@@ -1,0 +1,43 @@
+{
+  "name": "supsersede-web-library",
+  "version": "1.0.0",
+  "author": "Ronnie Schaniel <ronnieschaniel@gmail.com>",
+  "description": "A project for the supersede web feedback library",
+  "license": "tbd",
+  "keywords": [
+    "jquery",
+    "feedback",
+    "plugin"
+  ],
+  "devDependencies": {
+    "chai": "^1.9.1",
+    "chai-webdriver": "^0.9.3",
+    "chromedriver": "^2.10.0-1",
+    "http-server": "^0.7.4",
+    "jquery": "^2.1.1",
+    "jshint": "^2.5.5",
+    "mocha": "^1.21.4",
+    "node-http-server": "^1.6.2",
+    "normalize.css": "^3.0.1",
+    "selenium-webdriver": "^2.42.1",
+    "uglify-js": "^2.4.15"
+  },
+  "scripts": {
+    "prestart": "npm install && ./node_modules/uglify-js/bin/uglifyjs js/jquery.feedback.js -o dist/jquery.feedback.min.js",
+    "start": "./node_modules/.bin/http-server -a 0.0.0.0 -p 3000 -i",
+    "pretest": "npm install && ./node_modules/.bin/jshint js/",
+    "test": "./node_modules/.bin/mocha test/spec/tests.js",
+    "clean": "rm -rf node_modules && npm install"
+  },
+  "jshintConfig": {
+    "browser": true,
+    "node": true,
+    "unused": true,
+    "undef": true,
+    "globals": {
+      "$": false,
+      "jQuery": false
+    }
+  },
+  "preferGlobal": true
+}
