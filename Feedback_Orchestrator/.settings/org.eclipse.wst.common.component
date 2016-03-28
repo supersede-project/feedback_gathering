@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?><project-modules id="moduleCoreId" project-version="1.5.0">
+    <wb-module deploy-name="Feedback_Orchestrator">
+        <wb-resource deploy-path="/" source-path="/WebContent" tag="defaultRootSource"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src"/>
+        <dependent-module archiveName="feedback_library.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/feedback_library/feedback_library">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <property name="context-root" value="Feedback_Orchestrator"/>
+        <property name="java-output-path" value="/Feedback_Orchestrator/build/classes"/>
+    </wb-module>
+</project-modules>
