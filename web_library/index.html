@@ -1,0 +1,21 @@
+<!DOCTYPE>
+<html lang="en">
+<head>
+    <title>Web Library Testing</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="node_modules/normalize.css/normalize.css">
+    <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+    <a id="feedbackEntryPoint" href="#">Feedback</a>
+</body>
+<script src="node_modules/jquery/dist/jquery.min.js"></script>
+<script src="dist/jquery.feedback.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#feedbackEntryPoint').feedback({'color': '#000000'});
+    });
+</script>
+</html>
