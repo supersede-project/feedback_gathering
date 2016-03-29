@@ -1,9 +1,9 @@
 <resources>
-    <string name="app_name">FeedbackLibrary</string>
+    <string name="supersede_feedbacklibrary_app_name">FeedbackLibrary</string>
 
     <!-- unique identifiers for the mechanisms -->
-    <string name="textID">textMechanism</string>
-    <string name="ratingID">ratingMechanism</string>
-    <string name="screenshotID">screenshotMechanism</string>
-    <string name="audioID">audioMechanism</string>
+    <string name="supersede_feedbacklibrary_textID">TEXT_MECHANISM</string>
+    <string name="supersede_feedbacklibrary_ratingID">RATING_MECHANISM</string>
+    <string name="supersede_feedbacklibrary_screenshotID">SCREENSHOT_MECHANISM</string>
+    <string name="supersede_feedbacklibrary_audioID">AUDIO_MECHANISM</string>
 </resources>
