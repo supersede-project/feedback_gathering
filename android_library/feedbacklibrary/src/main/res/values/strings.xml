@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">FeedbackLibrary</string>
+
+    <!-- unique identifiers for the mechanisms -->
+    <string name="textID">textMechanism</string>
+    <string name="ratingID">ratingMechanism</string>
+    <string name="screenshotID">screenshotMechanism</string>
+    <string name="audioID">audioMechanism</string>
+</resources>
