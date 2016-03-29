@@ -12,8 +12,39 @@
     tools:showIn="@layout/activity_start">
 
     <TextView
-        android:id="@+id/textViewID"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Hello World!" />
+        android:text="Choose a feedback configuration!" />
+
+    <RadioGroup
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <RadioButton
+            android:id="@+id/radio_text_rating"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="text_rating.json"
+            android:onClick="onRadioButtonClicked"/>
+        <RadioButton
+            android:id="@+id/radio_text_rating_order"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="text_rating_order.json"
+            android:onClick="onRadioButtonClicked"/>
+        <RadioButton
+            android:id="@+id/radio_text_sc_rating"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="text_sc_rating.json"
+            android:onClick="onRadioButtonClicked"/>
+        <RadioButton
+            android:id="@+id/radio_rating_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="rating_text.json"
+            android:onClick="onRadioButtonClicked"/>
+    </RadioGroup>
+
 </LinearLayout>
