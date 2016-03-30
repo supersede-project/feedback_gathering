@@ -1,5 +1,10 @@
 package com.example.matthias.feedbacklibrary.models;
 
+import android.widget.RatingBar;
+import android.widget.TextView;
+
+import com.example.matthias.feedbacklibrary.R;
+
 import java.io.Serializable;
 
 /**
@@ -13,8 +18,25 @@ public class RatingMechanism extends Mechanism implements Serializable {
     private int maxRating;
     private float defaultRating;
 
+    private float inputRating;
+
     public RatingMechanism(boolean canBeActivated, boolean isActive, int order) {
         super(RATING_TYPE, canBeActivated, isActive, order);
+    }
+
+    public void updateView() {
+        ((TextView) getEnclosingLayout().findViewById(R.id.supersede_feedbacklibrary_rating_feedback_title)).setText(title);
+        RatingBar bar = (RatingBar) getEnclosingLayout().findViewById(R.id.supersede_feedbacklibrary_rating_feedback_rating);
+        bar.setNumStars(maxRating);
+        bar.setStepSize(1.0f);
+        bar.setRating(defaultRating);
+    }
+    public void updateModel() {
+        this.inputRating = ((RatingBar) getEnclosingLayout().findViewById(R.id.supersede_feedbacklibrary_rating_feedback_rating)).getRating();
+    }
+
+    public float getInputRating() {
+        return inputRating;
     }
 
     public int getMaxRating() {

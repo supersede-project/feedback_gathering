@@ -11,4 +11,7 @@ public class AudioMechanism extends Mechanism implements Serializable {
     public AudioMechanism(boolean canBeActivated, boolean isActive, int order) {
         super(AUDIO_TYPE, canBeActivated, isActive, order);
     }
+
+    public void updateView() {}
+    public void updateModel() {}
 }

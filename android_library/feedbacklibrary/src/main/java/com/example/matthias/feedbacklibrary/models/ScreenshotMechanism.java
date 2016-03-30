@@ -11,4 +11,7 @@ public class ScreenshotMechanism extends Mechanism implements Serializable {
     public ScreenshotMechanism(boolean canBeActivated, boolean isActive, int order) {
         super(SCREENSHOT_TYPE, canBeActivated, isActive, order);
     }
+
+    public void updateView() {}
+    public void updateModel() {}
 }

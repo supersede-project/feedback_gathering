@@ -4,19 +4,22 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:divider="?android:dividerVertical"
-    android:showDividers="end">
+    android:divider="@drawable/my_divider"
+    android:showDividers="end"
+    android:background="#ffffff">
 
     <TextView
         android:id="@+id/supersede_feedbacklibrary_text_feedback_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"/>
+        android:layout_marginBottom="10dp"
+        android:textSize="20dp"/>
 
     <EditText
         android:id="@+id/supersede_feedbacklibrary_text_feedback_text"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:background="#dceddb"/>
 
 </LinearLayout>
-

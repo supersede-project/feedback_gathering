@@ -7,14 +7,11 @@
     tools:context="com.example.matthias.feedbacklibrary.FeedbackActivity">
 
     <LinearLayout
+        android:id="@+id/feedback_activity_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-        <TextView
-            android:id="@+id/textViewID"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Feedback Library" />
+
     </LinearLayout>
 
 </ScrollView>

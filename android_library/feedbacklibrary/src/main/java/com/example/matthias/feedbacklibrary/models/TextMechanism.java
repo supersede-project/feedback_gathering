@@ -1,5 +1,10 @@
 package com.example.matthias.feedbacklibrary.models;
 
+import android.widget.EditText;
+import android.widget.TextView;
+
+import com.example.matthias.feedbacklibrary.R;
+
 import java.io.Serializable;
 
 /**
@@ -12,8 +17,23 @@ public class TextMechanism extends Mechanism implements Serializable {
     private String hint;
     private int maxLength;
 
+    private String inputText;
+
     public TextMechanism(boolean canBeActivated, boolean isActive, int order) {
         super(TEXT_TYPE, canBeActivated, isActive, order);
+    }
+
+    public void updateView() {
+        ((TextView) getEnclosingLayout().findViewById(R.id.supersede_feedbacklibrary_text_feedback_title)).setText(title);
+        ((EditText) getEnclosingLayout().findViewById(R.id.supersede_feedbacklibrary_text_feedback_text)).setHint(hint);
+    }
+
+    public void updateModel() {
+        this.inputText = ((EditText) getEnclosingLayout().findViewById(R.id.supersede_feedbacklibrary_text_feedback_text)).getText().toString();
+    }
+
+    public String getInputText() {
+        return inputText;
     }
 
     public String getHint() {

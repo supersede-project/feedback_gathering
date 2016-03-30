@@ -1,11 +1,14 @@
 package com.example.matthias.feedbacklibrary.models;
 
+import android.view.View;
+
 import java.io.Serializable;
 
 /**
  * Created by Matthias on 19.03.2016.
  */
 public abstract class Mechanism implements Serializable {
+    private View enclosingLayout;
     private boolean canBeActivated;
     private boolean isActive;
     private int order;
@@ -16,6 +19,24 @@ public abstract class Mechanism implements Serializable {
         this.canBeActivated = canBeActivated;
         this.isActive = isActive;
         this.order = order;
+    }
+
+    /**
+     * Updates the view with the model data
+     */
+    public abstract void updateView();
+
+    /**
+     * Updates the model with the view data
+     */
+    public abstract void updateModel();
+
+    public View getEnclosingLayout() {
+        return enclosingLayout;
+    }
+
+    public void setEnclosingLayout(View enclosingLayout) {
+        this.enclosingLayout = enclosingLayout;
     }
 
     /**

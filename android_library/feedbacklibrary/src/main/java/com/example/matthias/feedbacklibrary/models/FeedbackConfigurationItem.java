@@ -9,7 +9,7 @@ import java.util.Map;
  */
 public class FeedbackConfigurationItem implements Serializable {
     private boolean canBeActivated;
-    private boolean isActive;
+    private boolean active;
     private int order;
     private String type;
     private List<Map<String, Object>> parameters;
@@ -19,7 +19,7 @@ public class FeedbackConfigurationItem implements Serializable {
     }
 
     public boolean isActive() {
-        return isActive;
+        return active;
     }
 
     public int getOrder() {
@@ -38,8 +38,8 @@ public class FeedbackConfigurationItem implements Serializable {
         this.canBeActivated = canBeActivated;
     }
 
-    public void setIsActive(boolean isActive) {
-        this.isActive = isActive;
+    public void setIsActive(boolean active) {
+        this.active = active;
     }
 
     public void setOrder(int order) {
