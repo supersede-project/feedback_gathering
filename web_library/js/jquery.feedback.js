@@ -15,12 +15,15 @@
             var repositoryUrl = 'http://localhost:8080/feedback_repository/FeedbackServlet';
 
             $.ajax({
-                method: "POST",
                 url: repositoryUrl,
-                data: { text: text, component: "web library" }
-            })
-            .done(function( msg ) {
-
+                type: 'POST',
+                data: { text: text, component: "web library" },
+                success: function (data) {
+                    alert(data['success']);
+                },
+                error: function () {
+                    alert('Failure');
+                }
             });
         });
     };
