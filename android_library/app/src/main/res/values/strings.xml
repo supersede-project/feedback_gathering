@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">HostApplication</string>
+
+    <!-- action bar -->
+    <string name="action_settings">Settings</string>
+    <string name="action_feedback">Feedback</string>
+</resources>
