@@ -14,7 +14,7 @@ import ch.uzh.ifi.feedback.library.rest.RestManager;
 /**
  * Servlet implementation class OrchestratorServlet
  */
-@WebServlet("/")
+@WebServlet("/example/configuration")
 public class OrchestratorServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	

@@ -7,44 +7,77 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import ch.uzh.ifi.feedback.library.rest.IRestManager;
+import ch.uzh.ifi.feedback.library.rest.RestManager;
+
 /**
  * Servlet implementation class FeedbackServlet
  */
-@WebServlet("/FeedbackServlet")
+@WebServlet("/")
 public class FeedbackServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
+    
+    private IRestManager _restManager;
+    
     /**
      * @see HttpServlet#HttpServlet()
      */
     public FeedbackServlet() {
         super();
-        // TODO Auto-generated constructor stub
+        InitController();
+    }
+    
+    private void InitController()
+    {
+    	_restManager = new RestManager();
+        
+        try{
+        	_restManager.Init("ch.uzh.ifi.feedback.repository");
+        }
+        catch(Exception ex){
+        	System.out.println(ex.getMessage());
+        	ex.printStackTrace();
+        	super.destroy();
+        }
     }
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String json = "[{\"title\": \"Title\", \"text\": \"Text\"}]"; 
 		
         response.setContentType("application/json");            
         response.setCharacterEncoding("UTF-8");
         
         response.setHeader("Access-Control-Allow-Origin", "*");
-        response.setHeader("Access-Control-Allow-Methods", "GET");
+        response.setHeader("Access-Control-Allow-Methods", "GET,PUT");
         response.setHeader("Access-Control-Allow-Headers", "Content-Type");
         response.setHeader("Access-Control-Max-Age", "86400");
         
-        response.getWriter().write(json);
+        _restManager.Get(request, response);
+		
 	}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
+	{
 		doGet(request, response);
+	}
+	
+	protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
+	{
+
+        response.setContentType("application/json");            
+        response.setCharacterEncoding("UTF-8");
+        
+        response.setHeader("Access-Control-Allow-Origin", "*");
+        response.setHeader("Access-Control-Allow-Methods", "GET,PUT");
+        response.setHeader("Access-Control-Allow-Headers", "Content-Type");
+        response.setHeader("Access-Control-Max-Age", "86400");
+        
+        _restManager.Put(request, response);
 	}
 
 }
