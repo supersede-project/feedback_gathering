@@ -8,4 +8,3 @@ var Parameter = (function () {
     return Parameter;
 })();
 exports.Parameter = Parameter;
-//# sourceMappingURL=parameter.js.map

@@ -22,6 +22,9 @@
     "selenium-webdriver": "^2.42.1",
     "uglify-js": "^2.4.15"
   },
+  "dependencies": {
+    "jquery-ui": "^1.10.5"
+  },
   "scripts": {
     "prestart": "npm install && ./node_modules/uglify-js/bin/uglifyjs js/jquery.feedback.js -o dist/jquery.feedback.min.js",
     "start": "./node_modules/.bin/http-server -a 0.0.0.0 -p 3000 -i",

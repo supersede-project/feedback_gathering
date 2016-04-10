@@ -6,4 +6,3 @@ var Mechanism = (function () {
     return Mechanism;
 })();
 exports.Mechanism = Mechanism;
-//# sourceMappingURL=mechanism.js.map

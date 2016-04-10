@@ -1,0 +1,64 @@
+<!DOCTYPE>
+<html lang="en">
+<head>
+    <title>Web Library Testing</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="node_modules/normalize.css/normalize.css">
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css">
+    <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+<a id="feedbackEntryPoint" href="#">Feedback</a>
+<section id="feedbackContainer">
+    <form>
+        <article data-feedback-page="1" class="feedback-page">
+            <h2 id="textTypeTitle"></h2>
+            <textarea id="textTypeText"></textarea>
+            <p>
+                Max length: <span id="textTypeMaxLength"></span>
+            </p>
+            <button class="feedback-dialog-forward navigation-button">Review feedback</button>
+            <div class="clearfix"></div>
+        </article>
+        <article data-feedback-page="2" class="feedback-page">
+            <button class="feedback-dialog-backward navigation-button">back</button>
+            <div class="clearfix"></div>
+            <div id="feedbackReview">
+                <h2>Review your information</h2>
+                Your feedback:
+                <p id="textReview">
+
+                </p>
+            </div>
+            <div id="feedbackPrivacy">
+                <h2>Wer darf ihr Feedback sehen</h2>
+                <fieldset>
+                    <input type="radio" id="developers" name="privacy" value="developers">
+                    <label for="developers"> Only the Energiesparkonto-Team</label>
+                    <br>
+                    <input type="radio" id="public" name="privacy" value="public">
+                    <label for="public"> The feedback is going to be published in the forum. Sign in users are able to
+                        read the feedback there.</label>
+                </fieldset>
+            </div>
+            <p>
+                <button type="button" class="navigation-button" id="submitFeedback">Submit feedback</button>
+                <div class="clearfix"></div>
+            </p>
+        </article>
+        <span id="serverResponse"></span>
+    </form>
+</section>
+</body>
+<script src="node_modules/jquery/dist/jquery.min.js"></script>
+<script src="https://code.jquery.com/ui/1.10.3/jquery-ui.min.js"
+        integrity="sha256-lnH4vnCtlKU2LmD0ZW1dU7ohTTKrcKP50WA9fa350cE=" crossorigin="anonymous"></script>
+<script src="dist/jquery.feedback.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#feedbackEntryPoint').feedback({'color': '#000000'});
+    });
+</script>
+</html>
