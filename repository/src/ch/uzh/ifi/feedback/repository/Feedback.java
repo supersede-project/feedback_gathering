@@ -1,6 +1,8 @@
 package ch.uzh.ifi.feedback.repository;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Feedback {
 	
@@ -11,6 +13,7 @@ public class Feedback {
 	private Timestamp created;
 	private Timestamp lastUpdated;
 	private Double configVersion;
+	private List<Rating> ratings;
 	
 	public String getUser() {
 		return user;
@@ -53,5 +56,14 @@ public class Feedback {
 	}
 	public void setConfigVersion(Double configVersion) {
 		this.configVersion = configVersion;
+	}
+	public List<Rating> getRatings() {
+		if(ratings == null)
+			ratings = new ArrayList<>();
+		
+		return ratings;
+	}
+	public void setRatings(List<Rating> ratings) {
+		this.ratings = ratings;
 	}
 }

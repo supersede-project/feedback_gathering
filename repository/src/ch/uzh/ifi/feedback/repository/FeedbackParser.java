@@ -14,19 +14,37 @@ public class FeedbackParser implements IDbResultParser<List<Feedback>> {
 	@Override
 	public void Parse(ResultSet resultSet) throws SQLException {
 		
+		Feedback currentFeedback = null;
+		int currentFeedbackId = -1;
+		
 		while(resultSet.next())
 		{
-			Feedback feedback = new Feedback();
-			feedback.setApplication(resultSet.getString("application_id"));
-			feedback.setText(resultSet.getString("text"));
-			feedback.setTitle(resultSet.getString("title"));
-			feedback.setCreated(resultSet.getTimestamp("created"));
-			feedback.setLastUpdated(resultSet.getTimestamp("lastUpdated"));
-			feedback.setUser(resultSet.getString("user_id"));
-			feedback.setConfigVersion(Double.parseDouble(resultSet.getString("configVersion")));
+			int feedbackId = resultSet.getInt("feedback_id"); 
+			if(currentFeedbackId != feedbackId)
+			{
+				if(currentFeedback != null)
+					result.add(currentFeedback);
+				
+				currentFeedbackId = feedbackId;
+				currentFeedback = new Feedback();
+				currentFeedback.setApplication(resultSet.getString("application_id"));
+				currentFeedback.setText(resultSet.getString("text"));
+				currentFeedback.setTitle(resultSet.getString("feedback_title"));
+				currentFeedback.setCreated(resultSet.getTimestamp("created"));
+				currentFeedback.setLastUpdated(resultSet.getTimestamp("lastUpdated"));
+				currentFeedback.setUser(resultSet.getString("user_id"));
+				currentFeedback.setConfigVersion(Double.parseDouble(resultSet.getString("configVersion")));
+			}
 			
-			result.add(feedback);
+			if(resultSet.getString("rating_title") != null)
+			{
+				Rating rating = new Rating();
+				rating.setTitle(resultSet.getString("rating_title"));
+				rating.setRating(resultSet.getInt("rating"));
+				currentFeedback.getRatings().add(rating);
+			}
 		}
+		result.add(currentFeedback);
 	}
 
 	@Override

@@ -39,7 +39,7 @@ public abstract class RestController<T> implements IRestController<T> {
 	@Override
 	public String Serialize(T object) {
 		
-		Gson gson = new GsonBuilder().setPrettyPrinting().create();
+		Gson gson = new GsonBuilder().setPrettyPrinting().setDateFormat("yyyy-MM-dd hh:mm:ss.S").create();
 		String json = gson.toJson(object);
 		
 		return json;
@@ -48,7 +48,7 @@ public abstract class RestController<T> implements IRestController<T> {
 	@Override
 	public T Deserialize(String content) {
 		
-		Gson gson = new Gson();
+		Gson gson = new GsonBuilder().setPrettyPrinting().setDateFormat("yyyy-MM-dd hh:mm:ss.S").create();
 		T requestObject = gson.fromJson(content, serializationType);
 		
 		return requestObject;
