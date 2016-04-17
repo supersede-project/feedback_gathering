@@ -23,7 +23,8 @@
     "uglify-js": "^2.4.15"
   },
   "dependencies": {
-    "jquery-ui": "^1.10.5"
+    "jquery-ui": "^1.10.5",
+    "jquery-star-rating-plugin": "^4.11.0"
   },
   "scripts": {
     "prestart": "npm install && ./node_modules/uglify-js/bin/uglifyjs js/jquery.feedback.js -o dist/jquery.feedback.min.js",
