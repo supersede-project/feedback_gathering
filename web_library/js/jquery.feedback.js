@@ -57,7 +57,10 @@
         dialogContainer.find('.feedback-page').hide();
         dialogContainer.find('.feedback-page[data-feedback-page="1"]').show();
 
-        dialogContainer.find('.feedback-dialog-forward').on('click', function() {
+        dialogContainer.find('.feedback-dialog-forward').on('click', function(event) {
+            event.preventDefault();
+            event.stopPropagation();
+
             var feedbackPage = $(this).closest('.feedback-page');
             var pageNumber = feedbackPage.data('feedback-page');
             var nextPageNumber = pageNumber + 1;
@@ -70,7 +73,10 @@
                 nextPage.find('#textReview').text($('textarea#textTypeText').val());
             }
         });
-        dialogContainer.find('.feedback-dialog-backward').on('click', function() {
+        dialogContainer.find('.feedback-dialog-backward').on('click', function(event) {
+            event.preventDefault();
+            event.stopPropagation();
+
             var feedbackPage = $(this).closest('.feedback-page');
             var pageNumber = feedbackPage.data('feedback-page');
             var nextPage = pageNumber - 1;
@@ -79,7 +85,10 @@
             $('.feedback-page[data-feedback-page="' + nextPage + '"]').show();
         });
 
-        this.on('click', function () {
+        this.on('click', function (event) {
+            event.preventDefault();
+            event.stopPropagation();
+
             if (!active) {
                 $.get(currentOptions.backendUrl, null, function (data) {
                     initMechanisms(data);

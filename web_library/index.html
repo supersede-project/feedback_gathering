@@ -454,16 +454,18 @@ G&uuml;nter D. Alt, Journalist, ehemaliger Moderator bei ZDF WISO und Mitbegr&uu
                         <p>
                             Max length: <span id="textTypeMaxLength"></span>
                         </p>
-                        <p>
-                            Please rate your experience on this page:
-                        </p>
-                        <p>
-                            <input name="star1" type="radio" class="star"/>
-                            <input name="star1" type="radio" class="star"/>
-                            <input name="star1" type="radio" class="star"/>
-                            <input name="star1" type="radio" class="star"/>
-                            <input name="star1" type="radio" class="star"/>
-                        </p>
+                        <section class="rating-feedback">
+                            <p class="rating-text">
+                                Please rate your experience on this page:
+                            </p>
+                            <p class="rating-input">
+                                <input name="star1" type="radio" class="star"/>
+                                <input name="star1" type="radio" class="star"/>
+                                <input name="star1" type="radio" class="star"/>
+                                <input name="star1" type="radio" class="star"/>
+                                <input name="star1" type="radio" class="star"/>
+                            </p>
+                        </section>
                         <button class="feedback-dialog-forward navigation-button">Review feedback</button>
                         <div class="clearfix"></div>
                     </article>
@@ -476,6 +478,9 @@ G&uuml;nter D. Alt, Journalist, ehemaliger Moderator bei ZDF WISO und Mitbegr&uu
                             <p id="textReview">
 
                             </p>
+                            <p id="ratingReview">
+
+                            </p>
                         </div>
                         <div id="feedbackPrivacy">
                             <h2>Wer darf ihr Feedback sehen</h2>
@@ -484,7 +489,7 @@ G&uuml;nter D. Alt, Journalist, ehemaliger Moderator bei ZDF WISO und Mitbegr&uu
                                 <label for="developers"> Only the Energiesparkonto-Team</label>
                                 <br>
                                 <input type="radio" id="public" name="privacy" value="public">
-                                <label for="public"> The feedback is going to be published in the forum. Sign in users are able to
+                                <label for="public"> The feedback is going to be published in the forum. Signed in users are able to
                                     read the feedback there.</label>
                             </fieldset>
                         </div>

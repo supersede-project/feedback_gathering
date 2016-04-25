@@ -19,16 +19,18 @@
             <p>
                 Max length: <span id="textTypeMaxLength"></span>
             </p>
-            <p>
-                Please rate your experience on this page:
-            </p>
-            <p>
-                <input name="star1" type="radio" class="star"/>
-                <input name="star1" type="radio" class="star"/>
-                <input name="star1" type="radio" class="star"/>
-                <input name="star1" type="radio" class="star"/>
-                <input name="star1" type="radio" class="star"/>
-            </p>
+            <section class="rating-feedback">
+                <p class="rating-text">
+                    Please rate your experience on this page:
+                </p>
+                <p class="rating-input">
+                    <input name="star1" type="radio" class="star"/>
+                    <input name="star1" type="radio" class="star"/>
+                    <input name="star1" type="radio" class="star"/>
+                    <input name="star1" type="radio" class="star"/>
+                    <input name="star1" type="radio" class="star"/>
+                </p>
+            </section>
             <button class="feedback-dialog-forward navigation-button">Review feedback</button>
             <div class="clearfix"></div>
         </article>
@@ -39,6 +41,9 @@
                 <h2>Review your information</h2>
                 Your feedback:
                 <p id="textReview">
+
+                </p>
+                <p id="ratingReview">
 
                 </p>
             </div>
