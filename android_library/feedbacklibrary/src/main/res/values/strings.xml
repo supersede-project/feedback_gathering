@@ -2,8 +2,12 @@
     <string name="supersede_feedbacklibrary_app_name">FeedbackLibrary</string>
 
     <!-- unique identifiers for the mechanisms -->
-    <string name="supersede_feedbacklibrary_textID">TEXT_MECHANISM</string>
-    <string name="supersede_feedbacklibrary_ratingID">RATING_MECHANISM</string>
-    <string name="supersede_feedbacklibrary_screenshotID">SCREENSHOT_MECHANISM</string>
-    <string name="supersede_feedbacklibrary_audioID">AUDIO_MECHANISM</string>
+    <string name="supersede_feedbacklibrary_textID">TEXT_TYPE</string>
+    <string name="supersede_feedbacklibrary_ratingID">RATING_TYPE</string>
+    <string name="supersede_feedbacklibrary_screenshotID">SCREENSHOT_TYPE</string>
+    <string name="supersede_feedbacklibrary_audioID">AUDIO_TYPE</string>
+
+    <!-- various -->
+    <string name="supersede_feedbacklibrary_sendConfirmationText">By sending the feedback, you agree with the terms and conditions.</string>
+    <string name="supersede_feedbacklibrary_sendButtonText">Send feedback</string>
 </resources>

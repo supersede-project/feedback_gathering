@@ -12,6 +12,5 @@
         android:id="@+id/action_feedback"
         android:orderInCategory="101"
         android:title="@string/action_feedback"
-        android:enabled="false"
         app:showAsAction="never" />
 </menu>

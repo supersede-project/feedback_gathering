@@ -11,7 +11,7 @@ import java.io.Serializable;
  * Created by Matthias on 19.03.2016.
  */
 public class RatingMechanism extends Mechanism implements Serializable {
-    private static final String RATING_TYPE = "RATING_MECHANISM";
+    private static final String RATING_TYPE = "RATING_TYPE";
 
     private String title;
     private String ratingIcon;
@@ -20,23 +20,15 @@ public class RatingMechanism extends Mechanism implements Serializable {
 
     private float inputRating;
 
-    public RatingMechanism(boolean canBeActivated, boolean isActive, int order) {
-        super(RATING_TYPE, canBeActivated, isActive, order);
-    }
-
-    public void updateView() {
-        ((TextView) getEnclosingLayout().findViewById(R.id.supersede_feedbacklibrary_rating_feedback_title)).setText(title);
-        RatingBar bar = (RatingBar) getEnclosingLayout().findViewById(R.id.supersede_feedbacklibrary_rating_feedback_rating);
-        bar.setNumStars(maxRating);
-        bar.setStepSize(1.0f);
-        bar.setRating(defaultRating);
-    }
-    public void updateModel() {
-        this.inputRating = ((RatingBar) getEnclosingLayout().findViewById(R.id.supersede_feedbacklibrary_rating_feedback_rating)).getRating();
+    public RatingMechanism(FeedbackConfigurationItem item) {
+        super(RATING_TYPE, item);
     }
 
     public float getInputRating() {
         return inputRating;
+    }
+    public void setInputRating(float inputRating) {
+        this.inputRating = inputRating;
     }
 
     public int getMaxRating() {

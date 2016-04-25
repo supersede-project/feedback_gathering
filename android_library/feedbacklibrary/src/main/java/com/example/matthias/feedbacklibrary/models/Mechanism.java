@@ -1,42 +1,21 @@
 package com.example.matthias.feedbacklibrary.models;
 
-import android.view.View;
-
 import java.io.Serializable;
 
 /**
  * Created by Matthias on 19.03.2016.
  */
 public abstract class Mechanism implements Serializable {
-    private View enclosingLayout;
-    private boolean canBeActivated;
     private boolean isActive;
-    private int order;
+    private boolean canBeActivated;
     private String type;
+    private int order;
 
-    public Mechanism(String type, boolean canBeActivated, boolean isActive, int order) {
+    public Mechanism(String type, FeedbackConfigurationItem item) {
+        this.isActive = item.isActive();
+        this.canBeActivated = item.canBeActivated();
         this.type = type;
-        this.canBeActivated = canBeActivated;
-        this.isActive = isActive;
-        this.order = order;
-    }
-
-    /**
-     * Updates the view with the model data
-     */
-    public abstract void updateView();
-
-    /**
-     * Updates the model with the view data
-     */
-    public abstract void updateModel();
-
-    public View getEnclosingLayout() {
-        return enclosingLayout;
-    }
-
-    public void setEnclosingLayout(View enclosingLayout) {
-        this.enclosingLayout = enclosingLayout;
+        this.order = item.getOrder();
     }
 
     /**
