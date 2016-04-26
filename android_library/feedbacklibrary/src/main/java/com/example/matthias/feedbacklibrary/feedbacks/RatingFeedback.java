@@ -8,7 +8,7 @@ import java.io.Serializable;
 public class RatingFeedback implements Serializable {
     private String title;
 
-    private float rating;
+    private int rating;
 
     public String getTitle ()
     {
@@ -20,12 +20,12 @@ public class RatingFeedback implements Serializable {
         this.title = title;
     }
 
-    public float getRating ()
+    public int getRating ()
     {
         return rating;
     }
 
-    public void setRating (float rating)
+    public void setRating (int rating)
     {
         this.rating = rating;
     }

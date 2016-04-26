@@ -19,9 +19,9 @@ public class FeedbackConfiguration {
     private List<Mechanism> allMechanisms = null;
 
     public FeedbackConfiguration(List<FeedbackConfigurationItem> configuration) {
-        setApplication("testApplication");
+        setApplication("Android Application");
         setConfigVersion(1.0f);
-        setUser("testUser");
+        setUser("Android User");
         initMechanism(configuration);
     }
 

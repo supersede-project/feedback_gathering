@@ -12,12 +12,15 @@ import android.view.View;
 import android.widget.LinearLayout;
 
 import com.example.matthias.feedbacklibrary.API.feedbackAPI;
+import com.example.matthias.feedbacklibrary.feedbacks.Feedback;
 import com.example.matthias.feedbacklibrary.models.FeedbackConfiguration;
 import com.example.matthias.feedbacklibrary.models.FeedbackConfigurationItem;
 import com.example.matthias.feedbacklibrary.models.Mechanism;
+import com.example.matthias.feedbacklibrary.models.TextMechanism;
 import com.example.matthias.feedbacklibrary.views.MechanismView;
 import com.example.matthias.feedbacklibrary.views.RatingMechanismView;
 import com.example.matthias.feedbacklibrary.views.TextMechanismView;
+import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,13 +33,15 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class FeedbackActivity extends AppCompatActivity {
     private static final String endpoint = "http://ec2-54-175-37-30.compute-1.amazonaws.com/";
-
     private feedbackAPI fbAPI;
-    private String requestURL;
 
+    // List of feedback configuration items fetched from the orchestrator
     private List<FeedbackConfigurationItem> configuration;
+    // Feedback configuration initialized from the previously fetched feedback configuration items
     private FeedbackConfiguration feedbackConfiguration;
+    // All mechanisms (including inactive ones) --> models
     private List<Mechanism> allMechanisms;
+    // All views representing active mechanisms --> view
     private List<MechanismView> allMechanismViews;
 
     private ProgressDialog progressDialog;
@@ -64,7 +69,7 @@ public class FeedbackActivity extends AppCompatActivity {
      */
     private void init() {
         Call<List<FeedbackConfigurationItem>> result = null;
-        result = fbAPI.getTextAudioSCRatingConfiguration();
+        result = fbAPI.getConfiguration();
 
         // asynchronous call
         if(result != null) {
@@ -92,12 +97,14 @@ public class FeedbackActivity extends AppCompatActivity {
         if(configuration != null) {
             feedbackConfiguration = new FeedbackConfiguration(configuration);
             // TODO: Save original configuration on the device --> probably SQLite database
-
+            allMechanisms = feedbackConfiguration.getAllMechanisms();
         }
     }
 
+    /**
+     * Initialize the view
+     */
     public void initView() {
-        allMechanisms = feedbackConfiguration.getAllMechanisms();
         allMechanismViews = new ArrayList<>();
         LayoutInflater layoutInflater = LayoutInflater.from(this);
         LinearLayout linearLayout = (LinearLayout) findViewById(R.id.feedback_activity_layout);
@@ -134,30 +141,80 @@ public class FeedbackActivity extends AppCompatActivity {
             linearLayout.addView(sendLayout);
         }
 
+        // After successfully loading the model data and view, make the progress dialog disappear
         progressDialog.dismiss();
     }
 
+    /*
+     * User sends the feedback via a POST request to the feedback repository
+     */
     public void sendButtonClicked(View view) {
+        // The mechanism models are updated with the view values
         for(MechanismView mechanismView : allMechanismViews) {
             mechanismView.updateModel();
         }
 
-        /*for(Mechanism mechanism : allMechanisms) {
+        final ArrayList<String> messages = new ArrayList<>();
+        if(validateInput(allMechanisms, messages)) {
+            Feedback feedback = new Feedback(allMechanisms);
+
+            Call<JsonObject> result = null;
+            if (feedback != null) {
+                feedback.setApplication(feedbackConfiguration.getApplication());
+                feedback.setUser(feedbackConfiguration.getUser());
+                feedback.setConfigVersion(feedbackConfiguration.getConfigVersion());
+                result = fbAPI.createFeedback(feedback);
+                // result = fbAPI.createFeedbackTest(feedback);
+            }
+
+            if (result != null) {
+                result.enqueue(new Callback<JsonObject>() {
+                    @Override
+                    public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                        if (response.code() == 201) {
+                            messages.add("Your feedback was successfully sent. Thank you");
+                            DataDialog d = DataDialog.newInstance(messages);
+                            d.show(getFragmentManager(), "dataDialog");
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<JsonObject> call, Throwable t) {
+                        messages.add("Oops. Something went wrong!");
+                        DataDialog d = DataDialog.newInstance(messages);
+                        d.show(getFragmentManager(), "dataDialog");
+                    }
+                });
+            }
+        } else {
+            DataDialog d = DataDialog.newInstance(messages);
+            d.show(getFragmentManager(), "dataDialog");
+        }
+    }
+
+    // Move later on into a helper/utils class
+    private boolean validateInput(List<Mechanism> allMechanisms, List<String> errorMessages) {
+        boolean isValid = true;
+        for(Mechanism mechanism : allMechanisms) {
             if(mechanism.getType().equals("TEXT_TYPE")) {
-                System.out.println("Input text == " + ((TextMechanism) mechanism).getInputText());
+                int length = ((TextMechanism) mechanism).getInputText().length();
+                int maxLength = ((TextMechanism) mechanism).getMaxLength();
+                if(length > maxLength) {
+                    isValid = false;
+                    errorMessages.add("Text has " + length + " characters. Maximum allowed characters are " + maxLength);
+                }
             }
         }
 
-        DataDialog d = DataDialog.newInstance("dummy");
-        d.show(getFragmentManager(), "dataDialog");*/
+        return isValid;
     }
 
-    // Only for demo purposes, to show the potential data to be sent
+    // Move later on into a helper/utils class
     public static class DataDialog extends DialogFragment {
-        static DataDialog newInstance(String message) {
+        static DataDialog newInstance(ArrayList<String> messages) {
             DataDialog f = new DataDialog();
             Bundle args = new Bundle();
-            args.putString("message", message);
+            args.putStringArrayList("messages", messages);
             f.setArguments(args);
             return f;
         }
@@ -165,8 +222,12 @@ public class FeedbackActivity extends AppCompatActivity {
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-            builder.setMessage(getArguments().getString("message"))
-                    .setNegativeButton("Close", new DialogInterface.OnClickListener() {
+            List<String> messages = getArguments().getStringArrayList("messages");
+            StringBuilder message = new StringBuilder("");
+            for(String s : messages) {
+                message.append(s).append(".");
+            }
+            builder.setMessage(message.toString()).setNegativeButton("Close", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                         }
                     });
