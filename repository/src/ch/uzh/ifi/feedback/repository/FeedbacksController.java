@@ -46,5 +46,4 @@ public class FeedbacksController extends RestController<List<Feedback>> {
 
 		return parser.GetResult();
 	}
-
 }

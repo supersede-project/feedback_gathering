@@ -51,16 +51,7 @@ public class FeedbackController extends RestController<Feedback>{
 		    }
 		});
 		
+		response.setStatus(201);
 		response.getWriter().append(Serialize(feedback));
 	}
-
-	@Override
-	public Feedback Get(HttpServletRequest request, HttpServletResponse response) throws Exception {
-
-		response.setStatus(405);
-		response.getWriter().append("Operation not supported for this resource!");
-		
-		return null;
-	}
-
 }
