@@ -50,15 +50,20 @@ public class RestManager implements IRestManager {
 	public void Get(HttpServletRequest request, HttpServletResponse response) throws ServletException {
 		
 		try {
-			String path = request.getServletPath();
-			Entry<UriTemplate, Class<RestController>> classEntry = GetClassEntry(path);
-			request = SetAttributes(request, path, classEntry.getKey());
-			Class<RestController> controllerClass = classEntry.getValue();
-			IRestController controller = controllerClass.newInstance();
+			IRestController controller = GetController(request);
 			Object result = controller.Get(request, response);
 			String output = controller.Serialize(result);
 			response.getWriter().append(output);
 
+		} catch(NullPointerException ex)
+		{
+			response.setStatus(404);
+			try {
+				response.getWriter().append("Not Found");
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			
 		} catch (Exception ex) {
 			throw new ServletException(ex);
 		}
@@ -66,17 +71,43 @@ public class RestManager implements IRestManager {
 	}
 
 	@Override
+	public void Post(HttpServletRequest request, HttpServletResponse response) throws ServletException {
+		try {
+			IRestController controller = GetController(request);
+			Object result = controller.Deserialize(GetRequestContent(request));
+			controller.Post(request, response, result);
+
+		} catch(NullPointerException ex)
+		{
+			response.setStatus(404);
+			try {
+				response.getWriter().append("Not Found");
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			
+		}catch (Exception ex) {
+			throw new ServletException(ex);
+		}
+	}
+	
+	@Override
 	public void Put(HttpServletRequest request, HttpServletResponse response) throws ServletException {
 		try {
-			String path = request.getServletPath();
-			Entry<UriTemplate, Class<RestController>> classEntry = GetClassEntry(path);
-			request = SetAttributes(request, path, classEntry.getKey());
-			Class<RestController> controllerClass = classEntry.getValue();
-			IRestController controller = controllerClass.newInstance();
+			IRestController controller = GetController(request);
 			Object result = controller.Deserialize(GetRequestContent(request));
 			controller.Put(request, response, result);
 
-		} catch (Exception ex) {
+		} catch(NullPointerException ex)
+		{
+			response.setStatus(404);
+			try {
+				response.getWriter().append("Not Found");
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			
+		}catch (Exception ex) {
 			throw new ServletException(ex);
 		}
 	}
@@ -87,7 +118,16 @@ public class RestManager implements IRestManager {
 
 			Get(request, response);
 
-		} catch (Exception ex) {
+		} catch(NullPointerException ex)
+		{
+			response.setStatus(404);
+			try {
+				response.getWriter().append("Not Found");
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			
+		}catch (Exception ex) {
 			throw new ServletException(ex);
 		}
 	}
@@ -100,6 +140,15 @@ public class RestManager implements IRestManager {
 		}
 
 		return null;
+	}
+	
+	private IRestController GetController(HttpServletRequest request) throws InstantiationException, IllegalAccessException
+	{
+		String path = request.getServletPath();
+		Entry<UriTemplate, Class<RestController>> classEntry = GetClassEntry(path);
+		request = SetAttributes(request, path, classEntry.getKey());
+		Class<RestController> controllerClass = classEntry.getValue();
+		return controllerClass.newInstance();
 	}
 	
 	private String GetRequestContent(HttpServletRequest request) throws Exception
