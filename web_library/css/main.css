@@ -11,7 +11,8 @@
     display: none;
     min-width: 800px;
     max-width: 800px;
-    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif
+    font-family: Arial, sans-serif;
+    padding: 8px;
 }
 
 .ui-dialog-titlebar {
@@ -25,6 +26,47 @@
 
 textarea#textTypeText {
     width: 100%;
+    border: 1px solid #4d4d4d;
+    font-size: 17px;
+    color: #7d7a7c;
+    padding: 5px;
+    margin-top: 20px;
+}
+
+.ui-dialog .ui-dialog-titlebar {
+    color: #7c9009;
+    font-weight: normal;
+}
+
+.ui-dialog h2 {
+    font-size: 19px;
+    font-weight: normal;
+    margin-top: 22px;
+    margin-bottom: 5px;
+}
+
+.ui-dialog .ui-dialog-titlebar {
+    padding: 7px 0;
+}
+
+.ui-dialog-titlebar {
+    border-color: #7c9009;
+    border-width: 1px;
+    padding: 0;
+    margin: 0 0.5em;
+}
+
+p.rating-text {
+    margin-bottom: 2px;
+}
+
+p.rating-input, p.text-count {
+    margin-top: 4px;
+}
+
+#textTypeMaxLength {
+    font-size: 14px;
+    color: #4b4a4c;
 }
 
 .navigation-button {

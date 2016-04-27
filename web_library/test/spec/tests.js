@@ -23,7 +23,8 @@ server.deploy(
 );
 
 describe('test suite for feedback jQuery plugin', function() {
-    it('should display the options', function() {
+    it('should have the feedback button', function() {
         driver.get('http://localhost:8000');
+        expect($('#feedbackContainer')).to.have.length(1);
     });
 });

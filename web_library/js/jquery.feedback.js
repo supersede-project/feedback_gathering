@@ -4,8 +4,8 @@
     initMechanisms = function (data) {
         var textConfig = data[0];
 
-        $('h2#textTypeTitle').text(textConfig.parameters[0].value);
-        $('span#textTypeMaxLength').text(textConfig.parameters[2].value);
+        $('span#textTypeMaxLength').text($('textarea#textTypeText').val.length + '/' + textConfig.parameters[2].value);
+        $('#serverResponse').removeClass().text('');
 
         var currentRatingValue = 0;
         $(".rating-input").starRating({
@@ -17,6 +17,7 @@
             }
         });
 
+        $('#feedbackContainer').dialog('option', 'title', textConfig.parameters[0].value);
         dialog.dialog("open");
 
         $('button#submitFeedback').on('click', function (event) {
@@ -41,20 +42,23 @@
                     ]
             };
 
-            console.log(feedbackObject);
-            /*
             $.ajax({
-                url: repositoryUrl,
+                url: 'http://ec2-54-175-37-30.compute-1.amazonaws.com/feedback_repository/example/feedback',
                 type: 'POST',
-                data: feedbackObject,
+                data: JSON.stringify(feedbackObject),
                 success: function (data) {
-                    $('#serverResponse').addClass('success').text(data['success']);
+                    $('#serverResponse').addClass('success').text('Your feedback was successfully sent');
+                    $('textarea#textTypeText').val('');
                 },
-                error: function () {
-                    $('#serverResponse').addClass('error').text('Failure: Server not responding');
+                error: function (data) {
+                    $('#serverResponse').addClass('error').text('Failure: ' + JSON.stringify(data));
                 }
             });
-            */
+        });
+
+        var maxLength = textConfig.parameters[2].value;
+        $('textarea#textTypeText').on('keyup', function() {
+            $('span#textTypeMaxLength').text($(this).val().length + '/' + maxLength);
         });
     };
 
