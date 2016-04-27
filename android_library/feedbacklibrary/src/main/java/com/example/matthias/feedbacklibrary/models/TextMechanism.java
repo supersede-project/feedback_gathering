@@ -11,7 +11,7 @@ import java.io.Serializable;
  * Created by Matthias on 19.03.2016.
  */
 public class TextMechanism extends Mechanism implements Serializable {
-    private static final String TEXT_TYPE = "TEXT_MECHANISM";
+    private static final String TEXT_TYPE = "TEXT_TYPE";
 
     private String title;
     private String hint;
@@ -19,21 +19,16 @@ public class TextMechanism extends Mechanism implements Serializable {
 
     private String inputText;
 
-    public TextMechanism(boolean canBeActivated, boolean isActive, int order) {
-        super(TEXT_TYPE, canBeActivated, isActive, order);
-    }
-
-    public void updateView() {
-        ((TextView) getEnclosingLayout().findViewById(R.id.supersede_feedbacklibrary_text_feedback_title)).setText(title);
-        ((EditText) getEnclosingLayout().findViewById(R.id.supersede_feedbacklibrary_text_feedback_text)).setHint(hint);
-    }
-
-    public void updateModel() {
-        this.inputText = ((EditText) getEnclosingLayout().findViewById(R.id.supersede_feedbacklibrary_text_feedback_text)).getText().toString();
+    public TextMechanism(FeedbackConfigurationItem item) {
+        super(TEXT_TYPE, item);
     }
 
     public String getInputText() {
         return inputText;
+    }
+
+    public void setInputText(String inputText) {
+        this.inputText = inputText;
     }
 
     public String getHint() {

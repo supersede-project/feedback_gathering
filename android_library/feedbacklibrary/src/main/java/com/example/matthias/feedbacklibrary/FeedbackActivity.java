@@ -1,30 +1,29 @@
 package com.example.matthias.feedbacklibrary;
 
-import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.Space;
 
 import com.example.matthias.feedbacklibrary.API.feedbackAPI;
-import com.example.matthias.feedbacklibrary.models.AudioMechanism;
+import com.example.matthias.feedbacklibrary.feedbacks.Feedback;
+import com.example.matthias.feedbacklibrary.models.FeedbackConfiguration;
 import com.example.matthias.feedbacklibrary.models.FeedbackConfigurationItem;
-import com.example.matthias.feedbacklibrary.models.FeedbackContainer;
 import com.example.matthias.feedbacklibrary.models.Mechanism;
-import com.example.matthias.feedbacklibrary.models.RatingMechanism;
-import com.example.matthias.feedbacklibrary.models.ScreenshotMechanism;
 import com.example.matthias.feedbacklibrary.models.TextMechanism;
+import com.example.matthias.feedbacklibrary.views.MechanismView;
+import com.example.matthias.feedbacklibrary.views.RatingMechanismView;
+import com.example.matthias.feedbacklibrary.views.TextMechanismView;
+import com.google.gson.JsonObject;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -35,10 +34,15 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class FeedbackActivity extends AppCompatActivity {
     private static final String endpoint = "http://ec2-54-175-37-30.compute-1.amazonaws.com/";
     private feedbackAPI fbAPI;
-    private String requestURL;
 
+    // List of feedback configuration items fetched from the orchestrator
     private List<FeedbackConfigurationItem> configuration;
-    private FeedbackContainer allFeedback;
+    // Feedback configuration initialized from the previously fetched feedback configuration items
+    private FeedbackConfiguration feedbackConfiguration;
+    // All mechanisms (including inactive ones) --> models
+    private List<Mechanism> allMechanisms;
+    // All views representing active mechanisms --> view
+    private List<MechanismView> allMechanismViews;
 
     private ProgressDialog progressDialog;
 
@@ -53,9 +57,6 @@ public class FeedbackActivity extends AppCompatActivity {
         progressDialog.setCanceledOnTouchOutside(false);
         progressDialog.show();
 
-        // Only for demo purposes, to show different configurations
-        requestURL = getIntent().getStringExtra("requestURL");
-
         Retrofit rtf = new Retrofit.Builder().baseUrl(endpoint).addConverterFactory(GsonConverterFactory.create()).build();
         fbAPI = rtf.create(feedbackAPI.class);
 
@@ -68,15 +69,7 @@ public class FeedbackActivity extends AppCompatActivity {
      */
     private void init() {
         Call<List<FeedbackConfigurationItem>> result = null;
-        if(requestURL.equals("text_rating.json")) {
-            result = fbAPI.getTextRatingConfiguration();
-        } else if(requestURL.equals("text_rating_order.json")) {
-            result = fbAPI.getTextRatingOrderConfiguration();
-        } else if(requestURL.equals("text_sc_rating.json")) {
-            result = fbAPI.getTextSCRatingConfiguration();
-        } else if(requestURL.equals("rating_text.json")) {
-            result = fbAPI.getRatingTextConfiguration();
-        }
+        result = fbAPI.getConfiguration();
 
         // asynchronous call
         if(result != null) {
@@ -102,94 +95,126 @@ public class FeedbackActivity extends AppCompatActivity {
      */
     private void initModel() {
         if(configuration != null) {
-            allFeedback = new FeedbackContainer();
-            for(FeedbackConfigurationItem item : configuration) {
-                if(item.getType().equals("TEXT_TYPE")) {
-                    allFeedback.addFeedback(createText(item));
-                } else if(item.getType().equals("RATING_TYPE")) {
-                    allFeedback.addFeedback(createRating(item));
-                } else if(item.getType().equals("AUDIO_TYPE")) {
+            feedbackConfiguration = new FeedbackConfiguration(configuration);
+            // TODO: Save original configuration on the device --> probably SQLite database
+            allMechanisms = feedbackConfiguration.getAllMechanisms();
+        }
+    }
+
+    /**
+     * Initialize the view
+     */
+    public void initView() {
+        allMechanismViews = new ArrayList<>();
+        LayoutInflater layoutInflater = LayoutInflater.from(this);
+        LinearLayout linearLayout = (LinearLayout) findViewById(R.id.feedback_activity_layout);
+
+        for(int i = 0; i < allMechanisms.size(); ++i) {
+            if(allMechanisms.get(i).isActive()) {
+                MechanismView mechanismView = null;
+                View view = null;
+                String type = allMechanisms.get(i).getType();
+
+                if (type.equals("TEXT_TYPE")) {
+                    mechanismView = new TextMechanismView(layoutInflater, allMechanisms.get(i));
+                    view = mechanismView.getEnclosingLayout();
+                } else if (type.equals("RATING_TYPE")) {
+                    mechanismView = new RatingMechanismView(layoutInflater, allMechanisms.get(i));
+                    view = mechanismView.getEnclosingLayout();
+                } else if (type.equals("AUDIO_TYPE")) {
                     // TODO
-                } else if(item.getType().equals("SCREENSHOT_TYPE")) {
+                } else if (type.equals("SCREENSHOT_TYPE")) {
                     // TODO
                 } else {
                     // should never happen!
                 }
-            }
-            allFeedback.sortByOrder();
-        }
-    }
 
-    public void initView() {
-        List<Mechanism> all = allFeedback.getAllFeedback();
-        //LayoutInflater layoutInflater = (LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        LayoutInflater layoutInflater = LayoutInflater.from(this);
-        LinearLayout linearLayout = (LinearLayout) findViewById(R.id.feedback_activity_layout);
-        for(int i = 0; i < all.size(); ++i) {
-            Mechanism m = all.get(i);
-            if (m.isActive()) {
-                View view = null;
-
-                if (m instanceof TextMechanism) {
-                    view = layoutInflater.inflate(R.layout.text_feedback_layout, null);
-                    ((TextMechanism) m).setEnclosingLayout(view);
-                }
-                if (m instanceof RatingMechanism) {
-                    view = layoutInflater.inflate(R.layout.rating_feedback_layout, null);
-                    ((RatingMechanism) m).setEnclosingLayout(view);
-                }
-                if (m instanceof ScreenshotMechanism) {
-                    // TODO
-                }
-                if (m instanceof AudioMechanism) {
-                    // TODO
-                }
-
-                if (view != null) {
+                if (mechanismView != null && view != null) {
+                    allMechanismViews.add(mechanismView);
                     linearLayout.addView(view);
                 }
             }
         }
-        View view = layoutInflater.inflate(R.layout.send_feedback_layout, null);
-        if (view != null) {
-            linearLayout.addView(view);
+
+        View sendLayout = layoutInflater.inflate(R.layout.send_feedback_layout, null);
+        if(sendLayout != null) {
+            linearLayout.addView(sendLayout);
         }
 
-        allFeedback.updateView();
+        // After successfully loading the model data and view, make the progress dialog disappear
         progressDialog.dismiss();
     }
 
+    /*
+     * User sends the feedback via a POST request to the feedback repository
+     */
     public void sendButtonClicked(View view) {
-        allFeedback.updateModel();
-        List<Mechanism> all = allFeedback.getAllFeedback();
-        StringBuilder str = new StringBuilder();
-        for(int i = 0; i < all.size(); ++i) {
-            Mechanism m = all.get(i);
-            if (m.isActive()) {
-                if (m instanceof TextMechanism) {
-                    str.append("Input text sent == ").append(((TextMechanism) m).getInputText()).append("\n");
-                }
-                if (m instanceof RatingMechanism) {
-                    str.append("Input rating sent == ").append(((RatingMechanism) m).getInputRating()).append("\n");
-                }
-                if (m instanceof ScreenshotMechanism) {
-                    // TODO
-                }
-                if (m instanceof AudioMechanism) {
-                    // TODO
+        // The mechanism models are updated with the view values
+        for(MechanismView mechanismView : allMechanismViews) {
+            mechanismView.updateModel();
+        }
+
+        final ArrayList<String> messages = new ArrayList<>();
+        if(validateInput(allMechanisms, messages)) {
+            Feedback feedback = new Feedback(allMechanisms);
+
+            Call<JsonObject> result = null;
+            if (feedback != null) {
+                feedback.setApplication(feedbackConfiguration.getApplication());
+                feedback.setUser(feedbackConfiguration.getUser());
+                feedback.setConfigVersion(feedbackConfiguration.getConfigVersion());
+                result = fbAPI.createFeedback(feedback);
+                // result = fbAPI.createFeedbackTest(feedback);
+            }
+
+            if (result != null) {
+                result.enqueue(new Callback<JsonObject>() {
+                    @Override
+                    public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                        if (response.code() == 201) {
+                            messages.add("Your feedback was successfully sent. Thank you");
+                            DataDialog d = DataDialog.newInstance(messages);
+                            d.show(getFragmentManager(), "dataDialog");
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<JsonObject> call, Throwable t) {
+                        messages.add("Oops. Something went wrong!");
+                        DataDialog d = DataDialog.newInstance(messages);
+                        d.show(getFragmentManager(), "dataDialog");
+                    }
+                });
+            }
+        } else {
+            DataDialog d = DataDialog.newInstance(messages);
+            d.show(getFragmentManager(), "dataDialog");
+        }
+    }
+
+    // Move later on into a helper/utils class
+    private boolean validateInput(List<Mechanism> allMechanisms, List<String> errorMessages) {
+        boolean isValid = true;
+        for(Mechanism mechanism : allMechanisms) {
+            if(mechanism.getType().equals("TEXT_TYPE")) {
+                int length = ((TextMechanism) mechanism).getInputText().length();
+                int maxLength = ((TextMechanism) mechanism).getMaxLength();
+                if(length > maxLength) {
+                    isValid = false;
+                    errorMessages.add("Text has " + length + " characters. Maximum allowed characters are " + maxLength);
                 }
             }
         }
-        DataDialog d = DataDialog.newInstance(str.toString());
-        d.show(getFragmentManager(), "dataDialog");
+
+        return isValid;
     }
 
-    // Only for demo purposes, to show the potential data to be sent
+    // Move later on into a helper/utils class
     public static class DataDialog extends DialogFragment {
-        static DataDialog newInstance(String message) {
+        static DataDialog newInstance(ArrayList<String> messages) {
             DataDialog f = new DataDialog();
             Bundle args = new Bundle();
-            args.putString("message", message);
+            args.putStringArrayList("messages", messages);
             f.setArguments(args);
             return f;
         }
@@ -197,58 +222,16 @@ public class FeedbackActivity extends AppCompatActivity {
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-            builder.setMessage(getArguments().getString("message"))
-                    .setNegativeButton("Close", new DialogInterface.OnClickListener() {
+            List<String> messages = getArguments().getStringArrayList("messages");
+            StringBuilder message = new StringBuilder("");
+            for(String s : messages) {
+                message.append(s).append(".");
+            }
+            builder.setMessage(message.toString()).setNegativeButton("Close", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                         }
                     });
             return builder.create();
         }
-    }
-
-    // TODO: move to a separate class?
-    private TextMechanism createText(FeedbackConfigurationItem item) {
-        TextMechanism t = new TextMechanism(item.canBeActivated(), item.isActive(), item.getOrder());
-        for (Map<String, Object> param : item.getParameters()) {
-            String key = (String) param.get("key");
-            // Title
-            if(key.equals("title")) {
-                t.setTitle((String) param.get("value"));
-            }
-            // Hint
-            if(key.equals("hint")) {
-                t.setHint((String) param.get("value"));
-            }
-            // Maximum length
-            if(key.equals("maxLength")) {
-                t.setMaxLength(((Double) param.get("value")).intValue());
-            }
-        }
-        return t;
-    }
-
-    // TODO: move to a separate class?
-    private RatingMechanism createRating(FeedbackConfigurationItem item) {
-        RatingMechanism r = new RatingMechanism(item.canBeActivated(), item.isActive(), item.getOrder());
-        for (Map<String, Object> param : item.getParameters()) {
-            String key = (String) param.get("key");
-            // Title
-            if(key.equals("title")) {
-                r.setTitle((String) param.get("value"));
-            }
-            // Rating icon
-            if(key.equals("ratingIcon")) {
-                r.setRatingIcon((String) param.get("value"));
-            }
-            // Maximum rating
-            if(key.equals("maxRating")) {
-                r.setMaxRating(((Double) param.get("value")).intValue());
-            }
-            // Default rating
-            if(key.equals("defaultRating")) {
-                r.setDefaultRating(((Double) param.get("value")).floatValue());
-            }
-        }
-        return r;
     }
 }

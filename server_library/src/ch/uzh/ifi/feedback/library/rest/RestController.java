@@ -32,9 +32,6 @@ public abstract class RestController<T> implements IRestController<T> {
 		
 		parameterType = (Class<?>)(superclass);
 	}
-	
-	@Override
-	public abstract T Get(HttpServletRequest request, HttpServletResponse response) throws Exception;
 
 	@Override
 	public String Serialize(T object) {

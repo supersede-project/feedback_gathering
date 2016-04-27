@@ -25,16 +25,6 @@ public class StartActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onPrepareOptionsMenu (Menu menu) {
-        if (isConfigSelected) {
-            menu.getItem(1).setEnabled(true);
-        } else {
-            menu.getItem(1).setEnabled(false);
-        }
-        return true;
-    }
-
-    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_start, menu);
         return true;
@@ -58,41 +48,5 @@ public class StartActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    // Only for demo purposes, to show different configurations
-    public void onRadioButtonClicked(View view) {
-        boolean checked = ((RadioButton) view).isChecked();
-        isConfigSelected = false;
-        requestURL = null;
-
-        // Check which checkbox was clicked
-        switch(view.getId()) {
-            case R.id.radio_text_rating:
-                if (checked) {
-                    isConfigSelected = true;
-                    requestURL = "text_rating.json";
-                }
-                break;
-            case R.id.radio_text_rating_order:
-                if (checked) {
-                    isConfigSelected = true;
-                    requestURL = "text_rating_order.json";
-                }
-                break;
-            case R.id.radio_text_sc_rating:
-                if (checked) {
-                    isConfigSelected = true;
-                    requestURL = "text_sc_rating.json";
-                }
-                break;
-            case R.id.radio_rating_text:
-                if (checked) {
-                    isConfigSelected = true;
-                    requestURL = "rating_text.json";
-                }
-                break;
-        }
-        invalidateOptionsMenu();
     }
 }

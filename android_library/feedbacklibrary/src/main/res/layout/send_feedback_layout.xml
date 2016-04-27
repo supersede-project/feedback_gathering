@@ -1,22 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:paddingTop="20dp"
     android:background="#ffffff">
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#000000"/>
+
     <TextView
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:text="By sending the feedback, you agree with the terms and conditions"/>
+        android:layout_gravity="fill"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_toLeftOf="@+id/supersede_feedbacklibrary_send_feedback_button"
+        android:layout_toStartOf="@+id/supersede_feedbacklibrary_send_feedback_button"
+        android:layout_alignBottom="@+id/supersede_feedbacklibrary_send_feedback_button"
+        android:text="@string/supersede_feedbacklibrary_sendConfirmationText"/>
 
     <Button
         android:id="@+id/supersede_feedbacklibrary_send_feedback_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:minWidth="88dp"
+        android:height="36dp"
         android:onClick="sendButtonClicked"
-        android:text="Send"/>
+        android:text="@string/supersede_feedbacklibrary_sendButtonText"/>
 
-</LinearLayout>
+</RelativeLayout>

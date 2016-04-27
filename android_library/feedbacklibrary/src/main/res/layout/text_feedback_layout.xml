@@ -1,25 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:divider="@drawable/my_divider"
-    android:showDividers="end"
     android:background="#ffffff">
 
-    <TextView
-        android:id="@+id/supersede_feedbacklibrary_text_feedback_title"
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/supersede_feedbacklibrary_text_feedback_input_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        android:textSize="20dp"/>
+        android:paddingBottom="16dp"
+        android:dividerPadding="8dp"
+        app:counterOverflowTextAppearance="@style/counterOverride">
 
-    <EditText
-        android:id="@+id/supersede_feedbacklibrary_text_feedback_text"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        android:background="#dceddb"/>
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/supersede_feedbacklibrary_text_feedback_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textMultiLine"
+            android:fontFamily="sans-serif"
+            android:textStyle="normal"
+            android:textSize="16sp"/>
+
+    </android.support.design.widget.TextInputLayout>
 
 </LinearLayout>

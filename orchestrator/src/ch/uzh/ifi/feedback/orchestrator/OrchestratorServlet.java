@@ -14,7 +14,7 @@ import ch.uzh.ifi.feedback.library.rest.RestManager;
 /**
  * Servlet implementation class OrchestratorServlet
  */
-@WebServlet("/")
+@WebServlet("/example/configuration")
 public class OrchestratorServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
@@ -64,7 +64,8 @@ public class OrchestratorServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-		doGet(request, response);
+		response.setStatus(405);
+		response.getWriter().append("Operation not supported for this resource!");
 	}
 	
 	/**
@@ -72,7 +73,8 @@ public class OrchestratorServlet extends HttpServlet {
 	 */
 	protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-		doGet(request, response);
+		response.setStatus(405);
+		response.getWriter().append("Operation not supported for this resource!");
 	}
 
 	protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

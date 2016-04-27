@@ -50,7 +50,7 @@ public class FeedbackServlet extends HttpServlet {
         response.setCharacterEncoding("UTF-8");
         
         response.setHeader("Access-Control-Allow-Origin", "*");
-        response.setHeader("Access-Control-Allow-Methods", "GET,PUT");
+        response.setHeader("Access-Control-Allow-Methods", "GET,PUT,POST");
         response.setHeader("Access-Control-Allow-Headers", "Content-Type");
         response.setHeader("Access-Control-Max-Age", "86400");
         
@@ -63,7 +63,15 @@ public class FeedbackServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
 	{
-		doGet(request, response);
+        response.setContentType("application/json");            
+        response.setCharacterEncoding("UTF-8");
+        
+        response.setHeader("Access-Control-Allow-Origin", "*");
+        response.setHeader("Access-Control-Allow-Methods", "GET,PUT,POST");
+        response.setHeader("Access-Control-Allow-Headers", "Content-Type");
+        response.setHeader("Access-Control-Max-Age", "86400");
+        
+        _restManager.Post(request, response);
 	}
 	
 	protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
@@ -73,7 +81,7 @@ public class FeedbackServlet extends HttpServlet {
         response.setCharacterEncoding("UTF-8");
         
         response.setHeader("Access-Control-Allow-Origin", "*");
-        response.setHeader("Access-Control-Allow-Methods", "GET,PUT");
+        response.setHeader("Access-Control-Allow-Methods", "GET,PUT,POST");
         response.setHeader("Access-Control-Allow-Headers", "Content-Type");
         response.setHeader("Access-Control-Max-Age", "86400");
         

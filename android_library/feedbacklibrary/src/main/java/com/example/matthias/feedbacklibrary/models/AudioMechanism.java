@@ -6,12 +6,9 @@ import java.io.Serializable;
  * Created by Matthias on 19.03.2016.
  */
 public class AudioMechanism extends Mechanism implements Serializable {
-    private static final String AUDIO_TYPE = "AUDIO_MECHANISM";
+    private static final String AUDIO_TYPE = "AUDIO_TYPE";
 
-    public AudioMechanism(boolean canBeActivated, boolean isActive, int order) {
-        super(AUDIO_TYPE, canBeActivated, isActive, order);
+    public AudioMechanism(FeedbackConfigurationItem item) {
+        super(AUDIO_TYPE, item);
     }
-
-    public void updateView() {}
-    public void updateModel() {}
 }

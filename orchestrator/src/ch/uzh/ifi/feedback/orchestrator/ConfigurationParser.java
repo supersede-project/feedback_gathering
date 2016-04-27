@@ -39,23 +39,57 @@ public class ConfigurationParser implements IDbResultParser<List<FeedbackMechani
 			if(!config.getFeedbackMechanisms().contains(mechanism))
 			{
 				mechanism.setType(currentMechanism);
-				mechanism.setActive(Boolean.parseBoolean(resultSet.getString("active")));
+				mechanism.setActive((resultSet.getInt("active") != 0));
 				mechanism.setOrder(Integer.parseInt(resultSet.getString("order")));
-				mechanism.setCanBeActivated(Boolean.parseBoolean(resultSet.getString("can_be_activated")));
+				mechanism.setCanBeActivated(resultSet.getInt("can_be_activated") != 0);
 				config.getFeedbackMechanisms().add(mechanism);
 			}
 			
 			FeedbackParameter param = new FeedbackParameter();
 			param.setKey(resultSet.getString("key"));
-			param.setValue(resultSet.getString("value"));
-			param.setDefaultValue(resultSet.getString("default_value"));
-			param.setEditableByUser(resultSet.getString("editable_by_user") == null ? null : Boolean.parseBoolean(resultSet.getString("editable_by_user")));
+			param.setValue(getValue(resultSet, "value"));
+			param.setDefaultValue(getValue(resultSet, "default_value"));
+			param.setEditableByUser(resultSet.getString("editable_by_user") == null ? null : (resultSet.getInt("editable_by_user") != 0));
 			currentParameters.add(param);
 	    }
 	    
 	    mechanism.getParameters().addAll(currentParameters);
 	    
 	    result = config;
+	}
+	
+	private Object getValue(ResultSet resultSet, String columnName) throws SQLException
+	{
+		String stringValue = resultSet.getString(columnName);
+		
+		if(stringValue == null)
+			return null;
+		
+		if(tryParseInt(stringValue))
+			return Integer.parseInt(stringValue);
+		
+		if(tryParseDouble(stringValue))
+			return Double.parseDouble(stringValue);
+		
+		return stringValue;
+	}
+	
+	boolean tryParseInt(String value) {  
+	     try {  
+	         Integer.parseInt(value);  
+	         return true;  
+	      } catch (NumberFormatException e) {  
+	         return false;  
+	      }  
+	}
+	
+	boolean tryParseDouble(String value) {  
+	     try {  
+	         Double.parseDouble(value);  
+	         return true;  
+	      } catch (NumberFormatException e) {  
+	         return false;  
+	      }  
 	}
 
 	@Override
