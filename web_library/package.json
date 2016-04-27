@@ -23,11 +23,10 @@
     "uglify-js": "^2.4.15"
   },
   "dependencies": {
-    "jquery-ui": "^1.10.5",
-    "jquery-star-rating-plugin": "^4.11.0"
+    "jquery-ui": "^1.10.5"
   },
   "scripts": {
-    "prestart": "npm install && ./node_modules/uglify-js/bin/uglifyjs js/jquery.feedback.js -o dist/jquery.feedback.min.js",
+    "prestart": "npm install && ./node_modules/uglify-js/bin/uglifyjs js/jquery.feedback.js -o dist/jquery.feedback.min.js && ./node_modules/uglify-js/bin/uglifyjs js/jquery.star-rating-svg.min.js -o dist/jquery.star-rating-svg.min.js",
     "start": "./node_modules/.bin/http-server -a 0.0.0.0 -p 3000 -i",
     "pretest": "npm install && ./node_modules/.bin/jshint js/",
     "test": "./node_modules/.bin/mocha test/spec/tests.js",

@@ -7,19 +7,46 @@
         $('h2#textTypeTitle').text(textConfig.parameters[0].value);
         $('span#textTypeMaxLength').text(textConfig.parameters[2].value);
 
+        var currentRatingValue = 0;
+        $(".rating-input").starRating({
+            starSize: 25,
+            useFullStars: true,
+            disableAfterRate: false,
+            callback: function(currentRating, $el) {
+                currentRatingValue = currentRating;
+            }
+        });
+
         dialog.dialog("open");
 
         $('button#submitFeedback').on('click', function (event) {
             event.preventDefault();
 
             var text = $('textarea#textTypeText').val();
-            var repositoryUrl = 'http://localhost:8080/feedback_repository/FeedbackServlet';
+
             $('#serverResponse').removeClass();
 
+            var feedbackObject =  {
+                "title": "Feedback",
+                "application": "energiesparkonto.de",
+                "user": "uid12839120",
+                "text": text,
+                "configVersion": 1.0,
+                "ratings":
+                    [
+                        {
+                            "title": $('.rating-text').text().trim(),
+                            "rating": currentRatingValue
+                        }
+                    ]
+            };
+
+            console.log(feedbackObject);
+            /*
             $.ajax({
                 url: repositoryUrl,
                 type: 'POST',
-                data: { text: text, component: "web library" },
+                data: feedbackObject,
                 success: function (data) {
                     $('#serverResponse').addClass('success').text(data['success']);
                 },
@@ -27,6 +54,7 @@
                     $('#serverResponse').addClass('error').text('Failure: Server not responding');
                 }
             });
+            */
         });
     };
 
@@ -105,7 +133,7 @@
         'color': '#fff',
         'backgroundColor': '#a4e271',
         'backendUrl': 'http://ec2-54-175-37-30.compute-1.amazonaws.com/FeedbackConfiguration/text_rating.json',
-        'postTestUrl': 'http://localhost:8080/feedback_repository/FeedbackServlet'
+        'postUrl': 'http://ec2-54-175-37-30.compute-1.amazonaws.com/feedback_repository/example/feedback'
     };
 
 })(jQuery, window, document);

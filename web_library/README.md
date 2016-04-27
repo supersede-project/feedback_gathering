@@ -4,7 +4,6 @@ The Feedback Mechanisms for the web are realized as a jQuery Plugin. It has the 
 
 * jquery
 * jquery-ui
-* jquery-star-rating-plugin
 
 
 The library can then get integrate into a website by including:
