@@ -3,20 +3,29 @@ package ch.uzh.ifi.feedback.library.rest;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
+import com.google.gson.JsonSyntaxException;
+
+import ch.uzh.ifi.feedback.library.transaction.TransactionManager;
 
 public abstract class RestController<T> implements IRestController<T> {
 
 	private Class<?> parameterType;
 	private Type serializationType;
+	private TransactionManager transactionManager;
 	
-	public RestController()
+	public Type getSerializationType() {
+		return serializationType;
+	}
+
+	public void setSerializationType(Type serializationType) {
+		this.serializationType = serializationType;
+	}
+
+	public RestController(TransactionManager transactionManager)
 	{
+		this.transactionManager = transactionManager;
 		setParameterType();
 	}
 	
@@ -43,12 +52,16 @@ public abstract class RestController<T> implements IRestController<T> {
 	}
 
 	@Override
-	public T Deserialize(String content) {
+	public T Deserialize(String content) throws JsonSyntaxException {
 		
 		Gson gson = new GsonBuilder().setPrettyPrinting().setDateFormat("yyyy-MM-dd hh:mm:ss.S").create();
 		T requestObject = gson.fromJson(content, serializationType);
-		
+
 		return requestObject;
+	}
+
+	public TransactionManager getTransactionManager() {
+		return transactionManager;
 	}
 
 }

@@ -16,17 +16,18 @@ import ch.uzh.ifi.feedback.library.transaction.*;
 (Route = "/{Application}/configuration")
 public class ConfigurationController extends RestController<List<FeedbackMechanism>>{
     
-    public ConfigurationController() {
-    }
+    public ConfigurationController(TransactionManager transactionManager) {
+		super(transactionManager);
+	}
 
-    @Override
+	@Override
 	public List<FeedbackMechanism> Get(HttpServletRequest request, HttpServletResponse response) throws Exception 
 	{
 		String application = (String)request.getAttribute("Application");
 		
     	IDbResultParser<List<FeedbackMechanism>> parser = new ConfigurationParser();
     	
-		TransactionManager.withTransaction((con) -> {
+		getTransactionManager().withTransaction((con) -> {
 			
 		    PreparedStatement s = con.prepareStatement(
 

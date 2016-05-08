@@ -6,6 +6,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.google.gson.JsonSyntaxException;
+
 public interface IRestController<T> {
 	
 	default T Get(HttpServletRequest request, HttpServletResponse response) throws Exception
@@ -52,6 +54,6 @@ public interface IRestController<T> {
 	
 	String Serialize(T object);
 	
-	T Deserialize(String content);
+	T Deserialize(String content) throws JsonSyntaxException;
 	
 }

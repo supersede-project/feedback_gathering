@@ -17,6 +17,10 @@ import org.reflections.scanners.TypeAnnotationsScanner;
 import org.reflections.util.ClasspathHelper;
 import org.reflections.util.ConfigurationBuilder;
 
+import com.google.gson.JsonSyntaxException;
+
+import javassist.NotFoundException;
+
 
 public class RestManager implements IRestManager {
 	
@@ -73,11 +77,19 @@ public class RestManager implements IRestManager {
 	@Override
 	public void Post(HttpServletRequest request, HttpServletResponse response) throws ServletException {
 		try {
-			IRestController controller = GetController(request);
+			RestController controller = GetController(request);
 			Object result = controller.Deserialize(GetRequestContent(request));
 			controller.Post(request, response, result);
 
-		} catch(NullPointerException ex)
+		} catch(JsonSyntaxException ex)
+		{
+			response.setStatus(400);
+			try {
+				response.getWriter().append("Malformed Json");
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}catch(NotFoundException ex)
 		{
 			response.setStatus(404);
 			try {
@@ -85,7 +97,6 @@ public class RestManager implements IRestManager {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			
 		}catch (Exception ex) {
 			throw new ServletException(ex);
 		}
@@ -133,7 +144,7 @@ public class RestManager implements IRestManager {
 	}
 
 	private Entry<UriTemplate, Class<RestController>> GetClassEntry(String path) {
-
+	
 		for (Entry<UriTemplate, Class<RestController>> entry : _routingMap.entrySet()) {
 			if (entry.getKey().Match(path) != null)
 				return entry;
@@ -142,10 +153,13 @@ public class RestManager implements IRestManager {
 		return null;
 	}
 	
-	private IRestController GetController(HttpServletRequest request) throws InstantiationException, IllegalAccessException
+	private RestController GetController(HttpServletRequest request) throws InstantiationException, IllegalAccessException, NotFoundException
 	{
 		String path = request.getServletPath();
 		Entry<UriTemplate, Class<RestController>> classEntry = GetClassEntry(path);
+		if(classEntry == null)
+			throw new NotFoundException("No controller registered");
+		
 		request = SetAttributes(request, path, classEntry.getKey());
 		Class<RestController> controllerClass = classEntry.getValue();
 		return controllerClass.newInstance();
