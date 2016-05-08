@@ -6,7 +6,7 @@ import java.sql.DriverManager;
 
 public class TransactionManager {
 
-    public static void withTransaction(Transaction transaction) throws IOException, Exception {
+    public void withTransaction(Transaction transaction) throws IOException, Exception {
 
         Connection dbConnection = createDatabaseConnection();
         dbConnection.setAutoCommit(false);
@@ -32,10 +32,10 @@ public class TransactionManager {
         }
     }
 
-    private static Connection createDatabaseConnection() throws Exception {
+    public Connection createDatabaseConnection() throws Exception {
 
         Class.forName("com.mysql.jdbc.Driver");
-        return DriverManager.getConnection("jdbc:mysql://localhost:3306/", "root", "zi6TzptSBmxD");
+        return DriverManager.getConnection("jdbc:mysql://localhost:3306/", "", "");
     }
 }
 
