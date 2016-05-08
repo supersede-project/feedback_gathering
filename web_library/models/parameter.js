@@ -1,10 +1,12 @@
+"use strict";
 var Parameter = (function () {
-    function Parameter(key, value, defaultValue, editableByUSer) {
+    function Parameter(key, value, editableByUser, defaultValue) {
         this.key = key;
         this.value = value;
+        this.editableByUser = editableByUser;
         this.defaultValue = defaultValue;
-        this.editableByUSer = editableByUSer;
     }
     return Parameter;
-})();
+}());
 exports.Parameter = Parameter;
+//# sourceMappingURL=parameter.js.map

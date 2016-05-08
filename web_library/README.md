@@ -2,9 +2,12 @@
 
 The Feedback Mechanisms for the web are realized as a jQuery Plugin. It has the following dependencies:
 
-* jquery
-* jquery-ui
+## Setup
 
+    $ npm install    
+    $ npm start
+
+## Deployment
 
 The library can then get integrate into a website by including:
 

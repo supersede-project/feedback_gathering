@@ -57,7 +57,7 @@
         });
 
         var maxLength = textConfig.parameters[2].value;
-        $('textarea#textTypeText').on('keyup', function() {
+        $('textarea#textTypeText').on('keyup focus', function() {
             $('span#textTypeMaxLength').text($(this).val().length + '/' + maxLength);
         });
     };
