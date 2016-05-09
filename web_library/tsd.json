@@ -12,7 +12,7 @@
       "commit": "6052959591c9bc6f8463c58220965c7030ba934d"
     },
     "node/node.d.ts": {
-      "commit": "6052959591c9bc6f8463c58220965c7030ba934d"
+      "commit": "6d0e826824da52204c1c93f92cecbc961ac84fa9"
     },
     "vinyl/vinyl.d.ts": {
       "commit": "6052959591c9bc6f8463c58220965c7030ba934d"
@@ -43,6 +43,33 @@
     },
     "handlebars/handlebars.d.ts": {
       "commit": "6052959591c9bc6f8463c58220965c7030ba934d"
+    },
+    "bluebird/bluebird.d.ts": {
+      "commit": "6d0e826824da52204c1c93f92cecbc961ac84fa9"
+    },
+    "karma/karma.d.ts": {
+      "commit": "6d0e826824da52204c1c93f92cecbc961ac84fa9"
+    },
+    "log4js/log4js.d.ts": {
+      "commit": "6d0e826824da52204c1c93f92cecbc961ac84fa9"
+    },
+    "express/express.d.ts": {
+      "commit": "6d0e826824da52204c1c93f92cecbc961ac84fa9"
+    },
+    "serve-static/serve-static.d.ts": {
+      "commit": "6d0e826824da52204c1c93f92cecbc961ac84fa9"
+    },
+    "express-serve-static-core/express-serve-static-core.d.ts": {
+      "commit": "6d0e826824da52204c1c93f92cecbc961ac84fa9"
+    },
+    "mime/mime.d.ts": {
+      "commit": "6d0e826824da52204c1c93f92cecbc961ac84fa9"
+    },
+    "jasmine/jasmine.d.ts": {
+      "commit": "6d0e826824da52204c1c93f92cecbc961ac84fa9"
+    },
+    "yargs/yargs.d.ts": {
+      "commit": "6d0e826824da52204c1c93f92cecbc961ac84fa9"
     }
   }
 }

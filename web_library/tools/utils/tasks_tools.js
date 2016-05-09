@@ -8,6 +8,10 @@ var fs_1 = require('fs');
 var path_1 = require('path');
 var config_1 = require('../config');
 var TASKS_PATH = path_1.join(config_1.TOOLS_DIR, 'tasks');
+function loadTasks() {
+    scanDir(TASKS_PATH, function (taskname) { return registerTask(taskname); });
+}
+exports.loadTasks = loadTasks;
 function task(taskname, option) {
     util.log('Loading task', chalk.yellow(taskname, option || ''));
     return require(path_1.join('..', 'tasks', taskname))(gulp, gulpLoadPlugins(), option);

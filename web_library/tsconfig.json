@@ -14,8 +14,7 @@
     "node_modules",
     "typings/browser.d.ts",
     "typings/browser/**",
-    "typings/main/**",
-    "app"
+    "typings/main/**"
   ],
   "compileOnSave": true
 }
