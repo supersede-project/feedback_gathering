@@ -1,5 +1,5 @@
 import {expect, it, beforeEach, describe} from "jasmine";
-import {MechanismService} from '../../services/mechanism_service';
+import {MechanismService} from './mechanism_service';
 
 
 describe("Mechanism Service", () => {

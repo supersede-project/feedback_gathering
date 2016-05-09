@@ -1,6 +1,6 @@
 "use strict";
 var jasmine_1 = require("jasmine");
-var mechanism_service_1 = require('../../services/mechanism_service');
+var mechanism_service_1 = require('./mechanism_service');
 jasmine_1.describe("Mechanism Service", function () {
     var mechanismService;
     jasmine_1.beforeEach(function () {
