@@ -1,4 +1,4 @@
-package feedback_repository;
+package ch.uzh.ifi.feedback.repository.test;
 
 import static org.junit.Assert.*;
 

@@ -13,7 +13,7 @@ import ch.uzh.ifi.feedback.library.rest.RestManager;
 /**
  * Servlet implementation class FeedbackServlet
  */
-@WebServlet("/")
+@WebServlet("/example/feedbacks")
 public class FeedbackServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
     

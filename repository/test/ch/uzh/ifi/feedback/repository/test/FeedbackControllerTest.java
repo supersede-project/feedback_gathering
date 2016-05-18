@@ -1,4 +1,4 @@
-package feedback_repository;
+package ch.uzh.ifi.feedback.repository.test;
 
 import org.junit.Before;
 import org.junit.Test;
