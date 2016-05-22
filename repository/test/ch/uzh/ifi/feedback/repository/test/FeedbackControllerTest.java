@@ -60,7 +60,7 @@ public class FeedbackControllerTest {
 	}
 
 	@Test
-	public void testPost() throws Exception {
+	public void testExecuteTransaction() throws Exception {
 		
 	  //arrange
 		testee = new FeedbackController(transactionManager);

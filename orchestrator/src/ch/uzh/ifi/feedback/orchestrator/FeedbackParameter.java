@@ -30,5 +30,30 @@ public class FeedbackParameter {
 	}
 	public void setEditableByUser(Boolean editableByUser) {
 		this.editableByUser = editableByUser;
-	}	
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+	    if (obj == null) {
+	        return false;
+	    }
+	    if (!FeedbackParameter.class.isAssignableFrom(obj.getClass())) {
+	        return false;
+	    }
+	    final FeedbackParameter other = (FeedbackParameter) obj;
+	    
+	    if((other.getEditableByUser() == null && getEditableByUser() != null) || (other.getEditableByUser() != null && getEditableByUser() == null))
+	    	return false;
+	    
+	    if(other.getEditableByUser() != null && !other.getEditableByUser().equals(getEditableByUser()))
+	    	return false;
+	    
+	    if((other.getDefaultValue() == null && getDefaultValue() != null) || (other.getDefaultValue() != null && getDefaultValue() == null))
+	    	return false;
+	    
+	    if(other.getDefaultValue() != null && !other.getDefaultValue().equals(getDefaultValue()))
+	    	return false;
+	    
+	    return other.getKey().equals(getKey()) && other.getValue().equals(getValue());
+	}
 }

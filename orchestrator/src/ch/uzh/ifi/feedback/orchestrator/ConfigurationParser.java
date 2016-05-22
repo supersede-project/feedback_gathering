@@ -40,7 +40,7 @@ public class ConfigurationParser implements IDbResultParser<List<FeedbackMechani
 			{
 				mechanism.setType(currentMechanism);
 				mechanism.setActive((resultSet.getInt("active") != 0));
-				mechanism.setOrder(Integer.parseInt(resultSet.getString("order")));
+				mechanism.setOrder(resultSet.getInt("order"));
 				mechanism.setCanBeActivated(resultSet.getInt("can_be_activated") != 0);
 				config.getFeedbackMechanisms().add(mechanism);
 			}
@@ -94,7 +94,6 @@ public class ConfigurationParser implements IDbResultParser<List<FeedbackMechani
 
 	@Override
 	public List<FeedbackMechanism> GetResult() {
-		// TODO Auto-generated method stub
 		return result.getFeedbackMechanisms();
 	}
 }
