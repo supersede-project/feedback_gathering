@@ -14,10 +14,11 @@ import com.mysql.jdbc.Statement;
 import ch.uzh.ifi.feedback.library.rest.Controller;
 import ch.uzh.ifi.feedback.library.rest.RestController;
 import ch.uzh.ifi.feedback.library.transaction.TransactionManager;
+import ch.uzh.ifi.feedback.repository.interfaces.FeedbackReceiver;
 
 @Controller
 (Route = "/{Application}/feedback")
-public class FeedbackController extends RestController<Feedback>{
+public class FeedbackController extends RestController<Feedback> implements FeedbackReceiver{
 	
 	public FeedbackController(TransactionManager transactionManager) {
 		super(transactionManager);
@@ -58,9 +59,16 @@ public class FeedbackController extends RestController<Feedback>{
 	@Override
 	public void Post(HttpServletRequest request, HttpServletResponse response, Feedback feedback) throws Exception {
 		
-		getTransactionManager().withTransaction((con) -> ExecuteTransaction(con, feedback));
-		
+		StoreFeedback(feedback);
 		response.setStatus(201);
 		response.getWriter().append(Serialize(feedback));
+	}
+
+	@Override
+	public void StoreFeedback(Feedback feedback) throws Exception {
+		getTransactionManager().withTransaction((con) -> 
+		{
+			ExecuteTransaction(con, feedback);
+		});
 	}
 }

@@ -79,14 +79,7 @@ public class OrchestratorServlet extends HttpServlet {
 
 	protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-        response.setContentType("application/json");            
-        response.setCharacterEncoding("UTF-8");
-        
-        response.setHeader("Access-Control-Allow-Origin", "*");
-        response.setHeader("Access-Control-Allow-Methods", "GET,PUT");
-        response.setHeader("Access-Control-Allow-Headers", "Content-Type");
-        response.setHeader("Access-Control-Max-Age", "86400");
-        
-		doGet(request, response);
+		response.setStatus(405);
+		response.getWriter().append("Operation not supported for this resource!");
 	}
 }

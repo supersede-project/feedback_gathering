@@ -2,11 +2,13 @@ package ch.uzh.ifi.feedback.library.rest;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import javax.el.MethodNotFoundException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -19,6 +21,7 @@ import org.reflections.util.ConfigurationBuilder;
 
 import com.google.gson.JsonSyntaxException;
 
+import ch.uzh.ifi.feedback.library.transaction.TransactionManager;
 import javassist.NotFoundException;
 
 
@@ -125,22 +128,7 @@ public class RestManager implements IRestManager {
 
 	@Override
 	public void Delete(HttpServletRequest request, HttpServletResponse response) throws ServletException {
-		try {
-
-			Get(request, response);
-
-		} catch(NullPointerException ex)
-		{
-			response.setStatus(404);
-			try {
-				response.getWriter().append("Not Found");
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			
-		}catch (Exception ex) {
-			throw new ServletException(ex);
-		}
+		throw new MethodNotFoundException();
 	}
 
 	private Entry<UriTemplate, Class<RestController>> GetClassEntry(String path) {
@@ -153,7 +141,7 @@ public class RestManager implements IRestManager {
 		return null;
 	}
 	
-	private RestController GetController(HttpServletRequest request) throws InstantiationException, IllegalAccessException, NotFoundException
+	private RestController GetController(HttpServletRequest request) throws InstantiationException, IllegalAccessException, NotFoundException, InvocationTargetException, NoSuchMethodException
 	{
 		String path = request.getServletPath();
 		Entry<UriTemplate, Class<RestController>> classEntry = GetClassEntry(path);
@@ -162,7 +150,8 @@ public class RestManager implements IRestManager {
 		
 		request = SetAttributes(request, path, classEntry.getKey());
 		Class<RestController> controllerClass = classEntry.getValue();
-		return controllerClass.newInstance();
+
+		return controllerClass.getDeclaredConstructor(TransactionManager.class).newInstance(new TransactionManager());
 	}
 	
 	private String GetRequestContent(HttpServletRequest request) throws Exception

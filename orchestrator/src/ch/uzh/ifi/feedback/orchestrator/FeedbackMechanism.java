@@ -56,4 +56,35 @@ public class FeedbackMechanism {
 	public void setType(String type) {
 		this.type = type;
 	}
+	
+	@Override
+	public boolean equals(Object obj) {
+	    if (obj == null) {
+	        return false;
+	    }
+	    if (!FeedbackMechanism.class.isAssignableFrom(obj.getClass())) {
+	        return false;
+	    }
+	    final FeedbackMechanism other = (FeedbackMechanism) obj;
+	    
+	    final List<FeedbackParameter> otherParams = other.getParameters();
+	    if(otherParams.size() != getParameters().size())
+	    	return false;
+	    
+	    boolean equals = other.getOrder() == getOrder() 
+	    		&& other.getType().equals(getType()) 
+	    		&& other.isActive() == isActive() 
+	    		&& other.isCanBeActivated() == isCanBeActivated();
+	    
+	    if(!equals)
+	    	return false;
+	    
+	    for(int i = 0; i < otherParams.size(); i++)
+	    {
+	    	if(!otherParams.get(i).equals(getParameters().get(i)))
+	    		return false;
+	    }
+	    
+	    return true;
+	}
 }
