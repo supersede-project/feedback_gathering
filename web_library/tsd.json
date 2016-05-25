@@ -66,10 +66,16 @@
       "commit": "6d0e826824da52204c1c93f92cecbc961ac84fa9"
     },
     "jasmine/jasmine.d.ts": {
-      "commit": "6d0e826824da52204c1c93f92cecbc961ac84fa9"
+      "commit": "8886ae591751e8a8237fa855617745768f0b1bdf"
     },
     "yargs/yargs.d.ts": {
       "commit": "6d0e826824da52204c1c93f92cecbc961ac84fa9"
+    },
+    "zone.js/zone.js.d.ts": {
+      "commit": "6d0e826824da52204c1c93f92cecbc961ac84fa9"
+    },
+    "karma-jasmine/karma-jasmine.d.ts": {
+      "commit": "8886ae591751e8a8237fa855617745768f0b1bdf"
     }
   }
 }

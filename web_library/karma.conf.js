@@ -7,27 +7,19 @@ module.exports = function (config) {
         // base path that will be used to resolve all patterns (eg. files, exclude)
         basePath: '',
 
-
         // frameworks to use
         // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
         frameworks: ['jasmine', 'requirejs'],
 
-
         // list of files / patterns to load in the browser
         files: [
-            {pattern: 'app/**/*.spec.js', included: false},
+            { pattern: 'app/**/*.js', included: false },
             'test-main.js'
         ],
 
-
         // list of files to exclude
-        exclude: [],
-
-
-        // preprocess matching files before serving them to the browser
-        // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
-        preprocessors: {},
-
+        exclude: [
+        ],
 
         // test results reporter to use
         // possible values: 'dots', 'progress'
@@ -54,7 +46,7 @@ module.exports = function (config) {
 
         // start these browsers
         // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
-        browsers: ['Chrome', 'PhantomJS'],
+        browsers: ['Chrome', 'PhantomJS2'],
 
 
         // Continuous Integration mode
@@ -65,4 +57,4 @@ module.exports = function (config) {
         // how many browser should be started simultaneous
         concurrency: Infinity
     })
-}
+};
