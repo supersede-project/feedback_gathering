@@ -1,37 +1,48 @@
-(function ($, window, document) {
+(function($, window, document) {
     var dialog;
+
     function initMechanisms(data) {
-        var textConfig = data[0], textarea = $('textarea#textTypeText');
+        var textConfig = data[0],
+            textarea = $('textarea#textTypeText');
+
         $('span#textTypeMaxLength').text(textarea.val.length + '/' + textConfig.parameters[2].value);
         $('#serverResponse').removeClass().text('');
+
         var currentRatingValue = 0;
         $(".rating-input").starRating({
             starSize: 25,
             useFullStars: true,
             disableAfterRate: false,
-            callback: function (currentRating, $el) {
+            callback: function(currentRating, $el) {
                 currentRatingValue = currentRating;
             }
         });
+
         $('#feedbackContainer').dialog('option', 'title', textConfig.parameters[0].value);
         dialog.dialog("open");
+
         $('button#submitFeedback').on('click', function (event) {
             event.preventDefault();
+
             var text = $('textarea#textTypeText').val();
+
             $('#serverResponse').removeClass();
-            var feedbackObject = {
+
+            var feedbackObject =  {
                 "title": "Feedback",
                 "application": "energiesparkonto.de",
                 "user": "uid12839120",
                 "text": text,
                 "configVersion": 1.0,
-                "ratings": [
-                    {
-                        "title": $('.rating-text').text().trim(),
-                        "rating": currentRatingValue
-                    }
-                ]
+                "ratings":
+                    [
+                        {
+                            "title": $('.rating-text').text().trim(),
+                            "rating": currentRatingValue
+                        }
+                    ]
             };
+
             $.ajax({
                 url: 'http://ec2-54-175-37-30.compute-1.amazonaws.com/feedback_repository/example/feedback',
                 type: 'POST',
@@ -45,16 +56,22 @@
                 }
             });
         });
+
         var maxLength = textConfig.parameters[2].value;
-        textarea.on('keyup focus', function () {
+        textarea.on('keyup focus', function() {
             $('span#textTypeMaxLength').text($(this).val().length + '/' + maxLength);
         });
     }
+
     $.fn.feedbackPlugin = function (options) {
         this.options = $.extend({}, $.fn.feedbackPlugin.defaults, options);
-        var currentOptions = this.options, active = false, dialogContainer = $('#feedbackContainer');
+        var currentOptions = this.options,
+            active = false,
+            dialogContainer = $('#feedbackContainer');
+
         this.css('background-color', currentOptions.backgroundColor);
         this.css('color', currentOptions.color);
+
         dialog = dialogContainer.dialog({
             autoOpen: false,
             height: 'auto',
@@ -62,56 +79,66 @@
             minWidth: 500,
             modal: true,
             title: 'Feedback',
-            buttons: {},
-            close: function () {
+            buttons: {
+            },
+            close: function() {
                 dialog.dialog("close");
                 active = false;
             }
         });
+
         dialogContainer.find('.feedback-page').hide();
         dialogContainer.find('.feedback-page[data-feedback-page="1"]').show();
-        dialogContainer.find('.feedback-dialog-forward').on('click', function (event) {
+
+        dialogContainer.find('.feedback-dialog-forward').on('click', function(event) {
             event.preventDefault();
             event.stopPropagation();
+
             var feedbackPage = $(this).closest('.feedback-page');
             var pageNumber = feedbackPage.data('feedback-page');
             var nextPageNumber = pageNumber + 1;
+
             feedbackPage.hide();
             var nextPage = $('.feedback-page[data-feedback-page="' + nextPageNumber + '"]');
             nextPage.show();
-            if (nextPage.find('#textReview').length > 0) {
+
+            if(nextPage.find('#textReview').length > 0) {
                 nextPage.find('#textReview').text($('textarea#textTypeText').val());
             }
         });
-        dialogContainer.find('.feedback-dialog-backward').on('click', function (event) {
+        dialogContainer.find('.feedback-dialog-backward').on('click', function(event) {
             event.preventDefault();
             event.stopPropagation();
+
             var feedbackPage = $(this).closest('.feedback-page');
             var pageNumber = feedbackPage.data('feedback-page');
             var nextPage = pageNumber - 1;
+
             feedbackPage.hide();
             $('.feedback-page[data-feedback-page="' + nextPage + '"]').show();
         });
+
         this.on('click', function (event) {
             event.preventDefault();
             event.stopPropagation();
+
             if (!active) {
                 $.get(currentOptions.backendUrl, null, function (data) {
                     initMechanisms(data);
                 });
-            }
-            else {
+            } else {
                 dialog.dialog("close");
             }
             active = !active;
         });
         return this;
     };
+
     $.fn.feedbackPlugin.defaults = {
         'color': '#fff',
         'backgroundColor': '#a4e271',
         'backendUrl': 'http://ec2-54-175-37-30.compute-1.amazonaws.com/FeedbackConfiguration/text_rating.json',
         'postUrl': 'http://ec2-54-175-37-30.compute-1.amazonaws.com/feedback_repository/example/feedback'
     };
+
 })(jQuery, window, document);
-//# sourceMappingURL=feedback_plugin.js.map
