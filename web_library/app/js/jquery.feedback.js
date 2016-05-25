@@ -114,4 +114,4 @@
         'postUrl': 'http://ec2-54-175-37-30.compute-1.amazonaws.com/feedback_repository/example/feedback'
     };
 })(jQuery, window, document);
-//# sourceMappingURL=feedback_plugin.js.map
+//# sourceMappingURL=jquery.feedback.js.map

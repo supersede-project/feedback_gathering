@@ -59,6 +59,7 @@
     "normalize.css": "^3.0.1",
     "path": "^0.12.7",
     "phantomjs-prebuilt": "^2.1.7",
+    "protractor": "^3.3.0",
     "requirejs": "^2.2.0",
     "run-sequence": "^1.1.5",
     "traceur": "0.0.108",

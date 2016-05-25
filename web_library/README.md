@@ -17,8 +17,23 @@ The library can then get integrate into a website by including:
 <script src="dist/jquery.feedback.min.js"></script>
 
 $(document).ready(function () {
-    $('#feedbackEntryPoint').feedback({'color': '#000000'});
+    $('#feedbackEntryPoint').feedbackPlugin({'color': '#000000'});
 });
 ```
 
 A click on the element with the feedbackEntryPoint ID triggers then the feedback mechanism.
+
+
+## Testing
+
+Unit Testing
+
+    $ npm test
+    
+Frontend Testing
+
+    $ webdriver-mananger start
+
+then in second console:
+    
+    $ protractor protractor.conf.js     
