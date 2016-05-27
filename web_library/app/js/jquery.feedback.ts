@@ -1,4 +1,8 @@
-(function($, window, document) {
+import {Feedback} from '../models/feedback';
+import {Rating} from '../models/ratings';
+
+
+(function ($, window, document) {
     var dialog;
 
     function initMechanisms(data) {
@@ -13,7 +17,7 @@
             starSize: 25,
             useFullStars: true,
             disableAfterRate: false,
-            callback: function(currentRating, $el) {
+            callback: function (currentRating, $el) {
                 currentRatingValue = currentRating;
             }
         });
@@ -28,20 +32,9 @@
 
             $('#serverResponse').removeClass();
 
-            var feedbackObject =  {
-                "title": "Feedback",
-                "application": "energiesparkonto.de",
-                "user": "uid12839120",
-                "text": text,
-                "configVersion": 1.0,
-                "ratings":
-                    [
-                        {
-                            "title": $('.rating-text').text().trim(),
-                            "rating": currentRatingValue
-                        }
-                    ]
-            };
+            var ratingTitle = $('.rating-text').text().trim();
+            var feedbackObject = new Feedback("Feedback", "energiesparkonto.de", "uid12345", text, 1.0,
+                [new Rating(ratingTitle, currentRatingValue)]);
 
             $.ajax({
                 url: 'http://ec2-54-175-37-30.compute-1.amazonaws.com/feedback_repository/example/feedback',
@@ -58,7 +51,7 @@
         });
 
         var maxLength = textConfig.parameters[2].value;
-        textarea.on('keyup focus', function() {
+        textarea.on('keyup focus', function () {
             $('span#textTypeMaxLength').text($(this).val().length + '/' + maxLength);
         });
     }
@@ -79,9 +72,8 @@
             minWidth: 500,
             modal: true,
             title: 'Feedback',
-            buttons: {
-            },
-            close: function() {
+            buttons: {},
+            close: function () {
                 dialog.dialog("close");
                 active = false;
             }
@@ -90,7 +82,7 @@
         dialogContainer.find('.feedback-page').hide();
         dialogContainer.find('.feedback-page[data-feedback-page="1"]').show();
 
-        dialogContainer.find('.feedback-dialog-forward').on('click', function(event) {
+        dialogContainer.find('.feedback-dialog-forward').on('click', function (event) {
             event.preventDefault();
             event.stopPropagation();
 
@@ -102,11 +94,11 @@
             var nextPage = $('.feedback-page[data-feedback-page="' + nextPageNumber + '"]');
             nextPage.show();
 
-            if(nextPage.find('#textReview').length > 0) {
+            if (nextPage.find('#textReview').length > 0) {
                 nextPage.find('#textReview').text($('textarea#textTypeText').val());
             }
         });
-        dialogContainer.find('.feedback-dialog-backward').on('click', function(event) {
+        dialogContainer.find('.feedback-dialog-backward').on('click', function (event) {
             event.preventDefault();
             event.stopPropagation();
 
@@ -142,3 +134,9 @@
     };
 
 })(jQuery, window, document);
+
+requirejs.config( {
+    "shim": {
+        "feedbackPlugin"  : ["jquery"]
+    }
+} );

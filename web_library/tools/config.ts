@@ -12,7 +12,7 @@ export const ENV                  = getEnvironment();
 export const PROJECT_ROOT         = normalize(join(__dirname, '..'));
 export const APP_SRC              = 'app';
 export const TOOLS_DIR            = 'tools';
-export const APP_DEST             = `dist/${ENV}`;
+export const APP_DEST             = `dist`;
 export const TEST_DEST            = `dist/test`;
 export const TMP_DIR              = 'tmp';
 

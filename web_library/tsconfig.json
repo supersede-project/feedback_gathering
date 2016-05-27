@@ -8,13 +8,23 @@
     "noLib": false,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "sourceMap": true
+    "sourceMap": true,
+    "sourceRoot": "./app/",
+    "rootDir": "./app/",
+    "outDir": "./dist",
+    "outFile":"./dist/build.js"
   },
   "exclude": [
     "node_modules",
     "typings/browser.d.ts",
     "typings/browser/**",
-    "typings/main/**"
+    "typings/main/**",
+    "tools/*.ts",
+    "tools/**/*.ts",
+    "app/**/*.e2e.ts",
+    "app/**/*.spec.ts",
+    "app/**/**/*.e2e.ts",
+    "app/**/**/*.spec.ts"
   ],
   "compileOnSave": true
 }

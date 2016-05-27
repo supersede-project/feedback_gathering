@@ -30,10 +30,16 @@ Unit Testing
 
     $ npm test
     
-Frontend Testing
+# Frontend Testing
 
+Server has to run:
+
+    $ npm start
+
+Selenium server has to run as well: 
+ 
     $ webdriver-mananger start
 
-then in second console:
+then in another console:
     
-    $ protractor protractor.conf.js     
+    $ protractor protractor.conf.js

@@ -6,12 +6,17 @@ describe('JQuery Feedback Plugin', function() {
     });
 
     it('should open a dialog on link click', function() {
-        let feedbackEntryLink = element(by.css('a#feedbackEntryPoint'));
+        let feedbackEntryLink = browser.element(by.css('a#feedbackEntryPoint'));
         feedbackEntryLink.click();
 
         browser.sleep(2000);
 
+        expect(feedbackEntryLink.isPresent()).toEqual(true);
         expect(feedbackEntryLink).toBeDefined();
+
+        let feedbackDialog = browser.element(by.css('section#feedbackContainer'));
+
+        expect(feedbackDialog.isPresent()).toEqual(true);
     });
 
 });
