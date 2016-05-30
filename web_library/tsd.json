@@ -6,7 +6,7 @@
   "bundle": "typings/tsd.d.ts",
   "installed": {
     "requirejs/require.d.ts": {
-      "commit": "6052959591c9bc6f8463c58220965c7030ba934d"
+      "commit": "7ad4e09016898d9c4837e250121fef2aedbecaaa"
     },
     "gulp-util/gulp-util.d.ts": {
       "commit": "6052959591c9bc6f8463c58220965c7030ba934d"
@@ -66,10 +66,16 @@
       "commit": "6d0e826824da52204c1c93f92cecbc961ac84fa9"
     },
     "jasmine/jasmine.d.ts": {
-      "commit": "6d0e826824da52204c1c93f92cecbc961ac84fa9"
+      "commit": "7ad4e09016898d9c4837e250121fef2aedbecaaa"
     },
     "yargs/yargs.d.ts": {
       "commit": "6d0e826824da52204c1c93f92cecbc961ac84fa9"
+    },
+    "zone.js/zone.js.d.ts": {
+      "commit": "6d0e826824da52204c1c93f92cecbc961ac84fa9"
+    },
+    "karma-jasmine/karma-jasmine.d.ts": {
+      "commit": "8886ae591751e8a8237fa855617745768f0b1bdf"
     }
   }
 }
