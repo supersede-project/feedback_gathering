@@ -4,12 +4,14 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.example.matthias.feedbacklibrary.API.feedbackAPI;
 import com.example.matthias.feedbacklibrary.feedbacks.Feedback;
@@ -164,7 +166,6 @@ public class FeedbackActivity extends AppCompatActivity {
                 feedback.setUser(feedbackConfiguration.getUser());
                 feedback.setConfigVersion(feedbackConfiguration.getConfigVersion());
                 result = fbAPI.createFeedback(feedback);
-                // result = fbAPI.createFeedbackTest(feedback);
             }
 
             if (result != null) {
@@ -172,9 +173,8 @@ public class FeedbackActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
                         if (response.code() == 201) {
-                            messages.add("Your feedback was successfully sent. Thank you");
-                            DataDialog d = DataDialog.newInstance(messages);
-                            d.show(getFragmentManager(), "dataDialog");
+                            Toast toast = Toast.makeText(getApplicationContext(), "Your feedback was successfully sent. Thank you", Toast.LENGTH_SHORT);
+                            toast.show();
                         }
                     }
 
