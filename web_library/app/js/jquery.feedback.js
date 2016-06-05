@@ -105,5 +105,9 @@ define(["require", "exports", '../models/feedback', '../models/ratings'], functi
             'postUrl': 'http://ec2-54-175-37-30.compute-1.amazonaws.com/feedback_repository/example/feedback'
         };
     })(jQuery, window, document);
+    requirejs.config({
+        "shim": {
+            "feedbackPlugin": ["jquery"]
+        }
+    });
 });
-//# sourceMappingURL=jquery.feedback.js.map

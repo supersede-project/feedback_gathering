@@ -7,12 +7,7 @@
     "removeComments": true,
     "noLib": false,
     "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
-    "sourceMap": true,
-    "sourceRoot": "./app/",
-    "rootDir": "./app/",
-    "outDir": "./dist",
-    "outFile":"./dist/build.js"
+    "experimentalDecorators": true
   },
   "exclude": [
     "node_modules",

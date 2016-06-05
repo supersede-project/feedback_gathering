@@ -9,4 +9,3 @@ define(["require", "exports"], function (require, exports) {
     }());
     exports.Rating = Rating;
 });
-//# sourceMappingURL=ratings.js.map

@@ -11,4 +11,3 @@ define(["require", "exports", './mechanism_service'], function (require, exports
         });
     });
 });
-//# sourceMappingURL=mechanism_service.spec.js.map

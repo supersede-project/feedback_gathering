@@ -69,6 +69,7 @@
     "uglify-js": "^2.4.15",
     "wdio-jasmine-framework": "^0.1.9",
     "webdriverio": "^4.0.8",
+    "webpack": "^1.13.1",
     "yargs": "^4.7.0"
   },
   "dependencies": {

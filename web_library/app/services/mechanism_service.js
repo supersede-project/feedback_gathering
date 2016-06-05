@@ -14,4 +14,3 @@ define(["require", "exports", '../models/mechanism'], function (require, exports
     }());
     exports.MechanismService = MechanismService;
 });
-//# sourceMappingURL=mechanism_service.js.map

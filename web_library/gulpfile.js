@@ -8,4 +8,3 @@ define(["require", "exports", 'gulp', './tools/utils'], function (require, expor
         return utils_1.runSequence('clean.dist', 'tslint', 'build.sass.dev', 'build.js.dev', done);
     });
 });
-//# sourceMappingURL=gulpfile.js.map
