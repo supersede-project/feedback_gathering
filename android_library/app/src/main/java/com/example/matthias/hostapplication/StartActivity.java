@@ -6,15 +6,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.RadioButton;
 
 import com.example.matthias.feedbacklibrary.FeedbackActivity;
 
 public class StartActivity extends AppCompatActivity {
-    private boolean isConfigSelected;
-    private String requestURL;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,9 +33,7 @@ public class StartActivity extends AppCompatActivity {
             return true;
         }
 
-        // Only for demo purposes, to show different configurations
         Intent intent = new Intent(this, FeedbackActivity.class);
-        intent.putExtra("requestURL", requestURL);
         if (id == R.id.action_feedback) {
             // open FeedbackActivity from the feedback library
             startActivity(intent);
