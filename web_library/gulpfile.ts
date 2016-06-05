@@ -9,8 +9,7 @@ gulp.task('clean.tmp',   task('clean', 'tmp'));
 
 
 gulp.task('build.dev', done =>
-    runSequence('clean.dist',
+    runSequence(
         'tslint',
         'build.sass.dev',
-        'build.js.dev',
         done));

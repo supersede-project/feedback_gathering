@@ -9,6 +9,10 @@ The Feedback Mechanisms for the web are realized as a jQuery Plugin. It has the 
 
 ## Deployment
 
+Generate the bundle with the following command:
+
+    $ webpack
+
 The library can then get integrate into a website by including:
 
 ```javascript

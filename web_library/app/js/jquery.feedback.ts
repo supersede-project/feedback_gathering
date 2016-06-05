@@ -128,7 +128,7 @@ import {Rating} from '../models/ratings';
 
     $.fn.feedbackPlugin.defaults = {
         'color': '#fff',
-        'backgroundColor': '#a4e271',
+        'backgroundColor': '#b3cd40',
         'backendUrl': 'http://ec2-54-175-37-30.compute-1.amazonaws.com/FeedbackConfiguration/text_rating.json',
         'postUrl': 'http://ec2-54-175-37-30.compute-1.amazonaws.com/feedback_repository/example/feedback'
     };

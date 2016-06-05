@@ -5,6 +5,6 @@ define(["require", "exports", 'gulp', './tools/utils'], function (require, expor
     gulp.task('clean.test', utils_1.task('clean', 'test'));
     gulp.task('clean.tmp', utils_1.task('clean', 'tmp'));
     gulp.task('build.dev', function (done) {
-        return utils_1.runSequence('clean.dist', 'tslint', 'build.sass.dev', 'build.js.dev', done);
+        return utils_1.runSequence('tslint', 'build.sass.dev', done);
     });
 });
