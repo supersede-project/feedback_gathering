@@ -1,15 +1,19 @@
 import {Feedback} from '../models/feedback';
 import {Rating} from '../models/ratings';
+import {MechanismService} from '../services/mechanism_service';
+import {apiEndpoint, feedbackPath, configPath} from './config';
 
 
 (function ($, window, document) {
     var dialog;
 
     function initMechanisms(data) {
-        var textConfig = data[0],
-            textarea = $('textarea#textTypeText');
+        var mechanismService = new MechanismService(data);
+        var textMechanism = mechanismService.getMechanismConfig('TEXT_TYPE');
 
-        $('span#textTypeMaxLength').text(textarea.val.length + '/' + textConfig.parameters[2].value);
+        var textarea = $('textarea#textTypeText');
+
+        $('span#textTypeMaxLength').text(textarea.val.length + '/' + textMechanism.getParameter('maxLength').value);
         $('#serverResponse').removeClass().text('');
 
         var currentRatingValue = 0;
@@ -22,14 +26,13 @@ import {Rating} from '../models/ratings';
             }
         });
 
-        $('#feedbackContainer').dialog('option', 'title', textConfig.parameters[0].value);
+        $('#feedbackContainer').dialog('option', 'title', textMechanism.getParameter('title').value);
         dialog.dialog("open");
 
         $('button#submitFeedback').on('click', function (event) {
             event.preventDefault();
 
             var text = $('textarea#textTypeText').val();
-
             $('#serverResponse').removeClass();
 
             var ratingTitle = $('.rating-text').text().trim();
@@ -37,7 +40,7 @@ import {Rating} from '../models/ratings';
                 [new Rating(ratingTitle, currentRatingValue)]);
 
             $.ajax({
-                url: 'http://ec2-54-175-37-30.compute-1.amazonaws.com/feedback_repository/example/feedback',
+                url: apiEndpoint + feedbackPath,
                 type: 'POST',
                 data: JSON.stringify(feedbackObject),
                 success: function (data) {
@@ -50,7 +53,7 @@ import {Rating} from '../models/ratings';
             });
         });
 
-        var maxLength = textConfig.parameters[2].value;
+        var maxLength = textMechanism.getParameter('maxLength').value;
         textarea.on('keyup focus', function () {
             $('span#textTypeMaxLength').text($(this).val().length + '/' + maxLength);
         });
@@ -114,8 +117,10 @@ import {Rating} from '../models/ratings';
             event.preventDefault();
             event.stopPropagation();
 
+            var url = apiEndpoint + configPath;
+
             if (!active) {
-                $.get(currentOptions.backendUrl, null, function (data) {
+                $.get(url, null, function (data) {
                     initMechanisms(data);
                 });
             } else {
@@ -129,8 +134,6 @@ import {Rating} from '../models/ratings';
     $.fn.feedbackPlugin.defaults = {
         'color': '#fff',
         'backgroundColor': '#b3cd40',
-        'backendUrl': 'http://ec2-54-175-37-30.compute-1.amazonaws.com/FeedbackConfiguration/text_rating.json',
-        'postUrl': 'http://ec2-54-175-37-30.compute-1.amazonaws.com/feedback_repository/example/feedback'
     };
 
 })(jQuery, window, document);

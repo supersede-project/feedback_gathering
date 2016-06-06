@@ -15,5 +15,20 @@ export class Mechanism {
         this.canBeActivated = canBeActivated;
         this.parameters = parameters;
     }
-}
 
+    static initByData(data:any): Mechanism {
+        if(data.type === null || data.active === null) {
+            return null;
+        }
+        return new Mechanism(data.type, data.active, data.order, data.canBeActivated, data.parameters);
+    }
+
+    getParameter(key:string): Parameter {
+        var filteredArray = this.parameters.filter(parameter => parameter.key === key);
+        if(filteredArray.length > 0) {
+            return filteredArray[0];
+        } else {
+            return null;
+        }
+    }
+}

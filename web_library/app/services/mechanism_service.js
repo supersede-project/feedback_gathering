@@ -1,14 +1,17 @@
-define(["require", "exports", '../models/mechanism'], function (require, exports, mechanism_1) {
+define(["require", "exports"], function (require, exports) {
     "use strict";
     var MechanismService = (function () {
-        function MechanismService() {
+        function MechanismService(data) {
+            this.data = data;
         }
-        MechanismService.prototype.findAll = function () {
-            var mechanisms = [
-                new mechanism_1.Mechanism('TEXT_MECHANISM', true),
-                new mechanism_1.Mechanism('SCREENSHOT_MECHANISM', true)
-            ];
-            return mechanisms;
+        MechanismService.prototype.getMechanismConfig = function (mechanismTypeConstant) {
+            var filteredArray = this.data.filter(function (mechanism) { return mechanism.type === mechanismTypeConstant; });
+            if (filteredArray.length > 0) {
+                return filteredArray[0];
+            }
+            else {
+                return null;
+            }
         };
         return MechanismService;
     }());
