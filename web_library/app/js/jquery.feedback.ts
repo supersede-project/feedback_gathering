@@ -2,6 +2,7 @@ import {Feedback} from '../models/feedback';
 import {Rating} from '../models/ratings';
 import {MechanismService} from '../services/mechanism_service';
 import {apiEndpoint, feedbackPath, configPath} from './config';
+import './jquery.star-rating-svg.min.js';
 
 
 (function ($, window, document) {

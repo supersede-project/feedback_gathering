@@ -1,6 +1,6 @@
 # jQuery Web Library
 
-The Feedback Mechanisms for the web are realized as a jQuery Plugin. It has the following dependencies:
+The Feedback Mechanisms for the web are realized as a jQuery Plugin.
 
 ## Setup
 
@@ -17,9 +17,14 @@ The library can then get integrate into a website by including:
 
 ```javascript
 
-<link rel="stylesheet" href="css/main.css">
-<script src="dist/jquery.feedback.min.js"></script>
+<link rel="stylesheet" href="node_modules/normalize.css/normalize.css"/>
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css"/>
+<link rel="stylesheet" href="app/css/main.css"/>
+<link rel="stylesheet" href="app/css/star-rating-svg.css" />
 
+<script src="node_modules/jquery/dist/jquery.min.js"></script>
+<script src="https://code.jquery.com/ui/1.10.3/jquery-ui.min.js"></script>
+<script src="dist/jquery.feedback.min.js"></script>
 $(document).ready(function () {
     $('#feedbackEntryPoint').feedbackPlugin({'color': '#000000'});
 });

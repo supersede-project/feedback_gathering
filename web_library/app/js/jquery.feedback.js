@@ -1,4 +1,4 @@
-define(["require", "exports", '../models/feedback', '../models/ratings', '../services/mechanism_service', './config'], function (require, exports, feedback_1, ratings_1, mechanism_service_1, config_1) {
+define(["require", "exports", '../models/feedback', '../models/ratings', '../services/mechanism_service', './config', './jquery.star-rating-svg.min.js'], function (require, exports, feedback_1, ratings_1, mechanism_service_1, config_1) {
     "use strict";
     (function ($, window, document) {
         var dialog;
