@@ -1,50 +1,48 @@
-(function($, window, document) {
+import {Feedback} from '../models/feedback';
+import {Rating} from '../models/ratings';
+import {MechanismService} from '../services/mechanism_service';
+import {apiEndpoint, feedbackPath, configPath} from './config';
+import './jquery.star-rating-svg.min.js';
+
+
+(function ($, window, document) {
     var dialog;
 
     function initMechanisms(data) {
-        var textConfig = data[0],
-            textarea = $('textarea#textTypeText');
+        var mechanismService = new MechanismService(data);
+        var textMechanism = mechanismService.getMechanismConfig('TEXT_TYPE');
 
-        $('span#textTypeMaxLength').text(textarea.val.length + '/' + textConfig.parameters[2].value);
+        var textarea = $('textarea#textTypeText');
+
+        $('span#textTypeMaxLength').text(textarea.val.length + '/' + textMechanism.getParameter('maxLength').value);
         $('#serverResponse').removeClass().text('');
+        $('#textTypeHint').text(textMechanism.getParameter('hint').value);
 
         var currentRatingValue = 0;
         $(".rating-input").starRating({
             starSize: 25,
             useFullStars: true,
             disableAfterRate: false,
-            callback: function(currentRating, $el) {
+            callback: function (currentRating, $el) {
                 currentRatingValue = currentRating;
             }
         });
 
-        $('#feedbackContainer').dialog('option', 'title', textConfig.parameters[0].value);
+        $('#feedbackContainer').dialog('option', 'title', textMechanism.getParameter('title').value);
         dialog.dialog("open");
 
         $('button#submitFeedback').on('click', function (event) {
             event.preventDefault();
 
             var text = $('textarea#textTypeText').val();
-
             $('#serverResponse').removeClass();
 
-            var feedbackObject =  {
-                "title": "Feedback",
-                "application": "energiesparkonto.de",
-                "user": "uid12839120",
-                "text": text,
-                "configVersion": 1.0,
-                "ratings":
-                    [
-                        {
-                            "title": $('.rating-text').text().trim(),
-                            "rating": currentRatingValue
-                        }
-                    ]
-            };
+            var ratingTitle = $('.rating-text').text().trim();
+            var feedbackObject = new Feedback("Feedback", "energiesparkonto.de", "uid12345", text, 1.0,
+                [new Rating(ratingTitle, currentRatingValue)]);
 
             $.ajax({
-                url: 'http://ec2-54-175-37-30.compute-1.amazonaws.com/feedback_repository/example/feedback',
+                url: apiEndpoint + feedbackPath,
                 type: 'POST',
                 data: JSON.stringify(feedbackObject),
                 success: function (data) {
@@ -57,8 +55,8 @@
             });
         });
 
-        var maxLength = textConfig.parameters[2].value;
-        textarea.on('keyup focus', function() {
+        var maxLength = textMechanism.getParameter('maxLength').value;
+        textarea.on('keyup focus', function () {
             $('span#textTypeMaxLength').text($(this).val().length + '/' + maxLength);
         });
     }
@@ -79,9 +77,8 @@
             minWidth: 500,
             modal: true,
             title: 'Feedback',
-            buttons: {
-            },
-            close: function() {
+            buttons: {},
+            close: function () {
                 dialog.dialog("close");
                 active = false;
             }
@@ -90,7 +87,7 @@
         dialogContainer.find('.feedback-page').hide();
         dialogContainer.find('.feedback-page[data-feedback-page="1"]').show();
 
-        dialogContainer.find('.feedback-dialog-forward').on('click', function(event) {
+        dialogContainer.find('.feedback-dialog-forward').on('click', function (event) {
             event.preventDefault();
             event.stopPropagation();
 
@@ -102,11 +99,11 @@
             var nextPage = $('.feedback-page[data-feedback-page="' + nextPageNumber + '"]');
             nextPage.show();
 
-            if(nextPage.find('#textReview').length > 0) {
+            if (nextPage.find('#textReview').length > 0) {
                 nextPage.find('#textReview').text($('textarea#textTypeText').val());
             }
         });
-        dialogContainer.find('.feedback-dialog-backward').on('click', function(event) {
+        dialogContainer.find('.feedback-dialog-backward').on('click', function (event) {
             event.preventDefault();
             event.stopPropagation();
 
@@ -122,8 +119,10 @@
             event.preventDefault();
             event.stopPropagation();
 
+            var url = apiEndpoint + configPath;
+
             if (!active) {
-                $.get(currentOptions.backendUrl, null, function (data) {
+                $.get(url, null, function (data) {
                     initMechanisms(data);
                 });
             } else {
@@ -136,9 +135,13 @@
 
     $.fn.feedbackPlugin.defaults = {
         'color': '#fff',
-        'backgroundColor': '#a4e271',
-        'backendUrl': 'http://ec2-54-175-37-30.compute-1.amazonaws.com/FeedbackConfiguration/text_rating.json',
-        'postUrl': 'http://ec2-54-175-37-30.compute-1.amazonaws.com/feedback_repository/example/feedback'
+        'backgroundColor': '#b3cd40',
     };
 
 })(jQuery, window, document);
+
+requirejs.config( {
+    "shim": {
+        "feedbackPlugin"  : ["jquery"]
+    }
+} );

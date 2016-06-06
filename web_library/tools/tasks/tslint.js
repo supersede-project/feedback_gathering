@@ -18,4 +18,3 @@ define(["require", "exports", 'path', '../config'], function (require, exports, 
         };
     };
 });
-//# sourceMappingURL=tslint.js.map

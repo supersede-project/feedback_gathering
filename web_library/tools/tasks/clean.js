@@ -45,4 +45,3 @@ define(["require", "exports", 'async', 'gulp-util', 'chalk', 'del', '../config']
         };
     };
 });
-//# sourceMappingURL=clean.js.map

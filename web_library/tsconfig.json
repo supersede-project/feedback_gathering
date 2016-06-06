@@ -7,14 +7,19 @@
     "removeComments": true,
     "noLib": false,
     "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
-    "sourceMap": true
+    "experimentalDecorators": true
   },
   "exclude": [
     "node_modules",
     "typings/browser.d.ts",
     "typings/browser/**",
-    "typings/main/**"
+    "typings/main/**",
+    "tools/*.ts",
+    "tools/**/*.ts",
+    "app/**/*.e2e.ts",
+    "app/**/*.spec.ts",
+    "app/**/**/*.e2e.ts",
+    "app/**/**/*.spec.ts"
   ],
   "compileOnSave": true
 }

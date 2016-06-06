@@ -5,4 +5,3 @@ define(["require", "exports", '../config'], function (require, exports, CONFIG) 
     }
     exports.templateLocals = templateLocals;
 });
-//# sourceMappingURL=template_locals.js.map

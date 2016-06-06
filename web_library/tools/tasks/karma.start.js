@@ -9,4 +9,3 @@ define(["require", "exports", 'karma', 'path'], function (require, exports, karm
         };
     };
 });
-//# sourceMappingURL=karma.start.js.map

@@ -6,7 +6,7 @@
   "bundle": "typings/tsd.d.ts",
   "installed": {
     "requirejs/require.d.ts": {
-      "commit": "6052959591c9bc6f8463c58220965c7030ba934d"
+      "commit": "7ad4e09016898d9c4837e250121fef2aedbecaaa"
     },
     "gulp-util/gulp-util.d.ts": {
       "commit": "6052959591c9bc6f8463c58220965c7030ba934d"

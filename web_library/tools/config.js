@@ -8,7 +8,7 @@ define(["require", "exports", 'path', 'yargs'], function (require, exports, path
     exports.PROJECT_ROOT = path_1.normalize(path_1.join(__dirname, '..'));
     exports.APP_SRC = 'app';
     exports.TOOLS_DIR = 'tools';
-    exports.APP_DEST = "dist/" + exports.ENV;
+    exports.APP_DEST = "dist";
     exports.TEST_DEST = "dist/test";
     exports.TMP_DIR = 'tmp';
     function getEnvironment() {
@@ -22,4 +22,3 @@ define(["require", "exports", 'path', 'yargs'], function (require, exports, path
         }
     }
 });
-//# sourceMappingURL=config.js.map
