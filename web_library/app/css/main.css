@@ -137,14 +137,15 @@ section.dialog-navigation {
   font-style: italic; }
 
 #serverResponse {
-  display: block; }
+  display: block;
+  margin-top: 20px;
+  margin-bottom: 5px; }
 
 #serverResponse.success {
   background-color: #dff0d8;
   color: #3c763d;
   border: 1px solid #d0e9c6;
   border-radius: 0.25rem;
-  margin-bottom: 1rem;
   padding: 15px; }
 
 #serverResponse.error {
@@ -152,7 +153,6 @@ section.dialog-navigation {
   color: #a94442;
   border: 1px solid #ebcccc;
   border-radius: 0.25rem;
-  margin-bottom: 1rem;
   padding: 15px; }
 
 /*# sourceMappingURL=main.css.map */

@@ -15,6 +15,7 @@ import {apiEndpoint, feedbackPath, configPath} from './config';
 
         $('span#textTypeMaxLength').text(textarea.val.length + '/' + textMechanism.getParameter('maxLength').value);
         $('#serverResponse').removeClass().text('');
+        $('#textTypeHint').text(textMechanism.getParameter('hint').value);
 
         var currentRatingValue = 0;
         $(".rating-input").starRating({

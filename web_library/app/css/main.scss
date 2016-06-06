@@ -166,6 +166,8 @@ section.dialog-navigation {
 
 #serverResponse {
   display: block;
+  margin-top: 20px;
+  margin-bottom: 5px;
 }
 
 #serverResponse.success {
@@ -173,7 +175,6 @@ section.dialog-navigation {
   color: #3c763d;
   border: 1px solid #d0e9c6;
   border-radius: 0.25rem;
-  margin-bottom: 1rem;
   padding: 15px;
 }
 
@@ -182,7 +183,6 @@ section.dialog-navigation {
   color: #a94442;
   border: 1px solid #ebcccc;
   border-radius: 0.25rem;
-  margin-bottom: 1rem;
   padding: 15px;
 }
 

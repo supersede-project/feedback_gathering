@@ -8,6 +8,7 @@ define(["require", "exports", '../models/feedback', '../models/ratings', '../ser
             var textarea = $('textarea#textTypeText');
             $('span#textTypeMaxLength').text(textarea.val.length + '/' + textMechanism.getParameter('maxLength').value);
             $('#serverResponse').removeClass().text('');
+            $('#textTypeHint').text(textMechanism.getParameter('hint').value);
             var currentRatingValue = 0;
             $(".rating-input").starRating({
                 starSize: 25,
