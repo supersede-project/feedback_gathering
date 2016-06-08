@@ -27,10 +27,12 @@ import twitter4j.util.function.Consumer;
 @Path("SocialNetworkMonitoring")
 public class SocialNetworkService extends ServiceWrapper {
 	
-	MonitoringParams params;
+	//The streaming instance to call the Stream Twitter API
 	TwitterStream stream;
 	
+	//A list with the tweets info
 	List<Status> tweetInfo;
+	//Indicates if connection has been already initialized
 	boolean firstConnection;
 
 	@Override
@@ -38,13 +40,13 @@ public class SocialNetworkService extends ServiceWrapper {
 	@Path("/configuration")
 	public String addConfiguration(@QueryParam("configurationJson") String jsonConf) {
 		
-		int id = 1;
 		firstConnection = true;
 		tweetInfo = new ArrayList<>();
 		
 		try {
 			
-			params = parseConfigurationParams(jsonConf);
+			parseConfigurationParams(jsonConf);
+			initKafka();
 			
 			ConfigurationBuilder cb = new ConfigurationBuilder();
 			cb.setDebugEnabled(true)
@@ -60,7 +62,6 @@ public class SocialNetworkService extends ServiceWrapper {
 			stream.onStatus(new Consumer<Status>() {
 				@Override
 				public void accept(Status arg0) {
-					System.out.println("@" + arg0.getUser().getScreenName());
 					if (params.getAccounts() != null && !params.getAccounts().isEmpty()) {
 						if (params.getAccounts().contains(arg0.getUser().getScreenName())); 
 							tweetInfo.add(arg0);
