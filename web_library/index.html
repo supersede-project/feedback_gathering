@@ -13,7 +13,7 @@
           content="Mit dem Energiesparkonto sehen Sie Ihren Energieverbrauch auf einen Blick. Sie können Ihren Verbrauch vergleichen und Energiekosten senken."/>
     <meta name="keywords"
           content="Energie sparen, Kosten senken, Verbrauch vergleichen, Geld sparen,  Energieverbrauch bilanzieren, Klimaschutz, Forum, Energiespar-Ratgeber "/>
-    <meta name="robots" content="index,follow" />
+    <meta name="robots" content="noindex,noollow" />
     <meta name="language" content="de" />
 
     <link rel="icon" href="https://www.energiesparkonto.de/gfx/esk/favicon/favicon.ico" type="image/x-icon" />
@@ -60,10 +60,10 @@
     <![endif]-->
 
 
-    <link rel="stylesheet" href="node_modules/normalize.css/normalize.css"/>
+    <link rel="stylesheet" href="dist/normalize.css"/>
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css"/>
-    <link rel="stylesheet" href="app/css/main.css"/>
-    <link rel="stylesheet" href="app/css/star-rating-svg.css" />
+    <link rel="stylesheet" href="dist/main.css"/>
+    <link rel="stylesheet" href="dist/star-rating-svg.css" />
 
 </head>
 
@@ -509,20 +509,22 @@ G&uuml;nter D. Alt, Journalist, ehemaliger Moderator bei ZDF WISO und Mitbegr&uu
                 <section id="feedbackContainer">
                     <form>
                         <article data-feedback-page="1" class="feedback-page">
-                            <p id="textTypeHint" class="explanation">
-                                Please input text
-                            </p>
-                            <textarea id="textTypeText"></textarea>
-                            <p class="text-count">
-                                <span id="textTypeMaxLength"></span>
-                            </p>
-                            <section class="rating-feedback">
-                                <p class="rating-text">
-                                    Please rate your experience on this page:
+                            <section class="feedback-mechanism" id="textType">
+                                <p id="textTypeHint" class="explanation">
+                                    Please input text
                                 </p>
-                                <p class="rating-input">
+                                <textarea id="textTypeText"></textarea>
+                                <p class="text-count">
+                                    <span id="textTypeMaxLength"></span>
+                                </p>
+                            </section>
+                            <section class="feedback-mechanism" id="ratingType">
+                                    <p class="rating-text">
+                                        Please rate your experience on this page:
+                                    </p>
+                                    <p class="rating-input">
 
-                                </p>
+                                    </p>
                             </section>
                             <button class="feedback-dialog-forward navigation-button">Review feedback</button>
                             <div class="clearfix"></div>
@@ -564,7 +566,7 @@ G&uuml;nter D. Alt, Journalist, ehemaliger Moderator bei ZDF WISO und Mitbegr&uu
                 </section>
             </div>
 
-            <script src="node_modules/jquery/dist/jquery.min.js"></script>
+            <script src="dist/jquery.min.js"></script>
             <script src="https://code.jquery.com/ui/1.10.3/jquery-ui.min.js"></script>
             <script src="dist/jquery.feedback.min.js"></script>
             <script>
