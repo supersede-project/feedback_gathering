@@ -11,6 +11,11 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.QueryParam;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import kafka.javaapi.producer.Producer;
+import kafka.producer.KeyedMessage;
 import monitoring.params.MonitoringData;
 import monitoring.params.MonitoringParams;
 import twitter4j.ConnectionLifeCycleListener;
@@ -25,99 +30,90 @@ import twitter4j.conf.ConfigurationBuilder;
 import twitter4j.util.function.Consumer;
 
 @Path("SocialNetworkMonitoring")
-public class SocialNetworkService extends ServiceWrapper {
+public class TwitterAPI implements ServiceInterface {
 	
+	//Kafka producer
+	Producer<String, String> producer;
+	//Monitoring params
+	MonitoringParams params;
 	//The streaming instance to call the Stream Twitter API
 	TwitterStream stream;
-	
 	//A list with the tweets info
 	List<Status> tweetInfo;
 	//Indicates if connection has been already initialized
 	boolean firstConnection;
+	//Data id
+	int id = 1;
 
 	@Override
-	@POST
-	@Path("/configuration")
-	public String addConfiguration(@QueryParam("configurationJson") String jsonConf) {
+	public void addConfiguration(MonitoringParams params, Producer<String, String> producer) {
 		
+		this.params = params;
+		this.producer = producer;
 		firstConnection = true;
 		tweetInfo = new ArrayList<>();
 		
-		try {
-			
-			parseConfigurationParams(jsonConf);
-			initKafka();
-			
-			ConfigurationBuilder cb = new ConfigurationBuilder();
-			cb.setDebugEnabled(true)
-			  .setOAuthConsumerKey("bp7l14kRNiAL4ulI8kVxAwOji")
-			  .setOAuthConsumerSecret("OvsQl9Q4BgCmmSnhwxZSSoan49AICThiSBIUiBF98Xpjp5OKPw")
-			  .setOAuthAccessToken("124831353-OejsO8VStzjMvx0oT1qqydD2DcdiIcwpFOa0FIv8")
-			  .setOAuthAccessTokenSecret("HAhXZLgAqEq6OWmScQEndmCMLQwfeNsMkNMdq5BKCpvFE");
-			
-			Configuration conf = cb.build();
-			
-			stream = new TwitterStreamFactory(conf).getInstance();
-
-			stream.onStatus(new Consumer<Status>() {
-				@Override
-				public void accept(Status arg0) {
-					if (params.getAccounts() != null && !params.getAccounts().isEmpty()) {
-						if (params.getAccounts().contains(arg0.getUser().getScreenName())) { 
-							tweetInfo.add(arg0);
-						}
+		ConfigurationBuilder cb = new ConfigurationBuilder();
+		cb.setDebugEnabled(true)
+		  .setOAuthConsumerKey("bp7l14kRNiAL4ulI8kVxAwOji")
+		  .setOAuthConsumerSecret("OvsQl9Q4BgCmmSnhwxZSSoan49AICThiSBIUiBF98Xpjp5OKPw")
+		  .setOAuthAccessToken("124831353-OejsO8VStzjMvx0oT1qqydD2DcdiIcwpFOa0FIv8")
+		  .setOAuthAccessTokenSecret("HAhXZLgAqEq6OWmScQEndmCMLQwfeNsMkNMdq5BKCpvFE");
+		
+		Configuration conf = cb.build();
+		
+		stream = new TwitterStreamFactory(conf).getInstance();
+		
+		stream.onStatus(new Consumer<Status>() {
+			@Override
+			public void accept(Status arg0) {
+				if (params.getAccounts() != null && !params.getAccounts().isEmpty()) {
+					if (params.getAccounts().contains(arg0.getUser().getScreenName())) { 
+						tweetInfo.add(arg0);
 					}
-					else tweetInfo.add(arg0);
 				}
-			});
-			
-			stream.addConnectionLifeCycleListener(new ConnectionLifeCycleListener() {
+				else tweetInfo.add(arg0);
+			}
+		});
+		
+		stream.addConnectionLifeCycleListener(new ConnectionLifeCycleListener() {
 
-				@Override
-				public void onCleanUp() {
-					
-				}
+			@Override
+			public void onCleanUp() {
+			}
 
-				@Override
-				public void onConnect() {
-					Timer timer = new Timer();
-					timer.schedule(new TimerTask() {
-					    public void run() {
-					    	if (firstConnection) {
-					    		firstConnection = false;
-					    		System.out.println("First connection stablished");
-					    	} else {
-					    		generateData((new Timestamp((new Date()).getTime()).toString()));
-					    	}
-					    }
+			@Override
+			public void onConnect() {
+				Timer timer = new Timer();
+				timer.schedule(new TimerTask() {
+				    public void run() {
+				    	if (firstConnection) {
+				    		firstConnection = false;
+				    		System.out.println("First connection stablished");
+				    	} else {
+				    		generateData((new Timestamp((new Date()).getTime()).toString()));
+				    	}
+				    }
 
-					}, 0, Integer.parseInt(params.getTimeSlot())*1000);
-				}
+				}, 0, Integer.parseInt(params.getTimeSlot())* 1000);
+			}
 
-				@Override
-				public void onDisconnect() {
-					System.out.println("Connection closed");
-				}
-				
-			});
-						
-			
-			FilterQuery filterQuery = new FilterQuery();
-			if (params.getKeywordExpression() != null) {
-				filterQuery.track(generateKeywordExp(params.getKeywordExpression()));
+			@Override
+			public void onDisconnect() {
+				System.out.println("Connection closed");
 			}
 			
-			System.out.println(filterQuery);
-			
-			//filterQuery.follow(user.getId());
-			stream.filter(filterQuery);
-
-		} catch (Exception e1) {
-			e1.printStackTrace();
-			return getResponse("error").toString();
+		});
+		
+		FilterQuery filterQuery = new FilterQuery();
+		if (params.getKeywordExpression() != null) {
+			filterQuery.track(generateKeywordExp(params.getKeywordExpression()));
 		}
-
-		return getResponse("success").toString();
+		
+		System.out.println(filterQuery);
+		
+		//filterQuery.follow(user.getId());
+		stream.filter(filterQuery);
 		
 	}
 
@@ -198,6 +194,44 @@ public class SocialNetworkService extends ServiceWrapper {
 		}
 		tweetInfo = new ArrayList<>();
 		getData(searchTimeStamp, data);
+		
+	}
+	
+	public void getData(String timeStamp, List<MonitoringData> data) {
+		
+		try {
+			JSONArray items = new JSONArray();
+			for (MonitoringData item : data) {
+				JSONObject jsonItem = new JSONObject();
+				
+				jsonItem.put("idItem", item.getId());
+				jsonItem.put("timeStamp", item.getTimeStamp());
+				jsonItem.put("message", item.getMessage());
+				jsonItem.put("author", item.getAuthor());
+				jsonItem.put("link", item.getLink());
+				
+				items.put(jsonItem);
+			}
+			
+			JSONObject mainInfo = new JSONObject();
+			
+			mainInfo.put("idOutput", id);
+			mainInfo.put("searchTimeStamp", timeStamp);
+			mainInfo.put("numDataItems", data.size());
+			mainInfo.put("DataItems", items);
+			
+			++id;
+			
+			JSONObject jsonData = new JSONObject();
+			
+			jsonData.put("socialNetworksMonitoredData", mainInfo);
+			
+			KeyedMessage<String, String> msg = new KeyedMessage<String, String>(params.getKafkaTopic(), jsonData.toString());
+			producer.send(msg);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		
 	}
 	

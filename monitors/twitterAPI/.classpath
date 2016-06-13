@@ -39,5 +39,11 @@
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/twitter4j-async-4.0.4.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/twitter4j-core-4.0.4.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/twitter4j-stream-4.0.4.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/log4j-1.2.17.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/kafka-clients-0.9.0.0.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/kafka_2.10-0.9.0.0.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/slf4j-api-1.7.12.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/scala-library-2.10.4.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/metrics-core-2.2.0.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
