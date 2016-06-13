@@ -11,6 +11,18 @@ import './jquery.star-rating-svg.min.js';
     function initMechanisms(data) {
         var mechanismService = new MechanismService(data);
         var textMechanism = mechanismService.getMechanismConfig('TEXT_TYPE');
+        if(textMechanism.active) {
+            $('.feedback-mechanism#textType').show();
+        } else {
+            $('.feedback-mechanism#textType').hide();
+        }
+        
+        var ratingMechanism = mechanismService.getMechanismConfig('RATING_TYPE');
+        if(ratingMechanism.active) {
+            $('.feedback-mechanism#ratingType').show();
+        } else {
+            $('.feedback-mechanism#ratingType').hide();
+        }
 
         var textarea = $('textarea#textTypeText');
 
@@ -18,9 +30,14 @@ import './jquery.star-rating-svg.min.js';
         $('#serverResponse').removeClass().text('');
         $('#textTypeHint').text(textMechanism.getParameter('hint').value);
 
-        var currentRatingValue = 0;
+        var currentRatingValue = ratingMechanism.getParameter('defaultRating').value;
+        var ratingTitle = ratingMechanism.getParameter('title').value;
+        var numberOfStars = ratingMechanism.getParameter('maxRating').value;
+        $('#ratingType > p.rating-text').text(ratingTitle);
         $(".rating-input").starRating({
             starSize: 25,
+            totalStars: numberOfStars,
+            initialRating: currentRatingValue,
             useFullStars: true,
             disableAfterRate: false,
             callback: function (currentRating, $el) {
