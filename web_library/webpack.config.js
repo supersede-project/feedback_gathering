@@ -15,5 +15,10 @@ module.exports = {
                 comments: false
             }
         })
-    ]
+    ],
+    module: {
+        loaders: [
+            {test: /\.handlebars$/, loader: "handlebars-loader"}
+        ]
+    }
 };

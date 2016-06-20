@@ -8,33 +8,24 @@ import {
 import './jquery.star-rating-svg.min.js';
 import {textType, ratingType} from '../models/mechanism';
 import {PaginationContainer} from '../views/pagination_container';
+let feedbackDialog = require('../templates/feedback_dialog.handlebars');
 
 
 (function ($, window, document) {
     var dialog;
     var currentRatingValue;
+    var active = false;
 
     function initMechanisms(data) {
         var mechanismService = new MechanismService(data);
         var textMechanism = mechanismService.getMechanismConfig(textType);
-        handleMechanismVisibility(textMechanism, '.feedback-mechanism#textType');
-        
         var ratingMechanism = mechanismService.getMechanismConfig(ratingType);
-        handleMechanismVisibility(ratingMechanism, '.feedback-mechanism#ratingType');
-
-        var textarea = $('textarea#textTypeText');
-
-        $('span#textTypeMaxLength').text(textarea.val.length + '/' + textMechanism.getParameter('maxLength').value);
         $('#serverResponse').removeClass().text('');
-        $('#textTypeHint').text(textMechanism.getParameter('hint').value);
 
         currentRatingValue = ratingMechanism.getParameter('defaultRating').value;
-        var ratingTitle = ratingMechanism.getParameter('title').value;
-        var numberOfStars = ratingMechanism.getParameter('maxRating').value;
-        $('#ratingType > p.rating-text').text(ratingTitle);
         $(".rating-input").starRating({
             starSize: 25,
-            totalStars: numberOfStars,
+            totalStars: ratingMechanism.getParameter('maxRating').value,
             initialRating: currentRatingValue,
             useFullStars: true,
             disableAfterRate: false,
@@ -43,6 +34,38 @@ import {PaginationContainer} from '../views/pagination_container';
             }
         });
 
+        var context = {
+            textMechanism: {
+                hint: textMechanism.getParameter('hint').value,
+                currentLength: 0,
+                maxLength: textMechanism.getParameter('maxLength').value
+            },
+            ratingMechanism: {
+                title: ratingMechanism.getParameter('title').value
+            }
+        };
+        var html = feedbackDialog(context);
+        $('body').append(html);
+
+        var dialogContainer = $('#feedbackContainer');
+        dialog = dialogContainer.dialog({
+            autoOpen: false,
+            height: 'auto',
+            width: 'auto',
+            minWidth: 500,
+            modal: true,
+            title: 'Feedback',
+            buttons: {},
+            close: function () {
+                dialog.dialog("close");
+                active = false;
+            }
+        });
+        var paginationContainer = new PaginationContainer($('#feedbackContainer .pages-container'));
+        handleMechanismVisibility(textMechanism, '.feedback-mechanism#textType');
+        handleMechanismVisibility(ratingMechanism, '.feedback-mechanism#ratingType');
+
+        var textarea = $('textarea#textTypeText');
         $('#feedbackContainer').dialog('option', 'title', textMechanism.getParameter('title').value);
         dialog.dialog("open");
 
@@ -89,28 +112,10 @@ import {PaginationContainer} from '../views/pagination_container';
 
     $.fn.feedbackPlugin = function (options) {
         this.options = $.extend({}, $.fn.feedbackPlugin.defaults, options);
-        var currentOptions = this.options,
-            active = false,
-            dialogContainer = $('#feedbackContainer');
+        var currentOptions = this.options;
 
         this.css('background-color', currentOptions.backgroundColor);
         this.css('color', currentOptions.color);
-
-        dialog = dialogContainer.dialog({
-            autoOpen: false,
-            height: 'auto',
-            width: 'auto',
-            minWidth: 500,
-            modal: true,
-            title: 'Feedback',
-            buttons: {},
-            close: function () {
-                dialog.dialog("close");
-                active = false;
-            }
-        });
-
-        var paginationContainer = new PaginationContainer($('#feedbackContainer .pages-container'));
 
         // feedback mechanism gets invoked
         this.on('click', function (event) {

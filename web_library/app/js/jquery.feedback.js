@@ -1,25 +1,19 @@
 define(["require", "exports", '../models/feedback', '../models/ratings', '../services/mechanism_service', './config', '../models/mechanism', '../views/pagination_container', './jquery.star-rating-svg.min.js'], function (require, exports, feedback_1, ratings_1, mechanism_service_1, config_1, mechanism_1, pagination_container_1) {
     "use strict";
+    var feedbackDialog = require('../templates/feedback_dialog.handlebars');
     (function ($, window, document) {
         var dialog;
         var currentRatingValue;
+        var active = false;
         function initMechanisms(data) {
             var mechanismService = new mechanism_service_1.MechanismService(data);
             var textMechanism = mechanismService.getMechanismConfig(mechanism_1.textType);
-            handleMechanismVisibility(textMechanism, '.feedback-mechanism#textType');
             var ratingMechanism = mechanismService.getMechanismConfig(mechanism_1.ratingType);
-            handleMechanismVisibility(ratingMechanism, '.feedback-mechanism#ratingType');
-            var textarea = $('textarea#textTypeText');
-            $('span#textTypeMaxLength').text(textarea.val.length + '/' + textMechanism.getParameter('maxLength').value);
             $('#serverResponse').removeClass().text('');
-            $('#textTypeHint').text(textMechanism.getParameter('hint').value);
             currentRatingValue = ratingMechanism.getParameter('defaultRating').value;
-            var ratingTitle = ratingMechanism.getParameter('title').value;
-            var numberOfStars = ratingMechanism.getParameter('maxRating').value;
-            $('#ratingType > p.rating-text').text(ratingTitle);
             $(".rating-input").starRating({
                 starSize: 25,
-                totalStars: numberOfStars,
+                totalStars: ratingMechanism.getParameter('maxRating').value,
                 initialRating: currentRatingValue,
                 useFullStars: true,
                 disableAfterRate: false,
@@ -27,6 +21,36 @@ define(["require", "exports", '../models/feedback', '../models/ratings', '../ser
                     currentRatingValue = currentRating;
                 }
             });
+            var context = {
+                textMechanism: {
+                    hint: textMechanism.getParameter('hint').value,
+                    currentLength: 0,
+                    maxLength: textMechanism.getParameter('maxLength').value
+                },
+                ratingMechanism: {
+                    title: ratingMechanism.getParameter('title').value
+                }
+            };
+            var html = feedbackDialog(context);
+            $('body').append(html);
+            var dialogContainer = $('#feedbackContainer');
+            dialog = dialogContainer.dialog({
+                autoOpen: false,
+                height: 'auto',
+                width: 'auto',
+                minWidth: 500,
+                modal: true,
+                title: 'Feedback',
+                buttons: {},
+                close: function () {
+                    dialog.dialog("close");
+                    active = false;
+                }
+            });
+            var paginationContainer = new pagination_container_1.PaginationContainer($('#feedbackContainer .pages-container'));
+            handleMechanismVisibility(textMechanism, '.feedback-mechanism#textType');
+            handleMechanismVisibility(ratingMechanism, '.feedback-mechanism#ratingType');
+            var textarea = $('textarea#textTypeText');
             $('#feedbackContainer').dialog('option', 'title', textMechanism.getParameter('title').value);
             dialog.dialog("open");
             $('button#submitFeedback').on('click', function (event) {
@@ -66,23 +90,9 @@ define(["require", "exports", '../models/feedback', '../models/ratings', '../ser
         };
         $.fn.feedbackPlugin = function (options) {
             this.options = $.extend({}, $.fn.feedbackPlugin.defaults, options);
-            var currentOptions = this.options, active = false, dialogContainer = $('#feedbackContainer');
+            var currentOptions = this.options;
             this.css('background-color', currentOptions.backgroundColor);
             this.css('color', currentOptions.color);
-            dialog = dialogContainer.dialog({
-                autoOpen: false,
-                height: 'auto',
-                width: 'auto',
-                minWidth: 500,
-                modal: true,
-                title: 'Feedback',
-                buttons: {},
-                close: function () {
-                    dialog.dialog("close");
-                    active = false;
-                }
-            });
-            var paginationContainer = new pagination_container_1.PaginationContainer($('#feedbackContainer .pages-container'));
             this.on('click', function (event) {
                 event.preventDefault();
                 event.stopPropagation();
