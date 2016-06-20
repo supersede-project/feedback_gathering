@@ -7,7 +7,7 @@ import {
 } from './config';
 import './jquery.star-rating-svg.min.js';
 import {textType, ratingType} from '../models/mechanism';
-import {DialogContainer, PaginationContainer} from '../views/pagination_container';
+import {PaginationContainer} from '../views/pagination_container';
 
 
 (function ($, window, document) {
@@ -110,7 +110,7 @@ import {DialogContainer, PaginationContainer} from '../views/pagination_containe
             }
         });
 
-        var paginationContainer = new PaginationContainer('#feedbackContainer .pages-container');
+        var paginationContainer = new PaginationContainer($('#feedbackContainer .pages-container'));
 
         // feedback mechanism gets invoked
         this.on('click', function (event) {

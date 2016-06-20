@@ -82,7 +82,7 @@ define(["require", "exports", '../models/feedback', '../models/ratings', '../ser
                     active = false;
                 }
             });
-            var paginationContainer = new pagination_container_1.PaginationContainer('#feedbackContainer .pages-container');
+            var paginationContainer = new pagination_container_1.PaginationContainer($('#feedbackContainer .pages-container'));
             this.on('click', function (event) {
                 event.preventDefault();
                 event.stopPropagation();
