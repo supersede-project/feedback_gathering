@@ -1,5 +1,8 @@
 define(["require", "exports"], function (require, exports) {
     "use strict";
+    exports.textType = 'TEXT_TYPE';
+    exports.ratingType = 'RATING_TYPE';
+    exports.screenShotType = 'SCREEN_SHOT_TYPE';
     var Mechanism = (function () {
         function Mechanism(type, active, order, canBeActivated, parameters) {
             this.type = type;

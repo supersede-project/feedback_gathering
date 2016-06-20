@@ -84,7 +84,8 @@
     "karma": "karma",
     "karma.start": "karma start",
     "test": "karma start karma.conf.js --single-run",
-    "e2e": "protractor protractor.conf.js"
+    "e2e": "protractor protractor.conf.js",
+    "webpack": "webpack"
   },
   "jshintConfig": {
     "browser": true,

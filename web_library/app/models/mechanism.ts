@@ -1,6 +1,11 @@
 import {Parameter} from './parameter';
 
 
+export const textType = 'TEXT_TYPE';
+export const ratingType = 'RATING_TYPE';
+export const screenShotType = 'SCREEN_SHOT_TYPE';
+
+
 export class Mechanism {
     type:string;
     active:boolean;

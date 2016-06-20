@@ -5,7 +5,7 @@ define(["require", "exports", './mechanism_service'], function (require, exports
         beforeEach(function () {
             var data = [
                 {
-                    "type": "TEXT_TYPE",
+                    "type": "textType",
                     "active": true,
                     "order": 1,
                     "canBeActivated": false,
@@ -85,9 +85,9 @@ define(["require", "exports", './mechanism_service'], function (require, exports
             mechanismService = new mechanism_service_1.MechanismService(data);
         });
         it('should return the corresponding mechanisms', function () {
-            var textMechanism = mechanismService.getMechanismConfig('TEXT_TYPE');
+            var textMechanism = mechanismService.getMechanismConfig('textType');
             expect(textMechanism).toBeDefined();
-            expect(textMechanism.type).toEqual('TEXT_TYPE');
+            expect(textMechanism.type).toEqual('textType');
             expect(textMechanism.active).toEqual(true);
             expect(textMechanism.order).toEqual(1);
             expect(textMechanism.canBeActivated).toEqual(false);
