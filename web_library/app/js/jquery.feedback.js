@@ -1,4 +1,4 @@
-define(["require", "exports", '../models/feedback', '../models/ratings', '../services/mechanism_service', './config', '../models/mechanism', './jquery.star-rating-svg.min.js'], function (require, exports, feedback_1, ratings_1, mechanism_service_1, config_1, mechanism_1) {
+define(["require", "exports", '../models/feedback', '../models/ratings', '../services/mechanism_service', './config', '../models/mechanism', '../views/pagination_container', './jquery.star-rating-svg.min.js'], function (require, exports, feedback_1, ratings_1, mechanism_service_1, config_1, mechanism_1, pagination_container_1) {
     "use strict";
     (function ($, window, document) {
         var dialog;
@@ -42,7 +42,7 @@ define(["require", "exports", '../models/feedback', '../models/ratings', '../ser
             var text = $('textarea#textTypeText').val();
             $('#serverResponse').removeClass();
             var ratingTitle = $('.rating-text').text().trim();
-            var feedbackObject = new feedback_1.Feedback(config_1.feedbackTitle, config_1.applicationName, "uid12345", text, 1.0, [new ratings_1.Rating(ratingTitle, currentRatingValue)]);
+            var feedbackObject = new feedback_1.Feedback(config_1.feedbackObjectTitle, config_1.applicationName, "uid12345", text, 1.0, [new ratings_1.Rating(ratingTitle, currentRatingValue)]);
             $.ajax({
                 url: config_1.apiEndpoint + config_1.feedbackPath,
                 type: 'POST',
@@ -82,30 +82,7 @@ define(["require", "exports", '../models/feedback', '../models/ratings', '../ser
                     active = false;
                 }
             });
-            dialogContainer.find('.feedback-page').hide();
-            dialogContainer.find('.feedback-page[data-feedback-page="1"]').show();
-            dialogContainer.find('.feedback-dialog-forward').on('click', function (event) {
-                event.preventDefault();
-                event.stopPropagation();
-                var feedbackPage = $(this).closest('.feedback-page');
-                var pageNumber = feedbackPage.data('feedback-page');
-                var nextPageNumber = pageNumber + 1;
-                feedbackPage.hide();
-                var nextPage = $('.feedback-page[data-feedback-page="' + nextPageNumber + '"]');
-                nextPage.show();
-                if (nextPage.find('#textReview').length > 0) {
-                    nextPage.find('#textReview').text($('textarea#textTypeText').val());
-                }
-            });
-            dialogContainer.find('.feedback-dialog-backward').on('click', function (event) {
-                event.preventDefault();
-                event.stopPropagation();
-                var feedbackPage = $(this).closest('.feedback-page');
-                var pageNumber = feedbackPage.data('feedback-page');
-                var nextPage = pageNumber - 1;
-                feedbackPage.hide();
-                $('.feedback-page[data-feedback-page="' + nextPage + '"]').show();
-            });
+            var paginationContainer = new pagination_container_1.PaginationContainer('#feedbackContainer .pages-container');
             this.on('click', function (event) {
                 event.preventDefault();
                 event.stopPropagation();

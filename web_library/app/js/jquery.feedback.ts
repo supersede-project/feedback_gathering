@@ -1,9 +1,13 @@
 import {Feedback} from '../models/feedback';
 import {Rating} from '../models/ratings';
 import {MechanismService} from '../services/mechanism_service';
-import {apiEndpoint, feedbackPath, configPath, feedbackTitle, applicationName, defaultSuccessMessage} from './config';
+import {
+    apiEndpoint, feedbackPath, configPath, applicationName, defaultSuccessMessage,
+    feedbackObjectTitle
+} from './config';
 import './jquery.star-rating-svg.min.js';
 import {textType, ratingType} from '../models/mechanism';
+import {DialogContainer, PaginationContainer} from '../views/pagination_container';
 
 
 (function ($, window, document) {
@@ -58,7 +62,7 @@ import {textType, ratingType} from '../models/mechanism';
         $('#serverResponse').removeClass();
 
         var ratingTitle = $('.rating-text').text().trim();
-        var feedbackObject = new Feedback(feedbackTitle, applicationName, "uid12345", text, 1.0,
+        var feedbackObject = new Feedback(feedbackObjectTitle, applicationName, "uid12345", text, 1.0,
             [new Rating(ratingTitle, currentRatingValue)]);
 
         $.ajax({
@@ -106,37 +110,9 @@ import {textType, ratingType} from '../models/mechanism';
             }
         });
 
-        dialogContainer.find('.feedback-page').hide();
-        dialogContainer.find('.feedback-page[data-feedback-page="1"]').show();
+        var paginationContainer = new PaginationContainer('#feedbackContainer .pages-container');
 
-        dialogContainer.find('.feedback-dialog-forward').on('click', function (event) {
-            event.preventDefault();
-            event.stopPropagation();
-
-            var feedbackPage = $(this).closest('.feedback-page');
-            var pageNumber = feedbackPage.data('feedback-page');
-            var nextPageNumber = pageNumber + 1;
-
-            feedbackPage.hide();
-            var nextPage = $('.feedback-page[data-feedback-page="' + nextPageNumber + '"]');
-            nextPage.show();
-
-            if (nextPage.find('#textReview').length > 0) {
-                nextPage.find('#textReview').text($('textarea#textTypeText').val());
-            }
-        });
-        dialogContainer.find('.feedback-dialog-backward').on('click', function (event) {
-            event.preventDefault();
-            event.stopPropagation();
-
-            var feedbackPage = $(this).closest('.feedback-page');
-            var pageNumber = feedbackPage.data('feedback-page');
-            var nextPage = pageNumber - 1;
-
-            feedbackPage.hide();
-            $('.feedback-page[data-feedback-page="' + nextPage + '"]').show();
-        });
-
+        // feedback mechanism gets invoked
         this.on('click', function (event) {
             event.preventDefault();
             event.stopPropagation();
