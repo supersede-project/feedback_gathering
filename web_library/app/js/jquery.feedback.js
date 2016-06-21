@@ -9,58 +9,16 @@ define(["require", "exports", '../models/feedback', '../models/ratings', '../ser
             var mechanismService = new mechanism_service_1.MechanismService(data);
             var textMechanism = mechanismService.getMechanismConfig(mechanism_1.textType);
             var ratingMechanism = mechanismService.getMechanismConfig(mechanism_1.ratingType);
-            $('#serverResponse').removeClass().text('');
             currentRatingValue = ratingMechanism.getParameter('defaultRating').value;
-            $(".rating-input").starRating({
-                starSize: 25,
-                totalStars: ratingMechanism.getParameter('maxRating').value,
-                initialRating: currentRatingValue,
-                useFullStars: true,
-                disableAfterRate: false,
-                callback: function (currentRating, $el) {
-                    currentRatingValue = currentRating;
-                }
-            });
-            var context = {
-                textMechanism: {
-                    hint: textMechanism.getParameter('hint').value,
-                    currentLength: 0,
-                    maxLength: textMechanism.getParameter('maxLength').value
-                },
-                ratingMechanism: {
-                    title: ratingMechanism.getParameter('title').value
-                }
-            };
+            $('#serverResponse').removeClass().text('');
+            var context = mechanismService.getContextForView();
             var html = feedbackDialog(context);
             $('body').append(html);
             var dialogContainer = $('#feedbackContainer');
-            dialog = dialogContainer.dialog({
-                autoOpen: false,
-                height: 'auto',
-                width: 'auto',
-                minWidth: 500,
-                modal: true,
-                title: 'Feedback',
-                buttons: {},
-                close: function () {
-                    dialog.dialog("close");
-                    active = false;
-                }
-            });
-            var paginationContainer = new pagination_container_1.PaginationContainer($('#feedbackContainer .pages-container'));
-            handleMechanismVisibility(textMechanism, '.feedback-mechanism#textType');
-            handleMechanismVisibility(ratingMechanism, '.feedback-mechanism#ratingType');
-            var textarea = $('textarea#textTypeText');
-            $('#feedbackContainer').dialog('option', 'title', textMechanism.getParameter('title').value);
-            dialog.dialog("open");
-            $('button#submitFeedback').on('click', function (event) {
-                event.preventDefault();
-                sendFeedback();
-            });
-            var maxLength = textMechanism.getParameter('maxLength').value;
-            textarea.on('keyup focus', function () {
-                $('span#textTypeMaxLength').text($(this).val().length + '/' + maxLength);
-            });
+            new pagination_container_1.PaginationContainer($('#feedbackContainer .pages-container'));
+            initRating(".rating-input", ratingMechanism, currentRatingValue);
+            initDialog(dialogContainer, textMechanism);
+            addEvents(textMechanism);
         }
         var sendFeedback = function () {
             var text = $('textarea#textTypeText').val();
@@ -80,13 +38,38 @@ define(["require", "exports", '../models/feedback', '../models/ratings', '../ser
                 }
             });
         };
-        var handleMechanismVisibility = function (mechanism, selector) {
-            if (mechanism.active) {
-                $('' + selector).show();
-            }
-            else {
-                $('' + selector).hide();
-            }
+        var initRating = function (selector, ratingMechanism, currentRatingValue) {
+            $('' + selector).starRating({
+                starSize: 25,
+                totalStars: ratingMechanism.getParameter('maxRating').value,
+                initialRating: currentRatingValue,
+                useFullStars: true,
+                disableAfterRate: false,
+                callback: function (currentRating, $el) {
+                    currentRatingValue = currentRating;
+                }
+            });
+        };
+        var initDialog = function (dialogContainer, textMechanism) {
+            dialog = dialogContainer.dialog($.extend({}, config_1.dialogOptions, {
+                close: function () {
+                    dialog.dialog("close");
+                    active = false;
+                }
+            }));
+            $('#feedbackContainer').dialog('option', 'title', textMechanism.getParameter('title').value);
+            dialog.dialog("open");
+        };
+        var addEvents = function (textMechanism) {
+            $('button#submitFeedback').on('click', function (event) {
+                event.preventDefault();
+                sendFeedback();
+            });
+            var maxLength = textMechanism.getParameter('maxLength').value;
+            var textarea = $('textarea#textTypeText');
+            textarea.on('keyup focus', function () {
+                $('span#textTypeMaxLength').text($(this).val().length + '/' + maxLength);
+            });
         };
         $.fn.feedbackPlugin = function (options) {
             this.options = $.extend({}, $.fn.feedbackPlugin.defaults, options);

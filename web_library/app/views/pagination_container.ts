@@ -1,8 +1,16 @@
+/**
+ * Class that simply provides a pagination mechanism by showing/hiding some elements(pages)
+ */
 export class PaginationContainer {
     container:JQuery;
     pages:JQuery;
     activePage:number;
 
+    /**
+     *
+     * @param container
+     *  The element that contains the pages and buttons to move forward or backward
+     */
     constructor(container) {
         this.container = container;
         this.pages = this.container.find('.feedback-page');
@@ -30,6 +38,9 @@ export class PaginationContainer {
         });
     }
 
+    /**
+     * Shows the next page if any. Additionally, it copies the data from previous pages to the review section.
+     */
     navigateForward() {
         var feedbackPage = this.container.find('.feedback-page[data-feedback-page="' + this.activePage + '"]');
         if(this.activePage < this.pages.length) {

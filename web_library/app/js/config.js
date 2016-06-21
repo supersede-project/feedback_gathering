@@ -6,4 +6,13 @@ define(["require", "exports"], function (require, exports) {
     exports.feedbackObjectTitle = 'Feedback';
     exports.applicationName = 'energiesparkonto.de';
     exports.defaultSuccessMessage = 'Your feedback was successfully sent';
+    exports.dialogOptions = {
+        autoOpen: false,
+        height: 'auto',
+        width: 'auto',
+        minWidth: 500,
+        modal: true,
+        title: 'Feedback',
+        buttons: {}
+    };
 });

@@ -2,6 +2,7 @@
     <form>
         <section class="pages-container">
             <article data-feedback-page="1" class="feedback-page">
+                {{#if textMechanism.active}}
                 <section class="feedback-mechanism" id="textType">
                     <p id="textTypeHint" class="explanation">
                         {{ textMechanism.hint }}
@@ -11,14 +12,18 @@
                         <span id="textTypeMaxLength">{{ textMechanism.currentLength }} / {{ textMechanism.maxLength }}</span>
                     </p>
                 </section>
-                <section class="feedback-mechanism" id="ratingType">
-                    <p class="rating-text">
-                        {{ ratingMechanism.title }}
-                    </p>
-                    <p class="rating-input">
+                {{/if}}
 
-                    </p>
-                </section>
+                {{#if ratingMechanism.active}}
+                    <section class="feedback-mechanism" id="ratingType">
+                        <p class="rating-text">
+                            {{ ratingMechanism.title }}
+                        </p>
+                        <p class="rating-input">
+
+                        </p>
+                    </section>
+                {{/if}}
                 <button class="feedback-dialog-forward navigation-button">Review feedback</button>
                 <div class="clearfix"></div>
             </article>

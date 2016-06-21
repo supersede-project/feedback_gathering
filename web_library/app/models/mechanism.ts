@@ -3,7 +3,6 @@ import {Parameter} from './parameter';
 
 export const textType = 'TEXT_TYPE';
 export const ratingType = 'RATING_TYPE';
-export const screenShotType = 'SCREEN_SHOT_TYPE';
 
 
 export class Mechanism {
@@ -21,6 +20,11 @@ export class Mechanism {
         this.parameters = parameters;
     }
 
+    /**
+     * @param data
+     * @returns Mechanism
+     *  The mechanism object parsed from json.
+     */
     static initByData(data:any): Mechanism {
         if(data.type === null || data.active === null) {
             return null;
@@ -28,6 +32,12 @@ export class Mechanism {
         return new Mechanism(data.type, data.active, data.order, data.canBeActivated, data.parameters);
     }
 
+    /**
+     * @param key
+     *  The key of the key value pair of a parameter object
+     * @returns {any}
+     *  The parameter object, containing the value and further data
+     */
     getParameter(key:string): Parameter {
         var filteredArray = this.parameters.filter(parameter => parameter.key === key);
         if(filteredArray.length > 0) {
