@@ -139,6 +139,31 @@ let feedbackDialog = require('../templates/feedback_dialog.handlebars');
         });
     };
 
+    /**
+     * The configuration data is fetched from the API if the feedback mechanism is not currently active. In the other
+     * case the feedback mechanism dialog is closed. The active variable is toggled on each invocation.
+     */
+    var retrieveConfigurationDataOrClose = function() {
+        if (!active) {
+            var url = apiEndpoint + configPath;
+            $.get(url, null, function (data) {
+                initMechanisms(data);
+            });
+        } else {
+            dialog.dialog("close");
+        }
+        active = !active;
+    };
+
+    /**
+     * @param options
+     *  Client side configuration of the feedback library
+     * @returns {jQuery}
+     *
+     * The feedbackPlugin() function can get applied to a HTML element. This element is then configured via the passed
+     * options and the default options. If a click event on this element happens the configuration is fetched from the
+     * server and the feedback mechanism is invoked.
+     */
     $.fn.feedbackPlugin = function (options) {
         this.options = $.extend({}, $.fn.feedbackPlugin.defaults, options);
         var currentOptions = this.options;
@@ -146,21 +171,10 @@ let feedbackDialog = require('../templates/feedback_dialog.handlebars');
         this.css('background-color', currentOptions.backgroundColor);
         this.css('color', currentOptions.color);
 
-        // feedback mechanism gets invoked
         this.on('click', function (event) {
             event.preventDefault();
             event.stopPropagation();
-
-            var url = apiEndpoint + configPath;
-
-            if (!active) {
-                $.get(url, null, function (data) {
-                    initMechanisms(data);
-                });
-            } else {
-                dialog.dialog("close");
-            }
-            active = !active;
+            retrieveConfigurationDataOrClose();
         });
         return this;
     };

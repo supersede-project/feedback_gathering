@@ -71,6 +71,18 @@ define(["require", "exports", '../models/feedback', '../models/ratings', '../ser
                 $('span#textTypeMaxLength').text($(this).val().length + '/' + maxLength);
             });
         };
+        var retrieveConfigurationDataOrClose = function () {
+            if (!active) {
+                var url = config_1.apiEndpoint + config_1.configPath;
+                $.get(url, null, function (data) {
+                    initMechanisms(data);
+                });
+            }
+            else {
+                dialog.dialog("close");
+            }
+            active = !active;
+        };
         $.fn.feedbackPlugin = function (options) {
             this.options = $.extend({}, $.fn.feedbackPlugin.defaults, options);
             var currentOptions = this.options;
@@ -79,16 +91,7 @@ define(["require", "exports", '../models/feedback', '../models/ratings', '../ser
             this.on('click', function (event) {
                 event.preventDefault();
                 event.stopPropagation();
-                var url = config_1.apiEndpoint + config_1.configPath;
-                if (!active) {
-                    $.get(url, null, function (data) {
-                        initMechanisms(data);
-                    });
-                }
-                else {
-                    dialog.dialog("close");
-                }
-                active = !active;
+                retrieveConfigurationDataOrClose();
             });
             return this;
         };
