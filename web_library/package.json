@@ -72,6 +72,7 @@
     "wdio-jasmine-framework": "^0.1.9",
     "webdriverio": "^4.0.8",
     "webpack": "^1.13.1",
+    "webpack-dev-server": "^1.14.1",
     "yargs": "^4.7.0"
   },
   "dependencies": {
@@ -80,8 +81,8 @@
   },
   "scripts": {
     "build.test": "gulp build.test",
-    "prestart": "npm install && ./node_modules/uglify-js/bin/uglifyjs app/js/jquery.feedback.js -o dist/jquery.feedback.min.js && ./node_modules/uglify-js/bin/uglifyjs app/js/jquery.star-rating-svg.min.js -o dist/jquery.star-rating-svg.min.js",
-    "start": "./node_modules/.bin/http-server -a 0.0.0.0 -p 3000 -i",
+    "prestart": "webpack",
+    "start": "./node_modules/.bin/http-server -a 0.0.0.0 -p 3000 -i -o",
     "pretest": "npm install && ./node_modules/.bin/jshint js/",
     "clean": "rm -rf node_modules && npm install",
     "karma": "karma",
