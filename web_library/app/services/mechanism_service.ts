@@ -35,20 +35,24 @@ export class MechanismService {
      *  Context object that contains all the data to configure the feedback mechanism in the view.
      */
     getContextForView() {
+        var context = {textMechanism: null, ratingMechanism: null};
         var textMechanism = this.getMechanismConfig(textType);
         var ratingMechanism = this.getMechanismConfig(ratingType);
 
-        return {
-            textMechanism: {
+        if(textMechanism) {
+            context.textMechanism = {
                 active: textMechanism.active,
                 hint: textMechanism.getParameter('hint').value,
                 currentLength: 0,
                 maxLength: textMechanism.getParameter('maxLength').value
-            },
-            ratingMechanism: {
+            }
+        }
+        if(ratingMechanism) {
+            context.ratingMechanism =  {
                 active: ratingMechanism.active,
                 title: ratingMechanism.getParameter('title').value
             }
-        };
+        }
+        return context;
     }
 }

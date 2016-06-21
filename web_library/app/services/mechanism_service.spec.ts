@@ -7,7 +7,7 @@ describe('Mechanism Service', () => {
     beforeEach(() => {
         var data = [
             {
-                "type": "textType",
+                "type": "TEXT_TYPE",
                 "active": true,
                 "order": 1,
                 "canBeActivated": false,
@@ -88,15 +88,34 @@ describe('Mechanism Service', () => {
     });
 
     it('should return the corresponding mechanisms', () => {
-        var textMechanism = mechanismService.getMechanismConfig('textType');
+        var textMechanism = mechanismService.getMechanismConfig('TEXT_TYPE');
 
-        expect(textMechanism).toBeDefined();
+        expect(textMechanism).not.toBeNull();
 
-        expect(textMechanism.type).toEqual('textType');
+        expect(textMechanism.type).toEqual('TEXT_TYPE');
         expect(textMechanism.active).toEqual(true);
         expect(textMechanism.order).toEqual(1);
         expect(textMechanism.canBeActivated).toEqual(false);
         expect(textMechanism.parameters.length).toEqual(3);
+    });
+
+    it('should return the context for the view with the configuration data', () => {
+        var context = mechanismService.getContextForView();
+
+        var expectedContext = {
+            textMechanism: {
+                active: true,
+                hint: 'Enter your feedback',
+                currentLength: 0,
+                maxLength: 100
+            },
+            ratingMechanism: {
+                active: true,
+                title: 'Rate your user experience'
+            }
+        };
+
+        expect(context).toEqual(expectedContext);
     });
 });
 

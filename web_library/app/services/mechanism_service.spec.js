@@ -5,7 +5,7 @@ define(["require", "exports", './mechanism_service'], function (require, exports
         beforeEach(function () {
             var data = [
                 {
-                    "type": "textType",
+                    "type": "TEXT_TYPE",
                     "active": true,
                     "order": 1,
                     "canBeActivated": false,
@@ -85,13 +85,29 @@ define(["require", "exports", './mechanism_service'], function (require, exports
             mechanismService = new mechanism_service_1.MechanismService(data);
         });
         it('should return the corresponding mechanisms', function () {
-            var textMechanism = mechanismService.getMechanismConfig('textType');
-            expect(textMechanism).toBeDefined();
-            expect(textMechanism.type).toEqual('textType');
+            var textMechanism = mechanismService.getMechanismConfig('TEXT_TYPE');
+            expect(textMechanism).not.toBeNull();
+            expect(textMechanism.type).toEqual('TEXT_TYPE');
             expect(textMechanism.active).toEqual(true);
             expect(textMechanism.order).toEqual(1);
             expect(textMechanism.canBeActivated).toEqual(false);
             expect(textMechanism.parameters.length).toEqual(3);
+        });
+        it('should return the context for the view with the configuration data', function () {
+            var context = mechanismService.getContextForView();
+            var expectedContext = {
+                textMechanism: {
+                    active: true,
+                    hint: 'Enter your feedback',
+                    currentLength: 0,
+                    maxLength: 100
+                },
+                ratingMechanism: {
+                    active: true,
+                    title: 'Rate your user experience'
+                }
+            };
+            expect(context).toEqual(expectedContext);
         });
     });
 });

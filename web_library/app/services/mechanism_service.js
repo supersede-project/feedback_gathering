@@ -14,20 +14,24 @@ define(["require", "exports", '../models/mechanism'], function (require, exports
             }
         };
         MechanismService.prototype.getContextForView = function () {
+            var context = { textMechanism: null, ratingMechanism: null };
             var textMechanism = this.getMechanismConfig(mechanism_1.textType);
             var ratingMechanism = this.getMechanismConfig(mechanism_1.ratingType);
-            return {
-                textMechanism: {
+            if (textMechanism) {
+                context.textMechanism = {
                     active: textMechanism.active,
                     hint: textMechanism.getParameter('hint').value,
                     currentLength: 0,
                     maxLength: textMechanism.getParameter('maxLength').value
-                },
-                ratingMechanism: {
+                };
+            }
+            if (ratingMechanism) {
+                context.ratingMechanism = {
                     active: ratingMechanism.active,
                     title: ratingMechanism.getParameter('title').value
-                }
-            };
+                };
+            }
+            return context;
         };
         return MechanismService;
     }());
