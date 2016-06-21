@@ -4,6 +4,17 @@ define(["require", "exports", '../models/mechanism'], function (require, exports
         function MechanismService(data) {
             this.data = data;
         }
+        MechanismService.prototype.getConfig = function () {
+            var config = [];
+            for (var i = 0; i < this.data.length; i++) {
+                var element = this.data[i];
+                if (element.hasOwnProperty('type')) {
+                    var mechanism = this.getMechanismConfig(element['type']);
+                    config.push(mechanism);
+                }
+            }
+            return config;
+        };
         MechanismService.prototype.getMechanismConfig = function (mechanismTypeConstant) {
             var filteredArray = this.data.filter(function (mechanism) { return mechanism.type === mechanismTypeConstant; });
             if (filteredArray.length > 0) {

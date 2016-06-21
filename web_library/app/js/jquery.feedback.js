@@ -1,4 +1,4 @@
-define(["require", "exports", '../models/feedback', '../models/ratings', '../services/mechanism_service', './config', '../models/mechanism', '../views/pagination_container', './jquery.star-rating-svg.min.js'], function (require, exports, feedback_1, ratings_1, mechanism_service_1, config_1, mechanism_1, pagination_container_1) {
+define(["require", "exports", '../models/feedback', '../models/rating', '../services/mechanism_service', './config', '../models/mechanism', '../views/pagination_container', './jquery.star-rating-svg.min.js'], function (require, exports, feedback_1, rating_1, mechanism_service_1, config_1, mechanism_1, pagination_container_1) {
     "use strict";
     var feedbackDialog = require('../templates/feedback_dialog.handlebars');
     (function ($, window, document) {
@@ -24,7 +24,7 @@ define(["require", "exports", '../models/feedback', '../models/ratings', '../ser
             var text = $('textarea#textTypeText').val();
             $('#serverResponse').removeClass();
             var ratingTitle = $('.rating-text').text().trim();
-            var feedbackObject = new feedback_1.Feedback(config_1.feedbackObjectTitle, config_1.applicationName, "uid12345", text, 1.0, [new ratings_1.Rating(ratingTitle, currentRatingValue)]);
+            var feedbackObject = new feedback_1.Feedback(config_1.feedbackObjectTitle, config_1.applicationName, "uid12345", text, 1.0, [new rating_1.Rating(ratingTitle, currentRatingValue)]);
             $.ajax({
                 url: config_1.apiEndpoint + config_1.feedbackPath,
                 type: 'POST',

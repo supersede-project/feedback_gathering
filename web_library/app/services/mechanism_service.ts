@@ -15,6 +15,18 @@ export class MechanismService {
         this.data = data;
     }
 
+    getConfig(): Mechanism[] {
+        var config = [];
+        for(var i = 0; i < this.data.length; i++) {
+            var element = this.data[i];
+            if(element.hasOwnProperty('type')) {
+                var mechanism = this.getMechanismConfig(element['type']);
+                config.push(mechanism);
+            }
+        }
+        return config;
+    }
+
     /**
      * @param mechanismTypeConstant
      *  The ID of the mechanism to get config of

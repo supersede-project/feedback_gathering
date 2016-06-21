@@ -84,6 +84,18 @@ define(["require", "exports", './mechanism_service'], function (require, exports
             ];
             mechanismService = new mechanism_service_1.MechanismService(data);
         });
+        it('should return a configuration object with all the configuration', function () {
+            var configuration = mechanismService.getConfig();
+            expect(configuration.length).toBe(4);
+            var textMechanismConfig = configuration[0];
+            expect(textMechanismConfig.type).toEqual('TEXT_TYPE');
+            expect(textMechanismConfig.active).toEqual(true);
+            expect(textMechanismConfig.order).toEqual(1);
+            expect(textMechanismConfig.canBeActivated).toEqual(false);
+            expect(textMechanismConfig.parameters.length).toEqual(3);
+            var ratingMechanismConfig = configuration[3];
+            expect(ratingMechanismConfig.type).toEqual('RATING_TYPE');
+        });
         it('should return the corresponding mechanisms', function () {
             var textMechanism = mechanismService.getMechanismConfig('TEXT_TYPE');
             expect(textMechanism).not.toBeNull();

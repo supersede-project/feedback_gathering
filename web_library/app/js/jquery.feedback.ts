@@ -1,5 +1,5 @@
 import {Feedback} from '../models/feedback';
-import {Rating} from '../models/ratings';
+import {Rating} from '../models/rating';
 import {MechanismService} from '../services/mechanism_service';
 import {
     apiEndpoint, feedbackPath, configPath, applicationName, defaultSuccessMessage,

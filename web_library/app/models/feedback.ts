@@ -1,4 +1,4 @@
-import {Rating} from './ratings';
+import {Rating} from './rating';
 import {MechanismService} from '../services/mechanism_service';
 import {textType, ratingType} from './mechanism';
 
