@@ -93,10 +93,7 @@ export class ConfigurationService {
         for(var i = 0; i < parameterPropertyPairs.length; i++) {
             var parameterPropertyPair = parameterPropertyPairs[i];
             if (mechanism.getParameterValue(parameterPropertyPair.parameter) !== null) {
-                var unit = '';
-                if(parameterPropertyPair.property == 'font-size') {
-                    unit = 'px'
-                }
+                var unit = ConfigurationService.getCSSPropertyUnit(parameterPropertyPair.property);
                 cssStyles += parameterPropertyPair.property + ': ' + mechanism.getParameterValue(parameterPropertyPair.parameter) + unit + ';';
                 if(i !== parameterPropertyPairs.length - 1) {
                     cssStyles += ' ';
@@ -104,5 +101,13 @@ export class ConfigurationService {
             }
         }
         return cssStyles;
+    }
+
+    private static getCSSPropertyUnit(property: string) {
+        if(property === 'font-size') {
+            return 'px'
+        } else {
+            return '';
+        }
     }
 }
