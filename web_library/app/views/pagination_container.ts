@@ -1,3 +1,5 @@
+import '../js/jquery.validate.js';
+
 /**
  * Class that simply provides a pagination mechanism by showing/hiding some elements(pages)
  */
@@ -43,6 +45,16 @@ export class PaginationContainer {
      */
     navigateForward() {
         var feedbackPage = this.container.find('.feedback-page[data-feedback-page="' + this.activePage + '"]');
+
+        // do not go to the next page if something is invalid and validation on skip is enabled
+        feedbackPage.find('.validate').each(function() {
+            $(this).validate();
+        });
+        if(feedbackPage.find('.invalid').length > 0 &&
+            feedbackPage.find('.validate[data-mandatory-validate-on-skip="1"]').length > 0) {
+            return;
+        }
+
         if(this.activePage < this.pages.length) {
             this.activePage++;
         }

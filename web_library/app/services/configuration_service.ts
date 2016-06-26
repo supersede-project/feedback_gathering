@@ -69,7 +69,10 @@ export class ConfigurationService {
                 maxLengthVisible: textMechanism.getParameterValue('maxLengthVisible'),
                 textareaStyle: textareaStyle,
                 labelStyle: labelStyle,
-                clearInput: textMechanism.getParameterValue('clearInput')
+                clearInput: textMechanism.getParameterValue('clearInput'),
+                mandatory: textMechanism.getParameterValue('mandatory'),
+                mandatoryReminder: textMechanism.getParameterValue('mandatoryReminder'),
+                validateOnSkip: textMechanism.getParameterValue('validateOnSkip')
             }
         }
         if(ratingMechanism) {

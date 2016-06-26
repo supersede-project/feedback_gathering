@@ -54,6 +54,18 @@ define(["require", "exports", './configuration_service', '../models/mechanism', 
                             "key": "clearInput",
                             "value": 1
                         },
+                        {
+                            "key": "mandatory",
+                            "value": 1
+                        },
+                        {
+                            "key": "mandatoryReminder",
+                            "value": "Please fill in the text field"
+                        },
+                        {
+                            "key": "validateOnSkip",
+                            "value": 1
+                        }
                     ]
                 },
                 {
@@ -147,7 +159,10 @@ define(["require", "exports", './configuration_service', '../models/mechanism', 
                     maxLengthVisible: 1,
                     textareaStyle: 'color: #000000;',
                     labelStyle: 'text-align: left; color: #00ff00; font-size: 13px;',
-                    clearInput: 1
+                    clearInput: 1,
+                    mandatory: 1,
+                    mandatoryReminder: 'Please fill in the text field',
+                    validateOnSkip: 1
                 },
                 ratingMechanism: {
                     active: true,

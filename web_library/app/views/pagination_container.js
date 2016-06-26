@@ -1,4 +1,4 @@
-define(["require", "exports"], function (require, exports) {
+define(["require", "exports", '../js/jquery.validate.js'], function (require, exports) {
     "use strict";
     var PaginationContainer = (function () {
         function PaginationContainer(container) {
@@ -27,6 +27,13 @@ define(["require", "exports"], function (require, exports) {
         };
         PaginationContainer.prototype.navigateForward = function () {
             var feedbackPage = this.container.find('.feedback-page[data-feedback-page="' + this.activePage + '"]');
+            feedbackPage.find('.validate').each(function () {
+                $(this).validate();
+            });
+            if (feedbackPage.find('.invalid').length > 0 &&
+                feedbackPage.find('.validate[data-mandatory-validate-on-skip="1"]').length > 0) {
+                return;
+            }
             if (this.activePage < this.pages.length) {
                 this.activePage++;
             }

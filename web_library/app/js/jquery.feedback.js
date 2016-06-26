@@ -1,4 +1,4 @@
-define(["require", "exports", '../models/feedback', '../models/rating', '../services/configuration_service', './config', '../models/mechanism', '../views/pagination_container', './jquery.star-rating-svg.min.js'], function (require, exports, feedback_1, rating_1, configuration_service_1, config_1, mechanism_1, pagination_container_1) {
+define(["require", "exports", '../models/feedback', '../models/rating', '../services/configuration_service', './config', '../models/mechanism', '../views/pagination_container', './jquery.star-rating-svg.min.js', './jquery.validate.js'], function (require, exports, feedback_1, rating_1, configuration_service_1, config_1, mechanism_1, pagination_container_1) {
     "use strict";
     var feedbackDialog = require('../templates/feedback_dialog.handlebars');
     (function ($, window, document) {
@@ -61,20 +61,23 @@ define(["require", "exports", '../models/feedback', '../models/rating', '../serv
             dialog.dialog("open");
         };
         var addEvents = function (textMechanism) {
+            var textarea = $('textarea#textTypeText');
             $('button#submitFeedback').on('click', function (event) {
                 event.preventDefault();
                 event.stopPropagation();
-                sendFeedback();
+                textarea.validate();
+                if (!textarea.hasClass('invalid')) {
+                    sendFeedback();
+                }
             });
             var maxLength = textMechanism.getParameter('maxLength').value;
-            var textarea = $('textarea#textTypeText');
             textarea.on('keyup focus', function () {
                 $('span#textTypeMaxLength').text($(this).val().length + '/' + maxLength);
             });
             $('#textTypeTextClear').on('click', function (event) {
                 event.preventDefault();
                 event.stopPropagation();
-                $('textarea#textTypeText').val('');
+                textarea.val('');
             });
         };
         var retrieveConfigurationDataOrClose = function () {

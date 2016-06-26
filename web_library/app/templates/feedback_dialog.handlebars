@@ -8,8 +8,12 @@
                         {{ textMechanism.label }}
                     </p>
 
-                    <textarea placeholder="{{ textMechanism.hint }}" id="textTypeText" style="{{ textMechanism.textareaStyle }}"></textarea>
-
+                    <textarea class="validate"
+                        {{#if textMechanism.mandatory }} data-mandatory="1"
+                                                         data-mandatory-validate-on-skip="{{ textMechanism.validateOnSkip }}"
+                                                         data-mandatory-default-text="This field can't be blank"
+                                                         data-mandatory-manual-text="{{ textMechanism.mandatoryReminder }}" {{/if}}
+                        placeholder="{{ textMechanism.hint }}" id="textTypeText" style="{{ textMechanism.textareaStyle }}"></textarea>
                     <p class="textarea-bottom">
                         {{#if textMechanism.clearInput }}
                             <button id="textTypeTextClear" title="Clear the text input">x</button>

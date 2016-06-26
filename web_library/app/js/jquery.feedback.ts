@@ -1,13 +1,12 @@
 import {Feedback} from '../models/feedback';
 import {Rating} from '../models/rating';
 import {ConfigurationService} from '../services/configuration_service';
-import {
-    apiEndpoint, feedbackPath, configPath, applicationName, defaultSuccessMessage,
-    feedbackObjectTitle, dialogOptions
-} from './config';
-import './jquery.star-rating-svg.min.js';
+import {apiEndpoint, feedbackPath, configPath, applicationName, defaultSuccessMessage,
+    feedbackObjectTitle, dialogOptions} from './config';
 import {textType, ratingType} from '../models/mechanism';
 import {PaginationContainer} from '../views/pagination_container';
+import './jquery.star-rating-svg.min.js';
+import './jquery.validate.js';
 let feedbackDialog = require('../templates/feedback_dialog.handlebars');
 
 
@@ -126,16 +125,22 @@ let feedbackDialog = require('../templates/feedback_dialog.handlebars');
      * - Character count event for the text mechanism
      */
     var addEvents = function(textMechanism) {
+        var textarea = $('textarea#textTypeText');
+
         // send
         $('button#submitFeedback').on('click', function (event) {
             event.preventDefault();
             event.stopPropagation();
-            sendFeedback();
+
+            // validate anyway before sending
+            textarea.validate();
+            if(!textarea.hasClass('invalid')) {
+                sendFeedback();
+            }
         });
 
         // character length
         var maxLength = textMechanism.getParameter('maxLength').value;
-        var textarea = $('textarea#textTypeText');
         textarea.on('keyup focus', function () {
             $('span#textTypeMaxLength').text($(this).val().length + '/' + maxLength);
         });
@@ -144,8 +149,8 @@ let feedbackDialog = require('../templates/feedback_dialog.handlebars');
         $('#textTypeTextClear').on('click', function (event) {
             event.preventDefault();
             event.stopPropagation();
-            $('textarea#textTypeText').val('');
-        })
+            textarea.val('');
+        });
     };
 
     /**
