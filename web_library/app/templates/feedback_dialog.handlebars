@@ -5,9 +5,9 @@
                 {{#if textMechanism.active}}
                 <section class="feedback-mechanism" id="textType">
                     <p id="textTypeHint" class="explanation" style="{{ textMechanism.labelStyle }}">
-                        {{ textMechanism.hint }}
+                        {{ textMechanism.label }}
                     </p>
-                    <textarea id="textTypeText" style="{{ textMechanism.textareaStyle }}"></textarea>
+                    <textarea placeholder="{{ textMechanism.hint }}" id="textTypeText" style="{{ textMechanism.textareaStyle }}"></textarea>
                     {{#if textMechanism.maxLengthVisible}}
                         <p class="text-count">
                             <span id="textTypeMaxLength">{{ textMechanism.currentLength }} / {{ textMechanism.maxLength }}</span>

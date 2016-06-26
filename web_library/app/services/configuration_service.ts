@@ -63,6 +63,7 @@ export class ConfigurationService {
             context.textMechanism = {
                 active: textMechanism.active,
                 hint: textMechanism.getParameterValue('hint'),
+                label: textMechanism.getParameterValue('label'),
                 currentLength: 0,
                 maxLength: textMechanism.getParameterValue('maxLength'),
                 maxLengthVisible: textMechanism.getParameterValue('maxLengthVisible'),

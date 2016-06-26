@@ -19,6 +19,10 @@ define(["require", "exports", './configuration_service', '../models/mechanism', 
                             "value": "Feedback"
                         },
                         {
+                            "key": "label",
+                            "value": "Label of the text input"
+                        },
+                        {
                             "key": "hint",
                             "value": "Enter your feedback"
                         },
@@ -133,6 +137,7 @@ define(["require", "exports", './configuration_service', '../models/mechanism', 
                 textMechanism: {
                     active: true,
                     hint: 'Enter your feedback',
+                    label: 'Label of the text input',
                     currentLength: 0,
                     maxLength: 100,
                     maxLengthVisible: 1,
