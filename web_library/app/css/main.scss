@@ -98,14 +98,6 @@ p.rating-input, p.text-count {
   margin-top: 4px;
 }
 
-#textTypeMaxLength {
-  font-size: 14px;
-  color: #4b4a4c;
-  width: 100%;
-  display: block;
-  text-align: right;
-}
-
 section.dialog-navigation {
   margin: 13px 1px 3px 1px;
 }
@@ -187,5 +179,25 @@ section.dialog-navigation {
   padding: 15px;
 }
 
+p.textarea-bottom {
+  margin-top: 2px;
+}
 
+button#textTypeTextClear {
+  background: none;
+  margin: 2px;
+  padding: 0;
+  float: left;
 
+  &:hover {
+    color: #808080;
+  }
+}
+
+#textTypeMaxLength {
+  font-size: 14px;
+  color: #4b4a4c;
+  width: auto;
+  display: inline-block;
+  float: right;
+}

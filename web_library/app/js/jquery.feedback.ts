@@ -126,17 +126,26 @@ let feedbackDialog = require('../templates/feedback_dialog.handlebars');
      * - Character count event for the text mechanism
      */
     var addEvents = function(textMechanism) {
+        // send
         $('button#submitFeedback').on('click', function (event) {
             event.preventDefault();
+            event.stopPropagation();
             sendFeedback();
         });
 
+        // character length
         var maxLength = textMechanism.getParameter('maxLength').value;
         var textarea = $('textarea#textTypeText');
-
         textarea.on('keyup focus', function () {
             $('span#textTypeMaxLength').text($(this).val().length + '/' + maxLength);
         });
+
+        // text clear button
+        $('#textTypeTextClear').on('click', function (event) {
+            event.preventDefault();
+            event.stopPropagation();
+            $('textarea#textTypeText').val('');
+        })
     };
 
     /**

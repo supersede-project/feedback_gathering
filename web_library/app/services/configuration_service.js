@@ -43,6 +43,7 @@ define(["require", "exports", '../models/mechanism', '../models/parameter_proper
                     maxLengthVisible: textMechanism.getParameterValue('maxLengthVisible'),
                     textareaStyle: textareaStyle,
                     labelStyle: labelStyle,
+                    clearInput: textMechanism.getParameterValue('clearInput')
                 };
             }
             if (ratingMechanism) {

@@ -63,12 +63,18 @@ define(["require", "exports", '../models/feedback', '../models/rating', '../serv
         var addEvents = function (textMechanism) {
             $('button#submitFeedback').on('click', function (event) {
                 event.preventDefault();
+                event.stopPropagation();
                 sendFeedback();
             });
             var maxLength = textMechanism.getParameter('maxLength').value;
             var textarea = $('textarea#textTypeText');
             textarea.on('keyup focus', function () {
                 $('span#textTypeMaxLength').text($(this).val().length + '/' + maxLength);
+            });
+            $('#textTypeTextClear').on('click', function (event) {
+                event.preventDefault();
+                event.stopPropagation();
+                $('textarea#textTypeText').val('');
             });
         };
         var retrieveConfigurationDataOrClose = function () {

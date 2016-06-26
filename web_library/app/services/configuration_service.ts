@@ -69,6 +69,7 @@ export class ConfigurationService {
                 maxLengthVisible: textMechanism.getParameterValue('maxLengthVisible'),
                 textareaStyle: textareaStyle,
                 labelStyle: labelStyle,
+                clearInput: textMechanism.getParameterValue('clearInput')
             }
         }
         if(ratingMechanism) {

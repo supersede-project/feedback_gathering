@@ -7,12 +7,18 @@
                     <p id="textTypeHint" class="explanation" style="{{ textMechanism.labelStyle }}">
                         {{ textMechanism.label }}
                     </p>
+
                     <textarea placeholder="{{ textMechanism.hint }}" id="textTypeText" style="{{ textMechanism.textareaStyle }}"></textarea>
-                    {{#if textMechanism.maxLengthVisible}}
-                        <p class="text-count">
+
+                    <p class="textarea-bottom">
+                        {{#if textMechanism.clearInput }}
+                            <button id="textTypeTextClear" title="Clear the text input">x</button>
+                        {{/if}}
+                        {{#if textMechanism.maxLengthVisible}}
                             <span id="textTypeMaxLength">{{ textMechanism.currentLength }} / {{ textMechanism.maxLength }}</span>
-                        </p>
-                    {{/if}}
+                        {{/if}}
+                        <div class="clearfix"></div>
+                    </p>
                 </section>
                 {{/if}}
 
