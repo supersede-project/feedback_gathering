@@ -1,6 +1,6 @@
 import {Feedback} from '../models/feedback';
 import {Rating} from '../models/rating';
-import {MechanismService} from '../services/mechanism_service';
+import {ConfigurationService} from '../services/configuration_service';
 import {
     apiEndpoint, feedbackPath, configPath, applicationName, defaultSuccessMessage,
     feedbackObjectTitle, dialogOptions
@@ -27,7 +27,7 @@ let feedbackDialog = require('../templates/feedback_dialog.handlebars');
      * All events on the HTML have to be added after the template is appended to the body (if not using live binding).
      */
     function initMechanisms(data) {
-        var mechanismService = new MechanismService(data);
+        var mechanismService = new ConfigurationService(data);
         var textMechanism = mechanismService.getMechanismConfig(textType);
         var ratingMechanism = mechanismService.getMechanismConfig(ratingType);
         currentRatingValue = ratingMechanism.getParameter('defaultRating').value;

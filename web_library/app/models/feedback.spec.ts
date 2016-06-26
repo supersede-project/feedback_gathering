@@ -1,6 +1,4 @@
-import {Mechanism} from './mechanism';
-import {Parameter} from './parameter';
-import {MechanismService} from '../services/mechanism_service';
+import {ConfigurationService} from '../services/configuration_service';
 import {Feedback} from './feedback';
 
 
@@ -30,10 +28,10 @@ describe('Feedback', () => {
             }
         ];
 
-        var mechanismService = new MechanismService(data);
+        var configurationService = new ConfigurationService(data);
         var feedback = new Feedback('Feedback', 'application', null, 'This is my feedback!', 1.0, []);
 
-        expect(feedback.validate(mechanismService)).toBeTruthy();
+        expect(feedback.validate(configurationService)).toBeTruthy();
     });
 
     it('should return error messages if the validation was not successful', () => {
@@ -60,10 +58,10 @@ describe('Feedback', () => {
             }
         ];
 
-        var mechanismService = new MechanismService(data);
+        var configurationService = new ConfigurationService(data);
         var feedback = new Feedback('Feedback', 'application', null, '', 1.0, []);
 
-        var errors = feedback.validate(mechanismService);
+        var errors = feedback.validate(configurationService);
         expect(errors.textMechanism.length).toBe(1);
         expect(errors.ratingMechanism.length).toBe(0);
         expect(errors.general.length).toBe(0);

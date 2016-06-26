@@ -1,7 +1,7 @@
-define(["require", "exports", './mechanism_service'], function (require, exports, mechanism_service_1) {
+define(["require", "exports", './configuration_service', '../models/mechanism', '../models/parameter_property_pair'], function (require, exports, configuration_service_1, mechanism_1, parameter_property_pair_1) {
     "use strict";
     describe('Mechanism Service', function () {
-        var mechanismService;
+        var configurationService;
         beforeEach(function () {
             var data = [
                 {
@@ -21,7 +21,31 @@ define(["require", "exports", './mechanism_service'], function (require, exports
                         {
                             "key": "hint",
                             "value": "Enter your feedback"
-                        }
+                        },
+                        {
+                            "key": "textareaFontColor",
+                            "value": "#000000"
+                        },
+                        {
+                            "key": "fieldFontType",
+                            "value": "italic"
+                        },
+                        {
+                            "key": "maxLengthVisible",
+                            "value": 1
+                        },
+                        {
+                            "key": "labelPositioning",
+                            "value": "left"
+                        },
+                        {
+                            "key": "labelColor",
+                            "value": "#00ff00"
+                        },
+                        {
+                            "key": "labelFontSize",
+                            "value": 13
+                        },
                     ]
                 },
                 {
@@ -82,37 +106,38 @@ define(["require", "exports", './mechanism_service'], function (require, exports
                     ]
                 }
             ];
-            mechanismService = new mechanism_service_1.MechanismService(data);
+            configurationService = new configuration_service_1.ConfigurationService(data);
         });
         it('should return a configuration object with all the configuration', function () {
-            var configuration = mechanismService.getConfig();
+            var configuration = configurationService.getConfig();
             expect(configuration.length).toBe(4);
             var textMechanismConfig = configuration[0];
             expect(textMechanismConfig.type).toEqual('TEXT_TYPE');
             expect(textMechanismConfig.active).toEqual(true);
             expect(textMechanismConfig.order).toEqual(1);
             expect(textMechanismConfig.canBeActivated).toEqual(false);
-            expect(textMechanismConfig.parameters.length).toEqual(3);
             var ratingMechanismConfig = configuration[3];
             expect(ratingMechanismConfig.type).toEqual('RATING_TYPE');
         });
         it('should return the corresponding mechanisms', function () {
-            var textMechanism = mechanismService.getMechanismConfig('TEXT_TYPE');
+            var textMechanism = configurationService.getMechanismConfig('TEXT_TYPE');
             expect(textMechanism).not.toBeNull();
             expect(textMechanism.type).toEqual('TEXT_TYPE');
             expect(textMechanism.active).toEqual(true);
             expect(textMechanism.order).toEqual(1);
             expect(textMechanism.canBeActivated).toEqual(false);
-            expect(textMechanism.parameters.length).toEqual(3);
         });
         it('should return the context for the view with the configuration data', function () {
-            var context = mechanismService.getContextForView();
+            var context = configurationService.getContextForView();
             var expectedContext = {
                 textMechanism: {
                     active: true,
                     hint: 'Enter your feedback',
                     currentLength: 0,
-                    maxLength: 100
+                    maxLength: 100,
+                    maxLengthVisible: 1,
+                    textareaStyle: 'color: #000000;',
+                    labelStyle: 'text-align: left; color: #00ff00; font-size: 13px;'
                 },
                 ratingMechanism: {
                     active: true,
@@ -120,6 +145,13 @@ define(["require", "exports", './mechanism_service'], function (require, exports
                 }
             };
             expect(context).toEqual(expectedContext);
+        });
+        it('should return a css style string', function () {
+            var textMechanism = configurationService.getMechanismConfig(mechanism_1.textType);
+            var cssStyle = configurationService.getCssStyle(textMechanism, [new parameter_property_pair_1.ParameterPropertyPair('textareaFontColor', 'color')]);
+            expect(cssStyle).toEqual('color: #000000;');
+            var cssStyle2 = configurationService.getCssStyle(textMechanism, [new parameter_property_pair_1.ParameterPropertyPair('textareaFontColor', 'color'), new parameter_property_pair_1.ParameterPropertyPair('fieldFontType', 'font-style')]);
+            expect(cssStyle2).toEqual('color: #000000; font-style: italic;');
         });
     });
 });

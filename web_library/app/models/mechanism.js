@@ -25,6 +25,15 @@ define(["require", "exports"], function (require, exports) {
                 return null;
             }
         };
+        Mechanism.prototype.getParameterValue = function (key) {
+            var parameter = this.getParameter(key);
+            if (parameter == null || !parameter.hasOwnProperty('value')) {
+                return null;
+            }
+            else {
+                return parameter.value;
+            }
+        };
         return Mechanism;
     }());
     exports.Mechanism = Mechanism;

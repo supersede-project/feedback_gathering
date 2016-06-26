@@ -4,13 +4,15 @@
             <article data-feedback-page="1" class="feedback-page">
                 {{#if textMechanism.active}}
                 <section class="feedback-mechanism" id="textType">
-                    <p id="textTypeHint" class="explanation">
+                    <p id="textTypeHint" class="explanation" style="{{ textMechanism.labelStyle }}">
                         {{ textMechanism.hint }}
                     </p>
-                    <textarea id="textTypeText"></textarea>
-                    <p class="text-count">
-                        <span id="textTypeMaxLength">{{ textMechanism.currentLength }} / {{ textMechanism.maxLength }}</span>
-                    </p>
+                    <textarea id="textTypeText" style="{{ textMechanism.textareaStyle }}"></textarea>
+                    {{#if textMechanism.maxLengthVisible}}
+                        <p class="text-count">
+                            <span id="textTypeMaxLength">{{ textMechanism.currentLength }} / {{ textMechanism.maxLength }}</span>
+                        </p>
+                    {{/if}}
                 </section>
                 {{/if}}
 

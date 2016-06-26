@@ -1,8 +1,10 @@
-import {MechanismService} from './mechanism_service';
+import {ConfigurationService} from './configuration_service';
+import {textType} from '../models/mechanism';
+import {ParameterPropertyPair} from '../models/parameter_property_pair';
 
 
 describe('Mechanism Service', () => {
-    let mechanismService:MechanismService;
+    let configurationService:ConfigurationService;
 
     beforeEach(() => {
         var data = [
@@ -23,7 +25,31 @@ describe('Mechanism Service', () => {
                     {
                         "key": "hint",
                         "value": "Enter your feedback"
-                    }
+                    },
+                    {
+                        "key": "textareaFontColor",
+                        "value": "#000000"
+                    },
+                    {
+                        "key": "fieldFontType",
+                        "value": "italic"
+                    },
+                    {
+                        "key": "maxLengthVisible",
+                        "value": 1
+                    },
+                    {
+                        "key": "labelPositioning",
+                        "value": "left"
+                    },
+                    {
+                        "key": "labelColor",
+                        "value": "#00ff00"
+                    },
+                    {
+                        "key": "labelFontSize",
+                        "value": 13
+                    },
                 ]
             },
             {
@@ -84,11 +110,11 @@ describe('Mechanism Service', () => {
                 ]
             }
         ];
-        mechanismService = new MechanismService(data);
+        configurationService = new ConfigurationService(data);
     });
 
     it('should return a configuration object with all the configuration', () => {
-        var configuration = mechanismService.getConfig();
+        var configuration = configurationService.getConfig();
         expect(configuration.length).toBe(4);
 
         var textMechanismConfig = configuration[0];
@@ -96,14 +122,13 @@ describe('Mechanism Service', () => {
         expect(textMechanismConfig.active).toEqual(true);
         expect(textMechanismConfig.order).toEqual(1);
         expect(textMechanismConfig.canBeActivated).toEqual(false);
-        expect(textMechanismConfig.parameters.length).toEqual(3);
 
         var ratingMechanismConfig = configuration[3];
         expect(ratingMechanismConfig.type).toEqual('RATING_TYPE');
     });
 
     it('should return the corresponding mechanisms', () => {
-        var textMechanism = mechanismService.getMechanismConfig('TEXT_TYPE');
+        var textMechanism = configurationService.getMechanismConfig('TEXT_TYPE');
 
         expect(textMechanism).not.toBeNull();
 
@@ -111,18 +136,20 @@ describe('Mechanism Service', () => {
         expect(textMechanism.active).toEqual(true);
         expect(textMechanism.order).toEqual(1);
         expect(textMechanism.canBeActivated).toEqual(false);
-        expect(textMechanism.parameters.length).toEqual(3);
     });
 
     it('should return the context for the view with the configuration data', () => {
-        var context = mechanismService.getContextForView();
+        var context = configurationService.getContextForView();
 
         var expectedContext = {
             textMechanism: {
                 active: true,
                 hint: 'Enter your feedback',
                 currentLength: 0,
-                maxLength: 100
+                maxLength: 100,
+                maxLengthVisible: 1,
+                textareaStyle: 'color: #000000;',
+                labelStyle: 'text-align: left; color: #00ff00; font-size: 13px;'
             },
             ratingMechanism: {
                 active: true,
@@ -132,5 +159,16 @@ describe('Mechanism Service', () => {
 
         expect(context).toEqual(expectedContext);
     });
+
+    it('should return a css style string', () => {
+        var textMechanism = configurationService.getMechanismConfig(textType);
+
+        var cssStyle = configurationService.getCssStyle(textMechanism, [new ParameterPropertyPair('textareaFontColor', 'color')]);
+        expect(cssStyle).toEqual('color: #000000;');
+
+        var cssStyle2 = configurationService.getCssStyle(textMechanism,
+            [new ParameterPropertyPair('textareaFontColor', 'color'), new ParameterPropertyPair('fieldFontType', 'font-style')]);
+        expect(cssStyle2).toEqual('color: #000000; font-style: italic;');
+    })
 });
 

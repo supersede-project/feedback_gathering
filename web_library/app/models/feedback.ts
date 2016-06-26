@@ -1,6 +1,6 @@
 import {Rating} from './rating';
-import {MechanismService} from '../services/mechanism_service';
 import {textType, ratingType} from './mechanism';
+import {ConfigurationService} from '../services/configuration_service';
 
 
 const validationMessages = {
@@ -28,15 +28,15 @@ export class Feedback {
     }
 
     /**
-     * @param mechanismService
-     *  The mechanismService object used to configure the feedback mechanisms.
+     * @param configurationService
+     *  The configurationService object used to configure the feedback mechanisms.
      * @returns
      *  If the validation was successful: true
      *  Otherwise: An object with error messages
      */
-    validate(mechanismService: MechanismService): any {
-        var textMechanism = mechanismService.getMechanismConfig(textType);
-        var ratingMechanism = mechanismService.getMechanismConfig(ratingType);
+    validate(configurationService: ConfigurationService): any {
+        var textMechanism = configurationService.getMechanismConfig(textType);
+        var ratingMechanism = configurationService.getMechanismConfig(ratingType);
         var errors = {textMechanism: [], ratingMechanism: [], general: []};
 
         this.validateTextMechanism(textMechanism, errors);

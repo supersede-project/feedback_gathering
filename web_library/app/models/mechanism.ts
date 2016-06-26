@@ -46,4 +46,19 @@ export class Mechanism {
             return null;
         }
     }
+
+    /**
+     * @param key
+     *  The key of the key value pair of a parameter object
+     * @returns any
+     *  The parameter value or null
+     */
+    getParameterValue(key:string): any {
+        var parameter = this.getParameter(key);
+        if(parameter == null || !parameter.hasOwnProperty('value')) {
+            return null;
+        } else {
+            return parameter.value
+        }
+    }
 }

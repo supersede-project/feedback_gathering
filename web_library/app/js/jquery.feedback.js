@@ -1,4 +1,4 @@
-define(["require", "exports", '../models/feedback', '../models/rating', '../services/mechanism_service', './config', '../models/mechanism', '../views/pagination_container', './jquery.star-rating-svg.min.js'], function (require, exports, feedback_1, rating_1, mechanism_service_1, config_1, mechanism_1, pagination_container_1) {
+define(["require", "exports", '../models/feedback', '../models/rating', '../services/configuration_service', './config', '../models/mechanism', '../views/pagination_container', './jquery.star-rating-svg.min.js'], function (require, exports, feedback_1, rating_1, configuration_service_1, config_1, mechanism_1, pagination_container_1) {
     "use strict";
     var feedbackDialog = require('../templates/feedback_dialog.handlebars');
     (function ($, window, document) {
@@ -6,7 +6,7 @@ define(["require", "exports", '../models/feedback', '../models/rating', '../serv
         var currentRatingValue;
         var active = false;
         function initMechanisms(data) {
-            var mechanismService = new mechanism_service_1.MechanismService(data);
+            var mechanismService = new configuration_service_1.ConfigurationService(data);
             var textMechanism = mechanismService.getMechanismConfig(mechanism_1.textType);
             var ratingMechanism = mechanismService.getMechanismConfig(mechanism_1.ratingType);
             currentRatingValue = ratingMechanism.getParameter('defaultRating').value;
