@@ -2,6 +2,7 @@ package ch.uzh.ifi.feedback.repository;
 
 import java.io.IOException;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -13,7 +14,8 @@ import ch.uzh.ifi.feedback.library.rest.RestManager;
 /**
  * Servlet implementation class FeedbackServlet
  */
-@WebServlet("/example/feedbacks")
+@WebServlet("/")
+@MultipartConfig
 public class FeedbackServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
     

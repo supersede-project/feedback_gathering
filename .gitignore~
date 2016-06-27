@@ -1,0 +1,8 @@
+<<<<<<< HEAD
+.metadata/*
+RemoteSystemsTempFiles/*
+=======
+.idea
+.idea/*/
+npm-debug.log
+>>>>>>> 40f95769a543034012ec1c2a9907b05cd6094143
