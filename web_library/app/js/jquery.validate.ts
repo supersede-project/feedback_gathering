@@ -38,9 +38,3 @@ interface JQuery {
         return this;
     };
 })(jQuery, window, document);
-
-requirejs.config( {
-    "shim": {
-        "feedbackPlugin"  : ["jquery"]
-    }
-} );

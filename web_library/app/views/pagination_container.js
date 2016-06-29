@@ -1,4 +1,4 @@
-define(["require", "exports", '../js/jquery.validate.js'], function (require, exports) {
+define(["require", "exports"], function (require, exports) {
     "use strict";
     var PaginationContainer = (function () {
         function PaginationContainer(container) {

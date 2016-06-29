@@ -1,5 +1,3 @@
-import '../js/jquery.validate.js';
-
 /**
  * Class that simply provides a pagination mechanism by showing/hiding some elements(pages)
  */
