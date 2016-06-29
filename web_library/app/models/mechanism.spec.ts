@@ -33,6 +33,30 @@ describe('Mechanism', () => {
         expect(mechanism.parameters.length).toEqual(3);
     });
 
+    it('should not initialize a mechanism if its type is not given', () => {
+        var data = {
+            "active": true,
+            "order": 1,
+            "canBeActivated": false,
+            "parameters": [
+                {
+                    "key": "maxLength",
+                    "value": 100
+                },
+                {
+                    "key": "title",
+                    "value": "Feedback"
+                },
+                {
+                    "key": "hint",
+                    "value": "Enter your feedback"
+                }
+            ]
+        };
+        var mechanism = Mechanism.initByData(data);
+        expect(mechanism).toBeNull();
+    });
+
     it('should return the corresponding parameter object', () => {
         var parameters = [new Parameter('maxLength', 100), new Parameter('title', 'Feedback'), new Parameter('hint', 'Enter your feedback')];
         var mechanism = new Mechanism('TEXT_TYPE', true, 1, true, parameters);

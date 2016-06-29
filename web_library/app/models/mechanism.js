@@ -11,7 +11,7 @@ define(["require", "exports"], function (require, exports) {
             this.parameters = parameters;
         }
         Mechanism.initByData = function (data) {
-            if (data.type === null || data.active === null) {
+            if (!data.hasOwnProperty('type') || !data.hasOwnProperty('active')) {
                 return null;
             }
             return new Mechanism(data.type, data.active, data.order, data.canBeActivated, data.parameters);

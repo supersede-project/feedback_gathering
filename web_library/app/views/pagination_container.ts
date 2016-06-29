@@ -15,8 +15,8 @@ export class PaginationContainer {
         this.container = container;
         this.pages = this.container.find('.feedback-page');
         this.showFirstPage();
-        this.addNavigationEvents();
         this.activePage = 1;
+        this.addNavigationEvents();
     }
 
     showFirstPage() {
@@ -44,6 +44,7 @@ export class PaginationContainer {
     navigateForward() {
         var feedbackPage = this.container.find('.feedback-page[data-feedback-page="' + this.activePage + '"]');
 
+        // TODO pull this out in a separate module
         // do not go to the next page if something is invalid and validation on skip is enabled
         feedbackPage.find('.validate').each(function() {
             $(this).validate();

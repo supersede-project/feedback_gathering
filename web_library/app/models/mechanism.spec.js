@@ -29,6 +29,29 @@ define(["require", "exports", './mechanism', './parameter'], function (require, 
             expect(mechanism.canBeActivated).toEqual(false);
             expect(mechanism.parameters.length).toEqual(3);
         });
+        it('should not initialize a mechanism if its type is not given', function () {
+            var data = {
+                "active": true,
+                "order": 1,
+                "canBeActivated": false,
+                "parameters": [
+                    {
+                        "key": "maxLength",
+                        "value": 100
+                    },
+                    {
+                        "key": "title",
+                        "value": "Feedback"
+                    },
+                    {
+                        "key": "hint",
+                        "value": "Enter your feedback"
+                    }
+                ]
+            };
+            var mechanism = mechanism_1.Mechanism.initByData(data);
+            expect(mechanism).toBeNull();
+        });
         it('should return the corresponding parameter object', function () {
             var parameters = [new parameter_1.Parameter('maxLength', 100), new parameter_1.Parameter('title', 'Feedback'), new parameter_1.Parameter('hint', 'Enter your feedback')];
             var mechanism = new mechanism_1.Mechanism('TEXT_TYPE', true, 1, true, parameters);

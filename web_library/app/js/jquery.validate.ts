@@ -1,4 +1,4 @@
-interface JQuery {
+export interface JQuery {
     /**
      * Register a handler to validate a HTML element.
      *
@@ -6,7 +6,7 @@ interface JQuery {
     validate():JQuery;
 }
 
-(function ($, window, document) {
+export var validatePlugin = (function($, window, document) {
     /**
      * @returns {jQuery}
      *
@@ -37,4 +37,14 @@ interface JQuery {
         }
         return this;
     };
+});
+
+(function($, window, document) {
+    validatePlugin($, window, document);
 })(jQuery, window, document);
+
+requirejs.config( {
+    "shim": {
+        "validate"  : ["jquery"]
+    }
+} );

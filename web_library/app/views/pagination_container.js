@@ -5,8 +5,8 @@ define(["require", "exports"], function (require, exports) {
             this.container = container;
             this.pages = this.container.find('.feedback-page');
             this.showFirstPage();
-            this.addNavigationEvents();
             this.activePage = 1;
+            this.addNavigationEvents();
         }
         PaginationContainer.prototype.showFirstPage = function () {
             this.pages.hide();
