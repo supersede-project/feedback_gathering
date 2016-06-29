@@ -10,7 +10,7 @@ import './jquery.validate.js';
 let feedbackDialog = require('../templates/feedback_dialog.handlebars');
 
 
-(function ($, window, document) {
+export var feedbackPluginModule = (function ($, window, document) {
     var dialog;
     var currentRatingValue;
     var active = false;
@@ -112,7 +112,7 @@ let feedbackDialog = require('../templates/feedback_dialog.handlebars');
                 }
             })
         );
-        $('#feedbackContainer').dialog('option', 'title', textMechanism.getParameter('title').value);
+        dialog.dialog('option', 'title', textMechanism.getParameter('title').value);
         dialog.dialog("open");
     };
 
@@ -198,6 +198,10 @@ let feedbackDialog = require('../templates/feedback_dialog.handlebars');
         'backgroundColor': '#b3cd40',
     };
 
+});
+
+(function($, window, document) {
+  feedbackPluginModule($, window, document);
 })(jQuery, window, document);
 
 requirejs.config( {

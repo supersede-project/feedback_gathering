@@ -1,7 +1,7 @@
 define(["require", "exports", '../models/feedback', '../models/rating', '../services/configuration_service', './config', '../models/mechanism', '../views/pagination_container', './jquery.star-rating-svg.min.js', './jquery.validate.js'], function (require, exports, feedback_1, rating_1, configuration_service_1, config_1, mechanism_1, pagination_container_1) {
     "use strict";
     var feedbackDialog = require('../templates/feedback_dialog.handlebars');
-    (function ($, window, document) {
+    exports.feedbackPluginModule = (function ($, window, document) {
         var dialog;
         var currentRatingValue;
         var active = false;
@@ -57,7 +57,7 @@ define(["require", "exports", '../models/feedback', '../models/rating', '../serv
                     active = false;
                 }
             }));
-            $('#feedbackContainer').dialog('option', 'title', textMechanism.getParameter('title').value);
+            dialog.dialog('option', 'title', textMechanism.getParameter('title').value);
             dialog.dialog("open");
         };
         var addEvents = function (textMechanism) {
@@ -108,6 +108,9 @@ define(["require", "exports", '../models/feedback', '../models/rating', '../serv
             'color': '#fff',
             'backgroundColor': '#b3cd40',
         };
+    });
+    (function ($, window, document) {
+        exports.feedbackPluginModule($, window, document);
     })(jQuery, window, document);
     requirejs.config({
         "shim": {

@@ -4,7 +4,7 @@ define(["require", "exports", './jquery.validate'], function (require, exports, 
         var element;
         var $ = $j;
         beforeEach(function () {
-            jquery_validate_1.validatePlugin($, window, document);
+            jquery_validate_1.validatePluginModule($, window, document);
             element = $('<textarea class="validate" id="textTypeText" data-mandatory="1" data-mandatory-validate-on-skip="0" ' +
                 'data-mandatory-default-text="This field can\'t be blank" ' +
                 'data-mandatory-manual-text="Please fill in this field" ></textarea>');

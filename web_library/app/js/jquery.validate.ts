@@ -6,7 +6,7 @@ export interface JQuery {
     validate():JQuery;
 }
 
-export var validatePlugin = (function($, window, document) {
+export var validatePluginModule = (function($, window, document) {
     /**
      * @returns {jQuery}
      *
@@ -40,7 +40,7 @@ export var validatePlugin = (function($, window, document) {
 });
 
 (function($, window, document) {
-    validatePlugin($, window, document);
+    validatePluginModule($, window, document);
 })(jQuery, window, document);
 
 requirejs.config( {

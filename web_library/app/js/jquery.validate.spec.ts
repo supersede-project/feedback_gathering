@@ -1,4 +1,4 @@
-import {validatePlugin} from './jquery.validate';
+import {validatePluginModule} from './jquery.validate';
 
 
 describe('jQuery Validate Plugin', () => {
@@ -6,7 +6,7 @@ describe('jQuery Validate Plugin', () => {
     let $ = $j;
 
     beforeEach(() => {
-        validatePlugin($, window, document);
+        validatePluginModule($, window, document);
 
         element = $(
             '<textarea class="validate" id="textTypeText" data-mandatory="1" data-mandatory-validate-on-skip="0" ' +

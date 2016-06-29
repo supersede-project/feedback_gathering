@@ -1,6 +1,6 @@
 define(["require", "exports"], function (require, exports) {
     "use strict";
-    exports.validatePlugin = (function ($, window, document) {
+    exports.validatePluginModule = (function ($, window, document) {
         $.fn.validate = function () {
             var content = this.val(), mandatory = this.data('mandatory'), defaultText = this.data('mandatory-default-text'), manualText = this.data('mandatory-manual-text'), valid = true;
             $('.feedback-form-error').remove();
@@ -21,7 +21,7 @@ define(["require", "exports"], function (require, exports) {
         };
     });
     (function ($, window, document) {
-        exports.validatePlugin($, window, document);
+        exports.validatePluginModule($, window, document);
     })(jQuery, window, document);
     requirejs.config({
         "shim": {
