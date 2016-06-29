@@ -14,6 +14,7 @@ public class Feedback {
 	private Timestamp lastUpdated;
 	private Double configVersion;
 	private List<Rating> ratings;
+	private List<Screenshot> screenshots;
 	
 	public String getUser() {
 		return user;
@@ -65,5 +66,11 @@ public class Feedback {
 	}
 	public void setRatings(List<Rating> ratings) {
 		this.ratings = ratings;
+	}
+	public List<Screenshot> getScreenshots() {
+		return screenshots;
+	}
+	public void setScreenshots(List<Screenshot> screenshots) {
+		this.screenshots = screenshots;
 	}
 }
