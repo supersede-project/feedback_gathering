@@ -52,6 +52,7 @@
     "karma-chai": "^0.1.0",
     "karma-chrome-launcher": "^1.0.1",
     "karma-coverage": "^1.0.0",
+    "karma-handlebars-preprocessor": "^0.3.0",
     "karma-jasmine": "^1.0.2",
     "karma-jasmine-jquery": "^0.1.1",
     "karma-mocha": "^1.0.1",

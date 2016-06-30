@@ -1,13 +1,15 @@
+import './lib/html2canvas.js';
+import './lib/jquery.star-rating-svg.min.js';
+import './jquery.validate.js';
 import {Feedback} from '../models/feedback';
 import {Rating} from '../models/rating';
 import {ConfigurationService} from '../services/configuration_service';
-import {apiEndpoint, feedbackPath, configPath, applicationName, defaultSuccessMessage,
-    feedbackObjectTitle, dialogOptions} from './config';
-import {textType, ratingType} from '../models/mechanism';
+import {
+    apiEndpoint, feedbackPath, configPath, applicationName, defaultSuccessMessage,
+    feedbackObjectTitle, dialogOptions
+} from './config';
+import {textType, ratingType, screenshotType} from '../models/mechanism';
 import {PaginationContainer} from '../views/pagination_container';
-import './lib/jquery.star-rating-svg.min.js';
-import './lib/html2canvas.js';
-import './jquery.validate.js';
 
 
 export var feedbackPluginModule = function ($, window, document) {
@@ -15,7 +17,7 @@ export var feedbackPluginModule = function ($, window, document) {
     var currentRatingValue;
     var active = false;
     var feedbackDialog = require('../templates/feedback_dialog.handlebars');
-    
+
     /**
      * @param data
      *  Configuration data retrieved from the feedback orchestrator
@@ -30,6 +32,7 @@ export var feedbackPluginModule = function ($, window, document) {
         var mechanismService = new ConfigurationService(data);
         var textMechanism = mechanismService.getMechanismConfig(textType);
         var ratingMechanism = mechanismService.getMechanismConfig(ratingType);
+        var screenshotMechanism = mechanismService.getMechanismConfig(screenshotType);
         currentRatingValue = ratingMechanism.getParameter('defaultRating').value;
         $('#serverResponse').removeClass().text('');
 
@@ -41,6 +44,7 @@ export var feedbackPluginModule = function ($, window, document) {
 
         new PaginationContainer($('#feedbackContainer .pages-container'));
         initRating(".rating-input", ratingMechanism, currentRatingValue);
+        initScreenshot(screenshotMechanism, context);
         initDialog(dialogContainer, textMechanism);
         addEvents(textMechanism);
     }
@@ -93,6 +97,43 @@ export var feedbackPluginModule = function ($, window, document) {
             callback: function (currentRating, $el) {
                 currentRatingValue = currentRating;
             }
+        });
+    };
+
+    var initScreenshot = function (screenshotMechanism, context):void {
+        var screenshotPreview = $('#screenshotPreview');
+
+        $('button#takeScreenshot').on('click', function (event) {
+            event.preventDefault();
+            event.stopPropagation();
+
+            $('.ui-widget-overlay.ui-front').hide();
+            $('.ui-dialog').hide();
+
+            html2canvas(document.body, {
+                onrendered: function (canvas) {
+                    $('.ui-widget-overlay.ui-front').show();
+                    $('.ui-dialog').show();
+
+                    screenshotPreview.empty().append(canvas);
+
+                    var windowRatio = $(window).width() / $(window).height();
+
+                    // save the canvas content as imageURL
+                    var data = canvas.toDataURL();
+
+                    var context = canvas.getContext("2d");
+                    $(canvas).prop('width', screenshotPreview.width());
+                    $(canvas).prop('height', screenshotPreview.width() / windowRatio);
+
+
+                    var img = new Image();
+                    img.onload = function () {
+                        context.drawImage(img, 0, 0, img.width, img.height, 0, 0, canvas.width, canvas.height);
+                    };
+                    img.src = data;
+                }
+            });
         });
     };
 
@@ -152,18 +193,6 @@ export var feedbackPluginModule = function ($, window, document) {
             event.stopPropagation();
             textarea.val('');
         });
-
-        // take screenshot
-        $('button#takeScreenshot').on('click', function (event) {
-            event.preventDefault();
-            event.stopPropagation();
-
-            html2canvas(document.body, {
-                onrendered: function(canvas) {
-                    document.body.appendChild(canvas);
-                }
-            });
-        });
     };
 
     /**
@@ -213,12 +242,12 @@ export var feedbackPluginModule = function ($, window, document) {
 
 };
 
-(function($, window, document) {
-  feedbackPluginModule($, window, document);
+(function ($, window, document) {
+    feedbackPluginModule($, window, document);
 })(jQuery, window, document);
 
-requirejs.config( {
+requirejs.config({
     "shim": {
-        "feedbackPlugin"  : ["jquery"]
+        "feedbackPlugin": ["jquery"]
     }
-} );
+});

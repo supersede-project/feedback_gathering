@@ -172,4 +172,8 @@ button#textTypeTextClear {
   margin: 2px 0;
   font-size: 13px; }
 
+#screenshotPreview {
+  width: 100%;
+  height: auto; }
+
 /*# sourceMappingURL=main.css.map */

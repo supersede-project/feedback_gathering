@@ -1,4 +1,4 @@
-define(["require", "exports", '../models/feedback', '../models/rating', '../services/configuration_service', './config', '../models/mechanism', '../views/pagination_container', './lib/jquery.star-rating-svg.min.js', './lib/html2canvas.js', './jquery.validate.js'], function (require, exports, feedback_1, rating_1, configuration_service_1, config_1, mechanism_1, pagination_container_1) {
+define(["require", "exports", '../models/feedback', '../models/rating', '../services/configuration_service', './config', '../models/mechanism', '../views/pagination_container', './lib/html2canvas.js', './lib/jquery.star-rating-svg.min.js', './jquery.validate.js'], function (require, exports, feedback_1, rating_1, configuration_service_1, config_1, mechanism_1, pagination_container_1) {
     "use strict";
     exports.feedbackPluginModule = function ($, window, document) {
         var dialog;
@@ -9,6 +9,7 @@ define(["require", "exports", '../models/feedback', '../models/rating', '../serv
             var mechanismService = new configuration_service_1.ConfigurationService(data);
             var textMechanism = mechanismService.getMechanismConfig(mechanism_1.textType);
             var ratingMechanism = mechanismService.getMechanismConfig(mechanism_1.ratingType);
+            var screenshotMechanism = mechanismService.getMechanismConfig(mechanism_1.screenshotType);
             currentRatingValue = ratingMechanism.getParameter('defaultRating').value;
             $('#serverResponse').removeClass().text('');
             var context = mechanismService.getContextForView();
@@ -17,6 +18,7 @@ define(["require", "exports", '../models/feedback', '../models/rating', '../serv
             var dialogContainer = $('#feedbackContainer');
             new pagination_container_1.PaginationContainer($('#feedbackContainer .pages-container'));
             initRating(".rating-input", ratingMechanism, currentRatingValue);
+            initScreenshot(screenshotMechanism, context);
             initDialog(dialogContainer, textMechanism);
             addEvents(textMechanism);
         }
@@ -50,6 +52,32 @@ define(["require", "exports", '../models/feedback', '../models/rating', '../serv
                 }
             });
         };
+        var initScreenshot = function (screenshotMechanism, context) {
+            var screenshotPreview = $('#screenshotPreview');
+            $('button#takeScreenshot').on('click', function (event) {
+                event.preventDefault();
+                event.stopPropagation();
+                $('.ui-widget-overlay.ui-front').hide();
+                $('.ui-dialog').hide();
+                html2canvas(document.body, {
+                    onrendered: function (canvas) {
+                        $('.ui-widget-overlay.ui-front').show();
+                        $('.ui-dialog').show();
+                        screenshotPreview.empty().append(canvas);
+                        var windowRatio = $(window).width() / $(window).height();
+                        var data = canvas.toDataURL();
+                        var context = canvas.getContext("2d");
+                        $(canvas).prop('width', screenshotPreview.width());
+                        $(canvas).prop('height', screenshotPreview.width() / windowRatio);
+                        var img = new Image();
+                        img.onload = function () {
+                            context.drawImage(img, 0, 0, img.width, img.height, 0, 0, canvas.width, canvas.height);
+                        };
+                        img.src = data;
+                    }
+                });
+            });
+        };
         var initDialog = function (dialogContainer, textMechanism) {
             dialog = dialogContainer.dialog($.extend({}, config_1.dialogOptions, {
                 close: function () {
@@ -78,15 +106,6 @@ define(["require", "exports", '../models/feedback', '../models/rating', '../serv
                 event.preventDefault();
                 event.stopPropagation();
                 textarea.val('');
-            });
-            $('button#takeScreenshot').on('click', function (event) {
-                event.preventDefault();
-                event.stopPropagation();
-                html2canvas(document.body, {
-                    onrendered: function (canvas) {
-                        document.body.appendChild(canvas);
-                    }
-                });
             });
         };
         var retrieveConfigurationDataOrClose = function () {
