@@ -5,16 +5,17 @@ import {apiEndpoint, feedbackPath, configPath, applicationName, defaultSuccessMe
     feedbackObjectTitle, dialogOptions} from './config';
 import {textType, ratingType} from '../models/mechanism';
 import {PaginationContainer} from '../views/pagination_container';
-import './jquery.star-rating-svg.min.js';
+import './lib/jquery.star-rating-svg.min.js';
+import './lib/html2canvas.js';
 import './jquery.validate.js';
-let feedbackDialog = require('../templates/feedback_dialog.handlebars');
 
 
-export var feedbackPluginModule = (function ($, window, document) {
+export var feedbackPluginModule = function ($, window, document) {
     var dialog;
     var currentRatingValue;
     var active = false;
-
+    var feedbackDialog = require('../templates/feedback_dialog.handlebars');
+    
     /**
      * @param data
      *  Configuration data retrieved from the feedback orchestrator
@@ -50,7 +51,7 @@ export var feedbackPluginModule = (function ($, window, document) {
      * Then an AJAX request is done to send the submitted feedback to the feedback repository. A success or failure
      * message is shown after the request is done.
      */
-    var sendFeedback = function() {
+    var sendFeedback = function () {
         var text = $('textarea#textTypeText').val();
         $('#serverResponse').removeClass();
 
@@ -82,7 +83,7 @@ export var feedbackPluginModule = (function ($, window, document) {
      *
      * Applies the jQuery star rating plugin on a specified element with the configuration from the rating mechanism.
      */
-    var initRating = function(selector, ratingMechanism, currentRatingValue) {
+    var initRating = function (selector, ratingMechanism, currentRatingValue) {
         $('' + selector).starRating({
             starSize: 25,
             totalStars: ratingMechanism.getParameter('maxRating').value,
@@ -103,7 +104,7 @@ export var feedbackPluginModule = (function ($, window, document) {
      *
      * Initializes the dialog on a given element and opens it.
      */
-    var initDialog = function(dialogContainer, textMechanism) {
+    var initDialog = function (dialogContainer, textMechanism) {
         dialog = dialogContainer.dialog(
             $.extend({}, dialogOptions, {
                 close: function () {
@@ -124,7 +125,7 @@ export var feedbackPluginModule = (function ($, window, document) {
      * - Send event for the feedback form
      * - Character count event for the text mechanism
      */
-    var addEvents = function(textMechanism) {
+    var addEvents = function (textMechanism) {
         var textarea = $('textarea#textTypeText');
 
         // send
@@ -134,7 +135,7 @@ export var feedbackPluginModule = (function ($, window, document) {
 
             // validate anyway before sending
             textarea.validate();
-            if(!textarea.hasClass('invalid')) {
+            if (!textarea.hasClass('invalid')) {
                 sendFeedback();
             }
         });
@@ -151,13 +152,25 @@ export var feedbackPluginModule = (function ($, window, document) {
             event.stopPropagation();
             textarea.val('');
         });
+
+        // take screenshot
+        $('button#takeScreenshot').on('click', function (event) {
+            event.preventDefault();
+            event.stopPropagation();
+
+            html2canvas(document.body, {
+                onrendered: function(canvas) {
+                    document.body.appendChild(canvas);
+                }
+            });
+        });
     };
 
     /**
      * The configuration data is fetched from the API if the feedback mechanism is not currently active. In the other
      * case the feedback mechanism dialog is closed. The active variable is toggled on each invocation.
      */
-    var retrieveConfigurationDataOrClose = function() {
+    var retrieveConfigurationDataOrClose = function () {
         if (!active) {
             var url = apiEndpoint + configPath;
             $.get(url, null, function (data) {
@@ -198,7 +211,7 @@ export var feedbackPluginModule = (function ($, window, document) {
         'backgroundColor': '#b3cd40',
     };
 
-});
+};
 
 (function($, window, document) {
   feedbackPluginModule($, window, document);

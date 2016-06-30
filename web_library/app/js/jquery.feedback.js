@@ -1,10 +1,10 @@
-define(["require", "exports", '../models/feedback', '../models/rating', '../services/configuration_service', './config', '../models/mechanism', '../views/pagination_container', './jquery.star-rating-svg.min.js', './jquery.validate.js'], function (require, exports, feedback_1, rating_1, configuration_service_1, config_1, mechanism_1, pagination_container_1) {
+define(["require", "exports", '../models/feedback', '../models/rating', '../services/configuration_service', './config', '../models/mechanism', '../views/pagination_container', './lib/jquery.star-rating-svg.min.js', './lib/html2canvas.js', './jquery.validate.js'], function (require, exports, feedback_1, rating_1, configuration_service_1, config_1, mechanism_1, pagination_container_1) {
     "use strict";
-    var feedbackDialog = require('../templates/feedback_dialog.handlebars');
-    exports.feedbackPluginModule = (function ($, window, document) {
+    exports.feedbackPluginModule = function ($, window, document) {
         var dialog;
         var currentRatingValue;
         var active = false;
+        var feedbackDialog = require('../templates/feedback_dialog.handlebars');
         function initMechanisms(data) {
             var mechanismService = new configuration_service_1.ConfigurationService(data);
             var textMechanism = mechanismService.getMechanismConfig(mechanism_1.textType);
@@ -79,6 +79,15 @@ define(["require", "exports", '../models/feedback', '../models/rating', '../serv
                 event.stopPropagation();
                 textarea.val('');
             });
+            $('button#takeScreenshot').on('click', function (event) {
+                event.preventDefault();
+                event.stopPropagation();
+                html2canvas(document.body, {
+                    onrendered: function (canvas) {
+                        document.body.appendChild(canvas);
+                    }
+                });
+            });
         };
         var retrieveConfigurationDataOrClose = function () {
             if (!active) {
@@ -108,7 +117,7 @@ define(["require", "exports", '../models/feedback', '../models/rating', '../serv
             'color': '#fff',
             'backgroundColor': '#b3cd40',
         };
-    });
+    };
     (function ($, window, document) {
         exports.feedbackPluginModule($, window, document);
     })(jQuery, window, document);
