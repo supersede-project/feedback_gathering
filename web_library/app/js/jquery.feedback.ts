@@ -10,6 +10,7 @@ import {
 } from './config';
 import {textType, ratingType, screenshotType} from '../models/mechanism';
 import {PaginationContainer} from '../views/pagination_container';
+import {unescape} from 'querystring';
 
 
 export var feedbackPluginModule = function ($, window, document) {
@@ -17,6 +18,7 @@ export var feedbackPluginModule = function ($, window, document) {
     var currentRatingValue;
     var active = false;
     var feedbackDialog = require('../templates/feedback_dialog.handlebars');
+    var screenshotCanvas;
 
     /**
      * @param data
@@ -44,7 +46,7 @@ export var feedbackPluginModule = function ($, window, document) {
 
         new PaginationContainer($('#feedbackContainer .pages-container'));
         initRating(".rating-input", ratingMechanism, currentRatingValue);
-        initScreenshot(screenshotMechanism, context);
+        initScreenshot(screenshotMechanism);
         initDialog(dialogContainer, textMechanism);
         addEvents(textMechanism);
     }
@@ -63,10 +65,18 @@ export var feedbackPluginModule = function ($, window, document) {
         var feedbackObject = new Feedback(feedbackObjectTitle, applicationName, "uid12345", text, 1.0,
             [new Rating(ratingTitle, currentRatingValue)]);
 
+        var dataURL = screenshotCanvas.toDataURL("image/png");
+
+        var formData = new FormData();
+        formData.append('file', dataURItoBlob(dataURL));
+        formData.append('json', JSON.stringify(feedbackObject));
+
         $.ajax({
             url: apiEndpoint + feedbackPath,
             type: 'POST',
-            data: JSON.stringify(feedbackObject),
+            data: formData,
+            processData: false,
+            contentType: false,
             success: function (data) {
                 $('#serverResponse').addClass('success').text(defaultSuccessMessage);
                 $('textarea#textTypeText').val('');
@@ -76,6 +86,26 @@ export var feedbackPluginModule = function ($, window, document) {
             }
         });
     };
+
+    function dataURItoBlob(dataURI) {
+        // convert base64/URLEncoded data component to raw binary data held in a string
+        var byteString;
+        if (dataURI.split(',')[0].indexOf('base64') >= 0)
+            byteString = atob(dataURI.split(',')[1]);
+        else
+            byteString = unescape(dataURI.split(',')[1]);
+
+        // separate out the mime component
+        var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
+
+        // write the bytes of the string to a typed array
+        var ia = new Uint8Array(byteString.length);
+        for (var i = 0; i < byteString.length; i++) {
+            ia[i] = byteString.charCodeAt(i);
+        }
+
+        return new Blob([ia], {type:mimeString});
+    }
 
     /**
      * @param selector
@@ -100,7 +130,7 @@ export var feedbackPluginModule = function ($, window, document) {
         });
     };
 
-    var initScreenshot = function (screenshotMechanism, context):void {
+    var initScreenshot = function (screenshotMechanism):void {
         var screenshotPreview = $('#screenshotPreview');
 
         $('button#takeScreenshot').on('click', function (event) {
@@ -110,14 +140,17 @@ export var feedbackPluginModule = function ($, window, document) {
             $('.ui-widget-overlay.ui-front').hide();
             $('.ui-dialog').hide();
 
-            html2canvas(document.body, {
+            var elementToCapture = $('#page-wrapper_1');
+
+            html2canvas(elementToCapture, {
                 onrendered: function (canvas) {
                     $('.ui-widget-overlay.ui-front').show();
                     $('.ui-dialog').show();
 
                     screenshotPreview.empty().append(canvas);
+                    screenshotPreview.show();
 
-                    var windowRatio = $(window).width() / $(window).height();
+                    var windowRatio = elementToCapture.width() / elementToCapture.height();
 
                     // save the canvas content as imageURL
                     var data = canvas.toDataURL();
@@ -126,12 +159,12 @@ export var feedbackPluginModule = function ($, window, document) {
                     $(canvas).prop('width', screenshotPreview.width());
                     $(canvas).prop('height', screenshotPreview.width() / windowRatio);
 
-
                     var img = new Image();
                     img.onload = function () {
                         context.drawImage(img, 0, 0, img.width, img.height, 0, 0, canvas.width, canvas.height);
                     };
                     img.src = data;
+                    screenshotCanvas = canvas;
                 }
             });
         });

@@ -1,10 +1,11 @@
-define(["require", "exports", '../models/feedback', '../models/rating', '../services/configuration_service', './config', '../models/mechanism', '../views/pagination_container', './lib/html2canvas.js', './lib/jquery.star-rating-svg.min.js', './jquery.validate.js'], function (require, exports, feedback_1, rating_1, configuration_service_1, config_1, mechanism_1, pagination_container_1) {
+define(["require", "exports", '../models/feedback', '../models/rating', '../services/configuration_service', './config', '../models/mechanism', '../views/pagination_container', 'querystring', './lib/html2canvas.js', './lib/jquery.star-rating-svg.min.js', './jquery.validate.js'], function (require, exports, feedback_1, rating_1, configuration_service_1, config_1, mechanism_1, pagination_container_1, querystring_1) {
     "use strict";
     exports.feedbackPluginModule = function ($, window, document) {
         var dialog;
         var currentRatingValue;
         var active = false;
         var feedbackDialog = require('../templates/feedback_dialog.handlebars');
+        var screenshotCanvas;
         function initMechanisms(data) {
             var mechanismService = new configuration_service_1.ConfigurationService(data);
             var textMechanism = mechanismService.getMechanismConfig(mechanism_1.textType);
@@ -18,7 +19,7 @@ define(["require", "exports", '../models/feedback', '../models/rating', '../serv
             var dialogContainer = $('#feedbackContainer');
             new pagination_container_1.PaginationContainer($('#feedbackContainer .pages-container'));
             initRating(".rating-input", ratingMechanism, currentRatingValue);
-            initScreenshot(screenshotMechanism, context);
+            initScreenshot(screenshotMechanism);
             initDialog(dialogContainer, textMechanism);
             addEvents(textMechanism);
         }
@@ -27,10 +28,16 @@ define(["require", "exports", '../models/feedback', '../models/rating', '../serv
             $('#serverResponse').removeClass();
             var ratingTitle = $('.rating-text').text().trim();
             var feedbackObject = new feedback_1.Feedback(config_1.feedbackObjectTitle, config_1.applicationName, "uid12345", text, 1.0, [new rating_1.Rating(ratingTitle, currentRatingValue)]);
+            var dataURL = screenshotCanvas.toDataURL("image/png");
+            var formData = new FormData();
+            formData.append('file', dataURItoBlob(dataURL));
+            formData.append('json', JSON.stringify(feedbackObject));
             $.ajax({
                 url: config_1.apiEndpoint + config_1.feedbackPath,
                 type: 'POST',
-                data: JSON.stringify(feedbackObject),
+                data: formData,
+                processData: false,
+                contentType: false,
                 success: function (data) {
                     $('#serverResponse').addClass('success').text(config_1.defaultSuccessMessage);
                     $('textarea#textTypeText').val('');
@@ -40,6 +47,19 @@ define(["require", "exports", '../models/feedback', '../models/rating', '../serv
                 }
             });
         };
+        function dataURItoBlob(dataURI) {
+            var byteString;
+            if (dataURI.split(',')[0].indexOf('base64') >= 0)
+                byteString = atob(dataURI.split(',')[1]);
+            else
+                byteString = querystring_1.unescape(dataURI.split(',')[1]);
+            var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
+            var ia = new Uint8Array(byteString.length);
+            for (var i = 0; i < byteString.length; i++) {
+                ia[i] = byteString.charCodeAt(i);
+            }
+            return new Blob([ia], { type: mimeString });
+        }
         var initRating = function (selector, ratingMechanism, currentRatingValue) {
             $('' + selector).starRating({
                 starSize: 25,
@@ -52,19 +72,21 @@ define(["require", "exports", '../models/feedback', '../models/rating', '../serv
                 }
             });
         };
-        var initScreenshot = function (screenshotMechanism, context) {
+        var initScreenshot = function (screenshotMechanism) {
             var screenshotPreview = $('#screenshotPreview');
             $('button#takeScreenshot').on('click', function (event) {
                 event.preventDefault();
                 event.stopPropagation();
                 $('.ui-widget-overlay.ui-front').hide();
                 $('.ui-dialog').hide();
-                html2canvas(document.body, {
+                var elementToCapture = $('#page-wrapper_1');
+                html2canvas(elementToCapture, {
                     onrendered: function (canvas) {
                         $('.ui-widget-overlay.ui-front').show();
                         $('.ui-dialog').show();
                         screenshotPreview.empty().append(canvas);
-                        var windowRatio = $(window).width() / $(window).height();
+                        screenshotPreview.show();
+                        var windowRatio = elementToCapture.width() / elementToCapture.height();
                         var data = canvas.toDataURL();
                         var context = canvas.getContext("2d");
                         $(canvas).prop('width', screenshotPreview.width());
@@ -74,6 +96,7 @@ define(["require", "exports", '../models/feedback', '../models/rating', '../serv
                             context.drawImage(img, 0, 0, img.width, img.height, 0, 0, canvas.width, canvas.height);
                         };
                         img.src = data;
+                        screenshotCanvas = canvas;
                     }
                 });
             });

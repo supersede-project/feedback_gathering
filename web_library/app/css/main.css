@@ -86,8 +86,7 @@ p.rating-input, p.text-count {
 section.dialog-navigation {
   margin: 13px 1px 3px 1px; }
 
-.navigation-button {
-  float: right;
+.button {
   background-color: #546300;
   background-image: -moz-linear-gradient(top, #8aa221 0%, #8eab10 50%, #7c9009 52%, #546300 100%);
   background-image: -webkit-linear-gradient(top, #8aa221 0%, #8eab10 50%, #7c9009 52%, #546300 100%);
@@ -102,12 +101,15 @@ section.dialog-navigation {
   text-transform: uppercase;
   margin-top: 3px; }
 
-.navigation-button:hover {
+.button:hover {
   background-image: -webkit-linear-gradient(top, #7f9718 0%, #7d970b 50%, #7c9009 52%, #617203 100%);
   background-image: -moz-linear-gradient(top, #7f9718 0%, #7d970b 50%, #7c9009 52%, #617203 100%);
   background-image: -o-linear-gradient(top, #7f9718 0%, #7d970b 50%, #7c9009 52%, #617203 100%);
   background-image: linear-gradient(top, #7f9718 0%, #7d970b 50%, #7c9009 52%, #617203 100%);
   background-color: #617203; }
+
+.navigation-button {
+  float: right; }
 
 .navigation-button :active {
   position: relative;
@@ -174,6 +176,9 @@ button#textTypeTextClear {
 
 #screenshotPreview {
   width: 100%;
-  height: auto; }
+  border: 1px solid #393939;
+  height: auto;
+  display: none;
+  margin-bottom: 10px; }
 
 /*# sourceMappingURL=main.css.map */

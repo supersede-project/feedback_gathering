@@ -8,8 +8,12 @@ gulp.task('clean.test',  task('clean', 'test'));
 gulp.task('clean.tmp',   task('clean', 'tmp'));
 
 
-gulp.task('build.dev', done =>
+let exec = require('child_process').exec;
+
+
+gulp.task('build', done =>
     runSequence(
         'tslint',
         'build.sass.dev',
+        exec('webpack'),
         done));
