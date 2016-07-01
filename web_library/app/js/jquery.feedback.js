@@ -24,13 +24,15 @@ define(["require", "exports", '../models/feedback', '../models/rating', '../serv
             addEvents(textMechanism);
         }
         var sendFeedback = function () {
+            var formData = new FormData();
             var text = $('textarea#textTypeText').val();
             $('#serverResponse').removeClass();
             var ratingTitle = $('.rating-text').text().trim();
             var feedbackObject = new feedback_1.Feedback(config_1.feedbackObjectTitle, config_1.applicationName, "uid12345", text, 1.0, [new rating_1.Rating(ratingTitle, currentRatingValue)]);
-            var dataURL = screenshotCanvas.toDataURL("image/png");
-            var formData = new FormData();
-            formData.append('file', dataURItoBlob(dataURL));
+            if (screenshotCanvas) {
+                var dataURL = screenshotCanvas.toDataURL("image/png");
+                formData.append('file', dataURItoBlob(dataURL));
+            }
             formData.append('json', JSON.stringify(feedbackObject));
             $.ajax({
                 url: config_1.apiEndpoint + config_1.feedbackPath,
@@ -113,7 +115,7 @@ define(["require", "exports", '../models/feedback', '../models/rating', '../serv
         };
         var addEvents = function (textMechanism) {
             var textarea = $('textarea#textTypeText');
-            $('button#submitFeedback').on('click', function (event) {
+            $('button#submitFeedback').unbind().on('click', function (event) {
                 event.preventDefault();
                 event.stopPropagation();
                 textarea.validate();

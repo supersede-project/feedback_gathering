@@ -58,17 +58,20 @@ export var feedbackPluginModule = function ($, window, document) {
      * message is shown after the request is done.
      */
     var sendFeedback = function () {
+        var formData = new FormData();
+
+        // TODO check which mechanism are active
         var text = $('textarea#textTypeText').val();
         $('#serverResponse').removeClass();
-
         var ratingTitle = $('.rating-text').text().trim();
         var feedbackObject = new Feedback(feedbackObjectTitle, applicationName, "uid12345", text, 1.0,
             [new Rating(ratingTitle, currentRatingValue)]);
 
-        var dataURL = screenshotCanvas.toDataURL("image/png");
+        if (screenshotCanvas) {
+            var dataURL = screenshotCanvas.toDataURL("image/png");
+            formData.append('file', dataURItoBlob(dataURL));
+        }
 
-        var formData = new FormData();
-        formData.append('file', dataURItoBlob(dataURL));
         formData.append('json', JSON.stringify(feedbackObject));
 
         $.ajax({
@@ -203,7 +206,7 @@ export var feedbackPluginModule = function ($, window, document) {
         var textarea = $('textarea#textTypeText');
 
         // send
-        $('button#submitFeedback').on('click', function (event) {
+        $('button#submitFeedback').unbind().on('click', function (event) {
             event.preventDefault();
             event.stopPropagation();
 
