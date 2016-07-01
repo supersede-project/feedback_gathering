@@ -117,7 +117,7 @@ public class FeedbackController extends RestController<Feedback> implements Feed
 	        File tmp = new File(dir, String.valueOf(new Date().getTime()));
 	        tmp.createNewFile();
 	        Files.write(tmp.toPath(), content);
-	        Screenshot s = new Screenshot(fileName, tmp.toPath(), fileSize);
+	        Screenshot s = new Screenshot(fileName, tmp.getAbsolutePath(), fileSize);
 	        screenshots.add(s);
 	    }
 	    

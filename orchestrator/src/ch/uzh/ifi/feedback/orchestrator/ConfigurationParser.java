@@ -71,10 +71,14 @@ public class ConfigurationParser implements IDbResultParser<List<FeedbackMechani
 		if(tryParseDouble(stringValue))
 			return Double.parseDouble(stringValue);
 		
+		if (stringValue.equalsIgnoreCase("true") || stringValue.equalsIgnoreCase("false")) {
+		    return Boolean.valueOf(stringValue);
+		}
+		
 		return stringValue;
 	}
 	
-	boolean tryParseInt(String value) {  
+	private boolean tryParseInt(String value) {  
 	     try {  
 	         Integer.parseInt(value);  
 	         return true;  
@@ -83,7 +87,7 @@ public class ConfigurationParser implements IDbResultParser<List<FeedbackMechani
 	      }  
 	}
 	
-	boolean tryParseDouble(String value) {  
+	private boolean tryParseDouble(String value) {  
 	     try {  
 	         Double.parseDouble(value);  
 	         return true;  
