@@ -2,16 +2,20 @@ package ch.uzh.ifi.feedback.library.rest;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.stream.Collectors;
 import java.util.Set;
 
 import javax.el.MethodNotFoundException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.Part;
 
 import org.reflections.*;
 import org.reflections.scanners.MethodAnnotationsScanner;
@@ -81,7 +85,7 @@ public class RestManager implements IRestManager {
 	public void Post(HttpServletRequest request, HttpServletResponse response) throws ServletException {
 		try {
 			RestController controller = GetController(request);
-			Object result = controller.Deserialize(GetRequestContent(request));
+			Object result = controller.Deserialize(request.getParameter("json"));
 			controller.Post(request, response, result);
 
 		} catch(JsonSyntaxException ex)
@@ -109,7 +113,7 @@ public class RestManager implements IRestManager {
 	public void Put(HttpServletRequest request, HttpServletResponse response) throws ServletException {
 		try {
 			IRestController controller = GetController(request);
-			Object result = controller.Deserialize(GetRequestContent(request));
+			Object result = controller.Deserialize(request.getParameter("json"));
 			controller.Put(request, response, result);
 
 		} catch(NullPointerException ex)
@@ -156,7 +160,7 @@ public class RestManager implements IRestManager {
 	
 	private String GetRequestContent(HttpServletRequest request) throws Exception
 	{
-		StringBuffer buffer = new StringBuffer();
+	    StringBuffer buffer = new StringBuffer();
 		String line = null;
 		
 		try{
@@ -170,6 +174,7 @@ public class RestManager implements IRestManager {
 			throw new Exception(ex);
 		}
 		return buffer.toString();
+	    
 	}
 
 	private HttpServletRequest SetAttributes(HttpServletRequest request, String path, UriTemplate template)

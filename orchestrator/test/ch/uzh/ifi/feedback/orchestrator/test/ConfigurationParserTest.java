@@ -44,7 +44,6 @@ public class ConfigurationParserTest {
 		.thenReturn(String.valueOf(m1.getParameters().get(0).getEditableByUser()))
 		.thenReturn(null);
 		Mockito.when(resultSet.getInt("editable_by_user")).thenReturn(0);
-		
 	}
 
 	@Test
