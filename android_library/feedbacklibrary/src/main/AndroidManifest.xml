@@ -3,14 +3,24 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.matthias.feedbacklibrary">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+
     <application
         android:allowBackup="true"
         android:label="@string/supersede_feedbacklibrary_app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        android:screenOrientation="portrait">
         <activity
             android:name=".FeedbackActivity"
             android:label="@string/supersede_feedbacklibrary_app_name"/>
+        <activity
+            android:name=".AnnotateActivity"
+            android:label="Annotate Picture"
+            android:screenOrientation="portrait">
+        </activity>
     </application>
 
 </manifest>
