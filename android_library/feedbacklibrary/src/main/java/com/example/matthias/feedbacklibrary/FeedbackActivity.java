@@ -55,6 +55,8 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -442,7 +444,17 @@ public class FeedbackActivity extends AppCompatActivity {
             feedback.setApplication(feedbackConfiguration.getApplication());
             feedback.setUser(feedbackConfiguration.getUser());
             feedback.setConfigVersion(feedbackConfiguration.getConfigVersion());
-            result = fbAPI.createFeedback(feedback);
+
+            // JSON string of feedback
+            Gson gson = new Gson();
+            Type feedbackType = new TypeToken<Feedback>(){}.getType();
+            String feedbackJsonString = gson.toJson(feedback, feedbackType);
+            // Screenshot file
+            File imageFile = new File(screenShotImagePath);
+
+            RequestBody feedbackJsonPart = RequestBody.create(MediaType.parse("multipart/form-data"), feedbackJsonString);
+            RequestBody feedbackScreenshotPart = RequestBody.create(MediaType.parse("multipart/form-data"), imageFile);
+            result = fbAPI.createFeedbackMultipart(feedbackScreenshotPart, feedbackJsonPart);
 
             if (result != null) {
                 result.enqueue(new Callback<JsonObject>() {
