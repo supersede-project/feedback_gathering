@@ -1,4 +1,4 @@
-define(["require", "exports", '../models/mechanism', '../models/parameter_property_pair'], function (require, exports, mechanism_1, parameter_property_pair_1) {
+define(["require", "exports", '../models/parameter_property_pair', '../models/mechanism_factory', '../js/config'], function (require, exports, parameter_property_pair_1, mechanism_factory_1, config_1) {
     "use strict";
     var ConfigurationService = (function () {
         function ConfigurationService(data) {
@@ -18,7 +18,7 @@ define(["require", "exports", '../models/mechanism', '../models/parameter_proper
         ConfigurationService.prototype.getMechanismConfig = function (mechanismTypeConstant) {
             var filteredArray = this.data.filter(function (mechanism) { return mechanism.type === mechanismTypeConstant; });
             if (filteredArray.length > 0) {
-                return mechanism_1.Mechanism.initByData(filteredArray[0]);
+                return mechanism_factory_1.MechanismFactory.createByData(filteredArray[0]);
             }
             else {
                 return null;
@@ -26,8 +26,8 @@ define(["require", "exports", '../models/mechanism', '../models/parameter_proper
         };
         ConfigurationService.prototype.getContextForView = function () {
             var context = { textMechanism: null, ratingMechanism: null };
-            var textMechanism = this.getMechanismConfig(mechanism_1.textType);
-            var ratingMechanism = this.getMechanismConfig(mechanism_1.ratingType);
+            var textMechanism = this.getMechanismConfig(config_1.textType);
+            var ratingMechanism = this.getMechanismConfig(config_1.ratingType);
             var labelStyle = this.getCssStyle(textMechanism, [
                 new parameter_property_pair_1.ParameterPropertyPair('labelPositioning', 'text-align'),
                 new parameter_property_pair_1.ParameterPropertyPair('labelColor', 'color'),

@@ -1,6 +1,6 @@
 import {Rating} from './rating';
-import {textType, ratingType} from './mechanism';
 import {ConfigurationService} from '../services/configuration_service';
+import {textType, ratingType} from '../js/config';
 
 
 const validationMessages = {

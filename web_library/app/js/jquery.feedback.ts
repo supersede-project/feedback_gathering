@@ -6,19 +6,19 @@ import {Rating} from '../models/rating';
 import {ConfigurationService} from '../services/configuration_service';
 import {
     apiEndpoint, feedbackPath, configPath, applicationName, defaultSuccessMessage,
-    feedbackObjectTitle, dialogOptions
+    feedbackObjectTitle, dialogOptions, textType, ratingType, screenshotType
 } from './config';
-import {textType, ratingType, screenshotType} from '../models/mechanism';
 import {PaginationContainer} from '../views/pagination_container';
-import {unescape} from 'querystring';
+import {Helper} from './helper';
+import {RatingMechanism} from '../models/rating_mechanism';
 
 
 export var feedbackPluginModule = function ($, window, document) {
     var dialog;
-    var currentRatingValue;
     var active = false;
     var feedbackDialog = require('../templates/feedback_dialog.handlebars');
     var screenshotCanvas;
+    var ratingMechanism:RatingMechanism;
 
     /**
      * @param data
@@ -33,9 +33,8 @@ export var feedbackPluginModule = function ($, window, document) {
     function initMechanisms(data) {
         var configurationService = new ConfigurationService(data);
         var textMechanism = configurationService.getMechanismConfig(textType);
-        var ratingMechanism = configurationService.getMechanismConfig(ratingType);
+        ratingMechanism = configurationService.getMechanismConfig(ratingType);
         var screenshotMechanism = configurationService.getMechanismConfig(screenshotType);
-        currentRatingValue = ratingMechanism.getParameter('defaultRating').value;
         $('#serverResponse').removeClass().text('');
 
         var context = configurationService.getContextForView();
@@ -45,7 +44,7 @@ export var feedbackPluginModule = function ($, window, document) {
         var dialogContainer = $('#feedbackContainer');
 
         new PaginationContainer($('#feedbackContainer .pages-container'));
-        initRating(".rating-input", ratingMechanism, currentRatingValue);
+        initRating(".rating-input", ratingMechanism);
         initScreenshot(screenshotMechanism);
         initDialog(dialogContainer, textMechanism);
         addEvents(textMechanism);
@@ -64,12 +63,13 @@ export var feedbackPluginModule = function ($, window, document) {
         var text = $('textarea#textTypeText').val();
         $('#serverResponse').removeClass();
         var ratingTitle = $('.rating-text').text().trim();
+
         var feedbackObject = new Feedback(feedbackObjectTitle, applicationName, "uid12345", text, 1.0,
-            [new Rating(ratingTitle, currentRatingValue)]);
+            [new Rating(ratingTitle, ratingMechanism.currentRatingValue)]);
 
         if (screenshotCanvas) {
             var dataURL = screenshotCanvas.toDataURL("image/png");
-            formData.append('file', dataURItoBlob(dataURL));
+            formData.append('file', Helper.dataURItoBlob(dataURL));
         }
 
         formData.append('json', JSON.stringify(feedbackObject));
@@ -90,47 +90,17 @@ export var feedbackPluginModule = function ($, window, document) {
         });
     };
 
-    function dataURItoBlob(dataURI) {
-        // convert base64/URLEncoded data component to raw binary data held in a string
-        var byteString;
-        if (dataURI.split(',')[0].indexOf('base64') >= 0)
-            byteString = atob(dataURI.split(',')[1]);
-        else
-            byteString = unescape(dataURI.split(',')[1]);
-
-        // separate out the mime component
-        var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
-
-        // write the bytes of the string to a typed array
-        var ia = new Uint8Array(byteString.length);
-        for (var i = 0; i < byteString.length; i++) {
-            ia[i] = byteString.charCodeAt(i);
-        }
-
-        return new Blob([ia], {type:mimeString});
-    }
-
     /**
      * @param selector
      *  The jQuery selector that matches the element the star rating should be applied on
      * @param ratingMechanism
      *  The rating mechanism object that contains the configuration
-     * @param currentRatingValue
-     *  The value that sets the initial rating of the rating mechanism
      *
      * Applies the jQuery star rating plugin on a specified element with the configuration from the rating mechanism.
      */
-    var initRating = function (selector, ratingMechanism, currentRatingValue) {
-        $('' + selector).starRating({
-            starSize: 25,
-            totalStars: ratingMechanism.getParameter('maxRating').value,
-            initialRating: currentRatingValue,
-            useFullStars: true,
-            disableAfterRate: false,
-            callback: function (currentRating, $el) {
-                currentRatingValue = currentRating;
-            }
-        });
+    var initRating = function (selector, ratingMechanism:RatingMechanism) {
+        var options = ratingMechanism.getRatingElementOptions();
+        $('' + selector).starRating(options);
     };
 
     var initScreenshot = function (screenshotMechanism):void {

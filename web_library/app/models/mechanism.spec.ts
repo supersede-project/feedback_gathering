@@ -1,5 +1,6 @@
 import {Mechanism} from './mechanism';
 import {Parameter} from './parameter';
+import {MechanismFactory} from './mechanism_factory';
 
 
 describe('Mechanism', () => {
@@ -25,7 +26,7 @@ describe('Mechanism', () => {
                 }
             ]
         };
-        var mechanism = Mechanism.initByData(data);
+        var mechanism = MechanismFactory.createByData(data);
         expect(mechanism.type).toEqual('TEXT_TYPE');
         expect(mechanism.active).toEqual(true);
         expect(mechanism.order).toEqual(1);
@@ -53,7 +54,7 @@ describe('Mechanism', () => {
                 }
             ]
         };
-        var mechanism = Mechanism.initByData(data);
+        var mechanism = MechanismFactory.createByData(data);
         expect(mechanism).toBeNull();
     });
 

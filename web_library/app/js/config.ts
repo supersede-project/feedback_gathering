@@ -16,3 +16,7 @@ export const dialogOptions = {
     title: 'Feedback',
     buttons: {}
 };
+
+export const textType = 'TEXT_TYPE';
+export const ratingType = 'RATING_TYPE';
+export const screenshotType = 'SCREENSHOT_TYPE';

@@ -1,4 +1,4 @@
-define(["require", "exports", './mechanism', './parameter'], function (require, exports, mechanism_1, parameter_1) {
+define(["require", "exports", './mechanism', './parameter', './mechanism_factory'], function (require, exports, mechanism_1, parameter_1, mechanism_factory_1) {
     "use strict";
     describe('Mechanism', function () {
         it('should initialize a mechanism object with data passed', function () {
@@ -22,7 +22,7 @@ define(["require", "exports", './mechanism', './parameter'], function (require, 
                     }
                 ]
             };
-            var mechanism = mechanism_1.Mechanism.initByData(data);
+            var mechanism = mechanism_factory_1.MechanismFactory.createByData(data);
             expect(mechanism.type).toEqual('TEXT_TYPE');
             expect(mechanism.active).toEqual(true);
             expect(mechanism.order).toEqual(1);
@@ -49,7 +49,7 @@ define(["require", "exports", './mechanism', './parameter'], function (require, 
                     }
                 ]
             };
-            var mechanism = mechanism_1.Mechanism.initByData(data);
+            var mechanism = mechanism_factory_1.MechanismFactory.createByData(data);
             expect(mechanism).toBeNull();
         });
         it('should return the corresponding parameter object', function () {

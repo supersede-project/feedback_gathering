@@ -1,24 +1,23 @@
-define(["require", "exports", '../models/feedback', '../models/rating', '../services/configuration_service', './config', '../models/mechanism', '../views/pagination_container', 'querystring', './lib/html2canvas.js', './lib/jquery.star-rating-svg.min.js', './jquery.validate.js'], function (require, exports, feedback_1, rating_1, configuration_service_1, config_1, mechanism_1, pagination_container_1, querystring_1) {
+define(["require", "exports", '../models/feedback', '../models/rating', '../services/configuration_service', './config', '../views/pagination_container', './helper', './lib/html2canvas.js', './lib/jquery.star-rating-svg.min.js', './jquery.validate.js'], function (require, exports, feedback_1, rating_1, configuration_service_1, config_1, pagination_container_1, helper_1) {
     "use strict";
     exports.feedbackPluginModule = function ($, window, document) {
         var dialog;
-        var currentRatingValue;
         var active = false;
         var feedbackDialog = require('../templates/feedback_dialog.handlebars');
         var screenshotCanvas;
+        var ratingMechanism;
         function initMechanisms(data) {
             var configurationService = new configuration_service_1.ConfigurationService(data);
-            var textMechanism = configurationService.getMechanismConfig(mechanism_1.textType);
-            var ratingMechanism = configurationService.getMechanismConfig(mechanism_1.ratingType);
-            var screenshotMechanism = configurationService.getMechanismConfig(mechanism_1.screenshotType);
-            currentRatingValue = ratingMechanism.getParameter('defaultRating').value;
+            var textMechanism = configurationService.getMechanismConfig(config_1.textType);
+            ratingMechanism = configurationService.getMechanismConfig(config_1.ratingType);
+            var screenshotMechanism = configurationService.getMechanismConfig(config_1.screenshotType);
             $('#serverResponse').removeClass().text('');
             var context = configurationService.getContextForView();
             var html = feedbackDialog(context);
             $('body').append(html);
             var dialogContainer = $('#feedbackContainer');
             new pagination_container_1.PaginationContainer($('#feedbackContainer .pages-container'));
-            initRating(".rating-input", ratingMechanism, currentRatingValue);
+            initRating(".rating-input", ratingMechanism);
             initScreenshot(screenshotMechanism);
             initDialog(dialogContainer, textMechanism);
             addEvents(textMechanism);
@@ -28,10 +27,10 @@ define(["require", "exports", '../models/feedback', '../models/rating', '../serv
             var text = $('textarea#textTypeText').val();
             $('#serverResponse').removeClass();
             var ratingTitle = $('.rating-text').text().trim();
-            var feedbackObject = new feedback_1.Feedback(config_1.feedbackObjectTitle, config_1.applicationName, "uid12345", text, 1.0, [new rating_1.Rating(ratingTitle, currentRatingValue)]);
+            var feedbackObject = new feedback_1.Feedback(config_1.feedbackObjectTitle, config_1.applicationName, "uid12345", text, 1.0, [new rating_1.Rating(ratingTitle, ratingMechanism.currentRatingValue)]);
             if (screenshotCanvas) {
                 var dataURL = screenshotCanvas.toDataURL("image/png");
-                formData.append('file', dataURItoBlob(dataURL));
+                formData.append('file', helper_1.Helper.dataURItoBlob(dataURL));
             }
             formData.append('json', JSON.stringify(feedbackObject));
             $.ajax({
@@ -49,30 +48,9 @@ define(["require", "exports", '../models/feedback', '../models/rating', '../serv
                 }
             });
         };
-        function dataURItoBlob(dataURI) {
-            var byteString;
-            if (dataURI.split(',')[0].indexOf('base64') >= 0)
-                byteString = atob(dataURI.split(',')[1]);
-            else
-                byteString = querystring_1.unescape(dataURI.split(',')[1]);
-            var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
-            var ia = new Uint8Array(byteString.length);
-            for (var i = 0; i < byteString.length; i++) {
-                ia[i] = byteString.charCodeAt(i);
-            }
-            return new Blob([ia], { type: mimeString });
-        }
-        var initRating = function (selector, ratingMechanism, currentRatingValue) {
-            $('' + selector).starRating({
-                starSize: 25,
-                totalStars: ratingMechanism.getParameter('maxRating').value,
-                initialRating: currentRatingValue,
-                useFullStars: true,
-                disableAfterRate: false,
-                callback: function (currentRating, $el) {
-                    currentRatingValue = currentRating;
-                }
-            });
+        var initRating = function (selector, ratingMechanism) {
+            var options = ratingMechanism.getRatingElementOptions();
+            $('' + selector).starRating(options);
         };
         var initScreenshot = function (screenshotMechanism) {
             var screenshotPreview = $('#screenshotPreview');

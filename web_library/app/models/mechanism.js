@@ -1,8 +1,5 @@
 define(["require", "exports"], function (require, exports) {
     "use strict";
-    exports.textType = 'TEXT_TYPE';
-    exports.ratingType = 'RATING_TYPE';
-    exports.screenshotType = 'SCREENSHOT_TYPE';
     var Mechanism = (function () {
         function Mechanism(type, active, order, canBeActivated, parameters) {
             this.type = type;
@@ -11,12 +8,6 @@ define(["require", "exports"], function (require, exports) {
             this.canBeActivated = canBeActivated;
             this.parameters = parameters;
         }
-        Mechanism.initByData = function (data) {
-            if (!data.hasOwnProperty('type') || !data.hasOwnProperty('active')) {
-                return null;
-            }
-            return new Mechanism(data.type, data.active, data.order, data.canBeActivated, data.parameters);
-        };
         Mechanism.prototype.getParameter = function (key) {
             var filteredArray = this.parameters.filter(function (parameter) { return parameter.key === key; });
             if (filteredArray.length > 0) {

@@ -15,4 +15,7 @@ define(["require", "exports"], function (require, exports) {
         title: 'Feedback',
         buttons: {}
     };
+    exports.textType = 'TEXT_TYPE';
+    exports.ratingType = 'RATING_TYPE';
+    exports.screenshotType = 'SCREENSHOT_TYPE';
 });

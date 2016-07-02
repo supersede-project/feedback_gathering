@@ -1,6 +1,6 @@
-define(["require", "exports", './configuration_service', '../models/mechanism', '../models/parameter_property_pair'], function (require, exports, configuration_service_1, mechanism_1, parameter_property_pair_1) {
+define(["require", "exports", './configuration_service', '../models/parameter_property_pair', '../models/rating_mechanism', '../js/config', '../models/mechanism'], function (require, exports, configuration_service_1, parameter_property_pair_1, rating_mechanism_1, config_1, mechanism_1) {
     "use strict";
-    describe('Mechanism Service', function () {
+    describe('Configuration Service', function () {
         var configurationService;
         beforeEach(function () {
             var data = [
@@ -141,11 +141,21 @@ define(["require", "exports", './configuration_service', '../models/mechanism', 
         });
         it('should return the corresponding mechanisms', function () {
             var textMechanism = configurationService.getMechanismConfig('TEXT_TYPE');
+            expect(textMechanism).toEqual(jasmine.any(mechanism_1.Mechanism));
             expect(textMechanism).not.toBeNull();
             expect(textMechanism.type).toEqual('TEXT_TYPE');
             expect(textMechanism.active).toEqual(true);
             expect(textMechanism.order).toEqual(1);
             expect(textMechanism.canBeActivated).toEqual(false);
+        });
+        it('should return a rating mechanism object', function () {
+            var ratingMechanism = configurationService.getMechanismConfig('RATING_TYPE');
+            expect(ratingMechanism).toEqual(jasmine.any(rating_mechanism_1.RatingMechanism));
+            expect(ratingMechanism).not.toBeNull();
+            expect(ratingMechanism.type).toEqual('RATING_TYPE');
+            expect(ratingMechanism.active).toEqual(true);
+            expect(ratingMechanism.order).toEqual(4);
+            expect(ratingMechanism.canBeActivated).toEqual(true);
         });
         it('should return the context for the view with the configuration data', function () {
             var context = configurationService.getContextForView();
@@ -172,7 +182,7 @@ define(["require", "exports", './configuration_service', '../models/mechanism', 
             expect(context).toEqual(expectedContext);
         });
         it('should return a css style string', function () {
-            var textMechanism = configurationService.getMechanismConfig(mechanism_1.textType);
+            var textMechanism = configurationService.getMechanismConfig(config_1.textType);
             var cssStyle = configurationService.getCssStyle(textMechanism, [new parameter_property_pair_1.ParameterPropertyPair('textareaFontColor', 'color')]);
             expect(cssStyle).toEqual('color: #000000;');
             var cssStyle2 = configurationService.getCssStyle(textMechanism, [new parameter_property_pair_1.ParameterPropertyPair('textareaFontColor', 'color'), new parameter_property_pair_1.ParameterPropertyPair('fieldFontType', 'font-style')]);

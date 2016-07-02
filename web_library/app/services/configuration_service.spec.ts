@@ -1,9 +1,11 @@
 import {ConfigurationService} from './configuration_service';
-import {textType} from '../models/mechanism';
 import {ParameterPropertyPair} from '../models/parameter_property_pair';
+import {RatingMechanism} from '../models/rating_mechanism';
+import {textType} from '../js/config';
+import {Mechanism} from '../models/mechanism';
 
 
-describe('Mechanism Service', () => {
+describe('Configuration Service', () => {
     let configurationService:ConfigurationService;
 
     beforeEach(() => {
@@ -143,19 +145,32 @@ describe('Mechanism Service', () => {
         expect(textMechanismConfig.order).toEqual(1);
         expect(textMechanismConfig.canBeActivated).toEqual(false);
 
-        var ratingMechanismConfig = configuration[3];
+        var ratingMechanismConfig:RatingMechanism = configuration[3];
         expect(ratingMechanismConfig.type).toEqual('RATING_TYPE');
     });
 
     it('should return the corresponding mechanisms', () => {
         var textMechanism = configurationService.getMechanismConfig('TEXT_TYPE');
 
+        expect(textMechanism).toEqual(jasmine.any(Mechanism));
         expect(textMechanism).not.toBeNull();
 
         expect(textMechanism.type).toEqual('TEXT_TYPE');
         expect(textMechanism.active).toEqual(true);
         expect(textMechanism.order).toEqual(1);
         expect(textMechanism.canBeActivated).toEqual(false);
+    });
+
+    it('should return a rating mechanism object', () => {
+        var ratingMechanism= configurationService.getMechanismConfig('RATING_TYPE');
+
+        expect(ratingMechanism).toEqual(jasmine.any(RatingMechanism));
+        expect(ratingMechanism).not.toBeNull();
+        
+        expect(ratingMechanism.type).toEqual('RATING_TYPE');
+        expect(ratingMechanism.active).toEqual(true);
+        expect(ratingMechanism.order).toEqual(4);
+        expect(ratingMechanism.canBeActivated).toEqual(true);
     });
 
     it('should return the context for the view with the configuration data', () => {

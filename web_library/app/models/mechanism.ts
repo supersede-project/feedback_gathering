@@ -1,11 +1,6 @@
 import {Parameter} from './parameter';
 
 
-export const textType = 'TEXT_TYPE';
-export const ratingType = 'RATING_TYPE';
-export const screenshotType = 'SCREENSHOT_TYPE';
-
-
 export class Mechanism {
     type:string;
     active:boolean;
@@ -19,18 +14,6 @@ export class Mechanism {
         this.order = order;
         this.canBeActivated = canBeActivated;
         this.parameters = parameters;
-    }
-
-    /**
-     * @param data
-     * @returns Mechanism
-     *  The mechanism object parsed from json.
-     */
-    static initByData(data:any): Mechanism {
-        if(!data.hasOwnProperty('type') || !data.hasOwnProperty('active')) {
-            return null;
-        }
-        return new Mechanism(data.type, data.active, data.order, data.canBeActivated, data.parameters);
     }
 
     /**

@@ -1,5 +1,7 @@
-import {Mechanism, textType, ratingType} from '../models/mechanism';
+import {Mechanism} from '../models/mechanism';
 import {ParameterPropertyPair} from '../models/parameter_property_pair';
+import {MechanismFactory} from '../models/mechanism_factory';
+import {textType, ratingType} from '../js/config';
 
 
 /**
@@ -16,7 +18,7 @@ export class ConfigurationService {
         this.data = data;
     }
 
-    getConfig(): Mechanism[] {
+    getConfig(): any[] {
         var config = [];
         for(var i = 0; i < this.data.length; i++) {
             var element = this.data[i];
@@ -34,10 +36,10 @@ export class ConfigurationService {
      * @returns Mechanism
      *  The mechanism object with all its configuration data if the mechanism was found in the data, otherwise null.
      */
-    getMechanismConfig(mechanismTypeConstant:string): Mechanism {
+    getMechanismConfig(mechanismTypeConstant:string): any {
         var filteredArray = this.data.filter(mechanism => mechanism.type === mechanismTypeConstant);
         if(filteredArray.length > 0) {
-            return Mechanism.initByData(filteredArray[0]);
+            return MechanismFactory.createByData(filteredArray[0]);
         } else {
             return null;
         }
