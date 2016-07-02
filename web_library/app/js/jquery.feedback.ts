@@ -31,14 +31,14 @@ export var feedbackPluginModule = function ($, window, document) {
      * All events on the HTML have to be added after the template is appended to the body (if not using live binding).
      */
     function initMechanisms(data) {
-        var mechanismService = new ConfigurationService(data);
-        var textMechanism = mechanismService.getMechanismConfig(textType);
-        var ratingMechanism = mechanismService.getMechanismConfig(ratingType);
-        var screenshotMechanism = mechanismService.getMechanismConfig(screenshotType);
+        var configurationService = new ConfigurationService(data);
+        var textMechanism = configurationService.getMechanismConfig(textType);
+        var ratingMechanism = configurationService.getMechanismConfig(ratingType);
+        var screenshotMechanism = configurationService.getMechanismConfig(screenshotType);
         currentRatingValue = ratingMechanism.getParameter('defaultRating').value;
         $('#serverResponse').removeClass().text('');
 
-        var context = mechanismService.getContextForView();
+        var context = configurationService.getContextForView();
         var html = feedbackDialog(context);
         $('body').append(html);
 

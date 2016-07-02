@@ -7,13 +7,13 @@ define(["require", "exports", '../models/feedback', '../models/rating', '../serv
         var feedbackDialog = require('../templates/feedback_dialog.handlebars');
         var screenshotCanvas;
         function initMechanisms(data) {
-            var mechanismService = new configuration_service_1.ConfigurationService(data);
-            var textMechanism = mechanismService.getMechanismConfig(mechanism_1.textType);
-            var ratingMechanism = mechanismService.getMechanismConfig(mechanism_1.ratingType);
-            var screenshotMechanism = mechanismService.getMechanismConfig(mechanism_1.screenshotType);
+            var configurationService = new configuration_service_1.ConfigurationService(data);
+            var textMechanism = configurationService.getMechanismConfig(mechanism_1.textType);
+            var ratingMechanism = configurationService.getMechanismConfig(mechanism_1.ratingType);
+            var screenshotMechanism = configurationService.getMechanismConfig(mechanism_1.screenshotType);
             currentRatingValue = ratingMechanism.getParameter('defaultRating').value;
             $('#serverResponse').removeClass().text('');
-            var context = mechanismService.getContextForView();
+            var context = configurationService.getContextForView();
             var html = feedbackDialog(context);
             $('body').append(html);
             var dialogContainer = $('#feedbackContainer');

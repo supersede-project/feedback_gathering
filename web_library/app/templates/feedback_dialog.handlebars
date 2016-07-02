@@ -3,45 +3,52 @@
         <section class="pages-container">
             <article data-feedback-page="1" class="feedback-page">
                 {{#if textMechanism.active}}
-                <section class="feedback-mechanism" id="textType">
-                    <p id="textTypeHint" class="explanation" style="{{ textMechanism.labelStyle }}">
-                        {{ textMechanism.label }}
-                    </p>
+                    <section class="feedback-mechanism horizontal" id="textType">
+                        <p id="textTypeLabel" class="explanation col col-left" style="{{ textMechanism.labelStyle }}">
+                            {{ textMechanism.label }}
+                        </p>
 
-                    <textarea class="validate"
-                        {{#if textMechanism.mandatory }} data-mandatory="1"
-                                                         data-mandatory-validate-on-skip="{{ textMechanism.validateOnSkip }}"
-                                                         data-mandatory-default-text="This field can't be blank"
-                                                         data-mandatory-manual-text="{{ textMechanism.mandatoryReminder }}" {{/if}}
-                        placeholder="{{ textMechanism.hint }}" id="textTypeText" style="{{ textMechanism.textareaStyle }}"></textarea>
-                    <p class="textarea-bottom">
-                        {{#if textMechanism.clearInput }}
-                            <button id="textTypeTextClear" title="Clear the text input">x</button>
-                        {{/if}}
-                        {{#if textMechanism.maxLengthVisible}}
-                            <span id="textTypeMaxLength">{{ textMechanism.currentLength }} / {{ textMechanism.maxLength }}</span>
-                        {{/if}}
+                        <article class="col col-right">
+                            <textarea class="validate"
+                            {{#if textMechanism.mandatory }} data-mandatory="1"
+                                  data-mandatory-validate-on-skip="{{ textMechanism.validateOnSkip }}"
+                                  data-mandatory-default-text="This field can't be blank"
+                                  data-mandatory-manual-text="{{ textMechanism.mandatoryReminder }}" {{/if}}
+                                  placeholder="{{ textMechanism.hint }}" id="textTypeText"
+                                  style="{{ textMechanism.textareaStyle }}"></textarea>
+                                <p class="textarea-bottom">
+                                    {{#if textMechanism.clearInput }}
+                                        <button id="textTypeTextClear" title="Clear the text input">x</button>
+                                    {{/if}}
+                                    {{#if textMechanism.maxLengthVisible}}
+                                        <span id="textTypeMaxLength">{{ textMechanism.currentLength }}
+                                            / {{ textMechanism.maxLength }}</span>
+                                    {{/if}}
+                                </p>
+                                <div class="clearfix"></div>
+                        </article>
                         <div class="clearfix"></div>
-                    </p>
-                </section>
-                {{/if}}
-
-                {{#if ratingMechanism.active}}
-                    <section class="feedback-mechanism" id="ratingType">
-                        <p class="rating-text">
-                            {{ ratingMechanism.title }}
-                        </p>
-                        <p class="rating-input">
-
-                        </p>
                     </section>
                 {{/if}}
 
-                <section class="feedback-mechanism" id="screenshotType">
-                    <button id="takeScreenshot" class="button">Take screenshot</button>
-                    <div id="screenshotPreview">
+                {{#if ratingMechanism.active}}
+                    <section class="feedback-mechanism horizontal" id="ratingType">
+                        <p class="rating-text col col-left">
+                            {{ ratingMechanism.title }}
+                        </p>
+                        <p class="rating-input col col-right">
+
+                        </p>
+                        <div class="clearfix"></div>
+                    </section>
+                {{/if}}
+
+                <section class="feedback-mechanism horizontal" id="screenshotType">
+                    <button id="takeScreenshot" class="button small col col-left">Take screenshot</button>
+                    <div id="screenshotPreview" class="col col-right">
 
                     </div>
+                    <div class="clearfix"></div>
                 </section>
 
                 <button class="button feedback-dialog-forward navigation-button">Review feedback</button>
