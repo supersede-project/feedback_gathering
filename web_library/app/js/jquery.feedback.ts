@@ -16,9 +16,9 @@ import {RatingMechanism} from '../models/rating_mechanism';
 export var feedbackPluginModule = function ($, window, document) {
     var dialog;
     var active = false;
-    var feedbackDialog = require('../templates/feedback_dialog.handlebars');
     var screenshotCanvas;
     var ratingMechanism:RatingMechanism;
+    var template = require('../templates/feedback_dialog.handlebars');
 
     /**
      * @param data
@@ -30,7 +30,7 @@ export var feedbackPluginModule = function ($, window, document) {
      * is configured and displayed and some events are added to the UI.
      * All events on the HTML have to be added after the template is appended to the body (if not using live binding).
      */
-    function initMechanisms(data) {
+    var initMechanisms = function(data) {
         var configurationService = new ConfigurationService(data);
         var textMechanism = configurationService.getMechanismConfig(textType);
         ratingMechanism = configurationService.getMechanismConfig(ratingType);
@@ -38,17 +38,20 @@ export var feedbackPluginModule = function ($, window, document) {
         $('#serverResponse').removeClass().text('');
 
         var context = configurationService.getContextForView();
-        var html = feedbackDialog(context);
+        initTemplate(context, screenshotMechanism, textMechanism, ratingMechanism);
+    };
+
+    var initTemplate = function(context, screenshotMechanism, textMechanism, ratingMechanism) {
+        var html = template(context);
         $('body').append(html);
 
-        var dialogContainer = $('#feedbackContainer');
-
+        // after template is loaded
         new PaginationContainer($('#feedbackContainer .pages-container'));
         initRating(".rating-input", ratingMechanism);
         initScreenshot(screenshotMechanism);
-        initDialog(dialogContainer, textMechanism);
+        initDialog($('#feedbackContainer'), textMechanism);
         addEvents(textMechanism);
-    }
+    };
 
     /**
      * This method takes the data from the text mechanism and the rating mechanism and composes a feedback object with

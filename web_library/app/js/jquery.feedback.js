@@ -3,25 +3,27 @@ define(["require", "exports", '../models/feedback', '../models/rating', '../serv
     exports.feedbackPluginModule = function ($, window, document) {
         var dialog;
         var active = false;
-        var feedbackDialog = require('../templates/feedback_dialog.handlebars');
         var screenshotCanvas;
         var ratingMechanism;
-        function initMechanisms(data) {
+        var template = require('../templates/feedback_dialog.handlebars');
+        var initMechanisms = function (data) {
             var configurationService = new configuration_service_1.ConfigurationService(data);
             var textMechanism = configurationService.getMechanismConfig(config_1.textType);
             ratingMechanism = configurationService.getMechanismConfig(config_1.ratingType);
             var screenshotMechanism = configurationService.getMechanismConfig(config_1.screenshotType);
             $('#serverResponse').removeClass().text('');
             var context = configurationService.getContextForView();
-            var html = feedbackDialog(context);
+            initTemplate(context, screenshotMechanism, textMechanism, ratingMechanism);
+        };
+        var initTemplate = function (context, screenshotMechanism, textMechanism, ratingMechanism) {
+            var html = template(context);
             $('body').append(html);
-            var dialogContainer = $('#feedbackContainer');
             new pagination_container_1.PaginationContainer($('#feedbackContainer .pages-container'));
             initRating(".rating-input", ratingMechanism);
             initScreenshot(screenshotMechanism);
-            initDialog(dialogContainer, textMechanism);
+            initDialog($('#feedbackContainer'), textMechanism);
             addEvents(textMechanism);
-        }
+        };
         var sendFeedback = function () {
             var formData = new FormData();
             var text = $('textarea#textTypeText').val();
