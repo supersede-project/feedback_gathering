@@ -1,4 +1,3 @@
-import './lib/html2canvas.js';
 import './lib/jquery.star-rating-svg.min.js';
 import './jquery.validate.js';
 import {Feedback} from '../models/feedback';
@@ -9,15 +8,17 @@ import {
     feedbackObjectTitle, dialogOptions, textType, ratingType, screenshotType
 } from './config';
 import {PaginationContainer} from '../views/pagination_container';
-import {Helper} from './helper';
 import {RatingMechanism} from '../models/rating_mechanism';
+import {ScreenshotView} from '../views/screenshot_view';
+import {Mechanism} from '../models/mechanism';
 
 
 export var feedbackPluginModule = function ($, window, document) {
     var dialog;
     var active = false;
-    var screenshotCanvas;
     var ratingMechanism:RatingMechanism;
+    var screenshotMechanism:Mechanism;
+    var screenshotView:ScreenshotView;
     var template = require('../templates/feedback_dialog.handlebars');
 
     /**
@@ -30,18 +31,18 @@ export var feedbackPluginModule = function ($, window, document) {
      * is configured and displayed and some events are added to the UI.
      * All events on the HTML have to be added after the template is appended to the body (if not using live binding).
      */
-    var initMechanisms = function(data) {
+    var initMechanisms = function (data) {
         var configurationService = new ConfigurationService(data);
         var textMechanism = configurationService.getMechanismConfig(textType);
         ratingMechanism = configurationService.getMechanismConfig(ratingType);
-        var screenshotMechanism = configurationService.getMechanismConfig(screenshotType);
+        screenshotMechanism = configurationService.getMechanismConfig(screenshotType);
         $('#serverResponse').removeClass().text('');
 
         var context = configurationService.getContextForView();
         initTemplate(context, screenshotMechanism, textMechanism, ratingMechanism);
     };
 
-    var initTemplate = function(context, screenshotMechanism, textMechanism, ratingMechanism) {
+    var initTemplate = function (context, screenshotMechanism, textMechanism, ratingMechanism) {
         var html = template(context);
         $('body').append(html);
 
@@ -59,24 +60,7 @@ export var feedbackPluginModule = function ($, window, document) {
      * Then an AJAX request is done to send the submitted feedback to the feedback repository. A success or failure
      * message is shown after the request is done.
      */
-    var sendFeedback = function () {
-        var formData = new FormData();
-
-        // TODO check which mechanism are active
-        var text = $('textarea#textTypeText').val();
-        $('#serverResponse').removeClass();
-        var ratingTitle = $('.rating-text').text().trim();
-
-        var feedbackObject = new Feedback(feedbackObjectTitle, applicationName, "uid12345", text, 1.0,
-            [new Rating(ratingTitle, ratingMechanism.currentRatingValue)]);
-
-        if (screenshotCanvas) {
-            var dataURL = screenshotCanvas.toDataURL("image/png");
-            formData.append('file', Helper.dataURItoBlob(dataURL));
-        }
-
-        formData.append('json', JSON.stringify(feedbackObject));
-
+    var sendFeedback = function (formData:FormData) {
         $.ajax({
             url: apiEndpoint + feedbackPath,
             type: 'POST',
@@ -107,43 +91,12 @@ export var feedbackPluginModule = function ($, window, document) {
     };
 
     var initScreenshot = function (screenshotMechanism):void {
-        var screenshotPreview = $('#screenshotPreview');
-
-        $('button#takeScreenshot').on('click', function (event) {
-            event.preventDefault();
-            event.stopPropagation();
-
-            $('.ui-widget-overlay.ui-front').hide();
-            $('.ui-dialog').hide();
-
-            var elementToCapture = $('#page-wrapper_1');
-
-            html2canvas(elementToCapture, {
-                onrendered: function (canvas) {
-                    $('.ui-widget-overlay.ui-front').show();
-                    $('.ui-dialog').show();
-
-                    screenshotPreview.empty().append(canvas);
-                    screenshotPreview.show();
-
-                    var windowRatio = elementToCapture.width() / elementToCapture.height();
-
-                    // save the canvas content as imageURL
-                    var data = canvas.toDataURL();
-
-                    var context = canvas.getContext("2d");
-                    $(canvas).prop('width', screenshotPreview.width());
-                    $(canvas).prop('height', screenshotPreview.width() / windowRatio);
-
-                    var img = new Image();
-                    img.onload = function () {
-                        context.drawImage(img, 0, 0, img.width, img.height, 0, 0, canvas.width, canvas.height);
-                    };
-                    img.src = data;
-                    screenshotCanvas = canvas;
-                }
-            });
-        });
+        var screenshotPreview = $('#screenshotPreview'),
+            screenshotCaptureButton = $('button#takeScreenshot'),
+            elementToCapture = $('#page-wrapper_1'),
+            elementsToHide = [$('.ui-widget-overlay.ui-front'), $('.ui-dialog')];
+        screenshotView = new ScreenshotView(screenshotMechanism, screenshotPreview, screenshotCaptureButton,
+            elementToCapture, elementsToHide)
     };
 
     /**
@@ -186,7 +139,8 @@ export var feedbackPluginModule = function ($, window, document) {
             // validate anyway before sending
             textarea.validate();
             if (!textarea.hasClass('invalid')) {
-                sendFeedback();
+                var formData = prepareFormData();
+                sendFeedback(formData);
             }
         });
 
@@ -202,6 +156,25 @@ export var feedbackPluginModule = function ($, window, document) {
             event.stopPropagation();
             textarea.val('');
         });
+    };
+
+    var prepareFormData = function ():FormData {
+        var formData = new FormData();
+
+        // TODO check which mechanism are active
+        var text = $('textarea#textTypeText').val();
+        $('#serverResponse').removeClass();
+        var ratingTitle = $('.rating-text').text().trim();
+
+        var feedbackObject = new Feedback(feedbackObjectTitle, applicationName, "uid12345", text, 1.0,
+            [new Rating(ratingTitle, ratingMechanism.currentRatingValue)]);
+
+        if (screenshotMechanism.active) {
+            formData.append('file', screenshotView.getScreenshotAsBinary());
+        }
+
+        formData.append('json', JSON.stringify(feedbackObject));
+        return formData;
     };
 
     /**
