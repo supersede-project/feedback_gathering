@@ -1,13 +1,25 @@
 <resources>
     <string name="supersede_feedbacklibrary_app_name">FeedbackLibrary</string>
 
-    <!-- unique identifiers for the mechanisms -->
+    <!-- Unique identifiers for the mechanisms -->
     <string name="supersede_feedbacklibrary_textID">TEXT_TYPE</string>
     <string name="supersede_feedbacklibrary_ratingID">RATING_TYPE</string>
     <string name="supersede_feedbacklibrary_screenshotID">SCREENSHOT_TYPE</string>
     <string name="supersede_feedbacklibrary_audioID">AUDIO_TYPE</string>
 
-    <!-- various -->
-    <string name="supersede_feedbacklibrary_sendConfirmationText">By sending the feedback, you agree with the terms and conditions.</string>
-    <string name="supersede_feedbacklibrary_sendButtonText">Send feedback</string>
+    <!-- Various -->
+    <string name="supersede_feedbacklibrary_sendconfirmation_text">By sending the feedback, you agree with the terms and conditions.</string>
+    <string name="supersede_feedbacklibrary_sendbutton_text">Send feedback</string>
+    <string name="supersede_feedbacklibrary_removebutton_text">Remove</string>
+
+    <!-- Screenshot annotation -->
+    <string name="supersede_feedbacklibrary_screenshotbutton_text">Screenshot</string>
+    <string name="supersede_feedbacklibrary_annotatebutton_text">Annotate</string>
+    <string name="supersede_feedbacklibrary_colorpickerbutton_text">Color Picker</string>
+    <string name="supersede_feedbacklibrary_blurbutton_text">Blur</string>
+    <string name="supersede_feedbacklibrary_unblurbutton_text">Unblur</string>
+    <string name="supersede_feedbacklibrary_blackbutton_text">Black</string>
+    <string name="supersede_feedbacklibrary_colorbutton_text">Color</string>
+    <string name="supersede_feedbacklibrary_finishannotation_title">Finish annotation</string>
+    <string name="supersede_feedbacklibrary_chosencolor_text">Chosen color</string>
 </resources>

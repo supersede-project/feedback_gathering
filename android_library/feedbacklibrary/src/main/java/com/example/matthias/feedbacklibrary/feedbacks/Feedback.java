@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Matthias on 25.04.2016.
+ * Feedback
  */
 public class Feedback implements Serializable {
     private String text;

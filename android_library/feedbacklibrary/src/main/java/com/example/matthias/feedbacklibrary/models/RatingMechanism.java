@@ -8,7 +8,7 @@ import com.example.matthias.feedbacklibrary.R;
 import java.io.Serializable;
 
 /**
- * Created by Matthias on 19.03.2016.
+ * Rating mechanism model
  */
 public class RatingMechanism extends Mechanism implements Serializable {
     private static final String RATING_TYPE = "RATING_TYPE";
