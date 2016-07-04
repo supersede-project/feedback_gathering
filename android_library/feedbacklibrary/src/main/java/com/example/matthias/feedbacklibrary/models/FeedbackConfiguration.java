@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by Matthias on 24.04.2016.
+ * Feedback configuration used in the feedback activity
  */
 public class FeedbackConfiguration {
     private String application = null; // TODO: Set name of the actual application
@@ -36,23 +36,22 @@ public class FeedbackConfiguration {
         Collections.sort(allMechanisms, new Comparator<Mechanism>() {
             @Override
             public int compare(Mechanism a, Mechanism b) {
-                return ((Integer) a.getOrder()).compareTo((Integer) b.getOrder());
+                return ((Integer) a.getOrder()).compareTo(b.getOrder());
             }
         });
     }
 
     private Mechanism createMechanism(FeedbackConfigurationItem item) {
-        TextMechanism toCreateText = null;
-        RatingMechanism toCreateRating = null;
-        ScreenshotMechanism toCreateScreenshot = null;
-        AudioMechanism toCreateAudio = null;
+        TextMechanism toCreateText;
+        RatingMechanism toCreateRating;
+        ScreenshotMechanism toCreateScreenshot;
+        AudioMechanism toCreateAudio;
         String type = item.getType();
 
         if(type.equals("TEXT_TYPE")) {
             toCreateText = new TextMechanism(item);
             for (Map<String, Object> param : item.getParameters()) {
                 String key = (String) param.get("key");
-
                 // Title
                 if(key.equals("title")) {
                     toCreateText.setTitle((String) param.get("value"));
@@ -92,18 +91,22 @@ public class FeedbackConfiguration {
         } else if(type.equals("AUDIO_TYPE")) {
             toCreateAudio = new AudioMechanism(item);
             for (Map<String, Object> param : item.getParameters()) {
-
+                // TODO
             }
-
-            // TODO
             return toCreateAudio;
         } else if(type.equals("SCREENSHOT_TYPE")) {
             toCreateScreenshot = new ScreenshotMechanism(item);
             for (Map<String, Object> param : item.getParameters()) {
-
+                String key = (String) param.get("key");
+                // Title
+                if(key.equals("title")) {
+                    toCreateScreenshot.setTitle((String) param.get("value"));
+                }
+                // Default picture
+                if(key.equals("defaultPicture")) {
+                    toCreateScreenshot.setDefaultPicture((String) param.get("value"));
+                }
             }
-
-            // TODO
             return toCreateScreenshot;
         } else {
             // should never happen!

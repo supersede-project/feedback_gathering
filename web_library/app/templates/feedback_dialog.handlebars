@@ -1,0 +1,92 @@
+<section id="feedbackContainer">
+    <form>
+        <section class="pages-container">
+            <article data-feedback-page="1" class="feedback-page">
+                {{#if textMechanism.active}}
+                    <section class="feedback-mechanism horizontal" id="textType">
+                        <p id="textTypeLabel" class="explanation col col-left" style="{{ textMechanism.labelStyle }}">
+                            {{ textMechanism.label }}
+                        </p>
+
+                        <article class="col col-right">
+                            <textarea class="validate"
+                            {{#if textMechanism.mandatory }} data-mandatory="1"
+                                  data-mandatory-validate-on-skip="{{ textMechanism.validateOnSkip }}"
+                                  data-mandatory-default-text="This field can't be blank"
+                                  data-mandatory-manual-text="{{ textMechanism.mandatoryReminder }}" {{/if}}
+                                  placeholder="{{ textMechanism.hint }}" id="textTypeText"
+                                  style="{{ textMechanism.textareaStyle }}"></textarea>
+                                <p class="textarea-bottom">
+                                    {{#if textMechanism.clearInput }}
+                                        <button id="textTypeTextClear" title="Clear the text input">x</button>
+                                    {{/if}}
+                                    {{#if textMechanism.maxLengthVisible}}
+                                        <span id="textTypeMaxLength">{{ textMechanism.currentLength }}
+                                            / {{ textMechanism.maxLength }}</span>
+                                    {{/if}}
+                                </p>
+                                <div class="clearfix"></div>
+                        </article>
+                        <div class="clearfix"></div>
+                    </section>
+                {{/if}}
+
+                {{#if ratingMechanism.active}}
+                    <section class="feedback-mechanism horizontal" id="ratingType">
+                        <p class="rating-text col col-left">
+                            {{ ratingMechanism.title }}
+                        </p>
+                        <p class="rating-input col col-right">
+
+                        </p>
+                        <div class="clearfix"></div>
+                    </section>
+                {{/if}}
+
+                <section class="feedback-mechanism horizontal" id="screenshotType">
+                    <button id="takeScreenshot" class="button small col col-left">Take screenshot</button>
+                    <div id="screenshotPreview" class="col col-right">
+
+                    </div>
+                    <div class="clearfix"></div>
+                </section>
+
+                <button class="button feedback-dialog-forward navigation-button">Review feedback</button>
+                <div class="clearfix"></div>
+            </article>
+            <article data-feedback-page="2" class="feedback-page">
+                <div class="clearfix"></div>
+                <div id="feedbackReview">
+                    <h2>Your feedback:</h2>
+                    <p id="textReview">
+
+                    </p>
+                    <p id="ratingReview">
+
+                    </p>
+                </div>
+                <div id="feedbackPrivacy">
+                    <h2>Who will receive your feedback?</h2>
+                    <fieldset>
+                        <p>
+                            <input type="radio" id="developers" name="privacy" value="developers">
+                            <label for="developers"> Only the Energiesparkonto-Team</label>
+                        </p>
+                        <p>
+                            <input type="radio" id="public" name="privacy" value="public">
+                            <label for="public"> The feedback is going to be published in the forum. Signed
+                                in users are able to read the feedback there.</label>
+                        </p>
+                    </fieldset>
+                </div>
+                <section class="dialog-navigation">
+                    <button class="button feedback-dialog-backward navigation-button">back</button>
+                    <button type="button" class="button navigation-button" id="submitFeedback">Submit feedback
+                    </button>
+                    <div class="clearfix"></div>
+                    <span id="serverResponse"></span>
+                </section>
+            </article>
+        </section>
+    </form>
+</section>

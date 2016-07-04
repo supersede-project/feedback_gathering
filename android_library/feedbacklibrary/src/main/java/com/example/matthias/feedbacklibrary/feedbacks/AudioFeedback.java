@@ -3,7 +3,7 @@ package com.example.matthias.feedbacklibrary.feedbacks;
 import java.io.Serializable;
 
 /**
- * Created by Matthias on 25.04.2016.
+ * Audio feedback
  */
 public class AudioFeedback implements Serializable {
     private String title;

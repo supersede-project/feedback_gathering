@@ -68,6 +68,9 @@ public class Feedback {
 		this.ratings = ratings;
 	}
 	public List<Screenshot> getScreenshots() {
+		if(screenshots == null)
+			screenshots = new ArrayList<>();
+		
 		return screenshots;
 	}
 	public void setScreenshots(List<Screenshot> screenshots) {

@@ -6,7 +6,7 @@ import android.view.View;
 import com.example.matthias.feedbacklibrary.models.Mechanism;
 
 /**
- * Created by Matthias on 24.04.2016.
+ * Mechanism view
  */
 public abstract class MechanismView {
     private View enclosingLayout = null;

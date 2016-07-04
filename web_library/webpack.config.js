@@ -1,5 +1,6 @@
 const webpack = require('webpack');
 
+
 module.exports = {
     entry: './app/js/jquery.feedback.js',
     output: {
@@ -15,5 +16,11 @@ module.exports = {
                 comments: false
             }
         })
-    ]
+    ],
+    module: {
+        loaders: [
+            { test: /\.handlebars$/, loader: "handlebars-loader" },
+            { test: /\.css$/, loader: "style-loader!css-loader" }
+        ]
+    }
 };

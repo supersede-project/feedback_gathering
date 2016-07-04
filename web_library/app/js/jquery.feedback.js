@@ -1,122 +1,118 @@
-define(["require", "exports", '../models/feedback', '../models/ratings', '../services/mechanism_service', './config', './jquery.star-rating-svg.min.js'], function (require, exports, feedback_1, ratings_1, mechanism_service_1, config_1) {
+define(["require", "exports", '../models/feedback', '../models/rating', '../services/configuration_service', './config', '../views/pagination_container', '../views/screenshot_view', './lib/jquery.star-rating-svg.min.js', './jquery.validate.js'], function (require, exports, feedback_1, rating_1, configuration_service_1, config_1, pagination_container_1, screenshot_view_1) {
     "use strict";
-    (function ($, window, document) {
+    exports.feedbackPluginModule = function ($, window, document) {
         var dialog;
-        function initMechanisms(data) {
-            var mechanismService = new mechanism_service_1.MechanismService(data);
-            var textMechanism = mechanismService.getMechanismConfig('TEXT_TYPE');
-            if (textMechanism.active) {
-                $('.feedback-mechanism#textType').show();
-            }
-            else {
-                $('.feedback-mechanism#textType').hide();
-            }
-            var ratingMechanism = mechanismService.getMechanismConfig('RATING_TYPE');
-            if (ratingMechanism.active) {
-                $('.feedback-mechanism#ratingType').show();
-            }
-            else {
-                $('.feedback-mechanism#ratingType').hide();
-            }
-            var textarea = $('textarea#textTypeText');
-            $('span#textTypeMaxLength').text(textarea.val.length + '/' + textMechanism.getParameter('maxLength').value);
+        var active = false;
+        var ratingMechanism;
+        var screenshotMechanism;
+        var screenshotView;
+        var template = require('../templates/feedback_dialog.handlebars');
+        var initMechanisms = function (data) {
+            var configurationService = new configuration_service_1.ConfigurationService(data);
+            var textMechanism = configurationService.getMechanismConfig(config_1.textType);
+            ratingMechanism = configurationService.getMechanismConfig(config_1.ratingType);
+            screenshotMechanism = configurationService.getMechanismConfig(config_1.screenshotType);
             $('#serverResponse').removeClass().text('');
-            $('#textTypeHint').text(textMechanism.getParameter('hint').value);
-            var currentRatingValue = ratingMechanism.getParameter('defaultRating').value;
-            var ratingTitle = ratingMechanism.getParameter('title').value;
-            var numberOfStars = ratingMechanism.getParameter('maxRating').value;
-            $('#ratingType > p.rating-text').text(ratingTitle);
-            $(".rating-input").starRating({
-                starSize: 25,
-                totalStars: numberOfStars,
-                initialRating: currentRatingValue,
-                useFullStars: true,
-                disableAfterRate: false,
-                callback: function (currentRating, $el) {
-                    currentRatingValue = currentRating;
+            var context = configurationService.getContextForView();
+            initTemplate(context, screenshotMechanism, textMechanism, ratingMechanism);
+        };
+        var initTemplate = function (context, screenshotMechanism, textMechanism, ratingMechanism) {
+            var html = template(context);
+            $('body').append(html);
+            new pagination_container_1.PaginationContainer($('#feedbackContainer .pages-container'));
+            initRating(".rating-input", ratingMechanism);
+            initScreenshot(screenshotMechanism);
+            initDialog($('#feedbackContainer'), textMechanism);
+            addEvents(textMechanism);
+        };
+        var sendFeedback = function (formData) {
+            $.ajax({
+                url: config_1.apiEndpoint + config_1.feedbackPath,
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (data) {
+                    $('#serverResponse').addClass('success').text(config_1.defaultSuccessMessage);
+                    $('textarea#textTypeText').val('');
+                },
+                error: function (data) {
+                    $('#serverResponse').addClass('error').text('Failure: ' + JSON.stringify(data));
                 }
             });
-            $('#feedbackContainer').dialog('option', 'title', textMechanism.getParameter('title').value);
+        };
+        var initRating = function (selector, ratingMechanism) {
+            var options = ratingMechanism.getRatingElementOptions();
+            $('' + selector).starRating(options);
+        };
+        var initScreenshot = function (screenshotMechanism) {
+            var screenshotPreview = $('#screenshotPreview'), screenshotCaptureButton = $('button#takeScreenshot'), elementToCapture = $('#page-wrapper_1'), elementsToHide = [$('.ui-widget-overlay.ui-front'), $('.ui-dialog')];
+            screenshotView = new screenshot_view_1.ScreenshotView(screenshotMechanism, screenshotPreview, screenshotCaptureButton, elementToCapture, elementsToHide);
+        };
+        var initDialog = function (dialogContainer, textMechanism) {
+            dialog = dialogContainer.dialog($.extend({}, config_1.dialogOptions, {
+                close: function () {
+                    dialog.dialog("close");
+                    active = false;
+                }
+            }));
+            dialog.dialog('option', 'title', textMechanism.getParameter('title').value);
             dialog.dialog("open");
-            $('button#submitFeedback').on('click', function (event) {
+        };
+        var addEvents = function (textMechanism) {
+            var textarea = $('textarea#textTypeText');
+            $('button#submitFeedback').unbind().on('click', function (event) {
                 event.preventDefault();
-                var text = $('textarea#textTypeText').val();
-                $('#serverResponse').removeClass();
-                var ratingTitle = $('.rating-text').text().trim();
-                var feedbackObject = new feedback_1.Feedback("Feedback", "energiesparkonto.de", "uid12345", text, 1.0, [new ratings_1.Rating(ratingTitle, currentRatingValue)]);
-                $.ajax({
-                    url: config_1.apiEndpoint + config_1.feedbackPath,
-                    type: 'POST',
-                    data: JSON.stringify(feedbackObject),
-                    success: function (data) {
-                        $('#serverResponse').addClass('success').text('Your feedback was successfully sent');
-                        $('textarea#textTypeText').val('');
-                    },
-                    error: function (data) {
-                        $('#serverResponse').addClass('error').text('Failure: ' + JSON.stringify(data));
-                    }
-                });
+                event.stopPropagation();
+                textarea.validate();
+                if (!textarea.hasClass('invalid')) {
+                    var formData = prepareFormData();
+                    sendFeedback(formData);
+                }
             });
             var maxLength = textMechanism.getParameter('maxLength').value;
             textarea.on('keyup focus', function () {
                 $('span#textTypeMaxLength').text($(this).val().length + '/' + maxLength);
             });
-        }
+            $('#textTypeTextClear').on('click', function (event) {
+                event.preventDefault();
+                event.stopPropagation();
+                textarea.val('');
+            });
+        };
+        var prepareFormData = function () {
+            var formData = new FormData();
+            var text = $('textarea#textTypeText').val();
+            $('#serverResponse').removeClass();
+            var ratingTitle = $('.rating-text').text().trim();
+            var feedbackObject = new feedback_1.Feedback(config_1.feedbackObjectTitle, config_1.applicationName, "uid12345", text, 1.0, [new rating_1.Rating(ratingTitle, ratingMechanism.currentRatingValue)]);
+            if (screenshotMechanism.active) {
+                formData.append('file', screenshotView.getScreenshotAsBinary());
+            }
+            formData.append('json', JSON.stringify(feedbackObject));
+            return formData;
+        };
+        var retrieveConfigurationDataOrClose = function () {
+            if (!active) {
+                var url = config_1.apiEndpoint + config_1.configPath;
+                $.get(url, null, function (data) {
+                    initMechanisms(data);
+                });
+            }
+            else {
+                dialog.dialog("close");
+            }
+            active = !active;
+        };
         $.fn.feedbackPlugin = function (options) {
             this.options = $.extend({}, $.fn.feedbackPlugin.defaults, options);
-            var currentOptions = this.options, active = false, dialogContainer = $('#feedbackContainer');
+            var currentOptions = this.options;
             this.css('background-color', currentOptions.backgroundColor);
             this.css('color', currentOptions.color);
-            dialog = dialogContainer.dialog({
-                autoOpen: false,
-                height: 'auto',
-                width: 'auto',
-                minWidth: 500,
-                modal: true,
-                title: 'Feedback',
-                buttons: {},
-                close: function () {
-                    dialog.dialog("close");
-                    active = false;
-                }
-            });
-            dialogContainer.find('.feedback-page').hide();
-            dialogContainer.find('.feedback-page[data-feedback-page="1"]').show();
-            dialogContainer.find('.feedback-dialog-forward').on('click', function (event) {
-                event.preventDefault();
-                event.stopPropagation();
-                var feedbackPage = $(this).closest('.feedback-page');
-                var pageNumber = feedbackPage.data('feedback-page');
-                var nextPageNumber = pageNumber + 1;
-                feedbackPage.hide();
-                var nextPage = $('.feedback-page[data-feedback-page="' + nextPageNumber + '"]');
-                nextPage.show();
-                if (nextPage.find('#textReview').length > 0) {
-                    nextPage.find('#textReview').text($('textarea#textTypeText').val());
-                }
-            });
-            dialogContainer.find('.feedback-dialog-backward').on('click', function (event) {
-                event.preventDefault();
-                event.stopPropagation();
-                var feedbackPage = $(this).closest('.feedback-page');
-                var pageNumber = feedbackPage.data('feedback-page');
-                var nextPage = pageNumber - 1;
-                feedbackPage.hide();
-                $('.feedback-page[data-feedback-page="' + nextPage + '"]').show();
-            });
             this.on('click', function (event) {
                 event.preventDefault();
                 event.stopPropagation();
-                var url = config_1.apiEndpoint + config_1.configPath;
-                if (!active) {
-                    $.get(url, null, function (data) {
-                        initMechanisms(data);
-                    });
-                }
-                else {
-                    dialog.dialog("close");
-                }
-                active = !active;
+                retrieveConfigurationDataOrClose();
             });
             return this;
         };
@@ -124,6 +120,9 @@ define(["require", "exports", '../models/feedback', '../models/ratings', '../ser
             'color': '#fff',
             'backgroundColor': '#b3cd40',
         };
+    };
+    (function ($, window, document) {
+        exports.feedbackPluginModule($, window, document);
     })(jQuery, window, document);
     requirejs.config({
         "shim": {

@@ -14,54 +14,56 @@
 <a id="feedbackEntryPoint" href="#">Feedback</a>
 <section id="feedbackContainer">
     <form>
-        <article data-feedback-page="1" class="feedback-page">
-            <textarea id="textTypeText"></textarea>
-            <p class="text-count">
-                <span id="textTypeMaxLength"></span>
-            </p>
-            <section class="rating-feedback">
-                <p class="rating-text">
-                    Please rate your experience on this page:
+        <section class="pages-container">
+            <article data-feedback-page="1" class="feedback-page">
+                <textarea id="textTypeText"></textarea>
+                <p class="text-count">
+                    <span id="textTypeMaxLength"></span>
                 </p>
-                <p class="rating-input">
-
-                </p>
-            </section>
-            <button class="feedback-dialog-forward navigation-button">Review feedback</button>
-            <div class="clearfix"></div>
-        </article>
-        <article data-feedback-page="2" class="feedback-page">
-            <button class="feedback-dialog-backward navigation-button">back</button>
-            <div class="clearfix"></div>
-            <div id="feedbackReview">
-                <h2>Your feedback:</h2>
-                <p id="textReview">
-
-                </p>
-                <p id="ratingReview">
-
-                </p>
-            </div>
-            <div id="feedbackPrivacy">
-                <h2>Who will receive your feedback?</h2>
-                <fieldset>
-                    <p>
-                        <input type="radio" id="developers" name="privacy" value="developers">
-                        <label for="developers"> Only the Energiesparkonto-Team</label>
+                <section class="rating-feedback">
+                    <p class="rating-text">
+                        Please rate your experience on this page:
                     </p>
-                    <p>
-                        <input type="radio" id="public" name="privacy" value="public">
-                        <label for="public"> The feedback is going to be published in the forum. Sign in users are able
-                            to read the feedback there.</label>
+                    <p class="rating-input">
+
                     </p>
-                </fieldset>
-            </div>
-            <p>
-                <button type="button" class="navigation-button" id="submitFeedback">Submit feedback</button>
-            <div class="clearfix"></div>
-            </p>
-        </article>
-        <span id="serverResponse"></span>
+                </section>
+                <button class="feedback-dialog-forward navigation-button">Review feedback</button>
+                <div class="clearfix"></div>
+            </article>
+            <article data-feedback-page="2" class="feedback-page">
+                <button class="feedback-dialog-backward navigation-button">back</button>
+                <div class="clearfix"></div>
+                <div id="feedbackReview">
+                    <h2>Your feedback:</h2>
+                    <p id="textReview">
+
+                    </p>
+                    <p id="ratingReview">
+
+                    </p>
+                </div>
+                <div id="feedbackPrivacy">
+                    <h2>Who will receive your feedback?</h2>
+                    <fieldset>
+                        <p>
+                            <input type="radio" id="developers" name="privacy" value="developers">
+                            <label for="developers"> Only the Energiesparkonto-Team</label>
+                        </p>
+                        <p>
+                            <input type="radio" id="public" name="privacy" value="public">
+                            <label for="public"> The feedback is going to be published in the forum. Sign in users are able
+                                to read the feedback there.</label>
+                        </p>
+                    </fieldset>
+                </div>
+                <p>
+                    <button type="button" class="navigation-button" id="submitFeedback">Submit feedback</button>
+                <div class="clearfix"></div>
+                </p>
+                <span id="serverResponse"></span>
+            </article>
+        </section>
     </form>
 </section>
 </body>

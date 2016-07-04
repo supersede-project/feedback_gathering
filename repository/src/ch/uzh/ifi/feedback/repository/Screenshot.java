@@ -5,14 +5,17 @@ import java.nio.file.Path;
 public class Screenshot {
 	
 	private String fileName;
-	private Path path;
+	private String path;
 	private int size;
 	
-	public Screenshot(String fileName, Path path, int size)
+	public Screenshot(String fileName, String path, int size)
 	{
 		setFileName(fileName);
 		setPath(path);
 		setSize(size);
+	}
+	
+	public Screenshot(){
 	}
 	
 	public String getFileName() {
@@ -22,11 +25,11 @@ public class Screenshot {
 		this.fileName = fileName;
 	}
 
-	public Path getPath() {
+	public String getPath() {
 		return path;
 	}
 
-	public void setPath(Path path) {
+	public void setPath(String path) {
 		this.path = path;
 	}
 

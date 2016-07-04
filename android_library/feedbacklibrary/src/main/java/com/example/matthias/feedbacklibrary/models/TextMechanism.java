@@ -8,7 +8,7 @@ import com.example.matthias.feedbacklibrary.R;
 import java.io.Serializable;
 
 /**
- * Created by Matthias on 19.03.2016.
+ * Text mechanism model
  */
 public class TextMechanism extends Mechanism implements Serializable {
     private static final String TEXT_TYPE = "TEXT_TYPE";
