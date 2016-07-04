@@ -12,3 +12,5 @@ dist
 *.js.map
 
 tmp
+coverage
+

@@ -13,7 +13,7 @@ import com.example.matthias.feedbacklibrary.models.Mechanism;
 import com.example.matthias.feedbacklibrary.models.TextMechanism;
 
 /**
- * Created by Matthias on 24.04.2016.
+ * Text mechanism view
  */
 public class TextMechanismView extends MechanismView {
     private TextMechanism textMechanism = null;
@@ -60,6 +60,4 @@ public class TextMechanismView extends MechanismView {
     public void updateModel() {
         textMechanism.setInputText(((TextInputEditText) getEnclosingLayout().findViewById(R.id.supersede_feedbacklibrary_text_feedback_text)).getText().toString());
     }
-
-
 }

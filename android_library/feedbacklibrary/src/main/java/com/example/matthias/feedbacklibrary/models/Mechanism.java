@@ -3,7 +3,7 @@ package com.example.matthias.feedbacklibrary.models;
 import java.io.Serializable;
 
 /**
- * Created by Matthias on 19.03.2016.
+ * Mechanism model
  */
 public abstract class Mechanism implements Serializable {
     private boolean isActive;

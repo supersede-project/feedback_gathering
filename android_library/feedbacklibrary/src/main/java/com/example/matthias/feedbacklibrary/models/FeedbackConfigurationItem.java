@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by Matthias on 28.03.2016.
+ * Feedback configuration item
  */
 public class FeedbackConfigurationItem implements Serializable {
     private boolean canBeActivated;

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingTop="20dp"
-    android:background="#ffffff">
+    android:background="#ffffff"
+    android:orientation="horizontal"
+    android:paddingTop="20dp">
 
     <View
         android:layout_width="match_parent"
@@ -15,25 +15,25 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="fill"
-        android:layout_alignParentTop="true"
+        android:layout_alignBottom="@+id/supersede_feedbacklibrary_send_feedback_button"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_gravity="fill"
         android:layout_toLeftOf="@+id/supersede_feedbacklibrary_send_feedback_button"
         android:layout_toStartOf="@+id/supersede_feedbacklibrary_send_feedback_button"
-        android:layout_alignBottom="@+id/supersede_feedbacklibrary_send_feedback_button"
-        android:text="@string/supersede_feedbacklibrary_sendConfirmationText"/>
+        android:text="@string/supersede_feedbacklibrary_sendconfirmation_text"/>
 
     <Button
         android:id="@+id/supersede_feedbacklibrary_send_feedback_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:minWidth="88dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
         android:height="36dp"
+        android:minWidth="88dp"
         android:onClick="sendButtonClicked"
-        android:text="@string/supersede_feedbacklibrary_sendButtonText"/>
+        android:text="@string/supersede_feedbacklibrary_sendbutton_text"/>
 
 </RelativeLayout>

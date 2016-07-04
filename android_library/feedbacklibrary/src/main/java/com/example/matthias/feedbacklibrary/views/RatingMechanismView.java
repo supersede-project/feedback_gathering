@@ -9,7 +9,7 @@ import com.example.matthias.feedbacklibrary.models.Mechanism;
 import com.example.matthias.feedbacklibrary.models.RatingMechanism;
 
 /**
- * Created by Matthias on 24.04.2016.
+ * Rating mechanism view
  */
 public class RatingMechanismView extends MechanismView {
     private RatingMechanism ratingMechanism = null;
