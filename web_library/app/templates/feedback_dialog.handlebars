@@ -44,7 +44,15 @@
                 {{/if}}
 
                 <section class="feedback-mechanism horizontal" id="screenshotType">
-                    <button id="takeScreenshot" class="button small col col-left">Take screenshot</button>
+                    <article class="col col-left">
+                        <button id="takeScreenshot" class="button small">Take screenshot</button>
+
+                        <div class="screenshot-operations">
+                            <button id="screenshotDrawRect" class="screenshot-operation active">markieren</button>
+                            <button id="screenshotDrawFillRect" class="screenshot-operation">schwärzen</button>
+                            <button id="screenshotDrawUndo" class="screenshot-operation">zurück</button>
+                        </div>
+                    </article>
                     <div id="screenshotPreview" class="col col-right">
 
                     </div>

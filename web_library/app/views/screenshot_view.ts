@@ -17,6 +17,7 @@ export class ScreenshotView {
     startY:number;
     drawingMode:string;
     canvasState:HTMLImageElement;
+    canvasStates:any;
     isPainting:boolean;
     canvasWidth:number;
     canvasHeight:number;
@@ -30,6 +31,7 @@ export class ScreenshotView {
         this.elementToCapture = elementToCapture;
         this.elementsToHide = elementsToHide;
         this.canvasState = null;
+        this.canvasStates = [];
         this.addCaptureEventToButton();
     }
 
@@ -59,9 +61,9 @@ export class ScreenshotView {
                 };
 
                 img.src = data;
-                myThis.canvasState = new Image();
-                myThis.canvasState.src = img.src;
+                myThis.canvasState = img;
                 myThis.screenshotCanvas = canvas;
+
                 myThis.initDrawing();
             }
         });
@@ -95,10 +97,12 @@ export class ScreenshotView {
 
     initDrawing() {
         var context = this.screenshotCanvas.getContext('2d');
-        this.drawingMode = 'fillRect';
         this.isPainting = false;
+        this.drawingMode = 'rect';
+        this.context.strokeStyle="#FF0000";
 
         $(this.screenshotCanvas).on('mousedown touchstart', function(event) {
+            context.beginPath();
             var parentOffset = $(this).parent().offset();
             myThis.startX = event.pageX - parentOffset.left;
             myThis.startY = event.pageY - parentOffset.top;
@@ -119,7 +123,7 @@ export class ScreenshotView {
                 var height = currentY - myThis.startY;
 
                 if(myThis.drawingMode === 'rect') {
-                    context.rect(myThis.startX, myThis.startY, width, height);
+                    context.strokeRect(myThis.startX, myThis.startY, width, height);
                 } else if (myThis.drawingMode === 'fillRect') {
                     context.fillRect(myThis.startX, myThis.startY, width, height);
                 }
@@ -142,11 +146,66 @@ export class ScreenshotView {
             }
             context.stroke();
 
-            // update canvas state
-            myThis.canvasState.src = myThis.screenshotCanvas.toDataURL("image/jpeg");
+            myThis.updateCanvasState();
         }).on('mouseleave touchleave', function () {
             myThis.isPainting = false;
         });
+
+        myThis.initScreenshotOperations();
+    }
+
+    updateCanvasState() {
+        this.canvasStates.push(this.canvasState.src);
+        this.canvasState.src = this.screenshotCanvas.toDataURL("image/png");
+    }
+
+    undoOperation() {
+        if(this.canvasStates.length < 1) {
+            return;
+        }
+
+        this.canvasState.src = this.canvasStates.pop();
+
+        this.context.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
+        this.context.drawImage(this.canvasState, 0, 0, this.canvasState.width,
+            this.canvasState.height, 0, 0, this.screenshotCanvas.width,
+            this.screenshotCanvas.height);
+    }
+
+    initScreenshotOperations() {
+        $('#screenshotDrawRect').on('click', function(event) {
+            event.preventDefault();
+            event.stopPropagation();
+
+            myThis.disableAllScreenshotOperations();
+            $(this).addClass('active');
+            myThis.drawingMode = 'rect';
+            myThis.context.strokeStyle = "#FF0000";
+            myThis.context.fillStyle = "#FF0000";
+        });
+
+        $('#screenshotDrawFillRect').on('click', function(event) {
+            event.preventDefault();
+            event.stopPropagation();
+
+            myThis.disableAllScreenshotOperations();
+            $(this).addClass('active');
+            myThis.drawingMode = 'fillRect';
+            myThis.context.strokeStyle = "#000000";
+            myThis.context.fillStyle = "#000000";
+        });
+
+        $('#screenshotDrawUndo').on('click', function(event) {
+            event.preventDefault();
+            event.stopPropagation();
+            myThis.undoOperation();
+        });
+
+        $('.screenshot-operations').show();
+    }
+
+    disableAllScreenshotOperations() {
+        $('button.screenshot-operation').removeClass('active');
     }
 }
 
