@@ -21,7 +21,7 @@
             android:fontFamily="sans-serif"
             android:inputType="textMultiLine|textCapSentences"
             android:textSize="16sp"
-            android:textStyle="bold" />
+            android:textStyle="normal" />
     </android.support.design.widget.TextInputLayout>
 
 </LinearLayout>
