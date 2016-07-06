@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_margin="4dp"
     android:focusableInTouchMode="true"
     android:orientation="vertical"
-    android:padding="2dp"
     tools:context="com.example.matthias.feedbacklibrary.FeedbackActivity">
 
     <LinearLayout
@@ -26,11 +24,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
+                android:layout_marginBottom="2dp"
                 android:layout_marginLeft="2dp"
                 android:layout_marginRight="2dp"
                 android:layout_marginTop="2dp"
-                android:layout_marginBottom="2dp"
-                android:background="@drawable/camera_picture_big"/>
+                android:background="@drawable/camera_picture_big" />
         </RelativeLayout>
 
         <LinearLayout
@@ -43,31 +41,31 @@
                 android:id="@+id/supersede_feedbacklibrary_select_screenshot_btn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:height="36dp"
+                android:minWidth="88dp"
                 android:text="@string/supersede_feedbacklibrary_screenshotbutton_text"
                 android:textAllCaps="false"
-                android:textSize="13sp"
-                />
+                android:textSize="13sp" />
 
             <Button
                 android:id="@+id/supersede_feedbacklibrary_annotate_screenshot_btn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:height="36dp"
+                android:minWidth="88dp"
                 android:text="@string/supersede_feedbacklibrary_annotatebutton_text"
                 android:textAllCaps="false"
-                android:textSize="13sp"/>
+                android:textSize="13sp" />
 
             <Button
                 android:id="@+id/supersede_feedbacklibrary_remove_screenshot_btn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:height="36dp"
+                android:minWidth="88dp"
                 android:text="@string/supersede_feedbacklibrary_removebutton_text"
                 android:textAllCaps="false"
-                android:textSize="13sp"/>
+                android:textSize="13sp" />
         </LinearLayout>
     </LinearLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="#000000"/>
 </LinearLayout>

@@ -1,13 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:tools="http://schemas.android.com/tools"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:paddingBottom="@dimen/activity_vertical_margin"
-                android:paddingLeft="@dimen/activity_horizontal_margin"
-                android:paddingRight="@dimen/activity_horizontal_margin"
-                android:paddingTop="@dimen/activity_vertical_margin"
-                tools:context="com.example.matthias.feedbacklibrary.AnnotateActivity">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.matthias.feedbacklibrary.AnnotateActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -18,8 +14,7 @@
             android:id="@+id/supersede_feedbacklibrary_annotate_picture_layout"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="0.75">
-        </RelativeLayout>
+            android:layout_weight="0.75"></RelativeLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -33,25 +28,28 @@
                 android:id="@+id/supersede_feedbacklibrary_color_picker_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:height="36dp"
+                android:minWidth="88dp"
                 android:text="@string/supersede_feedbacklibrary_colorpickerbutton_text"
-                android:textAllCaps="false"
-                android:textSize="13sp"/>
+                android:textSize="13sp" />
 
             <Button
                 android:id="@+id/supersede_feedbacklibrary_blur_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:height="36dp"
+                android:minWidth="88dp"
                 android:text="@string/supersede_feedbacklibrary_blurbutton_text"
-                android:textAllCaps="false"
-                android:textSize="13sp"/>
+                android:textSize="13sp" />
 
             <Button
                 android:id="@+id/supersede_feedbacklibrary_black_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:height="36dp"
+                android:minWidth="88dp"
                 android:text="@string/supersede_feedbacklibrary_blackbutton_text"
-                android:textAllCaps="false"
-                android:textSize="13sp"/>
+                android:textSize="13sp" />
         </LinearLayout>
 
     </LinearLayout>
