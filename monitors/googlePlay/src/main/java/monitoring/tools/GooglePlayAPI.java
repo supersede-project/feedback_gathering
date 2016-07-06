@@ -18,6 +18,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import kafka.javaapi.producer.Producer;
@@ -97,11 +98,20 @@ public class GooglePlayAPI implements ToolInterface {
 
 	protected void firstApiCall() throws MalformedURLException, IOException {
 		URLConnection connection = new URL(apiUri + params.getPackageName() + "/reviews" 
-				+ "?access_token=" + accessToken)
+				+ "?access_token=" + accessToken
+				+ "&maxResults=100")
 				.openConnection();
 		
 		JSONObject data = new JSONObject(streamToString(connection.getInputStream()));
 		JSONArray reviews = data.getJSONArray("reviews");
+		
+		if (data.has("tokenPagination")) {
+			JSONArray next = getNextPage(data.getJSONObject("tokenPagination")
+					.getString("nextPageToken"));
+			for (int i = 0; i < next.length(); ++i) {
+				reviews.put(next.get(i));
+			}
+		}
 		
 		for (int i = 0; i < reviews.length(); ++i) {
 			System.out.println("Already : " + reviews.getJSONObject(i).getString("reviewId") + 
@@ -111,10 +121,30 @@ public class GooglePlayAPI implements ToolInterface {
 		}
 		
 	}
+	
+	protected JSONArray getNextPage(String token) throws MalformedURLException, IOException {
+		URLConnection connection = new URL(apiUri + params.getPackageName() + "/reviews" 
+				+ "?access_token=" + accessToken
+				+ "&maxResults=100"
+				+ "&token=" + token)
+				.openConnection();
+		
+		JSONObject data = new JSONObject(streamToString(connection.getInputStream()));
+		JSONArray reviews = data.getJSONArray("reviews");
+		
+		if (data.has("tokenPagination")) {
+			JSONArray next = getNextPage(data.getJSONObject("tokenPagination")
+					.getString("nextPageToken"));
+			for (int i = 0; i < next.length(); ++i) reviews.put(next.get(i));
+
+		} 
+		return reviews;
+	}
 
 	protected void apiCall() throws MalformedURLException, IOException {
 		URLConnection connection = new URL(apiUri + params.getPackageName() + "/reviews" 
-				+ "?access_token=" + accessToken)
+				+ "?access_token=" + accessToken
+				+ "&maxResults=100")
 				.openConnection();
 		
 		generateData(connection.getInputStream(), (new Date()).getTime());
@@ -148,11 +178,19 @@ public class GooglePlayAPI implements ToolInterface {
 	/*
 	 * When data is successfully retrieved, json response is generated
 	 */
-	protected void generateData(InputStream response, long date) {
+	protected void generateData(InputStream response, long date) throws MalformedURLException, JSONException, IOException {
 
 		JSONObject data = new JSONObject(streamToString(response));
 		
 		JSONArray reviews = data.getJSONArray("reviews");
+		
+		if (data.has("tokenPagination")) {
+			JSONArray next = getNextPage(data.getJSONObject("tokenPagination")
+					.getString("nextPageToken"));
+			for (int i = 0; i < next.length(); ++i) {
+				reviews.put(next.get(i));
+			}
+		}
 		
 		List<MonitoringData> dataList = new ArrayList<>();
 		
