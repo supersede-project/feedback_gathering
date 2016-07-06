@@ -244,3 +244,20 @@ button#textTypeTextClear {
   display: none;
   margin-bottom: 10px;
 }
+
+.screenshot-operations {
+  display: none;
+}
+
+button.screenshot-operation {
+  display: block;
+  background: none;
+  font-weight: normal;
+  color: #000000;
+  padding: 3px 5px;
+  font-size: 14px;
+
+  &.active {
+    font-weight: bold;
+  }
+}

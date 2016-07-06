@@ -70,6 +70,7 @@ export var feedbackPluginModule = function ($, window, document) {
             success: function (data) {
                 $('#serverResponse').addClass('success').text(defaultSuccessMessage);
                 $('textarea#textTypeText').val('');
+                // TODO reset screenshot and rating
             },
             error: function (data) {
                 $('#serverResponse').addClass('error').text('Failure: ' + JSON.stringify(data));
