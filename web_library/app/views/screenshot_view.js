@@ -100,7 +100,10 @@ define(["require", "exports", '../js/helper', '../js/lib/html2canvas.js'], funct
                     }
                     else if (myThis.drawingMode === 'freehand') {
                         context.lineTo(currentX, currentY);
-                        context.stroke();
+                    }
+                    else if (myThis.drawingMode === 'arrow') {
+                        context.beginPath();
+                        myThis.draw_arrow(context, myThis.startX, myThis.startY, currentX, currentY);
                     }
                     context.stroke();
                 }
@@ -124,6 +127,9 @@ define(["require", "exports", '../js/helper', '../js/lib/html2canvas.js'], funct
                 else if (myThis.drawingMode === 'freehand') {
                     context.lineTo(endX, endY);
                 }
+                else if (myThis.drawingMode === 'arrow') {
+                    myThis.draw_arrow(context, myThis.startX, myThis.startY, endX, endY);
+                }
                 context.stroke();
                 context.closePath();
                 myThis.updateCanvasState();
@@ -131,6 +137,15 @@ define(["require", "exports", '../js/helper', '../js/lib/html2canvas.js'], funct
                 myThis.isPainting = false;
             });
             myThis.initScreenshotOperations();
+        };
+        ScreenshotView.prototype.draw_arrow = function (context, fromx, fromy, tox, toy) {
+            var headLength = 10;
+            var angle = Math.atan2(toy - fromy, tox - fromx);
+            context.moveTo(fromx, fromy);
+            context.lineTo(tox, toy);
+            context.lineTo(tox - headLength * Math.cos(angle - Math.PI / 6), toy - headLength * Math.sin(angle - Math.PI / 6));
+            context.moveTo(tox, toy);
+            context.lineTo(tox - headLength * Math.cos(angle + Math.PI / 6), toy - headLength * Math.sin(angle + Math.PI / 6));
         };
         ScreenshotView.prototype.updateCanvasState = function () {
             this.canvasStates.push(this.canvasState.src);

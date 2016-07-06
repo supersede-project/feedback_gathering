@@ -109,7 +109,7 @@ export class ScreenshotView {
             if(myThis.drawingMode === 'freehand') {
                 context.beginPath();
                 context.moveTo(myThis.startX, myThis.startY);
-            } 
+            }
             myThis.isPainting = true;
         }).on('mousemove touchmove', function(event) {
             if(myThis.isPainting) {
@@ -138,7 +138,9 @@ export class ScreenshotView {
                     context.arc(myThis.startX, myThis.startY, radius, 0, Math.PI*2);
                 } else if (myThis.drawingMode === 'freehand') {
                     context.lineTo(currentX, currentY);
-                    context.stroke();
+                } else if (myThis.drawingMode === 'arrow') {
+                    context.beginPath();
+                    myThis.draw_arrow(context, myThis.startX, myThis.startY, currentX, currentY);
                 }
                 context.stroke();
             }
@@ -161,6 +163,8 @@ export class ScreenshotView {
                 context.arc(myThis.startX, myThis.startY, radius, 0, Math.PI*2);
             } else if (myThis.drawingMode === 'freehand') {
                 context.lineTo(endX, endY);
+            } else if (myThis.drawingMode === 'arrow') {
+                myThis.draw_arrow(context, myThis.startX, myThis.startY, endX, endY);
             }
             context.stroke();
             context.closePath();
@@ -171,6 +175,16 @@ export class ScreenshotView {
         });
 
         myThis.initScreenshotOperations();
+    }
+
+    draw_arrow(context, fromx, fromy, tox, toy){
+        var headLength = 10;
+        var angle = Math.atan2(toy-fromy,tox-fromx);
+        context.moveTo(fromx, fromy);
+        context.lineTo(tox, toy);
+        context.lineTo(tox-headLength*Math.cos(angle-Math.PI/6),toy-headLength*Math.sin(angle-Math.PI/6));
+        context.moveTo(tox, toy);
+        context.lineTo(tox-headLength*Math.cos(angle+Math.PI/6),toy-headLength*Math.sin(angle+Math.PI/6));
     }
 
     updateCanvasState() {
