@@ -9,12 +9,11 @@
 
 // Apply the java plugin to add support for Java
 apply plugin: 'java'
+apply plugin: 'war'
 
 // In this section you declare where to find the dependencies of your project
 repositories {
-    // Use 'jcenter' for resolving your dependencies.
-    // You can declare any Maven/Ivy/file repository here.
-    jcenter()
+    mavenCentral();
 }
 
 // In this section you declare the dependencies for your production and test code
@@ -27,4 +26,26 @@ dependencies {
     // testCompile dependency to testCompile 'org.testng:testng:6.8.1' and add
     // 'test.useTestNG()' to your build script.
     testCompile 'junit:junit:4.12'
+    
+    // https://mvnrepository.com/artifact/javax.ws.rs/javax.ws.rs-api
+	compile group: 'org.apache.kafka', name: 'kafka-clients', version: '0.9.0.0'
+	// https://mvnrepository.com/artifact/org.apache.kafka/kafka_2.10
+	compile group: 'org.apache.kafka', name: 'kafka_2.10', version: '0.9.0.0'
+	
+	// https://mvnrepository.com/artifact/javax.ws.rs/javax.ws.rs-api
+	compile group: 'javax.ws.rs', name: 'javax.ws.rs-api', version: '2.0'
+
+	// https://mvnrepository.com/artifact/org.json/json
+	compile group: 'org.json', name: 'json', version: '20160212'
+	
+	// https://mvnrepository.com/artifact/com.google.protobuf/protobuf-java
+	compile group: 'com.google.protobuf', name: 'protobuf-java', version: '2.2.0'
+	
+	// https://mvnrepository.com/artifact/org.glassfish.jersey.containers/jersey-container-servlet-core
+	compile group: 'org.glassfish.jersey.containers', name: 'jersey-container-servlet-core', version: '2.23.1'
+	// https://mvnrepository.com/artifact/org.glassfish.jersey.core/jersey-common
+	compile group: 'org.glassfish.jersey.core', name: 'jersey-common', version: '2.23.1'
+	
+    compile files('src/main/webapp/WEB-INF/lib/androidmarketapi-0.6.jar')
+    
 }
