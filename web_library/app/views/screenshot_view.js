@@ -68,10 +68,13 @@ define(["require", "exports", '../js/helper', '../js/lib/html2canvas.js'], funct
             this.drawingMode = 'rect';
             this.context.strokeStyle = "#FF0000";
             $(this.screenshotCanvas).on('mousedown touchstart', function (event) {
-                context.beginPath();
                 var parentOffset = $(this).parent().offset();
                 myThis.startX = event.pageX - parentOffset.left;
                 myThis.startY = event.pageY - parentOffset.top;
+                if (myThis.drawingMode === 'freehand') {
+                    context.beginPath();
+                    context.moveTo(myThis.startX, myThis.startY);
+                }
                 myThis.isPainting = true;
             }).on('mousemove touchmove', function (event) {
                 if (myThis.isPainting) {
@@ -83,10 +86,21 @@ define(["require", "exports", '../js/helper', '../js/lib/html2canvas.js'], funct
                     var width = currentX - myThis.startX;
                     var height = currentY - myThis.startY;
                     if (myThis.drawingMode === 'rect') {
+                        context.beginPath();
                         context.strokeRect(myThis.startX, myThis.startY, width, height);
                     }
                     else if (myThis.drawingMode === 'fillRect') {
+                        context.beginPath();
                         context.fillRect(myThis.startX, myThis.startY, width, height);
+                    }
+                    else if (myThis.drawingMode === 'circle') {
+                        context.beginPath();
+                        var radius = height > width ? height : width;
+                        context.arc(myThis.startX, myThis.startY, radius, 0, Math.PI * 2);
+                    }
+                    else if (myThis.drawingMode === 'freehand') {
+                        context.lineTo(currentX, currentY);
+                        context.stroke();
                     }
                     context.stroke();
                 }
@@ -103,7 +117,15 @@ define(["require", "exports", '../js/helper', '../js/lib/html2canvas.js'], funct
                 else if (myThis.drawingMode === 'fillRect') {
                     context.fillRect(myThis.startX, myThis.startY, width, height);
                 }
+                else if (myThis.drawingMode === 'circle') {
+                    var radius = height > width ? height : width;
+                    context.arc(myThis.startX, myThis.startY, radius, 0, Math.PI * 2);
+                }
+                else if (myThis.drawingMode === 'freehand') {
+                    context.lineTo(endX, endY);
+                }
                 context.stroke();
+                context.closePath();
                 myThis.updateCanvasState();
             }).on('mouseleave touchleave', function () {
                 myThis.isPainting = false;
@@ -140,6 +162,42 @@ define(["require", "exports", '../js/helper', '../js/lib/html2canvas.js'], funct
                 myThis.drawingMode = 'fillRect';
                 myThis.context.strokeStyle = "#000000";
                 myThis.context.fillStyle = "#000000";
+            });
+            $('#screenshotDrawCircle').on('click', function (event) {
+                event.preventDefault();
+                event.stopPropagation();
+                myThis.disableAllScreenshotOperations();
+                $(this).addClass('active');
+                myThis.drawingMode = 'circle';
+                myThis.context.strokeStyle = "#FF0000";
+                myThis.context.fillStyle = "#FF0000";
+            });
+            $('#screenshotDrawArrow').on('click', function (event) {
+                event.preventDefault();
+                event.stopPropagation();
+                myThis.disableAllScreenshotOperations();
+                $(this).addClass('active');
+                myThis.drawingMode = 'arrow';
+                myThis.context.strokeStyle = "#FF0000";
+                myThis.context.fillStyle = "#FF0000";
+            });
+            $('#screenshotDrawFreehand').on('click', function (event) {
+                event.preventDefault();
+                event.stopPropagation();
+                myThis.disableAllScreenshotOperations();
+                $(this).addClass('active');
+                myThis.drawingMode = 'freehand';
+                myThis.context.strokeStyle = "#FF0000";
+                myThis.context.fillStyle = "#FF0000";
+            });
+            $('#screenshotCrop').on('click', function (event) {
+                event.preventDefault();
+                event.stopPropagation();
+                myThis.disableAllScreenshotOperations();
+                $(this).addClass('active');
+                myThis.drawingMode = 'crop';
+                myThis.context.strokeStyle = "#FF0000";
+                myThis.context.fillStyle = "#FF0000";
             });
             $('#screenshotDrawUndo').on('click', function (event) {
                 event.preventDefault();
