@@ -68,10 +68,13 @@ define(["require", "exports", '../js/helper', '../js/lib/html2canvas.js'], funct
             this.drawingMode = 'rect';
             this.context.strokeStyle = "#FF0000";
             $(this.screenshotCanvas).on('mousedown touchstart', function (event) {
-                context.beginPath();
                 var parentOffset = $(this).parent().offset();
                 myThis.startX = event.pageX - parentOffset.left;
                 myThis.startY = event.pageY - parentOffset.top;
+                if (myThis.drawingMode === 'freehand') {
+                    context.beginPath();
+                    context.moveTo(myThis.startX, myThis.startY);
+                }
                 myThis.isPainting = true;
             }).on('mousemove touchmove', function (event) {
                 if (myThis.isPainting) {
@@ -83,10 +86,24 @@ define(["require", "exports", '../js/helper', '../js/lib/html2canvas.js'], funct
                     var width = currentX - myThis.startX;
                     var height = currentY - myThis.startY;
                     if (myThis.drawingMode === 'rect') {
+                        context.beginPath();
                         context.strokeRect(myThis.startX, myThis.startY, width, height);
                     }
                     else if (myThis.drawingMode === 'fillRect') {
+                        context.beginPath();
                         context.fillRect(myThis.startX, myThis.startY, width, height);
+                    }
+                    else if (myThis.drawingMode === 'circle') {
+                        context.beginPath();
+                        var radius = height > width ? height : width;
+                        context.arc(myThis.startX, myThis.startY, radius, 0, Math.PI * 2);
+                    }
+                    else if (myThis.drawingMode === 'freehand') {
+                        context.lineTo(currentX, currentY);
+                    }
+                    else if (myThis.drawingMode === 'arrow') {
+                        context.beginPath();
+                        myThis.draw_arrow(context, myThis.startX, myThis.startY, currentX, currentY);
                     }
                     context.stroke();
                 }
@@ -103,12 +120,32 @@ define(["require", "exports", '../js/helper', '../js/lib/html2canvas.js'], funct
                 else if (myThis.drawingMode === 'fillRect') {
                     context.fillRect(myThis.startX, myThis.startY, width, height);
                 }
+                else if (myThis.drawingMode === 'circle') {
+                    var radius = height > width ? height : width;
+                    context.arc(myThis.startX, myThis.startY, radius, 0, Math.PI * 2);
+                }
+                else if (myThis.drawingMode === 'freehand') {
+                    context.lineTo(endX, endY);
+                }
+                else if (myThis.drawingMode === 'arrow') {
+                    myThis.draw_arrow(context, myThis.startX, myThis.startY, endX, endY);
+                }
                 context.stroke();
+                context.closePath();
                 myThis.updateCanvasState();
             }).on('mouseleave touchleave', function () {
                 myThis.isPainting = false;
             });
             myThis.initScreenshotOperations();
+        };
+        ScreenshotView.prototype.draw_arrow = function (context, fromx, fromy, tox, toy) {
+            var headLength = 10;
+            var angle = Math.atan2(toy - fromy, tox - fromx);
+            context.moveTo(fromx, fromy);
+            context.lineTo(tox, toy);
+            context.lineTo(tox - headLength * Math.cos(angle - Math.PI / 6), toy - headLength * Math.sin(angle - Math.PI / 6));
+            context.moveTo(tox, toy);
+            context.lineTo(tox - headLength * Math.cos(angle + Math.PI / 6), toy - headLength * Math.sin(angle + Math.PI / 6));
         };
         ScreenshotView.prototype.updateCanvasState = function () {
             this.canvasStates.push(this.canvasState.src);
@@ -140,6 +177,42 @@ define(["require", "exports", '../js/helper', '../js/lib/html2canvas.js'], funct
                 myThis.drawingMode = 'fillRect';
                 myThis.context.strokeStyle = "#000000";
                 myThis.context.fillStyle = "#000000";
+            });
+            $('#screenshotDrawCircle').on('click', function (event) {
+                event.preventDefault();
+                event.stopPropagation();
+                myThis.disableAllScreenshotOperations();
+                $(this).addClass('active');
+                myThis.drawingMode = 'circle';
+                myThis.context.strokeStyle = "#FF0000";
+                myThis.context.fillStyle = "#FF0000";
+            });
+            $('#screenshotDrawArrow').on('click', function (event) {
+                event.preventDefault();
+                event.stopPropagation();
+                myThis.disableAllScreenshotOperations();
+                $(this).addClass('active');
+                myThis.drawingMode = 'arrow';
+                myThis.context.strokeStyle = "#FF0000";
+                myThis.context.fillStyle = "#FF0000";
+            });
+            $('#screenshotDrawFreehand').on('click', function (event) {
+                event.preventDefault();
+                event.stopPropagation();
+                myThis.disableAllScreenshotOperations();
+                $(this).addClass('active');
+                myThis.drawingMode = 'freehand';
+                myThis.context.strokeStyle = "#FF0000";
+                myThis.context.fillStyle = "#FF0000";
+            });
+            $('#screenshotCrop').on('click', function (event) {
+                event.preventDefault();
+                event.stopPropagation();
+                myThis.disableAllScreenshotOperations();
+                $(this).addClass('active');
+                myThis.drawingMode = 'crop';
+                myThis.context.strokeStyle = "#FF0000";
+                myThis.context.fillStyle = "#FF0000";
             });
             $('#screenshotDrawUndo').on('click', function (event) {
                 event.preventDefault();
