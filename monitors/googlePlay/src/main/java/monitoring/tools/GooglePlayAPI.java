@@ -25,6 +25,7 @@ import kafka.javaapi.producer.Producer;
 import kafka.producer.KeyedMessage;
 import monitoring.params.MonitoringData;
 import monitoring.params.MonitoringParams;
+import monitoring.services.KafkaCommunication;
 import monitoring.services.ToolInterface;
 
 public class GooglePlayAPI implements ToolInterface {
@@ -59,25 +60,15 @@ public class GooglePlayAPI implements ToolInterface {
 		this.producer = producer;
 		this.reported = new HashMap<>();
 		
+		generateNewAccessToken();
+		firstApiCall();
+		
 		Timer timer = new Timer();
 		timer.schedule(new TimerTask() {
 		    public void run() {
 		    	if (firstConnection) {
-		    		try {
-						firstApiCall();
-						firstConnection = false;
-			    		System.out.println("First connection stablished");
-					} catch (IOException e) {
-						try {
-							generateNewAccessToken();
-							firstApiCall();
-							firstConnection = false;
-							System.out.println("First connection stablished");
-						} catch (IOException e1) {
-							e1.printStackTrace();
-						}
-					}
-		    		
+					firstConnection = false;
+					System.out.println("First connection stablished");		
 		    	} else {
 					try {
 						apiCall();
@@ -114,8 +105,6 @@ public class GooglePlayAPI implements ToolInterface {
 		}
 		
 		for (int i = 0; i < reviews.length(); ++i) {
-			System.out.println("Already : " + reviews.getJSONObject(i).getString("reviewId") + 
-					" " + getDateTimeInMillis(reviews.getJSONObject(i)));
 			reported.put(reviews.getJSONObject(i).getString("reviewId"),
 					getDateTimeInMillis(reviews.getJSONObject(i)));
 		}
@@ -205,8 +194,6 @@ public class GooglePlayAPI implements ToolInterface {
 			//if so, check if the last update was reported;
 			//if it wasn't, check if the review datetime is later than the initMonitorization time
 			//if so, report the review
-			System.out.println("Checking : " + reviews.getJSONObject(i).getString("reviewId") + 
-					" " + getDateTimeInMillis(reviews.getJSONObject(i)));
 			if (!reported.containsKey(obj.getString("reviewId"))
 					|| (reported.containsKey(obj.getString("reviewId")) 
 					&& reported.get(obj.getString("reviewId")).compareTo(l) != 0)) {
@@ -240,44 +227,8 @@ public class GooglePlayAPI implements ToolInterface {
 		
 		String timeStamp = new Timestamp(date).toString();
 		
-		generateResponse(dataList, timeStamp);
-		
-	}
-	
-	private void generateResponse(List<MonitoringData> dataList, String timeStamp) {
-		
-		JSONArray dataItems = new JSONArray();
-		
-		for (MonitoringData data : dataList) {
-			JSONObject review = new JSONObject();
-			
-			if (data.getAppVersion() != null) review.put("appVersion", data.getAppVersion());
-			if (data.getAuthorName() != null) review.put("authorName", data.getAuthorName());
-			if (data.getTimeStamp() != null) review.put("timeStamp", data.getTimeStamp());
-			if (data.getDevice() != null) review.put("device", data.getDevice());
-			if (data.getLink() != null) review.put("link", data.getLink());
-			if (data.getReviewerLanguage() != null) review.put("reviewerLanguage", data.getReviewerLanguage());
-			if (data.getReviewID() != null) review.put("reviewID", data.getReviewID());
-			if (data.getReviewText() != null) review.put("reviewText", data.getReviewText());
-			if (data.getStarRating() != null) review.put("starRating", data.getStarRating());
-			
-			dataItems.put(review);
-		}
-		
-		JSONObject res = new JSONObject();
-		res.put("idOutput", id);
-		res.put("searchTimeStamp", timeStamp);
-		res.put("numDataItems", dataList.size());
-		res.put("DataItems", dataItems);
-		
-		JSONObject fullResponse = new JSONObject();
-		fullResponse.put("googlePlayMonitoredData", res);
-		
-		//Increment for fake id
+		KafkaCommunication.generateResponse(dataList, timeStamp, producer, id, params.getKafkaTopic());
 		++id;
-		
-		KeyedMessage<String, String> msg = new KeyedMessage<String, String>(params.getKafkaTopic(), res.toString());
-		producer.send(msg);
 		
 	}
 

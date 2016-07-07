@@ -32,13 +32,7 @@ public class ToolDispatcher {
 			
 			Class monitor = Class.forName(toolPackageRoute + params.getToolName());
 			ToolInterface toolInstance = (ToolInterface) monitor.newInstance();
-
-			Properties props = new Properties();
-			props.put("metadata.broker.list", params.getKafkaEndpoint());
-			props.put("serializer.class", "kafka.serializer.StringEncoder");
-			props.put("request.required.acks", "1");
-			ProducerConfig config = new ProducerConfig(props);
-			toolInstance.addConfiguration(params, new Producer<String,String>(config));
+			toolInstance.addConfiguration(params, KafkaCommunication.initProducer(params.getKafkaEndpoint()));
 			
 			return getResponse();
 			

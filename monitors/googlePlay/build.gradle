@@ -39,13 +39,11 @@ dependencies {
 	compile group: 'org.json', name: 'json', version: '20160212'
 	
 	// https://mvnrepository.com/artifact/com.google.protobuf/protobuf-java
-	compile group: 'com.google.protobuf', name: 'protobuf-java', version: '2.2.0'
+	compile group: 'com.google.protobuf', name: 'protobuf-java', version: '2.4.1'
 	
 	// https://mvnrepository.com/artifact/org.glassfish.jersey.containers/jersey-container-servlet-core
 	compile group: 'org.glassfish.jersey.containers', name: 'jersey-container-servlet-core', version: '2.23.1'
 	// https://mvnrepository.com/artifact/org.glassfish.jersey.core/jersey-common
 	compile group: 'org.glassfish.jersey.core', name: 'jersey-common', version: '2.23.1'
-	
-    compile files('src/main/webapp/WEB-INF/lib/androidmarketapi-0.6.jar')
-    
+	    
 }
