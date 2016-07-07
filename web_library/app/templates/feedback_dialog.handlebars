@@ -43,6 +43,7 @@
                     </section>
                 {{/if}}
 
+                {{#if screenshotMechanism.active}}
                 <section class="feedback-mechanism horizontal" id="screenshotType">
                     <article class="col col-left">
                         <button id="takeScreenshot" class="button small">Take screenshot</button>
@@ -62,6 +63,7 @@
                     </div>
                     <div class="clearfix"></div>
                 </section>
+                {{/if}}
 
                 <button class="button feedback-dialog-forward navigation-button">Review feedback</button>
                 <div class="clearfix"></div>
@@ -74,6 +76,9 @@
 
                     </p>
                     <p id="ratingReview">
+
+                    </p>
+                    <p id="screenshotReview">
 
                     </p>
                 </div>

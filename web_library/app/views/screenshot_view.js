@@ -40,8 +40,13 @@ define(["require", "exports", '../js/helper', './screenshot_view_drawing', '../j
             });
         };
         ScreenshotView.prototype.getScreenshotAsBinary = function () {
-            var dataURL = this.screenshotCanvas.toDataURL("image/png");
-            return helper_1.Helper.dataURItoBlob(dataURL);
+            if (this.screenshotCanvas) {
+                var dataURL = this.screenshotCanvas.toDataURL("image/png");
+                return helper_1.Helper.dataURItoBlob(dataURL);
+            }
+            else {
+                return null;
+            }
         };
         ScreenshotView.prototype.addCaptureEventToButton = function () {
             var myThis = this;
@@ -168,6 +173,9 @@ define(["require", "exports", '../js/helper', './screenshot_view_drawing', '../j
         ScreenshotView.prototype.updateCanvasState = function () {
             this.canvasStates.push(this.canvasState.src);
             this.canvasState.src = this.screenshotCanvas.toDataURL("image/png");
+            var img = jQuery('<img src="' + this.screenshotCanvas.toDataURL() + '" />');
+            img.css('max-width', '50%');
+            jQuery('#screenshotReview').empty().append(img);
         };
         ScreenshotView.prototype.undoOperation = function () {
             if (this.canvasStates.length < 1) {
