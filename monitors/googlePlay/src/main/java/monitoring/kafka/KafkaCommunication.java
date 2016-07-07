@@ -1,4 +1,4 @@
-package monitoring.services;
+package monitoring.kafka;
 
 import java.util.List;
 import java.util.Properties;
@@ -9,7 +9,7 @@ import org.json.JSONObject;
 import kafka.javaapi.producer.Producer;
 import kafka.producer.KeyedMessage;
 import kafka.producer.ProducerConfig;
-import monitoring.params.MonitoringData;
+import monitoring.model.MonitoringData;
 
 public class KafkaCommunication {
 	

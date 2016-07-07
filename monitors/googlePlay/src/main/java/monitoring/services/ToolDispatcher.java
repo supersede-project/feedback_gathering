@@ -12,7 +12,8 @@ import org.json.JSONObject;
 
 import kafka.javaapi.producer.Producer;
 import kafka.producer.ProducerConfig;
-import monitoring.params.MonitoringParams;
+import monitoring.kafka.KafkaCommunication;
+import monitoring.model.MonitoringParams;
 
 @Path("GooglePlayMonitoring")
 public class ToolDispatcher {

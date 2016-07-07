@@ -1,4 +1,4 @@
-package monitoring.params;
+package monitoring.model;
 
 public class MonitoringParams {
 	
