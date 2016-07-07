@@ -1,6 +1,7 @@
 import {Mechanism} from '../models/mechanism';
 import '../js/lib/html2canvas.js';
 import {Helper} from '../js/helper';
+import {ScreenshotViewDrawing} from './screenshot_view_drawing';
 
 var myThis;
 
@@ -21,6 +22,7 @@ export class ScreenshotView {
     isPainting:boolean;
     canvasWidth:number;
     canvasHeight:number;
+    screenshotViewDrawing:ScreenshotViewDrawing;
 
     constructor(screenshotMechanism:Mechanism, screenshotPreviewElement:JQuery, screenshotCaptureButton:JQuery,
                 elementToCapture:JQuery, elementsToHide:any) {
@@ -32,6 +34,7 @@ export class ScreenshotView {
         this.elementsToHide = elementsToHide;
         this.canvasState = null;
         this.canvasStates = [];
+        this.screenshotViewDrawing = new ScreenshotViewDrawing();
         this.addCaptureEventToButton();
     }
 
@@ -141,6 +144,9 @@ export class ScreenshotView {
                 } else if (myThis.drawingMode === 'arrow') {
                     context.beginPath();
                     myThis.draw_arrow(context, myThis.startX, myThis.startY, currentX, currentY);
+                } else if (myThis.drawingMode === 'crop') {
+                    context.beginPath();
+                    context.strokeRect(myThis.startX, myThis.startY, width, height);
                 }
                 context.stroke();
             }
@@ -165,6 +171,21 @@ export class ScreenshotView {
                 context.lineTo(endX, endY);
             } else if (myThis.drawingMode === 'arrow') {
                 myThis.draw_arrow(context, myThis.startX, myThis.startY, endX, endY);
+            } else if (myThis.drawingMode === 'crop') {
+                var topLeftCorner = myThis.screenshotViewDrawing.getRectangleTopLeftCorner(myThis.startX, myThis.startY, endX, endY);
+                var widthAndHeight = myThis.screenshotViewDrawing.getRectangleWidthAndHeight(myThis.startX, myThis.startY, endX, endY);
+                var newDimensions = myThis.screenshotViewDrawing.getNewDimensionsAfterCrop(myThis.startX, myThis.startY, endX, endY, myThis.screenshotCanvas.width, myThis.screenshotCanvas.height);
+
+                width = widthAndHeight[0];
+                height = widthAndHeight[1];
+                var newWidth = newDimensions[0];
+                var newHeight = newDimensions[1];
+                var topLeftX = topLeftCorner[0];
+                var topLeftY = topLeftCorner[1];
+
+                context.clearRect(0, 0, myThis.canvasWidth, myThis.canvasHeight);
+                context.drawImage(myThis.canvasState, topLeftX, topLeftY, width,
+                    height, 0, 0, newWidth, newHeight);
             }
             context.stroke();
             context.closePath();
@@ -215,6 +236,7 @@ export class ScreenshotView {
             myThis.drawingMode = 'rect';
             myThis.context.strokeStyle = "#FF0000";
             myThis.context.fillStyle = "#FF0000";
+            myThis.context.setLineDash([0,0]);
         });
 
         $('#screenshotDrawFillRect').on('click', function(event) {
@@ -226,6 +248,7 @@ export class ScreenshotView {
             myThis.drawingMode = 'fillRect';
             myThis.context.strokeStyle = "#000000";
             myThis.context.fillStyle = "#000000";
+            myThis.context.setLineDash([0,0]);
         });
 
         $('#screenshotDrawCircle').on('click', function(event) {
@@ -237,6 +260,7 @@ export class ScreenshotView {
             myThis.drawingMode = 'circle';
             myThis.context.strokeStyle = "#FF0000";
             myThis.context.fillStyle = "#FF0000";
+            myThis.context.setLineDash([0,0]);
         });
 
         $('#screenshotDrawArrow').on('click', function(event) {
@@ -248,6 +272,7 @@ export class ScreenshotView {
             myThis.drawingMode = 'arrow';
             myThis.context.strokeStyle = "#FF0000";
             myThis.context.fillStyle = "#FF0000";
+            myThis.context.setLineDash([0,0]);
         });
 
         $('#screenshotDrawFreehand').on('click', function(event) {
@@ -259,6 +284,7 @@ export class ScreenshotView {
             myThis.drawingMode = 'freehand';
             myThis.context.strokeStyle = "#FF0000";
             myThis.context.fillStyle = "#FF0000";
+            myThis.context.setLineDash([0,0]);
         });
 
         $('#screenshotCrop').on('click', function(event) {
@@ -268,8 +294,9 @@ export class ScreenshotView {
             myThis.disableAllScreenshotOperations();
             $(this).addClass('active');
             myThis.drawingMode = 'crop';
-            myThis.context.strokeStyle = "#FF0000";
-            myThis.context.fillStyle = "#FF0000";
+            myThis.context.strokeStyle = "#000000";
+            myThis.context.fillStyle = "#000000";
+            myThis.context.setLineDash([3, 8]);
         });
 
         $('#screenshotDrawUndo').on('click', function(event) {

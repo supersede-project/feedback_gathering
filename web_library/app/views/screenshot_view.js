@@ -1,4 +1,4 @@
-define(["require", "exports", '../js/helper', '../js/lib/html2canvas.js'], function (require, exports, helper_1) {
+define(["require", "exports", '../js/helper', './screenshot_view_drawing', '../js/lib/html2canvas.js'], function (require, exports, helper_1, screenshot_view_drawing_1) {
     "use strict";
     var myThis;
     var ScreenshotView = (function () {
@@ -11,6 +11,7 @@ define(["require", "exports", '../js/helper', '../js/lib/html2canvas.js'], funct
             this.elementsToHide = elementsToHide;
             this.canvasState = null;
             this.canvasStates = [];
+            this.screenshotViewDrawing = new screenshot_view_drawing_1.ScreenshotViewDrawing();
             this.addCaptureEventToButton();
         }
         ScreenshotView.prototype.generateScreenshot = function () {
@@ -105,6 +106,10 @@ define(["require", "exports", '../js/helper', '../js/lib/html2canvas.js'], funct
                         context.beginPath();
                         myThis.draw_arrow(context, myThis.startX, myThis.startY, currentX, currentY);
                     }
+                    else if (myThis.drawingMode === 'crop') {
+                        context.beginPath();
+                        context.strokeRect(myThis.startX, myThis.startY, width, height);
+                    }
                     context.stroke();
                 }
             }).on('mouseup touchend', function (event) {
@@ -129,6 +134,19 @@ define(["require", "exports", '../js/helper', '../js/lib/html2canvas.js'], funct
                 }
                 else if (myThis.drawingMode === 'arrow') {
                     myThis.draw_arrow(context, myThis.startX, myThis.startY, endX, endY);
+                }
+                else if (myThis.drawingMode === 'crop') {
+                    var topLeftCorner = myThis.screenshotViewDrawing.getRectangleTopLeftCorner(myThis.startX, myThis.startY, endX, endY);
+                    var widthAndHeight = myThis.screenshotViewDrawing.getRectangleWidthAndHeight(myThis.startX, myThis.startY, endX, endY);
+                    var newDimensions = myThis.screenshotViewDrawing.getNewDimensionsAfterCrop(myThis.startX, myThis.startY, endX, endY, myThis.screenshotCanvas.width, myThis.screenshotCanvas.height);
+                    width = widthAndHeight[0];
+                    height = widthAndHeight[1];
+                    var newWidth = newDimensions[0];
+                    var newHeight = newDimensions[1];
+                    var topLeftX = topLeftCorner[0];
+                    var topLeftY = topLeftCorner[1];
+                    context.clearRect(0, 0, myThis.canvasWidth, myThis.canvasHeight);
+                    context.drawImage(myThis.canvasState, topLeftX, topLeftY, width, height, 0, 0, newWidth, newHeight);
                 }
                 context.stroke();
                 context.closePath();
@@ -168,6 +186,7 @@ define(["require", "exports", '../js/helper', '../js/lib/html2canvas.js'], funct
                 myThis.drawingMode = 'rect';
                 myThis.context.strokeStyle = "#FF0000";
                 myThis.context.fillStyle = "#FF0000";
+                myThis.context.setLineDash([0, 0]);
             });
             $('#screenshotDrawFillRect').on('click', function (event) {
                 event.preventDefault();
@@ -177,6 +196,7 @@ define(["require", "exports", '../js/helper', '../js/lib/html2canvas.js'], funct
                 myThis.drawingMode = 'fillRect';
                 myThis.context.strokeStyle = "#000000";
                 myThis.context.fillStyle = "#000000";
+                myThis.context.setLineDash([0, 0]);
             });
             $('#screenshotDrawCircle').on('click', function (event) {
                 event.preventDefault();
@@ -186,6 +206,7 @@ define(["require", "exports", '../js/helper', '../js/lib/html2canvas.js'], funct
                 myThis.drawingMode = 'circle';
                 myThis.context.strokeStyle = "#FF0000";
                 myThis.context.fillStyle = "#FF0000";
+                myThis.context.setLineDash([0, 0]);
             });
             $('#screenshotDrawArrow').on('click', function (event) {
                 event.preventDefault();
@@ -195,6 +216,7 @@ define(["require", "exports", '../js/helper', '../js/lib/html2canvas.js'], funct
                 myThis.drawingMode = 'arrow';
                 myThis.context.strokeStyle = "#FF0000";
                 myThis.context.fillStyle = "#FF0000";
+                myThis.context.setLineDash([0, 0]);
             });
             $('#screenshotDrawFreehand').on('click', function (event) {
                 event.preventDefault();
@@ -204,6 +226,7 @@ define(["require", "exports", '../js/helper', '../js/lib/html2canvas.js'], funct
                 myThis.drawingMode = 'freehand';
                 myThis.context.strokeStyle = "#FF0000";
                 myThis.context.fillStyle = "#FF0000";
+                myThis.context.setLineDash([0, 0]);
             });
             $('#screenshotCrop').on('click', function (event) {
                 event.preventDefault();
@@ -211,8 +234,9 @@ define(["require", "exports", '../js/helper', '../js/lib/html2canvas.js'], funct
                 myThis.disableAllScreenshotOperations();
                 $(this).addClass('active');
                 myThis.drawingMode = 'crop';
-                myThis.context.strokeStyle = "#FF0000";
-                myThis.context.fillStyle = "#FF0000";
+                myThis.context.strokeStyle = "#000000";
+                myThis.context.fillStyle = "#000000";
+                myThis.context.setLineDash([3, 8]);
             });
             $('#screenshotDrawUndo').on('click', function (event) {
                 event.preventDefault();
