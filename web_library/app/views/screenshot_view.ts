@@ -1,6 +1,7 @@
 import {Mechanism} from '../models/mechanism';
 import '../js/lib/html2canvas.js';
 import {Helper} from '../js/helper';
+import {ScreenshotViewDrawing} from './screenshot_view_drawing';
 
 var myThis;
 
@@ -21,6 +22,7 @@ export class ScreenshotView {
     isPainting:boolean;
     canvasWidth:number;
     canvasHeight:number;
+    screenshotViewDrawing:ScreenshotViewDrawing;
 
     constructor(screenshotMechanism:Mechanism, screenshotPreviewElement:JQuery, screenshotCaptureButton:JQuery,
                 elementToCapture:JQuery, elementsToHide:any) {
@@ -32,6 +34,7 @@ export class ScreenshotView {
         this.elementsToHide = elementsToHide;
         this.canvasState = null;
         this.canvasStates = [];
+        this.screenshotViewDrawing = new ScreenshotViewDrawing();
         this.addCaptureEventToButton();
     }
 
@@ -70,8 +73,12 @@ export class ScreenshotView {
     }
 
     getScreenshotAsBinary() {
-        var dataURL = this.screenshotCanvas.toDataURL("image/png");
-        return Helper.dataURItoBlob(dataURL);
+        if(this.screenshotCanvas) {
+            var dataURL = this.screenshotCanvas.toDataURL("image/png");
+            return Helper.dataURItoBlob(dataURL);
+        } else {
+            return null;
+        }
     }
 
     addCaptureEventToButton() {
@@ -102,10 +109,14 @@ export class ScreenshotView {
         this.context.strokeStyle="#FF0000";
 
         $(this.screenshotCanvas).on('mousedown touchstart', function(event) {
-            context.beginPath();
             var parentOffset = $(this).parent().offset();
             myThis.startX = event.pageX - parentOffset.left;
             myThis.startY = event.pageY - parentOffset.top;
+
+            if(myThis.drawingMode === 'freehand') {
+                context.beginPath();
+                context.moveTo(myThis.startX, myThis.startY);
+            }
             myThis.isPainting = true;
         }).on('mousemove touchmove', function(event) {
             if(myThis.isPainting) {
@@ -123,9 +134,23 @@ export class ScreenshotView {
                 var height = currentY - myThis.startY;
 
                 if(myThis.drawingMode === 'rect') {
+                    context.beginPath();
                     context.strokeRect(myThis.startX, myThis.startY, width, height);
                 } else if (myThis.drawingMode === 'fillRect') {
+                    context.beginPath();
                     context.fillRect(myThis.startX, myThis.startY, width, height);
+                } else if (myThis.drawingMode === 'circle') {
+                    context.beginPath();
+                    var radius = height > width ? height : width;
+                    context.arc(myThis.startX, myThis.startY, radius, 0, Math.PI*2);
+                } else if (myThis.drawingMode === 'freehand') {
+                    context.lineTo(currentX, currentY);
+                } else if (myThis.drawingMode === 'arrow') {
+                    context.beginPath();
+                    myThis.draw_arrow(context, myThis.startX, myThis.startY, currentX, currentY);
+                } else if (myThis.drawingMode === 'crop') {
+                    context.beginPath();
+                    context.strokeRect(myThis.startX, myThis.startY, width, height);
                 }
                 context.stroke();
             }
@@ -143,8 +168,31 @@ export class ScreenshotView {
                 context.rect(myThis.startX, myThis.startY, width, height);
             } else if (myThis.drawingMode === 'fillRect') {
                 context.fillRect(myThis.startX, myThis.startY, width, height);
+            } else if (myThis.drawingMode === 'circle') {
+                var radius = height > width ? height : width;
+                context.arc(myThis.startX, myThis.startY, radius, 0, Math.PI*2);
+            } else if (myThis.drawingMode === 'freehand') {
+                context.lineTo(endX, endY);
+            } else if (myThis.drawingMode === 'arrow') {
+                myThis.draw_arrow(context, myThis.startX, myThis.startY, endX, endY);
+            } else if (myThis.drawingMode === 'crop') {
+                var topLeftCorner = myThis.screenshotViewDrawing.getRectangleTopLeftCorner(myThis.startX, myThis.startY, endX, endY);
+                var widthAndHeight = myThis.screenshotViewDrawing.getRectangleWidthAndHeight(myThis.startX, myThis.startY, endX, endY);
+                var newDimensions = myThis.screenshotViewDrawing.getNewDimensionsAfterCrop(myThis.startX, myThis.startY, endX, endY, myThis.screenshotCanvas.width, myThis.screenshotCanvas.height);
+
+                width = widthAndHeight[0];
+                height = widthAndHeight[1];
+                var newWidth = newDimensions[0];
+                var newHeight = newDimensions[1];
+                var topLeftX = topLeftCorner[0];
+                var topLeftY = topLeftCorner[1];
+
+                context.clearRect(0, 0, myThis.canvasWidth, myThis.canvasHeight);
+                context.drawImage(myThis.canvasState, topLeftX, topLeftY, width,
+                    height, 0, 0, newWidth, newHeight);
             }
             context.stroke();
+            context.closePath();
 
             myThis.updateCanvasState();
         }).on('mouseleave touchleave', function () {
@@ -154,9 +202,23 @@ export class ScreenshotView {
         myThis.initScreenshotOperations();
     }
 
+    draw_arrow(context, fromx, fromy, tox, toy){
+        var headLength = 10;
+        var angle = Math.atan2(toy-fromy,tox-fromx);
+        context.moveTo(fromx, fromy);
+        context.lineTo(tox, toy);
+        context.lineTo(tox-headLength*Math.cos(angle-Math.PI/6),toy-headLength*Math.sin(angle-Math.PI/6));
+        context.moveTo(tox, toy);
+        context.lineTo(tox-headLength*Math.cos(angle+Math.PI/6),toy-headLength*Math.sin(angle+Math.PI/6));
+    }
+
     updateCanvasState() {
         this.canvasStates.push(this.canvasState.src);
         this.canvasState.src = this.screenshotCanvas.toDataURL("image/png");
+
+        var img = jQuery('<img src="' + this.screenshotCanvas.toDataURL() + '" />');
+        img.css('max-width', '50%');
+        jQuery('#screenshotReview').empty().append(img);
     }
 
     undoOperation() {
@@ -182,6 +244,7 @@ export class ScreenshotView {
             myThis.drawingMode = 'rect';
             myThis.context.strokeStyle = "#FF0000";
             myThis.context.fillStyle = "#FF0000";
+            myThis.context.setLineDash([0,0]);
         });
 
         $('#screenshotDrawFillRect').on('click', function(event) {
@@ -193,6 +256,55 @@ export class ScreenshotView {
             myThis.drawingMode = 'fillRect';
             myThis.context.strokeStyle = "#000000";
             myThis.context.fillStyle = "#000000";
+            myThis.context.setLineDash([0,0]);
+        });
+
+        $('#screenshotDrawCircle').on('click', function(event) {
+            event.preventDefault();
+            event.stopPropagation();
+
+            myThis.disableAllScreenshotOperations();
+            $(this).addClass('active');
+            myThis.drawingMode = 'circle';
+            myThis.context.strokeStyle = "#FF0000";
+            myThis.context.fillStyle = "#FF0000";
+            myThis.context.setLineDash([0,0]);
+        });
+
+        $('#screenshotDrawArrow').on('click', function(event) {
+            event.preventDefault();
+            event.stopPropagation();
+
+            myThis.disableAllScreenshotOperations();
+            $(this).addClass('active');
+            myThis.drawingMode = 'arrow';
+            myThis.context.strokeStyle = "#FF0000";
+            myThis.context.fillStyle = "#FF0000";
+            myThis.context.setLineDash([0,0]);
+        });
+
+        $('#screenshotDrawFreehand').on('click', function(event) {
+            event.preventDefault();
+            event.stopPropagation();
+
+            myThis.disableAllScreenshotOperations();
+            $(this).addClass('active');
+            myThis.drawingMode = 'freehand';
+            myThis.context.strokeStyle = "#FF0000";
+            myThis.context.fillStyle = "#FF0000";
+            myThis.context.setLineDash([0,0]);
+        });
+
+        $('#screenshotCrop').on('click', function(event) {
+            event.preventDefault();
+            event.stopPropagation();
+
+            myThis.disableAllScreenshotOperations();
+            $(this).addClass('active');
+            myThis.drawingMode = 'crop';
+            myThis.context.strokeStyle = "#000000";
+            myThis.context.fillStyle = "#000000";
+            myThis.context.setLineDash([3, 8]);
         });
 
         $('#screenshotDrawUndo').on('click', function(event) {
