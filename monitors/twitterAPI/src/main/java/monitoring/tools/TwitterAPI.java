@@ -16,9 +16,9 @@ import org.json.JSONObject;
 
 import kafka.javaapi.producer.Producer;
 import kafka.producer.KeyedMessage;
-import monitoring.params.MonitoringData;
-import monitoring.params.MonitoringParams;
-import monitoring.services.KafkaCommunication;
+import monitoring.kafka.KafkaCommunication;
+import monitoring.model.MonitoringData;
+import monitoring.model.MonitoringParams;
 import monitoring.services.ToolInterface;
 import twitter4j.ConnectionLifeCycleListener;
 import twitter4j.FilterQuery;

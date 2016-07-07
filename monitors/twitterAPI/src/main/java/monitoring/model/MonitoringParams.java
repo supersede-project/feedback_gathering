@@ -1,4 +1,4 @@
-package monitoring.params;
+package monitoring.model;
 
 import java.util.ArrayList;
 import java.util.List;
