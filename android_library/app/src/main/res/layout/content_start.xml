@@ -16,4 +16,9 @@
         android:layout_height="wrap_content"
         android:text="@string/host_application_screen_text" />
 
+    <TextView
+        android:id="@+id/time_display"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
 </LinearLayout>

@@ -1,7 +1,7 @@
 [{
     "type": "TEXT_TYPE",    
      "active": true,
-     "order": 2,
+     "order": 1,
      "canBeActivated": false,
      "parameters": [{
         "key": "maxLength",
@@ -16,7 +16,7 @@
 }, {
     "type": "AUDIO_TYPE",
     "active": false,
-    "order": 3,
+    "order": 2,
     "canBeActivated": true,
     "parameters": [{
         "key": "maxTime",
@@ -26,7 +26,7 @@
 }, {
     "type": "SCREENSHOT_TYPE",
      "active": true,
-     "order": 1,
+     "order": 3,
      "canBeActivated": true,
      "parameters": [{
         "key": "title",
