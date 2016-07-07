@@ -1,7 +1,6 @@
 package monitoring.services;
 
 import java.util.Iterator;
-import java.util.Properties;
 
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -10,8 +9,6 @@ import javax.ws.rs.QueryParam;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import kafka.javaapi.producer.Producer;
-import kafka.producer.ProducerConfig;
 import monitoring.kafka.KafkaCommunication;
 import monitoring.model.MonitoringParams;
 
