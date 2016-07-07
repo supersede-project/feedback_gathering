@@ -7,15 +7,9 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import javax.ws.rs.POST;
 import javax.ws.rs.Path;
-import javax.ws.rs.QueryParam;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 import kafka.javaapi.producer.Producer;
-import kafka.producer.KeyedMessage;
 import monitoring.kafka.KafkaCommunication;
 import monitoring.model.MonitoringData;
 import monitoring.model.MonitoringParams;
