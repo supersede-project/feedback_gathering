@@ -25,9 +25,10 @@ define(["require", "exports", '../models/parameter_property_pair', '../models/me
             }
         };
         ConfigurationService.prototype.getContextForView = function () {
-            var context = { textMechanism: null, ratingMechanism: null };
+            var context = { textMechanism: null, ratingMechanism: null, screenshotMechanism: null };
             var textMechanism = this.getMechanismConfig(config_1.textType);
             var ratingMechanism = this.getMechanismConfig(config_1.ratingType);
+            var screenshotMechanism = this.getMechanismConfig(config_1.screenshotType);
             var labelStyle = this.getCssStyle(textMechanism, [
                 new parameter_property_pair_1.ParameterPropertyPair('labelPositioning', 'text-align'),
                 new parameter_property_pair_1.ParameterPropertyPair('labelColor', 'color'),
@@ -53,6 +54,11 @@ define(["require", "exports", '../models/parameter_property_pair', '../models/me
                 context.ratingMechanism = {
                     active: ratingMechanism.active,
                     title: ratingMechanism.getParameterValue('title')
+                };
+            }
+            if (screenshotMechanism) {
+                context.screenshotMechanism = {
+                    active: screenshotMechanism.active,
                 };
             }
             return context;

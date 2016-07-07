@@ -37,6 +37,14 @@ public class AnnotateActivity extends AppCompatActivity implements ColorPickerDi
     private MaskFilter oldMBlur;
     private AnnotatePictureView annotatePictureView;
 
+    private static ColorPickerDialog newInstance(int mInitialColor) {
+        ColorPickerDialog dialog = new ColorPickerDialog();
+        Bundle args = new Bundle();
+        args.putInt("mInitialColor", mInitialColor);
+        dialog.setArguments(args);
+        return dialog;
+    }
+
     public void applyBlurFilter() {
         if (mPaint.getMaskFilter() != mBlur) {
             mPaint.setMaskFilter(mBlur);
@@ -114,6 +122,7 @@ public class AnnotateActivity extends AppCompatActivity implements ColorPickerDi
         try {
             fos = new FileOutputStream(myPath);
             bitmapImage.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+            fos.flush();
             fos.close();
         } catch (Exception e) {
             e.printStackTrace();
@@ -167,14 +176,6 @@ public class AnnotateActivity extends AppCompatActivity implements ColorPickerDi
     public void showColorPickerDialog() {
         ColorPickerDialog dialog = newInstance(mPaint.getColor());
         dialog.show(getFragmentManager(), "ColorPickerDialog");
-    }
-
-    private static ColorPickerDialog newInstance(int mInitialColor) {
-        ColorPickerDialog dialog = new ColorPickerDialog();
-        Bundle args = new Bundle();
-        args.putInt("mInitialColor", mInitialColor);
-        dialog.setArguments(args);
-        return dialog;
     }
 
 }

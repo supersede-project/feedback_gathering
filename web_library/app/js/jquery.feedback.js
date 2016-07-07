@@ -86,7 +86,7 @@ define(["require", "exports", '../models/feedback', '../models/rating', '../serv
             $('#serverResponse').removeClass();
             var ratingTitle = $('.rating-text').text().trim();
             var feedbackObject = new feedback_1.Feedback(config_1.feedbackObjectTitle, config_1.applicationName, "uid12345", text, 1.0, [new rating_1.Rating(ratingTitle, ratingMechanism.currentRatingValue)]);
-            if (screenshotMechanism.active) {
+            if (screenshotMechanism.active && screenshotView.getScreenshotAsBinary() !== null) {
                 formData.append('file', screenshotView.getScreenshotAsBinary());
             }
             formData.append('json', JSON.stringify(feedbackObject));

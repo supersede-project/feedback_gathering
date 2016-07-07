@@ -34,6 +34,7 @@ import com.example.matthias.feedbacklibrary.models.FeedbackConfiguration;
 import com.example.matthias.feedbacklibrary.models.FeedbackConfigurationItem;
 import com.example.matthias.feedbacklibrary.models.Mechanism;
 import com.example.matthias.feedbacklibrary.models.TextMechanism;
+import com.example.matthias.feedbacklibrary.utils.Utils;
 import com.example.matthias.feedbacklibrary.views.MechanismView;
 import com.example.matthias.feedbacklibrary.views.RatingMechanismView;
 import com.example.matthias.feedbacklibrary.views.ScreenshotMechanismView;
@@ -68,11 +69,11 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 public class FeedbackActivity extends AppCompatActivity {
     public final static String IMAGE_NAME = "annotatedImage.jpg";
+    public final static String DEFAULT_IMAGE_PATH = "defaultImagePath";
     private static final String endpoint = "http://ec2-54-175-37-30.compute-1.amazonaws.com/";
     private final static int REQUEST_CAMERA = 10;
     private final static int REQUEST_PHOTO = 11;
     private final static int REQUEST_ANNOTATE = 12;
-    private static final int PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 123;
     private feedbackAPI fbAPI;
     // List of feedback configuration items fetched from the orchestrator
     private List<FeedbackConfigurationItem> configuration;
@@ -90,6 +91,7 @@ public class FeedbackActivity extends AppCompatActivity {
     private ImageView screenShotPreviewImageView;
     private Bitmap pictureBitmap;
     private String picturePath;
+    private String defaultImagePath;
     private String userScreenshotChosenTask = "";
 
     public void annotateImage() {
@@ -100,40 +102,6 @@ public class FeedbackActivity extends AppCompatActivity {
 
     private void cameraIntent() {
         //TODO: Implement image capture
-    }
-
-    /**
-     * Check permission at runtime required for Android versions 6 (API version 23) and higher
-     *
-     * @param context the context
-     * @return true if permission is granted, false otherwise
-     */
-    private boolean checkPermission(final Context context) {
-        int currentAPIVersion = Build.VERSION.SDK_INT;
-        if (currentAPIVersion >= android.os.Build.VERSION_CODES.M) {
-            if (ContextCompat.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                if (ActivityCompat.shouldShowRequestPermissionRationale((Activity) context, Manifest.permission.READ_EXTERNAL_STORAGE)) {
-                    AlertDialog.Builder alertBuilder = new AlertDialog.Builder(context);
-                    alertBuilder.setCancelable(true);
-                    alertBuilder.setTitle("Permission Request");
-                    alertBuilder.setMessage("External storage permission is necessary");
-                    alertBuilder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            ActivityCompat.requestPermissions((Activity) context, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE);
-                        }
-                    });
-                    AlertDialog alert = alertBuilder.create();
-                    alert.show();
-                } else {
-                    ActivityCompat.requestPermissions((Activity) context, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE);
-                }
-                return false;
-            } else {
-                return true;
-            }
-        } else {
-            return true;
-        }
     }
 
     private void galleryIntent() {
@@ -193,6 +161,18 @@ public class FeedbackActivity extends AppCompatActivity {
     }
 
     private void initScreenshotView(View view) {
+        screenShotPreviewImageView = (ImageView) view.findViewById(R.id.supersede_feedbacklibrary_screenshot_imageview);
+        boolean isEnabled = false;
+
+        // Use the default image path for the screenshot if present
+        if (defaultImagePath != null) {
+            picturePath = defaultImagePath;
+            annotatedImagePath = picturePath;
+            pictureBitmap = BitmapFactory.decodeFile(picturePath);
+            screenShotPreviewImageView.setBackground(null);
+            screenShotPreviewImageView.setImageBitmap(pictureBitmap);
+            isEnabled = true;
+        }
         Button selectScreenshotButton = (Button) view.findViewById(R.id.supersede_feedbacklibrary_select_screenshot_btn);
         selectScreenshotButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -201,7 +181,7 @@ public class FeedbackActivity extends AppCompatActivity {
             }
         });
         annotateScreenshotButton = (Button) view.findViewById(R.id.supersede_feedbacklibrary_annotate_screenshot_btn);
-        annotateScreenshotButton.setEnabled(false);
+        annotateScreenshotButton.setEnabled(isEnabled);
         annotateScreenshotButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -209,18 +189,19 @@ public class FeedbackActivity extends AppCompatActivity {
             }
         });
         deleteScreenshotButton = (Button) view.findViewById(R.id.supersede_feedbacklibrary_remove_screenshot_btn);
-        deleteScreenshotButton.setEnabled(false);
+        deleteScreenshotButton.setEnabled(isEnabled);
         deleteScreenshotButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 pictureBitmap = null;
+                picturePath = null;
+                annotatedImagePath = null;
                 annotateScreenshotButton.setEnabled(false);
                 deleteScreenshotButton.setEnabled(false);
                 screenShotPreviewImageView.setImageBitmap(null);
                 screenShotPreviewImageView.setBackgroundResource(R.drawable.camera_picture_big);
             }
         });
-        screenShotPreviewImageView = (ImageView) view.findViewById(R.id.supersede_feedbacklibrary_screenshot_imageview);
     }
 
     /**
@@ -328,6 +309,10 @@ public class FeedbackActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_feedback);
 
+        // Get the default image path for the screenshot if present
+        Intent intent = getIntent();
+        defaultImagePath = intent.getStringExtra(DEFAULT_IMAGE_PATH);
+
         // Make progress dialog visible
         progressDialog = new ProgressDialog((findViewById(R.id.feedback_activity_layout)).getContext());
         progressDialog.setTitle("Loading. Please wait.");
@@ -337,14 +322,14 @@ public class FeedbackActivity extends AppCompatActivity {
         Retrofit rtf = new Retrofit.Builder().baseUrl(endpoint).addConverterFactory(GsonConverterFactory.create()).build();
         fbAPI = rtf.create(feedbackAPI.class);
 
-        //init();
-        initOfflineConfiguration();
+        init();
+        //initOfflineConfiguration();
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         switch (requestCode) {
-            case PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE:
+            case Utils.PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     if (userScreenshotChosenTask.equals("Take a Photo")) {
                         cameraIntent();
@@ -405,7 +390,7 @@ public class FeedbackActivity extends AppCompatActivity {
         builder.setItems(items, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int item) {
-                boolean result = checkPermission(FeedbackActivity.this);
+                boolean result = Utils.checkPermission_READ_EXTERNAL_STORAGE(FeedbackActivity.this, Utils.PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE);
                 if (items[item].equals("Take a Photo")) {
                     userScreenshotChosenTask = "Take a Photo";
                     if (result)
@@ -447,22 +432,28 @@ public class FeedbackActivity extends AppCompatActivity {
 
             // JSON string of feedback
             Gson gson = new Gson();
-            Type feedbackType = new TypeToken<Feedback>(){}.getType();
+            Type feedbackType = new TypeToken<Feedback>() {
+            }.getType();
             String feedbackJsonString = gson.toJson(feedback, feedbackType);
             // Screenshot file
             File imageFile = new File(screenShotImagePath);
 
             RequestBody feedbackJsonPart = RequestBody.create(MediaType.parse("multipart/form-data"), feedbackJsonString);
             RequestBody feedbackScreenshotPart = RequestBody.create(MediaType.parse("multipart/form-data"), imageFile);
-            result = fbAPI.createFeedbackMultipart(feedbackScreenshotPart, feedbackJsonPart);
+            if (!screenShotImagePath.equals("")) {
+                result = fbAPI.createFeedbackMultipart(feedbackScreenshotPart, feedbackJsonPart);
+            } else {
+                result = fbAPI.createFeedback(feedbackJsonPart);
+            }
 
             if (result != null) {
                 result.enqueue(new Callback<JsonObject>() {
                     @Override
                     public void onFailure(Call<JsonObject> call, Throwable t) {
                         messages.add("Oops. Something went wrong!");
-                        DataDialog d = DataDialog.newInstance(messages);
+                        Utils.DataDialog d = Utils.DataDialog.newInstance(messages);
                         d.show(getFragmentManager(), "dataDialog");
+                        t.printStackTrace();
                     }
 
                     @Override
@@ -475,12 +466,18 @@ public class FeedbackActivity extends AppCompatActivity {
                 });
             }
         } else {
-            DataDialog d = DataDialog.newInstance(messages);
+            Utils.DataDialog d = Utils.DataDialog.newInstance(messages);
             d.show(getFragmentManager(), "dataDialog");
         }
     }
 
-    // Move later on into a helper/utils class
+    /**
+     * Checks if the inputs are valid
+     *
+     * @param allMechanisms all mechanism to check for their input validity
+     * @param errorMessages error messages to show if the validation fails
+     * @return
+     */
     private boolean validateInput(List<Mechanism> allMechanisms, List<String> errorMessages) {
         boolean isValid = true;
         for (Mechanism mechanism : allMechanisms) {
@@ -495,31 +492,5 @@ public class FeedbackActivity extends AppCompatActivity {
         }
 
         return isValid;
-    }
-
-    // Move later on into a helper/utils class
-    public static class DataDialog extends DialogFragment {
-        static DataDialog newInstance(ArrayList<String> messages) {
-            DataDialog f = new DataDialog();
-            Bundle args = new Bundle();
-            args.putStringArrayList("messages", messages);
-            f.setArguments(args);
-            return f;
-        }
-
-        @Override
-        public Dialog onCreateDialog(Bundle savedInstanceState) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-            List<String> messages = getArguments().getStringArrayList("messages");
-            StringBuilder message = new StringBuilder("");
-            for (String s : messages) {
-                message.append(s).append(".");
-            }
-            builder.setMessage(message.toString()).setNegativeButton("Close", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int id) {
-                }
-            });
-            return builder.create();
-        }
     }
 }

@@ -70,6 +70,7 @@ export var feedbackPluginModule = function ($, window, document) {
             success: function (data) {
                 $('#serverResponse').addClass('success').text(defaultSuccessMessage);
                 $('textarea#textTypeText').val('');
+                // TODO reset screenshot and rating
             },
             error: function (data) {
                 $('#serverResponse').addClass('error').text('Failure: ' + JSON.stringify(data));
@@ -169,7 +170,7 @@ export var feedbackPluginModule = function ($, window, document) {
         var feedbackObject = new Feedback(feedbackObjectTitle, applicationName, "uid12345", text, 1.0,
             [new Rating(ratingTitle, ratingMechanism.currentRatingValue)]);
 
-        if (screenshotMechanism.active) {
+        if (screenshotMechanism.active && screenshotView.getScreenshotAsBinary() !== null) {
             formData.append('file', screenshotView.getScreenshotAsBinary());
         }
 

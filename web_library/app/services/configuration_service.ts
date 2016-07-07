@@ -1,7 +1,7 @@
 import {Mechanism} from '../models/mechanism';
 import {ParameterPropertyPair} from '../models/parameter_property_pair';
 import {MechanismFactory} from '../models/mechanism_factory';
-import {textType, ratingType} from '../js/config';
+import {textType, ratingType, screenshotType} from '../js/config';
 
 
 /**
@@ -50,9 +50,10 @@ export class ConfigurationService {
      *  Context object that contains all the data to configure the feedback mechanism in the view.
      */
     getContextForView() {
-        var context = {textMechanism: null, ratingMechanism: null};
+        var context = {textMechanism: null, ratingMechanism: null, screenshotMechanism: null};
         var textMechanism = this.getMechanismConfig(textType);
         var ratingMechanism = this.getMechanismConfig(ratingType);
+        var screenshotMechanism = this.getMechanismConfig(screenshotType);
 
         var labelStyle = this.getCssStyle(textMechanism, [
             new ParameterPropertyPair('labelPositioning', 'text-align'),
@@ -81,6 +82,11 @@ export class ConfigurationService {
             context.ratingMechanism =  {
                 active: ratingMechanism.active,
                 title: ratingMechanism.getParameterValue('title')
+            }
+        }
+        if(screenshotMechanism) {
+            context.screenshotMechanism =  {
+                active: screenshotMechanism.active,
             }
         }
         return context;
