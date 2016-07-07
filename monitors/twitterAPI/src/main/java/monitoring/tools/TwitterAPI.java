@@ -18,7 +18,8 @@ import kafka.javaapi.producer.Producer;
 import kafka.producer.KeyedMessage;
 import monitoring.params.MonitoringData;
 import monitoring.params.MonitoringParams;
-import monitoring.services.ServiceInterface;
+import monitoring.services.KafkaCommunication;
+import monitoring.services.ToolInterface;
 import twitter4j.ConnectionLifeCycleListener;
 import twitter4j.FilterQuery;
 import twitter4j.Status;
@@ -29,7 +30,7 @@ import twitter4j.conf.ConfigurationBuilder;
 import twitter4j.util.function.Consumer;
 
 @Path("SocialNetworkMonitoring")
-public class TwitterAPI implements ServiceInterface {
+public class TwitterAPI implements ToolInterface {
 	
 	//Kafka producer
 	Producer<String, String> producer;
@@ -192,45 +193,8 @@ public class TwitterAPI implements ServiceInterface {
 			data.add(dataObj);
 		}
 		tweetInfo = new ArrayList<>();
-		getData(searchTimeStamp, data);
-		
-	}
-	
-	public void getData(String timeStamp, List<MonitoringData> data) {
-		
-		try {
-			JSONArray items = new JSONArray();
-			for (MonitoringData item : data) {
-				JSONObject jsonItem = new JSONObject();
-				
-				jsonItem.put("idItem", item.getId());
-				jsonItem.put("timeStamp", item.getTimeStamp());
-				jsonItem.put("message", item.getMessage());
-				jsonItem.put("author", item.getAuthor());
-				jsonItem.put("link", item.getLink());
-				
-				items.put(jsonItem);
-			}
-			
-			JSONObject mainInfo = new JSONObject();
-			
-			mainInfo.put("idOutput", id);
-			mainInfo.put("searchTimeStamp", timeStamp);
-			mainInfo.put("numDataItems", data.size());
-			mainInfo.put("DataItems", items);
-			
-			++id;
-			
-			JSONObject jsonData = new JSONObject();
-			
-			jsonData.put("socialNetworksMonitoredData", mainInfo);
-			
-			KeyedMessage<String, String> msg = new KeyedMessage<String, String>(confParams.getKafkaTopic(), jsonData.toString());
-			producer.send(msg);
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		KafkaCommunication.generateResponse(data, searchTimeStamp, producer, id, confParams.getKafkaTopic());
+		++id;
 		
 	}
 	

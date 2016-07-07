@@ -18,7 +18,7 @@ import kafka.producer.ProducerConfig;
 import monitoring.params.MonitoringParams;
 
 @Path("SocialNetworkMonitoring")
-public class ServiceDispatcher {
+public class ToolDispatcher {
 	
 	//The id of the response associated to a addConfiguration call
 	private int responseId = 1;
@@ -33,15 +33,8 @@ public class ServiceDispatcher {
 			if (params.getToolName() == null) 
 				return throwError("Missing tool name");
 			Class monitor = Class.forName(packageRoute + params.getToolName());
-			ServiceInterface serviceInstance = (ServiceInterface) monitor.newInstance();
-			//Initializes kafka producer
-			//PlotModel p = new PlotModel();
-			Properties props = new Properties();
-			props.put("metadata.broker.list", params.getKafkaEndpoint());
-			props.put("serializer.class", "kafka.serializer.StringEncoder");
-			props.put("request.required.acks", "1");
-			ProducerConfig config = new ProducerConfig(props);
-			serviceInstance.addConfiguration(params, new Producer<String,String>(config));
+			ToolInterface serviceInstance = (ToolInterface) monitor.newInstance();
+			serviceInstance.addConfiguration(params, KafkaCommunication.initProducer(params.getKafkaEndpoint()));
 			
 		} catch (JSONException e) {
 			return throwError("Not a valid JSON configuration object");
