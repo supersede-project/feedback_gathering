@@ -12,10 +12,10 @@ import org.junit.Test;
 
 public class AppTweakTest {
 
-	private final String token = "9IUCBJJb1GofSJJzHEg7gA4Hok0";
+	private final String token = "iOAbyjaOnWFNpO64RCVnG3TWmR4";
 	
 	private final String uri = "https://api.apptweak.com/android/applications/";
-	private final String packageName = "com.shazam.android";
+	private final String packageName = "com.facebook.katana";
 	
 	
 	@Test

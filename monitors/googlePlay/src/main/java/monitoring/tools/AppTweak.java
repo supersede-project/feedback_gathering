@@ -28,7 +28,7 @@ import monitoring.services.ToolInterface;
 public class AppTweak implements ToolInterface {
 	
 	//Token credentials
-	private final String token = "9IUCBJJb1GofSJJzHEg7gA4Hok0";
+	private final String token = "iOAbyjaOnWFNpO64RCVnG3TWmR4";
 	
 	//Route params
 	private final String uri = "https://api.apptweak.com/android/applications/";
