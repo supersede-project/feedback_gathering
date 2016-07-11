@@ -220,7 +220,7 @@ export var feedbackPluginModule = function ($, window, document) {
 
     $.fn.feedbackPlugin.defaults = {
         'color': '#fff',
-        'backgroundColor': '#b3cd40',
+        'backgroundColor': '#b3cd40'
     };
 
 };

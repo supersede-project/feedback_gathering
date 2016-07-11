@@ -177,6 +177,9 @@ define(["require", "exports", './configuration_service', '../models/parameter_pr
                 ratingMechanism: {
                     active: true,
                     title: 'Rate your user experience'
+                },
+                screenshotMechanism: {
+                    active: false
                 }
             };
             expect(context).toEqual(expectedContext);
