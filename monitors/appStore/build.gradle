@@ -34,4 +34,12 @@ dependencies {
 	
 	// https://mvnrepository.com/artifact/org.json/json
 	compile group: 'org.json', name: 'json', version: '20160212'
+	
+	// https://mvnrepository.com/artifact/javax.ws.rs/javax.ws.rs-api
+	compile group: 'javax.ws.rs', name: 'javax.ws.rs-api', version: '2.0'
+	
+	// https://mvnrepository.com/artifact/org.glassfish.jersey.containers/jersey-container-servlet-core
+	compile group: 'org.glassfish.jersey.containers', name: 'jersey-container-servlet-core', version: '2.23.1'
+	// https://mvnrepository.com/artifact/org.glassfish.jersey.core/jersey-common
+	compile group: 'org.glassfish.jersey.core', name: 'jersey-common', version: '2.23.1'
 }
