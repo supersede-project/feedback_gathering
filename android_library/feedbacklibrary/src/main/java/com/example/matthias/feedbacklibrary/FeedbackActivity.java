@@ -303,8 +303,8 @@ public class FeedbackActivity extends AppCompatActivity {
         Retrofit rtf = new Retrofit.Builder().baseUrl(endpoint).addConverterFactory(GsonConverterFactory.create()).build();
         fbAPI = rtf.create(feedbackAPI.class);
 
-        //init();
-        initOfflineConfiguration();
+        init();
+        //initOfflineConfiguration();
     }
 
     @Override
