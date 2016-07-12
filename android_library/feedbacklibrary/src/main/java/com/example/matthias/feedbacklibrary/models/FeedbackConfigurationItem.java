@@ -18,10 +18,6 @@ public class FeedbackConfigurationItem implements Serializable {
         return canBeActivated;
     }
 
-    public boolean isActive() {
-        return active;
-    }
-
     public int getOrder() {
         return order;
     }
@@ -32,6 +28,10 @@ public class FeedbackConfigurationItem implements Serializable {
 
     public String getType() {
         return type;
+    }
+
+    public boolean isActive() {
+        return active;
     }
 
     public void setCanBeActivated(boolean canBeActivated) {

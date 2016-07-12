@@ -1,27 +1,89 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.example.matthias.feedbacklibrary.AnnotateActivity">
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    tools:context=".AnnotateImageActivity">
+
+    <RelativeLayout
+        android:id="@+id/supersede_feedbacklibrary_annotate_picture_layout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.75"/>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="0.25"
         android:orientation="vertical">
-
-        <RelativeLayout
-            android:id="@+id/supersede_feedbacklibrary_annotate_picture_layout"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="0.75"></RelativeLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_marginLeft="-2dp"
-            android:layout_marginStart="-2dp"
-            android:layout_weight="0.25"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/supersede_feedbacklibrary_pen_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:src="@drawable/icon_pen"/>
+
+            <ImageButton
+                android:id="@+id/supersede_feedbacklibrary_line_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:src="@drawable/icon_line"/>
+
+            <ImageButton
+                android:id="@+id/supersede_feedbacklibrary_arrow_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:src="@drawable/icon_arrow"/>
+
+            <ImageButton
+                android:id="@+id/supersede_feedbacklibrary_rectangle_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:src="@drawable/icon_square"/>
+
+            <ImageButton
+                android:id="@+id/supersede_feedbacklibrary_circle_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:src="@drawable/icon_circle"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/supersede_feedbacklibrary_undo_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:src="@drawable/undo_black"/>
+
+            <ImageButton
+                android:id="@+id/supersede_feedbacklibrary_redo_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:src="@drawable/redo_black"/>
+
+            <Button
+                android:id="@+id/supersede_feedbacklibrary_erase_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:drawableLeft="@drawable/icon_eraser"
+                android:drawableStart="@drawable/icon_eraser"
+                android:text="OFF"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="horizontal">
 
             <Button
@@ -31,7 +93,7 @@
                 android:height="36dp"
                 android:minWidth="88dp"
                 android:text="@string/supersede_feedbacklibrary_colorpickerbutton_text"
-                android:textSize="13sp" />
+                android:textSize="13sp"/>
 
             <Button
                 android:id="@+id/supersede_feedbacklibrary_blur_btn"
@@ -40,7 +102,16 @@
                 android:height="36dp"
                 android:minWidth="88dp"
                 android:text="@string/supersede_feedbacklibrary_blurbutton_text"
-                android:textSize="13sp" />
+                android:textSize="13sp"/>
+
+            <Button
+                android:id="@+id/supersede_feedbacklibrary_fill_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:height="36dp"
+                android:minWidth="88dp"
+                android:text="@string/supersede_feedbacklibrary_fillbutton_text"
+                android:textSize="13sp"/>
 
             <Button
                 android:id="@+id/supersede_feedbacklibrary_black_btn"
@@ -49,8 +120,7 @@
                 android:height="36dp"
                 android:minWidth="88dp"
                 android:text="@string/supersede_feedbacklibrary_blackbutton_text"
-                android:textSize="13sp" />
+                android:textSize="13sp"/>
         </LinearLayout>
-
     </LinearLayout>
-</RelativeLayout>
+</LinearLayout>
