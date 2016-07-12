@@ -194,6 +194,9 @@ describe('Configuration Service', () => {
             ratingMechanism: {
                 active: true,
                 title: 'Rate your user experience'
+            },
+            screenshotMechanism: {
+                active: false
             }
         };
 

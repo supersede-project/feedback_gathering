@@ -90,7 +90,7 @@
     "build.test": "gulp build.test",
     "prestart": "webpack",
     "start": "./node_modules/.bin/http-server -a 0.0.0.0 -p 3000 -i -o",
-    "pretest": "npm install && ./node_modules/.bin/jshint js/",
+    "pretest": "",
     "clean": "rm -rf node_modules && npm install",
     "karma": "karma",
     "karma.start": "karma start",

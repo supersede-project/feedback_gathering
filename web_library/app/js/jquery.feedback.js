@@ -118,7 +118,7 @@ define(["require", "exports", '../models/feedback', '../models/rating', '../serv
         };
         $.fn.feedbackPlugin.defaults = {
             'color': '#fff',
-            'backgroundColor': '#b3cd40',
+            'backgroundColor': '#b3cd40'
         };
     };
     (function ($, window, document) {
