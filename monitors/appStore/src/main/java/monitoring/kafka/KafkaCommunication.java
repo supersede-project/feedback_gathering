@@ -44,9 +44,15 @@ public class KafkaCommunication {
 		for (MonitoringData data : dataList) {
 			JSONObject review = new JSONObject();
 			
-			/* 
-			 * Generate JSONResponse
-			 */
+			if (data.getAppVersion() != null) review.put("appVersion", data.getAppVersion());
+			if (data.getAuthorName() != null) review.put("authorName", data.getAuthorName());
+			if (data.getTimeStamp() != null) review.put("timeStamp", data.getTimeStamp());
+			if (data.getDevice() != null) review.put("device", data.getDevice());
+			if (data.getLink() != null) review.put("link", data.getLink());
+			if (data.getReviewerLanguage() != null) review.put("reviewerLanguage", data.getReviewerLanguage());
+			if (data.getReviewID() != null) review.put("reviewID", data.getReviewID());
+			if (data.getReviewText() != null) review.put("reviewText", data.getReviewText());
+			if (data.getStarRating() != null) review.put("starRating", data.getStarRating());
 			
 			dataItems.put(review);
 		}

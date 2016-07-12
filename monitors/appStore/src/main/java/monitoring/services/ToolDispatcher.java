@@ -12,6 +12,7 @@ import org.json.JSONObject;
 import monitoring.kafka.KafkaCommunication;
 import monitoring.model.MonitoringParams;
 
+@Path("service")
 public class ToolDispatcher {
 
 	//The id of the response associated to a addConfiguration call
@@ -64,7 +65,7 @@ public class ToolDispatcher {
 			    else if (key.equals("timeSlot")) params.setTimeSlot(jsonParams.getString(key).replaceAll("\"", ""));
 			    else if (key.equals("kafkaEndpoint")) params.setKafkaEndpoint(jsonParams.getString(key).replaceAll("\"", "").replace("http://", ""));
 			    else if (key.equals("kafkaTopic")) params.setKafkaTopic(jsonParams.getString(key).replaceAll("\"", ""));
-			    else if (key.equals("packageName")) params.setAppId(jsonParams.getString(key).replaceAll("\"", ""));
+			    else if (key.equals("appId")) params.setAppId(jsonParams.getString(key).replaceAll("\"", ""));
 			}
 			
 			return params;
