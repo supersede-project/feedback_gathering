@@ -17,27 +17,27 @@ public class ScreenshotMechanism extends Mechanism implements Serializable {
         super(SCREENSHOT_TYPE, item);
     }
 
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
     public String getDefaultPicture() {
         return defaultPicture;
-    }
-
-    public void setDefaultPicture(String defaultPicture) {
-        this.defaultPicture = defaultPicture;
     }
 
     public String getImagePath() {
         return imagePath;
     }
 
+    public String getTitle() {
+        return title;
+    }
+
+    public void setDefaultPicture(String defaultPicture) {
+        this.defaultPicture = defaultPicture;
+    }
+
     public void setImagePath(String imagePath) {
         this.imagePath = imagePath;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 }

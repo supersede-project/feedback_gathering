@@ -19,12 +19,13 @@ public abstract class MechanismView {
     public View getEnclosingLayout() {
         return enclosingLayout;
     }
-    public void setEnclosingLayout(View enclosingLayout) {
-        this.enclosingLayout = enclosingLayout;
-    }
 
     public LayoutInflater getLayoutInflater() {
         return layoutInflater;
+    }
+
+    public void setEnclosingLayout(View enclosingLayout) {
+        this.enclosingLayout = enclosingLayout;
     }
 
     public abstract void updateModel();

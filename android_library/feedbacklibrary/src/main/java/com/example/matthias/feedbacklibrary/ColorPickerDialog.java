@@ -25,16 +25,8 @@ import android.widget.TextView;
  */
 public class ColorPickerDialog extends DialogFragment {
 
-    /* The activity that creates an instance of this dialog fragment must
-     * implement this interface in order to receive event callbacks.
-     * Each method passes the DialogFragment in case the host needs to query it. */
-    public interface OnColorChangeDialogListener {
-        void onDialogPositiveClick(DialogFragment dialog);
-    }
-
     // Use this instance of the interface to deliver action events
     OnColorChangeDialogListener mListener;
-
     private int changedColor;
 
     public int getChangedColor() {
@@ -65,8 +57,8 @@ public class ColorPickerDialog extends DialogFragment {
         LinearLayout linearLayout = (LinearLayout) view;
 
         TextView textView = new TextView(view.getContext());
-        textView.setText(R.string.supersede_feedbacklibrary_chosencolor_text);
-        textView.setTextSize(20.0f);
+        textView.setText(R.string.supersede_feedbacklibrary_chosencolor_string);
+        textView.setTextSize(20F);
         textView.setTypeface(null, Typeface.BOLD);
         textView.setTextColor(changedColor);
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT);
@@ -94,19 +86,24 @@ public class ColorPickerDialog extends DialogFragment {
         return builder.create();
     }
 
+    /* The activity that creates an instance of this dialog fragment must
+     * implement this interface in order to receive event callbacks.
+     * Each method passes the DialogFragment in case the host needs to query it. */
+    public interface OnColorChangeDialogListener {
+        void onDialogPositiveClick(DialogFragment dialog);
+    }
+
     private class ColorPickerView extends View {
-        private TextView textView;
-
-        private Paint mPaint;
-        private Paint mCenterPaint;
-        private RectF newRectF;
-        private final int[] mColors;
-        private int changedColor;
-
         private static final int CENTER_X = 100;
         private static final int CENTER_Y = 100;
         private static final int CENTER_RADIUS = 32;
         private static final float PI = 3.1415926f;
+        private final int[] mColors;
+        private TextView textView;
+        private Paint mPaint;
+        private Paint mCenterPaint;
+        private RectF newRectF;
+        private int changedColor;
 
         ColorPickerView(Context c, int initialColor, TextView textView) {
             super(c);
@@ -128,6 +125,37 @@ public class ColorPickerDialog extends DialogFragment {
             mCenterPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
             mCenterPaint.setColor(initialColor);
             mCenterPaint.setStrokeWidth(5);
+        }
+
+        private int ave(int s, int d, float p) {
+            return s + Math.round(p * (d - s));
+        }
+
+        public int getChangedColor() {
+            return changedColor;
+        }
+
+        private int interpolateColor(int colors[], float unit) {
+            if (unit <= 0) {
+                return colors[0];
+            }
+            if (unit >= 1) {
+                return colors[colors.length - 1];
+            }
+
+            float p = unit * (colors.length - 1);
+            int i = (int) p;
+            p -= i;
+
+            // now p is just the fractional part [0...1) and i is the index
+            int c0 = colors[i];
+            int c1 = colors[i + 1];
+            int a = ave(Color.alpha(c0), Color.alpha(c1), p);
+            int r = ave(Color.red(c0), Color.red(c1), p);
+            int g = ave(Color.green(c0), Color.green(c1), p);
+            int b = ave(Color.blue(c0), Color.blue(c1), p);
+
+            return Color.argb(a, r, g, b);
         }
 
         @Override
@@ -166,37 +194,6 @@ public class ColorPickerDialog extends DialogFragment {
                     break;
             }
             return true;
-        }
-
-        public int getChangedColor() {
-            return changedColor;
-        }
-
-        private int ave(int s, int d, float p) {
-            return s + Math.round(p * (d - s));
-        }
-
-        private int interpolateColor(int colors[], float unit) {
-            if (unit <= 0) {
-                return colors[0];
-            }
-            if (unit >= 1) {
-                return colors[colors.length - 1];
-            }
-
-            float p = unit * (colors.length - 1);
-            int i = (int) p;
-            p -= i;
-
-            // now p is just the fractional part [0...1) and i is the index
-            int c0 = colors[i];
-            int c1 = colors[i + 1];
-            int a = ave(Color.alpha(c0), Color.alpha(c1), p);
-            int r = ave(Color.red(c0), Color.red(c1), p);
-            int g = ave(Color.green(c0), Color.green(c1), p);
-            int b = ave(Color.blue(c0), Color.blue(c1), p);
-
-            return Color.argb(a, r, g, b);
         }
     }
 }

@@ -23,32 +23,32 @@ public class TextMechanism extends Mechanism implements Serializable {
         super(TEXT_TYPE, item);
     }
 
-    public String getInputText() {
-        return inputText;
-    }
-
-    public void setInputText(String inputText) {
-        this.inputText = inputText;
-    }
-
     public String getHint() {
         return hint;
     }
 
-    public void setHint(String hint) {
-        this.hint = hint;
+    public String getInputText() {
+        return inputText;
     }
 
     public int getMaxLength() {
         return maxLength;
     }
 
-    public void setMaxLength(int maxLength) {
-        this.maxLength = maxLength;
-    }
-
     public String getTitle() {
         return title;
+    }
+
+    public void setHint(String hint) {
+        this.hint = hint;
+    }
+
+    public void setInputText(String inputText) {
+        this.inputText = inputText;
+    }
+
+    public void setMaxLength(int maxLength) {
+        this.maxLength = maxLength;
     }
 
     public void setTitle(String title) {

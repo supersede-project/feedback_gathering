@@ -19,7 +19,7 @@ public abstract class Mechanism implements Serializable {
     }
 
     /**
-     * Returns true if the mechanism can be activated/deactivated by the user, false otherwise
+     * This method returns true if the mechanism can be activated/deactivated by the user, false otherwise.
      *
      * @return canBeActivated
      */
@@ -28,7 +28,7 @@ public abstract class Mechanism implements Serializable {
     }
 
     /**
-     * Returns the order of the mechanism
+     * This method returns the order of the mechanism.
      *
      * @return the order
      */
@@ -37,7 +37,7 @@ public abstract class Mechanism implements Serializable {
     }
 
     /**
-     * Returns the type of the mechanism
+     * This method returns the type of the mechanism.
      *
      * @return the type
      */
@@ -46,7 +46,7 @@ public abstract class Mechanism implements Serializable {
     }
 
     /**
-     * Returns true if the mechanism is active, false otherwise.
+     * This method returns true if the mechanism is active, false otherwise.
      *
      * @return isActive
      */
@@ -55,7 +55,6 @@ public abstract class Mechanism implements Serializable {
     }
 
     /**
-     *
      * @param canBeActivated the value to set
      */
     public void setCanBeActivated(boolean canBeActivated) {
@@ -63,7 +62,6 @@ public abstract class Mechanism implements Serializable {
     }
 
     /**
-     *
      * @param isActive the value to set
      */
     public void setIsActive(boolean isActive) {
@@ -71,7 +69,6 @@ public abstract class Mechanism implements Serializable {
     }
 
     /**
-     *
      * @param order the value to set
      */
     public void setOrder(int order) {

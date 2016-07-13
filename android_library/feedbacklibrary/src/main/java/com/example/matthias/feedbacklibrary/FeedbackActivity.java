@@ -1,12 +1,8 @@
 package com.example.matthias.feedbacklibrary;
 
-import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Dialog;
-import android.app.DialogFragment;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -14,11 +10,8 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -46,7 +39,6 @@ import com.google.gson.reflect.TypeToken;
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -95,7 +87,7 @@ public class FeedbackActivity extends AppCompatActivity {
     private String userScreenshotChosenTask = "";
 
     public void annotateImage() {
-        Intent intent = new Intent(this, AnnotateActivity.class);
+        Intent intent = new Intent(this, AnnotateImageActivity.class);
         intent.putExtra("imagePath", picturePath);
         startActivityForResult(intent, REQUEST_ANNOTATE);
     }
@@ -111,14 +103,14 @@ public class FeedbackActivity extends AppCompatActivity {
     }
 
     /**
-     * GET request to feedback orchestrator to receive the configuration file (format JSON).
-     * If successful, initialize the model and view.
+     * This method performs a GET request to feedback orchestrator in order to receive the configuration file (format JSON).
+     * If successful, it initializes the model and view.
      */
     private void init() {
         Call<List<FeedbackConfigurationItem>> result = null;
         result = fbAPI.getConfiguration();
 
-        // asynchronous call
+        // Asynchronous call
         if (result != null) {
             result.enqueue(new Callback<List<FeedbackConfigurationItem>>() {
                 @Override
@@ -138,12 +130,12 @@ public class FeedbackActivity extends AppCompatActivity {
     }
 
     /**
-     * Initialize the model data
+     * This method initializes the model.
      */
     private void initModel() {
         if (configuration != null) {
+            // TODO: Save original configuration on the device --> possibly SQLite database
             feedbackConfiguration = new FeedbackConfiguration(configuration);
-            // TODO: Save original configuration on the device --> probably SQLite database
             allMechanisms = feedbackConfiguration.getAllMechanisms();
         }
     }
@@ -205,59 +197,48 @@ public class FeedbackActivity extends AppCompatActivity {
     }
 
     /**
-     * Initialize the view
+     * This method initializes the view.
      */
     public void initView() {
         allMechanismViews = new ArrayList<>();
         LayoutInflater layoutInflater = LayoutInflater.from(this);
         LinearLayout linearLayout = (LinearLayout) findViewById(R.id.feedback_activity_layout);
 
-        for (int i = 0; i < allMechanisms.size(); ++i) {
-            if (allMechanisms.get(i).isActive()) {
-                MechanismView mechanismView = null;
-                View view = null;
-                String type = allMechanisms.get(i).getType();
+        if (linearLayout != null) {
+            for (int i = 0; i < allMechanisms.size(); ++i) {
+                if (allMechanisms.get(i).isActive()) {
+                    MechanismView mechanismView = null;
+                    View view = null;
+                    String type = allMechanisms.get(i).getType();
 
-                if (type.equals("TEXT_TYPE")) {
-                    mechanismView = new TextMechanismView(layoutInflater, allMechanisms.get(i));
-                    view = mechanismView.getEnclosingLayout();
-                } else if (type.equals("RATING_TYPE")) {
-                    mechanismView = new RatingMechanismView(layoutInflater, allMechanisms.get(i));
-                    view = mechanismView.getEnclosingLayout();
-                } else if (type.equals("AUDIO_TYPE")) {
-                    // TODO
-                } else if (type.equals("SCREENSHOT_TYPE")) {
-                    mechanismView = new ScreenshotMechanismView(layoutInflater, allMechanisms.get(i));
-                    view = mechanismView.getEnclosingLayout();
-                    initScreenshotView(view);
-                } else {
-                    // Should never happen!
-                }
+                    if (type.equals("TEXT_TYPE")) {
+                        mechanismView = new TextMechanismView(layoutInflater, allMechanisms.get(i));
+                        view = mechanismView.getEnclosingLayout();
+                    } else if (type.equals("RATING_TYPE")) {
+                        mechanismView = new RatingMechanismView(layoutInflater, allMechanisms.get(i));
+                        view = mechanismView.getEnclosingLayout();
+                    } else if (type.equals("AUDIO_TYPE")) {
+                        // TODO: Implement audio mechanism
+                    } else if (type.equals("SCREENSHOT_TYPE")) {
+                        mechanismView = new ScreenshotMechanismView(layoutInflater, allMechanisms.get(i));
+                        view = mechanismView.getEnclosingLayout();
+                        initScreenshotView(view);
+                    } else {
+                        // Should never happen!
+                    }
 
-                if (mechanismView != null && view != null) {
-                    allMechanismViews.add(mechanismView);
-                    linearLayout.addView(view);
+                    if (mechanismView != null && view != null) {
+                        allMechanismViews.add(mechanismView);
+                        linearLayout.addView(view);
+                    }
                 }
             }
-        }
 
-        View sendLayout = layoutInflater.inflate(R.layout.send_feedback_layout, null);
-        if (sendLayout != null) {
-            linearLayout.addView(sendLayout);
+            layoutInflater.inflate(R.layout.send_feedback_layout, linearLayout);
         }
 
         // After successfully loading the model data and view, make the progress dialog disappear
         progressDialog.dismiss();
-    }
-
-    private Bitmap loadImageFromStorage(String path) {
-        try {
-            File f = new File(path);
-            return BitmapFactory.decodeStream(new FileInputStream(f));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        return null;
     }
 
     @Override
@@ -271,7 +252,7 @@ public class FeedbackActivity extends AppCompatActivity {
             else if (requestCode == REQUEST_ANNOTATE && data != null) {
                 annotatedImagePath = data.getStringExtra("annotatedImagePath") + "/" + IMAGE_NAME;
                 picturePath = annotatedImagePath;
-                Bitmap annotatedBitmap = loadImageFromStorage(annotatedImagePath);
+                Bitmap annotatedBitmap = Utils.loadImageFromStorage(annotatedImagePath);
                 if (annotatedBitmap != null) {
                     pictureBitmap = annotatedBitmap;
                     screenShotPreviewImageView.setImageBitmap(pictureBitmap);
@@ -336,7 +317,7 @@ public class FeedbackActivity extends AppCompatActivity {
                     } else if (userScreenshotChosenTask.equals("Choose from Library"))
                         galleryIntent();
                 } else {
-                    //code for deny
+                    // Code for denial
                 }
                 break;
         }
@@ -356,6 +337,15 @@ public class FeedbackActivity extends AppCompatActivity {
         screenShotPreviewImageView.setImageBitmap(pictureBitmap);
         annotateScreenshotButton.setEnabled(true);
         deleteScreenshotButton.setEnabled(true);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        LinearLayout emptyLayout = (LinearLayout) findViewById(R.id.supersede_feedbacklibrary_empty_layout);
+        if (emptyLayout != null) {
+            emptyLayout.requestFocus();
+        }
     }
 
     private String readJSONConfigurationFile(String fileName) {
@@ -408,7 +398,7 @@ public class FeedbackActivity extends AppCompatActivity {
     }
 
     /*
-     * User sends the feedback via a POST request to the feedback repository
+     * This method performs a POST request in order to send the feedback to the feedback repository.
      */
     public void sendButtonClicked(View view) {
         String screenShotImagePath = annotatedImagePath != null ? annotatedImagePath : "";
@@ -453,7 +443,6 @@ public class FeedbackActivity extends AppCompatActivity {
                         messages.add("Oops. Something went wrong!");
                         Utils.DataDialog d = Utils.DataDialog.newInstance(messages);
                         d.show(getFragmentManager(), "dataDialog");
-                        t.printStackTrace();
                     }
 
                     @Override
@@ -471,12 +460,16 @@ public class FeedbackActivity extends AppCompatActivity {
         }
     }
 
+    public void sendDummy() {
+        System.out.println("sendDummy clicked");
+    }
+
     /**
-     * Checks if the inputs are valid
+     * This method checks if the inputs are valid.
      *
      * @param allMechanisms all mechanism to check for their input validity
      * @param errorMessages error messages to show if the validation fails
-     * @return
+     * @return true if the all inputs are valid, false otherwise
      */
     private boolean validateInput(List<Mechanism> allMechanisms, List<String> errorMessages) {
         boolean isValid = true;

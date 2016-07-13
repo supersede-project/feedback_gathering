@@ -1,10 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:focusableInTouchMode="true"
     android:orientation="vertical">
+
+    <!-- Empty layout for getting focus, i.e., preventing the TextInputEditText of getting focus -->
+    <LinearLayout
+        android:id="@+id/supersede_feedbacklibrary_empty_layout"
+        android:layout_width="0px"
+        android:layout_height="0px"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:orientation="horizontal"/>
 
     <android.support.design.widget.TextInputLayout
         android:id="@+id/supersede_feedbacklibrary_text_feedback_input_layout"
@@ -21,7 +30,7 @@
             android:fontFamily="sans-serif"
             android:inputType="textMultiLine|textCapSentences"
             android:textSize="16sp"
-            android:textStyle="normal" />
+            android:textStyle="normal"/>
     </android.support.design.widget.TextInputLayout>
 
 </LinearLayout>
