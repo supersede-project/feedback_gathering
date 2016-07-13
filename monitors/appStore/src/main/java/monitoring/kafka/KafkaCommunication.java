@@ -65,7 +65,7 @@ public class KafkaCommunication {
 		
 		JSONObject fullResponse = new JSONObject();
 		fullResponse.put("appStoreMonitoredData", res);
-		
+		System.out.println(dataList.size());
 		KeyedMessage<String, String> msg = new KeyedMessage<String, String>(topic, res.toString());
 		producer.send(msg);
 		

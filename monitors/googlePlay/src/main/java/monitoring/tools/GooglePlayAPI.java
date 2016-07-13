@@ -44,31 +44,32 @@ public class GooglePlayAPI implements ToolInterface {
 	//temporal fake id
 	private int				id = 1;
 	
+	private Date initTime;
+	private Date stamp;
+	
 	private MonitoringParams params;
 	
 	//Kafka producer
 	Producer<String, String> producer;
-	
-	//List of reported reviews with last modification
-	Map<String, Long> reported;
 	
 	@Override
 	public void addConfiguration(MonitoringParams params, Producer<String, String> producer) throws Exception {
 
 		this.params = params;
 		this.producer = producer;
-		this.reported = new HashMap<>();
 		
 		generateNewAccessToken();
-		firstApiCall();
-		
+
 		Timer timer = new Timer();
 		timer.schedule(new TimerTask() {
 		    public void run() {
 		    	if (firstConnection) {
+		    		initTime = new Date();
 					firstConnection = false;
 					System.out.println("First connection stablished");		
 		    	} else {
+		    		stamp = initTime;
+		    		initTime = new Date();
 					try {
 						apiCall();
 					} catch (IOException e) {
@@ -83,30 +84,6 @@ public class GooglePlayAPI implements ToolInterface {
 		    }
 
 		}, 0, Integer.parseInt(params.getTimeSlot())* 1000);
-		
-	}
-
-	protected void firstApiCall() throws MalformedURLException, IOException {
-		URLConnection connection = new URL(apiUri + params.getPackageName() + "/reviews" 
-				+ "?access_token=" + accessToken
-				+ "&maxResults=100")
-				.openConnection();
-		
-		JSONObject data = new JSONObject(streamToString(connection.getInputStream()));
-		JSONArray reviews = data.getJSONArray("reviews");
-		
-		if (data.has("tokenPagination")) {
-			JSONArray next = getNextPage(data.getJSONObject("tokenPagination")
-					.getString("nextPageToken"));
-			for (int i = 0; i < next.length(); ++i) {
-				reviews.put(next.get(i));
-			}
-		}
-		
-		for (int i = 0; i < reviews.length(); ++i) {
-			reported.put(reviews.getJSONObject(i).getString("reviewId"),
-					getDateTimeInMillis(reviews.getJSONObject(i)));
-		}
 		
 	}
 	
@@ -193,9 +170,7 @@ public class GooglePlayAPI implements ToolInterface {
 			//if so, check if the last update was reported;
 			//if it wasn't, check if the review datetime is later than the initMonitorization time
 			//if so, report the review
-			if (!reported.containsKey(obj.getString("reviewId"))
-					|| (reported.containsKey(obj.getString("reviewId")) 
-					&& reported.get(obj.getString("reviewId")).compareTo(l) != 0)) {
+			if (l.compareTo(stamp.getTime()) > 0) {
 				Iterator<?> keys = obj.keys();
 				MonitoringData review = new MonitoringData();
 				
@@ -219,7 +194,6 @@ public class GooglePlayAPI implements ToolInterface {
 				}
 				review.setTimeStamp(new Timestamp(l).toString());
 				dataList.add(review);
-				reported.put(obj.getString("reviewId"), l);
 			}
 			
 		}

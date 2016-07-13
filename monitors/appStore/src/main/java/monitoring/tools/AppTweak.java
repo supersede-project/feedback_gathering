@@ -6,6 +6,9 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -17,6 +20,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import kafka.javaapi.producer.Producer;
@@ -40,30 +44,35 @@ public class AppTweak implements ToolInterface {
 	
 	private int id = 1;
 	
+	private Date initTime;
+	private Date stamp;
+	
 	//Kafka producer
 	Producer<String, String> producer;
-	
-	Map<String, String> reported;
 
 	@Override
 	public void addConfiguration(MonitoringParams params, Producer<String, String> producer) throws Exception {
 		
 		this.params = params;
 		this.producer = producer;
-		this.reported = new HashMap<>();
-		
-		firstApiCall();
 		
 		Timer timer = new Timer();
 		timer.schedule(new TimerTask() {
 		    public void run() {
 		    	if (firstConnection) {
+		    		initTime = new Date();
 					firstConnection = false;
 					System.out.println("First connection stablished");		
 		    	} else {
+		    		stamp = initTime;
+		    		initTime = new Date();
 					try {
 						apiCall();
 					} catch (IOException e) {
+						e.printStackTrace();
+					} catch (JSONException e) {
+						e.printStackTrace();
+					} catch (ParseException e) {
 						e.printStackTrace();
 					}	    		
 		    	}
@@ -73,32 +82,22 @@ public class AppTweak implements ToolInterface {
 		
 	}
 
-	private void firstApiCall() throws MalformedURLException, IOException {
-		
-		JSONObject data = urlConnection();
-		
-		JSONArray reviews = data.getJSONArray("content");
-		for (int i = 0; i < reviews.length(); ++i) {
-			reported.put(reviews.getJSONObject(i).getString("id"), reviews.getJSONObject(i).getString("date"));
-		}
-		
-	}
-
-	protected void apiCall() throws MalformedURLException, IOException {
-		
-		JSONObject data = urlConnection();
+	protected void apiCall() throws MalformedURLException, IOException, JSONException, ParseException {
 		
 		String timeStamp = new Timestamp((new Date()).getTime()).toString();
+
+		JSONObject data = urlConnection();
 		
 		List<MonitoringData> dataList = new ArrayList<>();
 		JSONArray reviews = data.getJSONArray("content");
 		for (int i = 0; i < reviews.length(); ++i) {
 			
 			JSONObject obj = reviews.getJSONObject(i);
+			
+			DateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss z");
+			Date date = format.parse(obj.getString("date"));
 						
-			if (!reported.containsKey(obj.getString("id"))
-					|| (reported.containsKey(obj.getString("id")) 
-					&& !reported.get(obj.getString("id")).equals(obj.getString("date")))) {
+			if (date.compareTo(stamp) > 0) {
 				
 				Iterator<?> keys = obj.keys();
 				MonitoringData review = new MonitoringData();
@@ -106,16 +105,15 @@ public class AppTweak implements ToolInterface {
 				while( keys.hasNext() ) {
 				    String key = (String)keys.next();
 				    if (key.equals("id")) review.setReviewID(obj.getString("id"));
-				    else if (key.equals("author")) review.setAuthorName(obj.getJSONObject("author").getString("name"));
+				    else if (key.equals("author")) review.setAuthorName(obj.getString("author"));
 				    else if (key.equals("title")) review.setReviewTitle(obj.getString("title"));
-				    else if (key.equals("body")) review.setReviewText(obj.getString("body"));
+				    else if (key.equals("content")) review.setReviewText(obj.getString("content"));
 				    else if (key.equals("date")) review.setTimeStamp(obj.getString("date"));
 				    else if (key.equals("rating")) review.setStarRating(String.valueOf(obj.getInt("rating")));
 				    else if (key.equals("version")) review.setAppVersion(obj.getString("version"));
 				}
 				
 				dataList.add(review);
-				reported.put(obj.getString("id"), obj.getString("date"));
 			}
 		}
 		KafkaCommunication.generateResponse(dataList, timeStamp, producer, id, params.getKafkaTopic());
