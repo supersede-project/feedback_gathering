@@ -35,11 +35,16 @@ public class TextMechanismView extends MechanismView {
 
         textInputLayout.getEditText().addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            public void afterTextChanged(Editable s) {
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (s.length() > 0 ) {
+                if (s.length() > 0) {
                     textInputLayout.setHint(textMechanism.getTitle());
                 } else if (s.length() == 0) {
                     textInputLayout.setHint(textMechanism.getHint());
@@ -50,9 +55,6 @@ public class TextMechanismView extends MechanismView {
                     textInputLayout.setError(null);
                 }
             }
-
-            @Override
-            public void afterTextChanged(Editable s) {}
         });
     }
 

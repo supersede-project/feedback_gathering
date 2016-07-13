@@ -23,5 +23,6 @@ public class ScreenshotMechanismView extends MechanismView {
     }
 
     @Override
-    public void updateModel() {}
+    public void updateModel() {
+    }
 }

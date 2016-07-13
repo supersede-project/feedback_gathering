@@ -24,39 +24,40 @@ public class RatingMechanism extends Mechanism implements Serializable {
         super(RATING_TYPE, item);
     }
 
+    public float getDefaultRating() {
+        return defaultRating;
+    }
+
     public float getInputRating() {
         return inputRating;
-    }
-    public void setInputRating(float inputRating) {
-        this.inputRating = inputRating;
     }
 
     public int getMaxRating() {
         return maxRating;
     }
 
-    public void setMaxRating(int maxRating) {
-        this.maxRating = maxRating;
+    public String getRatingIcon() {
+        return ratingIcon;
     }
 
-    public float getDefaultRating() {
-        return defaultRating;
+    public String getTitle() {
+        return title;
     }
 
     public void setDefaultRating(float defaultRating) {
         this.defaultRating = defaultRating;
     }
 
-    public String getRatingIcon() {
-        return ratingIcon;
+    public void setInputRating(float inputRating) {
+        this.inputRating = inputRating;
+    }
+
+    public void setMaxRating(int maxRating) {
+        this.maxRating = maxRating;
     }
 
     public void setRatingIcon(String ratingIcon) {
         this.ratingIcon = ratingIcon;
-    }
-
-    public String getTitle() {
-        return title;
     }
 
     public void setTitle(String title) {

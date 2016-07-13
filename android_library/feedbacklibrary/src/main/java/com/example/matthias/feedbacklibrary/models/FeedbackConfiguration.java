@@ -10,11 +10,12 @@ import java.util.Map;
  * Feedback configuration used in the feedback activity
  */
 public class FeedbackConfiguration {
-    private String application = null; // TODO: Set name of the actual application
-    private float configVersion = -1.0f; // TODO: Set actual configuration version
-    private String user = null; // TODO: Set actual user of the feedback application --> maybe a user class in the future
-    private String title = null; // Will this be the title of the text feedback?
-    private String text = null;
+    // TODO: Set name of the actual application
+    private String application = null;
+    // TODO: Set actual configuration version
+    private float configVersion = -1.0f;
+    // TODO: Set actual user of the feedback application --> possibly a user class in the future
+    private String user = null;
 
     private List<Mechanism> allMechanisms = null;
 
@@ -25,22 +26,6 @@ public class FeedbackConfiguration {
         initMechanism(configuration);
     }
 
-
-    private void initMechanism(List<FeedbackConfigurationItem> configuration) {
-        allMechanisms = new ArrayList<>();
-
-        for(FeedbackConfigurationItem item : configuration) {
-            allMechanisms.add(createMechanism(item));
-        }
-
-        Collections.sort(allMechanisms, new Comparator<Mechanism>() {
-            @Override
-            public int compare(Mechanism a, Mechanism b) {
-                return ((Integer) a.getOrder()).compareTo(b.getOrder());
-            }
-        });
-    }
-
     private Mechanism createMechanism(FeedbackConfigurationItem item) {
         TextMechanism toCreateText;
         RatingMechanism toCreateRating;
@@ -48,62 +33,62 @@ public class FeedbackConfiguration {
         AudioMechanism toCreateAudio;
         String type = item.getType();
 
-        if(type.equals("TEXT_TYPE")) {
+        if (type.equals("TEXT_TYPE")) {
             toCreateText = new TextMechanism(item);
             for (Map<String, Object> param : item.getParameters()) {
                 String key = (String) param.get("key");
                 // Title
-                if(key.equals("title")) {
+                if (key.equals("title")) {
                     toCreateText.setTitle((String) param.get("value"));
                 }
                 // Hint
-                if(key.equals("hint")) {
+                if (key.equals("hint")) {
                     toCreateText.setHint((String) param.get("value"));
                 }
                 // Maximum length
-                if(key.equals("maxLength")) {
+                if (key.equals("maxLength")) {
                     toCreateText.setMaxLength(((Double) param.get("value")).intValue());
                 }
             }
             return toCreateText;
-        } else if(type.equals("RATING_TYPE")) {
+        } else if (type.equals("RATING_TYPE")) {
             toCreateRating = new RatingMechanism(item);
             for (Map<String, Object> param : item.getParameters()) {
                 String key = (String) param.get("key");
                 // Title
-                if(key.equals("title")) {
+                if (key.equals("title")) {
                     toCreateRating.setTitle((String) param.get("value"));
                 }
                 // Rating icon
-                if(key.equals("ratingIcon")) {
+                if (key.equals("ratingIcon")) {
                     toCreateRating.setRatingIcon((String) param.get("value"));
                 }
                 // Maximum rating
-                if(key.equals("maxRating")) {
+                if (key.equals("maxRating")) {
                     toCreateRating.setMaxRating(((Double) param.get("value")).intValue());
                 }
                 // Default rating
-                if(key.equals("defaultRating")) {
+                if (key.equals("defaultRating")) {
                     toCreateRating.setDefaultRating(((Double) param.get("value")).floatValue());
                 }
             }
             return toCreateRating;
-        } else if(type.equals("AUDIO_TYPE")) {
+        } else if (type.equals("AUDIO_TYPE")) {
             toCreateAudio = new AudioMechanism(item);
             for (Map<String, Object> param : item.getParameters()) {
                 // TODO
             }
             return toCreateAudio;
-        } else if(type.equals("SCREENSHOT_TYPE")) {
+        } else if (type.equals("SCREENSHOT_TYPE")) {
             toCreateScreenshot = new ScreenshotMechanism(item);
             for (Map<String, Object> param : item.getParameters()) {
                 String key = (String) param.get("key");
                 // Title
-                if(key.equals("title")) {
+                if (key.equals("title")) {
                     toCreateScreenshot.setTitle((String) param.get("value"));
                 }
                 // Default picture
-                if(key.equals("defaultPicture")) {
+                if (key.equals("defaultPicture")) {
                     toCreateScreenshot.setDefaultPicture((String) param.get("value"));
                 }
             }
@@ -122,34 +107,38 @@ public class FeedbackConfiguration {
     public String getApplication() {
         return application;
     }
-    public void setApplication(String application) {
-        this.application = application;
-    }
 
     public float getConfigVersion() {
         return configVersion;
-    }
-    public void setConfigVersion(float configVersion) {
-        this.configVersion = configVersion;
-    }
-
-    public String getText() {
-        return text;
-    }
-    public void setText(String text) {
-        this.text = text;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-    public void setTitle(String title) {
-        this.title = title;
     }
 
     public String getUser() {
         return user;
     }
+
+    private void initMechanism(List<FeedbackConfigurationItem> configuration) {
+        allMechanisms = new ArrayList<>();
+
+        for (FeedbackConfigurationItem item : configuration) {
+            allMechanisms.add(createMechanism(item));
+        }
+
+        Collections.sort(allMechanisms, new Comparator<Mechanism>() {
+            @Override
+            public int compare(Mechanism a, Mechanism b) {
+                return ((Integer) a.getOrder()).compareTo(b.getOrder());
+            }
+        });
+    }
+
+    public void setApplication(String application) {
+        this.application = application;
+    }
+
+    public void setConfigVersion(float configVersion) {
+        this.configVersion = configVersion;
+    }
+
     public void setUser(String user) {
         this.user = user;
     }

@@ -1,24 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.matthias.feedbacklibrary">
+          package="com.example.matthias.feedbacklibrary">
 
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
     <application
         android:allowBackup="true"
-        android:label="@string/supersede_feedbacklibrary_app_name"
+        android:label="@string/supersede_feedbacklibrary_feedback_library_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
             android:name=".FeedbackActivity"
-            android:label="@string/supersede_feedbacklibrary_app_name"
-            android:screenOrientation="portrait" />
+            android:label="@string/supersede_feedbacklibrary_feedback_activity_name"
+            android:screenOrientation="portrait"/>
         <activity
-            android:name=".AnnotateActivity"
-            android:label="Annotate Picture"
-            android:screenOrientation="portrait" />
+            android:name=".AnnotateImageActivity"
+            android:label="@string/supersede_feedbacklibrary_annotate_image_activity_name"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>
