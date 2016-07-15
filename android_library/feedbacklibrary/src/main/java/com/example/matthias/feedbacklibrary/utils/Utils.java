@@ -140,10 +140,7 @@ public class Utils {
      * @return the boolean value corresponding to the input value
      */
     public static boolean intToBool(int input) {
-        if (input == 1) {
-            return true;
-        }
-        return false;
+        return input == 1;
     }
 
     /**

@@ -1,13 +1,13 @@
 package com.example.matthias.feedbacklibrary.models;
 
 import java.io.Serializable;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Screenshot mechanism model
  */
 public class ScreenshotMechanism extends Mechanism implements Serializable {
-    private static final String SCREENSHOT_TYPE = "SCREENSHOT_TYPE";
-
     private String title;
     private String defaultPicture;
 
@@ -15,6 +15,7 @@ public class ScreenshotMechanism extends Mechanism implements Serializable {
 
     public ScreenshotMechanism(FeedbackConfigurationItem item) {
         super(SCREENSHOT_TYPE, item);
+        initScreenshotMechanism(item);
     }
 
     public String getDefaultPicture() {
@@ -27,6 +28,25 @@ public class ScreenshotMechanism extends Mechanism implements Serializable {
 
     public String getTitle() {
         return title;
+    }
+
+    private void initScreenshotMechanism(FeedbackConfigurationItem item) {
+        for (Map<String, Object> param : item.getParameters()) {
+            String key = (String) param.get("key");
+            // Title
+            if (key.equals("title")) {
+                setTitle((String) param.get("value"));
+            }
+            // Default picture
+            if (key.equals("defaultPicture")) {
+                setDefaultPicture((String) param.get("value"));
+            }
+        }
+    }
+
+    @Override
+    public boolean isValid(List<String> errorMessage) {
+        return true;
     }
 
     public void setDefaultPicture(String defaultPicture) {

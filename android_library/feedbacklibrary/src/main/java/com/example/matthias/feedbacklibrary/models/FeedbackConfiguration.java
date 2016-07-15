@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Feedback configuration used in the feedback activity
@@ -34,65 +33,14 @@ public class FeedbackConfiguration {
         String type = item.getType();
 
         if (type.equals("TEXT_TYPE")) {
-            toCreateText = new TextMechanism(item);
-            for (Map<String, Object> param : item.getParameters()) {
-                String key = (String) param.get("key");
-                // Title
-                if (key.equals("title")) {
-                    toCreateText.setTitle((String) param.get("value"));
-                }
-                // Hint
-                if (key.equals("hint")) {
-                    toCreateText.setHint((String) param.get("value"));
-                }
-                // Maximum length
-                if (key.equals("maxLength")) {
-                    toCreateText.setMaxLength(((Double) param.get("value")).intValue());
-                }
-            }
-            return toCreateText;
+            return new TextMechanism(item);
         } else if (type.equals("RATING_TYPE")) {
-            toCreateRating = new RatingMechanism(item);
-            for (Map<String, Object> param : item.getParameters()) {
-                String key = (String) param.get("key");
-                // Title
-                if (key.equals("title")) {
-                    toCreateRating.setTitle((String) param.get("value"));
-                }
-                // Rating icon
-                if (key.equals("ratingIcon")) {
-                    toCreateRating.setRatingIcon((String) param.get("value"));
-                }
-                // Maximum rating
-                if (key.equals("maxRating")) {
-                    toCreateRating.setMaxRating(((Double) param.get("value")).intValue());
-                }
-                // Default rating
-                if (key.equals("defaultRating")) {
-                    toCreateRating.setDefaultRating(((Double) param.get("value")).floatValue());
-                }
-            }
-            return toCreateRating;
+            return new RatingMechanism(item);
         } else if (type.equals("AUDIO_TYPE")) {
-            toCreateAudio = new AudioMechanism(item);
-            for (Map<String, Object> param : item.getParameters()) {
-                // TODO
-            }
-            return toCreateAudio;
+            // TODO: Implement
+            return new AudioMechanism(item);
         } else if (type.equals("SCREENSHOT_TYPE")) {
-            toCreateScreenshot = new ScreenshotMechanism(item);
-            for (Map<String, Object> param : item.getParameters()) {
-                String key = (String) param.get("key");
-                // Title
-                if (key.equals("title")) {
-                    toCreateScreenshot.setTitle((String) param.get("value"));
-                }
-                // Default picture
-                if (key.equals("defaultPicture")) {
-                    toCreateScreenshot.setDefaultPicture((String) param.get("value"));
-                }
-            }
-            return toCreateScreenshot;
+            return new ScreenshotMechanism(item);
         } else {
             // should never happen!
         }
