@@ -56,3 +56,4 @@ define(["require", "exports"], function (require, exports) {
     }());
     exports.PaginationContainer = PaginationContainer;
 });
+//# sourceMappingURL=pagination_container.js.map

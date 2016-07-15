@@ -23,3 +23,4 @@ define(["require", "exports", './mechanism', './rating_mechanism', './parameter'
         });
     });
 });
+//# sourceMappingURL=rating_mechanism.spec.js.map

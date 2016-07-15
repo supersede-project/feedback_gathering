@@ -13,3 +13,4 @@ describe('JQuery Feedback Plugin', function () {
         expect(feedbackDialog.isPresent()).toEqual(true);
     });
 });
+//# sourceMappingURL=feedback_plugin.e2e.js.map

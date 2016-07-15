@@ -11,3 +11,4 @@ define(["require", "exports"], function (require, exports) {
     }());
     exports.Parameter = Parameter;
 });
+//# sourceMappingURL=parameter.js.map
