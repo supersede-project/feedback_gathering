@@ -20,3 +20,4 @@ define(["require", "exports", 'querystring'], function (require, exports, querys
     }());
     exports.Helper = Helper;
 });
+//# sourceMappingURL=helper.js.map

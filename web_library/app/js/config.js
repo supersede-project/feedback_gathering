@@ -20,3 +20,4 @@ define(["require", "exports"], function (require, exports) {
     exports.ratingType = 'RATING_TYPE';
     exports.screenshotType = 'SCREENSHOT_TYPE';
 });
+//# sourceMappingURL=config.js.map
