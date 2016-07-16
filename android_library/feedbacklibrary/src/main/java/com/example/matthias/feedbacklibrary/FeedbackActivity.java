@@ -146,8 +146,8 @@ public class FeedbackActivity extends AppCompatActivity {
         Type listType = new TypeToken<List<FeedbackConfigurationItem>>() {
         }.getType();
 
-        //jsonString = readJSONConfigurationFile("offline_configuration_file_text_variables.json");
-        jsonString = readJSONConfigurationFile("offline_configuration_file_text_variables_material_design.json");
+        //jsonString = readFileAsString("offline_configuration_file_text_variables.json", getAssets());
+        jsonString = Utils.readFileAsString("offline_configuration_file_text_variables_material_design.json", getAssets());
         configuration = gson.fromJson(jsonString, listType);
         initModel();
         initView();
@@ -347,31 +347,6 @@ public class FeedbackActivity extends AppCompatActivity {
         if (emptyLayout != null) {
             emptyLayout.requestFocus();
         }
-    }
-
-    private String readJSONConfigurationFile(String fileName) {
-        String ret = "";
-
-        try {
-            InputStream inputStream = getAssets().open(fileName);
-
-            if (inputStream != null) {
-                BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-                StringBuilder out = new StringBuilder();
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    out.append(line);
-                }
-                reader.close();
-                return out.toString();
-            }
-        } catch (FileNotFoundException e) {
-            System.out.println("File not found: " + e.toString());
-        } catch (IOException e) {
-            System.out.println("Cannot read file: " + e.toString());
-        }
-
-        return ret;
     }
 
     private void selectImage() {
