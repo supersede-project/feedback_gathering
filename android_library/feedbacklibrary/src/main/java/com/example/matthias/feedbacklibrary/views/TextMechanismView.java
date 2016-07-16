@@ -6,6 +6,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
+import android.view.View;
 
 import com.example.matthias.feedbacklibrary.R;
 import com.example.matthias.feedbacklibrary.models.Mechanism;
@@ -42,6 +43,22 @@ public class TextMechanismView extends MechanismView {
         if (textMechanism.getInputTextFontType() != null) {
             textInputEditText.setTypeface(null, textMechanism.getInputTextFontType());
         }
+        if (textMechanism.getInputTextAlignment() != null) {
+            String alignment = textMechanism.getInputTextAlignment();
+            switch (alignment) {
+                case "center":
+                    textInputEditText.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+                    break;
+                case "right":
+                    textInputEditText.setTextAlignment(View.TEXT_ALIGNMENT_TEXT_END);
+                    break;
+                case "left":
+                    textInputEditText.setTextAlignment(View.TEXT_ALIGNMENT_TEXT_START);
+                    break;
+                default:
+                    break;
+            }
+        }
         if (textMechanism.getMaxLength() != null) {
             textInputLayout.setCounterMaxLength(textMechanism.getMaxLength());
             textInputLayout.setErrorEnabled(true);
@@ -50,7 +67,7 @@ public class TextMechanismView extends MechanismView {
                 textInputLayout.setCounterEnabled(true);
             }
         }
-        if(textMechanism.isMandatory()) {
+        if (textMechanism.isMandatory()) {
             // If TI 11 is set, TI 11.1 should not be an option, i.e., the reminder should always be activated --> TI 11.1.1 and TI 11.1.2
             // TODO: If needed, implement visual changes of a mandatory text field
         }

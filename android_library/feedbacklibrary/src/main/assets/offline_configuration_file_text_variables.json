@@ -7,19 +7,19 @@
     "parameters": [
       {
         "key": "maxLength",
-        "value": 20
+        "value": 200
       },
       {
         "key": "title",
-        "value": "Feedback"
+        "value": "Feedback Title"
       },
       {
         "key": "hint",
-        "value": "Please enter your feedback"
+        "value": "Feedback Hint"
       },
       {
         "key": "label",
-        "value": "Please write about your problem"
+        "value": "Feedback Label"
       },
       {
         "key": "labelPositioning",
@@ -27,15 +27,15 @@
       },
       {
         "key": "labelColor",
-        "value": "#353535"
+        "value": "#1AED40"
       },
       {
         "key": "labelFontSize",
-        "value": 15
+        "value": 20
       },
       {
         "key": "textareaFontColor",
-        "value": "#7A7A7A"
+        "value": "#EDC21A"
       },
       {
         "key": "mandatory",
@@ -75,7 +75,7 @@
       },
       {
         "key": "fieldFontSize",
-        "value": 13
+        "value": 10
       },
       {
         "key": "fieldFontType",
@@ -83,7 +83,7 @@
       },
       {
         "key": "fieldTextAlignment",
-        "value": "left"
+        "value": "right"
       },
       {
         "key": "fieldBackgroundColor",

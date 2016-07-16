@@ -146,7 +146,8 @@ public class FeedbackActivity extends AppCompatActivity {
         Type listType = new TypeToken<List<FeedbackConfigurationItem>>() {
         }.getType();
 
-        jsonString = readJSONConfigurationFile("offline_configuration_file_text_variables.json");
+        //jsonString = readJSONConfigurationFile("offline_configuration_file_text_variables.json");
+        jsonString = readJSONConfigurationFile("offline_configuration_file_text_variables_material_design.json");
         configuration = gson.fromJson(jsonString, listType);
         initModel();
         initView();

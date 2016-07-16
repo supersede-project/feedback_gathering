@@ -23,6 +23,8 @@ public class TextMechanism extends Mechanism implements Serializable {
     private Float inputTextFontSize = null;
     // Font type of the input text (normal, italic or bold)
     private Integer inputTextFontType = null;
+    // Alignment of the input text (left, right, center)
+    private String inputTextAlignment = null;
     // Maximum length of the input text
     private Integer maxLength = null;
     private boolean maxLengthVisible = false;
@@ -51,6 +53,15 @@ public class TextMechanism extends Mechanism implements Serializable {
 
     public String getInputText() {
         return inputText;
+    }
+
+    /**
+     * This method returns the alignment of the input text.
+     *
+     * @return the alignment, or null by default
+     */
+    public String getInputTextAlignment() {
+        return inputTextAlignment;
     }
 
     /**
@@ -136,12 +147,28 @@ public class TextMechanism extends Mechanism implements Serializable {
                         setInputTextFontType(Typeface.ITALIC);
                         break;
                     case "bold":
-                        setInputTextFontType(Typeface.NORMAL);
+                        setInputTextFontType(Typeface.BOLD);
                         break;
                     case "normal":
                         // No break, because font type normal represents the default case
                     default:
                         setInputTextFontType(Typeface.NORMAL);
+                        break;
+                }
+            }
+            // Alignment
+            if (key.equals("fieldTextAlignment")) {
+                String alignment = (String) param.get("value");
+                switch (alignment) {
+                    case "center":
+                        setInputTextAlignment("center");
+                        break;
+                    case "right":
+                        setInputTextAlignment("right");
+                        break;
+                    case "left":
+                        setInputTextAlignment("left");
+                    default:
                         break;
                 }
             }
@@ -209,6 +236,10 @@ public class TextMechanism extends Mechanism implements Serializable {
 
     public void setInputText(String inputText) {
         this.inputText = inputText;
+    }
+
+    public void setInputTextAlignment(String inputTextAlignment) {
+        this.inputTextAlignment = inputTextAlignment;
     }
 
     public void setInputTextFontColor(int inputTextFontColor) {
