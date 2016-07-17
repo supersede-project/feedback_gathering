@@ -1,13 +1,13 @@
 package com.example.matthias.feedbacklibrary.models;
 
 import java.io.Serializable;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Screenshot mechanism model
  */
 public class ScreenshotMechanism extends Mechanism implements Serializable {
-    private static final String SCREENSHOT_TYPE = "SCREENSHOT_TYPE";
-
     private String title;
     private String defaultPicture;
 
@@ -15,29 +15,49 @@ public class ScreenshotMechanism extends Mechanism implements Serializable {
 
     public ScreenshotMechanism(FeedbackConfigurationItem item) {
         super(SCREENSHOT_TYPE, item);
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
+        initScreenshotMechanism(item);
     }
 
     public String getDefaultPicture() {
         return defaultPicture;
     }
 
-    public void setDefaultPicture(String defaultPicture) {
-        this.defaultPicture = defaultPicture;
-    }
-
     public String getImagePath() {
         return imagePath;
     }
 
+    public String getTitle() {
+        return title;
+    }
+
+    private void initScreenshotMechanism(FeedbackConfigurationItem item) {
+        for (Map<String, Object> param : item.getParameters()) {
+            String key = (String) param.get("key");
+            // Title
+            if (key.equals("title")) {
+                setTitle((String) param.get("value"));
+            }
+            // Default picture
+            if (key.equals("defaultPicture")) {
+                setDefaultPicture((String) param.get("value"));
+            }
+        }
+    }
+
+    @Override
+    public boolean isValid(List<String> errorMessage) {
+        return true;
+    }
+
+    public void setDefaultPicture(String defaultPicture) {
+        this.defaultPicture = defaultPicture;
+    }
+
     public void setImagePath(String imagePath) {
         this.imagePath = imagePath;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 }

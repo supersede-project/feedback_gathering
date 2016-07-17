@@ -1,10 +1,18 @@
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.example.matthias.feedbacklibrary.AnnotateActivity">
+    tools:context=".AnnotateImageActivity">
+
+    <item
+        android:id="@+id/supersede_feedbacklibrary_action_annotate_cancel"
+        android:icon="@drawable/icon_close"
+        android:title="@string/supersede_feedbacklibrary_cancelannotation_title"
+        app:showAsAction="always"/>
+
     <item
         android:id="@+id/supersede_feedbacklibrary_action_annotate_accept"
-        android:icon="@drawable/ic_action_accept"
+        android:icon="@drawable/icon_accept"
         android:title="@string/supersede_feedbacklibrary_finishannotation_title"
-        app:showAsAction="always" />
+        app:showAsAction="always"/>
 </menu>

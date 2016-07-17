@@ -1,5 +1,8 @@
 <resources>
-    <string name="supersede_feedbacklibrary_app_name">FeedbackLibrary</string>
+    <!-- Activity names -->
+    <string name="supersede_feedbacklibrary_feedback_library_name">Feedback Library</string>
+    <string name="supersede_feedbacklibrary_feedback_activity_name">Feedback</string>
+    <string name="supersede_feedbacklibrary_annotate_image_activity_name">Annotate Image</string>
 
     <!-- Unique identifiers for the mechanisms -->
     <string name="supersede_feedbacklibrary_textID">TEXT_TYPE</string>
@@ -10,16 +13,25 @@
     <!-- Various -->
     <string name="supersede_feedbacklibrary_sendconfirmation_text">By sending the feedback, you agree with the terms and conditions.</string>
     <string name="supersede_feedbacklibrary_sendbutton_text">Send feedback</string>
-    <string name="supersede_feedbacklibrary_removebutton_text">Remove</string>
+    <string name="supersede_feedbacklibrary_remove_string">Remove</string>
+    <string name="supersede_feedbacklibrary_off_string">Off</string>
+    <string name="supersede_feedbacklibrary_on_string">On</string>
 
-    <!-- Screenshot annotation -->
+    <!-- Screenshot mechanism -->
     <string name="supersede_feedbacklibrary_screenshotbutton_text">Screenshot</string>
     <string name="supersede_feedbacklibrary_annotatebutton_text">Annotate</string>
+    <string name="supersede_feedbacklibrary_previewbutton_text">Preview</string>
+    <string name="supersede_feedbacklibrary_erasebutton_text">Erase</string>
+
+    <!-- Image annotation-->
     <string name="supersede_feedbacklibrary_colorpickerbutton_text">Color Picker</string>
     <string name="supersede_feedbacklibrary_blurbutton_text">Blur</string>
     <string name="supersede_feedbacklibrary_unblurbutton_text">Unblur</string>
+    <string name="supersede_feedbacklibrary_fillbutton_text">Fill</string>
+    <string name="supersede_feedbacklibrary_strokebutton_text">Stroke</string>
     <string name="supersede_feedbacklibrary_blackbutton_text">Black</string>
     <string name="supersede_feedbacklibrary_colorbutton_text">Color</string>
     <string name="supersede_feedbacklibrary_finishannotation_title">Finish annotation</string>
-    <string name="supersede_feedbacklibrary_chosencolor_text">Chosen color</string>
+    <string name="supersede_feedbacklibrary_cancelannotation_title">Cancel annotation</string>
+    <string name="supersede_feedbacklibrary_chosencolor_string">Chosen color</string>
 </resources>

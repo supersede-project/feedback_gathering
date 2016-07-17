@@ -2,7 +2,7 @@
     <string name="app_name">HostApplication</string>
     <string name="host_application_screen_text">This represents the host application</string>
 
-    <!-- action bar -->
+    <!-- Action bar -->
     <string name="action_settings">Settings</string>
     <string name="action_feedback">Feedback</string>
 </resources>

@@ -6,10 +6,13 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.AssetManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -18,9 +21,14 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -29,7 +37,7 @@ import java.util.List;
  * Class with various helper methods
  */
 public class Utils {
-    public static final int PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 123;
+    public static final int PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 1234;
     public static final String SCREENSHOTS_DIR_NAME = "Screenshots";
 
     /**
@@ -41,7 +49,7 @@ public class Utils {
     }
 
     /**
-     * Takes a screenshot of the current screen and saves it in the 'Screenshots' folder
+     * This method takes a screenshot of the current screen and saves it in the 'Screenshots' folder.
      *
      * @return the path to the recently taken screenshot image
      */
@@ -93,7 +101,8 @@ public class Utils {
     }
 
     /**
-     * Check READ_EXTERNAL_STORAGE permission at runtime required for Android versions 6 (API version 23) and higher
+     * This method checks the READ_EXTERNAL_STORAGE permission at runtime.
+     * Required for Android versions 6 (API version 23) and higher.
      *
      * @param context     the context
      * @param requestCode the request code to be handled in the onRequestPermissionsResult method of the calling activity
@@ -132,10 +141,127 @@ public class Utils {
      * @return the boolean value corresponding to the input value
      */
     public static boolean intToBool(int input) {
-        if (input == 1) {
-            return true;
+        return input == 1;
+    }
+
+    /**
+     * This method loads an image as a bitmap from the specific path.
+     *
+     * @param path the absolute path of the image file
+     * @return the bitmap
+     */
+    public static Bitmap loadImageFromStorage(String path) {
+        try {
+            File f = new File(path);
+            return BitmapFactory.decodeStream(new FileInputStream(f));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
         }
-        return false;
+        return null;
+    }
+
+    /**
+     * This method deletes the file at the specific path if it exists
+     *
+     * @param path
+     */
+    public static void removeDeleteFileFromInternalStorage(String path) {
+        File toDelete = new File(path);
+        if (toDelete.exists()) {
+            toDelete.delete();
+        }
+    }
+
+    /**
+     * This method saves the image to the internal storage.
+     *
+     * @param applicationContext the application context
+     * @param dirName            the directory name
+     * @param imageName          the name of the image
+     * @param bitmapImage        the image as a bitmap
+     * @param mode               the mode
+     * @param format             the format
+     * @param quality            the quality
+     * @return the absolute path to the directory where the image is stored
+     */
+    public static String saveImageToInternalStorage(Context applicationContext, String dirName, String imageName, Bitmap bitmapImage, int mode, Bitmap.CompressFormat format, int quality) {
+        ContextWrapper cw = new ContextWrapper(applicationContext);
+        File directory = cw.getDir(dirName, mode);
+        File myPath = new File(directory, imageName);
+
+        FileOutputStream fos;
+        try {
+            fos = new FileOutputStream(myPath);
+            bitmapImage.compress(format, quality, fos);
+            fos.flush();
+            fos.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return directory.getAbsolutePath();
+    }
+
+    /**
+     * This method scales the bitmap according to a maximum width and height keeping the aspect ratio.
+     *
+     * @param bitmap    the original bitmap
+     * @param maxWidth  the maximum width to scale
+     * @param maxHeight the minimum width to scale
+     * @return the scaled bitmap
+     */
+    public static Bitmap scaleBitmap(Bitmap bitmap, int maxWidth, int maxHeight) {
+        int width = bitmap.getWidth();
+        int height = bitmap.getHeight();
+
+        if (width > height) {
+            // landscape
+            float ratio = (float) width / maxWidth;
+            width = maxWidth;
+            height = (int) (height / ratio);
+        } else if (height > width) {
+            // portrait
+            float ratio = (float) height / maxHeight;
+            height = maxHeight;
+            width = (int) (width / ratio);
+        } else {
+            // square
+            height = maxHeight;
+            width = maxWidth;
+        }
+
+        return Bitmap.createScaledBitmap(bitmap, width, height, true);
+    }
+
+    /**
+     * This method reads a specific file from the assets resource folder and returns it as a string.
+     *
+     * @param fileName     the file to read from
+     * @param assetManager the asset manager
+     * @return the file content as a string
+     */
+    public static String readFileAsString(String fileName, AssetManager assetManager) {
+        String ret = "";
+
+        try {
+            InputStream inputStream = assetManager.open(fileName);
+
+            if (inputStream != null) {
+                BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+                StringBuilder out = new StringBuilder();
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    out.append(line);
+                }
+                reader.close();
+                return out.toString();
+            }
+        } catch (FileNotFoundException e) {
+            System.out.println("File not found: " + e.toString());
+        } catch (IOException e) {
+            System.out.println("Cannot read file: " + e.toString());
+        }
+
+        return ret;
     }
 
     /**
