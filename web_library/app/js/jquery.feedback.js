@@ -120,7 +120,7 @@ define(["require", "exports", '../models/feedback', '../models/rating', '../serv
         };
         $.fn.feedbackPlugin.defaults = {
             'color': '#fff',
-            'lang': 'de',
+            'lang': 'en',
             'backgroundColor': '#b3cd40'
         };
     };

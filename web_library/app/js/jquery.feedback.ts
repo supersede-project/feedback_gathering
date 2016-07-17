@@ -224,7 +224,7 @@ export var feedbackPluginModule = function ($, window, document) {
 
     $.fn.feedbackPlugin.defaults = {
         'color': '#fff',
-        'lang': 'de',
+        'lang': 'en',
         'backgroundColor': '#b3cd40'
     };
 
