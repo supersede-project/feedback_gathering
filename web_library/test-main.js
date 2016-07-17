@@ -19,5 +19,10 @@ require.config({
     deps: allTestFiles,
 
     // we have to kickoff jasmine, as it is asynchronous
-    callback: window.__karma__.start
+    callback: window.__karma__.start,
+
+    paths: {
+        handlebars: 'node_modules/handlebars/dist/handlebars'
+    }
+
 });
