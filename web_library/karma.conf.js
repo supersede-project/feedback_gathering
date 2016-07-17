@@ -15,6 +15,7 @@ module.exports = function (config) {
         files: [
             'test-main.js',
             { pattern: 'node_modules/handlebars/dist/*.js', included: false },
+            { pattern: 'node_modules/i18next/*.js', included: false },
             { pattern: 'app/**/*.js', included: false }
         ],
 

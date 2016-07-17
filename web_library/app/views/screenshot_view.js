@@ -1,4 +1,4 @@
-define(["require", "exports", '../js/helper', './screenshot/screenshot_view_drawing', '../js/lib/html2canvas.js'], function (require, exports, helper_1, screenshot_view_drawing_1) {
+define(["require", "exports", './screenshot/screenshot_view_drawing', '../js/helpers/data_helper', '../js/lib/html2canvas.js'], function (require, exports, screenshot_view_drawing_1, data_helper_1) {
     "use strict";
     var myThis;
     var freehandDrawingMode = 'freehandDrawingMode';
@@ -50,7 +50,7 @@ define(["require", "exports", '../js/helper', './screenshot/screenshot_view_draw
         ScreenshotView.prototype.getScreenshotAsBinary = function () {
             if (this.screenshotCanvas) {
                 var dataURL = this.screenshotCanvas.toDataURL("image/png");
-                return helper_1.Helper.dataURItoBlob(dataURL);
+                return data_helper_1.DataHelper.dataURItoBlob(dataURL);
             }
             else {
                 return null;

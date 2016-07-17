@@ -1,4 +1,4 @@
-define(["require", "exports", '../models/feedback', '../models/rating', '../services/configuration_service', './config', '../views/pagination_container', '../views/screenshot_view', 'i18next', './lib/jquery.star-rating-svg.min.js', './jquery.validate.js'], function (require, exports, feedback_1, rating_1, configuration_service_1, config_1, pagination_container_1, screenshot_view_1, i18next) {
+define(["require", "exports", '../models/feedback', '../models/rating', '../services/configuration_service', './config', '../views/pagination_container', '../views/screenshot_view', './helpers/i18n', './lib/jquery.star-rating-svg.min.js', './jquery.validate.js'], function (require, exports, feedback_1, rating_1, configuration_service_1, config_1, pagination_container_1, screenshot_view_1, i18n_1) {
     "use strict";
     exports.feedbackPluginModule = function ($, window, document) {
         var dialog;
@@ -104,20 +104,11 @@ define(["require", "exports", '../models/feedback', '../models/rating', '../serv
             }
             active = !active;
         };
-        var initializeI18n = function (resources, options) {
-            i18next.init({
-                resources: resources,
-                debug: true,
-                fallbackLng: options.lang,
-                lng: options.lang,
-                load: 'currentOnly'
-            });
-        };
         $.fn.feedbackPlugin = function (options) {
             this.options = $.extend({}, $.fn.feedbackPlugin.defaults, options);
             var currentOptions = this.options;
             var resources = { en: { translation: require('json!../locales/en/translation.json') }, de: { translation: require('json!../locales/de/translation.json') } };
-            initializeI18n(resources, this.options);
+            i18n_1.I18nHelper.initializeI18n(resources, this.options);
             this.css('background-color', currentOptions.backgroundColor);
             this.css('color', currentOptions.color);
             this.on('click', function (event) {

@@ -22,7 +22,8 @@ require.config({
     callback: window.__karma__.start,
 
     paths: {
-        handlebars: 'node_modules/handlebars/dist/handlebars'
+        handlebars: 'node_modules/handlebars/dist/handlebars',
+        i18next: 'node_modules/i18next/i18next'
     }
 
 });

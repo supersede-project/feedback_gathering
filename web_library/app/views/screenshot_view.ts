@@ -1,7 +1,8 @@
 import {Mechanism} from '../models/mechanism';
 import '../js/lib/html2canvas.js';
-import {Helper} from '../js/helper';
 import {ScreenshotViewDrawing} from './screenshot/screenshot_view_drawing';
+import {DataHelper} from '../js/helpers/data_helper';
+
 
 var myThis;
 const freehandDrawingMode:string = 'freehandDrawingMode';
@@ -84,7 +85,7 @@ export class ScreenshotView {
     getScreenshotAsBinary() {
         if(this.screenshotCanvas) {
             var dataURL = this.screenshotCanvas.toDataURL("image/png");
-            return Helper.dataURItoBlob(dataURL);
+            return DataHelper.dataURItoBlob(dataURL);
         } else {
             return null;
         }
