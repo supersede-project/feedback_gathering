@@ -29,7 +29,7 @@ define(["require", "exports"], function (require, exports) {
         PaginationContainer.prototype.navigateForward = function () {
             var feedbackPage = this.container.find('.feedback-page[data-feedback-page="' + this.activePage + '"]');
             var nextPage = this.container.find('.feedback-page[data-feedback-page="' + (this.activePage + 1) + '"]');
-            if (!this.pageForwardCallback(feedbackPage, nextPage)) {
+            if (this.pageForwardCallback != null && !this.pageForwardCallback(feedbackPage, nextPage)) {
                 return;
             }
             if (this.activePage < this.pages.length) {

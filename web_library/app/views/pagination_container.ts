@@ -48,7 +48,7 @@ export class PaginationContainer {
     navigateForward() {
         var feedbackPage = this.container.find('.feedback-page[data-feedback-page="' + this.activePage + '"]');
         var nextPage = this.container.find('.feedback-page[data-feedback-page="' + (this.activePage + 1) + '"]');
-        if(!this.pageForwardCallback(feedbackPage, nextPage)) {
+        if(this.pageForwardCallback != null && !this.pageForwardCallback(feedbackPage, nextPage)) {
             return;
         }
 
