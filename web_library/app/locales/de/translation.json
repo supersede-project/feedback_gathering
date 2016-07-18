@@ -17,6 +17,7 @@
     "arrow": "Pfeil",
     "freehand": "Freihand",
     "crop": "Ausschneiden",
-    "undo": "Rückgängig"
+    "undo": "Rückgängig",
+    "remove": "Löschen"
   }
 }

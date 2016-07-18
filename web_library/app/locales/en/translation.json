@@ -17,6 +17,7 @@
     "arrow": "arrow",
     "freehand": "freehand",
     "crop": "crop",
-    "undo": "undo"
+    "undo": "undo",
+    "remove": "remove"
   }
 }

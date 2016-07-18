@@ -216,7 +216,11 @@ export class ScreenshotView {
         if(this.context) {
             this.context.clearRect(0, 0, this.context.width, this.context.height);
         }
+        this.screenshotCanvas = null;
         $('.screenshot-operations').hide();
+
+        this.disableAllScreenshotOperations();
+        $('#screenshotDrawRect').addClass('active');
     }
 
     draw_arrow(context, fromx, fromy, tox, toy){
@@ -324,6 +328,12 @@ export class ScreenshotView {
             event.preventDefault();
             event.stopPropagation();
             myThis.undoOperation();
+        });
+
+        $('#screenshotDrawRemove').on('click', function(event) {
+            event.preventDefault();
+            event.stopPropagation();
+            myThis.reset();
         });
 
         $('.screenshot-operations').show();

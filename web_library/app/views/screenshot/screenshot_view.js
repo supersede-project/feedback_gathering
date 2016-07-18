@@ -174,7 +174,10 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
             if (this.context) {
                 this.context.clearRect(0, 0, this.context.width, this.context.height);
             }
+            this.screenshotCanvas = null;
             $('.screenshot-operations').hide();
+            this.disableAllScreenshotOperations();
+            $('#screenshotDrawRect').addClass('active');
         };
         ScreenshotView.prototype.draw_arrow = function (context, fromx, fromy, tox, toy) {
             var headLength = 10;
@@ -262,6 +265,11 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
                 event.preventDefault();
                 event.stopPropagation();
                 myThis.undoOperation();
+            });
+            $('#screenshotDrawRemove').on('click', function (event) {
+                event.preventDefault();
+                event.stopPropagation();
+                myThis.reset();
             });
             $('.screenshot-operations').show();
         };
