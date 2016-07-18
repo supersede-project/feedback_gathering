@@ -1,0 +1,22 @@
+{
+  "general": {
+    "review_feedback": "Review feedback",
+    "review_feedback_title": "Your feedback",
+    "feedback_submit_button_title": "Submit feedback",
+    "mandatory_default_text": "This field can't be blank",
+    "back": "back"
+  },
+  "text": {
+    "text_type_text_clear": "Clear the text input"
+  },
+  "screenshot": {
+    "take_screenshot": "Take screenshot",
+    "rectangle": "rectangle",
+    "blacken": "blacken",
+    "circle": "circle",
+    "arrow": "arrow",
+    "freehand": "freehand",
+    "crop": "crop",
+    "undo": "undo"
+  }
+}

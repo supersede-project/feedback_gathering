@@ -49,6 +49,7 @@
 
 textarea#textTypeText {
   width: 100%;
+  min-width: 100%;
   border: 1px solid #4d4d4d;
   font-size: 15px;
   color: #7d7a7c;

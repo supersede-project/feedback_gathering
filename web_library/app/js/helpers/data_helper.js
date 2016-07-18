@@ -1,9 +1,9 @@
 define(["require", "exports", 'querystring'], function (require, exports, querystring_1) {
     "use strict";
-    var Helper = (function () {
-        function Helper() {
+    var DataHelper = (function () {
+        function DataHelper() {
         }
-        Helper.dataURItoBlob = function (dataURI) {
+        DataHelper.dataURItoBlob = function (dataURI) {
             var byteString;
             if (dataURI.split(',')[0].indexOf('base64') >= 0)
                 byteString = atob(dataURI.split(',')[1]);
@@ -16,7 +16,8 @@ define(["require", "exports", 'querystring'], function (require, exports, querys
             }
             return new Blob([ia], { type: mimeString });
         };
-        return Helper;
+        return DataHelper;
     }());
-    exports.Helper = Helper;
+    exports.DataHelper = DataHelper;
 });
+//# sourceMappingURL=data_helper.js.map

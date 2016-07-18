@@ -20,7 +20,13 @@ module.exports = {
     module: {
         loaders: [
             { test: /\.handlebars$/, loader: "handlebars-loader" },
-            { test: /\.css$/, loader: "style-loader!css-loader" }
+            { test: /\.css$/, loader: "style-loader!css-loader" },
+            { test: /\.json$/, loader: 'json', include: "app/locales"}
         ]
+    },
+    resolve: {
+        alias: {
+            handlebars: 'handlebars/dist/handlebars.amd.min.js'
+        }
     }
 };

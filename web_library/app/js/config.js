@@ -13,9 +13,11 @@ define(["require", "exports"], function (require, exports) {
         minWidth: 500,
         modal: true,
         title: 'Feedback',
-        buttons: {}
+        buttons: {},
+        resizable: false
     };
     exports.textType = 'TEXT_TYPE';
     exports.ratingType = 'RATING_TYPE';
     exports.screenshotType = 'SCREENSHOT_TYPE';
 });
+//# sourceMappingURL=config.js.map

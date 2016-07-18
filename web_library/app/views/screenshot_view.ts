@@ -1,9 +1,18 @@
 import {Mechanism} from '../models/mechanism';
 import '../js/lib/html2canvas.js';
-import {Helper} from '../js/helper';
-import {ScreenshotViewDrawing} from './screenshot_view_drawing';
+import {ScreenshotViewDrawing} from './screenshot/screenshot_view_drawing';
+import {DataHelper} from '../js/helpers/data_helper';
+
 
 var myThis;
+const freehandDrawingMode:string = 'freehandDrawingMode';
+const rectDrawingMode:string = 'rectDrawingMode';
+const fillRectDrawingMode:string = 'fillRectDrawingMode';
+const circleDrawingMode:string = 'circleDrawingMode';
+const arrowDrawingMode:string = 'arrowDrawingMode';
+const croppingMode:string = 'croppingMode';
+const black:string = "#000000";
+const red:string = "#FF0000";
 
 
 export class ScreenshotView {
@@ -23,6 +32,7 @@ export class ScreenshotView {
     canvasWidth:number;
     canvasHeight:number;
     screenshotViewDrawing:ScreenshotViewDrawing;
+
 
     constructor(screenshotMechanism:Mechanism, screenshotPreviewElement:JQuery, screenshotCaptureButton:JQuery,
                 elementToCapture:JQuery, elementsToHide:any) {
@@ -75,7 +85,7 @@ export class ScreenshotView {
     getScreenshotAsBinary() {
         if(this.screenshotCanvas) {
             var dataURL = this.screenshotCanvas.toDataURL("image/png");
-            return Helper.dataURItoBlob(dataURL);
+            return DataHelper.dataURItoBlob(dataURL);
         } else {
             return null;
         }
@@ -105,15 +115,15 @@ export class ScreenshotView {
     initDrawing() {
         var context = this.screenshotCanvas.getContext('2d');
         this.isPainting = false;
-        this.drawingMode = 'rect';
-        this.context.strokeStyle="#FF0000";
+        this.drawingMode = rectDrawingMode;
+        this.context.strokeStyle = red;
 
         $(this.screenshotCanvas).on('mousedown touchstart', function(event) {
             var parentOffset = $(this).parent().offset();
             myThis.startX = event.pageX - parentOffset.left;
             myThis.startY = event.pageY - parentOffset.top;
 
-            if(myThis.drawingMode === 'freehand') {
+            if(myThis.drawingMode === freehandDrawingMode) {
                 context.beginPath();
                 context.moveTo(myThis.startX, myThis.startY);
             }
@@ -129,26 +139,26 @@ export class ScreenshotView {
                 var parentOffset = $(this).parent().offset();
                 var currentX = event.pageX - parentOffset.left;
                 var currentY = event.pageY - parentOffset.top;
-
                 var width = currentX - myThis.startX;
                 var height = currentY - myThis.startY;
 
-                if(myThis.drawingMode === 'rect') {
+                if(myThis.drawingMode === rectDrawingMode) {
+                    // TODO extract all the drawing to various drawers that implement drawstart and drawend and implement the same interface
                     context.beginPath();
                     context.strokeRect(myThis.startX, myThis.startY, width, height);
-                } else if (myThis.drawingMode === 'fillRect') {
+                } else if (myThis.drawingMode === fillRectDrawingMode) {
                     context.beginPath();
                     context.fillRect(myThis.startX, myThis.startY, width, height);
-                } else if (myThis.drawingMode === 'circle') {
+                } else if (myThis.drawingMode === circleDrawingMode) {
                     context.beginPath();
                     var radius = height > width ? height : width;
                     context.arc(myThis.startX, myThis.startY, radius, 0, Math.PI*2);
-                } else if (myThis.drawingMode === 'freehand') {
+                } else if (myThis.drawingMode === freehandDrawingMode) {
                     context.lineTo(currentX, currentY);
-                } else if (myThis.drawingMode === 'arrow') {
+                } else if (myThis.drawingMode === arrowDrawingMode) {
                     context.beginPath();
                     myThis.draw_arrow(context, myThis.startX, myThis.startY, currentX, currentY);
-                } else if (myThis.drawingMode === 'crop') {
+                } else if (myThis.drawingMode === croppingMode) {
                     context.beginPath();
                     context.strokeRect(myThis.startX, myThis.startY, width, height);
                 }
@@ -160,22 +170,21 @@ export class ScreenshotView {
             var parentOffset = $(this).parent().offset();
             var endX = event.pageX - parentOffset.left;
             var endY = event.pageY - parentOffset.top;
-
             var width = endX - myThis.startX;
             var height = endY - myThis.startY;
 
-            if(myThis.drawingMode === 'rect') {
-                context.rect(myThis.startX, myThis.startY, width, height);
-            } else if (myThis.drawingMode === 'fillRect') {
+            if(myThis.drawingMode === rectDrawingMode) {
+                context.strokeRect(myThis.startX, myThis.startY, width, height);
+            } else if (myThis.drawingMode === fillRectDrawingMode) {
                 context.fillRect(myThis.startX, myThis.startY, width, height);
-            } else if (myThis.drawingMode === 'circle') {
+            } else if (myThis.drawingMode === circleDrawingMode) {
                 var radius = height > width ? height : width;
                 context.arc(myThis.startX, myThis.startY, radius, 0, Math.PI*2);
-            } else if (myThis.drawingMode === 'freehand') {
+            } else if (myThis.drawingMode === freehandDrawingMode) {
                 context.lineTo(endX, endY);
-            } else if (myThis.drawingMode === 'arrow') {
+            } else if (myThis.drawingMode === arrowDrawingMode) {
                 myThis.draw_arrow(context, myThis.startX, myThis.startY, endX, endY);
-            } else if (myThis.drawingMode === 'crop') {
+            } else if (myThis.drawingMode === croppingMode) {
                 var topLeftCorner = myThis.screenshotViewDrawing.getRectangleTopLeftCorner(myThis.startX, myThis.startY, endX, endY);
                 var widthAndHeight = myThis.screenshotViewDrawing.getRectangleWidthAndHeight(myThis.startX, myThis.startY, endX, endY);
                 var newDimensions = myThis.screenshotViewDrawing.getNewDimensionsAfterCrop(myThis.startX, myThis.startY, endX, endY, myThis.screenshotCanvas.width, myThis.screenshotCanvas.height);
@@ -241,9 +250,9 @@ export class ScreenshotView {
 
             myThis.disableAllScreenshotOperations();
             $(this).addClass('active');
-            myThis.drawingMode = 'rect';
-            myThis.context.strokeStyle = "#FF0000";
-            myThis.context.fillStyle = "#FF0000";
+            myThis.drawingMode = rectDrawingMode;
+            myThis.context.strokeStyle = red;
+            myThis.context.fillStyle = red;
             myThis.context.setLineDash([0,0]);
         });
 
@@ -253,9 +262,9 @@ export class ScreenshotView {
 
             myThis.disableAllScreenshotOperations();
             $(this).addClass('active');
-            myThis.drawingMode = 'fillRect';
-            myThis.context.strokeStyle = "#000000";
-            myThis.context.fillStyle = "#000000";
+            myThis.drawingMode = fillRectDrawingMode;
+            myThis.context.strokeStyle = black;
+            myThis.context.fillStyle = black;
             myThis.context.setLineDash([0,0]);
         });
 
@@ -265,9 +274,9 @@ export class ScreenshotView {
 
             myThis.disableAllScreenshotOperations();
             $(this).addClass('active');
-            myThis.drawingMode = 'circle';
-            myThis.context.strokeStyle = "#FF0000";
-            myThis.context.fillStyle = "#FF0000";
+            myThis.drawingMode = circleDrawingMode;
+            myThis.context.strokeStyle = red;
+            myThis.context.fillStyle = red;
             myThis.context.setLineDash([0,0]);
         });
 
@@ -277,9 +286,9 @@ export class ScreenshotView {
 
             myThis.disableAllScreenshotOperations();
             $(this).addClass('active');
-            myThis.drawingMode = 'arrow';
-            myThis.context.strokeStyle = "#FF0000";
-            myThis.context.fillStyle = "#FF0000";
+            myThis.drawingMode = arrowDrawingMode;
+            myThis.context.stokeStyle = red;
+            myThis.context.fillStyle = red;
             myThis.context.setLineDash([0,0]);
         });
 
@@ -289,9 +298,9 @@ export class ScreenshotView {
 
             myThis.disableAllScreenshotOperations();
             $(this).addClass('active');
-            myThis.drawingMode = 'freehand';
-            myThis.context.strokeStyle = "#FF0000";
-            myThis.context.fillStyle = "#FF0000";
+            myThis.drawingMode = freehandDrawingMode;
+            myThis.context.strokeStyle = red;
+            myThis.context.fillStyle = red;
             myThis.context.setLineDash([0,0]);
         });
 
@@ -301,9 +310,9 @@ export class ScreenshotView {
 
             myThis.disableAllScreenshotOperations();
             $(this).addClass('active');
-            myThis.drawingMode = 'crop';
-            myThis.context.strokeStyle = "#000000";
-            myThis.context.fillStyle = "#000000";
+            myThis.drawingMode = croppingMode;
+            myThis.context.strokeStyle = black;
+            myThis.context.fillStyle = black;
             myThis.context.setLineDash([3, 8]);
         });
 

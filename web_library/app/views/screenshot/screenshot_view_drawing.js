@@ -22,3 +22,4 @@ define(["require", "exports"], function (require, exports) {
     }());
     exports.ScreenshotViewDrawing = ScreenshotViewDrawing;
 });
+//# sourceMappingURL=screenshot_view_drawing.js.map

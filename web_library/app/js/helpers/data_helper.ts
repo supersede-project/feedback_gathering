@@ -1,7 +1,7 @@
 import {unescape} from 'querystring';
 
 
-export class Helper {
+export class DataHelper {
 
     /**
      * Converts base64/URLEncoded data component to raw binary data.
@@ -29,5 +29,4 @@ export class Helper {
 
         return new Blob([ia], {type: mimeString});
     }
-
 }

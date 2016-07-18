@@ -1,11 +1,17 @@
 package com.example.matthias.feedbacklibrary.models;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * Mechanism model
  */
 public abstract class Mechanism implements Serializable {
+    public static final String AUDIO_TYPE = "AUDIO_TYPE";
+    public static final String RATING_TYPE = "RATING_TYPE";
+    public static final String SCREENSHOT_TYPE = "SCREENSHOT_TYPE";
+    public static final String TEXT_TYPE = "TEXT_TYPE";
+
     private boolean isActive;
     private boolean canBeActivated;
     private String type;
@@ -53,6 +59,14 @@ public abstract class Mechanism implements Serializable {
     public boolean isActive() {
         return this.isActive;
     }
+
+    /**
+     * This method returns true if the input of the mechanism is valid, false otherwise.
+     *
+     * @param errorMessage error message to show if the validation fails
+     * @return the validity value
+     */
+    public abstract boolean isValid(List<String> errorMessage);
 
     /**
      * @param canBeActivated the value to set

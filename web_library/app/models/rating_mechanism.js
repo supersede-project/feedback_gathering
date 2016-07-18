@@ -28,3 +28,4 @@ define(["require", "exports", './mechanism'], function (require, exports, mechan
     }(mechanism_1.Mechanism));
     exports.RatingMechanism = RatingMechanism;
 });
+//# sourceMappingURL=rating_mechanism.js.map

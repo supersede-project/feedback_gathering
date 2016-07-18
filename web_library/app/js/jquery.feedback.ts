@@ -11,6 +11,7 @@ import {PaginationContainer} from '../views/pagination_container';
 import {RatingMechanism} from '../models/rating_mechanism';
 import {ScreenshotView} from '../views/screenshot_view';
 import {Mechanism} from '../models/mechanism';
+import {I18nHelper} from './helpers/i18n';
 
 
 export var feedbackPluginModule = function ($, window, document) {
@@ -194,7 +195,7 @@ export var feedbackPluginModule = function ($, window, document) {
         active = !active;
     };
 
-    /**
+     /**
      * @param options
      *  Client side configuration of the feedback library
      * @returns {jQuery}
@@ -206,20 +207,24 @@ export var feedbackPluginModule = function ($, window, document) {
     $.fn.feedbackPlugin = function (options) {
         this.options = $.extend({}, $.fn.feedbackPlugin.defaults, options);
         var currentOptions = this.options;
+        var resources = { en: {translation: require('json!../locales/en/translation.json')}, de: {translation: require('json!../locales/de/translation.json') }};
+
+        I18nHelper.initializeI18n(resources, this.options);
 
         this.css('background-color', currentOptions.backgroundColor);
         this.css('color', currentOptions.color);
-
         this.on('click', function (event) {
             event.preventDefault();
             event.stopPropagation();
             retrieveConfigurationDataOrClose();
         });
+
         return this;
     };
 
     $.fn.feedbackPlugin.defaults = {
         'color': '#fff',
+        'lang': 'en',
         'backgroundColor': '#b3cd40'
     };
 

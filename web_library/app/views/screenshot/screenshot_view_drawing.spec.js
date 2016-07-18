@@ -45,3 +45,4 @@ define(["require", "exports", './screenshot_view_drawing'], function (require, e
         });
     });
 });
+//# sourceMappingURL=screenshot_view_drawing.spec.js.map

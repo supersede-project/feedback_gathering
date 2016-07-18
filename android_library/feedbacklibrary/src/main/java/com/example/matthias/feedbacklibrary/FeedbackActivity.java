@@ -146,7 +146,8 @@ public class FeedbackActivity extends AppCompatActivity {
         Type listType = new TypeToken<List<FeedbackConfigurationItem>>() {
         }.getType();
 
-        jsonString = readJSONConfigurationFile("offline_configuration_file_screenshot_active.json");
+        //jsonString = readFileAsString("offline_configuration_file_text_variables.json", getAssets());
+        jsonString = Utils.readFileAsString("offline_configuration_file_text_variables_material_design.json", getAssets());
         configuration = gson.fromJson(jsonString, listType);
         initModel();
         initView();
@@ -303,8 +304,8 @@ public class FeedbackActivity extends AppCompatActivity {
         Retrofit rtf = new Retrofit.Builder().baseUrl(endpoint).addConverterFactory(GsonConverterFactory.create()).build();
         fbAPI = rtf.create(feedbackAPI.class);
 
-        init();
-        //initOfflineConfiguration();
+        //init();
+        initOfflineConfiguration();
     }
 
     @Override
@@ -346,31 +347,6 @@ public class FeedbackActivity extends AppCompatActivity {
         if (emptyLayout != null) {
             emptyLayout.requestFocus();
         }
-    }
-
-    private String readJSONConfigurationFile(String fileName) {
-        String ret = "";
-
-        try {
-            InputStream inputStream = getAssets().open(fileName);
-
-            if (inputStream != null) {
-                BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-                StringBuilder out = new StringBuilder();
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    out.append(line);
-                }
-                reader.close();
-                return out.toString();
-            }
-        } catch (FileNotFoundException e) {
-            System.out.println("File not found: " + e.toString());
-        } catch (IOException e) {
-            System.out.println("Cannot read file: " + e.toString());
-        }
-
-        return ret;
     }
 
     private void selectImage() {
@@ -460,30 +436,53 @@ public class FeedbackActivity extends AppCompatActivity {
         }
     }
 
-    public void sendDummy() {
-        System.out.println("sendDummy clicked");
+    public void sendDummy(View view) {
+        String screenShotImagePath = annotatedImagePath != null ? annotatedImagePath : "";
+
+        // The mechanism models are updated with the view values
+        for (MechanismView mechanismView : allMechanismViews) {
+            mechanismView.updateModel();
+            if (mechanismView instanceof ScreenshotMechanismView) {
+                ((ScreenshotMechanismView) mechanismView).setAnnotatedImagePath(screenShotImagePath);
+            }
+        }
+
+        final ArrayList<String> messages = new ArrayList<>();
+        if (validateInput(allMechanisms, messages)) {
+            System.out.println("Validation successful");
+        } else {
+            Utils.DataDialog d = Utils.DataDialog.newInstance(messages);
+            d.show(getFragmentManager(), "dataDialog");
+        }
     }
 
     /**
-     * This method checks if the inputs are valid.
+     * This method checks if the inputs of the active mechanisms are valid.
      *
      * @param allMechanisms all mechanism to check for their input validity
      * @param errorMessages error messages to show if the validation fails
      * @return true if the all inputs are valid, false otherwise
      */
     private boolean validateInput(List<Mechanism> allMechanisms, List<String> errorMessages) {
-        boolean isValid = true;
+        /*
+         * Two different options:
+         * 1. Append all error messages and show all of them to the user.
+         * --> Problem: potentially having a lot of error messages inside a tiny dialog.
+         * 2. Append an error message and return.
+         * --> The user is confronted with one error message at a time.
+         *
+         * Option 2 is implemented.
+         */
+
         for (Mechanism mechanism : allMechanisms) {
-            if (mechanism.getType().equals("TEXT_TYPE")) {
-                int length = ((TextMechanism) mechanism).getInputText().length();
-                int maxLength = ((TextMechanism) mechanism).getMaxLength();
-                if (length > maxLength) {
-                    isValid = false;
-                    errorMessages.add("Text has " + length + " characters. Maximum allowed characters are " + maxLength);
+            if (mechanism.isActive()) {
+                boolean isValid = mechanism.isValid(errorMessages);
+                if (!isValid) {
+                    return false;
                 }
             }
         }
 
-        return isValid;
+        return true;
     }
 }

@@ -13,8 +13,10 @@ module.exports = function (config) {
 
         // list of files / patterns to load in the browser
         files: [
-            { pattern: 'app/**/*.js', included: false },
-            'test-main.js'
+            'test-main.js',
+            { pattern: 'node_modules/handlebars/dist/*.js', included: false },
+            { pattern: 'node_modules/i18next/*.js', included: false },
+            { pattern: 'app/**/*.js', included: false }
         ],
 
         // list of files to exclude
@@ -24,7 +26,12 @@ module.exports = function (config) {
         // preprocess matching files before serving them to the browser
         // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
         preprocessors: {
-            'app/**/!(*spec).js': ['coverage']
+            'app/**/!(*spec).js': ['coverage'],
+            'app/templates/*.handlebars': ['handlebars']
+        },
+
+        handlebarsPreprocessor: {
+            templates: "Handlebars.templates"
         },
 
         // test results reporter to use
