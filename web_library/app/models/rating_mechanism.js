@@ -9,6 +9,7 @@ define(["require", "exports", './mechanism'], function (require, exports, mechan
         __extends(RatingMechanism, _super);
         function RatingMechanism(type, active, order, canBeActivated, parameters) {
             _super.call(this, type, active, order, canBeActivated, parameters);
+            this.initialRating = this.getParameterValue('defaultRating');
             this.currentRatingValue = this.getParameterValue('defaultRating');
         }
         RatingMechanism.prototype.getRatingElementOptions = function () {
@@ -16,7 +17,7 @@ define(["require", "exports", './mechanism'], function (require, exports, mechan
             return {
                 starSize: 25,
                 totalStars: this.getParameterValue('maxRating'),
-                initialRating: ratingMechanismObject.currentRatingValue,
+                initialRating: this.initialRating,
                 useFullStars: true,
                 disableAfterRate: false,
                 callback: function (currentRating, $el) {

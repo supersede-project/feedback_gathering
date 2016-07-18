@@ -169,6 +169,12 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
             });
             myThis.initScreenshotOperations();
         };
+        ScreenshotView.prototype.reset = function () {
+            this.screenshotPreviewElement.hide();
+            if (this.context) {
+                this.context.clearRect(0, 0, this.context.width, this.context.height);
+            }
+        };
         ScreenshotView.prototype.draw_arrow = function (context, fromx, fromy, tox, toy) {
             var headLength = 10;
             var angle = Math.atan2(toy - fromy, tox - fromx);

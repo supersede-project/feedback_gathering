@@ -211,6 +211,13 @@ export class ScreenshotView {
         myThis.initScreenshotOperations();
     }
 
+    reset() {
+        this.screenshotPreviewElement.hide();
+        if(this.context) {
+            this.context.clearRect(0, 0, this.context.width, this.context.height);
+        }
+    }
+
     draw_arrow(context, fromx, fromy, tox, toy){
         var headLength = 10;
         var angle = Math.atan2(toy-fromy,tox-fromx);

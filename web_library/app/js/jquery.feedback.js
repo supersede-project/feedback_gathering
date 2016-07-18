@@ -1,4 +1,4 @@
-define(["require", "exports", '../models/feedback', '../models/rating', '../services/configuration_service', './config', '../views/pagination_container', '../views/screenshot/screenshot_view', './helpers/i18n', './lib/jquery.star-rating-svg.min.js', './jquery.validate.js'], function (require, exports, feedback_1, rating_1, configuration_service_1, config_1, pagination_container_1, screenshot_view_1, i18n_1) {
+define(["require", "exports", '../models/feedback', '../models/rating', '../services/configuration_service', './config', '../views/pagination_container', '../views/screenshot/screenshot_view', './helpers/i18n', './lib/jquery.star-rating-svg.js', './jquery.validate.js'], function (require, exports, feedback_1, rating_1, configuration_service_1, config_1, pagination_container_1, screenshot_view_1, i18n_1) {
     "use strict";
     exports.feedbackPluginModule = function ($, window, document) {
         var dialog;
@@ -35,6 +35,8 @@ define(["require", "exports", '../models/feedback', '../models/rating', '../serv
                 success: function (data) {
                     $('#serverResponse').addClass('success').text(config_1.defaultSuccessMessage);
                     $('textarea#textTypeText').val('');
+                    screenshotView.reset();
+                    initRating(".rating-input", ratingMechanism);
                 },
                 error: function (data) {
                     $('#serverResponse').addClass('error').text('Failure: ' + JSON.stringify(data));
@@ -44,6 +46,7 @@ define(["require", "exports", '../models/feedback', '../models/rating', '../serv
         var initRating = function (selector, ratingMechanism) {
             var options = ratingMechanism.getRatingElementOptions();
             $('' + selector).starRating(options);
+            $('' + selector + ' .jq-star:nth-child(' + ratingMechanism.initialRating + ')').click();
         };
         var initScreenshot = function (screenshotMechanism) {
             var screenshotPreview = $('#screenshotPreview'), screenshotCaptureButton = $('button#takeScreenshot'), elementToCapture = $('#page-wrapper_1'), elementsToHide = [$('.ui-widget-overlay.ui-front'), $('.ui-dialog')];

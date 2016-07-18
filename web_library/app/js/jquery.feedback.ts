@@ -1,4 +1,4 @@
-import './lib/jquery.star-rating-svg.min.js';
+import './lib/jquery.star-rating-svg.js';
 import './jquery.validate.js';
 import {Feedback} from '../models/feedback';
 import {Rating} from '../models/rating';
@@ -71,7 +71,8 @@ export var feedbackPluginModule = function ($, window, document) {
             success: function (data) {
                 $('#serverResponse').addClass('success').text(defaultSuccessMessage);
                 $('textarea#textTypeText').val('');
-                // TODO reset screenshot and rating
+                screenshotView.reset();
+                initRating(".rating-input", ratingMechanism);
             },
             error: function (data) {
                 $('#serverResponse').addClass('error').text('Failure: ' + JSON.stringify(data));
@@ -90,6 +91,8 @@ export var feedbackPluginModule = function ($, window, document) {
     var initRating = function (selector, ratingMechanism:RatingMechanism) {
         var options = ratingMechanism.getRatingElementOptions();
         $('' + selector).starRating(options);
+        // reset to default rating
+        $('' + selector + ' .jq-star:nth-child(' + ratingMechanism.initialRating + ')').click();
     };
 
     var initScreenshot = function (screenshotMechanism):void {
