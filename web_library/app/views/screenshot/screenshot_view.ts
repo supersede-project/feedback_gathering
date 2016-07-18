@@ -232,10 +232,6 @@ export class ScreenshotView {
     updateCanvasState() {
         this.canvasStates.push(this.canvasState.src);
         this.canvasState.src = this.screenshotCanvas.toDataURL("image/png");
-
-        var img = jQuery('<img src="' + this.screenshotCanvas.toDataURL() + '" />');
-        img.css('max-width', '50%');
-        jQuery('#screenshotReview').empty().append(img);
     }
 
     undoOperation() {

@@ -532,7 +532,7 @@ section.dialog-navigation {
     #feedbackPrivacy fieldset p {
       margin: 4px 0; }
 
-#textReview {
+.mechanism-review {
   font-style: italic; }
 
 #serverResponse {

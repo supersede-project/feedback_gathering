@@ -188,9 +188,6 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
         ScreenshotView.prototype.updateCanvasState = function () {
             this.canvasStates.push(this.canvasState.src);
             this.canvasState.src = this.screenshotCanvas.toDataURL("image/png");
-            var img = jQuery('<img src="' + this.screenshotCanvas.toDataURL() + '" />');
-            img.css('max-width', '50%');
-            jQuery('#screenshotReview').empty().append(img);
         };
         ScreenshotView.prototype.undoOperation = function () {
             if (this.canvasStates.length < 1) {

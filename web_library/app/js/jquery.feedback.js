@@ -20,7 +20,7 @@ define(["require", "exports", '../models/feedback', '../models/rating', '../serv
         var initTemplate = function (context, screenshotMechanism, textMechanism, ratingMechanism) {
             var html = template(context);
             $('body').append(html);
-            new pagination_container_1.PaginationContainer($('#feedbackContainer .pages-container'));
+            new pagination_container_1.PaginationContainer($('#feedbackContainer .pages-container'), pageForwardCallback);
             initRating(".rating-input", ratingMechanism);
             initScreenshot(screenshotMechanism);
             initDialog($('#feedbackContainer'), textMechanism);
@@ -83,6 +83,26 @@ define(["require", "exports", '../models/feedback', '../models/rating', '../serv
                 event.stopPropagation();
                 textarea.val('');
             });
+        };
+        var pageForwardCallback = function (currentPage, nextPage) {
+            currentPage.find('.validate').each(function () {
+                $(this).validate();
+            });
+            if (currentPage.find('.invalid').length > 0 && currentPage.find('.validate[data-mandatory-validate-on-skip="1"]').length > 0) {
+                return false;
+            }
+            if (nextPage.find('#textReview').length > 0 && textMechanism.active) {
+                nextPage.find('#textReview').text($('textarea#textTypeText').val());
+            }
+            if (nextPage.find('#ratingReview').length > 0 && ratingMechanism.active) {
+                nextPage.find('#ratingReview').text(ratingMechanism.getParameterValue('title') + ": " + ratingMechanism.currentRatingValue + " / " + ratingMechanism.getParameterValue("maxRating"));
+            }
+            if (nextPage.find('#screenshotReview').length > 0 && screenshotMechanism.active) {
+                var img = $('<img src="' + screenshotView.screenshotCanvas.toDataURL() + '" />');
+                img.css('max-width', '20%');
+                $('#screenshotReview').empty().append(img);
+            }
+            return true;
         };
         var prepareFormData = function () {
             var formData = new FormData();

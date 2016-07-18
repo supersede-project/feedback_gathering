@@ -49,7 +49,7 @@ export var feedbackPluginModule = function ($, window, document) {
         $('body').append(html);
 
         // after template is loaded
-        new PaginationContainer($('#feedbackContainer .pages-container'));
+        new PaginationContainer($('#feedbackContainer .pages-container'), pageForwardCallback);
         initRating(".rating-input", ratingMechanism);
         initScreenshot(screenshotMechanism);
         initDialog($('#feedbackContainer'), textMechanism);
@@ -164,6 +164,39 @@ export var feedbackPluginModule = function ($, window, document) {
         });
     };
 
+    /**
+     *
+     * @param currentPage
+     * @param nextPage
+     * @returns {boolean}
+     *  indicates whether the navigation forward should happen (true) or not (false)
+     */
+    var pageForwardCallback = function(currentPage, nextPage) {
+        currentPage.find('.validate').each(function() {
+            $(this).validate();
+        });
+        if(currentPage.find('.invalid').length > 0 && currentPage.find('.validate[data-mandatory-validate-on-skip="1"]').length > 0) {
+            return false;
+        }
+        if(nextPage.find('#textReview').length > 0 && textMechanism.active) {
+            nextPage.find('#textReview').text($('textarea#textTypeText').val());
+        }
+        if(nextPage.find('#ratingReview').length > 0 && ratingMechanism.active) {
+            nextPage.find('#ratingReview').text(ratingMechanism.getParameterValue('title') + ": " + ratingMechanism.currentRatingValue + " / " + ratingMechanism.getParameterValue("maxRating"));
+        }
+        if(nextPage.find('#screenshotReview').length > 0 && screenshotMechanism.active) {
+            var img = $('<img src="' + screenshotView.screenshotCanvas.toDataURL() + '" />');
+            img.css('max-width', '20%');
+            $('#screenshotReview').empty().append(img);
+        }
+        return true;
+    };
+
+    /**
+     * Creates the multipart form data containing the data of the active mechanisms.
+     *
+     * @returns {FormData}
+     */
     var prepareFormData = function ():FormData {
         var formData = new FormData();
 
