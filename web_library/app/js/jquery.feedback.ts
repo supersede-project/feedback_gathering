@@ -9,7 +9,7 @@ import {
 } from './config';
 import {PaginationContainer} from '../views/pagination_container';
 import {RatingMechanism} from '../models/rating_mechanism';
-import {ScreenshotView} from '../views/screenshot_view';
+import {ScreenshotView} from '../views/screenshot/screenshot_view';
 import {Mechanism} from '../models/mechanism';
 import {I18nHelper} from './helpers/i18n';
 

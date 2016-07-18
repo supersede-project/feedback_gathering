@@ -1,7 +1,7 @@
-import {Mechanism} from '../models/mechanism';
-import '../js/lib/html2canvas.js';
-import {ScreenshotViewDrawing} from './screenshot/screenshot_view_drawing';
-import {DataHelper} from '../js/helpers/data_helper';
+import {Mechanism} from '../../models/mechanism';
+import '../../js/lib/html2canvas.js';
+import {ScreenshotViewDrawing} from './screenshot_view_drawing';
+import {DataHelper} from '../../js/helpers/data_helper';
 
 
 var myThis;

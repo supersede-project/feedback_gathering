@@ -1,4 +1,4 @@
-define(["require", "exports", './screenshot/screenshot_view_drawing', '../js/helpers/data_helper', '../js/lib/html2canvas.js'], function (require, exports, screenshot_view_drawing_1, data_helper_1) {
+define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/data_helper', '../../js/lib/html2canvas.js'], function (require, exports, screenshot_view_drawing_1, data_helper_1) {
     "use strict";
     var myThis;
     var freehandDrawingMode = 'freehandDrawingMode';
