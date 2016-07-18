@@ -3,13 +3,14 @@ define(["require", "exports", '../models/feedback', '../models/rating', '../serv
     exports.feedbackPluginModule = function ($, window, document) {
         var dialog;
         var active = false;
+        var textMechanism;
         var ratingMechanism;
         var screenshotMechanism;
         var screenshotView;
         var template = require('../templates/feedback_dialog.handlebars');
         var initMechanisms = function (data) {
             var configurationService = new configuration_service_1.ConfigurationService(data);
-            var textMechanism = configurationService.getMechanismConfig(config_1.textType);
+            textMechanism = configurationService.getMechanismConfig(config_1.textType);
             ratingMechanism = configurationService.getMechanismConfig(config_1.ratingType);
             screenshotMechanism = configurationService.getMechanismConfig(config_1.screenshotType);
             $('#serverResponse').removeClass().text('');
@@ -85,10 +86,17 @@ define(["require", "exports", '../models/feedback', '../models/rating', '../serv
         };
         var prepareFormData = function () {
             var formData = new FormData();
-            var text = $('textarea#textTypeText').val();
             $('#serverResponse').removeClass();
-            var ratingTitle = $('.rating-text').text().trim();
-            var feedbackObject = new feedback_1.Feedback(config_1.feedbackObjectTitle, config_1.applicationName, "uid12345", text, 1.0, [new rating_1.Rating(ratingTitle, ratingMechanism.currentRatingValue)]);
+            var feedbackObject = new feedback_1.Feedback(config_1.feedbackObjectTitle, config_1.applicationName, "uid12345", null, 1.0, null);
+            if (textMechanism.active) {
+                feedbackObject.text = $('textarea#textTypeText').val();
+            }
+            if (ratingMechanism.active) {
+                var ratingTitle = $('.rating-text').text().trim();
+                var rating = new rating_1.Rating(ratingTitle, ratingMechanism.currentRatingValue);
+                feedbackObject.ratings = [];
+                feedbackObject.ratings.push(rating);
+            }
             if (screenshotMechanism.active && screenshotView.getScreenshotAsBinary() !== null) {
                 formData.append('file', screenshotView.getScreenshotAsBinary());
             }

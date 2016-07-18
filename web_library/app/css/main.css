@@ -505,11 +505,11 @@ section.dialog-navigation {
     text-transform: none; }
 
 .button:hover {
+  background-color: #617203;
   background-image: -webkit-linear-gradient(top, #7f9718 0%, #7d970b 50%, #7c9009 52%, #617203 100%);
   background-image: -moz-linear-gradient(top, #7f9718 0%, #7d970b 50%, #7c9009 52%, #617203 100%);
   background-image: -o-linear-gradient(top, #7f9718 0%, #7d970b 50%, #7c9009 52%, #617203 100%);
-  background-image: linear-gradient(top, #7f9718 0%, #7d970b 50%, #7c9009 52%, #617203 100%);
-  background-color: #617203; }
+  background-image: linear-gradient(top, #7f9718 0%, #7d970b 50%, #7c9009 52%, #617203 100%); }
 
 .navigation-button {
   float: right; }

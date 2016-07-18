@@ -17,6 +17,7 @@ import {I18nHelper} from './helpers/i18n';
 export var feedbackPluginModule = function ($, window, document) {
     var dialog;
     var active = false;
+    var textMechanism:Mechanism;
     var ratingMechanism:RatingMechanism;
     var screenshotMechanism:Mechanism;
     var screenshotView:ScreenshotView;
@@ -34,7 +35,7 @@ export var feedbackPluginModule = function ($, window, document) {
      */
     var initMechanisms = function (data) {
         var configurationService = new ConfigurationService(data);
-        var textMechanism = configurationService.getMechanismConfig(textType);
+        textMechanism = configurationService.getMechanismConfig(textType);
         ratingMechanism = configurationService.getMechanismConfig(ratingType);
         screenshotMechanism = configurationService.getMechanismConfig(screenshotType);
         $('#serverResponse').removeClass().text('');
@@ -166,14 +167,18 @@ export var feedbackPluginModule = function ($, window, document) {
     var prepareFormData = function ():FormData {
         var formData = new FormData();
 
-        // TODO check which mechanism are active
-        var text = $('textarea#textTypeText').val();
         $('#serverResponse').removeClass();
-        var ratingTitle = $('.rating-text').text().trim();
+        var feedbackObject = new Feedback(feedbackObjectTitle, applicationName, "uid12345", null, 1.0, null);
 
-        var feedbackObject = new Feedback(feedbackObjectTitle, applicationName, "uid12345", text, 1.0,
-            [new Rating(ratingTitle, ratingMechanism.currentRatingValue)]);
-
+        if(textMechanism.active) {
+            feedbackObject.text = $('textarea#textTypeText').val();
+        }
+        if(ratingMechanism.active) {
+            var ratingTitle = $('.rating-text').text().trim();
+            var rating = new Rating(ratingTitle, ratingMechanism.currentRatingValue);
+            feedbackObject.ratings = [];
+            feedbackObject.ratings.push(rating);
+        }
         if (screenshotMechanism.active && screenshotView.getScreenshotAsBinary() !== null) {
             formData.append('file', screenshotView.getScreenshotAsBinary());
         }
