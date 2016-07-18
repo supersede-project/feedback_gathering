@@ -1,29 +1,8 @@
 @import "normalize";
 @import "star-rating-svg";
+@import "config";
+@import "functions";
 
-$feedbackEntryPointBoxShadow: 1px 1px 1px 0 #677a00;
-$dialogTitlebarColor: #7c9009;
-$dialogTitlebarBorderColor: #7c9009;
-$buttonBackgroundColor: #546300;
-$buttonHoverBackgroundColor: #617203;
-$buttonGradientEnabled: true;
-$buttonGradientColor1: #8aa221;
-$buttonGradientColor2: #8eab10;
-$buttonGradientColor3: #7c9009;
-$buttonHoverGradientColor1: #7f9718;
-$buttonHoverGradientColor2: #7d970b;
-$buttonTextColor: white;
-
-@function bool($value: false) {
-  @if $value == false or
-          $value == "" or
-          $value == "false" or
-          $value == 'false' or
-          $value == 0 {
-    @return false;
-  }
-  @return true;
-}
 
 .ui-widget input, .ui-widget select, .ui-widget textarea, .ui-widget button {
   font-family: Verdana, Arial, sans-serif;
