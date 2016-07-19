@@ -30,3 +30,4 @@ define(["require", "exports"], function (require, exports) {
     }());
     exports.Mechanism = Mechanism;
 });
+//# sourceMappingURL=mechanism.js.map

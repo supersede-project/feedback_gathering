@@ -5,14 +5,18 @@ export class PaginationContainer {
     container:JQuery;
     pages:JQuery;
     activePage:number;
+    pageForwardCallback:any;
 
     /**
      *
      * @param container
      *  The element that contains the pages and buttons to move forward or backward
+     * @param pageForwardCallback
+     *  Function that is executed when the navigation goes forward
      */
-    constructor(container) {
+    constructor(container, pageForwardCallback?) {
         this.container = container;
+        this.pageForwardCallback = pageForwardCallback;
         this.pages = this.container.find('.feedback-page');
         this.showFirstPage();
         this.activePage = 1;
@@ -43,14 +47,8 @@ export class PaginationContainer {
      */
     navigateForward() {
         var feedbackPage = this.container.find('.feedback-page[data-feedback-page="' + this.activePage + '"]');
-
-        // TODO pull this out in a separate module
-        // do not go to the next page if something is invalid and validation on skip is enabled
-        feedbackPage.find('.validate').each(function() {
-            $(this).validate();
-        });
-        if(feedbackPage.find('.invalid').length > 0 &&
-            feedbackPage.find('.validate[data-mandatory-validate-on-skip="1"]').length > 0) {
+        var nextPage = this.container.find('.feedback-page[data-feedback-page="' + (this.activePage + 1) + '"]');
+        if(this.pageForwardCallback != null && !this.pageForwardCallback(feedbackPage, nextPage)) {
             return;
         }
 
@@ -58,12 +56,7 @@ export class PaginationContainer {
             this.activePage++;
         }
         feedbackPage.hide();
-        var nextPage = this.container.find('.feedback-page[data-feedback-page="' + this.activePage + '"]');
         nextPage.show();
-
-        if(nextPage.find('#textReview').length > 0) {
-            nextPage.find('#textReview').text(jQuery('textarea#textTypeText').val());
-        }
     }
 
     navigateBackward() {

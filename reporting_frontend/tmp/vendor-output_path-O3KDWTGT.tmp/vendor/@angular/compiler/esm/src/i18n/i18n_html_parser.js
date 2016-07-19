@@ -1,0 +1,1 @@
+/home/flo/masterproject/angular2_tutorial/testproject/tmp/vendor-input_base_path-PAvsERKF.tmp/0/@angular/compiler/esm/src/i18n/i18n_html_parser.js

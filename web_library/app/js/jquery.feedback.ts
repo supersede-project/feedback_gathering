@@ -1,4 +1,4 @@
-import './lib/jquery.star-rating-svg.min.js';
+import './lib/jquery.star-rating-svg.js';
 import './jquery.validate.js';
 import {Feedback} from '../models/feedback';
 import {Rating} from '../models/rating';
@@ -9,13 +9,15 @@ import {
 } from './config';
 import {PaginationContainer} from '../views/pagination_container';
 import {RatingMechanism} from '../models/rating_mechanism';
-import {ScreenshotView} from '../views/screenshot_view';
+import {ScreenshotView} from '../views/screenshot/screenshot_view';
 import {Mechanism} from '../models/mechanism';
+import {I18nHelper} from './helpers/i18n';
 
 
 export var feedbackPluginModule = function ($, window, document) {
     var dialog;
     var active = false;
+    var textMechanism:Mechanism;
     var ratingMechanism:RatingMechanism;
     var screenshotMechanism:Mechanism;
     var screenshotView:ScreenshotView;
@@ -33,7 +35,7 @@ export var feedbackPluginModule = function ($, window, document) {
      */
     var initMechanisms = function (data) {
         var configurationService = new ConfigurationService(data);
-        var textMechanism = configurationService.getMechanismConfig(textType);
+        textMechanism = configurationService.getMechanismConfig(textType);
         ratingMechanism = configurationService.getMechanismConfig(ratingType);
         screenshotMechanism = configurationService.getMechanismConfig(screenshotType);
         $('#serverResponse').removeClass().text('');
@@ -47,7 +49,7 @@ export var feedbackPluginModule = function ($, window, document) {
         $('body').append(html);
 
         // after template is loaded
-        new PaginationContainer($('#feedbackContainer .pages-container'));
+        new PaginationContainer($('#feedbackContainer .pages-container'), pageForwardCallback);
         initRating(".rating-input", ratingMechanism);
         initScreenshot(screenshotMechanism);
         initDialog($('#feedbackContainer'), textMechanism);
@@ -70,7 +72,8 @@ export var feedbackPluginModule = function ($, window, document) {
             success: function (data) {
                 $('#serverResponse').addClass('success').text(defaultSuccessMessage);
                 $('textarea#textTypeText').val('');
-                // TODO reset screenshot and rating
+                screenshotView.reset();
+                initRating(".rating-input", ratingMechanism);
             },
             error: function (data) {
                 $('#serverResponse').addClass('error').text('Failure: ' + JSON.stringify(data));
@@ -89,6 +92,8 @@ export var feedbackPluginModule = function ($, window, document) {
     var initRating = function (selector, ratingMechanism:RatingMechanism) {
         var options = ratingMechanism.getRatingElementOptions();
         $('' + selector).starRating(options);
+        // reset to default rating
+        $('' + selector + ' .jq-star:nth-child(' + ratingMechanism.initialRating + ')').click();
     };
 
     var initScreenshot = function (screenshotMechanism):void {
@@ -159,17 +164,54 @@ export var feedbackPluginModule = function ($, window, document) {
         });
     };
 
+    /**
+     *
+     * @param currentPage
+     * @param nextPage
+     * @returns {boolean}
+     *  indicates whether the navigation forward should happen (true) or not (false)
+     */
+    var pageForwardCallback = function(currentPage, nextPage) {
+        currentPage.find('.validate').each(function() {
+            $(this).validate();
+        });
+        if(currentPage.find('.invalid').length > 0 && currentPage.find('.validate[data-mandatory-validate-on-skip="1"]').length > 0) {
+            return false;
+        }
+        if(nextPage.find('#textReview').length > 0 && textMechanism.active) {
+            nextPage.find('#textReview').text($('textarea#textTypeText').val());
+        }
+        if(nextPage.find('#ratingReview').length > 0 && ratingMechanism.active) {
+            nextPage.find('#ratingReview').text(ratingMechanism.getParameterValue('title') + ": " + ratingMechanism.currentRatingValue + " / " + ratingMechanism.getParameterValue("maxRating"));
+        }
+        if(nextPage.find('#screenshotReview').length > 0 && screenshotMechanism.active && screenshotView.screenshotCanvas != null) {
+            var img = $('<img src="' + screenshotView.screenshotCanvas.toDataURL() + '" />');
+            img.css('max-width', '20%');
+            $('#screenshotReview').empty().append(img);
+        }
+        return true;
+    };
+
+    /**
+     * Creates the multipart form data containing the data of the active mechanisms.
+     *
+     * @returns {FormData}
+     */
     var prepareFormData = function ():FormData {
         var formData = new FormData();
 
-        // TODO check which mechanism are active
-        var text = $('textarea#textTypeText').val();
         $('#serverResponse').removeClass();
-        var ratingTitle = $('.rating-text').text().trim();
+        var feedbackObject = new Feedback(feedbackObjectTitle, applicationName, "uid12345", null, 1.0, null);
 
-        var feedbackObject = new Feedback(feedbackObjectTitle, applicationName, "uid12345", text, 1.0,
-            [new Rating(ratingTitle, ratingMechanism.currentRatingValue)]);
-
+        if(textMechanism.active) {
+            feedbackObject.text = $('textarea#textTypeText').val();
+        }
+        if(ratingMechanism.active) {
+            var ratingTitle = $('.rating-text').text().trim();
+            var rating = new Rating(ratingTitle, ratingMechanism.currentRatingValue);
+            feedbackObject.ratings = [];
+            feedbackObject.ratings.push(rating);
+        }
         if (screenshotMechanism.active && screenshotView.getScreenshotAsBinary() !== null) {
             formData.append('file', screenshotView.getScreenshotAsBinary());
         }
@@ -194,7 +236,7 @@ export var feedbackPluginModule = function ($, window, document) {
         active = !active;
     };
 
-    /**
+     /**
      * @param options
      *  Client side configuration of the feedback library
      * @returns {jQuery}
@@ -206,20 +248,24 @@ export var feedbackPluginModule = function ($, window, document) {
     $.fn.feedbackPlugin = function (options) {
         this.options = $.extend({}, $.fn.feedbackPlugin.defaults, options);
         var currentOptions = this.options;
+        var resources = { en: {translation: require('json!../locales/en/translation.json')}, de: {translation: require('json!../locales/de/translation.json') }};
+
+        I18nHelper.initializeI18n(resources, this.options);
 
         this.css('background-color', currentOptions.backgroundColor);
         this.css('color', currentOptions.color);
-
         this.on('click', function (event) {
             event.preventDefault();
             event.stopPropagation();
             retrieveConfigurationDataOrClose();
         });
+
         return this;
     };
 
     $.fn.feedbackPlugin.defaults = {
         'color': '#fff',
+        'lang': 'en',
         'backgroundColor': '#b3cd40'
     };
 
