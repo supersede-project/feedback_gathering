@@ -66,6 +66,17 @@ public class ToolDispatcher {
 		    else if (key.equals("kafkaEndpoint")) params.setKafkaEndpoint(jsonParams.getString(key).replaceAll("\"", "").replace("http://", ""));
 		    else if (key.equals("kafkaTopic")) params.setKafkaTopic(jsonParams.getString(key).replaceAll("\"", ""));
 		    else if (key.equals("packageName")) params.setPackageName(jsonParams.getString(key).replaceAll("\"", ""));
+		    else if (key.equals("toolParams")) {
+		    	
+		    	Iterator<?> toolKeys = jsonParams.getJSONObject(key).keys();
+		    	while (toolKeys.hasNext()) {
+		    		
+		    		String toolKey = (String)keys.next();
+		    		if (toolKey.equals("country")) params.setCountry(jsonParams.getJSONObject(key).getString(toolKey).replaceAll("\"", ""));
+		    		else if (toolKey.equals("language")) params.setLanguage(jsonParams.getJSONObject(key).getString(toolKey).replaceAll("\"", ""));
+		    	}
+		    	
+		    }
 		}
 		
 		return params;

@@ -36,7 +36,7 @@ public class AppTweak implements ToolInterface {
 	
 	//Route params
 	private final String uri = "https://api.apptweak.com/android/applications/";
-	private final String uriParams = "/reviews.json?country=es&language=es";
+	private final String uriParams = "/reviews.json";
 	
 	private MonitoringParams params;
 	
@@ -121,7 +121,18 @@ public class AppTweak implements ToolInterface {
 	}
 	
 	private JSONObject urlConnection() throws MalformedURLException, IOException {
-		URLConnection connection = new URL(uri + params.getPackageName() + uriParams)
+		String URI = uri + params.getPackageName() + uriParams;
+		boolean first = true;
+		if (params.getCountry() != null) {
+			URI += "?country=" + params.getCountry();
+			first = false;
+		}
+		if (params.getLanguage() != null) {
+			if (first) URI += "?";
+			else URI += "&";
+			URI += "language=" + params.getLanguage();
+		}
+		URLConnection connection = new URL(URI)
 				.openConnection();
 		connection.setRequestProperty("X-Apptweak-Key", token);
 		connection.getInputStream();
