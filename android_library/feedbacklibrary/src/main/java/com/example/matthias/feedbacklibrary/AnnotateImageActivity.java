@@ -50,7 +50,7 @@ public class AnnotateImageActivity extends AppCompatActivity implements ColorPic
         // Set the bitmap to draw on
         annotateImageView.drawBitmap(bitmap);
         // Set the background color of the canvas (used for the eraser)
-        annotateImageView.setBaseColor(Color.GREEN);
+        annotateImageView.setBaseColor(Color.WHITE);
         // Set the mode
         annotateImageView.setMode(AnnotateImageView.Mode.DRAW);
         // Set the drawer

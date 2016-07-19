@@ -9,3 +9,4 @@ define(["require", "exports"], function (require, exports) {
     }());
     exports.ParameterPropertyPair = ParameterPropertyPair;
 });
+//# sourceMappingURL=parameter_property_pair.js.map

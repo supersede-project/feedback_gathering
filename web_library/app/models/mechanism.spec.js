@@ -69,3 +69,4 @@ define(["require", "exports", './mechanism', './parameter', './mechanism_factory
         });
     });
 });
+//# sourceMappingURL=mechanism.spec.js.map

@@ -1,3 +1,9 @@
+@import "normalize";
+@import "star-rating-svg";
+@import "config";
+@import "functions";
+
+
 .ui-widget input, .ui-widget select, .ui-widget textarea, .ui-widget button {
   font-family: Verdana, Arial, sans-serif;
   font-size: 15px;
@@ -18,7 +24,7 @@
   left: 0;
   padding: 4px 10px;
   text-decoration: none;
-  box-shadow: 1px 1px 1px 0 #677a00;
+  box-shadow: $feedbackEntryPointBoxShadow;
 }
 
 #feedbackContainer {
@@ -62,6 +68,7 @@
 
 textarea#textTypeText {
   width: 100%;
+  min-width: 100%;
   border: 1px solid #4d4d4d;
   font-size: 15px;
   color: #7d7a7c;
@@ -71,9 +78,9 @@ textarea#textTypeText {
 
 .ui-dialog .ui-dialog-titlebar {
   font-family: Arial, sans-serif;
-  color: #7c9009;
+  color: $dialogTitlebarColor;
   font-weight: normal;
-  border-bottom: 2px solid #7c9009;
+  border-bottom: 2px solid $dialogTitlebarBorderColor;
   font-size: 22px;
   margin: 2px 5px;
   padding: 0 0 0.25rem;
@@ -92,7 +99,7 @@ textarea#textTypeText {
 }
 
 .ui-dialog-titlebar {
-  border-color: #7c9009;
+  border-color: $dialogTitlebarBorderColor;
   border-width: 1px;
   padding: 0;
   margin: 0;
@@ -124,13 +131,15 @@ section.dialog-navigation {
 }
 
 .button {
-  background-color: #546300;
-  background-image: -moz-linear-gradient(top, #8aa221 0%, #8eab10 50%, #7c9009 52%, #546300 100%);
-  background-image: -webkit-linear-gradient(top, #8aa221 0%, #8eab10 50%, #7c9009 52%, #546300 100%);
-  background-image: -o-linear-gradient(top, #8aa221 0%, #8eab10 50%, #7c9009 52%, #546300 100%);
-  background-image: linear-gradient(top, #8aa221 0%, #8eab10 50%, #7c9009 52%, #546300 100%);
+  background-color: $buttonBackgroundColor;
+  @if bool($buttonGradientEnabled) {
+    background-image: -moz-linear-gradient(top, $buttonGradientColor1 0%, $buttonGradientColor2 50%, $buttonGradientColor3 52%, $buttonBackgroundColor 100%);
+    background-image: -webkit-linear-gradient(top, $buttonGradientColor1 0%, $buttonGradientColor2 50%, $buttonGradientColor3 52%, $buttonBackgroundColor 100%);
+    background-image: -o-linear-gradient(top, $buttonGradientColor1 0%, $buttonGradientColor2 50%, $buttonGradientColor3 52%, $buttonBackgroundColor 100%);
+    background-image: linear-gradient(top, $buttonGradientColor1 0%, $buttonGradientColor2 50%, $buttonGradientColor3 52%, $buttonBackgroundColor 100%);
+  }
   background-size: 100% auto;
-  color: white;
+  color: $buttonTextColor;
   display: inline-block;
   font-size: 10px;
   padding: 0.375em 1.3em;
@@ -146,11 +155,13 @@ section.dialog-navigation {
 }
 
 .button:hover {
-  background-image: -webkit-linear-gradient(top, #7f9718 0%, #7d970b 50%, #7c9009 52%, #617203 100%);
-  background-image: -moz-linear-gradient(top, #7f9718 0%, #7d970b 50%, #7c9009 52%, #617203 100%);
-  background-image: -o-linear-gradient(top, #7f9718 0%, #7d970b 50%, #7c9009 52%, #617203 100%);
-  background-image: linear-gradient(top, #7f9718 0%, #7d970b 50%, #7c9009 52%, #617203 100%);
-  background-color: #617203;
+  background-color: $buttonHoverBackgroundColor;
+  @if bool($buttonGradientEnabled) {
+    background-image: -webkit-linear-gradient(top, $buttonHoverGradientColor1 0%, $buttonHoverGradientColor2 50%, $buttonGradientColor3 52%, $buttonHoverBackgroundColor 100%);
+    background-image: -moz-linear-gradient(top, $buttonHoverGradientColor1 0%, $buttonHoverGradientColor2 50%, $buttonGradientColor3 52%, $buttonHoverBackgroundColor 100%);
+    background-image: -o-linear-gradient(top, $buttonHoverGradientColor1 0%, $buttonHoverGradientColor2 50%, $buttonGradientColor3 52%, $buttonHoverBackgroundColor 100%);
+    background-image: linear-gradient(top, $buttonHoverGradientColor1 0%, $buttonHoverGradientColor2 50%, $buttonGradientColor3 52%, $buttonHoverBackgroundColor 100%);
+  }
 }
 
 .navigation-button {
@@ -183,7 +194,7 @@ section.dialog-navigation {
   }
 }
 
-#textReview {
+.mechanism-review {
   font-style: italic;
 }
 

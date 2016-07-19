@@ -10,6 +10,7 @@ import android.content.ContextWrapper;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -20,14 +21,14 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
 
-import com.example.matthias.feedbacklibrary.FeedbackActivity;
-
-import java.io.ByteArrayOutputStream;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -140,10 +141,7 @@ public class Utils {
      * @return the boolean value corresponding to the input value
      */
     public static boolean intToBool(int input) {
-        if (input == 1) {
-            return true;
-        }
-        return false;
+        return input == 1;
     }
 
     /**
@@ -232,6 +230,38 @@ public class Utils {
         }
 
         return Bitmap.createScaledBitmap(bitmap, width, height, true);
+    }
+
+    /**
+     * This method reads a specific file from the assets resource folder and returns it as a string.
+     *
+     * @param fileName     the file to read from
+     * @param assetManager the asset manager
+     * @return the file content as a string
+     */
+    public static String readFileAsString(String fileName, AssetManager assetManager) {
+        String ret = "";
+
+        try {
+            InputStream inputStream = assetManager.open(fileName);
+
+            if (inputStream != null) {
+                BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+                StringBuilder out = new StringBuilder();
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    out.append(line);
+                }
+                reader.close();
+                return out.toString();
+            }
+        } catch (FileNotFoundException e) {
+            System.out.println("File not found: " + e.toString());
+        } catch (IOException e) {
+            System.out.println("Cannot read file: " + e.toString());
+        }
+
+        return ret;
     }
 
     /**

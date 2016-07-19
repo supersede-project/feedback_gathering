@@ -1,0 +1,10 @@
+@function bool($value: false) {
+  @if $value == false or
+          $value == "" or
+          $value == "false" or
+          $value == 'false' or
+          $value == 0 {
+    @return false;
+  }
+  @return true;
+}

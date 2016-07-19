@@ -1,0 +1,163 @@
+[
+  {
+    "type": "TEXT_TYPE",
+    "active": true,
+    "order": 1,
+    "canBeActivated": false,
+    "parameters": [
+      {
+        "key": "maxLength",
+        "value": 200
+      },
+      {
+        "key": "title",
+        "value": "Feedback Title"
+      },
+      {
+        "key": "hint",
+        "value": "Feedback Hint"
+      },
+      {
+        "key": "label",
+        "value": "Feedback Label"
+      },
+      {
+        "key": "labelPositioning",
+        "value": "left"
+      },
+      {
+        "key": "labelColor",
+        "value": "#1AED40"
+      },
+      {
+        "key": "labelFontSize",
+        "value": 20
+      },
+      {
+        "key": "textareaFontColor",
+        "value": "#EDC21A"
+      },
+      {
+        "key": "mandatory",
+        "value": 1
+      },
+      {
+        "key": "mandatoryReminder",
+        "value": "Please fill in the text field"
+      },
+      {
+        "key": "undoEnabled",
+        "value": 1
+      },
+      {
+        "key": "undoSteps",
+        "value": 1
+      },
+      {
+        "key": "clearInput",
+        "value": 0
+      },
+      {
+        "key": "borderWidth",
+        "value": 2
+      },
+      {
+        "key": "borderColor",
+        "value": "#000000"
+      },
+      {
+        "key": "fieldWidth",
+        "value": 200
+      },
+      {
+        "key": "fieldHeight",
+        "value": 50
+      },
+      {
+        "key": "fieldFontSize",
+        "value": 10
+      },
+      {
+        "key": "fieldFontType",
+        "value": "italic"
+      },
+      {
+        "key": "fieldTextAlignment",
+        "value": "right"
+      },
+      {
+        "key": "fieldBackgroundColor",
+        "value": "#ffffff"
+      },
+      {
+        "key": "maxLengthVisible",
+        "value": 1
+      },
+      {
+        "key": "validationRegex",
+        "value": "."
+      },
+      {
+        "key": "validateOnSkip",
+        "value": 1
+      }
+    ]
+  },
+  {
+    "type": "AUDIO_TYPE",
+    "active": false,
+    "order": 2,
+    "canBeActivated": true,
+    "parameters": [
+      {
+        "key": "maxTime",
+        "value": 30,
+        "defaultValue": 30
+      }
+    ]
+  },
+  {
+    "type": "SCREENSHOT_TYPE",
+    "active": true,
+    "order": 3,
+    "canBeActivated": true,
+    "parameters": [
+      {
+        "key": "title",
+        "value": "Title for screenshot feedback"
+      },
+      {
+        "key": "defaultPicture",
+        "value": "lastScreenshot",
+        "defaultValue": "noImage",
+        "editableByUser": true
+      }
+    ]
+  },
+  {
+    "type": "RATING_TYPE",
+    "active": true,
+    "order": 4,
+    "canBeActivated": false,
+    "parameters": [
+      {
+        "key": "title",
+        "value": "Rate your user experience"
+      },
+      {
+        "key": "ratingIcon",
+        "value": "star"
+      },
+      {
+        "key": "maxRating",
+        "value": 5
+      },
+      {
+        "key": "defaultRating",
+        "value": 2,
+        "editableByUser": false,
+        "defaultValue": 0
+      }
+    ]
+  }
+]

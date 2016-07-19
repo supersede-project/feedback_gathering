@@ -14,7 +14,8 @@ export const dialogOptions = {
     minWidth: 500,
     modal: true,
     title: 'Feedback',
-    buttons: {}
+    buttons: {},
+    resizable: false
 };
 
 export const textType = 'TEXT_TYPE';

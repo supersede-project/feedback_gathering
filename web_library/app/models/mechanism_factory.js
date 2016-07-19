@@ -18,3 +18,4 @@ define(["require", "exports", './rating_mechanism', '../js/config', './mechanism
     }());
     exports.MechanismFactory = MechanismFactory;
 });
+//# sourceMappingURL=mechanism_factory.js.map

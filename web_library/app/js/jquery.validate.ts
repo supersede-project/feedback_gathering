@@ -34,6 +34,11 @@ export var validatePluginModule = (function($, window, document) {
             } else {
                 this.after('<span class="feedback-form-error">' + manualText + '</span>');
             }
+
+            var invalidElement = this;
+            $('html, body').animate({
+                scrollTop: invalidElement.offset().top
+            }, 500);
         }
         return this;
     };

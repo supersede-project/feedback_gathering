@@ -1,18 +1,13 @@
 package com.example.matthias.feedbacklibrary.models;
 
-import android.widget.RatingBar;
-import android.widget.TextView;
-
-import com.example.matthias.feedbacklibrary.R;
-
 import java.io.Serializable;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Rating mechanism model
  */
 public class RatingMechanism extends Mechanism implements Serializable {
-    private static final String RATING_TYPE = "RATING_TYPE";
-
     private String title;
     private String ratingIcon;
     private int maxRating;
@@ -22,6 +17,7 @@ public class RatingMechanism extends Mechanism implements Serializable {
 
     public RatingMechanism(FeedbackConfigurationItem item) {
         super(RATING_TYPE, item);
+        initRatingMechanism(item);
     }
 
     public float getDefaultRating() {
@@ -42,6 +38,33 @@ public class RatingMechanism extends Mechanism implements Serializable {
 
     public String getTitle() {
         return title;
+    }
+
+    private void initRatingMechanism(FeedbackConfigurationItem item) {
+        for (Map<String, Object> param : item.getParameters()) {
+            String key = (String) param.get("key");
+            // Title
+            if (key.equals("title")) {
+                setTitle((String) param.get("value"));
+            }
+            // Rating icon
+            if (key.equals("ratingIcon")) {
+                setRatingIcon((String) param.get("value"));
+            }
+            // Maximum rating
+            if (key.equals("maxRating")) {
+                setMaxRating(((Double) param.get("value")).intValue());
+            }
+            // Default rating
+            if (key.equals("defaultRating")) {
+                setDefaultRating(((Double) param.get("value")).floatValue());
+            }
+        }
+    }
+
+    @Override
+    public boolean isValid(List<String> errorMessage) {
+        return true;
     }
 
     public void setDefaultRating(float defaultRating) {

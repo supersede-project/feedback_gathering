@@ -21,3 +21,4 @@ define(["require", "exports", './jquery.validate'], function (require, exports, 
         });
     });
 });
+//# sourceMappingURL=jquery.validate.spec.js.map

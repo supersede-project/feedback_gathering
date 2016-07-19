@@ -36,7 +36,6 @@ export class Feedback {
      */
     validate(configurationService: ConfigurationService): any {
         var textMechanism = configurationService.getMechanismConfig(textType);
-        var ratingMechanism = configurationService.getMechanismConfig(ratingType);
         var errors = {textMechanism: [], ratingMechanism: [], general: []};
 
         this.validateTextMechanism(textMechanism, errors);
