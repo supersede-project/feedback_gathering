@@ -30,13 +30,14 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
                     myThis.screenshotPreviewElement.empty().append(canvas);
                     myThis.screenshotPreviewElement.show();
                     var windowRatio = myThis.elementToCapture.width() / myThis.elementToCapture.height();
-                    var data = canvas.toDataURL();
+                    var data = canvas.toDataURL("image/png");
                     myThis.context = canvas.getContext("2d");
                     myThis.canvasWidth = myThis.screenshotPreviewElement.width();
                     myThis.canvasHeight = myThis.screenshotPreviewElement.width() / windowRatio;
                     $(canvas).prop('width', myThis.canvasWidth);
                     $(canvas).prop('height', myThis.canvasHeight);
                     var img = new Image();
+                    img.src = data;
                     img.onload = function () {
                         myThis.context.drawImage(img, 0, 0, img.width, img.height, 0, 0, canvas.width, canvas.height);
                     };
@@ -175,6 +176,7 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
                 this.context.clearRect(0, 0, this.context.width, this.context.height);
             }
             this.screenshotCanvas = null;
+            this.canvasStates = [];
             $('.screenshot-operations').hide();
             this.disableAllScreenshotOperations();
             $('#screenshotDrawRect').addClass('active');

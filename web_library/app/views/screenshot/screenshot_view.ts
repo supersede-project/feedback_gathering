@@ -1,7 +1,7 @@
 import {Mechanism} from '../../models/mechanism';
-import '../../js/lib/html2canvas.js';
 import {ScreenshotViewDrawing} from './screenshot_view_drawing';
 import {DataHelper} from '../../js/helpers/data_helper';
+import '../../js/lib/html2canvas.js';
 
 
 var myThis;
@@ -35,7 +35,7 @@ export class ScreenshotView {
 
 
     constructor(screenshotMechanism:Mechanism, screenshotPreviewElement:JQuery, screenshotCaptureButton:JQuery,
-                elementToCapture:JQuery, elementsToHide:any) {
+                elementToCapture:JQuery, elementsToHide?:any) {
         myThis = this;
         this.screenshotMechanism = screenshotMechanism;
         this.screenshotPreviewElement = screenshotPreviewElement;
@@ -60,7 +60,7 @@ export class ScreenshotView {
                 var windowRatio = myThis.elementToCapture.width() / myThis.elementToCapture.height();
 
                 // save the canvas content as imageURL
-                var data = canvas.toDataURL();
+                var data = canvas.toDataURL("image/png");
                 myThis.context = canvas.getContext("2d");
                 myThis.canvasWidth = myThis.screenshotPreviewElement.width();
                 myThis.canvasHeight = myThis.screenshotPreviewElement.width() / windowRatio;
@@ -69,10 +69,10 @@ export class ScreenshotView {
                 $(canvas).prop('height', myThis.canvasHeight);
 
                 var img = new Image();
+                img.src = data;
                 img.onload = function () {
                     myThis.context.drawImage(img, 0, 0, img.width, img.height, 0, 0, canvas.width, canvas.height);
                 };
-
                 img.src = data;
                 myThis.canvasState = img;
                 myThis.screenshotCanvas = canvas;
@@ -217,6 +217,7 @@ export class ScreenshotView {
             this.context.clearRect(0, 0, this.context.width, this.context.height);
         }
         this.screenshotCanvas = null;
+        this.canvasStates = [];
         $('.screenshot-operations').hide();
 
         this.disableAllScreenshotOperations();
