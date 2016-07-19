@@ -1,4 +1,4 @@
-package monitor;
+package monitoring.tools;
 
 import static org.junit.Assert.*;
 
@@ -14,8 +14,6 @@ import org.glassfish.jersey.uri.UriComponent;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.Test;
-
-//import com.sun.jersey.api.uri.UriComponent;
 
 public class TwitterAPITest {
 	
