@@ -88,7 +88,7 @@ public class ToolDispatcher {
 		
 		try {
 			resInfo.put("message", error);
-			resInfo.put("idConf", responseId);
+			resInfo.put("idConf", String.valueOf(responseId));
 			resInfo.put("status", "error");
 			response.put("SocialNetworksMonitoringConfProfResult", resInfo);
 			++responseId;		
@@ -105,7 +105,7 @@ public class ToolDispatcher {
 		JSONObject resInfo = new JSONObject();
 		
 		try {
-			resInfo.put("idConf", responseId);
+			resInfo.put("idConf", String.valueOf(responseId));
 			resInfo.put("status", "success");
 			response.put("SocialNetworksMonitoringConfProfResult", resInfo);
 			++responseId;		
