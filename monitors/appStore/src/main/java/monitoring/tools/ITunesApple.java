@@ -107,10 +107,14 @@ public class ITunesApple implements ToolInterface {
 	private void firstApiCall() throws IOException, MalformedURLException {
 		JSONObject data = urlConnection();
 		
-		JSONArray reviews = data.getJSONObject("feed").getJSONArray("entry");
-		
-		for (int i = 1; i < reviews.length(); ++i) {
-			reported.add(reviews.getJSONObject(i).getJSONObject("id").getString("label"));
+		if (data.getJSONObject("feed").has("entry")) {
+			
+			JSONArray reviews = data.getJSONObject("feed").getJSONArray("entry");
+			
+			for (int i = 1; i < reviews.length(); ++i) {
+				reported.add(reviews.getJSONObject(i).getJSONObject("id").getString("label"));
+			}
+			
 		}
 		
 	}

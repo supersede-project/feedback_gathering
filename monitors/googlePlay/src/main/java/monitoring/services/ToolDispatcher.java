@@ -12,15 +12,14 @@ import org.json.JSONObject;
 import monitoring.kafka.KafkaCommunication;
 import monitoring.model.MonitoringParams;
 
-@Path("service")
+@Path("configuration")
 public class ToolDispatcher {
 
 	//The id of the response associated to a addConfiguration call
 	private int responseId = 1;
-	private String toolPackageRoute = "monitoring.tools.";
+	private final String toolPackageRoute = "monitoring.tools.";
 	
 	@POST
-	@Path("configuration")
 	public String addConfiguration(@QueryParam("configurationJson") String jsonConf) {
 		
 		try {
