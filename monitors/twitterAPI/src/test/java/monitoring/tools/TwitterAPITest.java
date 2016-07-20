@@ -27,7 +27,7 @@ public class TwitterAPITest {
             .build();
 	
 	WebTarget target = client
-            .target("http://localhost:8080/twitterAPI/service/configuration");
+            .target("http://localhost:8080/twitterAPI/configuration");
 	
 	@Test
     public void addConfigurationSuccess() {
