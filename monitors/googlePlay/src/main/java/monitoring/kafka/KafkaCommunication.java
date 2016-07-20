@@ -51,6 +51,7 @@ public class KafkaCommunication {
 			if (data.getLink() != null) review.put("link", data.getLink());
 			if (data.getReviewerLanguage() != null) review.put("reviewerLanguage", data.getReviewerLanguage());
 			if (data.getReviewID() != null) review.put("reviewID", data.getReviewID());
+			if (data.getReviewTitle() != null) review.put("reviewTitle", data.getReviewTitle());
 			if (data.getReviewText() != null) review.put("reviewText", data.getReviewText());
 			if (data.getStarRating() != null) review.put("starRating", data.getStarRating());
 			
@@ -64,7 +65,7 @@ public class KafkaCommunication {
 		res.put("DataItems", dataItems);
 		
 		JSONObject fullResponse = new JSONObject();
-		fullResponse.put("googlePlayMonitoredData", res);
+		fullResponse.put("GooglePlayMonitoredData", res);
 		
 		KeyedMessage<String, String> msg = new KeyedMessage<String, String>(topic, res.toString());
 		producer.send(msg);
