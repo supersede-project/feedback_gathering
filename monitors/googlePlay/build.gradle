@@ -45,5 +45,7 @@ dependencies {
 	compile group: 'org.glassfish.jersey.containers', name: 'jersey-container-servlet-core', version: '2.23.1'
 	// https://mvnrepository.com/artifact/org.glassfish.jersey.core/jersey-common
 	compile group: 'org.glassfish.jersey.core', name: 'jersey-common', version: '2.23.1'
+	// https://mvnrepository.com/artifact/org.codehaus.jackson/jackson-jaxrs
+	compile group: 'org.codehaus.jackson', name: 'jackson-jaxrs', version: '1.9.13'
 	    
 }
