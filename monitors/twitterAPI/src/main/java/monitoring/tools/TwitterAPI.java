@@ -23,7 +23,6 @@ import twitter4j.conf.Configuration;
 import twitter4j.conf.ConfigurationBuilder;
 import twitter4j.util.function.Consumer;
 
-@Path("SocialNetworkMonitoring")
 public class TwitterAPI implements ToolInterface {
 	
 	//Kafka producer

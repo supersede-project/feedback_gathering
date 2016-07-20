@@ -54,7 +54,7 @@ public class KafkaCommunication {
 		
 		JSONObject mainInfo = new JSONObject();
 		
-		mainInfo.put("idOutput", id);
+		mainInfo.put("idOutput", String.valueOf(id));
 		mainInfo.put("searchTimeStamp", timeStamp);
 		mainInfo.put("numDataItems", dataList.size());
 		mainInfo.put("DataItems", items);
@@ -63,7 +63,7 @@ public class KafkaCommunication {
 		
 		JSONObject jsonData = new JSONObject();
 		
-		jsonData.put("socialNetworksMonitoredData", mainInfo);
+		jsonData.put("SocialNetworksMonitoredData", mainInfo);
 		
 		KeyedMessage<String, String> msg = new KeyedMessage<String, String>(topic, jsonData.toString());
 		producer.send(msg);
