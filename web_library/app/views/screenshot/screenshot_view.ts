@@ -33,7 +33,6 @@ export class ScreenshotView {
     canvasHeight:number;
     screenshotViewDrawing:ScreenshotViewDrawing;
 
-
     constructor(screenshotMechanism:Mechanism, screenshotPreviewElement:JQuery, screenshotCaptureButton:JQuery,
                 elementToCapture:JQuery, elementsToHide?:any) {
         myThis = this;
@@ -65,8 +64,8 @@ export class ScreenshotView {
                 myThis.canvasWidth = myThis.screenshotPreviewElement.width();
                 myThis.canvasHeight = myThis.screenshotPreviewElement.width() / windowRatio;
 
-                $(canvas).prop('width', myThis.canvasWidth);
-                $(canvas).prop('height', myThis.canvasHeight);
+                jQuery(canvas).prop('width', myThis.canvasWidth);
+                jQuery(canvas).prop('height', myThis.canvasHeight);
 
                 var img = new Image();
                 img.src = data;
@@ -101,14 +100,18 @@ export class ScreenshotView {
     }
 
     hideElements() {
-        for(var elementToHide of this.elementsToHide) {
-            elementToHide.hide();
+        if(this.elementsToHide != null) {
+            for(var elementToHide of this.elementsToHide) {
+                elementToHide.hide();
+            }
         }
     }
 
     showElements() {
-        for(var elementToHide of this.elementsToHide) {
-            elementToHide.show();
+        if(this.elementsToHide != null) {
+            for(var elementToHide of this.elementsToHide) {
+                elementToHide.show();
+            }
         }
     }
 
@@ -118,8 +121,8 @@ export class ScreenshotView {
         this.drawingMode = rectDrawingMode;
         this.context.strokeStyle = red;
 
-        $(this.screenshotCanvas).on('mousedown touchstart', function(event) {
-            var parentOffset = $(this).parent().offset();
+        jQuery(this.screenshotCanvas).on('mousedown touchstart', function(event) {
+            var parentOffset = jQuery(this).parent().offset();
             myThis.startX = event.pageX - parentOffset.left;
             myThis.startY = event.pageY - parentOffset.top;
 
@@ -136,7 +139,7 @@ export class ScreenshotView {
                     myThis.canvasState.height, 0, 0, myThis.screenshotCanvas.width,
                     myThis.screenshotCanvas.height);
 
-                var parentOffset = $(this).parent().offset();
+                var parentOffset = jQuery(this).parent().offset();
                 var currentX = event.pageX - parentOffset.left;
                 var currentY = event.pageY - parentOffset.top;
                 var width = currentX - myThis.startX;
@@ -167,7 +170,7 @@ export class ScreenshotView {
         }).on('mouseup touchend', function(event) {
             myThis.isPainting = false;
 
-            var parentOffset = $(this).parent().offset();
+            var parentOffset = jQuery(this).parent().offset();
             var endX = event.pageX - parentOffset.left;
             var endY = event.pageY - parentOffset.top;
             var width = endX - myThis.startX;
@@ -218,10 +221,11 @@ export class ScreenshotView {
         }
         this.screenshotCanvas = null;
         this.canvasStates = [];
-        $('.screenshot-operations').hide();
+        jQuery('.screenshot-operations').hide();
 
         this.disableAllScreenshotOperations();
-        $('#screenshotDrawRect').addClass('active');
+        jQuery('#screenshotDrawRect').addClass('active');
+        this.drawingMode = rectDrawingMode;
     }
 
     draw_arrow(context, fromx, fromy, tox, toy){
@@ -253,95 +257,95 @@ export class ScreenshotView {
     }
 
     initScreenshotOperations() {
-        $('#screenshotDrawRect').on('click', function(event) {
+        jQuery('#screenshotDrawRect').on('click', function(event) {
             event.preventDefault();
             event.stopPropagation();
 
             myThis.disableAllScreenshotOperations();
-            $(this).addClass('active');
+            jQuery(this).addClass('active');
             myThis.drawingMode = rectDrawingMode;
             myThis.context.strokeStyle = red;
             myThis.context.fillStyle = red;
             myThis.context.setLineDash([0,0]);
         });
 
-        $('#screenshotDrawFillRect').on('click', function(event) {
+        jQuery('#screenshotDrawFillRect').on('click', function(event) {
             event.preventDefault();
             event.stopPropagation();
 
             myThis.disableAllScreenshotOperations();
-            $(this).addClass('active');
+            jQuery(this).addClass('active');
             myThis.drawingMode = fillRectDrawingMode;
             myThis.context.strokeStyle = black;
             myThis.context.fillStyle = black;
             myThis.context.setLineDash([0,0]);
         });
 
-        $('#screenshotDrawCircle').on('click', function(event) {
+        jQuery('#screenshotDrawCircle').on('click', function(event) {
             event.preventDefault();
             event.stopPropagation();
 
             myThis.disableAllScreenshotOperations();
-            $(this).addClass('active');
+            jQuery(this).addClass('active');
             myThis.drawingMode = circleDrawingMode;
             myThis.context.strokeStyle = red;
             myThis.context.fillStyle = red;
             myThis.context.setLineDash([0,0]);
         });
 
-        $('#screenshotDrawArrow').on('click', function(event) {
+        jQuery('#screenshotDrawArrow').on('click', function(event) {
             event.preventDefault();
             event.stopPropagation();
 
             myThis.disableAllScreenshotOperations();
-            $(this).addClass('active');
+            jQuery(this).addClass('active');
             myThis.drawingMode = arrowDrawingMode;
             myThis.context.stokeStyle = red;
             myThis.context.fillStyle = red;
             myThis.context.setLineDash([0,0]);
         });
 
-        $('#screenshotDrawFreehand').on('click', function(event) {
+        jQuery('#screenshotDrawFreehand').on('click', function(event) {
             event.preventDefault();
             event.stopPropagation();
 
             myThis.disableAllScreenshotOperations();
-            $(this).addClass('active');
+            jQuery(this).addClass('active');
             myThis.drawingMode = freehandDrawingMode;
             myThis.context.strokeStyle = red;
             myThis.context.fillStyle = red;
             myThis.context.setLineDash([0,0]);
         });
 
-        $('#screenshotCrop').on('click', function(event) {
+        jQuery('#screenshotCrop').on('click', function(event) {
             event.preventDefault();
             event.stopPropagation();
 
             myThis.disableAllScreenshotOperations();
-            $(this).addClass('active');
+            jQuery(this).addClass('active');
             myThis.drawingMode = croppingMode;
             myThis.context.strokeStyle = black;
             myThis.context.fillStyle = black;
             myThis.context.setLineDash([3, 8]);
         });
 
-        $('#screenshotDrawUndo').on('click', function(event) {
+        jQuery('#screenshotDrawUndo').on('click', function(event) {
             event.preventDefault();
             event.stopPropagation();
             myThis.undoOperation();
         });
 
-        $('#screenshotDrawRemove').on('click', function(event) {
+        jQuery('#screenshotDrawRemove').on('click', function(event) {
             event.preventDefault();
             event.stopPropagation();
             myThis.reset();
         });
 
-        $('.screenshot-operations').show();
+        jQuery('.screenshot-operations').show();
     }
 
     disableAllScreenshotOperations() {
-        $('button.screenshot-operation').removeClass('active');
+        jQuery('button.screenshot-operation').removeClass('active');
     }
 }
 
