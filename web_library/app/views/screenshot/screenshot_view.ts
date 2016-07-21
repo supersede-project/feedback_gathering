@@ -32,6 +32,8 @@ export class ScreenshotView {
     canvasWidth:number;
     canvasHeight:number;
     screenshotViewDrawing:ScreenshotViewDrawing;
+    canvasOriginalWidth:number;
+    canvasOriginalHeight:number;
 
     constructor(screenshotMechanism:Mechanism, screenshotPreviewElement:JQuery, screenshotCaptureButton:JQuery,
                 elementToCapture:JQuery, elementsToHide?:any) {
@@ -61,6 +63,9 @@ export class ScreenshotView {
                 // save the canvas content as imageURL
                 var data = canvas.toDataURL("image/png");
                 myThis.context = canvas.getContext("2d");
+                myThis.canvasOriginalWidth = canvas.width;
+                myThis.canvasOriginalHeight = canvas.height;
+
                 myThis.canvasWidth = myThis.screenshotPreviewElement.width();
                 myThis.canvasHeight = myThis.screenshotPreviewElement.width() / windowRatio;
 
@@ -68,13 +73,12 @@ export class ScreenshotView {
                 jQuery(canvas).prop('height', myThis.canvasHeight);
 
                 var img = new Image();
+                myThis.canvasState = img;
+                myThis.screenshotCanvas = canvas;
                 img.src = data;
                 img.onload = function () {
                     myThis.context.drawImage(img, 0, 0, img.width, img.height, 0, 0, canvas.width, canvas.height);
                 };
-                img.src = data;
-                myThis.canvasState = img;
-                myThis.screenshotCanvas = canvas;
 
                 myThis.initDrawing();
             }
@@ -198,6 +202,18 @@ export class ScreenshotView {
                 var newHeight = newDimensions[1];
                 var topLeftX = topLeftCorner[0];
                 var topLeftY = topLeftCorner[1];
+
+
+                /* if original image is the current canvas image we have to adjust some values, since the original
+                    width and height differ from the width and height set after an annotation and redrawing and the
+                    crop would be to small and not at the right position  */
+                if (myThis.canvasStates === null || myThis.canvasStates.length === 0) {
+                    width = myThis.canvasOriginalWidth / myThis.canvasWidth * width;
+                    height = myThis.canvasOriginalHeight / myThis.canvasHeight * height;
+
+                    topLeftX = myThis.canvasOriginalWidth / myThis.canvasWidth * topLeftX;
+                    topLeftY = myThis.canvasOriginalHeight / myThis.canvasHeight * topLeftY;
+                }
 
                 context.clearRect(0, 0, myThis.canvasWidth, myThis.canvasHeight);
                 context.drawImage(myThis.canvasState, topLeftX, topLeftY, width,
