@@ -20,7 +20,7 @@ var AppComponent = (function () {
     AppComponent = __decorate([
         core_1.Component({
             selector: 'my-app',
-            template: "\n\n<div id=\"main\">\n    <div id=\"header\">\n    <h2 style=\"color: lightslategrey\">Feedback Reporting</h2>\n    </div>\n    <div id=\"feedback-toolbar\"><feedback-toolbar></feedback-toolbar></div>\n    <div id=\"feedback-list\"><feedback-list></feedback-list></div>\n    <div id=\"feedback-detail\"><feedback-detail></feedback-detail></div>\n</div>\n",
+            template: "\n\n<div id=\"main\">\n    <div id=\"toolbar\">\n      <feedback-toolbar></feedback-toolbar>\n    </div>\n    <div id=\"list\">\n      <feedback-list></feedback-list>\n    </div>\n    <div id=\"detail\">\n      <feedback-detail></feedback-detail>\n    </div>\n</div>\n",
             directives: [FeedbacksComponent_1.FeedbacksComponent, FeedbackDetailComponent_1.FeedbackDetailComponent, FeedbackToolbarComponent_1.FeedbackToolbarComponent, list_1.MD_LIST_DIRECTIVES],
             styleUrls: ['app/app.component.css'],
             providers: [feedback_service_1.FeedbackService]

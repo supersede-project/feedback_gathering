@@ -4,19 +4,20 @@
 import {Component} from '@angular/core'
 import {Feedback} from '../models/Feedback'
 import {FeedbackService} from '../services/feedback.service'
-import { MdButton } from '@angular2-material/button';
-import {MD_INPUT_DIRECTIVES} from '@angular2-material/input/input'
+import { MD_BUTTON_DIRECTIVES } from '@angular2-material/button';
+import {MD_INPUT_DIRECTIVES} from '@angular2-material/input'
+import {MD_TOOLBAR_DIRECTIVES} from '@angular2-material/toolbar'
 
 @Component({
   selector: 'feedback-toolbar',
   template:`
-  <div style="float: left">
-    <md-input placeholder="enter application name" #appname maxlength="100" class="demo-full-width">
-    </md-input>
-  </div>
-  <button style="margin-left: 10px" md-raised-button (click) = "getFeedbacks(appname.value)">load</button>
+  <md-toolbar color="primary">
+     Reporting
+     <md-input placeholder="enter application name" #appname maxlength="100" style="position:absolute; top:5px; right:70px"></md-input>
+     <button md-fab style="position:absolute; top:5px; right:10px" (click) = "getFeedbacks(appname.value)">load</button>
+  </md-toolbar>
 `,
-  directives: [MdButton, MD_INPUT_DIRECTIVES]
+  directives: [MD_BUTTON_DIRECTIVES, MD_INPUT_DIRECTIVES, MD_TOOLBAR_DIRECTIVES]
 
 })
 export class FeedbackToolbarComponent{

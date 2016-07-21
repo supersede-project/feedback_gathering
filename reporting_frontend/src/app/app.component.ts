@@ -10,12 +10,15 @@ import {MD_LIST_DIRECTIVES} from "@angular2-material/list/list"
     template: `
 
 <div id="main">
-    <div id="header">
-    <h2 style="color: lightslategrey">Feedback Reporting</h2>
+    <div id="toolbar">
+      <feedback-toolbar></feedback-toolbar>
     </div>
-    <div id="feedback-toolbar"><feedback-toolbar></feedback-toolbar></div>
-    <div id="feedback-list"><feedback-list></feedback-list></div>
-    <div id="feedback-detail"><feedback-detail></feedback-detail></div>
+    <div id="list">
+      <feedback-list></feedback-list>
+    </div>
+    <div id="detail">
+      <feedback-detail></feedback-detail>
+    </div>
 </div>
 `,
     directives: [FeedbacksComponent, FeedbackDetailComponent, FeedbackToolbarComponent, MD_LIST_DIRECTIVES],
