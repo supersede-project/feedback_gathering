@@ -37,6 +37,9 @@ public class TwitterAPI implements ToolInterface {
 	boolean firstConnection;
 	//Data id
 	int id = 1;
+	
+	//The thread timer for monitoring
+	Timer timer;
 
 	@Override
 	public void addConfiguration(MonitoringParams params, Producer<String, String> producer) {
@@ -77,7 +80,7 @@ public class TwitterAPI implements ToolInterface {
 
 			@Override
 			public void onConnect() {
-				Timer timer = new Timer();
+				timer = new Timer();
 				timer.schedule(new TimerTask() {
 				    public void run() {
 				    	if (firstConnection) {
@@ -108,6 +111,14 @@ public class TwitterAPI implements ToolInterface {
 		//filterQuery.follow(user.getId());
 		stream.filter(filterQuery);
 		
+	}
+	
+	@Override
+	public void deleteConfiguration() throws Exception {
+		timer.cancel();
+		
+		stream.cleanUp();
+		stream.shutdown();
 	}
 
 	private String[] generateKeywordExp(String keywordExpression) {

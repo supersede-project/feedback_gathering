@@ -1,11 +1,16 @@
 package monitoring.services;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
+import javax.inject.Singleton;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.QueryParam;
 
 import org.json.JSONArray;
@@ -16,36 +21,71 @@ import monitoring.kafka.KafkaCommunication;
 import monitoring.model.MonitoringParams;
 
 @Path("configuration")
+@Singleton
 public class ToolDispatcher {
 	
-	//The id of the response associated to a addConfiguration call
-	private int responseId = 1;
-	private String packageRoute = "monitoring.tools.";
+	//Fake configuration id for testing purposes
+	private int confId = 1;
+	private final String packageRoute = "monitoring.tools.";
 	
+	//A data structure storing all monitoring tool instances identified by configuration ID
+	private Map<Integer, ToolInterface> monitoringInstances = new HashMap<>();
+	
+	/**
+	 * Adds a new configuration for the implicit monitor and creates a new monitoring instance
+	 * @param jsonConf		the JSON monitor configuration
+	 * @return				response
+	 */
 	@POST
 	public String addConfiguration(@QueryParam("configurationJson") String jsonConf) {
 				
 		try {
 			MonitoringParams params = parseJsonConfiguration(jsonConf);
+			
 			if (params.getToolName() == null) 
-				return throwError("Missing tool name");
+				return throwError(confId, "Missing tool name");
+			
 			Class monitor = Class.forName(packageRoute + params.getToolName());
-			ToolInterface serviceInstance = (ToolInterface) monitor.newInstance();
-			serviceInstance.addConfiguration(params, KafkaCommunication.initProducer(params.getKafkaEndpoint()));
+			ToolInterface toolInstance = (ToolInterface) monitor.newInstance();
+			toolInstance.addConfiguration(params, KafkaCommunication.initProducer(params.getKafkaEndpoint()));
+			
+			monitoringInstances.put(confId, toolInstance);
 			
 		} catch (JSONException e) {
-			return throwError("Not a valid JSON configuration object");
+			return throwError(confId, "Not a valid JSON configuration object");
 		} catch (ClassNotFoundException e) {
-			return throwError("Not existing tool");
+			return throwError(confId, "Not existing tool");
 		} catch (InstantiationException e) {
-			return throwError("Monitor class must be concrete");
+			return throwError(confId, "Monitor class must be concrete");
 		} catch (IllegalAccessException e) {
-			return throwError("Monitor class must have a constructor with no args");
+			return throwError(confId, "Monitor class must have a constructor with no args");
 		} catch (Exception e) {
-			return throwError("The selected tool is not working properly");
+			return throwError(confId, "The selected tool is not working properly");
 		}
 		
-		return getResponse();
+		return getResponse(confId);
+	}
+	
+	/**
+	 * Deletes the implicit monitoring and stops the monitoring
+	 * @param id		the configuration id
+	 * @return			response
+	 */
+	@DELETE
+	@Path("{id}")
+	public String deleteConfiguration(@PathParam("id") Integer id) {
+				
+		try {
+			if (!monitoringInstances.containsKey(id))
+				return throwError(id, "Not existing configuration with the specified ID");
+			monitoringInstances.get(id).deleteConfiguration();
+			monitoringInstances.remove(id);
+		} catch (Exception e) {
+			return throwError(id, "There was an unexpected error");
+		}
+		
+		return getResponse(id);
+		
 	}
 	
 	private MonitoringParams parseJsonConfiguration(String json) throws Exception {
@@ -80,17 +120,17 @@ public class ToolDispatcher {
 		
 	}
 
-	public String throwError(String error) {
+	public String throwError(int id, String error) {
 		
 		JSONObject response = new JSONObject();
 		JSONObject resInfo = new JSONObject();
 		
 		try {
 			resInfo.put("message", error);
-			resInfo.put("idConf", String.valueOf(responseId));
+			resInfo.put("idConf", String.valueOf(id));
 			resInfo.put("status", "error");
 			response.put("SocialNetworksMonitoringConfProfResult", resInfo);
-			++responseId;		
+			++confId;		
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
@@ -99,15 +139,15 @@ public class ToolDispatcher {
 		
 	}
 	
-	public String getResponse() {
+	public String getResponse(int id) {
 		JSONObject response = new JSONObject();
 		JSONObject resInfo = new JSONObject();
 		
 		try {
-			resInfo.put("idConf", String.valueOf(responseId));
+			resInfo.put("idConf", String.valueOf(id));
 			resInfo.put("status", "success");
 			response.put("SocialNetworksMonitoringConfProfResult", resInfo);
-			++responseId;		
+			++confId;		
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
