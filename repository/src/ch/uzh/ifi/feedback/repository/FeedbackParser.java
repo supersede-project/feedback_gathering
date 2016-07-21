@@ -1,6 +1,5 @@
 package ch.uzh.ifi.feedback.repository;
 
-import java.nio.file.Paths;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -59,7 +58,6 @@ public class FeedbackParser implements IDbResultParser<List<Feedback>> {
 
 	@Override
 	public List<Feedback> GetResult() {
-		// TODO Auto-generated method stub
 		return result;
 	}
 

@@ -14,7 +14,8 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var core_1 = require('@angular/core');
 var feedback_service_1 = require('../services/feedback.service');
 var button_1 = require('@angular2-material/button');
-var input_1 = require('@angular2-material/input/input');
+var input_1 = require('@angular2-material/input');
+var toolbar_1 = require('@angular2-material/toolbar');
 var FeedbackToolbarComponent = (function () {
     function FeedbackToolbarComponent(feedbackService) {
         this.feedbackService = feedbackService;
@@ -25,8 +26,8 @@ var FeedbackToolbarComponent = (function () {
     FeedbackToolbarComponent = __decorate([
         core_1.Component({
             selector: 'feedback-toolbar',
-            template: "\n  <div style=\"float: left\">\n    <md-input placeholder=\"enter application name\" #appname maxlength=\"100\" class=\"demo-full-width\">\n    </md-input>\n  </div>\n  <button style=\"margin-left: 10px\" md-raised-button (click) = \"getFeedbacks(appname.value)\">load</button>\n",
-            directives: [button_1.MdButton, input_1.MD_INPUT_DIRECTIVES]
+            template: "\n  <md-toolbar color=\"primary\">\n     Reporting\n     <md-input placeholder=\"enter application name\" #appname maxlength=\"100\" style=\"position:absolute; top:5px; right:70px\"></md-input>\n     <button md-fab style=\"position:absolute; top:5px; right:10px\" (click) = \"getFeedbacks(appname.value)\">load</button>\n  </md-toolbar>\n",
+            directives: [button_1.MD_BUTTON_DIRECTIVES, input_1.MD_INPUT_DIRECTIVES, toolbar_1.MD_TOOLBAR_DIRECTIVES]
         }), 
         __metadata('design:paramtypes', [feedback_service_1.FeedbackService])
     ], FeedbackToolbarComponent);

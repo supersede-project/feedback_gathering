@@ -10,6 +10,8 @@ import ch.uzh.ifi.feedback.library.transaction.Transaction;
 import ch.uzh.ifi.feedback.library.transaction.TransactionManager;
 import ch.uzh.ifi.feedback.repository.Feedback;
 import ch.uzh.ifi.feedback.repository.FeedbackController;
+import ch.uzh.ifi.feedback.repository.FeedbackParser;
+import ch.uzh.ifi.feedback.repository.FeedbackService;
 import ch.uzh.ifi.feedback.repository.Rating;
 
 import static org.mockito.Mockito.*;
@@ -24,7 +26,7 @@ public class FeedbackControllerTest {
 	private Connection connection;
 	private PreparedStatement statement1;
 	private PreparedStatement statement2;
-	private FeedbackController testee;
+	private FeedbackService testee;
 	
 	@Before
 	public void setUp() throws Exception {
@@ -63,7 +65,7 @@ public class FeedbackControllerTest {
 	public void testExecuteTransaction() throws Exception {
 		
 	  //arrange
-		testee = new FeedbackController(transactionManager);
+		testee = new FeedbackService(transactionManager, mock(FeedbackParser.class));
 		Feedback feedback = getTestFeedback();
 		
 	  //act
