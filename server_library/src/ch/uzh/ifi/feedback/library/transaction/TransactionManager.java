@@ -35,7 +35,7 @@ public class TransactionManager {
     public Connection createDatabaseConnection() throws Exception {
 
         Class.forName("com.mysql.jdbc.Driver");
-        return DriverManager.getConnection("jdbc:mysql://localhost:3306/", "root", "merovinger.1337");
+        return DriverManager.getConnection("jdbc:mysql://localhost:3306/", "root", "");
     }
 }
 
