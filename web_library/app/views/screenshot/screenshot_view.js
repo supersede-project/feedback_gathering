@@ -30,13 +30,14 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
                     myThis.screenshotPreviewElement.empty().append(canvas);
                     myThis.screenshotPreviewElement.show();
                     var windowRatio = myThis.elementToCapture.width() / myThis.elementToCapture.height();
-                    var data = canvas.toDataURL();
+                    var data = canvas.toDataURL("image/png");
                     myThis.context = canvas.getContext("2d");
                     myThis.canvasWidth = myThis.screenshotPreviewElement.width();
                     myThis.canvasHeight = myThis.screenshotPreviewElement.width() / windowRatio;
-                    $(canvas).prop('width', myThis.canvasWidth);
-                    $(canvas).prop('height', myThis.canvasHeight);
+                    jQuery(canvas).prop('width', myThis.canvasWidth);
+                    jQuery(canvas).prop('height', myThis.canvasHeight);
                     var img = new Image();
+                    img.src = data;
                     img.onload = function () {
                         myThis.context.drawImage(img, 0, 0, img.width, img.height, 0, 0, canvas.width, canvas.height);
                     };
@@ -65,15 +66,19 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
             });
         };
         ScreenshotView.prototype.hideElements = function () {
-            for (var _i = 0, _a = this.elementsToHide; _i < _a.length; _i++) {
-                var elementToHide = _a[_i];
-                elementToHide.hide();
+            if (this.elementsToHide != null) {
+                for (var _i = 0, _a = this.elementsToHide; _i < _a.length; _i++) {
+                    var elementToHide = _a[_i];
+                    elementToHide.hide();
+                }
             }
         };
         ScreenshotView.prototype.showElements = function () {
-            for (var _i = 0, _a = this.elementsToHide; _i < _a.length; _i++) {
-                var elementToHide = _a[_i];
-                elementToHide.show();
+            if (this.elementsToHide != null) {
+                for (var _i = 0, _a = this.elementsToHide; _i < _a.length; _i++) {
+                    var elementToHide = _a[_i];
+                    elementToHide.show();
+                }
             }
         };
         ScreenshotView.prototype.initDrawing = function () {
@@ -81,8 +86,8 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
             this.isPainting = false;
             this.drawingMode = rectDrawingMode;
             this.context.strokeStyle = red;
-            $(this.screenshotCanvas).on('mousedown touchstart', function (event) {
-                var parentOffset = $(this).parent().offset();
+            jQuery(this.screenshotCanvas).on('mousedown touchstart', function (event) {
+                var parentOffset = jQuery(this).parent().offset();
                 myThis.startX = event.pageX - parentOffset.left;
                 myThis.startY = event.pageY - parentOffset.top;
                 if (myThis.drawingMode === freehandDrawingMode) {
@@ -94,7 +99,7 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
                 if (myThis.isPainting) {
                     context.clearRect(0, 0, myThis.canvasWidth, myThis.canvasHeight);
                     context.drawImage(myThis.canvasState, 0, 0, myThis.canvasState.width, myThis.canvasState.height, 0, 0, myThis.screenshotCanvas.width, myThis.screenshotCanvas.height);
-                    var parentOffset = $(this).parent().offset();
+                    var parentOffset = jQuery(this).parent().offset();
                     var currentX = event.pageX - parentOffset.left;
                     var currentY = event.pageY - parentOffset.top;
                     var width = currentX - myThis.startX;
@@ -127,7 +132,7 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
                 }
             }).on('mouseup touchend', function (event) {
                 myThis.isPainting = false;
-                var parentOffset = $(this).parent().offset();
+                var parentOffset = jQuery(this).parent().offset();
                 var endX = event.pageX - parentOffset.left;
                 var endY = event.pageY - parentOffset.top;
                 var width = endX - myThis.startX;
@@ -175,9 +180,11 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
                 this.context.clearRect(0, 0, this.context.width, this.context.height);
             }
             this.screenshotCanvas = null;
-            $('.screenshot-operations').hide();
+            this.canvasStates = [];
+            jQuery('.screenshot-operations').hide();
             this.disableAllScreenshotOperations();
-            $('#screenshotDrawRect').addClass('active');
+            jQuery('#screenshotDrawRect').addClass('active');
+            this.drawingMode = rectDrawingMode;
         };
         ScreenshotView.prototype.draw_arrow = function (context, fromx, fromy, tox, toy) {
             var headLength = 10;
@@ -201,80 +208,80 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
             this.context.drawImage(this.canvasState, 0, 0, this.canvasState.width, this.canvasState.height, 0, 0, this.screenshotCanvas.width, this.screenshotCanvas.height);
         };
         ScreenshotView.prototype.initScreenshotOperations = function () {
-            $('#screenshotDrawRect').on('click', function (event) {
+            jQuery('#screenshotDrawRect').on('click', function (event) {
                 event.preventDefault();
                 event.stopPropagation();
                 myThis.disableAllScreenshotOperations();
-                $(this).addClass('active');
+                jQuery(this).addClass('active');
                 myThis.drawingMode = rectDrawingMode;
                 myThis.context.strokeStyle = red;
                 myThis.context.fillStyle = red;
                 myThis.context.setLineDash([0, 0]);
             });
-            $('#screenshotDrawFillRect').on('click', function (event) {
+            jQuery('#screenshotDrawFillRect').on('click', function (event) {
                 event.preventDefault();
                 event.stopPropagation();
                 myThis.disableAllScreenshotOperations();
-                $(this).addClass('active');
+                jQuery(this).addClass('active');
                 myThis.drawingMode = fillRectDrawingMode;
                 myThis.context.strokeStyle = black;
                 myThis.context.fillStyle = black;
                 myThis.context.setLineDash([0, 0]);
             });
-            $('#screenshotDrawCircle').on('click', function (event) {
+            jQuery('#screenshotDrawCircle').on('click', function (event) {
                 event.preventDefault();
                 event.stopPropagation();
                 myThis.disableAllScreenshotOperations();
-                $(this).addClass('active');
+                jQuery(this).addClass('active');
                 myThis.drawingMode = circleDrawingMode;
                 myThis.context.strokeStyle = red;
                 myThis.context.fillStyle = red;
                 myThis.context.setLineDash([0, 0]);
             });
-            $('#screenshotDrawArrow').on('click', function (event) {
+            jQuery('#screenshotDrawArrow').on('click', function (event) {
                 event.preventDefault();
                 event.stopPropagation();
                 myThis.disableAllScreenshotOperations();
-                $(this).addClass('active');
+                jQuery(this).addClass('active');
                 myThis.drawingMode = arrowDrawingMode;
                 myThis.context.stokeStyle = red;
                 myThis.context.fillStyle = red;
                 myThis.context.setLineDash([0, 0]);
             });
-            $('#screenshotDrawFreehand').on('click', function (event) {
+            jQuery('#screenshotDrawFreehand').on('click', function (event) {
                 event.preventDefault();
                 event.stopPropagation();
                 myThis.disableAllScreenshotOperations();
-                $(this).addClass('active');
+                jQuery(this).addClass('active');
                 myThis.drawingMode = freehandDrawingMode;
                 myThis.context.strokeStyle = red;
                 myThis.context.fillStyle = red;
                 myThis.context.setLineDash([0, 0]);
             });
-            $('#screenshotCrop').on('click', function (event) {
+            jQuery('#screenshotCrop').on('click', function (event) {
                 event.preventDefault();
                 event.stopPropagation();
                 myThis.disableAllScreenshotOperations();
-                $(this).addClass('active');
+                jQuery(this).addClass('active');
                 myThis.drawingMode = croppingMode;
                 myThis.context.strokeStyle = black;
                 myThis.context.fillStyle = black;
                 myThis.context.setLineDash([3, 8]);
             });
-            $('#screenshotDrawUndo').on('click', function (event) {
+            jQuery('#screenshotDrawUndo').on('click', function (event) {
                 event.preventDefault();
                 event.stopPropagation();
                 myThis.undoOperation();
             });
-            $('#screenshotDrawRemove').on('click', function (event) {
+            jQuery('#screenshotDrawRemove').on('click', function (event) {
                 event.preventDefault();
                 event.stopPropagation();
                 myThis.reset();
             });
-            $('.screenshot-operations').show();
+            jQuery('.screenshot-operations').show();
         };
         ScreenshotView.prototype.disableAllScreenshotOperations = function () {
-            $('button.screenshot-operation').removeClass('active');
+            jQuery('button.screenshot-operation').removeClass('active');
         };
         return ScreenshotView;
     }());

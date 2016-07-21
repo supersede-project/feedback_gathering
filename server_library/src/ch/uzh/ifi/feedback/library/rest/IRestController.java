@@ -52,8 +52,6 @@ public interface IRestController<T> {
 		}
 	}
 	
-	String Serialize(T object);
-	
-	T Deserialize(String content) throws JsonSyntaxException;
+	ISerializationService<T> getSerializationService();
 	
 }

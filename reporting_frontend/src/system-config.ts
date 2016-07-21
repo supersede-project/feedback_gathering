@@ -67,6 +67,11 @@ const cliSystemConfigPackages: any = {
     format: 'cjs',
     defaultExtension: 'js',
     main: 'card.js'
+  },
+  '@angular2-material/toolbar': {
+    format: 'cjs',
+    defaultExtension: 'js',
+    main: 'toolbar.js'
   }
 
 };

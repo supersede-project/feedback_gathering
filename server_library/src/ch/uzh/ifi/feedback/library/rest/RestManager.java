@@ -63,7 +63,7 @@ public class RestManager implements IRestManager {
 		try {
 			IRestController controller = GetController(request);
 			Object result = controller.Get(request, response);
-			String output = controller.Serialize(result);
+			String output = controller.getSerializationService().Serialize(result);
 			response.getWriter().append(output);
 
 		} catch(NullPointerException ex)
@@ -85,7 +85,7 @@ public class RestManager implements IRestManager {
 	public void Post(HttpServletRequest request, HttpServletResponse response) throws ServletException {
 		try {
 			RestController controller = GetController(request);
-			Object result = controller.Deserialize(request.getParameter("json"));
+			Object result = controller.getSerializationService().Deserialize(request.getParameter("json"));
 			controller.Post(request, response, result);
 
 		} catch(JsonSyntaxException ex)
@@ -113,7 +113,7 @@ public class RestManager implements IRestManager {
 	public void Put(HttpServletRequest request, HttpServletResponse response) throws ServletException {
 		try {
 			IRestController controller = GetController(request);
-			Object result = controller.Deserialize(request.getParameter("json"));
+			Object result = controller.getSerializationService().Deserialize(request.getParameter("json"));
 			controller.Put(request, response, result);
 
 		} catch(NullPointerException ex)

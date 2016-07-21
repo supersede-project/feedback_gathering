@@ -25,62 +25,24 @@ import com.mysql.jdbc.Statement;
 import com.sun.jndi.toolkit.url.Uri;
 
 import ch.uzh.ifi.feedback.library.rest.Controller;
+import ch.uzh.ifi.feedback.library.rest.DefaultSerializer;
+import ch.uzh.ifi.feedback.library.rest.ISerializationService;
 import ch.uzh.ifi.feedback.library.rest.RestController;
 import ch.uzh.ifi.feedback.library.transaction.TransactionManager;
 import ch.uzh.ifi.feedback.repository.interfaces.FeedbackReceiver;
 
 @Controller
 (Route = "/{Application}/feedback")
-public class FeedbackController extends RestController<Feedback> implements FeedbackReceiver{
+public class FeedbackController extends RestController<Feedback>{
 	
-	public FeedbackController(TransactionManager transactionManager) {
-		super(transactionManager);
-	}
+	private ISerializationService<Feedback> serializationService;
+	private FeedbackService feedbackService;
 	
-	public void ExecuteTransaction(Connection con, Feedback feedback) throws IOException, SQLException {
+	public FeedbackController() {
+		super();
 		
-	    PreparedStatement s = con.prepareStatement(
-	    		
-	    		"INSERT INTO feedback_repository.feedback (title, created, lastUpdated, configVersion, text, application_id, user_id) "
-	    		+ "VALUES(?, NULL, NULL, ?, ?, ? ,?)", Statement.RETURN_GENERATED_KEYS);
-	    
-	    s.setString(1, feedback.getTitle());
-	    s.setDouble(2, feedback.getConfigVersion());
-	    s.setString(3, feedback.getText());
-	    s.setString(4, feedback.getApplication());
-	    s.setString(5, feedback.getUser());
-	    
-	    s.execute();
-	    
-	    ResultSet keys = s.getGeneratedKeys();
-	    keys.next();
-	    
-	    for(Rating rating : feedback.getRatings()){
-	    	
-	    	PreparedStatement s2 = con.prepareStatement(
-		    		
-		    		"INSERT INTO feedback_repository.rating_feedback(title, rating, feedback_id) "
-		    		+ "VALUES(?, ?, ?)");
-	    	
-		    s2.setString(1, rating.getTitle());
-		    s2.setInt(2, rating.getRating());
-		    s2.setInt(3, keys.getInt(1));
-		    s2.execute();
-	    }
-	    
-	    for(Screenshot screenshot : feedback.getScreenshots()){
-	    	
-	    	PreparedStatement s2 = con.prepareStatement(
-		    		
-		    		"INSERT INTO feedback_repository.screenshot_feedback(feedback_id, url, size, name) "
-		    		+ "VALUES(?, ?, ?, ?)");
-	    	
-		    s2.setInt(1, keys.getInt(1));
-		    s2.setString(2, screenshot.getPath().toString());
-		    s2.setInt(3, screenshot.getSize());
-		    s2.setString(4, screenshot.getFileName());
-		    s2.execute();
-	    }
+		this.feedbackService = new FeedbackService(new TransactionManager(), new FeedbackParser());
+		this.serializationService = new DefaultSerializer<>(getSerializationType());
 	}
 
 	@Override
@@ -89,19 +51,12 @@ public class FeedbackController extends RestController<Feedback> implements Feed
 	    List<Part> fileParts = request.getParts().stream().filter(part -> "file".equals(part.getName())).collect(Collectors.toList()); // Retrieves <input type="file" name="file" multiple="true">
 	    List<Screenshot> screenshots = SaveScreenshots(fileParts);
 	    feedback.setScreenshots(screenshots);
-		StoreFeedback(feedback);
+	    feedbackService.SaveFeedback(feedback);
 		
 		response.setStatus(201);
-		response.getWriter().append(Serialize(feedback));
+		response.getWriter().append(serializationService.Serialize(feedback));
 	}
 
-	@Override
-	public void StoreFeedback(Feedback feedback) throws Exception {
-		getTransactionManager().withTransaction((con) -> 
-		{
-			ExecuteTransaction(con, feedback);
-		});
-	}
 	
 	private List<Screenshot> SaveScreenshots(List<Part> fileParts) throws Exception
 	{
@@ -138,5 +93,10 @@ public class FeedbackController extends RestController<Feedback> implements Feed
 	        }
 	    }
 	    return null;
+	}
+
+	@Override
+	public ISerializationService<Feedback> getSerializationService() {
+		return serializationService;
 	}
 }

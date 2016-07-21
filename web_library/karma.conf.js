@@ -19,6 +19,10 @@ module.exports = function (config) {
             { pattern: 'app/**/*.js', included: false }
         ],
 
+        proxies: {
+            '/app/js/lib/html2canvas.js': '/base/app/js/lib/html2canvas.js'
+        },
+
         // list of files to exclude
         exclude: [
         ],
@@ -26,7 +30,7 @@ module.exports = function (config) {
         // preprocess matching files before serving them to the browser
         // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
         preprocessors: {
-            'app/**/!(*spec).js': ['coverage'],
+            'app/**/!(*spec|html2canvas).js': ['coverage'],
             'app/templates/*.handlebars': ['handlebars']
         },
 
