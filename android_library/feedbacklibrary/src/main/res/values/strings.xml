@@ -34,4 +34,5 @@
     <string name="supersede_feedbacklibrary_finishannotation_title">Finish annotation</string>
     <string name="supersede_feedbacklibrary_cancelannotation_title">Cancel annotation</string>
     <string name="supersede_feedbacklibrary_chosencolor_string">Chosen color</string>
+    <string name="supersede_feedbacklibrary_crop_string">Crop</string>
 </resources>

@@ -76,9 +76,17 @@
                 android:id="@+id/supersede_feedbacklibrary_erase_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:drawableLeft="@drawable/icon_eraser"
                 android:drawableStart="@drawable/icon_eraser"
-                android:text="OFF"/>
+                android:text="@string/supersede_feedbacklibrary_off_string"/>
+
+            <Button
+                android:id="@+id/supersede_feedbacklibrary_crop_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:height="36dp"
+                android:minWidth="88dp"
+                android:text="@string/supersede_feedbacklibrary_crop_string"
+                android:textSize="13sp"/>
         </LinearLayout>
 
         <LinearLayout
