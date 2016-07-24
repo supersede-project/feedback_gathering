@@ -1,4 +1,6 @@
-package ch.uzh.ifi.feedback.orchestrator;
+package ch.uzh.ifi.feedback.orchestrator.Model;
+
+import java.sql.Timestamp;
 
 public class FeedbackParameter {
 	
@@ -6,7 +8,29 @@ public class FeedbackParameter {
 	private Object value;
 	private Object defaultValue;
 	private Boolean editableByUser;
+	private Timestamp createdAt;
+	private Timestamp updatedAt;
+	private String language;
 	
+	
+	public Timestamp getCreatedAt() {
+		return createdAt;
+	}
+	public void setCreatedAt(Timestamp createdAt) {
+		this.createdAt = createdAt;
+	}
+	public Timestamp getUpdatedAt() {
+		return updatedAt;
+	}
+	public void setUpdatedAt(Timestamp updatedAt) {
+		this.updatedAt = updatedAt;
+	}
+	public String getLanguage() {
+		return language;
+	}
+	public void setLanguage(String language) {
+		this.language = language;
+	}
 	public String getKey() {
 		return key;
 	}
