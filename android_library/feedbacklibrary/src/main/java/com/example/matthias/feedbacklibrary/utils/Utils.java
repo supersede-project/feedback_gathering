@@ -3,8 +3,6 @@ package com.example.matthias.feedbacklibrary.utils;
 import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Dialog;
-import android.app.DialogFragment;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.DialogInterface;
@@ -15,7 +13,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
-import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -29,9 +26,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 
 /**
  * Class with various helper methods
@@ -302,33 +297,5 @@ public class Utils {
         }
 
         return Bitmap.createScaledBitmap(bitmap, width, height, true);
-    }
-
-    /**
-     * Dialog with a cancel button for displaying a simple string message, e.g., if a given input field is not valid
-     */
-    public static class DataDialog extends DialogFragment {
-        public static DataDialog newInstance(ArrayList<String> messages) {
-            DataDialog f = new DataDialog();
-            Bundle args = new Bundle();
-            args.putStringArrayList("messages", messages);
-            f.setArguments(args);
-            return f;
-        }
-
-        @Override
-        public Dialog onCreateDialog(Bundle savedInstanceState) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-            List<String> messages = getArguments().getStringArrayList("messages");
-            StringBuilder message = new StringBuilder("");
-            for (String s : messages) {
-                message.append(s).append(".");
-            }
-            builder.setMessage(message.toString()).setNegativeButton("Close", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int id) {
-                }
-            });
-            return builder.create();
-        }
     }
 }

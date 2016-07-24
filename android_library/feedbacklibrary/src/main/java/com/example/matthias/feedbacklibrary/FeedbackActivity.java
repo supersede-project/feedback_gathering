@@ -26,6 +26,7 @@ import com.example.matthias.feedbacklibrary.feedbacks.Feedback;
 import com.example.matthias.feedbacklibrary.models.FeedbackConfiguration;
 import com.example.matthias.feedbacklibrary.models.FeedbackConfigurationItem;
 import com.example.matthias.feedbacklibrary.models.Mechanism;
+import com.example.matthias.feedbacklibrary.utils.DialogUtils;
 import com.example.matthias.feedbacklibrary.utils.Utils;
 import com.example.matthias.feedbacklibrary.views.MechanismView;
 import com.example.matthias.feedbacklibrary.views.RatingMechanismView;
@@ -199,7 +200,7 @@ public class FeedbackActivity extends AppCompatActivity {
     public void initView() {
         allMechanismViews = new ArrayList<>();
         LayoutInflater layoutInflater = LayoutInflater.from(this);
-        LinearLayout linearLayout = (LinearLayout) findViewById(R.id.feedback_activity_layout);
+        LinearLayout linearLayout = (LinearLayout) findViewById(R.id.supersede_feedbacklibrary_feedback_activity_layout);
 
         if (linearLayout != null) {
             for (int i = 0; i < allMechanisms.size(); ++i) {
@@ -292,10 +293,11 @@ public class FeedbackActivity extends AppCompatActivity {
         defaultImagePath = intent.getStringExtra(DEFAULT_IMAGE_PATH);
 
         // Make progress dialog visible
-        progressDialog = new ProgressDialog((findViewById(R.id.feedback_activity_layout)).getContext());
-        progressDialog.setTitle("Loading. Please wait.");
-        progressDialog.setCanceledOnTouchOutside(false);
-        progressDialog.show();
+        View view = findViewById(R.id.supersede_feedbacklibrary_feedback_activity_layout);
+        if (view != null) {
+            progressDialog = DialogUtils.createProgressDialog(view.getContext(), getResources().getString(R.string.supersede_feedbacklibrary_loading_string), false);
+            progressDialog.show();
+        }
 
         Retrofit rtf = new Retrofit.Builder().baseUrl(endpoint).addConverterFactory(GsonConverterFactory.create()).build();
         fbAPI = rtf.create(feedbackAPI.class);
@@ -413,7 +415,7 @@ public class FeedbackActivity extends AppCompatActivity {
                     @Override
                     public void onFailure(Call<JsonObject> call, Throwable t) {
                         messages.add("Oops. Something went wrong!");
-                        Utils.DataDialog d = Utils.DataDialog.newInstance(messages);
+                        DialogUtils.DataDialog d = DialogUtils.DataDialog.newInstance(messages);
                         d.show(getFragmentManager(), "dataDialog");
                     }
 
@@ -427,7 +429,7 @@ public class FeedbackActivity extends AppCompatActivity {
                 });
             }
         } else {
-            Utils.DataDialog d = Utils.DataDialog.newInstance(messages);
+            DialogUtils.DataDialog d = DialogUtils.DataDialog.newInstance(messages);
             d.show(getFragmentManager(), "dataDialog");
         }
     }
@@ -447,7 +449,7 @@ public class FeedbackActivity extends AppCompatActivity {
         if (validateInput(allMechanisms, messages)) {
             System.out.println("Validation successful");
         } else {
-            Utils.DataDialog d = Utils.DataDialog.newInstance(messages);
+            DialogUtils.DataDialog d = DialogUtils.DataDialog.newInstance(messages);
             d.show(getFragmentManager(), "dataDialog");
         }
     }

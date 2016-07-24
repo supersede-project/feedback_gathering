@@ -12,7 +12,7 @@
     tools:context="com.example.matthias.feedbacklibrary.FeedbackActivity">
 
     <LinearLayout
-        android:id="@+id/feedback_activity_layout"
+        android:id="@+id/supersede_feedbacklibrary_feedback_activity_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"/>

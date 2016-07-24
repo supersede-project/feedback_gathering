@@ -16,9 +16,26 @@
         android:layout_height="wrap_content"
         android:text="@string/host_application_screen_text"/>
 
-    <TextView
-        android:id="@+id/time_display"
+    <TextClock
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:format24Hour="hh:mm:ss a"/>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/pull_start_button"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="Trigger countdown."/>
+
+        <TextView
+            android:id="@+id/countdown_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"/>
+    </LinearLayout>
 </LinearLayout>
