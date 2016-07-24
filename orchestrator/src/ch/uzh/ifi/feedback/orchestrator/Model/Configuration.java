@@ -1,4 +1,4 @@
-package ch.uzh.ifi.feedback.orchestrator;
+package ch.uzh.ifi.feedback.orchestrator.Model;
 
 import java.util.ArrayList;
 import java.util.List;

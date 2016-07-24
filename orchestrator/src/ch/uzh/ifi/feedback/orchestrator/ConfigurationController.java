@@ -6,38 +6,42 @@ import javax.servlet.http.HttpServletResponse;
 
 import ch.uzh.ifi.feedback.library.rest.*;
 import ch.uzh.ifi.feedback.library.transaction.*;
+import ch.uzh.ifi.feedback.orchestrator.Model.Application;
+import ch.uzh.ifi.feedback.orchestrator.Model.FeedbackMechanism;
 
 
 @Controller
 (Route = "/{Application}/configuration")
-public class ConfigurationController extends RestController<List<FeedbackMechanism>>{
+public class ConfigurationController extends RestController<Application>{
     
-	private ISerializationService<List<FeedbackMechanism>> serializationService;
+	private ISerializationService<Application> serializationService;
 	private ConfigurationService dbService;
 	
     public ConfigurationController() {
 		super();
 		
 		dbService = new ConfigurationService(new TransactionManager(), new ConfigurationParser());
-		serializationService = new DefaultSerializer<>(this.getSerializationType());
+		serializationService = new ConfigurationSerializer(this.getSerializationType());
 	}
 
 	@Override
-	public List<FeedbackMechanism> Get(HttpServletRequest request, HttpServletResponse response) throws Exception 
+	public Application Get(HttpServletRequest request, HttpServletResponse response) throws Exception 
 	{
 		String application = (String)request.getAttribute("Application");
-		return dbService.Read(application);
+		//return dbService.Read(application);
+		return new Application();
 	}
 
-/*	@Override
-	public void Post(HttpServletRequest request, HttpServletResponse response, List<FeedbackMechanism> configuration) throws Exception)
+	@Override
+	public void Post(HttpServletRequest request, HttpServletResponse response, Application configuration) throws Exception
 	{
 		String application = (String)request.getAttribute("Application");
-		
-	}*/
+		configuration.setName(application);
+		dbService.CreateConfiguration(configuration);
+	}
 
 	@Override
-	public ISerializationService<List<FeedbackMechanism>> getSerializationService() {
+	public ISerializationService<Application> getSerializationService() {
 		return serializationService;
 	}
 }
