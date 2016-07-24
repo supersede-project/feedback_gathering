@@ -341,11 +341,11 @@ public class AnnotateImageActivity extends AppCompatActivity implements ColorPic
                     if (annotateImageView.getMode() == AnnotateImageView.Mode.ERASER) {
                         annotateImageView.setMode(AnnotateImageView.Mode.DRAW);
                         blackButton.setEnabled(true);
-                        eraseButton.setText("OFF");
+                        eraseButton.setText(R.string.supersede_feedbacklibrary_off_string);
                     } else {
                         annotateImageView.setMode(AnnotateImageView.Mode.ERASER);
                         blackButton.setEnabled(false);
-                        eraseButton.setText("ON");
+                        eraseButton.setText(R.string.supersede_feedbacklibrary_on_string);
                     }
                 }
             });

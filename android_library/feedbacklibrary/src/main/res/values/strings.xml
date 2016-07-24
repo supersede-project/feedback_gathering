@@ -35,4 +35,7 @@
     <string name="supersede_feedbacklibrary_cancelannotation_title">Cancel annotation</string>
     <string name="supersede_feedbacklibrary_chosencolor_string">Chosen color</string>
     <string name="supersede_feedbacklibrary_crop_string">Crop</string>
+
+    <!-- Overriding string resources in com.theartofdev.edmodo:android-image-cropper -->
+    <string name="crop_image_menu_crop">@string/supersede_feedbacklibrary_crop_string</string>
 </resources>
