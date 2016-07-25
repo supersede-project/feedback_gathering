@@ -1,3 +1,18 @@
+/**
+ * Copyright [2016] [Matthias Scherrer]
+ * <p/>
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * <p/>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p/>
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.example.matthias.feedbacklibrary;
 
 import android.app.DialogFragment;
@@ -8,6 +23,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -17,9 +33,17 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.example.matthias.feedbacklibrary.utils.Utils;
 import com.example.matthias.feedbacklibrary.views.AnnotateImageView;
+import com.theartofdev.edmodo.cropper.CropImage;
+import com.theartofdev.edmodo.cropper.CropImageView;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Stack;
 
 /**
  * Activity for annotating the screenshot
@@ -30,6 +54,9 @@ public class AnnotateImageActivity extends AppCompatActivity implements ColorPic
     private int oldPaintFillColor;
 
     private AnnotateImageView annotateImageView;
+    private Stack<File> pastFileStack = new Stack<>();
+    private Stack<File> futureFileStack = new Stack<>();
+    private List<File> tempFiles = new ArrayList<>();
 
     private static ColorPickerDialog newInstance(int mInitialColor) {
         ColorPickerDialog dialog = new ColorPickerDialog();
@@ -44,11 +71,13 @@ public class AnnotateImageActivity extends AppCompatActivity implements ColorPic
      *
      * @param bitmap the bitmap to draw on
      */
-    private void initAnnotateImageView(Bitmap bitmap) {
+    private void initAnnotateImageView(Bitmap bitmap, String imagePath) {
         annotateImageView = new AnnotateImageView(this);
 
         // Set the bitmap to draw on
         annotateImageView.drawBitmap(bitmap);
+        // Add the file of the original image
+        annotateImageView.addCroppedImage(new File(imagePath));
         // Set the background color of the canvas (used for the eraser)
         annotateImageView.setBaseColor(Color.WHITE);
         // Set the mode
@@ -67,7 +96,7 @@ public class AnnotateImageActivity extends AppCompatActivity implements ColorPic
         annotateImageView.setBlur(0F);
 
         // Set the text attributes
-        annotateImageView.setText("");
+        annotateImageView.setText("Test TEXT");
         annotateImageView.setFontFamily(Typeface.DEFAULT);
         annotateImageView.setFontSize(32F);
 
@@ -79,13 +108,28 @@ public class AnnotateImageActivity extends AppCompatActivity implements ColorPic
     }
 
     @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+            CropImage.ActivityResult result = CropImage.getActivityResult(data);
+            if (resultCode == RESULT_OK) {
+                Uri croppedImageUri = result.getUri();
+                File croppedImageFile = new File(croppedImageUri.getPath());
+                annotateImageView.updateCroppedImageHistory(croppedImageFile);
+            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                Toast toast = Toast.makeText(getApplicationContext(), "Oops. Something went wrong!", Toast.LENGTH_SHORT);
+                toast.show();
+            }
+        }
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_annotate);
 
         String imagePath = getIntent().getStringExtra("imagePath");
         Bitmap bitmap = BitmapFactory.decodeFile(imagePath);
-        initAnnotateImageView(bitmap);
+        initAnnotateImageView(bitmap, imagePath);
 
         setListeners();
     }
@@ -106,13 +150,21 @@ public class AnnotateImageActivity extends AppCompatActivity implements ColorPic
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
+        // In both cases whether the action is accepted or cancelled, the temporary stored files need to be deleted
+        List<File> tempFiles = annotateImageView.getCroppedImageLists();
+        for (int i = 1; i < tempFiles.size(); ++i) {
+            tempFiles.get(i).delete();
+        }
+        tempFiles.clear();
+
         if (id == R.id.supersede_feedbacklibrary_action_annotate_cancel) {
             super.onBackPressed();
             return true;
         }
         if (id == R.id.supersede_feedbacklibrary_action_annotate_accept) {
             Bitmap annotatedBitmap = annotateImageView.getBitmap();
-            String annotatedImagePath = Utils.saveImageToInternalStorage(getApplicationContext(), "imageDir", FeedbackActivity.IMAGE_NAME, annotatedBitmap, Context.MODE_PRIVATE, Bitmap.CompressFormat.JPEG, 100);
+
+            String annotatedImagePath = Utils.saveBitmapToInternalStorage(getApplicationContext(), "imageDir", FeedbackActivity.IMAGE_NAME, annotatedBitmap, Context.MODE_PRIVATE, Bitmap.CompressFormat.PNG, 100);
             Intent intent = new Intent();
             intent.putExtra("annotatedImagePath", annotatedImagePath);
             setResult(RESULT_OK, intent);
@@ -136,6 +188,7 @@ public class AnnotateImageActivity extends AppCompatActivity implements ColorPic
         final ImageButton lineButton = (ImageButton) findViewById(R.id.supersede_feedbacklibrary_line_btn);
         final ImageButton arrowButton = (ImageButton) findViewById(R.id.supersede_feedbacklibrary_arrow_btn);
         final Button eraseButton = (Button) findViewById(R.id.supersede_feedbacklibrary_erase_btn);
+        final Button cropButton = (Button) findViewById(R.id.supersede_feedbacklibrary_crop_btn);
 
         if (colorPickerButton != null) {
             colorPickerButton.setOnClickListener(new View.OnClickListener() {
@@ -169,10 +222,10 @@ public class AnnotateImageActivity extends AppCompatActivity implements ColorPic
                 public void onClick(View v) {
                     if (annotateImageView.getPaintStyle() == Paint.Style.FILL) {
                         annotateImageView.setPaintStyle(Paint.Style.STROKE);
-                        fillButton.setText("Fill");
+                        fillButton.setText(R.string.supersede_feedbacklibrary_fillbutton_text);
                     } else {
                         annotateImageView.setPaintStyle(Paint.Style.FILL);
-                        fillButton.setText("Stroke");
+                        fillButton.setText(R.string.supersede_feedbacklibrary_strokebutton_text);
                     }
                 }
             });
@@ -288,11 +341,24 @@ public class AnnotateImageActivity extends AppCompatActivity implements ColorPic
                     if (annotateImageView.getMode() == AnnotateImageView.Mode.ERASER) {
                         annotateImageView.setMode(AnnotateImageView.Mode.DRAW);
                         blackButton.setEnabled(true);
-                        eraseButton.setText("OFF");
+                        eraseButton.setText(R.string.supersede_feedbacklibrary_off_string);
                     } else {
                         annotateImageView.setMode(AnnotateImageView.Mode.ERASER);
                         blackButton.setEnabled(false);
-                        eraseButton.setText("ON");
+                        eraseButton.setText(R.string.supersede_feedbacklibrary_on_string);
+                    }
+                }
+            });
+        }
+
+        if (cropButton != null) {
+            cropButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    File tempFile = Utils.createTempChacheFile(getApplicationContext(), "crop", ".jpg");
+                    if (Utils.saveBitmapToFile(tempFile, annotateImageView.getWholeViewBitmap(), Bitmap.CompressFormat.JPEG, 100)) {
+                        Uri cropInput = Uri.fromFile(tempFile);
+                        CropImage.activity(cropInput).setGuidelines(CropImageView.Guidelines.ON).start(AnnotateImageActivity.this);
                     }
                 }
             });

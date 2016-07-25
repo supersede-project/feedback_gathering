@@ -48,6 +48,7 @@ import android.widget.RelativeLayout;
 import com.example.matthias.feedbacklibrary.utils.Utils;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -94,12 +95,18 @@ public class AnnotateImageView extends View {
     private float startY = 0F;
     private float controlX = 0F;
     private float controlY = 0F;
+    private PointF startPoint;
+    private PointF endPoint;
     // Parent activity
     private boolean noActionExecuted = true;
     private ImageButton undoButton = null;
     private ImageButton redoButton = null;
-    private PointF startPoint;
-    private PointF endPoint;
+    // Cropped image history
+    private List<File> croppedImageLists = new ArrayList<>();
+    private List<Integer> startHistoryPointerLists = new ArrayList<>();
+    private boolean isCroppedImageAdded = false;
+    private int croppedImagePointer;
+    private int startHistoryPointer;
 
     /**
      * @param context  the context
@@ -108,7 +115,7 @@ public class AnnotateImageView extends View {
      */
     public AnnotateImageView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        this.setup(context);
+        setup(context);
     }
 
     /**
@@ -117,7 +124,7 @@ public class AnnotateImageView extends View {
      */
     public AnnotateImageView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        this.setup(context);
+        setup(context);
     }
 
     /**
@@ -125,7 +132,17 @@ public class AnnotateImageView extends View {
      */
     public AnnotateImageView(Context context) {
         super(context);
-        this.setup(context);
+        setup(context);
+    }
+
+    public void addCroppedImage(File file) {
+        if (!isCroppedImageAdded) {
+            croppedImageLists.add(file);
+            croppedImagePointer = 1;
+            startHistoryPointer = 0;
+            startHistoryPointerLists.add(historyPointer);
+            isCroppedImageAdded = !isCroppedImageAdded;
+        }
     }
 
     /**
@@ -141,26 +158,26 @@ public class AnnotateImageView extends View {
         paint.setColor(Color.WHITE);
         paint.setStyle(Paint.Style.FILL);
 
-        if (this.historyPointer == this.pathLists.size()) {
-            this.pathLists.add(path);
-            this.paintLists.add(paint);
-            this.historyPointer++;
+        if (historyPointer == pathLists.size()) {
+            pathLists.add(path);
+            paintLists.add(paint);
+            historyPointer++;
         } else {
             // On the way of Undo or Redo
-            this.pathLists.set(this.historyPointer, path);
-            this.paintLists.set(this.historyPointer, paint);
-            this.historyPointer++;
+            pathLists.set(historyPointer, path);
+            paintLists.set(historyPointer, paint);
+            historyPointer++;
 
-            for (int i = this.historyPointer, size = this.paintLists.size(); i < size; i++) {
-                this.pathLists.remove(this.historyPointer);
-                this.paintLists.remove(this.historyPointer);
+            for (int i = historyPointer, size = paintLists.size(); i < size; i++) {
+                pathLists.remove(historyPointer);
+                paintLists.remove(historyPointer);
             }
         }
 
-        this.text = "";
+        text = "";
 
         // Clear
-        this.invalidate();
+        invalidate();
     }
 
     /**
@@ -172,28 +189,28 @@ public class AnnotateImageView extends View {
         Paint paint = new Paint();
 
         paint.setAntiAlias(true);
-        paint.setStyle(this.paintStyle);
-        paint.setStrokeWidth(this.paintStrokeWidth);
-        paint.setStrokeCap(this.lineCap);
-        paint.setStrokeJoin(this.lineJoin);
+        paint.setStyle(paintStyle);
+        paint.setStrokeWidth(paintStrokeWidth);
+        paint.setStrokeCap(lineCap);
+        paint.setStrokeJoin(lineJoin);
 
         // Text
-        if (this.mode == Mode.TEXT) {
-            paint.setTypeface(this.fontFamily);
-            paint.setTextSize(this.fontSize);
-            paint.setTextAlign(this.textAlign);
+        if (mode == Mode.TEXT) {
+            paint.setTypeface(fontFamily);
+            paint.setTextSize(fontSize);
+            paint.setTextAlign(textAlign);
             paint.setStrokeWidth(0F);
         }
 
         // Eraser
-        if (this.mode == Mode.ERASER) {
-            paint.setColor(this.baseColor);
-            paint.setShadowLayer(this.blur, 0F, 0F, this.baseColor);
+        if (mode == Mode.ERASER) {
+            paint.setColor(baseColor);
+            paint.setShadowLayer(blur, 0F, 0F, baseColor);
         } else {
             // Otherwise
-            paint.setColor(this.paintStrokeColor);
-            paint.setShadowLayer(this.blur, 0F, 0F, this.paintStrokeColor);
-            paint.setAlpha(this.opacity);
+            paint.setColor(paintStrokeColor);
+            paint.setShadowLayer(blur, 0F, 0F, paintStrokeColor);
+            paint.setAlpha(opacity);
         }
 
         return paint;
@@ -210,14 +227,14 @@ public class AnnotateImageView extends View {
         Path path = new Path();
 
         // Save for ACTION_MOVE
-        this.startX = event.getX();
-        this.startY = event.getY();
+        startX = event.getX();
+        startY = event.getY();
 
-        path.moveTo(this.startX, this.startY);
+        path.moveTo(startX, startY);
 
-        if (this.drawer == Drawer.ARROW) {
-            this.startPoint = new PointF(this.startX, this.startY);
-            this.endPoint = new PointF();
+        if (drawer == Drawer.ARROW) {
+            startPoint = new PointF(startX, startY);
+            endPoint = new PointF();
         }
 
         return path;
@@ -230,7 +247,7 @@ public class AnnotateImageView extends View {
      */
     public void drawBitmap(Bitmap bitmap) {
         this.bitmap = bitmap;
-        this.invalidate();
+        invalidate();
     }
 
     /**
@@ -239,7 +256,7 @@ public class AnnotateImageView extends View {
      * @param byteArray This is returned as byte array of bitmap.
      */
     public void drawBitmap(byte[] byteArray) {
-        this.drawBitmap(BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length));
+        drawBitmap(BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length));
     }
 
     /**
@@ -248,15 +265,15 @@ public class AnnotateImageView extends View {
      * @param canvas the canvas
      */
     private void drawText(Canvas canvas) {
-        if (this.text.length() <= 0) {
+        if (text.length() <= 0) {
             return;
         }
 
-        if (this.mode == Mode.TEXT) {
-            this.textX = this.startX;
-            this.textY = this.startY;
+        if (mode == Mode.TEXT) {
+            textX = startX;
+            textY = startY;
 
-            this.textPaint = this.createPaint();
+            textPaint = createPaint();
         }
 
         float textX = this.textX;
@@ -265,8 +282,8 @@ public class AnnotateImageView extends View {
         Paint paintForMeasureText = new Paint();
 
         // Line break automatically
-        float textLength = paintForMeasureText.measureText(this.text);
-        float lengthOfChar = textLength / (float) this.text.length();
+        float textLength = paintForMeasureText.measureText(text);
+        float lengthOfChar = textLength / (float) text.length();
         // text-align : right
         float restWidth = canvas.getWidth() - textX;
         // The number of characters at 1 line
@@ -274,23 +291,31 @@ public class AnnotateImageView extends View {
         int modNumChars = (numChars < 1) ? 1 : numChars;
         float y = textY;
 
-        for (int i = 0, len = this.text.length(); i < len; i += modNumChars) {
+        for (int i = 0, len = text.length(); i < len; i += modNumChars) {
             String substring = "";
 
             if ((i + modNumChars) < len) {
-                substring = this.text.substring(i, (i + modNumChars));
+                substring = text.substring(i, (i + modNumChars));
             } else {
-                substring = this.text.substring(i, len);
+                substring = text.substring(i, len);
             }
 
-            y += this.fontSize;
+            y += fontSize;
 
-            canvas.drawText(substring, textX, y, this.textPaint);
+            canvas.drawText(substring, textX, y, textPaint);
         }
     }
 
+    private void enableUndoDisableRedo() {
+        undoButton.setEnabled(true);
+        undoButton.setAlpha(1.0F);
+        redoButton.setEnabled(false);
+        redoButton.setAlpha(0.4F);
+        noActionExecuted = false;
+    }
+
     public int getBaseColor() {
-        return this.baseColor;
+        return baseColor;
     }
 
     /**
@@ -299,10 +324,10 @@ public class AnnotateImageView extends View {
      * @return This is returned as bitmap.
      */
     public Bitmap getBitmap() {
-        this.setDrawingCacheEnabled(false);
-        this.setDrawingCacheEnabled(true);
+        setDrawingCacheEnabled(false);
+        setDrawingCacheEnabled(true);
 
-        return Bitmap.createBitmap(this.getDrawingCache(), 0, 0, this.bitmap.getWidth(), this.bitmap.getHeight());
+        return Bitmap.createBitmap(getDrawingCache(), 0, 0, bitmap.getWidth(), bitmap.getHeight());
     }
 
     /**
@@ -314,7 +339,7 @@ public class AnnotateImageView extends View {
      */
     public byte[] getBitmapAsByteArray(CompressFormat format, int quality) {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        this.getWholeViewBitmap().compress(format, quality, byteArrayOutputStream);
+        getWholeViewBitmap().compress(format, quality, byteArrayOutputStream);
 
         return byteArrayOutputStream.toByteArray();
     }
@@ -326,11 +351,15 @@ public class AnnotateImageView extends View {
      * @return the bitmap as byte array
      */
     public byte[] getBitmapAsByteArray() {
-        return this.getBitmapAsByteArray(CompressFormat.PNG, 100);
+        return getBitmapAsByteArray(CompressFormat.PNG, 100);
     }
 
     public float getBlur() {
-        return this.blur;
+        return blur;
+    }
+
+    public List<File> getCroppedImageLists() {
+        return croppedImageLists;
     }
 
     /**
@@ -339,23 +368,23 @@ public class AnnotateImageView extends View {
      * @return the instance of Path
      */
     private Path getCurrentPath() {
-        return this.pathLists.get(this.historyPointer - 1);
+        return pathLists.get(historyPointer - 1);
     }
 
     public Drawer getDrawer() {
-        return this.drawer;
+        return drawer;
     }
 
     public Typeface getFontFamily() {
-        return this.fontFamily;
+        return fontFamily;
     }
 
     public float getFontSize() {
-        return this.fontSize;
+        return fontSize;
     }
 
     public Paint.Cap getLineCap() {
-        return this.lineCap;
+        return lineCap;
     }
 
     public Paint.Join getLineJoin() {
@@ -363,27 +392,27 @@ public class AnnotateImageView extends View {
     }
 
     public Mode getMode() {
-        return this.mode;
+        return mode;
     }
 
     public int getOpacity() {
-        return this.opacity;
+        return opacity;
     }
 
     public int getPaintFillColor() {
-        return this.paintFillColor;
+        return paintFillColor;
     }
 
     public int getPaintStrokeColor() {
-        return this.paintStrokeColor;
+        return paintStrokeColor;
     }
 
     public float getPaintStrokeWidth() {
-        return this.paintStrokeWidth;
+        return paintStrokeWidth;
     }
 
     public Paint.Style getPaintStyle() {
-        return this.paintStyle;
+        return paintStyle;
     }
 
     /**
@@ -392,14 +421,14 @@ public class AnnotateImageView extends View {
      * @return the scaled bitmap.
      */
     public Bitmap getScaleBitmap(int w, int h) {
-        this.setDrawingCacheEnabled(false);
-        this.setDrawingCacheEnabled(true);
+        setDrawingCacheEnabled(false);
+        setDrawingCacheEnabled(true);
 
-        return Bitmap.createScaledBitmap(this.getDrawingCache(), w, h, true);
+        return Bitmap.createScaledBitmap(getDrawingCache(), w, h, true);
     }
 
     public String getText() {
-        return this.text;
+        return text;
     }
 
     /**
@@ -408,10 +437,10 @@ public class AnnotateImageView extends View {
      * @return This is returned as bitmap.
      */
     public Bitmap getWholeViewBitmap() {
-        this.setDrawingCacheEnabled(false);
-        this.setDrawingCacheEnabled(true);
+        setDrawingCacheEnabled(false);
+        setDrawingCacheEnabled(true);
 
-        return Bitmap.createBitmap(this.getDrawingCache());
+        return Bitmap.createBitmap(getDrawingCache());
     }
 
     /**
@@ -420,7 +449,7 @@ public class AnnotateImageView extends View {
      * @return true if a redo operation is possible, false otherwise
      */
     public boolean isRedoable() {
-        return this.historyPointer < this.pathLists.size();
+        return (historyPointer < pathLists.size() || startHistoryPointer < startHistoryPointerLists.size() - 1);
     }
 
     /**
@@ -429,7 +458,7 @@ public class AnnotateImageView extends View {
      * @return true if an undo operation is possible, false otherwise
      */
     public boolean isUndoable() {
-        return this.historyPointer > 1;
+        return (historyPointer > 1 || startHistoryPointer > 0);
     }
 
     /**
@@ -438,31 +467,31 @@ public class AnnotateImageView extends View {
      * @param event MotionEvent even, i.e., the argument of onTouchEvent method
      */
     private void onActionDown(MotionEvent event) {
-        switch (this.mode) {
+        switch (mode) {
             case DRAW:
             case ERASER:
-                if ((this.drawer != Drawer.QUADRATIC_BEZIER) && (this.drawer != Drawer.QUBIC_BEZIER)) {
+                if ((drawer != Drawer.QUADRATIC_BEZIER) && (drawer != Drawer.QUBIC_BEZIER)) {
                     // Otherwise
-                    this.updateHistory(this.createPath(event));
-                    this.isDown = true;
+                    updateHistory(createPath(event));
+                    isDown = true;
                 } else {
                     // Bezier
-                    if ((this.startX == 0F) && (this.startY == 0F)) {
+                    if ((startX == 0F) && (startY == 0F)) {
                         // The 1st tap
-                        this.updateHistory(this.createPath(event));
+                        updateHistory(createPath(event));
                     } else {
                         // The 2nd tap
-                        this.controlX = event.getX();
-                        this.controlY = event.getY();
+                        controlX = event.getX();
+                        controlY = event.getY();
 
-                        this.isDown = true;
+                        isDown = true;
                     }
                 }
 
                 break;
             case TEXT:
-                this.startX = event.getX();
-                this.startY = event.getY();
+                startX = event.getX();
+                startY = event.getY();
 
                 break;
             default:
@@ -479,15 +508,15 @@ public class AnnotateImageView extends View {
         float x = event.getX();
         float y = event.getY();
 
-        switch (this.mode) {
+        switch (mode) {
             case DRAW:
             case ERASER:
-                if ((this.drawer != Drawer.QUADRATIC_BEZIER) && (this.drawer != Drawer.QUBIC_BEZIER)) {
+                if ((drawer != Drawer.QUADRATIC_BEZIER) && (drawer != Drawer.QUBIC_BEZIER)) {
                     if (!isDown) {
                         return;
                     }
 
-                    Path path = this.getCurrentPath();
+                    Path path = getCurrentPath();
 
                     switch (this.drawer) {
                         case PEN:
@@ -495,12 +524,12 @@ public class AnnotateImageView extends View {
                             break;
                         case LINE:
                             path.reset();
-                            path.moveTo(this.startX, this.startY);
+                            path.moveTo(startX, startY);
                             path.lineTo(x, y);
                             break;
                         case ARROW:
                             path.reset();
-                            path.moveTo(this.startX, this.startY);
+                            path.moveTo(startX, startY);
                             path.lineTo(x, y);
 
                             this.endPoint.x = x;
@@ -508,13 +537,13 @@ public class AnnotateImageView extends View {
 
                             float deltaX = endPoint.x - startPoint.x;
                             float deltaY = endPoint.y - startPoint.y;
-                            float frac = (float) 0.1;
-                            float point_x_1 = startPoint.x + ((1 - frac) * deltaX + frac * deltaY);
-                            float point_y_1 = startPoint.y + ((1 - frac) * deltaY - frac * deltaX);
+                            float fracture = (float) 0.1;
+                            float point_x_1 = startPoint.x + ((1 - fracture) * deltaX + fracture * deltaY);
+                            float point_y_1 = startPoint.y + ((1 - fracture) * deltaY - fracture * deltaX);
                             float point_x_2 = endPoint.x;
                             float point_y_2 = endPoint.y;
-                            float point_x_3 = startPoint.x + ((1 - frac) * deltaX - frac * deltaY);
-                            float point_y_3 = startPoint.y + ((1 - frac) * deltaY + frac * deltaX);
+                            float point_x_3 = startPoint.x + ((1 - fracture) * deltaX - fracture * deltaY);
+                            float point_y_3 = startPoint.y + ((1 - fracture) * deltaY + fracture * deltaX);
 
                             path.moveTo(point_x_1, point_y_1);
                             path.lineTo(point_x_2, point_y_2);
@@ -522,18 +551,18 @@ public class AnnotateImageView extends View {
                             break;
                         case RECTANGLE:
                             path.reset();
-                            path.addRect(this.startX, this.startY, x, y, Path.Direction.CCW);
+                            path.addRect(startX, startY, x, y, Path.Direction.CCW);
                             break;
                         case CIRCLE:
-                            double distanceX = Math.abs((double) (this.startX - x));
-                            double distanceY = Math.abs((double) (this.startX - y));
+                            double distanceX = Math.abs((double) (startX - x));
+                            double distanceY = Math.abs((double) (startX - y));
                             double radius = Math.sqrt(Math.pow(distanceX, 2.0) + Math.pow(distanceY, 2.0));
 
                             path.reset();
-                            path.addCircle(this.startX, this.startY, (float) radius, Path.Direction.CCW);
+                            path.addCircle(startX, startY, (float) radius, Path.Direction.CCW);
                             break;
                         case ELLIPSE:
-                            RectF rect = new RectF(this.startX, this.startY, x, y);
+                            RectF rect = new RectF(startX, startY, x, y);
 
                             path.reset();
                             path.addOval(rect, Path.Direction.CCW);
@@ -546,17 +575,17 @@ public class AnnotateImageView extends View {
                         return;
                     }
 
-                    Path path = this.getCurrentPath();
+                    Path path = getCurrentPath();
 
                     path.reset();
-                    path.moveTo(this.startX, this.startY);
-                    path.quadTo(this.controlX, this.controlY, x, y);
+                    path.moveTo(startX, startY);
+                    path.quadTo(controlX, controlY, x, y);
                 }
 
                 break;
             case TEXT:
-                this.startX = x;
-                this.startY = y;
+                startX = x;
+                startY = y;
 
                 break;
             default:
@@ -571,9 +600,9 @@ public class AnnotateImageView extends View {
      */
     private void onActionUp(MotionEvent event) {
         if (isDown) {
-            this.startX = 0F;
-            this.startY = 0F;
-            this.isDown = false;
+            startX = 0F;
+            startY = 0F;
+            isDown = false;
         }
     }
 
@@ -587,30 +616,30 @@ public class AnnotateImageView extends View {
         super.onDraw(canvas);
 
         // Before "drawPath"
-        canvas.drawColor(this.baseColor);
+        canvas.drawColor(baseColor);
 
-        if (this.bitmap != null) {
-            canvas.drawBitmap(this.bitmap, 0F, 0F, emptyPaint);
+        if (bitmap != null) {
+            canvas.drawBitmap(bitmap, 0F, 0F, emptyPaint);
         }
 
-        for (int i = 0; i < this.historyPointer; i++) {
-            Path path = this.pathLists.get(i);
-            Paint paint = this.paintLists.get(i);
+        for (int i = startHistoryPointerLists.get(startHistoryPointer); i < historyPointer; i++) {
+            Path path = pathLists.get(i);
+            Paint paint = paintLists.get(i);
 
             canvas.drawPath(path, paint);
         }
 
-        this.drawText(canvas);
+        drawText(canvas);
     }
 
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
-        this.bitmap = Utils.scaleBitmap(this.bitmap, w, h);
+        bitmap = Utils.scaleBitmap(bitmap, w, h);
         RelativeLayout relativeLayout = (RelativeLayout) getParent();
         ViewGroup.LayoutParams relativeLayoutLayoutParams = relativeLayout.getLayoutParams();
         if (relativeLayoutLayoutParams != null) {
-            relativeLayoutLayoutParams.height = this.bitmap.getHeight();
-            relativeLayoutLayoutParams.width = this.bitmap.getWidth();
+            relativeLayoutLayoutParams.height = bitmap.getHeight();
+            relativeLayoutLayoutParams.width = bitmap.getWidth();
         }
 
         super.onSizeChanged(w, h, oldw, oldh);
@@ -625,20 +654,20 @@ public class AnnotateImageView extends View {
     public boolean onTouchEvent(MotionEvent event) {
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
-                this.onActionDown(event);
+                onActionDown(event);
                 break;
             case MotionEvent.ACTION_MOVE:
-                this.onActionMove(event);
+                onActionMove(event);
                 break;
             case MotionEvent.ACTION_UP:
-                this.onActionUp(event);
+                onActionUp(event);
                 break;
             default:
                 break;
         }
 
         // Redraw
-        this.invalidate();
+        invalidate();
 
         return true;
     }
@@ -649,14 +678,29 @@ public class AnnotateImageView extends View {
      * @return true if Redo is enabled, false otherwise
      */
     public boolean redo() {
-        if (this.historyPointer < this.pathLists.size()) {
-            this.historyPointer++;
-            this.invalidate();
+        if (historyPointer < pathLists.size()) {
+            if ((startHistoryPointer < startHistoryPointerLists.size() - 1) && startHistoryPointerLists.get(startHistoryPointer + 1) == historyPointer) {
+                startHistoryPointer++;
+                croppedImagePointer++;
+                updateCroppedImage();
+            } else {
+                historyPointer++;
+            }
+
+            invalidate();
 
             return true;
-        } else {
-            return false;
+        } else if ((startHistoryPointer < startHistoryPointerLists.size() - 1)) {
+            startHistoryPointer++;
+            croppedImagePointer++;
+            updateCroppedImage();
+
+            invalidate();
+
+            return true;
         }
+
+        return false;
     }
 
     /**
@@ -696,7 +740,7 @@ public class AnnotateImageView extends View {
      * @param face the face
      */
     public void setFontFamily(Typeface face) {
-        this.fontFamily = face;
+        fontFamily = face;
     }
 
     /**
@@ -706,9 +750,9 @@ public class AnnotateImageView extends View {
      */
     public void setFontSize(float size) {
         if (!(size < 0F)) {
-            this.fontSize = size;
+            fontSize = size;
         } else {
-            this.fontSize = 32F;
+            fontSize = 32F;
         }
     }
 
@@ -718,10 +762,8 @@ public class AnnotateImageView extends View {
      * @param cap the cap
      */
     public void setLineCap(Paint.Cap cap) {
-        this.lineCap = cap;
+        lineCap = cap;
     }
-
-    // TODO: observe?
 
     public void setLineJoin(Paint.Join lineJoin) {
         this.lineJoin = lineJoin;
@@ -761,7 +803,7 @@ public class AnnotateImageView extends View {
      * @param color the fill color
      */
     public void setPaintFillColor(int color) {
-        this.paintFillColor = color;
+        paintFillColor = color;
     }
 
     /**
@@ -770,7 +812,7 @@ public class AnnotateImageView extends View {
      * @param color the stroke color
      */
     public void setPaintStrokeColor(int color) {
-        this.paintStrokeColor = color;
+        paintStrokeColor = color;
     }
 
     /**
@@ -780,9 +822,9 @@ public class AnnotateImageView extends View {
      */
     public void setPaintStrokeWidth(float width) {
         if (!(width < 0)) {
-            this.paintStrokeWidth = width;
+            paintStrokeWidth = width;
         } else {
-            this.paintStrokeWidth = 3F;
+            paintStrokeWidth = 3F;
         }
     }
 
@@ -816,11 +858,11 @@ public class AnnotateImageView extends View {
      * @param context the context
      */
     private void setup(Context context) {
-        this.pathLists.add(new Path());
-        this.paintLists.add(this.createPaint());
-        this.historyPointer++;
+        pathLists.add(new Path());
+        paintLists.add(createPaint());
+        historyPointer++;
 
-        this.textPaint.setARGB(0, 255, 255, 255);
+        textPaint.setARGB(0, 255, 255, 255);
     }
 
     /**
@@ -829,14 +871,70 @@ public class AnnotateImageView extends View {
      * @return true if Undo is enabled, false otherwise
      */
     public boolean undo() {
-        if (this.historyPointer > 1) {
-            this.historyPointer--;
+        if (historyPointer > 1) {
+            if (startHistoryPointerLists.get(startHistoryPointer) == historyPointer && startHistoryPointer > 0) {
+                startHistoryPointer--;
+                croppedImagePointer--;
+                updateCroppedImage();
+            } else {
+                historyPointer--;
+            }
+
             invalidate();
 
             return true;
-        } else {
-            return false;
+        } else if (startHistoryPointer > 0) {
+            startHistoryPointer--;
+            croppedImagePointer--;
+            updateCroppedImage();
+
+            invalidate();
+
+            return true;
         }
+
+        return false;
+    }
+
+    private void updateCroppedImage() {
+        String imagePath = croppedImageLists.get(croppedImagePointer - 1).getAbsolutePath();
+        Bitmap bitmap = BitmapFactory.decodeFile(imagePath);
+        this.bitmap = bitmap;
+    }
+
+    /**
+     * This method updates the image history after a cropping operation.
+     *
+     * @param file the cropped image
+     */
+    public void updateCroppedImageHistory(File file) {
+        if (croppedImagePointer == croppedImageLists.size()) {
+            croppedImageLists.add(file);
+            croppedImagePointer++;
+            startHistoryPointerLists.add(historyPointer);
+            startHistoryPointer++;
+        } else {
+            croppedImageLists.set(croppedImagePointer, file);
+            croppedImagePointer++;
+
+            for (int i = croppedImagePointer, size = croppedImageLists.size(); i < size; i++) {
+                croppedImageLists.get(croppedImagePointer).delete();
+                croppedImageLists.remove(croppedImagePointer);
+            }
+
+            for (int i = historyPointer, size = paintLists.size(); i < size; i++) {
+                pathLists.remove(historyPointer);
+                paintLists.remove(historyPointer);
+            }
+
+            startHistoryPointer++;
+            for (int i = startHistoryPointer, size = startHistoryPointerLists.size(); i < size; i++) {
+                startHistoryPointerLists.remove(startHistoryPointer);
+            }
+            startHistoryPointerLists.add(historyPointer);
+        }
+        enableUndoDisableRedo();
+        updateCroppedImage();
     }
 
     /**
@@ -846,27 +944,23 @@ public class AnnotateImageView extends View {
      * @param path the instance of Path
      */
     private void updateHistory(Path path) {
-        if (this.noActionExecuted) {
-            this.undoButton.setEnabled(true);
-            this.undoButton.setAlpha(1.0F);
-            this.redoButton.setEnabled(false);
-            this.redoButton.setAlpha(0.4F);
-            this.noActionExecuted = false;
+        if (noActionExecuted) {
+            enableUndoDisableRedo();
         }
 
-        if (this.historyPointer == this.pathLists.size()) {
-            this.pathLists.add(path);
-            this.paintLists.add(this.createPaint());
-            this.historyPointer++;
+        if (historyPointer == pathLists.size()) {
+            pathLists.add(path);
+            paintLists.add(createPaint());
+            historyPointer++;
         } else {
             // On the way of Undo or Redo
-            this.pathLists.set(this.historyPointer, path);
-            this.paintLists.set(this.historyPointer, this.createPaint());
-            this.historyPointer++;
+            pathLists.set(historyPointer, path);
+            paintLists.set(historyPointer, createPaint());
+            historyPointer++;
 
-            for (int i = this.historyPointer, size = this.paintLists.size(); i < size; i++) {
-                this.pathLists.remove(this.historyPointer);
-                this.paintLists.remove(this.historyPointer);
+            for (int i = historyPointer, size = paintLists.size(); i < size; i++) {
+                pathLists.remove(historyPointer);
+                paintLists.remove(historyPointer);
             }
         }
     }

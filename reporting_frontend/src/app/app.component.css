@@ -1,5 +1,5 @@
 div#main {
-  width: 560px;
+  width: 60%;
   background-color: ghostwhite;
   position: absolute;
   top:0;
@@ -10,32 +10,29 @@ div#main {
   margin: auto;
 }
 
-div#header {
+#toolbar{
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 100px;
-}
-
-div#feedback-toolbar{
-  position: absolute;
-  top: 100px;
+  top: 0px;
   left: 0;
   right: 0;
   height: 50px;
 }
-div#feedback-list{
-  width: 250px;
-  height: 500px;
+
+#list{
+  min-width: 250px;
+  width: 30%;
   position:absolute;
-  top:160px;
+  top:90px;
   left: 0px;
+  max-height: 100%;
+  overflow-y: auto;
 }
-div#feedback-detail {
+
+#detail {
   min-width: 300px;
-  min-height: 300px;
+  width:60%;
+  margin-right:5%;
   position:absolute;
-  top: 250px;
-  margin-left: 260px;
+  top: 110px;
+  margin-left: 35%;
 }

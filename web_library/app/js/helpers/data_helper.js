@@ -1,4 +1,4 @@
-define(["require", "exports", 'querystring'], function (require, exports, querystring_1) {
+define(["require", "exports"], function (require, exports) {
     "use strict";
     var DataHelper = (function () {
         function DataHelper() {
@@ -8,7 +8,7 @@ define(["require", "exports", 'querystring'], function (require, exports, querys
             if (dataURI.split(',')[0].indexOf('base64') >= 0)
                 byteString = atob(dataURI.split(',')[1]);
             else
-                byteString = querystring_1.unescape(dataURI.split(',')[1]);
+                byteString = decodeURIComponent(dataURI.split(',')[1]);
             var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
             var ia = new Uint8Array(byteString.length);
             for (var i = 0; i < byteString.length; i++) {

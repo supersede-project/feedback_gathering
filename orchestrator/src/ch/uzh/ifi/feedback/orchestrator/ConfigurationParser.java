@@ -7,6 +7,9 @@ import java.util.List;
 
 
 import ch.uzh.ifi.feedback.library.transaction.*;
+import ch.uzh.ifi.feedback.orchestrator.Model.Configuration;
+import ch.uzh.ifi.feedback.orchestrator.Model.FeedbackMechanism;
+import ch.uzh.ifi.feedback.orchestrator.Model.FeedbackParameter;
 
 public class ConfigurationParser implements IDbResultParser<List<FeedbackMechanism>> {
 
