@@ -28,8 +28,7 @@ public class ConfigurationController extends RestController<Application>{
 	public Application Get(HttpServletRequest request, HttpServletResponse response) throws Exception 
 	{
 		String application = (String)request.getAttribute("Application");
-		//return dbService.Read(application);
-		return new Application();
+		return dbService.GetConfiguration(application);
 	}
 
 	@Override
@@ -40,6 +39,14 @@ public class ConfigurationController extends RestController<Application>{
 		dbService.CreateConfiguration(configuration);
 	}
 
+	@Override
+	public void Put(HttpServletRequest request, HttpServletResponse response, Application configuration) throws Exception
+	{
+		String application = (String)request.getAttribute("Application");
+		configuration.setName(application);
+		dbService.UpdateConfiguration(configuration);
+	}
+	
 	@Override
 	public ISerializationService<Application> getSerializationService() {
 		return serializationService;
