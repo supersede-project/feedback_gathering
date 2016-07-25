@@ -9,6 +9,8 @@ import java.util.TimerTask;
 
 import javax.ws.rs.Path;
 
+import org.apache.log4j.Logger;
+
 import kafka.javaapi.producer.Producer;
 import monitoring.kafka.KafkaCommunication;
 import monitoring.model.MonitoringData;
@@ -24,6 +26,8 @@ import twitter4j.conf.ConfigurationBuilder;
 import twitter4j.util.function.Consumer;
 
 public class TwitterAPI implements ToolInterface {
+	
+	final static Logger logger = Logger.getLogger(TwitterAPI.class);
 	
 	int configurationId;
 	

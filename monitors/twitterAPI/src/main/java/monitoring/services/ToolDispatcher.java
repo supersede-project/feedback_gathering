@@ -13,6 +13,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.QueryParam;
 
+import org.apache.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -23,6 +24,8 @@ import monitoring.model.MonitoringParams;
 @Path("configuration")
 @Singleton
 public class ToolDispatcher {
+	
+	final static Logger logger = Logger.getLogger(ToolDispatcher.class);
 	
 	//Fake configuration id for testing purposes
 	private int confId = 1;
