@@ -26,4 +26,5 @@ dependencies {
     compile 'com.google.code.gson:gson:2.6.2'
     compile 'com.squareup.retrofit2:retrofit:2.0.0'
     compile 'com.squareup.retrofit2:converter-gson:2.0.0'
+    compile 'com.theartofdev.edmodo:android-image-cropper:2.2.+'
 }

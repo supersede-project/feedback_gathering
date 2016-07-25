@@ -3,8 +3,6 @@ package com.example.matthias.feedbacklibrary.utils;
 import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Dialog;
-import android.app.DialogFragment;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.DialogInterface;
@@ -15,7 +13,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
-import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -29,15 +26,13 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 
 /**
  * Class with various helper methods
  */
 public class Utils {
-    public static final int PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 1234;
+    public static final int PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 123;
     public static final String SCREENSHOTS_DIR_NAME = "Screenshots";
 
     /**
@@ -137,6 +132,23 @@ public class Utils {
     }
 
     /**
+     * This method creates a temporary file in the cache directory.
+     *
+     * @param context the context of the application
+     * @param prefix  the prefix, e.g., crop
+     * @param suffix  the suffix, e.g., .jpg
+     * @return the created file, null if an exception occurred
+     */
+    public static File createTempChacheFile(Context context, String prefix, String suffix) {
+        try {
+            return File.createTempFile(prefix, suffix, context.getCacheDir());
+        } catch (IOException e) {
+            // Error while creating file
+        }
+        return null;
+    }
+
+    /**
      * @param input the input value
      * @return the boolean value corresponding to the input value
      */
@@ -161,9 +173,41 @@ public class Utils {
     }
 
     /**
-     * This method deletes the file at the specific path if it exists
+     * This method reads a specific file from the assets resource folder and returns it as a string.
      *
-     * @param path
+     * @param fileName     the file to read from
+     * @param assetManager the asset manager
+     * @return the file content as a string, the empty string if an error occurred
+     */
+    public static String readFileAsString(String fileName, AssetManager assetManager) {
+        String ret = "";
+
+        try {
+            InputStream inputStream = assetManager.open(fileName);
+
+            if (inputStream != null) {
+                BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+                StringBuilder out = new StringBuilder();
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    out.append(line);
+                }
+                reader.close();
+                return out.toString();
+            }
+        } catch (FileNotFoundException e) {
+            System.out.println("File not found: " + e.toString());
+        } catch (IOException e) {
+            System.out.println("Cannot read file: " + e.toString());
+        }
+
+        return ret;
+    }
+
+    /**
+     * This method deletes the file at the specific path if it exists.
+     *
+     * @param path the path of the file to delete
      */
     public static void removeDeleteFileFromInternalStorage(String path) {
         File toDelete = new File(path);
@@ -173,7 +217,30 @@ public class Utils {
     }
 
     /**
-     * This method saves the image to the internal storage.
+     * This method saves the bitmap in a specific file.
+     *
+     * @param file        the file to store the bitmap in
+     * @param bitmapImage the bitmap to store
+     * @param format      the bitmap compress format
+     * @param quality     the quality
+     * @return true on success, false otherwise
+     */
+    public static boolean saveBitmapToFile(File file, Bitmap bitmapImage, Bitmap.CompressFormat format, int quality) {
+        FileOutputStream fos;
+        try {
+            fos = new FileOutputStream(file);
+            bitmapImage.compress(format, quality, fos);
+            fos.flush();
+            fos.close();
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    /**
+     * This method saves the bitmap to the internal storage.
      *
      * @param applicationContext the application context
      * @param dirName            the directory name
@@ -184,7 +251,7 @@ public class Utils {
      * @param quality            the quality
      * @return the absolute path to the directory where the image is stored
      */
-    public static String saveImageToInternalStorage(Context applicationContext, String dirName, String imageName, Bitmap bitmapImage, int mode, Bitmap.CompressFormat format, int quality) {
+    public static String saveBitmapToInternalStorage(Context applicationContext, String dirName, String imageName, Bitmap bitmapImage, int mode, Bitmap.CompressFormat format, int quality) {
         ContextWrapper cw = new ContextWrapper(applicationContext);
         File directory = cw.getDir(dirName, mode);
         File myPath = new File(directory, imageName);
@@ -230,65 +297,5 @@ public class Utils {
         }
 
         return Bitmap.createScaledBitmap(bitmap, width, height, true);
-    }
-
-    /**
-     * This method reads a specific file from the assets resource folder and returns it as a string.
-     *
-     * @param fileName     the file to read from
-     * @param assetManager the asset manager
-     * @return the file content as a string
-     */
-    public static String readFileAsString(String fileName, AssetManager assetManager) {
-        String ret = "";
-
-        try {
-            InputStream inputStream = assetManager.open(fileName);
-
-            if (inputStream != null) {
-                BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-                StringBuilder out = new StringBuilder();
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    out.append(line);
-                }
-                reader.close();
-                return out.toString();
-            }
-        } catch (FileNotFoundException e) {
-            System.out.println("File not found: " + e.toString());
-        } catch (IOException e) {
-            System.out.println("Cannot read file: " + e.toString());
-        }
-
-        return ret;
-    }
-
-    /**
-     * Dialog with a cancel button for displaying a simple string message, e.g., if a given input field is not valid
-     */
-    public static class DataDialog extends DialogFragment {
-        public static DataDialog newInstance(ArrayList<String> messages) {
-            DataDialog f = new DataDialog();
-            Bundle args = new Bundle();
-            args.putStringArrayList("messages", messages);
-            f.setArguments(args);
-            return f;
-        }
-
-        @Override
-        public Dialog onCreateDialog(Bundle savedInstanceState) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-            List<String> messages = getArguments().getStringArrayList("messages");
-            StringBuilder message = new StringBuilder("");
-            for (String s : messages) {
-                message.append(s).append(".");
-            }
-            builder.setMessage(message.toString()).setNegativeButton("Close", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int id) {
-                }
-            });
-            return builder.create();
-        }
     }
 }

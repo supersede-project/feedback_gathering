@@ -19,6 +19,7 @@
             android:name=".AnnotateImageActivity"
             android:label="@string/supersede_feedbacklibrary_annotate_image_activity_name"
             android:screenOrientation="portrait"/>
+        <activity android:name="com.theartofdev.edmodo.cropper.CropImageActivity"/>
     </application>
 
 </manifest>
