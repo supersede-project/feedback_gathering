@@ -37,7 +37,7 @@ public class KafkaCommunication {
 	 * @param topic				the topic for the kafka communication
 	 */
 	public static void generateResponse(List<MonitoringData> dataList, String timeStamp, 
-		Producer<String, String> producer, int id, String topic) {
+		Producer<String, String> producer, int outputId, int confId, String topic) {
 		
 		JSONArray dataItems = new JSONArray();
 		
@@ -59,7 +59,8 @@ public class KafkaCommunication {
 		}
 		
 		JSONObject res = new JSONObject();
-		res.put("idOutput", id);
+		res.put("idOutput", outputId);
+		res.put("confId", confId);
 		res.put("searchTimeStamp", timeStamp);
 		res.put("numDataItems", dataList.size());
 		res.put("DataItems", dataItems);

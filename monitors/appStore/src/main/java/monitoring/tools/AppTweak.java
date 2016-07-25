@@ -30,6 +30,8 @@ import monitoring.model.MonitoringParams;
 import monitoring.services.ToolInterface;
 
 public class AppTweak implements ToolInterface {
+	
+	private int confId;
 
 	//Token credentials
 	private final String token = "iOAbyjaOnWFNpO64RCVnG3TWmR4";
@@ -48,13 +50,16 @@ public class AppTweak implements ToolInterface {
 	private Date stamp;
 	
 	//Kafka producer
-	Producer<String, String> producer;
+	private Producer<String, String> producer;
+	
+	private Timer timer;
 
 	@Override
-	public void addConfiguration(MonitoringParams params, Producer<String, String> producer) throws Exception {
+	public void addConfiguration(MonitoringParams params, Producer<String, String> producer, int confId) throws Exception {
 		
 		this.params = params;
 		this.producer = producer;
+		this.confId = confId;
 		
 		Timer timer = new Timer();
 		timer.schedule(new TimerTask() {
@@ -80,6 +85,11 @@ public class AppTweak implements ToolInterface {
 
 		}, 0, Integer.parseInt(params.getTimeSlot())* 1000);
 		
+	}
+	
+	@Override
+	public void deleteConfiguration() throws Exception {
+		timer.cancel();
 	}
 
 	protected void apiCall() throws MalformedURLException, IOException, JSONException, ParseException {
@@ -116,7 +126,7 @@ public class AppTweak implements ToolInterface {
 				dataList.add(review);
 			}
 		}
-		KafkaCommunication.generateResponse(dataList, timeStamp, producer, id, params.getKafkaTopic());
+		KafkaCommunication.generateResponse(dataList, timeStamp, producer, id, confId, params.getKafkaTopic());
 		++id;
 	}
 	

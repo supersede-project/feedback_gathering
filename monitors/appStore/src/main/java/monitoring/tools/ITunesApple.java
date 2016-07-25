@@ -26,6 +26,8 @@ import monitoring.services.ToolInterface;
 
 public class ITunesApple implements ToolInterface {
 	
+	private int confId;
+	
 	private String uri = "https://itunes.apple.com/es/rss/customerreviews/id=";
 	private String uriParams = "/sortBy=mostRecent/json";
 
@@ -36,13 +38,16 @@ public class ITunesApple implements ToolInterface {
 	private int id = 1;
 	
 	private boolean firstConnection = false;
+	
+	private Timer timer;
 
 	@Override
-	public void addConfiguration(MonitoringParams params, Producer<String, String> producer) throws Exception {
+	public void addConfiguration(MonitoringParams params, Producer<String, String> producer, int confId) throws Exception {
 		
 		this.params = params;
 		this.producer = producer;
 		this.reported = new ArrayList<>();
+		this.confId = confId;
 		
 		firstApiCall();
 		
@@ -63,6 +68,11 @@ public class ITunesApple implements ToolInterface {
 
 		}, 0, Integer.parseInt(params.getTimeSlot())* 1000);
 		
+	}
+	
+	@Override
+	public void deleteConfiguration() throws Exception {
+		timer.cancel();
 	}
 
 	protected void apiCall() throws IOException, MalformedURLException {
@@ -100,7 +110,7 @@ public class ITunesApple implements ToolInterface {
 			}
 		}
 		
-		KafkaCommunication.generateResponse(dataList, timeStamp, producer, id, params.getKafkaTopic());
+		KafkaCommunication.generateResponse(dataList, timeStamp, producer, id, confId, params.getKafkaTopic());
 		++id;
 	}
 
