@@ -7,8 +7,6 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import javax.ws.rs.Path;
-
 import org.apache.log4j.Logger;
 
 import kafka.javaapi.producer.Producer;
@@ -57,11 +55,12 @@ public class TwitterAPI implements ToolInterface {
 		tweetInfo = new ArrayList<>();
 		
 		ConfigurationBuilder cb = new ConfigurationBuilder();
-		cb.setDebugEnabled(true)
+		cb.setDebugEnabled(false)
 		  .setOAuthConsumerKey("EIW5qL14B5MjBGiQ9zjcMl7bM")
 		  .setOAuthConsumerSecret("HjaTo9bF9VjdNFLGGnFIjIM2KyMuRxiIlRA4YsIuwjqAHfJQHB")
 		  .setOAuthAccessToken("742364898596904960-Vpxpbgi6OETuW6j5IKYWgwZQFlO2Qeh")
 		  .setOAuthAccessTokenSecret("VmPdk3pgoo48IHYgS2HJUmDm21ReLwhTIbTnmMSxqQgir");
+		
 		
 		Configuration conf = cb.build();
 		
@@ -87,12 +86,12 @@ public class TwitterAPI implements ToolInterface {
 
 			@Override
 			public void onConnect() {
+				logger.debug("Connection stablished successfully");
 				timer = new Timer();
 				timer.schedule(new TimerTask() {
 				    public void run() {
 				    	if (firstConnection) {
 				    		firstConnection = false;
-				    		System.out.println("First connection stablished");
 				    	} else {
 				    		generateData((new Timestamp((new Date()).getTime()).toString()));
 				    	}
@@ -103,7 +102,7 @@ public class TwitterAPI implements ToolInterface {
 
 			@Override
 			public void onDisconnect() {
-				System.out.println("Connection closed");
+				logger.debug("Connection closed");
 			}
 			
 		});
@@ -205,6 +204,7 @@ public class TwitterAPI implements ToolInterface {
 		}
 		tweetInfo = new ArrayList<>();
 		KafkaCommunication.generateResponse(data, searchTimeStamp, producer, id, configurationId, confParams.getKafkaTopic());
+		logger.debug("Data successfully sent to Kafka endpoint");
 		++id;
 		
 	}
