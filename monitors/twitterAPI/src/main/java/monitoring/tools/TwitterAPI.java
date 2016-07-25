@@ -25,6 +25,8 @@ import twitter4j.util.function.Consumer;
 
 public class TwitterAPI implements ToolInterface {
 	
+	int configurationId;
+	
 	//Kafka producer
 	Producer<String, String> producer;
 	//Monitoring params
@@ -42,10 +44,11 @@ public class TwitterAPI implements ToolInterface {
 	Timer timer;
 
 	@Override
-	public void addConfiguration(MonitoringParams params, Producer<String, String> producer) {
+	public void addConfiguration(MonitoringParams params, Producer<String, String> producer, int configurationId) {
 		
 		this.confParams = params;
 		this.producer = producer;
+		this.configurationId = configurationId;
 		firstConnection = true;
 		tweetInfo = new ArrayList<>();
 		
@@ -197,7 +200,7 @@ public class TwitterAPI implements ToolInterface {
 			data.add(dataObj);
 		}
 		tweetInfo = new ArrayList<>();
-		KafkaCommunication.generateResponse(data, searchTimeStamp, producer, id, confParams.getKafkaTopic());
+		KafkaCommunication.generateResponse(data, searchTimeStamp, producer, id, configurationId, confParams.getKafkaTopic());
 		++id;
 		
 	}

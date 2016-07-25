@@ -47,7 +47,7 @@ public class ToolDispatcher {
 			
 			Class monitor = Class.forName(packageRoute + params.getToolName());
 			ToolInterface toolInstance = (ToolInterface) monitor.newInstance();
-			toolInstance.addConfiguration(params, KafkaCommunication.initProducer(params.getKafkaEndpoint()));
+			toolInstance.addConfiguration(params, KafkaCommunication.initProducer(params.getKafkaEndpoint()), confId);
 			
 			monitoringInstances.put(confId, toolInstance);
 			

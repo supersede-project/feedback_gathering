@@ -33,11 +33,12 @@ public class KafkaCommunication {
 	 * @param dataList			a list with the data to retrieve
 	 * @param timeStamp			the timestamp of the search
 	 * @param producer			the producer to communicate 
-	 * @param id				the id of the response data
+	 * @param outputId			the id of the response data
+	 * @param confId			the id of the configuration
 	 * @param topic				the topic for the kafka communication
 	 */
 	public static void generateResponse(List<MonitoringData> dataList, String timeStamp, 
-		Producer<String, String> producer, int id, String topic) {
+		Producer<String, String> producer, int outputId, int confId, String topic) {
 		
 		JSONArray items = new JSONArray();
 		for (MonitoringData item : dataList) {
@@ -54,12 +55,13 @@ public class KafkaCommunication {
 		
 		JSONObject mainInfo = new JSONObject();
 		
-		mainInfo.put("idOutput", String.valueOf(id));
+		mainInfo.put("idOutput", String.valueOf(outputId));
+		mainInfo.put("confId", String.valueOf(confId));
 		mainInfo.put("searchTimeStamp", timeStamp);
 		mainInfo.put("numDataItems", dataList.size());
 		mainInfo.put("DataItems", items);
 		
-		++id;
+		++outputId;
 		
 		JSONObject jsonData = new JSONObject();
 		
