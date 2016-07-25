@@ -19,5 +19,8 @@
     "crop": "crop",
     "undo": "undo",
     "remove": "remove"
+  },
+  "rating": {
+    "review_title": "Rating"
   }
 }

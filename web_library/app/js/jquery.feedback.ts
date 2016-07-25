@@ -12,6 +12,7 @@ import {RatingMechanism} from '../models/rating_mechanism';
 import {ScreenshotView} from '../views/screenshot/screenshot_view';
 import {Mechanism} from '../models/mechanism';
 import {I18nHelper} from './helpers/i18n';
+import i18n = require('i18next');
 
 
 export var feedbackPluginModule = function ($, window, document) {
@@ -182,7 +183,7 @@ export var feedbackPluginModule = function ($, window, document) {
             nextPage.find('#textReview').text($('textarea#textTypeText').val());
         }
         if(nextPage.find('#ratingReview').length > 0 && ratingMechanism.active) {
-            nextPage.find('#ratingReview').text(ratingMechanism.getParameterValue('title') + ": " + ratingMechanism.currentRatingValue + " / " + ratingMechanism.getParameterValue("maxRating"));
+            nextPage.find('#ratingReview').text(i18n.t('rating.review_title') + ": " + ratingMechanism.currentRatingValue + " / " + ratingMechanism.getParameterValue("maxRating"));
         }
         if(nextPage.find('#screenshotReview').length > 0 && screenshotMechanism.active && screenshotView.screenshotCanvas != null) {
             var img = $('<img src="' + screenshotView.screenshotCanvas.toDataURL() + '" />');
