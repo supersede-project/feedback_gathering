@@ -32,18 +32,19 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
                     var windowRatio = myThis.elementToCapture.width() / myThis.elementToCapture.height();
                     var data = canvas.toDataURL("image/png");
                     myThis.context = canvas.getContext("2d");
+                    myThis.canvasOriginalWidth = canvas.width;
+                    myThis.canvasOriginalHeight = canvas.height;
                     myThis.canvasWidth = myThis.screenshotPreviewElement.width();
                     myThis.canvasHeight = myThis.screenshotPreviewElement.width() / windowRatio;
                     jQuery(canvas).prop('width', myThis.canvasWidth);
                     jQuery(canvas).prop('height', myThis.canvasHeight);
                     var img = new Image();
+                    myThis.canvasState = img;
+                    myThis.screenshotCanvas = canvas;
                     img.src = data;
                     img.onload = function () {
                         myThis.context.drawImage(img, 0, 0, img.width, img.height, 0, 0, canvas.width, canvas.height);
                     };
-                    img.src = data;
-                    myThis.canvasState = img;
-                    myThis.screenshotCanvas = canvas;
                     myThis.initDrawing();
                 }
             });
@@ -163,6 +164,12 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
                     var newHeight = newDimensions[1];
                     var topLeftX = topLeftCorner[0];
                     var topLeftY = topLeftCorner[1];
+                    if (myThis.canvasStates === null || myThis.canvasStates.length === 0) {
+                        width = myThis.canvasOriginalWidth / myThis.canvasWidth * width;
+                        height = myThis.canvasOriginalHeight / myThis.canvasHeight * height;
+                        topLeftX = myThis.canvasOriginalWidth / myThis.canvasWidth * topLeftX;
+                        topLeftY = myThis.canvasOriginalHeight / myThis.canvasHeight * topLeftY;
+                    }
                     context.clearRect(0, 0, myThis.canvasWidth, myThis.canvasHeight);
                     context.drawImage(myThis.canvasState, topLeftX, topLeftY, width, height, 0, 0, newWidth, newHeight);
                 }

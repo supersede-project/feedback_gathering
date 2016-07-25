@@ -52,7 +52,7 @@ public class OrchestratorServlet extends HttpServlet {
         response.setCharacterEncoding("UTF-8");
         
         response.setHeader("Access-Control-Allow-Origin", "*");
-        response.setHeader("Access-Control-Allow-Methods", "GET,PUT");
+        response.setHeader("Access-Control-Allow-Methods", "GET,PUT,POST");
         response.setHeader("Access-Control-Allow-Headers", "Content-Type");
         response.setHeader("Access-Control-Max-Age", "86400");
         
@@ -64,8 +64,15 @@ public class OrchestratorServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-		response.setStatus(405);
-		response.getWriter().append("Operation not supported for this resource!");
+        response.setContentType("application/json");            
+        response.setCharacterEncoding("UTF-8");
+        
+        response.setHeader("Access-Control-Allow-Origin", "*");
+        response.setHeader("Access-Control-Allow-Methods", "GET,PUT,POST");
+        response.setHeader("Access-Control-Allow-Headers", "Content-Type");
+        response.setHeader("Access-Control-Max-Age", "86400");
+        
+		_restController.Post(request, response);
 	}
 	
 	/**

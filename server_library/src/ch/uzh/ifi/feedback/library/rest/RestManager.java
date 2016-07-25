@@ -85,7 +85,7 @@ public class RestManager implements IRestManager {
 	public void Post(HttpServletRequest request, HttpServletResponse response) throws ServletException {
 		try {
 			RestController controller = GetController(request);
-			Object result = controller.getSerializationService().Deserialize(request.getParameter("json"));
+			Object result = controller.getSerializationService().Deserialize(GetRequestContent(request));
 			controller.Post(request, response, result);
 
 		} catch(JsonSyntaxException ex)
@@ -155,7 +155,7 @@ public class RestManager implements IRestManager {
 		request = SetAttributes(request, path, classEntry.getKey());
 		Class<RestController> controllerClass = classEntry.getValue();
 
-		return controllerClass.getDeclaredConstructor(TransactionManager.class).newInstance(new TransactionManager());
+		return controllerClass.newInstance();
 	}
 	
 	private String GetRequestContent(HttpServletRequest request) throws Exception
