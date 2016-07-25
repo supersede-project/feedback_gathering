@@ -224,7 +224,7 @@ export class ScreenshotView {
 
             myThis.updateCanvasState();
         }).on('mouseleave touchleave', function () {
-            myThis.isPainting = false;
+            //myThis.isPainting = false;
         });
 
         myThis.initScreenshotOperations();
@@ -245,6 +245,9 @@ export class ScreenshotView {
     }
 
     draw_arrow(context, fromx, fromy, tox, toy){
+        if(Math.sqrt(Math.pow(fromx - tox, 2) + Math.pow(fromy - toy, 2)) < 20) {
+            return;
+        }
         var headLength = 10;
         var angle = Math.atan2(toy-fromy,tox-fromx);
         context.moveTo(fromx, fromy);
