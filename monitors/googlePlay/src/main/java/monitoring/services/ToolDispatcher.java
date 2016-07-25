@@ -1,7 +1,10 @@
 package monitoring.services;
 
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 
+import javax.inject.Singleton;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.QueryParam;
@@ -13,11 +16,15 @@ import monitoring.kafka.KafkaCommunication;
 import monitoring.model.MonitoringParams;
 
 @Path("configuration")
+@Singleton
 public class ToolDispatcher {
 
-	//The id of the response associated to a addConfiguration call
-	private int responseId = 1;
+	//Fake configuration id for testing purposes
+	private int confId = 1;
 	private final String toolPackageRoute = "monitoring.tools.";
+	
+	//A data structure storing all monitoring tool instances identified by configuration ID
+	private Map<Integer, ToolInterface> monitoringInstances = new HashMap<>();
 	
 	@POST
 	public String addConfiguration(@QueryParam("configurationJson") String jsonConf) {
@@ -30,6 +37,7 @@ public class ToolDispatcher {
 			Class monitor = Class.forName(toolPackageRoute + params.getToolName());
 			ToolInterface toolInstance = (ToolInterface) monitor.newInstance();
 			toolInstance.addConfiguration(params, KafkaCommunication.initProducer(params.getKafkaEndpoint()));
+			monitoringInstances.put(confId, toolInstance);
 			
 			return getResponse();
 			
@@ -89,10 +97,10 @@ public class ToolDispatcher {
 		
 		try {
 			resInfo.put("message", error);
-			resInfo.put("idConf", responseId);
+			resInfo.put("idConf", confId);
 			resInfo.put("status", "error");
 			response.put("GooglePlayConfProfResult", resInfo);
-			++responseId;		
+			++confId;		
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
@@ -106,10 +114,10 @@ public class ToolDispatcher {
 		JSONObject resInfo = new JSONObject();
 		
 		try {
-			resInfo.put("idConf", responseId);
+			resInfo.put("idConf", confId);
 			resInfo.put("status", "success");
 			response.put("GooglePlayConfProfResult", resInfo);
-			++responseId;		
+			++confId;		
 		} catch(Exception e) {
 			e.printStackTrace();
 		}

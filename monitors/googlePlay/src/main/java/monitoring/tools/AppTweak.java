@@ -47,6 +47,8 @@ public class AppTweak implements ToolInterface {
 	private Date initTime;
 	private Date stamp;
 	
+	private Timer timer;
+	
 	//Kafka producer
 	Producer<String, String> producer;
 
@@ -56,7 +58,7 @@ public class AppTweak implements ToolInterface {
 		this.params = params;
 		this.producer = producer;
 
-		Timer timer = new Timer();
+		timer = new Timer();
 		timer.schedule(new TimerTask() {
 		    public void run() {
 		    	if (firstConnection) {
@@ -80,6 +82,11 @@ public class AppTweak implements ToolInterface {
 
 		}, 0, Integer.parseInt(params.getTimeSlot())* 1000);
 		
+	}
+	
+	@Override
+	public void deleteConfiguration() throws Exception {
+		timer.cancel();
 	}
 
 	protected void apiCall() throws MalformedURLException, IOException, JSONException, ParseException {

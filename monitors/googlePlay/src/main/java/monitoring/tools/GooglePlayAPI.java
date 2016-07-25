@@ -50,7 +50,9 @@ public class GooglePlayAPI implements ToolInterface {
 	private MonitoringParams params;
 	
 	//Kafka producer
-	Producer<String, String> producer;
+	private Producer<String, String> producer;
+	
+	private Timer timer;
 	
 	@Override
 	public void addConfiguration(MonitoringParams params, Producer<String, String> producer) throws Exception {
@@ -60,7 +62,7 @@ public class GooglePlayAPI implements ToolInterface {
 		
 		generateNewAccessToken();
 
-		Timer timer = new Timer();
+		timer = new Timer();
 		timer.schedule(new TimerTask() {
 		    public void run() {
 		    	if (firstConnection) {
@@ -85,6 +87,11 @@ public class GooglePlayAPI implements ToolInterface {
 
 		}, 0, Integer.parseInt(params.getTimeSlot())* 1000);
 		
+	}
+	
+	@Override
+	public void deleteConfiguration() throws Exception {
+		timer.cancel();
 	}
 	
 	protected JSONArray getNextPage(String token) throws MalformedURLException, IOException {
