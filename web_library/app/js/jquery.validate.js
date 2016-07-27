@@ -1,4 +1,4 @@
-define(["require", "exports"], function (require, exports) {
+define(["require", "exports", 'i18next'], function (require, exports, i18n) {
     "use strict";
     exports.validatePluginModule = (function ($, window, document) {
         $.fn.validate = function () {
@@ -26,8 +26,10 @@ define(["require", "exports"], function (require, exports) {
             }
             if (!validMaxLength) {
                 this.addClass('invalid');
-                var errorMessageMaxLength = 'The maximum length of this field is ' + maxLength + '! You typed ' +
-                    '' + content.length + ' characters.';
+                var errorMessageMaxLength = i18n.t('general.validationMaxLengthErrorMessage', {
+                    maxLength: maxLength,
+                    currentLength: content.length
+                });
                 this.after('<span class="feedback-form-error">' + errorMessageMaxLength + '</span>');
                 var invalidElement = this;
                 $('html, body').animate({

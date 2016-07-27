@@ -1,3 +1,4 @@
+import i18n = require('i18next');
 export interface JQuery {
     /**
      * Register a handler to validate a HTML element.
@@ -52,8 +53,11 @@ export var validatePluginModule = (function($, window, document) {
         }
         if(!validMaxLength) {
             this.addClass('invalid');
-            var errorMessageMaxLength = 'The maximum length of this field is ' + maxLength + '! You typed ' +
-                '' + content.length + ' characters.';
+            var errorMessageMaxLength = i18n.t('general.validationMaxLengthErrorMessage', {
+                maxLength: maxLength,
+                currentLength: content.length
+            });
+            
             this.after('<span class="feedback-form-error">' + errorMessageMaxLength + '</span>');
 
             var invalidElement = this;
