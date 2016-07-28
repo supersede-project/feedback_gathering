@@ -8,10 +8,10 @@ define(["require", "exports", './rating_mechanism', '../js/config', './mechanism
                 return null;
             }
             if (data.type === config_1.ratingType) {
-                return new rating_mechanism_1.RatingMechanism(data.type, data.active, data.order, data.canBeActivated, data.parameters);
+                return new rating_mechanism_1.RatingMechanism(data.id, data.type, data.active, data.order, data.canBeActivated, data.parameters);
             }
             else {
-                return new mechanism_1.Mechanism(data.type, data.active, data.order, data.canBeActivated, data.parameters);
+                return new mechanism_1.Mechanism(data.id, data.type, data.active, data.order, data.canBeActivated, data.parameters);
             }
         };
         return MechanismFactory;

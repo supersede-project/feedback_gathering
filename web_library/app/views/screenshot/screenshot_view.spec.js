@@ -4,7 +4,7 @@ define(["require", "exports", './screenshot_view', '../../models/mechanism', '..
         var screenshotView;
         var $ = $j;
         beforeEach(function () {
-            var screenshotMechanism = new mechanism_1.Mechanism(config_1.screenshotType, true);
+            var screenshotMechanism = new mechanism_1.Mechanism(1, config_1.screenshotType, true);
             var screenshotMechanismTemplate = '<div id="capture">Capture this element' +
                 '<div class="hide-1">hide</div><span id="hide2">not part of screenshot</span></div>' +
                 '' +

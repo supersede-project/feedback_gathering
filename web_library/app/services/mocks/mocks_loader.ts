@@ -2,10 +2,10 @@
  * Function to load the mocks JSON files during testing.
  *
  * @param url
+ * @param base to prefix the url
  * @returns {null}
  */
-export var readJSON = function (url) {
-    var base = '/base/';
+export var readJSON = function (url, base:string = '') {
     url = base + url;
 
     var xhr = new XMLHttpRequest();

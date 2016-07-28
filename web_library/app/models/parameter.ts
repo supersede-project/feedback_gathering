@@ -1,13 +1,12 @@
-export class Parameter {
+import {ParameterInterface} from './parameter_interface';
+
+
+export class Parameter implements ParameterInterface {
     key:string;
     value:any;
-    editableByUser:boolean;
-    defaultValue:string;
 
-    constructor(key:string, value:any, editableByUser?:boolean, defaultValue?:string) {
+    constructor(key:string, value:any) {
         this.key = key;
         this.value = value;
-        this.editableByUser = editableByUser;
-        this.defaultValue = defaultValue;
     }
 }

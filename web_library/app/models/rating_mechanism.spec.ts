@@ -1,14 +1,15 @@
-import {ratingType} from './mechanism';
+import {ratingType} from '../js/config';
 import {RatingMechanism} from './rating_mechanism';
-import {Parameter} from './parameter';
 
 
 describe('Rating Mechanism', () => {
     let ratingMechanism:RatingMechanism;
 
     beforeEach(() => {
-        ratingMechanism = new RatingMechanism(ratingType, true, 1, false, [new Parameter('maxRating', 10),
-            new Parameter('defaultRating', 3)]);
+        ratingMechanism = new RatingMechanism(1, ratingType, true, 1, false, [
+            {key: 'maxRating', value: 10},
+            {key: 'defaultRating', value: 3}
+        ]);
     });
 
     it('should return its configuration for the rating element', () => {

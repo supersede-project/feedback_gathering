@@ -13,6 +13,7 @@ import {ScreenshotView} from '../views/screenshot/screenshot_view';
 import {Mechanism} from '../models/mechanism';
 import {I18nHelper} from './helpers/i18n';
 import i18n = require('i18next');
+import {MockBackend} from '../services/backends/mock_backend';
 
 
 export var feedbackPluginModule = function ($, window, document) {
@@ -23,9 +24,10 @@ export var feedbackPluginModule = function ($, window, document) {
     var screenshotMechanism:Mechanism;
     var screenshotView:ScreenshotView;
     var template = require('../templates/feedback_dialog.handlebars');
+    var mockData = require('json!../services/mocks/configurations_mock.json');
 
     /**
-     * @param data
+     * @param configuration
      *  Configuration data retrieved from the feedback orchestrator
      *
      * Initializes the mechanism objects with the configuration data. It then constructs the context variable for the
@@ -34,14 +36,13 @@ export var feedbackPluginModule = function ($, window, document) {
      * is configured and displayed and some events are added to the UI.
      * All events on the HTML have to be added after the template is appended to the body (if not using live binding).
      */
-    var initMechanisms = function (data) {
-        var configurationService = new ConfigurationService(data);
-        textMechanism = configurationService.getMechanismConfig(textType);
-        ratingMechanism = configurationService.getMechanismConfig(ratingType);
-        screenshotMechanism = configurationService.getMechanismConfig(screenshotType);
+    var initMechanisms = function (configuration) {
+        textMechanism = configuration.getMechanismConfig(textType);
+        ratingMechanism = configuration.getMechanismConfig(ratingType);
+        screenshotMechanism = configuration.getMechanismConfig(screenshotType);
         $('#serverResponse').removeClass().text('');
 
-        var context = configurationService.getContextForView();
+        var context = configuration.getContextForView();
         initTemplate(context, screenshotMechanism, textMechanism, ratingMechanism);
     };
 
@@ -227,9 +228,9 @@ export var feedbackPluginModule = function ($, window, document) {
      */
     var retrieveConfigurationDataOrClose = function () {
         if (!active) {
-            var url = apiEndpoint + configPath;
-            $.get(url, null, function (data) {
-                initMechanisms(data);
+            var configurationService = new ConfigurationService(new MockBackend(mockData));
+            configurationService.retrieveConfiguration(function(configuration) {
+               initMechanisms(configuration);
             });
         } else {
             dialog.dialog("close");

@@ -1,9 +1,6 @@
-import {Parameter} from './parameter';
 import {RatingMechanism} from './rating_mechanism';
 import {ratingType} from '../js/config';
 import {Mechanism} from './mechanism';
-
-
 
 
 export class MechanismFactory {
@@ -19,9 +16,9 @@ export class MechanismFactory {
             return null;
         }
         if(data.type === ratingType) {
-            return new RatingMechanism(data.type, data.active, data.order, data.canBeActivated, data.parameters);
+            return new RatingMechanism(data.id, data.type, data.active, data.order, data.canBeActivated, data.parameters);
         } else {
-            return new Mechanism(data.type, data.active, data.order, data.canBeActivated, data.parameters);
+            return new Mechanism(data.id, data.type, data.active, data.order, data.canBeActivated, data.parameters);
         }
     }
 }

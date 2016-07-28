@@ -21,7 +21,7 @@ module.exports = {
         loaders: [
             { test: /\.handlebars$/, loader: "handlebars-loader" },
             { test: /\.css$/, loader: "style-loader!css-loader" },
-            { test: /\.json$/, loader: 'json', include: "app/locales"}
+            { test: /\.json$/, loader: 'json', include: "app"}
         ]
     },
     resolve: {

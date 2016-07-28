@@ -1,11 +1,9 @@
 define(["require", "exports"], function (require, exports) {
     "use strict";
     var Parameter = (function () {
-        function Parameter(key, value, editableByUser, defaultValue) {
+        function Parameter(key, value) {
             this.key = key;
             this.value = value;
-            this.editableByUser = editableByUser;
-            this.defaultValue = defaultValue;
         }
         return Parameter;
     }());

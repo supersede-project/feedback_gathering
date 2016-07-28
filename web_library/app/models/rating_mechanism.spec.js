@@ -1,10 +1,12 @@
-define(["require", "exports", './mechanism', './rating_mechanism', './parameter'], function (require, exports, mechanism_1, rating_mechanism_1, parameter_1) {
+define(["require", "exports", '../js/config', './rating_mechanism'], function (require, exports, config_1, rating_mechanism_1) {
     "use strict";
     describe('Rating Mechanism', function () {
         var ratingMechanism;
         beforeEach(function () {
-            ratingMechanism = new rating_mechanism_1.RatingMechanism(mechanism_1.ratingType, true, 1, false, [new parameter_1.Parameter('maxRating', 10),
-                new parameter_1.Parameter('defaultRating', 3)]);
+            ratingMechanism = new rating_mechanism_1.RatingMechanism(1, config_1.ratingType, true, 1, false, [
+                { key: 'maxRating', value: 10 },
+                { key: 'defaultRating', value: 3 }
+            ]);
         });
         it('should return its configuration for the rating element', function () {
             var options = ratingMechanism.getRatingElementOptions();

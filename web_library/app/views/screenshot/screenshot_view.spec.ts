@@ -9,7 +9,7 @@ describe('Screenshot View', () => {
     let $ = $j;
 
     beforeEach(() => {
-        var screenshotMechanism = new Mechanism(screenshotType, true);
+        var screenshotMechanism = new Mechanism(1, screenshotType, true);
 
         var screenshotMechanismTemplate = '<div id="capture">Capture this element' +
             '<div class="hide-1">hide</div><span id="hide2">not part of screenshot</span></div>' +

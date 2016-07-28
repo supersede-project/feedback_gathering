@@ -7,8 +7,8 @@ define(["require", "exports", './mechanism'], function (require, exports, mechan
     "use strict";
     var RatingMechanism = (function (_super) {
         __extends(RatingMechanism, _super);
-        function RatingMechanism(type, active, order, canBeActivated, parameters) {
-            _super.call(this, type, active, order, canBeActivated, parameters);
+        function RatingMechanism(id, type, active, order, canBeActivated, parameters) {
+            _super.call(this, id, type, active, order, canBeActivated, parameters);
             this.initialRating = this.getParameterValue('defaultRating');
             this.currentRatingValue = this.getParameterValue('defaultRating');
         }

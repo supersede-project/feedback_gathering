@@ -1,7 +1,8 @@
 define(["require", "exports"], function (require, exports) {
     "use strict";
     var Mechanism = (function () {
-        function Mechanism(type, active, order, canBeActivated, parameters) {
+        function Mechanism(id, type, active, order, canBeActivated, parameters) {
+            this.id = id;
             this.type = type;
             this.active = active;
             this.order = order;

@@ -1,14 +1,17 @@
 import {Parameter} from './parameter';
+import {ParameterInterface} from './parameter_interface';
 
 
 export class Mechanism {
+    id:number;
     type:string;
     active:boolean;
     order: number;
     canBeActivated:boolean;
-    parameters: Parameter[];
+    parameters: ParameterInterface[];
 
-    constructor(type:string, active:boolean, order?:number, canBeActivated?:boolean, parameters?:Parameter[]) {
+    constructor(id: number, type:string, active:boolean, order?:number, canBeActivated?:boolean, parameters?:ParameterInterface[]) {
+        this.id = id;
         this.type = type;
         this.active = active;
         this.order = order;

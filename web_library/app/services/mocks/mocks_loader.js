@@ -1,7 +1,7 @@
 define(["require", "exports"], function (require, exports) {
     "use strict";
-    exports.readJSON = function (url) {
-        var base = '/base/';
+    exports.readJSON = function (url, base) {
+        if (base === void 0) { base = ''; }
         url = base + url;
         var xhr = new XMLHttpRequest();
         var json = null;

@@ -1,4 +1,4 @@
-define(["require", "exports", '../models/feedback', '../models/rating', '../services/configuration_service', './config', '../views/pagination_container', '../views/screenshot/screenshot_view', './helpers/i18n', 'i18next', './lib/jquery.star-rating-svg.js', './jquery.validate.js'], function (require, exports, feedback_1, rating_1, configuration_service_1, config_1, pagination_container_1, screenshot_view_1, i18n_1, i18n) {
+define(["require", "exports", '../models/feedback', '../models/rating', '../services/configuration_service', './config', '../views/pagination_container', '../views/screenshot/screenshot_view', './helpers/i18n', 'i18next', '../services/backends/mock_backend', './lib/jquery.star-rating-svg.js', './jquery.validate.js'], function (require, exports, feedback_1, rating_1, configuration_service_1, config_1, pagination_container_1, screenshot_view_1, i18n_1, i18n, mock_backend_1) {
     "use strict";
     exports.feedbackPluginModule = function ($, window, document) {
         var dialog;
@@ -8,13 +8,13 @@ define(["require", "exports", '../models/feedback', '../models/rating', '../serv
         var screenshotMechanism;
         var screenshotView;
         var template = require('../templates/feedback_dialog.handlebars');
-        var initMechanisms = function (data) {
-            var configurationService = new configuration_service_1.ConfigurationService(data);
-            textMechanism = configurationService.getMechanismConfig(config_1.textType);
-            ratingMechanism = configurationService.getMechanismConfig(config_1.ratingType);
-            screenshotMechanism = configurationService.getMechanismConfig(config_1.screenshotType);
+        var mockData = require('json!../services/mocks/configurations_mock.json');
+        var initMechanisms = function (configuration) {
+            textMechanism = configuration.getMechanismConfig(config_1.textType);
+            ratingMechanism = configuration.getMechanismConfig(config_1.ratingType);
+            screenshotMechanism = configuration.getMechanismConfig(config_1.screenshotType);
             $('#serverResponse').removeClass().text('');
-            var context = configurationService.getContextForView();
+            var context = configuration.getContextForView();
             initTemplate(context, screenshotMechanism, textMechanism, ratingMechanism);
         };
         var initTemplate = function (context, screenshotMechanism, textMechanism, ratingMechanism) {
@@ -125,9 +125,9 @@ define(["require", "exports", '../models/feedback', '../models/rating', '../serv
         };
         var retrieveConfigurationDataOrClose = function () {
             if (!active) {
-                var url = config_1.apiEndpoint + config_1.configPath;
-                $.get(url, null, function (data) {
-                    initMechanisms(data);
+                var configurationService = new configuration_service_1.ConfigurationService(new mock_backend_1.MockBackend(mockData));
+                configurationService.retrieveConfiguration(function (configuration) {
+                    initMechanisms(configuration);
                 });
             }
             else {
