@@ -1,4 +1,4 @@
-define(["require", "exports", '../models/feedback', '../models/rating', '../services/configuration_service', './config', '../views/pagination_container', '../views/screenshot/screenshot_view', './helpers/i18n', './lib/jquery.star-rating-svg.js', './jquery.validate.js'], function (require, exports, feedback_1, rating_1, configuration_service_1, config_1, pagination_container_1, screenshot_view_1, i18n_1) {
+define(["require", "exports", '../models/feedback', '../models/rating', '../services/configuration_service', './config', '../views/pagination_container', '../views/screenshot/screenshot_view', './helpers/i18n', 'i18next', './lib/jquery.star-rating-svg.js', './jquery.validate.js'], function (require, exports, feedback_1, rating_1, configuration_service_1, config_1, pagination_container_1, screenshot_view_1, i18n_1, i18n) {
     "use strict";
     exports.feedbackPluginModule = function ($, window, document) {
         var dialog;
@@ -95,7 +95,7 @@ define(["require", "exports", '../models/feedback', '../models/rating', '../serv
                 nextPage.find('#textReview').text($('textarea#textTypeText').val());
             }
             if (nextPage.find('#ratingReview').length > 0 && ratingMechanism.active) {
-                nextPage.find('#ratingReview').text(ratingMechanism.getParameterValue('title') + ": " + ratingMechanism.currentRatingValue + " / " + ratingMechanism.getParameterValue("maxRating"));
+                nextPage.find('#ratingReview').text(i18n.t('rating.review_title') + ": " + ratingMechanism.currentRatingValue + " / " + ratingMechanism.getParameterValue("maxRating"));
             }
             if (nextPage.find('#screenshotReview').length > 0 && screenshotMechanism.active && screenshotView.screenshotCanvas != null) {
                 var img = $('<img src="' + screenshotView.screenshotCanvas.toDataURL() + '" />');

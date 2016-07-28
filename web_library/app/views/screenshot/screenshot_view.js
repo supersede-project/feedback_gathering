@@ -177,7 +177,6 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
                 context.closePath();
                 myThis.updateCanvasState();
             }).on('mouseleave touchleave', function () {
-                myThis.isPainting = false;
             });
             myThis.initScreenshotOperations();
         };
@@ -194,6 +193,9 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
             this.drawingMode = rectDrawingMode;
         };
         ScreenshotView.prototype.draw_arrow = function (context, fromx, fromy, tox, toy) {
+            if (Math.sqrt(Math.pow(fromx - tox, 2) + Math.pow(fromy - toy, 2)) < 20) {
+                return;
+            }
             var headLength = 10;
             var angle = Math.atan2(toy - fromy, tox - fromx);
             context.moveTo(fromx, fromy);

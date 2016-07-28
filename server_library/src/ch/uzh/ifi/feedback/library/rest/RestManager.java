@@ -113,7 +113,7 @@ public class RestManager implements IRestManager {
 	public void Put(HttpServletRequest request, HttpServletResponse response) throws ServletException {
 		try {
 			IRestController controller = GetController(request);
-			Object result = controller.getSerializationService().Deserialize(request.getParameter("json"));
+			Object result = controller.getSerializationService().Deserialize(GetRequestContent(request));
 			controller.Put(request, response, result);
 
 		} catch(NullPointerException ex)

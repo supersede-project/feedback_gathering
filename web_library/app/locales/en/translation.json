@@ -4,13 +4,14 @@
     "review_feedback_title": "Your feedback",
     "feedback_submit_button_title": "Submit feedback",
     "mandatory_default_text": "This field can't be blank",
-    "back": "back"
+    "back": "back",
+    "validationMaxLengthErrorMessage": "The maximum length of this field is {{ maxLength }}! You typed {{ currentLength }} characters."
   },
   "text": {
     "text_type_text_clear": "Clear the text input"
   },
   "screenshot": {
-    "take_screenshot": "Take screenshot",
+    "take_screenshot": "Take a screenshot",
     "rectangle": "rectangle",
     "blacken": "blacken",
     "circle": "circle",
@@ -19,5 +20,8 @@
     "crop": "crop",
     "undo": "undo",
     "remove": "remove"
+  },
+  "rating": {
+    "review_title": "Rating"
   }
 }

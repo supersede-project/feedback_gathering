@@ -2,29 +2,50 @@ import {validatePluginModule} from './jquery.validate';
 
 
 describe('jQuery Validate Plugin', () => {
-    let element:any;
+    let elementMandatory:any;
+    let elementMaxLength:any;
     let $ = $j;
 
     beforeEach(() => {
         validatePluginModule($, window, document);
 
-        element = $(
+        elementMandatory = $(
             '<textarea class="validate" id="textTypeText" data-mandatory="1" data-mandatory-validate-on-skip="0" ' +
             'data-mandatory-default-text="This field can\'t be blank" ' +
             'data-mandatory-manual-text="Please fill in this field" ></textarea>');
+
+        elementMaxLength = $(
+            '<textarea class="validate" data-validation-max-length="30"></textarea>');
     });
 
-    it('should validate an element', () => {
-        expect(element.val()).toBe('');
-        expect(element.hasClass('validate')).toBeTruthy();
-        expect(element.hasClass('invalid')).toBeFalsy();
+    it('should validate an element if it is mandatory', () => {
+        expect(elementMandatory.val()).toBe('');
+        expect(elementMandatory.hasClass('validate')).toBeTruthy();
+        expect(elementMandatory.hasClass('invalid')).toBeFalsy();
 
-        element.validate();
-        expect(element.hasClass('invalid')).toBeTruthy();
+        elementMandatory.validate();
+        expect(elementMandatory.hasClass('invalid')).toBeTruthy();
 
-        element.val('The textarea content is set now');
-        element.validate();
-        expect(element.hasClass('invalid')).toBeFalsy();
+        elementMandatory.val('The textarea content is set now');
+        elementMandatory.validate();
+        expect(elementMandatory.hasClass('invalid')).toBeFalsy();
+    });
+
+    it('should validate an element if it has a max length set', () => {
+        expect(elementMaxLength.val()).toBe('');
+        expect(elementMaxLength.hasClass('validate')).toBeTruthy();
+        expect(elementMaxLength.hasClass('invalid')).toBeFalsy();
+
+        elementMaxLength.validate();
+        expect(elementMaxLength.hasClass('invalid')).toBeFalsy();
+
+        elementMaxLength.val('Lorem ipsum dolor sit amet, con');
+        elementMaxLength.validate();
+        expect(elementMaxLength.hasClass('invalid')).toBeTruthy();
+
+        elementMaxLength.val('Lorem ipsum dolor sit amet, co');
+        elementMaxLength.validate();
+        expect(elementMaxLength.hasClass('invalid')).toBeFalsy();
     });
 });
 
