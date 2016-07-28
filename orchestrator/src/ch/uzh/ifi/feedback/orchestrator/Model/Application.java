@@ -8,7 +8,8 @@ public class Application {
 	
 	private String name;
 	private Timestamp createdAt;
-	private int state;
+	private Integer state;
+	private Integer id;
 	private List<GeneralConfiguration> general_configurations;
 	private List<PullConfiguration> pull_configurations;
 	private List<FeedbackMechanism> mechanisms;
@@ -32,10 +33,10 @@ public class Application {
 	public void setCreatedAt(Timestamp createdAt) {
 		this.createdAt = createdAt;
 	}
-	public int getState() {
+	public Integer getState() {
 		return state;
 	}
-	public void setState(int state) {
+	public void setState(Integer state) {
 		this.state = state;
 	}
 	public List<GeneralConfiguration> getGeneralConfigurations() {
@@ -60,6 +61,12 @@ public class Application {
 	public void setFeedbackMechanisms(List<FeedbackMechanism> feedbackMechanisms) {
 		this.mechanisms = feedbackMechanisms;
 	}
-	
-	
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
 }

@@ -69,6 +69,9 @@ public class ConfigurationSerializer extends DefaultSerializer<Application> {
 					if(map.containsKey("language"))
 						child.setDefaultValue(map.get("language"));
 					
+					if(map.containsKey("id"))
+						child.setId(((Double)map.get("id")).intValue());
+					
 					parsedChildren.add(child);
 				}
 				setNestedParameters(parsedChildren);

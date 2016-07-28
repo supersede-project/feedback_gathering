@@ -11,6 +11,7 @@ public class FeedbackParameter {
 	private Timestamp createdAt;
 	private Timestamp updatedAt;
 	private String language;
+	private Integer id;
 	
 	
 	public Timestamp getCreatedAt() {
@@ -79,5 +80,11 @@ public class FeedbackParameter {
 	    	return false;
 	    
 	    return other.getKey().equals(getKey()) && other.getValue().equals(getValue());
+	}
+	public Integer getId() {
+		return id;
+	}
+	public void setId(Integer id) {
+		this.id = id;
 	}
 }
