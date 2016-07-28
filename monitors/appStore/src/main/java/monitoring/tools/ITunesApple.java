@@ -15,6 +15,7 @@ import java.util.Scanner;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import org.apache.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -25,6 +26,8 @@ import monitoring.model.MonitoringParams;
 import monitoring.services.ToolInterface;
 
 public class ITunesApple implements ToolInterface {
+	
+	final static Logger logger = Logger.getLogger(AppTweak.class);
 	
 	private int confId;
 	
@@ -55,13 +58,14 @@ public class ITunesApple implements ToolInterface {
 		timer.schedule(new TimerTask() {
 		    public void run() {
 		    	if (firstConnection) {
+		    		logger.debug("Connection established");
 					firstConnection = false;
 					System.out.println("First connection stablished");		
 		    	} else {
 					try {
 						apiCall();
 					} catch (IOException e) {
-						e.printStackTrace();
+						logger.error("There was an unexpected error with the API call");
 					}	    		
 		    	}
 		    }
@@ -111,6 +115,7 @@ public class ITunesApple implements ToolInterface {
 		}
 		
 		KafkaCommunication.generateResponse(dataList, timeStamp, producer, id, confId, params.getKafkaTopic());
+		logger.debug("Data sent to kafka endpoint");
 		++id;
 	}
 

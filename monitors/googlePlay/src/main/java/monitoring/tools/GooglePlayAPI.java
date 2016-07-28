@@ -17,6 +17,7 @@ import java.util.Scanner;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import org.apache.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -28,6 +29,8 @@ import monitoring.model.MonitoringParams;
 import monitoring.services.ToolInterface;
 
 public class GooglePlayAPI implements ToolInterface {
+	
+	final static Logger logger = Logger.getLogger(GooglePlayAPI.class);
 	
 	private int confId;
 	
@@ -69,20 +72,21 @@ public class GooglePlayAPI implements ToolInterface {
 		timer.schedule(new TimerTask() {
 		    public void run() {
 		    	if (firstConnection) {
+		    		logger.debug("Connection established");
 		    		initTime = new Date();
 					firstConnection = false;
-					System.out.println("First connection stablished");		
 		    	} else {
 		    		stamp = initTime;
 		    		initTime = new Date();
 					try {
 						apiCall();
 					} catch (IOException e) {
+						logger.debug("Invalid access token. Generating a new one");
 						try {
 							generateNewAccessToken();
 							apiCall();
 						} catch (IOException e1) {
-							e1.printStackTrace();
+							logger.error("There was an unexpected error with the API call");
 						}
 					}		    		
 		    	}
@@ -211,6 +215,7 @@ public class GooglePlayAPI implements ToolInterface {
 		String timeStamp = new Timestamp(date).toString();
 		
 		KafkaCommunication.generateResponse(dataList, timeStamp, producer, id, confId, params.getKafkaTopic());
+		logger.debug("Data sent to kafka endpoint");
 		++id;
 		
 	}

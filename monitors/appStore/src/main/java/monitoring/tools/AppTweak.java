@@ -19,6 +19,7 @@ import java.util.Scanner;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import org.apache.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -30,6 +31,8 @@ import monitoring.model.MonitoringParams;
 import monitoring.services.ToolInterface;
 
 public class AppTweak implements ToolInterface {
+	
+	final static Logger logger = Logger.getLogger(AppTweak.class);
 	
 	private int confId;
 
@@ -65,6 +68,7 @@ public class AppTweak implements ToolInterface {
 		timer.schedule(new TimerTask() {
 		    public void run() {
 		    	if (firstConnection) {
+		    		logger.debug("Connection established");
 		    		initTime = new Date();
 					firstConnection = false;
 					System.out.println("First connection stablished");		
@@ -74,12 +78,10 @@ public class AppTweak implements ToolInterface {
 					try {
 						apiCall();
 					} catch (IOException e) {
-						e.printStackTrace();
-					} catch (JSONException e) {
-						e.printStackTrace();
-					} catch (ParseException e) {
-						e.printStackTrace();
-					}	    		
+						logger.error("The API call was not correctly build");
+					} catch (JSONException|ParseException e) {
+						logger.error("The response provided by the API tool was not a valid JSON object");
+					}	 		
 		    	}
 		    }
 
@@ -127,6 +129,7 @@ public class AppTweak implements ToolInterface {
 			}
 		}
 		KafkaCommunication.generateResponse(dataList, timeStamp, producer, id, confId, params.getKafkaTopic());
+		logger.debug("Data sent to kafka endpoint");
 		++id;
 	}
 	
