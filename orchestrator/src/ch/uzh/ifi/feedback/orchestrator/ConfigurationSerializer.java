@@ -59,6 +59,16 @@ public class ConfigurationSerializer extends DefaultSerializer<Application> {
 					FeedbackParameter child = new FeedbackParameter();
 					child.setKey((String)map.get("key"));
 					child.setValue(map.get("value"));
+					
+					if(map.containsKey("editable_by_user"))
+						child.setEditableByUser((Boolean)map.get("editable_by_user"));
+					
+					if(map.containsKey("default_value"))
+						child.setDefaultValue(map.get("default_value"));
+					
+					if(map.containsKey("language"))
+						child.setDefaultValue(map.get("language"));
+					
 					parsedChildren.add(child);
 				}
 				setNestedParameters(parsedChildren);

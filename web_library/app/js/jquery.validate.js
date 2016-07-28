@@ -1,14 +1,17 @@
-define(["require", "exports"], function (require, exports) {
+define(["require", "exports", 'i18next'], function (require, exports, i18n) {
     "use strict";
     exports.validatePluginModule = (function ($, window, document) {
         $.fn.validate = function () {
-            var content = this.val(), mandatory = this.data('mandatory'), defaultText = this.data('mandatory-default-text'), manualText = this.data('mandatory-manual-text'), valid = true;
+            var content = this.val(), mandatory = this.data('mandatory'), defaultText = this.data('mandatory-default-text'), manualText = this.data('mandatory-manual-text'), maxLength = this.data('validation-max-length'), validMandatory = true, validMaxLength = true;
             $('.feedback-form-error').remove();
             this.removeClass('invalid');
             if (mandatory && content === '') {
-                valid = false;
+                validMandatory = false;
             }
-            if (!valid) {
+            if (maxLength && content.length > maxLength) {
+                validMaxLength = false;
+            }
+            if (!validMandatory) {
                 this.addClass('invalid');
                 if (manualText === null || manualText === '') {
                     this.after('<span class="feedback-form-error">' + defaultText + '</span>');
@@ -16,6 +19,18 @@ define(["require", "exports"], function (require, exports) {
                 else {
                     this.after('<span class="feedback-form-error">' + manualText + '</span>');
                 }
+                var invalidElement = this;
+                $('html, body').animate({
+                    scrollTop: invalidElement.offset().top
+                }, 500);
+            }
+            if (!validMaxLength) {
+                this.addClass('invalid');
+                var errorMessageMaxLength = i18n.t('general.validationMaxLengthErrorMessage', {
+                    maxLength: maxLength,
+                    currentLength: content.length
+                });
+                this.after('<span class="feedback-form-error">' + errorMessageMaxLength + '</span>');
                 var invalidElement = this;
                 $('html, body').animate({
                     scrollTop: invalidElement.offset().top
