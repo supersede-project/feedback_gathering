@@ -2,6 +2,8 @@ import {Mechanism} from '../models/mechanism';
 import {ParameterPropertyPair} from '../models/parameter_property_pair';
 import {MechanismFactory} from '../models/mechanism_factory';
 import {textType, ratingType, screenshotType} from '../js/config';
+import {Backend} from './backends/backend';
+import {HttpBackend} from './backends/http_backend';
 
 
 /**
@@ -9,12 +11,18 @@ import {textType, ratingType, screenshotType} from '../js/config';
  */
 export class ConfigurationService {
     private data:any;
+    private backend:Backend;
 
     /**
      * @param data
      *  The json data coming from the orchestrator core
+     * @param backend
+     *  Backend to get data from
      */
-    constructor(data: any) {
+    constructor(data: any, backend?: Backend) {
+        if(!backend) {
+            this.backend = new HttpBackend('feedback_orchestrator/example/configuration');
+        }
         this.data = data;
     }
 

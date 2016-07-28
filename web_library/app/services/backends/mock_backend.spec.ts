@@ -1,5 +1,5 @@
 import {MockBackend} from './mock_backend';
-import {readJSON} from './mocks/mocks_loader';
+import {readJSON} from './../mocks/mocks_loader';
 
 
 describe('Mock Backend', () => {
@@ -15,8 +15,9 @@ describe('Mock Backend', () => {
     });
 
     it('should list all the mock data', () => {
-        var data = configurationMockBackend.list();
-        expect(data.length).toBe(2);
+        configurationMockBackend.list(function(data) {
+            expect(data.length).toBe(2);
+        });
     });
 
     it('should retrieve a single object in the mock data', () => {
@@ -33,12 +34,15 @@ describe('Mock Backend', () => {
             "mechanisms": []
         };
 
-        expect(configurationMockBackend.retrieve(2)).toEqual(expectedObject);
+        configurationMockBackend.retrieve(2, function(object) {
+            expect(object).toEqual(expectedObject);
+        });
     });
 
     it('should create a new object in the mock data', () => {
-        var data = feedbackMockBackend.list();
-        expect(data.length).toBe(1);
+        feedbackMockBackend.list(function(data) {
+            expect(data.length).toBe(1);
+        });
 
         var newFeedback = {
             "title": "Feedback 2",
@@ -51,8 +55,9 @@ describe('Mock Backend', () => {
 
         feedbackMockBackend.create(newFeedback);
 
-        var data = feedbackMockBackend.list();
-        expect(data.length).toBe(2);
+        feedbackMockBackend.list(function(data) {
+            expect(data.length).toBe(2);
+        });
     });
 
     it('should update an object in the mock data', () => {
@@ -62,17 +67,21 @@ describe('Mock Backend', () => {
 
         feedbackMockBackend.update(1, attributes);
 
-        var updatedFeedback = feedbackMockBackend.retrieve(1);
-        expect(updatedFeedback.title).toEqual('New title for this feedback object');
+        feedbackMockBackend.retrieve(1, function(updatedFeedback) {
+            expect(updatedFeedback.title).toEqual('New title for this feedback object');
+        });
+
     });
 
     it('should delete an object in the mock data', () => {
-        var data = feedbackMockBackend.list();
-        expect(data.length).toBe(1);
+        feedbackMockBackend.list(function(data) {
+            expect(data.length).toBe(1);
+        });
 
         feedbackMockBackend.destroy(1);
 
-        var data = feedbackMockBackend.list();
-        expect(data.length).toBe(0);
+        feedbackMockBackend.list(function(data) {
+            expect(data.length).toBe(0);
+        });
     });
 });

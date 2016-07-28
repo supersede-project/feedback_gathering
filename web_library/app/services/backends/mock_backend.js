@@ -4,32 +4,38 @@ define(["require", "exports"], function (require, exports) {
         function MockBackend(mockData) {
             this.mockData = mockData;
         }
-        MockBackend.prototype.list = function () {
-            return this.mockData;
+        MockBackend.prototype.list = function (callback) {
+            callback(this.mockData);
         };
-        MockBackend.prototype.retrieve = function (id) {
-            return this.findById(id);
+        MockBackend.prototype.retrieve = function (id, callback) {
+            callback(this.findById(id));
         };
-        MockBackend.prototype.create = function (object) {
+        MockBackend.prototype.create = function (object, callback) {
             this.mockData.push(object);
-            return object;
+            if (callback) {
+                callback(object);
+            }
         };
-        MockBackend.prototype.update = function (id, attributes) {
+        MockBackend.prototype.update = function (id, attributes, callback) {
             var object = this.findById(id);
             for (var id_1 in attributes) {
                 if (attributes.hasOwnProperty(id_1)) {
                     object[id_1] = attributes[id_1];
                 }
             }
-            return object;
+            if (callback) {
+                callback(object);
+            }
         };
-        MockBackend.prototype.destroy = function (id) {
+        MockBackend.prototype.destroy = function (id, callback) {
             var object = this.findById(id);
             var index = this.mockData.indexOf(object);
             if (index !== undefined) {
                 this.mockData.splice(index, 1);
             }
-            return object;
+            if (callback) {
+                callback(object);
+            }
         };
         MockBackend.prototype.findById = function (id) {
             var resultArray = this.mockData.filter(function (obj) {

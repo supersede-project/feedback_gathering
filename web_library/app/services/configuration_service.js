@@ -1,7 +1,10 @@
-define(["require", "exports", '../models/parameter_property_pair', '../models/mechanism_factory', '../js/config'], function (require, exports, parameter_property_pair_1, mechanism_factory_1, config_1) {
+define(["require", "exports", '../models/parameter_property_pair', '../models/mechanism_factory', '../js/config', './backends/http_backend'], function (require, exports, parameter_property_pair_1, mechanism_factory_1, config_1, http_backend_1) {
     "use strict";
     var ConfigurationService = (function () {
-        function ConfigurationService(data) {
+        function ConfigurationService(data, backend) {
+            if (!backend) {
+                this.backend = new http_backend_1.HttpBackend('feedback_orchestrator/example/configuration');
+            }
             this.data = data;
         }
         ConfigurationService.prototype.getConfig = function () {

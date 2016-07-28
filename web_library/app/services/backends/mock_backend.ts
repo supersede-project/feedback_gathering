@@ -8,39 +8,45 @@ export class MockBackend implements Backend {
         this.mockData = mockData;
     }
 
-    list():any {
-        return this.mockData;
+    list(callback:(data:any) => void): void {
+        callback(this.mockData);
     }
 
-    retrieve(id:number):any {
-        return this.findById(id);
+    retrieve(id:number, callback:(data:any) => void): void {
+        callback(this.findById(id));
     }
 
-    create(object:any):any {
+    create(object:any, callback?:(data:any) => void): void {
         this.mockData.push(object);
-        return object;
+        if(callback) {
+            callback(object);
+        }
     }
 
-    update(id:number, attributes:{}):any {
+    update(id:number, attributes:{}, callback?:(data:any) => void): void {
         var object = this.findById(id);
         for (let id in attributes) {
             if (attributes.hasOwnProperty(id)) {
                 object[id] = attributes[id];
             }
         }
-        return object;
+        if(callback) {
+            callback(object);
+        }
     }
 
-    destroy(id:number):any {
+    destroy(id:number, callback?:(data:any) => void): void {
         var object = this.findById(id);
         let index = this.mockData.indexOf(object);
         if (index !== undefined) {
             this.mockData.splice(index, 1);
         }
-        return object;
+        if(callback) {
+            callback(object);
+        }
     }
 
-    private findById(id:number): any {
+    private findById(id:number): void {
         var resultArray = this.mockData.filter(function (obj) {
             return obj.id === id;
         });
