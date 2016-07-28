@@ -34,7 +34,7 @@ public class ToolDispatcher {
 		try {
 			MonitoringParams params = parseJsonConfiguration(jsonConf);
 			if (params.getToolName() == null) 
-				return throwError(confId, "Missing tool name");
+				return throwError("Missing tool name");
 			
 			Class monitor = Class.forName(toolPackageRoute + params.getToolName());
 			ToolInterface toolInstance = (ToolInterface) monitor.newInstance();
@@ -44,15 +44,15 @@ public class ToolDispatcher {
 			return getResponse(confId);
 			
 		} catch (JSONException e) {
-			return throwError(confId, "Not a valid JSON configuration object");
+			return throwError("Not a valid JSON configuration object");
 		} catch (InstantiationException e) {
-			return throwError(confId, "Monitor class must be concrete");
+			return throwError("Monitor class must be concrete");
 		} catch (IllegalAccessException e) {
-			return throwError(confId, "Monitor class must have a constructor with no args");
+			return throwError("Monitor class must have a constructor with no args");
 		} catch (ClassNotFoundException e) {
-			return throwError(confId, "Not existing tool");
+			return throwError("Not existing tool");
 		} catch (Exception e) {
-			return throwError(confId, e.getMessage());
+			return throwError(e.getMessage());
 		}
 		
 	}
@@ -68,11 +68,11 @@ public class ToolDispatcher {
 				
 		try {
 			if (!monitoringInstances.containsKey(id))
-				return throwError(id, "Not existing configuration with the specified ID");
+				return throwError("Not existing configuration with the specified ID");
 			monitoringInstances.get(id).deleteConfiguration();
 			monitoringInstances.remove(id);
 		} catch (Exception e) {
-			return throwError(id, "There was an unexpected error");
+			return throwError("There was an unexpected error");
 		}
 		
 		return getResponse(id);
@@ -114,14 +114,13 @@ public class ToolDispatcher {
 		
 	}
 
-	public String throwError(int id, String error) {
+	public String throwError(String error) {
 		
 		JSONObject response = new JSONObject();
 		JSONObject resInfo = new JSONObject();
 		
 		try {
 			resInfo.put("message", error);
-			resInfo.put("idConf", id);
 			resInfo.put("status", "error");
 			response.put("GooglePlayConfProfResult", resInfo);
 			++confId;		
