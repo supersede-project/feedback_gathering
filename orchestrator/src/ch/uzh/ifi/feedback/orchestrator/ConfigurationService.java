@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import com.google.gson.internal.bind.SqlDateTypeAdapter;
 
@@ -19,6 +20,7 @@ import ch.uzh.ifi.feedback.orchestrator.Model.FeedbackMechanism;
 import ch.uzh.ifi.feedback.orchestrator.Model.FeedbackParameter;
 import ch.uzh.ifi.feedback.orchestrator.Model.GeneralConfiguration;
 import ch.uzh.ifi.feedback.orchestrator.Model.PullConfiguration;
+import jdk.nashorn.internal.runtime.regexp.joni.Config;
 
 public class ConfigurationService {
 
@@ -31,7 +33,31 @@ public class ConfigurationService {
 		this.dbResultParser = dbResultParser;
 	}
 	
-	public void CreateConfiguration(Application config) throws Exception {
+	public Application GetConfiguration(String application) throws Exception
+	{
+		Application app = new Application();
+		app.setName(application);
+		
+		transactionManager.withTransaction((con) -> {
+			
+		    PreparedStatement s = con.prepareStatement(
+		    		"Select a.id FROM feedback_orchestrator.applications as a WHERE a.name = ? ;");
+		    s.setString(1, application);
+		    ResultSet result = s.executeQuery();
+		    result.next();
+		    int appId = result.getInt("id");
+		    app.setId(appId);
+		    
+		    AddMechanisms(con, app);
+		    AddGeneralConfigurations(con, app);
+		    AddPullConfigurations(con, app);
+		    
+		});
+
+	    return app;
+	}
+	
+	public void InsertConfiguration(Application config) throws Exception {
 		
 		Connection c = transactionManager.createDatabaseConnection();
 		PreparedStatement s = c.prepareStatement("SELECT id FROM feedback_orchestrator.applications as app WHERE app.name = ? ;");
@@ -42,9 +68,9 @@ public class ConfigurationService {
 		
 		transactionManager.withTransaction((con) -> {
 			int appId = CreateApplication(config, con);
-			StorePullConfigurations(config.getPullConfigurations(), appId, con);
-			StoreFeedbackMechanisms(config.getFeedbackMechanisms(), appId, con);
-			StoreGeneralConfigurations(config.getGeneralConfigurations(), appId, con);
+			InsertPullConfigurations(config.getPullConfigurations(), appId, con);
+			InsertFeedbackMechanisms(config.getFeedbackMechanisms(), appId, con);
+			InsertGeneralConfigurations(config.getGeneralConfigurations(), appId, con);
 		});
 		
 	}
@@ -60,11 +86,10 @@ public class ConfigurationService {
 		int appId = rs.getInt("id");
 		
 		transactionManager.withTransaction((con) -> {
-			StorePullConfigurations(config.getPullConfigurations(), appId, con);
-			//StoreFeedbackMechanisms(config.getFeedbackMechanisms(), appId, con);
-			//StoreGeneralConfigurations(config.getGeneralConfigurations(), appId, con);
+			UpdatePullConfigurations(config.getPullConfigurations(), appId, con);
+			UpdateFeedbackMechanisms(config.getFeedbackMechanisms(), appId, con);
+			UpdateGeneralConfigurations(config.getGeneralConfigurations(), appId, con);
 		});
-		
 	}
 	
 	private int CreateApplication(Application application, Connection con) throws SQLException
@@ -78,54 +103,55 @@ public class ConfigurationService {
 	    return keys.getInt(1);
 	}
 	
-	private void StoreGeneralConfigurations(List<GeneralConfiguration> generalConfigs, int applicationId, Connection con) throws SQLException
+	private void InsertGeneralConfigurations(List<GeneralConfiguration> generalConfigs, int applicationId, Connection con) throws SQLException
 	{
 		for(GeneralConfiguration config : generalConfigs)
-		{
-			int key;
-			
-			//Do update
-			if(config.getCreatedAt() != null)
-			{
-			    PreparedStatement s = con.prepareStatement(
-			    		"Update feedback_orchestrator.general_configurations as c"
-			    		+ "SET c.updated_at = now() "
-			    		+ "WHERE c.created_at = ? AND c.application_id = ?;");
-			    s.setTimestamp(1, config.getCreatedAt());
-			    s.setInt(2, applicationId);
-			    s.execute();
-			    
-			    s = con.prepareStatement(
-			    		  "SELECT id from feedback_orchestrator.general_configurations as c"
-			    		+ "WHERE c.created_at = ? AND c.application_id = ?;");
-			    s.setTimestamp(1, config.getCreatedAt());
-			    s.setInt(2, applicationId);
-			    ResultSet rs = s.executeQuery();
-			    
-			    key = rs.getInt("id");
-			}
-			else{
-				//Do create
-			    PreparedStatement s = con.prepareStatement(
-			    		"INSERT INTO feedback_orchestrator.general_configurations "
-			    		+ "(application_id) "
-			    		+ "VALUES (?) ;", PreparedStatement.RETURN_GENERATED_KEYS);
-			    
-			    s.setInt(1, applicationId);
-			    s.execute();
-			    ResultSet keys = s.getGeneratedKeys();
-			    keys.next();
-			    key = keys.getInt(1);
-			}
-			
+		{		
+		    PreparedStatement s = con.prepareStatement(
+		    		"INSERT INTO feedback_orchestrator.general_configurations "
+		    		+ "(application_id) "
+		    		+ "VALUES (?) ;", PreparedStatement.RETURN_GENERATED_KEYS);
+		    
+		    s.setInt(1, applicationId);
+		    s.execute();
+		    ResultSet keys = s.getGeneratedKeys();
+		    keys.next();
+		    int key = keys.getInt(1);
+		    
 		    for(FeedbackParameter param : config.getParameters())
 		    {
-		    	StoreParameter(param, null, key, null, null, con);
+		    	InsertParameter(param, null, config.getId(), null, null, con);
 		    }
 		}
 	}
 	
-	private void StoreFeedbackMechanisms(List<FeedbackMechanism> mechanisms, int applicationId, Connection con) throws SQLException
+	private void UpdateGeneralConfigurations(List<GeneralConfiguration> generalConfigs, int applicationId, Connection con) throws SQLException
+	{
+		List<GeneralConfiguration> newConfigs= generalConfigs.stream().filter(c -> c.getId() == null).collect(Collectors.toList());
+		generalConfigs.removeAll(newConfigs);
+		InsertGeneralConfigurations(newConfigs, applicationId, con);
+		
+		for(GeneralConfiguration config : generalConfigs)
+		{
+		    PreparedStatement s = con.prepareStatement(
+		    		"Update feedback_orchestrator.general_configurations as c "
+		    		+ "SET c.updated_at = now() "
+		    		+ "WHERE c.id = ? ;");
+		    s.setInt(1, config.getId());
+		    s.execute();
+		   
+		   for(FeedbackParameter param : config.getParameters())
+		   {
+			   if(param.getId() == null){
+				   InsertParameter(param, null, config.getId(), null, null, con);
+			   }else{
+				   UpdateParameter(param, null, config.getId(), null, null, con);
+			   }
+		   }
+		}
+	}
+	
+	private void InsertFeedbackMechanisms(List<FeedbackMechanism> mechanisms, int applicationId, Connection con) throws SQLException
 	{
 		for(FeedbackMechanism mechanism : mechanisms)
 		{
@@ -146,12 +172,47 @@ public class ConfigurationService {
 		    
 		    for(FeedbackParameter param : mechanism.getParameters())
 		    {
-		    	StoreParameter(param, null, null, key, null, con);
+		    	InsertParameter(param, null, null, key, null, con);
 		    }
 		}
 	}
 	
-	private void StorePullConfigurations(List<PullConfiguration> pullConfigurations, int applicationId, Connection con) throws SQLException
+	private void UpdateFeedbackMechanisms(List<FeedbackMechanism> mechanisms, int applicationId, Connection con) throws SQLException
+	{
+		List<FeedbackMechanism> newMechanisms= mechanisms.stream().filter(c -> c.getId() == null).collect(Collectors.toList());
+		mechanisms.removeAll(newMechanisms);
+		InsertFeedbackMechanisms(newMechanisms, applicationId, con);
+		
+		for(FeedbackMechanism mechanism : mechanisms)
+		{
+		    PreparedStatement s = con.prepareStatement(
+		    		  "UPDATE feedback_orchestrator.mechanisms "
+		    		+ "SET application_id = ?, `name` = IFNULL(?, `name`), active = IFNULL(?, active), `order` = IFNULL(?, `order`), "
+		    		    + "can_be_activated = IFNULL(?, can_be_activated), updated_at = now() "
+		    		+ "WHERE id = ? ;");
+		    
+		    s.setInt(1, applicationId);
+		    s.setString(2, mechanism.getType());
+		    s.setObject(3, mechanism.isActive());
+		    s.setObject(4, mechanism.getOrder());
+		    s.setObject(5, mechanism.isCanBeActivated());
+		    s.setInt(6, mechanism.getId());
+		    
+		    System.out.println(s.toString());
+		    s.execute();
+		    
+		    for(FeedbackParameter param : mechanism.getParameters())
+		    {
+		    	if(param.getId() == null){
+		    		InsertParameter(param, null, null, mechanism.getId(), null, con);
+		    	}else{
+		    		UpdateParameter(param, null, null, mechanism.getId(), null, con);
+		    	}
+		    }
+		}
+	}
+	
+	private void InsertPullConfigurations(List<PullConfiguration> pullConfigurations, int applicationId, Connection con) throws SQLException
 	{
 		for(PullConfiguration config : pullConfigurations)
 		{
@@ -169,12 +230,41 @@ public class ConfigurationService {
 		    
 		    for(FeedbackParameter param : config.getParameters())
 		    {
-		    	StoreParameter(param, key, null, null, null, con);
+		    	InsertParameter(param, key, null, null, null, con);
 		    }
 		}
 	}
 	
-	private void StoreParameter(
+	private void UpdatePullConfigurations(List<PullConfiguration> pullConfigurations, int applicationId, Connection con) throws SQLException
+	{
+		List<PullConfiguration> newConfigurations = pullConfigurations.stream().filter(c -> c.getId() == null).collect(Collectors.toList());
+		pullConfigurations.removeAll(newConfigurations);
+		InsertPullConfigurations(newConfigurations, applicationId, con);
+		
+		for(PullConfiguration config : pullConfigurations)
+		{
+		    PreparedStatement s = con.prepareStatement(
+		    		    "UPDATE feedback_orchestrator.pull_configurations "
+		    		  + "SET applications_id = ?, active = IFNULL(?, active), updated_at = now() "
+		    		  + "WHERE id = ? ;");
+		    
+		    s.setInt(1, applicationId);
+		    s.setObject(2, config.getActive());
+		    s.setInt(3, config.getId());
+		    s.execute();
+		    
+		    for(FeedbackParameter param : config.getParameters())
+		    {
+		    	if(param.getId() == null){
+		    		InsertParameter(param, config.getId(), null, null, null, con);
+		    	}else{
+		    		UpdateParameter(param, config.getId(), null, null, null, con);
+		    	}
+		    }
+		}
+	}
+	
+	private void InsertParameter(
 			FeedbackParameter param, 
 			Integer pullConfigurationId, 
 			Integer generalConfigurationId, 
@@ -185,13 +275,7 @@ public class ConfigurationService {
 		PreparedStatement s = con.prepareStatement(
 				  "INSERT INTO feedback_orchestrator.parameters "
 				+ "(mechanism_id, `key`, value, default_value, editable_by_user, parameters_id, language, general_configurations_id, pull_configurations_id, created_at) "
-				+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?) "
-				+ "ON DUPLICATE KEY UPDATE updated_at = now(), mechanism_id = VALUES(mechanism_id), `key` = VALUES(`key`), value = VALUES(value), "
-				+ "editable_by_user = VALUES(editable_by_user), parameters_id = VALUES(parameters_id), language = VALUES(language), "
-				+ "general_configurations_id = VALUES(general_configurations_id), pull_configurations_id = VALUES(pull_configurations_id);", 
-				PreparedStatement.RETURN_GENERATED_KEYS);
-		
-		System.out.println(s.toString());
+				+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ;", PreparedStatement.RETURN_GENERATED_KEYS);
 		
 		s.setObject(1, mechanismId);
 		s.setString(2, param.getKey());
@@ -213,7 +297,7 @@ public class ConfigurationService {
 
 		    List<FeedbackParameter> children = (List<FeedbackParameter>)param.getValue();
 			for (FeedbackParameter childParam : children){
-				StoreParameter(childParam, pullConfigurationId, generalConfigurationId, mechanismId, key, con);	
+				InsertParameter(childParam, pullConfigurationId, generalConfigurationId, mechanismId, key, con);	
 			}
 			
 		}else{
@@ -222,30 +306,51 @@ public class ConfigurationService {
 		}
 	}
 	
-	public Application GetConfiguration(String application) throws Exception
-	{
-		Application app = new Application();
-		app.setName(application);
+	private void UpdateParameter(
+			FeedbackParameter param, 
+			Integer pullConfigurationId, 
+			Integer generalConfigurationId, 
+			Integer mechanismId, 
+			Integer parameterId, 
+			Connection con) throws SQLException{
 		
-		transactionManager.withTransaction((con) -> {
+		PreparedStatement s = con.prepareStatement(
+				  	"UPDATE feedback_orchestrator.parameters "
+				  + "SET mechanism_id = ?, `key` = ?, value = ?, default_value = IFNULL(?, default_value), editable_by_user = IFNULL(?, editable_by_user), parameters_id = ?, language = IFNULL(?, language), general_configurations_id = ?, pull_configurations_id = ? "
+				  + "WHERE id = ? ;");
+		
+		s.setObject(1, mechanismId);
+		s.setString(2, param.getKey());
+		s.setObject(4, param.getDefaultValue());
+		s.setObject(5, param.getEditableByUser());
+		s.setObject(6, parameterId);
+		s.setObject(7, param.getLanguage());
+		s.setObject(8, generalConfigurationId);
+		s.setObject(9, pullConfigurationId);
+		s.setInt(10, param.getId());
+		
+		if(List.class.isAssignableFrom(param.getValue().getClass())){
 			
-		    PreparedStatement s = con.prepareStatement(
-		    		"Select a.id FROM feedback_orchestrator.applications as a WHERE a.name = ? ;");
-		    s.setString(1, application);
-		    ResultSet result = s.executeQuery();
-		    result.next();
-		    int appId = result.getInt("id");
-		    
-		    AddMechanisms(con, app, appId);
-		    AddGeneralConfigurations(con, app, appId);
-		    AddPullConfigurations(con, app, appId);
-		    
-		});
+			s.setObject(3, null);
+			s.execute();
 
-	    return app;
+		    List<FeedbackParameter> children = (List<FeedbackParameter>)param.getValue();
+			for (FeedbackParameter childParam : children){
+				if(childParam.getId() == null)
+				{
+					InsertParameter(childParam, pullConfigurationId, generalConfigurationId, mechanismId, param.getId(), con);
+				}else{
+					UpdateParameter(childParam, pullConfigurationId, generalConfigurationId, mechanismId, param.getId(), con);		
+				}
+			}
+			
+		}else{
+			s.setObject(3, param.getValue());
+			s.execute();
+		}
 	}
 	
-	private void AddMechanisms(Connection con, Application app, int appId) throws SQLException
+	private void AddMechanisms(Connection con, Application app) throws SQLException
 	{
 	    PreparedStatement s = con.prepareStatement(
 
@@ -255,7 +360,7 @@ public class ConfigurationService {
 	    		+ "WHERE a.id = ? ;"		    		
 	    		);
 	    
-	    s.setInt(1, appId);
+	    s.setInt(1, app.getId());
 	    ResultSet result = s.executeQuery();
 	    
 	    List<FeedbackMechanism> mechanisms = new ArrayList<>();
@@ -266,6 +371,7 @@ public class ConfigurationService {
 	    	mechanism.setActive(result.getBoolean("active"));
 	    	mechanism.setCanBeActivated(result.getBoolean("can_be_activated"));
 	    	mechanism.setOrder(result.getInt("order"));
+	    	mechanism.setId(result.getInt("id"));
 	    	mechanism.setParameters(GetParameters(con, "mechanisms", "mechanism_id", result.getInt("id")));
 	    	mechanisms.add(mechanism);
 	    }
@@ -273,7 +379,7 @@ public class ConfigurationService {
 	    app.setFeedbackMechanisms(mechanisms);
 	}
 	
-	private void AddGeneralConfigurations(Connection con, Application app, int appId) throws SQLException
+	private void AddGeneralConfigurations(Connection con, Application app) throws SQLException
 	{
 	    PreparedStatement s = con.prepareStatement(
 
@@ -283,7 +389,7 @@ public class ConfigurationService {
 	    		+ "WHERE a.id = ? ;"		    		
 	    		);
 	    
-	    s.setInt(1, appId);
+	    s.setInt(1, app.getId());
 	    ResultSet result = s.executeQuery();
 	    
 	    List<GeneralConfiguration> configs = new ArrayList<>();
@@ -292,15 +398,15 @@ public class ConfigurationService {
 	    	GeneralConfiguration config = new GeneralConfiguration();
 	    	config.setCreatedAt(result.getTimestamp("created_at"));
 	    	config.setUpdatedAt(result.getTimestamp("updated_at"));
-	    	int configKey = result.getInt("id");
-	    	config.setParameters(GetParameters(con, "general_configurations", "general_configurations_id", configKey));
+	    	config.setId(result.getInt("id"));
+	    	config.setParameters(GetParameters(con, "general_configurations", "general_configurations_id", config.getId()));
 	    	configs.add(config);
 	    }
 	    
 	    app.setGeneralConfigurations(configs);
 	}
 	
-	private void AddPullConfigurations(Connection con, Application app, int appId) throws SQLException
+	private void AddPullConfigurations(Connection con, Application app) throws SQLException
 	{
 	    PreparedStatement s = con.prepareStatement(
 
@@ -310,7 +416,7 @@ public class ConfigurationService {
 	    		+ "WHERE a.id = ? ;"		    		
 	    		);
 	    
-	    s.setInt(1, appId);
+	    s.setInt(1, app.getId());
 	    ResultSet result = s.executeQuery();
 	    
 	    List<PullConfiguration> configs = new ArrayList<>();
@@ -320,9 +426,8 @@ public class ConfigurationService {
 	    	config.setCreatedAt(result.getTimestamp("created_at"));
 	    	config.setUpdatedAt(result.getTimestamp("updated_at"));
 	    	config.setActive(result.getBoolean("active"));
-	    	
-	    	int configKey = result.getInt("id");
-	    	config.setParameters(GetParameters(con, "pull_configurations", "pull_configurations_id", configKey));
+	    	config.setId(result.getInt("id"));
+	    	config.setParameters(GetParameters(con, "pull_configurations", "pull_configurations_id", config.getId()));
 	    	configs.add(config);
 	    }
 	    
@@ -332,7 +437,7 @@ public class ConfigurationService {
 	private List<FeedbackParameter> GetParameters(Connection con, String foreignTableName, String foreignKeyName, int foreignKey) throws SQLException
 	{
 		String sql = String.format(
-				"Select p.id, p.parameters_id, p.key, p.value, p.default_value, p.editable_by_user, p.language, p.created_at, p.updated_at FROM "
+				  "Select p.id, p.parameters_id, p.key, p.value, p.default_value, p.editable_by_user, p.language, p.created_at, p.updated_at FROM "
 	    		+ "feedback_orchestrator.parameters as p "
 	    		+ "JOIN feedback_orchestrator.%s as f on (p.%s = f.id) "
 	    		+ "WHERE f.id = ? ;", foreignTableName, foreignKeyName);
@@ -348,6 +453,7 @@ public class ConfigurationService {
 	    while(result.next())
 	    {
 	    	FeedbackParameter param = new FeedbackParameter();
+	    	param.setId(result.getInt("id"));
 	    	param.setKey(result.getString("key"));
 	    	param.setValue(result.getObject("value"));
 	    	param.setDefaultValue(result.getObject("default_value"));
@@ -392,7 +498,7 @@ public class ConfigurationService {
 	{
 	    PreparedStatement s = con.prepareStatement(
 
-	    		"Select m.name as mechanism_name, m.order, m.active, m.can_be_activated, p.key, p.value, p.default_value, p.editable_by_user FROM "
+	    		  "Select m.name as mechanism_name, m.order, m.active, m.can_be_activated, p.key, p.value, p.default_value, p.editable_by_user FROM "
 	    		+ "feedback_orchestrator.mechanisms as m "
 	    		+ "LEFT JOIN feedback_orchestrator.applications as a on (m.application_id = a.id) "
 	    		+ "LEFT JOIN feedback_orchestrator.parameters as p on (p.mechanism_id = m.id) "

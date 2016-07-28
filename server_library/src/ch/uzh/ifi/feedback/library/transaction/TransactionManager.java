@@ -23,6 +23,7 @@ public class TransactionManager {
         } catch (Exception e) {
 
             System.out.println(e.getMessage());
+            e.printStackTrace();
             System.out.println("Rolling back...");
             dbConnection.rollback();
             throw e;

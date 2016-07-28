@@ -11,6 +11,7 @@ public class PullConfiguration {
 	private Timestamp createdAt;
 	private Timestamp updatedAt;
 	private Boolean active;
+	private Integer id;
 	
 	public PullConfiguration(){
 		parameters = new ArrayList<>();
@@ -55,5 +56,13 @@ public class PullConfiguration {
 
 	public void setActive(Boolean active) {
 		this.active = active;
+	}
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
 	}
 }
