@@ -54,17 +54,7 @@ public class TwitterAPI implements ToolInterface {
 		firstConnection = true;
 		tweetInfo = new ArrayList<>();
 		
-		ConfigurationBuilder cb = new ConfigurationBuilder();
-		cb.setDebugEnabled(false)
-		  .setOAuthConsumerKey("EIW5qL14B5MjBGiQ9zjcMl7bM")
-		  .setOAuthConsumerSecret("HjaTo9bF9VjdNFLGGnFIjIM2KyMuRxiIlRA4YsIuwjqAHfJQHB")
-		  .setOAuthAccessToken("742364898596904960-Vpxpbgi6OETuW6j5IKYWgwZQFlO2Qeh")
-		  .setOAuthAccessTokenSecret("VmPdk3pgoo48IHYgS2HJUmDm21ReLwhTIbTnmMSxqQgir");
-		
-		
-		Configuration conf = cb.build();
-		
-		stream = new TwitterStreamFactory(conf).getInstance();
+		stream = new TwitterStreamFactory().getInstance();
 		
 		stream.onStatus(new Consumer<Status>() {
 			@Override
@@ -86,7 +76,7 @@ public class TwitterAPI implements ToolInterface {
 
 			@Override
 			public void onConnect() {
-				logger.debug("Connection stablished successfully");
+				logger.debug("Connection established successfully");
 				timer = new Timer();
 				timer.schedule(new TimerTask() {
 				    public void run() {
