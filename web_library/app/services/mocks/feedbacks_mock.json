@@ -1,0 +1,14 @@
+[
+  {
+    "id": 1,
+    "title": "Feedback 1",
+    "configVersion": null,
+    "text": "This is the feedback text",
+    "user_identification": "u8102390",
+    "language": "DE",
+    "created_at": 1469701384,
+    "updated_at": 1469701384,
+    "application_id": null,
+    "context_information_id": null
+  }
+]
