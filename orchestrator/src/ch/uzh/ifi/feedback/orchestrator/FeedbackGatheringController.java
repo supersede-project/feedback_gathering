@@ -11,13 +11,13 @@ import ch.uzh.ifi.feedback.orchestrator.Model.FeedbackMechanism;
 
 
 @Controller
-(Route = "/{Application}/configuration")
-public class ConfigurationController extends RestController<Application>{
+(Route = "/application/{application_id}/configuration")
+public class FeedbackGatheringController extends RestController<Application>{
     
 	private ISerializationService<Application> serializationService;
 	private ConfigurationService dbService;
 	
-    public ConfigurationController() {
+    public FeedbackGatheringController() {
 		super();
 		
 		dbService = new ConfigurationService(new TransactionManager(), new ConfigurationParser());
@@ -36,7 +36,8 @@ public class ConfigurationController extends RestController<Application>{
 	{
 		String application = (String)request.getAttribute("Application");
 		configuration.setName(application);
-		dbService.CreateConfiguration(configuration);
+		dbService.InsertConfiguration(configuration);
+		response.getWriter().append(serializationService.Serialize(dbService.GetConfiguration(configuration.getName())));
 	}
 
 	@Override
@@ -45,6 +46,7 @@ public class ConfigurationController extends RestController<Application>{
 		String application = (String)request.getAttribute("Application");
 		configuration.setName(application);
 		dbService.UpdateConfiguration(configuration);
+		response.getWriter().append(serializationService.Serialize(dbService.GetConfiguration(configuration.getName())));
 	}
 	
 	@Override

@@ -8,20 +8,21 @@ import java.util.Map;
 public class FeedbackMechanism {
 	
 	private String type;
-	private boolean active;
-	private int order;
-	private boolean canBeActivated;
+	private Boolean active;
+	private Integer order;
+	private Boolean canBeActivated;
+	private Integer id;
 	private List<FeedbackParameter> parameters;
 	
 	public FeedbackMechanism(){
 		parameters = new ArrayList<>();
 	}
 
-	public boolean isActive() {
+	public Boolean isActive() {
 		return active;
 	}
 
-	public void setActive(boolean active) {
+	public void setActive(Boolean active) {
 		this.active = active;
 	}
 
@@ -33,19 +34,19 @@ public class FeedbackMechanism {
 		this.parameters = parameters;
 	}
 
-	public int getOrder() {
+	public Integer getOrder() {
 		return order;
 	}
 
-	public void setOrder(int order) {
+	public void setOrder(Integer order) {
 		this.order = order;
 	}
 
-	public boolean isCanBeActivated() {
+	public Boolean isCanBeActivated() {
 		return canBeActivated;
 	}
 
-	public void setCanBeActivated(boolean canBeActivated) {
+	public void setCanBeActivated(Boolean canBeActivated) {
 		this.canBeActivated = canBeActivated;
 	}
 
@@ -86,5 +87,13 @@ public class FeedbackMechanism {
 	    }
 	    
 	    return true;
+	}
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
 	}
 }

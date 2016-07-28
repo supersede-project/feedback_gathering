@@ -9,6 +9,7 @@ public class GeneralConfiguration {
 	private Timestamp createdAt;
 	private Timestamp updatedAt;
 	private List<FeedbackParameter> parameters;
+	private Integer id;
 	
 	public GeneralConfiguration()
 	{
@@ -32,6 +33,14 @@ public class GeneralConfiguration {
 	}
 	public void setParameters(List<FeedbackParameter> parameters) {
 		this.parameters = parameters;
+	}
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
 	}
 
 }
