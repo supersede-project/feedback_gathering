@@ -1,5 +1,7 @@
 package com.example.matthias.feedbacklibrary.models;
 
+import com.example.matthias.feedbacklibrary.configurations.MechanismConfigurationItem;
+
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
@@ -15,7 +17,7 @@ public class RatingMechanism extends Mechanism implements Serializable {
 
     private float inputRating;
 
-    public RatingMechanism(FeedbackConfigurationItem item) {
+    public RatingMechanism(MechanismConfigurationItem item) {
         super(RATING_TYPE, item);
         initRatingMechanism(item);
     }
@@ -40,7 +42,7 @@ public class RatingMechanism extends Mechanism implements Serializable {
         return title;
     }
 
-    private void initRatingMechanism(FeedbackConfigurationItem item) {
+    private void initRatingMechanism(MechanismConfigurationItem item) {
         for (Map<String, Object> param : item.getParameters()) {
             String key = (String) param.get("key");
             // Title

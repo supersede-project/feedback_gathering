@@ -16,8 +16,6 @@ import com.example.matthias.feedbacklibrary.FeedbackActivity;
 import com.example.matthias.feedbacklibrary.utils.DialogUtils;
 import com.example.matthias.feedbacklibrary.utils.Utils;
 
-import java.util.ArrayList;
-
 public class StartActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,9 +25,11 @@ public class StartActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        final TextView countdownTextView = (TextView) findViewById(R.id.countdown_textview);
-        final String message = getResources().getString(R.string.supersede_feedbacklibrary_pull_feedback_question_string);
+        // Actual trigger
+        //Utils.triggerPotentialPullFeedback(this);
 
+        // Only for demo purposes
+        final TextView countdownTextView = (TextView) findViewById(R.id.countdown_textview);
         Button b = (Button) findViewById(R.id.pull_start_button);
         if (b != null) {
             b.setOnClickListener(new View.OnClickListener() {
@@ -41,9 +41,11 @@ public class StartActivity extends AppCompatActivity {
                             if (countdownTextView != null) {
                                 countdownTextView.setText("0");
                             }
-                            ArrayList<String> messages = new ArrayList<String>();
-                            messages.add(message);
-                            DialogUtils.FeedbackPopupDialog d = DialogUtils.FeedbackPopupDialog.newInstance(messages);
+
+
+                            String jsonString;
+                            jsonString = Utils.readFileAsString("new_offline_configuration_file_text_variables_material_design.json", getAssets());
+                            DialogUtils.FeedbackPopupDialog d = DialogUtils.FeedbackPopupDialog.newInstance(getResources().getString(com.example.matthias.feedbacklibrary.R.string.supersede_feedbacklibrary_pull_feedback_question_string), jsonString, 0);
                             d.show(getFragmentManager(), "feedbackPopupDialog");
                         }
 

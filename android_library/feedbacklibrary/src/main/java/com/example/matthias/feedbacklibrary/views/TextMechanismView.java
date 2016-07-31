@@ -69,7 +69,7 @@ public class TextMechanismView extends MechanismView {
         }
         if (textMechanism.isMandatory()) {
             // If TI 11 is set, TI 11.1 should not be an option, i.e., the reminder should always be activated --> TI 11.1.1 and TI 11.1.2
-            // TODO: If needed, implement visual changes of a mandatory text field
+            // TODO: Implement visual changes of a mandatory text field?
         }
 
         textInputEditText.addTextChangedListener(new TextWatcher() {

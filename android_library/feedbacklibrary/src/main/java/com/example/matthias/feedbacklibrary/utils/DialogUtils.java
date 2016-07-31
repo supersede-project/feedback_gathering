@@ -20,6 +20,14 @@ import java.util.List;
  * Class with dialogs
  */
 public class DialogUtils {
+    /**
+     * This method creates a progress dialog.
+     *
+     * @param context              the context
+     * @param title                the title of the dialog
+     * @param cancelOnTouchOutisde cancelOnTouchOutside
+     * @return the progress dialog
+     */
     public static ProgressDialog createProgressDialog(Context context, String title, boolean cancelOnTouchOutisde) {
         ProgressDialog progressDialog = new ProgressDialog(context);
         progressDialog.setTitle(title);
@@ -46,7 +54,7 @@ public class DialogUtils {
             StringBuilder message = new StringBuilder("");
             if (messages != null) {
                 for (String s : messages) {
-                    message.append(s).append(".");
+                    message.append(s).append(" \n");
                 }
             }
             builder.setMessage(message.toString()).setNegativeButton("Close", new DialogInterface.OnClickListener() {
@@ -61,10 +69,12 @@ public class DialogUtils {
      * Dialog for starting the pull feedback.
      */
     public static class FeedbackPopupDialog extends DialogFragment {
-        public static FeedbackPopupDialog newInstance(ArrayList<String> messages) {
+        public static FeedbackPopupDialog newInstance(String message, String jsonString, int selectedPullConfigurationIndex) {
             FeedbackPopupDialog f = new FeedbackPopupDialog();
             Bundle args = new Bundle();
-            args.putStringArrayList("messages", messages);
+            args.putString("message", message);
+            args.putString("jsonString", jsonString);
+            args.putInt("selectedPullConfigurationIndex", selectedPullConfigurationIndex);
             f.setArguments(args);
             return f;
         }
@@ -73,16 +83,16 @@ public class DialogUtils {
         public Dialog onCreateDialog(Bundle savedInstanceState) {
             final Activity associatedActivity = getActivity();
             AlertDialog.Builder builder = new AlertDialog.Builder(associatedActivity);
-            List<String> messages = getArguments().getStringArrayList("messages");
-            StringBuilder message = new StringBuilder("");
-            if (messages != null) {
-                for (String s : messages) {
-                    message.append(s);
-                }
-            }
-            builder.setMessage(message.toString()).setPositiveButton(R.string.supersede_feedbacklibrary_yes_string, new DialogInterface.OnClickListener() {
+            String message = getArguments().getString("message");
+            final String jsonString = getArguments().getString("jsonString");
+            final int selectedPullConfigurationIndex = getArguments().getInt("selectedPullConfigurationIndex");
+
+            builder.setMessage(message).setPositiveButton(R.string.supersede_feedbacklibrary_yes_string, new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int id) {
                     Intent intent = new Intent(associatedActivity, FeedbackActivity.class);
+                    intent.putExtra(FeedbackActivity.JSON_CONFIGURATION_STRING, jsonString);
+                    intent.putExtra(FeedbackActivity.IS_PUSH_STRING, false);
+                    intent.putExtra(FeedbackActivity.SELECTED_PULL_CONFIGURATION_INDEX_STRING, selectedPullConfigurationIndex);
                     associatedActivity.startActivity(intent);
                 }
             }).setNegativeButton(R.string.supersede_feedbacklibrary_no_string, new DialogInterface.OnClickListener() {

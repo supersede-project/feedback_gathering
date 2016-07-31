@@ -22,12 +22,13 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.example.matthias.feedbacklibrary.API.feedbackAPI;
+import com.example.matthias.feedbacklibrary.configurations.OrchestratorConfiguration;
 import com.example.matthias.feedbacklibrary.feedbacks.Feedback;
-import com.example.matthias.feedbacklibrary.models.FeedbackConfiguration;
-import com.example.matthias.feedbacklibrary.models.FeedbackConfigurationItem;
+import com.example.matthias.feedbacklibrary.configurations.FeedbackConfiguration;
 import com.example.matthias.feedbacklibrary.models.Mechanism;
 import com.example.matthias.feedbacklibrary.utils.DialogUtils;
 import com.example.matthias.feedbacklibrary.utils.Utils;
+import com.example.matthias.feedbacklibrary.views.ChoiceMechanismView;
 import com.example.matthias.feedbacklibrary.views.MechanismView;
 import com.example.matthias.feedbacklibrary.views.RatingMechanismView;
 import com.example.matthias.feedbacklibrary.views.ScreenshotMechanismView;
@@ -59,21 +60,28 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class FeedbackActivity extends AppCompatActivity {
     public final static String IMAGE_NAME = "annotatedImage.jpg";
     public final static String DEFAULT_IMAGE_PATH = "defaultImagePath";
-    private static final String endpoint = "http://ec2-54-175-37-30.compute-1.amazonaws.com/";
+    public final static String IS_PUSH_STRING = "isPush";
+    public final static String SELECTED_PULL_CONFIGURATION_INDEX_STRING = "selectedPullConfigurationIndex";
+    public final static String CONFIGURATION_DIR = "configDir";
+    public final static String JSON_CONFIGURATION_STRING = "jsonConfigurationString";
+    public final static String JSON_CONFIGURATION_FILE_NAME = "currentConfiguration.json";
+
     private final static int REQUEST_CAMERA = 10;
     private final static int REQUEST_PHOTO = 11;
     private final static int REQUEST_ANNOTATE = 12;
     private feedbackAPI fbAPI;
-    // List of feedback configuration items fetched from the orchestrator
-    private List<FeedbackConfigurationItem> configuration;
-    // Feedback configuration initialized from the previously fetched feedback configuration items
+    // Feedback configuration fetched from the orchestrator
+    private OrchestratorConfiguration configuration;
+    // Feedback configuration initialized from the previously fetched feedback configuration
     private FeedbackConfiguration feedbackConfiguration;
     // All mechanisms (including inactive ones) --> models
     private List<Mechanism> allMechanisms;
-    // All views representing active mechanisms --> view
+    // All views representing active mechanisms --> views
     private List<MechanismView> allMechanismViews;
     // Path of the annotated image
     private String annotatedImagePath = null;
+    private boolean isPush;
+    private int selectedPullConfigurationIndex;
     private ProgressDialog progressDialog;
     private Button annotateScreenshotButton;
     private Button deleteScreenshotButton;
@@ -99,24 +107,34 @@ public class FeedbackActivity extends AppCompatActivity {
         startActivityForResult(intent, REQUEST_PHOTO);
     }
 
+    public int getSelectedPullConfigurationIndex() {
+        return selectedPullConfigurationIndex;
+    }
+
     /**
      * This method performs a GET request to feedback orchestrator in order to receive the configuration file (format JSON).
      * If successful, it initializes the model and view.
      */
     private void init() {
-        Call<List<FeedbackConfigurationItem>> result = null;
+        Retrofit rtf = new Retrofit.Builder().baseUrl(feedbackAPI.endpoint).addConverterFactory(GsonConverterFactory.create()).build();
+        fbAPI = rtf.create(feedbackAPI.class);
+        Call<OrchestratorConfiguration> result = null;
         result = fbAPI.getConfiguration();
 
         // Asynchronous call
         if (result != null) {
-            result.enqueue(new Callback<List<FeedbackConfigurationItem>>() {
+            result.enqueue(new Callback<OrchestratorConfiguration>() {
                 @Override
-                public void onFailure(Call<List<FeedbackConfigurationItem>> call, Throwable t) {
+                public void onFailure(Call<OrchestratorConfiguration> call, Throwable t) {
                 }
 
                 @Override
-                public void onResponse(Call<List<FeedbackConfigurationItem>> call, Response<List<FeedbackConfigurationItem>> response) {
+                public void onResponse(Call<OrchestratorConfiguration> call, Response<OrchestratorConfiguration> response) {
                     configuration = response.body();
+                    // Save the current configuration file under configDir/currentConfiguration.json
+                    Gson gson = new Gson();
+                    String jsonString = gson.toJson(configuration);
+                    Utils.saveStringContentToInternalStorage(getApplicationContext(), CONFIGURATION_DIR, JSON_CONFIGURATION_FILE_NAME, jsonString, MODE_PRIVATE);
                     initModel();
                     initView();
                 }
@@ -131,21 +149,17 @@ public class FeedbackActivity extends AppCompatActivity {
      */
     private void initModel() {
         if (configuration != null) {
-            // TODO: Save original configuration on the device --> possibly SQLite database
-            feedbackConfiguration = new FeedbackConfiguration(configuration);
-            allMechanisms = feedbackConfiguration.getAllMechanisms();
+            feedbackConfiguration = new FeedbackConfiguration(configuration, isPush(), getSelectedPullConfigurationIndex());
+            allMechanisms = feedbackConfiguration.getAllCurrentMechanisms();
         }
     }
 
     private void initOfflineConfiguration() {
         String jsonString;
         Gson gson = new Gson();
-        Type listType = new TypeToken<List<FeedbackConfigurationItem>>() {
-        }.getType();
+        jsonString = Utils.readFileAsString("new_offline_configuration_file_text_variables_material_design_bla.json", getAssets());
+        configuration = gson.fromJson(jsonString, OrchestratorConfiguration.class);
 
-        //jsonString = Utils.readFileAsString("offline_configuration_file_text_variables.json", getAssets());
-        jsonString = Utils.readFileAsString("offline_configuration_file_text_variables_material_design.json", getAssets());
-        configuration = gson.fromJson(jsonString, listType);
         initModel();
         initView();
     }
@@ -208,21 +222,30 @@ public class FeedbackActivity extends AppCompatActivity {
                     MechanismView mechanismView = null;
                     View view = null;
                     String type = allMechanisms.get(i).getType();
-
-                    if (type.equals("TEXT_TYPE")) {
-                        mechanismView = new TextMechanismView(layoutInflater, allMechanisms.get(i));
-                        view = mechanismView.getEnclosingLayout();
-                    } else if (type.equals("RATING_TYPE")) {
-                        mechanismView = new RatingMechanismView(layoutInflater, allMechanisms.get(i));
-                        view = mechanismView.getEnclosingLayout();
-                    } else if (type.equals("AUDIO_TYPE")) {
-                        // TODO: Implement audio mechanism
-                    } else if (type.equals("SCREENSHOT_TYPE")) {
-                        mechanismView = new ScreenshotMechanismView(layoutInflater, allMechanisms.get(i));
-                        view = mechanismView.getEnclosingLayout();
-                        initScreenshotView(view);
-                    } else {
-                        // Should never happen!
+                    switch (type) {
+                        case Mechanism.AUDIO_TYPE:
+                            // TODO: Implement audio mechanism
+                            break;
+                        case Mechanism.CHOICE_TYPE:
+                            mechanismView = new ChoiceMechanismView(layoutInflater, allMechanisms.get(i));
+                            view = mechanismView.getEnclosingLayout();
+                            break;
+                        case Mechanism.RATING_TYPE:
+                            mechanismView = new RatingMechanismView(layoutInflater, allMechanisms.get(i));
+                            view = mechanismView.getEnclosingLayout();
+                            break;
+                        case Mechanism.SCREENSHOT_TYPE:
+                            mechanismView = new ScreenshotMechanismView(layoutInflater, allMechanisms.get(i));
+                            view = mechanismView.getEnclosingLayout();
+                            initScreenshotView(view);
+                            break;
+                        case Mechanism.TEXT_TYPE:
+                            mechanismView = new TextMechanismView(layoutInflater, allMechanisms.get(i));
+                            view = mechanismView.getEnclosingLayout();
+                            break;
+                        default:
+                            // Should never happen!
+                            break;
                     }
 
                     if (mechanismView != null && view != null) {
@@ -237,6 +260,10 @@ public class FeedbackActivity extends AppCompatActivity {
 
         // After successfully loading the model data and view, make the progress dialog disappear
         progressDialog.dismiss();
+    }
+
+    public boolean isPush() {
+        return isPush;
     }
 
     @Override
@@ -292,6 +319,10 @@ public class FeedbackActivity extends AppCompatActivity {
         Intent intent = getIntent();
         defaultImagePath = intent.getStringExtra(DEFAULT_IMAGE_PATH);
 
+        isPush = intent.getBooleanExtra(IS_PUSH_STRING, true);
+        selectedPullConfigurationIndex = intent.getIntExtra(SELECTED_PULL_CONFIGURATION_INDEX_STRING, -1);
+        String jsonString = intent.getStringExtra(JSON_CONFIGURATION_STRING);
+
         // Make progress dialog visible
         View view = findViewById(R.id.supersede_feedbacklibrary_feedback_activity_layout);
         if (view != null) {
@@ -299,11 +330,23 @@ public class FeedbackActivity extends AppCompatActivity {
             progressDialog.show();
         }
 
-        Retrofit rtf = new Retrofit.Builder().baseUrl(endpoint).addConverterFactory(GsonConverterFactory.create()).build();
-        fbAPI = rtf.create(feedbackAPI.class);
+        if (!isPush && selectedPullConfigurationIndex != -1 && jsonString != null) {
+            // The feedback activity is started on behalf of a triggered pull configuration
 
-        //init();
-        initOfflineConfiguration();
+            // Save the current configuration file under configDir/currentConfiguration.json
+            Utils.saveStringContentToInternalStorage(getApplicationContext(), CONFIGURATION_DIR, JSON_CONFIGURATION_FILE_NAME, jsonString, MODE_PRIVATE);
+            configuration = new Gson().fromJson(jsonString, OrchestratorConfiguration.class);
+            initModel();
+            initView();
+        } else {
+            // The feedback activity is started on behalf of the user
+
+            // Actual init
+            //init();
+
+            // Only for offline purposes
+            initOfflineConfiguration();
+        }
     }
 
     @Override

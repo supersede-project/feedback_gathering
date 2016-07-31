@@ -1,5 +1,7 @@
 package com.example.matthias.feedbacklibrary.models;
 
+import com.example.matthias.feedbacklibrary.configurations.MechanismConfigurationItem;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -8,6 +10,7 @@ import java.util.List;
  */
 public abstract class Mechanism implements Serializable {
     public static final String AUDIO_TYPE = "AUDIO_TYPE";
+    public static final String CHOICE_TYPE = "CHOICE_TYPE";
     public static final String RATING_TYPE = "RATING_TYPE";
     public static final String SCREENSHOT_TYPE = "SCREENSHOT_TYPE";
     public static final String TEXT_TYPE = "TEXT_TYPE";
@@ -17,7 +20,7 @@ public abstract class Mechanism implements Serializable {
     private String type;
     private int order;
 
-    public Mechanism(String type, FeedbackConfigurationItem item) {
+    public Mechanism(String type, MechanismConfigurationItem item) {
         this.isActive = item.isActive();
         this.canBeActivated = item.canBeActivated();
         this.type = type;

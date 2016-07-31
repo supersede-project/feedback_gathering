@@ -3,6 +3,7 @@ package com.example.matthias.feedbacklibrary.models;
 import android.graphics.Color;
 import android.graphics.Typeface;
 
+import com.example.matthias.feedbacklibrary.configurations.MechanismConfigurationItem;
 import com.example.matthias.feedbacklibrary.utils.Utils;
 
 import java.io.Serializable;
@@ -13,7 +14,6 @@ import java.util.Map;
  * Text mechanism model
  */
 public class TextMechanism extends Mechanism implements Serializable {
-    private final static String TEXT_TYPE = "TEXT_TYPE";
     private String title = "";
     private String hint = "";
     private String label = "";
@@ -37,7 +37,7 @@ public class TextMechanism extends Mechanism implements Serializable {
     // The text entered by the user
     private String inputText = null;
 
-    public TextMechanism(FeedbackConfigurationItem item) {
+    public TextMechanism(MechanismConfigurationItem item) {
         super(TEXT_TYPE, item);
         initTextMechanism(item);
     }
@@ -116,7 +116,7 @@ public class TextMechanism extends Mechanism implements Serializable {
         return validationRegex;
     }
 
-    private void initTextMechanism(FeedbackConfigurationItem item) {
+    private void initTextMechanism(MechanismConfigurationItem item) {
         for (Map<String, Object> param : item.getParameters()) {
             String key = (String) param.get("key");
             // Title

@@ -1,5 +1,7 @@
 package com.example.matthias.feedbacklibrary.models;
 
+import com.example.matthias.feedbacklibrary.configurations.MechanismConfigurationItem;
+
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
@@ -13,7 +15,7 @@ public class ScreenshotMechanism extends Mechanism implements Serializable {
 
     private String imagePath;
 
-    public ScreenshotMechanism(FeedbackConfigurationItem item) {
+    public ScreenshotMechanism(MechanismConfigurationItem item) {
         super(SCREENSHOT_TYPE, item);
         initScreenshotMechanism(item);
     }
@@ -30,7 +32,7 @@ public class ScreenshotMechanism extends Mechanism implements Serializable {
         return title;
     }
 
-    private void initScreenshotMechanism(FeedbackConfigurationItem item) {
+    private void initScreenshotMechanism(MechanismConfigurationItem item) {
         for (Map<String, Object> param : item.getParameters()) {
             String key = (String) param.get("key");
             // Title

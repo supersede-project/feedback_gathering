@@ -18,15 +18,34 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
 
+import com.example.matthias.feedbacklibrary.API.feedbackAPI;
+import com.example.matthias.feedbacklibrary.FeedbackActivity;
+import com.example.matthias.feedbacklibrary.R;
+import com.example.matthias.feedbacklibrary.configurations.OrchestratorConfiguration;
+import com.example.matthias.feedbacklibrary.configurations.PullConfiguration;
+import com.example.matthias.feedbacklibrary.configurations.PullConfigurationItem;
+import com.google.gson.Gson;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.List;
+import java.util.Random;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * Class with various helper methods
@@ -243,10 +262,10 @@ public class Utils {
      * This method saves the bitmap to the internal storage.
      *
      * @param applicationContext the application context
-     * @param dirName            the directory name
+     * @param dirName            the directory name, e.g., "imageDir"
      * @param imageName          the name of the image
      * @param bitmapImage        the image as a bitmap
-     * @param mode               the mode
+     * @param mode               the mode, e.g., Context.MODE_PRIVATE
      * @param format             the format
      * @param quality            the quality
      * @return the absolute path to the directory where the image is stored
@@ -266,6 +285,34 @@ public class Utils {
             e.printStackTrace();
         }
         return directory.getAbsolutePath();
+    }
+
+    /**
+     * This method saves the string content to the internal storage.
+     *
+     * @param applicationContext the application context
+     * @param dirName            the directory name, e.g., "configDir"
+     * @param fileName           the name of the file
+     * @param str                the file content as a string
+     * @param mode               the mode, e.g., Context.MODE_PRIVATE
+     * @return true on success, false otherwise
+     */
+    public static boolean saveStringContentToInternalStorage(Context applicationContext, String dirName, String fileName, String str, int mode) {
+        ContextWrapper cw = new ContextWrapper(applicationContext);
+        File directory = cw.getDir(dirName, mode);
+        File myPath = new File(directory, fileName);
+
+        try {
+            FileWriter out = new FileWriter(myPath);
+            out.write(str);
+            out.flush();
+            out.close();
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return false;
     }
 
     /**
@@ -297,5 +344,63 @@ public class Utils {
         }
 
         return Bitmap.createScaledBitmap(bitmap, width, height, true);
+    }
+
+    /**
+     * This method triggers a pull feedback based on their respective probabilities.
+     * It should be called on startup of the main application.
+     *
+     * @param activity the activity from where the feedback activity is launched
+     */
+    public static void triggerPotentialPullFeedback(final Activity activity) {
+        Retrofit rtf = new Retrofit.Builder().baseUrl(feedbackAPI.endpoint).addConverterFactory(GsonConverterFactory.create()).build();
+        feedbackAPI fbAPI = rtf.create(feedbackAPI.class);
+        Call<OrchestratorConfiguration> result;
+        result = fbAPI.getConfiguration();
+
+        // Asynchronous call
+        if (result != null) {
+            result.enqueue(new Callback<OrchestratorConfiguration>() {
+                @Override
+                public void onFailure(Call<OrchestratorConfiguration> call, Throwable t) {
+                }
+
+                @Override
+                public void onResponse(Call<OrchestratorConfiguration> call, Response<OrchestratorConfiguration> response) {
+                    OrchestratorConfiguration configuration = response.body();
+                    if (configuration != null) {
+                        List<PullConfiguration> allPullConfigurations = new ArrayList<>();
+                        configuration = response.body();
+
+                        for (PullConfigurationItem item : configuration.getPullConfigurationItems()) {
+                            allPullConfigurations.add(new PullConfiguration(item));
+                        }
+
+                        Random rnd = new Random(System.nanoTime());
+                        Collections.shuffle(allPullConfigurations, rnd);
+                        for (int i = 0; i < allPullConfigurations.size(); ++i) {
+                            if (!(rnd.nextDouble() > allPullConfigurations.get(i).getLikelihood())) {
+                                Intent intent = new Intent(activity, FeedbackActivity.class);
+
+                                String jsonString = new Gson().toJson(configuration);
+                                intent.putExtra(FeedbackActivity.JSON_CONFIGURATION_STRING, jsonString);
+                                intent.putExtra(FeedbackActivity.IS_PUSH_STRING, false);
+                                intent.putExtra(FeedbackActivity.SELECTED_PULL_CONFIGURATION_INDEX_STRING, i);
+                                if (!allPullConfigurations.get(i).isShowPopupDialog()) {
+                                    // Start the feedback activity without asking the user
+                                    activity.startActivity(intent);
+                                } else {
+                                    // Ask the user if (s)he would like to give feedback or not
+                                    DialogUtils.FeedbackPopupDialog d = DialogUtils.FeedbackPopupDialog.newInstance(activity.getResources().getString(R.string.supersede_feedbacklibrary_pull_feedback_question_string), jsonString, i);
+                                    d.show(activity.getFragmentManager(), "feedbackPopupDialog");
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        } else {
+            // Should never happen!
+        }
     }
 }
