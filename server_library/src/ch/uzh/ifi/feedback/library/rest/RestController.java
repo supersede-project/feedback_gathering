@@ -14,7 +14,7 @@ public abstract class RestController<T> implements IRestController<T> {
 	private Class<?> parameterType;
 	private Type serializationType;
 	
-	protected Type getSerializationType() {
+	public Type getSerializationType() {
 		return serializationType;
 	}
 

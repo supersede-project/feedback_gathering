@@ -9,11 +9,11 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.internal.LinkedTreeMap;
 
 import ch.uzh.ifi.feedback.library.rest.DefaultSerializer;
-import ch.uzh.ifi.feedback.orchestrator.Model.Application;
-import ch.uzh.ifi.feedback.orchestrator.Model.FeedbackMechanism;
-import ch.uzh.ifi.feedback.orchestrator.Model.FeedbackParameter;
-import ch.uzh.ifi.feedback.orchestrator.Model.GeneralConfiguration;
-import ch.uzh.ifi.feedback.orchestrator.Model.PullConfiguration;
+import ch.uzh.ifi.feedback.orchestrator.model.Application;
+import ch.uzh.ifi.feedback.orchestrator.model.FeedbackMechanism;
+import ch.uzh.ifi.feedback.orchestrator.model.FeedbackParameter;
+import ch.uzh.ifi.feedback.orchestrator.model.GeneralConfiguration;
+import ch.uzh.ifi.feedback.orchestrator.model.PullConfiguration;
 
 public class ConfigurationSerializer extends DefaultSerializer<Application> {
 

@@ -14,12 +14,12 @@ import com.google.gson.internal.bind.SqlDateTypeAdapter;
 
 import ch.uzh.ifi.feedback.library.transaction.IDbResultParser;
 import ch.uzh.ifi.feedback.library.transaction.TransactionManager;
-import ch.uzh.ifi.feedback.orchestrator.Model.Application;
-import ch.uzh.ifi.feedback.orchestrator.Model.Configuration;
-import ch.uzh.ifi.feedback.orchestrator.Model.FeedbackMechanism;
-import ch.uzh.ifi.feedback.orchestrator.Model.FeedbackParameter;
-import ch.uzh.ifi.feedback.orchestrator.Model.GeneralConfiguration;
-import ch.uzh.ifi.feedback.orchestrator.Model.PullConfiguration;
+import ch.uzh.ifi.feedback.orchestrator.model.Application;
+import ch.uzh.ifi.feedback.orchestrator.model.Configuration;
+import ch.uzh.ifi.feedback.orchestrator.model.FeedbackMechanism;
+import ch.uzh.ifi.feedback.orchestrator.model.FeedbackParameter;
+import ch.uzh.ifi.feedback.orchestrator.model.GeneralConfiguration;
+import ch.uzh.ifi.feedback.orchestrator.model.PullConfiguration;
 import jdk.nashorn.internal.runtime.regexp.joni.Config;
 
 public class ConfigurationService {

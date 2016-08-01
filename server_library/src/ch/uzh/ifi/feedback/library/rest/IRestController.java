@@ -1,12 +1,12 @@
 package ch.uzh.ifi.feedback.library.rest;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import com.google.gson.JsonSyntaxException;
 
 public interface IRestController<T> {
 	
@@ -52,6 +52,50 @@ public interface IRestController<T> {
 		}
 	}
 	
+	default List<T> GetAll(HttpServletRequest request, HttpServletResponse response) throws Exception
+	{
+		try{
+			response.setStatus(405);
+			response.getWriter().append("Operation not supported for this resource!");
+			return null;
+			
+		}catch(IOException ex){
+			throw new ServletException(ex);
+		}
+	}
+	
+	default void PutMany(HttpServletRequest request, HttpServletResponse response, List<T> object) throws Exception
+	{
+		try{
+			response.setStatus(405);
+			response.getWriter().append("Operation not supported for this resource!");
+		}catch(IOException ex){
+			throw new ServletException(ex);
+		}
+	}
+	
+	default void DeleteMany(HttpServletRequest request, HttpServletResponse response, List<T> object) throws Exception
+	{
+		try{
+			response.setStatus(405);
+			response.getWriter().append("Operation not supported for this resource!");
+		}catch(IOException ex){
+			throw new ServletException(ex);
+		}
+	}
+	
+	default void PostMany(HttpServletRequest request, HttpServletResponse response, List<T> object) throws Exception
+	{
+		try{
+			response.setStatus(405);
+			response.getWriter().append("Operation not supported for this resource!");
+		}catch(IOException ex){
+			throw new ServletException(ex);
+		}
+	}
+	
 	ISerializationService<T> getSerializationService();
+	
+	Type getSerializationType();
 	
 }

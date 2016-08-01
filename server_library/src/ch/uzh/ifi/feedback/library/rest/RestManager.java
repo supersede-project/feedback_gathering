@@ -4,6 +4,11 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
+import java.lang.reflect.Type;
+import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,6 +21,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
+import javax.sound.midi.ControllerEventListener;
 
 import org.reflections.*;
 import org.reflections.scanners.MethodAnnotationsScanner;
@@ -25,6 +31,13 @@ import org.reflections.util.ConfigurationBuilder;
 
 import com.google.gson.JsonSyntaxException;
 
+import ch.uzh.ifi.feedback.library.rest.annotations.Controller;
+import ch.uzh.ifi.feedback.library.rest.annotations.DELETE;
+import ch.uzh.ifi.feedback.library.rest.annotations.POST;
+import ch.uzh.ifi.feedback.library.rest.annotations.PUT;
+import ch.uzh.ifi.feedback.library.rest.annotations.Path;
+import ch.uzh.ifi.feedback.library.rest.annotations.PathParam;
+import ch.uzh.ifi.feedback.library.rest.annotations.Serialize;
 import ch.uzh.ifi.feedback.library.transaction.TransactionManager;
 import javassist.NotFoundException;
 
@@ -32,20 +45,86 @@ import javassist.NotFoundException;
 public class RestManager implements IRestManager {
 	
 	private Map<UriTemplate, Class<RestController>> _routingMap;
+	private Map<Type, Method> _parsingMap;
+	private List<HandlerInfo> _handlers;
+	private Map<Class<? extends ISerializationService<?>>, ISerializationService<?>> _serializationMap;
+	private Map<Class<?>, Method> _parserMap;
 
 	public RestManager() {
 		
 		_routingMap = new HashMap<>();
+		_parsingMap = new HashMap<>();
+		_serializationMap = new HashMap<>();
+		_handlers = new ArrayList<>();
+		_parserMap = new HashMap<>();
 	}
 
 	public void Init(String packageName) throws Exception {
+		
+		InitParserMap();
 		
 		Reflections reflections = new Reflections(new ConfigurationBuilder()
                 .setUrls(ClasspathHelper.forPackage(packageName))
                 .setScanners(new MethodAnnotationsScanner(), new TypeAnnotationsScanner()));
 		
 		Set<Class<?>> controllerAnnotated = reflections.getTypesAnnotatedWith(Controller.class);
+		for(Class<?> clazz : controllerAnnotated){
+			Object instance = clazz.newInstance();
+			for(Method m : clazz.getMethods()){
+				if(m.isAnnotationPresent(Path.class)){
+					String path = m.getAnnotation(Path.class).value();
+					UriTemplate template = UriTemplate.Parse(path);
+					
+					HttpMethod method = HttpMethod.GET;
+					method = m.getAnnotation(POST.class) != null ? method = HttpMethod.POST : HttpMethod.GET;
+					method = m.getAnnotation(PUT.class) != null ? method = HttpMethod.PUT : HttpMethod.GET;
+					method = m.getAnnotation(DELETE.class) != null ? method = HttpMethod.DELETE : HttpMethod.GET;
+					
+					final HttpMethod method2 = method;
+					if(_handlers.stream().anyMatch((h) -> h.GetHttpMethod() == method2 && h.getUriTemplate().Match(path) != null))
+						throw new Exception("handler for template " + path + " already registered!");
+					
+					HandlerInfo info = new HandlerInfo(m, method, instance, template);
+					
+					Parameter[] params = m.getParameters();
+					for(int i = 0; i < params.length; i++){
+						if (params[i].isAnnotationPresent(PathParam.class)){
+							String paramName = params[i].getAnnotation(PathParam.class).value();
+							info.getPathParameters().put(paramName, params[i]);
+						}else if(i < params.length - 1){
+							throw new Exception("No annotation for parameter " + params[i].getName() + " present!");
+						}else{
+							Class<?> paramClazz = params[i].getType();
+							if(!paramClazz.isAnnotationPresent(Serialize.class))
+								throw new Exception("No SerializationService provided for class " + paramClazz.getName());
+							
+							//Todo:Check return type of serializer
+							Class<? extends ISerializationService<?>> serializerClass = paramClazz.getAnnotation(Serialize.class).value();
+							if(!_serializationMap.containsKey(serializerClass))
+								_serializationMap.put(serializerClass, serializerClass.newInstance());
+							
+							info.setSerializationClass(serializerClass);
+						}
+					}
+					
+					if(info.getSerializationClass() == null){
+						if (!m.getReturnType().equals(Void.TYPE)){
+							Class<?> returnType = m.getReturnType();
+							if(returnType.isAnnotationPresent(Serialize.class)){
+								Class<? extends ISerializationService<?>> serializerClass = returnType.getAnnotation(Serialize.class).value();
+								if(!_serializationMap.containsKey(serializerClass))
+									_serializationMap.put(serializerClass, serializerClass.newInstance());
+								
+								info.setSerializationClass(serializerClass);
+							}
+						}
+					}
+					_handlers.add(info);
+				}
+			}
+		}
 
+		/*
 		for(Class<?> c : controllerAnnotated){
 			
 			if(!(RestController.class.isAssignableFrom(c))){
@@ -53,7 +132,24 @@ public class RestManager implements IRestManager {
 			}
 			
 			Controller controllerAnnotation = c.getAnnotation(Controller.class);
-			_routingMap.put(UriTemplate.Parse(controllerAnnotation.Route()), (Class<RestController>) c);
+			for(String route : controllerAnnotation.Routes())
+			{
+				_routingMap.put(UriTemplate.Parse(route), (Class<RestController>) c);
+			}
+		}*/
+	}
+	
+	private void InitParserMap() throws Exception {
+		
+		try{
+			_parserMap.put(Integer.class, Integer.class.getMethod("parseInt", String.class));
+			_parserMap.put(Double.class, Double.class.getMethod("parseDouble", String.class));
+			_parserMap.put(Long.class, Long.class.getMethod("parseLong", String.class));
+			_parserMap.put(Float.class, Float.class.getMethod("parseFloat", String.class));
+			_parserMap.put(Timestamp.class, Timestamp.class.getMethod("valueOf", String.class));
+		}catch(Exception e){
+			e.printStackTrace();
+			throw e;
 		}
 	}
 
@@ -61,10 +157,13 @@ public class RestManager implements IRestManager {
 	public void Get(HttpServletRequest request, HttpServletResponse response) throws ServletException {
 		
 		try {
+			InvokeHandler(request, response, HttpMethod.GET);
+			/*
 			IRestController controller = GetController(request);
 			Object result = controller.Get(request, response);
 			String output = controller.getSerializationService().Serialize(result);
 			response.getWriter().append(output);
+			*/
 
 		} catch(NullPointerException ex)
 		{
@@ -93,7 +192,7 @@ public class RestManager implements IRestManager {
 			response.setStatus(400);
 			try {
 				response.getWriter().append("Malformed Json");
-			} catch (IOException e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}catch(NotFoundException ex)
@@ -143,6 +242,47 @@ public class RestManager implements IRestManager {
 		}
 
 		return null;
+	}
+	
+	private HandlerInfo GetHandlerEntry(String path, HttpMethod method) {
+		
+		for (HandlerInfo handler : _handlers) {
+			if (handler.getUriTemplate().Match(path) != null && handler.GetHttpMethod() == method)
+				return handler;
+		}
+
+		return null;
+	}
+	
+	private void InvokeHandler(HttpServletRequest request, HttpServletResponse response, HttpMethod method) throws Exception
+	{
+		String path = request.getServletPath();
+		HandlerInfo handler = GetHandlerEntry(path, method);
+		if(handler == null){
+			response.setStatus(404);
+			return;
+		}
+		
+		Map<String, String> params = handler.getUriTemplate().Match(path);
+		List<Object> parameters = new ArrayList<>();
+		for(Entry<String, Parameter> pathParam : handler.getPathParameters().entrySet())
+		{
+			if(params.containsKey(pathParam.getKey()))
+			{
+				Parameter methodParam = pathParam.getValue();
+				Class<?> type = methodParam.getType();
+				Object parameterObject = _parserMap.get(methodParam.getType()).invoke(null, params.get(pathParam.getKey()));
+				parameters.add(parameterObject);
+			}else{
+				parameters.add(null);
+			}
+		}
+		
+		//Todo: Add deserialized parameter for PUT/POST
+		
+		Object result = handler.getMethod().invoke(handler.getHandlerInstance(), parameters.toArray());
+		ISerializationService serializer = _serializationMap.get(handler.getSerializationClass());
+		response.getWriter().append(serializer.Serialize(result));
 	}
 	
 	private RestController GetController(HttpServletRequest request) throws InstantiationException, IllegalAccessException, NotFoundException, InvocationTargetException, NoSuchMethodException

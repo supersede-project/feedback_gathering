@@ -6,12 +6,10 @@ import javax.servlet.http.HttpServletResponse;
 
 import ch.uzh.ifi.feedback.library.rest.*;
 import ch.uzh.ifi.feedback.library.transaction.*;
-import ch.uzh.ifi.feedback.orchestrator.Model.Application;
-import ch.uzh.ifi.feedback.orchestrator.Model.FeedbackMechanism;
+import ch.uzh.ifi.feedback.orchestrator.model.Application;
+import ch.uzh.ifi.feedback.orchestrator.model.FeedbackMechanism;
 
 
-@Controller
-(Route = "/application/{application_id}/configuration")
 public class FeedbackGatheringController extends RestController<Application>{
     
 	private ISerializationService<Application> serializationService;
