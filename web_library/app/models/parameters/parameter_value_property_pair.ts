@@ -1,4 +1,4 @@
-export class ParameterPropertyPair {
+export class ParameterValuePropertyPair {
     parameter:string;
     property:any;
     

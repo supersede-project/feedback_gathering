@@ -1,15 +1,10 @@
-define(["require", "exports", './mechanism_factory', './parameter_property_pair', '../js/config'], function (require, exports, mechanism_factory_1, parameter_property_pair_1, config_1) {
+define(["require", "exports", '../parameters/parameter_value_property_pair', '../../js/config', '../mechanisms/mechanism_factory'], function (require, exports, parameter_value_property_pair_1, config_1, mechanism_factory_1) {
     "use strict";
     var Configuration = (function () {
-        function Configuration(id, mechanisms, general_configurations, pull_configurations) {
+        function Configuration(id, mechanisms) {
             this.id = id;
-            this.general_configurations = general_configurations;
-            this.pull_configurations = pull_configurations;
             this.mechanisms = mechanisms;
         }
-        Configuration.initByData = function (data) {
-            return new Configuration(data.id, data.mechanisms, data.general_configurations, data.pull_configurations);
-        };
         Configuration.prototype.getMechanismConfig = function (mechanismTypeConstant) {
             var filteredArray = this.mechanisms.filter(function (mechanism) { return mechanism.type === mechanismTypeConstant; });
             if (filteredArray.length > 0) {
@@ -20,15 +15,15 @@ define(["require", "exports", './mechanism_factory', './parameter_property_pair'
             }
         };
         Configuration.prototype.getContextForView = function () {
-            var context = { textMechanism: null, ratingMechanism: null, screenshotMechanism: null };
+            var context = { textMechanism: null, ratingMechanism: null, screenshotMechanism: null, dialogId: this.dialogId };
             var textMechanism = this.getMechanismConfig(config_1.textType);
             var ratingMechanism = this.getMechanismConfig(config_1.ratingType);
             var screenshotMechanism = this.getMechanismConfig(config_1.screenshotType);
             var labelStyle = this.getCssStyle(textMechanism, [
-                new parameter_property_pair_1.ParameterPropertyPair('labelPositioning', 'text-align'),
-                new parameter_property_pair_1.ParameterPropertyPair('labelColor', 'color'),
-                new parameter_property_pair_1.ParameterPropertyPair('labelFontSize', 'font-size')]);
-            var textareaStyle = this.getCssStyle(textMechanism, [new parameter_property_pair_1.ParameterPropertyPair('textareaFontColor', 'color')]);
+                new parameter_value_property_pair_1.ParameterValuePropertyPair('labelPositioning', 'text-align'),
+                new parameter_value_property_pair_1.ParameterValuePropertyPair('labelColor', 'color'),
+                new parameter_value_property_pair_1.ParameterValuePropertyPair('labelFontSize', 'font-size')]);
+            var textareaStyle = this.getCssStyle(textMechanism, [new parameter_value_property_pair_1.ParameterValuePropertyPair('textareaFontColor', 'color')]);
             if (textMechanism) {
                 context.textMechanism = {
                     active: textMechanism.active,
@@ -58,21 +53,21 @@ define(["require", "exports", './mechanism_factory', './parameter_property_pair'
             }
             return context;
         };
-        Configuration.prototype.getCssStyle = function (mechanism, parameterPropertyPairs) {
+        Configuration.prototype.getCssStyle = function (mechanism, parameterValuePropertyPair) {
             var cssStyles = '';
-            for (var i = 0; i < parameterPropertyPairs.length; i++) {
-                var parameterPropertyPair = parameterPropertyPairs[i];
+            for (var i = 0; i < parameterValuePropertyPair.length; i++) {
+                var parameterPropertyPair = parameterValuePropertyPair[i];
                 if (mechanism.getParameterValue(parameterPropertyPair.parameter) !== null) {
-                    var unit = Configuration.getCSSPropertyUnit(parameterPropertyPair.property);
+                    var unit = this.getCSSPropertyUnit(parameterPropertyPair.property);
                     cssStyles += parameterPropertyPair.property + ': ' + mechanism.getParameterValue(parameterPropertyPair.parameter) + unit + ';';
-                    if (i !== parameterPropertyPairs.length - 1) {
+                    if (i !== parameterValuePropertyPair.length - 1) {
                         cssStyles += ' ';
                     }
                 }
             }
             return cssStyles;
         };
-        Configuration.getCSSPropertyUnit = function (property) {
+        Configuration.prototype.getCSSPropertyUnit = function (property) {
             if (property === 'font-size') {
                 return 'px';
             }

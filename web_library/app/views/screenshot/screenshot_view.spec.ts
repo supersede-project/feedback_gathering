@@ -1,7 +1,7 @@
 import {ScreenshotView} from './screenshot_view';
-import {Mechanism} from '../../models/mechanism';
 import {screenshotType} from '../../js/config';
 import Handlebars = require('handlebars');
+import {Mechanism} from '../../models/mechanisms/mechanism';
 
 
 describe('Screenshot View', () => {

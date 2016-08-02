@@ -1,4 +1,4 @@
-define(["require", "exports", './screenshot_view', '../../models/mechanism', '../../js/config', 'handlebars'], function (require, exports, screenshot_view_1, mechanism_1, config_1, Handlebars) {
+define(["require", "exports", './screenshot_view', '../../js/config', 'handlebars', '../../models/mechanisms/mechanism'], function (require, exports, screenshot_view_1, config_1, Handlebars, mechanism_1) {
     "use strict";
     describe('Screenshot View', function () {
         var screenshotView;

@@ -1,5 +1,5 @@
-import {ratingType} from '../js/config';
 import {RatingMechanism} from './rating_mechanism';
+import {ratingType} from '../../js/config';
 
 
 describe('Rating Mechanism', () => {

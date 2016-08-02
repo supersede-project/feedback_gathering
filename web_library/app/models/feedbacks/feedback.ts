@@ -1,7 +1,7 @@
 import {Rating} from './rating';
 import {ConfigurationService} from '../services/configuration_service';
-import {textType, ratingType} from '../js/config';
-import {Configuration} from './configuration';
+import {textType} from '../../js/config';
+import {PushConfiguration} from '../configurations/push_configuration';
 
 
 const validationMessages = {
@@ -35,7 +35,7 @@ export class Feedback {
      *  If the validation was successful: true
      *  Otherwise: An object with error messages
      */
-    validate(configuration: Configuration): any {
+    validate(configuration: PushConfiguration): any {
         var textMechanism = configuration.getMechanismConfig(textType);
         var errors = {textMechanism: [], ratingMechanism: [], general: []};
 

@@ -1,4 +1,4 @@
-import {Parameter} from './parameter';
+import {Parameter} from './parameters/parameter';
 import {Mechanism} from './mechanism';
 
 

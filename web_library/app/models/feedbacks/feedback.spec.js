@@ -1,4 +1,4 @@
-define(["require", "exports", './feedback', './configuration'], function (require, exports, feedback_1, configuration_1) {
+define(["require", "exports", './feedback', '../configurations/push_configuration'], function (require, exports, feedback_1, push_configuration_1) {
     "use strict";
     describe('Feedback', function () {
         it('should validate itself according to the given configuration data', function () {
@@ -30,7 +30,7 @@ define(["require", "exports", './feedback', './configuration'], function (requir
                     }
                 ]
             };
-            var configuration = configuration_1.Configuration.initByData(configurationData);
+            var configuration = push_configuration_1.PushConfiguration.initByData(configurationData);
             var feedback = new feedback_1.Feedback('Feedback', 'application', null, 'This is my feedback!', 1.0, []);
             expect(feedback.validate(configuration)).toBeTruthy();
         });
@@ -63,7 +63,7 @@ define(["require", "exports", './feedback', './configuration'], function (requir
                     }
                 ]
             };
-            var configuration = configuration_1.Configuration.initByData(configurationData);
+            var configuration = push_configuration_1.PushConfiguration.initByData(configurationData);
             var feedback = new feedback_1.Feedback('Feedback', 'application', null, '', 1.0, []);
             var errors = feedback.validate(configuration);
             expect(errors.textMechanism.length).toBe(1);

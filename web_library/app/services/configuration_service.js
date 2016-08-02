@@ -1,4 +1,4 @@
-define(["require", "exports", './backends/http_backend', '../models/configuration'], function (require, exports, http_backend_1, configuration_1) {
+define(["require", "exports", './backends/http_backend', '../models/configurations/push_configuration'], function (require, exports, http_backend_1, push_configuration_1) {
     "use strict";
     var ConfigurationService = (function () {
         function ConfigurationService(backend) {
@@ -11,7 +11,7 @@ define(["require", "exports", './backends/http_backend', '../models/configuratio
         }
         ConfigurationService.prototype.retrieveConfiguration = function (callback) {
             this.backend.retrieve(1, function (configuration) {
-                var configurationObject = configuration_1.Configuration.initByData(configuration);
+                var configurationObject = push_configuration_1.PushConfiguration.initByData(configuration);
                 callback(configurationObject);
             });
         };

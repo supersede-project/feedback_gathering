@@ -1,34 +1,38 @@
 import './lib/jquery.star-rating-svg.js';
 import './jquery.validate.js';
-import {Feedback} from '../models/feedback';
-import {Rating} from '../models/rating';
 import {ConfigurationService} from '../services/configuration_service';
 import {
     apiEndpoint, feedbackPath, configPath, applicationName, defaultSuccessMessage,
     feedbackObjectTitle, dialogOptions, textType, ratingType, screenshotType
 } from './config';
 import {PaginationContainer} from '../views/pagination_container';
-import {RatingMechanism} from '../models/rating_mechanism';
 import {ScreenshotView} from '../views/screenshot/screenshot_view';
-import {Mechanism} from '../models/mechanism';
 import {I18nHelper} from './helpers/i18n';
 import i18n = require('i18next');
 import {MockBackend} from '../services/backends/mock_backend';
+import {Mechanism} from '../models/mechanisms/mechanism';
+import {RatingMechanism} from '../models/mechanisms/rating_mechanism';
+import {PullConfiguration} from '../models/configurations/pull_configuration';
+import {Feedback} from '../models/feedbacks/feedback';
+import {Rating} from '../models/feedbacks/rating';
+
 
 
 export var feedbackPluginModule = function ($, window, document) {
     var dialog;
+    var pullDialog;
     var active = false;
     var textMechanism:Mechanism;
     var ratingMechanism:RatingMechanism;
     var screenshotMechanism:Mechanism;
     var screenshotView:ScreenshotView;
-    var template = require('../templates/feedback_dialog.handlebars');
+    var dialogTemplate = require('../templates/feedback_dialog.handlebars');
+    var pullDialogTemplate = require('../templates/feedback_dialog.handlebars');
     var mockData = require('json!../services/mocks/configurations_mock.json');
 
     /**
      * @param configuration
-     *  Configuration data retrieved from the feedback orchestrator
+     *  PushConfiguration data retrieved from the feedback orchestrator
      *
      * Initializes the mechanism objects with the configuration data. It then constructs the context variable for the
      * template and invokes the feedbackDialog template with the configuration data.
@@ -41,12 +45,32 @@ export var feedbackPluginModule = function ($, window, document) {
         ratingMechanism = configuration.getMechanismConfig(ratingType);
         screenshotMechanism = configuration.getMechanismConfig(screenshotType);
         $('#serverResponse').removeClass().text('');
-
         var context = configuration.getContextForView();
-        initTemplate(context, screenshotMechanism, textMechanism, ratingMechanism);
+        initTemplate(dialogTemplate, dialog, "pushConfiguration", context, screenshotMechanism, textMechanism, ratingMechanism);
     };
 
-    var initTemplate = function (context, screenshotMechanism, textMechanism, ratingMechanism) {
+    /**
+     * Initializes the pull mechanisms and triggers the feedback mechanisms if necessary.
+     *
+     * @param configuration
+     */
+    var initPullConfiguration = function(configuration) {
+        var pullConfiguration:PullConfiguration = PullConfiguration.initByData(configuration.pull_configurations[0]);
+
+        // TODO use PushConfiguration class instead of PullConfiguration
+
+        textMechanism = pullConfiguration.getMechanismConfig(textType);
+        ratingMechanism = pullConfiguration.getMechanismConfig(ratingType);
+        screenshotMechanism = pullConfiguration.getMechanismConfig(screenshotType);
+        $('#serverResponse').removeClass().text('');
+
+        var context = pullConfiguration.getContextForView();
+        initTemplate(pullDialogTemplate, pullDialog, "pullConfiguration", context, screenshotMechanism, textMechanism, ratingMechanism);
+
+        pullDialog.dialog('open');
+    };
+
+    var initTemplate = function (template, dialogObject, dialogId, context, screenshotMechanism, textMechanism, ratingMechanism) {
         var html = template(context);
         $('body').append(html);
 
@@ -54,7 +78,7 @@ export var feedbackPluginModule = function ($, window, document) {
         new PaginationContainer($('#feedbackContainer .pages-container'), pageForwardCallback);
         initRating(".rating-input", ratingMechanism);
         initScreenshot(screenshotMechanism);
-        initDialog($('#feedbackContainer'), textMechanism);
+        initDialog(dialogObject, $('#'+ dialogId), textMechanism);
         addEvents(textMechanism);
     };
 
@@ -115,22 +139,21 @@ export var feedbackPluginModule = function ($, window, document) {
      *
      * Initializes the dialog on a given element and opens it.
      */
-    var initDialog = function (dialogContainer, textMechanism) {
-        dialog = dialogContainer.dialog(
+    var initDialog = function (dialogObject, dialogContainer, textMechanism) {
+        dialogObject = dialogContainer.dialog(
             $.extend({}, dialogOptions, {
                 close: function () {
-                    dialog.dialog("close");
+                    dialogObject.dialog("close");
                     active = false;
                 }
             })
         );
-        dialog.dialog('option', 'title', textMechanism.getParameter('title').value);
-        dialog.dialog("open");
+        dialogObject.dialog('option', 'title', textMechanism.getParameter('title').value);
     };
 
     /**
      * @param textMechanism
-     *  Configuration data for the text mechanism
+     *  PushConfiguration data for the text mechanism
      *
      * Adds the following events:
      * - Send event for the feedback form
@@ -173,20 +196,20 @@ export var feedbackPluginModule = function ($, window, document) {
      * @returns {boolean}
      *  indicates whether the navigation forward should happen (true) or not (false)
      */
-    var pageForwardCallback = function(currentPage, nextPage) {
-        currentPage.find('.validate').each(function() {
+    var pageForwardCallback = function (currentPage, nextPage) {
+        currentPage.find('.validate').each(function () {
             $(this).validate();
         });
-        if(currentPage.find('.invalid').length > 0 && currentPage.find('.validate[data-mandatory-validate-on-skip="1"]').length > 0) {
+        if (currentPage.find('.invalid').length > 0 && currentPage.find('.validate[data-mandatory-validate-on-skip="1"]').length > 0) {
             return false;
         }
-        if(nextPage.find('#textReview').length > 0 && textMechanism.active) {
+        if (nextPage.find('#textReview').length > 0 && textMechanism.active) {
             nextPage.find('#textReview').text($('textarea#textTypeText').val());
         }
-        if(nextPage.find('#ratingReview').length > 0 && ratingMechanism.active) {
+        if (nextPage.find('#ratingReview').length > 0 && ratingMechanism.active) {
             nextPage.find('#ratingReview').text(i18n.t('rating.review_title') + ": " + ratingMechanism.currentRatingValue + " / " + ratingMechanism.getParameterValue("maxRating"));
         }
-        if(nextPage.find('#screenshotReview').length > 0 && screenshotMechanism.active && screenshotView.screenshotCanvas != null) {
+        if (nextPage.find('#screenshotReview').length > 0 && screenshotMechanism.active && screenshotView.screenshotCanvas != null) {
             var img = $('<img src="' + screenshotView.screenshotCanvas.toDataURL() + '" />');
             img.css('max-width', '20%');
             $('#screenshotReview').empty().append(img);
@@ -205,10 +228,10 @@ export var feedbackPluginModule = function ($, window, document) {
         $('#serverResponse').removeClass();
         var feedbackObject = new Feedback(feedbackObjectTitle, applicationName, "uid12345", null, 1.0, null);
 
-        if(textMechanism.active) {
+        if (textMechanism.active) {
             feedbackObject.text = $('textarea#textTypeText').val();
         }
-        if(ratingMechanism.active) {
+        if (ratingMechanism.active) {
             var ratingTitle = $('.rating-text').text().trim();
             var rating = new Rating(ratingTitle, ratingMechanism.currentRatingValue);
             feedbackObject.ratings = [];
@@ -226,19 +249,16 @@ export var feedbackPluginModule = function ($, window, document) {
      * The configuration data is fetched from the API if the feedback mechanism is not currently active. In the other
      * case the feedback mechanism dialog is closed. The active variable is toggled on each invocation.
      */
-    var retrieveConfigurationDataOrClose = function () {
+    var toggleDialog = function () {
         if (!active) {
-            var configurationService = new ConfigurationService(new MockBackend(mockData));
-            configurationService.retrieveConfiguration(function(configuration) {
-               initMechanisms(configuration);
-            });
+            dialog.dialog("open");
         } else {
             dialog.dialog("close");
         }
         active = !active;
     };
 
-     /**
+    /**
      * @param options
      *  Client side configuration of the feedback library
      * @returns {jQuery}
@@ -250,16 +270,26 @@ export var feedbackPluginModule = function ($, window, document) {
     $.fn.feedbackPlugin = function (options) {
         this.options = $.extend({}, $.fn.feedbackPlugin.defaults, options);
         var currentOptions = this.options;
-        var resources = { en: {translation: require('json!../locales/en/translation.json')}, de: {translation: require('json!../locales/de/translation.json') }};
+        var resources = {
+            en: {translation: require('json!../locales/en/translation.json')},
+            de: {translation: require('json!../locales/de/translation.json')}
+        };
 
         I18nHelper.initializeI18n(resources, this.options);
+
+        // loadDataHere to trigger pull if necessary
+        var configurationService = new ConfigurationService(new MockBackend(mockData));
+        configurationService.retrieveConfiguration(function (configuration) {
+            initMechanisms(configuration);
+            initPullConfiguration(configuration);
+        });
 
         this.css('background-color', currentOptions.backgroundColor);
         this.css('color', currentOptions.color);
         this.on('click', function (event) {
             event.preventDefault();
             event.stopPropagation();
-            retrieveConfigurationDataOrClose();
+            toggleDialog();
         });
 
         return this;

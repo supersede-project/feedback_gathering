@@ -1,11 +1,11 @@
-define(["require", "exports", './configuration', '../services/mocks/mocks_loader', './rating_mechanism', './mechanism', '../js/config', './parameter_property_pair'], function (require, exports, configuration_1, mocks_loader_1, rating_mechanism_1, mechanism_1, config_1, parameter_property_pair_1) {
+define(["require", "exports", './push_configuration', '../../services/mocks/mocks_loader', '../mechanisms/mechanism', '../mechanisms/rating_mechanism', '../../js/config', '../parameters/parameter_value_property_pair'], function (require, exports, push_configuration_1, mocks_loader_1, mechanism_1, rating_mechanism_1, config_1, parameter_value_property_pair_1) {
     "use strict";
-    describe('Configuration object', function () {
+    describe('PushConfiguration object', function () {
         var configuration;
         beforeEach(function () {
             var configurations = mocks_loader_1.readJSON('app/services/mocks/configurations_mock.json', '/base/');
             var configurationData = configurations[0];
-            configuration = configuration_1.Configuration.initByData(configurationData);
+            configuration = push_configuration_1.PushConfiguration.initByData(configurationData);
         });
         it('should be an object with a complete configuration including general, pull and mechanism', function () {
             expect(configuration.mechanisms.length).toBe(4);
@@ -16,24 +16,6 @@ define(["require", "exports", './configuration', '../services/mocks/mocks_loader
             expect(textMechanismConfig.canBeActivated).toEqual(false);
             var ratingMechanismConfig = configuration.mechanisms[3];
             expect(ratingMechanismConfig.type).toEqual('RATING_TYPE');
-        });
-        it('should return the corresponding mechanisms', function () {
-            var textMechanism = configuration.getMechanismConfig('TEXT_TYPE');
-            expect(textMechanism).toEqual(jasmine.any(mechanism_1.Mechanism));
-            expect(textMechanism).not.toBeNull();
-            expect(textMechanism.type).toEqual('TEXT_TYPE');
-            expect(textMechanism.active).toEqual(true);
-            expect(textMechanism.order).toEqual(1);
-            expect(textMechanism.canBeActivated).toEqual(false);
-        });
-        it('should return a rating mechanism object', function () {
-            var ratingMechanism = configuration.getMechanismConfig('RATING_TYPE');
-            expect(ratingMechanism).toEqual(jasmine.any(rating_mechanism_1.RatingMechanism));
-            expect(ratingMechanism).not.toBeNull();
-            expect(ratingMechanism.type).toEqual('RATING_TYPE');
-            expect(ratingMechanism.active).toEqual(true);
-            expect(ratingMechanism.order).toEqual(4);
-            expect(ratingMechanism.canBeActivated).toEqual(false);
         });
         it('should return the context for the view with the configuration data', function () {
             var context = configuration.getContextForView();
@@ -58,17 +40,36 @@ define(["require", "exports", './configuration', '../services/mocks/mocks_loader
                 },
                 screenshotMechanism: {
                     active: true
-                }
+                },
+                dialogId: 'pushConfiguration'
             };
             expect(context).toEqual(expectedContext);
         });
+        it('should return the corresponding mechanisms', function () {
+            var textMechanism = configuration.getMechanismConfig('TEXT_TYPE');
+            expect(textMechanism).toEqual(jasmine.any(mechanism_1.Mechanism));
+            expect(textMechanism).not.toBeNull();
+            expect(textMechanism.type).toEqual('TEXT_TYPE');
+            expect(textMechanism.active).toEqual(true);
+            expect(textMechanism.order).toEqual(1);
+            expect(textMechanism.canBeActivated).toEqual(false);
+        });
+        it('should return a rating mechanism object', function () {
+            var ratingMechanism = configuration.getMechanismConfig('RATING_TYPE');
+            expect(ratingMechanism).toEqual(jasmine.any(rating_mechanism_1.RatingMechanism));
+            expect(ratingMechanism).not.toBeNull();
+            expect(ratingMechanism.type).toEqual('RATING_TYPE');
+            expect(ratingMechanism.active).toEqual(true);
+            expect(ratingMechanism.order).toEqual(4);
+            expect(ratingMechanism.canBeActivated).toEqual(false);
+        });
         it('should return a css style string', function () {
             var textMechanism = configuration.getMechanismConfig(config_1.textType);
-            var cssStyle = configuration.getCssStyle(textMechanism, [new parameter_property_pair_1.ParameterPropertyPair('textareaFontColor', 'color')]);
+            var cssStyle = configuration.getCssStyle(textMechanism, [new parameter_value_property_pair_1.ParameterValuePropertyPair('textareaFontColor', 'color')]);
             expect(cssStyle).toEqual('color: #7A7A7A;');
-            var cssStyle2 = configuration.getCssStyle(textMechanism, [new parameter_property_pair_1.ParameterPropertyPair('textareaFontColor', 'color'), new parameter_property_pair_1.ParameterPropertyPair('fieldFontType', 'font-style')]);
+            var cssStyle2 = configuration.getCssStyle(textMechanism, [new parameter_value_property_pair_1.ParameterValuePropertyPair('textareaFontColor', 'color'), new parameter_value_property_pair_1.ParameterValuePropertyPair('fieldFontType', 'font-style')]);
             expect(cssStyle2).toEqual('color: #7A7A7A; font-style: italic;');
         });
     });
 });
-//# sourceMappingURL=configuration.spec.js.map
+//# sourceMappingURL=push_configuration.spec.js.map

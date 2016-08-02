@@ -1,4 +1,4 @@
-define(["require", "exports", '../js/config'], function (require, exports, config_1) {
+define(["require", "exports", '../../js/config'], function (require, exports, config_1) {
     "use strict";
     var validationMessages = {
         textMechanism: {

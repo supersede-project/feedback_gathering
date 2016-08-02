@@ -1,26 +1,18 @@
-import {PullConfiguration} from './pull_configuration';
-import {Mechanism} from './mechanism';
-import {MechanismFactory} from './mechanism_factory';
-import {ParameterPropertyPair} from './parameter_property_pair';
-import {screenshotType, ratingType, textType} from '../js/config';
-import {ParameterInterface} from './parameter_interface';
+import {ConfigurationInterface} from './configuration_interface';
+import {Mechanism} from '../mechanisms/mechanism';
+import {ParameterValuePropertyPair} from '../parameters/parameter_value_property_pair';
+import {screenshotType, ratingType, textType} from '../../js/config';
+import {MechanismFactory} from '../mechanisms/mechanism_factory';
 
 
-export class Configuration {
+export abstract class Configuration implements ConfigurationInterface {
     id:number;
     mechanisms:Mechanism[];
-    general_configurations:ParameterInterface[];
-    pull_configurations:PullConfiguration[];
+    dialogId:string;
 
-    constructor(id:number, mechanisms:Mechanism[], general_configurations:ParameterInterface[], pull_configurations:PullConfiguration[]) {
+    constructor(id:number, mechanisms:Mechanism[]) {
         this.id = id;
-        this.general_configurations = general_configurations;
-        this.pull_configurations = pull_configurations;
         this.mechanisms = mechanisms;
-    }
-
-    static initByData(data:any) {
-        return new Configuration(data.id, data.mechanisms, data.general_configurations, data.pull_configurations);
     }
 
     /**
@@ -43,17 +35,17 @@ export class Configuration {
      *  Context object that contains all the data to configure the feedback mechanism in the view.
      */
     getContextForView() {
-        var context = {textMechanism: null, ratingMechanism: null, screenshotMechanism: null};
+        var context = {textMechanism: null, ratingMechanism: null, screenshotMechanism: null, dialogId: this.dialogId};
         var textMechanism = this.getMechanismConfig(textType);
         var ratingMechanism = this.getMechanismConfig(ratingType);
         var screenshotMechanism = this.getMechanismConfig(screenshotType);
 
         var labelStyle = this.getCssStyle(textMechanism, [
-            new ParameterPropertyPair('labelPositioning', 'text-align'),
-            new ParameterPropertyPair('labelColor', 'color'),
-            new ParameterPropertyPair('labelFontSize', 'font-size')]
+            new ParameterValuePropertyPair('labelPositioning', 'text-align'),
+            new ParameterValuePropertyPair('labelColor', 'color'),
+            new ParameterValuePropertyPair('labelFontSize', 'font-size')]
         );
-        var textareaStyle = this.getCssStyle(textMechanism, [new ParameterPropertyPair('textareaFontColor', 'color')]);
+        var textareaStyle = this.getCssStyle(textMechanism, [new ParameterValuePropertyPair('textareaFontColor', 'color')]);
 
         if(textMechanism) {
             context.textMechanism = {
@@ -90,18 +82,18 @@ export class Configuration {
      *
      * @param mechanism
      *  Mechanism to get the parameters from
-     * @param parameterPropertyPairs
+     * @param parameterValuePropertyPair
      *  The pairs of 1) parameter in the parameters of the config and 2) the css property to use for this parameter's value
      * @returns {string}
      */
-    getCssStyle(mechanism:Mechanism, parameterPropertyPairs:ParameterPropertyPair[]): string {
+    getCssStyle(mechanism:Mechanism, parameterValuePropertyPair:ParameterValuePropertyPair[]): string {
         var cssStyles = '';
-        for(var i = 0; i < parameterPropertyPairs.length; i++) {
-            var parameterPropertyPair = parameterPropertyPairs[i];
+        for(var i = 0; i < parameterValuePropertyPair.length; i++) {
+            var parameterPropertyPair = parameterValuePropertyPair[i];
             if (mechanism.getParameterValue(parameterPropertyPair.parameter) !== null) {
-                var unit = Configuration.getCSSPropertyUnit(parameterPropertyPair.property);
+                var unit = this.getCSSPropertyUnit(parameterPropertyPair.property);
                 cssStyles += parameterPropertyPair.property + ': ' + mechanism.getParameterValue(parameterPropertyPair.parameter) + unit + ';';
-                if(i !== parameterPropertyPairs.length - 1) {
+                if(i !== parameterValuePropertyPair.length - 1) {
                     cssStyles += ' ';
                 }
             }
@@ -109,7 +101,7 @@ export class Configuration {
         return cssStyles;
     }
 
-    private static getCSSPropertyUnit(property: string) {
+    getCSSPropertyUnit(property: string) {
         if(property === 'font-size') {
             return 'px'
         } else {
@@ -117,4 +109,3 @@ export class Configuration {
         }
     }
 }
-

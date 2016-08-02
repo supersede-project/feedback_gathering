@@ -1,5 +1,5 @@
 import {Feedback} from './feedback';
-import {Configuration} from './configuration';
+import {PushConfiguration} from '../configurations/push_configuration';
 
 
 describe('Feedback', () => {
@@ -34,7 +34,7 @@ describe('Feedback', () => {
             ]
         };
 
-        var configuration = Configuration.initByData(configurationData);
+        var configuration = PushConfiguration.initByData(configurationData);
         var feedback = new Feedback('Feedback', 'application', null, 'This is my feedback!', 1.0, []);
         expect(feedback.validate(configuration)).toBeTruthy();
     });
@@ -69,7 +69,7 @@ describe('Feedback', () => {
             ]
         };
 
-        var configuration = Configuration.initByData(configurationData);
+        var configuration = PushConfiguration.initByData(configurationData);
         var feedback = new Feedback('Feedback', 'application', null, '', 1.0, []);
 
         var errors = feedback.validate(configuration);

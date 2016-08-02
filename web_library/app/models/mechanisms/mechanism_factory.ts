@@ -1,6 +1,6 @@
 import {RatingMechanism} from './rating_mechanism';
-import {ratingType} from '../js/config';
 import {Mechanism} from './mechanism';
+import {ratingType} from '../../js/config';
 
 
 export class MechanismFactory {

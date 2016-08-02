@@ -1,5 +1,4 @@
 import {Mechanism} from './mechanism';
-import {Parameter} from './parameter';
 import {MechanismFactory} from './mechanism_factory';
 
 

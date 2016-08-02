@@ -1,5 +1,5 @@
-import {Parameter} from './parameter';
-import {ParameterInterface} from './parameter_interface';
+import {ParameterInterface} from '../parameters/parameter_interface';
+import {Parameter} from '../parameters/parameter';
 
 
 export class Mechanism {

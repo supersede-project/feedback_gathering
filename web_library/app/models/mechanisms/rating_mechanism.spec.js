@@ -1,4 +1,4 @@
-define(["require", "exports", '../js/config', './rating_mechanism'], function (require, exports, config_1, rating_mechanism_1) {
+define(["require", "exports", './rating_mechanism', '../../js/config'], function (require, exports, rating_mechanism_1, config_1) {
     "use strict";
     describe('Rating Mechanism', function () {
         var ratingMechanism;
