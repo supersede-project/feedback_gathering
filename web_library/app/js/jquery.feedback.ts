@@ -61,12 +61,11 @@ export var feedbackPluginModule = function ($, window, document) {
         screenshotMechanism = pullConfiguration.getMechanismConfig(screenshotType);
         $('#serverResponse').removeClass().text('');
 
-
-        //var likelihood = pullConfiguration.parameters.
-
-        var context = pullConfiguration.getContextForView();
-        pullDialog = initTemplate(pullDialogTemplate, "pullConfiguration", context, screenshotMechanism, textMechanism, ratingMechanism);
-        pullDialog.dialog('open');
+        if(pullConfiguration.shouldGetTriggered()) {
+            var context = pullConfiguration.getContextForView();
+            pullDialog = initTemplate(pullDialogTemplate, "pullConfiguration", context, screenshotMechanism, textMechanism, ratingMechanism);
+            pullDialog.dialog('open');
+        }
     };
 
     var initTemplate = function (template, dialogId, context, screenshotMechanism, textMechanism, ratingMechanism): HTMLElement {

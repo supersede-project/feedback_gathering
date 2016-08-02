@@ -27,6 +27,15 @@ export class PullConfiguration extends Configuration implements Parameterizable 
 
     getParameter: (key:string) => ParameterInterface;
     getParameterValue: (key:string) => any;
+
+    /**
+     * Decides whether the mechanisms associated with this configuration should get activated or not.
+     *
+     * @returns {boolean} true if the mechanismes should get triggered.
+     */
+    shouldGetTriggered(): boolean {
+        return this.getParameterValue('askOnAppStartup') || Math.random() <= this.getParameterValue('likelihood');
+    }
 }
 
 applyMixins(PullConfiguration, [Parameterizable]);

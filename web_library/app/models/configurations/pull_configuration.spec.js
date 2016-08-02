@@ -47,7 +47,7 @@ define(["require", "exports", '../../services/mocks/mocks_loader', './pull_confi
         it('should provide the parameter values', function () {
             var likelihood = pullConfiguration.getParameterValue("likelihood");
             var askOnAppStartup = pullConfiguration.getParameterValue("askOnAppStartup");
-            expect(likelihood).toEqual(0.1);
+            expect(likelihood).toEqual(0.3);
             expect(askOnAppStartup).toEqual(0);
         });
     });

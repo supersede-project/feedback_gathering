@@ -25,9 +25,11 @@ define(["require", "exports", '../services/configuration_service', './config', '
             ratingMechanism = pullConfiguration.getMechanismConfig(config_1.ratingType);
             screenshotMechanism = pullConfiguration.getMechanismConfig(config_1.screenshotType);
             $('#serverResponse').removeClass().text('');
-            var context = pullConfiguration.getContextForView();
-            pullDialog = initTemplate(pullDialogTemplate, "pullConfiguration", context, screenshotMechanism, textMechanism, ratingMechanism);
-            pullDialog.dialog('open');
+            if (pullConfiguration.shouldGetTriggered()) {
+                var context = pullConfiguration.getContextForView();
+                pullDialog = initTemplate(pullDialogTemplate, "pullConfiguration", context, screenshotMechanism, textMechanism, ratingMechanism);
+                pullDialog.dialog('open');
+            }
         };
         var initTemplate = function (template, dialogId, context, screenshotMechanism, textMechanism, ratingMechanism) {
             var html = template(context);

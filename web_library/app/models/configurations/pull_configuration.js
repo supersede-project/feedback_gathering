@@ -16,6 +16,9 @@ define(["require", "exports", './configuration', '../mixins/parameterizable', '.
         PullConfiguration.initByData = function (data) {
             return new PullConfiguration(data.id, data.mechanisms, data.active, data.parameters);
         };
+        PullConfiguration.prototype.shouldGetTriggered = function () {
+            return this.getParameterValue('askOnAppStartup') || Math.random() <= this.getParameterValue('likelihood');
+        };
         return PullConfiguration;
     }(configuration_1.Configuration));
     exports.PullConfiguration = PullConfiguration;
