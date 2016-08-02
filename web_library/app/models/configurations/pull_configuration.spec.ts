@@ -52,4 +52,12 @@ describe('PullConfiguration object', () => {
 
         expect(context).toEqual(expectedContext);
     });
+
+    it('should provide the parameter values', () => {
+        var likelihood = pullConfiguration.getParameterValue("likelihood");
+        var askOnAppStartup = pullConfiguration.getParameterValue("askOnAppStartup");
+
+        expect(likelihood).toEqual(0.1);
+        expect(askOnAppStartup).toEqual(0);
+    });
 });

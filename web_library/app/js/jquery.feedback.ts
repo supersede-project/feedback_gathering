@@ -46,7 +46,7 @@ export var feedbackPluginModule = function ($, window, document) {
         screenshotMechanism = configuration.getMechanismConfig(screenshotType);
         $('#serverResponse').removeClass().text('');
         var context = configuration.getContextForView();
-        initTemplate(dialogTemplate, dialog, "pushConfiguration", context, screenshotMechanism, textMechanism, ratingMechanism);
+        dialog = initTemplate(dialogTemplate, "pushConfiguration", context, screenshotMechanism, textMechanism, ratingMechanism);
     };
 
     /**
@@ -56,21 +56,20 @@ export var feedbackPluginModule = function ($, window, document) {
      */
     var initPullConfiguration = function(configuration) {
         var pullConfiguration:PullConfiguration = PullConfiguration.initByData(configuration.pull_configurations[0]);
-
-        // TODO use PushConfiguration class instead of PullConfiguration
-
         textMechanism = pullConfiguration.getMechanismConfig(textType);
         ratingMechanism = pullConfiguration.getMechanismConfig(ratingType);
         screenshotMechanism = pullConfiguration.getMechanismConfig(screenshotType);
         $('#serverResponse').removeClass().text('');
 
-        var context = pullConfiguration.getContextForView();
-        initTemplate(pullDialogTemplate, pullDialog, "pullConfiguration", context, screenshotMechanism, textMechanism, ratingMechanism);
 
+        //var likelihood = pullConfiguration.parameters.
+
+        var context = pullConfiguration.getContextForView();
+        pullDialog = initTemplate(pullDialogTemplate, "pullConfiguration", context, screenshotMechanism, textMechanism, ratingMechanism);
         pullDialog.dialog('open');
     };
 
-    var initTemplate = function (template, dialogObject, dialogId, context, screenshotMechanism, textMechanism, ratingMechanism) {
+    var initTemplate = function (template, dialogId, context, screenshotMechanism, textMechanism, ratingMechanism): HTMLElement {
         var html = template(context);
         $('body').append(html);
 
@@ -78,8 +77,10 @@ export var feedbackPluginModule = function ($, window, document) {
         new PaginationContainer($('#feedbackContainer .pages-container'), pageForwardCallback);
         initRating(".rating-input", ratingMechanism);
         initScreenshot(screenshotMechanism);
-        initDialog(dialogObject, $('#'+ dialogId), textMechanism);
+
+        var dialog = initDialog($('#'+ dialogId), textMechanism);
         addEvents(textMechanism);
+        return dialog;
     };
 
     /**
@@ -139,8 +140,8 @@ export var feedbackPluginModule = function ($, window, document) {
      *
      * Initializes the dialog on a given element and opens it.
      */
-    var initDialog = function (dialogObject, dialogContainer, textMechanism) {
-        dialogObject = dialogContainer.dialog(
+    var initDialog = function (dialogContainer, textMechanism) {
+        var dialogObject = dialogContainer.dialog(
             $.extend({}, dialogOptions, {
                 close: function () {
                     dialogObject.dialog("close");
@@ -149,6 +150,7 @@ export var feedbackPluginModule = function ($, window, document) {
             })
         );
         dialogObject.dialog('option', 'title', textMechanism.getParameter('title').value);
+        return dialogObject;
     };
 
     /**

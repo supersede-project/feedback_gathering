@@ -17,7 +17,7 @@ define(["require", "exports", '../services/configuration_service', './config', '
             screenshotMechanism = configuration.getMechanismConfig(config_1.screenshotType);
             $('#serverResponse').removeClass().text('');
             var context = configuration.getContextForView();
-            initTemplate(dialogTemplate, dialog, "pushConfiguration", context, screenshotMechanism, textMechanism, ratingMechanism);
+            dialog = initTemplate(dialogTemplate, "pushConfiguration", context, screenshotMechanism, textMechanism, ratingMechanism);
         };
         var initPullConfiguration = function (configuration) {
             var pullConfiguration = pull_configuration_1.PullConfiguration.initByData(configuration.pull_configurations[0]);
@@ -26,17 +26,18 @@ define(["require", "exports", '../services/configuration_service', './config', '
             screenshotMechanism = pullConfiguration.getMechanismConfig(config_1.screenshotType);
             $('#serverResponse').removeClass().text('');
             var context = pullConfiguration.getContextForView();
-            initTemplate(pullDialogTemplate, pullDialog, "pullConfiguration", context, screenshotMechanism, textMechanism, ratingMechanism);
+            pullDialog = initTemplate(pullDialogTemplate, "pullConfiguration", context, screenshotMechanism, textMechanism, ratingMechanism);
             pullDialog.dialog('open');
         };
-        var initTemplate = function (template, dialogObject, dialogId, context, screenshotMechanism, textMechanism, ratingMechanism) {
+        var initTemplate = function (template, dialogId, context, screenshotMechanism, textMechanism, ratingMechanism) {
             var html = template(context);
             $('body').append(html);
             new pagination_container_1.PaginationContainer($('#feedbackContainer .pages-container'), pageForwardCallback);
             initRating(".rating-input", ratingMechanism);
             initScreenshot(screenshotMechanism);
-            initDialog(dialogObject, $('#' + dialogId), textMechanism);
+            var dialog = initDialog($('#' + dialogId), textMechanism);
             addEvents(textMechanism);
+            return dialog;
         };
         var sendFeedback = function (formData) {
             $.ajax({
@@ -65,14 +66,15 @@ define(["require", "exports", '../services/configuration_service', './config', '
             var screenshotPreview = $('#screenshotPreview'), screenshotCaptureButton = $('button#takeScreenshot'), elementToCapture = $('#page-wrapper_1'), elementsToHide = [$('.ui-widget-overlay.ui-front'), $('.ui-dialog')];
             screenshotView = new screenshot_view_1.ScreenshotView(screenshotMechanism, screenshotPreview, screenshotCaptureButton, elementToCapture, elementsToHide);
         };
-        var initDialog = function (dialogObject, dialogContainer, textMechanism) {
-            dialogObject = dialogContainer.dialog($.extend({}, config_1.dialogOptions, {
+        var initDialog = function (dialogContainer, textMechanism) {
+            var dialogObject = dialogContainer.dialog($.extend({}, config_1.dialogOptions, {
                 close: function () {
                     dialogObject.dialog("close");
                     active = false;
                 }
             }));
             dialogObject.dialog('option', 'title', textMechanism.getParameter('title').value);
+            return dialogObject;
         };
         var addEvents = function (textMechanism) {
             var textarea = $('textarea#textTypeText');

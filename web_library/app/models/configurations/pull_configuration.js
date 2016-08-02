@@ -3,7 +3,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-define(["require", "exports", './configuration'], function (require, exports, configuration_1) {
+define(["require", "exports", './configuration', '../mixins/parameterizable', '../../js/helpers/mixin_helper'], function (require, exports, configuration_1, parameterizable_1, mixin_helper_1) {
     "use strict";
     var PullConfiguration = (function (_super) {
         __extends(PullConfiguration, _super);
@@ -19,5 +19,6 @@ define(["require", "exports", './configuration'], function (require, exports, co
         return PullConfiguration;
     }(configuration_1.Configuration));
     exports.PullConfiguration = PullConfiguration;
+    mixin_helper_1.applyMixins(PullConfiguration, [parameterizable_1.Parameterizable]);
 });
 //# sourceMappingURL=pull_configuration.js.map

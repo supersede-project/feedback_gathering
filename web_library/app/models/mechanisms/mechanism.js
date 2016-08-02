@@ -1,4 +1,4 @@
-define(["require", "exports"], function (require, exports) {
+define(["require", "exports", '../mixins/parameterizable', '../../js/helpers/mixin_helper'], function (require, exports, parameterizable_1, mixin_helper_1) {
     "use strict";
     var Mechanism = (function () {
         function Mechanism(id, type, active, order, canBeActivated, parameters) {
@@ -9,26 +9,9 @@ define(["require", "exports"], function (require, exports) {
             this.canBeActivated = canBeActivated;
             this.parameters = parameters;
         }
-        Mechanism.prototype.getParameter = function (key) {
-            var filteredArray = this.parameters.filter(function (parameter) { return parameter.key === key; });
-            if (filteredArray.length > 0) {
-                return filteredArray[0];
-            }
-            else {
-                return null;
-            }
-        };
-        Mechanism.prototype.getParameterValue = function (key) {
-            var parameter = this.getParameter(key);
-            if (parameter == null || !parameter.hasOwnProperty('value')) {
-                return null;
-            }
-            else {
-                return parameter.value;
-            }
-        };
         return Mechanism;
     }());
     exports.Mechanism = Mechanism;
+    mixin_helper_1.applyMixins(Mechanism, [parameterizable_1.Parameterizable]);
 });
 //# sourceMappingURL=mechanism.js.map

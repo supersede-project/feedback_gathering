@@ -1,8 +1,13 @@
 import {ParameterInterface} from '../parameters/parameter_interface';
-import {Parameter} from '../parameters/parameter';
+import {Parameterizable} from '../mixins/parameterizable';
+import {applyMixins} from '../../js/helpers/mixin_helper';
 
 
-export class Mechanism {
+/**
+ * Base class for the mechanisms. Note that this class is extended by the Parameterizable mixin to provide methods on a
+ * parameter array field.
+ */
+export class Mechanism implements Parameterizable {
     id:number;
     type:string;
     active:boolean;
@@ -19,33 +24,8 @@ export class Mechanism {
         this.parameters = parameters;
     }
 
-    /**
-     * @param key
-     *  The key of the key value pair of a parameter object
-     * @returns {any}
-     *  The parameter object, containing the value and further data
-     */
-    getParameter(key:string): Parameter {
-        var filteredArray = this.parameters.filter(parameter => parameter.key === key);
-        if(filteredArray.length > 0) {
-            return filteredArray[0];
-        } else {
-            return null;
-        }
-    }
-
-    /**
-     * @param key
-     *  The key of the key value pair of a parameter object
-     * @returns any
-     *  The parameter value or null
-     */
-    getParameterValue(key:string): any {
-        var parameter = this.getParameter(key);
-        if(parameter == null || !parameter.hasOwnProperty('value')) {
-            return null;
-        } else {
-            return parameter.value
-        }
-    }
+    getParameter: (key:string) => ParameterInterface;
+    getParameterValue: (key:string) => any;
 }
+
+applyMixins(Mechanism, [Parameterizable]);
