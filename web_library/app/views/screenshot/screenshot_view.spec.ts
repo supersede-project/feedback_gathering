@@ -6,6 +6,7 @@ import {Mechanism} from '../../models/mechanisms/mechanism';
 
 describe('Screenshot View', () => {
     let screenshotView:ScreenshotView;
+    let container:JQuery;
     let $ = $j;
 
     beforeEach(() => {
@@ -15,21 +16,21 @@ describe('Screenshot View', () => {
             '<div class="hide-1">hide</div><span id="hide2">not part of screenshot</span></div>' +
             '' +
             '{{#if screenshotMechanism.active}}' +
-            '<section class="feedback-mechanism horizontal" id="screenshotType">' +
+            '<section id="container" class="feedback-mechanism horizontal screenshot-type">' +
             '<article class="col col-left">' +
-                '<button id="takeScreenshot" class="button small">take screenshot</button>' +
+                '<button class="take-screenshot button small">take screenshot</button>' +
             '<div class="screenshot-operations">' +
-            '<button id="screenshotDrawRect" class="screenshot-operation active">rectangle</button>' +
-            '<button id="screenshotDrawFillRect" class="screenshot-operation">blacken</button>' +
-            '<button id="screenshotDrawCircle" class="screenshot-operation">circle</button>' +
-            '<button id="screenshotDrawArrow" class="screenshot-operation">arrow</button>' +
-            '<button id="screenshotDrawFreehand" class="screenshot-operation">freehand</button>' +
-            '<button id="screenshotCrop" class="screenshot-operation">crop</button>' +
-            '<button id="screenshotDrawUndo" class="screenshot-operation">undo</button>' +
-            '<button id="screenshotDrawRemove" class="screenshot-operation">remove</button>' +
+            '<button class="screenshot-operation active screenshot-draw-rect">rectangle</button>' +
+            '<button class="screenshot-operation screenshot-draw-fill-rect">blacken</button>' +
+            '<button class="screenshot-operation screenshot-draw-circle">circle</button>' +
+            '<button class="screenshot-operation screenshot-draw-arrow">arrow</button>' +
+            '<button class="screenshot-operation screenshot-draw-freehand">freehand</button>' +
+            '<button class="screenshot-operation screenshot-crop">crop</button>' +
+            '<button class="screenshot-operation screenshot-draw-undo">undo</button>' +
+            '<button class="screenshot-operation screenshot-draw-remove">remove</button>' +
             '</div>' +
             '</article>' +
-        '<div id="screenshotPreview" class="col col-right">' +
+        '<div class="screenshot-preview col col-right">' +
             '</div>' +
             '<div class="clearfix"></div>' +
             '</section>' +
@@ -40,17 +41,19 @@ describe('Screenshot View', () => {
         var html = template(context);
         $('body').append(html);
 
-        var screenshotPreviewElement = $('#screenshotPreview');
-        var screenshotCaptureButton = $('#takeScreenshot');
+        container = $('#container');
+
+        var screenshotPreviewElement = container.find('.screenshot-preview');
+        var screenshotCaptureButton = container.find('.take-screenshot');
         var elementToCapture = $('#capture');
 
         screenshotView = new ScreenshotView(screenshotMechanism, screenshotPreviewElement, screenshotCaptureButton,
-            elementToCapture, [$('.hide-1'), $('#hide2')]);
+            elementToCapture, container, [$('.hide-1'), $('#hide2')]);
     });
 
     it('should find the required elements in the html', () => {
         expect(screenshotView.screenshotCaptureButton).toBeDefined();
-        expect(screenshotView.screenshotCaptureButton.attr('id')).toEqual('takeScreenshot');
+        expect(screenshotView.screenshotCaptureButton.attr('class')).toEqual('take-screenshot button small');
 
         expect(screenshotView.screenshotPreviewElement).toBeDefined();
         expect(screenshotView.elementToCapture).toBeDefined();
@@ -105,7 +108,7 @@ describe('Screenshot View', () => {
         expect(screenshotView.screenshotPreviewElement.css('display')).toBe('none');
         expect(screenshotView.screenshotCanvas).toBeNull();
         expect($('.screenshot-operations').css('display')).toBe('none');
-        expect($('#screenshotDrawRect').hasClass('active')).toBeTruthy();
+        expect(container.find('.screenshot-draw-rect').hasClass('active')).toBeTruthy();
         expect(screenshotView.drawingMode).toEqual('rectDrawingMode');
     });
 

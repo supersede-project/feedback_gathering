@@ -3,6 +3,7 @@ import {Mechanism} from '../mechanisms/mechanism';
 import {Configuration} from './configuration';
 import {Parameterizable} from '../mixins/parameterizable';
 import {applyMixins} from '../../js/helpers/mixin_helper';
+import {MechanismFactory} from '../mechanisms/mechanism_factory';
 
 
 /**
@@ -22,7 +23,11 @@ export class PullConfiguration extends Configuration implements Parameterizable 
     }
 
     static initByData(data:any) {
-        return new PullConfiguration(data.id, data.mechanisms, data.active, data.parameters);
+        var mechanisms = [];
+        for(var mechanism of data.mechanisms) {
+            mechanisms.push(MechanismFactory.createByData(mechanism));
+        }
+        return new PullConfiguration(data.id, mechanisms, data.active, data.parameters);
     }
 
     getParameter: (key:string) => ParameterInterface;

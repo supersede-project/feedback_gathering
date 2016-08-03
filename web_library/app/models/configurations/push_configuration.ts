@@ -2,6 +2,7 @@ import {PullConfiguration} from './pull_configuration';
 import {ParameterInterface} from '../parameters/parameter_interface';
 import {Mechanism} from '../mechanisms/mechanism';
 import {Configuration} from './configuration';
+import {MechanismFactory} from '../mechanisms/mechanism_factory';
 
 
 /**
@@ -19,7 +20,11 @@ export class PushConfiguration extends Configuration {
     }
 
     static initByData(data:any) {
-        return new PushConfiguration(data.id, data.mechanisms, data.general_configurations, data.pull_configurations);
+        var mechanisms = [];
+        for(var mechanism of data.mechanisms) {
+            mechanisms.push(MechanismFactory.createByData(mechanism));
+        }
+        return new PushConfiguration(data.id, mechanisms, data.general_configurations, data.pull_configurations);
     }
 }
 

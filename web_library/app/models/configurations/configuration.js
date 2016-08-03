@@ -1,4 +1,4 @@
-define(["require", "exports", '../parameters/parameter_value_property_pair', '../../js/config', '../mechanisms/mechanism_factory'], function (require, exports, parameter_value_property_pair_1, config_1, mechanism_factory_1) {
+define(["require", "exports", '../parameters/parameter_value_property_pair', '../../js/config'], function (require, exports, parameter_value_property_pair_1, config_1) {
     "use strict";
     var Configuration = (function () {
         function Configuration(id, mechanisms) {
@@ -8,7 +8,7 @@ define(["require", "exports", '../parameters/parameter_value_property_pair', '..
         Configuration.prototype.getMechanismConfig = function (mechanismTypeConstant) {
             var filteredArray = this.mechanisms.filter(function (mechanism) { return mechanism.type === mechanismTypeConstant; });
             if (filteredArray.length > 0) {
-                return mechanism_factory_1.MechanismFactory.createByData(filteredArray[0]);
+                return filteredArray[0];
             }
             else {
                 return null;

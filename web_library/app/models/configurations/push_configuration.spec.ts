@@ -4,6 +4,7 @@ import {Mechanism} from '../mechanisms/mechanism';
 import {RatingMechanism} from '../mechanisms/rating_mechanism';
 import {textType} from '../../js/config';
 import {ParameterValuePropertyPair} from '../parameters/parameter_value_property_pair';
+import {ScreenshotMechanism} from '../mechanisms/screenshot_mechanism';
 
 
 describe('PushConfiguration object', () => {
@@ -25,6 +26,21 @@ describe('PushConfiguration object', () => {
 
         var ratingMechanismConfig = configuration.mechanisms[3];
         expect(ratingMechanismConfig.type).toEqual('RATING_TYPE');
+    });
+
+    it('should have typed mechanism objects in its mechanism', () => {
+        expect(configuration.mechanisms.length).toBe(4);
+        var textMechanismConfig = configuration.mechanisms[0];
+        expect(textMechanismConfig.type).toEqual('TEXT_TYPE');
+        expect(textMechanismConfig).toEqual(jasmine.any(Mechanism));
+
+        var ratingMechanismConfig = configuration.mechanisms[3];
+        expect(ratingMechanismConfig.type).toEqual('RATING_TYPE');
+        expect(ratingMechanismConfig).toEqual(jasmine.any(RatingMechanism));
+
+        var screenshotMechanismConfig = configuration.mechanisms[2];
+        expect(screenshotMechanismConfig.type).toEqual('SCREENSHOT_TYPE');
+        expect(screenshotMechanismConfig).toEqual(jasmine.any(ScreenshotMechanism));
     });
 
     it('should return the context for the view with the configuration data', () => {

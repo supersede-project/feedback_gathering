@@ -9,7 +9,7 @@ define(["require", "exports", '../../services/mocks/mocks_loader', './pull_confi
         });
         it('should be an object with a complete pull configuration', function () {
             expect(pullConfiguration.active).toBeTruthy();
-            expect(pullConfiguration.mechanisms.length).toBe(2);
+            expect(pullConfiguration.mechanisms.length).toBe(3);
             var textMechanismConfig = pullConfiguration.mechanisms[0];
             expect(textMechanismConfig.type).toEqual('TEXT_TYPE');
             expect(textMechanismConfig.active).toEqual(true);
@@ -39,7 +39,9 @@ define(["require", "exports", '../../services/mocks/mocks_loader', './pull_confi
                     active: true,
                     title: 'Rate your user experience'
                 },
-                screenshotMechanism: null,
+                screenshotMechanism: {
+                    active: true
+                },
                 dialogId: 'pullConfiguration'
             };
             expect(context).toEqual(expectedContext);
@@ -47,7 +49,7 @@ define(["require", "exports", '../../services/mocks/mocks_loader', './pull_confi
         it('should provide the parameter values', function () {
             var likelihood = pullConfiguration.getParameterValue("likelihood");
             var askOnAppStartup = pullConfiguration.getParameterValue("askOnAppStartup");
-            expect(likelihood).toEqual(0.3);
+            expect(likelihood).toEqual(1.0);
             expect(askOnAppStartup).toEqual(0);
         });
     });

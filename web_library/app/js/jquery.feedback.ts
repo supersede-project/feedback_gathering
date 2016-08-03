@@ -2,7 +2,7 @@ import './lib/jquery.star-rating-svg.js';
 import './jquery.validate.js';
 import {ConfigurationService} from '../services/configuration_service';
 import {
-    apiEndpoint, feedbackPath, configPath, applicationName, defaultSuccessMessage,
+    apiEndpoint, feedbackPath, applicationName, defaultSuccessMessage,
     feedbackObjectTitle, dialogOptions, textType, ratingType, screenshotType
 } from './config';
 import {PaginationContainer} from '../views/pagination_container';
@@ -10,22 +10,24 @@ import {ScreenshotView} from '../views/screenshot/screenshot_view';
 import {I18nHelper} from './helpers/i18n';
 import i18n = require('i18next');
 import {MockBackend} from '../services/backends/mock_backend';
-import {Mechanism} from '../models/mechanisms/mechanism';
 import {RatingMechanism} from '../models/mechanisms/rating_mechanism';
 import {PullConfiguration} from '../models/configurations/pull_configuration';
 import {Feedback} from '../models/feedbacks/feedback';
 import {Rating} from '../models/feedbacks/rating';
-
+import {PageNavigation} from './helpers/page_navigation';
+import {PushConfiguration} from '../models/configurations/push_configuration';
+import {ConfigurationInterface} from '../models/configurations/configuration_interface';
 
 
 export var feedbackPluginModule = function ($, window, document) {
     var dialog;
+    var pushConfigurationDialogId = "pushConfiguration";
     var pullDialog;
+    var pullConfigurationDialogId = "pullConfiguration";
     var active = false;
-    var textMechanism:Mechanism;
-    var ratingMechanism:RatingMechanism;
-    var screenshotMechanism:Mechanism;
-    var screenshotView:ScreenshotView;
+    var pushConfiguration:PushConfiguration;
+    // TODO if there are more than 1 possible pull configurations this needs to get extended
+    var pullConfiguration:PullConfiguration;
     var dialogTemplate = require('../templates/feedback_dialog.handlebars');
     var pullDialogTemplate = require('../templates/feedback_dialog.handlebars');
     var mockData = require('json!../services/mocks/configurations_mock.json');
@@ -41,12 +43,13 @@ export var feedbackPluginModule = function ($, window, document) {
      * All events on the HTML have to be added after the template is appended to the body (if not using live binding).
      */
     var initMechanisms = function (configuration) {
-        textMechanism = configuration.getMechanismConfig(textType);
-        ratingMechanism = configuration.getMechanismConfig(ratingType);
-        screenshotMechanism = configuration.getMechanismConfig(screenshotType);
-        $('#serverResponse').removeClass().text('');
+        pushConfiguration = configuration;
+        $('.server-response').removeClass('error').removeClass('success').text('');
         var context = configuration.getContextForView();
-        dialog = initTemplate(dialogTemplate, "pushConfiguration", context, screenshotMechanism, textMechanism, ratingMechanism);
+
+        var pageNavigation = new PageNavigation(configuration, $('#' + pushConfigurationDialogId));
+
+        dialog = initTemplate(dialogTemplate, pushConfigurationDialogId, context, pushConfiguration, pageNavigation);
     };
 
     /**
@@ -54,31 +57,31 @@ export var feedbackPluginModule = function ($, window, document) {
      *
      * @param configuration
      */
-    var initPullConfiguration = function(configuration) {
-        var pullConfiguration:PullConfiguration = PullConfiguration.initByData(configuration.pull_configurations[0]);
-        textMechanism = pullConfiguration.getMechanismConfig(textType);
-        ratingMechanism = pullConfiguration.getMechanismConfig(ratingType);
-        screenshotMechanism = pullConfiguration.getMechanismConfig(screenshotType);
-        $('#serverResponse').removeClass().text('');
+    var initPullConfiguration = function(configuration:PullConfiguration) {
+        pullConfiguration = configuration;
+        $('.server-response').removeClass('error').removeClass('success').text('');
+
+        var pageNavigation = new PageNavigation(pullConfiguration, $('#' + pullConfigurationDialogId));
 
         if(pullConfiguration.shouldGetTriggered()) {
             var context = pullConfiguration.getContextForView();
-            pullDialog = initTemplate(pullDialogTemplate, "pullConfiguration", context, screenshotMechanism, textMechanism, ratingMechanism);
+            pullDialog = initTemplate(pullDialogTemplate, pullConfigurationDialogId, context, pullConfiguration, pageNavigation);
             pullDialog.dialog('open');
         }
     };
 
-    var initTemplate = function (template, dialogId, context, screenshotMechanism, textMechanism, ratingMechanism): HTMLElement {
+    var initTemplate = function (template, dialogId, context, configuration, pageNavigation): HTMLElement {
         var html = template(context);
         $('body').append(html);
 
         // after template is loaded
-        new PaginationContainer($('#feedbackContainer .pages-container'), pageForwardCallback);
-        initRating(".rating-input", ratingMechanism);
-        initScreenshot(screenshotMechanism);
+        new PaginationContainer($('#' + dialogId + '.feedback-container .pages-container'), pageNavigation);
+        initRating("#" + dialogId + " .rating-input", configuration.getMechanismConfig(ratingType));
+        var screenshotView = initScreenshot(configuration.getMechanismConfig(screenshotType), dialogId);
 
-        var dialog = initDialog($('#'+ dialogId), textMechanism);
-        addEvents(textMechanism);
+        var dialog = initDialog($('#'+ dialogId), configuration.getMechanismConfig(textType));
+        addEvents(dialogId, configuration);
+        pageNavigation.screenshotView = screenshotView;
         return dialog;
     };
 
@@ -88,7 +91,10 @@ export var feedbackPluginModule = function ($, window, document) {
      * Then an AJAX request is done to send the submitted feedback to the feedback repository. A success or failure
      * message is shown after the request is done.
      */
-    var sendFeedback = function (formData:FormData) {
+    var sendFeedback = function (formData:FormData, configuration:ConfigurationInterface) {
+        var screenshotView = configuration.getMechanismConfig(screenshotType).screenshotView;
+        var ratingMechanism = configuration.getMechanismConfig(ratingType);
+
         $.ajax({
             url: apiEndpoint + feedbackPath,
             type: 'POST',
@@ -96,13 +102,13 @@ export var feedbackPluginModule = function ($, window, document) {
             processData: false,
             contentType: false,
             success: function (data) {
-                $('#serverResponse').addClass('success').text(defaultSuccessMessage);
-                $('textarea#textTypeText').val('');
+                $('.server-response').addClass('success').text(defaultSuccessMessage);
+                $('textarea.text-type-text').val('');
                 screenshotView.reset();
                 initRating(".rating-input", ratingMechanism);
             },
             error: function (data) {
-                $('#serverResponse').addClass('error').text('Failure: ' + JSON.stringify(data));
+                $('.server-response').addClass('error').text('Failure: ' + JSON.stringify(data));
             }
         });
     };
@@ -122,13 +128,23 @@ export var feedbackPluginModule = function ($, window, document) {
         $('' + selector + ' .jq-star:nth-child(' + ratingMechanism.initialRating + ')').click();
     };
 
-    var initScreenshot = function (screenshotMechanism):void {
-        var screenshotPreview = $('#screenshotPreview'),
-            screenshotCaptureButton = $('button#takeScreenshot'),
+    var initScreenshot = function (screenshotMechanism, containerId): ScreenshotView {
+        if(screenshotMechanism == null) {
+            return;
+        }
+        var container = $('#' + containerId);
+        var dialogSelector = $('[aria-describedby="' + containerId + '"]');
+
+        var screenshotPreview = container.find('.screenshot-preview'),
+            screenshotCaptureButton = container.find('button.take-screenshot'),
             elementToCapture = $('#page-wrapper_1'),
-            elementsToHide = [$('.ui-widget-overlay.ui-front'), $('.ui-dialog')];
-        screenshotView = new ScreenshotView(screenshotMechanism, screenshotPreview, screenshotCaptureButton,
-            elementToCapture, elementsToHide)
+            elementsToHide = [$('.ui-widget-overlay.ui-front'), dialogSelector];
+        // TODO attention: circular dependency
+        var screenshotView = new ScreenshotView(screenshotMechanism, screenshotPreview, screenshotCaptureButton,
+            elementToCapture, container, elementsToHide);
+
+        screenshotMechanism.setScreenshotView(screenshotView);
+        return screenshotView;
     };
 
     /**
@@ -139,6 +155,7 @@ export var feedbackPluginModule = function ($, window, document) {
      *
      * Initializes the dialog on a given element and opens it.
      */
+    // TODO extract the dialog to another module
     var initDialog = function (dialogContainer, textMechanism) {
         var dialogObject = dialogContainer.dialog(
             $.extend({}, dialogOptions, {
@@ -153,37 +170,41 @@ export var feedbackPluginModule = function ($, window, document) {
     };
 
     /**
-     * @param textMechanism
-     *  PushConfiguration data for the text mechanism
+     * @param containerId
+     *  The ID of the surrounding element that contains the feedback mechanisms
+     * @param configuration
+     *  Configuration used to set the events
      *
      * Adds the following events:
      * - Send event for the feedback form
      * - Character count event for the text mechanism
      */
-    var addEvents = function (textMechanism) {
-        var textarea = $('textarea#textTypeText');
+    var addEvents = function (containerId, configuration:ConfigurationInterface) {
+        var container = $('#' + containerId);
+        var textarea = container.find('textarea.text-type-text');
+        var textMechanism = configuration.getMechanismConfig(textType);
 
         // send
-        $('button#submitFeedback').unbind().on('click', function (event) {
+        container.find('button.submit-feedback').unbind().on('click', function (event) {
             event.preventDefault();
             event.stopPropagation();
 
             // validate anyway before sending
             textarea.validate();
             if (!textarea.hasClass('invalid')) {
-                var formData = prepareFormData();
-                sendFeedback(formData);
+                var formData = prepareFormData(container, configuration);
+                sendFeedback(formData, configuration);
             }
         });
 
         // character length
         var maxLength = textMechanism.getParameter('maxLength').value;
         textarea.on('keyup focus', function () {
-            $('span#textTypeMaxLength').text($(this).val().length + '/' + maxLength);
+            container.find('span.text-type-max-length').text($(this).val().length + '/' + maxLength);
         });
 
         // text clear button
-        $('#textTypeTextClear').on('click', function (event) {
+        container.find('.text-type-text-clear').on('click', function (event) {
             event.preventDefault();
             event.stopPropagation();
             textarea.val('');
@@ -191,55 +212,30 @@ export var feedbackPluginModule = function ($, window, document) {
     };
 
     /**
-     *
-     * @param currentPage
-     * @param nextPage
-     * @returns {boolean}
-     *  indicates whether the navigation forward should happen (true) or not (false)
-     */
-    var pageForwardCallback = function (currentPage, nextPage) {
-        currentPage.find('.validate').each(function () {
-            $(this).validate();
-        });
-        if (currentPage.find('.invalid').length > 0 && currentPage.find('.validate[data-mandatory-validate-on-skip="1"]').length > 0) {
-            return false;
-        }
-        if (nextPage.find('#textReview').length > 0 && textMechanism.active) {
-            nextPage.find('#textReview').text($('textarea#textTypeText').val());
-        }
-        if (nextPage.find('#ratingReview').length > 0 && ratingMechanism.active) {
-            nextPage.find('#ratingReview').text(i18n.t('rating.review_title') + ": " + ratingMechanism.currentRatingValue + " / " + ratingMechanism.getParameterValue("maxRating"));
-        }
-        if (nextPage.find('#screenshotReview').length > 0 && screenshotMechanism.active && screenshotView.screenshotCanvas != null) {
-            var img = $('<img src="' + screenshotView.screenshotCanvas.toDataURL() + '" />');
-            img.css('max-width', '20%');
-            $('#screenshotReview').empty().append(img);
-        }
-        return true;
-    };
-
-    /**
      * Creates the multipart form data containing the data of the active mechanisms.
      *
      * @returns {FormData}
      */
-    var prepareFormData = function ():FormData {
+    var prepareFormData = function (container:JQuery, configuration:ConfigurationInterface):FormData {
         var formData = new FormData();
+        var textMechanism = configuration.getMechanismConfig(textType);
+        var ratingMechanism = configuration.getMechanismConfig(ratingType);
+        var screenshotMechanism = configuration.getMechanismConfig(screenshotType);
 
-        $('#serverResponse').removeClass();
+        container.find('.server-response').removeClass('error').removeClass('success');
         var feedbackObject = new Feedback(feedbackObjectTitle, applicationName, "uid12345", null, 1.0, null);
 
         if (textMechanism.active) {
-            feedbackObject.text = $('textarea#textTypeText').val();
+            feedbackObject.text = container.find('textarea.text-type-text').val();
         }
         if (ratingMechanism.active) {
-            var ratingTitle = $('.rating-text').text().trim();
+            var ratingTitle = container.find('.rating-text').text().trim();
             var rating = new Rating(ratingTitle, ratingMechanism.currentRatingValue);
             feedbackObject.ratings = [];
             feedbackObject.ratings.push(rating);
         }
-        if (screenshotMechanism.active && screenshotView.getScreenshotAsBinary() !== null) {
-            formData.append('file', screenshotView.getScreenshotAsBinary());
+        if (screenshotMechanism.active && screenshotMechanism.screenshotView.getScreenshotAsBinary() !== null) {
+            formData.append('file', screenshotMechanism.screenshotView.getScreenshotAsBinary());
         }
 
         formData.append('json', JSON.stringify(feedbackObject));
@@ -282,7 +278,11 @@ export var feedbackPluginModule = function ($, window, document) {
         var configurationService = new ConfigurationService(new MockBackend(mockData));
         configurationService.retrieveConfiguration(function (configuration) {
             initMechanisms(configuration);
-            initPullConfiguration(configuration);
+            // TODO handle more than 1 pull configurations
+            if(configuration.pull_configurations.length > 0) {
+                var pullConfiguration:PullConfiguration = PullConfiguration.initByData(configuration.pull_configurations[0]);
+                initPullConfiguration(pullConfiguration);
+            }
         });
 
         this.css('background-color', currentOptions.backgroundColor);

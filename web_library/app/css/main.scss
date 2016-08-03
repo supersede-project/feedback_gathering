@@ -27,7 +27,7 @@
   box-shadow: $feedbackEntryPointBoxShadow;
 }
 
-#feedbackContainer {
+.feedback-container {
   display: none;
   min-width: 1000px;
   max-width: 1000px;
@@ -66,7 +66,7 @@
   }
 }
 
-textarea#textTypeText {
+textarea.text-type-text {
   width: 100%;
   min-width: 100%;
   border: 1px solid #4d4d4d;
@@ -181,30 +181,17 @@ section.dialog-navigation {
   clear: both;
 }
 
-#feedbackPrivacy {
-  font-size: 15px;
-  margin: 4px 0;
-
-  fieldset {
-    border: none;
-
-    p {
-      margin: 4px 0;
-    }
-  }
-}
-
 .mechanism-review {
   font-style: italic;
 }
 
-#serverResponse {
+.server-response {
   display: block;
   margin-top: 20px;
   margin-bottom: 5px;
 }
 
-#serverResponse.success {
+.server-response.success {
   background-color: #dff0d8;
   color: #3c763d;
   border: 1px solid #d0e9c6;
@@ -212,7 +199,7 @@ section.dialog-navigation {
   padding: 15px;
 }
 
-#serverResponse.error {
+.server-response.error {
   background-color: #f2dede;
   color: #a94442;
   border: 1px solid #ebcccc;
@@ -224,7 +211,7 @@ p.textarea-bottom {
   margin-top: 2px;
 }
 
-button#textTypeTextClear {
+button.text-type-text-clear {
   background: none;
   margin: 2px;
   padding: 0;
@@ -235,7 +222,7 @@ button#textTypeTextClear {
   }
 }
 
-#textTypeMaxLength {
+.text-type-max-length {
   font-size: 14px;
   color: #4b4a4c;
   width: auto;
@@ -249,7 +236,7 @@ button#textTypeTextClear {
   font-size: 13px;
 }
 
-#screenshotPreview {
+.screenshot-preview {
   border: 1px solid #393939;
   height: auto;
   display: none;

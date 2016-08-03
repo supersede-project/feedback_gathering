@@ -1,6 +1,5 @@
 define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/data_helper', '../../js/lib/html2canvas.js'], function (require, exports, screenshot_view_drawing_1, data_helper_1) {
     "use strict";
-    var myThis;
     var freehandDrawingMode = 'freehandDrawingMode';
     var rectDrawingMode = 'rectDrawingMode';
     var fillRectDrawingMode = 'fillRectDrawingMode';
@@ -10,12 +9,12 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
     var black = "#000000";
     var red = "#FF0000";
     var ScreenshotView = (function () {
-        function ScreenshotView(screenshotMechanism, screenshotPreviewElement, screenshotCaptureButton, elementToCapture, elementsToHide) {
-            myThis = this;
+        function ScreenshotView(screenshotMechanism, screenshotPreviewElement, screenshotCaptureButton, elementToCapture, container, elementsToHide) {
             this.screenshotMechanism = screenshotMechanism;
             this.screenshotPreviewElement = screenshotPreviewElement;
             this.screenshotCaptureButton = screenshotCaptureButton;
             this.elementToCapture = elementToCapture;
+            this.container = container;
             this.elementsToHide = elementsToHide;
             this.canvasState = null;
             this.canvasStates = [];
@@ -24,6 +23,7 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
         }
         ScreenshotView.prototype.generateScreenshot = function () {
             this.hideElements();
+            var myThis = this;
             html2canvas(this.elementToCapture, {
                 onrendered: function (canvas) {
                     myThis.showElements();
@@ -87,6 +87,7 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
             this.isPainting = false;
             this.drawingMode = rectDrawingMode;
             this.context.strokeStyle = red;
+            var myThis = this;
             jQuery(this.screenshotCanvas).on('mousedown touchstart', function (event) {
                 var parentOffset = jQuery(this).parent().offset();
                 myThis.startX = event.pageX - parentOffset.left;
@@ -187,9 +188,9 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
             }
             this.screenshotCanvas = null;
             this.canvasStates = [];
-            jQuery('.screenshot-operations').hide();
+            this.container.find('.screenshot-operations').hide();
             this.disableAllScreenshotOperations();
-            jQuery('#screenshotDrawRect').addClass('active');
+            this.container.find('.screenshot-draw-rect').addClass('active');
             this.drawingMode = rectDrawingMode;
         };
         ScreenshotView.prototype.draw_arrow = function (context, fromx, fromy, tox, toy) {
@@ -217,7 +218,8 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
             this.context.drawImage(this.canvasState, 0, 0, this.canvasState.width, this.canvasState.height, 0, 0, this.screenshotCanvas.width, this.screenshotCanvas.height);
         };
         ScreenshotView.prototype.initScreenshotOperations = function () {
-            jQuery('#screenshotDrawRect').on('click', function (event) {
+            var myThis = this;
+            this.container.find('.screenshot-draw-rect').on('click', function (event) {
                 event.preventDefault();
                 event.stopPropagation();
                 myThis.disableAllScreenshotOperations();
@@ -227,7 +229,7 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
                 myThis.context.fillStyle = red;
                 myThis.context.setLineDash([0, 0]);
             });
-            jQuery('#screenshotDrawFillRect').on('click', function (event) {
+            this.container.find('.screenshot-draw-fill-rect').on('click', function (event) {
                 event.preventDefault();
                 event.stopPropagation();
                 myThis.disableAllScreenshotOperations();
@@ -237,7 +239,7 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
                 myThis.context.fillStyle = black;
                 myThis.context.setLineDash([0, 0]);
             });
-            jQuery('#screenshotDrawCircle').on('click', function (event) {
+            this.container.find('.screenshot-draw-circle').on('click', function (event) {
                 event.preventDefault();
                 event.stopPropagation();
                 myThis.disableAllScreenshotOperations();
@@ -247,7 +249,7 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
                 myThis.context.fillStyle = red;
                 myThis.context.setLineDash([0, 0]);
             });
-            jQuery('#screenshotDrawArrow').on('click', function (event) {
+            this.container.find('.screenshot-draw-arrow').on('click', function (event) {
                 event.preventDefault();
                 event.stopPropagation();
                 myThis.disableAllScreenshotOperations();
@@ -257,7 +259,7 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
                 myThis.context.fillStyle = red;
                 myThis.context.setLineDash([0, 0]);
             });
-            jQuery('#screenshotDrawFreehand').on('click', function (event) {
+            this.container.find('.screenshot-draw-freehand').on('click', function (event) {
                 event.preventDefault();
                 event.stopPropagation();
                 myThis.disableAllScreenshotOperations();
@@ -267,7 +269,7 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
                 myThis.context.fillStyle = red;
                 myThis.context.setLineDash([0, 0]);
             });
-            jQuery('#screenshotCrop').on('click', function (event) {
+            this.container.find('.screenshot-crop').on('click', function (event) {
                 event.preventDefault();
                 event.stopPropagation();
                 myThis.disableAllScreenshotOperations();
@@ -277,20 +279,20 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
                 myThis.context.fillStyle = black;
                 myThis.context.setLineDash([3, 8]);
             });
-            jQuery('#screenshotDrawUndo').on('click', function (event) {
+            this.container.find('.screenshot-draw-undo').on('click', function (event) {
                 event.preventDefault();
                 event.stopPropagation();
                 myThis.undoOperation();
             });
-            jQuery('#screenshotDrawRemove').on('click', function (event) {
+            this.container.find('.screenshot-draw-remove').on('click', function (event) {
                 event.preventDefault();
                 event.stopPropagation();
                 myThis.reset();
             });
-            jQuery('.screenshot-operations').show();
+            this.container.find('.screenshot-operations').show();
         };
         ScreenshotView.prototype.disableAllScreenshotOperations = function () {
-            jQuery('button.screenshot-operation').removeClass('active');
+            this.container.find('button.screenshot-operation').removeClass('active');
         };
         return ScreenshotView;
     }());

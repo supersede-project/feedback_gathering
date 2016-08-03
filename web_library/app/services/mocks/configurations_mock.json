@@ -16,7 +16,7 @@
           {
             "id": 2,
             "key": "likelihood",
-            "value": 0.3
+            "value": 0.4
           },
           {
             "key": "askOnAppStartup",
@@ -36,7 +36,7 @@
               },
               {
                 "key": "title",
-                "value": "Feedback"
+                "value": "Feedback Pull"
               },
               {
                 "key": "hint",
@@ -131,6 +131,24 @@
                 "value": 2,
                 "editableByUser": false,
                 "defaultValue": 0
+              }
+            ]
+          },
+          {
+            "type": "SCREENSHOT_TYPE",
+            "active": true,
+            "order": 3,
+            "canBeActivated": false,
+            "parameters": [
+              {
+                "key": "title",
+                "value": "Title for screenshot feedback"
+              },
+              {
+                "key": "defaultPicture",
+                "value": "lastScreenshot",
+                "defaultValue": "noImage",
+                "editableByUser": true
               }
             ]
           }

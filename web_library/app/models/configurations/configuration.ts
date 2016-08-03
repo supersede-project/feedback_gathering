@@ -21,10 +21,10 @@ export abstract class Configuration implements ConfigurationInterface {
      * @returns Mechanism
      *  The mechanism object with all its configuration data if the mechanism was found in the data, otherwise null.
      */
-    getMechanismConfig(mechanismTypeConstant:string): any {
+    getMechanismConfig(mechanismTypeConstant:string): Mechanism {
         var filteredArray = this.mechanisms.filter(mechanism => mechanism.type === mechanismTypeConstant);
         if(filteredArray.length > 0) {
-            return MechanismFactory.createByData(filteredArray[0]);
+            return filteredArray[0];
         } else {
             return null;
         }

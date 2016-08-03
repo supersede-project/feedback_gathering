@@ -1,4 +1,4 @@
-define(["require", "exports", './push_configuration', '../../services/mocks/mocks_loader', '../mechanisms/mechanism', '../mechanisms/rating_mechanism', '../../js/config', '../parameters/parameter_value_property_pair'], function (require, exports, push_configuration_1, mocks_loader_1, mechanism_1, rating_mechanism_1, config_1, parameter_value_property_pair_1) {
+define(["require", "exports", './push_configuration', '../../services/mocks/mocks_loader', '../mechanisms/mechanism', '../mechanisms/rating_mechanism', '../../js/config', '../parameters/parameter_value_property_pair', '../mechanisms/screenshot_mechanism'], function (require, exports, push_configuration_1, mocks_loader_1, mechanism_1, rating_mechanism_1, config_1, parameter_value_property_pair_1, screenshot_mechanism_1) {
     "use strict";
     describe('PushConfiguration object', function () {
         var configuration;
@@ -16,6 +16,18 @@ define(["require", "exports", './push_configuration', '../../services/mocks/mock
             expect(textMechanismConfig.canBeActivated).toEqual(false);
             var ratingMechanismConfig = configuration.mechanisms[3];
             expect(ratingMechanismConfig.type).toEqual('RATING_TYPE');
+        });
+        it('should have typed mechanism objects in its mechanism', function () {
+            expect(configuration.mechanisms.length).toBe(4);
+            var textMechanismConfig = configuration.mechanisms[0];
+            expect(textMechanismConfig.type).toEqual('TEXT_TYPE');
+            expect(textMechanismConfig).toEqual(jasmine.any(mechanism_1.Mechanism));
+            var ratingMechanismConfig = configuration.mechanisms[3];
+            expect(ratingMechanismConfig.type).toEqual('RATING_TYPE');
+            expect(ratingMechanismConfig).toEqual(jasmine.any(rating_mechanism_1.RatingMechanism));
+            var screenshotMechanismConfig = configuration.mechanisms[2];
+            expect(screenshotMechanismConfig.type).toEqual('SCREENSHOT_TYPE');
+            expect(screenshotMechanismConfig).toEqual(jasmine.any(screenshot_mechanism_1.ScreenshotMechanism));
         });
         it('should return the context for the view with the configuration data', function () {
             var context = configuration.getContextForView();

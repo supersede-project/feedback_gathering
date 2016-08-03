@@ -1,6 +1,7 @@
 import {RatingMechanism} from './rating_mechanism';
 import {Mechanism} from './mechanism';
-import {ratingType} from '../../js/config';
+import {ratingType, screenshotType} from '../../js/config';
+import {ScreenshotMechanism} from './screenshot_mechanism';
 
 
 export class MechanismFactory {
@@ -17,6 +18,8 @@ export class MechanismFactory {
         }
         if(data.type === ratingType) {
             return new RatingMechanism(data.id, data.type, data.active, data.order, data.canBeActivated, data.parameters);
+        } else if (data.type === screenshotType) {
+            return new ScreenshotMechanism(data.id, data.type, data.active, data.order, data.canBeActivated, data.parameters);
         } else {
             return new Mechanism(data.id, data.type, data.active, data.order, data.canBeActivated, data.parameters);
         }

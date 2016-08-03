@@ -5,4 +5,6 @@ export interface ConfigurationInterface {
     id:number;
     mechanisms:Mechanism[];
     dialogId?:string;
+
+    getMechanismConfig(mechanismTypeConstant:string): any;
 }
