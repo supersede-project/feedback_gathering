@@ -3,10 +3,11 @@ package ch.uzh.ifi.feedback.library.transaction;
 import java.io.IOException;
 import java.sql.Connection;  
 import java.sql.DriverManager;
+import java.sql.SQLException;
 
 public class TransactionManager {
 
-    public void withTransaction(Transaction transaction) throws IOException, Exception {
+    public static void withTransaction(Transaction transaction) throws Exception {
 
         Connection dbConnection = createDatabaseConnection();
         dbConnection.setAutoCommit(false);
@@ -20,7 +21,7 @@ public class TransactionManager {
             System.out.println("Committing transaction");
             dbConnection.commit();
 
-        } catch (Exception e) {
+        } catch (SQLException e) {
 
             System.out.println(e.getMessage());
             e.printStackTrace();
@@ -33,7 +34,7 @@ public class TransactionManager {
         }
     }
 
-    public Connection createDatabaseConnection() throws Exception {
+    public static Connection createDatabaseConnection() throws SQLException, ClassNotFoundException {
 
         Class.forName("com.mysql.jdbc.Driver");
         return DriverManager.getConnection("jdbc:mysql://localhost:3306/", "root", "merovinger.1337");

@@ -30,6 +30,7 @@ import org.reflections.util.ClasspathHelper;
 import org.reflections.util.ConfigurationBuilder;
 
 import com.google.gson.JsonSyntaxException;
+import com.google.gson.reflect.TypeToken;
 
 import ch.uzh.ifi.feedback.library.rest.annotations.Controller;
 import ch.uzh.ifi.feedback.library.rest.annotations.DELETE;
@@ -43,17 +44,19 @@ import javassist.NotFoundException;
 
 
 public class RestManager implements IRestManager {
-	
+	/*
 	private Map<UriTemplate, Class<RestController>> _routingMap;
 	private Map<Type, Method> _parsingMap;
+	*/
 	private List<HandlerInfo> _handlers;
 	private Map<Class<? extends ISerializationService<?>>, ISerializationService<?>> _serializationMap;
 	private Map<Class<?>, Method> _parserMap;
 
 	public RestManager() {
-		
+		/*
 		_routingMap = new HashMap<>();
 		_parsingMap = new HashMap<>();
+		*/
 		_serializationMap = new HashMap<>();
 		_handlers = new ArrayList<>();
 		_parserMap = new HashMap<>();
@@ -76,15 +79,29 @@ public class RestManager implements IRestManager {
 					UriTemplate template = UriTemplate.Parse(path);
 					
 					HttpMethod method = HttpMethod.GET;
-					method = m.getAnnotation(POST.class) != null ? method = HttpMethod.POST : HttpMethod.GET;
-					method = m.getAnnotation(PUT.class) != null ? method = HttpMethod.PUT : HttpMethod.GET;
-					method = m.getAnnotation(DELETE.class) != null ? method = HttpMethod.DELETE : HttpMethod.GET;
+					if(m.isAnnotationPresent(POST.class)){
+						method = HttpMethod.POST;
+					}else if(m.isAnnotationPresent(PUT.class))
+					{
+						method = HttpMethod.PUT;
+					}else if(m.isAnnotationPresent(DELETE.class))
+					{
+						method = HttpMethod.DELETE;
+					}
 					
-					final HttpMethod method2 = method;
-					if(_handlers.stream().anyMatch((h) -> h.GetHttpMethod() == method2 && h.getUriTemplate().Match(path) != null))
-						throw new Exception("handler for template " + path + " already registered!");
+					final HttpMethod methodFinal = method;
+					if(_handlers.stream().anyMatch((h) -> h.GetHttpMethod() == methodFinal && h.getUriTemplate().Match(path) != null))
+						throw new Exception("handler for template " + path + " already registered!/n");
+					
+					if(!m.isAnnotationPresent(Serialize.class))
+						throw new Exception("Handler method " + m.getName() + " needs a serialization annotation");
 					
 					HandlerInfo info = new HandlerInfo(m, method, instance, template);
+					
+					Class<? extends ISerializationService<?>> serializerClass = m.getAnnotation(Serialize.class).value();
+					if(!_serializationMap.containsKey(serializerClass))
+						_serializationMap.put(serializerClass, serializerClass.newInstance());
+					info.setSerializationClass(serializerClass);
 					
 					Parameter[] params = m.getParameters();
 					for(int i = 0; i < params.length; i++){
@@ -92,31 +109,19 @@ public class RestManager implements IRestManager {
 							String paramName = params[i].getAnnotation(PathParam.class).value();
 							info.getPathParameters().put(paramName, params[i]);
 						}else if(i < params.length - 1){
-							throw new Exception("No annotation for parameter " + params[i].getName() + " present!");
+							throw new Exception("No annotation for parameter " + params[i].getName() + " present!/n");
 						}else{
 							Class<?> paramClazz = params[i].getType();
-							if(!paramClazz.isAnnotationPresent(Serialize.class))
-								throw new Exception("No SerializationService provided for class " + paramClazz.getName());
 							
-							//Todo:Check return type of serializer
-							Class<? extends ISerializationService<?>> serializerClass = paramClazz.getAnnotation(Serialize.class).value();
-							if(!_serializationMap.containsKey(serializerClass))
-								_serializationMap.put(serializerClass, serializerClass.newInstance());
-							
-							info.setSerializationClass(serializerClass);
+							//Todo:Check return type of serializer to match with parameter type
+							info.setSerializedParameterClass(paramClazz);
 						}
 					}
 					
-					if(info.getSerializationClass() == null){
+					if(info.getSerializedParameterClass() == null){
 						if (!m.getReturnType().equals(Void.TYPE)){
 							Class<?> returnType = m.getReturnType();
-							if(returnType.isAnnotationPresent(Serialize.class)){
-								Class<? extends ISerializationService<?>> serializerClass = returnType.getAnnotation(Serialize.class).value();
-								if(!_serializationMap.containsKey(serializerClass))
-									_serializationMap.put(serializerClass, serializerClass.newInstance());
-								
-								info.setSerializationClass(serializerClass);
-							}
+							info.setSerializedParameterClass(returnType);
 						}
 					}
 					_handlers.add(info);
@@ -149,7 +154,7 @@ public class RestManager implements IRestManager {
 			_parserMap.put(Timestamp.class, Timestamp.class.getMethod("valueOf", String.class));
 		}catch(Exception e){
 			e.printStackTrace();
-			throw e;
+			throw new ServletException(e);
 		}
 	}
 
@@ -165,15 +170,6 @@ public class RestManager implements IRestManager {
 			response.getWriter().append(output);
 			*/
 
-		} catch(NullPointerException ex)
-		{
-			response.setStatus(404);
-			try {
-				response.getWriter().append("Not Found");
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			
 		} catch (Exception ex) {
 			throw new ServletException(ex);
 		}
@@ -183,9 +179,12 @@ public class RestManager implements IRestManager {
 	@Override
 	public void Post(HttpServletRequest request, HttpServletResponse response) throws ServletException {
 		try {
+			InvokeHandler(request, response, HttpMethod.POST);
+			/*
 			RestController controller = GetController(request);
 			Object result = controller.getSerializationService().Deserialize(GetRequestContent(request));
 			controller.Post(request, response, result);
+			*/
 
 		} catch(JsonSyntaxException ex)
 		{
@@ -211,9 +210,11 @@ public class RestManager implements IRestManager {
 	@Override
 	public void Put(HttpServletRequest request, HttpServletResponse response) throws ServletException {
 		try {
+			InvokeHandler(request, response, HttpMethod.PUT);
+			/*
 			IRestController controller = GetController(request);
 			Object result = controller.getSerializationService().Deserialize(GetRequestContent(request));
-			controller.Put(request, response, result);
+			controller.Put(request, response, result);*/
 
 		} catch(NullPointerException ex)
 		{
@@ -234,6 +235,7 @@ public class RestManager implements IRestManager {
 		throw new MethodNotFoundException();
 	}
 
+	/*
 	private Entry<UriTemplate, Class<RestController>> GetClassEntry(String path) {
 	
 		for (Entry<UriTemplate, Class<RestController>> entry : _routingMap.entrySet()) {
@@ -242,7 +244,7 @@ public class RestManager implements IRestManager {
 		}
 
 		return null;
-	}
+	}*/
 	
 	private HandlerInfo GetHandlerEntry(String path, HttpMethod method) {
 		
@@ -270,7 +272,6 @@ public class RestManager implements IRestManager {
 			if(params.containsKey(pathParam.getKey()))
 			{
 				Parameter methodParam = pathParam.getValue();
-				Class<?> type = methodParam.getType();
 				Object parameterObject = _parserMap.get(methodParam.getType()).invoke(null, params.get(pathParam.getKey()));
 				parameters.add(parameterObject);
 			}else{
@@ -278,13 +279,20 @@ public class RestManager implements IRestManager {
 			}
 		}
 		
-		//Todo: Add deserialized parameter for PUT/POST
+		ISerializationService serializer = _serializationMap.get(handler.getSerializationClass());
+		if(method == HttpMethod.POST || method == HttpMethod.PUT){
+			String content = GetRequestContent(request);
+			parameters.add(serializer.Deserialize(content));
+		}
 		
 		Object result = handler.getMethod().invoke(handler.getHandlerInstance(), parameters.toArray());
-		ISerializationService serializer = _serializationMap.get(handler.getSerializationClass());
-		response.getWriter().append(serializer.Serialize(result));
+		
+		if(result != null){
+			response.getWriter().append(serializer.Serialize(result));
+		}
 	}
 	
+	/*
 	private RestController GetController(HttpServletRequest request) throws InstantiationException, IllegalAccessException, NotFoundException, InvocationTargetException, NoSuchMethodException
 	{
 		String path = request.getServletPath();
@@ -296,7 +304,7 @@ public class RestManager implements IRestManager {
 		Class<RestController> controllerClass = classEntry.getValue();
 
 		return controllerClass.newInstance();
-	}
+	}*/
 	
 	private String GetRequestContent(HttpServletRequest request) throws Exception
 	{
@@ -317,6 +325,7 @@ public class RestManager implements IRestManager {
 	    
 	}
 
+	/*
 	private HttpServletRequest SetAttributes(HttpServletRequest request, String path, UriTemplate template)
 	{
 		Map<String, String> params = template.Match(path);
@@ -325,5 +334,5 @@ public class RestManager implements IRestManager {
 		});
 		
 		return request;
-	}
+	}*/
 }

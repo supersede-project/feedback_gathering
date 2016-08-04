@@ -18,7 +18,6 @@ import ch.uzh.ifi.feedback.orchestrator.model.PullConfiguration;
 public class ConfigurationSerializer extends DefaultSerializer<Application> {
 
 	public ConfigurationSerializer(Type serializationType) {
-		super(serializationType);
 	}
 	
 	@Override

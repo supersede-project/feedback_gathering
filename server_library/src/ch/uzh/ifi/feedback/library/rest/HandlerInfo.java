@@ -11,9 +11,14 @@ public class HandlerInfo {
 	private Object handlerInstance;
 	private Map<String, Parameter> pathParameters;
 	private UriTemplate uriTemplate;
-	private Class<? extends ISerializationService> serializationClass;
+	private Class<? extends ISerializationService<?>> serializationClass;
+	private Class<?> serializedParameterClass;
 
-	public HandlerInfo(Method method, HttpMethod httpMethod, Object handlerInstance, UriTemplate template)
+	public HandlerInfo(
+			Method method, 
+			HttpMethod httpMethod, 
+			Object handlerInstance, 
+			UriTemplate template)
 	{
 		this.method = method;
 		this.httpMethod = httpMethod;
@@ -38,11 +43,11 @@ public class HandlerInfo {
 		return pathParameters;
 	}
 
-	public Class<? extends ISerializationService> getSerializationClass() {
+	public Class<? extends ISerializationService<?>> getSerializationClass() {
 		return serializationClass;
 	}
 
-	public void setSerializationClass(Class<? extends ISerializationService> serializationClass) {
+	public void setSerializationClass(Class<? extends ISerializationService<?>> serializationClass) {
 		this.serializationClass = serializationClass;
 	}
 
@@ -52,5 +57,13 @@ public class HandlerInfo {
 
 	public void setUriTemplate(UriTemplate uriTemplate) {
 		this.uriTemplate = uriTemplate;
+	}
+
+	public Class<?> getSerializedParameterClass() {
+		return serializedParameterClass;
+	}
+
+	public void setSerializedParameterClass(Class<?> serializedParameterClass) {
+		this.serializedParameterClass = serializedParameterClass;
 	}
 }

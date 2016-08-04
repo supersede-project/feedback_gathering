@@ -8,7 +8,7 @@ import java.lang.annotation.Target;
 import ch.uzh.ifi.feedback.library.rest.ISerializationService;
 
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.TYPE)
+@Target(ElementType.METHOD)
 public @interface Serialize {
 	public Class<? extends ISerializationService<?>> value();
 }

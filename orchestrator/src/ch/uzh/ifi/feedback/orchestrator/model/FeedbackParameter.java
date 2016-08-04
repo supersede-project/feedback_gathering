@@ -5,7 +5,6 @@ import java.sql.Timestamp;
 import ch.uzh.ifi.feedback.library.rest.annotations.Serialize;
 import ch.uzh.ifi.feedback.orchestrator.serialization.ParameterSerializationService;
 
-@Serialize(ParameterSerializationService.class)
 public class FeedbackParameter {
 	
 	private String key;

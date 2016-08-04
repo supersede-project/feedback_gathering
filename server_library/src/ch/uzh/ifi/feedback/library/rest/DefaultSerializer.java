@@ -1,5 +1,6 @@
 package ch.uzh.ifi.feedback.library.rest;
 
+import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,8 +15,8 @@ public class DefaultSerializer<T> implements ISerializationService<T> {
 
 	private Type serializationType;
 	
-	public DefaultSerializer(Type serializationType) {
-		this.serializationType = serializationType;
+	public DefaultSerializer() {
+		setSerializationType();
 	}
 	
 	@Override
@@ -30,11 +31,23 @@ public class DefaultSerializer<T> implements ISerializationService<T> {
 	@Override
 	public T Deserialize(String data) {
 		
-		TypeToken token = new TypeToken<T>() {};
 		Gson gson = new GsonBuilder().setPrettyPrinting().setDateFormat("yyyy-MM-dd hh:mm:ss.S").create();
-		T requestObject = gson.fromJson(data, token.getType());
+		T requestObject = gson.fromJson(data, serializationType);
 
 		return requestObject;
+	}
+	
+	private void setSerializationType()
+	{
+		Type superclass = this.getClass().getGenericSuperclass();
+		serializationType = ((ParameterizedType)superclass).getActualTypeArguments()[0];
+		
+		while(superclass instanceof ParameterizedType)
+		{
+			superclass = ((ParameterizedType)superclass).getActualTypeArguments()[0];
+		}
+		
+		//parameterType = (Class<?>)(superclass);
 	}
 
 }

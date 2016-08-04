@@ -4,19 +4,23 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Queue;
 import java.util.Set;
 
 
 public class UriTemplate {
 	
-	private Map<TemplatePart, String> _map;
+	private List<TemplateEntry> _entries;
+	private String _path;
 	
-	private UriTemplate(Map<TemplatePart, String> map)
+	private UriTemplate(List<TemplateEntry> entries, String path)
 	{
-		_map = map;
+		_entries = entries;
+		_path = path;
 	}
 	
 	public Map<String, String> Match(String path)
@@ -32,23 +36,21 @@ public class UriTemplate {
 			validParts.add(part);
 		}
 		
-		if(validParts.size() != _map.size())
+		if(validParts.size() != _entries.size())
 			return null;
 		
 		Map<String, String> variables = new HashMap<>();
-		Set<Entry<TemplatePart, String>> set = _map.entrySet();
-		Iterator<Entry<TemplatePart, String>> iterator = set.iterator();
 		
-		for(String part : validParts){
+		for(int i = 0; i < validParts.size(); ++i){
 			
-			Entry<TemplatePart, String> entry = iterator.next();
+			String part = validParts.get(i);
+			TemplateEntry entry = _entries.get(i);
 			String value = entry.getValue();
-			if(entry.getKey().equals(TemplatePart.Literal) && !part.equals(value))
+			if(entry.getTemplatePart().equals(TemplatePart.Literal) && !part.equals(value))
 				return null;
 			
-			if(entry.getKey().equals(TemplatePart.Variable))
+			if(entry.getTemplatePart().equals(TemplatePart.Variable))
 				variables.put(entry.getValue(), part);
-			
 		}
 		
 		return variables;
@@ -56,7 +58,7 @@ public class UriTemplate {
 	
 	public static UriTemplate Parse(String path)
 	{
-		Map<TemplatePart, String> map = new LinkedHashMap<>();
+		List<TemplateEntry> entries = new LinkedList<>();
 		String[] parts = path.split("/");
 		
 		for(String part : parts){		
@@ -66,13 +68,17 @@ public class UriTemplate {
 				continue;
 			
 			if(part.startsWith("{") && part.endsWith("}")){
-				map.put(TemplatePart.Variable, part.substring(1, part.length()-1));
+				entries.add(new TemplateEntry(TemplatePart.Variable, part.substring(1, part.length()-1)));
 
 			}else{
-				map.put(TemplatePart.Literal, part);	
+				entries.add(new TemplateEntry(TemplatePart.Literal, part));
 			}	
 		}
-		return new UriTemplate(map);
+		return new UriTemplate(entries, path);
+	}
+
+	public String get_path() {
+		return _path;
 	}
 }
 
