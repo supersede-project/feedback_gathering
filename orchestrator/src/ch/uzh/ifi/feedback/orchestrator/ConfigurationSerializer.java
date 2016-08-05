@@ -8,13 +8,12 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.internal.LinkedTreeMap;
 
-import ch.uzh.ifi.feedback.library.rest.DefaultSerializer;
 import ch.uzh.ifi.feedback.orchestrator.model.Application;
 import ch.uzh.ifi.feedback.orchestrator.model.FeedbackMechanism;
 import ch.uzh.ifi.feedback.orchestrator.model.FeedbackParameter;
 import ch.uzh.ifi.feedback.orchestrator.model.GeneralConfiguration;
 import ch.uzh.ifi.feedback.orchestrator.model.PullConfiguration;
-
+/*
 public class ConfigurationSerializer extends DefaultSerializer<Application> {
 
 	public ConfigurationSerializer(Type serializationType) {
@@ -79,4 +78,4 @@ public class ConfigurationSerializer extends DefaultSerializer<Application> {
 		}
 	}
 
-}
+}*/

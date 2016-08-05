@@ -8,12 +8,28 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import ch.uzh.ifi.feedback.library.rest.Service.IDbService;
+import ch.uzh.ifi.feedback.orchestrator.model.FeedbackMechanism;
 import ch.uzh.ifi.feedback.orchestrator.model.FeedbackParameter;
 import javassist.NotFoundException;
 
-public class ParameterService {
+public class ParameterService implements IParameterService{
 	
-	public List<FeedbackParameter> GetParametersFor(
+	@Override
+	public List<FeedbackParameter> GetAllFor(Connection con, String foreignKeyName, int foreignKey) throws SQLException, NotFoundException
+	{
+		switch(foreignKeyName){
+			case "mechanism_id":
+				return GetParametersFor(con, "mechanisms", foreignKeyName, foreignKey);
+			case "configuration_id":
+				return GetParametersFor(con, "general_configurations", foreignKeyName, foreignKey);
+			default:
+				throw new NotFoundException("");
+		}
+	}
+	
+	private List<FeedbackParameter> GetParametersFor(
 			Connection con, 
 			String foreignTableName, 
 			String foreignKeyName, 
@@ -59,7 +75,8 @@ public class ParameterService {
 	    return setParametersRecursive(rootParams, parameterMap, childMap);
 	}
 	
-	public List<FeedbackParameter> GetAllParameters(
+	@Override
+	public List<FeedbackParameter> GetAll(
 			Connection con) throws SQLException
 	{
 		String sql = String.format(
@@ -101,7 +118,8 @@ public class ParameterService {
 	    return setParametersRecursive(rootParams, parameterMap, childMap);
 	}
 	
-	public FeedbackParameter GetParameterById(Connection con, int id) 
+	@Override
+	public FeedbackParameter GetById(Connection con, int id) 
 			throws SQLException, NotFoundException
 	{
 		String sql = String.format(
@@ -128,6 +146,22 @@ public class ParameterService {
     	param.setUpdatedAt(result.getTimestamp("updated_at"));
     	
     	return param;
+	}
+	
+	
+	@Override
+	public void InsertFor(Connection con, FeedbackParameter param, String foreignKeyName, int foreignKey) throws SQLException, NotFoundException
+	{
+		switch(foreignKeyName){
+			case "mechanism_id":
+				InsertParameter(param, null, foreignKey, null, con);
+				break;
+			case "configuration_id":
+				InsertParameter(param, foreignKey, null, null, con);
+				break;
+			default:
+				throw new NotFoundException("");
+		}
 	}
 	
 	public void InsertParameter(
@@ -176,7 +210,28 @@ public class ParameterService {
 		    key = keys.getInt(1);
 		}
 		
-		param = GetParameterById(con, key);
+		param = GetById(con, key);
+	}
+	
+	@Override
+	public void UpdateFor(Connection con, FeedbackParameter param, String foreignKeyName, int foreignKey) throws SQLException, NotFoundException
+	{
+		switch(foreignKeyName){
+			case "mechanism_id":
+				UpdateParameter(param, null, foreignKey, null, con);
+				break;
+			case "configuration_id":
+				UpdateParameter(param, null, null, foreignKey, con);
+				break;
+			default:
+				throw new NotFoundException("");
+		}
+	}
+	
+	@Override
+	public void Update(Connection con, FeedbackParameter param) throws SQLException, NotFoundException
+	{
+		UpdateParameter(param, null, null, null, con);
 	}
 	
 	public void UpdateParameter(

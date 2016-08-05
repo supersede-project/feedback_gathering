@@ -1,4 +1,4 @@
-package ch.uzh.ifi.feedback.library.rest;
+package ch.uzh.ifi.feedback.library.rest.serialization;
 
 import java.util.List;
 

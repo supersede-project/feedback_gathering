@@ -9,7 +9,7 @@ import ch.uzh.ifi.feedback.library.transaction.*;
 import ch.uzh.ifi.feedback.orchestrator.model.Application;
 import ch.uzh.ifi.feedback.orchestrator.model.FeedbackMechanism;
 
-
+/*
 public class FeedbackGatheringController extends RestController<Application>{
     
 	private ISerializationService<Application> serializationService;
@@ -52,3 +52,4 @@ public class FeedbackGatheringController extends RestController<Application>{
 		return serializationService;
 	}
 }
+*/

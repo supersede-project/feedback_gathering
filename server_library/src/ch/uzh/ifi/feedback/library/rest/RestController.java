@@ -1,39 +1,64 @@
 package ch.uzh.ifi.feedback.library.rest;
 
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
-
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonSyntaxException;
-
+import java.util.List;
+import ch.uzh.ifi.feedback.library.rest.Service.IDbService;
+import ch.uzh.ifi.feedback.library.rest.serialization.ISerializationService;
 import ch.uzh.ifi.feedback.library.transaction.TransactionManager;
 
-public abstract class RestController<T> implements IRestController<T> {
 
-	private Class<?> parameterType;
-	private Type serializationType;
+public abstract class RestController<T> {
+
+	private ISerializationService<T> serializationService;
+	private IDbService<T> dbService;
 	
-	public Type getSerializationType() {
-		return serializationType;
+	public RestController(ISerializationService<T> serializationService, IDbService<T> dbService)
+	{
+		this.dbService = dbService;
+		this.serializationService = serializationService;
 	}
 
-	public RestController()
-	{
-		setParameterType();
+	public T GetById(int id) throws Exception {
+		return dbService.GetById(TransactionManager.createDatabaseConnection(), id);
 	}
 	
-	private void setParameterType()
-	{
-		Type superclass = this.getClass().getGenericSuperclass();
-		serializationType = ((ParameterizedType)superclass).getActualTypeArguments()[0];
-		
-		while(superclass instanceof ParameterizedType)
-		{
-			superclass = ((ParameterizedType)superclass).getActualTypeArguments()[0];
-		}
-		
-		parameterType = (Class<?>)(superclass);
+	public List<T> GetAll() throws Exception {
+		return dbService.GetAll(TransactionManager.createDatabaseConnection());
 	}
-
+	
+	public List<T> GetAllFor(String foreignKeyName, int foreignKey) throws Exception
+	{
+		return dbService.GetAllFor(TransactionManager.createDatabaseConnection(), foreignKeyName, foreignKey);
+	}
+	
+	public void Insert(T object) throws Exception
+	{
+		TransactionManager.withTransaction((con) -> {
+			dbService.Insert(con, object);
+		});
+	}
+	
+	public void InsertFor(T object, String foreignKeyName, int foreignKey) throws Exception
+	{
+		TransactionManager.withTransaction((con) -> {
+			dbService.InsertFor(con, object, foreignKeyName, foreignKey);
+		});
+	}
+	
+	public void Update(T object) throws Exception
+	{
+		TransactionManager.withTransaction((con) -> {
+			dbService.Update(con, object);
+		});
+	}
+	
+	public void UpdateFor(T object, String foreignKeyName, int foreignKey) throws Exception
+	{
+		TransactionManager.withTransaction((con) -> {
+			dbService.UpdateFor(con, object, foreignKeyName, foreignKey);
+		});
+	}
+	
+	public ISerializationService<T> getSerializationService() {
+		return serializationService;
+	}
 }

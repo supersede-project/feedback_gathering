@@ -7,9 +7,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import ch.uzh.ifi.feedback.library.rest.*;
+import ch.uzh.ifi.feedback.library.rest.serialization.ISerializationService;
 import ch.uzh.ifi.feedback.library.transaction.*;
-public abstract class FeedbackGatheringController<T> implements IRestController<T> {
-    
+public abstract class FeedbackGatheringController<T> {
+    /*
 	private ISerializationService<T> serializationService;
 	private IDbService<T> dbService;
 	private Type serializationType;
@@ -23,34 +24,7 @@ public abstract class FeedbackGatheringController<T> implements IRestController<
 		
 	}
 
-    /*
-	@Override
-	public void Post(HttpServletRequest request, HttpServletResponse response, T object) throws Exception
-	{
-		int id = dbService.Create(object);
-		response.getWriter().append(serializationService.Serialize(dbService.Read(id)));
-	}
-
-	@Override
-	public void Put(HttpServletRequest request, HttpServletResponse response, T object) throws Exception
-	{
-		int id = dbService.Update(object);
-		response.getWriter().append(serializationService.Serialize(dbService.Read(id)));
-	}
-	*/
-    
-	@Override
-	public ISerializationService<T> getSerializationService() {
-		return serializationService;
-	}
-	
-	@Override
-	public Type getSerializationType()
-	{
-		return this.serializationType;
-	}
-	
 	protected IDbService<T> getDbService(){
 		return dbService;
-	}
+	}*/
 }

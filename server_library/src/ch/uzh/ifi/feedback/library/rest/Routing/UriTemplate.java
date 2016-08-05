@@ -1,4 +1,4 @@
-package ch.uzh.ifi.feedback.library.rest;
+package ch.uzh.ifi.feedback.library.rest.Routing;
 
 import java.util.ArrayList;
 import java.util.HashMap;

@@ -5,7 +5,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import ch.uzh.ifi.feedback.library.rest.ISerializationService;
+import ch.uzh.ifi.feedback.library.rest.serialization.ISerializationService;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)

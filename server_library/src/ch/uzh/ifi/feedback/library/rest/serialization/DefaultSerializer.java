@@ -1,15 +1,10 @@
-package ch.uzh.ifi.feedback.library.rest;
+package ch.uzh.ifi.feedback.library.rest.serialization;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.List;
-
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
 
-import ch.uzh.ifi.feedback.library.rest.ISerializationService;
 
 public class DefaultSerializer<T> implements ISerializationService<T> {
 
