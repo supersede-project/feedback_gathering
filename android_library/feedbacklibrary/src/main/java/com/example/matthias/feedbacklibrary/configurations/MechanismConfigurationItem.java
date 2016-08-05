@@ -1,7 +1,7 @@
 package com.example.matthias.feedbacklibrary.configurations;
 
 import com.example.matthias.feedbacklibrary.models.AudioMechanism;
-import com.example.matthias.feedbacklibrary.models.ChoiceMechanism;
+import com.example.matthias.feedbacklibrary.models.CategoryMechanism;
 import com.example.matthias.feedbacklibrary.models.Mechanism;
 import com.example.matthias.feedbacklibrary.models.RatingMechanism;
 import com.example.matthias.feedbacklibrary.models.ScreenshotMechanism;
@@ -36,8 +36,8 @@ public class MechanismConfigurationItem implements Serializable {
                 case Mechanism.AUDIO_TYPE:
                     // TODO: Implement
                     return new AudioMechanism(this);
-                case Mechanism.CHOICE_TYPE:
-                    return new ChoiceMechanism(this);
+                case Mechanism.CATEGORY_TYPE:
+                    return new CategoryMechanism(this);
                 case Mechanism.RATING_TYPE:
                     return new RatingMechanism(this);
                 case Mechanism.SCREENSHOT_TYPE:
@@ -49,7 +49,6 @@ public class MechanismConfigurationItem implements Serializable {
                     break;
             }
         }
-
         return null; // Should never happen!
     }
 

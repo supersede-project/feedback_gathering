@@ -28,7 +28,7 @@ import com.example.matthias.feedbacklibrary.configurations.FeedbackConfiguration
 import com.example.matthias.feedbacklibrary.models.Mechanism;
 import com.example.matthias.feedbacklibrary.utils.DialogUtils;
 import com.example.matthias.feedbacklibrary.utils.Utils;
-import com.example.matthias.feedbacklibrary.views.ChoiceMechanismView;
+import com.example.matthias.feedbacklibrary.views.CategoryMechanismView;
 import com.example.matthias.feedbacklibrary.views.MechanismView;
 import com.example.matthias.feedbacklibrary.views.RatingMechanismView;
 import com.example.matthias.feedbacklibrary.views.ScreenshotMechanismView;
@@ -157,7 +157,7 @@ public class FeedbackActivity extends AppCompatActivity {
     private void initOfflineConfiguration() {
         String jsonString;
         Gson gson = new Gson();
-        jsonString = Utils.readFileAsString("new_offline_configuration_file_text_variables_material_design_bla.json", getAssets());
+        jsonString = Utils.readFileAsString("configuration_material_design_push.json", getAssets());
         configuration = gson.fromJson(jsonString, OrchestratorConfiguration.class);
 
         initModel();
@@ -226,8 +226,8 @@ public class FeedbackActivity extends AppCompatActivity {
                         case Mechanism.AUDIO_TYPE:
                             // TODO: Implement audio mechanism
                             break;
-                        case Mechanism.CHOICE_TYPE:
-                            mechanismView = new ChoiceMechanismView(layoutInflater, allMechanisms.get(i));
+                        case Mechanism.CATEGORY_TYPE:
+                            mechanismView = new CategoryMechanismView(layoutInflater, allMechanisms.get(i));
                             view = mechanismView.getEnclosingLayout();
                             break;
                         case Mechanism.RATING_TYPE:

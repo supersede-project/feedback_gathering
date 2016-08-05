@@ -4,7 +4,7 @@ import android.view.LayoutInflater;
 import android.widget.TextView;
 
 import com.example.matthias.feedbacklibrary.R;
-import com.example.matthias.feedbacklibrary.models.ChoiceMechanism;
+import com.example.matthias.feedbacklibrary.models.CategoryMechanism;
 import com.example.matthias.feedbacklibrary.models.Mechanism;
 
 import java.util.List;
@@ -12,24 +12,24 @@ import java.util.List;
 /**
  * Choice mechanism view
  */
-public class ChoiceMechanismView extends MechanismView implements CustomSpinner.OnMultipleItemsSelectedListener {
-    private ChoiceMechanism choiceMechanism = null;
+public class CategoryMechanismView extends MechanismView implements CustomSpinner.OnMultipleItemsSelectedListener {
+    private CategoryMechanism categoryMechanism = null;
     private CustomSpinner customSpinner = null;
 
-    public ChoiceMechanismView(LayoutInflater layoutInflater, Mechanism mechanism) {
+    public CategoryMechanismView(LayoutInflater layoutInflater, Mechanism mechanism) {
         super(layoutInflater);
-        this.choiceMechanism = (ChoiceMechanism) mechanism;
+        this.categoryMechanism = (CategoryMechanism) mechanism;
         setEnclosingLayout(getLayoutInflater().inflate(R.layout.choice_feedback_layout, null));
         initView();
     }
 
     private void initView() {
         final TextView textView = (TextView) getEnclosingLayout().findViewById(R.id.supersede_feedbacklibrary_choice_feedback_title);
-        textView.setText(choiceMechanism.getTitle());
+        textView.setText(categoryMechanism.getTitle());
         customSpinner = (CustomSpinner) getEnclosingLayout().findViewById(R.id.supersede_feedbacklibrary_custom_spinner);
-        customSpinner.setItems(choiceMechanism.getOptions(), false);
+        customSpinner.setItems(categoryMechanism.getOptions(), false);
         customSpinner.setListener(this);
-        customSpinner.setMultiple(choiceMechanism.isMultiple());
+        customSpinner.setMultiple(categoryMechanism.isMultiple());
     }
 
     @Override
@@ -42,6 +42,6 @@ public class ChoiceMechanismView extends MechanismView implements CustomSpinner.
 
     @Override
     public void updateModel() {
-        choiceMechanism.setSelectedOptions(customSpinner.getSelectedStrings());
+        categoryMechanism.setSelectedOptions(customSpinner.getSelectedStrings());
     }
 }

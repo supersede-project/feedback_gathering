@@ -18,10 +18,6 @@
           "value": 0.1
         },
         {
-          "key": "askOnAppStartup",
-          "value": 0
-        },
-        {
           "key": "showPopupDialog",
           "value": 1
         }
@@ -114,7 +110,7 @@
         {
           "type": "RATING_TYPE",
           "active": true,
-          "order": 4,
+          "order": 2,
           "canBeActivated": false,
           "parameters": [
             {
@@ -283,7 +279,7 @@
       ]
     },
     {
-      "type": "CHOICE_TYPE",
+      "type": "CATEGORY_TYPE",
       "active": true,
       "order": 5,
       "canBeActivated": false,

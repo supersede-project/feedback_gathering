@@ -10,7 +10,7 @@ import java.util.Map;
 /**
  * Choice mechanism model.
  */
-public class ChoiceMechanism extends Mechanism {
+public class CategoryMechanism extends Mechanism {
     private boolean mandatory;
     private boolean multiple;
     // TODO: Implement?
@@ -22,8 +22,8 @@ public class ChoiceMechanism extends Mechanism {
     private List<String> selectedOptions = new ArrayList<>();
     private String title;
 
-    public ChoiceMechanism(MechanismConfigurationItem item) {
-        super(CHOICE_TYPE, item);
+    public CategoryMechanism(MechanismConfigurationItem item) {
+        super(CATEGORY_TYPE, item);
         initChoiceMechanism(item);
     }
 

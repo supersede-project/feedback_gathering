@@ -29,7 +29,7 @@ public class Feedback implements Serializable {
                     case Mechanism.AUDIO_TYPE:
                         // TODO: Implement it here (multipart)?
                         break;
-                    case Mechanism.CHOICE_TYPE:
+                    case Mechanism.CATEGORY_TYPE:
                         break;
                     case Mechanism.RATING_TYPE:
                         RatingFeedback ratingFeedback = new RatingFeedback();

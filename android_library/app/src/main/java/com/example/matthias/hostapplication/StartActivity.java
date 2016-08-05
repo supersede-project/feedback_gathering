@@ -3,14 +3,12 @@ package com.example.matthias.hostapplication;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
 
 import com.example.matthias.feedbacklibrary.FeedbackActivity;
 import com.example.matthias.feedbacklibrary.utils.DialogUtils;
@@ -29,33 +27,26 @@ public class StartActivity extends AppCompatActivity {
         //Utils.triggerPotentialPullFeedback(this);
 
         // Only for demo purposes
-        final TextView countdownTextView = (TextView) findViewById(R.id.countdown_textview);
-        Button b = (Button) findViewById(R.id.pull_start_button);
-        if (b != null) {
-            b.setOnClickListener(new View.OnClickListener() {
+        Button noPopup = (Button) findViewById(R.id.pull_no_popup_button);
+        if (noPopup != null) {
+            noPopup.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    new CountDownTimer(6000, 1000) {
-                        @Override
-                        public void onFinish() {
-                            if (countdownTextView != null) {
-                                countdownTextView.setText("0");
-                            }
-
-
-                            String jsonString;
-                            jsonString = Utils.readFileAsString("new_offline_configuration_file_text_variables_material_design.json", getAssets());
-                            DialogUtils.FeedbackPopupDialog d = DialogUtils.FeedbackPopupDialog.newInstance(getResources().getString(com.example.matthias.feedbacklibrary.R.string.supersede_feedbacklibrary_pull_feedback_question_string), jsonString, 0);
-                            d.show(getFragmentManager(), "feedbackPopupDialog");
-                        }
-
-                        @Override
-                        public void onTick(long millisUntilFinished) {
-                            if (countdownTextView != null) {
-                                countdownTextView.setText(String.valueOf(millisUntilFinished / 1000));
-                            }
-                        }
-                    }.start();
+                    String jsonString;
+                    jsonString = Utils.readFileAsString("configuration_material_design_pull_no_popup.json", getAssets());
+                    startFeedbackActivity(jsonString, false, 0);
+                }
+            });
+        }
+        Button popup = (Button) findViewById(R.id.pull_popup_button);
+        if (popup != null) {
+            popup.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String jsonString;
+                    jsonString = Utils.readFileAsString("configuration_material_design_pull_popup.json", getAssets());
+                    DialogUtils.FeedbackPopupDialog d = DialogUtils.FeedbackPopupDialog.newInstance(getResources().getString(com.example.matthias.feedbacklibrary.R.string.supersede_feedbacklibrary_pull_feedback_question_string), jsonString, 0);
+                    d.show(getFragmentManager(), "feedbackPopupDialog");
                 }
             });
         }
@@ -106,5 +97,13 @@ public class StartActivity extends AppCompatActivity {
                 }
                 break;
         }
+    }
+
+    private void startFeedbackActivity(String jsonString, boolean isPush, int selectedPullConfigurationIndex) {
+        Intent intent = new Intent(this, FeedbackActivity.class);
+        intent.putExtra(FeedbackActivity.JSON_CONFIGURATION_STRING, jsonString);
+        intent.putExtra(FeedbackActivity.IS_PUSH_STRING, isPush);
+        intent.putExtra(FeedbackActivity.SELECTED_PULL_CONFIGURATION_INDEX_STRING, selectedPullConfigurationIndex);
+        startActivity(intent);
     }
 }

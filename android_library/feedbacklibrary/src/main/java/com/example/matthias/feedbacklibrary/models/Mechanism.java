@@ -10,7 +10,7 @@ import java.util.List;
  */
 public abstract class Mechanism implements Serializable {
     public static final String AUDIO_TYPE = "AUDIO_TYPE";
-    public static final String CHOICE_TYPE = "CHOICE_TYPE";
+    public static final String CATEGORY_TYPE = "CATEGORY_TYPE";
     public static final String RATING_TYPE = "RATING_TYPE";
     public static final String SCREENSHOT_TYPE = "SCREENSHOT_TYPE";
     public static final String TEXT_TYPE = "TEXT_TYPE";

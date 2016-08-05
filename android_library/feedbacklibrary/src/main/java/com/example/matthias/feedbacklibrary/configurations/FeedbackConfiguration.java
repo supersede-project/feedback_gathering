@@ -79,6 +79,7 @@ public class FeedbackConfiguration {
         for (MechanismConfigurationItem mechanismConfigurationItem : orchestratorConfiguration.getMechanisms()) {
             allPushMechanisms.add(mechanismConfigurationItem.createMechanism());
         }
+
         Collections.sort(allPushMechanisms, new Comparator<Mechanism>() {
             @Override
             public int compare(Mechanism a, Mechanism b) {

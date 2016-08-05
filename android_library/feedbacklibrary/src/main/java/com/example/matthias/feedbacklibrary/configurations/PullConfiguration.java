@@ -13,7 +13,6 @@ import java.util.Map;
  * Pull configuration.
  */
 public class PullConfiguration {
-    private boolean askOnAppStartup;
     private boolean isActive;
     private double likelihood;
     // If a popup dialog is shown asking the user if (s)he wants to give feedback
@@ -42,10 +41,6 @@ public class PullConfiguration {
             if (key.equals("likelihood")) {
                 setLikelihood(((Double) param.get("value")).floatValue());
             }
-            // AskOnAppStartup
-            if (key.equals("askOnAppStartup")) {
-                setAskOnAppStartup(Utils.intToBool(((Double) param.get("value")).intValue()));
-            }
             // ShowPopupDialog
             if (key.equals("showPopupDialog")) {
                 setShowPopupDialog(Utils.intToBool(((Double) param.get("value")).intValue()));
@@ -68,10 +63,6 @@ public class PullConfiguration {
         return isActive;
     }
 
-    public boolean isAskOnAppStartup() {
-        return askOnAppStartup;
-    }
-
     public boolean isShowPopupDialog() {
         return showPopupDialog;
     }
@@ -82,10 +73,6 @@ public class PullConfiguration {
 
     public void setAllPullMechanisms(List<Mechanism> allPullMechanisms) {
         this.allPullMechanisms = allPullMechanisms;
-    }
-
-    public void setAskOnAppStartup(boolean askOnAppStartup) {
-        this.askOnAppStartup = askOnAppStartup;
     }
 
     public void setLikelihood(double likelihood) {
