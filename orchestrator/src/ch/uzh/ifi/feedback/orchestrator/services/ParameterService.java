@@ -9,12 +9,21 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.google.inject.Inject;
+
 import ch.uzh.ifi.feedback.library.rest.Service.IDbService;
 import ch.uzh.ifi.feedback.orchestrator.model.FeedbackMechanism;
 import ch.uzh.ifi.feedback.orchestrator.model.FeedbackParameter;
 import javassist.NotFoundException;
 
 public class ParameterService implements IParameterService{
+	
+	private ParameterResultParser resultParser;
+	
+	@Inject
+	public ParameterService(ParameterResultParser resultParser) {
+		this.resultParser = resultParser;
+	}
 	
 	@Override
 	public List<FeedbackParameter> GetAllFor(Connection con, String foreignKeyName, int foreignKey) throws SQLException, NotFoundException
@@ -36,8 +45,9 @@ public class ParameterService implements IParameterService{
 			int foreignKey) throws SQLException
 	{
 		String sql = String.format(
-				  "Select p.id, p.parameters_id, p.key, p.value, p.default_value, p.editable_by_user, p.language, p.created_at, p.updated_at FROM "
-	    		+ "feedback_orchestrator.parameters as p "
+				  "SELECT p.id, p.parameters_id, p.key, p.value, p.default_value as defaultValue, "
+				       + "p.editable_by_user as editableByUser, p.language, p.created_at as createdAt, p.updated_at as updatedAt "
+				+ "FROM feedback_orchestrator.parameters as p "
 	    		+ "JOIN feedback_orchestrator.%s as f on (p.%s = f.id) "
 	    		+ "WHERE f.id = ? ;", foreignTableName, foreignKeyName);
 				
@@ -51,6 +61,7 @@ public class ParameterService implements IParameterService{
 	    while(result.next())
 	    {
 	    	FeedbackParameter param = new FeedbackParameter();
+	    	/*
 	    	param.setId(result.getInt("id"));
 	    	param.setKey(result.getString("key"));
 	    	param.setValue(result.getObject("value"));
@@ -59,6 +70,8 @@ public class ParameterService implements IParameterService{
 	    	param.setLanguage(result.getString("language"));
 	    	param.setCreatedAt(result.getTimestamp("created_at"));
 	    	param.setUpdatedAt(result.getTimestamp("updated_at"));
+	    	*/
+	    	resultParser.SetFields(param, result);
 	    	parameterMap.put(param, result.getInt("id"));
 	    	
 	    	Integer parameterKey = (Integer)result.getObject("parameters_id");
@@ -80,8 +93,8 @@ public class ParameterService implements IParameterService{
 			Connection con) throws SQLException
 	{
 		String sql = String.format(
-				  "Select p.id, p.parameters_id, p.key, p.value, p.default_value, p.editable_by_user, "
-				       + "p.language, p.created_at, p.updated_at "
+				  "Select p.id, p.parameters_id, p.key, p.value, p.default_value as defaultValue, p.editable_by_user as editableByUser, "
+				       + "p.language, p.created_at as createdAt, p.updated_at as updatedAt "
 				+ "FROM feedback_orchestrator.parameters as p;");
 				
 	    PreparedStatement s = con.prepareStatement(sql);
@@ -94,6 +107,7 @@ public class ParameterService implements IParameterService{
 	    while(result.next())
 	    {
 	    	FeedbackParameter param = new FeedbackParameter();
+	    	/*
 	    	param.setId(result.getInt("id"));
 	    	param.setKey(result.getString("key"));
 	    	param.setValue(result.getObject("value"));
@@ -102,6 +116,8 @@ public class ParameterService implements IParameterService{
 	    	param.setLanguage(result.getString("language"));
 	    	param.setCreatedAt(result.getTimestamp("created_at"));
 	    	param.setUpdatedAt(result.getTimestamp("updated_at"));
+	    	*/
+	    	resultParser.SetFields(param, result);
 	    	parameterMap.put(param, result.getInt("id"));
 	    	
 	    	Integer parameterKey = (Integer)result.getObject("parameters_id");
@@ -123,8 +139,8 @@ public class ParameterService implements IParameterService{
 			throws SQLException, NotFoundException
 	{
 		String sql = String.format(
-				    "Select p.id, p.parameters_id, p.key, p.value, p.default_value, p.editable_by_user, p.language, "
-				  +        "p.created_at, p.updated_at "
+				    "SELECT p.id, p.parameters_id, p.key, p.value, p.default_value as defaultValue, p.editable_by_user as editableByUser, "
+				         + "p.language, p.created_at as createdAt, p.updated_at as updatedAt "
 				  + "FROM feedback_orchestrator.parameters as p "
 	    		  + "WHERE p.id = ? ;");
 				
@@ -136,6 +152,7 @@ public class ParameterService implements IParameterService{
 			throw new NotFoundException("parameter with id " + id + "does not exist!/n");
 		
 		FeedbackParameter param = new FeedbackParameter();
+		/*
     	param.setId(result.getInt("id"));
     	param.setKey(result.getString("key"));
     	param.setValue(result.getObject("value"));
@@ -144,7 +161,8 @@ public class ParameterService implements IParameterService{
     	param.setLanguage(result.getString("language"));
     	param.setCreatedAt(result.getTimestamp("created_at"));
     	param.setUpdatedAt(result.getTimestamp("updated_at"));
-    	
+    	*/
+		resultParser.SetFields(param, result);
     	return param;
 	}
 	

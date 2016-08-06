@@ -4,6 +4,9 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 
+import javax.naming.OperationNotSupportedException;
+import javax.xml.bind.helpers.NotIdentifiableEventImpl;
+
 import javassist.NotFoundException;
 
 public interface IDbService<T> {
@@ -12,15 +15,23 @@ public interface IDbService<T> {
 	
 	List<T> GetAll(Connection con) throws SQLException, NotFoundException;
 	
-	List<T> GetAllFor(Connection con, String foreignKeyName, int foreignKey) throws SQLException, NotFoundException;
-	
-	default void Update(Connection con, T object) throws SQLException, NotFoundException {
+	default List<T> GetAllFor(Connection con, String foreignKeyName, int foreignKey) throws SQLException, NotFoundException {
+		throw new UnsupportedOperationException();
 	}
 	
-	void UpdateFor(Connection con, T object, String foreignKeyName, int foreignKey) throws SQLException, NotFoundException;
-	
-	default void Insert(Connection con, T object) throws SQLException, NotFoundException {
+	default void Update(Connection con, T object) throws SQLException, NotFoundException, UnsupportedOperationException {
+		throw new UnsupportedOperationException();
 	}
 	
-	void InsertFor(Connection con, T object, String foreignKeyName, int foreignKey) throws SQLException, NotFoundException;
+	default void UpdateFor(Connection con, T object, String foreignKeyName, int foreignKey) throws SQLException, NotFoundException, UnsupportedOperationException{
+		throw new UnsupportedOperationException();
+	}
+	
+	default void Insert(Connection con, T object) throws SQLException, NotFoundException, UnsupportedOperationException {
+		throw new UnsupportedOperationException();
+	}
+	
+	default void InsertFor(Connection con, T object, String foreignKeyName, int foreignKey) throws SQLException, NotFoundException, UnsupportedOperationException {
+		throw new UnsupportedOperationException();
+	}
 }

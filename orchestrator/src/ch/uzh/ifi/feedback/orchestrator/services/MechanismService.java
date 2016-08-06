@@ -9,6 +9,7 @@ import java.util.List;
 
 import com.google.inject.Inject;
 
+import ch.uzh.ifi.feedback.library.rest.Service.DbResultParser;
 import ch.uzh.ifi.feedback.library.rest.Service.IDbService;
 import ch.uzh.ifi.feedback.orchestrator.model.FeedbackMechanism;
 import ch.uzh.ifi.feedback.orchestrator.model.FeedbackParameter;
@@ -17,12 +18,15 @@ import javassist.NotFoundException;
 public class MechanismService implements IMechanismService {
 	
 	private ParameterService parameterService;
+	private MechanismResultParser resultParser;
 	
 	@Inject
-	public MechanismService(ParameterService parameterService){
+	public MechanismService(ParameterService parameterService, MechanismResultParser resultParser){
 		this.parameterService = parameterService;
+		this.resultParser = resultParser;
 	}
 	
+	@Override
 	public void InsertFor(Connection con, FeedbackMechanism mechanism, String foreignKeyName, int configurationId) throws SQLException, NotFoundException
 	{
 	    PreparedStatement s1 = con.prepareStatement(
@@ -53,6 +57,7 @@ public class MechanismService implements IMechanismService {
 	    }	
 	}
 	
+	@Override
 	public void UpdateFor(Connection con, FeedbackMechanism mechanism, String foreignKeyName, int configurationId) throws SQLException, NotFoundException
 	{
 	    PreparedStatement s1 = con.prepareStatement(
@@ -85,12 +90,13 @@ public class MechanismService implements IMechanismService {
 	    	}
 	    }
 	}
-	
+
+	@Override
 	public List<FeedbackMechanism> GetAll(Connection con) throws SQLException, NotFoundException
 	{
 	    PreparedStatement s = con.prepareStatement(
 
-	    		  "SELECT m.id, m.name as mechanism_name, cm.order, cm.active, cm.can_be_activated "
+	    		  "SELECT m.id, m.name as type, cm.order, cm.active, cm.can_be_activated as canBeActivated "
 	    		 + "FROM feedback_orchestrator.mechanisms as m "
 	    		+ "JOIN feedback_orchestrator.configurations_mechanisms as cm ON cm.mechanism_id = m.id ;"    		
 	    		);
@@ -101,11 +107,8 @@ public class MechanismService implements IMechanismService {
 	    while(result.next())
 	    {
 	    	FeedbackMechanism mechanism = new FeedbackMechanism();
-	    	mechanism.setType(result.getString("mechanism_name"));
-	    	mechanism.setActive(result.getBoolean("active"));
-	    	mechanism.setCanBeActivated(result.getBoolean("can_be_activated"));
-	    	mechanism.setOrder(result.getInt("order"));
-	    	mechanism.setId(result.getInt("id"));
+	    	
+	    	resultParser.SetFields(mechanism, result);
 	    	mechanism.setParameters(parameterService.GetAllFor(con, "mechanism_id", result.getInt("id")));
 	    	mechanisms.add(mechanism);
 	    }
@@ -113,11 +116,12 @@ public class MechanismService implements IMechanismService {
 	    return mechanisms;
 	}
 	
+	@Override
 	public List<FeedbackMechanism> GetAllFor(Connection con, String foreignKeyName, int configurationId) throws SQLException, NotFoundException
 	{
 	    PreparedStatement s = con.prepareStatement(
 
-	    		  "SELECT m.id, m.name as mechanism_name, cm.order, cm.active, cm.can_be_activated "
+	    		  "SELECT m.id, m.name as type, cm.order, cm.active, cm.can_be_activated as canBeActivated "
 	    		+ "FROM feedback_orchestrator.mechanisms as m "
 	    		+ "JOIN feedback_orchestrator.configurations_mechanisms as cm "
 	    		+ "WHERE cm.mechanism_id = m.id AND cm.configuration_id = ? ;"		    		
@@ -130,11 +134,7 @@ public class MechanismService implements IMechanismService {
 	    while(result.next())
 	    {
 	    	FeedbackMechanism mechanism = new FeedbackMechanism();
-	    	mechanism.setType(result.getString("mechanism_name"));
-	    	mechanism.setActive(result.getBoolean("active"));
-	    	mechanism.setCanBeActivated(result.getBoolean("can_be_activated"));
-	    	mechanism.setOrder(result.getInt("order"));
-	    	mechanism.setId(result.getInt("id"));
+	    	resultParser.SetFields(mechanism, result);
 	    	mechanism.setParameters(parameterService.GetAllFor(con, "mechanism_id", result.getInt("id")));
 	    	mechanisms.add(mechanism);
 	    }
@@ -142,11 +142,12 @@ public class MechanismService implements IMechanismService {
 	    return mechanisms;
 	}
 	
+	@Override
 	public FeedbackMechanism GetById(Connection con, int mechanismId) throws SQLException, NotFoundException
 	{
 	    PreparedStatement s = con.prepareStatement(
 
-	    		  "SELECT m.id, m.name as mechanism_name "
+	    		  "SELECT m.id, m.name as type "
 	    		+ "FROM feedback_orchestrator.mechanisms as m "
 	    		+ "WHERE m.id = ? ;"		    		
 	    		);
@@ -158,8 +159,7 @@ public class MechanismService implements IMechanismService {
 	    	throw new NotFoundException("mechanism with id: " + mechanismId + "does not exist");
 	    
     	FeedbackMechanism mechanism = new FeedbackMechanism();
-    	mechanism.setType(result.getString("mechanism_name"));
-    	mechanism.setId(result.getInt("id"));
+    	resultParser.SetFields(mechanism, result);
     	mechanism.setParameters(parameterService.GetAllFor(con, "mechanism_id", mechanismId));
    
 	    return mechanism;

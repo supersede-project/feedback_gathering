@@ -11,14 +11,12 @@ public class Application {
 	private Integer state;
 	private Integer id;
 	private List<GeneralConfiguration> general_configurations;
-	private List<PullConfiguration> pull_configurations;
-	private List<FeedbackMechanism> mechanisms;
+	private List<Configuration> configurations;
 	
 	public Application()
 	{
 		general_configurations = new ArrayList<>();
-		pull_configurations = new ArrayList<>();
-		mechanisms = new ArrayList<>();
+		configurations = new ArrayList<>();
 	}
 	
 	public String getName() {
@@ -42,24 +40,9 @@ public class Application {
 	public List<GeneralConfiguration> getGeneralConfigurations() {
 		return general_configurations;
 	}
-	public void setGeneralConfigurations(List<GeneralConfiguration> generalConfigurations) {
-		this.general_configurations = generalConfigurations;
-	}
 
-	public List<PullConfiguration> getPullConfigurations() {
-		return pull_configurations;
-	}
-
-	public void setPullConfigurations(List<PullConfiguration> pullConfigurations) {
-		this.pull_configurations = pullConfigurations;
-	}
-
-	public List<FeedbackMechanism> getFeedbackMechanisms() {
-		return mechanisms;
-	}
-
-	public void setFeedbackMechanisms(List<FeedbackMechanism> feedbackMechanisms) {
-		this.mechanisms = feedbackMechanisms;
+	public List<Configuration> getConfigurations() {
+		return configurations;
 	}
 
 	public Integer getId() {
