@@ -228,7 +228,7 @@
             {
               "id": 2,
               "key": "likelihood",
-              "value": 0.4
+              "value": 0.0
             },
             {
               "key": "askOnAppStartup",
@@ -386,7 +386,7 @@
             {
               "id": 79,
               "key": "askOnAppStartup",
-              "value": 0
+              "value": 1
             }
           ]
         },

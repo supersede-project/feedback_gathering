@@ -1,5 +1,6 @@
 import {MechanismFactory} from './mechanism_factory';
 import {RatingMechanism} from './rating_mechanism';
+import {CategoryMechanism} from './category_mechanism';
 
 
 describe('Mechanism Factory', () => {
@@ -67,6 +68,54 @@ describe('Mechanism Factory', () => {
         expect(mechanism.order).toEqual(4);
         expect(mechanism.canBeActivated).toEqual(false);
         expect(mechanism.parameters.length).toEqual(4);
+    });
+
+    it('should initialize a category mechanism with data passed', () => {
+        var data = {
+            "type": "CATEGORY_TYPE",
+            "active": true,
+            "order": 2,
+            "canBeActivated": false,
+            "parameters": [
+                {
+                    "key": "title",
+                    "value": "Please choose from the following categories"
+                },
+                {
+                    "key": "ownAllowed",
+                    "value": 1
+                },
+                {
+                    "key": "multiple",
+                    "value": 1
+                },
+                {
+                    "key": "options",
+                    "value": [
+                        {
+                            "key": "BUG_CATEGORY",
+                            "value": "Bug"
+                        },
+                        {
+                            "key": "FEATURE_REQUEST_CATEGORY",
+                            "value": "Feature Request"
+                        },
+                        {
+                            "key": "GENERAL_CATEGORY",
+                            "value": "General Feedback"
+                        }
+                    ]
+                }
+            ]
+        };
+        var mechanism:CategoryMechanism = MechanismFactory.createByData(data);
+        expect(mechanism).toEqual(jasmine.any(CategoryMechanism));
+        expect(mechanism.type).toEqual('CATEGORY_TYPE');
+        expect(mechanism.active).toEqual(true);
+        expect(mechanism.order).toEqual(2);
+        expect(mechanism.canBeActivated).toEqual(false);
+        expect(mechanism.parameters.length).toEqual(4);
+        expect(mechanism.getOptions()).toBeDefined()
     });
 
     it('should not initialize a mechanism if its type is not given', () => {
