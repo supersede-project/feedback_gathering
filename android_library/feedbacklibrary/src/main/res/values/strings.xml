@@ -27,6 +27,10 @@
     <string name="supersede_feedbacklibrary_previewbutton_text">Preview</string>
     <string name="supersede_feedbacklibrary_erasebutton_text">Erase</string>
 
+    <!-- Category mechanism -->
+    <string name="supersede_feedbacklibrary_single_option_dialog_title">Please select an option</string>
+    <string name="supersede_feedbacklibrary_multiple_options_dialog_title">Please select one or multiple options</string>
+
     <!-- Image annotation-->
     <string name="supersede_feedbacklibrary_colorpickerbutton_text">Color Picker</string>
     <string name="supersede_feedbacklibrary_blurbutton_text">Blur</string>
@@ -39,6 +43,9 @@
     <string name="supersede_feedbacklibrary_cancelannotation_title">Cancel annotation</string>
     <string name="supersede_feedbacklibrary_chosencolor_string">Chosen color</string>
     <string name="supersede_feedbacklibrary_crop_string">Crop</string>
+    <string name="supersede_feedbacklibrary_smiley_string">Smiley</string>
+    <string name="supersede_feedbacklibrary_thumb_up_string">Thumb up</string>
+    <string name="supersede_feedbacklibrary_thumb_down_string">Thumb down</string>
 
     <!-- Pull feedback -->
     <string name="supersede_feedbacklibrary_pull_feedback_question_string">Would you like to give feedback?</string>

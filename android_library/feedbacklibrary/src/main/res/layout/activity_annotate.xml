@@ -88,15 +88,11 @@
                 android:text="@string/supersede_feedbacklibrary_crop_string"
                 android:textSize="13sp"/>
 
-            <Button
+            <ImageButton
                 android:id="@+id/supersede_feedbacklibrary_sticker_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:height="36dp"
-                android:minWidth="88dp"
-                android:text="smile!"
-                android:textSize="13sp"/>
-
+                android:src="@drawable/ic_insert_emoticon_black_48dp"/>
         </LinearLayout>
 
         <LinearLayout

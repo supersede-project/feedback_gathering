@@ -157,7 +157,10 @@ public class FeedbackActivity extends AppCompatActivity {
     private void initOfflineConfiguration() {
         String jsonString;
         Gson gson = new Gson();
-        jsonString = Utils.readFileAsString("configuration_material_design_push.json", getAssets());
+        // For single category
+        //jsonString = Utils.readFileAsString("configuration_material_design_push_single_category.json", getAssets());
+        // For multiple category
+        jsonString = Utils.readFileAsString("configuration_material_design_push_multiple_categories.json", getAssets());
         configuration = gson.fromJson(jsonString, OrchestratorConfiguration.class);
 
         initModel();

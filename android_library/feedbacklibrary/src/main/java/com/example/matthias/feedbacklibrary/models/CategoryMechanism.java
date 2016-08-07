@@ -55,7 +55,7 @@ public class CategoryMechanism extends Mechanism {
             }
             // Multiple
             if (key.equals("multiple")) {
-                setMultiple(((Boolean) param.get("value")));
+                setMultiple(Utils.intToBool(((Double) param.get("value")).intValue()));
             }
             // Options
             if (key.equals("options")) {

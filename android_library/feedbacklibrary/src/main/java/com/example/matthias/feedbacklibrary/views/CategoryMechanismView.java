@@ -27,6 +27,7 @@ public class CategoryMechanismView extends MechanismView implements CustomSpinne
         final TextView textView = (TextView) getEnclosingLayout().findViewById(R.id.supersede_feedbacklibrary_choice_feedback_title);
         textView.setText(categoryMechanism.getTitle());
         customSpinner = (CustomSpinner) getEnclosingLayout().findViewById(R.id.supersede_feedbacklibrary_custom_spinner);
+        // TODO: Parameter if a category should be selected by default?
         customSpinner.setItems(categoryMechanism.getOptions(), true);
         customSpinner.setListener(this);
         customSpinner.setMultiple(categoryMechanism.isMultiple());

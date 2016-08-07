@@ -27,7 +27,9 @@ import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.ContextMenu;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,6 +46,7 @@ import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
 import java.io.File;
+import java.lang.reflect.Method;
 import java.util.List;
 
 /**
@@ -54,10 +57,12 @@ public class AnnotateImageActivity extends AppCompatActivity implements ColorPic
     private int oldPaintStrokeColor;
     private int oldPaintFillColor;
     private AnnotateImageView annotateImageView;
+    private int selectedSticker;
 
     private void addSticker() {
+        hideAllControlItems((RelativeLayout) findViewById(R.id.supersede_feedbacklibrary_annotate_picture_layout));
         StickerImageView sticker = new StickerImageView(this);
-        sticker.setImageDrawable(getResources().getDrawable(R.drawable.icon_smile));
+        sticker.setImageDrawable(getResources().getDrawable(selectedSticker));
         RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.supersede_feedbacklibrary_annotate_picture_layout);
         if (relativeLayout != null) {
             relativeLayout.addView(sticker);
@@ -76,6 +81,23 @@ public class AnnotateImageActivity extends AppCompatActivity implements ColorPic
         args.putInt("mInitialColor", mInitialColor);
         dialog.setArguments(args);
         return dialog;
+    }
+
+    /**
+     * This method hides all the control items for every sticker in the specific viewGroup.
+     *
+     * @param viewGroup the viewGroup
+     */
+    private void hideAllControlItems(ViewGroup viewGroup) {
+        // Hide all control items
+        if (viewGroup != null) {
+            for (int i = 0; i < viewGroup.getChildCount(); ++i) {
+                View child = viewGroup.getChildAt(i);
+                if (child instanceof StickerView) {
+                    ((StickerView) child).setControlItemsHidden(true);
+                }
+            }
+        }
     }
 
     /**
@@ -108,7 +130,7 @@ public class AnnotateImageActivity extends AppCompatActivity implements ColorPic
         annotateImageView.setBlur(0F);
 
         // Set the text attributes
-        annotateImageView.setText("Test TEXT");
+        annotateImageView.setText("Default text");
         annotateImageView.setFontFamily(Typeface.DEFAULT);
         annotateImageView.setFontSize(32F);
 
@@ -135,15 +157,77 @@ public class AnnotateImageActivity extends AppCompatActivity implements ColorPic
     }
 
     @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.supersede_feedbacklibrary_sticker_item_smiley) {
+            setSelectedSticker(R.drawable.icon_smile);
+            addSticker();
+            return true;
+        }
+        if (id == R.id.supersede_feedbacklibrary_sticker_item_thumb_up) {
+            setSelectedSticker(R.drawable.ic_thumb_up_black_48dp);
+            addSticker();
+            return true;
+        }
+        if (id == R.id.supersede_feedbacklibrary_sticker_item_thumb_down) {
+            setSelectedSticker(R.drawable.ic_thumb_down_black_48dp);
+            addSticker();
+            return true;
+        }
+        if (id == R.id.supersede_feedbacklibrary_sticker_item_dissatisfied) {
+            setSelectedSticker(R.drawable.ic_sentiment_dissatisfied_black_48dp);
+            addSticker();
+            return true;
+        }
+        if (id == R.id.supersede_feedbacklibrary_sticker_item_neutral) {
+            setSelectedSticker(R.drawable.ic_sentiment_neutral_black_48dp);
+            addSticker();
+            return true;
+        }
+        if (id == R.id.supersede_feedbacklibrary_sticker_item_satisfied) {
+            setSelectedSticker(R.drawable.ic_sentiment_satisfied_black_48dp);
+            addSticker();
+            return true;
+        }
+
+        return super.onContextItemSelected(item);
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_annotate);
+
+        // Register the sticker button for the context menu
+        selectedSticker = R.drawable.icon_smile;
+        final ImageButton stickerButton = (ImageButton) findViewById(R.id.supersede_feedbacklibrary_sticker_btn);
+        registerForContextMenu(stickerButton);
 
         String imagePath = getIntent().getStringExtra("imagePath");
         Bitmap bitmap = BitmapFactory.decodeFile(imagePath);
         initAnnotateImageView(bitmap, imagePath);
 
         setListeners();
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        if (v.getId() == R.id.supersede_feedbacklibrary_sticker_btn) {
+            if (menu.getClass().getSimpleName().equals("ContextMenuBuilder")) {
+                try {
+                    Method m = menu.getClass().getSuperclass().getDeclaredMethod("setOptionalIconsVisible", Boolean.TYPE);
+                    m.setAccessible(true);
+                    m.invoke(menu, true);
+                } catch (Exception e) {
+                    // If an exception occurred, ignore it and only the titles of the items will be shown
+                }
+            }
+
+            MenuInflater inflater = getMenuInflater();
+            inflater.inflate(R.menu.menu_sticker, menu);
+        }
     }
 
     @Override
@@ -177,12 +261,7 @@ public class AnnotateImageActivity extends AppCompatActivity implements ColorPic
             RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.supersede_feedbacklibrary_annotate_picture_layout);
             if (relativeLayout != null) {
                 // Hide all control items
-                for (int i = 0; i < relativeLayout.getChildCount(); ++i) {
-                    View child = relativeLayout.getChildAt(i);
-                    if (child instanceof StickerView) {
-                        ((StickerView) child).setControlItemsHidden(true);
-                    }
-                }
+                hideAllControlItems(relativeLayout);
 
                 // Convert the ViewGroup, i.e., the supersede_feedbacklibrary_annotate_picture_layout into a bitmap
                 relativeLayout.measure(View.MeasureSpec.makeMeasureSpec(relativeLayout.getLayoutParams().width, View.MeasureSpec.EXACTLY), View.MeasureSpec.makeMeasureSpec(relativeLayout.getLayoutParams().height, View.MeasureSpec.EXACTLY));
@@ -217,7 +296,7 @@ public class AnnotateImageActivity extends AppCompatActivity implements ColorPic
         final ImageButton arrowButton = (ImageButton) findViewById(R.id.supersede_feedbacklibrary_arrow_btn);
         final Button eraseButton = (Button) findViewById(R.id.supersede_feedbacklibrary_erase_btn);
         final Button cropButton = (Button) findViewById(R.id.supersede_feedbacklibrary_crop_btn);
-        final Button stickerButton = (Button) findViewById(R.id.supersede_feedbacklibrary_sticker_btn);
+        final ImageButton stickerButton = (ImageButton) findViewById(R.id.supersede_feedbacklibrary_sticker_btn);
 
         if (colorPickerButton != null) {
             colorPickerButton.setOnClickListener(new View.OnClickListener() {
@@ -401,6 +480,10 @@ public class AnnotateImageActivity extends AppCompatActivity implements ColorPic
                 }
             });
         }
+    }
+
+    private void setSelectedSticker(int selectedSticker) {
+        this.selectedSticker = selectedSticker;
     }
 
     public void showColorPickerDialog() {

@@ -141,9 +141,8 @@ public class CustomSpinner extends Spinner implements OnClickListener, OnMultiCh
     @Override
     public boolean performClick() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        // TODO: Different texts for single/multiple selection?
         if (isMultiple()) {
-            builder.setTitle("Please select one or multiple options.");
+            builder.setTitle(getResources().getString(R.string.supersede_feedbacklibrary_multiple_options_dialog_title));
             builder.setMultiChoiceItems(items, mSelection, this);
             itemsAtStart = getSelectedItemsAsString();
             builder.setPositiveButton(R.string.supersede_feedbacklibrary_yes_string, new DialogInterface.OnClickListener() {
@@ -163,7 +162,7 @@ public class CustomSpinner extends Spinner implements OnClickListener, OnMultiCh
                 }
             });
         } else {
-            builder.setTitle("Please select an options.");
+            builder.setTitle(getResources().getString(R.string.supersede_feedbacklibrary_single_option_dialog_title));
             builder.setSingleChoiceItems(items, checkedIndex, this);
             builder.setNegativeButton(R.string.supersede_feedbacklibrary_cancel_string, new DialogInterface.OnClickListener() {
                 @Override
