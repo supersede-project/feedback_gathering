@@ -54,6 +54,7 @@ describe('PullConfiguration object', () => {
             screenshotMechanism: {
                 active: true
             },
+            categoryMechanism: null,
             dialogId: 'pullConfiguration'
         };
 
@@ -64,7 +65,7 @@ describe('PullConfiguration object', () => {
         var likelihood = pullConfiguration.generalConfiguration.getParameterValue("likelihood");
         var askOnAppStartup = pullConfiguration.generalConfiguration.getParameterValue("askOnAppStartup");
 
-        expect(likelihood).toEqual(0.4);
+        expect(likelihood).toEqual(0.0);
         expect(askOnAppStartup).toEqual(0);
     });
 });

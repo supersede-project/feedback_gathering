@@ -425,7 +425,7 @@
             "parameters": [
               {
                 "key": "title",
-                "value": "Please choose from the following categories"
+                "value": "Please choose from the following categories:"
               },
               {
                 "key": "ownAllowed",
@@ -434,6 +434,10 @@
               {
                 "key": "multiple",
                 "value": 1
+              },
+              {
+                "key": "breakAfterOption",
+                "value": 0
               },
               {
                 "key": "options",

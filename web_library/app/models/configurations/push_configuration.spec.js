@@ -54,6 +54,7 @@ define(["require", "exports", '../../services/mocks/mocks_loader', '../mechanism
                 screenshotMechanism: {
                     active: true
                 },
+                categoryMechanism: null,
                 dialogId: 'pushConfiguration'
             };
             expect(context).toEqual(expectedContext);

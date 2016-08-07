@@ -67,6 +67,19 @@
                 </section>
                 {{/if}}
 
+                {{#if categoryMechanism.active}}
+                    <section class="feedback-mechanism horizontal category-type">
+                        <p>{{ categoryMechanism.title }}</p>
+                        {{#each categoryMechanism.options}}
+                            <input type="{{ ../categoryMechanism.inputType }}" id="option{{ key }}" name="{{ key }}" value="{{ key }}">
+                            <label for="option{{ key }}"> {{ value }}</label> &nbsp;
+                            {{#if ../categoryMechanism.breakAfterOption}}
+                                <br />
+                            {{/if}}
+                        {{/each}}
+                    </section>
+                {{/if}}
+
                 <button class="button feedback-dialog-forward navigation-button">{{t "general.review_feedback" }}</button>
                 <div class="clearfix"></div>
             </article>

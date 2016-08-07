@@ -5,6 +5,7 @@ import {GeneralConfiguration} from './general_configuration';
 import {mechanismTypes, configurationTypes} from '../../js/config';
 import {PushConfiguration} from './push_configuration';
 import {PullConfiguration} from './pull_configuration';
+import {CategoryMechanism} from '../mechanisms/category_mechanism';
 
 
 export abstract class Configuration implements ConfigurationInterface {
@@ -41,11 +42,19 @@ export abstract class Configuration implements ConfigurationInterface {
      *  Context object that contains all the data to configure the feedback mechanism in the view.
      */
     getContextForView() {
-        var context = {textMechanism: null, ratingMechanism: null, screenshotMechanism: null, dialogId: this.dialogId};
+        var context = {
+            textMechanism: null,
+            ratingMechanism: null,
+            screenshotMechanism: null,
+            categoryMechanism: null,
+            dialogId: this.dialogId
+        };
         var textMechanism = this.getMechanismConfig(mechanismTypes.textType);
         var ratingMechanism = this.getMechanismConfig(mechanismTypes.ratingType);
         var screenshotMechanism = this.getMechanismConfig(mechanismTypes.screenshotType);
+        var categoryMechanism:CategoryMechanism = <CategoryMechanism>this.getMechanismConfig(mechanismTypes.categoryType);
 
+        // TODO move this to the mechanism classes
         if(textMechanism) {
             var textareaStyle = this.getCssStyle(textMechanism, [new ParameterValuePropertyPair('textareaFontColor', 'color')]);
             var labelStyle = this.getCssStyle(textMechanism, [
@@ -79,6 +88,19 @@ export abstract class Configuration implements ConfigurationInterface {
                 active: screenshotMechanism.active,
             }
         }
+        if(categoryMechanism) {
+            context.categoryMechanism = {
+                active: categoryMechanism.active,
+                title: categoryMechanism.getParameterValue('title'),
+                ownAllowed: categoryMechanism.getParameterValue('ownAllowed'),
+                multiple: categoryMechanism.getParameterValue('multiple'),
+                breakAfterOption: categoryMechanism.getParameterValue('breakAfterOption') ? true : false,
+                options: categoryMechanism.getOptions(),
+                inputType: categoryMechanism.getParameterValue('multiple') ? 'checkbox' : 'radio'
+            }
+        }
+        console.log(context);
+
         return context;
     }
 

@@ -70,6 +70,7 @@ describe('PushConfiguration object', () => {
             screenshotMechanism: {
                 active: true
             },
+            categoryMechanism: null,
             dialogId: 'pushConfiguration'
         };
 

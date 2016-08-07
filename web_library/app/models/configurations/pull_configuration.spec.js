@@ -44,6 +44,7 @@ define(["require", "exports", '../../services/mocks/mocks_loader', './pull_confi
                 screenshotMechanism: {
                     active: true
                 },
+                categoryMechanism: null,
                 dialogId: 'pullConfiguration'
             };
             expect(context).toEqual(expectedContext);
@@ -51,7 +52,7 @@ define(["require", "exports", '../../services/mocks/mocks_loader', './pull_confi
         it('should provide the parameter values', function () {
             var likelihood = pullConfiguration.generalConfiguration.getParameterValue("likelihood");
             var askOnAppStartup = pullConfiguration.generalConfiguration.getParameterValue("askOnAppStartup");
-            expect(likelihood).toEqual(0.4);
+            expect(likelihood).toEqual(0.0);
             expect(askOnAppStartup).toEqual(0);
         });
     });

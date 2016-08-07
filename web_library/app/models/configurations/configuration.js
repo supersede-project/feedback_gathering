@@ -17,10 +17,17 @@ define(["require", "exports", '../parameters/parameter_value_property_pair', '..
             }
         };
         Configuration.prototype.getContextForView = function () {
-            var context = { textMechanism: null, ratingMechanism: null, screenshotMechanism: null, dialogId: this.dialogId };
+            var context = {
+                textMechanism: null,
+                ratingMechanism: null,
+                screenshotMechanism: null,
+                categoryMechanism: null,
+                dialogId: this.dialogId
+            };
             var textMechanism = this.getMechanismConfig(config_1.mechanismTypes.textType);
             var ratingMechanism = this.getMechanismConfig(config_1.mechanismTypes.ratingType);
             var screenshotMechanism = this.getMechanismConfig(config_1.mechanismTypes.screenshotType);
+            var categoryMechanism = this.getMechanismConfig(config_1.mechanismTypes.categoryType);
             if (textMechanism) {
                 var textareaStyle = this.getCssStyle(textMechanism, [new parameter_value_property_pair_1.ParameterValuePropertyPair('textareaFontColor', 'color')]);
                 var labelStyle = this.getCssStyle(textMechanism, [
@@ -53,6 +60,18 @@ define(["require", "exports", '../parameters/parameter_value_property_pair', '..
                     active: screenshotMechanism.active,
                 };
             }
+            if (categoryMechanism) {
+                context.categoryMechanism = {
+                    active: categoryMechanism.active,
+                    title: categoryMechanism.getParameterValue('title'),
+                    ownAllowed: categoryMechanism.getParameterValue('ownAllowed'),
+                    multiple: categoryMechanism.getParameterValue('multiple'),
+                    breakAfterOption: categoryMechanism.getParameterValue('breakAfterOption') ? true : false,
+                    options: categoryMechanism.getOptions(),
+                    inputType: categoryMechanism.getParameterValue('multiple') ? 'checkbox' : 'radio'
+                };
+            }
+            console.log(context);
             return context;
         };
         Configuration.prototype.getCssStyle = function (mechanism, parameterValuePropertyPair) {
