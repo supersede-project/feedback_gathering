@@ -17,6 +17,7 @@ import {Rating} from '../models/feedbacks/rating';
 import {PageNavigation} from './helpers/page_navigation';
 import {PushConfiguration} from '../models/configurations/push_configuration';
 import {ConfigurationInterface} from '../models/configurations/configuration_interface';
+import {Application} from '../models/applications/application';
 
 
 export var feedbackPluginModule = function ($, window, document) {
@@ -25,12 +26,10 @@ export var feedbackPluginModule = function ($, window, document) {
     var pullDialog;
     var pullConfigurationDialogId = "pullConfiguration";
     var active = false;
-    var pushConfiguration:PushConfiguration;
-    // TODO if there are more than 1 possible pull configurations this needs to get extended
-    var pullConfiguration:PullConfiguration;
+    var application:Application;
     var dialogTemplate = require('../templates/feedback_dialog.handlebars');
     var pullDialogTemplate = require('../templates/feedback_dialog.handlebars');
-    var mockData = require('json!../services/mocks/configurations_mock.json');
+    var mockData = require('json!../services/mocks/applications_mock.json');
 
     /**
      * @param configuration
@@ -43,13 +42,11 @@ export var feedbackPluginModule = function ($, window, document) {
      * All events on the HTML have to be added after the template is appended to the body (if not using live binding).
      */
     var initMechanisms = function (configuration) {
-        pushConfiguration = configuration;
         $('.server-response').removeClass('error').removeClass('success').text('');
         var context = configuration.getContextForView();
 
         var pageNavigation = new PageNavigation(configuration, $('#' + pushConfigurationDialogId));
-
-        dialog = initTemplate(dialogTemplate, pushConfigurationDialogId, context, pushConfiguration, pageNavigation);
+        dialog = initTemplate(dialogTemplate, pushConfigurationDialogId, context, configuration, pageNavigation);
     };
 
     /**
@@ -58,14 +55,12 @@ export var feedbackPluginModule = function ($, window, document) {
      * @param configuration
      */
     var initPullConfiguration = function(configuration:PullConfiguration) {
-        pullConfiguration = configuration;
         $('.server-response').removeClass('error').removeClass('success').text('');
+        var pageNavigation = new PageNavigation(configuration, $('#' + pullConfigurationDialogId));
 
-        var pageNavigation = new PageNavigation(pullConfiguration, $('#' + pullConfigurationDialogId));
-
-        if(pullConfiguration.shouldGetTriggered()) {
-            var context = pullConfiguration.getContextForView();
-            pullDialog = initTemplate(pullDialogTemplate, pullConfigurationDialogId, context, pullConfiguration, pageNavigation);
+        if(configuration.shouldGetTriggered()) {
+            var context = configuration.getContextForView();
+            pullDialog = initTemplate(pullDialogTemplate, pullConfigurationDialogId, context, configuration, pageNavigation);
             pullDialog.dialog('open');
         }
     };

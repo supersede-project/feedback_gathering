@@ -6,25 +6,22 @@ define(["require", "exports", '../services/configuration_service', './config', '
         var pullDialog;
         var pullConfigurationDialogId = "pullConfiguration";
         var active = false;
-        var pushConfiguration;
-        var pullConfiguration;
+        var application;
         var dialogTemplate = require('../templates/feedback_dialog.handlebars');
         var pullDialogTemplate = require('../templates/feedback_dialog.handlebars');
-        var mockData = require('json!../services/mocks/configurations_mock.json');
+        var mockData = require('json!../services/mocks/applications_mock.json');
         var initMechanisms = function (configuration) {
-            pushConfiguration = configuration;
             $('.server-response').removeClass('error').removeClass('success').text('');
             var context = configuration.getContextForView();
             var pageNavigation = new page_navigation_1.PageNavigation(configuration, $('#' + pushConfigurationDialogId));
-            dialog = initTemplate(dialogTemplate, pushConfigurationDialogId, context, pushConfiguration, pageNavigation);
+            dialog = initTemplate(dialogTemplate, pushConfigurationDialogId, context, configuration, pageNavigation);
         };
         var initPullConfiguration = function (configuration) {
-            pullConfiguration = configuration;
             $('.server-response').removeClass('error').removeClass('success').text('');
-            var pageNavigation = new page_navigation_1.PageNavigation(pullConfiguration, $('#' + pullConfigurationDialogId));
-            if (pullConfiguration.shouldGetTriggered()) {
-                var context = pullConfiguration.getContextForView();
-                pullDialog = initTemplate(pullDialogTemplate, pullConfigurationDialogId, context, pullConfiguration, pageNavigation);
+            var pageNavigation = new page_navigation_1.PageNavigation(configuration, $('#' + pullConfigurationDialogId));
+            if (configuration.shouldGetTriggered()) {
+                var context = configuration.getContextForView();
+                pullDialog = initTemplate(pullDialogTemplate, pullConfigurationDialogId, context, configuration, pageNavigation);
                 pullDialog.dialog('open');
             }
         };

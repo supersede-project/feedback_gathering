@@ -4,7 +4,7 @@ define(["require", "exports", './mock_backend', './../mocks/mocks_loader'], func
         var configurationMockBackend;
         var feedbackMockBackend;
         beforeEach(function () {
-            var configurationMockData = mocks_loader_1.readJSON('app/services/mocks/configurations_mock.json', '/base/');
+            var configurationMockData = mocks_loader_1.readJSON('app/services/mocks/applications_mock.json', '/base/');
             configurationMockBackend = new mock_backend_1.MockBackend(configurationMockData);
             var feedbackMockData = mocks_loader_1.readJSON('app/services/mocks/feedbacks_mock.json', '/base/');
             feedbackMockBackend = new mock_backend_1.MockBackend(feedbackMockData);

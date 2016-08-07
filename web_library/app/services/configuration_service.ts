@@ -1,6 +1,8 @@
 import {Backend} from './backends/backend';
 import {HttpBackend} from './backends/http_backend';
 import {PushConfiguration} from '../models/configurations/push_configuration';
+import {ConfigurationInterface} from '../models/configurations/configuration_interface';
+import {ConfigurationFactory} from '../models/configurations/configuration_factory';
 
 
 /**
@@ -21,9 +23,9 @@ export class ConfigurationService {
         }
     }
 
-    retrieveConfiguration(callback:(configuration:PushConfiguration) => void) {
-        this.backend.retrieve(1, function(configuration:PushConfiguration) {
-            var configurationObject = PushConfiguration.initByData(configuration);
+    retrieveConfiguration(configurationId:number, callback:(configuration:ConfigurationInterface) => void) {
+        this.backend.retrieve(configurationId, function(configurationData:ConfigurationInterface) {
+            var configurationObject = ConfigurationFactory.createByData(configurationData);
             callback(configurationObject);
         });
     }

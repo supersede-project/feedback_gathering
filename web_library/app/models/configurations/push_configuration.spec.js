@@ -3,7 +3,7 @@ define(["require", "exports", '../../services/mocks/mocks_loader', '../mechanism
     describe('PushConfiguration object', function () {
         var configuration;
         beforeEach(function () {
-            var applications = mocks_loader_1.readJSON('app/services/mocks/configurations_mock.json', '/base/');
+            var applications = mocks_loader_1.readJSON('app/services/mocks/applications_mock.json', '/base/');
             var application = applications[0];
             var pushConfigurationData = application.configurations[0];
             configuration = configuration_factory_1.ConfigurationFactory.createByData(pushConfigurationData);

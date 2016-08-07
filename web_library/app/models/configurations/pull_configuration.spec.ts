@@ -7,7 +7,7 @@ describe('PullConfiguration object', () => {
     let pullConfiguration:PullConfiguration;
 
     beforeEach(() => {
-        var applications = readJSON('app/services/mocks/configurations_mock.json', '/base/');
+        var applications = readJSON('app/services/mocks/applications_mock.json', '/base/');
         var application = applications[0];
 
         var pullConfigurationData = application.configurations[1];

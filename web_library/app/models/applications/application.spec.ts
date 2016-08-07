@@ -8,7 +8,7 @@ describe('Application', () => {
     let application:Application;
 
     beforeEach(() => {
-        var applications = readJSON('app/services/mocks/configurations_mock.json', '/base/');
+        var applications = readJSON('app/services/mocks/applications_mock.json', '/base/');
         application = Application.initByData(applications[0]);
     });
 

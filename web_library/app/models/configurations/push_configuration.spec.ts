@@ -12,7 +12,7 @@ describe('PushConfiguration object', () => {
     let configuration:PushConfiguration;
 
     beforeEach(() => {
-        var applications = readJSON('app/services/mocks/configurations_mock.json', '/base/');
+        var applications = readJSON('app/services/mocks/applications_mock.json', '/base/');
         var application = applications[0];
         var pushConfigurationData = application.configurations[0];
         configuration = ConfigurationFactory.createByData(pushConfigurationData);

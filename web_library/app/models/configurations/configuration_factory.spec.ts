@@ -9,7 +9,7 @@ describe('Configuration factory', () => {
     let application:Application;
 
     beforeEach(() => {
-        var applications = readJSON('app/services/mocks/configurations_mock.json', '/base/');
+        var applications = readJSON('app/services/mocks/applications_mock.json', '/base/');
         application = applications[0];
     });
 

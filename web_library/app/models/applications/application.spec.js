@@ -3,7 +3,7 @@ define(["require", "exports", '../../services/mocks/mocks_loader', './applicatio
     describe('Application', function () {
         var application;
         beforeEach(function () {
-            var applications = mocks_loader_1.readJSON('app/services/mocks/configurations_mock.json', '/base/');
+            var applications = mocks_loader_1.readJSON('app/services/mocks/applications_mock.json', '/base/');
             application = application_1.Application.initByData(applications[0]);
         });
         it('should have a general configuration', function () {

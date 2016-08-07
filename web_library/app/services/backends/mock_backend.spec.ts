@@ -7,7 +7,7 @@ describe('Mock Backend', () => {
     let feedbackMockBackend:MockBackend;
 
     beforeEach(() => {
-        var configurationMockData = readJSON('app/services/mocks/configurations_mock.json', '/base/');
+        var configurationMockData = readJSON('app/services/mocks/applications_mock.json', '/base/');
         configurationMockBackend = new MockBackend(configurationMockData);
 
         var feedbackMockData = readJSON('app/services/mocks/feedbacks_mock.json', '/base/');
