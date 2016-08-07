@@ -283,7 +283,7 @@ public class AnnotateImageActivity extends AppCompatActivity implements ColorPic
     }
 
     private void setListeners() {
-        final Button colorPickerButton = (Button) findViewById(R.id.supersede_feedbacklibrary_color_picker_btn);
+        final ImageButton colorPickerButton = (ImageButton) findViewById(R.id.supersede_feedbacklibrary_color_picker_btn);
         final Button blurButton = (Button) findViewById(R.id.supersede_feedbacklibrary_blur_btn);
         final Button fillButton = (Button) findViewById(R.id.supersede_feedbacklibrary_fill_btn);
         final Button blackButton = (Button) findViewById(R.id.supersede_feedbacklibrary_black_btn);
@@ -295,7 +295,7 @@ public class AnnotateImageActivity extends AppCompatActivity implements ColorPic
         final ImageButton lineButton = (ImageButton) findViewById(R.id.supersede_feedbacklibrary_line_btn);
         final ImageButton arrowButton = (ImageButton) findViewById(R.id.supersede_feedbacklibrary_arrow_btn);
         final Button eraseButton = (Button) findViewById(R.id.supersede_feedbacklibrary_erase_btn);
-        final Button cropButton = (Button) findViewById(R.id.supersede_feedbacklibrary_crop_btn);
+        final ImageButton cropButton = (ImageButton) findViewById(R.id.supersede_feedbacklibrary_crop_btn);
         final ImageButton stickerButton = (ImageButton) findViewById(R.id.supersede_feedbacklibrary_sticker_btn);
 
         if (colorPickerButton != null) {
@@ -306,7 +306,6 @@ public class AnnotateImageActivity extends AppCompatActivity implements ColorPic
                 }
             });
         }
-
         if (blurButton != null) {
             blurButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -323,7 +322,6 @@ public class AnnotateImageActivity extends AppCompatActivity implements ColorPic
                 }
             });
         }
-
         if (fillButton != null) {
             fillButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -338,7 +336,6 @@ public class AnnotateImageActivity extends AppCompatActivity implements ColorPic
                 }
             });
         }
-
         if (blackButton != null && colorPickerButton != null) {
             blackButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -360,7 +357,6 @@ public class AnnotateImageActivity extends AppCompatActivity implements ColorPic
                 }
             });
         }
-
         if (penButton != null) {
             penButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -369,7 +365,6 @@ public class AnnotateImageActivity extends AppCompatActivity implements ColorPic
                 }
             });
         }
-
         if (lineButton != null) {
             lineButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -378,7 +373,6 @@ public class AnnotateImageActivity extends AppCompatActivity implements ColorPic
                 }
             });
         }
-
         if (arrowButton != null) {
             arrowButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -387,7 +381,6 @@ public class AnnotateImageActivity extends AppCompatActivity implements ColorPic
                 }
             });
         }
-
         if (undoButton != null && redoButton != null) {
             annotateImageView.setUndoButton(undoButton);
             undoButton.setEnabled(false);
@@ -423,7 +416,6 @@ public class AnnotateImageActivity extends AppCompatActivity implements ColorPic
                 }
             });
         }
-
         if (rectangleButton != null) {
             rectangleButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -432,7 +424,6 @@ public class AnnotateImageActivity extends AppCompatActivity implements ColorPic
                 }
             });
         }
-
         if (circleButton != null) {
             circleButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -441,7 +432,6 @@ public class AnnotateImageActivity extends AppCompatActivity implements ColorPic
                 }
             });
         }
-
         if (eraseButton != null && blackButton != null) {
             eraseButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -458,7 +448,6 @@ public class AnnotateImageActivity extends AppCompatActivity implements ColorPic
                 }
             });
         }
-
         if (cropButton != null) {
             cropButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -471,7 +460,6 @@ public class AnnotateImageActivity extends AppCompatActivity implements ColorPic
                 }
             });
         }
-
         if (stickerButton != null) {
             stickerButton.setOnClickListener(new View.OnClickListener() {
                 @Override
