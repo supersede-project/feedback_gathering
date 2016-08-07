@@ -290,7 +290,7 @@
         },
         {
           "key": "multiple",
-          "value": false
+          "value": 0
         },
         {
           "key": "mandatory",

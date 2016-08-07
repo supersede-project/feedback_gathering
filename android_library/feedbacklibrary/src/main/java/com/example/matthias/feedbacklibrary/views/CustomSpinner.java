@@ -47,23 +47,11 @@ public class CustomSpinner extends Spinner implements OnClickListener, OnMultiCh
         super.setAdapter(simpleAdapter);
     }
 
-    private String buildSelectedItemString() {
-        StringBuilder sb = new StringBuilder();
-        boolean foundOne = false;
-
-        for (int i = 0; i < items.length; ++i) {
-            if (mSelection[i]) {
-                if (foundOne) {
-                    sb.append(", ");
-                }
-                foundOne = true;
-
-                sb.append(items[i]);
-            }
-        }
-        return sb.toString();
-    }
-
+    /**
+     * This method returns the indices of the selected items.
+     *
+     * @return the list of indices
+     */
     public List<Integer> getSelectedIndices() {
         List<Integer> selection = new LinkedList<>();
         for (int i = 0; i < items.length; ++i) {
@@ -74,7 +62,12 @@ public class CustomSpinner extends Spinner implements OnClickListener, OnMultiCh
         return selection;
     }
 
-    public String getSelectedItemsAsString() {
+    /**
+     * This method gets the selected items as a string.
+     *
+     * @return the concatenated string
+     */
+    private String getSelectedItemsAsString() {
         StringBuilder sb = new StringBuilder();
         boolean foundOne = false;
 
@@ -90,6 +83,11 @@ public class CustomSpinner extends Spinner implements OnClickListener, OnMultiCh
         return sb.toString();
     }
 
+    /**
+     * This method returns the strings of the selected items.
+     *
+     * @return the list of strings
+     */
     public List<String> getSelectedStrings() {
         List<String> selection = new LinkedList<>();
         for (int i = 0; i < items.length; ++i) {
@@ -100,26 +98,17 @@ public class CustomSpinner extends Spinner implements OnClickListener, OnMultiCh
         return selection;
     }
 
+    /**
+     * This method returns if the spinner is of single or multiple choice type.
+     *
+     * @return true if multiple choice, false otherwise
+     */
     public boolean isMultiple() {
         return isMultiple;
     }
 
     @Override
     public void onClick(DialogInterface dialog, int which, boolean isChecked) {
-        if (!isMultiple()) {
-            if (mSelection != null && which < mSelection.length) {
-                if (isChecked) {
-                    for (int i = 0; i < mSelection.length; ++i) {
-                        mSelection[i] = false;
-                    }
-                }
-                mSelection[which] = isChecked;
-                simpleAdapter.clear();
-                simpleAdapter.add(buildSelectedItemString());
-            } else {
-                throw new IllegalArgumentException("Argument 'which' is out of bounds.");
-            }
-        }
     }
 
     @Override
@@ -141,6 +130,7 @@ public class CustomSpinner extends Spinner implements OnClickListener, OnMultiCh
     @Override
     public boolean performClick() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setCancelable(false);
         if (isMultiple()) {
             builder.setTitle(getResources().getString(R.string.supersede_feedbacklibrary_multiple_options_dialog_title));
             builder.setMultiChoiceItems(items, mSelection, this);
@@ -148,6 +138,8 @@ public class CustomSpinner extends Spinner implements OnClickListener, OnMultiCh
             builder.setPositiveButton(R.string.supersede_feedbacklibrary_yes_string, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
+                    simpleAdapter.clear();
+                    simpleAdapter.add(getSelectedItemsAsString());
                     System.arraycopy(mSelection, 0, mSelectionAtStart, 0, mSelection.length);
                     listener.selectedIndices(getSelectedIndices());
                     listener.selectedStrings(getSelectedStrings());
@@ -179,6 +171,12 @@ public class CustomSpinner extends Spinner implements OnClickListener, OnMultiCh
         throw new RuntimeException("setAdapter is not supported by CustomSpinner.");
     }
 
+    /**
+     * This method sets the items for the selection.
+     *
+     * @param items                 the items to select
+     * @param firstDefaultSelection the firstDefaultSelection
+     */
     public void setItems(String[] items, boolean firstDefaultSelection) {
         this.items = items;
         mSelection = new boolean[this.items.length];
@@ -193,6 +191,12 @@ public class CustomSpinner extends Spinner implements OnClickListener, OnMultiCh
         mSelectionAtStart[0] = firstDefaultSelection;
     }
 
+    /**
+     * This method sets the items for the selection.
+     *
+     * @param items                 the items to select
+     * @param firstDefaultSelection the firstDefaultSelection
+     */
     public void setItems(List<String> items, boolean firstDefaultSelection) {
         this.items = items.toArray(new String[items.size()]);
         mSelection = new boolean[this.items.length];
@@ -229,7 +233,7 @@ public class CustomSpinner extends Spinner implements OnClickListener, OnMultiCh
             }
         }
         simpleAdapter.clear();
-        simpleAdapter.add(buildSelectedItemString());
+        simpleAdapter.add(getSelectedItemsAsString());
     }
 
     public void setSelection(List<String> selection) {
@@ -246,9 +250,10 @@ public class CustomSpinner extends Spinner implements OnClickListener, OnMultiCh
             }
         }
         simpleAdapter.clear();
-        simpleAdapter.add(buildSelectedItemString());
+        simpleAdapter.add(getSelectedItemsAsString());
     }
 
+    @Override
     public void setSelection(int index) {
         for (int i = 0; i < mSelection.length; i++) {
             mSelection[i] = false;
@@ -262,7 +267,7 @@ public class CustomSpinner extends Spinner implements OnClickListener, OnMultiCh
                     + " is out of bounds.");
         }
         simpleAdapter.clear();
-        simpleAdapter.add(buildSelectedItemString());
+        simpleAdapter.add(getSelectedItemsAsString());
     }
 
     public void setSelection(int[] selectedIndices) {
@@ -280,7 +285,7 @@ public class CustomSpinner extends Spinner implements OnClickListener, OnMultiCh
             }
         }
         simpleAdapter.clear();
-        simpleAdapter.add(buildSelectedItemString());
+        simpleAdapter.add(getSelectedItemsAsString());
     }
 
     public interface OnMultipleItemsSelectedListener {

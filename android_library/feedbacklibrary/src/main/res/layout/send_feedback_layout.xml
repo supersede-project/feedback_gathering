@@ -1,39 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/whiteColor"
-    android:orientation="horizontal"
-    android:paddingTop="@dimen/activity_horizontal_margin">
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/whiteColor"
+                android:orientation="horizontal"
+                android:paddingTop="@dimen/activity_horizontal_margin">
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="#000000" />
+        android:background="#000000"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/supersede_feedbacklibrary_send_feedback_button"
-        android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_gravity="fill"
-        android:layout_toLeftOf="@+id/supersede_feedbacklibrary_send_feedback_button"
         android:layout_toStartOf="@+id/supersede_feedbacklibrary_send_feedback_button"
         android:paddingTop="5dp"
-        android:text="@string/supersede_feedbacklibrary_sendconfirmation_text" />
+        android:text="@string/supersede_feedbacklibrary_sendconfirmation_text"/>
 
     <Button
         android:id="@+id/supersede_feedbacklibrary_send_feedback_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
         android:height="36dp"
         android:minWidth="88dp"
-        android:onClick="sendDummy"
-        android:text="@string/supersede_feedbacklibrary_sendbutton_text" />
+        android:onClick="sendStub"
+        android:text="@string/supersede_feedbacklibrary_sendbutton_text"/>
 
 </RelativeLayout>

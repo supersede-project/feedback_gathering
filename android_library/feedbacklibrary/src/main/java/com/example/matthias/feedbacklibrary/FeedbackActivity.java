@@ -158,9 +158,9 @@ public class FeedbackActivity extends AppCompatActivity {
         String jsonString;
         Gson gson = new Gson();
         // For single category
-        //jsonString = Utils.readFileAsString("configuration_material_design_push_single_category.json", getAssets());
+        jsonString = Utils.readFileAsString("configuration_material_design_push_single_category.json", getAssets());
         // For multiple category
-        jsonString = Utils.readFileAsString("configuration_material_design_push_multiple_categories.json", getAssets());
+        //jsonString = Utils.readFileAsString("configuration_material_design_push_multiple_categories.json", getAssets());
         configuration = gson.fromJson(jsonString, OrchestratorConfiguration.class);
 
         initModel();
@@ -214,7 +214,7 @@ public class FeedbackActivity extends AppCompatActivity {
     /**
      * This method initializes the view.
      */
-    public void initView() {
+    private void initView() {
         allMechanismViews = new ArrayList<>();
         LayoutInflater layoutInflater = LayoutInflater.from(this);
         LinearLayout linearLayout = (LinearLayout) findViewById(R.id.supersede_feedbacklibrary_feedback_activity_layout);
@@ -265,7 +265,7 @@ public class FeedbackActivity extends AppCompatActivity {
         progressDialog.dismiss();
     }
 
-    public boolean isPush() {
+    private boolean isPush() {
         return isPush;
     }
 
@@ -448,6 +448,10 @@ public class FeedbackActivity extends AppCompatActivity {
             // Screenshot file
             File imageFile = new File(screenShotImagePath);
 
+            if (fbAPI == null) {
+                Retrofit rtf = new Retrofit.Builder().baseUrl(feedbackAPI.endpoint).addConverterFactory(GsonConverterFactory.create()).build();
+                fbAPI = rtf.create(feedbackAPI.class);
+            }
             RequestBody feedbackJsonPart = RequestBody.create(MediaType.parse("multipart/form-data"), feedbackJsonString);
             RequestBody feedbackScreenshotPart = RequestBody.create(MediaType.parse("multipart/form-data"), imageFile);
             if (!screenShotImagePath.equals("")) {
@@ -480,7 +484,7 @@ public class FeedbackActivity extends AppCompatActivity {
         }
     }
 
-    public void sendDummy(View view) {
+    public void sendStub(View view) {
         String screenShotImagePath = annotatedImagePath != null ? annotatedImagePath : "";
 
         // The mechanism models are updated with the view values

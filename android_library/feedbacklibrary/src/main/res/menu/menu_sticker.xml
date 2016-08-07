@@ -7,36 +7,36 @@
     <item
         android:id="@+id/supersede_feedbacklibrary_sticker_item_smiley"
         android:icon="@drawable/icon_smile"
-        android:title="@string/supersede_feedbacklibrary_smiley_string"
+        android:title="@string/supersede_feedbacklibrary_menu_item_smiley_title"
         app:showAsAction="always"/>
 
     <item
         android:id="@+id/supersede_feedbacklibrary_sticker_item_thumb_up"
         android:icon="@drawable/ic_thumb_up_black_48dp"
-        android:title="@string/supersede_feedbacklibrary_thumb_up_string"
+        android:title="@string/supersede_feedbacklibrary_menu_item_thumb_up_title"
         app:showAsAction="always"/>
 
     <item
         android:id="@+id/supersede_feedbacklibrary_sticker_item_thumb_down"
         android:icon="@drawable/ic_thumb_down_black_48dp"
-        android:title="@string/supersede_feedbacklibrary_thumb_up_string"
+        android:title="@string/supersede_feedbacklibrary_menu_item_thumb_up_title"
         app:showAsAction="always"/>
 
     <item
         android:id="@+id/supersede_feedbacklibrary_sticker_item_dissatisfied"
         android:icon="@drawable/ic_sentiment_dissatisfied_black_48dp"
-        android:title="@string/supersede_feedbacklibrary_thumb_down_string"
+        android:title="@string/supersede_feedbacklibrary_menu_item_dissatisfied_title"
         app:showAsAction="always"/>
 
     <item
         android:id="@+id/supersede_feedbacklibrary_sticker_item_neutral"
         android:icon="@drawable/ic_sentiment_neutral_black_48dp"
-        android:title="@string/supersede_feedbacklibrary_thumb_down_string"
+        android:title="@string/supersede_feedbacklibrary_menu_item_neutral_title"
         app:showAsAction="always"/>
 
     <item
         android:id="@+id/supersede_feedbacklibrary_sticker_item_satisfied"
         android:icon="@drawable/ic_sentiment_satisfied_black_48dp"
-        android:title="@string/supersede_feedbacklibrary_thumb_down_string"
+        android:title="@string/supersede_feedbacklibrary_menu_item_satisfied_title"
         app:showAsAction="always"/>
 </menu>

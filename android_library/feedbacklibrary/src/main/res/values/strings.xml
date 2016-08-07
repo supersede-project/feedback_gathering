@@ -43,9 +43,12 @@
     <string name="supersede_feedbacklibrary_cancelannotation_title">Cancel annotation</string>
     <string name="supersede_feedbacklibrary_chosencolor_string">Chosen color</string>
     <string name="supersede_feedbacklibrary_crop_string">Crop</string>
-    <string name="supersede_feedbacklibrary_smiley_string">Smiley</string>
-    <string name="supersede_feedbacklibrary_thumb_up_string">Thumb up</string>
-    <string name="supersede_feedbacklibrary_thumb_down_string">Thumb down</string>
+    <string name="supersede_feedbacklibrary_menu_item_smiley_title">Smiley</string>
+    <string name="supersede_feedbacklibrary_menu_item_thumb_up_title">Thumb up</string>
+    <string name="supersede_feedbacklibrary_menu_item_thumb_down_title">Thumb down</string>
+    <string name="supersede_feedbacklibrary_menu_item_dissatisfied_title">Dissatisfied</string>
+    <string name="supersede_feedbacklibrary_menu_item_neutral_title">Neutral</string>
+    <string name="supersede_feedbacklibrary_menu_item_satisfied_title">Satisfied</string>
 
     <!-- Pull feedback -->
     <string name="supersede_feedbacklibrary_pull_feedback_question_string">Would you like to give feedback?</string>
