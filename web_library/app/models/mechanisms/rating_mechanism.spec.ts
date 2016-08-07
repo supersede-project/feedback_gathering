@@ -1,12 +1,12 @@
 import {RatingMechanism} from './rating_mechanism';
-import {ratingType} from '../../js/config';
+import {mechanismTypes} from '../../js/config';
 
 
 describe('Rating Mechanism', () => {
     let ratingMechanism:RatingMechanism;
 
     beforeEach(() => {
-        ratingMechanism = new RatingMechanism(1, ratingType, true, 1, false, [
+        ratingMechanism = new RatingMechanism(1, mechanismTypes.ratingType, true, 1, false, [
             {key: 'maxRating', value: 10},
             {key: 'defaultRating', value: 3}
         ]);
@@ -29,6 +29,5 @@ describe('Rating Mechanism', () => {
         expect(options['useFullStars']).toEqual(expectedOtions.useFullStars);
         expect(options['disableAfterRate']).toEqual(expectedOtions.disableAfterRate);
     });
-
 });
 

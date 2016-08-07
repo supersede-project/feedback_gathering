@@ -573,10 +573,14 @@ button.text-type-text-clear {
   border: 1px solid #393939;
   height: auto;
   display: none;
-  margin-bottom: 10px; }
+  margin-bottom: 10px;
+  position: relative; }
 
 .screenshot-operations {
   display: none; }
+  .screenshot-operations .sticking img {
+    width: 30px;
+    height: auto; }
 
 button.screenshot-operation {
   display: block;
@@ -587,5 +591,17 @@ button.screenshot-operation {
   font-size: 14px; }
   button.screenshot-operation.active {
     font-weight: bold; }
+
+.sticker-container {
+  position: absolute;
+  z-index: 1000;
+  top: 5px;
+  left: 5px;
+  padding: 10px;
+  border: 1px solid black; }
+  .sticker-container img {
+    z-index: 1000;
+    height: auto;
+    width: 30px; }
 
 /*# sourceMappingURL=main.css.map */

@@ -1,9 +1,7 @@
-import {ParameterInterface} from '../parameters/parameter_interface';
 import {Mechanism} from '../mechanisms/mechanism';
 import {Configuration} from './configuration';
-import {Parameterizable} from '../mixins/parameterizable';
-import {applyMixins} from '../../js/helpers/mixin_helper';
-import {MechanismFactory} from '../mechanisms/mechanism_factory';
+import {GeneralConfiguration} from './general_configuration';
+import {configurationTypes} from '../../js/config';
 
 
 /**
@@ -11,27 +9,12 @@ import {MechanismFactory} from '../mechanisms/mechanism_factory';
  * displayed to the user in order to get feedback from him.
  * Note that this class is extended by the Parameterizable mixin to provide methods on a parameter array field.
  */
-export class PullConfiguration extends Configuration implements Parameterizable {
-    active:boolean;
-    parameters:ParameterInterface[];
+export class PullConfiguration extends Configuration {
 
-    constructor(id:number, mechanisms:Mechanism[], active:boolean, parameters:ParameterInterface[]) {
-        super(id, mechanisms);
+    constructor(id:number, mechanisms:Mechanism[], generalConfiguration:GeneralConfiguration) {
+        super(id, mechanisms, configurationTypes.pull, generalConfiguration);
         this.dialogId = 'pullConfiguration';
-        this.active = active;
-        this.parameters = parameters;
     }
-
-    static initByData(data:any) {
-        var mechanisms = [];
-        for(var mechanism of data.mechanisms) {
-            mechanisms.push(MechanismFactory.createByData(mechanism));
-        }
-        return new PullConfiguration(data.id, mechanisms, data.active, data.parameters);
-    }
-
-    getParameter: (key:string) => ParameterInterface;
-    getParameterValue: (key:string) => any;
 
     /**
      * Decides whether the mechanisms associated with this configuration should get activated or not.
@@ -39,8 +22,7 @@ export class PullConfiguration extends Configuration implements Parameterizable 
      * @returns {boolean} true if the mechanismes should get triggered.
      */
     shouldGetTriggered(): boolean {
-        return this.getParameterValue('askOnAppStartup') || Math.random() <= this.getParameterValue('likelihood');
+        return this.generalConfiguration.getParameterValue('askOnAppStartup') ||
+            Math.random() <= this.generalConfiguration.getParameterValue('likelihood');
     }
 }
-
-applyMixins(PullConfiguration, [Parameterizable]);

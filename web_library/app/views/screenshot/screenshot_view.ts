@@ -364,6 +364,21 @@ export class ScreenshotView {
             myThis.reset();
         });
 
+        this.container.find('.screenshot-operation.sticking').on('click', function(event) {
+            event.preventDefault();
+            event.stopPropagation();
+            var imgSrc = jQuery(this).find('img').attr('src');
+            var img = jQuery('<img src="' + imgSrc + '" class="sticker" />');
+            var stickerContainer = jQuery('<div class="sticker-container"></div>');
+
+            img.resizable();
+            stickerContainer.append(img);
+            //stickerContainer.draggable();
+            img.css('width', '30px');
+            img.css('height', 'auto');
+            myThis.screenshotPreviewElement.append(stickerContainer);
+        });
+
         this.container.find('.screenshot-operations').show();
     }
 

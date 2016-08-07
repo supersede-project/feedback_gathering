@@ -6,9 +6,9 @@ define(["require", "exports", 'i18next', '../config', './../jquery.validate.js']
             this.container = container;
         }
         PageNavigation.prototype.pageForwardCallback = function (currentPage, nextPage) {
-            var textMechanism = this.configuration.getMechanismConfig(config_1.textType);
-            var ratingMechanism = this.configuration.getMechanismConfig(config_1.ratingType);
-            var screenshotMechanism = this.configuration.getMechanismConfig(config_1.screenshotType);
+            var textMechanism = this.configuration.getMechanismConfig(config_1.mechanismTypes.textType);
+            var ratingMechanism = this.configuration.getMechanismConfig(config_1.mechanismTypes.ratingType);
+            var screenshotMechanism = this.configuration.getMechanismConfig(config_1.mechanismTypes.screenshotType);
             currentPage.find('.validate').each(function () {
                 $(this).validate();
             });

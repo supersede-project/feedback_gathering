@@ -2,7 +2,7 @@ import {ConfigurationInterface} from '../../models/configurations/configuration_
 import i18n = require('i18next');
 import {ScreenshotView} from '../../views/screenshot/screenshot_view';
 import './../jquery.validate.js';
-import {textType, ratingType, screenshotType} from '../config';
+import {mechanismTypes} from '../config';
 
 
 export class PageNavigation {
@@ -23,9 +23,9 @@ export class PageNavigation {
      *  indicates whether the navigation forward should happen (true) or not (false)
      */
     pageForwardCallback(currentPage, nextPage) {
-        var textMechanism = this.configuration.getMechanismConfig(textType);
-        var ratingMechanism = this.configuration.getMechanismConfig(ratingType);
-        var screenshotMechanism = this.configuration.getMechanismConfig(screenshotType);
+        var textMechanism = this.configuration.getMechanismConfig(mechanismTypes.textType);
+        var ratingMechanism = this.configuration.getMechanismConfig(mechanismTypes.ratingType);
+        var screenshotMechanism = this.configuration.getMechanismConfig(mechanismTypes.screenshotType);
 
         currentPage.find('.validate').each(function () {
             $(this).validate();

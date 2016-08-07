@@ -1,6 +1,6 @@
 import {Rating} from './rating';
 import {ConfigurationService} from '../services/configuration_service';
-import {textType} from '../../js/config';
+import {mechanismTypes} from '../../js/config';
 import {PushConfiguration} from '../configurations/push_configuration';
 
 
@@ -36,7 +36,7 @@ export class Feedback {
      *  Otherwise: An object with error messages
      */
     validate(configuration: PushConfiguration): any {
-        var textMechanism = configuration.getMechanismConfig(textType);
+        var textMechanism = configuration.getMechanismConfig(mechanismTypes.textType);
         var errors = {textMechanism: [], ratingMechanism: [], general: []};
 
         this.validateTextMechanism(textMechanism, errors);

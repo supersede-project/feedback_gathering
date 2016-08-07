@@ -15,7 +15,7 @@ define(["require", "exports", '../../js/config'], function (require, exports, co
             this.ratings = ratings;
         }
         Feedback.prototype.validate = function (configuration) {
-            var textMechanism = configuration.getMechanismConfig(config_1.textType);
+            var textMechanism = configuration.getMechanismConfig(config_1.mechanismTypes.textType);
             var errors = { textMechanism: [], ratingMechanism: [], general: [] };
             this.validateTextMechanism(textMechanism, errors);
             if (errors.textMechanism.length === 0 && errors.ratingMechanism.length === 0 && errors.general.length === 0) {

@@ -1,11 +1,11 @@
-define(["require", "exports", './feedback', '../configurations/push_configuration'], function (require, exports, feedback_1, push_configuration_1) {
+define(["require", "exports", './feedback', '../configurations/configuration_factory'], function (require, exports, feedback_1, configuration_factory_1) {
     "use strict";
     describe('Feedback', function () {
         it('should validate itself according to the given configuration data', function () {
             var configurationData = {
                 "id": 1,
+                "type": "PUSH",
                 "general_configurations": null,
-                "pull_configurations": null,
                 "mechanisms": [
                     {
                         "id": 1,
@@ -30,15 +30,15 @@ define(["require", "exports", './feedback', '../configurations/push_configuratio
                     }
                 ]
             };
-            var configuration = push_configuration_1.PushConfiguration.initByData(configurationData);
+            var configuration = configuration_factory_1.ConfigurationFactory.createByData(configurationData);
             var feedback = new feedback_1.Feedback('Feedback', 'application', null, 'This is my feedback!', 1.0, []);
             expect(feedback.validate(configuration)).toBeTruthy();
         });
         it('should return error messages if the validation was not successful', function () {
             var configurationData = {
                 "id": 1,
+                "type": "PUSH",
                 "general_configurations": null,
-                "pull_configurations": null,
                 "mechanisms": [
                     {
                         "id": 1,
@@ -63,7 +63,7 @@ define(["require", "exports", './feedback', '../configurations/push_configuratio
                     }
                 ]
             };
-            var configuration = push_configuration_1.PushConfiguration.initByData(configurationData);
+            var configuration = configuration_factory_1.ConfigurationFactory.createByData(configurationData);
             var feedback = new feedback_1.Feedback('Feedback', 'application', null, '', 1.0, []);
             var errors = feedback.validate(configuration);
             expect(errors.textMechanism.length).toBe(1);

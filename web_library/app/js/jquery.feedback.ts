@@ -3,7 +3,7 @@ import './jquery.validate.js';
 import {ConfigurationService} from '../services/configuration_service';
 import {
     apiEndpoint, feedbackPath, applicationName, defaultSuccessMessage,
-    feedbackObjectTitle, dialogOptions, textType, ratingType, screenshotType
+    feedbackObjectTitle, dialogOptions, mechanismTypes
 } from './config';
 import {PaginationContainer} from '../views/pagination_container';
 import {ScreenshotView} from '../views/screenshot/screenshot_view';
@@ -76,10 +76,10 @@ export var feedbackPluginModule = function ($, window, document) {
 
         // after template is loaded
         new PaginationContainer($('#' + dialogId + '.feedback-container .pages-container'), pageNavigation);
-        initRating("#" + dialogId + " .rating-input", configuration.getMechanismConfig(ratingType));
-        var screenshotView = initScreenshot(configuration.getMechanismConfig(screenshotType), dialogId);
+        initRating("#" + dialogId + " .rating-input", configuration.getMechanismConfig(mechanismTypes.ratingType));
+        var screenshotView = initScreenshot(configuration.getMechanismConfig(mechanismTypes.screenshotType), dialogId);
 
-        var dialog = initDialog($('#'+ dialogId), configuration.getMechanismConfig(textType));
+        var dialog = initDialog($('#'+ dialogId), configuration.getMechanismConfig(mechanismTypes.textType));
         addEvents(dialogId, configuration);
         pageNavigation.screenshotView = screenshotView;
         return dialog;
@@ -92,8 +92,8 @@ export var feedbackPluginModule = function ($, window, document) {
      * message is shown after the request is done.
      */
     var sendFeedback = function (formData:FormData, configuration:ConfigurationInterface) {
-        var screenshotView = configuration.getMechanismConfig(screenshotType).screenshotView;
-        var ratingMechanism = configuration.getMechanismConfig(ratingType);
+        var screenshotView = configuration.getMechanismConfig(mechanismTypes.screenshotType).screenshotView;
+        var ratingMechanism = configuration.getMechanismConfig(mechanismTypes.ratingType);
 
         $.ajax({
             url: apiEndpoint + feedbackPath,
@@ -182,7 +182,7 @@ export var feedbackPluginModule = function ($, window, document) {
     var addEvents = function (containerId, configuration:ConfigurationInterface) {
         var container = $('#' + containerId);
         var textarea = container.find('textarea.text-type-text');
-        var textMechanism = configuration.getMechanismConfig(textType);
+        var textMechanism = configuration.getMechanismConfig(mechanismTypes.textType);
 
         // send
         container.find('button.submit-feedback').unbind().on('click', function (event) {
@@ -218,9 +218,9 @@ export var feedbackPluginModule = function ($, window, document) {
      */
     var prepareFormData = function (container:JQuery, configuration:ConfigurationInterface):FormData {
         var formData = new FormData();
-        var textMechanism = configuration.getMechanismConfig(textType);
-        var ratingMechanism = configuration.getMechanismConfig(ratingType);
-        var screenshotMechanism = configuration.getMechanismConfig(screenshotType);
+        var textMechanism = configuration.getMechanismConfig(mechanismTypes.textType);
+        var ratingMechanism = configuration.getMechanismConfig(mechanismTypes.ratingType);
+        var screenshotMechanism = configuration.getMechanismConfig(mechanismTypes.screenshotType);
 
         container.find('.server-response').removeClass('error').removeClass('success');
         var feedbackObject = new Feedback(feedbackObjectTitle, applicationName, "uid12345", null, 1.0, null);

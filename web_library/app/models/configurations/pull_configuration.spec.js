@@ -1,14 +1,16 @@
-define(["require", "exports", '../../services/mocks/mocks_loader', './pull_configuration'], function (require, exports, mocks_loader_1, pull_configuration_1) {
+define(["require", "exports", '../../services/mocks/mocks_loader', './pull_configuration', './configuration_factory'], function (require, exports, mocks_loader_1, pull_configuration_1, configuration_factory_1) {
     "use strict";
     describe('PullConfiguration object', function () {
         var pullConfiguration;
         beforeEach(function () {
-            var configurations = mocks_loader_1.readJSON('app/services/mocks/configurations_mock.json', '/base/');
-            var configurationData = configurations[0].pull_configurations[0];
-            pullConfiguration = pull_configuration_1.PullConfiguration.initByData(configurationData);
+            var applications = mocks_loader_1.readJSON('app/services/mocks/configurations_mock.json', '/base/');
+            var application = applications[0];
+            var pullConfigurationData = application.configurations[1];
+            pullConfiguration = configuration_factory_1.ConfigurationFactory.createByData(pullConfigurationData);
         });
         it('should be an object with a complete pull configuration', function () {
-            expect(pullConfiguration.active).toBeTruthy();
+            expect(pullConfiguration).toEqual(jasmine.any(pull_configuration_1.PullConfiguration));
+            expect(pullConfiguration.id).toBe(2);
             expect(pullConfiguration.mechanisms.length).toBe(3);
             var textMechanismConfig = pullConfiguration.mechanisms[0];
             expect(textMechanismConfig.type).toEqual('TEXT_TYPE');
@@ -47,9 +49,9 @@ define(["require", "exports", '../../services/mocks/mocks_loader', './pull_confi
             expect(context).toEqual(expectedContext);
         });
         it('should provide the parameter values', function () {
-            var likelihood = pullConfiguration.getParameterValue("likelihood");
-            var askOnAppStartup = pullConfiguration.getParameterValue("askOnAppStartup");
-            expect(likelihood).toEqual(1.0);
+            var likelihood = pullConfiguration.generalConfiguration.getParameterValue("likelihood");
+            var askOnAppStartup = pullConfiguration.generalConfiguration.getParameterValue("askOnAppStartup");
+            expect(likelihood).toEqual(0.4);
             expect(askOnAppStartup).toEqual(0);
         });
     });

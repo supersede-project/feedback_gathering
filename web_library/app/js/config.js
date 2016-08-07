@@ -16,8 +16,17 @@ define(["require", "exports"], function (require, exports) {
         buttons: {},
         resizable: false
     };
-    exports.textType = 'TEXT_TYPE';
-    exports.ratingType = 'RATING_TYPE';
-    exports.screenshotType = 'SCREENSHOT_TYPE';
+    exports.mechanismTypes = {
+        textType: 'TEXT_TYPE',
+        ratingType: 'RATING_TYPE',
+        screenshotType: 'SCREENSHOT_TYPE',
+        audioType: 'AUDIO_TYPE',
+        categoryType: 'CATEGORY_TYPE',
+        attachmentType: 'ATTACHMENT_TYPE'
+    };
+    exports.configurationTypes = {
+        push: 'PUSH',
+        pull: 'PULL'
+    };
 });
 //# sourceMappingURL=config.js.map

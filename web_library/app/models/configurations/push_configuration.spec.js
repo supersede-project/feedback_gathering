@@ -1,13 +1,14 @@
-define(["require", "exports", './push_configuration', '../../services/mocks/mocks_loader', '../mechanisms/mechanism', '../mechanisms/rating_mechanism', '../../js/config', '../parameters/parameter_value_property_pair', '../mechanisms/screenshot_mechanism'], function (require, exports, push_configuration_1, mocks_loader_1, mechanism_1, rating_mechanism_1, config_1, parameter_value_property_pair_1, screenshot_mechanism_1) {
+define(["require", "exports", '../../services/mocks/mocks_loader', '../mechanisms/mechanism', '../mechanisms/rating_mechanism', '../../js/config', '../parameters/parameter_value_property_pair', '../mechanisms/screenshot_mechanism', './configuration_factory'], function (require, exports, mocks_loader_1, mechanism_1, rating_mechanism_1, config_1, parameter_value_property_pair_1, screenshot_mechanism_1, configuration_factory_1) {
     "use strict";
     describe('PushConfiguration object', function () {
         var configuration;
         beforeEach(function () {
-            var configurations = mocks_loader_1.readJSON('app/services/mocks/configurations_mock.json', '/base/');
-            var configurationData = configurations[0];
-            configuration = push_configuration_1.PushConfiguration.initByData(configurationData);
+            var applications = mocks_loader_1.readJSON('app/services/mocks/configurations_mock.json', '/base/');
+            var application = applications[0];
+            var pushConfigurationData = application.configurations[0];
+            configuration = configuration_factory_1.ConfigurationFactory.createByData(pushConfigurationData);
         });
-        it('should be an object with a complete configuration including general, pull and mechanism', function () {
+        it('should be an object with a general configuration and some mechanisms', function () {
             expect(configuration.mechanisms.length).toBe(4);
             var textMechanismConfig = configuration.mechanisms[0];
             expect(textMechanismConfig.type).toEqual('TEXT_TYPE');
@@ -76,7 +77,7 @@ define(["require", "exports", './push_configuration', '../../services/mocks/mock
             expect(ratingMechanism.canBeActivated).toEqual(false);
         });
         it('should return a css style string', function () {
-            var textMechanism = configuration.getMechanismConfig(config_1.textType);
+            var textMechanism = configuration.getMechanismConfig(config_1.mechanismTypes.textType);
             var cssStyle = configuration.getCssStyle(textMechanism, [new parameter_value_property_pair_1.ParameterValuePropertyPair('textareaFontColor', 'color')]);
             expect(cssStyle).toEqual('color: #7A7A7A;');
             var cssStyle2 = configuration.getCssStyle(textMechanism, [new parameter_value_property_pair_1.ParameterValuePropertyPair('textareaFontColor', 'color'), new parameter_value_property_pair_1.ParameterValuePropertyPair('fieldFontType', 'font-style')]);

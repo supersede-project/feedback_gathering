@@ -1,18 +1,23 @@
 import {readJSON} from '../../services/mocks/mocks_loader';
 import {PullConfiguration} from './pull_configuration';
+import {ConfigurationFactory} from './configuration_factory';
 
 
 describe('PullConfiguration object', () => {
     let pullConfiguration:PullConfiguration;
 
     beforeEach(() => {
-        var configurations = readJSON('app/services/mocks/configurations_mock.json', '/base/');
-        var configurationData = configurations[0].pull_configurations[0];
-        pullConfiguration = PullConfiguration.initByData(configurationData);
+        var applications = readJSON('app/services/mocks/configurations_mock.json', '/base/');
+        var application = applications[0];
+
+        var pullConfigurationData = application.configurations[1];
+        pullConfiguration = <PullConfiguration>ConfigurationFactory.createByData(pullConfigurationData);
     });
 
     it('should be an object with a complete pull configuration', () => {
-        expect(pullConfiguration.active).toBeTruthy();
+        expect(pullConfiguration).toEqual(jasmine.any(PullConfiguration));
+        expect(pullConfiguration.id).toBe(2);
+
         expect(pullConfiguration.mechanisms.length).toBe(3);
         var textMechanismConfig = pullConfiguration.mechanisms[0];
         expect(textMechanismConfig.type).toEqual('TEXT_TYPE');
@@ -56,10 +61,10 @@ describe('PullConfiguration object', () => {
     });
 
     it('should provide the parameter values', () => {
-        var likelihood = pullConfiguration.getParameterValue("likelihood");
-        var askOnAppStartup = pullConfiguration.getParameterValue("askOnAppStartup");
+        var likelihood = pullConfiguration.generalConfiguration.getParameterValue("likelihood");
+        var askOnAppStartup = pullConfiguration.generalConfiguration.getParameterValue("askOnAppStartup");
 
-        expect(likelihood).toEqual(1.0);
+        expect(likelihood).toEqual(0.4);
         expect(askOnAppStartup).toEqual(0);
     });
 });

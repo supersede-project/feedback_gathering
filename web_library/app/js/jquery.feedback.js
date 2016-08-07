@@ -32,16 +32,16 @@ define(["require", "exports", '../services/configuration_service', './config', '
             var html = template(context);
             $('body').append(html);
             new pagination_container_1.PaginationContainer($('#' + dialogId + '.feedback-container .pages-container'), pageNavigation);
-            initRating("#" + dialogId + " .rating-input", configuration.getMechanismConfig(config_1.ratingType));
-            var screenshotView = initScreenshot(configuration.getMechanismConfig(config_1.screenshotType), dialogId);
-            var dialog = initDialog($('#' + dialogId), configuration.getMechanismConfig(config_1.textType));
+            initRating("#" + dialogId + " .rating-input", configuration.getMechanismConfig(config_1.mechanismTypes.ratingType));
+            var screenshotView = initScreenshot(configuration.getMechanismConfig(config_1.mechanismTypes.screenshotType), dialogId);
+            var dialog = initDialog($('#' + dialogId), configuration.getMechanismConfig(config_1.mechanismTypes.textType));
             addEvents(dialogId, configuration);
             pageNavigation.screenshotView = screenshotView;
             return dialog;
         };
         var sendFeedback = function (formData, configuration) {
-            var screenshotView = configuration.getMechanismConfig(config_1.screenshotType).screenshotView;
-            var ratingMechanism = configuration.getMechanismConfig(config_1.ratingType);
+            var screenshotView = configuration.getMechanismConfig(config_1.mechanismTypes.screenshotType).screenshotView;
+            var ratingMechanism = configuration.getMechanismConfig(config_1.mechanismTypes.ratingType);
             $.ajax({
                 url: config_1.apiEndpoint + config_1.feedbackPath,
                 type: 'POST',
@@ -88,7 +88,7 @@ define(["require", "exports", '../services/configuration_service', './config', '
         var addEvents = function (containerId, configuration) {
             var container = $('#' + containerId);
             var textarea = container.find('textarea.text-type-text');
-            var textMechanism = configuration.getMechanismConfig(config_1.textType);
+            var textMechanism = configuration.getMechanismConfig(config_1.mechanismTypes.textType);
             container.find('button.submit-feedback').unbind().on('click', function (event) {
                 event.preventDefault();
                 event.stopPropagation();
@@ -110,9 +110,9 @@ define(["require", "exports", '../services/configuration_service', './config', '
         };
         var prepareFormData = function (container, configuration) {
             var formData = new FormData();
-            var textMechanism = configuration.getMechanismConfig(config_1.textType);
-            var ratingMechanism = configuration.getMechanismConfig(config_1.ratingType);
-            var screenshotMechanism = configuration.getMechanismConfig(config_1.screenshotType);
+            var textMechanism = configuration.getMechanismConfig(config_1.mechanismTypes.textType);
+            var ratingMechanism = configuration.getMechanismConfig(config_1.mechanismTypes.ratingType);
+            var screenshotMechanism = configuration.getMechanismConfig(config_1.mechanismTypes.screenshotType);
             container.find('.server-response').removeClass('error').removeClass('success');
             var feedbackObject = new feedback_1.Feedback(config_1.feedbackObjectTitle, config_1.applicationName, "uid12345", null, 1.0, null);
             if (textMechanism.active) {

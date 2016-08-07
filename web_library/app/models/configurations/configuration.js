@@ -1,9 +1,11 @@
 define(["require", "exports", '../parameters/parameter_value_property_pair', '../../js/config'], function (require, exports, parameter_value_property_pair_1, config_1) {
     "use strict";
     var Configuration = (function () {
-        function Configuration(id, mechanisms) {
+        function Configuration(id, mechanisms, type, generalConfiguration) {
             this.id = id;
             this.mechanisms = mechanisms;
+            this.type = type;
+            this.generalConfiguration = generalConfiguration;
         }
         Configuration.prototype.getMechanismConfig = function (mechanismTypeConstant) {
             var filteredArray = this.mechanisms.filter(function (mechanism) { return mechanism.type === mechanismTypeConstant; });
@@ -16,9 +18,9 @@ define(["require", "exports", '../parameters/parameter_value_property_pair', '..
         };
         Configuration.prototype.getContextForView = function () {
             var context = { textMechanism: null, ratingMechanism: null, screenshotMechanism: null, dialogId: this.dialogId };
-            var textMechanism = this.getMechanismConfig(config_1.textType);
-            var ratingMechanism = this.getMechanismConfig(config_1.ratingType);
-            var screenshotMechanism = this.getMechanismConfig(config_1.screenshotType);
+            var textMechanism = this.getMechanismConfig(config_1.mechanismTypes.textType);
+            var ratingMechanism = this.getMechanismConfig(config_1.mechanismTypes.ratingType);
+            var screenshotMechanism = this.getMechanismConfig(config_1.mechanismTypes.screenshotType);
             var labelStyle = this.getCssStyle(textMechanism, [
                 new parameter_value_property_pair_1.ParameterValuePropertyPair('labelPositioning', 'text-align'),
                 new parameter_value_property_pair_1.ParameterValuePropertyPair('labelColor', 'color'),

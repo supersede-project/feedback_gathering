@@ -2,21 +2,23 @@ import {PushConfiguration} from './push_configuration';
 import {readJSON} from '../../services/mocks/mocks_loader';
 import {Mechanism} from '../mechanisms/mechanism';
 import {RatingMechanism} from '../mechanisms/rating_mechanism';
-import {textType} from '../../js/config';
+import {mechanismTypes} from '../../js/config';
 import {ParameterValuePropertyPair} from '../parameters/parameter_value_property_pair';
 import {ScreenshotMechanism} from '../mechanisms/screenshot_mechanism';
+import {ConfigurationFactory} from './configuration_factory';
 
 
 describe('PushConfiguration object', () => {
     let configuration:PushConfiguration;
 
     beforeEach(() => {
-        var configurations = readJSON('app/services/mocks/configurations_mock.json', '/base/');
-        var configurationData = configurations[0];
-        configuration = PushConfiguration.initByData(configurationData);
+        var applications = readJSON('app/services/mocks/configurations_mock.json', '/base/');
+        var application = applications[0];
+        var pushConfigurationData = application.configurations[0];
+        configuration = ConfigurationFactory.createByData(pushConfigurationData);
     });
 
-    it('should be an object with a complete configuration including general, pull and mechanism', () => {
+    it('should be an object with a general configuration and some mechanisms', () => {
         expect(configuration.mechanisms.length).toBe(4);
         var textMechanismConfig = configuration.mechanisms[0];
         expect(textMechanismConfig.type).toEqual('TEXT_TYPE');
@@ -99,7 +101,7 @@ describe('PushConfiguration object', () => {
     });
 
     it('should return a css style string', () => {
-        var textMechanism = configuration.getMechanismConfig(textType);
+        var textMechanism = configuration.getMechanismConfig(mechanismTypes.textType);
 
         var cssStyle = configuration.getCssStyle(textMechanism, [new ParameterValuePropertyPair('textareaFontColor', 'color')]);
         expect(cssStyle).toEqual('color: #7A7A7A;');

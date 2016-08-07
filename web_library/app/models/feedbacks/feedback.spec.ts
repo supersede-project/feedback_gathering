@@ -1,5 +1,6 @@
 import {Feedback} from './feedback';
 import {PushConfiguration} from '../configurations/push_configuration';
+import {ConfigurationFactory} from '../configurations/configuration_factory';
 
 
 describe('Feedback', () => {
@@ -7,8 +8,8 @@ describe('Feedback', () => {
     it('should validate itself according to the given configuration data', () => {
         var configurationData = {
             "id": 1,
+            "type": "PUSH",
             "general_configurations": null,
-            "pull_configurations": null,
             "mechanisms": [
                 {
                     "id": 1,
@@ -34,7 +35,7 @@ describe('Feedback', () => {
             ]
         };
 
-        var configuration = PushConfiguration.initByData(configurationData);
+        var configuration = ConfigurationFactory.createByData(configurationData);
         var feedback = new Feedback('Feedback', 'application', null, 'This is my feedback!', 1.0, []);
         expect(feedback.validate(configuration)).toBeTruthy();
     });
@@ -42,8 +43,8 @@ describe('Feedback', () => {
     it('should return error messages if the validation was not successful', () => {
         var configurationData = {
             "id": 1,
+            "type": "PUSH",
             "general_configurations": null,
-            "pull_configurations": null,
             "mechanisms": [
                 {
                     "id": 1,
@@ -69,7 +70,7 @@ describe('Feedback', () => {
             ]
         };
 
-        var configuration = PushConfiguration.initByData(configurationData);
+        var configuration = ConfigurationFactory.createByData(configurationData);
         var feedback = new Feedback('Feedback', 'application', null, '', 1.0, []);
 
         var errors = feedback.validate(configuration);

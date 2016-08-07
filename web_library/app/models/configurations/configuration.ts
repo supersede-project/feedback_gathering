@@ -1,18 +1,24 @@
 import {ConfigurationInterface} from './configuration_interface';
 import {Mechanism} from '../mechanisms/mechanism';
 import {ParameterValuePropertyPair} from '../parameters/parameter_value_property_pair';
-import {screenshotType, ratingType, textType} from '../../js/config';
-import {MechanismFactory} from '../mechanisms/mechanism_factory';
+import {GeneralConfiguration} from './general_configuration';
+import {mechanismTypes, configurationTypes} from '../../js/config';
+import {PushConfiguration} from './push_configuration';
+import {PullConfiguration} from './pull_configuration';
 
 
 export abstract class Configuration implements ConfigurationInterface {
     id:number;
     mechanisms:Mechanism[];
+    type:string;
+    generalConfiguration:GeneralConfiguration;
     dialogId:string;
 
-    constructor(id:number, mechanisms:Mechanism[]) {
+    constructor(id:number, mechanisms:Mechanism[], type:string, generalConfiguration:GeneralConfiguration) {
         this.id = id;
         this.mechanisms = mechanisms;
+        this.type = type;
+        this.generalConfiguration = generalConfiguration;
     }
 
     /**
@@ -36,9 +42,9 @@ export abstract class Configuration implements ConfigurationInterface {
      */
     getContextForView() {
         var context = {textMechanism: null, ratingMechanism: null, screenshotMechanism: null, dialogId: this.dialogId};
-        var textMechanism = this.getMechanismConfig(textType);
-        var ratingMechanism = this.getMechanismConfig(ratingType);
-        var screenshotMechanism = this.getMechanismConfig(screenshotType);
+        var textMechanism = this.getMechanismConfig(mechanismTypes.textType);
+        var ratingMechanism = this.getMechanismConfig(mechanismTypes.ratingType);
+        var screenshotMechanism = this.getMechanismConfig(mechanismTypes.screenshotType);
 
         var labelStyle = this.getCssStyle(textMechanism, [
             new ParameterValuePropertyPair('labelPositioning', 'text-align'),

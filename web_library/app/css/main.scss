@@ -241,10 +241,16 @@ button.text-type-text-clear {
   height: auto;
   display: none;
   margin-bottom: 10px;
+  position: relative;
 }
 
 .screenshot-operations {
   display: none;
+
+  .sticking img {
+    width: 30px;
+    height: auto;
+  }
 }
 
 button.screenshot-operation {
@@ -257,5 +263,20 @@ button.screenshot-operation {
 
   &.active {
     font-weight: bold;
+  }
+}
+
+.sticker-container {
+  position: absolute;
+  z-index: 1000;
+  top: 5px;
+  left: 5px;
+  padding: 10px;
+  border: 1px solid black;
+
+  img {
+    z-index: 1000;
+    height: auto;
+    width: 30px;
   }
 }

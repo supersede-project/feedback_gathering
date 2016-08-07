@@ -1,7 +1,8 @@
 import {RatingMechanism} from './rating_mechanism';
 import {Mechanism} from './mechanism';
-import {ratingType, screenshotType} from '../../js/config';
+import {mechanismTypes} from '../../js/config';
 import {ScreenshotMechanism} from './screenshot_mechanism';
+import {Parameter} from '../parameters/parameter';
 
 
 export class MechanismFactory {
@@ -12,16 +13,21 @@ export class MechanismFactory {
      * @returns Mechanism
      *  The mechanism object parsed from json.
      */
-    static createByData(data:any): any {
-        if(!data.hasOwnProperty('type') || !data.hasOwnProperty('active')) {
+    static createByData(data:any): Mechanism {
+        if(!data.hasOwnProperty('type')) {
             return null;
         }
-        if(data.type === ratingType) {
-            return new RatingMechanism(data.id, data.type, data.active, data.order, data.canBeActivated, data.parameters);
-        } else if (data.type === screenshotType) {
-            return new ScreenshotMechanism(data.id, data.type, data.active, data.order, data.canBeActivated, data.parameters);
+        var parameters = [];
+        for(var parameter of data.parameters) {
+            parameters.push(Parameter.initByData(parameter));
+        }
+
+        if(data.type === mechanismTypes.ratingType) {
+            return new RatingMechanism(data.id, data.type, data.active, data.order, data.canBeActivated, parameters);
+        } else if (data.type === mechanismTypes.screenshotType) {
+            return new ScreenshotMechanism(data.id, data.type, data.active, data.order, data.canBeActivated, parameters);
         } else {
-            return new Mechanism(data.id, data.type, data.active, data.order, data.canBeActivated, data.parameters);
+            return new Mechanism(data.id, data.type, data.active, data.order, data.canBeActivated, parameters);
         }
     }
 }

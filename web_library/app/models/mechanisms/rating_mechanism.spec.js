@@ -3,7 +3,7 @@ define(["require", "exports", './rating_mechanism', '../../js/config'], function
     describe('Rating Mechanism', function () {
         var ratingMechanism;
         beforeEach(function () {
-            ratingMechanism = new rating_mechanism_1.RatingMechanism(1, config_1.ratingType, true, 1, false, [
+            ratingMechanism = new rating_mechanism_1.RatingMechanism(1, config_1.mechanismTypes.ratingType, true, 1, false, [
                 { key: 'maxRating', value: 10 },
                 { key: 'defaultRating', value: 3 }
             ]);

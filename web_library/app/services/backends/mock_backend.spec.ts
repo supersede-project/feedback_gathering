@@ -23,15 +23,16 @@ describe('Mock Backend', () => {
     it('should retrieve a single object in the mock data', () => {
         var expectedObject = {
             "id": 2,
-            "general_configurations": [
-                {
+            "name": "Senercon App",
+            "state": 1,
+            "general_configuration": {
+                "parameters": {
                     "id": 1,
                     "key": "review",
                     "value": true
                 }
-            ],
-            "pull_configurations": [],
-            "mechanisms": []
+            },
+            "configurations": []
         };
 
         configurationMockBackend.retrieve(2, function(object) {
