@@ -26,6 +26,7 @@ export class PageNavigation {
         var textMechanism = this.configuration.getMechanismConfig(mechanismTypes.textType);
         var ratingMechanism = this.configuration.getMechanismConfig(mechanismTypes.ratingType);
         var screenshotMechanism = this.configuration.getMechanismConfig(mechanismTypes.screenshotType);
+        var categoryMechanism = this.configuration.getMechanismConfig(mechanismTypes.categoryType);
 
         currentPage.find('.validate').each(function () {
             $(this).validate();
@@ -44,6 +45,14 @@ export class PageNavigation {
                 var img = $('<img src="' + this.screenshotView.screenshotCanvas.toDataURL() + '" />');
                 img.css('max-width', '20%');
                 nextPage.find('.screenshot-review').empty().append(img);
+            }
+            if (categoryMechanism !== null && nextPage.find('.category-review').length > 0 && categoryMechanism.active) {
+                currentPage.find('.category-type input').each(function() {
+                    var input = $(this);
+                    var selector = 'input#review' + input.attr('id');
+                    var correspondingReviewInput = nextPage.find(selector);
+                    correspondingReviewInput.prop("checked", input.is(':checked'));
+                });
             }
         }
         return true;

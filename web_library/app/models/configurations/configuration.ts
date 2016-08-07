@@ -90,6 +90,7 @@ export abstract class Configuration implements ConfigurationInterface {
         }
         if(categoryMechanism) {
             context.categoryMechanism = {
+                id: categoryMechanism.id,
                 active: categoryMechanism.active,
                 title: categoryMechanism.getParameterValue('title'),
                 ownAllowed: categoryMechanism.getParameterValue('ownAllowed'),
@@ -99,8 +100,6 @@ export abstract class Configuration implements ConfigurationInterface {
                 inputType: categoryMechanism.getParameterValue('multiple') ? 'checkbox' : 'radio'
             }
         }
-        console.log(context);
-
         return context;
     }
 

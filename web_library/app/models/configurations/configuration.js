@@ -62,6 +62,7 @@ define(["require", "exports", '../parameters/parameter_value_property_pair', '..
             }
             if (categoryMechanism) {
                 context.categoryMechanism = {
+                    id: categoryMechanism.id,
                     active: categoryMechanism.active,
                     title: categoryMechanism.getParameterValue('title'),
                     ownAllowed: categoryMechanism.getParameterValue('ownAllowed'),
@@ -71,7 +72,6 @@ define(["require", "exports", '../parameters/parameter_value_property_pair', '..
                     inputType: categoryMechanism.getParameterValue('multiple') ? 'checkbox' : 'radio'
                 };
             }
-            console.log(context);
             return context;
         };
         Configuration.prototype.getCssStyle = function (mechanism, parameterValuePropertyPair) {

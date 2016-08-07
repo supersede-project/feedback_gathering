@@ -10,22 +10,24 @@
 
                         <article class="col col-right">
                             <textarea class="validate text-type-text"
-                            {{#if textMechanism.mandatory }} data-mandatory="1"
-                                  data-mandatory-validate-on-skip="{{ textMechanism.validateOnSkip }}"
-                                  data-mandatory-default-text="{{t "general.mandatory_default_text" }}"
-                                  data-mandatory-manual-text="{{ textMechanism.mandatoryReminder }}" {{/if}}
-                                  placeholder="{{ textMechanism.hint }}" data-validation-max-length="{{ textMechanism.maxLength }}"
+                                {{#if textMechanism.mandatory }} data-mandatory="1"
+                                      data-mandatory-validate-on-skip="{{ textMechanism.validateOnSkip }}"
+                                      data-mandatory-default-text="{{t "general.mandatory_default_text" }}"
+                                      data-mandatory-manual-text="{{ textMechanism.mandatoryReminder }}" {{/if}}
+                                      placeholder="{{ textMechanism.hint }}"
+                                      data-validation-max-length="{{ textMechanism.maxLength }}"
                                       style="{{ textMechanism.textareaStyle }}"></textarea>
-                                <p class="textarea-bottom">
-                                    {{#if textMechanism.clearInput }}
-                                        <button class="text-type-text-clear" title="{{t "text.text_type_text_clear" }}">x</button>
-                                    {{/if}}
-                                    {{#if textMechanism.maxLengthVisible}}
-                                        <span class="text-type-max-length">{{ textMechanism.currentLength }}
-                                            / {{ textMechanism.maxLength }}</span>
-                                    {{/if}}
-                                </p>
-                                <div class="clearfix"></div>
+                            <p class="textarea-bottom">
+                                {{#if textMechanism.clearInput }}
+                                    <button class="text-type-text-clear" title="{{t "text.text_type_text_clear" }}">x
+                                    </button>
+                                {{/if}}
+                                {{#if textMechanism.maxLengthVisible}}
+                                    <span class="text-type-max-length">{{ textMechanism.currentLength }}
+                                        / {{ textMechanism.maxLength }}</span>
+                                {{/if}}
+                            </p>
+                            <div class="clearfix"></div>
                         </article>
                         <div class="clearfix"></div>
                     </section>
@@ -44,37 +46,39 @@
                 {{/if}}
 
                 {{#if screenshotMechanism.active}}
-                <section class="feedback-mechanism horizontal screenshot-type">
-                    <article class="col col-left">
-                        <button class="take-screenshot button small">{{t "screenshot.take_screenshot" }}</button>
+                    <section class="feedback-mechanism horizontal screenshot-type">
+                        <article class="col col-left">
+                            <button class="take-screenshot button small">{{t "screenshot.take_screenshot" }}</button>
 
-                        <div class="screenshot-operations">
-                            <button class="screenshot-operation screenshot-draw-rect active">{{t "screenshot.rectangle" }}</button>
-                            <button class="screenshot-operation screenshot-draw-fill-rect">{{t "screenshot.blacken" }}</button>
-                            <button class="screenshot-operation screenshot-draw-circle">{{t "screenshot.circle" }}</button>
-                            <button class="screenshot-operation screenshot-draw-arrow">{{t "screenshot.arrow" }}</button>
-                            <button class="screenshot-operation screenshot-draw-freehand">{{t "screenshot.freehand" }}</button>
-                            <button class="screenshot-operation screenshot-crop">{{t "screenshot.crop" }}</button>
-                            <button class="screenshot-operation screenshot-draw-remove">{{t "screenshot.remove" }}</button>
-                            <button class="screenshot-operation screenshot-draw-undo">{{t "screenshot.undo" }}</button>
-                            <button class="screenshot-operation sticking smiley-1"><img src="dist/img/test_smiley.png" alt="Smiley" /></button>
+                            <div class="screenshot-operations">
+                                <button class="screenshot-operation screenshot-draw-rect active">{{t "screenshot.rectangle" }}</button>
+                                <button class="screenshot-operation screenshot-draw-fill-rect">{{t "screenshot.blacken" }}</button>
+                                <button class="screenshot-operation screenshot-draw-circle">{{t "screenshot.circle" }}</button>
+                                <button class="screenshot-operation screenshot-draw-arrow">{{t "screenshot.arrow" }}</button>
+                                <button class="screenshot-operation screenshot-draw-freehand">{{t "screenshot.freehand" }}</button>
+                                <button class="screenshot-operation screenshot-crop">{{t "screenshot.crop" }}</button>
+                                <button class="screenshot-operation screenshot-draw-remove">{{t "screenshot.remove" }}</button>
+                                <button class="screenshot-operation screenshot-draw-undo">{{t "screenshot.undo" }}</button>
+                                <button class="screenshot-operation sticking smiley-1"><img
+                                        src="dist/img/test_smiley.png" alt="Smiley"/></button>
+                            </div>
+                        </article>
+                        <div class="col col-right screenshot-preview">
+
                         </div>
-                    </article>
-                    <div class="col col-right screenshot-preview">
-
-                    </div>
-                    <div class="clearfix"></div>
-                </section>
+                        <div class="clearfix"></div>
+                    </section>
                 {{/if}}
 
                 {{#if categoryMechanism.active}}
                     <section class="feedback-mechanism horizontal category-type">
                         <p>{{ categoryMechanism.title }}</p>
                         {{#each categoryMechanism.options}}
-                            <input type="{{ ../categoryMechanism.inputType }}" id="option{{ key }}" name="{{ key }}" value="{{ key }}">
+                            <input type="{{ ../categoryMechanism.inputType }}" id="option{{ key }}" name="category_mechanism_{{ ../categoryMechanism.id }}"
+                                   value="{{ key }}">
                             <label for="option{{ key }}"> {{ value }}</label> &nbsp;
                             {{#if ../categoryMechanism.breakAfterOption}}
-                                <br />
+                                <br/>
                             {{/if}}
                         {{/each}}
                     </section>
@@ -96,10 +100,21 @@
                     <p class="mechanism-review screenshot-review">
 
                     </p>
+                    {{#if categoryMechanism.active}}
+                        <p class="mechanism-review category-review">
+                            <i>{{ categoryMechanism.title }}&nbsp;</i>
+                            {{#each categoryMechanism.options}}
+                                <input type="{{ ../categoryMechanism.inputType }}" id="reviewoption{{ key }}" name="category_mechanism_{{ ../categoryMechanism.id }}"
+                                       value="review{{ key }}" disabled>
+                                <label for="reviewOption{{ key }}"> {{ value }}</label> &nbsp;
+                            {{/each}}
+                        </p>
+                    {{/if}}
                 </div>
                 <section class="dialog-navigation">
                     <button class="button feedback-dialog-backward navigation-button">{{t "general.back" }}</button>
-                    <button type="button" class="button navigation-button submit-feedback">{{t "general.feedback_submit_button_title" }}
+                    <button type="button"
+                            class="button navigation-button submit-feedback">{{t "general.feedback_submit_button_title" }}
                     </button>
                     <div class="clearfix"></div>
                     <span class="server-response"></span>

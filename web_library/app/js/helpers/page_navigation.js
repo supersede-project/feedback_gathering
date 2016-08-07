@@ -9,6 +9,7 @@ define(["require", "exports", 'i18next', '../config', './../jquery.validate.js']
             var textMechanism = this.configuration.getMechanismConfig(config_1.mechanismTypes.textType);
             var ratingMechanism = this.configuration.getMechanismConfig(config_1.mechanismTypes.ratingType);
             var screenshotMechanism = this.configuration.getMechanismConfig(config_1.mechanismTypes.screenshotType);
+            var categoryMechanism = this.configuration.getMechanismConfig(config_1.mechanismTypes.categoryType);
             currentPage.find('.validate').each(function () {
                 $(this).validate();
             });
@@ -26,6 +27,14 @@ define(["require", "exports", 'i18next', '../config', './../jquery.validate.js']
                     var img = $('<img src="' + this.screenshotView.screenshotCanvas.toDataURL() + '" />');
                     img.css('max-width', '20%');
                     nextPage.find('.screenshot-review').empty().append(img);
+                }
+                if (categoryMechanism !== null && nextPage.find('.category-review').length > 0 && categoryMechanism.active) {
+                    currentPage.find('.category-type input').each(function () {
+                        var input = $(this);
+                        var selector = 'input#review' + input.attr('id');
+                        var correspondingReviewInput = nextPage.find(selector);
+                        correspondingReviewInput.prop("checked", input.is(':checked'));
+                    });
                 }
             }
             return true;
