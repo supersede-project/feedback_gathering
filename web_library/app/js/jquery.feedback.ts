@@ -18,6 +18,7 @@ import {PageNavigation} from './helpers/page_navigation';
 import {ConfigurationInterface} from '../models/configurations/configuration_interface';
 import {Application} from '../models/applications/application';
 import {ApplicationService} from '../services/application_service';
+import {shuffle} from './helpers/array_shuffle';
 
 
 export var feedbackPluginModule = function ($, window, document) {
@@ -41,7 +42,8 @@ export var feedbackPluginModule = function ($, window, document) {
         initPushMechanisms(application.getPushConfiguration());
 
         var alreadyTriggeredOne = false;
-        for(var pullConfiguration of application.getPullConfigurations()) {
+
+        for(var pullConfiguration of shuffle(application.getPullConfigurations())) {
             alreadyTriggeredOne = initPullConfiguration(pullConfiguration, alreadyTriggeredOne);
         }
     };
@@ -74,9 +76,8 @@ export var feedbackPluginModule = function ($, window, document) {
      *  Whether the pull configuration was triggered or not.
      */
     var initPullConfiguration = function(configuration:PullConfiguration, alreadyTriggeredOne:boolean = false): boolean {
-        var pageNavigation = new PageNavigation(configuration, $('#' + pullConfigurationDialogId));
-
         if(!alreadyTriggeredOne && configuration.shouldGetTriggered()) {
+            var pageNavigation = new PageNavigation(configuration, $('#' + pullConfigurationDialogId));
             var context = configuration.getContextForView();
             pullDialog = initTemplate(pullDialogTemplate, pullConfigurationDialogId, context, configuration, pageNavigation);
             pullDialog.dialog('open');
@@ -93,7 +94,6 @@ export var feedbackPluginModule = function ($, window, document) {
         new PaginationContainer($('#' + dialogId + '.feedback-container .pages-container'), pageNavigation);
         initRating("#" + dialogId + " .rating-input", configuration.getMechanismConfig(mechanismTypes.ratingType));
         var screenshotView = initScreenshot(configuration.getMechanismConfig(mechanismTypes.screenshotType), dialogId);
-
         var dialog = initDialog($('#'+ dialogId), configuration.getMechanismConfig(mechanismTypes.textType));
         addEvents(dialogId, configuration);
         pageNavigation.screenshotView = screenshotView;
@@ -180,7 +180,13 @@ export var feedbackPluginModule = function ($, window, document) {
                 }
             })
         );
-        dialogObject.dialog('option', 'title', textMechanism.getParameter('title').value);
+
+        // TODO move title to general configuration
+        if(textMechanism) {
+            dialogObject.dialog('option', 'title', textMechanism.getParameter('title').value);
+        } else {
+            dialogObject.dialog('option', 'title', 'Feedback');
+        }
         return dialogObject;
     };
 
@@ -205,25 +211,32 @@ export var feedbackPluginModule = function ($, window, document) {
             event.stopPropagation();
 
             // validate anyway before sending
-            textarea.validate();
-            if (!textarea.hasClass('invalid')) {
+            if(textMechanism) {
+                textarea.validate();
+                if (!textarea.hasClass('invalid')) {
+                    var formData = prepareFormData(container, configuration);
+                    sendFeedback(formData, configuration);
+                }
+            } else {
                 var formData = prepareFormData(container, configuration);
                 sendFeedback(formData, configuration);
             }
         });
 
         // character length
-        var maxLength = textMechanism.getParameter('maxLength').value;
-        textarea.on('keyup focus', function () {
-            container.find('span.text-type-max-length').text($(this).val().length + '/' + maxLength);
-        });
+        if(textMechanism) {
+            var maxLength = textMechanism.getParameter('maxLength').value;
+            textarea.on('keyup focus', function () {
+                container.find('span.text-type-max-length').text($(this).val().length + '/' + maxLength);
+            });
 
-        // text clear button
-        container.find('.text-type-text-clear').on('click', function (event) {
-            event.preventDefault();
-            event.stopPropagation();
-            textarea.val('');
-        });
+            // text clear button
+            container.find('.text-type-text-clear').on('click', function (event) {
+                event.preventDefault();
+                event.stopPropagation();
+                textarea.val('');
+            });
+        }
     };
 
     /**

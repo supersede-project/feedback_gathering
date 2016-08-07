@@ -21,12 +21,12 @@ define(["require", "exports", '../parameters/parameter_value_property_pair', '..
             var textMechanism = this.getMechanismConfig(config_1.mechanismTypes.textType);
             var ratingMechanism = this.getMechanismConfig(config_1.mechanismTypes.ratingType);
             var screenshotMechanism = this.getMechanismConfig(config_1.mechanismTypes.screenshotType);
-            var labelStyle = this.getCssStyle(textMechanism, [
-                new parameter_value_property_pair_1.ParameterValuePropertyPair('labelPositioning', 'text-align'),
-                new parameter_value_property_pair_1.ParameterValuePropertyPair('labelColor', 'color'),
-                new parameter_value_property_pair_1.ParameterValuePropertyPair('labelFontSize', 'font-size')]);
-            var textareaStyle = this.getCssStyle(textMechanism, [new parameter_value_property_pair_1.ParameterValuePropertyPair('textareaFontColor', 'color')]);
             if (textMechanism) {
+                var textareaStyle = this.getCssStyle(textMechanism, [new parameter_value_property_pair_1.ParameterValuePropertyPair('textareaFontColor', 'color')]);
+                var labelStyle = this.getCssStyle(textMechanism, [
+                    new parameter_value_property_pair_1.ParameterValuePropertyPair('labelPositioning', 'text-align'),
+                    new parameter_value_property_pair_1.ParameterValuePropertyPair('labelColor', 'color'),
+                    new parameter_value_property_pair_1.ParameterValuePropertyPair('labelFontSize', 'font-size')]);
                 context.textMechanism = {
                     active: textMechanism.active,
                     hint: textMechanism.getParameterValue('hint'),

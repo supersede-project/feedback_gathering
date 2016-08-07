@@ -46,14 +46,13 @@ export abstract class Configuration implements ConfigurationInterface {
         var ratingMechanism = this.getMechanismConfig(mechanismTypes.ratingType);
         var screenshotMechanism = this.getMechanismConfig(mechanismTypes.screenshotType);
 
-        var labelStyle = this.getCssStyle(textMechanism, [
-            new ParameterValuePropertyPair('labelPositioning', 'text-align'),
-            new ParameterValuePropertyPair('labelColor', 'color'),
-            new ParameterValuePropertyPair('labelFontSize', 'font-size')]
-        );
-        var textareaStyle = this.getCssStyle(textMechanism, [new ParameterValuePropertyPair('textareaFontColor', 'color')]);
-
         if(textMechanism) {
+            var textareaStyle = this.getCssStyle(textMechanism, [new ParameterValuePropertyPair('textareaFontColor', 'color')]);
+            var labelStyle = this.getCssStyle(textMechanism, [
+                new ParameterValuePropertyPair('labelPositioning', 'text-align'),
+                new ParameterValuePropertyPair('labelColor', 'color'),
+                new ParameterValuePropertyPair('labelFontSize', 'font-size')]
+            );
             context.textMechanism = {
                 active: textMechanism.active,
                 hint: textMechanism.getParameterValue('hint'),

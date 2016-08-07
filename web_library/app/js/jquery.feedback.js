@@ -1,4 +1,4 @@
-define(["require", "exports", './config', '../views/pagination_container', '../views/screenshot/screenshot_view', './helpers/i18n', '../services/backends/mock_backend', '../models/feedbacks/feedback', '../models/feedbacks/rating', './helpers/page_navigation', '../services/application_service', './lib/jquery.star-rating-svg.js', './jquery.validate.js'], function (require, exports, config_1, pagination_container_1, screenshot_view_1, i18n_1, mock_backend_1, feedback_1, rating_1, page_navigation_1, application_service_1) {
+define(["require", "exports", './config', '../views/pagination_container', '../views/screenshot/screenshot_view', './helpers/i18n', '../services/backends/mock_backend', '../models/feedbacks/feedback', '../models/feedbacks/rating', './helpers/page_navigation', '../services/application_service', './helpers/array_shuffle', './lib/jquery.star-rating-svg.js', './jquery.validate.js'], function (require, exports, config_1, pagination_container_1, screenshot_view_1, i18n_1, mock_backend_1, feedback_1, rating_1, page_navigation_1, application_service_1, array_shuffle_1) {
     "use strict";
     exports.feedbackPluginModule = function ($, window, document) {
         var dialog;
@@ -15,7 +15,7 @@ define(["require", "exports", './config', '../views/pagination_container', '../v
             resetMessageView();
             initPushMechanisms(application.getPushConfiguration());
             var alreadyTriggeredOne = false;
-            for (var _i = 0, _a = application.getPullConfigurations(); _i < _a.length; _i++) {
+            for (var _i = 0, _a = array_shuffle_1.shuffle(application.getPullConfigurations()); _i < _a.length; _i++) {
                 var pullConfiguration = _a[_i];
                 alreadyTriggeredOne = initPullConfiguration(pullConfiguration, alreadyTriggeredOne);
             }
@@ -27,8 +27,8 @@ define(["require", "exports", './config', '../views/pagination_container', '../v
         };
         var initPullConfiguration = function (configuration, alreadyTriggeredOne) {
             if (alreadyTriggeredOne === void 0) { alreadyTriggeredOne = false; }
-            var pageNavigation = new page_navigation_1.PageNavigation(configuration, $('#' + pullConfigurationDialogId));
             if (!alreadyTriggeredOne && configuration.shouldGetTriggered()) {
+                var pageNavigation = new page_navigation_1.PageNavigation(configuration, $('#' + pullConfigurationDialogId));
                 var context = configuration.getContextForView();
                 pullDialog = initTemplate(pullDialogTemplate, pullConfigurationDialogId, context, configuration, pageNavigation);
                 pullDialog.dialog('open');
@@ -90,7 +90,12 @@ define(["require", "exports", './config', '../views/pagination_container', '../v
                     active = false;
                 }
             }));
-            dialogObject.dialog('option', 'title', textMechanism.getParameter('title').value);
+            if (textMechanism) {
+                dialogObject.dialog('option', 'title', textMechanism.getParameter('title').value);
+            }
+            else {
+                dialogObject.dialog('option', 'title', 'Feedback');
+            }
             return dialogObject;
         };
         var addEvents = function (containerId, configuration) {
@@ -100,21 +105,29 @@ define(["require", "exports", './config', '../views/pagination_container', '../v
             container.find('button.submit-feedback').unbind().on('click', function (event) {
                 event.preventDefault();
                 event.stopPropagation();
-                textarea.validate();
-                if (!textarea.hasClass('invalid')) {
+                if (textMechanism) {
+                    textarea.validate();
+                    if (!textarea.hasClass('invalid')) {
+                        var formData = prepareFormData(container, configuration);
+                        sendFeedback(formData, configuration);
+                    }
+                }
+                else {
                     var formData = prepareFormData(container, configuration);
                     sendFeedback(formData, configuration);
                 }
             });
-            var maxLength = textMechanism.getParameter('maxLength').value;
-            textarea.on('keyup focus', function () {
-                container.find('span.text-type-max-length').text($(this).val().length + '/' + maxLength);
-            });
-            container.find('.text-type-text-clear').on('click', function (event) {
-                event.preventDefault();
-                event.stopPropagation();
-                textarea.val('');
-            });
+            if (textMechanism) {
+                var maxLength = textMechanism.getParameter('maxLength').value;
+                textarea.on('keyup focus', function () {
+                    container.find('span.text-type-max-length').text($(this).val().length + '/' + maxLength);
+                });
+                container.find('.text-type-text-clear').on('click', function (event) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    textarea.val('');
+                });
+            }
         };
         var prepareFormData = function (container, configuration) {
             var formData = new FormData();
