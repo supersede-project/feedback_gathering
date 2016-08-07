@@ -15,9 +15,9 @@ import {PullConfiguration} from '../models/configurations/pull_configuration';
 import {Feedback} from '../models/feedbacks/feedback';
 import {Rating} from '../models/feedbacks/rating';
 import {PageNavigation} from './helpers/page_navigation';
-import {PushConfiguration} from '../models/configurations/push_configuration';
 import {ConfigurationInterface} from '../models/configurations/configuration_interface';
 import {Application} from '../models/applications/application';
+import {ApplicationService} from '../services/application_service';
 
 
 export var feedbackPluginModule = function ($, window, document) {
@@ -32,6 +32,21 @@ export var feedbackPluginModule = function ($, window, document) {
     var mockData = require('json!../services/mocks/applications_mock.json');
 
     /**
+     * @param applicationObject
+     *  The current application object that configures the library.
+     */
+    var initApplication = function(applicationObject:Application) {
+        application = applicationObject;
+        resetMessageView();
+        initPushMechanisms(application.getPushConfiguration());
+
+        var alreadyTriggeredOne = false;
+        for(var pullConfiguration of application.getPullConfigurations()) {
+            alreadyTriggeredOne = initPullConfiguration(pullConfiguration, alreadyTriggeredOne);
+        }
+    };
+
+    /**
      * @param configuration
      *  PushConfiguration data retrieved from the feedback orchestrator
      *
@@ -41,8 +56,7 @@ export var feedbackPluginModule = function ($, window, document) {
      * is configured and displayed and some events are added to the UI.
      * All events on the HTML have to be added after the template is appended to the body (if not using live binding).
      */
-    var initMechanisms = function (configuration) {
-        $('.server-response').removeClass('error').removeClass('success').text('');
+    var initPushMechanisms = function (configuration) {
         var context = configuration.getContextForView();
 
         var pageNavigation = new PageNavigation(configuration, $('#' + pushConfigurationDialogId));
@@ -53,16 +67,22 @@ export var feedbackPluginModule = function ($, window, document) {
      * Initializes the pull mechanisms and triggers the feedback mechanisms if necessary.
      *
      * @param configuration
+     * @param alreadyTriggeredOne
+     *  Boolean that indicated whether a pull configuration has already been triggered.
+     *
+     * @returns boolean
+     *  Whether the pull configuration was triggered or not.
      */
-    var initPullConfiguration = function(configuration:PullConfiguration) {
-        $('.server-response').removeClass('error').removeClass('success').text('');
+    var initPullConfiguration = function(configuration:PullConfiguration, alreadyTriggeredOne:boolean = false): boolean {
         var pageNavigation = new PageNavigation(configuration, $('#' + pullConfigurationDialogId));
 
-        if(configuration.shouldGetTriggered()) {
+        if(!alreadyTriggeredOne && configuration.shouldGetTriggered()) {
             var context = configuration.getContextForView();
             pullDialog = initTemplate(pullDialogTemplate, pullConfigurationDialogId, context, configuration, pageNavigation);
             pullDialog.dialog('open');
+            return true;
         }
+        return false;
     };
 
     var initTemplate = function (template, dialogId, context, configuration, pageNavigation): HTMLElement {
@@ -250,6 +270,10 @@ export var feedbackPluginModule = function ($, window, document) {
         active = !active;
     };
 
+    var resetMessageView = function () {
+        $('.server-response').removeClass('error').removeClass('success').text('');
+    };
+
     /**
      * @param options
      *  Client side configuration of the feedback library
@@ -270,14 +294,9 @@ export var feedbackPluginModule = function ($, window, document) {
         I18nHelper.initializeI18n(resources, this.options);
 
         // loadDataHere to trigger pull if necessary
-        var configurationService = new ConfigurationService(new MockBackend(mockData));
-        configurationService.retrieveConfiguration(function (configuration) {
-            initMechanisms(configuration);
-            // TODO handle more than 1 pull configurations
-            if(configuration.pull_configurations.length > 0) {
-                var pullConfiguration:PullConfiguration = PullConfiguration.initByData(configuration.pull_configurations[0]);
-                initPullConfiguration(pullConfiguration);
-            }
+        var applicationService = new ApplicationService(new MockBackend(mockData));
+        applicationService.retrieveApplication(1, function(application) {
+            initApplication(application);
         });
 
         this.css('background-color', currentOptions.backgroundColor);

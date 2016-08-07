@@ -1,4 +1,4 @@
-define(["require", "exports", '../services/configuration_service', './config', '../views/pagination_container', '../views/screenshot/screenshot_view', './helpers/i18n', '../services/backends/mock_backend', '../models/configurations/pull_configuration', '../models/feedbacks/feedback', '../models/feedbacks/rating', './helpers/page_navigation', './lib/jquery.star-rating-svg.js', './jquery.validate.js'], function (require, exports, configuration_service_1, config_1, pagination_container_1, screenshot_view_1, i18n_1, mock_backend_1, pull_configuration_1, feedback_1, rating_1, page_navigation_1) {
+define(["require", "exports", './config', '../views/pagination_container', '../views/screenshot/screenshot_view', './helpers/i18n', '../services/backends/mock_backend', '../models/feedbacks/feedback', '../models/feedbacks/rating', './helpers/page_navigation', '../services/application_service', './lib/jquery.star-rating-svg.js', './jquery.validate.js'], function (require, exports, config_1, pagination_container_1, screenshot_view_1, i18n_1, mock_backend_1, feedback_1, rating_1, page_navigation_1, application_service_1) {
     "use strict";
     exports.feedbackPluginModule = function ($, window, document) {
         var dialog;
@@ -10,20 +10,31 @@ define(["require", "exports", '../services/configuration_service', './config', '
         var dialogTemplate = require('../templates/feedback_dialog.handlebars');
         var pullDialogTemplate = require('../templates/feedback_dialog.handlebars');
         var mockData = require('json!../services/mocks/applications_mock.json');
-        var initMechanisms = function (configuration) {
-            $('.server-response').removeClass('error').removeClass('success').text('');
+        var initApplication = function (applicationObject) {
+            application = applicationObject;
+            resetMessageView();
+            initPushMechanisms(application.getPushConfiguration());
+            var alreadyTriggeredOne = false;
+            for (var _i = 0, _a = application.getPullConfigurations(); _i < _a.length; _i++) {
+                var pullConfiguration = _a[_i];
+                alreadyTriggeredOne = initPullConfiguration(pullConfiguration, alreadyTriggeredOne);
+            }
+        };
+        var initPushMechanisms = function (configuration) {
             var context = configuration.getContextForView();
             var pageNavigation = new page_navigation_1.PageNavigation(configuration, $('#' + pushConfigurationDialogId));
             dialog = initTemplate(dialogTemplate, pushConfigurationDialogId, context, configuration, pageNavigation);
         };
-        var initPullConfiguration = function (configuration) {
-            $('.server-response').removeClass('error').removeClass('success').text('');
+        var initPullConfiguration = function (configuration, alreadyTriggeredOne) {
+            if (alreadyTriggeredOne === void 0) { alreadyTriggeredOne = false; }
             var pageNavigation = new page_navigation_1.PageNavigation(configuration, $('#' + pullConfigurationDialogId));
-            if (configuration.shouldGetTriggered()) {
+            if (!alreadyTriggeredOne && configuration.shouldGetTriggered()) {
                 var context = configuration.getContextForView();
                 pullDialog = initTemplate(pullDialogTemplate, pullConfigurationDialogId, context, configuration, pageNavigation);
                 pullDialog.dialog('open');
+                return true;
             }
+            return false;
         };
         var initTemplate = function (template, dialogId, context, configuration, pageNavigation) {
             var html = template(context);
@@ -136,6 +147,9 @@ define(["require", "exports", '../services/configuration_service', './config', '
             }
             active = !active;
         };
+        var resetMessageView = function () {
+            $('.server-response').removeClass('error').removeClass('success').text('');
+        };
         $.fn.feedbackPlugin = function (options) {
             this.options = $.extend({}, $.fn.feedbackPlugin.defaults, options);
             var currentOptions = this.options;
@@ -144,13 +158,9 @@ define(["require", "exports", '../services/configuration_service', './config', '
                 de: { translation: require('json!../locales/de/translation.json') }
             };
             i18n_1.I18nHelper.initializeI18n(resources, this.options);
-            var configurationService = new configuration_service_1.ConfigurationService(new mock_backend_1.MockBackend(mockData));
-            configurationService.retrieveConfiguration(function (configuration) {
-                initMechanisms(configuration);
-                if (configuration.pull_configurations.length > 0) {
-                    var pullConfiguration = pull_configuration_1.PullConfiguration.initByData(configuration.pull_configurations[0]);
-                    initPullConfiguration(pullConfiguration);
-                }
+            var applicationService = new application_service_1.ApplicationService(new mock_backend_1.MockBackend(mockData));
+            applicationService.retrieveApplication(1, function (application) {
+                initApplication(application);
             });
             this.css('background-color', currentOptions.backgroundColor);
             this.css('color', currentOptions.color);
