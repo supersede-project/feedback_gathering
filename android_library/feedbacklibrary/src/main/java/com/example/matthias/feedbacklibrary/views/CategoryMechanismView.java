@@ -19,7 +19,7 @@ public class CategoryMechanismView extends MechanismView implements CustomSpinne
     public CategoryMechanismView(LayoutInflater layoutInflater, Mechanism mechanism) {
         super(layoutInflater);
         this.categoryMechanism = (CategoryMechanism) mechanism;
-        setEnclosingLayout(getLayoutInflater().inflate(R.layout.choice_feedback_layout, null));
+        setEnclosingLayout(getLayoutInflater().inflate(R.layout.category_feedback_layout, null));
         initView();
     }
 
@@ -27,7 +27,7 @@ public class CategoryMechanismView extends MechanismView implements CustomSpinne
         final TextView textView = (TextView) getEnclosingLayout().findViewById(R.id.supersede_feedbacklibrary_choice_feedback_title);
         textView.setText(categoryMechanism.getTitle());
         customSpinner = (CustomSpinner) getEnclosingLayout().findViewById(R.id.supersede_feedbacklibrary_custom_spinner);
-        customSpinner.setItems(categoryMechanism.getOptions(), false);
+        customSpinner.setItems(categoryMechanism.getOptions(), true);
         customSpinner.setListener(this);
         customSpinner.setMultiple(categoryMechanism.isMultiple());
     }

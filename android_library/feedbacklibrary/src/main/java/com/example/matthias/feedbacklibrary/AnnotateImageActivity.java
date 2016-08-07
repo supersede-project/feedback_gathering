@@ -20,6 +20,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Typeface;
@@ -37,13 +38,13 @@ import android.widget.Toast;
 
 import com.example.matthias.feedbacklibrary.utils.Utils;
 import com.example.matthias.feedbacklibrary.views.AnnotateImageView;
+import com.example.matthias.feedbacklibrary.views.StickerImageView;
+import com.example.matthias.feedbacklibrary.views.StickerView;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Stack;
 
 /**
  * Activity for annotating the screenshot
@@ -52,13 +53,24 @@ public class AnnotateImageActivity extends AppCompatActivity implements ColorPic
     private boolean blackModeOn = false;
     private int oldPaintStrokeColor;
     private int oldPaintFillColor;
-
     private AnnotateImageView annotateImageView;
-    private Stack<File> pastFileStack = new Stack<>();
-    private Stack<File> futureFileStack = new Stack<>();
-    private List<File> tempFiles = new ArrayList<>();
 
-    private static ColorPickerDialog newInstance(int mInitialColor) {
+    private void addSticker() {
+        StickerImageView sticker = new StickerImageView(this);
+        sticker.setImageDrawable(getResources().getDrawable(R.drawable.icon_smile));
+        RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.supersede_feedbacklibrary_annotate_picture_layout);
+        if (relativeLayout != null) {
+            relativeLayout.addView(sticker);
+        }
+    }
+
+    /**
+     * This method creates the color picker dialog for the image annotation.
+     *
+     * @param mInitialColor the initial color
+     * @return the color picker dialog
+     */
+    private ColorPickerDialog createColorPickerDialog(int mInitialColor) {
         ColorPickerDialog dialog = new ColorPickerDialog();
         Bundle args = new Bundle();
         args.putInt("mInitialColor", mInitialColor);
@@ -162,12 +174,28 @@ public class AnnotateImageActivity extends AppCompatActivity implements ColorPic
             return true;
         }
         if (id == R.id.supersede_feedbacklibrary_action_annotate_accept) {
-            Bitmap annotatedBitmap = annotateImageView.getBitmap();
+            RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.supersede_feedbacklibrary_annotate_picture_layout);
+            if (relativeLayout != null) {
+                // Hide all control items
+                for (int i = 0; i < relativeLayout.getChildCount(); ++i) {
+                    View child = relativeLayout.getChildAt(i);
+                    if (child instanceof StickerView) {
+                        ((StickerView) child).setControlItemsHidden(true);
+                    }
+                }
 
-            String annotatedImagePath = Utils.saveBitmapToInternalStorage(getApplicationContext(), "imageDir", FeedbackActivity.IMAGE_NAME, annotatedBitmap, Context.MODE_PRIVATE, Bitmap.CompressFormat.PNG, 100);
-            Intent intent = new Intent();
-            intent.putExtra("annotatedImagePath", annotatedImagePath);
-            setResult(RESULT_OK, intent);
+                // Convert the ViewGroup, i.e., the supersede_feedbacklibrary_annotate_picture_layout into a bitmap
+                relativeLayout.measure(View.MeasureSpec.makeMeasureSpec(relativeLayout.getLayoutParams().width, View.MeasureSpec.EXACTLY), View.MeasureSpec.makeMeasureSpec(relativeLayout.getLayoutParams().height, View.MeasureSpec.EXACTLY));
+                relativeLayout.layout(0, 0, relativeLayout.getMeasuredWidth(), relativeLayout.getMeasuredHeight());
+                Bitmap annotatedBitmap = Bitmap.createBitmap(relativeLayout.getLayoutParams().width, relativeLayout.getLayoutParams().height, Bitmap.Config.ARGB_8888);
+                Canvas canvas = new Canvas(annotatedBitmap);
+                relativeLayout.draw(canvas);
+
+                String annotatedImagePath = Utils.saveBitmapToInternalStorage(getApplicationContext(), "imageDir", FeedbackActivity.IMAGE_NAME, annotatedBitmap, Context.MODE_PRIVATE, Bitmap.CompressFormat.PNG, 100);
+                Intent intent = new Intent();
+                intent.putExtra("annotatedImagePath", annotatedImagePath);
+                setResult(RESULT_OK, intent);
+            }
             super.onBackPressed();
             return true;
         }
@@ -189,6 +217,7 @@ public class AnnotateImageActivity extends AppCompatActivity implements ColorPic
         final ImageButton arrowButton = (ImageButton) findViewById(R.id.supersede_feedbacklibrary_arrow_btn);
         final Button eraseButton = (Button) findViewById(R.id.supersede_feedbacklibrary_erase_btn);
         final Button cropButton = (Button) findViewById(R.id.supersede_feedbacklibrary_crop_btn);
+        final Button stickerButton = (Button) findViewById(R.id.supersede_feedbacklibrary_sticker_btn);
 
         if (colorPickerButton != null) {
             colorPickerButton.setOnClickListener(new View.OnClickListener() {
@@ -363,10 +392,19 @@ public class AnnotateImageActivity extends AppCompatActivity implements ColorPic
                 }
             });
         }
+
+        if (stickerButton != null) {
+            stickerButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    addSticker();
+                }
+            });
+        }
     }
 
     public void showColorPickerDialog() {
-        ColorPickerDialog dialog = newInstance(annotateImageView.getPaintStrokeColor());
+        ColorPickerDialog dialog = createColorPickerDialog(annotateImageView.getPaintStrokeColor());
         dialog.show(getFragmentManager(), "ColorPickerDialog");
     }
 

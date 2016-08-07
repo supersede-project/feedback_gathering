@@ -1,66 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="4dp"
     android:baselineAligned="false"
-    android:orientation="horizontal"
-    tools:context="com.example.matthias.feedbacklibrary.FeedbackActivity">
+    android:orientation="vertical">
 
-    <RelativeLayout
-        android:layout_width="0dp"
-        android:layout_height="250dp"
-        android:layout_weight="0.75">
-        <!-- Layout height is fixed at the moment (later: relative to the screen size?) -->
-
-        <ImageView
-            android:id="@+id/supersede_feedbacklibrary_screenshot_imageview"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_marginBottom="2dp"
-            android:layout_marginLeft="2dp"
-            android:layout_marginRight="2dp"
-            android:layout_marginTop="2dp"
-            android:background="@drawable/camera_picture_big"/>
-    </RelativeLayout>
+    <TextView
+        android:id="@+id/supersede_feedbacklibrary_screenshot_feedback_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="4dp"
+        android:textSize="16sp"/>
 
     <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="0.25"
-        android:orientation="vertical">
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:baselineAligned="false"
+        android:orientation="horizontal">
 
-        <Button
-            android:id="@+id/supersede_feedbacklibrary_select_screenshot_btn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:height="36dp"
-            android:minWidth="88dp"
-            android:text="@string/supersede_feedbacklibrary_screenshotbutton_text"
-            android:textAllCaps="false"
-            android:textSize="13sp"/>
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="250dp"
+            android:layout_weight="0.75">
+            <!-- Layout height is fixed at the moment (later: relative to the screen size?) -->
 
-        <Button
-            android:id="@+id/supersede_feedbacklibrary_annotate_screenshot_btn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:height="36dp"
-            android:minWidth="88dp"
-            android:text="@string/supersede_feedbacklibrary_annotatebutton_text"
-            android:textAllCaps="false"
-            android:textSize="13sp"/>
+            <ImageView
+                android:id="@+id/supersede_feedbacklibrary_screenshot_imageview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_marginBottom="2dp"
+                android:layout_marginLeft="2dp"
+                android:layout_marginRight="2dp"
+                android:layout_marginTop="2dp"
+                android:background="@drawable/camera_picture_big"/>
+        </RelativeLayout>
 
-        <Button
-            android:id="@+id/supersede_feedbacklibrary_remove_screenshot_btn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:height="36dp"
-            android:minWidth="88dp"
-            android:text="@string/supersede_feedbacklibrary_remove_string"
-            android:textAllCaps="false"
-            android:textSize="13sp"/>
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.25"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/supersede_feedbacklibrary_select_screenshot_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:height="36dp"
+                android:minWidth="88dp"
+                android:text="@string/supersede_feedbacklibrary_screenshotbutton_text"
+                android:textAllCaps="false"
+                android:textSize="13sp"/>
+
+            <Button
+                android:id="@+id/supersede_feedbacklibrary_annotate_screenshot_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:height="36dp"
+                android:minWidth="88dp"
+                android:text="@string/supersede_feedbacklibrary_annotatebutton_text"
+                android:textAllCaps="false"
+                android:textSize="13sp"/>
+
+            <Button
+                android:id="@+id/supersede_feedbacklibrary_remove_screenshot_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:height="36dp"
+                android:minWidth="88dp"
+                android:text="@string/supersede_feedbacklibrary_remove_string"
+                android:textAllCaps="false"
+                android:textSize="13sp"/>
+        </LinearLayout>
     </LinearLayout>
 </LinearLayout>

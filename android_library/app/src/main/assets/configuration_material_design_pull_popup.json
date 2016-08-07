@@ -242,7 +242,7 @@
       "parameters": [
         {
           "key": "title",
-          "value": "Title for screenshot feedback"
+          "value": "Illustrate your feedback with a screenshot/image"
         },
         {
           "key": "defaultPicture",
