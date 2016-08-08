@@ -423,11 +423,17 @@ export class ScreenshotView {
 
             var containmentSelector = '#' + myThis.container.attr('id') + ' .screenshot-preview';
 
+            stickerContainer.resizable({
+                containment: containmentSelector,
+                resize: function() {
+                    textArea.css('height', (stickerContainer.height() - 40) + 'px');
+                    textArea.css('width', (stickerContainer.width() - 40) + 'px');
+                }
+            });
             stickerContainer.draggable({
                 cursor: "crosshair",
                 containment: containmentSelector,
             });
-
             stickerContainer.find('a.remove').on('click', function() {
                 jQuery(this).closest('.sticker-container').remove();
             });
