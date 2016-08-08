@@ -301,6 +301,29 @@ button.screenshot-operation {
     display: none;
   }
 
+  &.text-2 {
+    cursor: move;
+    height: auto;
+    width: auto;
+  }
+
+  textarea {
+    cursor: inherit;
+    margin: 10px;
+    min-width: 100px;
+    min-height: 60px;
+    height: auto;
+    resize: none;
+    position: relative;
+    background: transparent;
+    border: none;
+    overflow: hidden;
+    outline: none;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+  }
+
   img {
     z-index: 1000;
     height: auto;

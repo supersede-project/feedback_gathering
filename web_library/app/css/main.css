@@ -621,6 +621,25 @@ button.screenshot-operation {
     width: 48px;
     height: 48px;
     display: none; }
+  .sticker-container.text-2 {
+    cursor: move;
+    height: auto;
+    width: auto; }
+  .sticker-container textarea {
+    cursor: inherit;
+    margin: 10px;
+    min-width: 100px;
+    min-height: 60px;
+    height: auto;
+    resize: none;
+    position: relative;
+    background: transparent;
+    border: none;
+    overflow: hidden;
+    outline: none;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none; }
   .sticker-container img {
     z-index: 1000;
     height: auto;

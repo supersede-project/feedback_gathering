@@ -12,6 +12,7 @@ const arrowDrawingMode:string = 'arrowDrawingMode';
 const croppingMode:string = 'croppingMode';
 const stickingMode:string = 'stickingMode';
 const textMode:string = 'textMode';
+const textMode2:string = 'textMode2';
 const black:string = "#000000";
 const red:string = "#FF0000";
 
@@ -403,6 +404,44 @@ export class ScreenshotView {
             });
 
             myThis.screenshotPreviewElement.append(stickerContainer);
+        });
+
+        this.container.find('.screenshot-text-2').on('click', function(event) {
+            event.preventDefault();
+            event.stopPropagation();
+
+            myThis.disableAllScreenshotOperations();
+            myThis.drawingMode = textMode2;
+
+            var stickerContainer = jQuery('<div class="sticker-container text-2">' +
+                '<textarea placeholder="Your text"></textarea>' +
+                '<a class="remove"><img src="dist/img/ic_remove_circle_red_shadow_24px.png"</a>' +
+                '</div>');
+
+            stickerContainer.css('width', 'auto');
+            stickerContainer.css('height', 'auto');
+
+            var containmentSelector = '#' + myThis.container.attr('id') + ' .screenshot-preview';
+
+            stickerContainer.draggable({
+                cursor: "crosshair",
+                containment: containmentSelector,
+            });
+
+            stickerContainer.find('a.remove').on('click', function() {
+                jQuery(this).closest('.sticker-container').remove();
+            });
+
+            myThis.screenshotPreviewElement.append(stickerContainer);
+
+            var textArea = stickerContainer.find('textarea:first');
+            textArea.on('keydown', function() {
+                setTimeout(function() {
+                    textArea.css('height', textArea[0].scrollHeight + 'px');
+                    stickerContainer.css('height', textArea[0].scrollHeight + 40 + 'px');
+                }, 1);
+            });
+            textArea.focus();
         });
 
         this.container.find('.screenshot-draw-undo').on('click', function(event) {
