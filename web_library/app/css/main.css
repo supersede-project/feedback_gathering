@@ -583,14 +583,16 @@ button.text-type-text-clear {
     height: auto; }
 
 button.screenshot-operation {
-  display: block;
   background: none;
   font-weight: normal;
   color: #000000;
-  padding: 3px 5px;
-  font-size: 14px; }
+  font-size: 14px;
+  max-width: 30px;
+  display: inline-block;
+  margin-right: 1px;
+  padding: 1px 1px; }
   button.screenshot-operation.active {
-    font-weight: bold; }
+    padding: 7px 7px; }
 
 .sticker-container {
   position: absolute;

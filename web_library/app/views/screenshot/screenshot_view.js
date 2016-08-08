@@ -91,6 +91,7 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
         ScreenshotView.prototype.initDrawing = function () {
             var context = this.screenshotCanvas.getContext('2d');
             this.isPainting = false;
+            this.initRectAsDefaultDrawing();
             this.drawingMode = rectDrawingMode;
             this.context.strokeStyle = red;
             var myThis = this;
@@ -196,8 +197,14 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
             this.canvasStates = [];
             this.container.find('.screenshot-operations').hide();
             this.disableAllScreenshotOperations();
-            this.container.find('.screenshot-draw-rect').addClass('active');
-            this.drawingMode = rectDrawingMode;
+            this.initRectAsDefaultDrawing();
+        };
+        ScreenshotView.prototype.initRectAsDefaultDrawing = function () {
+            var myThis = this;
+            setTimeout(function () {
+                myThis.container.find('.screenshot-draw-rect').addClass('active', 500);
+                myThis.drawingMode = rectDrawingMode;
+            }, 1500);
         };
         ScreenshotView.prototype.draw_arrow = function (context, fromx, fromy, tox, toy) {
             if (Math.sqrt(Math.pow(fromx - tox, 2) + Math.pow(fromy - toy, 2)) < 20) {
