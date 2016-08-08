@@ -68,9 +68,11 @@ define(["require", "exports", './config', '../views/pagination_container', '../v
             });
         };
         var initRating = function (selector, ratingMechanism) {
-            var options = ratingMechanism.getRatingElementOptions();
-            $('' + selector).starRating(options);
-            $('' + selector + ' .jq-star:nth-child(' + ratingMechanism.initialRating + ')').click();
+            if (ratingMechanism !== null && ratingMechanism.active) {
+                var options = ratingMechanism.getRatingElementOptions();
+                $('' + selector).starRating(options);
+                $('' + selector + ' .jq-star:nth-child(' + ratingMechanism.initialRating + ')').click();
+            }
         };
         var initScreenshot = function (screenshotMechanism, containerId) {
             if (screenshotMechanism == null) {

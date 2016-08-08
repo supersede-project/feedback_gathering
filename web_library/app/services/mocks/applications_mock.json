@@ -220,6 +220,55 @@
                 "editableByUser": false
               }
             ]
+          },
+          {
+            "type": "CATEGORY_TYPE",
+            "active": true,
+            "order": 3,
+            "canBeActivated": false,
+            "parameters": [
+              {
+                "key": "title",
+                "value": "How likely are you to recommend this website to your friends? (1 = not very likely, 5 = very likely)"
+              },
+              {
+                "key": "ownAllowed",
+                "value": 0
+              },
+              {
+                "key": "multiple",
+                "value": 0
+              },
+              {
+                "key": "breakAfterOption",
+                "value": 0
+              },
+              {
+                "key": "options",
+                "value": [
+                  {
+                    "key": "1",
+                    "value": "1"
+                  },
+                  {
+                    "key": "2",
+                    "value": "2"
+                  },
+                  {
+                    "key": "3",
+                    "value": "3"
+                  },
+                  {
+                    "key": "4",
+                    "value": "4"
+                  },
+                  {
+                    "key": "5",
+                    "value": "5"
+                  }
+                ]
+              }
+            ]
           }
         ]
       },
@@ -326,50 +375,51 @@
             ]
           },
           {
-            "type": "RATING_TYPE",
+            "type": "CATEGORY_TYPE",
             "active": true,
-            "order": 4,
+            "order": 2,
             "canBeActivated": false,
             "parameters": [
               {
                 "key": "title",
-                "value": "Rate your user experience"
+                "value": "Please rate the feature that you just used"
               },
               {
-                "key": "ratingIcon",
-                "value": "star"
+                "key": "ownAllowed",
+                "value": 0
               },
               {
-                "key": "maxRating",
-                "value": 5
+                "key": "multiple",
+                "value": 0
               },
               {
-                "key": "defaultRating",
-                "value": 2,
-                "editableByUser": false,
-                "defaultValue": 0
-              }
-            ]
-          },
-          {
-            "type": "SCREENSHOT_TYPE",
-            "active": true,
-            "order": 3,
-            "canBeActivated": false,
-            "parameters": [
-              {
-                "key": "title",
-                "value": "Title for screenshot feedback"
+                "key": "breakAfterOption",
+                "value": 0
               },
               {
-                "key": "defaultPicture",
-                "value": "lastScreenshot",
-                "defaultValue": "noImage",
-                "editableByUser": true
-              },
-              {
-                "key": "autoTake",
-                "value": 1
+                "key": "options",
+                "value": [
+                  {
+                    "key": "RATING_1",
+                    "value": "Very bad"
+                  },
+                  {
+                    "key": "RATING_2",
+                    "value": "Bad"
+                  },
+                  {
+                    "key": "RATING_3",
+                    "value": "Okay"
+                  },
+                  {
+                    "key": "RATING_4",
+                    "value": "Good"
+                  },
+                  {
+                    "key": "RATING_5",
+                    "value": "Very good"
+                  }
+                ]
               }
             ]
           }
@@ -389,7 +439,7 @@
             {
               "id": 2,
               "key": "likelihood",
-              "value": 0.1
+              "value": 0.2
             },
             {
               "id": 79,
@@ -433,15 +483,15 @@
             "parameters": [
               {
                 "key": "title",
-                "value": "Please choose from the following categories:"
+                "value": "Which feature should we work on next?"
               },
               {
                 "key": "ownAllowed",
-                "value": 1
+                "value": 0
               },
               {
                 "key": "multiple",
-                "value": 1
+                "value": 0
               },
               {
                 "key": "breakAfterOption",
@@ -451,16 +501,12 @@
                 "key": "options",
                 "value": [
                   {
-                    "key": "BUG_CATEGORY",
-                    "value": "Bug"
+                    "key": "FEATURE_1",
+                    "value": "Twitter Login"
                   },
                   {
-                    "key": "FEATURE_REQUEST_CATEGORY",
-                    "value": "Feature Request"
-                  },
-                  {
-                    "key": "GENERAL_CATEGORY",
-                    "value": "General Feedback"
+                    "key": "FEATURE_2",
+                    "value": "Google Login"
                   }
                 ]
               }

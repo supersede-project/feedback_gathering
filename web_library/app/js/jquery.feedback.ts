@@ -138,10 +138,12 @@ export var feedbackPluginModule = function ($, window, document) {
      * Applies the jQuery star rating plugin on a specified element with the configuration from the rating mechanism.
      */
     var initRating = function (selector, ratingMechanism:RatingMechanism) {
-        var options = ratingMechanism.getRatingElementOptions();
-        $('' + selector).starRating(options);
-        // reset to default rating
-        $('' + selector + ' .jq-star:nth-child(' + ratingMechanism.initialRating + ')').click();
+        if(ratingMechanism !== null && ratingMechanism.active) {
+            var options = ratingMechanism.getRatingElementOptions();
+            $('' + selector).starRating(options);
+            // reset to default rating
+            $('' + selector + ' .jq-star:nth-child(' + ratingMechanism.initialRating + ')').click();
+        }
     };
 
     var initScreenshot = function (screenshotMechanism, containerId): ScreenshotView {
