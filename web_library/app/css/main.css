@@ -603,7 +603,16 @@ button.screenshot-operation {
   top: 5px;
   left: 5px;
   padding: 10px;
-  border: none; }
+  border: none;
+  overflow: visible; }
+  .sticker-container a.remove {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    z-index: 1000;
+    width: 16px;
+    height: 16px;
+    display: none; }
   .sticker-container img {
     z-index: 1000;
     height: auto;
@@ -611,5 +620,7 @@ button.screenshot-operation {
 
 .sticker-container:hover {
   border: 1px solid black; }
+  .sticker-container:hover a.remove {
+    display: block; }
 
 /*# sourceMappingURL=main.css.map */

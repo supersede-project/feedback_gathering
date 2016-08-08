@@ -309,7 +309,7 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
                 myThis.drawingMode = stickingMode;
                 var imgSrc = jQuery(this).find('img').attr('src');
                 var img = jQuery('<img src="' + imgSrc + '" class="sticker" />');
-                var stickerContainer = jQuery('<div class="sticker-container"></div>');
+                var stickerContainer = jQuery('<div class="sticker-container"><a class="remove"><img src="dist/img/ic_remove_circle_red_24px.png"</a></div>');
                 stickerContainer.css('width', '60px');
                 stickerContainer.css('height', 'auto');
                 stickerContainer.append(img);
@@ -322,6 +322,9 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
                 stickerContainer.draggable({
                     cursor: "crosshair",
                     containment: containmentSelector,
+                });
+                stickerContainer.find('a.remove').on('click', function () {
+                    jQuery(this).closest('.sticker-container').remove();
                 });
                 myThis.screenshotPreviewElement.append(stickerContainer);
             });
