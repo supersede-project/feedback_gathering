@@ -10,6 +10,7 @@ const fillRectDrawingMode:string = 'fillRectDrawingMode';
 const circleDrawingMode:string = 'circleDrawingMode';
 const arrowDrawingMode:string = 'arrowDrawingMode';
 const croppingMode:string = 'croppingMode';
+const stickingMode:string = 'stickingMode';
 const black:string = "#000000";
 const red:string = "#FF0000";
 
@@ -372,15 +373,30 @@ export class ScreenshotView {
         this.container.find('.screenshot-operation.sticking').on('click', function(event) {
             event.preventDefault();
             event.stopPropagation();
+
+            myThis.disableAllScreenshotOperations();
+            myThis.drawingMode = stickingMode;
+
             var imgSrc = jQuery(this).find('img').attr('src');
             var img = jQuery('<img src="' + imgSrc + '" class="sticker" />');
             var stickerContainer = jQuery('<div class="sticker-container"></div>');
 
-            img.resizable();
+            stickerContainer.css('width', '60px');
+            stickerContainer.css('height', 'auto');
             stickerContainer.append(img);
-            //stickerContainer.draggable();
-            img.css('width', '30px');
-            img.css('height', 'auto');
+            img.css('width', '100%');
+            img.css('height', '100%');
+
+            var containmentSelector = '#' + myThis.container.attr('id') + ' .screenshot-preview';
+
+            stickerContainer.resizable({
+                containment: containmentSelector
+            });
+            stickerContainer.draggable({
+                cursor: "crosshair",
+                containment: containmentSelector,
+            });
+
             myThis.screenshotPreviewElement.append(stickerContainer);
         });
 
