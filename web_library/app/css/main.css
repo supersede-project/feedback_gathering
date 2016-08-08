@@ -605,13 +605,21 @@ button.screenshot-operation {
   padding: 10px;
   border: none;
   overflow: visible; }
+  .sticker-container a.edit {
+    position: absolute;
+    bottom: -32px;
+    left: -16px;
+    z-index: 1000;
+    width: 48px;
+    height: 48px;
+    display: none; }
   .sticker-container a.remove {
     position: absolute;
-    top: -8px;
-    right: -8px;
+    top: -16px;
+    right: -32px;
     z-index: 1000;
-    width: 16px;
-    height: 16px;
+    width: 48px;
+    height: 48px;
     display: none; }
   .sticker-container img {
     z-index: 1000;
@@ -620,6 +628,8 @@ button.screenshot-operation {
 
 .sticker-container:hover {
   border: 1px solid black; }
+  .sticker-container:hover a.edit {
+    display: block; }
   .sticker-container:hover a.remove {
     display: block; }
 

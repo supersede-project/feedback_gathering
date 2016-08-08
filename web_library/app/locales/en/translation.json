@@ -20,6 +20,7 @@
     "arrow": "arrow",
     "freehand": "freehand",
     "crop": "crop",
+    "text": "Add text",
     "undo": "undo",
     "remove": "remove"
   },

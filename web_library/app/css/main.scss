@@ -281,13 +281,23 @@ button.screenshot-operation {
   border: none;
   overflow: visible;
 
+  a.edit {
+    position: absolute;
+    bottom: -32px;
+    left: -16px;
+    z-index: 1000;
+    width: 48px;
+    height: 48px;
+    display: none;
+  }
+
   a.remove {
     position: absolute;
-    top: -8px;
-    right: -8px;
+    top: -16px;
+    right: -32px;
     z-index: 1000;
-    width: 16px;
-    height: 16px;
+    width: 48px;
+    height: 48px;
     display: none;
   }
 
@@ -300,6 +310,10 @@ button.screenshot-operation {
 
 .sticker-container:hover {
   border: 1px solid black;
+
+  a.edit {
+    display: block;
+  }
 
   a.remove {
     display: block;

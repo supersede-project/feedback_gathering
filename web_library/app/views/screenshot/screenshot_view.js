@@ -7,6 +7,7 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
     var arrowDrawingMode = 'arrowDrawingMode';
     var croppingMode = 'croppingMode';
     var stickingMode = 'stickingMode';
+    var textMode = 'textMode';
     var black = "#000000";
     var red = "#FF0000";
     var ScreenshotView = (function () {
@@ -292,6 +293,35 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
                 myThis.context.fillStyle = black;
                 myThis.context.setLineDash([3, 8]);
             });
+            this.container.find('.screenshot-text').on('click', function (event) {
+                event.preventDefault();
+                event.stopPropagation();
+                myThis.disableAllScreenshotOperations();
+                myThis.drawingMode = textMode;
+                var imgSrc = jQuery(this).find('img').attr('src');
+                var img = jQuery('<img src="' + imgSrc + '" class="sticker" />');
+                var stickerContainer = jQuery('<div class="sticker-container">' +
+                    '<a class="edit"><img src="dist/img/ic_mode_edit_black_shadow_24px.png"</a>' +
+                    '<a class="remove"><img src="dist/img/ic_remove_circle_red_shadow_24px.png"</a>' +
+                    '</div>');
+                stickerContainer.css('width', '60px');
+                stickerContainer.css('height', 'auto');
+                stickerContainer.append(img);
+                img.css('width', '100%');
+                img.css('height', '100%');
+                var containmentSelector = '#' + myThis.container.attr('id') + ' .screenshot-preview';
+                stickerContainer.resizable({
+                    containment: containmentSelector
+                });
+                stickerContainer.draggable({
+                    cursor: "crosshair",
+                    containment: containmentSelector,
+                });
+                stickerContainer.find('a.remove').on('click', function () {
+                    jQuery(this).closest('.sticker-container').remove();
+                });
+                myThis.screenshotPreviewElement.append(stickerContainer);
+            });
             this.container.find('.screenshot-draw-undo').on('click', function (event) {
                 event.preventDefault();
                 event.stopPropagation();
@@ -309,7 +339,7 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
                 myThis.drawingMode = stickingMode;
                 var imgSrc = jQuery(this).find('img').attr('src');
                 var img = jQuery('<img src="' + imgSrc + '" class="sticker" />');
-                var stickerContainer = jQuery('<div class="sticker-container"><a class="remove"><img src="dist/img/ic_remove_circle_red_24px.png"</a></div>');
+                var stickerContainer = jQuery('<div class="sticker-container"><a class="remove"><img src="dist/img/ic_remove_circle_red_shadow_24px.png"</a></div>');
                 stickerContainer.css('width', '60px');
                 stickerContainer.css('height', 'auto');
                 stickerContainer.append(img);
