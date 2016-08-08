@@ -15,11 +15,9 @@ public class FeedbackParameter {
 	private Timestamp updatedAt;
 	private String language;
 	private Integer id;
-	private Integer parentParameterId;
+	private Integer parametersId;
 	private Integer mechanismId;
-	private Integer pullConfigurationId;
-	private Integer genaralConfigurationId;
-	
+	private Integer generalConfigurationsId;
 	
 	public Timestamp getCreatedAt() {
 		return createdAt;
@@ -65,10 +63,10 @@ public class FeedbackParameter {
 	}
 	
 	public Integer getParentParameterId() {
-		return parentParameterId;
+		return parametersId;
 	}
 	public void setParentParameterId(Integer parentParameterId) {
-		this.parentParameterId = parentParameterId;
+		this.parametersId = parentParameterId;
 	}
 	public Integer getMechanismId() {
 		return mechanismId;
@@ -76,17 +74,11 @@ public class FeedbackParameter {
 	public void setMechanismId(Integer mechanismId) {
 		this.mechanismId = mechanismId;
 	}
-	public Integer getPullConfigurationId() {
-		return pullConfigurationId;
-	}
-	public void setPullConfigurationId(Integer pullConfigurationId) {
-		this.pullConfigurationId = pullConfigurationId;
-	}
 	public Integer getGenaralConfigurationId() {
-		return genaralConfigurationId;
+		return generalConfigurationsId;
 	}
 	public void setGenaralConfigurationId(Integer genaralConfigurationId) {
-		this.genaralConfigurationId = genaralConfigurationId;
+		this.generalConfigurationsId = genaralConfigurationId;
 	}
 	
 	public Integer getId() {

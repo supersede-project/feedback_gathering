@@ -16,13 +16,12 @@ import ch.uzh.ifi.feedback.orchestrator.model.FeedbackMechanism;
 import ch.uzh.ifi.feedback.orchestrator.model.FeedbackParameter;
 import javassist.NotFoundException;
 
-public class ParameterService implements IParameterService{
-	
-	private ParameterResultParser resultParser;
+public class ParameterService extends ServiceBase<FeedbackParameter>{
 	
 	@Inject
-	public ParameterService(ParameterResultParser resultParser) {
-		this.resultParser = resultParser;
+	public ParameterService(ParameterResultParser resultParser) 
+	{
+		super(resultParser, FeedbackParameter.class, "parameters");
 	}
 	
 	@Override
@@ -42,39 +41,17 @@ public class ParameterService implements IParameterService{
 			Connection con, 
 			String foreignTableName, 
 			String foreignKeyName, 
-			int foreignKey) throws SQLException
+			int foreignKey) throws SQLException, NotFoundException
 	{
-		String sql = String.format(
-				  "SELECT p.id, p.parameters_id, p.key, p.value, p.default_value as defaultValue, "
-				       + "p.editable_by_user as editableByUser, p.language, p.created_at as createdAt, p.updated_at as updatedAt "
-				+ "FROM feedback_orchestrator.parameters as p "
-	    		+ "JOIN feedback_orchestrator.%s as f on (p.%s = f.id) "
-	    		+ "WHERE f.id = ? ;", foreignTableName, foreignKeyName);
-				
-	    PreparedStatement s = con.prepareStatement(sql);
-	    s.setInt(1, foreignKey);
-	    ResultSet result = s.executeQuery();
-	    
+		List<FeedbackParameter> rootParams = new ArrayList<>();
 		Map<Integer, List<FeedbackParameter>> childMap = new HashMap<>();
 		Map<FeedbackParameter, Integer> parameterMap = new HashMap<>();
-		List<FeedbackParameter> rootParams = new ArrayList<>();
-	    while(result.next())
+		List<FeedbackParameter> params = super.GetAllFor(con, foreignTableName, foreignKeyName, foreignKey);
+		
+	    for(FeedbackParameter param : params)
 	    {
-	    	FeedbackParameter param = new FeedbackParameter();
-	    	/*
-	    	param.setId(result.getInt("id"));
-	    	param.setKey(result.getString("key"));
-	    	param.setValue(result.getObject("value"));
-	    	param.setDefaultValue(result.getObject("default_value"));
-	    	param.setEditableByUser(result.getBoolean("editable_by_user"));
-	    	param.setLanguage(result.getString("language"));
-	    	param.setCreatedAt(result.getTimestamp("created_at"));
-	    	param.setUpdatedAt(result.getTimestamp("updated_at"));
-	    	*/
-	    	resultParser.SetFields(param, result);
-	    	parameterMap.put(param, result.getInt("id"));
-	    	
-	    	Integer parameterKey = (Integer)result.getObject("parameters_id");
+	    	parameterMap.put(param, param.getId());
+	    	Integer parameterKey = param.getParentParameterId();
 	    	if(parameterKey != null){
 	    		if(!childMap.containsKey(parameterKey))
 	    			childMap.put(parameterKey, new ArrayList<>());
@@ -90,37 +67,17 @@ public class ParameterService implements IParameterService{
 	
 	@Override
 	public List<FeedbackParameter> GetAll(
-			Connection con) throws SQLException
+			Connection con) throws SQLException, NotFoundException
 	{
-		String sql = String.format(
-				  "Select p.id, p.parameters_id, p.key, p.value, p.default_value as defaultValue, p.editable_by_user as editableByUser, "
-				       + "p.language, p.created_at as createdAt, p.updated_at as updatedAt "
-				+ "FROM feedback_orchestrator.parameters as p;");
-				
-	    PreparedStatement s = con.prepareStatement(sql);
-	    ResultSet result = s.executeQuery();
-	    
 		Map<Integer, List<FeedbackParameter>> childMap = new HashMap<>();
 		Map<FeedbackParameter, Integer> parameterMap = new HashMap<>();
 		List<FeedbackParameter> rootParams = new ArrayList<>();
-		
-	    while(result.next())
+		List<FeedbackParameter> params = super.GetAll(con);
+	    for(FeedbackParameter param : params)
 	    {
-	    	FeedbackParameter param = new FeedbackParameter();
-	    	/*
-	    	param.setId(result.getInt("id"));
-	    	param.setKey(result.getString("key"));
-	    	param.setValue(result.getObject("value"));
-	    	param.setDefaultValue(result.getObject("default_value"));
-	    	param.setEditableByUser(result.getBoolean("editable_by_user"));
-	    	param.setLanguage(result.getString("language"));
-	    	param.setCreatedAt(result.getTimestamp("created_at"));
-	    	param.setUpdatedAt(result.getTimestamp("updated_at"));
-	    	*/
-	    	resultParser.SetFields(param, result);
-	    	parameterMap.put(param, result.getInt("id"));
+	    	parameterMap.put(param, param.getId());
 	    	
-	    	Integer parameterKey = (Integer)result.getObject("parameters_id");
+	    	Integer parameterKey = (Integer)param.getParentParameterId();
 	    	if(parameterKey != null){
 	    		if(!childMap.containsKey(parameterKey))
 	    			childMap.put(parameterKey, new ArrayList<>());
@@ -138,31 +95,7 @@ public class ParameterService implements IParameterService{
 	public FeedbackParameter GetById(Connection con, int id) 
 			throws SQLException, NotFoundException
 	{
-		String sql = String.format(
-				    "SELECT p.id, p.parameters_id, p.key, p.value, p.default_value as defaultValue, p.editable_by_user as editableByUser, "
-				         + "p.language, p.created_at as createdAt, p.updated_at as updatedAt "
-				  + "FROM feedback_orchestrator.parameters as p "
-	    		  + "WHERE p.id = ? ;");
-				
-	    PreparedStatement s = con.prepareStatement(sql);
-	    s.setInt(1, id);
-	    ResultSet result = s.executeQuery();
-		
-		if(!result.next())
-			throw new NotFoundException("parameter with id " + id + "does not exist!/n");
-		
-		FeedbackParameter param = new FeedbackParameter();
-		/*
-    	param.setId(result.getInt("id"));
-    	param.setKey(result.getString("key"));
-    	param.setValue(result.getObject("value"));
-    	param.setDefaultValue(result.getObject("default_value"));
-    	param.setEditableByUser(result.getBoolean("editable_by_user"));
-    	param.setLanguage(result.getString("language"));
-    	param.setCreatedAt(result.getTimestamp("created_at"));
-    	param.setUpdatedAt(result.getTimestamp("updated_at"));
-    	*/
-		resultParser.SetFields(param, result);
+		FeedbackParameter param = super.GetById(con, id);
     	return param;
 	}
 	

@@ -15,6 +15,8 @@ public interface IDbService<T> {
 	
 	List<T> GetAll(Connection con) throws SQLException, NotFoundException;
 	
+	void Delete(Connection con, int id) throws SQLException, NotFoundException;
+	
 	default List<T> GetAllFor(Connection con, String foreignKeyName, int foreignKey) throws SQLException, NotFoundException {
 		throw new UnsupportedOperationException();
 	}

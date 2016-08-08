@@ -14,9 +14,8 @@ import ch.uzh.ifi.feedback.orchestrator.model.Configuration;
 import ch.uzh.ifi.feedback.orchestrator.model.GeneralConfiguration;
 import javassist.NotFoundException;
 
-public class ApplicationService implements IDbService<Application> {
+public class ApplicationService extends ServiceBase<Application>{
 
-	private ApplicationResultParser resultParser;
 	private ConfigurationService configurationService;
 	private GeneralConfigurationService generalConfigurationService;
 	
@@ -24,28 +23,18 @@ public class ApplicationService implements IDbService<Application> {
 	public ApplicationService(
 			ApplicationResultParser resultParser, 
 			ConfigurationService configurationService,
-			GeneralConfigurationService generalConfigurationService) {
-		this.resultParser = resultParser;
+			GeneralConfigurationService generalConfigurationService)
+	{
+		super(resultParser, Application.class, "applications");
+
 		this.configurationService = configurationService;
 		this.generalConfigurationService = generalConfigurationService;
 	}
 	
 	@Override
 	public Application GetById(Connection con, int id) throws SQLException, NotFoundException {
-		
-		PreparedStatement s = con.prepareStatement(
-				  "SELECT a.id, a.name, a.state, a.created_at as createdAt "
-				+ "FROM feedback_orchestrator.applications as a "
-				+ "WHERE a.id = ? ;");
-		
-		s.setInt(1, id);
-		ResultSet result = s.executeQuery();
-		
-		if(!result.next())
-			throw new NotFoundException("Application with id " + id + "does not exist");
-		
-		Application app = new Application();
-		resultParser.SetFields(app, result);
+
+		Application app = super.GetById(con, id);
 		app.getConfigurations().addAll(configurationService.GetAllFor(con, "application_id", id));
 		app.getGeneralConfigurations().addAll(generalConfigurationService.GetAllFor(con, "application_id", id));
 		
@@ -55,20 +44,11 @@ public class ApplicationService implements IDbService<Application> {
 	@Override
 	public List<Application> GetAll(Connection con) throws SQLException, NotFoundException {
 		
-		PreparedStatement s = con.prepareStatement(
-				  "SELECT a.id, a.name, a.state, a.created_at as createdAt "
-				+ "FROM feedback_orchestrator.applications as a ;");
-		
-		ResultSet result = s.executeQuery();
-		List<Application> apps = new ArrayList<>();
-		
-		while(result.next())
+		List<Application> apps = super.GetAll(con);
+		for(Application app : apps)
 		{
-			Application app = new Application();
-			resultParser.SetFields(app, result);
-			app.getConfigurations().addAll(configurationService.GetAllFor(con, "application_id", result.getInt("id")));
-			app.getGeneralConfigurations().addAll(generalConfigurationService.GetAllFor(con, "application_id", result.getInt("id")));
-			apps.add(app);
+			app.getConfigurations().addAll(configurationService.GetAllFor(con, "application_id", app.getId()));
+			app.getGeneralConfigurations().addAll(generalConfigurationService.GetAllFor(con, "application_id", app.getId()));
 		}
 		
 		return apps;
@@ -103,6 +83,8 @@ public class ApplicationService implements IDbService<Application> {
 	@Override
 	public void Update(Connection con, Application app) throws SQLException, NotFoundException, UnsupportedOperationException 
 	{
+		super.CheckId(con, app.getId());
+		
 		PreparedStatement s = con.prepareStatement(
 				  "UPDATE TABLE feedback_orchestrator.applications as a"
 				+ "SET `name` = IFNULL(?, `name`), `state` = IFNULL(?, `state`) "

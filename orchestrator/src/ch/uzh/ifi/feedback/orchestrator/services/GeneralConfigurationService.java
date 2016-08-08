@@ -10,59 +10,40 @@ import java.util.List;
 import com.google.inject.Inject;
 
 import ch.uzh.ifi.feedback.library.rest.Service.IDbService;
+import ch.uzh.ifi.feedback.orchestrator.model.Configuration;
 import ch.uzh.ifi.feedback.orchestrator.model.FeedbackParameter;
 import ch.uzh.ifi.feedback.orchestrator.model.GeneralConfiguration;
 import javassist.NotFoundException;
 
-public class GeneralConfigurationService implements IDbService<GeneralConfiguration> {
+public class GeneralConfigurationService extends ServiceBase<GeneralConfiguration> {
 
 	private ParameterService parameterService;
-	private GeneralConfigurationResultParser resultParser;
 	
 	@Inject
-	public GeneralConfigurationService(ParameterService parameterService, GeneralConfigurationResultParser resultParser) {
+	public GeneralConfigurationService(ParameterService parameterService, GeneralConfigurationResultParser resultParser) 
+	{
+		super(resultParser, GeneralConfiguration.class, "general_configurations");
 		this.parameterService = parameterService;
 	}
 	
 	@Override
 	public GeneralConfiguration GetById(Connection con, int id) throws SQLException, NotFoundException {
-		
-	    PreparedStatement s = con.prepareStatement(
 
-	    		       "SELECT c.id, c.created_at as createdAt, c.updated_at as updatedAt "
-	    		     + "FROM feedback_orchestrator.general_configurations as c "
-	    		     + "WHERE c.id = ? ;"		    		
-	    		);
-	    
-	    ResultSet result = s.executeQuery();
-	    
-    	GeneralConfiguration config = new GeneralConfiguration();
-    	resultParser.SetFields(config, result);
+    	GeneralConfiguration config = super.GetById(con, id);
     	config.setParameters(parameterService.GetAllFor(con, "configuration_id", config.getId()));
-	    
-	    return config;
+		
+		return config;
 	}
 
 	@Override
 	public List<GeneralConfiguration> GetAll(Connection con) throws SQLException, NotFoundException {
-		
-	    PreparedStatement s = con.prepareStatement(
 
-	    		    "SELECT c.id, c.created_at as createdAt, c.updated_at as updatedAt "
-	    		  + "FROM feedback_orchestrator.general_configurations as c ;"		    		
-	    		);
-	    
-	    ResultSet result = s.executeQuery();
-	    
-	    List<GeneralConfiguration> configs = new ArrayList<>();
-	    while(result.next())
-	    {
-	    	GeneralConfiguration config = new GeneralConfiguration();
-	    	resultParser.SetFields(config, result);
+		List<GeneralConfiguration> configs = super.GetAll(con);
+		for(GeneralConfiguration config : configs)
+		{
 	    	config.setParameters(parameterService.GetAllFor(con, "configuration_id", config.getId()));
-	    	configs.add(config);
-	    }
-	    
+		}
+		
 	    return configs;
 	}
 
@@ -83,25 +64,12 @@ public class GeneralConfigurationService implements IDbService<GeneralConfigurat
 	
 	private List<GeneralConfiguration> GetMechanismsFor(Connection con, String foreignTableName, String foreignKeyName, int foreignKey)
 			throws SQLException, NotFoundException {
-		
-	    String statement = String.format(
-    		    "SELECT c.id, c.created_at as createdAt, c.updated_at as updatedAt "
-    		  + "FROM feedback_orchestrator.general_configurations as c "
-    		  + "JOIN feedback_orchestrator.%s as f ON f.id = c.%s "
-    		  + "WHERE f.id = ? ;", foreignTableName, foreignKeyName);
-	    
-	    PreparedStatement s = con.prepareStatement(statement);
-	    s.setInt(1, foreignKey);
-	    ResultSet result = s.executeQuery();
-	    
-	    List<GeneralConfiguration> configs = new ArrayList<>();
-	    while(result.next())
-	    {
-	    	GeneralConfiguration config = new GeneralConfiguration();
-	    	resultParser.SetFields(config, result);
+
+		List<GeneralConfiguration> configs = super.GetAllFor(con, foreignTableName, foreignKeyName, foreignKey);
+		for(GeneralConfiguration config : configs)
+		{
 	    	config.setParameters(parameterService.GetAllFor(con, "configuration_id", config.getId()));
-	    	configs.add(config);
-	    }
+		}
 	    
 	    return configs;
 	}
@@ -109,6 +77,8 @@ public class GeneralConfigurationService implements IDbService<GeneralConfigurat
 	@Override
 	public void Update(Connection con, GeneralConfiguration config)
 			throws SQLException, NotFoundException {
+		
+		super.CheckId(con, config.getId());
 		
 	    PreparedStatement s = con.prepareStatement(
 	    		  "UPDATE feedback_orchestrator.general_configurations as c "

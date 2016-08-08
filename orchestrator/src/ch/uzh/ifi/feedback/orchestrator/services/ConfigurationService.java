@@ -18,10 +18,10 @@ import ch.uzh.ifi.feedback.orchestrator.model.ConfigurationType;
 import ch.uzh.ifi.feedback.orchestrator.model.FeedbackMechanism;
 import ch.uzh.ifi.feedback.orchestrator.model.GeneralConfiguration;
 import javassist.NotFoundException;
+import jdk.nashorn.internal.runtime.regexp.joni.Config;
 
-public class ConfigurationService implements IDbService<Configuration>{
+public class ConfigurationService extends ServiceBase<Configuration>{
 
-	private ConfigurationResultParser resultParser;
 	private MechanismService mechanismService;
 	private GeneralConfigurationService generalConfigurationService;
 	
@@ -31,25 +31,15 @@ public class ConfigurationService implements IDbService<Configuration>{
 			MechanismService mechanismService,
 			GeneralConfigurationService generalConfigurationService) 
 	{
-		this.resultParser = resultParser;
+		super(resultParser, Configuration.class, "configurations");
 		this.mechanismService = mechanismService;
 		this.generalConfigurationService = generalConfigurationService;
 	}
 	
 	@Override
 	public Configuration GetById(Connection con, int id) throws SQLException, NotFoundException {
-		
-		PreparedStatement s = con.prepareStatement(
-				  "SELECT c.id, c.name, c.created_at as createdAt, type "
-				+ "FROM feedback_orchestrator.configurations as c "
-				+ "WHERE c.id = ? ;");
-		
-		s.setInt(1, id);
-		ResultSet result = s.executeQuery();
-		
-		Configuration config = new Configuration();
-		resultParser.SetFields(config, result);
-		config.setType(ConfigurationType.valueOf(result.getString("type")));
+
+		Configuration config = super.GetById(con, id);
 		config.getFeedbackMechanisms().addAll(mechanismService.GetAllFor(con, "configuration_id", id));
 		config.getGeneralConfigurations().addAll(generalConfigurationService.GetAllFor(con, "configuration_id", id));
 		
@@ -58,22 +48,12 @@ public class ConfigurationService implements IDbService<Configuration>{
 
 	@Override
 	public List<Configuration> GetAll(Connection con) throws SQLException, NotFoundException {
-		
-		PreparedStatement s = con.prepareStatement(
-				  "SELECT c.id, c.name, c.created_at as createdAt, type "
-				+ "FROM feedback_orchestrator.configurations as c ;");
-		
-		ResultSet result = s.executeQuery();
-		
-		List<Configuration> configurations = new ArrayList<>();
-		while(result.next())
+
+		List<Configuration> configurations = super.GetAll(con);
+		for(Configuration config : configurations)
 		{
-			Configuration config = new Configuration();
-			resultParser.SetFields(config, result);
-			config.setType(ConfigurationType.valueOf(result.getString("type")));
 			config.getFeedbackMechanisms().addAll(mechanismService.GetAllFor(con, "configuration_id", config.getId()));
 			config.getGeneralConfigurations().addAll(generalConfigurationService.GetAllFor(con, "configuration_id", config.getId()));
-			configurations.add(config);
 		}
 		
 		return configurations;
@@ -94,27 +74,12 @@ public class ConfigurationService implements IDbService<Configuration>{
 	
 	private List<Configuration> GetConfigurationsFor(Connection con, String foreignTableName, String foreignKeyName, int foreignKey)
 			throws SQLException, NotFoundException {
-		
-		String statement = String.format(
-				  "SELECT c.id, c.name, c.created_at as createdAt, type "
-				+ "FROM feedback_orchestrator.configurations as c "
-				+ "JOIN feedback_orchestrator.%s as f ON f.id = c.%s "
-				+ "WHERE f.id = ?;", foreignTableName, foreignKeyName);
-		
-		PreparedStatement s = con.prepareStatement(statement);
-		s.setInt(1, foreignKey);
-		
-		ResultSet result = s.executeQuery();
-		
-		List<Configuration> configurations = new ArrayList<>();
-		while(result.next())
+
+		List<Configuration> configurations = super.GetAllFor(con, foreignTableName, foreignKeyName, foreignKey);
+		for(Configuration config : configurations)
 		{
-			Configuration config = new Configuration();
-			resultParser.SetFields(config, result);
-			config.setType(ConfigurationType.valueOf(result.getString("type")));
 			config.getFeedbackMechanisms().addAll(mechanismService.GetAllFor(con, "configuration_id", config.getId()));
 			config.getGeneralConfigurations().addAll(generalConfigurationService.GetAllFor(con, "configuration_id", config.getId()));
-			configurations.add(config);
 		}
 		
 		return configurations;

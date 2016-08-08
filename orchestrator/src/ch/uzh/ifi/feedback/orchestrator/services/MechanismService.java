@@ -15,15 +15,14 @@ import ch.uzh.ifi.feedback.orchestrator.model.FeedbackMechanism;
 import ch.uzh.ifi.feedback.orchestrator.model.FeedbackParameter;
 import javassist.NotFoundException;
 
-public class MechanismService implements IMechanismService {
+public class MechanismService extends ServiceBase<FeedbackMechanism> {
 	
 	private ParameterService parameterService;
-	private MechanismResultParser resultParser;
 	
 	@Inject
 	public MechanismService(ParameterService parameterService, MechanismResultParser resultParser){
+		super(resultParser, FeedbackMechanism.class, "mechanisms");
 		this.parameterService = parameterService;
-		this.resultParser = resultParser;
 	}
 	
 	@Override
@@ -96,9 +95,9 @@ public class MechanismService implements IMechanismService {
 	{
 	    PreparedStatement s = con.prepareStatement(
 
-	    		  "SELECT m.id, m.name as type, cm.order, cm.active, cm.can_be_activated as canBeActivated "
+	    		   "SELECT m.id, m.name as type, cm.order, cm.active, cm.can_be_activated as canBeActivated "
 	    		 + "FROM feedback_orchestrator.mechanisms as m "
-	    		+ "JOIN feedback_orchestrator.configurations_mechanisms as cm ON cm.mechanism_id = m.id ;"    		
+	    		 + "JOIN feedback_orchestrator.configurations_mechanisms as cm ON cm.mechanism_id = m.id ;"    		
 	    		);
 
 	    ResultSet result = s.executeQuery();
