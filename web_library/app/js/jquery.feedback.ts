@@ -3,7 +3,7 @@ import './jquery.validate.js';
 import {ConfigurationService} from '../services/configuration_service';
 import {
     apiEndpoint, feedbackPath, applicationName, defaultSuccessMessage,
-    feedbackObjectTitle, dialogOptions, mechanismTypes
+    feedbackObjectTitle, dialogOptions, mechanismTypes, configurationTypes
 } from './config';
 import {PaginationContainer} from '../views/pagination_container';
 import {ScreenshotView} from '../views/screenshot/screenshot_view';
@@ -19,6 +19,7 @@ import {ConfigurationInterface} from '../models/configurations/configuration_int
 import {Application} from '../models/applications/application';
 import {ApplicationService} from '../services/application_service';
 import {shuffle} from './helpers/array_shuffle';
+import {ScreenshotMechanism} from '../models/mechanisms/screenshot_mechanism';
 
 
 export var feedbackPluginModule = function ($, window, document) {
@@ -80,7 +81,7 @@ export var feedbackPluginModule = function ($, window, document) {
             var pageNavigation = new PageNavigation(configuration, $('#' + pullConfigurationDialogId));
             var context = configuration.getContextForView();
             pullDialog = initTemplate(pullDialogTemplate, pullConfigurationDialogId, context, configuration, pageNavigation);
-            pullDialog.dialog('open');
+            openDialog(pullDialog, configuration);
             return true;
         }
         return false;
@@ -274,13 +275,21 @@ export var feedbackPluginModule = function ($, window, document) {
      * The configuration data is fetched from the API if the feedback mechanism is not currently active. In the other
      * case the feedback mechanism dialog is closed. The active variable is toggled on each invocation.
      */
-    var toggleDialog = function () {
+    var toggleDialog = function (pushConfiguration) {
         if (!active) {
-            dialog.dialog("open");
+            openDialog(dialog, pushConfiguration);
         } else {
             dialog.dialog("close");
         }
         active = !active;
+    };
+
+    var openDialog = function(dialog, configuration) {
+        var screenshotMechanism:ScreenshotMechanism = configuration.getMechanismConfig(mechanismTypes.screenshotType);
+        if(screenshotMechanism !== null && screenshotMechanism !== undefined && screenshotMechanism.screenshotView !== null) {
+            screenshotMechanism.screenshotView.checkAutoTake();
+        }
+        dialog.dialog('open');
     };
 
     var resetMessageView = function () {
@@ -317,7 +326,7 @@ export var feedbackPluginModule = function ($, window, document) {
         this.on('click', function (event) {
             event.preventDefault();
             event.stopPropagation();
-            toggleDialog();
+            toggleDialog(application.getPushConfiguration());
         });
 
         return this;

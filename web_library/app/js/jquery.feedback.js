@@ -31,7 +31,7 @@ define(["require", "exports", './config', '../views/pagination_container', '../v
                 var pageNavigation = new page_navigation_1.PageNavigation(configuration, $('#' + pullConfigurationDialogId));
                 var context = configuration.getContextForView();
                 pullDialog = initTemplate(pullDialogTemplate, pullConfigurationDialogId, context, configuration, pageNavigation);
-                pullDialog.dialog('open');
+                openDialog(pullDialog, configuration);
                 return true;
             }
             return false;
@@ -151,14 +151,21 @@ define(["require", "exports", './config', '../views/pagination_container', '../v
             formData.append('json', JSON.stringify(feedbackObject));
             return formData;
         };
-        var toggleDialog = function () {
+        var toggleDialog = function (pushConfiguration) {
             if (!active) {
-                dialog.dialog("open");
+                openDialog(dialog, pushConfiguration);
             }
             else {
                 dialog.dialog("close");
             }
             active = !active;
+        };
+        var openDialog = function (dialog, configuration) {
+            var screenshotMechanism = configuration.getMechanismConfig(config_1.mechanismTypes.screenshotType);
+            if (screenshotMechanism !== null && screenshotMechanism !== undefined && screenshotMechanism.screenshotView !== null) {
+                screenshotMechanism.screenshotView.checkAutoTake();
+            }
+            dialog.dialog('open');
         };
         var resetMessageView = function () {
             $('.server-response').removeClass('error').removeClass('success').text('');
@@ -180,7 +187,7 @@ define(["require", "exports", './config', '../views/pagination_container', '../v
             this.on('click', function (event) {
                 event.preventDefault();
                 event.stopPropagation();
-                toggleDialog();
+                toggleDialog(application.getPushConfiguration());
             });
             return this;
         };

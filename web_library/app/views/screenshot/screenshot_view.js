@@ -21,6 +21,11 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
             this.screenshotViewDrawing = new screenshot_view_drawing_1.ScreenshotViewDrawing();
             this.addCaptureEventToButton();
         }
+        ScreenshotView.prototype.checkAutoTake = function () {
+            if (this.screenshotMechanism.getParameterValue('autoTake')) {
+                this.generateScreenshot();
+            }
+        };
         ScreenshotView.prototype.generateScreenshot = function () {
             this.hideElements();
             var myThis = this;

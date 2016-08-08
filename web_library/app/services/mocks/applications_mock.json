@@ -187,6 +187,10 @@
                 "value": "lastScreenshot",
                 "defaultValue": "noImage",
                 "editableByUser": true
+              },
+              {
+                "key": "autoTake",
+                "value": 1
               }
             ]
           },
@@ -228,7 +232,7 @@
             {
               "id": 2,
               "key": "likelihood",
-              "value": 0.0
+              "value": 0.2
             },
             {
               "key": "askOnAppStartup",
@@ -362,6 +366,10 @@
                 "value": "lastScreenshot",
                 "defaultValue": "noImage",
                 "editableByUser": true
+              },
+              {
+                "key": "autoTake",
+                "value": 1
               }
             ]
           }
@@ -386,7 +394,7 @@
             {
               "id": 79,
               "key": "askOnAppStartup",
-              "value": 1
+              "value": 0
             }
           ]
         },

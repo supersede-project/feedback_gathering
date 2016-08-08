@@ -58,6 +58,7 @@ define(["require", "exports", '../parameters/parameter_value_property_pair', '..
             if (screenshotMechanism) {
                 context.screenshotMechanism = {
                     active: screenshotMechanism.active,
+                    autoTake: screenshotMechanism.getParameterValue('autoTake')
                 };
             }
             if (categoryMechanism) {

@@ -35,7 +35,6 @@ export class ScreenshotView {
     canvasOriginalHeight:number;
     container:JQuery;
 
-
     constructor(screenshotMechanism:Mechanism, screenshotPreviewElement:JQuery, screenshotCaptureButton:JQuery,
                 elementToCapture:JQuery, container:JQuery, elementsToHide?:any) {
         this.screenshotMechanism = screenshotMechanism;
@@ -48,6 +47,12 @@ export class ScreenshotView {
         this.canvasStates = [];
         this.screenshotViewDrawing = new ScreenshotViewDrawing();
         this.addCaptureEventToButton();
+    }
+
+    checkAutoTake() {
+        if(this.screenshotMechanism.getParameterValue('autoTake')) {
+            this.generateScreenshot();
+        }
     }
 
     generateScreenshot() {

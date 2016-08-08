@@ -86,6 +86,7 @@ export abstract class Configuration implements ConfigurationInterface {
         if(screenshotMechanism) {
             context.screenshotMechanism =  {
                 active: screenshotMechanism.active,
+                autoTake: screenshotMechanism.getParameterValue('autoTake')
             }
         }
         if(categoryMechanism) {
