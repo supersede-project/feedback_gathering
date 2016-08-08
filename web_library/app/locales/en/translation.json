@@ -12,6 +12,8 @@
   },
   "screenshot": {
     "take_screenshot": "Take a screenshot",
+    "actions": "Actions",
+    "stickers": "Stickers",
     "rectangle": "rectangle",
     "blacken": "blacken",
     "circle": "circle",

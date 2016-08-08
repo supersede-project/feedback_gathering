@@ -12,6 +12,8 @@
   },
   "screenshot": {
     "take_screenshot": "Screenshot erstellen",
+    "actions": "Aktionen",
+    "stickers": "Sticker",
     "rectangle": "Rechteck",
     "blacken": "Einschwärzen",
     "circle": "Kreis",

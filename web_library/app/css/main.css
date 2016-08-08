@@ -581,6 +581,9 @@ button.text-type-text-clear {
   .screenshot-operations .sticking img {
     width: 30px;
     height: auto; }
+  .screenshot-operations p {
+    font-size: 16px;
+    margin-bottom: 2px; }
 
 button.screenshot-operation {
   background: none;
