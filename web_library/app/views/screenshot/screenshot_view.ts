@@ -379,8 +379,11 @@ export class ScreenshotView {
             var imgSrc = jQuery(this).find('img').attr('src');
             var img = jQuery('<img src="' + imgSrc + '" class="sticker" />');
             var stickerContainer = jQuery('<div class="sticker-container">' +
-                '<a class="edit"><img src="dist/img/ic_mode_edit_black_shadow_24px.png"</a>' +
-                '<a class="remove"><img src="dist/img/ic_remove_circle_red_shadow_24px.png"</a>' +
+                '<a class="edit"><img src="dist/img/ic_mode_edit_black_shadow_24px.png" /></a>' +
+                '<a class="remove"><img src="dist/img/ic_remove_circle_red_shadow_24px.png" /></a>' +
+                '<article class="text-container">' +
+                    '<textarea placeholder="Your text"></textarea>' +
+                '</article>' +
                 '</div>');
 
             stickerContainer.css('width', '60px');
@@ -402,6 +405,14 @@ export class ScreenshotView {
             stickerContainer.find('a.remove').on('click', function() {
                 jQuery(this).closest('.sticker-container').remove();
             });
+            stickerContainer.find('a.edit').on('click', function() {
+                var textContainer = stickerContainer.find('article.text-container');
+                if(textContainer.is(":visible")) {
+                    textContainer.hide();
+                } else {
+                    textContainer.show();
+                }
+            });
 
             myThis.screenshotPreviewElement.append(stickerContainer);
         });
@@ -415,7 +426,7 @@ export class ScreenshotView {
 
             var stickerContainer = jQuery('<div class="sticker-container text-2">' +
                 '<textarea placeholder="Your text"></textarea>' +
-                '<a class="remove"><img src="dist/img/ic_remove_circle_red_shadow_24px.png"</a>' +
+                '<a class="remove"><img src="dist/img/ic_remove_circle_red_shadow_24px.png" /></a>' +
                 '</div>');
 
             stickerContainer.css('width', 'auto');
@@ -471,7 +482,7 @@ export class ScreenshotView {
 
             var imgSrc = jQuery(this).find('img').attr('src');
             var img = jQuery('<img src="' + imgSrc + '" class="sticker" />');
-            var stickerContainer = jQuery('<div class="sticker-container"><a class="remove"><img src="dist/img/ic_remove_circle_red_shadow_24px.png"</a></div>');
+            var stickerContainer = jQuery('<div class="sticker-container"><a class="remove"><img src="dist/img/ic_remove_circle_red_shadow_24px.png" /></a></div>');
 
             stickerContainer.css('width', '60px');
             stickerContainer.css('height', 'auto');

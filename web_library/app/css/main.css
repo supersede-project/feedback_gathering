@@ -604,12 +604,13 @@ button.screenshot-operation {
   left: 5px;
   padding: 10px;
   border: none;
-  overflow: visible; }
+  overflow: visible;
+  cursor: move; }
   .sticker-container a.edit {
     position: absolute;
     bottom: -32px;
     left: -16px;
-    z-index: 1000;
+    z-index: 1200;
     width: 48px;
     height: 48px;
     display: none; }
@@ -617,7 +618,7 @@ button.screenshot-operation {
     position: absolute;
     top: -16px;
     right: -32px;
-    z-index: 1000;
+    z-index: 1200;
     width: 48px;
     height: 48px;
     display: none; }
@@ -625,8 +626,31 @@ button.screenshot-operation {
     cursor: move;
     height: auto;
     width: auto; }
+  .sticker-container article.text-container {
+    cursor: default;
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: none;
+    width: 100%;
+    height: 100%;
+    min-width: 200px;
+    min-height: 200px;
+    background: white;
+    border-radius: 5px;
+    z-index: 1000;
+    -webkit-box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.75);
+    -moz-box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.75);
+    box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.75); }
+    .sticker-container article.text-container textarea {
+      height: auto;
+      min-height: 100%;
+      width: 100%;
+      padding: 10px 15px 10px 5px;
+      margin: 0;
+      overflow: scroll; }
   .sticker-container textarea {
-    cursor: inherit;
+    cursor: default;
     margin: 10px;
     min-width: 100px;
     min-height: 60px;
@@ -646,7 +670,10 @@ button.screenshot-operation {
     width: 30px; }
 
 .sticker-container:hover {
-  border: 1px solid black; }
+  border-color: black;
+  border-width: 1px;
+  border-spacing: 3px;
+  border-style: dashed; }
   .sticker-container:hover a.edit {
     display: block; }
   .sticker-container:hover a.remove {
