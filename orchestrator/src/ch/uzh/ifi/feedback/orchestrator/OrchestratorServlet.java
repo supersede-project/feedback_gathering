@@ -14,7 +14,7 @@ import ch.uzh.ifi.feedback.library.rest.RestManager;
 /**
  * Servlet implementation class OrchestratorServlet
  */
-@WebServlet("/applications/1")
+@WebServlet("/en/applications/2")
 public class OrchestratorServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
@@ -48,14 +48,7 @@ public class OrchestratorServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-        response.setContentType("application/json");            
-        response.setCharacterEncoding("UTF-8");
-        
-        response.setHeader("Access-Control-Allow-Origin", "*");
-        response.setHeader("Access-Control-Allow-Methods", "GET,PUT,POST");
-        response.setHeader("Access-Control-Allow-Headers", "Content-Type");
-        response.setHeader("Access-Control-Max-Age", "86400");
-        
+		SetHeaders(response);
 		_restController.Get(request, response);
 	}
 
@@ -64,14 +57,7 @@ public class OrchestratorServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        response.setContentType("application/json");            
-        response.setCharacterEncoding("UTF-8");
-        
-        response.setHeader("Access-Control-Allow-Origin", "*");
-        response.setHeader("Access-Control-Allow-Methods", "GET,PUT,POST");
-        response.setHeader("Access-Control-Allow-Headers", "Content-Type");
-        response.setHeader("Access-Control-Max-Age", "86400");
-        
+		SetHeaders(response);
 		_restController.Post(request, response);
 	}
 	
@@ -80,12 +66,18 @@ public class OrchestratorServlet extends HttpServlet {
 	 */
 	protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-		response.setStatus(405);
-		response.getWriter().append("Operation not supported for this resource!");
+		SetHeaders(response);
+		_restController.Get(request, response);
 	}
 
 	protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
+	
+        SetHeaders(response);
+		_restController.Put(request, response);
+	}
+	
+	private void SetHeaders(HttpServletResponse response)
+	{
         response.setContentType("application/json");            
         response.setCharacterEncoding("UTF-8");
         
@@ -93,7 +85,5 @@ public class OrchestratorServlet extends HttpServlet {
         response.setHeader("Access-Control-Allow-Methods", "GET,PUT,POST");
         response.setHeader("Access-Control-Allow-Headers", "Content-Type");
         response.setHeader("Access-Control-Max-Age", "86400");
-        
-		_restController.Put(request, response);
 	}
 }

@@ -15,14 +15,34 @@ public abstract class ServiceBase<T> implements IDbService<T> {
 	
 	private Class<T> serviceClass;
 	private String tableName;
+	private List<IDbService<?>> childServices;
+	private String selectedLanguage;
 	
 	protected DbResultParser<T> resultParser;
 	
-	public ServiceBase(DbResultParser<T> resultParser, Class<T> serviceClass, String tableName)
+	public ServiceBase(DbResultParser<T> resultParser, Class<T> serviceClass, String tableName, IDbService<?>... services)
 	{
 		this.serviceClass = serviceClass;
 		this.tableName = tableName;
 		this.resultParser = resultParser;
+		this.childServices = new ArrayList<>();
+		for(IDbService<?> service : services)
+		{
+			childServices.add(service);
+		}
+	}
+	
+	@Override
+	public void SetLanguage(String lang)
+	{
+		this.selectedLanguage = lang;
+		childServices.stream().forEach(s -> s.SetLanguage(lang));
+	}
+	
+	@Override
+	public String GetLanguage()
+	{
+		return selectedLanguage;
 	}
 	
 	@Override

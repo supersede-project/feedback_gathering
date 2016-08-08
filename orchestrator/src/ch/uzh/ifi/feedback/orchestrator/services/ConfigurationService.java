@@ -31,7 +31,7 @@ public class ConfigurationService extends ServiceBase<Configuration>{
 			MechanismService mechanismService,
 			GeneralConfigurationService generalConfigurationService) 
 	{
-		super(resultParser, Configuration.class, "configurations");
+		super(resultParser, Configuration.class, "configurations", mechanismService, generalConfigurationService);
 		this.mechanismService = mechanismService;
 		this.generalConfigurationService = generalConfigurationService;
 	}

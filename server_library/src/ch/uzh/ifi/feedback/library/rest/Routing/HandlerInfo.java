@@ -11,7 +11,7 @@ import ch.uzh.ifi.feedback.library.rest.serialization.ISerializationService;
 public class HandlerInfo {
 	private Method method;
 	private HttpMethod httpMethod;
-	private RestController<?> handlerInstance;
+	private Class<RestController<?>> handlerClazz;
 	private Map<String, Parameter> pathParameters;
 	private UriTemplate uriTemplate;
 	private Class<?> serializedParameterClass;
@@ -19,18 +19,18 @@ public class HandlerInfo {
 	public HandlerInfo(
 			Method method, 
 			HttpMethod httpMethod, 
-			RestController<?> handlerInstance, 
+			Class<RestController<?>> handlerClazz, 
 			UriTemplate template)
 	{
 		this.method = method;
 		this.httpMethod = httpMethod;
-		this.handlerInstance = handlerInstance;
+		this.handlerClazz = handlerClazz;
 		this.uriTemplate = template;
 		pathParameters = new HashMap<>();
 	}
 
-	public RestController<?> getHandlerInstance(){
-		return this.handlerInstance;
+	public Class<RestController<?>> getHandlerClass(){
+		return this.handlerClazz;
 	}
 	
 	public HttpMethod GetHttpMethod(){

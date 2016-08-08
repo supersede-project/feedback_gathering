@@ -58,6 +58,11 @@ public abstract class RestController<T> {
 		});
 	}
 	
+	public final void SetLanguage(String lang)
+	{
+		dbService.SetLanguage(lang);
+	}
+	
 	public ISerializationService<T> getSerializationService() {
 		return serializationService;
 	}

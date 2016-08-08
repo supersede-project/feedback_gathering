@@ -8,8 +8,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import com.google.inject.Inject;
+import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils.Collections;
 
 import ch.uzh.ifi.feedback.library.rest.Service.IDbService;
 import ch.uzh.ifi.feedback.orchestrator.model.FeedbackMechanism;
@@ -47,6 +50,7 @@ public class ParameterService extends ServiceBase<FeedbackParameter>{
 		Map<Integer, List<FeedbackParameter>> childMap = new HashMap<>();
 		Map<FeedbackParameter, Integer> parameterMap = new HashMap<>();
 		List<FeedbackParameter> params = super.GetAllFor(con, foreignTableName, foreignKeyName, foreignKey);
+		params = params.stream().filter(p -> p.getLanguage().equals(this.GetLanguage())).collect(Collectors.toList());
 		
 	    for(FeedbackParameter param : params)
 	    {
@@ -73,6 +77,8 @@ public class ParameterService extends ServiceBase<FeedbackParameter>{
 		Map<FeedbackParameter, Integer> parameterMap = new HashMap<>();
 		List<FeedbackParameter> rootParams = new ArrayList<>();
 		List<FeedbackParameter> params = super.GetAll(con);
+		params = params.stream().filter(p -> p.getLanguage().equals(this.GetLanguage())).collect(Collectors.toList());
+		
 	    for(FeedbackParameter param : params)
 	    {
 	    	parameterMap.put(param, param.getId());
@@ -98,7 +104,6 @@ public class ParameterService extends ServiceBase<FeedbackParameter>{
 		FeedbackParameter param = super.GetById(con, id);
     	return param;
 	}
-	
 	
 	@Override
 	public void InsertFor(Connection con, FeedbackParameter param, String foreignKeyName, int foreignKey) throws SQLException, NotFoundException

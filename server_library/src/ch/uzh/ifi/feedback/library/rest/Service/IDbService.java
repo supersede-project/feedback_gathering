@@ -11,6 +11,10 @@ import javassist.NotFoundException;
 
 public interface IDbService<T> {
 	
+	String GetLanguage();
+	
+	void SetLanguage(String lang);
+	
 	T GetById(Connection con, int id) throws SQLException, NotFoundException;
 	
 	List<T> GetAll(Connection con) throws SQLException, NotFoundException;

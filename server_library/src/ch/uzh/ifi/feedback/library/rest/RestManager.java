@@ -2,8 +2,11 @@ package ch.uzh.ifi.feedback.library.rest;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InvalidClassException;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
+import java.rmi.AlreadyBoundException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -81,13 +84,11 @@ public class RestManager implements IRestManager {
 		Set<Class<?>> controllerAnnotated = reflections.getTypesAnnotatedWith(Controller.class);
 		for(Class<?> clazz : controllerAnnotated){
 			if(!RestController.class.isAssignableFrom(clazz))
-				throw new Exception("Class " + clazz.getName() + " must derive from RestController!");
-			
-			RestController<?> instance = (RestController<?>) _injector.getInstance(clazz);
+				throw new InvalidClassException("Class " + clazz.getName() + " must derive from RestController");
 			
 			for(Method m : clazz.getMethods()){
 				if(m.isAnnotationPresent(Path.class)){
-					String path = m.getAnnotation(Path.class).value();
+					String path = "{lang}/" + m.getAnnotation(Path.class).value();
 					UriTemplate template = UriTemplate.Parse(path);
 					
 					HttpMethod method = HttpMethod.GET;
@@ -103,9 +104,9 @@ public class RestManager implements IRestManager {
 					
 					final HttpMethod methodFinal = method;
 					if(_handlers.stream().anyMatch((h) -> h.GetHttpMethod() == methodFinal && h.getUriTemplate().Match(path) != null))
-						throw new Exception("handler for template " + path + " already registered!/n");
+						throw new AlreadyBoundException("handler for template '" + path + "' already registered!/n");
 				
-					HandlerInfo info = new HandlerInfo(m, method, instance, template);
+					HandlerInfo info = new HandlerInfo(m, method, (Class<RestController<?>>)clazz, template);
 					
 					Parameter[] params = m.getParameters();
 					for(int i = 0; i < params.length; i++){
@@ -126,88 +127,143 @@ public class RestManager implements IRestManager {
 							info.setSerializedParameterClass(returnType);
 						}
 					}
-					
 					_handlers.add(info);
 				}
 			}
 		}
-		
 	}
 
 	private void InitParserMap() throws Exception {
 		
-		try{
 			_parserMap.put(Integer.class, Integer.class.getMethod("parseInt", String.class));
 			_parserMap.put(Double.class, Double.class.getMethod("parseDouble", String.class));
 			_parserMap.put(Long.class, Long.class.getMethod("parseLong", String.class));
 			_parserMap.put(Float.class, Float.class.getMethod("parseFloat", String.class));
 			_parserMap.put(Timestamp.class, Timestamp.class.getMethod("valueOf", String.class));
-		}catch(Exception e){
-			e.printStackTrace();
-			throw new ServletException(e);
-		}
 	}
 
 	@Override
-	public void Get(HttpServletRequest request, HttpServletResponse response) throws ServletException {
-		
+	public void Get(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {	
 		try {
 			InvokeHandler(request, response, HttpMethod.GET);
-
-		} catch (Exception ex) {
+		}
+		catch(InvocationTargetException ex){
+			Throwable rootCause = GetRootCause(ex);
+			if(rootCause instanceof NotFoundException){
+				ex.printStackTrace();
+				response.setStatus(404);
+				response.getWriter().append(rootCause.getMessage());
+			}else if(rootCause instanceof UnsupportedOperationException)
+			{
+				ex.printStackTrace();
+				response.setStatus(405);
+				response.getWriter().append(rootCause.getMessage());
+			}else{
+				ex.printStackTrace();
+				throw new ServletException(ex);
+			}
+		}
+		catch (Exception ex) {
 			throw new ServletException(ex);
 		}
-
+	}
+	
+	private Throwable GetRootCause(Throwable ex)
+	{
+		while(ex.getCause() != null)
+		{
+			ex = ex.getCause();
+		}
+		
+		return ex;
 	}
 
 	@Override
-	public void Post(HttpServletRequest request, HttpServletResponse response) throws ServletException {
+	public void Post(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		try {
 			InvokeHandler(request, response, HttpMethod.POST);
 
 		} catch(JsonSyntaxException ex)
 		{
 			response.setStatus(400);
-			try {
-				response.getWriter().append("Malformed Json");
-			} catch (Exception e) {
-				e.printStackTrace();
+			response.getWriter().append("Malformed Json: " + ex.getMessage());
+		}
+		catch(InvocationTargetException ex){
+			Throwable rootCause = GetRootCause(ex);
+			if(rootCause instanceof NotFoundException){
+				ex.printStackTrace();
+				response.setStatus(404);
+				response.getWriter().append(rootCause.getMessage());
+			}else if(rootCause instanceof UnsupportedOperationException)
+			{
+				ex.printStackTrace();
+				response.setStatus(405);
+				response.getWriter().append(rootCause.getMessage());
+			}else{
+				ex.printStackTrace();
+				throw new ServletException(ex);
 			}
-		}catch(NotFoundException ex)
-		{
-			response.setStatus(404);
-			try {
-				response.getWriter().append("Not Found");
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}catch (Exception ex) {
+		}
+		catch (Exception ex) {
 			throw new ServletException(ex);
 		}
 	}
 	
 	@Override
-	public void Put(HttpServletRequest request, HttpServletResponse response) throws ServletException {
+	public void Put(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		try {
 			InvokeHandler(request, response, HttpMethod.PUT);
 
-		} catch(NullPointerException ex)
+		} catch(JsonSyntaxException ex)
 		{
-			response.setStatus(404);
-			try {
-				response.getWriter().append("Not Found");
-			} catch (IOException e) {
-				e.printStackTrace();
+			response.setStatus(400);
+			response.getWriter().append("Malformed Json: " + ex.getMessage());
+		}
+		catch(InvocationTargetException ex){
+			Throwable rootCause = GetRootCause(ex);
+			if(rootCause instanceof NotFoundException){
+				ex.printStackTrace();
+				response.setStatus(404);
+				response.getWriter().append(rootCause.getMessage());
+			}else if(rootCause instanceof UnsupportedOperationException)
+			{
+				ex.printStackTrace();
+				response.setStatus(405);
+				response.getWriter().append(rootCause.getMessage());
+			}else{
+				ex.printStackTrace();
+				throw new ServletException(ex);
 			}
-			
-		}catch (Exception ex) {
+		}
+		catch (Exception ex) {
 			throw new ServletException(ex);
 		}
 	}
 
 	@Override
-	public void Delete(HttpServletRequest request, HttpServletResponse response) throws ServletException {
-		throw new MethodNotFoundException();
+	public void Delete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		try {
+			InvokeHandler(request, response, HttpMethod.DELETE);
+		}
+		catch(InvocationTargetException ex){
+			Throwable rootCause = GetRootCause(ex);
+			if(rootCause instanceof NotFoundException){
+				ex.printStackTrace();
+				response.setStatus(404);
+				response.getWriter().append(rootCause.getMessage());
+			}else if(rootCause instanceof UnsupportedOperationException)
+			{
+				ex.printStackTrace();
+				response.setStatus(405);
+				response.getWriter().append(rootCause.getMessage());
+			}else{
+				ex.printStackTrace();
+				throw new ServletException(ex);
+			}
+		}
+		catch (Exception ex) {
+			throw new ServletException(ex);
+		}
 	}
 	
 	private HandlerInfo GetHandlerEntry(String path, HttpMethod method) {
@@ -216,7 +272,6 @@ public class RestManager implements IRestManager {
 			if (handler.getUriTemplate().Match(path) != null && handler.GetHttpMethod() == method)
 				return handler;
 		}
-
 		return null;
 	}
 	
@@ -225,12 +280,13 @@ public class RestManager implements IRestManager {
 		String path = request.getServletPath();
 		HandlerInfo handler = GetHandlerEntry(path, method);
 		if(handler == null){
-			response.setStatus(404);
-			return;
+			throw new NotFoundException("ressource '" + path + "' does not exist");
 		}
 		
 		Map<String, String> params = handler.getUriTemplate().Match(path);
 		List<Object> parameters = new ArrayList<>();
+		String language = params.get("lang");
+		
 		for(Entry<String, Parameter> pathParam : handler.getPathParameters().entrySet())
 		{
 			if(params.containsKey(pathParam.getKey()))
@@ -243,13 +299,16 @@ public class RestManager implements IRestManager {
 			}
 		}
 		
-		ISerializationService serializer = handler.getHandlerInstance().getSerializationService();
+		RestController<?> instance = (RestController<?>) _injector.getInstance(handler.getHandlerClass());
+		
+		ISerializationService serializer = instance.getSerializationService();
 		if(method == HttpMethod.POST || method == HttpMethod.PUT){
 			String content = GetRequestContent(request);
 			parameters.add(serializer.Deserialize(content));
 		}
 		
-		Object result = handler.getMethod().invoke(handler.getHandlerInstance(), parameters.toArray());
+		instance.SetLanguage(language);
+		Object result = handler.getMethod().invoke(instance, parameters.toArray());
 		
 		if(result != null){
 			response.getWriter().append(serializer.Serialize(result));
