@@ -373,3 +373,26 @@ button.screenshot-operation {
     display: block;
   }
 }
+
+/* intermediate dialog */
+
+#intermediateDialog {
+  display: none;
+  padding: 20px;
+  font-family: Arial,​ sans-serif;
+  font-size: 16px;
+
+  p {
+    margin-top: 1px;
+    margin-bottom: 25px;
+  }
+
+  a {
+    margin-right: 15px;
+    color: #807c7f;
+
+    &:hover {
+      color: #000000;
+    }
+  }
+}

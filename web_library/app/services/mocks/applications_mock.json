@@ -318,7 +318,7 @@
               },
               {
                 "key": "labelFontSize",
-                "value": 12
+                "value": 16
               },
               {
                 "key": "mandatory",
@@ -444,6 +444,11 @@
             {
               "id": 79,
               "key": "askOnAppStartup",
+              "value": 0
+            },
+            {
+              "id": 80,
+              "key": "intermediateDialog",
               "value": 0
             }
           ]

@@ -31,6 +31,7 @@ export var feedbackPluginModule = function ($, window, document) {
     var application:Application;
     var dialogTemplate = require('../templates/feedback_dialog.handlebars');
     var pullDialogTemplate = require('../templates/feedback_dialog.handlebars');
+    var intermediateDialogTemplate = require('../templates/intermediate_dialog.handlebars');
     var mockData = require('json!../services/mocks/applications_mock.json');
 
     /**
@@ -81,7 +82,14 @@ export var feedbackPluginModule = function ($, window, document) {
             var pageNavigation = new PageNavigation(configuration, $('#' + pullConfigurationDialogId));
             var context = configuration.getContextForView();
             pullDialog = initTemplate(pullDialogTemplate, pullConfigurationDialogId, context, configuration, pageNavigation);
-            openDialog(pullDialog, configuration);
+            if(configuration.generalConfiguration.getParameterValue('intermediateDialog')) {
+                var intermediateDialog = initIntermediateDialogTemplate(intermediateDialogTemplate, 'intermediateDialog', configuration, pullDialog);
+                if(intermediateDialog !== null) {
+                    intermediateDialog.dialog('open');
+                }
+            } else {
+                openDialog(pullDialog, configuration);
+            }
             return true;
         }
         return false;
@@ -98,6 +106,24 @@ export var feedbackPluginModule = function ($, window, document) {
         var dialog = initDialog($('#'+ dialogId), configuration.getMechanismConfig(mechanismTypes.textType));
         addEvents(dialogId, configuration);
         pageNavigation.screenshotView = screenshotView;
+        return dialog;
+    };
+
+    var initIntermediateDialogTemplate = function(template, dialogId, configuration, pullDialog): HTMLElement {
+        var html = template({});
+        $('body').append(html);
+
+        var dialog = initDialog($('#'+ dialogId), null);
+        $('#feedbackYes').on('click', function() {
+            dialog.dialog('close');
+            openDialog(pullDialog, configuration);
+        });
+        $('#feedbackNo').on('click', function() {
+            dialog.dialog('close');
+        });
+        $('#feedbackLater').on('click', function() {
+            dialog.dialog('close');
+        });
         return dialog;
     };
 

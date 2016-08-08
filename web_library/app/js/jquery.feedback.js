@@ -9,6 +9,7 @@ define(["require", "exports", './config', '../views/pagination_container', '../v
         var application;
         var dialogTemplate = require('../templates/feedback_dialog.handlebars');
         var pullDialogTemplate = require('../templates/feedback_dialog.handlebars');
+        var intermediateDialogTemplate = require('../templates/intermediate_dialog.handlebars');
         var mockData = require('json!../services/mocks/applications_mock.json');
         var initApplication = function (applicationObject) {
             application = applicationObject;
@@ -31,7 +32,15 @@ define(["require", "exports", './config', '../views/pagination_container', '../v
                 var pageNavigation = new page_navigation_1.PageNavigation(configuration, $('#' + pullConfigurationDialogId));
                 var context = configuration.getContextForView();
                 pullDialog = initTemplate(pullDialogTemplate, pullConfigurationDialogId, context, configuration, pageNavigation);
-                openDialog(pullDialog, configuration);
+                if (configuration.generalConfiguration.getParameterValue('intermediateDialog')) {
+                    var intermediateDialog = initIntermediateDialogTemplate(intermediateDialogTemplate, 'intermediateDialog', configuration, pullDialog);
+                    if (intermediateDialog !== null) {
+                        intermediateDialog.dialog('open');
+                    }
+                }
+                else {
+                    openDialog(pullDialog, configuration);
+                }
                 return true;
             }
             return false;
@@ -45,6 +54,22 @@ define(["require", "exports", './config', '../views/pagination_container', '../v
             var dialog = initDialog($('#' + dialogId), configuration.getMechanismConfig(config_1.mechanismTypes.textType));
             addEvents(dialogId, configuration);
             pageNavigation.screenshotView = screenshotView;
+            return dialog;
+        };
+        var initIntermediateDialogTemplate = function (template, dialogId, configuration, pullDialog) {
+            var html = template({});
+            $('body').append(html);
+            var dialog = initDialog($('#' + dialogId), null);
+            $('#feedbackYes').on('click', function () {
+                dialog.dialog('close');
+                openDialog(pullDialog, configuration);
+            });
+            $('#feedbackNo').on('click', function () {
+                dialog.dialog('close');
+            });
+            $('#feedbackLater').on('click', function () {
+                dialog.dialog('close');
+            });
             return dialog;
         };
         var sendFeedback = function (formData, configuration) {

@@ -1,3 +1,4 @@
+@charset "UTF-8";
 /*! normalize.css v3.0.3 | MIT License | github.com/necolas/normalize.css */
 /**
  * 1. Set default font family to sans-serif.
@@ -678,5 +679,20 @@ button.screenshot-operation {
     display: block; }
   .sticker-container:hover a.remove {
     display: block; }
+
+/* intermediate dialog */
+#intermediateDialog {
+  display: none;
+  padding: 20px;
+  font-family: Arial,​ sans-serif;
+  font-size: 16px; }
+  #intermediateDialog p {
+    margin-top: 1px;
+    margin-bottom: 25px; }
+  #intermediateDialog a {
+    margin-right: 15px;
+    color: #807c7f; }
+    #intermediateDialog a:hover {
+      color: #000000; }
 
 /*# sourceMappingURL=main.css.map */
