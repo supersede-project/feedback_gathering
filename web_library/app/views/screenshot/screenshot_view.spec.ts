@@ -102,14 +102,18 @@ describe('Screenshot View', () => {
         expect($('#hide2').css('display')).not.toBe('none');
     });
 
-    it('should reset the view', () => {
+    it('should reset the view', (done) => {
         screenshotView.reset();
 
         expect(screenshotView.screenshotPreviewElement.css('display')).toBe('none');
         expect(screenshotView.screenshotCanvas).toBeNull();
         expect($('.screenshot-operations').css('display')).toBe('none');
-        expect(container.find('.screenshot-draw-rect').hasClass('active')).toBeTruthy();
-        expect(screenshotView.drawingMode).toEqual('rectDrawingMode');
+
+        setTimeout(function() {
+            expect(container.find('.screenshot-draw-rect').hasClass('active')).toBeTruthy();
+            expect(screenshotView.drawingMode).toEqual('rectDrawingMode');
+            done();
+        }, 3000);
     });
 
     it('should update the canvas states for the undo stack', (done) => {

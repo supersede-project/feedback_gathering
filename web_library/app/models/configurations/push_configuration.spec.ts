@@ -19,7 +19,7 @@ describe('PushConfiguration object', () => {
     });
 
     it('should be an object with a general configuration and some mechanisms', () => {
-        expect(configuration.mechanisms.length).toBe(4);
+        expect(configuration.mechanisms.length).toBe(5);
         var textMechanismConfig = configuration.mechanisms[0];
         expect(textMechanismConfig.type).toEqual('TEXT_TYPE');
         expect(textMechanismConfig.active).toEqual(true);
@@ -31,7 +31,7 @@ describe('PushConfiguration object', () => {
     });
 
     it('should have typed mechanism objects in its mechanism', () => {
-        expect(configuration.mechanisms.length).toBe(4);
+        expect(configuration.mechanisms.length).toBe(5);
         var textMechanismConfig = configuration.mechanisms[0];
         expect(textMechanismConfig.type).toEqual('TEXT_TYPE');
         expect(textMechanismConfig).toEqual(jasmine.any(Mechanism));
@@ -68,9 +68,40 @@ describe('PushConfiguration object', () => {
                 title: 'Rate your user experience on this page'
             },
             screenshotMechanism: {
-                active: true
+                active: true,
+                autoTake: 1
             },
-            categoryMechanism: null,
+            categoryMechanism: {
+                id: undefined,
+                active: true,
+                title: 'How likely are you to recommend this website to your friends? (1 = not very likely, 5 = very likely)',
+                ownAllowed: 0,
+                multiple: 0,
+                breakAfterOption: false,
+                options: [
+                    {
+                        key: '1',
+                        value: '1'
+                    },
+                    {
+                        key: '2',
+                        value: '2'
+                    },
+                    {
+                        key: '3',
+                        value: '3'
+                    },
+                    {
+                        key: '4',
+                        value: '4'
+                    },
+                    {
+                        key: '5',
+                        value: '5'
+                    }
+                ],
+                inputType: 'radio'
+            },
             dialogId: 'pushConfiguration'
         };
 

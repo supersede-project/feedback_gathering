@@ -77,13 +77,16 @@ define(["require", "exports", './screenshot_view', '../../js/config', 'handlebar
             expect($('.hide-1').css('display')).not.toBe('none');
             expect($('#hide2').css('display')).not.toBe('none');
         });
-        it('should reset the view', function () {
+        it('should reset the view', function (done) {
             screenshotView.reset();
             expect(screenshotView.screenshotPreviewElement.css('display')).toBe('none');
             expect(screenshotView.screenshotCanvas).toBeNull();
             expect($('.screenshot-operations').css('display')).toBe('none');
-            expect(container.find('.screenshot-draw-rect').hasClass('active')).toBeTruthy();
-            expect(screenshotView.drawingMode).toEqual('rectDrawingMode');
+            setTimeout(function () {
+                expect(container.find('.screenshot-draw-rect').hasClass('active')).toBeTruthy();
+                expect(screenshotView.drawingMode).toEqual('rectDrawingMode');
+                done();
+            }, 3000);
         });
         it('should update the canvas states for the undo stack', function (done) {
             screenshotView.screenshotCaptureButton.click();

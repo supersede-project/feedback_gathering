@@ -9,7 +9,7 @@ define(["require", "exports", '../../services/mocks/mocks_loader', '../mechanism
             configuration = configuration_factory_1.ConfigurationFactory.createByData(pushConfigurationData);
         });
         it('should be an object with a general configuration and some mechanisms', function () {
-            expect(configuration.mechanisms.length).toBe(4);
+            expect(configuration.mechanisms.length).toBe(5);
             var textMechanismConfig = configuration.mechanisms[0];
             expect(textMechanismConfig.type).toEqual('TEXT_TYPE');
             expect(textMechanismConfig.active).toEqual(true);
@@ -19,7 +19,7 @@ define(["require", "exports", '../../services/mocks/mocks_loader', '../mechanism
             expect(ratingMechanismConfig.type).toEqual('RATING_TYPE');
         });
         it('should have typed mechanism objects in its mechanism', function () {
-            expect(configuration.mechanisms.length).toBe(4);
+            expect(configuration.mechanisms.length).toBe(5);
             var textMechanismConfig = configuration.mechanisms[0];
             expect(textMechanismConfig.type).toEqual('TEXT_TYPE');
             expect(textMechanismConfig).toEqual(jasmine.any(mechanism_1.Mechanism));
@@ -52,9 +52,40 @@ define(["require", "exports", '../../services/mocks/mocks_loader', '../mechanism
                     title: 'Rate your user experience on this page'
                 },
                 screenshotMechanism: {
-                    active: true
+                    active: true,
+                    autoTake: 1
                 },
-                categoryMechanism: null,
+                categoryMechanism: {
+                    id: undefined,
+                    active: true,
+                    title: 'How likely are you to recommend this website to your friends? (1 = not very likely, 5 = very likely)',
+                    ownAllowed: 0,
+                    multiple: 0,
+                    breakAfterOption: false,
+                    options: [
+                        {
+                            key: '1',
+                            value: '1'
+                        },
+                        {
+                            key: '2',
+                            value: '2'
+                        },
+                        {
+                            key: '3',
+                            value: '3'
+                        },
+                        {
+                            key: '4',
+                            value: '4'
+                        },
+                        {
+                            key: '5',
+                            value: '5'
+                        }
+                    ],
+                    inputType: 'radio'
+                },
                 dialogId: 'pushConfiguration'
             };
             expect(context).toEqual(expectedContext);

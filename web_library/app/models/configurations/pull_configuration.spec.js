@@ -11,14 +11,14 @@ define(["require", "exports", '../../services/mocks/mocks_loader', './pull_confi
         it('should be an object with a complete pull configuration', function () {
             expect(pullConfiguration).toEqual(jasmine.any(pull_configuration_1.PullConfiguration));
             expect(pullConfiguration.id).toBe(2);
-            expect(pullConfiguration.mechanisms.length).toBe(3);
+            expect(pullConfiguration.mechanisms.length).toBe(2);
             var textMechanismConfig = pullConfiguration.mechanisms[0];
             expect(textMechanismConfig.type).toEqual('TEXT_TYPE');
             expect(textMechanismConfig.active).toEqual(true);
             expect(textMechanismConfig.order).toEqual(1);
             expect(textMechanismConfig.canBeActivated).toEqual(false);
             var ratingMechanismConfig = pullConfiguration.mechanisms[1];
-            expect(ratingMechanismConfig.type).toEqual('RATING_TYPE');
+            expect(ratingMechanismConfig.type).toEqual('CATEGORY_TYPE');
         });
         it('should return the context for the view with the configuration data', function () {
             var context = pullConfiguration.getContextForView();
@@ -31,20 +31,45 @@ define(["require", "exports", '../../services/mocks/mocks_loader', './pull_confi
                     maxLength: 50,
                     maxLengthVisible: 1,
                     textareaStyle: '',
-                    labelStyle: 'text-align: left; font-size: 12px;',
+                    labelStyle: 'text-align: left; font-size: 16px;',
                     clearInput: 0,
                     mandatory: 1,
                     mandatoryReminder: 'Please fill in the text field',
                     validateOnSkip: 1
                 },
-                ratingMechanism: {
+                ratingMechanism: null,
+                screenshotMechanism: null,
+                categoryMechanism: {
+                    id: undefined,
                     active: true,
-                    title: 'Rate your user experience'
+                    title: 'Please rate the feature that you just used',
+                    ownAllowed: 0,
+                    multiple: 0,
+                    breakAfterOption: false,
+                    options: [
+                        {
+                            key: 'RATING_1',
+                            value: 'Very bad'
+                        },
+                        {
+                            key: 'RATING_2',
+                            value: 'Bad'
+                        },
+                        {
+                            key: 'RATING_3',
+                            value: 'Okay'
+                        },
+                        {
+                            key: 'RATING_4',
+                            value: 'Good'
+                        },
+                        {
+                            key: 'RATING_5',
+                            value: 'Very good'
+                        }
+                    ],
+                    inputType: 'radio'
                 },
-                screenshotMechanism: {
-                    active: true
-                },
-                categoryMechanism: null,
                 dialogId: 'pullConfiguration'
             };
             expect(context).toEqual(expectedContext);
