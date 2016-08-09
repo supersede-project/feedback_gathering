@@ -4,4 +4,7 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
     <color name="whiteColor">#FFFFFF</color>
+
+    <!-- AnnotateImageView -->
+    <color name="supersede_feedbacklibrary_annotate_image_layout_background_color">#4d4d4d</color>
 </resources>

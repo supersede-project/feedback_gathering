@@ -157,10 +157,11 @@ public class FeedbackActivity extends AppCompatActivity {
     private void initOfflineConfiguration() {
         String jsonString;
         Gson gson = new Gson();
-        // For single category
-        jsonString = Utils.readFileAsString("configuration_material_design_push_single_category.json", getAssets());
+
         // For multiple category
         //jsonString = Utils.readFileAsString("configuration_material_design_push_multiple_categories.json", getAssets());
+        // For single category
+        jsonString = Utils.readFileAsString("configuration_material_design_push_single_category.json", getAssets());
         configuration = gson.fromJson(jsonString, OrchestratorConfiguration.class);
 
         initModel();
@@ -347,7 +348,7 @@ public class FeedbackActivity extends AppCompatActivity {
             // Actual init
             //init();
 
-            // Only for offline purposes
+            // Only for demo purposes
             initOfflineConfiguration();
         }
     }
@@ -448,10 +449,12 @@ public class FeedbackActivity extends AppCompatActivity {
             // Screenshot file
             File imageFile = new File(screenShotImagePath);
 
+            // Only for demo purposes
             if (fbAPI == null) {
                 Retrofit rtf = new Retrofit.Builder().baseUrl(feedbackAPI.endpoint).addConverterFactory(GsonConverterFactory.create()).build();
                 fbAPI = rtf.create(feedbackAPI.class);
             }
+
             RequestBody feedbackJsonPart = RequestBody.create(MediaType.parse("multipart/form-data"), feedbackJsonString);
             RequestBody feedbackScreenshotPart = RequestBody.create(MediaType.parse("multipart/form-data"), imageFile);
             if (!screenShotImagePath.equals("")) {

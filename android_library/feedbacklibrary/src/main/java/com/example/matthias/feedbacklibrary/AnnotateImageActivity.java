@@ -60,10 +60,10 @@ public class AnnotateImageActivity extends AppCompatActivity implements ColorPic
     private int selectedSticker;
 
     private void addSticker() {
-        hideAllControlItems((RelativeLayout) findViewById(R.id.supersede_feedbacklibrary_annotate_picture_layout));
+        hideAllControlItems((RelativeLayout) findViewById(R.id.supersede_feedbacklibrary_annotate_image_layout));
         StickerImageView sticker = new StickerImageView(this);
         sticker.setImageDrawable(getResources().getDrawable(selectedSticker));
-        RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.supersede_feedbacklibrary_annotate_picture_layout);
+        RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.supersede_feedbacklibrary_annotate_image_layout);
         if (relativeLayout != null) {
             relativeLayout.addView(sticker);
         }
@@ -81,6 +81,27 @@ public class AnnotateImageActivity extends AppCompatActivity implements ColorPic
         args.putInt("mInitialColor", mInitialColor);
         dialog.setArguments(args);
         return dialog;
+    }
+
+    private void drawStickerOnCanvas() {
+        RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.supersede_feedbacklibrary_annotate_image_layout);
+        if (relativeLayout != null) {
+            // Hide all control items
+            hideAllControlItems(relativeLayout);
+
+            // Convert the ViewGroup, i.e., the supersede_feedbacklibrary_annotate_picture_layout into a bitmap
+            relativeLayout.measure(View.MeasureSpec.makeMeasureSpec(annotateImageView.getBitmapWidth(), View.MeasureSpec.EXACTLY),
+                    View.MeasureSpec.makeMeasureSpec(annotateImageView.getBitmapHeight(), View.MeasureSpec.EXACTLY));
+            relativeLayout.layout(0, 0, relativeLayout.getMeasuredWidth(), relativeLayout.getMeasuredHeight());
+
+            Bitmap annotatedBitmap = Bitmap.createBitmap(relativeLayout.getLayoutParams().width, relativeLayout.getLayoutParams().height, Bitmap.Config.ARGB_8888);
+            Canvas canvas = new Canvas(annotatedBitmap);
+            relativeLayout.draw(canvas);
+
+            int padding = getResources().getDimensionPixelSize(R.dimen.supersede_feedbacklibrary_annotate_image_layout_padding);
+            Bitmap croppedBitmap = Bitmap.createBitmap(annotatedBitmap, padding, padding,
+                    annotateImageView.getBitmapWidth() - 2 * padding, annotateImageView.getBitmapHeight() - 2 * padding);
+        }
     }
 
     /**
@@ -135,7 +156,7 @@ public class AnnotateImageActivity extends AppCompatActivity implements ColorPic
         annotateImageView.setFontSize(32F);
 
         annotateImageView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-        RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.supersede_feedbacklibrary_annotate_picture_layout);
+        RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.supersede_feedbacklibrary_annotate_image_layout);
         if (relativeLayout != null) {
             relativeLayout.addView(annotateImageView);
         }
@@ -258,19 +279,25 @@ public class AnnotateImageActivity extends AppCompatActivity implements ColorPic
             return true;
         }
         if (id == R.id.supersede_feedbacklibrary_action_annotate_accept) {
-            RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.supersede_feedbacklibrary_annotate_picture_layout);
+            RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.supersede_feedbacklibrary_annotate_image_layout);
             if (relativeLayout != null) {
                 // Hide all control items
                 hideAllControlItems(relativeLayout);
 
                 // Convert the ViewGroup, i.e., the supersede_feedbacklibrary_annotate_picture_layout into a bitmap
-                relativeLayout.measure(View.MeasureSpec.makeMeasureSpec(relativeLayout.getLayoutParams().width, View.MeasureSpec.EXACTLY), View.MeasureSpec.makeMeasureSpec(relativeLayout.getLayoutParams().height, View.MeasureSpec.EXACTLY));
+                relativeLayout.measure(View.MeasureSpec.makeMeasureSpec(annotateImageView.getBitmapWidth(), View.MeasureSpec.EXACTLY),
+                        View.MeasureSpec.makeMeasureSpec(annotateImageView.getBitmapHeight(), View.MeasureSpec.EXACTLY));
                 relativeLayout.layout(0, 0, relativeLayout.getMeasuredWidth(), relativeLayout.getMeasuredHeight());
+
                 Bitmap annotatedBitmap = Bitmap.createBitmap(relativeLayout.getLayoutParams().width, relativeLayout.getLayoutParams().height, Bitmap.Config.ARGB_8888);
                 Canvas canvas = new Canvas(annotatedBitmap);
                 relativeLayout.draw(canvas);
 
-                String annotatedImagePath = Utils.saveBitmapToInternalStorage(getApplicationContext(), "imageDir", FeedbackActivity.IMAGE_NAME, annotatedBitmap, Context.MODE_PRIVATE, Bitmap.CompressFormat.PNG, 100);
+                int padding = getResources().getDimensionPixelSize(R.dimen.supersede_feedbacklibrary_annotate_image_layout_padding);
+                Bitmap croppedBitmap = Bitmap.createBitmap(annotatedBitmap, padding, padding,
+                        annotateImageView.getBitmapWidth() - 2 * padding, annotateImageView.getBitmapHeight() - 2 * padding);
+
+                String annotatedImagePath = Utils.saveBitmapToInternalStorage(getApplicationContext(), "imageDir", FeedbackActivity.IMAGE_NAME, croppedBitmap, Context.MODE_PRIVATE, Bitmap.CompressFormat.PNG, 100);
                 Intent intent = new Intent();
                 intent.putExtra("annotatedImagePath", annotatedImagePath);
                 setResult(RESULT_OK, intent);
@@ -452,10 +479,29 @@ public class AnnotateImageActivity extends AppCompatActivity implements ColorPic
             cropButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    File tempFile = Utils.createTempChacheFile(getApplicationContext(), "crop", ".jpg");
-                    if (Utils.saveBitmapToFile(tempFile, annotateImageView.getWholeViewBitmap(), Bitmap.CompressFormat.JPEG, 100)) {
-                        Uri cropInput = Uri.fromFile(tempFile);
-                        CropImage.activity(cropInput).setGuidelines(CropImageView.Guidelines.ON).start(AnnotateImageActivity.this);
+                    RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.supersede_feedbacklibrary_annotate_image_layout);
+                    if (relativeLayout != null) {
+                        // Hide all control items
+                        hideAllControlItems(relativeLayout);
+
+                        // Convert the ViewGroup, i.e., the supersede_feedbacklibrary_annotate_picture_layout into a bitmap
+                        relativeLayout.measure(View.MeasureSpec.makeMeasureSpec(annotateImageView.getBitmapWidth(), View.MeasureSpec.EXACTLY),
+                                View.MeasureSpec.makeMeasureSpec(annotateImageView.getBitmapHeight(), View.MeasureSpec.EXACTLY));
+                        relativeLayout.layout(0, 0, relativeLayout.getMeasuredWidth(), relativeLayout.getMeasuredHeight());
+
+                        Bitmap annotatedBitmap = Bitmap.createBitmap(relativeLayout.getWidth(), relativeLayout.getHeight(), Bitmap.Config.ARGB_8888);
+                        Canvas canvas = new Canvas(annotatedBitmap);
+                        relativeLayout.draw(canvas);
+
+                        int padding = getResources().getDimensionPixelSize(R.dimen.supersede_feedbacklibrary_annotate_image_layout_padding);
+                        Bitmap croppedBitmap = Bitmap.createBitmap(annotatedBitmap, padding, padding,
+                                annotateImageView.getBitmapWidth() - 2 * padding, annotateImageView.getBitmapHeight() - 2 * padding);
+
+                        File tempFile = Utils.createTempChacheFile(getApplicationContext(), "crop", ".jpg");
+                        if (Utils.saveBitmapToFile(tempFile, croppedBitmap, Bitmap.CompressFormat.JPEG, 100)) {
+                            Uri cropInput = Uri.fromFile(tempFile);
+                            CropImage.activity(cropInput).setGuidelines(CropImageView.Guidelines.ON).start(AnnotateImageActivity.this);
+                        }
                     }
                 }
             });

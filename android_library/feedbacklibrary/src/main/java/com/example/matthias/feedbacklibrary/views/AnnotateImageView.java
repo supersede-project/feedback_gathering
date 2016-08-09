@@ -107,6 +107,9 @@ public class AnnotateImageView extends View {
     private boolean isCroppedImageAdded = false;
     private int croppedImagePointer;
     private int startHistoryPointer;
+    private int onSizeCalled = 0;
+    private int initW;
+    private int initH;
 
     /**
      * @param context  the context
@@ -352,6 +355,24 @@ public class AnnotateImageView extends View {
      */
     public byte[] getBitmapAsByteArray() {
         return getBitmapAsByteArray(CompressFormat.PNG, 100);
+    }
+
+    /**
+     * This method returns the height of the bitmap
+     *
+     * @return the height
+     */
+    public int getBitmapHeight() {
+        return bitmap.getHeight();
+    }
+
+    /**
+     * This method returns the width of the bitmap
+     *
+     * @return the width
+     */
+    public int getBitmapWidth() {
+        return bitmap.getWidth();
     }
 
     public float getBlur() {
@@ -634,12 +655,21 @@ public class AnnotateImageView extends View {
 
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
-        bitmap = Utils.scaleBitmap(bitmap, w, h);
-        RelativeLayout relativeLayout = (RelativeLayout) getParent();
-        ViewGroup.LayoutParams relativeLayoutLayoutParams = relativeLayout.getLayoutParams();
-        if (relativeLayoutLayoutParams != null) {
-            relativeLayoutLayoutParams.height = bitmap.getHeight();
-            relativeLayoutLayoutParams.width = bitmap.getWidth();
+        // Only adjust the relativeLayout when the AnnotateImageView has not been laid out yet
+        if (oldw == 0 && oldh == 0) {
+            initW = w;
+            initH = h;
+            bitmap = Utils.scaleBitmap(bitmap, w, h);
+            RelativeLayout relativeLayout = (RelativeLayout) getParent();
+            ViewGroup.LayoutParams relativeLayoutLayoutParams = relativeLayout.getLayoutParams();
+            if (relativeLayoutLayoutParams != null) {
+                relativeLayoutLayoutParams.width = bitmap.getWidth();
+                relativeLayoutLayoutParams.height = bitmap.getHeight();
+                onSizeCalled++;
+            }
+        } else if (onSizeCalled == 1) {
+            bitmap = Bitmap.createScaledBitmap(bitmap, bitmap.getWidth(), bitmap.getHeight() - 100, true);
+            onSizeCalled++;
         }
 
         super.onSizeChanged(w, h, oldw, oldh);
@@ -899,7 +929,12 @@ public class AnnotateImageView extends View {
     private void updateCroppedImage() {
         String imagePath = croppedImageLists.get(croppedImagePointer - 1).getAbsolutePath();
         Bitmap bitmap = BitmapFactory.decodeFile(imagePath);
-        this.bitmap = bitmap;
+        if (croppedImagePointer > 1) {
+            this.bitmap = bitmap;
+        } else {
+            Bitmap tempBitmap = Utils.scaleBitmap(bitmap, initW, initH);
+            this.bitmap = Bitmap.createScaledBitmap(tempBitmap, tempBitmap.getWidth(), tempBitmap.getHeight() - 100, true);
+        }
     }
 
     /**
