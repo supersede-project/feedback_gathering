@@ -23,7 +23,9 @@ export class ConfigurationFactory {
         var mechanisms = [];
         for(var mechanism of data.mechanisms) {
             var mechanismObject:Mechanism = MechanismFactory.createByData(mechanism);
-            mechanisms.push(mechanismObject);
+            if(mechanismObject !== null) {
+                mechanisms.push(mechanismObject);
+            }
         }
 
         if(data.type === configurationTypes.push) {

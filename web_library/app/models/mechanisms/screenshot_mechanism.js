@@ -14,6 +14,11 @@ define(["require", "exports", './mechanism'], function (require, exports, mechan
         ScreenshotMechanism.prototype.setScreenshotView = function (screenshotView) {
             this.screenshotView = screenshotView;
         };
+        ScreenshotMechanism.prototype.getContext = function () {
+            return {
+                autoTake: this.getParameterValue('autoTake')
+            };
+        };
         return ScreenshotMechanism;
     }(mechanism_1.Mechanism));
     exports.ScreenshotMechanism = ScreenshotMechanism;

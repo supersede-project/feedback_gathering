@@ -11,4 +11,15 @@ export class CategoryMechanism extends Mechanism {
     getOptions(): Parameter[] {
         return this.getParameterValue('options');
     }
+
+    getContext(): any {
+        return {
+            title: this.getParameterValue('title'),
+            ownAllowed: this.getParameterValue('ownAllowed'),
+            multiple: this.getParameterValue('multiple'),
+            breakAfterOption: this.getParameterValue('breakAfterOption') ? true : false,
+            options: this.getOptions(),
+            inputType: this.getParameterValue('multiple') ? 'checkbox' : 'radio'
+        }
+    }
 }

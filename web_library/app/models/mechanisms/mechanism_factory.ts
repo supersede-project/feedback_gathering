@@ -4,6 +4,7 @@ import {mechanismTypes} from '../../js/config';
 import {ScreenshotMechanism} from './screenshot_mechanism';
 import {Parameter} from '../parameters/parameter';
 import {CategoryMechanism} from './category_mechanism';
+import {TextMechanism} from './text_mechanism';
 
 
 export class MechanismFactory {
@@ -29,8 +30,10 @@ export class MechanismFactory {
             return new ScreenshotMechanism(data.id, data.type, data.active, data.order, data.canBeActivated, parameters);
         } else if (data.type === mechanismTypes.categoryType) {
             return new CategoryMechanism(data.id, data.type, data.active, data.order, data.canBeActivated, parameters);
+        } else if (data.type === mechanismTypes.textType) {
+            return new TextMechanism(data.id, data.type, data.active, data.order, data.canBeActivated, parameters);
         } else {
-            return new Mechanism(data.id, data.type, data.active, data.order, data.canBeActivated, parameters);
+            return null;
         }
     }
 }

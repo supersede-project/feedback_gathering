@@ -13,6 +13,16 @@ define(["require", "exports", './mechanism'], function (require, exports, mechan
         CategoryMechanism.prototype.getOptions = function () {
             return this.getParameterValue('options');
         };
+        CategoryMechanism.prototype.getContext = function () {
+            return {
+                title: this.getParameterValue('title'),
+                ownAllowed: this.getParameterValue('ownAllowed'),
+                multiple: this.getParameterValue('multiple'),
+                breakAfterOption: this.getParameterValue('breakAfterOption') ? true : false,
+                options: this.getOptions(),
+                inputType: this.getParameterValue('multiple') ? 'checkbox' : 'radio'
+            };
+        };
         return CategoryMechanism;
     }(mechanism_1.Mechanism));
     exports.CategoryMechanism = CategoryMechanism;

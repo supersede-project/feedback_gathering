@@ -3,7 +3,7 @@
         <section class="pages-container">
             <article data-feedback-page="1" class="feedback-page">
 
-                {{#each mechanism}}
+                {{#each mechanisms}}
                     {{#compare type "CATEGORY_TYPE" operator="==="}}
                         {{> partials/category_mechanism}}
                     {{/compare}}
@@ -11,7 +11,36 @@
                         {{> partials/rating_mechanism}}
                     {{/compare}}
                     {{#compare type "TEXT_TYPE" operator="==="}}
-                        {{> partials/text_mechanism}}
+                        {{#if active}}
+                            <section id="textMechanism{{ id }}" class="feedback-mechanism horizontal text-type">
+                                <p class="text-type-label explanation col col-left" style="{{ labelStyle }}">
+                                    {{ label }}
+                                </p>
+
+                                <article class="col col-right">
+                            <textarea class="validate text-type-text"
+                                {{#if mandatory }} data-mandatory="1"
+                                      data-mandatory-validate-on-skip="{{ validateOnSkip }}"
+                                      data-mandatory-default-text="{{t "general.mandatory_default_text" }}"
+                                      data-mandatory-manual-text="{{ mandatoryReminder }}" {{/if}}
+                                      placeholder="{{ hint }}"
+                                      data-validation-max-length="{{ maxLength }}"
+                                      style="{{ textareaStyle }}"></textarea>
+                                    <p class="textarea-bottom">
+                                        {{#if clearInput }}
+                                            <button class="text-type-text-clear" title="{{t "text.text_type_text_clear" }}">x
+                                            </button>
+                                        {{/if}}
+                                        {{#if maxLengthVisible}}
+                                            <span class="text-type-max-length">{{ currentLength }}
+                                                / {{ maxLength }}</span>
+                                        {{/if}}
+                                    </p>
+                                    <div class="clearfix"></div>
+                                </article>
+                                <div class="clearfix"></div>
+                            </section>
+                        {{/if}}
                     {{/compare}}
                     {{#compare type "SCREENSHOT_TYPE" operator="==="}}
                         {{#if active}}

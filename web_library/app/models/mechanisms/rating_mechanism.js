@@ -25,6 +25,11 @@ define(["require", "exports", './mechanism'], function (require, exports, mechan
                 }
             };
         };
+        RatingMechanism.prototype.getContext = function () {
+            return {
+                title: this.getParameterValue('title')
+            };
+        };
         return RatingMechanism;
     }(mechanism_1.Mechanism));
     exports.RatingMechanism = RatingMechanism;

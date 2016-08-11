@@ -1,4 +1,4 @@
-define(["require", "exports", './rating_mechanism', './mechanism', '../../js/config', './screenshot_mechanism', '../parameters/parameter', './category_mechanism'], function (require, exports, rating_mechanism_1, mechanism_1, config_1, screenshot_mechanism_1, parameter_1, category_mechanism_1) {
+define(["require", "exports", './rating_mechanism', '../../js/config', './screenshot_mechanism', '../parameters/parameter', './category_mechanism', './text_mechanism'], function (require, exports, rating_mechanism_1, config_1, screenshot_mechanism_1, parameter_1, category_mechanism_1, text_mechanism_1) {
     "use strict";
     var MechanismFactory = (function () {
         function MechanismFactory() {
@@ -21,8 +21,11 @@ define(["require", "exports", './rating_mechanism', './mechanism', '../../js/con
             else if (data.type === config_1.mechanismTypes.categoryType) {
                 return new category_mechanism_1.CategoryMechanism(data.id, data.type, data.active, data.order, data.canBeActivated, parameters);
             }
+            else if (data.type === config_1.mechanismTypes.textType) {
+                return new text_mechanism_1.TextMechanism(data.id, data.type, data.active, data.order, data.canBeActivated, parameters);
+            }
             else {
-                return new mechanism_1.Mechanism(data.id, data.type, data.active, data.order, data.canBeActivated, parameters);
+                return null;
             }
         };
         return MechanismFactory;

@@ -9,6 +9,29 @@ define(["require", "exports", '../mixins/parameterizable', '../../js/helpers/mix
             this.canBeActivated = canBeActivated;
             this.parameters = parameters;
         }
+        Mechanism.prototype.getContext = function () { };
+        Mechanism.prototype.getCssStyle = function (mechanism, parameterValuePropertyPair) {
+            var cssStyles = '';
+            for (var i = 0; i < parameterValuePropertyPair.length; i++) {
+                var parameterPropertyPair = parameterValuePropertyPair[i];
+                if (mechanism.getParameterValue(parameterPropertyPair.parameter) !== null) {
+                    var unit = this.getCSSPropertyUnit(parameterPropertyPair.property);
+                    cssStyles += parameterPropertyPair.property + ': ' + mechanism.getParameterValue(parameterPropertyPair.parameter) + unit + ';';
+                    if (i !== parameterValuePropertyPair.length - 1) {
+                        cssStyles += ' ';
+                    }
+                }
+            }
+            return cssStyles;
+        };
+        Mechanism.prototype.getCSSPropertyUnit = function (property) {
+            if (property === 'font-size') {
+                return 'px';
+            }
+            else {
+                return '';
+            }
+        };
         return Mechanism;
     }());
     exports.Mechanism = Mechanism;

@@ -12,7 +12,9 @@ define(["require", "exports", '../../js/config', './push_configuration', '../mec
             for (var _i = 0, _a = data.mechanisms; _i < _a.length; _i++) {
                 var mechanism = _a[_i];
                 var mechanismObject = mechanism_factory_1.MechanismFactory.createByData(mechanism);
-                mechanisms.push(mechanismObject);
+                if (mechanismObject !== null) {
+                    mechanisms.push(mechanismObject);
+                }
             }
             if (data.type === config_1.configurationTypes.push) {
                 return new push_configuration_1.PushConfiguration(data.id, mechanisms, generalConfiguration);

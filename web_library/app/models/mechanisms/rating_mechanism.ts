@@ -26,4 +26,10 @@ export class RatingMechanism extends Mechanism {
             }
         };
     }
+
+    getContext(): any {
+        return {
+            title: this.getParameterValue('title')
+        }
+    }
 }
