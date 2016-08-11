@@ -16,12 +16,17 @@ module.exports = function (config) {
             'test-main.js',
             { pattern: 'node_modules/handlebars/dist/*.js', included: false },
             { pattern: 'node_modules/i18next/*.js', included: false },
+            { pattern: 'app/templates/*.handlebars', included: false, watched: true, served: true },
+            { pattern: 'app/templates/*.handlebars.js', included: false, watched: true, served: true },
             { pattern: 'app/**/*.js', included: false },
             { pattern: 'app/services/mocks/*.json', included: false }
         ],
 
         proxies: {
-            '/app/js/lib/html2canvas.js': '/base/app/js/lib/html2canvas.js'
+            '/app/js/lib/html2canvas.js': '/base/app/js/lib/html2canvas.js',
+            '/app/js/lib/jquery.star-rating-svg.js': '/base/app/js/lib/jquery.star-rating-svg.js',
+            '/app/templates/feedback_dialog.handlebars': '/base/app/templates/feedback_dialog.handlebars',
+            '/app/templates/intermediate_dialog.handlebars': '/base/app/templates/intermediate_dialog.handlebars'
         },
 
         // list of files to exclude
@@ -31,12 +36,13 @@ module.exports = function (config) {
         // preprocess matching files before serving them to the browser
         // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
         preprocessors: {
-            'app/**/!(*spec|html2canvas).js': ['coverage'],
+            'app/**/!(*spec|html2canvas|jquery\.star-rating-svg).js': ['coverage'],
             'app/templates/*.handlebars': ['handlebars']
         },
 
         handlebarsPreprocessor: {
-            templates: "Handlebars.templates"
+            templates: "Handlebars.templates",
+            amd: true
         },
 
         // test results reporter to use

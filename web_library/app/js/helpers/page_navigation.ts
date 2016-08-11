@@ -1,7 +1,7 @@
 import {ConfigurationInterface} from '../../models/configurations/configuration_interface';
 import i18n = require('i18next');
 import {ScreenshotView} from '../../views/screenshot/screenshot_view';
-import './../jquery.validate.js';
+import './../jquery.validate';
 import {mechanismTypes} from '../config';
 
 

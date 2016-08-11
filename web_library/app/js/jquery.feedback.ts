@@ -1,6 +1,5 @@
 import './lib/jquery.star-rating-svg.js';
-import './jquery.validate.js';
-import {ConfigurationService} from '../services/configuration_service';
+import './jquery.validate';
 import {
     apiEndpoint, feedbackPath, applicationName, defaultSuccessMessage,
     feedbackObjectTitle, dialogOptions, mechanismTypes, configurationTypes
@@ -20,6 +19,10 @@ import {Application} from '../models/applications/application';
 import {ApplicationService} from '../services/application_service';
 import {shuffle} from './helpers/array_shuffle';
 import {ScreenshotMechanism} from '../models/mechanisms/screenshot_mechanism';
+import * as dialogTemplate from '../templates/feedback_dialog.handlebars';
+import * as pullDialogTemplate from '../templates/feedback_dialog.handlebars';
+import * as intermediateDialogTemplate from '../templates/intermediate_dialog.handlebars';
+var mockData = require('json!../services/mocks/applications_mock.json');
 
 
 export var feedbackPluginModule = function ($, window, document) {
@@ -29,10 +32,6 @@ export var feedbackPluginModule = function ($, window, document) {
     var pullConfigurationDialogId = "pullConfiguration";
     var active = false;
     var application:Application;
-    var dialogTemplate = require('../templates/feedback_dialog.handlebars');
-    var pullDialogTemplate = require('../templates/feedback_dialog.handlebars');
-    var intermediateDialogTemplate = require('../templates/intermediate_dialog.handlebars');
-    var mockData = require('json!../services/mocks/applications_mock.json');
 
     /**
      * @param applicationObject
