@@ -37,6 +37,12 @@ export abstract class Configuration implements ConfigurationInterface {
         }
     }
 
+    getMechanismsSorted(): Mechanism[] {
+        return this.mechanisms.sort(function(a,b) {
+            return (a.order > b.order) ? 1 : ((b.order > a.order) ? -1 : 0);}
+        );
+    }
+
     /**
      * @returns any
      *  Context object that contains all the data to configure the feedback mechanism in the view.
@@ -47,12 +53,15 @@ export abstract class Configuration implements ConfigurationInterface {
             ratingMechanism: null,
             screenshotMechanism: null,
             categoryMechanism: null,
-            dialogId: this.dialogId
+            dialogId: this.dialogId,
+            mechanism: []
         };
         var textMechanism = this.getMechanismConfig(mechanismTypes.textType);
         var ratingMechanism = this.getMechanismConfig(mechanismTypes.ratingType);
         var screenshotMechanism = this.getMechanismConfig(mechanismTypes.screenshotType);
         var categoryMechanism:CategoryMechanism = <CategoryMechanism>this.getMechanismConfig(mechanismTypes.categoryType);
+
+        context.mechanism = this.getMechanismsSorted();
 
         // TODO move this to the mechanism classes
         if(textMechanism) {

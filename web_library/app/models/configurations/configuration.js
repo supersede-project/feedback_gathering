@@ -16,18 +16,25 @@ define(["require", "exports", '../parameters/parameter_value_property_pair', '..
                 return null;
             }
         };
+        Configuration.prototype.getMechanismsSorted = function () {
+            return this.mechanisms.sort(function (a, b) {
+                return (a.order > b.order) ? 1 : ((b.order > a.order) ? -1 : 0);
+            });
+        };
         Configuration.prototype.getContextForView = function () {
             var context = {
                 textMechanism: null,
                 ratingMechanism: null,
                 screenshotMechanism: null,
                 categoryMechanism: null,
-                dialogId: this.dialogId
+                dialogId: this.dialogId,
+                mechanism: []
             };
             var textMechanism = this.getMechanismConfig(config_1.mechanismTypes.textType);
             var ratingMechanism = this.getMechanismConfig(config_1.mechanismTypes.ratingType);
             var screenshotMechanism = this.getMechanismConfig(config_1.mechanismTypes.screenshotType);
             var categoryMechanism = this.getMechanismConfig(config_1.mechanismTypes.categoryType);
+            context.mechanism = this.getMechanismsSorted();
             if (textMechanism) {
                 var textareaStyle = this.getCssStyle(textMechanism, [new parameter_value_property_pair_1.ParameterValuePropertyPair('textareaFontColor', 'color')]);
                 var labelStyle = this.getCssStyle(textMechanism, [

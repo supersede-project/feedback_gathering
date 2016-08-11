@@ -444,7 +444,7 @@
             {
               "id": 79,
               "key": "askOnAppStartup",
-              "value": 0
+              "value": 1
             },
             {
               "id": 80,
@@ -483,7 +483,7 @@
           {
             "type": "CATEGORY_TYPE",
             "active": true,
-            "order": 2,
+            "order": 3,
             "canBeActivated": false,
             "parameters": [
               {
@@ -512,6 +512,43 @@
                   {
                     "key": "FEATURE_2",
                     "value": "Google Login"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "CATEGORY_TYPE",
+            "active": true,
+            "order": 2,
+            "canBeActivated": false,
+            "parameters": [
+              {
+                "key": "title",
+                "value": "Please choose from the following categories"
+              },
+              {
+                "key": "ownAllowed",
+                "value": 1
+              },
+              {
+                "key": "multiple",
+                "value": 0
+              },
+              {
+                "key": "options",
+                "value": [
+                  {
+                    "key": "BUG_CATEGORY",
+                    "value": "Bug"
+                  },
+                  {
+                    "key": "FEATURE_REQUEST_CATEGORY",
+                    "value": "Feature Request"
+                  },
+                  {
+                    "key": "GENERAL_CATEGORY",
+                    "value": "General Feedback"
                   }
                 ]
               }
