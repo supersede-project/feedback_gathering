@@ -1,7 +1,10 @@
 @import "normalize";
 @import "star-rating-svg";
+@import "spectrum.min";
 @import "config";
 @import "functions";
+@import "https://fonts.googleapis.com/icon?family=Material+Icons";
+
 
 .ui-widget input, .ui-widget select, .ui-widget textarea, .ui-widget button {
   font-family: Verdana, Arial, sans-serif;
@@ -302,6 +305,24 @@ button.screenshot-operation {
     display: none;
   }
 
+  a.color {
+    position: absolute;
+    top: 32px;
+    right: -32px;
+    z-index: 1200;
+    width: 48px;
+    height: 48px;
+    display: none;
+    font-size: 12px;
+    background-size: 36px;
+    background-repeat: no-repeat;
+    padding: 8px;
+
+    i.material-icons {
+      font-size: 18px;
+    }
+  }
+
   &.text-2 {
     cursor: move;
     height: auto;
@@ -370,6 +391,10 @@ button.screenshot-operation {
   }
 
   a.remove {
+    display: block;
+  }
+
+  a.color {
     display: block;
   }
 }
