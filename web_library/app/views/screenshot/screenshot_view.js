@@ -294,7 +294,7 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
                 myThis.context.fillStyle = black;
                 myThis.context.setLineDash([3, 8]);
             });
-            this.container.find('.screenshot-text').on('click', function (event) {
+            this.container.find('.screenshot-text').off('click').on('click', function (event) {
                 event.preventDefault();
                 event.stopPropagation();
                 myThis.disableAllScreenshotOperations();
@@ -335,7 +335,7 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
                 });
                 myThis.screenshotPreviewElement.append(stickerContainer);
             });
-            this.container.find('.screenshot-text-2').on('click', function (event) {
+            this.container.find('.screenshot-text-2').off('click').on('click', function (event) {
                 event.preventDefault();
                 event.stopPropagation();
                 myThis.disableAllScreenshotOperations();
@@ -381,7 +381,7 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
                 event.stopPropagation();
                 myThis.reset();
             });
-            this.container.find('.screenshot-operation.sticking').on('click', function (event) {
+            this.container.find('.screenshot-operation.sticking').off('click').on('click', function (event) {
                 event.preventDefault();
                 event.stopPropagation();
                 myThis.disableAllScreenshotOperations();

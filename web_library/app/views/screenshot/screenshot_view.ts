@@ -369,7 +369,7 @@ export class ScreenshotView {
             myThis.context.setLineDash([3, 8]);
         });
 
-        this.container.find('.screenshot-text').on('click', function(event) {
+        this.container.find('.screenshot-text').off('click').on('click', function(event) {
             event.preventDefault();
             event.stopPropagation();
 
@@ -417,7 +417,7 @@ export class ScreenshotView {
             myThis.screenshotPreviewElement.append(stickerContainer);
         });
 
-        this.container.find('.screenshot-text-2').on('click', function(event) {
+        this.container.find('.screenshot-text-2').off('click').on('click', function(event) {
             event.preventDefault();
             event.stopPropagation();
 
@@ -473,7 +473,7 @@ export class ScreenshotView {
             myThis.reset();
         });
 
-        this.container.find('.screenshot-operation.sticking').on('click', function(event) {
+        this.container.find('.screenshot-operation.sticking').off('click').on('click', function(event) {
             event.preventDefault();
             event.stopPropagation();
 
