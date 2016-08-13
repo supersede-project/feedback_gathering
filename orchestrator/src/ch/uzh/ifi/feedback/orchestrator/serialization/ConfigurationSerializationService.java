@@ -1,7 +1,36 @@
 package ch.uzh.ifi.feedback.orchestrator.serialization;
 
+import com.google.inject.Inject;
+
 import ch.uzh.ifi.feedback.library.rest.serialization.DefaultSerializer;
 import ch.uzh.ifi.feedback.orchestrator.model.Configuration;
 
-public class ConfigurationSerializationService extends DefaultSerializer<Configuration>{
+public class ConfigurationSerializationService extends DefaultSerializer<Configuration>
+{
+	private MechanismSerializationService mechanismSerializationService;
+	private GeneralConfigurationSerializationService generalConfigurationSerializationService;
+	
+	@Inject
+	public ConfigurationSerializationService(
+			MechanismSerializationService mechanismSerializationService,
+			GeneralConfigurationSerializationService generalConfigurationSerializationService)
+	{
+		this.mechanismSerializationService = mechanismSerializationService;
+		this.generalConfigurationSerializationService = generalConfigurationSerializationService;
+	}
+	
+	@Override
+	public Configuration Deserialize(String data) {
+
+		Configuration config =  super.Deserialize(data);
+		SetNestedParameters(config);
+		return config;
+	}
+	
+	@Override
+	public void SetNestedParameters(Configuration config) {
+		config.getFeedbackMechanisms().forEach(m -> mechanismSerializationService.SetNestedParameters(m));
+		generalConfigurationSerializationService.SetNestedParameters(config.getGeneralConfiguration());
+	}
+	
 }

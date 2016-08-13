@@ -6,7 +6,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 
-public class DefaultSerializer<T> implements ISerializationService<T> {
+public abstract class DefaultSerializer<T> implements ISerializationService<T> {
 
 	private Type serializationType;
 	
@@ -31,6 +31,8 @@ public class DefaultSerializer<T> implements ISerializationService<T> {
 
 		return requestObject;
 	}
+	
+	public abstract void SetNestedParameters(T object);
 	
 	private void setSerializationType()
 	{
