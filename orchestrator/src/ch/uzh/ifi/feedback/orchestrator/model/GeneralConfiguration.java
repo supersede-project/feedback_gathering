@@ -4,11 +4,24 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GeneralConfiguration {
+import ch.uzh.ifi.feedback.library.rest.Service.IDbItem;
+import ch.uzh.ifi.feedback.library.rest.annotations.Serialize;
+import ch.uzh.ifi.feedback.library.rest.validation.Id;
+import ch.uzh.ifi.feedback.library.rest.validation.NotNull;
+import ch.uzh.ifi.feedback.library.rest.validation.Validate;
+import ch.uzh.ifi.feedback.orchestrator.serialization.ApplicationSerializationService;
+import ch.uzh.ifi.feedback.orchestrator.serialization.GeneralConfigurationSerializationService;
+import ch.uzh.ifi.feedback.orchestrator.validation.GeneralConfigurationValidator;
+
+@Validate(GeneralConfigurationValidator.class)
+@Serialize(GeneralConfigurationSerializationService.class)
+public class GeneralConfiguration implements IDbItem {
 	
 	private Timestamp createdAt;
 	private Timestamp updatedAt;
 	private List<FeedbackParameter> parameters;
+	private String name;
+	@Id
 	private Integer id;
 	
 	public GeneralConfiguration()
@@ -43,4 +56,11 @@ public class GeneralConfiguration {
 		this.id = id;
 	}
 
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
 }

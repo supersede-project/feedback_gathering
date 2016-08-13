@@ -10,6 +10,7 @@ import java.util.List;
 import com.google.inject.Inject;
 
 import ch.uzh.ifi.feedback.library.rest.Service.IDbService;
+import ch.uzh.ifi.feedback.library.rest.Service.ServiceBase;
 import ch.uzh.ifi.feedback.orchestrator.model.Configuration;
 import ch.uzh.ifi.feedback.orchestrator.model.FeedbackParameter;
 import ch.uzh.ifi.feedback.orchestrator.model.GeneralConfiguration;
@@ -47,6 +48,7 @@ public class GeneralConfigurationService extends ServiceBase<GeneralConfiguratio
 	    return configs;
 	}
 
+	/*
 	@Override
 	public List<GeneralConfiguration> GetAllFor(Connection con, String foreignKeyName, int foreignKey)
 			throws SQLException, NotFoundException {
@@ -72,7 +74,7 @@ public class GeneralConfigurationService extends ServiceBase<GeneralConfiguratio
 		}
 	    
 	    return configs;
-	}
+	}*/
 	
 	@Override
 	public void Update(Connection con, GeneralConfiguration config)
@@ -98,6 +100,30 @@ public class GeneralConfigurationService extends ServiceBase<GeneralConfiguratio
 	   }
 	}
 
+	@Override
+	public int Insert(Connection con, GeneralConfiguration config)
+			throws SQLException, NotFoundException, UnsupportedOperationException {
+		
+	    PreparedStatement s = con.prepareStatement(
+	    		"INSERT INTO feedback_orchestrator.general_configurations "
+	    		+ "(name) "
+	    		+ "VALUES (?) ;", PreparedStatement.RETURN_GENERATED_KEYS);
+	    
+	    s.setString(1, config.getName());
+	    s.execute();
+	    ResultSet keys = s.getGeneratedKeys();
+	    keys.next();
+	    int key = keys.getInt(1);
+	    
+	    for(FeedbackParameter param : config.getParameters())
+	    {
+	    	parameterService.InsertFor(con, param, "configuration_id", key);
+	    }
+	    
+	    return key;
+	}
+	
+	/*
 	@Override
 	public void InsertFor(Connection con, GeneralConfiguration config, String foreignKeyName, int foreignKey)
 			throws SQLException, NotFoundException {
@@ -135,4 +161,5 @@ public class GeneralConfigurationService extends ServiceBase<GeneralConfiguratio
 	    	parameterService.InsertFor(con, param, "general_configuration", key);
 	    }
 	}
+	*/
 }

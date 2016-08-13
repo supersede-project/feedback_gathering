@@ -13,6 +13,7 @@ import com.google.inject.Inject;
 import com.mysql.jdbc.Statement;
 
 import ch.uzh.ifi.feedback.library.rest.Service.IDbService;
+import ch.uzh.ifi.feedback.library.rest.Service.ServiceBase;
 import ch.uzh.ifi.feedback.orchestrator.model.Configuration;
 import ch.uzh.ifi.feedback.orchestrator.model.ConfigurationType;
 import ch.uzh.ifi.feedback.orchestrator.model.FeedbackMechanism;
@@ -41,7 +42,7 @@ public class ConfigurationService extends ServiceBase<Configuration>{
 
 		Configuration config = super.GetById(con, id);
 		config.getFeedbackMechanisms().addAll(mechanismService.GetAllFor(con, "configuration_id", id));
-		config.getGeneralConfigurations().addAll(generalConfigurationService.GetAllFor(con, "configuration_id", id));
+		config.setGeneralConfiguration(generalConfigurationService.GetById(con, config.getGeneralConfigurationId()));
 		
 		return config;
 	}
@@ -53,7 +54,7 @@ public class ConfigurationService extends ServiceBase<Configuration>{
 		for(Configuration config : configurations)
 		{
 			config.getFeedbackMechanisms().addAll(mechanismService.GetAllFor(con, "configuration_id", config.getId()));
-			config.getGeneralConfigurations().addAll(generalConfigurationService.GetAllFor(con, "configuration_id", config.getId()));
+			config.setGeneralConfiguration(generalConfigurationService.GetById(con, config.getGeneralConfigurationId()));
 		}
 		
 		return configurations;
@@ -79,7 +80,7 @@ public class ConfigurationService extends ServiceBase<Configuration>{
 		for(Configuration config : configurations)
 		{
 			config.getFeedbackMechanisms().addAll(mechanismService.GetAllFor(con, "configuration_id", config.getId()));
-			config.getGeneralConfigurations().addAll(generalConfigurationService.GetAllFor(con, "configuration_id", config.getId()));
+			config.setGeneralConfiguration(generalConfigurationService.GetById(con, config.getGeneralConfigurationId()));
 		}
 		
 		return configurations;
@@ -87,7 +88,20 @@ public class ConfigurationService extends ServiceBase<Configuration>{
 	}
 
 	@Override
-	public void Update(Connection con, Configuration config) throws SQLException, NotFoundException, UnsupportedOperationException {
+	public void Update(Connection con, Configuration config) throws SQLException, NotFoundException, UnsupportedOperationException 
+	{
+		GeneralConfiguration generalConfig = config.getGeneralConfiguration();
+		Integer generalConfigId = null;
+		if(generalConfig != null)
+		{
+			if(generalConfig.getId() != null)
+			{
+				generalConfigId = generalConfigurationService.Insert(con, generalConfig);
+				config.setGeneralConfigurationId(generalConfigId);
+			}else{
+				generalConfigurationService.Update(con, generalConfig);
+			}
+		}
 		
 		PreparedStatement s1 = con.prepareStatement(
 				  "SELECT application_id FROM feedback_orchestrator.configurations as c "
@@ -101,12 +115,13 @@ public class ConfigurationService extends ServiceBase<Configuration>{
 				
 		PreparedStatement s = con.prepareStatement(
 				  "UPDATE TABLE feedback_orchestrator.configurations as c "
-				+ "SET `name` = IFNULL(?, `name`), `type` = IFNULL(?, `type`) "
+				+ "SET `name` = IFNULL(?, `name`), `type` = IFNULL(?, `type`), general_configuration_id = IFNULL(?, general_configuration_id) "
 				+ "WHERE c.id = ? ;");
 		
 		s.setObject(1, config.getName());
-		s.setObject(2, config.getType());
-		s.setInt(3, config.getId());
+		s.setObject(2, config.getType().toString());
+		s.setObject(3, generalConfigId);
+		s.setInt(4, config.getId());
 		
 		for(FeedbackMechanism mechanism : config.getFeedbackMechanisms())
 		{
@@ -117,30 +132,30 @@ public class ConfigurationService extends ServiceBase<Configuration>{
 				mechanismService.UpdateFor(con, mechanism, "configuration_id", config.getId());
 			}
 		}
-		
-		for(GeneralConfiguration generalConfig : config.getGeneralConfigurations())
-		{
-			if(generalConfig.getId() != null)
-			{
-				generalConfigurationService.InsertFor(con, generalConfig, "configuration_id", config.getId());
-			}else{
-				generalConfigurationService.UpdateFor(con, generalConfig, "configuration_id", config.getId());
-			}
-		}
 	}
 	
 	@Override
 	public void InsertFor(Connection con, Configuration config, String foreignKeyName, int foreignKey)
 			throws SQLException, NotFoundException, UnsupportedOperationException {
 		
-		CheckIfTypeIsUnique(con, config, foreignKey);
+		//CheckIfTypeIsUnique(con, config, foreignKey);
+		
+		GeneralConfiguration generalConfig = config.getGeneralConfiguration();
+		Integer generalConfigId = null;
+		if(generalConfig != null)
+		{
+			generalConfigId = generalConfigurationService.Insert(con, generalConfig);
+			config.setGeneralConfigurationId(generalConfigId);
+		}
 		
 		PreparedStatement s = con.prepareStatement(
-				  "INSERT INTO TABLE feedback_orchestrator.configurations "
-				+ "(`name`, `type`) VALUES (?, ?) ;", Statement.RETURN_GENERATED_KEYS);
+				  "INSERT INTO feedback_orchestrator.configurations "
+				+ "(`name`, `type`, application_id, general_configuration_id) VALUES (?, ?, ?, ?) ;", Statement.RETURN_GENERATED_KEYS);
 		
 		s.setObject(1, config.getName());
-		s.setObject(2, config.getType());
+		s.setObject(2, config.getType().toString());
+		s.setInt(3, foreignKey);
+		s.setObject(4, generalConfigId);
 		s.execute();
 		
 		ResultSet result = s.getGeneratedKeys();
@@ -151,11 +166,6 @@ public class ConfigurationService extends ServiceBase<Configuration>{
 		for(FeedbackMechanism mechanism : config.getFeedbackMechanisms())
 		{
 			mechanismService.InsertFor(con, mechanism, "configuration_id", configurationId);
-		}
-		
-		for(GeneralConfiguration generalConfig : config.getGeneralConfigurations())
-		{
-			generalConfigurationService.InsertFor(con, generalConfig, "configuration_id", configurationId);
 		}
 	}
 	

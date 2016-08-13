@@ -9,6 +9,7 @@ import java.util.List;
 import com.google.inject.Inject;
 import com.mysql.jdbc.Statement;
 import ch.uzh.ifi.feedback.library.rest.Service.IDbService;
+import ch.uzh.ifi.feedback.library.rest.Service.ServiceBase;
 import ch.uzh.ifi.feedback.orchestrator.model.Application;
 import ch.uzh.ifi.feedback.orchestrator.model.Configuration;
 import ch.uzh.ifi.feedback.orchestrator.model.GeneralConfiguration;
@@ -36,7 +37,7 @@ public class ApplicationService extends ServiceBase<Application>{
 
 		Application app = super.GetById(con, id);
 		app.getConfigurations().addAll(configurationService.GetAllFor(con, "application_id", id));
-		app.getGeneralConfigurations().addAll(generalConfigurationService.GetAllFor(con, "application_id", id));
+		app.setGeneralConfiguration(generalConfigurationService.GetById(con, app.getGeneralConfigurationId()));
 		
 		return app;
 	}
@@ -48,21 +49,30 @@ public class ApplicationService extends ServiceBase<Application>{
 		for(Application app : apps)
 		{
 			app.getConfigurations().addAll(configurationService.GetAllFor(con, "application_id", app.getId()));
-			app.getGeneralConfigurations().addAll(generalConfigurationService.GetAllFor(con, "application_id", app.getId()));
+			app.setGeneralConfiguration(generalConfigurationService.GetById(con, app.getGeneralConfigurationId()));
 		}
 		
 		return apps;
 	}
 	
 	@Override
-	public void Insert(Connection con, Application app) throws SQLException, NotFoundException, UnsupportedOperationException 
+	public int Insert(Connection con, Application app) throws SQLException, NotFoundException, UnsupportedOperationException 
 	{
+		GeneralConfiguration generalConfig = app.getGeneralConfiguration();
+		Integer generalConfigId = null;
+		if(generalConfig != null)
+		{
+			generalConfigId = generalConfigurationService.Insert(con, generalConfig);
+			app.setGeneralConfigurationId(generalConfigId);
+		}
+		
 		PreparedStatement s = con.prepareStatement(
-				  "INSERT INTO TABLE feedback_orchestrator.applications "
-				+ "(`name`, `state`) VALUES (?, ?) ;", Statement.RETURN_GENERATED_KEYS);
+				  "INSERT INTO feedback_orchestrator.applications "
+				+ "(`name`, `state`, general_configuration_id) VALUES (?, ?, ?) ;", Statement.RETURN_GENERATED_KEYS);
 		
 		s.setString(1, app.getName());
 		s.setObject(2, app.getState());
+		s.setObject(3, generalConfigId);
 		s.execute();
 		
 		ResultSet result = s.getGeneratedKeys();
@@ -73,11 +83,8 @@ public class ApplicationService extends ServiceBase<Application>{
 		{
 			configurationService.InsertFor(con, config, "application_id", key);
 		}
-		
-		for(GeneralConfiguration config : app.getGeneralConfigurations())
-		{
-			generalConfigurationService.InsertFor(con, config, "application_id", key);
-		}
+	
+		return key;
 	}
 	
 	@Override
@@ -85,24 +92,33 @@ public class ApplicationService extends ServiceBase<Application>{
 	{
 		super.CheckId(con, app.getId());
 		
+		GeneralConfiguration generalConfig = app.getGeneralConfiguration();
+		Integer generalConfigId = null;
+		if(generalConfig != null)
+		{
+			if(generalConfig.getId() != null)
+			{
+				generalConfigId = generalConfigurationService.Insert(con, generalConfig);
+				app.setGeneralConfigurationId(generalConfigId);
+			}else{
+				generalConfigurationService.Update(con, generalConfig);
+			}
+		}
+		
 		PreparedStatement s = con.prepareStatement(
 				  "UPDATE TABLE feedback_orchestrator.applications as a"
-				+ "SET `name` = IFNULL(?, `name`), `state` = IFNULL(?, `state`) "
+				+ "SET `name` = IFNULL(?, `name`), `state` = IFNULL(?, `state`), general_configuration_id = IFNULL(?, general_configuration_id) "
 				+ "WHERE a.id = ? ;");
 		
 		s.setString(1, app.getName());
 		s.setObject(2, app.getState());
-		s.setInt(3, app.getId());
+		s.setObject(3, generalConfigId);
+		s.setInt(4, app.getId());
 		s.execute();
 		
 		for(Configuration config : app.getConfigurations())
 		{
 			configurationService.UpdateFor(con, config, "application_id", app.getId());
-		}
-		
-		for(GeneralConfiguration config : app.getGeneralConfigurations())
-		{
-			generalConfigurationService.UpdateFor(con, config, "application_id", app.getId());
 		}
 	}
 }

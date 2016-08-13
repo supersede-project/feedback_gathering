@@ -6,12 +6,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 import ch.uzh.ifi.feedback.library.rest.RestController;
+import ch.uzh.ifi.feedback.library.rest.Service.IDbItem;
 import ch.uzh.ifi.feedback.library.rest.serialization.ISerializationService;
+import ch.uzh.ifi.feedback.library.rest.validation.ValidatorBase;
 
 public class HandlerInfo {
 	private Method method;
 	private HttpMethod httpMethod;
-	private Class<RestController<?>> handlerClazz;
+	private Class<?> handlerClazz;
 	private Map<String, Parameter> pathParameters;
 	private UriTemplate uriTemplate;
 	private Class<?> serializedParameterClass;
@@ -19,17 +21,19 @@ public class HandlerInfo {
 	public HandlerInfo(
 			Method method, 
 			HttpMethod httpMethod, 
-			Class<RestController<?>> handlerClazz, 
+			Class<?> handlerClazz,
+			Class<?> parameterClass,
 			UriTemplate template)
 	{
 		this.method = method;
 		this.httpMethod = httpMethod;
 		this.handlerClazz = handlerClazz;
 		this.uriTemplate = template;
+		this.serializedParameterClass = parameterClass;
 		pathParameters = new HashMap<>();
 	}
 
-	public Class<RestController<?>> getHandlerClass(){
+	public Class<?> getHandlerClass(){
 		return this.handlerClazz;
 	}
 	

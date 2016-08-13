@@ -16,7 +16,7 @@ import ch.uzh.ifi.feedback.orchestrator.model.FeedbackParameter;
 import ch.uzh.ifi.feedback.orchestrator.serialization.ParameterSerializationService;
 import ch.uzh.ifi.feedback.orchestrator.services.ParameterService;
 
-@Controller
+@Controller(FeedbackParameter.class)
 public class ParameterController extends RestController<FeedbackParameter> {
 	
 	@Inject

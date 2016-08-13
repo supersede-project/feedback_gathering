@@ -15,7 +15,7 @@ import ch.uzh.ifi.feedback.orchestrator.model.FeedbackMechanism;
 import ch.uzh.ifi.feedback.orchestrator.serialization.MechanismSerializationService;
 import ch.uzh.ifi.feedback.orchestrator.services.MechanismService;
 
-@Controller
+@Controller(FeedbackMechanism.class)
 public class MechanismController extends RestController<FeedbackMechanism> {
 
 	@Inject

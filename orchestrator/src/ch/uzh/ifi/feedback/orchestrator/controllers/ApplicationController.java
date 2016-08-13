@@ -13,7 +13,7 @@ import ch.uzh.ifi.feedback.orchestrator.model.Application;
 import ch.uzh.ifi.feedback.orchestrator.serialization.ApplicationSerializationService;
 import ch.uzh.ifi.feedback.orchestrator.services.ApplicationService;
 
-@Controller
+@Controller(Application.class)
 public class ApplicationController extends RestController<Application> {
 
 	@Inject

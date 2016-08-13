@@ -15,7 +15,7 @@ import ch.uzh.ifi.feedback.orchestrator.model.Configuration;
 import ch.uzh.ifi.feedback.orchestrator.serialization.ConfigurationSerializationService;
 import ch.uzh.ifi.feedback.orchestrator.services.ConfigurationService;
 
-@Controller
+@Controller(Configuration.class)
 public class ConfigurationController extends RestController<Configuration>{
 
 	@Inject

@@ -34,6 +34,7 @@ import com.google.inject.Injector;
 import ch.uzh.ifi.feedback.library.rest.Routing.HandlerInfo;
 import ch.uzh.ifi.feedback.library.rest.Routing.HttpMethod;
 import ch.uzh.ifi.feedback.library.rest.Routing.UriTemplate;
+import ch.uzh.ifi.feedback.library.rest.Service.IDbItem;
 import ch.uzh.ifi.feedback.library.rest.annotations.Controller;
 import ch.uzh.ifi.feedback.library.rest.annotations.DELETE;
 import ch.uzh.ifi.feedback.library.rest.annotations.POST;
@@ -42,6 +43,9 @@ import ch.uzh.ifi.feedback.library.rest.annotations.Path;
 import ch.uzh.ifi.feedback.library.rest.annotations.PathParam;
 import ch.uzh.ifi.feedback.library.rest.annotations.Serialize;
 import ch.uzh.ifi.feedback.library.rest.serialization.ISerializationService;
+import ch.uzh.ifi.feedback.library.rest.validation.Validate;
+import ch.uzh.ifi.feedback.library.rest.validation.ValidationResult;
+import ch.uzh.ifi.feedback.library.rest.validation.ValidatorBase;
 import javassist.NotFoundException;
 
 
@@ -49,11 +53,15 @@ public class RestManager implements IRestManager {
 
 	private List<HandlerInfo> _handlers;
 	private Map<Class<?>, Method> _parserMap;
+	private Map<Class<?>, ISerializationService<?>> _serializerMap;
+	private Map<Class<?>, ValidatorBase<?>> _validatorMap;
 	private Injector _injector;
 
 	public RestManager() {
 		_handlers = new ArrayList<>();
 		_parserMap = new HashMap<>();
+		_validatorMap = new HashMap<>();
+		_serializerMap = new HashMap<>();
 	}
 
 	public void Init(String packageName) throws Exception {
@@ -83,8 +91,22 @@ public class RestManager implements IRestManager {
 	{
 		Set<Class<?>> controllerAnnotated = reflections.getTypesAnnotatedWith(Controller.class);
 		for(Class<?> clazz : controllerAnnotated){
-			if(!RestController.class.isAssignableFrom(clazz))
-				throw new InvalidClassException("Class " + clazz.getName() + " must derive from RestController");
+			Class<?> parameterClass = clazz.getAnnotation(Controller.class).value();
+			
+			if(parameterClass.isAnnotationPresent(Validate.class))
+			{
+				Validate annotation = parameterClass.getAnnotation(Validate.class);
+				Class<? extends ValidatorBase<?>> validatorClass = parameterClass.getAnnotation(Validate.class).value();
+				ValidatorBase<?> validator = _injector.getInstance(validatorClass);
+				_validatorMap.put(parameterClass, validator);
+			}
+			
+			if(parameterClass.isAnnotationPresent(Serialize.class))
+			{
+				Class<? extends ISerializationService<?>> serializerClass = parameterClass.getAnnotation(Serialize.class).value();
+				ISerializationService<?> serializer = _injector.getInstance(serializerClass);
+				_serializerMap.put(parameterClass, serializer);
+			}
 			
 			for(Method m : clazz.getMethods()){
 				if(m.isAnnotationPresent(Path.class)){
@@ -106,7 +128,7 @@ public class RestManager implements IRestManager {
 					if(_handlers.stream().anyMatch((h) -> h.GetHttpMethod() == methodFinal && h.getUriTemplate().Match(path) != null))
 						throw new AlreadyBoundException("handler for template '" + path + "' already registered!/n");
 				
-					HandlerInfo info = new HandlerInfo(m, method, (Class<RestController<?>>)clazz, template);
+					HandlerInfo info = new HandlerInfo(m, method, clazz, parameterClass, template);
 					
 					Parameter[] params = m.getParameters();
 					for(int i = 0; i < params.length; i++){
@@ -115,18 +137,9 @@ public class RestManager implements IRestManager {
 							info.getPathParameters().put(paramName, params[i]);
 						}else if(i < params.length - 1){
 							throw new Exception("No annotation for parameter " + params[i].getName() + " present!/n");
-						}else{
-							Class<?> paramClazz = params[i].getType();
-							info.setSerializedParameterClass(paramClazz);
 						}
 					}
-					
-					if(info.getSerializedParameterClass() == null){
-						if (!m.getReturnType().equals(Void.TYPE)){
-							Class<?> returnType = m.getReturnType();
-							info.setSerializedParameterClass(returnType);
-						}
-					}
+
 					_handlers.add(info);
 				}
 			}
@@ -147,24 +160,8 @@ public class RestManager implements IRestManager {
 		try {
 			InvokeHandler(request, response, HttpMethod.GET);
 		}
-		catch(InvocationTargetException ex){
-			Throwable rootCause = GetRootCause(ex);
-			if(rootCause instanceof NotFoundException){
-				ex.printStackTrace();
-				response.setStatus(404);
-				response.getWriter().append(rootCause.getMessage());
-			}else if(rootCause instanceof UnsupportedOperationException)
-			{
-				ex.printStackTrace();
-				response.setStatus(405);
-				response.getWriter().append(rootCause.getMessage());
-			}else{
-				ex.printStackTrace();
-				throw new ServletException(ex);
-			}
-		}
-		catch (Exception ex) {
-			throw new ServletException(ex);
+		catch(Exception ex){
+			HandleExceptions(response, ex);
 		}
 	}
 	
@@ -183,28 +180,30 @@ public class RestManager implements IRestManager {
 		try {
 			InvokeHandler(request, response, HttpMethod.POST);
 
-		} catch(JsonSyntaxException ex)
+		}
+		catch(Exception ex){
+			HandleExceptions(response, ex);
+		}
+	}
+
+	private void HandleExceptions(HttpServletResponse response, Exception ex) throws IOException, ServletException {
+		Throwable rootCause = GetRootCause(ex);
+		if(rootCause instanceof NotFoundException){
+			ex.printStackTrace();
+			response.setStatus(404);
+			response.getWriter().append(rootCause.getMessage());
+		}else if(rootCause instanceof UnsupportedOperationException)
 		{
+			ex.printStackTrace();
+			response.setStatus(405);
+			response.getWriter().append(rootCause.getMessage());
+		}
+		else if(rootCause instanceof JsonSyntaxException){
 			response.setStatus(400);
 			response.getWriter().append("Malformed Json: " + ex.getMessage());
 		}
-		catch(InvocationTargetException ex){
-			Throwable rootCause = GetRootCause(ex);
-			if(rootCause instanceof NotFoundException){
-				ex.printStackTrace();
-				response.setStatus(404);
-				response.getWriter().append(rootCause.getMessage());
-			}else if(rootCause instanceof UnsupportedOperationException)
-			{
-				ex.printStackTrace();
-				response.setStatus(405);
-				response.getWriter().append(rootCause.getMessage());
-			}else{
-				ex.printStackTrace();
-				throw new ServletException(ex);
-			}
-		}
-		catch (Exception ex) {
+		else{
+			ex.printStackTrace();
 			throw new ServletException(ex);
 		}
 	}
@@ -214,29 +213,9 @@ public class RestManager implements IRestManager {
 		try {
 			InvokeHandler(request, response, HttpMethod.PUT);
 
-		} catch(JsonSyntaxException ex)
-		{
-			response.setStatus(400);
-			response.getWriter().append("Malformed Json: " + ex.getMessage());
-		}
-		catch(InvocationTargetException ex){
-			Throwable rootCause = GetRootCause(ex);
-			if(rootCause instanceof NotFoundException){
-				ex.printStackTrace();
-				response.setStatus(404);
-				response.getWriter().append(rootCause.getMessage());
-			}else if(rootCause instanceof UnsupportedOperationException)
-			{
-				ex.printStackTrace();
-				response.setStatus(405);
-				response.getWriter().append(rootCause.getMessage());
-			}else{
-				ex.printStackTrace();
-				throw new ServletException(ex);
-			}
-		}
-		catch (Exception ex) {
-			throw new ServletException(ex);
+		} 
+		catch(Exception ex){
+			HandleExceptions(response, ex);
 		}
 	}
 
@@ -245,24 +224,8 @@ public class RestManager implements IRestManager {
 		try {
 			InvokeHandler(request, response, HttpMethod.DELETE);
 		}
-		catch(InvocationTargetException ex){
-			Throwable rootCause = GetRootCause(ex);
-			if(rootCause instanceof NotFoundException){
-				ex.printStackTrace();
-				response.setStatus(404);
-				response.getWriter().append(rootCause.getMessage());
-			}else if(rootCause instanceof UnsupportedOperationException)
-			{
-				ex.printStackTrace();
-				response.setStatus(405);
-				response.getWriter().append(rootCause.getMessage());
-			}else{
-				ex.printStackTrace();
-				throw new ServletException(ex);
-			}
-		}
-		catch (Exception ex) {
-			throw new ServletException(ex);
+		catch(Exception ex){
+			HandleExceptions(response, ex);
 		}
 	}
 	
@@ -299,19 +262,48 @@ public class RestManager implements IRestManager {
 			}
 		}
 		
-		RestController<?> instance = (RestController<?>) _injector.getInstance(handler.getHandlerClass());
+		Object instance = _injector.getInstance(handler.getHandlerClass());
 		
-		ISerializationService serializer = instance.getSerializationService();
+		ISerializationService serializer = _serializerMap.get(handler.getSerializedParameterClass());
 		if(method == HttpMethod.POST || method == HttpMethod.PUT){
 			String content = GetRequestContent(request);
-			parameters.add(serializer.Deserialize(content));
+			if(serializer != null)
+			{
+				Object object = serializer.Deserialize(content);
+				ValidatorBase validator = _validatorMap.get(handler.getSerializedParameterClass());
+				if(validator != null)
+				{
+					if(object instanceof IDbItem)
+					{
+						ValidationResult result = validator.Validate((IDbItem)object);
+						if(result.hasErrors())
+						{
+							response.getWriter().append(serializer.Serialize(result.GetValidationErrors()));
+							return;
+						}
+						
+					}else{
+						//Handle error when object not instance of IdbItem...
+					}
+				}
+				parameters.add(object);
+			}else{
+				parameters.add(content);
+			}
 		}
 		
-		instance.SetLanguage(language);
+		if (instance instanceof RestController<?>)
+			((RestController<?>)instance).SetLanguage(language);
+		
 		Object result = handler.getMethod().invoke(instance, parameters.toArray());
 		
 		if(result != null){
-			response.getWriter().append(serializer.Serialize(result));
+			if(serializer != null)
+			{
+				response.getWriter().append(serializer.Serialize(result));
+			}else{
+				response.getWriter().append(result.toString());
+			}
 		}
 	}
 	

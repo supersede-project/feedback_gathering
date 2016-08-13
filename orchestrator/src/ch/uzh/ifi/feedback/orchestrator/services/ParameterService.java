@@ -15,6 +15,7 @@ import com.google.inject.Inject;
 import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils.Collections;
 
 import ch.uzh.ifi.feedback.library.rest.Service.IDbService;
+import ch.uzh.ifi.feedback.library.rest.Service.ServiceBase;
 import ch.uzh.ifi.feedback.orchestrator.model.FeedbackMechanism;
 import ch.uzh.ifi.feedback.orchestrator.model.FeedbackParameter;
 import javassist.NotFoundException;
@@ -34,7 +35,7 @@ public class ParameterService extends ServiceBase<FeedbackParameter>{
 			case "mechanism_id":
 				return GetParametersFor(con, "mechanisms", foreignKeyName, foreignKey);
 			case "configuration_id":
-				return GetParametersFor(con, "general_configurations", foreignKeyName, foreignKey);
+				return GetParametersFor(con, "general_configurations", "general_configurations_id", foreignKey);
 			default:
 				throw new NotFoundException("");
 		}
@@ -138,7 +139,13 @@ public class ParameterService extends ServiceBase<FeedbackParameter>{
 		s.setObject(4, param.getDefaultValue());
 		s.setObject(5, param.getEditableByUser());
 		s.setObject(6, parameterId);
-		s.setObject(7, param.getLanguage());
+		if(param.getLanguage() == null)
+		{
+			s.setString(7, "en");
+		}else{
+			s.setObject(7, param.getLanguage());
+		}
+
 		s.setObject(8, generalConfigurationId);
 		s.setTimestamp(9, param.getCreatedAt());
 		
@@ -180,7 +187,7 @@ public class ParameterService extends ServiceBase<FeedbackParameter>{
 				UpdateParameter(param, null, null, foreignKey, con);
 				break;
 			default:
-				throw new NotFoundException("");
+				throw new NotFoundException("Foreign Key '" + foreignKeyName + "' does not exist in table 'Parameters'");
 		}
 	}
 	

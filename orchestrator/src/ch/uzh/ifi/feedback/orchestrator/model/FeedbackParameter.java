@@ -2,22 +2,37 @@ package ch.uzh.ifi.feedback.orchestrator.model;
 
 import java.sql.Timestamp;
 
+import ch.uzh.ifi.feedback.library.rest.Service.IDbItem;
 import ch.uzh.ifi.feedback.library.rest.annotations.Serialize;
+import ch.uzh.ifi.feedback.library.rest.validation.Id;
+import ch.uzh.ifi.feedback.library.rest.validation.NotNull;
+import ch.uzh.ifi.feedback.library.rest.validation.Validate;
+import ch.uzh.ifi.feedback.orchestrator.serialization.ApplicationSerializationService;
 import ch.uzh.ifi.feedback.orchestrator.serialization.ParameterSerializationService;
+import ch.uzh.ifi.feedback.orchestrator.validation.ParameterValidator;
 
-public class FeedbackParameter {
+@Validate(ParameterValidator.class)
+@Serialize(ParameterSerializationService.class)
+public class FeedbackParameter implements IDbItem {
 	
+	@NotNull
 	private String key;
+	
+	@NotNull
 	private Object value;
+	
 	private Object defaultValue;
 	private Boolean editableByUser;
 	private Timestamp createdAt;
 	private Timestamp updatedAt;
 	private String language;
+	
+	@Id
 	private Integer id;
-	private Integer parametersId;
-	private Integer mechanismId;
-	private Integer generalConfigurationsId;
+
+	private transient Integer parametersId;
+	private transient Integer mechanismId;
+	private transient Integer generalConfigurationsId;
 	
 	public Timestamp getCreatedAt() {
 		return createdAt;
@@ -87,7 +102,7 @@ public class FeedbackParameter {
 	public void setId(Integer id) {
 		this.id = id;
 	}
-	
+/*	
 	@Override
 	public boolean equals(Object obj) {
 	    if (obj == null) {
@@ -112,4 +127,5 @@ public class FeedbackParameter {
 	    
 	    return other.getKey().equals(getKey()) && other.getValue().equals(getValue());
 	}
+	*/
 }

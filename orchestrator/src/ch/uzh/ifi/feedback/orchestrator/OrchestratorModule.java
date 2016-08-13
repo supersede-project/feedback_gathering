@@ -22,6 +22,11 @@ import ch.uzh.ifi.feedback.orchestrator.services.MechanismResultParser;
 import ch.uzh.ifi.feedback.orchestrator.services.MechanismService;
 import ch.uzh.ifi.feedback.orchestrator.services.ParameterResultParser;
 import ch.uzh.ifi.feedback.orchestrator.services.ParameterService;
+import ch.uzh.ifi.feedback.orchestrator.validation.ApplicationValidator;
+import ch.uzh.ifi.feedback.orchestrator.validation.ConfigurationValidator;
+import ch.uzh.ifi.feedback.orchestrator.validation.GeneralConfigurationValidator;
+import ch.uzh.ifi.feedback.orchestrator.validation.MechanismValidator;
+import ch.uzh.ifi.feedback.orchestrator.validation.ParameterValidator;
 
 public class OrchestratorModule extends AbstractModule{
 
@@ -46,6 +51,11 @@ public class OrchestratorModule extends AbstractModule{
 	    bind(ApplicationResultParser.class).to(ApplicationResultParser.class);
 	    bind(ApplicationService.class).to(ApplicationService.class);
 	    bind(ApplicationController.class).to(ApplicationController.class);
+	    bind(ApplicationValidator.class).to(ApplicationValidator.class);
+	    bind(ConfigurationValidator.class).to(ConfigurationValidator.class);
+	    bind(GeneralConfigurationValidator.class).to(GeneralConfigurationValidator.class);
+	    bind(MechanismValidator.class).to(MechanismValidator.class);
+	    bind(ParameterValidator.class).to(ParameterValidator.class);
 	}
 
 }

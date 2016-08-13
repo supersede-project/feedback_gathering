@@ -5,12 +5,28 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class FeedbackMechanism {
+import ch.uzh.ifi.feedback.library.rest.Service.IDbItem;
+import ch.uzh.ifi.feedback.library.rest.annotations.Serialize;
+import ch.uzh.ifi.feedback.library.rest.validation.Id;
+import ch.uzh.ifi.feedback.library.rest.validation.NotNull;
+import ch.uzh.ifi.feedback.library.rest.validation.Validate;
+import ch.uzh.ifi.feedback.orchestrator.serialization.ApplicationSerializationService;
+import ch.uzh.ifi.feedback.orchestrator.serialization.MechanismSerializationService;
+import ch.uzh.ifi.feedback.orchestrator.validation.MechanismValidator;
+
+@Validate(MechanismValidator.class)
+@Serialize(MechanismSerializationService.class)
+public class FeedbackMechanism implements IDbItem{
 	
+	@NotNull
 	private String type;
+	@NotNull
 	private Boolean active;
+	@NotNull
 	private Integer order;
+	@NotNull
 	private Boolean canBeActivated;
+	@Id
 	private Integer id;
 	private List<FeedbackParameter> parameters;
 	
@@ -58,6 +74,7 @@ public class FeedbackMechanism {
 		this.type = type;
 	}
 	
+	/*
 	@Override
 	public boolean equals(Object obj) {
 	    if (obj == null) {
@@ -88,7 +105,7 @@ public class FeedbackMechanism {
 	    
 	    return true;
 	}
-
+*/
 	public Integer getId() {
 		return id;
 	}

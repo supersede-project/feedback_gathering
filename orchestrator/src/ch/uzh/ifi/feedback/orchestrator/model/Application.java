@@ -4,18 +4,31 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Application {
+import ch.uzh.ifi.feedback.library.rest.Service.IDbItem;
+import ch.uzh.ifi.feedback.library.rest.annotations.Serialize;
+import ch.uzh.ifi.feedback.library.rest.validation.Id;
+import ch.uzh.ifi.feedback.library.rest.validation.NotNull;
+import ch.uzh.ifi.feedback.library.rest.validation.Validate;
+import ch.uzh.ifi.feedback.orchestrator.serialization.ApplicationSerializationService;
+import ch.uzh.ifi.feedback.orchestrator.validation.ApplicationValidator;
+
+@Validate(ApplicationValidator.class)
+@Serialize(ApplicationSerializationService.class)
+public class Application implements IDbItem {
 	
+	@NotNull
 	private String name;
 	private Timestamp createdAt;
 	private Integer state;
+	@Id
 	private Integer id;
-	private List<GeneralConfiguration> general_configurations;
+	private GeneralConfiguration generalConfiguration;
 	private List<Configuration> configurations;
+	
+	private transient Integer generalConfigurationId;
 	
 	public Application()
 	{
-		general_configurations = new ArrayList<>();
 		configurations = new ArrayList<>();
 	}
 	
@@ -37,9 +50,6 @@ public class Application {
 	public void setState(Integer state) {
 		this.state = state;
 	}
-	public List<GeneralConfiguration> getGeneralConfigurations() {
-		return general_configurations;
-	}
 
 	public List<Configuration> getConfigurations() {
 		return configurations;
@@ -49,7 +59,24 @@ public class Application {
 		return id;
 	}
 
-	public void setId(Integer id) {
+	public void setId(Integer id){
 		this.id = id;
 	}
+
+	public GeneralConfiguration getGeneralConfiguration() {
+		return generalConfiguration;
+	}
+
+	public void setGeneralConfiguration(GeneralConfiguration generalConfiguration) {
+		this.generalConfiguration = generalConfiguration;
+	}
+
+	public Integer getGeneralConfigurationId() {
+		return generalConfigurationId;
+	}
+
+	public void setGeneralConfigurationId(Integer generalConfigurationId) {
+		this.generalConfigurationId = generalConfigurationId;
+	}
+
 }

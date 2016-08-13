@@ -15,7 +15,7 @@ import ch.uzh.ifi.feedback.orchestrator.model.GeneralConfiguration;
 import ch.uzh.ifi.feedback.orchestrator.serialization.GeneralConfigurationSerializationService;
 import ch.uzh.ifi.feedback.orchestrator.services.GeneralConfigurationService;
 
-@Controller
+@Controller(GeneralConfiguration.class)
 public class GeneralConfigurationController extends RestController<GeneralConfiguration> {
 
 	@Inject

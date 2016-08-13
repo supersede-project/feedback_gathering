@@ -1,4 +1,4 @@
-package ch.uzh.ifi.feedback.orchestrator.services;
+package ch.uzh.ifi.feedback.library.rest.Service;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

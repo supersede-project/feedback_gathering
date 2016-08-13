@@ -4,18 +4,32 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Configuration {
+import ch.uzh.ifi.feedback.library.rest.Service.IDbItem;
+import ch.uzh.ifi.feedback.library.rest.annotations.Serialize;
+import ch.uzh.ifi.feedback.library.rest.validation.Id;
+import ch.uzh.ifi.feedback.library.rest.validation.NotNull;
+import ch.uzh.ifi.feedback.library.rest.validation.Validate;
+import ch.uzh.ifi.feedback.orchestrator.serialization.ApplicationSerializationService;
+import ch.uzh.ifi.feedback.orchestrator.serialization.ConfigurationSerializationService;
+import ch.uzh.ifi.feedback.orchestrator.validation.ConfigurationValidator;
+
+@Validate(ConfigurationValidator.class)
+@Serialize(ConfigurationSerializationService.class)
+public class Configuration implements IDbItem {
 	
 	private String name;
+	@Id
 	private Integer id;
 	private Timestamp createdAt;
+	@NotNull
 	private ConfigurationType type;
-	private List<FeedbackMechanism> feedbackMechanisms;
-	private List<GeneralConfiguration> generalConfigurations;
+	private List<FeedbackMechanism> mechanisms;
+	private GeneralConfiguration generalConfiguration;
+	
+	private transient Integer generalConfigurationId;
 	
 	public Configuration(){
-		feedbackMechanisms = new ArrayList<>();
-		generalConfigurations = new ArrayList<>();
+		mechanisms = new ArrayList<>();
 	}
 
 	public String getName() {
@@ -27,12 +41,7 @@ public class Configuration {
 	}
 
 	public List<FeedbackMechanism> getFeedbackMechanisms() {
-		return feedbackMechanisms;
-	}
-
-	public List<GeneralConfiguration> getGeneralConfigurations()
-	{
-		return this.generalConfigurations;
+		return mechanisms;
 	}
 
 	public Integer getId() {
@@ -57,6 +66,22 @@ public class Configuration {
 
 	public void setType(ConfigurationType type) {
 		this.type = type;
+	}
+
+	public GeneralConfiguration getGeneralConfiguration() {
+		return generalConfiguration;
+	}
+
+	public void setGeneralConfiguration(GeneralConfiguration generalConfiguration) {
+		this.generalConfiguration = generalConfiguration;
+	}
+
+	public Integer getGeneralConfigurationId() {
+		return generalConfigurationId;
+	}
+
+	public void setGeneralConfigurationId(Integer generalConfigurationId) {
+		this.generalConfigurationId = generalConfigurationId;
 	}
 	
 }

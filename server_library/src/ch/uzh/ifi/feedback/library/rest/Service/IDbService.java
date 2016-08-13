@@ -33,7 +33,7 @@ public interface IDbService<T> {
 		throw new UnsupportedOperationException();
 	}
 	
-	default void Insert(Connection con, T object) throws SQLException, NotFoundException, UnsupportedOperationException {
+	default int Insert(Connection con, T object) throws SQLException, NotFoundException, UnsupportedOperationException {
 		throw new UnsupportedOperationException();
 	}
 	

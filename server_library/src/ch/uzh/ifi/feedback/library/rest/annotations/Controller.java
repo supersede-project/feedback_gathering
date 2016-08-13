@@ -9,7 +9,10 @@ import java.lang.annotation.Target;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonSerializer;
 
+import ch.uzh.ifi.feedback.library.rest.Service.IDbItem;
+
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 public @interface Controller {
+	public Class<?> value();
 }

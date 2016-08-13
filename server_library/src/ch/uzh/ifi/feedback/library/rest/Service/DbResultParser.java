@@ -3,6 +3,7 @@ package ch.uzh.ifi.feedback.library.rest.Service;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.security.Timestamp;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
@@ -43,7 +44,9 @@ public abstract class DbResultParser<T> {
 						Method parser = f.getType().getMethod("valueOf", String.class);
 						Object value = parser.invoke(null, rs.getObject(i + 1));
 						fields.get(columnName).set(obj, value);
-					}else{
+					}
+					else
+					{
 						fields.get(columnName).set(obj, rs.getObject(i + 1));
 					}
 				}
