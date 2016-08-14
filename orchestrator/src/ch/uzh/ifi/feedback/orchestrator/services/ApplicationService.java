@@ -26,7 +26,12 @@ public class ApplicationService extends ServiceBase<Application>{
 			ConfigurationService configurationService,
 			GeneralConfigurationService generalConfigurationService)
 	{
-		super(resultParser, Application.class, "applications", configurationService, generalConfigurationService);
+		super(  resultParser, 
+				Application.class, 
+				"applications", 
+				"feedback_orchestrator", 
+				configurationService, 
+				generalConfigurationService);
 
 		this.configurationService = configurationService;
 		this.generalConfigurationService = generalConfigurationService;

@@ -1,11 +1,13 @@
 package ch.uzh.ifi.feedback.orchestrator.serialization;
 
+import javax.servlet.http.HttpServletRequest;
+
 import com.google.inject.Inject;
 
 import ch.uzh.ifi.feedback.library.rest.serialization.DefaultSerializer;
 import ch.uzh.ifi.feedback.orchestrator.model.FeedbackMechanism;
 
-public class MechanismSerializationService extends DefaultSerializer<FeedbackMechanism> 
+public class MechanismSerializationService extends OrchestratorSerializationService<FeedbackMechanism> 
 {
 	private ParameterSerializationService parameterSerializationService;
 	
@@ -16,8 +18,8 @@ public class MechanismSerializationService extends DefaultSerializer<FeedbackMec
 	}
 	
 	@Override
-	public FeedbackMechanism Deserialize(String data) {
-		FeedbackMechanism mechanism = super.Deserialize(data);
+	public FeedbackMechanism Deserialize(HttpServletRequest request) {
+		FeedbackMechanism mechanism = super.Deserialize(request);
 		
 		return mechanism;
 	}

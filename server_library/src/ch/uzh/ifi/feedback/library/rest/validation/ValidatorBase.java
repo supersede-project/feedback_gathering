@@ -2,11 +2,15 @@ package ch.uzh.ifi.feedback.library.rest.validation;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.util.List;
 
 import ch.uzh.ifi.feedback.library.rest.Service.IDbItem;
 import ch.uzh.ifi.feedback.library.rest.Service.ServiceBase;
+import ch.uzh.ifi.feedback.library.rest.annotations.DbAttribute;
 import ch.uzh.ifi.feedback.library.transaction.TransactionManager;
 import javassist.NotFoundException;
+
+import static java.util.Arrays.asList;
 
 public class ValidatorBase<T extends IDbItem> {
 	
@@ -37,13 +41,22 @@ public class ValidatorBase<T extends IDbItem> {
 						e.printStackTrace();
 					}
 				}
+				if(a instanceof Unique)
+				{
+					try {
+						Object o = f.get(object);
+						CheckUnique(f, o, result);
+					} catch (IllegalArgumentException | IllegalAccessException e) {
+						e.printStackTrace();
+					}
+				}
 			}
 		}
 		
 		return result;
 	}
 	
-	private void CheckNotNull(Field f, Object o, ValidationResult result)
+	protected void CheckNotNull(Field f, Object o, ValidationResult result)
 	{
 		if (o == null)
 		{
@@ -53,7 +66,7 @@ public class ValidatorBase<T extends IDbItem> {
 		}
 	}
 	
-	private void CheckId(T object, ValidationResult result) throws Exception
+	protected void CheckId(T object, ValidationResult result) throws Exception
 	{
 		if(object.getId() != null)
 		{
@@ -66,6 +79,21 @@ public class ValidatorBase<T extends IDbItem> {
 				ValidationError error = new ValidationError("id", "not found: Id was not found");
 				result.GetValidationErrors().add(error);
 			}
+		}
+	}
+	
+	protected void CheckUnique(Field f, Object o, ValidationResult result) throws Exception
+	{
+		String fieldName = f.getName();
+		if(f.isAnnotationPresent(DbAttribute.class))
+			fieldName = f.getAnnotation(DbAttribute.class).value();
+		
+		List<T> dbResult = dbService.GetWhereEquals(TransactionManager.createDatabaseConnection(), asList(fieldName), asList(o));
+		if(dbResult.size() > 1)
+		{
+			result.setHasErrors(true);
+			ValidationError error = new ValidationError(f.getName(), "unique: field must be unique");
+			result.GetValidationErrors().add(error);
 		}
 	}
 }

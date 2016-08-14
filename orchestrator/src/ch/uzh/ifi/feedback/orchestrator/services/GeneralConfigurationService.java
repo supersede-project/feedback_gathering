@@ -23,7 +23,13 @@ public class GeneralConfigurationService extends ServiceBase<GeneralConfiguratio
 	@Inject
 	public GeneralConfigurationService(ParameterService parameterService, GeneralConfigurationResultParser resultParser) 
 	{
-		super(resultParser, GeneralConfiguration.class, "general_configurations", parameterService);
+		super(
+				resultParser, 
+				GeneralConfiguration.class, 
+				"general_configurations",
+				"feedback_orchestrator", 
+				parameterService);
+		
 		this.parameterService = parameterService;
 	}
 	

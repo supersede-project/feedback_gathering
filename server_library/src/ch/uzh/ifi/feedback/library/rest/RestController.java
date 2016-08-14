@@ -58,6 +58,13 @@ public abstract class RestController<T> {
 		});
 	}
 	
+	public void Delete(int id) throws Exception
+	{
+		TransactionManager.withTransaction((con) -> {
+			dbService.Delete(con, id);
+		});
+	}
+	
 	public final void SetLanguage(String lang)
 	{
 		dbService.SetLanguage(lang);

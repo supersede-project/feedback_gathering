@@ -3,6 +3,7 @@ package ch.uzh.ifi.feedback.orchestrator.model;
 import java.sql.Timestamp;
 
 import ch.uzh.ifi.feedback.library.rest.Service.IDbItem;
+import ch.uzh.ifi.feedback.library.rest.annotations.DbAttribute;
 import ch.uzh.ifi.feedback.library.rest.annotations.Serialize;
 import ch.uzh.ifi.feedback.library.rest.validation.Id;
 import ch.uzh.ifi.feedback.library.rest.validation.NotNull;
@@ -21,17 +22,24 @@ public class FeedbackParameter implements IDbItem {
 	@NotNull
 	private Object value;
 	
+	@DbAttribute("default_value")
 	private Object defaultValue;
+	@DbAttribute("editable_by_user")
 	private Boolean editableByUser;
+	@DbAttribute("created_at")
 	private Timestamp createdAt;
+	@DbAttribute("updated_at")
 	private Timestamp updatedAt;
 	private String language;
 	
 	@Id
 	private Integer id;
 
+	@DbAttribute("parameters_id")
 	private transient Integer parametersId;
+	@DbAttribute("mechanism_id")
 	private transient Integer mechanismId;
+	@DbAttribute("general_configurations_id")
 	private transient Integer generalConfigurationsId;
 	
 	public Timestamp getCreatedAt() {

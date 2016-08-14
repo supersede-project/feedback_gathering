@@ -10,6 +10,8 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
+import ch.uzh.ifi.feedback.library.rest.annotations.DbAttribute;
+
 public abstract class DbResultParser<T> {
 	
 	private Map<String, Field> fields;
@@ -25,7 +27,12 @@ public abstract class DbResultParser<T> {
 		for (Field f : clazz.getDeclaredFields())
 		{
 			f.setAccessible(true);
-			fields.put(f.getName().toLowerCase(), f);
+			if(f.isAnnotationPresent(DbAttribute.class))
+			{
+				fields.put(f.getAnnotation(DbAttribute.class).value(), f);
+			}else{
+				fields.put(f.getName(), f);
+			}
 		}
 	}
 	
@@ -35,7 +42,6 @@ public abstract class DbResultParser<T> {
 		for(int i=0; i<metadata.getColumnCount(); i++)
 		{
 			String columnName = metadata.getColumnLabel(i + 1);
-			columnName = columnName.toLowerCase().replace("_", "");
 			try {
 				if(fields.containsKey(columnName))
 				{
@@ -54,6 +60,11 @@ public abstract class DbResultParser<T> {
 				e.printStackTrace();
 			}
 		}
+	}
+	
+	public Map<String, Field> GetFields()
+	{
+		return this.fields;
 	}
 
 }

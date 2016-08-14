@@ -22,7 +22,13 @@ public class MechanismService extends ServiceBase<FeedbackMechanism> {
 	
 	@Inject
 	public MechanismService(ParameterService parameterService, MechanismResultParser resultParser){
-		super(resultParser, FeedbackMechanism.class, "mechanisms", parameterService);
+		super(
+				resultParser, 
+				FeedbackMechanism.class, 
+				"mechanisms",
+				"feedback_orchestrator", 
+				parameterService);
+		
 		this.parameterService = parameterService;
 	}
 	

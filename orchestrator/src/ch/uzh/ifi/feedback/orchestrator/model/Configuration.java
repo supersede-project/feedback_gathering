@@ -5,9 +5,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ch.uzh.ifi.feedback.library.rest.Service.IDbItem;
+import ch.uzh.ifi.feedback.library.rest.annotations.DbAttribute;
 import ch.uzh.ifi.feedback.library.rest.annotations.Serialize;
 import ch.uzh.ifi.feedback.library.rest.validation.Id;
 import ch.uzh.ifi.feedback.library.rest.validation.NotNull;
+import ch.uzh.ifi.feedback.library.rest.validation.Unique;
 import ch.uzh.ifi.feedback.library.rest.validation.Validate;
 import ch.uzh.ifi.feedback.orchestrator.serialization.ApplicationSerializationService;
 import ch.uzh.ifi.feedback.orchestrator.serialization.ConfigurationSerializationService;
@@ -17,15 +19,18 @@ import ch.uzh.ifi.feedback.orchestrator.validation.ConfigurationValidator;
 @Serialize(ConfigurationSerializationService.class)
 public class Configuration implements IDbItem {
 	
+	@Unique
 	private String name;
 	@Id
 	private Integer id;
+	@DbAttribute("created_at")
 	private Timestamp createdAt;
 	@NotNull
 	private ConfigurationType type;
 	private List<FeedbackMechanism> mechanisms;
 	private GeneralConfiguration generalConfiguration;
 	
+	@DbAttribute("general_configuration_id")
 	private transient Integer generalConfigurationId;
 	
 	public Configuration(){

@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import ch.uzh.ifi.feedback.library.rest.Service.IDbItem;
+import ch.uzh.ifi.feedback.library.rest.annotations.DbAttribute;
 import ch.uzh.ifi.feedback.library.rest.annotations.Serialize;
 import ch.uzh.ifi.feedback.library.rest.validation.Id;
 import ch.uzh.ifi.feedback.library.rest.validation.NotNull;
@@ -19,12 +20,14 @@ import ch.uzh.ifi.feedback.orchestrator.validation.MechanismValidator;
 public class FeedbackMechanism implements IDbItem{
 	
 	@NotNull
+	@DbAttribute("name")
 	private String type;
 	@NotNull
 	private Boolean active;
 	@NotNull
 	private Integer order;
 	@NotNull
+	@DbAttribute("can_be_activated")
 	private Boolean canBeActivated;
 	@Id
 	private Integer id;

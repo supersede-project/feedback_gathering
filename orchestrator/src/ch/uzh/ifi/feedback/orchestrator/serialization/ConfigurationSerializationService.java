@@ -1,11 +1,13 @@
 package ch.uzh.ifi.feedback.orchestrator.serialization;
 
+import javax.servlet.http.HttpServletRequest;
+
 import com.google.inject.Inject;
 
 import ch.uzh.ifi.feedback.library.rest.serialization.DefaultSerializer;
 import ch.uzh.ifi.feedback.orchestrator.model.Configuration;
 
-public class ConfigurationSerializationService extends DefaultSerializer<Configuration>
+public class ConfigurationSerializationService extends OrchestratorSerializationService<Configuration>
 {
 	private MechanismSerializationService mechanismSerializationService;
 	private GeneralConfigurationSerializationService generalConfigurationSerializationService;
@@ -20,9 +22,9 @@ public class ConfigurationSerializationService extends DefaultSerializer<Configu
 	}
 	
 	@Override
-	public Configuration Deserialize(String data) {
+	public Configuration Deserialize(HttpServletRequest request) {
 
-		Configuration config =  super.Deserialize(data);
+		Configuration config =  super.Deserialize(request);
 		SetNestedParameters(config);
 		return config;
 	}

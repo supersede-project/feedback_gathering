@@ -1,19 +1,47 @@
-package ch.uzh.ifi.feedback.repository;
+package ch.uzh.ifi.feedback.repository.model;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
+import ch.uzh.ifi.feedback.library.rest.annotations.DbAttribute;
+import ch.uzh.ifi.feedback.library.rest.annotations.DbIgnore;
+import ch.uzh.ifi.feedback.library.rest.annotations.Serialize;
+import ch.uzh.ifi.feedback.library.rest.validation.Id;
+import ch.uzh.ifi.feedback.library.rest.validation.NotNull;
+import ch.uzh.ifi.feedback.repository.serialization.FeedbackSerializationService;
+
+@Serialize(FeedbackSerializationService.class)
 public class Feedback {
 	
+	@NotNull
 	private String title;
-	private String application;
+	@Id
+	private Integer id;
+	
+	@NotNull
+	@DbAttribute("application_id")
+	private Integer applicationId;
+	
+	@DbAttribute("user_identification")
+	@NotNull
 	private String user;
+	
 	private String text;
-	private Timestamp created;
-	private Timestamp lastUpdated;
+	@DbAttribute("created_at")
+	private Timestamp createdAt;
+	
+	@DbAttribute("updated_at")
+	private Timestamp updatedAt;
+	
+	@DbAttribute("config_version")
+	@NotNull
 	private Double configVersion;
+	private String language;
+	
+	@DbIgnore
 	private List<Rating> ratings;
+	@DbIgnore
 	private List<Screenshot> screenshots;
 	
 	public String getUser() {
@@ -23,28 +51,22 @@ public class Feedback {
 		this.user = user;
 	}
 	public Timestamp getCreated() {
-		return created;
+		return createdAt;
 	}
 	public void setCreated(Timestamp created) {
-		this.created = created;
+		this.createdAt = created;
 	}
 	public Timestamp getLastUpdated() {
-		return lastUpdated;
+		return updatedAt;
 	}
 	public void setLastUpdated(Timestamp lastUpdated) {
-		this.lastUpdated = lastUpdated;
+		this.updatedAt = lastUpdated;
 	}
 	public String getTitle() {
 		return title;
 	}
 	public void setTitle(String title) {
 		this.title = title;
-	}
-	public String getApplication() {
-		return application;
-	}
-	public void setApplication(String application) {
-		this.application = application;
 	}
 	public String getText() {
 		return text;
@@ -75,5 +97,17 @@ public class Feedback {
 	}
 	public void setScreenshots(List<Screenshot> screenshots) {
 		this.screenshots = screenshots;
+	}
+	public String getLanguage() {
+		return language;
+	}
+	public void setLanguage(String language) {
+		this.language = language;
+	}
+	public Integer getId() {
+		return id;
+	}
+	public void setId(Integer id) {
+		this.id = id;
 	}
 }

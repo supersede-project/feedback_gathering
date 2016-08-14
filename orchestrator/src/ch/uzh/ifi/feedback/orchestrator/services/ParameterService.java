@@ -25,7 +25,7 @@ public class ParameterService extends ServiceBase<FeedbackParameter>{
 	@Inject
 	public ParameterService(ParameterResultParser resultParser) 
 	{
-		super(resultParser, FeedbackParameter.class, "parameters");
+		super(resultParser, FeedbackParameter.class, "parameters", "feedback_orchestrator");
 	}
 	
 	@Override

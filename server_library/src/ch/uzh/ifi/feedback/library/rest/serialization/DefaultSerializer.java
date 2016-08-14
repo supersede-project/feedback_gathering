@@ -1,14 +1,19 @@
 package ch.uzh.ifi.feedback.library.rest.serialization;
 
+import java.io.BufferedReader;
+import java.io.IOException;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+
+import javax.servlet.http.HttpServletRequest;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 
 public abstract class DefaultSerializer<T> implements ISerializationService<T> {
 
-	private Type serializationType;
+	protected Type serializationType;
 	
 	public DefaultSerializer() {
 		setSerializationType();
@@ -24,15 +29,14 @@ public abstract class DefaultSerializer<T> implements ISerializationService<T> {
 	}
 
 	@Override
-	public T Deserialize(String data) {
-		
+	public T Deserialize(HttpServletRequest request) 
+	{
+		String data = GetRequestContent(request);
 		Gson gson = new GsonBuilder().setPrettyPrinting().setDateFormat("yyyy-MM-dd hh:mm:ss.S").create();
 		T requestObject = gson.fromJson(data, serializationType);
 
 		return requestObject;
 	}
-	
-	public abstract void SetNestedParameters(T object);
 	
 	private void setSerializationType()
 	{
@@ -47,4 +51,21 @@ public abstract class DefaultSerializer<T> implements ISerializationService<T> {
 		//parameterType = (Class<?>)(superclass);
 	}
 
+	private String GetRequestContent(HttpServletRequest request)
+	{
+	    StringBuffer buffer = new StringBuffer();
+		String line = null;
+		
+		try{
+			BufferedReader reader = request.getReader();
+			while((line = reader.readLine()) != null)
+			{
+				buffer.append(line);
+			}
+		}
+		catch(IOException ex){
+			ex.printStackTrace();
+		}
+		return buffer.toString();
+	}
 }

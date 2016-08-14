@@ -9,6 +9,7 @@ import java.lang.reflect.Parameter;
 import java.rmi.AlreadyBoundException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,6 +20,7 @@ import javax.el.MethodNotFoundException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.Part;
 
 import org.reflections.*;
 import org.reflections.scanners.MethodAnnotationsScanner;
@@ -240,6 +242,7 @@ public class RestManager implements IRestManager {
 	
 	private void InvokeHandler(HttpServletRequest request, HttpServletResponse response, HttpMethod method) throws Exception
 	{
+		Map<String, String[]> map = request.getParameterMap();
 		String path = request.getServletPath();
 		HandlerInfo handler = GetHandlerEntry(path, method);
 		if(handler == null){
@@ -266,10 +269,9 @@ public class RestManager implements IRestManager {
 		
 		ISerializationService serializer = _serializerMap.get(handler.getSerializedParameterClass());
 		if(method == HttpMethod.POST || method == HttpMethod.PUT){
-			String content = GetRequestContent(request);
 			if(serializer != null)
 			{
-				Object object = serializer.Deserialize(content);
+				Object object = serializer.Deserialize(request);
 				ValidatorBase validator = _validatorMap.get(handler.getSerializedParameterClass());
 				if(validator != null)
 				{
@@ -278,6 +280,7 @@ public class RestManager implements IRestManager {
 						ValidationResult result = validator.Validate((IDbItem)object);
 						if(result.hasErrors())
 						{
+							response.setStatus(422);
 							response.getWriter().append(serializer.Serialize(result.GetValidationErrors()));
 							return;
 						}
@@ -288,7 +291,7 @@ public class RestManager implements IRestManager {
 				}
 				parameters.add(object);
 			}else{
-				parameters.add(content);
+				parameters.add(GetRequestContent(request));
 			}
 		}
 		
@@ -323,6 +326,5 @@ public class RestManager implements IRestManager {
 			throw new Exception(ex);
 		}
 		return buffer.toString();
-	    
 	}
 }

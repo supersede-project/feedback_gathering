@@ -4,16 +4,18 @@ package ch.uzh.ifi.feedback.orchestrator.serialization;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import com.google.gson.internal.LinkedTreeMap;
 
 import ch.uzh.ifi.feedback.library.rest.serialization.DefaultSerializer;
 import ch.uzh.ifi.feedback.orchestrator.model.FeedbackParameter;
 
-public class ParameterSerializationService extends DefaultSerializer<FeedbackParameter>{
+public class ParameterSerializationService extends OrchestratorSerializationService<FeedbackParameter>{
 	
 	@Override
-	public FeedbackParameter Deserialize(String data) {
-		FeedbackParameter param =  super.Deserialize(data);
+	public FeedbackParameter Deserialize(HttpServletRequest request) {
+		FeedbackParameter param =  super.Deserialize(request);
 		SetNestedParameters(param);
 		return param;
 	}
