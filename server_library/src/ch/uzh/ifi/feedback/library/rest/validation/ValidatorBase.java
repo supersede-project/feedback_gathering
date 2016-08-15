@@ -30,6 +30,9 @@ public class ValidatorBase<T extends IDbItem<T>> {
 	{
 		ValidationResult result = new ValidationResult();
 		
+		if(object.getId() != null)
+			CheckId(object, result);
+		
 		for(Field f : ItemBase.GetFields(clazz, new ArrayList<>()))
 		{
 			f.setAccessible(true);
@@ -61,15 +64,9 @@ public class ValidatorBase<T extends IDbItem<T>> {
 	
 	public T Merge(T object) throws Exception
 	{
-		try{
-			T oldObject = dbService.GetById(TransactionManager.createDatabaseConnection(), object.getId());
-			object = object.Merge(oldObject);
-			return object;
-		}
-		catch(NotFoundException e)
-		{
-			return object;
-		}
+		T oldObject = dbService.GetById(object.getId());
+		object = object.Merge(oldObject);
+		return object;
 	}
 	
 	protected void CheckNotNull(Field f, Object o, ValidationResult result)
@@ -87,7 +84,7 @@ public class ValidatorBase<T extends IDbItem<T>> {
 		if(object.getId() != null)
 		{
 			try{
-				dbService.GetById(TransactionManager.createDatabaseConnection(), object.getId());
+				dbService.GetById(object.getId());
 			}
 			catch(NotFoundException ex)
 			{
@@ -104,7 +101,7 @@ public class ValidatorBase<T extends IDbItem<T>> {
 		if(f.isAnnotationPresent(DbAttribute.class))
 			fieldName = f.getAnnotation(DbAttribute.class).value();
 		
-		List<T> dbResult = dbService.GetWhereEquals(TransactionManager.createDatabaseConnection(), asList(fieldName), asList(o));
+		List<T> dbResult = dbService.GetWhereEquals(asList(fieldName), asList(o));
 		if(dbResult.size() > 1)
 		{
 			result.setHasErrors(true);

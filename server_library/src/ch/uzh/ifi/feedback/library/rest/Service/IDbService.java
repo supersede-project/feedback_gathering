@@ -15,13 +15,13 @@ public interface IDbService<T> {
 	
 	void SetLanguage(String lang);
 	
-	T GetById(Connection con, int id) throws SQLException, NotFoundException;
+	T GetById(int id) throws SQLException, NotFoundException;
 	
-	List<T> GetAll(Connection con) throws SQLException, NotFoundException;
+	List<T> GetAll() throws SQLException, NotFoundException;
 	
 	void Delete(Connection con, int id) throws SQLException, NotFoundException;
 	
-	default List<T> GetAllFor(Connection con, String foreignKeyName, int foreignKey) throws SQLException, NotFoundException {
+	default List<T> GetAllFor(String foreignKeyName, int foreignKey) throws SQLException, NotFoundException {
 		throw new UnsupportedOperationException();
 	}
 	

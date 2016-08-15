@@ -30,18 +30,20 @@ public class FeedbackService extends ServiceBase<Feedback>{
 	}
 
 	@Override
-	public Feedback GetById(Connection con, int id) throws SQLException, NotFoundException {
-		Feedback feedback =  super.GetById(con, id);
-		feedback.setRatings(ratingService.GetAllFor(con, "feedback_id", id));
+	public Feedback GetById(int id) throws SQLException, NotFoundException {
+		Feedback feedback =  super.GetById(id);
+		feedback.setRatings(ratingService.GetWhereEquals(Arrays.asList("feedback_id"), Arrays.asList(feedback.getId())));
+		feedback.setScreenshots(screenshotService.GetWhereEquals(Arrays.asList("feedback_id"), Arrays.asList(feedback.getId())));
 		return feedback;
 	}
 	
 	@Override
-	public List<Feedback> GetAll(Connection con) throws SQLException, NotFoundException {
-		List<Feedback> feedbacks = super.GetAll(con);
+	public List<Feedback> GetAll() throws SQLException, NotFoundException {
+		List<Feedback> feedbacks = super.GetAll();
 		for(Feedback f : feedbacks)
 		{
-			f.setRatings(ratingService.GetAllFor(con, "feedback_id", f.getId()));
+			f.setRatings(ratingService.GetWhereEquals(Arrays.asList("feedback_id"), Arrays.asList(f.getId())));
+			f.setScreenshots(screenshotService.GetWhereEquals(Arrays.asList("feedback_id"), Arrays.asList(f.getId())));
 		}
 
 		return feedbacks;
@@ -68,8 +70,7 @@ public class FeedbackService extends ServiceBase<Feedback>{
 	}
 	
 	@Override
-	public List<Feedback> GetAllFor(Connection con, String foreignKeyName, int foreignKey)
-			throws SQLException, NotFoundException {
-		return super.GetWhereEquals(con, Arrays.asList("application_id"), Arrays.asList(foreignKey));
+	public List<Feedback> GetAllFor(String foreignKeyName, int foreignKey) throws SQLException, NotFoundException {
+		return super.GetWhereEquals(Arrays.asList("application_id"), Arrays.asList(foreignKey));
 	}
 }

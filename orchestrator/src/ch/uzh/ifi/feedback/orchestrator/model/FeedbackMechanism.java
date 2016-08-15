@@ -9,6 +9,7 @@ import java.util.Optional;
 import ch.uzh.ifi.feedback.library.rest.Service.IDbItem;
 import ch.uzh.ifi.feedback.library.rest.Service.ItemBase;
 import ch.uzh.ifi.feedback.library.rest.annotations.DbAttribute;
+import ch.uzh.ifi.feedback.library.rest.annotations.DbIgnore;
 import ch.uzh.ifi.feedback.library.rest.annotations.Serialize;
 import ch.uzh.ifi.feedback.library.rest.validation.Id;
 import ch.uzh.ifi.feedback.library.rest.validation.NotNull;
@@ -35,6 +36,7 @@ public class FeedbackMechanism extends ItemBase<FeedbackMechanism> {
 	@DbAttribute("can_be_activated")
 	private Boolean canBeActivated;
 
+	@DbIgnore
 	private List<FeedbackParameter> parameters;
 	
 	public FeedbackMechanism(){

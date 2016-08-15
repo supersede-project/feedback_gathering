@@ -11,7 +11,7 @@ import com.google.inject.Inject;
 import ch.uzh.ifi.feedback.library.rest.serialization.DefaultSerializer;
 import ch.uzh.ifi.feedback.repository.model.Feedback;
 
-public class FeedbackSerializationService extends DefaultSerializer<Feedback>{
+public class FeedbackSerializationService extends RepositorySerializationService<Feedback>{
 
 	private ScreenshotSerializationService screenshotSerializationService;
 	
@@ -26,8 +26,8 @@ public class FeedbackSerializationService extends DefaultSerializer<Feedback>{
 		Feedback feedback = super.Deserialize(request);
 		
 		try{
-			List<Part> parts = request.getParts().stream().collect(Collectors.toList());
-			feedback.setScreenshots(screenshotSerializationService.ParseRequestParts(parts));
+			List<Part> screenshotParts = request.getParts().stream().filter(part -> "file".equals(part.getName())).collect(Collectors.toList());
+			feedback.setScreenshots(screenshotSerializationService.ParseRequestParts(screenshotParts));
 		}catch(Exception e)
 		{
 			e.printStackTrace();

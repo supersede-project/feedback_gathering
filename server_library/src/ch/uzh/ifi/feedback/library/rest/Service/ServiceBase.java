@@ -15,6 +15,7 @@ import java.util.Map.Entry;
 import ch.uzh.ifi.feedback.library.rest.Service.DbResultParser;
 import ch.uzh.ifi.feedback.library.rest.Service.IDbService;
 import ch.uzh.ifi.feedback.library.rest.annotations.DbIgnore;
+import ch.uzh.ifi.feedback.library.transaction.TransactionManager;
 import javassist.NotFoundException;
 
 public abstract class ServiceBase<T> implements IDbService<T> {
@@ -59,8 +60,9 @@ public abstract class ServiceBase<T> implements IDbService<T> {
 	}
 	
 	@Override
-	public T GetById(Connection con, int id) throws SQLException, NotFoundException 
+	public T GetById(int id) throws SQLException, NotFoundException
 	{
+		Connection con = TransactionManager.createDatabaseConnection();
 		ResultSet result = CheckId(con, id);
 		T instance = null;
 		try {
@@ -69,24 +71,28 @@ public abstract class ServiceBase<T> implements IDbService<T> {
 			e.printStackTrace();
 		}
 		resultParser.SetFields(instance, result);
+		con.close();
+		
 		return instance;
 	}
 	
 	@Override
-	public List<T> GetAll(Connection con) throws SQLException, NotFoundException
+	public List<T> GetAll() throws SQLException, NotFoundException
 	{
+		Connection con = TransactionManager.createDatabaseConnection();
+		
 		String statement = String.format("SELECT * FROM %s.%s ;", dbName, tableName);
 		PreparedStatement s = con.prepareStatement(statement);
 		ResultSet result = s.executeQuery();
-
-		return getList(result);
+	
+		List<T> resultList = getList(result);
+		con.close();
+		return resultList;
 	}
 	
 	@Override
 	public void Delete(Connection con, int id) throws SQLException, NotFoundException
 	{
-		CheckId(con, id);
-		
 		String statement = String.format("DELETE * FROM %s.%s as t WHERE t.id = ? ;", dbName, tableName);
 		PreparedStatement s = con.prepareStatement(statement);
 		s.setInt(1, id);
@@ -131,7 +137,12 @@ public abstract class ServiceBase<T> implements IDbService<T> {
 		PreparedStatement s = con.prepareStatement(statement, PreparedStatement.RETURN_GENERATED_KEYS);
 		for(int i=0; i<fieldValues.size(); i++)
 		{
-			s.setObject(i+1, fieldValues.get(i));
+			if(fieldValues.get(i).getClass().isEnum())
+			{
+				s.setObject(i+1, fieldValues.get(i).toString());
+			}else{
+				s.setObject(i+1, fieldValues.get(i));	
+			}
 		}
 		
 		s.execute();
@@ -140,8 +151,10 @@ public abstract class ServiceBase<T> implements IDbService<T> {
 	    return keys.getInt(1);
 	}
 	
-	public List<T> GetWhereEquals(Connection con, List<String> attributeNames, List<Object> values) throws SQLException
+	public List<T> GetWhereEquals(List<String> attributeNames, List<Object> values) throws SQLException, NotFoundException
 	{
+		Connection con = TransactionManager.createDatabaseConnection();
+		
 		if(attributeNames.size() != values.size())
 			return null;
 		
@@ -164,12 +177,16 @@ public abstract class ServiceBase<T> implements IDbService<T> {
 			s.setObject(i+1, values.get(i));
 		}
 		ResultSet result = s.executeQuery();
-		return getList(result);
+	
+		List<T> resultList = getList(result);
+		con.close();
+		return resultList;
 	}
 	
-	protected List<T> GetAllFor(Connection con, String foreignTableName, String foreignKeyName, int foreignKey)
-			throws SQLException, NotFoundException
+	protected List<T> GetAllFor(String foreignTableName, String foreignKeyName, int foreignKey) throws SQLException, NotFoundException
 	{
+		Connection con = TransactionManager.createDatabaseConnection();
+		
 	    String statement = String.format(
     		    "SELECT * "
     		  + "FROM %s.%s as f "
@@ -179,8 +196,10 @@ public abstract class ServiceBase<T> implements IDbService<T> {
 	    PreparedStatement s = con.prepareStatement(statement);
 	    s.setInt(1, foreignKey);
 	    ResultSet result = s.executeQuery();
-	    
-	    return getList(result);
+	   
+	    List<T> resultList = getList(result);
+	    con.close();
+	    return resultList;
 	}
 	
 	protected ResultSet CheckId(Connection con, int id) throws SQLException, NotFoundException

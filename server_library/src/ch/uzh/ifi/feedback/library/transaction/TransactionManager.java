@@ -34,9 +34,13 @@ public class TransactionManager {
         }
     }
 
-    public static Connection createDatabaseConnection() throws SQLException, ClassNotFoundException {
+    public static Connection createDatabaseConnection() throws SQLException {
 
-        Class.forName("com.mysql.jdbc.Driver");
+        try {
+			Class.forName("com.mysql.jdbc.Driver");
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
         return DriverManager.getConnection("jdbc:mysql://localhost:3306/", "root", "merovinger.1337");
     }
 }

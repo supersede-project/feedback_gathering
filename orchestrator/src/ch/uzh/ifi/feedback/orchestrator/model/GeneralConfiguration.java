@@ -8,6 +8,7 @@ import java.util.Optional;
 import ch.uzh.ifi.feedback.library.rest.Service.IDbItem;
 import ch.uzh.ifi.feedback.library.rest.Service.ItemBase;
 import ch.uzh.ifi.feedback.library.rest.annotations.DbAttribute;
+import ch.uzh.ifi.feedback.library.rest.annotations.DbIgnore;
 import ch.uzh.ifi.feedback.library.rest.annotations.Serialize;
 import ch.uzh.ifi.feedback.library.rest.validation.Id;
 import ch.uzh.ifi.feedback.library.rest.validation.NotNull;
@@ -25,6 +26,7 @@ public class GeneralConfiguration extends ItemBase<GeneralConfiguration>{
 	private Timestamp createdAt;
 	@DbAttribute("updated_at")
 	private Timestamp updatedAt;
+	@DbIgnore
 	private List<FeedbackParameter> parameters;
 	@Unique
 	private String name;

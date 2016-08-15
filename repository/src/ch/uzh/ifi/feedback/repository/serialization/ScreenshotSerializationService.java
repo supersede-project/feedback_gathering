@@ -14,28 +14,28 @@ public class ScreenshotSerializationService extends RepositorySerializationServi
 	
 	public List<Screenshot> ParseRequestParts(List<Part> fileParts)
 	{
-			File dir = new File("screenshots");
-			boolean isDir = dir.mkdirs();
-		    List<Screenshot> screenshots = new ArrayList<>(fileParts.size());
-		    for (Part filePart : fileParts) {
-		    	try
-		    	{
-			        InputStream fileContent = filePart.getInputStream();
-			        int fileSize = (int) filePart.getSize();
-			        byte[] content = new byte[fileSize];
-			        fileContent.read(content);
-			        String fileName = getFileName(filePart);
-			        File tmp = new File(dir, String.valueOf(new Date().getTime()));
-			        tmp.createNewFile();
-			        Screenshot s = new Screenshot(fileName, tmp.toPath().toString(), fileSize);
-			        screenshots.add(s);
-		    	}catch(Exception e)
-		    	{
-		    		e.printStackTrace();
-		    	}
-		    }
-		    
-		    return screenshots;
+		File dir = new File("screenshots");
+		boolean isDir = dir.mkdirs();
+	    List<Screenshot> screenshots = new ArrayList<>(fileParts.size());
+	    for (Part filePart : fileParts) {
+	    	try
+	    	{
+		        InputStream fileContent = filePart.getInputStream();
+		        int fileSize = (int) filePart.getSize();
+		        byte[] content = new byte[fileSize];
+		        fileContent.read(content);
+		        String fileName = getFileName(filePart);
+		        File tmp = new File(dir, String.valueOf(new Date().getTime()));
+		        tmp.createNewFile();
+		        Screenshot s = new Screenshot(fileName, tmp.toPath().toString(), fileSize);
+		        screenshots.add(s);
+	    	}catch(Exception e)
+	    	{
+	    		e.printStackTrace();
+	    	}
+	    }
+	    
+	    return screenshots;
 	}
 	
 	private static String getFileName(Part filePart)

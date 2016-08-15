@@ -1,5 +1,7 @@
 package ch.uzh.ifi.feedback.orchestrator.services;
 
+import static java.util.Arrays.asList;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -34,59 +36,29 @@ public class GeneralConfigurationService extends ServiceBase<GeneralConfiguratio
 	}
 	
 	@Override
-	public GeneralConfiguration GetById(Connection con, int id) throws SQLException, NotFoundException {
+	public GeneralConfiguration GetById(int id) throws SQLException, NotFoundException {
 
-    	GeneralConfiguration config = super.GetById(con, id);
-    	config.setParameters(parameterService.GetAllFor(con, "configuration_id", config.getId()));
+    	GeneralConfiguration config = super.GetById(id);
+    	config.setParameters(parameterService.GetWhereEquals(asList("mechanism_id"), asList(id)));
 		
 		return config;
 	}
 
 	@Override
-	public List<GeneralConfiguration> GetAll(Connection con) throws SQLException, NotFoundException {
+	public List<GeneralConfiguration> GetAll() throws SQLException, NotFoundException {
 
-		List<GeneralConfiguration> configs = super.GetAll(con);
+		List<GeneralConfiguration> configs = super.GetAll();
 		for(GeneralConfiguration config : configs)
 		{
-	    	config.setParameters(parameterService.GetAllFor(con, "configuration_id", config.getId()));
+	    	config.setParameters(parameterService.GetWhereEquals(asList("mechanism_id"), asList(config.getId())));
 		}
 		
 	    return configs;
 	}
 
-	/*
-	@Override
-	public List<GeneralConfiguration> GetAllFor(Connection con, String foreignKeyName, int foreignKey)
-			throws SQLException, NotFoundException {
-		
-		switch(foreignKeyName)
-		{
-			case "application_id":
-				return GetMechanismsFor(con, "applications", "application_id", foreignKey);
-			case "configuration_id":
-				return GetMechanismsFor(con, "configurations", "configuration_id", foreignKey);
-			default:
-				throw new NotFoundException("foreign key " + foreignKeyName + " does not exist on table general_configurations");
-		}
-	}
-	
-	private List<GeneralConfiguration> GetMechanismsFor(Connection con, String foreignTableName, String foreignKeyName, int foreignKey)
-			throws SQLException, NotFoundException {
-
-		List<GeneralConfiguration> configs = super.GetAllFor(con, foreignTableName, foreignKeyName, foreignKey);
-		for(GeneralConfiguration config : configs)
-		{
-	    	config.setParameters(parameterService.GetAllFor(con, "configuration_id", config.getId()));
-		}
-	    
-	    return configs;
-	}*/
-	
 	@Override
 	public void Update(Connection con, GeneralConfiguration config)
 			throws SQLException, NotFoundException {
-		
-		super.CheckId(con, config.getId());
 		
 	    PreparedStatement s = con.prepareStatement(
 	    		  "UPDATE feedback_orchestrator.general_configurations as c "
@@ -128,44 +100,4 @@ public class GeneralConfigurationService extends ServiceBase<GeneralConfiguratio
 	    
 	    return key;
 	}
-	
-	/*
-	@Override
-	public void InsertFor(Connection con, GeneralConfiguration config, String foreignKeyName, int foreignKey)
-			throws SQLException, NotFoundException {
-		
-		switch(foreignKeyName)
-		{
-			case "application_id":
-				Insert(con, config, foreignKey, null);
-				break;
-			case "configuration_id":
-				Insert(con, config, null, foreignKey);
-				break;
-			default:
-				throw new NotFoundException("foreign key " + foreignKeyName + " does not exist on table general_configurations");
-		}
-	}
-	
-	private void Insert(Connection con, GeneralConfiguration config, Integer applicationId, Integer configurationId)
-			throws SQLException, NotFoundException{
-		
-	    PreparedStatement s = con.prepareStatement(
-	    		"INSERT INTO feedback_orchestrator.general_configurations "
-	    		+ "(application_id, configuration_id) "
-	    		+ "VALUES (?, ?) ;", PreparedStatement.RETURN_GENERATED_KEYS);
-	    
-	    s.setInt(1, applicationId);
-	    s.setInt(2, configurationId);
-	    s.execute();
-	    ResultSet keys = s.getGeneratedKeys();
-	    keys.next();
-	    int key = keys.getInt(1);
-	    
-	    for(FeedbackParameter param : config.getParameters())
-	    {
-	    	parameterService.InsertFor(con, param, "general_configuration", key);
-	    }
-	}
-	*/
 }

@@ -2,18 +2,15 @@ package ch.uzh.ifi.feedback.orchestrator.services;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 import com.google.inject.Inject;
-import com.mysql.jdbc.Statement;
-import ch.uzh.ifi.feedback.library.rest.Service.IDbService;
 import ch.uzh.ifi.feedback.library.rest.Service.ServiceBase;
 import ch.uzh.ifi.feedback.orchestrator.model.Application;
 import ch.uzh.ifi.feedback.orchestrator.model.Configuration;
 import ch.uzh.ifi.feedback.orchestrator.model.GeneralConfiguration;
 import javassist.NotFoundException;
+import static java.util.Arrays.asList;
 
 public class ApplicationService extends ServiceBase<Application>{
 
@@ -38,23 +35,23 @@ public class ApplicationService extends ServiceBase<Application>{
 	}
 	
 	@Override
-	public Application GetById(Connection con, int id) throws SQLException, NotFoundException {
+	public Application GetById(int id) throws SQLException, NotFoundException {
 
-		Application app = super.GetById(con, id);
-		app.getConfigurations().addAll(configurationService.GetAllFor(con, "application_id", id));
-		app.setGeneralConfiguration(generalConfigurationService.GetById(con, app.getGeneralConfigurationId()));
+		Application app = super.GetById(id);
+		app.getConfigurations().addAll(configurationService.GetWhereEquals(asList("application_id"), asList(id)));
+		app.setGeneralConfiguration(generalConfigurationService.GetById(app.getGeneralConfigurationId()));
 		
 		return app;
 	}
 
 	@Override
-	public List<Application> GetAll(Connection con) throws SQLException, NotFoundException {
+	public List<Application> GetAll() throws SQLException, NotFoundException {
 		
-		List<Application> apps = super.GetAll(con);
+		List<Application> apps = super.GetAll();
 		for(Application app : apps)
 		{
-			app.getConfigurations().addAll(configurationService.GetAllFor(con, "application_id", app.getId()));
-			app.setGeneralConfiguration(generalConfigurationService.GetById(con, app.getGeneralConfigurationId()));
+			app.getConfigurations().addAll(configurationService.GetWhereEquals(asList("application_id"), asList(app.getId())));
+			app.setGeneralConfiguration(generalConfigurationService.GetById(app.getGeneralConfigurationId()));
 		}
 		
 		return apps;
@@ -71,25 +68,14 @@ public class ApplicationService extends ServiceBase<Application>{
 			app.setGeneralConfigurationId(generalConfigId);
 		}
 		
-		PreparedStatement s = con.prepareStatement(
-				  "INSERT INTO feedback_orchestrator.applications "
-				+ "(`name`, `state`, general_configuration_id) VALUES (?, ?, ?) ;", Statement.RETURN_GENERATED_KEYS);
-		
-		s.setString(1, app.getName());
-		s.setObject(2, app.getState());
-		s.setObject(3, generalConfigId);
-		s.execute();
-		
-		ResultSet result = s.getGeneratedKeys();
-		result.next();
-		int key = result.getInt(1);
-		
+		int appId = super.Insert(con, app);
 		for(Configuration config : app.getConfigurations())
 		{
-			configurationService.InsertFor(con, config, "application_id", key);
+			config.setApplicationId(appId);
+			configurationService.Insert(con, config);
 		}
 	
-		return key;
+		return appId;
 	}
 	
 	@Override

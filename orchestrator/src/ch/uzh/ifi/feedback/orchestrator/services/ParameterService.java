@@ -29,59 +29,38 @@ public class ParameterService extends ServiceBase<FeedbackParameter>{
 	}
 	
 	@Override
-	public List<FeedbackParameter> GetAllFor(Connection con, String foreignKeyName, int foreignKey) throws SQLException, NotFoundException
-	{
-		switch(foreignKeyName){
-			case "mechanism_id":
-				return GetParametersFor(con, "mechanisms", foreignKeyName, foreignKey);
-			case "configuration_id":
-				return GetParametersFor(con, "general_configurations", "general_configurations_id", foreignKey);
-			default:
-				throw new NotFoundException("");
-		}
-	}
-	
-	private List<FeedbackParameter> GetParametersFor(
-			Connection con, 
-			String foreignTableName, 
-			String foreignKeyName, 
-			int foreignKey) throws SQLException, NotFoundException
-	{
-		List<FeedbackParameter> rootParams = new ArrayList<>();
+	public List<FeedbackParameter> GetWhereEquals(List<String> attributeNames, List<Object> values)
+			throws SQLException, NotFoundException {
+		List<FeedbackParameter> params = super.GetWhereEquals(attributeNames, values);
+		
 		Map<Integer, List<FeedbackParameter>> childMap = new HashMap<>();
 		Map<FeedbackParameter, Integer> parameterMap = new HashMap<>();
-		List<FeedbackParameter> params = super.GetAllFor(con, foreignTableName, foreignKeyName, foreignKey);
+		
 		if(GetLanguage() != null)
 			params = params.stream().filter(p -> p.getLanguage().equals(this.GetLanguage())).collect(Collectors.toList());
 		
-	    for(FeedbackParameter param : params)
-	    {
-	    	parameterMap.put(param, param.getId());
-	    	Integer parameterKey = param.getParentParameterId();
-	    	if(parameterKey != null){
-	    		if(!childMap.containsKey(parameterKey))
-	    			childMap.put(parameterKey, new ArrayList<>());
-	    			
-	    		childMap.get(parameterKey).add(param);
-	    	}else{
-	    		rootParams.add(param);
-	    	}
-	    }
+		List<FeedbackParameter> rootParams = GetRootParams(params, parameterMap, childMap);
 	    
 	    return setParametersRecursive(rootParams, parameterMap, childMap);
 	}
 	
 	@Override
-	public List<FeedbackParameter> GetAll(
-			Connection con) throws SQLException, NotFoundException
+	public List<FeedbackParameter> GetAll() throws SQLException, NotFoundException
 	{
 		Map<Integer, List<FeedbackParameter>> childMap = new HashMap<>();
 		Map<FeedbackParameter, Integer> parameterMap = new HashMap<>();
-		List<FeedbackParameter> rootParams = new ArrayList<>();
-		List<FeedbackParameter> params = super.GetAll(con);
+		List<FeedbackParameter> params = super.GetAll();
 		if(GetLanguage() != null)
 			params = params.stream().filter(p -> p.getLanguage().equals(this.GetLanguage())).collect(Collectors.toList());
 		
+		List<FeedbackParameter> rootParams = GetRootParams(params, parameterMap, childMap);
+	    
+	    return setParametersRecursive(rootParams, parameterMap, childMap);
+	}
+	
+	private List<FeedbackParameter> GetRootParams(List<FeedbackParameter> params, Map<FeedbackParameter, Integer> parameterMap, Map<Integer, List<FeedbackParameter>> childMap)
+	{
+		List<FeedbackParameter> rootParams = new ArrayList<>();
 	    for(FeedbackParameter param : params)
 	    {
 	    	parameterMap.put(param, param.getId());
@@ -97,14 +76,13 @@ public class ParameterService extends ServiceBase<FeedbackParameter>{
 	    	}
 	    }
 	    
-	    return setParametersRecursive(rootParams, parameterMap, childMap);
+	    return rootParams;
 	}
 	
 	@Override
-	public FeedbackParameter GetById(Connection con, int id) 
-			throws SQLException, NotFoundException
+	public FeedbackParameter GetById(int id) throws SQLException, NotFoundException
 	{
-		FeedbackParameter param = super.GetById(con, id);
+		FeedbackParameter param = super.GetById(id);
     	return param;
 	}
 	
@@ -174,8 +152,6 @@ public class ParameterService extends ServiceBase<FeedbackParameter>{
 		    keys.next();
 		    key = keys.getInt(1);
 		}
-		
-		param = GetById(con, key);
 	}
 	
 	@Override

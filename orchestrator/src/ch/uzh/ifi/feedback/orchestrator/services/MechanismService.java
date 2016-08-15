@@ -12,9 +12,11 @@ import com.google.inject.Inject;
 import ch.uzh.ifi.feedback.library.rest.Service.DbResultParser;
 import ch.uzh.ifi.feedback.library.rest.Service.IDbService;
 import ch.uzh.ifi.feedback.library.rest.Service.ServiceBase;
+import ch.uzh.ifi.feedback.library.transaction.TransactionManager;
 import ch.uzh.ifi.feedback.orchestrator.model.FeedbackMechanism;
 import ch.uzh.ifi.feedback.orchestrator.model.FeedbackParameter;
 import javassist.NotFoundException;
+import static java.util.Arrays.asList;
 
 public class MechanismService extends ServiceBase<FeedbackMechanism> {
 	
@@ -98,8 +100,10 @@ public class MechanismService extends ServiceBase<FeedbackMechanism> {
 	}
 
 	@Override
-	public List<FeedbackMechanism> GetAll(Connection con) throws SQLException, NotFoundException
+	public List<FeedbackMechanism> GetAll() throws SQLException, NotFoundException
 	{
+		Connection con = TransactionManager.createDatabaseConnection();
+		
 	    PreparedStatement s = con.prepareStatement(
 
 	    		   "SELECT m.id, m.name, cm.order, cm.active, cm.can_be_activated "
@@ -115,16 +119,19 @@ public class MechanismService extends ServiceBase<FeedbackMechanism> {
 	    	FeedbackMechanism mechanism = new FeedbackMechanism();
 	    	
 	    	resultParser.SetFields(mechanism, result);
-	    	mechanism.setParameters(parameterService.GetAllFor(con, "mechanism_id", result.getInt("id")));
+	    	mechanism.setParameters(parameterService.GetWhereEquals(asList("mechanism_id"), asList(mechanism.getId())));
 	    	mechanisms.add(mechanism);
 	    }
 	    
+	    con.close();
 	    return mechanisms;
 	}
 	
 	@Override
-	public List<FeedbackMechanism> GetAllFor(Connection con, String foreignKeyName, int configurationId) throws SQLException, NotFoundException
+	public List<FeedbackMechanism> GetAllFor(String foreignKeyName, int configurationId) throws SQLException, NotFoundException
 	{
+		Connection con = TransactionManager.createDatabaseConnection();
+		
 	    PreparedStatement s = con.prepareStatement(
 
 	    		  "SELECT m.id, m.name, cm.order, cm.active, cm.can_be_activated "
@@ -141,16 +148,18 @@ public class MechanismService extends ServiceBase<FeedbackMechanism> {
 	    {
 	    	FeedbackMechanism mechanism = new FeedbackMechanism();
 	    	resultParser.SetFields(mechanism, result);
-	    	mechanism.setParameters(parameterService.GetAllFor(con, "mechanism_id", result.getInt("id")));
+	    	mechanism.setParameters(parameterService.GetWhereEquals(asList("mechanism_id"), asList(mechanism.getId())));
 	    	mechanisms.add(mechanism);
 	    }
 	    
+	    con.close();
 	    return mechanisms;
 	}
 	
 	@Override
-	public FeedbackMechanism GetById(Connection con, int mechanismId) throws SQLException, NotFoundException
+	public FeedbackMechanism GetById(int mechanismId) throws SQLException, NotFoundException
 	{
+	/*	
 	    PreparedStatement s = con.prepareStatement(
 
 	    		  "SELECT m.id, m.name "
@@ -162,12 +171,14 @@ public class MechanismService extends ServiceBase<FeedbackMechanism> {
 	    ResultSet result = s.executeQuery();
 	    
 	    if(!result.next())
-	    	throw new NotFoundException("mechanism with id: " + mechanismId + "does not exist");
-	    
+		
     	FeedbackMechanism mechanism = new FeedbackMechanism();
     	resultParser.SetFields(mechanism, result);
-    	mechanism.setParameters(parameterService.GetAllFor(con, "mechanism_id", mechanismId));
-   
+    		    	throw new NotFoundException("mechanism with id: " + mechanismId + "does not exist");
+	    */
+		
+		FeedbackMechanism mechanism = super.GetById(mechanismId);
+    	mechanism.setParameters(parameterService.GetWhereEquals(asList("mechanism_id"), asList(mechanism.getId())));
 	    return mechanism;
 	}
 }

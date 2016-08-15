@@ -18,16 +18,16 @@ public abstract class RestController<T> {
 	}
 
 	public T GetById(int id) throws Exception {
-		return dbService.GetById(TransactionManager.createDatabaseConnection(), id);
+		return dbService.GetById(id);
 	}
 	
 	public List<T> GetAll() throws Exception {
-		return dbService.GetAll(TransactionManager.createDatabaseConnection());
+		return dbService.GetAll();
 	}
 	
 	public List<T> GetAllFor(String foreignKeyName, int foreignKey) throws Exception
 	{
-		return dbService.GetAllFor(TransactionManager.createDatabaseConnection(), foreignKeyName, foreignKey);
+		return dbService.GetAllFor(foreignKeyName, foreignKey);
 	}
 	
 	public void Insert(T object) throws Exception
