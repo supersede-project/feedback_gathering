@@ -51,7 +51,8 @@ public class ParameterService extends ServiceBase<FeedbackParameter>{
 		Map<Integer, List<FeedbackParameter>> childMap = new HashMap<>();
 		Map<FeedbackParameter, Integer> parameterMap = new HashMap<>();
 		List<FeedbackParameter> params = super.GetAllFor(con, foreignTableName, foreignKeyName, foreignKey);
-		params = params.stream().filter(p -> p.getLanguage().equals(this.GetLanguage())).collect(Collectors.toList());
+		if(GetLanguage() != null)
+			params = params.stream().filter(p -> p.getLanguage().equals(this.GetLanguage())).collect(Collectors.toList());
 		
 	    for(FeedbackParameter param : params)
 	    {
@@ -78,7 +79,8 @@ public class ParameterService extends ServiceBase<FeedbackParameter>{
 		Map<FeedbackParameter, Integer> parameterMap = new HashMap<>();
 		List<FeedbackParameter> rootParams = new ArrayList<>();
 		List<FeedbackParameter> params = super.GetAll(con);
-		params = params.stream().filter(p -> p.getLanguage().equals(this.GetLanguage())).collect(Collectors.toList());
+		if(GetLanguage() != null)
+			params = params.stream().filter(p -> p.getLanguage().equals(this.GetLanguage())).collect(Collectors.toList());
 		
 	    for(FeedbackParameter param : params)
 	    {

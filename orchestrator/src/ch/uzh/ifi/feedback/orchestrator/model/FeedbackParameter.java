@@ -1,8 +1,11 @@
 package ch.uzh.ifi.feedback.orchestrator.model;
 
 import java.sql.Timestamp;
+import java.util.List;
+import java.util.Optional;
 
 import ch.uzh.ifi.feedback.library.rest.Service.IDbItem;
+import ch.uzh.ifi.feedback.library.rest.Service.ItemBase;
 import ch.uzh.ifi.feedback.library.rest.annotations.DbAttribute;
 import ch.uzh.ifi.feedback.library.rest.annotations.Serialize;
 import ch.uzh.ifi.feedback.library.rest.validation.Id;
@@ -14,7 +17,7 @@ import ch.uzh.ifi.feedback.orchestrator.validation.ParameterValidator;
 
 @Validate(ParameterValidator.class)
 @Serialize(ParameterSerializationService.class)
-public class FeedbackParameter implements IDbItem {
+public class FeedbackParameter extends ItemBase<FeedbackParameter> {
 	
 	@NotNull
 	private String key;
@@ -31,9 +34,6 @@ public class FeedbackParameter implements IDbItem {
 	@DbAttribute("updated_at")
 	private Timestamp updatedAt;
 	private String language;
-	
-	@Id
-	private Integer id;
 
 	@DbAttribute("parameters_id")
 	private transient Integer parametersId;
@@ -104,36 +104,28 @@ public class FeedbackParameter implements IDbItem {
 		this.generalConfigurationsId = genaralConfigurationId;
 	}
 	
-	public Integer getId() {
-		return id;
-	}
-	public void setId(Integer id) {
-		this.id = id;
-	}
-/*	
 	@Override
-	public boolean equals(Object obj) {
-	    if (obj == null) {
-	        return false;
-	    }
-	    if (!FeedbackParameter.class.isAssignableFrom(obj.getClass())) {
-	        return false;
-	    }
-	    final FeedbackParameter other = (FeedbackParameter) obj;
-	    
-	    if((other.getEditableByUser() == null && getEditableByUser() != null) || (other.getEditableByUser() != null && getEditableByUser() == null))
-	    	return false;
-	    
-	    if(other.getEditableByUser() != null && !other.getEditableByUser().equals(getEditableByUser()))
-	    	return false;
-	    
-	    if((other.getDefaultValue() == null && getDefaultValue() != null) || (other.getDefaultValue() != null && getDefaultValue() == null))
-	    	return false;
-	    
-	    if(other.getDefaultValue() != null && !other.getDefaultValue().equals(getDefaultValue()))
-	    	return false;
-	    
-	    return other.getKey().equals(getKey()) && other.getValue().equals(getValue());
+	public FeedbackParameter Merge(FeedbackParameter original) {
+		super.Merge(original);
+		if(List.class.isAssignableFrom(original.getValue().getClass()))
+		{
+			List<FeedbackParameter> oldChildren = (List<FeedbackParameter>)original.getValue();
+			if(List.class.isAssignableFrom(this.getValue().getClass()))
+			{
+				List<FeedbackParameter> newChildren = (List<FeedbackParameter>)this.getValue();
+				for(FeedbackParameter param : oldChildren)
+				{
+					Optional<FeedbackParameter> newParam = newChildren.stream().filter(p -> p.getId().equals(param.getId())).findFirst();
+					if(!newParam.isPresent())
+					{
+						newChildren.add(param);
+					}else{ 
+						newParam.get().Merge(param);
+					}
+				}
+			}
+		}
+		
+		return this;
 	}
-	*/
 }

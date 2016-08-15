@@ -2,9 +2,12 @@ package ch.uzh.ifi.feedback.library.rest.validation;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import ch.uzh.ifi.feedback.library.rest.Service.IDbItem;
+import ch.uzh.ifi.feedback.library.rest.Service.ItemBase;
 import ch.uzh.ifi.feedback.library.rest.Service.ServiceBase;
 import ch.uzh.ifi.feedback.library.rest.annotations.DbAttribute;
 import ch.uzh.ifi.feedback.library.transaction.TransactionManager;
@@ -12,7 +15,7 @@ import javassist.NotFoundException;
 
 import static java.util.Arrays.asList;
 
-public class ValidatorBase<T extends IDbItem> {
+public class ValidatorBase<T extends IDbItem<T>> {
 	
 	private Class<?> clazz;
 	protected ServiceBase<T> dbService;
@@ -26,8 +29,8 @@ public class ValidatorBase<T extends IDbItem> {
 	public ValidationResult Validate(T object) throws Exception
 	{
 		ValidationResult result = new ValidationResult();
-		CheckId(object, result);
-		for(Field f : clazz.getDeclaredFields())
+		
+		for(Field f : ItemBase.GetFields(clazz, new ArrayList<>()))
 		{
 			f.setAccessible(true);
 			for(Annotation a : f.getAnnotations())
@@ -54,6 +57,19 @@ public class ValidatorBase<T extends IDbItem> {
 		}
 		
 		return result;
+	}
+	
+	public T Merge(T object) throws Exception
+	{
+		try{
+			T oldObject = dbService.GetById(TransactionManager.createDatabaseConnection(), object.getId());
+			object = object.Merge(oldObject);
+			return object;
+		}
+		catch(NotFoundException e)
+		{
+			return object;
+		}
 	}
 	
 	protected void CheckNotNull(Field f, Object o, ValidationResult result)

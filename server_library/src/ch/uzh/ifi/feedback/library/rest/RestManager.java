@@ -275,9 +275,14 @@ public class RestManager implements IRestManager {
 				ValidatorBase validator = _validatorMap.get(handler.getSerializedParameterClass());
 				if(validator != null)
 				{
-					if(object instanceof IDbItem)
+					if(object instanceof IDbItem<?>)
 					{
-						ValidationResult result = validator.Validate((IDbItem)object);
+						if(method == HttpMethod.PUT)
+						{
+							//Merge object with original on update
+							object = validator.Merge((IDbItem)object);
+						}
+						ValidationResult result = validator.Validate((IDbItem<?>)object);
 						if(result.hasErrors())
 						{
 							response.setStatus(422);

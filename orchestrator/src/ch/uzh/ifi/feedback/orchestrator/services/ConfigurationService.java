@@ -109,7 +109,7 @@ public class ConfigurationService extends ServiceBase<Configuration>{
 				generalConfigurationService.Update(con, generalConfig);
 			}
 		}
-		
+		/*
 		PreparedStatement s1 = con.prepareStatement(
 				  "SELECT application_id FROM feedback_orchestrator.configurations as c "
 				+ "WHERE c.id = ? ;");
@@ -119,9 +119,10 @@ public class ConfigurationService extends ServiceBase<Configuration>{
 		int appId = res.getInt("application_id");
 		
 		CheckIfTypeIsUnique(con, config, appId);
-				
+				*/
+		
 		PreparedStatement s = con.prepareStatement(
-				  "UPDATE TABLE feedback_orchestrator.configurations as c "
+				  "UPDATE feedback_orchestrator.configurations as c "
 				+ "SET `name` = IFNULL(?, `name`), `type` = IFNULL(?, `type`), general_configuration_id = IFNULL(?, general_configuration_id) "
 				+ "WHERE c.id = ? ;");
 		

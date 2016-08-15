@@ -3,8 +3,10 @@ package ch.uzh.ifi.feedback.orchestrator.model;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import ch.uzh.ifi.feedback.library.rest.Service.IDbItem;
+import ch.uzh.ifi.feedback.library.rest.Service.ItemBase;
 import ch.uzh.ifi.feedback.library.rest.annotations.DbAttribute;
 import ch.uzh.ifi.feedback.library.rest.annotations.Serialize;
 import ch.uzh.ifi.feedback.library.rest.validation.Id;
@@ -17,7 +19,7 @@ import ch.uzh.ifi.feedback.orchestrator.validation.GeneralConfigurationValidator
 
 @Validate(GeneralConfigurationValidator.class)
 @Serialize(GeneralConfigurationSerializationService.class)
-public class GeneralConfiguration implements IDbItem {
+public class GeneralConfiguration extends ItemBase<GeneralConfiguration>{
 	
 	@DbAttribute("created_at")
 	private Timestamp createdAt;
@@ -26,8 +28,6 @@ public class GeneralConfiguration implements IDbItem {
 	private List<FeedbackParameter> parameters;
 	@Unique
 	private String name;
-	@Id
-	private Integer id;
 	
 	public GeneralConfiguration()
 	{
@@ -47,18 +47,13 @@ public class GeneralConfiguration implements IDbItem {
 		this.updatedAt = updated_at;
 	}
 	public List<FeedbackParameter> getParameters() {
+		if (parameters == null)
+			parameters = new ArrayList<>();
+		
 		return parameters;
 	}
 	public void setParameters(List<FeedbackParameter> parameters) {
 		this.parameters = parameters;
-	}
-
-	public Integer getId() {
-		return id;
-	}
-
-	public void setId(Integer id) {
-		this.id = id;
 	}
 
 	public String getName() {
@@ -67,5 +62,31 @@ public class GeneralConfiguration implements IDbItem {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+	
+	@Override
+	public GeneralConfiguration Merge(GeneralConfiguration original) {
+		super.Merge(original);
+		
+		for(FeedbackParameter param : original.getParameters())
+		{
+			try{
+				List<FeedbackParameter> parameters = getParameters();
+				Optional<FeedbackParameter> newParam = getParameters().stream().filter(p -> param.getId().equals(p.getId())).findFirst();
+				
+				if(!newParam.isPresent())
+				{
+					getParameters().add(param);
+				}else{ 
+					newParam.get().Merge(param);
+				}
+			} catch(NullPointerException e)
+			{
+				e.printStackTrace();
+			}
+		
+		}
+		
+		return this;
 	}
 }

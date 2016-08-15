@@ -102,7 +102,7 @@ public class MechanismService extends ServiceBase<FeedbackMechanism> {
 	{
 	    PreparedStatement s = con.prepareStatement(
 
-	    		   "SELECT m.id, m.name as type, cm.order, cm.active, cm.can_be_activated as canBeActivated "
+	    		   "SELECT m.id, m.name, cm.order, cm.active, cm.can_be_activated "
 	    		 + "FROM feedback_orchestrator.mechanisms as m "
 	    		 + "JOIN feedback_orchestrator.configurations_mechanisms as cm ON cm.mechanism_id = m.id ;"    		
 	    		);
@@ -127,7 +127,7 @@ public class MechanismService extends ServiceBase<FeedbackMechanism> {
 	{
 	    PreparedStatement s = con.prepareStatement(
 
-	    		  "SELECT m.id, m.name as type, cm.order, cm.active, cm.can_be_activated as canBeActivated "
+	    		  "SELECT m.id, m.name, cm.order, cm.active, cm.can_be_activated "
 	    		+ "FROM feedback_orchestrator.mechanisms as m "
 	    		+ "JOIN feedback_orchestrator.configurations_mechanisms as cm "
 	    		+ "WHERE cm.mechanism_id = m.id AND cm.configuration_id = ? ;"		    		
@@ -153,7 +153,7 @@ public class MechanismService extends ServiceBase<FeedbackMechanism> {
 	{
 	    PreparedStatement s = con.prepareStatement(
 
-	    		  "SELECT m.id, m.name as type "
+	    		  "SELECT m.id, m.name "
 	    		+ "FROM feedback_orchestrator.mechanisms as m "
 	    		+ "WHERE m.id = ? ;"		    		
 	    		);

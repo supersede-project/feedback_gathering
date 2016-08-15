@@ -95,8 +95,6 @@ public class ApplicationService extends ServiceBase<Application>{
 	@Override
 	public void Update(Connection con, Application app) throws SQLException, NotFoundException, UnsupportedOperationException 
 	{
-		super.CheckId(con, app.getId());
-		
 		GeneralConfiguration generalConfig = app.getGeneralConfiguration();
 		Integer generalConfigId = null;
 		if(generalConfig != null)
@@ -111,7 +109,7 @@ public class ApplicationService extends ServiceBase<Application>{
 		}
 		
 		PreparedStatement s = con.prepareStatement(
-				  "UPDATE TABLE feedback_orchestrator.applications as a"
+				  "UPDATE feedback_orchestrator.applications as a "
 				+ "SET `name` = IFNULL(?, `name`), `state` = IFNULL(?, `state`), general_configuration_id = IFNULL(?, general_configuration_id) "
 				+ "WHERE a.id = ? ;");
 		
@@ -123,7 +121,8 @@ public class ApplicationService extends ServiceBase<Application>{
 		
 		for(Configuration config : app.getConfigurations())
 		{
-			configurationService.UpdateFor(con, config, "application_id", app.getId());
+			config.setApplicationId(app.getId());
+			configurationService.Update(con, config);
 		}
 	}
 }

@@ -7,7 +7,9 @@ import java.security.Timestamp;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import ch.uzh.ifi.feedback.library.rest.annotations.DbAttribute;
@@ -24,7 +26,7 @@ public abstract class DbResultParser<T> {
 	private void InitFields(Class<?> clazz)
 	{
 		fields = new HashMap<>();
-		for (Field f : clazz.getDeclaredFields())
+		for (Field f : ItemBase.GetFields(clazz, new ArrayList<>()))
 		{
 			f.setAccessible(true);
 			if(f.isAnnotationPresent(DbAttribute.class))

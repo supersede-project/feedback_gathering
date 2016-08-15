@@ -4,8 +4,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import ch.uzh.ifi.feedback.library.rest.Service.IDbItem;
+import ch.uzh.ifi.feedback.library.rest.Service.ItemBase;
 import ch.uzh.ifi.feedback.library.rest.annotations.DbAttribute;
 import ch.uzh.ifi.feedback.library.rest.annotations.Serialize;
 import ch.uzh.ifi.feedback.library.rest.validation.Id;
@@ -17,20 +19,22 @@ import ch.uzh.ifi.feedback.orchestrator.validation.MechanismValidator;
 
 @Validate(MechanismValidator.class)
 @Serialize(MechanismSerializationService.class)
-public class FeedbackMechanism implements IDbItem{
+public class FeedbackMechanism extends ItemBase<FeedbackMechanism> {
 	
 	@NotNull
 	@DbAttribute("name")
 	private String type;
+	
 	@NotNull
 	private Boolean active;
+	
 	@NotNull
 	private Integer order;
+	
 	@NotNull
 	@DbAttribute("can_be_activated")
 	private Boolean canBeActivated;
-	@Id
-	private Integer id;
+
 	private List<FeedbackParameter> parameters;
 	
 	public FeedbackMechanism(){
@@ -46,6 +50,9 @@ public class FeedbackMechanism implements IDbItem{
 	}
 
 	public List<FeedbackParameter> getParameters() {
+		if (parameters == null)
+			parameters = new ArrayList<>();
+		
 		return parameters;
 	}
 
@@ -77,43 +84,21 @@ public class FeedbackMechanism implements IDbItem{
 		this.type = type;
 	}
 	
-	/*
 	@Override
-	public boolean equals(Object obj) {
-	    if (obj == null) {
-	        return false;
-	    }
-	    if (!FeedbackMechanism.class.isAssignableFrom(obj.getClass())) {
-	        return false;
-	    }
-	    final FeedbackMechanism other = (FeedbackMechanism) obj;
-	    
-	    final List<FeedbackParameter> otherParams = other.getParameters();
-	    if(otherParams.size() != getParameters().size())
-	    	return false;
-	    
-	    boolean equals = other.getOrder() == getOrder() 
-	    		&& other.getType().equals(getType()) 
-	    		&& other.isActive() == isActive() 
-	    		&& other.isCanBeActivated() == isCanBeActivated();
-	    
-	    if(!equals)
-	    	return false;
-	    
-	    for(int i = 0; i < otherParams.size(); i++)
-	    {
-	    	if(!otherParams.get(i).equals(getParameters().get(i)))
-	    		return false;
-	    }
-	    
-	    return true;
-	}
-*/
-	public Integer getId() {
-		return id;
-	}
-
-	public void setId(Integer id) {
-		this.id = id;
+	public FeedbackMechanism Merge(FeedbackMechanism original) {
+		super.Merge(original);
+		
+		for(FeedbackParameter param : original.getParameters())
+		{
+			Optional<FeedbackParameter> newParam = getParameters().stream().filter(p -> p.getId().equals(param.getId())).findFirst();
+			if(!newParam.isPresent())
+			{
+				getParameters().add(param);
+			}else{ 
+				newParam.get().Merge(param);
+			}
+		}
+		
+		return this;
 	}
 }
