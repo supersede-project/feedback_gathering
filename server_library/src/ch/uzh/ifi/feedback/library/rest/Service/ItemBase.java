@@ -21,7 +21,7 @@ public abstract class ItemBase<T> implements IDbItem<T> {
 	public void setId(Integer id) {
 		this.id = id;
 	}
-
+	
 	@Override
 	public T Merge(T original) {
 		Class<?> clazz = this.getClass();
