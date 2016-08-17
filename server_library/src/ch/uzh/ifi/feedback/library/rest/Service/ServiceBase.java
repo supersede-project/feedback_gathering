@@ -20,9 +20,9 @@ import javassist.NotFoundException;
 
 public abstract class ServiceBase<T> implements IDbService<T> {
 	
-	private Class<T> serviceClass;
-	private String tableName;
-	private String dbName;
+	protected String tableName;
+	protected String dbName;
+	protected Class<T> serviceClass;
 	private List<IDbService<?>> childServices;
 	private String selectedLanguage;
 	
@@ -216,7 +216,7 @@ public abstract class ServiceBase<T> implements IDbService<T> {
 		return result;
 	}
 	
-	private List<T> getList(ResultSet result) throws SQLException
+	protected List<T> getList(ResultSet result) throws SQLException
 	{
 		List<T> list = new ArrayList<>();
 		while(result.next())
