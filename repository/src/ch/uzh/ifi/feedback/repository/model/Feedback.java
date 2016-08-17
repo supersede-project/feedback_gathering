@@ -38,6 +38,9 @@ public class Feedback {
 	@NotNull
 	private Double configVersion;
 	private String language;
+	
+	@DbAttribute("context_information_id")
+	private ContextInformation contextInformation;
 
 	@DbIgnore
 	private List<Rating> ratings;
