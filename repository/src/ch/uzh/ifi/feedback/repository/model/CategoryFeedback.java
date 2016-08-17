@@ -1,37 +1,32 @@
 package ch.uzh.ifi.feedback.repository.model;
 
-import ch.uzh.ifi.feedback.library.rest.annotations.DbAttribute;
-import ch.uzh.ifi.feedback.library.rest.validation.Id;
-import ch.uzh.ifi.feedback.library.rest.validation.NotNull;
+import java.util.List;
 
-public class Rating {
+import ch.uzh.ifi.feedback.library.rest.annotations.DbAttribute;
+import ch.uzh.ifi.feedback.library.rest.annotations.DbIgnore;
+import ch.uzh.ifi.feedback.library.rest.validation.Id;
+
+
+public class CategoryFeedback {
 
 	@Id
 	private Integer id;
-	private String title;
-	@NotNull
-	private int rating;
 
 	@DbAttribute("feedback_id")
 	private transient Integer feedbackId;
-
+	
 	@DbAttribute("mechanism_id")
 	private long mechanismId;
-
-	public String getTitle() {
-		return title;
-	}
-
-	public void setTitle(String title) {
-		this.title = title;
-	}
-
-	public int getRating() {
-		return rating;
-	}
-
-	public void setRating(int rating) {
-		this.rating = rating;
+	
+	@DbIgnore
+	private List<Category> categories;
+	
+	public CategoryFeedback(Integer id, Integer feedbackId, long mechanismId, List<Category> categories) {
+		super();
+		this.id = id;
+		this.feedbackId = feedbackId;
+		this.mechanismId = mechanismId;
+		this.categories = categories;
 	}
 
 	public Integer getId() {
@@ -56,5 +51,13 @@ public class Rating {
 
 	public void setMechanismId(long mechanismId) {
 		this.mechanismId = mechanismId;
+	}
+
+	public List<Category> getCategories() {
+		return categories;
+	}
+
+	public void setCategories(List<Category> categories) {
+		this.categories = categories;
 	}
 }

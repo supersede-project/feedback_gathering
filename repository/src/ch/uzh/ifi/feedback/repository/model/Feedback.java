@@ -42,107 +42,17 @@ public class Feedback {
 	private ContextInformation contextInformation;
 
 	@DbIgnore
-	private TextFeedback textFeedback;
+	private List<TextFeedback> textFeedbacks;
 	@DbIgnore
-	private List<Rating> ratings;
+	private List<RatingFeedback> ratings;
 	@DbIgnore
-	private List<Screenshot> screenshots;
+	private List<ScreenshotFeedback> screenshots;
 	@DbIgnore
 	private List<FeedbackComment> feedbackComments;
 	@DbIgnore
-	private List<AttachmentFeedback> attachments;
-
-	public String getUser() {
-		return user;
-	}
-
-	public void setUser(String user) {
-		this.user = user;
-	}
-
-	public Timestamp getCreated() {
-		return createdAt;
-	}
-
-	public void setCreated(Timestamp created) {
-		this.createdAt = created;
-	}
-
-	public Timestamp getLastUpdated() {
-		return updatedAt;
-	}
-
-	public void setLastUpdated(Timestamp lastUpdated) {
-		this.updatedAt = lastUpdated;
-	}
-
-	public String getTitle() {
-		return title;
-	}
-
-	public void setTitle(String title) {
-		this.title = title;
-	}
-
-	public String getText() {
-		return text;
-	}
-
-	public void setText(String text) {
-		this.text = text;
-	}
-
-	public Double getConfigVersion() {
-		return configVersion;
-	}
-
-	public void setConfigVersion(Double configVersion) {
-		this.configVersion = configVersion;
-	}
-
-	public List<Rating> getRatings() {
-		if (ratings == null)
-			ratings = new ArrayList<>();
-
-		return ratings;
-	}
-
-	public void setRatings(List<Rating> ratings) {
-		this.ratings = ratings;
-	}
-
-	public List<Screenshot> getScreenshots() {
-		if (screenshots == null)
-			screenshots = new ArrayList<>();
-
-		return screenshots;
-	}
-
-	public void setScreenshots(List<Screenshot> screenshots) {
-		this.screenshots = screenshots;
-	}
-
-	public List<FeedbackComment> getFeedbackComments() {
-		return feedbackComments;
-	}
-
-	public void setFeedbackComments(List<FeedbackComment> feedbackComments) {
-		this.feedbackComments = feedbackComments;
-	}
-
-	public String getLanguage() {
-		return language;
-	}
-
-	public void setLanguage(String language) {
-		this.language = language;
-	}
-
-	public Integer getId() {
-		return id;
-	}
-
-	public void setId(Integer id) {
-		this.id = id;
-	}
+	private List<AttachmentFeedback> attachmentFeedbacks;
+	@DbIgnore
+	private List<AudioFeedback> audioFeedbacks;
+	@DbIgnore
+	private List<CategoryFeedback> categoryFeedbacks;
 }

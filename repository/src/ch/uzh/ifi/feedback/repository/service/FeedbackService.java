@@ -9,7 +9,7 @@ import com.google.inject.Inject;
 
 import ch.uzh.ifi.feedback.library.rest.Service.ServiceBase;
 import ch.uzh.ifi.feedback.repository.model.Feedback;
-import ch.uzh.ifi.feedback.repository.model.Rating;
+import ch.uzh.ifi.feedback.repository.model.RatingFeedback;
 import ch.uzh.ifi.feedback.repository.model.Screenshot;
 import javassist.NotFoundException;
 
@@ -54,7 +54,7 @@ public class FeedbackService extends ServiceBase<Feedback>{
 			throws SQLException, NotFoundException, UnsupportedOperationException
 	{
 		int feedbackId = super.Insert(con, feedback);
-		for(Rating r : feedback.getRatings())
+		for(RatingFeedback r : feedback.getRatings())
 		{
 			r.setFeedbackId(feedbackId);
 			ratingService.Insert(con, r);

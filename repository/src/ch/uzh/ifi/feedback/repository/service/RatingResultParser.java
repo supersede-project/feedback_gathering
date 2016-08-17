@@ -1,12 +1,12 @@
 package ch.uzh.ifi.feedback.repository.service;
 
 import ch.uzh.ifi.feedback.library.rest.Service.DbResultParser;
-import ch.uzh.ifi.feedback.repository.model.Rating;
+import ch.uzh.ifi.feedback.repository.model.RatingFeedback;
 
-public class RatingResultParser extends DbResultParser<Rating> {
+public class RatingResultParser extends DbResultParser<RatingFeedback> {
 
 	public RatingResultParser() {
-		super(Rating.class);
+		super(RatingFeedback.class);
 	}
 
 }

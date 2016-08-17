@@ -49,8 +49,8 @@ public class FeedbackControllerTest {
 		Feedback feedback = new Feedback();
 		feedback.setApplication("TestApplication");
 		feedback.setConfigVersion(1.0);
-		List<Rating> ratings = new ArrayList<>();
-		Rating rating = new Rating();
+		List<RatingFeedback> ratings = new ArrayList<>();
+		RatingFeedback rating = new RatingFeedback();
 		rating.setTitle("rating");
 		rating.setRating(4);
 		ratings.add(rating);
@@ -80,7 +80,7 @@ public class FeedbackControllerTest {
 		verify(statement1).setString(5, feedback.getUser());
 		verify(statement1).execute();
 		
-		Rating rating = feedback.getRatings().get(0);
+		RatingFeedback rating = feedback.getRatings().get(0);
 		verify(statement2).setString(1, rating.getTitle());
 		verify(statement2).setInt(2, rating.getRating());
 		verify(statement2).execute();

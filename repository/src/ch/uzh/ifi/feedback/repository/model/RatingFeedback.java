@@ -4,50 +4,34 @@ import ch.uzh.ifi.feedback.library.rest.annotations.DbAttribute;
 import ch.uzh.ifi.feedback.library.rest.validation.Id;
 import ch.uzh.ifi.feedback.library.rest.validation.NotNull;
 
-public class Screenshot {
-	
+public class RatingFeedback {
+
 	@Id
 	private Integer id;
-	private String name;
+	private String title;
 	@NotNull
-	private String path;
-	@NotNull
-	private int size;
-	
+	private int rating;
+
 	@DbAttribute("feedback_id")
 	private transient Integer feedbackId;
-	
-	public Screenshot(String fileName, String path, int size)
-	{
-		setFileName(fileName);
-		setPath(path);
-		setSize(size);
-	}
-	
-	public Screenshot(){
-	}
-	
-	public String getFileName() {
-		return name;
-	}
-	public void setFileName(String fileName) {
-		this.name = fileName;
+
+	@DbAttribute("mechanism_id")
+	private long mechanismId;
+
+	public String getTitle() {
+		return title;
 	}
 
-	public String getPath() {
-		return path;
+	public void setTitle(String title) {
+		this.title = title;
 	}
 
-	public void setPath(String path) {
-		this.path = path;
+	public int getRating() {
+		return rating;
 	}
 
-	public int getSize() {
-		return size;
-	}
-
-	public void setSize(int size) {
-		this.size = size;
+	public void setRating(int rating) {
+		this.rating = rating;
 	}
 
 	public Integer getId() {
@@ -64,5 +48,13 @@ public class Screenshot {
 
 	public void setFeedbackId(Integer feedbackId) {
 		this.feedbackId = feedbackId;
+	}
+
+	public long getMechanismId() {
+		return mechanismId;
+	}
+
+	public void setMechanismId(long mechanismId) {
+		this.mechanismId = mechanismId;
 	}
 }
