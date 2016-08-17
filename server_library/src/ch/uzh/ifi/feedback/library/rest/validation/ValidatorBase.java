@@ -2,7 +2,6 @@ package ch.uzh.ifi.feedback.library.rest.validation;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,7 +9,6 @@ import ch.uzh.ifi.feedback.library.rest.Service.IDbItem;
 import ch.uzh.ifi.feedback.library.rest.Service.ItemBase;
 import ch.uzh.ifi.feedback.library.rest.Service.ServiceBase;
 import ch.uzh.ifi.feedback.library.rest.annotations.DbAttribute;
-import ch.uzh.ifi.feedback.library.transaction.TransactionManager;
 import javassist.NotFoundException;
 
 import static java.util.Arrays.asList;

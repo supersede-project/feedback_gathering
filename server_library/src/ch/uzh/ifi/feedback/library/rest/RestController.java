@@ -9,7 +9,7 @@ import ch.uzh.ifi.feedback.library.transaction.TransactionManager;
 public abstract class RestController<T> {
 
 	private ISerializationService<T> serializationService;
-	private IDbService<T> dbService;
+	protected IDbService<T> dbService;
 	
 	public RestController(ISerializationService<T> serializationService, IDbService<T> dbService)
 	{

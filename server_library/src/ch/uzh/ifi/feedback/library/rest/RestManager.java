@@ -112,7 +112,12 @@ public class RestManager implements IRestManager {
 			
 			for(Method m : clazz.getMethods()){
 				if(m.isAnnotationPresent(Path.class)){
-					String path = "{lang}/" + m.getAnnotation(Path.class).value();
+					
+					String annotatedPath = m.getAnnotation(Path.class).value();
+					if(RestController.class.isAssignableFrom(clazz))
+						annotatedPath = "{lang}/" + annotatedPath;
+					
+					String path = annotatedPath;
 					UriTemplate template = UriTemplate.Parse(path);
 					
 					HttpMethod method = HttpMethod.GET;
