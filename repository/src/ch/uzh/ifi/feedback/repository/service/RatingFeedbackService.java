@@ -7,7 +7,7 @@ import ch.uzh.ifi.feedback.repository.model.RatingFeedback;
 public class RatingFeedbackService extends ServiceBase<RatingFeedback> {
 
 	@Inject
-	public RatingFeedbackService(RatingResultParser resultParser) {
+	public RatingFeedbackService(RatingFeedbackResultParser resultParser) {
 		super(resultParser, RatingFeedback.class, "rating_feedbacks", "feedback_repository");
 	}
 }

@@ -4,9 +4,9 @@ import ch.uzh.ifi.feedback.library.rest.Service.DbResultParser;
 import ch.uzh.ifi.feedback.repository.model.ScreenshotFeedback;
 
 
-public class ScreenshotResultParser extends DbResultParser<ScreenshotFeedback> {
+public class ScreenshotFeedbackResultParser extends DbResultParser<ScreenshotFeedback> {
 
-	public ScreenshotResultParser() {
+	public ScreenshotFeedbackResultParser() {
 		super(ScreenshotFeedback.class);
 	}
 }
