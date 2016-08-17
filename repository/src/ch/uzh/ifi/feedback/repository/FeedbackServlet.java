@@ -17,8 +17,8 @@ import ch.uzh.ifi.feedback.library.rest.RestManager;
 @WebServlet("/")
 @MultipartConfig
 public class FeedbackServlet extends HttpServlet {
-	private static final long serialVersionUID = 1L;
-    
+	
+	private static final long serialVersionUID = 1L;    
     private IRestManager _restManager;
     
     /**
@@ -26,10 +26,10 @@ public class FeedbackServlet extends HttpServlet {
      */
     public FeedbackServlet() {
         super();
-        InitController();
+        initController();
     }
     
-    private void InitController()
+    private void initController()
     {
     	_restManager = new RestManager();
         

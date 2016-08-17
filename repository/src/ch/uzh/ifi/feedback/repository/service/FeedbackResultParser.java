@@ -8,5 +8,4 @@ public class FeedbackResultParser extends DbResultParser<Feedback>{
 	public FeedbackResultParser() {
 		super(Feedback.class);
 	}
-
 }

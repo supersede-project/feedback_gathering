@@ -8,9 +8,9 @@ import ch.uzh.ifi.feedback.repository.serialization.ScreenshotSerializationServi
 import ch.uzh.ifi.feedback.repository.service.FeedbackResultParser;
 import ch.uzh.ifi.feedback.repository.service.FeedbackService;
 import ch.uzh.ifi.feedback.repository.service.RatingResultParser;
-import ch.uzh.ifi.feedback.repository.service.RatingService;
+import ch.uzh.ifi.feedback.repository.service.RatingFeedbackService;
 import ch.uzh.ifi.feedback.repository.service.ScreenshotResultParser;
-import ch.uzh.ifi.feedback.repository.service.ScreenshotService;
+import ch.uzh.ifi.feedback.repository.service.ScreenshotFeedbackService;
 
 public class RepositoryModule extends AbstractModule {
 
@@ -22,8 +22,8 @@ public class RepositoryModule extends AbstractModule {
 		bind(FeedbackResultParser.class).to(FeedbackResultParser.class);
 		bind(FeedbackService.class).to(FeedbackService.class);
 		bind(RatingResultParser.class).to(RatingResultParser.class);
-		bind(RatingService.class).to(RatingService.class);
-		bind(ScreenshotService.class).to(ScreenshotService.class);
+		bind(RatingFeedbackService.class).to(RatingFeedbackService.class);
+		bind(ScreenshotFeedbackService.class).to(ScreenshotFeedbackService.class);
 		bind(ScreenshotResultParser.class).to(ScreenshotResultParser.class);
 	}
 
