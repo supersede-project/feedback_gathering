@@ -9,24 +9,24 @@ public class AttachmentFeedback {
 
 	@Id
 	private long id;
-	
+
 	@DbAttribute("feedback_id")
 	private transient Integer feedbackId;
 
 	@NotNull
 	private String path;
-	
-	@NotNull	
+
+	@NotNull
 	private long size;
 
 	@NotNull
 	@DbAttribute("file_extension")
 	private String fileExtension;
-	
+
 	private String name;
-	
+
 	private String part;
-	
+
 	@DbAttribute("mechanism_id")
 	private long mechanismId;
 

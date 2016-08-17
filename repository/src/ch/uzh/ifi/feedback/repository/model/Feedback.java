@@ -26,8 +26,7 @@ public class Feedback {
 	@DbAttribute("user_identification")
 	@NotNull
 	private String user;
-	
-	private String text;
+
 	@DbAttribute("created_at")
 	private Timestamp createdAt;
 
@@ -38,10 +37,12 @@ public class Feedback {
 	@NotNull
 	private Double configVersion;
 	private String language;
-	
+
 	@DbAttribute("context_information_id")
 	private ContextInformation contextInformation;
 
+	@DbIgnore
+	private TextFeedback textFeedback;
 	@DbIgnore
 	private List<Rating> ratings;
 	@DbIgnore
