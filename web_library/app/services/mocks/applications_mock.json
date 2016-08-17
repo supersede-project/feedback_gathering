@@ -16,6 +16,10 @@
           "id": 55,
           "key": "mainColor",
           "value": "#00ff00"
+        },
+        {
+          "key": "dialogTitle",
+          "value": "Feedback"
         }
       ]
     },

@@ -2,13 +2,106 @@
   {
     "id": 1,
     "title": "Feedback 1",
-    "configVersion": null,
-    "text": "This is the feedback text",
     "user_identification": "u8102390",
-    "language": "DE",
+    "language": "EN",
     "created_at": 1469701384,
     "updated_at": 1469701384,
-    "application_id": null,
-    "context_information_id": null
+    "application_id": 1,
+    "context_information": {
+      "resolution": "1440x900",
+      "iosVersion": "9.1",
+      "androidVersion": "24.0",
+      "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.10; rv:48.0) Gecko/20100101 Firefox/48.0",
+      "localTime": "9:51 am",
+      "timeZone": "-2 hours",
+      "devicePixelRatio": 2,
+      "country": "CH",
+      "region": "Graubunden"
+    },
+    "text_feedbacks": [
+      {
+        "text": "This is the feedback text"
+      },
+      {
+        "text": "This is a second text mechanisms's text"
+      }
+    ],
+    "rating_feedbacks": [
+      {
+        "rating": 5
+      },
+      {
+        "rating": 1
+      }
+    ],
+    "audio_feedbacks": [
+      {
+        "name": "audio1",
+        "duration": 25
+      },
+      {
+        "name": "audio2",
+        "duration": 20
+      }
+    ],
+    "screenshot_feedbacks": [
+      {
+        "name": "screenshot1"
+      },
+      {
+        "name": "screenshot2"
+      }
+    ],
+    "attachment_feedbacks": [
+      {
+        "part": "attachment1",
+        "name": "my_feedback",
+        "extension": "pdf"
+      },
+      {
+        "part": "attachment2",
+        "name": "hey_read_this",
+        "extension": "xdoc"
+      },
+      {
+        "part": "attachment3",
+        "name": "image_senercon_page",
+        "extension": "png"
+      }
+    ],
+    "category_feedbacks": [
+      {
+        "categories": [
+          {
+            "text": null,
+            "category_types_id": 2
+          },
+          {
+            "text": null,
+            "category_types_id": 3
+          },
+          {
+            "text": "my own category",
+            "category_types_id": null
+          }
+        ]
+      },
+      {
+        "categories": [
+          {
+            "text": null,
+            "category_types_id": 10
+          },
+          {
+            "text": null,
+            "category_types_id": 11
+          },
+          {
+            "text": "Praise",
+            "category_types_id": null
+          }
+        ]
+      }
+    ]
   }
 ]

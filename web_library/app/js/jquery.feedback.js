@@ -11,26 +11,26 @@ define(["require", "exports", './config', '../views/pagination_container', '../v
         var initApplication = function (applicationObject) {
             application = applicationObject;
             resetMessageView();
-            initPushMechanisms(application.getPushConfiguration());
+            initPushMechanisms(application.getPushConfiguration(), application.generalConfiguration);
             var alreadyTriggeredOne = false;
             for (var _i = 0, _a = array_shuffle_1.shuffle(application.getPullConfigurations()); _i < _a.length; _i++) {
                 var pullConfiguration = _a[_i];
-                alreadyTriggeredOne = initPullConfiguration(pullConfiguration, alreadyTriggeredOne);
+                alreadyTriggeredOne = initPullConfiguration(pullConfiguration, application.generalConfiguration, alreadyTriggeredOne);
             }
         };
-        var initPushMechanisms = function (configuration) {
+        var initPushMechanisms = function (configuration, generalConfiguration) {
             var context = configuration.getContextForView();
             var pageNavigation = new page_navigation_1.PageNavigation(configuration, $('#' + pushConfigurationDialogId));
-            dialog = initTemplate(dialogTemplate, pushConfigurationDialogId, context, configuration, pageNavigation);
+            dialog = initTemplate(dialogTemplate, pushConfigurationDialogId, context, configuration, pageNavigation, generalConfiguration);
         };
-        var initPullConfiguration = function (configuration, alreadyTriggeredOne) {
+        var initPullConfiguration = function (configuration, generalConfiguration, alreadyTriggeredOne) {
             if (alreadyTriggeredOne === void 0) { alreadyTriggeredOne = false; }
             if (!alreadyTriggeredOne && configuration.shouldGetTriggered()) {
                 var pageNavigation = new page_navigation_1.PageNavigation(configuration, $('#' + pullConfigurationDialogId));
                 var context = configuration.getContextForView();
-                pullDialog = initTemplate(pullDialogTemplate, pullConfigurationDialogId, context, configuration, pageNavigation);
+                pullDialog = initTemplate(pullDialogTemplate, pullConfigurationDialogId, context, configuration, pageNavigation, generalConfiguration);
                 if (configuration.generalConfiguration.getParameterValue('intermediateDialog')) {
-                    var intermediateDialog = initIntermediateDialogTemplate(intermediateDialogTemplate, 'intermediateDialog', configuration, pullDialog);
+                    var intermediateDialog = initIntermediateDialogTemplate(intermediateDialogTemplate, 'intermediateDialog', configuration, pullDialog, generalConfiguration);
                     if (intermediateDialog !== null) {
                         intermediateDialog.dialog('open');
                     }
@@ -42,21 +42,28 @@ define(["require", "exports", './config', '../views/pagination_container', '../v
             }
             return false;
         };
-        var initTemplate = function (template, dialogId, context, configuration, pageNavigation) {
+        var initTemplate = function (template, dialogId, context, configuration, pageNavigation, generalConfiguration) {
             var html = template(context);
             $('body').append(html);
             new pagination_container_1.PaginationContainer($('#' + dialogId + '.feedback-container .pages-container'), pageNavigation);
-            initRating("#" + dialogId + " .rating-input", configuration.getMechanismConfig(config_1.mechanismTypes.ratingType));
-            var screenshotView = initScreenshot(configuration.getMechanismConfig(config_1.mechanismTypes.screenshotType), dialogId);
-            var dialog = initDialog($('#' + dialogId), configuration.getMechanismConfig(config_1.mechanismTypes.textType));
+            pageNavigation.screenshotViews = [];
+            for (var _i = 0, _a = configuration.getMechanismConfig(config_1.mechanismTypes.ratingType); _i < _a.length; _i++) {
+                var ratingMechanism = _a[_i];
+                initRating("#" + dialogId + " #ratingMechanism" + ratingMechanism.id + " .rating-input", ratingMechanism);
+            }
+            for (var _b = 0, _c = configuration.getMechanismConfig(config_1.mechanismTypes.screenshotType); _b < _c.length; _b++) {
+                var screenshotMechanism = _c[_b];
+                var screenshotView = initScreenshot(screenshotMechanism, dialogId);
+                pageNavigation.screenshotViews.push(screenshotView);
+            }
+            var dialog = initDialog($('#' + dialogId), generalConfiguration.getParameterValue('dialogTitle'));
             addEvents(dialogId, configuration);
-            pageNavigation.screenshotView = screenshotView;
             return dialog;
         };
-        var initIntermediateDialogTemplate = function (template, dialogId, configuration, pullDialog) {
+        var initIntermediateDialogTemplate = function (template, dialogId, configuration, pullDialog, generalConfiguration) {
             var html = template({});
             $('body').append(html);
-            var dialog = initDialog($('#' + dialogId), null);
+            var dialog = initDialog($('#' + dialogId), generalConfiguration.getParameterValue('dialogTitle'));
             $('#feedbackYes').on('click', function () {
                 dialog.dialog('close');
                 openDialog(pullDialog, configuration);
@@ -79,15 +86,24 @@ define(["require", "exports", './config', '../views/pagination_container', '../v
                 processData: false,
                 contentType: false,
                 success: function (data) {
-                    $('.server-response').addClass('success').text(config_1.defaultSuccessMessage);
-                    $('textarea.text-type-text').val('');
-                    screenshotView.reset();
-                    initRating(".rating-input", ratingMechanism);
+                    resetPlugin(configuration);
                 },
                 error: function (data) {
                     $('.server-response').addClass('error').text('Failure: ' + JSON.stringify(data));
                 }
             });
+        };
+        var resetPlugin = function (configuration) {
+            $('.server-response').addClass('success').text(config_1.defaultSuccessMessage);
+            $('textarea.text-type-text').val('');
+            for (var _i = 0, _a = configuration.getMechanismConfig(config_1.mechanismTypes.screenshotType); _i < _a.length; _i++) {
+                var screenshotMechanism = _a[_i];
+                screenshotMechanism.screenshotView.reset();
+            }
+            for (var _b = 0, _c = configuration.getMechanismConfig(config_1.mechanismTypes.ratingType); _b < _c.length; _b++) {
+                var ratingMechanism = _c[_b];
+                initRating("#" + configuration.dialogId + " #ratingMechanism" + ratingMechanism.id + " .rating-input", ratingMechanism);
+            }
         };
         var initRating = function (selector, ratingMechanism) {
             if (ratingMechanism !== null && ratingMechanism.active) {
@@ -107,19 +123,14 @@ define(["require", "exports", './config', '../views/pagination_container', '../v
             screenshotMechanism.setScreenshotView(screenshotView);
             return screenshotView;
         };
-        var initDialog = function (dialogContainer, textMechanism) {
+        var initDialog = function (dialogContainer, title) {
             var dialogObject = dialogContainer.dialog($.extend({}, config_1.dialogOptions, {
                 close: function () {
                     dialogObject.dialog("close");
                     active = false;
                 }
             }));
-            if (textMechanism) {
-                dialogObject.dialog('option', 'title', textMechanism.getParameter('title').value);
-            }
-            else {
-                dialogObject.dialog('option', 'title', 'Feedback');
-            }
+            dialogObject.dialog('option', 'title', title);
             return dialogObject;
         };
         var addEvents = function (containerId, configuration) {
@@ -142,7 +153,7 @@ define(["require", "exports", './config', '../views/pagination_container', '../v
                 }
             });
             if (textMechanism) {
-                var maxLength = textMechanism.getParameter('maxLength').value;
+                var maxLength = textMechanism.getParameterValue('maxLength');
                 textarea.on('keyup focus', function () {
                     container.find('span.text-type-max-length').text($(this).val().length + '/' + maxLength);
                 });

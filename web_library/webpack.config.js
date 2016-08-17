@@ -1,5 +1,17 @@
 const webpack = require('webpack');
+const dev = true;
+var plugins = [];
 
+if(!dev) {
+    plugins.push(new webpack.optimize.UglifyJsPlugin({
+        compress: {
+            warnings: false
+        },
+        output: {
+            comments: false
+        }
+    }));
+}
 
 module.exports = {
     entry: './app/js/jquery.feedback.js',
@@ -7,16 +19,7 @@ module.exports = {
         path: './dist',
         filename: 'jquery.feedback.min.js'
     },
-    plugins: [
-        new webpack.optimize.UglifyJsPlugin({
-            compress: {
-                warnings: false
-            },
-            output: {
-                comments: false
-            }
-        })
-    ],
+    plugins: plugins,
     module: {
         loaders: [
             { test: /\.handlebars$/, loader: "handlebars-loader" },

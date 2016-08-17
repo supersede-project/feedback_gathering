@@ -25,13 +25,13 @@ export abstract class Configuration implements ConfigurationInterface {
     /**
      * @param mechanismTypeConstant
      *  The ID of the mechanism to get config of
-     * @returns Mechanism
-     *  The mechanism object with all its configuration data if the mechanism was found in the data, otherwise null.
+     * @returns Mechanisms
+     *  The matched mechanisms
      */
-    getMechanismConfig(mechanismTypeConstant:string): Mechanism {
+    getMechanismConfig(mechanismTypeConstant:string): Mechanism[] {
         var filteredArray = this.mechanisms.filter(mechanism => mechanism.type === mechanismTypeConstant);
         if(filteredArray.length > 0) {
-            return filteredArray[0];
+            return filteredArray;
         } else {
             return null;
         }

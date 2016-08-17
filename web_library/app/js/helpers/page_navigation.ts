@@ -8,7 +8,7 @@ import {mechanismTypes} from '../config';
 export class PageNavigation {
     configuration:ConfigurationInterface;
     container:JQuery;
-    screenshotView:ScreenshotView;
+    screenshotViews:ScreenshotView[];
 
     constructor(configuration:ConfigurationInterface, container:JQuery) {
         this.configuration = configuration;
@@ -23,6 +23,7 @@ export class PageNavigation {
      *  indicates whether the navigation forward should happen (true) or not (false)
      */
     pageForwardCallback(currentPage, nextPage) {
+        // TODO refactor this to multiple mechanisms
         var textMechanism = this.configuration.getMechanismConfig(mechanismTypes.textType);
         var ratingMechanism = this.configuration.getMechanismConfig(mechanismTypes.ratingType);
         var screenshotMechanism = this.configuration.getMechanismConfig(mechanismTypes.screenshotType);

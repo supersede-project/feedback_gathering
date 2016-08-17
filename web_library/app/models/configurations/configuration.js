@@ -10,7 +10,7 @@ define(["require", "exports"], function (require, exports) {
         Configuration.prototype.getMechanismConfig = function (mechanismTypeConstant) {
             var filteredArray = this.mechanisms.filter(function (mechanism) { return mechanism.type === mechanismTypeConstant; });
             if (filteredArray.length > 0) {
-                return filteredArray[0];
+                return filteredArray;
             }
             else {
                 return null;

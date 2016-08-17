@@ -22,6 +22,7 @@ import {ScreenshotMechanism} from '../models/mechanisms/screenshot_mechanism';
 import * as dialogTemplate from '../templates/feedback_dialog.handlebars';
 import * as pullDialogTemplate from '../templates/feedback_dialog.handlebars';
 import * as intermediateDialogTemplate from '../templates/intermediate_dialog.handlebars';
+import {GeneralConfiguration} from '../models/configurations/general_configuration';
 var mockData = require('json!../services/mocks/applications_mock.json');
 
 
@@ -40,12 +41,12 @@ export var feedbackPluginModule = function ($, window, document) {
     var initApplication = function(applicationObject:Application) {
         application = applicationObject;
         resetMessageView();
-        initPushMechanisms(application.getPushConfiguration());
+        initPushMechanisms(application.getPushConfiguration(), application.generalConfiguration);
 
         var alreadyTriggeredOne = false;
 
         for(var pullConfiguration of shuffle(application.getPullConfigurations())) {
-            alreadyTriggeredOne = initPullConfiguration(pullConfiguration, alreadyTriggeredOne);
+            alreadyTriggeredOne = initPullConfiguration(pullConfiguration, application.generalConfiguration, alreadyTriggeredOne);
         }
     };
 
@@ -59,11 +60,11 @@ export var feedbackPluginModule = function ($, window, document) {
      * is configured and displayed and some events are added to the UI.
      * All events on the HTML have to be added after the template is appended to the body (if not using live binding).
      */
-    var initPushMechanisms = function (configuration) {
+    var initPushMechanisms = function (configuration, generalConfiguration:GeneralConfiguration) {
         var context = configuration.getContextForView();
 
         var pageNavigation = new PageNavigation(configuration, $('#' + pushConfigurationDialogId));
-        dialog = initTemplate(dialogTemplate, pushConfigurationDialogId, context, configuration, pageNavigation);
+        dialog = initTemplate(dialogTemplate, pushConfigurationDialogId, context, configuration, pageNavigation, generalConfiguration);
     };
 
     /**
@@ -76,13 +77,14 @@ export var feedbackPluginModule = function ($, window, document) {
      * @returns boolean
      *  Whether the pull configuration was triggered or not.
      */
-    var initPullConfiguration = function(configuration:PullConfiguration, alreadyTriggeredOne:boolean = false): boolean {
+    var initPullConfiguration = function(configuration:PullConfiguration, generalConfiguration:GeneralConfiguration,
+                                         alreadyTriggeredOne:boolean = false): boolean {
         if(!alreadyTriggeredOne && configuration.shouldGetTriggered()) {
             var pageNavigation = new PageNavigation(configuration, $('#' + pullConfigurationDialogId));
             var context = configuration.getContextForView();
-            pullDialog = initTemplate(pullDialogTemplate, pullConfigurationDialogId, context, configuration, pageNavigation);
+            pullDialog = initTemplate(pullDialogTemplate, pullConfigurationDialogId, context, configuration, pageNavigation, generalConfiguration);
             if(configuration.generalConfiguration.getParameterValue('intermediateDialog')) {
-                var intermediateDialog = initIntermediateDialogTemplate(intermediateDialogTemplate, 'intermediateDialog', configuration, pullDialog);
+                var intermediateDialog = initIntermediateDialogTemplate(intermediateDialogTemplate, 'intermediateDialog', configuration, pullDialog, generalConfiguration);
                 if(intermediateDialog !== null) {
                     intermediateDialog.dialog('open');
                 }
@@ -94,25 +96,35 @@ export var feedbackPluginModule = function ($, window, document) {
         return false;
     };
 
-    var initTemplate = function (template, dialogId, context, configuration, pageNavigation): HTMLElement {
+    var initTemplate = function (template, dialogId, context, configuration, pageNavigation,
+                                 generalConfiguration:GeneralConfiguration): HTMLElement {
         var html = template(context);
         $('body').append(html);
 
         // after template is loaded
         new PaginationContainer($('#' + dialogId + '.feedback-container .pages-container'), pageNavigation);
-        initRating("#" + dialogId + " .rating-input", configuration.getMechanismConfig(mechanismTypes.ratingType));
-        var screenshotView = initScreenshot(configuration.getMechanismConfig(mechanismTypes.screenshotType), dialogId);
-        var dialog = initDialog($('#'+ dialogId), configuration.getMechanismConfig(mechanismTypes.textType));
+        pageNavigation.screenshotViews = [];
+
+        for(var ratingMechanism of configuration.getMechanismConfig(mechanismTypes.ratingType)) {
+            initRating("#" + dialogId + " #ratingMechanism" + ratingMechanism.id + " .rating-input", ratingMechanism);
+        }
+
+        for(var screenshotMechanism of configuration.getMechanismConfig(mechanismTypes.screenshotType)) {
+            var screenshotView = initScreenshot(screenshotMechanism, dialogId);
+            pageNavigation.screenshotViews.push(screenshotView);
+        }
+
+        var dialog = initDialog($('#'+ dialogId), generalConfiguration.getParameterValue('dialogTitle'));
         addEvents(dialogId, configuration);
-        pageNavigation.screenshotView = screenshotView;
         return dialog;
     };
 
-    var initIntermediateDialogTemplate = function(template, dialogId, configuration, pullDialog): HTMLElement {
+    var initIntermediateDialogTemplate = function(template, dialogId, configuration, pullDialog,
+                                                  generalConfiguration:GeneralConfiguration): HTMLElement {
         var html = template({});
         $('body').append(html);
 
-        var dialog = initDialog($('#'+ dialogId), null);
+        var dialog = initDialog($('#'+ dialogId), generalConfiguration.getParameterValue('dialogTitle'));
         $('#feedbackYes').on('click', function() {
             dialog.dialog('close');
             openDialog(pullDialog, configuration);
@@ -143,15 +155,23 @@ export var feedbackPluginModule = function ($, window, document) {
             processData: false,
             contentType: false,
             success: function (data) {
-                $('.server-response').addClass('success').text(defaultSuccessMessage);
-                $('textarea.text-type-text').val('');
-                screenshotView.reset();
-                initRating(".rating-input", ratingMechanism);
+                resetPlugin(configuration);
             },
             error: function (data) {
                 $('.server-response').addClass('error').text('Failure: ' + JSON.stringify(data));
             }
         });
+    };
+
+    var resetPlugin = function(configuration) {
+        $('.server-response').addClass('success').text(defaultSuccessMessage);
+        $('textarea.text-type-text').val('');
+        for(var screenshotMechanism of configuration.getMechanismConfig(mechanismTypes.screenshotType)) {
+            screenshotMechanism.screenshotView.reset();
+        }
+        for(var ratingMechanism of configuration.getMechanismConfig(mechanismTypes.ratingType)) {
+            initRating("#" + configuration.dialogId + " #ratingMechanism" + ratingMechanism.id + " .rating-input", ratingMechanism);
+        }
     };
 
     /**
@@ -193,13 +213,12 @@ export var feedbackPluginModule = function ($, window, document) {
     /**
      * @param dialogContainer
      *  Element that contains the dialog content
-     * @param textMechanism
-     *  The text mechanism object that contains the configuration
+     * @param title
+     *  The title of the dialog
      *
      * Initializes the dialog on a given element and opens it.
      */
-    // TODO extract the dialog to another module
-    var initDialog = function (dialogContainer, textMechanism) {
+    var initDialog = function (dialogContainer, title) {
         var dialogObject = dialogContainer.dialog(
             $.extend({}, dialogOptions, {
                 close: function () {
@@ -208,13 +227,7 @@ export var feedbackPluginModule = function ($, window, document) {
                 }
             })
         );
-
-        // TODO move title to general configuration
-        if(textMechanism) {
-            dialogObject.dialog('option', 'title', textMechanism.getParameter('title').value);
-        } else {
-            dialogObject.dialog('option', 'title', 'Feedback');
-        }
+        dialogObject.dialog('option', 'title', title);
         return dialogObject;
     };
 
@@ -233,7 +246,6 @@ export var feedbackPluginModule = function ($, window, document) {
         var textarea = container.find('textarea.text-type-text');
         var textMechanism = configuration.getMechanismConfig(mechanismTypes.textType);
 
-        // send
         container.find('button.submit-feedback').unbind().on('click', function (event) {
             event.preventDefault();
             event.stopPropagation();
@@ -253,7 +265,7 @@ export var feedbackPluginModule = function ($, window, document) {
 
         // character length
         if(textMechanism) {
-            var maxLength = textMechanism.getParameter('maxLength').value;
+            var maxLength = textMechanism.getParameterValue('maxLength');
             textarea.on('keyup focus', function () {
                 container.find('span.text-type-max-length').text($(this).val().length + '/' + maxLength);
             });
@@ -272,6 +284,7 @@ export var feedbackPluginModule = function ($, window, document) {
      *
      * @returns {FormData}
      */
+    // TODO extend to multiple mechanisms
     var prepareFormData = function (container:JQuery, configuration:ConfigurationInterface):FormData {
         var formData = new FormData();
         var textMechanism = configuration.getMechanismConfig(mechanismTypes.textType);
@@ -312,6 +325,7 @@ export var feedbackPluginModule = function ($, window, document) {
     };
 
     var openDialog = function(dialog, configuration) {
+        // TODO extend to multiple mechanisms
         var screenshotMechanism:ScreenshotMechanism = configuration.getMechanismConfig(mechanismTypes.screenshotType);
         if(screenshotMechanism !== null && screenshotMechanism !== undefined && screenshotMechanism.screenshotView !== null) {
             screenshotMechanism.screenshotView.checkAutoTake();
