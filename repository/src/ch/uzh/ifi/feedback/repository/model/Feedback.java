@@ -48,6 +48,8 @@ public class Feedback {
 	private List<Screenshot> screenshots;
 	@DbIgnore
 	private List<FeedbackComment> feedbackComments;
+	@DbIgnore
+	private List<AttachmentFeedback> attachments;
 
 	public String getUser() {
 		return user;
