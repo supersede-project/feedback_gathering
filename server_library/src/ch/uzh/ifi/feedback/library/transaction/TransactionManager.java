@@ -1,9 +1,12 @@
 package ch.uzh.ifi.feedback.library.transaction;
 
+import java.io.FileInputStream;
 import java.io.IOException;
-import java.sql.Connection;  
+import java.io.InputStream;
+import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.Properties;
 
 public class TransactionManager {
 
@@ -41,7 +44,28 @@ public class TransactionManager {
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}
-        return DriverManager.getConnection("jdbc:mysql://localhost:3306/", "root", "merovinger.1337");
+        
+        Properties prop = new Properties();
+    	InputStream input = null;
+    	try {
+    		input = new FileInputStream("config.properties");
+    		prop.load(input);
+    		String dbUrl = prop.getProperty("dburl");
+    		String dbUser = prop.getProperty("dbuser");
+    		String dbPassword = prop.getProperty("dbpassword");
+            return DriverManager.getConnection(dbUrl, dbUser, dbPassword);
+    	} catch (IOException ex) {
+    		ex.printStackTrace();
+    	} finally {
+    		if (input != null) {
+    			try {
+    				input.close();
+    			} catch (IOException e) {
+    				e.printStackTrace();
+    			}
+    		}
+    	}
+    	return null;
     }
 }
 
