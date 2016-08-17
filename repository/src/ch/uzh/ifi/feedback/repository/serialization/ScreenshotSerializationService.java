@@ -8,15 +8,15 @@ import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.Part;
-import ch.uzh.ifi.feedback.repository.model.Screenshot;
+import ch.uzh.ifi.feedback.repository.model.ScreenshotFeedback;
 
-public class ScreenshotSerializationService extends RepositorySerializationService<Screenshot> {
+public class ScreenshotSerializationService extends RepositorySerializationService<ScreenshotFeedback> {
 	
-	public List<Screenshot> ParseRequestParts(List<Part> fileParts)
+	public List<ScreenshotFeedback> ParseRequestParts(List<Part> fileParts)
 	{
 		File dir = new File("screenshots");
 		boolean isDir = dir.mkdirs();
-	    List<Screenshot> screenshots = new ArrayList<>(fileParts.size());
+	    List<ScreenshotFeedback> screenshots = new ArrayList<>(fileParts.size());
 	    for (Part filePart : fileParts) {
 	    	try
 	    	{
@@ -27,7 +27,7 @@ public class ScreenshotSerializationService extends RepositorySerializationServi
 		        String fileName = getFileName(filePart);
 		        File tmp = new File(dir, String.valueOf(new Date().getTime()));
 		        tmp.createNewFile();
-		        Screenshot s = new Screenshot(fileName, tmp.toPath().toString(), fileSize);
+		        ScreenshotFeedback s = new ScreenshotFeedback(null, null, tmp.toPath().toString(), fileSize, fileName, null, "", "");
 		        screenshots.add(s);
 	    	}catch(Exception e)
 	    	{

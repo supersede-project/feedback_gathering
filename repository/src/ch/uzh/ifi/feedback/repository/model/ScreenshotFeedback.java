@@ -8,7 +8,7 @@ import ch.uzh.ifi.feedback.library.rest.validation.NotNull;
 public class ScreenshotFeedback {
 
 	@Id
-	private long id;
+	private Long id;
 	
 	@DbAttribute("feedback_id")
 	private transient Integer feedbackId;
@@ -22,7 +22,7 @@ public class ScreenshotFeedback {
 	private String name;
 	
 	@DbAttribute("mechanism_id")
-	private long mechanismId;
+	private Long mechanismId;
 
 	@DbIgnore
 	private String part;
@@ -30,7 +30,7 @@ public class ScreenshotFeedback {
 	@DbAttribute("file_extension")
 	private String fileExtension;
 
-	public ScreenshotFeedback(long id, Integer feedbackId, String path, int size, String name, long mechanismId,
+	public ScreenshotFeedback(Long id, Integer feedbackId, String path, int size, String name, Long mechanismId,
 			String part, String fileExtension) {
 		super();
 		this.id = id;
@@ -43,11 +43,11 @@ public class ScreenshotFeedback {
 		this.fileExtension = fileExtension;
 	}
 
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
@@ -83,11 +83,11 @@ public class ScreenshotFeedback {
 		this.name = name;
 	}
 
-	public long getMechanismId() {
+	public Long getMechanismId() {
 		return mechanismId;
 	}
 
-	public void setMechanismId(long mechanismId) {
+	public void setMechanismId(Long mechanismId) {
 		this.mechanismId = mechanismId;
 	}
 
