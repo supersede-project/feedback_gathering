@@ -48,8 +48,11 @@ public class TransactionManager {
         Properties prop = new Properties();
     	InputStream input = null;
     	try {
-    		input = new FileInputStream("config.properties");
-    		prop.load(input);
+    		InputStream propertiesStream   = TransactionManager.class.getResourceAsStream("config.properties");
+    		
+    		//input = new FileInputStream("config.properties");
+    		
+    		prop.load(propertiesStream);
     		String dbUrl = prop.getProperty("dburl");
     		String dbUser = prop.getProperty("dbuser");
     		String dbPassword = prop.getProperty("dbpassword");
