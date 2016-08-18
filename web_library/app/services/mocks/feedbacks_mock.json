@@ -2,14 +2,14 @@
   {
     "id": 1,
     "title": "Feedback 1",
-    "user_identification": "u8102390",
+    "userIdentification": "u8102390",
     "language": "EN",
-    "created_at": 1469701384,
-    "updated_at": 1469701384,
-    "application_id": 1,
-    "context_information": {
+    "createdAt": 1469701384,
+    "updatedAt": 1469701384,
+    "applicationId": 1,
+    "configurationId": 77,
+    "contextInformation": {
       "resolution": "1440x900",
-      "iosVersion": "9.1",
       "androidVersion": "24.0",
       "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.10; rv:48.0) Gecko/20100101 Firefox/48.0",
       "localTime": "9:51 am",
@@ -18,59 +18,77 @@
       "country": "CH",
       "region": "Graubunden"
     },
-    "text_feedbacks": [
+    "textFeedbacks": [
       {
-        "text": "This is the feedback text"
+        "text": "This is the feedback text",
+        "mechanismId": 1
       },
       {
-        "text": "This is a second text mechanisms's text"
+        "text": "This is a second text mechanisms's text",
+        "mechanismId": 2
       }
     ],
-    "rating_feedbacks": [
+    "ratingFeedbacks": [
       {
-        "rating": 5
+        "rating": 5,
+        "mechanismId": 5
       },
       {
-        "rating": 1
+        "rating": 1,
+        "mechanismId": 6
       }
     ],
-    "audio_feedbacks": [
+    "audioFeedbacks": [
       {
-        "name": "audio1",
-        "duration": 25
+        "part": "audio1",
+        "duration": 25,
+        "fileExtension": "mp3",
+        "mechanismId": 911
       },
       {
-        "name": "audio2",
-        "duration": 20
+        "part": "audio2",
+        "duration": 20,
+        "fileExtension": "mp3",
+        "mechanismId": 912
       }
     ],
-    "screenshot_feedbacks": [
+    "screenshotFeedbacks": [
       {
-        "name": "screenshot1"
+        "name": "screenshot-website",
+        "part": "screenshot1",
+        "mechanismId": 3,
+        "fileExtension": "png"
       },
       {
-        "name": "screenshot2"
+        "name": "screenshot-2016-08-17",
+        "part": "screenshot2",
+        "mechanismId": 4,
+        "fileExtension": "jpg"
       }
     ],
-    "attachment_feedbacks": [
+    "attachmentFeedbacks": [
       {
         "part": "attachment1",
         "name": "my_feedback",
-        "extension": "pdf"
+        "extension": "pdf",
+        "mechanismId": 812
       },
       {
         "part": "attachment2",
         "name": "hey_read_this",
-        "extension": "xdoc"
+        "extension": "xdoc",
+        "mechanismId": 812
       },
       {
         "part": "attachment3",
         "name": "image_senercon_page",
-        "extension": "png"
+        "extension": "png",
+        "mechanismId": 812
       }
     ],
-    "category_feedbacks": [
+    "categoryFeedbacks": [
       {
+        "mechanismId": 12,
         "categories": [
           {
             "text": null,
@@ -87,6 +105,7 @@
         ]
       },
       {
+        "mechanismId": 13,
         "categories": [
           {
             "text": null,
