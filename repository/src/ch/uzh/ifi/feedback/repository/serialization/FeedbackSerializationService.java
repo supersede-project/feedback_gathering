@@ -8,7 +8,6 @@ import javax.servlet.http.Part;
 
 import com.google.inject.Inject;
 
-import ch.uzh.ifi.feedback.library.rest.serialization.DefaultSerializer;
 import ch.uzh.ifi.feedback.repository.model.Feedback;
 
 public class FeedbackSerializationService extends RepositorySerializationService<Feedback> {

@@ -29,6 +29,10 @@ public class ScreenshotFeedback {
 	
 	@DbAttribute("file_extension")
 	private String fileExtension;
+	
+	public ScreenshotFeedback() {
+		
+	}
 
 	public ScreenshotFeedback(Long id, Integer feedbackId, String path, int size, String name, Long mechanismId,
 			String part, String fileExtension) {

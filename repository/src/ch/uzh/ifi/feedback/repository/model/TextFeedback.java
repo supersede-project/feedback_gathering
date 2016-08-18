@@ -16,6 +16,8 @@ public class TextFeedback {
 
 	@DbAttribute("mechanism_id")
 	private long mechanismId;
+	
+	public TextFeedback() {}
 
 	public TextFeedback(Integer id, Integer feedbackId, String text, long mechanismId) {
 		super();
