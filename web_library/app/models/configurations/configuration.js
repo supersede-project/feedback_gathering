@@ -13,7 +13,7 @@ define(["require", "exports"], function (require, exports) {
                 return filteredArray;
             }
             else {
-                return null;
+                return [];
             }
         };
         Configuration.prototype.getMechanismsSorted = function () {

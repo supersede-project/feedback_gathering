@@ -33,7 +33,7 @@ export abstract class Configuration implements ConfigurationInterface {
         if(filteredArray.length > 0) {
             return filteredArray;
         } else {
-            return null;
+            return [];
         }
     }
 

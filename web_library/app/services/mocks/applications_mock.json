@@ -202,7 +202,7 @@
             "id": 4,
             "type": "RATING_TYPE",
             "active": true,
-            "order": 4,
+            "order": 2,
             "canBeActivated": false,
             "parameters": [
               {
