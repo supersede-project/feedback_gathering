@@ -1,7 +1,9 @@
-import {Rating} from './rating';
 import {ConfigurationService} from '../services/configuration_service';
 import {mechanismTypes} from '../../js/config';
 import {PushConfiguration} from '../configurations/push_configuration';
+import {TextFeedback} from './text_feedback';
+import {RatingFeedback} from './rating_feedback';
+import {ScreenshotFeedback} from './screenshot_feedback';
 
 
 const validationMessages = {
@@ -13,19 +15,24 @@ const validationMessages = {
 
 export class Feedback {
     title:string;
-    application:string;
-    user:string;
-    text:string;
-    configVersion:number;
-    ratings:Rating[];
+    userIdentification:string;
+    language:string;
+    applicationId:number;
+    configurationId:number;
+    ratingFeedbacks:RatingFeedback[];
+    textFeedbacks:TextFeedback[];
+    screenshotFeedbacks:ScreenshotFeedback[];
 
-    constructor(title?:string, application?:string, user?:string, text?:string, configVersion?:number, ratings?:Rating[]) {
+
+    constructor(title:string, userIdentification:string, language:string, applicationId:number, configurationId:number, ratingFeedbacks?:RatingFeedback[], textFeedbacks?:TextFeedback[], screenshotFeedbacks?:ScreenshotFeedback[]) {
         this.title = title;
-        this.application = application;
-        this.user = user;
-        this.text = text;
-        this.configVersion = configVersion;
-        this.ratings = ratings;
+        this.userIdentification = userIdentification;
+        this.language = language;
+        this.applicationId = applicationId;
+        this.configurationId = configurationId;
+        this.ratingFeedbacks = ratingFeedbacks;
+        this.textFeedbacks = textFeedbacks;
+        this.screenshotFeedbacks = screenshotFeedbacks;
     }
 
     /**
@@ -36,22 +43,24 @@ export class Feedback {
      *  Otherwise: An object with error messages
      */
     validate(configuration: PushConfiguration): any {
-        var textMechanism = configuration.getMechanismConfig(mechanismTypes.textType);
-        var errors = {textMechanism: [], ratingMechanism: [], general: []};
+        var textMechanisms = configuration.getMechanismConfig(mechanismTypes.textType);
+        var errors = {textMechanisms: [], ratingMechanisms: [], general: []};
 
-        this.validateTextMechanism(textMechanism, errors);
+        this.validateTextMechanism(textMechanisms, errors);
 
-        if(errors.textMechanism.length === 0 && errors.ratingMechanism.length === 0 && errors.general.length === 0) {
+        if(errors.textMechanisms.length === 0 && errors.ratingMechanisms.length === 0 && errors.general.length === 0) {
             return true;
         } else {
             return errors;
         }
     }
 
-    private validateTextMechanism(textMechanism, errors) {
-        if(textMechanism) {
-            if(this.text === null || this.text === '') {
-                errors.textMechanism.push(validationMessages.textMechanism.noText);
+    private validateTextMechanism(textMechanisms, errors) {
+        for(var textMechanism of textMechanisms) {
+            if(textMechanism) {
+                if(textMechanism.text === null || textMechanism.text === '') {
+                    errors.textMechanism.push(validationMessages.textMechanism.noText);
+                }
             }
         }
     }

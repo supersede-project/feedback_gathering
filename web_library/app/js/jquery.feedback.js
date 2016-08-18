@@ -1,4 +1,4 @@
-define(["require", "exports", './config', '../views/pagination_container', '../views/screenshot/screenshot_view', './helpers/i18n', '../services/backends/mock_backend', '../models/feedbacks/feedback', '../models/feedbacks/rating', './helpers/page_navigation', '../services/application_service', './helpers/array_shuffle', '../templates/feedback_dialog.handlebars', '../templates/feedback_dialog.handlebars', '../templates/intermediate_dialog.handlebars', './lib/jquery.star-rating-svg.js', './jquery.validate'], function (require, exports, config_1, pagination_container_1, screenshot_view_1, i18n_1, mock_backend_1, feedback_1, rating_1, page_navigation_1, application_service_1, array_shuffle_1, dialogTemplate, pullDialogTemplate, intermediateDialogTemplate) {
+define(["require", "exports", './config', '../views/pagination_container', '../views/screenshot/screenshot_view', './helpers/i18n', '../services/backends/mock_backend', '../models/feedbacks/feedback', './helpers/page_navigation', '../services/application_service', './helpers/array_shuffle', '../templates/feedback_dialog.handlebars', '../templates/feedback_dialog.handlebars', '../templates/intermediate_dialog.handlebars', '../models/feedbacks/text_feedback', '../models/feedbacks/rating_feedback', '../models/feedbacks/screenshot_feedback', './lib/jquery.star-rating-svg.js', './jquery.validate'], function (require, exports, config_1, pagination_container_1, screenshot_view_1, i18n_1, mock_backend_1, feedback_1, page_navigation_1, application_service_1, array_shuffle_1, dialogTemplate, pullDialogTemplate, intermediateDialogTemplate, text_feedback_1, rating_feedback_1, screenshot_feedback_1) {
     "use strict";
     var mockData = require('json!../services/mocks/applications_mock.json');
     exports.feedbackPluginModule = function ($, window, document) {
@@ -133,14 +133,17 @@ define(["require", "exports", './config', '../views/pagination_container', '../v
         };
         var addEvents = function (containerId, configuration) {
             var container = $('#' + containerId);
-            var textarea = container.find('textarea.text-type-text');
-            var textMechanism = configuration.getMechanismConfig(config_1.mechanismTypes.textType);
+            var textareas = container.find('textarea.text-type-text');
+            var textMechanisms = configuration.getMechanismConfig(config_1.mechanismTypes.textType);
             container.find('button.submit-feedback').unbind().on('click', function (event) {
                 event.preventDefault();
                 event.stopPropagation();
-                if (textMechanism) {
-                    textarea.validate();
-                    if (!textarea.hasClass('invalid')) {
+                if (textMechanisms.length > 0) {
+                    textareas.each(function () {
+                        $(this).validate();
+                    });
+                    var invalidTextareas = container.find('textarea.text-type-text.invalid');
+                    if (invalidTextareas.length == 0) {
                         var formData = prepareFormData(container, configuration);
                         sendFeedback(formData, configuration);
                     }
@@ -150,12 +153,15 @@ define(["require", "exports", './config', '../views/pagination_container', '../v
                     sendFeedback(formData, configuration);
                 }
             });
-            if (textMechanism) {
+            for (var _i = 0, textMechanisms_1 = textMechanisms; _i < textMechanisms_1.length; _i++) {
+                var textMechanism = textMechanisms_1[_i];
+                var sectionSelector = "textMechanism" + textMechanism.id;
+                var textarea = container.find('section#' + sectionSelector + ' textarea.text-type-text');
                 var maxLength = textMechanism.getParameterValue('maxLength');
                 textarea.on('keyup focus', function () {
-                    container.find('span.text-type-max-length').text($(this).val().length + '/' + maxLength);
+                    container.find('section#' + sectionSelector + ' span.text-type-max-length').text($(this).val().length + '/' + maxLength);
                 });
-                container.find('.text-type-text-clear').on('click', function (event) {
+                container.find('section#' + sectionSelector + ' .text-type-text-clear').on('click', function (event) {
                     event.preventDefault();
                     event.stopPropagation();
                     textarea.val('');
@@ -164,22 +170,35 @@ define(["require", "exports", './config', '../views/pagination_container', '../v
         };
         var prepareFormData = function (container, configuration) {
             var formData = new FormData();
-            var textMechanism = configuration.getMechanismConfig(config_1.mechanismTypes.textType);
-            var ratingMechanism = configuration.getMechanismConfig(config_1.mechanismTypes.ratingType);
-            var screenshotMechanism = configuration.getMechanismConfig(config_1.mechanismTypes.screenshotType);
+            var textMechanisms = configuration.getMechanismConfig(config_1.mechanismTypes.textType);
+            var ratingMechanisms = configuration.getMechanismConfig(config_1.mechanismTypes.ratingType);
+            var screenshotMechanisms = configuration.getMechanismConfig(config_1.mechanismTypes.screenshotType);
             container.find('.server-response').removeClass('error').removeClass('success');
-            var feedbackObject = new feedback_1.Feedback(config_1.feedbackObjectTitle, config_1.applicationName, "uid12345", null, 1.0, null);
-            if (textMechanism.active) {
-                feedbackObject.text = container.find('textarea.text-type-text').val();
+            var feedbackObject = new feedback_1.Feedback(config_1.feedbackObjectTitle, "uid12345", "DE", 1, 1);
+            for (var _i = 0, textMechanisms_2 = textMechanisms; _i < textMechanisms_2.length; _i++) {
+                var textMechanism = textMechanisms_2[_i];
+                if (textMechanism.active) {
+                    var sectionSelector = "textMechanism" + textMechanism.id;
+                    var textarea = container.find('section#' + sectionSelector + ' textarea.text-type-text');
+                    var textFeedback = new text_feedback_1.TextFeedback(textarea.val(), textMechanism.id);
+                    feedbackObject.textFeedbacks.push(textFeedback);
+                }
             }
-            if (ratingMechanism.active) {
-                var ratingTitle = container.find('.rating-text').text().trim();
-                var rating = new rating_1.Rating(ratingTitle, ratingMechanism.currentRatingValue);
-                feedbackObject.ratings = [];
-                feedbackObject.ratings.push(rating);
+            for (var _a = 0, ratingMechanisms_1 = ratingMechanisms; _a < ratingMechanisms_1.length; _a++) {
+                var ratingMechanism = ratingMechanisms_1[_a];
+                if (ratingMechanism.active) {
+                    var rating = new rating_feedback_1.RatingFeedback(ratingMechanism.getParameterValue('title'), ratingMechanism.currentRatingValue, ratingMechanism.id);
+                    feedbackObject.ratingFeedbacks.push(rating);
+                }
             }
-            if (screenshotMechanism.active && screenshotMechanism.screenshotView.getScreenshotAsBinary() !== null) {
-                formData.append('file', screenshotMechanism.screenshotView.getScreenshotAsBinary());
+            for (var _b = 0, screenshotMechanisms_1 = screenshotMechanisms; _b < screenshotMechanisms_1.length; _b++) {
+                var screenshotMechanism = screenshotMechanisms_1[_b];
+                if (screenshotMechanism.active) {
+                    var partName = "screenshot" + screenshotMechanism.id;
+                    var screenshotFeedback = new screenshot_feedback_1.ScreenshotFeedback(partName, screenshotMechanism.id, partName);
+                    feedbackObject.screenshotFeedbacks.push(screenshotFeedback);
+                    formData.append(partName, screenshotMechanism.screenshotView.getScreenshotAsBinary());
+                }
             }
             formData.append('json', JSON.stringify(feedbackObject));
             return formData;
@@ -194,9 +213,11 @@ define(["require", "exports", './config', '../views/pagination_container', '../v
             active = !active;
         };
         var openDialog = function (dialog, configuration) {
-            var screenshotMechanism = configuration.getMechanismConfig(config_1.mechanismTypes.screenshotType);
-            if (screenshotMechanism !== null && screenshotMechanism !== undefined && screenshotMechanism.screenshotView !== null) {
-                screenshotMechanism.screenshotView.checkAutoTake();
+            for (var _i = 0, _a = configuration.getMechanismConfig(config_1.mechanismTypes.screenshotType); _i < _a.length; _i++) {
+                var screenshotMechanism = _a[_i];
+                if (screenshotMechanism !== null && screenshotMechanism !== undefined && screenshotMechanism.screenshotView !== null) {
+                    screenshotMechanism.screenshotView.checkAutoTake();
+                }
             }
             dialog.dialog('open');
         };
