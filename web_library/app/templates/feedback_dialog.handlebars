@@ -97,16 +97,21 @@
                     <p class="mechanism-review screenshot-review">
 
                     </p>
-                    {{#if categoryMechanism.active}}
-                        <p class="mechanism-review category-review">
-                            <i>{{ categoryMechanism.title }}&nbsp;</i>
-                            {{#each categoryMechanism.options}}
-                                <input type="{{ ../categoryMechanism.inputType }}" id="reviewoption{{ key }}" name="category_mechanism_{{ ../categoryMechanism.id }}"
-                                       value="review{{ key }}" disabled>
-                                <label for="reviewOption{{ key }}"> {{ value }}</label> &nbsp;
-                            {{/each}}
-                        </p>
-                    {{/if}}
+
+                    {{#each mechanisms}}
+                        {{#compare type "CATEGORY_TYPE" operator="==="}}
+                            {{#if active}}
+                                <p class="mechanism-review category-review">
+                                    <i>{{ title }}</i>
+                                    {{#each options}}
+                                        <input type="{{ ../inputType }}" id="reviewoption{{ key }}" name="category_mechanism_{{ ../id }}"
+                                               value="review{{ key }}" disabled>
+                                        <label for="reviewOption{{ key }}"> {{ value }}</label> &nbsp;
+                                    {{/each}}
+                                </p>
+                            {{/if}}
+                        {{/compare}}
+                    {{/each}}
                 </div>
                 <section class="dialog-navigation">
                     <button class="button feedback-dialog-backward navigation-button">{{t "general.back" }}</button>

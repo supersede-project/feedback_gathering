@@ -297,7 +297,7 @@ export var feedbackPluginModule = function ($, window, document) {
         var screenshotMechanisms = configuration.getMechanismConfig(mechanismTypes.screenshotType);
 
         container.find('.server-response').removeClass('error').removeClass('success');
-        var feedbackObject = new Feedback(feedbackObjectTitle, "uid12345", "DE", 1, 1);
+        var feedbackObject = new Feedback(feedbackObjectTitle, "uid12345", "DE", 1, 1, [], [], []);
 
         for(var textMechanism of textMechanisms) {
             if(textMechanism.active) {

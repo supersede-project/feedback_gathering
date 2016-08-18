@@ -174,7 +174,7 @@ define(["require", "exports", './config', '../views/pagination_container', '../v
             var ratingMechanisms = configuration.getMechanismConfig(config_1.mechanismTypes.ratingType);
             var screenshotMechanisms = configuration.getMechanismConfig(config_1.mechanismTypes.screenshotType);
             container.find('.server-response').removeClass('error').removeClass('success');
-            var feedbackObject = new feedback_1.Feedback(config_1.feedbackObjectTitle, "uid12345", "DE", 1, 1);
+            var feedbackObject = new feedback_1.Feedback(config_1.feedbackObjectTitle, "uid12345", "DE", 1, 1, [], [], []);
             for (var _i = 0, textMechanisms_2 = textMechanisms; _i < textMechanisms_2.length; _i++) {
                 var textMechanism = textMechanisms_2[_i];
                 if (textMechanism.active) {

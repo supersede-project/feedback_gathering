@@ -226,6 +226,7 @@
             ]
           },
           {
+            "id": 5,
             "type": "CATEGORY_TYPE",
             "active": true,
             "order": 3,
@@ -285,7 +286,7 @@
             {
               "id": 2,
               "key": "likelihood",
-              "value": 0.0
+              "value": 0.1
             },
             {
               "key": "askOnAppStartup",
@@ -485,6 +486,7 @@
             ]
           },
           {
+            "id": 991,
             "type": "CATEGORY_TYPE",
             "active": true,
             "order": 3,
@@ -522,6 +524,7 @@
             ]
           },
           {
+            "id": 992,
             "type": "CATEGORY_TYPE",
             "active": true,
             "order": 2,
