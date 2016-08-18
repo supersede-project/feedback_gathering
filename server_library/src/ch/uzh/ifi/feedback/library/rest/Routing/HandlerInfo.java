@@ -3,6 +3,7 @@ package ch.uzh.ifi.feedback.library.rest.Routing;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import ch.uzh.ifi.feedback.library.rest.RestController;
@@ -30,7 +31,7 @@ public class HandlerInfo {
 		this.handlerClazz = handlerClazz;
 		this.uriTemplate = template;
 		this.serializedParameterClass = parameterClass;
-		pathParameters = new HashMap<>();
+		pathParameters = new LinkedHashMap<>();
 	}
 
 	public Class<?> getHandlerClass(){
