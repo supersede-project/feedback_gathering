@@ -3,6 +3,7 @@ package ch.uzh.ifi.feedback.repository.service;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import com.google.inject.Inject;
@@ -21,11 +22,11 @@ public class FeedbackService extends ServiceBase<Feedback> {
 	private ScreenshotFeedbackService screenshotFeedbackService;
 	
 	@Inject
-	public FeedbackService(FeedbackResultParser resultParser, RatingFeedbackService ratingService,
-			ScreenshotFeedbackService screenshotService, TextFeedbackService textFeedbackService) {
-		super(resultParser, Feedback.class, "feedbacks", "feedback_repository", ratingService, screenshotService);
-		this.screenshotFeedbackService = screenshotService;
-		this.ratingFeedbackService = ratingService;
+	public FeedbackService(FeedbackResultParser resultParser, RatingFeedbackService ratingFeedbackService,
+			ScreenshotFeedbackService screenshotFeedbackService, TextFeedbackService textFeedbackService) {
+		super(resultParser, Feedback.class, "feedbacks", "feedback_repository", ratingFeedbackService, screenshotFeedbackService);
+		this.screenshotFeedbackService = screenshotFeedbackService;
+		this.ratingFeedbackService = ratingFeedbackService;
 		this.textFeedbackService = textFeedbackService;
 	}
 
@@ -49,17 +50,26 @@ public class FeedbackService extends ServiceBase<Feedback> {
 	@Override
 	public int Insert(Connection con, Feedback feedback) throws SQLException, NotFoundException, UnsupportedOperationException {
 		int feedbackId = super.Insert(con, feedback);
-		for (TextFeedback textFeedback : feedback.getTextFeedbacks()) {
-			textFeedback.setFeedbackId(feedbackId);
-			textFeedbackService.Insert(con, textFeedback);
+		
+		if(feedback.getTextFeedbacks() != null) {
+			for (TextFeedback textFeedback : feedback.getTextFeedbacks()) {
+				textFeedback.setFeedbackId(feedbackId);
+				textFeedbackService.Insert(con, textFeedback);
+			}	
 		}
-		for (RatingFeedback ratingFeedback : feedback.getRatingFeedbacks()) {
-			ratingFeedback.setFeedbackId(feedbackId);
-			ratingFeedbackService.Insert(con, ratingFeedback);
+	
+		if(feedback.getRatingFeedbacks() != null) {
+			for (RatingFeedback ratingFeedback : feedback.getRatingFeedbacks()) {
+				ratingFeedback.setFeedbackId(feedbackId);
+				ratingFeedbackService.Insert(con, ratingFeedback);
+			}
 		}
-		for (ScreenshotFeedback screenshotFeedback : feedback.getScreenshotFeedbacks()) {
-			screenshotFeedback.setFeedbackId(feedbackId);
-			screenshotFeedbackService.Insert(con, screenshotFeedback);
+		
+		if(feedback.getScreenshotFeedbacks() != null) {
+			for (ScreenshotFeedback screenshotFeedback : feedback.getScreenshotFeedbacks()) {
+				screenshotFeedback.setFeedbackId(feedbackId);
+				screenshotFeedbackService.Insert(con, screenshotFeedback);
+			}
 		}
 		return feedbackId;
 	}

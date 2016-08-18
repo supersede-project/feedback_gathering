@@ -25,7 +25,7 @@ public class Feedback {
 
 	@DbAttribute("user_identification")
 	@NotNull
-	private String user;
+	private String userIdentification;
 
 	@DbAttribute("created_at")
 	private Timestamp createdAt;
@@ -58,7 +58,7 @@ public class Feedback {
 
 	public Feedback() {}
 	
-	public Feedback(String title, Integer id, Integer applicationId, String user, Timestamp createdAt,
+	public Feedback(String title, Integer id, Integer applicationId, String userIdentification, Timestamp createdAt,
 			Timestamp updatedAt, String language, ContextInformation contextInformation,
 			List<TextFeedback> textFeedbacks, List<RatingFeedback> ratings, List<ScreenshotFeedback> screenshots,
 			List<FeedbackComment> feedbackComments, List<AttachmentFeedback> attachmentFeedbacks,
@@ -67,7 +67,7 @@ public class Feedback {
 		this.title = title;
 		this.id = id;
 		this.applicationId = applicationId;
-		this.user = user;
+		this.userIdentification = userIdentification;
 		this.createdAt = createdAt;
 		this.updatedAt = updatedAt;
 		this.language = language;
@@ -113,12 +113,12 @@ public class Feedback {
 		this.configurationId = configurationId;
 	}
 
-	public String getUser() {
-		return user;
+	public String getUserIdentification() {
+		return userIdentification;
 	}
 
-	public void setUser(String user) {
-		this.user = user;
+	public void setUserIdentification(String userIdentification) {
+		this.userIdentification = userIdentification;
 	}
 
 	public Timestamp getCreatedAt() {

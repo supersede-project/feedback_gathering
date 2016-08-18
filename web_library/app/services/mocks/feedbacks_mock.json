@@ -1,6 +1,5 @@
 [
   {
-    "id": 1,
     "title": "Feedback 1",
     "userIdentification": "u8102390",
     "language": "EN",
@@ -10,7 +9,6 @@
       "resolution": "1440x900",
       "androidVersion": "24.0",
       "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.10; rv:48.0) Gecko/20100101 Firefox/48.0",
-      "localTime": "9:51 am",
       "timeZone": "-2 hours",
       "devicePixelRatio": 2,
       "country": "CH",
