@@ -122,7 +122,7 @@ define(["require", "exports", './config', '../views/pagination_container', '../v
             }
             var container = $('#' + containerId);
             var dialogSelector = $('[aria-describedby="' + containerId + '"]');
-            var screenshotPreview = container.find('.screenshot-preview'), screenshotCaptureButton = container.find('button.take-screenshot'), elementToCapture = $('#page-wrapper_1'), elementsToHide = [$('.ui-widget-overlay.ui-front'), dialogSelector];
+            var screenshotPreview = container.find('.screenshot-preview'), screenshotCaptureButton = container.find('button.take-screenshot'), elementToCapture = $('body'), elementsToHide = [$('.ui-widget-overlay.ui-front'), dialogSelector];
             var screenshotView = new screenshot_view_1.ScreenshotView(screenshotMechanism, screenshotPreview, screenshotCaptureButton, elementToCapture, container, elementsToHide);
             screenshotMechanism.setScreenshotView(screenshotView);
             return screenshotView;
