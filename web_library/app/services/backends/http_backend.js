@@ -1,8 +1,9 @@
-define(["require", "exports", '../../js/config'], function (require, exports, config_1) {
+define(["require", "exports"], function (require, exports) {
     "use strict";
     var HttpBackend = (function () {
-        function HttpBackend(path) {
+        function HttpBackend(path, apiEndpoint) {
             this.path = path;
+            this.apiEndpoint = apiEndpoint;
         }
         HttpBackend.prototype.list = function (callback) {
             var url = this.getUrl();
@@ -30,7 +31,7 @@ define(["require", "exports", '../../js/config'], function (require, exports, co
             return null;
         };
         HttpBackend.prototype.getUrl = function () {
-            return config_1.apiEndpoint + this.path;
+            return this.apiEndpoint + this.path;
         };
         return HttpBackend;
     }());

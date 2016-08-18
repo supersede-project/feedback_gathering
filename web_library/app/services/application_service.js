@@ -1,9 +1,9 @@
-define(["require", "exports", './backends/http_backend', '../models/applications/application'], function (require, exports, http_backend_1, application_1) {
+define(["require", "exports", './backends/http_backend', '../models/applications/application', '../js/config'], function (require, exports, http_backend_1, application_1, config_1) {
     "use strict";
     var ApplicationService = (function () {
         function ApplicationService(backend) {
             if (!backend) {
-                this.backend = new http_backend_1.HttpBackend('feedback_orchestrator/example/configuration');
+                this.backend = new http_backend_1.HttpBackend('feedback_orchestrator/example/configuration', config_1.apiEndpointOrchestrator);
             }
             else {
                 this.backend = backend;

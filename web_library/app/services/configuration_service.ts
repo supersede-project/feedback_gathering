@@ -3,6 +3,7 @@ import {HttpBackend} from './backends/http_backend';
 import {PushConfiguration} from '../models/configurations/push_configuration';
 import {ConfigurationInterface} from '../models/configurations/configuration_interface';
 import {ConfigurationFactory} from '../models/configurations/configuration_factory';
+import {apiEndpointOrchestrator} from '../js/config';
 
 
 /**
@@ -17,7 +18,7 @@ export class ConfigurationService {
      */
     constructor(backend?: Backend) {
         if(!backend) {
-            this.backend = new HttpBackend('feedback_orchestrator/example/configuration');
+            this.backend = new HttpBackend('feedback_orchestrator/example/configuration', apiEndpointOrchestrator);
         } else {
             this.backend = backend;
         }

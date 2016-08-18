@@ -77,10 +77,8 @@ define(["require", "exports", './config', '../views/pagination_container', '../v
             return dialog;
         };
         var sendFeedback = function (formData, configuration) {
-            var screenshotView = configuration.getMechanismConfig(config_1.mechanismTypes.screenshotType).screenshotView;
-            var ratingMechanism = configuration.getMechanismConfig(config_1.mechanismTypes.ratingType);
             $.ajax({
-                url: config_1.apiEndpoint + config_1.feedbackPath,
+                url: config_1.apiEndpointRepository + config_1.feedbackPath,
                 type: 'POST',
                 data: formData,
                 processData: false,

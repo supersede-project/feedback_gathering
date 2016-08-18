@@ -1,12 +1,13 @@
 import {Backend} from './backend';
-import {apiEndpoint} from '../../js/config';
 
 
 export class HttpBackend implements Backend {
     private path:string;
+    private apiEndpoint:string;
 
-    constructor(path:string) {
+    constructor(path:string, apiEndpoint:string) {
         this.path = path;
+        this.apiEndpoint = apiEndpoint;
     }
 
     list(callback:(data:any) => void): void {
@@ -40,6 +41,6 @@ export class HttpBackend implements Backend {
     }
 
     getUrl(): string {
-        return apiEndpoint + this.path;
+        return this.apiEndpoint + this.path;
     }
 }

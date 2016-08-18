@@ -1,8 +1,8 @@
 import './lib/jquery.star-rating-svg.js';
 import './jquery.validate';
 import {
-    apiEndpoint, feedbackPath, applicationName, defaultSuccessMessage,
-    feedbackObjectTitle, dialogOptions, mechanismTypes, configurationTypes
+    apiEndpointRepository, feedbackPath, applicationName, defaultSuccessMessage,
+    feedbackObjectTitle, dialogOptions, mechanismTypes
 } from './config';
 import {PaginationContainer} from '../views/pagination_container';
 import {ScreenshotView} from '../views/screenshot/screenshot_view';
@@ -145,11 +145,8 @@ export var feedbackPluginModule = function ($, window, document) {
      * message is shown after the request is done.
      */
     var sendFeedback = function (formData:FormData, configuration:ConfigurationInterface) {
-        var screenshotView = configuration.getMechanismConfig(mechanismTypes.screenshotType).screenshotView;
-        var ratingMechanism = configuration.getMechanismConfig(mechanismTypes.ratingType);
-
         $.ajax({
-            url: apiEndpoint + feedbackPath,
+            url: apiEndpointRepository + feedbackPath,
             type: 'POST',
             data: formData,
             processData: false,

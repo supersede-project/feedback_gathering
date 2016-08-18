@@ -13,7 +13,7 @@ import ch.uzh.ifi.feedback.repository.model.ScreenshotFeedback;
 public class ScreenshotSerializationService extends RepositorySerializationService<ScreenshotFeedback> {
 
 	public List<ScreenshotFeedback> ParseRequestParts(List<Part> fileParts) {
-		File dir = new File("screenshots");
+		File dir = new File("/screenshots");
 		boolean isDir = dir.mkdirs();
 		List<ScreenshotFeedback> screenshots = new ArrayList<>(fileParts.size());
 		for (Part filePart : fileParts) {
