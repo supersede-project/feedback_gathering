@@ -1,9 +1,9 @@
 define(["require", "exports"], function (require, exports) {
     "use strict";
     var PaginationContainer = (function () {
-        function PaginationContainer(container, pageForwardCallback) {
+        function PaginationContainer(container, pageNavigation) {
             this.container = container;
-            this.pageForwardCallback = pageForwardCallback;
+            this.pageNavigation = pageNavigation;
             this.pages = this.container.find('.feedback-page');
             this.showFirstPage();
             this.activePage = 1;
@@ -29,7 +29,7 @@ define(["require", "exports"], function (require, exports) {
         PaginationContainer.prototype.navigateForward = function () {
             var feedbackPage = this.container.find('.feedback-page[data-feedback-page="' + this.activePage + '"]');
             var nextPage = this.container.find('.feedback-page[data-feedback-page="' + (this.activePage + 1) + '"]');
-            if (this.pageForwardCallback != null && !this.pageForwardCallback(feedbackPage, nextPage)) {
+            if (this.pageNavigation != null && !this.pageNavigation.pageForwardCallback(feedbackPage, nextPage)) {
                 return;
             }
             if (this.activePage < this.pages.length) {

@@ -1,3 +1,6 @@
+import {PageNavigation} from '../js/helpers/page_navigation';
+
+
 /**
  * Class that simply provides a pagination mechanism by showing/hiding some elements(pages)
  */
@@ -5,18 +8,18 @@ export class PaginationContainer {
     container:JQuery;
     pages:JQuery;
     activePage:number;
-    pageForwardCallback:any;
+    pageNavigation:PageNavigation;
 
     /**
      *
      * @param container
      *  The element that contains the pages and buttons to move forward or backward
-     * @param pageForwardCallback
-     *  Function that is executed when the navigation goes forward
+     * @param pageNavigation
+     *  Object that has a method which is called on forward navigation
      */
-    constructor(container, pageForwardCallback?) {
+    constructor(container, pageNavigation?) {
         this.container = container;
-        this.pageForwardCallback = pageForwardCallback;
+        this.pageNavigation = pageNavigation;
         this.pages = this.container.find('.feedback-page');
         this.showFirstPage();
         this.activePage = 1;
@@ -48,7 +51,7 @@ export class PaginationContainer {
     navigateForward() {
         var feedbackPage = this.container.find('.feedback-page[data-feedback-page="' + this.activePage + '"]');
         var nextPage = this.container.find('.feedback-page[data-feedback-page="' + (this.activePage + 1) + '"]');
-        if(this.pageForwardCallback != null && !this.pageForwardCallback(feedbackPage, nextPage)) {
+        if(this.pageNavigation != null && !this.pageNavigation.pageForwardCallback(feedbackPage, nextPage)) {
             return;
         }
 

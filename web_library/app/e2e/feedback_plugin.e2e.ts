@@ -22,7 +22,7 @@ describe('JQuery Feedback Plugin', function() {
     xit('should validate text input', function() {
         let feedbackEntryLink = browser.element(by.css('a#feedbackEntryPoint'));
         let dialogForward = browser.element(by.css('.feedback-dialog-forward'));
-        let textTypeTextarea = browser.element(by.css('textarea#textTypeText'));
+        let textTypeTextarea = browser.element(by.css('textarea.textTypeText'));
 
         feedbackEntryLink.click();
 

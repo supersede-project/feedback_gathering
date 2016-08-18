@@ -1,4 +1,6 @@
 import i18n = require('i18next');
+
+
 export interface JQuery {
     /**
      * Register a handler to validate a HTML element.

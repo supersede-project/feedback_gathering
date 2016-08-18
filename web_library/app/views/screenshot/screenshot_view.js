@@ -1,29 +1,37 @@
 define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/data_helper', '../../js/lib/html2canvas.js'], function (require, exports, screenshot_view_drawing_1, data_helper_1) {
     "use strict";
-    var myThis;
     var freehandDrawingMode = 'freehandDrawingMode';
     var rectDrawingMode = 'rectDrawingMode';
     var fillRectDrawingMode = 'fillRectDrawingMode';
     var circleDrawingMode = 'circleDrawingMode';
     var arrowDrawingMode = 'arrowDrawingMode';
     var croppingMode = 'croppingMode';
+    var stickingMode = 'stickingMode';
+    var textMode = 'textMode';
+    var textMode2 = 'textMode2';
     var black = "#000000";
     var red = "#FF0000";
     var ScreenshotView = (function () {
-        function ScreenshotView(screenshotMechanism, screenshotPreviewElement, screenshotCaptureButton, elementToCapture, elementsToHide) {
-            myThis = this;
+        function ScreenshotView(screenshotMechanism, screenshotPreviewElement, screenshotCaptureButton, elementToCapture, container, elementsToHide) {
             this.screenshotMechanism = screenshotMechanism;
             this.screenshotPreviewElement = screenshotPreviewElement;
             this.screenshotCaptureButton = screenshotCaptureButton;
             this.elementToCapture = elementToCapture;
+            this.container = container;
             this.elementsToHide = elementsToHide;
             this.canvasState = null;
             this.canvasStates = [];
             this.screenshotViewDrawing = new screenshot_view_drawing_1.ScreenshotViewDrawing();
             this.addCaptureEventToButton();
         }
+        ScreenshotView.prototype.checkAutoTake = function () {
+            if (this.screenshotMechanism.getParameterValue('autoTake')) {
+                this.generateScreenshot();
+            }
+        };
         ScreenshotView.prototype.generateScreenshot = function () {
             this.hideElements();
+            var myThis = this;
             html2canvas(this.elementToCapture, {
                 onrendered: function (canvas) {
                     myThis.showElements();
@@ -85,8 +93,10 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
         ScreenshotView.prototype.initDrawing = function () {
             var context = this.screenshotCanvas.getContext('2d');
             this.isPainting = false;
+            this.initRectAsDefaultDrawing();
             this.drawingMode = rectDrawingMode;
             this.context.strokeStyle = red;
+            var myThis = this;
             jQuery(this.screenshotCanvas).on('mousedown touchstart', function (event) {
                 var parentOffset = jQuery(this).parent().offset();
                 myThis.startX = event.pageX - parentOffset.left;
@@ -187,10 +197,16 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
             }
             this.screenshotCanvas = null;
             this.canvasStates = [];
-            jQuery('.screenshot-operations').hide();
+            this.container.find('.screenshot-operations').hide();
             this.disableAllScreenshotOperations();
-            jQuery('#screenshotDrawRect').addClass('active');
-            this.drawingMode = rectDrawingMode;
+            this.initRectAsDefaultDrawing();
+        };
+        ScreenshotView.prototype.initRectAsDefaultDrawing = function () {
+            var myThis = this;
+            setTimeout(function () {
+                myThis.container.find('.screenshot-draw-rect').addClass('active', 500);
+                myThis.drawingMode = rectDrawingMode;
+            }, 1500);
         };
         ScreenshotView.prototype.draw_arrow = function (context, fromx, fromy, tox, toy) {
             if (Math.sqrt(Math.pow(fromx - tox, 2) + Math.pow(fromy - toy, 2)) < 20) {
@@ -217,7 +233,8 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
             this.context.drawImage(this.canvasState, 0, 0, this.canvasState.width, this.canvasState.height, 0, 0, this.screenshotCanvas.width, this.screenshotCanvas.height);
         };
         ScreenshotView.prototype.initScreenshotOperations = function () {
-            jQuery('#screenshotDrawRect').on('click', function (event) {
+            var myThis = this;
+            this.container.find('.screenshot-draw-rect').on('click', function (event) {
                 event.preventDefault();
                 event.stopPropagation();
                 myThis.disableAllScreenshotOperations();
@@ -227,7 +244,7 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
                 myThis.context.fillStyle = red;
                 myThis.context.setLineDash([0, 0]);
             });
-            jQuery('#screenshotDrawFillRect').on('click', function (event) {
+            this.container.find('.screenshot-draw-fill-rect').on('click', function (event) {
                 event.preventDefault();
                 event.stopPropagation();
                 myThis.disableAllScreenshotOperations();
@@ -237,7 +254,7 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
                 myThis.context.fillStyle = black;
                 myThis.context.setLineDash([0, 0]);
             });
-            jQuery('#screenshotDrawCircle').on('click', function (event) {
+            this.container.find('.screenshot-draw-circle').on('click', function (event) {
                 event.preventDefault();
                 event.stopPropagation();
                 myThis.disableAllScreenshotOperations();
@@ -247,7 +264,7 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
                 myThis.context.fillStyle = red;
                 myThis.context.setLineDash([0, 0]);
             });
-            jQuery('#screenshotDrawArrow').on('click', function (event) {
+            this.container.find('.screenshot-draw-arrow').on('click', function (event) {
                 event.preventDefault();
                 event.stopPropagation();
                 myThis.disableAllScreenshotOperations();
@@ -257,7 +274,7 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
                 myThis.context.fillStyle = red;
                 myThis.context.setLineDash([0, 0]);
             });
-            jQuery('#screenshotDrawFreehand').on('click', function (event) {
+            this.container.find('.screenshot-draw-freehand').on('click', function (event) {
                 event.preventDefault();
                 event.stopPropagation();
                 myThis.disableAllScreenshotOperations();
@@ -267,7 +284,7 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
                 myThis.context.fillStyle = red;
                 myThis.context.setLineDash([0, 0]);
             });
-            jQuery('#screenshotCrop').on('click', function (event) {
+            this.container.find('.screenshot-crop').on('click', function (event) {
                 event.preventDefault();
                 event.stopPropagation();
                 myThis.disableAllScreenshotOperations();
@@ -277,20 +294,150 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
                 myThis.context.fillStyle = black;
                 myThis.context.setLineDash([3, 8]);
             });
-            jQuery('#screenshotDrawUndo').on('click', function (event) {
+            this.container.find('.screenshot-text').off('click').on('click', function (event) {
+                event.preventDefault();
+                event.stopPropagation();
+                myThis.disableAllScreenshotOperations();
+                myThis.drawingMode = textMode;
+                var imgSrc = jQuery(this).find('img').attr('src');
+                var img = jQuery('<img src="' + imgSrc + '" class="sticker" />');
+                var stickerContainer = jQuery('<div class="sticker-container">' +
+                    '<a class="edit"><img src="dist/img/ic_mode_edit_black_shadow_24px.png" /></a>' +
+                    '<a class="remove"><img src="dist/img/ic_remove_circle_red_shadow_24px.png" /></a>' +
+                    '<article class="text-container">' +
+                    '<textarea placeholder="Your text"></textarea>' +
+                    '</article>' +
+                    '</div>');
+                stickerContainer.css('width', '60px');
+                stickerContainer.css('height', 'auto');
+                stickerContainer.append(img);
+                img.css('width', '100%');
+                img.css('height', '100%');
+                var containmentSelector = '#' + myThis.container.attr('id') + ' .screenshot-preview';
+                stickerContainer.resizable({
+                    containment: containmentSelector
+                });
+                stickerContainer.draggable({
+                    cursor: "crosshair",
+                    containment: containmentSelector,
+                });
+                stickerContainer.find('a.remove').on('click', function () {
+                    jQuery(this).closest('.sticker-container').remove();
+                });
+                stickerContainer.find('a.edit').on('click', function () {
+                    var textContainer = stickerContainer.find('article.text-container');
+                    if (textContainer.is(":visible")) {
+                        textContainer.hide();
+                    }
+                    else {
+                        textContainer.show();
+                    }
+                });
+                myThis.screenshotPreviewElement.append(stickerContainer);
+            });
+            this.container.find('.screenshot-text-2').off('click').on('click', function (event) {
+                event.preventDefault();
+                event.stopPropagation();
+                myThis.disableAllScreenshotOperations();
+                myThis.drawingMode = textMode2;
+                var stickerContainer = jQuery('<div class="sticker-container text-2">' +
+                    '<textarea placeholder="Your text"></textarea>' +
+                    '<a class="remove"><img src="dist/img/ic_remove_circle_red_shadow_24px.png" /></a>' +
+                    '<a class="color" style="background-image: url(\'dist/img/screenshot_button_background.png\');"><i class="material-icons">format_color_text</i></a>' +
+                    '</div>');
+                var textarea = stickerContainer.find('textarea');
+                var colorLink = stickerContainer.find('a.color');
+                var defaultColor = "#000";
+                textarea.css('color', defaultColor);
+                stickerContainer.css('width', 'auto');
+                stickerContainer.css('height', 'auto');
+                stickerContainer.find('a.color').spectrum({
+                    color: defaultColor,
+                    showPaletteOnly: true,
+                    togglePaletteOnly: true,
+                    togglePaletteMoreText: 'more',
+                    togglePaletteLessText: 'less',
+                    palette: [
+                        ["#000", "#444", "#666", "#999", "#ccc", "#eee", "#f3f3f3", "#fff"],
+                        ["#f00", "#f90", "#ff0", "#0f0", "#0ff", "#00f", "#90f", "#f0f"],
+                        ["#f4cccc", "#fce5cd", "#fff2cc", "#d9ead3", "#d0e0e3", "#cfe2f3", "#d9d2e9", "#ead1dc"],
+                        ["#ea9999", "#f9cb9c", "#ffe599", "#b6d7a8", "#a2c4c9", "#9fc5e8", "#b4a7d6", "#d5a6bd"],
+                        ["#e06666", "#f6b26b", "#ffd966", "#93c47d", "#76a5af", "#6fa8dc", "#8e7cc3", "#c27ba0"],
+                        ["#c00", "#e69138", "#f1c232", "#6aa84f", "#45818e", "#3d85c6", "#674ea7", "#a64d79"],
+                        ["#900", "#b45f06", "#bf9000", "#38761d", "#134f5c", "#0b5394", "#351c75", "#741b47"],
+                        ["#600", "#783f04", "#7f6000", "#274e13", "#0c343d", "#073763", "#20124d", "#4c1130"]
+                    ],
+                    change: function (color) {
+                        var color = color.toHexString();
+                        textarea.css('color', color);
+                        colorLink.css('color', color);
+                    }
+                });
+                var containmentSelector = '#' + myThis.container.attr('id') + ' .screenshot-preview';
+                stickerContainer.resizable({
+                    containment: containmentSelector,
+                    resize: function () {
+                        textArea.css('height', (stickerContainer.height() - 40) + 'px');
+                        textArea.css('width', (stickerContainer.width() - 40) + 'px');
+                    }
+                });
+                stickerContainer.draggable({
+                    cursor: "crosshair",
+                    containment: containmentSelector,
+                });
+                stickerContainer.find('a.remove').on('click', function () {
+                    jQuery(this).closest('.sticker-container').remove();
+                });
+                myThis.screenshotPreviewElement.append(stickerContainer);
+                var textArea = stickerContainer.find('textarea:first');
+                textArea.on('keydown', function () {
+                    setTimeout(function () {
+                        textArea.css('height', textArea[0].scrollHeight + 'px');
+                        stickerContainer.css('height', textArea[0].scrollHeight + 40 + 'px');
+                    }, 1);
+                });
+                textArea.focus();
+            });
+            this.container.find('.screenshot-draw-undo').on('click', function (event) {
                 event.preventDefault();
                 event.stopPropagation();
                 myThis.undoOperation();
             });
-            jQuery('#screenshotDrawRemove').on('click', function (event) {
+            this.container.find('.screenshot-draw-remove').on('click', function (event) {
                 event.preventDefault();
                 event.stopPropagation();
                 myThis.reset();
             });
-            jQuery('.screenshot-operations').show();
+            this.container.find('.screenshot-operation.sticking').off('click').on('click', function (event) {
+                event.preventDefault();
+                event.stopPropagation();
+                myThis.disableAllScreenshotOperations();
+                myThis.drawingMode = stickingMode;
+                var imgSrc = jQuery(this).find('img').attr('src');
+                var img = jQuery('<img src="' + imgSrc + '" class="sticker" />');
+                var stickerContainer = jQuery('<div class="sticker-container"><a class="remove"><img src="dist/img/ic_remove_circle_red_shadow_24px.png" /></a></div>');
+                stickerContainer.css('width', '60px');
+                stickerContainer.css('height', 'auto');
+                stickerContainer.append(img);
+                img.css('width', '100%');
+                img.css('height', '100%');
+                var containmentSelector = '#' + myThis.container.attr('id') + ' .screenshot-preview';
+                stickerContainer.resizable({
+                    containment: containmentSelector
+                });
+                stickerContainer.draggable({
+                    cursor: "crosshair",
+                    containment: containmentSelector,
+                });
+                stickerContainer.find('a.remove').on('click', function () {
+                    jQuery(this).closest('.sticker-container').remove();
+                });
+                myThis.screenshotPreviewElement.append(stickerContainer);
+            });
+            this.container.find('.screenshot-operations').show();
         };
         ScreenshotView.prototype.disableAllScreenshotOperations = function () {
-            jQuery('button.screenshot-operation').removeClass('active');
+            this.container.find('button.screenshot-operation').removeClass('active');
         };
         return ScreenshotView;
     }());

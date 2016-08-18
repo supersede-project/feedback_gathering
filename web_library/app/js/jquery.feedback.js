@@ -1,32 +1,84 @@
-define(["require", "exports", '../models/feedback', '../models/rating', '../services/configuration_service', './config', '../views/pagination_container', '../views/screenshot/screenshot_view', './helpers/i18n', 'i18next', './lib/jquery.star-rating-svg.js', './jquery.validate.js'], function (require, exports, feedback_1, rating_1, configuration_service_1, config_1, pagination_container_1, screenshot_view_1, i18n_1, i18n) {
+define(["require", "exports", './config', '../views/pagination_container', '../views/screenshot/screenshot_view', './helpers/i18n', '../services/backends/mock_backend', '../models/feedbacks/feedback', '../models/feedbacks/rating', './helpers/page_navigation', '../services/application_service', './helpers/array_shuffle', '../templates/feedback_dialog.handlebars', '../templates/feedback_dialog.handlebars', '../templates/intermediate_dialog.handlebars', './lib/jquery.star-rating-svg.js', './jquery.validate'], function (require, exports, config_1, pagination_container_1, screenshot_view_1, i18n_1, mock_backend_1, feedback_1, rating_1, page_navigation_1, application_service_1, array_shuffle_1, dialogTemplate, pullDialogTemplate, intermediateDialogTemplate) {
     "use strict";
+    var mockData = require('json!../services/mocks/applications_mock.json');
     exports.feedbackPluginModule = function ($, window, document) {
         var dialog;
+        var pushConfigurationDialogId = "pushConfiguration";
+        var pullDialog;
+        var pullConfigurationDialogId = "pullConfiguration";
         var active = false;
-        var textMechanism;
-        var ratingMechanism;
-        var screenshotMechanism;
-        var screenshotView;
-        var template = require('../templates/feedback_dialog.handlebars');
-        var initMechanisms = function (data) {
-            var configurationService = new configuration_service_1.ConfigurationService(data);
-            textMechanism = configurationService.getMechanismConfig(config_1.textType);
-            ratingMechanism = configurationService.getMechanismConfig(config_1.ratingType);
-            screenshotMechanism = configurationService.getMechanismConfig(config_1.screenshotType);
-            $('#serverResponse').removeClass().text('');
-            var context = configurationService.getContextForView();
-            initTemplate(context, screenshotMechanism, textMechanism, ratingMechanism);
+        var application;
+        var initApplication = function (applicationObject) {
+            application = applicationObject;
+            resetMessageView();
+            initPushMechanisms(application.getPushConfiguration(), application.generalConfiguration);
+            var alreadyTriggeredOne = false;
+            for (var _i = 0, _a = array_shuffle_1.shuffle(application.getPullConfigurations()); _i < _a.length; _i++) {
+                var pullConfiguration = _a[_i];
+                alreadyTriggeredOne = initPullConfiguration(pullConfiguration, application.generalConfiguration, alreadyTriggeredOne);
+            }
         };
-        var initTemplate = function (context, screenshotMechanism, textMechanism, ratingMechanism) {
+        var initPushMechanisms = function (configuration, generalConfiguration) {
+            var context = configuration.getContextForView();
+            var pageNavigation = new page_navigation_1.PageNavigation(configuration, $('#' + pushConfigurationDialogId));
+            dialog = initTemplate(dialogTemplate, pushConfigurationDialogId, context, configuration, pageNavigation, generalConfiguration);
+        };
+        var initPullConfiguration = function (configuration, generalConfiguration, alreadyTriggeredOne) {
+            if (alreadyTriggeredOne === void 0) { alreadyTriggeredOne = false; }
+            if (!alreadyTriggeredOne && configuration.shouldGetTriggered()) {
+                var pageNavigation = new page_navigation_1.PageNavigation(configuration, $('#' + pullConfigurationDialogId));
+                var context = configuration.getContextForView();
+                pullDialog = initTemplate(pullDialogTemplate, pullConfigurationDialogId, context, configuration, pageNavigation, generalConfiguration);
+                if (configuration.generalConfiguration.getParameterValue('intermediateDialog')) {
+                    var intermediateDialog = initIntermediateDialogTemplate(intermediateDialogTemplate, 'intermediateDialog', configuration, pullDialog, generalConfiguration);
+                    if (intermediateDialog !== null) {
+                        intermediateDialog.dialog('open');
+                    }
+                }
+                else {
+                    openDialog(pullDialog, configuration);
+                }
+                return true;
+            }
+            return false;
+        };
+        var initTemplate = function (template, dialogId, context, configuration, pageNavigation, generalConfiguration) {
             var html = template(context);
             $('body').append(html);
-            new pagination_container_1.PaginationContainer($('#feedbackContainer .pages-container'), pageForwardCallback);
-            initRating(".rating-input", ratingMechanism);
-            initScreenshot(screenshotMechanism);
-            initDialog($('#feedbackContainer'), textMechanism);
-            addEvents(textMechanism);
+            new pagination_container_1.PaginationContainer($('#' + dialogId + '.feedback-container .pages-container'), pageNavigation);
+            pageNavigation.screenshotViews = [];
+            for (var _i = 0, _a = configuration.getMechanismConfig(config_1.mechanismTypes.ratingType); _i < _a.length; _i++) {
+                var ratingMechanism = _a[_i];
+                initRating("#" + dialogId + " #ratingMechanism" + ratingMechanism.id + " .rating-input", ratingMechanism);
+            }
+            for (var _b = 0, _c = configuration.getMechanismConfig(config_1.mechanismTypes.screenshotType); _b < _c.length; _b++) {
+                var screenshotMechanism = _c[_b];
+                var screenshotView = initScreenshot(screenshotMechanism, dialogId);
+                pageNavigation.screenshotViews.push(screenshotView);
+            }
+            var dialog = initDialog($('#' + dialogId), generalConfiguration.getParameterValue('dialogTitle'));
+            addEvents(dialogId, configuration);
+            return dialog;
         };
-        var sendFeedback = function (formData) {
+        var initIntermediateDialogTemplate = function (template, dialogId, configuration, pullDialog, generalConfiguration) {
+            var html = template({});
+            $('body').append(html);
+            var dialog = initDialog($('#' + dialogId), generalConfiguration.getParameterValue('dialogTitle'));
+            $('#feedbackYes').on('click', function () {
+                dialog.dialog('close');
+                openDialog(pullDialog, configuration);
+            });
+            $('#feedbackNo').on('click', function () {
+                dialog.dialog('close');
+            });
+            $('#feedbackLater').on('click', function () {
+                dialog.dialog('close');
+            });
+            return dialog;
+        };
+        var sendFeedback = function (formData, configuration) {
+            var screenshotView = configuration.getMechanismConfig(config_1.mechanismTypes.screenshotType).screenshotView;
+            var ratingMechanism = configuration.getMechanismConfig(config_1.mechanismTypes.ratingType);
             $.ajax({
                 url: config_1.apiEndpoint + config_1.feedbackPath,
                 type: 'POST',
@@ -34,118 +86,143 @@ define(["require", "exports", '../models/feedback', '../models/rating', '../serv
                 processData: false,
                 contentType: false,
                 success: function (data) {
-                    $('#serverResponse').addClass('success').text(config_1.defaultSuccessMessage);
-                    $('textarea#textTypeText').val('');
-                    screenshotView.reset();
-                    initRating(".rating-input", ratingMechanism);
+                    resetPlugin(configuration);
                 },
                 error: function (data) {
-                    $('#serverResponse').addClass('error').text('Failure: ' + JSON.stringify(data));
+                    $('.server-response').addClass('error').text('Failure: ' + JSON.stringify(data));
                 }
             });
         };
+        var resetPlugin = function (configuration) {
+            $('.server-response').addClass('success').text(config_1.defaultSuccessMessage);
+            $('textarea.text-type-text').val('');
+            for (var _i = 0, _a = configuration.getMechanismConfig(config_1.mechanismTypes.screenshotType); _i < _a.length; _i++) {
+                var screenshotMechanism = _a[_i];
+                screenshotMechanism.screenshotView.reset();
+            }
+            for (var _b = 0, _c = configuration.getMechanismConfig(config_1.mechanismTypes.ratingType); _b < _c.length; _b++) {
+                var ratingMechanism = _c[_b];
+                initRating("#" + configuration.dialogId + " #ratingMechanism" + ratingMechanism.id + " .rating-input", ratingMechanism);
+            }
+        };
         var initRating = function (selector, ratingMechanism) {
-            var options = ratingMechanism.getRatingElementOptions();
-            $('' + selector).starRating(options);
-            $('' + selector + ' .jq-star:nth-child(' + ratingMechanism.initialRating + ')').click();
+            if (ratingMechanism !== null && ratingMechanism.active) {
+                var options = ratingMechanism.getRatingElementOptions();
+                $('' + selector).starRating(options);
+                $('' + selector + ' .jq-star:nth-child(' + ratingMechanism.initialRating + ')').click();
+            }
         };
-        var initScreenshot = function (screenshotMechanism) {
-            var screenshotPreview = $('#screenshotPreview'), screenshotCaptureButton = $('button#takeScreenshot'), elementToCapture = $('#page-wrapper_1'), elementsToHide = [$('.ui-widget-overlay.ui-front'), $('.ui-dialog')];
-            screenshotView = new screenshot_view_1.ScreenshotView(screenshotMechanism, screenshotPreview, screenshotCaptureButton, elementToCapture, elementsToHide);
+        var initScreenshot = function (screenshotMechanism, containerId) {
+            if (screenshotMechanism == null) {
+                return;
+            }
+            var container = $('#' + containerId);
+            var dialogSelector = $('[aria-describedby="' + containerId + '"]');
+            var screenshotPreview = container.find('.screenshot-preview'), screenshotCaptureButton = container.find('button.take-screenshot'), elementToCapture = $('#page-wrapper_1'), elementsToHide = [$('.ui-widget-overlay.ui-front'), dialogSelector];
+            var screenshotView = new screenshot_view_1.ScreenshotView(screenshotMechanism, screenshotPreview, screenshotCaptureButton, elementToCapture, container, elementsToHide);
+            screenshotMechanism.setScreenshotView(screenshotView);
+            return screenshotView;
         };
-        var initDialog = function (dialogContainer, textMechanism) {
-            dialog = dialogContainer.dialog($.extend({}, config_1.dialogOptions, {
+        var initDialog = function (dialogContainer, title) {
+            var dialogObject = dialogContainer.dialog($.extend({}, config_1.dialogOptions, {
                 close: function () {
-                    dialog.dialog("close");
+                    dialogObject.dialog("close");
                     active = false;
                 }
             }));
-            dialog.dialog('option', 'title', textMechanism.getParameter('title').value);
-            dialog.dialog("open");
+            dialogObject.dialog('option', 'title', title);
+            return dialogObject;
         };
-        var addEvents = function (textMechanism) {
-            var textarea = $('textarea#textTypeText');
-            $('button#submitFeedback').unbind().on('click', function (event) {
+        var addEvents = function (containerId, configuration) {
+            var container = $('#' + containerId);
+            var textarea = container.find('textarea.text-type-text');
+            var textMechanism = configuration.getMechanismConfig(config_1.mechanismTypes.textType);
+            container.find('button.submit-feedback').unbind().on('click', function (event) {
                 event.preventDefault();
                 event.stopPropagation();
-                textarea.validate();
-                if (!textarea.hasClass('invalid')) {
-                    var formData = prepareFormData();
-                    sendFeedback(formData);
+                if (textMechanism) {
+                    textarea.validate();
+                    if (!textarea.hasClass('invalid')) {
+                        var formData = prepareFormData(container, configuration);
+                        sendFeedback(formData, configuration);
+                    }
+                }
+                else {
+                    var formData = prepareFormData(container, configuration);
+                    sendFeedback(formData, configuration);
                 }
             });
-            var maxLength = textMechanism.getParameter('maxLength').value;
-            textarea.on('keyup focus', function () {
-                $('span#textTypeMaxLength').text($(this).val().length + '/' + maxLength);
-            });
-            $('#textTypeTextClear').on('click', function (event) {
-                event.preventDefault();
-                event.stopPropagation();
-                textarea.val('');
-            });
+            if (textMechanism) {
+                var maxLength = textMechanism.getParameterValue('maxLength');
+                textarea.on('keyup focus', function () {
+                    container.find('span.text-type-max-length').text($(this).val().length + '/' + maxLength);
+                });
+                container.find('.text-type-text-clear').on('click', function (event) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    textarea.val('');
+                });
+            }
         };
-        var pageForwardCallback = function (currentPage, nextPage) {
-            currentPage.find('.validate').each(function () {
-                $(this).validate();
-            });
-            if (currentPage.find('.invalid').length > 0 && currentPage.find('.validate[data-mandatory-validate-on-skip="1"]').length > 0) {
-                return false;
-            }
-            if (nextPage.find('#textReview').length > 0 && textMechanism.active) {
-                nextPage.find('#textReview').text($('textarea#textTypeText').val());
-            }
-            if (nextPage.find('#ratingReview').length > 0 && ratingMechanism.active) {
-                nextPage.find('#ratingReview').text(i18n.t('rating.review_title') + ": " + ratingMechanism.currentRatingValue + " / " + ratingMechanism.getParameterValue("maxRating"));
-            }
-            if (nextPage.find('#screenshotReview').length > 0 && screenshotMechanism.active && screenshotView.screenshotCanvas != null) {
-                var img = $('<img src="' + screenshotView.screenshotCanvas.toDataURL() + '" />');
-                img.css('max-width', '20%');
-                $('#screenshotReview').empty().append(img);
-            }
-            return true;
-        };
-        var prepareFormData = function () {
+        var prepareFormData = function (container, configuration) {
             var formData = new FormData();
-            $('#serverResponse').removeClass();
+            var textMechanism = configuration.getMechanismConfig(config_1.mechanismTypes.textType);
+            var ratingMechanism = configuration.getMechanismConfig(config_1.mechanismTypes.ratingType);
+            var screenshotMechanism = configuration.getMechanismConfig(config_1.mechanismTypes.screenshotType);
+            container.find('.server-response').removeClass('error').removeClass('success');
             var feedbackObject = new feedback_1.Feedback(config_1.feedbackObjectTitle, config_1.applicationName, "uid12345", null, 1.0, null);
             if (textMechanism.active) {
-                feedbackObject.text = $('textarea#textTypeText').val();
+                feedbackObject.text = container.find('textarea.text-type-text').val();
             }
             if (ratingMechanism.active) {
-                var ratingTitle = $('.rating-text').text().trim();
+                var ratingTitle = container.find('.rating-text').text().trim();
                 var rating = new rating_1.Rating(ratingTitle, ratingMechanism.currentRatingValue);
                 feedbackObject.ratings = [];
                 feedbackObject.ratings.push(rating);
             }
-            if (screenshotMechanism.active && screenshotView.getScreenshotAsBinary() !== null) {
-                formData.append('file', screenshotView.getScreenshotAsBinary());
+            if (screenshotMechanism.active && screenshotMechanism.screenshotView.getScreenshotAsBinary() !== null) {
+                formData.append('file', screenshotMechanism.screenshotView.getScreenshotAsBinary());
             }
             formData.append('json', JSON.stringify(feedbackObject));
             return formData;
         };
-        var retrieveConfigurationDataOrClose = function () {
+        var toggleDialog = function (pushConfiguration) {
             if (!active) {
-                var url = config_1.apiEndpoint + config_1.configPath;
-                $.get(url, null, function (data) {
-                    initMechanisms(data);
-                });
+                openDialog(dialog, pushConfiguration);
             }
             else {
                 dialog.dialog("close");
             }
             active = !active;
         };
+        var openDialog = function (dialog, configuration) {
+            var screenshotMechanism = configuration.getMechanismConfig(config_1.mechanismTypes.screenshotType);
+            if (screenshotMechanism !== null && screenshotMechanism !== undefined && screenshotMechanism.screenshotView !== null) {
+                screenshotMechanism.screenshotView.checkAutoTake();
+            }
+            dialog.dialog('open');
+        };
+        var resetMessageView = function () {
+            $('.server-response').removeClass('error').removeClass('success').text('');
+        };
         $.fn.feedbackPlugin = function (options) {
             this.options = $.extend({}, $.fn.feedbackPlugin.defaults, options);
             var currentOptions = this.options;
-            var resources = { en: { translation: require('json!../locales/en/translation.json') }, de: { translation: require('json!../locales/de/translation.json') } };
+            var resources = {
+                en: { translation: require('json!../locales/en/translation.json') },
+                de: { translation: require('json!../locales/de/translation.json') }
+            };
             i18n_1.I18nHelper.initializeI18n(resources, this.options);
+            var applicationService = new application_service_1.ApplicationService(new mock_backend_1.MockBackend(mockData));
+            applicationService.retrieveApplication(1, function (application) {
+                initApplication(application);
+            });
             this.css('background-color', currentOptions.backgroundColor);
             this.css('color', currentOptions.color);
             this.on('click', function (event) {
                 event.preventDefault();
                 event.stopPropagation();
-                retrieveConfigurationDataOrClose();
+                toggleDialog(application.getPushConfiguration());
             });
             return this;
         };

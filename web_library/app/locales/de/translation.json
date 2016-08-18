@@ -12,12 +12,15 @@
   },
   "screenshot": {
     "take_screenshot": "Screenshot erstellen",
+    "actions": "Aktionen",
+    "stickers": "Sticker",
     "rectangle": "Rechteck",
     "blacken": "Einschwärzen",
     "circle": "Kreis",
     "arrow": "Pfeil",
     "freehand": "Freihand",
     "crop": "Ausschneiden",
+    "text": "Text hinzufügen",
     "undo": "Rückgängig",
     "remove": "Löschen"
   },

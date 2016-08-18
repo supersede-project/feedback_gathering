@@ -18,6 +18,16 @@ export const dialogOptions = {
     resizable: false
 };
 
-export const textType = 'TEXT_TYPE';
-export const ratingType = 'RATING_TYPE';
-export const screenshotType = 'SCREENSHOT_TYPE';
+export const mechanismTypes = {
+    textType: 'TEXT_TYPE',
+    ratingType: 'RATING_TYPE',
+    screenshotType: 'SCREENSHOT_TYPE',
+    audioType: 'AUDIO_TYPE',
+    categoryType: 'CATEGORY_TYPE',
+    attachmentType: 'ATTACHMENT_TYPE'
+};
+
+export const configurationTypes = {
+    push: 'PUSH',
+    pull: 'PULL'
+};

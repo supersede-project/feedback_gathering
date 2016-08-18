@@ -12,12 +12,15 @@
   },
   "screenshot": {
     "take_screenshot": "Take a screenshot",
+    "actions": "Actions",
+    "stickers": "Stickers",
     "rectangle": "rectangle",
     "blacken": "blacken",
     "circle": "circle",
     "arrow": "arrow",
     "freehand": "freehand",
     "crop": "crop",
+    "text": "Add text",
     "undo": "undo",
     "remove": "remove"
   },

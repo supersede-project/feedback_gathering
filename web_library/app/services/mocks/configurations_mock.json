@@ -1,0 +1,438 @@
+[
+  {
+    "id": 1,
+    "type": "PUSH",
+    "userGroup": {
+      "id": 1,
+      "name": "Group of motivated users",
+      "users": [
+        {
+          "id": 1,
+          "name": "U0239402342034"
+        },
+        {
+          "id": 2,
+          "name": "U2304923492224"
+        },
+        {
+          "id": 3,
+          "name": "U8239820392403"
+        }
+      ]
+    },
+    "generalConfiguration": {
+      "parameters": [
+        {
+          "id": 1,
+          "key": "aKey",
+          "value": "aPushSpecificValue"
+        }
+      ]
+    },
+    "mechanisms": [
+      {
+        "id": 1,
+        "type": "TEXT_TYPE",
+        "active": true,
+        "order": 1,
+        "canBeActivated": false,
+        "parameters": [
+          {
+            "key": "maxLength",
+            "value": 200
+          },
+          {
+            "key": "title",
+            "value": "Feedback"
+          },
+          {
+            "key": "hint",
+            "value": "Please enter your feedback"
+          },
+          {
+            "key": "label",
+            "value": "Please write about your problem"
+          },
+          {
+            "key": "labelPositioning",
+            "value": "left"
+          },
+          {
+            "key": "labelColor",
+            "value": "#353535"
+          },
+          {
+            "key": "labelFontSize",
+            "value": 15
+          },
+          {
+            "key": "textareaFontColor",
+            "value": "#7A7A7A"
+          },
+          {
+            "key": "mandatory",
+            "value": 1
+          },
+          {
+            "key": "mandatoryReminder",
+            "value": "Please fill in the text field"
+          },
+          {
+            "key": "undoEnabled",
+            "value": 1
+          },
+          {
+            "key": "undoSteps",
+            "value": 1
+          },
+          {
+            "key": "clearInput",
+            "value": 0
+          },
+          {
+            "key": "borderWidth",
+            "value": 2
+          },
+          {
+            "key": "borderColor",
+            "value": "#000000"
+          },
+          {
+            "key": "fieldWidth",
+            "value": 200
+          },
+          {
+            "key": "fieldHeight",
+            "value": 50
+          },
+          {
+            "key": "fieldFontSize",
+            "value": 13
+          },
+          {
+            "key": "fieldFontType",
+            "value": "italic"
+          },
+          {
+            "key": "fieldTextAlignment",
+            "value": "left"
+          },
+          {
+            "key": "fieldBackgroundColor",
+            "value": "#ffffff"
+          },
+          {
+            "key": "maxLengthVisible",
+            "value": 1
+          },
+          {
+            "key": "validationRegex",
+            "value": "."
+          },
+          {
+            "key": "validateOnSkip",
+            "value": 1
+          }
+        ]
+      },
+      {
+        "id": 2,
+        "type": "AUDIO_TYPE",
+        "active": false,
+        "order": 2,
+        "canBeActivated": false,
+        "parameters": [
+          {
+            "key": "maxTime",
+            "value": 30,
+            "defaultValue": 30,
+            "editableByUser": false
+          }
+        ]
+      },
+      {
+        "id": 3,
+        "type": "SCREENSHOT_TYPE",
+        "active": true,
+        "order": 3,
+        "canBeActivated": false,
+        "parameters": [
+          {
+            "key": "title",
+            "value": "Title for screenshot feedback"
+          },
+          {
+            "key": "defaultPicture",
+            "value": "lastScreenshot",
+            "defaultValue": "noImage",
+            "editableByUser": true
+          }
+        ]
+      },
+      {
+        "id": 4,
+        "type": "RATING_TYPE",
+        "active": true,
+        "order": 4,
+        "canBeActivated": false,
+        "parameters": [
+          {
+            "key": "title",
+            "value": "Rate your user experience on this page"
+          },
+          {
+            "key": "ratingIcon",
+            "value": "star"
+          },
+          {
+            "key": "maxRating",
+            "value": 5
+          },
+          {
+            "key": "defaultRating",
+            "value": 3,
+            "defaultValue": 0,
+            "editableByUser": false
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "type": "PULL",
+    "active": true,
+    "generalConfiguration": {
+      "parameters": [
+        {
+          "id": 2,
+          "key": "likelihood",
+          "value": 0.4
+        },
+        {
+          "key": "askOnAppStartup",
+          "value": 0
+        }
+      ]
+    },
+    "mechanisms": [
+      {
+        "type": "TEXT_TYPE",
+        "active": true,
+        "order": 1,
+        "canBeActivated": false,
+        "parameters": [
+          {
+            "key": "maxLength",
+            "value": 50
+          },
+          {
+            "key": "title",
+            "value": "Feedback Pull"
+          },
+          {
+            "key": "hint",
+            "value": "Please enter your feedback"
+          },
+          {
+            "key": "label",
+            "value": "Feedback"
+          },
+          {
+            "key": "labelPositioning",
+            "value": "left"
+          },
+          {
+            "key": "labelFontSize",
+            "value": 12
+          },
+          {
+            "key": "mandatory",
+            "value": 1
+          },
+          {
+            "key": "mandatoryReminder",
+            "value": "Please fill in the text field"
+          },
+          {
+            "key": "undoEnabled",
+            "value": 1
+          },
+          {
+            "key": "undoSteps",
+            "value": 1
+          },
+          {
+            "key": "clearInput",
+            "value": 0
+          },
+          {
+            "key": "borderWidth",
+            "value": 2
+          },
+          {
+            "key": "borderColor",
+            "value": "#000000"
+          },
+          {
+            "key": "fieldWidth",
+            "value": 200
+          },
+          {
+            "key": "fieldHeight",
+            "value": 50
+          },
+          {
+            "key": "fieldBackgroundColor",
+            "value": "#ffffff"
+          },
+          {
+            "key": "maxLengthVisible",
+            "value": 1
+          },
+          {
+            "key": "validationRegex",
+            "value": "."
+          },
+          {
+            "key": "validateOnSkip",
+            "value": 1
+          }
+        ]
+      },
+      {
+        "type": "RATING_TYPE",
+        "active": true,
+        "order": 4,
+        "canBeActivated": false,
+        "parameters": [
+          {
+            "key": "title",
+            "value": "Rate your user experience"
+          },
+          {
+            "key": "ratingIcon",
+            "value": "star"
+          },
+          {
+            "key": "maxRating",
+            "value": 5
+          },
+          {
+            "key": "defaultRating",
+            "value": 2,
+            "editableByUser": false,
+            "defaultValue": 0
+          }
+        ]
+      },
+      {
+        "type": "SCREENSHOT_TYPE",
+        "active": true,
+        "order": 3,
+        "canBeActivated": false,
+        "parameters": [
+          {
+            "key": "title",
+            "value": "Title for screenshot feedback"
+          },
+          {
+            "key": "defaultPicture",
+            "value": "lastScreenshot",
+            "defaultValue": "noImage",
+            "editableByUser": true
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "type": "PULL",
+    "active": true,
+    "generalConfiguration": {
+      "parameters": [
+        {
+          "id": 77,
+          "key": "reviewActive",
+          "value": 0
+        },
+        {
+          "id": 2,
+          "key": "likelihood",
+          "value": 0.2
+        },
+        {
+          "id": 79,
+          "key": "askOnAppStartup",
+          "value": 0
+        }
+      ]
+    },
+    "mechanisms": [
+      {
+        "type": "RATING_TYPE",
+        "active": true,
+        "order": 1,
+        "canBeActivated": false,
+        "parameters": [
+          {
+            "key": "title",
+            "value": "Rate your user experience"
+          },
+          {
+            "key": "ratingIcon",
+            "value": "star"
+          },
+          {
+            "key": "maxRating",
+            "value": 5
+          },
+          {
+            "key": "defaultRating",
+            "value": 2,
+            "editableByUser": false,
+            "defaultValue": 0
+          }
+        ]
+      },
+      {
+        "type": "CATEGORY_TYPE",
+        "active": true,
+        "order": 2,
+        "canBeActivated": false,
+        "parameters": [
+          {
+            "key": "title",
+            "value": "Please choose from the following categories"
+          },
+          {
+            "key": "ownAllowed",
+            "value": 1
+          },
+          {
+            "key": "multiple",
+            "value": 1
+          },
+          {
+            "key": "options",
+            "value": [
+              {
+                "key": "BUG_CATEGORY",
+                "value": "Bug"
+              },
+              {
+                "key": "FEATURE_REQUEST_CATEGORY",
+                "value": "Feature Request"
+              },
+              {
+                "key": "GENERAL_CATEGORY",
+                "value": "General Feedback"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]
