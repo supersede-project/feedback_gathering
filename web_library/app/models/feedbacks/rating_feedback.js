@@ -1,8 +1,7 @@
 define(["require", "exports"], function (require, exports) {
     "use strict";
     var RatingFeedback = (function () {
-        function RatingFeedback(title, rating, mechanismId) {
-            this.title = title;
+        function RatingFeedback(rating, mechanismId) {
             this.rating = rating;
             this.mechanismId = mechanismId;
         }

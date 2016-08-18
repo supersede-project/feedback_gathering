@@ -14,11 +14,11 @@ public class TextFeedback {
 	private String text;
 
 	@DbAttribute("mechanism_id")
-	private long mechanismId;
+	private Integer mechanismId;
 	
 	public TextFeedback() {}
 
-	public TextFeedback(Integer id, Integer feedbackId, String text, long mechanismId) {
+	public TextFeedback(Integer id, Integer feedbackId, String text, Integer mechanismId) {
 		super();
 		this.id = id;
 		this.feedbackId = feedbackId;
@@ -50,11 +50,11 @@ public class TextFeedback {
 		this.text = text;
 	}
 
-	public long getMechanismId() {
+	public Integer getMechanismId() {
 		return mechanismId;
 	}
 
-	public void setMechanismId(long mechanismId) {
+	public void setMechanismId(Integer mechanismId) {
 		this.mechanismId = mechanismId;
 	}
 }

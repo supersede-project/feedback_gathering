@@ -310,7 +310,7 @@ export var feedbackPluginModule = function ($, window, document) {
 
         for(var ratingMechanism of ratingMechanisms) {
             if (ratingMechanism.active) {
-                var rating = new RatingFeedback(ratingMechanism.getParameterValue('title'), ratingMechanism.currentRatingValue, ratingMechanism.id);
+                var rating = new RatingFeedback(ratingMechanism.currentRatingValue, ratingMechanism.id);
                 feedbackObject.ratingFeedbacks.push(rating);
             }
         }
@@ -325,6 +325,7 @@ export var feedbackPluginModule = function ($, window, document) {
         }
 
         formData.append('json', JSON.stringify(feedbackObject));
+
         return formData;
     };
 

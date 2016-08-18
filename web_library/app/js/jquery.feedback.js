@@ -187,7 +187,7 @@ define(["require", "exports", './config', '../views/pagination_container', '../v
             for (var _a = 0, ratingMechanisms_1 = ratingMechanisms; _a < ratingMechanisms_1.length; _a++) {
                 var ratingMechanism = ratingMechanisms_1[_a];
                 if (ratingMechanism.active) {
-                    var rating = new rating_feedback_1.RatingFeedback(ratingMechanism.getParameterValue('title'), ratingMechanism.currentRatingValue, ratingMechanism.id);
+                    var rating = new rating_feedback_1.RatingFeedback(ratingMechanism.currentRatingValue, ratingMechanism.id);
                     feedbackObject.ratingFeedbacks.push(rating);
                 }
             }

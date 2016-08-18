@@ -1,5 +1,6 @@
 package ch.uzh.ifi.feedback.repository.serialization;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -21,11 +22,11 @@ public class FeedbackSerializationService extends RepositorySerializationService
 
 	@Override
 	public Feedback Deserialize(HttpServletRequest request) {
-		Feedback feedback = super.Deserialize(request);
+		Feedback feedback = super.Deserialize(request);		
 
-		try {
-			List<Part> screenshotParts = request.getParts().stream().filter(part -> "file".equals(part.getName()))
-					.collect(Collectors.toList());
+		try {		
+			List<Part> screenshotParts = request.getParts().stream().filter(part -> part.getName().toLowerCase().contains("screenshot"))
+					.collect(Collectors.toList());						
 			feedback.setScreenshots(screenshotSerializationService.ParseRequestParts(screenshotParts));
 		} catch (Exception e) {
 			e.printStackTrace();

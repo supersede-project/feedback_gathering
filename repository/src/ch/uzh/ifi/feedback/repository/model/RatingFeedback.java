@@ -16,7 +16,7 @@ public class RatingFeedback {
 	private transient Integer feedbackId;
 
 	@DbAttribute("mechanism_id")
-	private long mechanismId;
+	private Integer mechanismId;
 
 	public String getTitle() {
 		return title;
@@ -50,11 +50,11 @@ public class RatingFeedback {
 		this.feedbackId = feedbackId;
 	}
 
-	public long getMechanismId() {
+	public Integer getMechanismId() {
 		return mechanismId;
 	}
 
-	public void setMechanismId(long mechanismId) {
+	public void setMechanismId(Integer mechanismId) {
 		this.mechanismId = mechanismId;
 	}
 }
