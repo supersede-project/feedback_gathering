@@ -12,17 +12,18 @@ import {MockBackend} from '../services/backends/mock_backend';
 import {RatingMechanism} from '../models/mechanisms/rating_mechanism';
 import {PullConfiguration} from '../models/configurations/pull_configuration';
 import {Feedback} from '../models/feedbacks/feedback';
-import {Rating} from '../models/feedbacks/rating';
 import {PageNavigation} from './helpers/page_navigation';
 import {ConfigurationInterface} from '../models/configurations/configuration_interface';
 import {Application} from '../models/applications/application';
 import {ApplicationService} from '../services/application_service';
 import {shuffle} from './helpers/array_shuffle';
-import {ScreenshotMechanism} from '../models/mechanisms/screenshot_mechanism';
 import * as dialogTemplate from '../templates/feedback_dialog.handlebars';
 import * as pullDialogTemplate from '../templates/feedback_dialog.handlebars';
 import * as intermediateDialogTemplate from '../templates/intermediate_dialog.handlebars';
 import {GeneralConfiguration} from '../models/configurations/general_configuration';
+import {TextFeedback} from '../models/feedbacks/text_feedback';
+import {RatingFeedback} from '../models/feedbacks/rating_feedback';
+import {ScreenshotFeedback} from '../models/feedbacks/screenshot_feedback';
 var mockData = require('json!../services/mocks/applications_mock.json');
 
 
@@ -240,17 +241,21 @@ export var feedbackPluginModule = function ($, window, document) {
      */
     var addEvents = function (containerId, configuration:ConfigurationInterface) {
         var container = $('#' + containerId);
-        var textarea = container.find('textarea.text-type-text');
-        var textMechanism = configuration.getMechanismConfig(mechanismTypes.textType);
+        var textareas = container.find('textarea.text-type-text');
+        var textMechanisms = configuration.getMechanismConfig(mechanismTypes.textType);
 
         container.find('button.submit-feedback').unbind().on('click', function (event) {
             event.preventDefault();
             event.stopPropagation();
 
             // validate anyway before sending
-            if(textMechanism) {
-                textarea.validate();
-                if (!textarea.hasClass('invalid')) {
+            if(textMechanisms.length > 0) {
+                textareas.each(function() {
+                    $(this).validate();
+                });
+
+                var invalidTextareas = container.find('textarea.text-type-text.invalid');
+                if(invalidTextareas.length == 0) {
                     var formData = prepareFormData(container, configuration);
                     sendFeedback(formData, configuration);
                 }
@@ -261,14 +266,17 @@ export var feedbackPluginModule = function ($, window, document) {
         });
 
         // character length
-        if(textMechanism) {
+        for(var textMechanism of textMechanisms) {
+            var sectionSelector = "textMechanism" + textMechanism.id;
+            var textarea = container.find('section#' + sectionSelector + ' textarea.text-type-text');
             var maxLength = textMechanism.getParameterValue('maxLength');
+
             textarea.on('keyup focus', function () {
-                container.find('span.text-type-max-length').text($(this).val().length + '/' + maxLength);
+                container.find('section#' + sectionSelector + ' span.text-type-max-length').text($(this).val().length + '/' + maxLength);
             });
 
             // text clear button
-            container.find('.text-type-text-clear').on('click', function (event) {
+            container.find('section#' + sectionSelector + ' .text-type-text-clear').on('click', function (event) {
                 event.preventDefault();
                 event.stopPropagation();
                 textarea.val('');
@@ -281,27 +289,39 @@ export var feedbackPluginModule = function ($, window, document) {
      *
      * @returns {FormData}
      */
-    // TODO extend to multiple mechanisms
     var prepareFormData = function (container:JQuery, configuration:ConfigurationInterface):FormData {
         var formData = new FormData();
-        var textMechanism = configuration.getMechanismConfig(mechanismTypes.textType);
-        var ratingMechanism = configuration.getMechanismConfig(mechanismTypes.ratingType);
-        var screenshotMechanism = configuration.getMechanismConfig(mechanismTypes.screenshotType);
+
+        var textMechanisms = configuration.getMechanismConfig(mechanismTypes.textType);
+        var ratingMechanisms = configuration.getMechanismConfig(mechanismTypes.ratingType);
+        var screenshotMechanisms = configuration.getMechanismConfig(mechanismTypes.screenshotType);
 
         container.find('.server-response').removeClass('error').removeClass('success');
-        var feedbackObject = new Feedback(feedbackObjectTitle, applicationName, "uid12345", null, 1.0, null);
+        var feedbackObject = new Feedback(feedbackObjectTitle, "uid12345", "DE", 1, 1);
 
-        if (textMechanism.active) {
-            feedbackObject.text = container.find('textarea.text-type-text').val();
+        for(var textMechanism of textMechanisms) {
+            if(textMechanism.active) {
+                var sectionSelector = "textMechanism" + textMechanism.id;
+                var textarea = container.find('section#' + sectionSelector + ' textarea.text-type-text');
+                var textFeedback = new TextFeedback(textarea.val(), textMechanism.id);
+                feedbackObject.textFeedbacks.push(textFeedback);
+            }
         }
-        if (ratingMechanism.active) {
-            var ratingTitle = container.find('.rating-text').text().trim();
-            var rating = new Rating(ratingTitle, ratingMechanism.currentRatingValue);
-            feedbackObject.ratings = [];
-            feedbackObject.ratings.push(rating);
+
+        for(var ratingMechanism of ratingMechanisms) {
+            if (ratingMechanism.active) {
+                var rating = new RatingFeedback(ratingMechanism.getParameterValue('title'), ratingMechanism.currentRatingValue, ratingMechanism.id);
+                feedbackObject.ratingFeedbacks.push(rating);
+            }
         }
-        if (screenshotMechanism.active && screenshotMechanism.screenshotView.getScreenshotAsBinary() !== null) {
-            formData.append('file', screenshotMechanism.screenshotView.getScreenshotAsBinary());
+
+        for(var screenshotMechanism of screenshotMechanisms) {
+            if(screenshotMechanism.active) {
+                var partName = "screenshot" + screenshotMechanism.id;
+                var screenshotFeedback = new ScreenshotFeedback(partName, screenshotMechanism.id, partName);
+                feedbackObject.screenshotFeedbacks.push(screenshotFeedback);
+                formData.append(partName, screenshotMechanism.screenshotView.getScreenshotAsBinary());
+            }
         }
 
         formData.append('json', JSON.stringify(feedbackObject));
@@ -322,10 +342,10 @@ export var feedbackPluginModule = function ($, window, document) {
     };
 
     var openDialog = function(dialog, configuration) {
-        // TODO extend to multiple mechanisms
-        var screenshotMechanism:ScreenshotMechanism = configuration.getMechanismConfig(mechanismTypes.screenshotType);
-        if(screenshotMechanism !== null && screenshotMechanism !== undefined && screenshotMechanism.screenshotView !== null) {
-            screenshotMechanism.screenshotView.checkAutoTake();
+        for(var screenshotMechanism of configuration.getMechanismConfig(mechanismTypes.screenshotType)) {
+            if(screenshotMechanism !== null && screenshotMechanism !== undefined && screenshotMechanism.screenshotView !== null) {
+                screenshotMechanism.screenshotView.checkAutoTake();
+            }
         }
         dialog.dialog('open');
     };
