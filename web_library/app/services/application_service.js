@@ -3,7 +3,7 @@ define(["require", "exports", './backends/http_backend', '../models/applications
     var ApplicationService = (function () {
         function ApplicationService(backend) {
             if (!backend) {
-                this.backend = new http_backend_1.HttpBackend('feedback_orchestrator/example/configuration', config_1.apiEndpointOrchestrator);
+                this.backend = new http_backend_1.HttpBackend(config_1.applicationPath, config_1.apiEndpointOrchestrator);
             }
             else {
                 this.backend = backend;

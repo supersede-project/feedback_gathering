@@ -2,7 +2,7 @@ import './lib/jquery.star-rating-svg.js';
 import './jquery.validate';
 import {
     apiEndpointRepository, feedbackPath, applicationName, defaultSuccessMessage,
-    feedbackObjectTitle, dialogOptions, mechanismTypes
+    feedbackObjectTitle, dialogOptions, mechanismTypes, applicationId
 } from './config';
 import {PaginationContainer} from '../views/pagination_container';
 import {ScreenshotView} from '../views/screenshot/screenshot_view';
@@ -115,7 +115,12 @@ export var feedbackPluginModule = function ($, window, document) {
             pageNavigation.screenshotViews.push(screenshotView);
         }
 
-        var dialog = initDialog($('#'+ dialogId), generalConfiguration.getParameterValue('dialogTitle'));
+        var title = "Feedback";
+        if(generalConfiguration.getParameterValue('dialogTitle') !== null && generalConfiguration.getParameterValue('dialogTitle') !== "") {
+            title = generalConfiguration.getParameterValue('dialogTitle');
+        }
+
+        var dialog = initDialog($('#'+ dialogId), title);
         addEvents(dialogId, configuration);
         return dialog;
     };
@@ -297,7 +302,7 @@ export var feedbackPluginModule = function ($, window, document) {
         var screenshotMechanisms = configuration.getMechanismConfig(mechanismTypes.screenshotType);
 
         container.find('.server-response').removeClass('error').removeClass('success');
-        var feedbackObject = new Feedback(feedbackObjectTitle, "uid12345", "DE", 1, 1, [], [], []);
+        var feedbackObject = new Feedback(feedbackObjectTitle, "uid12345", "DE", applicationId, configuration.id, [], [], []);
 
         for(var textMechanism of textMechanisms) {
             if(textMechanism.active) {
@@ -375,8 +380,8 @@ export var feedbackPluginModule = function ($, window, document) {
         I18nHelper.initializeI18n(resources, this.options);
 
         // loadDataHere to trigger pull if necessary
-        var applicationService = new ApplicationService(new MockBackend(mockData));
-        applicationService.retrieveApplication(1, function(application) {
+        var applicationService = new ApplicationService();
+        applicationService.retrieveApplication(applicationId, function(application) {
             initApplication(application);
         });
 

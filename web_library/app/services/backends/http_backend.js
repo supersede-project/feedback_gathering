@@ -19,7 +19,17 @@ define(["require", "exports"], function (require, exports) {
             });
         };
         HttpBackend.prototype.retrieve = function (id, callback) {
-            return null;
+            var url = this.getUrl() + id;
+            jQuery.ajax({
+                url: url,
+                type: 'GET',
+                success: function (data) {
+                    callback(data);
+                },
+                error: function (data) {
+                    callback(data);
+                }
+            });
         };
         HttpBackend.prototype.create = function (object, callback) {
             return null;

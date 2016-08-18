@@ -25,7 +25,18 @@ export class HttpBackend implements Backend {
     }
 
     retrieve(id:number, callback:(data:any) => void): void {
-        return null;
+        var url = this.getUrl() + id;
+
+        jQuery.ajax({
+            url: url,
+            type: 'GET',
+            success: function (data) {
+                callback(data);
+            },
+            error: function (data) {
+                callback(data);
+            }
+        });
     }
 
     create(object:any, callback?:(data:any) => void): void {

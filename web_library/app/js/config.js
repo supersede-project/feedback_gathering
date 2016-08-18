@@ -1,7 +1,8 @@
 define(["require", "exports"], function (require, exports) {
     "use strict";
-    exports.apiEndpointOrchestrator = 'http://ec2-54-175-37-30.compute-1.amazonaws.com/';
-    exports.configPath = 'feedback_orchestrator/example/configuration';
+    exports.apiEndpointOrchestrator = 'http://localhost:8080/';
+    exports.applicationPath = 'feedback_orchestrator/en/applications/';
+    exports.applicationId = 13;
     exports.apiEndpointRepository = "http://localhost:8080/";
     exports.feedbackPath = "feedback_repository/de/feedbacks";
     exports.feedbackObjectTitle = 'Feedback';
