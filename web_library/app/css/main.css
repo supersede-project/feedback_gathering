@@ -1045,7 +1045,11 @@ button.screenshot-operation {
   max-width: 30px;
   display: inline-block;
   margin-right: 1px;
-  padding: 1px 1px; }
+  padding: 1px 1px;
+  border: none; }
+  button.screenshot-operation img {
+    height: auto;
+    max-height: 30px; }
   button.screenshot-operation.active {
     padding: 7px 7px; }
 

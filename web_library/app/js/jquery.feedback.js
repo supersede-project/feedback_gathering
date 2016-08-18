@@ -120,9 +120,13 @@ define(["require", "exports", './config', '../views/pagination_container', '../v
             if (screenshotMechanism == null) {
                 return;
             }
+            var elementToCaptureSelector = 'body';
+            if (screenshotMechanism.getParameterValue('elementToCapture') !== null && screenshotMechanism.getParameterValue('elementToCapture') !== "") {
+                elementToCaptureSelector = screenshotMechanism.getParameterValue('elementToCapture');
+            }
             var container = $('#' + containerId);
             var dialogSelector = $('[aria-describedby="' + containerId + '"]');
-            var screenshotPreview = container.find('.screenshot-preview'), screenshotCaptureButton = container.find('button.take-screenshot'), elementToCapture = $('body'), elementsToHide = [$('.ui-widget-overlay.ui-front'), dialogSelector];
+            var screenshotPreview = container.find('.screenshot-preview'), screenshotCaptureButton = container.find('button.take-screenshot'), elementToCapture = $(elementToCaptureSelector), elementsToHide = [$('.ui-widget-overlay.ui-front'), dialogSelector];
             var screenshotView = new screenshot_view_1.ScreenshotView(screenshotMechanism, screenshotPreview, screenshotCaptureButton, elementToCapture, container, elementsToHide);
             screenshotMechanism.setScreenshotView(screenshotView);
             return screenshotView;
