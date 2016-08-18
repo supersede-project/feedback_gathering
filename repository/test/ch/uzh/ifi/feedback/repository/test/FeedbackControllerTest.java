@@ -8,11 +8,11 @@ import com.mysql.jdbc.PreparedStatement;
 
 import ch.uzh.ifi.feedback.library.transaction.Transaction;
 import ch.uzh.ifi.feedback.library.transaction.TransactionManager;
-import ch.uzh.ifi.feedback.repository.Feedback;
-import ch.uzh.ifi.feedback.repository.FeedbackController;
-import ch.uzh.ifi.feedback.repository.FeedbackParser;
-import ch.uzh.ifi.feedback.repository.FeedbackService;
-import ch.uzh.ifi.feedback.repository.Rating;
+import ch.uzh.ifi.feedback.repository.model.Feedback;
+import ch.uzh.ifi.feedback.repository.controller.FeedbackController;
+import ch.uzh.ifi.feedback.repository.service.FeedbackResultParser;
+import ch.uzh.ifi.feedback.repository.service.FeedbackService;
+import ch.uzh.ifi.feedback.repository.model.RatingFeedback;
 
 import static org.mockito.Mockito.*;
 
@@ -27,10 +27,10 @@ public class FeedbackControllerTest {
 	private PreparedStatement statement1;
 	private PreparedStatement statement2;
 	private FeedbackService testee;
-	
+
 	@Before
 	public void setUp() throws Exception {
-		
+
 		transactionManager = mock(TransactionManager.class);
 		connection = mock(Connection.class);
 		statement1 = mock(PreparedStatement.class);
@@ -43,11 +43,10 @@ public class FeedbackControllerTest {
 		when(rs.next()).thenReturn(true);
 		when(rs.getInt(1)).thenReturn(1);
 	}
-	
-	private Feedback getTestFeedback()
-	{
+
+	private Feedback getTestFeedback() {
 		Feedback feedback = new Feedback();
-		feedback.setApplication("TestApplication");
+		feedback.setApplicationId(1);
 		feedback.setConfigVersion(1.0);
 		List<RatingFeedback> ratings = new ArrayList<>();
 		RatingFeedback rating = new RatingFeedback();
@@ -55,7 +54,6 @@ public class FeedbackControllerTest {
 		rating.setRating(4);
 		ratings.add(rating);
 		feedback.setRatings(ratings);
-		feedback.setText("Test");
 		feedback.setTitle("Title");
 		feedback.setUser("User");
 		return feedback;
@@ -63,24 +61,23 @@ public class FeedbackControllerTest {
 
 	@Test
 	public void testExecuteTransaction() throws Exception {
-		
-	  //arrange
-		testee = new FeedbackService(transactionManager, mock(FeedbackParser.class));
+
+		// arrange
+		testee = new FeedbackService(transactionManager, mock(FeedbackResultParser.class));
 		Feedback feedback = getTestFeedback();
-		
-	  //act
+
+		// act
 		testee.ExecuteTransaction(connection, feedback);
-		
-	  //assert
+
+		// assert
 		verify(connection).prepareStatement(anyString(), anyInt());
 		verify(statement1).setString(1, feedback.getTitle());
 		verify(statement1).setDouble(2, feedback.getConfigVersion());
-		verify(statement1).setString(3, feedback.getText());
-		verify(statement1).setString(4, feedback.getApplication());
+		verify(statement1).setLong(1, feedback.getApplicationId());
 		verify(statement1).setString(5, feedback.getUser());
 		verify(statement1).execute();
-		
-		RatingFeedback rating = feedback.getRatings().get(0);
+
+		RatingFeedback rating = feedback.getRatingFeedbacks().get(0);
 		verify(statement2).setString(1, rating.getTitle());
 		verify(statement2).setInt(2, rating.getRating());
 		verify(statement2).execute();

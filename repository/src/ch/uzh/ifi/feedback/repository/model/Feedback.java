@@ -40,7 +40,7 @@ public class Feedback {
 
 	@DbAttribute("context_information_id")
 	private ContextInformation contextInformation;
-
+	
 	@DbIgnore
 	private List<TextFeedback> textFeedbacks;
 	@DbIgnore
@@ -56,6 +56,8 @@ public class Feedback {
 	@DbIgnore
 	private List<CategoryFeedback> categoryFeedbacks;
 
+	public Feedback() {}
+	
 	public Feedback(String title, Integer id, Integer applicationId, String user, Timestamp createdAt,
 			Timestamp updatedAt, Double configVersion, String language, ContextInformation contextInformation,
 			List<TextFeedback> textFeedbacks, List<RatingFeedback> ratings, List<ScreenshotFeedback> screenshots,
