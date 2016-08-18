@@ -34,7 +34,22 @@ public class ScreenshotSerializationService extends RepositorySerializationServi
 				int fileSize = (int) filePart.getSize();
 				String fileName = getFileName(filePart);
 				
-				File outputFile = new File(uploadsStoragePath, String.valueOf(new Date().getTime()));
+				String fileExtension = "";
+				
+				if(filePart.getContentType().equals("image/png")) {
+					fileExtension = ".png";
+				} else if (filePart.getContentType().equals("image/jpeg")) {
+					fileExtension = ".jpg";
+				} else if (filePart.getContentType().equals("image/tiff")) {
+					fileExtension = ".tiff";
+				} else if (filePart.getContentType().equals("image/gif")) {
+					fileExtension = ".gif";
+				}
+				
+				// more or less unique filename
+				String fileNameOfStoredFile = Integer.toString(fileSize) + "_" + String.valueOf(new Date().getTime()) + fileExtension;				
+				
+				File outputFile = new File(uploadsStoragePath, fileNameOfStoredFile);
 				outputStream = new FileOutputStream(outputFile);
 				
 				int read = 0;
@@ -44,12 +59,6 @@ public class ScreenshotSerializationService extends RepositorySerializationServi
 					outputStream.write(bytes, 0, read);
 				}
 				
-				/*
-				byte[] content = new byte[fileSize];
-				fileContent.read(content);
-				File tmp = new File(uploadsStoragePath, String.valueOf(new Date().getTime()));
-				tmp.createNewFile();
-				 */
 				ScreenshotFeedback s = new ScreenshotFeedback(null, null, outputFile.toPath().toString(), fileSize, fileName,
 						null, "", "");
 				screenshots.add(s);
