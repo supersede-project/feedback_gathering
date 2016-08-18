@@ -92,15 +92,15 @@
         "categories": [
           {
             "text": null,
-            "category_types_id": 2
+            "categoryTypesId": 2
           },
           {
             "text": null,
-            "category_types_id": 3
+            "categoryTypesId": 3
           },
           {
             "text": "my own category",
-            "category_types_id": null
+            "categoryTypesId": null
           }
         ]
       },
@@ -109,15 +109,15 @@
         "categories": [
           {
             "text": null,
-            "category_types_id": 10
+            "categoryTypesId": 10
           },
           {
             "text": null,
-            "category_types_id": 11
+            "categoryTypesId": 11
           },
           {
             "text": "Praise",
-            "category_types_id": null
+            "categoryTypesId": null
           }
         ]
       }
