@@ -21,7 +21,7 @@ public class Feedback {
 
 	@NotNull
 	@DbAttribute("application_id")
-	private Integer applicationId;
+	private long applicationId;
 
 	@DbAttribute("user_identification")
 	@NotNull
@@ -33,9 +33,9 @@ public class Feedback {
 	@DbAttribute("updated_at")
 	private Timestamp updatedAt;
 
-	@DbAttribute("config_version")
-	@NotNull
-	private Double configVersion;
+	@DbAttribute("configuration_id")
+	private long configurationId;
+	
 	private String language;
 
 	@DbAttribute("context_information_id")
