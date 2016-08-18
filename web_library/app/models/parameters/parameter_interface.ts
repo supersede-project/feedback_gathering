@@ -4,4 +4,7 @@ export interface ParameterInterface {
     value:any;
     editableByUser?:boolean;
     defaultValue?:string;
+    language?:string;
+    createdAt?:string;
+    updatedAt?:string;
 }

@@ -111,7 +111,9 @@ define(["require", "exports", './config', '../views/pagination_container', '../v
             if (ratingMechanism !== null && ratingMechanism.active) {
                 var options = ratingMechanism.getRatingElementOptions();
                 $('' + selector).starRating(options);
-                $('' + selector + ' .jq-star:nth-child(' + ratingMechanism.initialRating + ')').click();
+                if (ratingMechanism.initialRating) {
+                    $('' + selector + ' .jq-star:nth-child(' + ratingMechanism.initialRating + ')').click();
+                }
             }
         };
         var initScreenshot = function (screenshotMechanism, containerId) {
@@ -232,8 +234,8 @@ define(["require", "exports", './config', '../views/pagination_container', '../v
             this.options = $.extend({}, $.fn.feedbackPlugin.defaults, options);
             var currentOptions = this.options;
             var resources = {
-                en: { translation: require('json!../locales/en/translation.json') },
-                de: { translation: require('json!../locales/de/translation.json') }
+                de: { translation: require('json!../locales/de/translation.json') },
+                en: { translation: require('json!../locales/en/translation.json') }
             };
             i18n_1.I18nHelper.initializeI18n(resources, this.options);
             var applicationService = new application_service_1.ApplicationService();
@@ -251,7 +253,7 @@ define(["require", "exports", './config', '../views/pagination_container', '../v
         };
         $.fn.feedbackPlugin.defaults = {
             'color': '#fff',
-            'lang': 'en',
+            'lang': 'de',
             'backgroundColor': '#b3cd40'
         };
     };

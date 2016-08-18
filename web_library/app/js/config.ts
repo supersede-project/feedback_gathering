@@ -1,12 +1,12 @@
-export const apiEndpointOrchestrator = 'http://localhost:8080/';
+export const apiEndpointOrchestrator = 'http://ec2-54-166-31-250.compute-1.amazonaws.com/';
 export const applicationPath = 'feedback_orchestrator/en/applications/';
-export const applicationId = 13;
+export const applicationId = 8;
 
-export const apiEndpointRepository = "http://localhost:8080/";
+export const apiEndpointRepository = "http://ec2-54-166-31-250.compute-1.amazonaws.com/";
 export const feedbackPath = "feedback_repository/de/feedbacks";
 
 export const feedbackObjectTitle = 'Feedback';
-export const applicationName = 'energiesparkonto.de';
+export const applicationName = 'PTV';
 
 export const defaultSuccessMessage = 'Your feedback was successfully sent';
 

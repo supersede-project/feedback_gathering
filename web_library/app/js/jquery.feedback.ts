@@ -190,7 +190,9 @@ export var feedbackPluginModule = function ($, window, document) {
             var options = ratingMechanism.getRatingElementOptions();
             $('' + selector).starRating(options);
             // reset to default rating
-            $('' + selector + ' .jq-star:nth-child(' + ratingMechanism.initialRating + ')').click();
+            if(ratingMechanism.initialRating) {
+                $('' + selector + ' .jq-star:nth-child(' + ratingMechanism.initialRating + ')').click();
+            }
         }
     };
 
@@ -373,8 +375,8 @@ export var feedbackPluginModule = function ($, window, document) {
         this.options = $.extend({}, $.fn.feedbackPlugin.defaults, options);
         var currentOptions = this.options;
         var resources = {
-            en: {translation: require('json!../locales/en/translation.json')},
-            de: {translation: require('json!../locales/de/translation.json')}
+            de: {translation: require('json!../locales/de/translation.json')},
+            en: {translation: require('json!../locales/en/translation.json')}
         };
 
         I18nHelper.initializeI18n(resources, this.options);
@@ -398,7 +400,7 @@ export var feedbackPluginModule = function ($, window, document) {
 
     $.fn.feedbackPlugin.defaults = {
         'color': '#fff',
-        'lang': 'en',
+        'lang': 'de',
         'backgroundColor': '#b3cd40'
     };
 
