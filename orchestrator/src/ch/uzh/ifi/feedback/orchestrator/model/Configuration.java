@@ -36,9 +36,10 @@ public class Configuration extends OrchestratorItem<Configuration> {
 	@DbIgnore
 	private GeneralConfiguration generalConfiguration;
 	
-	@DbAttribute("general_configuration_id")
+	@DbAttribute("general_configurations_id")
 	private transient Integer generalConfigurationId;
-	@DbAttribute("application_id")
+	
+	@DbAttribute("applications_id")
 	private transient Integer applicationId;
 	
 	public Configuration(){

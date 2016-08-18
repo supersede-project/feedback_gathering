@@ -95,6 +95,8 @@ public class RestManager implements IRestManager {
 		for(Class<?> clazz : controllerAnnotated){
 			Class<?> parameterClass = clazz.getAnnotation(Controller.class).value();
 			
+			System.out.println(clazz.getName());
+			
 			if(parameterClass.isAnnotationPresent(Validate.class))
 			{
 				Validate annotation = parameterClass.getAnnotation(Validate.class);
@@ -132,6 +134,13 @@ public class RestManager implements IRestManager {
 					}
 					
 					final HttpMethod methodFinal = method;
+					for(HandlerInfo h : _handlers)
+					{
+						UriTemplate t = h.getUriTemplate();
+						if(h.GetHttpMethod() == methodFinal && t.Match(path) != null)
+							throw new AlreadyBoundException("handler for template '" + path + "' already registered!/n");
+					}
+					
 					if(_handlers.stream().anyMatch((h) -> h.GetHttpMethod() == methodFinal && h.getUriTemplate().Match(path) != null))
 						throw new AlreadyBoundException("handler for template '" + path + "' already registered!/n");
 				

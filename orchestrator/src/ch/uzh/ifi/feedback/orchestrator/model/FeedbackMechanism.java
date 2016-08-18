@@ -26,6 +26,9 @@ public class FeedbackMechanism extends OrchestratorItem<FeedbackMechanism> {
 	@DbAttribute("mechanisms_id")
 	private Integer id;
 	
+	@DbAttribute("configurations_id")
+	private Integer configurationsId;
+	
 	@NotNull
 	@DbAttribute("name")
 	private String type;
@@ -116,5 +119,13 @@ public class FeedbackMechanism extends OrchestratorItem<FeedbackMechanism> {
 	@Override
 	public void setId(Integer id) {
 		this.id = id;
+	}
+
+	public Integer getConfigurationsid() {
+		return configurationsId;
+	}
+
+	public void setConfigurationsid(Integer configurationsid) {
+		this.configurationsId = configurationsid;
 	}
 }

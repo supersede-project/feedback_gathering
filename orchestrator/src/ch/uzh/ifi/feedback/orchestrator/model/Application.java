@@ -33,7 +33,7 @@ public class Application extends OrchestratorItem<Application> {
 	@DbIgnore
 	private List<Configuration> configurations;
 	
-	@DbAttribute("general_configuration_id")
+	@DbAttribute("general_configurations_id")
 	private transient Integer generalConfigurationId;
 	
 	public Application()

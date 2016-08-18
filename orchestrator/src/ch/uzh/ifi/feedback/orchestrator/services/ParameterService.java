@@ -19,6 +19,7 @@ import ch.uzh.ifi.feedback.library.rest.Service.ServiceBase;
 import ch.uzh.ifi.feedback.orchestrator.model.FeedbackMechanism;
 import ch.uzh.ifi.feedback.orchestrator.model.FeedbackParameter;
 import javassist.NotFoundException;
+import static java.util.Arrays.asList;
 
 public class ParameterService extends OrchestratorService<FeedbackParameter>{
 	
@@ -28,6 +29,7 @@ public class ParameterService extends OrchestratorService<FeedbackParameter>{
 		super(resultParser, FeedbackParameter.class, "parameters", "feedback_orchestrator");
 	}
 	
+	/*
 	@Override
 	public List<FeedbackParameter> GetWhereEquals(List<String> attributeNames, List<Object> values)
 			throws SQLException, NotFoundException {
@@ -43,10 +45,30 @@ public class ParameterService extends OrchestratorService<FeedbackParameter>{
 	    
 	    return setParametersRecursive(rootParams, parameterMap, childMap);
 	}
+	*/
+	
+	@Override
+	public List<FeedbackParameter> GetWhere(List<Object> values, String... conditions)
+			throws SQLException, NotFoundException {
+		
+		List<FeedbackParameter> params = super.GetWhere(values, conditions);
+		
+		Map<Integer, List<FeedbackParameter>> childMap = new HashMap<>();
+		Map<FeedbackParameter, Integer> parameterMap = new HashMap<>();
+		
+		if(GetLanguage() != null)
+			params = params.stream().filter(p -> p.getLanguage().equals(this.GetLanguage())).collect(Collectors.toList());
+		
+		List<FeedbackParameter> rootParams = GetRootParams(params, parameterMap, childMap);
+	    
+	    return setParametersRecursive(rootParams, parameterMap, childMap);
+	}
 	
 	@Override
 	public List<FeedbackParameter> GetAll() throws SQLException, NotFoundException
 	{
+		return GetWhere(asList());
+		/*
 		Map<Integer, List<FeedbackParameter>> childMap = new HashMap<>();
 		Map<FeedbackParameter, Integer> parameterMap = new HashMap<>();
 		List<FeedbackParameter> params = super.GetAll();
@@ -56,6 +78,7 @@ public class ParameterService extends OrchestratorService<FeedbackParameter>{
 		List<FeedbackParameter> rootParams = GetRootParams(params, parameterMap, childMap);
 	    
 	    return setParametersRecursive(rootParams, parameterMap, childMap);
+	    */
 	}
 	
 	private List<FeedbackParameter> GetRootParams(List<FeedbackParameter> params, Map<FeedbackParameter, Integer> parameterMap, Map<Integer, List<FeedbackParameter>> childMap)
@@ -82,10 +105,14 @@ public class ParameterService extends OrchestratorService<FeedbackParameter>{
 	@Override
 	public FeedbackParameter GetById(int id) throws SQLException, NotFoundException
 	{
+		/*
 		FeedbackParameter param = super.GetById(id);
     	return param;
+    	*/
+		return GetWhere(asList(id), "parameters_id = ?").get(0);
 	}
 	
+	/*
 	@Override
 	public void InsertFor(Connection con, FeedbackParameter param, String foreignKeyName, int foreignKey) throws SQLException, NotFoundException
 	{
@@ -101,6 +128,7 @@ public class ParameterService extends OrchestratorService<FeedbackParameter>{
 		}
 	}
 	
+
 	public void InsertParameter(
 			FeedbackParameter param, 
 			Integer generalConfigurationId, 
@@ -153,7 +181,59 @@ public class ParameterService extends OrchestratorService<FeedbackParameter>{
 		    key = keys.getInt(1);
 		}
 	}
+	*/
 	
+	@Override
+	public int Insert(Connection con, FeedbackParameter param)
+			throws SQLException, NotFoundException, UnsupportedOperationException {
+
+		int parameterId;
+		
+		if (param.getValue() == null || List.class.isAssignableFrom(param.getValue().getClass()))
+		{
+			List<FeedbackParameter> children = (List<FeedbackParameter>)param.getValue();
+			param.setValue(null);
+			parameterId = super.Insert(con, param);
+			for(FeedbackParameter child : children)
+			{
+				child.setParentParameterId(parameterId);
+				child.setMechanismId(param.getMechanismId());
+				child.setGenaralConfigurationId(param.getGenaralConfigurationId());
+				Insert(con, child);
+			}
+		}else{
+			parameterId = super.Insert(con, param);
+		}
+		
+		return parameterId;
+	}
+	
+	@Override
+	public void Update(Connection con, FeedbackParameter param)
+			throws SQLException, NotFoundException, UnsupportedOperationException {
+
+		if (List.class.isAssignableFrom(param.getValue().getClass()))
+		{
+			List<FeedbackParameter> children = (List<FeedbackParameter>)param.getValue();
+			param.setValue(null);
+			super.Update(con, param);
+			
+			for(FeedbackParameter child : children)
+			{
+				if(child.getId() == null)
+				{
+					child.setParentParameterId(param.getId());
+					child.setMechanismId(param.getMechanismId());
+					child.setGenaralConfigurationId(param.getGenaralConfigurationId());
+					Insert(con, child);
+				}else{
+					Update(con, child);
+				}
+			}
+		}
+	}
+	
+	/*
 	@Override
 	public void UpdateFor(Connection con, FeedbackParameter param, String foreignKeyName, int foreignKey) throws SQLException, NotFoundException
 	{
@@ -217,6 +297,7 @@ public class ParameterService extends OrchestratorService<FeedbackParameter>{
 			s.execute();
 		}
 	}
+	*/
 	
 	private List<FeedbackParameter> setParametersRecursive(
 			List<FeedbackParameter> params, 

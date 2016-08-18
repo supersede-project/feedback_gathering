@@ -28,8 +28,10 @@ public class ValidatorBase<T extends IDbItem<T>> {
 	{
 		ValidationResult result = new ValidationResult();
 		
+		/*
 		if(object.getId() != null)
 			CheckId(object, result);
+		*/
 		
 		for(Field f : ItemBase.GetFields(clazz, new ArrayList<>()))
 		{

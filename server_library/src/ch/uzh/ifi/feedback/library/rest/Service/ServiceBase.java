@@ -183,7 +183,7 @@ public abstract class ServiceBase<T> implements IDbService<T> {
 		return resultList;
 	}
 	
-	public List<T> GetWhere(List<Object> values, String...conditions) throws SQLException
+	public List<T> GetWhere(List<Object> values, String...conditions) throws SQLException, NotFoundException
 	{
 		Connection con = TransactionManager.createDatabaseConnection();
 		

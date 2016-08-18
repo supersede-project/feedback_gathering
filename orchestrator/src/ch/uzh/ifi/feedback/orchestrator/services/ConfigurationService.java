@@ -1,25 +1,14 @@
 package ch.uzh.ifi.feedback.orchestrator.services;
 
 import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
-
-import javax.naming.OperationNotSupportedException;
-
 import com.google.inject.Inject;
-import com.mysql.jdbc.Statement;
-
-import ch.uzh.ifi.feedback.library.rest.Service.IDbService;
-import ch.uzh.ifi.feedback.library.rest.Service.ServiceBase;
 import ch.uzh.ifi.feedback.orchestrator.model.Configuration;
-import ch.uzh.ifi.feedback.orchestrator.model.ConfigurationType;
 import ch.uzh.ifi.feedback.orchestrator.model.FeedbackMechanism;
 import ch.uzh.ifi.feedback.orchestrator.model.GeneralConfiguration;
 import javassist.NotFoundException;
-import jdk.nashorn.internal.runtime.regexp.joni.Config;
+import static java.util.Arrays.asList;
 
 public class ConfigurationService extends OrchestratorService<Configuration>{
 
@@ -48,8 +37,10 @@ public class ConfigurationService extends OrchestratorService<Configuration>{
 	public Configuration GetById(int id) throws SQLException, NotFoundException {
 
 		Configuration config = super.GetById(id);
-		config.getFeedbackMechanisms().addAll(mechanismService.GetAllFor("configuration_id", id));
-		config.setGeneralConfiguration(generalConfigurationService.GetById(config.getGeneralConfigurationId()));
+		//config.getFeedbackMechanisms().addAll(mechanismService.GetAllFor("configuration_id", id));
+		config.getFeedbackMechanisms().addAll(mechanismService.GetWhere(asList(id), "configurations_id = ?"));
+		if(config.getGeneralConfigurationId() != null)
+			config.setGeneralConfiguration(generalConfigurationService.GetById(config.getGeneralConfigurationId()));
 		
 		return config;
 	}
@@ -60,8 +51,10 @@ public class ConfigurationService extends OrchestratorService<Configuration>{
 		List<Configuration> configurations = super.GetAll();
 		for(Configuration config : configurations)
 		{
-			config.getFeedbackMechanisms().addAll(mechanismService.GetAllFor("configuration_id", config.getId()));
-			config.setGeneralConfiguration(generalConfigurationService.GetById(config.getGeneralConfigurationId()));
+			//config.getFeedbackMechanisms().addAll(mechanismService.GetAllFor("configuration_id", config.getId()));
+			config.getFeedbackMechanisms().addAll(mechanismService.GetWhere(asList(config.getId()), "configurations_id = ?"));
+			if(config.getGeneralConfigurationId() != null)
+				config.setGeneralConfiguration(generalConfigurationService.GetById(config.getGeneralConfigurationId()));
 		}
 		
 		return configurations;
@@ -73,8 +66,23 @@ public class ConfigurationService extends OrchestratorService<Configuration>{
 		
 		for(Configuration config : configurations)
 		{
-			config.getFeedbackMechanisms().addAll(mechanismService.GetAllFor("configuration_id", config.getId()));
+			config.getFeedbackMechanisms().addAll(mechanismService.GetAllFor("configurations_id", config.getId()));
 			config.setGeneralConfiguration(generalConfigurationService.GetById(config.getGeneralConfigurationId()));
+		}
+		
+		return configurations;
+	}
+	
+	@Override
+	public List<Configuration> GetWhere(List<Object> values, String... conditions) throws SQLException, NotFoundException 
+	{
+		List<Configuration> configurations =  super.GetWhere(values, conditions);
+		
+		for(Configuration config : configurations)
+		{
+			config.getFeedbackMechanisms().addAll(mechanismService.GetWhere(asList(config.getId()), "configurations_id = ?"));
+			if(config.getGeneralConfigurationId() != null)
+				config.setGeneralConfiguration(generalConfigurationService.GetById(config.getGeneralConfigurationId()));
 		}
 		
 		return configurations;
@@ -96,6 +104,7 @@ public class ConfigurationService extends OrchestratorService<Configuration>{
 			}
 		}
 		
+		/*
 		PreparedStatement s = con.prepareStatement(
 				  "UPDATE feedback_orchestrator.configurations as c "
 				+ "SET `name` = IFNULL(?, `name`), `type` = IFNULL(?, `type`), general_configuration_id = IFNULL(?, general_configuration_id) "
@@ -105,14 +114,19 @@ public class ConfigurationService extends OrchestratorService<Configuration>{
 		s.setObject(2, config.getType().toString());
 		s.setObject(3, generalConfigId);
 		s.setInt(4, config.getId());
+		*/
 		
+		super.Update(con, config);
 		for(FeedbackMechanism mechanism : config.getFeedbackMechanisms())
 		{
 			if(mechanism.getId() != null)
 			{
-				mechanismService.InsertFor(con, mechanism, "configuration_id", config.getId());
+				mechanism.setConfigurationsid(config.getId());
+				mechanismService.Insert(con, mechanism);
+				//mechanismService.InsertFor(con, mechanism, "configuration_id", config.getId());
 			}else{
-				mechanismService.UpdateFor(con, mechanism, "configuration_id", config.getId());
+				mechanismService.Update(con, mechanism);
+				//mechanismService.UpdateFor(con, mechanism, "configuration_id", config.getId());
 			}
 		}
 	}
@@ -132,7 +146,9 @@ public class ConfigurationService extends OrchestratorService<Configuration>{
 		
 		for(FeedbackMechanism mechanism : config.getFeedbackMechanisms())
 		{
-			mechanismService.InsertFor(con, mechanism, "configuration_id", configId);
+			mechanism.setConfigurationsid(config.getId());
+			mechanismService.Insert(con, mechanism);
+			//mechanismService.InsertFor(con, mechanism, "configuration_id", configId);
 		}
 		
 		return configId;

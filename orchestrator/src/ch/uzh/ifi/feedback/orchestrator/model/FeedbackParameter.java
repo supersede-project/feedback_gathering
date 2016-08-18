@@ -25,8 +25,7 @@ public class FeedbackParameter extends OrchestratorItem<FeedbackParameter> {
 	
 	@NotNull
 	private String key;
-	
-	@NotNull
+
 	private Object value;
 	
 	@DbAttribute("default_value")
@@ -38,7 +37,7 @@ public class FeedbackParameter extends OrchestratorItem<FeedbackParameter> {
 
 	@DbAttribute("parent_parameters_id")
 	private transient Integer parametersId;
-	@DbAttribute("mechanism_id")
+	@DbAttribute("mechanisms_id")
 	private transient Integer mechanismId;
 	@DbAttribute("general_configurations_id")
 	private transient Integer generalConfigurationsId;

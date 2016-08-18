@@ -31,7 +31,7 @@ public class ApplicationController extends OrchestratorController<Application> {
 	}
 	
 	@GET
-	@Path("/applications/{app_id}/{time}")
+	@Path("/applications/{app_id}/timestamp/{time}")
 	public Application GetByIdAndTime( @PathParam("app_id") Integer id, @PathParam("time") Timestamp time) throws Exception 
 	{
 		return super.GetByIdAndTime(id, time);
