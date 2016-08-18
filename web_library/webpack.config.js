@@ -1,5 +1,5 @@
 const webpack = require('webpack');
-const dev = true;
+const dev = false;
 var plugins = [];
 
 if(!dev) {
