@@ -254,7 +254,7 @@ define(["require", "exports", './config', '../views/pagination_container', '../v
         $.fn.feedbackPlugin.defaults = {
             'color': '#fff',
             'lang': 'de',
-            'backgroundColor': '#b3cd40'
+            'backgroundColor': '#1A6FC2'
         };
     };
     (function ($, window, document) {
