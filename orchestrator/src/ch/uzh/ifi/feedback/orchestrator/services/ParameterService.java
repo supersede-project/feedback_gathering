@@ -20,7 +20,7 @@ import ch.uzh.ifi.feedback.orchestrator.model.FeedbackMechanism;
 import ch.uzh.ifi.feedback.orchestrator.model.FeedbackParameter;
 import javassist.NotFoundException;
 
-public class ParameterService extends ServiceBase<FeedbackParameter>{
+public class ParameterService extends OrchestratorService<FeedbackParameter>{
 	
 	@Inject
 	public ParameterService(ParameterResultParser resultParser) 

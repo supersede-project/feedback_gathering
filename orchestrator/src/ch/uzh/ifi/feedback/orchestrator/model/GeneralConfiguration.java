@@ -1,31 +1,25 @@
 package ch.uzh.ifi.feedback.orchestrator.model;
 
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import ch.uzh.ifi.feedback.library.rest.Service.IDbItem;
-import ch.uzh.ifi.feedback.library.rest.Service.ItemBase;
 import ch.uzh.ifi.feedback.library.rest.annotations.DbAttribute;
 import ch.uzh.ifi.feedback.library.rest.annotations.DbIgnore;
 import ch.uzh.ifi.feedback.library.rest.annotations.Serialize;
 import ch.uzh.ifi.feedback.library.rest.validation.Id;
-import ch.uzh.ifi.feedback.library.rest.validation.NotNull;
 import ch.uzh.ifi.feedback.library.rest.validation.Unique;
 import ch.uzh.ifi.feedback.library.rest.validation.Validate;
-import ch.uzh.ifi.feedback.orchestrator.serialization.ApplicationSerializationService;
 import ch.uzh.ifi.feedback.orchestrator.serialization.GeneralConfigurationSerializationService;
 import ch.uzh.ifi.feedback.orchestrator.validation.GeneralConfigurationValidator;
 
 @Validate(GeneralConfigurationValidator.class)
 @Serialize(GeneralConfigurationSerializationService.class)
-public class GeneralConfiguration extends ItemBase<GeneralConfiguration>{
+public class GeneralConfiguration extends OrchestratorItem<GeneralConfiguration>{
 	
-	@DbAttribute("created_at")
-	private Timestamp createdAt;
-	@DbAttribute("updated_at")
-	private Timestamp updatedAt;
+	@Id
+	@DbAttribute("general_configurations_id")
+	private Integer id;
 	@DbIgnore
 	private List<FeedbackParameter> parameters;
 	@Unique
@@ -36,18 +30,6 @@ public class GeneralConfiguration extends ItemBase<GeneralConfiguration>{
 		parameters = new ArrayList<FeedbackParameter>();
 	}
 	
-	public Timestamp getCreatedAt() {
-		return createdAt;
-	}
-	public void setCreatedAt(Timestamp created_at) {
-		this.createdAt = created_at;
-	}
-	public Timestamp getUpdatedAt() {
-		return updatedAt;
-	}
-	public void setUpdatedAt(Timestamp updated_at) {
-		this.updatedAt = updated_at;
-	}
 	public List<FeedbackParameter> getParameters() {
 		if (parameters == null)
 			parameters = new ArrayList<>();
@@ -90,5 +72,16 @@ public class GeneralConfiguration extends ItemBase<GeneralConfiguration>{
 		}
 		
 		return this;
+	}
+	
+	
+	@Override
+	public Integer getId() {
+		return id;
+	}
+
+	@Override
+	public void setId(Integer id) {
+		this.id = id;
 	}
 }

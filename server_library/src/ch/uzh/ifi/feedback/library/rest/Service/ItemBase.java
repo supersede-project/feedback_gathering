@@ -8,19 +8,11 @@ import ch.uzh.ifi.feedback.library.rest.validation.Id;
 
 public abstract class ItemBase<T> implements IDbItem<T> {
 
-	@Id
-	private Integer id;
-	
 	@Override
-	public Integer getId() {
-		
-		return this.id;
-	}
+	public abstract Integer getId();
 
 	@Override
-	public void setId(Integer id) {
-		this.id = id;
-	}
+	public abstract void setId(Integer id);
 	
 	@Override
 	public T Merge(T original) {
@@ -31,7 +23,7 @@ public abstract class ItemBase<T> implements IDbItem<T> {
 			try {
 				Object newValue = f.get(this);
 				Object oldValue = f.get(original);
-				if (newValue == null)
+				if (newValue == null && f.getName() != "createdAt")
 				{
 					f.set(this, oldValue);
 				}

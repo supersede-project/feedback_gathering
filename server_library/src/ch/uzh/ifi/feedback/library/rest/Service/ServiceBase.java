@@ -113,7 +113,7 @@ public abstract class ServiceBase<T> implements IDbService<T> {
 			try {
 				Field field = entry.getValue();
 				Object fieldValue = field.get(object);
-				if(fieldValue != null && !field.getName().toLowerCase().equals("id") && !field.isAnnotationPresent(DbIgnore.class))
+				if(fieldValue != null  && !field.isAnnotationPresent(DbIgnore.class))
 				{
 					statement += "`" +entry.getKey()+ "`";
 					statement += ", ";
@@ -180,6 +180,36 @@ public abstract class ServiceBase<T> implements IDbService<T> {
 	
 		List<T> resultList = getList(result);
 		con.close();
+		return resultList;
+	}
+	
+	public List<T> GetWhere(List<Object> values, String...conditions) throws SQLException
+	{
+		Connection con = TransactionManager.createDatabaseConnection();
+		
+		String statement = 
+				  "SELECT * "
+				+ "FROM %s.%s as t ";
+		statement = String.format(statement, dbName, tableName);
+		statement += "WHERE %s ";
+		
+		for(int i=1; i<conditions.length; i++)
+		{
+			statement += "AND %s ";
+		}
+		statement += ";";
+		statement = String.format(statement, (Object[])conditions);
+		
+		PreparedStatement s = con.prepareStatement(statement);
+		for(int i=0; i<values.size();i++)
+		{
+			s.setObject(i+1, values.get(i));
+		}
+		ResultSet result = s.executeQuery();
+	
+		List<T> resultList = getList(result);
+		con.close();
+		
 		return resultList;
 	}
 	

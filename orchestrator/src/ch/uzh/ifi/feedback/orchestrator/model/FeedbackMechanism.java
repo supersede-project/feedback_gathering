@@ -20,7 +20,11 @@ import ch.uzh.ifi.feedback.orchestrator.validation.MechanismValidator;
 
 @Validate(MechanismValidator.class)
 @Serialize(MechanismSerializationService.class)
-public class FeedbackMechanism extends ItemBase<FeedbackMechanism> {
+public class FeedbackMechanism extends OrchestratorItem<FeedbackMechanism> {
+	
+	@Id
+	@DbAttribute("mechanisms_id")
+	private Integer id;
 	
 	@NotNull
 	@DbAttribute("name")
@@ -102,5 +106,15 @@ public class FeedbackMechanism extends ItemBase<FeedbackMechanism> {
 		}
 		
 		return this;
+	}
+	
+	@Override
+	public Integer getId() {
+		return id;
+	}
+
+	@Override
+	public void setId(Integer id) {
+		this.id = id;
 	}
 }

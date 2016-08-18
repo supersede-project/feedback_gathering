@@ -19,13 +19,14 @@ import ch.uzh.ifi.feedback.orchestrator.validation.ApplicationValidator;
 
 @Validate(ApplicationValidator.class)
 @Serialize(ApplicationSerializationService.class)
-public class Application extends ItemBase<Application> {
+public class Application extends OrchestratorItem<Application> {
 	
+	@Id
+	@DbAttribute("applications1_id")
+	private Integer id;
 	@NotNull
 	@Unique
 	private String name;
-	@DbAttribute("created_at")
-	private Timestamp createdAt;
 	private Integer state;
 	@DbIgnore
 	private GeneralConfiguration generalConfiguration;
@@ -40,17 +41,21 @@ public class Application extends ItemBase<Application> {
 		configurations = new ArrayList<>();
 	}
 	
+	@Override
+	public Integer getId() {
+		return id;
+	}
+	
+	@Override
+	public void setId(Integer id) {
+		this.id = id;
+	}
+	
 	public String getName() {
 		return name;
 	}
 	public void setName(String name) {
 		this.name = name;
-	}
-	public Timestamp getCreatedAt() {
-		return createdAt;
-	}
-	public void setCreatedAt(Timestamp createdAt) {
-		this.createdAt = createdAt;
 	}
 	public Integer getState() {
 		return state;

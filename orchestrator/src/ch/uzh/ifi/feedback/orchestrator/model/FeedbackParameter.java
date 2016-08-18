@@ -17,7 +17,11 @@ import ch.uzh.ifi.feedback.orchestrator.validation.ParameterValidator;
 
 @Validate(ParameterValidator.class)
 @Serialize(ParameterSerializationService.class)
-public class FeedbackParameter extends ItemBase<FeedbackParameter> {
+public class FeedbackParameter extends OrchestratorItem<FeedbackParameter> {
+	
+	@Id
+	@DbAttribute("parameters_id")
+	private Integer id;
 	
 	@NotNull
 	private String key;
@@ -29,31 +33,16 @@ public class FeedbackParameter extends ItemBase<FeedbackParameter> {
 	private Object defaultValue;
 	@DbAttribute("editable_by_user")
 	private Boolean editableByUser;
-	@DbAttribute("created_at")
-	private Timestamp createdAt;
-	@DbAttribute("updated_at")
-	private Timestamp updatedAt;
+
 	private String language;
 
-	@DbAttribute("parameters_id")
+	@DbAttribute("parent_parameters_id")
 	private transient Integer parametersId;
 	@DbAttribute("mechanism_id")
 	private transient Integer mechanismId;
 	@DbAttribute("general_configurations_id")
 	private transient Integer generalConfigurationsId;
 	
-	public Timestamp getCreatedAt() {
-		return createdAt;
-	}
-	public void setCreatedAt(Timestamp createdAt) {
-		this.createdAt = createdAt;
-	}
-	public Timestamp getUpdatedAt() {
-		return updatedAt;
-	}
-	public void setUpdatedAt(Timestamp updatedAt) {
-		this.updatedAt = updatedAt;
-	}
 	public String getLanguage() {
 		return language;
 	}
@@ -127,5 +116,15 @@ public class FeedbackParameter extends ItemBase<FeedbackParameter> {
 		}
 		
 		return this;
+	}
+	
+	@Override
+	public Integer getId() {
+		return id;
+	}
+
+	@Override
+	public void setId(Integer id) {
+		this.id = id;
 	}
 }

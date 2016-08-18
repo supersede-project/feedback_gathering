@@ -18,7 +18,7 @@ import ch.uzh.ifi.feedback.orchestrator.model.FeedbackParameter;
 import ch.uzh.ifi.feedback.orchestrator.model.GeneralConfiguration;
 import javassist.NotFoundException;
 
-public class GeneralConfigurationService extends ServiceBase<GeneralConfiguration> {
+public class GeneralConfigurationService extends OrchestratorService<GeneralConfiguration> {
 
 	private ParameterService parameterService;
 	

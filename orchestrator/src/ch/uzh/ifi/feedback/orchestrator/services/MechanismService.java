@@ -18,7 +18,7 @@ import ch.uzh.ifi.feedback.orchestrator.model.FeedbackParameter;
 import javassist.NotFoundException;
 import static java.util.Arrays.asList;
 
-public class MechanismService extends ServiceBase<FeedbackMechanism> {
+public class MechanismService extends OrchestratorService<FeedbackMechanism> {
 	
 	private ParameterService parameterService;
 	

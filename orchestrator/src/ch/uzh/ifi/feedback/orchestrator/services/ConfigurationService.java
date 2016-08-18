@@ -21,7 +21,7 @@ import ch.uzh.ifi.feedback.orchestrator.model.GeneralConfiguration;
 import javassist.NotFoundException;
 import jdk.nashorn.internal.runtime.regexp.joni.Config;
 
-public class ConfigurationService extends ServiceBase<Configuration>{
+public class ConfigurationService extends OrchestratorService<Configuration>{
 
 	private MechanismService mechanismService;
 	private GeneralConfigurationService generalConfigurationService;
