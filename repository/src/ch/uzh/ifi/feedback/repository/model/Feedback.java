@@ -59,7 +59,7 @@ public class Feedback {
 	public Feedback() {}
 	
 	public Feedback(String title, Integer id, Integer applicationId, String user, Timestamp createdAt,
-			Timestamp updatedAt, Double configVersion, String language, ContextInformation contextInformation,
+			Timestamp updatedAt, String language, ContextInformation contextInformation,
 			List<TextFeedback> textFeedbacks, List<RatingFeedback> ratings, List<ScreenshotFeedback> screenshots,
 			List<FeedbackComment> feedbackComments, List<AttachmentFeedback> attachmentFeedbacks,
 			List<AudioFeedback> audioFeedbacks, List<CategoryFeedback> categoryFeedbacks) {
@@ -70,7 +70,6 @@ public class Feedback {
 		this.user = user;
 		this.createdAt = createdAt;
 		this.updatedAt = updatedAt;
-		this.configVersion = configVersion;
 		this.language = language;
 		this.contextInformation = contextInformation;
 		this.textFeedbacks = textFeedbacks;
@@ -98,12 +97,20 @@ public class Feedback {
 		this.id = id;
 	}
 
-	public Integer getApplicationId() {
+	public long getApplicationId() {
 		return applicationId;
 	}
-
+	
 	public void setApplicationId(Integer applicationId) {
 		this.applicationId = applicationId;
+	}
+	
+	public long getConfigurationId() {
+		return configurationId;
+	}
+
+	public void setConfigurationId(long configurationId) {
+		this.configurationId = configurationId;
 	}
 
 	public String getUser() {
@@ -128,14 +135,6 @@ public class Feedback {
 
 	public void setUpdatedAt(Timestamp updatedAt) {
 		this.updatedAt = updatedAt;
-	}
-
-	public Double getConfigVersion() {
-		return configVersion;
-	}
-
-	public void setConfigVersion(Double configVersion) {
-		this.configVersion = configVersion;
 	}
 
 	public String getLanguage() {

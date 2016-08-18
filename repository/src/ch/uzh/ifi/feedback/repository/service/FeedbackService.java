@@ -22,10 +22,11 @@ public class FeedbackService extends ServiceBase<Feedback> {
 	
 	@Inject
 	public FeedbackService(FeedbackResultParser resultParser, RatingFeedbackService ratingService,
-			ScreenshotFeedbackService screenshotService) {
+			ScreenshotFeedbackService screenshotService, TextFeedbackService textFeedbackService) {
 		super(resultParser, Feedback.class, "feedbacks", "feedback_repository", ratingService, screenshotService);
 		this.screenshotFeedbackService = screenshotService;
 		this.ratingFeedbackService = ratingService;
+		this.textFeedbackService = textFeedbackService;
 	}
 
 	@Override
