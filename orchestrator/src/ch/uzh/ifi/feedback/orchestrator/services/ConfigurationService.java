@@ -49,7 +49,8 @@ public class ConfigurationService extends ServiceBase<Configuration>{
 
 		Configuration config = super.GetById(id);
 		config.getFeedbackMechanisms().addAll(mechanismService.GetAllFor("configuration_id", id));
-		config.setGeneralConfiguration(generalConfigurationService.GetById(config.getGeneralConfigurationId()));
+		if(config.getGeneralConfigurationId() != null)
+			config.setGeneralConfiguration(generalConfigurationService.GetById(config.getGeneralConfigurationId()));
 		
 		return config;
 	}
@@ -61,7 +62,8 @@ public class ConfigurationService extends ServiceBase<Configuration>{
 		for(Configuration config : configurations)
 		{
 			config.getFeedbackMechanisms().addAll(mechanismService.GetAllFor("configuration_id", config.getId()));
-			config.setGeneralConfiguration(generalConfigurationService.GetById(config.getGeneralConfigurationId()));
+			if(config.getGeneralConfigurationId() != null)
+				config.setGeneralConfiguration(generalConfigurationService.GetById(config.getGeneralConfigurationId()));
 		}
 		
 		return configurations;
@@ -74,7 +76,8 @@ public class ConfigurationService extends ServiceBase<Configuration>{
 		for(Configuration config : configurations)
 		{
 			config.getFeedbackMechanisms().addAll(mechanismService.GetAllFor("configuration_id", config.getId()));
-			config.setGeneralConfiguration(generalConfigurationService.GetById(config.getGeneralConfigurationId()));
+			if(config.getGeneralConfigurationId() != null)
+				config.setGeneralConfiguration(generalConfigurationService.GetById(config.getGeneralConfigurationId()));
 		}
 		
 		return configurations;

@@ -39,7 +39,8 @@ public class ApplicationService extends ServiceBase<Application>{
 
 		Application app = super.GetById(id);
 		app.getConfigurations().addAll(configurationService.GetWhereEquals(asList("application_id"), asList(id)));
-		app.setGeneralConfiguration(generalConfigurationService.GetById(app.getGeneralConfigurationId()));
+		if (app.getGeneralConfigurationId() != null)
+			app.setGeneralConfiguration(generalConfigurationService.GetById(app.getGeneralConfigurationId()));
 		
 		return app;
 	}
@@ -51,7 +52,8 @@ public class ApplicationService extends ServiceBase<Application>{
 		for(Application app : apps)
 		{
 			app.getConfigurations().addAll(configurationService.GetWhereEquals(asList("application_id"), asList(app.getId())));
-			app.setGeneralConfiguration(generalConfigurationService.GetById(app.getGeneralConfigurationId()));
+			if(app.getGeneralConfigurationId() != null)
+				app.setGeneralConfiguration(generalConfigurationService.GetById(app.getGeneralConfigurationId()));
 		}
 		
 		return apps;
