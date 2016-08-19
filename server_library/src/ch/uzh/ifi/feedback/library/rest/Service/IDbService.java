@@ -17,27 +17,19 @@ public interface IDbService<T> {
 	
 	T GetById(int id) throws SQLException, NotFoundException;
 	
+	boolean CheckId(int id) throws SQLException;
+	
 	List<T> GetAll() throws SQLException, NotFoundException;
 	
-	void Delete(Connection con, int id) throws SQLException, NotFoundException;
+	List<T> GetWhere(List<Object> values, String...conditions) throws SQLException, NotFoundException;
 	
-	default List<T> GetAllFor(String foreignKeyName, int foreignKey) throws SQLException, NotFoundException {
-		throw new UnsupportedOperationException();
-	}
+	void Delete(Connection con, int id) throws SQLException, NotFoundException;
 	
 	default void Update(Connection con, T object) throws SQLException, NotFoundException, UnsupportedOperationException {
 		throw new UnsupportedOperationException();
 	}
 	
-	default void UpdateFor(Connection con, T object, String foreignKeyName, int foreignKey) throws SQLException, NotFoundException, UnsupportedOperationException{
-		throw new UnsupportedOperationException();
-	}
-	
 	default int Insert(Connection con, T object) throws SQLException, NotFoundException, UnsupportedOperationException {
-		throw new UnsupportedOperationException();
-	}
-	
-	default void InsertFor(Connection con, T object, String foreignKeyName, int foreignKey) throws SQLException, NotFoundException, UnsupportedOperationException {
 		throw new UnsupportedOperationException();
 	}
 }

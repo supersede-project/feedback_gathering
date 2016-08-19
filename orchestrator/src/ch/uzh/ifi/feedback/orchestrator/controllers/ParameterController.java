@@ -43,14 +43,14 @@ public class ParameterController extends RestController<FeedbackParameter> {
 	@Path("/mechanisms/{mechanism_id}/parameters")
 	public List<FeedbackParameter> GetParametersByMechanism(@PathParam("mechanism_id") Integer id) throws Exception 
 	{
-		return super.GetAllFor("mechanism_id", id);
+		return super.GetAllFor("mechanisms_id", id);
 	}
 	
 	@GET
 	@Path("/general_configurations/{config_id}/parameters")
 	public List<FeedbackParameter> GetParametersByGeneralConfigurationId(@PathParam("config_id") Integer id) throws Exception 
 	{
-		return super.GetAllFor("configuration_id", id);
+		return super.GetAllFor("configurations_id", id);
 	}
 	
 	@PUT
@@ -65,7 +65,8 @@ public class ParameterController extends RestController<FeedbackParameter> {
 	@Path("/general_configurations/{config_id}/parameters")
 	public FeedbackParameter InsertParameterForConfiguration(@PathParam("config_id")Integer config_id, final FeedbackParameter param) throws Exception 
 	{
-		super.InsertFor(param, "configuration_id", config_id);
+		param.setGenaralConfigurationId(config_id);
+		super.Insert(param);
 		return param;
 	}
 	
@@ -73,7 +74,8 @@ public class ParameterController extends RestController<FeedbackParameter> {
 	@Path("/mechanisms/{mechanism_id}/parameters")
 	public FeedbackParameter InsertParameterForMechanism(@PathParam("mechanism_id") Integer mechanism_id, final FeedbackParameter param) throws Exception 
 	{
-		super.InsertFor(param, "mechanism_id", mechanism_id);
+		param.setMechanismId(mechanism_id);
+		super.Insert(param);
 		return param;
 	}
 }

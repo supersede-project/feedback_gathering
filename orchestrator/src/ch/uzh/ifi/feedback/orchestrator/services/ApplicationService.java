@@ -89,7 +89,7 @@ public class ApplicationService extends OrchestratorService<Application>{
 		Integer generalConfigId = null;
 		if(generalConfig != null)
 		{
-			if(generalConfig.getId() != null)
+			if(generalConfig.getId() == null)
 			{
 				generalConfigId = generalConfigurationService.Insert(con, generalConfig);
 				app.setGeneralConfigurationId(generalConfigId);
@@ -98,19 +98,8 @@ public class ApplicationService extends OrchestratorService<Application>{
 			}
 		}
 		
-		/*
-		PreparedStatement s = con.prepareStatement(
-				  "UPDATE feedback_orchestrator.applications as a "
-				+ "SET `name` = IFNULL(?, `name`), `state` = IFNULL(?, `state`), general_configuration_id = IFNULL(?, general_configuration_id) "
-				+ "WHERE a.id = ? ;");
-		
-		s.setString(1, app.getName());
-		s.setObject(2, app.getState());
-		s.setObject(3, generalConfigId);
-		s.setInt(4, app.getId());
-		s.execute();
-		*/
 		super.Update(con, app);
+		
 		for(Configuration config : app.getConfigurations())
 		{
 			config.setApplicationId(app.getId());

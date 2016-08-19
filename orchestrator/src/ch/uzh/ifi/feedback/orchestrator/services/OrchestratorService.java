@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import ch.uzh.ifi.feedback.library.rest.Service.DbResultParser;
 import ch.uzh.ifi.feedback.library.rest.Service.ServiceBase;
+import ch.uzh.ifi.feedback.library.transaction.TransactionManager;
 import ch.uzh.ifi.feedback.orchestrator.model.IOrchestratorItem;
 import javassist.NotFoundException;
 import sun.nio.cs.HistoricallyNamedCharset;
@@ -82,7 +83,8 @@ public class OrchestratorService<T extends IOrchestratorItem<T>> extends Service
 	
 	@Override
 	public void Update(Connection con, T object) throws SQLException, NotFoundException, UnsupportedOperationException {
-		super.Insert(con, object);
+		if(object.hasChanges())
+			super.Insert(con, object);
 	}
 	
 	@Override
@@ -104,28 +106,27 @@ public class OrchestratorService<T extends IOrchestratorItem<T>> extends Service
 	@Override
 	public List<T> GetAll() throws SQLException, NotFoundException 
 	{
-		/*
+		return GetWhere(asList());
+	}
+	
+	@Override
+	public boolean CheckId(int id) throws SQLException {
+		
 		Connection con = TransactionManager.createDatabaseConnection();
-		Timestamp ts = this.selectedTimestamp;
-		String statement = String.format(
-				  "SELECT * FROM %s.%s "
-				+ "WHERE abs(TIMEDIFF(created_at, ?)) = "
-				+ "("
-					+ "SELECT min(abs(TIMEDIFF(created_at, ?))) "
-					+ "FROM %s.%s"
-				+ ") ;", dbName, mainTableName, mainTableKey, dbName, mainTableName);
 		
+		String statement = String.format("SELECT * FROM %s.%s as t WHERE t.id = ? ;", dbName, mainTableName);
 		PreparedStatement s = con.prepareStatement(statement);
-		s.setTimestamp(1, ts);
-		s.setTimestamp(2, ts);
-		ResultSet result = s.executeQuery();
+		s.setInt(1, id);
 		
-		List<T> resultList = getList(result);
+		ResultSet result = s.executeQuery();
+		boolean res = result.next();
+		
 		con.close();
 		
-		return resultList;
-		*/
-		return GetWhere(asList());
+		if(!res)
+			return false;
+		
+		return true;
 	}
 	
 	protected String getTimeCondition()

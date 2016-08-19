@@ -87,8 +87,6 @@ public class Configuration extends OrchestratorItem<Configuration> {
 	
 	@Override
 	public Configuration Merge(Configuration original) {
-		super.Merge(original);
-		
 		for(FeedbackMechanism mechanism : original.getFeedbackMechanisms())
 		{
 			Optional<FeedbackMechanism> newMechanism = getFeedbackMechanisms().stream().filter(p -> p.getId().equals(mechanism.getId())).findFirst();
@@ -105,6 +103,8 @@ public class Configuration extends OrchestratorItem<Configuration> {
 		}else{
 			generalConfiguration = original.getGeneralConfiguration();
 		}
+		
+		super.Merge(original);
 		
 		return this;
 	}

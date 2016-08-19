@@ -61,19 +61,6 @@ public class ConfigurationService extends OrchestratorService<Configuration>{
 	}
 	
 	@Override
-	public List<Configuration> GetWhereEquals(List<String> attributeNames, List<Object> values) throws SQLException, NotFoundException {
-		List<Configuration> configurations = super.GetWhereEquals(attributeNames, values);
-		
-		for(Configuration config : configurations)
-		{
-			config.getFeedbackMechanisms().addAll(mechanismService.GetAllFor("configurations_id", config.getId()));
-			config.setGeneralConfiguration(generalConfigurationService.GetById(config.getGeneralConfigurationId()));
-		}
-		
-		return configurations;
-	}
-	
-	@Override
 	public List<Configuration> GetWhere(List<Object> values, String... conditions) throws SQLException, NotFoundException 
 	{
 		List<Configuration> configurations =  super.GetWhere(values, conditions);
@@ -95,7 +82,7 @@ public class ConfigurationService extends OrchestratorService<Configuration>{
 		Integer generalConfigId = null;
 		if(generalConfig != null)
 		{
-			if(generalConfig.getId() != null)
+			if(generalConfig.getId() == null)
 			{
 				generalConfigId = generalConfigurationService.Insert(con, generalConfig);
 				config.setGeneralConfigurationId(generalConfigId);
@@ -104,24 +91,12 @@ public class ConfigurationService extends OrchestratorService<Configuration>{
 			}
 		}
 		
-		/*
-		PreparedStatement s = con.prepareStatement(
-				  "UPDATE feedback_orchestrator.configurations as c "
-				+ "SET `name` = IFNULL(?, `name`), `type` = IFNULL(?, `type`), general_configuration_id = IFNULL(?, general_configuration_id) "
-				+ "WHERE c.id = ? ;");
-		
-		s.setObject(1, config.getName());
-		s.setObject(2, config.getType().toString());
-		s.setObject(3, generalConfigId);
-		s.setInt(4, config.getId());
-		*/
-		
 		super.Update(con, config);
 		for(FeedbackMechanism mechanism : config.getFeedbackMechanisms())
 		{
-			if(mechanism.getId() != null)
+			mechanism.setConfigurationsid(config.getId());
+			if(mechanism.getId() == null)
 			{
-				mechanism.setConfigurationsid(config.getId());
 				mechanismService.Insert(con, mechanism);
 				//mechanismService.InsertFor(con, mechanism, "configuration_id", config.getId());
 			}else{

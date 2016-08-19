@@ -95,7 +95,6 @@ public class FeedbackMechanism extends OrchestratorItem<FeedbackMechanism> {
 	
 	@Override
 	public FeedbackMechanism Merge(FeedbackMechanism original) {
-		super.Merge(original);
 		
 		for(FeedbackParameter param : original.getParameters())
 		{
@@ -107,6 +106,8 @@ public class FeedbackMechanism extends OrchestratorItem<FeedbackMechanism> {
 				newParam.get().Merge(param);
 			}
 		}
+		
+		super.Merge(original);
 		
 		return this;
 	}

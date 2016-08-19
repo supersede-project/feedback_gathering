@@ -94,7 +94,6 @@ public class FeedbackParameter extends OrchestratorItem<FeedbackParameter> {
 	
 	@Override
 	public FeedbackParameter Merge(FeedbackParameter original) {
-		super.Merge(original);
 		if(List.class.isAssignableFrom(original.getValue().getClass()))
 		{
 			List<FeedbackParameter> oldChildren = (List<FeedbackParameter>)original.getValue();
@@ -113,6 +112,8 @@ public class FeedbackParameter extends OrchestratorItem<FeedbackParameter> {
 				}
 			}
 		}
+		
+		super.Merge(original);
 		
 		return this;
 	}

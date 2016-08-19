@@ -4,10 +4,14 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
+import ch.uzh.ifi.feedback.library.rest.annotations.DbIgnore;
 import ch.uzh.ifi.feedback.library.rest.validation.Id;
 
 public abstract class ItemBase<T> implements IDbItem<T> {
 
+	@DbIgnore
+	protected transient boolean hasChanges;
+	
 	@Override
 	public abstract Integer getId();
 
@@ -17,6 +21,8 @@ public abstract class ItemBase<T> implements IDbItem<T> {
 	@Override
 	public T Merge(T original) {
 		Class<?> clazz = this.getClass();
+		
+		hasChanges = false;
 		for(Field f : GetFields(clazz, new ArrayList<>()))
 		{
 			f.setAccessible(true);
@@ -26,6 +32,10 @@ public abstract class ItemBase<T> implements IDbItem<T> {
 				if (newValue == null && f.getName() != "createdAt")
 				{
 					f.set(this, oldValue);
+					
+				}else if(f.getName() != "createdAt")
+				{
+					hasChanges = true;
 				}
 			} catch (IllegalArgumentException | IllegalAccessException e) {
 				e.printStackTrace();
@@ -33,6 +43,10 @@ public abstract class ItemBase<T> implements IDbItem<T> {
 		}
 		
 		return (T)this;
+	}
+	
+	public boolean hasChanges(){
+		return this.hasChanges;
 	}
 	
 	  public static List<Field> GetFields(Class<?> clazz, List<Field> fields) 

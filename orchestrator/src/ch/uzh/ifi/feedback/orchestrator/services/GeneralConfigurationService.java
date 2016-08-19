@@ -68,7 +68,9 @@ public class GeneralConfigurationService extends OrchestratorService<GeneralConf
 	    s.setInt(1, config.getId());
 	    s.execute();
 	   */
+
 	   super.Update(con, config);
+	   
 	   for(FeedbackParameter param : config.getParameters())
 	   {
 		   param.setGenaralConfigurationId(config.getId());

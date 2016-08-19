@@ -63,7 +63,12 @@ public abstract class ServiceBase<T> implements IDbService<T> {
 	public T GetById(int id) throws SQLException, NotFoundException
 	{
 		Connection con = TransactionManager.createDatabaseConnection();
-		ResultSet result = CheckId(con, id);
+		//ResultSet result = CheckId(con, id);
+		String statement = String.format("SELECT * FROM %s.%s as t WHERE t.id = ? ;", dbName, tableName);
+		PreparedStatement s = con.prepareStatement(statement);
+		s.setInt(1, id);
+		ResultSet result = s.executeQuery();
+		
 		T instance = null;
 		try {
 			instance = serviceClass.newInstance();
@@ -151,6 +156,7 @@ public abstract class ServiceBase<T> implements IDbService<T> {
 	    return keys.getInt(1);
 	}
 	
+	/*
 	public List<T> GetWhereEquals(List<String> attributeNames, List<Object> values) throws SQLException, NotFoundException
 	{
 		Connection con = TransactionManager.createDatabaseConnection();
@@ -181,8 +187,9 @@ public abstract class ServiceBase<T> implements IDbService<T> {
 		List<T> resultList = getList(result);
 		con.close();
 		return resultList;
-	}
+	}*/
 	
+	@Override
 	public List<T> GetWhere(List<Object> values, String...conditions) throws SQLException, NotFoundException
 	{
 		Connection con = TransactionManager.createDatabaseConnection();
@@ -213,6 +220,7 @@ public abstract class ServiceBase<T> implements IDbService<T> {
 		return resultList;
 	}
 	
+	/*
 	protected List<T> GetAllFor(String foreignTableName, String foreignKeyName, int foreignKey) throws SQLException, NotFoundException
 	{
 		Connection con = TransactionManager.createDatabaseConnection();
@@ -231,9 +239,13 @@ public abstract class ServiceBase<T> implements IDbService<T> {
 	    con.close();
 	    return resultList;
 	}
+	*/
 	
-	protected ResultSet CheckId(Connection con, int id) throws SQLException, NotFoundException
+	@Override
+	public boolean CheckId(int id) throws SQLException
 	{
+		Connection con = TransactionManager.createDatabaseConnection();
+		
 		String statement = String.format("SELECT * FROM %s.%s as t WHERE t.id = ? ;", dbName, tableName);
 		PreparedStatement s = con.prepareStatement(statement);
 		s.setInt(1, id);
@@ -241,9 +253,9 @@ public abstract class ServiceBase<T> implements IDbService<T> {
 		ResultSet result = s.executeQuery();
 		
 		if(!result.next())
-			throw new NotFoundException("Table '" + tableName + "' does not contain an object with id " + id);
+			return false;
 		
-		return result;
+		return true;
 	}
 	
 	protected List<T> getList(ResultSet result) throws SQLException

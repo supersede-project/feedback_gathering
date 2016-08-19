@@ -89,7 +89,12 @@ public class Application extends OrchestratorItem<Application> {
 	
 	@Override
 	public Application Merge(Application original) {
-		super.Merge(original);
+		
+		if(generalConfiguration != null){
+			generalConfiguration.Merge(original.getGeneralConfiguration());
+		}else{
+			generalConfiguration = original.getGeneralConfiguration();
+		}
 		
 		for(Configuration config : original.getConfigurations())
 		{
@@ -102,11 +107,7 @@ public class Application extends OrchestratorItem<Application> {
 			}
 		}
 		
-		if(generalConfiguration != null){
-			generalConfiguration.Merge(original.getGeneralConfiguration());
-		}else{
-			generalConfiguration = original.getGeneralConfiguration();
-		}
+		super.Merge(original);
 		
 		return this;
 	}

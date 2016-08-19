@@ -28,11 +28,9 @@ public class ValidatorBase<T extends IDbItem<T>> {
 	{
 		ValidationResult result = new ValidationResult();
 		
-		/*
-		if(object.getId() != null)
+		if(object.getId() != null && object.hasChanges())
 			CheckId(object, result);
-		*/
-		
+
 		for(Field f : ItemBase.GetFields(clazz, new ArrayList<>()))
 		{
 			f.setAccessible(true);
@@ -83,13 +81,12 @@ public class ValidatorBase<T extends IDbItem<T>> {
 	{
 		if(object.getId() != null)
 		{
-			try{
-				dbService.GetById(object.getId());
-			}
-			catch(NotFoundException ex)
+			boolean res = dbService.CheckId(object.getId());
+			
+			if(!res)
 			{
 				result.setHasErrors(true);
-				ValidationError error = new ValidationError("id", "not found: Id was not found");
+				ValidationError error = new ValidationError("id", "not found: Id '" + object.getId() + "' was not found");
 				result.GetValidationErrors().add(error);
 			}
 		}
@@ -101,7 +98,7 @@ public class ValidatorBase<T extends IDbItem<T>> {
 		if(f.isAnnotationPresent(DbAttribute.class))
 			fieldName = f.getAnnotation(DbAttribute.class).value();
 		
-		List<T> dbResult = dbService.GetWhereEquals(asList(fieldName), asList(o));
+		List<T> dbResult = dbService.GetWhere(asList(o), fieldName + "= ?");
 		if(dbResult.size() > 1)
 		{
 			result.setHasErrors(true);

@@ -109,7 +109,8 @@ public class ParameterService extends OrchestratorService<FeedbackParameter>{
 		FeedbackParameter param = super.GetById(id);
     	return param;
     	*/
-		return GetWhere(asList(id), "parameters_id = ?").get(0);
+		List<FeedbackParameter> params = GetWhere(asList(id), "parameters_id = ?");
+		return params.size() > 0 ? params.get(0) : null;
 	}
 	
 	/*
@@ -230,6 +231,8 @@ public class ParameterService extends OrchestratorService<FeedbackParameter>{
 					Update(con, child);
 				}
 			}
+		}else{
+			super.Update(con, param);
 		}
 	}
 	

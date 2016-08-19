@@ -50,8 +50,6 @@ public class GeneralConfiguration extends OrchestratorItem<GeneralConfiguration>
 	
 	@Override
 	public GeneralConfiguration Merge(GeneralConfiguration original) {
-		super.Merge(original);
-		
 		for(FeedbackParameter param : original.getParameters())
 		{
 			try{
@@ -70,6 +68,8 @@ public class GeneralConfiguration extends OrchestratorItem<GeneralConfiguration>
 			}
 		
 		}
+		
+		super.Merge(original);
 		
 		return this;
 	}
