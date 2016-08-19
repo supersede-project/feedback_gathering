@@ -107,11 +107,16 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
+            <ImageButton
+                android:id="@+id/supersede_feedbacklibrary_text_comment_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:src="@drawable/ic_comment_black_48dp"/>
+
             <Button
                 android:id="@+id/supersede_feedbacklibrary_blur_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:height="36dp"
                 android:text="@string/supersede_feedbacklibrary_blurbutton_text"
                 android:textSize="13sp"/>
 
@@ -119,7 +124,6 @@
                 android:id="@+id/supersede_feedbacklibrary_fill_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:height="36dp"
                 android:text="@string/supersede_feedbacklibrary_fillbutton_text"
                 android:textSize="13sp"/>
 
@@ -127,7 +131,6 @@
                 android:id="@+id/supersede_feedbacklibrary_black_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:height="36dp"
                 android:text="@string/supersede_feedbacklibrary_blackbutton_text"
                 android:textSize="13sp"/>
         </LinearLayout>

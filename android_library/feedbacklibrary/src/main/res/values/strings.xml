@@ -18,6 +18,7 @@
     <string name="supersede_feedbacklibrary_on_string">On</string>
     <string name="supersede_feedbacklibrary_yes_string">Yes</string>
     <string name="supersede_feedbacklibrary_no_string">No</string>
+    <string name="supersede_feedbacklibrary_ok_string">OK</string>
     <string name="supersede_feedbacklibrary_cancel_string">Cancel</string>
     <string name="supersede_feedbacklibrary_loading_string">Loading. Please wait.</string>
 

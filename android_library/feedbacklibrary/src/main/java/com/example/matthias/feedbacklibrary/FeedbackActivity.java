@@ -279,6 +279,19 @@ public class FeedbackActivity extends AppCompatActivity {
             else if (requestCode == REQUEST_CAMERA)
                 onCaptureImageResult(data);
             else if (requestCode == REQUEST_ANNOTATE && data != null) {
+                // Text annotations
+                ArrayList<String> allTextAnnotations = new ArrayList<>();
+                if (data.getBooleanExtra("hasTextAnnotations", false)) {
+                    System.out.println("at least one text annotation!");
+                    allTextAnnotations = data.getStringArrayListExtra("allTextAnnotations");
+                }
+
+                // TODO: Check for null values and empty strings --> where?
+                for (int i = 0; i < allTextAnnotations.size(); ++i) {
+                    System.out.println("text annotation at index '" + i + "' == " + allTextAnnotations.get(i));
+                }
+
+                // Annotated image
                 annotatedImagePath = data.getStringExtra("annotatedImagePath") + "/" + IMAGE_NAME;
                 picturePath = annotatedImagePath;
                 Bitmap annotatedBitmap = Utils.loadImageFromStorage(annotatedImagePath);

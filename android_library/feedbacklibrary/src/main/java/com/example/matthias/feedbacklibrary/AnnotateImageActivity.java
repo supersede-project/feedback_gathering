@@ -44,8 +44,10 @@ import android.widget.Toast;
 
 import com.example.matthias.feedbacklibrary.utils.Utils;
 import com.example.matthias.feedbacklibrary.views.AnnotateImageView;
-import com.example.matthias.feedbacklibrary.views.StickerImageView;
-import com.example.matthias.feedbacklibrary.views.StickerView;
+import com.example.matthias.feedbacklibrary.views.StickerAnnotationImageView;
+import com.example.matthias.feedbacklibrary.views.StickerAnnotationView;
+import com.example.matthias.feedbacklibrary.views.TextAnnotationImageView;
+import com.example.matthias.feedbacklibrary.views.TextAnnotationView;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
@@ -68,11 +70,22 @@ public class AnnotateImageActivity extends AppCompatActivity implements ColorPic
 
     private void addSticker(int stickerId) {
         hideAllControlItems((RelativeLayout) findViewById(R.id.supersede_feedbacklibrary_annotate_image_layout));
-        StickerImageView sticker = new StickerImageView(this);
-        sticker.setImageDrawable(getResources().getDrawable(stickerId));
+        StickerAnnotationImageView sticker = new StickerAnnotationImageView(this);
+        sticker.setImageResource(stickerId);
         RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.supersede_feedbacklibrary_annotate_image_layout);
         if (relativeLayout != null) {
             relativeLayout.addView(sticker);
+        }
+    }
+
+    private void addTextAnnotation() {
+        TextAnnotationImageView stickerViewTextAnnotationImageView = new TextAnnotationImageView(this);
+        stickerViewTextAnnotationImageView.setAnnotationInputTextHint("Please enter your text annotation");
+        stickerViewTextAnnotationImageView.setAnnotationInputTextLabel("Text annotation");
+        stickerViewTextAnnotationImageView.setImageResource(R.drawable.ic_comment_black_48dp);
+        RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.supersede_feedbacklibrary_annotate_image_layout);
+        if (relativeLayout != null) {
+            relativeLayout.addView(stickerViewTextAnnotationImageView);
         }
     }
 
@@ -100,8 +113,10 @@ public class AnnotateImageActivity extends AppCompatActivity implements ColorPic
         if (viewGroup != null) {
             for (int i = 0; i < viewGroup.getChildCount(); ++i) {
                 View child = viewGroup.getChildAt(i);
-                if (child instanceof StickerView) {
-                    ((StickerView) child).setControlItemsHidden(true);
+                if (child instanceof StickerAnnotationView) {
+                    ((StickerAnnotationView) child).setControlItemsHidden(true);
+                } else if (child instanceof TextAnnotationView) {
+                    ((TextAnnotationView) child).setControlItemsHidden(true);
                 }
             }
         }
@@ -225,6 +240,8 @@ public class AnnotateImageActivity extends AppCompatActivity implements ColorPic
             if (relativeLayout != null) {
                 // Hide all control items
                 hideAllControlItems(relativeLayout);
+                // Process all the text annotations
+                ArrayList<String> allTextAnnotations = processTextAnnotations(relativeLayout);
 
                 // Convert the ViewGroup, i.e., the supersede_feedbacklibrary_annotate_picture_layout into a bitmap
                 relativeLayout.measure(View.MeasureSpec.makeMeasureSpec(annotateImageView.getBitmapWidth(), View.MeasureSpec.EXACTLY),
@@ -242,6 +259,8 @@ public class AnnotateImageActivity extends AppCompatActivity implements ColorPic
                 String annotatedImagePath = Utils.saveBitmapToInternalStorage(getApplicationContext(), "imageDir", FeedbackActivity.IMAGE_NAME, croppedBitmap, Context.MODE_PRIVATE, Bitmap.CompressFormat.PNG, 100);
                 Intent intent = new Intent();
                 intent.putExtra("annotatedImagePath", annotatedImagePath);
+                intent.putExtra("hasTextAnnotations", allTextAnnotations.size() > 0);
+                intent.putExtra("allTextAnnotations", allTextAnnotations);
                 setResult(RESULT_OK, intent);
             }
             super.onBackPressed();
@@ -251,20 +270,35 @@ public class AnnotateImageActivity extends AppCompatActivity implements ColorPic
         return super.onOptionsItemSelected(item);
     }
 
+    private ArrayList<String> processTextAnnotations(ViewGroup viewGroup) {
+        ArrayList<String> allTextAnnotations = new ArrayList<>();
+        if (viewGroup != null) {
+            for (int i = 0; i < viewGroup.getChildCount(); ++i) {
+                View child = viewGroup.getChildAt(i);
+                if (child instanceof TextAnnotationView) {
+                    allTextAnnotations.add(((TextAnnotationView) child).getAnnotationInputText());
+                }
+            }
+        }
+
+        return allTextAnnotations;
+    }
+
     private void setListeners() {
-        final ImageButton colorPickerButton = (ImageButton) findViewById(R.id.supersede_feedbacklibrary_color_picker_btn);
-        final Button blurButton = (Button) findViewById(R.id.supersede_feedbacklibrary_blur_btn);
-        final Button fillButton = (Button) findViewById(R.id.supersede_feedbacklibrary_fill_btn);
-        final Button blackButton = (Button) findViewById(R.id.supersede_feedbacklibrary_black_btn);
-        final ImageButton undoButton = (ImageButton) findViewById(R.id.supersede_feedbacklibrary_undo_btn);
-        final ImageButton redoButton = (ImageButton) findViewById(R.id.supersede_feedbacklibrary_redo_btn);
         final ImageButton penButton = (ImageButton) findViewById(R.id.supersede_feedbacklibrary_pen_btn);
         final ImageButton rectangleButton = (ImageButton) findViewById(R.id.supersede_feedbacklibrary_rectangle_btn);
         final ImageButton circleButton = (ImageButton) findViewById(R.id.supersede_feedbacklibrary_circle_btn);
         final ImageButton lineButton = (ImageButton) findViewById(R.id.supersede_feedbacklibrary_line_btn);
         final ImageButton arrowButton = (ImageButton) findViewById(R.id.supersede_feedbacklibrary_arrow_btn);
-        final ImageButton cropButton = (ImageButton) findViewById(R.id.supersede_feedbacklibrary_crop_btn);
         final ImageButton stickerButton = (ImageButton) findViewById(R.id.supersede_feedbacklibrary_sticker_btn);
+        final ImageButton colorPickerButton = (ImageButton) findViewById(R.id.supersede_feedbacklibrary_color_picker_btn);
+        final ImageButton cropButton = (ImageButton) findViewById(R.id.supersede_feedbacklibrary_crop_btn);
+        final ImageButton textCommentButton = (ImageButton) findViewById(R.id.supersede_feedbacklibrary_text_comment_btn);
+        final ImageButton undoButton = (ImageButton) findViewById(R.id.supersede_feedbacklibrary_undo_btn);
+        final ImageButton redoButton = (ImageButton) findViewById(R.id.supersede_feedbacklibrary_redo_btn);
+        final Button blurButton = (Button) findViewById(R.id.supersede_feedbacklibrary_blur_btn);
+        final Button fillButton = (Button) findViewById(R.id.supersede_feedbacklibrary_fill_btn);
+        final Button blackButton = (Button) findViewById(R.id.supersede_feedbacklibrary_black_btn);
 
         if (colorPickerButton != null) {
             colorPickerButton.setOnClickListener(new View.OnClickListener() {
@@ -419,29 +453,15 @@ public class AnnotateImageActivity extends AppCompatActivity implements ColorPic
             stickerButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (stickerDialog == null) {
-                        AlertDialog.Builder builder = new AlertDialog.Builder(AnnotateImageActivity.this);
-                        builder.setIcon(R.drawable.ic_sentiment_satisfied_black_48dp);
-                        builder.setTitle(getResources().getString(R.string.supersede_feedbacklibrary_sticker_dialog_title));
-                        builder.setNegativeButton(getResources().getString(R.string.supersede_feedbacklibrary_cancel_string), new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
-                        });
-                        if (stickerArrayAdapter == null) {
-                            stickerArrayAdapter = new StickerArrayAdapter(builder.getContext(), stickerIcons, stickerLabels);
-                        }
-                        builder.setAdapter(stickerArrayAdapter, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                addSticker(stickerArrayAdapter.getIcons().get(which));
-                            }
-                        });
-                        builder.setCancelable(false);
-                        stickerDialog = builder.create();
-                    }
-                    stickerDialog.show();
+                    showStickerDialog();
+                }
+            });
+        }
+        if (textCommentButton != null) {
+            textCommentButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    addTextAnnotation();
                 }
             });
         }
@@ -450,6 +470,32 @@ public class AnnotateImageActivity extends AppCompatActivity implements ColorPic
     public void showColorPickerDialog() {
         ColorPickerDialog dialog = createColorPickerDialog(annotateImageView.getPaintStrokeColor());
         dialog.show(getFragmentManager(), "ColorPickerDialog");
+    }
+
+    private void showStickerDialog() {
+        if (stickerDialog == null) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setIcon(R.drawable.ic_sentiment_satisfied_black_48dp);
+            builder.setTitle(getResources().getString(R.string.supersede_feedbacklibrary_sticker_dialog_title));
+            builder.setNegativeButton(getResources().getString(R.string.supersede_feedbacklibrary_cancel_string), new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+            if (stickerArrayAdapter == null) {
+                stickerArrayAdapter = new StickerArrayAdapter(builder.getContext(), stickerIcons, stickerLabels);
+            }
+            builder.setAdapter(stickerArrayAdapter, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    addSticker(stickerArrayAdapter.getIcons().get(which));
+                }
+            });
+            builder.setCancelable(false);
+            stickerDialog = builder.create();
+        }
+        stickerDialog.show();
     }
 
     private class StickerArrayAdapter extends ArrayAdapter<String> {
