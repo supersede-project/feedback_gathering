@@ -43,6 +43,7 @@ public class CategoryMechanism extends Mechanism {
         return title;
     }
 
+    @SuppressWarnings("unchecked")
     private void initChoiceMechanism(MechanismConfigurationItem item) {
         for (Map<String, Object> param : item.getParameters()) {
             String key = (String) param.get("key");

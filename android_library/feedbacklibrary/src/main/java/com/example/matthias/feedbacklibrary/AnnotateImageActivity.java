@@ -53,16 +53,22 @@ import com.theartofdev.edmodo.cropper.CropImageView;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
  * Activity for annotating the screenshot
  */
-public class AnnotateImageActivity extends AppCompatActivity implements ColorPickerDialog.OnColorChangeDialogListener {
+public class AnnotateImageActivity extends AppCompatActivity implements ColorPickerDialog.OnColorChangeDialogListener, TextAnnotationView.OnTextAnnotationChangedListener {
     private boolean blackModeOn = false;
     private int oldPaintStrokeColor;
     private int oldPaintFillColor;
+    // Text annotation
+    private int textAnnotationCounter;
+    private int textAnnotationCounterMax;
+    // Annotated image view
     private AnnotateImageView annotateImageView;
+    // Sticker dialog
     private StickerArrayAdapter stickerArrayAdapter;
     private List<Integer> stickerIcons;
     private List<String> stickerLabels;
@@ -79,13 +85,29 @@ public class AnnotateImageActivity extends AppCompatActivity implements ColorPic
     }
 
     private void addTextAnnotation() {
-        TextAnnotationImageView stickerViewTextAnnotationImageView = new TextAnnotationImageView(this);
-        stickerViewTextAnnotationImageView.setAnnotationInputTextHint("Please enter your text annotation");
-        stickerViewTextAnnotationImageView.setAnnotationInputTextLabel("Text annotation");
-        stickerViewTextAnnotationImageView.setImageResource(R.drawable.ic_comment_black_48dp);
-        RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.supersede_feedbacklibrary_annotate_image_layout);
-        if (relativeLayout != null) {
-            relativeLayout.addView(stickerViewTextAnnotationImageView);
+        if (textAnnotationCounter <= textAnnotationCounterMax) {
+            TextAnnotationImageView stickerViewTextAnnotationImageView = new TextAnnotationImageView(this);
+            stickerViewTextAnnotationImageView.setOnTextAnnotationChangedListener(this);
+            stickerViewTextAnnotationImageView.setImageResource(R.drawable.ic_comment_black_48dp);
+            stickerViewTextAnnotationImageView.setAnnotationInputTextHint("Please enter your text annotation");
+            stickerViewTextAnnotationImageView.setAnnotationInputTextLabel("Text annotation");
+            TextView textView = stickerViewTextAnnotationImageView.getAnnotationNumberView();
+            if (textView != null) {
+                String newAnnotationNumber = Integer.toString(textAnnotationCounter);
+                textView.setText(newAnnotationNumber);
+                textAnnotationCounter++;
+            }
+            RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.supersede_feedbacklibrary_annotate_image_layout);
+            if (relativeLayout != null) {
+                relativeLayout.addView(stickerViewTextAnnotationImageView);
+            }
+            if (textAnnotationCounter > textAnnotationCounterMax) {
+                ImageButton textAnnotationButton = (ImageButton) findViewById(R.id.supersede_feedbacklibrary_text_comment_btn);
+                if (textAnnotationButton != null) {
+                    textAnnotationButton.setEnabled(false);
+                    textAnnotationButton.setAlpha(0.4F);
+                }
+            }
         }
     }
 
@@ -201,6 +223,8 @@ public class AnnotateImageActivity extends AppCompatActivity implements ColorPic
         setContentView(R.layout.activity_annotate);
 
         String imagePath = getIntent().getStringExtra("imagePath");
+        textAnnotationCounter = 1;
+        textAnnotationCounterMax = getIntent().getIntExtra("textAnnotationCounterMax", 4);
         Bitmap bitmap = BitmapFactory.decodeFile(imagePath);
         initAnnotateImageView(bitmap, imagePath);
 
@@ -241,7 +265,7 @@ public class AnnotateImageActivity extends AppCompatActivity implements ColorPic
                 // Hide all control items
                 hideAllControlItems(relativeLayout);
                 // Process all the text annotations
-                ArrayList<String> allTextAnnotations = processTextAnnotations(relativeLayout);
+                HashMap<Integer, String> allTextAnnotations = processTextAnnotations(relativeLayout);
 
                 // Convert the ViewGroup, i.e., the supersede_feedbacklibrary_annotate_picture_layout into a bitmap
                 relativeLayout.measure(View.MeasureSpec.makeMeasureSpec(annotateImageView.getBitmapWidth(), View.MeasureSpec.EXACTLY),
@@ -270,18 +294,50 @@ public class AnnotateImageActivity extends AppCompatActivity implements ColorPic
         return super.onOptionsItemSelected(item);
     }
 
-    private ArrayList<String> processTextAnnotations(ViewGroup viewGroup) {
-        ArrayList<String> allTextAnnotations = new ArrayList<>();
+    @Override
+    public void onTextAnnotationDelete() {
+        textAnnotationCounter--;
+        RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.supersede_feedbacklibrary_annotate_image_layout);
+        if (relativeLayout != null) {
+            refreshAnnotationNumber(relativeLayout);
+        }
+        ImageButton textAnnotationButton = (ImageButton) findViewById(R.id.supersede_feedbacklibrary_text_comment_btn);
+        if (textAnnotationButton != null) {
+            textAnnotationButton.setEnabled(true);
+            textAnnotationButton.setAlpha(1.0F);
+        }
+    }
+
+    private HashMap<Integer, String> processTextAnnotations(ViewGroup viewGroup) {
+        HashMap<Integer, String> allTextAnnotations = new HashMap<>();
         if (viewGroup != null) {
             for (int i = 0; i < viewGroup.getChildCount(); ++i) {
                 View child = viewGroup.getChildAt(i);
                 if (child instanceof TextAnnotationView) {
-                    allTextAnnotations.add(((TextAnnotationView) child).getAnnotationInputText());
+                    TextAnnotationView textAnnotationView = (TextAnnotationView) child;
+                    int annotationNumber = Integer.valueOf(textAnnotationView.getAnnotationNumberView().getText().toString());
+                    String annotationInputText = textAnnotationView.getAnnotationInputText();
+                    allTextAnnotations.put(annotationNumber, annotationInputText);
                 }
             }
         }
 
         return allTextAnnotations;
+    }
+
+    private void refreshAnnotationNumber(ViewGroup viewGroup) {
+        if (viewGroup != null) {
+            for (int i = 0; i < viewGroup.getChildCount(); ++i) {
+                View child = viewGroup.getChildAt(i);
+                if (child instanceof TextAnnotationView) {
+                    TextView textView = (((TextAnnotationView) child).getAnnotationNumberView());
+                    String newAnnotationNumber = Integer.toString(Integer.valueOf(textView.getText().toString()) - 1);
+                    if (Integer.valueOf(newAnnotationNumber) != 0) {
+                        textView.setText(newAnnotationNumber);
+                    }
+                }
+            }
+        }
     }
 
     private void setListeners() {
@@ -293,7 +349,7 @@ public class AnnotateImageActivity extends AppCompatActivity implements ColorPic
         final ImageButton stickerButton = (ImageButton) findViewById(R.id.supersede_feedbacklibrary_sticker_btn);
         final ImageButton colorPickerButton = (ImageButton) findViewById(R.id.supersede_feedbacklibrary_color_picker_btn);
         final ImageButton cropButton = (ImageButton) findViewById(R.id.supersede_feedbacklibrary_crop_btn);
-        final ImageButton textCommentButton = (ImageButton) findViewById(R.id.supersede_feedbacklibrary_text_comment_btn);
+        final ImageButton textAnnotationButton = (ImageButton) findViewById(R.id.supersede_feedbacklibrary_text_comment_btn);
         final ImageButton undoButton = (ImageButton) findViewById(R.id.supersede_feedbacklibrary_undo_btn);
         final ImageButton redoButton = (ImageButton) findViewById(R.id.supersede_feedbacklibrary_redo_btn);
         final Button blurButton = (Button) findViewById(R.id.supersede_feedbacklibrary_blur_btn);
@@ -457,8 +513,8 @@ public class AnnotateImageActivity extends AppCompatActivity implements ColorPic
                 }
             });
         }
-        if (textCommentButton != null) {
-            textCommentButton.setOnClickListener(new View.OnClickListener() {
+        if (textAnnotationButton != null) {
+            textAnnotationButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     addTextAnnotation();

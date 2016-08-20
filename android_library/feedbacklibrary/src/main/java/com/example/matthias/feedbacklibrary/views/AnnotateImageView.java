@@ -45,7 +45,6 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 
-import com.example.matthias.feedbacklibrary.R;
 import com.example.matthias.feedbacklibrary.utils.Utils;
 
 import java.io.ByteArrayOutputStream;

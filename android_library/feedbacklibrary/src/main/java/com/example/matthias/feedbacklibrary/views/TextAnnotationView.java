@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.res.Resources;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.text.Editable;
@@ -19,6 +21,7 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.example.matthias.feedbacklibrary.R;
 
@@ -26,15 +29,16 @@ import com.example.matthias.feedbacklibrary.R;
  * Sticker view
  */
 public abstract class TextAnnotationView extends FrameLayout {
-    private final static int BUTTON_SIZE_DP = 30;
-    private final static int SELF_SIZE_DP = 100;
+    private final static int BUTTON_SIZE_DP = 25;
+    private final static int SELF_SIZE_DP = 90;
     // Text annotation
     private String AnnotationInputTextHint;
     private String AnnotationInputTextLabel;
     private String AnnotationInputText;
+    private AlertDialog textAnnotationDialog;
     // Sticker border
     private BorderView borderView;
-    private ImageView scaleImageView;
+    private TextView annotationNumberView;
     private ImageView deleteImageView;
     private ImageView editImageView;
     private ImageView checkImageView;
@@ -54,7 +58,7 @@ public abstract class TextAnnotationView extends FrameLayout {
     private double centerY;
     // Touch listener
     private OnTouchListener onTouchListener;
-    private AlertDialog textAnnotationDialog;
+    private OnTextAnnotationChangedListener onTextAnnotationChangedListener;
 
     public TextAnnotationView(Context context) {
         super(context);
@@ -90,6 +94,10 @@ public abstract class TextAnnotationView extends FrameLayout {
         return AnnotationInputTextLabel;
     }
 
+    public TextView getAnnotationNumberView() {
+        return annotationNumberView;
+    }
+
     private double getLength(double x1, double y1, double x2, double y2) {
         return Math.sqrt(Math.pow(y2 - y1, 2) + Math.pow(x2 - x1, 2));
     }
@@ -107,19 +115,22 @@ public abstract class TextAnnotationView extends FrameLayout {
         initOnTouchListener();
 
         borderView = new BorderView(context);
-        scaleImageView = new ImageView(context);
+        annotationNumberView = new TextView(context);
+        annotationNumberView.setBackgroundResource(R.drawable.ic_lens_black_48dp);
+        annotationNumberView.setTypeface(null, Typeface.BOLD);
+        annotationNumberView.setTextColor(Color.WHITE);
+        annotationNumberView.setGravity(Gravity.CENTER);
         deleteImageView = new ImageView(context);
         editImageView = new ImageView(context);
         checkImageView = new ImageView(context);
 
-        scaleImageView.setImageResource(R.drawable.icon_zoominout);
         deleteImageView.setImageResource(R.drawable.ic_delete_black_48dp);
         editImageView.setImageResource(R.drawable.ic_mode_edit_black_48dp);
         checkImageView.setImageResource(R.drawable.ic_check_circle_black_48dp);
 
         setTag("DraggableViewGroup");
         borderView.setTag("borderView");
-        scaleImageView.setTag("scaleImageView");
+        annotationNumberView.setTag("annotationNumberView");
         deleteImageView.setTag("deleteImageView");
         editImageView.setTag("editImageView");
         checkImageView.setTag("checkImageView");
@@ -136,15 +147,15 @@ public abstract class TextAnnotationView extends FrameLayout {
         // Border view
         LayoutParams ivBorderParams = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         ivBorderParams.setMargins(margin, margin, margin, margin);
-        // Scale image view
-        LayoutParams ivScaleParams = new LayoutParams(convertDpToPixel(BUTTON_SIZE_DP, getContext()), convertDpToPixel(BUTTON_SIZE_DP, getContext()));
-        ivScaleParams.gravity = Gravity.BOTTOM | Gravity.END;
+        // Annotation number view
+        LayoutParams ivAnnotationNumberViewParams = new LayoutParams(convertDpToPixel(BUTTON_SIZE_DP, getContext()), convertDpToPixel(BUTTON_SIZE_DP, getContext()));
+        ivAnnotationNumberViewParams.gravity = Gravity.BOTTOM | Gravity.START;
         // Delete image view
         LayoutParams ivDeleteParams = new LayoutParams(convertDpToPixel(BUTTON_SIZE_DP, getContext()), convertDpToPixel(BUTTON_SIZE_DP, getContext()));
         ivDeleteParams.gravity = Gravity.TOP | Gravity.START;
         // Edit image view
         LayoutParams ivEditParams = new LayoutParams(convertDpToPixel(BUTTON_SIZE_DP, getContext()), convertDpToPixel(BUTTON_SIZE_DP, getContext()));
-        ivEditParams.gravity = Gravity.BOTTOM | Gravity.START;
+        ivEditParams.gravity = Gravity.BOTTOM | Gravity.END;
         // Check image view
         LayoutParams ivCheckParams = new LayoutParams(convertDpToPixel(BUTTON_SIZE_DP, getContext()), convertDpToPixel(BUTTON_SIZE_DP, getContext()));
         ivCheckParams.gravity = Gravity.TOP | Gravity.END;
@@ -152,20 +163,20 @@ public abstract class TextAnnotationView extends FrameLayout {
         setLayoutParams(thisParams);
         addView(getMainView(), ivMainParams);
         addView(borderView, ivBorderParams);
-        addView(scaleImageView, ivScaleParams);
+        addView(annotationNumberView, ivAnnotationNumberViewParams);
         addView(deleteImageView, ivDeleteParams);
         addView(editImageView, ivEditParams);
         addView(checkImageView, ivCheckParams);
         setControlItemsHidden(false);
 
         setOnTouchListener(onTouchListener);
-        scaleImageView.setOnTouchListener(onTouchListener);
         deleteImageView.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (TextAnnotationView.this.getParent() != null) {
                     ViewGroup myCanvas = ((ViewGroup) TextAnnotationView.this.getParent());
                     myCanvas.removeView(TextAnnotationView.this);
+                    onTextAnnotationChangedListener.onTextAnnotationDelete();
                 }
             }
         });
@@ -321,17 +332,19 @@ public abstract class TextAnnotationView extends FrameLayout {
         this.controlItemsHidden = controlItemsHidden;
         if (controlItemsHidden) {
             borderView.setVisibility(View.INVISIBLE);
-            scaleImageView.setVisibility(View.INVISIBLE);
             deleteImageView.setVisibility(View.INVISIBLE);
             editImageView.setVisibility(View.INVISIBLE);
             checkImageView.setVisibility(View.INVISIBLE);
         } else {
             borderView.setVisibility(View.VISIBLE);
-            scaleImageView.setVisibility(View.VISIBLE);
             deleteImageView.setVisibility(View.VISIBLE);
             editImageView.setVisibility(View.VISIBLE);
             checkImageView.setVisibility(View.VISIBLE);
         }
+    }
+
+    public void setOnTextAnnotationChangedListener(OnTextAnnotationChangedListener onTextAnnotationChangedListener) {
+        this.onTextAnnotationChangedListener = onTextAnnotationChangedListener;
     }
 
     private void showTextAnnotationDialog(Context context) {
@@ -393,5 +406,9 @@ public abstract class TextAnnotationView extends FrameLayout {
             textAnnotationDialog = builder.create();
         }
         textAnnotationDialog.show();
+    }
+
+    public interface OnTextAnnotationChangedListener {
+        void onTextAnnotationDelete();
     }
 }
