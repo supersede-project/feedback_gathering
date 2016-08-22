@@ -1,7 +1,10 @@
 package ch.uzh.ifi.feedback.repository.controller;
 
+import java.util.ArrayList;
 import java.util.List;
+
 import com.google.inject.Inject;
+
 import ch.uzh.ifi.feedback.library.rest.RestController;
 import ch.uzh.ifi.feedback.library.rest.annotations.Controller;
 import ch.uzh.ifi.feedback.library.rest.annotations.DELETE;
@@ -24,19 +27,24 @@ public class FeedbackController extends RestController<Feedback>{
 	@Path("/feedbacks")
 	@GET
 	public List<Feedback> GetAll() throws Exception {
-		return super.GetAll();
+		//return super.GetAll();
+		List<Feedback> emptyList = new ArrayList<Feedback>();
+		return emptyList;
 	}
 	
 	@Path("/applications/{appId}/feedbacks")
 	@GET
 	public List<Feedback> GetAllForApplication(@PathParam("appId")Integer applicationId) throws Exception {
-		return super.GetAllFor("application_id", applicationId);
+		//return super.GetAllFor("application_id", applicationId);
+		List<Feedback> emptyList = new ArrayList<Feedback>();
+		return emptyList;
 	}
 	
 	@Path("/feedbacks/{id}")
 	@GET
 	public Feedback GetByFeedbackId(@PathParam("id")Integer id) throws Exception {
-		return super.GetById(id);
+		//return super.GetById(id);
+		return null;
 	}
 	
 	@Path("/feedbacks")
@@ -49,8 +57,7 @@ public class FeedbackController extends RestController<Feedback>{
 	
 	@Path("/feedbacks/{id}")
 	@DELETE
-	public void DeleteFeedback(@PathParam("id")Integer id) throws Exception 
-	{
+	public void DeleteFeedback(@PathParam("id")Integer id) throws Exception {
 		super.Delete(id);
 	}
 }
