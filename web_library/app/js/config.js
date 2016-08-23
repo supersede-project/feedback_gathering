@@ -1,9 +1,9 @@
 define(["require", "exports"], function (require, exports) {
     "use strict";
-    exports.apiEndpointOrchestrator = 'http://localhost:8080/';
+    exports.apiEndpointOrchestrator = 'http://ec2-54-175-37-30.compute-1.amazonaws.com/';
     exports.applicationPath = 'feedback_orchestrator/en/applications/';
-    exports.applicationId = 13;
-    exports.apiEndpointRepository = "http://localhost:8080/";
+    exports.applicationId = 8;
+    exports.apiEndpointRepository = 'http://ec2-54-175-37-30.compute-1.amazonaws.com/';
     exports.feedbackPath = "feedback_repository/de/feedbacks";
     exports.feedbackObjectTitle = 'Feedback';
     exports.applicationName = 'energiesparkonto.de';
