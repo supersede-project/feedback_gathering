@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context="com.example.matthias.feedbacklibrary.AnnotateImageActivity">
 
@@ -11,14 +11,13 @@
         android:id="@+id/supersede_feedbacklibrary_annotate_image_layout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="0.75"
+        android:layout_weight="1"
         android:background="@color/supersede_feedbacklibrary_annotate_image_layout_background_color"
         android:padding="@dimen/supersede_feedbacklibrary_annotate_image_layout_padding"/>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.25"
+        android:layout_height="wrap_content"
         android:orientation="vertical">
 
         <LinearLayout
@@ -108,19 +107,16 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <Button
-                android:id="@+id/supersede_feedbacklibrary_erase_btn"
+            <ImageButton
+                android:id="@+id/supersede_feedbacklibrary_text_comment_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:drawableStart="@drawable/icon_eraser"
-                android:text="@string/supersede_feedbacklibrary_off_string"/>
+                android:src="@drawable/ic_comment_black_48dp"/>
 
             <Button
                 android:id="@+id/supersede_feedbacklibrary_blur_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:height="36dp"
-                android:minWidth="88dp"
                 android:text="@string/supersede_feedbacklibrary_blurbutton_text"
                 android:textSize="13sp"/>
 
@@ -128,8 +124,6 @@
                 android:id="@+id/supersede_feedbacklibrary_fill_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:height="36dp"
-                android:minWidth="88dp"
                 android:text="@string/supersede_feedbacklibrary_fillbutton_text"
                 android:textSize="13sp"/>
 
@@ -137,8 +131,6 @@
                 android:id="@+id/supersede_feedbacklibrary_black_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:height="36dp"
-                android:minWidth="88dp"
                 android:text="@string/supersede_feedbacklibrary_blackbutton_text"
                 android:textSize="13sp"/>
         </LinearLayout>

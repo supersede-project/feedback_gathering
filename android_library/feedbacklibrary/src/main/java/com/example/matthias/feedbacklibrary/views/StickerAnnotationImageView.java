@@ -8,19 +8,19 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.widget.ImageView;
 
-public class StickerImageView extends StickerView {
+public class StickerAnnotationImageView extends StickerAnnotationView {
     private String ownerId;
     private ImageView mainView;
 
-    public StickerImageView(Context context) {
+    public StickerAnnotationImageView(Context context) {
         super(context);
     }
 
-    public StickerImageView(Context context, AttributeSet attrs) {
+    public StickerAnnotationImageView(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public StickerImageView(Context context, AttributeSet attrs, int defStyle) {
+    public StickerAnnotationImageView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
     }
 

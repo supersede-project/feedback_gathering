@@ -107,7 +107,6 @@ public class AnnotateImageView extends View {
     private boolean isCroppedImageAdded = false;
     private int croppedImagePointer;
     private int startHistoryPointer;
-    private int onSizeCalled = 0;
     private int initW;
     private int initH;
 
@@ -330,7 +329,22 @@ public class AnnotateImageView extends View {
         setDrawingCacheEnabled(false);
         setDrawingCacheEnabled(true);
 
-        return Bitmap.createBitmap(getDrawingCache(), 0, 0, bitmap.getWidth(), bitmap.getHeight());
+        // Adjust width and height
+        Bitmap drawingCache = getDrawingCache();
+        int width;
+        int height;
+        if (getBitmapWidth() > drawingCache.getWidth()) {
+            width = drawingCache.getWidth();
+        } else {
+            width = getBitmapWidth();
+        }
+        if (getBitmapHeight() > drawingCache.getHeight()) {
+            height = drawingCache.getHeight();
+        } else {
+            height = getBitmapHeight();
+        }
+
+        return Bitmap.createBitmap(getDrawingCache(), 0, 0, width, height);
     }
 
     /**
@@ -665,11 +679,7 @@ public class AnnotateImageView extends View {
             if (relativeLayoutLayoutParams != null) {
                 relativeLayoutLayoutParams.width = bitmap.getWidth();
                 relativeLayoutLayoutParams.height = bitmap.getHeight();
-                onSizeCalled++;
             }
-        } else if (onSizeCalled == 1) {
-            bitmap = Bitmap.createScaledBitmap(bitmap, bitmap.getWidth(), bitmap.getHeight() - 100, true);
-            onSizeCalled++;
         }
 
         super.onSizeChanged(w, h, oldw, oldh);
@@ -932,8 +942,7 @@ public class AnnotateImageView extends View {
         if (croppedImagePointer > 1) {
             this.bitmap = bitmap;
         } else {
-            Bitmap tempBitmap = Utils.scaleBitmap(bitmap, initW, initH);
-            this.bitmap = Bitmap.createScaledBitmap(tempBitmap, tempBitmap.getWidth(), tempBitmap.getHeight() - 100, true);
+            this.bitmap = Utils.scaleBitmap(bitmap, initW, initH);
         }
     }
 

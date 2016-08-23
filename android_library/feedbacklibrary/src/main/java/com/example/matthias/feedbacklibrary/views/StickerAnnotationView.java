@@ -17,7 +17,7 @@ import com.example.matthias.feedbacklibrary.R;
 /**
  * Sticker view
  */
-public abstract class StickerView extends FrameLayout {
+public abstract class StickerAnnotationView extends FrameLayout {
     private final static int BUTTON_SIZE_DP = 30;
     private final static int SELF_SIZE_DP = 100;
     // Sticker border
@@ -28,12 +28,8 @@ public abstract class StickerView extends FrameLayout {
     private ImageView checkImageView;
     private boolean controlItemsHidden;
     // Scaling
-    private float thisOrgX = -1F;
-    private float thisOrgY = -1F;
     private float scaleOrgX = -1F;
     private float scaleOrgY = -1F;
-    private double scaleOrgWidth = -1D;
-    private double scaleOrgHeight = -1D;
     // Sticker rotation
     private float rotateOrgX = -1F;
     private float rotateOrgY = -1F;
@@ -47,17 +43,17 @@ public abstract class StickerView extends FrameLayout {
     // Touch listener
     private OnTouchListener onTouchListener;
 
-    public StickerView(Context context) {
+    public StickerAnnotationView(Context context) {
         super(context);
         init(context);
     }
 
-    public StickerView(Context context, AttributeSet attrs) {
+    public StickerAnnotationView(Context context, AttributeSet attrs) {
         super(context, attrs);
         init(context);
     }
 
-    public StickerView(Context context, AttributeSet attrs, int defStyle) {
+    public StickerAnnotationView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         init(context);
     }
@@ -80,10 +76,6 @@ public abstract class StickerView extends FrameLayout {
                 absX - ((View) this.getParent()).getX(),
                 absY - ((View) this.getParent()).getY()
         };
-    }
-
-    protected View getRotateImageView() {
-        return rotateImageView;
     }
 
     private void init(Context context) {
@@ -146,9 +138,9 @@ public abstract class StickerView extends FrameLayout {
         deleteImageView.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (StickerView.this.getParent() != null) {
-                    ViewGroup myCanvas = ((ViewGroup) StickerView.this.getParent());
-                    myCanvas.removeView(StickerView.this);
+                if (StickerAnnotationView.this.getParent() != null) {
+                    ViewGroup myCanvas = ((ViewGroup) StickerAnnotationView.this.getParent());
+                    myCanvas.removeView(StickerAnnotationView.this);
                 }
             }
         });
@@ -191,8 +183,8 @@ public abstract class StickerView extends FrameLayout {
                         case MotionEvent.ACTION_MOVE:
                             float offsetX = event.getRawX() - moveOrgX;
                             float offsetY = event.getRawY() - moveOrgY;
-                            StickerView.this.setX(StickerView.this.getX() + offsetX);
-                            StickerView.this.setY(StickerView.this.getY() + offsetY);
+                            StickerAnnotationView.this.setX(StickerAnnotationView.this.getX() + offsetX);
+                            StickerAnnotationView.this.setY(StickerAnnotationView.this.getY() + offsetY);
                             moveOrgX = event.getRawX();
                             moveOrgY = event.getRawY();
                             break;
@@ -202,27 +194,21 @@ public abstract class StickerView extends FrameLayout {
                 } else if (view.getTag().equals("scaleImageView")) {
                     switch (event.getAction()) {
                         case MotionEvent.ACTION_DOWN:
-                            thisOrgX = StickerView.this.getX();
-                            thisOrgY = StickerView.this.getY();
-
                             scaleOrgX = event.getRawX();
                             scaleOrgY = event.getRawY();
-                            scaleOrgWidth = StickerView.this.getLayoutParams().width;
-                            scaleOrgHeight = StickerView.this.getLayoutParams().height;
 
                             rotateOrgX = event.getRawX();
                             rotateOrgY = event.getRawY();
 
-                            centerX = StickerView.this.getX() + ((View) StickerView.this.getParent()).getX() + (float) StickerView.this.getWidth() / 2;
+                            centerX = StickerAnnotationView.this.getX() + ((View) StickerAnnotationView.this.getParent()).getX() + (float) StickerAnnotationView.this.getWidth() / 2;
 
-                            //double statusBarHeight = Math.ceil(25 * getContext().getResources().getDisplayMetrics().density);
                             int result = 0;
                             int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
                             if (resourceId > 0) {
                                 result = getResources().getDimensionPixelSize(resourceId);
                             }
                             double statusBarHeight = result;
-                            centerY = StickerView.this.getY() + ((View) StickerView.this.getParent()).getY() + statusBarHeight + (float) StickerView.this.getHeight() / 2;
+                            centerY = StickerAnnotationView.this.getY() + ((View) StickerAnnotationView.this.getParent()).getY() + statusBarHeight + (float) StickerAnnotationView.this.getHeight() / 2;
 
                             break;
                         case MotionEvent.ACTION_MOVE:
@@ -240,19 +226,17 @@ public abstract class StickerView extends FrameLayout {
                                 double offsetY = Math.abs(event.getRawY() - scaleOrgY);
                                 double offset = Math.max(offsetX, offsetY);
                                 offset = Math.round(offset);
-                                StickerView.this.getLayoutParams().width += offset;
-                                StickerView.this.getLayoutParams().height += offset;
+                                StickerAnnotationView.this.getLayoutParams().width += offset;
+                                StickerAnnotationView.this.getLayoutParams().height += offset;
                                 onScaling(true);
-                                //DraggableViewGroup.this.setX((float) (getX() - offset / 2));
-                                //DraggableViewGroup.this.setY((float) (getY() - offset / 2));
-                            } else if (length2 < length1 && (angle_diff < 25 || Math.abs(angle_diff - 180) < 25) && StickerView.this.getLayoutParams().width > size / 2 && StickerView.this.getLayoutParams().height > size / 2) {
+                            } else if (length2 < length1 && (angle_diff < 25 || Math.abs(angle_diff - 180) < 25) && StickerAnnotationView.this.getLayoutParams().width > size / 2 && StickerAnnotationView.this.getLayoutParams().height > size / 2) {
                                 // Scale down
                                 double offsetX = Math.abs(event.getRawX() - scaleOrgX);
                                 double offsetY = Math.abs(event.getRawY() - scaleOrgY);
                                 double offset = Math.max(offsetX, offsetY);
                                 offset = Math.round(offset);
-                                StickerView.this.getLayoutParams().width -= offset;
-                                StickerView.this.getLayoutParams().height -= offset;
+                                StickerAnnotationView.this.getLayoutParams().width -= offset;
+                                StickerAnnotationView.this.getLayoutParams().height -= offset;
                                 onScaling(false);
                             }
 

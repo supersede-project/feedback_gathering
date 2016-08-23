@@ -16,7 +16,7 @@ import retrofit2.http.Part;
  * Repository: http://ec2-54-175-37-30.compute-1.amazonaws.com/feedback_repository/example/feedback
  */
 public interface feedbackAPI {
-    public static final String endpoint = "http://ec2-54-175-37-30.compute-1.amazonaws.com/";
+    String endpoint = "http://ec2-54-175-37-30.compute-1.amazonaws.com/";
 
     // Test servlets:
     // http://ec2-54-175-37-30.compute-1.amazonaws.com/FeedbackConfiguration/material_design_push.json

@@ -44,7 +44,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
@@ -94,6 +96,7 @@ public class FeedbackActivity extends AppCompatActivity {
     public void annotateImage() {
         Intent intent = new Intent(this, AnnotateImageActivity.class);
         intent.putExtra("imagePath", picturePath);
+        intent.putExtra("textAnnotationCounterMax", 4);
         startActivityForResult(intent, REQUEST_ANNOTATE);
     }
 
@@ -271,6 +274,7 @@ public class FeedbackActivity extends AppCompatActivity {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK) {
@@ -279,6 +283,18 @@ public class FeedbackActivity extends AppCompatActivity {
             else if (requestCode == REQUEST_CAMERA)
                 onCaptureImageResult(data);
             else if (requestCode == REQUEST_ANNOTATE && data != null) {
+                // Text annotations
+                HashMap<Integer, String> allTextAnnotations = new HashMap<>();
+                if (data.getBooleanExtra("hasTextAnnotations", false)) {
+                    allTextAnnotations = (HashMap<Integer, String>) data.getSerializableExtra("allTextAnnotations");
+                }
+
+                // TODO: Check for null values and empty strings --> where?
+                for (Map.Entry<Integer, String> entry : allTextAnnotations.entrySet()) {
+                    System.out.println("Text annotation number '" + entry.getKey() + "' == " + entry.getValue());
+                }
+
+                // Annotated image
                 annotatedImagePath = data.getStringExtra("annotatedImagePath") + "/" + IMAGE_NAME;
                 picturePath = annotatedImagePath;
                 Bitmap annotatedBitmap = Utils.loadImageFromStorage(annotatedImagePath);
@@ -293,25 +309,24 @@ public class FeedbackActivity extends AppCompatActivity {
     private void onCaptureImageResult(Intent data) {
         Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-        thumbnail.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
-        File destination = new File(Environment.getExternalStorageDirectory(), System.currentTimeMillis() + ".jpg");
-        FileOutputStream fo;
-        try {
-            destination.createNewFile();
-            fo = new FileOutputStream(destination);
-            fo.write(bytes.toByteArray());
-            fo.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (thumbnail != null) {
+            thumbnail.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+            File destination = new File(Environment.getExternalStorageDirectory(), System.currentTimeMillis() + ".jpg");
+            FileOutputStream fo;
+            try {
+                destination.createNewFile();
+                fo = new FileOutputStream(destination);
+                fo.write(bytes.toByteArray());
+                fo.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            annotateScreenshotButton.setEnabled(true);
+            deleteScreenshotButton.setEnabled(true);
+            screenShotPreviewImageView.setBackground(null);
+            screenShotPreviewImageView.setImageBitmap(thumbnail);
         }
-
-        annotateScreenshotButton.setEnabled(true);
-        deleteScreenshotButton.setEnabled(true);
-        screenShotPreviewImageView.setBackground(null);
-        screenShotPreviewImageView.setImageBitmap(thumbnail);
-
     }
 
     @Override

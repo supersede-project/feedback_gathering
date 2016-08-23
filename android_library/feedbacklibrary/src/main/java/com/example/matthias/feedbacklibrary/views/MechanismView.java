@@ -3,8 +3,6 @@ package com.example.matthias.feedbacklibrary.views;
 import android.view.LayoutInflater;
 import android.view.View;
 
-import com.example.matthias.feedbacklibrary.models.Mechanism;
-
 /**
  * Mechanism view
  */
