@@ -558,8 +558,3 @@ export class ScreenshotView {
 
 
 
-
-
-
-
-
