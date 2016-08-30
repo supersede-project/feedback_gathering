@@ -2,7 +2,7 @@ define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.apiEndpointOrchestrator = 'http://ec2-54-175-37-30.compute-1.amazonaws.com/';
     exports.applicationPath = 'feedback_orchestrator/en/applications/';
-    exports.applicationId = 8;
+    exports.applicationId = 1;
     exports.apiEndpointRepository = 'http://ec2-54-175-37-30.compute-1.amazonaws.com/';
     exports.feedbackPath = "feedback_repository/de/feedbacks";
     exports.feedbackObjectTitle = 'Feedback';
@@ -29,6 +29,9 @@ define(["require", "exports"], function (require, exports) {
     exports.configurationTypes = {
         push: 'PUSH',
         pull: 'PULL'
+    };
+    exports.cookieNames = {
+        lastTriggered: 'lastTriggered'
     };
 });
 //# sourceMappingURL=config.js.map

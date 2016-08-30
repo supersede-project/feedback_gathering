@@ -1,6 +1,6 @@
 export const apiEndpointOrchestrator = 'http://ec2-54-175-37-30.compute-1.amazonaws.com/';
 export const applicationPath = 'feedback_orchestrator/en/applications/';
-export const applicationId = 8;
+export const applicationId = 1; // 8
 
 export const apiEndpointRepository = 'http://ec2-54-175-37-30.compute-1.amazonaws.com/';
 export const feedbackPath = "feedback_repository/de/feedbacks";
@@ -33,4 +33,8 @@ export const mechanismTypes = {
 export const configurationTypes = {
     push: 'PUSH',
     pull: 'PULL'
+};
+
+export const cookieNames = {
+  lastTriggered: 'lastTriggered'
 };

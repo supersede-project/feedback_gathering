@@ -81,6 +81,7 @@ export var feedbackPluginModule = function ($, window, document) {
     var initPullConfiguration = function(configuration:PullConfiguration, generalConfiguration:GeneralConfiguration,
                                          alreadyTriggeredOne:boolean = false): boolean {
         if(!alreadyTriggeredOne && configuration.shouldGetTriggered()) {
+            configuration.wasTriggered();
             var pageNavigation = new PageNavigation(configuration, $('#' + pullConfigurationDialogId));
             var context = configuration.getContextForView();
             pullDialog = initTemplate(pullDialogTemplate, pullConfigurationDialogId, context, configuration, pageNavigation, generalConfiguration);
@@ -380,7 +381,7 @@ export var feedbackPluginModule = function ($, window, document) {
         I18nHelper.initializeI18n(resources, this.options);
 
         // loadDataHere to trigger pull if necessary
-        var applicationService = new ApplicationService();
+        var applicationService = new ApplicationService(new MockBackend(mockData));
         applicationService.retrieveApplication(applicationId, function(application) {
             initApplication(application);
         });
