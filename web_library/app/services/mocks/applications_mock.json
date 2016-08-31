@@ -459,6 +459,11 @@
               "id": 80,
               "key": "intermediateDialog",
               "value": 0
+            },
+            {
+              "id": 81,
+              "key": "delay",
+              "value": 5
             }
           ]
         },

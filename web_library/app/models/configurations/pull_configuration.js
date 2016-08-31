@@ -20,7 +20,7 @@ define(["require", "exports", './configuration', '../../js/config'], function (r
             if (this.generalConfiguration.getParameterValue('doNotDisturbTimeDuration') != null) {
                 doNotDisturbTimeDuration = this.generalConfiguration.getParameterValue('doNotDisturbTimeDuration');
             }
-            return this.currentTimeStamp() - Number(this.getCookie(config_1.cookieNames.lastTriggered)) > doNotDisturbTimeDuration;
+            return true;
         };
         PullConfiguration.prototype.currentTimeStamp = function () {
             if (!Date.now) {

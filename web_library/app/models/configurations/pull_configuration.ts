@@ -31,7 +31,8 @@ export class PullConfiguration extends Configuration {
         if (this.generalConfiguration.getParameterValue('doNotDisturbTimeDuration') != null) {
             doNotDisturbTimeDuration = this.generalConfiguration.getParameterValue('doNotDisturbTimeDuration');
         }
-        return this.currentTimeStamp() - Number(this.getCookie(cookieNames.lastTriggered)) > doNotDisturbTimeDuration;
+        return true;
+        //return this.currentTimeStamp() - Number(this.getCookie(cookieNames.lastTriggered)) > doNotDisturbTimeDuration;
     }
 
     currentTimeStamp():number {

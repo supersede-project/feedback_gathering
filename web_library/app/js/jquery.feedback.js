@@ -30,14 +30,26 @@ define(["require", "exports", './config', '../views/pagination_container', '../v
                 var pageNavigation = new page_navigation_1.PageNavigation(configuration, $('#' + pullConfigurationDialogId));
                 var context = configuration.getContextForView();
                 pullDialog = initTemplate(pullDialogTemplate, pullConfigurationDialogId, context, configuration, pageNavigation, generalConfiguration);
+                var delay = 0;
+                if (configuration.generalConfiguration.getParameterValue('delay')) {
+                    delay = configuration.generalConfiguration.getParameterValue('delay');
+                }
                 if (configuration.generalConfiguration.getParameterValue('intermediateDialog')) {
                     var intermediateDialog = initIntermediateDialogTemplate(intermediateDialogTemplate, 'intermediateDialog', configuration, pullDialog, generalConfiguration);
                     if (intermediateDialog !== null) {
-                        intermediateDialog.dialog('open');
+                        setTimeout(function () {
+                            if (!active) {
+                                intermediateDialog.dialog('open');
+                            }
+                        }, delay * 1000);
                     }
                 }
                 else {
-                    openDialog(pullDialog, configuration);
+                    setTimeout(function () {
+                        if (!active) {
+                            openDialog(pullDialog, configuration);
+                        }
+                    }, delay * 1000);
                 }
                 return true;
             }
