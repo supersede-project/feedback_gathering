@@ -27,16 +27,18 @@ export class PullConfiguration extends Configuration {
     }
 
     private isDoNotDisturbTimeDurationOver() {
-        var doNotDisturbTimeDuration = 5*60;
+        var doNotDisturbTimeDuration = 5 * 60;
         if (this.generalConfiguration.getParameterValue('doNotDisturbTimeDuration') != null) {
             doNotDisturbTimeDuration = this.generalConfiguration.getParameterValue('doNotDisturbTimeDuration');
         }
         return this.currentTimeStamp() - Number(this.getCookie(cookieNames.lastTriggered)) > doNotDisturbTimeDuration;
     }
 
-    currentTimeStamp(): number {
+    currentTimeStamp():number {
         if (!Date.now) {
-            Date.now = function() { return new Date().getTime(); }
+            Date.now = function () {
+                return new Date().getTime();
+            }
         }
         return Math.floor(Date.now() / 1000);
     }

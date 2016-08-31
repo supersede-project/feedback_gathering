@@ -24,7 +24,9 @@ define(["require", "exports", './configuration', '../../js/config'], function (r
         };
         PullConfiguration.prototype.currentTimeStamp = function () {
             if (!Date.now) {
-                Date.now = function () { return new Date().getTime(); };
+                Date.now = function () {
+                    return new Date().getTime();
+                };
             }
             return Math.floor(Date.now() / 1000);
         };
