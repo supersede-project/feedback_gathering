@@ -4,6 +4,7 @@ import {PushConfiguration} from '../configurations/push_configuration';
 import {TextFeedback} from './text_feedback';
 import {RatingFeedback} from './rating_feedback';
 import {ScreenshotFeedback} from './screenshot_feedback';
+import {CategoryFeedback} from './category_feedback';
 
 
 const validationMessages = {
@@ -22,9 +23,11 @@ export class Feedback {
     ratingFeedbacks:RatingFeedback[];
     textFeedbacks:TextFeedback[];
     screenshotFeedbacks:ScreenshotFeedback[];
+    categoryFeedbacks:CategoryFeedback[];
 
-
-    constructor(title:string, userIdentification:string, language:string, applicationId:number, configurationId:number, ratingFeedbacks?:RatingFeedback[], textFeedbacks?:TextFeedback[], screenshotFeedbacks?:ScreenshotFeedback[]) {
+    constructor(title:string, userIdentification:string, language:string, applicationId:number, configurationId:number,
+                ratingFeedbacks?:RatingFeedback[], textFeedbacks?:TextFeedback[],
+                screenshotFeedbacks?:ScreenshotFeedback[], categoryFeedbacks?:CategoryFeedback[]) {
         this.title = title;
         this.userIdentification = userIdentification;
         this.language = language;
@@ -33,6 +36,7 @@ export class Feedback {
         this.ratingFeedbacks = ratingFeedbacks;
         this.textFeedbacks = textFeedbacks;
         this.screenshotFeedbacks = screenshotFeedbacks;
+        this.categoryFeedbacks = categoryFeedbacks;
     }
 
     /**

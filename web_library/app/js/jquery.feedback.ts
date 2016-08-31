@@ -24,6 +24,9 @@ import {GeneralConfiguration} from '../models/configurations/general_configurati
 import {TextFeedback} from '../models/feedbacks/text_feedback';
 import {RatingFeedback} from '../models/feedbacks/rating_feedback';
 import {ScreenshotFeedback} from '../models/feedbacks/screenshot_feedback';
+import {CategoryType} from '../models/feedbacks/category_type';
+import {Category} from '../models/feedbacks/category';
+import {CategoryFeedback} from '../models/feedbacks/category_feedback';
 var mockData = require('json!../services/mocks/applications_mock.json');
 
 
@@ -301,9 +304,10 @@ export var feedbackPluginModule = function ($, window, document) {
         var textMechanisms = configuration.getMechanismConfig(mechanismTypes.textType);
         var ratingMechanisms = configuration.getMechanismConfig(mechanismTypes.ratingType);
         var screenshotMechanisms = configuration.getMechanismConfig(mechanismTypes.screenshotType);
+        var categoryMechanisms = configuration.getMechanismConfig(mechanismTypes.categoryType);
 
         container.find('.server-response').removeClass('error').removeClass('success');
-        var feedbackObject = new Feedback(feedbackObjectTitle, "uid12345", "DE", applicationId, configuration.id, [], [], []);
+        var feedbackObject = new Feedback(feedbackObjectTitle, "uid12345", "DE", applicationId, configuration.id, [], [], [], []);
 
         for(var textMechanism of textMechanisms) {
             if(textMechanism.active) {
@@ -327,6 +331,13 @@ export var feedbackPluginModule = function ($, window, document) {
                 var screenshotFeedback = new ScreenshotFeedback(partName, screenshotMechanism.id, partName);
                 feedbackObject.screenshotFeedbacks.push(screenshotFeedback);
                 formData.append(partName, screenshotMechanism.screenshotView.getScreenshotAsBinary());
+            }
+        }
+
+        for (var categoryMechanism of categoryMechanisms) {
+            if (categoryMechanism.active) {
+                var categoryFeedback = categoryMechanism.getCategoryFeedback();
+                feedbackObject.categoryFeedbacks.push(categoryFeedback);
             }
         }
 

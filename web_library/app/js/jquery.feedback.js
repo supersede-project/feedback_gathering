@@ -178,8 +178,9 @@ define(["require", "exports", './config', '../views/pagination_container', '../v
             var textMechanisms = configuration.getMechanismConfig(config_1.mechanismTypes.textType);
             var ratingMechanisms = configuration.getMechanismConfig(config_1.mechanismTypes.ratingType);
             var screenshotMechanisms = configuration.getMechanismConfig(config_1.mechanismTypes.screenshotType);
+            var categoryMechanisms = configuration.getMechanismConfig(config_1.mechanismTypes.categoryType);
             container.find('.server-response').removeClass('error').removeClass('success');
-            var feedbackObject = new feedback_1.Feedback(config_1.feedbackObjectTitle, "uid12345", "DE", config_1.applicationId, configuration.id, [], [], []);
+            var feedbackObject = new feedback_1.Feedback(config_1.feedbackObjectTitle, "uid12345", "DE", config_1.applicationId, configuration.id, [], [], [], []);
             for (var _i = 0, textMechanisms_2 = textMechanisms; _i < textMechanisms_2.length; _i++) {
                 var textMechanism = textMechanisms_2[_i];
                 if (textMechanism.active) {
@@ -203,6 +204,13 @@ define(["require", "exports", './config', '../views/pagination_container', '../v
                     var screenshotFeedback = new screenshot_feedback_1.ScreenshotFeedback(partName, screenshotMechanism.id, partName);
                     feedbackObject.screenshotFeedbacks.push(screenshotFeedback);
                     formData.append(partName, screenshotMechanism.screenshotView.getScreenshotAsBinary());
+                }
+            }
+            for (var _c = 0, categoryMechanisms_1 = categoryMechanisms; _c < categoryMechanisms_1.length; _c++) {
+                var categoryMechanism = categoryMechanisms_1[_c];
+                if (categoryMechanism.active) {
+                    var categoryFeedback = categoryMechanism.getCategoryFeedback();
+                    feedbackObject.categoryFeedbacks.push(categoryFeedback);
                 }
             }
             formData.append('json', JSON.stringify(feedbackObject));
