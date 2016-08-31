@@ -4,7 +4,7 @@ import {MechanismFactory} from './mechanism_factory';
 import {CategoryFeedback} from '../feedbacks/category_feedback';
 
 
-fdescribe('Category Mechanism', () => {
+describe('Category Mechanism', () => {
     let categoryMechanism:CategoryMechanism;
     let $ = $j;
 

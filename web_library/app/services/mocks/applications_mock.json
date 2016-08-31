@@ -295,6 +295,19 @@
             {
               "key": "askOnAppStartup",
               "value": 0
+            },
+            {
+              "key": "pages",
+              "value": [
+                {
+                  "key": "page",
+                  "value": "index.html"
+                },
+                {
+                  "key": "page",
+                  "value": "info.html"
+                }
+              ]
             }
           ]
         },
@@ -464,6 +477,23 @@
               "id": 81,
               "key": "delay",
               "value": 5
+            },
+            {
+              "key": "pages",
+              "value": [
+                {
+                  "key": "page",
+                  "value": "index.html"
+                },
+                {
+                  "key": "page",
+                  "value": "info.html"
+                },
+                {
+                  "key": "page",
+                  "value": "file:///Users/ronnieschaniel/SupersedeProjects/feedback_gathering/web_library/index.html"
+                }
+              ]
             }
           ]
         },

@@ -2,6 +2,7 @@ import {Mechanism} from '../mechanisms/mechanism';
 import {Configuration} from './configuration';
 import {GeneralConfiguration} from './general_configuration';
 import {configurationTypes, cookieNames} from '../../js/config';
+import {ParameterInterface} from '../parameters/parameter_interface';
 
 
 /**
@@ -22,7 +23,7 @@ export class PullConfiguration extends Configuration {
      * @returns {boolean} true if the mechanismes should get triggered.
      */
     shouldGetTriggered():boolean {
-        return this.isDoNotDisturbTimeDurationOver() && (this.generalConfiguration.getParameterValue('askOnAppStartup') ||
+        return this.pageDoesMatch(this.currentSlug()) && this.isDoNotDisturbTimeDurationOver() && (this.generalConfiguration.getParameterValue('askOnAppStartup') ||
             Math.random() <= this.generalConfiguration.getParameterValue('likelihood'));
     }
 
@@ -31,8 +32,7 @@ export class PullConfiguration extends Configuration {
         if (this.generalConfiguration.getParameterValue('doNotDisturbTimeDuration') != null) {
             doNotDisturbTimeDuration = this.generalConfiguration.getParameterValue('doNotDisturbTimeDuration');
         }
-        return true;
-        //return this.currentTimeStamp() - Number(this.getCookie(cookieNames.lastTriggered)) > doNotDisturbTimeDuration;
+        return this.currentTimeStamp() - Number(this.getCookie(cookieNames.lastTriggered)) > doNotDisturbTimeDuration;
     }
 
     currentTimeStamp():number {
@@ -46,6 +46,30 @@ export class PullConfiguration extends Configuration {
 
     wasTriggered():void {
         this.setCookie(cookieNames.lastTriggered, this.currentTimeStamp(), 365);
+    }
+
+    currentSlug():string {
+        var url = location.href;
+        return url.replace(/http:\/\/.*\//i, "");
+    }
+
+    pageDoesMatch(slug:string):boolean {
+        console.log(slug);
+
+        var pages:ParameterInterface[] = this.generalConfiguration.getParameterValue('pages');
+
+        console.log(JSON.stringify(pages));
+
+        if(pages === null || pages.length === 0) {
+            return true;
+        } else {
+            for(var page of pages) {
+                if(page.value === slug) {
+                    return true;
+                }
+            }
+            return false;
+        }
     }
 
     setCookie(cname, cvalue, exdays):void {

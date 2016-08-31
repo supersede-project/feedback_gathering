@@ -1,6 +1,6 @@
 define(["require", "exports", '../../services/mocks/mocks_loader', './pull_configuration', './configuration_factory'], function (require, exports, mocks_loader_1, pull_configuration_1, configuration_factory_1) {
     "use strict";
-    describe('PullConfiguration object', function () {
+    fdescribe('PullConfiguration object', function () {
         var pullConfiguration;
         beforeEach(function () {
             var applications = mocks_loader_1.readJSON('app/services/mocks/applications_mock.json', '/base/');
@@ -22,63 +22,27 @@ define(["require", "exports", '../../services/mocks/mocks_loader', './pull_confi
         });
         it('should return the context for the view with the configuration data', function () {
             var context = pullConfiguration.getContextForView();
-            var expectedContext = {
-                textMechanism: {
-                    active: true,
-                    hint: 'Please enter your feedback',
-                    label: 'Feedback',
-                    currentLength: 0,
-                    maxLength: 50,
-                    maxLengthVisible: 1,
-                    textareaStyle: '',
-                    labelStyle: 'text-align: left; font-size: 16px;',
-                    clearInput: 0,
-                    mandatory: 1,
-                    mandatoryReminder: 'Please fill in the text field',
-                    validateOnSkip: 1
-                },
-                ratingMechanism: null,
-                screenshotMechanism: null,
-                categoryMechanism: {
-                    id: undefined,
-                    active: true,
-                    title: 'Please rate the feature that you just used',
-                    ownAllowed: 0,
-                    multiple: 0,
-                    breakAfterOption: false,
-                    options: [
-                        {
-                            key: 'RATING_1',
-                            value: 'Very bad'
-                        },
-                        {
-                            key: 'RATING_2',
-                            value: 'Bad'
-                        },
-                        {
-                            key: 'RATING_3',
-                            value: 'Okay'
-                        },
-                        {
-                            key: 'RATING_4',
-                            value: 'Good'
-                        },
-                        {
-                            key: 'RATING_5',
-                            value: 'Very good'
-                        }
-                    ],
-                    inputType: 'radio'
-                },
-                dialogId: 'pullConfiguration'
-            };
-            expect(context).toEqual(expectedContext);
+            expect(context.dialogId).toEqual('pullConfiguration');
+            expect(context.mechanisms.length).toBe(2);
         });
         it('should provide the parameter values', function () {
             var likelihood = pullConfiguration.generalConfiguration.getParameterValue("likelihood");
             var askOnAppStartup = pullConfiguration.generalConfiguration.getParameterValue("askOnAppStartup");
-            expect(likelihood).toEqual(0.0);
+            expect(likelihood).toEqual(0.1);
             expect(askOnAppStartup).toEqual(0);
+        });
+        it('should return whether the page slug matches in the config', function () {
+            var pages = pullConfiguration.generalConfiguration.getParameterValue("pages");
+            expect(pages).not.toBeNull();
+            expect(pullConfiguration.pageDoesMatch('index.html')).toBeTruthy();
+            expect(pullConfiguration.pageDoesMatch('info.html')).toBeTruthy();
+            expect(pullConfiguration.pageDoesMatch('html')).toBeFalsy();
+            expect(pullConfiguration.pageDoesMatch('info')).toBeFalsy();
+            expect(pullConfiguration.pageDoesMatch('')).toBeFalsy();
+            expect(pullConfiguration.pageDoesMatch('/')).toBeFalsy();
+        });
+        it('should return the slug', function () {
+            expect(pullConfiguration.currentSlug()).toEqual('context.html');
         });
     });
 });

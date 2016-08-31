@@ -12,7 +12,7 @@ define(["require", "exports", './configuration', '../../js/config'], function (r
             this.dialogId = 'pullConfiguration';
         }
         PullConfiguration.prototype.shouldGetTriggered = function () {
-            return this.isDoNotDisturbTimeDurationOver() && (this.generalConfiguration.getParameterValue('askOnAppStartup') ||
+            return this.pageDoesMatch(this.currentSlug()) && this.isDoNotDisturbTimeDurationOver() && (this.generalConfiguration.getParameterValue('askOnAppStartup') ||
                 Math.random() <= this.generalConfiguration.getParameterValue('likelihood'));
         };
         PullConfiguration.prototype.isDoNotDisturbTimeDurationOver = function () {
@@ -20,7 +20,7 @@ define(["require", "exports", './configuration', '../../js/config'], function (r
             if (this.generalConfiguration.getParameterValue('doNotDisturbTimeDuration') != null) {
                 doNotDisturbTimeDuration = this.generalConfiguration.getParameterValue('doNotDisturbTimeDuration');
             }
-            return true;
+            return this.currentTimeStamp() - Number(this.getCookie(config_1.cookieNames.lastTriggered)) > doNotDisturbTimeDuration;
         };
         PullConfiguration.prototype.currentTimeStamp = function () {
             if (!Date.now) {
@@ -32,6 +32,27 @@ define(["require", "exports", './configuration', '../../js/config'], function (r
         };
         PullConfiguration.prototype.wasTriggered = function () {
             this.setCookie(config_1.cookieNames.lastTriggered, this.currentTimeStamp(), 365);
+        };
+        PullConfiguration.prototype.currentSlug = function () {
+            var url = location.href;
+            return url.replace(/http:\/\/.*\//i, "");
+        };
+        PullConfiguration.prototype.pageDoesMatch = function (slug) {
+            console.log(slug);
+            var pages = this.generalConfiguration.getParameterValue('pages');
+            console.log(JSON.stringify(pages));
+            if (pages === null || pages.length === 0) {
+                return true;
+            }
+            else {
+                for (var _i = 0, pages_1 = pages; _i < pages_1.length; _i++) {
+                    var page = pages_1[_i];
+                    if (page.value === slug) {
+                        return true;
+                    }
+                }
+                return false;
+            }
         };
         PullConfiguration.prototype.setCookie = function (cname, cvalue, exdays) {
             var d = new Date();

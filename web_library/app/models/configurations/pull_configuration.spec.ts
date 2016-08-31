@@ -1,9 +1,10 @@
 import {readJSON} from '../../services/mocks/mocks_loader';
 import {PullConfiguration} from './pull_configuration';
 import {ConfigurationFactory} from './configuration_factory';
+import {platform} from 'os';
 
 
-describe('PullConfiguration object', () => {
+fdescribe('PullConfiguration object', () => {
     let pullConfiguration:PullConfiguration;
 
     beforeEach(() => {
@@ -32,65 +33,34 @@ describe('PullConfiguration object', () => {
     it('should return the context for the view with the configuration data', () => {
         var context = pullConfiguration.getContextForView();
 
-        var expectedContext = {
-            textMechanism: {
-                active: true,
-                hint: 'Please enter your feedback',
-                label: 'Feedback',
-                currentLength: 0,
-                maxLength: 50,
-                maxLengthVisible: 1,
-                textareaStyle: '',
-                labelStyle: 'text-align: left; font-size: 16px;',
-                clearInput: 0,
-                mandatory: 1,
-                mandatoryReminder: 'Please fill in the text field',
-                validateOnSkip: 1
-            },
-            ratingMechanism: null,
-            screenshotMechanism: null,
-            categoryMechanism: {
-                id: undefined,
-                active: true,
-                title: 'Please rate the feature that you just used',
-                ownAllowed: 0,
-                multiple: 0,
-                breakAfterOption: false,
-                options: [
-                    {
-                        key: 'RATING_1',
-                        value: 'Very bad'
-                    },
-                    {
-                        key: 'RATING_2',
-                        value: 'Bad'
-                    },
-                    {
-                        key: 'RATING_3',
-                        value: 'Okay'
-                    },
-                    {
-                        key: 'RATING_4',
-                        value: 'Good'
-                    },
-                    {
-                        key: 'RATING_5',
-                        value: 'Very good'
-                    }
-                ],
-                inputType: 'radio'
-            },
-            dialogId: 'pullConfiguration'
-        };
-
-        expect(context).toEqual(expectedContext);
+        expect(context.dialogId).toEqual('pullConfiguration');
+        expect(context.mechanisms.length).toBe(2)
     });
 
     it('should provide the parameter values', () => {
         var likelihood = pullConfiguration.generalConfiguration.getParameterValue("likelihood");
         var askOnAppStartup = pullConfiguration.generalConfiguration.getParameterValue("askOnAppStartup");
 
-        expect(likelihood).toEqual(0.0);
+        expect(likelihood).toEqual(0.1);
         expect(askOnAppStartup).toEqual(0);
     });
+
+    it('should return whether the page slug matches in the config', () => {
+        var pages = pullConfiguration.generalConfiguration.getParameterValue("pages");
+
+        expect(pages).not.toBeNull();
+
+        expect(pullConfiguration.pageDoesMatch('index.html')).toBeTruthy();
+        expect(pullConfiguration.pageDoesMatch('info.html')).toBeTruthy();
+        expect(pullConfiguration.pageDoesMatch('html')).toBeFalsy();
+        expect(pullConfiguration.pageDoesMatch('info')).toBeFalsy();
+        expect(pullConfiguration.pageDoesMatch('')).toBeFalsy();
+        expect(pullConfiguration.pageDoesMatch('/')).toBeFalsy();
+    });
+
+    it('should return the slug', () => {
+        expect(pullConfiguration.currentSlug()).toEqual('context.html');
+    });
 });
+
+

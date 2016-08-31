@@ -1,6 +1,6 @@
 define(["require", "exports", '../../services/mocks/mocks_loader', './mechanism_factory'], function (require, exports, mocks_loader_1, mechanism_factory_1) {
     "use strict";
-    fdescribe('Category Mechanism', function () {
+    describe('Category Mechanism', function () {
         var categoryMechanism;
         var $ = $j;
         beforeAll(function () {
