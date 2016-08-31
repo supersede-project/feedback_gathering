@@ -19,6 +19,7 @@ export class CategoryMechanism extends Mechanism {
         return {
             title: this.getParameterValue('title'),
             ownAllowed: this.getParameterValue('ownAllowed'),
+            ownLabel: this.getParameterValue('ownLabel'),
             multiple: this.getParameterValue('multiple'),
             breakAfterOption: this.getParameterValue('breakAfterOption') ? true : false,
             options: this.getOptions(),
@@ -49,7 +50,31 @@ export class CategoryMechanism extends Mechanism {
         return new CategoryFeedback(this.id, categories);
     }
 
-    private getInputSelector() {
+    getInputSelector() {
         return 'section#categoryMechanism' + this.id + '.category-type input';
+    }
+
+    coordinateOwnInputAndRadioBoxes() {
+        // set constraints between radio boxes and own input fields
+        if(this.active && this.getParameterValue('multiple') === 0 && this.getParameterValue('ownAllowed') === 1) {
+            var ownTextInput = jQuery(this.getInputSelector() + '.own-category');
+            var radioInputs = jQuery(this.getInputSelector() + '[type="radio"]');
+
+            // uncheck all radios if text input gets text
+            ownTextInput.on('keyup change', function() {
+                if(jQuery(this).val().length > 0) {
+                    radioInputs.each(function() {
+                        jQuery(this).prop('checked', false);
+                    });
+                }
+            });
+
+            // empty text input if radio input is checked
+            radioInputs.on('change', function() {
+                if(jQuery(this).is(':checked')) {
+                    ownTextInput.val("");
+                }
+            });
+        }
     }
 }

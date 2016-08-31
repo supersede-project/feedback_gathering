@@ -17,6 +17,7 @@ define(["require", "exports", './mechanism', '../feedbacks/category_feedback', '
             return {
                 title: this.getParameterValue('title'),
                 ownAllowed: this.getParameterValue('ownAllowed'),
+                ownLabel: this.getParameterValue('ownLabel'),
                 multiple: this.getParameterValue('multiple'),
                 breakAfterOption: this.getParameterValue('breakAfterOption') ? true : false,
                 options: this.getOptions(),
@@ -45,6 +46,24 @@ define(["require", "exports", './mechanism', '../feedbacks/category_feedback', '
         };
         CategoryMechanism.prototype.getInputSelector = function () {
             return 'section#categoryMechanism' + this.id + '.category-type input';
+        };
+        CategoryMechanism.prototype.coordinateOwnInputAndRadioBoxes = function () {
+            if (this.active && this.getParameterValue('multiple') === 0 && this.getParameterValue('ownAllowed') === 1) {
+                var ownTextInput = jQuery(this.getInputSelector() + '.own-category');
+                var radioInputs = jQuery(this.getInputSelector() + '[type="radio"]');
+                ownTextInput.on('keyup change', function () {
+                    if (jQuery(this).val().length > 0) {
+                        radioInputs.each(function () {
+                            jQuery(this).prop('checked', false);
+                        });
+                    }
+                });
+                radioInputs.on('change', function () {
+                    if (jQuery(this).is(':checked')) {
+                        ownTextInput.val("");
+                    }
+                });
+            }
         };
         return CategoryMechanism;
     }(mechanism_1.Mechanism));

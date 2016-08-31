@@ -140,6 +140,7 @@ define(["require", "exports", './config', '../views/pagination_container', '../v
             var container = $('#' + containerId);
             var textareas = container.find('textarea.text-type-text');
             var textMechanisms = configuration.getMechanismConfig(config_1.mechanismTypes.textType);
+            var categoryMechanisms = configuration.getMechanismConfig(config_1.mechanismTypes.categoryType);
             container.find('button.submit-feedback').unbind().on('click', function (event) {
                 event.preventDefault();
                 event.stopPropagation();
@@ -171,6 +172,10 @@ define(["require", "exports", './config', '../views/pagination_container', '../v
                     event.stopPropagation();
                     textarea.val('');
                 });
+            }
+            for (var _a = 0, categoryMechanisms_1 = categoryMechanisms; _a < categoryMechanisms_1.length; _a++) {
+                var categoryMechanism = categoryMechanisms_1[_a];
+                categoryMechanism.coordinateOwnInputAndRadioBoxes();
             }
         };
         var prepareFormData = function (container, configuration) {
@@ -206,8 +211,8 @@ define(["require", "exports", './config', '../views/pagination_container', '../v
                     formData.append(partName, screenshotMechanism.screenshotView.getScreenshotAsBinary());
                 }
             }
-            for (var _c = 0, categoryMechanisms_1 = categoryMechanisms; _c < categoryMechanisms_1.length; _c++) {
-                var categoryMechanism = categoryMechanisms_1[_c];
+            for (var _c = 0, categoryMechanisms_2 = categoryMechanisms; _c < categoryMechanisms_2.length; _c++) {
+                var categoryMechanism = categoryMechanisms_2[_c];
                 if (categoryMechanism.active) {
                     var categoryFeedback = categoryMechanism.getCategoryFeedback();
                     feedbackObject.categoryFeedbacks.push(categoryFeedback);

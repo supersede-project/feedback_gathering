@@ -252,6 +252,7 @@ export var feedbackPluginModule = function ($, window, document) {
         var container = $('#' + containerId);
         var textareas = container.find('textarea.text-type-text');
         var textMechanisms = configuration.getMechanismConfig(mechanismTypes.textType);
+        var categoryMechanisms = configuration.getMechanismConfig(mechanismTypes.categoryType);
 
         container.find('button.submit-feedback').unbind().on('click', function (event) {
             event.preventDefault();
@@ -290,6 +291,10 @@ export var feedbackPluginModule = function ($, window, document) {
                 event.stopPropagation();
                 textarea.val('');
             });
+        }
+
+        for(var categoryMechanism of categoryMechanisms) {
+            categoryMechanism.coordinateOwnInputAndRadioBoxes();
         }
     };
 

@@ -9,5 +9,9 @@
                 <br/>
             {{/if}}
         {{/each}}
+        {{#if ownAllowed}}
+            <label for="ownInput1">{{ ownLabel }}</label>
+            <input class="own-category" id="ownInput1" type="text" />
+        {{/if}}
     </section>
 {{/if}}

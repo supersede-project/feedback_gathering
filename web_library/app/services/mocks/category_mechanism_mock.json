@@ -14,6 +14,10 @@
       "value": 1
     },
     {
+      "key": "ownLabel",
+      "value": "Other:"
+    },
+    {
       "key": "multiple",
       "value": 0
     },

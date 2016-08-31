@@ -238,7 +238,11 @@
               },
               {
                 "key": "ownAllowed",
-                "value": 0
+                "value": 1
+              },
+              {
+                "key": "ownLabel",
+                "value": "Other:"
               },
               {
                 "key": "multiple",
@@ -537,6 +541,10 @@
               {
                 "key": "ownAllowed",
                 "value": 1
+              },
+              {
+                "key": "ownLabel",
+                "value": "Other:"
               },
               {
                 "key": "multiple",
