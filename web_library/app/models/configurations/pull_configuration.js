@@ -38,9 +38,7 @@ define(["require", "exports", './configuration', '../../js/config'], function (r
             return url.replace(/http:\/\/.*\//i, "");
         };
         PullConfiguration.prototype.pageDoesMatch = function (slug) {
-            console.log(slug);
             var pages = this.generalConfiguration.getParameterValue('pages');
-            console.log(JSON.stringify(pages));
             if (pages === null || pages.length === 0) {
                 return true;
             }

@@ -10,6 +10,9 @@
                     {{#compare type "RATING_TYPE" operator="==="}}
                         {{> partials/rating_mechanism}}
                     {{/compare}}
+                    {{#compare type "AUDIO_TYPE" operator="==="}}
+                        {{> partials/audio_mechanism}}
+                    {{/compare}}
                     {{#compare type "TEXT_TYPE" operator="==="}}
                         {{#if active}}
                             <section id="textMechanism{{ id }}" class="feedback-mechanism horizontal text-type">
@@ -92,6 +95,9 @@
 
                     </p>
                     <p class="mechanism-review rating-review">
+
+                    </p>
+                    <p class="mechanism-review audio-review">
 
                     </p>
                     <p class="mechanism-review screenshot-review">

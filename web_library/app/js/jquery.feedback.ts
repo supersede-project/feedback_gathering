@@ -24,9 +24,6 @@ import {GeneralConfiguration} from '../models/configurations/general_configurati
 import {TextFeedback} from '../models/feedbacks/text_feedback';
 import {RatingFeedback} from '../models/feedbacks/rating_feedback';
 import {ScreenshotFeedback} from '../models/feedbacks/screenshot_feedback';
-import {CategoryType} from '../models/feedbacks/category_type';
-import {Category} from '../models/feedbacks/category';
-import {CategoryFeedback} from '../models/feedbacks/category_feedback';
 var mockData = require('json!../services/mocks/applications_mock.json');
 
 
@@ -129,6 +126,10 @@ export var feedbackPluginModule = function ($, window, document) {
         for(var screenshotMechanism of configuration.getMechanismConfig(mechanismTypes.screenshotType)) {
             var screenshotView = initScreenshot(screenshotMechanism, dialogId);
             pageNavigation.screenshotViews.push(screenshotView);
+        }
+
+        for(var audioMechanism of configuration.getMechanismConfig(mechanismTypes.audioType)) {
+            var recordButton = $("#" + dialogId + " #audioMechanism" + audioMechanism.id + " .record-audio");
         }
 
         var title = "Feedback";

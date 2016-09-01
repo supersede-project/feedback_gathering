@@ -54,11 +54,7 @@ export class PullConfiguration extends Configuration {
     }
 
     pageDoesMatch(slug:string):boolean {
-        console.log(slug);
-
         var pages:ParameterInterface[] = this.generalConfiguration.getParameterValue('pages');
-
-        console.log(JSON.stringify(pages));
 
         if(pages === null || pages.length === 0) {
             return true;

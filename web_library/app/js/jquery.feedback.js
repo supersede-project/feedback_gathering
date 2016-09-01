@@ -69,6 +69,10 @@ define(["require", "exports", './config', '../views/pagination_container', '../v
                 var screenshotView = initScreenshot(screenshotMechanism, dialogId);
                 pageNavigation.screenshotViews.push(screenshotView);
             }
+            for (var _d = 0, _e = configuration.getMechanismConfig(config_1.mechanismTypes.audioType); _d < _e.length; _d++) {
+                var audioMechanism = _e[_d];
+                var recordButton = $("#" + dialogId + " #audioMechanism" + audioMechanism.id + " .record-audio");
+            }
             var title = "Feedback";
             if (generalConfiguration.getParameterValue('dialogTitle') !== null && generalConfiguration.getParameterValue('dialogTitle') !== "") {
                 title = generalConfiguration.getParameterValue('dialogTitle');

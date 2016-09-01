@@ -163,7 +163,7 @@
           {
             "id": 2,
             "type": "AUDIO_TYPE",
-            "active": false,
+            "active": true,
             "order": 2,
             "canBeActivated": false,
             "parameters": [
@@ -172,13 +172,17 @@
                 "value": 30,
                 "defaultValue": 30,
                 "editableByUser": false
+              },
+              {
+                "key": "title",
+                "value": "Please record an audio with your feedback"
               }
             ]
           },
           {
             "id": 3,
             "type": "SCREENSHOT_TYPE",
-            "active": true,
+            "active": false,
             "order": 3,
             "canBeActivated": false,
             "parameters": [
@@ -201,7 +205,7 @@
           {
             "id": 4,
             "type": "RATING_TYPE",
-            "active": true,
+            "active": false,
             "order": 2,
             "canBeActivated": false,
             "parameters": [
@@ -228,7 +232,7 @@
           {
             "id": 5,
             "type": "CATEGORY_TYPE",
-            "active": true,
+            "active": false,
             "order": 3,
             "canBeActivated": false,
             "parameters": [

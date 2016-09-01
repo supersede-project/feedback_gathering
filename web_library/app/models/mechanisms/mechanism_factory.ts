@@ -5,6 +5,7 @@ import {ScreenshotMechanism} from './screenshot_mechanism';
 import {Parameter} from '../parameters/parameter';
 import {CategoryMechanism} from './category_mechanism';
 import {TextMechanism} from './text_mechanism';
+import {AudioMechanism} from './audio_mechanism';
 
 
 export class MechanismFactory {
@@ -32,7 +33,10 @@ export class MechanismFactory {
             return new CategoryMechanism(data.id, data.type, data.active, data.order, data.canBeActivated, parameters);
         } else if (data.type === mechanismTypes.textType) {
             return new TextMechanism(data.id, data.type, data.active, data.order, data.canBeActivated, parameters);
+        } else if (data.type === mechanismTypes.audioType) {
+            return new AudioMechanism(data.id, data.type, data.active, data.order, data.canBeActivated, parameters);
         } else {
+            console.warn('This mechanism type is not supported by the mechanism factory: ' + data.type);
             return null;
         }
     }
