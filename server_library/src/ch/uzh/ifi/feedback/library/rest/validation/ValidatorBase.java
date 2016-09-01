@@ -62,6 +62,13 @@ public class ValidatorBase<T extends IDbItem<T>> {
 	
 	public T Merge(T object) throws Exception
 	{
+		if(object.getId() == null)
+			throw new UnsupportedOperationException("ID on object must be set for update");
+		
+		boolean res = dbService.CheckId(object.getId());
+		if(!res)
+			throw new NotFoundException("Object with ID '" + object.getId() + "' not found");
+		
 		T oldObject = dbService.GetById(object.getId());
 		object = object.Merge(oldObject);
 		return object;

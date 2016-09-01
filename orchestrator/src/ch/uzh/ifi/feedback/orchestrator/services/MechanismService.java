@@ -230,7 +230,7 @@ public class MechanismService extends OrchestratorService<FeedbackMechanism> {
 	    */
 		
 		FeedbackMechanism mechanism = super.GetById(mechanismId);
-    	mechanism.setParameters(parameterService.GetWhere(asList(asList(mechanism.getId()), "mechanisms_id = ?")));
+    	mechanism.setParameters(parameterService.GetWhere(asList(mechanism.getId()), "mechanisms_id = ?"));
 	    return mechanism;
 	}
 }
