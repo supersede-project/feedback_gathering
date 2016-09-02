@@ -18,7 +18,7 @@ import ch.uzh.ifi.feedback.orchestrator.model.FeedbackParameter;
 import ch.uzh.ifi.feedback.orchestrator.model.GeneralConfiguration;
 import javassist.NotFoundException;
 
-public class GeneralConfigurationService extends ServiceBase<GeneralConfiguration> {
+public class GeneralConfigurationService extends OrchestratorService<GeneralConfiguration> {
 
 	private ParameterService parameterService;
 	
@@ -39,7 +39,7 @@ public class GeneralConfigurationService extends ServiceBase<GeneralConfiguratio
 	public GeneralConfiguration GetById(int id) throws SQLException, NotFoundException {
 
     	GeneralConfiguration config = super.GetById(id);
-    	config.setParameters(parameterService.GetWhereEquals(asList("mechanism_id"), asList(id)));
+    	config.setParameters(parameterService.GetWhere(asList(id), "general_configurations_id = ?"));
 		
 		return config;
 	}
@@ -50,7 +50,7 @@ public class GeneralConfigurationService extends ServiceBase<GeneralConfiguratio
 		List<GeneralConfiguration> configs = super.GetAll();
 		for(GeneralConfiguration config : configs)
 		{
-	    	config.setParameters(parameterService.GetWhereEquals(asList("mechanism_id"), asList(config.getId())));
+	    	config.setParameters(parameterService.GetWhere(asList(config.getId()), "general_configurations_id = ?"));
 		}
 		
 	    return configs;
@@ -59,7 +59,7 @@ public class GeneralConfigurationService extends ServiceBase<GeneralConfiguratio
 	@Override
 	public void Update(Connection con, GeneralConfiguration config)
 			throws SQLException, NotFoundException {
-		
+		/*
 	    PreparedStatement s = con.prepareStatement(
 	    		  "UPDATE feedback_orchestrator.general_configurations as c "
 	    		+ "SET c.updated_at = now() "
@@ -67,13 +67,20 @@ public class GeneralConfigurationService extends ServiceBase<GeneralConfiguratio
 	    
 	    s.setInt(1, config.getId());
 	    s.execute();
+	   */
+
+	   super.Update(con, config);
 	   
 	   for(FeedbackParameter param : config.getParameters())
 	   {
+		   param.setGenaralConfigurationId(config.getId());
 		   if(param.getId() == null){
-			   parameterService.InsertFor(con, param, "configuration_id", config.getId());
+			   parameterService.Insert(con, param);
+			   //parameterService.InsertFor(con, param, "configuration_id", config.getId());
 		   }else{
-			   parameterService.UpdateFor(con, param, "configuration_id", config.getId());
+			   
+			  // parameterService.UpdateFor(con, param, "configuration_id", config.getId());
+			   parameterService.Update(con, param);
 		   }
 	   }
 	}
@@ -82,6 +89,7 @@ public class GeneralConfigurationService extends ServiceBase<GeneralConfiguratio
 	public int Insert(Connection con, GeneralConfiguration config)
 			throws SQLException, NotFoundException, UnsupportedOperationException {
 		
+		/*
 	    PreparedStatement s = con.prepareStatement(
 	    		"INSERT INTO feedback_orchestrator.general_configurations "
 	    		+ "(name) "
@@ -92,12 +100,15 @@ public class GeneralConfigurationService extends ServiceBase<GeneralConfiguratio
 	    ResultSet keys = s.getGeneratedKeys();
 	    keys.next();
 	    int key = keys.getInt(1);
-	    
+	    */
+		int id = super.Insert(con, config);
 	    for(FeedbackParameter param : config.getParameters())
 	    {
-	    	parameterService.InsertFor(con, param, "configuration_id", key);
+	    	//parameterService.InsertFor(con, param, "configuration_id", key);
+	    	param.setGenaralConfigurationId(id);
+	    	parameterService.Insert(con, param);
 	    }
 	    
-	    return key;
+	    return id;
 	}
 }

@@ -42,7 +42,7 @@ public class ConfigurationController extends RestController<Configuration>{
 	@Path("/applications/{app_id}/configurations")
 	public List<Configuration> GetAllByApplication( @PathParam("app_id")Integer appId) throws Exception 
 	{
-		return super.GetAllFor("application_id", appId);
+		return super.GetAllFor("applications_id", appId);
 	}
 	
 	@PUT
@@ -57,7 +57,8 @@ public class ConfigurationController extends RestController<Configuration>{
 	@Path("/applications/{app_id}/configurations")
 	public Configuration InsertConfigurationForApplication(@PathParam("app_id")Integer appId, Configuration config) throws Exception 
 	{
-		super.InsertFor(config, "application_id", appId);
+		config.setApplicationId(appId);
+		super.Insert(config);
 		return config;
 	}
 }

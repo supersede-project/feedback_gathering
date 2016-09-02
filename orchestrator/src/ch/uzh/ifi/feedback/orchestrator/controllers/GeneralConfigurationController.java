@@ -42,29 +42,30 @@ public class GeneralConfigurationController extends RestController<GeneralConfig
 	@Path("/applications/{app_id}/general_configurations")
 	public List<GeneralConfiguration> GetAllByApplication( @PathParam("app_id")Integer appId) throws Exception 
 	{
-		return super.GetAllFor("application_id", appId);
+		return super.GetAllFor("applications_id", appId);
 	}
 	
 	@GET
 	@Path("/configurations/{config_id}/general_configurations")
 	public List<GeneralConfiguration> GetAllByConfiguration( @PathParam("config_id")Integer configId) throws Exception 
 	{
-		return super.GetAllFor("configuration_id", configId);
+		return super.GetAllFor("configurations_id", configId);
 	}
 	
 	@PUT
 	@Path("/general_configurations")
-	public GeneralConfiguration UpdateMechanismForConfiguration(GeneralConfiguration config) throws Exception 
+	public GeneralConfiguration UpdateGeneralConfiguration(GeneralConfiguration config) throws Exception 
 	{
 		super.Update(config);
 		return config;
 	}
 	
+	/*
 	@POST
 	@Path("/applications/{app_id}/general_configurations")
 	public GeneralConfiguration InsertGeneralConfigurationForApplication(@PathParam("app_id")Integer appId, GeneralConfiguration config) throws Exception 
 	{
-		super.InsertFor(config, "application_id", appId);
+		super.InsertFor(config, "applications_id", appId);
 		return config;
 	}
 	
@@ -72,7 +73,7 @@ public class GeneralConfigurationController extends RestController<GeneralConfig
 	@Path("/configurations/{config_id}/general_configurations")
 	public GeneralConfiguration InsertGeneralConfigurationForConfiguration(@PathParam("app_id")Integer configId, GeneralConfiguration config) throws Exception 
 	{
-		super.InsertFor(config, "configuration_id", configId);
+		super.InsertFor(config, "configurations_id", configId);
 		return config;
-	}
+	}*/
 }

@@ -1,5 +1,6 @@
 package ch.uzh.ifi.feedback.orchestrator.controllers;
 
+import java.sql.Timestamp;
 import java.util.List;
 import com.google.inject.Inject;
 import ch.uzh.ifi.feedback.library.rest.RestController;
@@ -14,7 +15,7 @@ import ch.uzh.ifi.feedback.orchestrator.serialization.ApplicationSerializationSe
 import ch.uzh.ifi.feedback.orchestrator.services.ApplicationService;
 
 @Controller(Application.class)
-public class ApplicationController extends RestController<Application> {
+public class ApplicationController extends OrchestratorController<Application> {
 
 	@Inject
 	public ApplicationController(ApplicationSerializationService serializationService,
@@ -27,6 +28,13 @@ public class ApplicationController extends RestController<Application> {
 	public Application GetById( @PathParam("app_id") Integer id) throws Exception 
 	{
 		return super.GetById(id);
+	}
+	
+	@GET
+	@Path("/applications/{app_id}/timestamp/{time}")
+	public Application GetByIdAndTime( @PathParam("app_id") Integer id, @PathParam("time") Timestamp time) throws Exception 
+	{
+		return super.GetByIdAndTime(id, time);
 	}
 	
 	@GET

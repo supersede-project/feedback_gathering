@@ -34,12 +34,14 @@ public class FeedbackService extends ServiceBase<Feedback> {
 	public Feedback GetById(int id) throws SQLException, NotFoundException {
 		Feedback feedback = super.GetById(id);
 		setFeedbackRelations(feedback);
+
 		return feedback;
 	}
 
 	@Override
 	public List<Feedback> GetAll() throws SQLException, NotFoundException {
 		List<Feedback> feedbacks = super.GetAll();
+
 		for (Feedback feedback : feedbacks) {
 			setFeedbackRelations(feedback);
 		}
@@ -74,14 +76,10 @@ public class FeedbackService extends ServiceBase<Feedback> {
 		return feedbackId;
 	}
 
-	@Override
-	public List<Feedback> GetAllFor(String foreignKeyName, int foreignKey) throws SQLException, NotFoundException {
-		return super.GetWhereEquals(Arrays.asList("application_id"), Arrays.asList(foreignKey));
-	}
-	
+
 	private void setFeedbackRelations(Feedback feedback) throws SQLException, NotFoundException {
-		feedback.setTextFeedbacks(textFeedbackService.GetWhereEquals(Arrays.asList("feedback_id"), Arrays.asList(feedback.getId())));
-		feedback.setRatings(ratingFeedbackService.GetWhereEquals(Arrays.asList("feedback_id"), Arrays.asList(feedback.getId())));
-		feedback.setScreenshots(screenshotFeedbackService.GetWhereEquals(Arrays.asList("feedback_id"), Arrays.asList(feedback.getId())));
+		feedback.setTextFeedbacks(textFeedbackService.GetWhere(Arrays.asList(feedback.getId()), "feedback_id = ?"));
+		feedback.setRatings(ratingFeedbackService.GetWhere(Arrays.asList(feedback.getId()), "feedback_id = ?"));
+		feedback.setScreenshots(screenshotFeedbackService.GetWhere(Arrays.asList(feedback.getId()), "feedback_id = ?"));
 	}
 }
