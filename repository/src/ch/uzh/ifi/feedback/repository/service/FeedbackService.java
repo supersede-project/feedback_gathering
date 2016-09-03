@@ -8,6 +8,7 @@ import java.util.List;
 
 import com.google.inject.Inject;
 
+import ch.uzh.ifi.feedback.library.rest.Service.DatabaseConfiguration;
 import ch.uzh.ifi.feedback.library.rest.Service.ServiceBase;
 import ch.uzh.ifi.feedback.repository.model.Feedback;
 import ch.uzh.ifi.feedback.repository.model.RatingFeedback;
@@ -22,9 +23,14 @@ public class FeedbackService extends ServiceBase<Feedback> {
 	private ScreenshotFeedbackService screenshotFeedbackService;
 	
 	@Inject
-	public FeedbackService(FeedbackResultParser resultParser, RatingFeedbackService ratingFeedbackService,
-			ScreenshotFeedbackService screenshotFeedbackService, TextFeedbackService textFeedbackService) {
-		super(resultParser, Feedback.class, "feedbacks", "feedback_repository", ratingFeedbackService, screenshotFeedbackService);
+	public FeedbackService(
+			FeedbackResultParser resultParser, 
+			RatingFeedbackService ratingFeedbackService,
+			ScreenshotFeedbackService screenshotFeedbackService, 
+			TextFeedbackService textFeedbackService,
+			DatabaseConfiguration dbConfig) 
+	{
+		super(resultParser, Feedback.class, "feedbacks", dbConfig.getRepositoryDb(), ratingFeedbackService, screenshotFeedbackService);
 		this.screenshotFeedbackService = screenshotFeedbackService;
 		this.ratingFeedbackService = ratingFeedbackService;
 		this.textFeedbackService = textFeedbackService;

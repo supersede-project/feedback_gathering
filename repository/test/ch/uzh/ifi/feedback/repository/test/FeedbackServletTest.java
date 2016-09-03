@@ -22,6 +22,7 @@ import org.junit.After;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import ch.uzh.ifi.feedback.library.rest.Service.DatabaseConfiguration;
 import ch.uzh.ifi.feedback.library.transaction.TransactionManager;
 import ch.uzh.ifi.feedback.repository.model.Feedback;
 import javassist.NotFoundException;
@@ -32,20 +33,19 @@ import junit.framework.TestCase;
 public class FeedbackServletTest extends TestCase {
 	
 	private Connection dbConnection;
-	private final int NUMBER_OF_FEEDBACK_RECORDS = 36;
+	private final int NUMBER_OF_FEEDBACK_RECORDS = 10;
 		
     @Override
     protected void setUp() throws Exception
     {
         super.setUp();
 
-        Connection dbConnection = TransactionManager.createDatabaseConnection();
-        dbConnection.setAutoCommit(false);
+        DatabaseConfiguration.SelectedConfiguration = "test_config.properties";
     }
     
     @After
     protected void cleanUp() {
-    	
+    	DatabaseConfiguration.SelectedConfiguration = "config.properties";
     }
 
 	public void testRetrievingAllFeedbacks() throws ClientProtocolException, IOException {
