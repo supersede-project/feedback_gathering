@@ -161,6 +161,19 @@
             ]
           },
           {
+            "id": 222,
+            "type": "ATTACHMENT_TYPE",
+            "active": true,
+            "order": 3,
+            "canBeActivated": false,
+            "parameters": [
+              {
+                "key": "title",
+                "value": "You can also attach some files to your feedback"
+              }
+            ]
+          },
+          {
             "id": 2,
             "type": "AUDIO_TYPE",
             "active": true,

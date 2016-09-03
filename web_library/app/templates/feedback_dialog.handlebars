@@ -13,6 +13,9 @@
                     {{#compare type "AUDIO_TYPE" operator="==="}}
                         {{> partials/audio_mechanism}}
                     {{/compare}}
+                    {{#compare type "ATTACHMENT_TYPE" operator="==="}}
+                        {{> partials/attachment_mechanism}}
+                    {{/compare}}
                     {{#compare type "TEXT_TYPE" operator="==="}}
                         {{#if active}}
                             <section id="textMechanism{{ id }}" class="feedback-mechanism horizontal text-type">

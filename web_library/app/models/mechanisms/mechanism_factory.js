@@ -1,4 +1,4 @@
-define(["require", "exports", './rating_mechanism', '../../js/config', './screenshot_mechanism', '../parameters/parameter', './category_mechanism', './text_mechanism', './audio_mechanism'], function (require, exports, rating_mechanism_1, config_1, screenshot_mechanism_1, parameter_1, category_mechanism_1, text_mechanism_1, audio_mechanism_1) {
+define(["require", "exports", './rating_mechanism', '../../js/config', './screenshot_mechanism', '../parameters/parameter', './category_mechanism', './text_mechanism', './audio_mechanism', './attachment_mechanism'], function (require, exports, rating_mechanism_1, config_1, screenshot_mechanism_1, parameter_1, category_mechanism_1, text_mechanism_1, audio_mechanism_1, attachment_mechanism_1) {
     "use strict";
     var MechanismFactory = (function () {
         function MechanismFactory() {
@@ -26,6 +26,9 @@ define(["require", "exports", './rating_mechanism', '../../js/config', './screen
             }
             else if (data.type === config_1.mechanismTypes.audioType) {
                 return new audio_mechanism_1.AudioMechanism(data.id, data.type, data.active, data.order, data.canBeActivated, parameters);
+            }
+            else if (data.type === config_1.mechanismTypes.attachmentType) {
+                return new attachment_mechanism_1.AttachmentMechanism(data.id, data.type, data.active, data.order, data.canBeActivated, parameters);
             }
             else {
                 console.warn('This mechanism type is not supported by the mechanism factory: ' + data.type);

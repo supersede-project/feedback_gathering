@@ -200,6 +200,7 @@ define(["require", "exports", './config', '../views/pagination_container', '../v
             var ratingMechanisms = configuration.getMechanismConfig(config_1.mechanismTypes.ratingType);
             var screenshotMechanisms = configuration.getMechanismConfig(config_1.mechanismTypes.screenshotType);
             var categoryMechanisms = configuration.getMechanismConfig(config_1.mechanismTypes.categoryType);
+            var attachmentMechanisms = configuration.getMechanismConfig(config_1.mechanismTypes.attachmentType);
             container.find('.server-response').removeClass('error').removeClass('success');
             var feedbackObject = new feedback_1.Feedback(config_1.feedbackObjectTitle, "uid12345", "DE", config_1.applicationId, configuration.id, [], [], [], []);
             for (var _i = 0, textMechanisms_2 = textMechanisms; _i < textMechanisms_2.length; _i++) {
@@ -232,6 +233,18 @@ define(["require", "exports", './config', '../views/pagination_container', '../v
                 if (categoryMechanism.active) {
                     var categoryFeedback = categoryMechanism.getCategoryFeedback();
                     feedbackObject.categoryFeedbacks.push(categoryFeedback);
+                }
+            }
+            for (var _d = 0, attachmentMechanisms_1 = attachmentMechanisms; _d < attachmentMechanisms_1.length; _d++) {
+                var attachmentMechanism = attachmentMechanisms_1[_d];
+                if (attachmentMechanism.active) {
+                    var sectionSelector = "attachmentMechanism" + attachmentMechanism.id;
+                    var input = container.find('section#' + sectionSelector + ' .attachments');
+                    var files = input.files;
+                    for (var i = 0; i < files.length; i++) {
+                        var file = files[i];
+                        formData.append('photos[]', file, file.name);
+                    }
                 }
             }
             formData.append('json', JSON.stringify(feedbackObject));

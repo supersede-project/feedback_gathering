@@ -323,6 +323,7 @@ export var feedbackPluginModule = function ($, window, document) {
         var ratingMechanisms = configuration.getMechanismConfig(mechanismTypes.ratingType);
         var screenshotMechanisms = configuration.getMechanismConfig(mechanismTypes.screenshotType);
         var categoryMechanisms = configuration.getMechanismConfig(mechanismTypes.categoryType);
+        var attachmentMechanisms = configuration.getMechanismConfig(mechanismTypes.attachmentType);
 
         container.find('.server-response').removeClass('error').removeClass('success');
         var feedbackObject = new Feedback(feedbackObjectTitle, "uid12345", "DE", applicationId, configuration.id, [], [], [], []);
@@ -359,8 +360,20 @@ export var feedbackPluginModule = function ($, window, document) {
             }
         }
 
-        formData.append('json', JSON.stringify(feedbackObject));
+        for(var attachmentMechanism of attachmentMechanisms) {
+            if(attachmentMechanism.active) {
+                var sectionSelector = "attachmentMechanism" + attachmentMechanism.id;
+                var input = container.find('section#' + sectionSelector + ' .attachments');
+                var files = input.files;
 
+                for (var i = 0; i < files.length; i++) {
+                    var file = files[i];
+                    formData.append('photos[]', file, file.name);
+                }
+            }
+        }
+
+        formData.append('json', JSON.stringify(feedbackObject));
         return formData;
     };
 
