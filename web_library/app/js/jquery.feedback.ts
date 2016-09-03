@@ -1,5 +1,6 @@
 import './lib/jquery.star-rating-svg.js';
 import './jquery.validate';
+import './jquery.fileupload';
 import {
     apiEndpointRepository, feedbackPath, applicationName, defaultSuccessMessage,
     feedbackObjectTitle, dialogOptions, mechanismTypes, applicationId
@@ -130,6 +131,14 @@ export var feedbackPluginModule = function ($, window, document) {
 
         for(var audioMechanism of configuration.getMechanismConfig(mechanismTypes.audioType)) {
             var recordButton = $("#" + dialogId + " #audioMechanism" + audioMechanism.id + " .record-audio");
+        }
+
+        for(var attachmentMechanism of configuration.getMechanismConfig(mechanismTypes.attachmentType)) {
+            if(attachmentMechanism.active) {
+                var sectionSelector = "#attachmentMechanism" + attachmentMechanism.id;
+                var dropArea = $('' + sectionSelector).find('.drop-area');
+                dropArea.fileUpload();
+            }
         }
 
         var title = "Feedback";
@@ -363,7 +372,7 @@ export var feedbackPluginModule = function ($, window, document) {
         for(var attachmentMechanism of attachmentMechanisms) {
             if(attachmentMechanism.active) {
                 var sectionSelector = "attachmentMechanism" + attachmentMechanism.id;
-                var input = container.find('section#' + sectionSelector + ' .attachments');
+                var input = container.find('section#' + sectionSelector + ' input[type=file]');
                 var files = input.files;
 
                 for (var i = 0; i < files.length; i++) {

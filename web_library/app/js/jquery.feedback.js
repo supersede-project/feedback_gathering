@@ -1,4 +1,4 @@
-define(["require", "exports", './config', '../views/pagination_container', '../views/screenshot/screenshot_view', './helpers/i18n', '../services/backends/mock_backend', '../models/feedbacks/feedback', './helpers/page_navigation', '../services/application_service', './helpers/array_shuffle', '../templates/feedback_dialog.handlebars', '../templates/feedback_dialog.handlebars', '../templates/intermediate_dialog.handlebars', '../models/feedbacks/text_feedback', '../models/feedbacks/rating_feedback', '../models/feedbacks/screenshot_feedback', './lib/jquery.star-rating-svg.js', './jquery.validate'], function (require, exports, config_1, pagination_container_1, screenshot_view_1, i18n_1, mock_backend_1, feedback_1, page_navigation_1, application_service_1, array_shuffle_1, dialogTemplate, pullDialogTemplate, intermediateDialogTemplate, text_feedback_1, rating_feedback_1, screenshot_feedback_1) {
+define(["require", "exports", './config', '../views/pagination_container', '../views/screenshot/screenshot_view', './helpers/i18n', '../services/backends/mock_backend', '../models/feedbacks/feedback', './helpers/page_navigation', '../services/application_service', './helpers/array_shuffle', '../templates/feedback_dialog.handlebars', '../templates/feedback_dialog.handlebars', '../templates/intermediate_dialog.handlebars', '../models/feedbacks/text_feedback', '../models/feedbacks/rating_feedback', '../models/feedbacks/screenshot_feedback', './lib/jquery.star-rating-svg.js', './jquery.validate', './jquery.fileupload'], function (require, exports, config_1, pagination_container_1, screenshot_view_1, i18n_1, mock_backend_1, feedback_1, page_navigation_1, application_service_1, array_shuffle_1, dialogTemplate, pullDialogTemplate, intermediateDialogTemplate, text_feedback_1, rating_feedback_1, screenshot_feedback_1) {
     "use strict";
     var mockData = require('json!../services/mocks/applications_mock.json');
     exports.feedbackPluginModule = function ($, window, document) {
@@ -72,6 +72,14 @@ define(["require", "exports", './config', '../views/pagination_container', '../v
             for (var _d = 0, _e = configuration.getMechanismConfig(config_1.mechanismTypes.audioType); _d < _e.length; _d++) {
                 var audioMechanism = _e[_d];
                 var recordButton = $("#" + dialogId + " #audioMechanism" + audioMechanism.id + " .record-audio");
+            }
+            for (var _f = 0, _g = configuration.getMechanismConfig(config_1.mechanismTypes.attachmentType); _f < _g.length; _f++) {
+                var attachmentMechanism = _g[_f];
+                if (attachmentMechanism.active) {
+                    var sectionSelector = "#attachmentMechanism" + attachmentMechanism.id;
+                    var dropArea = $('' + sectionSelector).find('.drop-area');
+                    dropArea.fileUpload();
+                }
             }
             var title = "Feedback";
             if (generalConfiguration.getParameterValue('dialogTitle') !== null && generalConfiguration.getParameterValue('dialogTitle') !== "") {
@@ -239,7 +247,7 @@ define(["require", "exports", './config', '../views/pagination_container', '../v
                 var attachmentMechanism = attachmentMechanisms_1[_d];
                 if (attachmentMechanism.active) {
                     var sectionSelector = "attachmentMechanism" + attachmentMechanism.id;
-                    var input = container.find('section#' + sectionSelector + ' .attachments');
+                    var input = container.find('section#' + sectionSelector + ' input[type=file]');
                     var files = input.files;
                     for (var i = 0; i < files.length; i++) {
                         var file = files[i];

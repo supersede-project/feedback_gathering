@@ -2,5 +2,14 @@
     <section id="attachmentMechanism{{ id }}" class="feedback-mechanism horizontal attachment-type">
         <p>{{ title }}</p>
 
+        <article class="file-upload-box drop-area">
+            <input type="file" name="files[]" id="file" multiple/>
+            <label for="file"><strong>Choose a file</strong><span> or drop it here</span>.</label>
+        </article>
+
+        <table class="current-files">
+
+        </table>
+
     </section>
 {{/if}}
