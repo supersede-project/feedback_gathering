@@ -98,12 +98,15 @@ define(["require", "exports", 'i18next', '../config', './../jquery.validate'], f
                 for (var _d = 0, audioMechanisms_1 = audioMechanisms; _d < audioMechanisms_1.length; _d++) {
                     var audioMechanism = audioMechanisms_1[_d];
                     if (audioMechanism !== null && nextPage.find('.audio-review').length > 0 && audioMechanism.active) {
+                        var audio = currentPage.find('#audioMechanism' + audioMechanism.id + ' audio:first');
+                        var audioCopy = audio.clone();
+                        audioCopy.css('display', 'block');
+                        nextPage.find('.audio-review').empty().append(audioCopy);
                     }
                 }
                 for (var _e = 0, attachmentMechanisms_1 = attachmentMechanisms; _e < attachmentMechanisms_1.length; _e++) {
                     var attachmentMechanism = attachmentMechanisms_1[_e];
                     if (attachmentMechanism !== null && nextPage.find('.attachment-review').length > 0 && attachmentMechanism.active) {
-                        console.log('test');
                         var table = currentPage.find('#attachmentMechanism' + attachmentMechanism.id + ' table.current-files:first');
                         var tableCopy = table.clone();
                         nextPage.find('.attachment-review').empty().append(tableCopy);
