@@ -2,6 +2,7 @@ package ch.uzh.ifi.feedback.repository;
 
 import com.google.inject.AbstractModule;
 
+import ch.uzh.ifi.feedback.library.rest.Service.DatabaseConfiguration;
 import ch.uzh.ifi.feedback.repository.controller.FeedbackController;
 import ch.uzh.ifi.feedback.repository.serialization.FeedbackSerializationService;
 import ch.uzh.ifi.feedback.repository.serialization.ScreenshotSerializationService;
@@ -25,6 +26,7 @@ public class RepositoryModule extends AbstractModule {
 		bind(RatingFeedbackService.class).to(RatingFeedbackService.class);
 		bind(ScreenshotFeedbackService.class).to(ScreenshotFeedbackService.class);
 		bind(ScreenshotFeedbackResultParser.class).to(ScreenshotFeedbackResultParser.class);
+		bind(DatabaseConfiguration.class).to(DatabaseConfiguration.class);
 	}
 
 }

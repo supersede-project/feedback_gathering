@@ -68,6 +68,7 @@ public abstract class ServiceBase<T> implements IDbService<T> {
 		PreparedStatement s = con.prepareStatement(statement);
 		s.setInt(1, id);
 		ResultSet result = s.executeQuery();
+		result.next();
 		
 		T instance = null;
 		try {

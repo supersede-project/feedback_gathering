@@ -1,0 +1,5 @@
+repository_db=feedback_repository
+repository_test_db=feedback_repository_test
+orchestrator_db=feedback_orchestrator
+orchestrator_test_db=feedback_orchestrator_test
+database_directory=/var/lib/mysql/
