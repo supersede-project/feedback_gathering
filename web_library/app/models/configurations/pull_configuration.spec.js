@@ -1,6 +1,6 @@
 define(["require", "exports", '../../services/mocks/mocks_loader', './pull_configuration', './configuration_factory'], function (require, exports, mocks_loader_1, pull_configuration_1, configuration_factory_1) {
     "use strict";
-    fdescribe('PullConfiguration object', function () {
+    describe('PullConfiguration object', function () {
         var pullConfiguration;
         beforeEach(function () {
             var applications = mocks_loader_1.readJSON('app/services/mocks/applications_mock.json', '/base/');

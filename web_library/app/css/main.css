@@ -1055,6 +1055,20 @@ button.text-type-text-clear {
   margin-bottom: 10px;
   position: relative; }
 
+.screenshot-review {
+  position: relative; }
+  .screenshot-review img.base {
+    z-index: 2000; }
+  .screenshot-review img {
+    z-index: 3000; }
+  .screenshot-review .sticker-container {
+    z-index: 3000; }
+
+.hidden-preview {
+  display: none;
+  height: auto;
+  position: relative; }
+
 .screenshot-operations {
   display: none; }
   .screenshot-operations .sticking img {
@@ -1173,6 +1187,25 @@ button.screenshot-operation {
     display: block; }
   .sticker-container:hover a.color {
     display: block; }
+
+.sticker-container-review:hover {
+  cursor: default;
+  border: none; }
+  .sticker-container-review:hover a.edit {
+    display: none; }
+  .sticker-container-review:hover a.remove {
+    display: none; }
+  .sticker-container-review:hover a.color {
+    display: none; }
+
+.screenshot-text-review {
+  display: none;
+  margin-left: 30px;
+  height: 100px;
+  position: absolute;
+  width: 50%;
+  text-align: left;
+  z-index: 5000; }
 
 /* intermediate dialog */
 #intermediateDialog {

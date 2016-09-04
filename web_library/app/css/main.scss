@@ -248,6 +248,28 @@ button.text-type-text-clear {
   position: relative;
 }
 
+.screenshot-review {
+  position: relative;
+
+  img.base {
+    z-index: 2000;
+  }
+
+  img {
+    z-index: 3000;
+  }
+
+  .sticker-container {
+    z-index: 3000;
+  }
+}
+
+.hidden-preview {
+  display: none;
+  height: auto;
+  position: relative;
+}
+
 .screenshot-operations {
   display: none;
 
@@ -399,6 +421,33 @@ button.screenshot-operation {
   a.color {
     display: block;
   }
+}
+
+.sticker-container-review:hover {
+  cursor: default;
+  border: none;
+
+  a.edit {
+    display: none;
+  }
+
+  a.remove {
+    display: none;
+  }
+
+  a.color {
+    display: none;
+  }
+}
+
+.screenshot-text-review {
+  display: none;
+  margin-left: 30px;
+  height: 100px;
+  position: absolute;
+  width: 50%;
+  text-align: left;
+  z-index: 5000;
 }
 
 /* intermediate dialog */

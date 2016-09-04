@@ -58,7 +58,7 @@
           {
             "id": 1,
             "type": "TEXT_TYPE",
-            "active": true,
+            "active": false,
             "order": 1,
             "canBeActivated": false,
             "parameters": [
@@ -163,7 +163,7 @@
           {
             "id": 222,
             "type": "ATTACHMENT_TYPE",
-            "active": true,
+            "active": false,
             "order": 3,
             "canBeActivated": false,
             "parameters": [
@@ -176,7 +176,7 @@
           {
             "id": 2,
             "type": "AUDIO_TYPE",
-            "active": true,
+            "active": false,
             "order": 2,
             "canBeActivated": false,
             "parameters": [
@@ -195,7 +195,7 @@
           {
             "id": 3,
             "type": "SCREENSHOT_TYPE",
-            "active": false,
+            "active": true,
             "order": 3,
             "canBeActivated": false,
             "parameters": [

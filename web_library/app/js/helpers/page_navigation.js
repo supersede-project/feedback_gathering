@@ -39,8 +39,46 @@ define(["require", "exports", 'i18next', '../config', './../jquery.validate'], f
                     if (screenshotMechanism != null && nextPage.find('.screenshot-review').length > 0 && screenshotMechanism.active &&
                         screenshotMechanism.screenshotView !== undefined && screenshotMechanism.screenshotView.screenshotCanvas !== undefined && screenshotMechanism.screenshotView.screenshotCanvas !== null) {
                         var img = $('<img src="' + screenshotMechanism.screenshotView.screenshotCanvas.toDataURL() + '" />');
-                        img.css('max-width', '20%');
-                        nextPage.find('.screenshot-review').append(img);
+                        img.css('width', '40%');
+                        img.addClass('base');
+                        var screenshotReviewElement = nextPage.find('.screenshot-review');
+                        screenshotReviewElement.append(img);
+                        var screenshotTextReview = $('<p class="screenshot-text-review"></p>');
+                        screenshotReviewElement.append(screenshotTextReview);
+                        var ratio = 965 * 0.4 / screenshotMechanism.screenshotView.screenshotPreviewElement.width();
+                        jQuery('section#screenshotMechanism' + screenshotMechanism.id + ' .sticker-container').each(function () {
+                            var x = $(this).position().left;
+                            var y = $(this).position().top;
+                            var width = $(this).width();
+                            var height = $(this).height();
+                            var reviewClone = $(this).clone();
+                            reviewClone.removeClass('ui-resizable');
+                            reviewClone.removeClass('ui-draggable');
+                            reviewClone.removeClass('ui-draggable-handle');
+                            reviewClone.css('left', x * ratio + "px");
+                            reviewClone.css('top', y * ratio + "px");
+                            reviewClone.css('width', width * ratio + "px");
+                            reviewClone.css('height', height * ratio + "px");
+                            reviewClone.css('padding', "0");
+                            reviewClone.addClass('sticker-container-review');
+                            reviewClone.find('a').remove();
+                            if ($(this).hasClass('text-2')) {
+                                var textarea = $(this).find('textarea');
+                                var text = textarea.val();
+                                var oldFontSize = textarea.css('font-size');
+                                var newFontSize = ratio * parseInt(oldFontSize);
+                                reviewClone.find('textarea').val(text).css('font-size', newFontSize + 'px').prop("disabled", true);
+                            }
+                            if ($(this).hasClass('text') || $(this).hasClass('text-2')) {
+                                var text = $(this).find('textarea').val();
+                                reviewClone.on('mouseover mouseenter', function () {
+                                    $('.screenshot-text-review').text(text).css('display', 'inline');
+                                }).on('mouseleave', function () {
+                                    $('.screenshot-text-review').text("").css('display', 'none');
+                                });
+                            }
+                            screenshotReviewElement.append(reviewClone);
+                        });
                     }
                 }
                 for (var _c = 0, categoryMechanisms_1 = categoryMechanisms; _c < categoryMechanisms_1.length; _c++) {

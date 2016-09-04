@@ -379,7 +379,7 @@ export class ScreenshotView {
 
             var imgSrc = jQuery(this).find('img').attr('src');
             var img = jQuery('<img src="' + imgSrc + '" class="sticker" />');
-            var stickerContainer = jQuery('<div class="sticker-container">' +
+            var stickerContainer = jQuery('<div class="sticker-container text">' +
                 '<a class="edit"><img src="dist/img/ic_mode_edit_black_shadow_24px.png" /></a>' +
                 '<a class="remove"><img src="dist/img/ic_remove_circle_red_shadow_24px.png" /></a>' +
                 '<article class="text-container">' +

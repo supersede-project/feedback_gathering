@@ -4,7 +4,7 @@ import {ConfigurationFactory} from './configuration_factory';
 import {platform} from 'os';
 
 
-fdescribe('PullConfiguration object', () => {
+describe('PullConfiguration object', () => {
     let pullConfiguration:PullConfiguration;
 
     beforeEach(() => {
