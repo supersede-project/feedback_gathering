@@ -10,6 +10,8 @@ define(["require", "exports", 'i18next', '../config', './../jquery.validate'], f
             var ratingMechanisms = this.configuration.getMechanismConfig(config_1.mechanismTypes.ratingType);
             var screenshotMechanisms = this.configuration.getMechanismConfig(config_1.mechanismTypes.screenshotType);
             var categoryMechanisms = this.configuration.getMechanismConfig(config_1.mechanismTypes.categoryType);
+            var audioMechanisms = this.configuration.getMechanismConfig(config_1.mechanismTypes.audioType);
+            var attachmentMechanisms = this.configuration.getMechanismConfig(config_1.mechanismTypes.attachmentType);
             currentPage.find('.validate').each(function () {
                 $(this).validate();
             });
@@ -91,6 +93,20 @@ define(["require", "exports", 'i18next', '../config', './../jquery.validate'], f
                             var correspondingReviewInput = nextPage.find(selector);
                             correspondingReviewInput.prop("checked", input.is(':checked'));
                         });
+                    }
+                }
+                for (var _d = 0, audioMechanisms_1 = audioMechanisms; _d < audioMechanisms_1.length; _d++) {
+                    var audioMechanism = audioMechanisms_1[_d];
+                    if (audioMechanism !== null && nextPage.find('.audio-review').length > 0 && audioMechanism.active) {
+                    }
+                }
+                for (var _e = 0, attachmentMechanisms_1 = attachmentMechanisms; _e < attachmentMechanisms_1.length; _e++) {
+                    var attachmentMechanism = attachmentMechanisms_1[_e];
+                    if (attachmentMechanism !== null && nextPage.find('.attachment-review').length > 0 && attachmentMechanism.active) {
+                        console.log('test');
+                        var table = currentPage.find('#attachmentMechanism' + attachmentMechanism.id + ' table.current-files:first');
+                        var tableCopy = table.clone();
+                        nextPage.find('.attachment-review').empty().append(tableCopy);
                     }
                 }
             }

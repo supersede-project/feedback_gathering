@@ -25,6 +25,8 @@ export class PageNavigation {
         var ratingMechanisms = this.configuration.getMechanismConfig(mechanismTypes.ratingType);
         var screenshotMechanisms = this.configuration.getMechanismConfig(mechanismTypes.screenshotType);
         var categoryMechanisms = this.configuration.getMechanismConfig(mechanismTypes.categoryType);
+        var audioMechanisms = this.configuration.getMechanismConfig(mechanismTypes.audioType);
+        var attachmentMechanisms = this.configuration.getMechanismConfig(mechanismTypes.attachmentType);
 
         currentPage.find('.validate').each(function () {
             $(this).validate();
@@ -119,6 +121,21 @@ export class PageNavigation {
                         var correspondingReviewInput = nextPage.find(selector);
                         correspondingReviewInput.prop("checked", input.is(':checked'));
                     });
+                }
+            }
+
+            for (var audioMechanism of audioMechanisms) {
+                if (audioMechanism !== null && nextPage.find('.audio-review').length > 0 && audioMechanism.active) {
+
+                }
+            }
+
+            for (var attachmentMechanism of attachmentMechanisms) {
+                if (attachmentMechanism !== null && nextPage.find('.attachment-review').length > 0 && attachmentMechanism.active) {
+                    console.log('test');
+                    var table =  currentPage.find('#attachmentMechanism' + attachmentMechanism.id + ' table.current-files:first');
+                    var tableCopy = table.clone();
+                    nextPage.find('.attachment-review').empty().append(tableCopy);
                 }
             }
         }

@@ -163,7 +163,7 @@
           {
             "id": 222,
             "type": "ATTACHMENT_TYPE",
-            "active": false,
+            "active": true,
             "order": 3,
             "canBeActivated": false,
             "parameters": [
@@ -176,7 +176,7 @@
           {
             "id": 2,
             "type": "AUDIO_TYPE",
-            "active": false,
+            "active": true,
             "order": 2,
             "canBeActivated": false,
             "parameters": [

@@ -861,6 +861,11 @@ table.current-files {
   table.current-files td {
     padding-right: 15px; }
 
+.attachment-review tr {
+  height: 20px; }
+.attachment-review a.remove-file {
+  display: none; }
+
 .ui-widget input, .ui-widget select, .ui-widget textarea, .ui-widget button {
   font-family: Verdana, Arial, sans-serif;
   font-size: 15px; }

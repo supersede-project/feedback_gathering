@@ -22,3 +22,14 @@ table.current-files {
     padding-right: 15px;
   }
 }
+
+.attachment-review {
+
+  tr {
+    height: 20px;
+  }
+
+  a.remove-file {
+    display: none;
+  }
+}
