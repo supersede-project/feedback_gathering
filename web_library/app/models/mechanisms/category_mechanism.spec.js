@@ -18,7 +18,7 @@ define(["require", "exports", '../../services/mocks/mocks_loader', './mechanism_
             $('body').append(html);
         });
         beforeEach(function () {
-            var categoryMechanismData = mocks_loader_1.readJSON('app/services/mocks/category_mechanism_mock.json', '/base/');
+            var categoryMechanismData = mocks_loader_1.readJSON('app/services/mocks/test/category_mechanism_mock.json', '/base/');
             categoryMechanism = mechanism_factory_1.MechanismFactory.createByData(categoryMechanismData);
         });
         it('should return its options', function () {

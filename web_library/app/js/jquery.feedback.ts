@@ -25,7 +25,7 @@ import {GeneralConfiguration} from '../models/configurations/general_configurati
 import {TextFeedback} from '../models/feedbacks/text_feedback';
 import {RatingFeedback} from '../models/feedbacks/rating_feedback';
 import {ScreenshotFeedback} from '../models/feedbacks/screenshot_feedback';
-var mockData = require('json!../services/mocks/applications_mock.json');
+var mockData = require('json!../services/mocks/dev/applications_mock.json');
 
 
 export var feedbackPluginModule = function ($, window, document) {

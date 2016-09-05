@@ -6,41 +6,42 @@ import {mechanismTypes} from '../../js/config';
 import {ParameterValuePropertyPair} from '../parameters/parameter_value_property_pair';
 import {ScreenshotMechanism} from '../mechanisms/screenshot_mechanism';
 import {ConfigurationFactory} from './configuration_factory';
+import {TextMechanism} from '../mechanisms/text_mechanism';
 
 
 describe('PushConfiguration object', () => {
     let configuration:PushConfiguration;
 
     beforeEach(() => {
-        var applications = readJSON('app/services/mocks/applications_mock.json', '/base/');
+        var applications = readJSON('app/services/mocks/test/applications_mock.json', '/base/');
         var application = applications[0];
         var pushConfigurationData = application.configurations[0];
         configuration = ConfigurationFactory.createByData(pushConfigurationData);
     });
 
     it('should be an object with a general configuration and some mechanisms', () => {
-        expect(configuration.mechanisms.length).toBe(5);
+        expect(configuration.mechanisms.length).toBe(7);
         var textMechanismConfig = configuration.mechanisms[0];
         expect(textMechanismConfig.type).toEqual('TEXT_TYPE');
-        expect(textMechanismConfig.active).toEqual(true);
+        expect(textMechanismConfig.active).toEqual(false);
         expect(textMechanismConfig.order).toEqual(1);
         expect(textMechanismConfig.canBeActivated).toEqual(false);
 
         var ratingMechanismConfig = configuration.mechanisms[3];
-        expect(ratingMechanismConfig.type).toEqual('RATING_TYPE');
+        expect(ratingMechanismConfig.type).toEqual('SCREENSHOT_TYPE');
     });
 
     it('should have typed mechanism objects in its mechanism', () => {
-        expect(configuration.mechanisms.length).toBe(5);
+        expect(configuration.mechanisms.length).toBe(7);
         var textMechanismConfig = configuration.mechanisms[0];
         expect(textMechanismConfig.type).toEqual('TEXT_TYPE');
-        expect(textMechanismConfig).toEqual(jasmine.any(Mechanism));
+        expect(textMechanismConfig).toEqual(jasmine.any(TextMechanism));
 
-        var ratingMechanismConfig = configuration.mechanisms[3];
+        var ratingMechanismConfig = configuration.mechanisms[4];
         expect(ratingMechanismConfig.type).toEqual('RATING_TYPE');
         expect(ratingMechanismConfig).toEqual(jasmine.any(RatingMechanism));
 
-        var screenshotMechanismConfig = configuration.mechanisms[2];
+        var screenshotMechanismConfig = configuration.mechanisms[3];
         expect(screenshotMechanismConfig.type).toEqual('SCREENSHOT_TYPE');
         expect(screenshotMechanismConfig).toEqual(jasmine.any(ScreenshotMechanism));
     });
@@ -48,97 +49,41 @@ describe('PushConfiguration object', () => {
     it('should return the context for the view with the configuration data', () => {
         var context = configuration.getContextForView();
 
-        var expectedContext = {
-            textMechanism: {
-                active: true,
-                hint: 'Please enter your feedback',
-                label: 'Please write about your problem',
-                currentLength: 0,
-                maxLength: 200,
-                maxLengthVisible: 1,
-                textareaStyle: 'color: #7A7A7A;',
-                labelStyle: 'text-align: left; color: #353535; font-size: 15px;',
-                clearInput: 0,
-                mandatory: 1,
-                mandatoryReminder: 'Please fill in the text field',
-                validateOnSkip: 1
-            },
-            ratingMechanism: {
-                active: true,
-                title: 'Rate your user experience on this page'
-            },
-            screenshotMechanism: {
-                active: true,
-                autoTake: 1
-            },
-            categoryMechanism: {
-                id: undefined,
-                active: true,
-                title: 'How likely are you to recommend this website to your friends? (1 = not very likely, 5 = very likely)',
-                ownAllowed: 0,
-                multiple: 0,
-                breakAfterOption: false,
-                options: [
-                    {
-                        key: '1',
-                        value: '1'
-                    },
-                    {
-                        key: '2',
-                        value: '2'
-                    },
-                    {
-                        key: '3',
-                        value: '3'
-                    },
-                    {
-                        key: '4',
-                        value: '4'
-                    },
-                    {
-                        key: '5',
-                        value: '5'
-                    }
-                ],
-                inputType: 'radio'
-            },
-            dialogId: 'pushConfiguration'
-        };
-
-        expect(context).toEqual(expectedContext);
+        expect(context.dialogId).toEqual('pushConfiguration');
+        expect(context.mechanisms.length).toBe(7);
     });
 
     it('should return the corresponding mechanisms', () => {
-        var textMechanism = configuration.getMechanismConfig('TEXT_TYPE');
+        var textMechanism = configuration.getMechanismConfig('TEXT_TYPE')[0];
 
-        expect(textMechanism).toEqual(jasmine.any(Mechanism));
+        expect(textMechanism).toEqual(jasmine.any(TextMechanism));
         expect(textMechanism).not.toBeNull();
 
         expect(textMechanism.type).toEqual('TEXT_TYPE');
-        expect(textMechanism.active).toEqual(true);
+        expect(textMechanism.active).toEqual(false);
         expect(textMechanism.order).toEqual(1);
         expect(textMechanism.canBeActivated).toEqual(false);
     });
 
     it('should return a rating mechanism object', () => {
-        var ratingMechanism = configuration.getMechanismConfig('RATING_TYPE');
+        var ratingMechanism = configuration.getMechanismConfig('RATING_TYPE')[0];
 
         expect(ratingMechanism).toEqual(jasmine.any(RatingMechanism));
         expect(ratingMechanism).not.toBeNull();
 
         expect(ratingMechanism.type).toEqual('RATING_TYPE');
-        expect(ratingMechanism.active).toEqual(true);
-        expect(ratingMechanism.order).toEqual(4);
+        expect(ratingMechanism.active).toEqual(false);
+        expect(ratingMechanism.order).toEqual(2);
         expect(ratingMechanism.canBeActivated).toEqual(false);
     });
 
     it('should return a css style string', () => {
-        var textMechanism = configuration.getMechanismConfig(mechanismTypes.textType);
+        var textMechanism:TextMechanism = configuration.getMechanismConfig(mechanismTypes.textType)[0];
 
-        var cssStyle = configuration.getCssStyle(textMechanism, [new ParameterValuePropertyPair('textareaFontColor', 'color')]);
+        var cssStyle = textMechanism.getCssStyle([new ParameterValuePropertyPair('textareaFontColor', 'color')]);
         expect(cssStyle).toEqual('color: #7A7A7A;');
 
-        var cssStyle2 = configuration.getCssStyle(textMechanism,
+        var cssStyle2 = textMechanism.getCssStyle(
             [new ParameterValuePropertyPair('textareaFontColor', 'color'), new ParameterValuePropertyPair('fieldFontType', 'font-style')]);
         expect(cssStyle2).toEqual('color: #7A7A7A; font-style: italic;');
     })

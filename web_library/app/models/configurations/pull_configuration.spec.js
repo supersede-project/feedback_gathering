@@ -3,7 +3,7 @@ define(["require", "exports", '../../services/mocks/mocks_loader', './pull_confi
     describe('PullConfiguration object', function () {
         var pullConfiguration;
         beforeEach(function () {
-            var applications = mocks_loader_1.readJSON('app/services/mocks/applications_mock.json', '/base/');
+            var applications = mocks_loader_1.readJSON('app/services/mocks/test/applications_mock.json', '/base/');
             var application = applications[0];
             var pullConfigurationData = application.configurations[1];
             pullConfiguration = configuration_factory_1.ConfigurationFactory.createByData(pullConfigurationData);

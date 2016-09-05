@@ -58,7 +58,7 @@
           {
             "id": 1,
             "type": "TEXT_TYPE",
-            "active": false,
+            "active": true,
             "order": 1,
             "canBeActivated": false,
             "parameters": [
@@ -291,6 +291,52 @@
                   {
                     "key": "5",
                     "value": "5"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": 991,
+            "type": "CATEGORY_TYPE",
+            "active": true,
+            "order": 3,
+            "canBeActivated": false,
+            "parameters": [
+              {
+                "key": "title",
+                "value": "Which feature should we work on next?"
+              },
+              {
+                "key": "ownAllowed",
+                "value": 1
+              },
+              {
+                "key": "ownLabel",
+                "value": "Other:"
+              },
+              {
+                "key": "multiple",
+                "value": 0
+              },
+              {
+                "key": "breakAfterOption",
+                "value": 0
+              },
+              {
+                "key": "options",
+                "value": [
+                  {
+                    "key": "FEATURE_1",
+                    "value": "Twitter Login"
+                  },
+                  {
+                    "key": "FEATURE_2",
+                    "value": "Google Login"
+                  },
+                  {
+                    "key": "FEATURE_3",
+                    "value": "Registration"
                   }
                 ]
               }

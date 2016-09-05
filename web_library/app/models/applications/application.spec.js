@@ -3,13 +3,14 @@ define(["require", "exports", '../../services/mocks/mocks_loader', './applicatio
     describe('Application', function () {
         var application;
         beforeEach(function () {
-            var applications = mocks_loader_1.readJSON('app/services/mocks/applications_mock.json', '/base/');
+            var applications = mocks_loader_1.readJSON('app/services/mocks/test/applications_mock.json', '/base/');
             application = application_1.Application.initByData(applications[0]);
         });
         it('should have a general configuration', function () {
             var expectedParameters = [
                 new parameter_1.Parameter(54, "reviewActive", 1),
-                new parameter_1.Parameter(55, "mainColor", "#00ff00")
+                new parameter_1.Parameter(55, "mainColor", "#00ff00"),
+                new parameter_1.Parameter(56, "dialogTitle", "Feedback")
             ];
             var expectedGeneralConfiguration = new general_configuration_1.GeneralConfiguration(1, "Senercon General Configuration", expectedParameters);
             expect(application.generalConfiguration).toEqual(expectedGeneralConfiguration);

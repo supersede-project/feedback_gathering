@@ -3,7 +3,7 @@ define(["require", "exports", '../../services/mocks/mocks_loader', './pull_confi
     describe('Configuration factory', function () {
         var application;
         beforeEach(function () {
-            var applications = mocks_loader_1.readJSON('app/services/mocks/applications_mock.json', '/base/');
+            var applications = mocks_loader_1.readJSON('app/services/mocks/test/applications_mock.json', '/base/');
             application = applications[0];
         });
         it('should return the correct configuration object depending on the type attribute', function () {

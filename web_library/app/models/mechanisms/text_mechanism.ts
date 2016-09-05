@@ -11,8 +11,8 @@ export class TextMechanism extends Mechanism {
     }
 
     getContext():any {
-        var textareaStyle = this.getCssStyle(this, [new ParameterValuePropertyPair('textareaFontColor', 'color')]);
-        var labelStyle = this.getCssStyle(this, [
+        var textareaStyle = this.getCssStyle([new ParameterValuePropertyPair('textareaFontColor', 'color')]);
+        var labelStyle = this.getCssStyle([
             new ParameterValuePropertyPair('labelPositioning', 'text-align'),
             new ParameterValuePropertyPair('labelColor', 'color'),
             new ParameterValuePropertyPair('labelFontSize', 'font-size')]

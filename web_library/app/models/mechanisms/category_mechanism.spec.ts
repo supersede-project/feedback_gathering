@@ -24,7 +24,7 @@ describe('Category Mechanism', () => {
     });
 
     beforeEach(() => {
-        var categoryMechanismData = readJSON('app/services/mocks/category_mechanism_mock.json', '/base/');
+        var categoryMechanismData = readJSON('app/services/mocks/test/category_mechanism_mock.json', '/base/');
         categoryMechanism = <CategoryMechanism>MechanismFactory.createByData(categoryMechanismData);
     });
 

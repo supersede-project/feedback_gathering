@@ -7,7 +7,7 @@ describe('Configuration Service', () => {
     let configurationService:ConfigurationService;
 
     beforeEach(() => {
-        var configurationMockData = readJSON('app/services/mocks/configurations_mock.json', '/base/');
+        var configurationMockData = readJSON('app/services/mocks/test/configurations_mock.json', '/base/');
         var backend = new MockBackend(configurationMockData);
         configurationService = new ConfigurationService(backend);
     });

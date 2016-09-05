@@ -8,14 +8,15 @@ describe('Application', () => {
     let application:Application;
 
     beforeEach(() => {
-        var applications = readJSON('app/services/mocks/applications_mock.json', '/base/');
+        var applications = readJSON('app/services/mocks/test/applications_mock.json', '/base/');
         application = Application.initByData(applications[0]);
     });
 
     it('should have a general configuration', () => {
         var expectedParameters = [
             new Parameter(54, "reviewActive", 1),
-            new Parameter(55, "mainColor", "#00ff00")
+            new Parameter(55, "mainColor", "#00ff00"),
+            new Parameter(56, "dialogTitle", "Feedback")
         ];
         var expectedGeneralConfiguration = new GeneralConfiguration(1, "Senercon General Configuration", expectedParameters);
 

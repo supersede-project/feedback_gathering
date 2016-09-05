@@ -11,8 +11,8 @@ define(["require", "exports", './mechanism', '../parameters/parameter_value_prop
             _super.call(this, id, type, active, order, canBeActivated, parameters);
         }
         TextMechanism.prototype.getContext = function () {
-            var textareaStyle = this.getCssStyle(this, [new parameter_value_property_pair_1.ParameterValuePropertyPair('textareaFontColor', 'color')]);
-            var labelStyle = this.getCssStyle(this, [
+            var textareaStyle = this.getCssStyle([new parameter_value_property_pair_1.ParameterValuePropertyPair('textareaFontColor', 'color')]);
+            var labelStyle = this.getCssStyle([
                 new parameter_value_property_pair_1.ParameterValuePropertyPair('labelPositioning', 'text-align'),
                 new parameter_value_property_pair_1.ParameterValuePropertyPair('labelColor', 'color'),
                 new parameter_value_property_pair_1.ParameterValuePropertyPair('labelFontSize', 'font-size')]);

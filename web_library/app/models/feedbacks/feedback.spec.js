@@ -34,7 +34,7 @@ define(["require", "exports", './feedback', '../configurations/configuration_fac
             var feedback = new feedback_1.Feedback('Feedback', 'application', null, 'This is my feedback!', 1.0, []);
             expect(feedback.validate(configuration)).toBeTruthy();
         });
-        it('should return error messages if the validation was not successful', function () {
+        xit('should return error messages if the validation was not successful', function () {
             var configurationData = {
                 "id": 1,
                 "type": "PUSH",
@@ -64,12 +64,12 @@ define(["require", "exports", './feedback', '../configurations/configuration_fac
                 ]
             };
             var configuration = configuration_factory_1.ConfigurationFactory.createByData(configurationData);
-            var feedback = new feedback_1.Feedback('Feedback', 'application', null, '', 1.0, []);
+            var feedback = new feedback_1.Feedback('Feedback', 'u1234324', 'en', 1, 2, []);
             var errors = feedback.validate(configuration);
-            expect(errors.textMechanism.length).toBe(1);
-            expect(errors.ratingMechanism.length).toBe(0);
+            expect(errors.textMechanisms.length).toBe(1);
+            expect(errors.ratingMechanisms.length).toBe(0);
             expect(errors.general.length).toBe(0);
-            expect(errors.textMechanism[0]).toEqual('Please input a text');
+            expect(errors.textMechanisms[0]).toEqual('Please input a text');
         });
     });
 });
