@@ -9,6 +9,7 @@ import java.util.List;
 
 import com.google.inject.Inject;
 
+import ch.uzh.ifi.feedback.library.rest.Service.DatabaseConfiguration;
 import ch.uzh.ifi.feedback.library.rest.Service.DbResultParser;
 import ch.uzh.ifi.feedback.library.rest.Service.IDbService;
 import ch.uzh.ifi.feedback.library.rest.Service.ServiceBase;
@@ -23,12 +24,16 @@ public class MechanismService extends OrchestratorService<FeedbackMechanism> {
 	private ParameterService parameterService;
 	
 	@Inject
-	public MechanismService(ParameterService parameterService, MechanismResultParser resultParser){
+	public MechanismService(
+			ParameterService parameterService, 
+			MechanismResultParser resultParser,
+			DatabaseConfiguration config)
+	{
 		super(
 				resultParser, 
 				FeedbackMechanism.class, 
 				"mechanisms",
-				"feedback_orchestrator", 
+				config.getOrchestratorDb(), 
 				parameterService);
 		
 		this.parameterService = parameterService;

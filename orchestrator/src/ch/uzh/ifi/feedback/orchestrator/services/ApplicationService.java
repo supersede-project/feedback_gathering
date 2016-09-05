@@ -5,6 +5,8 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.List;
 import com.google.inject.Inject;
+
+import ch.uzh.ifi.feedback.library.rest.Service.DatabaseConfiguration;
 import ch.uzh.ifi.feedback.library.rest.Service.ServiceBase;
 import ch.uzh.ifi.feedback.orchestrator.model.Application;
 import ch.uzh.ifi.feedback.orchestrator.model.Configuration;
@@ -21,12 +23,13 @@ public class ApplicationService extends OrchestratorService<Application>{
 	public ApplicationService(
 			ApplicationResultParser resultParser, 
 			ConfigurationService configurationService,
-			GeneralConfigurationService generalConfigurationService)
+			GeneralConfigurationService generalConfigurationService,
+			DatabaseConfiguration config)
 	{
 		super(  resultParser, 
 				Application.class, 
 				"applications1",
-				"feedback_orchestrator", 
+				config.getOrchestratorDb(), 
 				configurationService, 
 				generalConfigurationService);
 

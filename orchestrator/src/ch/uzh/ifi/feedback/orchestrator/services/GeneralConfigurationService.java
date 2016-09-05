@@ -11,6 +11,7 @@ import java.util.List;
 
 import com.google.inject.Inject;
 
+import ch.uzh.ifi.feedback.library.rest.Service.DatabaseConfiguration;
 import ch.uzh.ifi.feedback.library.rest.Service.IDbService;
 import ch.uzh.ifi.feedback.library.rest.Service.ServiceBase;
 import ch.uzh.ifi.feedback.orchestrator.model.Configuration;
@@ -23,13 +24,16 @@ public class GeneralConfigurationService extends OrchestratorService<GeneralConf
 	private ParameterService parameterService;
 	
 	@Inject
-	public GeneralConfigurationService(ParameterService parameterService, GeneralConfigurationResultParser resultParser) 
+	public GeneralConfigurationService(
+			ParameterService parameterService, 
+			GeneralConfigurationResultParser resultParser,
+			DatabaseConfiguration config) 
 	{
 		super(
 				resultParser, 
 				GeneralConfiguration.class, 
 				"general_configurations",
-				"feedback_orchestrator", 
+				config.getOrchestratorDb(), 
 				parameterService);
 		
 		this.parameterService = parameterService;

@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 import com.google.inject.Inject;
+
+import ch.uzh.ifi.feedback.library.rest.Service.DatabaseConfiguration;
 import ch.uzh.ifi.feedback.orchestrator.model.Configuration;
 import ch.uzh.ifi.feedback.orchestrator.model.FeedbackMechanism;
 import ch.uzh.ifi.feedback.orchestrator.model.GeneralConfiguration;
@@ -19,13 +21,14 @@ public class ConfigurationService extends OrchestratorService<Configuration>{
 	public ConfigurationService(
 			ConfigurationResultParser resultParser, 
 			MechanismService mechanismService,
-			GeneralConfigurationService generalConfigurationService) 
+			GeneralConfigurationService generalConfigurationService,
+			DatabaseConfiguration config) 
 	{
 		super(
 			resultParser, 
 			Configuration.class, 
 			"configurations", 
-			"feedback_orchestrator", 
+			config.getOrchestratorDb(), 
 			mechanismService, 
 			generalConfigurationService);
 		
