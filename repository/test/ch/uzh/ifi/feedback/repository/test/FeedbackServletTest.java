@@ -30,14 +30,10 @@ import junit.framework.TestCase;
 public class FeedbackServletTest extends TestCase {
 	private final int NUMBER_OF_FEEDBACK_RECORDS = 10;
 	
-	private String dbPath;
-	private String tempPath;
-	private String repositoryDb;
 	private DatabaseConfiguration config;
 	
 	public FeedbackServletTest() {
         config = new DatabaseConfiguration();
-        repositoryDb = config.getRepositoryDb();
 	}
 	
     @Override
@@ -45,34 +41,14 @@ public class FeedbackServletTest extends TestCase {
     {
         super.setUp();
 
-        config.setRepositoryDb(config.getRepositoryDbTest());
-        config.WriteConfig();
-        
-        dbPath = config.getDatabaseDirectory() + config.getRepositoryDb();
-        tempPath = dbPath + "_bak";
-        File source = new File(dbPath);
-        File dest = new File(tempPath);
-        try {
-            FileUtils.copyDirectory(source, dest);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        config.UseTestConfiguration();
     }
     
    @Override
 	protected void tearDown() throws Exception {
 		super.tearDown();
-		
-        config.setRepositoryDb(repositoryDb);
-        config.WriteConfig();
         
-        File source = new File(tempPath);
-        File dest = new File(dbPath);
-        try {
-            FileUtils.copyDirectory(source, dest);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+		config.RestoreConfiguration();
 	}
     
 	public void testRetrievingAllFeedbacks() throws ClientProtocolException, IOException {

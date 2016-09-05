@@ -23,5 +23,6 @@
 	</classpathentry>
 	<classpathentry kind="lib" path="lib/guice-4.1.1-SNAPSHOT.jar"/>
 	<classpathentry kind="lib" path="lib/mockito-all-1.9.5.jar"/>
+	<classpathentry kind="lib" path="lib/commons-lang3-3.4.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
