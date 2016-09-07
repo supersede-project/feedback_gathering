@@ -103,14 +103,10 @@ public class FeedbackActivity extends AppCompatActivity {
     private void annotateImage() {
         Intent intent = new Intent(this, AnnotateImageActivity.class);
         if (allStickerAnnotations != null && allStickerAnnotations.size() > 0) {
-            //intent.putExtra("hasStickerAnnotations", true);
             intent.putExtra(Utils.EXTRA_KEY_HAS_STICKER_ANNOTATIONS, true);
-            //intent.putExtra("allStickerAnnotations", allStickerAnnotations);
             intent.putExtra(Utils.EXTRA_KEY_ALL_STICKER_ANNOTATIONS, allStickerAnnotations);
         }
         if (allTextAnnotations != null && allTextAnnotations.size() > 0) {
-            //intent.putExtra("hasTextAnnotations", true);
-            //intent.putExtra("allTextAnnotations", allTextAnnotations);
             intent.putExtra(Utils.EXTRA_KEY_HAS_TEXT_ANNOTATIONS, true);
             intent.putExtra(Utils.EXTRA_KEY_ALL_TEXT_ANNOTATIONS, allTextAnnotations);
         }

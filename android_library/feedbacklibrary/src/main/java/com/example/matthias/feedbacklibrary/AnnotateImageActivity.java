@@ -359,14 +359,6 @@ public class AnnotateImageActivity extends AppCompatActivity implements ColorPic
                 intent.putExtra(Utils.EXTRA_KEY_ALL_STICKER_ANNOTATIONS, allStickerAnnotations);
                 intent.putExtra(Utils.EXTRA_KEY_HAS_TEXT_ANNOTATIONS, allTextAnnotations.size() > 0);
                 intent.putExtra(Utils.EXTRA_KEY_ALL_TEXT_ANNOTATIONS, allTextAnnotations);
-                /*
-                intent.putExtra("annotatedImagePathWithoutStickers", annotatedImagePathWithoutStickers);
-                intent.putExtra("annotatedImagePathWithStickers", annotatedImagePathWithStickers);
-                intent.putExtra("hasStickerAnnotations", allStickerAnnotations.size() > 0);
-                intent.putExtra("allStickerAnnotations", allStickerAnnotations);
-                intent.putExtra("hasTextAnnotations", allTextAnnotations.size() > 0);
-                intent.putExtra("allTextAnnotations", allTextAnnotations);
-                */
                 setResult(RESULT_OK, intent);
             }
             super.onBackPressed();
