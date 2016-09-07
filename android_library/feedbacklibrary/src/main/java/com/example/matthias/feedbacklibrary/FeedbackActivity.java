@@ -112,7 +112,7 @@ public class FeedbackActivity extends AppCompatActivity {
         }
 
         String path = picturePathWithoutStickers == null ? picturePath : picturePathWithoutStickers;
-        //intent.putExtra("mechanismId", 10);
+        intent.putExtra(Utils.EXTRA_KEY_MECHANISM_ID, 10);
         intent.putExtra(Utils.EXTRA_KEY_IMAGE_PATCH, path);
         intent.putExtra(Utils.TEXT_ANNOTATION_COUNTER_MAXIMUM, TEXT_ANNOTATION_MAXIMUM);
         startActivityForResult(intent, REQUEST_ANNOTATE);
@@ -305,31 +305,33 @@ public class FeedbackActivity extends AppCompatActivity {
             else if (requestCode == REQUEST_ANNOTATE && data != null) {
                 // Sticker annotations
                 allStickerAnnotations = new HashMap<>();
-                if (data.getBooleanExtra("hasStickerAnnotations", false)) {
-                    allStickerAnnotations = (HashMap<Integer, String>) data.getSerializableExtra("allStickerAnnotations");
+                if (data.getBooleanExtra(Utils.EXTRA_KEY_HAS_STICKER_ANNOTATIONS, false)) {
+                    allStickerAnnotations = (HashMap<Integer, String>) data.getSerializableExtra(Utils.EXTRA_KEY_ALL_STICKER_ANNOTATIONS);
                 }
 
                 // Text annotations
                 allTextAnnotations = new HashMap<>();
-                if (data.getBooleanExtra("hasTextAnnotations", false)) {
-                    allTextAnnotations = (HashMap<Integer, String>) data.getSerializableExtra("allTextAnnotations");
+                if (data.getBooleanExtra(Utils.EXTRA_KEY_HAS_TEXT_ANNOTATIONS, false)) {
+                    allTextAnnotations = (HashMap<Integer, String>) data.getSerializableExtra(Utils.EXTRA_KEY_ALL_TEXT_ANNOTATIONS);
                 }
 
                 // Annotated image
-                annotatedImagePath = data.getStringExtra("annotatedImagePathWithStickers") + "/" + ANNOTATED_IMAGE_NAME_WITH_STICKERS;
+                annotatedImagePath = data.getStringExtra(Utils.EXTRA_KEY_ANNOTATED_IMAGE_PATH_WITH_STICKERS) + "/" + ANNOTATED_IMAGE_NAME_WITH_STICKERS;
                 picturePath = annotatedImagePath;
+                System.out.println("picturePathWithStickers == " + picturePath);
                 Bitmap annotatedBitmap = Utils.loadImageFromStorage(annotatedImagePath);
                 if (annotatedBitmap != null) {
                     pictureBitmap = annotatedBitmap;
                     screenShotPreviewImageView.setImageBitmap(pictureBitmap);
                 }
 
-                if (data.getStringExtra("annotatedImagePathWithoutStickers") == null) {
+                if (data.getStringExtra(Utils.EXTRA_KEY_ANNOTATED_IMAGE_PATH_WITHOUT_STICKERS) == null) {
                     annotatedImagePathWithoutStickers = null;
                     picturePathWithoutStickers = null;
                 } else {
-                    annotatedImagePathWithoutStickers = data.getStringExtra("annotatedImagePathWithStickers") + "/" + ANNOTATED_IMAGE_NAME_WITHOUT_STICKERS;
+                    annotatedImagePathWithoutStickers = data.getStringExtra(Utils.EXTRA_KEY_ANNOTATED_IMAGE_PATH_WITHOUT_STICKERS) + "/" + ANNOTATED_IMAGE_NAME_WITHOUT_STICKERS;
                     picturePathWithoutStickers = annotatedImagePathWithoutStickers;
+                    System.out.println("picturePathWithoutStickers == " + picturePathWithoutStickers);
                 }
             }
         }

@@ -283,15 +283,19 @@ public class AnnotateImageActivity extends AppCompatActivity implements ColorPic
         Intent intent = getIntent();
         // If mechanismId == -1, an error occurred
         mechanismId = intent.getIntExtra("mechanismId", -1);
-        String imagePath = intent.getStringExtra("imagePath");
-        textAnnotationCounter = 1;
-        // If no maximum is specified, no text annotations are allowed
-        textAnnotationCounterMaximum = intent.getIntExtra("textAnnotationCounterMaximum", 0);
-        Bitmap bitmap = BitmapFactory.decodeFile(imagePath);
-        initAnnotateImageView(bitmap, imagePath);
-        initAnnotations(intent);
-        initStickerLists();
-        setListeners();
+        if (mechanismId != -1) {
+            String imagePath = intent.getStringExtra("imagePath");
+            textAnnotationCounter = 1;
+            // If no maximum is specified, no text annotations are allowed
+            textAnnotationCounterMaximum = intent.getIntExtra("textAnnotationCounterMaximum", 0);
+            Bitmap bitmap = BitmapFactory.decodeFile(imagePath);
+            initAnnotateImageView(bitmap, imagePath);
+            initAnnotations(intent);
+            initStickerLists();
+            setListeners();
+        } else {
+            throw new RuntimeException("no mechanismId provided.");
+        }
     }
 
     @Override
