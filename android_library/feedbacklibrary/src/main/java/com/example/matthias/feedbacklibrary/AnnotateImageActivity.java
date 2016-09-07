@@ -268,68 +268,6 @@ public class AnnotateImageActivity extends AppCompatActivity implements ColorPic
                 Uri croppedImageUri = result.getUri();
                 File croppedImageFile = new File(croppedImageUri.getPath());
                 annotateImageView.updateCroppedImageHistory(croppedImageFile);
-
-                /*
-                RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.supersede_feedbacklibrary_annotate_image_layout);
-                if (relativeLayout != null) {
-                    List<View> toRemove = new ArrayList<>();
-                    int newBitmapWidth = annotateImageView.getBitmapWidth();
-                    int newBitmapHeight = annotateImageView.getBitmapHeight();
-                    float fraction = 0.5f;
-                    for (int i = 0; i < relativeLayout.getChildCount(); ++i) {
-                        View child = relativeLayout.getChildAt(i);
-                        if (child instanceof StickerAnnotationView || child instanceof TextAnnotationView) {
-                            // A fraction the sticker should be visible, if not the sticker will be removed
-                            float deleteThresholdX = child.getWidth() * fraction;
-                            float deleteThresholdY = child.getHeight() * fraction;
-                            float x = child.getX();
-                            float y = child.getY();
-
-                            boolean xOk = true;
-                            boolean yOk = true;
-                            if (x < 0) {
-                                xOk = Math.abs(x) < deleteThresholdX;
-                            } else if (x > 0 && !(x < 0)) {
-                                xOk = x + deleteThresholdX < newBitmapWidth;
-                            }
-                            if (y < 0) {
-                                yOk = Math.abs(y) < deleteThresholdY;
-                            } else if (y > 0 && !(y < 0)) {
-                                yOk = y + deleteThresholdY < newBitmapHeight;
-                            }
-
-                            if (!(xOk && yOk)) {
-                                toRemove.add(child);
-                            }
-                        }
-                    }
-
-                    for (int i = 0; i < toRemove.size(); ++i) {
-                        relativeLayout.removeView(toRemove.get(i));
-                    }
-                    toRemove.clear();
-
-                    textAnnotationCounter = 1;
-                    for (int i = 0; i < relativeLayout.getChildCount(); ++i) {
-                        View child = relativeLayout.getChildAt(i);
-                        if (child instanceof TextAnnotationView) {
-                            String newAnnotationNumber = Integer.toString(textAnnotationCounter);
-                            ((TextAnnotationImageView) child).getAnnotationNumberView().setText(newAnnotationNumber);
-                            textAnnotationCounter++;
-                        }
-                        if (textAnnotationCounter > textAnnotationCounterMaximum) {
-                            break;
-                        }
-                    }
-                    if (textAnnotationCounter <= textAnnotationCounterMaximum) {
-                        ImageButton textAnnotationButton = (ImageButton) findViewById(R.id.supersede_feedbacklibrary_text_comment_btn);
-                        if (textAnnotationButton != null) {
-                            textAnnotationButton.setEnabled(false);
-                            textAnnotationButton.setAlpha(0.4F);
-                        }
-                    }
-                }
-            */
             } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
                 Toast toast = Toast.makeText(getApplicationContext(), getResources().getString(R.string.supersede_feedbacklibrary_error_text), Toast.LENGTH_SHORT);
                 toast.show();
