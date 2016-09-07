@@ -53,6 +53,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class Utils {
     public static final int PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 123;
     public static final String SCREENSHOTS_DIR_NAME = "Screenshots";
+    public static final String SEPARATOR = "::;;::;;";
 
     /**
      * @param input the input value

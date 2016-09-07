@@ -10,7 +10,7 @@
     <string name="supersede_feedbacklibrary_screenshotID">SCREENSHOT_TYPE</string>
     <string name="supersede_feedbacklibrary_audioID">AUDIO_TYPE</string>
 
-    <!-- Various -->
+    <!-- Miscellaneous -->
     <string name="supersede_feedbacklibrary_sendconfirmation_text">By sending the feedback, you agree with the terms and conditions.</string>
     <string name="supersede_feedbacklibrary_sendbutton_text">Send feedback</string>
     <string name="supersede_feedbacklibrary_remove_string">Remove</string>
@@ -21,6 +21,8 @@
     <string name="supersede_feedbacklibrary_ok_string">OK</string>
     <string name="supersede_feedbacklibrary_cancel_string">Cancel</string>
     <string name="supersede_feedbacklibrary_loading_string">Loading. Please wait.</string>
+    <string name="supersede_feedbacklibrary_error_text">Oops. Something went wrong!</string>
+    <string name="supersede_feedbacklibrary_success_text">Your feedback was successfully sent. Thank you!</string>
 
     <!-- Screenshot mechanism -->
     <string name="supersede_feedbacklibrary_screenshotbutton_text">Screenshot</string>
@@ -31,6 +33,10 @@
     <!-- Category mechanism -->
     <string name="supersede_feedbacklibrary_single_option_dialog_title">Please select an option</string>
     <string name="supersede_feedbacklibrary_multiple_options_dialog_title">Please select one or multiple options</string>
+    <string name="supersede_feedbacklibrary_other_option_string">Other</string>
+    <string name="supersede_feedbacklibrary_other_options_string">Others</string>
+    <string name="supersede_feedbacklibrary_own_category_dialog_label">Category</string>
+    <string name="supersede_feedbacklibrary_own_category_dialog_hint">Please enter your own category</string>
 
     <!-- Image annotation-->
     <string name="supersede_feedbacklibrary_colorpickerbutton_text">Color Picker</string>
@@ -51,6 +57,8 @@
     <string name="supersede_feedbacklibrary_sticker_dialog_dissatisfied_title">Dissatisfied</string>
     <string name="supersede_feedbacklibrary_sticker_dialog_neutral_title">Neutral</string>
     <string name="supersede_feedbacklibrary_sticker_dialog_satisfied_title">Satisfied</string>
+    <string name="supersede_feedbacklibrary_text_annotation_dialog_label">Text annotation</string>
+    <string name="supersede_feedbacklibrary_text_annotation_dialog_hint">Please enter your text annotation</string>
 
     <!-- Pull feedback -->
     <string name="supersede_feedbacklibrary_pull_feedback_question_string">Would you like to give feedback?</string>

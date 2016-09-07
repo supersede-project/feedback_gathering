@@ -39,7 +39,6 @@ import com.google.gson.reflect.TypeToken;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.reflect.Type;
@@ -60,8 +59,10 @@ import retrofit2.converter.gson.GsonConverterFactory;
  * The main activity where the feedback items are displayed
  */
 public class FeedbackActivity extends AppCompatActivity {
-    public final static String IMAGE_NAME = "annotatedImage.jpg";
+    public final static String ANNOTATED_IMAGE_NAME_WITHOUT_STICKERS = "annotatedImageWithoutStickers.png";
+    public final static String ANNOTATED_IMAGE_NAME_WITH_STICKERS = "annotatedImageWithStickers.png";
     public final static String DEFAULT_IMAGE_PATH = "defaultImagePath";
+    public final static int TEXT_ANNOTATION_MAXIMUM = 4;
     public final static String IS_PUSH_STRING = "isPush";
     public final static String SELECTED_PULL_CONFIGURATION_INDEX_STRING = "selectedPullConfigurationIndex";
     public final static String CONFIGURATION_DIR = "configDir";
@@ -80,23 +81,38 @@ public class FeedbackActivity extends AppCompatActivity {
     private List<Mechanism> allMechanisms;
     // All views representing active mechanisms --> views
     private List<MechanismView> allMechanismViews;
-    // Path of the annotated image
+    // Image annotation
     private String annotatedImagePath = null;
+    private String annotatedImagePathWithoutStickers = null;
+    private ImageView screenShotPreviewImageView;
+    private HashMap<Integer, String> allStickerAnnotations;
+    private HashMap<Integer, String> allTextAnnotations;
+    private Button annotateScreenshotButton;
+    private Button deleteScreenshotButton;
+    private Bitmap pictureBitmap;
+    private String picturePath;
+    private String picturePathWithoutStickers;
+    private String defaultImagePath;
+    private String userScreenshotChosenTask = "";
+    // General
     private boolean isPush;
     private int selectedPullConfigurationIndex;
     private ProgressDialog progressDialog;
-    private Button annotateScreenshotButton;
-    private Button deleteScreenshotButton;
-    private ImageView screenShotPreviewImageView;
-    private Bitmap pictureBitmap;
-    private String picturePath;
-    private String defaultImagePath;
-    private String userScreenshotChosenTask = "";
 
-    public void annotateImage() {
+    private void annotateImage() {
         Intent intent = new Intent(this, AnnotateImageActivity.class);
-        intent.putExtra("imagePath", picturePath);
-        intent.putExtra("textAnnotationCounterMax", 4);
+        if (allStickerAnnotations != null && allStickerAnnotations.size() > 0) {
+            intent.putExtra("hasStickerAnnotations", true);
+            intent.putExtra("allStickerAnnotations", allStickerAnnotations);
+        }
+        if (allTextAnnotations != null && allTextAnnotations.size() > 0) {
+            intent.putExtra("hasTextAnnotations", true);
+            intent.putExtra("allTextAnnotations", allTextAnnotations);
+        }
+
+        String path = picturePathWithoutStickers == null ? picturePath : picturePathWithoutStickers;
+        intent.putExtra("imagePath", path);
+        intent.putExtra("textAnnotationCounterMax", TEXT_ANNOTATION_MAXIMUM);
         startActivityForResult(intent, REQUEST_ANNOTATE);
     }
 
@@ -206,7 +222,9 @@ public class FeedbackActivity extends AppCompatActivity {
             public void onClick(View v) {
                 pictureBitmap = null;
                 picturePath = null;
+                picturePathWithoutStickers = null;
                 annotatedImagePath = null;
+                annotatedImagePathWithoutStickers = null;
                 annotateScreenshotButton.setEnabled(false);
                 deleteScreenshotButton.setEnabled(false);
                 screenShotPreviewImageView.setImageBitmap(null);
@@ -283,24 +301,33 @@ public class FeedbackActivity extends AppCompatActivity {
             else if (requestCode == REQUEST_CAMERA)
                 onCaptureImageResult(data);
             else if (requestCode == REQUEST_ANNOTATE && data != null) {
+                // Sticker annotations
+                allStickerAnnotations = new HashMap<>();
+                if (data.getBooleanExtra("hasStickerAnnotations", false)) {
+                    allStickerAnnotations = (HashMap<Integer, String>) data.getSerializableExtra("allStickerAnnotations");
+                }
+
                 // Text annotations
-                HashMap<Integer, String> allTextAnnotations = new HashMap<>();
+                allTextAnnotations = new HashMap<>();
                 if (data.getBooleanExtra("hasTextAnnotations", false)) {
                     allTextAnnotations = (HashMap<Integer, String>) data.getSerializableExtra("allTextAnnotations");
                 }
 
-                // TODO: Check for null values and empty strings --> where?
-                for (Map.Entry<Integer, String> entry : allTextAnnotations.entrySet()) {
-                    System.out.println("Text annotation number '" + entry.getKey() + "' == " + entry.getValue());
-                }
-
                 // Annotated image
-                annotatedImagePath = data.getStringExtra("annotatedImagePath") + "/" + IMAGE_NAME;
+                annotatedImagePath = data.getStringExtra("annotatedImagePathWithStickers") + "/" + ANNOTATED_IMAGE_NAME_WITH_STICKERS;
                 picturePath = annotatedImagePath;
                 Bitmap annotatedBitmap = Utils.loadImageFromStorage(annotatedImagePath);
                 if (annotatedBitmap != null) {
                     pictureBitmap = annotatedBitmap;
                     screenShotPreviewImageView.setImageBitmap(pictureBitmap);
+                }
+
+                if (data.getStringExtra("annotatedImagePathWithoutStickers") == null) {
+                    annotatedImagePathWithoutStickers = null;
+                    picturePathWithoutStickers = null;
+                } else {
+                    annotatedImagePathWithoutStickers = data.getStringExtra("annotatedImagePathWithStickers") + "/" + ANNOTATED_IMAGE_NAME_WITHOUT_STICKERS;
+                    picturePathWithoutStickers = annotatedImagePathWithoutStickers;
                 }
             }
         }
@@ -482,7 +509,7 @@ public class FeedbackActivity extends AppCompatActivity {
                 result.enqueue(new Callback<JsonObject>() {
                     @Override
                     public void onFailure(Call<JsonObject> call, Throwable t) {
-                        messages.add("Oops. Something went wrong!");
+                        messages.add(getResources().getString(R.string.supersede_feedbacklibrary_error_text));
                         DialogUtils.DataDialog d = DialogUtils.DataDialog.newInstance(messages);
                         d.show(getFragmentManager(), "dataDialog");
                     }
@@ -490,7 +517,7 @@ public class FeedbackActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
                         if (response.code() == 201) {
-                            Toast toast = Toast.makeText(getApplicationContext(), "Your feedback was successfully sent. Thank you", Toast.LENGTH_SHORT);
+                            Toast toast = Toast.makeText(getApplicationContext(), getResources().getString(R.string.supersede_feedbacklibrary_success_text), Toast.LENGTH_SHORT);
                             toast.show();
                         }
                     }

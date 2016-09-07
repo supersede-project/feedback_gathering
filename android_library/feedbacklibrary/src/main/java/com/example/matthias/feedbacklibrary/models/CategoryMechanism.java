@@ -12,6 +12,7 @@ import java.util.Map;
  */
 public class CategoryMechanism extends Mechanism {
     private boolean mandatory;
+    private boolean ownAllowed;
     private boolean multiple;
     // TODO: Implement?
     // Hint for the user if nothing is selected
@@ -58,6 +59,10 @@ public class CategoryMechanism extends Mechanism {
             if (key.equals("multiple")) {
                 setMultiple(Utils.intToBool(((Double) param.get("value")).intValue()));
             }
+            // Own category allowed
+            if (key.equals("ownAllowed")) {
+                setOwnAllowed(Utils.intToBool(((Double) param.get("value")).intValue()));
+            }
             // Options
             if (key.equals("options")) {
                 List<Map<String, Object>> opt = (List<Map<String, Object>>) param.get("value");
@@ -79,6 +84,10 @@ public class CategoryMechanism extends Mechanism {
 
     public boolean isMultiple() {
         return multiple;
+    }
+
+    public boolean isOwnAllowed() {
+        return ownAllowed;
     }
 
     @Override
@@ -104,6 +113,10 @@ public class CategoryMechanism extends Mechanism {
 
     public void setOptions(List<String> options) {
         this.options = options;
+    }
+
+    public void setOwnAllowed(boolean ownAllowed) {
+        this.ownAllowed = ownAllowed;
     }
 
     public void setSelectedOptions(List<String> selectedOptions) {

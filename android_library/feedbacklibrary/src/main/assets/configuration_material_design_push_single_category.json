@@ -297,6 +297,10 @@
           "value": 0
         },
         {
+          "key": "ownAllowed",
+          "value": 1.0
+        },
+        {
           "key": "options",
           "value": [
             {
