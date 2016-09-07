@@ -471,6 +471,7 @@ public class FeedbackActivity extends AppCompatActivity {
             mechanismView.updateModel();
             if (mechanismView instanceof ScreenshotMechanismView) {
                 ((ScreenshotMechanismView) mechanismView).setAnnotatedImagePath(screenShotImagePath);
+                ((ScreenshotMechanismView) mechanismView).setAllTextAnnotations(allTextAnnotations);
             }
         }
 
@@ -537,6 +538,7 @@ public class FeedbackActivity extends AppCompatActivity {
             mechanismView.updateModel();
             if (mechanismView instanceof ScreenshotMechanismView) {
                 ((ScreenshotMechanismView) mechanismView).setAnnotatedImagePath(screenShotImagePath);
+                ((ScreenshotMechanismView) mechanismView).setAllTextAnnotations(allTextAnnotations);
             }
         }
 

@@ -7,6 +7,8 @@ import com.example.matthias.feedbacklibrary.R;
 import com.example.matthias.feedbacklibrary.models.Mechanism;
 import com.example.matthias.feedbacklibrary.models.ScreenshotMechanism;
 
+import java.util.HashMap;
+
 /**
  * Screenshot mechanism view
  */
@@ -22,6 +24,10 @@ public class ScreenshotMechanismView extends MechanismView {
 
     private void initView() {
         ((TextView) getEnclosingLayout().findViewById(R.id.supersede_feedbacklibrary_screenshot_feedback_title)).setText(screenshotMechanism.getTitle());
+    }
+
+    public void setAllTextAnnotations(HashMap<Integer, String> allTextAnnotations) {
+        screenshotMechanism.setAllTextAnnotations(allTextAnnotations);
     }
 
     public void setAnnotatedImagePath(String annotatedImagePath) {
