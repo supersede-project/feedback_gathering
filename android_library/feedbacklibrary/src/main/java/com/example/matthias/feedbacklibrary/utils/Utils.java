@@ -59,7 +59,7 @@ public class Utils {
     public static final String EXTRA_KEY_HAS_STICKER_ANNOTATIONS = "hasStickerAnnotations";
     public static final String EXTRA_KEY_HAS_TEXT_ANNOTATIONS = "hasTextAnnotations";
     public static final String EXTRA_KEY_IMAGE_PATCH = "imagePath";
-    public static final String EXTRA_KEY_MECHANISM_ID = "mechanismID";
+    public static final String EXTRA_KEY_MECHANISM_VIEW_ID = "mechanismViewID";
     public static final String SCREENSHOTS_DIR_NAME = "Screenshots";
     public static final String SEPARATOR = "::;;::;;";
     public static final String TEXT_ANNOTATION_COUNTER_MAXIMUM = "textAnnotationCounterMaximum";

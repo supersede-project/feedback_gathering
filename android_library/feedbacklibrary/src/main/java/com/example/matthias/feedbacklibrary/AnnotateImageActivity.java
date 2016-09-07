@@ -64,7 +64,7 @@ import java.util.TreeSet;
  * Activity for annotating the screenshot
  */
 public class AnnotateImageActivity extends AppCompatActivity implements ColorPickerDialog.OnColorChangeDialogListener, TextAnnotationView.OnTextAnnotationChangedListener {
-    private int mechanismId = -1;
+    private int mechanismViewId = -1;
 
     private boolean blackModeOn = false;
     private int oldPaintStrokeColor;
@@ -281,9 +281,9 @@ public class AnnotateImageActivity extends AppCompatActivity implements ColorPic
         setContentView(R.layout.activity_annotate);
 
         Intent intent = getIntent();
-        // If mechanismId == -1, an error occurred
-        mechanismId = intent.getIntExtra("mechanismId", -1);
-        if (mechanismId != -1) {
+        // If mechanismViewId == -1, an error occurred
+        mechanismViewId = intent.getIntExtra(Utils.EXTRA_KEY_MECHANISM_VIEW_ID, -1);
+        if (mechanismViewId != -1) {
             String imagePath = intent.getStringExtra("imagePath");
             textAnnotationCounter = 1;
             // If no maximum is specified, no text annotations are allowed
@@ -294,7 +294,7 @@ public class AnnotateImageActivity extends AppCompatActivity implements ColorPic
             initStickerLists();
             setListeners();
         } else {
-            throw new RuntimeException("no mechanismId provided.");
+            throw new RuntimeException("no " + Utils.EXTRA_KEY_MECHANISM_VIEW_ID + " provided.");
         }
     }
 
@@ -341,7 +341,7 @@ public class AnnotateImageActivity extends AppCompatActivity implements ColorPic
                 if (allStickerAnnotations.size() > 0 || allTextAnnotations.size() > 0) {
                     // Get the bitmap (image without stickers if there are any)
                     Bitmap annotatedBitmapWithoutStickers = annotateImageView.getBitmap();
-                    annotatedImagePathWithoutStickers = Utils.saveBitmapToInternalStorage(getApplicationContext(), "imageDir", FeedbackActivity.ANNOTATED_IMAGE_NAME_WITHOUT_STICKERS, annotatedBitmapWithoutStickers, Context.MODE_PRIVATE, Bitmap.CompressFormat.PNG, 100);
+                    annotatedImagePathWithoutStickers = Utils.saveBitmapToInternalStorage(getApplicationContext(), "imageDir", mechanismViewId + FeedbackActivity.ANNOTATED_IMAGE_NAME_WITHOUT_STICKERS, annotatedBitmapWithoutStickers, Context.MODE_PRIVATE, Bitmap.CompressFormat.PNG, 100);
                 }
 
                 // Convert the ViewGroup, i.e., the supersede_feedbacklibrary_annotate_picture_layout into a bitmap (image with stickers)
@@ -354,9 +354,10 @@ public class AnnotateImageActivity extends AppCompatActivity implements ColorPic
                 int padding = getResources().getDimensionPixelSize(R.dimen.supersede_feedbacklibrary_annotate_image_layout_padding);
                 Bitmap croppedBitmap = Bitmap.createBitmap(annotatedBitmapWithStickers, padding, padding,
                         annotateImageView.getBitmapWidth() - 2 * padding, annotateImageView.getBitmapHeight() - 2 * padding);
-                String annotatedImagePathWithStickers = Utils.saveBitmapToInternalStorage(getApplicationContext(), "imageDir", FeedbackActivity.ANNOTATED_IMAGE_NAME_WITH_STICKERS, croppedBitmap, Context.MODE_PRIVATE, Bitmap.CompressFormat.PNG, 100);
+                String annotatedImagePathWithStickers = Utils.saveBitmapToInternalStorage(getApplicationContext(), "imageDir", mechanismViewId + FeedbackActivity.ANNOTATED_IMAGE_NAME_WITH_STICKERS, croppedBitmap, Context.MODE_PRIVATE, Bitmap.CompressFormat.PNG, 100);
 
                 Intent intent = new Intent();
+                intent.putExtra(Utils.EXTRA_KEY_MECHANISM_VIEW_ID, mechanismViewId);
                 intent.putExtra(Utils.EXTRA_KEY_ANNOTATED_IMAGE_PATH_WITHOUT_STICKERS, annotatedImagePathWithoutStickers);
                 intent.putExtra(Utils.EXTRA_KEY_ANNOTATED_IMAGE_PATH_WITH_STICKERS, annotatedImagePathWithStickers);
                 intent.putExtra(Utils.EXTRA_KEY_HAS_STICKER_ANNOTATIONS, allStickerAnnotations.size() > 0);
