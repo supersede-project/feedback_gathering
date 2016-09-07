@@ -6,6 +6,7 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -61,17 +62,17 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class FeedbackActivity extends AppCompatActivity {
     public final static String ANNOTATED_IMAGE_NAME_WITHOUT_STICKERS = "annotatedImageWithoutStickers.png";
     public final static String ANNOTATED_IMAGE_NAME_WITH_STICKERS = "annotatedImageWithStickers.png";
-    public final static String DEFAULT_IMAGE_PATH = "defaultImagePath";
-    public final static int TEXT_ANNOTATION_MAXIMUM = 4;
-    public final static String IS_PUSH_STRING = "isPush";
-    public final static String SELECTED_PULL_CONFIGURATION_INDEX_STRING = "selectedPullConfigurationIndex";
     public final static String CONFIGURATION_DIR = "configDir";
-    public final static String JSON_CONFIGURATION_STRING = "jsonConfigurationString";
+    public final static String DEFAULT_IMAGE_PATH = "defaultImagePath";
+    public final static String IS_PUSH_STRING = "isPush";
     public final static String JSON_CONFIGURATION_FILE_NAME = "currentConfiguration.json";
-
+    public final static String JSON_CONFIGURATION_STRING = "jsonConfigurationString";
+    public final static String SELECTED_PULL_CONFIGURATION_INDEX_STRING = "selectedPullConfigurationIndex";
+    public final static int TEXT_ANNOTATION_MAXIMUM = 4;
     private final static int REQUEST_CAMERA = 10;
     private final static int REQUEST_PHOTO = 11;
     private final static int REQUEST_ANNOTATE = 12;
+
     private feedbackAPI fbAPI;
     // Feedback configuration fetched from the orchestrator
     private OrchestratorConfiguration configuration;
@@ -102,17 +103,22 @@ public class FeedbackActivity extends AppCompatActivity {
     private void annotateImage() {
         Intent intent = new Intent(this, AnnotateImageActivity.class);
         if (allStickerAnnotations != null && allStickerAnnotations.size() > 0) {
-            intent.putExtra("hasStickerAnnotations", true);
-            intent.putExtra("allStickerAnnotations", allStickerAnnotations);
+            //intent.putExtra("hasStickerAnnotations", true);
+            intent.putExtra(Utils.EXTRA_KEY_HAS_STICKER_ANNOTATIONS, true);
+            //intent.putExtra("allStickerAnnotations", allStickerAnnotations);
+            intent.putExtra(Utils.EXTRA_KEY_ALL_STICKER_ANNOTATIONS, allStickerAnnotations);
         }
         if (allTextAnnotations != null && allTextAnnotations.size() > 0) {
-            intent.putExtra("hasTextAnnotations", true);
-            intent.putExtra("allTextAnnotations", allTextAnnotations);
+            //intent.putExtra("hasTextAnnotations", true);
+            //intent.putExtra("allTextAnnotations", allTextAnnotations);
+            intent.putExtra(Utils.EXTRA_KEY_HAS_TEXT_ANNOTATIONS, true);
+            intent.putExtra(Utils.EXTRA_KEY_ALL_TEXT_ANNOTATIONS, allTextAnnotations);
         }
 
         String path = picturePathWithoutStickers == null ? picturePath : picturePathWithoutStickers;
-        intent.putExtra("imagePath", path);
-        intent.putExtra("textAnnotationCounterMax", TEXT_ANNOTATION_MAXIMUM);
+        //intent.putExtra("mechanismId", 10);
+        intent.putExtra(Utils.EXTRA_KEY_IMAGE_PATCH, path);
+        intent.putExtra(Utils.TEXT_ANNOTATION_COUNTER_MAXIMUM, TEXT_ANNOTATION_MAXIMUM);
         startActivityForResult(intent, REQUEST_ANNOTATE);
     }
 
@@ -400,9 +406,10 @@ public class FeedbackActivity extends AppCompatActivity {
         switch (requestCode) {
             case Utils.PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    if (userScreenshotChosenTask.equals("Take a Photo")) {
+                    Resources res = getResources();
+                    if (userScreenshotChosenTask.equals(res.getString(R.string.supersede_feedbacklibrary_photo_capture_text))) {
                         cameraIntent();
-                    } else if (userScreenshotChosenTask.equals("Choose from Library"))
+                    } else if (userScreenshotChosenTask.equals(res.getString(R.string.supersede_feedbacklibrary_library_chooser_text)))
                         galleryIntent();
                 } else {
                     // Code for denial
@@ -437,22 +444,23 @@ public class FeedbackActivity extends AppCompatActivity {
     }
 
     private void selectImage() {
-        final CharSequence[] items = {"Take a Photo", "Choose from Library", "Cancel"};
+        final Resources res = getResources();
+        final CharSequence[] items = {res.getString(R.string.supersede_feedbacklibrary_photo_capture_text), res.getString(R.string.supersede_feedbacklibrary_library_chooser_text), res.getString(R.string.supersede_feedbacklibrary_cancel_string)};
         AlertDialog.Builder builder = new AlertDialog.Builder(FeedbackActivity.this);
-        builder.setTitle("Add Photo");
+        builder.setTitle(res.getString(R.string.supersede_feedbacklibrary_image_selection_dialog_title));
         builder.setItems(items, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int item) {
                 boolean result = Utils.checkPermission_READ_EXTERNAL_STORAGE(FeedbackActivity.this, Utils.PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE);
-                if (items[item].equals("Take a Photo")) {
-                    userScreenshotChosenTask = "Take a Photo";
+                if (items[item].equals(res.getString(R.string.supersede_feedbacklibrary_photo_capture_text))) {
+                    userScreenshotChosenTask = res.getString(R.string.supersede_feedbacklibrary_photo_capture_text);
                     if (result)
                         cameraIntent();
-                } else if (items[item].equals("Choose from Library")) {
-                    userScreenshotChosenTask = "Choose from Library";
+                } else if (items[item].equals(res.getString(R.string.supersede_feedbacklibrary_library_chooser_text))) {
+                    userScreenshotChosenTask = res.getString(R.string.supersede_feedbacklibrary_library_chooser_text);
                     if (result)
                         galleryIntent();
-                } else if (items[item].equals("Cancel")) {
+                } else if (items[item].equals(res.getString(R.string.supersede_feedbacklibrary_cancel_string))) {
                     dialog.dismiss();
                 }
             }

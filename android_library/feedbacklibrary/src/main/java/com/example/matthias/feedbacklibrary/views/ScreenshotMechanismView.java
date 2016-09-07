@@ -1,8 +1,10 @@
 package com.example.matthias.feedbacklibrary.views;
 
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.widget.TextView;
 
+import com.example.matthias.feedbacklibrary.AnnotateImageActivity;
 import com.example.matthias.feedbacklibrary.R;
 import com.example.matthias.feedbacklibrary.models.Mechanism;
 import com.example.matthias.feedbacklibrary.models.ScreenshotMechanism;
@@ -20,6 +22,8 @@ public class ScreenshotMechanismView extends MechanismView {
         this.screenshotMechanism = (ScreenshotMechanism) mechanism;
         setEnclosingLayout(getLayoutInflater().inflate(R.layout.screenshot_feedback_layout, null));
         initView();
+
+        //Intent intent = new Intent(getEnclosingLayout().getContext(), AnnotateImageActivity.class);
     }
 
     private void initView() {
