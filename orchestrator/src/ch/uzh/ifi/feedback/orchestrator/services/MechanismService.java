@@ -41,8 +41,8 @@ public class MechanismService extends OrchestratorService<FeedbackMechanism> {
 	
 	private int InsertNewMechanism(Connection con) throws SQLException
 	{
-	    PreparedStatement s1 = con.prepareStatement(
-	    		"INSERT INTO feedback_orchestrator.mechanisms (id) VALUES (NULL) ;", PreparedStatement.RETURN_GENERATED_KEYS);
+		String stmt = String.format("INSERT INTO %s.mechanisms (id) VALUES (NULL) ;", this.dbName);
+	    PreparedStatement s1 = con.prepareStatement(stmt, PreparedStatement.RETURN_GENERATED_KEYS);
 	    
 	    s1.execute();
 	    ResultSet keys = s1.getGeneratedKeys();
@@ -54,17 +54,19 @@ public class MechanismService extends OrchestratorService<FeedbackMechanism> {
 	
 	private void InsertMechanismHistory(Connection con, FeedbackMechanism mechanism, int mechanismId)
 			throws SQLException {
-		PreparedStatement s2 = con.prepareStatement(
-	    		"INSERT INTO feedback_orchestrator.mechanisms_history (`name`, `mechanisms_id`) VALUES (?, ?) ;");
+		
+		String stmt = String.format("INSERT INTO %s.mechanisms_history (`name`, `mechanisms_id`) VALUES (?, ?) ;", this.dbName);
+		PreparedStatement s2 = con.prepareStatement(stmt);
 	    
 	    s2.setString(1, mechanism.getType());
 	    s2.setInt(2, mechanismId);
 	    s2.execute();
 	    
-	    PreparedStatement s = con.prepareStatement(
-	    		"INSERT INTO feedback_orchestrator.configurations_mechanisms_history "
+	    stmt = String.format("INSERT INTO %s.configurations_mechanisms_history "
 	    		+ "(configurations_id, mechanisms_id, active, `order`, can_be_activated) "
-	    		+ "VALUES (?, ?, ?, ?, ?) ;");
+	    		+ "VALUES (?, ?, ?, ?, ?) ;", this.dbName);
+	    
+	    PreparedStatement s = con.prepareStatement(stmt);
 	    
 	    s.setInt(1, mechanism.getConfigurationsid());
 	    s.setInt(2, mechanismId);
@@ -86,7 +88,6 @@ public class MechanismService extends OrchestratorService<FeedbackMechanism> {
 	    {
 	    	param.setMechanismId(mechanismId);
 	    	parameterService.Insert(con, param);
-	    	//parameterService.InsertFor(con, param, "mechanism_id", mechanismId);
 	    }
 	    
 	    return mechanismId;
@@ -102,10 +103,8 @@ public class MechanismService extends OrchestratorService<FeedbackMechanism> {
 	    {
     		param.setMechanismId(mechanism.getId());
 	    	if(param.getId() == null){
-		    	//parameterService.InsertFor(con, param, "mechanism_id", mechanism.getId());
 	    		parameterService.Insert(con, param);
 	    	}else{
-	    		//parameterService.UpdateFor(con, param, "mechanism_id", mechanism.getId());
 	    		parameterService.Update(con, param);
 	    	}
 	    }
@@ -114,31 +113,6 @@ public class MechanismService extends OrchestratorService<FeedbackMechanism> {
 	@Override
 	public List<FeedbackMechanism> GetAll() throws SQLException, NotFoundException
 	{
-		/*
-		Connection con = TransactionManager.createDatabaseConnection();
-		
-	    PreparedStatement s = con.prepareStatement(
-
-	    		   "SELECT m.id, m.name, cm.order, cm.active, cm.can_be_activated "
-	    		 + "FROM feedback_orchestrator.mechanisms as m "
-	    		 + "JOIN feedback_orchestrator.configurations_mechanisms as cm ON cm.mechanism_id = m.id ;"    		
-	    		);
-
-	    ResultSet result = s.executeQuery();
-	    
-	    List<FeedbackMechanism> mechanisms = new ArrayList<>();
-	    while(result.next())
-	    {
-	    	FeedbackMechanism mechanism = new FeedbackMechanism();
-	    	
-	    	resultParser.SetFields(mechanism, result);
-	    	mechanism.setParameters(parameterService.GetWhereEquals(asList("mechanism_id"), asList(mechanism.getId())));
-	    	mechanisms.add(mechanism);
-	    }
-	    
-	    con.close();
-	    */
-		
 	    return GetWhere(asList());
 	}
 	
@@ -147,10 +121,10 @@ public class MechanismService extends OrchestratorService<FeedbackMechanism> {
 			throws SQLException, NotFoundException {
 		
 		Connection con = TransactionManager.createDatabaseConnection();
-		String statement = 
-				   "SELECT t.mechanisms_id, t.name, cm.order, cm.active, cm.can_be_activated, t.created_at "
-	    		 + "FROM feedback_orchestrator.mechanisms_history as t "
-	    		 + "JOIN feedback_orchestrator.configurations_mechanisms_history as cm ON cm.mechanisms_id = t.mechanisms_id ";
+		
+		String statement = String.format("SELECT t.mechanisms_id, t.name, cm.order, cm.active, cm.can_be_activated, t.created_at "
+	    		 + "FROM %s.mechanisms_history as t "
+	    		 + "JOIN %s.configurations_mechanisms_history as cm ON cm.mechanisms_id = t.mechanisms_id ", this.dbName, this.dbName);
 		
 		statement += "WHERE " + getTimeCondition();
 		
@@ -183,57 +157,9 @@ public class MechanismService extends OrchestratorService<FeedbackMechanism> {
 		return resultList;
 	}
 	
-	/*
-	@Override
-	public List<FeedbackMechanism> GetAllFor(String foreignKeyName, int configurationId) throws SQLException, NotFoundException
-	{
-		Connection con = TransactionManager.createDatabaseConnection();
-		
-	    PreparedStatement s = con.prepareStatement(
-
-	    		  "SELECT m.id, m.name, cm.order, cm.active, cm.can_be_activated "
-	    		+ "FROM feedback_orchestrator.mechanisms as m "
-	    		+ "JOIN feedback_orchestrator.configurations_mechanisms as cm "
-	    		+ "WHERE cm.mechanism_id = m.id AND cm.configuration_id = ? ;"		    		
-	    		);
-
-	    s.setInt(1, configurationId);
-	    ResultSet result = s.executeQuery();
-	    
-	    List<FeedbackMechanism> mechanisms = new ArrayList<>();
-	    while(result.next())
-	    {
-	    	FeedbackMechanism mechanism = new FeedbackMechanism();
-	    	resultParser.SetFields(mechanism, result);
-	    	mechanism.setParameters(parameterService.GetWhereEquals(asList("mechanism_id"), asList(mechanism.getId())));
-	    	mechanisms.add(mechanism);
-	    }
-	    
-	    con.close();
-	    return mechanisms;
-	}
-	*/
 	@Override
 	public FeedbackMechanism GetById(int mechanismId) throws SQLException, NotFoundException
 	{
-	/*	
-	    PreparedStatement s = con.prepareStatement(
-
-	    		  "SELECT m.id, m.name "
-	    		+ "FROM feedback_orchestrator.mechanisms as m "
-	    		+ "WHERE m.id = ? ;"		    		
-	    		);
-
-	    s.setInt(1, mechanismId);
-	    ResultSet result = s.executeQuery();
-	    
-	    if(!result.next())
-		
-    	FeedbackMechanism mechanism = new FeedbackMechanism();
-    	resultParser.SetFields(mechanism, result);
-    		    	throw new NotFoundException("mechanism with id: " + mechanismId + "does not exist");
-	    */
-		
 		FeedbackMechanism mechanism = super.GetById(mechanismId);
     	mechanism.setParameters(parameterService.GetWhere(asList(mechanism.getId()), "mechanisms_id = ?"));
 	    return mechanism;

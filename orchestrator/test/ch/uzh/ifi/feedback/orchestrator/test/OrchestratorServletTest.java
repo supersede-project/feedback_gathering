@@ -28,7 +28,7 @@ import junit.framework.TestCase;
 
 public class OrchestratorServletTest extends TestCase {
 	
-	private static int NUMBER_OF_APPLICATIONS = 4;
+	private static int NUMBER_OF_APPLICATIONS = 9;
 	
 	private DatabaseConfiguration config;
 	
@@ -96,6 +96,6 @@ public class OrchestratorServletTest extends TestCase {
 	    Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss.S").create();
 	    Application createdApplication = gson.fromJson(jsonFromResponse, Application.class);
 	    
-	    assertEquals(createdApplication.getName(), "Test Website");		
+	    assertEquals(createdApplication.getName(), "Test Website 10");		
 	}	
 }
