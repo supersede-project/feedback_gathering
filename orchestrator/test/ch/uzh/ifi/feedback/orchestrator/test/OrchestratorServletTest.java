@@ -40,15 +40,14 @@ public class OrchestratorServletTest extends TestCase {
     protected void setUp() throws Exception
     {
         super.setUp();
-
-        config.UseTestConfiguration();
+        config.RestoreTestDatabases();
     }
     
    @Override
-	protected void tearDown() throws Exception {
+	protected void tearDown() throws Exception 
+   {
 		super.tearDown();
-        
-		config.RestoreConfiguration();
+		config.RestoreTestDatabases();
 	}
    
 	public void testRetrievingAllApplications() throws ClientProtocolException, IOException {
@@ -96,6 +95,6 @@ public class OrchestratorServletTest extends TestCase {
 	    Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss.S").create();
 	    Application createdApplication = gson.fromJson(jsonFromResponse, Application.class);
 	    
-	    assertEquals(createdApplication.getName(), "Test Website 10");		
+	    assertEquals(createdApplication.getName(), "Test Website 11");		
 	}	
 }

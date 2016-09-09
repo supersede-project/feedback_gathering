@@ -57,7 +57,7 @@ public class OrchestratorModule extends AbstractModule{
 	    bind(GeneralConfigurationValidator.class).to(GeneralConfigurationValidator.class);
 	    bind(MechanismValidator.class).to(MechanismValidator.class);
 	    bind(ParameterValidator.class).to(ParameterValidator.class);
-	    bind(DatabaseConfiguration.class).to(DatabaseConfiguration.class);
+	    bind(DatabaseConfiguration.class).to(DatabaseConfiguration.class).asEagerSingleton();
 	}
 
 }

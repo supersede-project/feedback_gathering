@@ -41,14 +41,14 @@ public class FeedbackServletTest extends TestCase {
     {
         super.setUp();
 
-        config.UseTestConfiguration();
+        config.RestoreTestDatabases();
     }
     
    @Override
 	protected void tearDown() throws Exception {
 		super.tearDown();
         
-		config.RestoreConfiguration();
+		config.RestoreTestDatabases();
 	}
     
 	public void testRetrievingAllFeedbacks() throws ClientProtocolException, IOException {
