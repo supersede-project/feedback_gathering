@@ -110,6 +110,7 @@ define(["require", "exports", './config', '../views/pagination_container', '../v
                 url: config_1.apiEndpointRepository + config_1.feedbackPath,
                 type: 'POST',
                 data: formData,
+                dataType: 'json',
                 processData: false,
                 contentType: false,
                 success: function (data) {

@@ -181,6 +181,7 @@ export var feedbackPluginModule = function ($, window, document) {
             url: apiEndpointRepository + feedbackPath,
             type: 'POST',
             data: formData,
+            dataType: 'json',
             processData: false,
             contentType: false,
             success: function (data) {

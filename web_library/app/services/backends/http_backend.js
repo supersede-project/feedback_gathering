@@ -9,6 +9,7 @@ define(["require", "exports"], function (require, exports) {
             var url = this.getUrl();
             jQuery.ajax({
                 url: url,
+                dataType: 'json',
                 type: 'GET',
                 success: function (data) {
                     callback(data);
@@ -22,6 +23,7 @@ define(["require", "exports"], function (require, exports) {
             var url = this.getUrl() + id;
             jQuery.ajax({
                 url: url,
+                dataType: 'json',
                 type: 'GET',
                 success: function (data) {
                     callback(data);
