@@ -43,7 +43,7 @@ export class Parameterizable {
      */
     getParameterValue(key:string): any {
         var parameter = this.getParameter(key);
-        if(parameter == null || !parameter.hasOwnProperty('value')) {
+        if(parameter === null || !parameter.hasOwnProperty('value')) {
             return null;
         } else {
             return parameter.value

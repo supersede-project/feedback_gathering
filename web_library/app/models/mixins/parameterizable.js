@@ -14,7 +14,7 @@ define(["require", "exports"], function (require, exports) {
         };
         Parameterizable.prototype.getParameterValue = function (key) {
             var parameter = this.getParameter(key);
-            if (parameter == null || !parameter.hasOwnProperty('value')) {
+            if (parameter === null || !parameter.hasOwnProperty('value')) {
                 return null;
             }
             else {
