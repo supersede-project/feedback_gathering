@@ -84,6 +84,7 @@ define(["require", "exports", './config', '../views/pagination_container', '../v
             $.ajax({
                 url: config_1.apiEndpointRepository + config_1.feedbackPath,
                 type: 'POST',
+                dataType: 'json',
                 data: formData,
                 processData: false,
                 contentType: false,

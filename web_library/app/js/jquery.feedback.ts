@@ -154,6 +154,7 @@ export var feedbackPluginModule = function ($, window, document) {
         $.ajax({
             url: apiEndpointRepository + feedbackPath,
             type: 'POST',
+            dataType: 'json',
             data: formData,
             processData: false,
             contentType: false,
