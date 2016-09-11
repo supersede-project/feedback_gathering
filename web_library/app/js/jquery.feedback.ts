@@ -433,7 +433,7 @@ export var feedbackPluginModule = function ($, window, document) {
         I18nHelper.initializeI18n(resources, this.options);
 
         // loadDataHere to trigger pull if necessary
-        var applicationService = new ApplicationService(new MockBackend(mockData));
+        var applicationService = new ApplicationService();
         applicationService.retrieveApplication(applicationId, function(application) {
             initApplication(application);
         });

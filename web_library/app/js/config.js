@@ -2,7 +2,7 @@ define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.apiEndpointOrchestrator = 'http://ec2-54-175-37-30.compute-1.amazonaws.com/';
     exports.applicationPath = 'feedback_orchestrator/en/applications/';
-    exports.applicationId = 1;
+    exports.applicationId = 8;
     exports.apiEndpointRepository = 'http://ec2-54-175-37-30.compute-1.amazonaws.com/';
     exports.feedbackPath = "feedback_repository/de/feedbacks";
     exports.feedbackObjectTitle = 'Feedback';
