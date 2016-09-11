@@ -183,10 +183,10 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
                     }
                     context.clearRect(0, 0, myThis.canvasWidth, myThis.canvasHeight);
                     context.drawImage(myThis.canvasState, topLeftX, topLeftY, width, height, 0, 0, newWidth, newHeight);
+                    myThis.updateCanvasState();
                 }
                 context.stroke();
                 context.closePath();
-                myThis.updateCanvasState();
             }).on('mouseleave touchleave', function () {
             });
             myThis.initScreenshotOperations();
