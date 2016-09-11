@@ -281,6 +281,7 @@ define(["require", "exports", './config', '../views/pagination_container', '../v
             $('.server-response').removeClass('error').removeClass('success').text('');
         };
         $.fn.feedbackPlugin = function (options) {
+            var feedbackButton = this;
             this.options = $.extend({}, $.fn.feedbackPlugin.defaults, options);
             var currentOptions = this.options;
             var resources = {
@@ -290,6 +291,10 @@ define(["require", "exports", './config', '../views/pagination_container', '../v
             i18n_1.I18nHelper.initializeI18n(resources, this.options);
             var applicationService = new application_service_1.ApplicationService();
             applicationService.retrieveApplication(config_1.applicationId, function (application) {
+                if (application.state === null || application.state === 0) {
+                    feedbackButton.hide();
+                    return feedbackButton;
+                }
                 initApplication(application);
             });
             this.css('background-color', currentOptions.backgroundColor);

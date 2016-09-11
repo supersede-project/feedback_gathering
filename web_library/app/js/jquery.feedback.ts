@@ -42,6 +42,7 @@ export var feedbackPluginModule = function ($, window, document) {
      */
     var initApplication = function(applicationObject:Application) {
         application = applicationObject;
+
         resetMessageView();
         initPushMechanisms(application.getPushConfiguration(), application.generalConfiguration);
 
@@ -423,6 +424,7 @@ export var feedbackPluginModule = function ($, window, document) {
      * server and the feedback mechanism is invoked.
      */
     $.fn.feedbackPlugin = function (options) {
+        var feedbackButton = this;
         this.options = $.extend({}, $.fn.feedbackPlugin.defaults, options);
         var currentOptions = this.options;
         var resources = {
@@ -435,6 +437,11 @@ export var feedbackPluginModule = function ($, window, document) {
         // loadDataHere to trigger pull if necessary
         var applicationService = new ApplicationService();
         applicationService.retrieveApplication(applicationId, function(application) {
+            // disable library
+            if(application.state === null || application.state === 0) {
+                feedbackButton.hide();
+                return feedbackButton;
+            }
             initApplication(application);
         });
 
