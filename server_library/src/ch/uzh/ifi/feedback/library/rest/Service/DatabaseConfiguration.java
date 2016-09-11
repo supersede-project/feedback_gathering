@@ -15,8 +15,9 @@ import org.apache.commons.lang3.SystemUtils;
 
 import com.google.inject.Singleton;
 
+import ch.uzh.ifi.feedback.library.test.ServletTest;
+import ch.uzh.ifi.feedback.library.test.dumps.TestHelper;
 import ch.uzh.ifi.feedback.library.transaction.TransactionManager;
-import dumps.TestHelper;
 
 @Singleton
 public class DatabaseConfiguration {

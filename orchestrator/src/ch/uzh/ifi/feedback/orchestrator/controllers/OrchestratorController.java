@@ -9,8 +9,8 @@ import ch.uzh.ifi.feedback.orchestrator.services.IOrchestratorService;
 public class OrchestratorController<T> extends RestController<T> {
 
 	private IOrchestratorService<T> service;
-	public OrchestratorController(ISerializationService<T> serializationService, IOrchestratorService<T> dbService) {
-		super(serializationService, dbService);
+	public OrchestratorController(IOrchestratorService<T> dbService) {
+		super(dbService);
 		
 		this.service = dbService;
 	}

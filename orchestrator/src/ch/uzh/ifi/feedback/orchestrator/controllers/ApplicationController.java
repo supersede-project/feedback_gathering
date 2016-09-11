@@ -18,21 +18,20 @@ import ch.uzh.ifi.feedback.orchestrator.services.ApplicationService;
 public class ApplicationController extends OrchestratorController<Application> {
 
 	@Inject
-	public ApplicationController(ApplicationSerializationService serializationService,
-			ApplicationService dbService) {
-		super(serializationService, dbService);
+	public ApplicationController(ApplicationService dbService) {
+		super(dbService);
 	}
 	
 	@GET
 	@Path("/applications/{app_id}")
-	public Application GetById( @PathParam("app_id") Integer id) throws Exception 
+	public Application GetById(@PathParam("app_id") Integer id) throws Exception 
 	{
 		return super.GetById(id);
 	}
 	
 	@GET
 	@Path("/applications/{app_id}/timestamp/{time}")
-	public Application GetByIdAndTime( @PathParam("app_id") Integer id, @PathParam("time") Timestamp time) throws Exception 
+	public Application GetByIdAndTime(@PathParam("app_id") Integer id, @PathParam("time") Timestamp time) throws Exception 
 	{
 		return super.GetByIdAndTime(id, time);
 	}

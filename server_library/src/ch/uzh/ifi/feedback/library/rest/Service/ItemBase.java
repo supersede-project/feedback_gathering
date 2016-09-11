@@ -49,18 +49,18 @@ public abstract class ItemBase<T> implements IDbItem<T> {
 		return this.hasChanges;
 	}
 	
-	  public static List<Field> GetFields(Class<?> clazz, List<Field> fields) 
-	  {
-	      for(Field f : clazz.getDeclaredFields())
-	      {
-	    	  f.setAccessible(true);
-	    	  fields.add(f);
-	      }
-	      Class<?> superClass = clazz.getSuperclass();
-	      if (superClass == null) {
-	        return fields;
-	      } else {
-	        return GetFields(superClass, fields);
-	      }
-	  }
+  public static List<Field> GetFields(Class<?> clazz, List<Field> fields) 
+  {
+      for(Field f : clazz.getDeclaredFields())
+      {
+    	  f.setAccessible(true);
+    	  fields.add(f);
+      }
+      Class<?> superClass = clazz.getSuperclass();
+      if (superClass == null) {
+        return fields;
+      } else {
+        return GetFields(superClass, fields);
+      }
+  }
 }

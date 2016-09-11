@@ -63,12 +63,14 @@ public abstract class ServiceBase<T> implements IDbService<T> {
 	public T GetById(int id) throws SQLException, NotFoundException
 	{
 		Connection con = TransactionManager.createDatabaseConnection();
-		//ResultSet result = CheckId(con, id);
 		String statement = String.format("SELECT * FROM %s.%s as t WHERE t.id = ? ;", dbName, tableName);
 		PreparedStatement s = con.prepareStatement(statement);
 		s.setInt(1, id);
 		ResultSet result = s.executeQuery();
-		result.next();
+		if (!result.next())
+		{
+			throw new NotFoundException("Object with id '" + id +"' not found");
+		}
 		
 		T instance = null;
 		try {
@@ -157,39 +159,6 @@ public abstract class ServiceBase<T> implements IDbService<T> {
 	    return keys.getInt(1);
 	}
 	
-	/*
-	public List<T> GetWhereEquals(List<String> attributeNames, List<Object> values) throws SQLException, NotFoundException
-	{
-		Connection con = TransactionManager.createDatabaseConnection();
-		
-		if(attributeNames.size() != values.size())
-			return null;
-		
-		String statement = 
-				  "SELECT * "
-				+ "FROM %s.%s as t ";
-		statement = String.format(statement, dbName, tableName);
-		statement += "WHERE t.%s = ? ";
-		
-		for(int i=1; i<attributeNames.size(); i++)
-		{
-			statement += "AND t.%s = ? ";
-		}
-		statement += ";";
-		statement = String.format(statement, attributeNames.toArray());
-		
-		PreparedStatement s = con.prepareStatement(statement);
-		for(int i=0; i<values.size(); i++)
-		{
-			s.setObject(i+1, values.get(i));
-		}
-		ResultSet result = s.executeQuery();
-	
-		List<T> resultList = getList(result);
-		con.close();
-		return resultList;
-	}*/
-	
 	@Override
 	public List<T> GetWhere(List<Object> values, String...conditions) throws SQLException, NotFoundException
 	{
@@ -220,27 +189,6 @@ public abstract class ServiceBase<T> implements IDbService<T> {
 		
 		return resultList;
 	}
-	
-	/*
-	protected List<T> GetAllFor(String foreignTableName, String foreignKeyName, int foreignKey) throws SQLException, NotFoundException
-	{
-		Connection con = TransactionManager.createDatabaseConnection();
-		
-	    String statement = String.format(
-    		    "SELECT * "
-    		  + "FROM %s.%s as f "
-    		  + "JOIN %s.%s as t ON t.%s = f.id "
-    		  + "WHERE f.id = ? ;", dbName, foreignTableName, dbName, tableName, foreignKeyName);
-	    
-	    PreparedStatement s = con.prepareStatement(statement);
-	    s.setInt(1, foreignKey);
-	    ResultSet result = s.executeQuery();
-	   
-	    List<T> resultList = getList(result);
-	    con.close();
-	    return resultList;
-	}
-	*/
 	
 	@Override
 	public boolean CheckId(int id) throws SQLException

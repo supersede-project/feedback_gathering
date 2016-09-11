@@ -19,9 +19,8 @@ import ch.uzh.ifi.feedback.orchestrator.services.ConfigurationService;
 public class ConfigurationController extends RestController<Configuration>{
 
 	@Inject
-	public ConfigurationController(ConfigurationSerializationService serializationService,
-			ConfigurationService dbService) {
-		super(serializationService, dbService);
+	public ConfigurationController(ConfigurationService dbService) {
+		super(dbService);
 	}
 	
 	@GET

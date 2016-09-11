@@ -100,14 +100,12 @@ public class RestManager implements IRestManager {
 			{
 				Validate annotation = parameterClass.getAnnotation(Validate.class);
 				Class<? extends ValidatorBase<?>> validatorClass = parameterClass.getAnnotation(Validate.class).value();
-				//ValidatorBase<?> validator = _injector.getInstance(validatorClass);
 				_validatorMap.put(parameterClass, validatorClass);
 			}
 			
 			if(parameterClass.isAnnotationPresent(Serialize.class))
 			{
 				Class<? extends ISerializationService<?>> serializerClass = parameterClass.getAnnotation(Serialize.class).value();
-				//ISerializationService<?> serializer = _injector.getInstance(serializerClass);
 				_serializerMap.put(parameterClass, serializerClass);
 			}
 			

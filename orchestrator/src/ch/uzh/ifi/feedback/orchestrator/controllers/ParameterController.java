@@ -20,9 +20,8 @@ import ch.uzh.ifi.feedback.orchestrator.services.ParameterService;
 public class ParameterController extends RestController<FeedbackParameter> {
 	
 	@Inject
-	public ParameterController(ParameterSerializationService serializationService,
-			ParameterService dbService) {
-		super(serializationService, dbService);
+	public ParameterController(ParameterService dbService) {
+		super(dbService);
 	}
 
 	@GET
@@ -50,7 +49,7 @@ public class ParameterController extends RestController<FeedbackParameter> {
 	@Path("/general_configurations/{config_id}/parameters")
 	public List<FeedbackParameter> GetParametersByGeneralConfigurationId(@PathParam("config_id") Integer id) throws Exception 
 	{
-		return super.GetAllFor("configurations_id", id);
+		return super.GetAllFor("general_configurations_id", id);
 	}
 	
 	@PUT

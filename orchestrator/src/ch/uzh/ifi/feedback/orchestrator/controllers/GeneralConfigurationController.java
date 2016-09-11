@@ -19,9 +19,8 @@ import ch.uzh.ifi.feedback.orchestrator.services.GeneralConfigurationService;
 public class GeneralConfigurationController extends RestController<GeneralConfiguration> {
 
 	@Inject
-	public GeneralConfigurationController(GeneralConfigurationSerializationService serializationService,
-			GeneralConfigurationService dbService) {
-		super(serializationService, dbService);
+	public GeneralConfigurationController(GeneralConfigurationService dbService) {
+		super(dbService);
 	}
 	
 	@GET

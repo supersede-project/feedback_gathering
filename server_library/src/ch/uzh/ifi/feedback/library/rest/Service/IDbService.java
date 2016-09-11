@@ -11,19 +11,29 @@ import javassist.NotFoundException;
 
 public interface IDbService<T> {
 	
-	String GetLanguage();
+	default String GetLanguage(){ return "en"; }
 	
-	void SetLanguage(String lang);
+	default void SetLanguage(String lang) { }
 	
 	T GetById(int id) throws SQLException, NotFoundException;
 	
-	boolean CheckId(int id) throws SQLException;
+	default boolean CheckId(int id) throws SQLException{
+		try{
+			GetById(id);
+			return true;
+		}catch(NotFoundException e)
+		{
+			return false;
+		}
+	}
 	
 	List<T> GetAll() throws SQLException, NotFoundException;
 	
 	List<T> GetWhere(List<Object> values, String...conditions) throws SQLException, NotFoundException;
 	
-	void Delete(Connection con, int id) throws SQLException, NotFoundException;
+	default void Delete(Connection con, int id) throws SQLException, NotFoundException {
+		throw new UnsupportedOperationException();
+	}
 	
 	default void Update(Connection con, T object) throws SQLException, NotFoundException, UnsupportedOperationException {
 		throw new UnsupportedOperationException();

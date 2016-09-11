@@ -1,9 +1,8 @@
 package ch.uzh.ifi.feedback.repository.test;
 
-import java.io.File;
+
 import java.io.IOException;
 import java.sql.SQLException;
-import org.apache.commons.io.FileUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.ClientProtocolException;

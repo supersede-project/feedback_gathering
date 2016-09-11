@@ -17,8 +17,8 @@ import ch.uzh.ifi.feedback.repository.service.FeedbackService;
 public class FeedbackController extends RestController<Feedback>{
 
 	@Inject
-	public FeedbackController(FeedbackSerializationService serializationService, FeedbackService dbService) {
-		super(serializationService, dbService);
+	public FeedbackController(FeedbackService dbService) {
+		super(dbService);
 	}
 	
 	@Path("/feedbacks")

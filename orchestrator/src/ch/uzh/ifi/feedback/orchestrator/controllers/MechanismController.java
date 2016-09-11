@@ -19,9 +19,8 @@ import ch.uzh.ifi.feedback.orchestrator.services.MechanismService;
 public class MechanismController extends RestController<FeedbackMechanism> {
 
 	@Inject
-	public MechanismController(MechanismSerializationService serializationService,
-			MechanismService dbService) {
-		super(serializationService, dbService);
+	public MechanismController(MechanismService dbService) {
+		super(dbService);
 	}
 
 	@GET
