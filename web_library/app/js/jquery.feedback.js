@@ -8,11 +8,13 @@ define(["require", "exports", './config', '../views/pagination_container', '../v
         var pullConfigurationDialogId = "pullConfiguration";
         var active = false;
         var application;
+        var feedbackButton;
         var initApplication = function (applicationObject) {
             application = applicationObject;
             resetMessageView();
             initPushMechanisms(application.getPushConfiguration(), application.generalConfiguration);
             var alreadyTriggeredOne = false;
+            feedbackButton.attr('title', application.generalConfiguration.getParameterValue('quickInfo'));
             for (var _i = 0, _a = array_shuffle_1.shuffle(application.getPullConfigurations()); _i < _a.length; _i++) {
                 var pullConfiguration = _a[_i];
                 alreadyTriggeredOne = initPullConfiguration(pullConfiguration, application.generalConfiguration, alreadyTriggeredOne);
@@ -281,7 +283,7 @@ define(["require", "exports", './config', '../views/pagination_container', '../v
             $('.server-response').removeClass('error').removeClass('success').text('');
         };
         $.fn.feedbackPlugin = function (options) {
-            var feedbackButton = this;
+            feedbackButton = this;
             this.options = $.extend({}, $.fn.feedbackPlugin.defaults, options);
             var currentOptions = this.options;
             var resources = {

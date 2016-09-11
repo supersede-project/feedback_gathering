@@ -35,6 +35,7 @@ export var feedbackPluginModule = function ($, window, document) {
     var pullConfigurationDialogId = "pullConfiguration";
     var active = false;
     var application:Application;
+    var feedbackButton;
 
     /**
      * @param applicationObject
@@ -47,6 +48,8 @@ export var feedbackPluginModule = function ($, window, document) {
         initPushMechanisms(application.getPushConfiguration(), application.generalConfiguration);
 
         var alreadyTriggeredOne = false;
+
+        feedbackButton.attr('title', application.generalConfiguration.getParameterValue('quickInfo'));
 
         for(var pullConfiguration of shuffle(application.getPullConfigurations())) {
             alreadyTriggeredOne = initPullConfiguration(pullConfiguration, application.generalConfiguration, alreadyTriggeredOne);
@@ -424,7 +427,7 @@ export var feedbackPluginModule = function ($, window, document) {
      * server and the feedback mechanism is invoked.
      */
     $.fn.feedbackPlugin = function (options) {
-        var feedbackButton = this;
+        feedbackButton = this;
         this.options = $.extend({}, $.fn.feedbackPlugin.defaults, options);
         var currentOptions = this.options;
         var resources = {
