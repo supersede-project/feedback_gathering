@@ -297,6 +297,16 @@ button.screenshot-operation {
   &.active {
     padding: 7px 7px;
   }
+
+  &.screenshot-draw-remove {
+    margin-top: 20px;
+    max-width: none;
+    width: auto;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
 }
 
 .sticker-container {

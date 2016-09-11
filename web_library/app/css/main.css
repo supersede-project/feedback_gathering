@@ -1094,6 +1094,12 @@ button.screenshot-operation {
   padding: 1px 1px; }
   button.screenshot-operation.active {
     padding: 7px 7px; }
+  button.screenshot-operation.screenshot-draw-remove {
+    margin-top: 1px;
+    max-width: none;
+    width: auto; }
+    button.screenshot-operation.screenshot-draw-remove:hover {
+      text-decoration: underline; }
 
 .sticker-container {
   position: absolute;
