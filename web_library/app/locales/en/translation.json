@@ -12,6 +12,7 @@
   },
   "screenshot": {
     "take_screenshot": "Take a screenshot",
+    "take_new_screenshot": "Take a new screenshot",
     "actions": "Actions",
     "stickers": "Stickers",
     "rectangle": "rectangle",

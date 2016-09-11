@@ -52,7 +52,9 @@
                         {{#if active}}
                             <section id="screenshotMechanism{{ id }}" class="feedback-mechanism horizontal screenshot-type">
                                 <article class="col col-left">
-                                    <button class="take-screenshot button small">{{t "screenshot.take_screenshot" }}</button>
+                                    <button class="take-screenshot button small"
+                                            data-default-text="{{t "screenshot.take_screenshot" }}"
+                                            data-active-text="{{t "screenshot.take_new_screenshot" }}">{{t "screenshot.take_screenshot" }}</button>
 
                                     <div class="screenshot-operations">
                                         <p>{{t "screenshot.actions" }}</p>

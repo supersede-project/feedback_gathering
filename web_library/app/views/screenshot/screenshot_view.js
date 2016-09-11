@@ -54,6 +54,8 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
                     img.onload = function () {
                         myThis.context.drawImage(img, 0, 0, img.width, img.height, 0, 0, canvas.width, canvas.height);
                     };
+                    var screenshotCaptureButtonActiveText = myThis.screenshotCaptureButton.data('active-text');
+                    myThis.screenshotCaptureButton.text(screenshotCaptureButtonActiveText);
                     myThis.initDrawing();
                 }
             });
@@ -200,6 +202,8 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
             this.canvasStates = [];
             this.container.find('.screenshot-operations').hide();
             this.disableAllScreenshotOperations();
+            var screenshotCaptureButtonDefaultText = this.screenshotCaptureButton.data('default-text');
+            this.screenshotCaptureButton.text(screenshotCaptureButtonDefaultText);
             this.initRectAsDefaultDrawing();
         };
         ScreenshotView.prototype.initRectAsDefaultDrawing = function () {

@@ -91,6 +91,8 @@ export class ScreenshotView {
                     myThis.context.drawImage(img, 0, 0, img.width, img.height, 0, 0, canvas.width, canvas.height);
                 };
 
+                let screenshotCaptureButtonActiveText = myThis.screenshotCaptureButton.data('active-text');
+                myThis.screenshotCaptureButton.text(screenshotCaptureButtonActiveText);
                 myThis.initDrawing();
             }
         });
@@ -253,6 +255,9 @@ export class ScreenshotView {
         this.container.find('.screenshot-operations').hide();
 
         this.disableAllScreenshotOperations();
+
+        let screenshotCaptureButtonDefaultText = this.screenshotCaptureButton.data('default-text');
+        this.screenshotCaptureButton.text(screenshotCaptureButtonDefaultText);
 
         this.initRectAsDefaultDrawing();
     }
