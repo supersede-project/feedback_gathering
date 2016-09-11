@@ -43,6 +43,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.example.matthias.feedbacklibrary.utils.Utils;
@@ -60,7 +61,7 @@ import java.util.List;
  * Android Application Library
  * https://github.com/Korilakkuma/CanvasView
  */
-public class AnnotateImageView extends View {
+public class AnnotateImageView extends ImageView {
     private final Paint emptyPaint = new Paint();
     private Bitmap bitmap = null;
     private List<Path> pathLists = new ArrayList<>();

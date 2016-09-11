@@ -32,6 +32,7 @@ import com.google.gson.JsonSyntaxException;
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+import com.google.inject.Key;
 
 import ch.uzh.ifi.feedback.library.rest.Routing.HandlerInfo;
 import ch.uzh.ifi.feedback.library.rest.Routing.HttpMethod;
@@ -55,8 +56,8 @@ public class RestManager implements IRestManager {
 
 	private List<HandlerInfo> _handlers;
 	private Map<Class<?>, Method> _parserMap;
-	private Map<Class<?>, ISerializationService<?>> _serializerMap;
-	private Map<Class<?>, ValidatorBase<?>> _validatorMap;
+	private Map<Class<?>, Class<? extends ISerializationService<?>>> _serializerMap;
+	private Map<Class<?>, Class<? extends ValidatorBase<?>>> _validatorMap;
 	private Injector _injector;
 
 	public RestManager() {
@@ -99,15 +100,13 @@ public class RestManager implements IRestManager {
 			{
 				Validate annotation = parameterClass.getAnnotation(Validate.class);
 				Class<? extends ValidatorBase<?>> validatorClass = parameterClass.getAnnotation(Validate.class).value();
-				ValidatorBase<?> validator = _injector.getInstance(validatorClass);
-				_validatorMap.put(parameterClass, validator);
+				_validatorMap.put(parameterClass, validatorClass);
 			}
 			
 			if(parameterClass.isAnnotationPresent(Serialize.class))
 			{
 				Class<? extends ISerializationService<?>> serializerClass = parameterClass.getAnnotation(Serialize.class).value();
-				ISerializationService<?> serializer = _injector.getInstance(serializerClass);
-				_serializerMap.put(parameterClass, serializer);
+				_serializerMap.put(parameterClass, serializerClass);
 			}
 			
 			for(Method m : clazz.getMethods()){
@@ -132,6 +131,13 @@ public class RestManager implements IRestManager {
 					}
 					
 					final HttpMethod methodFinal = method;
+					for(HandlerInfo h : _handlers)
+					{
+						UriTemplate t = h.getUriTemplate();
+						if(h.GetHttpMethod() == methodFinal && t.Match(path) != null)
+							throw new AlreadyBoundException("handler for template '" + path + "' already registered!/n");
+					}
+					
 					if(_handlers.stream().anyMatch((h) -> h.GetHttpMethod() == methodFinal && h.getUriTemplate().Match(path) != null))
 						throw new AlreadyBoundException("handler for template '" + path + "' already registered!/n");
 				
@@ -161,7 +167,17 @@ public class RestManager implements IRestManager {
 			_parserMap.put(Float.class, Float.class.getMethod("parseFloat", String.class));
 			_parserMap.put(Timestamp.class, Timestamp.class.getMethod("valueOf", String.class));
 	}
+	
+	public <T> T GetInstance(Class<T> clazz)
+	{
+		return _injector.getInstance(clazz);
+	}
 
+	public <T> T GetSingleton(Class<T> clazz)
+	{
+		return _injector.getInstance(Key.get(clazz));
+	}
+	
 	@Override
 	public void Get(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {	
 		try {
@@ -272,14 +288,17 @@ public class RestManager implements IRestManager {
 		
 		Object instance = _injector.getInstance(handler.getHandlerClass());
 		
-		ISerializationService serializer = _serializerMap.get(handler.getSerializedParameterClass());
+		ISerializationService serializer = _injector.getInstance(_serializerMap.get(handler.getSerializedParameterClass()));
 		if(method == HttpMethod.POST || method == HttpMethod.PUT){
 			if(serializer != null)
 			{
 				Object object = serializer.Deserialize(request);
-				ValidatorBase validator = _validatorMap.get(handler.getSerializedParameterClass());
-				if(validator != null)
+				
+				Class<? extends ValidatorBase<?>> validatorClass = _validatorMap.get(handler.getSerializedParameterClass());
+				if(validatorClass != null)
 				{
+					ValidatorBase validator = _injector.getInstance(validatorClass);
+					
 					if(object instanceof IDbItem<?>)
 					{
 						if(method == HttpMethod.PUT)

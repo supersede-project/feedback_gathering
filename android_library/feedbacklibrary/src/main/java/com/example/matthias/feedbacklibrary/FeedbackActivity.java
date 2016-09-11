@@ -6,6 +6,7 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -26,6 +27,7 @@ import com.example.matthias.feedbacklibrary.configurations.OrchestratorConfigura
 import com.example.matthias.feedbacklibrary.feedbacks.Feedback;
 import com.example.matthias.feedbacklibrary.configurations.FeedbackConfiguration;
 import com.example.matthias.feedbacklibrary.models.Mechanism;
+import com.example.matthias.feedbacklibrary.models.ScreenshotMechanism;
 import com.example.matthias.feedbacklibrary.utils.DialogUtils;
 import com.example.matthias.feedbacklibrary.utils.Utils;
 import com.example.matthias.feedbacklibrary.views.CategoryMechanismView;
@@ -39,7 +41,6 @@ import com.google.gson.reflect.TypeToken;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.reflect.Type;
@@ -59,18 +60,20 @@ import retrofit2.converter.gson.GsonConverterFactory;
 /**
  * The main activity where the feedback items are displayed
  */
-public class FeedbackActivity extends AppCompatActivity {
-    public final static String IMAGE_NAME = "annotatedImage.jpg";
+public class FeedbackActivity extends AppCompatActivity implements ScreenshotMechanismView.OnImageChangedListener {
+    public final static String ANNOTATED_IMAGE_NAME_WITHOUT_STICKERS = "annotatedImageWithoutStickers.png";
+    public final static String ANNOTATED_IMAGE_NAME_WITH_STICKERS = "annotatedImageWithStickers.png";
+    public final static String CONFIGURATION_DIR = "configDir";
     public final static String DEFAULT_IMAGE_PATH = "defaultImagePath";
     public final static String IS_PUSH_STRING = "isPush";
-    public final static String SELECTED_PULL_CONFIGURATION_INDEX_STRING = "selectedPullConfigurationIndex";
-    public final static String CONFIGURATION_DIR = "configDir";
-    public final static String JSON_CONFIGURATION_STRING = "jsonConfigurationString";
     public final static String JSON_CONFIGURATION_FILE_NAME = "currentConfiguration.json";
-
+    public final static String JSON_CONFIGURATION_STRING = "jsonConfigurationString";
+    public final static String SELECTED_PULL_CONFIGURATION_INDEX_STRING = "selectedPullConfigurationIndex";
+    public final static int TEXT_ANNOTATION_MAXIMUM = 4;
     private final static int REQUEST_CAMERA = 10;
     private final static int REQUEST_PHOTO = 11;
     private final static int REQUEST_ANNOTATE = 12;
+
     private feedbackAPI fbAPI;
     // Feedback configuration fetched from the orchestrator
     private OrchestratorConfiguration configuration;
@@ -80,29 +83,14 @@ public class FeedbackActivity extends AppCompatActivity {
     private List<Mechanism> allMechanisms;
     // All views representing active mechanisms --> views
     private List<MechanismView> allMechanismViews;
-    // Path of the annotated image
-    private String annotatedImagePath = null;
+    // Image annotation
+    private int tempMechanismViewId = -1;
+    private String defaultImagePath;
+    private String userScreenshotChosenTask = "";
+    // General
     private boolean isPush;
     private int selectedPullConfigurationIndex;
     private ProgressDialog progressDialog;
-    private Button annotateScreenshotButton;
-    private Button deleteScreenshotButton;
-    private ImageView screenShotPreviewImageView;
-    private Bitmap pictureBitmap;
-    private String picturePath;
-    private String defaultImagePath;
-    private String userScreenshotChosenTask = "";
-
-    public void annotateImage() {
-        Intent intent = new Intent(this, AnnotateImageActivity.class);
-        intent.putExtra("imagePath", picturePath);
-        intent.putExtra("textAnnotationCounterMax", 4);
-        startActivityForResult(intent, REQUEST_ANNOTATE);
-    }
-
-    private void cameraIntent() {
-        //TODO: Implement image capture
-    }
 
     private void galleryIntent() {
         Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
@@ -171,50 +159,6 @@ public class FeedbackActivity extends AppCompatActivity {
         initView();
     }
 
-    private void initScreenshotView(View view) {
-        screenShotPreviewImageView = (ImageView) view.findViewById(R.id.supersede_feedbacklibrary_screenshot_imageview);
-        boolean isEnabled = false;
-
-        // Use the default image path for the screenshot if present
-        if (defaultImagePath != null) {
-            picturePath = defaultImagePath;
-            annotatedImagePath = picturePath;
-            pictureBitmap = BitmapFactory.decodeFile(picturePath);
-            screenShotPreviewImageView.setBackground(null);
-            screenShotPreviewImageView.setImageBitmap(pictureBitmap);
-            isEnabled = true;
-        }
-        Button selectScreenshotButton = (Button) view.findViewById(R.id.supersede_feedbacklibrary_select_screenshot_btn);
-        selectScreenshotButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                selectImage();
-            }
-        });
-        annotateScreenshotButton = (Button) view.findViewById(R.id.supersede_feedbacklibrary_annotate_screenshot_btn);
-        annotateScreenshotButton.setEnabled(isEnabled);
-        annotateScreenshotButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                annotateImage();
-            }
-        });
-        deleteScreenshotButton = (Button) view.findViewById(R.id.supersede_feedbacklibrary_remove_screenshot_btn);
-        deleteScreenshotButton.setEnabled(isEnabled);
-        deleteScreenshotButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                pictureBitmap = null;
-                picturePath = null;
-                annotatedImagePath = null;
-                annotateScreenshotButton.setEnabled(false);
-                deleteScreenshotButton.setEnabled(false);
-                screenShotPreviewImageView.setImageBitmap(null);
-                screenShotPreviewImageView.setBackgroundResource(R.drawable.camera_picture_big);
-            }
-        });
-    }
-
     /**
      * This method initializes the view.
      */
@@ -230,6 +174,9 @@ public class FeedbackActivity extends AppCompatActivity {
                     View view = null;
                     String type = allMechanisms.get(i).getType();
                     switch (type) {
+                        case Mechanism.ATTACHMENT_TYPE:
+                            // TODO: Implement attachment mechanism
+                            break;
                         case Mechanism.AUDIO_TYPE:
                             // TODO: Implement audio mechanism
                             break;
@@ -242,9 +189,8 @@ public class FeedbackActivity extends AppCompatActivity {
                             view = mechanismView.getEnclosingLayout();
                             break;
                         case Mechanism.SCREENSHOT_TYPE:
-                            mechanismView = new ScreenshotMechanismView(layoutInflater, allMechanisms.get(i));
+                            mechanismView = new ScreenshotMechanismView(layoutInflater, allMechanisms.get(i), FeedbackActivity.this, allMechanismViews.size(), defaultImagePath);
                             view = mechanismView.getEnclosingLayout();
-                            initScreenshotView(view);
                             break;
                         case Mechanism.TEXT_TYPE:
                             mechanismView = new TextMechanismView(layoutInflater, allMechanisms.get(i));
@@ -265,7 +211,7 @@ public class FeedbackActivity extends AppCompatActivity {
             layoutInflater.inflate(R.layout.send_feedback_layout, linearLayout);
         }
 
-        // After successfully loading the model data and view, make the progress dialog disappear
+        // Make the progress dialog disappear after successfully loading the models and views
         progressDialog.dismiss();
     }
 
@@ -278,54 +224,45 @@ public class FeedbackActivity extends AppCompatActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK) {
-            if (requestCode == REQUEST_PHOTO)
+            if (requestCode == REQUEST_PHOTO) {
                 onSelectFromGalleryResult(data);
-            else if (requestCode == REQUEST_CAMERA)
-                onCaptureImageResult(data);
-            else if (requestCode == REQUEST_ANNOTATE && data != null) {
-                // Text annotations
-                HashMap<Integer, String> allTextAnnotations = new HashMap<>();
-                if (data.getBooleanExtra("hasTextAnnotations", false)) {
-                    allTextAnnotations = (HashMap<Integer, String>) data.getSerializableExtra("allTextAnnotations");
-                }
+            } else if (requestCode == REQUEST_CAMERA) {
+            } else if (requestCode == REQUEST_ANNOTATE && data != null) {
+                // If mechanismViewId == -1, an error occurred
+                int mechanismViewId = data.getIntExtra(Utils.EXTRA_KEY_MECHANISM_VIEW_ID, -1);
+                if (mechanismViewId != -1) {
+                    ScreenshotMechanismView screenshotMechanismView = (ScreenshotMechanismView) allMechanismViews.get(mechanismViewId);
 
-                // TODO: Check for null values and empty strings --> where?
-                for (Map.Entry<Integer, String> entry : allTextAnnotations.entrySet()) {
-                    System.out.println("Text annotation number '" + entry.getKey() + "' == " + entry.getValue());
-                }
+                    // Sticker annotations
+                    if (data.getBooleanExtra(Utils.EXTRA_KEY_HAS_STICKER_ANNOTATIONS, false)) {
+                        screenshotMechanismView.setAllStickerAnnotations((HashMap<Integer, String>) data.getSerializableExtra(Utils.EXTRA_KEY_ALL_STICKER_ANNOTATIONS));
+                    }
+                    // Text annotations
+                    if (data.getBooleanExtra(Utils.EXTRA_KEY_HAS_TEXT_ANNOTATIONS, false)) {
+                        screenshotMechanismView.setAllTextAnnotations((HashMap<Integer, String>) data.getSerializableExtra(Utils.EXTRA_KEY_ALL_TEXT_ANNOTATIONS));
+                    }
 
-                // Annotated image
-                annotatedImagePath = data.getStringExtra("annotatedImagePath") + "/" + IMAGE_NAME;
-                picturePath = annotatedImagePath;
-                Bitmap annotatedBitmap = Utils.loadImageFromStorage(annotatedImagePath);
-                if (annotatedBitmap != null) {
-                    pictureBitmap = annotatedBitmap;
-                    screenShotPreviewImageView.setImageBitmap(pictureBitmap);
+                    // Annotated image with stickers
+                    String tempPathWithStickers = data.getStringExtra(Utils.EXTRA_KEY_ANNOTATED_IMAGE_PATH_WITH_STICKERS) + "/" + mechanismViewId + ANNOTATED_IMAGE_NAME_WITH_STICKERS;
+                    screenshotMechanismView.setAnnotatedImagePath(tempPathWithStickers);
+                    screenshotMechanismView.setPicturePath(tempPathWithStickers);
+                    Bitmap annotatedBitmap = Utils.loadImageFromStorage(tempPathWithStickers);
+                    if (annotatedBitmap != null) {
+                        screenshotMechanismView.setPictureBitmap(annotatedBitmap);
+                        screenshotMechanismView.getScreenShotPreviewImageView().setImageBitmap(annotatedBitmap);
+                    }
+
+                    // Annotated image without stickers
+                    if (data.getStringExtra(Utils.EXTRA_KEY_ANNOTATED_IMAGE_PATH_WITHOUT_STICKERS) == null) {
+                        screenshotMechanismView.setPicturePathWithoutStickers(null);
+                    } else {
+                        String tempPathWithoutStickers = data.getStringExtra(Utils.EXTRA_KEY_ANNOTATED_IMAGE_PATH_WITHOUT_STICKERS) + "/" + mechanismViewId + ANNOTATED_IMAGE_NAME_WITHOUT_STICKERS;
+                        screenshotMechanismView.setPicturePathWithoutStickers(tempPathWithoutStickers);
+                    }
+                } else {
+                    throw new RuntimeException("no " + Utils.EXTRA_KEY_MECHANISM_VIEW_ID + " provided.");
                 }
             }
-        }
-    }
-
-    private void onCaptureImageResult(Intent data) {
-        Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
-        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-        if (thumbnail != null) {
-            thumbnail.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
-            File destination = new File(Environment.getExternalStorageDirectory(), System.currentTimeMillis() + ".jpg");
-            FileOutputStream fo;
-            try {
-                destination.createNewFile();
-                fo = new FileOutputStream(destination);
-                fo.write(bytes.toByteArray());
-                fo.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            annotateScreenshotButton.setEnabled(true);
-            deleteScreenshotButton.setEnabled(true);
-            screenShotPreviewImageView.setBackground(null);
-            screenShotPreviewImageView.setImageBitmap(thumbnail);
         }
     }
 
@@ -369,35 +306,88 @@ public class FeedbackActivity extends AppCompatActivity {
     }
 
     @Override
+    public void onImageAnnotate(ScreenshotMechanismView screenshotMechanismView) {
+        Intent intent = new Intent(this, AnnotateImageActivity.class);
+        if (screenshotMechanismView.getAllStickerAnnotations() != null && screenshotMechanismView.getAllStickerAnnotations().size() > 0) {
+            intent.putExtra(Utils.EXTRA_KEY_HAS_STICKER_ANNOTATIONS, true);
+            intent.putExtra(Utils.EXTRA_KEY_ALL_STICKER_ANNOTATIONS, screenshotMechanismView.getAllStickerAnnotations());
+        }
+        if (screenshotMechanismView.getAllTextAnnotations() != null && screenshotMechanismView.getAllTextAnnotations().size() > 0) {
+            intent.putExtra(Utils.EXTRA_KEY_HAS_TEXT_ANNOTATIONS, true);
+            intent.putExtra(Utils.EXTRA_KEY_ALL_TEXT_ANNOTATIONS, screenshotMechanismView.getAllTextAnnotations());
+        }
+
+        String path = screenshotMechanismView.getPicturePathWithoutStickers() == null ? screenshotMechanismView.getPicturePath() : screenshotMechanismView.getPicturePathWithoutStickers();
+        intent.putExtra(Utils.EXTRA_KEY_MECHANISM_VIEW_ID, screenshotMechanismView.getMechanismViewIndex());
+        intent.putExtra(Utils.EXTRA_KEY_IMAGE_PATCH, path);
+        intent.putExtra(Utils.TEXT_ANNOTATION_COUNTER_MAXIMUM, TEXT_ANNOTATION_MAXIMUM);
+        startActivityForResult(intent, REQUEST_ANNOTATE);
+    }
+
+    @Override
+    public void onImageSelect(ScreenshotMechanismView screenshotMechanismView) {
+        tempMechanismViewId = screenshotMechanismView.getMechanismViewIndex();
+        final Resources res = getResources();
+        final CharSequence[] items = {res.getString(R.string.supersede_feedbacklibrary_photo_capture_text), res.getString(R.string.supersede_feedbacklibrary_library_chooser_text), res.getString(R.string.supersede_feedbacklibrary_cancel_string)};
+        AlertDialog.Builder builder = new AlertDialog.Builder(FeedbackActivity.this);
+        builder.setTitle(res.getString(R.string.supersede_feedbacklibrary_image_selection_dialog_title));
+        builder.setItems(items, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int item) {
+                boolean result = Utils.checkPermission_READ_EXTERNAL_STORAGE(FeedbackActivity.this, Utils.PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE);
+                if (items[item].equals(res.getString(R.string.supersede_feedbacklibrary_photo_capture_text))) {
+                    userScreenshotChosenTask = res.getString(R.string.supersede_feedbacklibrary_photo_capture_text);
+                    if (result) {
+                    }
+                } else if (items[item].equals(res.getString(R.string.supersede_feedbacklibrary_library_chooser_text))) {
+                    userScreenshotChosenTask = res.getString(R.string.supersede_feedbacklibrary_library_chooser_text);
+                    if (result)
+                        galleryIntent();
+                } else if (items[item].equals(res.getString(R.string.supersede_feedbacklibrary_cancel_string))) {
+                    dialog.dismiss();
+                }
+            }
+        });
+        builder.show();
+    }
+
+    @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         switch (requestCode) {
             case Utils.PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    if (userScreenshotChosenTask.equals("Take a Photo")) {
-                        cameraIntent();
-                    } else if (userScreenshotChosenTask.equals("Choose from Library"))
+                    Resources res = getResources();
+                    if (userScreenshotChosenTask.equals(res.getString(R.string.supersede_feedbacklibrary_photo_capture_text))) {
+                    } else if (userScreenshotChosenTask.equals(res.getString(R.string.supersede_feedbacklibrary_library_chooser_text))) {
                         galleryIntent();
-                } else {
-                    // Code for denial
+                    }
                 }
                 break;
         }
     }
 
     private void onSelectFromGalleryResult(Intent data) {
-        Uri selectedImage = data.getData();
-        String[] filePathColumn = {MediaStore.Images.Media.DATA};
-        Cursor cursor = getContentResolver().query(selectedImage, filePathColumn, null, null, null);
-        cursor.moveToFirst();
-        int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-        picturePath = cursor.getString(columnIndex);
-        cursor.close();
-        annotatedImagePath = picturePath;
-        pictureBitmap = BitmapFactory.decodeFile(picturePath);
-        screenShotPreviewImageView.setBackground(null);
-        screenShotPreviewImageView.setImageBitmap(pictureBitmap);
-        annotateScreenshotButton.setEnabled(true);
-        deleteScreenshotButton.setEnabled(true);
+        if (tempMechanismViewId != -1 && allMechanismViews.get(tempMechanismViewId) instanceof ScreenshotMechanismView) {
+            ScreenshotMechanismView screenshotMechanismView = (ScreenshotMechanismView) allMechanismViews.get(tempMechanismViewId);
+            Uri selectedImage = data.getData();
+            String[] filePathColumn = {MediaStore.Images.Media.DATA};
+            Cursor cursor = getContentResolver().query(selectedImage, filePathColumn, null, null, null);
+            if (cursor != null) {
+                cursor.moveToFirst();
+                int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+                String tempPicturePath = cursor.getString(columnIndex);
+                cursor.close();
+                screenshotMechanismView.setPicturePath(tempPicturePath);
+                screenshotMechanismView.setAnnotatedImagePath(tempPicturePath);
+                Bitmap tempPictureBitmap = BitmapFactory.decodeFile(tempPicturePath);
+                screenshotMechanismView.setPictureBitmap(tempPictureBitmap);
+                screenshotMechanismView.getScreenShotPreviewImageView().setBackground(null);
+                screenshotMechanismView.getScreenShotPreviewImageView().setImageBitmap(tempPictureBitmap);
+                screenshotMechanismView.getAnnotateScreenshotButton().setEnabled(true);
+                screenshotMechanismView.getDeleteScreenshotButton().setEnabled(true);
+            }
+            tempMechanismViewId = -1;
+        }
     }
 
     @Override
@@ -409,42 +399,16 @@ public class FeedbackActivity extends AppCompatActivity {
         }
     }
 
-    private void selectImage() {
-        final CharSequence[] items = {"Take a Photo", "Choose from Library", "Cancel"};
-        AlertDialog.Builder builder = new AlertDialog.Builder(FeedbackActivity.this);
-        builder.setTitle("Add Photo");
-        builder.setItems(items, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int item) {
-                boolean result = Utils.checkPermission_READ_EXTERNAL_STORAGE(FeedbackActivity.this, Utils.PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE);
-                if (items[item].equals("Take a Photo")) {
-                    userScreenshotChosenTask = "Take a Photo";
-                    if (result)
-                        cameraIntent();
-                } else if (items[item].equals("Choose from Library")) {
-                    userScreenshotChosenTask = "Choose from Library";
-                    if (result)
-                        galleryIntent();
-                } else if (items[item].equals("Cancel")) {
-                    dialog.dismiss();
-                }
-            }
-        });
-        builder.show();
-    }
-
     /*
      * This method performs a POST request in order to send the feedback to the feedback repository.
      */
     public void sendButtonClicked(View view) {
-        String screenShotImagePath = annotatedImagePath != null ? annotatedImagePath : "";
+        //String screenShotImagePath = annotatedImagePath != null ? annotatedImagePath : "";
+        String screenShotImagePath = "dummy";
 
         // The mechanism models are updated with the view values
         for (MechanismView mechanismView : allMechanismViews) {
             mechanismView.updateModel();
-            if (mechanismView instanceof ScreenshotMechanismView) {
-                ((ScreenshotMechanismView) mechanismView).setAnnotatedImagePath(screenShotImagePath);
-            }
         }
 
         final ArrayList<String> messages = new ArrayList<>();
@@ -482,7 +446,7 @@ public class FeedbackActivity extends AppCompatActivity {
                 result.enqueue(new Callback<JsonObject>() {
                     @Override
                     public void onFailure(Call<JsonObject> call, Throwable t) {
-                        messages.add("Oops. Something went wrong!");
+                        messages.add(getResources().getString(R.string.supersede_feedbacklibrary_error_text));
                         DialogUtils.DataDialog d = DialogUtils.DataDialog.newInstance(messages);
                         d.show(getFragmentManager(), "dataDialog");
                     }
@@ -490,7 +454,7 @@ public class FeedbackActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
                         if (response.code() == 201) {
-                            Toast toast = Toast.makeText(getApplicationContext(), "Your feedback was successfully sent. Thank you", Toast.LENGTH_SHORT);
+                            Toast toast = Toast.makeText(getApplicationContext(), getResources().getString(R.string.supersede_feedbacklibrary_success_text), Toast.LENGTH_SHORT);
                             toast.show();
                         }
                     }
@@ -503,13 +467,24 @@ public class FeedbackActivity extends AppCompatActivity {
     }
 
     public void sendStub(View view) {
-        String screenShotImagePath = annotatedImagePath != null ? annotatedImagePath : "";
+        //String screenShotImagePath = annotatedImagePath != null ? annotatedImagePath : "";
 
         // The mechanism models are updated with the view values
         for (MechanismView mechanismView : allMechanismViews) {
             mechanismView.updateModel();
-            if (mechanismView instanceof ScreenshotMechanismView) {
-                ((ScreenshotMechanismView) mechanismView).setAnnotatedImagePath(screenShotImagePath);
+        }
+        for (Mechanism mechanism : allMechanisms) {
+            if (mechanism.isActive() && mechanism instanceof ScreenshotMechanism) {
+                ScreenshotMechanism screenshotMechanism = (ScreenshotMechanism) mechanism;
+                System.out.println("path of annotated image == " + screenshotMechanism.getImagePath());
+                HashMap<Integer, String> allTextAnnotations = screenshotMechanism.getAllTextAnnotations();
+                if (allTextAnnotations != null) {
+                    for (Map.Entry<Integer, String> entry : allTextAnnotations.entrySet()) {
+                        System.out.println("key == " + entry.getKey() + " and value == " + entry.getValue());
+                    }
+                } else {
+                    System.out.println("allTextAnnotations is null");
+                }
             }
         }
 

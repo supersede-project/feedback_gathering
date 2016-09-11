@@ -1,10 +1,8 @@
 package ch.uzh.ifi.feedback.repository.test;
 
-import java.io.IOException;
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.util.List;
 
+import java.io.IOException;
+import java.sql.SQLException;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.ClientProtocolException;
@@ -17,12 +15,11 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
-import org.junit.After;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import ch.uzh.ifi.feedback.library.transaction.TransactionManager;
+import ch.uzh.ifi.feedback.library.rest.Service.DatabaseConfiguration;
 import ch.uzh.ifi.feedback.repository.model.Feedback;
 import javassist.NotFoundException;
 import junit.framework.TestCase;
@@ -30,24 +27,29 @@ import junit.framework.TestCase;
 
 // TODO run the tests against a test database that is cleanup after every test method
 public class FeedbackServletTest extends TestCase {
+	private final int NUMBER_OF_FEEDBACK_RECORDS = 10;
 	
-	private Connection dbConnection;
-	private final int NUMBER_OF_FEEDBACK_RECORDS = 36;
-		
+	private DatabaseConfiguration config;
+	
+	public FeedbackServletTest() {
+        config = new DatabaseConfiguration();
+	}
+	
     @Override
     protected void setUp() throws Exception
     {
         super.setUp();
 
-        Connection dbConnection = TransactionManager.createDatabaseConnection();
-        dbConnection.setAutoCommit(false);
+        config.RestoreTestDatabases();
     }
     
-    @After
-    protected void cleanUp() {
-    	
-    }
-
+   @Override
+	protected void tearDown() throws Exception {
+		super.tearDown();
+        
+		config.RestoreTestDatabases();
+	}
+    
 	public void testRetrievingAllFeedbacks() throws ClientProtocolException, IOException {
 		HttpUriRequest request = new HttpGet("http://localhost:8080/feedback_repository/en/feedbacks");
 		HttpResponse httpResponse = HttpClientBuilder.create().build().execute(request);
@@ -56,14 +58,14 @@ public class FeedbackServletTest extends TestCase {
 		String jsonFromResponse = EntityUtils.toString(httpResponse.getEntity());	    
 	    Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss.S").create();
 	    Feedback[] retrievedFeedbacks = gson.fromJson(jsonFromResponse, Feedback[].class);
-	    		
+        
 		assertEquals(httpResponse.getStatusLine().getStatusCode(), HttpStatus.SC_OK);
 		assertEquals("application/json", mimeType);
 		assertEquals(retrievedFeedbacks.length, NUMBER_OF_FEEDBACK_RECORDS);
 	}
 
 	public void testRetrievingSingleFeedbacks() throws ClientProtocolException, IOException {
-		HttpUriRequest request = new HttpGet("http://localhost:8080/feedback_repository/en/feedbacks/1");
+		HttpUriRequest request = new HttpGet("http://localhost:8080/feedback_repository/en/feedbacks/57");
 		HttpResponse httpResponse = HttpClientBuilder.create().build().execute(request);
 		String mimeType = ContentType.getOrDefault(httpResponse.getEntity()).getMimeType();
 
@@ -73,10 +75,11 @@ public class FeedbackServletTest extends TestCase {
 	    
 		assertEquals(httpResponse.getStatusLine().getStatusCode(), HttpStatus.SC_OK);
 		assertEquals("application/json", mimeType);
-		assertEquals(retrievedFeedback.getId(), new Integer(1));		
+		assertEquals(retrievedFeedback.getId(), new Integer(57));		
 		assertEquals(retrievedFeedback.getApplicationId(), 1l);		
 	}
 	
+
 	public void testCreationOfFeedback() throws ClientProtocolException, IOException, SQLException, NotFoundException {
 		HttpClient httpclient = HttpClients.createDefault();
 		HttpPost request = new HttpPost("http://localhost:8080/feedback_repository/en/feedbacks");

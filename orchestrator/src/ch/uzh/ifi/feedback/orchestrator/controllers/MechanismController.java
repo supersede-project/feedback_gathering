@@ -19,9 +19,8 @@ import ch.uzh.ifi.feedback.orchestrator.services.MechanismService;
 public class MechanismController extends RestController<FeedbackMechanism> {
 
 	@Inject
-	public MechanismController(MechanismSerializationService serializationService,
-			MechanismService dbService) {
-		super(serializationService, dbService);
+	public MechanismController(MechanismService dbService) {
+		super(dbService);
 	}
 
 	@GET
@@ -42,14 +41,15 @@ public class MechanismController extends RestController<FeedbackMechanism> {
 	@Path("Configurations/{config_id}/mechanisms")
 	public List<FeedbackMechanism> GetAllByConfiguration( @PathParam("config_id")Integer configId) throws Exception 
 	{
-		return super.GetAllFor("configuration_id", configId);
+		return super.GetAllFor("configurations_id", configId);
 	}
 	
 	@PUT
 	@Path("Configurations/{config_id}/mechanisms")
 	public FeedbackMechanism UpdateMechanismForConfiguration(@PathParam("config_id")Integer configId, FeedbackMechanism mechanism) throws Exception 
 	{
-		super.UpdateFor(mechanism, "configuration_id", configId);
+		mechanism.setConfigurationsid(configId);
+		super.Update(mechanism);
 		return mechanism;
 	}
 	
@@ -57,7 +57,8 @@ public class MechanismController extends RestController<FeedbackMechanism> {
 	@Path("Configurations/{config_id}/mechanisms")
 	public FeedbackMechanism InsertMechanismForConfiguration(@PathParam("config_id")Integer configId, FeedbackMechanism mechanism) throws Exception 
 	{
-		super.InsertFor(mechanism, "configuration_id", configId);
+		mechanism.setConfigurationsid(configId);
+		super.Insert(mechanism);
 		return mechanism;
 	}
 }

@@ -1,3 +1,7 @@
 dburl=jdbc:mysql://localhost:3306/
 dbuser=user
 dbpassword=password
+repositoryDb=feedback_repository
+repositoryTestDb=feedback_repository_test
+orchestratorDb=feedback_orchestrator
+orchestratorTestDb=feedback_orchestrator_test

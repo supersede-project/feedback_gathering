@@ -20,13 +20,15 @@ import ch.uzh.ifi.feedback.orchestrator.validation.ConfigurationValidator;
 
 @Validate(ConfigurationValidator.class)
 @Serialize(ConfigurationSerializationService.class)
-public class Configuration extends ItemBase<Configuration> {
+public class Configuration extends OrchestratorItem<Configuration> {
+	
+	@Id
+	@DbAttribute("configurations_id")
+	private Integer id;
 	
 	@Unique
 	private String name;
-
-	@DbAttribute("created_at")
-	private Timestamp createdAt;
+	
 	@NotNull
 	private ConfigurationType type;
 	@DbIgnore
@@ -34,9 +36,10 @@ public class Configuration extends ItemBase<Configuration> {
 	@DbIgnore
 	private GeneralConfiguration generalConfiguration;
 	
-	@DbAttribute("general_configuration_id")
+	@DbAttribute("general_configurations_id")
 	private transient Integer generalConfigurationId;
-	@DbAttribute("application_id")
+	
+	@DbAttribute("applications_id")
 	private transient Integer applicationId;
 	
 	public Configuration(){
@@ -56,14 +59,6 @@ public class Configuration extends ItemBase<Configuration> {
 			mechanisms = new ArrayList<>();
 		
 		return mechanisms;
-	}
-
-	public Timestamp getCreatedAt() {
-		return createdAt;
-	}
-
-	public void setCreatedAt(Timestamp createdAt) {
-		this.createdAt = createdAt;
 	}
 
 	public ConfigurationType getType() {
@@ -92,8 +87,6 @@ public class Configuration extends ItemBase<Configuration> {
 	
 	@Override
 	public Configuration Merge(Configuration original) {
-		super.Merge(original);
-		
 		for(FeedbackMechanism mechanism : original.getFeedbackMechanisms())
 		{
 			Optional<FeedbackMechanism> newMechanism = getFeedbackMechanisms().stream().filter(p -> p.getId().equals(mechanism.getId())).findFirst();
@@ -111,6 +104,8 @@ public class Configuration extends ItemBase<Configuration> {
 			generalConfiguration = original.getGeneralConfiguration();
 		}
 		
+		super.Merge(original);
+		
 		return this;
 	}
 
@@ -120,5 +115,15 @@ public class Configuration extends ItemBase<Configuration> {
 
 	public void setApplicationId(Integer applicationId) {
 		this.applicationId = applicationId;
+	}
+
+	@Override
+	public Integer getId() {
+		return id;
+	}
+
+	@Override
+	public void setId(Integer id) {
+		this.id = id;
 	}
 }

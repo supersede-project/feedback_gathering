@@ -3,6 +3,7 @@ package com.example.matthias.feedbacklibrary.models;
 import com.example.matthias.feedbacklibrary.configurations.MechanismConfigurationItem;
 
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -14,10 +15,15 @@ public class ScreenshotMechanism extends Mechanism implements Serializable {
     private String defaultPicture;
 
     private String imagePath;
+    private HashMap<Integer, String> allTextAnnotations = null;
 
     public ScreenshotMechanism(MechanismConfigurationItem item) {
         super(SCREENSHOT_TYPE, item);
         initScreenshotMechanism(item);
+    }
+
+    public HashMap<Integer, String> getAllTextAnnotations() {
+        return allTextAnnotations;
     }
 
     public String getDefaultPicture() {
@@ -49,6 +55,10 @@ public class ScreenshotMechanism extends Mechanism implements Serializable {
     @Override
     public boolean isValid(List<String> errorMessage) {
         return true;
+    }
+
+    public void setAllTextAnnotations(HashMap<Integer, String> allTextAnnotations) {
+        this.allTextAnnotations = allTextAnnotations;
     }
 
     public void setDefaultPicture(String defaultPicture) {

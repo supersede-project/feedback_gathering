@@ -11,6 +11,7 @@ import android.widget.ImageView;
 public class StickerAnnotationImageView extends StickerAnnotationView {
     private String ownerId;
     private ImageView mainView;
+    private int imageResourceId;
 
     public StickerAnnotationImageView(Context context) {
         super(context);
@@ -26,6 +27,10 @@ public class StickerAnnotationImageView extends StickerAnnotationView {
 
     public Bitmap getImageBitmap() {
         return ((BitmapDrawable) mainView.getDrawable()).getBitmap();
+    }
+
+    public int getImageResourceId() {
+        return imageResourceId;
     }
 
     @Override
@@ -49,12 +54,13 @@ public class StickerAnnotationImageView extends StickerAnnotationView {
         mainView.setImageDrawable(drawable);
     }
 
-    public void setImageResource(int res_id) {
-        mainView.setImageResource(res_id);
+    public void setImageResource(int resId) {
+        imageResourceId = resId;
+        mainView.setImageResource(resId);
     }
 
-    public void setOwnerId(String owner_id) {
-        ownerId = owner_id;
+    public void setOwnerId(String ownerId) {
+        this.ownerId = ownerId;
     }
 
 }

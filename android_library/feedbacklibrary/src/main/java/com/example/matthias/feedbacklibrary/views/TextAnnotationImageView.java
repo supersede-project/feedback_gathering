@@ -11,6 +11,7 @@ import android.widget.ImageView;
 public class TextAnnotationImageView extends TextAnnotationView {
     private String ownerId;
     private ImageView mainView;
+    private int imageResourceId;
 
     public TextAnnotationImageView(Context context) {
         super(context);
@@ -26,6 +27,10 @@ public class TextAnnotationImageView extends TextAnnotationView {
 
     public Bitmap getImageBitmap() {
         return ((BitmapDrawable) mainView.getDrawable()).getBitmap();
+    }
+
+    public int getImageResourceId() {
+        return imageResourceId;
     }
 
     @Override
@@ -49,12 +54,13 @@ public class TextAnnotationImageView extends TextAnnotationView {
         mainView.setImageDrawable(drawable);
     }
 
-    public void setImageResource(int res_id) {
-        mainView.setImageResource(res_id);
+    public void setImageResource(int resId) {
+        imageResourceId = resId;
+        mainView.setImageResource(resId);
     }
 
-    public void setOwnerId(String owner_id) {
-        ownerId = owner_id;
+    public void setOwnerId(String ownerId) {
+        this.ownerId = ownerId;
     }
 
 }

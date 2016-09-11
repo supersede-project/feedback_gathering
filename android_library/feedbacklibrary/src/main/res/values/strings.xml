@@ -4,33 +4,13 @@
     <string name="supersede_feedbacklibrary_feedback_activity_name">Feedback</string>
     <string name="supersede_feedbacklibrary_annotate_image_activity_name">Annotate Image</string>
 
-    <!-- Unique identifiers for the mechanisms -->
-    <string name="supersede_feedbacklibrary_textID">TEXT_TYPE</string>
-    <string name="supersede_feedbacklibrary_ratingID">RATING_TYPE</string>
-    <string name="supersede_feedbacklibrary_screenshotID">SCREENSHOT_TYPE</string>
-    <string name="supersede_feedbacklibrary_audioID">AUDIO_TYPE</string>
-
-    <!-- Various -->
-    <string name="supersede_feedbacklibrary_sendconfirmation_text">By sending the feedback, you agree with the terms and conditions.</string>
-    <string name="supersede_feedbacklibrary_sendbutton_text">Send feedback</string>
-    <string name="supersede_feedbacklibrary_remove_string">Remove</string>
-    <string name="supersede_feedbacklibrary_off_string">Off</string>
-    <string name="supersede_feedbacklibrary_on_string">On</string>
-    <string name="supersede_feedbacklibrary_yes_string">Yes</string>
-    <string name="supersede_feedbacklibrary_no_string">No</string>
-    <string name="supersede_feedbacklibrary_ok_string">OK</string>
-    <string name="supersede_feedbacklibrary_cancel_string">Cancel</string>
-    <string name="supersede_feedbacklibrary_loading_string">Loading. Please wait.</string>
-
-    <!-- Screenshot mechanism -->
-    <string name="supersede_feedbacklibrary_screenshotbutton_text">Screenshot</string>
-    <string name="supersede_feedbacklibrary_annotatebutton_text">Annotate</string>
-    <string name="supersede_feedbacklibrary_previewbutton_text">Preview</string>
-    <string name="supersede_feedbacklibrary_erasebutton_text">Erase</string>
-
     <!-- Category mechanism -->
     <string name="supersede_feedbacklibrary_single_option_dialog_title">Please select an option</string>
     <string name="supersede_feedbacklibrary_multiple_options_dialog_title">Please select one or multiple options</string>
+    <string name="supersede_feedbacklibrary_other_option_string">Other</string>
+    <string name="supersede_feedbacklibrary_other_options_string">Others</string>
+    <string name="supersede_feedbacklibrary_own_category_dialog_label">Category</string>
+    <string name="supersede_feedbacklibrary_own_category_dialog_hint">Please enter your own category</string>
 
     <!-- Image annotation-->
     <string name="supersede_feedbacklibrary_colorpickerbutton_text">Color Picker</string>
@@ -43,6 +23,9 @@
     <string name="supersede_feedbacklibrary_finishannotation_title">Finish annotation</string>
     <string name="supersede_feedbacklibrary_cancelannotation_title">Cancel annotation</string>
     <string name="supersede_feedbacklibrary_chosencolor_string">Chosen color</string>
+    <string name="supersede_feedbacklibrary_photo_capture_text">Take a photo</string>
+    <string name="supersede_feedbacklibrary_library_chooser_text">Choose from library</string>
+    <string name="supersede_feedbacklibrary_image_selection_dialog_title">Select an image</string>
     <string name="supersede_feedbacklibrary_crop_string">Crop</string>
     <string name="supersede_feedbacklibrary_sticker_dialog_title">Express your sentiment</string>
     <string name="supersede_feedbacklibrary_sticker_dialog_smiley_title">Smiley</string>
@@ -51,9 +34,32 @@
     <string name="supersede_feedbacklibrary_sticker_dialog_dissatisfied_title">Dissatisfied</string>
     <string name="supersede_feedbacklibrary_sticker_dialog_neutral_title">Neutral</string>
     <string name="supersede_feedbacklibrary_sticker_dialog_satisfied_title">Satisfied</string>
+    <string name="supersede_feedbacklibrary_text_annotation_dialog_label">Text annotation</string>
+    <string name="supersede_feedbacklibrary_text_annotation_dialog_hint">Please enter your text annotation</string>
+
+    <!-- Miscellaneous -->
+    <string name="supersede_feedbacklibrary_sendconfirmation_text">By sending the feedback, you agree with the terms and conditions.</string>
+    <string name="supersede_feedbacklibrary_sendbutton_text">Send feedback</string>
+    <string name="supersede_feedbacklibrary_remove_string">Remove</string>
+    <string name="supersede_feedbacklibrary_off_string">Off</string>
+    <string name="supersede_feedbacklibrary_on_string">On</string>
+    <string name="supersede_feedbacklibrary_yes_string">Yes</string>
+    <string name="supersede_feedbacklibrary_no_string">No</string>
+    <string name="supersede_feedbacklibrary_ok_string">OK</string>
+    <string name="supersede_feedbacklibrary_cancel_string">Cancel</string>
+    <string name="supersede_feedbacklibrary_discard_string">Discard</string>
+    <string name="supersede_feedbacklibrary_loading_string">Loading. Please wait.</string>
+    <string name="supersede_feedbacklibrary_error_text">Oops. Something went wrong!</string>
+    <string name="supersede_feedbacklibrary_success_text">Your feedback was successfully sent. Thank you!</string>
 
     <!-- Pull feedback -->
     <string name="supersede_feedbacklibrary_pull_feedback_question_string">Would you like to give feedback?</string>
+
+    <!-- Screenshot mechanism -->
+    <string name="supersede_feedbacklibrary_screenshotbutton_text">Screenshot</string>
+    <string name="supersede_feedbacklibrary_annotatebutton_text">Annotate</string>
+    <string name="supersede_feedbacklibrary_previewbutton_text">Preview</string>
+    <string name="supersede_feedbacklibrary_erasebutton_text">Erase</string>
 
     <!-- Overriding string resources in com.theartofdev.edmodo:android-image-cropper -->
     <string name="crop_image_menu_crop">@string/supersede_feedbacklibrary_crop_string</string>

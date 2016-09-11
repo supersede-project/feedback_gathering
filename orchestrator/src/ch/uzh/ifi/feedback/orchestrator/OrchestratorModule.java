@@ -2,6 +2,7 @@ package ch.uzh.ifi.feedback.orchestrator;
 
 import com.google.inject.AbstractModule;
 
+import ch.uzh.ifi.feedback.library.rest.Service.DatabaseConfiguration;
 import ch.uzh.ifi.feedback.library.rest.Service.DbResultParser;
 import ch.uzh.ifi.feedback.orchestrator.controllers.ApplicationController;
 import ch.uzh.ifi.feedback.orchestrator.controllers.ConfigurationController;
@@ -56,6 +57,7 @@ public class OrchestratorModule extends AbstractModule{
 	    bind(GeneralConfigurationValidator.class).to(GeneralConfigurationValidator.class);
 	    bind(MechanismValidator.class).to(MechanismValidator.class);
 	    bind(ParameterValidator.class).to(ParameterValidator.class);
+	    bind(DatabaseConfiguration.class).to(DatabaseConfiguration.class).asEagerSingleton();
 	}
 
 }

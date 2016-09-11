@@ -20,9 +20,9 @@ import javassist.NotFoundException;
 
 public abstract class ServiceBase<T> implements IDbService<T> {
 	
-	private Class<T> serviceClass;
-	private String tableName;
-	private String dbName;
+	protected String tableName;
+	protected String dbName;
+	protected Class<T> serviceClass;
 	private List<IDbService<?>> childServices;
 	private String selectedLanguage;
 	
@@ -63,7 +63,15 @@ public abstract class ServiceBase<T> implements IDbService<T> {
 	public T GetById(int id) throws SQLException, NotFoundException
 	{
 		Connection con = TransactionManager.createDatabaseConnection();
-		ResultSet result = CheckId(con, id);
+		String statement = String.format("SELECT * FROM %s.%s as t WHERE t.id = ? ;", dbName, tableName);
+		PreparedStatement s = con.prepareStatement(statement);
+		s.setInt(1, id);
+		ResultSet result = s.executeQuery();
+		if (!result.next())
+		{
+			throw new NotFoundException("Object with id '" + id +"' not found");
+		}
+		
 		T instance = null;
 		try {
 			instance = serviceClass.newInstance();
@@ -113,7 +121,7 @@ public abstract class ServiceBase<T> implements IDbService<T> {
 			try {
 				Field field = entry.getValue();
 				Object fieldValue = field.get(object);
-				if(fieldValue != null && !field.getName().toLowerCase().equals("id") && !field.isAnnotationPresent(DbIgnore.class))
+				if(fieldValue != null  && !field.isAnnotationPresent(DbIgnore.class))
 				{
 					statement += "`" +entry.getKey()+ "`";
 					statement += ", ";
@@ -151,28 +159,26 @@ public abstract class ServiceBase<T> implements IDbService<T> {
 	    return keys.getInt(1);
 	}
 	
-	public List<T> GetWhereEquals(List<String> attributeNames, List<Object> values) throws SQLException, NotFoundException
+	@Override
+	public List<T> GetWhere(List<Object> values, String...conditions) throws SQLException, NotFoundException
 	{
 		Connection con = TransactionManager.createDatabaseConnection();
-		
-		if(attributeNames.size() != values.size())
-			return null;
 		
 		String statement = 
 				  "SELECT * "
 				+ "FROM %s.%s as t ";
 		statement = String.format(statement, dbName, tableName);
-		statement += "WHERE t.%s = ? ";
+		statement += "WHERE %s ";
 		
-		for(int i=1; i<attributeNames.size(); i++)
+		for(int i=1; i<conditions.length; i++)
 		{
-			statement += "AND t.%s = ? ";
+			statement += "AND %s ";
 		}
 		statement += ";";
-		statement = String.format(statement, attributeNames.toArray());
+		statement = String.format(statement, (Object[])conditions);
 		
 		PreparedStatement s = con.prepareStatement(statement);
-		for(int i=0; i<values.size(); i++)
+		for(int i=0; i<values.size();i++)
 		{
 			s.setObject(i+1, values.get(i));
 		}
@@ -180,30 +186,15 @@ public abstract class ServiceBase<T> implements IDbService<T> {
 	
 		List<T> resultList = getList(result);
 		con.close();
+		
 		return resultList;
 	}
 	
-	protected List<T> GetAllFor(String foreignTableName, String foreignKeyName, int foreignKey) throws SQLException, NotFoundException
+	@Override
+	public boolean CheckId(int id) throws SQLException
 	{
 		Connection con = TransactionManager.createDatabaseConnection();
 		
-	    String statement = String.format(
-    		    "SELECT * "
-    		  + "FROM %s.%s as f "
-    		  + "JOIN %s.%s as t ON t.%s = f.id "
-    		  + "WHERE f.id = ? ;", dbName, foreignTableName, dbName, tableName, foreignKeyName);
-	    
-	    PreparedStatement s = con.prepareStatement(statement);
-	    s.setInt(1, foreignKey);
-	    ResultSet result = s.executeQuery();
-	   
-	    List<T> resultList = getList(result);
-	    con.close();
-	    return resultList;
-	}
-	
-	protected ResultSet CheckId(Connection con, int id) throws SQLException, NotFoundException
-	{
 		String statement = String.format("SELECT * FROM %s.%s as t WHERE t.id = ? ;", dbName, tableName);
 		PreparedStatement s = con.prepareStatement(statement);
 		s.setInt(1, id);
@@ -211,12 +202,12 @@ public abstract class ServiceBase<T> implements IDbService<T> {
 		ResultSet result = s.executeQuery();
 		
 		if(!result.next())
-			throw new NotFoundException("Table '" + tableName + "' does not contain an object with id " + id);
+			return false;
 		
-		return result;
+		return true;
 	}
 	
-	private List<T> getList(ResultSet result) throws SQLException
+	protected List<T> getList(ResultSet result) throws SQLException
 	{
 		List<T> list = new ArrayList<>();
 		while(result.next())

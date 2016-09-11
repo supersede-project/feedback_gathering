@@ -10,6 +10,10 @@ public interface IRestManager
 {
 	void Init(String packageName) throws Exception;
 	
+	<T> T GetInstance(Class<T> clazz);
+	
+	<T> T GetSingleton(Class<T> clazz);
+	
 	default void Get(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
 		try{

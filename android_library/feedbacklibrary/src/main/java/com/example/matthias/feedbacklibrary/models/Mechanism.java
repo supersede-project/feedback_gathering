@@ -9,16 +9,17 @@ import java.util.List;
  * Mechanism model
  */
 public abstract class Mechanism implements Serializable {
+    public static final String ATTACHMENT_TYPE = "ATTACHMENT_TYPE";
     public static final String AUDIO_TYPE = "AUDIO_TYPE";
     public static final String CATEGORY_TYPE = "CATEGORY_TYPE";
     public static final String RATING_TYPE = "RATING_TYPE";
     public static final String SCREENSHOT_TYPE = "SCREENSHOT_TYPE";
     public static final String TEXT_TYPE = "TEXT_TYPE";
 
-    private boolean isActive;
     private boolean canBeActivated;
-    private String type;
+    private boolean isActive;
     private int order;
+    private String type;
 
     public Mechanism(String type, MechanismConfigurationItem item) {
         this.isActive = item.isActive();

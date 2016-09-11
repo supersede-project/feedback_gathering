@@ -51,8 +51,21 @@ import retrofit2.converter.gson.GsonConverterFactory;
  * Class with various helper methods
  */
 public class Utils {
-    public static final int PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 123;
+    // Image annotation
+    public static final String EXTRA_KEY_ALL_STICKER_ANNOTATIONS = "allStickerAnnotations";
+    public static final String EXTRA_KEY_ALL_TEXT_ANNOTATIONS = "allTextAnnotations";
+    public static final String EXTRA_KEY_ANNOTATED_IMAGE_PATH_WITHOUT_STICKERS = "annotatedImagePathWithoutStickers";
+    public static final String EXTRA_KEY_ANNOTATED_IMAGE_PATH_WITH_STICKERS = "annotatedImagePathWithStickers";
+    public static final String EXTRA_KEY_HAS_STICKER_ANNOTATIONS = "hasStickerAnnotations";
+    public static final String EXTRA_KEY_HAS_TEXT_ANNOTATIONS = "hasTextAnnotations";
+    public static final String EXTRA_KEY_IMAGE_PATCH = "imagePath";
+    public static final String EXTRA_KEY_MECHANISM_VIEW_ID = "mechanismViewID";
     public static final String SCREENSHOTS_DIR_NAME = "Screenshots";
+    public static final String SEPARATOR = "::;;::;;";
+    public static final String TEXT_ANNOTATION_COUNTER_MAXIMUM = "textAnnotationCounterMaximum";
+
+    // Storage permission
+    public static final int PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 123;
 
     /**
      * @param input the input value
