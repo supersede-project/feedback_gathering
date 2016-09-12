@@ -5,7 +5,8 @@
     "feedback_submit_button_title": "Feedback abschicken",
     "mandatory_default_text": "Bitte füllen Sie das Feld aus",
     "back": "zurück",
-    "validationMaxLengthErrorMessage": "Die maximale Länge des Feldes ist {{ maxLength }}! Sie haben {{ currentLength }} Zeichen eingegeben."
+    "validation_max_length_error_message": "Die maximale Länge des Feldes ist {{ maxLength }}! Sie haben {{ currentLength }} Zeichen eingegeben.",
+    "discard_feedback": "Feedback verwerfen"
   },
   "text": {
     "text_type_text_clear": "Texteingabe löschen"

@@ -26,7 +26,7 @@ define(["require", "exports", 'i18next'], function (require, exports, i18n) {
             }
             if (!validMaxLength) {
                 this.addClass('invalid');
-                var errorMessageMaxLength = i18n.t('general.validationMaxLengthErrorMessage', {
+                var errorMessageMaxLength = i18n.t('general.validation_max_length_error_message', {
                     maxLength: maxLength,
                     currentLength: content.length
                 });

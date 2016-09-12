@@ -341,6 +341,15 @@ export var feedbackPluginModule = function ($, window, document) {
             });
         }
 
+        container.find('.discard-feedback').on('click', function() {
+            if(configuration.dialogId == 'pushConfiguration') {
+                dialog.dialog("close");
+            } else if(configuration.dialogId == 'pullConfiguration') {
+                pullDialog.dialog("close");
+            }
+            resetPlugin(configuration);
+        });
+
         for(var categoryMechanism of categoryMechanisms) {
             categoryMechanism.coordinateOwnInputAndRadioBoxes();
         }

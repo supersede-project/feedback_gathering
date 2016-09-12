@@ -109,17 +109,16 @@
                 {{/each}}
 
                 {{#compare reviewButtonPosition "bottom" operator="==="}}
-                    <button class="button feedback-dialog-forward navigation-button">{{t "general.review_feedback" }}</button>
-                    <div class="clearfix"></div>
+                    <button class="button pull-right feedback-dialog-forward navigation-button">{{t "general.review_feedback" }}</button>
                 {{/compare}}
                 {{#compare reviewButtonPosition undefined operator="==="}}
-                    <button class="button feedback-dialog-forward navigation-button">{{t "general.review_feedback" }}</button>
-                    <div class="clearfix"></div>
+                    <button class="button pull-right feedback-dialog-forward navigation-button">{{t "general.review_feedback" }}</button>
                 {{/compare}}
                 {{#compare reviewButtonPosition null operator="==="}}
-                    <button class="button feedback-dialog-forward navigation-button">{{t "general.review_feedback" }}</button>
-                    <div class="clearfix"></div>
+                    <button class="button pull-right feedback-dialog-forward navigation-button">{{t "general.review_feedback" }}</button>
                 {{/compare}}
+
+                <a href="#" class="discard-feedback">{{t "general.discard_feedback" }}</a>
                 <div class="clearfix"></div>
             </article>
             <article data-feedback-page="2" class="feedback-page">

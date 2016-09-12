@@ -483,3 +483,22 @@ button.screenshot-operation {
     }
   }
 }
+
+.pull-right {
+  float: right;
+  display: inline-block;
+}
+
+a.discard-feedback {
+  float: left;
+  display: inline-block;
+  color: $dialogTitlebarColor;
+  text-decoration: none;
+  margin-top: 7px;
+  font-size: 14px;
+
+  &:hover {
+    color: $dialogTitlebarColor;
+    text-decoration: underline;
+  }
+}

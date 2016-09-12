@@ -215,6 +215,15 @@ define(["require", "exports", './config', '../views/pagination_container', '../v
                     textarea.val('');
                 });
             }
+            container.find('.discard-feedback').on('click', function () {
+                if (configuration.dialogId == 'pushConfiguration') {
+                    dialog.dialog("close");
+                }
+                else if (configuration.dialogId == 'pullConfiguration') {
+                    pullDialog.dialog("close");
+                }
+                resetPlugin(configuration);
+            });
             for (var _a = 0, categoryMechanisms_1 = categoryMechanisms; _a < categoryMechanisms_1.length; _a++) {
                 var categoryMechanism = categoryMechanisms_1[_a];
                 categoryMechanism.coordinateOwnInputAndRadioBoxes();
