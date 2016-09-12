@@ -310,11 +310,7 @@ define(["require", "exports", './config', '../views/pagination_container', '../v
             feedbackButton = this;
             this.options = $.extend({}, $.fn.feedbackPlugin.defaults, options);
             var currentOptions = this.options;
-            var resources = {
-                en: { translation: require('json!../locales/en/translation.json') },
-                de: { translation: require('json!../locales/de/translation.json') }
-            };
-            i18n_1.I18nHelper.initializeI18n(resources, this.options);
+            i18n_1.I18nHelper.initializeI18n(this.options);
             var applicationService = new application_service_1.ApplicationService();
             applicationService.retrieveApplication(config_1.applicationId, function (application) {
                 if (application.state === null || application.state === 0) {
@@ -335,7 +331,8 @@ define(["require", "exports", './config', '../views/pagination_container', '../v
         $.fn.feedbackPlugin.defaults = {
             'color': '#fff',
             'lang': 'en',
-            'backgroundColor': '#b3cd40'
+            'backgroundColor': '#b3cd40',
+            'distPath': 'dist/'
         };
     };
     (function ($, window, document) {

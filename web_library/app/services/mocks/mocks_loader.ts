@@ -20,11 +20,13 @@ export var readJSON = function (url, base:string = '') {
 
         else {
             console.error('readJSON', url, xhr.statusText);
+            return null;
         }
     };
 
     xhr.onerror = function (e) {
         console.error('readJSON', url, xhr.statusText);
+        return null;
     };
 
     xhr.send(null);

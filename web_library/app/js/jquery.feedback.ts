@@ -460,12 +460,8 @@ export var feedbackPluginModule = function ($, window, document) {
         feedbackButton = this;
         this.options = $.extend({}, $.fn.feedbackPlugin.defaults, options);
         var currentOptions = this.options;
-        var resources = {
-            en: {translation: require('json!../locales/en/translation.json')},
-            de: {translation: require('json!../locales/de/translation.json')}
-        };
 
-        I18nHelper.initializeI18n(resources, this.options);
+        I18nHelper.initializeI18n(this.options);
 
         // loadDataHere to trigger pull if necessary
         var applicationService = new ApplicationService();
@@ -492,7 +488,8 @@ export var feedbackPluginModule = function ($, window, document) {
     $.fn.feedbackPlugin.defaults = {
         'color': '#fff',
         'lang': 'en',
-        'backgroundColor': '#b3cd40'
+        'backgroundColor': '#b3cd40',
+        'distPath': 'dist/'
     };
 
 };
