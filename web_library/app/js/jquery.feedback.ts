@@ -272,6 +272,12 @@ export var feedbackPluginModule = function ($, window, document) {
                 close: function () {
                     dialogObject.dialog("close");
                     active = false;
+                },
+                create: function(event, ui) {
+                    var widget = $(this).dialog("widget");
+                    $(".ui-dialog-titlebar-close span", widget)
+                        .removeClass("ui-icon-closethick")
+                        .addClass("ui-icon-minusthick");
                 }
             })
         );
