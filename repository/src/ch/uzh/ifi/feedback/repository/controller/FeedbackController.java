@@ -18,7 +18,7 @@ public class FeedbackController extends RestController<Feedback>{
 
 	@Inject
 	public FeedbackController(FeedbackService dbService) {
-		super(dbService);
+		super(dbService, null);
 	}
 	
 	@Path("/feedbacks")

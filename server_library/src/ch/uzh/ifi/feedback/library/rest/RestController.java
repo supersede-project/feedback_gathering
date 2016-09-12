@@ -36,7 +36,8 @@ public abstract class RestController<T extends IDbItem<T>> {
 	
 	public void Insert(T object) throws Exception
 	{
-		validator.Validate(object);
+		if (validator != null)
+			validator.Validate(object);
 		
 		TransactionManager.withTransaction((con) -> {
 			dbService.Insert(con, object);
@@ -45,8 +46,11 @@ public abstract class RestController<T extends IDbItem<T>> {
 	
 	public void Update(T object) throws Exception
 	{
-		T mergedObject = validator.Merge(object);
-		validator.Validate(mergedObject);
+		if(validator != null)
+		{
+			T mergedObject = validator.Merge(object);
+			validator.Validate(mergedObject);
+		}
 		
 		TransactionManager.withTransaction((con) -> {
 			dbService.Update(con, object);
