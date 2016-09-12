@@ -14,13 +14,14 @@ import ch.uzh.ifi.feedback.library.rest.annotations.PathParam;
 import ch.uzh.ifi.feedback.orchestrator.model.Configuration;
 import ch.uzh.ifi.feedback.orchestrator.serialization.ConfigurationSerializationService;
 import ch.uzh.ifi.feedback.orchestrator.services.ConfigurationService;
+import ch.uzh.ifi.feedback.orchestrator.validation.ConfigurationValidator;
 
 @Controller(Configuration.class)
 public class ConfigurationController extends RestController<Configuration>{
 
 	@Inject
-	public ConfigurationController(ConfigurationService dbService) {
-		super(dbService);
+	public ConfigurationController(ConfigurationService dbService, ConfigurationValidator validator) {
+		super(dbService, validator);
 	}
 	
 	@GET

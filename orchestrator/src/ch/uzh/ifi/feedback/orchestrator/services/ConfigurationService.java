@@ -40,7 +40,6 @@ public class ConfigurationService extends OrchestratorService<Configuration>{
 	public Configuration GetById(int id) throws SQLException, NotFoundException {
 
 		Configuration config = super.GetById(id);
-		//config.getFeedbackMechanisms().addAll(mechanismService.GetAllFor("configuration_id", id));
 		config.getFeedbackMechanisms().addAll(mechanismService.GetWhere(asList(id), "configurations_id = ?"));
 		if(config.getGeneralConfigurationId() != null)
 			config.setGeneralConfiguration(generalConfigurationService.GetById(config.getGeneralConfigurationId()));
@@ -54,7 +53,6 @@ public class ConfigurationService extends OrchestratorService<Configuration>{
 		List<Configuration> configurations = super.GetAll();
 		for(Configuration config : configurations)
 		{
-			//config.getFeedbackMechanisms().addAll(mechanismService.GetAllFor("configuration_id", config.getId()));
 			config.getFeedbackMechanisms().addAll(mechanismService.GetWhere(asList(config.getId()), "configurations_id = ?"));
 			if(config.getGeneralConfigurationId() != null)
 				config.setGeneralConfiguration(generalConfigurationService.GetById(config.getGeneralConfigurationId()));
@@ -101,10 +99,8 @@ public class ConfigurationService extends OrchestratorService<Configuration>{
 			if(mechanism.getId() == null)
 			{
 				mechanismService.Insert(con, mechanism);
-				//mechanismService.InsertFor(con, mechanism, "configuration_id", config.getId());
 			}else{
 				mechanismService.Update(con, mechanism);
-				//mechanismService.UpdateFor(con, mechanism, "configuration_id", config.getId());
 			}
 		}
 	}
@@ -126,7 +122,6 @@ public class ConfigurationService extends OrchestratorService<Configuration>{
 		{
 			mechanism.setConfigurationsid(config.getId());
 			mechanismService.Insert(con, mechanism);
-			//mechanismService.InsertFor(con, mechanism, "configuration_id", configId);
 		}
 		
 		return configId;

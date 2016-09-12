@@ -13,18 +13,20 @@ import javassist.NotFoundException;
 
 import static java.util.Arrays.asList;
 
-public class ValidatorBase<T extends IDbItem<T>> {
+public class ValidatorBase<T extends IDbItem<T>> implements IValidator<T> {
 	
 	private Class<?> clazz;
 	protected ServiceBase<T> dbService;
+	protected ValidationSerializer serializer;
 	
-	public ValidatorBase(Class<?> clazz, ServiceBase<T> service)
+	public ValidatorBase(Class<?> clazz, ServiceBase<T> service, ValidationSerializer serializer)
 	{
 		this.clazz = clazz;
 		this.dbService = service;
+		this.serializer = serializer;
 	}
 	
-	public ValidationResult Validate(T object) throws Exception
+	public ValidationResult Validate(T object) throws ValidationException, Exception
 	{
 		ValidationResult result = new ValidationResult();
 		

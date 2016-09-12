@@ -26,6 +26,10 @@ public class GeneralConfigurationSerializationService extends OrchestratorSerial
 	
 	public void SetNestedParameters(GeneralConfiguration config)
 	{
-		config.getParameters().stream().forEach(p -> parameterSerializationService.SetNestedParameters(p));
+		config.getParameters().stream().forEach(p -> 
+		{
+			if(p != null)
+				parameterSerializationService.SetNestedParameters(p);
+		});
 	}
 }

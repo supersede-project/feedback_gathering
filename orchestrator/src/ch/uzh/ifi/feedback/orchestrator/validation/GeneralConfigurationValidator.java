@@ -6,7 +6,9 @@ import java.util.List;
 import com.google.inject.Inject;
 
 import ch.uzh.ifi.feedback.library.rest.validation.ValidationError;
+import ch.uzh.ifi.feedback.library.rest.validation.ValidationException;
 import ch.uzh.ifi.feedback.library.rest.validation.ValidationResult;
+import ch.uzh.ifi.feedback.library.rest.validation.ValidationSerializer;
 import ch.uzh.ifi.feedback.library.rest.validation.ValidatorBase;
 import ch.uzh.ifi.feedback.orchestrator.model.FeedbackParameter;
 import ch.uzh.ifi.feedback.orchestrator.model.GeneralConfiguration;
@@ -17,8 +19,8 @@ public class GeneralConfigurationValidator extends ValidatorBase<GeneralConfigur
 	private ParameterValidator parameterValidator;
 	
 	@Inject
-	public GeneralConfigurationValidator(ParameterValidator parameterValidator, GeneralConfigurationService service) {
-		super(GeneralConfiguration.class, service);
+	public GeneralConfigurationValidator(ParameterValidator parameterValidator, GeneralConfigurationService service, ValidationSerializer serializer) {
+		super(GeneralConfiguration.class, service, serializer);
 		this.parameterValidator = parameterValidator;
 	}
 	
@@ -38,12 +40,11 @@ public class GeneralConfigurationValidator extends ValidatorBase<GeneralConfigur
 			}
 		}
 		result.GetValidationErrors().add(new ValidationError("Parameters", childrenErrors));
+		
+		if(result.hasErrors())
+			throw new ValidationException(serializer.Serialize(result));
+		
 		return result;
-		/*
-		for(FeedbackParameter param : object.getParameters())
-		{
-			parameterValidator.Validate(param, result);
-		}*/
 	}
 
 }

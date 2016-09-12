@@ -11,16 +11,36 @@ import ch.uzh.ifi.feedback.library.rest.annotations.POST;
 import ch.uzh.ifi.feedback.library.rest.annotations.PUT;
 import ch.uzh.ifi.feedback.library.rest.annotations.Path;
 import ch.uzh.ifi.feedback.library.rest.annotations.PathParam;
+import ch.uzh.ifi.feedback.library.rest.validation.ValidationException;
+import ch.uzh.ifi.feedback.library.transaction.TransactionManager;
+import ch.uzh.ifi.feedback.orchestrator.model.Application;
+import ch.uzh.ifi.feedback.orchestrator.model.Configuration;
 import ch.uzh.ifi.feedback.orchestrator.model.GeneralConfiguration;
 import ch.uzh.ifi.feedback.orchestrator.serialization.GeneralConfigurationSerializationService;
+import ch.uzh.ifi.feedback.orchestrator.services.ApplicationService;
+import ch.uzh.ifi.feedback.orchestrator.services.ConfigurationService;
 import ch.uzh.ifi.feedback.orchestrator.services.GeneralConfigurationService;
+import ch.uzh.ifi.feedback.orchestrator.validation.GeneralConfigurationValidator;
+
+import static java.util.Arrays.asList;
 
 @Controller(GeneralConfiguration.class)
-public class GeneralConfigurationController extends RestController<GeneralConfiguration> {
-
+public class GeneralConfigurationController extends RestController<GeneralConfiguration> 
+{
+	private ApplicationService applicationService;
+	private ConfigurationService configurationService;
+	
 	@Inject
-	public GeneralConfigurationController(GeneralConfigurationService dbService) {
-		super(dbService);
+	public GeneralConfigurationController(
+			GeneralConfigurationService dbService, 
+			ApplicationService applicationService,
+			ConfigurationService configurationService,
+			GeneralConfigurationValidator validator) 
+	{
+		super(dbService, validator);
+		
+		this.applicationService = applicationService;
+		this.configurationService = configurationService;
 	}
 	
 	@GET
@@ -38,17 +58,19 @@ public class GeneralConfigurationController extends RestController<GeneralConfig
 	}
 	
 	@GET
-	@Path("/applications/{app_id}/general_configurations")
-	public List<GeneralConfiguration> GetAllByApplication( @PathParam("app_id")Integer appId) throws Exception 
+	@Path("/applications/{app_id}/general_configuration")
+	public GeneralConfiguration GetByApplication( @PathParam("app_id")Integer appId) throws Exception 
 	{
-		return super.GetAllFor("applications_id", appId);
+		Application app = applicationService.GetById(appId);
+		return app.getGeneralConfiguration();
 	}
 	
 	@GET
-	@Path("/configurations/{config_id}/general_configurations")
-	public List<GeneralConfiguration> GetAllByConfiguration( @PathParam("config_id")Integer configId) throws Exception 
+	@Path("/configurations/{config_id}/general_configuration")
+	public GeneralConfiguration GetByConfiguration( @PathParam("config_id")Integer configId) throws Exception 
 	{
-		return super.GetAllFor("configurations_id", configId);
+		Configuration config = configurationService.GetById(configId);
+		return config.getGeneralConfiguration();
 	}
 	
 	@PUT
@@ -59,20 +81,40 @@ public class GeneralConfigurationController extends RestController<GeneralConfig
 		return config;
 	}
 	
-	/*
+
 	@POST
-	@Path("/applications/{app_id}/general_configurations")
+	@Path("/applications/{app_id}/general_configuration")
 	public GeneralConfiguration InsertGeneralConfigurationForApplication(@PathParam("app_id")Integer appId, GeneralConfiguration config) throws Exception 
 	{
-		super.InsertFor(config, "applications_id", appId);
+		Application app = applicationService.GetById(appId);
+		if(app.getGeneralConfiguration() != null)
+			throw new ValidationException("general configuration for application already set. Please perform update!");
+		
+		validator.Validate(config);
+		app.setGeneralConfiguration(config);
+		
+		TransactionManager.withTransaction((con) -> 
+			applicationService.Update(con, app)
+		);
+		
 		return config;
 	}
 	
 	@POST
-	@Path("/configurations/{config_id}/general_configurations")
+	@Path("/configurations/{config_id}/general_configuration")
 	public GeneralConfiguration InsertGeneralConfigurationForConfiguration(@PathParam("app_id")Integer configId, GeneralConfiguration config) throws Exception 
 	{
-		super.InsertFor(config, "configurations_id", configId);
+		Configuration configuration = configurationService.GetById(configId);
+		if(configuration.getGeneralConfiguration() != null)
+			throw new ValidationException("general configuration for configuration already set. Please perform update!");
+		
+		validator.Validate(config);
+		configuration.setGeneralConfiguration(config);
+		
+		TransactionManager.withTransaction((con) -> 
+			configurationService.Update(con, configuration)
+	    );
+		
 		return config;
-	}*/
+	}
 }

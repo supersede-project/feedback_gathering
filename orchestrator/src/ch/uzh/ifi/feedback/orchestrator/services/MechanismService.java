@@ -62,7 +62,8 @@ public class MechanismService extends OrchestratorService<FeedbackMechanism> {
 	    s2.setInt(2, mechanismId);
 	    s2.execute();
 	    
-	    stmt = String.format("INSERT INTO %s.configurations_mechanisms_history "
+	    stmt = String.format(
+	    		"INSERT INTO %s.configurations_mechanisms_history "
 	    		+ "(configurations_id, mechanisms_id, active, `order`, can_be_activated) "
 	    		+ "VALUES (?, ?, ?, ?, ?) ;", this.dbName);
 	    
@@ -122,7 +123,8 @@ public class MechanismService extends OrchestratorService<FeedbackMechanism> {
 		
 		Connection con = TransactionManager.createDatabaseConnection();
 		
-		String statement = String.format("SELECT t.mechanisms_id, t.name, cm.order, cm.active, cm.can_be_activated, t.created_at "
+		String statement = String.format(
+				"SELECT DISTINCT t.mechanisms_id, t.name, cm.order, cm.active, cm.can_be_activated, t.created_at "
 	    		 + "FROM %s.mechanisms_history as t "
 	    		 + "JOIN %s.configurations_mechanisms_history as cm ON cm.mechanisms_id = t.mechanisms_id ", this.dbName, this.dbName);
 		

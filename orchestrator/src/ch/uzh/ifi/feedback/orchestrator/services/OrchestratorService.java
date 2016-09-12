@@ -78,7 +78,10 @@ public class OrchestratorService<T extends IOrchestratorItem<T>> extends Service
 		List<Object> list = asList(id, selectedTimestamp, selectedTimestamp);
 		List<T> result = super.GetWhere(list, idCondition, getTimeCondition());
 		
-		return result.size() > 0 ? result.get(0) : null;
+		if(result.size() == 0)
+			throw new NotFoundException("Object with ID '" + id + "' not found!");
+		
+		return result.get(0);
 	}
 	
 	@Override

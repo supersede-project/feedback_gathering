@@ -7,6 +7,7 @@ import com.google.inject.Inject;
 
 import ch.uzh.ifi.feedback.library.rest.validation.ValidationError;
 import ch.uzh.ifi.feedback.library.rest.validation.ValidationResult;
+import ch.uzh.ifi.feedback.library.rest.validation.ValidationSerializer;
 import ch.uzh.ifi.feedback.library.rest.validation.ValidatorBase;
 import ch.uzh.ifi.feedback.orchestrator.model.Application;
 import ch.uzh.ifi.feedback.orchestrator.model.Configuration;
@@ -23,8 +24,9 @@ public class ApplicationValidator extends ValidatorBase<Application>{
 	public ApplicationValidator(
 			GeneralConfigurationValidator generalConfigurationValidator, 
 			ConfigurationValidator configurationValidator,
-			ApplicationService applicationService) {
-		super(Application.class, applicationService);
+			ApplicationService applicationService,
+			ValidationSerializer serializer) {
+		super(Application.class, applicationService, serializer);
 		this.generalConfigurationValidator = generalConfigurationValidator;
 		this.configurationValidator = configurationValidator;
 	}
