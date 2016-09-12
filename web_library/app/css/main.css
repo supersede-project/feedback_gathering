@@ -996,7 +996,8 @@ section.dialog-navigation {
   background-image: linear-gradient(top, #7f9718 0%, #7d970b 50%, #7c9009 52%, #617203 100%); }
 
 .navigation-button {
-  float: right; }
+  float: right;
+  display: block; }
 
 .navigation-button :active {
   position: relative;
@@ -1095,7 +1096,7 @@ button.screenshot-operation {
   button.screenshot-operation.active {
     padding: 7px 7px; }
   button.screenshot-operation.screenshot-draw-remove {
-    margin-top: 1px;
+    margin-top: 20px;
     max-width: none;
     width: auto; }
     button.screenshot-operation.screenshot-draw-remove:hover {

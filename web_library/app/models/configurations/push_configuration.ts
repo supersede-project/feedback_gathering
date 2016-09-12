@@ -1,8 +1,5 @@
-import {PullConfiguration} from './pull_configuration';
-import {ParameterInterface} from '../parameters/parameter_interface';
 import {Mechanism} from '../mechanisms/mechanism';
 import {Configuration} from './configuration';
-import {MechanismFactory} from '../mechanisms/mechanism_factory';
 import {GeneralConfiguration} from './general_configuration';
 import {configurationTypes} from '../../js/config';
 

@@ -23,6 +23,11 @@ define(["require", "exports", '../configurations/general_configuration', '../con
         Application.prototype.getPullConfigurations = function () {
             return this.configurations.filter(function (configuration) { return configuration.type === config_1.configurationTypes.pull; });
         };
+        Application.prototype.getContextForView = function () {
+            return {
+                reviewButtonPosition: this.generalConfiguration.getParameterValue('reviewButtonPosition')
+            };
+        };
         return Application;
     }());
     exports.Application = Application;

@@ -36,6 +36,7 @@ export var feedbackPluginModule = function ($, window, document) {
     var active = false;
     var application:Application;
     var feedbackButton;
+    var applicationContext;
 
     /**
      * @param applicationObject
@@ -43,14 +44,14 @@ export var feedbackPluginModule = function ($, window, document) {
      */
     var initApplication = function(applicationObject:Application) {
         application = applicationObject;
+        applicationContext = application.getContextForView();
 
         resetMessageView();
         initPushMechanisms(application.getPushConfiguration(), application.generalConfiguration);
 
-        var alreadyTriggeredOne = false;
-
         feedbackButton.attr('title', application.generalConfiguration.getParameterValue('quickInfo'));
 
+        var alreadyTriggeredOne = false;
         for(var pullConfiguration of shuffle(application.getPullConfigurations())) {
             alreadyTriggeredOne = initPullConfiguration(pullConfiguration, application.generalConfiguration, alreadyTriggeredOne);
         }
@@ -68,6 +69,8 @@ export var feedbackPluginModule = function ($, window, document) {
      */
     var initPushMechanisms = function (configuration, generalConfiguration:GeneralConfiguration) {
         var context = configuration.getContextForView();
+        // merge of contexts
+        context = $.extend({}, applicationContext, context);
 
         var pageNavigation = new PageNavigation(configuration, $('#' + pushConfigurationDialogId));
         dialog = initTemplate(dialogTemplate, pushConfigurationDialogId, context, configuration, pageNavigation, generalConfiguration);
@@ -88,7 +91,11 @@ export var feedbackPluginModule = function ($, window, document) {
         if(!alreadyTriggeredOne && configuration.shouldGetTriggered()) {
             configuration.wasTriggered();
             var pageNavigation = new PageNavigation(configuration, $('#' + pullConfigurationDialogId));
+
             var context = configuration.getContextForView();
+            // merge of contexts
+            context = $.extend({}, applicationContext, context);
+
             pullDialog = initTemplate(pullDialogTemplate, pullConfigurationDialogId, context, configuration, pageNavigation, generalConfiguration);
             var delay = 0;
             if(configuration.generalConfiguration.getParameterValue('delay')) {

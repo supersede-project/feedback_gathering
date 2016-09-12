@@ -37,4 +37,14 @@ export class Application {
     getPullConfigurations(): PullConfiguration[] {
         return <PullConfiguration[]>this.configurations.filter(configuration => configuration.type === configurationTypes.pull);
     }
+
+    /**
+     * @returns any
+     *  Context object
+     */
+    getContextForView() {
+        return {
+            reviewButtonPosition: this.generalConfiguration.getParameterValue('reviewButtonPosition')
+        };
+    }
 }

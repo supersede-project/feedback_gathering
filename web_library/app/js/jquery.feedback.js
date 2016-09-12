@@ -9,12 +9,14 @@ define(["require", "exports", './config', '../views/pagination_container', '../v
         var active = false;
         var application;
         var feedbackButton;
+        var applicationContext;
         var initApplication = function (applicationObject) {
             application = applicationObject;
+            applicationContext = application.getContextForView();
             resetMessageView();
             initPushMechanisms(application.getPushConfiguration(), application.generalConfiguration);
-            var alreadyTriggeredOne = false;
             feedbackButton.attr('title', application.generalConfiguration.getParameterValue('quickInfo'));
+            var alreadyTriggeredOne = false;
             for (var _i = 0, _a = array_shuffle_1.shuffle(application.getPullConfigurations()); _i < _a.length; _i++) {
                 var pullConfiguration = _a[_i];
                 alreadyTriggeredOne = initPullConfiguration(pullConfiguration, application.generalConfiguration, alreadyTriggeredOne);
@@ -22,6 +24,7 @@ define(["require", "exports", './config', '../views/pagination_container', '../v
         };
         var initPushMechanisms = function (configuration, generalConfiguration) {
             var context = configuration.getContextForView();
+            context = $.extend({}, applicationContext, context);
             var pageNavigation = new page_navigation_1.PageNavigation(configuration, $('#' + pushConfigurationDialogId));
             dialog = initTemplate(dialogTemplate, pushConfigurationDialogId, context, configuration, pageNavigation, generalConfiguration);
         };
@@ -31,6 +34,7 @@ define(["require", "exports", './config', '../views/pagination_container', '../v
                 configuration.wasTriggered();
                 var pageNavigation = new page_navigation_1.PageNavigation(configuration, $('#' + pullConfigurationDialogId));
                 var context = configuration.getContextForView();
+                context = $.extend({}, applicationContext, context);
                 pullDialog = initTemplate(pullDialogTemplate, pullConfigurationDialogId, context, configuration, pageNavigation, generalConfiguration);
                 var delay = 0;
                 if (configuration.generalConfiguration.getParameterValue('delay')) {

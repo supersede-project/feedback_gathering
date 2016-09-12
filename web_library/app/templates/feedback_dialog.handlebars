@@ -3,6 +3,11 @@
         <section class="pages-container">
             <article data-feedback-page="1" class="feedback-page">
 
+                {{#compare reviewButtonPosition "top" operator="==="}}
+                    <button class="button feedback-dialog-forward navigation-button">{{t "general.review_feedback" }}</button>
+                    <div class="clearfix"></div>
+                {{/compare}}
+
                 {{#each mechanisms}}
                     {{#compare type "CATEGORY_TYPE" operator="==="}}
                         {{> partials/category_mechanism}}
@@ -95,9 +100,26 @@
                             </section>
                         {{/if}}
                     {{/compare}}
+
+                    {{#compare ../reviewButtonPosition @index operator="==="}}
+                        <button class="button feedback-dialog-forward navigation-button">{{t "general.review_feedback" }}</button>
+                        <div class="clearfix"></div>
+                    {{/compare}}
+
                 {{/each}}
 
-                <button class="button feedback-dialog-forward navigation-button">{{t "general.review_feedback" }}</button>
+                {{#compare reviewButtonPosition "bottom" operator="==="}}
+                    <button class="button feedback-dialog-forward navigation-button">{{t "general.review_feedback" }}</button>
+                    <div class="clearfix"></div>
+                {{/compare}}
+                {{#compare reviewButtonPosition undefined operator="==="}}
+                    <button class="button feedback-dialog-forward navigation-button">{{t "general.review_feedback" }}</button>
+                    <div class="clearfix"></div>
+                {{/compare}}
+                {{#compare reviewButtonPosition null operator="==="}}
+                    <button class="button feedback-dialog-forward navigation-button">{{t "general.review_feedback" }}</button>
+                    <div class="clearfix"></div>
+                {{/compare}}
                 <div class="clearfix"></div>
             </article>
             <article data-feedback-page="2" class="feedback-page">
