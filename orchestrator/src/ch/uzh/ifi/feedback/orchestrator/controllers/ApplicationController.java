@@ -13,13 +13,14 @@ import ch.uzh.ifi.feedback.library.rest.annotations.PathParam;
 import ch.uzh.ifi.feedback.orchestrator.model.Application;
 import ch.uzh.ifi.feedback.orchestrator.serialization.ApplicationSerializationService;
 import ch.uzh.ifi.feedback.orchestrator.services.ApplicationService;
+import ch.uzh.ifi.feedback.orchestrator.validation.ApplicationValidator;
 
 @Controller(Application.class)
 public class ApplicationController extends OrchestratorController<Application> {
 
 	@Inject
-	public ApplicationController(ApplicationService dbService) {
-		super(dbService);
+	public ApplicationController(ApplicationService dbService, ApplicationValidator validator) {
+		super(dbService, validator);
 	}
 	
 	@GET

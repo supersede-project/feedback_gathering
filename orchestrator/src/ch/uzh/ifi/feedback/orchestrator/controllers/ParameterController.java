@@ -15,13 +15,14 @@ import ch.uzh.ifi.feedback.library.rest.annotations.PathParam;
 import ch.uzh.ifi.feedback.orchestrator.model.FeedbackParameter;
 import ch.uzh.ifi.feedback.orchestrator.serialization.ParameterSerializationService;
 import ch.uzh.ifi.feedback.orchestrator.services.ParameterService;
+import ch.uzh.ifi.feedback.orchestrator.validation.ParameterValidator;
 
 @Controller(FeedbackParameter.class)
 public class ParameterController extends RestController<FeedbackParameter> {
 	
 	@Inject
-	public ParameterController(ParameterService dbService) {
-		super(dbService);
+	public ParameterController(ParameterService dbService, ParameterValidator validator) {
+		super(dbService, validator);
 	}
 
 	@GET

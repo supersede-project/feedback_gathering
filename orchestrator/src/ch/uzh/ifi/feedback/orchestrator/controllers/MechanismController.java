@@ -14,13 +14,14 @@ import ch.uzh.ifi.feedback.library.rest.annotations.PathParam;
 import ch.uzh.ifi.feedback.orchestrator.model.FeedbackMechanism;
 import ch.uzh.ifi.feedback.orchestrator.serialization.MechanismSerializationService;
 import ch.uzh.ifi.feedback.orchestrator.services.MechanismService;
+import ch.uzh.ifi.feedback.orchestrator.validation.MechanismValidator;
 
 @Controller(FeedbackMechanism.class)
 public class MechanismController extends RestController<FeedbackMechanism> {
 
 	@Inject
-	public MechanismController(MechanismService dbService) {
-		super(dbService);
+	public MechanismController(MechanismService dbService, MechanismValidator validator) {
+		super(dbService, validator);
 	}
 
 	@GET
@@ -38,14 +39,14 @@ public class MechanismController extends RestController<FeedbackMechanism> {
 	}
 	
 	@GET
-	@Path("Configurations/{config_id}/mechanisms")
+	@Path("/configurations/{config_id}/mechanisms")
 	public List<FeedbackMechanism> GetAllByConfiguration( @PathParam("config_id")Integer configId) throws Exception 
 	{
 		return super.GetAllFor("configurations_id", configId);
 	}
 	
 	@PUT
-	@Path("Configurations/{config_id}/mechanisms")
+	@Path("/configurations/{config_id}/mechanisms")
 	public FeedbackMechanism UpdateMechanismForConfiguration(@PathParam("config_id")Integer configId, FeedbackMechanism mechanism) throws Exception 
 	{
 		mechanism.setConfigurationsid(configId);
@@ -54,7 +55,7 @@ public class MechanismController extends RestController<FeedbackMechanism> {
 	}
 	
 	@POST
-	@Path("Configurations/{config_id}/mechanisms")
+	@Path("/configurations/{config_id}/mechanisms")
 	public FeedbackMechanism InsertMechanismForConfiguration(@PathParam("config_id")Integer configId, FeedbackMechanism mechanism) throws Exception 
 	{
 		mechanism.setConfigurationsid(configId);

@@ -47,6 +47,7 @@ import ch.uzh.ifi.feedback.library.rest.annotations.PathParam;
 import ch.uzh.ifi.feedback.library.rest.annotations.Serialize;
 import ch.uzh.ifi.feedback.library.rest.serialization.ISerializationService;
 import ch.uzh.ifi.feedback.library.rest.validation.Validate;
+import ch.uzh.ifi.feedback.library.rest.validation.ValidationException;
 import ch.uzh.ifi.feedback.library.rest.validation.ValidationResult;
 import ch.uzh.ifi.feedback.library.rest.validation.ValidatorBase;
 import javassist.NotFoundException;
@@ -96,12 +97,13 @@ public class RestManager implements IRestManager {
 		for(Class<?> clazz : controllerAnnotated){
 			Class<?> parameterClass = clazz.getAnnotation(Controller.class).value();
 			
+			/*
 			if(parameterClass.isAnnotationPresent(Validate.class))
 			{
 				Validate annotation = parameterClass.getAnnotation(Validate.class);
 				Class<? extends ValidatorBase<?>> validatorClass = parameterClass.getAnnotation(Validate.class).value();
 				_validatorMap.put(parameterClass, validatorClass);
-			}
+			}*/
 			
 			if(parameterClass.isAnnotationPresent(Serialize.class))
 			{
@@ -225,6 +227,10 @@ public class RestManager implements IRestManager {
 			response.setStatus(400);
 			response.getWriter().append("Malformed Json: " + ex.getMessage());
 		}
+		else if(rootCause instanceof ValidationException){
+			response.setStatus(422);
+			response.getWriter().append(ex.getMessage());
+		}
 		else{
 			ex.printStackTrace();
 			throw new ServletException(ex);
@@ -293,31 +299,6 @@ public class RestManager implements IRestManager {
 			if(serializer != null)
 			{
 				Object object = serializer.Deserialize(request);
-				
-				Class<? extends ValidatorBase<?>> validatorClass = _validatorMap.get(handler.getSerializedParameterClass());
-				if(validatorClass != null)
-				{
-					ValidatorBase validator = _injector.getInstance(validatorClass);
-					
-					if(object instanceof IDbItem<?>)
-					{
-						if(method == HttpMethod.PUT)
-						{
-							//Merge object with original on update
-							object = validator.Merge((IDbItem)object);
-						}
-						ValidationResult result = validator.Validate((IDbItem<?>)object);
-						if(result.hasErrors())
-						{
-							response.setStatus(422);
-							response.getWriter().append(serializer.Serialize(result.GetValidationErrors()));
-							return;
-						}
-						
-					}else{
-						//Handle error when object not instance of IdbItem...
-					}
-				}
 				parameters.add(object);
 			}else{
 				parameters.add(GetRequestContent(request));

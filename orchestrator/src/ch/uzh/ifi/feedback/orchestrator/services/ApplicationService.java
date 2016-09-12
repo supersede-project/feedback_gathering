@@ -1,13 +1,11 @@
 package ch.uzh.ifi.feedback.orchestrator.services;
 
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.List;
 import com.google.inject.Inject;
 
 import ch.uzh.ifi.feedback.library.rest.Service.DatabaseConfiguration;
-import ch.uzh.ifi.feedback.library.rest.Service.ServiceBase;
 import ch.uzh.ifi.feedback.orchestrator.model.Application;
 import ch.uzh.ifi.feedback.orchestrator.model.Configuration;
 import ch.uzh.ifi.feedback.orchestrator.model.GeneralConfiguration;

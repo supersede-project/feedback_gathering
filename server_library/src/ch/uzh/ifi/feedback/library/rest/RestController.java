@@ -1,19 +1,24 @@
 package ch.uzh.ifi.feedback.library.rest;
 
 import java.util.List;
+
+import ch.uzh.ifi.feedback.library.rest.Service.IDbItem;
 import ch.uzh.ifi.feedback.library.rest.Service.IDbService;
-import ch.uzh.ifi.feedback.library.rest.serialization.ISerializationService;
+import ch.uzh.ifi.feedback.library.rest.validation.IValidator;
 import ch.uzh.ifi.feedback.library.transaction.TransactionManager;
+
 import static java.util.Arrays.asList;
 
 
-public abstract class RestController<T> {
+public abstract class RestController<T extends IDbItem<T>> {
 
 	protected IDbService<T> dbService;
+	protected IValidator<T> validator;
 	
-	public RestController(IDbService<T> dbService)
+	public RestController(IDbService<T> dbService, IValidator<T> validator)
 	{
 		this.dbService = dbService;
+		this.validator = validator;
 	}
 
 	public T GetById(int id) throws Exception {
@@ -31,6 +36,9 @@ public abstract class RestController<T> {
 	
 	public void Insert(T object) throws Exception
 	{
+		if (validator != null)
+			validator.Validate(object);
+		
 		TransactionManager.withTransaction((con) -> {
 			dbService.Insert(con, object);
 		});
@@ -38,6 +46,12 @@ public abstract class RestController<T> {
 	
 	public void Update(T object) throws Exception
 	{
+		if(validator != null)
+		{
+			T mergedObject = validator.Merge(object);
+			validator.Validate(mergedObject);
+		}
+		
 		TransactionManager.withTransaction((con) -> {
 			dbService.Update(con, object);
 		});
