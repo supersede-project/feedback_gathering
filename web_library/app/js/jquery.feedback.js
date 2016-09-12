@@ -91,14 +91,18 @@ define(["require", "exports", './config', '../views/pagination_container', '../v
             if (generalConfiguration.getParameterValue('dialogTitle') !== null && generalConfiguration.getParameterValue('dialogTitle') !== "") {
                 title = generalConfiguration.getParameterValue('dialogTitle');
             }
-            var dialog = initDialog($('#' + dialogId), title);
+            var modal = false;
+            if (generalConfiguration.getParameterValue('dialogModal') !== null && generalConfiguration.getParameterValue('dialogModal') !== "") {
+                modal = generalConfiguration.getParameterValue('dialogModal');
+            }
+            var dialog = initDialog($('#' + dialogId), title, modal);
             addEvents(dialogId, configuration);
             return dialog;
         };
         var initIntermediateDialogTemplate = function (template, dialogId, configuration, pullDialog, generalConfiguration) {
             var html = template({});
             $('body').append(html);
-            var dialog = initDialog($('#' + dialogId), generalConfiguration.getParameterValue('dialogTitle'));
+            var dialog = initDialog($('#' + dialogId), generalConfiguration.getParameterValue('dialogTitle'), true);
             $('#feedbackYes').on('click', function () {
                 dialog.dialog('close');
                 openDialog(pullDialog, configuration);
@@ -157,7 +161,7 @@ define(["require", "exports", './config', '../views/pagination_container', '../v
             screenshotMechanism.setScreenshotView(screenshotView);
             return screenshotView;
         };
-        var initDialog = function (dialogContainer, title) {
+        var initDialog = function (dialogContainer, title, modal) {
             var dialogObject = dialogContainer.dialog($.extend({}, config_1.dialogOptions, {
                 close: function () {
                     dialogObject.dialog("close");
@@ -165,6 +169,7 @@ define(["require", "exports", './config', '../views/pagination_container', '../v
                 }
             }));
             dialogObject.dialog('option', 'title', title);
+            dialogObject.dialog('option', 'modal', modal);
             return dialogObject;
         };
         var addEvents = function (containerId, configuration) {

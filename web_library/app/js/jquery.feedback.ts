@@ -157,7 +157,12 @@ export var feedbackPluginModule = function ($, window, document) {
             title = generalConfiguration.getParameterValue('dialogTitle');
         }
 
-        var dialog = initDialog($('#'+ dialogId), title);
+        var modal = false;
+        if(generalConfiguration.getParameterValue('dialogModal') !== null && generalConfiguration.getParameterValue('dialogModal') !== "") {
+            modal = generalConfiguration.getParameterValue('dialogModal');
+        }
+
+        var dialog = initDialog($('#'+ dialogId), title, modal);
         addEvents(dialogId, configuration);
         return dialog;
     };
@@ -167,7 +172,7 @@ export var feedbackPluginModule = function ($, window, document) {
         var html = template({});
         $('body').append(html);
 
-        var dialog = initDialog($('#'+ dialogId), generalConfiguration.getParameterValue('dialogTitle'));
+        var dialog = initDialog($('#'+ dialogId), generalConfiguration.getParameterValue('dialogTitle'), true);
         $('#feedbackYes').on('click', function() {
             dialog.dialog('close');
             openDialog(pullDialog, configuration);
@@ -256,10 +261,12 @@ export var feedbackPluginModule = function ($, window, document) {
      *  Element that contains the dialog content
      * @param title
      *  The title of the dialog
+     * @param modal
+     *  whether the dialog behaviour is modal or not
      *
      * Initializes the dialog on a given element and opens it.
      */
-    var initDialog = function (dialogContainer, title) {
+    var initDialog = function (dialogContainer, title, modal) {
         var dialogObject = dialogContainer.dialog(
             $.extend({}, dialogOptions, {
                 close: function () {
@@ -269,6 +276,7 @@ export var feedbackPluginModule = function ($, window, document) {
             })
         );
         dialogObject.dialog('option', 'title', title);
+        dialogObject.dialog('option', 'modal', modal);
         return dialogObject;
     };
 
