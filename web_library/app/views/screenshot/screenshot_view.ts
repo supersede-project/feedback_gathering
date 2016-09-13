@@ -37,9 +37,10 @@ export class ScreenshotView {
     canvasOriginalWidth:number;
     canvasOriginalHeight:number;
     container:JQuery;
+    distPath:string;
 
     constructor(screenshotMechanism:Mechanism, screenshotPreviewElement:JQuery, screenshotCaptureButton:JQuery,
-                elementToCapture:JQuery, container:JQuery, elementsToHide?:any) {
+                elementToCapture:JQuery, container:JQuery, distPath:string, elementsToHide?:any) {
         this.screenshotMechanism = screenshotMechanism;
         this.screenshotPreviewElement = screenshotPreviewElement;
         this.screenshotCaptureButton = screenshotCaptureButton;
@@ -48,6 +49,7 @@ export class ScreenshotView {
         this.elementsToHide = elementsToHide;
         this.canvasState = null;
         this.canvasStates = [];
+        this.distPath = distPath;
         this.screenshotViewDrawing = new ScreenshotViewDrawing();
         this.addCaptureEventToButton();
     }
@@ -385,8 +387,8 @@ export class ScreenshotView {
             var imgSrc = jQuery(this).find('img').attr('src');
             var img = jQuery('<img src="' + imgSrc + '" class="sticker" />');
             var stickerContainer = jQuery('<div class="sticker-container text">' +
-                '<a class="edit"><img src="dist/img/ic_mode_edit_black_shadow_24px.png" /></a>' +
-                '<a class="remove"><img src="dist/img/ic_remove_circle_red_shadow_24px.png" /></a>' +
+                '<a class="edit"><img src="' + myThis.distPath + 'img/ic_mode_edit_black_shadow_24px.png" /></a>' +
+                '<a class="remove"><img src="' + myThis.distPath + 'img/ic_remove_circle_red_shadow_24px.png" /></a>' +
                 '<article class="text-container">' +
                 '<textarea placeholder="Your text"></textarea>' +
                 '</article>' +
@@ -432,8 +434,8 @@ export class ScreenshotView {
 
             var stickerContainer = jQuery('<div class="sticker-container text-2">' +
                 '<textarea placeholder="Your text"></textarea>' +
-                '<a class="remove"><img src="dist/img/ic_remove_circle_red_shadow_24px.png" /></a>' +
-                '<a class="color" style="background-image: url(\'dist/img/screenshot_button_background.png\');"><i class="material-icons">format_color_text</i></a>' +
+                '<a class="remove"><img src="' + myThis.distPath + 'img/ic_remove_circle_red_shadow_24px.png" /></a>' +
+                '<a class="color" style="background-image: url(\'' + myThis.distPath + 'img/screenshot_button_background.png\');"><i class="material-icons">format_color_text</i></a>' +
                 '</div>');
 
             var textarea = stickerContainer.find('textarea');
@@ -517,7 +519,7 @@ export class ScreenshotView {
 
             var imgSrc = jQuery(this).find('img').attr('src');
             var img = jQuery('<img src="' + imgSrc + '" class="sticker" />');
-            var stickerContainer = jQuery('<div class="sticker-container"><a class="remove"><img src="dist/img/ic_remove_circle_red_shadow_24px.png" /></a></div>');
+            var stickerContainer = jQuery('<div class="sticker-container"><a class="remove"><img src="' + myThis.distPath + 'img/ic_remove_circle_red_shadow_24px.png" /></a></div>');
 
             stickerContainer.css('width', '60px');
             stickerContainer.css('height', 'auto');

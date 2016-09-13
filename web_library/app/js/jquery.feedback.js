@@ -10,6 +10,7 @@ define(["require", "exports", './config', '../views/pagination_container', '../v
         var application;
         var feedbackButton;
         var applicationContext;
+        var distPath;
         var initApplication = function (applicationObject) {
             application = applicationObject;
             applicationContext = application.getContextForView();
@@ -23,8 +24,7 @@ define(["require", "exports", './config', '../views/pagination_container', '../v
             }
         };
         var initPushMechanisms = function (configuration, generalConfiguration) {
-            var context = configuration.getContextForView();
-            context = $.extend({}, applicationContext, context);
+            var context = prepareTemplateContext(configuration.getContextForView());
             var pageNavigation = new page_navigation_1.PageNavigation(configuration, $('#' + pushConfigurationDialogId));
             dialog = initTemplate(dialogTemplate, pushConfigurationDialogId, context, configuration, pageNavigation, generalConfiguration);
         };
@@ -33,8 +33,7 @@ define(["require", "exports", './config', '../views/pagination_container', '../v
             if (!alreadyTriggeredOne && configuration.shouldGetTriggered()) {
                 configuration.wasTriggered();
                 var pageNavigation = new page_navigation_1.PageNavigation(configuration, $('#' + pullConfigurationDialogId));
-                var context = configuration.getContextForView();
-                context = $.extend({}, applicationContext, context);
+                var context = prepareTemplateContext(configuration.getContextForView());
                 pullDialog = initTemplate(pullDialogTemplate, pullConfigurationDialogId, context, configuration, pageNavigation, generalConfiguration);
                 var delay = 0;
                 if (configuration.generalConfiguration.getParameterValue('delay')) {
@@ -84,7 +83,7 @@ define(["require", "exports", './config', '../views/pagination_container', '../v
                 if (attachmentMechanism.active) {
                     var sectionSelector = "#attachmentMechanism" + attachmentMechanism.id;
                     var dropArea = $('' + sectionSelector).find('.drop-area');
-                    dropArea.fileUpload();
+                    dropArea.fileUpload(distPath);
                 }
             }
             var title = "Feedback";
@@ -157,7 +156,7 @@ define(["require", "exports", './config', '../views/pagination_container', '../v
             var container = $('#' + containerId);
             var dialogSelector = $('[aria-describedby="' + containerId + '"]');
             var screenshotPreview = container.find('.screenshot-preview'), screenshotCaptureButton = container.find('button.take-screenshot'), elementToCapture = $('#page-wrapper_1'), elementsToHide = [$('.ui-widget-overlay.ui-front'), dialogSelector];
-            var screenshotView = new screenshot_view_1.ScreenshotView(screenshotMechanism, screenshotPreview, screenshotCaptureButton, elementToCapture, container, elementsToHide);
+            var screenshotView = new screenshot_view_1.ScreenshotView(screenshotMechanism, screenshotPreview, screenshotCaptureButton, elementToCapture, container, distPath, elementsToHide);
             screenshotMechanism.setScreenshotView(screenshotView);
             return screenshotView;
         };
@@ -303,6 +302,13 @@ define(["require", "exports", './config', '../views/pagination_container', '../v
             }
             dialog.dialog('open');
         };
+        var prepareTemplateContext = function (context) {
+            var contextWithApplicationContext = $.extend({}, applicationContext, context);
+            var pluginContext = {
+                'distPath': distPath
+            };
+            return $.extend({}, pluginContext, contextWithApplicationContext);
+        };
         var resetMessageView = function () {
             $('.server-response').removeClass('error').removeClass('success').text('');
         };
@@ -310,6 +316,7 @@ define(["require", "exports", './config', '../views/pagination_container', '../v
             feedbackButton = this;
             this.options = $.extend({}, $.fn.feedbackPlugin.defaults, options);
             var currentOptions = this.options;
+            distPath = currentOptions.distPath;
             i18n_1.I18nHelper.initializeI18n(this.options);
             var applicationService = new application_service_1.ApplicationService();
             applicationService.retrieveApplication(config_1.applicationId, function (application) {

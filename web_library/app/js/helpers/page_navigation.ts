@@ -69,47 +69,46 @@ export class PageNavigation {
                     // TODO get this 965 from the actual html
                     var ratio = 965*0.4 / screenshotMechanism.screenshotView.screenshotPreviewElement.width();
 
-                    jQuery('section#screenshotMechanism' + screenshotMechanism.id + ' .sticker-container').each(function() {
-                        var x = $(this).position().left;
-                        var y = $(this).position().top;
-                        var width = $(this).width();
-                        var height = $(this).height();
-
-                        var reviewClone = $(this).clone();
-                        reviewClone.removeClass('ui-resizable');
-                        reviewClone.removeClass('ui-draggable');
-                        reviewClone.removeClass('ui-draggable-handle');
-                        reviewClone.css('left', x * ratio + "px");
-                        reviewClone.css('top', y * ratio + "px");
-                        reviewClone.css('width', width * ratio + "px");
-                        reviewClone.css('height', height * ratio + "px");
-                        reviewClone.css('padding', "0");
-                        reviewClone.addClass('sticker-container-review');
-                        reviewClone.find('a').remove();
-
-                        // adjust sizes of text
-                        if($(this).hasClass('text-2')) {
-                            var textarea = $(this).find('textarea');
-                            var text = textarea.val();
-                            var oldFontSize = textarea.css('font-size');
-                            var newFontSize = ratio * parseInt(oldFontSize);
-                            reviewClone.find('textarea').val(text).css('font-size', newFontSize + 'px').prop("disabled", true);
-                        }
-
-                        // text review on hover
-                        if($(this).hasClass('text') || $(this).hasClass('text-2')) {
-                            var text = $(this).find('textarea').val();
-                            reviewClone.on('mouseover mouseenter', function() {
-                                $('.screenshot-text-review').text(text).css('display', 'inline');
-                            }).on('mouseleave', function() {
-                                $('.screenshot-text-review').text("").css('display', 'none');
-                            });
-                        }
-
-                        screenshotReviewElement.append(reviewClone);
-                    });
-                    // TODO on hover show overlay text
                 }
+                jQuery('section#screenshotMechanism' + screenshotMechanism.id + ' .sticker-container').each(function() {
+                    var x = $(this).position().left;
+                    var y = $(this).position().top;
+                    var width = $(this).width();
+                    var height = $(this).height();
+
+                    var reviewClone = $(this).clone();
+                    reviewClone.removeClass('ui-resizable');
+                    reviewClone.removeClass('ui-draggable');
+                    reviewClone.removeClass('ui-draggable-handle');
+                    reviewClone.css('left', x * ratio + "px");
+                    reviewClone.css('top', y * ratio + "px");
+                    reviewClone.css('width', width * ratio + "px");
+                    reviewClone.css('height', height * ratio + "px");
+                    reviewClone.css('padding', "0");
+                    reviewClone.addClass('sticker-container-review');
+                    reviewClone.find('a').remove();
+
+                    // adjust sizes of text
+                    if($(this).hasClass('text-2')) {
+                        var textarea = $(this).find('textarea');
+                        var text = textarea.val();
+                        var oldFontSize = textarea.css('font-size');
+                        var newFontSize = ratio * parseInt(oldFontSize);
+                        reviewClone.find('textarea').val(text).css('font-size', newFontSize + 'px').prop("disabled", true);
+                    }
+
+                    // text review on hover
+                    if($(this).hasClass('text') || $(this).hasClass('text-2')) {
+                        var text = $(this).find('textarea').val();
+                        reviewClone.on('mouseover mouseenter', function() {
+                            $('.screenshot-text-review').text(text).css('display', 'inline');
+                        }).on('mouseleave', function() {
+                            $('.screenshot-text-review').text("").css('display', 'none');
+                        });
+                    }
+
+                    screenshotReviewElement.append(reviewClone);
+                });
             }
 
             for (var categoryMechanism of categoryMechanisms) {

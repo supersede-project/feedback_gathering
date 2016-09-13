@@ -37,7 +37,7 @@ define(["require", "exports", './screenshot_view', '../../js/config', 'handlebar
             var screenshotPreviewElement = container.find('.screenshot-preview');
             var screenshotCaptureButton = container.find('.take-screenshot');
             var elementToCapture = $('#capture');
-            screenshotView = new screenshot_view_1.ScreenshotView(screenshotMechanism, screenshotPreviewElement, screenshotCaptureButton, elementToCapture, container, [$('.hide-1'), $('#hide2')]);
+            screenshotView = new screenshot_view_1.ScreenshotView(screenshotMechanism, screenshotPreviewElement, screenshotCaptureButton, elementToCapture, container, 'dist/', [$('.hide-1'), $('#hide2')]);
         });
         it('should find the required elements in the html', function () {
             expect(screenshotView.screenshotCaptureButton).toBeDefined();

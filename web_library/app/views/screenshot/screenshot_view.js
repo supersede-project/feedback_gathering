@@ -12,7 +12,7 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
     var black = "#000000";
     var red = "#FF0000";
     var ScreenshotView = (function () {
-        function ScreenshotView(screenshotMechanism, screenshotPreviewElement, screenshotCaptureButton, elementToCapture, container, elementsToHide) {
+        function ScreenshotView(screenshotMechanism, screenshotPreviewElement, screenshotCaptureButton, elementToCapture, container, distPath, elementsToHide) {
             this.screenshotMechanism = screenshotMechanism;
             this.screenshotPreviewElement = screenshotPreviewElement;
             this.screenshotCaptureButton = screenshotCaptureButton;
@@ -21,6 +21,7 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
             this.elementsToHide = elementsToHide;
             this.canvasState = null;
             this.canvasStates = [];
+            this.distPath = distPath;
             this.screenshotViewDrawing = new screenshot_view_drawing_1.ScreenshotViewDrawing();
             this.addCaptureEventToButton();
         }
@@ -307,8 +308,8 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
                 var imgSrc = jQuery(this).find('img').attr('src');
                 var img = jQuery('<img src="' + imgSrc + '" class="sticker" />');
                 var stickerContainer = jQuery('<div class="sticker-container text">' +
-                    '<a class="edit"><img src="dist/img/ic_mode_edit_black_shadow_24px.png" /></a>' +
-                    '<a class="remove"><img src="dist/img/ic_remove_circle_red_shadow_24px.png" /></a>' +
+                    '<a class="edit"><img src="' + myThis.distPath + 'img/ic_mode_edit_black_shadow_24px.png" /></a>' +
+                    '<a class="remove"><img src="' + myThis.distPath + 'img/ic_remove_circle_red_shadow_24px.png" /></a>' +
                     '<article class="text-container">' +
                     '<textarea placeholder="Your text"></textarea>' +
                     '</article>' +
@@ -347,8 +348,8 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
                 myThis.drawingMode = textMode2;
                 var stickerContainer = jQuery('<div class="sticker-container text-2">' +
                     '<textarea placeholder="Your text"></textarea>' +
-                    '<a class="remove"><img src="dist/img/ic_remove_circle_red_shadow_24px.png" /></a>' +
-                    '<a class="color" style="background-image: url(\'dist/img/screenshot_button_background.png\');"><i class="material-icons">format_color_text</i></a>' +
+                    '<a class="remove"><img src="' + myThis.distPath + 'img/ic_remove_circle_red_shadow_24px.png" /></a>' +
+                    '<a class="color" style="background-image: url(\'' + myThis.distPath + 'img/screenshot_button_background.png\');"><i class="material-icons">format_color_text</i></a>' +
                     '</div>');
                 var textarea = stickerContainer.find('textarea');
                 var colorLink = stickerContainer.find('a.color');
@@ -420,7 +421,7 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
                 myThis.drawingMode = stickingMode;
                 var imgSrc = jQuery(this).find('img').attr('src');
                 var img = jQuery('<img src="' + imgSrc + '" class="sticker" />');
-                var stickerContainer = jQuery('<div class="sticker-container"><a class="remove"><img src="dist/img/ic_remove_circle_red_shadow_24px.png" /></a></div>');
+                var stickerContainer = jQuery('<div class="sticker-container"><a class="remove"><img src="' + myThis.distPath + 'img/ic_remove_circle_red_shadow_24px.png" /></a></div>');
                 stickerContainer.css('width', '60px');
                 stickerContainer.css('height', 'auto');
                 stickerContainer.append(img);

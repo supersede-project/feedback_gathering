@@ -11,13 +11,15 @@ export class I18nHelper {
      *  Containing the key 'lang' to set the language
      *
      */
-    static initializeI18n = function(options) {
+    static initializeI18n = function(options, resources?) {
         var language = options.lang;
 
-        var resources = {};
-        resources[language] = {
-            translation: readJSON('dist/locales/' + language + '/translation.json')
-        };
+        if(resources == null || resources == undefined) {
+            var resources = {};
+            resources[language] = {
+                translation: readJSON(options.distPath + 'locales/' + language + '/translation.json')
+            };
+        }
 
         i18next.init({
             resources: resources,

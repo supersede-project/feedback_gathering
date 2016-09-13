@@ -1,9 +1,9 @@
 export interface JQuery {
-    fileUpload():JQuery;
+    fileUpload(distPath:string):JQuery;
 }
 
 export var fileUploadPluginModule = (function ($, window, document) {
-
+    var distPath;
     var dropArea;
     var fileInput;
     var fileTable;
@@ -32,13 +32,14 @@ export var fileUploadPluginModule = (function ($, window, document) {
             var fileLi = $('<tr>' +
                 '<td>' + files[i].name + '</td>' +
                 '<td>' + files[i].type + '</td>' +
-                '<td><a class="remove-file" data-index="' + i + '" href="#"><img src="dist/img/ic_delete_black_24dp_1x.png" /></a></td>' +
+                '<td><a class="remove-file" data-index="' + i + '" href="#"><img src="' + distPath + 'img/ic_delete_black_24dp_1x.png" /></a></td>' +
                 '</tr>');
             fileTable.append(fileLi);
         }
     };
 
-    $.fn.fileUpload = function () {
+    $.fn.fileUpload = function (distPathString:string) {
+        distPath = distPathString;
         dropArea = this;
         fileInput = this.find('input[type=file]');
         fileTable = this.parent('.attachment-type').find('table.current-files');

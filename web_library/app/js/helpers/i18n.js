@@ -3,12 +3,14 @@ define(["require", "exports", 'i18next', '../../services/mocks/mocks_loader'], f
     var I18nHelper = (function () {
         function I18nHelper() {
         }
-        I18nHelper.initializeI18n = function (options) {
+        I18nHelper.initializeI18n = function (options, resources) {
             var language = options.lang;
-            var resources = {};
-            resources[language] = {
-                translation: mocks_loader_1.readJSON('dist/locales/' + language + '/translation.json')
-            };
+            if (resources == null || resources == undefined) {
+                var resources = {};
+                resources[language] = {
+                    translation: mocks_loader_1.readJSON(options.distPath + 'locales/' + language + '/translation.json')
+                };
+            }
             i18next.init({
                 resources: resources,
                 debug: false,

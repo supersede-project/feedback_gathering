@@ -48,7 +48,7 @@ describe('Screenshot View', () => {
         var elementToCapture = $('#capture');
 
         screenshotView = new ScreenshotView(screenshotMechanism, screenshotPreviewElement, screenshotCaptureButton,
-            elementToCapture, container, [$('.hide-1'), $('#hide2')]);
+            elementToCapture, container, 'dist/', [$('.hide-1'), $('#hide2')]);
     });
 
     it('should find the required elements in the html', () => {

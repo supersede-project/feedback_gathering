@@ -37,6 +37,7 @@ export var feedbackPluginModule = function ($, window, document) {
     var application:Application;
     var feedbackButton;
     var applicationContext;
+    var distPath;
 
     /**
      * @param applicationObject
@@ -68,9 +69,7 @@ export var feedbackPluginModule = function ($, window, document) {
      * All events on the HTML have to be added after the template is appended to the body (if not using live binding).
      */
     var initPushMechanisms = function (configuration, generalConfiguration:GeneralConfiguration) {
-        var context = configuration.getContextForView();
-        // merge of contexts
-        context = $.extend({}, applicationContext, context);
+        var context = prepareTemplateContext(configuration.getContextForView());
 
         var pageNavigation = new PageNavigation(configuration, $('#' + pushConfigurationDialogId));
         dialog = initTemplate(dialogTemplate, pushConfigurationDialogId, context, configuration, pageNavigation, generalConfiguration);
@@ -92,9 +91,7 @@ export var feedbackPluginModule = function ($, window, document) {
             configuration.wasTriggered();
             var pageNavigation = new PageNavigation(configuration, $('#' + pullConfigurationDialogId));
 
-            var context = configuration.getContextForView();
-            // merge of contexts
-            context = $.extend({}, applicationContext, context);
+            var context = prepareTemplateContext(configuration.getContextForView());
 
             pullDialog = initTemplate(pullDialogTemplate, pullConfigurationDialogId, context, configuration, pageNavigation, generalConfiguration);
             var delay = 0;
@@ -148,7 +145,7 @@ export var feedbackPluginModule = function ($, window, document) {
             if(attachmentMechanism.active) {
                 var sectionSelector = "#attachmentMechanism" + attachmentMechanism.id;
                 var dropArea = $('' + sectionSelector).find('.drop-area');
-                dropArea.fileUpload();
+                dropArea.fileUpload(distPath);
             }
         }
 
@@ -250,7 +247,7 @@ export var feedbackPluginModule = function ($, window, document) {
             elementsToHide = [$('.ui-widget-overlay.ui-front'), dialogSelector];
         // TODO attention: circular dependency
         var screenshotView = new ScreenshotView(screenshotMechanism, screenshotPreview, screenshotCaptureButton,
-            elementToCapture, container, elementsToHide);
+            elementToCapture, container, distPath, elementsToHide);
 
         screenshotMechanism.setScreenshotView(screenshotView);
         return screenshotView;
@@ -443,6 +440,14 @@ export var feedbackPluginModule = function ($, window, document) {
         dialog.dialog('open');
     };
 
+    var prepareTemplateContext = function(context) {
+        var contextWithApplicationContext = $.extend({}, applicationContext, context);
+        var pluginContext = {
+            'distPath': distPath
+        };
+        return $.extend({}, pluginContext, contextWithApplicationContext);
+    };
+
     var resetMessageView = function () {
         $('.server-response').removeClass('error').removeClass('success').text('');
     };
@@ -460,6 +465,7 @@ export var feedbackPluginModule = function ($, window, document) {
         feedbackButton = this;
         this.options = $.extend({}, $.fn.feedbackPlugin.defaults, options);
         var currentOptions = this.options;
+        distPath = currentOptions.distPath;
 
         I18nHelper.initializeI18n(this.options);
 

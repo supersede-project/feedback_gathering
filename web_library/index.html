@@ -489,7 +489,9 @@ G&uuml;nter D. Alt, Journalist, ehemaliger Moderator bei ZDF WISO und Mitbegr&uu
             <script src="dist/jquery.feedback.min.js"></script>
             <script>
                 $(document).ready(function () {
-                    $('#feedbackEntryPoint').feedbackPlugin();
+                    $('#feedbackEntryPoint').feedbackPlugin({
+                        'distPath': 'dist/'
+                    });
                 });
             </script>
         </div>
