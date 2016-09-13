@@ -561,10 +561,10 @@ export class ScreenshotView {
                         '<a class="color" style="background-image: url(\'' + myThis.distPath + 'img/screenshot_button_background.png\');"><i class="material-icons">format_color_text</i></a>' +
                         '</div>');
 
-                    console.log(event);
-
-                    var offsetY = event.pageY - $(this).offset().top;
-                    var offsetX = event.pageX - $(this).offset().left;
+                    // TODO get this offsetCorrection somehow from the stickerClone size
+                    var offsetCorrection = 12;
+                    var offsetY = event.pageY - $(this).offset().top - offsetCorrection;
+                    var offsetX = event.pageX - $(this).offset().left - offsetCorrection;
 
                     stickerContainer.css('width', '60px');
                     stickerContainer.css('height', 'auto');

@@ -454,9 +454,9 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
                             '<a class="remove"><img src="' + myThis.distPath + 'img/ic_remove_circle_red_shadow_24px.png" /></a>' +
                             '<a class="color" style="background-image: url(\'' + myThis.distPath + 'img/screenshot_button_background.png\');"><i class="material-icons">format_color_text</i></a>' +
                             '</div>');
-                        console.log(event);
-                        var offsetY = event.pageY - $(this).offset().top;
-                        var offsetX = event.pageX - $(this).offset().left;
+                        var offsetCorrection = 12;
+                        var offsetY = event.pageY - $(this).offset().top - offsetCorrection;
+                        var offsetX = event.pageX - $(this).offset().left - offsetCorrection;
                         stickerContainer.css('width', '60px');
                         stickerContainer.css('height', 'auto');
                         stickerContainer.css('top', offsetY + 'px');
