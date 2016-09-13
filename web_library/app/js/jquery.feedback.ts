@@ -326,7 +326,7 @@ export var feedbackPluginModule = function ($, window, document) {
             var textarea = container.find('section#' + sectionSelector + ' textarea.text-type-text');
             var maxLength = textMechanism.getParameterValue('maxLength');
 
-            textarea.on('keyup focus', function () {
+            textarea.on('keyup focus paste', function () {
                 container.find('section#' + sectionSelector + ' span.text-type-max-length').text($(this).val().length + '/' + maxLength);
             });
 

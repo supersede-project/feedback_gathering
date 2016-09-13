@@ -205,7 +205,7 @@ define(["require", "exports", './config', '../views/pagination_container', '../v
                 var sectionSelector = "textMechanism" + textMechanism.id;
                 var textarea = container.find('section#' + sectionSelector + ' textarea.text-type-text');
                 var maxLength = textMechanism.getParameterValue('maxLength');
-                textarea.on('keyup focus', function () {
+                textarea.on('keyup focus paste', function () {
                     container.find('section#' + sectionSelector + ' span.text-type-max-length').text($(this).val().length + '/' + maxLength);
                 });
                 container.find('section#' + sectionSelector + ' .text-type-text-clear').on('click', function (event) {
