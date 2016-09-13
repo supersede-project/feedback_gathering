@@ -3,6 +3,9 @@ define(["require", "exports", 'i18next'], function (require, exports, i18n) {
     exports.validatePluginModule = (function ($, window, document) {
         $.fn.validate = function () {
             var content = this.val(), mandatory = this.data('mandatory'), defaultText = this.data('mandatory-default-text'), manualText = this.data('mandatory-manual-text'), maxLength = this.data('validation-max-length'), validMandatory = true, validMaxLength = true;
+            var showValidationError = function (errorMessage, element) {
+                element.after('<span class="feedback-form-error">' + errorMessage + '</span>');
+            };
             $('.feedback-form-error').remove();
             this.removeClass('invalid');
             if (mandatory && content === '') {
@@ -14,10 +17,10 @@ define(["require", "exports", 'i18next'], function (require, exports, i18n) {
             if (!validMandatory) {
                 this.addClass('invalid');
                 if (manualText === null || manualText === '') {
-                    this.after('<span class="feedback-form-error">' + defaultText + '</span>');
+                    showValidationError(defaultText, this);
                 }
                 else {
-                    this.after('<span class="feedback-form-error">' + manualText + '</span>');
+                    showValidationError(manualText, this);
                 }
                 var invalidElement = this;
                 $('html, body').animate({
@@ -30,7 +33,7 @@ define(["require", "exports", 'i18next'], function (require, exports, i18n) {
                     maxLength: maxLength,
                     currentLength: content.length
                 });
-                this.after('<span class="feedback-form-error">' + errorMessageMaxLength + '</span>');
+                showValidationError(errorMessageMaxLength, this);
                 var invalidElement = this;
                 $('html, body').animate({
                     scrollTop: invalidElement.offset().top

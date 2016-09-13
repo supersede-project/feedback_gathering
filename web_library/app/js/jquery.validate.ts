@@ -24,6 +24,9 @@ export var validatePluginModule = (function($, window, document) {
             maxLength = this.data('validation-max-length'),
             validMandatory = true,
             validMaxLength = true;
+        var showValidationError = function (errorMessage, element) {
+            element.after('<span class="feedback-form-error">' + errorMessage + '</span>');
+        };
 
         // reset
         $('.feedback-form-error').remove();
@@ -43,9 +46,9 @@ export var validatePluginModule = (function($, window, document) {
         if(!validMandatory) {
             this.addClass('invalid');
             if(manualText === null || manualText === '') {
-                this.after('<span class="feedback-form-error">' + defaultText + '</span>');
+                showValidationError(defaultText, this);
             } else {
-                this.after('<span class="feedback-form-error">' + manualText + '</span>');
+                showValidationError(manualText, this);
             }
 
             var invalidElement = this;
@@ -53,14 +56,14 @@ export var validatePluginModule = (function($, window, document) {
                 scrollTop: invalidElement.offset().top
             }, 500);
         }
+
         if(!validMaxLength) {
             this.addClass('invalid');
             var errorMessageMaxLength = i18n.t('general.validation_max_length_error_message', {
                 maxLength: maxLength,
                 currentLength: content.length
             });
-            
-            this.after('<span class="feedback-form-error">' + errorMessageMaxLength + '</span>');
+            showValidationError(errorMessageMaxLength, this);
 
             var invalidElement = this;
             $('html, body').animate({
