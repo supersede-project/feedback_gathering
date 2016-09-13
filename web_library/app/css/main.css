@@ -1060,6 +1060,10 @@ button.text-type-text-clear {
   display: none;
   margin-bottom: 10px;
   position: relative; }
+  .screenshot-preview .sticker-source {
+    z-index: 5000;
+    position: absolute;
+    cursor: move; }
 
 .screenshot-review {
   position: relative; }

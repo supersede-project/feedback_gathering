@@ -544,6 +544,55 @@ export class ScreenshotView {
             myThis.screenshotPreviewElement.append(stickerContainer);
         });
 
+        this.container.find('.sticker-source').draggable({
+            cursor: "crosshair",
+            revert: "invalid",
+            helper: "clone",
+            zIndex: 5000
+        });
+
+        this.screenshotPreviewElement.droppable({
+            drop: function(event:DragEvent, ui) {
+                if(!ui.helper.hasClass('sticker-container')) {
+                    var stickerClone = $(ui.helper).clone();
+
+                    var stickerContainer = jQuery('<div class="sticker-container">' +
+                        '<a class="remove"><img src="' + myThis.distPath + 'img/ic_remove_circle_red_shadow_24px.png" /></a>' +
+                        '<a class="color" style="background-image: url(\'' + myThis.distPath + 'img/screenshot_button_background.png\');"><i class="material-icons">format_color_text</i></a>' +
+                        '</div>');
+
+                    console.log(event);
+
+                    var offsetY = event.pageY - $(this).offset().top;
+                    var offsetX = event.pageX - $(this).offset().left;
+
+                    stickerContainer.css('width', '60px');
+                    stickerContainer.css('height', 'auto');
+                    stickerContainer.css('top', offsetY + 'px');
+                    stickerContainer.css('left', offsetX + 'px');
+                    stickerClone.css('top', 0);
+                    stickerClone.css('left', 0);
+                    stickerContainer.append(stickerClone);
+
+                    var containmentSelector = '#' + myThis.container.attr('id') + ' .screenshot-preview';
+
+                    stickerContainer.resizable({
+                        containment: containmentSelector
+                    });
+                    stickerContainer.draggable({
+                        cursor: "crosshair",
+                        containment: containmentSelector,
+                    });
+
+                    stickerContainer.find('a.remove').on('click', function () {
+                        jQuery(this).closest('.sticker-container').remove();
+                    });
+
+                    $(this).append(stickerContainer);
+                }
+            }
+        });
+
         this.container.find('.screenshot-operations').show();
     }
 
