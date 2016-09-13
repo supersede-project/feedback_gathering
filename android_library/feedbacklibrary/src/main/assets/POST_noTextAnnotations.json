@@ -1,0 +1,48 @@
+{
+  "applicationId": 8,
+  "attachmentFeedbacks": null,
+  "audioFeedbacks": null,
+  "categoryFeedbacks": [
+    {
+      "categories": [
+        {
+          "text": "Bug",
+          "categoryTypesId": 103
+        },
+        {
+          "text": null,
+          "categoryTypesId": 104
+        },
+        {
+          "text": null,
+          "categoryTypesId": 105
+        }
+      ],
+      "mechanismId": 15
+    }
+  ],
+  "configurationId": 8,
+  "language": "EN",
+  "ratingFeedbacks": [
+    {
+      "mechanismId": 10,
+      "rating": 0
+    }
+  ],
+  "screenshotFeedbacks": [
+    {
+      "textAnnotations": null,
+      "fileExtension": "png",
+      "mechanismId": 9,
+      "name": "Screenshot_2016913-215740491",
+      "part": "screenshot0"
+    }
+  ],
+  "textFeedbacks": [
+    {
+      "mechanismId": 7,
+      "text": "Ghjhj fgg"
+    }
+  ],
+  "userIdentification": "u8102390"
+}

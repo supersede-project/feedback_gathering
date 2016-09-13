@@ -11,23 +11,20 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.example.matthias.feedbacklibrary.API.feedbackAPI;
+import com.example.matthias.feedbacklibrary.configurations.Configuration;
 import com.example.matthias.feedbacklibrary.configurations.OrchestratorConfiguration;
+import com.example.matthias.feedbacklibrary.configurations.OrchestratorConfigurationItem;
 import com.example.matthias.feedbacklibrary.feedbacks.Feedback;
-import com.example.matthias.feedbacklibrary.configurations.FeedbackConfiguration;
 import com.example.matthias.feedbacklibrary.models.Mechanism;
-import com.example.matthias.feedbacklibrary.models.ScreenshotMechanism;
 import com.example.matthias.feedbacklibrary.utils.DialogUtils;
 import com.example.matthias.feedbacklibrary.utils.Utils;
 import com.example.matthias.feedbacklibrary.views.CategoryMechanismView;
@@ -36,18 +33,15 @@ import com.example.matthias.feedbacklibrary.views.RatingMechanismView;
 import com.example.matthias.feedbacklibrary.views.ScreenshotMechanismView;
 import com.example.matthias.feedbacklibrary.views.TextMechanismView;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
@@ -58,7 +52,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
- * The main activity where the feedback items are displayed
+ * The main activity where the feedback mechanisms are displayed.
  */
 public class FeedbackActivity extends AppCompatActivity implements ScreenshotMechanismView.OnImageChangedListener {
     public final static String ANNOTATED_IMAGE_NAME_WITHOUT_STICKERS = "annotatedImageWithoutStickers.png";
@@ -75,22 +69,25 @@ public class FeedbackActivity extends AppCompatActivity implements ScreenshotMec
     private final static int REQUEST_ANNOTATE = 12;
 
     private feedbackAPI fbAPI;
-    // Feedback configuration fetched from the orchestrator
-    private OrchestratorConfiguration configuration;
-    // Feedback configuration initialized from the previously fetched feedback configuration
-    private FeedbackConfiguration feedbackConfiguration;
-    // All mechanisms (including inactive ones) --> models
+    // Orchestrator configuration fetched from the orchestrator
+    private OrchestratorConfigurationItem orchestratorConfigurationItem;
+    // Orchestrator configuration initialized from the previously fetched orchestrator configuration
+    private OrchestratorConfiguration orchestratorConfiguration;
+    // Active configuration
+    private Configuration activeConfiguration;
+    // All mechanisms including inactive ones which represent the models
     private List<Mechanism> allMechanisms;
-    // All views representing active mechanisms --> views
+    // All views of active mechanisms which represent the views
     private List<MechanismView> allMechanismViews;
     // Image annotation
     private int tempMechanismViewId = -1;
     private String defaultImagePath;
-    private String userScreenshotChosenTask = "";
-    // General
+    // Pull configuration
     private boolean isPush;
     private int selectedPullConfigurationIndex;
+    // General
     private ProgressDialog progressDialog;
+    private String userScreenshotChosenTask = "";
 
     private void galleryIntent() {
         Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
@@ -104,27 +101,29 @@ public class FeedbackActivity extends AppCompatActivity implements ScreenshotMec
 
     /**
      * This method performs a GET request to feedback orchestrator in order to receive the configuration file (format JSON).
-     * If successful, it initializes the model and view.
+     * If successful, it initializes the models and views.
      */
     private void init() {
         Retrofit rtf = new Retrofit.Builder().baseUrl(feedbackAPI.endpoint).addConverterFactory(GsonConverterFactory.create()).build();
         fbAPI = rtf.create(feedbackAPI.class);
-        Call<OrchestratorConfiguration> result = null;
-        result = fbAPI.getConfiguration();
+        Call<OrchestratorConfigurationItem> result = fbAPI.getConfiguration();
 
         // Asynchronous call
         if (result != null) {
-            result.enqueue(new Callback<OrchestratorConfiguration>() {
+            result.enqueue(new Callback<OrchestratorConfigurationItem>() {
                 @Override
-                public void onFailure(Call<OrchestratorConfiguration> call, Throwable t) {
+                public void onFailure(Call<OrchestratorConfigurationItem> call, Throwable t) {
                 }
 
                 @Override
-                public void onResponse(Call<OrchestratorConfiguration> call, Response<OrchestratorConfiguration> response) {
-                    configuration = response.body();
-                    // Save the current configuration file under configDir/currentConfiguration.json
+                public void onResponse(Call<OrchestratorConfigurationItem> call, Response<OrchestratorConfigurationItem> response) {
+                    // TODO: Ask Florian if NULL values are serialized or left out
+                    orchestratorConfigurationItem = response.body();
+                    /**
+                     * Save the current configuration under {@link FeedbackActivity#CONFIGURATION_DIR}/{@link FeedbackActivity#JSON_CONFIGURATION_FILE_NAME}.
+                     */
                     Gson gson = new Gson();
-                    String jsonString = gson.toJson(configuration);
+                    String jsonString = gson.toJson(orchestratorConfigurationItem);
                     Utils.saveStringContentToInternalStorage(getApplicationContext(), CONFIGURATION_DIR, JSON_CONFIGURATION_FILE_NAME, jsonString, MODE_PRIVATE);
                     initModel();
                     initView();
@@ -136,12 +135,13 @@ public class FeedbackActivity extends AppCompatActivity implements ScreenshotMec
     }
 
     /**
-     * This method initializes the model.
+     * This method initializes the models.
      */
     private void initModel() {
-        if (configuration != null) {
-            feedbackConfiguration = new FeedbackConfiguration(configuration, isPush(), getSelectedPullConfigurationIndex());
-            allMechanisms = feedbackConfiguration.getAllCurrentMechanisms();
+        if (orchestratorConfigurationItem != null) {
+            orchestratorConfiguration = new OrchestratorConfiguration(orchestratorConfigurationItem, isPush(), getSelectedPullConfigurationIndex());
+            activeConfiguration = orchestratorConfiguration.getActiveConfiguration();
+            allMechanisms = activeConfiguration.getMechanisms();
         }
     }
 
@@ -150,17 +150,17 @@ public class FeedbackActivity extends AppCompatActivity implements ScreenshotMec
         Gson gson = new Gson();
 
         // For multiple category
-        //jsonString = Utils.readFileAsString("configuration_material_design_push_multiple_categories.json", getAssets());
+        //jsonString = Utils.readFileAsString("feedback_orchestrator_adapted_multiple_selection.json", getAssets());
         // For single category
-        jsonString = Utils.readFileAsString("configuration_material_design_push_single_category.json", getAssets());
-        configuration = gson.fromJson(jsonString, OrchestratorConfiguration.class);
+        jsonString = Utils.readFileAsString("feedback_orchestrator_adapted_single_selection.json", getAssets());
+        orchestratorConfigurationItem = gson.fromJson(jsonString, OrchestratorConfigurationItem.class);
 
         initModel();
         initView();
     }
 
     /**
-     * This method initializes the view.
+     * This method initializes the views.
      */
     private void initView() {
         allMechanismViews = new ArrayList<>();
@@ -289,9 +289,11 @@ public class FeedbackActivity extends AppCompatActivity implements ScreenshotMec
         if (!isPush && selectedPullConfigurationIndex != -1 && jsonString != null) {
             // The feedback activity is started on behalf of a triggered pull configuration
 
-            // Save the current configuration file under configDir/currentConfiguration.json
+            /**
+             * Save the current configuration under {@link FeedbackActivity#CONFIGURATION_DIR}/{@link FeedbackActivity#JSON_CONFIGURATION_FILE_NAME}.
+             */
             Utils.saveStringContentToInternalStorage(getApplicationContext(), CONFIGURATION_DIR, JSON_CONFIGURATION_FILE_NAME, jsonString, MODE_PRIVATE);
-            configuration = new Gson().fromJson(jsonString, OrchestratorConfiguration.class);
+            orchestratorConfigurationItem = new Gson().fromJson(jsonString, OrchestratorConfigurationItem.class);
             initModel();
             initView();
         } else {
@@ -403,9 +405,6 @@ public class FeedbackActivity extends AppCompatActivity implements ScreenshotMec
      * This method performs a POST request in order to send the feedback to the feedback repository.
      */
     public void sendButtonClicked(View view) {
-        //String screenShotImagePath = annotatedImagePath != null ? annotatedImagePath : "";
-        String screenShotImagePath = "dummy";
-
         // The mechanism models are updated with the view values
         for (MechanismView mechanismView : allMechanismViews) {
             mechanismView.updateModel();
@@ -414,20 +413,21 @@ public class FeedbackActivity extends AppCompatActivity implements ScreenshotMec
         final ArrayList<String> messages = new ArrayList<>();
         if (validateInput(allMechanisms, messages)) {
             Feedback feedback = new Feedback(allMechanisms);
-
-            Call<JsonObject> result;
-            feedback.setApplication(feedbackConfiguration.getApplication());
-            feedback.setUser(feedbackConfiguration.getUser());
-            feedback.setConfigVersion(feedbackConfiguration.getConfigVersion());
+            feedback.setApplicationId(orchestratorConfiguration.getId());
+            feedback.setConfigurationId(activeConfiguration.getId());
+            feedback.setLanguage("EN");
 
             // JSON string of feedback
-            Gson gson = new Gson();
+            GsonBuilder builder = new GsonBuilder();
+            builder.excludeFieldsWithoutExposeAnnotation();
+            // TODO: Ask Florian if NULL values should be serialized or left out
+            //builder.serializeNulls();
+            Gson gson = builder.create();
             Type feedbackType = new TypeToken<Feedback>() {
             }.getType();
             String feedbackJsonString = gson.toJson(feedback, feedbackType);
-            // Screenshot file
-            File imageFile = new File(screenShotImagePath);
 
+            /*
             // Only for demo purposes
             if (fbAPI == null) {
                 Retrofit rtf = new Retrofit.Builder().baseUrl(feedbackAPI.endpoint).addConverterFactory(GsonConverterFactory.create()).build();
@@ -436,6 +436,7 @@ public class FeedbackActivity extends AppCompatActivity implements ScreenshotMec
 
             RequestBody feedbackJsonPart = RequestBody.create(MediaType.parse("multipart/form-data"), feedbackJsonString);
             RequestBody feedbackScreenshotPart = RequestBody.create(MediaType.parse("multipart/form-data"), imageFile);
+            Call<JsonObject> result;
             if (!screenShotImagePath.equals("")) {
                 result = fbAPI.createFeedbackMultipart(feedbackScreenshotPart, feedbackJsonPart);
             } else {
@@ -460,6 +461,7 @@ public class FeedbackActivity extends AppCompatActivity implements ScreenshotMec
                     }
                 });
             }
+            */
         } else {
             DialogUtils.DataDialog d = DialogUtils.DataDialog.newInstance(messages);
             d.show(getFragmentManager(), "dataDialog");
@@ -467,30 +469,31 @@ public class FeedbackActivity extends AppCompatActivity implements ScreenshotMec
     }
 
     public void sendStub(View view) {
-        //String screenShotImagePath = annotatedImagePath != null ? annotatedImagePath : "";
-
         // The mechanism models are updated with the view values
         for (MechanismView mechanismView : allMechanismViews) {
             mechanismView.updateModel();
-        }
-        for (Mechanism mechanism : allMechanisms) {
-            if (mechanism.isActive() && mechanism instanceof ScreenshotMechanism) {
-                ScreenshotMechanism screenshotMechanism = (ScreenshotMechanism) mechanism;
-                System.out.println("path of annotated image == " + screenshotMechanism.getImagePath());
-                HashMap<Integer, String> allTextAnnotations = screenshotMechanism.getAllTextAnnotations();
-                if (allTextAnnotations != null) {
-                    for (Map.Entry<Integer, String> entry : allTextAnnotations.entrySet()) {
-                        System.out.println("key == " + entry.getKey() + " and value == " + entry.getValue());
-                    }
-                } else {
-                    System.out.println("allTextAnnotations is null");
-                }
-            }
         }
 
         final ArrayList<String> messages = new ArrayList<>();
         if (validateInput(allMechanisms, messages)) {
             System.out.println("Validation successful");
+
+            Feedback feedback = new Feedback(allMechanisms);
+            feedback.setApplicationId(orchestratorConfiguration.getId());
+            feedback.setConfigurationId(activeConfiguration.getId());
+            feedback.setLanguage("EN");
+            feedback.setUserIdentification("u8102390");
+
+            // JSON string of feedback
+            GsonBuilder builder = new GsonBuilder();
+            builder.excludeFieldsWithoutExposeAnnotation();
+            // TODO: Ask Florian if NULL values should be serialized or left out --> we should serialize also the null values (consistency!)
+            builder.serializeNulls();
+            Gson gson = builder.create();
+            Type feedbackType = new TypeToken<Feedback>() {
+            }.getType();
+            String feedbackJsonString = gson.toJson(feedback, feedbackType);
+            System.out.println(feedbackJsonString);
         } else {
             DialogUtils.DataDialog d = DialogUtils.DataDialog.newInstance(messages);
             d.show(getFragmentManager(), "dataDialog");

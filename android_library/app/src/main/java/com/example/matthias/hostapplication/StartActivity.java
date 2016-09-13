@@ -45,7 +45,7 @@ public class StartActivity extends AppCompatActivity {
                 public void onClick(View v) {
                     String jsonString;
                     jsonString = Utils.readFileAsString("configuration_material_design_pull_popup.json", getAssets());
-                    DialogUtils.FeedbackPopupDialog d = DialogUtils.FeedbackPopupDialog.newInstance(getResources().getString(com.example.matthias.feedbacklibrary.R.string.supersede_feedbacklibrary_pull_feedback_question_string), jsonString, 0);
+                    DialogUtils.PullFeedbackIntermediateDialog d = DialogUtils.PullFeedbackIntermediateDialog.newInstance(getResources().getString(com.example.matthias.feedbacklibrary.R.string.supersede_feedbacklibrary_pull_feedback_question_string), jsonString, 0);
                     d.show(getFragmentManager(), "feedbackPopupDialog");
                 }
             });

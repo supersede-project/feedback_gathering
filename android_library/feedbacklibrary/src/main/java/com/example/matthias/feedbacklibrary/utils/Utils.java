@@ -14,6 +14,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
@@ -21,9 +22,8 @@ import android.view.View;
 import com.example.matthias.feedbacklibrary.API.feedbackAPI;
 import com.example.matthias.feedbacklibrary.FeedbackActivity;
 import com.example.matthias.feedbacklibrary.R;
-import com.example.matthias.feedbacklibrary.configurations.OrchestratorConfiguration;
-import com.example.matthias.feedbacklibrary.configurations.PullConfiguration;
-import com.example.matthias.feedbacklibrary.configurations.PullConfigurationItem;
+import com.example.matthias.feedbacklibrary.configurations.ConfigurationItem;
+import com.example.matthias.feedbacklibrary.configurations.OrchestratorConfigurationItem;
 import com.google.gson.Gson;
 
 import java.io.BufferedReader;
@@ -38,7 +38,9 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import retrofit2.Call;
@@ -283,6 +285,7 @@ public class Utils {
      * @param quality            the quality
      * @return the absolute path to the directory where the image is stored
      */
+    @NonNull
     public static String saveBitmapToInternalStorage(Context applicationContext, String dirName, String imageName, Bitmap bitmapImage, int mode, Bitmap.CompressFormat format, int quality) {
         ContextWrapper cw = new ContextWrapper(applicationContext);
         File directory = cw.getDir(dirName, mode);
@@ -314,7 +317,6 @@ public class Utils {
         ContextWrapper cw = new ContextWrapper(applicationContext);
         File directory = cw.getDir(dirName, mode);
         File myPath = new File(directory, fileName);
-
         try {
             FileWriter out = new FileWriter(myPath);
             out.write(str);
@@ -324,7 +326,6 @@ public class Utils {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         return false;
     }
 
@@ -360,51 +361,67 @@ public class Utils {
     }
 
     /**
-     * This method triggers a pull feedback based on their respective probabilities.
-     * It should be called on startup of the main application.
+     * This method triggers a pull feedback based on their respective likelihoods
+     * and can be called anywhere in the main application where a pull feedback potentially needs to be triggered.
      *
      * @param activity the activity from where the feedback activity is launched
      */
     public static void triggerPotentialPullFeedback(final Activity activity) {
         Retrofit rtf = new Retrofit.Builder().baseUrl(feedbackAPI.endpoint).addConverterFactory(GsonConverterFactory.create()).build();
         feedbackAPI fbAPI = rtf.create(feedbackAPI.class);
-        Call<OrchestratorConfiguration> result;
-        result = fbAPI.getConfiguration();
+        Call<OrchestratorConfigurationItem> result = fbAPI.getConfiguration();
 
         // Asynchronous call
         if (result != null) {
-            result.enqueue(new Callback<OrchestratorConfiguration>() {
+            result.enqueue(new Callback<OrchestratorConfigurationItem>() {
                 @Override
-                public void onFailure(Call<OrchestratorConfiguration> call, Throwable t) {
+                public void onFailure(Call<OrchestratorConfigurationItem> call, Throwable t) {
                 }
 
                 @Override
-                public void onResponse(Call<OrchestratorConfiguration> call, Response<OrchestratorConfiguration> response) {
-                    OrchestratorConfiguration configuration = response.body();
+                public void onResponse(Call<OrchestratorConfigurationItem> call, Response<OrchestratorConfigurationItem> response) {
+                    OrchestratorConfigurationItem configuration = response.body();
                     if (configuration != null) {
-                        List<PullConfiguration> allPullConfigurations = new ArrayList<>();
-                        configuration = response.body();
-
-                        for (PullConfigurationItem item : configuration.getPullConfigurationItems()) {
-                            allPullConfigurations.add(new PullConfiguration(item));
+                        List<ConfigurationItem> configurationItems = configuration.getConfigurationItems();
+                        List<Long> shuffleIds = new ArrayList<>();
+                        Map<Long, List<Map<String, Object>>> idParameters = new HashMap<>();
+                        for (ConfigurationItem configurationItem : configurationItems) {
+                            if (configurationItem.getType().equals("PULL")) {
+                                shuffleIds.add(configuration.getId());
+                                idParameters.put(configuration.getId(), configurationItem.getGeneralConfigurationItem().getParameters());
+                            }
                         }
 
                         Random rnd = new Random(System.nanoTime());
-                        Collections.shuffle(allPullConfigurations, rnd);
-                        for (int i = 0; i < allPullConfigurations.size(); ++i) {
-                            if (!(rnd.nextDouble() > allPullConfigurations.get(i).getLikelihood())) {
+                        Collections.shuffle(shuffleIds, rnd);
+                        for (int i = 0; i < shuffleIds.size(); ++i) {
+                            double likelihood = -1;
+                            boolean showIntermediateDialog = true;
+                            for (Map<String, Object> parameter : idParameters.get(shuffleIds.get(i))) {
+                                String key = (String) parameter.get("key");
+                                // Likelihood
+                                if (key.equals("likelihood")) {
+                                    likelihood = (((Double) parameter.get("value")).floatValue());
+                                }
+                                // Intermediate dialog
+                                if (key.equals("showIntermediateDialog")) {
+                                    showIntermediateDialog = (Utils.intToBool(((Double) parameter.get("value")).intValue()));
+                                }
+                            }
+
+                            if (!(rnd.nextDouble() > likelihood)) {
                                 Intent intent = new Intent(activity, FeedbackActivity.class);
 
                                 String jsonString = new Gson().toJson(configuration);
                                 intent.putExtra(FeedbackActivity.JSON_CONFIGURATION_STRING, jsonString);
                                 intent.putExtra(FeedbackActivity.IS_PUSH_STRING, false);
-                                intent.putExtra(FeedbackActivity.SELECTED_PULL_CONFIGURATION_INDEX_STRING, i);
-                                if (!allPullConfigurations.get(i).isShowPopupDialog()) {
+                                intent.putExtra(FeedbackActivity.SELECTED_PULL_CONFIGURATION_INDEX_STRING, shuffleIds.get(i));
+                                if (!showIntermediateDialog) {
                                     // Start the feedback activity without asking the user
                                     activity.startActivity(intent);
                                 } else {
                                     // Ask the user if (s)he would like to give feedback or not
-                                    DialogUtils.FeedbackPopupDialog d = DialogUtils.FeedbackPopupDialog.newInstance(activity.getResources().getString(R.string.supersede_feedbacklibrary_pull_feedback_question_string), jsonString, i);
+                                    DialogUtils.PullFeedbackIntermediateDialog d = DialogUtils.PullFeedbackIntermediateDialog.newInstance(activity.getResources().getString(R.string.supersede_feedbacklibrary_pull_feedback_question_string), jsonString, shuffleIds.get(i));
                                     d.show(activity.getFragmentManager(), "feedbackPopupDialog");
                                 }
                             }

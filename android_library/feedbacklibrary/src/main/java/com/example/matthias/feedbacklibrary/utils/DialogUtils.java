@@ -25,13 +25,13 @@ public class DialogUtils {
      *
      * @param context              the context
      * @param title                the title of the dialog
-     * @param cancelOnTouchOutisde cancelOnTouchOutside
+     * @param cancelOnTouchOutside cancelOnTouchOutside
      * @return the progress dialog
      */
-    public static ProgressDialog createProgressDialog(Context context, String title, boolean cancelOnTouchOutisde) {
+    public static ProgressDialog createProgressDialog(Context context, String title, boolean cancelOnTouchOutside) {
         ProgressDialog progressDialog = new ProgressDialog(context);
         progressDialog.setTitle(title);
-        progressDialog.setCanceledOnTouchOutside(cancelOnTouchOutisde);
+        progressDialog.setCanceledOnTouchOutside(cancelOnTouchOutside);
         return progressDialog;
     }
 
@@ -66,15 +66,15 @@ public class DialogUtils {
     }
 
     /**
-     * Dialog for starting the pull feedback.
+     * Dialog asking the user if (s)he wants to give feedback.
      */
-    public static class FeedbackPopupDialog extends DialogFragment {
-        public static FeedbackPopupDialog newInstance(String message, String jsonString, int selectedPullConfigurationIndex) {
-            FeedbackPopupDialog f = new FeedbackPopupDialog();
+    public static class PullFeedbackIntermediateDialog extends DialogFragment {
+        public static PullFeedbackIntermediateDialog newInstance(String message, String jsonString, long selectedPullConfigurationIndex) {
+            PullFeedbackIntermediateDialog f = new PullFeedbackIntermediateDialog();
             Bundle args = new Bundle();
             args.putString("message", message);
             args.putString("jsonString", jsonString);
-            args.putInt("selectedPullConfigurationIndex", selectedPullConfigurationIndex);
+            args.putLong("selectedPullConfigurationIndex", selectedPullConfigurationIndex);
             f.setArguments(args);
             return f;
         }

@@ -1,0 +1,57 @@
+{
+  "applicationId": 8,
+  "attachmentFeedbacks": null,
+  "audioFeedbacks": null,
+  "categoryFeedbacks": [
+    {
+      "categories": [
+        {
+          "text": null,
+          "categoryTypesId": 103
+        },
+        {
+          "text": "Feature Request",
+          "categoryTypesId": 104
+        },
+        {
+          "text": null,
+          "categoryTypesId": 105
+        }
+      ],
+      "mechanismId": 15
+    }
+  ],
+  "configurationId": 8,
+  "language": "EN",
+  "ratingFeedbacks": [
+    {
+      "mechanismId": 10,
+      "rating": 5
+    }
+  ],
+  "screenshotFeedbacks": [
+    {
+      "textAnnotations": [
+        {
+          "referenceNumber": 1,
+          "text": "Cthvv"
+        },
+        {
+          "referenceNumber": 2,
+          "text": "FC hbuhb"
+        }
+      ],
+      "fileExtension": "png",
+      "mechanismId": 9,
+      "name": "1annotatedImageWithStickers",
+      "part": "screenshot0"
+    }
+  ],
+  "textFeedbacks": [
+    {
+      "mechanismId": 7,
+      "text": "Gcyv. Jvvu.  Kbib"
+    }
+  ],
+  "userIdentification": "u8102390"
+}

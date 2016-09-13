@@ -9,7 +9,7 @@ import java.util.Map;
 /**
  * Rating mechanism model
  */
-public class RatingMechanism extends Mechanism implements Serializable {
+public class RatingMechanism extends Mechanism {
     private String title;
     private String ratingIcon;
     private int maxRating;

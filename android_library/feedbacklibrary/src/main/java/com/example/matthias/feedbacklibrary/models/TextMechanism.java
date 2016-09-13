@@ -13,7 +13,7 @@ import java.util.Map;
 /**
  * Text mechanism model
  */
-public class TextMechanism extends Mechanism implements Serializable {
+public class TextMechanism extends Mechanism {
     private String title = "";
     private String hint = "";
     private String label = "";

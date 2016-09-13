@@ -1,6 +1,7 @@
 package com.example.matthias.feedbacklibrary.models;
 
 import com.example.matthias.feedbacklibrary.configurations.MechanismConfigurationItem;
+import com.example.matthias.feedbacklibrary.utils.Utils;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -10,7 +11,7 @@ import java.util.Map;
 /**
  * Screenshot mechanism model
  */
-public class ScreenshotMechanism extends Mechanism implements Serializable {
+public class ScreenshotMechanism extends Mechanism {
     private String title;
     private String defaultPicture;
 
@@ -22,6 +23,22 @@ public class ScreenshotMechanism extends Mechanism implements Serializable {
         initScreenshotMechanism(item);
     }
 
+    public HashMap<Integer, String> getAllTextAnnotationTexts() {
+        if (getAllTextAnnotations() != null) {
+            HashMap<Integer, String> returnValue = new HashMap<>();
+            for (Map.Entry<Integer, String> entry : getAllTextAnnotations().entrySet()) {
+                String split[] = entry.getValue().split(Utils.SEPARATOR);
+                if (split.length > 0) {
+                    returnValue.put(entry.getKey(), split[0]);
+                } else {
+                    System.out.println("error occured, i.e., split.length > 0 == false");
+                }
+            }
+            return returnValue;
+        }
+        return null;
+    }
+
     public HashMap<Integer, String> getAllTextAnnotations() {
         return allTextAnnotations;
     }
@@ -30,6 +47,11 @@ public class ScreenshotMechanism extends Mechanism implements Serializable {
         return defaultPicture;
     }
 
+    /**
+     * This method returns the path of the annotated image.
+     *
+     * @return the image path or null if there is no image
+     */
     public String getImagePath() {
         return imagePath;
     }

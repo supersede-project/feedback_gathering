@@ -1,6 +1,6 @@
 package com.example.matthias.feedbacklibrary.API;
 
-import com.example.matthias.feedbacklibrary.configurations.OrchestratorConfiguration;
+import com.example.matthias.feedbacklibrary.configurations.OrchestratorConfigurationItem;
 import com.google.gson.JsonObject;
 
 import okhttp3.RequestBody;
@@ -21,19 +21,19 @@ public interface feedbackAPI {
     // Test servlets:
     // http://ec2-54-175-37-30.compute-1.amazonaws.com/FeedbackConfiguration/material_design_push.json
     @GET("FeedbackConfiguration/material_design_push.json")
-    Call<OrchestratorConfiguration> getConfigurationPush();
+    Call<OrchestratorConfigurationItem> getConfigurationPush();
 
     // http://ec2-54-175-37-30.compute-1.amazonaws.com/FeedbackConfiguration/material_design_push_choice_active.json
     @GET("FeedbackConfiguration/material_design_push_choice_active.json")
-    Call<OrchestratorConfiguration> getConfigurationPushChoiceActive();
+    Call<OrchestratorConfigurationItem> getConfigurationPushChoiceActive();
 
     // http://ec2-54-175-37-30.compute-1.amazonaws.com/FeedbackConfiguration/material_design_pull_0_text.json
     @GET("FeedbackConfiguration/material_design_pull_0_text.json")
-    Call<OrchestratorConfiguration> getConfigurationPullText0();
+    Call<OrchestratorConfigurationItem> getConfigurationPullText0();
 
     // http://ec2-54-175-37-30.compute-1.amazonaws.com/FeedbackConfiguration/material_design_pull_1_text_rating.json
     @GET("FeedbackConfiguration/material_design_pull_1_text_rating.json")
-    Call<OrchestratorConfiguration> getConfigurationPullTextRating1();
+    Call<OrchestratorConfigurationItem> getConfigurationPullTextRating1();
 
     // Actual backend
     /**
@@ -41,8 +41,8 @@ public interface feedbackAPI {
      *
      * @return the configuration from the orchestrator
      */
-    @GET("feedback_orchestrator/example/configuration")
-    Call<OrchestratorConfiguration> getConfiguration();
+    @GET("feedback_orchestrator/en/applications/8")
+    Call<OrchestratorConfigurationItem> getConfiguration();
 
     /**
      * This methods makes a POST request to the feedback repository without an image.
