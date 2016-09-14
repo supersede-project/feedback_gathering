@@ -359,6 +359,11 @@ button.screenshot-operation {
     background-repeat: no-repeat;
     padding: 8px;
 
+    &.bottom-left {
+      left: -24px;
+      right: auto;
+    }
+
     i.material-icons {
       font-size: 18px;
     }

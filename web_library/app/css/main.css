@@ -1143,6 +1143,9 @@ button.screenshot-operation {
     background-size: 36px;
     background-repeat: no-repeat;
     padding: 8px; }
+    .sticker-container a.color.bottom-left {
+      left: -24px;
+      right: auto; }
     .sticker-container a.color i.material-icons {
       font-size: 18px; }
   .sticker-container.text-2 {

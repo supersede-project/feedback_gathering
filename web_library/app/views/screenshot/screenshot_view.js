@@ -452,21 +452,35 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
                         var stickerClone = $(ui.helper).clone();
                         var stickerContainer = jQuery('<div class="sticker-container">' +
                             '<a class="remove"><img src="' + myThis.distPath + 'img/ic_remove_circle_red_shadow_24px.png" /></a>' +
-                            '<a class="color" style="background-image: url(\'' + myThis.distPath + 'img/screenshot_button_background.png\');"><i class="material-icons">format_color_text</i></a>' +
+                            '<a class="color bottom-left" style="background-image: url(\'' + myThis.distPath + 'img/screenshot_button_background.png\');"><i class="material-icons">format_color_fill</i></a>' +
                             '</div>');
-                        var offsetCorrection = 12;
+                        var offsetCorrection = 12 * 2;
                         var offsetY = event.pageY - $(this).offset().top - offsetCorrection;
                         var offsetX = event.pageX - $(this).offset().left - offsetCorrection;
-                        stickerContainer.css('width', '60px');
+                        stickerContainer.css('width', 'auto');
                         stickerContainer.css('height', 'auto');
                         stickerContainer.css('top', offsetY + 'px');
                         stickerContainer.css('left', offsetX + 'px');
+                        stickerContainer.css('padding', '20px');
                         stickerClone.css('top', 0);
                         stickerClone.css('left', 0);
+                        stickerClone.addClass('color-sticker');
                         stickerContainer.append(stickerClone);
                         var containmentSelector = '#' + myThis.container.attr('id') + ' .screenshot-preview';
+                        var initDiagonal;
+                        var initFontSize;
                         stickerContainer.resizable({
-                            containment: containmentSelector
+                            containment: containmentSelector,
+                            aspectRatio: true,
+                            create: function (event, ui) {
+                                initDiagonal = myThis.getContentDiagonal(stickerContainer);
+                                initFontSize = parseInt(stickerContainer.find('i.color-sticker').css("font-size"));
+                            },
+                            resize: function (e, ui) {
+                                var newDiagonal = myThis.getContentDiagonal(stickerContainer);
+                                var ratio = newDiagonal / initDiagonal;
+                                stickerContainer.find('i.color-sticker').css("font-size", initFontSize + ratio * 3);
+                            }
                         });
                         stickerContainer.draggable({
                             cursor: "crosshair",
@@ -475,11 +489,40 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
                         stickerContainer.find('a.remove').on('click', function () {
                             jQuery(this).closest('.sticker-container').remove();
                         });
+                        var defaultColor = "#000";
+                        stickerClone.css('color', defaultColor);
+                        stickerContainer.find('a.color').spectrum({
+                            color: defaultColor,
+                            showPaletteOnly: true,
+                            togglePaletteOnly: true,
+                            togglePaletteMoreText: 'more',
+                            togglePaletteLessText: 'less',
+                            palette: [
+                                ["#000", "#444", "#666", "#999", "#ccc", "#eee", "#f3f3f3", "#fff"],
+                                ["#f00", "#f90", "#ff0", "#0f0", "#0ff", "#00f", "#90f", "#f0f"],
+                                ["#f4cccc", "#fce5cd", "#fff2cc", "#d9ead3", "#d0e0e3", "#cfe2f3", "#d9d2e9", "#ead1dc"],
+                                ["#ea9999", "#f9cb9c", "#ffe599", "#b6d7a8", "#a2c4c9", "#9fc5e8", "#b4a7d6", "#d5a6bd"],
+                                ["#e06666", "#f6b26b", "#ffd966", "#93c47d", "#76a5af", "#6fa8dc", "#8e7cc3", "#c27ba0"],
+                                ["#c00", "#e69138", "#f1c232", "#6aa84f", "#45818e", "#3d85c6", "#674ea7", "#a64d79"],
+                                ["#900", "#b45f06", "#bf9000", "#38761d", "#134f5c", "#0b5394", "#351c75", "#741b47"],
+                                ["#600", "#783f04", "#7f6000", "#274e13", "#0c343d", "#073763", "#20124d", "#4c1130"]
+                            ],
+                            change: function (color) {
+                                var color = color.toHexString();
+                                stickerClone.css('color', color);
+                                stickerContainer.find('a.color').css('color', color);
+                            }
+                        });
                         $(this).append(stickerContainer);
                     }
                 }
             });
             this.container.find('.screenshot-operations').show();
+        };
+        ScreenshotView.prototype.getContentDiagonal = function (element) {
+            var contentWidth = element.width();
+            var contentHeight = element.height();
+            return contentWidth * contentWidth + contentHeight * contentHeight;
         };
         ScreenshotView.prototype.disableAllScreenshotOperations = function () {
             this.container.find('button.screenshot-operation').removeClass('active');
