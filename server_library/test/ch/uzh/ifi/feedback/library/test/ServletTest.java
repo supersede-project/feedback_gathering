@@ -2,6 +2,7 @@ package ch.uzh.ifi.feedback.library.test;
 
 import java.io.IOException;
 
+import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.ClientProtocolException;
@@ -11,6 +12,8 @@ import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
+import org.apache.http.entity.mime.MultipartEntity;
+import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
 
@@ -65,6 +68,23 @@ public class ServletTest extends TestCase {
 		StringEntity params = new StringEntity(jsonString);
         request.addHeader("content-type", "application/json");
         request.setEntity(params);
+        
+		HttpResponse httpResponse = HttpClientBuilder.create().build().execute(request);
+		String mimeType = ContentType.getOrDefault(httpResponse.getEntity()).getMimeType();
+
+		String jsonFromResponse = EntityUtils.toString(httpResponse.getEntity());	    
+		T createdObjects = gson.fromJson(jsonFromResponse, clazz);
+		assertEquals(httpResponse.getStatusLine().getStatusCode(), HttpStatus.SC_OK);
+		assertEquals("application/json", mimeType);
+		
+		return createdObjects;
+   }
+   
+   protected <T> T PostSuccess(String url, HttpEntity entity, Class<T> clazz) throws ClientProtocolException, IOException
+   {
+		HttpPost request = new HttpPost(url);
+        request.addHeader(entity.getContentType());
+        request.setEntity(entity);
         
 		HttpResponse httpResponse = HttpClientBuilder.create().build().execute(request);
 		String mimeType = ContentType.getOrDefault(httpResponse.getEntity()).getMimeType();

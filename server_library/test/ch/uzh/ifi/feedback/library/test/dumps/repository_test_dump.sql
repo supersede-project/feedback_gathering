@@ -1,4 +1,4 @@
-CREATE DATABASE  IF NOT EXISTS `feedback_repository_test` /*!40100 DEFAULT CHARACTER SET big5 */;
+CREATE DATABASE  IF NOT EXISTS `feedback_repository_test` /*!40100 DEFAULT CHARACTER SET latin1 */;
 USE `feedback_repository_test`;
 -- MySQL dump 10.13  Distrib 5.5.41, for debian-linux-gnu (x86_64)
 --
@@ -25,7 +25,7 @@ DROP TABLE IF EXISTS `attachment_feedbacks`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `attachment_feedbacks` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `feedback_id` int(11) NOT NULL,
   `path` varchar(255) NOT NULL,
   `size` int(11) NOT NULL,
@@ -56,7 +56,7 @@ DROP TABLE IF EXISTS `audio_feedbacks`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `audio_feedbacks` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `feedback_id` int(11) NOT NULL,
   `path` varchar(255) NOT NULL,
   `size` int(11) NOT NULL,
@@ -88,7 +88,7 @@ DROP TABLE IF EXISTS `categories`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `categories` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `text` varchar(255) DEFAULT NULL,
   `category_feedbacks_id` int(11) NOT NULL,
   `category_types_id` int(11) NOT NULL,
@@ -117,7 +117,7 @@ DROP TABLE IF EXISTS `category_feedbacks`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `category_feedbacks` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `feedback_id` int(11) NOT NULL,
   `mechanism_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
@@ -143,7 +143,7 @@ DROP TABLE IF EXISTS `category_types`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `category_types` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `key` varchar(255) NOT NULL,
   `language` varchar(3) NOT NULL,
   `text` varchar(255) NOT NULL,
@@ -170,7 +170,7 @@ DROP TABLE IF EXISTS `context_informations`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `context_informations` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `resolution` varchar(255) DEFAULT NULL,
   `user_agent` varchar(255) DEFAULT NULL,
   `android_version` varchar(45) DEFAULT NULL,
@@ -200,7 +200,7 @@ DROP TABLE IF EXISTS `feedback_comments`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `feedback_comments` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `feedback_id` int(11) NOT NULL,
   `comment` text NOT NULL,
   `user_id` varchar(255) NOT NULL,
@@ -266,6 +266,7 @@ CREATE TABLE `rating_feedbacks` (
   `rating` int(11) NOT NULL,
   `feedback_id` int(11) NOT NULL,
   `mechanism_id` int(11) DEFAULT NULL,
+  `title` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_rating_feedback_idx` (`feedback_id`),
   CONSTRAINT `fk_rating_feedback` FOREIGN KEY (`feedback_id`) REFERENCES `feedbacks` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
@@ -349,4 +350,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-09-05 14:05:30
+-- Dump completed on 2016-09-15 12:50:29

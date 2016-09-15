@@ -9,6 +9,7 @@ public class RatingFeedback extends ItemBase<RatingFeedback>{
 
 	@Id
 	private Integer id;
+	
 	private String title;
 	@NotNull
 	private int rating;

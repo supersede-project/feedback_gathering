@@ -5,12 +5,15 @@ import java.util.List;
 
 import javax.servlet.http.Part;
 
+import com.google.inject.Inject;
+
 import ch.uzh.ifi.feedback.repository.model.ScreenshotFeedback;
 
 public class ScreenshotFeedbackParser {
 
 	private FileStorageService storageService;
 	
+	@Inject
 	public ScreenshotFeedbackParser(FileStorageService storageService)
 	{
 		this.storageService = storageService;
@@ -23,6 +26,7 @@ public class ScreenshotFeedbackParser {
 		for (Part filePart : fileParts) {
 			ScreenshotFeedback screenshot = new ScreenshotFeedback();
 			screenshot = storageService.ParseFilePart(filePart, screenshot, storagePath);	
+			screenshots.add(screenshot);
 		}
 
 		return screenshots;

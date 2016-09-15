@@ -4,8 +4,15 @@ import com.google.inject.AbstractModule;
 
 import ch.uzh.ifi.feedback.library.rest.Service.DatabaseConfiguration;
 import ch.uzh.ifi.feedback.repository.controller.FeedbackController;
+import ch.uzh.ifi.feedback.repository.serialization.AttachmentFeedbackParser;
+import ch.uzh.ifi.feedback.repository.serialization.AudioFeedbackParser;
 import ch.uzh.ifi.feedback.repository.serialization.FeedbackSerializationService;
+import ch.uzh.ifi.feedback.repository.serialization.FileStorageService;
 import ch.uzh.ifi.feedback.repository.serialization.ScreenshotFeedbackParser;
+import ch.uzh.ifi.feedback.repository.service.AttachmentFeedbackResultParser;
+import ch.uzh.ifi.feedback.repository.service.AttachmentFeedbackService;
+import ch.uzh.ifi.feedback.repository.service.AudioFeedbackResultParser;
+import ch.uzh.ifi.feedback.repository.service.AudioFeedbackService;
 import ch.uzh.ifi.feedback.repository.service.FeedbackResultParser;
 import ch.uzh.ifi.feedback.repository.service.FeedbackService;
 import ch.uzh.ifi.feedback.repository.service.RatingFeedbackResultParser;
@@ -27,6 +34,13 @@ public class RepositoryModule extends AbstractModule {
 		bind(ScreenshotFeedbackService.class).to(ScreenshotFeedbackService.class);
 		bind(ScreenshotFeedbackResultParser.class).to(ScreenshotFeedbackResultParser.class);
 		bind(DatabaseConfiguration.class).to(DatabaseConfiguration.class).asEagerSingleton();
+		bind(AudioFeedbackResultParser.class).to(AudioFeedbackResultParser.class);
+		bind(AttachmentFeedbackResultParser.class).to(AttachmentFeedbackResultParser.class);
+		bind(AudioFeedbackParser.class).to(AudioFeedbackParser.class);
+		bind(AttachmentFeedbackParser.class).to(AttachmentFeedbackParser.class);
+		bind(FileStorageService.class).to(FileStorageService.class);
+		bind(AudioFeedbackService.class).to(AudioFeedbackService.class);
+		bind(AttachmentFeedbackService.class).to(AttachmentFeedbackService.class);
 	}
 
 }
