@@ -134,9 +134,9 @@ public class OrchestratorService<T extends IOrchestratorItem<T>> extends Service
 	
 	protected String getTimeCondition()
 	{
-		String condition = 	"abs(timestampdiff(SECOND, created_at, ?)) = "
+		String condition = 	"abs(timestampdiff(SECOND, t.created_at, ?)) = "
 							+ "("
-							+ "SELECT min(abs(timestampdiff(SECOND, created_at, ?))) "
+							+ "SELECT min(abs(timestampdiff(SECOND, t2.created_at, ?))) "
 							+ "FROM %s.%s as t2 "
 							+ "WHERE t.%s = t2.%s"
 							+ ") ";

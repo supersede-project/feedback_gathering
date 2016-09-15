@@ -15,6 +15,7 @@ import ch.uzh.ifi.feedback.orchestrator.model.FeedbackMechanism;
 import ch.uzh.ifi.feedback.orchestrator.serialization.MechanismSerializationService;
 import ch.uzh.ifi.feedback.orchestrator.services.MechanismService;
 import ch.uzh.ifi.feedback.orchestrator.validation.MechanismValidator;
+import static java.util.Arrays.asList;
 
 @Controller(FeedbackMechanism.class)
 public class MechanismController extends RestController<FeedbackMechanism> {
@@ -51,7 +52,7 @@ public class MechanismController extends RestController<FeedbackMechanism> {
 	{
 		mechanism.setConfigurationsid(configId);
 		super.Update(mechanism);
-		return mechanism;
+		return dbService.GetWhere(asList(configId, mechanism.getId()), "cm.configurations_id = ?", "t.mechanisms_id = ?").get(0);
 	}
 	
 	@POST
@@ -59,7 +60,7 @@ public class MechanismController extends RestController<FeedbackMechanism> {
 	public FeedbackMechanism InsertMechanismForConfiguration(@PathParam("config_id")Integer configId, FeedbackMechanism mechanism) throws Exception 
 	{
 		mechanism.setConfigurationsid(configId);
-		super.Insert(mechanism);
-		return mechanism;
+		FeedbackMechanism created = super.Insert(mechanism);
+		return dbService.GetWhere(asList(configId, created.getId()), "cm.configurations_id = ?", "t.mechanisms_id = ?").get(0);
 	}
 }

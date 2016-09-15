@@ -49,8 +49,7 @@ public class ConfigurationController extends RestController<Configuration>{
 	@Path("/configurations")
 	public Configuration UpdateConfiguration(Configuration config) throws Exception 
 	{
-		super.Update(config);
-		return config;
+		return super.Update(config);
 	}
 	
 	@POST
@@ -58,7 +57,6 @@ public class ConfigurationController extends RestController<Configuration>{
 	public Configuration InsertConfigurationForApplication(@PathParam("app_id")Integer appId, Configuration config) throws Exception 
 	{
 		config.setApplicationId(appId);
-		super.Insert(config);
-		return config;
+		return super.Insert(config);
 	}
 }

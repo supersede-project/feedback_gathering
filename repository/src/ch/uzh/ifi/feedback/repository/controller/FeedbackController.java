@@ -42,9 +42,7 @@ public class FeedbackController extends RestController<Feedback>{
 	@Path("/feedbacks")
 	@POST
 	public Feedback InsertFeedback(Feedback feedback) throws Exception {
-		System.out.println("feedback POST");
-		super.Insert(feedback);
-		return feedback;
+		return super.Insert(feedback);
 	}
 	
 	@Path("/feedbacks/{id}")

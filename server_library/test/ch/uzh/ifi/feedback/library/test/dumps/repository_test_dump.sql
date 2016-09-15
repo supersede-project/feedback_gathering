@@ -81,35 +81,6 @@ LOCK TABLES `audio_feedbacks` WRITE;
 UNLOCK TABLES;
 
 --
--- Table structure for table `categories`
---
-
-DROP TABLE IF EXISTS `categories`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `categories` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `text` varchar(255) DEFAULT NULL,
-  `category_feedbacks_id` int(11) NOT NULL,
-  `category_types_id` int(11) NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `fk_choices_choice_feedbacks1_idx` (`category_feedbacks_id`),
-  KEY `fk_categories_category_types1_idx` (`category_types_id`),
-  CONSTRAINT `fk_categories_category_types1` FOREIGN KEY (`category_types_id`) REFERENCES `feedback_orchestrator`.`category_types` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_choices_category_feedbacks1` FOREIGN KEY (`category_feedbacks_id`) REFERENCES `category_feedbacks` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=big5;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `categories`
---
-
-LOCK TABLES `categories` WRITE;
-/*!40000 ALTER TABLE `categories` DISABLE KEYS */;
-/*!40000 ALTER TABLE `categories` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `category_feedbacks`
 --
 
@@ -119,7 +90,8 @@ DROP TABLE IF EXISTS `category_feedbacks`;
 CREATE TABLE `category_feedbacks` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `feedback_id` int(11) NOT NULL,
-  `mechanism_id` int(11) DEFAULT NULL,
+  `parameter_id` int(11) NOT NULL,
+  `text` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_audio_feedback_idx` (`feedback_id`),
   CONSTRAINT `fk_audio_feedback00` FOREIGN KEY (`feedback_id`) REFERENCES `feedbacks` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
@@ -133,33 +105,6 @@ CREATE TABLE `category_feedbacks` (
 LOCK TABLES `category_feedbacks` WRITE;
 /*!40000 ALTER TABLE `category_feedbacks` DISABLE KEYS */;
 /*!40000 ALTER TABLE `category_feedbacks` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `category_types`
---
-
-DROP TABLE IF EXISTS `category_types`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `category_types` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `key` varchar(255) NOT NULL,
-  `language` varchar(3) NOT NULL,
-  `text` varchar(255) NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=big5;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `category_types`
---
-
-LOCK TABLES `category_types` WRITE;
-/*!40000 ALTER TABLE `category_types` DISABLE KEYS */;
-/*!40000 ALTER TABLE `category_types` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -350,4 +295,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-09-15 12:50:29
+-- Dump completed on 2016-09-15 16:24:02

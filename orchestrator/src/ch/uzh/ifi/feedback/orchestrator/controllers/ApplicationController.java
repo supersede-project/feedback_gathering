@@ -48,15 +48,13 @@ public class ApplicationController extends OrchestratorController<Application> {
 	@Path("/applications")
 	public Application UpdateApplication(Application app) throws Exception 
 	{
-		super.Update(app);
-		return app;
+		return super.Update(app);
 	}
 	
 	@POST
 	@Path("/applications")
 	public Application InsertApplication(@PathParam("app_id")Integer appId, Application app) throws Exception 
 	{
-		super.Insert(app);
-		return app;
+		return super.Insert(app);
 	}
 }

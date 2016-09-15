@@ -45,8 +45,9 @@ public class FeedbackServletTest extends ServletTest {
 		
 	    assertEquals(createdFeedback.getApplicationId(), 1l);	
 	    assertEquals(createdFeedback.getTitle(), "Feedback JUnit 648");
+	    assertEquals(createdFeedback.getRatingFeedbacks().size(), 2);
+	    assertEquals(createdFeedback.getCategoryFeedbacks().size(), 2);
 	}	
-	
 	
 	/**
 	 * Note: This test will only work, when the webapps directory ot tomcat is writable...
@@ -71,6 +72,7 @@ public class FeedbackServletTest extends ServletTest {
 	    assertEquals(createdFeedback.getApplicationId(), 1l);	
 	    assertEquals(createdFeedback.getTitle(), "Feedback JUnit 648");
 	    assertEquals(createdFeedback.getRatingFeedbacks().size(), 2);
+	    assertEquals(createdFeedback.getCategoryFeedbacks().size(), 2);
 	    assertEquals(createdFeedback.getScreenshotFeedbacks().size(), 2);
 	    assertEquals(createdFeedback.getAttachmentFeedbacks().size(), 2);
 	    assertEquals(createdFeedback.getAudioFeedbacks().size(), 1);

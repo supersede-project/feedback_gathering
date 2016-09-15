@@ -15,6 +15,8 @@ public abstract class RestController<T extends IDbItem<T>> {
 	protected IDbService<T> dbService;
 	protected IValidator<T> validator;
 	
+	private int createdObjectId;
+	
 	public RestController(IDbService<T> dbService, IValidator<T> validator)
 	{
 		this.dbService = dbService;
@@ -34,17 +36,19 @@ public abstract class RestController<T extends IDbItem<T>> {
 		return dbService.GetWhere(asList(foreignKey), foreignKeyName + " = ?");
 	}
 	
-	public void Insert(T object) throws Exception
+	public T Insert(T object) throws Exception
 	{
 		if (validator != null)
 			validator.Validate(object);
 		
 		TransactionManager.withTransaction((con) -> {
-			dbService.Insert(con, object);
+			createdObjectId = dbService.Insert(con, object);
 		});
+		
+		return GetById(createdObjectId);
 	}
 	
-	public void Update(T object) throws Exception
+	public T Update(T object) throws Exception
 	{
 		if(validator != null)
 		{
@@ -55,6 +59,8 @@ public abstract class RestController<T extends IDbItem<T>> {
 		TransactionManager.withTransaction((con) -> {
 			dbService.Update(con, object);
 		});
+		
+		return GetById(object.getId());
 	}
 	
 	public void Delete(int id) throws Exception

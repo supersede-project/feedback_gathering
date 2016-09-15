@@ -77,8 +77,7 @@ public class GeneralConfigurationController extends RestController<GeneralConfig
 	@Path("/general_configurations")
 	public GeneralConfiguration UpdateGeneralConfiguration(GeneralConfiguration config) throws Exception 
 	{
-		super.Update(config);
-		return config;
+		return super.Update(config);
 	}
 	
 
@@ -97,12 +96,12 @@ public class GeneralConfigurationController extends RestController<GeneralConfig
 			applicationService.Update(con, app)
 		);
 		
-		return config;
+		return applicationService.GetById(appId).getGeneralConfiguration();
 	}
 	
 	@POST
 	@Path("/configurations/{config_id}/general_configuration")
-	public GeneralConfiguration InsertGeneralConfigurationForConfiguration(@PathParam("app_id")Integer configId, GeneralConfiguration config) throws Exception 
+	public GeneralConfiguration InsertGeneralConfigurationForConfiguration(@PathParam("config_id")Integer configId, GeneralConfiguration config) throws Exception 
 	{
 		Configuration configuration = configurationService.GetById(configId);
 		if(configuration.getGeneralConfiguration() != null)
@@ -115,6 +114,6 @@ public class GeneralConfigurationController extends RestController<GeneralConfig
 			configurationService.Update(con, configuration)
 	    );
 		
-		return config;
+		return configurationService.GetById(configId).getGeneralConfiguration();
 	}
 }

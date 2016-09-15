@@ -57,8 +57,7 @@ public class ParameterController extends RestController<FeedbackParameter> {
 	@Path("/parameters")
 	public FeedbackParameter UpdateParameter(FeedbackParameter param) throws Exception 
 	{
-		super.Update(param);
-		return param;
+		return super.Update(param);
 	}
 
 	@POST
@@ -66,8 +65,7 @@ public class ParameterController extends RestController<FeedbackParameter> {
 	public FeedbackParameter InsertParameterForConfiguration(@PathParam("config_id")Integer config_id, final FeedbackParameter param) throws Exception 
 	{
 		param.setGenaralConfigurationId(config_id);
-		super.Insert(param);
-		return param;
+		return super.Insert(param);
 	}
 	
 	@POST
@@ -75,7 +73,6 @@ public class ParameterController extends RestController<FeedbackParameter> {
 	public FeedbackParameter InsertParameterForMechanism(@PathParam("mechanism_id") Integer mechanism_id, final FeedbackParameter param) throws Exception 
 	{
 		param.setMechanismId(mechanism_id);
-		super.Insert(param);
-		return param;
+		return super.Insert(param);
 	}
 }

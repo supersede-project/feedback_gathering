@@ -13,11 +13,22 @@
     "ratingFeedbacks": [
       {
         "title": "Test rating",
-        "rating": 4
+        "rating": 4,
+        "mechanismId": 5
       },
       {
         "title": "Test rating 2",
-        "rating": 5
+        "rating": 5,
+        "mechanismId": 6
       }
+    ],
+    "categoryFeedbacks": [
+    	{
+    	  "text": "sample text",
+    	  "parameterId": "12"
+    	},
+    	{
+    	  "parameterId": "14"
+    	}
     ]
   }

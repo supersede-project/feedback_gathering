@@ -13,6 +13,8 @@ import ch.uzh.ifi.feedback.repository.service.AttachmentFeedbackResultParser;
 import ch.uzh.ifi.feedback.repository.service.AttachmentFeedbackService;
 import ch.uzh.ifi.feedback.repository.service.AudioFeedbackResultParser;
 import ch.uzh.ifi.feedback.repository.service.AudioFeedbackService;
+import ch.uzh.ifi.feedback.repository.service.CategoryFeedbackService;
+import ch.uzh.ifi.feedback.repository.service.CategoryResultParser;
 import ch.uzh.ifi.feedback.repository.service.FeedbackResultParser;
 import ch.uzh.ifi.feedback.repository.service.FeedbackService;
 import ch.uzh.ifi.feedback.repository.service.RatingFeedbackResultParser;
@@ -41,6 +43,8 @@ public class RepositoryModule extends AbstractModule {
 		bind(FileStorageService.class).to(FileStorageService.class);
 		bind(AudioFeedbackService.class).to(AudioFeedbackService.class);
 		bind(AttachmentFeedbackService.class).to(AttachmentFeedbackService.class);
+		bind(CategoryResultParser.class).to(CategoryResultParser.class);
+		bind(CategoryFeedbackService.class).to(CategoryFeedbackService.class);
 	}
 
 }

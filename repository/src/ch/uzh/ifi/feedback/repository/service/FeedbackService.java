@@ -12,6 +12,7 @@ import ch.uzh.ifi.feedback.library.rest.Service.DatabaseConfiguration;
 import ch.uzh.ifi.feedback.library.rest.Service.ServiceBase;
 import ch.uzh.ifi.feedback.repository.model.AttachmentFeedback;
 import ch.uzh.ifi.feedback.repository.model.AudioFeedback;
+import ch.uzh.ifi.feedback.repository.model.CategoryFeedback;
 import ch.uzh.ifi.feedback.repository.model.Feedback;
 import ch.uzh.ifi.feedback.repository.model.RatingFeedback;
 import ch.uzh.ifi.feedback.repository.model.ScreenshotFeedback;
@@ -25,6 +26,7 @@ public class FeedbackService extends ServiceBase<Feedback> {
 	private ScreenshotFeedbackService screenshotFeedbackService;
 	private AudioFeedbackService audioFeedbackService;
 	private AttachmentFeedbackService attachmentFeedbackService;
+	private CategoryFeedbackService categoryFeedbackService;
 	
 	@Inject
 	public FeedbackService(
@@ -34,14 +36,17 @@ public class FeedbackService extends ServiceBase<Feedback> {
 			TextFeedbackService textFeedbackService,
 			AudioFeedbackService audioFeedbackService,
 			AttachmentFeedbackService attachmentFeedbackService,
+			CategoryFeedbackService categoryFeedbackService,
 			DatabaseConfiguration dbConfig) 
 	{
 		super(resultParser, Feedback.class, "feedbacks", dbConfig.getRepositoryDb(), ratingFeedbackService, screenshotFeedbackService);
+		
 		this.screenshotFeedbackService = screenshotFeedbackService;
 		this.ratingFeedbackService = ratingFeedbackService;
 		this.textFeedbackService = textFeedbackService;
 		this.audioFeedbackService = audioFeedbackService;
 		this.attachmentFeedbackService = attachmentFeedbackService;
+		this.categoryFeedbackService = categoryFeedbackService;
 	}
 
 	@Override
@@ -101,6 +106,16 @@ public class FeedbackService extends ServiceBase<Feedback> {
 				attachmentFeedbackService.Insert(con, attachementFeedback);
 			}
 		}
+		
+		if(feedback.getCategoryFeedbacks() != null)
+		{
+			for(CategoryFeedback categoryFeedback : feedback.getCategoryFeedbacks())
+			{
+				categoryFeedback.setFeedbackId(feedbackId);
+				categoryFeedbackService.Insert(con, categoryFeedback);
+			}
+		}
+		
 		return feedbackId;
 	}
 
@@ -111,5 +126,6 @@ public class FeedbackService extends ServiceBase<Feedback> {
 		feedback.setScreenshots(screenshotFeedbackService.GetWhere(Arrays.asList(feedback.getId()), "feedback_id = ?"));
 		feedback.setAudioFeedbacks(audioFeedbackService.GetWhere(Arrays.asList(feedback.getId()), "feedback_id = ?"));
 		feedback.setAttachmentFeedbacks(attachmentFeedbackService.GetWhere(Arrays.asList(feedback.getId()), "feedback_id = ?"));
+		feedback.setCategoryFeedbacks(categoryFeedbackService.GetWhere(Arrays.asList(feedback.getId()), "feedback_id = ?"));
 	}
 }

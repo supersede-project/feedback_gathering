@@ -134,7 +134,7 @@ public class MechanismService extends OrchestratorService<FeedbackMechanism> {
 		{
 			statement += "AND %s ";
 		}
-		statement += ";";
+		statement += "AND t.created_at = cm.created_at;";
 		statement = String.format(statement, (Object[])conditions);
 		
 		PreparedStatement s = con.prepareStatement(statement);
