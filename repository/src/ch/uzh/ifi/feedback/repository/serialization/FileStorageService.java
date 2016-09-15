@@ -5,27 +5,16 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 import javax.servlet.http.Part;
 
-import ch.uzh.ifi.feedback.repository.model.ScreenshotFeedback;
+import ch.uzh.ifi.feedback.repository.model.FileFeedback;
 
-public class ScreenshotSerializationService extends RepositorySerializationService<ScreenshotFeedback> {
+public class FileStorageService {
+	
+	public <T extends FileFeedback> T ParseFilePart(Part filePart, T feedback, String storeagePath) {
 
-	public List<ScreenshotFeedback> ParseRequestParts(List<Part> fileParts) {
-		String rootPath = System.getProperty("catalina.home");
-		String relativePath = "webapps" + File.separator + "screenshots";
-		String uploadsStoragePath = rootPath + File.separator + relativePath;
-		File uploadDirectory = new File(uploadsStoragePath);
-		if (!uploadDirectory.exists()) {
-			uploadDirectory.mkdirs();
-		}
-
-		List<ScreenshotFeedback> screenshots = new ArrayList<>(fileParts.size());
-		for (Part filePart : fileParts) {
 			InputStream inputStream = null;
 			OutputStream outputStream = null;
 
@@ -49,7 +38,7 @@ public class ScreenshotSerializationService extends RepositorySerializationServi
 				// more or less unique filename
 				String fileNameOfStoredFile = Integer.toString(fileSize) + "_" + String.valueOf(new Date().getTime()) + fileExtension;				
 				
-				File outputFile = new File(uploadsStoragePath, fileNameOfStoredFile);
+				File outputFile = new File(storeagePath, fileNameOfStoredFile);
 				outputStream = new FileOutputStream(outputFile);
 				
 				int read = 0;
@@ -59,9 +48,11 @@ public class ScreenshotSerializationService extends RepositorySerializationServi
 					outputStream.write(bytes, 0, read);
 				}
 				
-				ScreenshotFeedback s = new ScreenshotFeedback(null, null, outputFile.toPath().toString(), fileSize, fileName,
-						null, "", "");
-				screenshots.add(s);
+				feedback.setFileExtension(fileExtension);
+				feedback.setPath(outputFile.toPath().toString());
+				feedback.setSize(fileSize);
+				feedback.setName(fileName);
+				
 				
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -82,11 +73,23 @@ public class ScreenshotSerializationService extends RepositorySerializationServi
 
 				}
 			}
-		}
 
-		return screenshots;
+		return feedback;
 	}
-
+	
+	public String CreateDirectory(String directoryName)
+	{
+		String rootPath = System.getProperty("catalina.home");
+		String relativePath = "webapps" + File.separator + directoryName;
+		String uploadsStoragePath = rootPath + File.separator + relativePath;
+		File uploadDirectory = new File(uploadsStoragePath);
+		if (!uploadDirectory.exists()) {
+			uploadDirectory.mkdirs();
+		}
+		
+		return uploadsStoragePath;
+	}
+	
 	private static String getFileName(Part filePart) {
 		String header = filePart.getHeader("content-disposition");
 		if (header == null)

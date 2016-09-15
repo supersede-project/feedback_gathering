@@ -1,6 +1,5 @@
 package ch.uzh.ifi.feedback.repository.serialization;
 
-import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -13,11 +12,19 @@ import ch.uzh.ifi.feedback.repository.model.Feedback;
 
 public class FeedbackSerializationService extends RepositorySerializationService<Feedback> {
 
-	private ScreenshotSerializationService screenshotSerializationService;
+	private ScreenshotFeedbackParser screenshotParser;
+	private AudioFeedbackParser audioParser;
+	private AttachmentFeedbackParser attachmentParser;
 
 	@Inject
-	public FeedbackSerializationService(ScreenshotSerializationService screenshotSerializationService) {
-		this.screenshotSerializationService = screenshotSerializationService;
+	public FeedbackSerializationService(
+			ScreenshotFeedbackParser screenshotParser, 
+			AudioFeedbackParser audioParser, 
+			AttachmentFeedbackParser attachmentParser) 
+	{
+		this.screenshotParser = screenshotParser;
+		this.attachmentParser = attachmentParser;
+		this.audioParser = audioParser;
 	}
 
 	@Override
@@ -27,7 +34,16 @@ public class FeedbackSerializationService extends RepositorySerializationService
 		try {		
 			List<Part> screenshotParts = request.getParts().stream().filter(part -> part.getName().toLowerCase().contains("screenshot"))
 					.collect(Collectors.toList());						
-			feedback.setScreenshots(screenshotSerializationService.ParseRequestParts(screenshotParts));
+			feedback.setScreenshots(screenshotParser.ParseRequestParts(screenshotParts));
+			
+			List<Part> audioParts = request.getParts().stream().filter(part -> part.getName().toLowerCase().contains("audio"))
+					.collect(Collectors.toList());						
+			feedback.setAudioFeedbacks(audioParser.ParseRequestParts(audioParts));
+			
+			List<Part> attachmentParts = request.getParts().stream().filter(part -> part.getName().toLowerCase().contains("attachment"))
+					.collect(Collectors.toList());						
+			feedback.setAttachmentFeedbacks(attachmentParser.ParseRequestParts(attachmentParts));
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

@@ -5,7 +5,7 @@ import com.google.inject.AbstractModule;
 import ch.uzh.ifi.feedback.library.rest.Service.DatabaseConfiguration;
 import ch.uzh.ifi.feedback.repository.controller.FeedbackController;
 import ch.uzh.ifi.feedback.repository.serialization.FeedbackSerializationService;
-import ch.uzh.ifi.feedback.repository.serialization.ScreenshotSerializationService;
+import ch.uzh.ifi.feedback.repository.serialization.ScreenshotFeedbackParser;
 import ch.uzh.ifi.feedback.repository.service.FeedbackResultParser;
 import ch.uzh.ifi.feedback.repository.service.FeedbackService;
 import ch.uzh.ifi.feedback.repository.service.RatingFeedbackResultParser;
@@ -19,7 +19,7 @@ public class RepositoryModule extends AbstractModule {
 	protected void configure() {
 		bind(FeedbackController.class).to(FeedbackController.class);
 		bind(FeedbackSerializationService.class).to(FeedbackSerializationService.class);
-		bind(ScreenshotSerializationService.class).to(ScreenshotSerializationService.class);
+		bind(ScreenshotFeedbackParser.class).to(ScreenshotFeedbackParser.class);
 		bind(FeedbackResultParser.class).to(FeedbackResultParser.class);
 		bind(FeedbackService.class).to(FeedbackService.class);
 		bind(RatingFeedbackResultParser.class).to(RatingFeedbackResultParser.class);

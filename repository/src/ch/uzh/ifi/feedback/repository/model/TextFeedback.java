@@ -1,9 +1,10 @@
 package ch.uzh.ifi.feedback.repository.model;
 
+import ch.uzh.ifi.feedback.library.rest.Service.ItemBase;
 import ch.uzh.ifi.feedback.library.rest.annotations.DbAttribute;
 import ch.uzh.ifi.feedback.library.rest.validation.Id;
 
-public class TextFeedback {
+public class TextFeedback extends ItemBase<TextFeedback> {
 
 	@Id
 	private Integer id;

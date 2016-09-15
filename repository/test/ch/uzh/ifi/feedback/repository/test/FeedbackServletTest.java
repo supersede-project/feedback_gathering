@@ -24,8 +24,6 @@ import ch.uzh.ifi.feedback.repository.model.Feedback;
 import javassist.NotFoundException;
 import junit.framework.TestCase;
 
-
-// TODO run the tests against a test database that is cleanup after every test method
 public class FeedbackServletTest extends TestCase {
 	private final int NUMBER_OF_FEEDBACK_RECORDS = 10;
 	
