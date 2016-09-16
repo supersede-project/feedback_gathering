@@ -1,6 +1,9 @@
 package ch.uzh.ifi.feedback.orchestrator.test;
 
 import java.io.IOException;
+import java.io.InputStream;
+
+import org.apache.commons.io.IOUtils;
 import org.apache.http.client.ClientProtocolException;
 
 import ch.uzh.ifi.feedback.library.test.ServletTest;
@@ -36,20 +39,33 @@ public class OrchestratorServletConfigurationTest extends ServletTest {
 		assertEquals(retrievedConfigs.length, 3);
 	}
 	
+	public void testRetrievingAllConfigurationsForUserGroupAndApplication() throws ClientProtocolException, IOException {
+		Configuration[] retrievedConfigs = GetSuccess(
+				"http://localhost:8080/feedback_orchestrator/en/applications/27/user_groups/1/configurations", 
+				Configuration[].class);
+		
+		assertEquals(retrievedConfigs.length, 3);
+	}
+	
+	public void testRetrievingAllConfigurationsForUserAndApplication() throws ClientProtocolException, IOException {
+		Configuration[] retrievedConfigs = GetSuccess(
+				"http://localhost:8080/feedback_orchestrator/en/applications/27/users/u1234/configurations", 
+				Configuration[].class);
+		
+		assertEquals(retrievedConfigs.length, 3);
+	}
+	
 	/*
 	public void testInsertConfigurationForApplication() throws ClientProtocolException, IOException {
 		
-		InputStream stream = this.getClass().getResourceAsStream("mechanism_insert.json");
+		InputStream stream = this.getClass().getResourceAsStream("configuration_insert.json");
 		String jsonString = IOUtils.toString(stream); 
 		
-		FeedbackMechanism createdMechanism = PostSuccess(
-				"http://localhost:8080/feedback_orchestrator/en/configurations/17/mechanisms", 
+		Configuration createdConfig = PostSuccess(
+				"http://localhost:8080/feedback_orchestrator/en/applications/27/configurations", 
 				jsonString,
-				FeedbackMechanism.class);
+				Configuration.class);
         
-		assertEquals(createdMechanism.getType(), "AUDIO_TYPE");
-		assertEquals(createdMechanism.isActive(), new Boolean(true));
-		assertEquals(createdMechanism.getParameters().size(), 2);
-		assertEquals(createdMechanism.getOrder(), new Integer(2));
+		assertEquals(createdConfig.getType(), "PULL");
 	}*/
 }

@@ -114,13 +114,12 @@ CREATE TABLE `configurations_history` (
   `configurations_id` int(11) NOT NULL,
   `current_version` bit(1) NOT NULL DEFAULT b'1',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `application_id` (`applications_id`,`user_groups_id`),
   KEY `fk_configurations_1_idx` (`applications_id`),
   KEY `fk_configurations_2_idx` (`user_groups_id`),
   KEY `fk_configurations_3_idx` (`general_configurations_id`),
   KEY `fk_configurations_history_1_idx` (`configurations_id`),
-  CONSTRAINT `fk_configurations_history_1` FOREIGN KEY (`configurations_id`) REFERENCES `configurations` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_configurations_history_2` FOREIGN KEY (`user_groups_id`) REFERENCES `user_groups` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_configurations_history_1` FOREIGN KEY (`configurations_id`) REFERENCES `configurations` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_configurations_history_3` FOREIGN KEY (`general_configurations_id`) REFERENCES `general_configurations` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_configurations_history_4` FOREIGN KEY (`applications_id`) REFERENCES `applications1` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB AUTO_INCREMENT=117 DEFAULT CHARSET=utf8;
@@ -132,7 +131,7 @@ CREATE TABLE `configurations_history` (
 
 LOCK TABLES `configurations_history` WRITE;
 /*!40000 ALTER TABLE `configurations_history` DISABLE KEYS */;
-INSERT INTO `configurations_history` VALUES (90,NULL,'2016-09-16 08:48:59',27,NULL,'PUSH',117,56,'\0'),(91,NULL,'2016-09-16 08:49:00',27,NULL,'PULL',118,57,'\0'),(92,NULL,'2016-09-16 08:49:00',27,NULL,'PULL',119,58,'\0'),(93,NULL,'2016-09-16 08:55:35',28,NULL,'PUSH',121,59,'\0'),(94,NULL,'2016-09-16 08:55:35',28,NULL,'PULL',122,60,'\0'),(95,NULL,'2016-09-16 08:55:36',28,NULL,'PULL',123,61,'\0'),(96,NULL,'2016-09-16 08:56:05',29,NULL,'PUSH',125,62,'\0'),(97,NULL,'2016-09-16 08:56:05',29,NULL,'PULL',126,63,'\0'),(98,NULL,'2016-09-16 08:56:05',29,NULL,'PULL',127,64,'\0'),(99,NULL,'2016-09-16 08:56:13',30,NULL,'PUSH',129,65,'\0'),(100,NULL,'2016-09-16 08:56:13',30,NULL,'PULL',130,66,'\0'),(101,NULL,'2016-09-16 08:56:13',30,NULL,'PULL',131,67,'\0'),(102,NULL,'2016-09-16 08:56:19',31,NULL,'PUSH',133,68,'\0'),(103,NULL,'2016-09-16 08:56:19',31,NULL,'PULL',134,69,'\0'),(104,NULL,'2016-09-16 08:56:19',31,NULL,'PULL',135,70,'\0'),(105,NULL,'2016-09-16 08:56:26',32,NULL,'PUSH',137,71,'\0'),(106,NULL,'2016-09-16 08:56:26',32,NULL,'PULL',138,72,'\0'),(107,NULL,'2016-09-16 08:56:26',32,NULL,'PULL',139,73,'\0'),(108,NULL,'2016-09-16 08:56:34',33,NULL,'PUSH',141,74,'\0'),(109,NULL,'2016-09-16 08:56:34',33,NULL,'PULL',142,75,'\0'),(110,NULL,'2016-09-16 08:56:34',33,NULL,'PULL',143,76,'\0'),(111,NULL,'2016-09-16 08:56:41',34,NULL,'PUSH',145,77,'\0'),(112,NULL,'2016-09-16 08:56:41',34,NULL,'PULL',146,78,'\0'),(113,NULL,'2016-09-16 08:56:41',34,NULL,'PULL',147,79,'\0'),(114,NULL,'2016-09-16 08:56:49',35,NULL,'PUSH',149,80,'\0'),(115,NULL,'2016-09-16 08:56:49',35,NULL,'PULL',150,81,'\0'),(116,NULL,'2016-09-16 08:56:49',35,NULL,'PULL',151,82,'\0');
+INSERT INTO `configurations_history` VALUES (90,NULL,'2016-09-16 08:48:59',27,1,'PUSH',117,56,'\0'),(91,NULL,'2016-09-16 08:49:00',27,1,'PULL',118,57,'\0'),(92,NULL,'2016-09-16 08:49:00',27,1,'PULL',119,58,'\0'),(93,NULL,'2016-09-16 08:55:35',28,1,'PUSH',121,59,'\0'),(94,NULL,'2016-09-16 08:55:35',28,1,'PULL',122,60,'\0'),(95,NULL,'2016-09-16 08:55:36',28,1,'PULL',123,61,'\0'),(96,NULL,'2016-09-16 08:56:05',29,1,'PUSH',125,62,'\0'),(97,NULL,'2016-09-16 08:56:05',29,1,'PULL',126,63,'\0'),(98,NULL,'2016-09-16 08:56:05',29,1,'PULL',127,64,'\0'),(99,NULL,'2016-09-16 08:56:13',30,1,'PUSH',129,65,'\0'),(100,NULL,'2016-09-16 08:56:13',30,1,'PULL',130,66,'\0'),(101,NULL,'2016-09-16 08:56:13',30,1,'PULL',131,67,'\0'),(102,NULL,'2016-09-16 08:56:19',31,1,'PUSH',133,68,'\0'),(103,NULL,'2016-09-16 08:56:19',31,1,'PULL',134,69,'\0'),(104,NULL,'2016-09-16 08:56:19',31,1,'PULL',135,70,'\0'),(105,NULL,'2016-09-16 08:56:26',32,1,'PUSH',137,71,'\0'),(106,NULL,'2016-09-16 08:56:26',32,1,'PULL',138,72,'\0'),(107,NULL,'2016-09-16 08:56:26',32,1,'PULL',139,73,'\0'),(108,NULL,'2016-09-16 08:56:34',33,1,'PUSH',141,74,'\0'),(109,NULL,'2016-09-16 08:56:34',33,1,'PULL',142,75,'\0'),(110,NULL,'2016-09-16 08:56:34',33,1,'PULL',143,76,'\0'),(111,NULL,'2016-09-16 08:56:41',34,1,'PUSH',145,77,'\0'),(112,NULL,'2016-09-16 08:56:41',34,1,'PULL',146,78,'\0'),(113,NULL,'2016-09-16 08:56:41',34,1,'PULL',147,79,'\0'),(114,NULL,'2016-09-16 08:56:49',35,1,'PUSH',149,80,'\0'),(115,NULL,'2016-09-16 08:56:49',35,1,'PULL',150,81,'\0'),(116,NULL,'2016-09-16 08:56:49',35,1,'PULL',151,82,'\0');
 /*!40000 ALTER TABLE `configurations_history` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -393,9 +392,8 @@ DROP TABLE IF EXISTS `user_groups`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `user_groups` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(45) NOT NULL DEFAULT 'default',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -404,7 +402,37 @@ CREATE TABLE `user_groups` (
 
 LOCK TABLES `user_groups` WRITE;
 /*!40000 ALTER TABLE `user_groups` DISABLE KEYS */;
+INSERT INTO `user_groups` VALUES (1);
 /*!40000 ALTER TABLE `user_groups` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `user_groups_history`
+--
+
+DROP TABLE IF EXISTS `user_groups_history`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `user_groups_history` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(45) NOT NULL,
+  `user_groups_id` int(11) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `current_version` bit(1) NOT NULL DEFAULT b'1',
+  PRIMARY KEY (`id`),
+  KEY `fk_user_groups_history_1_idx` (`user_groups_id`),
+  CONSTRAINT `fk_user_groups_history_1` FOREIGN KEY (`user_groups_id`) REFERENCES `user_groups` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `user_groups_history`
+--
+
+LOCK TABLES `user_groups_history` WRITE;
+/*!40000 ALTER TABLE `user_groups_history` DISABLE KEYS */;
+INSERT INTO `user_groups_history` VALUES (1,'default',1,'2016-09-16 13:08:07','');
+/*!40000 ALTER TABLE `user_groups_history` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -416,11 +444,8 @@ DROP TABLE IF EXISTS `users`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `users` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(45) NOT NULL,
-  `user_group_id` int(11) NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `fk_users_1_idx` (`user_group_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -429,7 +454,39 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
+INSERT INTO `users` VALUES (1);
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `users_history`
+--
+
+DROP TABLE IF EXISTS `users_history`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `users_history` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(45) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `current_version` bit(1) NOT NULL DEFAULT b'1',
+  `users_id` int(11) NOT NULL,
+  `user_groups_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_users_history_2_idx` (`user_groups_id`),
+  CONSTRAINT `fk_users_history_1` FOREIGN KEY (`user_groups_id`) REFERENCES `users` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_users_history_2` FOREIGN KEY (`user_groups_id`) REFERENCES `user_groups` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `users_history`
+--
+
+LOCK TABLES `users_history` WRITE;
+/*!40000 ALTER TABLE `users_history` DISABLE KEYS */;
+INSERT INTO `users_history` VALUES (1,'u1234','2016-09-16 14:42:23','',1,1);
+/*!40000 ALTER TABLE `users_history` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -441,4 +498,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-09-16 10:57:24
+-- Dump completed on 2016-09-16 17:22:24

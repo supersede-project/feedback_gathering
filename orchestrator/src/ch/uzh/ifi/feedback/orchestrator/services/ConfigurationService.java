@@ -46,20 +46,6 @@ public class ConfigurationService extends OrchestratorService<Configuration>{
 		
 		return config;
 	}
-
-	@Override
-	public List<Configuration> GetAll() throws SQLException, NotFoundException {
-
-		List<Configuration> configurations = super.GetAll();
-		for(Configuration config : configurations)
-		{
-			config.getFeedbackMechanisms().addAll(mechanismService.GetWhere(asList(config.getId()), "configurations_id = ?"));
-			if(config.getGeneralConfigurationId() != null)
-				config.setGeneralConfiguration(generalConfigurationService.GetById(config.getGeneralConfigurationId()));
-		}
-		
-		return configurations;
-	}
 	
 	@Override
 	public List<Configuration> GetWhere(List<Object> values, String... conditions) throws SQLException, NotFoundException 

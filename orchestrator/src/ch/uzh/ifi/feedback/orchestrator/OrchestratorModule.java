@@ -8,11 +8,15 @@ import ch.uzh.ifi.feedback.orchestrator.controllers.ApplicationController;
 import ch.uzh.ifi.feedback.orchestrator.controllers.ConfigurationController;
 import ch.uzh.ifi.feedback.orchestrator.controllers.MechanismController;
 import ch.uzh.ifi.feedback.orchestrator.controllers.ParameterController;
+import ch.uzh.ifi.feedback.orchestrator.controllers.UserController;
+import ch.uzh.ifi.feedback.orchestrator.controllers.UserGroupController;
 import ch.uzh.ifi.feedback.orchestrator.model.FeedbackParameter;
 import ch.uzh.ifi.feedback.orchestrator.serialization.ApplicationSerializationService;
 import ch.uzh.ifi.feedback.orchestrator.serialization.ConfigurationSerializationService;
 import ch.uzh.ifi.feedback.orchestrator.serialization.MechanismSerializationService;
 import ch.uzh.ifi.feedback.orchestrator.serialization.ParameterSerializationService;
+import ch.uzh.ifi.feedback.orchestrator.serialization.UserGroupSerializationService;
+import ch.uzh.ifi.feedback.orchestrator.serialization.UserSerializationService;
 import ch.uzh.ifi.feedback.orchestrator.services.ApplicationResultParser;
 import ch.uzh.ifi.feedback.orchestrator.services.ApplicationService;
 import ch.uzh.ifi.feedback.orchestrator.services.ConfigurationResultParser;
@@ -23,6 +27,10 @@ import ch.uzh.ifi.feedback.orchestrator.services.MechanismResultParser;
 import ch.uzh.ifi.feedback.orchestrator.services.MechanismService;
 import ch.uzh.ifi.feedback.orchestrator.services.ParameterResultParser;
 import ch.uzh.ifi.feedback.orchestrator.services.ParameterService;
+import ch.uzh.ifi.feedback.orchestrator.services.UserGroupResultParser;
+import ch.uzh.ifi.feedback.orchestrator.services.UserGroupService;
+import ch.uzh.ifi.feedback.orchestrator.services.UserResultParser;
+import ch.uzh.ifi.feedback.orchestrator.services.UserService;
 import ch.uzh.ifi.feedback.orchestrator.validation.ApplicationValidator;
 import ch.uzh.ifi.feedback.orchestrator.validation.ConfigurationValidator;
 import ch.uzh.ifi.feedback.orchestrator.validation.GeneralConfigurationValidator;
@@ -58,6 +66,14 @@ public class OrchestratorModule extends AbstractModule{
 	    bind(MechanismValidator.class).to(MechanismValidator.class);
 	    bind(ParameterValidator.class).to(ParameterValidator.class);
 	    bind(DatabaseConfiguration.class).to(DatabaseConfiguration.class).asEagerSingleton();
+	    bind(UserSerializationService.class).to(UserSerializationService.class);
+	    bind(UserService.class).to(UserService.class);
+	    bind(UserResultParser.class).to(UserResultParser.class);
+	    bind(UserController.class).to(UserController.class);
+	    bind(UserGroupService.class).to(UserGroupService.class);
+	    bind(UserGroupSerializationService.class).to(UserGroupSerializationService.class);
+	    bind(UserGroupResultParser.class).to(UserGroupResultParser.class);
+	    bind(UserGroupController.class).to(UserGroupController.class);
 	}
 
 }

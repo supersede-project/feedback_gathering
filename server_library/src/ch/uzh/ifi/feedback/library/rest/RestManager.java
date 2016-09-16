@@ -148,6 +148,10 @@ public class RestManager implements IRestManager {
 					Parameter[] params = m.getParameters();
 					for(int i = 0; i < params.length; i++){
 						if (params[i].isAnnotationPresent(PathParam.class)){
+							
+							if(!_parserMap.containsKey(params[i].getType()) && !params[i].getType().equals(String.class))
+								throw new Exception("The provided parameter type is not supported!");
+							
 							String paramName = params[i].getAnnotation(PathParam.class).value();
 							info.getPathParameters().put(paramName, params[i]);
 						}else if(i < params.length - 1){
@@ -285,8 +289,14 @@ public class RestManager implements IRestManager {
 			if(params.containsKey(pathParam.getKey()))
 			{
 				Parameter methodParam = pathParam.getValue();
-				Object parameterObject = _parserMap.get(methodParam.getType()).invoke(null, params.get(pathParam.getKey()));
-				parameters.add(parameterObject);
+				if(methodParam.getType().equals(String.class))
+				{
+					parameters.add(params.get(pathParam.getKey()));
+				}else{
+					Object parameterObject = _parserMap.get(methodParam.getType()).invoke(null, params.get(pathParam.getKey()));
+					parameters.add(parameterObject);
+				}
+
 			}else{
 				parameters.add(null);
 			}

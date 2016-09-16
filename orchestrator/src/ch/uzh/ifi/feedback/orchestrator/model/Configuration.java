@@ -42,6 +42,9 @@ public class Configuration extends OrchestratorItem<Configuration> {
 	@DbAttribute("applications_id")
 	private transient Integer applicationId;
 	
+	@DbAttribute("user_groups_id")
+	private transient Integer userGroupsId;
+	
 	public Configuration(){
 		mechanisms = new ArrayList<>();
 	}
@@ -125,5 +128,13 @@ public class Configuration extends OrchestratorItem<Configuration> {
 	@Override
 	public void setId(Integer id) {
 		this.id = id;
+	}
+
+	public Integer getUserGroupsId() {
+		return userGroupsId;
+	}
+
+	public void setUserGroupsId(Integer userGroupsId) {
+		this.userGroupsId = userGroupsId;
 	}
 }
