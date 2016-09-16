@@ -19,10 +19,10 @@ public class OrchestratorServletConfigurationTest extends ServletTest {
 	
 	public void testRetrievingSingleConfiguration() throws ClientProtocolException, IOException {
 		Configuration config = GetSuccess(
-				"http://localhost:8080/feedback_orchestrator/en/configurations/17",
+				"http://localhost:8080/feedback_orchestrator/en/configurations/80",
 				Configuration.class);
 		
-		assertEquals(config.getId(), new Integer(17));
+		assertEquals(config.getId(), new Integer(80));
 		assertEquals(config.getType(), ConfigurationType.PUSH);
 		assertEquals(config.getFeedbackMechanisms().size(), 4);
 		assertNotNull(config.getGeneralConfiguration());
@@ -30,7 +30,7 @@ public class OrchestratorServletConfigurationTest extends ServletTest {
 	
 	public void testRetrievingAllConfigurationsForApplication() throws ClientProtocolException, IOException {
 		Configuration[] retrievedConfigs = GetSuccess(
-				"http://localhost:8080/feedback_orchestrator/en/applications/14/configurations", 
+				"http://localhost:8080/feedback_orchestrator/en/applications/27/configurations", 
 				Configuration[].class);
 		
 		assertEquals(retrievedConfigs.length, 3);
