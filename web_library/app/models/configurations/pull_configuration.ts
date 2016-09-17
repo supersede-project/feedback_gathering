@@ -50,7 +50,7 @@ export class PullConfiguration extends Configuration {
 
     currentSlug():string {
         var url = location.href;
-        return url.replace(/http:\/\/.*\//i, "");
+        return url.replace(/http(s*):\/\/[^\/]*\//i, "");
     }
 
     pageDoesMatch(slug:string):boolean {

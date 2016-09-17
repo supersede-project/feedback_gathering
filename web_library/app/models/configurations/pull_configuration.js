@@ -35,7 +35,7 @@ define(["require", "exports", './configuration', '../../js/config'], function (r
         };
         PullConfiguration.prototype.currentSlug = function () {
             var url = location.href;
-            return url.replace(/http:\/\/.*\//i, "");
+            return url.replace(/http(s*):\/\/[^\/]*\//i, "");
         };
         PullConfiguration.prototype.pageDoesMatch = function (slug) {
             var pages = this.generalConfiguration.getParameterValue('pages');
