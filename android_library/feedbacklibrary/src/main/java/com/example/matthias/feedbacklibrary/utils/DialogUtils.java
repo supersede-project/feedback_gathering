@@ -85,7 +85,7 @@ public class DialogUtils {
             AlertDialog.Builder builder = new AlertDialog.Builder(associatedActivity);
             String message = getArguments().getString("message");
             final String jsonString = getArguments().getString("jsonString");
-            final int selectedPullConfigurationIndex = getArguments().getInt("selectedPullConfigurationIndex");
+            final long selectedPullConfigurationIndex = getArguments().getLong("selectedPullConfigurationIndex");
 
             builder.setMessage(message).setPositiveButton(R.string.supersede_feedbacklibrary_yes_string, new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int id) {

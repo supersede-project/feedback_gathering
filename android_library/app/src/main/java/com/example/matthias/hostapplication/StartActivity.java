@@ -27,26 +27,26 @@ public class StartActivity extends AppCompatActivity {
         //Utils.triggerPotentialPullFeedback(this);
 
         // Only for demo purposes
-        Button noPopup = (Button) findViewById(R.id.pull_no_popup_button);
-        if (noPopup != null) {
-            noPopup.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    String jsonString;
-                    jsonString = Utils.readFileAsString("configuration_material_design_pull_no_popup.json", getAssets());
-                    startFeedbackActivity(jsonString, false, 0);
-                }
-            });
-        }
         Button popup = (Button) findViewById(R.id.pull_popup_button);
         if (popup != null) {
             popup.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     String jsonString;
-                    jsonString = Utils.readFileAsString("configuration_material_design_pull_popup.json", getAssets());
-                    DialogUtils.PullFeedbackIntermediateDialog d = DialogUtils.PullFeedbackIntermediateDialog.newInstance(getResources().getString(com.example.matthias.feedbacklibrary.R.string.supersede_feedbacklibrary_pull_feedback_question_string), jsonString, 0);
+                    jsonString = Utils.readFileAsString("feedback_orchestrator_adapted_single_selection.json", getAssets());
+                    DialogUtils.PullFeedbackIntermediateDialog d = DialogUtils.PullFeedbackIntermediateDialog.newInstance(getResources().getString(com.example.matthias.feedbacklibrary.R.string.supersede_feedbacklibrary_pull_feedback_question_string), jsonString, 9);
                     d.show(getFragmentManager(), "feedbackPopupDialog");
+                }
+            });
+        }
+        Button noPopup = (Button) findViewById(R.id.pull_no_popup_button);
+        if (noPopup != null) {
+            noPopup.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String jsonString;
+                    jsonString = Utils.readFileAsString("feedback_orchestrator_adapted_multiple_selection.json", getAssets());
+                    startFeedbackActivity(jsonString, false, 10);
                 }
             });
         }
@@ -99,7 +99,7 @@ public class StartActivity extends AppCompatActivity {
         }
     }
 
-    private void startFeedbackActivity(String jsonString, boolean isPush, int selectedPullConfigurationIndex) {
+    private void startFeedbackActivity(String jsonString, boolean isPush, long selectedPullConfigurationIndex) {
         Intent intent = new Intent(this, FeedbackActivity.class);
         intent.putExtra(FeedbackActivity.JSON_CONFIGURATION_STRING, jsonString);
         intent.putExtra(FeedbackActivity.IS_PUSH_STRING, isPush);

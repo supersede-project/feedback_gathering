@@ -3,12 +3,18 @@ package com.example.matthias.feedbacklibrary.API;
 import com.example.matthias.feedbacklibrary.configurations.OrchestratorConfigurationItem;
 import com.google.gson.JsonObject;
 
+import java.util.Map;
+
+import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import retrofit2.Call;
+import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
+import retrofit2.http.PartMap;
+import retrofit2.http.Path;
 
 /**
  * API calls to the feedback orchestrator and feedback repository
@@ -16,52 +22,37 @@ import retrofit2.http.Part;
  * Repository: http://ec2-54-175-37-30.compute-1.amazonaws.com/feedback_repository/example/feedback
  */
 public interface feedbackAPI {
-    String endpoint = "http://ec2-54-175-37-30.compute-1.amazonaws.com/";
+    String endpoint = "http://ec2-54-166-31-250.compute-1.amazonaws.com/";
 
-    // Test servlets:
-    // http://ec2-54-175-37-30.compute-1.amazonaws.com/FeedbackConfiguration/material_design_push.json
-    @GET("FeedbackConfiguration/material_design_push.json")
-    Call<OrchestratorConfigurationItem> getConfigurationPush();
+    /**
+     * This methods makes a POST request to the feedback repository.
+     *
+     * @param language the language
+     * @param feedback the feedback
+     * @param files    the multipart files
+     * @return the JSON object
+     */
+    @Multipart
+    @POST("feedback_repository/{language}/feedbacks")
+    Call<JsonObject> createFeedbackVariant1(@Path("language") String language, @Part("json") RequestBody feedback, @PartMap Map<String, RequestBody> files);
 
-    // http://ec2-54-175-37-30.compute-1.amazonaws.com/FeedbackConfiguration/material_design_push_choice_active.json
-    @GET("FeedbackConfiguration/material_design_push_choice_active.json")
-    Call<OrchestratorConfigurationItem> getConfigurationPushChoiceActive();
+    /**
+     * This methods makes a POST request to the feedback repository.
+     *
+     * @param language      the language
+     * @param feedbackJSON  the feedback JSON
+     * @param feedbackFiles the feedback files
+     * @return the JSON object
+     */
+    @Multipart
+    @POST("feedback_repository/{language}/feedbacks")
+    Call<JsonObject> createFeedbackVariant2(@Path("language") String language, @Part("json") RequestBody feedbackJSON, @Part MultipartBody.Part feedbackFiles);
 
-    // http://ec2-54-175-37-30.compute-1.amazonaws.com/FeedbackConfiguration/material_design_pull_0_text.json
-    @GET("FeedbackConfiguration/material_design_pull_0_text.json")
-    Call<OrchestratorConfigurationItem> getConfigurationPullText0();
-
-    // http://ec2-54-175-37-30.compute-1.amazonaws.com/FeedbackConfiguration/material_design_pull_1_text_rating.json
-    @GET("FeedbackConfiguration/material_design_pull_1_text_rating.json")
-    Call<OrchestratorConfigurationItem> getConfigurationPullTextRating1();
-
-    // Actual backend
     /**
      * This method retrieves the feedback configuration from the orchestrator.
      *
      * @return the configuration from the orchestrator
      */
-    @GET("feedback_orchestrator/en/applications/8")
-    Call<OrchestratorConfigurationItem> getConfiguration();
-
-    /**
-     * This methods makes a POST request to the feedback repository without an image.
-     *
-     * @param feedback the feedback
-     * @return the JSON object
-     */
-    @Multipart
-    @POST("feedback_repository/example/feedback")
-    Call<JsonObject> createFeedback(@Part("json") RequestBody feedback);
-
-    /**
-     * This methods makes a POST request to the feedback repository with an image.
-     *
-     * @param file the image
-     * @param feedback the feedback
-     * @return the JSON object
-     */
-    @Multipart
-    @POST("feedback_repository/example/feedback")
-    Call<JsonObject> createFeedbackMultipart(@Part("file") RequestBody file, @Part("json") RequestBody feedback);
+    @GET("feedback_orchestrator/{language}/applications/{application_id}")
+    Call<OrchestratorConfigurationItem> getConfiguration(@Path("language") String language, @Path("application_id") long application_id);
 }

@@ -25,6 +25,8 @@ public class Feedback implements Serializable {
     @Expose
     private String language;
     @Expose
+    private String title;
+    @Expose
     private String userIdentification;
     // Mechanisms
     @Expose
@@ -39,7 +41,6 @@ public class Feedback implements Serializable {
     private List<ScreenshotFeedback> screenshotFeedbacks = null;
     @Expose
     private List<TextFeedback> textFeedbacks = null;
-
     public Feedback(List<Mechanism> allMechanisms) {
         for (Mechanism mechanism : allMechanisms) {
             if (mechanism.isActive()) {
@@ -136,6 +137,9 @@ public class Feedback implements Serializable {
         return textFeedbacks;
     }
 
+    public String getTitle() {
+        return title;
+    }
 
     public String getUserIdentification() {
         return userIdentification;
@@ -175,6 +179,10 @@ public class Feedback implements Serializable {
 
     public void setTextFeedbacks(List<TextFeedback> textFeedbacks) {
         this.textFeedbacks = textFeedbacks;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public void setUserIdentification(String userIdentification) {

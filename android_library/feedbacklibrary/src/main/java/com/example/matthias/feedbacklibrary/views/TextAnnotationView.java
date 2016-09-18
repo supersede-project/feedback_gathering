@@ -356,6 +356,10 @@ public abstract class TextAnnotationView extends FrameLayout {
             final TextInputLayout textAnnotationDialogInputLayout = (TextInputLayout) linearLayout.findViewById(R.id.supersede_feedbacklibrary_text_annotation_dialog_input_layout);
             final TextInputEditText textAnnotationDialogInputEditText = (TextInputEditText) linearLayout.findViewById(R.id.supersede_feedbacklibrary_text_annotation_dialog_text);
 
+            // Set the input text if the sticker is restored
+            if (AnnotationInputText != null) {
+                textAnnotationDialogInputEditText.setText(getAnnotationInputText());
+            }
             // Set the hint and enable it
             textAnnotationDialogInputLayout.setHintEnabled(true);
             textAnnotationDialogInputLayout.setHint(getAnnotationInputTextHint());

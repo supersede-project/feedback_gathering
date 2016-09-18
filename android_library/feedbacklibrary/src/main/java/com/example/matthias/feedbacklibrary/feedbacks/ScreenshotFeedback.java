@@ -3,6 +3,7 @@ package com.example.matthias.feedbacklibrary.feedbacks;
 import com.example.matthias.feedbacklibrary.models.ScreenshotMechanism;
 import com.google.gson.annotations.Expose;
 
+import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,6 +14,7 @@ import java.util.Map;
  * Screenshot feedback.
  */
 public class ScreenshotFeedback extends PartFeedback implements Serializable {
+    private String fileName;
     private String imagePath;
     @Expose
     private List<HashMap<String, Object>> textAnnotations;
@@ -20,6 +22,10 @@ public class ScreenshotFeedback extends PartFeedback implements Serializable {
     public ScreenshotFeedback(ScreenshotMechanism screenshotMechanism, int partId) {
         super(screenshotMechanism, screenshotMechanism.getImagePath(), partId);
         initScreenshotFeedback(screenshotMechanism);
+    }
+
+    public String getFileName() {
+        return new File(imagePath).getName();
     }
 
     public String getImagePath() {

@@ -10,11 +10,16 @@ import java.util.Map;
  * Attachment mechanism model
  */
 public class AttachmentMechanism extends Mechanism {
+    private List<String> attachmentPaths;
     private String title;
 
     public AttachmentMechanism(MechanismConfigurationItem item) {
         super(ATTACHMENT_TYPE, item);
         initAttachmentMechanism(item);
+    }
+
+    public List<String> getAttachmentPaths() {
+        return attachmentPaths;
     }
 
     public String getTitle() {
@@ -34,6 +39,10 @@ public class AttachmentMechanism extends Mechanism {
     @Override
     public boolean isValid(List<String> errorMessage) {
         return true;
+    }
+
+    public void setAttachmentPaths(List<String> attachmentPaths) {
+        this.attachmentPaths = attachmentPaths;
     }
 
     public void setTitle(String title) {

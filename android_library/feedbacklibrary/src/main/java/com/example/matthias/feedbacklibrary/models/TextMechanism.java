@@ -210,10 +210,12 @@ public class TextMechanism extends Mechanism {
             pattern = validationRegex;
         }
 
+        /*
         if (!inputText.matches(pattern)) {
             errorMessage.add(validationRegexErrorMessage);
             return false;
         }
+        */
 
         if (isMandatory() && !(inputText.length() > 0)) {
             errorMessage.add(mandatoryReminder);

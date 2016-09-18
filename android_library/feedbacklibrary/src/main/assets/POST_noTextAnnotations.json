@@ -1,16 +1,18 @@
 {
+  "title": "Feedback 1",
   "applicationId": 8,
-  "attachmentFeedbacks": null,
-  "audioFeedbacks": null,
+  "configurationId": 8,
+  "language": "EN",
+  "userIdentification": "u8102390",
   "categoryFeedbacks": [
     {
       "categories": [
         {
-          "text": "Bug",
+          "text": null,
           "categoryTypesId": 103
         },
         {
-          "text": null,
+          "text": "Feature Request",
           "categoryTypesId": 104
         },
         {
@@ -21,12 +23,10 @@
       "mechanismId": 15
     }
   ],
-  "configurationId": 8,
-  "language": "EN",
   "ratingFeedbacks": [
     {
       "mechanismId": 10,
-      "rating": 0
+      "rating": 4
     }
   ],
   "screenshotFeedbacks": [
@@ -34,15 +34,16 @@
       "textAnnotations": null,
       "fileExtension": "png",
       "mechanismId": 9,
-      "name": "Screenshot_2016913-215740491",
+      "name": "annotatedImage",
       "part": "screenshot0"
     }
   ],
   "textFeedbacks": [
     {
       "mechanismId": 7,
-      "text": "Ghjhj fgg"
+      "text": "My text feedback"
     }
   ],
-  "userIdentification": "u8102390"
+  "attachmentFeedbacks": null,
+  "audioFeedbacks": null
 }

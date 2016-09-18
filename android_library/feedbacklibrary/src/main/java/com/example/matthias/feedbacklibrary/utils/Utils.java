@@ -369,7 +369,7 @@ public class Utils {
     public static void triggerPotentialPullFeedback(final Activity activity) {
         Retrofit rtf = new Retrofit.Builder().baseUrl(feedbackAPI.endpoint).addConverterFactory(GsonConverterFactory.create()).build();
         feedbackAPI fbAPI = rtf.create(feedbackAPI.class);
-        Call<OrchestratorConfigurationItem> result = fbAPI.getConfiguration();
+        Call<OrchestratorConfigurationItem> result = fbAPI.getConfiguration("en", 8);
 
         // Asynchronous call
         if (result != null) {

@@ -118,7 +118,8 @@ public class ScreenshotMechanismView extends MechanismView {
                 picturePath = null;
                 picturePathWithoutStickers = null;
                 annotatedImagePath = null;
-                //annotatedImagePathWithoutStickers = null;
+                allStickerAnnotations = null;
+                allTextAnnotations = null;
                 annotateScreenshotButton.setEnabled(false);
                 deleteScreenshotButton.setEnabled(false);
                 screenShotPreviewImageView.setImageBitmap(null);

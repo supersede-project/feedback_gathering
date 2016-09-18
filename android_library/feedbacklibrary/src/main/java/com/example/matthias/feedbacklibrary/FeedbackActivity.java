@@ -12,8 +12,10 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -24,7 +26,11 @@ import com.example.matthias.feedbacklibrary.configurations.Configuration;
 import com.example.matthias.feedbacklibrary.configurations.OrchestratorConfiguration;
 import com.example.matthias.feedbacklibrary.configurations.OrchestratorConfigurationItem;
 import com.example.matthias.feedbacklibrary.feedbacks.Feedback;
+import com.example.matthias.feedbacklibrary.feedbacks.ScreenshotFeedback;
+import com.example.matthias.feedbacklibrary.models.AttachmentMechanism;
+import com.example.matthias.feedbacklibrary.models.AudioMechanism;
 import com.example.matthias.feedbacklibrary.models.Mechanism;
+import com.example.matthias.feedbacklibrary.models.ScreenshotMechanism;
 import com.example.matthias.feedbacklibrary.utils.DialogUtils;
 import com.example.matthias.feedbacklibrary.utils.Utils;
 import com.example.matthias.feedbacklibrary.views.CategoryMechanismView;
@@ -42,8 +48,11 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import okhttp3.FormBody;
 import okhttp3.MediaType;
+import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -67,7 +76,7 @@ public class FeedbackActivity extends AppCompatActivity implements ScreenshotMec
     private final static int REQUEST_CAMERA = 10;
     private final static int REQUEST_PHOTO = 11;
     private final static int REQUEST_ANNOTATE = 12;
-
+    private static final String MULTIPART_FORM_DATA = "multipart/form-data";
     private feedbackAPI fbAPI;
     // Orchestrator configuration fetched from the orchestrator
     private OrchestratorConfigurationItem orchestratorConfigurationItem;
@@ -84,10 +93,16 @@ public class FeedbackActivity extends AppCompatActivity implements ScreenshotMec
     private String defaultImagePath;
     // Pull configuration
     private boolean isPush;
-    private int selectedPullConfigurationIndex;
+    private long selectedPullConfigurationIndex;
     // General
     private ProgressDialog progressDialog;
     private String userScreenshotChosenTask = "";
+
+    @NonNull
+    private RequestBody createRequestBody(@NonNull File file) {
+        return RequestBody.create(
+                MediaType.parse(MULTIPART_FORM_DATA), file);
+    }
 
     private void galleryIntent() {
         Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
@@ -95,7 +110,7 @@ public class FeedbackActivity extends AppCompatActivity implements ScreenshotMec
         startActivityForResult(intent, REQUEST_PHOTO);
     }
 
-    public int getSelectedPullConfigurationIndex() {
+    public long getSelectedPullConfigurationIndex() {
         return selectedPullConfigurationIndex;
     }
 
@@ -106,7 +121,8 @@ public class FeedbackActivity extends AppCompatActivity implements ScreenshotMec
     private void init() {
         Retrofit rtf = new Retrofit.Builder().baseUrl(feedbackAPI.endpoint).addConverterFactory(GsonConverterFactory.create()).build();
         fbAPI = rtf.create(feedbackAPI.class);
-        Call<OrchestratorConfigurationItem> result = fbAPI.getConfiguration();
+        long applicationId = 8;
+        Call<OrchestratorConfigurationItem> result = fbAPI.getConfiguration("en", applicationId);
 
         // Asynchronous call
         if (result != null) {
@@ -146,13 +162,14 @@ public class FeedbackActivity extends AppCompatActivity implements ScreenshotMec
     }
 
     private void initOfflineConfiguration() {
+        System.out.println("initOfflineConfiguration executed (ONLY with PUSH correct!)");
+
         String jsonString;
         Gson gson = new Gson();
-
-        // For multiple category
-        //jsonString = Utils.readFileAsString("feedback_orchestrator_adapted_multiple_selection.json", getAssets());
         // For single category
         jsonString = Utils.readFileAsString("feedback_orchestrator_adapted_single_selection.json", getAssets());
+        // For multiple category
+        //jsonString = Utils.readFileAsString("feedback_orchestrator_adapted_multiple_selection.json", getAssets());
         orchestratorConfigurationItem = gson.fromJson(jsonString, OrchestratorConfigurationItem.class);
 
         initModel();
@@ -276,7 +293,7 @@ public class FeedbackActivity extends AppCompatActivity implements ScreenshotMec
         defaultImagePath = intent.getStringExtra(DEFAULT_IMAGE_PATH);
 
         isPush = intent.getBooleanExtra(IS_PUSH_STRING, true);
-        selectedPullConfigurationIndex = intent.getIntExtra(SELECTED_PULL_CONFIGURATION_INDEX_STRING, -1);
+        selectedPullConfigurationIndex = intent.getLongExtra(SELECTED_PULL_CONFIGURATION_INDEX_STRING, -1);
         String jsonString = intent.getStringExtra(JSON_CONFIGURATION_STRING);
 
         // Make progress dialog visible
@@ -330,7 +347,7 @@ public class FeedbackActivity extends AppCompatActivity implements ScreenshotMec
     public void onImageSelect(ScreenshotMechanismView screenshotMechanismView) {
         tempMechanismViewId = screenshotMechanismView.getMechanismViewIndex();
         final Resources res = getResources();
-        final CharSequence[] items = {res.getString(R.string.supersede_feedbacklibrary_photo_capture_text), res.getString(R.string.supersede_feedbacklibrary_library_chooser_text), res.getString(R.string.supersede_feedbacklibrary_cancel_string)};
+        final CharSequence[] items = {res.getString(R.string.supersede_feedbacklibrary_library_chooser_text), res.getString(R.string.supersede_feedbacklibrary_cancel_string)};
         AlertDialog.Builder builder = new AlertDialog.Builder(FeedbackActivity.this);
         builder.setTitle(res.getString(R.string.supersede_feedbacklibrary_image_selection_dialog_title));
         builder.setItems(items, new DialogInterface.OnClickListener() {
@@ -412,36 +429,61 @@ public class FeedbackActivity extends AppCompatActivity implements ScreenshotMec
 
         final ArrayList<String> messages = new ArrayList<>();
         if (validateInput(allMechanisms, messages)) {
-            Feedback feedback = new Feedback(allMechanisms);
-            feedback.setApplicationId(orchestratorConfiguration.getId());
-            feedback.setConfigurationId(activeConfiguration.getId());
-            feedback.setLanguage("EN");
-
-            // JSON string of feedback
-            GsonBuilder builder = new GsonBuilder();
-            builder.excludeFieldsWithoutExposeAnnotation();
-            // TODO: Ask Florian if NULL values should be serialized or left out
-            //builder.serializeNulls();
-            Gson gson = builder.create();
-            Type feedbackType = new TypeToken<Feedback>() {
-            }.getType();
-            String feedbackJsonString = gson.toJson(feedback, feedbackType);
-
-            /*
-            // Only for demo purposes
             if (fbAPI == null) {
                 Retrofit rtf = new Retrofit.Builder().baseUrl(feedbackAPI.endpoint).addConverterFactory(GsonConverterFactory.create()).build();
                 fbAPI = rtf.create(feedbackAPI.class);
             }
 
-            RequestBody feedbackJsonPart = RequestBody.create(MediaType.parse("multipart/form-data"), feedbackJsonString);
-            RequestBody feedbackScreenshotPart = RequestBody.create(MediaType.parse("multipart/form-data"), imageFile);
-            Call<JsonObject> result;
-            if (!screenShotImagePath.equals("")) {
-                result = fbAPI.createFeedbackMultipart(feedbackScreenshotPart, feedbackJsonPart);
-            } else {
-                result = fbAPI.createFeedback(feedbackJsonPart);
+            Feedback feedback = new Feedback(allMechanisms);
+            feedback.setApplicationId(orchestratorConfiguration.getId());
+            feedback.setConfigurationId(activeConfiguration.getId());
+            feedback.setLanguage("EN");
+            feedback.setTitle("Feedback test title");
+
+            // The JSON string of the feedback
+            GsonBuilder builder = new GsonBuilder();
+            builder.excludeFieldsWithoutExposeAnnotation();
+            // TODO: Ask Florian if NULL values should be serialized or left out --> we should serialize also the null values (consistency!)
+            builder.serializeNulls();
+            Gson gson = builder.create();
+            Type feedbackType = new TypeToken<Feedback>() {
+            }.getType();
+            String feedbackJsonString = gson.toJson(feedback, feedbackType);
+            RequestBody feedbackJSONPart = RequestBody.create(MediaType.parse("multipart/form-data"), feedbackJsonString);
+
+            List<String> screenshotPaths = new ArrayList<>();
+            List<String> audioPaths = new ArrayList<>();
+            List<List<String>> attachmentPaths = new ArrayList<>();
+
+            // Screenshots multipart
+            List<ScreenshotFeedback> screenshotFeedbacks = feedback.getScreenshotFeedbacks();
+            // Variant 1?
+            Map<String, RequestBody> files = new HashMap<>();
+            /*
+            // Variant 2?
+            MultipartBody.Builder multipartBodyBuilder = new MultipartBody.Builder().setType(MultipartBody.FORM);
+            */
+            for (int pos = 0; pos < screenshotFeedbacks.size(); ++pos) {
+                // Variant 1?
+                RequestBody requestBody = createRequestBody(new File(screenshotFeedbacks.get(pos).getImagePath()));
+                String fileName = screenshotFeedbacks.get(pos).getFileName();
+                String key = String.format("%1$s\"; filename=\"%2$s", screenshotFeedbacks.get(pos).getPartString() + String.valueOf(pos + 1), fileName);
+                files.put(key, requestBody);
+
+                /*
+                // Variant 2?
+                RequestBody requestBody = RequestBody.create(MediaType.parse(MULTIPART_FORM_DATA), new File(screenshotFeedbacks.get(pos).getImagePath()));
+                multipartBodyBuilder = multipartBodyBuilder.addFormDataPart(screenshotFeedbacks.get(pos).getPartString() + String.valueOf(pos + 1), screenshotFeedbacks.get(pos).getFileName(), requestBody);
+                */
             }
+
+
+            /*
+            Call<JsonObject> result;
+            // Variant 1?
+            result = fbAPI.createFeedbackVariant1("en", feedbackJSONPart, files);
+            // Variant 2?
+            result = fbAPI.createFeedbackVariant2("en", feedbackJSONPart, multipartBodyBuilder.build());
 
             if (result != null) {
                 result.enqueue(new Callback<JsonObject>() {
@@ -476,15 +518,18 @@ public class FeedbackActivity extends AppCompatActivity implements ScreenshotMec
 
         final ArrayList<String> messages = new ArrayList<>();
         if (validateInput(allMechanisms, messages)) {
-            System.out.println("Validation successful");
+            if (fbAPI == null) {
+                Retrofit rtf = new Retrofit.Builder().baseUrl(feedbackAPI.endpoint).addConverterFactory(GsonConverterFactory.create()).build();
+                fbAPI = rtf.create(feedbackAPI.class);
+            }
 
             Feedback feedback = new Feedback(allMechanisms);
             feedback.setApplicationId(orchestratorConfiguration.getId());
             feedback.setConfigurationId(activeConfiguration.getId());
             feedback.setLanguage("EN");
-            feedback.setUserIdentification("u8102390");
+            feedback.setTitle("Feedback test title");
 
-            // JSON string of feedback
+            // The JSON string of the feedback
             GsonBuilder builder = new GsonBuilder();
             builder.excludeFieldsWithoutExposeAnnotation();
             // TODO: Ask Florian if NULL values should be serialized or left out --> we should serialize also the null values (consistency!)
@@ -493,7 +538,66 @@ public class FeedbackActivity extends AppCompatActivity implements ScreenshotMec
             Type feedbackType = new TypeToken<Feedback>() {
             }.getType();
             String feedbackJsonString = gson.toJson(feedback, feedbackType);
-            System.out.println(feedbackJsonString);
+            RequestBody feedbackJSONPart = RequestBody.create(MediaType.parse("multipart/form-data"), feedbackJsonString);
+
+            List<String> screenshotPaths = new ArrayList<>();
+            List<String> audioPaths = new ArrayList<>();
+            List<List<String>> attachmentPaths = new ArrayList<>();
+
+            // Screenshots multipart
+            List<ScreenshotFeedback> screenshotFeedbacks = feedback.getScreenshotFeedbacks();
+            // Variant 1?
+            Map<String, RequestBody> files = new HashMap<>();
+            /*
+            // Variant 2?
+            MultipartBody.Builder multipartBodyBuilder = new MultipartBody.Builder().setType(MultipartBody.FORM);
+            */
+            if (screenshotFeedbacks != null) {
+                for (int pos = 0; pos < screenshotFeedbacks.size(); ++pos) {
+                    // Variant 1?
+                    RequestBody requestBody = createRequestBody(new File(screenshotFeedbacks.get(pos).getImagePath()));
+                    String fileName = screenshotFeedbacks.get(pos).getFileName();
+                    String key = String.format("%1$s\"; filename=\"%2$s", screenshotFeedbacks.get(pos).getPartString() + String.valueOf(pos + 1), fileName);
+                    files.put(key, requestBody);
+
+                    // TODO: Must key and filename be congruent?
+                    System.out.println("key == " + key);
+                    System.out.println("" + screenshotFeedbacks.get(pos).getPartString() + String.valueOf(pos + 1) + "\"; filename=\"" + fileName + ".jpg");
+
+                /*
+                // Variant 2?
+                RequestBody requestBody = RequestBody.create(MediaType.parse(MULTIPART_FORM_DATA), new File(screenshotFeedbacks.get(pos).getImagePath()));
+                multipartBodyBuilder = multipartBodyBuilder.addFormDataPart(screenshotFeedbacks.get(pos).getPartString() + String.valueOf(pos + 1), screenshotFeedbacks.get(pos).getFileName(), requestBody);
+                */
+                }
+            }
+
+            /*
+            Call<JsonObject> result;
+            // Variant 1?
+            result = fbAPI.createFeedbackVariant1("en", feedbackJSONPart, files);
+            // Variant 2?
+            result = fbAPI.createFeedbackVariant2("en", feedbackJSONPart, multipartBodyBuilder.build());
+
+            if (result != null) {
+                result.enqueue(new Callback<JsonObject>() {
+                    @Override
+                    public void onFailure(Call<JsonObject> call, Throwable t) {
+                        messages.add(getResources().getString(R.string.supersede_feedbacklibrary_error_text));
+                        DialogUtils.DataDialog d = DialogUtils.DataDialog.newInstance(messages);
+                        d.show(getFragmentManager(), "dataDialog");
+                    }
+
+                    @Override
+                    public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                        if (response.code() == 201) {
+                            Toast toast = Toast.makeText(getApplicationContext(), getResources().getString(R.string.supersede_feedbacklibrary_success_text), Toast.LENGTH_SHORT);
+                            toast.show();
+                        }
+                    }
+                });
+            }
+            */
         } else {
             DialogUtils.DataDialog d = DialogUtils.DataDialog.newInstance(messages);
             d.show(getFragmentManager(), "dataDialog");
