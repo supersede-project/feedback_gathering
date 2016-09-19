@@ -119,7 +119,7 @@ export class ScreenshotView {
             borderColor: '#000000',
             cornerColor: '#545454',
             cornerSize: 9,
-            padding: 10
+            padding: 3
         });
 
         var selectedObjectControls = jQuery('#screenshotMechanism' + myThis.screenshotMechanism.id + ' .selectedObjectControls');
@@ -192,8 +192,8 @@ export class ScreenshotView {
 
     }
 
-    initTextAnnotation() {
-        var text = new fabric.IText('Your text', { left: 100, top: 100, fontFamily: 'arial black' });
+    addTextAnnotation(left, top) {
+        var text = new fabric.IText('Your text', { left: left, top: top, fontFamily: 'arial black' });
         this.fabricCanvas.add(text);
     }
 
@@ -226,12 +226,16 @@ export class ScreenshotView {
                 offsetY -= 12;
                 offsetX -= 12;
 
-                fabric.loadSVGFromURL(sticker.attr('src'), function(objects, options) {
-                    var obj = fabric.util.groupSVGElements(objects, options);
-                    obj.set('left', offsetX);
-                    obj.set('top', offsetY);
-                    myThis.fabricCanvas.add(obj).renderAll();
-                });
+                if(sticker.hasClass('text')) {
+                    myThis.addTextAnnotation(offsetX, offsetY);
+                } else {
+                    fabric.loadSVGFromURL(sticker.attr('src'), function(objects, options) {
+                        var obj = fabric.util.groupSVGElements(objects, options);
+                        obj.set('left', offsetX);
+                        obj.set('top', offsetY);
+                        myThis.fabricCanvas.add(obj).renderAll();
+                    });
+                }
             }
         });
     }
