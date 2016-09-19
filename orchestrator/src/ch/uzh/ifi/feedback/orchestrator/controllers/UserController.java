@@ -31,18 +31,17 @@ public class UserController extends RestController<User> {
 	}
 	
 	@POST
-	@Path("/user_groups/{groupd_id}/users")
-	public User InsertForGroup(@PathParam("groupd_id") Integer groupId, User user) throws Exception 
+	@Path("/user_groups/{group_id}/users")
+	public User InsertForGroup(@PathParam("group_id") Integer groupId, User user) throws Exception 
 	{
 		user.setGroupId(groupId);
 		return super.Insert(user);
 	}
 	
 	@PUT
-	@Path("/user_groups/{groupd_id}/users")
-	public User UpdateForGroup(@PathParam("groupd_id") Integer groupId, User user) throws Exception 
+	@Path("/users")
+	public User UpdateForGroup(User user) throws Exception 
 	{
-		user.setGroupId(groupId);
 		return super.Update(user);
 	}
 }

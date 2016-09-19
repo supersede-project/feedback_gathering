@@ -393,7 +393,7 @@ DROP TABLE IF EXISTS `user_groups`;
 CREATE TABLE `user_groups` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -402,7 +402,7 @@ CREATE TABLE `user_groups` (
 
 LOCK TABLES `user_groups` WRITE;
 /*!40000 ALTER TABLE `user_groups` DISABLE KEYS */;
-INSERT INTO `user_groups` VALUES (1);
+INSERT INTO `user_groups` VALUES (1),(2);
 /*!40000 ALTER TABLE `user_groups` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -422,7 +422,7 @@ CREATE TABLE `user_groups_history` (
   PRIMARY KEY (`id`),
   KEY `fk_user_groups_history_1_idx` (`user_groups_id`),
   CONSTRAINT `fk_user_groups_history_1` FOREIGN KEY (`user_groups_id`) REFERENCES `user_groups` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -431,7 +431,7 @@ CREATE TABLE `user_groups_history` (
 
 LOCK TABLES `user_groups_history` WRITE;
 /*!40000 ALTER TABLE `user_groups_history` DISABLE KEYS */;
-INSERT INTO `user_groups_history` VALUES (1,'default',1,'2016-09-16 13:08:07','');
+INSERT INTO `user_groups_history` VALUES (1,'default',1,'2016-09-16 13:08:07',''),(2,'power_users',2,'2016-09-19 11:43:02','');
 /*!40000 ALTER TABLE `user_groups_history` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -474,7 +474,8 @@ CREATE TABLE `users_history` (
   `user_groups_id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_users_history_2_idx` (`user_groups_id`),
-  CONSTRAINT `fk_users_history_1` FOREIGN KEY (`user_groups_id`) REFERENCES `users` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  KEY `fk_users_history_1_idx` (`users_id`),
+  CONSTRAINT `fk_users_history_1` FOREIGN KEY (`users_id`) REFERENCES `users` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_users_history_2` FOREIGN KEY (`user_groups_id`) REFERENCES `user_groups` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -498,4 +499,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-09-16 17:22:24
+-- Dump completed on 2016-09-19 13:59:21

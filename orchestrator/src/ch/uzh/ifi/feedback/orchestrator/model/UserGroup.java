@@ -3,13 +3,19 @@ package ch.uzh.ifi.feedback.orchestrator.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import ch.uzh.ifi.feedback.library.rest.annotations.DbAttribute;
 import ch.uzh.ifi.feedback.library.rest.annotations.DbIgnore;
+import ch.uzh.ifi.feedback.library.rest.annotations.Serialize;
 import ch.uzh.ifi.feedback.library.rest.validation.Id;
 import ch.uzh.ifi.feedback.library.rest.validation.NotNull;
+import ch.uzh.ifi.feedback.orchestrator.serialization.UserGroupSerializationService;
+import ch.uzh.ifi.feedback.orchestrator.serialization.UserSerializationService;
 
+@Serialize(UserGroupSerializationService.class)
 public class UserGroup extends OrchestratorItem<UserGroup>{
 
 	@Id
+	@DbAttribute("user_groups_id")
 	private Integer id;
 	
 	@NotNull

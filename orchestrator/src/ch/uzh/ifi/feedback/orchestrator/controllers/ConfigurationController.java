@@ -60,12 +60,12 @@ public class ConfigurationController extends RestController<Configuration>
 	}
 	
 	@GET
-	@Path("/applications/{app_id}/users/{user_name}/configurations")
+	@Path("/applications/{app_id}/users/{user_id}/configurations")
 	public List<Configuration> GetAllByUserNameAndApplication( 
-			@PathParam("user_name")String userName, 
+			@PathParam("user_id")Integer userId, 
 			@PathParam("app_id")Integer appId) throws Exception 
 	{
-		List<User> users = userService.GetWhere(asList(userName), "name = ?");
+		List<User> users = userService.GetWhere(asList(userId), "users_id = ?");
 		if(users.size() != 1)
 			throw new ValidationException("The user you provided does not exist!");
 		

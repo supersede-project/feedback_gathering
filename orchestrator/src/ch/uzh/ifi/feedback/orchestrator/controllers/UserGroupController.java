@@ -10,6 +10,7 @@ import ch.uzh.ifi.feedback.library.rest.annotations.GET;
 import ch.uzh.ifi.feedback.library.rest.annotations.POST;
 import ch.uzh.ifi.feedback.library.rest.annotations.PUT;
 import ch.uzh.ifi.feedback.library.rest.annotations.Path;
+import ch.uzh.ifi.feedback.library.rest.annotations.PathParam;
 import ch.uzh.ifi.feedback.orchestrator.model.UserGroup;
 import ch.uzh.ifi.feedback.orchestrator.services.UserGroupService;
 import ch.uzh.ifi.feedback.orchestrator.validation.UserGroupValidator;
@@ -29,17 +30,17 @@ public class UserGroupController extends RestController<UserGroup> {
 		return super.GetAll();
 	}
 	
-	@POST
-	@Path("/user_groups")
-	public UserGroup Insert(UserGroup group) throws Exception 
+	@GET
+	@Path("/user_groups/{group_id}")
+	public UserGroup GetById(@PathParam("group_id") Integer groupId) throws Exception 
 	{
-		return super.Insert(group);
+		return super.GetById(groupId);
 	}
 	
-	@PUT
+	@POST
 	@Path("/user_groups")
-	public UserGroup UpdateGroup(UserGroup group) throws Exception 
+	public UserGroup Insert(UserGroup group) throws Exception
 	{
-		return super.Update(group);
+		return super.Insert(group);
 	}
 }
