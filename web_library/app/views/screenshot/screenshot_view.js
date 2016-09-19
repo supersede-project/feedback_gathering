@@ -67,12 +67,22 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
                         height: 20
                     });
                     oldCanvas.set('selectable', false);
+                    oldCanvas.set('hoverCursor', 'default');
                     fabricCanvas.add(oldCanvas);
                     fabricCanvas.add(rect);
-                    fabric.loadSVGFromURL(myThis.distPath + 'img/ic_sentiment_dissatisfied_black_24px.svg', function (objects, options) {
+                    fabric.loadSVGFromURL(myThis.distPath + 'img/ic_sentiment_satisfied_black_24px.svg', function (objects, options) {
                         var obj = fabric.util.groupSVGElements(objects, options);
+                        for (var _i = 0, _a = obj.paths; _i < _a.length; _i++) {
+                            var path = _a[_i];
+                            if (path.getFill() != "") {
+                                console.log(path.getFill());
+                                path.setFill('#00ff00');
+                            }
+                        }
                         fabricCanvas.add(obj).renderAll();
                     });
+                    var text = new fabric.IText('Your text', { left: 100, top: 100, fontFamily: 'arial black' });
+                    fabricCanvas.add(text);
                 }
             });
         };
