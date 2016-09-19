@@ -2,6 +2,7 @@ import {ConfigurationInterface} from '../../models/configurations/configuration_
 import i18n = require('i18next');
 import './../jquery.validate';
 import {mechanismTypes} from '../config';
+import '../../js/lib/html2canvas.js';
 
 
 export class PageNavigation {
@@ -109,6 +110,8 @@ export class PageNavigation {
 
                     screenshotReviewElement.append(reviewClone);
                 });
+
+                this.takeScreenshotOfScreenshotReview(screenshotMechanism, currentPage, nextPage);
             }
 
             for (var categoryMechanism of categoryMechanisms) {
@@ -143,4 +146,16 @@ export class PageNavigation {
         return true;
     }
 
+    takeScreenshotOfScreenshotReview(screenshotMechanism) {
+        var screenshotPreviewElement = jQuery('#screenshotMechanism' + screenshotMechanism.id + ' .screenshot-preview');
+
+        html2canvas(screenshotPreviewElement, {
+            onrendered: function (canvas) {
+                var data = canvas.toDataURL();
+                var img = $('<img src="' + data + '" />');
+                img.css('width', '40%');
+                jQuery('#testScreenshot').append(img)
+            }
+        });
+    }
 }

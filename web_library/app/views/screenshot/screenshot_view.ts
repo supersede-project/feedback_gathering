@@ -2,7 +2,7 @@ import {ScreenshotViewDrawing} from './screenshot_view_drawing';
 import {DataHelper} from '../../js/helpers/data_helper';
 import '../../js/lib/html2canvas.js';
 import {Mechanism} from '../../models/mechanisms/mechanism';
-
+import 'fabric';
 
 const freehandDrawingMode:string = 'freehandDrawingMode';
 const rectDrawingMode:string = 'rectDrawingMode';
@@ -69,6 +69,8 @@ export class ScreenshotView {
                 myThis.showElements();
                 myThis.screenshotPreviewElement.empty().append(canvas);
                 myThis.screenshotPreviewElement.show();
+                var canvasId = 'screenshotCanvas';
+                jQuery('.screenshot-preview canvas').attr('id', canvasId);
 
                 var windowRatio = myThis.elementToCapture.width() / myThis.elementToCapture.height();
 
@@ -89,13 +91,34 @@ export class ScreenshotView {
                 myThis.canvasState = img;
                 myThis.screenshotCanvas = canvas;
                 img.src = data;
-                img.onload = function () {
-                    myThis.context.drawImage(img, 0, 0, img.width, img.height, 0, 0, canvas.width, canvas.height);
-                };
+
+
 
                 let screenshotCaptureButtonActiveText = myThis.screenshotCaptureButton.data('active-text');
                 myThis.screenshotCaptureButton.text(screenshotCaptureButtonActiveText);
                 myThis.initDrawing();
+
+
+
+                var fabricCanvas = new fabric.Canvas(canvasId);
+                var oldCanvas = new fabric.Image(img, { width: canvas.width, height: canvas.height });
+
+                var rect = new fabric.Rect({
+                    left: 100,
+                    top: 100,
+                    fill: 'red',
+                    width: 20,
+                    height: 20
+                });
+                oldCanvas.set('selectable', false);
+                fabricCanvas.add(oldCanvas);
+                fabricCanvas.add(rect);
+
+
+                fabric.loadSVGFromURL(myThis.distPath + 'img/ic_sentiment_dissatisfied_black_24px.svg', function(objects, options) {
+                    var obj = fabric.util.groupSVGElements(objects, options);
+                    fabricCanvas.add(obj).renderAll();
+                });
             }
         });
     }

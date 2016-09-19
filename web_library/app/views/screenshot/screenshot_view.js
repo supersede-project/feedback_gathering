@@ -1,4 +1,4 @@
-define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/data_helper', '../../js/lib/html2canvas.js'], function (require, exports, screenshot_view_drawing_1, data_helper_1) {
+define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/data_helper', '../../js/lib/html2canvas.js', 'fabric'], function (require, exports, screenshot_view_drawing_1, data_helper_1) {
     "use strict";
     var freehandDrawingMode = 'freehandDrawingMode';
     var rectDrawingMode = 'rectDrawingMode';
@@ -38,6 +38,8 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
                     myThis.showElements();
                     myThis.screenshotPreviewElement.empty().append(canvas);
                     myThis.screenshotPreviewElement.show();
+                    var canvasId = 'screenshotCanvas';
+                    jQuery('.screenshot-preview canvas').attr('id', canvasId);
                     var windowRatio = myThis.elementToCapture.width() / myThis.elementToCapture.height();
                     var data = canvas.toDataURL("image/png");
                     myThis.context = canvas.getContext("2d");
@@ -52,12 +54,25 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
                     myThis.canvasState = img;
                     myThis.screenshotCanvas = canvas;
                     img.src = data;
-                    img.onload = function () {
-                        myThis.context.drawImage(img, 0, 0, img.width, img.height, 0, 0, canvas.width, canvas.height);
-                    };
                     var screenshotCaptureButtonActiveText = myThis.screenshotCaptureButton.data('active-text');
                     myThis.screenshotCaptureButton.text(screenshotCaptureButtonActiveText);
                     myThis.initDrawing();
+                    var fabricCanvas = new fabric.Canvas(canvasId);
+                    var oldCanvas = new fabric.Image(img, { width: canvas.width, height: canvas.height });
+                    var rect = new fabric.Rect({
+                        left: 100,
+                        top: 100,
+                        fill: 'red',
+                        width: 20,
+                        height: 20
+                    });
+                    oldCanvas.set('selectable', false);
+                    fabricCanvas.add(oldCanvas);
+                    fabricCanvas.add(rect);
+                    fabric.loadSVGFromURL(myThis.distPath + 'img/ic_sentiment_dissatisfied_black_24px.svg', function (objects, options) {
+                        var obj = fabric.util.groupSVGElements(objects, options);
+                        fabricCanvas.add(obj).renderAll();
+                    });
                 }
             });
         };

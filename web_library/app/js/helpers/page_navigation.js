@@ -1,4 +1,4 @@
-define(["require", "exports", 'i18next', '../config', './../jquery.validate'], function (require, exports, i18n, config_1) {
+define(["require", "exports", 'i18next', '../config', './../jquery.validate', '../../js/lib/html2canvas.js'], function (require, exports, i18n, config_1) {
     "use strict";
     var PageNavigation = (function () {
         function PageNavigation(configuration, container) {
@@ -82,6 +82,7 @@ define(["require", "exports", 'i18next', '../config', './../jquery.validate'], f
                         }
                         screenshotReviewElement.append(reviewClone);
                     });
+                    this.takeScreenshotOfScreenshotReview(screenshotMechanism, currentPage, nextPage);
                 }
                 for (var _c = 0, categoryMechanisms_1 = categoryMechanisms; _c < categoryMechanisms_1.length; _c++) {
                     var categoryMechanism = categoryMechanisms_1[_c];
@@ -114,6 +115,17 @@ define(["require", "exports", 'i18next', '../config', './../jquery.validate'], f
                 }
             }
             return true;
+        };
+        PageNavigation.prototype.takeScreenshotOfScreenshotReview = function (screenshotMechanism) {
+            var screenshotPreviewElement = jQuery('#screenshotMechanism' + screenshotMechanism.id + ' .screenshot-preview');
+            html2canvas(screenshotPreviewElement, {
+                onrendered: function (canvas) {
+                    var data = canvas.toDataURL();
+                    var img = $('<img src="' + data + '" />');
+                    img.css('width', '40%');
+                    jQuery('#testScreenshot').append(img);
+                }
+            });
         };
         return PageNavigation;
     }());
