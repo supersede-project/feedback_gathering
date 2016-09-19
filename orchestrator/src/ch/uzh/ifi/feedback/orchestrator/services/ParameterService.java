@@ -32,7 +32,7 @@ public class ParameterService extends OrchestratorService<FeedbackParameter>{
 	
 	@Override
 	public List<FeedbackParameter> GetWhere(List<Object> values, String... conditions)
-			throws SQLException, NotFoundException {
+			throws SQLException {
 		
 		List<FeedbackParameter> params = super.GetWhere(values, conditions);
 		
@@ -48,7 +48,7 @@ public class ParameterService extends OrchestratorService<FeedbackParameter>{
 	}
 	
 	@Override
-	public List<FeedbackParameter> GetAll() throws SQLException, NotFoundException
+	public List<FeedbackParameter> GetAll() throws SQLException
 	{
 		return GetWhere(asList());
 	}

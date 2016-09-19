@@ -116,14 +116,14 @@ public class MechanismService extends OrchestratorService<FeedbackMechanism> {
 	}
 
 	@Override
-	public List<FeedbackMechanism> GetAll() throws SQLException, NotFoundException
+	public List<FeedbackMechanism> GetAll() throws SQLException
 	{
 	    return GetWhere(asList());
 	}
 	
 	@Override
 	public List<FeedbackMechanism> GetWhere(List<Object> values, String... conditions)
-			throws SQLException, NotFoundException {
+			throws SQLException {
 		
 		Connection con = TransactionManager.createDatabaseConnection();
 		

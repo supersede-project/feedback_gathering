@@ -18,6 +18,30 @@ USE `feedback_orchestrator_test`;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
+-- Table structure for table `api_users`
+--
+
+DROP TABLE IF EXISTS `api_users`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `api_users` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(45) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `api_users`
+--
+
+LOCK TABLES `api_users` WRITE;
+/*!40000 ALTER TABLE `api_users` DISABLE KEYS */;
+/*!40000 ALTER TABLE `api_users` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `applications1`
 --
 
@@ -499,4 +523,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-09-19 13:59:21
+-- Dump completed on 2016-09-19 16:35:09

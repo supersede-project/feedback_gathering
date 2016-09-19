@@ -49,7 +49,7 @@ public class GeneralConfigurationService extends OrchestratorService<GeneralConf
 	}
 
 	@Override
-	public List<GeneralConfiguration> GetAll() throws SQLException, NotFoundException {
+	public List<GeneralConfiguration> GetAll() throws SQLException {
 
 		List<GeneralConfiguration> configs = super.GetAll();
 		for(GeneralConfiguration config : configs)
@@ -63,16 +63,6 @@ public class GeneralConfigurationService extends OrchestratorService<GeneralConf
 	@Override
 	public void Update(Connection con, GeneralConfiguration config)
 			throws SQLException, NotFoundException {
-		/*
-	    PreparedStatement s = con.prepareStatement(
-	    		  "UPDATE feedback_orchestrator.general_configurations as c "
-	    		+ "SET c.updated_at = now() "
-	    		+ "WHERE c.id = ? ;");
-	    
-	    s.setInt(1, config.getId());
-	    s.execute();
-	   */
-
 	   super.Update(con, config);
 	   
 	   for(FeedbackParameter param : config.getParameters())
@@ -80,10 +70,7 @@ public class GeneralConfigurationService extends OrchestratorService<GeneralConf
 		   param.setGenaralConfigurationId(config.getId());
 		   if(param.getId() == null){
 			   parameterService.Insert(con, param);
-			   //parameterService.InsertFor(con, param, "configuration_id", config.getId());
-		   }else{
-			   
-			  // parameterService.UpdateFor(con, param, "configuration_id", config.getId());
+		   }else{	  
 			   parameterService.Update(con, param);
 		   }
 	   }
@@ -93,22 +80,9 @@ public class GeneralConfigurationService extends OrchestratorService<GeneralConf
 	public int Insert(Connection con, GeneralConfiguration config)
 			throws SQLException, NotFoundException, UnsupportedOperationException {
 		
-		/*
-	    PreparedStatement s = con.prepareStatement(
-	    		"INSERT INTO feedback_orchestrator.general_configurations "
-	    		+ "(name) "
-	    		+ "VALUES (?) ;", PreparedStatement.RETURN_GENERATED_KEYS);
-	    
-	    s.setString(1, config.getName());
-	    s.execute();
-	    ResultSet keys = s.getGeneratedKeys();
-	    keys.next();
-	    int key = keys.getInt(1);
-	    */
 		int id = super.Insert(con, config);
 	    for(FeedbackParameter param : config.getParameters())
 	    {
-	    	//parameterService.InsertFor(con, param, "configuration_id", key);
 	    	param.setGenaralConfigurationId(id);
 	    	parameterService.Insert(con, param);
 	    }

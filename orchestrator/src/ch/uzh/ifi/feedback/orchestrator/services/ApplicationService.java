@@ -48,14 +48,18 @@ public class ApplicationService extends OrchestratorService<Application>{
 	}
 
 	@Override
-	public List<Application> GetAll() throws SQLException, NotFoundException {
+	public List<Application> GetAll() throws SQLException {
 		
 		List<Application> apps = super.GetAll();
 		for(Application app : apps)
 		{
 			app.getConfigurations().addAll(configurationService.GetWhere(asList(app.getId()), "applications_id = ?"));
 			if(app.getGeneralConfigurationId() != null)
-				app.setGeneralConfiguration(generalConfigurationService.GetById(app.getGeneralConfigurationId()));
+				try {
+					app.setGeneralConfiguration(generalConfigurationService.GetById(app.getGeneralConfigurationId()));
+				} catch (NotFoundException e) {
+					e.printStackTrace();
+				}
 		}
 		
 		return apps;

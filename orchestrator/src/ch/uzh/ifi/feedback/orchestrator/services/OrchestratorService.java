@@ -91,7 +91,7 @@ public class OrchestratorService<T extends IOrchestratorItem<T>> extends Service
 	}
 	
 	@Override
-	public List<T> GetWhere(List<Object> values, String... conditions) throws SQLException, NotFoundException {
+	public List<T> GetWhere(List<Object> values, String... conditions) throws SQLException {
 		List<Object> newValues = new ArrayList<>();
 		newValues.addAll(asList(selectedTimestamp, selectedTimestamp));
 		newValues.addAll(values);
@@ -107,7 +107,7 @@ public class OrchestratorService<T extends IOrchestratorItem<T>> extends Service
 	}
 	
 	@Override
-	public List<T> GetAll() throws SQLException, NotFoundException 
+	public List<T> GetAll() throws SQLException 
 	{
 		return GetWhere(asList());
 	}

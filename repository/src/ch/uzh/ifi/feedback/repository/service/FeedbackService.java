@@ -58,7 +58,7 @@ public class FeedbackService extends ServiceBase<Feedback> {
 	}
 
 	@Override
-	public List<Feedback> GetAll() throws SQLException, NotFoundException {
+	public List<Feedback> GetAll() throws SQLException {
 		List<Feedback> feedbacks = super.GetAll();
 
 		for (Feedback feedback : feedbacks) {
@@ -120,7 +120,7 @@ public class FeedbackService extends ServiceBase<Feedback> {
 	}
 
 
-	private void setFeedbackRelations(Feedback feedback) throws SQLException, NotFoundException {
+	private void setFeedbackRelations(Feedback feedback) throws SQLException {
 		feedback.setTextFeedbacks(textFeedbackService.GetWhere(Arrays.asList(feedback.getId()), "feedback_id = ?"));
 		feedback.setRatings(ratingFeedbackService.GetWhere(Arrays.asList(feedback.getId()), "feedback_id = ?"));
 		feedback.setScreenshots(screenshotFeedbackService.GetWhere(Arrays.asList(feedback.getId()), "feedback_id = ?"));

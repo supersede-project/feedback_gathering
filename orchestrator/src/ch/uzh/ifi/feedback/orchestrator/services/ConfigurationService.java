@@ -48,7 +48,7 @@ public class ConfigurationService extends OrchestratorService<Configuration>{
 	}
 	
 	@Override
-	public List<Configuration> GetWhere(List<Object> values, String... conditions) throws SQLException, NotFoundException 
+	public List<Configuration> GetWhere(List<Object> values, String... conditions) throws SQLException 
 	{
 		List<Configuration> configurations =  super.GetWhere(values, conditions);
 		
@@ -56,7 +56,11 @@ public class ConfigurationService extends OrchestratorService<Configuration>{
 		{
 			config.getFeedbackMechanisms().addAll(mechanismService.GetWhere(asList(config.getId()), "configurations_id = ?"));
 			if(config.getGeneralConfigurationId() != null)
-				config.setGeneralConfiguration(generalConfigurationService.GetById(config.getGeneralConfigurationId()));
+				try {
+					config.setGeneralConfiguration(generalConfigurationService.GetById(config.getGeneralConfigurationId()));
+				} catch (NotFoundException e) {
+					e.printStackTrace();
+				}
 		}
 		
 		return configurations;

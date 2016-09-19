@@ -4,19 +4,24 @@ import com.google.inject.AbstractModule;
 
 import ch.uzh.ifi.feedback.library.rest.Service.DatabaseConfiguration;
 import ch.uzh.ifi.feedback.library.rest.Service.DbResultParser;
+import ch.uzh.ifi.feedback.library.rest.authorization.AuthenticationCache;
+import ch.uzh.ifi.feedback.orchestrator.authorization.UserAuthenticationService;
 import ch.uzh.ifi.feedback.orchestrator.controllers.ApplicationController;
+import ch.uzh.ifi.feedback.orchestrator.controllers.AuthenticationController;
 import ch.uzh.ifi.feedback.orchestrator.controllers.ConfigurationController;
 import ch.uzh.ifi.feedback.orchestrator.controllers.MechanismController;
 import ch.uzh.ifi.feedback.orchestrator.controllers.ParameterController;
 import ch.uzh.ifi.feedback.orchestrator.controllers.UserController;
 import ch.uzh.ifi.feedback.orchestrator.controllers.UserGroupController;
 import ch.uzh.ifi.feedback.orchestrator.model.FeedbackParameter;
+import ch.uzh.ifi.feedback.orchestrator.serialization.ApiUserSerializationService;
 import ch.uzh.ifi.feedback.orchestrator.serialization.ApplicationSerializationService;
 import ch.uzh.ifi.feedback.orchestrator.serialization.ConfigurationSerializationService;
 import ch.uzh.ifi.feedback.orchestrator.serialization.MechanismSerializationService;
 import ch.uzh.ifi.feedback.orchestrator.serialization.ParameterSerializationService;
 import ch.uzh.ifi.feedback.orchestrator.serialization.UserGroupSerializationService;
 import ch.uzh.ifi.feedback.orchestrator.serialization.UserSerializationService;
+import ch.uzh.ifi.feedback.orchestrator.services.ApiUserService;
 import ch.uzh.ifi.feedback.orchestrator.services.ApplicationResultParser;
 import ch.uzh.ifi.feedback.orchestrator.services.ApplicationService;
 import ch.uzh.ifi.feedback.orchestrator.services.ConfigurationResultParser;
@@ -31,6 +36,7 @@ import ch.uzh.ifi.feedback.orchestrator.services.UserGroupResultParser;
 import ch.uzh.ifi.feedback.orchestrator.services.UserGroupService;
 import ch.uzh.ifi.feedback.orchestrator.services.UserResultParser;
 import ch.uzh.ifi.feedback.orchestrator.services.UserService;
+import ch.uzh.ifi.feedback.orchestrator.validation.ApiUserValidator;
 import ch.uzh.ifi.feedback.orchestrator.validation.ApplicationValidator;
 import ch.uzh.ifi.feedback.orchestrator.validation.ConfigurationValidator;
 import ch.uzh.ifi.feedback.orchestrator.validation.GeneralConfigurationValidator;
@@ -74,6 +80,12 @@ public class OrchestratorModule extends AbstractModule{
 	    bind(UserGroupSerializationService.class).to(UserGroupSerializationService.class);
 	    bind(UserGroupResultParser.class).to(UserGroupResultParser.class);
 	    bind(UserGroupController.class).to(UserGroupController.class);
+	    bind(ApiUserValidator.class).to(ApiUserValidator.class);
+	    bind(ApiUserSerializationService.class).to(ApiUserSerializationService.class);
+	    bind(ApiUserService.class).to(ApiUserService.class);
+	    bind(UserAuthenticationService.class).to(UserAuthenticationService.class);
+	    bind(AuthenticationCache.class).to(AuthenticationCache.class);
+	    bind(AuthenticationController.class).to(AuthenticationController.class);
 	}
 
 }

@@ -29,7 +29,7 @@ public class UserGroupService extends OrchestratorService<UserGroup>{
 	}
 	
 	@Override
-	public List<UserGroup> GetAll() throws SQLException, NotFoundException {
+	public List<UserGroup> GetAll() throws SQLException {
 		List<UserGroup> groups = super.GetAll();
 		
 		for(UserGroup group : groups)
