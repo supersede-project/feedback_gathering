@@ -1100,7 +1100,7 @@ button.screenshot-operation {
   button.screenshot-operation.active {
     padding: 7px 7px; }
   button.screenshot-operation.screenshot-draw-remove {
-    margin-top: 20px;
+    margin-top: 0;
     max-width: none;
     width: auto; }
     button.screenshot-operation.screenshot-draw-remove:hover {
