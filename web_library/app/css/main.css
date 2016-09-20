@@ -1217,6 +1217,11 @@ button.screenshot-operation {
   .sticker-container-review:hover a.color {
     display: none; }
 
+.svg-sticker-source {
+  width: 24px;
+  height: 24px;
+  margin: 3px; }
+
 .svg-sticker-source:hover {
   cursor: move; }
 
