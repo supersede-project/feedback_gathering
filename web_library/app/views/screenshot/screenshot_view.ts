@@ -96,10 +96,11 @@ export class ScreenshotView {
                 img.src = data;
                 img.onload = function () {
                     myThis.context.drawImage(img, 0, 0, img.width, img.height, 0, 0, canvas.width, canvas.height);
-                    myThis.initFabric(img, canvas);
-                    myThis.initSVGStickers();
-                    myThis.initScreenshotOperations();
                 };
+
+                myThis.initFabric(img, canvas);
+                myThis.initSVGStickers();
+                myThis.initScreenshotOperations();
 
                 let screenshotCaptureButtonActiveText = myThis.screenshotCaptureButton.data('active-text');
                 myThis.screenshotCaptureButton.text(screenshotCaptureButtonActiveText);
@@ -274,7 +275,6 @@ export class ScreenshotView {
     }
 
     cropTheCanvas(croppingRect) {
-        this.updateCanvasState();
         this.fabricCanvas.clipTo = function (ctx) {
             ctx.rect(croppingRect.left, croppingRect.top, croppingRect.width, croppingRect.height);
         };
@@ -283,8 +283,12 @@ export class ScreenshotView {
     }
 
     addTextAnnotation(left, top) {
-        var text = new fabric.IText('Your text', {left: left, top: top, fontFamily: 'arial black'});
+        var text = new fabric.IText('Your text', {left: left, top: top, fontFamily: 'arial', fontSize: 30});
         this.fabricCanvas.add(text);
+        this.fabricCanvas.setActiveObject(text);
+        text.enterEditing();
+        text.hiddenTextarea.focus();
+        text.selectAll();
     }
 
     initSVGStickers() {
@@ -320,10 +324,11 @@ export class ScreenshotView {
                     myThis.addTextAnnotation(offsetX, offsetY);
                 } else {
                     fabric.loadSVGFromURL(sticker.attr('src'), function (objects, options) {
-                        var obj = fabric.util.groupSVGElements(objects, options);
-                        obj.set('left', offsetX);
-                        obj.set('top', offsetY);
-                        myThis.fabricCanvas.add(obj).renderAll();
+                        var svgObject = fabric.util.groupSVGElements(objects, options);
+                        svgObject.set('left', offsetX);
+                        svgObject.set('top', offsetY);
+                        myThis.fabricCanvas.add(svgObject).renderAll();
+                        myThis.fabricCanvas.setActiveObject(svgObject);
                     });
                 }
             }
@@ -404,6 +409,7 @@ export class ScreenshotView {
         this.container.find('.screenshot-crop').on('click', function (event) {
             event.preventDefault();
             event.stopPropagation();
+            myThis.updateCanvasState();
             myThis.initCrop();
         });
 

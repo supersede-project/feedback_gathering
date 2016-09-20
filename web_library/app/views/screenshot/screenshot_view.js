@@ -57,10 +57,10 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
                     img.src = data;
                     img.onload = function () {
                         myThis.context.drawImage(img, 0, 0, img.width, img.height, 0, 0, canvas.width, canvas.height);
-                        myThis.initFabric(img, canvas);
-                        myThis.initSVGStickers();
-                        myThis.initScreenshotOperations();
                     };
+                    myThis.initFabric(img, canvas);
+                    myThis.initSVGStickers();
+                    myThis.initScreenshotOperations();
                     var screenshotCaptureButtonActiveText = myThis.screenshotCaptureButton.data('active-text');
                     myThis.screenshotCaptureButton.text(screenshotCaptureButtonActiveText);
                 }
@@ -215,7 +215,6 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
             });
         };
         ScreenshotView.prototype.cropTheCanvas = function (croppingRect) {
-            this.updateCanvasState();
             this.fabricCanvas.clipTo = function (ctx) {
                 ctx.rect(croppingRect.left, croppingRect.top, croppingRect.width, croppingRect.height);
             };
@@ -223,8 +222,12 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
             this.container.find('.screenshot-draw-undo').show();
         };
         ScreenshotView.prototype.addTextAnnotation = function (left, top) {
-            var text = new fabric.IText('Your text', { left: left, top: top, fontFamily: 'arial black' });
+            var text = new fabric.IText('Your text', { left: left, top: top, fontFamily: 'arial', fontSize: 30 });
             this.fabricCanvas.add(text);
+            this.fabricCanvas.setActiveObject(text);
+            text.enterEditing();
+            text.hiddenTextarea.focus();
+            text.selectAll();
         };
         ScreenshotView.prototype.initSVGStickers = function () {
             var myThis = this;
@@ -256,10 +259,11 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
                     }
                     else {
                         fabric.loadSVGFromURL(sticker.attr('src'), function (objects, options) {
-                            var obj = fabric.util.groupSVGElements(objects, options);
-                            obj.set('left', offsetX);
-                            obj.set('top', offsetY);
-                            myThis.fabricCanvas.add(obj).renderAll();
+                            var svgObject = fabric.util.groupSVGElements(objects, options);
+                            svgObject.set('left', offsetX);
+                            svgObject.set('top', offsetY);
+                            myThis.fabricCanvas.add(svgObject).renderAll();
+                            myThis.fabricCanvas.setActiveObject(svgObject);
                         });
                     }
                 }
@@ -328,6 +332,7 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
             this.container.find('.screenshot-crop').on('click', function (event) {
                 event.preventDefault();
                 event.stopPropagation();
+                myThis.updateCanvasState();
                 myThis.initCrop();
             });
             this.container.find('.screenshot-draw-undo').on('click', function (event) {
