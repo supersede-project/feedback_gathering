@@ -10,8 +10,8 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
     var textMode = 'textMode';
     var textMode2 = 'textMode2';
     var black = "#000000";
-    var red = "#FF0000";
     var defaultColor = black;
+    var canvasId = 'screenshotCanvas';
     var ScreenshotView = (function () {
         function ScreenshotView(screenshotMechanism, screenshotPreviewElement, screenshotCaptureButton, elementToCapture, container, distPath, elementsToHide) {
             this.screenshotMechanism = screenshotMechanism;
@@ -25,6 +25,7 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
             this.distPath = distPath;
             this.screenshotViewDrawing = new screenshot_view_drawing_1.ScreenshotViewDrawing();
             this.addCaptureEventToButton();
+            this.croppingIsActive = false;
         }
         ScreenshotView.prototype.checkAutoTake = function () {
             if (this.screenshotMechanism.getParameterValue('autoTake')) {
@@ -39,7 +40,6 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
                     myThis.showElements();
                     myThis.screenshotPreviewElement.empty().append(canvas);
                     myThis.screenshotPreviewElement.show();
-                    var canvasId = 'screenshotCanvas';
                     jQuery('.screenshot-preview canvas').attr('id', canvasId);
                     var windowRatio = myThis.elementToCapture.width() / myThis.elementToCapture.height();
                     var data = canvas.toDataURL("image/png");
@@ -55,21 +55,24 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
                     myThis.canvasState = img;
                     myThis.screenshotCanvas = canvas;
                     img.src = data;
+                    img.onload = function () {
+                        myThis.context.drawImage(img, 0, 0, img.width, img.height, 0, 0, canvas.width, canvas.height);
+                        myThis.initFabric(img, canvas);
+                        myThis.initSVGStickers();
+                        myThis.initScreenshotOperations();
+                    };
                     var screenshotCaptureButtonActiveText = myThis.screenshotCaptureButton.data('active-text');
                     myThis.screenshotCaptureButton.text(screenshotCaptureButtonActiveText);
-                    myThis.initScreenshotOperations();
-                    myThis.initFabric(canvasId, img, canvas);
-                    myThis.initSVGStickers();
                 }
             });
         };
-        ScreenshotView.prototype.initFabric = function (canvasId, img, canvas) {
+        ScreenshotView.prototype.initFabric = function (img, canvas) {
             var myThis = this;
             this.fabricCanvas = new fabric.Canvas(canvasId);
-            var oldCanvas = new fabric.Image(img, { width: canvas.width, height: canvas.height });
-            oldCanvas.set('selectable', false);
-            oldCanvas.set('hoverCursor', 'default');
-            this.fabricCanvas.add(oldCanvas);
+            var pageScreenshotCanvas = new fabric.Image(img, { width: canvas.width, height: canvas.height });
+            pageScreenshotCanvas.set('selectable', false);
+            pageScreenshotCanvas.set('hoverCursor', 'default');
+            this.fabricCanvas.add(pageScreenshotCanvas);
             fabric.Object.prototype.set({
                 transparentCorners: true,
                 borderColor: '#000000',
@@ -142,6 +145,82 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
                 selectedObjectControls.find('.delete').off();
                 selectedObjectControls.find('.color').off();
             });
+        };
+        ScreenshotView.prototype.initCrop = function () {
+            var myThis = this;
+            var pos = [0, 0];
+            var canvasBoundingRect = document.getElementById(canvasId).getBoundingClientRect();
+            pos[0] = canvasBoundingRect.left;
+            pos[1] = jQuery(myThis.screenshotCanvas).parent().offset().top;
+            var mousex = 0;
+            var mousey = 0;
+            var crop = false;
+            var croppingRect = new fabric.Rect({
+                fill: 'transparent',
+                originX: 'left',
+                originY: 'top',
+                stroke: '#333',
+                strokeDashArray: [3, 3],
+                opacity: 1,
+                width: 1,
+                height: 1
+            });
+            this.croppingIsActive = true;
+            croppingRect.visible = false;
+            this.fabricCanvas.add(croppingRect);
+            this.fabricCanvas.on("mouse:down", function (event) {
+                if (!myThis.croppingIsActive) {
+                    return;
+                }
+                croppingRect.left = event.e.pageX - pos[0];
+                croppingRect.top = event.e.pageY - pos[1];
+                croppingRect.visible = true;
+                mousex = event.e.pageX;
+                mousey = event.e.pageY;
+                crop = true;
+                myThis.fabricCanvas.bringToFront(croppingRect);
+            });
+            this.fabricCanvas.on("mouse:move", function (event) {
+                if (crop && myThis.croppingIsActive) {
+                    if (event.e.pageX - mousex > 0) {
+                        croppingRect.width = event.e.pageX - mousex;
+                    }
+                    if (event.e.pageY - mousey > 0) {
+                        croppingRect.height = event.e.pageY - mousey;
+                    }
+                }
+                myThis.fabricCanvas.renderAll();
+            });
+            this.fabricCanvas.on("mouse:up", function (event) {
+                crop = false;
+            });
+            this.container.find('.screenshot-crop-cancel').show().on('click', function (e) {
+                e.preventDefault();
+                e.stopPropagation();
+                myThis.croppingIsActive = false;
+                jQuery(this).hide();
+                jQuery('.screenshot-crop-confirm').hide();
+                croppingRect.remove();
+                myThis.fabricCanvas.renderAll();
+            });
+            this.container.find('.screenshot-crop-confirm').show().on('click', function (e) {
+                e.preventDefault();
+                e.stopPropagation();
+                myThis.cropTheCanvas(croppingRect);
+                myThis.croppingIsActive = false;
+                jQuery(this).hide();
+                jQuery('.screenshot-crop-cancel').hide();
+                croppingRect.remove();
+                myThis.fabricCanvas.renderAll();
+            });
+        };
+        ScreenshotView.prototype.cropTheCanvas = function (croppingRect) {
+            this.updateCanvasState();
+            this.fabricCanvas.clipTo = function (ctx) {
+                ctx.rect(croppingRect.left, croppingRect.top, croppingRect.width, croppingRect.height);
+            };
+            this.fabricCanvas.renderAll();
+            this.container.find('.screenshot-draw-undo').show();
         };
         ScreenshotView.prototype.addTextAnnotation = function (left, top) {
             var text = new fabric.IText('Your text', { left: left, top: top, fontFamily: 'arial black' });
@@ -232,19 +311,25 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
             this.screenshotCaptureButton.text(screenshotCaptureButtonDefaultText);
         };
         ScreenshotView.prototype.updateCanvasState = function () {
+            this.canvasState.src = this.fabricCanvas.toDataURL("image/png");
             this.canvasStates.push(this.canvasState.src);
-            this.canvasState.src = this.screenshotCanvas.toDataURL("image/png");
         };
         ScreenshotView.prototype.undoOperation = function () {
             if (this.canvasStates.length < 1) {
                 return;
             }
             this.canvasState.src = this.canvasStates.pop();
-            this.context.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
-            this.context.drawImage(this.canvasState, 0, 0, this.canvasState.width, this.canvasState.height, 0, 0, this.screenshotCanvas.width, this.screenshotCanvas.height);
+            var context = this.fabricCanvas.getContext('2d');
+            context.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
+            context.drawImage(this.canvasState, 0, 0, this.canvasState.width, this.canvasState.height, 0, 0, this.fabricCanvas.width, this.fabricCanvas.height);
         };
         ScreenshotView.prototype.initScreenshotOperations = function () {
             var myThis = this;
+            this.container.find('.screenshot-crop').on('click', function (event) {
+                event.preventDefault();
+                event.stopPropagation();
+                myThis.initCrop();
+            });
             this.container.find('.screenshot-draw-undo').on('click', function (event) {
                 event.preventDefault();
                 event.stopPropagation();
@@ -256,11 +341,7 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
                 myThis.reset();
             });
             this.container.find('.screenshot-operations').show();
-        };
-        ScreenshotView.prototype.getContentDiagonal = function (element) {
-            var contentWidth = element.width();
-            var contentHeight = element.height();
-            return contentWidth * contentWidth + contentHeight * contentHeight;
+            this.container.find('.screenshot-operation.default-hidden').hide();
         };
         ScreenshotView.prototype.disableAllScreenshotOperations = function () {
             this.container.find('button.screenshot-operation').removeClass('active');

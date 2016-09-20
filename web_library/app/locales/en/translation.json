@@ -6,7 +6,8 @@
     "mandatory_default_text": "This field can't be blank",
     "back": "back",
     "validation_max_length_error_message": "The maximum length of this field is {{ maxLength }}! You typed {{ currentLength }} characters.",
-    "discard_feedback": "Discard feedback"
+    "discard_feedback": "Discard feedback",
+    "cancel": "Cancel"
   },
   "text": {
     "text_type_text_clear": "Clear the text input"

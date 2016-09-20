@@ -14,8 +14,8 @@ const stickingMode:string = 'stickingMode';
 const textMode:string = 'textMode';
 const textMode2:string = 'textMode2';
 const black:string = "#000000";
-const red:string = "#FF0000";
 const defaultColor:string = black;
+const canvasId:string = 'screenshotCanvas';
 
 
 export class ScreenshotView {
@@ -31,7 +31,6 @@ export class ScreenshotView {
     drawingMode:string;
     canvasState:HTMLImageElement;
     canvasStates:any;
-    isPainting:boolean;
     canvasWidth:number;
     canvasHeight:number;
     screenshotViewDrawing:ScreenshotViewDrawing;
@@ -40,6 +39,7 @@ export class ScreenshotView {
     container:JQuery;
     distPath:string;
     fabricCanvas;
+    croppingIsActive:boolean;
 
 
     constructor(screenshotMechanism:Mechanism, screenshotPreviewElement:JQuery, screenshotCaptureButton:JQuery,
@@ -55,6 +55,7 @@ export class ScreenshotView {
         this.distPath = distPath;
         this.screenshotViewDrawing = new ScreenshotViewDrawing();
         this.addCaptureEventToButton();
+        this.croppingIsActive = false;
     }
 
     checkAutoTake() {
@@ -72,7 +73,6 @@ export class ScreenshotView {
                 myThis.showElements();
                 myThis.screenshotPreviewElement.empty().append(canvas);
                 myThis.screenshotPreviewElement.show();
-                var canvasId = 'screenshotCanvas';
                 jQuery('.screenshot-preview canvas').attr('id', canvasId);
 
                 var windowRatio = myThis.elementToCapture.width() / myThis.elementToCapture.height();
@@ -94,25 +94,27 @@ export class ScreenshotView {
                 myThis.canvasState = img;
                 myThis.screenshotCanvas = canvas;
                 img.src = data;
+                img.onload = function () {
+                    myThis.context.drawImage(img, 0, 0, img.width, img.height, 0, 0, canvas.width, canvas.height);
+                    myThis.initFabric(img, canvas);
+                    myThis.initSVGStickers();
+                    myThis.initScreenshotOperations();
+                };
 
                 let screenshotCaptureButtonActiveText = myThis.screenshotCaptureButton.data('active-text');
                 myThis.screenshotCaptureButton.text(screenshotCaptureButtonActiveText);
-                myThis.initScreenshotOperations();
-
-                myThis.initFabric(canvasId, img, canvas);
-                myThis.initSVGStickers();
             }
         });
     }
 
-    initFabric(canvasId, img, canvas) {
+    initFabric(img, canvas) {
         var myThis = this;
         this.fabricCanvas = new fabric.Canvas(canvasId);
-        var oldCanvas = new fabric.Image(img, { width: canvas.width, height: canvas.height });
+        var pageScreenshotCanvas = new fabric.Image(img, {width: canvas.width, height: canvas.height});
 
-        oldCanvas.set('selectable', false);
-        oldCanvas.set('hoverCursor', 'default');
-        this.fabricCanvas.add(oldCanvas);
+        pageScreenshotCanvas.set('selectable', false);
+        pageScreenshotCanvas.set('hoverCursor', 'default');
+        this.fabricCanvas.add(pageScreenshotCanvas);
 
         fabric.Object.prototype.set({
             transparentCorners: true,
@@ -125,14 +127,14 @@ export class ScreenshotView {
         var selectedObjectControls = jQuery('#screenshotMechanism' + myThis.screenshotMechanism.id + ' .selectedObjectControls');
         selectedObjectControls.hide();
 
-        myThis.fabricCanvas.on('object:selected', function(e) {
+        myThis.fabricCanvas.on('object:selected', function (e) {
             var selectedObject = e.target;
 
-            if(selectedObject.get('type') !== 'path-group') {
+            if (selectedObject.get('type') !== 'path-group') {
                 var currentObjectColor = selectedObject.getFill();
             } else {
-                for(var path of selectedObject.paths) {
-                    if(path.getFill() != "") {
+                for (var path of selectedObject.paths) {
+                    if (path.getFill() != "") {
                         var currentObjectColor = path.getFill();
                         break;
                     }
@@ -140,10 +142,10 @@ export class ScreenshotView {
             }
 
             selectedObjectControls.show();
-            selectedObjectControls.find('.delete').off().on('click', function(e) {
+            selectedObjectControls.find('.delete').off().on('click', function (e) {
                 e.preventDefault();
                 e.stopPropagation();
-                if(selectedObject) {
+                if (selectedObject) {
                     selectedObject.remove();
                 }
             });
@@ -169,11 +171,11 @@ export class ScreenshotView {
                     var color = color.toHexString();
                     jQuery(this).css('color', color);
 
-                    if(selectedObject.get('type') !== 'path-group') {
+                    if (selectedObject.get('type') !== 'path-group') {
                         selectedObject.setFill(color);
                     } else {
-                        for(var path of selectedObject.paths) {
-                            if(path.getFill() != "") {
+                        for (var path of selectedObject.paths) {
+                            if (path.getFill() != "") {
                                 path.setFill(color);
                             }
                         }
@@ -183,17 +185,105 @@ export class ScreenshotView {
             });
         });
 
-        myThis.fabricCanvas.on('selection:cleared', function() {
+        myThis.fabricCanvas.on('selection:cleared', function () {
             var selectedObjectControls = jQuery('#screenshotMechanism' + myThis.screenshotMechanism.id + ' .selectedObjectControls');
             selectedObjectControls.hide();
             selectedObjectControls.find('.delete').off();
             selectedObjectControls.find('.color').off();
         });
+    }
 
+    initCrop() {
+        var myThis = this;
+        var pos = [0, 0];
+        var canvasBoundingRect = document.getElementById(canvasId).getBoundingClientRect();
+        pos[0] = canvasBoundingRect.left;
+        pos[1] = jQuery(myThis.screenshotCanvas).parent().offset().top;
+
+        var mousex = 0;
+        var mousey = 0;
+        var crop = false;
+
+        var croppingRect = new fabric.Rect({
+            fill: 'transparent',
+            originX: 'left',
+            originY: 'top',
+            stroke: '#333',
+            strokeDashArray: [3, 3],
+            opacity: 1,
+            width: 1,
+            height: 1
+        });
+
+        this.croppingIsActive = true;
+
+        croppingRect.visible = false;
+        this.fabricCanvas.add(croppingRect);
+
+        this.fabricCanvas.on("mouse:down", function (event) {
+            if (!myThis.croppingIsActive) {
+                return;
+            }
+            croppingRect.left = event.e.pageX - pos[0];
+            croppingRect.top = event.e.pageY - pos[1];
+            //el.selectable = false;
+            croppingRect.visible = true;
+            mousex = event.e.pageX;
+            mousey = event.e.pageY;
+            crop = true;
+            myThis.fabricCanvas.bringToFront(croppingRect);
+        });
+
+        this.fabricCanvas.on("mouse:move", function (event) {
+            if (crop && myThis.croppingIsActive) {
+                if (event.e.pageX - mousex > 0) {
+                    croppingRect.width = event.e.pageX - mousex;
+                }
+
+                if (event.e.pageY - mousey > 0) {
+                    croppingRect.height = event.e.pageY - mousey;
+                }
+            }
+            myThis.fabricCanvas.renderAll();
+        });
+
+        this.fabricCanvas.on("mouse:up", function (event) {
+            crop = false;
+        });
+
+        this.container.find('.screenshot-crop-cancel').show().on('click', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            myThis.croppingIsActive = false;
+            jQuery(this).hide();
+            jQuery('.screenshot-crop-confirm').hide();
+            croppingRect.remove();
+            myThis.fabricCanvas.renderAll();
+        });
+
+        this.container.find('.screenshot-crop-confirm').show().on('click', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            myThis.cropTheCanvas(croppingRect);
+            myThis.croppingIsActive = false;
+            jQuery(this).hide();
+            jQuery('.screenshot-crop-cancel').hide();
+            croppingRect.remove();
+            myThis.fabricCanvas.renderAll();
+        });
+    }
+
+    cropTheCanvas(croppingRect) {
+        this.updateCanvasState();
+        this.fabricCanvas.clipTo = function (ctx) {
+            ctx.rect(croppingRect.left, croppingRect.top, croppingRect.width, croppingRect.height);
+        };
+        this.fabricCanvas.renderAll();
+        this.container.find('.screenshot-draw-undo').show();
     }
 
     addTextAnnotation(left, top) {
-        var text = new fabric.IText('Your text', { left: left, top: top, fontFamily: 'arial black' });
+        var text = new fabric.IText('Your text', {left: left, top: top, fontFamily: 'arial black'});
         this.fabricCanvas.add(text);
     }
 
@@ -204,15 +294,15 @@ export class ScreenshotView {
             revert: "invalid",
             helper: "clone",
             zIndex: 5000,
-            drag: function(event:Event, ui) {
+            drag: function (event:Event, ui) {
                 myThis.screenshotPreviewElement.css('border-style', 'dashed');
             },
-            stop: function(event:DragEvent, ui) {
+            stop: function (event:DragEvent, ui) {
                 myThis.screenshotPreviewElement.css('border-style', 'solid');
             }
-        }).on('mouseover mouseenter', function() {
+        }).on('mouseover mouseenter', function () {
             myThis.screenshotPreviewElement.css('border-style', 'dashed');
-        }).on('mouseleave', function() {
+        }).on('mouseleave', function () {
             myThis.screenshotPreviewElement.css('border-style', 'solid');
         });
 
@@ -226,10 +316,10 @@ export class ScreenshotView {
                 offsetY -= 12;
                 offsetX -= 12;
 
-                if(sticker.hasClass('text')) {
+                if (sticker.hasClass('text')) {
                     myThis.addTextAnnotation(offsetX, offsetY);
                 } else {
-                    fabric.loadSVGFromURL(sticker.attr('src'), function(objects, options) {
+                    fabric.loadSVGFromURL(sticker.attr('src'), function (objects, options) {
                         var obj = fabric.util.groupSVGElements(objects, options);
                         obj.set('left', offsetX);
                         obj.set('top', offsetY);
@@ -290,8 +380,8 @@ export class ScreenshotView {
     }
 
     updateCanvasState() {
+        this.canvasState.src = this.fabricCanvas.toDataURL("image/png");
         this.canvasStates.push(this.canvasState.src);
-        this.canvasState.src = this.screenshotCanvas.toDataURL("image/png");
     }
 
     undoOperation() {
@@ -300,15 +390,22 @@ export class ScreenshotView {
         }
 
         this.canvasState.src = this.canvasStates.pop();
+        var context = this.fabricCanvas.getContext('2d');
 
-        this.context.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
-        this.context.drawImage(this.canvasState, 0, 0, this.canvasState.width,
-            this.canvasState.height, 0, 0, this.screenshotCanvas.width,
-            this.screenshotCanvas.height);
+        context.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
+        context.drawImage(this.canvasState, 0, 0, this.canvasState.width,
+            this.canvasState.height, 0, 0, this.fabricCanvas.width,
+            this.fabricCanvas.height);
     }
 
     initScreenshotOperations() {
         var myThis = this;
+
+        this.container.find('.screenshot-crop').on('click', function (event) {
+            event.preventDefault();
+            event.stopPropagation();
+            myThis.initCrop();
+        });
 
         this.container.find('.screenshot-draw-undo').on('click', function (event) {
             event.preventDefault();
@@ -323,12 +420,7 @@ export class ScreenshotView {
         });
 
         this.container.find('.screenshot-operations').show();
-    }
-
-    getContentDiagonal(element) {
-        var contentWidth = element.width();
-        var contentHeight = element.height();
-        return contentWidth * contentWidth + contentHeight * contentHeight;
+        this.container.find('.screenshot-operation.default-hidden').hide();
     }
 
     disableAllScreenshotOperations() {
