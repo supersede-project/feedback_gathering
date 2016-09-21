@@ -19,7 +19,7 @@ public class FeedbackServletTest extends ServletTest {
 	
 	public void testRetrievingAllFeedbacks() throws ClientProtocolException, IOException {
 		Feedback[] retrievedFeedbacks = GetSuccess(
-				"http://localhost:8080/feedback_repository/en/feedbacks", 
+				"https://localhost:8443/feedback_repository/en/feedbacks", 
 				Feedback[].class);
 
 		assertEquals(retrievedFeedbacks.length, NUMBER_OF_FEEDBACK_RECORDS);
@@ -27,7 +27,7 @@ public class FeedbackServletTest extends ServletTest {
 
 	public void testRetrievingSingleFeedbacks() throws ClientProtocolException, IOException {
 		Feedback retrievedFeedback = GetSuccess(
-				"http://localhost:8080/feedback_repository/en/feedbacks/57", 
+				"https://localhost:8443/feedback_repository/en/feedbacks/57", 
 				Feedback.class);
 		
 		assertEquals(retrievedFeedback.getId(), new Integer(57));		
@@ -39,7 +39,7 @@ public class FeedbackServletTest extends ServletTest {
 		String jsonString = IOUtils.toString(stream); 
 		
 		Feedback createdFeedback = PostSuccess(
-				"http://localhost:8080/feedback_repository/en/feedbacks", 
+				"https://localhost:8443/feedback_repository/en/feedbacks", 
 				jsonString,
 				Feedback.class);
 		
@@ -65,7 +65,7 @@ public class FeedbackServletTest extends ServletTest {
 		builder.addBinaryBody("attachment2", getClass().getResourceAsStream("attachment2.txt"));
 		
 		Feedback createdFeedback = PostSuccess(
-				"http://localhost:8080/feedback_repository/en/feedbacks", 
+				"https://localhost:8443/feedback_repository/en/feedbacks", 
 				builder.build(),
 				Feedback.class);
 		

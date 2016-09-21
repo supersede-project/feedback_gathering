@@ -6,12 +6,14 @@ import com.google.inject.Inject;
 
 import ch.uzh.ifi.feedback.library.rest.RestController;
 import ch.uzh.ifi.feedback.library.rest.Service.IDbService;
+import ch.uzh.ifi.feedback.library.rest.annotations.Authenticate;
 import ch.uzh.ifi.feedback.library.rest.annotations.Controller;
 import ch.uzh.ifi.feedback.library.rest.annotations.GET;
 import ch.uzh.ifi.feedback.library.rest.annotations.POST;
 import ch.uzh.ifi.feedback.library.rest.annotations.PUT;
 import ch.uzh.ifi.feedback.library.rest.annotations.Path;
 import ch.uzh.ifi.feedback.library.rest.annotations.PathParam;
+import ch.uzh.ifi.feedback.orchestrator.authorization.UserAuthenticationService;
 import ch.uzh.ifi.feedback.orchestrator.model.FeedbackParameter;
 import ch.uzh.ifi.feedback.orchestrator.serialization.ParameterSerializationService;
 import ch.uzh.ifi.feedback.orchestrator.services.ParameterService;
@@ -54,6 +56,7 @@ public class ParameterController extends RestController<FeedbackParameter> {
 	}
 	
 	@PUT
+	@Authenticate(UserAuthenticationService.class)
 	@Path("/parameters")
 	public FeedbackParameter UpdateParameter(FeedbackParameter param) throws Exception 
 	{
@@ -61,6 +64,7 @@ public class ParameterController extends RestController<FeedbackParameter> {
 	}
 
 	@POST
+	@Authenticate(UserAuthenticationService.class)
 	@Path("/general_configurations/{config_id}/parameters")
 	public FeedbackParameter InsertParameterForConfiguration(@PathParam("config_id")Integer config_id, final FeedbackParameter param) throws Exception 
 	{
@@ -69,6 +73,7 @@ public class ParameterController extends RestController<FeedbackParameter> {
 	}
 	
 	@POST
+	@Authenticate(UserAuthenticationService.class)
 	@Path("/mechanisms/{mechanism_id}/parameters")
 	public FeedbackParameter InsertParameterForMechanism(@PathParam("mechanism_id") Integer mechanism_id, final FeedbackParameter param) throws Exception 
 	{

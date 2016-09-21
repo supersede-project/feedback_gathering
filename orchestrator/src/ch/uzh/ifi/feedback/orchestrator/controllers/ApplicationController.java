@@ -47,6 +47,7 @@ public class ApplicationController extends OrchestratorController<Application> {
 	}
 	
 	@PUT
+	@Authenticate(UserAuthenticationService.class)
 	@Path("/applications")
 	public Application UpdateApplication(Application app) throws Exception 
 	{
@@ -54,6 +55,7 @@ public class ApplicationController extends OrchestratorController<Application> {
 	}
 	
 	@POST
+	@Authenticate(UserAuthenticationService.class)
 	@Path("/applications")
 	public Application InsertApplication(@PathParam("app_id")Integer appId, Application app) throws Exception 
 	{

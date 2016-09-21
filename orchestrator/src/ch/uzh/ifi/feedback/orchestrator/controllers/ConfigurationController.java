@@ -5,6 +5,7 @@ import java.util.List;
 import com.google.inject.Inject;
 
 import ch.uzh.ifi.feedback.library.rest.RestController;
+import ch.uzh.ifi.feedback.library.rest.annotations.Authenticate;
 import ch.uzh.ifi.feedback.library.rest.annotations.Controller;
 import ch.uzh.ifi.feedback.library.rest.annotations.GET;
 import ch.uzh.ifi.feedback.library.rest.annotations.POST;
@@ -12,6 +13,7 @@ import ch.uzh.ifi.feedback.library.rest.annotations.PUT;
 import ch.uzh.ifi.feedback.library.rest.annotations.Path;
 import ch.uzh.ifi.feedback.library.rest.annotations.PathParam;
 import ch.uzh.ifi.feedback.library.rest.validation.ValidationException;
+import ch.uzh.ifi.feedback.orchestrator.authorization.UserAuthenticationService;
 import ch.uzh.ifi.feedback.orchestrator.model.Configuration;
 import ch.uzh.ifi.feedback.orchestrator.model.User;
 import ch.uzh.ifi.feedback.orchestrator.services.ConfigurationService;
@@ -83,6 +85,7 @@ public class ConfigurationController extends RestController<Configuration>
 	}
 	
 	@PUT
+	@Authenticate(UserAuthenticationService.class)
 	@Path("/configurations")
 	public Configuration UpdateConfiguration(Configuration config) throws Exception 
 	{
@@ -90,6 +93,7 @@ public class ConfigurationController extends RestController<Configuration>
 	}
 	
 	@POST
+	@Authenticate(UserAuthenticationService.class)
 	@Path("/applications/{app_id}/configurations")
 	public Configuration InsertConfigurationForApplication(@PathParam("app_id")Integer appId, Configuration config) throws Exception 
 	{
@@ -102,6 +106,7 @@ public class ConfigurationController extends RestController<Configuration>
 	}
 	
 	@POST
+	@Authenticate(UserAuthenticationService.class)
 	@Path("/applications/{app_id}/user_groups/{group_id}/configurations")
 	public Configuration InsertConfigurationForApplicationAndUserGroup(
 			@PathParam("app_id")Integer appId, 

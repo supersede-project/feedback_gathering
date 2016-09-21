@@ -1,6 +1,7 @@
 package ch.uzh.ifi.feedback.orchestrator.authorization;
 
 import com.google.inject.Inject;
+import com.google.inject.Singleton;
 
 import ch.uzh.ifi.feedback.library.rest.authorization.AuthenticationCache;
 import ch.uzh.ifi.feedback.library.rest.authorization.AuthorizationException;
@@ -17,6 +18,7 @@ import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 
+@Singleton
 public class UserAuthenticationService implements ITokenAuthenticationService {
 
 	private ApiUserService userService;
@@ -31,7 +33,7 @@ public class UserAuthenticationService implements ITokenAuthenticationService {
 	
 	public UserToken Authenticate(ApiUser user) throws SQLException, AuthorizationException
 	{
-		List<ApiUser> validatedUsers = userService.GetWhere(asList(user.getName(), user.getPassword()), "name = ?", "password = ?");
+		List<ApiUser> validatedUsers = userService.GetWhere(asList(user.getName(), user.getPassword()), "`name` = ?", "`password` = ?");
 		if(validatedUsers.size() != 1)
 			throw new AuthorizationException("The user and the provided password dont match!");
 		

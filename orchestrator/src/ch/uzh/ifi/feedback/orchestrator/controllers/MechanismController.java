@@ -5,12 +5,14 @@ import java.util.List;
 import com.google.inject.Inject;
 
 import ch.uzh.ifi.feedback.library.rest.RestController;
+import ch.uzh.ifi.feedback.library.rest.annotations.Authenticate;
 import ch.uzh.ifi.feedback.library.rest.annotations.Controller;
 import ch.uzh.ifi.feedback.library.rest.annotations.GET;
 import ch.uzh.ifi.feedback.library.rest.annotations.POST;
 import ch.uzh.ifi.feedback.library.rest.annotations.PUT;
 import ch.uzh.ifi.feedback.library.rest.annotations.Path;
 import ch.uzh.ifi.feedback.library.rest.annotations.PathParam;
+import ch.uzh.ifi.feedback.orchestrator.authorization.UserAuthenticationService;
 import ch.uzh.ifi.feedback.orchestrator.model.FeedbackMechanism;
 import ch.uzh.ifi.feedback.orchestrator.serialization.MechanismSerializationService;
 import ch.uzh.ifi.feedback.orchestrator.services.MechanismService;
@@ -47,6 +49,7 @@ public class MechanismController extends RestController<FeedbackMechanism> {
 	}
 	
 	@PUT
+	@Authenticate(UserAuthenticationService.class)
 	@Path("/configurations/{config_id}/mechanisms")
 	public FeedbackMechanism UpdateMechanismForConfiguration(@PathParam("config_id")Integer configId, FeedbackMechanism mechanism) throws Exception 
 	{
@@ -56,6 +59,7 @@ public class MechanismController extends RestController<FeedbackMechanism> {
 	}
 	
 	@POST
+	@Authenticate(UserAuthenticationService.class)
 	@Path("/configurations/{config_id}/mechanisms")
 	public FeedbackMechanism InsertMechanismForConfiguration(@PathParam("config_id")Integer configId, FeedbackMechanism mechanism) throws Exception 
 	{

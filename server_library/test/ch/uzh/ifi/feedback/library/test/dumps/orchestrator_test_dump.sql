@@ -29,7 +29,7 @@ CREATE TABLE `api_users` (
   `name` varchar(45) NOT NULL,
   `password` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -38,6 +38,7 @@ CREATE TABLE `api_users` (
 
 LOCK TABLES `api_users` WRITE;
 /*!40000 ALTER TABLE `api_users` DISABLE KEYS */;
+INSERT INTO `api_users` VALUES (1,'api_user','password');
 /*!40000 ALTER TABLE `api_users` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -523,4 +524,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-09-19 16:35:09
+-- Dump completed on 2016-09-21 12:46:36

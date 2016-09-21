@@ -31,7 +31,7 @@ public class OrchestratorServletGeneralConfigurationTest extends ServletTest {
 				"http://localhost:8080/feedback_orchestrator/en/applications/27/general_configuration", 
 				GeneralConfiguration.class);
 		
-		assertEquals(retrievedConfig.getId(), new Integer(148));
+		assertEquals(retrievedConfig.getId(), new Integer(116));
 	}
 	
 	public void testUpdateGeneralConfiguration() throws ClientProtocolException, IOException  {

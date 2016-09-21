@@ -52,7 +52,7 @@ public class OrchestratorServletApplicationTest extends ServletTest {
 		String jsonString = IOUtils.toString(stream); 
 		
 		Application createdApplication = PostSuccess(
-				"http://localhost:8080/feedback_orchestrator/en/applications", 
+				"https://localhost:8443/feedback_orchestrator/en/applications", 
 				jsonString,
 				Application.class);
 		
