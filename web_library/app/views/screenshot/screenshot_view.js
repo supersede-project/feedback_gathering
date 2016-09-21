@@ -69,6 +69,7 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
         ScreenshotView.prototype.initFabric = function (img, canvas) {
             var myThis = this;
             this.fabricCanvas = new fabric.Canvas(canvasId);
+            this.determineCanvasScaleForRetinaDisplay();
             var pageScreenshotCanvas = new fabric.Image(img, { width: canvas.width, height: canvas.height });
             pageScreenshotCanvas.set('selectable', false);
             pageScreenshotCanvas.set('hoverCursor', 'default');
@@ -146,6 +147,17 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
                 selectedObjectControls.find('.color').off();
             });
         };
+        ScreenshotView.prototype.determineCanvasScaleForRetinaDisplay = function () {
+            if (window.devicePixelRatio !== 1) {
+                var height = jQuery('.screenshot-preview canvas').height();
+                var width = jQuery('.screenshot-preview canvas').width();
+                var canvas = this.fabricCanvas.getElement();
+                canvas.setAttribute('width', window.devicePixelRatio * width);
+                canvas.setAttribute('height', window.devicePixelRatio * height);
+                canvas.setAttribute('style', 'width="' + width + 'px"; height="' + height + 'px";');
+                canvas.getContext('2d').scale(window.devicePixelRatio, window.devicePixelRatio);
+            }
+        };
         ScreenshotView.prototype.initCrop = function () {
             var myThis = this;
             var pos = [0, 0];
@@ -218,8 +230,11 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
             this.fabricCanvas.clipTo = function (ctx) {
                 ctx.rect(croppingRect.left, croppingRect.top, croppingRect.width, croppingRect.height);
             };
+            this.updateCanvasState();
             this.fabricCanvas.renderAll();
             this.container.find('.screenshot-draw-undo').show();
+        };
+        ScreenshotView.prototype.stretchAreaToFullCanvas = function (left, top, width, height) {
         };
         ScreenshotView.prototype.addTextAnnotation = function (left, top) {
             var text = new fabric.IText('Your text', { left: left, top: top, fontFamily: 'arial', fontSize: 30 });

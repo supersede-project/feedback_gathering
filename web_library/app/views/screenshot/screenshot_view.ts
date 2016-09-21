@@ -111,6 +111,8 @@ export class ScreenshotView {
     initFabric(img, canvas) {
         var myThis = this;
         this.fabricCanvas = new fabric.Canvas(canvasId);
+        this.determineCanvasScaleForRetinaDisplay();
+
         var pageScreenshotCanvas = new fabric.Image(img, {width: canvas.width, height: canvas.height});
 
         pageScreenshotCanvas.set('selectable', false);
@@ -192,6 +194,22 @@ export class ScreenshotView {
             selectedObjectControls.find('.delete').off();
             selectedObjectControls.find('.color').off();
         });
+    }
+
+    determineCanvasScaleForRetinaDisplay() {
+        if(window.devicePixelRatio !== 1) {
+            var height = jQuery('.screenshot-preview canvas').height();
+            var width = jQuery('.screenshot-preview canvas').width();
+
+            var canvas = this.fabricCanvas.getElement();
+
+            // TODO get this working!!!
+            canvas.setAttribute('width', window.devicePixelRatio * width);
+            canvas.setAttribute('height', window.devicePixelRatio * height);
+            canvas.setAttribute('style', 'width="' + width +'px"; height="' + height + 'px";');
+
+            canvas.getContext('2d').scale(window.devicePixelRatio, window.devicePixelRatio);
+        }
     }
 
     initCrop() {
@@ -278,8 +296,15 @@ export class ScreenshotView {
         this.fabricCanvas.clipTo = function (ctx) {
             ctx.rect(croppingRect.left, croppingRect.top, croppingRect.width, croppingRect.height);
         };
+
+        this.updateCanvasState();
+
         this.fabricCanvas.renderAll();
         this.container.find('.screenshot-draw-undo').show();
+    }
+
+    stretchAreaToFullCanvas(left, top, width, height) {
+
     }
 
     addTextAnnotation(left, top) {
