@@ -1,4 +1,4 @@
-define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/data_helper', '../../js/lib/html2canvas.js', 'fabric'], function (require, exports, screenshot_view_drawing_1, data_helper_1) {
+define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/data_helper', './canvas_state', '../../js/lib/html2canvas.js', 'fabric'], function (require, exports, screenshot_view_drawing_1, data_helper_1, canvas_state_1) {
     "use strict";
     var freehandDrawingMode = 'freehandDrawingMode';
     var rectDrawingMode = 'rectDrawingMode';
@@ -172,7 +172,8 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
                 originX: 'left',
                 originY: 'top',
                 stroke: '#333',
-                strokeDashArray: [3, 3],
+                strokeDashArray: [4, 4],
+                type: 'cropper',
                 opacity: 1,
                 width: 1,
                 height: 1
@@ -218,23 +219,40 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
             this.container.find('.screenshot-crop-confirm').show().on('click', function (e) {
                 e.preventDefault();
                 e.stopPropagation();
-                myThis.cropTheCanvas(croppingRect);
+                myThis.cropTheCanvas();
                 myThis.croppingIsActive = false;
                 jQuery(this).hide();
                 jQuery('.screenshot-crop-cancel').hide();
-                croppingRect.remove();
-                myThis.fabricCanvas.renderAll();
             });
         };
-        ScreenshotView.prototype.cropTheCanvas = function (croppingRect) {
-            this.fabricCanvas.clipTo = function (ctx) {
-                ctx.rect(croppingRect.left, croppingRect.top, croppingRect.width, croppingRect.height);
-            };
+        ScreenshotView.prototype.cropTheCanvas = function () {
             this.updateCanvasState();
-            this.fabricCanvas.renderAll();
             this.container.find('.screenshot-draw-undo').show();
-        };
-        ScreenshotView.prototype.stretchAreaToFullCanvas = function (left, top, width, height) {
+            var canvas = this.fabricCanvas;
+            var i;
+            var croppedLeft = 0;
+            var croppedTop = 0;
+            var objectsToMove = canvas.getObjects();
+            var croppWidth = 0;
+            var croppHeight = 0;
+            if (canvas.getObjects().length > 0) {
+                var i;
+                for (i = 0; i < canvas.getObjects().length; i++) {
+                    if (canvas.getObjects()[i].type === 'cropper') {
+                        croppedLeft = canvas.getObjects()[i].left + 1;
+                        croppedTop = canvas.getObjects()[i].top + 1;
+                        croppHeight = canvas.getObjects()[i].height - 2;
+                        croppWidth = canvas.getObjects()[i].width - 2;
+                        canvas.getObjects()[i].remove();
+                    }
+                }
+            }
+            for (i = 0; i < objectsToMove.length; i++) {
+                canvas.getObjects()[i].left = canvas.getObjects()[i].left - croppedLeft;
+                canvas.getObjects()[i].top = canvas.getObjects()[i].top - croppedTop;
+            }
+            canvas.setWidth(croppWidth);
+            canvas.setHeight(croppHeight);
         };
         ScreenshotView.prototype.addTextAnnotation = function (left, top) {
             var text = new fabric.IText('Your text', { left: left, top: top, fontFamily: 'arial', fontSize: 30 });
@@ -331,13 +349,17 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
         };
         ScreenshotView.prototype.updateCanvasState = function () {
             this.canvasState.src = this.fabricCanvas.toDataURL("image/png");
-            this.canvasStates.push(this.canvasState.src);
+            var canvasState = new canvas_state_1.CanvasState(this.canvasState.src, this.fabricCanvas.getWidth(), this.fabricCanvas.getHeight());
+            this.canvasStates.push(canvasState);
         };
         ScreenshotView.prototype.undoOperation = function () {
             if (this.canvasStates.length < 1) {
                 return;
             }
-            this.canvasState.src = this.canvasStates.pop();
+            var canvasStateToRestore = this.canvasStates.pop();
+            this.canvasState.src = canvasStateToRestore.src;
+            this.fabricCanvas.setWidth(canvasStateToRestore.width);
+            this.fabricCanvas.setHeight(canvasStateToRestore.height);
             var context = this.fabricCanvas.getContext('2d');
             context.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
             context.drawImage(this.canvasState, 0, 0, this.canvasState.width, this.canvasState.height, 0, 0, this.fabricCanvas.width, this.fabricCanvas.height);
@@ -347,7 +369,6 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
             this.container.find('.screenshot-crop').on('click', function (event) {
                 event.preventDefault();
                 event.stopPropagation();
-                myThis.updateCanvasState();
                 myThis.initCrop();
             });
             this.container.find('.screenshot-draw-undo').on('click', function (event) {

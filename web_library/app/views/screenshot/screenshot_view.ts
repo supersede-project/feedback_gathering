@@ -3,6 +3,7 @@ import {DataHelper} from '../../js/helpers/data_helper';
 import '../../js/lib/html2canvas.js';
 import {Mechanism} from '../../models/mechanisms/mechanism';
 import 'fabric';
+import {CanvasState} from './canvas_state';
 
 const freehandDrawingMode:string = 'freehandDrawingMode';
 const rectDrawingMode:string = 'rectDrawingMode';
@@ -30,7 +31,7 @@ export class ScreenshotView {
     startY:number;
     drawingMode:string;
     canvasState:HTMLImageElement;
-    canvasStates:any;
+    canvasStates:CanvasState[];
     canvasWidth:number;
     canvasHeight:number;
     screenshotViewDrawing:ScreenshotViewDrawing;
@@ -228,7 +229,8 @@ export class ScreenshotView {
             originX: 'left',
             originY: 'top',
             stroke: '#333',
-            strokeDashArray: [3, 3],
+            strokeDashArray: [4, 4],
+            type: 'cropper',
             opacity: 1,
             width: 1,
             height: 1
@@ -283,28 +285,47 @@ export class ScreenshotView {
         this.container.find('.screenshot-crop-confirm').show().on('click', function (e) {
             e.preventDefault();
             e.stopPropagation();
-            myThis.cropTheCanvas(croppingRect);
+            myThis.cropTheCanvas();
             myThis.croppingIsActive = false;
             jQuery(this).hide();
             jQuery('.screenshot-crop-cancel').hide();
-            croppingRect.remove();
-            myThis.fabricCanvas.renderAll();
         });
     }
 
-    cropTheCanvas(croppingRect) {
-        this.fabricCanvas.clipTo = function (ctx) {
-            ctx.rect(croppingRect.left, croppingRect.top, croppingRect.width, croppingRect.height);
-        };
-
+    cropTheCanvas() {
         this.updateCanvasState();
-
-        this.fabricCanvas.renderAll();
         this.container.find('.screenshot-draw-undo').show();
-    }
 
-    stretchAreaToFullCanvas(left, top, width, height) {
+        var canvas = this.fabricCanvas;
+        var i;
+        var croppedLeft = 0;
+        var croppedTop = 0;
+        var objectsToMove = canvas.getObjects();
+        var croppWidth = 0;
+        var croppHeight = 0;
 
+        // Cropping canvas according to cropper rectangle
+        if (canvas.getObjects().length > 0) {
+            var i;
+            for (i = 0; i < canvas.getObjects().length; i++) {
+                if (canvas.getObjects()[i].type === 'cropper') {
+                    croppedLeft = canvas.getObjects()[i].left + 1;
+                    croppedTop = canvas.getObjects()[i].top + 1;
+                    croppHeight = canvas.getObjects()[i].height - 2;
+                    croppWidth = canvas.getObjects()[i].width - 2;
+                    canvas.getObjects()[i].remove();
+                }
+            }
+        }
+
+        // Shifting the elements accordingly
+        for (i = 0; i < objectsToMove.length; i++) {
+            canvas.getObjects()[i].left = canvas.getObjects()[i].left - croppedLeft;
+            canvas.getObjects()[i].top = canvas.getObjects()[i].top - croppedTop;
+        }
+
+        canvas.setWidth(croppWidth);
+        canvas.setHeight(croppHeight);
     }
 
     addTextAnnotation(left, top) {
@@ -411,7 +432,8 @@ export class ScreenshotView {
 
     updateCanvasState() {
         this.canvasState.src = this.fabricCanvas.toDataURL("image/png");
-        this.canvasStates.push(this.canvasState.src);
+        var canvasState = new CanvasState(this.canvasState.src, this.fabricCanvas.getWidth(), this.fabricCanvas.getHeight());
+        this.canvasStates.push(canvasState);
     }
 
     undoOperation() {
@@ -419,7 +441,11 @@ export class ScreenshotView {
             return;
         }
 
-        this.canvasState.src = this.canvasStates.pop();
+        var canvasStateToRestore = this.canvasStates.pop();
+        this.canvasState.src = canvasStateToRestore.src;
+        this.fabricCanvas.setWidth(canvasStateToRestore.width);
+        this.fabricCanvas.setHeight(canvasStateToRestore.height);
+
         var context = this.fabricCanvas.getContext('2d');
 
         context.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
@@ -434,7 +460,6 @@ export class ScreenshotView {
         this.container.find('.screenshot-crop').on('click', function (event) {
             event.preventDefault();
             event.stopPropagation();
-            myThis.updateCanvasState();
             myThis.initCrop();
         });
 
