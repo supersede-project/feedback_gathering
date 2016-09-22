@@ -33,7 +33,7 @@ public abstract class ItemBase<T> implements IDbItem<T> {
 				{
 					f.set(this, oldValue);
 					
-				}else if(f.getName() != "createdAt")
+				}else if(f.getName() != "createdAt" && !newValue.equals(oldValue))
 				{
 					hasChanges = true;
 				}

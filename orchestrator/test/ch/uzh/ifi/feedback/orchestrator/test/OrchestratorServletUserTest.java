@@ -14,7 +14,7 @@ public class OrchestratorServletUserTest extends ServletTest {
 	
 	public void testRetrievingAllUsers() throws ClientProtocolException, IOException {
 		User[] retrievedUsers = GetSuccess(
-				"http://localhost:8080/feedback_orchestrator/en/users", 
+				"https://localhost:8443/feedback_orchestrator/en/users", 
 				User[].class);
 		
 		assertEquals(retrievedUsers.length, 1);
@@ -25,7 +25,7 @@ public class OrchestratorServletUserTest extends ServletTest {
 		String jsonString = IOUtils.toString(stream); 
 		
 		User addedUser = PostSuccess(
-				"http://localhost:8080/feedback_orchestrator/en/user_groups/1/users",
+				"https://localhost:8443/feedback_orchestrator/en/user_groups/1/users",
 				jsonString,
 				User.class);
 		
@@ -38,7 +38,7 @@ public class OrchestratorServletUserTest extends ServletTest {
 		String jsonString = IOUtils.toString(stream); 
 		
 		User updatedUser = PutSuccess(
-				"http://localhost:8080/feedback_orchestrator/en/users",
+				"https://localhost:8443/feedback_orchestrator/en/users",
 				jsonString,
 				User.class);
 		
@@ -46,13 +46,13 @@ public class OrchestratorServletUserTest extends ServletTest {
 		assertEquals(updatedUser.getGroupId(), 2);
 		
 		UserGroup group1 = GetSuccess(
-				"http://localhost:8080/feedback_orchestrator/en/user_groups/1",
+				"https://localhost:8443/feedback_orchestrator/en/user_groups/1",
 				UserGroup.class);
 		
 		assertEquals(group1.getUsers().size(), 0);
 		
 		UserGroup group2 = GetSuccess(
-				"http://localhost:8080/feedback_orchestrator/en/user_groups/2",
+				"https://localhost:8443/feedback_orchestrator/en/user_groups/2",
 				UserGroup.class);
 		
 		assertEquals(group2.getUsers().size(), 1);

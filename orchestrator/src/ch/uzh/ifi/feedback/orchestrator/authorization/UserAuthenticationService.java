@@ -43,6 +43,10 @@ public class UserAuthenticationService implements ITokenAuthenticationService {
 	public boolean Authenticate(HttpServletRequest request)
 	{
 		String authorizationHeader = request.getHeader("Authorization");
+		
+		if(authorizationHeader == null)
+			return false;
+		
 		UserToken token = new UserToken(UUID.fromString(authorizationHeader));
 		return cache.Authenticate(token);
 	}

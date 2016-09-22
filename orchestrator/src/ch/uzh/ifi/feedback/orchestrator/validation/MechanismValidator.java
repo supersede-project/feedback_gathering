@@ -31,23 +31,36 @@ public class MechanismValidator extends ValidatorBase<FeedbackMechanism> {
 	@Override
 	public ValidationResult Validate(FeedbackMechanism object) throws Exception {
 		ValidationResult result = super.Validate(object);
+
+		//Check that only one mechanism of a specific type can be active at a time
+		if(object.isActive())
+		{
+			List<FeedbackMechanism> mechanisms = mechanismService.GetWhere(
+					asList(object.getConfigurationsid(), object.getType(), object.isActive()), 
+					"configurations_id = ?", "`name` = ?", "active = ?");
+			
+			if(mechanisms.size() == 1)
+			{
+				FeedbackMechanism other = mechanisms.get(0);
+				if(object.getId() == null || !other.getId().equals(object.getId()))
+				{
+					result.setHasErrors(true);
+					ValidationError error = new ValidationError("isActive", object.getType(), "unique: there can only be one mechanism active for a specific mechanism type in a configuration");
+					result.GetValidationErrors().add(error);
+				}
+			}
+		}
 		
-		List<Object> childrenErrors = new ArrayList<>();
 		for(FeedbackParameter param : object.getParameters())
 		{
 			ValidationResult childResult = parameterValidator.Validate(param);
 			if(childResult.hasErrors())
 			{
 				result.setHasErrors(true);
-				List<ValidationError> errors = childResult.GetValidationErrors();
-				childrenErrors.add(errors);
+				result.GetValidationErrors().addAll(childResult.GetValidationErrors());
 			}
 		}
-		result.GetValidationErrors().add(new ValidationError("Parameters", childrenErrors));
 		
-		if(result.hasErrors())
-			throw new ValidationException(serializer.Serialize(result));
-			
 		return result;
 	}
 	

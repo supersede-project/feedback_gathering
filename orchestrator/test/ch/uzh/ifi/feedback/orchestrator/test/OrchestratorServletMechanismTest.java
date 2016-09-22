@@ -14,14 +14,14 @@ public class OrchestratorServletMechanismTest extends ServletTest {
 	
 	public void testRetrievingAllMechanisms() throws ClientProtocolException, IOException {
 		FeedbackMechanism[] retrievedMechanisms = GetSuccess(
-				"http://localhost:8080/feedback_orchestrator/en/mechanisms", 
+				"https://localhost:8443/feedback_orchestrator/en/mechanisms", 
 				FeedbackMechanism[].class);
 		assertEquals(retrievedMechanisms.length, 81);
 	}
 	
 	public void testRetrievingSingleMechanism() throws ClientProtocolException, IOException {
 		FeedbackMechanism mechanism = GetSuccess(
-				"http://localhost:8080/feedback_orchestrator/en/mechanisms/830",
+				"https://localhost:8443/feedback_orchestrator/en/mechanisms/830",
 				FeedbackMechanism.class);
 		
 		assertEquals(mechanism.getId(), new Integer(830));
@@ -30,7 +30,7 @@ public class OrchestratorServletMechanismTest extends ServletTest {
 	
 	public void testRetrievingAllMechanismsForConfiguration() throws ClientProtocolException, IOException {
 		FeedbackMechanism[] retrievedMechanisms = GetSuccess(
-				"http://localhost:8080/feedback_orchestrator/en/configurations/80/mechanisms", 
+				"https://localhost:8443/feedback_orchestrator/en/configurations/80/mechanisms", 
 				FeedbackMechanism[].class);
 		
 		assertEquals(retrievedMechanisms.length, 4);
@@ -42,7 +42,7 @@ public class OrchestratorServletMechanismTest extends ServletTest {
 		String jsonString = IOUtils.toString(stream); 
 		
 		FeedbackMechanism createdMechanism = PostSuccess(
-				"http://localhost:8080/feedback_orchestrator/en/configurations/80/mechanisms", 
+				"https://localhost:8443/feedback_orchestrator/en/configurations/80/mechanisms", 
 				jsonString,
 				FeedbackMechanism.class);
         
@@ -58,7 +58,7 @@ public class OrchestratorServletMechanismTest extends ServletTest {
 		String jsonString = IOUtils.toString(stream); 
 		
 		FeedbackMechanism updatedMechanism = PutSuccess(
-				"http://localhost:8080/feedback_orchestrator/en/configurations/80/mechanisms", 
+				"https://localhost:8443/feedback_orchestrator/en/configurations/80/mechanisms", 
 				jsonString,
 				FeedbackMechanism.class);
         

@@ -16,7 +16,7 @@ public class OrchestratorServletConfigurationTest extends ServletTest {
 	
 	public void testRetrievingAllConfigurations() throws ClientProtocolException, IOException {
 		Configuration[] retrievedConfigs = GetSuccess(
-				"http://localhost:8080/feedback_orchestrator/en/configurations", 
+				"https://localhost:8443/feedback_orchestrator/en/configurations", 
 				Configuration[].class);
 		
 		assertEquals(retrievedConfigs.length, 27);
@@ -24,7 +24,7 @@ public class OrchestratorServletConfigurationTest extends ServletTest {
 	
 	public void testRetrievingSingleConfiguration() throws ClientProtocolException, IOException {
 		Configuration config = GetSuccess(
-				"http://localhost:8080/feedback_orchestrator/en/configurations/80",
+				"https://localhost:8443/feedback_orchestrator/en/configurations/80",
 				Configuration.class);
 		
 		assertEquals(config.getId(), new Integer(80));
@@ -35,7 +35,7 @@ public class OrchestratorServletConfigurationTest extends ServletTest {
 	
 	public void testRetrievingAllConfigurationsForApplication() throws ClientProtocolException, IOException {
 		Configuration[] retrievedConfigs = GetSuccess(
-				"http://localhost:8080/feedback_orchestrator/en/applications/27/configurations", 
+				"https://localhost:8443/feedback_orchestrator/en/applications/27/configurations", 
 				Configuration[].class);
 		
 		assertEquals(retrievedConfigs.length, 3);
@@ -43,7 +43,7 @@ public class OrchestratorServletConfigurationTest extends ServletTest {
 	
 	public void testRetrievingAllConfigurationsForUserGroupAndApplication() throws ClientProtocolException, IOException {
 		Configuration[] retrievedConfigs = GetSuccess(
-				"http://localhost:8080/feedback_orchestrator/en/applications/27/user_groups/1/configurations", 
+				"https://localhost:8443/feedback_orchestrator/en/applications/27/user_groups/1/configurations", 
 				Configuration[].class);
 		
 		assertEquals(retrievedConfigs.length, 3);
@@ -51,7 +51,7 @@ public class OrchestratorServletConfigurationTest extends ServletTest {
 	
 	public void testRetrievingAllConfigurationsForUserAndApplication() throws ClientProtocolException, IOException {
 		Configuration[] retrievedConfigs = GetSuccess(
-				"http://localhost:8080/feedback_orchestrator/en/applications/27/users/1/configurations", 
+				"https://localhost:8443/feedback_orchestrator/en/applications/27/users/1/configurations", 
 				Configuration[].class);
 		
 		assertEquals(retrievedConfigs.length, 3);
@@ -64,7 +64,7 @@ public class OrchestratorServletConfigurationTest extends ServletTest {
 		String jsonString = IOUtils.toString(stream); 
 		
 		Configuration createdConfig = PostSuccess(
-				"http://localhost:8080/feedback_orchestrator/en/applications/27/configurations", 
+				"https://localhost:8443/feedback_orchestrator/en/applications/27/configurations", 
 				jsonString,
 				Configuration.class);
         
@@ -80,7 +80,7 @@ public class OrchestratorServletConfigurationTest extends ServletTest {
 		String jsonString = IOUtils.toString(stream); 
 		
 		Configuration createdConfig = PostSuccess(
-				"http://localhost:8080/feedback_orchestrator/en/applications/27/user_groups/1/configurations", 
+				"https://localhost:8443/feedback_orchestrator/en/applications/27/user_groups/1/configurations", 
 				jsonString,
 				Configuration.class);
         
@@ -96,7 +96,7 @@ public class OrchestratorServletConfigurationTest extends ServletTest {
 		String jsonString = IOUtils.toString(stream); 
 		
 		Configuration updatedConfig = PutSuccess(
-				"http://localhost:8080/feedback_orchestrator/en/configurations", 
+				"https://localhost:8443/feedback_orchestrator/en/configurations", 
 				jsonString,
 				Configuration.class);
         

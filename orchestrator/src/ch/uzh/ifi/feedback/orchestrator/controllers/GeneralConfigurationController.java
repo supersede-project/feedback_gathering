@@ -91,9 +91,9 @@ public class GeneralConfigurationController extends RestController<GeneralConfig
 	{
 		Application app = applicationService.GetById(appId);
 		if(app.getGeneralConfiguration() != null)
-			throw new ValidationException("general configuration for application already set. Please perform update!");
+			throw new ValidationException("general configuration for application already set. Please perform an update!");
 		
-		validator.Validate(config);
+		super.Validate(config, false);
 		app.setGeneralConfiguration(config);
 		
 		TransactionManager.withTransaction((con) -> 
@@ -112,7 +112,7 @@ public class GeneralConfigurationController extends RestController<GeneralConfig
 		if(configuration.getGeneralConfiguration() != null)
 			throw new ValidationException("general configuration for configuration already set. Please perform update!");
 		
-		validator.Validate(config);
+		super.Validate(config, false);
 		configuration.setGeneralConfiguration(config);
 		
 		TransactionManager.withTransaction((con) -> 

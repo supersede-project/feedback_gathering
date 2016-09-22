@@ -11,7 +11,7 @@ public class OrchestratorServletGeneralConfigurationTest extends ServletTest {
 	
 	public void testRetrievingAllConfigurations() throws ClientProtocolException, IOException {
 		GeneralConfiguration[] retrievedConfigs = GetSuccess(
-				"http://localhost:8080/feedback_orchestrator/en/general_configurations", 
+				"https://localhost:8443/feedback_orchestrator/en/general_configurations", 
 				GeneralConfiguration[].class);
 		
 		assertEquals(retrievedConfigs.length, 36);
@@ -19,7 +19,7 @@ public class OrchestratorServletGeneralConfigurationTest extends ServletTest {
 	
 	public void testRetrievingSingleConfiguration() throws ClientProtocolException, IOException {
 		GeneralConfiguration config = GetSuccess(
-				"http://localhost:8080/feedback_orchestrator/en/general_configurations/148",
+				"https://localhost:8443/feedback_orchestrator/en/general_configurations/148",
 				GeneralConfiguration.class);
 		
 		assertEquals(config.getId(), new Integer(148));
@@ -28,7 +28,7 @@ public class OrchestratorServletGeneralConfigurationTest extends ServletTest {
 	
 	public void testRetrievingConfigurationForApplication() throws ClientProtocolException, IOException {
 		GeneralConfiguration retrievedConfig = GetSuccess(
-				"http://localhost:8080/feedback_orchestrator/en/applications/27/general_configuration", 
+				"https://localhost:8443/feedback_orchestrator/en/applications/27/general_configuration", 
 				GeneralConfiguration.class);
 		
 		assertEquals(retrievedConfig.getId(), new Integer(116));
@@ -40,7 +40,7 @@ public class OrchestratorServletGeneralConfigurationTest extends ServletTest {
 		String jsonString = IOUtils.toString(stream); 
 		
 		GeneralConfiguration updatedMechanism = PutSuccess(
-				"http://localhost:8080/feedback_orchestrator/en/general_configurations", 
+				"https://localhost:8443/feedback_orchestrator/en/general_configurations", 
 				jsonString,
 				GeneralConfiguration.class);
         

@@ -230,14 +230,14 @@ public class RestManager implements IRestManager {
 		}
 		else if(rootCause instanceof JsonSyntaxException){
 			response.setStatus(400);
-			response.getWriter().append("Malformed Json: " + ex.getMessage());
+			response.getWriter().append("Malformed Json: " + rootCause.getMessage());
 		}
 		else if(rootCause instanceof ValidationException){
 			response.setStatus(422);
-			response.getWriter().append(ex.getMessage());
+			response.getWriter().append(rootCause.getMessage());
 		}else if(rootCause instanceof AuthenticationException){
 			response.setStatus(403);
-			response.getWriter().append(ex.getMessage());
+			response.getWriter().append(rootCause.getMessage());
 		}
 		else{
 			ex.printStackTrace();

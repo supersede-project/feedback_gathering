@@ -13,7 +13,7 @@ public class OrchestratorServletUserGroupTest extends ServletTest {
 	
 	public void testRetrievingAllUserGroups() throws ClientProtocolException, IOException {
 		UserGroup[] retrievedUsers = GetSuccess(
-				"http://localhost:8080/feedback_orchestrator/en/user_groups", 
+				"https://localhost:8443/feedback_orchestrator/en/user_groups", 
 				UserGroup[].class);
 		
 		assertEquals(retrievedUsers.length, 2);
@@ -21,7 +21,7 @@ public class OrchestratorServletUserGroupTest extends ServletTest {
 	
 	public void testRetrievingSingleUserGroup() throws ClientProtocolException, IOException {
 		UserGroup retrievedUserGroup = GetSuccess(
-				"http://localhost:8080/feedback_orchestrator/en/user_groups/1", 
+				"https://localhost:8443/feedback_orchestrator/en/user_groups/1", 
 				UserGroup.class);
 		
 		assertEquals(retrievedUserGroup.getName(), "default");
@@ -33,7 +33,7 @@ public class OrchestratorServletUserGroupTest extends ServletTest {
 		String jsonString = IOUtils.toString(stream); 
 		
 		UserGroup addedUserGroup = PostSuccess(
-				"http://localhost:8080/feedback_orchestrator/en/user_groups",
+				"https://localhost:8443/feedback_orchestrator/en/user_groups",
 				jsonString,
 				UserGroup.class);
 		

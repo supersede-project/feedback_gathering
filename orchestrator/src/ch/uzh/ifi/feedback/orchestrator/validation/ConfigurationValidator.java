@@ -11,10 +11,12 @@ import ch.uzh.ifi.feedback.library.rest.validation.ValidationResult;
 import ch.uzh.ifi.feedback.library.rest.validation.ValidationSerializer;
 import ch.uzh.ifi.feedback.library.rest.validation.ValidatorBase;
 import ch.uzh.ifi.feedback.orchestrator.model.Configuration;
+import ch.uzh.ifi.feedback.orchestrator.model.ConfigurationType;
 import ch.uzh.ifi.feedback.orchestrator.model.FeedbackMechanism;
 import ch.uzh.ifi.feedback.orchestrator.model.FeedbackParameter;
 import ch.uzh.ifi.feedback.orchestrator.model.GeneralConfiguration;
 import ch.uzh.ifi.feedback.orchestrator.services.ConfigurationService;
+import static java.util.Arrays.asList;
 
 public class ConfigurationValidator extends ValidatorBase<Configuration> {
 
@@ -40,19 +42,35 @@ public class ConfigurationValidator extends ValidatorBase<Configuration> {
 	public ValidationResult Validate(Configuration object) throws Exception {
 		ValidationResult result = super.Validate(object);
 		
-		List<Object> childrenErrors = new ArrayList<>();
+		//check that no more than 1 push configuration is present per user group and application
+		if(object.getType().equals(ConfigurationType.PUSH))
+		{
+			List<Configuration> configs = configurationService.GetWhere(
+					asList(object.getUserGroupsId(), object.getApplicationId(), object.getType().toString()),
+					"user_groups_id = ?", "applications_id = ?", "type = ?");
+			
+			if(configs.size() == 1)
+			{
+				Configuration other = configs.get(0);
+				if(object.getId() == null || !other.getId().equals(object.getId()))
+				{
+					result.setHasErrors(true);
+					ValidationError error = new ValidationError("type", object.getType(), "unique: there can only be one push configuration per user group and application");
+					result.GetValidationErrors().add(error);
+				}
+			}
+		}
+		
 		for(FeedbackMechanism mechanism : object.getFeedbackMechanisms())
 		{
 			ValidationResult childResult = mechanismValidator.Validate(mechanism);
 			if(childResult.hasErrors())
 			{
 				result.setHasErrors(true);
-				List<ValidationError> errors = childResult.GetValidationErrors();
-				childrenErrors.add(errors);
+				result.GetValidationErrors().addAll(childResult.GetValidationErrors());
 			}
 		}
-		result.GetValidationErrors().add(new ValidationError("Mechanisms", childrenErrors));
-		
+
 		GeneralConfiguration config = object.getGeneralConfiguration();
 		if(config != null)
 		{
@@ -60,12 +78,9 @@ public class ConfigurationValidator extends ValidatorBase<Configuration> {
 			if(childResult.hasErrors())
 			{
 				result.setHasErrors(true);
-				result.GetValidationErrors().add(new ValidationError("generalConfiguration", childResult.GetValidationErrors()));
+				result.GetValidationErrors().addAll(childResult.GetValidationErrors());
 			}
 		}
-		
-		if(result.hasErrors())
-			throw new ValidationException(serializer.Serialize(result));
 		
 		return result;
 	}
