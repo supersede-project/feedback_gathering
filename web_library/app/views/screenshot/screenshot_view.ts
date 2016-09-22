@@ -16,6 +16,8 @@ const textMode2:string = 'textMode2';
 const black:string = "#000000";
 const defaultColor:string = black;
 const canvasId:string = 'screenshotCanvas';
+const defaultFontSize:number = 30;
+const textTypeObjectIdentifier:string = 'i-text';
 
 
 export class ScreenshotView {
@@ -126,7 +128,20 @@ export class ScreenshotView {
 
         myThis.fabricCanvas.on('object:selected', function (e) {
             var selectedObject = e.target;
+
             selectedObjectControls.show();
+            if(selectedObject.get('type') === textTypeObjectIdentifier) {
+                var textSizeInput = selectedObjectControls.find('.text-size');
+                textSizeInput.show();
+                textSizeInput.val(selectedObject.getFontSize());
+                textSizeInput.off().on('keyup', function() {
+                    selectedObject.setFontSize(jQuery(this).val());
+                    myThis.fabricCanvas.renderAll();
+                });
+            } else {
+                selectedObjectControls.find('.text-size').hide();
+            }
+
 
             if (selectedObject.get('type') !== 'path-group') {
                 var currentObjectColor = selectedObject.getFill();
@@ -322,7 +337,7 @@ export class ScreenshotView {
     }
 
     addTextAnnotation(left, top) {
-        var text = new fabric.IText('Your text', {left: left, top: top, fontFamily: 'arial', fontSize: 30});
+        var text = new fabric.IText('Your text', {left: left, top: top, fontFamily: 'arial', fontSize: defaultFontSize});
         this.fabricCanvas.add(text);
         this.fabricCanvas.setActiveObject(text);
         text.enterEditing();

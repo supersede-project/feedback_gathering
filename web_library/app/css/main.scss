@@ -482,6 +482,18 @@ button.screenshot-operation {
   z-index: 5000;
 }
 
+.selected-object-controls a {
+  margin-top: 4px;
+}
+
+.screenshot-operations .text-size {
+  display: inline-block;
+  width: 50px;
+  margin-left: 5px;
+  position: relative;
+  top: -5px;
+}
+
 /* intermediate dialog */
 
 #intermediateDialog {

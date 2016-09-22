@@ -12,6 +12,8 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
     var black = "#000000";
     var defaultColor = black;
     var canvasId = 'screenshotCanvas';
+    var defaultFontSize = 30;
+    var textTypeObjectIdentifier = 'i-text';
     var ScreenshotView = (function () {
         function ScreenshotView(screenshotMechanism, screenshotPreviewElement, screenshotCaptureButton, elementToCapture, container, distPath, elementsToHide) {
             this.screenshotMechanism = screenshotMechanism;
@@ -81,6 +83,18 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
             myThis.fabricCanvas.on('object:selected', function (e) {
                 var selectedObject = e.target;
                 selectedObjectControls.show();
+                if (selectedObject.get('type') === textTypeObjectIdentifier) {
+                    var textSizeInput = selectedObjectControls.find('.text-size');
+                    textSizeInput.show();
+                    textSizeInput.val(selectedObject.getFontSize());
+                    textSizeInput.off().on('keyup', function () {
+                        selectedObject.setFontSize(jQuery(this).val());
+                        myThis.fabricCanvas.renderAll();
+                    });
+                }
+                else {
+                    selectedObjectControls.find('.text-size').hide();
+                }
                 if (selectedObject.get('type') !== 'path-group') {
                     var currentObjectColor = selectedObject.getFill();
                 }
@@ -250,7 +264,7 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
             canvas.setHeight(croppHeight);
         };
         ScreenshotView.prototype.addTextAnnotation = function (left, top) {
-            var text = new fabric.IText('Your text', { left: left, top: top, fontFamily: 'arial', fontSize: 30 });
+            var text = new fabric.IText('Your text', { left: left, top: top, fontFamily: 'arial', fontSize: defaultFontSize });
             this.fabricCanvas.add(text);
             this.fabricCanvas.setActiveObject(text);
             text.enterEditing();
