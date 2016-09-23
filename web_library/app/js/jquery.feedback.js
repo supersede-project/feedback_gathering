@@ -11,6 +11,7 @@ define(["require", "exports", './config', '../views/pagination_container', '../v
         var feedbackButton;
         var applicationContext;
         var distPath;
+        var userId;
         var initApplication = function (applicationObject) {
             application = applicationObject;
             applicationContext = application.getContextForView();
@@ -236,7 +237,7 @@ define(["require", "exports", './config', '../views/pagination_container', '../v
             var categoryMechanisms = configuration.getMechanismConfig(config_1.mechanismTypes.categoryType);
             var attachmentMechanisms = configuration.getMechanismConfig(config_1.mechanismTypes.attachmentType);
             container.find('.server-response').removeClass('error').removeClass('success');
-            var feedbackObject = new feedback_1.Feedback(config_1.feedbackObjectTitle, "uid12345", "DE", config_1.applicationId, configuration.id, [], [], [], []);
+            var feedbackObject = new feedback_1.Feedback(config_1.feedbackObjectTitle, userId, "DE", config_1.applicationId, configuration.id, [], [], [], []);
             for (var _i = 0, textMechanisms_2 = textMechanisms; _i < textMechanisms_2.length; _i++) {
                 var textMechanism = textMechanisms_2[_i];
                 if (textMechanism.active) {
@@ -317,6 +318,7 @@ define(["require", "exports", './config', '../views/pagination_container', '../v
             this.options = $.extend({}, $.fn.feedbackPlugin.defaults, options);
             var currentOptions = this.options;
             distPath = currentOptions.distPath;
+            userId = currentOptions.userId;
             i18n_1.I18nHelper.initializeI18n(this.options);
             var applicationService = new application_service_1.ApplicationService();
             applicationService.retrieveApplication(config_1.applicationId, function (application) {
@@ -339,7 +341,8 @@ define(["require", "exports", './config', '../views/pagination_container', '../v
             'color': '#fff',
             'lang': 'en',
             'backgroundColor': '#b3cd40',
-            'distPath': 'dist/'
+            'distPath': 'dist/',
+            'userId': ''
         };
     };
     (function ($, window, document) {

@@ -39,6 +39,7 @@ export var feedbackPluginModule = function ($, window, document) {
     var feedbackButton;
     var applicationContext;
     var distPath;
+    var userId;
 
     /**
      * @param applicationObject
@@ -368,7 +369,7 @@ export var feedbackPluginModule = function ($, window, document) {
         var attachmentMechanisms = configuration.getMechanismConfig(mechanismTypes.attachmentType);
 
         container.find('.server-response').removeClass('error').removeClass('success');
-        var feedbackObject = new Feedback(feedbackObjectTitle, "uid12345", "DE", applicationId, configuration.id, [], [], [], []);
+        var feedbackObject = new Feedback(feedbackObjectTitle, userId, "DE", applicationId, configuration.id, [], [], [], []);
 
         for(var textMechanism of textMechanisms) {
             if(textMechanism.active) {
@@ -467,6 +468,7 @@ export var feedbackPluginModule = function ($, window, document) {
         this.options = $.extend({}, $.fn.feedbackPlugin.defaults, options);
         var currentOptions = this.options;
         distPath = currentOptions.distPath;
+        userId = currentOptions.userId;
 
         I18nHelper.initializeI18n(this.options);
 
@@ -496,7 +498,8 @@ export var feedbackPluginModule = function ($, window, document) {
         'color': '#fff',
         'lang': 'en',
         'backgroundColor': '#b3cd40',
-        'distPath': 'dist/'
+        'distPath': 'dist/',
+        'userId': ''
     };
 
 };
