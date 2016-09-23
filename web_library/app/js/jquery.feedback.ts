@@ -475,7 +475,7 @@ export var feedbackPluginModule = function ($, window, document) {
         I18nHelper.initializeI18n(this.options);
 
         // loadDataHere to trigger pull if necessary
-        var applicationService = new ApplicationService();
+        var applicationService = new ApplicationService(language);
         applicationService.retrieveApplication(applicationId, function(application) {
             // disable library
             if(application.state === null || application.state === 0) {

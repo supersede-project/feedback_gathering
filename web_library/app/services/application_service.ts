@@ -11,12 +11,14 @@ export class ApplicationService {
     private backend:Backend;
 
     /**
+     * @param language
+     *  Language to use when getting the data
      * @param backend
      *  Backend to get data from
      */
-    constructor(backend?: Backend) {
+    constructor(language:string, backend?:Backend) {
         if(!backend) {
-            this.backend = new HttpBackend(applicationPath, apiEndpointOrchestrator);
+            this.backend = new HttpBackend(applicationPath, apiEndpointOrchestrator, language);
         } else {
             this.backend = backend;
         }

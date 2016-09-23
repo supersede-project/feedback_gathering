@@ -5,7 +5,7 @@ define(["require", "exports", './backends/mock_backend', './mocks/mocks_loader',
         beforeEach(function () {
             var applicationMockData = mocks_loader_1.readJSON('app/services/mocks/test/applications_mock.json', '/base/');
             var backend = new mock_backend_1.MockBackend(applicationMockData);
-            applicationService = new application_service_1.ApplicationService(backend);
+            applicationService = new application_service_1.ApplicationService('en', backend);
         });
         it('should retrieve the application from a backend', function () {
             applicationService.retrieveApplication(1, function (application) {

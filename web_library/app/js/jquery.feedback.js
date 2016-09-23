@@ -322,7 +322,7 @@ define(["require", "exports", './config', '../views/pagination_container', '../v
             userId = currentOptions.userId;
             language = i18n_1.I18nHelper.getLanguage(this.options);
             i18n_1.I18nHelper.initializeI18n(this.options);
-            var applicationService = new application_service_1.ApplicationService();
+            var applicationService = new application_service_1.ApplicationService(language);
             applicationService.retrieveApplication(config_1.applicationId, function (application) {
                 if (application.state === null || application.state === 0) {
                     feedbackButton.hide();

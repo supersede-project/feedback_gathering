@@ -1,9 +1,10 @@
 define(["require", "exports"], function (require, exports) {
     "use strict";
     var HttpBackend = (function () {
-        function HttpBackend(path, apiEndpoint) {
+        function HttpBackend(path, apiEndpoint, language) {
             this.path = path;
             this.apiEndpoint = apiEndpoint;
+            this.language = language;
         }
         HttpBackend.prototype.list = function (callback) {
             var url = this.getUrl();
@@ -43,7 +44,7 @@ define(["require", "exports"], function (require, exports) {
             return null;
         };
         HttpBackend.prototype.getUrl = function () {
-            return this.apiEndpoint + this.path;
+            return (this.apiEndpoint + this.path).replace('{lang}', this.language);
         };
         return HttpBackend;
     }());

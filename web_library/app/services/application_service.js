@@ -1,9 +1,9 @@
 define(["require", "exports", './backends/http_backend', '../models/applications/application', '../js/config'], function (require, exports, http_backend_1, application_1, config_1) {
     "use strict";
     var ApplicationService = (function () {
-        function ApplicationService(backend) {
+        function ApplicationService(language, backend) {
             if (!backend) {
-                this.backend = new http_backend_1.HttpBackend(config_1.applicationPath, config_1.apiEndpointOrchestrator);
+                this.backend = new http_backend_1.HttpBackend(config_1.applicationPath, config_1.apiEndpointOrchestrator, language);
             }
             else {
                 this.backend = backend;

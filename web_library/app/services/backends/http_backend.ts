@@ -4,10 +4,12 @@ import {Backend} from './backend';
 export class HttpBackend implements Backend {
     private path:string;
     private apiEndpoint:string;
+    private language:string;
 
-    constructor(path:string, apiEndpoint:string) {
+    constructor(path:string, apiEndpoint:string, language:string) {
         this.path = path;
         this.apiEndpoint = apiEndpoint;
+        this.language = language;
     }
 
     list(callback:(data:any) => void): void {
@@ -54,6 +56,6 @@ export class HttpBackend implements Backend {
     }
 
     getUrl(): string {
-        return this.apiEndpoint + this.path;
+        return (this.apiEndpoint + this.path).replace('{lang}', this.language);
     }
 }
