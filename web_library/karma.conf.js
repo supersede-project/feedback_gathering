@@ -19,7 +19,8 @@ module.exports = function (config) {
             { pattern: 'app/templates/*.handlebars', included: false, watched: true, served: true },
             { pattern: 'app/templates/*.handlebars.js', included: false, watched: true, served: true },
             { pattern: 'app/**/*.js', included: false },
-            { pattern: 'app/services/mocks/**/*.json', included: false }
+            { pattern: 'app/services/mocks/**/*.json', included: false },
+            { pattern: 'app/locales/**/*.json', included: false }
         ],
 
         proxies: {

@@ -1,7 +1,6 @@
 import {ScreenshotViewDrawing} from './screenshot_view_drawing';
 import {DataHelper} from '../../js/helpers/data_helper';
 import '../../js/lib/html2canvas.js';
-import '../../js/lib/fabric.js';
 import '../../js/lib/spectrum.js';
 import {Mechanism} from '../../models/mechanisms/mechanism';
 import {CanvasState} from './canvas_state';

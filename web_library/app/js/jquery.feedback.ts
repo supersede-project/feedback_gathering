@@ -40,6 +40,7 @@ export var feedbackPluginModule = function ($, window, document) {
     var applicationContext;
     var distPath;
     var userId;
+    var language:string;
 
     /**
      * @param applicationObject
@@ -470,6 +471,7 @@ export var feedbackPluginModule = function ($, window, document) {
         distPath = currentOptions.distPath;
         userId = currentOptions.userId;
 
+        language = I18nHelper.getLanguage(this.options);
         I18nHelper.initializeI18n(this.options);
 
         // loadDataHere to trigger pull if necessary
@@ -496,6 +498,7 @@ export var feedbackPluginModule = function ($, window, document) {
 
     $.fn.feedbackPlugin.defaults = {
         'color': '#fff',
+        'fallbackLang': 'en',
         'lang': 'en',
         'backgroundColor': '#b3cd40',
         'distPath': 'dist/',

@@ -12,6 +12,7 @@ define(["require", "exports", './config', '../views/pagination_container', '../v
         var applicationContext;
         var distPath;
         var userId;
+        var language;
         var initApplication = function (applicationObject) {
             application = applicationObject;
             applicationContext = application.getContextForView();
@@ -319,6 +320,7 @@ define(["require", "exports", './config', '../views/pagination_container', '../v
             var currentOptions = this.options;
             distPath = currentOptions.distPath;
             userId = currentOptions.userId;
+            language = i18n_1.I18nHelper.getLanguage(this.options);
             i18n_1.I18nHelper.initializeI18n(this.options);
             var applicationService = new application_service_1.ApplicationService();
             applicationService.retrieveApplication(config_1.applicationId, function (application) {
@@ -339,6 +341,7 @@ define(["require", "exports", './config', '../views/pagination_container', '../v
         };
         $.fn.feedbackPlugin.defaults = {
             'color': '#fff',
+            'fallbackLang': 'en',
             'lang': 'en',
             'backgroundColor': '#b3cd40',
             'distPath': 'dist/',
