@@ -1,1 +1,0 @@
-/home/flo/masterproject/angular2_tutorial/testproject/tmp/vendor-input_base_path-PAvsERKF.tmp/0/es6-shim/es6-shim.js
