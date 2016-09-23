@@ -1,6 +1,6 @@
 define(["require", "exports", './screenshot_view', '../../js/config', 'handlebars', '../../models/mechanisms/mechanism'], function (require, exports, screenshot_view_1, config_1, Handlebars, mechanism_1) {
     "use strict";
-    describe('Screenshot View', function () {
+    xdescribe('Screenshot View', function () {
         var screenshotView;
         var container;
         var $ = $j;
@@ -22,6 +22,16 @@ define(["require", "exports", './screenshot_view', '../../js/config', 'handlebar
                 '<button class="screenshot-operation screenshot-crop">crop</button>' +
                 '<button class="screenshot-operation screenshot-draw-undo">undo</button>' +
                 '<button class="screenshot-operation screenshot-draw-remove">remove</button>' +
+                '<article class="selected-object-controls">' +
+                '<p>Selection</p>' +
+                '<a class="delete" href="#"><i class="material-icons">delete</i></a> &nbsp;' +
+                '<a class="color" href="#"><i class="material-icons">format_color_fill</i></a>' +
+                '<input class="text-size" type="text">' +
+                '</article>' +
+                '<article class="freehand-controls">' +
+                '<p>Color</p>' +
+                '<a class="freehand-color" href="#"><i class="material-icons">format_color_fill</i></a>' +
+                '</article>' +
                 '</div>' +
                 '</article>' +
                 '<div class="screenshot-preview col col-right">' +

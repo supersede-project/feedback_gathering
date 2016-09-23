@@ -24,6 +24,9 @@ module.exports = function (config) {
 
         proxies: {
             '/app/js/lib/html2canvas.js': '/base/app/js/lib/html2canvas.js',
+            '/app/js/lib/fabric.js': '/base/app/js/lib/fabric.js',
+            '/app/js/lib/spectrum.js': '/base/app/js/lib/spectrum.js',
+            '/app/js/lib/customiseControls.js': '/base/app/js/lib/customiseControls.js',
             '/app/js/lib/jquery.star-rating-svg.js': '/base/app/js/lib/jquery.star-rating-svg.js',
             '/app/templates/feedback_dialog.handlebars': '/base/app/templates/feedback_dialog.handlebars',
             '/app/templates/intermediate_dialog.handlebars': '/base/app/templates/intermediate_dialog.handlebars'
@@ -36,7 +39,7 @@ module.exports = function (config) {
         // preprocess matching files before serving them to the browser
         // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
         preprocessors: {
-            'app/**/!(*spec|html2canvas|jquery\.star-rating-svg).js': ['coverage'],
+            'app/**/!(*spec|html2canvas|jquery\.star-rating-svg|spectrum|fabric|customiseControl|Fr.voice|libmp3lame.min|mp3Worker|recorder|recorderWorker).js': ['coverage'],
             'app/templates/*.handlebars': ['handlebars']
         },
 

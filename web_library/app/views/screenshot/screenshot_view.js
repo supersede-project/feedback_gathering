@@ -1,4 +1,4 @@
-define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/data_helper', './canvas_state', '../../js/lib/html2canvas.js'], function (require, exports, screenshot_view_drawing_1, data_helper_1, canvas_state_1) {
+define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/data_helper', './canvas_state', '../../js/lib/html2canvas.js', '../../js/lib/fabric.js', '../../js/lib/spectrum.js'], function (require, exports, screenshot_view_drawing_1, data_helper_1, canvas_state_1) {
     "use strict";
     var freehandDrawingMode = 'freehandDrawingMode';
     var rectDrawingMode = 'rectDrawingMode';
