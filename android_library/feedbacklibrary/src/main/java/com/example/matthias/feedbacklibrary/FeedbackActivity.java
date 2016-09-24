@@ -1,5 +1,6 @@
 package com.example.matthias.feedbacklibrary;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -13,13 +14,12 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import com.example.matthias.feedbacklibrary.API.feedbackAPI;
 import com.example.matthias.feedbacklibrary.configurations.Configuration;
@@ -27,12 +27,10 @@ import com.example.matthias.feedbacklibrary.configurations.OrchestratorConfigura
 import com.example.matthias.feedbacklibrary.configurations.OrchestratorConfigurationItem;
 import com.example.matthias.feedbacklibrary.feedbacks.Feedback;
 import com.example.matthias.feedbacklibrary.feedbacks.ScreenshotFeedback;
-import com.example.matthias.feedbacklibrary.models.AttachmentMechanism;
-import com.example.matthias.feedbacklibrary.models.AudioMechanism;
 import com.example.matthias.feedbacklibrary.models.Mechanism;
-import com.example.matthias.feedbacklibrary.models.ScreenshotMechanism;
 import com.example.matthias.feedbacklibrary.utils.DialogUtils;
 import com.example.matthias.feedbacklibrary.utils.Utils;
+import com.example.matthias.feedbacklibrary.views.AudioMechanismView;
 import com.example.matthias.feedbacklibrary.views.CategoryMechanismView;
 import com.example.matthias.feedbacklibrary.views.MechanismView;
 import com.example.matthias.feedbacklibrary.views.RatingMechanismView;
@@ -40,7 +38,6 @@ import com.example.matthias.feedbacklibrary.views.ScreenshotMechanismView;
 import com.example.matthias.feedbacklibrary.views.TextMechanismView;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 
 import java.io.File;
@@ -50,9 +47,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import okhttp3.FormBody;
 import okhttp3.MediaType;
-import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -77,6 +72,10 @@ public class FeedbackActivity extends AppCompatActivity implements ScreenshotMec
     private final static int REQUEST_PHOTO = 11;
     private final static int REQUEST_ANNOTATE = 12;
     private static final String MULTIPART_FORM_DATA = "multipart/form-data";
+    // Storage permission (android.permission-group.STORAGE)
+    private static final int PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 100;
+    // Microphone permission (android.permission-group.MICROPHONE)
+    private static final int PERMISSIONS_REQUEST_RECORD_AUDIO = 101;
     private feedbackAPI fbAPI;
     // Orchestrator configuration fetched from the orchestrator
     private OrchestratorConfigurationItem orchestratorConfigurationItem;
@@ -133,7 +132,7 @@ public class FeedbackActivity extends AppCompatActivity implements ScreenshotMec
 
                 @Override
                 public void onResponse(Call<OrchestratorConfigurationItem> call, Response<OrchestratorConfigurationItem> response) {
-                    // TODO: Ask Florian if NULL values are serialized or left out
+                    // TODO: Ask Florian if NULL values are serialized or left out --> no null values, i.e., empty lists
                     orchestratorConfigurationItem = response.body();
                     /**
                      * Save the current configuration under {@link FeedbackActivity#CONFIGURATION_DIR}/{@link FeedbackActivity#JSON_CONFIGURATION_FILE_NAME}.
@@ -162,12 +161,12 @@ public class FeedbackActivity extends AppCompatActivity implements ScreenshotMec
     }
 
     private void initOfflineConfiguration() {
-        System.out.println("initOfflineConfiguration executed (ONLY with PUSH correct!)");
+        //System.out.println("initOfflineConfiguration executed (ONLY with PUSH correct!)");
 
         String jsonString;
         Gson gson = new Gson();
         // For single category
-        jsonString = Utils.readFileAsString("feedback_orchestrator_adapted_single_selection.json", getAssets());
+        jsonString = Utils.readFileAsString("feedback_orchestrator_adapted_single_selection_active_audio.json", getAssets());
         // For multiple category
         //jsonString = Utils.readFileAsString("feedback_orchestrator_adapted_multiple_selection.json", getAssets());
         orchestratorConfigurationItem = gson.fromJson(jsonString, OrchestratorConfigurationItem.class);
@@ -196,6 +195,8 @@ public class FeedbackActivity extends AppCompatActivity implements ScreenshotMec
                             break;
                         case Mechanism.AUDIO_TYPE:
                             // TODO: Implement audio mechanism
+                            mechanismView = new AudioMechanismView(layoutInflater, allMechanisms.get(i), getResources());
+                            view = mechanismView.getEnclosingLayout();
                             break;
                         case Mechanism.CATEGORY_TYPE:
                             mechanismView = new CategoryMechanismView(layoutInflater, allMechanisms.get(i));
@@ -353,16 +354,19 @@ public class FeedbackActivity extends AppCompatActivity implements ScreenshotMec
         builder.setItems(items, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int item) {
-                boolean result = Utils.checkPermission_READ_EXTERNAL_STORAGE(FeedbackActivity.this, Utils.PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE);
-                if (items[item].equals(res.getString(R.string.supersede_feedbacklibrary_photo_capture_text))) {
-                    userScreenshotChosenTask = res.getString(R.string.supersede_feedbacklibrary_photo_capture_text);
-                    if (result) {
+                if (!items[item].equals(res.getString(R.string.supersede_feedbacklibrary_cancel_string))) {
+                    boolean result = Utils.checkSinglePermission(FeedbackActivity.this, PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE, getResources().getString(R.string.supersede_feedbacklibrary_permission_request_title), "External storage permission is necessary");
+                    if (items[item].equals(res.getString(R.string.supersede_feedbacklibrary_photo_capture_text))) {
+                        userScreenshotChosenTask = res.getString(R.string.supersede_feedbacklibrary_photo_capture_text);
+                        if (result) {
+                        }
+                    } else if (items[item].equals(res.getString(R.string.supersede_feedbacklibrary_library_chooser_text))) {
+                        userScreenshotChosenTask = res.getString(R.string.supersede_feedbacklibrary_library_chooser_text);
+                        if (result) {
+                            galleryIntent();
+                        }
                     }
-                } else if (items[item].equals(res.getString(R.string.supersede_feedbacklibrary_library_chooser_text))) {
-                    userScreenshotChosenTask = res.getString(R.string.supersede_feedbacklibrary_library_chooser_text);
-                    if (result)
-                        galleryIntent();
-                } else if (items[item].equals(res.getString(R.string.supersede_feedbacklibrary_cancel_string))) {
+                } else {
                     dialog.dismiss();
                 }
             }
@@ -373,12 +377,70 @@ public class FeedbackActivity extends AppCompatActivity implements ScreenshotMec
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         switch (requestCode) {
-            case Utils.PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE:
+            case PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     Resources res = getResources();
                     if (userScreenshotChosenTask.equals(res.getString(R.string.supersede_feedbacklibrary_photo_capture_text))) {
                     } else if (userScreenshotChosenTask.equals(res.getString(R.string.supersede_feedbacklibrary_library_chooser_text))) {
                         galleryIntent();
+                    }
+                } else {
+                    // The user denied the permission
+                    if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_EXTERNAL_STORAGE)) {
+                        // The user denied without checking 'Never ask again'. Show again the rationale
+                        AlertDialog.Builder alertBuilder = new AlertDialog.Builder(this);
+                        alertBuilder.setCancelable(true);
+                        alertBuilder.setTitle(getResources().getString(R.string.supersede_feedbacklibrary_permission_request_title));
+                        alertBuilder.setMessage(getResources().getString(R.string.supersede_feedbacklibrary_external_storage_permission_text));
+                        alertBuilder.setPositiveButton(R.string.supersede_feedbacklibrary_retry_string, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                ActivityCompat.requestPermissions(FeedbackActivity.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE);
+                            }
+                        });
+                        alertBuilder.setNegativeButton(R.string.supersede_feedbacklibrary_not_now_text, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
+                        alertBuilder.show();
+                    } else {
+                        // The user denied and checked the 'Never ask again' option. Show a short explanation dialog
+                        ArrayList<String> messages = new ArrayList<>();
+                        messages.add(getResources().getString(R.string.supersede_feedbacklibrary_external_storage_permission_text_instructions));
+                        DialogUtils.DataDialog d = DialogUtils.DataDialog.newInstance(messages);
+                        d.setCancelable(false);
+                        d.show(getFragmentManager(), "dataDialog");
+                    }
+                }
+                break;
+            case PERMISSIONS_REQUEST_RECORD_AUDIO:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                } else {
+                    // The user denied the permission
+                    if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.RECORD_AUDIO)) {
+                        // The user denied without checking 'Never ask again'. Show again the rationale
+                        AlertDialog.Builder alertBuilder = new AlertDialog.Builder(this);
+                        alertBuilder.setCancelable(true);
+                        alertBuilder.setTitle(getResources().getString(R.string.supersede_feedbacklibrary_permission_request_title));
+                        alertBuilder.setMessage(getResources().getString(R.string.supersede_feedbacklibrary_record_audio_permission_text));
+                        alertBuilder.setPositiveButton(R.string.supersede_feedbacklibrary_retry_string, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                ActivityCompat.requestPermissions(FeedbackActivity.this, new String[]{Manifest.permission.RECORD_AUDIO}, PERMISSIONS_REQUEST_RECORD_AUDIO);
+                            }
+                        });
+                        alertBuilder.setNegativeButton(R.string.supersede_feedbacklibrary_not_now_text, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
+                        alertBuilder.show();
+                    } else {
+                        // The user denied and checked the 'Never ask again' option. Show a short explanation dialog
+                        ArrayList<String> messages = new ArrayList<>();
+                        messages.add(getResources().getString(R.string.supersede_feedbacklibrary_record_audio_permission_text_instructions));
+                        DialogUtils.DataDialog d = DialogUtils.DataDialog.newInstance(messages);
+                        d.setCancelable(false);
+                        d.show(getFragmentManager(), "dataDialog");
                     }
                 }
                 break;
@@ -560,7 +622,7 @@ public class FeedbackActivity extends AppCompatActivity implements ScreenshotMec
                     String key = String.format("%1$s\"; filename=\"%2$s", screenshotFeedbacks.get(pos).getPartString() + String.valueOf(pos + 1), fileName);
                     files.put(key, requestBody);
 
-                    // TODO: Must key and filename be congruent?
+                    // TODO: Must key and filename be congruent? --> I don't think so
                     System.out.println("key == " + key);
                     System.out.println("" + screenshotFeedbacks.get(pos).getPartString() + String.valueOf(pos + 1) + "\"; filename=\"" + fileName + ".jpg");
 

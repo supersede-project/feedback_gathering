@@ -15,6 +15,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
@@ -62,12 +63,9 @@ public class Utils {
     public static final String EXTRA_KEY_HAS_TEXT_ANNOTATIONS = "hasTextAnnotations";
     public static final String EXTRA_KEY_IMAGE_PATCH = "imagePath";
     public static final String EXTRA_KEY_MECHANISM_VIEW_ID = "mechanismViewID";
-    public static final String SCREENSHOTS_DIR_NAME = "Screenshots";
     public static final String SEPARATOR = "::;;::;;";
     public static final String TEXT_ANNOTATION_COUNTER_MAXIMUM = "textAnnotationCounterMaximum";
-
-    // Storage permission
-    public static final int PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 123;
+    private static final String SCREENSHOTS_DIR_NAME = "Screenshots";
 
     /**
      * @param input the input value
@@ -82,6 +80,7 @@ public class Utils {
      *
      * @return the path to the recently taken screenshot image
      */
+    @NonNull
     public static String captureScreenshot(final Activity activity) {
         // Create the 'Screenshots' folder if it does not already exist
         File screenshotDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), SCREENSHOTS_DIR_NAME);
@@ -130,31 +129,35 @@ public class Utils {
     }
 
     /**
-     * This method checks the READ_EXTERNAL_STORAGE permission at runtime.
-     * Required for Android versions 6 (API version 23) and higher.
+     * This method checks a single permission at runtime. Required for Android versions Marshmallow (API version 23) and higher.
+     * The request code must be handled in the onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) method
+     * which has to be overridden in each activity that needs to request runtime permission.
      *
-     * @param context     the context
-     * @param requestCode the request code to be handled in the onRequestPermissionsResult method of the calling activity
+     * @param context       the context
+     * @param requestCode   the request code to be handled in the onRequestPermissionsResult method of the calling activity
+     * @param permission    the needed permission
+     * @param dialogTitle   the dialog title
+     * @param dialogMessage the dialog message
      * @return true if permission is granted, false otherwise
      */
-    public static boolean checkPermission_READ_EXTERNAL_STORAGE(final Context context, final int requestCode) {
+    public static boolean checkSinglePermission(@NonNull final Context context, final int requestCode, @NonNull final String permission, @NonNull final String dialogTitle, @NonNull final String dialogMessage) {
         int currentAPIVersion = Build.VERSION.SDK_INT;
         if (currentAPIVersion >= android.os.Build.VERSION_CODES.M) {
-            if (ContextCompat.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                if (ActivityCompat.shouldShowRequestPermissionRationale((Activity) context, Manifest.permission.READ_EXTERNAL_STORAGE)) {
+            if (ContextCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
+                if (ActivityCompat.shouldShowRequestPermissionRationale((Activity) context, permission)) {
                     AlertDialog.Builder alertBuilder = new AlertDialog.Builder(context);
                     alertBuilder.setCancelable(true);
-                    alertBuilder.setTitle("Permission Request");
-                    alertBuilder.setMessage("External storage permission is necessary");
+                    alertBuilder.setTitle(dialogTitle);
+                    alertBuilder.setMessage(dialogMessage);
                     alertBuilder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
-                            ActivityCompat.requestPermissions((Activity) context, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, requestCode);
+                            ActivityCompat.requestPermissions((Activity) context, new String[]{permission}, requestCode);
                         }
                     });
                     AlertDialog alert = alertBuilder.create();
                     alert.show();
                 } else {
-                    ActivityCompat.requestPermissions((Activity) context, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, requestCode);
+                    ActivityCompat.requestPermissions((Activity) context, new String[]{permission}, requestCode);
                 }
                 return false;
             } else {
@@ -173,6 +176,7 @@ public class Utils {
      * @param suffix  the suffix, e.g., .jpg
      * @return the created file, null if an exception occurred
      */
+    @Nullable
     public static File createTempChacheFile(Context context, String prefix, String suffix) {
         try {
             return File.createTempFile(prefix, suffix, context.getCacheDir());
@@ -196,6 +200,7 @@ public class Utils {
      * @param path the absolute path of the image file
      * @return the bitmap
      */
+    @Nullable
     public static Bitmap loadImageFromStorage(String path) {
         try {
             File f = new File(path);
@@ -229,25 +234,22 @@ public class Utils {
                 reader.close();
                 return out.toString();
             }
-        } catch (FileNotFoundException e) {
-            System.out.println("File not found: " + e.toString());
         } catch (IOException e) {
-            System.out.println("Cannot read file: " + e.toString());
+            e.printStackTrace();
         }
 
         return ret;
     }
 
     /**
-     * This method deletes the file at the specific path if it exists.
+     * This method deletes the file or directory at the specific path if it exists.
      *
      * @param path the path of the file to delete
+     * @return true if and only if the file or directory is successfully deleted, false otherwise
      */
-    public static void removeDeleteFileFromInternalStorage(String path) {
+    public static boolean removeDeleteFileFromInternalStorage(String path) {
         File toDelete = new File(path);
-        if (toDelete.exists()) {
-            toDelete.delete();
-        }
+        return toDelete.exists() && toDelete.delete();
     }
 
     /**
@@ -342,17 +344,17 @@ public class Utils {
         int height = bitmap.getHeight();
 
         if (width > height) {
-            // landscape
+            // Landscape
             float ratio = (float) width / maxWidth;
             width = maxWidth;
             height = (int) (height / ratio);
         } else if (height > width) {
-            // portrait
+            // Portrait
             float ratio = (float) height / maxHeight;
             height = maxHeight;
             width = (int) (width / ratio);
         } else {
-            // square
+            // Square
             height = maxHeight;
             width = maxWidth;
         }

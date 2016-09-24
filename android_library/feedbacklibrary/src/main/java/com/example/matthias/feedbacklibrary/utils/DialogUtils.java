@@ -57,7 +57,7 @@ public class DialogUtils {
                     message.append(s).append(" \n");
                 }
             }
-            builder.setMessage(message.toString()).setNegativeButton("Close", new DialogInterface.OnClickListener() {
+            builder.setMessage(message.toString()).setNegativeButton(getResources().getString(R.string.supersede_feedbacklibrary_close_string), new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int id) {
                 }
             });

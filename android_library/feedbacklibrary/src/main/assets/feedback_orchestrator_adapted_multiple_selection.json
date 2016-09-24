@@ -191,6 +191,185 @@
             }
           ]
         },
+
+        {
+          "id": 7234,
+          "type": "TEXT_TYPE",
+          "active": true,
+          "order": 1,
+          "canBeActivated": false,
+          "parameters": [
+            {
+              "key": "maxLength",
+              "value": 100.0,
+              "createdAt": "2016-08-13 05:07:31.0",
+              "language": "en",
+              "id": 68
+            },
+            {
+              "key": "title",
+              "value": "Feedback",
+              "createdAt": "2016-08-13 05:07:31.0",
+              "language": "en",
+              "id": 69
+            },
+            {
+              "key": "hint",
+              "value": "Please enter your feedback",
+              "createdAt": "2016-08-13 05:07:31.0",
+              "language": "en",
+              "id": 70
+            },
+            {
+              "key": "label",
+              "value": "Feedback",
+              "createdAt": "2016-08-13 05:07:31.0",
+              "language": "en",
+              "id": 71
+            },
+            {
+              "key": "labelPositioning",
+              "value": "left",
+              "createdAt": "2016-08-13 05:07:31.0",
+              "language": "en",
+              "id": 72
+            },
+            {
+              "key": "labelColor",
+              "value": "#353535",
+              "createdAt": "2016-08-13 05:07:31.0",
+              "language": "en",
+              "id": 73
+            },
+            {
+              "key": "labelFontSize",
+              "value": 15.0,
+              "createdAt": "2016-08-13 05:07:31.0",
+              "language": "en",
+              "id": 74
+            },
+            {
+              "key": "textareaFontColor",
+              "value": "#7A7A7A",
+              "createdAt": "2016-08-13 05:07:31.0",
+              "language": "en",
+              "id": 75
+            },
+            {
+              "key": "mandatory",
+              "value": 1.0,
+              "createdAt": "2016-08-13 05:07:31.0",
+              "language": "en",
+              "id": 76
+            },
+            {
+              "key": "mandatoryReminder",
+              "value": "Please fill in the text field",
+              "createdAt": "2016-08-13 05:07:31.0",
+              "language": "en",
+              "id": 77
+            },
+            {
+              "key": "undoEnabled",
+              "value": 1.0,
+              "createdAt": "2016-08-13 05:07:31.0",
+              "language": "en",
+              "id": 78
+            },
+            {
+              "key": "undoSteps",
+              "value": 1.0,
+              "createdAt": "2016-08-13 05:07:31.0",
+              "language": "en",
+              "id": 79
+            },
+            {
+              "key": "clearInput",
+              "value": 0.0,
+              "createdAt": "2016-08-13 05:07:31.0",
+              "language": "en",
+              "id": 80
+            },
+            {
+              "key": "borderWidth",
+              "value": 2.0,
+              "createdAt": "2016-08-13 05:07:31.0",
+              "language": "en",
+              "id": 81
+            },
+            {
+              "key": "borderColor",
+              "value": "#000000",
+              "createdAt": "2016-08-13 05:07:31.0",
+              "language": "en",
+              "id": 82
+            },
+            {
+              "key": "fieldWidth",
+              "value": 200.0,
+              "createdAt": "2016-08-13 05:07:31.0",
+              "language": "en",
+              "id": 83
+            },
+            {
+              "key": "fieldHeight",
+              "value": 50.0,
+              "createdAt": "2016-08-13 05:07:31.0",
+              "language": "en",
+              "id": 84
+            },
+            {
+              "key": "fieldFontSize",
+              "value": 16.0,
+              "createdAt": "2016-08-13 05:07:31.0",
+              "language": "en",
+              "id": 85
+            },
+            {
+              "key": "fieldFontType",
+              "value": "normal",
+              "createdAt": "2016-08-13 05:07:31.0",
+              "language": "en",
+              "id": 86
+            },
+            {
+              "key": "fieldTextAlignment",
+              "value": "left",
+              "createdAt": "2016-08-13 05:07:31.0",
+              "language": "en",
+              "id": 87
+            },
+            {
+              "key": "fieldBackgroundColor",
+              "value": "#ffffff",
+              "createdAt": "2016-08-13 05:07:31.0",
+              "language": "en",
+              "id": 88
+            },
+            {
+              "key": "maxLengthVisible",
+              "value": 1.0,
+              "createdAt": "2016-08-13 05:07:31.0",
+              "language": "en",
+              "id": 89
+            },
+            {
+              "key": "validationRegex",
+              "value": ".",
+              "createdAt": "2016-08-13 05:07:31.0",
+              "language": "en",
+              "id": 90
+            },
+            {
+              "key": "validateOnSkip",
+              "value": 1.0,
+              "createdAt": "2016-08-13 05:07:31.0",
+              "language": "en",
+              "id": 91
+            }
+          ]
+        },
+
         {
           "id": 8,
           "type": "AUDIO_TYPE",

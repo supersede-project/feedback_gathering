@@ -6,5 +6,13 @@
     <color name="whiteColor">#FFFFFF</color>
 
     <!-- AnnotateImageView -->
-    <color name="supersede_feedbacklibrary_annotate_image_layout_background_color">#4d4d4d</color>
+    <color name="supersede_feedbacklibrary_annotate_image_layout_background_color">#4D4D4D</color>
+
+    <!-- Audio mechanism -->
+    <color name="supersede_feedbacklibrary_audio_timer_record_indicator_start_animation_color">
+        #000000
+    </color>
+    <color name="supersede_feedbacklibrary_audio_timer_record_indicator_end_animation_color">
+        @color/colorAccent
+    </color>
 </resources>

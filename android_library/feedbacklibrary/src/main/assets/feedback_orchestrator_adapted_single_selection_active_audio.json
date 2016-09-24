@@ -194,7 +194,7 @@
         {
           "id": 8,
           "type": "AUDIO_TYPE",
-          "active": false,
+          "active": true,
           "order": 2,
           "canBeActivated": false,
           "parameters": [
