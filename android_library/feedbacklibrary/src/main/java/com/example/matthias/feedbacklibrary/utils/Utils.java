@@ -135,16 +135,16 @@ public class Utils {
      *
      * @param context       the context
      * @param requestCode   the request code to be handled in the onRequestPermissionsResult method of the calling activity
-     * @param permission    the needed permission
-     * @param dialogTitle   the dialog title
-     * @param dialogMessage the dialog message
+     * @param permission    the requested permission
+     * @param dialogTitle   the dialog title for the rationale
+     * @param dialogMessage the dialog message for the rationale
      * @return true if permission is granted, false otherwise
      */
-    public static boolean checkSinglePermission(@NonNull final Context context, final int requestCode, @NonNull final String permission, @NonNull final String dialogTitle, @NonNull final String dialogMessage) {
+    public static boolean checkSinglePermission(@NonNull final Context context, final int requestCode, @NonNull final String permission, final String dialogTitle, final String dialogMessage, final boolean showRequestPermissionRationale) {
         int currentAPIVersion = Build.VERSION.SDK_INT;
         if (currentAPIVersion >= android.os.Build.VERSION_CODES.M) {
             if (ContextCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
-                if (ActivityCompat.shouldShowRequestPermissionRationale((Activity) context, permission)) {
+                if (showRequestPermissionRationale && ActivityCompat.shouldShowRequestPermissionRationale((Activity) context, permission)) {
                     AlertDialog.Builder alertBuilder = new AlertDialog.Builder(context);
                     alertBuilder.setCancelable(true);
                     alertBuilder.setTitle(dialogTitle);
@@ -209,6 +209,51 @@ public class Utils {
             e.printStackTrace();
         }
         return null;
+    }
+
+    /**
+     * This method is used in the host application in the onRequestPermissionsResult method.
+     *
+     * @param requestCode   the request code to be handled in the onRequestPermissionsResult method of the calling activity
+     * @param permissions   the permissions
+     * @param grantResults  the granted results
+     * @param activity      the activity from where the method is called
+     * @param permission    the requested permission
+     * @param dialogTitle   the dialog title for the rationale
+     * @param dialogMessage the dialog message for the rationale
+     */
+    public static void onRequestPermissionsResultCase(final int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults,
+                                                      @NonNull final Activity activity, @NonNull final String permission, int dialogTitle, int dialogMessage) {
+        final Intent intent = new Intent(activity, FeedbackActivity.class);
+        if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            // Permission was already granted. Taking a screenshot of the current screen automatically and open the FeedbackActivity from the feedback library
+            String defaultImagePath = captureScreenshot(activity);
+            intent.putExtra(FeedbackActivity.DEFAULT_IMAGE_PATH, defaultImagePath);
+            activity.startActivity(intent);
+        } else {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(activity, permission)) {
+                // The user denied the permission without checking 'Never ask again'. Show the rationale
+                AlertDialog.Builder alertBuilder = new AlertDialog.Builder(activity);
+                alertBuilder.setTitle(dialogTitle);
+                alertBuilder.setMessage(dialogMessage);
+                alertBuilder.setPositiveButton(R.string.supersede_feedbacklibrary_retry_string, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        ActivityCompat.requestPermissions(activity, new String[]{permission}, requestCode);
+                    }
+                });
+                alertBuilder.setNegativeButton(R.string.supersede_feedbacklibrary_not_now_text, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        activity.startActivity(intent);
+                    }
+                });
+                alertBuilder.setCancelable(false);
+                alertBuilder.show();
+            } else {
+                // Open the FeedbackActivity from the feedback library without automatically taking a screenshot
+                activity.startActivity(intent);
+            }
+        }
     }
 
     /**
@@ -363,15 +408,21 @@ public class Utils {
     }
 
     /**
-     * This method triggers a pull feedback based on their respective likelihoods
-     * and can be called anywhere in the main application where a pull feedback potentially needs to be triggered.
+     * This method starts takes a screenshot of the current screen automatically and opens the FeedbackActivity from the feedback library.
      *
-     * @param activity the activity from where the feedback activity is launched
+     * @param activity the activity from where the method is called
      */
-    public static void triggerPotentialPullFeedback(final Activity activity) {
+    public static void startActivityWithScreenshotCapture(@NonNull Activity activity) {
+        Intent intent = new Intent(activity, FeedbackActivity.class);
+        String defaultImagePath = Utils.captureScreenshot(activity);
+        intent.putExtra(FeedbackActivity.DEFAULT_IMAGE_PATH, defaultImagePath);
+        activity.startActivity(intent);
+    }
+
+    public static void triggerPotentialPullFeedback(@NonNull final Activity activity, @NonNull String language, long applicationId) {
         Retrofit rtf = new Retrofit.Builder().baseUrl(feedbackAPI.endpoint).addConverterFactory(GsonConverterFactory.create()).build();
         feedbackAPI fbAPI = rtf.create(feedbackAPI.class);
-        Call<OrchestratorConfigurationItem> result = fbAPI.getConfiguration("en", 8);
+        Call<OrchestratorConfigurationItem> result = fbAPI.getConfiguration(language, applicationId);
 
         // Asynchronous call
         if (result != null) {

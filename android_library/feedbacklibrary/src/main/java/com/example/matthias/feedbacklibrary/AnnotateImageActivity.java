@@ -269,7 +269,7 @@ public class AnnotateImageActivity extends AppCompatActivity implements ColorPic
                 File croppedImageFile = new File(croppedImageUri.getPath());
                 annotateImageView.updateCroppedImageHistory(croppedImageFile);
             } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
-                Toast toast = Toast.makeText(getApplicationContext(), getResources().getString(R.string.supersede_feedbacklibrary_error_text), Toast.LENGTH_SHORT);
+                Toast toast = Toast.makeText(getApplicationContext(), R.string.supersede_feedbacklibrary_error_text, Toast.LENGTH_SHORT);
                 toast.show();
             }
         }

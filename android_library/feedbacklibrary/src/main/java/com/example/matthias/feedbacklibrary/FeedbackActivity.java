@@ -20,6 +20,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.example.matthias.feedbacklibrary.API.feedbackAPI;
 import com.example.matthias.feedbacklibrary.configurations.Configuration;
@@ -68,14 +69,14 @@ public class FeedbackActivity extends AppCompatActivity implements ScreenshotMec
     public final static String JSON_CONFIGURATION_STRING = "jsonConfigurationString";
     public final static String SELECTED_PULL_CONFIGURATION_INDEX_STRING = "selectedPullConfigurationIndex";
     public final static int TEXT_ANNOTATION_MAXIMUM = 4;
+    // Microphone permission (android.permission-group.MICROPHONE)
+    public static final int PERMISSIONS_REQUEST_RECORD_AUDIO = 101;
     private final static int REQUEST_CAMERA = 10;
     private final static int REQUEST_PHOTO = 11;
     private final static int REQUEST_ANNOTATE = 12;
     private static final String MULTIPART_FORM_DATA = "multipart/form-data";
     // Storage permission (android.permission-group.STORAGE)
     private static final int PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 100;
-    // Microphone permission (android.permission-group.MICROPHONE)
-    private static final int PERMISSIONS_REQUEST_RECORD_AUDIO = 101;
     private feedbackAPI fbAPI;
     // Orchestrator configuration fetched from the orchestrator
     private OrchestratorConfigurationItem orchestratorConfigurationItem;
@@ -195,7 +196,7 @@ public class FeedbackActivity extends AppCompatActivity implements ScreenshotMec
                             break;
                         case Mechanism.AUDIO_TYPE:
                             // TODO: Implement audio mechanism
-                            mechanismView = new AudioMechanismView(layoutInflater, allMechanisms.get(i), getResources());
+                            mechanismView = new AudioMechanismView(layoutInflater, allMechanisms.get(i), getResources(), this);
                             view = mechanismView.getEnclosingLayout();
                             break;
                         case Mechanism.CATEGORY_TYPE:
@@ -355,7 +356,7 @@ public class FeedbackActivity extends AppCompatActivity implements ScreenshotMec
             @Override
             public void onClick(DialogInterface dialog, int item) {
                 if (!items[item].equals(res.getString(R.string.supersede_feedbacklibrary_cancel_string))) {
-                    boolean result = Utils.checkSinglePermission(FeedbackActivity.this, PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE, getResources().getString(R.string.supersede_feedbacklibrary_permission_request_title), "External storage permission is necessary");
+                    boolean result = Utils.checkSinglePermission(FeedbackActivity.this, PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE, null, null, true);
                     if (items[item].equals(res.getString(R.string.supersede_feedbacklibrary_photo_capture_text))) {
                         userScreenshotChosenTask = res.getString(R.string.supersede_feedbacklibrary_photo_capture_text);
                         if (result) {
@@ -386,64 +387,51 @@ public class FeedbackActivity extends AppCompatActivity implements ScreenshotMec
                     }
                 } else {
                     // The user denied the permission
-                    if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_EXTERNAL_STORAGE)) {
-                        // The user denied without checking 'Never ask again'. Show again the rationale
-                        AlertDialog.Builder alertBuilder = new AlertDialog.Builder(this);
-                        alertBuilder.setCancelable(true);
-                        alertBuilder.setTitle(getResources().getString(R.string.supersede_feedbacklibrary_permission_request_title));
-                        alertBuilder.setMessage(getResources().getString(R.string.supersede_feedbacklibrary_external_storage_permission_text));
-                        alertBuilder.setPositiveButton(R.string.supersede_feedbacklibrary_retry_string, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                ActivityCompat.requestPermissions(FeedbackActivity.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE);
-                            }
-                        });
-                        alertBuilder.setNegativeButton(R.string.supersede_feedbacklibrary_not_now_text, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
-                        });
-                        alertBuilder.show();
-                    } else {
-                        // The user denied and checked the 'Never ask again' option. Show a short explanation dialog
-                        ArrayList<String> messages = new ArrayList<>();
-                        messages.add(getResources().getString(R.string.supersede_feedbacklibrary_external_storage_permission_text_instructions));
-                        DialogUtils.DataDialog d = DialogUtils.DataDialog.newInstance(messages);
-                        d.setCancelable(false);
-                        d.show(getFragmentManager(), "dataDialog");
-                    }
+                    onRequestPermissionsResultDenied(requestCode, permissions, grantResults, Manifest.permission.READ_EXTERNAL_STORAGE,
+                            R.string.supersede_feedbacklibrary_external_storage_permission_text,
+                            getResources().getString(R.string.supersede_feedbacklibrary_external_storage_permission_text_instructions));
                 }
                 break;
             case PERMISSIONS_REQUEST_RECORD_AUDIO:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Toast toast = Toast.makeText(getApplicationContext(), R.string.supersede_feedbacklibrary_record_audio_permission_granted_text, Toast.LENGTH_SHORT);
+                    toast.show();
                 } else {
                     // The user denied the permission
-                    if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.RECORD_AUDIO)) {
-                        // The user denied without checking 'Never ask again'. Show again the rationale
-                        AlertDialog.Builder alertBuilder = new AlertDialog.Builder(this);
-                        alertBuilder.setCancelable(true);
-                        alertBuilder.setTitle(getResources().getString(R.string.supersede_feedbacklibrary_permission_request_title));
-                        alertBuilder.setMessage(getResources().getString(R.string.supersede_feedbacklibrary_record_audio_permission_text));
-                        alertBuilder.setPositiveButton(R.string.supersede_feedbacklibrary_retry_string, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                ActivityCompat.requestPermissions(FeedbackActivity.this, new String[]{Manifest.permission.RECORD_AUDIO}, PERMISSIONS_REQUEST_RECORD_AUDIO);
-                            }
-                        });
-                        alertBuilder.setNegativeButton(R.string.supersede_feedbacklibrary_not_now_text, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
-                        });
-                        alertBuilder.show();
-                    } else {
-                        // The user denied and checked the 'Never ask again' option. Show a short explanation dialog
-                        ArrayList<String> messages = new ArrayList<>();
-                        messages.add(getResources().getString(R.string.supersede_feedbacklibrary_record_audio_permission_text_instructions));
-                        DialogUtils.DataDialog d = DialogUtils.DataDialog.newInstance(messages);
-                        d.setCancelable(false);
-                        d.show(getFragmentManager(), "dataDialog");
-                    }
+                    onRequestPermissionsResultDenied(requestCode, permissions, grantResults, Manifest.permission.RECORD_AUDIO,
+                            R.string.supersede_feedbacklibrary_record_audio_permission_text,
+                            getResources().getString(R.string.supersede_feedbacklibrary_record_audio_permission_text_instructions));
                 }
                 break;
+        }
+    }
+
+    private void onRequestPermissionsResultDenied(final int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults,
+                                                  @NonNull final String permission, int dialogMessage, @NonNull String dialogInstructions) {
+        if (ActivityCompat.shouldShowRequestPermissionRationale(this, permission)) {
+            // The user denied without checking 'Never ask again'. Show again the rationale
+            AlertDialog.Builder alertBuilder = new AlertDialog.Builder(this);
+            alertBuilder.setTitle(R.string.supersede_feedbacklibrary_permission_request_title);
+            alertBuilder.setMessage(dialogMessage);
+            alertBuilder.setPositiveButton(R.string.supersede_feedbacklibrary_retry_string, new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    ActivityCompat.requestPermissions(FeedbackActivity.this, new String[]{permission}, requestCode);
+                }
+            });
+            alertBuilder.setNegativeButton(R.string.supersede_feedbacklibrary_not_now_text, new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+            alertBuilder.setCancelable(false);
+            alertBuilder.show();
+        } else {
+            // The user denied and checked the 'Never ask again' option. Show a short explanation dialog
+            ArrayList<String> messages = new ArrayList<>();
+            messages.add(dialogInstructions);
+            DialogUtils.DataDialog d = DialogUtils.DataDialog.newInstance(messages);
+            d.setCancelable(false);
+            d.show(getFragmentManager(), "dataDialog");
         }
     }
 
@@ -505,7 +493,7 @@ public class FeedbackActivity extends AppCompatActivity implements ScreenshotMec
             // The JSON string of the feedback
             GsonBuilder builder = new GsonBuilder();
             builder.excludeFieldsWithoutExposeAnnotation();
-            // TODO: Ask Florian if NULL values should be serialized or left out --> we should serialize also the null values (consistency!)
+            // TODO: Ask Florian if NULL values should be serialized or left out --> we should serialize also the null values (consistency!) OK FOR HIM
             builder.serializeNulls();
             Gson gson = builder.create();
             Type feedbackType = new TypeToken<Feedback>() {
@@ -573,6 +561,11 @@ public class FeedbackActivity extends AppCompatActivity implements ScreenshotMec
     }
 
     public void sendStub(View view) {
+        File dir = getFilesDir();
+        for (File f : dir.listFiles()) {
+            System.out.println("fileName == " + f.getAbsolutePath());
+        }
+
         // The mechanism models are updated with the view values
         for (MechanismView mechanismView : allMechanismViews) {
             mechanismView.updateModel();
@@ -594,7 +587,7 @@ public class FeedbackActivity extends AppCompatActivity implements ScreenshotMec
             // The JSON string of the feedback
             GsonBuilder builder = new GsonBuilder();
             builder.excludeFieldsWithoutExposeAnnotation();
-            // TODO: Ask Florian if NULL values should be serialized or left out --> we should serialize also the null values (consistency!)
+            // TODO: Ask Florian if NULL values should be serialized or left out --> we should serialize also the null values (consistency!) OK FOR HIM
             builder.serializeNulls();
             Gson gson = builder.create();
             Type feedbackType = new TypeToken<Feedback>() {

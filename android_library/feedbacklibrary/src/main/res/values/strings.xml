@@ -60,10 +60,12 @@
 
     <!-- Permissions -->
     <string name="supersede_feedbacklibrary_permission_request_title">Permission request</string>
+    <string name="supersede_feedbacklibrary_record_audio_permission_granted_text">You can now capture your audio message by pressing the record button</string>
     <string name="supersede_feedbacklibrary_record_audio_permission_text">Audio permission is necessary in order to record audio</string>
     <string name="supersede_feedbacklibrary_record_audio_permission_text_instructions">Audio permission is necessary in order to record audio. You can grant access in the application\'s settings to use this feature.</string>
     <string name="supersede_feedbacklibrary_external_storage_permission_text">External storage permission is necessary in order to choose a picture</string>
     <string name="supersede_feedbacklibrary_external_storage_permission_text_instructions">External storage permission is necessary in order to choose a picture. You can grant access in the application\'s settings to use this feature.</string>
+    <string name="supersede_feedbacklibrary_external_storage_permission_text_automatic_screenshot_rationale">The application takes a screenshot of the current screen and external storage permission is necessary to do so</string>
     <string name="supersede_feedbacklibrary_retry_string">Re-try</string>
     <string name="supersede_feedbacklibrary_not_now_text">Not now</string>
 

@@ -2,7 +2,6 @@ package com.example.matthias.hostapplication;
 
 import android.Manifest;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -28,7 +27,7 @@ public class StartActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         // Actual trigger
-        //Utils.triggerPotentialPullFeedback(this);
+        //Utils.triggerPotentialPullFeedback(this, "en", 8L);
 
         // Only for demo purposes
         Button popup = (Button) findViewById(R.id.pull_popup_button);
@@ -70,14 +69,11 @@ public class StartActivity extends AppCompatActivity {
             return true;
         }
 
-        Intent intent = new Intent(this, FeedbackActivity.class);
         if (id == R.id.action_feedback) {
-            boolean result = Utils.checkSinglePermission(StartActivity.this, PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE, getResources().getString(com.example.matthias.feedbacklibrary.R.string.supersede_feedbacklibrary_permission_request_title), "External storage permission is necessary");
+            boolean result = Utils.checkSinglePermission(this, PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE, null, null, false);
             if (result) {
                 // Permission is already granted. Taking a screenshot of the current screen automatically and open the FeedbackActivity from the feedback library
-                String defaultImagePath = Utils.captureScreenshot(this);
-                intent.putExtra(FeedbackActivity.DEFAULT_IMAGE_PATH, defaultImagePath);
-                startActivity(intent);
+                Utils.startActivityWithScreenshotCapture(this);
             }
             return true;
         }
@@ -89,16 +85,9 @@ public class StartActivity extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         switch (requestCode) {
             case PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE:
-                Intent intent = new Intent(this, FeedbackActivity.class);
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    // Permission was already granted. Taking a screenshot of the current screen automatically and open the FeedbackActivity from the feedback library
-                    String defaultImagePath = Utils.captureScreenshot(this);
-                    intent.putExtra(FeedbackActivity.DEFAULT_IMAGE_PATH, defaultImagePath);
-                    startActivity(intent);
-                } else {
-                    // Permission was not denied. Open the FeedbackActivity from the feedback library without automatically taking a screenshot
-                    startActivity(intent);
-                }
+                Utils.onRequestPermissionsResultCase(requestCode, permissions, grantResults, this, Manifest.permission.READ_EXTERNAL_STORAGE,
+                        com.example.matthias.feedbacklibrary.R.string.supersede_feedbacklibrary_permission_request_title,
+                        com.example.matthias.feedbacklibrary.R.string.supersede_feedbacklibrary_external_storage_permission_text_automatic_screenshot_rationale);
                 break;
         }
     }

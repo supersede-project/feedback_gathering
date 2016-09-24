@@ -97,6 +97,7 @@ public class DialogUtils {
                 }
             }).setNegativeButton(R.string.supersede_feedbacklibrary_no_string, new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int id) {
+                    dialog.dismiss();
                 }
             });
             return builder.create();
