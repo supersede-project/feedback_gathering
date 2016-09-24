@@ -3,6 +3,7 @@ package ch.uzh.ifi.feedback.orchestrator.authorization;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
+import ch.uzh.ifi.feedback.library.rest.IRequestContext;
 import ch.uzh.ifi.feedback.library.rest.authorization.AuthenticationCache;
 import ch.uzh.ifi.feedback.library.rest.authorization.AuthorizationException;
 import ch.uzh.ifi.feedback.library.rest.authorization.ITokenAuthenticationService;
@@ -40,9 +41,9 @@ public class UserAuthenticationService implements ITokenAuthenticationService {
 		return cache.Register(validatedUsers.get(0).getName());
 	}
 	
-	public boolean Authenticate(HttpServletRequest request)
+	public boolean Authenticate(IRequestContext context)
 	{
-		String authorizationHeader = request.getHeader("Authorization");
+		String authorizationHeader = context.getRequest().getHeader("Authorization");
 		
 		if(authorizationHeader == null)
 			return false;

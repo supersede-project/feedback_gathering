@@ -35,7 +35,6 @@ public class RepositoryModule extends AbstractModule {
 		bind(RatingFeedbackService.class).to(RatingFeedbackService.class);
 		bind(ScreenshotFeedbackService.class).to(ScreenshotFeedbackService.class);
 		bind(ScreenshotFeedbackResultParser.class).to(ScreenshotFeedbackResultParser.class);
-		bind(DatabaseConfiguration.class).to(DatabaseConfiguration.class).asEagerSingleton();
 		bind(AudioFeedbackResultParser.class).to(AudioFeedbackResultParser.class);
 		bind(AttachmentFeedbackResultParser.class).to(AttachmentFeedbackResultParser.class);
 		bind(AudioFeedbackParser.class).to(AudioFeedbackParser.class);

@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.google.inject.Inject;
 
+import ch.uzh.ifi.feedback.library.rest.IRequestContext;
 import ch.uzh.ifi.feedback.library.rest.RestController;
 import ch.uzh.ifi.feedback.library.rest.Service.IDbService;
 import ch.uzh.ifi.feedback.library.rest.annotations.Authenticate;
@@ -23,8 +24,8 @@ import ch.uzh.ifi.feedback.orchestrator.validation.ParameterValidator;
 public class ParameterController extends RestController<FeedbackParameter> {
 	
 	@Inject
-	public ParameterController(ParameterService dbService, ParameterValidator validator) {
-		super(dbService, validator);
+	public ParameterController(ParameterService dbService, ParameterValidator validator, IRequestContext requestContext) {
+		super(dbService, validator, requestContext);
 	}
 
 	@GET

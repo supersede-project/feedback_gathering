@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.google.inject.Inject;
 
+import ch.uzh.ifi.feedback.library.rest.IRequestContext;
 import ch.uzh.ifi.feedback.library.rest.RestController;
 import ch.uzh.ifi.feedback.library.rest.annotations.Authenticate;
 import ch.uzh.ifi.feedback.library.rest.annotations.Controller;
@@ -37,9 +38,10 @@ public class GeneralConfigurationController extends RestController<GeneralConfig
 			GeneralConfigurationService dbService, 
 			ApplicationService applicationService,
 			ConfigurationService configurationService,
+			IRequestContext requestContext,
 			GeneralConfigurationValidator validator) 
 	{
-		super(dbService, validator);
+		super(dbService, validator, requestContext);
 		
 		this.applicationService = applicationService;
 		this.configurationService = configurationService;

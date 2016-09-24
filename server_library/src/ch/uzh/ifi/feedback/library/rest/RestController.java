@@ -19,14 +19,18 @@ public abstract class RestController<T extends IDbItem<T>> {
 
 	protected IDbService<T> dbService;
 	protected IValidator<T> validator;
+	protected IRequestContext requestContext;
 	
 	private Gson gson; 
 	private int createdObjectId;
 	
-	public RestController(IDbService<T> dbService, IValidator<T> validator)
+	public RestController(IDbService<T> dbService, IValidator<T> validator, IRequestContext requestContext)
 	{
 		this.dbService = dbService;
 		this.validator = validator;
+		this.requestContext = requestContext;
+		dbService.SetLanguage(requestContext.getRequestLanguage());
+		
 		this.gson = new GsonBuilder().setPrettyPrinting().setDateFormat("yyyy-MM-dd hh:mm:ss.S").create();
 	}
 
@@ -69,11 +73,6 @@ public abstract class RestController<T extends IDbItem<T>> {
 		TransactionManager.withTransaction((con) -> {
 			dbService.Delete(con, id);
 		});
-	}
-	
-	public final void SetLanguage(String lang)
-	{
-		dbService.SetLanguage(lang);
 	}
 	
 	protected void Validate(T object, boolean merge) throws Exception

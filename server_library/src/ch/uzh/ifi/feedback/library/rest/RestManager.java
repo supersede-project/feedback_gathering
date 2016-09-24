@@ -6,6 +6,7 @@ import java.io.InvalidClassException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
+import java.net.URL;
 import java.rmi.AlreadyBoundException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -63,6 +64,7 @@ public class RestManager implements IRestManager {
 	private Map<Class<?>, Class<? extends ISerializationService<?>>> _serializerMap;
 	private Map<Class<?>, Class<? extends ValidatorBase<?>>> _validatorMap;
 	private Map<Method, Class<? extends ITokenAuthenticationService>> _authentiactionMap;
+	private ServletRequestContext requestContext;
 	private Injector _injector;
 
 	public RestManager() {
@@ -77,12 +79,14 @@ public class RestManager implements IRestManager {
 		
 		InitParserMap();
 		
+		Set<URL> packages = ClasspathHelper.forPackage(packageName);
 		Reflections reflections = new Reflections(new ConfigurationBuilder()
-                .setUrls(ClasspathHelper.forPackage(packageName))
+                .setUrls(packages)
                 .setScanners(new MethodAnnotationsScanner(), new TypeAnnotationsScanner()));
 		
 		InitInjector(reflections);
 		InitHandlerTable(reflections);
+		requestContext = (ServletRequestContext)_injector.getInstance(IRequestContext.class);
 	}
 	
 	private void InitInjector(Reflections reflections) throws Exception
@@ -93,6 +97,7 @@ public class RestManager implements IRestManager {
 		{
 			moduleInstances.add(moduleClazz.newInstance());
 		}
+		moduleInstances.add(MainModule.class.newInstance());
 		_injector = Guice.createInjector(moduleInstances);
 	}
 	
@@ -277,6 +282,9 @@ public class RestManager implements IRestManager {
 	
 	private void InvokeHandler(HttpServletRequest request, HttpServletResponse response, HttpMethod method) throws Exception
 	{
+		requestContext.setRequest(request);
+		requestContext.setResponse(response);
+		
 		Map<String, String[]> map = request.getParameterMap();
 		String path = request.getServletPath();
 		HandlerInfo handler = GetHandlerEntry(path, method);
@@ -289,13 +297,14 @@ public class RestManager implements IRestManager {
 		if(authServiceClazz != null)
 		{
 			ITokenAuthenticationService authService = _injector.getInstance(authServiceClazz);
-			if(!authService.Authenticate(request))
+			if(!authService.Authenticate(requestContext))
 				throw new AuthenticationException("the provided usertoken does not match!");
 		}
 		
 		Map<String, String> params = handler.getUriTemplate().Match(path);
 		List<Object> parameters = new ArrayList<>();
 		String language = params.get("lang");
+		requestContext.setRequestLanguage(language);
 		
 		for(Entry<String, Parameter> pathParam : handler.getPathParameters().entrySet())
 		{
@@ -328,8 +337,10 @@ public class RestManager implements IRestManager {
 			}
 		}
 		
+		/*
 		if (instance instanceof RestController<?>)
 			((RestController<?>)instance).SetLanguage(language);
+		*/
 		
 		Object result = handler.getMethod().invoke(instance, parameters.toArray());
 		

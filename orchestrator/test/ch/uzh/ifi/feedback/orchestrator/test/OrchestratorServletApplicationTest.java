@@ -33,7 +33,7 @@ public class OrchestratorServletApplicationTest extends ServletTest {
    
 	public void testRetrievingAllApplications() throws ClientProtocolException, IOException {
 		Application[] retrievedApplications = GetSuccess(
-				"https://localhost:8443/feedback_orchestrator/en/applications", 
+				"http://localhost:8080/feedback_orchestrator/en/applications", 
 				Application[].class);
 		
 		assertEquals(retrievedApplications.length, NUMBER_OF_APPLICATIONS);
@@ -41,7 +41,7 @@ public class OrchestratorServletApplicationTest extends ServletTest {
 	
 	public void testRetrievingSingleApplication() throws ClientProtocolException, IOException {
 		Application application = GetSuccess(
-				"https://localhost:8443/feedback_orchestrator/en/applications/27", 
+				"http://localhost:8080/feedback_orchestrator/en/applications/27", 
 				Application.class);
 		
 		assertEquals(application.getId(), new Integer(27));
@@ -52,7 +52,7 @@ public class OrchestratorServletApplicationTest extends ServletTest {
 		String jsonString = IOUtils.toString(stream); 
 		
 		Application createdApplication = PostSuccess(
-				"https://localhost:8443/feedback_orchestrator/en/applications", 
+				"http://localhost:8080/feedback_orchestrator/en/applications", 
 				jsonString,
 				Application.class);
 		

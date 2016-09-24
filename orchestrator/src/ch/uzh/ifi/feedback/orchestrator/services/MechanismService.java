@@ -85,6 +85,18 @@ public class MechanismService extends OrchestratorService<FeedbackMechanism> {
 	public int Insert(Connection con, FeedbackMechanism mechanism)
 			throws SQLException, NotFoundException, UnsupportedOperationException {
 		
+		//get mechanisms with higher order and shift them down
+		int order = mechanism.getOrder();
+		List<FeedbackMechanism> descendants = GetWhere(
+				asList(order, mechanism.getConfigurationsid()), 
+				"cm.order >= ?", "cm.configurations_id = ?");
+		
+		for(FeedbackMechanism descendant : descendants)
+		{
+			descendant.setOrder(descendant.getOrder() + 1);
+			InsertMechanismHistory(con, descendant, descendant.getId());
+		}
+		
 	    int mechanismId = InsertNewMechanism(con);
 	    
 	    InsertMechanismHistory(con, mechanism, mechanismId);
@@ -102,6 +114,27 @@ public class MechanismService extends OrchestratorService<FeedbackMechanism> {
 	public void Update(Connection con, FeedbackMechanism mechanism)
 			throws SQLException, NotFoundException, UnsupportedOperationException {
 
+		//Check if order has changed and switch mechanisms
+		List<FeedbackMechanism> oldMechanisms = GetWhere(
+				asList(mechanism.getId(), mechanism.getConfigurationsid()), 
+				"mechanisms_id = ?", "cm.configurations_id = ?");
+		
+		FeedbackMechanism oldMechanism = oldMechanisms.get(0);
+		if(!oldMechanism.getOrder().equals(mechanism.getOrder()))
+		{
+			List<FeedbackMechanism> others = GetWhere(
+					asList(mechanism.getOrder(), mechanism.getConfigurationsid()), 
+					"cm.order = ?", "cm.configurations_id = ?");
+			
+			if(others.size() > 0)
+			{
+				FeedbackMechanism other = others.get(0);
+				int oldOrder = oldMechanism.getOrder();
+				other.setOrder(oldOrder);
+				InsertMechanismHistory(con, other, other.getId());
+			}
+		}
+		
 		InsertMechanismHistory(con, mechanism, mechanism.getId());
 		
 	    for(FeedbackParameter param : mechanism.getParameters())
@@ -128,7 +161,7 @@ public class MechanismService extends OrchestratorService<FeedbackMechanism> {
 		Connection con = TransactionManager.createDatabaseConnection();
 		
 		String statement = String.format(
-				"SELECT DISTINCT t.mechanisms_id, t.name, cm.order, cm.active, cm.can_be_activated, t.created_at "
+				"SELECT DISTINCT t.mechanisms_id, t.name, cm.order, cm.active, cm.can_be_activated, cm.configurations_id, t.created_at "
 	    		 + "FROM %s.mechanisms_history as t "
 	    		 + "JOIN %s.configurations_mechanisms_history as cm ON cm.mechanisms_history_id = t.id ", this.dbName, this.dbName);
 		

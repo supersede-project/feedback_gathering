@@ -3,6 +3,8 @@ package ch.uzh.ifi.feedback.orchestrator.controllers;
 import java.sql.Timestamp;
 import java.util.List;
 import com.google.inject.Inject;
+
+import ch.uzh.ifi.feedback.library.rest.IRequestContext;
 import ch.uzh.ifi.feedback.library.rest.RestController;
 import ch.uzh.ifi.feedback.library.rest.annotations.Authenticate;
 import ch.uzh.ifi.feedback.library.rest.annotations.Controller;
@@ -21,8 +23,8 @@ import ch.uzh.ifi.feedback.orchestrator.validation.ApplicationValidator;
 public class ApplicationController extends OrchestratorController<Application> {
 
 	@Inject
-	public ApplicationController(ApplicationService dbService, ApplicationValidator validator) {
-		super(dbService, validator);
+	public ApplicationController(ApplicationService dbService, ApplicationValidator validator, IRequestContext requestContext) {
+		super(dbService, validator, requestContext);
 	}
 	
 	@GET

@@ -21,7 +21,6 @@ import ch.uzh.ifi.feedback.library.rest.Service.DatabaseConfiguration;
  */
 @MultipartConfig
 @WebServlet("/")
-@ServletSecurity(@HttpConstraint(transportGuarantee = TransportGuarantee.CONFIDENTIAL))
 public class FeedbackServlet extends ServletBase {
 	
 	private static final long serialVersionUID = 1L;    

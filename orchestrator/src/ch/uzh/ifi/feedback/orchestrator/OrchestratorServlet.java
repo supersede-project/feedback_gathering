@@ -20,7 +20,6 @@ import ch.uzh.ifi.feedback.library.rest.Service.DatabaseConfiguration;
  * Servlet implementation class OrchestratorServlet
  */
 @WebServlet("/")
-@ServletSecurity(@HttpConstraint(transportGuarantee = TransportGuarantee.CONFIDENTIAL))
 public class OrchestratorServlet extends ServletBase {
 	private static final long serialVersionUID = 1L;
 	
