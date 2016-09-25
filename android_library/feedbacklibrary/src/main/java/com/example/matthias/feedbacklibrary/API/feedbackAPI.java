@@ -6,6 +6,7 @@ import com.google.gson.JsonObject;
 import java.util.Map;
 
 import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Multipart;
@@ -48,6 +49,6 @@ public interface feedbackAPI {
      * @return 'pong'
      */
     @GET("feedback_orchestrator/ping")
-    Call<JsonObject> pingOrchestrator();
+    Call<ResponseBody> pingOrchestrator();
     // TODO: Type of return value (JSON, Plain text)?
 }

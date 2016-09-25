@@ -45,6 +45,7 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -205,19 +206,20 @@ public class Utils {
      * @return true if the application is up and running, false otherwise
      */
     private static boolean isUpAndRunning() {
-        Retrofit rtf = new Retrofit.Builder().baseUrl(feedbackAPI.endpoint).addConverterFactory(GsonConverterFactory.create()).build();
+        // TODO: String converter factory for text/plain response header?
+        Retrofit rtf = new Retrofit.Builder().baseUrl(feedbackAPI.endpoint).build();
         feedbackAPI fbAPI = rtf.create(feedbackAPI.class);
-        Call<JsonObject> checkUpAndRunning = fbAPI.pingOrchestrator();
+        Call<ResponseBody> checkUpAndRunning = fbAPI.pingOrchestrator();
         final Set<Boolean> isUpAndRunning = new HashSet<>();
 
         if (checkUpAndRunning != null) {
-            checkUpAndRunning.enqueue(new Callback<JsonObject>() {
+            checkUpAndRunning.enqueue(new Callback<ResponseBody>() {
                 @Override
-                public void onFailure(Call<JsonObject> call, Throwable t) {
+                public void onFailure(Call<ResponseBody> call, Throwable t) {
                 }
 
                 @Override
-                public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                     if (response.code() == 200) {
                         isUpAndRunning.add(true);
                     }
