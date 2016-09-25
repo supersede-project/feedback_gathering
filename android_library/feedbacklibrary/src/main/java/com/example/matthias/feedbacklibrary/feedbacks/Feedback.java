@@ -53,7 +53,6 @@ public class Feedback implements Serializable {
                         AttachmentMechanism attachmentMechanism = (AttachmentMechanism) mechanism;
                         break;
                     case Mechanism.AUDIO_TYPE:
-                        // TODO: Implement audio mechanism
                         AudioMechanism audioMechanism = (AudioMechanism) mechanism;
                         if (audioMechanism.getAudioPath() != null) {
                             if (audioFeedbacks == null) {
@@ -63,7 +62,6 @@ public class Feedback implements Serializable {
                         }
                         break;
                     case Mechanism.CATEGORY_TYPE:
-                        // TODO: Implement category mechanism
                         if (categoryFeedbacks == null) {
                             categoryFeedbacks = new ArrayList<>();
                         }
@@ -76,7 +74,6 @@ public class Feedback implements Serializable {
                         ratingFeedbacks.add(new RatingFeedback((RatingMechanism) mechanism));
                         break;
                     case Mechanism.SCREENSHOT_TYPE:
-                        // TODO: Implement screenshot mechanism
                         ScreenshotMechanism screenshotMechanism = (ScreenshotMechanism) mechanism;
                         if (screenshotMechanism.getImagePath() != null) {
                             if (screenshotFeedbacks == null) {

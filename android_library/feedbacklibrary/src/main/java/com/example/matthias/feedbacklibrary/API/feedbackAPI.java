@@ -32,7 +32,7 @@ public interface feedbackAPI {
      */
     @Multipart
     @POST("feedback_repository/{language}/feedbacks")
-    Call<JsonObject> createFeedbackVariant1(@Path("language") String language, @Part("json") RequestBody feedback, @PartMap Map<String, RequestBody> files);
+    Call<JsonObject> createFeedbackVariant(@Path("language") String language, @Part("json") RequestBody feedback, @PartMap Map<String, RequestBody> files);
 
     /**
      * This method retrieves the feedback configuration from the orchestrator.

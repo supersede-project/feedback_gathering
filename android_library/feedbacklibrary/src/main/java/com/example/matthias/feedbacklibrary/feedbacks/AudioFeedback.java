@@ -2,6 +2,7 @@ package com.example.matthias.feedbacklibrary.feedbacks;
 
 import com.example.matthias.feedbacklibrary.models.AudioMechanism;
 
+import java.io.File;
 import java.io.Serializable;
 
 /**
@@ -17,6 +18,10 @@ public class AudioFeedback extends PartFeedback implements Serializable {
 
     public String getAudioPath() {
         return audioPath;
+    }
+
+    public String getFileName() {
+        return new File(audioPath).getName();
     }
 
     @Override

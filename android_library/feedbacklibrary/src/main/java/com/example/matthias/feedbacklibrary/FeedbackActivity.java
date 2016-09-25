@@ -26,6 +26,7 @@ import com.example.matthias.feedbacklibrary.API.feedbackAPI;
 import com.example.matthias.feedbacklibrary.configurations.Configuration;
 import com.example.matthias.feedbacklibrary.configurations.OrchestratorConfiguration;
 import com.example.matthias.feedbacklibrary.configurations.OrchestratorConfigurationItem;
+import com.example.matthias.feedbacklibrary.feedbacks.AudioFeedback;
 import com.example.matthias.feedbacklibrary.feedbacks.Feedback;
 import com.example.matthias.feedbacklibrary.feedbacks.ScreenshotFeedback;
 import com.example.matthias.feedbacklibrary.models.Mechanism;
@@ -214,7 +215,7 @@ public class FeedbackActivity extends AppCompatActivity implements ScreenshotMec
                             // TODO: Implement attachment mechanism
                             break;
                         case Mechanism.AUDIO_TYPE:
-                            // TODO: Implement audio mechanism
+                            // TODO: Implement audio mechanism (id or index as prefix?)
                             mechanismView = new AudioMechanismView(layoutInflater, allMechanisms.get(i), getResources(), this, getApplicationContext());
                             view = mechanismView.getEnclosingLayout();
                             break;
@@ -520,19 +521,27 @@ public class FeedbackActivity extends AppCompatActivity implements ScreenshotMec
                 String feedbackJsonString = gson.toJson(feedback, feedbackType);
                 RequestBody feedbackJSONPart = RequestBody.create(MediaType.parse("multipart/form-data"), feedbackJsonString);
 
-                // Screenshots multipart
-                List<ScreenshotFeedback> screenshotFeedbacks = feedback.getScreenshotFeedbacks();
                 Map<String, RequestBody> files = new HashMap<>();
-                for (int pos = 0; pos < screenshotFeedbacks.size(); ++pos) {
-                    RequestBody requestBody = createRequestBody(new File(screenshotFeedbacks.get(pos).getImagePath()));
-                    String fileName = screenshotFeedbacks.get(pos).getFileName();
-                    String key = String.format("%1$s\"; filename=\"%2$s", screenshotFeedbacks.get(pos).getPartString() + String.valueOf(pos + 1), fileName);
+                // Audio multipart
+                List<AudioFeedback> audioFeedbackList = feedback.getAudioFeedbacks();
+                for (int pos = 0; pos < audioFeedbackList.size(); ++pos) {
+                    RequestBody requestBody = createRequestBody(new File(audioFeedbackList.get(pos).getAudioPath()));
+                    String fileName = audioFeedbackList.get(pos).getFileName();
+                    String key = String.format("%1$s\"; filename=\"%2$s", audioFeedbackList.get(pos).getPartString() + String.valueOf(pos + 1), fileName);
+                    files.put(key, requestBody);
+                }
+                // Screenshots multipart
+                List<ScreenshotFeedback> screenshotFeedbackList = feedback.getScreenshotFeedbacks();
+                for (int pos = 0; pos < screenshotFeedbackList.size(); ++pos) {
+                    RequestBody requestBody = createRequestBody(new File(screenshotFeedbackList.get(pos).getImagePath()));
+                    String fileName = screenshotFeedbackList.get(pos).getFileName();
+                    String key = String.format("%1$s\"; filename=\"%2$s", screenshotFeedbackList.get(pos).getPartString() + String.valueOf(pos + 1), fileName);
                     files.put(key, requestBody);
                 }
 
                 final Set<Boolean> success = new HashSet<>();
                 // Send the feedback
-                Call<JsonObject> result = fbAPI.createFeedbackVariant1(language, feedbackJSONPart, files);
+                Call<JsonObject> result = fbAPI.createFeedbackVariant(language, feedbackJSONPart, files);
                 if (result != null) {
                     result.enqueue(new Callback<JsonObject>() {
                         @Override
@@ -610,19 +619,29 @@ public class FeedbackActivity extends AppCompatActivity implements ScreenshotMec
                 String feedbackJsonString = gson.toJson(feedback, feedbackType);
                 RequestBody feedbackJSONPart = RequestBody.create(MediaType.parse("multipart/form-data"), feedbackJsonString);
 
-                // Screenshots multipart
-                List<ScreenshotFeedback> screenshotFeedbacks = feedback.getScreenshotFeedbacks();
                 Map<String, RequestBody> files = new HashMap<>();
-                for (int pos = 0; pos < screenshotFeedbacks.size(); ++pos) {
-                    RequestBody requestBody = createRequestBody(new File(screenshotFeedbacks.get(pos).getImagePath()));
-                    String fileName = screenshotFeedbacks.get(pos).getFileName();
-                    String key = String.format("%1$s\"; filename=\"%2$s", screenshotFeedbacks.get(pos).getPartString() + String.valueOf(pos + 1), fileName);
+                // Audio multipart
+                List<AudioFeedback> audioFeedbackList = feedback.getAudioFeedbacks();
+                for (int pos = 0; pos < audioFeedbackList.size(); ++pos) {
+                    RequestBody requestBody = createRequestBody(new File(audioFeedbackList.get(pos).getAudioPath()));
+                    String fileName = audioFeedbackList.get(pos).getFileName();
+                    String key = String.format("%1$s\"; filename=\"%2$s", audioFeedbackList.get(pos).getPartString() + String.valueOf(pos + 1), fileName);
                     files.put(key, requestBody);
+                    System.out.println("key == " + key);
+                }
+                // Screenshots multipart
+                List<ScreenshotFeedback> screenshotFeedbackList = feedback.getScreenshotFeedbacks();
+                for (int pos = 0; pos < screenshotFeedbackList.size(); ++pos) {
+                    RequestBody requestBody = createRequestBody(new File(screenshotFeedbackList.get(pos).getImagePath()));
+                    String fileName = screenshotFeedbackList.get(pos).getFileName();
+                    String key = String.format("%1$s\"; filename=\"%2$s", screenshotFeedbackList.get(pos).getPartString() + String.valueOf(pos + 1), fileName);
+                    files.put(key, requestBody);
+                    System.out.println("key == " + key);
                 }
 
                 /*
                 // Send the feedback
-                Call<JsonObject> result = fbAPI.createFeedbackVariant1(language, feedbackJSONPart, files);
+                Call<JsonObject> result = fbAPI.createFeedbackVariant(language, feedbackJSONPart, files);
                 if (result != null) {
                     result.enqueue(new Callback<JsonObject>() {
                         @Override
