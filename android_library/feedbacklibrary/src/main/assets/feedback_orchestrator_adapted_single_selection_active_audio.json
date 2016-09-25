@@ -208,7 +208,7 @@
             {
               "key": "maxTime",
               "value": 30.0,
-              "defaultValue": "30.0",
+              "defaultValue": 30.0,
               "editableByUser": false,
               "createdAt": "2016-08-13 05:07:31.0",
               "language": "en",

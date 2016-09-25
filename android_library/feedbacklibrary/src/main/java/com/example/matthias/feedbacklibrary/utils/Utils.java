@@ -1,10 +1,8 @@
 package com.example.matthias.feedbacklibrary.utils;
 
-import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.ContextWrapper;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -54,7 +52,11 @@ import retrofit2.converter.gson.GsonConverterFactory;
  * Class with various helper methods
  */
 public class Utils {
-    // Image annotation
+    // Audio
+    public static final String AUDIO_DIR = "audioDir";
+    public static final String AUDIO_EXTENSION = "m4a";
+    public static final String AUDIO_FILENAME = "audioFile";
+    // Screenshot
     public static final String EXTRA_KEY_ALL_STICKER_ANNOTATIONS = "allStickerAnnotations";
     public static final String EXTRA_KEY_ALL_TEXT_ANNOTATIONS = "allTextAnnotations";
     public static final String EXTRA_KEY_ANNOTATED_IMAGE_PATH_WITHOUT_STICKERS = "annotatedImagePathWithoutStickers";
@@ -63,9 +65,9 @@ public class Utils {
     public static final String EXTRA_KEY_HAS_TEXT_ANNOTATIONS = "hasTextAnnotations";
     public static final String EXTRA_KEY_IMAGE_PATCH = "imagePath";
     public static final String EXTRA_KEY_MECHANISM_VIEW_ID = "mechanismViewID";
+    private static final String SCREENSHOTS_DIR_NAME = "Screenshots";
     public static final String SEPARATOR = "::;;::;;";
     public static final String TEXT_ANNOTATION_COUNTER_MAXIMUM = "textAnnotationCounterMaximum";
-    private static final String SCREENSHOTS_DIR_NAME = "Screenshots";
 
     /**
      * @param input the input value
@@ -334,10 +336,8 @@ public class Utils {
      */
     @NonNull
     public static String saveBitmapToInternalStorage(Context applicationContext, String dirName, String imageName, Bitmap bitmapImage, int mode, Bitmap.CompressFormat format, int quality) {
-        ContextWrapper cw = new ContextWrapper(applicationContext);
-        File directory = cw.getDir(dirName, mode);
+        File directory = applicationContext.getDir(dirName, mode);
         File myPath = new File(directory, imageName);
-
         FileOutputStream fos;
         try {
             fos = new FileOutputStream(myPath);
@@ -361,8 +361,7 @@ public class Utils {
      * @return true on success, false otherwise
      */
     public static boolean saveStringContentToInternalStorage(Context applicationContext, String dirName, String fileName, String str, int mode) {
-        ContextWrapper cw = new ContextWrapper(applicationContext);
-        File directory = cw.getDir(dirName, mode);
+        File directory = applicationContext.getDir(dirName, mode);
         File myPath = new File(directory, fileName);
         try {
             FileWriter out = new FileWriter(myPath);

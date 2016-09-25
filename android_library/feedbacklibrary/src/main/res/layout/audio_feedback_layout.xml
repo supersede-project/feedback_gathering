@@ -10,7 +10,8 @@
         android:id="@+id/supersede_feedbacklibrary_audio_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"/>
+        android:layout_alignParentTop="true"
+        android:paddingBottom="10dp"/>
 
     <!-- Timer display -->
     <LinearLayout

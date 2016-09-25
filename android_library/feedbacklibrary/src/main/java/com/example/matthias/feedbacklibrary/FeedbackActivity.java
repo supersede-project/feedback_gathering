@@ -196,7 +196,7 @@ public class FeedbackActivity extends AppCompatActivity implements ScreenshotMec
                             break;
                         case Mechanism.AUDIO_TYPE:
                             // TODO: Implement audio mechanism
-                            mechanismView = new AudioMechanismView(layoutInflater, allMechanisms.get(i), getResources(), this);
+                            mechanismView = new AudioMechanismView(layoutInflater, allMechanisms.get(i), getResources(), this, getApplicationContext());
                             view = mechanismView.getEnclosingLayout();
                             break;
                         case Mechanism.CATEGORY_TYPE:
@@ -208,7 +208,7 @@ public class FeedbackActivity extends AppCompatActivity implements ScreenshotMec
                             view = mechanismView.getEnclosingLayout();
                             break;
                         case Mechanism.SCREENSHOT_TYPE:
-                            mechanismView = new ScreenshotMechanismView(layoutInflater, allMechanisms.get(i), FeedbackActivity.this, allMechanismViews.size(), defaultImagePath);
+                            mechanismView = new ScreenshotMechanismView(layoutInflater, allMechanisms.get(i), this, allMechanismViews.size(), defaultImagePath);
                             view = mechanismView.getEnclosingLayout();
                             break;
                         case Mechanism.TEXT_TYPE:
@@ -356,7 +356,7 @@ public class FeedbackActivity extends AppCompatActivity implements ScreenshotMec
             @Override
             public void onClick(DialogInterface dialog, int item) {
                 if (!items[item].equals(res.getString(R.string.supersede_feedbacklibrary_cancel_string))) {
-                    boolean result = Utils.checkSinglePermission(FeedbackActivity.this, PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE, null, null, true);
+                    boolean result = Utils.checkSinglePermission(FeedbackActivity.this, PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE, null, null, false);
                     if (items[item].equals(res.getString(R.string.supersede_feedbacklibrary_photo_capture_text))) {
                         userScreenshotChosenTask = res.getString(R.string.supersede_feedbacklibrary_photo_capture_text);
                         if (result) {
@@ -561,10 +561,19 @@ public class FeedbackActivity extends AppCompatActivity implements ScreenshotMec
     }
 
     public void sendStub(View view) {
+        /*
         File dir = getFilesDir();
+        System.out.println("dir == " + dir.getAbsolutePath());
         for (File f : dir.listFiles()) {
             System.out.println("fileName == " + f.getAbsolutePath());
         }
+        String rootDirPath = getApplicationInfo().dataDir;
+        System.out.println("rootDirPath == " + rootDirPath);
+        File rootDir = new File(rootDirPath);
+        for (File f : rootDir.listFiles()) {
+            System.out.println("fileName == " + f.getAbsolutePath());
+        }
+        */
 
         // The mechanism models are updated with the view values
         for (MechanismView mechanismView : allMechanismViews) {

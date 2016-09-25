@@ -155,6 +155,7 @@ public class ScreenshotMechanismView extends MechanismView {
 
     @Override
     public void updateModel() {
+        System.out.println("annotatedImagePath == " + annotatedImagePath);
         screenshotMechanism.setImagePath(annotatedImagePath);
         screenshotMechanism.setAllTextAnnotations(allTextAnnotations);
     }

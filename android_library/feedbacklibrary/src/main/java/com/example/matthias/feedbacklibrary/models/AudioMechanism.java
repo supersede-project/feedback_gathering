@@ -2,7 +2,6 @@ package com.example.matthias.feedbacklibrary.models;
 
 import com.example.matthias.feedbacklibrary.configurations.MechanismConfigurationItem;
 
-import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
@@ -11,7 +10,7 @@ import java.util.Map;
  */
 public class AudioMechanism extends Mechanism {
     private String audioPath;
-    private float defaultTime;
+    private float maxTimeDefault;
     private float maxTime;
     private String title;
 
@@ -24,12 +23,12 @@ public class AudioMechanism extends Mechanism {
         return audioPath;
     }
 
-    public float getDefaultTime() {
-        return defaultTime;
-    }
-
     public float getMaxTime() {
         return maxTime;
+    }
+
+    public float getMaxTimeDefault() {
+        return maxTimeDefault;
     }
 
     public String getTitle() {
@@ -46,12 +45,10 @@ public class AudioMechanism extends Mechanism {
             // Maximum time
             if (key.equals("maxTime")) {
                 setMaxTime(((Double) param.get("value")).floatValue());
-            }
-            // Default time
-            if (key.equals("defaultTime")) {
-                setDefaultTime(((Double) param.get("value")).floatValue());
+                setMaxTimeDefault(((Double) param.get("defaultValue")).floatValue());
             }
         }
+        setTitle(getTitle() + "\nof maximum " + ((int) getMaxTime()) + " seconds");
     }
 
     @Override
@@ -63,12 +60,12 @@ public class AudioMechanism extends Mechanism {
         this.audioPath = audioPath;
     }
 
-    public void setDefaultTime(float defaultTime) {
-        this.defaultTime = defaultTime;
-    }
-
     public void setMaxTime(float maxTime) {
         this.maxTime = maxTime;
+    }
+
+    public void setMaxTimeDefault(float maxTimeDefault) {
+        this.maxTimeDefault = maxTimeDefault;
     }
 
     public void setTitle(String title) {
