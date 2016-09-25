@@ -6,7 +6,7 @@
   "generalConfiguration": {
     "id": 39,
     "createdAt": "2016-08-15 03:00:20.0",
-    "parameters": null
+    "parameters": []
   },
   "configurations": [
     {
@@ -549,7 +549,7 @@
       "generalConfiguration": {
         "id": 25,
         "createdAt": "2016-08-13 05:07:31.0",
-        "parameters": null
+        "parameters": []
       }
     },
     {

@@ -26,9 +26,11 @@ public class StartActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        // TODO: Uncomment before release
         // Actual trigger
-        //Utils.triggerPotentialPullFeedback(this, "en", 8L);
+        //Utils.triggerPotentialPullFeedback(this, 8L, "en");
 
+        // TODO: Remove before release
         // Only for demo purposes
         Button popup = (Button) findViewById(R.id.pull_popup_button);
         if (popup != null) {
@@ -37,7 +39,7 @@ public class StartActivity extends AppCompatActivity {
                 public void onClick(View v) {
                     String jsonString;
                     jsonString = Utils.readFileAsString("feedback_orchestrator_adapted_single_selection.json", getAssets());
-                    DialogUtils.PullFeedbackIntermediateDialog d = DialogUtils.PullFeedbackIntermediateDialog.newInstance(getResources().getString(com.example.matthias.feedbacklibrary.R.string.supersede_feedbacklibrary_pull_feedback_question_string), jsonString, 9);
+                    DialogUtils.PullFeedbackIntermediateDialog d = DialogUtils.PullFeedbackIntermediateDialog.newInstance(getResources().getString(com.example.matthias.feedbacklibrary.R.string.supersede_feedbacklibrary_pull_feedback_question_string), jsonString, 9, "en");
                     d.show(getFragmentManager(), "feedbackPopupDialog");
                 }
             });
@@ -49,7 +51,7 @@ public class StartActivity extends AppCompatActivity {
                 public void onClick(View v) {
                     String jsonString;
                     jsonString = Utils.readFileAsString("feedback_orchestrator_adapted_multiple_selection.json", getAssets());
-                    startFeedbackActivity(jsonString, false, 10);
+                    startFeedbackActivity(jsonString, false, 10, "en");
                 }
             });
         }
@@ -73,7 +75,7 @@ public class StartActivity extends AppCompatActivity {
             boolean result = Utils.checkSinglePermission(this, PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE, null, null, false);
             if (result) {
                 // Permission is already granted. Taking a screenshot of the current screen automatically and open the FeedbackActivity from the feedback library
-                Utils.startActivityWithScreenshotCapture(this);
+                Utils.startActivityWithScreenshotCapture(this, 8L, "en");
             }
             return true;
         }
@@ -87,16 +89,20 @@ public class StartActivity extends AppCompatActivity {
             case PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE:
                 Utils.onRequestPermissionsResultCase(requestCode, permissions, grantResults, this, Manifest.permission.READ_EXTERNAL_STORAGE,
                         com.example.matthias.feedbacklibrary.R.string.supersede_feedbacklibrary_permission_request_title,
-                        com.example.matthias.feedbacklibrary.R.string.supersede_feedbacklibrary_external_storage_permission_text_automatic_screenshot_rationale);
+                        com.example.matthias.feedbacklibrary.R.string.supersede_feedbacklibrary_external_storage_permission_text_automatic_screenshot_rationale,
+                        8L, "en");
                 break;
         }
     }
 
-    private void startFeedbackActivity(String jsonString, boolean isPush, long selectedPullConfigurationIndex) {
+    // TODO: Remove before release
+    // Only for demo purposes
+    private void startFeedbackActivity(String jsonString, boolean isPush, long selectedPullConfigurationIndex, String language) {
         Intent intent = new Intent(this, FeedbackActivity.class);
         intent.putExtra(FeedbackActivity.JSON_CONFIGURATION_STRING, jsonString);
         intent.putExtra(FeedbackActivity.IS_PUSH_STRING, isPush);
         intent.putExtra(FeedbackActivity.SELECTED_PULL_CONFIGURATION_INDEX_STRING, selectedPullConfigurationIndex);
+        intent.putExtra(FeedbackActivity.EXTRA_KEY_LANGUAGE, language);
         startActivity(intent);
     }
 }

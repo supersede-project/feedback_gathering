@@ -24,6 +24,7 @@ import com.example.matthias.feedbacklibrary.R;
 import com.example.matthias.feedbacklibrary.configurations.ConfigurationItem;
 import com.example.matthias.feedbacklibrary.configurations.OrchestratorConfigurationItem;
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -38,9 +39,11 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.Set;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -65,9 +68,9 @@ public class Utils {
     public static final String EXTRA_KEY_HAS_TEXT_ANNOTATIONS = "hasTextAnnotations";
     public static final String EXTRA_KEY_IMAGE_PATCH = "imagePath";
     public static final String EXTRA_KEY_MECHANISM_VIEW_ID = "mechanismViewID";
-    private static final String SCREENSHOTS_DIR_NAME = "Screenshots";
     public static final String SEPARATOR = "::;;::;;";
     public static final String TEXT_ANNOTATION_COUNTER_MAXIMUM = "textAnnotationCounterMaximum";
+    private static final String SCREENSHOTS_DIR_NAME = "Screenshots";
 
     /**
      * @param input the input value
@@ -197,6 +200,35 @@ public class Utils {
     }
 
     /**
+     * This method checks if the application is up and running.
+     *
+     * @return true if the application is up and running, false otherwise
+     */
+    private static boolean isUpAndRunning() {
+        Retrofit rtf = new Retrofit.Builder().baseUrl(feedbackAPI.endpoint).addConverterFactory(GsonConverterFactory.create()).build();
+        feedbackAPI fbAPI = rtf.create(feedbackAPI.class);
+        Call<JsonObject> checkUpAndRunning = fbAPI.pingOrchestrator();
+        final Set<Boolean> isUpAndRunning = new HashSet<>();
+
+        if (checkUpAndRunning != null) {
+            checkUpAndRunning.enqueue(new Callback<JsonObject>() {
+                @Override
+                public void onFailure(Call<JsonObject> call, Throwable t) {
+                }
+
+                @Override
+                public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                    if (response.code() == 200) {
+                        isUpAndRunning.add(true);
+                    }
+                }
+            });
+        }
+
+        return !isUpAndRunning.isEmpty();
+    }
+
+    /**
      * This method loads an image as a bitmap from the specific path.
      *
      * @param path the absolute path of the image file
@@ -225,8 +257,11 @@ public class Utils {
      * @param dialogMessage the dialog message for the rationale
      */
     public static void onRequestPermissionsResultCase(final int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults,
-                                                      @NonNull final Activity activity, @NonNull final String permission, int dialogTitle, int dialogMessage) {
+                                                      @NonNull final Activity activity, @NonNull final String permission, int dialogTitle,
+                                                      int dialogMessage, long applicationId, String language) {
         final Intent intent = new Intent(activity, FeedbackActivity.class);
+        intent.putExtra(FeedbackActivity.EXTRA_KEY_APPLICATION_ID, applicationId);
+        intent.putExtra(FeedbackActivity.EXTRA_KEY_LANGUAGE, language);
         if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             // Permission was already granted. Taking a screenshot of the current screen automatically and open the FeedbackActivity from the feedback library
             String defaultImagePath = captureScreenshot(activity);
@@ -411,78 +446,92 @@ public class Utils {
      *
      * @param activity the activity from where the method is called
      */
-    public static void startActivityWithScreenshotCapture(@NonNull Activity activity) {
-        Intent intent = new Intent(activity, FeedbackActivity.class);
-        String defaultImagePath = Utils.captureScreenshot(activity);
-        intent.putExtra(FeedbackActivity.DEFAULT_IMAGE_PATH, defaultImagePath);
-        activity.startActivity(intent);
+    public static void startActivityWithScreenshotCapture(@NonNull Activity activity, long applicationId, @NonNull String language) {
+        // TODO: Remove '|| true' before release
+        // '|| true' only for demo purposes
+        if (isUpAndRunning() || true) {
+            Intent intent = new Intent(activity, FeedbackActivity.class);
+            String defaultImagePath = Utils.captureScreenshot(activity);
+            intent.putExtra(FeedbackActivity.DEFAULT_IMAGE_PATH, defaultImagePath);
+            intent.putExtra(FeedbackActivity.EXTRA_KEY_APPLICATION_ID, applicationId);
+            intent.putExtra(FeedbackActivity.EXTRA_KEY_LANGUAGE, language);
+            activity.startActivity(intent);
+        } else {
+            DialogUtils.showInformationDialog(activity, new String[]{activity.getResources().getString(R.string.supersede_feedbacklibrary_feedback_application_unavailable_text)}, true);
+        }
     }
 
-    public static void triggerPotentialPullFeedback(@NonNull final Activity activity, @NonNull String language, long applicationId) {
-        Retrofit rtf = new Retrofit.Builder().baseUrl(feedbackAPI.endpoint).addConverterFactory(GsonConverterFactory.create()).build();
-        feedbackAPI fbAPI = rtf.create(feedbackAPI.class);
-        Call<OrchestratorConfigurationItem> result = fbAPI.getConfiguration(language, applicationId);
+    public static void triggerPotentialPullFeedback(@NonNull final Activity activity, long applicationId, final @NonNull String language) {
+        if (isUpAndRunning()) {
+            Retrofit rtf = new Retrofit.Builder().baseUrl(feedbackAPI.endpoint).addConverterFactory(GsonConverterFactory.create()).build();
+            feedbackAPI fbAPI = rtf.create(feedbackAPI.class);
+            Call<OrchestratorConfigurationItem> result = fbAPI.getConfiguration(language, applicationId);
 
-        // Asynchronous call
-        if (result != null) {
-            result.enqueue(new Callback<OrchestratorConfigurationItem>() {
-                @Override
-                public void onFailure(Call<OrchestratorConfigurationItem> call, Throwable t) {
-                }
+            // Asynchronous call
+            if (result != null) {
+                result.enqueue(new Callback<OrchestratorConfigurationItem>() {
+                    @Override
+                    public void onFailure(Call<OrchestratorConfigurationItem> call, Throwable t) {
+                        DialogUtils.showInformationDialog(activity, new String[]{activity.getResources().getString(R.string.supersede_feedbacklibrary_feedback_application_unavailable_text)}, true);
+                    }
 
-                @Override
-                public void onResponse(Call<OrchestratorConfigurationItem> call, Response<OrchestratorConfigurationItem> response) {
-                    OrchestratorConfigurationItem configuration = response.body();
-                    if (configuration != null) {
-                        List<ConfigurationItem> configurationItems = configuration.getConfigurationItems();
-                        List<Long> shuffleIds = new ArrayList<>();
-                        Map<Long, List<Map<String, Object>>> idParameters = new HashMap<>();
-                        for (ConfigurationItem configurationItem : configurationItems) {
-                            if (configurationItem.getType().equals("PULL")) {
-                                shuffleIds.add(configuration.getId());
-                                idParameters.put(configuration.getId(), configurationItem.getGeneralConfigurationItem().getParameters());
-                            }
-                        }
-
-                        Random rnd = new Random(System.nanoTime());
-                        Collections.shuffle(shuffleIds, rnd);
-                        for (int i = 0; i < shuffleIds.size(); ++i) {
-                            double likelihood = -1;
-                            boolean showIntermediateDialog = true;
-                            for (Map<String, Object> parameter : idParameters.get(shuffleIds.get(i))) {
-                                String key = (String) parameter.get("key");
-                                // Likelihood
-                                if (key.equals("likelihood")) {
-                                    likelihood = (((Double) parameter.get("value")).floatValue());
-                                }
-                                // Intermediate dialog
-                                if (key.equals("showIntermediateDialog")) {
-                                    showIntermediateDialog = (Utils.intToBool(((Double) parameter.get("value")).intValue()));
+                    @Override
+                    public void onResponse(Call<OrchestratorConfigurationItem> call, Response<OrchestratorConfigurationItem> response) {
+                        OrchestratorConfigurationItem configuration = response.body();
+                        if (configuration != null) {
+                            List<ConfigurationItem> configurationItems = configuration.getConfigurationItems();
+                            List<Long> shuffleIds = new ArrayList<>();
+                            Map<Long, List<Map<String, Object>>> idParameters = new HashMap<>();
+                            for (ConfigurationItem configurationItem : configurationItems) {
+                                if (configurationItem.getType().equals("PULL")) {
+                                    shuffleIds.add(configuration.getId());
+                                    idParameters.put(configuration.getId(), configurationItem.getGeneralConfigurationItem().getParameters());
                                 }
                             }
 
-                            if (!(rnd.nextDouble() > likelihood)) {
-                                Intent intent = new Intent(activity, FeedbackActivity.class);
+                            Random rnd = new Random(System.nanoTime());
+                            Collections.shuffle(shuffleIds, rnd);
+                            for (int i = 0; i < shuffleIds.size(); ++i) {
+                                double likelihood = -1;
+                                boolean showIntermediateDialog = true;
+                                for (Map<String, Object> parameter : idParameters.get(shuffleIds.get(i))) {
+                                    String key = (String) parameter.get("key");
+                                    // Likelihood
+                                    if (key.equals("likelihood")) {
+                                        likelihood = (((Double) parameter.get("value")).floatValue());
+                                    }
+                                    // Intermediate dialog
+                                    if (key.equals("showIntermediateDialog")) {
+                                        showIntermediateDialog = (Utils.intToBool(((Double) parameter.get("value")).intValue()));
+                                    }
+                                }
 
-                                String jsonString = new Gson().toJson(configuration);
-                                intent.putExtra(FeedbackActivity.JSON_CONFIGURATION_STRING, jsonString);
-                                intent.putExtra(FeedbackActivity.IS_PUSH_STRING, false);
-                                intent.putExtra(FeedbackActivity.SELECTED_PULL_CONFIGURATION_INDEX_STRING, shuffleIds.get(i));
-                                if (!showIntermediateDialog) {
-                                    // Start the feedback activity without asking the user
-                                    activity.startActivity(intent);
-                                } else {
-                                    // Ask the user if (s)he would like to give feedback or not
-                                    DialogUtils.PullFeedbackIntermediateDialog d = DialogUtils.PullFeedbackIntermediateDialog.newInstance(activity.getResources().getString(R.string.supersede_feedbacklibrary_pull_feedback_question_string), jsonString, shuffleIds.get(i));
-                                    d.show(activity.getFragmentManager(), "feedbackPopupDialog");
+                                if (!(rnd.nextDouble() > likelihood)) {
+                                    Intent intent = new Intent(activity, FeedbackActivity.class);
+
+                                    String jsonString = new Gson().toJson(configuration);
+                                    intent.putExtra(FeedbackActivity.IS_PUSH_STRING, false);
+                                    intent.putExtra(FeedbackActivity.JSON_CONFIGURATION_STRING, jsonString);
+                                    intent.putExtra(FeedbackActivity.SELECTED_PULL_CONFIGURATION_INDEX_STRING, shuffleIds.get(i));
+                                    intent.putExtra(FeedbackActivity.EXTRA_KEY_LANGUAGE, language);
+                                    if (!showIntermediateDialog) {
+                                        // Start the feedback activity without asking the user
+                                        activity.startActivity(intent);
+                                    } else {
+                                        // Ask the user if (s)he would like to give feedback or not
+                                        DialogUtils.PullFeedbackIntermediateDialog d = DialogUtils.PullFeedbackIntermediateDialog.newInstance(activity.getResources().getString(com.example.matthias.feedbacklibrary.R.string.supersede_feedbacklibrary_pull_feedback_question_string), jsonString, shuffleIds.get(i), language);
+                                        d.show(activity.getFragmentManager(), "feedbackPopupDialog");
+                                    }
                                 }
                             }
                         }
                     }
-                }
-            });
+                });
+            } else {
+                DialogUtils.showInformationDialog(activity, new String[]{activity.getResources().getString(R.string.supersede_feedbacklibrary_feedback_application_unavailable_text)}, true);
+            }
         } else {
-            // Should never happen!
+            DialogUtils.showInformationDialog(activity, new String[]{activity.getResources().getString(R.string.supersede_feedbacklibrary_feedback_application_unavailable_text)}, true);
         }
     }
 }

@@ -57,6 +57,7 @@
     <string name="supersede_feedbacklibrary_loading_string">Loading. Please wait.</string>
     <string name="supersede_feedbacklibrary_error_text">Oops. Something went wrong! Please try again later.</string>
     <string name="supersede_feedbacklibrary_success_text">Your feedback was successfully sent. Thank you!</string>
+    <string name="supersede_feedbacklibrary_feedback_application_unavailable_text">We apologize that the feedback tool is not available at the moment. Please try again later.</string>
 
     <!-- Permissions -->
     <string name="supersede_feedbacklibrary_permission_request_title">Permission request</string>
