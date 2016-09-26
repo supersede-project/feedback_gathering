@@ -14,6 +14,7 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
     var canvasId = 'screenshotCanvas';
     var defaultFontSize = 30;
     var textTypeObjectIdentifier = 'i-text';
+    var cropperTypeObjectIdentifier = 'cropper';
     var ScreenshotView = (function () {
         function ScreenshotView(screenshotMechanism, screenshotPreviewElement, screenshotCaptureButton, elementToCapture, container, distPath, elementsToHide) {
             this.screenshotMechanism = screenshotMechanism;
@@ -183,7 +184,7 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
                 originY: 'top',
                 stroke: '#333',
                 strokeDashArray: [4, 4],
-                type: 'cropper',
+                type: cropperTypeObjectIdentifier,
                 opacity: 1,
                 width: 1,
                 height: 1
@@ -224,9 +225,8 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
                 jQuery(this).hide();
                 jQuery('.screenshot-crop-confirm').hide();
                 croppingRect.remove();
-                myThis.fabricCanvas.renderAll();
             });
-            this.container.find('.screenshot-crop-confirm').show().on('click', function (e) {
+            this.container.find('.screenshot-crop-confirm').show().off().on('click', function (e) {
                 e.preventDefault();
                 e.stopPropagation();
                 myThis.cropTheCanvas(croppingRect);
@@ -244,6 +244,7 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
             var croppWidth = croppingRect.width - 2;
             var croppHeight = croppingRect.height - 2;
             croppingRect.remove();
+            canvas.renderAll.bind(canvas);
             this.updateCanvasState(croppedTop, croppedLeft);
             for (var i = 0; i < objectsToMove.length; i++) {
                 canvas.getObjects()[i].left = canvas.getObjects()[i].left - croppedLeft;
@@ -420,28 +421,31 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
             this.fabricCanvas.setWidth(canvasStateToRestore.width);
             this.fabricCanvas.setHeight(canvasStateToRestore.height);
             canvas.loadFromJSON(canvasStateToRestore.src, canvas.renderAll.bind(canvas), function (o, object) {
-                if (object.type == 'image') {
+                if (object.type === 'image') {
                     object.set('selectable', false);
                     object.set('hoverCursor', 'default');
                 }
-                if (myThis.canvasStates.length < 1) {
-                    myThis.container.find('.screenshot-draw-undo').hide();
+                else if (object.type === cropperTypeObjectIdentifier) {
+                    object.remove();
                 }
             });
+            if (myThis.canvasStates.length < 1) {
+                myThis.container.find('.screenshot-draw-undo').hide();
+            }
         };
         ScreenshotView.prototype.initScreenshotOperations = function () {
             var myThis = this;
-            this.container.find('.screenshot-crop').on('click', function (event) {
+            this.container.find('.screenshot-crop').off().on('click', function (event) {
                 event.preventDefault();
                 event.stopPropagation();
                 myThis.initCrop();
             });
-            this.container.find('.screenshot-draw-undo').on('click', function (event) {
+            this.container.find('.screenshot-draw-undo').off().on('click', function (event) {
                 event.preventDefault();
                 event.stopPropagation();
                 myThis.undoOperation();
             });
-            this.container.find('.screenshot-draw-remove').on('click', function (event) {
+            this.container.find('.screenshot-draw-remove').off().on('click', function (event) {
                 event.preventDefault();
                 event.stopPropagation();
                 myThis.reset();

@@ -19,6 +19,7 @@ const defaultColor:string = black;
 const canvasId:string = 'screenshotCanvas';
 const defaultFontSize:number = 30;
 const textTypeObjectIdentifier:string = 'i-text';
+const cropperTypeObjectIdentifier:string = 'cropper';
 
 
 export class ScreenshotView {
@@ -240,7 +241,7 @@ export class ScreenshotView {
             originY: 'top',
             stroke: '#333',
             strokeDashArray: [4, 4],
-            type: 'cropper',
+            type: cropperTypeObjectIdentifier,
             opacity: 1,
             width: 1,
             height: 1
@@ -257,7 +258,6 @@ export class ScreenshotView {
             }
             croppingRect.left = event.e.pageX - pos[0];
             croppingRect.top = event.e.pageY - pos[1];
-            //el.selectable = false;
             croppingRect.visible = true;
             mousex = event.e.pageX;
             mousey = event.e.pageY;
@@ -289,10 +289,9 @@ export class ScreenshotView {
             jQuery(this).hide();
             jQuery('.screenshot-crop-confirm').hide();
             croppingRect.remove();
-            myThis.fabricCanvas.renderAll();
         });
 
-        this.container.find('.screenshot-crop-confirm').show().on('click', function (e) {
+        this.container.find('.screenshot-crop-confirm').show().off().on('click', function (e) {
             e.preventDefault();
             e.stopPropagation();
             myThis.cropTheCanvas(croppingRect);
@@ -314,6 +313,7 @@ export class ScreenshotView {
         var croppWidth = croppingRect.width - 2;
         var croppHeight = croppingRect.height - 2;
         croppingRect.remove();
+        canvas.renderAll.bind(canvas);
 
         this.updateCanvasState(croppedTop, croppedLeft);
 
@@ -508,38 +508,41 @@ export class ScreenshotView {
         canvas.clear().renderAll();
 
         var canvasStateToRestore = this.canvasStates.pop();
+
         this.fabricCanvas.setWidth(canvasStateToRestore.width);
         this.fabricCanvas.setHeight(canvasStateToRestore.height);
 
         canvas.loadFromJSON(canvasStateToRestore.src, canvas.renderAll.bind(canvas), function(o, object) {
             // update page screenshot object
-            if (object.type == 'image') {
+            if (object.type === 'image') {
                 object.set('selectable', false);
                 object.set('hoverCursor', 'default');
-            }
-
-            if (myThis.canvasStates.length < 1) {
-                myThis.container.find('.screenshot-draw-undo').hide();
+            } else if (object.type === cropperTypeObjectIdentifier) {
+                object.remove();
             }
         });
+
+        if (myThis.canvasStates.length < 1) {
+            myThis.container.find('.screenshot-draw-undo').hide();
+        }
     }
 
     initScreenshotOperations() {
         var myThis = this;
 
-        this.container.find('.screenshot-crop').on('click', function (event) {
+        this.container.find('.screenshot-crop').off().on('click', function (event) {
             event.preventDefault();
             event.stopPropagation();
             myThis.initCrop();
         });
 
-        this.container.find('.screenshot-draw-undo').on('click', function (event) {
+        this.container.find('.screenshot-draw-undo').off().on('click', function (event) {
             event.preventDefault();
             event.stopPropagation();
             myThis.undoOperation();
         });
 
-        this.container.find('.screenshot-draw-remove').on('click', function (event) {
+        this.container.find('.screenshot-draw-remove').off().on('click', function (event) {
             event.preventDefault();
             event.stopPropagation();
             myThis.reset();
