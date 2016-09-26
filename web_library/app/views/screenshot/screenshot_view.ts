@@ -133,11 +133,11 @@ export class ScreenshotView {
             var selectedObject = e.target;
 
             selectedObjectControls.show();
-            if(selectedObject.get('type') === textTypeObjectIdentifier) {
+            if (selectedObject.get('type') === textTypeObjectIdentifier) {
                 var textSizeInput = selectedObjectControls.find('.text-size');
                 textSizeInput.show();
                 textSizeInput.val(selectedObject.getFontSize());
-                textSizeInput.off().on('keyup', function() {
+                textSizeInput.off().on('keyup', function () {
                     selectedObject.setFontSize(jQuery(this).val());
                     myThis.fabricCanvas.renderAll();
                 });
@@ -316,7 +316,7 @@ export class ScreenshotView {
         var croppHeight = croppingRect.height - 2;
         croppingRect.remove();
 
-        //this.updateCanvasState(croppedTop, croppedLeft);
+        this.updateCanvasState(croppedTop, croppedLeft);
 
         // Shifting the elements accordingly
         for (var i = 0; i < objectsToMove.length; i++) {
@@ -331,7 +331,12 @@ export class ScreenshotView {
     }
 
     addTextAnnotation(left, top) {
-        var text = new fabric.IText('Your text', {left: left, top: top, fontFamily: 'arial', fontSize: defaultFontSize});
+        var text = new fabric.IText('Your text', {
+            left: left,
+            top: top,
+            fontFamily: 'arial',
+            fontSize: defaultFontSize
+        });
         this.fabricCanvas.add(text);
         this.fabricCanvas.setActiveObject(text);
         text.enterEditing();
@@ -491,8 +496,7 @@ export class ScreenshotView {
     }
 
     updateCanvasState(shiftTop:number, shiftLeft:number) {
-        this.canvasState.src = this.fabricCanvas.toDataURL("image/png");
-        var canvasState = new CanvasState(this.canvasState.src, this.fabricCanvas.getWidth(), this.fabricCanvas.getHeight(), shiftTop, shiftLeft);
+        var canvasState = new CanvasState(JSON.stringify(this.fabricCanvas), this.fabricCanvas.getWidth(), this.fabricCanvas.getHeight(), shiftTop, shiftLeft);
         this.canvasStates.push(canvasState);
     }
 
@@ -500,26 +504,24 @@ export class ScreenshotView {
         if (this.canvasStates.length < 1) {
             return;
         }
+        var myThis = this;
+        var canvas = this.fabricCanvas;
+        canvas.clear().renderAll();
 
         var canvasStateToRestore = this.canvasStates.pop();
-        this.canvasState.src = canvasStateToRestore.src;
         this.fabricCanvas.setWidth(canvasStateToRestore.width);
         this.fabricCanvas.setHeight(canvasStateToRestore.height);
 
-        var canvas = this.fabricCanvas;
-        for (var i = 0; i < canvas.getObjects().length; i++) {
-            canvas.getObjects()[i].top = canvas.getObjects()[i].top + canvasStateToRestore.shiftTop;
-            canvas.getObjects()[i].left = canvas.getObjects()[i].left + canvasStateToRestore.shiftLeft;
-        }
+        canvas.loadFromJSON(canvasStateToRestore.src, canvas.renderAll(), function(o, object) {
+            if (object.type == 'image') {
+                object.set('selectable', false);
+                object.set('hoverCursor', 'default');
+            }
 
-        var context = this.fabricCanvas.getContext('2d');
-
-        /*
-        context.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
-        context.drawImage(this.canvasState, 0, 0, this.canvasState.width,
-            this.canvasState.height, 0, 0, this.fabricCanvas.width,
-            this.fabricCanvas.height);
-        */
+            if (myThis.canvasStates.length < 1) {
+                myThis.container.find('.screenshot-draw-undo').hide();
+            }
+        });
     }
 
     initScreenshotOperations() {
@@ -563,14 +565,14 @@ export class ScreenshotView {
 
         var selectedObjectControls = jQuery('#screenshotMechanism' + myThis.screenshotMechanism.id + ' .selected-object-controls');
 
-        fabric.Object.prototype.hide = function() {
+        fabric.Object.prototype.hide = function () {
             this.set({
                 opacity: 0,
                 selectable: false
             });
         };
 
-        fabric.Object.prototype.show = function() {
+        fabric.Object.prototype.show = function () {
             this.set({
                 opacity: 1,
                 selectable: true
@@ -631,7 +633,7 @@ export class ScreenshotView {
                     if (activeGroup) {
                         var objectsInGroup = activeGroup.getObjects();
                         fabricCanvas.discardActiveGroup();
-                        objectsInGroup.forEach(function(object) {
+                        objectsInGroup.forEach(function (object) {
                             fabricCanvas.remove(object);
                         });
                     }
@@ -640,7 +642,7 @@ export class ScreenshotView {
                     }
 
                     fabricCanvas.renderAll();
-                    fabricCanvas.fire('mouse:down', { });
+                    fabricCanvas.fire('mouse:down', {});
                 },
                 cursor: 'pointer'
             }

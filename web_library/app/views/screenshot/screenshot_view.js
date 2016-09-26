@@ -245,6 +245,7 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
             var croppWidth = croppingRect.width - 2;
             var croppHeight = croppingRect.height - 2;
             croppingRect.remove();
+            this.updateCanvasState(croppedTop, croppedLeft);
             for (var i = 0; i < objectsToMove.length; i++) {
                 canvas.getObjects()[i].left = canvas.getObjects()[i].left - croppedLeft;
                 canvas.getObjects()[i].top = canvas.getObjects()[i].top - croppedTop;
@@ -255,7 +256,12 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
             canvas.renderAll();
         };
         ScreenshotView.prototype.addTextAnnotation = function (left, top) {
-            var text = new fabric.IText('Your text', { left: left, top: top, fontFamily: 'arial', fontSize: defaultFontSize });
+            var text = new fabric.IText('Your text', {
+                left: left,
+                top: top,
+                fontFamily: 'arial',
+                fontSize: defaultFontSize
+            });
             this.fabricCanvas.add(text);
             this.fabricCanvas.setActiveObject(text);
             text.enterEditing();
@@ -401,24 +407,28 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
             this.screenshotCaptureButton.text(screenshotCaptureButtonDefaultText);
         };
         ScreenshotView.prototype.updateCanvasState = function (shiftTop, shiftLeft) {
-            this.canvasState.src = this.fabricCanvas.toDataURL("image/png");
-            var canvasState = new canvas_state_1.CanvasState(this.canvasState.src, this.fabricCanvas.getWidth(), this.fabricCanvas.getHeight(), shiftTop, shiftLeft);
+            var canvasState = new canvas_state_1.CanvasState(JSON.stringify(this.fabricCanvas), this.fabricCanvas.getWidth(), this.fabricCanvas.getHeight(), shiftTop, shiftLeft);
             this.canvasStates.push(canvasState);
         };
         ScreenshotView.prototype.undoOperation = function () {
             if (this.canvasStates.length < 1) {
                 return;
             }
+            var myThis = this;
+            var canvas = this.fabricCanvas;
+            canvas.clear().renderAll();
             var canvasStateToRestore = this.canvasStates.pop();
-            this.canvasState.src = canvasStateToRestore.src;
             this.fabricCanvas.setWidth(canvasStateToRestore.width);
             this.fabricCanvas.setHeight(canvasStateToRestore.height);
-            var canvas = this.fabricCanvas;
-            for (var i = 0; i < canvas.getObjects().length; i++) {
-                canvas.getObjects()[i].top = canvas.getObjects()[i].top + canvasStateToRestore.shiftTop;
-                canvas.getObjects()[i].left = canvas.getObjects()[i].left + canvasStateToRestore.shiftLeft;
-            }
-            var context = this.fabricCanvas.getContext('2d');
+            canvas.loadFromJSON(canvasStateToRestore.src, canvas.renderAll(), function (o, object) {
+                if (object.type == 'image') {
+                    object.set('selectable', false);
+                    object.set('hoverCursor', 'default');
+                }
+                if (myThis.canvasStates.length < 1) {
+                    myThis.container.find('.screenshot-draw-undo').hide();
+                }
+            });
         };
         ScreenshotView.prototype.initScreenshotOperations = function () {
             var myThis = this;
