@@ -95,7 +95,7 @@ export class ScreenshotView {
                 jQuery(canvas).prop('height', myThis.canvasHeight);
 
                 var img = new Image();
-                img.crossOrigin = "Anonymous";
+                //img.crossOrigin = "Anonymous";
                 myThis.canvasState = img;
                 myThis.screenshotCanvas = canvas;
                 img.src = data;
