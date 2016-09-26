@@ -252,7 +252,7 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
             }
             canvas.setWidth(croppWidth);
             canvas.setHeight(croppHeight);
-            canvas.renderAll();
+            canvas.renderAll.bind(canvas);
         };
         ScreenshotView.prototype.addTextAnnotation = function (left, top) {
             var text = new fabric.IText('Your text', {
@@ -419,7 +419,7 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
             var canvasStateToRestore = this.canvasStates.pop();
             this.fabricCanvas.setWidth(canvasStateToRestore.width);
             this.fabricCanvas.setHeight(canvasStateToRestore.height);
-            canvas.loadFromJSON(canvasStateToRestore.src, canvas.renderAll(), function (o, object) {
+            canvas.loadFromJSON(canvasStateToRestore.src, canvas.renderAll.bind(canvas), function (o, object) {
                 if (object.type == 'image') {
                     object.set('selectable', false);
                     object.set('hoverCursor', 'default');
@@ -533,8 +533,7 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
                         else if (activeObject) {
                             fabricCanvas.remove(activeObject);
                         }
-                        fabricCanvas.renderAll();
-                        fabricCanvas.fire('mouse:down', {});
+                        fabricCanvas.renderAll.bind(fabricCanvas);
                     },
                     cursor: 'pointer'
                 }
