@@ -210,9 +210,9 @@ export class ScreenshotView {
 
     determineCanvasScaleForRetinaDisplay() {
         if (window.devicePixelRatio !== 1) {
-            var height = jQuery('.screenshot-preview canvas').height();
-            var width = jQuery('.screenshot-preview canvas').width();
-
+            var screenshotPreviewCanvas = jQuery('.screenshot-preview canvas');
+            var height = screenshotPreviewCanvas.height();
+            var width = screenshotPreviewCanvas.width();
             var canvas = this.fabricCanvas.getElement();
 
             // TODO get this working!!!
@@ -316,12 +316,13 @@ export class ScreenshotView {
         var croppHeight = croppingRect.height - 2;
         croppingRect.remove();
 
-        this.updateCanvasState(croppedTop, croppedLeft);
+        //this.updateCanvasState(croppedTop, croppedLeft);
 
         // Shifting the elements accordingly
         for (var i = 0; i < objectsToMove.length; i++) {
             canvas.getObjects()[i].left = canvas.getObjects()[i].left - croppedLeft;
             canvas.getObjects()[i].top = canvas.getObjects()[i].top - croppedTop;
+            canvas.getObjects()[i].setCoords();
         }
 
         canvas.setWidth(croppWidth);

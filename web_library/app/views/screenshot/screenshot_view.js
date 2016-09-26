@@ -159,8 +159,9 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
         };
         ScreenshotView.prototype.determineCanvasScaleForRetinaDisplay = function () {
             if (window.devicePixelRatio !== 1) {
-                var height = jQuery('.screenshot-preview canvas').height();
-                var width = jQuery('.screenshot-preview canvas').width();
+                var screenshotPreviewCanvas = jQuery('.screenshot-preview canvas');
+                var height = screenshotPreviewCanvas.height();
+                var width = screenshotPreviewCanvas.width();
                 var canvas = this.fabricCanvas.getElement();
                 canvas.setAttribute('width', window.devicePixelRatio * width);
                 canvas.setAttribute('height', window.devicePixelRatio * height);
@@ -244,10 +245,10 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
             var croppWidth = croppingRect.width - 2;
             var croppHeight = croppingRect.height - 2;
             croppingRect.remove();
-            this.updateCanvasState(croppedTop, croppedLeft);
             for (var i = 0; i < objectsToMove.length; i++) {
                 canvas.getObjects()[i].left = canvas.getObjects()[i].left - croppedLeft;
                 canvas.getObjects()[i].top = canvas.getObjects()[i].top - croppedTop;
+                canvas.getObjects()[i].setCoords();
             }
             canvas.setWidth(croppWidth);
             canvas.setHeight(croppHeight);
