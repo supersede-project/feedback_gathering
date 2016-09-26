@@ -17,11 +17,12 @@ import retrofit2.http.Path;
 
 /**
  * API calls to the feedback orchestrator and feedback repository
- * Orchestrator: http://ec2-54-166-31-250.compute-1.amazonaws.com/feedback_orchestrator
- * Repository: http://ec2-54-166-31-250.compute-1.amazonaws.com/feedback_repository
+ * Orchestrator: http://ec2-54-175-37-30.compute-1.amazonaws.com/feedback_orchestrator
+ * Repository: http://ec2-54-175-37-30.compute-1.amazonaws.com/feedback_repository
  */
 public interface feedbackAPI {
-    String endpoint = "http://ec2-54-166-31-250.compute-1.amazonaws.com/";
+    //String endpoint = "http://ec2-54-166-31-250.compute-1.amazonaws.com/"; --> PTV domain
+    String endpoint = "http://ec2-54-175-37-30.compute-1.amazonaws.com/";
 
     /**
      * This methods sends the feedback to the repository.
