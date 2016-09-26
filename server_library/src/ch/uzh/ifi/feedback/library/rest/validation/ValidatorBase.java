@@ -13,7 +13,7 @@ import javassist.NotFoundException;
 
 import static java.util.Arrays.asList;
 
-public class ValidatorBase<T extends IDbItem<T>> implements IValidator<T> {
+public class ValidatorBase<T extends IDbItem> implements IValidator<T> {
 	
 	private Class<?> clazz;
 	protected ServiceBase<T> dbService;
@@ -72,7 +72,7 @@ public class ValidatorBase<T extends IDbItem<T>> implements IValidator<T> {
 			throw new NotFoundException("Object with ID '" + object.getId() + "' not found");
 		
 		T oldObject = dbService.GetById(object.getId());
-		object = object.Merge(oldObject);
+		object = (T) object.Merge(oldObject);
 		return object;
 	}
 	

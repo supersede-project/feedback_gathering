@@ -2,7 +2,7 @@ package ch.uzh.ifi.feedback.repository.model;
 
 import ch.uzh.ifi.feedback.library.rest.annotations.DbAttribute;
 
-public class AttachmentFeedback extends FileFeedback{
+public class AttachmentFeedback extends FileFeedback {
 
 	@DbAttribute("feedback_id")
 	private transient Integer feedbackId;

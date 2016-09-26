@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.sql.SQLException;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.http.HttpEntity;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
@@ -34,23 +35,8 @@ public class FeedbackServletTest extends ServletTest {
 		assertEquals(retrievedFeedback.getApplicationId(), 1l);		
 	}
 	
-	public void testCreationOfFeedback() throws ClientProtocolException, IOException, SQLException, NotFoundException {
-		InputStream stream = this.getClass().getResourceAsStream("feedback_insert.json");
-		String jsonString = IOUtils.toString(stream); 
-		
-		Feedback createdFeedback = PostSuccess(
-				"http://localhost:8080/feedback_repository/en/feedbacks", 
-				jsonString,
-				Feedback.class);
-		
-	    assertEquals(createdFeedback.getApplicationId(), 1l);	
-	    assertEquals(createdFeedback.getTitle(), "Feedback JUnit 648");
-	    assertEquals(createdFeedback.getRatingFeedbacks().size(), 2);
-	    assertEquals(createdFeedback.getCategoryFeedbacks().size(), 2);
-	}	
-	
 	/**
-	 * Note: This test will only work, when the webapps directory ot tomcat is writable...
+	 * Note: This test will only work, when the webapps directory of tomcat is writable...
 	 */
 	public void testCreationOfFeedbackWithFiles() throws ClientProtocolException, IOException, SQLException, NotFoundException {
 		InputStream stream = this.getClass().getResourceAsStream("feedback_insert.json");
@@ -63,6 +49,7 @@ public class FeedbackServletTest extends ServletTest {
 		builder.addBinaryBody("audio1", getClass().getResourceAsStream("audio1.mp3"));
 		builder.addBinaryBody("attachment1", getClass().getResourceAsStream("attachment1.txt"));
 		builder.addBinaryBody("attachment2", getClass().getResourceAsStream("attachment2.txt"));
+		builder.setContentType(ContentType.MULTIPART_FORM_DATA);
 		
 		Feedback createdFeedback = PostSuccess(
 				"http://localhost:8080/feedback_repository/en/feedbacks", 
@@ -76,6 +63,7 @@ public class FeedbackServletTest extends ServletTest {
 	    assertEquals(createdFeedback.getScreenshotFeedbacks().size(), 2);
 	    assertEquals(createdFeedback.getAttachmentFeedbacks().size(), 2);
 	    assertEquals(createdFeedback.getAudioFeedbacks().size(), 1);
+	    assertTrue(createdFeedback.getScreenshotFeedbacks().stream().anyMatch(s -> s.getTextAnnotations().size() == 2));
 	}	
 }
 

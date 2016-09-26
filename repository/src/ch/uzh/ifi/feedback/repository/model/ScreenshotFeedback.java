@@ -1,6 +1,10 @@
 package ch.uzh.ifi.feedback.repository.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import ch.uzh.ifi.feedback.library.rest.annotations.DbAttribute;
+import ch.uzh.ifi.feedback.library.rest.annotations.DbIgnore;
 
 public class ScreenshotFeedback extends FileFeedback {
 
@@ -9,9 +13,12 @@ public class ScreenshotFeedback extends FileFeedback {
 
 	@DbAttribute("mechanism_id")
 	private Integer mechanismId;
+	
+	@DbIgnore
+	private List<TextAnnotation> textAnnotations;
 
 	public ScreenshotFeedback() {
-		
+		setTextAnnotations(new ArrayList<>());
 	}
 
 	public ScreenshotFeedback(Integer id, Integer feedbackId, String path, int size, String name, Integer mechanismId,
@@ -25,6 +32,7 @@ public class ScreenshotFeedback extends FileFeedback {
 		this.mechanismId = mechanismId;
 		this.part = part;
 		this.fileExtension = fileExtension;
+		setTextAnnotations(new ArrayList<>());
 	}
 
 	public Integer getFeedbackId() {
@@ -41,5 +49,16 @@ public class ScreenshotFeedback extends FileFeedback {
 
 	public void setMechanismId(Integer mechanismId) {
 		this.mechanismId = mechanismId;
+	}
+
+	public List<TextAnnotation> getTextAnnotations() {
+		if(textAnnotations == null)
+			textAnnotations = new ArrayList<>();
+		
+		return textAnnotations;
+	}
+
+	public void setTextAnnotations(List<TextAnnotation> textAnnotations) {
+		this.textAnnotations = textAnnotations;
 	}
 }

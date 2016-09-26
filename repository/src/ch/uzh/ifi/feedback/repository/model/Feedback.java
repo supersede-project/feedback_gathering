@@ -37,11 +37,14 @@ public class Feedback extends ItemBase<Feedback> {
 	@DbAttribute("configuration_id")
 	private long configurationId;
 	
+	@DbAttribute("context_informations_id")
+	private transient Integer contextInformationId;
+	
 	private String language;
 
-	@DbAttribute("context_information_id")
-	private ContextInformation contextInformation;
 	
+	@DbIgnore
+	private ContextInformation contextInformation;
 	@DbIgnore
 	private List<TextFeedback> textFeedbacks;
 	@DbIgnore
@@ -220,5 +223,13 @@ public class Feedback extends ItemBase<Feedback> {
 
 	public void addTextFeedback(TextFeedback textFeedback) {
 		this.textFeedbacks.add(textFeedback);
+	}
+
+	public Integer getContextInformationId() {
+		return contextInformationId;
+	}
+
+	public void setContextInformationId(Integer contextInformationId) {
+		this.contextInformationId = contextInformationId;
 	}
 }

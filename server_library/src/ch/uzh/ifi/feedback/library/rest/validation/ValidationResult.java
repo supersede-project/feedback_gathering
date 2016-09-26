@@ -5,7 +5,7 @@ import java.util.List;
 
 public class ValidationResult {
 	
-	private boolean hasErrors;
+	private transient boolean hasErrors;
 	private List<ValidationError> validationErrors;
 	
 	public ValidationResult(){
