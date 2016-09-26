@@ -513,6 +513,7 @@ export class ScreenshotView {
         this.fabricCanvas.setHeight(canvasStateToRestore.height);
 
         canvas.loadFromJSON(canvasStateToRestore.src, canvas.renderAll(), function(o, object) {
+            // update page screenshot object
             if (object.type == 'image') {
                 object.set('selectable', false);
                 object.set('hoverCursor', 'default');
