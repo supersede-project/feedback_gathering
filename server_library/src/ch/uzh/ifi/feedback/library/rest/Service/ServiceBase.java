@@ -85,7 +85,7 @@ public abstract class ServiceBase<T> implements IDbService<T> {
 	}
 	
 	@Override
-	public List<T> GetAll() throws SQLException, NotFoundException
+	public List<T> GetAll() throws SQLException
 	{
 		Connection con = TransactionManager.createDatabaseConnection();
 		
@@ -160,7 +160,7 @@ public abstract class ServiceBase<T> implements IDbService<T> {
 	}
 	
 	@Override
-	public List<T> GetWhere(List<Object> values, String...conditions) throws SQLException, NotFoundException
+	public List<T> GetWhere(List<Object> values, String...conditions) throws SQLException
 	{
 		Connection con = TransactionManager.createDatabaseConnection();
 		

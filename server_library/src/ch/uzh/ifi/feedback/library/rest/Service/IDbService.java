@@ -27,9 +27,9 @@ public interface IDbService<T> {
 		}
 	}
 	
-	List<T> GetAll() throws SQLException, NotFoundException;
+	List<T> GetAll() throws SQLException;
 	
-	List<T> GetWhere(List<Object> values, String...conditions) throws SQLException, NotFoundException;
+	List<T> GetWhere(List<Object> values, String...conditions) throws SQLException;
 	
 	default void Delete(Connection con, int id) throws SQLException, NotFoundException {
 		throw new UnsupportedOperationException();

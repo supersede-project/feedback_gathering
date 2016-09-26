@@ -1,67 +1,54 @@
 package com.example.matthias.feedbacklibrary.API;
 
-import com.example.matthias.feedbacklibrary.configurations.OrchestratorConfiguration;
+import com.example.matthias.feedbacklibrary.configurations.OrchestratorConfigurationItem;
 import com.google.gson.JsonObject;
 
+import java.util.Map;
+
 import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
+import retrofit2.http.PartMap;
+import retrofit2.http.Path;
 
 /**
  * API calls to the feedback orchestrator and feedback repository
- * Orchestrator: http://ec2-54-175-37-30.compute-1.amazonaws.com/feedback_orchestrator/example/configuration
- * Repository: http://ec2-54-175-37-30.compute-1.amazonaws.com/feedback_repository/example/feedback
+ * Orchestrator: http://ec2-54-166-31-250.compute-1.amazonaws.com/feedback_orchestrator
+ * Repository: http://ec2-54-166-31-250.compute-1.amazonaws.com/feedback_repository
  */
 public interface feedbackAPI {
-    String endpoint = "http://ec2-54-175-37-30.compute-1.amazonaws.com/";
+    String endpoint = "http://ec2-54-166-31-250.compute-1.amazonaws.com/";
 
-    // Test servlets:
-    // http://ec2-54-175-37-30.compute-1.amazonaws.com/FeedbackConfiguration/material_design_push.json
-    @GET("FeedbackConfiguration/material_design_push.json")
-    Call<OrchestratorConfiguration> getConfigurationPush();
+    /**
+     * This methods sends the feedback to the repository.
+     *
+     * @param language the language
+     * @param feedback the feedback
+     * @param files    the multipart files
+     * @return the JSON object
+     */
+    @Multipart
+    @POST("feedback_repository/{language}/feedbacks")
+    Call<JsonObject> createFeedbackVariant(@Path("language") String language, @Part("json") RequestBody feedback, @PartMap Map<String, RequestBody> files);
 
-    // http://ec2-54-175-37-30.compute-1.amazonaws.com/FeedbackConfiguration/material_design_push_choice_active.json
-    @GET("FeedbackConfiguration/material_design_push_choice_active.json")
-    Call<OrchestratorConfiguration> getConfigurationPushChoiceActive();
-
-    // http://ec2-54-175-37-30.compute-1.amazonaws.com/FeedbackConfiguration/material_design_pull_0_text.json
-    @GET("FeedbackConfiguration/material_design_pull_0_text.json")
-    Call<OrchestratorConfiguration> getConfigurationPullText0();
-
-    // http://ec2-54-175-37-30.compute-1.amazonaws.com/FeedbackConfiguration/material_design_pull_1_text_rating.json
-    @GET("FeedbackConfiguration/material_design_pull_1_text_rating.json")
-    Call<OrchestratorConfiguration> getConfigurationPullTextRating1();
-
-    // Actual backend
     /**
      * This method retrieves the feedback configuration from the orchestrator.
      *
      * @return the configuration from the orchestrator
      */
-    @GET("feedback_orchestrator/example/configuration")
-    Call<OrchestratorConfiguration> getConfiguration();
+    @GET("feedback_orchestrator/{language}/applications/{application_id}")
+    Call<OrchestratorConfigurationItem> getConfiguration(@Path("language") String language, @Path("application_id") long application_id);
 
     /**
-     * This methods makes a POST request to the feedback repository without an image.
+     * This method checks it the application is up and running.
      *
-     * @param feedback the feedback
-     * @return the JSON object
+     * @return 'pong'
      */
-    @Multipart
-    @POST("feedback_repository/example/feedback")
-    Call<JsonObject> createFeedback(@Part("json") RequestBody feedback);
-
-    /**
-     * This methods makes a POST request to the feedback repository with an image.
-     *
-     * @param file the image
-     * @param feedback the feedback
-     * @return the JSON object
-     */
-    @Multipart
-    @POST("feedback_repository/example/feedback")
-    Call<JsonObject> createFeedbackMultipart(@Part("file") RequestBody file, @Part("json") RequestBody feedback);
+    @GET("feedback_orchestrator/ping")
+    Call<ResponseBody> pingOrchestrator();
+    // TODO: Type of return value (JSON, Plain text)?
 }

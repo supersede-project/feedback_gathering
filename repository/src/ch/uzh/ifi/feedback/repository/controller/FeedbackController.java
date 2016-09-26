@@ -2,6 +2,8 @@ package ch.uzh.ifi.feedback.repository.controller;
 
 import java.util.List;
 import com.google.inject.Inject;
+
+import ch.uzh.ifi.feedback.library.rest.IRequestContext;
 import ch.uzh.ifi.feedback.library.rest.RestController;
 import ch.uzh.ifi.feedback.library.rest.annotations.Controller;
 import ch.uzh.ifi.feedback.library.rest.annotations.DELETE;
@@ -17,8 +19,8 @@ import ch.uzh.ifi.feedback.repository.service.FeedbackService;
 public class FeedbackController extends RestController<Feedback>{
 
 	@Inject
-	public FeedbackController(FeedbackService dbService) {
-		super(dbService, null);
+	public FeedbackController(FeedbackService dbService, IRequestContext requestContext) {
+		super(dbService, null, requestContext);
 	}
 	
 	@Path("/feedbacks")
@@ -42,9 +44,7 @@ public class FeedbackController extends RestController<Feedback>{
 	@Path("/feedbacks")
 	@POST
 	public Feedback InsertFeedback(Feedback feedback) throws Exception {
-		System.out.println("feedback POST");
-		super.Insert(feedback);
-		return feedback;
+		return super.Insert(feedback);
 	}
 	
 	@Path("/feedbacks/{id}")

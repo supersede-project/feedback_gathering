@@ -32,9 +32,9 @@ public abstract class TextAnnotationView extends FrameLayout {
     private final static int BUTTON_SIZE_DP = 25;
     private final static int SELF_SIZE_DP = 90;
     // Text annotation
-    private String AnnotationInputTextHint;
-    private String AnnotationInputTextLabel;
-    private String AnnotationInputText;
+    private String annotationInputTextHint;
+    private String annotationInputTextLabel;
+    private String annotationInputText;
     private AlertDialog textAnnotationDialog;
     // Sticker border
     private BorderView borderView;
@@ -83,15 +83,15 @@ public abstract class TextAnnotationView extends FrameLayout {
     }
 
     public String getAnnotationInputText() {
-        return AnnotationInputText;
+        return annotationInputText;
     }
 
     public String getAnnotationInputTextHint() {
-        return AnnotationInputTextHint;
+        return annotationInputTextHint;
     }
 
     public String getAnnotationInputTextLabel() {
-        return AnnotationInputTextLabel;
+        return annotationInputTextLabel;
     }
 
     public TextView getAnnotationNumberView() {
@@ -312,15 +312,15 @@ public abstract class TextAnnotationView extends FrameLayout {
     }
 
     public void setAnnotationInputText(String annotationInputText) {
-        this.AnnotationInputText = annotationInputText;
+        this.annotationInputText = annotationInputText;
     }
 
     public void setAnnotationInputTextHint(String annotationInputTextHint) {
-        this.AnnotationInputTextHint = annotationInputTextHint;
+        this.annotationInputTextHint = annotationInputTextHint;
     }
 
     public void setAnnotationInputTextLabel(String annotationInputTextLabel) {
-        AnnotationInputTextLabel = annotationInputTextLabel;
+        this.annotationInputTextLabel = annotationInputTextLabel;
     }
 
     /**
@@ -356,6 +356,10 @@ public abstract class TextAnnotationView extends FrameLayout {
             final TextInputLayout textAnnotationDialogInputLayout = (TextInputLayout) linearLayout.findViewById(R.id.supersede_feedbacklibrary_text_annotation_dialog_input_layout);
             final TextInputEditText textAnnotationDialogInputEditText = (TextInputEditText) linearLayout.findViewById(R.id.supersede_feedbacklibrary_text_annotation_dialog_text);
 
+            // Set the input text if the sticker is restored
+            if (annotationInputText != null) {
+                textAnnotationDialogInputEditText.setText(getAnnotationInputText());
+            }
             // Set the hint and enable it
             textAnnotationDialogInputLayout.setHintEnabled(true);
             textAnnotationDialogInputLayout.setHint(getAnnotationInputTextHint());

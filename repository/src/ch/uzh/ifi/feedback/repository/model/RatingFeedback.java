@@ -1,13 +1,15 @@
 package ch.uzh.ifi.feedback.repository.model;
 
+import ch.uzh.ifi.feedback.library.rest.Service.ItemBase;
 import ch.uzh.ifi.feedback.library.rest.annotations.DbAttribute;
 import ch.uzh.ifi.feedback.library.rest.validation.Id;
 import ch.uzh.ifi.feedback.library.rest.validation.NotNull;
 
-public class RatingFeedback {
+public class RatingFeedback extends ItemBase<RatingFeedback>{
 
 	@Id
 	private Integer id;
+	
 	private String title;
 	@NotNull
 	private int rating;

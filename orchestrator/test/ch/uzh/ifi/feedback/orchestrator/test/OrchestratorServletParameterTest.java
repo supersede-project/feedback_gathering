@@ -23,24 +23,24 @@ public class OrchestratorServletParameterTest extends ServletTest {
 	
 	public void testRetrievingSingleParameter() throws ClientProtocolException, IOException {
 		FeedbackParameter parameter = GetSuccess(
-				"http://localhost:8080/feedback_orchestrator/en/parameters/5065", 
+				"http://localhost:8080/feedback_orchestrator/en/parameters/6640", 
 				FeedbackParameter.class);
 		
-		assertEquals(parameter.getId(), new Integer(5065));
+		assertEquals(parameter.getId(), new Integer(6640));
 		assertEquals(parameter.getKey(), "maxLength");
 		assertEquals(parameter.getValue(), 200.0);
 	}
 	
 	public void testRetrievingAllParametersForGeneralConfiguration() throws ClientProtocolException, IOException  {
 		FeedbackParameter[] retrievedParameters = GetSuccess(
-				"http://localhost:8080/feedback_orchestrator/en/general_configurations/65/parameters", 
+				"http://localhost:8080/feedback_orchestrator/en/general_configurations/148/parameters", 
 				FeedbackParameter[].class);
 		assertEquals(retrievedParameters.length, 2);
 	}
 	
 	public void testRetrievingAllParametersForMechanism() throws ClientProtocolException, IOException  {    
 		FeedbackParameter[] retrievedParameters = GetSuccess(
-				"http://localhost:8080/feedback_orchestrator/en/mechanisms/626/parameters", 
+				"http://localhost:8080/feedback_orchestrator/en/mechanisms/829/parameters", 
 				FeedbackParameter[].class);
         
 		assertEquals(retrievedParameters.length, 2);
@@ -52,7 +52,7 @@ public class OrchestratorServletParameterTest extends ServletTest {
 		String jsonString = IOUtils.toString(stream); 
 		
 		FeedbackParameter createdParameter = PostSuccess(
-				"http://localhost:8080/feedback_orchestrator/en/general_configurations/65/parameters", 
+				"https://localhost:8443/feedback_orchestrator/en/general_configurations/148/parameters", 
 				jsonString,
 				FeedbackParameter.class);
         
@@ -66,7 +66,7 @@ public class OrchestratorServletParameterTest extends ServletTest {
 		String jsonString = IOUtils.toString(stream); 
 		
 		FeedbackParameter createdParameter = PostSuccess(
-				"http://localhost:8080/feedback_orchestrator/en/mechanisms/626/parameters", 
+				"https://localhost:8443/feedback_orchestrator/en/mechanisms/829/parameters", 
 				jsonString,
 				FeedbackParameter.class);
         
@@ -80,11 +80,11 @@ public class OrchestratorServletParameterTest extends ServletTest {
 		String jsonString = IOUtils.toString(stream); 
 		
 		FeedbackParameter updatedParameter = PutSuccess(
-				"http://localhost:8080/feedback_orchestrator/en/parameters", 
+				"https://localhost:8443/feedback_orchestrator/en/parameters", 
 				jsonString,
 				FeedbackParameter.class);
         
-		assertEquals(updatedParameter.getId(), new Integer(5065));
+		assertEquals(updatedParameter.getId(), new Integer(6640));
 		assertEquals(updatedParameter.getKey(), "maxLength");
 		assertEquals(updatedParameter.getValue(), 100.0);
 	}

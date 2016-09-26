@@ -4,7 +4,9 @@ import java.util.List;
 
 import com.google.inject.Inject;
 
+import ch.uzh.ifi.feedback.library.rest.IRequestContext;
 import ch.uzh.ifi.feedback.library.rest.RestController;
+import ch.uzh.ifi.feedback.library.rest.annotations.Authenticate;
 import ch.uzh.ifi.feedback.library.rest.annotations.Controller;
 import ch.uzh.ifi.feedback.library.rest.annotations.GET;
 import ch.uzh.ifi.feedback.library.rest.annotations.POST;
@@ -13,6 +15,7 @@ import ch.uzh.ifi.feedback.library.rest.annotations.Path;
 import ch.uzh.ifi.feedback.library.rest.annotations.PathParam;
 import ch.uzh.ifi.feedback.library.rest.validation.ValidationException;
 import ch.uzh.ifi.feedback.library.transaction.TransactionManager;
+import ch.uzh.ifi.feedback.orchestrator.authorization.UserAuthenticationService;
 import ch.uzh.ifi.feedback.orchestrator.model.Application;
 import ch.uzh.ifi.feedback.orchestrator.model.Configuration;
 import ch.uzh.ifi.feedback.orchestrator.model.GeneralConfiguration;
@@ -35,9 +38,10 @@ public class GeneralConfigurationController extends RestController<GeneralConfig
 			GeneralConfigurationService dbService, 
 			ApplicationService applicationService,
 			ConfigurationService configurationService,
+			IRequestContext requestContext,
 			GeneralConfigurationValidator validator) 
 	{
-		super(dbService, validator);
+		super(dbService, validator, requestContext);
 		
 		this.applicationService = applicationService;
 		this.configurationService = configurationService;
@@ -74,47 +78,49 @@ public class GeneralConfigurationController extends RestController<GeneralConfig
 	}
 	
 	@PUT
+	@Authenticate(UserAuthenticationService.class)
 	@Path("/general_configurations")
 	public GeneralConfiguration UpdateGeneralConfiguration(GeneralConfiguration config) throws Exception 
 	{
-		super.Update(config);
-		return config;
+		return super.Update(config);
 	}
 	
 
 	@POST
+	@Authenticate(UserAuthenticationService.class)
 	@Path("/applications/{app_id}/general_configuration")
 	public GeneralConfiguration InsertGeneralConfigurationForApplication(@PathParam("app_id")Integer appId, GeneralConfiguration config) throws Exception 
 	{
 		Application app = applicationService.GetById(appId);
 		if(app.getGeneralConfiguration() != null)
-			throw new ValidationException("general configuration for application already set. Please perform update!");
+			throw new ValidationException("general configuration for application already set. Please perform an update!");
 		
-		validator.Validate(config);
+		super.Validate(config, false);
 		app.setGeneralConfiguration(config);
 		
 		TransactionManager.withTransaction((con) -> 
 			applicationService.Update(con, app)
 		);
 		
-		return config;
+		return applicationService.GetById(appId).getGeneralConfiguration();
 	}
 	
 	@POST
+	@Authenticate(UserAuthenticationService.class)
 	@Path("/configurations/{config_id}/general_configuration")
-	public GeneralConfiguration InsertGeneralConfigurationForConfiguration(@PathParam("app_id")Integer configId, GeneralConfiguration config) throws Exception 
+	public GeneralConfiguration InsertGeneralConfigurationForConfiguration(@PathParam("config_id")Integer configId, GeneralConfiguration config) throws Exception 
 	{
 		Configuration configuration = configurationService.GetById(configId);
 		if(configuration.getGeneralConfiguration() != null)
 			throw new ValidationException("general configuration for configuration already set. Please perform update!");
 		
-		validator.Validate(config);
+		super.Validate(config, false);
 		configuration.setGeneralConfiguration(config);
 		
 		TransactionManager.withTransaction((con) -> 
 			configurationService.Update(con, configuration)
 	    );
 		
-		return config;
+		return configurationService.GetById(configId).getGeneralConfiguration();
 	}
 }

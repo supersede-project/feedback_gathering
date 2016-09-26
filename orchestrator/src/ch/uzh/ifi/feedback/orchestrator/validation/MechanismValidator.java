@@ -32,22 +32,16 @@ public class MechanismValidator extends ValidatorBase<FeedbackMechanism> {
 	public ValidationResult Validate(FeedbackMechanism object) throws Exception {
 		ValidationResult result = super.Validate(object);
 		
-		List<Object> childrenErrors = new ArrayList<>();
 		for(FeedbackParameter param : object.getParameters())
 		{
 			ValidationResult childResult = parameterValidator.Validate(param);
 			if(childResult.hasErrors())
 			{
 				result.setHasErrors(true);
-				List<ValidationError> errors = childResult.GetValidationErrors();
-				childrenErrors.add(errors);
+				result.GetValidationErrors().addAll(childResult.GetValidationErrors());
 			}
 		}
-		result.GetValidationErrors().add(new ValidationError("Parameters", childrenErrors));
 		
-		if(result.hasErrors())
-			throw new ValidationException(serializer.Serialize(result));
-			
 		return result;
 	}
 	

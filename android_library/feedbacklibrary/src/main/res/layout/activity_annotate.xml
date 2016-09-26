@@ -8,12 +8,18 @@
     tools:context="com.example.matthias.feedbacklibrary.AnnotateImageActivity">
 
     <RelativeLayout
-        android:id="@+id/supersede_feedbacklibrary_annotate_image_layout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
         android:background="@color/supersede_feedbacklibrary_annotate_image_layout_background_color"
-        android:padding="@dimen/supersede_feedbacklibrary_annotate_image_layout_padding"/>
+        android:padding="@dimen/supersede_feedbacklibrary_annotate_image_layout_padding">
+
+        <RelativeLayout
+            android:id="@+id/supersede_feedbacklibrary_annotate_image_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+    </RelativeLayout>
+
 
     <LinearLayout
         android:layout_width="match_parent"

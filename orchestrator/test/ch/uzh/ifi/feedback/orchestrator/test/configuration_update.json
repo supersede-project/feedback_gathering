@@ -1,0 +1,17 @@
+{
+    "id": 58,
+    "mechanisms": [
+      {
+        "id": 762,
+        "active": false,
+        "canBeActivated": true,
+        "parameters": [
+          {
+            "id": 6101,
+            "key": "title",
+            "value": "Enter your rating here"
+          }
+        ]
+      }
+   ]
+}

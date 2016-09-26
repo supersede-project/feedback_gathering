@@ -6,6 +6,7 @@ import java.io.InvalidClassException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
+import java.net.URL;
 import java.rmi.AlreadyBoundException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -17,6 +18,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import javax.el.MethodNotFoundException;
+import javax.naming.AuthenticationException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -38,6 +40,7 @@ import ch.uzh.ifi.feedback.library.rest.Routing.HandlerInfo;
 import ch.uzh.ifi.feedback.library.rest.Routing.HttpMethod;
 import ch.uzh.ifi.feedback.library.rest.Routing.UriTemplate;
 import ch.uzh.ifi.feedback.library.rest.Service.IDbItem;
+import ch.uzh.ifi.feedback.library.rest.annotations.Authenticate;
 import ch.uzh.ifi.feedback.library.rest.annotations.Controller;
 import ch.uzh.ifi.feedback.library.rest.annotations.DELETE;
 import ch.uzh.ifi.feedback.library.rest.annotations.POST;
@@ -45,6 +48,7 @@ import ch.uzh.ifi.feedback.library.rest.annotations.PUT;
 import ch.uzh.ifi.feedback.library.rest.annotations.Path;
 import ch.uzh.ifi.feedback.library.rest.annotations.PathParam;
 import ch.uzh.ifi.feedback.library.rest.annotations.Serialize;
+import ch.uzh.ifi.feedback.library.rest.authorization.ITokenAuthenticationService;
 import ch.uzh.ifi.feedback.library.rest.serialization.ISerializationService;
 import ch.uzh.ifi.feedback.library.rest.validation.Validate;
 import ch.uzh.ifi.feedback.library.rest.validation.ValidationException;
@@ -59,6 +63,8 @@ public class RestManager implements IRestManager {
 	private Map<Class<?>, Method> _parserMap;
 	private Map<Class<?>, Class<? extends ISerializationService<?>>> _serializerMap;
 	private Map<Class<?>, Class<? extends ValidatorBase<?>>> _validatorMap;
+	private Map<Method, Class<? extends ITokenAuthenticationService>> _authentiactionMap;
+	private ServletRequestContext requestContext;
 	private Injector _injector;
 
 	public RestManager() {
@@ -66,18 +72,21 @@ public class RestManager implements IRestManager {
 		_parserMap = new HashMap<>();
 		_validatorMap = new HashMap<>();
 		_serializerMap = new HashMap<>();
+		_authentiactionMap = new HashMap<>();
 	}
 
 	public void Init(String packageName) throws Exception {
 		
 		InitParserMap();
 		
+		Set<URL> packages = ClasspathHelper.forPackage(packageName);
 		Reflections reflections = new Reflections(new ConfigurationBuilder()
-                .setUrls(ClasspathHelper.forPackage(packageName))
+                .setUrls(packages)
                 .setScanners(new MethodAnnotationsScanner(), new TypeAnnotationsScanner()));
 		
 		InitInjector(reflections);
 		InitHandlerTable(reflections);
+		requestContext = (ServletRequestContext)_injector.getInstance(IRequestContext.class);
 	}
 	
 	private void InitInjector(Reflections reflections) throws Exception
@@ -88,6 +97,7 @@ public class RestManager implements IRestManager {
 		{
 			moduleInstances.add(moduleClazz.newInstance());
 		}
+		moduleInstances.add(MainModule.class.newInstance());
 		_injector = Guice.createInjector(moduleInstances);
 	}
 	
@@ -97,13 +107,6 @@ public class RestManager implements IRestManager {
 		for(Class<?> clazz : controllerAnnotated){
 			Class<?> parameterClass = clazz.getAnnotation(Controller.class).value();
 			
-			/*
-			if(parameterClass.isAnnotationPresent(Validate.class))
-			{
-				Validate annotation = parameterClass.getAnnotation(Validate.class);
-				Class<? extends ValidatorBase<?>> validatorClass = parameterClass.getAnnotation(Validate.class).value();
-				_validatorMap.put(parameterClass, validatorClass);
-			}*/
 			
 			if(parameterClass.isAnnotationPresent(Serialize.class))
 			{
@@ -148,12 +151,19 @@ public class RestManager implements IRestManager {
 					Parameter[] params = m.getParameters();
 					for(int i = 0; i < params.length; i++){
 						if (params[i].isAnnotationPresent(PathParam.class)){
+							
+							if(!_parserMap.containsKey(params[i].getType()) && !params[i].getType().equals(String.class))
+								throw new Exception("The provided parameter type is not supported!");
+							
 							String paramName = params[i].getAnnotation(PathParam.class).value();
 							info.getPathParameters().put(paramName, params[i]);
 						}else if(i < params.length - 1){
 							throw new Exception("No annotation for parameter " + params[i].getName() + " present!/n");
 						}
 					}
+					
+					if(m.isAnnotationPresent(Authenticate.class))
+						_authentiactionMap.put(m, m.getAnnotation(Authenticate.class).value());
 
 					_handlers.add(info);
 				}
@@ -225,11 +235,14 @@ public class RestManager implements IRestManager {
 		}
 		else if(rootCause instanceof JsonSyntaxException){
 			response.setStatus(400);
-			response.getWriter().append("Malformed Json: " + ex.getMessage());
+			response.getWriter().append("Malformed Json: " + rootCause.getMessage());
 		}
 		else if(rootCause instanceof ValidationException){
 			response.setStatus(422);
-			response.getWriter().append(ex.getMessage());
+			response.getWriter().append(rootCause.getMessage());
+		}else if(rootCause instanceof AuthenticationException){
+			response.setStatus(403);
+			response.getWriter().append(rootCause.getMessage());
 		}
 		else{
 			ex.printStackTrace();
@@ -269,6 +282,9 @@ public class RestManager implements IRestManager {
 	
 	private void InvokeHandler(HttpServletRequest request, HttpServletResponse response, HttpMethod method) throws Exception
 	{
+		requestContext.setRequest(request);
+		requestContext.setResponse(response);
+		
 		Map<String, String[]> map = request.getParameterMap();
 		String path = request.getServletPath();
 		HandlerInfo handler = GetHandlerEntry(path, method);
@@ -276,17 +292,33 @@ public class RestManager implements IRestManager {
 			throw new NotFoundException("ressource '" + path + "' does not exist");
 		}
 		
+		//Do token authentication if needed
+		Class<? extends ITokenAuthenticationService> authServiceClazz = _authentiactionMap.get(handler.getMethod());
+		if(authServiceClazz != null)
+		{
+			ITokenAuthenticationService authService = _injector.getInstance(authServiceClazz);
+			if(!authService.Authenticate(requestContext))
+				throw new AuthenticationException("the provided usertoken does not match!");
+		}
+		
 		Map<String, String> params = handler.getUriTemplate().Match(path);
 		List<Object> parameters = new ArrayList<>();
 		String language = params.get("lang");
+		requestContext.setRequestLanguage(language);
 		
 		for(Entry<String, Parameter> pathParam : handler.getPathParameters().entrySet())
 		{
 			if(params.containsKey(pathParam.getKey()))
 			{
 				Parameter methodParam = pathParam.getValue();
-				Object parameterObject = _parserMap.get(methodParam.getType()).invoke(null, params.get(pathParam.getKey()));
-				parameters.add(parameterObject);
+				if(methodParam.getType().equals(String.class))
+				{
+					parameters.add(params.get(pathParam.getKey()));
+				}else{
+					Object parameterObject = _parserMap.get(methodParam.getType()).invoke(null, params.get(pathParam.getKey()));
+					parameters.add(parameterObject);
+				}
+
 			}else{
 				parameters.add(null);
 			}
@@ -305,8 +337,10 @@ public class RestManager implements IRestManager {
 			}
 		}
 		
+		/*
 		if (instance instanceof RestController<?>)
 			((RestController<?>)instance).SetLanguage(language);
+		*/
 		
 		Object result = handler.getMethod().invoke(instance, parameters.toArray());
 		

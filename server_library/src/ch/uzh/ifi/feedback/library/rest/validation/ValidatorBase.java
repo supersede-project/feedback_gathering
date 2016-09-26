@@ -26,7 +26,7 @@ public class ValidatorBase<T extends IDbItem<T>> implements IValidator<T> {
 		this.serializer = serializer;
 	}
 	
-	public ValidationResult Validate(T object) throws ValidationException, Exception
+	public ValidationResult Validate(T object) throws Exception
 	{
 		ValidationResult result = new ValidationResult();
 		
@@ -51,7 +51,7 @@ public class ValidatorBase<T extends IDbItem<T>> implements IValidator<T> {
 				{
 					try {
 						Object o = f.get(object);
-						CheckUnique(f, o, result);
+						CheckUnique(f, o, object, result);
 					} catch (IllegalArgumentException | IllegalAccessException e) {
 						e.printStackTrace();
 					}
@@ -81,7 +81,7 @@ public class ValidatorBase<T extends IDbItem<T>> implements IValidator<T> {
 		if (o == null)
 		{
 			result.setHasErrors(true);
-			ValidationError error = new ValidationError(f.getName(), "Not null: Field must not be null");
+			ValidationError error = new ValidationError(f.getName(), o, "Not null: Field must not be null");
 			result.GetValidationErrors().add(error);
 		}
 	}
@@ -95,23 +95,30 @@ public class ValidatorBase<T extends IDbItem<T>> implements IValidator<T> {
 			if(!res)
 			{
 				result.setHasErrors(true);
-				ValidationError error = new ValidationError("id", "not found: Id '" + object.getId() + "' was not found");
+				ValidationError error = new ValidationError("id", object.getId(), "not found: Id was not found");
 				result.GetValidationErrors().add(error);
 			}
 		}
 	}
 	
-	protected void CheckUnique(Field f, Object o, ValidationResult result) throws Exception
+	protected void CheckUnique(Field f, Object value, T object, ValidationResult result) throws Exception
 	{
 		String fieldName = f.getName();
 		if(f.isAnnotationPresent(DbAttribute.class))
 			fieldName = f.getAnnotation(DbAttribute.class).value();
 		
-		List<T> dbResult = dbService.GetWhere(asList(o), fieldName + "= ?");
-		if(dbResult.size() > 1)
+		List<T> dbResult = dbService.GetWhere(asList(value), fieldName + " = ?");
+		if(dbResult.size() > 0)
 		{
+			if(dbResult.size() == 1 && object.getId() != null)
+			{
+				T stored = dbResult.get(0);
+				if(stored.getId().equals(object.getId()))
+					return;
+			}
+			
 			result.setHasErrors(true);
-			ValidationError error = new ValidationError(f.getName(), "unique: field must be unique");
+			ValidationError error = new ValidationError(f.getName(), value, "unique: field must be unique");
 			result.GetValidationErrors().add(error);
 		}
 	}

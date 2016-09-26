@@ -91,7 +91,7 @@ public class OrchestratorService<T extends IOrchestratorItem<T>> extends Service
 	}
 	
 	@Override
-	public List<T> GetWhere(List<Object> values, String... conditions) throws SQLException, NotFoundException {
+	public List<T> GetWhere(List<Object> values, String... conditions) throws SQLException {
 		List<Object> newValues = new ArrayList<>();
 		newValues.addAll(asList(selectedTimestamp, selectedTimestamp));
 		newValues.addAll(values);
@@ -107,7 +107,7 @@ public class OrchestratorService<T extends IOrchestratorItem<T>> extends Service
 	}
 	
 	@Override
-	public List<T> GetAll() throws SQLException, NotFoundException 
+	public List<T> GetAll() throws SQLException 
 	{
 		return GetWhere(asList());
 	}
@@ -134,9 +134,9 @@ public class OrchestratorService<T extends IOrchestratorItem<T>> extends Service
 	
 	protected String getTimeCondition()
 	{
-		String condition = 	"abs(timestampdiff(SECOND, created_at, ?)) = "
+		String condition = 	"abs(timestampdiff(SECOND, t.created_at, ?)) = "
 							+ "("
-							+ "SELECT min(abs(timestampdiff(SECOND, created_at, ?))) "
+							+ "SELECT min(abs(timestampdiff(SECOND, t2.created_at, ?))) "
 							+ "FROM %s.%s as t2 "
 							+ "WHERE t.%s = t2.%s"
 							+ ") ";

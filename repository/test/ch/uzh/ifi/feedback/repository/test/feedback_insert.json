@@ -1,0 +1,34 @@
+  {
+    "title": "Feedback JUnit 648",
+    "applicationId": 1,
+    "userIdentification": "u8102390",
+    "configurationId": 1,
+    "language": "EN",
+    "textFeedbacks": [
+      {
+        "text": "This is the feedback text",
+        "mechanismId": 1
+      }
+    ],
+    "ratingFeedbacks": [
+      {
+        "title": "Test rating",
+        "rating": 4,
+        "mechanismId": 5
+      },
+      {
+        "title": "Test rating 2",
+        "rating": 5,
+        "mechanismId": 6
+      }
+    ],
+    "categoryFeedbacks": [
+    	{
+    	  "text": "sample text",
+    	  "parameterId": "12"
+    	},
+    	{
+    	  "parameterId": "14"
+    	}
+    ]
+  }

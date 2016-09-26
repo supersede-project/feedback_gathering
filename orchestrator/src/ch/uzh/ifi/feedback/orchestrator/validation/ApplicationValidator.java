@@ -36,18 +36,15 @@ public class ApplicationValidator extends ValidatorBase<Application>{
 	{
 		ValidationResult result = super.Validate(object);
 
-		List<Object> childrenErrors = new ArrayList<>();
 		for(Configuration config : object.getConfigurations())
 		{
 			ValidationResult childResult = configurationValidator.Validate(config);
 			if(childResult.hasErrors())
 			{
 				result.setHasErrors(true);
-				List<ValidationError> errors = childResult.GetValidationErrors();
-				childrenErrors.add(errors);
+				result.GetValidationErrors().addAll(childResult.GetValidationErrors());
 			}
 		}
-		result.GetValidationErrors().add(new ValidationError("configurations", childrenErrors));
 		
 		GeneralConfiguration config = object.getGeneralConfiguration();
 		if(config != null)
@@ -56,9 +53,10 @@ public class ApplicationValidator extends ValidatorBase<Application>{
 			if(childResult.hasErrors())
 			{
 				result.setHasErrors(true);
-				result.GetValidationErrors().add(new ValidationError("generalConfiguration", childResult.GetValidationErrors()));
+				result.GetValidationErrors().addAll(childResult.GetValidationErrors());
 			}
 		}
+		
 		return result;
 	}
 }

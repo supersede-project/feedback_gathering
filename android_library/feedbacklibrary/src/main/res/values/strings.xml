@@ -4,6 +4,11 @@
     <string name="supersede_feedbacklibrary_feedback_activity_name">Feedback</string>
     <string name="supersede_feedbacklibrary_annotate_image_activity_name">Annotate Image</string>
 
+    <!-- Audio mechanism -->
+    <string name="supersede_feedbacklibrary_feedback_library_default_current_duration">0:00</string>
+    <string name="supersede_feedbacklibrary_feedback_library_default_total_duration">0:00/-</string>
+    <string name="supersede_feedbacklibrary_feedback_library_record_indicator">RECORDING!</string>
+
     <!-- Category mechanism -->
     <string name="supersede_feedbacklibrary_single_option_dialog_title">Please select an option</string>
     <string name="supersede_feedbacklibrary_multiple_options_dialog_title">Please select one or multiple options</string>
@@ -48,9 +53,22 @@
     <string name="supersede_feedbacklibrary_ok_string">OK</string>
     <string name="supersede_feedbacklibrary_cancel_string">Cancel</string>
     <string name="supersede_feedbacklibrary_discard_string">Discard</string>
+    <string name="supersede_feedbacklibrary_close_string">Close</string>
     <string name="supersede_feedbacklibrary_loading_string">Loading. Please wait.</string>
-    <string name="supersede_feedbacklibrary_error_text">Oops. Something went wrong!</string>
+    <string name="supersede_feedbacklibrary_error_text">Oops. Something went wrong! Please try again later.</string>
     <string name="supersede_feedbacklibrary_success_text">Your feedback was successfully sent. Thank you!</string>
+    <string name="supersede_feedbacklibrary_feedback_application_unavailable_text">We apologize that the feedback tool is not available at the moment. Please try again later.</string>
+
+    <!-- Permissions -->
+    <string name="supersede_feedbacklibrary_permission_request_title">Permission request</string>
+    <string name="supersede_feedbacklibrary_record_audio_permission_granted_text">You can now capture your audio message by pressing the record button</string>
+    <string name="supersede_feedbacklibrary_record_audio_permission_text">Audio permission is necessary in order to record audio</string>
+    <string name="supersede_feedbacklibrary_record_audio_permission_text_instructions">Audio permission is necessary in order to record audio. You can grant access in the application\'s settings to use this feature.</string>
+    <string name="supersede_feedbacklibrary_external_storage_permission_text">External storage permission is necessary in order to choose a picture</string>
+    <string name="supersede_feedbacklibrary_external_storage_permission_text_instructions">External storage permission is necessary in order to choose a picture. You can grant access in the application\'s settings to use this feature.</string>
+    <string name="supersede_feedbacklibrary_external_storage_permission_text_automatic_screenshot_rationale">The application takes a screenshot of the current screen and external storage permission is necessary to do so</string>
+    <string name="supersede_feedbacklibrary_retry_string">Re-try</string>
+    <string name="supersede_feedbacklibrary_not_now_text">Not now</string>
 
     <!-- Pull feedback -->
     <string name="supersede_feedbacklibrary_pull_feedback_question_string">Would you like to give feedback?</string>

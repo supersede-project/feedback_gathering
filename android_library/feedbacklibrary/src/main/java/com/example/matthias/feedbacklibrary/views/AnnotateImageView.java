@@ -678,8 +678,8 @@ public class AnnotateImageView extends ImageView {
             RelativeLayout relativeLayout = (RelativeLayout) getParent();
             ViewGroup.LayoutParams relativeLayoutLayoutParams = relativeLayout.getLayoutParams();
             if (relativeLayoutLayoutParams != null) {
-                relativeLayoutLayoutParams.width = bitmap.getWidth();
-                relativeLayoutLayoutParams.height = bitmap.getHeight();
+                relativeLayoutLayoutParams.width = w;
+                relativeLayoutLayoutParams.height = h;
             }
         }
 

@@ -1,7 +1,5 @@
 package com.example.matthias.feedbacklibrary.configurations;
 
-import com.example.matthias.feedbacklibrary.utils.Utils;
-
 import java.util.List;
 import java.util.Map;
 
@@ -9,40 +7,25 @@ import java.util.Map;
  * General configuration.
  */
 public class GeneralConfiguration {
-    private String language;
-    private boolean review;
+    private String createdAt;
+    private long id;
+    private List<Map<String, Object>> parameters;
 
-    public GeneralConfiguration(List<Map<String, Object>> items) {
-        initGeneralConfiguration(items);
+    public GeneralConfiguration(GeneralConfigurationItem generalConfigurationItem) {
+        createdAt = generalConfigurationItem.getCreatedAt();
+        id = generalConfigurationItem.getId();
+        parameters = generalConfigurationItem.getParameters();
     }
 
-    public String getLanguage() {
-        return language;
+    public String getCreatedAt() {
+        return createdAt;
     }
 
-    private void initGeneralConfiguration(List<Map<String, Object>> items) {
-        for (Map<String, Object> param : items) {
-            String key = (String) param.get("key");
-            // Language
-            if (key.equals("lang")) {
-                setLanguage((String) param.get("value"));
-            }
-            // Review
-            if (key.equals("review")) {
-                setReview(Utils.intToBool(((Double) param.get("value")).intValue()));
-            }
-        }
+    public long getId() {
+        return id;
     }
 
-    public boolean isReview() {
-        return review;
-    }
-
-    public void setLanguage(String language) {
-        this.language = language;
-    }
-
-    public void setReview(boolean review) {
-        this.review = review;
+    public List<Map<String, Object>> getParameters() {
+        return parameters;
     }
 }

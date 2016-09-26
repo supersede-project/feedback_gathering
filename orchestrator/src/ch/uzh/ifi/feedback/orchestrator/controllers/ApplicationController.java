@@ -3,13 +3,17 @@ package ch.uzh.ifi.feedback.orchestrator.controllers;
 import java.sql.Timestamp;
 import java.util.List;
 import com.google.inject.Inject;
+
+import ch.uzh.ifi.feedback.library.rest.IRequestContext;
 import ch.uzh.ifi.feedback.library.rest.RestController;
+import ch.uzh.ifi.feedback.library.rest.annotations.Authenticate;
 import ch.uzh.ifi.feedback.library.rest.annotations.Controller;
 import ch.uzh.ifi.feedback.library.rest.annotations.GET;
 import ch.uzh.ifi.feedback.library.rest.annotations.POST;
 import ch.uzh.ifi.feedback.library.rest.annotations.PUT;
 import ch.uzh.ifi.feedback.library.rest.annotations.Path;
 import ch.uzh.ifi.feedback.library.rest.annotations.PathParam;
+import ch.uzh.ifi.feedback.orchestrator.authorization.UserAuthenticationService;
 import ch.uzh.ifi.feedback.orchestrator.model.Application;
 import ch.uzh.ifi.feedback.orchestrator.serialization.ApplicationSerializationService;
 import ch.uzh.ifi.feedback.orchestrator.services.ApplicationService;
@@ -19,8 +23,8 @@ import ch.uzh.ifi.feedback.orchestrator.validation.ApplicationValidator;
 public class ApplicationController extends OrchestratorController<Application> {
 
 	@Inject
-	public ApplicationController(ApplicationService dbService, ApplicationValidator validator) {
-		super(dbService, validator);
+	public ApplicationController(ApplicationService dbService, ApplicationValidator validator, IRequestContext requestContext) {
+		super(dbService, validator, requestContext);
 	}
 	
 	@GET
@@ -45,18 +49,18 @@ public class ApplicationController extends OrchestratorController<Application> {
 	}
 	
 	@PUT
+	@Authenticate(UserAuthenticationService.class)
 	@Path("/applications")
 	public Application UpdateApplication(Application app) throws Exception 
 	{
-		super.Update(app);
-		return app;
+		return super.Update(app);
 	}
 	
 	@POST
+	@Authenticate(UserAuthenticationService.class)
 	@Path("/applications")
 	public Application InsertApplication(@PathParam("app_id")Integer appId, Application app) throws Exception 
 	{
-		super.Insert(app);
-		return app;
+		return super.Insert(app);
 	}
 }

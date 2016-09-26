@@ -21,6 +21,7 @@ public class Application extends OrchestratorItem<Application> {
 	@Id
 	@DbAttribute("applications1_id")
 	private Integer id;
+	
 	@NotNull
 	@Unique
 	private String name;

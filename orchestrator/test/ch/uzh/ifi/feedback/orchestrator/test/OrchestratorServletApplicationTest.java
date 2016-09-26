@@ -40,13 +40,11 @@ public class OrchestratorServletApplicationTest extends ServletTest {
 	}
 	
 	public void testRetrievingSingleApplication() throws ClientProtocolException, IOException {
-		HttpUriRequest request = new HttpGet("http://localhost:8080/feedback_orchestrator/en/applications/14");
-		
 		Application application = GetSuccess(
-				"http://localhost:8080/feedback_orchestrator/en/applications/14", 
+				"http://localhost:8080/feedback_orchestrator/en/applications/27", 
 				Application.class);
 		
-		assertEquals(application.getId(), new Integer(14));	
+		assertEquals(application.getId(), new Integer(27));
 	}
 
 	public void testCreationOfApplication() throws ClientProtocolException, IOException, SQLException, NotFoundException {
@@ -58,6 +56,6 @@ public class OrchestratorServletApplicationTest extends ServletTest {
 				jsonString,
 				Application.class);
 		
-	    assertEquals(createdApplication.getName(), "Test Website 11");		
+	    assertEquals(createdApplication.getName(), "Test Website 20");		
 	}	
 }
