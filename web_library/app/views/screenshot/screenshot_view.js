@@ -40,6 +40,7 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
             html2canvas(this.elementToCapture, {
                 onrendered: function (canvas) {
                     myThis.showElements();
+                    myThis.canvas = canvas;
                     myThis.screenshotPreviewElement.empty().append(canvas);
                     myThis.screenshotPreviewElement.show();
                     jQuery('.screenshot-preview canvas').attr('id', canvasId);
@@ -228,40 +229,29 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
             this.container.find('.screenshot-crop-confirm').show().on('click', function (e) {
                 e.preventDefault();
                 e.stopPropagation();
-                myThis.cropTheCanvas();
+                myThis.cropTheCanvas(croppingRect);
                 myThis.croppingIsActive = false;
                 jQuery(this).hide();
                 jQuery('.screenshot-crop-cancel').hide();
             });
         };
-        ScreenshotView.prototype.cropTheCanvas = function () {
+        ScreenshotView.prototype.cropTheCanvas = function (croppingRect) {
             this.container.find('.screenshot-draw-undo').show();
             var canvas = this.fabricCanvas;
-            var i;
-            var croppedLeft = 0;
-            var croppedTop = 0;
             var objectsToMove = canvas.getObjects();
-            var croppWidth = 0;
-            var croppHeight = 0;
-            if (canvas.getObjects().length > 0) {
-                var i;
-                for (i = 0; i < canvas.getObjects().length; i++) {
-                    if (canvas.getObjects()[i].type === 'cropper') {
-                        croppedTop = canvas.getObjects()[i].top + 1;
-                        croppedLeft = canvas.getObjects()[i].left + 1;
-                        this.updateCanvasState(croppedTop, croppedLeft);
-                        croppWidth = canvas.getObjects()[i].width - 2;
-                        croppHeight = canvas.getObjects()[i].height - 2;
-                        canvas.getObjects()[i].remove();
-                    }
-                }
-            }
-            for (i = 0; i < objectsToMove.length; i++) {
+            var croppedTop = croppingRect.top + 1;
+            var croppedLeft = croppingRect.left + 1;
+            var croppWidth = croppingRect.width - 2;
+            var croppHeight = croppingRect.height - 2;
+            croppingRect.remove();
+            this.updateCanvasState(croppedTop, croppedLeft);
+            for (var i = 0; i < objectsToMove.length; i++) {
                 canvas.getObjects()[i].left = canvas.getObjects()[i].left - croppedLeft;
                 canvas.getObjects()[i].top = canvas.getObjects()[i].top - croppedTop;
             }
             canvas.setWidth(croppWidth);
             canvas.setHeight(croppHeight);
+            canvas.renderAll();
         };
         ScreenshotView.prototype.addTextAnnotation = function (left, top) {
             var text = new fabric.IText('Your text', { left: left, top: top, fontFamily: 'arial', fontSize: defaultFontSize });
@@ -461,6 +451,18 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
             colorLinkElement.css('height', '16px');
             colorLinkElement.css('opacity', '0');
             var selectedObjectControls = jQuery('#screenshotMechanism' + myThis.screenshotMechanism.id + ' .selected-object-controls');
+            fabric.Object.prototype.hide = function () {
+                this.set({
+                    opacity: 0,
+                    selectable: false
+                });
+            };
+            fabric.Object.prototype.show = function () {
+                this.set({
+                    opacity: 1,
+                    selectable: true
+                });
+            };
             fabric.Canvas.prototype.customiseControls({
                 mt: {
                     action: function (e, target) {
@@ -508,8 +510,21 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
                 },
                 ml: {
                     action: function (e, target) {
-                        target.remove();
-                        myThis.fabricCanvas.renderAll();
+                        target.hide();
+                        var fabricCanvas = myThis.fabricCanvas;
+                        var activeObject = fabricCanvas.getActiveObject(), activeGroup = fabricCanvas.getActiveGroup();
+                        if (activeGroup) {
+                            var objectsInGroup = activeGroup.getObjects();
+                            fabricCanvas.discardActiveGroup();
+                            objectsInGroup.forEach(function (object) {
+                                fabricCanvas.remove(object);
+                            });
+                        }
+                        else if (activeObject) {
+                            fabricCanvas.remove(activeObject);
+                        }
+                        fabricCanvas.renderAll();
+                        fabricCanvas.fire('mouse:down', {});
                     },
                     cursor: 'pointer'
                 }

@@ -42,6 +42,7 @@ export class ScreenshotView {
     container:JQuery;
     distPath:string;
     fabricCanvas;
+    canvas;
     croppingIsActive:boolean;
 
 
@@ -74,6 +75,7 @@ export class ScreenshotView {
         html2canvas(this.elementToCapture, {
             onrendered: function (canvas) {
                 myThis.showElements();
+                myThis.canvas = canvas;
                 myThis.screenshotPreviewElement.empty().append(canvas);
                 myThis.screenshotPreviewElement.show();
                 jQuery('.screenshot-preview canvas').attr('id', canvasId);
@@ -294,48 +296,37 @@ export class ScreenshotView {
         this.container.find('.screenshot-crop-confirm').show().on('click', function (e) {
             e.preventDefault();
             e.stopPropagation();
-            myThis.cropTheCanvas();
+            myThis.cropTheCanvas(croppingRect);
             myThis.croppingIsActive = false;
             jQuery(this).hide();
             jQuery('.screenshot-crop-cancel').hide();
         });
     }
 
-    cropTheCanvas() {
+    cropTheCanvas(croppingRect) {
         this.container.find('.screenshot-draw-undo').show();
 
         var canvas = this.fabricCanvas;
-        var i;
-        var croppedLeft = 0;
-        var croppedTop = 0;
         var objectsToMove = canvas.getObjects();
-        var croppWidth = 0;
-        var croppHeight = 0;
 
         // Cropping canvas according to cropper rectangle
-        if (canvas.getObjects().length > 0) {
-            var i;
-            for (i = 0; i < canvas.getObjects().length; i++) {
-                if (canvas.getObjects()[i].type === 'cropper') {
-                    croppedTop = canvas.getObjects()[i].top + 1;
-                    croppedLeft = canvas.getObjects()[i].left + 1;
-                    this.updateCanvasState(croppedTop, croppedLeft);
+        var croppedTop = croppingRect.top + 1;
+        var croppedLeft = croppingRect.left + 1;
+        var croppWidth = croppingRect.width - 2;
+        var croppHeight = croppingRect.height - 2;
+        croppingRect.remove();
 
-                    croppWidth = canvas.getObjects()[i].width - 2;
-                    croppHeight = canvas.getObjects()[i].height - 2;
-                    canvas.getObjects()[i].remove();
-                }
-            }
-        }
+        this.updateCanvasState(croppedTop, croppedLeft);
 
         // Shifting the elements accordingly
-        for (i = 0; i < objectsToMove.length; i++) {
+        for (var i = 0; i < objectsToMove.length; i++) {
             canvas.getObjects()[i].left = canvas.getObjects()[i].left - croppedLeft;
             canvas.getObjects()[i].top = canvas.getObjects()[i].top - croppedTop;
         }
 
         canvas.setWidth(croppWidth);
         canvas.setHeight(croppHeight);
+        canvas.renderAll();
     }
 
     addTextAnnotation(left, top) {
@@ -561,8 +552,8 @@ export class ScreenshotView {
 
     customizeControls() {
         var myThis = this;
-
         var colorLinkElement = jQuery('<a class="corner-color" href="#"><i class="material-icons">format_color_fill</i></a>');
+
         colorLinkElement.css('position', 'absolute');
         colorLinkElement.css('color', defaultColor);
         colorLinkElement.css('width', '16px');
@@ -570,6 +561,20 @@ export class ScreenshotView {
         colorLinkElement.css('opacity', '0');
 
         var selectedObjectControls = jQuery('#screenshotMechanism' + myThis.screenshotMechanism.id + ' .selected-object-controls');
+
+        fabric.Object.prototype.hide = function() {
+            this.set({
+                opacity: 0,
+                selectable: false
+            });
+        };
+
+        fabric.Object.prototype.show = function() {
+            this.set({
+                opacity: 1,
+                selectable: true
+            });
+        };
 
         fabric.Canvas.prototype.customiseControls({
             mt: {
@@ -616,8 +621,25 @@ export class ScreenshotView {
             },
             ml: {
                 action: function (e, target) {
-                    target.remove();
-                    myThis.fabricCanvas.renderAll();
+                    target.hide();
+                    var fabricCanvas = myThis.fabricCanvas;
+
+                    var activeObject = fabricCanvas.getActiveObject(),
+                        activeGroup = fabricCanvas.getActiveGroup();
+
+                    if (activeGroup) {
+                        var objectsInGroup = activeGroup.getObjects();
+                        fabricCanvas.discardActiveGroup();
+                        objectsInGroup.forEach(function(object) {
+                            fabricCanvas.remove(object);
+                        });
+                    }
+                    else if (activeObject) {
+                        fabricCanvas.remove(activeObject);
+                    }
+
+                    fabricCanvas.renderAll();
+                    fabricCanvas.fire('mouse:down', { });
                 },
                 cursor: 'pointer'
             }
