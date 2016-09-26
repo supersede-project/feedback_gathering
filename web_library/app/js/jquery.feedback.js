@@ -329,6 +329,11 @@ define(["require", "exports", './config', '../views/pagination_container', '../v
                     return feedbackButton;
                 }
                 initApplication(application);
+                feedbackButton.show();
+            }, function (errorData) {
+                console.warn('SERVER ERROR ' + errorData.status + ' ' + errorData.statusText + ': ' + errorData.responseText);
+                feedbackButton.hide();
+                return feedbackButton;
             });
             this.css('background-color', currentOptions.backgroundColor);
             this.css('color', currentOptions.color);

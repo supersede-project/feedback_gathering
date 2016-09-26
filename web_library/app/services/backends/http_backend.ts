@@ -12,7 +12,7 @@ export class HttpBackend implements Backend {
         this.language = language;
     }
 
-    list(callback:(data:any) => void): void {
+    list(callback:(data:any) => void, errorCallback?:(data:any) => void): void {
         var url = this.getUrl();
         jQuery.ajax({
             url: url,
@@ -22,12 +22,12 @@ export class HttpBackend implements Backend {
                 callback(data);
             },
             error: function (data) {
-                callback(data);
+                errorCallback(data);
             }
         });
     }
 
-    retrieve(id:number, callback:(data:any) => void): void {
+    retrieve(id:number, callback:(data:any) => void, errorCallback?:(data:any) => void): void {
         var url = this.getUrl() + id;
 
         jQuery.ajax({
@@ -38,20 +38,20 @@ export class HttpBackend implements Backend {
                 callback(data);
             },
             error: function (data) {
-                callback(data);
+                errorCallback(data);
             }
         });
     }
 
-    create(object:any, callback?:(data:any) => void): void {
+    create(object:any, callback?:(data:any) => void, errorCallback?:(data:any) => void): void {
         return null;
     }
 
-    update(id:number, attributes:{}, callback?:(data:any) => void): void {
+    update(id:number, attributes:{}, callback?:(data:any) => void, errorCallback?:(data:any) => void): void {
         return null;
     }
 
-    destroy(id:number, callback?:(data:any) => void): void {
+    destroy(id:number, callback?:(data:any) => void, errorCallback?:(data:any) => void): void {
         return null;
     }
 

@@ -6,7 +6,7 @@ define(["require", "exports"], function (require, exports) {
             this.apiEndpoint = apiEndpoint;
             this.language = language;
         }
-        HttpBackend.prototype.list = function (callback) {
+        HttpBackend.prototype.list = function (callback, errorCallback) {
             var url = this.getUrl();
             jQuery.ajax({
                 url: url,
@@ -16,11 +16,11 @@ define(["require", "exports"], function (require, exports) {
                     callback(data);
                 },
                 error: function (data) {
-                    callback(data);
+                    errorCallback(data);
                 }
             });
         };
-        HttpBackend.prototype.retrieve = function (id, callback) {
+        HttpBackend.prototype.retrieve = function (id, callback, errorCallback) {
             var url = this.getUrl() + id;
             jQuery.ajax({
                 url: url,
@@ -30,17 +30,17 @@ define(["require", "exports"], function (require, exports) {
                     callback(data);
                 },
                 error: function (data) {
-                    callback(data);
+                    errorCallback(data);
                 }
             });
         };
-        HttpBackend.prototype.create = function (object, callback) {
+        HttpBackend.prototype.create = function (object, callback, errorCallback) {
             return null;
         };
-        HttpBackend.prototype.update = function (id, attributes, callback) {
+        HttpBackend.prototype.update = function (id, attributes, callback, errorCallback) {
             return null;
         };
-        HttpBackend.prototype.destroy = function (id, callback) {
+        HttpBackend.prototype.destroy = function (id, callback, errorCallback) {
             return null;
         };
         HttpBackend.prototype.getUrl = function () {

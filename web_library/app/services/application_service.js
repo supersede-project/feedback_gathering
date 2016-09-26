@@ -9,10 +9,12 @@ define(["require", "exports", './backends/http_backend', '../models/applications
                 this.backend = backend;
             }
         }
-        ApplicationService.prototype.retrieveApplication = function (applicationId, callback) {
+        ApplicationService.prototype.retrieveApplication = function (applicationId, callback, errorCallback) {
             this.backend.retrieve(applicationId, function (applicationData) {
                 var application = application_1.Application.initByData(applicationData);
                 callback(application);
+            }, function (data) {
+                errorCallback(data);
             });
         };
         return ApplicationService;

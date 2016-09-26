@@ -476,13 +476,17 @@ export var feedbackPluginModule = function ($, window, document) {
 
         // loadDataHere to trigger pull if necessary
         var applicationService = new ApplicationService(language);
-        applicationService.retrieveApplication(applicationId, function(application) {
-            // disable library
+        applicationService.retrieveApplication(applicationId, application => {
             if(application.state === null || application.state === 0) {
                 feedbackButton.hide();
                 return feedbackButton;
             }
             initApplication(application);
+            feedbackButton.show();
+        }, errorData => {
+            console.warn('SERVER ERROR ' + errorData.status + ' ' + errorData.statusText + ': ' + errorData.responseText);
+            feedbackButton.hide();
+            return feedbackButton;
         });
 
         this.css('background-color', currentOptions.backgroundColor);

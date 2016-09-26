@@ -24,10 +24,12 @@ export class ApplicationService {
         }
     }
 
-    retrieveApplication(applicationId:number, callback:(application:Application) => void) {
-        this.backend.retrieve(applicationId, function(applicationData) {
+    retrieveApplication(applicationId:number, callback:(application:Application) => void, errorCallback:(data:any) => void) {
+        this.backend.retrieve(applicationId, applicationData => {
             var application = Application.initByData(applicationData);
             callback(application);
+        }, data => {
+            errorCallback(data);
         });
     }
 }
