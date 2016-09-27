@@ -5,5 +5,5 @@ import javax.servlet.http.HttpServletRequest;
 import ch.uzh.ifi.feedback.library.rest.IRequestContext;
 
 public interface ITokenAuthenticationService {
-	boolean Authenticate(IRequestContext context);
+	boolean Authenticate(HttpServletRequest request);
 }

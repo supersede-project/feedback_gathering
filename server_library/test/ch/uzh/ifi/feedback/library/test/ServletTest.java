@@ -97,7 +97,7 @@ public class ServletTest extends TestCase {
 		String jsonString = IOUtils.toString(stream); 
 		
 		return PostSuccess(
-				"https://localhost:8443/feedback_orchestrator/authenticate", 
+				"http://localhost:8080/feedback_orchestrator/authenticate", 
 				jsonString,
 				UserToken.class);
 	}
@@ -107,7 +107,7 @@ public class ServletTest extends TestCase {
     {
         super.setUp();
         config.RestoreTestDatabases();
-        token = AuthenticateUser();
+        //token = AuthenticateUser();
     }
     
    @Override

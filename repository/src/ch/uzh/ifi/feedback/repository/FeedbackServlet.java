@@ -11,6 +11,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
+
+import ch.uzh.ifi.feedback.library.rest.IRestController;
 import ch.uzh.ifi.feedback.library.rest.IRestManager;
 import ch.uzh.ifi.feedback.library.rest.RestManager;
 import ch.uzh.ifi.feedback.library.rest.ServletBase;
@@ -19,8 +23,7 @@ import ch.uzh.ifi.feedback.library.rest.Service.DatabaseConfiguration;
 /**
  * Servlet implementation class FeedbackServlet
  */
-@MultipartConfig
-@WebServlet("/")
+@Singleton
 public class FeedbackServlet extends ServletBase {
 	
 	private static final long serialVersionUID = 1L;    
@@ -28,16 +31,16 @@ public class FeedbackServlet extends ServletBase {
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public FeedbackServlet() {
+	@Inject
+    public FeedbackServlet(IRestManager restController) {
         super();
+        this._restController = restController;
         InitController();
     }
     
     @Override
     protected void InitController()
     {
-    	this._restController = new RestManager();
-        
         try{
         	_restController.Init("ch.uzh.ifi.feedback.repository");
         }

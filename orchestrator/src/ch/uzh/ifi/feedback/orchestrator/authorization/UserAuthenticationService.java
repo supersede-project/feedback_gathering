@@ -41,9 +41,9 @@ public class UserAuthenticationService implements ITokenAuthenticationService {
 		return cache.Register(validatedUsers.get(0).getName());
 	}
 	
-	public boolean Authenticate(IRequestContext context)
+	public boolean Authenticate(HttpServletRequest request)
 	{
-		String authorizationHeader = context.getRequest().getHeader("Authorization");
+		String authorizationHeader = request.getHeader("Authorization");
 		
 		if(authorizationHeader == null)
 			return false;

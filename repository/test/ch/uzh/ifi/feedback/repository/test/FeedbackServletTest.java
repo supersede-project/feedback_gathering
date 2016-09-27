@@ -57,7 +57,7 @@ public class FeedbackServletTest extends ServletTest {
 				Feedback.class);
 		
 	    assertEquals(createdFeedback.getApplicationId(), 1l);	
-	    assertEquals(createdFeedback.getTitle(), "Feedback JUnit 648");
+	    assertEquals(createdFeedback.getTitle(), "test_feedback");
 	    assertEquals(createdFeedback.getRatingFeedbacks().size(), 2);
 	    assertEquals(createdFeedback.getCategoryFeedbacks().size(), 2);
 	    assertEquals(createdFeedback.getScreenshotFeedbacks().size(), 2);

@@ -33,8 +33,10 @@ import org.reflections.util.ConfigurationBuilder;
 import com.google.gson.JsonSyntaxException;
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
+import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.google.inject.Key;
+import com.google.inject.Singleton;
 
 import ch.uzh.ifi.feedback.library.rest.Routing.HandlerInfo;
 import ch.uzh.ifi.feedback.library.rest.Routing.HttpMethod;
@@ -56,7 +58,7 @@ import ch.uzh.ifi.feedback.library.rest.validation.ValidationResult;
 import ch.uzh.ifi.feedback.library.rest.validation.ValidatorBase;
 import javassist.NotFoundException;
 
-
+@Singleton
 public class RestManager implements IRestManager {
 
 	private List<HandlerInfo> _handlers;
@@ -67,7 +69,10 @@ public class RestManager implements IRestManager {
 	private ServletRequestContext requestContext;
 	private Injector _injector;
 
-	public RestManager() {
+	@Inject
+	public RestManager(Injector injector) {
+		
+		this._injector = injector;
 		_handlers = new ArrayList<>();
 		_parserMap = new HashMap<>();
 		_validatorMap = new HashMap<>();
@@ -84,9 +89,9 @@ public class RestManager implements IRestManager {
                 .setUrls(packages)
                 .setScanners(new MethodAnnotationsScanner(), new TypeAnnotationsScanner()));
 		
-		InitInjector(reflections);
+		//InitInjector(reflections);
 		InitHandlerTable(reflections);
-		requestContext = (ServletRequestContext)_injector.getInstance(IRequestContext.class);
+		//requestContext = (ServletRequestContext)_injector.getInstance(IRequestContext.class);
 	}
 	
 	private void InitInjector(Reflections reflections) throws Exception
@@ -282,11 +287,8 @@ public class RestManager implements IRestManager {
 	
 	private void InvokeHandler(HttpServletRequest request, HttpServletResponse response, HttpMethod method) throws Exception
 	{
-		requestContext.setRequest(request);
-		requestContext.setResponse(response);
-		
 		Map<String, String[]> map = request.getParameterMap();
-		String path = request.getServletPath();
+		String path = request.getPathInfo();
 		HandlerInfo handler = GetHandlerEntry(path, method);
 		if(handler == null){
 			throw new NotFoundException("ressource '" + path + "' does not exist");
@@ -297,14 +299,14 @@ public class RestManager implements IRestManager {
 		if(authServiceClazz != null)
 		{
 			ITokenAuthenticationService authService = _injector.getInstance(authServiceClazz);
-			if(!authService.Authenticate(requestContext))
+			if(!authService.Authenticate(request))
 				throw new AuthenticationException("the provided usertoken does not match!");
 		}
 		
 		Map<String, String> params = handler.getUriTemplate().Match(path);
 		List<Object> parameters = new ArrayList<>();
 		String language = params.get("lang");
-		requestContext.setRequestLanguage(language);
+		request.setAttribute("lang", language);
 		
 		for(Entry<String, Parameter> pathParam : handler.getPathParameters().entrySet())
 		{

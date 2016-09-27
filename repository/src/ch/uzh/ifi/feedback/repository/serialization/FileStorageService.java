@@ -9,19 +9,25 @@ import java.util.Date;
 
 import javax.servlet.http.Part;
 
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.io.FilenameUtils;
+
 import ch.uzh.ifi.feedback.repository.model.FileFeedback;
 
 public class FileStorageService {
 	
-	public <T extends FileFeedback> T ParseFilePart(Part filePart, T feedback, String storeagePath) {
+	public <T extends FileFeedback> T ParseFilePart(FileItem filePart, T feedback, String storeagePath) {
 
+		    if(filePart == null)
+		    	return feedback;
+		    
 			InputStream inputStream = null;
 			OutputStream outputStream = null;
 
 			try {
 				inputStream = filePart.getInputStream();
 				int fileSize = (int) filePart.getSize();
-				String fileName = getFileName(filePart);
+				String fileName = FilenameUtils.getName(filePart.getName());
 				
 				String fileExtension = "";
 				
@@ -89,16 +95,5 @@ public class FileStorageService {
 		
 		return uploadsStoragePath;
 	}
-	
-	private static String getFileName(Part filePart) {
-		String header = filePart.getHeader("content-disposition");
-		if (header == null)
-			return null;
-		for (String headerPart : header.split(";")) {
-			if (headerPart.trim().startsWith("filename")) {
-				return headerPart.substring(headerPart.indexOf('=') + 1).trim().replace("\"", "");
-			}
-		}
-		return null;
-	}
+
 }
