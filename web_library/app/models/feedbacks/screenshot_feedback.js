@@ -1,10 +1,11 @@
 define(["require", "exports"], function (require, exports) {
     "use strict";
     var ScreenshotFeedback = (function () {
-        function ScreenshotFeedback(name, mechanismId, part) {
+        function ScreenshotFeedback(name, mechanismId, part, fileExtension) {
             this.name = name;
             this.mechanismId = mechanismId;
             this.part = part;
+            this.fileExtension = fileExtension;
         }
         return ScreenshotFeedback;
     }());

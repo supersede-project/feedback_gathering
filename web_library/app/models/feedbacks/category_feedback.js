@@ -1,9 +1,9 @@
 define(["require", "exports"], function (require, exports) {
     "use strict";
     var CategoryFeedback = (function () {
-        function CategoryFeedback(mechanismId, categories) {
-            this.mechanismId = mechanismId;
-            this.categories = categories;
+        function CategoryFeedback(parameterId, text) {
+            this.parameterId = parameterId;
+            this.text = text;
         }
         return CategoryFeedback;
     }());

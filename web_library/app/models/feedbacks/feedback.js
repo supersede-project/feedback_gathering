@@ -6,7 +6,7 @@ define(["require", "exports", '../../js/config'], function (require, exports, co
         }
     };
     var Feedback = (function () {
-        function Feedback(title, userIdentification, language, applicationId, configurationId, ratingFeedbacks, textFeedbacks, screenshotFeedbacks, categoryFeedbacks) {
+        function Feedback(title, userIdentification, language, applicationId, configurationId, ratingFeedbacks, textFeedbacks, screenshotFeedbacks, categoryFeedbacks, contextInformation, attachmentFeedbacks) {
             this.title = title;
             this.userIdentification = userIdentification;
             this.language = language;
@@ -16,6 +16,8 @@ define(["require", "exports", '../../js/config'], function (require, exports, co
             this.textFeedbacks = textFeedbacks;
             this.screenshotFeedbacks = screenshotFeedbacks;
             this.categoryFeedbacks = categoryFeedbacks;
+            this.contextInformation = contextInformation;
+            this.attachmentFeedbacks = attachmentFeedbacks;
         }
         Feedback.prototype.validate = function (configuration) {
             var textMechanisms = configuration.getMechanismConfig(config_1.mechanismTypes.textType);

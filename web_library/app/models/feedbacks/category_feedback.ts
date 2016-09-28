@@ -1,13 +1,9 @@
-import {Category} from './category';
-
-
 export class CategoryFeedback {
-    mechanismId:number;
-    categories:Category[];
+    parameterId:number;
+    text:string;
 
-    constructor(mechanismId:number, categories:Category[]) {
-        this.mechanismId = mechanismId;
-        this.categories = categories;
+    constructor(parameterId:number, text:string) {
+        this.parameterId = parameterId;
+        this.text = text;
     }
 }
-

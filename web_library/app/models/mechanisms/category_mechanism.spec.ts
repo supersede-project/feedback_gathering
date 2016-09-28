@@ -11,11 +11,11 @@ describe('Category Mechanism', () => {
     beforeAll(() => {
         var html = '<section id="categoryMechanism992" class="feedback-mechanism horizontal category-type">' +
             '<p>Please choose from the following categories</p>' +
-            '<input id="optionBUG_CATEGORY" type="radio" value="BUG_CATEGORY" name="category_mechanism_992">' +
+            '<input id="optionBUG_CATEGORY" data-parameter-id="1" type="radio" value="BUG_CATEGORY" name="category_mechanism_992">' +
             '<label for="optionBUG_CATEGORY"> Bug</label>' +
-            '<input id="optionFEATURE_REQUEST_CATEGORY" type="radio" value="FEATURE_REQUEST_CATEGORY" name="category_mechanism_992">' +
+            '<input id="optionFEATURE_REQUEST_CATEGORY" data-parameter-id="2" type="radio" value="FEATURE_REQUEST_CATEGORY" name="category_mechanism_992">' +
             '<label for="optionFEATURE_REQUEST_CATEGORY"> Feature Request</label>' +
-            '<input id="optionGENERAL_CATEGORY" type="radio" value="GENERAL_CATEGORY" name="category_mechanism_992">' +
+            '<input id="optionGENERAL_CATEGORY" data-parameter-id="3" type="radio" value="GENERAL_CATEGORY" name="category_mechanism_992">' +
             '<label for="optionGENERAL_CATEGORY"> General Feedback</label>' +
             '<label for="ownInput1">Other:</label>' +
             '<input class="own-category" id="ownInput1" type="text" />' +
@@ -43,9 +43,9 @@ describe('Category Mechanism', () => {
     it('should return its category feedback object', () => {
         $('#optionFEATURE_REQUEST_CATEGORY').prop("checked", true);
 
-        var categoryFeedback:CategoryFeedback = categoryMechanism.getCategoryFeedback();
-        var json = JSON.stringify(categoryFeedback);
-        var expectedJson = '{"mechanismId":992,"categories":[{"mechanismId":992,"text":null,"categoryType":{"key":"FEATURE_REQUEST_CATEGORY","text":"Feature Request"}}]}';
+        var categoryFeedbacks:CategoryFeedback[] = categoryMechanism.getCategoryFeedbacks();
+        var json = JSON.stringify(categoryFeedbacks);
+        var expectedJson = '[{"parameterId":2,"text":""}]';
 
         expect(json).toEqual(expectedJson);
     });

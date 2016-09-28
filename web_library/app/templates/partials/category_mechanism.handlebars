@@ -2,7 +2,7 @@
     <section id="categoryMechanism{{ id }}" class="feedback-mechanism horizontal category-type">
         <p>{{ title }}</p>
         {{#each options}}
-            <input type="{{ ../inputType }}" id="option{{ key }}" name="category_mechanism_{{ ../id }}"
+            <input type="{{ ../inputType }}" id="option{{ key }}" data-parameter-id="{{id}}" name="category_mechanism_{{ ../id }}"
                    value="{{ key }}">
             <label for="option{{ key }}"> {{ value }}</label> &nbsp;
             {{#if ../breakAfterOption}}

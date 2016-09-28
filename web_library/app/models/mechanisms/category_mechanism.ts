@@ -1,8 +1,6 @@
 import {Parameter} from './parameters/parameter';
 import {Mechanism} from './mechanism';
 import {CategoryFeedback} from '../feedbacks/category_feedback';
-import {Category} from '../feedbacks/category';
-import {CategoryType} from '../feedbacks/category_type';
 
 
 export class CategoryMechanism extends Mechanism {
@@ -27,27 +25,21 @@ export class CategoryMechanism extends Mechanism {
         }
     }
 
-    getCategoryFeedback(): CategoryFeedback {
+    getCategoryFeedbacks(): CategoryFeedback[] {
         var inputSelector = this.getInputSelector();
-        var thisCategoryMechanism = this;
-        var categories:Category[] = [];
+        var categoryFeedbacks:CategoryFeedback[] = [];
 
         jQuery(inputSelector).each(function () {
             var input = jQuery(this);
 
             if((input.attr('type') === 'checkbox' || input.attr('type') === 'radio') && input.is(':checked')) {
-                var categoryKey = input.val();
-                var categoryValue = jQuery('section#categoryMechanism' + thisCategoryMechanism.id + '.category-type label[for="option' + categoryKey + '"]').text().trim();
-                var categoryType = new CategoryType(categoryKey, categoryValue);
-                var category:Category = new Category(thisCategoryMechanism.id, null, null, categoryType);
-                categories.push(category);
+                categoryFeedbacks.push(new CategoryFeedback(input.data('parameter-id'), ""));
             } else if(input.attr('type') === 'text' && input.val() !== "") {
-                var category:Category = new Category(thisCategoryMechanism.id, input.val(), null, null);
-                categories.push(category);
+                categoryFeedbacks.push(new CategoryFeedback(null, input.val()));
             }
         });
 
-        return new CategoryFeedback(this.id, categories);
+        return categoryFeedbacks;
     }
 
     getInputSelector() {
