@@ -47,8 +47,6 @@ public abstract class DefaultSerializer<T> implements ISerializationService<T> {
 		{
 			superclass = ((ParameterizedType)superclass).getActualTypeArguments()[0];
 		}
-		
-		//parameterType = (Class<?>)(superclass);
 	}
 
 	private String GetRequestContent(HttpServletRequest request)

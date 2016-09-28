@@ -27,6 +27,7 @@ public class FeedbackService extends ServiceBase<Feedback> {
 	private AudioFeedbackService audioFeedbackService;
 	private AttachmentFeedbackService attachmentFeedbackService;
 	private CategoryFeedbackService categoryFeedbackService;
+	private ContextInformationService contextInformationService;
 	
 	@Inject
 	public FeedbackService(
@@ -37,9 +38,13 @@ public class FeedbackService extends ServiceBase<Feedback> {
 			AudioFeedbackService audioFeedbackService,
 			AttachmentFeedbackService attachmentFeedbackService,
 			CategoryFeedbackService categoryFeedbackService,
+			ContextInformationService contextInformationService,
 			DatabaseConfiguration dbConfig) 
 	{
-		super(resultParser, Feedback.class, "feedbacks", dbConfig.getRepositoryDb(), ratingFeedbackService, screenshotFeedbackService);
+		super(  resultParser, 
+				Feedback.class, 
+				"feedbacks", 
+				dbConfig.getRepositoryDb());
 		
 		this.screenshotFeedbackService = screenshotFeedbackService;
 		this.ratingFeedbackService = ratingFeedbackService;
@@ -47,6 +52,7 @@ public class FeedbackService extends ServiceBase<Feedback> {
 		this.audioFeedbackService = audioFeedbackService;
 		this.attachmentFeedbackService = attachmentFeedbackService;
 		this.categoryFeedbackService = categoryFeedbackService;
+		this.contextInformationService = contextInformationService;
 	}
 
 	@Override
@@ -70,6 +76,13 @@ public class FeedbackService extends ServiceBase<Feedback> {
 
 	@Override
 	public int Insert(Connection con, Feedback feedback) throws SQLException, NotFoundException, UnsupportedOperationException {
+		
+		if(feedback.getContextInformation() != null)
+		{
+			int contextId = contextInformationService.Insert(con, feedback.getContextInformation());
+			feedback.setContextInformationId(contextId);
+		}
+		
 		int feedbackId = super.Insert(con, feedback);
 		
 		if(feedback.getTextFeedbacks() != null) {
@@ -127,5 +140,11 @@ public class FeedbackService extends ServiceBase<Feedback> {
 		feedback.setAudioFeedbacks(audioFeedbackService.GetWhere(Arrays.asList(feedback.getId()), "feedback_id = ?"));
 		feedback.setAttachmentFeedbacks(attachmentFeedbackService.GetWhere(Arrays.asList(feedback.getId()), "feedback_id = ?"));
 		feedback.setCategoryFeedbacks(categoryFeedbackService.GetWhere(Arrays.asList(feedback.getId()), "feedback_id = ?"));
+		try {
+			if(feedback.getContextInformationId() != null)
+				feedback.setContextInformation(contextInformationService.GetById(feedback.getContextInformationId()));
+		} catch (NotFoundException e) {
+			e.printStackTrace();
+		}
 	}
 }

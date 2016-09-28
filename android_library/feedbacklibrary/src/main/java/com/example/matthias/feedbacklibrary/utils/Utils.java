@@ -207,7 +207,7 @@ public class Utils {
      */
     private static boolean isUpAndRunning() {
         // TODO: String converter factory for text/plain response header?
-        Retrofit rtf = new Retrofit.Builder().baseUrl(feedbackAPI.endpoint).build();
+        Retrofit rtf = new Retrofit.Builder().baseUrl(feedbackAPI.endpoint).addConverterFactory(GsonConverterFactory.create()).build();
         feedbackAPI fbAPI = rtf.create(feedbackAPI.class);
         Call<ResponseBody> checkUpAndRunning = fbAPI.pingOrchestrator();
         final Set<Boolean> isUpAndRunning = new HashSet<>();

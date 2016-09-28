@@ -15,4 +15,6 @@
     <color name="supersede_feedbacklibrary_audio_timer_record_indicator_end_animation_color">
         @color/colorAccent
     </color>
+    <color name="progress_start">#009933</color>
+    <color name="progress_end">#996633</color>
 </resources>

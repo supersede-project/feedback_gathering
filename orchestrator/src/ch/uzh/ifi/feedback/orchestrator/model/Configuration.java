@@ -1,12 +1,8 @@
 package ch.uzh.ifi.feedback.orchestrator.model;
 
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
-import ch.uzh.ifi.feedback.library.rest.Service.IDbItem;
-import ch.uzh.ifi.feedback.library.rest.Service.ItemBase;
 import ch.uzh.ifi.feedback.library.rest.annotations.DbAttribute;
 import ch.uzh.ifi.feedback.library.rest.annotations.DbIgnore;
 import ch.uzh.ifi.feedback.library.rest.annotations.Serialize;
@@ -14,7 +10,6 @@ import ch.uzh.ifi.feedback.library.rest.validation.Id;
 import ch.uzh.ifi.feedback.library.rest.validation.NotNull;
 import ch.uzh.ifi.feedback.library.rest.validation.Unique;
 import ch.uzh.ifi.feedback.library.rest.validation.Validate;
-import ch.uzh.ifi.feedback.orchestrator.serialization.ApplicationSerializationService;
 import ch.uzh.ifi.feedback.orchestrator.serialization.ConfigurationSerializationService;
 import ch.uzh.ifi.feedback.orchestrator.validation.ConfigurationValidator;
 

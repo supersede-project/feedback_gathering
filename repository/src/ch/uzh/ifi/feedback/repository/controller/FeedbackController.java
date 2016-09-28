@@ -14,13 +14,14 @@ import ch.uzh.ifi.feedback.library.rest.annotations.PathParam;
 import ch.uzh.ifi.feedback.repository.model.Feedback;
 import ch.uzh.ifi.feedback.repository.serialization.FeedbackSerializationService;
 import ch.uzh.ifi.feedback.repository.service.FeedbackService;
+import ch.uzh.ifi.feedback.repository.validation.FeedbackValidator;
 
 @Controller(Feedback.class)
 public class FeedbackController extends RestController<Feedback>{
 
 	@Inject
-	public FeedbackController(FeedbackService dbService, IRequestContext requestContext) {
-		super(dbService, null, requestContext);
+	public FeedbackController(FeedbackService dbService, FeedbackValidator validator, IRequestContext requestContext) {
+		super(dbService, validator, requestContext);
 	}
 	
 	@Path("/feedbacks")

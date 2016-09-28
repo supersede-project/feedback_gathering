@@ -9,6 +9,7 @@ import ch.uzh.ifi.feedback.library.rest.Service.DatabaseConfiguration;
 import ch.uzh.ifi.feedback.orchestrator.model.Application;
 import ch.uzh.ifi.feedback.orchestrator.model.Configuration;
 import ch.uzh.ifi.feedback.orchestrator.model.GeneralConfiguration;
+import ch.uzh.ifi.feedback.orchestrator.model.UserGroup;
 import javassist.NotFoundException;
 import static java.util.Arrays.asList;
 
@@ -16,12 +17,14 @@ public class ApplicationService extends OrchestratorService<Application>{
 
 	private ConfigurationService configurationService;
 	private GeneralConfigurationService generalConfigurationService;
+	private UserGroupService userGroupService;
 	
 	@Inject
 	public ApplicationService(
 			ApplicationResultParser resultParser, 
 			ConfigurationService configurationService,
 			GeneralConfigurationService generalConfigurationService,
+			UserGroupService userGroupService,
 			DatabaseConfiguration config)
 	{
 		super(  resultParser, 
@@ -33,6 +36,7 @@ public class ApplicationService extends OrchestratorService<Application>{
 
 		this.configurationService = configurationService;
 		this.generalConfigurationService = generalConfigurationService;
+		this.userGroupService = userGroupService;
 	}
 	
 	@Override
@@ -80,6 +84,14 @@ public class ApplicationService extends OrchestratorService<Application>{
 		for(Configuration config : app.getConfigurations())
 		{
 			config.setApplicationId(appId);
+			
+			//set default user groups id if null
+			if(config.getUserGroupsId() == null)
+			{
+				UserGroup defaultGroup = userGroupService.GetWhere(asList("default"), "name = ?").get(0);
+				config.setUserGroupsId(defaultGroup.getId());
+			}
+			
 			configurationService.Insert(con, config);
 		}
 	

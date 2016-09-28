@@ -12,6 +12,7 @@ import com.google.gson.annotations.Expose;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Feedback
@@ -23,7 +24,11 @@ public class Feedback implements Serializable {
     @Expose
     private long configurationId;
     @Expose
+    private Map<String, Object> contextInformation;
+    @Expose
     private String language;
+    @Expose
+    private String title;
     @Expose
     private String userIdentification;
     // Mechanisms
@@ -117,6 +122,10 @@ public class Feedback implements Serializable {
         return configurationId;
     }
 
+    public Map<String, Object> getContextInformation() {
+        return contextInformation;
+    }
+
     public String getLanguage() {
         return language;
     }
@@ -131,6 +140,10 @@ public class Feedback implements Serializable {
 
     public List<TextFeedback> getTextFeedbacks() {
         return textFeedbacks;
+    }
+
+    public String getTitle() {
+        return title;
     }
 
     public String getUserIdentification() {
@@ -157,6 +170,10 @@ public class Feedback implements Serializable {
         this.configurationId = configurationId;
     }
 
+    public void setContextInformation(Map<String, Object> contextInformation) {
+        this.contextInformation = contextInformation;
+    }
+
     public void setLanguage(String language) {
         this.language = language;
     }
@@ -171,6 +188,10 @@ public class Feedback implements Serializable {
 
     public void setTextFeedbacks(List<TextFeedback> textFeedbacks) {
         this.textFeedbacks = textFeedbacks;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public void setUserIdentification(String userIdentification) {
