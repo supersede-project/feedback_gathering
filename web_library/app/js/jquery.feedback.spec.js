@@ -1,8 +1,9 @@
-define(["require", "exports"], function (require, exports) {
+define(["require", "exports", './jquery.feedback'], function (require, exports, jquery_feedback_1) {
     "use strict";
-    describe('jQuery Validate Plugin', function () {
+    fdescribe('jQuery Validate Plugin', function () {
         var $ = $j;
         beforeEach(function () {
+            jquery_feedback_1.feedbackPluginModule($, window, document);
         });
         it('should initialize the translations', function () {
         });

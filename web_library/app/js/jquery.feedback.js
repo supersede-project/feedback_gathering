@@ -125,6 +125,7 @@ define(["require", "exports", './config', '../views/pagination_container', '../v
                 processData: false,
                 contentType: false,
                 success: function (data) {
+                    $('.server-response').addClass('success').text(config_1.defaultSuccessMessage);
                     resetPlugin(configuration);
                 },
                 error: function (data) {
@@ -133,7 +134,6 @@ define(["require", "exports", './config', '../views/pagination_container', '../v
             });
         };
         var resetPlugin = function (configuration) {
-            $('.server-response').addClass('success').text(config_1.defaultSuccessMessage);
             $('textarea.text-type-text').val('');
             for (var _i = 0, _a = configuration.getMechanismConfig(config_1.mechanismTypes.screenshotType); _i < _a.length; _i++) {
                 var screenshotMechanism = _a[_i];
@@ -237,6 +237,7 @@ define(["require", "exports", './config', '../views/pagination_container', '../v
             var screenshotMechanisms = configuration.getMechanismConfig(config_1.mechanismTypes.screenshotType);
             var categoryMechanisms = configuration.getMechanismConfig(config_1.mechanismTypes.categoryType);
             var attachmentMechanisms = configuration.getMechanismConfig(config_1.mechanismTypes.attachmentType);
+            var audioMechanisms = configuration.getMechanismConfig(config_1.mechanismTypes.audioType);
             container.find('.server-response').removeClass('error').removeClass('success');
             var feedbackObject = new feedback_1.Feedback(config_1.feedbackObjectTitle, userId, "DE", config_1.applicationId, configuration.id, [], [], [], []);
             for (var _i = 0, textMechanisms_2 = textMechanisms; _i < textMechanisms_2.length; _i++) {
@@ -282,6 +283,9 @@ define(["require", "exports", './config', '../views/pagination_container', '../v
                         formData.append('photos[]', file, file.name);
                     }
                 }
+            }
+            for (var _e = 0, audioMechanisms_1 = audioMechanisms; _e < audioMechanisms_1.length; _e++) {
+                var audioMechanism = audioMechanisms_1[_e];
             }
             formData.append('json', JSON.stringify(feedbackObject));
             return formData;

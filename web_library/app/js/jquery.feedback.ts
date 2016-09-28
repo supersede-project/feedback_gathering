@@ -1,3 +1,4 @@
+import Handlebars = require('handlebars');
 import './lib/jquery.star-rating-svg.js';
 import './jquery.validate';
 import './jquery.fileupload';
@@ -201,6 +202,7 @@ export var feedbackPluginModule = function ($, window, document) {
             processData: false,
             contentType: false,
             success: function (data) {
+                $('.server-response').addClass('success').text(defaultSuccessMessage);
                 resetPlugin(configuration);
             },
             error: function (data) {
@@ -210,7 +212,6 @@ export var feedbackPluginModule = function ($, window, document) {
     };
 
     var resetPlugin = function(configuration) {
-        $('.server-response').addClass('success').text(defaultSuccessMessage);
         $('textarea.text-type-text').val('');
         for(var screenshotMechanism of configuration.getMechanismConfig(mechanismTypes.screenshotType)) {
             screenshotMechanism.screenshotView.reset();
@@ -368,6 +369,7 @@ export var feedbackPluginModule = function ($, window, document) {
         var screenshotMechanisms = configuration.getMechanismConfig(mechanismTypes.screenshotType);
         var categoryMechanisms = configuration.getMechanismConfig(mechanismTypes.categoryType);
         var attachmentMechanisms = configuration.getMechanismConfig(mechanismTypes.attachmentType);
+        var audioMechanisms = configuration.getMechanismConfig(mechanismTypes.audioType);
 
         container.find('.server-response').removeClass('error').removeClass('success');
         var feedbackObject = new Feedback(feedbackObjectTitle, userId, "DE", applicationId, configuration.id, [], [], [], []);
@@ -415,6 +417,10 @@ export var feedbackPluginModule = function ($, window, document) {
                     formData.append('photos[]', file, file.name);
                 }
             }
+        }
+
+        for(var audioMechanism of audioMechanisms) {
+
         }
 
         formData.append('json', JSON.stringify(feedbackObject));

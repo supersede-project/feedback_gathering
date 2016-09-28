@@ -15,12 +15,14 @@ module.exports = function (config) {
         files: [
             'test-main.js',
             { pattern: 'node_modules/handlebars/dist/*.js', included: false },
+            { pattern: 'node_modules/handlebars/dist/**/*.js', included: false },
+            { pattern: 'node_modules/handlebars/runtime.js', included: false },
             { pattern: 'node_modules/i18next/*.js', included: false },
-            { pattern: 'app/templates/*.handlebars', included: false, watched: true, served: true },
-            { pattern: 'app/templates/*.handlebars.js', included: false, watched: true, served: true },
             { pattern: 'app/**/*.js', included: false },
             { pattern: 'app/services/mocks/**/*.json', included: false },
-            { pattern: 'app/locales/**/*.json', included: false }
+            { pattern: 'app/locales/**/*.json', included: false },
+            { pattern: 'app/templates/**/*.handlebars', included: true },
+            { pattern: 'app/templates/*.handlebars', included: true }
         ],
 
         proxies: {
@@ -28,9 +30,7 @@ module.exports = function (config) {
             '/app/js/lib/fabric.js': '/base/app/js/lib/fabric.js',
             '/app/js/lib/spectrum.js': '/base/app/js/lib/spectrum.js',
             '/app/js/lib/customiseControls.js': '/base/app/js/lib/customiseControls.js',
-            '/app/js/lib/jquery.star-rating-svg.js': '/base/app/js/lib/jquery.star-rating-svg.js',
-            '/app/templates/feedback_dialog.handlebars': '/base/app/templates/feedback_dialog.handlebars',
-            '/app/templates/intermediate_dialog.handlebars': '/base/app/templates/intermediate_dialog.handlebars'
+            '/app/js/lib/jquery.star-rating-svg.js': '/base/app/js/lib/jquery.star-rating-svg.js'
         },
 
         // list of files to exclude
@@ -40,13 +40,23 @@ module.exports = function (config) {
         // preprocess matching files before serving them to the browser
         // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
         preprocessors: {
-            'app/**/!(*spec|html2canvas|jquery\.star-rating-svg|spectrum|fabric|customiseControl|Fr.voice|libmp3lame.min|mp3Worker|recorder|recorderWorker).js': ['coverage'],
-            'app/templates/*.handlebars': ['handlebars']
+            'app/templates/*.handlebars': ['handlebars'],
+            'app/templates/**/*.handlebars': ['handlebars'],
+            'app/**/!(*spec|html2canvas|jquery\.star-rating-svg|spectrum|fabric|customiseControl|Fr.voice|libmp3lame.min|mp3Worker|recorder|recorderWorker).js': ['coverage']
         },
 
         handlebarsPreprocessor: {
             templates: "Handlebars.templates",
-            amd: true
+            amd: false,
+            // translates original file path to template name
+            templateName: function(filepath) {
+                return filepath.replace(/^.*\/([^\/]+)\.handlebars$/, '$1');
+            },
+
+            // transforms original file path to path of the processed file
+            transformPath: function(path) {
+                return path.replace(/\.handlebars$/, '.js');
+            }
         },
 
         // test results reporter to use

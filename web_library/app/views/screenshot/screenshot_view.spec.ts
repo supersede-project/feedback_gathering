@@ -1,7 +1,7 @@
 import {ScreenshotView} from './screenshot_view';
 import {mechanismTypes} from '../../js/config';
 import Handlebars = require('handlebars');
-import {Mechanism} from '../../models/mechanisms/mechanism';
+import {ScreenshotMechanism} from '../../models/mechanisms/screenshot_mechanism';
 
 
 xdescribe('Screenshot View', () => {
@@ -10,7 +10,7 @@ xdescribe('Screenshot View', () => {
     let $ = $j;
 
     beforeEach(() => {
-        var screenshotMechanism = new Mechanism(1, mechanismTypes.screenshotType, true);
+        var screenshotMechanism = new ScreenshotMechanism(1, mechanismTypes.screenshotType, true, 1, true, []);
 
         var screenshotMechanismTemplate = '<div id="capture">Capture this element' +
             '<div class="hide-1">hide</div><span id="hide2">not part of screenshot</span></div>' +

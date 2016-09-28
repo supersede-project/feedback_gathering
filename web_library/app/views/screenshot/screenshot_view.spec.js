@@ -1,11 +1,11 @@
-define(["require", "exports", './screenshot_view', '../../js/config', 'handlebars', '../../models/mechanisms/mechanism'], function (require, exports, screenshot_view_1, config_1, Handlebars, mechanism_1) {
+define(["require", "exports", './screenshot_view', '../../js/config', 'handlebars', '../../models/mechanisms/screenshot_mechanism'], function (require, exports, screenshot_view_1, config_1, Handlebars, screenshot_mechanism_1) {
     "use strict";
     xdescribe('Screenshot View', function () {
         var screenshotView;
         var container;
         var $ = $j;
         beforeEach(function () {
-            var screenshotMechanism = new mechanism_1.Mechanism(1, config_1.mechanismTypes.screenshotType, true);
+            var screenshotMechanism = new screenshot_mechanism_1.ScreenshotMechanism(1, config_1.mechanismTypes.screenshotType, true, 1, true, []);
             var screenshotMechanismTemplate = '<div id="capture">Capture this element' +
                 '<div class="hide-1">hide</div><span id="hide2">not part of screenshot</span></div>' +
                 '' +

@@ -24,6 +24,12 @@ require.config({
     paths: {
         handlebars: 'node_modules/handlebars/dist/handlebars',
         i18next: 'node_modules/i18next/i18next'
+    },
+    shim:
+    {
+        "handlebars.runtime":
+        {
+            "exports": "Handlebars"
+        }
     }
-
 });

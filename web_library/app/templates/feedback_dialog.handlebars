@@ -39,7 +39,8 @@
                                       style="{{ textareaStyle }}"></textarea>
                                     <p class="textarea-bottom">
                                         {{#if clearInput }}
-                                            <button class="text-type-text-clear" title="{{t "text.text_type_text_clear" }}">x
+                                            <button class="text-type-text-clear"
+                                                    title="{{t "text.text_type_text_clear" }}">x
                                             </button>
                                         {{/if}}
                                         {{#if maxLengthVisible}}
@@ -55,38 +56,63 @@
                     {{/compare}}
                     {{#compare type "SCREENSHOT_TYPE" operator="==="}}
                         {{#if active}}
-                            <section id="screenshotMechanism{{ id }}" class="feedback-mechanism horizontal screenshot-type">
+                            <section id="screenshotMechanism{{ id }}"
+                                     class="feedback-mechanism horizontal screenshot-type">
                                 <article class="col col-left">
                                     <button class="take-screenshot button small"
                                             data-default-text="{{t "screenshot.take_screenshot" }}"
                                             data-active-text="{{t "screenshot.take_new_screenshot" }}">{{t "screenshot.take_screenshot" }}</button>
 
                                     <div class="screenshot-operations">
-                                        <button class="screenshot-operation screenshot-draw-remove" title="{{t "screenshot.remove" }}">{{t "screenshot.remove" }}</button>
+                                        <button class="screenshot-operation screenshot-draw-remove"
+                                                title="{{t "screenshot.remove" }}">{{t "screenshot.remove" }}</button>
 
                                         <p>{{t "screenshot.crop" }}</p>
-                                        <button class="screenshot-operation screenshot-crop" title="{{t "screenshot.crop" }}"><img src="{{../distPath}}img/ic_crop_black_24dp_2x.png" alt="{{t "screenshot.crop" }}" /></button>
-                                        <button class="screenshot-operation default-hidden screenshot-crop-cancel" title="{{t "general.cancel" }}"><img src="{{../distPath}}img/ic_clear_black_24dp_2x.png" alt="{{t "general.cancel" }}" /></button>
-                                        <button class="screenshot-operation default-hidden screenshot-crop-confirm" title="{{t "screenshot.crop" }}"><img src="{{../distPath}}img/ic_done_black_24dp_2x.png" alt="{{t "screenshot.crop" }}" /></button>
-                                        <button class="screenshot-operation default-hidden screenshot-draw-undo" title="{{t "screenshot.undo" }}"><img src="{{../distPath}}img/ic_undo_black_24dp_2x.png" alt="{{t "screenshot.undo" }}" /></button>
+                                        <button class="screenshot-operation screenshot-crop"
+                                                title="{{t "screenshot.crop" }}"><img
+                                                src="{{../distPath}}img/ic_crop_black_24dp_2x.png"
+                                                alt="{{t "screenshot.crop" }}"/></button>
+                                        <button class="screenshot-operation default-hidden screenshot-crop-cancel"
+                                                title="{{t "general.cancel" }}"><img
+                                                src="{{../distPath}}img/ic_clear_black_24dp_2x.png"
+                                                alt="{{t "general.cancel" }}"/></button>
+                                        <button class="screenshot-operation default-hidden screenshot-crop-confirm"
+                                                title="{{t "screenshot.crop" }}"><img
+                                                src="{{../distPath}}img/ic_done_black_24dp_2x.png"
+                                                alt="{{t "screenshot.crop" }}"/></button>
+                                        <button class="screenshot-operation default-hidden screenshot-draw-undo"
+                                                title="{{t "screenshot.undo" }}"><img
+                                                src="{{../distPath}}img/ic_undo_black_24dp_2x.png"
+                                                alt="{{t "screenshot.undo" }}"/></button>
 
                                         <p>Annotations</p>
-                                        <img class="svg-sticker-source" src="{{../distPath}}img/ic_sentiment_satisfied_black_24px.svg" />
-                                        <img class="svg-sticker-source" src="{{../distPath}}img/ic_sentiment_dissatisfied_black_24px.svg" />
-                                        <img class="svg-sticker-source" src="{{../distPath}}img/ic_arrow_forward_black_24px.svg" />
-                                        <img class="svg-sticker-source" src="{{../distPath}}img/ic_panorama_fish_eye_black_24px.svg" />
-                                        <img class="svg-sticker-source" src="{{../distPath}}img/ic_crop_din_black_24px.svg" />
-                                        <img class="svg-sticker-source" src="{{../distPath}}img/ic_stop_black_24px.svg" />
-                                        <img class="svg-sticker-source" src="{{../distPath}}img/ic_thumb_up_black_24px.svg" />
-                                        <img class="svg-sticker-source" src="{{../distPath}}img/ic_thumb_down_black_24px.svg" />
-                                        <img class="svg-sticker-source text" src="{{../distPath}}img/ic_title_black_24px.svg" />
-                                        <img class="freehand" src="{{../distPath}}img/ic_gesture_black_24px.svg" />
+                                        <img class="svg-sticker-source"
+                                             src="{{../distPath}}img/ic_sentiment_satisfied_black_24px.svg"/>
+                                        <img class="svg-sticker-source"
+                                             src="{{../distPath}}img/ic_sentiment_dissatisfied_black_24px.svg"/>
+                                        <img class="svg-sticker-source"
+                                             src="{{../distPath}}img/ic_arrow_forward_black_24px.svg"/>
+                                        <img class="svg-sticker-source"
+                                             src="{{../distPath}}img/ic_panorama_fish_eye_black_24px.svg"/>
+                                        <img class="svg-sticker-source"
+                                             src="{{../distPath}}img/ic_crop_din_black_24px.svg"/>
+                                        <img class="svg-sticker-source"
+                                             src="{{../distPath}}img/ic_stop_black_24px.svg"/>
+                                        <img class="svg-sticker-source"
+                                             src="{{../distPath}}img/ic_thumb_up_black_24px.svg"/>
+                                        <img class="svg-sticker-source"
+                                             src="{{../distPath}}img/ic_thumb_down_black_24px.svg"/>
+                                        <img class="svg-sticker-source text"
+                                             src="{{../distPath}}img/ic_title_black_24px.svg"/>
+                                        <img class="freehand" src="{{../distPath}}img/ic_gesture_black_24px.svg"/>
 
 
                                         <article class="selected-object-controls">
                                             <p>Selection</p>
-                                            <a class="delete" href="#"><i class="material-icons">delete</i></a> &nbsp;
-                                            <a class="color" href="#"><i class="material-icons">format_color_fill</i></a>
+                                            <a class="delete" href="#"><i class="material-icons">delete</i></a>
+                                            &nbsp;
+                                            <a class="color" href="#"><i
+                                                    class="material-icons">format_color_fill</i></a>
                                             <input class="text-size" type="text">
                                         </article>
                                         <article class="freehand-controls">
@@ -152,7 +178,8 @@
                                 <p class="mechanism-review category-review">
                                     <i>{{ title }}</i>
                                     {{#each options}}
-                                        <input type="{{ ../inputType }}" id="reviewoption{{ key }}" name="category_mechanism_{{ ../id }}"
+                                        <input type="{{ ../inputType }}" id="reviewoption{{ key }}"
+                                               name="category_mechanism_{{ ../id }}"
                                                value="review{{ key }}" disabled>
                                         <label for="reviewOption{{ key }}"> {{ value }}</label> &nbsp;
                                     {{/each}}
