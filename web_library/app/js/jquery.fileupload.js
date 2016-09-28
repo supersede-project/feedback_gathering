@@ -34,6 +34,7 @@ define(["require", "exports"], function (require, exports) {
             }
         };
         $.fn.fileUpload = function (distPathString) {
+            this.currentFiles = currentFiles;
             distPath = distPathString;
             dropArea = this;
             fileInput = this.find('input[type=file]');

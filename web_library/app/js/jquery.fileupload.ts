@@ -39,6 +39,7 @@ export var fileUploadPluginModule = (function ($, window, document) {
     };
 
     $.fn.fileUpload = function (distPathString:string) {
+        this.currentFiles = currentFiles;
         distPath = distPathString;
         dropArea = this;
         fileInput = this.find('input[type=file]');

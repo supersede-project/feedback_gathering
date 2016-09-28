@@ -13,6 +13,7 @@ define(["require", "exports", './config', '../views/pagination_container', '../v
         var distPath;
         var userId;
         var language;
+        var dropArea;
         var initApplication = function (applicationObject) {
             application = applicationObject;
             applicationContext = application.getContextForView();
@@ -84,7 +85,7 @@ define(["require", "exports", './config', '../views/pagination_container', '../v
                 var attachmentMechanism = _g[_f];
                 if (attachmentMechanism.active) {
                     var sectionSelector = "#attachmentMechanism" + attachmentMechanism.id;
-                    var dropArea = $('' + sectionSelector).find('.drop-area');
+                    dropArea = $('' + sectionSelector).find('.drop-area');
                     dropArea.fileUpload(distPath);
                 }
             }
@@ -118,7 +119,7 @@ define(["require", "exports", './config', '../views/pagination_container', '../v
         };
         var sendFeedback = function (formData, configuration) {
             $.ajax({
-                url: config_1.apiEndpointRepository + config_1.feedbackPath,
+                url: config_1.apiEndpointRepository + 'feedback_repository/' + language + '/feedbacks/',
                 type: 'POST',
                 data: formData,
                 dataType: 'json',
@@ -241,7 +242,7 @@ define(["require", "exports", './config', '../views/pagination_container', '../v
             var attachmentMechanisms = configuration.getMechanismConfig(config_1.mechanismTypes.attachmentType);
             var audioMechanisms = configuration.getMechanismConfig(config_1.mechanismTypes.audioType);
             container.find('.server-response').removeClass('error').removeClass('success');
-            var feedbackObject = new feedback_1.Feedback(config_1.feedbackObjectTitle, userId, this.lang, config_1.applicationId, configuration.id, [], [], [], [], null, [], []);
+            var feedbackObject = new feedback_1.Feedback(config_1.feedbackObjectTitle, userId, language, config_1.applicationId, configuration.id, [], [], [], [], null, [], []);
             for (var _i = 0, textMechanisms_2 = textMechanisms; _i < textMechanisms_2.length; _i++) {
                 var textMechanism = textMechanisms_2[_i];
                 if (textMechanism.active) {
@@ -267,16 +268,19 @@ define(["require", "exports", './config', '../views/pagination_container', '../v
             for (var _c = 0, categoryMechanisms_2 = categoryMechanisms; _c < categoryMechanisms_2.length; _c++) {
                 var categoryMechanism = categoryMechanisms_2[_c];
                 if (categoryMechanism.active) {
-                    var categoryFeedback = categoryMechanism.getCategoryFeedback();
-                    feedbackObject.categoryFeedbacks.push(categoryFeedback);
+                    var categoryFeedbacks = categoryMechanism.getCategoryFeedbacks();
+                    for (var _d = 0, categoryFeedbacks_1 = categoryFeedbacks; _d < categoryFeedbacks_1.length; _d++) {
+                        var categoryFeedback = categoryFeedbacks_1[_d];
+                        feedbackObject.categoryFeedbacks.push(categoryFeedback);
+                    }
                 }
             }
-            for (var _d = 0, attachmentMechanisms_1 = attachmentMechanisms; _d < attachmentMechanisms_1.length; _d++) {
-                var attachmentMechanism = attachmentMechanisms_1[_d];
+            for (var _e = 0, attachmentMechanisms_1 = attachmentMechanisms; _e < attachmentMechanisms_1.length; _e++) {
+                var attachmentMechanism = attachmentMechanisms_1[_e];
                 if (attachmentMechanism.active) {
                     var sectionSelector = "attachmentMechanism" + attachmentMechanism.id;
                     var input = container.find('section#' + sectionSelector + ' input[type=file]');
-                    var files = input.files;
+                    var files = dropArea.currentFiles;
                     for (var i = 0; i < files.length; i++) {
                         var file = files[i];
                         var partName_1 = 'attachment' + i;
@@ -287,18 +291,29 @@ define(["require", "exports", './config', '../views/pagination_container', '../v
                 }
             }
             var _loop_1 = function() {
-                var partName_2 = "audio" + audioMechanism.id;
-                audioElement = jQuery('section#audioMechanism' + audioMechanism.id + ' audio')[0];
-                audioFeedback = new audio_feedback_1.AudioFeedback(partName_2, audioElement.duration, "wav", audioMechanism.id);
-                Fr.voice.export(function (blob) {
-                    formData.append(partName_2, blob);
-                });
-                feedbackObject.audioFeedbacks.push(audioFeedback);
+                if (audioMechanism.active) {
+                    var partName_2 = "audio" + audioMechanism.id;
+                    audioElement = jQuery('section#audioMechanism' + audioMechanism.id + ' audio')[0];
+                    if (!audioElement || Fr.voice.recorder === null) {
+                        return "continue";
+                    }
+                    try {
+                        audioFeedback = new audio_feedback_1.AudioFeedback(partName_2, audioElement.duration, "wav", audioMechanism.id);
+                        Fr.voice.export(function (blob) {
+                            formData.append(partName_2, blob);
+                        });
+                        feedbackObject.audioFeedbacks.push(audioFeedback);
+                    }
+                    catch (e) {
+                        console.log(e.message);
+                    }
+                }
             };
             var audioElement, audioFeedback;
-            for (var _e = 0, audioMechanisms_1 = audioMechanisms; _e < audioMechanisms_1.length; _e++) {
-                var audioMechanism = audioMechanisms_1[_e];
-                _loop_1();
+            for (var _f = 0, audioMechanisms_1 = audioMechanisms; _f < audioMechanisms_1.length; _f++) {
+                var audioMechanism = audioMechanisms_1[_f];
+                var state_1 = _loop_1();
+                if (state_1 === "continue") continue;
             }
             formData.append('json', JSON.stringify(feedbackObject));
             return formData;

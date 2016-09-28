@@ -44,6 +44,8 @@ export var feedbackPluginModule = function ($, window, document) {
     var distPath;
     var userId;
     var language:string;
+    // TODO support multiple attachment mechanisms
+    var dropArea;
 
     /**
      * @param applicationObject
@@ -150,7 +152,7 @@ export var feedbackPluginModule = function ($, window, document) {
         for(var attachmentMechanism of configuration.getMechanismConfig(mechanismTypes.attachmentType)) {
             if(attachmentMechanism.active) {
                 var sectionSelector = "#attachmentMechanism" + attachmentMechanism.id;
-                var dropArea = $('' + sectionSelector).find('.drop-area');
+                dropArea = $('' + sectionSelector).find('.drop-area');
                 dropArea.fileUpload(distPath);
             }
         }
@@ -197,7 +199,7 @@ export var feedbackPluginModule = function ($, window, document) {
      */
     var sendFeedback = function (formData:FormData, configuration:ConfigurationInterface) {
         $.ajax({
-            url: apiEndpointRepository + feedbackPath,
+            url: apiEndpointRepository + 'feedback_repository/' + language + '/feedbacks/',
             type: 'POST',
             data: formData,
             dataType: 'json',
@@ -376,7 +378,7 @@ export var feedbackPluginModule = function ($, window, document) {
         var audioMechanisms = configuration.getMechanismConfig(mechanismTypes.audioType);
 
         container.find('.server-response').removeClass('error').removeClass('success');
-        var feedbackObject = new Feedback(feedbackObjectTitle, userId, this.lang, applicationId, configuration.id, [], [], [], [], null, [], []);
+        var feedbackObject = new Feedback(feedbackObjectTitle, userId, language, applicationId, configuration.id, [], [], [], [], null, [], []);
 
         for(var textMechanism of textMechanisms) {
             if(textMechanism.active) {
@@ -402,8 +404,10 @@ export var feedbackPluginModule = function ($, window, document) {
 
         for (var categoryMechanism of categoryMechanisms) {
             if (categoryMechanism.active) {
-                var categoryFeedback = categoryMechanism.getCategoryFeedback();
-                feedbackObject.categoryFeedbacks.push(categoryFeedback);
+                var categoryFeedbacks = categoryMechanism.getCategoryFeedbacks();
+                for(var categoryFeedback of categoryFeedbacks) {
+                    feedbackObject.categoryFeedbacks.push(categoryFeedback);
+                }
             }
         }
 
@@ -411,7 +415,7 @@ export var feedbackPluginModule = function ($, window, document) {
             if(attachmentMechanism.active) {
                 var sectionSelector = "attachmentMechanism" + attachmentMechanism.id;
                 var input = container.find('section#' + sectionSelector + ' input[type=file]');
-                var files = input.files;
+                var files = dropArea.currentFiles;
 
                 for (var i = 0; i < files.length; i++) {
                     var file = files[i];
@@ -424,14 +428,23 @@ export var feedbackPluginModule = function ($, window, document) {
         }
 
         for(var audioMechanism of audioMechanisms) {
-            let partName = "audio" + audioMechanism.id;
-            var audioElement = jQuery('section#audioMechanism' + audioMechanism.id + ' audio')[0];
-            var audioFeedback = new AudioFeedback(partName, audioElement.duration, "wav", audioMechanism.id);
+            if(audioMechanism.active) {
+                let partName = "audio" + audioMechanism.id;
+                var audioElement = jQuery('section#audioMechanism' + audioMechanism.id + ' audio')[0];
+                if(!audioElement || Fr.voice.recorder === null) {
+                    continue;
+                }
 
-            Fr.voice.export(function(blob) {
-                formData.append(partName, blob);
-            });
-            feedbackObject.audioFeedbacks.push(audioFeedback);
+                try {
+                    var audioFeedback = new AudioFeedback(partName, audioElement.duration, "wav", audioMechanism.id);
+                    Fr.voice.export(function(blob) {
+                        formData.append(partName, blob);
+                    });
+                    feedbackObject.audioFeedbacks.push(audioFeedback);                }
+                catch (e){
+                    console.log((<Error>e).message);
+                }
+            }
         }
 
         formData.append('json', JSON.stringify(feedbackObject));
