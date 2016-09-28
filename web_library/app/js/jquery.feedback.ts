@@ -27,6 +27,8 @@ import {GeneralConfiguration} from '../models/configurations/general_configurati
 import {TextFeedback} from '../models/feedbacks/text_feedback';
 import {RatingFeedback} from '../models/feedbacks/rating_feedback';
 import {ScreenshotFeedback} from '../models/feedbacks/screenshot_feedback';
+import {AttachmentFeedback} from '../models/feedbacks/attachment_feedback';
+import {AudioFeedback} from '../models/feedbacks/audio_feedback';
 var mockData = require('json!../services/mocks/dev/applications_mock.json');
 
 
@@ -203,6 +205,8 @@ export var feedbackPluginModule = function ($, window, document) {
             contentType: false,
             success: function (data) {
                 $('.server-response').addClass('success').text(defaultSuccessMessage);
+                console.log('response');
+                console.log(data);
                 resetPlugin(configuration);
             },
             error: function (data) {
@@ -372,14 +376,11 @@ export var feedbackPluginModule = function ($, window, document) {
         var audioMechanisms = configuration.getMechanismConfig(mechanismTypes.audioType);
 
         container.find('.server-response').removeClass('error').removeClass('success');
-        var feedbackObject = new Feedback(feedbackObjectTitle, userId, "DE", applicationId, configuration.id, [], [], [], []);
+        var feedbackObject = new Feedback(feedbackObjectTitle, userId, this.lang, applicationId, configuration.id, [], [], [], [], null, [], []);
 
         for(var textMechanism of textMechanisms) {
             if(textMechanism.active) {
-                var sectionSelector = "textMechanism" + textMechanism.id;
-                var textarea = container.find('section#' + sectionSelector + ' textarea.text-type-text');
-                var textFeedback = new TextFeedback(textarea.val(), textMechanism.id);
-                feedbackObject.textFeedbacks.push(textFeedback);
+                feedbackObject.textFeedbacks.push(textMechanism.getTextFeedback());
             }
         }
 
@@ -393,7 +394,7 @@ export var feedbackPluginModule = function ($, window, document) {
         for(var screenshotMechanism of screenshotMechanisms) {
             if(screenshotMechanism.active) {
                 var partName = "screenshot" + screenshotMechanism.id;
-                var screenshotFeedback = new ScreenshotFeedback(partName, screenshotMechanism.id, partName);
+                var screenshotFeedback = new ScreenshotFeedback(partName, screenshotMechanism.id, partName, 'png');
                 feedbackObject.screenshotFeedbacks.push(screenshotFeedback);
                 formData.append(partName, screenshotMechanism.screenshotView.getScreenshotAsBinary());
             }
@@ -414,13 +415,23 @@ export var feedbackPluginModule = function ($, window, document) {
 
                 for (var i = 0; i < files.length; i++) {
                     var file = files[i];
-                    formData.append('photos[]', file, file.name);
+                    let partName = 'attachment' + i;
+                    var attachmentFeedback = new AttachmentFeedback(partName, file.name, file.extension, attachmentMechanism.id);
+                    formData.append(partName, file, file.name);
+                    feedbackObject.attachmentFeedbacks.push(attachmentFeedback);
                 }
             }
         }
 
         for(var audioMechanism of audioMechanisms) {
+            let partName = "audio" + audioMechanism.id;
+            var audioElement = jQuery('section#audioMechanism' + audioMechanism.id + ' audio')[0];
+            var audioFeedback = new AudioFeedback(partName, audioElement.duration, "wav", audioMechanism.id);
 
+            Fr.voice.export(function(blob) {
+                formData.append(partName, blob);
+            });
+            feedbackObject.audioFeedbacks.push(audioFeedback);
         }
 
         formData.append('json', JSON.stringify(feedbackObject));

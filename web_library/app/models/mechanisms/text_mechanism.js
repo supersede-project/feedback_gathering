@@ -3,13 +3,17 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-define(["require", "exports", './mechanism', '../parameters/parameter_value_property_pair'], function (require, exports, mechanism_1, parameter_value_property_pair_1) {
+define(["require", "exports", './mechanism', '../parameters/parameter_value_property_pair', '../feedbacks/text_feedback'], function (require, exports, mechanism_1, parameter_value_property_pair_1, text_feedback_1) {
     "use strict";
     var TextMechanism = (function (_super) {
         __extends(TextMechanism, _super);
         function TextMechanism(id, type, active, order, canBeActivated, parameters) {
             _super.call(this, id, type, active, order, canBeActivated, parameters);
         }
+        TextMechanism.prototype.getTextFeedback = function () {
+            var text = jQuery('section#textMechanism' + this.id + ' textarea').val();
+            return new text_feedback_1.TextFeedback(text, this.id);
+        };
         TextMechanism.prototype.getContext = function () {
             var textareaStyle = this.getCssStyle([new parameter_value_property_pair_1.ParameterValuePropertyPair('textareaFontColor', 'color')]);
             var labelStyle = this.getCssStyle([

@@ -1,4 +1,4 @@
-define(["require", "exports", './config', '../views/pagination_container', '../views/screenshot/screenshot_view', './helpers/i18n', '../models/feedbacks/feedback', './helpers/page_navigation', '../services/application_service', './helpers/array_shuffle', '../templates/feedback_dialog.handlebars', '../templates/feedback_dialog.handlebars', '../templates/intermediate_dialog.handlebars', '../models/feedbacks/text_feedback', '../models/feedbacks/rating_feedback', '../models/feedbacks/screenshot_feedback', './lib/jquery.star-rating-svg.js', './jquery.validate', './jquery.fileupload', './lib/html2canvas.js'], function (require, exports, config_1, pagination_container_1, screenshot_view_1, i18n_1, feedback_1, page_navigation_1, application_service_1, array_shuffle_1, dialogTemplate, pullDialogTemplate, intermediateDialogTemplate, text_feedback_1, rating_feedback_1, screenshot_feedback_1) {
+define(["require", "exports", './config', '../views/pagination_container', '../views/screenshot/screenshot_view', './helpers/i18n', '../models/feedbacks/feedback', './helpers/page_navigation', '../services/application_service', './helpers/array_shuffle', '../templates/feedback_dialog.handlebars', '../templates/feedback_dialog.handlebars', '../templates/intermediate_dialog.handlebars', '../models/feedbacks/rating_feedback', '../models/feedbacks/screenshot_feedback', '../models/feedbacks/attachment_feedback', '../models/feedbacks/audio_feedback', './lib/jquery.star-rating-svg.js', './jquery.validate', './jquery.fileupload', './lib/html2canvas.js'], function (require, exports, config_1, pagination_container_1, screenshot_view_1, i18n_1, feedback_1, page_navigation_1, application_service_1, array_shuffle_1, dialogTemplate, pullDialogTemplate, intermediateDialogTemplate, rating_feedback_1, screenshot_feedback_1, attachment_feedback_1, audio_feedback_1) {
     "use strict";
     var mockData = require('json!../services/mocks/dev/applications_mock.json');
     exports.feedbackPluginModule = function ($, window, document) {
@@ -126,6 +126,8 @@ define(["require", "exports", './config', '../views/pagination_container', '../v
                 contentType: false,
                 success: function (data) {
                     $('.server-response').addClass('success').text(config_1.defaultSuccessMessage);
+                    console.log('response');
+                    console.log(data);
                     resetPlugin(configuration);
                 },
                 error: function (data) {
@@ -239,14 +241,11 @@ define(["require", "exports", './config', '../views/pagination_container', '../v
             var attachmentMechanisms = configuration.getMechanismConfig(config_1.mechanismTypes.attachmentType);
             var audioMechanisms = configuration.getMechanismConfig(config_1.mechanismTypes.audioType);
             container.find('.server-response').removeClass('error').removeClass('success');
-            var feedbackObject = new feedback_1.Feedback(config_1.feedbackObjectTitle, userId, "DE", config_1.applicationId, configuration.id, [], [], [], []);
+            var feedbackObject = new feedback_1.Feedback(config_1.feedbackObjectTitle, userId, this.lang, config_1.applicationId, configuration.id, [], [], [], [], null, [], []);
             for (var _i = 0, textMechanisms_2 = textMechanisms; _i < textMechanisms_2.length; _i++) {
                 var textMechanism = textMechanisms_2[_i];
                 if (textMechanism.active) {
-                    var sectionSelector = "textMechanism" + textMechanism.id;
-                    var textarea = container.find('section#' + sectionSelector + ' textarea.text-type-text');
-                    var textFeedback = new text_feedback_1.TextFeedback(textarea.val(), textMechanism.id);
-                    feedbackObject.textFeedbacks.push(textFeedback);
+                    feedbackObject.textFeedbacks.push(textMechanism.getTextFeedback());
                 }
             }
             for (var _a = 0, ratingMechanisms_1 = ratingMechanisms; _a < ratingMechanisms_1.length; _a++) {
@@ -260,7 +259,7 @@ define(["require", "exports", './config', '../views/pagination_container', '../v
                 var screenshotMechanism = screenshotMechanisms_1[_b];
                 if (screenshotMechanism.active) {
                     var partName = "screenshot" + screenshotMechanism.id;
-                    var screenshotFeedback = new screenshot_feedback_1.ScreenshotFeedback(partName, screenshotMechanism.id, partName);
+                    var screenshotFeedback = new screenshot_feedback_1.ScreenshotFeedback(partName, screenshotMechanism.id, partName, 'png');
                     feedbackObject.screenshotFeedbacks.push(screenshotFeedback);
                     formData.append(partName, screenshotMechanism.screenshotView.getScreenshotAsBinary());
                 }
@@ -280,12 +279,26 @@ define(["require", "exports", './config', '../views/pagination_container', '../v
                     var files = input.files;
                     for (var i = 0; i < files.length; i++) {
                         var file = files[i];
-                        formData.append('photos[]', file, file.name);
+                        var partName_1 = 'attachment' + i;
+                        var attachmentFeedback = new attachment_feedback_1.AttachmentFeedback(partName_1, file.name, file.extension, attachmentMechanism.id);
+                        formData.append(partName_1, file, file.name);
+                        feedbackObject.attachmentFeedbacks.push(attachmentFeedback);
                     }
                 }
             }
+            var _loop_1 = function() {
+                var partName_2 = "audio" + audioMechanism.id;
+                audioElement = jQuery('section#audioMechanism' + audioMechanism.id + ' audio')[0];
+                audioFeedback = new audio_feedback_1.AudioFeedback(partName_2, audioElement.duration, "wav", audioMechanism.id);
+                Fr.voice.export(function (blob) {
+                    formData.append(partName_2, blob);
+                });
+                feedbackObject.audioFeedbacks.push(audioFeedback);
+            };
+            var audioElement, audioFeedback;
             for (var _e = 0, audioMechanisms_1 = audioMechanisms; _e < audioMechanisms_1.length; _e++) {
                 var audioMechanism = audioMechanisms_1[_e];
+                _loop_1();
             }
             formData.append('json', JSON.stringify(feedbackObject));
             return formData;
