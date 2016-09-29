@@ -29,6 +29,7 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
             this.screenshotViewDrawing = new screenshot_view_drawing_1.ScreenshotViewDrawing();
             this.addCaptureEventToButton();
             this.croppingIsActive = false;
+            this.freehandActive = false;
         }
         ScreenshotView.prototype.checkAutoTake = function () {
             if (this.screenshotMechanism.getParameterValue('autoTake')) {
@@ -96,10 +97,7 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
                 else {
                     selectedObjectControls.find('.text-size').hide();
                 }
-                if (selectedObject.get('type') !== 'path-group') {
-                    var currentObjectColor = selectedObject.getFill();
-                }
-                else {
+                if (selectedObject.get('type') === 'path-group') {
                     for (var _i = 0, _a = selectedObject.paths; _i < _a.length; _i++) {
                         var path = _a[_i];
                         if (path.getFill() != "") {
@@ -107,6 +105,12 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
                             break;
                         }
                     }
+                }
+                else if (selectedObject.get('type') === 'path') {
+                    var currentObjectColor = selectedObject.getStroke();
+                }
+                else {
+                    var currentObjectColor = selectedObject.getFill();
                 }
                 selectedObjectControls.find('.delete').off().on('click', function (e) {
                     e.preventDefault();
@@ -135,16 +139,19 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
                     change: function (color) {
                         var color = color.toHexString();
                         jQuery(this).css('color', color);
-                        if (selectedObject.get('type') !== 'path-group') {
-                            selectedObject.setFill(color);
-                        }
-                        else {
+                        if (selectedObject.get('type') === 'path-group') {
                             for (var _i = 0, _a = selectedObject.paths; _i < _a.length; _i++) {
                                 var path = _a[_i];
                                 if (path.getFill() != "") {
                                     path.setFill(color);
                                 }
                             }
+                        }
+                        else if (selectedObject.get('type') === 'path') {
+                            selectedObject.setStroke(color);
+                        }
+                        else {
+                            selectedObject.setFill(color);
                         }
                         myThis.fabricCanvas.renderAll();
                     }
@@ -155,6 +162,10 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
                 selectedObjectControls.hide();
                 selectedObjectControls.find('.delete').off();
                 selectedObjectControls.find('.color').off();
+            });
+            myThis.fabricCanvas.on('object:added', function (object) {
+                if (myThis.freehandActive) {
+                }
             });
         };
         ScreenshotView.prototype.determineCanvasScaleForRetinaDisplay = function () {
@@ -312,12 +323,14 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
             this.fabricCanvas.isDrawingMode = true;
             jQuery('.screenshot-operations .freehand').css('border-bottom', '1px solid black');
             freehandControls.show();
+            this.freehandActive = true;
         };
         ScreenshotView.prototype.disableFreehandDrawing = function () {
             var freehandControls = jQuery('.freehand-controls');
             jQuery('.screenshot-operations .freehand').css('border-bottom', 'none');
             this.fabricCanvas.isDrawingMode = false;
             freehandControls.hide();
+            this.freehandActive = false;
         };
         ScreenshotView.prototype.initSVGStickers = function () {
             var myThis = this;

@@ -45,6 +45,7 @@ export class ScreenshotView {
     fabricCanvas;
     canvas;
     croppingIsActive:boolean;
+    freehandActive:boolean;
 
 
     constructor(screenshotMechanism:Mechanism, screenshotPreviewElement:JQuery, screenshotCaptureButton:JQuery,
@@ -61,6 +62,7 @@ export class ScreenshotView {
         this.screenshotViewDrawing = new ScreenshotViewDrawing();
         this.addCaptureEventToButton();
         this.croppingIsActive = false;
+        this.freehandActive = false;
     }
 
     checkAutoTake() {
@@ -145,16 +147,17 @@ export class ScreenshotView {
                 selectedObjectControls.find('.text-size').hide();
             }
 
-
-            if (selectedObject.get('type') !== 'path-group') {
-                var currentObjectColor = selectedObject.getFill();
-            } else {
+            if (selectedObject.get('type') === 'path-group') {
                 for (var path of selectedObject.paths) {
                     if (path.getFill() != "") {
                         var currentObjectColor = path.getFill();
                         break;
                     }
                 }
+            } else if(selectedObject.get('type') === 'path') {
+                var currentObjectColor = selectedObject.getStroke();
+            } else {
+                var currentObjectColor = selectedObject.getFill();
             }
 
             selectedObjectControls.find('.delete').off().on('click', function (e) {
@@ -186,15 +189,18 @@ export class ScreenshotView {
                     var color = color.toHexString();
                     jQuery(this).css('color', color);
 
-                    if (selectedObject.get('type') !== 'path-group') {
-                        selectedObject.setFill(color);
-                    } else {
+                    if (selectedObject.get('type') === 'path-group') {
                         for (var path of selectedObject.paths) {
                             if (path.getFill() != "") {
                                 path.setFill(color);
                             }
                         }
+                    } else if(selectedObject.get('type') === 'path') {
+                        selectedObject.setStroke(color);
+                    } else {
+                        selectedObject.setFill(color);
                     }
+
                     myThis.fabricCanvas.renderAll();
                 }
             });
@@ -205,6 +211,11 @@ export class ScreenshotView {
             selectedObjectControls.hide();
             selectedObjectControls.find('.delete').off();
             selectedObjectControls.find('.color').off();
+        });
+
+        myThis.fabricCanvas.on('object:added', function(object) {
+            if(myThis.freehandActive) {
+            }
         });
     }
 
@@ -390,6 +401,7 @@ export class ScreenshotView {
         this.fabricCanvas.isDrawingMode = true;
         jQuery('.screenshot-operations .freehand').css('border-bottom', '1px solid black');
         freehandControls.show();
+        this.freehandActive = true;
     }
 
     disableFreehandDrawing() {
@@ -397,6 +409,7 @@ export class ScreenshotView {
         jQuery('.screenshot-operations .freehand').css('border-bottom', 'none');
         this.fabricCanvas.isDrawingMode = false;
         freehandControls.hide();
+        this.freehandActive = false;
     }
 
     initSVGStickers() {
