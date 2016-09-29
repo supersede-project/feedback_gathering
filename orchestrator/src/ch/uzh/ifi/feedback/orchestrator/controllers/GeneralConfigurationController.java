@@ -2,7 +2,11 @@ package ch.uzh.ifi.feedback.orchestrator.controllers;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import com.google.inject.Inject;
+import com.google.inject.servlet.RequestScoped;
 
 import ch.uzh.ifi.feedback.library.rest.IRequestContext;
 import ch.uzh.ifi.feedback.library.rest.RestController;
@@ -27,6 +31,7 @@ import ch.uzh.ifi.feedback.orchestrator.validation.GeneralConfigurationValidator
 
 import static java.util.Arrays.asList;
 
+@RequestScoped
 @Controller(GeneralConfiguration.class)
 public class GeneralConfigurationController extends RestController<GeneralConfiguration> 
 {
@@ -38,10 +43,11 @@ public class GeneralConfigurationController extends RestController<GeneralConfig
 			GeneralConfigurationService dbService, 
 			ApplicationService applicationService,
 			ConfigurationService configurationService,
-			IRequestContext requestContext,
+			HttpServletRequest request, 
+			HttpServletResponse response,
 			GeneralConfigurationValidator validator) 
 	{
-		super(dbService, validator, requestContext);
+		super(dbService, validator, request, response);
 		
 		this.applicationService = applicationService;
 		this.configurationService = configurationService;

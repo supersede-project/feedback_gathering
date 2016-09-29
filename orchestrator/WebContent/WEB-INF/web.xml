@@ -12,7 +12,7 @@
 </filter-mapping>
 
 <listener>
-  <listener-class>ch.uzh.ifi.feedback.repository.GuiceRepositoryContextListener</listener-class>
+  <listener-class>ch.uzh.ifi.feedback.orchestrator.GuiceOrchestratorContextListener</listener-class>
 </listener>
 
 <context-param>

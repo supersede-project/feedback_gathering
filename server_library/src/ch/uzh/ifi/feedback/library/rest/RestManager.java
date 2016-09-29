@@ -64,18 +64,16 @@ public class RestManager implements IRestManager {
 	private List<HandlerInfo> _handlers;
 	private Map<Class<?>, Method> _parserMap;
 	private Map<Class<?>, Class<? extends ISerializationService<?>>> _serializerMap;
-	private Map<Class<?>, Class<? extends ValidatorBase<?>>> _validatorMap;
 	private Map<Method, Class<? extends ITokenAuthenticationService>> _authentiactionMap;
-	private ServletRequestContext requestContext;
 	private Injector _injector;
 
 	@Inject
 	public RestManager(Injector injector) {
 		
 		this._injector = injector;
+		
 		_handlers = new ArrayList<>();
 		_parserMap = new HashMap<>();
-		_validatorMap = new HashMap<>();
 		_serializerMap = new HashMap<>();
 		_authentiactionMap = new HashMap<>();
 	}
@@ -89,21 +87,7 @@ public class RestManager implements IRestManager {
                 .setUrls(packages)
                 .setScanners(new MethodAnnotationsScanner(), new TypeAnnotationsScanner()));
 		
-		//InitInjector(reflections);
 		InitHandlerTable(reflections);
-		//requestContext = (ServletRequestContext)_injector.getInstance(IRequestContext.class);
-	}
-	
-	private void InitInjector(Reflections reflections) throws Exception
-	{
-		Set<Class<? extends AbstractModule>> modules = reflections.getSubTypesOf(AbstractModule.class);
-		List<AbstractModule> moduleInstances = new ArrayList<>();
-		for(Class<? extends AbstractModule> moduleClazz : modules)
-		{
-			moduleInstances.add(moduleClazz.newInstance());
-		}
-		moduleInstances.add(MainModule.class.newInstance());
-		_injector = Guice.createInjector(moduleInstances);
 	}
 	
 	private void InitHandlerTable(Reflections reflections) throws Exception
@@ -328,21 +312,21 @@ public class RestManager implements IRestManager {
 		
 		Object instance = _injector.getInstance(handler.getHandlerClass());
 		
-		ISerializationService serializer = _injector.getInstance(_serializerMap.get(handler.getSerializedParameterClass()));
-		if(method == HttpMethod.POST || method == HttpMethod.PUT){
-			if(serializer != null)
-			{
-				Object object = serializer.Deserialize(request);
-				parameters.add(object);
-			}else{
-				parameters.add(GetRequestContent(request));
+		ISerializationService serializer = null;
+		
+		if(handler.getSerializedParameterClass() != void.class)
+		{
+			serializer = _injector.getInstance(_serializerMap.get(handler.getSerializedParameterClass()));
+			if(method == HttpMethod.POST || method == HttpMethod.PUT){
+				if(serializer != null)
+				{
+					Object object = serializer.Deserialize(request);
+					parameters.add(object);
+				}else{
+					parameters.add(GetRequestContent(request));
+				}
 			}
 		}
-		
-		/*
-		if (instance instanceof RestController<?>)
-			((RestController<?>)instance).SetLanguage(language);
-		*/
 		
 		Object result = handler.getMethod().invoke(instance, parameters.toArray());
 		

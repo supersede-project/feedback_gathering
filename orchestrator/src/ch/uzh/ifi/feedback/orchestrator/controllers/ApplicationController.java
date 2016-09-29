@@ -2,7 +2,12 @@ package ch.uzh.ifi.feedback.orchestrator.controllers;
 
 import java.sql.Timestamp;
 import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import com.google.inject.Inject;
+import com.google.inject.servlet.RequestScoped;
 
 import ch.uzh.ifi.feedback.library.rest.IRequestContext;
 import ch.uzh.ifi.feedback.library.rest.RestController;
@@ -19,12 +24,13 @@ import ch.uzh.ifi.feedback.orchestrator.serialization.ApplicationSerializationSe
 import ch.uzh.ifi.feedback.orchestrator.services.ApplicationService;
 import ch.uzh.ifi.feedback.orchestrator.validation.ApplicationValidator;
 
+@RequestScoped
 @Controller(Application.class)
 public class ApplicationController extends OrchestratorController<Application> {
 
 	@Inject
-	public ApplicationController(ApplicationService dbService, ApplicationValidator validator, IRequestContext requestContext) {
-		super(dbService, validator, requestContext);
+	public ApplicationController(ApplicationService dbService, ApplicationValidator validator, HttpServletRequest request, HttpServletResponse response) {
+		super(dbService, validator, request, response);
 	}
 	
 	@GET

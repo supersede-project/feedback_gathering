@@ -2,7 +2,11 @@ package ch.uzh.ifi.feedback.orchestrator.controllers;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import com.google.inject.Inject;
+import com.google.inject.servlet.RequestScoped;
 
 import ch.uzh.ifi.feedback.library.rest.IRequestContext;
 import ch.uzh.ifi.feedback.library.rest.RestController;
@@ -18,12 +22,13 @@ import ch.uzh.ifi.feedback.orchestrator.model.User;
 import ch.uzh.ifi.feedback.orchestrator.services.UserService;
 import ch.uzh.ifi.feedback.orchestrator.validation.UserValidator;
 
+@RequestScoped
 @Controller(User.class)
 public class UserController extends RestController<User> {
 
 	@Inject
-	public UserController(UserService dbService, UserValidator validator, IRequestContext requestContext) {
-		super(dbService, validator, requestContext);
+	public UserController(UserService dbService, UserValidator validator, HttpServletRequest request, HttpServletResponse response) {
+		super(dbService, validator, request, response);
 	}
 	
 	@GET

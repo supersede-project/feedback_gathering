@@ -107,7 +107,7 @@ public class ServletTest extends TestCase {
     {
         super.setUp();
         config.RestoreTestDatabases();
-        //token = AuthenticateUser();
+        token = AuthenticateUser();
     }
     
    @Override

@@ -2,7 +2,11 @@ package ch.uzh.ifi.feedback.orchestrator.controllers;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import com.google.inject.Inject;
+import com.google.inject.servlet.RequestScoped;
 
 import ch.uzh.ifi.feedback.library.rest.IRequestContext;
 import ch.uzh.ifi.feedback.library.rest.RestController;
@@ -20,12 +24,13 @@ import ch.uzh.ifi.feedback.orchestrator.serialization.ParameterSerializationServ
 import ch.uzh.ifi.feedback.orchestrator.services.ParameterService;
 import ch.uzh.ifi.feedback.orchestrator.validation.ParameterValidator;
 
+@RequestScoped
 @Controller(FeedbackParameter.class)
 public class ParameterController extends RestController<FeedbackParameter> {
 	
 	@Inject
-	public ParameterController(ParameterService dbService, ParameterValidator validator, IRequestContext requestContext) {
-		super(dbService, validator, requestContext);
+	public ParameterController(ParameterService dbService, ParameterValidator validator, HttpServletRequest request, HttpServletResponse response) {
+		super(dbService, validator, request, response);
 	}
 
 	@GET

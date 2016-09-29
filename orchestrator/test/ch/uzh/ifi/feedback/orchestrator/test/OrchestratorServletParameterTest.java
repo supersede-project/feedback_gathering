@@ -52,7 +52,7 @@ public class OrchestratorServletParameterTest extends ServletTest {
 		String jsonString = IOUtils.toString(stream); 
 		
 		FeedbackParameter createdParameter = PostSuccess(
-				"https://localhost:8443/feedback_orchestrator/en/general_configurations/148/parameters", 
+				"http://localhost:8080/feedback_orchestrator/en/general_configurations/148/parameters", 
 				jsonString,
 				FeedbackParameter.class);
         
@@ -66,7 +66,7 @@ public class OrchestratorServletParameterTest extends ServletTest {
 		String jsonString = IOUtils.toString(stream); 
 		
 		FeedbackParameter createdParameter = PostSuccess(
-				"https://localhost:8443/feedback_orchestrator/en/mechanisms/829/parameters", 
+				"http://localhost:8080/feedback_orchestrator/en/mechanisms/829/parameters", 
 				jsonString,
 				FeedbackParameter.class);
         
@@ -80,7 +80,7 @@ public class OrchestratorServletParameterTest extends ServletTest {
 		String jsonString = IOUtils.toString(stream); 
 		
 		FeedbackParameter updatedParameter = PutSuccess(
-				"https://localhost:8443/feedback_orchestrator/en/parameters", 
+				"http://localhost:8080/feedback_orchestrator/en/parameters", 
 				jsonString,
 				FeedbackParameter.class);
         

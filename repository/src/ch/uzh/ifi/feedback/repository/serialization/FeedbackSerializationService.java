@@ -50,24 +50,21 @@ public class FeedbackSerializationService extends RepositorySerializationService
 		feedback = gson.fromJson(data, Feedback.class);
 		
 		try {
-			String storagePath = storageService.CreateDirectory("screenshots");
 			for(ScreenshotFeedback screenshot : feedback.getScreenshotFeedbacks())
 			{
-				screenshot = storageService.ParseFilePart(getFileItemsForFeedback(screenshot, fileItems), screenshot, storagePath);	
+				screenshot = storageService.ParseFilePart(getFileItemsForFeedback(screenshot, fileItems), screenshot, "screenshots");	
 			}
 			
-			storagePath = storageService.CreateDirectory("audios");
 			for(AudioFeedback audio : feedback.getAudioFeedbacks())
 			{
 				Part filePart = request.getPart(audio.getPart());
-				audio = storageService.ParseFilePart(getFileItemsForFeedback(audio, fileItems), audio, storagePath);	
+				audio = storageService.ParseFilePart(getFileItemsForFeedback(audio, fileItems), audio, "audios");	
 			}
 			
-			storagePath = storageService.CreateDirectory("attachments");
 			for(AttachmentFeedback attachment : feedback.getAttachmentFeedbacks())
 			{
 				Part filePart = request.getPart(attachment.getPart());
-				attachment = storageService.ParseFilePart(getFileItemsForFeedback(attachment, fileItems), attachment, storagePath);	
+				attachment = storageService.ParseFilePart(getFileItemsForFeedback(attachment, fileItems), attachment, "attachments");	
 			}
 			
 		} catch (Exception e) {

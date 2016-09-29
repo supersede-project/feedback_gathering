@@ -11,18 +11,19 @@ public abstract class FileFeedback extends ItemBase<FileFeedback> {
 	@Id
 	protected Integer id;
 	
-	@NotNull
 	protected String path;
 	
-	@NotNull
 	protected int size;
 		
+	@NotNull
 	protected String name;
 	
 	@DbIgnore
+	@NotNull
 	protected String part;
 	
 	@DbAttribute("file_extension")
+	@NotNull
 	protected String fileExtension;
 	
 
