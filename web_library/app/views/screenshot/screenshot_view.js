@@ -121,7 +121,7 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
                 });
                 selectedObjectControls.find('a.color').css('color', currentObjectColor);
                 selectedObjectControls.find('a.color').off().spectrum({
-                    color: defaultColor,
+                    color: currentObjectColor,
                     showPaletteOnly: true,
                     togglePaletteOnly: true,
                     togglePaletteMoreText: 'more',
@@ -154,6 +154,9 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
                             selectedObject.setFill(color);
                         }
                         myThis.fabricCanvas.renderAll();
+                    },
+                    beforeShow: function (color) {
+                        jQuery(this).spectrum("option", 'color', currentObjectColor);
                     }
                 });
             });
@@ -493,10 +496,25 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
             fabric.Canvas.prototype.customiseControls({
                 mt: {
                     action: function (e, target) {
+                        if (target.get('type') === 'path-group') {
+                            for (var _i = 0, _a = target.paths; _i < _a.length; _i++) {
+                                var path = _a[_i];
+                                if (path.getFill() != "") {
+                                    var currentObjectColor = path.getFill();
+                                    break;
+                                }
+                            }
+                        }
+                        else if (target.get('type') === 'path') {
+                            var currentObjectColor = target.getStroke();
+                        }
+                        else {
+                            var currentObjectColor = target.getFill();
+                        }
                         colorLinkElement.css('top', e.offsetY - 12 + 'px');
                         colorLinkElement.css('left', e.offsetX - 8 + 'px');
                         colorLinkElement.off().spectrum({
-                            color: defaultColor,
+                            color: currentObjectColor,
                             showPaletteOnly: true,
                             togglePaletteOnly: true,
                             togglePaletteMoreText: 'more',
@@ -528,6 +546,9 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
                                 selectedObjectControls.find('a.color').css('color', color);
                                 myThis.fabricCanvas.renderAll();
                                 jQuery(this).remove();
+                            },
+                            beforeShow: function (color) {
+                                jQuery(this).spectrum("option", 'color', currentObjectColor);
                             }
                         });
                         myThis.screenshotPreviewElement.append(colorLinkElement);

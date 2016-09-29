@@ -170,7 +170,7 @@ export class ScreenshotView {
 
             selectedObjectControls.find('a.color').css('color', currentObjectColor);
             selectedObjectControls.find('a.color').off().spectrum({
-                color: defaultColor,
+                color: currentObjectColor,
                 showPaletteOnly: true,
                 togglePaletteOnly: true,
                 togglePaletteMoreText: 'more',
@@ -202,6 +202,9 @@ export class ScreenshotView {
                     }
 
                     myThis.fabricCanvas.renderAll();
+                },
+                beforeShow: function(color) {
+                    jQuery(this).spectrum("option", 'color', currentObjectColor);
                 }
             });
         });
@@ -598,10 +601,23 @@ export class ScreenshotView {
         fabric.Canvas.prototype.customiseControls({
             mt: {
                 action: function (e, target) {
+                    if (target.get('type') === 'path-group') {
+                        for (var path of target.paths) {
+                            if (path.getFill() != "") {
+                                var currentObjectColor = path.getFill();
+                                break;
+                            }
+                        }
+                    } else if(target.get('type') === 'path') {
+                        var currentObjectColor = target.getStroke();
+                    } else {
+                        var currentObjectColor = target.getFill();
+                    }
+
                     colorLinkElement.css('top', e.offsetY - 12 + 'px');
                     colorLinkElement.css('left', e.offsetX - 8 + 'px');
                     colorLinkElement.off().spectrum({
-                        color: defaultColor,
+                        color: currentObjectColor,
                         showPaletteOnly: true,
                         togglePaletteOnly: true,
                         togglePaletteMoreText: 'more',
@@ -631,6 +647,9 @@ export class ScreenshotView {
                             selectedObjectControls.find('a.color').css('color', color);
                             myThis.fabricCanvas.renderAll();
                             jQuery(this).remove();
+                        },
+                        beforeShow: function(color) {
+                            jQuery(this).spectrum("option", 'color', currentObjectColor);
                         }
                     });
                     myThis.screenshotPreviewElement.append(colorLinkElement);
