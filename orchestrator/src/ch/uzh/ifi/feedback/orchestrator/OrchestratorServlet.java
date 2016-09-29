@@ -3,25 +3,22 @@ package ch.uzh.ifi.feedback.orchestrator;
 import java.io.IOException;
 
 import javax.servlet.ServletException;
-import javax.servlet.annotation.HttpConstraint;
-import javax.servlet.annotation.ServletSecurity;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.annotation.ServletSecurity.TransportGuarantee;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import ch.uzh.ifi.feedback.library.rest.IRestManager;
 import ch.uzh.ifi.feedback.library.rest.RestManager;
-import ch.uzh.ifi.feedback.library.rest.ServletBase;
-import ch.uzh.ifi.feedback.library.rest.Service.DatabaseConfiguration;
 
 /**
  * Servlet implementation class OrchestratorServlet
  */
 @WebServlet("/")
-public class OrchestratorServlet extends ServletBase {
+public class OrchestratorServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	
+    private IRestManager _restController;
 	
     /**
      * @see HttpServlet#HttpServlet()
@@ -29,13 +26,12 @@ public class OrchestratorServlet extends ServletBase {
     public OrchestratorServlet() {
         super();
         
-        this.InitController();
+        InitController();
     }
     
-    @Override
-    protected void InitController()
+    private void InitController()
     {
-        this._restController = new RestManager();
+        _restController = new RestManager();
         
         try{
         	_restController.Init("ch.uzh.ifi.feedback.orchestrator");
@@ -46,4 +42,48 @@ public class OrchestratorServlet extends ServletBase {
         	super.destroy();
         }
     }
+
+	/**
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
+		SetHeaders(response);
+		_restController.Get(request, response);
+	}
+
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+		SetHeaders(response);
+		_restController.Post(request, response);
+	}
+	
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+		SetHeaders(response);
+		_restController.Get(request, response);
+	}
+
+	protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	
+        SetHeaders(response);
+		_restController.Put(request, response);
+	}
+	
+	private void SetHeaders(HttpServletResponse response)
+	{
+        response.setContentType("application/json");            
+        response.setCharacterEncoding("UTF-8");
+        
+        response.setHeader("Access-Control-Allow-Origin", "*");
+        response.setHeader("Access-Control-Allow-Methods", "GET,PUT,POST");
+        response.setHeader("Access-Control-Allow-Headers", "Content-Type");
+        response.setHeader("Access-Control-Max-Age", "86400");
+	}
 }

@@ -14,27 +14,24 @@ import java.util.stream.Stream;
 import com.google.inject.Inject;
 import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils.Collections;
 
-import ch.uzh.ifi.feedback.library.rest.Service.DatabaseConfiguration;
 import ch.uzh.ifi.feedback.library.rest.Service.IDbService;
 import ch.uzh.ifi.feedback.library.rest.Service.ServiceBase;
 import ch.uzh.ifi.feedback.orchestrator.model.FeedbackMechanism;
 import ch.uzh.ifi.feedback.orchestrator.model.FeedbackParameter;
 import javassist.NotFoundException;
-import static java.util.Arrays.asList;
 
-public class ParameterService extends OrchestratorService<FeedbackParameter>{
+public class ParameterService extends ServiceBase<FeedbackParameter>{
 	
 	@Inject
-	public ParameterService(ParameterResultParser resultParser, DatabaseConfiguration config) 
+	public ParameterService(ParameterResultParser resultParser) 
 	{
-		super(resultParser, FeedbackParameter.class, "parameters", config.getOrchestratorDb());
+		super(resultParser, FeedbackParameter.class, "parameters", "feedback_orchestrator");
 	}
 	
 	@Override
-	public List<FeedbackParameter> GetWhere(List<Object> values, String... conditions)
-			throws SQLException {
-		
-		List<FeedbackParameter> params = super.GetWhere(values, conditions);
+	public List<FeedbackParameter> GetWhereEquals(List<String> attributeNames, List<Object> values)
+			throws SQLException, NotFoundException {
+		List<FeedbackParameter> params = super.GetWhereEquals(attributeNames, values);
 		
 		Map<Integer, List<FeedbackParameter>> childMap = new HashMap<>();
 		Map<FeedbackParameter, Integer> parameterMap = new HashMap<>();
@@ -48,9 +45,17 @@ public class ParameterService extends OrchestratorService<FeedbackParameter>{
 	}
 	
 	@Override
-	public List<FeedbackParameter> GetAll() throws SQLException
+	public List<FeedbackParameter> GetAll() throws SQLException, NotFoundException
 	{
-		return GetWhere(asList());
+		Map<Integer, List<FeedbackParameter>> childMap = new HashMap<>();
+		Map<FeedbackParameter, Integer> parameterMap = new HashMap<>();
+		List<FeedbackParameter> params = super.GetAll();
+		if(GetLanguage() != null)
+			params = params.stream().filter(p -> p.getLanguage().equals(this.GetLanguage())).collect(Collectors.toList());
+		
+		List<FeedbackParameter> rootParams = GetRootParams(params, parameterMap, childMap);
+	    
+	    return setParametersRecursive(rootParams, parameterMap, childMap);
 	}
 	
 	private List<FeedbackParameter> GetRootParams(List<FeedbackParameter> params, Map<FeedbackParameter, Integer> parameterMap, Map<Integer, List<FeedbackParameter>> childMap)
@@ -77,62 +82,142 @@ public class ParameterService extends OrchestratorService<FeedbackParameter>{
 	@Override
 	public FeedbackParameter GetById(int id) throws SQLException, NotFoundException
 	{
-		List<FeedbackParameter> params = GetWhere(asList(id), "parameters_id = ?");
-		return params.size() > 0 ? params.get(0) : null;
+		FeedbackParameter param = super.GetById(id);
+    	return param;
 	}
 	
 	@Override
-	public int Insert(Connection con, FeedbackParameter param)
-			throws SQLException, NotFoundException, UnsupportedOperationException {
-
-		int parameterId;
-		
-		if (param.getValue() == null || List.class.isAssignableFrom(param.getValue().getClass()))
-		{
-			List<FeedbackParameter> children = (List<FeedbackParameter>)param.getValue();
-			param.setValue(null);
-			parameterId = super.Insert(con, param);
-			for(FeedbackParameter child : children)
-			{
-				child.setParentParameterId(parameterId);
-				child.setMechanismId(param.getMechanismId());
-				child.setGenaralConfigurationId(param.getGenaralConfigurationId());
-				Insert(con, child);
-			}
-		}else{
-			parameterId = super.Insert(con, param);
+	public void InsertFor(Connection con, FeedbackParameter param, String foreignKeyName, int foreignKey) throws SQLException, NotFoundException
+	{
+		switch(foreignKeyName){
+			case "mechanism_id":
+				InsertParameter(param, null, foreignKey, null, con);
+				break;
+			case "configuration_id":
+				InsertParameter(param, foreignKey, null, null, con);
+				break;
+			default:
+				throw new NotFoundException("");
 		}
+	}
+	
+	public void InsertParameter(
+			FeedbackParameter param, 
+			Integer generalConfigurationId, 
+			Integer mechanismId, 
+			Integer parameterId, 
+			Connection con) throws SQLException, NotFoundException{
 		
-		return parameterId;
+		PreparedStatement s = con.prepareStatement(
+				  "INSERT INTO feedback_orchestrator.parameters "
+				+ "(mechanism_id, `key`, value, default_value, editable_by_user, parameters_id, "
+				+ "language, general_configurations_id,  created_at) "
+				+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) ;", PreparedStatement.RETURN_GENERATED_KEYS);
+		
+		s.setObject(1, mechanismId);
+		s.setString(2, param.getKey());
+		s.setObject(4, param.getDefaultValue());
+		s.setObject(5, param.getEditableByUser());
+		s.setObject(6, parameterId);
+		if(param.getLanguage() == null)
+		{
+			s.setString(7, "en");
+		}else{
+			s.setObject(7, param.getLanguage());
+		}
+
+		s.setObject(8, generalConfigurationId);
+		s.setTimestamp(9, param.getCreatedAt());
+		
+		int key;
+		if(List.class.isAssignableFrom(param.getValue().getClass())){
+			
+			s.setObject(3, null);
+			s.execute();
+		    ResultSet keys = s.getGeneratedKeys();
+		    keys.next();
+		    key = keys.getInt(1);
+		    
+
+		    List<FeedbackParameter> children = (List<FeedbackParameter>)param.getValue();
+			for (FeedbackParameter childParam : children){
+				InsertParameter(childParam, generalConfigurationId, mechanismId, key, con);	
+			}
+			
+		}else{
+			s.setObject(3, param.getValue());
+			s.execute();
+			
+		    ResultSet keys = s.getGeneratedKeys();
+		    keys.next();
+		    key = keys.getInt(1);
+		}
 	}
 	
 	@Override
-	public void Update(Connection con, FeedbackParameter param)
-			throws SQLException, NotFoundException, UnsupportedOperationException {
-
-		if (List.class.isAssignableFrom(param.getValue().getClass()))
-		{
-			List<FeedbackParameter> children = (List<FeedbackParameter>)param.getValue();
-			param.setValue(null);
-			super.Update(con, param);
+	public void UpdateFor(Connection con, FeedbackParameter param, String foreignKeyName, int foreignKey) throws SQLException, NotFoundException
+	{
+		switch(foreignKeyName){
+			case "mechanism_id":
+				UpdateParameter(param, null, foreignKey, null, con);
+				break;
+			case "configuration_id":
+				UpdateParameter(param, null, null, foreignKey, con);
+				break;
+			default:
+				throw new NotFoundException("Foreign Key '" + foreignKeyName + "' does not exist in table 'Parameters'");
+		}
+	}
+	
+	@Override
+	public void Update(Connection con, FeedbackParameter param) throws SQLException, NotFoundException
+	{
+		UpdateParameter(param, null, null, null, con);
+	}
+	
+	public void UpdateParameter(
+			FeedbackParameter param, 
+			Integer parameterId,
+			Integer mechanismId,
+			Integer generalConfigurationId,
+			Connection con) throws SQLException, NotFoundException{
+		
+		PreparedStatement s = con.prepareStatement(
+				  	"UPDATE feedback_orchestrator.parameters "
+				  + "SET mechanism_id = ?, `key` = ?, value = ?, default_value = IFNULL(?, default_value), editable_by_user = IFNULL(?, editable_by_user), "
+				       + "parameters_id = ?, language = IFNULL(?, language), general_configurations_id = ? "
+				  + "WHERE id = ? ;");
+		
+		s.setObject(1, mechanismId);
+		s.setString(2, param.getKey());
+		s.setObject(4, param.getDefaultValue());
+		s.setObject(5, param.getEditableByUser());
+		s.setObject(6, parameterId);
+		s.setObject(7, param.getLanguage());
+		s.setObject(8, generalConfigurationId);
+		s.setInt(9, param.getId());
+		
+		if(List.class.isAssignableFrom(param.getValue().getClass())){
 			
-			for(FeedbackParameter child : children)
-			{
-				if(child.getId() == null)
+			s.setObject(3, null);
+			s.execute();
+
+		    List<FeedbackParameter> children = (List<FeedbackParameter>)param.getValue();
+			for (FeedbackParameter childParam : children){
+				if(childParam.getId() == null)
 				{
-					child.setParentParameterId(param.getId());
-					child.setMechanismId(param.getMechanismId());
-					child.setGenaralConfigurationId(param.getGenaralConfigurationId());
-					Insert(con, child);
+					InsertParameter(childParam, generalConfigurationId, mechanismId, param.getId(), con);
 				}else{
-					Update(con, child);
+					UpdateParameter(childParam, generalConfigurationId, mechanismId, param.getId(), con);		
 				}
 			}
+			
 		}else{
-			super.Update(con, param);
+			s.setObject(3, param.getValue());
+			s.execute();
 		}
 	}
-
+	
 	private List<FeedbackParameter> setParametersRecursive(
 			List<FeedbackParameter> params, 
 			Map<FeedbackParameter, Integer> parameterMap, 

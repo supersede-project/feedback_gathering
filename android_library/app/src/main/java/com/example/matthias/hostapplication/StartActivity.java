@@ -1,7 +1,7 @@
 package com.example.matthias.hostapplication;
 
-import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -15,9 +15,6 @@ import com.example.matthias.feedbacklibrary.utils.DialogUtils;
 import com.example.matthias.feedbacklibrary.utils.Utils;
 
 public class StartActivity extends AppCompatActivity {
-    // Storage permission (android.permission-group.STORAGE)
-    private static final int PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 100;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,32 +23,30 @@ public class StartActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        // TODO: Uncomment before release
         // Actual trigger
-        //Utils.triggerPotentialPullFeedback(this, 8L, "en");
+        //Utils.triggerPotentialPullFeedback(this);
 
-        // TODO: Remove before release
         // Only for demo purposes
-        Button popup = (Button) findViewById(R.id.pull_popup_button);
-        if (popup != null) {
-            popup.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    String jsonString;
-                    jsonString = Utils.readFileAsString("feedback_orchestrator_adapted_single_selection.json", getAssets());
-                    DialogUtils.PullFeedbackIntermediateDialog d = DialogUtils.PullFeedbackIntermediateDialog.newInstance(getResources().getString(com.example.matthias.feedbacklibrary.R.string.supersede_feedbacklibrary_pull_feedback_question_string), jsonString, 9, "en");
-                    d.show(getFragmentManager(), "feedbackPopupDialog");
-                }
-            });
-        }
         Button noPopup = (Button) findViewById(R.id.pull_no_popup_button);
         if (noPopup != null) {
             noPopup.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     String jsonString;
-                    jsonString = Utils.readFileAsString("feedback_orchestrator_adapted_multiple_selection.json", getAssets());
-                    startFeedbackActivity(jsonString, false, 10, "en");
+                    jsonString = Utils.readFileAsString("configuration_material_design_pull_no_popup.json", getAssets());
+                    startFeedbackActivity(jsonString, false, 0);
+                }
+            });
+        }
+        Button popup = (Button) findViewById(R.id.pull_popup_button);
+        if (popup != null) {
+            popup.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String jsonString;
+                    jsonString = Utils.readFileAsString("configuration_material_design_pull_popup.json", getAssets());
+                    DialogUtils.FeedbackPopupDialog d = DialogUtils.FeedbackPopupDialog.newInstance(getResources().getString(com.example.matthias.feedbacklibrary.R.string.supersede_feedbacklibrary_pull_feedback_question_string), jsonString, 0);
+                    d.show(getFragmentManager(), "feedbackPopupDialog");
                 }
             });
         }
@@ -71,11 +66,14 @@ public class StartActivity extends AppCompatActivity {
             return true;
         }
 
+        Intent intent = new Intent(this, FeedbackActivity.class);
         if (id == R.id.action_feedback) {
-            boolean result = Utils.checkSinglePermission(this, PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE, null, null, false);
+            boolean result = Utils.checkPermission_READ_EXTERNAL_STORAGE(StartActivity.this, Utils.PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE);
             if (result) {
-                // Permission is already granted. Taking a screenshot of the current screen automatically and open the FeedbackActivity from the feedback library
-                Utils.startActivityWithScreenshotCapture(this, 8L, "en");
+                // Permission is granted --> Open the FeedbackActivity from the feedback library and taking a screenshot automatically before opening it
+                String defaultImagePath = Utils.captureScreenshot(this);
+                intent.putExtra(FeedbackActivity.DEFAULT_IMAGE_PATH, defaultImagePath);
+                startActivity(intent);
             }
             return true;
         }
@@ -86,23 +84,26 @@ public class StartActivity extends AppCompatActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         switch (requestCode) {
-            case PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE:
-                Utils.onRequestPermissionsResultCase(requestCode, permissions, grantResults, this, Manifest.permission.READ_EXTERNAL_STORAGE,
-                        com.example.matthias.feedbacklibrary.R.string.supersede_feedbacklibrary_permission_request_title,
-                        com.example.matthias.feedbacklibrary.R.string.supersede_feedbacklibrary_external_storage_permission_text_automatic_screenshot_rationale,
-                        8L, "en");
+            case Utils.PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE:
+                Intent intent = new Intent(this, FeedbackActivity.class);
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // Permission is granted --> Open the FeedbackActivity from the feedback library and taking a screenshot automatically before opening it
+                    String defaultImagePath = Utils.captureScreenshot(this);
+                    intent.putExtra(FeedbackActivity.DEFAULT_IMAGE_PATH, defaultImagePath);
+                    startActivity(intent);
+                } else {
+                    // Permission is denied --> Open the FeedbackActivity from the feedback library without taking a screenshot automatically before opening it
+                    startActivity(intent);
+                }
                 break;
         }
     }
 
-    // TODO: Remove before release
-    // Only for demo purposes
-    private void startFeedbackActivity(String jsonString, boolean isPush, long selectedPullConfigurationIndex, String language) {
+    private void startFeedbackActivity(String jsonString, boolean isPush, int selectedPullConfigurationIndex) {
         Intent intent = new Intent(this, FeedbackActivity.class);
         intent.putExtra(FeedbackActivity.JSON_CONFIGURATION_STRING, jsonString);
         intent.putExtra(FeedbackActivity.IS_PUSH_STRING, isPush);
         intent.putExtra(FeedbackActivity.SELECTED_PULL_CONFIGURATION_INDEX_STRING, selectedPullConfigurationIndex);
-        intent.putExtra(FeedbackActivity.EXTRA_KEY_LANGUAGE, language);
         startActivity(intent);
     }
 }

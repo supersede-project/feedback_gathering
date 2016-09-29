@@ -1,11 +1,20 @@
 package com.example.matthias.feedbacklibrary;
 
+import com.example.matthias.feedbacklibrary.configurations.FeedbackConfiguration;
+import com.example.matthias.feedbacklibrary.configurations.MechanismConfigurationItem;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
 import org.junit.Test;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.lang.reflect.Type;
+import java.util.List;
+
+import static org.junit.Assert.*;
 
 /**
  * Class for testing the configuration

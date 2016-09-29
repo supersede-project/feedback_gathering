@@ -9,13 +9,11 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 
 import com.example.matthias.feedbacklibrary.FeedbackActivity;
 import com.example.matthias.feedbacklibrary.R;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -27,30 +25,18 @@ public class DialogUtils {
      *
      * @param context              the context
      * @param title                the title of the dialog
-     * @param cancelOnTouchOutside cancelOnTouchOutside
+     * @param cancelOnTouchOutisde cancelOnTouchOutside
      * @return the progress dialog
      */
-    public static ProgressDialog createProgressDialog(Context context, String title, boolean cancelOnTouchOutside) {
+    public static ProgressDialog createProgressDialog(Context context, String title, boolean cancelOnTouchOutisde) {
         ProgressDialog progressDialog = new ProgressDialog(context);
         progressDialog.setTitle(title);
-        progressDialog.setCanceledOnTouchOutside(cancelOnTouchOutside);
+        progressDialog.setCanceledOnTouchOutside(cancelOnTouchOutisde);
         return progressDialog;
     }
 
     /**
-     * This method prompts the user a simple information dialog.
-     *
-     * @param activity the activity
-     * @param messages the message(s) to display
-     */
-    public static void showInformationDialog(@NonNull final Activity activity, @NonNull String[] messages, boolean cancelable) {
-        DialogUtils.DataDialog d = DialogUtils.DataDialog.newInstance(new ArrayList<>(Arrays.asList(messages)));
-        d.setCancelable(cancelable);
-        d.show(activity.getFragmentManager(), "dataDialog");
-    }
-
-    /**
-     * Dialog with a close button for displaying a simple string message, e.g., if a given input field is not valid.
+     * Dialog with a cancel button for displaying a simple string message, e.g., if a given input field is not valid.
      */
     public static class DataDialog extends DialogFragment {
         public static DataDialog newInstance(ArrayList<String> messages) {
@@ -71,9 +57,8 @@ public class DialogUtils {
                     message.append(s).append(" \n");
                 }
             }
-            builder.setMessage(message.toString()).setNegativeButton(getResources().getString(R.string.supersede_feedbacklibrary_close_string), new DialogInterface.OnClickListener() {
+            builder.setMessage(message.toString()).setNegativeButton("Close", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int id) {
-                    dialog.dismiss();
                 }
             });
             return builder.create();
@@ -81,16 +66,15 @@ public class DialogUtils {
     }
 
     /**
-     * Dialog asking the user if (s)he wants to give feedback.
+     * Dialog for starting the pull feedback.
      */
-    public static class PullFeedbackIntermediateDialog extends DialogFragment {
-        public static PullFeedbackIntermediateDialog newInstance(String message, String jsonString, long selectedPullConfigurationIndex, String language) {
-            PullFeedbackIntermediateDialog f = new PullFeedbackIntermediateDialog();
+    public static class FeedbackPopupDialog extends DialogFragment {
+        public static FeedbackPopupDialog newInstance(String message, String jsonString, int selectedPullConfigurationIndex) {
+            FeedbackPopupDialog f = new FeedbackPopupDialog();
             Bundle args = new Bundle();
             args.putString("message", message);
             args.putString("jsonString", jsonString);
-            args.putLong("selectedPullConfigurationIndex", selectedPullConfigurationIndex);
-            args.putString("language", language);
+            args.putInt("selectedPullConfigurationIndex", selectedPullConfigurationIndex);
             f.setArguments(args);
             return f;
         }
@@ -101,8 +85,7 @@ public class DialogUtils {
             AlertDialog.Builder builder = new AlertDialog.Builder(associatedActivity);
             String message = getArguments().getString("message");
             final String jsonString = getArguments().getString("jsonString");
-            final long selectedPullConfigurationIndex = getArguments().getLong("selectedPullConfigurationIndex");
-            final String language = getArguments().getString("language");
+            final int selectedPullConfigurationIndex = getArguments().getInt("selectedPullConfigurationIndex");
 
             builder.setMessage(message).setPositiveButton(R.string.supersede_feedbacklibrary_yes_string, new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int id) {
@@ -110,12 +93,10 @@ public class DialogUtils {
                     intent.putExtra(FeedbackActivity.JSON_CONFIGURATION_STRING, jsonString);
                     intent.putExtra(FeedbackActivity.IS_PUSH_STRING, false);
                     intent.putExtra(FeedbackActivity.SELECTED_PULL_CONFIGURATION_INDEX_STRING, selectedPullConfigurationIndex);
-                    intent.putExtra(FeedbackActivity.EXTRA_KEY_LANGUAGE, language);
                     associatedActivity.startActivity(intent);
                 }
             }).setNegativeButton(R.string.supersede_feedbacklibrary_no_string, new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int id) {
-                    dialog.dismiss();
                 }
             });
             return builder.create();

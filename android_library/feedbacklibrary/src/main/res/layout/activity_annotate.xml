@@ -3,27 +3,22 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical"
     tools:context="com.example.matthias.feedbacklibrary.AnnotateImageActivity">
 
     <RelativeLayout
+        android:id="@+id/supersede_feedbacklibrary_annotate_image_layout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_weight="0.75"
         android:background="@color/supersede_feedbacklibrary_annotate_image_layout_background_color"
-        android:padding="@dimen/supersede_feedbacklibrary_annotate_image_layout_padding">
-
-        <RelativeLayout
-            android:id="@+id/supersede_feedbacklibrary_annotate_image_layout"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
-    </RelativeLayout>
-
+        android:padding="@dimen/supersede_feedbacklibrary_annotate_image_layout_padding"/>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="0.25"
         android:orientation="vertical">
 
         <LinearLayout
@@ -113,16 +108,19 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <ImageButton
-                android:id="@+id/supersede_feedbacklibrary_text_comment_btn"
+            <Button
+                android:id="@+id/supersede_feedbacklibrary_erase_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:src="@drawable/ic_comment_black_48dp"/>
+                android:drawableStart="@drawable/icon_eraser"
+                android:text="@string/supersede_feedbacklibrary_off_string"/>
 
             <Button
                 android:id="@+id/supersede_feedbacklibrary_blur_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:height="36dp"
+                android:minWidth="88dp"
                 android:text="@string/supersede_feedbacklibrary_blurbutton_text"
                 android:textSize="13sp"/>
 
@@ -130,6 +128,8 @@
                 android:id="@+id/supersede_feedbacklibrary_fill_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:height="36dp"
+                android:minWidth="88dp"
                 android:text="@string/supersede_feedbacklibrary_fillbutton_text"
                 android:textSize="13sp"/>
 
@@ -137,6 +137,8 @@
                 android:id="@+id/supersede_feedbacklibrary_black_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:height="36dp"
+                android:minWidth="88dp"
                 android:text="@string/supersede_feedbacklibrary_blackbutton_text"
                 android:textSize="13sp"/>
         </LinearLayout>

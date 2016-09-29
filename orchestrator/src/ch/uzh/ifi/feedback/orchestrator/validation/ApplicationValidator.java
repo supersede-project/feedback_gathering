@@ -7,7 +7,6 @@ import com.google.inject.Inject;
 
 import ch.uzh.ifi.feedback.library.rest.validation.ValidationError;
 import ch.uzh.ifi.feedback.library.rest.validation.ValidationResult;
-import ch.uzh.ifi.feedback.library.rest.validation.ValidationSerializer;
 import ch.uzh.ifi.feedback.library.rest.validation.ValidatorBase;
 import ch.uzh.ifi.feedback.orchestrator.model.Application;
 import ch.uzh.ifi.feedback.orchestrator.model.Configuration;
@@ -24,9 +23,8 @@ public class ApplicationValidator extends ValidatorBase<Application>{
 	public ApplicationValidator(
 			GeneralConfigurationValidator generalConfigurationValidator, 
 			ConfigurationValidator configurationValidator,
-			ApplicationService applicationService,
-			ValidationSerializer serializer) {
-		super(Application.class, applicationService, serializer);
+			ApplicationService applicationService) {
+		super(Application.class, applicationService);
 		this.generalConfigurationValidator = generalConfigurationValidator;
 		this.configurationValidator = configurationValidator;
 	}
@@ -36,15 +34,18 @@ public class ApplicationValidator extends ValidatorBase<Application>{
 	{
 		ValidationResult result = super.Validate(object);
 
+		List<Object> childrenErrors = new ArrayList<>();
 		for(Configuration config : object.getConfigurations())
 		{
 			ValidationResult childResult = configurationValidator.Validate(config);
 			if(childResult.hasErrors())
 			{
 				result.setHasErrors(true);
-				result.GetValidationErrors().addAll(childResult.GetValidationErrors());
+				List<ValidationError> errors = childResult.GetValidationErrors();
+				childrenErrors.add(errors);
 			}
 		}
+		result.GetValidationErrors().add(new ValidationError("configurations", childrenErrors));
 		
 		GeneralConfiguration config = object.getGeneralConfiguration();
 		if(config != null)
@@ -53,10 +54,9 @@ public class ApplicationValidator extends ValidatorBase<Application>{
 			if(childResult.hasErrors())
 			{
 				result.setHasErrors(true);
-				result.GetValidationErrors().addAll(childResult.GetValidationErrors());
+				result.GetValidationErrors().add(new ValidationError("generalConfiguration", childResult.GetValidationErrors()));
 			}
 		}
-		
 		return result;
 	}
 }

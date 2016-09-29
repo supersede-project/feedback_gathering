@@ -1,44 +1,32 @@
 package ch.uzh.ifi.feedback.orchestrator.controllers;
 
-import java.sql.Timestamp;
 import java.util.List;
 import com.google.inject.Inject;
-
-import ch.uzh.ifi.feedback.library.rest.IRequestContext;
 import ch.uzh.ifi.feedback.library.rest.RestController;
-import ch.uzh.ifi.feedback.library.rest.annotations.Authenticate;
 import ch.uzh.ifi.feedback.library.rest.annotations.Controller;
 import ch.uzh.ifi.feedback.library.rest.annotations.GET;
 import ch.uzh.ifi.feedback.library.rest.annotations.POST;
 import ch.uzh.ifi.feedback.library.rest.annotations.PUT;
 import ch.uzh.ifi.feedback.library.rest.annotations.Path;
 import ch.uzh.ifi.feedback.library.rest.annotations.PathParam;
-import ch.uzh.ifi.feedback.orchestrator.authorization.UserAuthenticationService;
 import ch.uzh.ifi.feedback.orchestrator.model.Application;
 import ch.uzh.ifi.feedback.orchestrator.serialization.ApplicationSerializationService;
 import ch.uzh.ifi.feedback.orchestrator.services.ApplicationService;
-import ch.uzh.ifi.feedback.orchestrator.validation.ApplicationValidator;
 
 @Controller(Application.class)
-public class ApplicationController extends OrchestratorController<Application> {
+public class ApplicationController extends RestController<Application> {
 
 	@Inject
-	public ApplicationController(ApplicationService dbService, ApplicationValidator validator, IRequestContext requestContext) {
-		super(dbService, validator, requestContext);
+	public ApplicationController(ApplicationSerializationService serializationService,
+			ApplicationService dbService) {
+		super(serializationService, dbService);
 	}
 	
 	@GET
 	@Path("/applications/{app_id}")
-	public Application GetById(@PathParam("app_id") Integer id) throws Exception 
+	public Application GetById( @PathParam("app_id") Integer id) throws Exception 
 	{
 		return super.GetById(id);
-	}
-	
-	@GET
-	@Path("/applications/{app_id}/timestamp/{time}")
-	public Application GetByIdAndTime(@PathParam("app_id") Integer id, @PathParam("time") Timestamp time) throws Exception 
-	{
-		return super.GetByIdAndTime(id, time);
 	}
 	
 	@GET
@@ -49,18 +37,18 @@ public class ApplicationController extends OrchestratorController<Application> {
 	}
 	
 	@PUT
-	@Authenticate(UserAuthenticationService.class)
 	@Path("/applications")
 	public Application UpdateApplication(Application app) throws Exception 
 	{
-		return super.Update(app);
+		super.Update(app);
+		return app;
 	}
 	
 	@POST
-	@Authenticate(UserAuthenticationService.class)
 	@Path("/applications")
 	public Application InsertApplication(@PathParam("app_id")Integer appId, Application app) throws Exception 
 	{
-		return super.Insert(app);
+		super.Insert(app);
+		return app;
 	}
 }

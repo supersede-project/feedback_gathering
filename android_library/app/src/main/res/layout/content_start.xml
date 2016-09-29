@@ -27,16 +27,16 @@
             android:orientation="horizontal">
 
             <Button
-                android:id="@+id/pull_popup_button"
+                android:id="@+id/pull_no_popup_button"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:text="PULL 1"/>
+                android:text="Run demo"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
-                android:text="Pull feedback triggered WITH a popup"/>
+                android:text="Pull feedback triggered WITHOUT a popup"/>
         </LinearLayout>
 
         <LinearLayout
@@ -45,16 +45,16 @@
             android:orientation="horizontal">
 
             <Button
-                android:id="@+id/pull_no_popup_button"
+                android:id="@+id/pull_popup_button"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:text="PULL 2"/>
+                android:text="Run demo"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
-                android:text="Pull feedback triggered WITHOUT a popup"/>
+                android:text="Pull feedback triggered WITH a popup"/>
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>

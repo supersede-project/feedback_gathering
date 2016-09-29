@@ -3,21 +3,15 @@ package com.example.matthias.feedbacklibrary.views;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.support.annotation.NonNull;
-import android.support.design.widget.TextInputEditText;
-import android.support.design.widget.TextInputLayout;
-import android.text.Editable;
-import android.text.TextWatcher;
+import android.content.DialogInterface.OnClickListener;
+import android.content.DialogInterface.OnMultiChoiceClickListener;
 import android.util.AttributeSet;
-import android.view.LayoutInflater;
 import android.widget.ArrayAdapter;
-import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
 
 import com.example.matthias.feedbacklibrary.R;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
@@ -25,8 +19,7 @@ import java.util.List;
 /**
  * Custom spinner class for spinner with single and multiple selection
  */
-public class CustomSpinner extends Spinner implements DialogInterface.OnClickListener, DialogInterface.OnMultiChoiceClickListener {
-    // General
+public class CustomSpinner extends Spinner implements OnClickListener, OnMultiChoiceClickListener {
     private int checkedIndex = -1;
     private boolean isMultiple;
     private String[] items = null;
@@ -35,8 +28,6 @@ public class CustomSpinner extends Spinner implements DialogInterface.OnClickLis
     private boolean[] mSelectionAtStart = null;
     private OnMultipleItemsSelectedListener listener;
     private ArrayAdapter<String> simpleAdapter;
-    // Own category
-    private boolean ownCategoryAllowed;
 
     public CustomSpinner(Context context) {
         super(context);
@@ -76,7 +67,6 @@ public class CustomSpinner extends Spinner implements DialogInterface.OnClickLis
      *
      * @return the concatenated string
      */
-    @NonNull
     private String getSelectedItemsAsString() {
         StringBuilder sb = new StringBuilder();
         boolean foundOne = false;
@@ -117,185 +107,21 @@ public class CustomSpinner extends Spinner implements DialogInterface.OnClickLis
         return isMultiple;
     }
 
-    public boolean isOwnCategoryAllowed() {
-        return ownCategoryAllowed;
-    }
-
     @Override
     public void onClick(DialogInterface dialog, int which, boolean isChecked) {
-        final AlertDialog spinnerDialog = (AlertDialog) dialog;
-        final int spinnerWhich = which;
-        if (spinnerWhich < items.length) {
-            if (spinnerWhich == items.length - 1 && isOwnCategoryAllowed()) {
-                // Others was clicked
-                LayoutInflater layoutInflater = LayoutInflater.from(getContext());
-                // Inflating the custom layout
-                LinearLayout linearLayout = (LinearLayout) layoutInflater.inflate(R.layout.own_category_dialog_layout, null);
-
-                final TextInputLayout ownCategoryDialogInputLayout = (TextInputLayout) linearLayout.findViewById(R.id.supersede_feedbacklibrary_own_category_dialog_input_layout);
-                final TextInputEditText ownCategoryDialogInputEditText = (TextInputEditText) linearLayout.findViewById(R.id.supersede_feedbacklibrary_own_category_dialog_text);
-
-                // Set the hint and enable it
-                ownCategoryDialogInputLayout.setHintEnabled(true);
-                ownCategoryDialogInputLayout.setHint(getResources().getString(R.string.supersede_feedbacklibrary_own_category_dialog_hint));
-                ownCategoryDialogInputEditText.addTextChangedListener(new TextWatcher() {
-                    @Override
-                    public void afterTextChanged(Editable s) {
-                    }
-
-                    @Override
-                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                    }
-
-                    @Override
-                    public void onTextChanged(CharSequence s, int start, int before, int count) {
-                        if (s.length() > 0) {
-                            ownCategoryDialogInputLayout.setHint(getResources().getString(R.string.supersede_feedbacklibrary_own_category_dialog_label));
-                        } else if (s.length() == 0) {
-                            ownCategoryDialogInputLayout.setHint(getResources().getString(R.string.supersede_feedbacklibrary_own_category_dialog_hint));
-                        }
-                    }
-                });
-
-                final LinearLayout emptyLayout = (LinearLayout) linearLayout.findViewById(R.id.supersede_feedbacklibrary_own_category_dialog_empty_layout);
-                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                builder.setPositiveButton(getResources().getString(R.string.supersede_feedbacklibrary_ok_string), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        if (ownCategoryDialogInputEditText.getText().toString().length() > 0) {
-                            updateCategoryList(ownCategoryDialogInputEditText.getText().toString());
-                            ownCategoryDialogInputEditText.setText(null);
-                            if (emptyLayout != null) {
-                                emptyLayout.requestFocus();
-                            }
-                        } else {
-                            mSelection[spinnerWhich] = false;
-                            spinnerDialog.getListView().setItemChecked(spinnerWhich, false);
-                            ownCategoryDialogInputEditText.setText(null);
-                            if (emptyLayout != null) {
-                                emptyLayout.requestFocus();
-                            }
-                        }
-                    }
-                });
-                builder.setNegativeButton(getResources().getString(R.string.supersede_feedbacklibrary_cancel_string), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        mSelection[spinnerWhich] = false;
-                        spinnerDialog.getListView().setItemChecked(spinnerWhich, false);
-                        ownCategoryDialogInputEditText.setText(null);
-                        if (emptyLayout != null) {
-                            emptyLayout.requestFocus();
-                        }
-                    }
-                });
-                builder.setView(linearLayout);
-                builder.setCancelable(false);
-                builder.show();
-            }
-        }
     }
 
     @Override
     public void onClick(DialogInterface dialog, int which) {
-        final AlertDialog spinnerDialog = (AlertDialog) dialog;
-        final int spinnerWhich = which;
-        if (spinnerWhich < items.length) {
-            if (spinnerWhich == items.length - 1 && isOwnCategoryAllowed()) {
-                // Other was clicked
-                LayoutInflater layoutInflater = LayoutInflater.from(getContext());
-                // Inflating the custom layout
-                LinearLayout linearLayout = (LinearLayout) layoutInflater.inflate(R.layout.own_category_dialog_layout, null);
-
-                final TextInputLayout ownCategoryDialogInputLayout = (TextInputLayout) linearLayout.findViewById(R.id.supersede_feedbacklibrary_own_category_dialog_input_layout);
-                final TextInputEditText ownCategoryDialogInputEditText = (TextInputEditText) linearLayout.findViewById(R.id.supersede_feedbacklibrary_own_category_dialog_text);
-
-                // Set the hint and enable it
-                ownCategoryDialogInputLayout.setHintEnabled(true);
-                ownCategoryDialogInputLayout.setHint(getResources().getString(R.string.supersede_feedbacklibrary_own_category_dialog_hint));
-                ownCategoryDialogInputEditText.addTextChangedListener(new TextWatcher() {
-                    @Override
-                    public void afterTextChanged(Editable s) {
-                    }
-
-                    @Override
-                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                    }
-
-                    @Override
-                    public void onTextChanged(CharSequence s, int start, int before, int count) {
-                        if (s.length() > 0) {
-                            ownCategoryDialogInputLayout.setHint(getResources().getString(R.string.supersede_feedbacklibrary_own_category_dialog_label));
-                        } else if (s.length() == 0) {
-                            ownCategoryDialogInputLayout.setHint(getResources().getString(R.string.supersede_feedbacklibrary_own_category_dialog_hint));
-                        }
-                    }
-                });
-
-                final LinearLayout emptyLayout = (LinearLayout) linearLayout.findViewById(R.id.supersede_feedbacklibrary_own_category_dialog_empty_layout);
-                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                builder.setPositiveButton(getResources().getString(R.string.supersede_feedbacklibrary_ok_string), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        if (ownCategoryDialogInputEditText.getText().toString().length() > 0) {
-                            updateCategoryList(ownCategoryDialogInputEditText.getText().toString());
-
-                            if (checkedIndex != -1 && checkedIndex != spinnerWhich) {
-                                mSelection[checkedIndex] = false;
-                            }
-                            checkedIndex = spinnerWhich;
-                            mSelection[spinnerWhich] = true;
-                            simpleAdapter.clear();
-                            simpleAdapter.add(items[spinnerWhich]);
-
-                            ownCategoryDialogInputEditText.setText(null);
-
-                            if (emptyLayout != null) {
-                                emptyLayout.requestFocus();
-                            }
-                            spinnerDialog.dismiss();
-                        } else {
-                            mSelection[spinnerWhich] = false;
-                            mSelection[checkedIndex] = true;
-                            spinnerDialog.getListView().setItemChecked(spinnerWhich, false);
-                            spinnerDialog.getListView().setItemChecked(checkedIndex, true);
-
-                            ownCategoryDialogInputEditText.setText(null);
-
-                            if (emptyLayout != null) {
-                                emptyLayout.requestFocus();
-                            }
-                        }
-                    }
-                });
-                builder.setNegativeButton(getResources().getString(R.string.supersede_feedbacklibrary_cancel_string), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        mSelection[spinnerWhich] = false;
-                        mSelection[checkedIndex] = true;
-                        spinnerDialog.getListView().setItemChecked(spinnerWhich, false);
-                        spinnerDialog.getListView().setItemChecked(checkedIndex, true);
-
-                        ownCategoryDialogInputEditText.setText(null);
-
-                        if (emptyLayout != null) {
-                            emptyLayout.requestFocus();
-                        }
-                    }
-                });
-                builder.setView(linearLayout);
-                builder.setCancelable(false);
-                builder.show();
-            } else {
-                if (checkedIndex != -1 && checkedIndex != spinnerWhich) {
-                    mSelection[checkedIndex] = false;
-                }
-                checkedIndex = spinnerWhich;
-                mSelection[spinnerWhich] = true;
-                simpleAdapter.clear();
-                simpleAdapter.add(items[spinnerWhich]);
-                spinnerDialog.dismiss();
+        if (which < items.length) {
+            if (checkedIndex != -1 && checkedIndex != which) {
+                mSelection[checkedIndex] = false;
             }
+            checkedIndex = which;
+            mSelection[which] = true;
+            simpleAdapter.clear();
+            simpleAdapter.add(items[which]);
+            dialog.dismiss();
         } else {
             throw new IllegalArgumentException("Argument 'which' is out of bounds.");
         }
@@ -393,10 +219,6 @@ public class CustomSpinner extends Spinner implements DialogInterface.OnClickLis
         isMultiple = multiple;
     }
 
-    public void setOwnCategoryAllowed(boolean ownCategoryAllowed) {
-        this.ownCategoryAllowed = ownCategoryAllowed;
-    }
-
     public void setSelection(String[] selection) {
         for (int i = 0; i < mSelection.length; i++) {
             mSelection[i] = false;
@@ -464,35 +286,6 @@ public class CustomSpinner extends Spinner implements DialogInterface.OnClickLis
         }
         simpleAdapter.clear();
         simpleAdapter.add(getSelectedItemsAsString());
-    }
-
-    /**
-     * This method updates the category list after the user created an own category.
-     *
-     * @param newCategory the new category
-     */
-    private void updateCategoryList(String newCategory) {
-        // Update items
-        List<String> newItems = new ArrayList<>();
-        for (int i = 0; i < items.length; ++i) {
-            newItems.add(items[i]);
-        }
-        newItems.add(newItems.size() - 1, newCategory);
-        items = newItems.toArray(new String[newItems.size()]);
-        // Update mSelection
-        boolean[] newMSelection = new boolean[items.length];
-        for (int i = 0; i < items.length - 1; ++i) {
-            newMSelection[i] = mSelection[i];
-        }
-        newMSelection[newMSelection.length - 1] = false;
-        mSelection = newMSelection;
-        // Update mSelectionAtStart
-        boolean[] newMSelectionAtStart = new boolean[items.length];
-        for (int i = 0; i < items.length - 1; ++i) {
-            newMSelectionAtStart[i] = mSelectionAtStart[i];
-        }
-        newMSelectionAtStart[newMSelectionAtStart.length - 1] = false;
-        mSelectionAtStart = newMSelectionAtStart;
     }
 
     public interface OnMultipleItemsSelectedListener {

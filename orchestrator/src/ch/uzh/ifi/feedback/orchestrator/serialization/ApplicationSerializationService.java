@@ -31,7 +31,6 @@ public class ApplicationSerializationService extends OrchestratorSerializationSe
 	@Override
 	public void SetNestedParameters(Application app) {
 		app.getConfigurations().stream().forEach(c -> configurationSerializationService.SetNestedParameters(c));
-		if(app.getGeneralConfiguration() != null)
-			generalConfigurationSerializationService.SetNestedParameters(app.getGeneralConfiguration());
+		generalConfigurationSerializationService.SetNestedParameters(app.getGeneralConfiguration());
 	}
 }

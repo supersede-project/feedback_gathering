@@ -18,6 +18,8 @@ import com.example.matthias.feedbacklibrary.views.ColorPickerView;
  * Color picker dialog class
  */
 public class ColorPickerDialog extends DialogFragment {
+
+    // Use this instance of the interface to deliver action events
     OnColorChangeDialogListener mListener;
     private int changedColor;
 
@@ -25,13 +27,18 @@ public class ColorPickerDialog extends DialogFragment {
         return changedColor;
     }
 
+    // Override the Fragment.onAttach() method to instantiate the OnColorChangeDialogListener
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
+        // Verify that the host activity implements the callback interface
         try {
+            // Instantiate the OnColorChangeDialogListener so we can send events to the host
             mListener = (OnColorChangeDialogListener) activity;
         } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString() + " must implement OnColorChangeDialogListener");
+            // The activity doesn't implement the interface, throw exception
+            throw new ClassCastException(activity.toString()
+                    + " must implement OnColorChangeDialogListener");
         }
     }
 
@@ -55,25 +62,29 @@ public class ColorPickerDialog extends DialogFragment {
 
         final ColorPickerView cpv = new ColorPickerView(view.getContext(), changedColor, textView);
         cpv.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT));
+
         linearLayout.addView(cpv);
         linearLayout.addView(textView);
 
         // Setting the view to the custom layout
         builder.setView(linearLayout)
-                .setPositiveButton(getResources().getString(R.string.supersede_feedbacklibrary_ok_string), new DialogInterface.OnClickListener() {
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        // The user wants to change the color
+                        // User wants to change the color
                         changedColor = cpv.getChangedColor();
                         mListener.onDialogPositiveClick(ColorPickerDialog.this);
                     }
                 })
-                .setNegativeButton(getResources().getString(R.string.supersede_feedbacklibrary_discard_string), new DialogInterface.OnClickListener() {
+                .setNegativeButton("DISCARD", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                     }
                 });
         return builder.create();
     }
 
+    /* The activity that creates an instance of this dialog fragment must
+     * implement this interface in order to receive event callbacks.
+     * Each method passes the DialogFragment in case the host needs to query it. */
     public interface OnColorChangeDialogListener {
         void onDialogPositiveClick(DialogFragment dialog);
     }

@@ -1,6 +1,5 @@
 package com.example.matthias.feedbacklibrary.configurations;
 
-import com.example.matthias.feedbacklibrary.models.AttachmentMechanism;
 import com.example.matthias.feedbacklibrary.models.AudioMechanism;
 import com.example.matthias.feedbacklibrary.models.CategoryMechanism;
 import com.example.matthias.feedbacklibrary.models.Mechanism;
@@ -16,12 +15,11 @@ import java.util.Map;
  * Mechanism configuration item.
  */
 public class MechanismConfigurationItem implements Serializable {
-    private boolean active;
     private boolean canBeActivated;
-    private long id;
+    private boolean active;
     private int order;
-    private List<Map<String, Object>> parameters;
     private String type;
+    private List<Map<String, Object>> parameters;
 
     public boolean canBeActivated() {
         return canBeActivated;
@@ -35,11 +33,8 @@ public class MechanismConfigurationItem implements Serializable {
     public Mechanism createMechanism() {
         if (type != null) {
             switch (type) {
-                case Mechanism.ATTACHMENT_TYPE:
-                    // TODO: Implement attachment mechanism
-                    return new AttachmentMechanism(this);
                 case Mechanism.AUDIO_TYPE:
-                    // TODO: Implement audio mechanism
+                    // TODO: Implement
                     return new AudioMechanism(this);
                 case Mechanism.CATEGORY_TYPE:
                     return new CategoryMechanism(this);
@@ -50,14 +45,11 @@ public class MechanismConfigurationItem implements Serializable {
                 case Mechanism.TEXT_TYPE:
                     return new TextMechanism(this);
                 default:
+                    // Should never happen!
                     break;
             }
         }
-        return null;
-    }
-
-    public long getId() {
-        return id;
+        return null; // Should never happen!
     }
 
     public int getOrder() {
@@ -76,20 +68,12 @@ public class MechanismConfigurationItem implements Serializable {
         return active;
     }
 
-    public boolean isCanBeActivated() {
-        return canBeActivated;
-    }
-
-    public void setActive(boolean active) {
-        this.active = active;
-    }
-
     public void setCanBeActivated(boolean canBeActivated) {
         this.canBeActivated = canBeActivated;
     }
 
-    public void setId(long id) {
-        this.id = id;
+    public void setIsActive(boolean active) {
+        this.active = active;
     }
 
     public void setOrder(int order) {

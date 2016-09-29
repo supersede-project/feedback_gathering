@@ -11,7 +11,6 @@ import java.util.List;
 
 import com.google.inject.Inject;
 
-import ch.uzh.ifi.feedback.library.rest.Service.DatabaseConfiguration;
 import ch.uzh.ifi.feedback.library.rest.Service.IDbService;
 import ch.uzh.ifi.feedback.library.rest.Service.ServiceBase;
 import ch.uzh.ifi.feedback.orchestrator.model.Configuration;
@@ -19,21 +18,18 @@ import ch.uzh.ifi.feedback.orchestrator.model.FeedbackParameter;
 import ch.uzh.ifi.feedback.orchestrator.model.GeneralConfiguration;
 import javassist.NotFoundException;
 
-public class GeneralConfigurationService extends OrchestratorService<GeneralConfiguration> {
+public class GeneralConfigurationService extends ServiceBase<GeneralConfiguration> {
 
 	private ParameterService parameterService;
 	
 	@Inject
-	public GeneralConfigurationService(
-			ParameterService parameterService, 
-			GeneralConfigurationResultParser resultParser,
-			DatabaseConfiguration config) 
+	public GeneralConfigurationService(ParameterService parameterService, GeneralConfigurationResultParser resultParser) 
 	{
 		super(
 				resultParser, 
 				GeneralConfiguration.class, 
 				"general_configurations",
-				config.getOrchestratorDb(), 
+				"feedback_orchestrator", 
 				parameterService);
 		
 		this.parameterService = parameterService;
@@ -43,18 +39,18 @@ public class GeneralConfigurationService extends OrchestratorService<GeneralConf
 	public GeneralConfiguration GetById(int id) throws SQLException, NotFoundException {
 
     	GeneralConfiguration config = super.GetById(id);
-    	config.setParameters(parameterService.GetWhere(asList(id), "general_configurations_id = ?"));
+    	config.setParameters(parameterService.GetWhereEquals(asList("mechanism_id"), asList(id)));
 		
 		return config;
 	}
 
 	@Override
-	public List<GeneralConfiguration> GetAll() throws SQLException {
+	public List<GeneralConfiguration> GetAll() throws SQLException, NotFoundException {
 
 		List<GeneralConfiguration> configs = super.GetAll();
 		for(GeneralConfiguration config : configs)
 		{
-	    	config.setParameters(parameterService.GetWhere(asList(config.getId()), "general_configurations_id = ?"));
+	    	config.setParameters(parameterService.GetWhereEquals(asList("mechanism_id"), asList(config.getId())));
 		}
 		
 	    return configs;
@@ -63,15 +59,21 @@ public class GeneralConfigurationService extends OrchestratorService<GeneralConf
 	@Override
 	public void Update(Connection con, GeneralConfiguration config)
 			throws SQLException, NotFoundException {
-	   super.Update(con, config);
+		
+	    PreparedStatement s = con.prepareStatement(
+	    		  "UPDATE feedback_orchestrator.general_configurations as c "
+	    		+ "SET c.updated_at = now() "
+	    		+ "WHERE c.id = ? ;");
+	    
+	    s.setInt(1, config.getId());
+	    s.execute();
 	   
 	   for(FeedbackParameter param : config.getParameters())
 	   {
-		   param.setGenaralConfigurationId(config.getId());
 		   if(param.getId() == null){
-			   parameterService.Insert(con, param);
-		   }else{	  
-			   parameterService.Update(con, param);
+			   parameterService.InsertFor(con, param, "configuration_id", config.getId());
+		   }else{
+			   parameterService.UpdateFor(con, param, "configuration_id", config.getId());
 		   }
 	   }
 	}
@@ -80,13 +82,22 @@ public class GeneralConfigurationService extends OrchestratorService<GeneralConf
 	public int Insert(Connection con, GeneralConfiguration config)
 			throws SQLException, NotFoundException, UnsupportedOperationException {
 		
-		int id = super.Insert(con, config);
+	    PreparedStatement s = con.prepareStatement(
+	    		"INSERT INTO feedback_orchestrator.general_configurations "
+	    		+ "(name) "
+	    		+ "VALUES (?) ;", PreparedStatement.RETURN_GENERATED_KEYS);
+	    
+	    s.setString(1, config.getName());
+	    s.execute();
+	    ResultSet keys = s.getGeneratedKeys();
+	    keys.next();
+	    int key = keys.getInt(1);
+	    
 	    for(FeedbackParameter param : config.getParameters())
 	    {
-	    	param.setGenaralConfigurationId(id);
-	    	parameterService.Insert(con, param);
+	    	parameterService.InsertFor(con, param, "configuration_id", key);
 	    }
 	    
-	    return id;
+	    return key;
 	}
 }

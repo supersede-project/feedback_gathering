@@ -32,9 +32,7 @@ public class ConfigurationSerializationService extends OrchestratorSerialization
 	@Override
 	public void SetNestedParameters(Configuration config) {
 		config.getFeedbackMechanisms().forEach(m -> mechanismSerializationService.SetNestedParameters(m));
-		
-		if(config.getGeneralConfiguration() != null)
-			generalConfigurationSerializationService.SetNestedParameters(config.getGeneralConfiguration());
+		generalConfigurationSerializationService.SetNestedParameters(config.getGeneralConfiguration());
 	}
 	
 }

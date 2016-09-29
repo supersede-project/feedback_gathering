@@ -1,8 +1,12 @@
 package ch.uzh.ifi.feedback.orchestrator.model;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
+import ch.uzh.ifi.feedback.library.rest.Service.IDbItem;
+import ch.uzh.ifi.feedback.library.rest.Service.ItemBase;
 import ch.uzh.ifi.feedback.library.rest.annotations.DbAttribute;
 import ch.uzh.ifi.feedback.library.rest.annotations.DbIgnore;
 import ch.uzh.ifi.feedback.library.rest.annotations.Serialize;
@@ -10,20 +14,19 @@ import ch.uzh.ifi.feedback.library.rest.validation.Id;
 import ch.uzh.ifi.feedback.library.rest.validation.NotNull;
 import ch.uzh.ifi.feedback.library.rest.validation.Unique;
 import ch.uzh.ifi.feedback.library.rest.validation.Validate;
+import ch.uzh.ifi.feedback.orchestrator.serialization.ApplicationSerializationService;
 import ch.uzh.ifi.feedback.orchestrator.serialization.ConfigurationSerializationService;
 import ch.uzh.ifi.feedback.orchestrator.validation.ConfigurationValidator;
 
 @Validate(ConfigurationValidator.class)
 @Serialize(ConfigurationSerializationService.class)
-public class Configuration extends OrchestratorItem<Configuration> {
-	
-	@Id
-	@DbAttribute("configurations_id")
-	private Integer id;
+public class Configuration extends ItemBase<Configuration> {
 	
 	@Unique
 	private String name;
-	
+
+	@DbAttribute("created_at")
+	private Timestamp createdAt;
 	@NotNull
 	private ConfigurationType type;
 	@DbIgnore
@@ -31,14 +34,10 @@ public class Configuration extends OrchestratorItem<Configuration> {
 	@DbIgnore
 	private GeneralConfiguration generalConfiguration;
 	
-	@DbAttribute("general_configurations_id")
+	@DbAttribute("general_configuration_id")
 	private transient Integer generalConfigurationId;
-	
-	@DbAttribute("applications_id")
+	@DbAttribute("application_id")
 	private transient Integer applicationId;
-	
-	@DbAttribute("user_groups_id")
-	private transient Integer userGroupsId;
 	
 	public Configuration(){
 		mechanisms = new ArrayList<>();
@@ -57,6 +56,14 @@ public class Configuration extends OrchestratorItem<Configuration> {
 			mechanisms = new ArrayList<>();
 		
 		return mechanisms;
+	}
+
+	public Timestamp getCreatedAt() {
+		return createdAt;
+	}
+
+	public void setCreatedAt(Timestamp createdAt) {
+		this.createdAt = createdAt;
 	}
 
 	public ConfigurationType getType() {
@@ -85,6 +92,8 @@ public class Configuration extends OrchestratorItem<Configuration> {
 	
 	@Override
 	public Configuration Merge(Configuration original) {
+		super.Merge(original);
+		
 		for(FeedbackMechanism mechanism : original.getFeedbackMechanisms())
 		{
 			Optional<FeedbackMechanism> newMechanism = getFeedbackMechanisms().stream().filter(p -> p.getId().equals(mechanism.getId())).findFirst();
@@ -102,8 +111,6 @@ public class Configuration extends OrchestratorItem<Configuration> {
 			generalConfiguration = original.getGeneralConfiguration();
 		}
 		
-		super.Merge(original);
-		
 		return this;
 	}
 
@@ -113,23 +120,5 @@ public class Configuration extends OrchestratorItem<Configuration> {
 
 	public void setApplicationId(Integer applicationId) {
 		this.applicationId = applicationId;
-	}
-
-	@Override
-	public Integer getId() {
-		return id;
-	}
-
-	@Override
-	public void setId(Integer id) {
-		this.id = id;
-	}
-
-	public Integer getUserGroupsId() {
-		return userGroupsId;
-	}
-
-	public void setUserGroupsId(Integer userGroupsId) {
-		this.userGroupsId = userGroupsId;
 	}
 }

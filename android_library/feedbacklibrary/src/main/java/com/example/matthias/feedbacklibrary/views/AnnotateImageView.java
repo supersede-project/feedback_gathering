@@ -43,7 +43,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.example.matthias.feedbacklibrary.utils.Utils;
@@ -61,7 +60,7 @@ import java.util.List;
  * Android Application Library
  * https://github.com/Korilakkuma/CanvasView
  */
-public class AnnotateImageView extends ImageView {
+public class AnnotateImageView extends View {
     private final Paint emptyPaint = new Paint();
     private Bitmap bitmap = null;
     private List<Path> pathLists = new ArrayList<>();
@@ -108,6 +107,7 @@ public class AnnotateImageView extends ImageView {
     private boolean isCroppedImageAdded = false;
     private int croppedImagePointer;
     private int startHistoryPointer;
+    private int onSizeCalled = 0;
     private int initW;
     private int initH;
 
@@ -330,22 +330,7 @@ public class AnnotateImageView extends ImageView {
         setDrawingCacheEnabled(false);
         setDrawingCacheEnabled(true);
 
-        // Adjust width and height
-        Bitmap drawingCache = getDrawingCache();
-        int width;
-        int height;
-        if (getBitmapWidth() > drawingCache.getWidth()) {
-            width = drawingCache.getWidth();
-        } else {
-            width = getBitmapWidth();
-        }
-        if (getBitmapHeight() > drawingCache.getHeight()) {
-            height = drawingCache.getHeight();
-        } else {
-            height = getBitmapHeight();
-        }
-
-        return Bitmap.createBitmap(getDrawingCache(), 0, 0, width, height);
+        return Bitmap.createBitmap(getDrawingCache(), 0, 0, bitmap.getWidth(), bitmap.getHeight());
     }
 
     /**
@@ -678,9 +663,13 @@ public class AnnotateImageView extends ImageView {
             RelativeLayout relativeLayout = (RelativeLayout) getParent();
             ViewGroup.LayoutParams relativeLayoutLayoutParams = relativeLayout.getLayoutParams();
             if (relativeLayoutLayoutParams != null) {
-                relativeLayoutLayoutParams.width = w;
-                relativeLayoutLayoutParams.height = h;
+                relativeLayoutLayoutParams.width = bitmap.getWidth();
+                relativeLayoutLayoutParams.height = bitmap.getHeight();
+                onSizeCalled++;
             }
+        } else if (onSizeCalled == 1) {
+            bitmap = Bitmap.createScaledBitmap(bitmap, bitmap.getWidth(), bitmap.getHeight() - 100, true);
+            onSizeCalled++;
         }
 
         super.onSizeChanged(w, h, oldw, oldh);
@@ -943,7 +932,8 @@ public class AnnotateImageView extends ImageView {
         if (croppedImagePointer > 1) {
             this.bitmap = bitmap;
         } else {
-            this.bitmap = Utils.scaleBitmap(bitmap, initW, initH);
+            Bitmap tempBitmap = Utils.scaleBitmap(bitmap, initW, initH);
+            this.bitmap = Bitmap.createScaledBitmap(tempBitmap, tempBitmap.getWidth(), tempBitmap.getHeight() - 100, true);
         }
     }
 

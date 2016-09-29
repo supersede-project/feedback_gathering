@@ -1,65 +1,42 @@
 package com.example.matthias.feedbacklibrary.configurations;
 
-import java.util.ArrayList;
+import com.google.gson.annotations.SerializedName;
+
+import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 
 /**
- * Orchestrator configuration.
+ * This class holds the full configuration which is retrieved from the feedback orchestrator.
  */
-public class OrchestratorConfiguration {
-    private Configuration activeConfiguration;
-    private List<Configuration> configurations;
-    private String createdAt;
-    private GeneralConfiguration generalConfiguration;
-    private long id;
-    private String name;
-    private long state;
+public class OrchestratorConfiguration implements Serializable {
+    @SerializedName("general_configurations")
+    private List<Map<String, Object>> generalConfigurationItems;
+    private List<MechanismConfigurationItem> mechanisms;
+    @SerializedName("pull_configurations")
+    private List<PullConfigurationItem> pullConfigurationItems;
 
-    public OrchestratorConfiguration(OrchestratorConfigurationItem orchestratorConfigurationItem, boolean isPush, long selectedPullConfigurationId) {
-        createdAt = orchestratorConfigurationItem.getCreatedAt();
-        generalConfiguration = new GeneralConfiguration(orchestratorConfigurationItem.getGeneralConfigurationItem());
-        id = orchestratorConfigurationItem.getId();
-        name = orchestratorConfigurationItem.getName();
-        state = orchestratorConfigurationItem.getState();
-        initOrchestratorConfiguration(orchestratorConfigurationItem, isPush, selectedPullConfigurationId);
+    public List<Map<String, Object>> getGeneralConfigurationItems() {
+        return generalConfigurationItems;
     }
 
-    public Configuration getActiveConfiguration() {
-        return activeConfiguration;
+    public List<MechanismConfigurationItem> getMechanisms() {
+        return mechanisms;
     }
 
-    public List<Configuration> getConfigurations() {
-        return configurations;
+    public List<PullConfigurationItem> getPullConfigurationItems() {
+        return pullConfigurationItems;
     }
 
-    public String getCreatedAt() {
-        return createdAt;
+    public void setGeneralConfigurationItems(List<Map<String, Object>> generalConfigurationItems) {
+        this.generalConfigurationItems = generalConfigurationItems;
     }
 
-    public GeneralConfiguration getGeneralConfiguration() {
-        return generalConfiguration;
+    public void setMechanisms(List<MechanismConfigurationItem> mechanisms) {
+        this.mechanisms = mechanisms;
     }
 
-    public long getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public long getState() {
-        return state;
-    }
-
-    private void initOrchestratorConfiguration(OrchestratorConfigurationItem orchestratorConfigurationItem, boolean isPush, long selectedPullConfigurationId) {
-        configurations = new ArrayList<>();
-        for (ConfigurationItem configurationItem : orchestratorConfigurationItem.getConfigurationItems()) {
-            Configuration configuration = new Configuration(configurationItem);
-            if((isPush && configuration.isPush()) || (!isPush && selectedPullConfigurationId == configuration.getId())) {
-                activeConfiguration = configuration;
-            }
-            configurations.add(configuration);
-        }
+    public void setPullConfigurationItems(List<PullConfigurationItem> pullConfigurationItems) {
+        this.pullConfigurationItems = pullConfigurationItems;
     }
 }
