@@ -1,9 +1,9 @@
-export const apiEndpointOrchestrator = 'http://ec2-54-166-31-250.compute-1.amazonaws.com/';
+export const apiEndpointOrchestrator = 'https://ptvfeedback.ronnieschaniel.com/';
 export const applicationPath = 'feedback_orchestrator/{lang}/applications/';
 export const applicationId = 8;
 
-export const apiEndpointRepository = "http://ec2-54-166-31-250.compute-1.amazonaws.com/";
-export const feedbackPath = "feedback_repository/{lang}/feedbacks";
+export const apiEndpointRepository = 'https://ptvfeedback.ronnieschaniel.com/';
+export const feedbackPath = 'feedback_repository/{lang}/feedbacks';
 
 export const feedbackObjectTitle = 'Feedback';
 export const applicationName = 'PTV';
