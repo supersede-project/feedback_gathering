@@ -1270,12 +1270,12 @@ button.screenshot-operation {
 a.discard-feedback {
   float: left;
   display: inline-block;
-  color: #7c9009;
+  color: #1A6FC2;
   text-decoration: none;
   margin-top: 7px;
   font-size: 14px; }
   a.discard-feedback:hover {
-    color: #7c9009;
+    color: #1A6FC2;
     text-decoration: underline; }
 
 /*# sourceMappingURL=main.css.map */
