@@ -1,8 +1,8 @@
-export const apiEndpointOrchestrator = 'http://ec2-54-175-37-30.compute-1.amazonaws.com/';
+export const apiEndpointOrchestrator = 'http://62.14.219.13:8080/';
 export const applicationPath = 'feedback_orchestrator/{lang}/applications/';
 export const applicationId = 4;
 
-export const apiEndpointRepository = 'http://ec2-54-175-37-30.compute-1.amazonaws.com/';
+export const apiEndpointRepository = 'http://62.14.219.13:8080/';
 export const feedbackPath = "feedback_repository/{lang}/feedbacks";
 
 export const feedbackObjectTitle = 'Feedback';
