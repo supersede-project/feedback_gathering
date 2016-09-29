@@ -2,6 +2,7 @@ import {ConfigurationInterface} from '../../models/configurations/configuration_
 import i18n = require('i18next');
 import './../jquery.validate';
 import {mechanismTypes} from '../config';
+import '../../js/lib/html2canvas.js';
 
 
 export class PageNavigation {
@@ -25,6 +26,8 @@ export class PageNavigation {
         var ratingMechanisms = this.configuration.getMechanismConfig(mechanismTypes.ratingType);
         var screenshotMechanisms = this.configuration.getMechanismConfig(mechanismTypes.screenshotType);
         var categoryMechanisms = this.configuration.getMechanismConfig(mechanismTypes.categoryType);
+        var audioMechanisms = this.configuration.getMechanismConfig(mechanismTypes.audioType);
+        var attachmentMechanisms = this.configuration.getMechanismConfig(mechanismTypes.attachmentType);
 
         currentPage.find('.validate').each(function () {
             $(this).validate();
@@ -56,9 +59,57 @@ export class PageNavigation {
                 if (screenshotMechanism != null && nextPage.find('.screenshot-review').length > 0 && screenshotMechanism.active &&
                     screenshotMechanism.screenshotView !== undefined && screenshotMechanism.screenshotView.screenshotCanvas !== undefined && screenshotMechanism.screenshotView.screenshotCanvas !== null) {
                     var img = $('<img src="' + screenshotMechanism.screenshotView.screenshotCanvas.toDataURL() + '" />');
-                    img.css('max-width', '20%');
-                    nextPage.find('.screenshot-review').append(img);
+                    img.css('width', '40%');
+                    img.addClass('base');
+                    var screenshotReviewElement = nextPage.find('.screenshot-review');
+                    screenshotReviewElement.append(img);
+
+                    var screenshotTextReview = $('<p class="screenshot-text-review"></p>');
+                    screenshotReviewElement.append(screenshotTextReview);
+
+                    // TODO get this 965 from the actual html
+                    var ratio = 965*0.4 / screenshotMechanism.screenshotView.screenshotPreviewElement.width();
+
                 }
+                jQuery('section#screenshotMechanism' + screenshotMechanism.id + ' .sticker-container').each(function() {
+                    var x = $(this).position().left;
+                    var y = $(this).position().top;
+                    var width = $(this).width();
+                    var height = $(this).height();
+
+                    var reviewClone = $(this).clone();
+                    reviewClone.removeClass('ui-resizable');
+                    reviewClone.removeClass('ui-draggable');
+                    reviewClone.removeClass('ui-draggable-handle');
+                    reviewClone.css('left', x * ratio + "px");
+                    reviewClone.css('top', y * ratio + "px");
+                    reviewClone.css('width', width * ratio + "px");
+                    reviewClone.css('height', height * ratio + "px");
+                    reviewClone.css('padding', "0");
+                    reviewClone.addClass('sticker-container-review');
+                    reviewClone.find('a').remove();
+
+                    // adjust sizes of text
+                    if($(this).hasClass('text-2')) {
+                        var textarea = $(this).find('textarea');
+                        var text = textarea.val();
+                        var oldFontSize = textarea.css('font-size');
+                        var newFontSize = ratio * parseInt(oldFontSize);
+                        reviewClone.find('textarea').val(text).css('font-size', newFontSize + 'px').prop("disabled", true);
+                    }
+
+                    // text review on hover
+                    if($(this).hasClass('text') || $(this).hasClass('text-2')) {
+                        var text = $(this).find('textarea').val();
+                        reviewClone.on('mouseover mouseenter', function() {
+                            $('.screenshot-text-review').text(text).css('display', 'inline');
+                        }).on('mouseleave', function() {
+                            $('.screenshot-text-review').text("").css('display', 'none');
+                        });
+                    }
+
+                    screenshotReviewElement.append(reviewClone);
+                });
             }
 
             for (var categoryMechanism of categoryMechanisms) {
@@ -72,8 +123,24 @@ export class PageNavigation {
                     });
                 }
             }
+
+            for (var audioMechanism of audioMechanisms) {
+                if (audioMechanism !== null && nextPage.find('.audio-review').length > 0 && audioMechanism.active) {
+                    var audio =  currentPage.find('#audioMechanism' + audioMechanism.id + ' audio:first');
+                    var audioCopy = audio.clone();
+                    audioCopy.css('display', 'block');
+                    nextPage.find('.audio-review').empty().append(audioCopy);
+                }
+            }
+
+            for (var attachmentMechanism of attachmentMechanisms) {
+                if (attachmentMechanism !== null && nextPage.find('.attachment-review').length > 0 && attachmentMechanism.active) {
+                    var table =  currentPage.find('#attachmentMechanism' + attachmentMechanism.id + ' table.current-files:first');
+                    var tableCopy = table.clone();
+                    nextPage.find('.attachment-review').empty().append(tableCopy);
+                }
+            }
         }
         return true;
     }
-
 }

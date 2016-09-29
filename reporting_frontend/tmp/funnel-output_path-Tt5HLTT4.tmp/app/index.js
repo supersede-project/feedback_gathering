@@ -1,1 +1,0 @@
-/home/flo/masterproject/angular2_tutorial/testproject/src/app/index.js

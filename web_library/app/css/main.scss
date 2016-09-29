@@ -1,9 +1,11 @@
 @import "normalize";
+@import "spectrum";
 @import "star-rating-svg";
-@import "spectrum.min";
 @import "config";
 @import "functions";
 @import "https://fonts.googleapis.com/icon?family=Material+Icons";
+@import "audio";
+@import "attachment";
 
 
 .ui-widget input, .ui-widget select, .ui-widget textarea, .ui-widget button {
@@ -168,6 +170,7 @@ section.dialog-navigation {
 
 .navigation-button {
   float: right;
+  display: block;
 }
 
 .navigation-button :active {
@@ -244,6 +247,34 @@ button.text-type-text-clear {
   display: none;
   margin-bottom: 10px;
   position: relative;
+
+  .sticker-source {
+    z-index: 5000;
+    position: absolute;
+    cursor: move;
+  }
+}
+
+.screenshot-review {
+  position: relative;
+
+  img.base {
+    z-index: 2000;
+  }
+
+  img {
+    z-index: 3000;
+  }
+
+  .sticker-container {
+    z-index: 3000;
+  }
+}
+
+.hidden-preview {
+  display: none;
+  height: auto;
+  position: relative;
 }
 
 .screenshot-operations {
@@ -278,6 +309,16 @@ button.screenshot-operation {
 
   &.active {
     padding: 7px 7px;
+  }
+
+  &.screenshot-draw-remove {
+    margin-top: 0;
+    max-width: none;
+    width: auto;
+
+    &:hover {
+      text-decoration: underline;
+    }
   }
 }
 
@@ -323,6 +364,11 @@ button.screenshot-operation {
     background-size: 36px;
     background-repeat: no-repeat;
     padding: 8px;
+
+    &.bottom-left {
+      left: -24px;
+      right: auto;
+    }
 
     i.material-icons {
       font-size: 18px;
@@ -405,6 +451,55 @@ button.screenshot-operation {
   }
 }
 
+.sticker-container-review:hover {
+  cursor: default;
+  border: none;
+
+  a.edit {
+    display: none;
+  }
+
+  a.remove {
+    display: none;
+  }
+
+  a.color {
+    display: none;
+  }
+}
+
+.svg-sticker-source {
+  width: 24px;
+  height: 24px;
+  margin: 3px;
+}
+
+.svg-sticker-source:hover {
+  cursor: move;
+}
+
+.screenshot-text-review {
+  display: none;
+  margin-left: 30px;
+  height: 100px;
+  position: absolute;
+  width: 50%;
+  text-align: left;
+  z-index: 5000;
+}
+
+.selected-object-controls a {
+  margin-top: 4px;
+}
+
+.screenshot-operations .text-size {
+  display: inline-block;
+  width: 50px;
+  margin-left: 5px;
+  position: relative;
+  top: -5px;
+}
+
 /* intermediate dialog */
 
 #intermediateDialog {
@@ -425,5 +520,24 @@ button.screenshot-operation {
     &:hover {
       color: #000000;
     }
+  }
+}
+
+.pull-right {
+  float: right;
+  display: inline-block;
+}
+
+a.discard-feedback {
+  float: left;
+  display: inline-block;
+  color: $dialogTitlebarColor;
+  text-decoration: none;
+  margin-top: 7px;
+  font-size: 14px;
+
+  &:hover {
+    color: $dialogTitlebarColor;
+    text-decoration: underline;
   }
 }

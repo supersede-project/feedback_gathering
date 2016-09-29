@@ -13,7 +13,7 @@ import java.util.Map;
 /**
  * Text mechanism model
  */
-public class TextMechanism extends Mechanism implements Serializable {
+public class TextMechanism extends Mechanism {
     private String title = "";
     private String hint = "";
     private String label = "";
@@ -210,10 +210,12 @@ public class TextMechanism extends Mechanism implements Serializable {
             pattern = validationRegex;
         }
 
+        /*
         if (!inputText.matches(pattern)) {
             errorMessage.add(validationRegexErrorMessage);
             return false;
         }
+        */
 
         if (isMandatory() && !(inputText.length() > 0)) {
             errorMessage.add(mandatoryReminder);

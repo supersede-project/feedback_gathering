@@ -7,6 +7,7 @@ import com.example.matthias.feedbacklibrary.R;
 import com.example.matthias.feedbacklibrary.models.CategoryMechanism;
 import com.example.matthias.feedbacklibrary.models.Mechanism;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -27,8 +28,17 @@ public class CategoryMechanismView extends MechanismView implements CustomSpinne
         final TextView textView = (TextView) getEnclosingLayout().findViewById(R.id.supersede_feedbacklibrary_choice_feedback_title);
         textView.setText(categoryMechanism.getTitle());
         customSpinner = (CustomSpinner) getEnclosingLayout().findViewById(R.id.supersede_feedbacklibrary_custom_spinner);
-        // TODO: Parameter if a category should be selected by default?
-        customSpinner.setItems(categoryMechanism.getOptions(), true);
+        List<String> items = new ArrayList<>(categoryMechanism.getOptions());
+        if (categoryMechanism.isOwnAllowed()) {
+            if (!categoryMechanism.isMultiple()) {
+                items.add(getEnclosingLayout().getResources().getString(R.string.supersede_feedbacklibrary_other_option_string));
+            } else {
+                items.add(getEnclosingLayout().getResources().getString(R.string.supersede_feedbacklibrary_other_options_string));
+            }
+        }
+        customSpinner.setOwnCategoryAllowed(categoryMechanism.isOwnAllowed());
+        //customSpinner.setItems(items, true);
+        customSpinner.setItems(items, false);
         customSpinner.setListener(this);
         customSpinner.setMultiple(categoryMechanism.isMultiple());
     }

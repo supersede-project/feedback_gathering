@@ -1,32 +1,39 @@
 package com.example.matthias.feedbacklibrary.feedbacks;
 
+import com.example.matthias.feedbacklibrary.models.AudioMechanism;
+
+import java.io.File;
 import java.io.Serializable;
 
 /**
- * Audio feedback
+ * Audio feedback.
  */
-public class AudioFeedback implements Serializable {
-    private String title;
-
+public class AudioFeedback extends PartFeedback implements Serializable {
     private String audioPath;
 
-    public String getTitle ()
-    {
-        return title;
+    public AudioFeedback(AudioMechanism audioMechanism, int partId) {
+        super(audioMechanism, audioMechanism.getAudioPath(), partId);
+        initAudioFeedback(audioMechanism);
     }
 
-    public void setTitle (String title)
-    {
-        this.title = title;
-    }
-
-    public String getAudioPath ()
-    {
+    public String getAudioPath() {
         return audioPath;
     }
 
-    public void setAudioPath (String audioPath)
-    {
+    public String getFileName() {
+        return new File(audioPath).getName();
+    }
+
+    @Override
+    public String getPartString() {
+        return "audio";
+    }
+
+    private void initAudioFeedback(AudioMechanism audioMechanism) {
+        audioPath = audioMechanism.getAudioPath();
+    }
+
+    public void setAudioPath(String audioPath) {
         this.audioPath = audioPath;
     }
 }

@@ -1,10 +1,8 @@
 package com.example.matthias.feedbacklibrary.utils;
 
-import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.ContextWrapper;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -14,6 +12,8 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
@@ -21,10 +21,10 @@ import android.view.View;
 import com.example.matthias.feedbacklibrary.API.feedbackAPI;
 import com.example.matthias.feedbacklibrary.FeedbackActivity;
 import com.example.matthias.feedbacklibrary.R;
-import com.example.matthias.feedbacklibrary.configurations.OrchestratorConfiguration;
-import com.example.matthias.feedbacklibrary.configurations.PullConfiguration;
-import com.example.matthias.feedbacklibrary.configurations.PullConfigurationItem;
+import com.example.matthias.feedbacklibrary.configurations.ConfigurationItem;
+import com.example.matthias.feedbacklibrary.configurations.OrchestratorConfigurationItem;
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -38,9 +38,14 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
+import java.util.Set;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -51,8 +56,22 @@ import retrofit2.converter.gson.GsonConverterFactory;
  * Class with various helper methods
  */
 public class Utils {
-    public static final int PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 123;
-    public static final String SCREENSHOTS_DIR_NAME = "Screenshots";
+    // Audio
+    public static final String AUDIO_DIR = "audioDir";
+    public static final String AUDIO_EXTENSION = "m4a";
+    public static final String AUDIO_FILENAME = "audioFile";
+    // Screenshot
+    public static final String EXTRA_KEY_ALL_STICKER_ANNOTATIONS = "allStickerAnnotations";
+    public static final String EXTRA_KEY_ALL_TEXT_ANNOTATIONS = "allTextAnnotations";
+    public static final String EXTRA_KEY_ANNOTATED_IMAGE_PATH_WITHOUT_STICKERS = "annotatedImagePathWithoutStickers";
+    public static final String EXTRA_KEY_ANNOTATED_IMAGE_PATH_WITH_STICKERS = "annotatedImagePathWithStickers";
+    public static final String EXTRA_KEY_HAS_STICKER_ANNOTATIONS = "hasStickerAnnotations";
+    public static final String EXTRA_KEY_HAS_TEXT_ANNOTATIONS = "hasTextAnnotations";
+    public static final String EXTRA_KEY_IMAGE_PATCH = "imagePath";
+    public static final String EXTRA_KEY_MECHANISM_VIEW_ID = "mechanismViewID";
+    public static final String SEPARATOR = "::;;::;;";
+    public static final String TEXT_ANNOTATION_COUNTER_MAXIMUM = "textAnnotationCounterMaximum";
+    private static final String SCREENSHOTS_DIR_NAME = "Screenshots";
 
     /**
      * @param input the input value
@@ -67,6 +86,7 @@ public class Utils {
      *
      * @return the path to the recently taken screenshot image
      */
+    @NonNull
     public static String captureScreenshot(final Activity activity) {
         // Create the 'Screenshots' folder if it does not already exist
         File screenshotDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), SCREENSHOTS_DIR_NAME);
@@ -115,31 +135,35 @@ public class Utils {
     }
 
     /**
-     * This method checks the READ_EXTERNAL_STORAGE permission at runtime.
-     * Required for Android versions 6 (API version 23) and higher.
+     * This method checks a single permission at runtime. Required for Android versions Marshmallow (API version 23) and higher.
+     * The request code must be handled in the onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) method
+     * which has to be overridden in each activity that needs to request runtime permission.
      *
-     * @param context     the context
-     * @param requestCode the request code to be handled in the onRequestPermissionsResult method of the calling activity
+     * @param context       the context
+     * @param requestCode   the request code to be handled in the onRequestPermissionsResult method of the calling activity
+     * @param permission    the requested permission
+     * @param dialogTitle   the dialog title for the rationale
+     * @param dialogMessage the dialog message for the rationale
      * @return true if permission is granted, false otherwise
      */
-    public static boolean checkPermission_READ_EXTERNAL_STORAGE(final Context context, final int requestCode) {
+    public static boolean checkSinglePermission(@NonNull final Context context, final int requestCode, @NonNull final String permission, final String dialogTitle, final String dialogMessage, final boolean showRequestPermissionRationale) {
         int currentAPIVersion = Build.VERSION.SDK_INT;
         if (currentAPIVersion >= android.os.Build.VERSION_CODES.M) {
-            if (ContextCompat.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                if (ActivityCompat.shouldShowRequestPermissionRationale((Activity) context, Manifest.permission.READ_EXTERNAL_STORAGE)) {
+            if (ContextCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
+                if (showRequestPermissionRationale && ActivityCompat.shouldShowRequestPermissionRationale((Activity) context, permission)) {
                     AlertDialog.Builder alertBuilder = new AlertDialog.Builder(context);
                     alertBuilder.setCancelable(true);
-                    alertBuilder.setTitle("Permission Request");
-                    alertBuilder.setMessage("External storage permission is necessary");
+                    alertBuilder.setTitle(dialogTitle);
+                    alertBuilder.setMessage(dialogMessage);
                     alertBuilder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
-                            ActivityCompat.requestPermissions((Activity) context, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, requestCode);
+                            ActivityCompat.requestPermissions((Activity) context, new String[]{permission}, requestCode);
                         }
                     });
                     AlertDialog alert = alertBuilder.create();
                     alert.show();
                 } else {
-                    ActivityCompat.requestPermissions((Activity) context, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, requestCode);
+                    ActivityCompat.requestPermissions((Activity) context, new String[]{permission}, requestCode);
                 }
                 return false;
             } else {
@@ -158,6 +182,7 @@ public class Utils {
      * @param suffix  the suffix, e.g., .jpg
      * @return the created file, null if an exception occurred
      */
+    @Nullable
     public static File createTempChacheFile(Context context, String prefix, String suffix) {
         try {
             return File.createTempFile(prefix, suffix, context.getCacheDir());
@@ -176,11 +201,42 @@ public class Utils {
     }
 
     /**
+     * This method checks if the application is up and running.
+     *
+     * @return true if the application is up and running, false otherwise
+     */
+    private static boolean isUpAndRunning() {
+        // TODO: String converter factory for text/plain response header?
+        Retrofit rtf = new Retrofit.Builder().baseUrl(feedbackAPI.endpoint).addConverterFactory(GsonConverterFactory.create()).build();
+        feedbackAPI fbAPI = rtf.create(feedbackAPI.class);
+        Call<ResponseBody> checkUpAndRunning = fbAPI.pingOrchestrator();
+        final Set<Boolean> isUpAndRunning = new HashSet<>();
+
+        if (checkUpAndRunning != null) {
+            checkUpAndRunning.enqueue(new Callback<ResponseBody>() {
+                @Override
+                public void onFailure(Call<ResponseBody> call, Throwable t) {
+                }
+
+                @Override
+                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                    if (response.code() == 200) {
+                        isUpAndRunning.add(true);
+                    }
+                }
+            });
+        }
+
+        return !isUpAndRunning.isEmpty();
+    }
+
+    /**
      * This method loads an image as a bitmap from the specific path.
      *
      * @param path the absolute path of the image file
      * @return the bitmap
      */
+    @Nullable
     public static Bitmap loadImageFromStorage(String path) {
         try {
             File f = new File(path);
@@ -189,6 +245,54 @@ public class Utils {
             e.printStackTrace();
         }
         return null;
+    }
+
+    /**
+     * This method is used in the host application in the onRequestPermissionsResult method.
+     *
+     * @param requestCode   the request code to be handled in the onRequestPermissionsResult method of the calling activity
+     * @param permissions   the permissions
+     * @param grantResults  the granted results
+     * @param activity      the activity from where the method is called
+     * @param permission    the requested permission
+     * @param dialogTitle   the dialog title for the rationale
+     * @param dialogMessage the dialog message for the rationale
+     */
+    public static void onRequestPermissionsResultCase(final int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults,
+                                                      @NonNull final Activity activity, @NonNull final String permission, int dialogTitle,
+                                                      int dialogMessage, long applicationId, String language) {
+        final Intent intent = new Intent(activity, FeedbackActivity.class);
+        intent.putExtra(FeedbackActivity.EXTRA_KEY_APPLICATION_ID, applicationId);
+        intent.putExtra(FeedbackActivity.EXTRA_KEY_LANGUAGE, language);
+        if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            // Permission was already granted. Taking a screenshot of the current screen automatically and open the FeedbackActivity from the feedback library
+            String defaultImagePath = captureScreenshot(activity);
+            intent.putExtra(FeedbackActivity.DEFAULT_IMAGE_PATH, defaultImagePath);
+            activity.startActivity(intent);
+        } else {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(activity, permission)) {
+                // The user denied the permission without checking 'Never ask again'. Show the rationale
+                AlertDialog.Builder alertBuilder = new AlertDialog.Builder(activity);
+                alertBuilder.setTitle(dialogTitle);
+                alertBuilder.setMessage(dialogMessage);
+                alertBuilder.setPositiveButton(R.string.supersede_feedbacklibrary_retry_string, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        ActivityCompat.requestPermissions(activity, new String[]{permission}, requestCode);
+                    }
+                });
+                alertBuilder.setNegativeButton(R.string.supersede_feedbacklibrary_not_now_text, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        activity.startActivity(intent);
+                    }
+                });
+                alertBuilder.setCancelable(false);
+                alertBuilder.show();
+            } else {
+                // Open the FeedbackActivity from the feedback library without automatically taking a screenshot
+                activity.startActivity(intent);
+            }
+        }
     }
 
     /**
@@ -214,25 +318,22 @@ public class Utils {
                 reader.close();
                 return out.toString();
             }
-        } catch (FileNotFoundException e) {
-            System.out.println("File not found: " + e.toString());
         } catch (IOException e) {
-            System.out.println("Cannot read file: " + e.toString());
+            e.printStackTrace();
         }
 
         return ret;
     }
 
     /**
-     * This method deletes the file at the specific path if it exists.
+     * This method deletes the file or directory at the specific path if it exists.
      *
      * @param path the path of the file to delete
+     * @return true if and only if the file or directory is successfully deleted, false otherwise
      */
-    public static void removeDeleteFileFromInternalStorage(String path) {
+    public static boolean removeDeleteFileFromInternalStorage(String path) {
         File toDelete = new File(path);
-        if (toDelete.exists()) {
-            toDelete.delete();
-        }
+        return toDelete.exists() && toDelete.delete();
     }
 
     /**
@@ -270,11 +371,10 @@ public class Utils {
      * @param quality            the quality
      * @return the absolute path to the directory where the image is stored
      */
+    @NonNull
     public static String saveBitmapToInternalStorage(Context applicationContext, String dirName, String imageName, Bitmap bitmapImage, int mode, Bitmap.CompressFormat format, int quality) {
-        ContextWrapper cw = new ContextWrapper(applicationContext);
-        File directory = cw.getDir(dirName, mode);
+        File directory = applicationContext.getDir(dirName, mode);
         File myPath = new File(directory, imageName);
-
         FileOutputStream fos;
         try {
             fos = new FileOutputStream(myPath);
@@ -298,10 +398,8 @@ public class Utils {
      * @return true on success, false otherwise
      */
     public static boolean saveStringContentToInternalStorage(Context applicationContext, String dirName, String fileName, String str, int mode) {
-        ContextWrapper cw = new ContextWrapper(applicationContext);
-        File directory = cw.getDir(dirName, mode);
+        File directory = applicationContext.getDir(dirName, mode);
         File myPath = new File(directory, fileName);
-
         try {
             FileWriter out = new FileWriter(myPath);
             out.write(str);
@@ -311,7 +409,6 @@ public class Utils {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         return false;
     }
 
@@ -328,17 +425,17 @@ public class Utils {
         int height = bitmap.getHeight();
 
         if (width > height) {
-            // landscape
+            // Landscape
             float ratio = (float) width / maxWidth;
             width = maxWidth;
             height = (int) (height / ratio);
         } else if (height > width) {
-            // portrait
+            // Portrait
             float ratio = (float) height / maxHeight;
             height = maxHeight;
             width = (int) (width / ratio);
         } else {
-            // square
+            // Square
             height = maxHeight;
             width = maxWidth;
         }
@@ -347,60 +444,96 @@ public class Utils {
     }
 
     /**
-     * This method triggers a pull feedback based on their respective probabilities.
-     * It should be called on startup of the main application.
+     * This method starts takes a screenshot of the current screen automatically and opens the FeedbackActivity from the feedback library.
      *
-     * @param activity the activity from where the feedback activity is launched
+     * @param activity the activity from where the method is called
      */
-    public static void triggerPotentialPullFeedback(final Activity activity) {
-        Retrofit rtf = new Retrofit.Builder().baseUrl(feedbackAPI.endpoint).addConverterFactory(GsonConverterFactory.create()).build();
-        feedbackAPI fbAPI = rtf.create(feedbackAPI.class);
-        Call<OrchestratorConfiguration> result;
-        result = fbAPI.getConfiguration();
+    public static void startActivityWithScreenshotCapture(@NonNull Activity activity, long applicationId, @NonNull String language) {
+        // TODO: Remove '|| true' before release
+        // '|| true' only for demo purposes
+        if (isUpAndRunning() || true) {
+            Intent intent = new Intent(activity, FeedbackActivity.class);
+            String defaultImagePath = Utils.captureScreenshot(activity);
+            intent.putExtra(FeedbackActivity.DEFAULT_IMAGE_PATH, defaultImagePath);
+            intent.putExtra(FeedbackActivity.EXTRA_KEY_APPLICATION_ID, applicationId);
+            intent.putExtra(FeedbackActivity.EXTRA_KEY_LANGUAGE, language);
+            activity.startActivity(intent);
+        } else {
+            DialogUtils.showInformationDialog(activity, new String[]{activity.getResources().getString(R.string.supersede_feedbacklibrary_feedback_application_unavailable_text)}, true);
+        }
+    }
 
-        // Asynchronous call
-        if (result != null) {
-            result.enqueue(new Callback<OrchestratorConfiguration>() {
-                @Override
-                public void onFailure(Call<OrchestratorConfiguration> call, Throwable t) {
-                }
+    public static void triggerPotentialPullFeedback(@NonNull final Activity activity, long applicationId, final @NonNull String language) {
+        if (isUpAndRunning()) {
+            Retrofit rtf = new Retrofit.Builder().baseUrl(feedbackAPI.endpoint).addConverterFactory(GsonConverterFactory.create()).build();
+            feedbackAPI fbAPI = rtf.create(feedbackAPI.class);
+            Call<OrchestratorConfigurationItem> result = fbAPI.getConfiguration(language, applicationId);
 
-                @Override
-                public void onResponse(Call<OrchestratorConfiguration> call, Response<OrchestratorConfiguration> response) {
-                    OrchestratorConfiguration configuration = response.body();
-                    if (configuration != null) {
-                        List<PullConfiguration> allPullConfigurations = new ArrayList<>();
-                        configuration = response.body();
+            // Asynchronous call
+            if (result != null) {
+                result.enqueue(new Callback<OrchestratorConfigurationItem>() {
+                    @Override
+                    public void onFailure(Call<OrchestratorConfigurationItem> call, Throwable t) {
+                        DialogUtils.showInformationDialog(activity, new String[]{activity.getResources().getString(R.string.supersede_feedbacklibrary_feedback_application_unavailable_text)}, true);
+                    }
 
-                        for (PullConfigurationItem item : configuration.getPullConfigurationItems()) {
-                            allPullConfigurations.add(new PullConfiguration(item));
-                        }
+                    @Override
+                    public void onResponse(Call<OrchestratorConfigurationItem> call, Response<OrchestratorConfigurationItem> response) {
+                        OrchestratorConfigurationItem configuration = response.body();
+                        if (configuration != null) {
+                            List<ConfigurationItem> configurationItems = configuration.getConfigurationItems();
+                            List<Long> shuffleIds = new ArrayList<>();
+                            Map<Long, List<Map<String, Object>>> idParameters = new HashMap<>();
+                            for (ConfigurationItem configurationItem : configurationItems) {
+                                if (configurationItem.getType().equals("PULL")) {
+                                    shuffleIds.add(configuration.getId());
+                                    idParameters.put(configuration.getId(), configurationItem.getGeneralConfigurationItem().getParameters());
+                                }
+                            }
 
-                        Random rnd = new Random(System.nanoTime());
-                        Collections.shuffle(allPullConfigurations, rnd);
-                        for (int i = 0; i < allPullConfigurations.size(); ++i) {
-                            if (!(rnd.nextDouble() > allPullConfigurations.get(i).getLikelihood())) {
-                                Intent intent = new Intent(activity, FeedbackActivity.class);
+                            Random rnd = new Random(System.nanoTime());
+                            Collections.shuffle(shuffleIds, rnd);
+                            for (int i = 0; i < shuffleIds.size(); ++i) {
+                                double likelihood = -1;
+                                boolean showIntermediateDialog = true;
+                                for (Map<String, Object> parameter : idParameters.get(shuffleIds.get(i))) {
+                                    String key = (String) parameter.get("key");
+                                    // Likelihood
+                                    if (key.equals("likelihood")) {
+                                        likelihood = (((Double) parameter.get("value")).floatValue());
+                                    }
+                                    // Intermediate dialog
+                                    if (key.equals("showIntermediateDialog")) {
+                                        showIntermediateDialog = (Utils.intToBool(((Double) parameter.get("value")).intValue()));
+                                    }
+                                }
 
-                                String jsonString = new Gson().toJson(configuration);
-                                intent.putExtra(FeedbackActivity.JSON_CONFIGURATION_STRING, jsonString);
-                                intent.putExtra(FeedbackActivity.IS_PUSH_STRING, false);
-                                intent.putExtra(FeedbackActivity.SELECTED_PULL_CONFIGURATION_INDEX_STRING, i);
-                                if (!allPullConfigurations.get(i).isShowPopupDialog()) {
-                                    // Start the feedback activity without asking the user
-                                    activity.startActivity(intent);
-                                } else {
-                                    // Ask the user if (s)he would like to give feedback or not
-                                    DialogUtils.FeedbackPopupDialog d = DialogUtils.FeedbackPopupDialog.newInstance(activity.getResources().getString(R.string.supersede_feedbacklibrary_pull_feedback_question_string), jsonString, i);
-                                    d.show(activity.getFragmentManager(), "feedbackPopupDialog");
+                                if (!(rnd.nextDouble() > likelihood)) {
+                                    Intent intent = new Intent(activity, FeedbackActivity.class);
+
+                                    String jsonString = new Gson().toJson(configuration);
+                                    intent.putExtra(FeedbackActivity.IS_PUSH_STRING, false);
+                                    intent.putExtra(FeedbackActivity.JSON_CONFIGURATION_STRING, jsonString);
+                                    intent.putExtra(FeedbackActivity.SELECTED_PULL_CONFIGURATION_INDEX_STRING, shuffleIds.get(i));
+                                    intent.putExtra(FeedbackActivity.EXTRA_KEY_LANGUAGE, language);
+                                    if (!showIntermediateDialog) {
+                                        // Start the feedback activity without asking the user
+                                        activity.startActivity(intent);
+                                    } else {
+                                        // Ask the user if (s)he would like to give feedback or not
+                                        DialogUtils.PullFeedbackIntermediateDialog d = DialogUtils.PullFeedbackIntermediateDialog.newInstance(activity.getResources().getString(com.example.matthias.feedbacklibrary.R.string.supersede_feedbacklibrary_pull_feedback_question_string), jsonString, shuffleIds.get(i), language);
+                                        d.show(activity.getFragmentManager(), "feedbackPopupDialog");
+                                    }
                                 }
                             }
                         }
                     }
-                }
-            });
+                });
+            } else {
+                DialogUtils.showInformationDialog(activity, new String[]{activity.getResources().getString(R.string.supersede_feedbacklibrary_feedback_application_unavailable_text)}, true);
+            }
         } else {
-            // Should never happen!
+            DialogUtils.showInformationDialog(activity, new String[]{activity.getResources().getString(R.string.supersede_feedbacklibrary_feedback_application_unavailable_text)}, true);
         }
     }
 }

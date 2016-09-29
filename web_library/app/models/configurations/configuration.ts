@@ -1,11 +1,6 @@
 import {ConfigurationInterface} from './configuration_interface';
 import {Mechanism} from '../mechanisms/mechanism';
-import {ParameterValuePropertyPair} from '../parameters/parameter_value_property_pair';
 import {GeneralConfiguration} from './general_configuration';
-import {mechanismTypes, configurationTypes} from '../../js/config';
-import {PushConfiguration} from './push_configuration';
-import {PullConfiguration} from './pull_configuration';
-import {CategoryMechanism} from '../mechanisms/category_mechanism';
 
 
 export abstract class Configuration implements ConfigurationInterface {

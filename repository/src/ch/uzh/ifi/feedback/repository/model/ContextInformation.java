@@ -2,15 +2,14 @@ package ch.uzh.ifi.feedback.repository.model;
 
 import java.sql.Date;
 
+import ch.uzh.ifi.feedback.library.rest.Service.ItemBase;
 import ch.uzh.ifi.feedback.library.rest.annotations.DbAttribute;
-import ch.uzh.ifi.feedback.library.rest.annotations.DbIgnore;
 import ch.uzh.ifi.feedback.library.rest.validation.Id;
-import ch.uzh.ifi.feedback.library.rest.validation.NotNull;
 
-public class ContextInformation {
+public class ContextInformation extends ItemBase<ContextInformation> {
 
 	@Id
-	private long id;	
+	private Integer id;	
 
 	private String resolution;
 	
@@ -32,14 +31,6 @@ public class ContextInformation {
 	private String country;
 	
 	private String region;
-
-	public long getId() {
-		return id;
-	}
-
-	public void setId(long id) {
-		this.id = id;
-	}
 
 	public String getResolution() {
 		return resolution;
@@ -103,5 +94,15 @@ public class ContextInformation {
 
 	public void setRegion(String region) {
 		this.region = region;
+	}
+
+	@Override
+	public Integer getId() {
+		return id;
+	}
+
+	@Override
+	public void setId(Integer id) {
+		this.id = id;
 	}
 }

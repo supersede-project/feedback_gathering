@@ -8,23 +8,26 @@ import java.util.List;
 /**
  * Mechanism model
  */
-public abstract class Mechanism implements Serializable {
+public abstract class Mechanism {
+    public static final String ATTACHMENT_TYPE = "ATTACHMENT_TYPE";
     public static final String AUDIO_TYPE = "AUDIO_TYPE";
     public static final String CATEGORY_TYPE = "CATEGORY_TYPE";
     public static final String RATING_TYPE = "RATING_TYPE";
     public static final String SCREENSHOT_TYPE = "SCREENSHOT_TYPE";
     public static final String TEXT_TYPE = "TEXT_TYPE";
 
-    private boolean isActive;
     private boolean canBeActivated;
-    private String type;
+    private long id;
+    private boolean isActive;
     private int order;
+    private String type;
 
     public Mechanism(String type, MechanismConfigurationItem item) {
-        this.isActive = item.isActive();
         this.canBeActivated = item.canBeActivated();
-        this.type = type;
+        this.id = item.getId();
+        this.isActive = item.isActive();
         this.order = item.getOrder();
+        this.type = type;
     }
 
     /**
@@ -34,6 +37,10 @@ public abstract class Mechanism implements Serializable {
      */
     public boolean canBeActivated() {
         return this.canBeActivated;
+    }
+
+    public long getId() {
+        return id;
     }
 
     /**

@@ -1,0 +1,61 @@
+  {
+  	"applicationId": 1,
+  	"userIdentification": "u8102390",
+  	"configurationId": 1,
+  	"contextInformation": null,
+  	"language": "EN",
+  	"textFeedbacks": [{
+  		"text": "This is the feedback text",
+  		"mechanismId": 1
+  	}],
+  	"ratingFeedbacks": [{
+  		"title": "Test rating",
+  		"rating": 4,
+  		"mechanismId": 5
+  	}, {
+  		"title": "Test rating 2",
+  		"rating": 5,
+  		"mechanismId": 6
+  	}],
+  	"categoryFeedbacks": [{
+  		"text": "sample text",
+  		"parameterId": "12"
+  	}, {
+  		"parameterId": "14"
+  	}],
+  	"screenshotFeedbacks": [{
+  		"textAnnotations": [{
+  			"referenceNumber": 1,
+  			"text": "Too big"
+  		}, {
+  			"referenceNumber": 2,
+  			"text": "Unnecessary info"
+  		}],
+  		"fileExtension": "jpeg",
+  		"mechanismId": 9,
+  		"name": "annotatedImage1",
+  		"part": "screenshot1"
+  	}, {
+  		"fileExtension": "jpeg",
+  		"mechanismId": 9,
+  		"name": "annotatedImage2",
+  		"part": "screenshot2"
+  	}],
+  	"attachmentFeedbacks": [{
+  		"fileExtension": "txt",
+  		"mechanismId": 10,
+  		"name": "attachment1",
+  		"part": "attachment1"
+  	}, {
+  		"fileExtension": "txt",
+  		"mechanismId": 10,
+  		"name": "attachment2",
+  		"part": "attachment2"
+  	}],
+  	"audioFeedbacks": [{
+  		"fileExtension": "mp3",
+  		"mechanismId": 11,
+  		"name": "audio1",
+  		"part": "audio1"
+  	}]
+  }

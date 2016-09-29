@@ -4,25 +4,28 @@ import java.util.List;
 
 import com.google.inject.Inject;
 
+import ch.uzh.ifi.feedback.library.rest.IRequestContext;
 import ch.uzh.ifi.feedback.library.rest.RestController;
 import ch.uzh.ifi.feedback.library.rest.Service.IDbService;
+import ch.uzh.ifi.feedback.library.rest.annotations.Authenticate;
 import ch.uzh.ifi.feedback.library.rest.annotations.Controller;
 import ch.uzh.ifi.feedback.library.rest.annotations.GET;
 import ch.uzh.ifi.feedback.library.rest.annotations.POST;
 import ch.uzh.ifi.feedback.library.rest.annotations.PUT;
 import ch.uzh.ifi.feedback.library.rest.annotations.Path;
 import ch.uzh.ifi.feedback.library.rest.annotations.PathParam;
+import ch.uzh.ifi.feedback.orchestrator.authorization.UserAuthenticationService;
 import ch.uzh.ifi.feedback.orchestrator.model.FeedbackParameter;
 import ch.uzh.ifi.feedback.orchestrator.serialization.ParameterSerializationService;
 import ch.uzh.ifi.feedback.orchestrator.services.ParameterService;
+import ch.uzh.ifi.feedback.orchestrator.validation.ParameterValidator;
 
 @Controller(FeedbackParameter.class)
 public class ParameterController extends RestController<FeedbackParameter> {
 	
 	@Inject
-	public ParameterController(ParameterSerializationService serializationService,
-			ParameterService dbService) {
-		super(serializationService, dbService);
+	public ParameterController(ParameterService dbService, ParameterValidator validator, IRequestContext requestContext) {
+		super(dbService, validator, requestContext);
 	}
 
 	@GET
@@ -43,37 +46,39 @@ public class ParameterController extends RestController<FeedbackParameter> {
 	@Path("/mechanisms/{mechanism_id}/parameters")
 	public List<FeedbackParameter> GetParametersByMechanism(@PathParam("mechanism_id") Integer id) throws Exception 
 	{
-		return super.GetAllFor("mechanism_id", id);
+		return super.GetAllFor("mechanisms_id", id);
 	}
 	
 	@GET
 	@Path("/general_configurations/{config_id}/parameters")
 	public List<FeedbackParameter> GetParametersByGeneralConfigurationId(@PathParam("config_id") Integer id) throws Exception 
 	{
-		return super.GetAllFor("configuration_id", id);
+		return super.GetAllFor("general_configurations_id", id);
 	}
 	
 	@PUT
+	@Authenticate(UserAuthenticationService.class)
 	@Path("/parameters")
 	public FeedbackParameter UpdateParameter(FeedbackParameter param) throws Exception 
 	{
-		super.Update(param);
-		return param;
+		return super.Update(param);
 	}
 
 	@POST
+	@Authenticate(UserAuthenticationService.class)
 	@Path("/general_configurations/{config_id}/parameters")
 	public FeedbackParameter InsertParameterForConfiguration(@PathParam("config_id")Integer config_id, final FeedbackParameter param) throws Exception 
 	{
-		super.InsertFor(param, "configuration_id", config_id);
-		return param;
+		param.setGenaralConfigurationId(config_id);
+		return super.Insert(param);
 	}
 	
 	@POST
+	@Authenticate(UserAuthenticationService.class)
 	@Path("/mechanisms/{mechanism_id}/parameters")
 	public FeedbackParameter InsertParameterForMechanism(@PathParam("mechanism_id") Integer mechanism_id, final FeedbackParameter param) throws Exception 
 	{
-		super.InsertFor(param, "mechanism_id", mechanism_id);
-		return param;
+		param.setMechanismId(mechanism_id);
+		return super.Insert(param);
 	}
 }

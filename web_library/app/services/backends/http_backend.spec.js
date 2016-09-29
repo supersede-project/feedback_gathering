@@ -4,17 +4,14 @@ define(["require", "exports", './http_backend'], function (require, exports, htt
         var configurationHttpBackend;
         var feebackHttpBackend;
         beforeEach(function () {
-            configurationHttpBackend = new http_backend_1.HttpBackend('feedback_orchestrator/example/configuration');
-            feebackHttpBackend = new http_backend_1.HttpBackend('feedbacks');
+            configurationHttpBackend = new http_backend_1.HttpBackend('feedback_orchestrator/{lang}/example/configuration', 'http://ec2-54-175-37-30.compute-1.amazonaws.com/', 'en');
+            feebackHttpBackend = new http_backend_1.HttpBackend('{lang}/feedbacks', 'http://ec2-54-175-37-30.compute-1.amazonaws.com/', 'de');
         });
         it('should return the correct url for the given path', function () {
-            var expectedPath = 'http://ec2-54-175-37-30.compute-1.amazonaws.com/feedback_orchestrator/example/configuration';
+            var expectedPath = 'http://ec2-54-175-37-30.compute-1.amazonaws.com/feedback_orchestrator/en/example/configuration';
             expect(configurationHttpBackend.getUrl()).toEqual(expectedPath);
-        });
-        it('should list all the mock data', function () {
-            configurationHttpBackend.list(function (responseData) {
-                expect(responseData.length).toBe(4);
-            });
+            var expectedFeedbackPath = 'http://ec2-54-175-37-30.compute-1.amazonaws.com/de/feedbacks';
+            expect(feebackHttpBackend.getUrl()).toEqual(expectedFeedbackPath);
         });
     });
 });

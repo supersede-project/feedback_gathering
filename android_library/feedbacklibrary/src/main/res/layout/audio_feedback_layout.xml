@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginTop="100dp"
+    android:background="@color/whiteColor">
+
+    <TextView
+        android:id="@+id/supersede_feedbacklibrary_audio_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:paddingBottom="10dp"/>
+
+    <!-- Timer display -->
+    <LinearLayout
+        android:id="@+id/supersede_feedbacklibrary_audio_timer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/supersede_feedbacklibrary_audio_title"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:orientation="horizontal">
+        <!-- Current duration -->
+        <TextView
+            android:id="@+id/supersede_feedbacklibrary_audio_timer_current_duration"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="start"
+            android:text="@string/supersede_feedbacklibrary_feedback_library_default_current_duration"/>
+        <!-- Recording indicator -->
+        <TextView
+            android:id="@+id/supersede_feedbacklibrary_audio_timer_record_indicator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:text="@string/supersede_feedbacklibrary_feedback_library_record_indicator"
+            android:textSize="16sp"
+            android:textStyle="bold"/>
+        <!-- Total duration -->
+        <TextView
+            android:id="@+id/supersede_feedbacklibrary_audio_timer_total_duration"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="end"
+            android:text="@string/supersede_feedbacklibrary_feedback_library_default_total_duration"/>
+    </LinearLayout>
+
+    <SeekBar
+        android:id="@+id/supersede_feedbacklibrary_audio_seekbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/supersede_feedbacklibrary_audio_timer"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"/>
+
+    <!-- Player buttons -->
+    <LinearLayout
+        android:id="@+id/supersede_feedbacklibrary_audio_player_buttonbar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/supersede_feedbacklibrary_audio_seekbar"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:orientation="horizontal">
+        <!-- Backward Button -->
+        <!--
+        <ImageButton
+            android:id="@+id/supersede_feedbacklibrary_audio_player_button_backward"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_fast_rewind_black_48dp"/>
+            -->
+        <!-- Stop button -->
+        <ImageButton
+            android:id="@+id/supersede_feedbacklibrary_audio_player_button_record"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_mic_black_48dp"/>
+        <!-- Stop button -->
+        <ImageButton
+            android:id="@+id/supersede_feedbacklibrary_audio_player_button_stop"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_stop_black_48dp"/>
+        <!-- Pause button -->
+        <ImageButton
+            android:id="@+id/supersede_feedbacklibrary_audio_player_button_pause"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_pause_black_48dp"/>
+        <!-- Play button -->
+        <ImageButton
+            android:id="@+id/supersede_feedbacklibrary_audio_player_button_play"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_play_arrow_black_48dp"/>
+        <!-- Forward button -->
+        <!--
+        <ImageButton
+            android:id="@+id/supersede_feedbacklibrary_audio_player_button_forward"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_fast_forward_black_48dp"/>
+            -->
+    </LinearLayout>
+</RelativeLayout>

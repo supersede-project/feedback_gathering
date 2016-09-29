@@ -6,6 +6,23 @@ The Feedback Mechanisms for the web are realized as a jQuery Plugin.
 
     $ npm install
         
+Ideally the development is locally done on a virtual host (otherwise you might have problems with cross origin loads):
+        
+    <VirtualHost *:80>
+        DocumentRoot /<your_path>/web_library
+        ServerName localhost.web-library.dev
+        <Directory "/<your_path>/web_library">
+            Options Indexes FollowSymLinks
+            AllowOverride All
+            Order allow,deny
+            Allow from all
+        </Directory>
+    </VirtualHost>
+        
+And don't forget to add an entry to the hosts file:
+                
+    127.0.0.1	localhost.web-library.dev
+        
 ## Bundling
     $ webpack
 

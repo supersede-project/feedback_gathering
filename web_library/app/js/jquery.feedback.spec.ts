@@ -1,7 +1,8 @@
 import {feedbackPluginModule} from './jquery.feedback';
+import Handlebars = require('handlebars');
 
 
-describe('jQuery Validate Plugin', () => {
+xdescribe('jQuery Validate Plugin', () => {
     let $ = $j;
 
     beforeEach(() => {

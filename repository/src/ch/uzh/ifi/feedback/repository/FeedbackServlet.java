@@ -2,39 +2,44 @@ package ch.uzh.ifi.feedback.repository;
 
 import java.io.IOException;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.HttpConstraint;
 import javax.servlet.annotation.MultipartConfig;
+import javax.servlet.annotation.ServletSecurity;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.annotation.ServletSecurity.TransportGuarantee;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import ch.uzh.ifi.feedback.library.rest.IRestManager;
 import ch.uzh.ifi.feedback.library.rest.RestManager;
+import ch.uzh.ifi.feedback.library.rest.ServletBase;
+import ch.uzh.ifi.feedback.library.rest.Service.DatabaseConfiguration;
 
 /**
  * Servlet implementation class FeedbackServlet
  */
-@WebServlet("/")
 @MultipartConfig
-public class FeedbackServlet extends HttpServlet {
+@WebServlet("/")
+public class FeedbackServlet extends ServletBase {
 	
 	private static final long serialVersionUID = 1L;    
-    private IRestManager _restManager;
     
     /**
      * @see HttpServlet#HttpServlet()
      */
     public FeedbackServlet() {
         super();
-        initController();
+        InitController();
     }
     
-    private void initController()
+    @Override
+    protected void InitController()
     {
-    	_restManager = new RestManager();
+    	this._restController = new RestManager();
         
         try{
-        	_restManager.Init("ch.uzh.ifi.feedback.repository");
+        	_restController.Init("ch.uzh.ifi.feedback.repository");
         }
         catch(Exception ex){
         	System.out.println(ex.getMessage());
@@ -42,64 +47,4 @@ public class FeedbackServlet extends HttpServlet {
         	super.destroy();
         }
     }
-
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
-        response.setContentType("application/json");            
-        response.setCharacterEncoding("UTF-8");
-        
-        response.setHeader("Access-Control-Allow-Origin", "*");
-        response.setHeader("Access-Control-Allow-Methods", "GET,PUT,POST");
-        response.setHeader("Access-Control-Allow-Headers", "Content-Type");
-        response.setHeader("Access-Control-Max-Age", "86400");
-        
-        _restManager.Get(request, response);
-		
-	}
-
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
-	{
-        response.setContentType("application/json");           
-        response.setCharacterEncoding("UTF-8");
-        
-        response.setHeader("Access-Control-Allow-Origin", "*");
-        response.setHeader("Access-Control-Allow-Methods", "GET,PUT,POST");
-        response.setHeader("Access-Control-Allow-Headers", "Content-Type");
-        response.setHeader("Access-Control-Max-Age", "86400");
-        
-        _restManager.Post(request, response);
-	}
-	
-	protected void doOptions(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
-	{
-        response.setContentType("application/json");           
-        response.setCharacterEncoding("UTF-8");
-        
-        response.setHeader("Access-Control-Allow-Origin", "*");
-        response.setHeader("Access-Control-Allow-Methods", "GET,PUT,POST");
-        response.setHeader("Access-Control-Allow-Headers", "Content-Type");
-        response.setHeader("Access-Control-Max-Age", "86400");
-		response.setStatus(200);
-	}
-	
-	protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
-	{
-
-        response.setContentType("application/json");            
-        response.setCharacterEncoding("UTF-8");
-        
-        response.setHeader("Access-Control-Allow-Origin", "*");
-        response.setHeader("Access-Control-Allow-Methods", "GET,PUT,POST");
-        response.setHeader("Access-Control-Allow-Headers", "Content-Type");
-        response.setHeader("Access-Control-Max-Age", "86400");
-        
-        _restManager.Put(request, response);
-	}
-
 }

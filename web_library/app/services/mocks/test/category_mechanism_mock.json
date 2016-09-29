@@ -1,0 +1,42 @@
+{
+  "id": 992,
+  "type": "CATEGORY_TYPE",
+  "active": true,
+  "order": 2,
+  "canBeActivated": false,
+  "parameters": [
+    {
+      "key": "title",
+      "value": "Please choose from the following categories"
+    },
+    {
+      "key": "ownAllowed",
+      "value": 1
+    },
+    {
+      "key": "ownLabel",
+      "value": "Other:"
+    },
+    {
+      "key": "multiple",
+      "value": 0
+    },
+    {
+      "key": "options",
+      "value": [
+        {
+          "key": "BUG_CATEGORY",
+          "value": "Bug"
+        },
+        {
+          "key": "FEATURE_REQUEST_CATEGORY",
+          "value": "Feature Request"
+        },
+        {
+          "key": "GENERAL_CATEGORY",
+          "value": "General Feedback"
+        }
+      ]
+    }
+  ]
+}

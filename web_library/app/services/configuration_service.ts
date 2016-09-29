@@ -13,12 +13,14 @@ export class ConfigurationService {
     private backend:Backend;
 
     /**
+     * @param language
+     *  Language to use when getting the data
      * @param backend
      *  Backend to get data from
      */
-    constructor(backend?: Backend) {
+    constructor(language:string, backend?: Backend) {
         if(!backend) {
-            this.backend = new HttpBackend('feedback_orchestrator/example/configuration', apiEndpointOrchestrator);
+            this.backend = new HttpBackend('feedback_orchestrator/example/configuration', apiEndpointOrchestrator, language);
         } else {
             this.backend = backend;
         }

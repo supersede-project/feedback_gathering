@@ -3,9 +3,9 @@ define(["require", "exports", './configuration_service', './backends/mock_backen
     describe('Configuration Service', function () {
         var configurationService;
         beforeEach(function () {
-            var configurationMockData = mocks_loader_1.readJSON('app/services/mocks/configurations_mock.json', '/base/');
+            var configurationMockData = mocks_loader_1.readJSON('app/services/mocks/test/configurations_mock.json', '/base/');
             var backend = new mock_backend_1.MockBackend(configurationMockData);
-            configurationService = new configuration_service_1.ConfigurationService(backend);
+            configurationService = new configuration_service_1.ConfigurationService('en', backend);
         });
         it('should retrieve the configuration from a backend', function () {
             configurationService.retrieveConfiguration(1, function (configuration) {

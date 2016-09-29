@@ -1,5 +1,7 @@
+import Handlebars = require('handlebars');
 import './lib/jquery.star-rating-svg.js';
 import './jquery.validate';
+import './jquery.fileupload';
 import {
     apiEndpointRepository, feedbackPath, applicationName, defaultSuccessMessage,
     feedbackObjectTitle, dialogOptions, mechanismTypes, applicationId
@@ -8,6 +10,7 @@ import {PaginationContainer} from '../views/pagination_container';
 import {ScreenshotView} from '../views/screenshot/screenshot_view';
 import {I18nHelper} from './helpers/i18n';
 import i18n = require('i18next');
+import './lib/html2canvas.js';
 import {MockBackend} from '../services/backends/mock_backend';
 import {RatingMechanism} from '../models/mechanisms/rating_mechanism';
 import {PullConfiguration} from '../models/configurations/pull_configuration';
@@ -24,7 +27,9 @@ import {GeneralConfiguration} from '../models/configurations/general_configurati
 import {TextFeedback} from '../models/feedbacks/text_feedback';
 import {RatingFeedback} from '../models/feedbacks/rating_feedback';
 import {ScreenshotFeedback} from '../models/feedbacks/screenshot_feedback';
-var mockData = require('json!../services/mocks/applications_mock.json');
+import {AttachmentFeedback} from '../models/feedbacks/attachment_feedback';
+import {AudioFeedback} from '../models/feedbacks/audio_feedback';
+var mockData = require('json!../services/mocks/dev/applications_mock.json');
 
 
 export var feedbackPluginModule = function ($, window, document) {
@@ -34,6 +39,13 @@ export var feedbackPluginModule = function ($, window, document) {
     var pullConfigurationDialogId = "pullConfiguration";
     var active = false;
     var application:Application;
+    var feedbackButton;
+    var applicationContext;
+    var distPath;
+    var userId;
+    var language:string;
+    // TODO support multiple attachment mechanisms
+    var dropArea;
 
     /**
      * @param applicationObject
@@ -41,11 +53,14 @@ export var feedbackPluginModule = function ($, window, document) {
      */
     var initApplication = function(applicationObject:Application) {
         application = applicationObject;
+        applicationContext = application.getContextForView();
+
         resetMessageView();
         initPushMechanisms(application.getPushConfiguration(), application.generalConfiguration);
 
-        var alreadyTriggeredOne = false;
+        feedbackButton.attr('title', application.generalConfiguration.getParameterValue('quickInfo'));
 
+        var alreadyTriggeredOne = false;
         for(var pullConfiguration of shuffle(application.getPullConfigurations())) {
             alreadyTriggeredOne = initPullConfiguration(pullConfiguration, application.generalConfiguration, alreadyTriggeredOne);
         }
@@ -62,7 +77,7 @@ export var feedbackPluginModule = function ($, window, document) {
      * All events on the HTML have to be added after the template is appended to the body (if not using live binding).
      */
     var initPushMechanisms = function (configuration, generalConfiguration:GeneralConfiguration) {
-        var context = configuration.getContextForView();
+        var context = prepareTemplateContext(configuration.getContextForView());
 
         var pageNavigation = new PageNavigation(configuration, $('#' + pushConfigurationDialogId));
         dialog = initTemplate(dialogTemplate, pushConfigurationDialogId, context, configuration, pageNavigation, generalConfiguration);
@@ -81,16 +96,31 @@ export var feedbackPluginModule = function ($, window, document) {
     var initPullConfiguration = function(configuration:PullConfiguration, generalConfiguration:GeneralConfiguration,
                                          alreadyTriggeredOne:boolean = false): boolean {
         if(!alreadyTriggeredOne && configuration.shouldGetTriggered()) {
+            configuration.wasTriggered();
             var pageNavigation = new PageNavigation(configuration, $('#' + pullConfigurationDialogId));
-            var context = configuration.getContextForView();
+
+            var context = prepareTemplateContext(configuration.getContextForView());
+
             pullDialog = initTemplate(pullDialogTemplate, pullConfigurationDialogId, context, configuration, pageNavigation, generalConfiguration);
+            var delay = 0;
+            if(configuration.generalConfiguration.getParameterValue('delay')) {
+                delay = configuration.generalConfiguration.getParameterValue('delay');
+            }
             if(configuration.generalConfiguration.getParameterValue('intermediateDialog')) {
                 var intermediateDialog = initIntermediateDialogTemplate(intermediateDialogTemplate, 'intermediateDialog', configuration, pullDialog, generalConfiguration);
                 if(intermediateDialog !== null) {
-                    intermediateDialog.dialog('open');
+                    setTimeout(function(){
+                        if(!active) {
+                            intermediateDialog.dialog('open');
+                        }
+                    }, delay * 1000);
                 }
             } else {
-                openDialog(pullDialog, configuration);
+                setTimeout(function(){
+                    if(!active) {
+                        openDialog(pullDialog, configuration);
+                    }
+                }, delay * 1000);
             }
             return true;
         }
@@ -115,12 +145,29 @@ export var feedbackPluginModule = function ($, window, document) {
             pageNavigation.screenshotViews.push(screenshotView);
         }
 
+        for(var audioMechanism of configuration.getMechanismConfig(mechanismTypes.audioType)) {
+            var recordButton = $("#" + dialogId + " #audioMechanism" + audioMechanism.id + " .record-audio");
+        }
+
+        for(var attachmentMechanism of configuration.getMechanismConfig(mechanismTypes.attachmentType)) {
+            if(attachmentMechanism.active) {
+                var sectionSelector = "#attachmentMechanism" + attachmentMechanism.id;
+                dropArea = $('' + sectionSelector).find('.drop-area');
+                dropArea.fileUpload(distPath);
+            }
+        }
+
         var title = "Feedback";
         if(generalConfiguration.getParameterValue('dialogTitle') !== null && generalConfiguration.getParameterValue('dialogTitle') !== "") {
             title = generalConfiguration.getParameterValue('dialogTitle');
         }
 
-        var dialog = initDialog($('#'+ dialogId), title);
+        var modal = false;
+        if(generalConfiguration.getParameterValue('dialogModal') !== null && generalConfiguration.getParameterValue('dialogModal') !== "") {
+            modal = generalConfiguration.getParameterValue('dialogModal');
+        }
+
+        var dialog = initDialog($('#'+ dialogId), title, modal);
         addEvents(dialogId, configuration);
         return dialog;
     };
@@ -130,7 +177,7 @@ export var feedbackPluginModule = function ($, window, document) {
         var html = template({});
         $('body').append(html);
 
-        var dialog = initDialog($('#'+ dialogId), generalConfiguration.getParameterValue('dialogTitle'));
+        var dialog = initDialog($('#'+ dialogId), generalConfiguration.getParameterValue('dialogTitle'), true);
         $('#feedbackYes').on('click', function() {
             dialog.dialog('close');
             openDialog(pullDialog, configuration);
@@ -152,13 +199,16 @@ export var feedbackPluginModule = function ($, window, document) {
      */
     var sendFeedback = function (formData:FormData, configuration:ConfigurationInterface) {
         $.ajax({
-            url: apiEndpointRepository + feedbackPath,
+            url: apiEndpointRepository + 'feedback_repository/' + language + '/feedbacks/',
             type: 'POST',
-            dataType: 'json',
             data: formData,
+            dataType: 'json',
             processData: false,
             contentType: false,
             success: function (data) {
+                $('.server-response').addClass('success').text(defaultSuccessMessage);
+                console.log('response');
+                console.log(data);
                 resetPlugin(configuration);
             },
             error: function (data) {
@@ -168,7 +218,6 @@ export var feedbackPluginModule = function ($, window, document) {
     };
 
     var resetPlugin = function(configuration) {
-        $('.server-response').addClass('success').text(defaultSuccessMessage);
         $('textarea.text-type-text').val('');
         for(var screenshotMechanism of configuration.getMechanismConfig(mechanismTypes.screenshotType)) {
             screenshotMechanism.screenshotView.reset();
@@ -212,11 +261,11 @@ export var feedbackPluginModule = function ($, window, document) {
 
         var screenshotPreview = container.find('.screenshot-preview'),
             screenshotCaptureButton = container.find('button.take-screenshot'),
-            elementToCapture = $(elementToCaptureSelector),
+            elementToCapture = $('#page-wrapper_1'),
             elementsToHide = [$('.ui-widget-overlay.ui-front'), dialogSelector];
         // TODO attention: circular dependency
         var screenshotView = new ScreenshotView(screenshotMechanism, screenshotPreview, screenshotCaptureButton,
-            elementToCapture, container, elementsToHide);
+            elementToCapture, container, distPath, elementsToHide);
 
         screenshotMechanism.setScreenshotView(screenshotView);
         return screenshotView;
@@ -227,19 +276,28 @@ export var feedbackPluginModule = function ($, window, document) {
      *  Element that contains the dialog content
      * @param title
      *  The title of the dialog
+     * @param modal
+     *  whether the dialog behaviour is modal or not
      *
      * Initializes the dialog on a given element and opens it.
      */
-    var initDialog = function (dialogContainer, title) {
+    var initDialog = function (dialogContainer, title, modal) {
         var dialogObject = dialogContainer.dialog(
             $.extend({}, dialogOptions, {
                 close: function () {
                     dialogObject.dialog("close");
                     active = false;
+                },
+                create: function(event, ui) {
+                    var widget = $(this).dialog("widget");
+                    $(".ui-dialog-titlebar-close span", widget)
+                        .removeClass("ui-icon-closethick")
+                        .addClass("ui-icon-minusthick");
                 }
             })
         );
         dialogObject.dialog('option', 'title', title);
+        dialogObject.dialog('option', 'modal', modal);
         return dialogObject;
     };
 
@@ -257,6 +315,7 @@ export var feedbackPluginModule = function ($, window, document) {
         var container = $('#' + containerId);
         var textareas = container.find('textarea.text-type-text');
         var textMechanisms = configuration.getMechanismConfig(mechanismTypes.textType);
+        var categoryMechanisms = configuration.getMechanismConfig(mechanismTypes.categoryType);
 
         container.find('button.submit-feedback').unbind().on('click', function (event) {
             event.preventDefault();
@@ -270,12 +329,14 @@ export var feedbackPluginModule = function ($, window, document) {
 
                 var invalidTextareas = container.find('textarea.text-type-text.invalid');
                 if(invalidTextareas.length == 0) {
-                    var formData = prepareFormData(container, configuration);
-                    sendFeedback(formData, configuration);
+                    prepareFormData(container, configuration, function(formData) {
+                        sendFeedback(formData, configuration);
+                    });
                 }
             } else {
-                var formData = prepareFormData(container, configuration);
-                sendFeedback(formData, configuration);
+                prepareFormData(container, configuration, function(formData) {
+                    sendFeedback(formData, configuration);
+                });
             }
         });
 
@@ -285,7 +346,7 @@ export var feedbackPluginModule = function ($, window, document) {
             var textarea = container.find('section#' + sectionSelector + ' textarea.text-type-text');
             var maxLength = textMechanism.getParameterValue('maxLength');
 
-            textarea.on('keyup focus', function () {
+            textarea.on('keyup focus paste', function () {
                 container.find('section#' + sectionSelector + ' span.text-type-max-length').text($(this).val().length + '/' + maxLength);
             });
 
@@ -296,29 +357,40 @@ export var feedbackPluginModule = function ($, window, document) {
                 textarea.val('');
             });
         }
+
+        container.find('.discard-feedback').on('click', function() {
+            if(configuration.dialogId === 'pushConfiguration') {
+                dialog.dialog("close");
+            } else if(configuration.dialogId === 'pullConfiguration') {
+                pullDialog.dialog("close");
+            }
+            resetPlugin(configuration);
+        });
+
+        for(var categoryMechanism of categoryMechanisms) {
+            categoryMechanism.coordinateOwnInputAndRadioBoxes();
+        }
     };
 
     /**
      * Creates the multipart form data containing the data of the active mechanisms.
-     *
-     * @returns {FormData}
      */
-    var prepareFormData = function (container:JQuery, configuration:ConfigurationInterface):FormData {
+    var prepareFormData = function (container:JQuery, configuration:ConfigurationInterface, callback?:any) {
         var formData = new FormData();
 
         var textMechanisms = configuration.getMechanismConfig(mechanismTypes.textType);
         var ratingMechanisms = configuration.getMechanismConfig(mechanismTypes.ratingType);
         var screenshotMechanisms = configuration.getMechanismConfig(mechanismTypes.screenshotType);
+        var categoryMechanisms = configuration.getMechanismConfig(mechanismTypes.categoryType);
+        var attachmentMechanisms = configuration.getMechanismConfig(mechanismTypes.attachmentType);
+        var audioMechanisms = configuration.getMechanismConfig(mechanismTypes.audioType);
 
         container.find('.server-response').removeClass('error').removeClass('success');
-        var feedbackObject = new Feedback(feedbackObjectTitle, "uid12345", "DE", applicationId, configuration.id, [], [], []);
+        var feedbackObject = new Feedback(feedbackObjectTitle, userId, language, applicationId, configuration.id, [], [], [], [], null, [], []);
 
         for(var textMechanism of textMechanisms) {
             if(textMechanism.active) {
-                var sectionSelector = "textMechanism" + textMechanism.id;
-                var textarea = container.find('section#' + sectionSelector + ' textarea.text-type-text');
-                var textFeedback = new TextFeedback(textarea.val(), textMechanism.id);
-                feedbackObject.textFeedbacks.push(textFeedback);
+                feedbackObject.textFeedbacks.push(textMechanism.getTextFeedback());
             }
         }
 
@@ -331,16 +403,65 @@ export var feedbackPluginModule = function ($, window, document) {
 
         for(var screenshotMechanism of screenshotMechanisms) {
             if(screenshotMechanism.active) {
+                if(screenshotMechanism.screenshotView.getScreenshotAsBinary() === null) {
+                    continue;
+                }
                 var partName = "screenshot" + screenshotMechanism.id;
-                var screenshotFeedback = new ScreenshotFeedback(partName, screenshotMechanism.id, partName);
+                var screenshotFeedback = new ScreenshotFeedback(partName, screenshotMechanism.id, partName, 'png');
                 feedbackObject.screenshotFeedbacks.push(screenshotFeedback);
                 formData.append(partName, screenshotMechanism.screenshotView.getScreenshotAsBinary());
             }
         }
 
-        formData.append('json', JSON.stringify(feedbackObject));
+        for (var categoryMechanism of categoryMechanisms) {
+            if (categoryMechanism.active) {
+                var categoryFeedbacks = categoryMechanism.getCategoryFeedbacks();
+                for(var categoryFeedback of categoryFeedbacks) {
+                    feedbackObject.categoryFeedbacks.push(categoryFeedback);
+                }
+            }
+        }
 
-        return formData;
+        for(var attachmentMechanism of attachmentMechanisms) {
+            if(attachmentMechanism.active) {
+                var sectionSelector = "attachmentMechanism" + attachmentMechanism.id;
+                var input = container.find('section#' + sectionSelector + ' input[type=file]');
+                var files = dropArea.currentFiles;
+
+                for (var i = 0; i < files.length; i++) {
+                    var file = files[i];
+                    let partName = 'attachment' + i;
+                    var attachmentFeedback = new AttachmentFeedback(partName, file.name, file.extension, attachmentMechanism.id);
+                    formData.append(partName, file, file.name);
+                    feedbackObject.attachmentFeedbacks.push(attachmentFeedback);
+                }
+            }
+        }
+
+        for(var audioMechanism of audioMechanisms) {
+            if(audioMechanism.active) {
+                let partName = "audio" + audioMechanism.id;
+                var audioElement = jQuery('section#audioMechanism' + audioMechanism.id + ' audio')[0];
+                if(!audioElement || Fr.voice.recorder === null) {
+                    continue;
+                }
+
+                try {
+                    var audioFeedback = new AudioFeedback(partName, Math.round(audioElement.duration), "wav", audioMechanism.id);
+                    console.log('export is called');
+                    Fr.voice.export(function(blob) {
+                        console.log('blob is not called');
+                        formData.append(partName, blob);
+                        feedbackObject.audioFeedbacks.push(audioFeedback);
+                    });
+                } catch (e){
+                    console.log((<Error>e).message);
+                }
+            }
+        }
+
+        formData.append('json', JSON.stringify(feedbackObject));
+        callback(formData);
     };
 
     /**
@@ -365,6 +486,14 @@ export var feedbackPluginModule = function ($, window, document) {
         dialog.dialog('open');
     };
 
+    var prepareTemplateContext = function(context) {
+        var contextWithApplicationContext = $.extend({}, applicationContext, context);
+        var pluginContext = {
+            'distPath': distPath
+        };
+        return $.extend({}, pluginContext, contextWithApplicationContext);
+    };
+
     var resetMessageView = function () {
         $('.server-response').removeClass('error').removeClass('success').text('');
     };
@@ -379,19 +508,28 @@ export var feedbackPluginModule = function ($, window, document) {
      * server and the feedback mechanism is invoked.
      */
     $.fn.feedbackPlugin = function (options) {
+        feedbackButton = this;
         this.options = $.extend({}, $.fn.feedbackPlugin.defaults, options);
         var currentOptions = this.options;
-        var resources = {
-            de: {translation: require('json!../locales/de/translation.json')},
-            en: {translation: require('json!../locales/en/translation.json')}
-        };
+        distPath = currentOptions.distPath;
+        userId = currentOptions.userId;
 
-        I18nHelper.initializeI18n(resources, this.options);
+        language = I18nHelper.getLanguage(this.options);
+        I18nHelper.initializeI18n(this.options);
 
         // loadDataHere to trigger pull if necessary
-        var applicationService = new ApplicationService();
-        applicationService.retrieveApplication(applicationId, function(application) {
+        var applicationService = new ApplicationService(language);
+        applicationService.retrieveApplication(applicationId, application => {
+            if(application.state === null || application.state === 0) {
+                feedbackButton.hide();
+                return feedbackButton;
+            }
             initApplication(application);
+            feedbackButton.show();
+        }, errorData => {
+            console.warn('SERVER ERROR ' + errorData.status + ' ' + errorData.statusText + ': ' + errorData.responseText);
+            feedbackButton.hide();
+            return feedbackButton;
         });
 
         this.css('background-color', currentOptions.backgroundColor);
@@ -408,7 +546,10 @@ export var feedbackPluginModule = function ($, window, document) {
     $.fn.feedbackPlugin.defaults = {
         'color': '#fff',
         'lang': 'de',
-        'backgroundColor': '#1A6FC2'
+        'backgroundColor': '#1A6FC2',
+        'fallbackLang': 'en',
+        'distPath': 'dist/',
+        'userId': ''
     };
 
 };

@@ -39,13 +39,13 @@ export abstract class Mechanism implements Parameterizable {
      *  The pairs of 1) parameter in the parameters of the config and 2) the css property to use for this parameter's value
      * @returns {string}
      */
-    getCssStyle(mechanism:Mechanism, parameterValuePropertyPair:ParameterValuePropertyPair[]): string {
+    getCssStyle(parameterValuePropertyPair:ParameterValuePropertyPair[]): string {
         var cssStyles = '';
         for(var i = 0; i < parameterValuePropertyPair.length; i++) {
             var parameterPropertyPair = parameterValuePropertyPair[i];
-            if (mechanism.getParameterValue(parameterPropertyPair.parameter) !== null) {
+            if (this.getParameterValue(parameterPropertyPair.parameter) !== null) {
                 var unit = this.getCSSPropertyUnit(parameterPropertyPair.property);
-                cssStyles += parameterPropertyPair.property + ': ' + mechanism.getParameterValue(parameterPropertyPair.parameter) + unit + ';';
+                cssStyles += parameterPropertyPair.property + ': ' + this.getParameterValue(parameterPropertyPair.parameter) + unit + ';';
                 if(i !== parameterValuePropertyPair.length - 1) {
                     cssStyles += ' ';
                 }

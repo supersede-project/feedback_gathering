@@ -11,21 +11,25 @@ export class ApplicationService {
     private backend:Backend;
 
     /**
+     * @param language
+     *  Language to use when getting the data
      * @param backend
      *  Backend to get data from
      */
-    constructor(backend?: Backend) {
+    constructor(language:string, backend?:Backend) {
         if(!backend) {
-            this.backend = new HttpBackend(applicationPath, apiEndpointOrchestrator);
+            this.backend = new HttpBackend(applicationPath, apiEndpointOrchestrator, language);
         } else {
             this.backend = backend;
         }
     }
 
-    retrieveApplication(applicationId:number, callback:(application:Application) => void) {
-        this.backend.retrieve(applicationId, function(applicationData) {
+    retrieveApplication(applicationId:number, callback:(application:Application) => void, errorCallback:(data:any) => void) {
+        this.backend.retrieve(applicationId, applicationData => {
             var application = Application.initByData(applicationData);
             callback(application);
+        }, data => {
+            errorCallback(data);
         });
     }
 }

@@ -1,48 +1,97 @@
 package com.example.matthias.feedbacklibrary.feedbacks;
 
+import com.example.matthias.feedbacklibrary.models.AttachmentMechanism;
+import com.example.matthias.feedbacklibrary.models.AudioMechanism;
+import com.example.matthias.feedbacklibrary.models.CategoryMechanism;
 import com.example.matthias.feedbacklibrary.models.Mechanism;
 import com.example.matthias.feedbacklibrary.models.RatingMechanism;
+import com.example.matthias.feedbacklibrary.models.ScreenshotMechanism;
 import com.example.matthias.feedbacklibrary.models.TextMechanism;
+import com.google.gson.annotations.Expose;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Feedback
  */
 public class Feedback implements Serializable {
-    private String text;
-    private String application;
+    // Application
+    @Expose
+    private long applicationId;
+    @Expose
+    private long configurationId;
+    @Expose
+    private Map<String, Object> contextInformation;
+    @Expose
+    private String language;
+    @Expose
     private String title;
-    private float configVersion;
-    private String user;
-
-    private List<RatingFeedback> ratings;
+    @Expose
+    private String userIdentification;
+    // Mechanisms
+    @Expose
+    private List<AttachmentFeedback> attachmentFeedbacks = null;
+    @Expose
+    private List<AudioFeedback> audioFeedbacks = null;
+    @Expose
+    private List<CategoryFeedback> categoryFeedbacks = null;
+    @Expose
+    private List<RatingFeedback> ratingFeedbacks = null;
+    @Expose
+    private List<ScreenshotFeedback> screenshotFeedbacks = null;
+    @Expose
+    private List<TextFeedback> textFeedbacks = null;
 
     public Feedback(List<Mechanism> allMechanisms) {
-        ratings = new ArrayList<>();
         for (Mechanism mechanism : allMechanisms) {
             if (mechanism.isActive()) {
                 String type = mechanism.getType();
                 switch (type) {
+                    case Mechanism.ATTACHMENT_TYPE:
+                        // TODO: Implement attachment mechanism
+                        if (attachmentFeedbacks == null) {
+                            attachmentFeedbacks = new ArrayList<>();
+                        }
+                        AttachmentMechanism attachmentMechanism = (AttachmentMechanism) mechanism;
+                        break;
                     case Mechanism.AUDIO_TYPE:
-                        // TODO: Implement it here (multipart)?
+                        AudioMechanism audioMechanism = (AudioMechanism) mechanism;
+                        if (audioMechanism.getAudioPath() != null) {
+                            if (audioFeedbacks == null) {
+                                audioFeedbacks = new ArrayList<>();
+                            }
+                            audioFeedbacks.add(new AudioFeedback(audioMechanism, audioFeedbacks.size()));
+                        }
                         break;
                     case Mechanism.CATEGORY_TYPE:
+                        if (categoryFeedbacks == null) {
+                            categoryFeedbacks = new ArrayList<>();
+                        }
+                        categoryFeedbacks.add(new CategoryFeedback((CategoryMechanism) mechanism));
                         break;
                     case Mechanism.RATING_TYPE:
-                        RatingFeedback ratingFeedback = new RatingFeedback();
-                        ratingFeedback.setTitle(((RatingMechanism) mechanism).getTitle());
-                        ratingFeedback.setRating((int) (((RatingMechanism) mechanism).getInputRating()));
-                        ratings.add(ratingFeedback);
+                        if (ratingFeedbacks == null) {
+                            ratingFeedbacks = new ArrayList<>();
+                        }
+                        ratingFeedbacks.add(new RatingFeedback((RatingMechanism) mechanism));
                         break;
                     case Mechanism.SCREENSHOT_TYPE:
-                        // TODO: Implement it here (multipart)?
+                        ScreenshotMechanism screenshotMechanism = (ScreenshotMechanism) mechanism;
+                        if (screenshotMechanism.getImagePath() != null) {
+                            if (screenshotFeedbacks == null) {
+                                screenshotFeedbacks = new ArrayList<>();
+                            }
+                            screenshotFeedbacks.add(new ScreenshotFeedback(screenshotMechanism, screenshotFeedbacks.size()));
+                        }
                         break;
                     case Mechanism.TEXT_TYPE:
-                        this.title = ((TextMechanism) mechanism).getTitle();
-                        this.text = ((TextMechanism) mechanism).getInputText();
+                        if (textFeedbacks == null) {
+                            textFeedbacks = new ArrayList<>();
+                        }
+                        textFeedbacks.add(new TextFeedback((TextMechanism) mechanism));
                         break;
                     default:
                         // should never happen!
@@ -53,51 +102,100 @@ public class Feedback implements Serializable {
         }
     }
 
-    public String getApplication() {
-        return application;
+    public long getApplicationId() {
+        return applicationId;
     }
 
-    public float getConfigVersion() {
-        return configVersion;
+    public List<AttachmentFeedback> getAttachmentFeedbacks() {
+        return attachmentFeedbacks;
     }
 
-    public List<RatingFeedback> getRatings() {
-        return ratings;
+    public List<AudioFeedback> getAudioFeedbacks() {
+        return audioFeedbacks;
     }
 
-    public String getText() {
-        return text;
+    public List<CategoryFeedback> getCategoryFeedbacks() {
+        return categoryFeedbacks;
+    }
+
+    public long getConfigurationId() {
+        return configurationId;
+    }
+
+    public Map<String, Object> getContextInformation() {
+        return contextInformation;
+    }
+
+    public String getLanguage() {
+        return language;
+    }
+
+    public List<RatingFeedback> getRatingFeedbacks() {
+        return ratingFeedbacks;
+    }
+
+    public List<ScreenshotFeedback> getScreenshotFeedbacks() {
+        return screenshotFeedbacks;
+    }
+
+    public List<TextFeedback> getTextFeedbacks() {
+        return textFeedbacks;
     }
 
     public String getTitle() {
         return title;
     }
 
-    public String getUser() {
-        return user;
+    public String getUserIdentification() {
+        return userIdentification;
     }
 
-    public void setApplication(String application) {
-        this.application = application;
+    public void setApplicationId(long applicationId) {
+        this.applicationId = applicationId;
     }
 
-    public void setConfigVersion(float configVersion) {
-        this.configVersion = configVersion;
+    public void setAttachmentFeedbacks(List<AttachmentFeedback> attachmentFeedbacks) {
+        this.attachmentFeedbacks = attachmentFeedbacks;
     }
 
-    public void setRatings(List<RatingFeedback> ratings) {
-        this.ratings = ratings;
+    public void setAudioFeedbacks(List<AudioFeedback> audioFeedbacks) {
+        this.audioFeedbacks = audioFeedbacks;
     }
 
-    public void setText(String text) {
-        this.text = text;
+    public void setCategoryFeedbacks(List<CategoryFeedback> categoryFeedbacks) {
+        this.categoryFeedbacks = categoryFeedbacks;
+    }
+
+    public void setConfigurationId(long configurationId) {
+        this.configurationId = configurationId;
+    }
+
+    public void setContextInformation(Map<String, Object> contextInformation) {
+        this.contextInformation = contextInformation;
+    }
+
+    public void setLanguage(String language) {
+        this.language = language;
+    }
+
+    public void setRatingFeedbacks(List<RatingFeedback> ratingFeedbacks) {
+        this.ratingFeedbacks = ratingFeedbacks;
+    }
+
+    public void setScreenshotFeedbacks(List<ScreenshotFeedback> screenshotFeedbacks) {
+        this.screenshotFeedbacks = screenshotFeedbacks;
+    }
+
+    public void setTextFeedbacks(List<TextFeedback> textFeedbacks) {
+        this.textFeedbacks = textFeedbacks;
     }
 
     public void setTitle(String title) {
         this.title = title;
     }
 
-    public void setUser(String user) {
-        this.user = user;
+    public void setUserIdentification(String userIdentification) {
+        this.userIdentification = userIdentification;
     }
+
 }

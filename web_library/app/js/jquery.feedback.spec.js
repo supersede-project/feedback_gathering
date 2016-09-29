@@ -1,6 +1,6 @@
 define(["require", "exports"], function (require, exports) {
     "use strict";
-    describe('jQuery Validate Plugin', function () {
+    xdescribe('jQuery Validate Plugin', function () {
         var $ = $j;
         beforeEach(function () {
         });

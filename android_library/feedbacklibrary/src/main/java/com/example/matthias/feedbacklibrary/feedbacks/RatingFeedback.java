@@ -1,32 +1,37 @@
 package com.example.matthias.feedbacklibrary.feedbacks;
 
+import com.example.matthias.feedbacklibrary.models.RatingMechanism;
+import com.google.gson.annotations.Expose;
+
 import java.io.Serializable;
 
 /**
- * Rating feedback
+ * Rating feedback.
  */
 public class RatingFeedback implements Serializable {
-    private String title;
+    @Expose
+    private long mechanismId;
+    @Expose
+    private long rating;
 
-    private int rating;
-
-    public String getTitle ()
-    {
-        return title;
+    public RatingFeedback(RatingMechanism ratingMechanism) {
+        setMechanismId(ratingMechanism.getId());
+        setRating((long) ratingMechanism.getInputRating());
     }
 
-    public void setTitle (String title)
-    {
-        this.title = title;
+    public long getMechanismId() {
+        return mechanismId;
     }
 
-    public int getRating ()
-    {
+    public long getRating() {
         return rating;
     }
 
-    public void setRating (int rating)
-    {
+    public void setMechanismId(long mechanismId) {
+        this.mechanismId = mechanismId;
+    }
+
+    public void setRating(long rating) {
         this.rating = rating;
     }
 }

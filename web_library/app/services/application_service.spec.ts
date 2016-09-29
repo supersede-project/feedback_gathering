@@ -7,9 +7,9 @@ describe('Application Service', () => {
     let applicationService:ApplicationService;
 
     beforeEach(() => {
-        var applicationMockData = readJSON('app/services/mocks/applications_mock.json', '/base/');
+        var applicationMockData = readJSON('app/services/mocks/test/applications_mock.json', '/base/');
         var backend = new MockBackend(applicationMockData);
-        applicationService = new ApplicationService(backend);
+        applicationService = new ApplicationService('en', backend);
     });
 
     it('should retrieve the application from a backend', () => {

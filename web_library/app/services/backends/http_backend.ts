@@ -4,13 +4,15 @@ import {Backend} from './backend';
 export class HttpBackend implements Backend {
     private path:string;
     private apiEndpoint:string;
+    private language:string;
 
-    constructor(path:string, apiEndpoint:string) {
+    constructor(path:string, apiEndpoint:string, language:string) {
         this.path = path;
         this.apiEndpoint = apiEndpoint;
+        this.language = language;
     }
 
-    list(callback:(data:any) => void): void {
+    list(callback:(data:any) => void, errorCallback?:(data:any) => void): void {
         var url = this.getUrl();
         jQuery.ajax({
             url: url,
@@ -20,12 +22,12 @@ export class HttpBackend implements Backend {
                 callback(data);
             },
             error: function (data) {
-                callback(data);
+                errorCallback(data);
             }
         });
     }
 
-    retrieve(id:number, callback:(data:any) => void): void {
+    retrieve(id:number, callback:(data:any) => void, errorCallback?:(data:any) => void): void {
         var url = this.getUrl() + id;
 
         jQuery.ajax({
@@ -36,24 +38,24 @@ export class HttpBackend implements Backend {
                 callback(data);
             },
             error: function (data) {
-                callback(data);
+                errorCallback(data);
             }
         });
     }
 
-    create(object:any, callback?:(data:any) => void): void {
+    create(object:any, callback?:(data:any) => void, errorCallback?:(data:any) => void): void {
         return null;
     }
 
-    update(id:number, attributes:{}, callback?:(data:any) => void): void {
+    update(id:number, attributes:{}, callback?:(data:any) => void, errorCallback?:(data:any) => void): void {
         return null;
     }
 
-    destroy(id:number, callback?:(data:any) => void): void {
+    destroy(id:number, callback?:(data:any) => void, errorCallback?:(data:any) => void): void {
         return null;
     }
 
     getUrl(): string {
-        return this.apiEndpoint + this.path;
+        return (this.apiEndpoint + this.path).replace('{lang}', this.language);
     }
 }

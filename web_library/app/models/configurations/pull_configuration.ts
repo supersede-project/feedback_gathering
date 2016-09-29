@@ -1,7 +1,8 @@
 import {Mechanism} from '../mechanisms/mechanism';
 import {Configuration} from './configuration';
 import {GeneralConfiguration} from './general_configuration';
-import {configurationTypes} from '../../js/config';
+import {configurationTypes, cookieNames} from '../../js/config';
+import {ParameterInterface} from '../parameters/parameter_interface';
 
 
 /**
@@ -21,8 +22,71 @@ export class PullConfiguration extends Configuration {
      *
      * @returns {boolean} true if the mechanismes should get triggered.
      */
-    shouldGetTriggered(): boolean {
-        return this.generalConfiguration.getParameterValue('askOnAppStartup') ||
-            Math.random() <= this.generalConfiguration.getParameterValue('likelihood');
+    shouldGetTriggered():boolean {
+        return this.pageDoesMatch(this.currentSlug()) && this.isDoNotDisturbTimeDurationOver() && (this.generalConfiguration.getParameterValue('askOnAppStartup') ||
+            Math.random() <= this.generalConfiguration.getParameterValue('likelihood'));
+    }
+
+    private isDoNotDisturbTimeDurationOver() {
+        var doNotDisturbTimeDuration = 5 * 60;
+        if (this.generalConfiguration.getParameterValue('doNotDisturbTimeDuration') != null) {
+            doNotDisturbTimeDuration = this.generalConfiguration.getParameterValue('doNotDisturbTimeDuration');
+        }
+        return this.currentTimeStamp() - Number(this.getCookie(cookieNames.lastTriggered)) > doNotDisturbTimeDuration;
+    }
+
+    currentTimeStamp():number {
+        if (!Date.now) {
+            Date.now = function () {
+                return new Date().getTime();
+            }
+        }
+        return Math.floor(Date.now() / 1000);
+    }
+
+    wasTriggered():void {
+        this.setCookie(cookieNames.lastTriggered, this.currentTimeStamp(), 365);
+    }
+
+    currentSlug():string {
+        var url = location.href;
+        return url.replace(/http(s*):\/\/[^\/]*\//i, "");
+    }
+
+    pageDoesMatch(slug:string):boolean {
+        var pages:ParameterInterface[] = this.generalConfiguration.getParameterValue('pages');
+
+        if(pages === null || pages.length === 0) {
+            return true;
+        } else {
+            for(var page of pages) {
+                if(page.value === slug) {
+                    return true;
+                }
+            }
+            return false;
+        }
+    }
+
+    setCookie(cname, cvalue, exdays):void {
+        var d = new Date();
+        d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+        var expires = "expires=" + d.toUTCString();
+        document.cookie = cname + "=" + cvalue + "; " + expires;
+    }
+
+    getCookie(cname) {
+        var name = cname + "=";
+        var ca = document.cookie.split(';');
+        for (var i = 0; i < ca.length; i++) {
+            var c = ca[i];
+            while (c.charAt(0) == ' ') {
+                c = c.substring(1);
+            }
+            if (c.indexOf(name) == 0) {
+                return c.substring(name.length, c.length);
+            }
+        }
+        return null;
     }
 }

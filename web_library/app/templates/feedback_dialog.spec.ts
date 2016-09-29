@@ -9,7 +9,7 @@ describe('Feedback dialog template', () => {
 
     beforeAll(() => {
         var resources = { en: {translation: {"take_screenshot": "Take screenshot"}}, de: {translation: {"take_screenshot": "Screenshot erstellen"}}};
-        I18nHelper.initializeI18n(resources, {lang: 'en'});
+        I18nHelper.initializeI18n({lang: 'en'}, resources);
 
         var t = function(i18n_key) {
             return i18n.t(i18n_key);

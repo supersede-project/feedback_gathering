@@ -5,7 +5,7 @@ define(["require", "exports", 'handlebars', 'i18next', '../js/helpers/i18n'], fu
         var feedbackDialogTemplateWithTranslations;
         beforeAll(function () {
             var resources = { en: { translation: { "take_screenshot": "Take screenshot" } }, de: { translation: { "take_screenshot": "Screenshot erstellen" } } };
-            i18n_1.I18nHelper.initializeI18n(resources, { lang: 'en' });
+            i18n_1.I18nHelper.initializeI18n({ lang: 'en' }, resources);
             var t = function (i18n_key) {
                 return i18n.t(i18n_key);
             };

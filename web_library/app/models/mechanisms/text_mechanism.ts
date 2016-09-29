@@ -2,6 +2,7 @@ import {Parameter} from './parameters/parameter';
 import {Mechanism} from './mechanism';
 import {ParameterValuePropertyPair} from '../parameters/parameter_value_property_pair';
 import {ParameterInterface} from '../parameters/parameter_interface';
+import {TextFeedback} from '../feedbacks/text_feedback';
 
 
 export class TextMechanism extends Mechanism {
@@ -10,9 +11,14 @@ export class TextMechanism extends Mechanism {
         super(id, type, active, order, canBeActivated, parameters);
     }
 
+    getTextFeedback():TextFeedback {
+        var text = jQuery('section#textMechanism' + this.id + ' textarea').val();
+        return new TextFeedback(text, this.id)
+    }
+
     getContext():any {
-        var textareaStyle = this.getCssStyle(this, [new ParameterValuePropertyPair('textareaFontColor', 'color')]);
-        var labelStyle = this.getCssStyle(this, [
+        var textareaStyle = this.getCssStyle([new ParameterValuePropertyPair('textareaFontColor', 'color')]);
+        var labelStyle = this.getCssStyle([
             new ParameterValuePropertyPair('labelPositioning', 'text-align'),
             new ParameterValuePropertyPair('labelColor', 'color'),
             new ParameterValuePropertyPair('labelFontSize', 'font-size')]

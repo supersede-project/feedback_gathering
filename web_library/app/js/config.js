@@ -1,10 +1,10 @@
 define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.apiEndpointOrchestrator = 'http://ec2-54-166-31-250.compute-1.amazonaws.com/';
-    exports.applicationPath = 'feedback_orchestrator/en/applications/';
+    exports.applicationPath = 'feedback_orchestrator/{lang}/applications/';
     exports.applicationId = 8;
     exports.apiEndpointRepository = "http://ec2-54-166-31-250.compute-1.amazonaws.com/";
-    exports.feedbackPath = "feedback_repository/de/feedbacks";
+    exports.feedbackPath = "feedback_repository/{lang}/feedbacks";
     exports.feedbackObjectTitle = 'Feedback';
     exports.applicationName = 'PTV';
     exports.defaultSuccessMessage = 'Your feedback was successfully sent';
@@ -29,6 +29,9 @@ define(["require", "exports"], function (require, exports) {
     exports.configurationTypes = {
         push: 'PUSH',
         pull: 'PULL'
+    };
+    exports.cookieNames = {
+        lastTriggered: 'lastTriggered'
     };
 });
 //# sourceMappingURL=config.js.map

@@ -1,9 +1,9 @@
 export const apiEndpointOrchestrator = 'http://ec2-54-166-31-250.compute-1.amazonaws.com/';
-export const applicationPath = 'feedback_orchestrator/en/applications/';
+export const applicationPath = 'feedback_orchestrator/{lang}/applications/';
 export const applicationId = 8;
 
 export const apiEndpointRepository = "http://ec2-54-166-31-250.compute-1.amazonaws.com/";
-export const feedbackPath = "feedback_repository/de/feedbacks";
+export const feedbackPath = "feedback_repository/{lang}/feedbacks";
 
 export const feedbackObjectTitle = 'Feedback';
 export const applicationName = 'PTV';
@@ -33,4 +33,8 @@ export const mechanismTypes = {
 export const configurationTypes = {
     push: 'PUSH',
     pull: 'PULL'
+};
+
+export const cookieNames = {
+  lastTriggered: 'lastTriggered'
 };

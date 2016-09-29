@@ -1,59 +1,69 @@
 package ch.uzh.ifi.feedback.orchestrator.services;
 
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.List;
 import com.google.inject.Inject;
-import ch.uzh.ifi.feedback.library.rest.Service.ServiceBase;
+
+import ch.uzh.ifi.feedback.library.rest.Service.DatabaseConfiguration;
 import ch.uzh.ifi.feedback.orchestrator.model.Application;
 import ch.uzh.ifi.feedback.orchestrator.model.Configuration;
 import ch.uzh.ifi.feedback.orchestrator.model.GeneralConfiguration;
+import ch.uzh.ifi.feedback.orchestrator.model.UserGroup;
 import javassist.NotFoundException;
 import static java.util.Arrays.asList;
 
-public class ApplicationService extends ServiceBase<Application>{
+public class ApplicationService extends OrchestratorService<Application>{
 
 	private ConfigurationService configurationService;
 	private GeneralConfigurationService generalConfigurationService;
+	private UserGroupService userGroupService;
 	
 	@Inject
 	public ApplicationService(
 			ApplicationResultParser resultParser, 
 			ConfigurationService configurationService,
-			GeneralConfigurationService generalConfigurationService)
+			GeneralConfigurationService generalConfigurationService,
+			UserGroupService userGroupService,
+			DatabaseConfiguration config)
 	{
 		super(  resultParser, 
 				Application.class, 
-				"applications", 
-				"feedback_orchestrator", 
+				"applications1",
+				config.getOrchestratorDb(), 
 				configurationService, 
 				generalConfigurationService);
 
 		this.configurationService = configurationService;
 		this.generalConfigurationService = generalConfigurationService;
+		this.userGroupService = userGroupService;
 	}
 	
 	@Override
 	public Application GetById(int id) throws SQLException, NotFoundException {
 
 		Application app = super.GetById(id);
-		app.getConfigurations().addAll(configurationService.GetWhereEquals(asList("application_id"), asList(id)));
-		if (app.getGeneralConfigurationId() != null)
+		app.getConfigurations().addAll(configurationService.GetWhere(asList(id), "applications_id = ?"));
+		
+		if(app.getGeneralConfigurationId() != null)
 			app.setGeneralConfiguration(generalConfigurationService.GetById(app.getGeneralConfigurationId()));
 		
 		return app;
 	}
 
 	@Override
-	public List<Application> GetAll() throws SQLException, NotFoundException {
+	public List<Application> GetAll() throws SQLException {
 		
 		List<Application> apps = super.GetAll();
 		for(Application app : apps)
 		{
-			app.getConfigurations().addAll(configurationService.GetWhereEquals(asList("application_id"), asList(app.getId())));
+			app.getConfigurations().addAll(configurationService.GetWhere(asList(app.getId()), "applications_id = ?"));
 			if(app.getGeneralConfigurationId() != null)
-				app.setGeneralConfiguration(generalConfigurationService.GetById(app.getGeneralConfigurationId()));
+				try {
+					app.setGeneralConfiguration(generalConfigurationService.GetById(app.getGeneralConfigurationId()));
+				} catch (NotFoundException e) {
+					e.printStackTrace();
+				}
 		}
 		
 		return apps;
@@ -74,6 +84,14 @@ public class ApplicationService extends ServiceBase<Application>{
 		for(Configuration config : app.getConfigurations())
 		{
 			config.setApplicationId(appId);
+			
+			//set default user groups id if null
+			if(config.getUserGroupsId() == null)
+			{
+				UserGroup defaultGroup = userGroupService.GetWhere(asList("default"), "name = ?").get(0);
+				config.setUserGroupsId(defaultGroup.getId());
+			}
+			
 			configurationService.Insert(con, config);
 		}
 	
@@ -87,7 +105,7 @@ public class ApplicationService extends ServiceBase<Application>{
 		Integer generalConfigId = null;
 		if(generalConfig != null)
 		{
-			if(generalConfig.getId() != null)
+			if(generalConfig.getId() == null)
 			{
 				generalConfigId = generalConfigurationService.Insert(con, generalConfig);
 				app.setGeneralConfigurationId(generalConfigId);
@@ -96,16 +114,7 @@ public class ApplicationService extends ServiceBase<Application>{
 			}
 		}
 		
-		PreparedStatement s = con.prepareStatement(
-				  "UPDATE feedback_orchestrator.applications as a "
-				+ "SET `name` = IFNULL(?, `name`), `state` = IFNULL(?, `state`), general_configuration_id = IFNULL(?, general_configuration_id) "
-				+ "WHERE a.id = ? ;");
-		
-		s.setString(1, app.getName());
-		s.setObject(2, app.getState());
-		s.setObject(3, generalConfigId);
-		s.setInt(4, app.getId());
-		s.execute();
+		super.Update(con, app);
 		
 		for(Configuration config : app.getConfigurations())
 		{
