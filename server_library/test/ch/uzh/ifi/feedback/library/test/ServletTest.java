@@ -91,9 +91,9 @@ public class ServletTest extends TestCase {
 		return null;
 	}
 	
-	private UserToken AuthenticateUser() throws IOException
+	protected UserToken AuthenticateUser() throws IOException
 	{
-		InputStream stream = ServletTest.class.getResourceAsStream("api_user_post.json");
+		InputStream stream = ServletTest.class.getResourceAsStream("api_user.json");
 		String jsonString = IOUtils.toString(stream); 
 		
 		return PostSuccess(

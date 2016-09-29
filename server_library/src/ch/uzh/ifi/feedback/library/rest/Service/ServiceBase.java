@@ -23,8 +23,6 @@ public abstract class ServiceBase<T> implements IDbService<T> {
 	protected String tableName;
 	protected String dbName;
 	protected Class<T> serviceClass;
-	private List<IDbService<?>> childServices;
-	private String selectedLanguage;
 	
 	protected DbResultParser<T> resultParser;
 	
@@ -32,31 +30,12 @@ public abstract class ServiceBase<T> implements IDbService<T> {
 			DbResultParser<T> resultParser, 
 			Class<T> serviceClass, 
 			String tableName,
-			String dbName,
-			IDbService<?>... services)
+			String dbName)
 	{
 		this.serviceClass = serviceClass;
 		this.tableName = tableName;
 		this.resultParser = resultParser;
-		this.childServices = new ArrayList<>();
 		this.dbName = dbName;
-		for(IDbService<?> service : services)
-		{
-			childServices.add(service);
-		}
-	}
-	
-	@Override
-	public void SetLanguage(String lang)
-	{
-		this.selectedLanguage = lang;
-		childServices.stream().forEach(s -> s.SetLanguage(lang));
-	}
-	
-	@Override
-	public String GetLanguage()
-	{
-		return selectedLanguage;
 	}
 	
 	@Override

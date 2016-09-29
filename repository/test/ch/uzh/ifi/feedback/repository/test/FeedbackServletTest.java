@@ -10,6 +10,7 @@ import org.apache.http.client.ClientProtocolException;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
 
+import ch.uzh.ifi.feedback.library.rest.authorization.UserToken;
 import ch.uzh.ifi.feedback.library.test.ServletTest;
 import ch.uzh.ifi.feedback.repository.model.Feedback;
 import javassist.NotFoundException;
@@ -17,6 +18,18 @@ import javassist.NotFoundException;
 public class FeedbackServletTest extends ServletTest {
 	
 	private final int NUMBER_OF_FEEDBACK_RECORDS = 10;
+	
+	@Override
+	protected UserToken AuthenticateUser() throws IOException
+	{
+		InputStream stream = ServletTest.class.getResourceAsStream("api_user.json");
+		String jsonString = IOUtils.toString(stream); 
+		
+		return PostSuccess(
+				"http://localhost:8080/feedback_repository/authenticate", 
+				jsonString,
+				UserToken.class);
+	}
 	
 	public void testRetrievingAllFeedbacks() throws ClientProtocolException, IOException {
 		Feedback[] retrievedFeedbacks = GetSuccess(

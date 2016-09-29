@@ -15,6 +15,7 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.inject.Inject;
+import com.google.inject.Singleton;
 
 import ch.uzh.ifi.feedback.repository.model.AttachmentFeedback;
 import ch.uzh.ifi.feedback.repository.model.AudioFeedback;
@@ -22,6 +23,7 @@ import ch.uzh.ifi.feedback.repository.model.Feedback;
 import ch.uzh.ifi.feedback.repository.model.FileFeedback;
 import ch.uzh.ifi.feedback.repository.model.ScreenshotFeedback;
 
+@Singleton
 public class FeedbackSerializationService extends RepositorySerializationService<Feedback> {
 
 	private FileStorageService storageService;

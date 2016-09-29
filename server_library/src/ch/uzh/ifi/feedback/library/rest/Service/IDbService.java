@@ -11,10 +11,6 @@ import javassist.NotFoundException;
 
 public interface IDbService<T> {
 	
-	default String GetLanguage(){ return "en"; }
-	
-	default void SetLanguage(String lang) { }
-	
 	T GetById(int id) throws SQLException, NotFoundException;
 	
 	default boolean CheckId(int id) throws SQLException{

@@ -4,10 +4,14 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.google.inject.Inject;
+import com.google.inject.Provider;
+import com.google.inject.Singleton;
+import com.google.inject.name.Named;
 import com.mysql.jdbc.Statement;
 
 import ch.uzh.ifi.feedback.library.rest.Service.DatabaseConfiguration;
@@ -20,6 +24,7 @@ import ch.uzh.ifi.feedback.orchestrator.model.FeedbackParameter;
 import javassist.NotFoundException;
 import static java.util.Arrays.asList;
 
+@Singleton
 public class MechanismService extends OrchestratorService<FeedbackMechanism> {
 	
 	private ParameterService parameterService;
@@ -28,14 +33,15 @@ public class MechanismService extends OrchestratorService<FeedbackMechanism> {
 	public MechanismService(
 			ParameterService parameterService, 
 			MechanismResultParser resultParser,
-			DatabaseConfiguration config)
+			DatabaseConfiguration config,
+			@Named("timestamp")Provider<Timestamp> timestampProvider)
 	{
 		super(
 				resultParser, 
 				FeedbackMechanism.class, 
 				"mechanisms",
-				config.getOrchestratorDb(), 
-				parameterService);
+				config.getOrchestratorDb(),
+				timestampProvider);
 		
 		this.parameterService = parameterService;
 	}
@@ -176,8 +182,8 @@ public class MechanismService extends OrchestratorService<FeedbackMechanism> {
 		
 		PreparedStatement s = con.prepareStatement(statement);
 		
-		s.setObject(1, getTimestamp());
-		s.setObject(2, getTimestamp());
+		s.setObject(1, timestampProvider.get());
+		s.setObject(2, timestampProvider.get());
 		
 		for(int i=0; i<values.size();i++)
 		{

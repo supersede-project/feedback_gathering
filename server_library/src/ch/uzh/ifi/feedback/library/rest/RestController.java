@@ -34,9 +34,6 @@ public abstract class RestController<T extends IDbItem<T>> {
 		this.validator = validator;
 		this.request = request;
 		this.response = response;
-		
-		dbService.SetLanguage((String)request.getAttribute("lang"));
-		
 		this.gson = new GsonBuilder().setPrettyPrinting().setDateFormat("yyyy-MM-dd hh:mm:ss.S").create();
 	}
 

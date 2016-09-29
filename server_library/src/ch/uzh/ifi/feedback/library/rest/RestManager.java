@@ -9,6 +9,7 @@ import java.lang.reflect.Parameter;
 import java.net.URL;
 import java.rmi.AlreadyBoundException;
 import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -19,7 +20,12 @@ import java.util.Set;
 
 import javax.el.MethodNotFoundException;
 import javax.naming.AuthenticationException;
+import javax.servlet.Filter;
+import javax.servlet.FilterChain;
+import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
@@ -36,7 +42,11 @@ import com.google.inject.Guice;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.google.inject.Key;
+import com.google.inject.Provides;
 import com.google.inject.Singleton;
+import com.google.inject.name.Named;
+import com.google.inject.name.Names;
+import com.google.inject.servlet.RequestScoped;
 
 import ch.uzh.ifi.feedback.library.rest.Routing.HandlerInfo;
 import ch.uzh.ifi.feedback.library.rest.Routing.HttpMethod;
@@ -292,7 +302,9 @@ public class RestManager implements IRestManager {
 		Map<String, String> params = handler.getUriTemplate().Match(path);
 		List<Object> parameters = new ArrayList<>();
 		String language = params.get("lang");
-		request.setAttribute("lang", language);
+        request.setAttribute(
+	             Key.get(String.class, Names.named("language")).toString(),
+	             language);
 		
 		for(Entry<String, Parameter> pathParam : handler.getPathParameters().entrySet())
 		{
