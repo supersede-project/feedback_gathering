@@ -196,13 +196,15 @@ define(["require", "exports", './config', '../views/pagination_container', '../v
                     });
                     var invalidTextareas = container.find('textarea.text-type-text.invalid');
                     if (invalidTextareas.length == 0) {
-                        var formData = prepareFormData(container, configuration);
-                        sendFeedback(formData, configuration);
+                        prepareFormData(container, configuration, function (formData) {
+                            sendFeedback(formData, configuration);
+                        });
                     }
                 }
                 else {
-                    var formData = prepareFormData(container, configuration);
-                    sendFeedback(formData, configuration);
+                    prepareFormData(container, configuration, function (formData) {
+                        sendFeedback(formData, configuration);
+                    });
                 }
             });
             for (var _i = 0, textMechanisms_1 = textMechanisms; _i < textMechanisms_1.length; _i++) {
@@ -233,7 +235,7 @@ define(["require", "exports", './config', '../views/pagination_container', '../v
                 categoryMechanism.coordinateOwnInputAndRadioBoxes();
             }
         };
-        var prepareFormData = function (container, configuration) {
+        var prepareFormData = function (container, configuration, callback) {
             var formData = new FormData();
             var textMechanisms = configuration.getMechanismConfig(config_1.mechanismTypes.textType);
             var ratingMechanisms = configuration.getMechanismConfig(config_1.mechanismTypes.ratingType);
@@ -259,6 +261,9 @@ define(["require", "exports", './config', '../views/pagination_container', '../v
             for (var _b = 0, screenshotMechanisms_1 = screenshotMechanisms; _b < screenshotMechanisms_1.length; _b++) {
                 var screenshotMechanism = screenshotMechanisms_1[_b];
                 if (screenshotMechanism.active) {
+                    if (screenshotMechanism.screenshotView.getScreenshotAsBinary() === null) {
+                        continue;
+                    }
                     var partName = "screenshot" + screenshotMechanism.id;
                     var screenshotFeedback = new screenshot_feedback_1.ScreenshotFeedback(partName, screenshotMechanism.id, partName, 'png');
                     feedbackObject.screenshotFeedbacks.push(screenshotFeedback);
@@ -298,11 +303,13 @@ define(["require", "exports", './config', '../views/pagination_container', '../v
                         return "continue";
                     }
                     try {
-                        audioFeedback = new audio_feedback_1.AudioFeedback(partName_2, audioElement.duration, "wav", audioMechanism.id);
+                        audioFeedback = new audio_feedback_1.AudioFeedback(partName_2, Math.round(audioElement.duration), "wav", audioMechanism.id);
+                        console.log('export is called');
                         Fr.voice.export(function (blob) {
+                            console.log('blob is not called');
                             formData.append(partName_2, blob);
+                            feedbackObject.audioFeedbacks.push(audioFeedback);
                         });
-                        feedbackObject.audioFeedbacks.push(audioFeedback);
                     }
                     catch (e) {
                         console.log(e.message);
@@ -316,7 +323,7 @@ define(["require", "exports", './config', '../views/pagination_container', '../v
                 if (state_1 === "continue") continue;
             }
             formData.append('json', JSON.stringify(feedbackObject));
-            return formData;
+            callback(formData);
         };
         var toggleDialog = function (pushConfiguration) {
             if (!active) {

@@ -321,12 +321,14 @@ export var feedbackPluginModule = function ($, window, document) {
 
                 var invalidTextareas = container.find('textarea.text-type-text.invalid');
                 if(invalidTextareas.length == 0) {
-                    var formData = prepareFormData(container, configuration);
-                    sendFeedback(formData, configuration);
+                    prepareFormData(container, configuration, function(formData) {
+                        sendFeedback(formData, configuration);
+                    });
                 }
             } else {
-                var formData = prepareFormData(container, configuration);
-                sendFeedback(formData, configuration);
+                prepareFormData(container, configuration, function(formData) {
+                    sendFeedback(formData, configuration);
+                });
             }
         });
 
@@ -364,10 +366,8 @@ export var feedbackPluginModule = function ($, window, document) {
 
     /**
      * Creates the multipart form data containing the data of the active mechanisms.
-     *
-     * @returns {FormData}
      */
-    var prepareFormData = function (container:JQuery, configuration:ConfigurationInterface):FormData {
+    var prepareFormData = function (container:JQuery, configuration:ConfigurationInterface, callback?:any) {
         var formData = new FormData();
 
         var textMechanisms = configuration.getMechanismConfig(mechanismTypes.textType);
@@ -395,6 +395,9 @@ export var feedbackPluginModule = function ($, window, document) {
 
         for(var screenshotMechanism of screenshotMechanisms) {
             if(screenshotMechanism.active) {
+                if(screenshotMechanism.screenshotView.getScreenshotAsBinary() === null) {
+                    continue;
+                }
                 var partName = "screenshot" + screenshotMechanism.id;
                 var screenshotFeedback = new ScreenshotFeedback(partName, screenshotMechanism.id, partName, 'png');
                 feedbackObject.screenshotFeedbacks.push(screenshotFeedback);
@@ -436,19 +439,21 @@ export var feedbackPluginModule = function ($, window, document) {
                 }
 
                 try {
-                    var audioFeedback = new AudioFeedback(partName, audioElement.duration, "wav", audioMechanism.id);
+                    var audioFeedback = new AudioFeedback(partName, Math.round(audioElement.duration), "wav", audioMechanism.id);
+                    console.log('export is called');
                     Fr.voice.export(function(blob) {
+                        console.log('blob is not called');
                         formData.append(partName, blob);
+                        feedbackObject.audioFeedbacks.push(audioFeedback);
                     });
-                    feedbackObject.audioFeedbacks.push(audioFeedback);                }
-                catch (e){
+                } catch (e){
                     console.log((<Error>e).message);
                 }
             }
         }
 
         formData.append('json', JSON.stringify(feedbackObject));
-        return formData;
+        callback(formData);
     };
 
     /**
