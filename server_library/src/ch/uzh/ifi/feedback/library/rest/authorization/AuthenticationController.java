@@ -1,4 +1,4 @@
-package ch.uzh.ifi.feedback.orchestrator.controllers;
+package ch.uzh.ifi.feedback.library.rest.authorization;
 
 import com.google.inject.Inject;
 import com.google.inject.servlet.RequestScoped;
@@ -6,9 +6,9 @@ import com.google.inject.servlet.RequestScoped;
 import ch.uzh.ifi.feedback.library.rest.annotations.Controller;
 import ch.uzh.ifi.feedback.library.rest.annotations.POST;
 import ch.uzh.ifi.feedback.library.rest.annotations.Path;
+import ch.uzh.ifi.feedback.library.rest.authorization.ApiUser;
+import ch.uzh.ifi.feedback.library.rest.authorization.UserAuthenticationService;
 import ch.uzh.ifi.feedback.library.rest.authorization.UserToken;
-import ch.uzh.ifi.feedback.orchestrator.authorization.UserAuthenticationService;
-import ch.uzh.ifi.feedback.orchestrator.model.ApiUser;
 
 @RequestScoped
 @Controller(ApiUser.class)

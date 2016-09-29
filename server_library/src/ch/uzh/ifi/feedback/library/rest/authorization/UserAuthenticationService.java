@@ -1,15 +1,12 @@
-package ch.uzh.ifi.feedback.orchestrator.authorization;
+package ch.uzh.ifi.feedback.library.rest.authorization;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
-import ch.uzh.ifi.feedback.library.rest.IRequestContext;
 import ch.uzh.ifi.feedback.library.rest.authorization.AuthenticationCache;
 import ch.uzh.ifi.feedback.library.rest.authorization.AuthorizationException;
 import ch.uzh.ifi.feedback.library.rest.authorization.ITokenAuthenticationService;
 import ch.uzh.ifi.feedback.library.rest.authorization.UserToken;
-import ch.uzh.ifi.feedback.orchestrator.model.ApiUser;
-import ch.uzh.ifi.feedback.orchestrator.services.ApiUserService;
 
 import static java.util.Arrays.asList;
 
@@ -22,11 +19,11 @@ import javax.servlet.http.HttpServletRequest;
 @Singleton
 public class UserAuthenticationService implements ITokenAuthenticationService {
 
-	private ApiUserService userService;
+	private IApiUserService userService;
 	private AuthenticationCache cache;
 	
 	@Inject
-	public UserAuthenticationService(ApiUserService userService, AuthenticationCache cache)
+	public UserAuthenticationService(IApiUserService userService, AuthenticationCache cache)
 	{
 		this.userService = userService;
 		this.cache = cache;

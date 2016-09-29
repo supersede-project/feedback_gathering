@@ -15,7 +15,7 @@ import ch.uzh.ifi.feedback.library.rest.annotations.GET;
 import ch.uzh.ifi.feedback.library.rest.annotations.POST;
 import ch.uzh.ifi.feedback.library.rest.annotations.Path;
 import ch.uzh.ifi.feedback.library.rest.annotations.PathParam;
-import ch.uzh.ifi.feedback.orchestrator.authorization.UserAuthenticationService;
+import ch.uzh.ifi.feedback.library.rest.authorization.UserAuthenticationService;
 import ch.uzh.ifi.feedback.orchestrator.model.UserGroup;
 import ch.uzh.ifi.feedback.orchestrator.services.UserGroupService;
 import ch.uzh.ifi.feedback.orchestrator.validation.UserGroupValidator;

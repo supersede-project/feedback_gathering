@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ch.uzh.ifi.feedback.library.rest.Service.IDbItem;
+import ch.uzh.ifi.feedback.library.rest.Service.IDbService;
 import ch.uzh.ifi.feedback.library.rest.Service.ItemBase;
 import ch.uzh.ifi.feedback.library.rest.Service.ServiceBase;
 import ch.uzh.ifi.feedback.library.rest.annotations.DbAttribute;
@@ -16,10 +17,10 @@ import static java.util.Arrays.asList;
 public class ValidatorBase<T extends IDbItem> implements IValidator<T> {
 	
 	private Class<?> clazz;
-	protected ServiceBase<T> dbService;
+	protected IDbService<T> dbService;
 	protected ValidationSerializer serializer;
 	
-	public ValidatorBase(Class<?> clazz, ServiceBase<T> service, ValidationSerializer serializer)
+	public ValidatorBase(Class<?> clazz, IDbService<T> service, ValidationSerializer serializer)
 	{
 		this.clazz = clazz;
 		this.dbService = service;

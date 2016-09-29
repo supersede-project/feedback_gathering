@@ -18,6 +18,31 @@ USE `feedback_repository_test`;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
+-- Table structure for table `api_users`
+--
+
+DROP TABLE IF EXISTS `api_users`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `api_users` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `api_users`
+--
+
+LOCK TABLES `api_users` WRITE;
+/*!40000 ALTER TABLE `api_users` DISABLE KEYS */;
+INSERT INTO `api_users` VALUES (1,'api_user','password');
+/*!40000 ALTER TABLE `api_users` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `attachment_feedbacks`
 --
 
@@ -378,4 +403,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-09-26 15:29:59
+-- Dump completed on 2016-09-29 14:53:52

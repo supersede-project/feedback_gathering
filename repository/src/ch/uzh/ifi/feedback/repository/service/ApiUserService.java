@@ -1,4 +1,4 @@
-package ch.uzh.ifi.feedback.orchestrator.services;
+package ch.uzh.ifi.feedback.repository.service;
 
 import com.google.inject.Inject;
 
@@ -13,9 +13,8 @@ public class ApiUserService extends ServiceBase<ApiUser> implements IApiUserServ
 	@Inject
 	public ApiUserService(
 			ApiUserResultParser resultParser, 
-			DatabaseConfiguration config) 
-	{
-		super(resultParser, ApiUser.class, "api_users", config.getOrchestratorDb());
+			DatabaseConfiguration config) {
+		super(resultParser, ApiUser.class, "api_users", config.getRepositoryDb());
 	}
 
 }

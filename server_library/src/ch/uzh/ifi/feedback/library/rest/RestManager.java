@@ -83,6 +83,8 @@ public class RestManager implements IRestManager {
 		InitParserMap();
 		
 		Set<URL> packages = ClasspathHelper.forPackage(packageName);
+		packages.addAll(ClasspathHelper.forPackage("ch.uzh.ifi.feedback.library.rest"));
+		
 		Reflections reflections = new Reflections(new ConfigurationBuilder()
                 .setUrls(packages)
                 .setScanners(new MethodAnnotationsScanner(), new TypeAnnotationsScanner()));
