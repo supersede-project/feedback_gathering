@@ -84,12 +84,13 @@ public class DialogUtils {
      * Dialog asking the user if (s)he wants to give feedback.
      */
     public static class PullFeedbackIntermediateDialog extends DialogFragment {
-        public static PullFeedbackIntermediateDialog newInstance(String message, String jsonString, long selectedPullConfigurationIndex, String language) {
+        public static PullFeedbackIntermediateDialog newInstance(String message, String jsonString, long selectedPullConfigurationIndex, String baseURL, String language) {
             PullFeedbackIntermediateDialog f = new PullFeedbackIntermediateDialog();
             Bundle args = new Bundle();
             args.putString("message", message);
             args.putString("jsonString", jsonString);
             args.putLong("selectedPullConfigurationIndex", selectedPullConfigurationIndex);
+            args.putString("baseURL", baseURL);
             args.putString("language", language);
             f.setArguments(args);
             return f;
@@ -102,6 +103,7 @@ public class DialogUtils {
             String message = getArguments().getString("message");
             final String jsonString = getArguments().getString("jsonString");
             final long selectedPullConfigurationIndex = getArguments().getLong("selectedPullConfigurationIndex");
+            final String baseURL = getArguments().getString("baseURL");
             final String language = getArguments().getString("language");
 
             builder.setMessage(message).setPositiveButton(R.string.supersede_feedbacklibrary_yes_string, new DialogInterface.OnClickListener() {
@@ -110,6 +112,7 @@ public class DialogUtils {
                     intent.putExtra(FeedbackActivity.JSON_CONFIGURATION_STRING, jsonString);
                     intent.putExtra(FeedbackActivity.IS_PUSH_STRING, false);
                     intent.putExtra(FeedbackActivity.SELECTED_PULL_CONFIGURATION_INDEX_STRING, selectedPullConfigurationIndex);
+                    intent.putExtra(FeedbackActivity.EXTRA_KEY_BASE_URL, baseURL);
                     intent.putExtra(FeedbackActivity.EXTRA_KEY_LANGUAGE, language);
                     associatedActivity.startActivity(intent);
                 }
