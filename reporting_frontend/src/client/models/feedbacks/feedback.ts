@@ -24,6 +24,7 @@ export class Feedback {
     textFeedbacks:TextFeedback[];
     screenshotFeedbacks:ScreenshotFeedback[];
     categoryFeedbacks:CategoryFeedback[];
+    createdAt:Date;
 
     constructor(title:string, userIdentification:string, language:string, applicationId:number, configurationId:number,
                 ratingFeedbacks?:RatingFeedback[], textFeedbacks?:TextFeedback[],

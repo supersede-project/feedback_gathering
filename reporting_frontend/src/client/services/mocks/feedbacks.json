@@ -1,0 +1,904 @@
+[
+  {
+    "title": "Feedback JUnit",
+    "id": 54,
+    "applicationId": 1,
+    "userIdentification": "u8102390",
+    "createdAt": "2016-09-02 01:03:21.0",
+    "configurationId": 1,
+    "language": "EN",
+    "textFeedbacks": [
+      {
+        "id": 41,
+        "text": "This is the feedback text",
+        "mechanismId": 1
+      }
+    ],
+    "ratingFeedbacks": [],
+    "screenshotFeedbacks": [],
+    "attachmentFeedbacks": [],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": []
+  },
+  {
+    "title": "Feedback JUnit",
+    "id": 55,
+    "applicationId": 1,
+    "userIdentification": "u8102390",
+    "createdAt": "2016-09-02 01:22:10.0",
+    "configurationId": 1,
+    "language": "EN",
+    "textFeedbacks": [
+      {
+        "id": 42,
+        "text": "This is the feedback text",
+        "mechanismId": 1
+      }
+    ],
+    "ratingFeedbacks": [],
+    "screenshotFeedbacks": [],
+    "attachmentFeedbacks": [],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": []
+  },
+  {
+    "title": "Feedback JUnit",
+    "id": 56,
+    "applicationId": 1,
+    "userIdentification": "u8102390",
+    "createdAt": "2016-09-02 01:22:47.0",
+    "configurationId": 1,
+    "language": "EN",
+    "textFeedbacks": [
+      {
+        "id": 43,
+        "text": "This is the feedback text",
+        "mechanismId": 1
+      }
+    ],
+    "ratingFeedbacks": [],
+    "screenshotFeedbacks": [],
+    "attachmentFeedbacks": [],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": []
+  },
+  {
+    "title": "Feedback JUnit",
+    "id": 57,
+    "applicationId": 1,
+    "userIdentification": "u8102390",
+    "createdAt": "2016-09-02 01:22:55.0",
+    "configurationId": 1,
+    "language": "EN",
+    "textFeedbacks": [
+      {
+        "id": 44,
+        "text": "This is the feedback text",
+        "mechanismId": 1
+      }
+    ],
+    "ratingFeedbacks": [],
+    "screenshotFeedbacks": [],
+    "attachmentFeedbacks": [],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": []
+  },
+  {
+    "title": "Feedback JUnit",
+    "id": 58,
+    "applicationId": 1,
+    "userIdentification": "u8102390",
+    "createdAt": "2016-09-02 01:22:55.0",
+    "configurationId": 1,
+    "language": "EN",
+    "textFeedbacks": [
+      {
+        "id": 45,
+        "text": "This is the feedback text",
+        "mechanismId": 1
+      }
+    ],
+    "ratingFeedbacks": [],
+    "screenshotFeedbacks": [],
+    "attachmentFeedbacks": [],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": []
+  },
+  {
+    "title": "Feedback JUnit",
+    "id": 59,
+    "applicationId": 1,
+    "userIdentification": "u8102390",
+    "createdAt": "2016-09-02 01:22:56.0",
+    "configurationId": 1,
+    "language": "EN",
+    "textFeedbacks": [
+      {
+        "id": 46,
+        "text": "This is the feedback text",
+        "mechanismId": 1
+      }
+    ],
+    "ratingFeedbacks": [],
+    "screenshotFeedbacks": [],
+    "attachmentFeedbacks": [],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": []
+  },
+  {
+    "title": "Feedback JUnit",
+    "id": 60,
+    "applicationId": 1,
+    "userIdentification": "u8102390",
+    "createdAt": "2016-09-02 01:22:56.0",
+    "configurationId": 1,
+    "language": "EN",
+    "textFeedbacks": [
+      {
+        "id": 47,
+        "text": "This is the feedback text",
+        "mechanismId": 1
+      }
+    ],
+    "ratingFeedbacks": [],
+    "screenshotFeedbacks": [],
+    "attachmentFeedbacks": [],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": []
+  },
+  {
+    "title": "Feedback JUnit",
+    "id": 61,
+    "applicationId": 1,
+    "userIdentification": "u8102390",
+    "createdAt": "2016-09-02 01:22:57.0",
+    "configurationId": 1,
+    "language": "EN",
+    "textFeedbacks": [
+      {
+        "id": 48,
+        "text": "This is the feedback text",
+        "mechanismId": 1
+      }
+    ],
+    "ratingFeedbacks": [],
+    "screenshotFeedbacks": [],
+    "attachmentFeedbacks": [],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": []
+  },
+  {
+    "title": "Feedback JUnit",
+    "id": 62,
+    "applicationId": 1,
+    "userIdentification": "u8102390",
+    "createdAt": "2016-09-02 01:22:57.0",
+    "configurationId": 1,
+    "language": "EN",
+    "textFeedbacks": [
+      {
+        "id": 49,
+        "text": "This is the feedback text",
+        "mechanismId": 1
+      }
+    ],
+    "ratingFeedbacks": [],
+    "screenshotFeedbacks": [],
+    "attachmentFeedbacks": [],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": []
+  },
+  {
+    "title": "Feedback JUnit",
+    "id": 63,
+    "applicationId": 1,
+    "userIdentification": "u8102390",
+    "createdAt": "2016-09-02 01:22:58.0",
+    "configurationId": 1,
+    "language": "EN",
+    "textFeedbacks": [
+      {
+        "id": 50,
+        "text": "This is the feedback text",
+        "mechanismId": 1
+      }
+    ],
+    "ratingFeedbacks": [],
+    "screenshotFeedbacks": [],
+    "attachmentFeedbacks": [],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": []
+  },
+  {
+    "title": "Feedback JUnit",
+    "id": 64,
+    "applicationId": 1,
+    "userIdentification": "u8102390",
+    "createdAt": "2016-09-04 01:30:13.0",
+    "configurationId": 1,
+    "language": "EN",
+    "textFeedbacks": [
+      {
+        "id": 51,
+        "text": "This is the feedback text",
+        "mechanismId": 1
+      }
+    ],
+    "ratingFeedbacks": [],
+    "screenshotFeedbacks": [],
+    "attachmentFeedbacks": [],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": []
+  },
+  {
+    "title": "Feedback JUnit",
+    "id": 65,
+    "applicationId": 1,
+    "userIdentification": "u8102390",
+    "createdAt": "2016-09-04 01:37:49.0",
+    "configurationId": 1,
+    "language": "EN",
+    "textFeedbacks": [
+      {
+        "id": 52,
+        "text": "This is the feedback text",
+        "mechanismId": 1
+      }
+    ],
+    "ratingFeedbacks": [],
+    "screenshotFeedbacks": [],
+    "attachmentFeedbacks": [],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": []
+  },
+  {
+    "title": "Feedback JUnit",
+    "id": 66,
+    "applicationId": 1,
+    "userIdentification": "u8102390",
+    "createdAt": "2016-09-04 01:38:41.0",
+    "configurationId": 1,
+    "language": "EN",
+    "textFeedbacks": [
+      {
+        "id": 53,
+        "text": "This is the feedback text",
+        "mechanismId": 1
+      }
+    ],
+    "ratingFeedbacks": [],
+    "screenshotFeedbacks": [],
+    "attachmentFeedbacks": [],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": []
+  },
+  {
+    "title": "test_feedback",
+    "id": 68,
+    "applicationId": 1,
+    "userIdentification": "u8102390",
+    "createdAt": "2016-09-30 09:04:39.0",
+    "configurationId": 1,
+    "language": "EN",
+    "textFeedbacks": [
+      {
+        "id": 55,
+        "text": "This is the feedback text",
+        "mechanismId": 1
+      }
+    ],
+    "ratingFeedbacks": [
+      {
+        "id": 3,
+        "title": "Test rating",
+        "rating": 4,
+        "mechanismId": 5
+      },
+      {
+        "id": 4,
+        "title": "Test rating 2",
+        "rating": 5,
+        "mechanismId": 6
+      }
+    ],
+    "screenshotFeedbacks": [],
+    "attachmentFeedbacks": [],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": [
+      {
+        "id": 1,
+        "parameterId": 12,
+        "text": "sample text"
+      },
+      {
+        "id": 2,
+        "parameterId": 14
+      }
+    ]
+  },
+  {
+    "title": "test_feedback",
+    "id": 69,
+    "applicationId": 1,
+    "userIdentification": "u8102390",
+    "createdAt": "2016-09-30 09:05:58.0",
+    "configurationId": 1,
+    "language": "EN",
+    "textFeedbacks": [
+      {
+        "id": 56,
+        "text": "This is the feedback text",
+        "mechanismId": 1
+      }
+    ],
+    "ratingFeedbacks": [
+      {
+        "id": 5,
+        "title": "Test rating",
+        "rating": 4,
+        "mechanismId": 5
+      },
+      {
+        "id": 6,
+        "title": "Test rating 2",
+        "rating": 5,
+        "mechanismId": 6
+      }
+    ],
+    "screenshotFeedbacks": [],
+    "attachmentFeedbacks": [],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": [
+      {
+        "id": 3,
+        "parameterId": 12,
+        "text": "sample text"
+      },
+      {
+        "id": 4,
+        "parameterId": 14
+      }
+    ]
+  },
+  {
+    "title": "test_feedback",
+    "id": 70,
+    "applicationId": 1,
+    "userIdentification": "u8102390",
+    "createdAt": "2016-09-30 09:06:20.0",
+    "configurationId": 1,
+    "language": "EN",
+    "textFeedbacks": [
+      {
+        "id": 57,
+        "text": "This is the feedback text",
+        "mechanismId": 1
+      }
+    ],
+    "ratingFeedbacks": [
+      {
+        "id": 7,
+        "title": "Test rating",
+        "rating": 4,
+        "mechanismId": 5
+      },
+      {
+        "id": 8,
+        "title": "Test rating 2",
+        "rating": 5,
+        "mechanismId": 6
+      }
+    ],
+    "screenshotFeedbacks": [],
+    "attachmentFeedbacks": [],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": [
+      {
+        "id": 5,
+        "parameterId": 12,
+        "text": "sample text"
+      },
+      {
+        "id": 6,
+        "parameterId": 14
+      }
+    ]
+  },
+  {
+    "title": "test_feedback",
+    "id": 71,
+    "applicationId": 1,
+    "userIdentification": "u8102390",
+    "createdAt": "2016-09-30 09:09:59.0",
+    "configurationId": 1,
+    "language": "EN",
+    "textFeedbacks": [
+      {
+        "id": 58,
+        "text": "This is the feedback text",
+        "mechanismId": 1
+      }
+    ],
+    "ratingFeedbacks": [
+      {
+        "id": 9,
+        "title": "Test rating",
+        "rating": 4,
+        "mechanismId": 5
+      },
+      {
+        "id": 10,
+        "title": "Test rating 2",
+        "rating": 5,
+        "mechanismId": 6
+      }
+    ],
+    "screenshotFeedbacks": [],
+    "attachmentFeedbacks": [],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": [
+      {
+        "id": 7,
+        "parameterId": 12,
+        "text": "sample text"
+      },
+      {
+        "id": 8,
+        "parameterId": 14
+      }
+    ]
+  },
+  {
+    "title": "test_feedback",
+    "id": 72,
+    "applicationId": 1,
+    "userIdentification": "u8102390",
+    "createdAt": "2016-09-30 09:10:02.0",
+    "configurationId": 1,
+    "language": "EN",
+    "textFeedbacks": [
+      {
+        "id": 59,
+        "text": "This is the feedback text",
+        "mechanismId": 1
+      }
+    ],
+    "ratingFeedbacks": [
+      {
+        "id": 11,
+        "title": "Test rating",
+        "rating": 4,
+        "mechanismId": 5
+      },
+      {
+        "id": 12,
+        "title": "Test rating 2",
+        "rating": 5,
+        "mechanismId": 6
+      }
+    ],
+    "screenshotFeedbacks": [],
+    "attachmentFeedbacks": [],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": [
+      {
+        "id": 9,
+        "parameterId": 12,
+        "text": "sample text"
+      },
+      {
+        "id": 10,
+        "parameterId": 14
+      }
+    ]
+  },
+  {
+    "title": "test_feedback",
+    "id": 73,
+    "applicationId": 1,
+    "userIdentification": "u8102390",
+    "createdAt": "2016-09-30 09:11:02.0",
+    "configurationId": 1,
+    "language": "EN",
+    "textFeedbacks": [
+      {
+        "id": 60,
+        "text": "This is the feedback text",
+        "mechanismId": 1
+      }
+    ],
+    "ratingFeedbacks": [
+      {
+        "id": 13,
+        "title": "Test rating",
+        "rating": 4,
+        "mechanismId": 5
+      },
+      {
+        "id": 14,
+        "title": "Test rating 2",
+        "rating": 5,
+        "mechanismId": 6
+      }
+    ],
+    "screenshotFeedbacks": [],
+    "attachmentFeedbacks": [],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": [
+      {
+        "id": 11,
+        "parameterId": 12,
+        "text": "sample text"
+      },
+      {
+        "id": 12,
+        "parameterId": 14
+      }
+    ]
+  },
+  {
+    "title": "test_feedback",
+    "id": 74,
+    "applicationId": 1,
+    "userIdentification": "u8102390",
+    "createdAt": "2016-09-30 09:11:03.0",
+    "configurationId": 1,
+    "language": "EN",
+    "textFeedbacks": [
+      {
+        "id": 61,
+        "text": "This is the feedback text",
+        "mechanismId": 1
+      }
+    ],
+    "ratingFeedbacks": [
+      {
+        "id": 15,
+        "title": "Test rating",
+        "rating": 4,
+        "mechanismId": 5
+      },
+      {
+        "id": 16,
+        "title": "Test rating 2",
+        "rating": 5,
+        "mechanismId": 6
+      }
+    ],
+    "screenshotFeedbacks": [],
+    "attachmentFeedbacks": [],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": [
+      {
+        "id": 13,
+        "parameterId": 12,
+        "text": "sample text"
+      },
+      {
+        "id": 14,
+        "parameterId": 14
+      }
+    ]
+  },
+  {
+    "title": "test_feedback",
+    "id": 75,
+    "applicationId": 1,
+    "userIdentification": "u8102390",
+    "createdAt": "2016-09-30 09:12:22.0",
+    "configurationId": 1,
+    "language": "EN",
+    "textFeedbacks": [
+      {
+        "id": 62,
+        "text": "This is the feedback text",
+        "mechanismId": 1
+      }
+    ],
+    "ratingFeedbacks": [
+      {
+        "id": 17,
+        "title": "Test rating",
+        "rating": 4,
+        "mechanismId": 5
+      },
+      {
+        "id": 18,
+        "title": "Test rating 2",
+        "rating": 5,
+        "mechanismId": 6
+      }
+    ],
+    "screenshotFeedbacks": [],
+    "attachmentFeedbacks": [],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": [
+      {
+        "id": 15,
+        "parameterId": 12,
+        "text": "sample text"
+      },
+      {
+        "id": 16,
+        "parameterId": 14
+      }
+    ]
+  },
+  {
+    "title": "test_feedback",
+    "id": 76,
+    "applicationId": 1,
+    "userIdentification": "u8102390",
+    "createdAt": "2016-09-30 09:13:08.0",
+    "configurationId": 1,
+    "language": "EN",
+    "textFeedbacks": [
+      {
+        "id": 63,
+        "text": "This is the feedback text",
+        "mechanismId": 1
+      }
+    ],
+    "ratingFeedbacks": [
+      {
+        "id": 19,
+        "title": "Test rating",
+        "rating": 4,
+        "mechanismId": 5
+      },
+      {
+        "id": 20,
+        "title": "Test rating 2",
+        "rating": 5,
+        "mechanismId": 6
+      }
+    ],
+    "screenshotFeedbacks": [],
+    "attachmentFeedbacks": [],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": [
+      {
+        "id": 17,
+        "parameterId": 12,
+        "text": "sample text"
+      },
+      {
+        "id": 18,
+        "parameterId": 14
+      }
+    ]
+  },
+  {
+    "title": "test_feedback",
+    "id": 77,
+    "applicationId": 1,
+    "userIdentification": "u8102390",
+    "createdAt": "2016-09-30 09:13:17.0",
+    "configurationId": 1,
+    "language": "EN",
+    "textFeedbacks": [
+      {
+        "id": 64,
+        "text": "This is the feedback text",
+        "mechanismId": 1
+      }
+    ],
+    "ratingFeedbacks": [
+      {
+        "id": 21,
+        "title": "Test rating",
+        "rating": 4,
+        "mechanismId": 5
+      },
+      {
+        "id": 22,
+        "title": "Test rating 2",
+        "rating": 5,
+        "mechanismId": 6
+      }
+    ],
+    "screenshotFeedbacks": [],
+    "attachmentFeedbacks": [],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": [
+      {
+        "id": 19,
+        "parameterId": 12,
+        "text": "sample text"
+      },
+      {
+        "id": 20,
+        "parameterId": 14
+      }
+    ]
+  },
+  {
+    "title": "test_feedback",
+    "id": 78,
+    "applicationId": 1,
+    "userIdentification": "u8102390",
+    "createdAt": "2016-09-30 09:13:17.0",
+    "configurationId": 1,
+    "language": "EN",
+    "textFeedbacks": [
+      {
+        "id": 65,
+        "text": "This is the feedback text",
+        "mechanismId": 1
+      }
+    ],
+    "ratingFeedbacks": [
+      {
+        "id": 23,
+        "title": "Test rating",
+        "rating": 4,
+        "mechanismId": 5
+      },
+      {
+        "id": 24,
+        "title": "Test rating 2",
+        "rating": 5,
+        "mechanismId": 6
+      }
+    ],
+    "screenshotFeedbacks": [],
+    "attachmentFeedbacks": [],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": [
+      {
+        "id": 21,
+        "parameterId": 12,
+        "text": "sample text"
+      },
+      {
+        "id": 22,
+        "parameterId": 14
+      }
+    ]
+  },
+  {
+    "title": "asdfasdf",
+    "id": 79,
+    "applicationId": 1,
+    "userIdentification": "asdfas",
+    "createdAt": "2016-09-30 09:18:02.0",
+    "configurationId": 1,
+    "language": "EN",
+    "textFeedbacks": [
+      {
+        "id": 66,
+        "text": "This is the feedback text",
+        "mechanismId": 1
+      }
+    ],
+    "ratingFeedbacks": [
+      {
+        "id": 25,
+        "title": "Test rating",
+        "rating": 4,
+        "mechanismId": 5
+      },
+      {
+        "id": 26,
+        "title": "Test rating 2",
+        "rating": 5,
+        "mechanismId": 6
+      }
+    ],
+    "screenshotFeedbacks": [],
+    "attachmentFeedbacks": [],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": [
+      {
+        "id": 23,
+        "parameterId": 12,
+        "text": "sample text"
+      },
+      {
+        "id": 24,
+        "parameterId": 14
+      }
+    ]
+  },
+  {
+    "title": "Test title",
+    "id": 83,
+    "applicationId": 8,
+    "userIdentification": "e39c01a9050e7fa",
+    "createdAt": "2016-09-30 09:36:04.0",
+    "configurationId": 8,
+    "language": "en",
+    "textFeedbacks": [
+      {
+        "id": 70,
+        "text": "Dghh",
+        "mechanismId": 7
+      }
+    ],
+    "ratingFeedbacks": [
+      {
+        "id": 30,
+        "rating": 2,
+        "mechanismId": 10
+      }
+    ],
+    "screenshotFeedbacks": [],
+    "attachmentFeedbacks": [],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": []
+  },
+  {
+    "title": "Test title",
+    "id": 84,
+    "applicationId": 8,
+    "userIdentification": "e39c01a9050e7fa",
+    "createdAt": "2016-09-30 09:36:39.0",
+    "configurationId": 8,
+    "language": "en",
+    "textFeedbacks": [
+      {
+        "id": 71,
+        "text": "Dghh",
+        "mechanismId": 7
+      }
+    ],
+    "ratingFeedbacks": [
+      {
+        "id": 31,
+        "rating": 2,
+        "mechanismId": 10
+      }
+    ],
+    "screenshotFeedbacks": [],
+    "attachmentFeedbacks": [],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": [
+      {
+        "id": 25,
+        "parameterId": 12,
+        "text": "sample text"
+      },
+      {
+        "id": 26,
+        "parameterId": 14
+      }
+    ]
+  },
+  {
+    "title": "Test title",
+    "id": 85,
+    "applicationId": 8,
+    "userIdentification": "e39c01a9050e7fa",
+    "createdAt": "2016-09-30 09:37:17.0",
+    "configurationId": 8,
+    "language": "en",
+    "textFeedbacks": [
+      {
+        "id": 72,
+        "text": "Dghh",
+        "mechanismId": 7
+      }
+    ],
+    "ratingFeedbacks": [
+      {
+        "id": 32,
+        "rating": 2,
+        "mechanismId": 10
+      }
+    ],
+    "screenshotFeedbacks": [],
+    "attachmentFeedbacks": [],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": [
+      {
+        "id": 27,
+        "parameterId": 12,
+        "text": "sample text"
+      },
+      {
+        "id": 28,
+        "parameterId": 14
+      }
+    ]
+  }
+]
