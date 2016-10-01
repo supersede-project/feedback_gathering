@@ -33,17 +33,17 @@ public class Feedback implements Serializable {
     private String userIdentification;
     // Mechanisms
     @Expose
-    private List<AttachmentFeedback> attachmentFeedbacks = null;
+    private List<AttachmentFeedback> attachmentFeedbacks = new ArrayList<>();
     @Expose
-    private List<AudioFeedback> audioFeedbacks = null;
+    private List<AudioFeedback> audioFeedbacks = new ArrayList<>();
     @Expose
-    private List<CategoryFeedback> categoryFeedbacks = null;
+    private List<CategoryFeedback> categoryFeedbacks = new ArrayList<>();
     @Expose
-    private List<RatingFeedback> ratingFeedbacks = null;
+    private List<RatingFeedback> ratingFeedbacks = new ArrayList<>();
     @Expose
-    private List<ScreenshotFeedback> screenshotFeedbacks = null;
+    private List<ScreenshotFeedback> screenshotFeedbacks = new ArrayList<>();
     @Expose
-    private List<TextFeedback> textFeedbacks = null;
+    private List<TextFeedback> textFeedbacks = new ArrayList<>();
 
     public Feedback(List<Mechanism> allMechanisms) {
         for (Mechanism mechanism : allMechanisms) {
@@ -52,19 +52,25 @@ public class Feedback implements Serializable {
                 switch (type) {
                     case Mechanism.ATTACHMENT_TYPE:
                         // TODO: Implement attachment mechanism
+                        /*
                         if (attachmentFeedbacks == null) {
                             attachmentFeedbacks = new ArrayList<>();
                         }
+                        */
                         AttachmentMechanism attachmentMechanism = (AttachmentMechanism) mechanism;
                         break;
                     case Mechanism.AUDIO_TYPE:
                         AudioMechanism audioMechanism = (AudioMechanism) mechanism;
+                        /*
                         if (audioMechanism.getAudioPath() != null) {
                             if (audioFeedbacks == null) {
                                 audioFeedbacks = new ArrayList<>();
                             }
+                        */
+                        if (audioMechanism.getAudioPath() != null) {
                             audioFeedbacks.add(new AudioFeedback(audioMechanism, audioFeedbacks.size()));
                         }
+                        //}
                         break;
                     case Mechanism.CATEGORY_TYPE:
                         if (categoryFeedbacks == null) {
@@ -80,17 +86,23 @@ public class Feedback implements Serializable {
                         break;
                     case Mechanism.SCREENSHOT_TYPE:
                         ScreenshotMechanism screenshotMechanism = (ScreenshotMechanism) mechanism;
+                        /*
                         if (screenshotMechanism.getImagePath() != null) {
                             if (screenshotFeedbacks == null) {
                                 screenshotFeedbacks = new ArrayList<>();
                             }
+                        */
+                        if (screenshotMechanism.getImagePath() != null) {
                             screenshotFeedbacks.add(new ScreenshotFeedback(screenshotMechanism, screenshotFeedbacks.size()));
                         }
+                        //}
                         break;
                     case Mechanism.TEXT_TYPE:
+                        /*
                         if (textFeedbacks == null) {
                             textFeedbacks = new ArrayList<>();
                         }
+                        */
                         textFeedbacks.add(new TextFeedback((TextMechanism) mechanism));
                         break;
                     default:

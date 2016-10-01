@@ -442,7 +442,6 @@ public class Utils {
         } else {
             DialogUtils.showInformationDialog(activity, new String[]{activity.getResources().getString(R.string.supersede_feedbacklibrary_feedback_application_unavailable_text)}, true);
         }
-
     }
 
     /**
@@ -518,8 +517,8 @@ public class Utils {
                                             Map<Long, List<Map<String, Object>>> idParameters = new HashMap<>();
                                             for (ConfigurationItem configurationItem : configurationItems) {
                                                 if (configurationItem.getType().equals("PULL")) {
-                                                    shuffleIds.add(configuration.getId());
-                                                    idParameters.put(configuration.getId(), configurationItem.getGeneralConfigurationItem().getParameters());
+                                                    shuffleIds.add(configurationItem.getId());
+                                                    idParameters.put(configurationItem.getId(), configurationItem.getGeneralConfigurationItem().getParameters());
                                                 }
                                             }
 
@@ -551,10 +550,12 @@ public class Utils {
                                                     if (!showIntermediateDialog) {
                                                         // Start the feedback activity without asking the user
                                                         activity.startActivity(intent);
+                                                        break;
                                                     } else {
                                                         // Ask the user if (s)he would like to give feedback or not
                                                         DialogUtils.PullFeedbackIntermediateDialog d = DialogUtils.PullFeedbackIntermediateDialog.newInstance(activity.getResources().getString(com.example.matthias.feedbacklibrary.R.string.supersede_feedbacklibrary_pull_feedback_question_string), jsonString, shuffleIds.get(i), baseURL, language);
                                                         d.show(activity.getFragmentManager(), "feedbackPopupDialog");
+                                                        break;
                                                     }
                                                 }
                                             }

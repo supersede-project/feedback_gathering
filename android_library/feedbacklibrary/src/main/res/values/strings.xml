@@ -41,6 +41,7 @@
     <string name="supersede_feedbacklibrary_sticker_dialog_satisfied_title">Satisfied</string>
     <string name="supersede_feedbacklibrary_text_annotation_dialog_label">Text annotation</string>
     <string name="supersede_feedbacklibrary_text_annotation_dialog_hint">Please enter your text annotation</string>
+    <string name="supersede_feedbacklibrary_text_processing_dialog">Please wait. Processing image</string>
 
     <!-- Miscellaneous -->
     <string name="supersede_feedbacklibrary_sendconfirmation_text">By sending the feedback, you agree with the terms and conditions.</string>

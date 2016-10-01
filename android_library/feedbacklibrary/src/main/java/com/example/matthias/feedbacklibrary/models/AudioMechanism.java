@@ -45,7 +45,7 @@ public class AudioMechanism extends Mechanism {
             // Maximum time
             if (key.equals("maxTime")) {
                 setMaxTime(((Double) param.get("value")).floatValue());
-                setMaxTimeDefault(((Double) param.get("defaultValue")).floatValue());
+                setMaxTimeDefault(Float.valueOf((String) param.get("defaultValue")));
             }
         }
         setTitle(getTitle() + "\nof maximum " + ((int) getMaxTime()) + " seconds");

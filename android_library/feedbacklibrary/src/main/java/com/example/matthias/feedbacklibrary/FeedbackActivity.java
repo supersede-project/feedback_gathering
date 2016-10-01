@@ -109,6 +109,12 @@ public class FeedbackActivity extends AppCompatActivity implements ScreenshotMec
     private ProgressDialog progressDialog;
     private String userScreenshotChosenTask = "";
 
+    private void closeProgressDialog() {
+        if (progressDialog != null && progressDialog.isShowing()) {
+            progressDialog.dismiss();
+        }
+    }
+
     @NonNull
     private RequestBody createRequestBody(@NonNull File file) {
         return RequestBody.create(MediaType.parse(MULTIPART_FORM_DATA), file);
@@ -129,9 +135,6 @@ public class FeedbackActivity extends AppCompatActivity implements ScreenshotMec
                 setPositiveButton(R.string.supersede_feedbacklibrary_ok_string, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        if (progressDialog != null) {
-                            progressDialog.dismiss();
-                        }
                         dialog.dismiss();
                         FeedbackActivity.this.onBackPressed();
                     }
@@ -155,21 +158,31 @@ public class FeedbackActivity extends AppCompatActivity implements ScreenshotMec
 
             // Asynchronous call
             if (result != null) {
+                // Make progress dialog visible
+                progressDialog = DialogUtils.createProgressDialog(FeedbackActivity.this, getResources().getString(R.string.supersede_feedbacklibrary_loading_string), false);
+                progressDialog.show();
                 result.enqueue(new Callback<OrchestratorConfigurationItem>() {
                     @Override
                     public void onFailure(Call<OrchestratorConfigurationItem> call, Throwable t) {
+                        closeProgressDialog();
                         handleConfigurationRetrievalError();
                     }
 
                     @Override
                     public void onResponse(Call<OrchestratorConfigurationItem> call, Response<OrchestratorConfigurationItem> response) {
-                        orchestratorConfigurationItem = response.body();
-                        // Save the current configuration under FeedbackActivity.CONFIGURATION_DIR}/FeedbackActivity.JSON_CONFIGURATION_FILE_NAME
-                        Gson gson = new Gson();
-                        String jsonString = gson.toJson(orchestratorConfigurationItem);
-                        Utils.saveStringContentToInternalStorage(getApplicationContext(), CONFIGURATION_DIR, JSON_CONFIGURATION_FILE_NAME, jsonString, MODE_PRIVATE);
-                        initModel();
-                        initView();
+                        if (response.code() == 200) {
+                            orchestratorConfigurationItem = response.body();
+                            // Save the current configuration under FeedbackActivity.CONFIGURATION_DIR}/FeedbackActivity.JSON_CONFIGURATION_FILE_NAME
+                            Gson gson = new Gson();
+                            String jsonString = gson.toJson(orchestratorConfigurationItem);
+                            Utils.saveStringContentToInternalStorage(getApplicationContext(), CONFIGURATION_DIR, JSON_CONFIGURATION_FILE_NAME, jsonString, MODE_PRIVATE);
+                            initModel();
+                            initView();
+                            closeProgressDialog();
+                        } else {
+                            closeProgressDialog();
+                            handleConfigurationRetrievalError();
+                        }
                     }
                 });
             } else {
@@ -193,9 +206,10 @@ public class FeedbackActivity extends AppCompatActivity implements ScreenshotMec
         String jsonString;
         Gson gson = new Gson();
         // For single category
-        jsonString = Utils.readFileAsString("feedback_orchestrator_adapted_single_selection_active_audio.json", getAssets());
+        //jsonString = Utils.readFileAsString("feedback_orchestrator_adapted_single_selection_active_audio.json", getAssets());
         // For multiple category
         //jsonString = Utils.readFileAsString("feedback_orchestrator_adapted_multiple_selection.json", getAssets());
+        jsonString = Utils.readFileAsString("android_application_v1_offline.json", getAssets());
         orchestratorConfigurationItem = gson.fromJson(jsonString, OrchestratorConfigurationItem.class);
 
         initModel();
@@ -251,11 +265,6 @@ public class FeedbackActivity extends AppCompatActivity implements ScreenshotMec
             }
 
             layoutInflater.inflate(R.layout.send_feedback_layout, linearLayout);
-        }
-
-        // Make the progress dialog disappear after successfully loading the models and views
-        if (progressDialog != null) {
-            progressDialog.dismiss();
         }
     }
 
@@ -324,13 +333,6 @@ public class FeedbackActivity extends AppCompatActivity implements ScreenshotMec
         selectedPullConfigurationIndex = intent.getLongExtra(SELECTED_PULL_CONFIGURATION_INDEX_STRING, -1);
         String jsonString = intent.getStringExtra(JSON_CONFIGURATION_STRING);
 
-        // Make progress dialog visible
-        View view = findViewById(R.id.supersede_feedbacklibrary_feedback_activity_layout);
-        if (view != null) {
-            //progressDialog = DialogUtils.createProgressDialog(view.getContext(), getResources().getString(R.string.supersede_feedbacklibrary_loading_string), false);
-            //progressDialog.show();
-        }
-
         // Initialization based on the type of configuration, i.e., if it is push or pull
         language = intent.getStringExtra(EXTRA_KEY_LANGUAGE);
         baseURL = intent.getStringExtra(EXTRA_KEY_BASE_URL);
@@ -347,12 +349,12 @@ public class FeedbackActivity extends AppCompatActivity implements ScreenshotMec
 
             // TODO: Uncomment before release
             // Get the application id and language
-            //init(intent.getLongExtra(EXTRA_KEY_APPLICATION_ID, -1L), baseURL, language);
+            init(intent.getLongExtra(EXTRA_KEY_APPLICATION_ID, -1L), baseURL, language);
 
             // TODO: Remove before release
             // Only for demo purposes
-            System.out.println("about to initialize the offline configuration");
-            initOfflineConfiguration();
+            //System.out.println("about to initialize the offline configuration");
+            //initOfflineConfiguration();
         }
     }
 
@@ -516,8 +518,7 @@ public class FeedbackActivity extends AppCompatActivity implements ScreenshotMec
                 feedback.setApplicationId(orchestratorConfiguration.getId());
                 feedback.setConfigurationId(activeConfiguration.getId());
                 feedback.setLanguage(language);
-                //feedback.setUserIdentification("u8102390");
-                feedback.setUserIdentification(Settings.Secure.ANDROID_ID);
+                feedback.setUserIdentification(Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
 
                 // The JSON string of the feedback
                 GsonBuilder builder = new GsonBuilder();
@@ -580,7 +581,7 @@ public class FeedbackActivity extends AppCompatActivity implements ScreenshotMec
     }
 
     public void sendStub(View view) {
-        if (language != null) {
+        if (baseURL != null && language != null) {
             // The mechanism models are updated with the view values
             for (MechanismView mechanismView : allMechanismViews) {
                 mechanismView.updateModel();
@@ -599,8 +600,9 @@ public class FeedbackActivity extends AppCompatActivity implements ScreenshotMec
                 feedback.setConfigurationId(activeConfiguration.getId());
                 feedback.setLanguage(language);
                 //feedback.setUserIdentification("u8102390");
-                feedback.setUserIdentification(Settings.Secure.ANDROID_ID);
-                System.out.println("android_id == " + Settings.Secure.ANDROID_ID);
+                String androidId = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
+                feedback.setUserIdentification(androidId);
+                System.out.println("android_id == " + androidId);
 
                 // The JSON string of the feedback
                 GsonBuilder builder = new GsonBuilder();
@@ -611,6 +613,8 @@ public class FeedbackActivity extends AppCompatActivity implements ScreenshotMec
                 }.getType();
                 String feedbackJsonString = gson.toJson(feedback, feedbackType);
                 RequestBody feedbackJSONPart = RequestBody.create(MediaType.parse("multipart/form-data"), feedbackJsonString);
+
+                System.out.println(feedbackJsonString);
 
                 Map<String, RequestBody> files = new HashMap<>();
                 // Audio multipart

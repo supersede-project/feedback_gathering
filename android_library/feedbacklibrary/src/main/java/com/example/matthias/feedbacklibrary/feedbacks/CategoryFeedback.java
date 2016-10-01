@@ -41,7 +41,7 @@ public class CategoryFeedback implements Serializable {
                 } else {
                     values.put("text", null);
                 }
-                values.put("categoryTypesId", optionsIds.get(option));
+                values.put("parameterId", optionsIds.get(option));
                 categories.add(values);
             }
         }

@@ -29,7 +29,7 @@ public class StartActivity extends AppCompatActivity {
 
         // TODO: Uncomment before release
         // Actual trigger
-        //Utils.triggerPotentialPullFeedback("http://ec2-54-175-37-30.compute-1.amazonaws.com/", this, 8L, "en");
+        //Utils.triggerPotentialPullFeedback("http://ec2-54-175-37-30.compute-1.amazonaws.com/", this, 4L, "en");
 
         // TODO: Remove before release
         // Only for demo purposes
@@ -38,10 +38,12 @@ public class StartActivity extends AppCompatActivity {
             popup.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    /*
                     String jsonString;
                     jsonString = Utils.readFileAsString("feedback_orchestrator_adapted_single_selection.json", getAssets());
                     DialogUtils.PullFeedbackIntermediateDialog d = DialogUtils.PullFeedbackIntermediateDialog.newInstance(getResources().getString(com.example.matthias.feedbacklibrary.R.string.supersede_feedbacklibrary_pull_feedback_question_string), jsonString, 9, "http://ec2-54-175-37-30.compute-1.amazonaws.com/", "en");
                     d.show(getFragmentManager(), "feedbackPopupDialog");
+                    */
                 }
             });
         }
@@ -50,9 +52,11 @@ public class StartActivity extends AppCompatActivity {
             noPopup.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    /*
                     String jsonString;
                     jsonString = Utils.readFileAsString("feedback_orchestrator_adapted_multiple_selection.json", getAssets());
                     startFeedbackActivity(jsonString, false, 10, "http://ec2-54-175-37-30.compute-1.amazonaws.com/", "en");
+                    */
                 }
             });
         }
@@ -76,7 +80,7 @@ public class StartActivity extends AppCompatActivity {
             boolean result = Utils.checkSinglePermission(this, PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE, null, null, false);
             if (result) {
                 // Permission is already granted. Taking a screenshot of the current screen automatically and open the FeedbackActivity from the feedback library
-                Utils.startActivityWithScreenshotCapture("http://ec2-54-175-37-30.compute-1.amazonaws.com/", this, 8L, "en");
+                Utils.startActivityWithScreenshotCapture("http://ec2-54-175-37-30.compute-1.amazonaws.com/", this, 4L, "en");
             }
             return true;
         }
@@ -91,7 +95,7 @@ public class StartActivity extends AppCompatActivity {
                 Utils.onRequestPermissionsResultCase(requestCode, permissions, grantResults, this, Manifest.permission.READ_EXTERNAL_STORAGE,
                         com.example.matthias.feedbacklibrary.R.string.supersede_feedbacklibrary_permission_request_title,
                         com.example.matthias.feedbacklibrary.R.string.supersede_feedbacklibrary_external_storage_permission_text_automatic_screenshot_rationale,
-                        8L, "http://ec2-54-175-37-30.compute-1.amazonaws.com/", "en");
+                        4L, "http://ec2-54-175-37-30.compute-1.amazonaws.com/", "en");
                 break;
         }
     }
