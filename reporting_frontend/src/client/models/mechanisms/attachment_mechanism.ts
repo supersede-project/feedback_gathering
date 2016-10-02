@@ -1,5 +1,5 @@
-import {Parameter} from './parameters/parameter';
 import {Mechanism} from './mechanism';
+import {Parameter} from '../parameters/parameter';
 
 
 export class AttachmentMechanism extends Mechanism {

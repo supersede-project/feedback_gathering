@@ -9,10 +9,12 @@ import { routes } from './app.routes';
 import { AboutModule } from './about/about.module';
 import { HomeModule } from './home/home.module';
 import { SharedModule } from './shared/shared.module';
-import { FeedbackListModule } from './feedback/feedback-list.module';
+import { FeedbackListModule } from './feedback-list/feedback-list.module';
+import {FeedbackDetailModule} from './feedback-detail/feedback-detail.module';
+
 
 @NgModule({
-  imports: [BrowserModule, HttpModule, RouterModule.forRoot(routes), AboutModule, FeedbackListModule, HomeModule,
+  imports: [BrowserModule, HttpModule, RouterModule.forRoot(routes), AboutModule, FeedbackListModule, FeedbackDetailModule, HomeModule,
     SharedModule.forRoot()],
   declarations: [AppComponent],
   providers: [{

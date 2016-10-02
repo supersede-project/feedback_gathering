@@ -1,7 +1,6 @@
 import {ParameterInterface} from '../parameters/parameter_interface';
 import {Parameterizable} from '../mixins/parameterizable';
-import {applyMixins} from '../../js/helpers/mixin_helper';
-import {ParameterValuePropertyPair} from '../parameters/parameter_value_property_pair';
+import {applyMixins} from '../mixins/mixin_helper';
 
 
 /**

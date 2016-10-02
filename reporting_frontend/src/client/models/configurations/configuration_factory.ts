@@ -1,10 +1,10 @@
-import {configurationTypes} from '../../js/config';
 import {PushConfiguration} from './push_configuration';
 import {MechanismFactory} from '../mechanisms/mechanism_factory';
 import {GeneralConfiguration} from './general_configuration';
 import {PullConfiguration} from './pull_configuration';
 import {Mechanism} from '../mechanisms/mechanism';
 import {ConfigurationInterface} from './configuration_interface';
+import {configurationTypes} from './configuration_types';
 
 
 export class ConfigurationFactory {

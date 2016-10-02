@@ -1,8 +1,5 @@
-import {Parameter} from './parameters/parameter';
 import {Mechanism} from './mechanism';
-import {CategoryFeedback} from '../feedbacks/category_feedback';
-import {Category} from '../feedbacks/category';
-import {CategoryType} from '../feedbacks/category_type';
+import {Parameter} from '../parameters/parameter';
 
 
 export class CategoryMechanism extends Mechanism {

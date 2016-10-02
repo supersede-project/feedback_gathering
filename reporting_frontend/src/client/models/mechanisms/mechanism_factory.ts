@@ -1,12 +1,12 @@
 import {RatingMechanism} from './rating_mechanism';
 import {Mechanism} from './mechanism';
-import {mechanismTypes} from '../../js/config';
 import {ScreenshotMechanism} from './screenshot_mechanism';
 import {Parameter} from '../parameters/parameter';
 import {CategoryMechanism} from './category_mechanism';
 import {TextMechanism} from './text_mechanism';
 import {AudioMechanism} from './audio_mechanism';
 import {AttachmentMechanism} from './attachment_mechanism';
+import {mechanismTypes} from './mechanism_types';
 
 
 export class MechanismFactory {

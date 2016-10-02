@@ -13,8 +13,6 @@ import {FeedbackListService} from '../../services/feedback-list.service';
 })
 
 export class FeedbackListComponent implements OnInit {
-
-  newName: string = '';
   errorMessage: string;
   feedbacks: Feedback[] = [];
 

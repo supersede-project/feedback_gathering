@@ -1,10 +1,9 @@
-import {ConfigurationService} from '../services/configuration_service';
-import {mechanismTypes} from '../../js/config';
-import {PushConfiguration} from '../configurations/push_configuration';
 import {TextFeedback} from './text_feedback';
 import {RatingFeedback} from './rating_feedback';
 import {ScreenshotFeedback} from './screenshot_feedback';
 import {CategoryFeedback} from './category_feedback';
+import {PushConfiguration} from '../configurations/push_configuration';
+import {mechanismTypes} from '../mechanisms/mechanism_types';
 
 
 const validationMessages = {
@@ -15,6 +14,7 @@ const validationMessages = {
 
 
 export class Feedback {
+    id:number;
     title:string;
     userIdentification:string;
     language:string;

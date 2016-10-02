@@ -1,6 +1,5 @@
-import {Parameter} from './parameters/parameter';
 import {Mechanism} from './mechanism';
-import {ScreenshotView} from '../../views/screenshot/screenshot_view';
+import {Parameter} from '../parameters/parameter';
 
 
 export class ScreenshotMechanism extends Mechanism {

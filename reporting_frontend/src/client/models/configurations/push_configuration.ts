@@ -1,7 +1,7 @@
 import {Mechanism} from '../mechanisms/mechanism';
 import {Configuration} from './configuration';
 import {GeneralConfiguration} from './general_configuration';
-import {configurationTypes} from '../../js/config';
+import {configurationTypes} from './configuration_types';
 
 
 /**

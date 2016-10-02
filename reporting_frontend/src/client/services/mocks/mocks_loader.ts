@@ -5,11 +5,11 @@
  * @param base to prefix the url
  * @returns {null}
  */
-export var readJSON = function (url, base:string = '') {
+export var readJSON = function (url:any, base:string = '') {
     url = base + url;
 
     var xhr = new XMLHttpRequest();
-    var json = null;
+    var json:any = null;
 
     xhr.open("GET", url, false);
 
