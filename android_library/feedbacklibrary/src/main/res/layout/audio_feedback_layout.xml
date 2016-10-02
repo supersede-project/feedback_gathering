@@ -60,6 +60,7 @@
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:progressDrawable="@drawable/progress_drawable"
+        android:splitTrack="false"
         android:thumb="@drawable/thumb_drawable"
         android:thumbOffset="0dp"
         />
