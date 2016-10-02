@@ -31,6 +31,7 @@ public class TextMechanism extends Mechanism {
     private boolean maxLengthVisible = false;
     private boolean mandatory = false;
     private String mandatoryReminder = "Default mandatory reminder text!";
+    private boolean textLengthVisible = true;
     // The text entered by the user
     private String inputText = null;
 
@@ -172,6 +173,9 @@ public class TextMechanism extends Mechanism {
             if (key.equals("maxLengthVisible")) {
                 setMaxLengthVisible(Utils.intToBool(((Double) param.get("value")).intValue()));
             }
+            if (key.equals("textLengthVisible")) {
+                setTextLengthVisible(Utils.intToBool(((Double) param.get("value")).intValue()));
+            }
             if (key.equals("mandatory")) {
                 setMandatory(Utils.intToBool(((Double) param.get("value")).intValue()));
                 // If TI 11 is set, TI 11.1 should always be activated, i.e., the user always needs a reminder for a mandatory field
@@ -188,6 +192,10 @@ public class TextMechanism extends Mechanism {
 
     public boolean isMaxLengthVisible() {
         return maxLengthVisible;
+    }
+
+    public boolean isTextLengthVisible() {
+        return textLengthVisible;
     }
 
     @Override
@@ -249,6 +257,10 @@ public class TextMechanism extends Mechanism {
 
     public void setMaxLengthVisible(boolean maxLengthVisible) {
         this.maxLengthVisible = maxLengthVisible;
+    }
+
+    public void setTextLengthVisible(boolean textLengthVisible) {
+        this.textLengthVisible = textLengthVisible;
     }
 
     public void setTitle(String title) {

@@ -80,6 +80,9 @@
     <string name="supersede_feedbacklibrary_previewbutton_text">Preview</string>
     <string name="supersede_feedbacklibrary_erasebutton_text">Erase</string>
 
+    <!-- Text mechanism -->
+    <string name="supersede_feedbacklibrary_maximum_character_hint">"Text cannot be longer than %1$d characters"</string>
+
     <!-- Overriding string resources in com.theartofdev.edmodo:android-image-cropper -->
     <string name="crop_image_menu_crop">@string/supersede_feedbacklibrary_crop_string</string>
 </resources>

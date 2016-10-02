@@ -23,7 +23,7 @@
             {
               "id": 115,
               "key": "maxLength",
-              "value": 200.0,
+              "value": 200,
               "language": "en",
               "createdAt": "2016-10-01 08:49:43.0"
             },
@@ -100,9 +100,16 @@
             {
               "id": 126,
               "key": "maxLengthVisible",
-              "value": 1.0,
+              "value": 0.0,
               "language": "en",
               "createdAt": "2016-10-01 08:49:43.0"
+            },
+            {
+              "id": 182,
+              "key": "textLengthVisible",
+              "value": 0.0,
+              "language": "en",
+              "createdAt": "2016-10-01 11:29:52.0"
             }
           ],
           "createdAt": "2016-10-01 08:49:43.0"
@@ -234,7 +241,7 @@
             {
               "id": 138,
               "key": "mandatory",
-              "value": 1.0,
+              "value": 0.0,
               "language": "en",
               "createdAt": "2016-10-01 08:49:43.0"
             },
