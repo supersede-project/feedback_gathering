@@ -30,7 +30,7 @@
         android:layout_alignParentTop="true"
         android:height="36dp"
         android:minWidth="88dp"
-        android:onClick="sendButtonClicked"
+        android:onClick="sendStub"
         android:text="@string/supersede_feedbacklibrary_sendbutton_text"/>
 
 </RelativeLayout>

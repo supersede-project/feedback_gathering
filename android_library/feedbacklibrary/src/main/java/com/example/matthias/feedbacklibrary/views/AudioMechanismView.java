@@ -36,6 +36,7 @@ public class AudioMechanismView extends MechanismView {
     private AudioMechanism audioMechanism;
     private Activity activity;
     private Context applicationContext;
+    private boolean isPaused = false;
     private boolean isPlaying = false;
     private boolean isRecording = false;
     private MediaPlayer mediaPlayer;
@@ -62,24 +63,30 @@ public class AudioMechanismView extends MechanismView {
     private void initView() {
         ((TextView) getEnclosingLayout().findViewById(R.id.supersede_feedbacklibrary_audio_title)).setText(audioMechanism.getTitle());
         pauseButton = (ImageButton) getEnclosingLayout().findViewById(R.id.supersede_feedbacklibrary_audio_player_button_pause);
-        pauseButton.setEnabled(false);
-        pauseButton.setAlpha(0.4F);
+        setButtonEnabled(pauseButton, false);
         playButton = (ImageButton) getEnclosingLayout().findViewById(R.id.supersede_feedbacklibrary_audio_player_button_play);
-        playButton.setEnabled(false);
-        playButton.setAlpha(0.4F);
+        setButtonEnabled(playButton, false);
         recordAnimationColorStart = resources.getColor(R.color.supersede_feedbacklibrary_audio_timer_record_indicator_start_animation_color);
         recordAnimationColorEnd = resources.getColor(R.color.supersede_feedbacklibrary_audio_timer_record_indicator_end_animation_color);
         recordButton = (ImageButton) getEnclosingLayout().findViewById(R.id.supersede_feedbacklibrary_audio_player_button_record);
         recordIndicator = (TextView) getEnclosingLayout().findViewById(R.id.supersede_feedbacklibrary_audio_timer_record_indicator);
         stopButton = (ImageButton) getEnclosingLayout().findViewById(R.id.supersede_feedbacklibrary_audio_player_button_stop);
-        stopButton.setEnabled(false);
-        stopButton.setAlpha(0.4F);
+        setButtonEnabled(stopButton, false);
 
+        pauseButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                pausePlaying();
+            }
+        });
         playButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!isPlaying && !isRecording) {
+                if (!isPaused && !isPlaying && !isRecording) {
                     startPlaying();
+                }
+                if (isPaused && !isPlaying && !isRecording && mediaPlayer != null && !mediaPlayer.isPlaying()) {
+                    resumePlaying();
                 }
             }
         });
@@ -144,6 +151,7 @@ public class AudioMechanismView extends MechanismView {
 
                     isRecording = true;
                     setButtonEnabled(playButton, false);
+                    setButtonEnabled(recordButton, false);
                     setButtonEnabled(stopButton, true);
                 }
             }
@@ -169,9 +177,32 @@ public class AudioMechanismView extends MechanismView {
         mediaRecorder.release();
         mediaRecorder = null;
         audioFilePath = tempAudioFilePath;
+        isPaused = false;
+        isPlaying = false;
         isRecording = false;
+        setButtonEnabled(pauseButton, false);
         setButtonEnabled(playButton, true);
+        setButtonEnabled(recordButton, true);
         setButtonEnabled(stopButton, false);
+    }
+
+    private void pausePlaying() {
+        if (!isPaused && isPlaying && !isRecording && mediaPlayer != null && mediaPlayer.isPlaying()) {
+            mediaPlayer.pause();
+            isPaused = true;
+            isPlaying = false;
+            setButtonEnabled(pauseButton, false);
+            setButtonEnabled(playButton, true);
+        }
+    }
+
+    private void resumePlaying() {
+        mediaPlayer.seekTo(mediaPlayer.getCurrentPosition());
+        mediaPlayer.start();
+        isPaused = false;
+        isPlaying = true;
+        setButtonEnabled(pauseButton, true);
+        setButtonEnabled(playButton, false);
     }
 
     private void setButtonEnabled(ImageButton imageButton, boolean enabled) {
@@ -189,16 +220,21 @@ public class AudioMechanismView extends MechanismView {
                 public void onCompletion(MediaPlayer mp) {
                     stopRecordAnimation();
                     isPlaying = false;
+                    setButtonEnabled(pauseButton, false);
                     setButtonEnabled(playButton, true);
+                    setButtonEnabled(recordButton, true);
                     setButtonEnabled(stopButton, false);
                 }
             });
             mediaPlayer.setDataSource(audioFilePath);
             mediaPlayer.prepare();
             mediaPlayer.start();
+            isPaused = false;
             isPlaying = true;
             isRecording = false;
+            setButtonEnabled(pauseButton, true);
             setButtonEnabled(playButton, false);
+            setButtonEnabled(recordButton, false);
             setButtonEnabled(stopButton, true);
         } catch (IOException e) {
             System.out.println("prepare() failed");
@@ -210,9 +246,12 @@ public class AudioMechanismView extends MechanismView {
             mediaPlayer.release();
             mediaPlayer = null;
         }
+        isPaused = false;
         isPlaying = false;
         isRecording = false;
+        setButtonEnabled(pauseButton, false);
         setButtonEnabled(playButton, true);
+        setButtonEnabled(recordButton, true);
         setButtonEnabled(stopButton, false);
     }
 
