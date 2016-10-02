@@ -13,6 +13,7 @@ public class AudioMechanism extends Mechanism {
     private float maxTimeDefault;
     private float maxTime;
     private String title;
+    private int totalDuration;
 
     public AudioMechanism(MechanismConfigurationItem item) {
         super(AUDIO_TYPE, item);
@@ -35,6 +36,10 @@ public class AudioMechanism extends Mechanism {
         return title;
     }
 
+    public int getTotalDuration() {
+        return totalDuration;
+    }
+
     private void initAudioMechanism(MechanismConfigurationItem item) {
         for (Map<String, Object> param : item.getParameters()) {
             String key = (String) param.get("key");
@@ -48,7 +53,7 @@ public class AudioMechanism extends Mechanism {
                 setMaxTimeDefault(Float.valueOf((String) param.get("defaultValue")));
             }
         }
-        setTitle(getTitle() + "\nof maximum " + ((int) getMaxTime()) + " seconds");
+        setTitle(getTitle());
     }
 
     @Override
@@ -70,5 +75,9 @@ public class AudioMechanism extends Mechanism {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public void setTotalDuration(int totalDuration) {
+        this.totalDuration = totalDuration;
     }
 }

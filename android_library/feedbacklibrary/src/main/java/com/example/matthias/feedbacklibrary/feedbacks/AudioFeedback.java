@@ -1,6 +1,7 @@
 package com.example.matthias.feedbacklibrary.feedbacks;
 
 import com.example.matthias.feedbacklibrary.models.AudioMechanism;
+import com.google.gson.annotations.Expose;
 
 import java.io.File;
 import java.io.Serializable;
@@ -10,6 +11,8 @@ import java.io.Serializable;
  */
 public class AudioFeedback extends PartFeedback implements Serializable {
     private String audioPath;
+    @Expose
+    private int duration;
 
     public AudioFeedback(AudioMechanism audioMechanism, int partId) {
         super(audioMechanism, audioMechanism.getAudioPath(), partId);
@@ -18,6 +21,10 @@ public class AudioFeedback extends PartFeedback implements Serializable {
 
     public String getAudioPath() {
         return audioPath;
+    }
+
+    public int getDuration() {
+        return duration;
     }
 
     public String getFileName() {
@@ -31,9 +38,14 @@ public class AudioFeedback extends PartFeedback implements Serializable {
 
     private void initAudioFeedback(AudioMechanism audioMechanism) {
         audioPath = audioMechanism.getAudioPath();
+        duration = audioMechanism.getTotalDuration();
     }
 
     public void setAudioPath(String audioPath) {
         this.audioPath = audioPath;
+    }
+
+    public void setDuration(int duration) {
+        this.duration = duration;
     }
 }

@@ -5,9 +5,12 @@
     <string name="supersede_feedbacklibrary_annotate_image_activity_name">Annotate Image</string>
 
     <!-- Audio mechanism -->
-    <string name="supersede_feedbacklibrary_feedback_library_default_current_duration">0:00</string>
-    <string name="supersede_feedbacklibrary_feedback_library_default_total_duration">0:00/-</string>
-    <string name="supersede_feedbacklibrary_feedback_library_record_indicator">RECORDING!</string>
+    <string name="supersede_feedbacklibrary_audio_default_current_duration">0:00</string>
+    <string name="supersede_feedbacklibrary_audio_default_total_duration">0:00/-</string>
+    <string name="supersede_feedbacklibrary_audio_record_indicator">RECORDING!</string>
+    <string name="supersede_feedbacklibrary_audio_maximum_length_text">Maximum %1$d seconds can be recorded</string>
+    <string name="supersede_feedbacklibrary_audio_maximum_length_reached_text">"Recording stopped because the limit of %1$d seconds is reached"</string>
+    <string name="supersede_feedbacklibrary_audio_stopped_recording_text">Stopped recording</string>
 
     <!-- Category mechanism -->
     <string name="supersede_feedbacklibrary_single_option_dialog_title">Please select an option</string>

@@ -11,14 +11,22 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:paddingBottom="10dp"/>
+        android:paddingBottom="5dp"
+        android:textSize="16sp"/>
+
+    <TextView
+        android:id="@+id/supersede_feedbacklibrary_audio_time_limit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/supersede_feedbacklibrary_audio_title"
+        android:paddingBottom="5dp"/>
 
     <!-- Timer display -->
     <LinearLayout
         android:id="@+id/supersede_feedbacklibrary_audio_timer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/supersede_feedbacklibrary_audio_title"
+        android:layout_below="@id/supersede_feedbacklibrary_audio_time_limit"
         android:layout_marginBottom="10dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
@@ -30,14 +38,14 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="start"
-            android:text="@string/supersede_feedbacklibrary_feedback_library_default_current_duration"/>
+            android:text="@string/supersede_feedbacklibrary_audio_default_current_duration"/>
         <!-- Recording indicator -->
         <TextView
             android:id="@+id/supersede_feedbacklibrary_audio_timer_record_indicator"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
-            android:text="@string/supersede_feedbacklibrary_feedback_library_record_indicator"
+            android:text="@string/supersede_feedbacklibrary_audio_record_indicator"
             android:textSize="16sp"
             android:textStyle="bold"
             android:visibility="invisible"/>
@@ -48,7 +56,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="end"
-            android:text="@string/supersede_feedbacklibrary_feedback_library_default_total_duration"/>
+            android:text="@string/supersede_feedbacklibrary_audio_default_total_duration"/>
     </LinearLayout>
 
     <SeekBar
