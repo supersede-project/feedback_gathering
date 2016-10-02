@@ -46,7 +46,6 @@ public class CategoryFeedback implements Serializable {
             }
         }
 
-        // TODO: This will fail (waiting for the response of Florian)
         // Process all the user created options
         Set<String> copySelectedOptionSet = new HashSet<>(selectedOptionsSet);
         copySelectedOptionSet.removeAll(new HashSet<>(options));
