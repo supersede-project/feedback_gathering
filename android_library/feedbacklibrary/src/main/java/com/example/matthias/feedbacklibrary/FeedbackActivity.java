@@ -513,6 +513,7 @@ public class FeedbackActivity extends AppCompatActivity implements ScreenshotMec
                 feedback.setConfigurationId(activeConfiguration.getId());
                 feedback.setLanguage(language);
                 feedback.setUserIdentification(Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
+                //feedback.initContextInformation();
 
                 // The JSON string of the feedback
                 GsonBuilder builder = new GsonBuilder();
@@ -577,6 +578,7 @@ public class FeedbackActivity extends AppCompatActivity implements ScreenshotMec
     }
 
     public void sendStub(View view) {
+        System.out.println("sendStub");
         if (baseURL != null && language != null) {
             // The mechanism models are updated with the view values
             for (MechanismView mechanismView : allMechanismViews) {
@@ -596,6 +598,7 @@ public class FeedbackActivity extends AppCompatActivity implements ScreenshotMec
                 feedback.setConfigurationId(activeConfiguration.getId());
                 feedback.setLanguage(language);
                 feedback.setUserIdentification(Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
+                feedback.initContextInformation();
 
                 // The JSON string of the feedback
                 GsonBuilder builder = new GsonBuilder();

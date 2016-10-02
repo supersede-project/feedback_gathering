@@ -1,5 +1,7 @@
 package com.example.matthias.feedbacklibrary.feedbacks;
 
+import android.os.Build;
+
 import com.example.matthias.feedbacklibrary.models.AttachmentMechanism;
 import com.example.matthias.feedbacklibrary.models.AudioMechanism;
 import com.example.matthias.feedbacklibrary.models.CategoryMechanism;
@@ -37,8 +39,6 @@ public class Feedback implements Serializable {
     private List<AttachmentFeedback> attachmentFeedbacks = new ArrayList<>();
     @Expose
     private List<AudioFeedback> audioFeedbacks = new ArrayList<>();
-    //@Expose
-    //private List<CategoryFeedback> categoryFeedbacks = new ArrayList<>();
     @Expose
     private List<HashMap<String, Object>> categoryFeedbacks = new ArrayList<>();
     @Expose
@@ -86,6 +86,20 @@ public class Feedback implements Serializable {
 
             }
         }
+    }
+
+    public void initContextInformation() {
+        contextInformation = new HashMap<>();
+        contextInformation.put("release", Build.VERSION.RELEASE);
+        contextInformation.put("device", Build.DEVICE);
+        contextInformation.put("model", Build.MODEL);
+        contextInformation.put("product", Build.PRODUCT);
+        contextInformation.put("brand", Build.BRAND);
+        contextInformation.put("display", Build.DISPLAY);
+        contextInformation.put("androidId", Build.ID);
+        contextInformation.put("manufacturer", Build.MANUFACTURER);
+        contextInformation.put("serial", Build.SERIAL);
+        contextInformation.put("host", Build.HOST);
     }
 
     public long getApplicationId() {
