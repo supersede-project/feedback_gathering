@@ -29,7 +29,7 @@ public class StartActivity extends AppCompatActivity {
 
         // TODO: Uncomment before release
         // Actual trigger
-        //Utils.triggerPotentialPullFeedback("http://ec2-54-175-37-30.compute-1.amazonaws.com/", this, 4L, "en");
+        //Utils.triggerPotentialPullFeedback("http://ec2-54-175-37-30.compute-1.amazonaws.com/", this, 6L, "en");
 
         // TODO: Remove before release
         // Only for demo purposes
@@ -80,7 +80,9 @@ public class StartActivity extends AppCompatActivity {
             boolean result = Utils.checkSinglePermission(this, PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE, null, null, false);
             if (result) {
                 // Permission is already granted. Taking a screenshot of the current screen automatically and open the FeedbackActivity from the feedback library
-                Utils.startActivityWithScreenshotCapture("http://ec2-54-175-37-30.compute-1.amazonaws.com/", this, 4L, "en");
+                Utils.startActivityWithScreenshotCapture("http://ec2-54-175-37-30.compute-1.amazonaws.com/", this, 6L, "en");
+                // 5L --> multiple mechanisms of the same type
+                // 6L --> only one mechanisms of the same type
             }
             return true;
         }
@@ -95,7 +97,7 @@ public class StartActivity extends AppCompatActivity {
                 Utils.onRequestPermissionsResultCase(requestCode, permissions, grantResults, this, Manifest.permission.READ_EXTERNAL_STORAGE,
                         com.example.matthias.feedbacklibrary.R.string.supersede_feedbacklibrary_permission_request_title,
                         com.example.matthias.feedbacklibrary.R.string.supersede_feedbacklibrary_external_storage_permission_text_automatic_screenshot_rationale,
-                        4L, "http://ec2-54-175-37-30.compute-1.amazonaws.com/", "en");
+                        6L, "http://ec2-54-175-37-30.compute-1.amazonaws.com/", "en");
                 break;
         }
     }

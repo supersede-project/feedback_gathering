@@ -48,10 +48,8 @@ import java.io.File;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
@@ -205,11 +203,8 @@ public class FeedbackActivity extends AppCompatActivity implements ScreenshotMec
     private void initOfflineConfiguration() {
         String jsonString;
         Gson gson = new Gson();
-        // For single category
-        //jsonString = Utils.readFileAsString("feedback_orchestrator_adapted_single_selection_active_audio.json", getAssets());
-        // For multiple category
-        //jsonString = Utils.readFileAsString("feedback_orchestrator_adapted_multiple_selection.json", getAssets());
-        jsonString = Utils.readFileAsString("android_application_v1_offline.json", getAssets());
+        //jsonString = Utils.readFileAsString("android_application_v1_offline.json", getAssets());
+        jsonString = Utils.readFileAsString("android_application_v2_offline_multiple.json", getAssets());
         orchestratorConfigurationItem = gson.fromJson(jsonString, OrchestratorConfigurationItem.class);
 
         initModel();
@@ -353,7 +348,6 @@ public class FeedbackActivity extends AppCompatActivity implements ScreenshotMec
 
             // TODO: Remove before release
             // Only for demo purposes
-            //System.out.println("about to initialize the offline configuration");
             //initOfflineConfiguration();
         }
     }
@@ -537,7 +531,7 @@ public class FeedbackActivity extends AppCompatActivity implements ScreenshotMec
                     for (int pos = 0; pos < audioFeedbackList.size(); ++pos) {
                         RequestBody requestBody = createRequestBody(new File(audioFeedbackList.get(pos).getAudioPath()));
                         String fileName = audioFeedbackList.get(pos).getFileName();
-                        String key = String.format("%1$s\"; filename=\"%2$s", audioFeedbackList.get(pos).getPartString() + String.valueOf(pos + 1), fileName);
+                        String key = String.format("%1$s\"; filename=\"%2$s", audioFeedbackList.get(pos).getPartString() + String.valueOf(pos), fileName);
                         files.put(key, requestBody);
                     }
                 }
@@ -547,7 +541,7 @@ public class FeedbackActivity extends AppCompatActivity implements ScreenshotMec
                     for (int pos = 0; pos < screenshotFeedbackList.size(); ++pos) {
                         RequestBody requestBody = createRequestBody(new File(screenshotFeedbackList.get(pos).getImagePath()));
                         String fileName = screenshotFeedbackList.get(pos).getFileName();
-                        String key = String.format("%1$s\"; filename=\"%2$s", screenshotFeedbackList.get(pos).getPartString() + String.valueOf(pos + 1), fileName);
+                        String key = String.format("%1$s\"; filename=\"%2$s", screenshotFeedbackList.get(pos).getPartString() + String.valueOf(pos), fileName);
                         files.put(key, requestBody);
                     }
                 }
@@ -563,9 +557,11 @@ public class FeedbackActivity extends AppCompatActivity implements ScreenshotMec
 
                         @Override
                         public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-                            if (response.code() == 201) {
+                            if (response.code() == 200 || response.code() == 201) {
                                 Toast toast = Toast.makeText(getApplicationContext(), getResources().getString(R.string.supersede_feedbacklibrary_success_text), Toast.LENGTH_SHORT);
                                 toast.show();
+                            } else {
+                                DialogUtils.showInformationDialog(FeedbackActivity.this, new String[]{getResources().getString(R.string.supersede_feedbacklibrary_error_text)}, true);
                             }
                         }
                     });
@@ -599,10 +595,7 @@ public class FeedbackActivity extends AppCompatActivity implements ScreenshotMec
                 feedback.setApplicationId(orchestratorConfiguration.getId());
                 feedback.setConfigurationId(activeConfiguration.getId());
                 feedback.setLanguage(language);
-                //feedback.setUserIdentification("u8102390");
-                String androidId = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
-                feedback.setUserIdentification(androidId);
-                System.out.println("android_id == " + androidId);
+                feedback.setUserIdentification(Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
 
                 // The JSON string of the feedback
                 GsonBuilder builder = new GsonBuilder();

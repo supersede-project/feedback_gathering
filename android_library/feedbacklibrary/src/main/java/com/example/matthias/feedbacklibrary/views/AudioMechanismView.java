@@ -223,7 +223,6 @@ public class AudioMechanismView extends MechanismView {
 
     @Override
     public void updateModel() {
-        System.out.println("audioFilePath == " + audioFilePath);
         audioMechanism.setAudioPath(audioFilePath);
     }
 }

@@ -14,14 +14,14 @@ import java.util.Set;
  * Category feedback.
  */
 public class CategoryFeedback implements Serializable {
-    @Expose
-    private long mechanismId;
-    @Expose
     private List<HashMap<String, Object>> categories;
 
     public CategoryFeedback(CategoryMechanism categoryMechanism) {
-        mechanismId = categoryMechanism.getId();
         initCategoryFeedback(categoryMechanism);
+    }
+
+    public List<HashMap<String, Object>> getCategories() {
+        return categories;
     }
 
     private void initCategoryFeedback(CategoryMechanism categoryMechanism) {
@@ -46,16 +46,17 @@ public class CategoryFeedback implements Serializable {
             }
         }
 
+        // TODO: This will fail (waiting for the response of Florian)
         // Process all the user created options
         Set<String> copySelectedOptionSet = new HashSet<>(selectedOptionsSet);
-        copySelectedOptionSet.removeAll(new HashSet<String>(options));
+        copySelectedOptionSet.removeAll(new HashSet<>(options));
         for (String option : copySelectedOptionSet) {
             if (categories == null) {
                 categories = new ArrayList<>();
             }
             HashMap<String, Object> values = new HashMap<>();
             values.put("text", option);
-            values.put("categoryTypesId", null);
+            values.put("parameterId", null);
             categories.add(values);
         }
     }
