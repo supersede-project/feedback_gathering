@@ -37,6 +37,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
+            android:visibility="invisible"
             android:text="@string/supersede_feedbacklibrary_feedback_library_record_indicator"
             android:textSize="16sp"
             android:textStyle="bold"/>

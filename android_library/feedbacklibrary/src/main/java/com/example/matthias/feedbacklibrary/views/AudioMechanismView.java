@@ -122,6 +122,7 @@ public class AudioMechanismView extends MechanismView {
                     }
                     mediaRecorder.start();
 
+                    recordIndicator.setVisibility(View.VISIBLE);
                     // Record animation
                     if (recordIndicatorAnimator == null) {
                         recordIndicatorAnimator = ValueAnimator.ofObject(new ArgbEvaluator(), recordAnimationColorStart, recordAnimationColorEnd);
@@ -163,6 +164,7 @@ public class AudioMechanismView extends MechanismView {
 
     private void onRecordSuccess() {
         stopRecordAnimation();
+        recordIndicator.setVisibility(View.INVISIBLE);
         mediaRecorder.stop();
         mediaRecorder.release();
         mediaRecorder = null;
