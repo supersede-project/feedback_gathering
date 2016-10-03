@@ -11,14 +11,14 @@ export class ApplicationService {
   constructor(private http:Http) {
   }
 
-  all():Observable<Application> {
-    return this.http.get('/services/mocks/applications.json')
+  all():Observable<Application[]> {
+    return this.http.get('http://ec2-54-175-37-30.compute-1.amazonaws.com/examples/prod/app/shared/services/mocks/applications.json')
       .map((res: Response) => res.json())
       .catch(this.handleError);
   }
 
   find(id:number):Observable<Application> {
-    return this.http.get('/services/mocks/application5.json')
+    return this.http.get('http://ec2-54-175-37-30.compute-1.amazonaws.com/examples/prod/app/shared/services/mocks/application5.json')
       .map((res: Response) => res.json())
       .catch(this.handleError);
   }

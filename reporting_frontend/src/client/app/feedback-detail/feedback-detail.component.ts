@@ -1,14 +1,13 @@
 import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute, Params} from '@angular/router';
-import {Feedback} from '../../models/feedbacks/feedback';
-import {FeedbackDetailService} from '../../services/feedback-detail.service';
-import {ApplicationService} from '../../services/application.service';
-import {Application} from '../../models/applications/application';
-import {ConfigurationInterface} from '../../models/configurations/configuration_interface';
-import {RatingMechanism} from '../../models/mechanisms/rating_mechanism';
-import {RatingFeedback} from '../../models/feedbacks/rating_feedback';
-import {ParameterValuePipe} from '../../pipes/parameter-value.pipe';
-import {TextMechanism} from '../../models/mechanisms/text_mechanism';
+import {ActivatedRoute} from '@angular/router';
+import {ConfigurationInterface} from '../shared/models/configurations/configuration_interface';
+import {Application} from '../shared/models/applications/application';
+import {Feedback} from '../shared/models/feedbacks/feedback';
+import {FeedbackDetailService} from '../shared/services/feedback-detail.service';
+import {ApplicationService} from '../shared/services/application.service';
+import {TextMechanism} from '../shared/models/mechanisms/text_mechanism';
+import {RatingMechanism} from '../shared/models/mechanisms/rating_mechanism';
+
 
 @Component({
   moduleId: module.id,
@@ -28,7 +27,7 @@ export class FeedbackDetailComponent implements OnInit {
 
   ngOnInit() {
     this.route.params.subscribe(params => {
-      if (params.id) {
+      if (params.hasOwnProperty('id') && params['id']) {
         let id = +params['id'];
         this.feedbackService.find(id).subscribe(
           feedback => {
@@ -54,12 +53,12 @@ export class FeedbackDetailComponent implements OnInit {
 
   populateConfigurationData() {
     for(var textFeedback of this.feedback.textFeedbacks) {
-      var mechanism:TextMechanism = <TextMechanism>this.configuration.mechanisms.filter(mechanism => mechanism.id === textFeedback.mechanismId)[0];
-      textFeedback.mechanism = <TextMechanism>mechanism;
+      let textMechanism:TextMechanism = <TextMechanism>this.configuration.mechanisms.filter(mechanism => mechanism.id === textFeedback.mechanismId)[0];
+      textFeedback.mechanism = <TextMechanism>textMechanism;
     }
     for(var ratingFeedback of this.feedback.ratingFeedbacks) {
-      var mechanism:RatingMechanism = <RatingMechanism>this.configuration.mechanisms.filter(mechanism => mechanism.id === ratingFeedback.mechanismId)[0];
-      ratingFeedback.mechanism = <RatingMechanism>mechanism;
+      let ratingMechanism:RatingMechanism = <RatingMechanism>this.configuration.mechanisms.filter(mechanism => mechanism.id === ratingFeedback.mechanismId)[0];
+      ratingFeedback.mechanism = <RatingMechanism>ratingMechanism;
     }
   }
 }

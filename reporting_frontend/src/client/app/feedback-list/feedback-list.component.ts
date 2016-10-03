@@ -1,8 +1,9 @@
 import {Component, OnInit} from '@angular/core';
-import {Feedback} from '../../models/feedbacks/feedback';
-import {FeedbackListService} from '../../services/feedback-list.service';
-import {Application} from '../../models/applications/application';
-import {ApplicationService} from '../../services/application.service';
+import {Feedback} from '../shared/models/feedbacks/feedback';
+import {Application} from '../shared/models/applications/application';
+import {FeedbackListService} from '../shared/services/feedback-list.service';
+import {ApplicationService} from '../shared/services/application.service';
+
 
 /**
  * This class represents the lazy loaded HomeComponent.
@@ -42,10 +43,10 @@ export class FeedbackListComponent implements OnInit {
   getApplications() {
     this.applicationService.all().subscribe(
       applications => {
-        for(var application of applications) {
+        this.applications = applications;
+        for(var application of this.applications) {
           application.filterActive = false;
         }
-        this.applications = applications;
       },
       error => this.errorMessage = <any>error
     );
@@ -54,7 +55,7 @@ export class FeedbackListComponent implements OnInit {
   sortFeedbacks(field:string, ascending:boolean = true) {
     var feedbacks = this.feedbacks.sort(function (feedbackA, feedbackB) {
       if(field === 'date') {
-        return Date.parse(feedbackA[field]).getTime() - Date.parse(feedbackB[field]).getTime();
+        return Date.parse(feedbackA[field]) - Date.parse(feedbackB[field]);
       } else {
         return feedbackA[field] - feedbackB[field];
       }

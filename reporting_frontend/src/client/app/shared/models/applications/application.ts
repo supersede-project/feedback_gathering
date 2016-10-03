@@ -12,6 +12,7 @@ export class Application {
     state:number;
     generalConfiguration:GeneralConfiguration;
     configurations:ConfigurationInterface[];
+    filterActive:boolean;
 
     constructor(id:number, name:string, state:number, generalConfiguration:GeneralConfiguration, configurations:ConfigurationInterface[]) {
         this.id = id;

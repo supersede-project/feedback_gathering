@@ -12,7 +12,7 @@ export class FeedbackDetailService {
   }
 
   find(id:number):Observable<Feedback> {
-    return this.http.get('/services/mocks/feedbacks.json')
+    return this.http.get('http://ec2-54-175-37-30.compute-1.amazonaws.com/examples/prod/app/shared/services/mocks/feedbacks.json')
       .map((res: Response) => <Feedback>(<Feedback[]>res.json()).filter(feedback => feedback.id === id)[0])
       .catch(this.handleError);
   }
