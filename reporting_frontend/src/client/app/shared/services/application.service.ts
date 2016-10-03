@@ -4,6 +4,7 @@ import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import {Application} from '../models/applications/application';
+import {ORCHESTRATOR_HOST} from './config';
 
 @Injectable()
 export class ApplicationService {
@@ -12,13 +13,13 @@ export class ApplicationService {
   }
 
   all():Observable<Application[]> {
-    return this.http.get('http://ec2-54-175-37-30.compute-1.amazonaws.com/examples/prod/app/shared/services/mocks/applications.json')
+    return this.http.get(ORCHESTRATOR_HOST + 'en/applications')
       .map((res: Response) => res.json())
       .catch(this.handleError);
   }
 
   find(id:number):Observable<Application> {
-    return this.http.get('http://ec2-54-175-37-30.compute-1.amazonaws.com/examples/prod/app/shared/services/mocks/application5.json')
+    return this.http.get(ORCHESTRATOR_HOST + 'en/applications/' + id)
       .map((res: Response) => res.json())
       .catch(this.handleError);
   }

@@ -3,6 +3,7 @@ input.search {
   margin: 5px 0;
   display: inline-block;
   margin-right: 10px;
+  border-radius: 0;
 }
 
 article.filters {

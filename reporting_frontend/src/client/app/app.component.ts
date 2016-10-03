@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { Config} from './shared/index';
+import {Component, OnInit} from '@angular/core';
+import {UserService} from './shared/services/user.service';
 
 /**
  * This class represents the main application component. Within the @Routes annotation is the configuration of the
@@ -11,8 +11,9 @@ import { Config} from './shared/index';
   templateUrl: 'app.component.html',
 })
 
-export class AppComponent {
-  constructor() {
-    console.log('Environment config', Config);
+export class AppComponent implements OnInit {
+
+  constructor(public userService:UserService) {
+
   }
 }

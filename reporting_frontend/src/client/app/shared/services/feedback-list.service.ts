@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
-import { Http, Response } from '@angular/http';
+import { Http, Response, Headers } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import {Feedback} from '../models/feedbacks/feedback';
+import {REPOSITORY_HOST} from './config';
 
 @Injectable()
 export class FeedbackListService {
@@ -11,9 +12,13 @@ export class FeedbackListService {
   constructor(private http: Http) {}
 
   get(): Observable<Feedback[]> {
-    return this.http.get('http://ec2-54-175-37-30.compute-1.amazonaws.com/examples/prod/app/shared/services/mocks/feedbacks.json')
-                    .map((res: Response) => res.json())
-                    .catch(this.handleError);
+    var headers = new Headers();
+    headers.append('Accept', 'application/json');
+    headers.append('Authorization', localStorage.getItem('auth_token'));
+
+    return this.http.get(REPOSITORY_HOST + 'en/feedbacks', { headers: headers })
+      .map((res: Response) => res.json())
+      .catch(this.handleError);
   }
 
   /**
