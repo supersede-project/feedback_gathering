@@ -32,7 +32,9 @@ export class FeedbackDetailComponent implements OnInit {
         this.feedbackService.find(id).subscribe(
           feedback => {
             this.feedback = <Feedback>feedback;
-            this.loadApplication(feedback.applicationId, feedback.configurationId);
+            if(feedback && feedback.applicationId) {
+              this.loadApplication(feedback.applicationId, feedback.configurationId);
+            }
           },
           error => this.errorMessage = <any>error
         );

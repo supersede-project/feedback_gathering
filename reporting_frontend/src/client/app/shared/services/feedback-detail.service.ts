@@ -18,7 +18,7 @@ export class FeedbackDetailService {
     headers.append('Authorization', localStorage.getItem('auth_token'));
 
     return this.http.get(REPOSITORY_HOST + 'en/feedbacks/' + id, { headers: headers })
-      .map((res: Response) => <Feedback>(<Feedback[]>res.json()).filter(feedback => feedback.id === id)[0])
+      .map((res: Response) => res.json())
       .catch(this.handleError);
   }
 
