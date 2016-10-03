@@ -4,6 +4,8 @@ import {ScreenshotFeedback} from './screenshot_feedback';
 import {CategoryFeedback} from './category_feedback';
 import {PushConfiguration} from '../configurations/push_configuration';
 import {mechanismTypes} from '../mechanisms/mechanism_types';
+import {ConfigurationInterface} from '../configurations/configuration_interface';
+import {RatingMechanism} from '../mechanisms/rating_mechanism';
 
 
 const validationMessages = {
@@ -20,6 +22,7 @@ export class Feedback {
     language:string;
     applicationId:number;
     configurationId:number;
+    configuration:ConfigurationInterface;
     ratingFeedbacks:RatingFeedback[];
     textFeedbacks:TextFeedback[];
     screenshotFeedbacks:ScreenshotFeedback[];

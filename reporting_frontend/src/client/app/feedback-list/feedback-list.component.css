@@ -1,4 +1,8 @@
+input.search {
+  width: 200px;
+  margin: 5px 0;
+}
+
 table {
   margin-top: 20px;
-
 }

@@ -1,3 +1,5 @@
+<input #searchField (keyup)="search(searchField.value)" value="" class="form-control search" placeholder="Search" autofocus>
+
 <table class="table table-condensed">
   <thead>
     <tr>
@@ -8,7 +10,7 @@
     </tr>
   </thead>
   <tbody>
-    <tr *ngFor="let feedback of feedbacks">
+    <tr *ngFor="let feedback of filteredFeedbacks">
       <td>
         <a [routerLink]="['/feedback-detail', feedback.id]">#{{feedback.id}}</a>
       </td>

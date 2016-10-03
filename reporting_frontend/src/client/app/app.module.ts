@@ -6,15 +6,13 @@ import { HttpModule } from '@angular/http';
 import { AppComponent } from './app.component';
 import { routes } from './app.routes';
 
-import { AboutModule } from './about/about.module';
-import { HomeModule } from './home/home.module';
 import { SharedModule } from './shared/shared.module';
 import { FeedbackListModule } from './feedback-list/feedback-list.module';
 import {FeedbackDetailModule} from './feedback-detail/feedback-detail.module';
 
 
 @NgModule({
-  imports: [BrowserModule, HttpModule, RouterModule.forRoot(routes), AboutModule, FeedbackListModule, FeedbackDetailModule, HomeModule,
+  imports: [BrowserModule, HttpModule, RouterModule.forRoot(routes), FeedbackListModule, FeedbackDetailModule,
     SharedModule.forRoot()],
   declarations: [AppComponent],
   providers: [{

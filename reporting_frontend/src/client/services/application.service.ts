@@ -3,17 +3,17 @@ import {Http, Response} from '@angular/http';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
-import {Feedback} from '../models/feedbacks/feedback';
+import {Application} from '../models/applications/application';
 
 @Injectable()
-export class FeedbackDetailService {
+export class ApplicationService {
 
   constructor(private http:Http) {
   }
 
-  find(id:number):Observable<Feedback> {
-    return this.http.get('/services/mocks/feedbacks.json')
-      .map((res: Response) => <Feedback>(<Feedback[]>res.json()).filter(feedback => feedback.id === id)[0])
+  find(id:number):Observable<Application> {
+    return this.http.get('/services/mocks/application5.json')
+      .map((res: Response) => res.json())
       .catch(this.handleError);
   }
 
