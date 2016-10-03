@@ -4,9 +4,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
+import com.google.inject.Singleton;
+
 import ch.uzh.ifi.feedback.library.rest.Service.DbResultParser;
 import ch.uzh.ifi.feedback.orchestrator.model.FeedbackParameter;
 
+@Singleton
 public class ParameterResultParser extends DbResultParser<FeedbackParameter> {
 
 	public ParameterResultParser() {

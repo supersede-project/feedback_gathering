@@ -1,12 +1,8 @@
 package ch.uzh.ifi.feedback.orchestrator.validation;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.google.inject.Inject;
+import com.google.inject.Singleton;
 
-import ch.uzh.ifi.feedback.library.rest.validation.ValidationError;
-import ch.uzh.ifi.feedback.library.rest.validation.ValidationException;
 import ch.uzh.ifi.feedback.library.rest.validation.ValidationResult;
 import ch.uzh.ifi.feedback.library.rest.validation.ValidationSerializer;
 import ch.uzh.ifi.feedback.library.rest.validation.ValidatorBase;
@@ -16,6 +12,7 @@ import ch.uzh.ifi.feedback.orchestrator.services.MechanismService;
 import javassist.NotFoundException;
 import static java.util.Arrays.asList;
 
+@Singleton
 public class MechanismValidator extends ValidatorBase<FeedbackMechanism> {
 
 	private ParameterValidator parameterValidator;

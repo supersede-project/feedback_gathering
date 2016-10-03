@@ -2,7 +2,11 @@ package ch.uzh.ifi.feedback.orchestrator.controllers;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import com.google.inject.Inject;
+import com.google.inject.servlet.RequestScoped;
 
 import ch.uzh.ifi.feedback.library.rest.IRequestContext;
 import ch.uzh.ifi.feedback.library.rest.RestController;
@@ -13,8 +17,8 @@ import ch.uzh.ifi.feedback.library.rest.annotations.POST;
 import ch.uzh.ifi.feedback.library.rest.annotations.PUT;
 import ch.uzh.ifi.feedback.library.rest.annotations.Path;
 import ch.uzh.ifi.feedback.library.rest.annotations.PathParam;
+import ch.uzh.ifi.feedback.library.rest.authorization.UserAuthenticationService;
 import ch.uzh.ifi.feedback.library.rest.validation.ValidationException;
-import ch.uzh.ifi.feedback.orchestrator.authorization.UserAuthenticationService;
 import ch.uzh.ifi.feedback.orchestrator.model.Configuration;
 import ch.uzh.ifi.feedback.orchestrator.model.User;
 import ch.uzh.ifi.feedback.orchestrator.services.ConfigurationService;
@@ -23,6 +27,7 @@ import ch.uzh.ifi.feedback.orchestrator.services.UserService;
 import ch.uzh.ifi.feedback.orchestrator.validation.ConfigurationValidator;
 import static java.util.Arrays.asList;
 
+@RequestScoped
 @Controller(Configuration.class)
 public class ConfigurationController extends RestController<Configuration>
 {
@@ -33,11 +38,13 @@ public class ConfigurationController extends RestController<Configuration>
 	public ConfigurationController(
 			ConfigurationService dbService, 
 			ConfigurationValidator validator,
-			IRequestContext requestContext,
+			HttpServletRequest request, 
+			HttpServletResponse response,
 			UserService userService,
 			UserGroupService userGroupService) {
 		
-		super(dbService, validator, requestContext);
+		super(dbService, validator, request, response);
+		
 		this.userService = userService; 
 		this.userGroupService = userGroupService;
 	}

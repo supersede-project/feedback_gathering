@@ -2,8 +2,12 @@ package ch.uzh.ifi.feedback.orchestrator.services;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.List;
 import com.google.inject.Inject;
+import com.google.inject.Provider;
+import com.google.inject.Singleton;
+import com.google.inject.name.Named;
 
 import ch.uzh.ifi.feedback.library.rest.Service.DatabaseConfiguration;
 import ch.uzh.ifi.feedback.orchestrator.model.Configuration;
@@ -12,6 +16,7 @@ import ch.uzh.ifi.feedback.orchestrator.model.GeneralConfiguration;
 import javassist.NotFoundException;
 import static java.util.Arrays.asList;
 
+@Singleton
 public class ConfigurationService extends OrchestratorService<Configuration>{
 
 	private MechanismService mechanismService;
@@ -22,15 +27,15 @@ public class ConfigurationService extends OrchestratorService<Configuration>{
 			ConfigurationResultParser resultParser, 
 			MechanismService mechanismService,
 			GeneralConfigurationService generalConfigurationService,
-			DatabaseConfiguration config) 
+			DatabaseConfiguration config,
+			@Named("timestamp")Provider<Timestamp> timestampProvider) 
 	{
 		super(
 			resultParser, 
 			Configuration.class, 
 			"configurations", 
-			config.getOrchestratorDb(), 
-			mechanismService, 
-			generalConfigurationService);
+			config.getOrchestratorDb(),
+			timestampProvider);
 		
 		this.mechanismService = mechanismService;
 		this.generalConfigurationService = generalConfigurationService;

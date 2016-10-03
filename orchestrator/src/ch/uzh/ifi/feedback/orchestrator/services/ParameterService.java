@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -12,6 +13,9 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import com.google.inject.Inject;
+import com.google.inject.Provider;
+import com.google.inject.Singleton;
+import com.google.inject.name.Named;
 import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils.Collections;
 
 import ch.uzh.ifi.feedback.library.rest.Service.DatabaseConfiguration;
@@ -22,12 +26,20 @@ import ch.uzh.ifi.feedback.orchestrator.model.FeedbackParameter;
 import javassist.NotFoundException;
 import static java.util.Arrays.asList;
 
+@Singleton
 public class ParameterService extends OrchestratorService<FeedbackParameter>{
 	
+	private Provider<String> languageProvider;
+
 	@Inject
-	public ParameterService(ParameterResultParser resultParser, DatabaseConfiguration config) 
+	public ParameterService(
+			ParameterResultParser resultParser, 
+			DatabaseConfiguration config,
+			@Named("timestamp") Provider<Timestamp> timeStampProvider,
+			@Named("language") Provider<String> languageProvider) 
 	{
-		super(resultParser, FeedbackParameter.class, "parameters", config.getOrchestratorDb());
+		super(resultParser, FeedbackParameter.class, "parameters", config.getOrchestratorDb(), timeStampProvider);
+		this.languageProvider = languageProvider;
 	}
 	
 	@Override
@@ -38,9 +50,8 @@ public class ParameterService extends OrchestratorService<FeedbackParameter>{
 		
 		Map<Integer, List<FeedbackParameter>> childMap = new HashMap<>();
 		Map<FeedbackParameter, Integer> parameterMap = new HashMap<>();
-		
-		if(GetLanguage() != null)
-			params = params.stream().filter(p -> p.getLanguage().equals(this.GetLanguage())).collect(Collectors.toList());
+
+		params = params.stream().filter(p -> p.getLanguage().equals(languageProvider.get())).collect(Collectors.toList());
 		
 		List<FeedbackParameter> rootParams = GetRootParams(params, parameterMap, childMap);
 	    

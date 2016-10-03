@@ -3,10 +3,12 @@ package ch.uzh.ifi.feedback.orchestrator.serialization;
 import javax.servlet.http.HttpServletRequest;
 
 import com.google.inject.Inject;
+import com.google.inject.Singleton;
 
 import ch.uzh.ifi.feedback.library.rest.serialization.DefaultSerializer;
 import ch.uzh.ifi.feedback.orchestrator.model.FeedbackMechanism;
 
+@Singleton
 public class MechanismSerializationService extends OrchestratorSerializationService<FeedbackMechanism> 
 {
 	private ParameterSerializationService parameterSerializationService;

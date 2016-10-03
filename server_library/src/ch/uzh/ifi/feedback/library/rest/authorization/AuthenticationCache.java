@@ -1,8 +1,9 @@
 package ch.uzh.ifi.feedback.library.rest.authorization;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
+
 import com.google.inject.Singleton;
 
 import ch.uzh.ifi.feedback.library.rest.authorization.UserToken;
@@ -14,11 +15,14 @@ public class AuthenticationCache {
 	
 	public AuthenticationCache()
 	{
-		this.userTokens = new HashMap<>();
+		this.userTokens = new ConcurrentHashMap<>();
 	}
 	
 	public UserToken Register(String username)
 	{
+		if(userTokens.containsKey(username))
+			return userTokens.get(username);
+		
 		UserToken token = new UserToken(UUID.randomUUID());
 		userTokens.put(username, token);
 		return token;

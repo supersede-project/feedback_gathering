@@ -1,12 +1,16 @@
 package ch.uzh.ifi.feedback.orchestrator.services;
 
 import com.google.inject.Inject;
+import com.google.inject.Singleton;
 
 import ch.uzh.ifi.feedback.library.rest.Service.DatabaseConfiguration;
 import ch.uzh.ifi.feedback.library.rest.Service.ServiceBase;
-import ch.uzh.ifi.feedback.orchestrator.model.ApiUser;
+import ch.uzh.ifi.feedback.library.rest.authorization.ApiUser;
+import ch.uzh.ifi.feedback.library.rest.authorization.ApiUserResultParser;
+import ch.uzh.ifi.feedback.library.rest.authorization.IApiUserService;
 
-public class ApiUserService extends ServiceBase<ApiUser> {
+@Singleton
+public class ApiUserService extends ServiceBase<ApiUser> implements IApiUserService {
 
 	@Inject
 	public ApiUserService(

@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 import com.google.inject.Inject;
+import com.google.inject.Singleton;
 
 import ch.uzh.ifi.feedback.library.rest.Service.DatabaseConfiguration;
 import ch.uzh.ifi.feedback.library.rest.Service.ServiceBase;
@@ -14,6 +15,7 @@ import javassist.NotFoundException;
 
 import static java.util.Arrays.asList;
 
+@Singleton
 public class ScreenshotFeedbackService extends ServiceBase<ScreenshotFeedback> {
 
 	private TextAnnotationService annotationService;

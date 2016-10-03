@@ -1,10 +1,9 @@
-package ch.uzh.ifi.feedback.orchestrator.model;
+package ch.uzh.ifi.feedback.library.rest.authorization;
 
 import ch.uzh.ifi.feedback.library.rest.Service.ItemBase;
 import ch.uzh.ifi.feedback.library.rest.annotations.Serialize;
 import ch.uzh.ifi.feedback.library.rest.validation.Id;
 import ch.uzh.ifi.feedback.library.rest.validation.Unique;
-import ch.uzh.ifi.feedback.orchestrator.serialization.ApiUserSerializationService;
 
 @Serialize(ApiUserSerializationService.class)
 public class ApiUser extends ItemBase<ApiUser> {

@@ -1,6 +1,7 @@
 package ch.uzh.ifi.feedback.repository.validation;
 
 import com.google.inject.Inject;
+import com.google.inject.Singleton;
 
 import ch.uzh.ifi.feedback.library.rest.Service.ServiceBase;
 import ch.uzh.ifi.feedback.library.rest.validation.ValidationResult;
@@ -10,6 +11,7 @@ import ch.uzh.ifi.feedback.repository.model.ScreenshotFeedback;
 import ch.uzh.ifi.feedback.repository.model.TextAnnotation;
 import ch.uzh.ifi.feedback.repository.service.ScreenshotFeedbackService;
 
+@Singleton
 public class ScreenshotValidator extends ValidatorBase<ScreenshotFeedback>{
 
 	private TextAnnotationValidator annotationValidator;
