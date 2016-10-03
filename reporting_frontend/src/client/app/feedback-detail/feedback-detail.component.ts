@@ -6,6 +6,9 @@ import {ApplicationService} from '../../services/application.service';
 import {Application} from '../../models/applications/application';
 import {ConfigurationInterface} from '../../models/configurations/configuration_interface';
 import {RatingMechanism} from '../../models/mechanisms/rating_mechanism';
+import {RatingFeedback} from '../../models/feedbacks/rating_feedback';
+import {ParameterValuePipe} from '../../pipes/parameter-value.pipe';
+import {TextMechanism} from '../../models/mechanisms/text_mechanism';
 
 @Component({
   moduleId: module.id,
@@ -50,9 +53,13 @@ export class FeedbackDetailComponent implements OnInit {
   }
 
   populateConfigurationData() {
+    for(var textFeedback of this.feedback.textFeedbacks) {
+      var mechanism:TextMechanism = <TextMechanism>this.configuration.mechanisms.filter(mechanism => mechanism.id === textFeedback.mechanismId)[0];
+      textFeedback.mechanism = <TextMechanism>mechanism;
+    }
     for(var ratingFeedback of this.feedback.ratingFeedbacks) {
       var mechanism:RatingMechanism = <RatingMechanism>this.configuration.mechanisms.filter(mechanism => mechanism.id === ratingFeedback.mechanismId)[0];
-      ratingFeedback.mechanism = mechanism;
+      ratingFeedback.mechanism = <RatingMechanism>mechanism;
     }
   }
 }

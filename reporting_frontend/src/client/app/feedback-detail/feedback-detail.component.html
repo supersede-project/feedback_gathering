@@ -28,6 +28,7 @@
       </div>
       <div class="panel-body">
         <p *ngFor="let textFeedback of feedback.textFeedbacks">
+          {{textFeedback.mechanism | parameterValue:'title'}}: <br />
           {{textFeedback.text}}
           <br/>
           <small>(Mechanism ID: {{textFeedback.mechanismId}})</small>
@@ -41,7 +42,11 @@
       </div>
       <div class="panel-body">
         <p *ngFor="let ratingFeedback of feedback.ratingFeedbacks">
-          {{ratingFeedback.rating}}
+          <span *ngIf="ratingFeedback.mechanism">
+            {{ratingFeedback.mechanism | parameterValue:'title'}}
+            {{ratingFeedback.rating}} /
+            {{ratingFeedback.mechanism | parameterValue:'maxRating'}}
+          </span>
           <br/>
           <small>(Mechanism ID: {{ratingFeedback.mechanismId}})</small>
         </p>
