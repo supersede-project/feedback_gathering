@@ -43,7 +43,7 @@ export class FeedbackListComponent implements OnInit {
     this.applicationService.all().subscribe(
       applications => {
         for(var application of applications) {
-          application.filterActive = true;
+          application.filterActive = false;
         }
         this.applications = applications;
       },
@@ -72,6 +72,33 @@ export class FeedbackListComponent implements OnInit {
   }
 
   clickedApplicationFilter(application) {
-    application.filterActive = !application.filterActive;
+    var wasActive = application.filterActive;
+
+    for(let application of this.applications) {
+      application.filterActive = false;
+    }
+    application.filterActive = !wasActive;
+    if(application.filterActive) {
+      this.filteredFeedbacks = this.feedbacks.filter(feedback => feedback.applicationId === application.id);
+    } else {
+      this.filteredFeedbacks = this.feedbacks;
+    }
   }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

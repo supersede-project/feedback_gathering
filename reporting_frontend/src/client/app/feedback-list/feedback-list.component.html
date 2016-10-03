@@ -15,14 +15,14 @@
       <th>App ID</th>
     </tr>
   </thead>
-  <tbody>
+  <tbody *ngIf="applications">
     <tr *ngFor="let feedback of filteredFeedbacks">
       <td>
         <a [routerLink]="['/feedback-detail', feedback.id]">#{{feedback.id}}</a>
       </td>
       <td>{{feedback.title}}</td>
       <td>{{feedback.createdAt}}</td>
-      <td>{{feedback.applicationId}}</td>
+      <td>{{feedback.applicationId | applicationNameById:applications:feedback.applicationId}}</td>
     </tr>
   </tbody>
 </table>
