@@ -1589,7 +1589,7 @@
     "textFeedbacks": [
       {
         "id": 114,
-        "text": "I'm tired :(",
+        "text": "I\u0027m tired :(",
         "mechanismId": 43
       }
     ],
@@ -2438,6 +2438,263 @@
       {
         "id": 174,
         "parameterId": 241
+      }
+    ]
+  },
+  {
+    "title": "Test title",
+    "id": 130,
+    "applicationId": 5,
+    "userIdentification": "e39c01a9050e7fa",
+    "createdAt": "2016-10-02 04:18:19.0",
+    "configurationId": 10,
+    "language": "en",
+    "textFeedbacks": [
+      {
+        "id": 135,
+        "text": "Multiple mechanisms of the same type!",
+        "mechanismId": 26
+      },
+      {
+        "id": 136,
+        "text": "sdfasfa",
+        "mechanismId": 27
+      }
+    ],
+    "ratingFeedbacks": [
+      {
+        "id": 95,
+        "rating": 1,
+        "mechanismId": 32
+      },
+      {
+        "id": 96,
+        "rating": 1,
+        "mechanismId": 33
+      }
+    ],
+    "screenshotFeedbacks": [],
+    "attachmentFeedbacks": [],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": [
+      {
+        "id": 175,
+        "parameterId": 230
+      },
+      {
+        "id": 176,
+        "parameterId": 231,
+        "text": "Feature Request"
+      },
+      {
+        "id": 177,
+        "parameterId": 232
+      },
+      {
+        "id": 178,
+        "parameterId": 239
+      },
+      {
+        "id": 179,
+        "parameterId": 240
+      },
+      {
+        "id": 180,
+        "parameterId": 241
+      },
+      {
+        "id": 181,
+        "text": "own"
+      }
+    ]
+  },
+  {
+    "title": "Test title",
+    "id": 131,
+    "applicationId": 5,
+    "userIdentification": "e39c01a9050e7fa",
+    "createdAt": "2016-10-02 04:18:22.0",
+    "configurationId": 10,
+    "language": "en",
+    "textFeedbacks": [
+      {
+        "id": 137,
+        "text": "Multiple mechanisms of the same type!",
+        "mechanismId": 26
+      },
+      {
+        "id": 138,
+        "text": "sdfasfa",
+        "mechanismId": 27
+      }
+    ],
+    "ratingFeedbacks": [
+      {
+        "id": 97,
+        "rating": 1,
+        "mechanismId": 32
+      },
+      {
+        "id": 98,
+        "rating": 1,
+        "mechanismId": 33
+      }
+    ],
+    "screenshotFeedbacks": [],
+    "attachmentFeedbacks": [],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": [
+      {
+        "id": 182,
+        "parameterId": 230
+      },
+      {
+        "id": 183,
+        "parameterId": 231,
+        "text": "Feature Request"
+      },
+      {
+        "id": 184,
+        "parameterId": 232
+      },
+      {
+        "id": 185,
+        "parameterId": 239
+      },
+      {
+        "id": 186,
+        "parameterId": 240
+      },
+      {
+        "id": 187,
+        "parameterId": 241
+      },
+      {
+        "id": 188,
+        "text": "own"
+      }
+    ]
+  },
+  {
+    "title": "Test title",
+    "id": 132,
+    "applicationId": 5,
+    "userIdentification": "e39c01a9050e7fa",
+    "createdAt": "2016-10-02 07:11:05.0",
+    "configurationId": 10,
+    "language": "en",
+    "textFeedbacks": [
+      {
+        "id": 139,
+        "text": "Mandatory text!",
+        "mechanismId": 26
+      },
+      {
+        "id": 140,
+        "text": "Optional text!",
+        "mechanismId": 27
+      }
+    ],
+    "ratingFeedbacks": [
+      {
+        "id": 99,
+        "rating": 0,
+        "mechanismId": 32
+      },
+      {
+        "id": 100,
+        "rating": 5,
+        "mechanismId": 33
+      }
+    ],
+    "screenshotFeedbacks": [
+      {
+        "mechanismId": 30,
+        "textAnnotations": [
+          {
+            "id": 7,
+            "referenceNumber": 1,
+            "text": "First text annotation"
+          }
+        ],
+        "id": 13,
+        "path": "screenshots/65120_1475435465472.png",
+        "size": 65120,
+        "name": "4annotatedImageWithStickers",
+        "fileExtension": "png"
+      },
+      {
+        "mechanismId": 31,
+        "textAnnotations": [
+          {
+            "id": 8,
+            "referenceNumber": 1,
+            "text": "First text annotation"
+          },
+          {
+            "id": 9,
+            "referenceNumber": 2,
+            "text": "Second text annotation"
+          }
+        ],
+        "id": 14,
+        "path": "screenshots/63077_1475435465472.png",
+        "size": 63077,
+        "name": "5annotatedImageWithStickers",
+        "fileExtension": "png"
+      }
+    ],
+    "attachmentFeedbacks": [],
+    "audioFeedbacks": [
+      {
+        "duration": 0,
+        "mechanismId": 28,
+        "id": 7,
+        "path": "audios/13876_1475435465473.m4a",
+        "size": 13876,
+        "name": "28audioFile",
+        "fileExtension": "m4a"
+      },
+      {
+        "duration": 0,
+        "mechanismId": 29,
+        "id": 8,
+        "path": "audios/12867_1475435465474.m4a",
+        "size": 12867,
+        "name": "29audioFile",
+        "fileExtension": "m4a"
+      }
+    ],
+    "categoryFeedbacks": [
+      {
+        "id": 189,
+        "parameterId": 230
+      },
+      {
+        "id": 190,
+        "parameterId": 231,
+        "text": "Feature Request"
+      },
+      {
+        "id": 191,
+        "parameterId": 232
+      },
+      {
+        "id": 192,
+        "parameterId": 239,
+        "text": "Work"
+      },
+      {
+        "id": 193,
+        "parameterId": 240
+      },
+      {
+        "id": 194,
+        "parameterId": 241
+      },
+      {
+        "id": 195,
+        "text": "University"
       }
     ]
   }

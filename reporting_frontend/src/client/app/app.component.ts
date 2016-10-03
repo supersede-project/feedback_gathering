@@ -1,5 +1,4 @@
-import {Component, OnInit} from '@angular/core';
-import {UserService} from './shared/services/user.service';
+import {Component} from '@angular/core';
 
 /**
  * This class represents the main application component. Within the @Routes annotation is the configuration of the
@@ -11,9 +10,6 @@ import {UserService} from './shared/services/user.service';
   templateUrl: 'app.component.html',
 })
 
-export class AppComponent implements OnInit {
+export class AppComponent {
 
-  constructor(public userService:UserService) {
-
-  }
 }
