@@ -80,7 +80,7 @@ public abstract class ServiceBase<T> implements IDbService<T> {
 	@Override
 	public void Delete(Connection con, int id) throws SQLException, NotFoundException
 	{
-		String statement = String.format("DELETE * FROM %s.%s as t WHERE t.id = ? ;", dbName, tableName);
+		String statement = String.format("DELETE FROM %s.%s WHERE id = ? ;", dbName, tableName);
 		PreparedStatement s = con.prepareStatement(statement);
 		s.setInt(1, id);
 		s.execute();

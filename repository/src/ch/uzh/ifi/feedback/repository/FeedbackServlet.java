@@ -32,17 +32,15 @@ public class FeedbackServlet extends ServletBase {
      * @see HttpServlet#HttpServlet()
      */
 	@Inject
-    public FeedbackServlet(IRestManager restController) {
-        super();
-        this._restController = restController;
-        InitController();
+    public FeedbackServlet(IRestManager restManager, DatabaseConfiguration config) {
+        super(restManager, config);
     }
     
     @Override
     protected void InitController()
     {
         try{
-        	_restController.Init("ch.uzh.ifi.feedback.repository");
+        	_restManager.Init("ch.uzh.ifi.feedback.repository");
         }
         catch(Exception ex){
         	System.out.println(ex.getMessage());

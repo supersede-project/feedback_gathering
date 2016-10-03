@@ -181,20 +181,11 @@ public class RestManager implements IRestManager {
 			_parserMap.put(Timestamp.class, Timestamp.class.getMethod("valueOf", String.class));
 	}
 	
-	public <T> T GetInstance(Class<T> clazz)
-	{
-		return _injector.getInstance(clazz);
-	}
-
-	public <T> T GetSingleton(Class<T> clazz)
-	{
-		return _injector.getInstance(Key.get(clazz));
-	}
-	
 	@Override
 	public void Get(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {	
 		try {
 			InvokeHandler(request, response, HttpMethod.GET);
+			response.setStatus(200);
 		}
 		catch(Exception ex){
 			HandleExceptions(response, ex);
@@ -215,7 +206,7 @@ public class RestManager implements IRestManager {
 	public void Post(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		try {
 			InvokeHandler(request, response, HttpMethod.POST);
-
+			response.setStatus(201);
 		}
 		catch(Exception ex){
 			HandleExceptions(response, ex);
@@ -255,7 +246,7 @@ public class RestManager implements IRestManager {
 	public void Put(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		try {
 			InvokeHandler(request, response, HttpMethod.PUT);
-
+			response.setStatus(200);
 		} 
 		catch(Exception ex){
 			HandleExceptions(response, ex);
@@ -266,6 +257,7 @@ public class RestManager implements IRestManager {
 	public void Delete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		try {
 			InvokeHandler(request, response, HttpMethod.DELETE);
+			response.setStatus(200);
 		}
 		catch(Exception ex){
 			HandleExceptions(response, ex);

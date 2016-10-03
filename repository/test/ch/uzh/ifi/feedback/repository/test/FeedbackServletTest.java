@@ -14,6 +14,7 @@ import ch.uzh.ifi.feedback.library.rest.authorization.UserToken;
 import ch.uzh.ifi.feedback.library.test.ServletTest;
 import ch.uzh.ifi.feedback.repository.model.Feedback;
 import javassist.NotFoundException;
+import static java.util.Arrays.asList;
 
 public class FeedbackServletTest extends ServletTest {
 	
@@ -46,6 +47,16 @@ public class FeedbackServletTest extends ServletTest {
 		
 		assertEquals(retrievedFeedback.getId(), new Integer(57));		
 		assertEquals(retrievedFeedback.getApplicationId(), 1l);		
+	}
+	
+	public void testDeleteSingleFeedback() throws ClientProtocolException, IOException {
+		DeleteSuccess("http://localhost:8080/feedback_repository/en/feedbacks/57");
+		
+		Feedback[] retrievedFeedbacks = GetSuccess(
+				"http://localhost:8080/feedback_repository/en/feedbacks", 
+				Feedback[].class);
+		
+		assertFalse(asList(retrievedFeedbacks).stream().anyMatch(f -> f.getId().equals(new Integer(57))));
 	}
 	
 	/**

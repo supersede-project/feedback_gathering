@@ -19,7 +19,15 @@ import ch.uzh.ifi.feedback.library.rest.Service.DatabaseConfiguration;
 public abstract class ServletBase extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
-    protected IRestManager _restController;
+    protected IRestManager _restManager;
+    protected DatabaseConfiguration _dbConfig;
+    
+    public ServletBase(IRestManager restManager, DatabaseConfiguration config) {
+		this._restManager = restManager;
+		this._dbConfig = config;
+		
+        InitController();
+	}
     
     protected abstract void InitController();
 
@@ -30,7 +38,7 @@ public abstract class ServletBase extends HttpServlet {
 	{
 		SetDebugMode();
 		SetHeaders(response);
-		_restController.Get(request, response);
+		_restManager.Get(request, response);
 	}
 
 	/**
@@ -40,7 +48,7 @@ public abstract class ServletBase extends HttpServlet {
 	{
 		SetDebugMode();
 		SetHeaders(response);
-		_restController.Post(request, response);
+		_restManager.Post(request, response);
 	}
 	
 	/**
@@ -50,14 +58,14 @@ public abstract class ServletBase extends HttpServlet {
 	{
 		SetDebugMode();
 		SetHeaders(response);
-		_restController.Get(request, response);
+		_restManager.Delete(request, response);
 	}
 
 	protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
 	{
 		SetDebugMode();
         SetHeaders(response);
-		_restController.Put(request, response);
+		_restManager.Put(request, response);
 	}
 	
 	private void SetHeaders(HttpServletResponse response)
@@ -76,7 +84,7 @@ public abstract class ServletBase extends HttpServlet {
     	String debugMode = getServletContext().getInitParameter("debug");
     	if(debugMode != null && debugMode.equalsIgnoreCase("true"))
     	{
-    		_restController.GetInstance(DatabaseConfiguration.class).StartDebugMode();
+    		_dbConfig.StartDebugMode();
     	}
 	}
 }

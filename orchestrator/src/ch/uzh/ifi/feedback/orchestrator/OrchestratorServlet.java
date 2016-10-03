@@ -4,6 +4,7 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import ch.uzh.ifi.feedback.library.rest.IRestManager;
 import ch.uzh.ifi.feedback.library.rest.ServletBase;
+import ch.uzh.ifi.feedback.library.rest.Service.DatabaseConfiguration;
 
 /**
  * Servlet implementation class OrchestratorServlet
@@ -16,17 +17,15 @@ public class OrchestratorServlet extends ServletBase {
      * @see HttpServlet#HttpServlet()
      */
 	@Inject
-    public OrchestratorServlet(IRestManager restManager) {
-        super();
-        this._restController = restManager;
-        this.InitController();
+    public OrchestratorServlet(IRestManager restManager, DatabaseConfiguration config) {
+        super(restManager, config);
     }
     
     @Override
     protected void InitController()
     {
         try{
-        	_restController.Init("ch.uzh.ifi.feedback.orchestrator");
+        	_restManager.Init("ch.uzh.ifi.feedback.orchestrator");
         }
         catch(Exception ex){
         	System.out.println(ex.getMessage());

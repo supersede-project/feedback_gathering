@@ -20,6 +20,9 @@ public class AuthenticationCache {
 	
 	public UserToken Register(String username)
 	{
+		if(userTokens.containsKey(username))
+			return userTokens.get(username);
+		
 		UserToken token = new UserToken(UUID.randomUUID());
 		userTokens.put(username, token);
 		return token;

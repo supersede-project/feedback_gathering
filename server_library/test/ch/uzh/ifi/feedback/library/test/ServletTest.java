@@ -14,6 +14,7 @@ import org.apache.http.HttpStatus;
 import org.apache.http.ProtocolException;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.RedirectStrategy;
+import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
@@ -135,6 +136,19 @@ public class ServletTest extends TestCase {
 		return retrievedObjects;
    }
    
+   protected void DeleteSuccess(String url) throws ClientProtocolException, IOException
+   {
+		HttpUriRequest request = new HttpDelete(url);
+		
+		if(token != null)
+			request.setHeader("Authorization", token.getToken().toString());
+		
+		HttpResponse httpResponse = client.execute(request);
+		String mimeType = ContentType.getOrDefault(httpResponse.getEntity()).getMimeType();
+
+		assertEquals(httpResponse.getStatusLine().getStatusCode(), HttpStatus.SC_OK);
+   }
+   
    protected <T> T PostSuccess(String url, String jsonString, Class<T> clazz) throws ClientProtocolException, IOException
    {
 		HttpPost request = new HttpPost(url);
@@ -149,9 +163,10 @@ public class ServletTest extends TestCase {
 		HttpResponse httpResponse = client.execute(request);
 		String mimeType = ContentType.getOrDefault(httpResponse.getEntity()).getMimeType();
 
-		String jsonFromResponse = EntityUtils.toString(httpResponse.getEntity());	    
+		String jsonFromResponse = EntityUtils.toString(httpResponse.getEntity());
+		System.out.println(jsonFromResponse);
 		T createdObjects = gson.fromJson(jsonFromResponse, clazz);
-		assertEquals(httpResponse.getStatusLine().getStatusCode(), HttpStatus.SC_OK);
+		assertEquals(httpResponse.getStatusLine().getStatusCode(), HttpStatus.SC_CREATED);
 		assertEquals("application/json", mimeType);
 		
 		return createdObjects;
@@ -172,7 +187,7 @@ public class ServletTest extends TestCase {
 
 		String jsonFromResponse = EntityUtils.toString(httpResponse.getEntity());	    
 		T createdObjects = gson.fromJson(jsonFromResponse, clazz);
-		assertEquals(httpResponse.getStatusLine().getStatusCode(), HttpStatus.SC_OK);
+		assertEquals(httpResponse.getStatusLine().getStatusCode(), HttpStatus.SC_CREATED);
 		assertEquals("application/json", mimeType);
 		
 		return createdObjects;

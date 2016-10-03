@@ -2,11 +2,8 @@ package ch.uzh.ifi.feedback.orchestrator.test;
 
 import java.io.IOException;
 import java.io.InputStream;
-
 import org.apache.commons.io.IOUtils;
 import org.apache.http.client.ClientProtocolException;
-
-
 import ch.uzh.ifi.feedback.library.test.ServletTest;
 import ch.uzh.ifi.feedback.orchestrator.model.FeedbackParameter;
 
