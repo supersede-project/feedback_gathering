@@ -23,6 +23,10 @@ table {
   margin-top: 20px;
 }
 
+th i.glyphicon {
+  font-size: 9px;
+}
+
 h4.filters {
   border-bottom: 2px solid #ddd;
   padding: 19px 0 4px 0;
