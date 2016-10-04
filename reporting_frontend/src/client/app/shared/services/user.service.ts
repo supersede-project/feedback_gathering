@@ -2,6 +2,7 @@ import {Injectable} from '@angular/core';
 import {Http, Headers} from '@angular/http';
 import {REPOSITORY_HOST} from './config';
 import {Router} from '@angular/router';
+import {ORCHESTRATOR_HOST} from '../../../../../dist/tmp/app/shared/services/config';
 
 
 @Injectable()
@@ -12,7 +13,7 @@ export class UserService {
     this.loggedIn = !!localStorage.getItem('auth_token');
   }
 
-  login(username, password) {
+  loginOnRepository(username, password) {
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
 

@@ -1,8 +1,8 @@
-import { Route } from '@angular/router';
-import { FeedbackListComponent } from './index';
+import {Route} from '@angular/router';
+import {FeedbackListComponent} from './index';
 import {LoggedInGuard} from '../shared/guards/logged-in.guard';
 
-export const FeedbackListRoutes: Route[] = [
+export const FeedbackListRoutes:Route[] = [
   {
     path: '',
     component: FeedbackListComponent,
