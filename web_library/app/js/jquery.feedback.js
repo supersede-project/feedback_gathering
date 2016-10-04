@@ -165,8 +165,8 @@ define(["require", "exports", './config', '../views/pagination_container', '../v
                 elementToCaptureSelector = screenshotMechanism.getParameterValue('elementToCapture');
             }
             var container = $('#' + containerId);
-            var dialogSelector = $('[aria-describedby="' + containerId + '"]');
-            var screenshotPreview = container.find('.screenshot-preview'), screenshotCaptureButton = container.find('button.take-screenshot'), elementToCapture = $('' + elementToCaptureSelector), elementsToHide = [$('.ui-widget-overlay.ui-front'), dialogSelector];
+            var dialogSelector = '[aria-describedby="' + containerId + '"]';
+            var screenshotPreview = container.find('.screenshot-preview'), screenshotCaptureButton = container.find('button.take-screenshot'), elementToCapture = $('' + elementToCaptureSelector), elementsToHide = ['.ui-widget-overlay.ui-front', dialogSelector];
             var screenshotView = new screenshot_view_1.ScreenshotView(screenshotMechanism, screenshotPreview, screenshotCaptureButton, elementToCapture, container, distPath, elementsToHide);
             screenshotMechanism.setScreenshotView(screenshotView);
             return screenshotView;

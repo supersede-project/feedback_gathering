@@ -257,11 +257,12 @@ export var feedbackPluginModule = function ($, window, document) {
         }
 
         var container = $('#' + containerId);
-        var dialogSelector = $('[aria-describedby="' + containerId + '"]');
+        var dialogSelector = '[aria-describedby="' + containerId + '"]';
+
         var screenshotPreview = container.find('.screenshot-preview'),
             screenshotCaptureButton = container.find('button.take-screenshot'),
             elementToCapture = $('' + elementToCaptureSelector),
-            elementsToHide = [$('.ui-widget-overlay.ui-front'), dialogSelector];
+            elementsToHide = ['.ui-widget-overlay.ui-front', dialogSelector];
         // TODO attention: circular dependency
         var screenshotView = new ScreenshotView(screenshotMechanism, screenshotPreview, screenshotCaptureButton,
             elementToCapture, container, distPath, elementsToHide);

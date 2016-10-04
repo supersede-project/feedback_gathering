@@ -27,7 +27,7 @@ export class ScreenshotView {
     screenshotPreviewElement:JQuery;
     screenshotCaptureButton:JQuery;
     elementToCapture:JQuery;
-    elementsToHide:[JQuery];
+    elementsToHide:[string];
     screenshotCanvas:any;
     context:any;
     startX:number;
@@ -482,7 +482,7 @@ export class ScreenshotView {
     hideElements() {
         if (this.elementsToHide != null) {
             for (var elementToHide of this.elementsToHide) {
-                elementToHide.hide();
+                jQuery('' + elementToHide).hide();
             }
         }
     }
@@ -490,7 +490,7 @@ export class ScreenshotView {
     showElements() {
         if (this.elementsToHide != null) {
             for (var elementToHide of this.elementsToHide) {
-                elementToHide.show();
+                jQuery('' + elementToHide).show();
             }
         }
     }
