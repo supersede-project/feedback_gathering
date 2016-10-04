@@ -35,7 +35,7 @@
       <span #applicationFilter (click)="clickedApplicationFilter(application)"
             [class.label-primary]="application.filterActive" class="label label-default"
             *ngFor="let application of applications">
-        {{ application.name| truncate: 50 }} <br />
+        {{ application.name| truncate: 50 }}
       </span>
     </article>
 
