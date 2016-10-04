@@ -300,6 +300,12 @@ button.screenshot-operation {
   display: inline-block;
   margin-right: 1px;
   padding: 1px 1px;
+  border: none;
+
+  img {
+    height: auto;
+    max-height: 30px;
+  }
 
   &.active {
     padding: 7px 7px;

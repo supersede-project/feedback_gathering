@@ -1,0 +1,2701 @@
+[
+  {
+    "title": "Feedback JUnit",
+    "id": 54,
+    "applicationId": 1,
+    "userIdentification": "u8102390",
+    "createdAt": "2016-09-02 01:03:21.0",
+    "configurationId": 1,
+    "language": "EN",
+    "textFeedbacks": [
+      {
+        "id": 41,
+        "text": "This is the feedback text",
+        "mechanismId": 1
+      }
+    ],
+    "ratingFeedbacks": [],
+    "screenshotFeedbacks": [],
+    "attachmentFeedbacks": [],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": []
+  },
+  {
+    "title": "Feedback JUnit",
+    "id": 55,
+    "applicationId": 1,
+    "userIdentification": "u8102390",
+    "createdAt": "2016-09-02 01:22:10.0",
+    "configurationId": 1,
+    "language": "EN",
+    "textFeedbacks": [
+      {
+        "id": 42,
+        "text": "This is the feedback text",
+        "mechanismId": 1
+      }
+    ],
+    "ratingFeedbacks": [],
+    "screenshotFeedbacks": [],
+    "attachmentFeedbacks": [],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": []
+  },
+  {
+    "title": "Feedback JUnit",
+    "id": 56,
+    "applicationId": 1,
+    "userIdentification": "u8102390",
+    "createdAt": "2016-09-02 01:22:47.0",
+    "configurationId": 1,
+    "language": "EN",
+    "textFeedbacks": [
+      {
+        "id": 43,
+        "text": "This is the feedback text",
+        "mechanismId": 1
+      }
+    ],
+    "ratingFeedbacks": [],
+    "screenshotFeedbacks": [],
+    "attachmentFeedbacks": [],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": []
+  },
+  {
+    "title": "Feedback JUnit",
+    "id": 57,
+    "applicationId": 1,
+    "userIdentification": "u8102390",
+    "createdAt": "2016-09-02 01:22:55.0",
+    "configurationId": 1,
+    "language": "EN",
+    "textFeedbacks": [
+      {
+        "id": 44,
+        "text": "This is the feedback text",
+        "mechanismId": 1
+      }
+    ],
+    "ratingFeedbacks": [],
+    "screenshotFeedbacks": [],
+    "attachmentFeedbacks": [],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": []
+  },
+  {
+    "title": "Feedback JUnit",
+    "id": 58,
+    "applicationId": 1,
+    "userIdentification": "u8102390",
+    "createdAt": "2016-09-02 01:22:55.0",
+    "configurationId": 1,
+    "language": "EN",
+    "textFeedbacks": [
+      {
+        "id": 45,
+        "text": "This is the feedback text",
+        "mechanismId": 1
+      }
+    ],
+    "ratingFeedbacks": [],
+    "screenshotFeedbacks": [],
+    "attachmentFeedbacks": [],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": []
+  },
+  {
+    "title": "Feedback JUnit",
+    "id": 59,
+    "applicationId": 1,
+    "userIdentification": "u8102390",
+    "createdAt": "2016-09-02 01:22:56.0",
+    "configurationId": 1,
+    "language": "EN",
+    "textFeedbacks": [
+      {
+        "id": 46,
+        "text": "This is the feedback text",
+        "mechanismId": 1
+      }
+    ],
+    "ratingFeedbacks": [],
+    "screenshotFeedbacks": [],
+    "attachmentFeedbacks": [],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": []
+  },
+  {
+    "title": "Feedback JUnit",
+    "id": 60,
+    "applicationId": 1,
+    "userIdentification": "u8102390",
+    "createdAt": "2016-09-02 01:22:56.0",
+    "configurationId": 1,
+    "language": "EN",
+    "textFeedbacks": [
+      {
+        "id": 47,
+        "text": "This is the feedback text",
+        "mechanismId": 1
+      }
+    ],
+    "ratingFeedbacks": [],
+    "screenshotFeedbacks": [],
+    "attachmentFeedbacks": [],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": []
+  },
+  {
+    "title": "Feedback JUnit",
+    "id": 61,
+    "applicationId": 1,
+    "userIdentification": "u8102390",
+    "createdAt": "2016-09-02 01:22:57.0",
+    "configurationId": 1,
+    "language": "EN",
+    "textFeedbacks": [
+      {
+        "id": 48,
+        "text": "This is the feedback text",
+        "mechanismId": 1
+      }
+    ],
+    "ratingFeedbacks": [],
+    "screenshotFeedbacks": [],
+    "attachmentFeedbacks": [],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": []
+  },
+  {
+    "title": "Feedback JUnit",
+    "id": 62,
+    "applicationId": 1,
+    "userIdentification": "u8102390",
+    "createdAt": "2016-09-02 01:22:57.0",
+    "configurationId": 1,
+    "language": "EN",
+    "textFeedbacks": [
+      {
+        "id": 49,
+        "text": "This is the feedback text",
+        "mechanismId": 1
+      }
+    ],
+    "ratingFeedbacks": [],
+    "screenshotFeedbacks": [],
+    "attachmentFeedbacks": [],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": []
+  },
+  {
+    "title": "Feedback JUnit",
+    "id": 63,
+    "applicationId": 1,
+    "userIdentification": "u8102390",
+    "createdAt": "2016-09-02 01:22:58.0",
+    "configurationId": 1,
+    "language": "EN",
+    "textFeedbacks": [
+      {
+        "id": 50,
+        "text": "This is the feedback text",
+        "mechanismId": 1
+      }
+    ],
+    "ratingFeedbacks": [],
+    "screenshotFeedbacks": [],
+    "attachmentFeedbacks": [],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": []
+  },
+  {
+    "title": "Feedback JUnit",
+    "id": 64,
+    "applicationId": 1,
+    "userIdentification": "u8102390",
+    "createdAt": "2016-09-04 01:30:13.0",
+    "configurationId": 1,
+    "language": "EN",
+    "textFeedbacks": [
+      {
+        "id": 51,
+        "text": "This is the feedback text",
+        "mechanismId": 1
+      }
+    ],
+    "ratingFeedbacks": [],
+    "screenshotFeedbacks": [],
+    "attachmentFeedbacks": [],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": []
+  },
+  {
+    "title": "Feedback JUnit",
+    "id": 65,
+    "applicationId": 1,
+    "userIdentification": "u8102390",
+    "createdAt": "2016-09-04 01:37:49.0",
+    "configurationId": 1,
+    "language": "EN",
+    "textFeedbacks": [
+      {
+        "id": 52,
+        "text": "This is the feedback text",
+        "mechanismId": 1
+      }
+    ],
+    "ratingFeedbacks": [],
+    "screenshotFeedbacks": [],
+    "attachmentFeedbacks": [],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": []
+  },
+  {
+    "title": "Feedback JUnit",
+    "id": 66,
+    "applicationId": 1,
+    "userIdentification": "u8102390",
+    "createdAt": "2016-09-04 01:38:41.0",
+    "configurationId": 1,
+    "language": "EN",
+    "textFeedbacks": [
+      {
+        "id": 53,
+        "text": "This is the feedback text",
+        "mechanismId": 1
+      }
+    ],
+    "ratingFeedbacks": [],
+    "screenshotFeedbacks": [],
+    "attachmentFeedbacks": [],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": []
+  },
+  {
+    "title": "test_feedback",
+    "id": 68,
+    "applicationId": 1,
+    "userIdentification": "u8102390",
+    "createdAt": "2016-09-30 09:04:39.0",
+    "configurationId": 1,
+    "language": "EN",
+    "textFeedbacks": [
+      {
+        "id": 55,
+        "text": "This is the feedback text",
+        "mechanismId": 1
+      }
+    ],
+    "ratingFeedbacks": [
+      {
+        "id": 3,
+        "title": "Test rating",
+        "rating": 4,
+        "mechanismId": 5
+      },
+      {
+        "id": 4,
+        "title": "Test rating 2",
+        "rating": 5,
+        "mechanismId": 6
+      }
+    ],
+    "screenshotFeedbacks": [],
+    "attachmentFeedbacks": [],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": [
+      {
+        "id": 1,
+        "parameterId": 12,
+        "text": "sample text"
+      },
+      {
+        "id": 2,
+        "parameterId": 14
+      }
+    ]
+  },
+  {
+    "title": "test_feedback",
+    "id": 69,
+    "applicationId": 1,
+    "userIdentification": "u8102390",
+    "createdAt": "2016-09-30 09:05:58.0",
+    "configurationId": 1,
+    "language": "EN",
+    "textFeedbacks": [
+      {
+        "id": 56,
+        "text": "This is the feedback text",
+        "mechanismId": 1
+      }
+    ],
+    "ratingFeedbacks": [
+      {
+        "id": 5,
+        "title": "Test rating",
+        "rating": 4,
+        "mechanismId": 5
+      },
+      {
+        "id": 6,
+        "title": "Test rating 2",
+        "rating": 5,
+        "mechanismId": 6
+      }
+    ],
+    "screenshotFeedbacks": [],
+    "attachmentFeedbacks": [],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": [
+      {
+        "id": 3,
+        "parameterId": 12,
+        "text": "sample text"
+      },
+      {
+        "id": 4,
+        "parameterId": 14
+      }
+    ]
+  },
+  {
+    "title": "test_feedback",
+    "id": 70,
+    "applicationId": 1,
+    "userIdentification": "u8102390",
+    "createdAt": "2016-09-30 09:06:20.0",
+    "configurationId": 1,
+    "language": "EN",
+    "textFeedbacks": [
+      {
+        "id": 57,
+        "text": "This is the feedback text",
+        "mechanismId": 1
+      }
+    ],
+    "ratingFeedbacks": [
+      {
+        "id": 7,
+        "title": "Test rating",
+        "rating": 4,
+        "mechanismId": 5
+      },
+      {
+        "id": 8,
+        "title": "Test rating 2",
+        "rating": 5,
+        "mechanismId": 6
+      }
+    ],
+    "screenshotFeedbacks": [],
+    "attachmentFeedbacks": [],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": [
+      {
+        "id": 5,
+        "parameterId": 12,
+        "text": "sample text"
+      },
+      {
+        "id": 6,
+        "parameterId": 14
+      }
+    ]
+  },
+  {
+    "title": "test_feedback",
+    "id": 71,
+    "applicationId": 1,
+    "userIdentification": "u8102390",
+    "createdAt": "2016-09-30 09:09:59.0",
+    "configurationId": 1,
+    "language": "EN",
+    "textFeedbacks": [
+      {
+        "id": 58,
+        "text": "This is the feedback text",
+        "mechanismId": 1
+      }
+    ],
+    "ratingFeedbacks": [
+      {
+        "id": 9,
+        "title": "Test rating",
+        "rating": 4,
+        "mechanismId": 5
+      },
+      {
+        "id": 10,
+        "title": "Test rating 2",
+        "rating": 5,
+        "mechanismId": 6
+      }
+    ],
+    "screenshotFeedbacks": [],
+    "attachmentFeedbacks": [],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": [
+      {
+        "id": 7,
+        "parameterId": 12,
+        "text": "sample text"
+      },
+      {
+        "id": 8,
+        "parameterId": 14
+      }
+    ]
+  },
+  {
+    "title": "test_feedback",
+    "id": 72,
+    "applicationId": 1,
+    "userIdentification": "u8102390",
+    "createdAt": "2016-09-30 09:10:02.0",
+    "configurationId": 1,
+    "language": "EN",
+    "textFeedbacks": [
+      {
+        "id": 59,
+        "text": "This is the feedback text",
+        "mechanismId": 1
+      }
+    ],
+    "ratingFeedbacks": [
+      {
+        "id": 11,
+        "title": "Test rating",
+        "rating": 4,
+        "mechanismId": 5
+      },
+      {
+        "id": 12,
+        "title": "Test rating 2",
+        "rating": 5,
+        "mechanismId": 6
+      }
+    ],
+    "screenshotFeedbacks": [],
+    "attachmentFeedbacks": [],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": [
+      {
+        "id": 9,
+        "parameterId": 12,
+        "text": "sample text"
+      },
+      {
+        "id": 10,
+        "parameterId": 14
+      }
+    ]
+  },
+  {
+    "title": "test_feedback",
+    "id": 73,
+    "applicationId": 1,
+    "userIdentification": "u8102390",
+    "createdAt": "2016-09-30 09:11:02.0",
+    "configurationId": 1,
+    "language": "EN",
+    "textFeedbacks": [
+      {
+        "id": 60,
+        "text": "This is the feedback text",
+        "mechanismId": 1
+      }
+    ],
+    "ratingFeedbacks": [
+      {
+        "id": 13,
+        "title": "Test rating",
+        "rating": 4,
+        "mechanismId": 5
+      },
+      {
+        "id": 14,
+        "title": "Test rating 2",
+        "rating": 5,
+        "mechanismId": 6
+      }
+    ],
+    "screenshotFeedbacks": [],
+    "attachmentFeedbacks": [],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": [
+      {
+        "id": 11,
+        "parameterId": 12,
+        "text": "sample text"
+      },
+      {
+        "id": 12,
+        "parameterId": 14
+      }
+    ]
+  },
+  {
+    "title": "test_feedback",
+    "id": 74,
+    "applicationId": 1,
+    "userIdentification": "u8102390",
+    "createdAt": "2016-09-30 09:11:03.0",
+    "configurationId": 1,
+    "language": "EN",
+    "textFeedbacks": [
+      {
+        "id": 61,
+        "text": "This is the feedback text",
+        "mechanismId": 1
+      }
+    ],
+    "ratingFeedbacks": [
+      {
+        "id": 15,
+        "title": "Test rating",
+        "rating": 4,
+        "mechanismId": 5
+      },
+      {
+        "id": 16,
+        "title": "Test rating 2",
+        "rating": 5,
+        "mechanismId": 6
+      }
+    ],
+    "screenshotFeedbacks": [],
+    "attachmentFeedbacks": [],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": [
+      {
+        "id": 13,
+        "parameterId": 12,
+        "text": "sample text"
+      },
+      {
+        "id": 14,
+        "parameterId": 14
+      }
+    ]
+  },
+  {
+    "title": "test_feedback",
+    "id": 75,
+    "applicationId": 1,
+    "userIdentification": "u8102390",
+    "createdAt": "2016-09-30 09:12:22.0",
+    "configurationId": 1,
+    "language": "EN",
+    "textFeedbacks": [
+      {
+        "id": 62,
+        "text": "This is the feedback text",
+        "mechanismId": 1
+      }
+    ],
+    "ratingFeedbacks": [
+      {
+        "id": 17,
+        "title": "Test rating",
+        "rating": 4,
+        "mechanismId": 5
+      },
+      {
+        "id": 18,
+        "title": "Test rating 2",
+        "rating": 5,
+        "mechanismId": 6
+      }
+    ],
+    "screenshotFeedbacks": [],
+    "attachmentFeedbacks": [],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": [
+      {
+        "id": 15,
+        "parameterId": 12,
+        "text": "sample text"
+      },
+      {
+        "id": 16,
+        "parameterId": 14
+      }
+    ]
+  },
+  {
+    "title": "test_feedback",
+    "id": 76,
+    "applicationId": 1,
+    "userIdentification": "u8102390",
+    "createdAt": "2016-09-30 09:13:08.0",
+    "configurationId": 1,
+    "language": "EN",
+    "textFeedbacks": [
+      {
+        "id": 63,
+        "text": "This is the feedback text",
+        "mechanismId": 1
+      }
+    ],
+    "ratingFeedbacks": [
+      {
+        "id": 19,
+        "title": "Test rating",
+        "rating": 4,
+        "mechanismId": 5
+      },
+      {
+        "id": 20,
+        "title": "Test rating 2",
+        "rating": 5,
+        "mechanismId": 6
+      }
+    ],
+    "screenshotFeedbacks": [],
+    "attachmentFeedbacks": [],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": [
+      {
+        "id": 17,
+        "parameterId": 12,
+        "text": "sample text"
+      },
+      {
+        "id": 18,
+        "parameterId": 14
+      }
+    ]
+  },
+  {
+    "title": "test_feedback",
+    "id": 77,
+    "applicationId": 1,
+    "userIdentification": "u8102390",
+    "createdAt": "2016-09-30 09:13:17.0",
+    "configurationId": 1,
+    "language": "EN",
+    "textFeedbacks": [
+      {
+        "id": 64,
+        "text": "This is the feedback text",
+        "mechanismId": 1
+      }
+    ],
+    "ratingFeedbacks": [
+      {
+        "id": 21,
+        "title": "Test rating",
+        "rating": 4,
+        "mechanismId": 5
+      },
+      {
+        "id": 22,
+        "title": "Test rating 2",
+        "rating": 5,
+        "mechanismId": 6
+      }
+    ],
+    "screenshotFeedbacks": [],
+    "attachmentFeedbacks": [],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": [
+      {
+        "id": 19,
+        "parameterId": 12,
+        "text": "sample text"
+      },
+      {
+        "id": 20,
+        "parameterId": 14
+      }
+    ]
+  },
+  {
+    "title": "test_feedback",
+    "id": 78,
+    "applicationId": 1,
+    "userIdentification": "u8102390",
+    "createdAt": "2016-09-30 09:13:17.0",
+    "configurationId": 1,
+    "language": "EN",
+    "textFeedbacks": [
+      {
+        "id": 65,
+        "text": "This is the feedback text",
+        "mechanismId": 1
+      }
+    ],
+    "ratingFeedbacks": [
+      {
+        "id": 23,
+        "title": "Test rating",
+        "rating": 4,
+        "mechanismId": 5
+      },
+      {
+        "id": 24,
+        "title": "Test rating 2",
+        "rating": 5,
+        "mechanismId": 6
+      }
+    ],
+    "screenshotFeedbacks": [],
+    "attachmentFeedbacks": [],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": [
+      {
+        "id": 21,
+        "parameterId": 12,
+        "text": "sample text"
+      },
+      {
+        "id": 22,
+        "parameterId": 14
+      }
+    ]
+  },
+  {
+    "title": "asdfasdf",
+    "id": 79,
+    "applicationId": 1,
+    "userIdentification": "asdfas",
+    "createdAt": "2016-09-30 09:18:02.0",
+    "configurationId": 1,
+    "language": "EN",
+    "textFeedbacks": [
+      {
+        "id": 66,
+        "text": "This is the feedback text",
+        "mechanismId": 1
+      }
+    ],
+    "ratingFeedbacks": [
+      {
+        "id": 25,
+        "title": "Test rating",
+        "rating": 4,
+        "mechanismId": 5
+      },
+      {
+        "id": 26,
+        "title": "Test rating 2",
+        "rating": 5,
+        "mechanismId": 6
+      }
+    ],
+    "screenshotFeedbacks": [],
+    "attachmentFeedbacks": [],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": [
+      {
+        "id": 23,
+        "parameterId": 12,
+        "text": "sample text"
+      },
+      {
+        "id": 24,
+        "parameterId": 14
+      }
+    ]
+  },
+  {
+    "title": "Test title",
+    "id": 83,
+    "applicationId": 8,
+    "userIdentification": "e39c01a9050e7fa",
+    "createdAt": "2016-09-30 09:36:04.0",
+    "configurationId": 8,
+    "language": "en",
+    "textFeedbacks": [
+      {
+        "id": 70,
+        "text": "Dghh",
+        "mechanismId": 7
+      }
+    ],
+    "ratingFeedbacks": [
+      {
+        "id": 30,
+        "rating": 2,
+        "mechanismId": 10
+      }
+    ],
+    "screenshotFeedbacks": [],
+    "attachmentFeedbacks": [],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": []
+  },
+  {
+    "title": "Test title",
+    "id": 84,
+    "applicationId": 8,
+    "userIdentification": "e39c01a9050e7fa",
+    "createdAt": "2016-09-30 09:36:39.0",
+    "configurationId": 8,
+    "language": "en",
+    "textFeedbacks": [
+      {
+        "id": 71,
+        "text": "Dghh",
+        "mechanismId": 7
+      }
+    ],
+    "ratingFeedbacks": [
+      {
+        "id": 31,
+        "rating": 2,
+        "mechanismId": 10
+      }
+    ],
+    "screenshotFeedbacks": [],
+    "attachmentFeedbacks": [],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": [
+      {
+        "id": 25,
+        "parameterId": 12,
+        "text": "sample text"
+      },
+      {
+        "id": 26,
+        "parameterId": 14
+      }
+    ]
+  },
+  {
+    "title": "Test title",
+    "id": 85,
+    "applicationId": 8,
+    "userIdentification": "e39c01a9050e7fa",
+    "createdAt": "2016-09-30 09:37:17.0",
+    "configurationId": 8,
+    "language": "en",
+    "textFeedbacks": [
+      {
+        "id": 72,
+        "text": "Dghh",
+        "mechanismId": 7
+      }
+    ],
+    "ratingFeedbacks": [
+      {
+        "id": 32,
+        "rating": 2,
+        "mechanismId": 10
+      }
+    ],
+    "screenshotFeedbacks": [],
+    "attachmentFeedbacks": [],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": [
+      {
+        "id": 27,
+        "parameterId": 12,
+        "text": "sample text"
+      },
+      {
+        "id": 28,
+        "parameterId": 14
+      }
+    ]
+  },
+  {
+    "title": "Test title",
+    "id": 86,
+    "applicationId": 8,
+    "userIdentification": "e39c01a9050e7fa",
+    "createdAt": "2016-10-01 08:27:20.0",
+    "configurationId": 8,
+    "language": "en",
+    "textFeedbacks": [
+      {
+        "id": 73,
+        "text": "Dghh",
+        "mechanismId": 7
+      }
+    ],
+    "ratingFeedbacks": [
+      {
+        "id": 33,
+        "rating": 2,
+        "mechanismId": 10
+      }
+    ],
+    "screenshotFeedbacks": [],
+    "attachmentFeedbacks": [],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": [
+      {
+        "id": 29,
+        "parameterId": 12,
+        "text": "sample text"
+      },
+      {
+        "id": 30,
+        "parameterId": 14
+      }
+    ]
+  },
+  {
+    "title": "Test title",
+    "id": 87,
+    "applicationId": 8,
+    "userIdentification": "e39c01a9050e7fa",
+    "createdAt": "2016-10-01 08:27:34.0",
+    "configurationId": 8,
+    "language": "en",
+    "textFeedbacks": [
+      {
+        "id": 74,
+        "text": "Dghh",
+        "mechanismId": 7
+      }
+    ],
+    "ratingFeedbacks": [
+      {
+        "id": 34,
+        "rating": 2,
+        "mechanismId": 10
+      }
+    ],
+    "screenshotFeedbacks": [],
+    "attachmentFeedbacks": [],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": [
+      {
+        "id": 31,
+        "parameterId": 12,
+        "text": "sample text"
+      },
+      {
+        "id": 32,
+        "parameterId": 14
+      }
+    ]
+  },
+  {
+    "title": "Test title",
+    "id": 88,
+    "applicationId": 4,
+    "userIdentification": "e39c01a9050e7fa",
+    "createdAt": "2016-10-02 01:39:45.0",
+    "configurationId": 7,
+    "language": "en",
+    "textFeedbacks": [
+      {
+        "id": 75,
+        "text": "Fuu",
+        "mechanismId": 14
+      }
+    ],
+    "ratingFeedbacks": [
+      {
+        "id": 35,
+        "rating": 3,
+        "mechanismId": 17
+      }
+    ],
+    "screenshotFeedbacks": [],
+    "attachmentFeedbacks": [],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": [
+      {
+        "id": 33,
+        "parameterId": 141
+      },
+      {
+        "id": 34,
+        "parameterId": 142
+      },
+      {
+        "id": 35,
+        "parameterId": 143
+      }
+    ]
+  },
+  {
+    "title": "Test title",
+    "id": 89,
+    "applicationId": 4,
+    "userIdentification": "e39c01a9050e7fa",
+    "createdAt": "2016-10-02 01:39:59.0",
+    "configurationId": 7,
+    "language": "en",
+    "textFeedbacks": [
+      {
+        "id": 76,
+        "text": "Fuu",
+        "mechanismId": 14
+      }
+    ],
+    "ratingFeedbacks": [
+      {
+        "id": 36,
+        "rating": 3,
+        "mechanismId": 17
+      }
+    ],
+    "screenshotFeedbacks": [],
+    "attachmentFeedbacks": [],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": [
+      {
+        "id": 36,
+        "parameterId": 141,
+        "text": "blabla"
+      },
+      {
+        "id": 37,
+        "parameterId": 142
+      },
+      {
+        "id": 38,
+        "parameterId": 143
+      }
+    ]
+  },
+  {
+    "title": "Test title",
+    "id": 90,
+    "applicationId": 5,
+    "userIdentification": "e39c01a9050e7fa",
+    "createdAt": "2016-10-02 02:31:23.0",
+    "configurationId": 10,
+    "language": "en",
+    "textFeedbacks": [
+      {
+        "id": 77,
+        "text": "Multiple mechanisms of the same type!",
+        "mechanismId": 26
+      },
+      {
+        "id": 78,
+        "text": "sdfasfa",
+        "mechanismId": 27
+      }
+    ],
+    "ratingFeedbacks": [
+      {
+        "id": 37,
+        "rating": 1,
+        "mechanismId": 32
+      },
+      {
+        "id": 38,
+        "rating": 1,
+        "mechanismId": 33
+      }
+    ],
+    "screenshotFeedbacks": [],
+    "attachmentFeedbacks": [],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": [
+      {
+        "id": 39,
+        "parameterId": 230
+      },
+      {
+        "id": 40,
+        "parameterId": 231,
+        "text": "Feature Request"
+      },
+      {
+        "id": 41,
+        "parameterId": 232
+      },
+      {
+        "id": 42,
+        "parameterId": 239
+      },
+      {
+        "id": 43,
+        "parameterId": 240
+      },
+      {
+        "id": 44,
+        "parameterId": 241
+      }
+    ]
+  },
+  {
+    "title": "Test title",
+    "id": 96,
+    "applicationId": 6,
+    "userIdentification": "e39c01a9050e7fa",
+    "createdAt": "2016-10-02 02:49:37.0",
+    "configurationId": 13,
+    "language": "en",
+    "textFeedbacks": [
+      {
+        "id": 86,
+        "text": "Thjjj",
+        "mechanismId": 43
+      }
+    ],
+    "ratingFeedbacks": [
+      {
+        "id": 46,
+        "rating": 4,
+        "mechanismId": 46
+      }
+    ],
+    "screenshotFeedbacks": [],
+    "attachmentFeedbacks": [],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": [
+      {
+        "id": 57,
+        "parameterId": 308
+      },
+      {
+        "id": 58,
+        "parameterId": 309,
+        "text": "Feature Request"
+      },
+      {
+        "id": 59,
+        "parameterId": 310
+      }
+    ]
+  },
+  {
+    "title": "Test title",
+    "id": 110,
+    "applicationId": 6,
+    "userIdentification": "e39c01a9050e7fa",
+    "createdAt": "2016-10-02 03:22:45.0",
+    "configurationId": 13,
+    "language": "en",
+    "textFeedbacks": [
+      {
+        "id": 100,
+        "text": "Chu",
+        "mechanismId": 43
+      }
+    ],
+    "ratingFeedbacks": [
+      {
+        "id": 60,
+        "rating": 0,
+        "mechanismId": 46
+      }
+    ],
+    "screenshotFeedbacks": [
+      {
+        "mechanismId": 45,
+        "textAnnotations": [],
+        "id": 1,
+        "path": "screenshots/39113_1475378565089.png",
+        "size": 39113,
+        "name": "2annotatedImageWithStickers",
+        "fileExtension": "png"
+      }
+    ],
+    "attachmentFeedbacks": [],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": [
+      {
+        "id": 60,
+        "parameterId": 308
+      },
+      {
+        "id": 61,
+        "parameterId": 309,
+        "text": "Feature Request"
+      },
+      {
+        "id": 62,
+        "parameterId": 310
+      }
+    ]
+  },
+  {
+    "title": "Test title",
+    "id": 111,
+    "applicationId": 6,
+    "userIdentification": "e39c01a9050e7fa",
+    "createdAt": "2016-10-02 03:23:42.0",
+    "configurationId": 13,
+    "language": "en",
+    "textFeedbacks": [
+      {
+        "id": 101,
+        "text": "VB hb",
+        "mechanismId": 43
+      }
+    ],
+    "ratingFeedbacks": [
+      {
+        "id": 61,
+        "rating": 1,
+        "mechanismId": 46
+      }
+    ],
+    "screenshotFeedbacks": [
+      {
+        "mechanismId": 45,
+        "textAnnotations": [],
+        "id": 2,
+        "path": "screenshots/40745_1475378622193.png",
+        "size": 40745,
+        "name": "2annotatedImageWithStickers",
+        "fileExtension": "png"
+      }
+    ],
+    "attachmentFeedbacks": [],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": [
+      {
+        "id": 63,
+        "parameterId": 308
+      },
+      {
+        "id": 64,
+        "parameterId": 309,
+        "text": "Feature Request"
+      },
+      {
+        "id": 65,
+        "parameterId": 310
+      }
+    ]
+  },
+  {
+    "title": "Test title",
+    "id": 112,
+    "applicationId": 6,
+    "userIdentification": "e39c01a9050e7fa",
+    "createdAt": "2016-10-02 03:24:22.0",
+    "configurationId": 13,
+    "language": "en",
+    "textFeedbacks": [
+      {
+        "id": 102,
+        "text": "CT hjj",
+        "mechanismId": 43
+      }
+    ],
+    "ratingFeedbacks": [
+      {
+        "id": 62,
+        "rating": 0,
+        "mechanismId": 46
+      }
+    ],
+    "screenshotFeedbacks": [
+      {
+        "mechanismId": 45,
+        "textAnnotations": [],
+        "id": 3,
+        "path": "screenshots/43312_1475378662449.png",
+        "size": 43312,
+        "name": "2annotatedImageWithStickers",
+        "fileExtension": "png"
+      }
+    ],
+    "attachmentFeedbacks": [],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": [
+      {
+        "id": 66,
+        "parameterId": 308,
+        "text": "Bug"
+      },
+      {
+        "id": 67,
+        "parameterId": 309
+      },
+      {
+        "id": 68,
+        "parameterId": 310
+      }
+    ]
+  },
+  {
+    "title": "Test title",
+    "id": 113,
+    "applicationId": 6,
+    "userIdentification": "e39c01a9050e7fa",
+    "createdAt": "2016-10-02 03:26:02.0",
+    "configurationId": 13,
+    "language": "en",
+    "textFeedbacks": [
+      {
+        "id": 103,
+        "text": "Fujj",
+        "mechanismId": 43
+      }
+    ],
+    "ratingFeedbacks": [
+      {
+        "id": 63,
+        "rating": 3,
+        "mechanismId": 46
+      }
+    ],
+    "screenshotFeedbacks": [
+      {
+        "mechanismId": 45,
+        "textAnnotations": [],
+        "id": 4,
+        "path": "screenshots/51223_1475378762303.png",
+        "size": 51223,
+        "name": "2annotatedImageWithStickers",
+        "fileExtension": "png"
+      }
+    ],
+    "attachmentFeedbacks": [],
+    "audioFeedbacks": [
+      {
+        "duration": 0,
+        "mechanismId": 44,
+        "id": 1,
+        "path": "audios/13246_1475378762304.m4a",
+        "size": 13246,
+        "name": "44audioFile",
+        "fileExtension": "m4a"
+      }
+    ],
+    "categoryFeedbacks": [
+      {
+        "id": 69,
+        "parameterId": 308
+      },
+      {
+        "id": 70,
+        "parameterId": 309
+      },
+      {
+        "id": 71,
+        "parameterId": 310,
+        "text": "General Feedback"
+      }
+    ]
+  },
+  {
+    "title": "Test title",
+    "id": 116,
+    "applicationId": 5,
+    "userIdentification": "e39c01a9050e7fa",
+    "createdAt": "2016-10-02 03:33:11.0",
+    "configurationId": 10,
+    "language": "en",
+    "textFeedbacks": [
+      {
+        "id": 108,
+        "text": "Multiple mechanisms of the same type!",
+        "mechanismId": 26
+      },
+      {
+        "id": 109,
+        "text": "sdfasfa",
+        "mechanismId": 27
+      }
+    ],
+    "ratingFeedbacks": [
+      {
+        "id": 68,
+        "rating": 1,
+        "mechanismId": 32
+      },
+      {
+        "id": 69,
+        "rating": 1,
+        "mechanismId": 33
+      }
+    ],
+    "screenshotFeedbacks": [],
+    "attachmentFeedbacks": [],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": [
+      {
+        "id": 84,
+        "parameterId": 230
+      },
+      {
+        "id": 85,
+        "parameterId": 231,
+        "text": "Feature Request"
+      },
+      {
+        "id": 86,
+        "parameterId": 232
+      },
+      {
+        "id": 87,
+        "parameterId": 239
+      },
+      {
+        "id": 88,
+        "parameterId": 240
+      },
+      {
+        "id": 89,
+        "parameterId": 241
+      },
+      {
+        "id": 90,
+        "parameterId": -1,
+        "text": "own"
+      }
+    ]
+  },
+  {
+    "title": "Test title",
+    "id": 117,
+    "applicationId": 5,
+    "userIdentification": "e39c01a9050e7fa",
+    "createdAt": "2016-10-02 03:33:30.0",
+    "configurationId": 10,
+    "language": "en",
+    "textFeedbacks": [
+      {
+        "id": 110,
+        "text": "Multiple mechanisms of the same type!",
+        "mechanismId": 26
+      },
+      {
+        "id": 111,
+        "text": "sdfasfa",
+        "mechanismId": 27
+      }
+    ],
+    "ratingFeedbacks": [
+      {
+        "id": 70,
+        "rating": 1,
+        "mechanismId": 32
+      },
+      {
+        "id": 71,
+        "rating": 1,
+        "mechanismId": 33
+      }
+    ],
+    "screenshotFeedbacks": [],
+    "attachmentFeedbacks": [],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": [
+      {
+        "id": 91,
+        "parameterId": 230
+      },
+      {
+        "id": 92,
+        "parameterId": 231,
+        "text": "Feature Request"
+      },
+      {
+        "id": 93,
+        "parameterId": 232
+      },
+      {
+        "id": 94,
+        "parameterId": 239
+      },
+      {
+        "id": 95,
+        "parameterId": 240
+      },
+      {
+        "id": 96,
+        "parameterId": 241
+      },
+      {
+        "id": 97,
+        "parameterId": -1,
+        "text": "own"
+      }
+    ]
+  },
+  {
+    "title": "Test title",
+    "id": 118,
+    "applicationId": 5,
+    "userIdentification": "e39c01a9050e7fa",
+    "createdAt": "2016-10-02 03:33:33.0",
+    "configurationId": 10,
+    "language": "en",
+    "textFeedbacks": [
+      {
+        "id": 112,
+        "text": "Multiple mechanisms of the same type!",
+        "mechanismId": 26
+      },
+      {
+        "id": 113,
+        "text": "sdfasfa",
+        "mechanismId": 27
+      }
+    ],
+    "ratingFeedbacks": [
+      {
+        "id": 72,
+        "rating": 1,
+        "mechanismId": 32
+      },
+      {
+        "id": 73,
+        "rating": 1,
+        "mechanismId": 33
+      }
+    ],
+    "screenshotFeedbacks": [],
+    "attachmentFeedbacks": [],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": [
+      {
+        "id": 98,
+        "parameterId": 230
+      },
+      {
+        "id": 99,
+        "parameterId": 231,
+        "text": "Feature Request"
+      },
+      {
+        "id": 100,
+        "parameterId": 232
+      },
+      {
+        "id": 101,
+        "parameterId": 239
+      },
+      {
+        "id": 102,
+        "parameterId": 240
+      },
+      {
+        "id": 103,
+        "parameterId": 241
+      },
+      {
+        "id": 104,
+        "parameterId": -1,
+        "text": "own"
+      }
+    ]
+  },
+  {
+    "title": "Test title",
+    "id": 119,
+    "applicationId": 6,
+    "userIdentification": "e39c01a9050e7fa",
+    "createdAt": "2016-10-02 03:36:37.0",
+    "configurationId": 13,
+    "language": "en",
+    "textFeedbacks": [
+      {
+        "id": 114,
+        "text": "I\u0027m tired :(",
+        "mechanismId": 43
+      }
+    ],
+    "ratingFeedbacks": [
+      {
+        "id": 74,
+        "rating": 5,
+        "mechanismId": 46
+      }
+    ],
+    "screenshotFeedbacks": [
+      {
+        "mechanismId": 45,
+        "textAnnotations": [
+          {
+            "id": 1,
+            "referenceNumber": 1,
+            "text": "Troll"
+          },
+          {
+            "id": 2,
+            "referenceNumber": 2,
+            "text": "Lol"
+          }
+        ],
+        "id": 5,
+        "path": "screenshots/78762_1475379397096.png",
+        "size": 78762,
+        "name": "2annotatedImageWithStickers",
+        "fileExtension": "png"
+      }
+    ],
+    "attachmentFeedbacks": [],
+    "audioFeedbacks": [
+      {
+        "duration": 0,
+        "mechanismId": 44,
+        "id": 2,
+        "path": "audios/14419_1475379397096.m4a",
+        "size": 14419,
+        "name": "44audioFile",
+        "fileExtension": "m4a"
+      }
+    ],
+    "categoryFeedbacks": [
+      {
+        "id": 105,
+        "parameterId": 308
+      },
+      {
+        "id": 106,
+        "parameterId": 309,
+        "text": "Feature Request"
+      },
+      {
+        "id": 107,
+        "parameterId": 310
+      }
+    ]
+  },
+  {
+    "title": "Test title",
+    "id": 120,
+    "applicationId": 5,
+    "userIdentification": "e39c01a9050e7fa",
+    "createdAt": "2016-10-02 03:51:54.0",
+    "configurationId": 10,
+    "language": "en",
+    "textFeedbacks": [
+      {
+        "id": 115,
+        "text": "First text field!!",
+        "mechanismId": 26
+      },
+      {
+        "id": 116,
+        "text": "Second text field!",
+        "mechanismId": 27
+      }
+    ],
+    "ratingFeedbacks": [
+      {
+        "id": 75,
+        "rating": 0,
+        "mechanismId": 32
+      },
+      {
+        "id": 76,
+        "rating": 5,
+        "mechanismId": 33
+      }
+    ],
+    "screenshotFeedbacks": [
+      {
+        "mechanismId": 30,
+        "textAnnotations": [
+          {
+            "id": 3,
+            "referenceNumber": 1,
+            "text": "First"
+          }
+        ],
+        "id": 6,
+        "path": "screenshots/100273_1475380314492.png",
+        "size": 100273,
+        "name": "4annotatedImageWithStickers",
+        "fileExtension": "png"
+      },
+      {
+        "mechanismId": 31,
+        "textAnnotations": [],
+        "id": 7,
+        "path": "screenshots/42890_1475380314493.png",
+        "size": 42890,
+        "name": "Screenshot_2016102-55147585",
+        "fileExtension": "png"
+      }
+    ],
+    "attachmentFeedbacks": [],
+    "audioFeedbacks": [
+      {
+        "duration": 0,
+        "mechanismId": 28,
+        "id": 3,
+        "path": "audios/8431_1475380314493.m4a",
+        "size": 8431,
+        "name": "28audioFile",
+        "fileExtension": "m4a"
+      },
+      {
+        "duration": 0,
+        "mechanismId": 29,
+        "id": 4,
+        "path": "audios/8313_1475380314493.m4a",
+        "size": 8313,
+        "name": "29audioFile",
+        "fileExtension": "m4a"
+      }
+    ],
+    "categoryFeedbacks": [
+      {
+        "id": 108,
+        "parameterId": 230
+      },
+      {
+        "id": 109,
+        "parameterId": 231,
+        "text": "Feature Request"
+      },
+      {
+        "id": 110,
+        "parameterId": 232
+      },
+      {
+        "id": 111,
+        "parameterId": 239,
+        "text": "Work"
+      },
+      {
+        "id": 112,
+        "parameterId": 240,
+        "text": "Spare_time"
+      },
+      {
+        "id": 113,
+        "parameterId": 241
+      }
+    ]
+  },
+  {
+    "title": "Test title",
+    "id": 121,
+    "applicationId": 5,
+    "userIdentification": "e39c01a9050e7fa",
+    "createdAt": "2016-10-02 03:52:25.0",
+    "configurationId": 10,
+    "language": "en",
+    "textFeedbacks": [
+      {
+        "id": 117,
+        "text": "First text field!!",
+        "mechanismId": 26
+      },
+      {
+        "id": 118,
+        "text": "Second text field!",
+        "mechanismId": 27
+      }
+    ],
+    "ratingFeedbacks": [
+      {
+        "id": 77,
+        "rating": 0,
+        "mechanismId": 32
+      },
+      {
+        "id": 78,
+        "rating": 0,
+        "mechanismId": 33
+      }
+    ],
+    "screenshotFeedbacks": [
+      {
+        "mechanismId": 30,
+        "textAnnotations": [
+          {
+            "id": 4,
+            "referenceNumber": 1,
+            "text": "First"
+          }
+        ],
+        "id": 8,
+        "path": "screenshots/100273_1475380345441.png",
+        "size": 100273,
+        "name": "4annotatedImageWithStickers",
+        "fileExtension": "png"
+      },
+      {
+        "mechanismId": 31,
+        "textAnnotations": [],
+        "id": 9,
+        "path": "screenshots/52207_1475380345441.png",
+        "size": 52207,
+        "name": "5annotatedImageWithStickers",
+        "fileExtension": "png"
+      }
+    ],
+    "attachmentFeedbacks": [],
+    "audioFeedbacks": [
+      {
+        "duration": 0,
+        "mechanismId": 28,
+        "id": 5,
+        "path": "audios/8431_1475380345442.m4a",
+        "size": 8431,
+        "name": "28audioFile",
+        "fileExtension": "m4a"
+      },
+      {
+        "duration": 0,
+        "mechanismId": 29,
+        "id": 6,
+        "path": "audios/8313_1475380345442.m4a",
+        "size": 8313,
+        "name": "29audioFile",
+        "fileExtension": "m4a"
+      }
+    ],
+    "categoryFeedbacks": [
+      {
+        "id": 114,
+        "parameterId": 230
+      },
+      {
+        "id": 115,
+        "parameterId": 231,
+        "text": "Feature Request"
+      },
+      {
+        "id": 116,
+        "parameterId": 232
+      },
+      {
+        "id": 117,
+        "parameterId": 239,
+        "text": "Work"
+      },
+      {
+        "id": 118,
+        "parameterId": 240,
+        "text": "Spare_time"
+      },
+      {
+        "id": 119,
+        "parameterId": 241
+      }
+    ]
+  },
+  {
+    "title": "Test title",
+    "id": 122,
+    "applicationId": 5,
+    "userIdentification": "e39c01a9050e7fa",
+    "createdAt": "2016-10-02 02:00:35.0",
+    "configurationId": 10,
+    "language": "en",
+    "textFeedbacks": [
+      {
+        "id": 119,
+        "text": "Multiple mechanisms of the same type!",
+        "mechanismId": 26
+      },
+      {
+        "id": 120,
+        "text": "sdfasfa",
+        "mechanismId": 27
+      }
+    ],
+    "ratingFeedbacks": [
+      {
+        "id": 79,
+        "rating": 1,
+        "mechanismId": 32
+      },
+      {
+        "id": 80,
+        "rating": 1,
+        "mechanismId": 33
+      }
+    ],
+    "screenshotFeedbacks": [],
+    "attachmentFeedbacks": [],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": [
+      {
+        "id": 120,
+        "parameterId": 230
+      },
+      {
+        "id": 121,
+        "parameterId": 231,
+        "text": "Feature Request"
+      },
+      {
+        "id": 122,
+        "parameterId": 232
+      },
+      {
+        "id": 123,
+        "parameterId": 239
+      },
+      {
+        "id": 124,
+        "parameterId": 240
+      },
+      {
+        "id": 125,
+        "parameterId": 241
+      },
+      {
+        "id": 126,
+        "text": "own"
+      }
+    ]
+  },
+  {
+    "title": "Test title",
+    "id": 123,
+    "applicationId": 5,
+    "userIdentification": "e39c01a9050e7fa",
+    "createdAt": "2016-10-02 02:00:49.0",
+    "configurationId": 10,
+    "language": "en",
+    "textFeedbacks": [
+      {
+        "id": 121,
+        "text": "Multiple mechanisms of the same type!",
+        "mechanismId": 26
+      },
+      {
+        "id": 122,
+        "text": "sdfasfa",
+        "mechanismId": 27
+      }
+    ],
+    "ratingFeedbacks": [
+      {
+        "id": 81,
+        "rating": 1,
+        "mechanismId": 32
+      },
+      {
+        "id": 82,
+        "rating": 1,
+        "mechanismId": 33
+      }
+    ],
+    "screenshotFeedbacks": [],
+    "attachmentFeedbacks": [],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": [
+      {
+        "id": 127,
+        "parameterId": 230
+      },
+      {
+        "id": 128,
+        "parameterId": 231,
+        "text": "Feature Request"
+      },
+      {
+        "id": 129,
+        "parameterId": 232
+      },
+      {
+        "id": 130,
+        "parameterId": 239
+      },
+      {
+        "id": 131,
+        "parameterId": 240
+      },
+      {
+        "id": 132,
+        "parameterId": 241
+      },
+      {
+        "id": 133,
+        "text": "own"
+      }
+    ]
+  },
+  {
+    "title": "Test title",
+    "id": 124,
+    "applicationId": 5,
+    "userIdentification": "e39c01a9050e7fa",
+    "createdAt": "2016-10-02 02:00:54.0",
+    "configurationId": 10,
+    "language": "en",
+    "textFeedbacks": [
+      {
+        "id": 123,
+        "text": "Multiple mechanisms of the same type!",
+        "mechanismId": 26
+      },
+      {
+        "id": 124,
+        "text": "sdfasfa",
+        "mechanismId": 27
+      }
+    ],
+    "ratingFeedbacks": [
+      {
+        "id": 83,
+        "rating": 1,
+        "mechanismId": 32
+      },
+      {
+        "id": 84,
+        "rating": 1,
+        "mechanismId": 33
+      }
+    ],
+    "screenshotFeedbacks": [],
+    "attachmentFeedbacks": [],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": [
+      {
+        "id": 134,
+        "parameterId": 230
+      },
+      {
+        "id": 135,
+        "parameterId": 231,
+        "text": "Feature Request"
+      },
+      {
+        "id": 136,
+        "parameterId": 232
+      },
+      {
+        "id": 137,
+        "parameterId": 239
+      },
+      {
+        "id": 138,
+        "parameterId": 240
+      },
+      {
+        "id": 139,
+        "parameterId": 241
+      },
+      {
+        "id": 140,
+        "text": "own"
+      }
+    ]
+  },
+  {
+    "title": "Test title",
+    "id": 125,
+    "applicationId": 5,
+    "userIdentification": "e39c01a9050e7fa",
+    "createdAt": "2016-10-02 02:00:57.0",
+    "configurationId": 10,
+    "language": "en",
+    "textFeedbacks": [
+      {
+        "id": 125,
+        "text": "Multiple mechanisms of the same type!",
+        "mechanismId": 26
+      },
+      {
+        "id": 126,
+        "text": "sdfasfa",
+        "mechanismId": 27
+      }
+    ],
+    "ratingFeedbacks": [
+      {
+        "id": 85,
+        "rating": 1,
+        "mechanismId": 32
+      },
+      {
+        "id": 86,
+        "rating": 1,
+        "mechanismId": 33
+      }
+    ],
+    "screenshotFeedbacks": [],
+    "attachmentFeedbacks": [],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": [
+      {
+        "id": 141,
+        "parameterId": 230
+      },
+      {
+        "id": 142,
+        "parameterId": 231,
+        "text": "Feature Request"
+      },
+      {
+        "id": 143,
+        "parameterId": 232
+      },
+      {
+        "id": 144,
+        "parameterId": 239
+      },
+      {
+        "id": 145,
+        "parameterId": 240
+      },
+      {
+        "id": 146,
+        "parameterId": 241
+      },
+      {
+        "id": 147,
+        "text": "own"
+      }
+    ]
+  },
+  {
+    "title": "Test title",
+    "id": 126,
+    "applicationId": 5,
+    "userIdentification": "e39c01a9050e7fa",
+    "createdAt": "2016-10-02 02:18:08.0",
+    "configurationId": 10,
+    "language": "en",
+    "textFeedbacks": [
+      {
+        "id": 127,
+        "text": "Test 1",
+        "mechanismId": 26
+      },
+      {
+        "id": 128,
+        "text": "Test 2",
+        "mechanismId": 27
+      }
+    ],
+    "ratingFeedbacks": [
+      {
+        "id": 87,
+        "rating": 2,
+        "mechanismId": 32
+      },
+      {
+        "id": 88,
+        "rating": 0,
+        "mechanismId": 33
+      }
+    ],
+    "screenshotFeedbacks": [
+      {
+        "mechanismId": 30,
+        "textAnnotations": [
+          {
+            "id": 5,
+            "referenceNumber": 1,
+            "text": "Comment 1"
+          },
+          {
+            "id": 6,
+            "referenceNumber": 2,
+            "text": "Comment 2"
+          }
+        ],
+        "id": 10,
+        "path": "screenshots/65061_1475417888604.png",
+        "size": 65061,
+        "name": "4annotatedImageWithStickers",
+        "fileExtension": "png"
+      }
+    ],
+    "attachmentFeedbacks": [],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": [
+      {
+        "id": 148,
+        "parameterId": 230
+      },
+      {
+        "id": 149,
+        "parameterId": 231,
+        "text": "Feature Request"
+      },
+      {
+        "id": 150,
+        "parameterId": 232
+      },
+      {
+        "id": 151,
+        "parameterId": 239,
+        "text": "Work"
+      },
+      {
+        "id": 152,
+        "parameterId": 240
+      },
+      {
+        "id": 153,
+        "parameterId": 241
+      },
+      {
+        "id": 154,
+        "text": "Own category"
+      }
+    ]
+  },
+  {
+    "title": "Test title",
+    "id": 127,
+    "applicationId": 5,
+    "userIdentification": "e39c01a9050e7fa",
+    "createdAt": "2016-10-02 02:33:59.0",
+    "configurationId": 10,
+    "language": "en",
+    "textFeedbacks": [
+      {
+        "id": 129,
+        "text": "Multiple mechanisms of the same type!",
+        "mechanismId": 26
+      },
+      {
+        "id": 130,
+        "text": "sdfasfa",
+        "mechanismId": 27
+      }
+    ],
+    "ratingFeedbacks": [
+      {
+        "id": 89,
+        "rating": 1,
+        "mechanismId": 32
+      },
+      {
+        "id": 90,
+        "rating": 1,
+        "mechanismId": 33
+      }
+    ],
+    "screenshotFeedbacks": [],
+    "attachmentFeedbacks": [],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": [
+      {
+        "id": 155,
+        "parameterId": 230
+      },
+      {
+        "id": 156,
+        "parameterId": 231,
+        "text": "Feature Request"
+      },
+      {
+        "id": 157,
+        "parameterId": 232
+      },
+      {
+        "id": 158,
+        "parameterId": 239
+      },
+      {
+        "id": 159,
+        "parameterId": 240
+      },
+      {
+        "id": 160,
+        "parameterId": 241
+      },
+      {
+        "id": 161,
+        "text": "own"
+      }
+    ]
+  },
+  {
+    "title": "Test title",
+    "id": 128,
+    "applicationId": 5,
+    "userIdentification": "e39c01a9050e7fa",
+    "createdAt": "2016-10-02 02:34:01.0",
+    "configurationId": 10,
+    "language": "en",
+    "textFeedbacks": [
+      {
+        "id": 131,
+        "text": "Multiple mechanisms of the same type!",
+        "mechanismId": 26
+      },
+      {
+        "id": 132,
+        "text": "sdfasfa",
+        "mechanismId": 27
+      }
+    ],
+    "ratingFeedbacks": [
+      {
+        "id": 91,
+        "rating": 1,
+        "mechanismId": 32
+      },
+      {
+        "id": 92,
+        "rating": 1,
+        "mechanismId": 33
+      }
+    ],
+    "screenshotFeedbacks": [],
+    "attachmentFeedbacks": [],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": [
+      {
+        "id": 162,
+        "parameterId": 230
+      },
+      {
+        "id": 163,
+        "parameterId": 231,
+        "text": "Feature Request"
+      },
+      {
+        "id": 164,
+        "parameterId": 232
+      },
+      {
+        "id": 165,
+        "parameterId": 239
+      },
+      {
+        "id": 166,
+        "parameterId": 240
+      },
+      {
+        "id": 167,
+        "parameterId": 241
+      },
+      {
+        "id": 168,
+        "text": "own"
+      }
+    ]
+  },
+  {
+    "title": "Test title",
+    "id": 129,
+    "applicationId": 5,
+    "userIdentification": "e39c01a9050e7fa",
+    "createdAt": "2016-10-02 02:37:48.0",
+    "configurationId": 10,
+    "language": "en",
+    "textFeedbacks": [
+      {
+        "id": 133,
+        "text": "Guh",
+        "mechanismId": 26
+      },
+      {
+        "id": 134,
+        "text": "",
+        "mechanismId": 27
+      }
+    ],
+    "ratingFeedbacks": [
+      {
+        "id": 93,
+        "rating": 0,
+        "mechanismId": 32
+      },
+      {
+        "id": 94,
+        "rating": 4,
+        "mechanismId": 33
+      }
+    ],
+    "screenshotFeedbacks": [
+      {
+        "mechanismId": 30,
+        "textAnnotations": [],
+        "id": 11,
+        "path": "screenshots/42890_1475419068529.png",
+        "size": 42890,
+        "name": "Screenshot_2016102-163852484",
+        "fileExtension": "png"
+      },
+      {
+        "mechanismId": 31,
+        "textAnnotations": [],
+        "id": 12,
+        "path": "screenshots/42890_1475419068532.png",
+        "size": 42890,
+        "name": "Screenshot_2016102-163852484",
+        "fileExtension": "png"
+      }
+    ],
+    "attachmentFeedbacks": [],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": [
+      {
+        "id": 169,
+        "parameterId": 230
+      },
+      {
+        "id": 170,
+        "parameterId": 231,
+        "text": "Feature Request"
+      },
+      {
+        "id": 171,
+        "parameterId": 232
+      },
+      {
+        "id": 172,
+        "parameterId": 239
+      },
+      {
+        "id": 173,
+        "parameterId": 240
+      },
+      {
+        "id": 174,
+        "parameterId": 241
+      }
+    ]
+  },
+  {
+    "title": "Test title",
+    "id": 130,
+    "applicationId": 5,
+    "userIdentification": "e39c01a9050e7fa",
+    "createdAt": "2016-10-02 04:18:19.0",
+    "configurationId": 10,
+    "language": "en",
+    "textFeedbacks": [
+      {
+        "id": 135,
+        "text": "Multiple mechanisms of the same type!",
+        "mechanismId": 26
+      },
+      {
+        "id": 136,
+        "text": "sdfasfa",
+        "mechanismId": 27
+      }
+    ],
+    "ratingFeedbacks": [
+      {
+        "id": 95,
+        "rating": 1,
+        "mechanismId": 32
+      },
+      {
+        "id": 96,
+        "rating": 1,
+        "mechanismId": 33
+      }
+    ],
+    "screenshotFeedbacks": [],
+    "attachmentFeedbacks": [],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": [
+      {
+        "id": 175,
+        "parameterId": 230
+      },
+      {
+        "id": 176,
+        "parameterId": 231,
+        "text": "Feature Request"
+      },
+      {
+        "id": 177,
+        "parameterId": 232
+      },
+      {
+        "id": 178,
+        "parameterId": 239
+      },
+      {
+        "id": 179,
+        "parameterId": 240
+      },
+      {
+        "id": 180,
+        "parameterId": 241
+      },
+      {
+        "id": 181,
+        "text": "own"
+      }
+    ]
+  },
+  {
+    "title": "Test title",
+    "id": 131,
+    "applicationId": 5,
+    "userIdentification": "e39c01a9050e7fa",
+    "createdAt": "2016-10-02 04:18:22.0",
+    "configurationId": 10,
+    "language": "en",
+    "textFeedbacks": [
+      {
+        "id": 137,
+        "text": "Multiple mechanisms of the same type!",
+        "mechanismId": 26
+      },
+      {
+        "id": 138,
+        "text": "sdfasfa",
+        "mechanismId": 27
+      }
+    ],
+    "ratingFeedbacks": [
+      {
+        "id": 97,
+        "rating": 1,
+        "mechanismId": 32
+      },
+      {
+        "id": 98,
+        "rating": 1,
+        "mechanismId": 33
+      }
+    ],
+    "screenshotFeedbacks": [],
+    "attachmentFeedbacks": [],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": [
+      {
+        "id": 182,
+        "parameterId": 230
+      },
+      {
+        "id": 183,
+        "parameterId": 231,
+        "text": "Feature Request"
+      },
+      {
+        "id": 184,
+        "parameterId": 232
+      },
+      {
+        "id": 185,
+        "parameterId": 239
+      },
+      {
+        "id": 186,
+        "parameterId": 240
+      },
+      {
+        "id": 187,
+        "parameterId": 241
+      },
+      {
+        "id": 188,
+        "text": "own"
+      }
+    ]
+  },
+  {
+    "title": "Test title",
+    "id": 132,
+    "applicationId": 5,
+    "userIdentification": "e39c01a9050e7fa",
+    "createdAt": "2016-10-02 07:11:05.0",
+    "configurationId": 10,
+    "language": "en",
+    "textFeedbacks": [
+      {
+        "id": 139,
+        "text": "Mandatory text!",
+        "mechanismId": 26
+      },
+      {
+        "id": 140,
+        "text": "Optional text!",
+        "mechanismId": 27
+      }
+    ],
+    "ratingFeedbacks": [
+      {
+        "id": 99,
+        "rating": 0,
+        "mechanismId": 32
+      },
+      {
+        "id": 100,
+        "rating": 5,
+        "mechanismId": 33
+      }
+    ],
+    "screenshotFeedbacks": [
+      {
+        "mechanismId": 30,
+        "textAnnotations": [
+          {
+            "id": 7,
+            "referenceNumber": 1,
+            "text": "First text annotation"
+          }
+        ],
+        "id": 13,
+        "path": "screenshots/65120_1475435465472.png",
+        "size": 65120,
+        "name": "4annotatedImageWithStickers",
+        "fileExtension": "png"
+      },
+      {
+        "mechanismId": 31,
+        "textAnnotations": [
+          {
+            "id": 8,
+            "referenceNumber": 1,
+            "text": "First text annotation"
+          },
+          {
+            "id": 9,
+            "referenceNumber": 2,
+            "text": "Second text annotation"
+          }
+        ],
+        "id": 14,
+        "path": "screenshots/63077_1475435465472.png",
+        "size": 63077,
+        "name": "5annotatedImageWithStickers",
+        "fileExtension": "png"
+      }
+    ],
+    "attachmentFeedbacks": [],
+    "audioFeedbacks": [
+      {
+        "duration": 0,
+        "mechanismId": 28,
+        "id": 7,
+        "path": "audios/13876_1475435465473.m4a",
+        "size": 13876,
+        "name": "28audioFile",
+        "fileExtension": "m4a"
+      },
+      {
+        "duration": 0,
+        "mechanismId": 29,
+        "id": 8,
+        "path": "audios/12867_1475435465474.m4a",
+        "size": 12867,
+        "name": "29audioFile",
+        "fileExtension": "m4a"
+      }
+    ],
+    "categoryFeedbacks": [
+      {
+        "id": 189,
+        "parameterId": 230
+      },
+      {
+        "id": 190,
+        "parameterId": 231,
+        "text": "Feature Request"
+      },
+      {
+        "id": 191,
+        "parameterId": 232
+      },
+      {
+        "id": 192,
+        "parameterId": 239,
+        "text": "Work"
+      },
+      {
+        "id": 193,
+        "parameterId": 240
+      },
+      {
+        "id": 194,
+        "parameterId": 241
+      },
+      {
+        "id": 195,
+        "text": "University"
+      }
+    ]
+  }
+]

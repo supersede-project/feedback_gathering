@@ -1,5 +1,4 @@
-import { Component } from '@angular/core';
-import { Config} from './shared/index';
+import {Component} from '@angular/core';
 
 /**
  * This class represents the main application component. Within the @Routes annotation is the configuration of the
@@ -12,7 +11,5 @@ import { Config} from './shared/index';
 })
 
 export class AppComponent {
-  constructor() {
-    console.log('Environment config', Config);
-  }
+
 }

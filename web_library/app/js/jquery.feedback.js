@@ -151,12 +151,18 @@ define(["require", "exports", './config', '../views/pagination_container', '../v
             if (ratingMechanism !== null && ratingMechanism.active) {
                 var options = ratingMechanism.getRatingElementOptions();
                 $('' + selector).starRating(options);
-                $('' + selector + ' .jq-star:nth-child(' + ratingMechanism.initialRating + ')').click();
+                if (ratingMechanism.initialRating) {
+                    $('' + selector + ' .jq-star:nth-child(' + ratingMechanism.initialRating + ')').click();
+                }
             }
         };
         var initScreenshot = function (screenshotMechanism, containerId) {
             if (screenshotMechanism == null) {
                 return;
+            }
+            var elementToCaptureSelector = 'body';
+            if (screenshotMechanism.getParameterValue('elementToCapture') !== null && screenshotMechanism.getParameterValue('elementToCapture') !== "") {
+                elementToCaptureSelector = screenshotMechanism.getParameterValue('elementToCapture');
             }
             var container = $('#' + containerId);
             var dialogSelector = $('[aria-describedby="' + containerId + '"]');
@@ -385,9 +391,9 @@ define(["require", "exports", './config', '../views/pagination_container', '../v
         };
         $.fn.feedbackPlugin.defaults = {
             'color': '#fff',
+            'lang': 'de',
+            'backgroundColor': '#1A6FC2',
             'fallbackLang': 'en',
-            'lang': 'en',
-            'backgroundColor': '#b3cd40',
             'distPath': 'dist/',
             'userId': ''
         };

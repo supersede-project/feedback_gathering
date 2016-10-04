@@ -1,12 +1,12 @@
 define(["require", "exports"], function (require, exports) {
     "use strict";
-    exports.apiEndpointOrchestrator = 'http://62.14.219.13:8080/';
+    exports.apiEndpointOrchestrator = 'https://ptvfeedback.ronnieschaniel.com/';
     exports.applicationPath = 'feedback_orchestrator/{lang}/applications/';
-    exports.applicationId = 4;
-    exports.apiEndpointRepository = 'http://62.14.219.13:8080/';
-    exports.feedbackPath = "feedback_repository/{lang}/feedbacks";
+    exports.applicationId = 8;
+    exports.apiEndpointRepository = 'https://ptvfeedback.ronnieschaniel.com/';
+    exports.feedbackPath = 'feedback_repository/{lang}/feedbacks';
     exports.feedbackObjectTitle = 'Feedback';
-    exports.applicationName = 'energiesparkonto.de';
+    exports.applicationName = 'PTV';
     exports.defaultSuccessMessage = 'Your feedback was successfully sent';
     exports.dialogOptions = {
         autoOpen: false,

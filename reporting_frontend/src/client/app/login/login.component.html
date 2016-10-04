@@ -1,0 +1,11 @@
+<h2>Login</h2>
+
+<form (submit)="formSubmitted($event, username.value, password.value)">
+  <div class="form-group">
+    <input type="text" #username class="form-control" id="usernameInput" placeholder="Username">
+  </div>
+  <div class="form-group">
+    <input type="password" #password class="form-control" id="passwortInput" placeholder="Password">
+  </div>
+  <button type="submit" class="btn btn-default">submit</button>
+</form>
