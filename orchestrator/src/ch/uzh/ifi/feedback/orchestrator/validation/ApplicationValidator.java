@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.google.inject.Inject;
+import com.google.inject.Singleton;
 
 import ch.uzh.ifi.feedback.library.rest.validation.ValidationError;
 import ch.uzh.ifi.feedback.library.rest.validation.ValidationResult;
@@ -15,6 +16,7 @@ import ch.uzh.ifi.feedback.orchestrator.model.FeedbackMechanism;
 import ch.uzh.ifi.feedback.orchestrator.model.GeneralConfiguration;
 import ch.uzh.ifi.feedback.orchestrator.services.ApplicationService;
 
+@Singleton
 public class ApplicationValidator extends ValidatorBase<Application>{
 
 	private GeneralConfigurationValidator generalConfigurationValidator;

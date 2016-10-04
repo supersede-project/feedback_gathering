@@ -1,6 +1,7 @@
 package ch.uzh.ifi.feedback.repository.validation;
 
 import com.google.inject.Inject;
+import com.google.inject.Singleton;
 
 import ch.uzh.ifi.feedback.library.rest.Service.IDbItem;
 import ch.uzh.ifi.feedback.library.rest.validation.ValidationResult;
@@ -15,6 +16,7 @@ import ch.uzh.ifi.feedback.repository.model.ScreenshotFeedback;
 import ch.uzh.ifi.feedback.repository.model.TextFeedback;
 import ch.uzh.ifi.feedback.repository.service.FeedbackService;
 
+@Singleton
 public class FeedbackValidator extends ValidatorBase<Feedback> {
 
 	private AttachmentValidator attachmentValidator;

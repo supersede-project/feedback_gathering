@@ -6,10 +6,14 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.google.inject.Inject;
+import com.google.inject.Provider;
+import com.google.inject.Singleton;
+import com.google.inject.name.Named;
 
 import ch.uzh.ifi.feedback.library.rest.Service.DatabaseConfiguration;
 import ch.uzh.ifi.feedback.library.rest.Service.IDbService;
@@ -19,6 +23,7 @@ import ch.uzh.ifi.feedback.orchestrator.model.FeedbackParameter;
 import ch.uzh.ifi.feedback.orchestrator.model.GeneralConfiguration;
 import javassist.NotFoundException;
 
+@Singleton
 public class GeneralConfigurationService extends OrchestratorService<GeneralConfiguration> {
 
 	private ParameterService parameterService;
@@ -27,14 +32,15 @@ public class GeneralConfigurationService extends OrchestratorService<GeneralConf
 	public GeneralConfigurationService(
 			ParameterService parameterService, 
 			GeneralConfigurationResultParser resultParser,
-			DatabaseConfiguration config) 
+			DatabaseConfiguration config,
+			@Named("timestamp")Provider<Timestamp> timestampProvider) 
 	{
 		super(
 				resultParser, 
 				GeneralConfiguration.class, 
 				"general_configurations",
-				config.getOrchestratorDb(), 
-				parameterService);
+				config.getOrchestratorDb(),
+				timestampProvider);
 		
 		this.parameterService = parameterService;
 	}

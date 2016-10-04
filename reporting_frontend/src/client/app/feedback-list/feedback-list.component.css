@@ -1,0 +1,23 @@
+input.search {
+  width: 200px;
+  margin: 5px 0;
+  display: inline-block;
+  margin-right: 10px;
+  border-radius: 0;
+}
+
+article.filters {
+  display: inline-block;
+  float: right;
+  padding-top: 6px;
+}
+
+article.filters span {
+  margin-left: 5px;
+  margin-top: 5px;
+  cursor: pointer;
+}
+
+table {
+  margin-top: 20px;
+}

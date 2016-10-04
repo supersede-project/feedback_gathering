@@ -59,17 +59,14 @@ public class TextMechanismView extends MechanismView {
                     break;
             }
         }
-        if (textMechanism.getMaxLength() != null) {
+        if (textMechanism.isTextLengthVisible()) {
+            textInputLayout.setCounterEnabled(true);
+        }
+        if (textMechanism.getMaxLength() != null && textMechanism.isMaxLengthVisible()) {
             textInputLayout.setCounterMaxLength(textMechanism.getMaxLength());
             textInputLayout.setErrorEnabled(true);
-            // If TI 19 is set, TI 19.1 is a possible option
-            if (textMechanism.isMaxLengthVisible()) {
-                textInputLayout.setCounterEnabled(true);
-            }
-        }
-        if (textMechanism.isMandatory()) {
-            // If TI 11 is set, TI 11.1 should not be an option, i.e., the reminder should always be activated --> TI 11.1.1 and TI 11.1.2
-            // TODO: Implement visual changes of a mandatory text field?
+            // If there is a maximum length and this maximum length is visible, then the counter must be visible anyways independent of isTextLengthVisible
+            textInputLayout.setCounterEnabled(true);
         }
 
         textInputEditText.addTextChangedListener(new TextWatcher() {
@@ -89,9 +86,9 @@ public class TextMechanismView extends MechanismView {
                     textInputLayout.setHint(textMechanism.getHint());
                 }
 
-                if (textMechanism.getMaxLength() != null && textInputLayout.isErrorEnabled()) {
+                if (textMechanism.getMaxLength() != null && textMechanism.isMaxLengthVisible() && textInputLayout.isErrorEnabled()) {
                     if (s.length() > textMechanism.getMaxLength()) {
-                        textInputLayout.setError("Text cannot be longer than " + textMechanism.getMaxLength() + " characters");
+                        textInputLayout.setError(getEnclosingLayout().getResources().getString(R.string.supersede_feedbacklibrary_maximum_character_hint, textMechanism.getMaxLength()));
                     } else {
                         textInputLayout.setError(null);
                     }

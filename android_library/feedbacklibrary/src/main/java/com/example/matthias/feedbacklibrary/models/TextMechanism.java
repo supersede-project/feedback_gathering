@@ -3,6 +3,7 @@ package com.example.matthias.feedbacklibrary.models;
 import android.graphics.Color;
 import android.graphics.Typeface;
 
+import com.example.matthias.feedbacklibrary.R;
 import com.example.matthias.feedbacklibrary.configurations.MechanismConfigurationItem;
 import com.example.matthias.feedbacklibrary.utils.Utils;
 
@@ -30,10 +31,7 @@ public class TextMechanism extends Mechanism {
     private boolean maxLengthVisible = false;
     private boolean mandatory = false;
     private String mandatoryReminder = "Default mandatory reminder text!";
-    // TODO: Positive or negative validation? What kind of RE? Also an error message with manual text possible?
-    // Regex used for validation
-    private String validationRegex = ".";
-    private String validationRegexErrorMessage = "Default regex validation text!";
+    private boolean textLengthVisible = true;
     // The text entered by the user
     private String inputText = null;
 
@@ -112,10 +110,6 @@ public class TextMechanism extends Mechanism {
         return title;
     }
 
-    public String getValidationRegex() {
-        return validationRegex;
-    }
-
     private void initTextMechanism(MechanismConfigurationItem item) {
         for (Map<String, Object> param : item.getParameters()) {
             String key = (String) param.get("key");
@@ -179,15 +173,15 @@ public class TextMechanism extends Mechanism {
             if (key.equals("maxLengthVisible")) {
                 setMaxLengthVisible(Utils.intToBool(((Double) param.get("value")).intValue()));
             }
+            if (key.equals("textLengthVisible")) {
+                setTextLengthVisible(Utils.intToBool(((Double) param.get("value")).intValue()));
+            }
             if (key.equals("mandatory")) {
                 setMandatory(Utils.intToBool(((Double) param.get("value")).intValue()));
                 // If TI 11 is set, TI 11.1 should always be activated, i.e., the user always needs a reminder for a mandatory field
             }
             if (key.equals("mandatoryReminder")) {
                 setMandatoryReminder((String) param.get("value"));
-            }
-            if (key.equals("validationRegex")) {
-                setValidationRegex((String) param.get("value"));
             }
         }
     }
@@ -200,23 +194,12 @@ public class TextMechanism extends Mechanism {
         return maxLengthVisible;
     }
 
+    public boolean isTextLengthVisible() {
+        return textLengthVisible;
+    }
+
     @Override
     public boolean isValid(List<String> errorMessage) {
-        String pattern;
-        if (validationRegex.equals(".")) {
-            // Default value, i.e., every character is allowed
-            pattern = ".*";
-        } else {
-            pattern = validationRegex;
-        }
-
-        /*
-        if (!inputText.matches(pattern)) {
-            errorMessage.add(validationRegexErrorMessage);
-            return false;
-        }
-        */
-
         if (isMandatory() && !(inputText.length() > 0)) {
             errorMessage.add(mandatoryReminder);
             return false;
@@ -276,11 +259,11 @@ public class TextMechanism extends Mechanism {
         this.maxLengthVisible = maxLengthVisible;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setTextLengthVisible(boolean textLengthVisible) {
+        this.textLengthVisible = textLengthVisible;
     }
 
-    public void setValidationRegex(String validationRegex) {
-        this.validationRegex = validationRegex;
+    public void setTitle(String title) {
+        this.title = title;
     }
 }

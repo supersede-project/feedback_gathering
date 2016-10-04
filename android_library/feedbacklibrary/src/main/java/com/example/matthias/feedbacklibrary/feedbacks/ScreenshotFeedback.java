@@ -14,7 +14,6 @@ import java.util.Map;
  * Screenshot feedback.
  */
 public class ScreenshotFeedback extends PartFeedback implements Serializable {
-    private String fileName;
     private String imagePath;
     @Expose
     private List<HashMap<String, Object>> textAnnotations;

@@ -1,5 +1,7 @@
 package com.example.matthias.feedbacklibrary.feedbacks;
 
+import android.os.Build;
+
 import com.example.matthias.feedbacklibrary.models.AttachmentMechanism;
 import com.example.matthias.feedbacklibrary.models.AudioMechanism;
 import com.example.matthias.feedbacklibrary.models.CategoryMechanism;
@@ -11,6 +13,7 @@ import com.google.gson.annotations.Expose;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -33,17 +36,17 @@ public class Feedback implements Serializable {
     private String userIdentification;
     // Mechanisms
     @Expose
-    private List<AttachmentFeedback> attachmentFeedbacks = null;
+    private List<AttachmentFeedback> attachmentFeedbacks = new ArrayList<>();
     @Expose
-    private List<AudioFeedback> audioFeedbacks = null;
+    private List<AudioFeedback> audioFeedbacks = new ArrayList<>();
     @Expose
-    private List<CategoryFeedback> categoryFeedbacks = null;
+    private List<HashMap<String, Object>> categoryFeedbacks = new ArrayList<>();
     @Expose
-    private List<RatingFeedback> ratingFeedbacks = null;
+    private List<RatingFeedback> ratingFeedbacks = new ArrayList<>();
     @Expose
-    private List<ScreenshotFeedback> screenshotFeedbacks = null;
+    private List<ScreenshotFeedback> screenshotFeedbacks = new ArrayList<>();
     @Expose
-    private List<TextFeedback> textFeedbacks = null;
+    private List<TextFeedback> textFeedbacks = new ArrayList<>();
 
     public Feedback(List<Mechanism> allMechanisms) {
         for (Mechanism mechanism : allMechanisms) {
@@ -52,45 +55,28 @@ public class Feedback implements Serializable {
                 switch (type) {
                     case Mechanism.ATTACHMENT_TYPE:
                         // TODO: Implement attachment mechanism
-                        if (attachmentFeedbacks == null) {
-                            attachmentFeedbacks = new ArrayList<>();
-                        }
                         AttachmentMechanism attachmentMechanism = (AttachmentMechanism) mechanism;
                         break;
                     case Mechanism.AUDIO_TYPE:
                         AudioMechanism audioMechanism = (AudioMechanism) mechanism;
                         if (audioMechanism.getAudioPath() != null) {
-                            if (audioFeedbacks == null) {
-                                audioFeedbacks = new ArrayList<>();
-                            }
                             audioFeedbacks.add(new AudioFeedback(audioMechanism, audioFeedbacks.size()));
                         }
                         break;
                     case Mechanism.CATEGORY_TYPE:
-                        if (categoryFeedbacks == null) {
-                            categoryFeedbacks = new ArrayList<>();
-                        }
-                        categoryFeedbacks.add(new CategoryFeedback((CategoryMechanism) mechanism));
+                        CategoryFeedback categoryFeedback = new CategoryFeedback((CategoryMechanism) mechanism);
+                        categoryFeedbacks.addAll(categoryFeedback.getCategories());
                         break;
                     case Mechanism.RATING_TYPE:
-                        if (ratingFeedbacks == null) {
-                            ratingFeedbacks = new ArrayList<>();
-                        }
                         ratingFeedbacks.add(new RatingFeedback((RatingMechanism) mechanism));
                         break;
                     case Mechanism.SCREENSHOT_TYPE:
                         ScreenshotMechanism screenshotMechanism = (ScreenshotMechanism) mechanism;
                         if (screenshotMechanism.getImagePath() != null) {
-                            if (screenshotFeedbacks == null) {
-                                screenshotFeedbacks = new ArrayList<>();
-                            }
                             screenshotFeedbacks.add(new ScreenshotFeedback(screenshotMechanism, screenshotFeedbacks.size()));
                         }
                         break;
                     case Mechanism.TEXT_TYPE:
-                        if (textFeedbacks == null) {
-                            textFeedbacks = new ArrayList<>();
-                        }
                         textFeedbacks.add(new TextFeedback((TextMechanism) mechanism));
                         break;
                     default:
@@ -100,6 +86,20 @@ public class Feedback implements Serializable {
 
             }
         }
+    }
+
+    public void initContextInformation() {
+        contextInformation = new HashMap<>();
+        contextInformation.put("release", Build.VERSION.RELEASE);
+        contextInformation.put("device", Build.DEVICE);
+        contextInformation.put("model", Build.MODEL);
+        contextInformation.put("product", Build.PRODUCT);
+        contextInformation.put("brand", Build.BRAND);
+        contextInformation.put("display", Build.DISPLAY);
+        contextInformation.put("androidId", Build.ID);
+        contextInformation.put("manufacturer", Build.MANUFACTURER);
+        contextInformation.put("serial", Build.SERIAL);
+        contextInformation.put("host", Build.HOST);
     }
 
     public long getApplicationId() {
@@ -114,7 +114,7 @@ public class Feedback implements Serializable {
         return audioFeedbacks;
     }
 
-    public List<CategoryFeedback> getCategoryFeedbacks() {
+    public List<HashMap<String, Object>> getCategoryFeedbacks() {
         return categoryFeedbacks;
     }
 
@@ -162,7 +162,7 @@ public class Feedback implements Serializable {
         this.audioFeedbacks = audioFeedbacks;
     }
 
-    public void setCategoryFeedbacks(List<CategoryFeedback> categoryFeedbacks) {
+    public void setCategoryFeedbacks(List<HashMap<String, Object>> categoryFeedbacks) {
         this.categoryFeedbacks = categoryFeedbacks;
     }
 

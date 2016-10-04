@@ -8,7 +8,11 @@ import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.google.inject.Provider;
+
 import ch.uzh.ifi.feedback.library.rest.Service.DbResultParser;
+import ch.uzh.ifi.feedback.library.rest.Service.IDbService;
 import ch.uzh.ifi.feedback.library.rest.Service.ServiceBase;
 import ch.uzh.ifi.feedback.library.transaction.TransactionManager;
 import ch.uzh.ifi.feedback.orchestrator.model.IOrchestratorItem;
@@ -17,42 +21,24 @@ import sun.nio.cs.HistoricallyNamedCharset;
 
 import static java.util.Arrays.asList;
 
-public class OrchestratorService<T extends IOrchestratorItem<T>> extends ServiceBase<T> implements IOrchestratorService<T>{
+public class OrchestratorService<T extends IOrchestratorItem<T>> extends ServiceBase<T> {
 
-	private Timestamp selectedTimestamp;
-	private List<IOrchestratorService<?>> childServices;
 	private String mainTableName;
 	private String mainTableKey;
+	protected Provider<Timestamp> timestampProvider;
 	
 	public OrchestratorService(
 			DbResultParser<T> resultParser, 
 			Class<T> serviceClass,
 			String mainTableName,
 			String dbName,
-			IOrchestratorService<?>... services) 
+			Provider<Timestamp> timestampProvider) 
 	{
-		super(resultParser, serviceClass, mainTableName + "_history", dbName, services);
+		super(resultParser, serviceClass, mainTableName + "_history", dbName);
 		
 		this.mainTableName = mainTableName;
+		this.timestampProvider = timestampProvider;
 		this.mainTableKey = mainTableName + "_id";
-		this.selectedTimestamp = Timestamp.from(Instant.now());
-		
-		childServices = new ArrayList<IOrchestratorService<?>>();
-		for(IOrchestratorService<?> service : services)
-		{
-			childServices.add(service);
-		}
-	}
-
-	@Override
-	public void setTimestamp(Timestamp timestamp) {
-		this.selectedTimestamp = timestamp;
-		childServices.stream().forEach(s -> s.setTimestamp(timestamp));
-	}
-
-	@Override
-	public Timestamp getTimestamp() {
-		return this.selectedTimestamp;
 	}
 	
 	@Override
@@ -75,7 +61,7 @@ public class OrchestratorService<T extends IOrchestratorItem<T>> extends Service
 	public T GetById(int id) throws SQLException, NotFoundException 
 	{
 		String idCondition = String.format("%s = ?", mainTableKey);
-		List<Object> list = asList(id, selectedTimestamp, selectedTimestamp);
+		List<Object> list = asList(id, timestampProvider.get(), timestampProvider.get());
 		List<T> result = super.GetWhere(list, idCondition, getTimeCondition());
 		
 		if(result.size() == 0)
@@ -93,7 +79,7 @@ public class OrchestratorService<T extends IOrchestratorItem<T>> extends Service
 	@Override
 	public List<T> GetWhere(List<Object> values, String... conditions) throws SQLException {
 		List<Object> newValues = new ArrayList<>();
-		newValues.addAll(asList(selectedTimestamp, selectedTimestamp));
+		newValues.addAll(asList(timestampProvider.get(), timestampProvider.get()));
 		newValues.addAll(values);
 		
 		List<String> conds = new ArrayList<>();

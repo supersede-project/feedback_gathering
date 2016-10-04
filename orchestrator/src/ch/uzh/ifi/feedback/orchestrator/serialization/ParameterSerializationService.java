@@ -7,10 +7,12 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import com.google.gson.internal.LinkedTreeMap;
+import com.google.inject.Singleton;
 
 import ch.uzh.ifi.feedback.library.rest.serialization.DefaultSerializer;
 import ch.uzh.ifi.feedback.orchestrator.model.FeedbackParameter;
 
+@Singleton
 public class ParameterSerializationService extends OrchestratorSerializationService<FeedbackParameter>{
 	
 	@Override

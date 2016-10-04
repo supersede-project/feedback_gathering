@@ -17,13 +17,10 @@ import retrofit2.http.Path;
 
 /**
  * API calls to the feedback orchestrator and feedback repository
- * Orchestrator: http://ec2-54-175-37-30.compute-1.amazonaws.com/feedback_orchestrator
- * Repository: http://ec2-54-175-37-30.compute-1.amazonaws.com/feedback_repository
+ * Orchestrator: baseURL/feedback_orchestrator
+ * Repository: baseURL/feedback_repository
  */
 public interface feedbackAPI {
-    //String endpoint = "http://ec2-54-166-31-250.compute-1.amazonaws.com/"; --> PTV domain
-    String endpoint = "http://ec2-54-175-37-30.compute-1.amazonaws.com/";
-
     /**
      * This methods sends the feedback to the repository.
      *
@@ -45,11 +42,18 @@ public interface feedbackAPI {
     Call<OrchestratorConfigurationItem> getConfiguration(@Path("language") String language, @Path("application_id") long application_id);
 
     /**
-     * This method checks it the application is up and running.
+     * This method checks it the orchestrator is up and running.
      *
      * @return 'pong'
      */
     @GET("feedback_orchestrator/ping")
     Call<ResponseBody> pingOrchestrator();
-    // TODO: Type of return value (JSON, Plain text)?
+
+    /**
+     * This method checks it the repository is up and running.
+     *
+     * @return 'pong'
+     */
+    @GET("feedback_repository/ping")
+    Call<ResponseBody> pingRepository();
 }

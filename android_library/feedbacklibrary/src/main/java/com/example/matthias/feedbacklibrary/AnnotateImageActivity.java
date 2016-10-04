@@ -191,7 +191,8 @@ public class AnnotateImageActivity extends AppCompatActivity implements ColorPic
         annotateImageView.setPaintStrokeColor(Color.RED);
         annotateImageView.setLineCap(Paint.Cap.ROUND);
         annotateImageView.setLineJoin(Paint.Join.ROUND);
-        annotateImageView.setPaintStrokeWidth(12F);
+        float strokeWidth = getResources().getDisplayMetrics().density < 1.6F ? 6F : 12F;
+        annotateImageView.setPaintStrokeWidth(strokeWidth);
         annotateImageView.setPaintFillColor(Color.RED);
         annotateImageView.setOpacity(255);
         annotateImageView.setBlur(0F);

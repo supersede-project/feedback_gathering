@@ -9,36 +9,33 @@ import java.util.Date;
 
 import javax.servlet.http.Part;
 
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.io.FilenameUtils;
+
+import com.google.inject.Singleton;
+
 import ch.uzh.ifi.feedback.repository.model.FileFeedback;
 
+@Singleton
 public class FileStorageService {
 	
-	public <T extends FileFeedback> T ParseFilePart(Part filePart, T feedback, String storeagePath) {
+	public <T extends FileFeedback> T ParseFilePart(FileItem filePart, T feedback, String directoryName) {
 
+		    if(filePart == null)
+		    	return feedback;
+		    
 			InputStream inputStream = null;
 			OutputStream outputStream = null;
 
 			try {
 				inputStream = filePart.getInputStream();
 				int fileSize = (int) filePart.getSize();
-				String fileName = getFileName(filePart);
-				
-				String fileExtension = "";
-				
-				if(filePart.getContentType().equals("image/png")) {
-					fileExtension = ".png";
-				} else if (filePart.getContentType().equals("image/jpeg")) {
-					fileExtension = ".jpg";
-				} else if (filePart.getContentType().equals("image/tiff")) {
-					fileExtension = ".tiff";
-				} else if (filePart.getContentType().equals("image/gif")) {
-					fileExtension = ".gif";
-				}
-				
+				String storagePath = createDirectory(directoryName);
+
 				// more or less unique filename
-				String fileNameOfStoredFile = Integer.toString(fileSize) + "_" + String.valueOf(new Date().getTime()) + fileExtension;				
+				String fileNameOfStoredFile = Integer.toString(fileSize) + "_" + String.valueOf(new Date().getTime()) + "." + feedback.getFileExtension();				
 				
-				File outputFile = new File(storeagePath, fileNameOfStoredFile);
+				File outputFile = new File(storagePath, fileNameOfStoredFile);
 				outputStream = new FileOutputStream(outputFile);
 				
 				int read = 0;
@@ -48,11 +45,8 @@ public class FileStorageService {
 					outputStream.write(bytes, 0, read);
 				}
 				
-				feedback.setFileExtension(fileExtension);
-				feedback.setPath(outputFile.toPath().toString());
+				feedback.setPath(directoryName + File.separator + fileNameOfStoredFile);
 				feedback.setSize(fileSize);
-				feedback.setName(fileName);
-				
 				
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -77,7 +71,7 @@ public class FileStorageService {
 		return feedback;
 	}
 	
-	public String CreateDirectory(String directoryName)
+	private String createDirectory(String directoryName)
 	{
 		String rootPath = System.getProperty("catalina.home");
 		String relativePath = "webapps" + File.separator + directoryName;
@@ -89,16 +83,5 @@ public class FileStorageService {
 		
 		return uploadsStoragePath;
 	}
-	
-	private static String getFileName(Part filePart) {
-		String header = filePart.getHeader("content-disposition");
-		if (header == null)
-			return null;
-		for (String headerPart : header.split(";")) {
-			if (headerPart.trim().startsWith("filename")) {
-				return headerPart.substring(headerPart.indexOf('=') + 1).trim().replace("\"", "");
-			}
-		}
-		return null;
-	}
+
 }

@@ -1,0 +1,3017 @@
+[
+  {
+    "id": 3,
+    "name": "Test Website 21",
+    "state": 0,
+    "generalConfiguration": {
+      "id": 6,
+      "parameters": [
+        {
+          "id": 40,
+          "key": "reviewActive",
+          "value": 1.0,
+          "language": "en",
+          "createdAt": "2016-09-24 01:55:06.0"
+        },
+        {
+          "id": 41,
+          "key": "mainColor",
+          "value": "#00ff00",
+          "language": "en",
+          "createdAt": "2016-09-24 01:55:06.0"
+        }
+      ],
+      "createdAt": "2016-09-24 01:55:06.0"
+    },
+    "configurations": [
+      {
+        "id": 4,
+        "type": "PUSH",
+        "mechanisms": [
+          {
+            "id": 5,
+            "configurationsId": 4,
+            "type": "TEXT_TYPE",
+            "active": true,
+            "order": 1,
+            "canBeActivated": false,
+            "parameters": [
+              {
+                "id": 43,
+                "key": "maxLength",
+                "value": 200.0,
+                "language": "en",
+                "createdAt": "2016-09-24 01:55:06.0"
+              },
+              {
+                "id": 44,
+                "key": "title",
+                "value": "Feedback",
+                "language": "en",
+                "createdAt": "2016-09-24 01:55:06.0"
+              },
+              {
+                "id": 45,
+                "key": "hint",
+                "value": "Please enter your feedback",
+                "language": "en",
+                "createdAt": "2016-09-24 01:55:06.0"
+              },
+              {
+                "id": 46,
+                "key": "label",
+                "value": "Please write about your problem",
+                "language": "en",
+                "createdAt": "2016-09-24 01:55:06.0"
+              },
+              {
+                "id": 47,
+                "key": "labelPositioning",
+                "value": "left",
+                "language": "en",
+                "createdAt": "2016-09-24 01:55:06.0"
+              },
+              {
+                "id": 48,
+                "key": "labelColor",
+                "value": "#353535",
+                "language": "en",
+                "createdAt": "2016-09-24 01:55:06.0"
+              },
+              {
+                "id": 49,
+                "key": "labelFontSize",
+                "value": 15.0,
+                "language": "en",
+                "createdAt": "2016-09-24 01:55:06.0"
+              },
+              {
+                "id": 50,
+                "key": "textareaFontColor",
+                "value": "#7A7A7A",
+                "language": "en",
+                "createdAt": "2016-09-24 01:55:06.0"
+              },
+              {
+                "id": 51,
+                "key": "mandatory",
+                "value": 1.0,
+                "language": "en",
+                "createdAt": "2016-09-24 01:55:06.0"
+              },
+              {
+                "id": 52,
+                "key": "mandatoryReminder",
+                "value": "Please fill in the text field",
+                "language": "en",
+                "createdAt": "2016-09-24 01:55:06.0"
+              },
+              {
+                "id": 53,
+                "key": "undoEnabled",
+                "value": 1.0,
+                "language": "en",
+                "createdAt": "2016-09-24 01:55:06.0"
+              },
+              {
+                "id": 54,
+                "key": "undoSteps",
+                "value": 1.0,
+                "language": "en",
+                "createdAt": "2016-09-24 01:55:06.0"
+              },
+              {
+                "id": 55,
+                "key": "clearInput",
+                "value": 0.0,
+                "language": "en",
+                "createdAt": "2016-09-24 01:55:06.0"
+              },
+              {
+                "id": 56,
+                "key": "borderWidth",
+                "value": 2.0,
+                "language": "en",
+                "createdAt": "2016-09-24 01:55:06.0"
+              },
+              {
+                "id": 57,
+                "key": "borderColor",
+                "value": "#000000",
+                "language": "en",
+                "createdAt": "2016-09-24 01:55:06.0"
+              },
+              {
+                "id": 58,
+                "key": "fieldWidth",
+                "value": 200.0,
+                "language": "en",
+                "createdAt": "2016-09-24 01:55:06.0"
+              },
+              {
+                "id": 59,
+                "key": "fieldHeight",
+                "value": 50.0,
+                "language": "en",
+                "createdAt": "2016-09-24 01:55:06.0"
+              },
+              {
+                "id": 60,
+                "key": "fieldFontSize",
+                "value": 13.0,
+                "language": "en",
+                "createdAt": "2016-09-24 01:55:06.0"
+              },
+              {
+                "id": 61,
+                "key": "fieldFontType",
+                "value": "italic",
+                "language": "en",
+                "createdAt": "2016-09-24 01:55:06.0"
+              },
+              {
+                "id": 62,
+                "key": "fieldTextAlignment",
+                "value": "left",
+                "language": "en",
+                "createdAt": "2016-09-24 01:55:06.0"
+              },
+              {
+                "id": 63,
+                "key": "fieldBackgroundColor",
+                "value": "#ffffff",
+                "language": "en",
+                "createdAt": "2016-09-24 01:55:06.0"
+              },
+              {
+                "id": 64,
+                "key": "maxLengthVisible",
+                "value": 1.0,
+                "language": "en",
+                "createdAt": "2016-09-24 01:55:06.0"
+              },
+              {
+                "id": 65,
+                "key": "validationRegex",
+                "value": ".",
+                "language": "en",
+                "createdAt": "2016-09-24 01:55:06.0"
+              },
+              {
+                "id": 66,
+                "key": "validateOnSkip",
+                "value": 1.0,
+                "language": "en",
+                "createdAt": "2016-09-24 01:55:06.0"
+              }
+            ],
+            "createdAt": "2016-09-24 02:02:10.0"
+          },
+          {
+            "id": 6,
+            "configurationsId": 4,
+            "type": "AUDIO_TYPE",
+            "active": false,
+            "order": 2,
+            "canBeActivated": false,
+            "parameters": [
+              {
+                "id": 67,
+                "key": "maxTime",
+                "value": 30.0,
+                "defaultValue": "30.0",
+                "editableByUser": false,
+                "language": "en",
+                "createdAt": "2016-09-24 01:55:06.0"
+              }
+            ],
+            "createdAt": "2016-09-24 02:02:10.0"
+          },
+          {
+            "id": 7,
+            "configurationsId": 4,
+            "type": "SCREENSHOT_TYPE",
+            "active": true,
+            "order": 3,
+            "canBeActivated": false,
+            "parameters": [
+              {
+                "id": 68,
+                "key": "title",
+                "value": "Title for screenshot feedback",
+                "language": "en",
+                "createdAt": "2016-09-24 01:55:06.0"
+              },
+              {
+                "id": 69,
+                "key": "defaultPicture",
+                "value": "lastScreenshot",
+                "defaultValue": "noImage",
+                "editableByUser": true,
+                "language": "en",
+                "createdAt": "2016-09-24 01:55:06.0"
+              }
+            ],
+            "createdAt": "2016-09-24 02:02:10.0"
+          },
+          {
+            "id": 8,
+            "configurationsId": 4,
+            "type": "RATING_TYPE",
+            "active": true,
+            "order": 4,
+            "canBeActivated": false,
+            "parameters": [
+              {
+                "id": 70,
+                "key": "title",
+                "value": "Rate your user experience on this page",
+                "language": "en",
+                "createdAt": "2016-09-24 01:55:06.0"
+              },
+              {
+                "id": 71,
+                "key": "ratingIcon",
+                "value": "star",
+                "language": "en",
+                "createdAt": "2016-09-24 01:55:06.0"
+              },
+              {
+                "id": 72,
+                "key": "maxRating",
+                "value": 5.0,
+                "language": "en",
+                "createdAt": "2016-09-24 01:55:06.0"
+              },
+              {
+                "id": 73,
+                "key": "defaultRating",
+                "value": 3.0,
+                "defaultValue": "0.0",
+                "editableByUser": false,
+                "language": "en",
+                "createdAt": "2016-09-24 01:55:06.0"
+              }
+            ],
+            "createdAt": "2016-09-24 02:02:10.0"
+          }
+        ],
+        "generalConfiguration": {
+          "id": 7,
+          "parameters": [
+            {
+              "id": 42,
+              "key": "aKey",
+              "value": "aPushSpecificValue",
+              "language": "en",
+              "createdAt": "2016-09-24 01:55:06.0"
+            }
+          ],
+          "createdAt": "2016-09-24 01:55:06.0"
+        },
+        "createdAt": "2016-09-24 01:55:06.0"
+      },
+      {
+        "id": 5,
+        "type": "PULL",
+        "mechanisms": [
+          {
+            "id": 9,
+            "configurationsId": 5,
+            "type": "TEXT_TYPE",
+            "active": true,
+            "order": 1,
+            "canBeActivated": false,
+            "parameters": [
+              {
+                "id": 76,
+                "key": "maxLength",
+                "value": 50.0,
+                "language": "en",
+                "createdAt": "2016-09-24 01:55:06.0"
+              },
+              {
+                "id": 77,
+                "key": "title",
+                "value": "Feedback Pull",
+                "language": "en",
+                "createdAt": "2016-09-24 01:55:06.0"
+              },
+              {
+                "id": 78,
+                "key": "hint",
+                "value": "Please enter your feedback",
+                "language": "en",
+                "createdAt": "2016-09-24 01:55:06.0"
+              },
+              {
+                "id": 79,
+                "key": "label",
+                "value": "Feedback",
+                "language": "en",
+                "createdAt": "2016-09-24 01:55:06.0"
+              },
+              {
+                "id": 80,
+                "key": "labelPositioning",
+                "value": "left",
+                "language": "en",
+                "createdAt": "2016-09-24 01:55:06.0"
+              },
+              {
+                "id": 81,
+                "key": "labelFontSize",
+                "value": 12.0,
+                "language": "en",
+                "createdAt": "2016-09-24 01:55:06.0"
+              },
+              {
+                "id": 82,
+                "key": "mandatory",
+                "value": 1.0,
+                "language": "en",
+                "createdAt": "2016-09-24 01:55:06.0"
+              },
+              {
+                "id": 83,
+                "key": "mandatoryReminder",
+                "value": "Please fill in the text field",
+                "language": "en",
+                "createdAt": "2016-09-24 01:55:06.0"
+              },
+              {
+                "id": 84,
+                "key": "undoEnabled",
+                "value": 1.0,
+                "language": "en",
+                "createdAt": "2016-09-24 01:55:06.0"
+              },
+              {
+                "id": 85,
+                "key": "undoSteps",
+                "value": 1.0,
+                "language": "en",
+                "createdAt": "2016-09-24 01:55:06.0"
+              },
+              {
+                "id": 86,
+                "key": "clearInput",
+                "value": 0.0,
+                "language": "en",
+                "createdAt": "2016-09-24 01:55:06.0"
+              },
+              {
+                "id": 87,
+                "key": "borderWidth",
+                "value": 2.0,
+                "language": "en",
+                "createdAt": "2016-09-24 01:55:06.0"
+              },
+              {
+                "id": 88,
+                "key": "borderColor",
+                "value": "#000000",
+                "language": "en",
+                "createdAt": "2016-09-24 01:55:06.0"
+              },
+              {
+                "id": 89,
+                "key": "fieldWidth",
+                "value": 200.0,
+                "language": "en",
+                "createdAt": "2016-09-24 01:55:06.0"
+              },
+              {
+                "id": 90,
+                "key": "fieldHeight",
+                "value": 50.0,
+                "language": "en",
+                "createdAt": "2016-09-24 01:55:06.0"
+              },
+              {
+                "id": 91,
+                "key": "fieldBackgroundColor",
+                "value": "#ffffff",
+                "language": "en",
+                "createdAt": "2016-09-24 01:55:06.0"
+              },
+              {
+                "id": 92,
+                "key": "maxLengthVisible",
+                "value": 1.0,
+                "language": "en",
+                "createdAt": "2016-09-24 01:55:06.0"
+              },
+              {
+                "id": 93,
+                "key": "validationRegex",
+                "value": ".",
+                "language": "en",
+                "createdAt": "2016-09-24 01:55:06.0"
+              },
+              {
+                "id": 94,
+                "key": "validateOnSkip",
+                "value": 1.0,
+                "language": "en",
+                "createdAt": "2016-09-24 01:55:06.0"
+              }
+            ],
+            "createdAt": "2016-09-24 02:02:10.0"
+          },
+          {
+            "id": 10,
+            "configurationsId": 5,
+            "type": "RATING_TYPE",
+            "active": true,
+            "order": 4,
+            "canBeActivated": false,
+            "parameters": [
+              {
+                "id": 95,
+                "key": "title",
+                "value": "Rate your user experience",
+                "language": "en",
+                "createdAt": "2016-09-24 01:55:06.0"
+              },
+              {
+                "id": 96,
+                "key": "ratingIcon",
+                "value": "star",
+                "language": "en",
+                "createdAt": "2016-09-24 01:55:06.0"
+              },
+              {
+                "id": 97,
+                "key": "maxRating",
+                "value": 5.0,
+                "language": "en",
+                "createdAt": "2016-09-24 01:55:06.0"
+              },
+              {
+                "id": 98,
+                "key": "defaultRating",
+                "value": 2.0,
+                "defaultValue": "0.0",
+                "editableByUser": false,
+                "language": "en",
+                "createdAt": "2016-09-24 01:55:06.0"
+              }
+            ],
+            "createdAt": "2016-09-24 02:02:10.0"
+          },
+          {
+            "id": 11,
+            "configurationsId": 5,
+            "type": "SCREENSHOT_TYPE",
+            "active": true,
+            "order": 3,
+            "canBeActivated": false,
+            "parameters": [
+              {
+                "id": 99,
+                "key": "title",
+                "value": "Title for screenshot feedback",
+                "language": "en",
+                "createdAt": "2016-09-24 01:55:06.0"
+              },
+              {
+                "id": 100,
+                "key": "defaultPicture",
+                "value": "lastScreenshot",
+                "defaultValue": "noImage",
+                "editableByUser": true,
+                "language": "en",
+                "createdAt": "2016-09-24 01:55:06.0"
+              }
+            ],
+            "createdAt": "2016-09-24 02:02:10.0"
+          }
+        ],
+        "generalConfiguration": {
+          "id": 8,
+          "parameters": [
+            {
+              "id": 74,
+              "key": "likelihood",
+              "value": 0.4,
+              "language": "en",
+              "createdAt": "2016-09-24 01:55:06.0"
+            },
+            {
+              "id": 75,
+              "key": "askOnAppStartup",
+              "value": 0.0,
+              "language": "en",
+              "createdAt": "2016-09-24 01:55:06.0"
+            }
+          ],
+          "createdAt": "2016-09-24 01:55:06.0"
+        },
+        "createdAt": "2016-09-24 01:55:06.0"
+      },
+      {
+        "id": 6,
+        "type": "PULL",
+        "mechanisms": [
+          {
+            "id": 12,
+            "configurationsId": 6,
+            "type": "RATING_TYPE",
+            "active": true,
+            "order": 1,
+            "canBeActivated": false,
+            "parameters": [
+              {
+                "id": 104,
+                "key": "title",
+                "value": "Rate your user experience",
+                "language": "en",
+                "createdAt": "2016-09-24 01:55:06.0"
+              },
+              {
+                "id": 105,
+                "key": "ratingIcon",
+                "value": "star",
+                "language": "en",
+                "createdAt": "2016-09-24 01:55:06.0"
+              },
+              {
+                "id": 106,
+                "key": "maxRating",
+                "value": 5.0,
+                "language": "en",
+                "createdAt": "2016-09-24 01:55:06.0"
+              },
+              {
+                "id": 107,
+                "key": "defaultRating",
+                "value": 2.0,
+                "defaultValue": "0.0",
+                "editableByUser": false,
+                "language": "en",
+                "createdAt": "2016-09-24 01:55:06.0"
+              }
+            ],
+            "createdAt": "2016-09-24 02:02:10.0"
+          },
+          {
+            "id": 13,
+            "configurationsId": 6,
+            "type": "CATEGORY_TYPE",
+            "active": true,
+            "order": 2,
+            "canBeActivated": false,
+            "parameters": [
+              {
+                "id": 108,
+                "key": "title",
+                "value": "Please choose from the following categories",
+                "language": "en",
+                "createdAt": "2016-09-24 01:55:06.0"
+              },
+              {
+                "id": 109,
+                "key": "ownAllowed",
+                "value": 1.0,
+                "language": "en",
+                "createdAt": "2016-09-24 01:55:06.0"
+              },
+              {
+                "id": 110,
+                "key": "multiple",
+                "value": 1.0,
+                "language": "en",
+                "createdAt": "2016-09-24 01:55:06.0"
+              },
+              {
+                "id": 111,
+                "key": "options",
+                "value": [
+                  {
+                    "id": 112,
+                    "key": "BUG_CATEGORY",
+                    "value": "Bug",
+                    "language": "en",
+                    "createdAt": "2016-09-24 01:55:06.0"
+                  },
+                  {
+                    "id": 113,
+                    "key": "FEATURE_REQUEST_CATEGORY",
+                    "value": "Feature Request",
+                    "language": "en",
+                    "createdAt": "2016-09-24 01:55:06.0"
+                  },
+                  {
+                    "id": 114,
+                    "key": "GENERAL_CATEGORY",
+                    "value": "General Feedback",
+                    "language": "en",
+                    "createdAt": "2016-09-24 01:55:06.0"
+                  }
+                ],
+                "language": "en",
+                "createdAt": "2016-09-24 01:55:06.0"
+              }
+            ],
+            "createdAt": "2016-09-24 02:02:10.0"
+          }
+        ],
+        "generalConfiguration": {
+          "id": 9,
+          "parameters": [
+            {
+              "id": 101,
+              "key": "reviewActive",
+              "value": 0.0,
+              "language": "en",
+              "createdAt": "2016-09-24 01:55:06.0"
+            },
+            {
+              "id": 102,
+              "key": "likelihood",
+              "value": 0.2,
+              "language": "en",
+              "createdAt": "2016-09-24 01:55:06.0"
+            },
+            {
+              "id": 103,
+              "key": "askOnAppStartup",
+              "value": 0.0,
+              "language": "en",
+              "createdAt": "2016-09-24 01:55:06.0"
+            }
+          ],
+          "createdAt": "2016-09-24 01:55:06.0"
+        },
+        "createdAt": "2016-09-24 01:55:06.0"
+      }
+    ],
+    "createdAt": "2016-09-24 02:02:10.0"
+  },
+  {
+    "id": 4,
+    "name": "Android application v1",
+    "state": 1,
+    "generalConfiguration": {
+      "id": 10,
+      "parameters": [],
+      "createdAt": "2016-10-01 08:49:43.0"
+    },
+    "configurations": [
+      {
+        "id": 7,
+        "type": "PUSH",
+        "mechanisms": [
+          {
+            "id": 14,
+            "configurationsId": 7,
+            "type": "TEXT_TYPE",
+            "active": true,
+            "order": 1,
+            "canBeActivated": false,
+            "parameters": [
+              {
+                "id": 115,
+                "key": "maxLength",
+                "value": 200.0,
+                "language": "en",
+                "createdAt": "2016-10-01 08:49:43.0"
+              },
+              {
+                "id": 116,
+                "key": "title",
+                "value": "Feedback",
+                "language": "en",
+                "createdAt": "2016-10-01 08:49:43.0"
+              },
+              {
+                "id": 117,
+                "key": "hint",
+                "value": "Please enter your feedback",
+                "language": "en",
+                "createdAt": "2016-10-01 08:49:43.0"
+              },
+              {
+                "id": 118,
+                "key": "label",
+                "value": "Feedback",
+                "language": "en",
+                "createdAt": "2016-10-01 08:49:43.0"
+              },
+              {
+                "id": 119,
+                "key": "labelColor",
+                "value": "#353535",
+                "language": "en",
+                "createdAt": "2016-10-01 08:49:43.0"
+              },
+              {
+                "id": 120,
+                "key": "textareaFontColor",
+                "value": "#000000",
+                "language": "en",
+                "createdAt": "2016-10-01 08:49:43.0"
+              },
+              {
+                "id": 121,
+                "key": "mandatory",
+                "value": 1.0,
+                "language": "en",
+                "createdAt": "2016-10-01 08:49:43.0"
+              },
+              {
+                "id": 122,
+                "key": "mandatoryReminder",
+                "value": "Please fill in the text field",
+                "language": "en",
+                "createdAt": "2016-10-01 08:49:43.0"
+              },
+              {
+                "id": 123,
+                "key": "fieldFontSize",
+                "value": 16.0,
+                "language": "en",
+                "createdAt": "2016-10-01 08:49:43.0"
+              },
+              {
+                "id": 124,
+                "key": "fieldFontType",
+                "value": "normal",
+                "language": "en",
+                "createdAt": "2016-10-01 08:49:43.0"
+              },
+              {
+                "id": 125,
+                "key": "fieldTextAlignment",
+                "value": "left",
+                "language": "en",
+                "createdAt": "2016-10-01 08:49:43.0"
+              },
+              {
+                "id": 126,
+                "key": "maxLengthVisible",
+                "value": 1.0,
+                "language": "en",
+                "createdAt": "2016-10-01 08:49:43.0"
+              },
+              {
+                "id": 182,
+                "key": "textLengthVisible",
+                "value": 1.0,
+                "language": "en",
+                "createdAt": "2016-10-01 11:29:52.0"
+              }
+            ],
+            "createdAt": "2016-10-01 08:49:43.0"
+          },
+          {
+            "id": 15,
+            "configurationsId": 7,
+            "type": "AUDIO_TYPE",
+            "active": true,
+            "order": 2,
+            "canBeActivated": false,
+            "parameters": [
+              {
+                "id": 127,
+                "key": "title",
+                "value": "Express your feedback with an audio message",
+                "language": "en",
+                "createdAt": "2016-10-01 08:49:43.0"
+              },
+              {
+                "id": 128,
+                "key": "maxTime",
+                "value": 30.0,
+                "defaultValue": "30.0",
+                "editableByUser": false,
+                "language": "en",
+                "createdAt": "2016-10-01 08:49:43.0"
+              }
+            ],
+            "createdAt": "2016-10-01 08:49:43.0"
+          },
+          {
+            "id": 16,
+            "configurationsId": 7,
+            "type": "SCREENSHOT_TYPE",
+            "active": true,
+            "order": 3,
+            "canBeActivated": false,
+            "parameters": [
+              {
+                "id": 129,
+                "key": "title",
+                "value": "Illustrate your feedback with a screenshot/image",
+                "language": "en",
+                "createdAt": "2016-10-01 08:49:43.0"
+              },
+              {
+                "id": 130,
+                "key": "defaultPicture",
+                "value": "lastScreenshot",
+                "defaultValue": "noImage",
+                "editableByUser": true,
+                "language": "en",
+                "createdAt": "2016-10-01 08:49:43.0"
+              }
+            ],
+            "createdAt": "2016-10-01 08:49:43.0"
+          },
+          {
+            "id": 17,
+            "configurationsId": 7,
+            "type": "RATING_TYPE",
+            "active": true,
+            "order": 4,
+            "canBeActivated": false,
+            "parameters": [
+              {
+                "id": 131,
+                "key": "title",
+                "value": "Rate your user experience",
+                "language": "en",
+                "createdAt": "2016-10-01 08:49:43.0"
+              },
+              {
+                "id": 132,
+                "key": "ratingIcon",
+                "value": "star",
+                "language": "en",
+                "createdAt": "2016-10-01 08:49:43.0"
+              },
+              {
+                "id": 133,
+                "key": "maxRating",
+                "value": 5.0,
+                "language": "en",
+                "createdAt": "2016-10-01 08:49:43.0"
+              },
+              {
+                "id": 134,
+                "key": "defaultRating",
+                "value": 3.0,
+                "defaultValue": "0.0",
+                "editableByUser": false,
+                "language": "en",
+                "createdAt": "2016-10-01 08:49:43.0"
+              }
+            ],
+            "createdAt": "2016-10-01 08:49:43.0"
+          },
+          {
+            "id": 18,
+            "configurationsId": 7,
+            "type": "CATEGORY_TYPE",
+            "active": true,
+            "order": 5,
+            "canBeActivated": false,
+            "parameters": [
+              {
+                "id": 135,
+                "key": "title",
+                "value": "Please choose one of the following categories",
+                "language": "en",
+                "createdAt": "2016-10-01 08:49:43.0"
+              },
+              {
+                "id": 136,
+                "key": "ownAllowed",
+                "value": 0.0,
+                "language": "en",
+                "createdAt": "2016-10-01 08:49:43.0"
+              },
+              {
+                "id": 137,
+                "key": "multiple",
+                "value": 0.0,
+                "language": "en",
+                "createdAt": "2016-10-01 08:49:43.0"
+              },
+              {
+                "id": 138,
+                "key": "mandatory",
+                "value": 1.0,
+                "language": "en",
+                "createdAt": "2016-10-01 08:49:43.0"
+              },
+              {
+                "id": 139,
+                "key": "mandatoryReminder",
+                "value": "Please select at least one category",
+                "language": "en",
+                "createdAt": "2016-10-01 08:49:43.0"
+              },
+              {
+                "id": 140,
+                "key": "options",
+                "value": [
+                  {
+                    "id": 141,
+                    "key": "BUG_CATEGORY",
+                    "value": "Bug",
+                    "language": "en",
+                    "createdAt": "2016-10-01 08:49:43.0"
+                  },
+                  {
+                    "id": 142,
+                    "key": "FEATURE_REQUEST_CATEGORY",
+                    "value": "Feature Request",
+                    "language": "en",
+                    "createdAt": "2016-10-01 08:49:43.0"
+                  },
+                  {
+                    "id": 143,
+                    "key": "GENERAL_CATEGORY",
+                    "value": "General Feedback",
+                    "language": "en",
+                    "createdAt": "2016-10-01 08:49:43.0"
+                  }
+                ],
+                "language": "en",
+                "createdAt": "2016-10-01 08:49:43.0"
+              }
+            ],
+            "createdAt": "2016-10-01 08:49:43.0"
+          },
+          {
+            "id": 19,
+            "configurationsId": 7,
+            "type": "ATTACHMENT_TYPE",
+            "active": false,
+            "order": 6,
+            "canBeActivated": false,
+            "parameters": [
+              {
+                "id": 144,
+                "key": "title",
+                "value": "You can also attach some files to your feedback",
+                "language": "en",
+                "createdAt": "2016-10-01 08:49:43.0"
+              }
+            ],
+            "createdAt": "2016-10-01 08:49:43.0"
+          }
+        ],
+        "generalConfiguration": {
+          "id": 11,
+          "parameters": [],
+          "createdAt": "2016-10-01 08:49:43.0"
+        },
+        "createdAt": "2016-10-01 08:49:43.0"
+      },
+      {
+        "id": 8,
+        "type": "PULL",
+        "mechanisms": [
+          {
+            "id": 20,
+            "configurationsId": 8,
+            "type": "TEXT_TYPE",
+            "active": true,
+            "order": 1,
+            "canBeActivated": false,
+            "parameters": [
+              {
+                "id": 147,
+                "key": "maxLength",
+                "value": -1.0,
+                "language": "en",
+                "createdAt": "2016-10-01 08:49:43.0"
+              },
+              {
+                "id": 148,
+                "key": "title",
+                "value": "Feedback",
+                "language": "en",
+                "createdAt": "2016-10-01 08:49:43.0"
+              },
+              {
+                "id": 149,
+                "key": "hint",
+                "value": "Please enter your feedback",
+                "language": "en",
+                "createdAt": "2016-10-01 08:49:43.0"
+              },
+              {
+                "id": 150,
+                "key": "label",
+                "value": "Feedback",
+                "language": "en",
+                "createdAt": "2016-10-01 08:49:43.0"
+              },
+              {
+                "id": 151,
+                "key": "labelColor",
+                "value": "#353535",
+                "language": "en",
+                "createdAt": "2016-10-01 08:49:43.0"
+              },
+              {
+                "id": 152,
+                "key": "textareaFontColor",
+                "value": "#000000",
+                "language": "en",
+                "createdAt": "2016-10-01 08:49:43.0"
+              },
+              {
+                "id": 153,
+                "key": "mandatory",
+                "value": 1.0,
+                "language": "en",
+                "createdAt": "2016-10-01 08:49:43.0"
+              },
+              {
+                "id": 154,
+                "key": "mandatoryReminder",
+                "value": "Please fill in the text field",
+                "language": "en",
+                "createdAt": "2016-10-01 08:49:43.0"
+              },
+              {
+                "id": 155,
+                "key": "fieldFontSize",
+                "value": 22.0,
+                "language": "en",
+                "createdAt": "2016-10-01 08:49:43.0"
+              },
+              {
+                "id": 156,
+                "key": "fieldFontType",
+                "value": "italic",
+                "language": "en",
+                "createdAt": "2016-10-01 08:49:43.0"
+              },
+              {
+                "id": 157,
+                "key": "fieldTextAlignment",
+                "value": "right",
+                "language": "en",
+                "createdAt": "2016-10-01 08:49:43.0"
+              },
+              {
+                "id": 158,
+                "key": "maxLengthVisible",
+                "value": 0.0,
+                "language": "en",
+                "createdAt": "2016-10-01 08:49:43.0"
+              }
+            ],
+            "createdAt": "2016-10-01 08:49:43.0"
+          },
+          {
+            "id": 21,
+            "configurationsId": 8,
+            "type": "RATING_TYPE",
+            "active": true,
+            "order": 4,
+            "canBeActivated": false,
+            "parameters": [
+              {
+                "id": 159,
+                "key": "title",
+                "value": "Rate your user experience",
+                "language": "en",
+                "createdAt": "2016-10-01 08:49:43.0"
+              },
+              {
+                "id": 160,
+                "key": "ratingIcon",
+                "value": "star",
+                "language": "en",
+                "createdAt": "2016-10-01 08:49:43.0"
+              },
+              {
+                "id": 161,
+                "key": "maxRating",
+                "value": 5.0,
+                "language": "en",
+                "createdAt": "2016-10-01 08:49:43.0"
+              },
+              {
+                "id": 162,
+                "key": "defaultRating",
+                "value": 0.0,
+                "defaultValue": "0.0",
+                "editableByUser": false,
+                "language": "en",
+                "createdAt": "2016-10-01 08:49:43.0"
+              }
+            ],
+            "createdAt": "2016-10-01 08:49:43.0"
+          },
+          {
+            "id": 22,
+            "configurationsId": 8,
+            "type": "SCREENSHOT_TYPE",
+            "active": false,
+            "order": 3,
+            "canBeActivated": false,
+            "parameters": [
+              {
+                "id": 163,
+                "key": "title",
+                "value": "Illustrate your feedback with a screenshot/image",
+                "language": "en",
+                "createdAt": "2016-10-01 08:49:43.0"
+              },
+              {
+                "id": 164,
+                "key": "defaultPicture",
+                "value": "lastScreenshot",
+                "defaultValue": "noImage",
+                "editableByUser": true,
+                "language": "en",
+                "createdAt": "2016-10-01 08:49:43.0"
+              }
+            ],
+            "createdAt": "2016-10-01 08:49:43.0"
+          },
+          {
+            "id": 23,
+            "configurationsId": 8,
+            "type": "CATEGORY_TYPE",
+            "active": true,
+            "order": 5,
+            "canBeActivated": false,
+            "parameters": [
+              {
+                "id": 165,
+                "key": "title",
+                "value": "In which situations do you use the app?",
+                "language": "en",
+                "createdAt": "2016-10-01 08:49:43.0"
+              },
+              {
+                "id": 166,
+                "key": "ownAllowed",
+                "value": 1.0,
+                "language": "en",
+                "createdAt": "2016-10-01 08:49:43.0"
+              },
+              {
+                "id": 167,
+                "key": "multiple",
+                "value": 1.0,
+                "language": "en",
+                "createdAt": "2016-10-01 08:49:43.0"
+              },
+              {
+                "id": 168,
+                "key": "mandatory",
+                "value": 0.0,
+                "language": "en",
+                "createdAt": "2016-10-01 08:49:43.0"
+              },
+              {
+                "id": 169,
+                "key": "mandatoryReminder",
+                "value": "Please select at least one category",
+                "language": "en",
+                "createdAt": "2016-10-01 08:49:43.0"
+              },
+              {
+                "id": 170,
+                "key": "options",
+                "value": [
+                  {
+                    "id": 171,
+                    "key": "SPARETIME_CATEGORY",
+                    "value": "Spare time",
+                    "language": "en",
+                    "createdAt": "2016-10-01 08:49:43.0"
+                  },
+                  {
+                    "id": 172,
+                    "key": "WORK_CATEGORY",
+                    "value": "Work",
+                    "language": "en",
+                    "createdAt": "2016-10-01 08:49:43.0"
+                  },
+                  {
+                    "id": 173,
+                    "key": "SCHOOL_CATEGORY",
+                    "value": "School",
+                    "language": "en",
+                    "createdAt": "2016-10-01 08:49:43.0"
+                  }
+                ],
+                "language": "en",
+                "createdAt": "2016-10-01 08:49:43.0"
+              }
+            ],
+            "createdAt": "2016-10-01 08:49:43.0"
+          }
+        ],
+        "generalConfiguration": {
+          "id": 12,
+          "parameters": [
+            {
+              "id": 145,
+              "key": "likelihood",
+              "value": 0.5,
+              "language": "en",
+              "createdAt": "2016-10-01 08:49:43.0"
+            },
+            {
+              "id": 146,
+              "key": "showIntermediateDialog",
+              "value": 1.0,
+              "language": "en",
+              "createdAt": "2016-10-01 08:49:43.0"
+            }
+          ],
+          "createdAt": "2016-10-01 08:49:43.0"
+        },
+        "createdAt": "2016-10-01 08:49:43.0"
+      },
+      {
+        "id": 9,
+        "type": "PULL",
+        "mechanisms": [
+          {
+            "id": 24,
+            "configurationsId": 9,
+            "type": "RATING_TYPE",
+            "active": true,
+            "order": 1,
+            "canBeActivated": false,
+            "parameters": [
+              {
+                "id": 176,
+                "key": "title",
+                "value": "Rate your user experience",
+                "language": "en",
+                "createdAt": "2016-10-01 08:49:43.0"
+              },
+              {
+                "id": 177,
+                "key": "ratingIcon",
+                "value": "star",
+                "language": "en",
+                "createdAt": "2016-10-01 08:49:43.0"
+              },
+              {
+                "id": 178,
+                "key": "maxRating",
+                "value": 5.0,
+                "language": "en",
+                "createdAt": "2016-10-01 08:49:43.0"
+              },
+              {
+                "id": 179,
+                "key": "defaultRating",
+                "value": 5.0,
+                "defaultValue": "0.0",
+                "editableByUser": false,
+                "language": "en",
+                "createdAt": "2016-10-01 08:49:43.0"
+              }
+            ],
+            "createdAt": "2016-10-01 08:49:43.0"
+          },
+          {
+            "id": 25,
+            "configurationsId": 9,
+            "type": "AUDIO_TYPE",
+            "active": true,
+            "order": 2,
+            "canBeActivated": false,
+            "parameters": [
+              {
+                "id": 180,
+                "key": "title",
+                "value": "Express your feedback with an audio message",
+                "language": "en",
+                "createdAt": "2016-10-01 08:49:43.0"
+              },
+              {
+                "id": 181,
+                "key": "maxTime",
+                "value": 60.0,
+                "defaultValue": "30.0",
+                "editableByUser": false,
+                "language": "en",
+                "createdAt": "2016-10-01 08:49:43.0"
+              }
+            ],
+            "createdAt": "2016-10-01 08:49:43.0"
+          }
+        ],
+        "generalConfiguration": {
+          "id": 13,
+          "parameters": [
+            {
+              "id": 174,
+              "key": "likelihood",
+              "value": 0.5,
+              "language": "en",
+              "createdAt": "2016-10-01 08:49:43.0"
+            },
+            {
+              "id": 175,
+              "key": "showIntermediateDialog",
+              "value": 0.0,
+              "language": "en",
+              "createdAt": "2016-10-01 08:49:43.0"
+            }
+          ],
+          "createdAt": "2016-10-01 08:49:43.0"
+        },
+        "createdAt": "2016-10-01 08:49:43.0"
+      }
+    ],
+    "createdAt": "2016-10-01 08:49:43.0"
+  },
+  {
+    "id": 5,
+    "name": "Android application v2 multiple categories of the same type",
+    "state": 1,
+    "generalConfiguration": {
+      "id": 14,
+      "parameters": [],
+      "createdAt": "2016-10-02 02:09:54.0"
+    },
+    "configurations": [
+      {
+        "id": 10,
+        "type": "PUSH",
+        "mechanisms": [
+          {
+            "id": 26,
+            "configurationsId": 10,
+            "type": "TEXT_TYPE",
+            "active": true,
+            "order": 1,
+            "canBeActivated": false,
+            "parameters": [
+              {
+                "id": 183,
+                "key": "maxLength",
+                "value": 200.0,
+                "language": "en",
+                "createdAt": "2016-10-02 02:09:54.0"
+              },
+              {
+                "id": 184,
+                "key": "title",
+                "value": "Feedback",
+                "language": "en",
+                "createdAt": "2016-10-02 02:09:54.0"
+              },
+              {
+                "id": 185,
+                "key": "hint",
+                "value": "Please enter your feedback",
+                "language": "en",
+                "createdAt": "2016-10-02 02:09:54.0"
+              },
+              {
+                "id": 186,
+                "key": "label",
+                "value": "Feedback",
+                "language": "en",
+                "createdAt": "2016-10-02 02:09:54.0"
+              },
+              {
+                "id": 187,
+                "key": "labelColor",
+                "value": "#353535",
+                "language": "en",
+                "createdAt": "2016-10-02 02:09:54.0"
+              },
+              {
+                "id": 188,
+                "key": "textareaFontColor",
+                "value": "#000000",
+                "language": "en",
+                "createdAt": "2016-10-02 02:09:54.0"
+              },
+              {
+                "id": 189,
+                "key": "mandatory",
+                "value": 1.0,
+                "language": "en",
+                "createdAt": "2016-10-02 02:09:54.0"
+              },
+              {
+                "id": 190,
+                "key": "mandatoryReminder",
+                "value": "Please fill in the text field",
+                "language": "en",
+                "createdAt": "2016-10-02 02:09:54.0"
+              },
+              {
+                "id": 191,
+                "key": "fieldFontSize",
+                "value": 16.0,
+                "language": "en",
+                "createdAt": "2016-10-02 02:09:54.0"
+              },
+              {
+                "id": 192,
+                "key": "fieldFontType",
+                "value": "normal",
+                "language": "en",
+                "createdAt": "2016-10-02 02:09:54.0"
+              },
+              {
+                "id": 193,
+                "key": "fieldTextAlignment",
+                "value": "left",
+                "language": "en",
+                "createdAt": "2016-10-02 02:09:54.0"
+              },
+              {
+                "id": 194,
+                "key": "maxLengthVisible",
+                "value": 1.0,
+                "language": "en",
+                "createdAt": "2016-10-02 02:09:54.0"
+              },
+              {
+                "id": 195,
+                "key": "textLengthVisible",
+                "value": 1.0,
+                "language": "en",
+                "createdAt": "2016-10-02 02:09:54.0"
+              }
+            ],
+            "createdAt": "2016-10-02 02:09:54.0"
+          },
+          {
+            "id": 27,
+            "configurationsId": 10,
+            "type": "TEXT_TYPE",
+            "active": true,
+            "order": 2,
+            "canBeActivated": false,
+            "parameters": [
+              {
+                "id": 196,
+                "key": "title",
+                "value": "Feedback",
+                "language": "en",
+                "createdAt": "2016-10-02 02:09:54.0"
+              },
+              {
+                "id": 197,
+                "key": "hint",
+                "value": "Please enter your feedback",
+                "language": "en",
+                "createdAt": "2016-10-02 02:09:54.0"
+              },
+              {
+                "id": 198,
+                "key": "label",
+                "value": "Feedback",
+                "language": "en",
+                "createdAt": "2016-10-02 02:09:54.0"
+              },
+              {
+                "id": 199,
+                "key": "labelColor",
+                "value": "#353535",
+                "language": "en",
+                "createdAt": "2016-10-02 02:09:54.0"
+              },
+              {
+                "id": 200,
+                "key": "textareaFontColor",
+                "value": "#000000",
+                "language": "en",
+                "createdAt": "2016-10-02 02:09:54.0"
+              },
+              {
+                "id": 201,
+                "key": "mandatory",
+                "value": 0.0,
+                "language": "en",
+                "createdAt": "2016-10-02 02:09:54.0"
+              },
+              {
+                "id": 202,
+                "key": "mandatoryReminder",
+                "value": "Please fill in the text field",
+                "language": "en",
+                "createdAt": "2016-10-02 02:09:54.0"
+              },
+              {
+                "id": 203,
+                "key": "fieldFontSize",
+                "value": 16.0,
+                "language": "en",
+                "createdAt": "2016-10-02 02:09:54.0"
+              },
+              {
+                "id": 204,
+                "key": "fieldFontType",
+                "value": "normal",
+                "language": "en",
+                "createdAt": "2016-10-02 02:09:54.0"
+              },
+              {
+                "id": 205,
+                "key": "fieldTextAlignment",
+                "value": "right",
+                "language": "en",
+                "createdAt": "2016-10-02 02:09:54.0"
+              },
+              {
+                "id": 206,
+                "key": "maxLengthVisible",
+                "value": 0.0,
+                "language": "en",
+                "createdAt": "2016-10-02 02:09:54.0"
+              },
+              {
+                "id": 207,
+                "key": "textLengthVisible",
+                "value": 1.0,
+                "language": "en",
+                "createdAt": "2016-10-02 02:09:54.0"
+              }
+            ],
+            "createdAt": "2016-10-02 02:09:54.0"
+          },
+          {
+            "id": 28,
+            "configurationsId": 10,
+            "type": "AUDIO_TYPE",
+            "active": true,
+            "order": 3,
+            "canBeActivated": false,
+            "parameters": [
+              {
+                "id": 208,
+                "key": "title",
+                "value": "Express your feedback with an audio message",
+                "language": "en",
+                "createdAt": "2016-10-02 02:09:54.0"
+              },
+              {
+                "id": 209,
+                "key": "maxTime",
+                "value": 30.0,
+                "defaultValue": "30.0",
+                "editableByUser": false,
+                "language": "en",
+                "createdAt": "2016-10-02 02:09:54.0"
+              }
+            ],
+            "createdAt": "2016-10-02 02:09:54.0"
+          },
+          {
+            "id": 29,
+            "configurationsId": 10,
+            "type": "AUDIO_TYPE",
+            "active": true,
+            "order": 4,
+            "canBeActivated": false,
+            "parameters": [
+              {
+                "id": 210,
+                "key": "title",
+                "value": "Express your feedback with an audio message",
+                "language": "en",
+                "createdAt": "2016-10-02 02:09:54.0"
+              },
+              {
+                "id": 211,
+                "key": "maxTime",
+                "value": 10.0,
+                "defaultValue": "10.0",
+                "editableByUser": false,
+                "language": "en",
+                "createdAt": "2016-10-02 02:09:54.0"
+              }
+            ],
+            "createdAt": "2016-10-02 02:09:54.0"
+          },
+          {
+            "id": 30,
+            "configurationsId": 10,
+            "type": "SCREENSHOT_TYPE",
+            "active": true,
+            "order": 5,
+            "canBeActivated": false,
+            "parameters": [
+              {
+                "id": 212,
+                "key": "title",
+                "value": "Illustrate your feedback with a screenshot/image",
+                "language": "en",
+                "createdAt": "2016-10-02 02:09:54.0"
+              },
+              {
+                "id": 213,
+                "key": "defaultPicture",
+                "value": "lastScreenshot",
+                "defaultValue": "noImage",
+                "editableByUser": true,
+                "language": "en",
+                "createdAt": "2016-10-02 02:09:54.0"
+              },
+              {
+                "id": 351,
+                "key": "maxTextAnnotation",
+                "value": 2.0,
+                "language": "en",
+                "createdAt": "2016-10-02 08:19:52.0"
+              }
+            ],
+            "createdAt": "2016-10-02 02:09:54.0"
+          },
+          {
+            "id": 31,
+            "configurationsId": 10,
+            "type": "SCREENSHOT_TYPE",
+            "active": true,
+            "order": 6,
+            "canBeActivated": false,
+            "parameters": [
+              {
+                "id": 214,
+                "key": "title",
+                "value": "Illustrate your feedback with a screenshot/image",
+                "language": "en",
+                "createdAt": "2016-10-02 02:09:54.0"
+              },
+              {
+                "id": 215,
+                "key": "defaultPicture",
+                "value": "lastScreenshot",
+                "defaultValue": "noImage",
+                "editableByUser": false,
+                "language": "en",
+                "createdAt": "2016-10-02 02:09:54.0"
+              },
+              {
+                "id": 352,
+                "key": "maxTextAnnotation",
+                "value": 8.0,
+                "language": "en",
+                "createdAt": "2016-10-02 08:21:27.0"
+              }
+            ],
+            "createdAt": "2016-10-02 02:09:54.0"
+          },
+          {
+            "id": 32,
+            "configurationsId": 10,
+            "type": "RATING_TYPE",
+            "active": true,
+            "order": 7,
+            "canBeActivated": false,
+            "parameters": [
+              {
+                "id": 216,
+                "key": "title",
+                "value": "Rate your user experience",
+                "language": "en",
+                "createdAt": "2016-10-02 02:09:54.0"
+              },
+              {
+                "id": 217,
+                "key": "ratingIcon",
+                "value": "star",
+                "language": "en",
+                "createdAt": "2016-10-02 02:09:54.0"
+              },
+              {
+                "id": 218,
+                "key": "maxRating",
+                "value": 5.0,
+                "language": "en",
+                "createdAt": "2016-10-02 02:09:54.0"
+              },
+              {
+                "id": 219,
+                "key": "defaultRating",
+                "value": 0.0,
+                "defaultValue": "0.0",
+                "editableByUser": false,
+                "language": "en",
+                "createdAt": "2016-10-02 02:09:54.0"
+              }
+            ],
+            "createdAt": "2016-10-02 02:09:54.0"
+          },
+          {
+            "id": 33,
+            "configurationsId": 10,
+            "type": "RATING_TYPE",
+            "active": true,
+            "order": 8,
+            "canBeActivated": false,
+            "parameters": [
+              {
+                "id": 220,
+                "key": "title",
+                "value": "Rate your user experience",
+                "language": "en",
+                "createdAt": "2016-10-02 02:09:54.0"
+              },
+              {
+                "id": 221,
+                "key": "ratingIcon",
+                "value": "star",
+                "language": "en",
+                "createdAt": "2016-10-02 02:09:54.0"
+              },
+              {
+                "id": 222,
+                "key": "maxRating",
+                "value": 5.0,
+                "language": "en",
+                "createdAt": "2016-10-02 02:09:54.0"
+              },
+              {
+                "id": 223,
+                "key": "defaultRating",
+                "value": 4.0,
+                "defaultValue": "0.0",
+                "editableByUser": false,
+                "language": "en",
+                "createdAt": "2016-10-02 02:09:54.0"
+              }
+            ],
+            "createdAt": "2016-10-02 02:09:54.0"
+          },
+          {
+            "id": 34,
+            "configurationsId": 10,
+            "type": "CATEGORY_TYPE",
+            "active": true,
+            "order": 9,
+            "canBeActivated": false,
+            "parameters": [
+              {
+                "id": 224,
+                "key": "title",
+                "value": "Please choose one of the following categories",
+                "language": "en",
+                "createdAt": "2016-10-02 02:09:54.0"
+              },
+              {
+                "id": 225,
+                "key": "ownAllowed",
+                "value": 0.0,
+                "language": "en",
+                "createdAt": "2016-10-02 02:09:54.0"
+              },
+              {
+                "id": 226,
+                "key": "multiple",
+                "value": 0.0,
+                "language": "en",
+                "createdAt": "2016-10-02 02:09:54.0"
+              },
+              {
+                "id": 227,
+                "key": "mandatory",
+                "value": 1.0,
+                "language": "en",
+                "createdAt": "2016-10-02 02:09:54.0"
+              },
+              {
+                "id": 228,
+                "key": "mandatoryReminder",
+                "value": "Please select at least one category",
+                "language": "en",
+                "createdAt": "2016-10-02 02:09:54.0"
+              },
+              {
+                "id": 229,
+                "key": "options",
+                "value": [
+                  {
+                    "id": 230,
+                    "key": "BUG_CATEGORY",
+                    "value": "Bug",
+                    "language": "en",
+                    "createdAt": "2016-10-02 02:09:54.0"
+                  },
+                  {
+                    "id": 231,
+                    "key": "FEATURE_REQUEST_CATEGORY",
+                    "value": "Feature Request",
+                    "language": "en",
+                    "createdAt": "2016-10-02 02:09:54.0"
+                  },
+                  {
+                    "id": 232,
+                    "key": "GENERAL_CATEGORY",
+                    "value": "General Feedback",
+                    "language": "en",
+                    "createdAt": "2016-10-02 02:09:54.0"
+                  }
+                ],
+                "language": "en",
+                "createdAt": "2016-10-02 02:09:54.0"
+              }
+            ],
+            "createdAt": "2016-10-02 02:09:54.0"
+          },
+          {
+            "id": 35,
+            "configurationsId": 10,
+            "type": "CATEGORY_TYPE",
+            "active": true,
+            "order": 10,
+            "canBeActivated": false,
+            "parameters": [
+              {
+                "id": 233,
+                "key": "title",
+                "value": "Where do you use the app the most?",
+                "language": "en",
+                "createdAt": "2016-10-02 02:09:54.0"
+              },
+              {
+                "id": 234,
+                "key": "ownAllowed",
+                "value": 1.0,
+                "language": "en",
+                "createdAt": "2016-10-02 02:09:54.0"
+              },
+              {
+                "id": 235,
+                "key": "multiple",
+                "value": 1.0,
+                "language": "en",
+                "createdAt": "2016-10-02 02:09:54.0"
+              },
+              {
+                "id": 236,
+                "key": "mandatory",
+                "value": 0.0,
+                "language": "en",
+                "createdAt": "2016-10-02 02:09:54.0"
+              },
+              {
+                "id": 237,
+                "key": "mandatoryReminder",
+                "value": "Please select at least one option",
+                "language": "en",
+                "createdAt": "2016-10-02 02:09:54.0"
+              },
+              {
+                "id": 238,
+                "key": "options",
+                "value": [
+                  {
+                    "id": 239,
+                    "key": "WORK_CATEGORY",
+                    "value": "Work",
+                    "language": "en",
+                    "createdAt": "2016-10-02 02:09:54.0"
+                  },
+                  {
+                    "id": 240,
+                    "key": "SPARE_TIME_CATEGORY",
+                    "value": "Spare_time",
+                    "language": "en",
+                    "createdAt": "2016-10-02 02:09:54.0"
+                  },
+                  {
+                    "id": 241,
+                    "key": "SCHOOL_CATEGORY",
+                    "value": "School",
+                    "language": "en",
+                    "createdAt": "2016-10-02 02:09:54.0"
+                  }
+                ],
+                "language": "en",
+                "createdAt": "2016-10-02 02:09:54.0"
+              }
+            ],
+            "createdAt": "2016-10-02 02:09:54.0"
+          },
+          {
+            "id": 36,
+            "configurationsId": 10,
+            "type": "ATTACHMENT_TYPE",
+            "active": false,
+            "order": 11,
+            "canBeActivated": false,
+            "parameters": [
+              {
+                "id": 242,
+                "key": "title",
+                "value": "You can also attach some files to your feedback",
+                "language": "en",
+                "createdAt": "2016-10-02 02:09:54.0"
+              }
+            ],
+            "createdAt": "2016-10-02 02:09:54.0"
+          }
+        ],
+        "generalConfiguration": {
+          "id": 15,
+          "parameters": [],
+          "createdAt": "2016-10-02 02:09:54.0"
+        },
+        "createdAt": "2016-10-02 02:09:54.0"
+      },
+      {
+        "id": 11,
+        "type": "PULL",
+        "mechanisms": [
+          {
+            "id": 37,
+            "configurationsId": 11,
+            "type": "TEXT_TYPE",
+            "active": true,
+            "order": 1,
+            "canBeActivated": false,
+            "parameters": [
+              {
+                "id": 245,
+                "key": "maxLength",
+                "value": 150.0,
+                "language": "en",
+                "createdAt": "2016-10-02 02:09:54.0"
+              },
+              {
+                "id": 246,
+                "key": "title",
+                "value": "Feedback",
+                "language": "en",
+                "createdAt": "2016-10-02 02:09:54.0"
+              },
+              {
+                "id": 247,
+                "key": "hint",
+                "value": "Please enter your feedback",
+                "language": "en",
+                "createdAt": "2016-10-02 02:09:54.0"
+              },
+              {
+                "id": 248,
+                "key": "label",
+                "value": "Feedback",
+                "language": "en",
+                "createdAt": "2016-10-02 02:09:54.0"
+              },
+              {
+                "id": 249,
+                "key": "labelColor",
+                "value": "#353535",
+                "language": "en",
+                "createdAt": "2016-10-02 02:09:54.0"
+              },
+              {
+                "id": 250,
+                "key": "textareaFontColor",
+                "value": "#000000",
+                "language": "en",
+                "createdAt": "2016-10-02 02:09:54.0"
+              },
+              {
+                "id": 251,
+                "key": "mandatory",
+                "value": 1.0,
+                "language": "en",
+                "createdAt": "2016-10-02 02:09:54.0"
+              },
+              {
+                "id": 252,
+                "key": "mandatoryReminder",
+                "value": "Please fill in the text field",
+                "language": "en",
+                "createdAt": "2016-10-02 02:09:54.0"
+              },
+              {
+                "id": 253,
+                "key": "fieldFontSize",
+                "value": 22.0,
+                "language": "en",
+                "createdAt": "2016-10-02 02:09:54.0"
+              },
+              {
+                "id": 254,
+                "key": "fieldFontType",
+                "value": "italic",
+                "language": "en",
+                "createdAt": "2016-10-02 02:09:54.0"
+              },
+              {
+                "id": 255,
+                "key": "fieldTextAlignment",
+                "value": "center",
+                "language": "en",
+                "createdAt": "2016-10-02 02:09:54.0"
+              },
+              {
+                "id": 256,
+                "key": "maxLengthVisible",
+                "value": 1.0,
+                "language": "en",
+                "createdAt": "2016-10-02 02:09:54.0"
+              },
+              {
+                "id": 257,
+                "key": "textLengthVisible",
+                "value": 1.0,
+                "language": "en",
+                "createdAt": "2016-10-02 02:09:54.0"
+              }
+            ],
+            "createdAt": "2016-10-02 02:09:54.0"
+          },
+          {
+            "id": 38,
+            "configurationsId": 11,
+            "type": "RATING_TYPE",
+            "active": true,
+            "order": 4,
+            "canBeActivated": false,
+            "parameters": [
+              {
+                "id": 258,
+                "key": "title",
+                "value": "Rate your user experience",
+                "language": "en",
+                "createdAt": "2016-10-02 02:09:54.0"
+              },
+              {
+                "id": 259,
+                "key": "ratingIcon",
+                "value": "star",
+                "language": "en",
+                "createdAt": "2016-10-02 02:09:54.0"
+              },
+              {
+                "id": 260,
+                "key": "maxRating",
+                "value": 5.0,
+                "language": "en",
+                "createdAt": "2016-10-02 02:09:54.0"
+              },
+              {
+                "id": 261,
+                "key": "defaultRating",
+                "value": 5.0,
+                "defaultValue": "0.0",
+                "editableByUser": false,
+                "language": "en",
+                "createdAt": "2016-10-02 02:09:54.0"
+              }
+            ],
+            "createdAt": "2016-10-02 02:09:54.0"
+          },
+          {
+            "id": 39,
+            "configurationsId": 11,
+            "type": "SCREENSHOT_TYPE",
+            "active": false,
+            "order": 3,
+            "canBeActivated": false,
+            "parameters": [
+              {
+                "id": 262,
+                "key": "title",
+                "value": "Illustrate your feedback with a screenshot/image",
+                "language": "en",
+                "createdAt": "2016-10-02 02:09:54.0"
+              },
+              {
+                "id": 263,
+                "key": "defaultPicture",
+                "value": "lastScreenshot",
+                "defaultValue": "noImage",
+                "editableByUser": true,
+                "language": "en",
+                "createdAt": "2016-10-02 02:09:54.0"
+              }
+            ],
+            "createdAt": "2016-10-02 02:09:54.0"
+          },
+          {
+            "id": 40,
+            "configurationsId": 11,
+            "type": "CATEGORY_TYPE",
+            "active": true,
+            "order": 5,
+            "canBeActivated": false,
+            "parameters": [
+              {
+                "id": 264,
+                "key": "title",
+                "value": "In which situations do you use the app?",
+                "language": "en",
+                "createdAt": "2016-10-02 02:09:54.0"
+              },
+              {
+                "id": 265,
+                "key": "ownAllowed",
+                "value": 1.0,
+                "language": "en",
+                "createdAt": "2016-10-02 02:09:54.0"
+              },
+              {
+                "id": 266,
+                "key": "multiple",
+                "value": 1.0,
+                "language": "en",
+                "createdAt": "2016-10-02 02:09:54.0"
+              },
+              {
+                "id": 267,
+                "key": "mandatory",
+                "value": 0.0,
+                "language": "en",
+                "createdAt": "2016-10-02 02:09:54.0"
+              },
+              {
+                "id": 268,
+                "key": "mandatoryReminder",
+                "value": "Please select at least one category",
+                "language": "en",
+                "createdAt": "2016-10-02 02:09:54.0"
+              },
+              {
+                "id": 269,
+                "key": "options",
+                "value": [
+                  {
+                    "id": 270,
+                    "key": "SPARETIME_CATEGORY",
+                    "value": "Spare time",
+                    "language": "en",
+                    "createdAt": "2016-10-02 02:09:54.0"
+                  },
+                  {
+                    "id": 271,
+                    "key": "WORK_CATEGORY",
+                    "value": "Work",
+                    "language": "en",
+                    "createdAt": "2016-10-02 02:09:54.0"
+                  },
+                  {
+                    "id": 272,
+                    "key": "SCHOOL_CATEGORY",
+                    "value": "School",
+                    "language": "en",
+                    "createdAt": "2016-10-02 02:09:54.0"
+                  }
+                ],
+                "language": "en",
+                "createdAt": "2016-10-02 02:09:54.0"
+              }
+            ],
+            "createdAt": "2016-10-02 02:09:54.0"
+          }
+        ],
+        "generalConfiguration": {
+          "id": 16,
+          "parameters": [
+            {
+              "id": 243,
+              "key": "likelihood",
+              "value": 0.5,
+              "language": "en",
+              "createdAt": "2016-10-02 02:09:54.0"
+            },
+            {
+              "id": 244,
+              "key": "showIntermediateDialog",
+              "value": 1.0,
+              "language": "en",
+              "createdAt": "2016-10-02 02:09:54.0"
+            }
+          ],
+          "createdAt": "2016-10-02 02:09:54.0"
+        },
+        "createdAt": "2016-10-02 02:09:54.0"
+      },
+      {
+        "id": 12,
+        "type": "PULL",
+        "mechanisms": [
+          {
+            "id": 41,
+            "configurationsId": 12,
+            "type": "RATING_TYPE",
+            "active": true,
+            "order": 1,
+            "canBeActivated": false,
+            "parameters": [
+              {
+                "id": 275,
+                "key": "title",
+                "value": "Rate your user experience",
+                "language": "en",
+                "createdAt": "2016-10-02 02:09:54.0"
+              },
+              {
+                "id": 276,
+                "key": "ratingIcon",
+                "value": "star",
+                "language": "en",
+                "createdAt": "2016-10-02 02:09:54.0"
+              },
+              {
+                "id": 277,
+                "key": "maxRating",
+                "value": 5.0,
+                "language": "en",
+                "createdAt": "2016-10-02 02:09:54.0"
+              },
+              {
+                "id": 278,
+                "key": "defaultRating",
+                "value": 5.0,
+                "defaultValue": "0.0",
+                "editableByUser": false,
+                "language": "en",
+                "createdAt": "2016-10-02 02:09:54.0"
+              }
+            ],
+            "createdAt": "2016-10-02 02:09:54.0"
+          },
+          {
+            "id": 42,
+            "configurationsId": 12,
+            "type": "AUDIO_TYPE",
+            "active": true,
+            "order": 2,
+            "canBeActivated": false,
+            "parameters": [
+              {
+                "id": 279,
+                "key": "title",
+                "value": "Express your feedback with an audio message",
+                "language": "en",
+                "createdAt": "2016-10-02 02:09:55.0"
+              },
+              {
+                "id": 280,
+                "key": "maxTime",
+                "value": 60.0,
+                "defaultValue": "30.0",
+                "editableByUser": false,
+                "language": "en",
+                "createdAt": "2016-10-02 02:09:55.0"
+              }
+            ],
+            "createdAt": "2016-10-02 02:09:54.0"
+          }
+        ],
+        "generalConfiguration": {
+          "id": 17,
+          "parameters": [
+            {
+              "id": 273,
+              "key": "likelihood",
+              "value": 0.5,
+              "language": "en",
+              "createdAt": "2016-10-02 02:09:54.0"
+            },
+            {
+              "id": 274,
+              "key": "showIntermediateDialog",
+              "value": 0.0,
+              "language": "en",
+              "createdAt": "2016-10-02 02:09:54.0"
+            }
+          ],
+          "createdAt": "2016-10-02 02:09:54.0"
+        },
+        "createdAt": "2016-10-02 02:09:54.0"
+      }
+    ],
+    "createdAt": "2016-10-02 02:09:54.0"
+  },
+  {
+    "id": 6,
+    "name": "Android application v1 single categories of the same type",
+    "state": 1,
+    "generalConfiguration": {
+      "id": 18,
+      "parameters": [],
+      "createdAt": "2016-10-02 02:17:50.0"
+    },
+    "configurations": [
+      {
+        "id": 13,
+        "type": "PUSH",
+        "mechanisms": [
+          {
+            "id": 43,
+            "configurationsId": 13,
+            "type": "TEXT_TYPE",
+            "active": true,
+            "order": 1,
+            "canBeActivated": false,
+            "parameters": [
+              {
+                "id": 281,
+                "key": "maxLength",
+                "value": 200.0,
+                "language": "en",
+                "createdAt": "2016-10-02 02:17:50.0"
+              },
+              {
+                "id": 282,
+                "key": "title",
+                "value": "Feedback",
+                "language": "en",
+                "createdAt": "2016-10-02 02:17:50.0"
+              },
+              {
+                "id": 283,
+                "key": "hint",
+                "value": "Please enter your feedback",
+                "language": "en",
+                "createdAt": "2016-10-02 02:17:50.0"
+              },
+              {
+                "id": 284,
+                "key": "label",
+                "value": "Feedback",
+                "language": "en",
+                "createdAt": "2016-10-02 02:17:50.0"
+              },
+              {
+                "id": 285,
+                "key": "labelColor",
+                "value": "#353535",
+                "language": "en",
+                "createdAt": "2016-10-02 02:17:50.0"
+              },
+              {
+                "id": 286,
+                "key": "textareaFontColor",
+                "value": "#000000",
+                "language": "en",
+                "createdAt": "2016-10-02 02:17:50.0"
+              },
+              {
+                "id": 287,
+                "key": "mandatory",
+                "value": 1.0,
+                "language": "en",
+                "createdAt": "2016-10-02 02:17:50.0"
+              },
+              {
+                "id": 288,
+                "key": "mandatoryReminder",
+                "value": "Please fill in the text field",
+                "language": "en",
+                "createdAt": "2016-10-02 02:17:50.0"
+              },
+              {
+                "id": 289,
+                "key": "fieldFontSize",
+                "value": 16.0,
+                "language": "en",
+                "createdAt": "2016-10-02 02:17:50.0"
+              },
+              {
+                "id": 290,
+                "key": "fieldFontType",
+                "value": "normal",
+                "language": "en",
+                "createdAt": "2016-10-02 02:17:50.0"
+              },
+              {
+                "id": 291,
+                "key": "fieldTextAlignment",
+                "value": "left",
+                "language": "en",
+                "createdAt": "2016-10-02 02:17:50.0"
+              },
+              {
+                "id": 292,
+                "key": "maxLengthVisible",
+                "value": 1.0,
+                "language": "en",
+                "createdAt": "2016-10-02 02:17:50.0"
+              },
+              {
+                "id": 293,
+                "key": "textLengthVisible",
+                "value": 1.0,
+                "language": "en",
+                "createdAt": "2016-10-02 02:17:50.0"
+              },
+              {
+                "id": 349,
+                "key": "maxTextAnnotation",
+                "value": 4.0,
+                "language": "en",
+                "createdAt": "2016-10-02 08:17:21.0"
+              }
+            ],
+            "createdAt": "2016-10-02 02:17:50.0"
+          },
+          {
+            "id": 44,
+            "configurationsId": 13,
+            "type": "AUDIO_TYPE",
+            "active": true,
+            "order": 2,
+            "canBeActivated": false,
+            "parameters": [
+              {
+                "id": 294,
+                "key": "title",
+                "value": "Express your feedback with an audio message",
+                "language": "en",
+                "createdAt": "2016-10-02 02:17:50.0"
+              },
+              {
+                "id": 295,
+                "key": "maxTime",
+                "value": 30.0,
+                "defaultValue": "30.0",
+                "editableByUser": false,
+                "language": "en",
+                "createdAt": "2016-10-02 02:17:50.0"
+              }
+            ],
+            "createdAt": "2016-10-02 02:17:50.0"
+          },
+          {
+            "id": 45,
+            "configurationsId": 13,
+            "type": "SCREENSHOT_TYPE",
+            "active": true,
+            "order": 3,
+            "canBeActivated": false,
+            "parameters": [
+              {
+                "id": 296,
+                "key": "title",
+                "value": "Illustrate your feedback with a screenshot/image",
+                "language": "en",
+                "createdAt": "2016-10-02 02:17:50.0"
+              },
+              {
+                "id": 297,
+                "key": "defaultPicture",
+                "value": "lastScreenshot",
+                "defaultValue": "noImage",
+                "editableByUser": true,
+                "language": "en",
+                "createdAt": "2016-10-02 02:17:50.0"
+              },
+              {
+                "id": 350,
+                "key": "maxTextAnnotation",
+                "value": 5.0,
+                "language": "en",
+                "createdAt": "2016-10-02 08:18:42.0"
+              }
+            ],
+            "createdAt": "2016-10-02 02:17:50.0"
+          },
+          {
+            "id": 46,
+            "configurationsId": 13,
+            "type": "RATING_TYPE",
+            "active": true,
+            "order": 4,
+            "canBeActivated": false,
+            "parameters": [
+              {
+                "id": 298,
+                "key": "title",
+                "value": "Rate your user experience",
+                "language": "en",
+                "createdAt": "2016-10-02 02:17:50.0"
+              },
+              {
+                "id": 299,
+                "key": "ratingIcon",
+                "value": "star",
+                "language": "en",
+                "createdAt": "2016-10-02 02:17:50.0"
+              },
+              {
+                "id": 300,
+                "key": "maxRating",
+                "value": 5.0,
+                "language": "en",
+                "createdAt": "2016-10-02 02:17:50.0"
+              },
+              {
+                "id": 301,
+                "key": "defaultRating",
+                "value": 3.0,
+                "defaultValue": "0.0",
+                "editableByUser": false,
+                "language": "en",
+                "createdAt": "2016-10-02 02:17:50.0"
+              }
+            ],
+            "createdAt": "2016-10-02 02:17:50.0"
+          },
+          {
+            "id": 47,
+            "configurationsId": 13,
+            "type": "CATEGORY_TYPE",
+            "active": true,
+            "order": 5,
+            "canBeActivated": false,
+            "parameters": [
+              {
+                "id": 302,
+                "key": "title",
+                "value": "Please choose one of the following categories",
+                "language": "en",
+                "createdAt": "2016-10-02 02:17:50.0"
+              },
+              {
+                "id": 303,
+                "key": "ownAllowed",
+                "value": 0.0,
+                "language": "en",
+                "createdAt": "2016-10-02 02:17:50.0"
+              },
+              {
+                "id": 304,
+                "key": "multiple",
+                "value": 0.0,
+                "language": "en",
+                "createdAt": "2016-10-02 02:17:50.0"
+              },
+              {
+                "id": 305,
+                "key": "mandatory",
+                "value": 1.0,
+                "language": "en",
+                "createdAt": "2016-10-02 02:17:50.0"
+              },
+              {
+                "id": 306,
+                "key": "mandatoryReminder",
+                "value": "Please select at least one category",
+                "language": "en",
+                "createdAt": "2016-10-02 02:17:50.0"
+              },
+              {
+                "id": 307,
+                "key": "options",
+                "value": [
+                  {
+                    "id": 308,
+                    "key": "BUG_CATEGORY",
+                    "value": "Bug",
+                    "language": "en",
+                    "createdAt": "2016-10-02 02:17:50.0"
+                  },
+                  {
+                    "id": 309,
+                    "key": "FEATURE_REQUEST_CATEGORY",
+                    "value": "Feature Request",
+                    "language": "en",
+                    "createdAt": "2016-10-02 02:17:50.0"
+                  },
+                  {
+                    "id": 310,
+                    "key": "GENERAL_CATEGORY",
+                    "value": "General Feedback",
+                    "language": "en",
+                    "createdAt": "2016-10-02 02:17:50.0"
+                  }
+                ],
+                "language": "en",
+                "createdAt": "2016-10-02 02:17:50.0"
+              }
+            ],
+            "createdAt": "2016-10-02 02:17:50.0"
+          },
+          {
+            "id": 48,
+            "configurationsId": 13,
+            "type": "ATTACHMENT_TYPE",
+            "active": false,
+            "order": 6,
+            "canBeActivated": false,
+            "parameters": [
+              {
+                "id": 311,
+                "key": "title",
+                "value": "You can also attach some files to your feedback",
+                "language": "en",
+                "createdAt": "2016-10-02 02:17:50.0"
+              }
+            ],
+            "createdAt": "2016-10-02 02:17:50.0"
+          }
+        ],
+        "generalConfiguration": {
+          "id": 19,
+          "parameters": [],
+          "createdAt": "2016-10-02 02:17:50.0"
+        },
+        "createdAt": "2016-10-02 02:17:50.0"
+      },
+      {
+        "id": 14,
+        "type": "PULL",
+        "mechanisms": [
+          {
+            "id": 49,
+            "configurationsId": 14,
+            "type": "TEXT_TYPE",
+            "active": true,
+            "order": 1,
+            "canBeActivated": false,
+            "parameters": [
+              {
+                "id": 314,
+                "key": "title",
+                "value": "Feedback",
+                "language": "en",
+                "createdAt": "2016-10-02 02:17:50.0"
+              },
+              {
+                "id": 315,
+                "key": "hint",
+                "value": "Please enter your feedback",
+                "language": "en",
+                "createdAt": "2016-10-02 02:17:50.0"
+              },
+              {
+                "id": 316,
+                "key": "label",
+                "value": "Feedback",
+                "language": "en",
+                "createdAt": "2016-10-02 02:17:50.0"
+              },
+              {
+                "id": 317,
+                "key": "labelColor",
+                "value": "#353535",
+                "language": "en",
+                "createdAt": "2016-10-02 02:17:50.0"
+              },
+              {
+                "id": 318,
+                "key": "textareaFontColor",
+                "value": "#000000",
+                "language": "en",
+                "createdAt": "2016-10-02 02:17:50.0"
+              },
+              {
+                "id": 319,
+                "key": "mandatory",
+                "value": 1.0,
+                "language": "en",
+                "createdAt": "2016-10-02 02:17:50.0"
+              },
+              {
+                "id": 320,
+                "key": "mandatoryReminder",
+                "value": "Please fill in the text field",
+                "language": "en",
+                "createdAt": "2016-10-02 02:17:50.0"
+              },
+              {
+                "id": 321,
+                "key": "fieldFontSize",
+                "value": 22.0,
+                "language": "en",
+                "createdAt": "2016-10-02 02:17:50.0"
+              },
+              {
+                "id": 322,
+                "key": "fieldFontType",
+                "value": "italic",
+                "language": "en",
+                "createdAt": "2016-10-02 02:17:50.0"
+              },
+              {
+                "id": 323,
+                "key": "fieldTextAlignment",
+                "value": "right",
+                "language": "en",
+                "createdAt": "2016-10-02 02:17:50.0"
+              },
+              {
+                "id": 324,
+                "key": "maxLengthVisible",
+                "value": 0.0,
+                "language": "en",
+                "createdAt": "2016-10-02 02:17:50.0"
+              },
+              {
+                "id": 325,
+                "key": "textLengthVisible",
+                "value": 1.0,
+                "language": "en",
+                "createdAt": "2016-10-02 02:17:50.0"
+              }
+            ],
+            "createdAt": "2016-10-02 02:17:50.0"
+          },
+          {
+            "id": 50,
+            "configurationsId": 14,
+            "type": "RATING_TYPE",
+            "active": true,
+            "order": 4,
+            "canBeActivated": false,
+            "parameters": [
+              {
+                "id": 326,
+                "key": "title",
+                "value": "Rate your user experience",
+                "language": "en",
+                "createdAt": "2016-10-02 02:17:50.0"
+              },
+              {
+                "id": 327,
+                "key": "ratingIcon",
+                "value": "star",
+                "language": "en",
+                "createdAt": "2016-10-02 02:17:50.0"
+              },
+              {
+                "id": 328,
+                "key": "maxRating",
+                "value": 5.0,
+                "language": "en",
+                "createdAt": "2016-10-02 02:17:50.0"
+              },
+              {
+                "id": 329,
+                "key": "defaultRating",
+                "value": 0.0,
+                "defaultValue": "0.0",
+                "editableByUser": false,
+                "language": "en",
+                "createdAt": "2016-10-02 02:17:50.0"
+              }
+            ],
+            "createdAt": "2016-10-02 02:17:50.0"
+          },
+          {
+            "id": 51,
+            "configurationsId": 14,
+            "type": "SCREENSHOT_TYPE",
+            "active": false,
+            "order": 3,
+            "canBeActivated": false,
+            "parameters": [
+              {
+                "id": 330,
+                "key": "title",
+                "value": "Illustrate your feedback with a screenshot/image",
+                "language": "en",
+                "createdAt": "2016-10-02 02:17:50.0"
+              },
+              {
+                "id": 331,
+                "key": "defaultPicture",
+                "value": "lastScreenshot",
+                "defaultValue": "noImage",
+                "editableByUser": true,
+                "language": "en",
+                "createdAt": "2016-10-02 02:17:50.0"
+              }
+            ],
+            "createdAt": "2016-10-02 02:17:50.0"
+          },
+          {
+            "id": 52,
+            "configurationsId": 14,
+            "type": "CATEGORY_TYPE",
+            "active": true,
+            "order": 5,
+            "canBeActivated": false,
+            "parameters": [
+              {
+                "id": 332,
+                "key": "title",
+                "value": "In which situations do you use the app?",
+                "language": "en",
+                "createdAt": "2016-10-02 02:17:50.0"
+              },
+              {
+                "id": 333,
+                "key": "ownAllowed",
+                "value": 1.0,
+                "language": "en",
+                "createdAt": "2016-10-02 02:17:50.0"
+              },
+              {
+                "id": 334,
+                "key": "multiple",
+                "value": 1.0,
+                "language": "en",
+                "createdAt": "2016-10-02 02:17:50.0"
+              },
+              {
+                "id": 335,
+                "key": "mandatory",
+                "value": 0.0,
+                "language": "en",
+                "createdAt": "2016-10-02 02:17:50.0"
+              },
+              {
+                "id": 336,
+                "key": "mandatoryReminder",
+                "value": "Please select at least one category",
+                "language": "en",
+                "createdAt": "2016-10-02 02:17:50.0"
+              },
+              {
+                "id": 337,
+                "key": "options",
+                "value": [
+                  {
+                    "id": 338,
+                    "key": "SPARETIME_CATEGORY",
+                    "value": "Spare time",
+                    "language": "en",
+                    "createdAt": "2016-10-02 02:17:50.0"
+                  },
+                  {
+                    "id": 339,
+                    "key": "WORK_CATEGORY",
+                    "value": "Work",
+                    "language": "en",
+                    "createdAt": "2016-10-02 02:17:50.0"
+                  },
+                  {
+                    "id": 340,
+                    "key": "SCHOOL_CATEGORY",
+                    "value": "School",
+                    "language": "en",
+                    "createdAt": "2016-10-02 02:17:50.0"
+                  }
+                ],
+                "language": "en",
+                "createdAt": "2016-10-02 02:17:50.0"
+              }
+            ],
+            "createdAt": "2016-10-02 02:17:50.0"
+          }
+        ],
+        "generalConfiguration": {
+          "id": 20,
+          "parameters": [
+            {
+              "id": 312,
+              "key": "likelihood",
+              "value": 0.5,
+              "language": "en",
+              "createdAt": "2016-10-02 02:17:50.0"
+            },
+            {
+              "id": 313,
+              "key": "showIntermediateDialog",
+              "value": 1.0,
+              "language": "en",
+              "createdAt": "2016-10-02 02:17:50.0"
+            }
+          ],
+          "createdAt": "2016-10-02 02:17:50.0"
+        },
+        "createdAt": "2016-10-02 02:17:50.0"
+      },
+      {
+        "id": 15,
+        "type": "PULL",
+        "mechanisms": [
+          {
+            "id": 53,
+            "configurationsId": 15,
+            "type": "RATING_TYPE",
+            "active": true,
+            "order": 1,
+            "canBeActivated": false,
+            "parameters": [
+              {
+                "id": 343,
+                "key": "title",
+                "value": "Rate your user experience",
+                "language": "en",
+                "createdAt": "2016-10-02 02:17:50.0"
+              },
+              {
+                "id": 344,
+                "key": "ratingIcon",
+                "value": "star",
+                "language": "en",
+                "createdAt": "2016-10-02 02:17:50.0"
+              },
+              {
+                "id": 345,
+                "key": "maxRating",
+                "value": 5.0,
+                "language": "en",
+                "createdAt": "2016-10-02 02:17:50.0"
+              },
+              {
+                "id": 346,
+                "key": "defaultRating",
+                "value": 5.0,
+                "defaultValue": "0.0",
+                "editableByUser": false,
+                "language": "en",
+                "createdAt": "2016-10-02 02:17:50.0"
+              }
+            ],
+            "createdAt": "2016-10-02 02:17:50.0"
+          },
+          {
+            "id": 54,
+            "configurationsId": 15,
+            "type": "AUDIO_TYPE",
+            "active": true,
+            "order": 2,
+            "canBeActivated": false,
+            "parameters": [
+              {
+                "id": 347,
+                "key": "title",
+                "value": "Express your feedback with an audio message",
+                "language": "en",
+                "createdAt": "2016-10-02 02:17:50.0"
+              },
+              {
+                "id": 348,
+                "key": "maxTime",
+                "value": 60.0,
+                "defaultValue": "30.0",
+                "editableByUser": false,
+                "language": "en",
+                "createdAt": "2016-10-02 02:17:50.0"
+              }
+            ],
+            "createdAt": "2016-10-02 02:17:50.0"
+          }
+        ],
+        "generalConfiguration": {
+          "id": 21,
+          "parameters": [
+            {
+              "id": 341,
+              "key": "likelihood",
+              "value": 0.5,
+              "language": "en",
+              "createdAt": "2016-10-02 02:17:50.0"
+            },
+            {
+              "id": 342,
+              "key": "showIntermediateDialog",
+              "value": 0.0,
+              "language": "en",
+              "createdAt": "2016-10-02 02:17:50.0"
+            }
+          ],
+          "createdAt": "2016-10-02 02:17:50.0"
+        },
+        "createdAt": "2016-10-02 02:17:50.0"
+      }
+    ],
+    "createdAt": "2016-10-02 02:17:50.0"
+  }
+]

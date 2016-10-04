@@ -240,7 +240,9 @@ export var feedbackPluginModule = function ($, window, document) {
             var options = ratingMechanism.getRatingElementOptions();
             $('' + selector).starRating(options);
             // reset to default rating
-            $('' + selector + ' .jq-star:nth-child(' + ratingMechanism.initialRating + ')').click();
+            if(ratingMechanism.initialRating) {
+                $('' + selector + ' .jq-star:nth-child(' + ratingMechanism.initialRating + ')').click();
+            }
         }
     };
 
@@ -248,6 +250,12 @@ export var feedbackPluginModule = function ($, window, document) {
         if(screenshotMechanism == null) {
             return;
         }
+
+        var elementToCaptureSelector = 'body';
+        if(screenshotMechanism.getParameterValue('elementToCapture') !== null && screenshotMechanism.getParameterValue('elementToCapture') !== "") {
+            elementToCaptureSelector = screenshotMechanism.getParameterValue('elementToCapture');
+        }
+
         var container = $('#' + containerId);
         var dialogSelector = $('[aria-describedby="' + containerId + '"]');
 
@@ -537,9 +545,9 @@ export var feedbackPluginModule = function ($, window, document) {
 
     $.fn.feedbackPlugin.defaults = {
         'color': '#fff',
+        'lang': 'de',
+        'backgroundColor': '#1A6FC2',
         'fallbackLang': 'en',
-        'lang': 'en',
-        'backgroundColor': '#b3cd40',
         'distPath': 'dist/',
         'userId': ''
     };

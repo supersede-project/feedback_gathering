@@ -2,6 +2,9 @@ package ch.uzh.ifi.feedback.library.rest;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -19,18 +22,18 @@ public abstract class RestController<T extends IDbItem<T>> {
 
 	protected IDbService<T> dbService;
 	protected IValidator<T> validator;
-	protected IRequestContext requestContext;
+	protected HttpServletRequest request;
+	protected HttpServletResponse response;
 	
 	private Gson gson; 
 	private int createdObjectId;
 	
-	public RestController(IDbService<T> dbService, IValidator<T> validator, IRequestContext requestContext)
+	public RestController(IDbService<T> dbService, IValidator<T> validator, HttpServletRequest request, HttpServletResponse response)
 	{
 		this.dbService = dbService;
 		this.validator = validator;
-		this.requestContext = requestContext;
-		dbService.SetLanguage(requestContext.getRequestLanguage());
-		
+		this.request = request;
+		this.response = response;
 		this.gson = new GsonBuilder().setPrettyPrinting().setDateFormat("yyyy-MM-dd hh:mm:ss.S").create();
 	}
 

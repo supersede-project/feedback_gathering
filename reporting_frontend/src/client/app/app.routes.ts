@@ -1,9 +1,12 @@
-import { Routes } from '@angular/router';
+import {Routes} from '@angular/router';
+import {FeedbackListRoutes} from './feedback-list/feedback-list.routes';
+import {FeedbackDetailRoutes} from './feedback-detail/feedback-detail.routes';
+import {SettingsRoutes} from './settings/settings.routes';
+import {LoginRoutes} from './login/login.routes';
 
-import { AboutRoutes } from './about/index';
-import { HomeRoutes } from './home/index';
-
-export const routes: Routes = [
-  ...HomeRoutes,
-  ...AboutRoutes
+export const routes:Routes = [
+  ...FeedbackListRoutes,
+  ...FeedbackDetailRoutes,
+  ...SettingsRoutes,
+  ...LoginRoutes
 ];

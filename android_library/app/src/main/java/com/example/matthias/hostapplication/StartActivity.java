@@ -17,6 +17,7 @@ import com.example.matthias.feedbacklibrary.utils.Utils;
 public class StartActivity extends AppCompatActivity {
     // Storage permission (android.permission-group.STORAGE)
     private static final int PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 100;
+    // baseURL = "http://ec2-54-175-37-30.compute-1.amazonaws.com/"
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,7 +29,7 @@ public class StartActivity extends AppCompatActivity {
 
         // TODO: Uncomment before release
         // Actual trigger
-        //Utils.triggerPotentialPullFeedback(this, 8L, "en");
+        //Utils.triggerPotentialPullFeedback("http://ec2-54-175-37-30.compute-1.amazonaws.com/", this, 6L, "en");
 
         // TODO: Remove before release
         // Only for demo purposes
@@ -37,10 +38,12 @@ public class StartActivity extends AppCompatActivity {
             popup.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    /*
                     String jsonString;
                     jsonString = Utils.readFileAsString("feedback_orchestrator_adapted_single_selection.json", getAssets());
-                    DialogUtils.PullFeedbackIntermediateDialog d = DialogUtils.PullFeedbackIntermediateDialog.newInstance(getResources().getString(com.example.matthias.feedbacklibrary.R.string.supersede_feedbacklibrary_pull_feedback_question_string), jsonString, 9, "en");
+                    DialogUtils.PullFeedbackIntermediateDialog d = DialogUtils.PullFeedbackIntermediateDialog.newInstance(getResources().getString(com.example.matthias.feedbacklibrary.R.string.supersede_feedbacklibrary_pull_feedback_question_string), jsonString, 9, "http://ec2-54-175-37-30.compute-1.amazonaws.com/", "en");
                     d.show(getFragmentManager(), "feedbackPopupDialog");
+                    */
                 }
             });
         }
@@ -49,9 +52,11 @@ public class StartActivity extends AppCompatActivity {
             noPopup.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    /*
                     String jsonString;
                     jsonString = Utils.readFileAsString("feedback_orchestrator_adapted_multiple_selection.json", getAssets());
-                    startFeedbackActivity(jsonString, false, 10, "en");
+                    startFeedbackActivity(jsonString, false, 10, "http://ec2-54-175-37-30.compute-1.amazonaws.com/", "en");
+                    */
                 }
             });
         }
@@ -75,7 +80,9 @@ public class StartActivity extends AppCompatActivity {
             boolean result = Utils.checkSinglePermission(this, PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE, null, null, false);
             if (result) {
                 // Permission is already granted. Taking a screenshot of the current screen automatically and open the FeedbackActivity from the feedback library
-                Utils.startActivityWithScreenshotCapture(this, 8L, "en");
+                Utils.startActivityWithScreenshotCapture("http://ec2-54-175-37-30.compute-1.amazonaws.com/", this, 6L, "en");
+                // 5L --> multiple mechanisms of the same type
+                // 6L --> only one mechanisms of the same type
             }
             return true;
         }
@@ -90,18 +97,19 @@ public class StartActivity extends AppCompatActivity {
                 Utils.onRequestPermissionsResultCase(requestCode, permissions, grantResults, this, Manifest.permission.READ_EXTERNAL_STORAGE,
                         com.example.matthias.feedbacklibrary.R.string.supersede_feedbacklibrary_permission_request_title,
                         com.example.matthias.feedbacklibrary.R.string.supersede_feedbacklibrary_external_storage_permission_text_automatic_screenshot_rationale,
-                        8L, "en");
+                        6L, "http://ec2-54-175-37-30.compute-1.amazonaws.com/", "en");
                 break;
         }
     }
 
     // TODO: Remove before release
     // Only for demo purposes
-    private void startFeedbackActivity(String jsonString, boolean isPush, long selectedPullConfigurationIndex, String language) {
+    private void startFeedbackActivity(String jsonString, boolean isPush, long selectedPullConfigurationIndex, String baseURL, String language) {
         Intent intent = new Intent(this, FeedbackActivity.class);
         intent.putExtra(FeedbackActivity.JSON_CONFIGURATION_STRING, jsonString);
         intent.putExtra(FeedbackActivity.IS_PUSH_STRING, isPush);
         intent.putExtra(FeedbackActivity.SELECTED_PULL_CONFIGURATION_INDEX_STRING, selectedPullConfigurationIndex);
+        intent.putExtra(FeedbackActivity.EXTRA_KEY_BASE_URL, baseURL);
         intent.putExtra(FeedbackActivity.EXTRA_KEY_LANGUAGE, language);
         startActivity(intent);
     }
