@@ -14,9 +14,8 @@ export class LoginComponent {
   }
 
   formSubmitted(event, username, password) {
-    console.log('formSubmitted');
     event.preventDefault();
-    this.userService.login(username, password).subscribe((result) => {
+    this.userService.loginOnRepository(username, password).subscribe((result) => {
       if (result) {
         this.router.navigate(['']);
       }
