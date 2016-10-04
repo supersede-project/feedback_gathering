@@ -46,6 +46,7 @@ export var feedbackPluginModule = function ($, window, document) {
     var language:string;
     // TODO support multiple attachment mechanisms
     var dropArea;
+    var dialogCSSClass;
 
     /**
      * @param applicationObject
@@ -298,6 +299,7 @@ export var feedbackPluginModule = function ($, window, document) {
         );
         dialogObject.dialog('option', 'title', title);
         dialogObject.dialog('option', 'modal', modal);
+        dialogObject.dialog('option', 'dialogClass', dialogCSSClass);
         return dialogObject;
     };
 
@@ -513,6 +515,7 @@ export var feedbackPluginModule = function ($, window, document) {
         var currentOptions = this.options;
         distPath = currentOptions.distPath;
         userId = currentOptions.userId;
+        dialogCSSClass = currentOptions.dialogCSSClass;
 
         language = I18nHelper.getLanguage(this.options);
         I18nHelper.initializeI18n(this.options);
@@ -549,7 +552,8 @@ export var feedbackPluginModule = function ($, window, document) {
         'backgroundColor': '#1A6FC2',
         'fallbackLang': 'en',
         'distPath': 'dist/',
-        'userId': ''
+        'userId': '',
+        'dialogCSSClass': 'feedback-dialog'
     };
 
 };

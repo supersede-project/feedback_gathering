@@ -14,6 +14,7 @@ define(["require", "exports", './config', '../views/pagination_container', '../v
         var userId;
         var language;
         var dropArea;
+        var dialogCSSClass;
         var initApplication = function (applicationObject) {
             application = applicationObject;
             applicationContext = application.getContextForView();
@@ -186,6 +187,7 @@ define(["require", "exports", './config', '../views/pagination_container', '../v
             }));
             dialogObject.dialog('option', 'title', title);
             dialogObject.dialog('option', 'modal', modal);
+            dialogObject.dialog('option', 'dialogClass', dialogCSSClass);
             return dialogObject;
         };
         var addEvents = function (containerId, configuration) {
@@ -365,6 +367,7 @@ define(["require", "exports", './config', '../views/pagination_container', '../v
             var currentOptions = this.options;
             distPath = currentOptions.distPath;
             userId = currentOptions.userId;
+            dialogCSSClass = currentOptions.dialogCSSClass;
             language = i18n_1.I18nHelper.getLanguage(this.options);
             i18n_1.I18nHelper.initializeI18n(this.options);
             var applicationService = new application_service_1.ApplicationService(language);
@@ -395,7 +398,8 @@ define(["require", "exports", './config', '../views/pagination_container', '../v
             'backgroundColor': '#1A6FC2',
             'fallbackLang': 'en',
             'distPath': 'dist/',
-            'userId': ''
+            'userId': '',
+            'dialogCSSClass': 'feedback-dialog'
         };
     };
     (function ($, window, document) {
