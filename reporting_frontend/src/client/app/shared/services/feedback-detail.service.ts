@@ -4,7 +4,7 @@ import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import {Feedback} from '../models/feedbacks/feedback';
-import {REPOSITORY_HOST} from '../../../../../dist/tmp/app/shared/services/config';
+import {REPOSITORY_HOST} from './config';
 
 @Injectable()
 export class FeedbackDetailService {

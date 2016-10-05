@@ -1,28 +1,63 @@
-<input #searchField (keyup)="search(searchField.value)" value="" class="form-control search" placeholder="Search" autofocus>
+<input #searchField (keyup)="search(searchField.value)" value="" class="form-control search" placeholder="Search"
+       autofocus>
 
-<article *ngIf="applications" class="filters">
-  <span #applicationFilter (click)="clickedApplicationFilter(application)" [class.label-primary]="application.filterActive" class="label label-default" *ngFor="let application of applications">
-    {{application.name}}
-  </span>
-</article>
+<div class="row">
+  <section class="col-sm-9">
+    <table class="table table-condensed">
+      <thead>
+      <tr>
+        <th [class.asc]="sortOrder['id'] === 'asc'" [class.desc]="sortOrder['id'] === 'desc'" (click)="sortClicked('id')">
+          ID
+          <i *ngIf="sortOrder['id'] === 'asc'" class="glyphicon glyphicon-triangle-top"></i>
+          <i *ngIf="sortOrder['id'] === 'desc'" class="glyphicon glyphicon-triangle-bottom"></i>
+        </th>
+        <th></th>
+        <th [class.asc]="sortOrder['title'] === 'asc'" [class.desc]="sortOrder['id'] === 'desc'" (click)="sortClicked('title')">
+          Title
+          <i *ngIf="sortOrder['title'] === 'asc'" class="glyphicon glyphicon-triangle-top"></i>
+          <i *ngIf="sortOrder['title'] === 'desc'" class="glyphicon glyphicon-triangle-bottom"></i>
+        </th>
+        <th [class.asc]="sortOrder['date'] === 'asc'" [class.desc]="sortOrder['id'] === 'desc'" (click)="sortClicked('date')">
+          Date
+          <i *ngIf="sortOrder['date'] === 'asc'" class="glyphicon glyphicon-triangle-top"></i>
+          <i *ngIf="sortOrder['date'] === 'desc'" class="glyphicon glyphicon-triangle-bottom"></i>
+        </th>
+        <th>App ID</th>
+      </tr>
+      </thead>
+      <tbody *ngIf="applications">
+      <tr *ngFor="let feedback of filteredFeedbacks">
+        <td>
+          <a [routerLink]="['/feedback-detail', feedback.id]">#{{feedback.id}}</a>
+        </td>
+        <td><i class="glyphicon glyphicon-star-empty"></i></td>
+        <td>{{feedback.title}}</td>
+        <td>{{feedback.createdAt | date: 'dd.MM.yyyy H:mm'}}</td>
+        <td>{{feedback.applicationId | applicationNameById:applications:feedback.applicationId}}</td>
+      </tr>
+      </tbody>
+    </table>
+  </section>
 
-<table class="table table-condensed">
-  <thead>
-    <tr>
-      <th>ID</th>
-      <th>Title</th>
-      <th>Date</th>
-      <th>App ID</th>
-    </tr>
-  </thead>
-  <tbody *ngIf="applications">
-    <tr *ngFor="let feedback of filteredFeedbacks">
-      <td>
-        <a [routerLink]="['/feedback-detail', feedback.id]">#{{feedback.id}}</a>
-      </td>
-      <td>{{feedback.title}}</td>
-      <td>{{feedback.createdAt}}</td>
-      <td>{{feedback.applicationId | applicationNameById:applications:feedback.applicationId}}</td>
-    </tr>
-  </tbody>
-</table>
+  <section class="filters-sidebar col-sm-3">
+    <h4 class="filters">Filters</h4>
+
+    <h5>Application</h5>
+    <article *ngIf="applications" class="filters">
+      <span #applicationFilter (click)="clickedApplicationFilter(application)"
+            [class.label-primary]="application.filterActive" class="label label-default"
+            *ngFor="let application of applications">
+        {{ application.name| truncate: 50 }}
+      </span>
+    </article>
+
+    <h5>Status</h5>
+    <span class="label label-default">read</span><br/>
+    <span class="label label-default">unread</span><br/>
+    <span class="label label-default">rejected</span><br/>
+    <span class="label label-default">approved</span><br/>
+    <span class="label label-default">implemented</span><br/>
+    <br />
+
+  </section>
+</div>

@@ -20,8 +20,10 @@ export class FeedbackListComponent implements OnInit {
   feedbacks:Feedback[] = [];
   filteredFeedbacks:Feedback[] = [];
   applications:Application[] = [];
+  sortOrder:{} = {'id': '', 'title': '', 'date': ''};
 
-  constructor(public feedbackListService:FeedbackListService, private applicationService:ApplicationService) {}
+  constructor(public feedbackListService:FeedbackListService, private applicationService:ApplicationService) {
+  }
 
   ngOnInit() {
     this.getFeedbacks();
@@ -44,7 +46,7 @@ export class FeedbackListComponent implements OnInit {
     this.applicationService.all().subscribe(
       applications => {
         this.applications = applications;
-        for(var application of this.applications) {
+        for (var application of this.applications) {
           application.filterActive = false;
         }
       },
@@ -52,16 +54,38 @@ export class FeedbackListComponent implements OnInit {
     );
   }
 
+  resetSortOrder():void {
+    this.sortOrder = {'id': '', 'title': '', 'date': ''};
+  }
+
+  sortClicked(field:string) {
+    if (this.sortOrder[field] === '') {
+      this.resetSortOrder();
+      this.sortFeedbacks(field, true);
+      this.sortOrder[field] = 'asc';
+    } else if (this.sortOrder[field] === 'asc') {
+      this.resetSortOrder();
+      this.sortFeedbacks(field, false);
+      this.sortOrder[field] = 'desc';
+    } else if (this.sortOrder[field] === 'desc') {
+      this.resetSortOrder();
+      this.sortOrder[field] = 'asc';
+      this.sortFeedbacks(field, true);
+    }
+  }
+
   sortFeedbacks(field:string, ascending:boolean = true) {
     var feedbacks = this.feedbacks.sort(function (feedbackA, feedbackB) {
-      if(field === 'date') {
-        return Date.parse(feedbackA[field]) - Date.parse(feedbackB[field]);
+      if (field === 'date') {
+        var dateA = new Date(feedbackA[field]);
+        var dateB = new Date(feedbackB[field]);
+        return dateA - dateB;
       } else {
         return feedbackA[field] - feedbackB[field];
       }
     });
 
-    if(!ascending) {
+    if (!ascending) {
       this.filteredFeedbacks = feedbacks.reverse();
     } else {
       this.filteredFeedbacks = feedbacks;
@@ -75,11 +99,11 @@ export class FeedbackListComponent implements OnInit {
   clickedApplicationFilter(application) {
     var wasActive = application.filterActive;
 
-    for(let application of this.applications) {
+    for (let application of this.applications) {
       application.filterActive = false;
     }
     application.filterActive = !wasActive;
-    if(application.filterActive) {
+    if (application.filterActive) {
       this.filteredFeedbacks = this.feedbacks.filter(feedback => feedback.applicationId === application.id);
     } else {
       this.filteredFeedbacks = this.feedbacks;

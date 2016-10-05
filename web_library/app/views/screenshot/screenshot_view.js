@@ -398,7 +398,7 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
             if (this.elementsToHide != null) {
                 for (var _i = 0, _a = this.elementsToHide; _i < _a.length; _i++) {
                     var elementToHide = _a[_i];
-                    elementToHide.hide();
+                    jQuery('' + elementToHide).hide();
                 }
             }
         };
@@ -406,7 +406,7 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
             if (this.elementsToHide != null) {
                 for (var _i = 0, _a = this.elementsToHide; _i < _a.length; _i++) {
                     var elementToHide = _a[_i];
-                    elementToHide.show();
+                    jQuery('' + elementToHide).show();
                 }
             }
         };

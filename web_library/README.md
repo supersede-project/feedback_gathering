@@ -1,13 +1,31 @@
-# jQuery Web Library
+# Introduction
 
-The Feedback Mechanisms for the web are realized as a jQuery Plugin.
+Is a jQuery plugin that provides the integration of feedback mechanisms in the web context. 
 
-## Setup
+It provides the following features:
 
-    $ npm install
-        
-Ideally the development is locally done on a virtual host (otherwise you might have problems with cross origin loads):
-        
+- Text feedback mechanism
+- Rating feedback mechanism
+- Screenshot feedback mechanism
+- Audio feedback mechanism
+- Categorization of feedback mechanism
+- Uploading files(s) 
+- Flexible configuration of feedback requests
+- Pull and push feedback request presentation
+
+# How to start
+
+In order to get the project running use:
+
+```bash
+git clone https://github.com/supersede-project/monitor_feedback/tree/master/web_library
+cd web_library
+# install the project's dependencies
+npm install
+```
+
+Create a virtual host on your local machine to avoid problems with cross origin loads:
+
     <VirtualHost *:80>
         DocumentRoot /<your_path>/web_library
         ServerName localhost.web-library.dev
@@ -18,22 +36,38 @@ Ideally the development is locally done on a virtual host (otherwise you might h
             Allow from all
         </Directory>
     </VirtualHost>
-        
-And don't forget to add an entry to the hosts file:
-                
+
+Add an entry to your hosts file:
+
     127.0.0.1	localhost.web-library.dev
-        
-## Bundling
-    $ webpack
 
-## Deployment
+Bundle the project:
 
-Generate the bundle with the following command:
+```bash
+webpack
+```
 
-    $ webpack
-    $ gulp deploy
+Open the index.html file in the browser of your choice.
 
-The library can then get integrate into a website by including:
+# Table of Contents
+
+- [Introduction](#introduction)
+- [How to start](#how-to-start)
+- [Table of Content](#table-of-content)
+- [Integration](#integration)
+- [Configuration](#configuration)
+- [Internationalization](#internationalization)
+- [Running tests](#running-tests)
+- [Deployment](#deployment)
+- [Directory Structure](#directory-structure)
+- [License](#license)
+
+# Integration
+
+```bash
+# create the dist bundle
+webpack
+```
 
 ```javascript
 
@@ -43,11 +77,18 @@ The library can then get integrate into a website by including:
 
 <!-- footer -->
 <script src="dist/jquery.min.js"></script>
+<script src="dist/spectrum.min.js"></script>
 <script src="https://code.jquery.com/ui/1.10.3/jquery-ui.min.js"></script>
+<script src="dist/screenshot/fabric.js"></script>
+<script src="dist/screenshot/customiseControls.js"></script>
 <script src="dist/jquery.feedback.min.js"></script>
 <script>
     $(document).ready(function () {
-        $('#feedbackEntryPoint').feedbackPlugin({'color': '#000000'});
+        $('#feedbackEntryPoint').feedbackPlugin({
+            // optional options
+            'color': '#000000',
+            'distPath': 'dist/'
+        });
     });
 </script>
 
@@ -55,23 +96,82 @@ The library can then get integrate into a website by including:
 
 A click on the element with the feedbackEntryPoint ID triggers then the feedback mechanism.
 
+# Configuration
 
-## Testing
+The following options are available to configure the jQuery plugin on the client side:
 
-Unit Testing
+|option   |description   |
+|---|---|
+|distPath   |Path to the ressources that are used within the library (css, img, etc.)   |
+|userId|ID that gets sent to the repository component and will be store alongside the feedback|
+|lang|Language to be used|
+|fallbackLang|Language to be used if 'lang' is not available in the locales folder|
+|color|Font color of the feedback button|
+|backgroundColor|Background color of the feedback button|
 
-    $ npm test
-    
-# Frontend Testing
+# Internationalization
 
-Server has to run:
+The translations are located in dist/locales/. To adjust an existing translation please update values in the translation.json files. 
+To add new languages please create a folder using the ISO-691-1 language code as the name of the folder. Then copy an existing translation files from another language and adjust the values. 
 
-    $ npm start
+# Running tests
 
-Selenium server has to run as well: 
- 
-    $ webdriver-mananger start
+```bash
+npm test
+```
 
-then in another console:
-    
-    $ protractor protractor.conf.js
+# Deployment
+
+To deploy a demo page please copy env/state.json-dist to env/state.json and fill in the required information. Then execute
+
+```bash
+webpack
+gulp deploy
+```
+
+# Directory Structure
+
+```
+.
+├── app                        <- source code of the application
+│   ├── config
+│   ├── e2e
+│   ├── img
+│   ├── js
+│   ├── locales
+│   ├── models
+│   ├── services
+│   ├── templates
+│   ├── views
+├── env
+│   ├── stage.json-dist        <- demo page deployment settings
+├── tools
+├── typings                    <- typings directory. Contains all the external typing definitions defined with typings
+├── gulpfile.js                <- gulp tasks
+├── index.html                 <- html page to run the plugin in during development
+├── karma.conf.js              <- test config
+├── tsconfig.json              <- configuration of the typescript project
+├── tslint.json                <- tslint configuration
+└── webpack.config.js          <- bundler configuration
+```
+
+
+# License
+
+tba
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

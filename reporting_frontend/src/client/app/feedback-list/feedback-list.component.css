@@ -7,17 +7,31 @@ input.search {
 }
 
 article.filters {
-  display: inline-block;
-  float: right;
-  padding-top: 6px;
+  display: block;
 }
 
 article.filters span {
-  margin-left: 5px;
+  margin-right: 5px;
   margin-top: 5px;
+  text-align: left;
   cursor: pointer;
+  display: inline-block;
+  width: auto;
 }
 
 table {
+  margin-top: 20px;
+}
+
+th i.glyphicon {
+  font-size: 9px;
+}
+
+h4.filters {
+  border-bottom: 2px solid #ddd;
+  padding: 19px 0 4px 0;
+}
+
+.filters-sidebar h5 {
   margin-top: 20px;
 }

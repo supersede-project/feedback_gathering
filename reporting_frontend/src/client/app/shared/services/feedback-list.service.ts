@@ -16,14 +16,12 @@ export class FeedbackListService {
     headers.append('Accept', 'application/json');
     headers.append('Authorization', localStorage.getItem('auth_token'));
 
-    return this.http.get(REPOSITORY_HOST + 'en/feedbacks', { headers: headers })
+    //return this.http.get(REPOSITORY_HOST + 'en/feedbacks', { headers: headers })
+    return this.http.get('/services/mocks/feedbacks.json')
       .map((res: Response) => res.json())
       .catch(this.handleError);
   }
 
-  /**
-    * Handle HTTP error
-    */
   private handleError (error: any) {
     let errMsg = (error.message) ? error.message :
       error.status ? `${error.status} - ${error.statusText}` : 'Server error';
