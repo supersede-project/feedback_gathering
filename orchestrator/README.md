@@ -1,6 +1,7 @@
+
 # Introduction
 
-Is a RESTfull Web API that provides endpoints for storing, receiving and deleting user feedbacks.
+Is a RESTfull Web API that provides endpoints for storing, receiving and updating the feedback configuration.
 
 # Table of Contents
 
@@ -12,20 +13,20 @@ Is a RESTfull Web API that provides endpoints for storing, receiving and deletin
 
 # Deployment
 
-To deploy the newest version of the repository:
+To deploy the newest version of the orchestrator:
 
 - clone the github repository:
 
 ```bash
-git clone https://github.com/supersede-project/monitor_feedback/tree/master/repository
-cd repository
+git clone https://github.com/supersede-project/monitor_feedback/tree/master/orchestrator
+cd orchestrator
 ```
 
 - execute the mysql script in the /deployment/dumps folder of the project and create the database:
 
 ```bash
-cd repository/deployment/dumps
-mysql -u username -p repository < repository.sql
+cd orchestrator/deployment/dumps
+mysql -u username -p orchestrator < orchestrator.sql
 ```
 
 - switch to the war files folder of the deployment folder, open the war file and enter your database 
