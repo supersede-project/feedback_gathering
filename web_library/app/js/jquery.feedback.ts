@@ -549,7 +549,7 @@ export var feedbackPluginModule = function ($, window, document) {
     $.fn.feedbackPlugin.defaults = {
         'color': '#fff',
         'lang': 'de',
-        'backgroundColor': '#1A6FC2',
+        'backgroundColor': '#7c9009',
         'fallbackLang': 'en',
         'distPath': 'dist/',
         'userId': '',
