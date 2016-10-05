@@ -1,12 +1,12 @@
 import { Route } from '@angular/router';
 import {LoggedInGuard} from '../shared/guards/logged-in.guard';
-import {SettingsComponent} from './settings.component';
+import {UsersComponent} from './users.component';
 
 
-export const SettingsRoutes: Route[] = [
+export const UsersRoutes: Route[] = [
   {
-    path: 'settings',
-    component: SettingsComponent,
+    path: 'users',
+    component: UsersComponent,
     canActivate: [] //[LoggedInGuard]
   }
 ];

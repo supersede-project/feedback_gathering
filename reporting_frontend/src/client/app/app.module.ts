@@ -11,11 +11,12 @@ import {FeedbackListModule} from './feedback-list/feedback-list.module';
 import {FeedbackDetailModule} from './feedback-detail/feedback-detail.module';
 import {SettingsModule} from './settings/settings.module';
 import {LoginModule} from './login/login.module';
+import {UsersModule} from './users/users.module';
 
 
 @NgModule({
   imports: [BrowserModule, HttpModule, RouterModule.forRoot(routes), FeedbackListModule, FeedbackDetailModule,
-    SharedModule.forRoot(), SettingsModule, LoginModule],
+    SharedModule.forRoot(), SettingsModule, LoginModule, UsersModule],
   declarations: [AppComponent],
   providers: [{
     provide: APP_BASE_HREF,

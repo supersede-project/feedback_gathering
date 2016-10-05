@@ -45,7 +45,7 @@
       </tr>
       </thead>
       <tbody *ngIf="applications">
-      <tr *ngFor="let feedback of filteredFeedbacks" class="unread">
+      <tr *ngFor="let feedback of filteredFeedbacks; let i = index" [class.unread]="i < 4">
         <td>
           <input (change)="select($event, feedback)" class="checkbox" type="checkbox" name="{{feedback.id}}"
                  value="{{feedback.id}}">
