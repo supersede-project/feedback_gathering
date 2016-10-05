@@ -1,6 +1,8 @@
 <input #searchField (keyup)="search(searchField.value)" value="" class="form-control search" placeholder="Search"
        autofocus>
 
+<button (click)="exportAsCSV()" id="export" class="btn-primary btn-xs">CSV Export</button>
+
 <div class="row">
   <section class="col-sm-9">
     <table class="table table-condensed">

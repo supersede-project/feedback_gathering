@@ -6,6 +6,12 @@ input.search {
   border-radius: 0;
 }
 
+button#export {
+  border-radius: 0;
+  height: 32px;
+  padding: 2px 10px;
+}
+
 article.filters {
   display: block;
 }
