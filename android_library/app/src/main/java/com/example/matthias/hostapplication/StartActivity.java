@@ -33,30 +33,12 @@ public class StartActivity extends AppCompatActivity {
 
         // TODO: Remove before release
         // Only for demo purposes
-        Button popup = (Button) findViewById(R.id.pull_popup_button);
-        if (popup != null) {
-            popup.setOnClickListener(new View.OnClickListener() {
+        Button triggerPullV1 = (Button) findViewById(R.id.trigger_pull_v1_button);
+        if (triggerPullV1 != null) {
+            triggerPullV1.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    /*
-                    String jsonString;
-                    jsonString = Utils.readFileAsString("feedback_orchestrator_adapted_single_selection.json", getAssets());
-                    DialogUtils.PullFeedbackIntermediateDialog d = DialogUtils.PullFeedbackIntermediateDialog.newInstance(getResources().getString(com.example.matthias.feedbacklibrary.R.string.supersede_feedbacklibrary_pull_feedback_question_string), jsonString, 9, "http://ec2-54-175-37-30.compute-1.amazonaws.com/", "en");
-                    d.show(getFragmentManager(), "feedbackPopupDialog");
-                    */
-                }
-            });
-        }
-        Button noPopup = (Button) findViewById(R.id.pull_no_popup_button);
-        if (noPopup != null) {
-            noPopup.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    /*
-                    String jsonString;
-                    jsonString = Utils.readFileAsString("feedback_orchestrator_adapted_multiple_selection.json", getAssets());
-                    startFeedbackActivity(jsonString, false, 10, "http://ec2-54-175-37-30.compute-1.amazonaws.com/", "en");
-                    */
+                    Utils.triggerPotentialPullFeedback("http://ec2-54-175-37-30.compute-1.amazonaws.com/", StartActivity.this, 6L, "en");
                 }
             });
         }
@@ -77,6 +59,7 @@ public class StartActivity extends AppCompatActivity {
         }
 
         if (id == R.id.action_feedback) {
+            /*
             boolean result = Utils.checkSinglePermission(this, PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE, null, null, false);
             if (result) {
                 // Permission is already granted. Taking a screenshot of the current screen automatically and open the FeedbackActivity from the feedback library
@@ -84,7 +67,28 @@ public class StartActivity extends AppCompatActivity {
                 // 5L --> multiple mechanisms of the same type
                 // 6L --> only one mechanisms of the same type
             }
+            */
             return true;
+        }
+
+        if (id == R.id.action_single_mechanism_feedback) {
+            boolean result = Utils.checkSinglePermission(this, PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE, null, null, false);
+            if (result) {
+                // Permission is already granted. Taking a screenshot of the current screen automatically and open the FeedbackActivity from the feedback library
+                Utils.startActivityWithScreenshotCapture("http://ec2-54-175-37-30.compute-1.amazonaws.com/", this, 6L, "en");
+                // 5L --> multiple mechanisms of the same type
+                // 6L --> only one mechanisms of the same type
+            }
+        }
+
+        if (id == R.id.action_multiple_mechanism_feedback) {
+            boolean result = Utils.checkSinglePermission(this, PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE, null, null, false);
+            if (result) {
+                // Permission is already granted. Taking a screenshot of the current screen automatically and open the FeedbackActivity from the feedback library
+                Utils.startActivityWithScreenshotCapture("http://ec2-54-175-37-30.compute-1.amazonaws.com/", this, 5L, "en");
+                // 5L --> multiple mechanisms of the same type
+                // 6L --> only one mechanisms of the same type
+            }
         }
 
         return super.onOptionsItemSelected(item);

@@ -5,4 +5,10 @@
     <!-- Action bar -->
     <string name="action_settings">Settings</string>
     <string name="action_feedback">Feedback</string>
+
+    <!-- Overridden string from the feedback library used for multi language support -->
+    <string name="supersede_feedbacklibrary_annotatebutton_text">Annotieren</string>
+    <string name="supersede_feedbacklibrary_sendbutton_text">Feedback abschicken</string>
+
+    <!--<string name="crop_image_menu_crop">@string/supersede_feedbacklibrary_crop_string</string>-->
 </resources>
