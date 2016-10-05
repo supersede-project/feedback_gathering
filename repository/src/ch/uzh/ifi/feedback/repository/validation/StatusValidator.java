@@ -3,7 +3,7 @@ package ch.uzh.ifi.feedback.repository.validation;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
-import ch.uzh.ifi.feedback.library.rest.Service.IDbItem;
+import ch.uzh.ifi.feedback.library.rest.service.IDbItem;
 import ch.uzh.ifi.feedback.library.rest.validation.ValidationResult;
 import ch.uzh.ifi.feedback.library.rest.validation.ValidationSerializer;
 import ch.uzh.ifi.feedback.library.rest.validation.ValidatorBase;
