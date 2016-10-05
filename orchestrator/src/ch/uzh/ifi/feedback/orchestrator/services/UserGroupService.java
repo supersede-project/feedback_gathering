@@ -10,8 +10,8 @@ import com.google.inject.Provider;
 import com.google.inject.Singleton;
 import com.google.inject.name.Named;
 
-import ch.uzh.ifi.feedback.library.rest.Service.DatabaseConfiguration;
-import ch.uzh.ifi.feedback.library.rest.Service.DbResultParser;
+import ch.uzh.ifi.feedback.library.transaction.DatabaseConfiguration;
+import ch.uzh.ifi.feedback.library.transaction.DbResultParser;
 import ch.uzh.ifi.feedback.orchestrator.model.User;
 import ch.uzh.ifi.feedback.orchestrator.model.UserGroup;
 import javassist.NotFoundException;

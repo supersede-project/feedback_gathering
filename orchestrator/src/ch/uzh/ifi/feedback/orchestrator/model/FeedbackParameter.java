@@ -4,13 +4,13 @@ import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
 
-import ch.uzh.ifi.feedback.library.rest.Service.IDbItem;
-import ch.uzh.ifi.feedback.library.rest.Service.ItemBase;
 import ch.uzh.ifi.feedback.library.rest.annotations.DbAttribute;
+import ch.uzh.ifi.feedback.library.rest.annotations.Id;
+import ch.uzh.ifi.feedback.library.rest.annotations.NotNull;
 import ch.uzh.ifi.feedback.library.rest.annotations.Serialize;
-import ch.uzh.ifi.feedback.library.rest.validation.Id;
-import ch.uzh.ifi.feedback.library.rest.validation.NotNull;
-import ch.uzh.ifi.feedback.library.rest.validation.Validate;
+import ch.uzh.ifi.feedback.library.rest.annotations.Validate;
+import ch.uzh.ifi.feedback.library.rest.service.IDbItem;
+import ch.uzh.ifi.feedback.library.rest.service.ItemBase;
 import ch.uzh.ifi.feedback.orchestrator.serialization.ApplicationSerializationService;
 import ch.uzh.ifi.feedback.orchestrator.serialization.ParameterSerializationService;
 import ch.uzh.ifi.feedback.orchestrator.validation.ParameterValidator;

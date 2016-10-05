@@ -5,11 +5,13 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
-import ch.uzh.ifi.feedback.library.rest.Service.IDbItem;
-import ch.uzh.ifi.feedback.library.rest.Service.IDbService;
-import ch.uzh.ifi.feedback.library.rest.Service.ItemBase;
-import ch.uzh.ifi.feedback.library.rest.Service.ServiceBase;
 import ch.uzh.ifi.feedback.library.rest.annotations.DbAttribute;
+import ch.uzh.ifi.feedback.library.rest.annotations.NotNull;
+import ch.uzh.ifi.feedback.library.rest.annotations.Unique;
+import ch.uzh.ifi.feedback.library.rest.service.IDbItem;
+import ch.uzh.ifi.feedback.library.rest.service.IDbService;
+import ch.uzh.ifi.feedback.library.rest.service.ItemBase;
+import ch.uzh.ifi.feedback.library.rest.service.ServiceBase;
 import javassist.NotFoundException;
 
 import static java.util.Arrays.asList;
