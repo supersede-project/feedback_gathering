@@ -1,5 +1,66 @@
-# Local
+# Introduction
 
-Repository running on: http://localhost:8080/feedback_repository/ 
+Is a RESTfull Web API that provides endpoints for storing, receiving and deleting user feedback.
 
-To get the feedbacks, for example, visit http://localhost:8080/feedback_repository/de/feedbacks.
+# Table of Contents
+
+- [Introduction](#introduction)
+- [Table of Content](#table-of-content)
+- [Deployment](#deployment)
+- [Directory Structure](#directory-structure)
+- [License](#license)
+
+# Deployment
+
+To deploy the newest version of the repository:
+
+- clone the github repository:
+
+```bash
+git clone https://github.com/supersede-project/monitor_feedback/tree/master/repository
+cd repository
+```
+
+- execute the mysql script in the /deployment/dumps folder of the project and create the database:
+
+```bash
+cd repository/deployment/dumps
+mysql -u username -p repository < repository.sql
+```
+
+- switch to the war files folder of the deployment folder, open the war file and enter your database 
+  credentials (dbuser and password) in the file "ch/uzh/ifi/feedback/library/transaction/config.properties":
+  
+  dburl=jdbc:mysql://localhost:3306/
+  dbuser=your_user_name
+  dbpassword=your_password
+ 
+- copy the war file to your tomcat WepApps directory. In linux systems, this is usually the directory 
+  "/usr/share/tomcat7/webapps"
+
+- start the tomcat server over the console
+
+```bash
+sudo service tomcat7 start
+```
+
+# Directory Structure
+
+```
+.
+├── src                        <- source code of the application
+|   |                          <- servlet class and guice modules 
+│   ├── controllers            <- controller classes
+│   ├── model                  <- model classes
+│   ├── serialization          <- serialization classes
+│   ├── services               <- service classes
+│   ├── validation             <- validation classes
+├── WebContent                 <- compiled classes and libs
+├── deployment                 <- SQL dumps and war files for deployment
+├── test                       <- API- and unit-tests
+│   ├── test                   <- API tests for all controllers
+```
+
+# License
+
+tba
