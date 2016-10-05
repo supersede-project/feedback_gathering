@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 
 import ch.uzh.ifi.feedback.library.rest.IRestManager;
-import ch.uzh.ifi.feedback.library.rest.Service.DatabaseConfiguration;
+import ch.uzh.ifi.feedback.library.transaction.DatabaseConfiguration;
 
 /**
  * Servlet base implementation

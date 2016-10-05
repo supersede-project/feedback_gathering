@@ -7,8 +7,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.google.inject.Inject;
 import com.google.inject.servlet.RequestScoped;
-
-import ch.uzh.ifi.feedback.library.rest.IRequestContext;
 import ch.uzh.ifi.feedback.library.rest.RestController;
 import ch.uzh.ifi.feedback.library.rest.annotations.Authenticate;
 import ch.uzh.ifi.feedback.library.rest.annotations.Controller;

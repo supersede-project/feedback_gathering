@@ -18,9 +18,9 @@ import com.google.inject.Singleton;
 import com.google.inject.name.Named;
 import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils.Collections;
 
-import ch.uzh.ifi.feedback.library.rest.Service.DatabaseConfiguration;
-import ch.uzh.ifi.feedback.library.rest.Service.IDbService;
-import ch.uzh.ifi.feedback.library.rest.Service.ServiceBase;
+import ch.uzh.ifi.feedback.library.rest.service.IDbService;
+import ch.uzh.ifi.feedback.library.rest.service.ServiceBase;
+import ch.uzh.ifi.feedback.library.transaction.DatabaseConfiguration;
 import ch.uzh.ifi.feedback.orchestrator.model.FeedbackMechanism;
 import ch.uzh.ifi.feedback.orchestrator.model.FeedbackParameter;
 import javassist.NotFoundException;

@@ -48,10 +48,6 @@ import com.google.inject.name.Named;
 import com.google.inject.name.Names;
 import com.google.inject.servlet.RequestScoped;
 
-import ch.uzh.ifi.feedback.library.rest.Routing.HandlerInfo;
-import ch.uzh.ifi.feedback.library.rest.Routing.HttpMethod;
-import ch.uzh.ifi.feedback.library.rest.Routing.UriTemplate;
-import ch.uzh.ifi.feedback.library.rest.Service.IDbItem;
 import ch.uzh.ifi.feedback.library.rest.annotations.Authenticate;
 import ch.uzh.ifi.feedback.library.rest.annotations.Controller;
 import ch.uzh.ifi.feedback.library.rest.annotations.DELETE;
@@ -60,9 +56,13 @@ import ch.uzh.ifi.feedback.library.rest.annotations.PUT;
 import ch.uzh.ifi.feedback.library.rest.annotations.Path;
 import ch.uzh.ifi.feedback.library.rest.annotations.PathParam;
 import ch.uzh.ifi.feedback.library.rest.annotations.Serialize;
+import ch.uzh.ifi.feedback.library.rest.annotations.Validate;
 import ch.uzh.ifi.feedback.library.rest.authorization.ITokenAuthenticationService;
+import ch.uzh.ifi.feedback.library.rest.routing.HandlerInfo;
+import ch.uzh.ifi.feedback.library.rest.routing.HttpMethod;
+import ch.uzh.ifi.feedback.library.rest.routing.UriTemplate;
 import ch.uzh.ifi.feedback.library.rest.serialization.ISerializationService;
-import ch.uzh.ifi.feedback.library.rest.validation.Validate;
+import ch.uzh.ifi.feedback.library.rest.service.IDbItem;
 import ch.uzh.ifi.feedback.library.rest.validation.ValidationException;
 import ch.uzh.ifi.feedback.library.rest.validation.ValidationResult;
 import ch.uzh.ifi.feedback.library.rest.validation.ValidatorBase;
@@ -92,7 +92,7 @@ public class RestManager implements IRestManager {
 		
 		InitParserMap();
 		
-		Set<URL> packages = ClasspathHelper.forPackage(packageName);
+		Collection<URL> packages = ClasspathHelper.forPackage(packageName);
 		packages.addAll(ClasspathHelper.forPackage("ch.uzh.ifi.feedback.library.rest"));
 		
 		Reflections reflections = new Reflections(new ConfigurationBuilder()

@@ -1,9 +1,9 @@
 package ch.uzh.ifi.feedback.library.rest.validation.test;
 
-import ch.uzh.ifi.feedback.library.rest.Service.ItemBase;
-import ch.uzh.ifi.feedback.library.rest.validation.Id;
-import ch.uzh.ifi.feedback.library.rest.validation.NotNull;
-import ch.uzh.ifi.feedback.library.rest.validation.Unique;
+import ch.uzh.ifi.feedback.library.rest.annotations.Id;
+import ch.uzh.ifi.feedback.library.rest.annotations.NotNull;
+import ch.uzh.ifi.feedback.library.rest.annotations.Unique;
+import ch.uzh.ifi.feedback.library.rest.service.ItemBase;
 
 public class TestItem extends ItemBase<TestItem>{
 

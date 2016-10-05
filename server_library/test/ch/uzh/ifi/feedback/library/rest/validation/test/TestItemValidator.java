@@ -1,6 +1,6 @@
 package ch.uzh.ifi.feedback.library.rest.validation.test;
 
-import ch.uzh.ifi.feedback.library.rest.Service.ServiceBase;
+import ch.uzh.ifi.feedback.library.rest.service.ServiceBase;
 import ch.uzh.ifi.feedback.library.rest.validation.ValidationSerializer;
 import ch.uzh.ifi.feedback.library.rest.validation.ValidatorBase;
 

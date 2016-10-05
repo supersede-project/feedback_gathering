@@ -11,9 +11,9 @@ import java.util.List;
 
 import com.google.inject.Provider;
 
-import ch.uzh.ifi.feedback.library.rest.Service.DbResultParser;
-import ch.uzh.ifi.feedback.library.rest.Service.IDbService;
-import ch.uzh.ifi.feedback.library.rest.Service.ServiceBase;
+import ch.uzh.ifi.feedback.library.rest.service.IDbService;
+import ch.uzh.ifi.feedback.library.rest.service.ServiceBase;
+import ch.uzh.ifi.feedback.library.transaction.DbResultParser;
 import ch.uzh.ifi.feedback.library.transaction.TransactionManager;
 import ch.uzh.ifi.feedback.orchestrator.model.IOrchestratorItem;
 import javassist.NotFoundException;
