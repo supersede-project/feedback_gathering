@@ -31,9 +31,11 @@ mysql -u username -p repository < repository.sql
 - switch to the war files folder of the deployment folder, open the war file and enter your database 
   credentials (dbuser and password) in the file "ch/uzh/ifi/feedback/library/transaction/config.properties":
   
+ ``` 
   dburl=jdbc:mysql://localhost:3306/
   dbuser=your_user_name
   dbpassword=your_password
+ ```
  
 - copy the war file to your tomcat WepApps directory. In linux systems, this is usually the directory 
   "/usr/share/tomcat7/webapps"
