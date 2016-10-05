@@ -1,6 +1,6 @@
 # Introduction
 
-Is a RESTfull Web API that provides endpoints for storing, receiving and deleting user feedback.
+Is a RESTfull Web API that provides endpoints for storing, receiving and deleting user feedbacks.
 
 # Table of Contents
 
