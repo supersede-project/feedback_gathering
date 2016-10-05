@@ -5,7 +5,6 @@ import {CategoryFeedback} from './category_feedback';
 import {PushConfiguration} from '../configurations/push_configuration';
 import {mechanismTypes} from '../mechanisms/mechanism_types';
 import {ConfigurationInterface} from '../configurations/configuration_interface';
-import {RatingMechanism} from '../mechanisms/rating_mechanism';
 
 
 const validationMessages = {
