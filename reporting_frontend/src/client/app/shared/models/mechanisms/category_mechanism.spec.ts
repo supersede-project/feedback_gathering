@@ -1,7 +1,6 @@
 import {CategoryMechanism} from './category_mechanism';
 import {readJSON} from '../../services/mocks/mocks_loader';
 import {MechanismFactory} from './mechanism_factory';
-import {CategoryFeedback} from '../feedbacks/category_feedback';
 
 
 describe('Category Mechanism', () => {

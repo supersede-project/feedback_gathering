@@ -21,6 +21,7 @@ export class FeedbackListComponent implements OnInit {
   errorMessage:string;
   feedbacks:Feedback[] = [];
   filteredFeedbacks:Feedback[] = [];
+  selectedFeedbacks:Feedback[] = [];
   applications:Application[] = [];
   sortOrder:{} = {'id': '', 'title': '', 'date': ''};
 
@@ -78,7 +79,7 @@ export class FeedbackListComponent implements OnInit {
   }
 
   sortFeedbacks(field:string, ascending:boolean = true) {
-    var feedbacks = this.feedbacks.sort(function (feedbackA, feedbackB) {
+    var feedbacks = this.filteredFeedbacks.sort(function (feedbackA, feedbackB) {
       if (field === 'date') {
         var dateA = new Date(feedbackA[field]);
         var dateB = new Date(feedbackB[field]);
@@ -180,6 +181,22 @@ export class FeedbackListComponent implements OnInit {
         document.body.removeChild(link);
       }
     }
+  }
+
+  select(event, feedback:Feedback) {
+    var index = this.selectedFeedbacks.indexOf(feedback);
+
+    if(index > -1) {
+        this.selectedFeedbacks.splice(index, 1);
+    } else {
+      this.selectedFeedbacks.push(feedback);
+    }
+
+    console.log(this.selectedFeedbacks);
+  }
+
+  markAsRead():void {
+
   }
 }
 
