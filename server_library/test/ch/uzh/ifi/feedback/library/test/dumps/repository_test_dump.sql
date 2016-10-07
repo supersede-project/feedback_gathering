@@ -28,6 +28,7 @@ CREATE TABLE `api_users` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
   `password` varchar(255) NOT NULL,
+  `is_admin` bit(1) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -38,7 +39,7 @@ CREATE TABLE `api_users` (
 
 LOCK TABLES `api_users` WRITE;
 /*!40000 ALTER TABLE `api_users` DISABLE KEYS */;
-INSERT INTO `api_users` VALUES (1,'api_user','password');
+INSERT INTO `api_users` VALUES (1,'api_user','password','');
 /*!40000 ALTER TABLE `api_users` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -108,6 +109,35 @@ INSERT INTO `audio_feedbacks` VALUES (1,75,'audios/1430174_1475244168466.mp3',14
 UNLOCK TABLES;
 
 --
+-- Table structure for table `categories`
+--
+
+DROP TABLE IF EXISTS `categories`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `categories` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `text` varchar(255) DEFAULT NULL,
+  `category_feedbacks_id` int(11) NOT NULL,
+  `category_types_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_choices_choice_feedbacks1_idx` (`category_feedbacks_id`),
+  KEY `fk_categories_category_types1_idx` (`category_types_id`),
+  CONSTRAINT `fk_categories_category_types1` FOREIGN KEY (`category_types_id`) REFERENCES `feedback_orchestrator`.`category_types` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_choices_category_feedbacks1` FOREIGN KEY (`category_feedbacks_id`) REFERENCES `category_feedbacks` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=big5;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `categories`
+--
+
+LOCK TABLES `categories` WRITE;
+/*!40000 ALTER TABLE `categories` DISABLE KEYS */;
+/*!40000 ALTER TABLE `categories` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `category_feedbacks`
 --
 
@@ -133,6 +163,33 @@ LOCK TABLES `category_feedbacks` WRITE;
 /*!40000 ALTER TABLE `category_feedbacks` DISABLE KEYS */;
 INSERT INTO `category_feedbacks` VALUES (1,75,12,'sample text'),(2,75,14,NULL);
 /*!40000 ALTER TABLE `category_feedbacks` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `category_types`
+--
+
+DROP TABLE IF EXISTS `category_types`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `category_types` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `key` varchar(255) NOT NULL,
+  `language` varchar(3) NOT NULL,
+  `text` varchar(255) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=big5;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `category_types`
+--
+
+LOCK TABLES `category_types` WRITE;
+/*!40000 ALTER TABLE `category_types` DISABLE KEYS */;
+/*!40000 ALTER TABLE `category_types` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -191,6 +248,35 @@ CREATE TABLE `feedback_comments` (
 LOCK TABLES `feedback_comments` WRITE;
 /*!40000 ALTER TABLE `feedback_comments` DISABLE KEYS */;
 /*!40000 ALTER TABLE `feedback_comments` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `feedback_states`
+--
+
+DROP TABLE IF EXISTS `feedback_states`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `feedback_states` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `feedback_id` int(11) NOT NULL,
+  `api_user_id` int(11) NOT NULL,
+  `status` varchar(45) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_feedback_states_1_idx` (`feedback_id`),
+  KEY `fk_feedback_states_2_idx` (`api_user_id`),
+  CONSTRAINT `fk_feedback_states_1` FOREIGN KEY (`feedback_id`) REFERENCES `feedbacks` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_feedback_states_2` FOREIGN KEY (`api_user_id`) REFERENCES `api_users` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=big5;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `feedback_states`
+--
+
+LOCK TABLES `feedback_states` WRITE;
+/*!40000 ALTER TABLE `feedback_states` DISABLE KEYS */;
+/*!40000 ALTER TABLE `feedback_states` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -353,4 +439,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-10-03 15:44:14
+-- Dump completed on 2016-10-07 15:34:50

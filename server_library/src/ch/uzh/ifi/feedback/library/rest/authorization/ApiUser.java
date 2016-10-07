@@ -1,5 +1,4 @@
 package ch.uzh.ifi.feedback.library.rest.authorization;
-
 import ch.uzh.ifi.feedback.library.rest.annotations.Id;
 import ch.uzh.ifi.feedback.library.rest.annotations.Serialize;
 import ch.uzh.ifi.feedback.library.rest.annotations.Unique;
@@ -16,6 +15,8 @@ public class ApiUser extends ItemBase<ApiUser> {
 	
 	private String password;
 	
+	private UserRole role;
+	 
 	@Override
 	public Integer getId() {
 		return id;
@@ -40,5 +41,13 @@ public class ApiUser extends ItemBase<ApiUser> {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	public UserRole getRole() {
+		return role;
+	}
+
+	public void setRole(UserRole role) {
+		this.role = role;
 	}
 }
