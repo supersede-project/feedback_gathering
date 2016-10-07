@@ -15,6 +15,7 @@ define(["require", "exports", './config', '../views/pagination_container', '../v
         var language;
         var dropArea;
         var dialogCSSClass;
+        var colorPickerCSSClass;
         var initApplication = function (applicationObject) {
             application = applicationObject;
             applicationContext = application.getContextForView();
@@ -169,6 +170,7 @@ define(["require", "exports", './config', '../views/pagination_container', '../v
             var dialogSelector = '[aria-describedby="' + containerId + '"]';
             var screenshotPreview = container.find('.screenshot-preview'), screenshotCaptureButton = container.find('button.take-screenshot'), elementToCapture = $('' + elementToCaptureSelector), elementsToHide = ['.ui-widget-overlay.ui-front', dialogSelector];
             var screenshotView = new screenshot_view_1.ScreenshotView(screenshotMechanism, screenshotPreview, screenshotCaptureButton, elementToCapture, container, distPath, elementsToHide);
+            screenshotView.colorPickerCSSClass = colorPickerCSSClass;
             screenshotMechanism.setScreenshotView(screenshotView);
             return screenshotView;
         };
@@ -368,6 +370,7 @@ define(["require", "exports", './config', '../views/pagination_container', '../v
             distPath = currentOptions.distPath;
             userId = currentOptions.userId;
             dialogCSSClass = currentOptions.dialogCSSClass;
+            colorPickerCSSClass = currentOptions.colorPickerCSSClass;
             language = i18n_1.I18nHelper.getLanguage(this.options);
             i18n_1.I18nHelper.initializeI18n(this.options);
             var applicationService = new application_service_1.ApplicationService(language);
@@ -399,7 +402,8 @@ define(["require", "exports", './config', '../views/pagination_container', '../v
             'fallbackLang': 'en',
             'distPath': 'dist/',
             'userId': '',
-            'dialogCSSClass': 'feedback-dialog'
+            'dialogCSSClass': 'feedback-dialog',
+            'colorPickerCSSClass': 'color-picker'
         };
     };
     (function ($, window, document) {

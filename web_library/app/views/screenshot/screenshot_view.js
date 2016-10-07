@@ -17,6 +17,7 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
     var cropperTypeObjectIdentifier = 'cropper';
     var ScreenshotView = (function () {
         function ScreenshotView(screenshotMechanism, screenshotPreviewElement, screenshotCaptureButton, elementToCapture, container, distPath, elementsToHide) {
+            this.colorPickerCSSClass = 'color-picker';
             this.screenshotMechanism = screenshotMechanism;
             this.screenshotPreviewElement = screenshotPreviewElement;
             this.screenshotCaptureButton = screenshotCaptureButton;
@@ -122,6 +123,7 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
                 selectedObjectControls.find('a.color').css('color', currentObjectColor);
                 selectedObjectControls.find('a.color').off().spectrum({
                     color: currentObjectColor,
+                    containerClassName: myThis.colorPickerCSSClass,
                     showPaletteOnly: true,
                     togglePaletteOnly: true,
                     togglePaletteMoreText: 'more',
@@ -291,6 +293,7 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
             freehandControls.find('a.freehand-color').css('color', currentFreehandDrawingColor);
             freehandControls.find('a.freehand-color').off().spectrum({
                 color: defaultColor,
+                containerClassName: myThis.colorPickerCSSClass,
                 showPaletteOnly: true,
                 togglePaletteOnly: true,
                 togglePaletteMoreText: 'more',
@@ -515,6 +518,7 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
                         colorLinkElement.css('left', e.offsetX - 8 + 'px');
                         colorLinkElement.off().spectrum({
                             color: currentObjectColor,
+                            containerClassName: myThis.colorPickerCSSClass,
                             showPaletteOnly: true,
                             togglePaletteOnly: true,
                             togglePaletteMoreText: 'more',

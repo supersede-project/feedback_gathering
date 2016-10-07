@@ -46,7 +46,7 @@ export class ScreenshotView {
     canvas;
     croppingIsActive:boolean;
     freehandActive:boolean;
-
+    colorPickerCSSClass:string = 'color-picker';
 
     constructor(screenshotMechanism:Mechanism, screenshotPreviewElement:JQuery, screenshotCaptureButton:JQuery,
                 elementToCapture:JQuery, container:JQuery, distPath:string, elementsToHide?:any) {
@@ -171,6 +171,7 @@ export class ScreenshotView {
             selectedObjectControls.find('a.color').css('color', currentObjectColor);
             selectedObjectControls.find('a.color').off().spectrum({
                 color: currentObjectColor,
+                containerClassName: myThis.colorPickerCSSClass,
                 showPaletteOnly: true,
                 togglePaletteOnly: true,
                 togglePaletteMoreText: 'more',
@@ -368,6 +369,7 @@ export class ScreenshotView {
         freehandControls.find('a.freehand-color').css('color', currentFreehandDrawingColor);
         freehandControls.find('a.freehand-color').off().spectrum({
             color: defaultColor,
+            containerClassName: myThis.colorPickerCSSClass,
             showPaletteOnly: true,
             togglePaletteOnly: true,
             togglePaletteMoreText: 'more',
@@ -618,6 +620,7 @@ export class ScreenshotView {
                     colorLinkElement.css('left', e.offsetX - 8 + 'px');
                     colorLinkElement.off().spectrum({
                         color: currentObjectColor,
+                        containerClassName: myThis.colorPickerCSSClass,
                         showPaletteOnly: true,
                         togglePaletteOnly: true,
                         togglePaletteMoreText: 'more',
