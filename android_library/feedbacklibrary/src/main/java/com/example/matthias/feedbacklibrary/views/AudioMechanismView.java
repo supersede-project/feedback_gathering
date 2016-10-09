@@ -25,7 +25,6 @@ import java.io.File;
 import java.io.IOException;
 
 
-
 import android.os.Handler;
 
 
@@ -54,79 +53,13 @@ public class AudioMechanismView extends MechanismView implements SeekBar.OnSeekB
     private String tempAudioFilePath;
     private int totalDuration;
 
-
     private TextView totalDurationLabel;
     private Handler handler;
+    private Handler handlerRecorder;
     private SeekBar seekBar;
     private Runnable updateSeekBarTask;
-
-    private int getProgressPercentage(long currentDuration, long totalDuration) {
-        long currentSeconds = (int) (currentDuration / 1000);
-        long totalSeconds = (int) (totalDuration / 1000);
-        return Double.valueOf(((((double) currentSeconds) / totalSeconds) * 100)).intValue();
-    }
-
-    private String milliSecondsToTimer(long milliseconds) {
-        String finalTimerString = "";
-        String secondsString;
-
-        // Convert total duration into time
-        int hours = (int) (milliseconds / (1000 * 60 * 60));
-        int minutes = (int) (milliseconds % (1000 * 60 * 60)) / (1000 * 60);
-        int seconds = (int) ((milliseconds % (1000 * 60 * 60)) % (1000 * 60) / 1000);
-        // Add hours if necessary
-        if (hours > 0) {
-            finalTimerString = hours + ":";
-        }
-
-        // Prepending 0 to seconds if it is one digit
-        if (seconds < 10) {
-            secondsString = "0" + seconds;
-        } else {
-            secondsString = "" + seconds;
-        }
-
-        return finalTimerString + minutes + ":" + secondsString;
-    }
-
-    @Override
-    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-    }
-
-    @Override
-    public void onStartTrackingTouch(SeekBar seekBar) {
-        removeUpdateSeekBarTask();
-    }
-
-    @Override
-    public void onStopTrackingTouch(SeekBar seekBar) {
-        removeUpdateSeekBarTask();
-        int totalDuration = mediaPlayer.getDuration();
-        int currentPosition = progressToTimer(seekBar.getProgress(), totalDuration);
-
-        // Forward or backward to certain seconds
-        mediaPlayer.seekTo(currentPosition);
-
-        // Update progress bar again
-        addUpdateSeekBarTask();
-    }
-
-    private int progressToTimer(int progress, int totalDuration) {
-        int currentDuration;
-        totalDuration = (totalDuration / 1000);
-        currentDuration = (int) ((((double) progress) / 100) * totalDuration);
-
-        // Return current duration in milliseconds
-        return currentDuration * 1000;
-    }
-
-    private void addUpdateSeekBarTask() {
-        handler.postDelayed(updateSeekBarTask, 100);
-    }
-
-    private void removeUpdateSeekBarTask(){
-        handler.removeCallbacks(updateSeekBarTask);
-    }
+    private Runnable updateSeekBarTaskRecorder;
+    private long currentRecordDuration = 1L;
 
     public AudioMechanismView(LayoutInflater layoutInflater, Mechanism mechanism, Resources resources, Activity activity, Context applicationContext) {
         super(layoutInflater);
@@ -153,6 +86,36 @@ public class AudioMechanismView extends MechanismView implements SeekBar.OnSeekB
                 handler.postDelayed(this, 100);
             }
         };
+        handlerRecorder = new Handler();
+        updateSeekBarTaskRecorder = new Runnable() {
+            public void run() {
+                long totalDuration = ((long) audioMechanism.getMaxTime()) * 1000;
+                // Displaying time completed playing / total duration time
+                String toDisplay = milliSecondsToTimer(currentRecordDuration * 1000) + "/" + milliSecondsToTimer(totalDuration);
+                totalDurationLabel.setText(toDisplay);
+
+                // Updating progress bar
+                int progress = getProgressPercentage(currentRecordDuration * 1000, totalDuration);
+                seekBar.setProgress(progress);
+
+                ++currentRecordDuration;
+                handlerRecorder.postDelayed(this, 1000);
+            }
+        };
+    }
+
+    private void addUpdateSeekBarTask() {
+        handler.postDelayed(updateSeekBarTask, 100);
+    }
+
+    private void addUpdateSeekBarTaskRecorder() {
+        handlerRecorder.postDelayed(updateSeekBarTaskRecorder, 1000);
+    }
+
+    private int getProgressPercentage(long currentDuration, long totalDuration) {
+        long currentSeconds = (int) (currentDuration / 1000);
+        long totalSeconds = (int) (totalDuration / 1000);
+        return Double.valueOf(((((double) currentSeconds) / totalSeconds) * 100)).intValue();
     }
 
     private void initView() {
@@ -170,6 +133,8 @@ public class AudioMechanismView extends MechanismView implements SeekBar.OnSeekB
         stopButton = (ImageButton) getEnclosingLayout().findViewById(R.id.supersede_feedbacklibrary_audio_player_button_stop);
         setButtonEnabled(stopButton, false);
         totalDurationLabel = (TextView) getEnclosingLayout().findViewById(R.id.supersede_feedbacklibrary_audio_timer_total_duration);
+        String startTotalDurationLabel = "-/" + milliSecondsToTimer(((long) audioMechanism.getMaxTime()) * 1000);
+        totalDurationLabel.setText(startTotalDurationLabel);
 
         pauseButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -193,11 +158,12 @@ public class AudioMechanismView extends MechanismView implements SeekBar.OnSeekB
             public void onClick(View v) {
                 boolean result = Utils.checkSinglePermission(activity, FeedbackActivity.PERMISSIONS_REQUEST_RECORD_AUDIO, Manifest.permission.RECORD_AUDIO, null, null, false);
                 if (result) {
-                    if(mediaPlayer != null) {
+                    if (mediaPlayer != null) {
                         mediaPlayer.pause();
                         resetToStartState();
                     }
                     removeUpdateSeekBarTask();
+                    removeUpdateSeekBarTaskRecorder();
 
                     // Output file
                     File audioDirectory = applicationContext.getDir(Utils.AUDIO_DIR, Context.MODE_PRIVATE);
@@ -258,8 +224,12 @@ public class AudioMechanismView extends MechanismView implements SeekBar.OnSeekB
                     setButtonEnabled(recordButton, false);
                     setButtonEnabled(stopButton, true);
 
-                    totalDurationLabel.setText(applicationContext.getResources().getString(R.string.supersede_feedbacklibrary_audio_default_total_duration));
                     seekBar.setOnSeekBarChangeListener(null);
+                    seekBar.setEnabled(false);
+                    seekBar.setProgress(0);
+                    seekBar.setMax(100);
+                    currentRecordDuration = 1L;
+                    addUpdateSeekBarTaskRecorder();
                 }
             }
         });
@@ -277,8 +247,37 @@ public class AudioMechanismView extends MechanismView implements SeekBar.OnSeekB
         });
     }
 
+    private String milliSecondsToTimer(long milliseconds) {
+        String finalTimerString = "";
+        String secondsString;
+
+        // Convert total duration into time
+        int hours = (int) (milliseconds / (1000 * 60 * 60));
+        int minutes = (int) (milliseconds % (1000 * 60 * 60)) / (1000 * 60);
+        int seconds = (int) ((milliseconds % (1000 * 60 * 60)) % (1000 * 60) / 1000);
+        // Add hours if necessary
+        if (hours > 0) {
+            finalTimerString = hours + ":";
+        }
+
+        // Prepending 0 to seconds if it is one digit
+        if (seconds < 10) {
+            secondsString = "0" + seconds;
+        } else {
+            secondsString = "" + seconds;
+        }
+
+        return finalTimerString + minutes + ":" + secondsString;
+    }
+
+    @Override
+    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+    }
+
     private void onRecordSuccess() {
         stopRecordAnimation();
+        removeUpdateSeekBarTaskRecorder();
+        currentRecordDuration = 1L;
         recordIndicator.setVisibility(View.INVISIBLE);
         mediaRecorder.stop();
         mediaRecorder.release();
@@ -316,9 +315,8 @@ public class AudioMechanismView extends MechanismView implements SeekBar.OnSeekB
             mediaPlayer.setDataSource(audioFilePath);
             mediaPlayer.prepare();
             totalDuration = mediaPlayer.getDuration();
-            System.out.println("totalDuration == " + totalDuration);
 
-            // Set Progress bar values
+            seekBar.setEnabled(true);
             seekBar.setProgress(0);
             seekBar.setMax(100);
             // Updating progress bar
@@ -329,6 +327,24 @@ public class AudioMechanismView extends MechanismView implements SeekBar.OnSeekB
         }
     }
 
+    @Override
+    public void onStartTrackingTouch(SeekBar seekBar) {
+        removeUpdateSeekBarTask();
+    }
+
+    @Override
+    public void onStopTrackingTouch(SeekBar seekBar) {
+        removeUpdateSeekBarTask();
+        int totalDuration = mediaPlayer.getDuration();
+        int currentPosition = progressToTimer(seekBar.getProgress(), totalDuration);
+
+        // Forward or backward to certain seconds
+        mediaPlayer.seekTo(currentPosition);
+
+        // Update progress bar again
+        addUpdateSeekBarTask();
+    }
+
     private void pausePlaying() {
         if (!isPaused && isPlaying && !isRecording && mediaPlayer != null && mediaPlayer.isPlaying()) {
             mediaPlayer.pause();
@@ -337,6 +353,28 @@ public class AudioMechanismView extends MechanismView implements SeekBar.OnSeekB
             setButtonEnabled(pauseButton, false);
             setButtonEnabled(playButton, true);
         }
+    }
+
+    private int progressToTimer(int progress, int totalDuration) {
+        int currentDuration;
+        totalDuration = (totalDuration / 1000);
+        currentDuration = (int) ((((double) progress) / 100) * totalDuration);
+
+        // Return current duration in milliseconds
+        return currentDuration * 1000;
+    }
+
+    private void removeUpdateSeekBarTask() {
+        handler.removeCallbacks(updateSeekBarTask);
+    }
+
+    private void removeUpdateSeekBarTaskRecorder() {
+        handlerRecorder.removeCallbacks(updateSeekBarTaskRecorder);
+    }
+
+    private void resetToStartState() {
+        mediaPlayer.seekTo(0);
+        seekBar.setProgress(0);
     }
 
     private void resumePlaying() {
@@ -366,13 +404,8 @@ public class AudioMechanismView extends MechanismView implements SeekBar.OnSeekB
         setButtonEnabled(stopButton, true);
     }
 
-    private void resetToStartState() {
-        mediaPlayer.seekTo(0);
-        seekBar.setProgress(0);
-    }
-
     private void stopPlaying() {
-        if(mediaPlayer != null) {
+        if (mediaPlayer != null) {
             mediaPlayer.pause();
             resetToStartState();
         }

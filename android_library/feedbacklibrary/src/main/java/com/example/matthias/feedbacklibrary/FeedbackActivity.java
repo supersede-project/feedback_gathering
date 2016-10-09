@@ -227,7 +227,6 @@ public class FeedbackActivity extends AppCompatActivity implements ScreenshotMec
                             // TODO: Implement attachment mechanism
                             break;
                         case Mechanism.AUDIO_TYPE:
-                            // TODO: Implement audio mechanism (id or index as prefix?)
                             mechanismView = new AudioMechanismView(layoutInflater, allMechanisms.get(i), getResources(), this, getApplicationContext());
                             view = mechanismView.getEnclosingLayout();
                             break;
