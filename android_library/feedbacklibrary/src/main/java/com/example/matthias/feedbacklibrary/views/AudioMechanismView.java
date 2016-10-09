@@ -61,11 +61,14 @@ public class AudioMechanismView extends MechanismView implements SeekBar.OnSeekB
     private Runnable updateSeekBarTaskRecorder;
     private long currentRecordDuration = 1L;
 
+    private MultipleAudioMechanismsListener multipleAudioMechanismsListener;
+
     public AudioMechanismView(LayoutInflater layoutInflater, Mechanism mechanism, Resources resources, Activity activity, Context applicationContext) {
         super(layoutInflater);
         this.audioMechanism = (AudioMechanism) mechanism;
         this.resources = resources;
         this.activity = activity;
+        this.multipleAudioMechanismsListener = (MultipleAudioMechanismsListener) activity;
         this.applicationContext = applicationContext;
         setEnclosingLayout(getLayoutInflater().inflate(R.layout.audio_feedback_layout, null));
         initView();
@@ -110,6 +113,15 @@ public class AudioMechanismView extends MechanismView implements SeekBar.OnSeekB
 
     private void addUpdateSeekBarTaskRecorder() {
         handlerRecorder.postDelayed(updateSeekBarTaskRecorder, 1000);
+    }
+
+    /**
+     * This method returns the id of the audio mechanism represented by the view.
+     *
+     * @return the audio mechanism id
+     */
+    public long getAudioMechanismId() {
+        return audioMechanism.getId();
     }
 
     private int getProgressPercentage(long currentDuration, long totalDuration) {
@@ -224,6 +236,8 @@ public class AudioMechanismView extends MechanismView implements SeekBar.OnSeekB
                     setButtonEnabled(recordButton, false);
                     setButtonEnabled(stopButton, true);
 
+                    multipleAudioMechanismsListener.onRecordStart(audioMechanism.getId());
+
                     seekBar.setOnSeekBarChangeListener(null);
                     seekBar.setEnabled(false);
                     seekBar.setProgress(0);
@@ -316,6 +330,8 @@ public class AudioMechanismView extends MechanismView implements SeekBar.OnSeekB
             mediaPlayer.prepare();
             totalDuration = mediaPlayer.getDuration();
 
+            multipleAudioMechanismsListener.onRecordStop();
+
             seekBar.setEnabled(true);
             seekBar.setProgress(0);
             seekBar.setMax(100);
@@ -386,6 +402,19 @@ public class AudioMechanismView extends MechanismView implements SeekBar.OnSeekB
         setButtonEnabled(playButton, false);
     }
 
+    /**
+     * This method enables/disables all button clicks.
+     *
+     * @param clickable true to set all buttons clickable, else otherwise
+     */
+    public void setAllButtonsClickable(boolean clickable) {
+        pauseButton.setClickable(clickable);
+        playButton.setClickable(clickable);
+        recordButton.setClickable(clickable);
+        stopButton.setClickable(clickable);
+        seekBar.setEnabled(clickable);
+    }
+
     private void setButtonEnabled(ImageButton imageButton, boolean enabled) {
         if (imageButton != null) {
             imageButton.setEnabled(enabled);
@@ -430,5 +459,11 @@ public class AudioMechanismView extends MechanismView implements SeekBar.OnSeekB
     public void updateModel() {
         audioMechanism.setAudioPath(audioFilePath);
         audioMechanism.setTotalDuration(totalDuration);
+    }
+
+    public interface MultipleAudioMechanismsListener {
+        void onRecordStart(long audioMechanismId);
+
+        void onRecordStop();
     }
 }
