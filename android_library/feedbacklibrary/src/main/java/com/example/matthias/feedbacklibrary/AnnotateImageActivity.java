@@ -419,7 +419,11 @@ public class AnnotateImageActivity extends AppCompatActivity implements ColorPic
                     TextAnnotationImageView textAnnotationView = (TextAnnotationImageView) child;
 
                     int key = Integer.valueOf(textAnnotationView.getAnnotationNumberView().getText().toString());
-                    String annotationInputText = (textAnnotationView.getAnnotationInputText()).trim();
+                    // If no text was entered, just set the empty string
+                    String annotationInputText = "";
+                    if (textAnnotationView.getAnnotationInputText() != null) {
+                        annotationInputText = (textAnnotationView.getAnnotationInputText()).trim();
+                    }
                     int annotationImageResource = textAnnotationView.getImageResourceId();
                     float getX = child.getX();
                     float getY = child.getY();
@@ -497,13 +501,6 @@ public class AnnotateImageActivity extends AppCompatActivity implements ColorPic
                 }
                 if (textAnnotationCounter > textAnnotationCounterMaximum) {
                     break;
-                }
-            }
-            if (textAnnotationCounter <= textAnnotationCounterMaximum) {
-                ImageButton textAnnotationButton = (ImageButton) findViewById(R.id.supersede_feedbacklibrary_text_comment_btn);
-                if (textAnnotationButton != null) {
-                    textAnnotationButton.setEnabled(false);
-                    textAnnotationButton.setAlpha(0.4F);
                 }
             }
         }
