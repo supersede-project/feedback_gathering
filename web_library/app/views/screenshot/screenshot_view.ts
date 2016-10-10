@@ -166,6 +166,18 @@ export class ScreenshotView {
             selectedObjectControls.find('.delete').off().on('click', function (e) {
                 e.preventDefault();
                 e.stopPropagation();
+                if (selectedObject.get('customType') === 'arrow') {
+                    if (selectedObject.line !== undefined) {
+                        selectedObject.line.remove();
+                    }
+                    if (selectedObject.arrow !== undefined) {
+                        selectedObject.arrow.remove();
+                    }
+                    if (selectedObject.circle !== undefined) {
+                        selectedObject.circle.remove();
+                    }
+                }
+
                 if (selectedObject) {
                     selectedObject.remove();
                 }
@@ -193,7 +205,22 @@ export class ScreenshotView {
                     var color = color.toHexString();
                     jQuery(this).css('color', color);
 
-                    if (selectedObject.get('type') === 'path-group') {
+                    if (selectedObject.get('customType') === 'arrow') {
+                        selectedObject.setFill(color);
+                        selectedObject.setStroke(color);
+                        if(selectedObject.line !== undefined) {
+                            selectedObject.line.setFill(color);
+                            selectedObject.line.setStroke(color);
+                        }
+                        if(selectedObject.arrow !== undefined) {
+                            selectedObject.arrow.setFill(color);
+                            selectedObject.arrow.setStroke(color);
+                        }
+                        if(selectedObject.circle !== undefined) {
+                            selectedObject.circle.setFill(color);
+                            selectedObject.circle.setStroke(color);
+                        }
+                    } else if (selectedObject.get('type') === 'path-group') {
                         for (var path of selectedObject.paths) {
                             if (path.getFill() != "") {
                                 path.setFill(color);
