@@ -48,6 +48,7 @@ export var feedbackPluginModule = function ($, window, document) {
     var dropArea;
     var dialogCSSClass;
     var colorPickerCSSClass;
+    var defaultStrokeWidth;
 
     /**
      * @param applicationObject
@@ -269,6 +270,7 @@ export var feedbackPluginModule = function ($, window, document) {
         var screenshotView = new ScreenshotView(screenshotMechanism, screenshotPreview, screenshotCaptureButton,
             elementToCapture, container, distPath, elementsToHide);
         screenshotView.colorPickerCSSClass = colorPickerCSSClass;
+        screenshotView.setDefaultStrokeWidth(defaultStrokeWidth);
 
         screenshotMechanism.setScreenshotView(screenshotView);
         return screenshotView;
@@ -519,6 +521,7 @@ export var feedbackPluginModule = function ($, window, document) {
         userId = currentOptions.userId;
         dialogCSSClass = currentOptions.dialogCSSClass;
         colorPickerCSSClass = currentOptions.colorPickerCSSClass;
+        defaultStrokeWidth = currentOptions.defaultStrokeWidth;
 
         language = I18nHelper.getLanguage(this.options);
         I18nHelper.initializeI18n(this.options);
@@ -557,7 +560,8 @@ export var feedbackPluginModule = function ($, window, document) {
         'distPath': 'dist/',
         'userId': '',
         'dialogCSSClass': 'feedback-dialog',
-        'colorPickerCSSClass': 'color-picker'
+        'colorPickerCSSClass': 'color-picker',
+        'defaultStrokeWidth': 3
     };
 
 };

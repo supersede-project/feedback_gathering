@@ -18,6 +18,7 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
     var ScreenshotView = (function () {
         function ScreenshotView(screenshotMechanism, screenshotPreviewElement, screenshotCaptureButton, elementToCapture, container, distPath, elementsToHide) {
             this.colorPickerCSSClass = 'color-picker';
+            this.defaultStrokeWidth = 3;
             this.screenshotMechanism = screenshotMechanism;
             this.screenshotPreviewElement = screenshotPreviewElement;
             this.screenshotCaptureButton = screenshotCaptureButton;
@@ -65,7 +66,7 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
                     };
                     myThis.initFabric(img, canvas);
                     myThis.initFreehandDrawing();
-                    myThis.initSVGStickers();
+                    myThis.initStickers();
                     myThis.initScreenshotOperations();
                     myThis.customizeControls();
                     var screenshotCaptureButtonActiveText = myThis.screenshotCaptureButton.data('active-text');
@@ -85,6 +86,7 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
             selectedObjectControls.hide();
             myThis.fabricCanvas.on('object:selected', function (e) {
                 var selectedObject = e.target;
+                myThis.fabricCanvas.uniScaleTransform = selectedObject.get('type') === 'fabricObject';
                 selectedObjectControls.show();
                 if (selectedObject.get('type') === textTypeObjectIdentifier) {
                     var textSizeInput = selectedObjectControls.find('.text-size');
@@ -107,7 +109,7 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
                         }
                     }
                 }
-                else if (selectedObject.get('type') === 'path') {
+                else if (selectedObject.get('type') === 'path' || selectedObject.get('type') === 'fabricObject') {
                     var currentObjectColor = selectedObject.getStroke();
                 }
                 else {
@@ -149,7 +151,7 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
                                 }
                             }
                         }
-                        else if (selectedObject.get('type') === 'path') {
+                        else if (selectedObject.get('type') === 'path' || selectedObject.get('type') === 'fabricObject') {
                             selectedObject.setStroke(color);
                         }
                         else {
@@ -170,6 +172,19 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
             });
             myThis.fabricCanvas.on('object:added', function (object) {
                 if (myThis.freehandActive) {
+                }
+            });
+            myThis.fabricCanvas.on('object:scaling', function (e) {
+                var object = e.target;
+                console.log(object.type);
+                if (object.type === 'fabricObject') {
+                    var o = e.target;
+                    if (!o.strokeWidthUnscaled && o.strokeWidth) {
+                        o.strokeWidthUnscaled = o.strokeWidth;
+                    }
+                    if (o.strokeWidthUnscaled) {
+                        o.strokeWidth = o.strokeWidthUnscaled / o.scaleX;
+                    }
                 }
             });
         };
@@ -338,9 +353,9 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
             freehandControls.hide();
             this.freehandActive = false;
         };
-        ScreenshotView.prototype.initSVGStickers = function () {
+        ScreenshotView.prototype.initStickers = function () {
             var myThis = this;
-            myThis.container.find('.svg-sticker-source').draggable({
+            myThis.container.find('.sticker-source').draggable({
                 cursor: "crosshair",
                 revert: "invalid",
                 helper: "clone",
@@ -367,7 +382,7 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
                     if (sticker.hasClass('text')) {
                         myThis.addTextAnnotation(offsetX, offsetY);
                     }
-                    else {
+                    else if (sticker.hasClass('svg-sticker-source')) {
                         fabric.loadSVGFromURL(sticker.attr('src'), function (objects, options) {
                             var svgObject = fabric.util.groupSVGElements(objects, options);
                             svgObject.set('left', offsetX);
@@ -376,6 +391,41 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
                             myThis.fabricCanvas.add(svgObject).renderAll();
                             myThis.fabricCanvas.setActiveObject(svgObject);
                         });
+                    }
+                    else if (sticker.hasClass('object-source')) {
+                        if (sticker.hasClass('arrow')) {
+                            myThis.addArrowToCanvas(offsetX, offsetY);
+                        }
+                        else if (sticker.hasClass('rect')) {
+                            var rect = new fabric.Rect({
+                                left: offsetX,
+                                top: offsetY,
+                                width: 50,
+                                height: 50,
+                                type: 'fabricObject',
+                                stroke: defaultColor,
+                                strokeWidth: myThis.defaultStrokeWidth,
+                                lockUniScaling: false,
+                                fill: 'transparent'
+                            });
+                            myThis.fabricCanvas.add(rect).renderAll();
+                            myThis.fabricCanvas.setActiveObject(rect);
+                        }
+                        else if (sticker.hasClass('circle')) {
+                            var circle = new fabric.Circle({
+                                left: offsetX,
+                                top: offsetY,
+                                radius: 50,
+                                startAngle: 0,
+                                type: 'fabricObject',
+                                endAngle: 2 * Math.PI,
+                                stroke: defaultColor,
+                                strokeWidth: myThis.defaultStrokeWidth,
+                                fill: 'transparent'
+                            });
+                            myThis.fabricCanvas.add(circle).renderAll();
+                            myThis.fabricCanvas.setActiveObject(circle);
+                        }
                     }
                 }
             });
@@ -508,7 +558,7 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
                                 }
                             }
                         }
-                        else if (target.get('type') === 'path') {
+                        else if (target.get('type') === 'path' || target.get('type') === 'fabricObject') {
                             var currentObjectColor = target.getStroke();
                         }
                         else {
@@ -536,7 +586,10 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
                             change: function (color) {
                                 var color = color.toHexString();
                                 jQuery(this).css('color', color);
-                                if (target.get('type') !== 'path-group') {
+                                if (target.get('type') === 'fabricObject') {
+                                    target.setStroke(color);
+                                }
+                                else if (target.get('type') !== 'path-group') {
                                     target.setFill(color);
                                 }
                                 else {
@@ -594,6 +647,134 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
                     icon: myThis.distPath + 'img/ic_format_color_fill_black_24px_background.svg'
                 }
             });
+        };
+        ScreenshotView.prototype.calcArrowAngle = function (x1, y1, x2, y2) {
+            var angle = 0, x, y;
+            x = (x2 - x1);
+            y = (y2 - y1);
+            if (x === 0) {
+                angle = (y === 0) ? 0 : (y > 0) ? Math.PI / 2 : Math.PI * 3 / 2;
+            }
+            else if (y === 0) {
+                angle = (x > 0) ? 0 : Math.PI;
+            }
+            else {
+                angle = (x < 0) ? Math.atan(y / x) + Math.PI : (y < 0) ? Math.atan(y / x) + (2 * Math.PI) : Math.atan(y / x);
+            }
+            return (angle * 180 / Math.PI);
+        };
+        ScreenshotView.prototype.addArrowToCanvas = function (offsetX, offsetY) {
+            var line, arrow, circle;
+            line = new fabric.Line([50, 50, 100, 100], {
+                stroke: '#000',
+                selectable: true,
+                strokeWidth: '2',
+                padding: 5,
+                hasBorders: false,
+                hasControls: false,
+                originX: offsetX,
+                originY: offsetY,
+                lockScalingX: true,
+                lockScalingY: true
+            });
+            var centerX = (line.x1 + line.x2) / 2, centerY = (line.y1 + line.y2) / 2;
+            var deltaX = line.left - centerX, deltaY = line.top - centerY;
+            arrow = new fabric.Triangle({
+                left: line.get('x1') + deltaX,
+                top: line.get('y1') + deltaY,
+                originX: 'center',
+                originY: 'center',
+                hasBorders: false,
+                hasControls: false,
+                lockScalingX: true,
+                lockScalingY: true,
+                lockRotation: true,
+                pointType: 'arrow_start',
+                angle: -45,
+                width: 20,
+                height: 20,
+                fill: '#000'
+            });
+            arrow.line = line;
+            circle = new fabric.Circle({
+                left: line.get('x2') + deltaX,
+                top: line.get('y2') + deltaY,
+                radius: 2,
+                stroke: '#000',
+                strokeWidth: 3,
+                originX: 'center',
+                originY: 'center',
+                hasBorders: false,
+                hasControls: false,
+                lockScalingX: true,
+                lockScalingY: true,
+                lockRotation: true,
+                pointType: 'arrow_end',
+                fill: '#000'
+            });
+            circle.line = line;
+            line.customType = arrow.customType = circle.customType = 'arrow';
+            line.circle = arrow.circle = circle;
+            line.arrow = circle.arrow = arrow;
+            this.fabricCanvas.add(line, arrow, circle);
+            function moveEnd(obj) {
+                var p = obj, x1, y1, x2, y2;
+                if (obj.pointType === 'arrow_end') {
+                    obj.line.set('x2', obj.get('left'));
+                    obj.line.set('y2', obj.get('top'));
+                }
+                else {
+                    obj.line.set('x1', obj.get('left'));
+                    obj.line.set('y1', obj.get('top'));
+                }
+                obj.line._setWidthHeight();
+                x1 = obj.line.get('x1');
+                y1 = obj.line.get('y1');
+                x2 = obj.line.get('x2');
+                y2 = obj.line.get('y2');
+                var angle = this.calcArrowAngle(x1, y1, x2, y2);
+                if (obj.pointType === 'arrow_end') {
+                    obj.arrow.set('angle', angle - 90);
+                }
+                else {
+                    obj.set('angle', angle - 90);
+                }
+                obj.line.setCoords();
+                this.fabricCanvas.renderAll();
+            }
+            function moveLine() {
+                var oldCenterX = (line.x1 + line.x2) / 2, oldCenterY = (line.y1 + line.y2) / 2, deltaX = line.left - oldCenterX, deltaY = line.top - oldCenterY;
+                line.arrow.set({
+                    'left': line.x1 + deltaX,
+                    'top': line.y1 + deltaY
+                }).setCoords();
+                line.circle.set({
+                    'left': line.x2 + deltaX,
+                    'top': line.y2 + deltaY
+                }).setCoords();
+                line.set({
+                    'x1': line.x1 + deltaX,
+                    'y1': line.y1 + deltaY,
+                    'x2': line.x2 + deltaX,
+                    'y2': line.y2 + deltaY
+                });
+                line.set({
+                    'left': (line.x1 + line.x2) / 2,
+                    'top': (line.y1 + line.y2) / 2
+                });
+            }
+            arrow.on('moving', function () {
+                moveEnd(arrow);
+            });
+            circle.on('moving', function () {
+                moveEnd(circle);
+            });
+            line.on('moving', function () {
+                moveLine();
+            });
+        };
+        ScreenshotView.prototype.setDefaultStrokeWidth = function (strokeWidth) {
+            this.defaultStrokeWidth = strokeWidth;
         };
         return ScreenshotView;
     }());
