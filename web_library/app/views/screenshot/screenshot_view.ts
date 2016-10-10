@@ -48,6 +48,7 @@ export class ScreenshotView {
     freehandActive:boolean;
     colorPickerCSSClass:string = 'color-picker';
     defaultStrokeWidth:number = 3;
+    selectedObjectControls:any;
 
     constructor(screenshotMechanism:Mechanism, screenshotPreviewElement:JQuery, screenshotCaptureButton:JQuery,
                 elementToCapture:JQuery, container:JQuery, distPath:string, elementsToHide?:any) {
@@ -129,17 +130,17 @@ export class ScreenshotView {
         pageScreenshotCanvas.set('hoverCursor', 'default');
         this.fabricCanvas.add(pageScreenshotCanvas);
 
-        var selectedObjectControls = jQuery('#screenshotMechanism' + myThis.screenshotMechanism.id + ' .selected-object-controls');
-        selectedObjectControls.hide();
+        this.selectedObjectControls = jQuery('#screenshotMechanism' + myThis.screenshotMechanism.id + ' .selected-object-controls');
+        this.selectedObjectControls.hide();
 
         myThis.fabricCanvas.on('object:selected', function (e) {
             var selectedObject = e.target;
 
             myThis.fabricCanvas.uniScaleTransform = selectedObject.get('type') === 'fabricObject';
 
-            selectedObjectControls.show();
+            myThis.selectedObjectControls.show();
             if (selectedObject.get('type') === textTypeObjectIdentifier) {
-                var textSizeInput = selectedObjectControls.find('.text-size');
+                var textSizeInput = myThis.selectedObjectControls.find('.text-size');
                 textSizeInput.show();
                 textSizeInput.val(selectedObject.getFontSize());
                 textSizeInput.off().on('keyup', function () {
@@ -147,7 +148,7 @@ export class ScreenshotView {
                     myThis.fabricCanvas.renderAll();
                 });
             } else {
-                selectedObjectControls.find('.text-size').hide();
+                myThis.selectedObjectControls.find('.text-size').hide();
             }
 
             if (selectedObject.get('type') === 'path-group') {
@@ -163,7 +164,7 @@ export class ScreenshotView {
                 var currentObjectColor = selectedObject.getFill();
             }
 
-            selectedObjectControls.find('.delete').off().on('click', function (e) {
+            myThis.selectedObjectControls.find('.delete').off().on('click', function (e) {
                 e.preventDefault();
                 e.stopPropagation();
                 if (selectedObject.get('customType') === 'arrow') {
@@ -183,8 +184,8 @@ export class ScreenshotView {
                 }
             });
 
-            selectedObjectControls.find('a.color').css('color', currentObjectColor);
-            selectedObjectControls.find('a.color').off().spectrum({
+            myThis.selectedObjectControls.find('a.color').css('color', currentObjectColor);
+            myThis.selectedObjectControls.find('a.color').off().spectrum({
                 color: currentObjectColor,
                 containerClassName: myThis.colorPickerCSSClass,
                 showPaletteOnly: true,
@@ -348,6 +349,7 @@ export class ScreenshotView {
             jQuery(this).hide();
             jQuery('.screenshot-crop-confirm').hide();
             croppingRect.remove();
+            myThis.setCanvasObjectsMovement(false);
         });
 
         this.container.find('.screenshot-crop-confirm').show().off().on('click', function (e) {
@@ -357,6 +359,7 @@ export class ScreenshotView {
             myThis.croppingIsActive = false;
             jQuery(this).hide();
             jQuery('.screenshot-crop-cancel').hide();
+            myThis.setCanvasObjectsMovement(false);
         });
     }
 
@@ -627,6 +630,9 @@ export class ScreenshotView {
         this.container.find('.screenshot-crop').off().on('click', function (event) {
             event.preventDefault();
             event.stopPropagation();
+            myThis.fabricCanvas.deactivateAll().renderAll();
+            myThis.selectedObjectControls.hide();
+            myThis.setCanvasObjectsMovement(true);
             myThis.initCrop();
         });
 
@@ -792,8 +798,8 @@ export class ScreenshotView {
         line = new fabric.Line([offsetX, offsetY, offsetX + 50, offsetY + 50], {
             stroke: defaultColor,
             selectable: true,
-            strokeWidth: '3',
-            padding: 5,
+            strokeWidth: 3,
+            padding: 1,
             hasBorders: false,
             hasControls: false,
             originX: 'center',
@@ -817,6 +823,7 @@ export class ScreenshotView {
             lockScalingX: true,
             lockScalingY: true,
             lockRotation: true,
+            padding: 0,
             pointType: 'arrow_start',
             angle: -45,
             width: 20,
@@ -828,7 +835,7 @@ export class ScreenshotView {
         circle = new fabric.Circle({
             left: line.get('x2') + deltaX,
             top: line.get('y2') + deltaY,
-            radius: 1,
+            radius: 2,
             stroke: defaultColor,
             strokeWidth: 3,
             originX: 'center',
@@ -838,6 +845,7 @@ export class ScreenshotView {
             lockScalingX: true,
             lockScalingY: true,
             lockRotation: true,
+            padding: 0,
             pointType: 'arrow_end',
             fill: defaultColor
         });
@@ -910,7 +918,7 @@ export class ScreenshotView {
         }
 
         arrow.on('moving', function () {
-            moveEnd(arrow);
+           moveEnd(arrow);
         });
 
         circle.on('moving', function () {
@@ -938,6 +946,17 @@ export class ScreenshotView {
         }
 
         return (angle * 180 / Math.PI);
+    }
+
+    setCanvasObjectsMovement(lock:boolean) {
+        var objects = this.fabricCanvas.getObjects();
+
+        for (var i = 0; i < objects.length; i++) {
+            if(this.fabricCanvas.getObjects()[i].get('type') !== cropperTypeObjectIdentifier) {
+                this.fabricCanvas.getObjects()[i].lockMovementX = lock;
+                this.fabricCanvas.getObjects()[i].lockMovementX = lock;
+            }
+        }
     }
 }
 
