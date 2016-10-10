@@ -43,9 +43,11 @@ public class StatusController extends RestController<Status>{
 		return super.GetAllFor("feedback_id", id);
 	}
 	
-	@Path("/statuses")
+	@Path("/feedbacks/{id}/statuses")
 	@POST
-	public Status InsertStatus(Status status) throws Exception {
+	public Status InsertStatus(@PathParam("id") Integer id, Status status) throws Exception {
+		
+		status.setFeedbackId(id);
 		return super.Insert(status);
 	}
 
@@ -60,8 +62,8 @@ public class StatusController extends RestController<Status>{
 	@Path("/statuses/{id}")
 	@PUT
 	@Authenticate(UserAuthenticationService.class)
-	public void UpdateStatus(Status status) throws Exception 
+	public Status UpdateStatus(Status status) throws Exception 
 	{
-		super.Update(status);
+		return super.Update(status);
 	}
 }

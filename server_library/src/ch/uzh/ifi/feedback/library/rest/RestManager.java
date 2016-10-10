@@ -58,6 +58,7 @@ import ch.uzh.ifi.feedback.library.rest.annotations.PathParam;
 import ch.uzh.ifi.feedback.library.rest.annotations.Serialize;
 import ch.uzh.ifi.feedback.library.rest.annotations.Validate;
 import ch.uzh.ifi.feedback.library.rest.authorization.ITokenAuthenticationService;
+import ch.uzh.ifi.feedback.library.rest.authorization.UserRole;
 import ch.uzh.ifi.feedback.library.rest.routing.HandlerInfo;
 import ch.uzh.ifi.feedback.library.rest.routing.HttpMethod;
 import ch.uzh.ifi.feedback.library.rest.routing.UriTemplate;
@@ -74,7 +75,6 @@ public class RestManager implements IRestManager {
 	private List<HandlerInfo> _handlers;
 	private Map<Class<?>, Method> _parserMap;
 	private Map<Class<?>, Class<? extends ISerializationService<?>>> _serializerMap;
-	private Map<Method, Class<? extends ITokenAuthenticationService>> _authentiactionMap;
 	private Injector _injector;
 
 	@Inject
@@ -85,7 +85,6 @@ public class RestManager implements IRestManager {
 		_handlers = new ArrayList<>();
 		_parserMap = new HashMap<>();
 		_serializerMap = new HashMap<>();
-		_authentiactionMap = new HashMap<>();
 	}
 
 	public void Init(String packageName) throws Exception {
@@ -147,7 +146,15 @@ public class RestManager implements IRestManager {
 					if(_handlers.stream().anyMatch((h) -> h.GetHttpMethod() == methodFinal && h.getUriTemplate().Match(path) != null))
 						throw new AlreadyBoundException("handler for template '" + path + "' already registered!/n");
 				
-					HandlerInfo info = new HandlerInfo(m, method, clazz, parameterClass, template);
+					Class<? extends ITokenAuthenticationService> authClass = null;
+					UserRole authRole = null;
+					if(m.isAnnotationPresent(Authenticate.class))
+					{
+						authClass = m.getAnnotation(Authenticate.class).value();
+						authRole = UserRole.valueOf(m.getAnnotation(Authenticate.class).role());
+					}
+					
+					HandlerInfo info = new HandlerInfo(m, method, clazz, parameterClass, template, authClass, authRole);
 					
 					Parameter[] params = m.getParameters();
 					for(int i = 0; i < params.length; i++){
@@ -162,9 +169,6 @@ public class RestManager implements IRestManager {
 							throw new Exception("No annotation for parameter " + params[i].getName() + " present!/n");
 						}
 					}
-					
-					if(m.isAnnotationPresent(Authenticate.class))
-						_authentiactionMap.put(m, m.getAnnotation(Authenticate.class).value());
 
 					_handlers.add(info);
 				}
@@ -283,11 +287,12 @@ public class RestManager implements IRestManager {
 		}
 		
 		//Do token authentication if needed
-		Class<? extends ITokenAuthenticationService> authServiceClazz = _authentiactionMap.get(handler.getMethod());
+		Class<? extends ITokenAuthenticationService> authServiceClazz = handler.getAuthenticationClass();
 		if(authServiceClazz != null)
 		{
 			ITokenAuthenticationService authService = _injector.getInstance(authServiceClazz);
-			if(!authService.Authenticate(request))
+			UserRole authRole = handler.getAuthenticationUserRole();
+			if(!authService.Authenticate(request, authRole))
 				throw new AuthenticationException("the provided usertoken does not match!");
 		}
 		

@@ -16,7 +16,7 @@ import ch.uzh.ifi.feedback.repository.model.Feedback;
 import javassist.NotFoundException;
 import static java.util.Arrays.asList;
 
-public class FeedbackServletTest extends ServletTest {
+public class FeedbackControllerTest extends ServletTest {
 	
 	private final int NUMBER_OF_FEEDBACK_RECORDS = 10;
 	

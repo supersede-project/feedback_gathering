@@ -62,7 +62,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 /**
  * The main activity where the feedback mechanisms are displayed.
  */
-public class FeedbackActivity extends AppCompatActivity implements ScreenshotMechanismView.OnImageChangedListener {
+public class FeedbackActivity extends AppCompatActivity implements ScreenshotMechanismView.OnImageChangedListener, AudioMechanismView.MultipleAudioMechanismsListener {
     public final static String ANNOTATED_IMAGE_NAME_WITHOUT_STICKERS = "annotatedImageWithoutStickers.png";
     public final static String ANNOTATED_IMAGE_NAME_WITH_STICKERS = "annotatedImageWithStickers.png";
     public final static String CONFIGURATION_DIR = "configDir";
@@ -227,7 +227,6 @@ public class FeedbackActivity extends AppCompatActivity implements ScreenshotMec
                             // TODO: Implement attachment mechanism
                             break;
                         case Mechanism.AUDIO_TYPE:
-                            // TODO: Implement audio mechanism (id or index as prefix?)
                             mechanismView = new AudioMechanismView(layoutInflater, allMechanisms.get(i), getResources(), this, getApplicationContext());
                             view = mechanismView.getEnclosingLayout();
                             break;
@@ -399,6 +398,27 @@ public class FeedbackActivity extends AppCompatActivity implements ScreenshotMec
             }
         });
         builder.show();
+    }
+
+    @Override
+    public void onRecordStart(long audioMechanismId) {
+        for (MechanismView mechanismView : allMechanismViews) {
+            if (mechanismView instanceof AudioMechanismView) {
+                AudioMechanismView view = ((AudioMechanismView) mechanismView);
+                if (view.getAudioMechanismId() != audioMechanismId) {
+                    view.setAllButtonsClickable(false);
+                }
+            }
+        }
+    }
+
+    @Override
+    public void onRecordStop() {
+        for (MechanismView mechanismView : allMechanismViews) {
+            if (mechanismView instanceof AudioMechanismView) {
+                ((AudioMechanismView) mechanismView).setAllButtonsClickable(true);
+            }
+        }
     }
 
     @Override
