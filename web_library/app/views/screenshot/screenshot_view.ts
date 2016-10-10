@@ -138,7 +138,7 @@ export class ScreenshotView {
 
             selectedObject.bringToFront();
 
-            myThis.fabricCanvas.uniScaleTransform = selectedObject.get('type') === 'fabricObject';
+            myThis.fabricCanvas.uniScaleTransform = selectedObject.get('type') === 'fabricObject' || selectedObject.get('type') === 'fillRect';
 
             myThis.selectedObjectControls.show();
             if (selectedObject.get('type') === textTypeObjectIdentifier) {
@@ -162,6 +162,8 @@ export class ScreenshotView {
                 }
             } else if (selectedObject.get('type') === 'path' || selectedObject.get('type') === 'fabricObject') {
                 var currentObjectColor = selectedObject.getStroke();
+            } else if (selectedObject.get('type') === 'fillRect') {
+                var currentObjectColor = selectedObject.getFill();
             } else {
                 var currentObjectColor = selectedObject.getFill();
             }
@@ -231,6 +233,9 @@ export class ScreenshotView {
                         }
                     } else if (selectedObject.get('type') === 'path' || selectedObject.get('type') === 'fabricObject') {
                         selectedObject.setStroke(color);
+                    } else if (selectedObject.get('type') === 'fillRect') {
+                        selectedObject.setStroke(color);
+                        selectedObject.setFill(color);
                     } else {
                         selectedObject.setFill(color);
                     }
@@ -257,7 +262,6 @@ export class ScreenshotView {
 
         myThis.fabricCanvas.on('object:scaling', function (e) {
             var object = e.target;
-            console.log(object.type);
             if (object.type === 'fabricObject') {
                 var o = e.target;
                 if (!o.strokeWidthUnscaled && o.strokeWidth) {
@@ -524,6 +528,20 @@ export class ScreenshotView {
                         });
                         myThis.fabricCanvas.add(rect).renderAll();
                         myThis.fabricCanvas.setActiveObject(rect);
+                    } else if (sticker.hasClass('fillRect')) {
+                        var rect = new fabric.Rect({
+                            left: offsetX,
+                            top: offsetY,
+                            width: 50,
+                            height: 50,
+                            type: 'fillRect',
+                            stroke: defaultColor,
+                            strokeWidth: myThis.defaultStrokeWidth,
+                            lockUniScaling: false,
+                            fill: defaultColor
+                        });
+                        myThis.fabricCanvas.add(rect).renderAll();
+                        myThis.fabricCanvas.setActiveObject(rect);
                     } else if (sticker.hasClass('circle')) {
                         var circle = new fabric.Circle({
                             left: offsetX,
@@ -687,6 +705,8 @@ export class ScreenshotView {
         fabric.Canvas.prototype.customiseControls({
             mt: {
                 action: function (e, target) {
+                    var selectedObject = target;
+
                     if (target.get('type') === 'path-group') {
                         for (var path of target.paths) {
                             if (path.getFill() != "") {
@@ -696,6 +716,8 @@ export class ScreenshotView {
                         }
                     } else if (target.get('type') === 'path' || target.get('type') === 'fabricObject') {
                         var currentObjectColor = target.getStroke();
+                    } else if (target.get('type') === 'fillRect') {
+                        var currentObjectColor = target.getFill();
                     } else {
                         var currentObjectColor = target.getFill();
                     }
@@ -722,17 +744,37 @@ export class ScreenshotView {
                         change: function (color) {
                             var color = color.toHexString();
                             jQuery(this).css('color', color);
-                            if (target.get('type') === 'fabricObject') {
-                                target.setStroke(color);
-                            } else if (target.get('type') !== 'path-group') {
-                                target.setFill(color);
-                            } else {
-                                for (var path of target.paths) {
+
+                            if (selectedObject.get('customType') === 'arrow') {
+                                selectedObject.setFill(color);
+                                selectedObject.setStroke(color);
+                                if(selectedObject.line !== undefined) {
+                                    selectedObject.line.setFill(color);
+                                    selectedObject.line.setStroke(color);
+                                }
+                                if(selectedObject.arrow !== undefined) {
+                                    selectedObject.arrow.setFill(color);
+                                    selectedObject.arrow.setStroke(color);
+                                }
+                                if(selectedObject.circle !== undefined) {
+                                    selectedObject.circle.setFill(color);
+                                    selectedObject.circle.setStroke(color);
+                                }
+                            } else if (selectedObject.get('type') === 'path-group') {
+                                for (var path of selectedObject.paths) {
                                     if (path.getFill() != "") {
                                         path.setFill(color);
                                     }
                                 }
+                            } else if (selectedObject.get('type') === 'path' || selectedObject.get('type') === 'fabricObject') {
+                                selectedObject.setStroke(color);
+                            } else if (selectedObject.get('type') === 'fillRect') {
+                                selectedObject.setStroke(color);
+                                selectedObject.setFill(color);
+                            } else {
+                                selectedObject.setFill(color);
                             }
+
                             selectedObjectControls.find('a.color').css('color', color);
                             myThis.fabricCanvas.renderAll();
                             jQuery(this).remove();

@@ -1221,12 +1221,12 @@ button.screenshot-operation {
   .sticker-container-review:hover a.color {
     display: none; }
 
-.svg-sticker-source {
+.svg-sticker-source, .object-source.fillRect {
   width: 24px;
   height: 24px;
   margin: 3px; }
 
-.svg-sticker-source:hover {
+.svg-sticker-source:hover, .object-source:hover {
   cursor: move; }
 
 .screenshot-text-review {

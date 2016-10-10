@@ -407,7 +407,7 @@ define(["require", "exports", './config', '../views/pagination_container', '../v
             'userId': '',
             'dialogCSSClass': 'feedback-dialog',
             'colorPickerCSSClass': 'color-picker',
-            'defaultStrokeWidth': 3
+            'defaultStrokeWidth': 4
         };
     };
     (function ($, window, document) {

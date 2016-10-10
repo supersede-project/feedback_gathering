@@ -561,7 +561,7 @@ export var feedbackPluginModule = function ($, window, document) {
         'userId': '',
         'dialogCSSClass': 'feedback-dialog',
         'colorPickerCSSClass': 'color-picker',
-        'defaultStrokeWidth': 3
+        'defaultStrokeWidth': 4
     };
 
 };
