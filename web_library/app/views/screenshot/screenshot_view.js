@@ -86,6 +86,7 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
             this.selectedObjectControls.hide();
             myThis.fabricCanvas.on('object:selected', function (e) {
                 var selectedObject = e.target;
+                selectedObject.bringToFront();
                 myThis.fabricCanvas.uniScaleTransform = selectedObject.get('type') === 'fabricObject';
                 myThis.selectedObjectControls.show();
                 if (selectedObject.get('type') === textTypeObjectIdentifier) {

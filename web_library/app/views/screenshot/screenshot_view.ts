@@ -136,6 +136,8 @@ export class ScreenshotView {
         myThis.fabricCanvas.on('object:selected', function (e) {
             var selectedObject = e.target;
 
+            selectedObject.bringToFront();
+
             myThis.fabricCanvas.uniScaleTransform = selectedObject.get('type') === 'fabricObject';
 
             myThis.selectedObjectControls.show();
