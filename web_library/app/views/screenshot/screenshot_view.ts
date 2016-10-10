@@ -225,10 +225,10 @@ export class ScreenshotView {
             }
         });
 
-        myThis.fabricCanvas.on('object:scaling', function(e) {
+        myThis.fabricCanvas.on('object:scaling', function (e) {
             var object = e.target;
             console.log(object.type);
-            if(object.type === 'fabricObject') {
+            if (object.type === 'fabricObject') {
                 var o = e.target;
                 if (!o.strokeWidthUnscaled && o.strokeWidth) {
                     o.strokeWidthUnscaled = o.strokeWidth;
@@ -687,7 +687,7 @@ export class ScreenshotView {
                         change: function (color) {
                             var color = color.toHexString();
                             jQuery(this).css('color', color);
-                            if(target.get('type') === 'fabricObject') {
+                            if (target.get('type') === 'fabricObject') {
                                 target.setStroke(color);
                             } else if (target.get('type') !== 'path-group') {
                                 target.setFill(color);
@@ -752,38 +752,25 @@ export class ScreenshotView {
         });
     }
 
-    calcArrowAngle(x1, y1, x2, y2) {
-        var angle = 0,
-            x, y;
-
-        x = (x2 - x1);
-        y = (y2 - y1);
-
-        if (x === 0) {
-            angle = (y === 0) ? 0 : (y > 0) ? Math.PI / 2 : Math.PI * 3 / 2;
-        } else if (y === 0) {
-            angle = (x > 0) ? 0 : Math.PI;
-        } else {
-            angle = (x < 0) ? Math.atan(y / x) + Math.PI : (y < 0) ? Math.atan(y / x) + (2 * Math.PI) : Math.atan(y / x);
-        }
-
-        return (angle * 180 / Math.PI);
+    setDefaultStrokeWidth(strokeWidth:number) {
+        this.defaultStrokeWidth = strokeWidth;
     }
 
-    addArrowToCanvas(offsetX:number, offsetY:number):void {
+    addArrowToCanvas(offsetX:number, offsetY:number) {
         var line,
             arrow,
-            circle;
+            circle,
+            myThis = this;
 
-        line = new fabric.Line([50, 50, 100, 100], {
-            stroke: '#000',
+        line = new fabric.Line([offsetX, offsetY, offsetX + 50, offsetY + 50], {
+            stroke: defaultColor,
             selectable: true,
-            strokeWidth: '2',
+            strokeWidth: '3',
             padding: 5,
             hasBorders: false,
             hasControls: false,
-            originX: offsetX,
-            originY: offsetY,
+            originX: 'center',
+            originY: 'center',
             lockScalingX: true,
             lockScalingY: true
         });
@@ -807,15 +794,15 @@ export class ScreenshotView {
             angle: -45,
             width: 20,
             height: 20,
-            fill: '#000'
+            fill: defaultColor
         });
         arrow.line = line;
 
         circle = new fabric.Circle({
             left: line.get('x2') + deltaX,
             top: line.get('y2') + deltaY,
-            radius: 2,
-            stroke: '#000',
+            radius: 1,
+            stroke: defaultColor,
             strokeWidth: 3,
             originX: 'center',
             originY: 'center',
@@ -825,7 +812,7 @@ export class ScreenshotView {
             lockScalingY: true,
             lockRotation: true,
             pointType: 'arrow_end',
-            fill: '#000'
+            fill: defaultColor
         });
         circle.line = line;
 
@@ -833,7 +820,7 @@ export class ScreenshotView {
         line.circle = arrow.circle = circle;
         line.arrow = circle.arrow = arrow;
 
-        this.fabricCanvas.add(line, arrow, circle);
+        myThis.fabricCanvas.add(line, arrow, circle);
 
         function moveEnd(obj) {
             var p = obj,
@@ -854,7 +841,7 @@ export class ScreenshotView {
             x2 = obj.line.get('x2');
             y2 = obj.line.get('y2');
 
-            var angle = this.calcArrowAngle(x1, y1, x2, y2);
+            var angle = myThis.calcArrowAngle(x1, y1, x2, y2);
 
             if (obj.pointType === 'arrow_end') {
                 obj.arrow.set('angle', angle - 90);
@@ -863,7 +850,7 @@ export class ScreenshotView {
             }
 
             obj.line.setCoords();
-            this.fabricCanvas.renderAll();
+            myThis.fabricCanvas.renderAll();
         }
 
         function moveLine() {
@@ -908,8 +895,22 @@ export class ScreenshotView {
         });
     }
 
-    setDefaultStrokeWidth(strokeWidth:number) {
-        this.defaultStrokeWidth = strokeWidth;
+    calcArrowAngle(x1, y1, x2, y2) {
+        var angle = 0,
+            x, y;
+
+        x = (x2 - x1);
+        y = (y2 - y1);
+
+        if (x === 0) {
+            angle = (y === 0) ? 0 : (y > 0) ? Math.PI / 2 : Math.PI * 3 / 2;
+        } else if (y === 0) {
+            angle = (x > 0) ? 0 : Math.PI;
+        } else {
+            angle = (x < 0) ? Math.atan(y / x) + Math.PI : (y < 0) ? Math.atan(y / x) + (2 * Math.PI) : Math.atan(y / x);
+        }
+
+        return (angle * 180 / Math.PI);
     }
 }
 
