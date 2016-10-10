@@ -13,12 +13,13 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import ch.uzh.ifi.feedback.library.rest.annotations.DbIgnore;
+import ch.uzh.ifi.feedback.library.rest.annotations.Id;
 import ch.uzh.ifi.feedback.library.rest.service.IDbService;
 import ch.uzh.ifi.feedback.library.transaction.DbResultParser;
 import ch.uzh.ifi.feedback.library.transaction.TransactionManager;
 import javassist.NotFoundException;
 
-public abstract class ServiceBase<T> implements IDbService<T> {
+public abstract class ServiceBase<T extends IDbItem> implements IDbService<T> {
 	
 	protected String tableName;
 	protected String dbName;
@@ -85,6 +86,49 @@ public abstract class ServiceBase<T> implements IDbService<T> {
 		s.setInt(1, id);
 		s.execute();
 	}
+	
+	@Override
+	public void Update(Connection con, T object) throws SQLException ,NotFoundException ,UnsupportedOperationException 
+	{
+		String statement = String.format("UPDATE %s.%s SET ", dbName, tableName);
+		Map<String, Field> fields = resultParser.GetFields();
+		List<Object> fieldValues = new ArrayList<>();
+		Iterator<Entry<String, Field>> iterator = fields.entrySet().iterator();
+		
+		while(iterator.hasNext())
+		{
+			Entry<String, Field> entry = iterator.next();
+			try {
+				Field field = entry.getValue();
+				Object fieldValue = field.get(object);
+				if(fieldValue != null  && !field.isAnnotationPresent(DbIgnore.class) && !field.isAnnotationPresent(Id.class))
+				{
+					statement += String.format("`%s` = ?", entry.getKey());
+					statement += ", ";
+					fieldValues.add(fieldValue);
+				}
+			} catch (IllegalArgumentException | IllegalAccessException e) {
+				e.printStackTrace();
+			}
+		}
+		statement = statement.substring(0, statement.length()-2);
+		
+		statement += " WHERE id = ?;";
+		fieldValues.add(object.getId());
+		
+		PreparedStatement s = con.prepareStatement(statement, PreparedStatement.RETURN_GENERATED_KEYS);
+		for(int i=0; i<fieldValues.size(); i++)
+		{
+			if(fieldValues.get(i).getClass().isEnum())
+			{
+				s.setObject(i+1, fieldValues.get(i).toString());
+			}else{
+				s.setObject(i+1, fieldValues.get(i));	
+			}
+		}
+		
+		s.execute();
+	};
 	
 	@Override
 	public int Insert(Connection con, T object) throws SQLException ,NotFoundException ,UnsupportedOperationException 

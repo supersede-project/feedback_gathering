@@ -9,7 +9,7 @@ import javax.xml.bind.helpers.NotIdentifiableEventImpl;
 
 import javassist.NotFoundException;
 
-public interface IDbService<T> {
+public interface IDbService<T extends IDbItem> {
 	
 	T GetById(int id) throws SQLException, NotFoundException;
 	

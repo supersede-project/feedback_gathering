@@ -13,6 +13,7 @@ import org.apache.http.entity.mime.MultipartEntityBuilder;
 import ch.uzh.ifi.feedback.library.rest.authorization.UserToken;
 import ch.uzh.ifi.feedback.library.test.ServletTest;
 import ch.uzh.ifi.feedback.repository.model.Feedback;
+import ch.uzh.ifi.feedback.repository.model.Status;
 import javassist.NotFoundException;
 import static java.util.Arrays.asList;
 

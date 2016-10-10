@@ -15,13 +15,24 @@ public class Status extends ItemBase<Status> {
 	private Integer id;
 
 	@DbAttribute("api_user_id")
-	private transient Integer apiUserId;
+	private Integer apiUserId;
 	
 	@DbAttribute("feedback_id")
-	private transient Integer feedbackId;
+	private Integer feedbackId;
 	
 	@NotNull
 	private String status;
+	
+	public Status(Integer userId, Integer feedbackId, String status)
+	{
+		this.apiUserId = userId;
+		this.feedbackId = feedbackId;
+		this.status = status;
+	}
+	
+	public Status()
+	{
+	}
 
 	public Integer getId() {
 		return id;

@@ -15,7 +15,7 @@ public class StatusService extends ServiceBase<Status> {
 			StatusResultParser resultParser,
 			DatabaseConfiguration config) 
 	{
-		super(resultParser, Status.class, "statuses", config.getRepositoryDb());
+		super(resultParser, Status.class, "feedback_states", config.getRepositoryDb());
 	}
 
 }

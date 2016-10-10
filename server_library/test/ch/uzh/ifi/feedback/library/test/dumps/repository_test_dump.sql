@@ -28,7 +28,7 @@ CREATE TABLE `api_users` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
   `password` varchar(255) NOT NULL,
-  `is_admin` bit(1) NOT NULL,
+  `role` enum('ADMIN','USER') NOT NULL DEFAULT 'USER',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -39,7 +39,7 @@ CREATE TABLE `api_users` (
 
 LOCK TABLES `api_users` WRITE;
 /*!40000 ALTER TABLE `api_users` DISABLE KEYS */;
-INSERT INTO `api_users` VALUES (1,'api_user','password','');
+INSERT INTO `api_users` VALUES (1,'api_user','password','ADMIN');
 /*!40000 ALTER TABLE `api_users` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -260,13 +260,14 @@ DROP TABLE IF EXISTS `feedback_states`;
 CREATE TABLE `feedback_states` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `feedback_id` int(11) NOT NULL,
-  `api_user_id` int(11) NOT NULL,
+  `api_user_id` int(11) DEFAULT NULL,
   `status` varchar(45) NOT NULL,
   PRIMARY KEY (`id`),
+  UNIQUE KEY `UNIQUE` (`feedback_id`,`api_user_id`),
   KEY `fk_feedback_states_1_idx` (`feedback_id`),
   KEY `fk_feedback_states_2_idx` (`api_user_id`),
-  CONSTRAINT `fk_feedback_states_1` FOREIGN KEY (`feedback_id`) REFERENCES `feedbacks` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_feedback_states_2` FOREIGN KEY (`api_user_id`) REFERENCES `api_users` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  CONSTRAINT `fk_feedback_states_2` FOREIGN KEY (`api_user_id`) REFERENCES `api_users` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_feedback_states_1` FOREIGN KEY (`feedback_id`) REFERENCES `feedbacks` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=big5;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -375,6 +376,32 @@ INSERT INTO `screenshot_feedbacks` VALUES (1,75,'screenshots/7185_1475244168465.
 UNLOCK TABLES;
 
 --
+-- Table structure for table `status_options`
+--
+
+DROP TABLE IF EXISTS `status_options`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `status_options` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(45) NOT NULL,
+  `order` int(11) NOT NULL,
+  `user_specific` bit(1) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `status_options`
+--
+
+LOCK TABLES `status_options` WRITE;
+/*!40000 ALTER TABLE `status_options` DISABLE KEYS */;
+INSERT INTO `status_options` VALUES (1,'unread',1,''),(2,'read',2,''),(3,'new',1,'\0'),(4,'approved',2,'\0'),(5,'rejected',2,'\0'),(6,'implemented',3,'\0'),(7,'name',0,'\0');
+/*!40000 ALTER TABLE `status_options` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `text_annotations`
 --
 
@@ -439,4 +466,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-10-07 15:34:50
+-- Dump completed on 2016-10-10 15:21:54
