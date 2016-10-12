@@ -71,7 +71,6 @@ public class FeedbackActivity extends AppCompatActivity implements ScreenshotMec
     public final static String JSON_CONFIGURATION_FILE_NAME = "currentConfiguration.json";
     public final static String JSON_CONFIGURATION_STRING = "jsonConfigurationString";
     public final static String SELECTED_PULL_CONFIGURATION_INDEX_STRING = "selectedPullConfigurationIndex";
-    public final static int TEXT_ANNOTATION_MAXIMUM = 4;
     // Microphone permission (android.permission-group.MICROPHONE)
     public static final int PERMISSIONS_REQUEST_RECORD_AUDIO = 101;
     // Initialization
@@ -366,7 +365,7 @@ public class FeedbackActivity extends AppCompatActivity implements ScreenshotMec
         String path = screenshotMechanismView.getPicturePathWithoutStickers() == null ? screenshotMechanismView.getPicturePath() : screenshotMechanismView.getPicturePathWithoutStickers();
         intent.putExtra(Utils.EXTRA_KEY_MECHANISM_VIEW_ID, screenshotMechanismView.getMechanismViewIndex());
         intent.putExtra(Utils.EXTRA_KEY_IMAGE_PATCH, path);
-        intent.putExtra(Utils.TEXT_ANNOTATION_COUNTER_MAXIMUM, TEXT_ANNOTATION_MAXIMUM);
+        intent.putExtra(Utils.TEXT_ANNOTATION_COUNTER_MAXIMUM, screenshotMechanismView.getMaxNumberTextAnnotation());
         startActivityForResult(intent, REQUEST_ANNOTATE);
     }
 

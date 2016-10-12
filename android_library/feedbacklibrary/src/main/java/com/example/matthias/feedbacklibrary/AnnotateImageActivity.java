@@ -43,6 +43,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.matthias.feedbacklibrary.utils.ColorPickerDialog;
 import com.example.matthias.feedbacklibrary.utils.Utils;
 import com.example.matthias.feedbacklibrary.views.AnnotateImageView;
 import com.example.matthias.feedbacklibrary.views.StickerAnnotationImageView;

@@ -1,4 +1,4 @@
-package com.example.matthias.feedbacklibrary;
+package com.example.matthias.feedbacklibrary.utils;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.example.matthias.feedbacklibrary.R;
 import com.example.matthias.feedbacklibrary.views.ColorPickerView;
 
 /**

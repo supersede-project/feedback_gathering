@@ -14,7 +14,7 @@ import java.util.Map;
 public class ScreenshotMechanism extends Mechanism {
     private String title;
     private String defaultPicture;
-
+    private int maxNumberTextAnnotation = 0;
     private String imagePath;
     private HashMap<Integer, String> allTextAnnotations = null;
 
@@ -56,6 +56,10 @@ public class ScreenshotMechanism extends Mechanism {
         return imagePath;
     }
 
+    public int getMaxNumberTextAnnotation() {
+        return maxNumberTextAnnotation;
+    }
+
     public String getTitle() {
         return title;
     }
@@ -70,6 +74,10 @@ public class ScreenshotMechanism extends Mechanism {
             // Default picture
             if (key.equals("defaultPicture")) {
                 setDefaultPicture((String) param.get("value"));
+            }
+            // Maximum number of text annotations
+            if (key.equals("maxTextAnnotation")) {
+                setMaxNumberTextAnnotation(((Double) param.get("value")).intValue());
             }
         }
     }
@@ -89,6 +97,10 @@ public class ScreenshotMechanism extends Mechanism {
 
     public void setImagePath(String imagePath) {
         this.imagePath = imagePath;
+    }
+
+    public void setMaxNumberTextAnnotation(int maxNumberTextAnnotation) {
+        this.maxNumberTextAnnotation = maxNumberTextAnnotation;
     }
 
     public void setTitle(String title) {
