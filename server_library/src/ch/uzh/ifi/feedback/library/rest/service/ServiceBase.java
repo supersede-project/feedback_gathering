@@ -18,6 +18,7 @@ import ch.uzh.ifi.feedback.library.rest.service.IDbService;
 import ch.uzh.ifi.feedback.library.transaction.DbResultParser;
 import ch.uzh.ifi.feedback.library.transaction.TransactionManager;
 import javassist.NotFoundException;
+import static java.util.Arrays.asList;
 
 public abstract class ServiceBase<T extends IDbItem> implements IDbService<T> {
 	
@@ -37,6 +38,16 @@ public abstract class ServiceBase<T extends IDbItem> implements IDbService<T> {
 		this.tableName = tableName;
 		this.resultParser = resultParser;
 		this.dbName = dbName;
+	}
+	
+	protected List<T> filterByApplication(List<T> objects, Connection con) throws SQLException
+	{
+		return objects;
+	}
+	
+	protected boolean validateByApplication(T object, Connection con) throws SQLException
+	{
+		return true;
 	}
 	
 	@Override
@@ -59,7 +70,11 @@ public abstract class ServiceBase<T extends IDbItem> implements IDbService<T> {
 			e.printStackTrace();
 		}
 		resultParser.SetFields(instance, result);
+		boolean valid = validateByApplication(instance, con);
 		con.close();
+		
+		if(!valid)
+			throw new NotFoundException("Object with id '" + id +"' not found in the given application scope");
 		
 		return instance;
 	}
@@ -73,7 +88,7 @@ public abstract class ServiceBase<T extends IDbItem> implements IDbService<T> {
 		PreparedStatement s = con.prepareStatement(statement);
 		ResultSet result = s.executeQuery();
 	
-		List<T> resultList = getList(result);
+		List<T> resultList = filterByApplication(getList(result), con);
 		con.close();
 		return resultList;
 	}
@@ -81,6 +96,9 @@ public abstract class ServiceBase<T extends IDbItem> implements IDbService<T> {
 	@Override
 	public void Delete(Connection con, int id) throws SQLException, NotFoundException
 	{
+		if(!validateByApplication(GetById(id), con))
+			throw new NotFoundException("Object with id '" + id +"' not found in the given application scope");
+		
 		String statement = String.format("DELETE FROM %s.%s WHERE id = ? ;", dbName, tableName);
 		PreparedStatement s = con.prepareStatement(statement);
 		s.setInt(1, id);
@@ -90,6 +108,9 @@ public abstract class ServiceBase<T extends IDbItem> implements IDbService<T> {
 	@Override
 	public void Update(Connection con, T object) throws SQLException ,NotFoundException ,UnsupportedOperationException 
 	{
+		if(!validateByApplication(object, con))
+			throw new NotFoundException("Object with id '" + object.getId() +"' not found in the given application scope");
+		
 		String statement = String.format("UPDATE %s.%s SET ", dbName, tableName);
 		Map<String, Field> fields = resultParser.GetFields();
 		List<Object> fieldValues = new ArrayList<>();
@@ -133,6 +154,9 @@ public abstract class ServiceBase<T extends IDbItem> implements IDbService<T> {
 	@Override
 	public int Insert(Connection con, T object) throws SQLException ,NotFoundException ,UnsupportedOperationException 
 	{
+		if(!validateByApplication(object, con))
+			throw new NotFoundException("Object does not belong to the given application scope");
+		
 		String statement = String.format("INSERT INTO %s.%s (", dbName, tableName);
 		Map<String, Field> fields = resultParser.GetFields();
 		List<Object> fieldValues = new ArrayList<>();
@@ -207,7 +231,7 @@ public abstract class ServiceBase<T extends IDbItem> implements IDbService<T> {
 		}
 		ResultSet result = s.executeQuery();
 	
-		List<T> resultList = getList(result);
+		List<T> resultList = filterByApplication(getList(result), con);
 		con.close();
 		
 		return resultList;

@@ -38,6 +38,11 @@ public class OrchestratorServletModule extends ServletModule {
         throw new IllegalStateException("language must be manually seeded");
     }
     
+    @Provides @Named("application") @RequestScoped String provideApplication() 
+    {
+        return null;
+    }
+    
    protected Filter createTimeStampFilter() {
 	     return new Filter() {
 	    	 

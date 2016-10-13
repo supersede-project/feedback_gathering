@@ -1,6 +1,8 @@
 package ch.uzh.ifi.feedback.repository.controller;
 
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -18,6 +20,7 @@ import ch.uzh.ifi.feedback.library.rest.authorization.UserAuthenticationService;
 import ch.uzh.ifi.feedback.repository.model.Feedback;
 import ch.uzh.ifi.feedback.repository.service.FeedbackService;
 import ch.uzh.ifi.feedback.repository.validation.FeedbackValidator;
+import javassist.NotFoundException;
 
 @RequestScoped
 @Controller(Feedback.class)
@@ -28,38 +31,40 @@ public class FeedbackController extends RestController<Feedback>{
 		super(dbService, validator, request, response);
 	}
 	
-	@Path("/feedbacks")
+	@Path("/applications/{application_id}/feedbacks")
 	@GET
 	@Authenticate(UserAuthenticationService.class)
-	public List<Feedback> GetAll() throws Exception {
-		return super.GetAll();
-	}
-	
-	@Path("/applications/{appId}/feedbacks")
-	@GET
-	@Authenticate(UserAuthenticationService.class)
-	public List<Feedback> GetAllForApplication(@PathParam("appId")Integer applicationId) throws Exception {
+	public List<Feedback> GetAllForApplication(@PathParam("application_id")Integer applicationId) throws Exception {
 		return super.GetAllFor("application_id", applicationId);
 	}
 	
-	@Path("/feedbacks/{id}")
+	@Path("/applications/{application_id}/feedbacks/{id}")
 	@GET
 	@Authenticate(UserAuthenticationService.class)
-	public Feedback GetByFeedbackId(@PathParam("id")Integer id) throws Exception {
-		return super.GetById(id);
+	public Feedback GetByFeedbackId(@PathParam("id")Integer id, @PathParam("application_id")Integer applicationId) throws Exception 
+	{
+		Feedback feedback = super.GetById(id);
+		if(!feedback.getApplicationId().equals(applicationId))
+			throw new NotFoundException("object does not exist in given application context");
+		
+		return feedback;
 	}
 	
-	@Path("/feedbacks")
+	@Path("/applications/{application_id}/feedbacks")
 	@POST
 	public Feedback InsertFeedback(Feedback feedback) throws Exception {
 		return super.Insert(feedback);
 	}
 	
-	@Path("/feedbacks/{id}")
+	@Path("/applications/{application_id}/feedbacks/{id}")
 	@DELETE
 	@Authenticate(UserAuthenticationService.class)
-	public void DeleteFeedback(@PathParam("id")Integer id) throws Exception 
+	public void DeleteFeedback(@PathParam("id")Integer id, @PathParam("application_id")Integer applicationId) throws Exception 
 	{
+		Feedback toDelete = super.GetById(id);
+		if(!toDelete.getApplicationId().equals(applicationId))
+			throw new NotFoundException("object does not exist in given application context");
+		
 		super.Delete(id);
 	}
 }

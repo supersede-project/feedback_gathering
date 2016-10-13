@@ -18,6 +18,7 @@ import ch.uzh.ifi.feedback.library.rest.authorization.UserAuthenticationService;
 import ch.uzh.ifi.feedback.library.rest.validation.ValidationException;
 import ch.uzh.ifi.feedback.repository.model.Status;
 import ch.uzh.ifi.feedback.repository.model.StatusOption;
+import ch.uzh.ifi.feedback.repository.service.FeedbackService;
 import ch.uzh.ifi.feedback.repository.service.StatusOptionService;
 import ch.uzh.ifi.feedback.repository.service.StatusService;
 import ch.uzh.ifi.feedback.repository.validation.StatusValidator;
@@ -44,14 +45,14 @@ public class StatusController extends RestController<Status>{
 		this.optionService = optionService;
 	}
 	
-	@Path("/states")
+	@Path("/applications/{application_id}/states")
 	@GET
 	@Authenticate(UserAuthenticationService.class)
 	public List<Status> GetAll() throws Exception {
 		return super.GetAll();
 	}
 	
-	@Path("/feedbacks/{id}/status")
+	@Path("/applications/{application_id}/feedbacks/{id}/status")
 	@GET
 	@Authenticate(UserAuthenticationService.class)
 	public Status GetByFeedbackId(@PathParam("id")Integer id) throws Exception {
@@ -62,7 +63,7 @@ public class StatusController extends RestController<Status>{
 		throw new NotFoundException("feedback with id '" + id + "' does not exist !");
 	}
 	
-	@Path("/feedbacks/{feedback_id}/api_users/{user_id}/status")
+	@Path("/applications/{application_id}/feedbacks/{feedback_id}/api_users/{user_id}/status")
 	@GET
 	@Authenticate(UserAuthenticationService.class)
 	public Status GetByFeedbackAndUserId(@PathParam("feedback_id")Integer feedbackId, @PathParam("user_id") Integer userId) throws Exception {
@@ -73,7 +74,7 @@ public class StatusController extends RestController<Status>{
 		throw new NotFoundException("feedback with id '" + feedbackId + "' has no status for user '"+ userId  + " '!");
 	}
 	
-	@Path("/api_users/{id}/states")
+	@Path("/applications/{application_id}/api_users/{id}/states")
 	@GET
 	@Authenticate(UserAuthenticationService.class)
 	public List<Status> GetByApiUser(@PathParam("id")Integer id) throws Exception {
@@ -81,7 +82,7 @@ public class StatusController extends RestController<Status>{
 		return states;
 	}
 
-	@Path("/states/{id}")
+	@Path("/applications/{application_id}/states/{id}")
 	@DELETE
 	@Authenticate(UserAuthenticationService.class)
 	public void DeleteStatus(@PathParam("id")Integer id) throws Exception 
@@ -89,7 +90,7 @@ public class StatusController extends RestController<Status>{
 		super.Delete(id);
 	}
 	
-	@Path("/states")
+	@Path("/applications/{application_id}/states")
 	@PUT
 	@Authenticate(UserAuthenticationService.class)
 	public Status UpdateStatus(Status status) throws Exception 

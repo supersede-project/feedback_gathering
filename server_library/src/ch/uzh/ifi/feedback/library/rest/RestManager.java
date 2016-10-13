@@ -286,6 +286,16 @@ public class RestManager implements IRestManager {
 			throw new NotFoundException("ressource '" + path + "' does not exist");
 		}
 		
+		Map<String, String> params = handler.getUriTemplate().Match(path);
+		List<Object> parameters = new ArrayList<>();
+		
+		//set application scope variable if exists
+		String application = params.get("application_id");
+		Integer applicationId = application == null ? null : Integer.valueOf(application);
+        request.setAttribute(
+	             Key.get(Integer.class, Names.named("application")).toString(),
+	             applicationId);
+		
 		//Do token authentication if needed
 		Class<? extends ITokenAuthenticationService> authServiceClazz = handler.getAuthenticationClass();
 		if(authServiceClazz != null)
@@ -295,9 +305,7 @@ public class RestManager implements IRestManager {
 			if(!authService.Authenticate(request, authRole))
 				throw new AuthenticationException("the provided usertoken does not match!");
 		}
-		
-		Map<String, String> params = handler.getUriTemplate().Match(path);
-		List<Object> parameters = new ArrayList<>();
+	
 		String language = params.get("lang");
         request.setAttribute(
 	             Key.get(String.class, Names.named("language")).toString(),
