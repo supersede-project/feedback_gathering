@@ -33,6 +33,7 @@ public interface feedbackAPI {
     @POST("feedback_repository/{language}/feedbacks")
     Call<JsonObject> createFeedbackVariant(@Path("language") String language, @Part("json") RequestBody feedback, @PartMap Map<String, RequestBody> files);
 
+    // TODO: Change to updated URL when the new version of the backend is deployed
     /**
      * This method retrieves the feedback configuration from the orchestrator.
      *
