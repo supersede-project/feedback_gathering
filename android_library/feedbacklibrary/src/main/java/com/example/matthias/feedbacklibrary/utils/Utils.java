@@ -16,6 +16,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.View;
 
 import com.example.matthias.feedbacklibrary.API.feedbackAPI;
@@ -69,6 +70,7 @@ public class Utils {
     public static final String SEPARATOR = "::;;::;;";
     public static final String TEXT_ANNOTATION_COUNTER_MAXIMUM = "textAnnotationCounterMaximum";
     private static final String SCREENSHOTS_DIR_NAME = "Screenshots";
+    private static final String TAG = "Utils";
 
     @NonNull
     private static String captureScreenshot(final Activity activity) {
@@ -90,7 +92,7 @@ public class Utils {
             }
             screenshotFile.createNewFile();
         } catch (IOException e) {
-            e.printStackTrace();
+            Log.e(TAG, "Failed to create a new file", e);
         }
 
         // Capture the current screen
@@ -106,7 +108,7 @@ public class Utils {
             fos.flush();
             fos.close();
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.e(TAG, "Failed to write the bitmap to the file", e);
         }
 
         // Add the screenshot image to the Media Provider's database
@@ -171,7 +173,7 @@ public class Utils {
         try {
             return File.createTempFile(prefix, suffix, context.getCacheDir());
         } catch (IOException e) {
-            // Error while creating file
+            Log.e(TAG, "Failed to create a temporary file", e);
         }
         return null;
     }
@@ -198,7 +200,7 @@ public class Utils {
             File f = new File(path);
             return BitmapFactory.decodeStream(new FileInputStream(f));
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            Log.e(TAG, "File was not found", e);
         }
         return null;
     }
@@ -251,36 +253,6 @@ public class Utils {
     }
 
     /**
-     * This method reads a specific file from the assets resource folder and returns it as a string.
-     *
-     * @param fileName     the file to read from
-     * @param assetManager the asset manager
-     * @return the file content as a string, the empty string if an error occurred
-     */
-    public static String readFileAsString(String fileName, AssetManager assetManager) {
-        String ret = "";
-
-        try {
-            InputStream inputStream = assetManager.open(fileName);
-
-            if (inputStream != null) {
-                BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-                StringBuilder out = new StringBuilder();
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    out.append(line);
-                }
-                reader.close();
-                return out.toString();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return ret;
-    }
-
-    /**
      * This method saves the bitmap in a specific file.
      *
      * @param file        the file to store the bitmap in
@@ -298,7 +270,7 @@ public class Utils {
             fos.close();
             return true;
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.e(TAG, "Failed to write the bitmap to the file", e);
         }
         return false;
     }
@@ -326,7 +298,7 @@ public class Utils {
             fos.flush();
             fos.close();
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.e(TAG, "Failed to write the bitmap to the file", e);
         }
         return directory.getAbsolutePath();
     }
@@ -351,7 +323,7 @@ public class Utils {
             out.close();
             return true;
         } catch (IOException e) {
-            e.printStackTrace();
+            Log.e(TAG, "Failed to write the content to the file", e);
         }
         return false;
     }
@@ -397,23 +369,27 @@ public class Utils {
             checkUpAndRunning.enqueue(new Callback<ResponseBody>() {
                 @Override
                 public void onFailure(Call<ResponseBody> call, Throwable t) {
+                    Log.e(TAG, "Failed to ping the server. onFailure method called", t);
                     DialogUtils.showInformationDialog(activity, new String[]{activity.getResources().getString(R.string.supersede_feedbacklibrary_feedback_application_unavailable_text)}, true);
                 }
 
                 @Override
                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                     if (response.code() == 200) {
+                        Log.i(TAG, "The server is up and running");
                         if (isCapturingScreenshot) {
                             String defaultImagePath = captureScreenshot(activity);
                             intent.putExtra(FeedbackActivity.DEFAULT_IMAGE_PATH, defaultImagePath);
                         }
                         activity.startActivity(intent);
                     } else {
+                        Log.e(TAG, "The server is not up and running. Response code == " + response.code());
                         DialogUtils.showInformationDialog(activity, new String[]{activity.getResources().getString(R.string.supersede_feedbacklibrary_feedback_application_unavailable_text)}, true);
                     }
                 }
             });
         } else {
+            Log.e(TAG, "Failed to ping the server. Call<ResponseBody> checkUpAndRunning result is null");
             DialogUtils.showInformationDialog(activity, new String[]{activity.getResources().getString(R.string.supersede_feedbacklibrary_feedback_application_unavailable_text)}, true);
         }
     }
@@ -435,6 +411,7 @@ public class Utils {
             checkUpAndRunning.enqueue(new Callback<ResponseBody>() {
                 @Override
                 public void onFailure(Call<ResponseBody> call, Throwable t) {
+                    Log.e(TAG, "Failed to ping the server. onFailure method called", t);
                     DialogUtils.showInformationDialog(activity, new String[]{activity.getResources().getString(R.string.supersede_feedbacklibrary_feedback_application_unavailable_text)}, true);
                 }
 
@@ -449,11 +426,13 @@ public class Utils {
                         intent.putExtra(FeedbackActivity.EXTRA_KEY_LANGUAGE, language);
                         activity.startActivity(intent);
                     } else {
+                        Log.e(TAG, "The server is not up and running. Response code == " + response.code());
                         DialogUtils.showInformationDialog(activity, new String[]{activity.getResources().getString(R.string.supersede_feedbacklibrary_feedback_application_unavailable_text)}, true);
                     }
                 }
             });
         } else {
+            Log.e(TAG, "Failed to ping the server. Call<ResponseBody> checkUpAndRunning result is null");
             DialogUtils.showInformationDialog(activity, new String[]{activity.getResources().getString(R.string.supersede_feedbacklibrary_feedback_application_unavailable_text)}, true);
         }
     }
@@ -475,11 +454,13 @@ public class Utils {
             checkUpAndRunning.enqueue(new Callback<ResponseBody>() {
                 @Override
                 public void onFailure(Call<ResponseBody> call, Throwable t) {
+                    Log.e(TAG, "Failed to ping the server. onFailure method called", t);
                 }
 
                 @Override
                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                     if (response.code() == 200) {
+                        Log.i(TAG, "The server is up and running");
                         Retrofit rtf = new Retrofit.Builder().baseUrl(baseURL).addConverterFactory(GsonConverterFactory.create()).build();
                         feedbackAPI fbAPI = rtf.create(feedbackAPI.class);
                         Call<OrchestratorConfigurationItem> result = fbAPI.getConfiguration(language, applicationId);
@@ -489,12 +470,14 @@ public class Utils {
                             result.enqueue(new Callback<OrchestratorConfigurationItem>() {
                                 @Override
                                 public void onFailure(Call<OrchestratorConfigurationItem> call, Throwable t) {
+                                    Log.e(TAG, "Failed to retrieve the configuration. onFailure method called", t);
                                     DialogUtils.showInformationDialog(activity, new String[]{activity.getResources().getString(R.string.supersede_feedbacklibrary_feedback_application_unavailable_text)}, true);
                                 }
 
                                 @Override
                                 public void onResponse(Call<OrchestratorConfigurationItem> call, Response<OrchestratorConfigurationItem> response) {
                                     if (response.code() == 200) {
+                                        Log.i(TAG, "Configuration successfully retrieved");
                                         OrchestratorConfigurationItem configuration = response.body();
                                         if (configuration != null) {
                                             List<ConfigurationItem> configurationItems = configuration.getConfigurationItems();
@@ -545,13 +528,21 @@ public class Utils {
                                                 }
                                             }
                                         }
+                                    } else {
+                                        Log.e(TAG, "Failed to retrieve the configuration. Response code == " + response.code());
                                     }
                                 }
                             });
+                        } else {
+                            Log.e(TAG, "Failed to retrieve the configuration. Call<OrchestratorConfigurationItem> result is null");
                         }
+                    } else {
+                        Log.e(TAG, "The server is not up and running. Response code == " + response.code());
                     }
                 }
             });
+        } else {
+            Log.e(TAG, "Failed to ping the server. Call<ResponseBody> checkUpAndRunning result is null");
         }
     }
 
@@ -575,11 +566,13 @@ public class Utils {
             checkUpAndRunning.enqueue(new Callback<ResponseBody>() {
                 @Override
                 public void onFailure(Call<ResponseBody> call, Throwable t) {
+                    Log.e(TAG, "Failed to ping the server. onFailure method called", t);
                 }
 
                 @Override
                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                     if (response.code() == 200) {
+                        Log.i(TAG, "The server is up and running");
                         Retrofit rtf = new Retrofit.Builder().baseUrl(baseURL).addConverterFactory(GsonConverterFactory.create()).build();
                         feedbackAPI fbAPI = rtf.create(feedbackAPI.class);
                         Call<OrchestratorConfigurationItem> result = fbAPI.getConfiguration(language, applicationId);
@@ -589,12 +582,14 @@ public class Utils {
                             result.enqueue(new Callback<OrchestratorConfigurationItem>() {
                                 @Override
                                 public void onFailure(Call<OrchestratorConfigurationItem> call, Throwable t) {
+                                    Log.e(TAG, "Failed to retrieve the configuration. onFailure method called", t);
                                     DialogUtils.showInformationDialog(activity, new String[]{activity.getResources().getString(R.string.supersede_feedbacklibrary_feedback_application_unavailable_text)}, true);
                                 }
 
                                 @Override
                                 public void onResponse(Call<OrchestratorConfigurationItem> call, Response<OrchestratorConfigurationItem> response) {
                                     if (response.code() == 200) {
+                                        Log.i(TAG, "Configuration successfully retrieved");
                                         OrchestratorConfigurationItem configuration = response.body();
                                         if (configuration != null) {
                                             List<ConfigurationItem> configurationItems = configuration.getConfigurationItems();
@@ -638,13 +633,21 @@ public class Utils {
                                                 DialogUtils.showInformationDialog(activity, new String[]{activity.getResources().getString(R.string.supersede_feedbacklibrary_feedback_application_unavailable_text)}, true);
                                             }
                                         }
+                                    } else {
+                                        Log.e(TAG, "Failed to retrieve the configuration. Response code == " + response.code());
                                     }
                                 }
                             });
+                        } else {
+                            Log.e(TAG, "Failed to retrieve the configuration. Call<OrchestratorConfigurationItem> result is null");
                         }
+                    } else {
+                        Log.e(TAG, "The server is not up and running. Response code == " + response.code());
                     }
                 }
             });
+        } else {
+            Log.e(TAG, "Failed to ping the server. Call<ResponseBody> checkUpAndRunning result is null");
         }
     }
 }

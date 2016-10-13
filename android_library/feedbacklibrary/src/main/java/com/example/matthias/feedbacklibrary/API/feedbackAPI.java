@@ -42,6 +42,7 @@ public interface feedbackAPI {
     @GET("feedback_orchestrator/{language}/applications/{application_id}")
     Call<OrchestratorConfigurationItem> getConfiguration(@Path("language") String language, @Path("application_id") long application_id);
 
+    // TODO: Change to updated URL when the new version of the backend is deployed
     /**
      * This method checks it the orchestrator is up and running.
      *
