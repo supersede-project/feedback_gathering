@@ -1,5 +1,7 @@
 package com.example.matthias.feedbacklibrary.models;
 
+import android.util.Log;
+
 import com.example.matthias.feedbacklibrary.configurations.MechanismConfigurationItem;
 import com.example.matthias.feedbacklibrary.utils.Utils;
 
@@ -31,7 +33,7 @@ public class ScreenshotMechanism extends Mechanism {
                 if (split.length > 0) {
                     returnValue.put(entry.getKey(), split[0]);
                 } else {
-                    System.out.println("error occured, i.e., split.length > 0 == false");
+                    Log.e("ScreenshotMechanism", "Failed to split. split.length smaller than 1");
                 }
             }
             return returnValue;
