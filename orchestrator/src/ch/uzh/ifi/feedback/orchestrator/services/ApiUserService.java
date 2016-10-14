@@ -18,7 +18,7 @@ import javassist.NotFoundException;
 import static java.util.Arrays.asList;
 
 @Singleton
-public abstract class ApiUserService extends ServiceBase<ApiUser> implements IApiUserService {
+public class ApiUserService extends ServiceBase<ApiUser> implements IApiUserService {
 
 	private ApiUserPermissionService permissionService;
 

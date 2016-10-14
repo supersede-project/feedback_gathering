@@ -33,14 +33,14 @@ public class FeedbackController extends RestController<Feedback>{
 	
 	@Path("/applications/{application_id}/feedbacks")
 	@GET
-	@Authenticate(UserAuthenticationService.class)
+	@Authenticate(service = UserAuthenticationService.class, scope = "APPLICATION")
 	public List<Feedback> GetAllForApplication(@PathParam("application_id")Integer applicationId) throws Exception {
 		return super.GetAllFor("application_id", applicationId);
 	}
 	
 	@Path("/applications/{application_id}/feedbacks/{id}")
 	@GET
-	@Authenticate(UserAuthenticationService.class)
+	@Authenticate(service = UserAuthenticationService.class, scope = "APPLICATION")
 	public Feedback GetByFeedbackId(@PathParam("id")Integer id, @PathParam("application_id")Integer applicationId) throws Exception 
 	{
 		Feedback feedback = super.GetById(id);
@@ -58,7 +58,7 @@ public class FeedbackController extends RestController<Feedback>{
 	
 	@Path("/applications/{application_id}/feedbacks/{id}")
 	@DELETE
-	@Authenticate(UserAuthenticationService.class)
+	@Authenticate(service = UserAuthenticationService.class, scope = "APPLICATION")
 	public void DeleteFeedback(@PathParam("id")Integer id, @PathParam("application_id")Integer applicationId) throws Exception 
 	{
 		Feedback toDelete = super.GetById(id);

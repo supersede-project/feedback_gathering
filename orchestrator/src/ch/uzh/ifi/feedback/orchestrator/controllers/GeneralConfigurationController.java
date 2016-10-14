@@ -26,6 +26,7 @@ import ch.uzh.ifi.feedback.orchestrator.services.ApplicationService;
 import ch.uzh.ifi.feedback.orchestrator.services.ConfigurationService;
 import ch.uzh.ifi.feedback.orchestrator.services.GeneralConfigurationService;
 import ch.uzh.ifi.feedback.orchestrator.validation.GeneralConfigurationValidator;
+import javassist.NotFoundException;
 
 import static java.util.Arrays.asList;
 
@@ -59,13 +60,6 @@ public class GeneralConfigurationController extends RestController<GeneralConfig
 	}
 	
 	@GET
-	@Path("/general_configurations")
-	public List<GeneralConfiguration> GetAll() throws Exception 
-	{
-		return super.GetAll();
-	}
-	
-	@GET
 	@Path("/applications/{app_id}/general_configuration")
 	public GeneralConfiguration GetByApplication( @PathParam("app_id")Integer appId) throws Exception 
 	{
@@ -82,18 +76,26 @@ public class GeneralConfigurationController extends RestController<GeneralConfig
 	}
 	
 	@PUT
-	@Authenticate(UserAuthenticationService.class)
-	@Path("/general_configurations")
-	public GeneralConfiguration UpdateGeneralConfiguration(GeneralConfiguration config) throws Exception 
+	@Authenticate(service = UserAuthenticationService.class, scope = "APPLICATION")
+	@Path("/applications/{application_id}/general_configurations")
+	public GeneralConfiguration UpdateGeneralConfigurationForApplication(
+			@PathParam("application_id") Integer applicationId,
+			GeneralConfiguration config) throws Exception 
 	{
+		Application app = applicationService.GetById(applicationId);
+		if(!app.getGeneralConfiguration().getId().equals(config.getId()))
+			throw new NotFoundException("the configuration does not belong to the specified application");
+		
 		return super.Update(config);
 	}
 	
 
 	@POST
-	@Authenticate(UserAuthenticationService.class)
-	@Path("/applications/{app_id}/general_configuration")
-	public GeneralConfiguration InsertGeneralConfigurationForApplication(@PathParam("app_id")Integer appId, GeneralConfiguration config) throws Exception 
+	@Authenticate(service = UserAuthenticationService.class, scope = "APPLICATION")
+	@Path("/applications/{application_id}/general_configuration")
+	public GeneralConfiguration InsertGeneralConfigurationForApplication(
+			@PathParam("app_id")Integer appId, 
+			GeneralConfiguration config) throws Exception 
 	{
 		Application app = applicationService.GetById(appId);
 		if(app.getGeneralConfiguration() != null)
@@ -110,13 +112,20 @@ public class GeneralConfigurationController extends RestController<GeneralConfig
 	}
 	
 	@POST
-	@Authenticate(UserAuthenticationService.class)
-	@Path("/configurations/{config_id}/general_configuration")
-	public GeneralConfiguration InsertGeneralConfigurationForConfiguration(@PathParam("config_id")Integer configId, GeneralConfiguration config) throws Exception 
+	@Authenticate(service = UserAuthenticationService.class, scope = "APPLICATION")
+	@Path("/applications/{application_id}/configurations/{config_id}/general_configuration")
+	public GeneralConfiguration InsertGeneralConfigurationForConfiguration(
+			@PathParam("config_id")Integer configId, 
+			@PathParam("application_id") Integer applicationId,
+			GeneralConfiguration config) throws Exception 
 	{
 		Configuration configuration = configurationService.GetById(configId);
+		
 		if(configuration.getGeneralConfiguration() != null)
 			throw new ValidationException("general configuration for configuration already set. Please perform update!");
+		
+		if(!configuration.getApplicationId().equals(applicationId))
+			throw new NotFoundException("the configuration does not belong to the specified application");
 		
 		super.Validate(config, false);
 		configuration.setGeneralConfiguration(config);

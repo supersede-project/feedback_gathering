@@ -7,6 +7,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import ch.uzh.ifi.feedback.library.rest.RestController;
+import ch.uzh.ifi.feedback.library.rest.annotations.Authenticate;
 import ch.uzh.ifi.feedback.library.rest.authorization.ITokenAuthenticationService;
 import ch.uzh.ifi.feedback.library.rest.authorization.UserRole;
 import ch.uzh.ifi.feedback.library.rest.serialization.ISerializationService;
@@ -20,8 +21,8 @@ public class HandlerInfo {
 	private Map<String, Parameter> pathParameters;
 	private UriTemplate uriTemplate;
 	private Class<?> serializedParameterClass;
-	private Class<? extends ITokenAuthenticationService> authenticationClass;
-	private UserRole authenticationRole;
+	private Authenticate auth;
+
 	
 	public HandlerInfo(
 			Method method, 
@@ -29,16 +30,14 @@ public class HandlerInfo {
 			Class<?> handlerClazz,
 			Class<?> parameterClass,
 			UriTemplate template,
-			Class<? extends ITokenAuthenticationService> authClass,
-			UserRole authRole)
+			Authenticate auth)
 	{
 		this.method = method;
 		this.httpMethod = httpMethod;
 		this.handlerClazz = handlerClazz;
 		this.uriTemplate = template;
 		this.serializedParameterClass = parameterClass;
-		this.authenticationClass = authClass;
-		this.authenticationRole = authRole;
+		this.setAuth(auth);
 		pathParameters = new LinkedHashMap<>();
 	}
 
@@ -74,19 +73,11 @@ public class HandlerInfo {
 		this.serializedParameterClass = serializedParameterClass;
 	}
 
-	public Class<? extends ITokenAuthenticationService> getAuthenticationClass() {
-		return authenticationClass;
+	public Authenticate getAuth() {
+		return auth;
 	}
 
-	public void setAuthenticationClass(Class<? extends ITokenAuthenticationService> authenticationClass) {
-		this.authenticationClass = authenticationClass;
-	}
-
-	public UserRole getAuthenticationUserRole() {
-		return authenticationRole;
-	}
-
-	public void setAuthenticationUserRole(UserRole authenticationUserRole) {
-		this.authenticationRole = authenticationUserRole;
+	public void setAuth(Authenticate auth) {
+		this.auth = auth;
 	}
 }

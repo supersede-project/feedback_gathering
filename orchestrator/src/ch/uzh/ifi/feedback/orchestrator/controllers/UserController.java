@@ -38,7 +38,7 @@ public class UserController extends RestController<User> {
 	}
 	
 	@POST
-	@Authenticate(UserAuthenticationService.class)
+	@Authenticate(service = UserAuthenticationService.class, role = "ADMIN")
 	@Path("/user_groups/{group_id}/users")
 	public User InsertForGroup(@PathParam("group_id") Integer groupId, User user) throws Exception 
 	{
@@ -47,7 +47,7 @@ public class UserController extends RestController<User> {
 	}
 	
 	@PUT
-	@Authenticate(UserAuthenticationService.class)
+	@Authenticate(service = UserAuthenticationService.class, role = "ADMIN")
 	@Path("/users")
 	public User UpdateForGroup(User user) throws Exception 
 	{

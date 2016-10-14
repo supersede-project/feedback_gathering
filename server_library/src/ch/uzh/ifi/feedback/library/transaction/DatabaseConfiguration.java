@@ -19,7 +19,7 @@ import ch.uzh.ifi.feedback.library.test.ServletTest;
 import ch.uzh.ifi.feedback.library.test.dumps.TestHelper;
 
 @Singleton
-public class DatabaseConfiguration {
+public class DatabaseConfiguration implements IDatabaseConfiguration {
 	
 	private String repositoryDb;
 	private String orchestratorDb;
@@ -82,8 +82,8 @@ public class DatabaseConfiguration {
 	
 	private void CreateDumps()
 	{
-		InputStream orchestratorInputStream = TestHelper.class.getResourceAsStream("orchestrator_test_dump.sql");
-		InputStream repositoryInputStream = TestHelper.class.getResourceAsStream("repository_test_dump.sql");
+		InputStream orchestratorInputStream = this.getClass().getResourceAsStream("orchestrator_test_dump.sql");
+		InputStream repositoryInputStream = this.getClass().getResourceAsStream("repository_test_dump.sql");
 		
 		orchestratorDumpFile = generateTempFile(orchestratorInputStream, "orchestratorDump");
 		repositoryDumpFile = generateTempFile(repositoryInputStream, "repositorDump");

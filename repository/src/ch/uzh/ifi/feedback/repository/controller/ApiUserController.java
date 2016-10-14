@@ -50,7 +50,7 @@ public class ApiUserController extends RestController<ApiUser> {
 
 	@POST
 	@Path("/api_users")
-	@Authenticate(value = UserAuthenticationService.class, role = "ADMIN")
+	@Authenticate(service = UserAuthenticationService.class, role = "ADMIN")
 	public ApiUser Insert(ApiUser user) throws Exception
 	{
 		return super.Insert(user);
@@ -58,7 +58,7 @@ public class ApiUserController extends RestController<ApiUser> {
 	
 	@PUT
 	@Path("/api_users")
-	@Authenticate(value = UserAuthenticationService.class, role = "ADMIN")
+	@Authenticate(service = UserAuthenticationService.class, role = "ADMIN")
 	public ApiUser Update(ApiUser user) throws Exception
 	{
 		return super.Insert(user);
@@ -66,7 +66,7 @@ public class ApiUserController extends RestController<ApiUser> {
 	
 	@DELETE
 	@Path("/api_users/{id}")
-	@Authenticate(value = UserAuthenticationService.class, role = "ADMIN")
+	@Authenticate(service = UserAuthenticationService.class, role = "ADMIN")
 	public void Delete(@PathParam("id") Integer id) throws Exception
 	{
 		super.Delete(id);

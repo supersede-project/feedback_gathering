@@ -24,8 +24,8 @@ public class OrchestratorServletModule extends ServletModule {
     @Override
     protected void configureServlets() {
     	
-      filter("/*").through(createTimeStampFilter());
-      serve("/*").with(OrchestratorServlet.class);
+      filter("/feedback/*").through(createTimeStampFilter());
+      serve("/feedback/*").with(OrchestratorServlet.class);
       
     }
     
@@ -38,7 +38,7 @@ public class OrchestratorServletModule extends ServletModule {
         throw new IllegalStateException("language must be manually seeded");
     }
     
-    @Provides @Named("application") @RequestScoped String provideApplication() 
+    @Provides @Named("application") @RequestScoped Integer provideApplication() 
     {
         return null;
     }
