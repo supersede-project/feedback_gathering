@@ -6,6 +6,6 @@ export const FeedbackDetailRoutes: Route[] = [
   {
     path: 'feedback-detail/:id',
     component: FeedbackDetailComponent,
-    canActivate: [LoggedInGuard]
+    canActivate: [] //[LoggedInGuard]
   }
 ];

@@ -1,5 +1,7 @@
 package ch.uzh.ifi.feedback.repository.service;
 
+import static java.util.Arrays.asList;
+
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Arrays;
@@ -8,14 +10,17 @@ import java.util.List;
 
 import com.google.inject.Inject;
 
-import ch.uzh.ifi.feedback.library.rest.Service.DatabaseConfiguration;
-import ch.uzh.ifi.feedback.library.rest.Service.ServiceBase;
+import ch.uzh.ifi.feedback.library.rest.authorization.ApiUser;
+import ch.uzh.ifi.feedback.library.rest.service.ServiceBase;
+import ch.uzh.ifi.feedback.library.transaction.DatabaseConfiguration;
 import ch.uzh.ifi.feedback.repository.model.AttachmentFeedback;
 import ch.uzh.ifi.feedback.repository.model.AudioFeedback;
 import ch.uzh.ifi.feedback.repository.model.CategoryFeedback;
 import ch.uzh.ifi.feedback.repository.model.Feedback;
 import ch.uzh.ifi.feedback.repository.model.RatingFeedback;
 import ch.uzh.ifi.feedback.repository.model.ScreenshotFeedback;
+import ch.uzh.ifi.feedback.repository.model.Status;
+import ch.uzh.ifi.feedback.repository.model.StatusOption;
 import ch.uzh.ifi.feedback.repository.model.TextFeedback;
 import javassist.NotFoundException;
 
@@ -28,6 +33,9 @@ public class FeedbackService extends ServiceBase<Feedback> {
 	private AttachmentFeedbackService attachmentFeedbackService;
 	private CategoryFeedbackService categoryFeedbackService;
 	private ContextInformationService contextInformationService;
+	private StatusOptionService optionService;
+	private ApiUserService userService;
+	private StatusService statusService;
 	
 	@Inject
 	public FeedbackService(
@@ -39,6 +47,9 @@ public class FeedbackService extends ServiceBase<Feedback> {
 			AttachmentFeedbackService attachmentFeedbackService,
 			CategoryFeedbackService categoryFeedbackService,
 			ContextInformationService contextInformationService,
+			StatusOptionService optionService,
+			ApiUserService userService,
+			StatusService statusService,
 			DatabaseConfiguration dbConfig) 
 	{
 		super(  resultParser, 
@@ -53,6 +64,9 @@ public class FeedbackService extends ServiceBase<Feedback> {
 		this.attachmentFeedbackService = attachmentFeedbackService;
 		this.categoryFeedbackService = categoryFeedbackService;
 		this.contextInformationService = contextInformationService;
+		this.optionService = optionService;
+		this.userService = userService;
+		this.statusService = statusService;
 	}
 
 	@Override
@@ -127,6 +141,23 @@ public class FeedbackService extends ServiceBase<Feedback> {
 				categoryFeedback.setFeedbackId(feedbackId);
 				categoryFeedbackService.Insert(con, categoryFeedback);
 			}
+		}
+		
+		//get initial non user specific status
+		StatusOption initialStatus = optionService.GetWhere(asList(1, false), "`order` = ?", "user_specific = ?").get(0);		
+		//get initial user specific status
+		StatusOption initialUserStatus = optionService.GetWhere(asList(1, true), "`order` = ?", "user_specific = ?").get(0);
+	
+		//Insert initial status for users and initial general status
+		Status status = new Status(null, feedbackId, initialStatus.getName());
+		statusService.Insert(con, status);
+		
+		status.setStatus(initialUserStatus.getName());
+		List<ApiUser> users = userService.GetAll();
+		for(ApiUser user : users)
+		{
+			status.setApiUserId(user.getId());
+			statusService.Insert(con, status);
 		}
 		
 		return feedbackId;

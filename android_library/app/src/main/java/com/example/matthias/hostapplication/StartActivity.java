@@ -11,13 +11,11 @@ import android.view.View;
 import android.widget.Button;
 
 import com.example.matthias.feedbacklibrary.FeedbackActivity;
-import com.example.matthias.feedbacklibrary.utils.DialogUtils;
 import com.example.matthias.feedbacklibrary.utils.Utils;
 
 public class StartActivity extends AppCompatActivity {
     // Storage permission (android.permission-group.STORAGE)
     private static final int PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 100;
-    // baseURL = "http://ec2-54-175-37-30.compute-1.amazonaws.com/"
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,36 +25,30 @@ public class StartActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        // TODO: Uncomment before release
-        // Actual trigger
-        //Utils.triggerPotentialPullFeedback("http://ec2-54-175-37-30.compute-1.amazonaws.com/", this, 6L, "en");
-
-        // TODO: Remove before release
-        // Only for demo purposes
-        Button popup = (Button) findViewById(R.id.pull_popup_button);
-        if (popup != null) {
-            popup.setOnClickListener(new View.OnClickListener() {
+        Button triggerRandomPullV1 = (Button) findViewById(R.id.trigger_random_pull_config_v1_button);
+        if (triggerRandomPullV1 != null) {
+            triggerRandomPullV1.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    /*
-                    String jsonString;
-                    jsonString = Utils.readFileAsString("feedback_orchestrator_adapted_single_selection.json", getAssets());
-                    DialogUtils.PullFeedbackIntermediateDialog d = DialogUtils.PullFeedbackIntermediateDialog.newInstance(getResources().getString(com.example.matthias.feedbacklibrary.R.string.supersede_feedbacklibrary_pull_feedback_question_string), jsonString, 9, "http://ec2-54-175-37-30.compute-1.amazonaws.com/", "en");
-                    d.show(getFragmentManager(), "feedbackPopupDialog");
-                    */
+                    Utils.triggerRandomPullFeedback("http://ec2-54-175-37-30.compute-1.amazonaws.com/", StartActivity.this, 6L, "en");
                 }
             });
         }
-        Button noPopup = (Button) findViewById(R.id.pull_no_popup_button);
-        if (noPopup != null) {
-            noPopup.setOnClickListener(new View.OnClickListener() {
+        Button triggerSpecificPullV1Id14 = (Button) findViewById(R.id.trigger_specific_pull_config_v1_id14_button);
+        if (triggerSpecificPullV1Id14 != null) {
+            triggerSpecificPullV1Id14.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    /*
-                    String jsonString;
-                    jsonString = Utils.readFileAsString("feedback_orchestrator_adapted_multiple_selection.json", getAssets());
-                    startFeedbackActivity(jsonString, false, 10, "http://ec2-54-175-37-30.compute-1.amazonaws.com/", "en");
-                    */
+                    Utils.triggerSpecificPullFeedback("http://ec2-54-175-37-30.compute-1.amazonaws.com/", StartActivity.this, 6L, "en", 14L, "Would you like to give feedback to pull config 14");
+                }
+            });
+        }
+        Button triggerSpecificPullV1Id15 = (Button) findViewById(R.id.trigger_specific_pull_config_v1_id15_button);
+        if (triggerSpecificPullV1Id15 != null) {
+            triggerSpecificPullV1Id15.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Utils.triggerSpecificPullFeedback("http://ec2-54-175-37-30.compute-1.amazonaws.com/", StartActivity.this, 6L, "en", 15L, "Would you like to give feedback to pull config 15");
                 }
             });
         }
@@ -76,15 +68,22 @@ public class StartActivity extends AppCompatActivity {
             return true;
         }
 
-        if (id == R.id.action_feedback) {
+        if (id == R.id.action_single_mechanism_feedback) {
             boolean result = Utils.checkSinglePermission(this, PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE, null, null, false);
             if (result) {
                 // Permission is already granted. Taking a screenshot of the current screen automatically and open the FeedbackActivity from the feedback library
                 Utils.startActivityWithScreenshotCapture("http://ec2-54-175-37-30.compute-1.amazonaws.com/", this, 6L, "en");
-                // 5L --> multiple mechanisms of the same type
                 // 6L --> only one mechanisms of the same type
             }
-            return true;
+        }
+
+        if (id == R.id.action_multiple_mechanism_feedback) {
+            boolean result = Utils.checkSinglePermission(this, PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE, null, null, false);
+            if (result) {
+                // Permission is already granted. Taking a screenshot of the current screen automatically and open the FeedbackActivity from the feedback library
+                Utils.startActivityWithScreenshotCapture("http://ec2-54-175-37-30.compute-1.amazonaws.com/", this, 5L, "en");
+                // 5L --> multiple mechanisms of the same type
+            }
         }
 
         return super.onOptionsItemSelected(item);
@@ -100,17 +99,5 @@ public class StartActivity extends AppCompatActivity {
                         6L, "http://ec2-54-175-37-30.compute-1.amazonaws.com/", "en");
                 break;
         }
-    }
-
-    // TODO: Remove before release
-    // Only for demo purposes
-    private void startFeedbackActivity(String jsonString, boolean isPush, long selectedPullConfigurationIndex, String baseURL, String language) {
-        Intent intent = new Intent(this, FeedbackActivity.class);
-        intent.putExtra(FeedbackActivity.JSON_CONFIGURATION_STRING, jsonString);
-        intent.putExtra(FeedbackActivity.IS_PUSH_STRING, isPush);
-        intent.putExtra(FeedbackActivity.SELECTED_PULL_CONFIGURATION_INDEX_STRING, selectedPullConfigurationIndex);
-        intent.putExtra(FeedbackActivity.EXTRA_KEY_BASE_URL, baseURL);
-        intent.putExtra(FeedbackActivity.EXTRA_KEY_LANGUAGE, language);
-        startActivity(intent);
     }
 }

@@ -5,11 +5,11 @@ import java.util.List;
 import java.util.Optional;
 import ch.uzh.ifi.feedback.library.rest.annotations.DbAttribute;
 import ch.uzh.ifi.feedback.library.rest.annotations.DbIgnore;
+import ch.uzh.ifi.feedback.library.rest.annotations.Id;
+import ch.uzh.ifi.feedback.library.rest.annotations.NotNull;
 import ch.uzh.ifi.feedback.library.rest.annotations.Serialize;
-import ch.uzh.ifi.feedback.library.rest.validation.Id;
-import ch.uzh.ifi.feedback.library.rest.validation.NotNull;
-import ch.uzh.ifi.feedback.library.rest.validation.Unique;
-import ch.uzh.ifi.feedback.library.rest.validation.Validate;
+import ch.uzh.ifi.feedback.library.rest.annotations.Unique;
+import ch.uzh.ifi.feedback.library.rest.annotations.Validate;
 import ch.uzh.ifi.feedback.orchestrator.serialization.ConfigurationSerializationService;
 import ch.uzh.ifi.feedback.orchestrator.validation.ConfigurationValidator;
 

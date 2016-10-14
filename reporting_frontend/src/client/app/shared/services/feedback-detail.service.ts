@@ -4,7 +4,7 @@ import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import {Feedback} from '../models/feedbacks/feedback';
-import {REPOSITORY_HOST} from '../../../../../dist/tmp/app/shared/services/config';
+import {REPOSITORY_HOST} from './config';
 
 @Injectable()
 export class FeedbackDetailService {
@@ -17,8 +17,10 @@ export class FeedbackDetailService {
     headers.append('Accept', 'application/json');
     headers.append('Authorization', localStorage.getItem('auth_token'));
 
-    return this.http.get(REPOSITORY_HOST + 'en/feedbacks/' + id, { headers: headers })
-      .map((res: Response) => res.json())
+    //return this.http.get(REPOSITORY_HOST + 'en/feedbacks/' + id, { headers: headers })
+    return this.http.get('/services/mocks/feedbacks.json')
+      .map((res: Response) => <Feedback>(<Feedback[]>res.json()).filter(feedback => feedback.id === id)[0])
+      //.map((res: Response) => res.json())
       .catch(this.handleError);
   }
 

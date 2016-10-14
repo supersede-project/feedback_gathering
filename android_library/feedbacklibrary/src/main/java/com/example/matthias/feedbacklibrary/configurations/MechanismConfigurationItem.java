@@ -36,10 +36,8 @@ public class MechanismConfigurationItem implements Serializable {
         if (type != null) {
             switch (type) {
                 case Mechanism.ATTACHMENT_TYPE:
-                    // TODO: Implement attachment mechanism
                     return new AttachmentMechanism(this);
                 case Mechanism.AUDIO_TYPE:
-                    // TODO: Implement audio mechanism
                     return new AudioMechanism(this);
                 case Mechanism.CATEGORY_TYPE:
                     return new CategoryMechanism(this);

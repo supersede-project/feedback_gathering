@@ -21,40 +21,22 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <LinearLayout
+        <Button
+            android:id="@+id/trigger_random_pull_config_v1_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:text="Trigger a potential random pull feedback from config v1"/>
 
-            <Button
-                android:id="@+id/pull_popup_button"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:text="PULL 1"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="center_vertical"
-                android:text="Pull feedback triggered WITH a popup"/>
-        </LinearLayout>
-
-        <LinearLayout
+        <Button
+            android:id="@+id/trigger_specific_pull_config_v1_id14_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:text="Trigger pull feedback from config v1 with id=14"/>
 
-            <Button
-                android:id="@+id/pull_no_popup_button"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:text="PULL 2"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="center_vertical"
-                android:text="Pull feedback triggered WITHOUT a popup"/>
-        </LinearLayout>
+        <Button
+            android:id="@+id/trigger_specific_pull_config_v1_id15_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Trigger pull feedback from config v1 with id=15"/>
     </LinearLayout>
 </LinearLayout>

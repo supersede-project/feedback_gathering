@@ -3,6 +3,7 @@ var config = require('./env/stage.json');
 var SSH  = require('gulp-ssh');
 var exec = require('child_process').exec;
 var fs = require('fs');
+var insert = require('gulp-insert');
 var runSequence = require('run-sequence');
 
 
@@ -24,4 +25,16 @@ gulp.task('deploy', function (done) {
         gulpSSH.shell(['sudo cp -R ' + config.serverDest + '/* ' + config.serverAppDir]),
         done
     );
+});
+
+
+var copyright = function () {
+    var copyrightString = fs.readFileSync('copyright.txt');
+    return '/*' + copyrightString + '*/';
+};
+
+gulp.task('add-copyright', function () {
+    gulp.src(['dist/jquery.feedback.min.js'])
+    .pipe(insert.prepend(copyright))
+    .pipe(gulp.dest('dist/'));
 });

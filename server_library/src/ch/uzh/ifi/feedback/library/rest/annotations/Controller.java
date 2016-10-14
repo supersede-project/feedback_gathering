@@ -9,7 +9,7 @@ import java.lang.annotation.Target;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonSerializer;
 
-import ch.uzh.ifi.feedback.library.rest.Service.IDbItem;
+import ch.uzh.ifi.feedback.library.rest.service.IDbItem;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)

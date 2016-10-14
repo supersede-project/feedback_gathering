@@ -41,9 +41,7 @@ li {
 input {
   border: 1px solid #106cc8;
   font-size: 14px;
-  height: 40px;
   outline: none;
-  padding: 8px;
 }
 
 button {
@@ -53,7 +51,6 @@ button {
   cursor: pointer;
   display: inline-block;
   font-size: 14px;
-  height: 40px;
   padding: 8px 18px;
   text-decoration: none;
 }

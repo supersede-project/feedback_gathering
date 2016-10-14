@@ -30,6 +30,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -43,6 +44,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.matthias.feedbacklibrary.utils.ColorPickerDialog;
 import com.example.matthias.feedbacklibrary.utils.Utils;
 import com.example.matthias.feedbacklibrary.views.AnnotateImageView;
 import com.example.matthias.feedbacklibrary.views.StickerAnnotationImageView;
@@ -65,7 +67,6 @@ import java.util.TreeSet;
  */
 public class AnnotateImageActivity extends AppCompatActivity implements ColorPickerDialog.OnColorChangeDialogListener, TextAnnotationView.OnTextAnnotationChangedListener {
     private int mechanismViewId = -1;
-
     private boolean blackModeOn = false;
     private int oldPaintStrokeColor;
     private int oldPaintFillColor;
@@ -80,12 +81,6 @@ public class AnnotateImageActivity extends AppCompatActivity implements ColorPic
     private List<String> stickerLabels;
     private AlertDialog stickerDialog;
 
-    /**
-     * This method creates a new sticker annotation.
-     *
-     * @param imageResourceId the image resource of the sticker
-     * @return the sticker or null if no sticker was created
-     */
     @Nullable
     private StickerAnnotationImageView addSticker(int imageResourceId) {
         RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.supersede_feedbacklibrary_annotate_image_layout);
@@ -99,12 +94,6 @@ public class AnnotateImageActivity extends AppCompatActivity implements ColorPic
         return null;
     }
 
-    /**
-     * This method creates a new text annotation.
-     *
-     * @param imageResourceId the image resource of the annotation
-     * @return the text annotation or null if no annotation was created
-     */
     @Nullable
     private TextAnnotationImageView addTextAnnotation(int imageResourceId) {
         if (textAnnotationCounter <= textAnnotationCounterMaximum) {
@@ -135,12 +124,6 @@ public class AnnotateImageActivity extends AppCompatActivity implements ColorPic
         return null;
     }
 
-    /**
-     * This method creates the color picker dialog for the image annotation.
-     *
-     * @param mInitialColor the initial color
-     * @return the color picker dialog
-     */
     private ColorPickerDialog createColorPickerDialog(int mInitialColor) {
         ColorPickerDialog dialog = new ColorPickerDialog();
         Bundle args = new Bundle();
@@ -149,11 +132,6 @@ public class AnnotateImageActivity extends AppCompatActivity implements ColorPic
         return dialog;
     }
 
-    /**
-     * This method hides all the control items for every sticker and text annotation in the specific viewGroup.
-     *
-     * @param viewGroup the viewGroup
-     */
     private void hideAllControlItems(ViewGroup viewGroup) {
         // Hide all control items
         if (viewGroup != null) {
@@ -168,12 +146,6 @@ public class AnnotateImageActivity extends AppCompatActivity implements ColorPic
         }
     }
 
-    /**
-     * This method initializes the view for the image a annotation.
-     *
-     * @param bitmap            the bitmap to draw on
-     * @param originalImagePath the path of the original image
-     */
     private void initAnnotateImageView(Bitmap bitmap, String originalImagePath) {
         annotateImageView = new AnnotateImageView(this);
         // Set the bitmap to draw on
@@ -295,7 +267,7 @@ public class AnnotateImageActivity extends AppCompatActivity implements ColorPic
             initStickerLists();
             setListeners();
         } else {
-            throw new RuntimeException("no " + Utils.EXTRA_KEY_MECHANISM_VIEW_ID + " provided.");
+            Log.e("AnnotateImageActivity", "Failed to create the activity. No mechanismViewID provided");
         }
     }
 
@@ -419,7 +391,11 @@ public class AnnotateImageActivity extends AppCompatActivity implements ColorPic
                     TextAnnotationImageView textAnnotationView = (TextAnnotationImageView) child;
 
                     int key = Integer.valueOf(textAnnotationView.getAnnotationNumberView().getText().toString());
-                    String annotationInputText = (textAnnotationView.getAnnotationInputText()).trim();
+                    // If no text was entered, just set the empty string
+                    String annotationInputText = "";
+                    if (textAnnotationView.getAnnotationInputText() != null) {
+                        annotationInputText = (textAnnotationView.getAnnotationInputText()).trim();
+                    }
                     int annotationImageResource = textAnnotationView.getImageResourceId();
                     float getX = child.getX();
                     float getY = child.getY();
@@ -497,13 +473,6 @@ public class AnnotateImageActivity extends AppCompatActivity implements ColorPic
                 }
                 if (textAnnotationCounter > textAnnotationCounterMaximum) {
                     break;
-                }
-            }
-            if (textAnnotationCounter <= textAnnotationCounterMaximum) {
-                ImageButton textAnnotationButton = (ImageButton) findViewById(R.id.supersede_feedbacklibrary_text_comment_btn);
-                if (textAnnotationButton != null) {
-                    textAnnotationButton.setEnabled(false);
-                    textAnnotationButton.setAlpha(0.4F);
                 }
             }
         }

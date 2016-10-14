@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 
 import ch.uzh.ifi.feedback.library.rest.IRestManager;
-import ch.uzh.ifi.feedback.library.rest.Service.DatabaseConfiguration;
+import ch.uzh.ifi.feedback.library.transaction.DatabaseConfiguration;
 
 /**
  * Servlet base implementation
@@ -34,6 +34,7 @@ public abstract class ServletBase extends HttpServlet {
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
+	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
 	{
 		SetDebugMode();
@@ -44,6 +45,7 @@ public abstract class ServletBase extends HttpServlet {
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
+	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
 	{
 		SetDebugMode();
@@ -54,6 +56,7 @@ public abstract class ServletBase extends HttpServlet {
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
+	@Override
 	protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
 	{
 		SetDebugMode();
@@ -61,11 +64,18 @@ public abstract class ServletBase extends HttpServlet {
 		_restManager.Delete(request, response);
 	}
 
+	@Override
 	protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
 	{
 		SetDebugMode();
         SetHeaders(response);
 		_restManager.Put(request, response);
+	}
+	
+	@Override
+	protected void doOptions(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		SetHeaders(response);
+		response.setStatus(200);
 	}
 	
 	private void SetHeaders(HttpServletResponse response)
@@ -74,8 +84,9 @@ public abstract class ServletBase extends HttpServlet {
         response.setCharacterEncoding("UTF-8");
         
         response.setHeader("Access-Control-Allow-Origin", "*");
-        response.setHeader("Access-Control-Allow-Methods", "GET,PUT,POST");
+        response.setHeader("Access-Control-Allow-Methods", "GET,PUT,POST, DELETE");
         response.setHeader("Access-Control-Allow-Headers", "Content-Type");
+        response.setHeader("Access-Control-Allow-Headers", "Authorization");
         response.setHeader("Access-Control-Max-Age", "86400");
 	}
 	

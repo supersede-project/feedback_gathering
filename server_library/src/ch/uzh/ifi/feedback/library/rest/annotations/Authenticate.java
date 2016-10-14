@@ -10,4 +10,6 @@ import ch.uzh.ifi.feedback.library.rest.authorization.ITokenAuthenticationServic
 @Target(ElementType.METHOD)
 public @interface Authenticate {
 	public Class<? extends ITokenAuthenticationService> value();
+	public String role() default "USER";
+
 }

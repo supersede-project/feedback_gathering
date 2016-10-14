@@ -5,9 +5,9 @@ import java.util.List;
 
 import ch.uzh.ifi.feedback.library.rest.annotations.DbAttribute;
 import ch.uzh.ifi.feedback.library.rest.annotations.DbIgnore;
+import ch.uzh.ifi.feedback.library.rest.annotations.Id;
+import ch.uzh.ifi.feedback.library.rest.annotations.NotNull;
 import ch.uzh.ifi.feedback.library.rest.annotations.Serialize;
-import ch.uzh.ifi.feedback.library.rest.validation.Id;
-import ch.uzh.ifi.feedback.library.rest.validation.NotNull;
 import ch.uzh.ifi.feedback.orchestrator.serialization.UserGroupSerializationService;
 import ch.uzh.ifi.feedback.orchestrator.serialization.UserSerializationService;
 

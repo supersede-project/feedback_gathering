@@ -4,7 +4,7 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import ch.uzh.ifi.feedback.library.rest.IRestManager;
 import ch.uzh.ifi.feedback.library.rest.ServletBase;
-import ch.uzh.ifi.feedback.library.rest.Service.DatabaseConfiguration;
+import ch.uzh.ifi.feedback.library.transaction.DatabaseConfiguration;
 
 /**
  * Servlet implementation class OrchestratorServlet

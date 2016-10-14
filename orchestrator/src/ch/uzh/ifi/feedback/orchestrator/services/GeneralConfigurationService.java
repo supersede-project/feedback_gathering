@@ -15,9 +15,9 @@ import com.google.inject.Provider;
 import com.google.inject.Singleton;
 import com.google.inject.name.Named;
 
-import ch.uzh.ifi.feedback.library.rest.Service.DatabaseConfiguration;
-import ch.uzh.ifi.feedback.library.rest.Service.IDbService;
-import ch.uzh.ifi.feedback.library.rest.Service.ServiceBase;
+import ch.uzh.ifi.feedback.library.rest.service.IDbService;
+import ch.uzh.ifi.feedback.library.rest.service.ServiceBase;
+import ch.uzh.ifi.feedback.library.transaction.DatabaseConfiguration;
 import ch.uzh.ifi.feedback.orchestrator.model.Configuration;
 import ch.uzh.ifi.feedback.orchestrator.model.FeedbackParameter;
 import ch.uzh.ifi.feedback.orchestrator.model.GeneralConfiguration;

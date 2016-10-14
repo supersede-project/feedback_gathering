@@ -1,9 +1,8 @@
 package ch.uzh.ifi.feedback.library.rest.authorization;
-
-import ch.uzh.ifi.feedback.library.rest.Service.ItemBase;
+import ch.uzh.ifi.feedback.library.rest.annotations.Id;
 import ch.uzh.ifi.feedback.library.rest.annotations.Serialize;
-import ch.uzh.ifi.feedback.library.rest.validation.Id;
-import ch.uzh.ifi.feedback.library.rest.validation.Unique;
+import ch.uzh.ifi.feedback.library.rest.annotations.Unique;
+import ch.uzh.ifi.feedback.library.rest.service.ItemBase;
 
 @Serialize(ApiUserSerializationService.class)
 public class ApiUser extends ItemBase<ApiUser> {
@@ -16,6 +15,8 @@ public class ApiUser extends ItemBase<ApiUser> {
 	
 	private String password;
 	
+	private UserRole role;
+	 
 	@Override
 	public Integer getId() {
 		return id;
@@ -40,5 +41,13 @@ public class ApiUser extends ItemBase<ApiUser> {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	public UserRole getRole() {
+		return role;
+	}
+
+	public void setRole(UserRole role) {
+		this.role = role;
 	}
 }

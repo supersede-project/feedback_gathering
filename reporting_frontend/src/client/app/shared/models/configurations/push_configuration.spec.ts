@@ -1,12 +1,11 @@
 import {PushConfiguration} from './push_configuration';
 import {readJSON} from '../../services/mocks/mocks_loader';
-import {Mechanism} from '../mechanisms/mechanism';
 import {RatingMechanism} from '../mechanisms/rating_mechanism';
-import {mechanismTypes} from '../../js/config';
 import {ParameterValuePropertyPair} from '../parameters/parameter_value_property_pair';
 import {ScreenshotMechanism} from '../mechanisms/screenshot_mechanism';
 import {ConfigurationFactory} from './configuration_factory';
 import {TextMechanism} from '../mechanisms/text_mechanism';
+import {mechanismTypes} from '../mechanisms/mechanism_types';
 
 
 describe('PushConfiguration object', () => {

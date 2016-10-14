@@ -12,7 +12,7 @@ export class UserService {
     this.loggedIn = !!localStorage.getItem('auth_token');
   }
 
-  login(username, password) {
+  loginOnRepository(username, password) {
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
 

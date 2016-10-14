@@ -1,12 +1,12 @@
-export const apiEndpointOrchestrator = 'https://ptvfeedback.ronnieschaniel.com/';
+export const apiEndpointOrchestrator = 'http://ec2-54-175-37-30.compute-1.amazonaws.com/';
 export const applicationPath = 'feedback_orchestrator/{lang}/applications/';
-export const applicationId = 8;
+export const applicationId = 4;
 
-export const apiEndpointRepository = 'https://ptvfeedback.ronnieschaniel.com/';
-export const feedbackPath = 'feedback_repository/{lang}/feedbacks';
+export const apiEndpointRepository = 'http://ec2-54-175-37-30.compute-1.amazonaws.com/';
+export const feedbackPath = "feedback_repository/{lang}/feedbacks";
 
 export const feedbackObjectTitle = 'Feedback';
-export const applicationName = 'PTV';
+export const applicationName = 'energiesparkonto.de';
 
 export const defaultSuccessMessage = 'Your feedback was successfully sent';
 

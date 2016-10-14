@@ -1,5 +1,4 @@
 import {Feedback} from './feedback';
-import {PushConfiguration} from '../configurations/push_configuration';
 import {ConfigurationFactory} from '../configurations/configuration_factory';
 
 

@@ -17,6 +17,8 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
     var cropperTypeObjectIdentifier = 'cropper';
     var ScreenshotView = (function () {
         function ScreenshotView(screenshotMechanism, screenshotPreviewElement, screenshotCaptureButton, elementToCapture, container, distPath, elementsToHide) {
+            this.colorPickerCSSClass = 'color-picker';
+            this.defaultStrokeWidth = 3;
             this.screenshotMechanism = screenshotMechanism;
             this.screenshotPreviewElement = screenshotPreviewElement;
             this.screenshotCaptureButton = screenshotCaptureButton;
@@ -64,7 +66,7 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
                     };
                     myThis.initFabric(img, canvas);
                     myThis.initFreehandDrawing();
-                    myThis.initSVGStickers();
+                    myThis.initStickers();
                     myThis.initScreenshotOperations();
                     myThis.customizeControls();
                     var screenshotCaptureButtonActiveText = myThis.screenshotCaptureButton.data('active-text');
@@ -80,13 +82,15 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
             pageScreenshotCanvas.set('selectable', false);
             pageScreenshotCanvas.set('hoverCursor', 'default');
             this.fabricCanvas.add(pageScreenshotCanvas);
-            var selectedObjectControls = jQuery('#screenshotMechanism' + myThis.screenshotMechanism.id + ' .selected-object-controls');
-            selectedObjectControls.hide();
+            this.selectedObjectControls = jQuery('#screenshotMechanism' + myThis.screenshotMechanism.id + ' .selected-object-controls');
+            this.selectedObjectControls.hide();
             myThis.fabricCanvas.on('object:selected', function (e) {
                 var selectedObject = e.target;
-                selectedObjectControls.show();
+                selectedObject.bringToFront();
+                myThis.fabricCanvas.uniScaleTransform = selectedObject.get('type') === 'fabricObject' || selectedObject.get('type') === 'fillRect';
+                myThis.selectedObjectControls.show();
                 if (selectedObject.get('type') === textTypeObjectIdentifier) {
-                    var textSizeInput = selectedObjectControls.find('.text-size');
+                    var textSizeInput = myThis.selectedObjectControls.find('.text-size');
                     textSizeInput.show();
                     textSizeInput.val(selectedObject.getFontSize());
                     textSizeInput.off().on('keyup', function () {
@@ -95,7 +99,7 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
                     });
                 }
                 else {
-                    selectedObjectControls.find('.text-size').hide();
+                    myThis.selectedObjectControls.find('.text-size').hide();
                 }
                 if (selectedObject.get('type') === 'path-group') {
                     for (var _i = 0, _a = selectedObject.paths; _i < _a.length; _i++) {
@@ -106,22 +110,37 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
                         }
                     }
                 }
-                else if (selectedObject.get('type') === 'path') {
+                else if (selectedObject.get('type') === 'path' || selectedObject.get('type') === 'fabricObject') {
                     var currentObjectColor = selectedObject.getStroke();
+                }
+                else if (selectedObject.get('type') === 'fillRect') {
+                    var currentObjectColor = selectedObject.getFill();
                 }
                 else {
                     var currentObjectColor = selectedObject.getFill();
                 }
-                selectedObjectControls.find('.delete').off().on('click', function (e) {
+                myThis.selectedObjectControls.find('.delete').off().on('click', function (e) {
                     e.preventDefault();
                     e.stopPropagation();
+                    if (selectedObject.get('customType') === 'arrow') {
+                        if (selectedObject.line !== undefined) {
+                            selectedObject.line.remove();
+                        }
+                        if (selectedObject.arrow !== undefined) {
+                            selectedObject.arrow.remove();
+                        }
+                        if (selectedObject.circle !== undefined) {
+                            selectedObject.circle.remove();
+                        }
+                    }
                     if (selectedObject) {
                         selectedObject.remove();
                     }
                 });
-                selectedObjectControls.find('a.color').css('color', currentObjectColor);
-                selectedObjectControls.find('a.color').off().spectrum({
+                myThis.selectedObjectControls.find('a.color').css('color', currentObjectColor);
+                myThis.selectedObjectControls.find('a.color').off().spectrum({
                     color: currentObjectColor,
+                    containerClassName: myThis.colorPickerCSSClass,
                     showPaletteOnly: true,
                     togglePaletteOnly: true,
                     togglePaletteMoreText: 'more',
@@ -139,7 +158,23 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
                     change: function (color) {
                         var color = color.toHexString();
                         jQuery(this).css('color', color);
-                        if (selectedObject.get('type') === 'path-group') {
+                        if (selectedObject.get('customType') === 'arrow') {
+                            selectedObject.setFill(color);
+                            selectedObject.setStroke(color);
+                            if (selectedObject.line !== undefined) {
+                                selectedObject.line.setFill(color);
+                                selectedObject.line.setStroke(color);
+                            }
+                            if (selectedObject.arrow !== undefined) {
+                                selectedObject.arrow.setFill(color);
+                                selectedObject.arrow.setStroke(color);
+                            }
+                            if (selectedObject.circle !== undefined) {
+                                selectedObject.circle.setFill(color);
+                                selectedObject.circle.setStroke(color);
+                            }
+                        }
+                        else if (selectedObject.get('type') === 'path-group') {
                             for (var _i = 0, _a = selectedObject.paths; _i < _a.length; _i++) {
                                 var path = _a[_i];
                                 if (path.getFill() != "") {
@@ -147,8 +182,12 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
                                 }
                             }
                         }
-                        else if (selectedObject.get('type') === 'path') {
+                        else if (selectedObject.get('type') === 'path' || selectedObject.get('type') === 'fabricObject') {
                             selectedObject.setStroke(color);
+                        }
+                        else if (selectedObject.get('type') === 'fillRect') {
+                            selectedObject.setStroke(color);
+                            selectedObject.setFill(color);
                         }
                         else {
                             selectedObject.setFill(color);
@@ -168,6 +207,18 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
             });
             myThis.fabricCanvas.on('object:added', function (object) {
                 if (myThis.freehandActive) {
+                }
+            });
+            myThis.fabricCanvas.on('object:scaling', function (e) {
+                var object = e.target;
+                if (object.type === 'fabricObject') {
+                    var o = e.target;
+                    if (!o.strokeWidthUnscaled && o.strokeWidth) {
+                        o.strokeWidthUnscaled = o.strokeWidth;
+                    }
+                    if (o.strokeWidthUnscaled) {
+                        o.strokeWidth = o.strokeWidthUnscaled / o.scaleX;
+                    }
                 }
             });
         };
@@ -239,6 +290,7 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
                 jQuery(this).hide();
                 jQuery('.screenshot-crop-confirm').hide();
                 croppingRect.remove();
+                myThis.setCanvasObjectsMovement(false);
             });
             this.container.find('.screenshot-crop-confirm').show().off().on('click', function (e) {
                 e.preventDefault();
@@ -247,6 +299,7 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
                 myThis.croppingIsActive = false;
                 jQuery(this).hide();
                 jQuery('.screenshot-crop-cancel').hide();
+                myThis.setCanvasObjectsMovement(false);
             });
         };
         ScreenshotView.prototype.cropTheCanvas = function (croppingRect) {
@@ -291,6 +344,7 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
             freehandControls.find('a.freehand-color').css('color', currentFreehandDrawingColor);
             freehandControls.find('a.freehand-color').off().spectrum({
                 color: defaultColor,
+                containerClassName: myThis.colorPickerCSSClass,
                 showPaletteOnly: true,
                 togglePaletteOnly: true,
                 togglePaletteMoreText: 'more',
@@ -335,9 +389,9 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
             freehandControls.hide();
             this.freehandActive = false;
         };
-        ScreenshotView.prototype.initSVGStickers = function () {
+        ScreenshotView.prototype.initStickers = function () {
             var myThis = this;
-            myThis.container.find('.svg-sticker-source').draggable({
+            myThis.container.find('.sticker-source').draggable({
                 cursor: "crosshair",
                 revert: "invalid",
                 helper: "clone",
@@ -364,7 +418,7 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
                     if (sticker.hasClass('text')) {
                         myThis.addTextAnnotation(offsetX, offsetY);
                     }
-                    else {
+                    else if (sticker.hasClass('svg-sticker-source')) {
                         fabric.loadSVGFromURL(sticker.attr('src'), function (objects, options) {
                             var svgObject = fabric.util.groupSVGElements(objects, options);
                             svgObject.set('left', offsetX);
@@ -373,6 +427,56 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
                             myThis.fabricCanvas.add(svgObject).renderAll();
                             myThis.fabricCanvas.setActiveObject(svgObject);
                         });
+                    }
+                    else if (sticker.hasClass('object-source')) {
+                        if (sticker.hasClass('arrow')) {
+                            myThis.addArrowToCanvas(offsetX, offsetY);
+                        }
+                        else if (sticker.hasClass('rect')) {
+                            var rect = new fabric.Rect({
+                                left: offsetX,
+                                top: offsetY,
+                                width: 50,
+                                height: 50,
+                                type: 'fabricObject',
+                                stroke: defaultColor,
+                                strokeWidth: myThis.defaultStrokeWidth,
+                                lockUniScaling: false,
+                                fill: 'transparent'
+                            });
+                            myThis.fabricCanvas.add(rect).renderAll();
+                            myThis.fabricCanvas.setActiveObject(rect);
+                        }
+                        else if (sticker.hasClass('fillRect')) {
+                            var rect = new fabric.Rect({
+                                left: offsetX,
+                                top: offsetY,
+                                width: 50,
+                                height: 50,
+                                type: 'fillRect',
+                                stroke: defaultColor,
+                                strokeWidth: myThis.defaultStrokeWidth,
+                                lockUniScaling: false,
+                                fill: defaultColor
+                            });
+                            myThis.fabricCanvas.add(rect).renderAll();
+                            myThis.fabricCanvas.setActiveObject(rect);
+                        }
+                        else if (sticker.hasClass('circle')) {
+                            var circle = new fabric.Circle({
+                                left: offsetX,
+                                top: offsetY,
+                                radius: 50,
+                                startAngle: 0,
+                                type: 'fabricObject',
+                                endAngle: 2 * Math.PI,
+                                stroke: defaultColor,
+                                strokeWidth: myThis.defaultStrokeWidth,
+                                fill: 'transparent'
+                            });
+                            myThis.fabricCanvas.add(circle).renderAll();
+                            myThis.fabricCanvas.setActiveObject(circle);
+                        }
                     }
                 }
             });
@@ -398,7 +502,7 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
             if (this.elementsToHide != null) {
                 for (var _i = 0, _a = this.elementsToHide; _i < _a.length; _i++) {
                     var elementToHide = _a[_i];
-                    elementToHide.hide();
+                    jQuery('' + elementToHide).hide();
                 }
             }
         };
@@ -406,7 +510,7 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
             if (this.elementsToHide != null) {
                 for (var _i = 0, _a = this.elementsToHide; _i < _a.length; _i++) {
                     var elementToHide = _a[_i];
-                    elementToHide.show();
+                    jQuery('' + elementToHide).show();
                 }
             }
         };
@@ -454,6 +558,9 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
             this.container.find('.screenshot-crop').off().on('click', function (event) {
                 event.preventDefault();
                 event.stopPropagation();
+                myThis.fabricCanvas.deactivateAll().renderAll();
+                myThis.selectedObjectControls.hide();
+                myThis.setCanvasObjectsMovement(true);
                 myThis.initCrop();
             });
             this.container.find('.screenshot-draw-undo').off().on('click', function (event) {
@@ -496,6 +603,7 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
             fabric.Canvas.prototype.customiseControls({
                 mt: {
                     action: function (e, target) {
+                        var selectedObject = target;
                         if (target.get('type') === 'path-group') {
                             for (var _i = 0, _a = target.paths; _i < _a.length; _i++) {
                                 var path = _a[_i];
@@ -505,8 +613,11 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
                                 }
                             }
                         }
-                        else if (target.get('type') === 'path') {
+                        else if (target.get('type') === 'path' || target.get('type') === 'fabricObject') {
                             var currentObjectColor = target.getStroke();
+                        }
+                        else if (target.get('type') === 'fillRect') {
+                            var currentObjectColor = target.getFill();
                         }
                         else {
                             var currentObjectColor = target.getFill();
@@ -515,6 +626,7 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
                         colorLinkElement.css('left', e.offsetX - 8 + 'px');
                         colorLinkElement.off().spectrum({
                             color: currentObjectColor,
+                            containerClassName: myThis.colorPickerCSSClass,
                             showPaletteOnly: true,
                             togglePaletteOnly: true,
                             togglePaletteMoreText: 'more',
@@ -532,16 +644,39 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
                             change: function (color) {
                                 var color = color.toHexString();
                                 jQuery(this).css('color', color);
-                                if (target.get('type') !== 'path-group') {
-                                    target.setFill(color);
+                                if (selectedObject.get('customType') === 'arrow') {
+                                    selectedObject.setFill(color);
+                                    selectedObject.setStroke(color);
+                                    if (selectedObject.line !== undefined) {
+                                        selectedObject.line.setFill(color);
+                                        selectedObject.line.setStroke(color);
+                                    }
+                                    if (selectedObject.arrow !== undefined) {
+                                        selectedObject.arrow.setFill(color);
+                                        selectedObject.arrow.setStroke(color);
+                                    }
+                                    if (selectedObject.circle !== undefined) {
+                                        selectedObject.circle.setFill(color);
+                                        selectedObject.circle.setStroke(color);
+                                    }
                                 }
-                                else {
-                                    for (var _i = 0, _a = target.paths; _i < _a.length; _i++) {
+                                else if (selectedObject.get('type') === 'path-group') {
+                                    for (var _i = 0, _a = selectedObject.paths; _i < _a.length; _i++) {
                                         var path = _a[_i];
                                         if (path.getFill() != "") {
                                             path.setFill(color);
                                         }
                                     }
+                                }
+                                else if (selectedObject.get('type') === 'path' || selectedObject.get('type') === 'fabricObject') {
+                                    selectedObject.setStroke(color);
+                                }
+                                else if (selectedObject.get('type') === 'fillRect') {
+                                    selectedObject.setStroke(color);
+                                    selectedObject.setFill(color);
+                                }
+                                else {
+                                    selectedObject.setFill(color);
                                 }
                                 selectedObjectControls.find('a.color').css('color', color);
                                 myThis.fabricCanvas.renderAll();
@@ -590,6 +725,145 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
                     icon: myThis.distPath + 'img/ic_format_color_fill_black_24px_background.svg'
                 }
             });
+        };
+        ScreenshotView.prototype.setDefaultStrokeWidth = function (strokeWidth) {
+            this.defaultStrokeWidth = strokeWidth;
+        };
+        ScreenshotView.prototype.addArrowToCanvas = function (offsetX, offsetY) {
+            var line, arrow, circle, myThis = this;
+            line = new fabric.Line([offsetX, offsetY, offsetX + 50, offsetY + 50], {
+                stroke: defaultColor,
+                selectable: true,
+                strokeWidth: 3,
+                padding: 1,
+                hasBorders: false,
+                hasControls: false,
+                originX: 'center',
+                originY: 'center',
+                lockScalingX: true,
+                lockScalingY: true
+            });
+            var centerX = (line.x1 + line.x2) / 2, centerY = (line.y1 + line.y2) / 2;
+            var deltaX = line.left - centerX, deltaY = line.top - centerY;
+            arrow = new fabric.Triangle({
+                left: line.get('x1') + deltaX,
+                top: line.get('y1') + deltaY,
+                originX: 'center',
+                originY: 'center',
+                hasBorders: false,
+                hasControls: false,
+                lockScalingX: true,
+                lockScalingY: true,
+                lockRotation: true,
+                padding: 0,
+                pointType: 'arrow_start',
+                angle: -45,
+                width: 20,
+                height: 20,
+                fill: defaultColor
+            });
+            arrow.line = line;
+            circle = new fabric.Circle({
+                left: line.get('x2') + deltaX,
+                top: line.get('y2') + deltaY,
+                radius: 2,
+                stroke: defaultColor,
+                strokeWidth: 3,
+                originX: 'center',
+                originY: 'center',
+                hasBorders: false,
+                hasControls: false,
+                lockScalingX: true,
+                lockScalingY: true,
+                lockRotation: true,
+                padding: 0,
+                pointType: 'arrow_end',
+                fill: defaultColor
+            });
+            circle.line = line;
+            line.customType = arrow.customType = circle.customType = 'arrow';
+            line.circle = arrow.circle = circle;
+            line.arrow = circle.arrow = arrow;
+            myThis.fabricCanvas.add(line, arrow, circle);
+            function moveEnd(obj) {
+                var p = obj, x1, y1, x2, y2;
+                if (obj.pointType === 'arrow_end') {
+                    obj.line.set('x2', obj.get('left'));
+                    obj.line.set('y2', obj.get('top'));
+                }
+                else {
+                    obj.line.set('x1', obj.get('left'));
+                    obj.line.set('y1', obj.get('top'));
+                }
+                obj.line._setWidthHeight();
+                x1 = obj.line.get('x1');
+                y1 = obj.line.get('y1');
+                x2 = obj.line.get('x2');
+                y2 = obj.line.get('y2');
+                var angle = myThis.calcArrowAngle(x1, y1, x2, y2);
+                if (obj.pointType === 'arrow_end') {
+                    obj.arrow.set('angle', angle - 90);
+                }
+                else {
+                    obj.set('angle', angle - 90);
+                }
+                obj.line.setCoords();
+                myThis.fabricCanvas.renderAll();
+            }
+            function moveLine() {
+                var oldCenterX = (line.x1 + line.x2) / 2, oldCenterY = (line.y1 + line.y2) / 2, deltaX = line.left - oldCenterX, deltaY = line.top - oldCenterY;
+                line.arrow.set({
+                    'left': line.x1 + deltaX,
+                    'top': line.y1 + deltaY
+                }).setCoords();
+                line.circle.set({
+                    'left': line.x2 + deltaX,
+                    'top': line.y2 + deltaY
+                }).setCoords();
+                line.set({
+                    'x1': line.x1 + deltaX,
+                    'y1': line.y1 + deltaY,
+                    'x2': line.x2 + deltaX,
+                    'y2': line.y2 + deltaY
+                });
+                line.set({
+                    'left': (line.x1 + line.x2) / 2,
+                    'top': (line.y1 + line.y2) / 2
+                });
+            }
+            arrow.on('moving', function () {
+                moveEnd(arrow);
+            });
+            circle.on('moving', function () {
+                moveEnd(circle);
+            });
+            line.on('moving', function () {
+                moveLine();
+            });
+        };
+        ScreenshotView.prototype.calcArrowAngle = function (x1, y1, x2, y2) {
+            var angle = 0, x, y;
+            x = (x2 - x1);
+            y = (y2 - y1);
+            if (x === 0) {
+                angle = (y === 0) ? 0 : (y > 0) ? Math.PI / 2 : Math.PI * 3 / 2;
+            }
+            else if (y === 0) {
+                angle = (x > 0) ? 0 : Math.PI;
+            }
+            else {
+                angle = (x < 0) ? Math.atan(y / x) + Math.PI : (y < 0) ? Math.atan(y / x) + (2 * Math.PI) : Math.atan(y / x);
+            }
+            return (angle * 180 / Math.PI);
+        };
+        ScreenshotView.prototype.setCanvasObjectsMovement = function (lock) {
+            var objects = this.fabricCanvas.getObjects();
+            for (var i = 0; i < objects.length; i++) {
+                if (this.fabricCanvas.getObjects()[i].get('type') !== cropperTypeObjectIdentifier) {
+                    this.fabricCanvas.getObjects()[i].lockMovementX = lock;
+                    this.fabricCanvas.getObjects()[i].lockMovementX = lock;
+                }
+            }
         };
         return ScreenshotView;
     }());

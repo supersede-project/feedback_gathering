@@ -168,6 +168,14 @@ public class CustomSpinner extends Spinner implements DialogInterface.OnClickLis
                             if (emptyLayout != null) {
                                 emptyLayout.requestFocus();
                             }
+
+                            simpleAdapter.clear();
+                            simpleAdapter.add(getSelectedItemsAsString());
+                            System.arraycopy(mSelection, 0, mSelectionAtStart, 0, mSelection.length);
+                            listener.selectedIndices(getSelectedIndices());
+                            listener.selectedStrings(getSelectedStrings());
+
+                            spinnerDialog.dismiss();
                         } else {
                             mSelection[spinnerWhich] = false;
                             spinnerDialog.getListView().setItemChecked(spinnerWhich, false);

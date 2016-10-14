@@ -59,7 +59,7 @@
                     </button>
                 </div>
             </div>
-            <div class="page-wrapper" id="page-wrapper_1">
+            <div class="page-wrapper" id="applicationPanel">
                 <!--###startheader###-->
                 <header class="row">
 
@@ -495,10 +495,22 @@ G&uuml;nter D. Alt, Journalist, ehemaliger Moderator bei ZDF WISO und Mitbegr&uu
                         'distPath': 'dist/',
                         'userId': '99999999',
                         'lang': 'en',
-                        'fallbackLang': 'de'
+                        'fallbackLang': 'de',
+                        'dialogCSSClass': 'my-custom-dialog-class',
+                        'colorPickerCSSClass': 'my-color-picker',
+                        'defaultStrokeWidth': 4
                     });
                 });
             </script>
+            <style>
+                .my-custom-dialog-class {
+                    z-index: 9999995;
+                }
+
+                .my-color-picker {
+                    z-index: 9999996;
+                }
+            </style>
         </div>
     </div>
 </div>

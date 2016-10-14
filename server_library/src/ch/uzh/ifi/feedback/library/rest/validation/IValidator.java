@@ -1,6 +1,6 @@
 package ch.uzh.ifi.feedback.library.rest.validation;
 
-import ch.uzh.ifi.feedback.library.rest.Service.IDbItem;
+import ch.uzh.ifi.feedback.library.rest.service.IDbItem;
 
 public interface IValidator<T extends IDbItem> {
 	

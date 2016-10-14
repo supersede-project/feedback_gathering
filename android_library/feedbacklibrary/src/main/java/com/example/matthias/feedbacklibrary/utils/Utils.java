@@ -1,3 +1,18 @@
+/**
+ * Copyright [2016] [Matthias Scherrer]
+ * <p/>
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * <p/>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p/>
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.example.matthias.feedbacklibrary.utils;
 
 import android.app.Activity;
@@ -16,6 +31,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.View;
 
 import com.example.matthias.feedbacklibrary.API.feedbackAPI;
@@ -24,7 +40,6 @@ import com.example.matthias.feedbacklibrary.R;
 import com.example.matthias.feedbacklibrary.configurations.ConfigurationItem;
 import com.example.matthias.feedbacklibrary.configurations.OrchestratorConfigurationItem;
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -39,11 +54,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
-import java.util.Set;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -72,20 +85,8 @@ public class Utils {
     public static final String SEPARATOR = "::;;::;;";
     public static final String TEXT_ANNOTATION_COUNTER_MAXIMUM = "textAnnotationCounterMaximum";
     private static final String SCREENSHOTS_DIR_NAME = "Screenshots";
+    private static final String TAG = "Utils";
 
-    /**
-     * @param input the input value
-     * @return the integer value corresponding to the input value
-     */
-    public static int boolToInt(boolean input) {
-        return input ? 1 : 0;
-    }
-
-    /**
-     * This method takes a screenshot of the current screen and saves it in the 'Screenshots' folder.
-     *
-     * @return the path to the recently taken screenshot image
-     */
     @NonNull
     private static String captureScreenshot(final Activity activity) {
         // Create the 'Screenshots' folder if it does not already exist
@@ -106,7 +107,7 @@ public class Utils {
             }
             screenshotFile.createNewFile();
         } catch (IOException e) {
-            e.printStackTrace();
+            Log.e(TAG, "Failed to create a new file", e);
         }
 
         // Capture the current screen
@@ -122,7 +123,7 @@ public class Utils {
             fos.flush();
             fos.close();
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.e(TAG, "Failed to write the bitmap to the file", e);
         }
 
         // Add the screenshot image to the Media Provider's database
@@ -187,12 +188,14 @@ public class Utils {
         try {
             return File.createTempFile(prefix, suffix, context.getCacheDir());
         } catch (IOException e) {
-            // Error while creating file
+            Log.e(TAG, "Failed to create a temporary file", e);
         }
         return null;
     }
 
     /**
+     * This method returns the boolean value of an integer.
+     *
      * @param input the input value
      * @return the boolean value corresponding to the input value
      */
@@ -212,13 +215,13 @@ public class Utils {
             File f = new File(path);
             return BitmapFactory.decodeStream(new FileInputStream(f));
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            Log.e(TAG, "File was not found", e);
         }
         return null;
     }
 
     /**
-     * This method is used in the host application in the onRequestPermissionsResult method.
+     * This method is used in the host application in the onRequestPermissionsResult method in case if a PUSH feedback is triggered.
      *
      * @param requestCode   the request code to be handled in the onRequestPermissionsResult method of the calling activity
      * @param permissions   the permissions
@@ -265,47 +268,6 @@ public class Utils {
     }
 
     /**
-     * This method reads a specific file from the assets resource folder and returns it as a string.
-     *
-     * @param fileName     the file to read from
-     * @param assetManager the asset manager
-     * @return the file content as a string, the empty string if an error occurred
-     */
-    public static String readFileAsString(String fileName, AssetManager assetManager) {
-        String ret = "";
-
-        try {
-            InputStream inputStream = assetManager.open(fileName);
-
-            if (inputStream != null) {
-                BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-                StringBuilder out = new StringBuilder();
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    out.append(line);
-                }
-                reader.close();
-                return out.toString();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return ret;
-    }
-
-    /**
-     * This method deletes the file or directory at the specific path if it exists.
-     *
-     * @param path the path of the file to delete
-     * @return true if and only if the file or directory is successfully deleted, false otherwise
-     */
-    public static boolean removeDeleteFileFromInternalStorage(String path) {
-        File toDelete = new File(path);
-        return toDelete.exists() && toDelete.delete();
-    }
-
-    /**
      * This method saves the bitmap in a specific file.
      *
      * @param file        the file to store the bitmap in
@@ -323,7 +285,7 @@ public class Utils {
             fos.close();
             return true;
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.e(TAG, "Failed to write the bitmap to the file", e);
         }
         return false;
     }
@@ -351,7 +313,7 @@ public class Utils {
             fos.flush();
             fos.close();
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.e(TAG, "Failed to write the bitmap to the file", e);
         }
         return directory.getAbsolutePath();
     }
@@ -376,7 +338,7 @@ public class Utils {
             out.close();
             return true;
         } catch (IOException e) {
-            e.printStackTrace();
+            Log.e(TAG, "Failed to write the content to the file", e);
         }
         return false;
     }
@@ -414,7 +376,6 @@ public class Utils {
 
     private static void startActivity(@NonNull final Activity activity, @NonNull final Intent intent,
                                       @NonNull String baseURL, final boolean isCapturingScreenshot) {
-
         Retrofit rtf = new Retrofit.Builder().baseUrl(baseURL).addConverterFactory(GsonConverterFactory.create()).build();
         feedbackAPI fbAPI = rtf.create(feedbackAPI.class);
         Call<ResponseBody> checkUpAndRunning = fbAPI.pingOrchestrator();
@@ -423,6 +384,7 @@ public class Utils {
             checkUpAndRunning.enqueue(new Callback<ResponseBody>() {
                 @Override
                 public void onFailure(Call<ResponseBody> call, Throwable t) {
+                    Log.e(TAG, "Failed to ping the server. onFailure method called", t);
                     DialogUtils.showInformationDialog(activity, new String[]{activity.getResources().getString(R.string.supersede_feedbacklibrary_feedback_application_unavailable_text)}, true);
                 }
 
@@ -435,19 +397,24 @@ public class Utils {
                         }
                         activity.startActivity(intent);
                     } else {
+                        Log.e(TAG, "The server is not up and running. Response code == " + response.code());
                         DialogUtils.showInformationDialog(activity, new String[]{activity.getResources().getString(R.string.supersede_feedbacklibrary_feedback_application_unavailable_text)}, true);
                     }
                 }
             });
         } else {
+            Log.e(TAG, "Failed to ping the server. Call<ResponseBody> checkUpAndRunning result is null");
             DialogUtils.showInformationDialog(activity, new String[]{activity.getResources().getString(R.string.supersede_feedbacklibrary_feedback_application_unavailable_text)}, true);
         }
     }
 
     /**
-     * This method starts takes a screenshot of the current screen automatically and opens the FeedbackActivity from the feedback library.
+     * This method takes a screenshot of the current screen automatically and opens the FeedbackActivity from the feedback library in case if a PUSH feedback is triggered.
      *
-     * @param activity the activity from where the method is called
+     * @param baseURL       the base URL
+     * @param activity      the activity in which the method is called
+     * @param applicationId the application id
+     * @param language      the language
      */
     public static void startActivityWithScreenshotCapture(@NonNull final String baseURL, @NonNull final Activity activity, final long applicationId, @NonNull final String language) {
         Retrofit rtf = new Retrofit.Builder().baseUrl(baseURL).addConverterFactory(GsonConverterFactory.create()).build();
@@ -458,6 +425,7 @@ public class Utils {
             checkUpAndRunning.enqueue(new Callback<ResponseBody>() {
                 @Override
                 public void onFailure(Call<ResponseBody> call, Throwable t) {
+                    Log.e(TAG, "Failed to ping the server. onFailure method called", t);
                     DialogUtils.showInformationDialog(activity, new String[]{activity.getResources().getString(R.string.supersede_feedbacklibrary_feedback_application_unavailable_text)}, true);
                 }
 
@@ -472,16 +440,26 @@ public class Utils {
                         intent.putExtra(FeedbackActivity.EXTRA_KEY_LANGUAGE, language);
                         activity.startActivity(intent);
                     } else {
+                        Log.e(TAG, "The server is not up and running. Response code == " + response.code());
                         DialogUtils.showInformationDialog(activity, new String[]{activity.getResources().getString(R.string.supersede_feedbacklibrary_feedback_application_unavailable_text)}, true);
                     }
                 }
             });
         } else {
+            Log.e(TAG, "Failed to ping the server. Call<ResponseBody> checkUpAndRunning result is null");
             DialogUtils.showInformationDialog(activity, new String[]{activity.getResources().getString(R.string.supersede_feedbacklibrary_feedback_application_unavailable_text)}, true);
         }
     }
 
-    public static void triggerPotentialPullFeedback(@NonNull final String baseURL, @NonNull final Activity activity, final long applicationId, final @NonNull String language) {
+    /**
+     * This method opens the FeedbackActivity from the feedback library in case if a PULL feedback is triggered with a random PULL configuration.
+     *
+     * @param baseURL       the base URL
+     * @param activity      the activity in which the method is called
+     * @param applicationId the application id
+     * @param language      the language
+     */
+    public static void triggerRandomPullFeedback(@NonNull final String baseURL, @NonNull final Activity activity, final long applicationId, final @NonNull String language) {
         Retrofit rtf = new Retrofit.Builder().baseUrl(baseURL).addConverterFactory(GsonConverterFactory.create()).build();
         feedbackAPI fbAPI = rtf.create(feedbackAPI.class);
         final Call<ResponseBody> checkUpAndRunning = fbAPI.pingOrchestrator();
@@ -490,6 +468,7 @@ public class Utils {
             checkUpAndRunning.enqueue(new Callback<ResponseBody>() {
                 @Override
                 public void onFailure(Call<ResponseBody> call, Throwable t) {
+                    Log.e(TAG, "Failed to ping the server. onFailure method called", t);
                 }
 
                 @Override
@@ -504,12 +483,14 @@ public class Utils {
                             result.enqueue(new Callback<OrchestratorConfigurationItem>() {
                                 @Override
                                 public void onFailure(Call<OrchestratorConfigurationItem> call, Throwable t) {
+                                    Log.e(TAG, "Failed to retrieve the configuration. onFailure method called", t);
                                     DialogUtils.showInformationDialog(activity, new String[]{activity.getResources().getString(R.string.supersede_feedbacklibrary_feedback_application_unavailable_text)}, true);
                                 }
 
                                 @Override
                                 public void onResponse(Call<OrchestratorConfigurationItem> call, Response<OrchestratorConfigurationItem> response) {
                                     if (response.code() == 200) {
+                                        Log.i(TAG, "Configuration successfully retrieved");
                                         OrchestratorConfigurationItem configuration = response.body();
                                         if (configuration != null) {
                                             List<ConfigurationItem> configurationItems = configuration.getConfigurationItems();
@@ -560,13 +541,125 @@ public class Utils {
                                                 }
                                             }
                                         }
+                                    } else {
+                                        Log.e(TAG, "Failed to retrieve the configuration. Response code == " + response.code());
                                     }
                                 }
                             });
+                        } else {
+                            Log.e(TAG, "Failed to retrieve the configuration. Call<OrchestratorConfigurationItem> result is null");
                         }
+                    } else {
+                        Log.e(TAG, "The server is not up and running. Response code == " + response.code());
                     }
                 }
             });
+        } else {
+            Log.e(TAG, "Failed to ping the server. Call<ResponseBody> checkUpAndRunning result is null");
+        }
+    }
+
+    /**
+     * This method opens the FeedbackActivity from the feedback library in case if a PULL feedback is triggered with a specific PULL configuration.
+     *
+     * @param baseURL                the base URL
+     * @param activity               the activity in which the method is called
+     * @param applicationId          the application id
+     * @param language               the language
+     * @param pullConfigurationId    the pull configuration id
+     * @param intermediateDialogText the text for shown in the intermediate dialog
+     */
+    public static void triggerSpecificPullFeedback(@NonNull final String baseURL, @NonNull final Activity activity, final long applicationId, final @NonNull String language,
+                                                   final long pullConfigurationId, final @NonNull String intermediateDialogText) {
+        Retrofit rtf = new Retrofit.Builder().baseUrl(baseURL).addConverterFactory(GsonConverterFactory.create()).build();
+        feedbackAPI fbAPI = rtf.create(feedbackAPI.class);
+        final Call<ResponseBody> checkUpAndRunning = fbAPI.pingOrchestrator();
+
+        if (checkUpAndRunning != null) {
+            checkUpAndRunning.enqueue(new Callback<ResponseBody>() {
+                @Override
+                public void onFailure(Call<ResponseBody> call, Throwable t) {
+                    Log.e(TAG, "Failed to ping the server. onFailure method called", t);
+                }
+
+                @Override
+                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                    if (response.code() == 200) {
+                        Retrofit rtf = new Retrofit.Builder().baseUrl(baseURL).addConverterFactory(GsonConverterFactory.create()).build();
+                        feedbackAPI fbAPI = rtf.create(feedbackAPI.class);
+                        Call<OrchestratorConfigurationItem> result = fbAPI.getConfiguration(language, applicationId);
+
+                        // Asynchronous call
+                        if (result != null) {
+                            result.enqueue(new Callback<OrchestratorConfigurationItem>() {
+                                @Override
+                                public void onFailure(Call<OrchestratorConfigurationItem> call, Throwable t) {
+                                    Log.e(TAG, "Failed to retrieve the configuration. onFailure method called", t);
+                                    DialogUtils.showInformationDialog(activity, new String[]{activity.getResources().getString(R.string.supersede_feedbacklibrary_feedback_application_unavailable_text)}, true);
+                                }
+
+                                @Override
+                                public void onResponse(Call<OrchestratorConfigurationItem> call, Response<OrchestratorConfigurationItem> response) {
+                                    if (response.code() == 200) {
+                                        Log.i(TAG, "Configuration successfully retrieved");
+                                        OrchestratorConfigurationItem configuration = response.body();
+                                        if (configuration != null) {
+                                            List<ConfigurationItem> configurationItems = configuration.getConfigurationItems();
+                                            long[] selectedPullConfigurationIndex = {-1L};
+                                            ConfigurationItem selectedConfigurationItem = null;
+                                            for (ConfigurationItem configurationItem : configurationItems) {
+                                                if (configurationItem.getType().equals("PULL") && configurationItem.getId() == pullConfigurationId) {
+                                                    selectedPullConfigurationIndex[0] = configurationItem.getId();
+                                                    selectedConfigurationItem = configurationItem;
+                                                    break;
+                                                }
+                                            }
+
+                                            if (selectedPullConfigurationIndex[0] != -1 && selectedConfigurationItem != null) {
+                                                // If no "showIntermediateDialog" is provided, do not show it
+                                                boolean showIntermediateDialog = false;
+                                                for (Map<String, Object> parameter : selectedConfigurationItem.getGeneralConfigurationItem().getParameters()) {
+                                                    String key = (String) parameter.get("key");
+                                                    // Intermediate dialog
+                                                    if (key.equals("showIntermediateDialog")) {
+                                                        showIntermediateDialog = (Utils.intToBool(((Double) parameter.get("value")).intValue()));
+                                                    }
+                                                }
+
+                                                Intent intent = new Intent(activity, FeedbackActivity.class);
+                                                String jsonString = new Gson().toJson(configuration);
+                                                intent.putExtra(FeedbackActivity.IS_PUSH_STRING, false);
+                                                intent.putExtra(FeedbackActivity.JSON_CONFIGURATION_STRING, jsonString);
+                                                intent.putExtra(FeedbackActivity.SELECTED_PULL_CONFIGURATION_INDEX_STRING, selectedPullConfigurationIndex[0]);
+                                                intent.putExtra(FeedbackActivity.EXTRA_KEY_BASE_URL, baseURL);
+                                                intent.putExtra(FeedbackActivity.EXTRA_KEY_LANGUAGE, language);
+                                                if (!showIntermediateDialog) {
+                                                    // Start the feedback activity without asking the user
+                                                    activity.startActivity(intent);
+                                                } else {
+                                                    // Ask the user if (s)he would like to give feedback or not
+                                                    DialogUtils.PullFeedbackIntermediateDialog d = DialogUtils.PullFeedbackIntermediateDialog.newInstance(intermediateDialogText, jsonString, selectedPullConfigurationIndex[0], baseURL, language);
+                                                    d.show(activity.getFragmentManager(), "feedbackPopupDialog");
+                                                }
+                                            } else {
+                                                DialogUtils.showInformationDialog(activity, new String[]{activity.getResources().getString(R.string.supersede_feedbacklibrary_feedback_application_unavailable_text)}, true);
+                                            }
+                                        }
+                                    } else {
+                                        Log.e(TAG, "Failed to retrieve the configuration. Response code == " + response.code());
+                                    }
+                                }
+                            });
+                        } else {
+                            Log.e(TAG, "Failed to retrieve the configuration. Call<OrchestratorConfigurationItem> result is null");
+                        }
+                    } else {
+                        Log.e(TAG, "The server is not up and running. Response code == " + response.code());
+                    }
+                }
+            });
+        } else {
+            Log.e(TAG, "Failed to ping the server. Call<ResponseBody> checkUpAndRunning result is null");
         }
     }
 }

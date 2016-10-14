@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {ConfigurationInterface} from '../shared/models/configurations/configuration_interface';
 import {Application} from '../shared/models/applications/application';
 import {Feedback} from '../shared/models/feedbacks/feedback';
@@ -22,7 +22,7 @@ export class FeedbackDetailComponent implements OnInit {
   errorMessage:string;
   host:string = 'http://ec2-54-175-37-30.compute-1.amazonaws.com/';
 
-  constructor(private route:ActivatedRoute, private feedbackService:FeedbackDetailService, private applicationService:ApplicationService) {
+  constructor(private route:ActivatedRoute, private feedbackService:FeedbackDetailService, private applicationService:ApplicationService, private router:Router) {
   }
 
   ngOnInit() {
@@ -62,5 +62,9 @@ export class FeedbackDetailComponent implements OnInit {
       let ratingMechanism:RatingMechanism = <RatingMechanism>this.configuration.mechanisms.filter(mechanism => mechanism.id === ratingFeedback.mechanismId)[0];
       ratingFeedback.mechanism = <RatingMechanism>ratingMechanism;
     }
+  }
+
+  markAsUnread():void {
+    this.router.navigate(['/']);
   }
 }

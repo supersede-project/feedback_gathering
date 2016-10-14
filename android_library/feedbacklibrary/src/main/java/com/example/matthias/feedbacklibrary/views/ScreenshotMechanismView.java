@@ -61,6 +61,10 @@ public class ScreenshotMechanismView extends MechanismView {
         return deleteScreenshotButton;
     }
 
+    public int getMaxNumberTextAnnotation() {
+        return screenshotMechanism.getMaxNumberTextAnnotation();
+    }
+
     public int getMechanismViewIndex() {
         return mechanismViewIndex;
     }
