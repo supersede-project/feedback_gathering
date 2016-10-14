@@ -43,7 +43,7 @@ public class ApplicationController extends RestController<Application> {
 	}
 	
 	@PUT
-	@Authenticate(UserAuthenticationService.class)
+	@Authenticate(service = UserAuthenticationService.class)
 	@Path("/applications")
 	public Application UpdateApplication(Application app) throws Exception 
 	{
@@ -51,7 +51,7 @@ public class ApplicationController extends RestController<Application> {
 	}
 	
 	@POST
-	@Authenticate(UserAuthenticationService.class)
+	@Authenticate(service = UserAuthenticationService.class)
 	@Path("/applications")
 	public Application InsertApplication(@PathParam("app_id")Integer appId, Application app) throws Exception 
 	{

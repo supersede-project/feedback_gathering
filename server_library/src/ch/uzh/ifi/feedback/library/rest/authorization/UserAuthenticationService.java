@@ -38,7 +38,7 @@ public class UserAuthenticationService implements ITokenAuthenticationService {
 		return cache.Register(validatedUsers.get(0));
 	}
 	
-	public boolean Authenticate(HttpServletRequest request, UserRole role)
+	public boolean Authenticate(HttpServletRequest request, ch.uzh.ifi.feedback.library.rest.annotations.Authenticate auth)
 	{
 		String authorizationHeader = request.getHeader("Authorization");
 		
@@ -46,6 +46,6 @@ public class UserAuthenticationService implements ITokenAuthenticationService {
 			return false;
 		
 		UserToken token = new UserToken(UUID.fromString(authorizationHeader));
-		return cache.Authenticate(token, role);
+		return cache.Authenticate(token, auth);
 	}
 }

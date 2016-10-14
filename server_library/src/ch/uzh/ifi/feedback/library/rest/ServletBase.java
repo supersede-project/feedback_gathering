@@ -10,8 +10,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 
+import com.google.inject.Injector;
+
 import ch.uzh.ifi.feedback.library.rest.IRestManager;
 import ch.uzh.ifi.feedback.library.transaction.DatabaseConfiguration;
+import ch.uzh.ifi.feedback.library.transaction.IDatabaseConfiguration;
 
 /**
  * Servlet base implementation
@@ -20,12 +23,13 @@ public abstract class ServletBase extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
     protected IRestManager _restManager;
-    protected DatabaseConfiguration _dbConfig;
+
+	private DatabaseConfiguration _dbConfig;;
     
     public ServletBase(IRestManager restManager, DatabaseConfiguration config) {
 		this._restManager = restManager;
 		this._dbConfig = config;
-		
+
         InitController();
 	}
     
@@ -50,6 +54,7 @@ public abstract class ServletBase extends HttpServlet {
 	{
 		SetDebugMode();
 		SetHeaders(response);
+		response.setStatus(201);
 		_restManager.Post(request, response);
 	}
 	
@@ -84,7 +89,7 @@ public abstract class ServletBase extends HttpServlet {
         response.setCharacterEncoding("UTF-8");
         
         response.setHeader("Access-Control-Allow-Origin", "*");
-        response.setHeader("Access-Control-Allow-Methods", "GET,PUT,POST, DELETE");
+        response.setHeader("Access-Control-Allow-Methods", "GET,PUT,POST, DELETE, OPTIONS");
         response.setHeader("Access-Control-Allow-Headers", "Content-Type");
         response.setHeader("Access-Control-Allow-Headers", "Authorization");
         response.setHeader("Access-Control-Max-Age", "86400");

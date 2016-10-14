@@ -23,6 +23,8 @@ import ch.uzh.ifi.feedback.orchestrator.services.ConfigurationService;
 import ch.uzh.ifi.feedback.orchestrator.services.UserGroupService;
 import ch.uzh.ifi.feedback.orchestrator.services.UserService;
 import ch.uzh.ifi.feedback.orchestrator.validation.ConfigurationValidator;
+import javassist.NotFoundException;
+
 import static java.util.Arrays.asList;
 
 @RequestScoped
@@ -91,18 +93,10 @@ public class ConfigurationController extends RestController<Configuration>
 		return dbService.GetWhere(asList(groupId, appId), "user_groups_id = ?", "applications_id = ?");
 	}
 	
-	@PUT
-	@Authenticate(UserAuthenticationService.class)
-	@Path("/configurations")
-	public Configuration UpdateConfiguration(Configuration config) throws Exception 
-	{
-		return super.Update(config);
-	}
-	
 	@POST
-	@Authenticate(UserAuthenticationService.class)
-	@Path("/applications/{app_id}/configurations")
-	public Configuration InsertConfigurationForApplication(@PathParam("app_id")Integer appId, Configuration config) throws Exception 
+	@Authenticate(service = UserAuthenticationService.class, scope = "APPLICATION")
+	@Path("/applications/{application_id}/configurations")
+	public Configuration InsertConfigurationForApplication(@PathParam("application_id")Integer appId, Configuration config) throws Exception 
 	{
 		//Set default user group id when no group specified
 		int groupId = userGroupService.GetWhere(asList("default"), "name = ?").get(0).getId();
@@ -112,11 +106,25 @@ public class ConfigurationController extends RestController<Configuration>
 		return super.Insert(config);
 	}
 	
+	@PUT
+	@Authenticate(service = UserAuthenticationService.class, scope = "APPLICATION")
+	@Path("/applications/{application_id}/configurations")
+	public Configuration UpdateConfigurationForApplication(
+			@PathParam("application_id") Integer applicationId,
+			Configuration config) throws Exception
+	{
+		Configuration oldConfig = dbService.GetById(config.getId());
+		if(!oldConfig.getApplicationId().equals(applicationId))
+			throw new NotFoundException("the configuration does not exist in the provided application");
+			
+		return super.Update(config);
+	}
+	
 	@POST
-	@Authenticate(UserAuthenticationService.class)
-	@Path("/applications/{app_id}/user_groups/{group_id}/configurations")
+	@Authenticate(service = UserAuthenticationService.class, scope = "APPLICATION")
+	@Path("/applications/{application_id}/user_groups/{group_id}/configurations")
 	public Configuration InsertConfigurationForApplicationAndUserGroup(
-			@PathParam("app_id")Integer appId, 
+			@PathParam("application_id")Integer appId, 
 			@PathParam("group_id")Integer groupId,
 			Configuration config) throws Exception 
 	{

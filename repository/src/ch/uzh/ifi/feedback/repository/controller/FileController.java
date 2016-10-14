@@ -37,7 +37,7 @@ public class FileController {
 	
 	@GET
 	@Path("/attachments/{fileName}")
-	@Authenticate(UserAuthenticationService.class)
+	@Authenticate(service = UserAuthenticationService.class)
 	public void GetAttachmentFile(@PathParam("fileName") String filename) throws IOException
 	{
 		returnBinaryFile(filename, "attachments");
@@ -45,7 +45,7 @@ public class FileController {
 	
 	@GET
 	@Path("/audios/{fileName}")
-	@Authenticate(UserAuthenticationService.class)
+	@Authenticate(service = UserAuthenticationService.class)
 	public void GetAudioFile(@PathParam("fileName") String filename) throws IOException
 	{
 		returnBinaryFile(filename, "audios");
@@ -53,7 +53,7 @@ public class FileController {
 	
 	@GET
 	@Path("/screenshots/{fileName}")
-	@Authenticate(UserAuthenticationService.class)
+	@Authenticate(service = UserAuthenticationService.class)
 	public void GetScreenshot(@PathParam("fileName") String filename) throws IOException
 	{
 		returnBinaryFile(filename, "screenshots");
@@ -61,7 +61,7 @@ public class FileController {
 	
 	@GET
 	@Path("/screenshots/{fileName}/base64")
-	@Authenticate(UserAuthenticationService.class)
+	@Authenticate(service = UserAuthenticationService.class)
 	public void GetScreenshotAsBase64(@PathParam("fileName") String filename) throws IOException
 	{
 		String rootPath = System.getProperty("catalina.home");

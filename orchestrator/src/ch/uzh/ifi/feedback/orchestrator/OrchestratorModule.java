@@ -12,8 +12,7 @@ public class OrchestratorModule extends AbstractModule{
 	@Override
 	protected void configure() {
 		
-	    bind(IRestManager.class).to(RestManager.class);
 	    bind(IApiUserService.class).to(ApiUserService.class);
+	    bind(IRestManager.class).to(RestManager.class);
 	}
-
 }

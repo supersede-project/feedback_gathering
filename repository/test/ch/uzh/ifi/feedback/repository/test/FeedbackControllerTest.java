@@ -19,7 +19,7 @@ import static java.util.Arrays.asList;
 
 public class FeedbackControllerTest extends ServletTest {
 	
-	private final int NUMBER_OF_FEEDBACK_RECORDS = 10;
+	private final int NUMBER_OF_FEEDBACK_RECORDS = 11;
 	
 	@Override
 	protected UserToken AuthenticateUser() throws IOException
@@ -33,28 +33,28 @@ public class FeedbackControllerTest extends ServletTest {
 				UserToken.class);
 	}
 	
-	public void testRetrievingAllFeedbacks() throws ClientProtocolException, IOException {
+	public void testRetrievingAllFeedbacksForApplication() throws ClientProtocolException, IOException {
 		Feedback[] retrievedFeedbacks = GetSuccess(
-				"http://localhost:8080/feedback_repository/en/feedbacks", 
+				"http://localhost:8080/feedback_repository/en/applications/1/feedbacks", 
 				Feedback[].class);
 
 		assertEquals(retrievedFeedbacks.length, NUMBER_OF_FEEDBACK_RECORDS);
 	}
 
-	public void testRetrievingSingleFeedbacks() throws ClientProtocolException, IOException {
+	public void testRetrievingSingleFeedbackForApplication() throws ClientProtocolException, IOException {
 		Feedback retrievedFeedback = GetSuccess(
-				"http://localhost:8080/feedback_repository/en/feedbacks/57", 
+				"http://localhost:8080/feedback_repository/en/applications/1/feedbacks/57", 
 				Feedback.class);
 		
 		assertEquals(retrievedFeedback.getId(), new Integer(57));		
-		assertEquals(retrievedFeedback.getApplicationId(), 1l);		
+		assertEquals(retrievedFeedback.getApplicationId(), new Integer(1));		
 	}
 	
 	public void testDeleteSingleFeedback() throws ClientProtocolException, IOException {
-		DeleteSuccess("http://localhost:8080/feedback_repository/en/feedbacks/57");
+		DeleteSuccess("http://localhost:8080/feedback_repository/en/applications/1/feedbacks/57");
 		
 		Feedback[] retrievedFeedbacks = GetSuccess(
-				"http://localhost:8080/feedback_repository/en/feedbacks", 
+				"http://localhost:8080/feedback_repository/en/applications/1/feedbacks", 
 				Feedback[].class);
 		
 		assertFalse(asList(retrievedFeedbacks).stream().anyMatch(f -> f.getId().equals(new Integer(57))));
@@ -77,11 +77,11 @@ public class FeedbackControllerTest extends ServletTest {
 		builder.setContentType(ContentType.MULTIPART_FORM_DATA);
 		
 		Feedback createdFeedback = PostSuccess(
-				"http://localhost:8080/feedback_repository/en/feedbacks", 
+				"http://localhost:8080/feedback_repository/en/applications/1/feedbacks", 
 				builder.build(),
 				Feedback.class);
 		
-	    assertEquals(createdFeedback.getApplicationId(), 1l);	
+	    assertEquals(createdFeedback.getApplicationId(), new Integer(1));	
 	    assertEquals(createdFeedback.getTitle(), "test_feedback");
 	    assertEquals(createdFeedback.getRatingFeedbacks().size(), 2);
 	    assertEquals(createdFeedback.getCategoryFeedbacks().size(), 2);
