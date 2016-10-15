@@ -29,7 +29,6 @@ package com.example.matthias.feedbacklibrary.views;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.Bitmap.CompressFormat;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -47,7 +46,6 @@ import android.widget.RelativeLayout;
 
 import com.example.matthias.feedbacklibrary.utils.Utils;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -239,7 +237,7 @@ public class AnnotateImageView extends ImageView {
         float y = textY;
 
         for (int i = 0, len = text.length(); i < len; i += modNumChars) {
-            String substring = "";
+            String substring;
 
             if ((i + modNumChars) < len) {
                 substring = text.substring(i, (i + modNumChars));
@@ -504,7 +502,7 @@ public class AnnotateImageView extends ImageView {
         }
     }
 
-    private void onActionUp(MotionEvent event) {
+    private void onActionUp() {
         if (isDown) {
             startX = 0F;
             startY = 0F;
@@ -571,7 +569,7 @@ public class AnnotateImageView extends ImageView {
                 onActionMove(event);
                 break;
             case MotionEvent.ACTION_UP:
-                onActionUp(event);
+                onActionUp();
                 break;
             default:
                 break;
