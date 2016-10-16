@@ -80,14 +80,15 @@ classes/
 *.iml
 *.ipr
 
+
 /node_modules
-/lib
+# /lib
 
 /site/_site
 /site/lib
 
 notes.md
-/dist
+# /dist
 
 /customers
 /npm
