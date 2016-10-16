@@ -83,128 +83,56 @@
             ga('send', 'pageview');
 
         </script>
-        END - Google Analytics -->
+        END - Google Analytics 
 
         <script type="text/javascript" src="form-builder/form-builder.js"></script>
-        <link type="text/css" href="form-builder/form-builder.css" rel="stylesheet" />
+        <link type="text/css" href="form-builder/form-builder.css" rel="stylesheet" /> 
+
+        <style>
+            #draggable {
+                width: 100px;
+                height: 100px;
+                background: #ccc;
+            }
+        </style> -->
 
     </head>
-    <body data-spy="scroll" data-target=".demo-nav">
-        <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
-            <!-- Brand and toggle get grouped for better mobile display -->
-            <div class="navbar-header"><h1>Orchestrator GUI</h1></div>
-        </nav>
+    <body>
+        <div class=container-fluid><h1>Orchestrator GUI</h1></div>
 
-        <div class="container">
+       
+        <div class="row">
+        
+            <div class="col-xs-4" style="border:2px ridge">Form Components
+                <div class="row">
+                    <div class="col-xs-12" id="draggable" style="background-color: lightblue">
+
+                        <input type="text" class="form-control" placeholder="Text input">
 
 
-                <div class="col-md-12">
-                    <div>
-                        <ul class="nav nav-tabs">
-                            <li class="active"><a href="#source" data-toggle="tab" class="tab-item tab-item-source">Source</a></li>
-                            <li><a href="#designer" data-toggle="tab" class="tab-item tab-item-designer">Designer</a></li>
-                            <li><a href="#view" data-toggle="tab" class="tab-item tab-item-view">View</a></li>
-                            <li><a href="#code" data-toggle="tab" class="tab-item tab-item-code">Code</a></li>
-                            <li><a href="#loadsave" data-toggle="tab" class="tab-item tab-item-loadsave">Load / Save</a></li>
-                        </ul>
-                    </div>
-                    <div class="tab-content">
-                        <div class="tab-pane active" id="source">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div>
-                                        <ul class="nav nav-tabs">
-                                            <li class="active"><a href="#schema" data-toggle="tab" class="tab-source-schema">Schema</a></li>
-                                            <li><a href="#options" data-toggle="tab" class="tab-source-options">Options</a></li>
-                                            <li><a href="#data" data-toggle="tab" class="tab-source-data">Data</a></li>
-                                        </ul>
-                                    </div>
-                                    <div class="tab-content">
-                                        <div class="tab-pane active" id="schema">
-                                        </div>
-                                        <div class="tab-pane" id="options">
-                                        </div>
-                                        <div class="tab-pane" id="data">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div>
-                                        <ul class="nav nav-tabs">
-                                            <li class="active"><a href="#preview" data-toggle="tab">Preview</a></li>
-                                        </ul>
-                                    </div>
-                                    <div class="tab-content">
-                                        <div class="tab-pane active" id="preview">
-                                            <div class="row">
-                                                <div class="col-md-12">
-                                                    <div id="previewDiv"></div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="tab-pane" id="designer">
-                            <div class="row">
-                                <div class="col-md-7">
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <div id="designerDiv"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-5">
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <div>
-                                                <ul class="nav nav-tabs">
-                                                    <li class="active"><a href="#types" data-toggle="tab">Types</a></li>
-                                                    <li><a href="#basic" data-toggle="tab">Basic</a></li>
-                                                    <li><a href="#advanced" data-toggle="tab">Advanced</a></li>
-                                                </ul>
-                                            </div>
-                                            <div class="tab-content">
-                                                <div class="tab-pane active" id="types"></div>
-                                                <div class="tab-pane" id="basic"></div>
-                                                <div class="tab-pane" id="advanced"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="tab-pane" id="view">
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div id="viewDiv"></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="tab-pane" id="code">
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div id="codeDiv"></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="tab-pane" id="loadsave">
-                            <div class="row">
-                                <div class="col-md-12">
+                        <script>
+                        $("#draggable").draggable();
+                        </script> 
 
-                                    <button class="btn btn-default load-button">Load Form</button>
-                                    <br/>
-                                    <br/>
-                                    <button class="btn btn-default save-button">Save Form</button>
-                                    <br/>
+                        Drag me!
 
-                                </div>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
+
+
+            <!-- <div id="draggable">Drag me</div> -->
+         
+            
+
+
+            <div class="col-xs-8" style="border:2px ridge">Form</div>
+            
         </div>
+        
+
+        
+
+        
     </body>
 </html>
