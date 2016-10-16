@@ -1,7 +1,7 @@
-import {readJSON} from '../../services/mocks/mocks_loader';
 import {Application} from './application';
 import {GeneralConfiguration} from '../configurations/general_configuration';
 import {Parameter} from '../parameters/parameter';
+import {readJSON} from '../../services/mocks/mocks_loader';
 
 
 describe('Application', () => {

@@ -7,7 +7,7 @@ import com.google.inject.Provider;
 import com.google.inject.Singleton;
 import com.google.inject.name.Named;
 
-import ch.uzh.ifi.feedback.library.rest.Service.DatabaseConfiguration;
+import ch.uzh.ifi.feedback.library.transaction.DatabaseConfiguration;
 import ch.uzh.ifi.feedback.orchestrator.model.User;
 
 @Singleton

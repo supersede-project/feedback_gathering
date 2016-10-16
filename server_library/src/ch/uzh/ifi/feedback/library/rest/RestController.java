@@ -8,8 +8,8 @@ import javax.servlet.http.HttpServletResponse;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import ch.uzh.ifi.feedback.library.rest.Service.IDbItem;
-import ch.uzh.ifi.feedback.library.rest.Service.IDbService;
+import ch.uzh.ifi.feedback.library.rest.service.IDbItem;
+import ch.uzh.ifi.feedback.library.rest.service.IDbService;
 import ch.uzh.ifi.feedback.library.rest.validation.IValidator;
 import ch.uzh.ifi.feedback.library.rest.validation.ValidationException;
 import ch.uzh.ifi.feedback.library.rest.validation.ValidationResult;

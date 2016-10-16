@@ -29,7 +29,6 @@ package com.example.matthias.feedbacklibrary.views;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.Bitmap.CompressFormat;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -40,7 +39,6 @@ import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -48,7 +46,6 @@ import android.widget.RelativeLayout;
 
 import com.example.matthias.feedbacklibrary.utils.Utils;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -112,30 +109,36 @@ public class AnnotateImageView extends ImageView {
     private int initH;
 
     /**
+     * Constructor
+     *
      * @param context  the context
      * @param attrs    the attrs
      * @param defStyle the defStyle
      */
     public AnnotateImageView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        setup(context);
+        setup();
     }
 
     /**
+     * Constructor
+     *
      * @param context the context
      * @param attrs   the attrs
      */
     public AnnotateImageView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        setup(context);
+        setup();
     }
 
     /**
+     * Constructor
+     *
      * @param context the context
      */
     public AnnotateImageView(Context context) {
         super(context);
-        setup(context);
+        setup();
     }
 
     public void addCroppedImage(File file) {
@@ -148,46 +151,6 @@ public class AnnotateImageView extends ImageView {
         }
     }
 
-    /**
-     * This method initializes the canvas.
-     */
-    public void clear() {
-        Path path = new Path();
-        path.moveTo(0F, 0F);
-        path.addRect(0F, 0F, 1000F, 1000F, Path.Direction.CCW);
-        path.close();
-
-        Paint paint = new Paint();
-        paint.setColor(Color.WHITE);
-        paint.setStyle(Paint.Style.FILL);
-
-        if (historyPointer == pathLists.size()) {
-            pathLists.add(path);
-            paintLists.add(paint);
-            historyPointer++;
-        } else {
-            // On the way of Undo or Redo
-            pathLists.set(historyPointer, path);
-            paintLists.set(historyPointer, paint);
-            historyPointer++;
-
-            for (int i = historyPointer, size = paintLists.size(); i < size; i++) {
-                pathLists.remove(historyPointer);
-                paintLists.remove(historyPointer);
-            }
-        }
-
-        text = "";
-
-        // Clear
-        invalidate();
-    }
-
-    /**
-     * This method creates the instance of Paint and sets the styles for Paint.
-     *
-     * @return paint this returned as the instance of Paint
-     */
     private Paint createPaint() {
         Paint paint = new Paint();
 
@@ -219,13 +182,6 @@ public class AnnotateImageView extends ImageView {
         return paint;
     }
 
-    /**
-     * This method initializes Path.
-     * Namely, this method creates the instance of Path and moves to the current position.
-     *
-     * @param event onTouchEvent event
-     * @return path this  returned as the instance of Path
-     */
     private Path createPath(MotionEvent event) {
         Path path = new Path();
 
@@ -253,20 +209,6 @@ public class AnnotateImageView extends ImageView {
         invalidate();
     }
 
-    /**
-     * This method draws the designated byte array of bitmap to the canvas.
-     *
-     * @param byteArray This is returned as byte array of bitmap.
-     */
-    public void drawBitmap(byte[] byteArray) {
-        drawBitmap(BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length));
-    }
-
-    /**
-     * This method draws the text.
-     *
-     * @param canvas the canvas
-     */
     private void drawText(Canvas canvas) {
         if (text.length() <= 0) {
             return;
@@ -287,7 +229,7 @@ public class AnnotateImageView extends ImageView {
         // Line break automatically
         float textLength = paintForMeasureText.measureText(text);
         float lengthOfChar = textLength / (float) text.length();
-        // text-align : right
+        // Text-align : right
         float restWidth = canvas.getWidth() - textX;
         // The number of characters at 1 line
         int numChars = (lengthOfChar <= 0) ? 1 : (int) Math.floor((double) (restWidth / lengthOfChar));
@@ -295,7 +237,7 @@ public class AnnotateImageView extends ImageView {
         float y = textY;
 
         for (int i = 0, len = text.length(); i < len; i += modNumChars) {
-            String substring = "";
+            String substring;
 
             if ((i + modNumChars) < len) {
                 substring = text.substring(i, (i + modNumChars));
@@ -317,12 +259,8 @@ public class AnnotateImageView extends ImageView {
         noActionExecuted = false;
     }
 
-    public int getBaseColor() {
-        return baseColor;
-    }
-
     /**
-     * This method returns the part of current canvas which represents the image, i.e., the 'bitmap part' of the whole view as a bitmap.
+     * This method returns the part of the current canvas which represents the image, i.e., the 'bitmap part' of the whole view as a bitmap.
      *
      * @return This is returned as bitmap.
      */
@@ -349,31 +287,7 @@ public class AnnotateImageView extends ImageView {
     }
 
     /**
-     * This method returns the bitmap as byte array.
-     *
-     * @param format  the format
-     * @param quality the quality
-     * @return the bitmap as byte array
-     */
-    public byte[] getBitmapAsByteArray(CompressFormat format, int quality) {
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        getWholeViewBitmap().compress(format, quality, byteArrayOutputStream);
-
-        return byteArrayOutputStream.toByteArray();
-    }
-
-    /**
-     * This method returns the bitmap as a byte array.
-     * Bitmap format is PNG and quality is 100.
-     *
-     * @return the bitmap as byte array
-     */
-    public byte[] getBitmapAsByteArray() {
-        return getBitmapAsByteArray(CompressFormat.PNG, 100);
-    }
-
-    /**
-     * This method returns the height of the bitmap
+     * This method returns the height of the bitmap.
      *
      * @return the height
      */
@@ -382,7 +296,7 @@ public class AnnotateImageView extends ImageView {
     }
 
     /**
-     * This method returns the width of the bitmap
+     * This method returns the width of the bitmap.
      *
      * @return the width
      */
@@ -390,93 +304,62 @@ public class AnnotateImageView extends ImageView {
         return bitmap.getWidth();
     }
 
+    /**
+     * This method returns the blur factor
+     *
+     * @return the blur
+     */
     public float getBlur() {
         return blur;
     }
 
+    /**
+     * This method returns the list of files from all cropped images.
+     *
+     * @return the file list
+     */
     public List<File> getCroppedImageLists() {
         return croppedImageLists;
     }
 
-    /**
-     * This method gets the instance of Path that the pointer indicates.
-     *
-     * @return the instance of Path
-     */
     private Path getCurrentPath() {
         return pathLists.get(historyPointer - 1);
     }
 
-    public Drawer getDrawer() {
-        return drawer;
-    }
-
-    public Typeface getFontFamily() {
-        return fontFamily;
-    }
-
-    public float getFontSize() {
-        return fontSize;
-    }
-
-    public Paint.Cap getLineCap() {
-        return lineCap;
-    }
-
-    public Paint.Join getLineJoin() {
-        return lineJoin;
-    }
-
-    public Mode getMode() {
-        return mode;
-    }
-
-    public int getOpacity() {
-        return opacity;
-    }
-
+    /**
+     * This method returns the fill color of the paint.
+     *
+     * @return the fill color
+     */
     public int getPaintFillColor() {
         return paintFillColor;
     }
 
+    /**
+     * This method returns the stroke color of the paint.
+     *
+     * @return the stroke color
+     */
     public int getPaintStrokeColor() {
         return paintStrokeColor;
     }
 
-    public float getPaintStrokeWidth() {
-        return paintStrokeWidth;
-    }
-
+    /**
+     * This method returns the style of the paint.
+     *
+     * @return the paint style
+     */
     public Paint.Style getPaintStyle() {
         return paintStyle;
     }
 
     /**
-     * This method gets the current canvas as a scaled bitmap.
+     * This method returns the text.
      *
-     * @return the scaled bitmap.
+     * @return the text
      */
-    public Bitmap getScaleBitmap(int w, int h) {
-        setDrawingCacheEnabled(false);
-        setDrawingCacheEnabled(true);
-
-        return Bitmap.createScaledBitmap(getDrawingCache(), w, h, true);
-    }
-
     public String getText() {
         return text;
-    }
-
-    /**
-     * This method returns the current canvas, i.e., the whole view as a bitmap.
-     *
-     * @return This is returned as bitmap.
-     */
-    public Bitmap getWholeViewBitmap() {
-        setDrawingCacheEnabled(false);
-        setDrawingCacheEnabled(true);
-
-        return Bitmap.createBitmap(getDrawingCache());
     }
 
     /**
@@ -497,11 +380,6 @@ public class AnnotateImageView extends ImageView {
         return (historyPointer > 1 || startHistoryPointer > 0);
     }
 
-    /**
-     * This method defines the action on MotionEvent.ACTION_DOWN.
-     *
-     * @param event MotionEvent even, i.e., the argument of onTouchEvent method
-     */
     private void onActionDown(MotionEvent event) {
         switch (mode) {
             case DRAW:
@@ -535,11 +413,6 @@ public class AnnotateImageView extends ImageView {
         }
     }
 
-    /**
-     * This method defines the action on MotionEvent.ACTION_MOVE.
-     *
-     * @param event MotionEvent even, i.e., the argument of onTouchEvent method
-     */
     private void onActionMove(MotionEvent event) {
         float x = event.getX();
         float y = event.getY();
@@ -629,12 +502,7 @@ public class AnnotateImageView extends ImageView {
         }
     }
 
-    /**
-     * This method defines the action on MotionEvent.ACTION_DOWN.
-     *
-     * @param event MotionEvent even, i.e., the argument of onTouchEvent method
-     */
-    private void onActionUp(MotionEvent event) {
+    private void onActionUp() {
         if (isDown) {
             startX = 0F;
             startY = 0F;
@@ -643,7 +511,7 @@ public class AnnotateImageView extends ImageView {
     }
 
     /**
-     * This method updates the instance of the canvas, i.e., the view
+     * This method updates the instance of the canvas, i.e., the view.
      *
      * @param canvas the new instance of Canvas
      */
@@ -701,7 +569,7 @@ public class AnnotateImageView extends ImageView {
                 onActionMove(event);
                 break;
             case MotionEvent.ACTION_UP:
-                onActionUp(event);
+                onActionUp();
                 break;
             default:
                 break;
@@ -806,6 +674,11 @@ public class AnnotateImageView extends ImageView {
         lineCap = cap;
     }
 
+    /**
+     * This method sets the line join.
+     *
+     * @param lineJoin the line join
+     */
     public void setLineJoin(Paint.Join lineJoin) {
         this.lineJoin = lineJoin;
     }
@@ -895,10 +768,7 @@ public class AnnotateImageView extends ImageView {
         this.undoButton = undoButton;
     }
 
-    /**
-     * @param context the context
-     */
-    private void setup(Context context) {
+    private void setup() {
         pathLists.add(new Path());
         paintLists.add(createPaint());
         historyPointer++;
@@ -982,12 +852,6 @@ public class AnnotateImageView extends ImageView {
         updateCroppedImage();
     }
 
-    /**
-     * This method updates the lists for the instance of Path and Paint.
-     * "Undo" and "Redo" are enabled by this method.
-     *
-     * @param path the instance of Path
-     */
     private void updateHistory(Path path) {
         if (noActionExecuted) {
             enableUndoDisableRedo();
@@ -1028,5 +892,4 @@ public class AnnotateImageView extends ImageView {
         QUADRATIC_BEZIER,
         QUBIC_BEZIER
     }
-
 }

@@ -15,6 +15,8 @@ define(["require", "exports", './config', '../views/pagination_container', '../v
         var language;
         var dropArea;
         var dialogCSSClass;
+        var colorPickerCSSClass;
+        var defaultStrokeWidth;
         var initApplication = function (applicationObject) {
             application = applicationObject;
             applicationContext = application.getContextForView();
@@ -169,6 +171,8 @@ define(["require", "exports", './config', '../views/pagination_container', '../v
             var dialogSelector = '[aria-describedby="' + containerId + '"]';
             var screenshotPreview = container.find('.screenshot-preview'), screenshotCaptureButton = container.find('button.take-screenshot'), elementToCapture = $('' + elementToCaptureSelector), elementsToHide = ['.ui-widget-overlay.ui-front', dialogSelector];
             var screenshotView = new screenshot_view_1.ScreenshotView(screenshotMechanism, screenshotPreview, screenshotCaptureButton, elementToCapture, container, distPath, elementsToHide);
+            screenshotView.colorPickerCSSClass = colorPickerCSSClass;
+            screenshotView.setDefaultStrokeWidth(defaultStrokeWidth);
             screenshotMechanism.setScreenshotView(screenshotView);
             return screenshotView;
         };
@@ -368,6 +372,8 @@ define(["require", "exports", './config', '../views/pagination_container', '../v
             distPath = currentOptions.distPath;
             userId = currentOptions.userId;
             dialogCSSClass = currentOptions.dialogCSSClass;
+            colorPickerCSSClass = currentOptions.colorPickerCSSClass;
+            defaultStrokeWidth = currentOptions.defaultStrokeWidth;
             language = i18n_1.I18nHelper.getLanguage(this.options);
             i18n_1.I18nHelper.initializeI18n(this.options);
             var applicationService = new application_service_1.ApplicationService(language);
@@ -395,11 +401,13 @@ define(["require", "exports", './config', '../views/pagination_container', '../v
         $.fn.feedbackPlugin.defaults = {
             'color': '#fff',
             'lang': 'de',
-            'backgroundColor': '#1A6FC2',
+            'backgroundColor': '#7c9009',
             'fallbackLang': 'en',
             'distPath': 'dist/',
             'userId': '',
-            'dialogCSSClass': 'feedback-dialog'
+            'dialogCSSClass': 'feedback-dialog',
+            'colorPickerCSSClass': 'color-picker',
+            'defaultStrokeWidth': 4
         };
     };
     (function ($, window, document) {

@@ -33,8 +33,8 @@ import org.apache.http.util.EntityUtils;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import ch.uzh.ifi.feedback.library.rest.Service.DatabaseConfiguration;
 import ch.uzh.ifi.feedback.library.rest.authorization.UserToken;
+import ch.uzh.ifi.feedback.library.transaction.DatabaseConfiguration;
 import junit.framework.TestCase;
 
 public class ServletTest extends TestCase {
@@ -98,7 +98,7 @@ public class ServletTest extends TestCase {
 		String jsonString = IOUtils.toString(stream); 
 		
 		return PostSuccess(
-				"http://localhost:8080/feedback_orchestrator/authenticate", 
+				"http://localhost:8080/feedback_orchestrator/feedback/authenticate", 
 				jsonString,
 				UserToken.class);
 	}

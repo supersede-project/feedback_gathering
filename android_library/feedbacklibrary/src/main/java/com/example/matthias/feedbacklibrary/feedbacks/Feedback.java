@@ -1,6 +1,7 @@
 package com.example.matthias.feedbacklibrary.feedbacks;
 
 import android.os.Build;
+import android.util.Log;
 
 import com.example.matthias.feedbacklibrary.models.AttachmentMechanism;
 import com.example.matthias.feedbacklibrary.models.AudioMechanism;
@@ -54,7 +55,6 @@ public class Feedback implements Serializable {
                 String type = mechanism.getType();
                 switch (type) {
                     case Mechanism.ATTACHMENT_TYPE:
-                        // TODO: Implement attachment mechanism
                         AttachmentMechanism attachmentMechanism = (AttachmentMechanism) mechanism;
                         break;
                     case Mechanism.AUDIO_TYPE:
@@ -80,26 +80,12 @@ public class Feedback implements Serializable {
                         textFeedbacks.add(new TextFeedback((TextMechanism) mechanism));
                         break;
                     default:
-                        // should never happen!
+                        Log.wtf("Feedback", "Unknown mechanism type '" + type + "'");
                         break;
                 }
 
             }
         }
-    }
-
-    public void initContextInformation() {
-        contextInformation = new HashMap<>();
-        contextInformation.put("release", Build.VERSION.RELEASE);
-        contextInformation.put("device", Build.DEVICE);
-        contextInformation.put("model", Build.MODEL);
-        contextInformation.put("product", Build.PRODUCT);
-        contextInformation.put("brand", Build.BRAND);
-        contextInformation.put("display", Build.DISPLAY);
-        contextInformation.put("androidId", Build.ID);
-        contextInformation.put("manufacturer", Build.MANUFACTURER);
-        contextInformation.put("serial", Build.SERIAL);
-        contextInformation.put("host", Build.HOST);
     }
 
     public long getApplicationId() {
@@ -148,6 +134,20 @@ public class Feedback implements Serializable {
 
     public String getUserIdentification() {
         return userIdentification;
+    }
+
+    public void initContextInformation() {
+        contextInformation = new HashMap<>();
+        contextInformation.put("release", Build.VERSION.RELEASE);
+        contextInformation.put("device", Build.DEVICE);
+        contextInformation.put("model", Build.MODEL);
+        contextInformation.put("product", Build.PRODUCT);
+        contextInformation.put("brand", Build.BRAND);
+        contextInformation.put("display", Build.DISPLAY);
+        contextInformation.put("androidId", Build.ID);
+        contextInformation.put("manufacturer", Build.MANUFACTURER);
+        contextInformation.put("serial", Build.SERIAL);
+        contextInformation.put("host", Build.HOST);
     }
 
     public void setApplicationId(long applicationId) {

@@ -24,6 +24,11 @@ public class GuiceRepositoryContextListener extends GuiceServletContextListener 
 	            throw new IllegalStateException("language must be manually seeded");
 	        }
 	        
+	        @Provides @Named("application") @RequestScoped Integer provideApplication() 
+	        {
+	        	return null;
+	        }
+	        
 	      });
 	  }
 	}

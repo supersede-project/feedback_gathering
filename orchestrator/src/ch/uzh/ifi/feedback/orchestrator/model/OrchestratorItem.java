@@ -2,8 +2,8 @@ package ch.uzh.ifi.feedback.orchestrator.model;
 
 import java.sql.Timestamp;
 
-import ch.uzh.ifi.feedback.library.rest.Service.ItemBase;
 import ch.uzh.ifi.feedback.library.rest.annotations.DbAttribute;
+import ch.uzh.ifi.feedback.library.rest.service.ItemBase;
 
 public abstract class OrchestratorItem<T> extends ItemBase<T> implements IOrchestratorItem<T> {
 

@@ -32,6 +32,7 @@ import javax.servlet.http.Part;
 
 import org.reflections.*;
 import org.reflections.scanners.MethodAnnotationsScanner;
+import org.reflections.scanners.SubTypesScanner;
 import org.reflections.scanners.TypeAnnotationsScanner;
 import org.reflections.util.ClasspathHelper;
 import org.reflections.util.ConfigurationBuilder;
@@ -48,10 +49,6 @@ import com.google.inject.name.Named;
 import com.google.inject.name.Names;
 import com.google.inject.servlet.RequestScoped;
 
-import ch.uzh.ifi.feedback.library.rest.Routing.HandlerInfo;
-import ch.uzh.ifi.feedback.library.rest.Routing.HttpMethod;
-import ch.uzh.ifi.feedback.library.rest.Routing.UriTemplate;
-import ch.uzh.ifi.feedback.library.rest.Service.IDbItem;
 import ch.uzh.ifi.feedback.library.rest.annotations.Authenticate;
 import ch.uzh.ifi.feedback.library.rest.annotations.Controller;
 import ch.uzh.ifi.feedback.library.rest.annotations.DELETE;
@@ -60,9 +57,14 @@ import ch.uzh.ifi.feedback.library.rest.annotations.PUT;
 import ch.uzh.ifi.feedback.library.rest.annotations.Path;
 import ch.uzh.ifi.feedback.library.rest.annotations.PathParam;
 import ch.uzh.ifi.feedback.library.rest.annotations.Serialize;
+import ch.uzh.ifi.feedback.library.rest.annotations.Validate;
 import ch.uzh.ifi.feedback.library.rest.authorization.ITokenAuthenticationService;
+import ch.uzh.ifi.feedback.library.rest.authorization.UserRole;
+import ch.uzh.ifi.feedback.library.rest.routing.HandlerInfo;
+import ch.uzh.ifi.feedback.library.rest.routing.HttpMethod;
+import ch.uzh.ifi.feedback.library.rest.routing.UriTemplate;
 import ch.uzh.ifi.feedback.library.rest.serialization.ISerializationService;
-import ch.uzh.ifi.feedback.library.rest.validation.Validate;
+import ch.uzh.ifi.feedback.library.rest.service.IDbItem;
 import ch.uzh.ifi.feedback.library.rest.validation.ValidationException;
 import ch.uzh.ifi.feedback.library.rest.validation.ValidationResult;
 import ch.uzh.ifi.feedback.library.rest.validation.ValidatorBase;
@@ -74,7 +76,6 @@ public class RestManager implements IRestManager {
 	private List<HandlerInfo> _handlers;
 	private Map<Class<?>, Method> _parserMap;
 	private Map<Class<?>, Class<? extends ISerializationService<?>>> _serializerMap;
-	private Map<Method, Class<? extends ITokenAuthenticationService>> _authentiactionMap;
 	private Injector _injector;
 
 	@Inject
@@ -85,19 +86,18 @@ public class RestManager implements IRestManager {
 		_handlers = new ArrayList<>();
 		_parserMap = new HashMap<>();
 		_serializerMap = new HashMap<>();
-		_authentiactionMap = new HashMap<>();
 	}
 
 	public void Init(String packageName) throws Exception {
 		
 		InitParserMap();
 		
-		Set<URL> packages = ClasspathHelper.forPackage(packageName);
+		Collection<URL> packages = ClasspathHelper.forPackage(packageName);
 		packages.addAll(ClasspathHelper.forPackage("ch.uzh.ifi.feedback.library.rest"));
 		
 		Reflections reflections = new Reflections(new ConfigurationBuilder()
                 .setUrls(packages)
-                .setScanners(new MethodAnnotationsScanner(), new TypeAnnotationsScanner()));
+                .setScanners(new MethodAnnotationsScanner(), new TypeAnnotationsScanner(), new SubTypesScanner()));
 		
 		InitHandlerTable(reflections);
 	}
@@ -107,7 +107,6 @@ public class RestManager implements IRestManager {
 		Set<Class<?>> controllerAnnotated = reflections.getTypesAnnotatedWith(Controller.class);
 		for(Class<?> clazz : controllerAnnotated){
 			Class<?> parameterClass = clazz.getAnnotation(Controller.class).value();
-			
 			
 			if(parameterClass.isAnnotationPresent(Serialize.class))
 			{
@@ -147,7 +146,13 @@ public class RestManager implements IRestManager {
 					if(_handlers.stream().anyMatch((h) -> h.GetHttpMethod() == methodFinal && h.getUriTemplate().Match(path) != null))
 						throw new AlreadyBoundException("handler for template '" + path + "' already registered!/n");
 				
-					HandlerInfo info = new HandlerInfo(m, method, clazz, parameterClass, template);
+					Authenticate auth = null;
+					if(m.isAnnotationPresent(Authenticate.class))
+					{
+						auth = m.getAnnotation(Authenticate.class);
+					}
+					
+					HandlerInfo info = new HandlerInfo(m, method, clazz, parameterClass, template, auth);
 					
 					Parameter[] params = m.getParameters();
 					for(int i = 0; i < params.length; i++){
@@ -162,9 +167,6 @@ public class RestManager implements IRestManager {
 							throw new Exception("No annotation for parameter " + params[i].getName() + " present!/n");
 						}
 					}
-					
-					if(m.isAnnotationPresent(Authenticate.class))
-						_authentiactionMap.put(m, m.getAnnotation(Authenticate.class).value());
 
 					_handlers.add(info);
 				}
@@ -185,7 +187,6 @@ public class RestManager implements IRestManager {
 	public void Get(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {	
 		try {
 			InvokeHandler(request, response, HttpMethod.GET);
-			response.setStatus(200);
 		}
 		catch(Exception ex){
 			HandleExceptions(response, ex);
@@ -206,7 +207,6 @@ public class RestManager implements IRestManager {
 	public void Post(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		try {
 			InvokeHandler(request, response, HttpMethod.POST);
-			response.setStatus(201);
 		}
 		catch(Exception ex){
 			HandleExceptions(response, ex);
@@ -246,7 +246,6 @@ public class RestManager implements IRestManager {
 	public void Put(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		try {
 			InvokeHandler(request, response, HttpMethod.PUT);
-			response.setStatus(200);
 		} 
 		catch(Exception ex){
 			HandleExceptions(response, ex);
@@ -257,7 +256,6 @@ public class RestManager implements IRestManager {
 	public void Delete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		try {
 			InvokeHandler(request, response, HttpMethod.DELETE);
-			response.setStatus(200);
 		}
 		catch(Exception ex){
 			HandleExceptions(response, ex);
@@ -282,17 +280,26 @@ public class RestManager implements IRestManager {
 			throw new NotFoundException("ressource '" + path + "' does not exist");
 		}
 		
-		//Do token authentication if needed
-		Class<? extends ITokenAuthenticationService> authServiceClazz = _authentiactionMap.get(handler.getMethod());
-		if(authServiceClazz != null)
-		{
-			ITokenAuthenticationService authService = _injector.getInstance(authServiceClazz);
-			if(!authService.Authenticate(request))
-				throw new AuthenticationException("the provided usertoken does not match!");
-		}
-		
 		Map<String, String> params = handler.getUriTemplate().Match(path);
 		List<Object> parameters = new ArrayList<>();
+		
+		//set application scope variable if exists
+		String application = params.get("application_id");
+		Integer applicationId = application == null ? null : Integer.valueOf(application);
+        request.setAttribute(
+	             Key.get(Integer.class, Names.named("application")).toString(),
+	             applicationId);
+		
+		//Do token authentication if needed
+        Authenticate auth = handler.getAuth();
+        if(auth != null)
+        {
+    		Class<? extends ITokenAuthenticationService> authServiceClazz = auth.service();
+			ITokenAuthenticationService authService = _injector.getInstance(authServiceClazz);
+			if(!authService.Authenticate(request, auth))
+				throw new AuthenticationException("User is not authorized for the provided operation");
+        }
+
 		String language = params.get("lang");
         request.setAttribute(
 	             Key.get(String.class, Names.named("language")).toString(),

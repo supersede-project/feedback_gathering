@@ -1,9 +1,25 @@
+/**
+ * Copyright [2016] [Matthias Scherrer]
+ * <p/>
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * <p/>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p/>
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.example.matthias.feedbacklibrary;
 
 import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -12,12 +28,14 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.UserManager;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -53,6 +71,7 @@ import java.util.Map;
 
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -62,7 +81,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 /**
  * The main activity where the feedback mechanisms are displayed.
  */
-public class FeedbackActivity extends AppCompatActivity implements ScreenshotMechanismView.OnImageChangedListener {
+public class FeedbackActivity extends AppCompatActivity implements ScreenshotMechanismView.OnImageChangedListener, AudioMechanismView.MultipleAudioMechanismsListener {
     public final static String ANNOTATED_IMAGE_NAME_WITHOUT_STICKERS = "annotatedImageWithoutStickers.png";
     public final static String ANNOTATED_IMAGE_NAME_WITH_STICKERS = "annotatedImageWithStickers.png";
     public final static String CONFIGURATION_DIR = "configDir";
@@ -71,7 +90,6 @@ public class FeedbackActivity extends AppCompatActivity implements ScreenshotMec
     public final static String JSON_CONFIGURATION_FILE_NAME = "currentConfiguration.json";
     public final static String JSON_CONFIGURATION_STRING = "jsonConfigurationString";
     public final static String SELECTED_PULL_CONFIGURATION_INDEX_STRING = "selectedPullConfigurationIndex";
-    public final static int TEXT_ANNOTATION_MAXIMUM = 4;
     // Microphone permission (android.permission-group.MICROPHONE)
     public static final int PERMISSIONS_REQUEST_RECORD_AUDIO = 101;
     // Initialization
@@ -84,6 +102,7 @@ public class FeedbackActivity extends AppCompatActivity implements ScreenshotMec
     private static final String MULTIPART_FORM_DATA = "multipart/form-data";
     // Storage permission (android.permission-group.STORAGE)
     private static final int PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 100;
+    private static final String TAG = "FeedbackActivity";
     private feedbackAPI fbAPI;
     // Orchestrator configuration fetched from the orchestrator
     private OrchestratorConfigurationItem orchestratorConfigurationItem;
@@ -124,6 +143,11 @@ public class FeedbackActivity extends AppCompatActivity implements ScreenshotMec
         startActivityForResult(intent, REQUEST_PHOTO);
     }
 
+    /**
+     * This method returns the id of the selected PULL configuration.
+     *
+     * @return the id
+     */
     public long getSelectedPullConfigurationIndex() {
         return selectedPullConfigurationIndex;
     }
@@ -141,12 +165,6 @@ public class FeedbackActivity extends AppCompatActivity implements ScreenshotMec
                 show();
     }
 
-    /**
-     * This method performs a GET request to the feedback orchestrator in order to receive the configuration.
-     *
-     * @param applicationId the application to retrieve
-     * @param language      the language
-     */
     private void init(long applicationId, String baseURL, String language) {
         if (applicationId != -1 && baseURL != null && language != null) {
             Retrofit rtf = new Retrofit.Builder().baseUrl(baseURL).addConverterFactory(GsonConverterFactory.create()).build();
@@ -162,6 +180,7 @@ public class FeedbackActivity extends AppCompatActivity implements ScreenshotMec
                 result.enqueue(new Callback<OrchestratorConfigurationItem>() {
                     @Override
                     public void onFailure(Call<OrchestratorConfigurationItem> call, Throwable t) {
+                        Log.e(TAG, "Failed to retrieve the configuration. onFailure method called", t);
                         closeProgressDialog();
                         handleConfigurationRetrievalError();
                     }
@@ -169,6 +188,7 @@ public class FeedbackActivity extends AppCompatActivity implements ScreenshotMec
                     @Override
                     public void onResponse(Call<OrchestratorConfigurationItem> call, Response<OrchestratorConfigurationItem> response) {
                         if (response.code() == 200) {
+                            Log.i(TAG, "Configuration successfully retrieved");
                             orchestratorConfigurationItem = response.body();
                             // Save the current configuration under FeedbackActivity.CONFIGURATION_DIR}/FeedbackActivity.JSON_CONFIGURATION_FILE_NAME
                             Gson gson = new Gson();
@@ -178,15 +198,24 @@ public class FeedbackActivity extends AppCompatActivity implements ScreenshotMec
                             initView();
                             closeProgressDialog();
                         } else {
+                            Log.e(TAG, "Failed to retrieve the configuration. Response code == " + response.code());
                             closeProgressDialog();
                             handleConfigurationRetrievalError();
                         }
                     }
                 });
             } else {
+                Log.e(TAG, "Failed to retrieve the configuration. Call<OrchestratorConfigurationItem> result is null");
                 handleConfigurationRetrievalError();
             }
         } else {
+            if (applicationId == -1) {
+                Log.e(TAG, "Failed to retrieve the configuration. applicationId is -1");
+            } else if (baseURL == null) {
+                Log.e(TAG, "Failed to retrieve the configuration. baseURL is null");
+            } else {
+                Log.e(TAG, "Failed to retrieve the configuration. language is null");
+            }
             handleConfigurationRetrievalError();
         }
     }
@@ -199,12 +228,16 @@ public class FeedbackActivity extends AppCompatActivity implements ScreenshotMec
         }
     }
 
-    // TODO: Remove before release
+    // TODO: remove before release
     private void initOfflineConfiguration() {
+        baseURL = "null";
+        language = "null";
+        System.out.println("offlineConfiguration triggered");
+
         String jsonString;
         Gson gson = new Gson();
-        //jsonString = Utils.readFileAsString("android_application_v1_offline.json", getAssets());
-        jsonString = Utils.readFileAsString("android_application_v2_offline_multiple.json", getAssets());
+        jsonString = Utils.readFileAsString("android_application_v1_offline.json", getAssets());
+        //jsonString = Utils.readFileAsString("android_application_v2_offline_multiple.json", getAssets());
         orchestratorConfigurationItem = gson.fromJson(jsonString, OrchestratorConfigurationItem.class);
 
         initModel();
@@ -224,10 +257,8 @@ public class FeedbackActivity extends AppCompatActivity implements ScreenshotMec
                     String type = allMechanisms.get(i).getType();
                     switch (type) {
                         case Mechanism.ATTACHMENT_TYPE:
-                            // TODO: Implement attachment mechanism
                             break;
                         case Mechanism.AUDIO_TYPE:
-                            // TODO: Implement audio mechanism (id or index as prefix?)
                             mechanismView = new AudioMechanismView(layoutInflater, allMechanisms.get(i), getResources(), this, getApplicationContext());
                             view = mechanismView.getEnclosingLayout();
                             break;
@@ -248,7 +279,7 @@ public class FeedbackActivity extends AppCompatActivity implements ScreenshotMec
                             view = mechanismView.getEnclosingLayout();
                             break;
                         default:
-                            // Should never happen!
+                            Log.wtf(TAG, "Unknown mechanism type '" + type + "'");
                             break;
                     }
 
@@ -308,7 +339,7 @@ public class FeedbackActivity extends AppCompatActivity implements ScreenshotMec
                         screenshotMechanismView.setPicturePathWithoutStickers(tempPathWithoutStickers);
                     }
                 } else {
-                    throw new RuntimeException("no " + Utils.EXTRA_KEY_MECHANISM_VIEW_ID + " provided.");
+                    Log.e(TAG, "Failed to annotate the image. No mechanismViewID provided");
                 }
             }
         }
@@ -318,6 +349,13 @@ public class FeedbackActivity extends AppCompatActivity implements ScreenshotMec
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_feedback);
+
+        UserManager userManager = (UserManager) getApplicationContext().getSystemService(Context.USER_SERVICE);
+        if (userManager.isUserAGoat()) {
+            Log.v(TAG, "The user IS a goat and subject to teleportations");
+        } else {
+            Log.v(TAG, "The user IS NOT a goat and subject to teleportations");
+        }
 
         Intent intent = getIntent();
         // Get the default image path for the screenshot if present
@@ -333,6 +371,7 @@ public class FeedbackActivity extends AppCompatActivity implements ScreenshotMec
         baseURL = intent.getStringExtra(EXTRA_KEY_BASE_URL);
         if (!isPush && selectedPullConfigurationIndex != -1 && jsonString != null) {
             // The feedback activity is started on behalf of a triggered pull configuration
+            Log.v(TAG, "The feedback activity is started via a PULL configuration");
 
             // Save the current configuration under FeedbackActivity.CONFIGURATION_DIR}/FeedbackActivity.JSON_CONFIGURATION_FILE_NAME
             Utils.saveStringContentToInternalStorage(getApplicationContext(), CONFIGURATION_DIR, JSON_CONFIGURATION_FILE_NAME, jsonString, MODE_PRIVATE);
@@ -341,14 +380,14 @@ public class FeedbackActivity extends AppCompatActivity implements ScreenshotMec
             initView();
         } else {
             // The feedback activity is started on behalf of the user
+            Log.v(TAG, "The feedback activity is started via a PUSH configuration");
 
-            // TODO: Uncomment before release
+            // TODO: remove before release
+            //initOfflineConfiguration();
+
+            // TODO: uncomment before release
             // Get the application id and language
             init(intent.getLongExtra(EXTRA_KEY_APPLICATION_ID, -1L), baseURL, language);
-
-            // TODO: Remove before release
-            // Only for demo purposes
-            //initOfflineConfiguration();
         }
     }
 
@@ -367,7 +406,7 @@ public class FeedbackActivity extends AppCompatActivity implements ScreenshotMec
         String path = screenshotMechanismView.getPicturePathWithoutStickers() == null ? screenshotMechanismView.getPicturePath() : screenshotMechanismView.getPicturePathWithoutStickers();
         intent.putExtra(Utils.EXTRA_KEY_MECHANISM_VIEW_ID, screenshotMechanismView.getMechanismViewIndex());
         intent.putExtra(Utils.EXTRA_KEY_IMAGE_PATCH, path);
-        intent.putExtra(Utils.TEXT_ANNOTATION_COUNTER_MAXIMUM, TEXT_ANNOTATION_MAXIMUM);
+        intent.putExtra(Utils.TEXT_ANNOTATION_COUNTER_MAXIMUM, screenshotMechanismView.getMaxNumberTextAnnotation());
         startActivityForResult(intent, REQUEST_ANNOTATE);
     }
 
@@ -399,6 +438,27 @@ public class FeedbackActivity extends AppCompatActivity implements ScreenshotMec
             }
         });
         builder.show();
+    }
+
+    @Override
+    public void onRecordStart(long audioMechanismId) {
+        for (MechanismView mechanismView : allMechanismViews) {
+            if (mechanismView instanceof AudioMechanismView) {
+                AudioMechanismView view = ((AudioMechanismView) mechanismView);
+                if (view.getAudioMechanismId() != audioMechanismId) {
+                    view.setAllButtonsClickable(false);
+                }
+            }
+        }
+    }
+
+    @Override
+    public void onRecordStop() {
+        for (MechanismView mechanismView : allMechanismViews) {
+            if (mechanismView instanceof AudioMechanismView) {
+                ((AudioMechanismView) mechanismView).setAllButtonsClickable(true);
+            }
+        }
     }
 
     @Override
@@ -507,72 +567,103 @@ public class FeedbackActivity extends AppCompatActivity implements ScreenshotMec
                     fbAPI = rtf.create(feedbackAPI.class);
                 }
 
-                Feedback feedback = new Feedback(allMechanisms);
-                feedback.setTitle("Test title");
-                feedback.setApplicationId(orchestratorConfiguration.getId());
-                feedback.setConfigurationId(activeConfiguration.getId());
-                feedback.setLanguage(language);
-                feedback.setUserIdentification(Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
-                //feedback.initContextInformation();
-
-                // The JSON string of the feedback
-                GsonBuilder builder = new GsonBuilder();
-                builder.excludeFieldsWithoutExposeAnnotation();
-                builder.serializeNulls();
-                Gson gson = builder.create();
-                Type feedbackType = new TypeToken<Feedback>() {
-                }.getType();
-                String feedbackJsonString = gson.toJson(feedback, feedbackType);
-                RequestBody feedbackJSONPart = RequestBody.create(MediaType.parse("multipart/form-data"), feedbackJsonString);
-
-                Map<String, RequestBody> files = new HashMap<>();
-                // Audio multipart
-                List<AudioFeedback> audioFeedbackList = feedback.getAudioFeedbacks();
-                if (audioFeedbackList != null) {
-                    for (int pos = 0; pos < audioFeedbackList.size(); ++pos) {
-                        RequestBody requestBody = createRequestBody(new File(audioFeedbackList.get(pos).getAudioPath()));
-                        String fileName = audioFeedbackList.get(pos).getFileName();
-                        String key = String.format("%1$s\"; filename=\"%2$s", audioFeedbackList.get(pos).getPartString() + String.valueOf(pos), fileName);
-                        files.put(key, requestBody);
-                    }
-                }
-                // Screenshots multipart
-                List<ScreenshotFeedback> screenshotFeedbackList = feedback.getScreenshotFeedbacks();
-                if (screenshotFeedbackList != null) {
-                    for (int pos = 0; pos < screenshotFeedbackList.size(); ++pos) {
-                        RequestBody requestBody = createRequestBody(new File(screenshotFeedbackList.get(pos).getImagePath()));
-                        String fileName = screenshotFeedbackList.get(pos).getFileName();
-                        String key = String.format("%1$s\"; filename=\"%2$s", screenshotFeedbackList.get(pos).getPartString() + String.valueOf(pos), fileName);
-                        files.put(key, requestBody);
-                    }
-                }
-
-                // Send the feedback
-                Call<JsonObject> result = fbAPI.createFeedbackVariant(language, feedbackJSONPart, files);
-                if (result != null) {
-                    result.enqueue(new Callback<JsonObject>() {
+                Call<ResponseBody> checkUpAndRunning = fbAPI.pingRepository();
+                if (checkUpAndRunning != null) {
+                    checkUpAndRunning.enqueue(new Callback<ResponseBody>() {
                         @Override
-                        public void onFailure(Call<JsonObject> call, Throwable t) {
+                        public void onFailure(Call<ResponseBody> call, Throwable t) {
+                            Log.e(TAG, "Failed to ping the server. onFailure method called", t);
                             DialogUtils.showInformationDialog(FeedbackActivity.this, new String[]{getResources().getString(R.string.supersede_feedbacklibrary_error_text)}, true);
                         }
 
                         @Override
-                        public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-                            if (response.code() == 200 || response.code() == 201) {
-                                Toast toast = Toast.makeText(getApplicationContext(), getResources().getString(R.string.supersede_feedbacklibrary_success_text), Toast.LENGTH_SHORT);
-                                toast.show();
+                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                            if (response.code() == 200) {
+                                Feedback feedback = new Feedback(allMechanisms);
+                                feedback.setTitle(getResources().getString(R.string.supersede_feedbacklibrary_feedback_title_text, System.currentTimeMillis()));
+                                feedback.setApplicationId(orchestratorConfiguration.getId());
+                                feedback.setConfigurationId(activeConfiguration.getId());
+                                feedback.setLanguage(language);
+                                feedback.setUserIdentification(Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
+
+                                // The JSON string of the feedback
+                                GsonBuilder builder = new GsonBuilder();
+                                builder.excludeFieldsWithoutExposeAnnotation();
+                                builder.serializeNulls();
+                                Gson gson = builder.create();
+                                Type feedbackType = new TypeToken<Feedback>() {
+                                }.getType();
+                                String feedbackJsonString = gson.toJson(feedback, feedbackType);
+                                RequestBody feedbackJSONPart = RequestBody.create(MediaType.parse("multipart/form-data"), feedbackJsonString);
+
+                                Map<String, RequestBody> files = new HashMap<>();
+                                // Audio multipart
+                                List<AudioFeedback> audioFeedbackList = feedback.getAudioFeedbacks();
+                                if (audioFeedbackList != null) {
+                                    for (int pos = 0; pos < audioFeedbackList.size(); ++pos) {
+                                        RequestBody requestBody = createRequestBody(new File(audioFeedbackList.get(pos).getAudioPath()));
+                                        String fileName = audioFeedbackList.get(pos).getFileName();
+                                        String key = String.format("%1$s\"; filename=\"%2$s", audioFeedbackList.get(pos).getPartString() + String.valueOf(pos), fileName);
+                                        files.put(key, requestBody);
+                                    }
+                                }
+                                // Screenshots multipart
+                                List<ScreenshotFeedback> screenshotFeedbackList = feedback.getScreenshotFeedbacks();
+                                if (screenshotFeedbackList != null) {
+                                    for (int pos = 0; pos < screenshotFeedbackList.size(); ++pos) {
+                                        RequestBody requestBody = createRequestBody(new File(screenshotFeedbackList.get(pos).getImagePath()));
+                                        String fileName = screenshotFeedbackList.get(pos).getFileName();
+                                        String key = String.format("%1$s\"; filename=\"%2$s", screenshotFeedbackList.get(pos).getPartString() + String.valueOf(pos), fileName);
+                                        files.put(key, requestBody);
+                                    }
+                                }
+
+                                // Send the feedback
+                                Call<JsonObject> result = fbAPI.createFeedbackVariant(language, feedback.getApplicationId(), feedbackJSONPart, files);
+                                if (result != null) {
+                                    result.enqueue(new Callback<JsonObject>() {
+                                        @Override
+                                        public void onFailure(Call<JsonObject> call, Throwable t) {
+                                            Log.e(TAG, "Failed to send the feedback. onFailure method called", t);
+                                            DialogUtils.showInformationDialog(FeedbackActivity.this, new String[]{getResources().getString(R.string.supersede_feedbacklibrary_error_text)}, true);
+                                        }
+
+                                        @Override
+                                        public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                                            if (response.code() == 201) {
+                                                Log.i(TAG, "Feedback successfully sent");
+                                                Toast toast = Toast.makeText(getApplicationContext(), getResources().getString(R.string.supersede_feedbacklibrary_success_text), Toast.LENGTH_SHORT);
+                                                toast.show();
+                                            } else {
+                                                Log.e(TAG, "Failed to send the feedback. Response code == " + response.code());
+                                                DialogUtils.showInformationDialog(FeedbackActivity.this, new String[]{getResources().getString(R.string.supersede_feedbacklibrary_error_text)}, true);
+                                            }
+                                        }
+                                    });
+                                } else {
+                                    Log.e(TAG, "Failed to send the feebdkack. Call<JsonObject> result is null");
+                                    DialogUtils.showInformationDialog(FeedbackActivity.this, new String[]{getResources().getString(R.string.supersede_feedbacklibrary_error_text)}, true);
+                                }
                             } else {
+                                Log.e(TAG, "The server is not up and running. Response code == " + response.code());
                                 DialogUtils.showInformationDialog(FeedbackActivity.this, new String[]{getResources().getString(R.string.supersede_feedbacklibrary_error_text)}, true);
                             }
                         }
                     });
                 } else {
+                    Log.e(TAG, "Failed to ping the server. Call<ResponseBody> checkUpAndRunning result is null");
                     DialogUtils.showInformationDialog(FeedbackActivity.this, new String[]{getResources().getString(R.string.supersede_feedbacklibrary_error_text)}, true);
                 }
             } else {
+                Log.v(TAG, "Validation of the mechanism failed");
                 DialogUtils.showInformationDialog(this, messages.toArray(new String[messages.size()]), false);
             }
         } else {
+            if (baseURL == null) {
+                Log.e(TAG, "Failed to send the feedback. baseURL is null");
+            } else {
+                Log.e(TAG, "Failed to send the feedback. language is null");
+            }
             DialogUtils.showInformationDialog(this, new String[]{getResources().getString(R.string.supersede_feedbacklibrary_error_text)}, true);
         }
     }
@@ -593,7 +684,7 @@ public class FeedbackActivity extends AppCompatActivity implements ScreenshotMec
                 }
 
                 Feedback feedback = new Feedback(allMechanisms);
-                feedback.setTitle("Test title");
+                feedback.setTitle(getResources().getString(R.string.supersede_feedbacklibrary_feedback_title_text, System.currentTimeMillis()));
                 feedback.setApplicationId(orchestratorConfiguration.getId());
                 feedback.setConfigurationId(activeConfiguration.getId());
                 feedback.setLanguage(language);

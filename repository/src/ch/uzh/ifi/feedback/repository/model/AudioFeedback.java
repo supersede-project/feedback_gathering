@@ -1,7 +1,7 @@
 package ch.uzh.ifi.feedback.repository.model;
 
 import ch.uzh.ifi.feedback.library.rest.annotations.DbAttribute;
-import ch.uzh.ifi.feedback.library.rest.validation.Id;
+import ch.uzh.ifi.feedback.library.rest.annotations.Id;
 
 public class AudioFeedback extends FileFeedback
 {

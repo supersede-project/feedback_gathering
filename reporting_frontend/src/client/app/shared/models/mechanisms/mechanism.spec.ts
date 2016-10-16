@@ -1,5 +1,4 @@
 import {Mechanism} from './mechanism';
-import {MechanismFactory} from './mechanism_factory';
 
 
 describe('Mechanism', () => {

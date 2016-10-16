@@ -2,7 +2,7 @@ package ch.uzh.ifi.feedback.orchestrator.model;
 
 import java.sql.Timestamp;
 
-import ch.uzh.ifi.feedback.library.rest.Service.IDbItem;
+import ch.uzh.ifi.feedback.library.rest.service.IDbItem;
 
 public interface IOrchestratorItem<T> extends IDbItem<T> {
 	

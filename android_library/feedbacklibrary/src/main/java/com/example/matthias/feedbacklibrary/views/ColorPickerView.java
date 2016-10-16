@@ -30,26 +30,14 @@ public class ColorPickerView extends View {
     private RectF newRectF;
     private int changedColor;
 
-    /**
-     * @param context  the context
-     * @param attrs    the attrs
-     * @param defStyle the defStyle
-     */
     public ColorPickerView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
     }
 
-    /**
-     * @param context the context
-     * @param attrs   the attrs
-     */
     public ColorPickerView(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
-    /**
-     * @param context the context
-     */
     public ColorPickerView(Context context) {
         super(context);
     }
@@ -76,6 +64,11 @@ public class ColorPickerView extends View {
         return s + Math.round(p * (d - s));
     }
 
+    /**
+     * This method returns the changed color.
+     *
+     * @return the changed color
+     */
     public int getChangedColor() {
         return changedColor;
     }

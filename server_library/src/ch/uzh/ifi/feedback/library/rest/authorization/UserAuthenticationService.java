@@ -35,10 +35,10 @@ public class UserAuthenticationService implements ITokenAuthenticationService {
 		if(validatedUsers.size() != 1)
 			throw new AuthorizationException("The user and the provided password dont match!");
 		
-		return cache.Register(validatedUsers.get(0).getName());
+		return cache.Register(validatedUsers.get(0));
 	}
 	
-	public boolean Authenticate(HttpServletRequest request)
+	public boolean Authenticate(HttpServletRequest request, ch.uzh.ifi.feedback.library.rest.annotations.Authenticate auth)
 	{
 		String authorizationHeader = request.getHeader("Authorization");
 		
@@ -46,6 +46,6 @@ public class UserAuthenticationService implements ITokenAuthenticationService {
 			return false;
 		
 		UserToken token = new UserToken(UUID.fromString(authorizationHeader));
-		return cache.Authenticate(token);
+		return cache.Authenticate(token, auth);
 	}
 }

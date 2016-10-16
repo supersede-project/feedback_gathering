@@ -2,7 +2,6 @@ import {Injectable} from '@angular/core';
 import {Http, Headers} from '@angular/http';
 import {REPOSITORY_HOST} from './config';
 import {Router} from '@angular/router';
-import {ORCHESTRATOR_HOST} from '../../../../../dist/tmp/app/shared/services/config';
 
 
 @Injectable()

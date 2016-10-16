@@ -47,6 +47,8 @@ export var feedbackPluginModule = function ($, window, document) {
     // TODO support multiple attachment mechanisms
     var dropArea;
     var dialogCSSClass;
+    var colorPickerCSSClass;
+    var defaultStrokeWidth;
 
     /**
      * @param applicationObject
@@ -267,6 +269,8 @@ export var feedbackPluginModule = function ($, window, document) {
         // TODO attention: circular dependency
         var screenshotView = new ScreenshotView(screenshotMechanism, screenshotPreview, screenshotCaptureButton,
             elementToCapture, container, distPath, elementsToHide);
+        screenshotView.colorPickerCSSClass = colorPickerCSSClass;
+        screenshotView.setDefaultStrokeWidth(defaultStrokeWidth);
 
         screenshotMechanism.setScreenshotView(screenshotView);
         return screenshotView;
@@ -516,6 +520,8 @@ export var feedbackPluginModule = function ($, window, document) {
         distPath = currentOptions.distPath;
         userId = currentOptions.userId;
         dialogCSSClass = currentOptions.dialogCSSClass;
+        colorPickerCSSClass = currentOptions.colorPickerCSSClass;
+        defaultStrokeWidth = currentOptions.defaultStrokeWidth;
 
         language = I18nHelper.getLanguage(this.options);
         I18nHelper.initializeI18n(this.options);
@@ -549,11 +555,13 @@ export var feedbackPluginModule = function ($, window, document) {
     $.fn.feedbackPlugin.defaults = {
         'color': '#fff',
         'lang': 'de',
-        'backgroundColor': '#1A6FC2',
+        'backgroundColor': '#7c9009',
         'fallbackLang': 'en',
         'distPath': 'dist/',
         'userId': '',
-        'dialogCSSClass': 'feedback-dialog'
+        'dialogCSSClass': 'feedback-dialog',
+        'colorPickerCSSClass': 'color-picker',
+        'defaultStrokeWidth': 4
     };
 
 };

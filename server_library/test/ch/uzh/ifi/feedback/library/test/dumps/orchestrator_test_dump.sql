@@ -18,6 +18,33 @@ USE `feedback_orchestrator_test`;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
+-- Table structure for table `api_user_permissions`
+--
+
+DROP TABLE IF EXISTS `api_user_permissions`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `api_user_permissions` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `application_id` int(11) NOT NULL,
+  `has_permission` bit(1) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_api_user_permissions_1_idx` (`user_id`),
+  CONSTRAINT `fk_api_user_permissions_1` FOREIGN KEY (`user_id`) REFERENCES `api_users` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=big5;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `api_user_permissions`
+--
+
+LOCK TABLES `api_user_permissions` WRITE;
+/*!40000 ALTER TABLE `api_user_permissions` DISABLE KEYS */;
+/*!40000 ALTER TABLE `api_user_permissions` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `api_users`
 --
 
@@ -143,8 +170,8 @@ CREATE TABLE `configurations_history` (
   KEY `fk_configurations_2_idx` (`user_groups_id`),
   KEY `fk_configurations_3_idx` (`general_configurations_id`),
   KEY `fk_configurations_history_1_idx` (`configurations_id`),
-  CONSTRAINT `fk_configurations_history_2` FOREIGN KEY (`user_groups_id`) REFERENCES `user_groups` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_configurations_history_1` FOREIGN KEY (`configurations_id`) REFERENCES `configurations` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_configurations_history_2` FOREIGN KEY (`user_groups_id`) REFERENCES `user_groups` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_configurations_history_3` FOREIGN KEY (`general_configurations_id`) REFERENCES `general_configurations` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_configurations_history_4` FOREIGN KEY (`applications_id`) REFERENCES `applications1` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB AUTO_INCREMENT=117 DEFAULT CHARSET=utf8;
@@ -524,4 +551,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-09-21 12:46:36
+-- Dump completed on 2016-10-13 13:55:46

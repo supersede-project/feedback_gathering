@@ -3,7 +3,8 @@ package ch.uzh.ifi.feedback.library.rest.validation.test;
 import org.junit.Rule;
 import org.junit.rules.ExpectedException;
 import org.mockito.Mockito;
-import ch.uzh.ifi.feedback.library.rest.Service.ServiceBase;
+
+import ch.uzh.ifi.feedback.library.rest.service.ServiceBase;
 import ch.uzh.ifi.feedback.library.rest.validation.ValidationException;
 import ch.uzh.ifi.feedback.library.rest.validation.ValidationResult;
 import ch.uzh.ifi.feedback.library.rest.validation.ValidationSerializer;

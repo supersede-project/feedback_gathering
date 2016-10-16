@@ -7,6 +7,6 @@ export const SettingsRoutes: Route[] = [
   {
     path: 'settings',
     component: SettingsComponent,
-    canActivate: [LoggedInGuard]
+    canActivate: [] //[LoggedInGuard]
   }
 ];

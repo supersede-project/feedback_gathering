@@ -8,9 +8,11 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
 
+import javassist.NotFoundException;
+
 public class TransactionManager {
 
-    public static void withTransaction(Transaction transaction) throws Exception {
+    public static void withTransaction(Transaction transaction) throws SQLException, NotFoundException {
 
         Connection dbConnection = createDatabaseConnection();
         dbConnection.setAutoCommit(false);

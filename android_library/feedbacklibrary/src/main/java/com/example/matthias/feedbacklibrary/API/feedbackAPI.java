@@ -1,3 +1,18 @@
+/**
+ * Copyright [2016] [Matthias Scherrer]
+ * <p/>
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * <p/>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p/>
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.example.matthias.feedbacklibrary.API;
 
 import com.example.matthias.feedbacklibrary.configurations.OrchestratorConfigurationItem;
@@ -17,8 +32,8 @@ import retrofit2.http.Path;
 
 /**
  * API calls to the feedback orchestrator and feedback repository
- * Orchestrator: baseURL/feedback_orchestrator
- * Repository: baseURL/feedback_repository
+ * Orchestrator: baseURL/orchestrator/feedback (http://docs.supersedeorchestratorapi.apiary.io/#reference)
+ * Repository: baseURL/feedback_repository (http://docs.supersederepositoryapi.apiary.io/#reference)
  */
 public interface feedbackAPI {
     /**
@@ -30,15 +45,15 @@ public interface feedbackAPI {
      * @return the JSON object
      */
     @Multipart
-    @POST("feedback_repository/{language}/feedbacks")
-    Call<JsonObject> createFeedbackVariant(@Path("language") String language, @Part("json") RequestBody feedback, @PartMap Map<String, RequestBody> files);
+    @POST("feedback_repository/{language}/applications/{application_id}/feedbacks")
+    Call<JsonObject> createFeedbackVariant(@Path("language") String language, @Path("application_id") long application_id, @Part("json") RequestBody feedback, @PartMap Map<String, RequestBody> files);
 
     /**
      * This method retrieves the feedback configuration from the orchestrator.
      *
      * @return the configuration from the orchestrator
      */
-    @GET("feedback_orchestrator/{language}/applications/{application_id}")
+    @GET("orchestrator/feedback/{language}/applications/{application_id}")
     Call<OrchestratorConfigurationItem> getConfiguration(@Path("language") String language, @Path("application_id") long application_id);
 
     /**
@@ -46,7 +61,7 @@ public interface feedbackAPI {
      *
      * @return 'pong'
      */
-    @GET("feedback_orchestrator/ping")
+    @GET("orchestrator/feedback/ping")
     Call<ResponseBody> pingOrchestrator();
 
     /**

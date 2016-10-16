@@ -37,7 +37,6 @@ public class CategoryMechanismView extends MechanismView implements CustomSpinne
             }
         }
         customSpinner.setOwnCategoryAllowed(categoryMechanism.isOwnAllowed());
-        //customSpinner.setItems(items, true);
         customSpinner.setItems(items, false);
         customSpinner.setListener(this);
         customSpinner.setMultiple(categoryMechanism.isMultiple());

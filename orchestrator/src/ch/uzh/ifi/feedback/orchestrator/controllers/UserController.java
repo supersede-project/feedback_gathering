@@ -8,7 +8,6 @@ import javax.servlet.http.HttpServletResponse;
 import com.google.inject.Inject;
 import com.google.inject.servlet.RequestScoped;
 
-import ch.uzh.ifi.feedback.library.rest.IRequestContext;
 import ch.uzh.ifi.feedback.library.rest.RestController;
 import ch.uzh.ifi.feedback.library.rest.annotations.Authenticate;
 import ch.uzh.ifi.feedback.library.rest.annotations.Controller;
@@ -39,7 +38,7 @@ public class UserController extends RestController<User> {
 	}
 	
 	@POST
-	@Authenticate(UserAuthenticationService.class)
+	@Authenticate(service = UserAuthenticationService.class, role = "ADMIN")
 	@Path("/user_groups/{group_id}/users")
 	public User InsertForGroup(@PathParam("group_id") Integer groupId, User user) throws Exception 
 	{
@@ -48,7 +47,7 @@ public class UserController extends RestController<User> {
 	}
 	
 	@PUT
-	@Authenticate(UserAuthenticationService.class)
+	@Authenticate(service = UserAuthenticationService.class, role = "ADMIN")
 	@Path("/users")
 	public User UpdateForGroup(User user) throws Exception 
 	{
