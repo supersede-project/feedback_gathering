@@ -5,14 +5,14 @@
 /.idea
 # /build
 
-/node_modules
-/lib
+# /node_modules
+# /lib
 
 /site/_site
 /site/lib
 
 notes.md
-/dist
+# /dist
 
 /customers
 /npm
