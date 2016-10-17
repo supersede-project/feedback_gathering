@@ -72,55 +72,76 @@
         <!-- jQuery UI for draggable support -->
         <script src="/lib/jquery-ui/jquery-ui.js" type="text/javascript" charset="utf-8"></script>
 
-        <script type="text/javascript" src="form-builder/form-builder.js"></script>
-        <link type="text/css" href="form-builder/form-builder.css" rel="stylesheet" /> 
-
-        <style>
-            #draggable {
-                width: 100px;
-                height: 100px;
-                background: #ccc;
-            }
-        </style> 
-<script>
-$(document).ready(function () {
-    $('#draggable').draggable();
-});
-</script> 
-
+        <script>
+            $(function() {
+                $("#draggable").draggable();
+            });
+        </script>
 
     </head>
     <body>
-        <div class=container-fluid><h1>Orchestrator GUI</h1></div>
-
+        <div class="container">
        
         <div class="row">
-        
-            <div class="col-xs-4" style="border:2px ridge">Form Components
-                <div class="row">
-                    <div class="col-xs-12" id="draggable" style="background-color: lightblue">
+            <h1>Orchestrator GUI</h1>
+            <div class="col-md-12">
 
-                        <input type="text" class="form-control" placeholder="Text input">
+                <div class="tab-pane" id="designer">
 
-                        Drag me!
+                    <div class="row">
 
+
+
+
+
+                        <div class="col-md-7" style="border:2px ridge">Form Components
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div id="designerDiv">
+
+                                        <div class="alpaca-field alpaca-field-object alpaca-optional alpaca-edit alpaca-top alpaca-field-valid" data-alpaca-field-id="alpaca61" data-alpaca-field-path="/"
+                                             data-alpaca-field-name>
+
+                                        </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <!-- <div id="draggable">Drag me</div> -->
+
+
+
+
+                        <div class="col-md-5">
+                            <div class="row">
+
+                                <div class="col-md-12">
+
+                                    <div class="tab-pane" id="types">
+
+                                        <div id="draggable" class="form-element draggable ui-widget-content ui-draggable ui-draggable-handle" data-type="string">
+                                    <input type="text" class="form-control" placeholder="Text input">
+
+
+
+
+                                    Drag me!
+                                            </div>
+                                            </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-
-
-            <!-- <div id="draggable">Drag me</div> -->
-         
-            
-
-
-            <div class="col-xs-8" style="border:2px ridge">Form</div>
-            
         </div>
-        
 
-        
 
-        
+
+
+        </div>
     </body>
 </html>
