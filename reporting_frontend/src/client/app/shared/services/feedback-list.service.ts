@@ -11,12 +11,12 @@ export class FeedbackListService {
 
   constructor(private http: Http) {}
 
-  get(): Observable<Feedback[]> {
+  get(applicationId:number): Observable<Feedback[]> {
     var headers = new Headers();
     headers.append('Accept', 'application/json');
     headers.append('Authorization', localStorage.getItem('auth_token'));
 
-    return this.http.get(REPOSITORY_HOST + 'en/feedbacks', { headers: headers })
+    return this.http.get(REPOSITORY_HOST + 'en/applications/' + applicationId + '/feedbacks', { headers: headers })
       .map((res: Response) => res.json())
       .catch(this.handleError);
   }
