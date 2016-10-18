@@ -268,6 +268,36 @@ public class Utils {
     }
 
     /**
+     * This method reads a specific file from the assets resource folder and returns it as a string.
+     *
+     * @param fileName     the file to read from
+     * @param assetManager the asset manager
+     * @return the file content as a string, the empty string if an error occurred
+     */
+    public static String readFileAsString(String fileName, AssetManager assetManager) {
+        String ret = "";
+
+        try {
+            InputStream inputStream = assetManager.open(fileName);
+
+            if (inputStream != null) {
+                BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+                StringBuilder out = new StringBuilder();
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    out.append(line);
+                }
+                reader.close();
+                return out.toString();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return ret;
+    }
+
+    /**
      * This method saves the bitmap in a specific file.
      *
      * @param file        the file to store the bitmap in

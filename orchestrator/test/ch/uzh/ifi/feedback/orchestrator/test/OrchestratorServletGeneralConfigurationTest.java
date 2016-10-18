@@ -9,17 +9,9 @@ import ch.uzh.ifi.feedback.orchestrator.model.GeneralConfiguration;
 
 public class OrchestratorServletGeneralConfigurationTest extends ServletTest {
 	
-	public void testRetrievingAllConfigurations() throws ClientProtocolException, IOException {
-		GeneralConfiguration[] retrievedConfigs = GetSuccess(
-				"http://localhost:8080/feedback_orchestrator/en/general_configurations", 
-				GeneralConfiguration[].class);
-		
-		assertEquals(retrievedConfigs.length, 36);
-	}
-	
 	public void testRetrievingSingleConfiguration() throws ClientProtocolException, IOException {
 		GeneralConfiguration config = GetSuccess(
-				"http://localhost:8080/feedback_orchestrator/en/general_configurations/148",
+				"http://localhost:8080/feedback_orchestrator/feedback/en/general_configurations/148",
 				GeneralConfiguration.class);
 		
 		assertEquals(config.getId(), new Integer(148));
@@ -28,19 +20,19 @@ public class OrchestratorServletGeneralConfigurationTest extends ServletTest {
 	
 	public void testRetrievingConfigurationForApplication() throws ClientProtocolException, IOException {
 		GeneralConfiguration retrievedConfig = GetSuccess(
-				"http://localhost:8080/feedback_orchestrator/en/applications/27/general_configuration", 
+				"http://localhost:8080/feedback_orchestrator/feedback/en/applications/27/general_configuration", 
 				GeneralConfiguration.class);
 		
 		assertEquals(retrievedConfig.getId(), new Integer(116));
 	}
 	
-	public void testUpdateGeneralConfiguration() throws ClientProtocolException, IOException  {
+	public void testUpdateGeneralConfigurationForApplication() throws ClientProtocolException, IOException  {
 		
 		InputStream stream = this.getClass().getResourceAsStream("general_configuration_update.json");
 		String jsonString = IOUtils.toString(stream); 
 		
 		GeneralConfiguration updatedMechanism = PutSuccess(
-				"http://localhost:8080/feedback_orchestrator/en/general_configurations", 
+				"http://localhost:8080/feedback_orchestrator/feedback/en/applications/35/general_configurations", 
 				jsonString,
 				GeneralConfiguration.class);
         

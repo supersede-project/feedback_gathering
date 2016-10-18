@@ -18,6 +18,7 @@ import ch.uzh.ifi.feedback.library.rest.service.IDbService;
 import ch.uzh.ifi.feedback.library.transaction.DbResultParser;
 import ch.uzh.ifi.feedback.library.transaction.TransactionManager;
 import javassist.NotFoundException;
+import static java.util.Arrays.asList;
 
 public abstract class ServiceBase<T extends IDbItem> implements IDbService<T> {
 	
@@ -60,7 +61,6 @@ public abstract class ServiceBase<T extends IDbItem> implements IDbService<T> {
 		}
 		resultParser.SetFields(instance, result);
 		con.close();
-		
 		return instance;
 	}
 	

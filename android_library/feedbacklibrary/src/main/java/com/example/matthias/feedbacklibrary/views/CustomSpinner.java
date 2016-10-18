@@ -72,7 +72,7 @@ public class CustomSpinner extends Spinner implements DialogInterface.OnClickLis
     }
 
     /**
-     * This method gets the selected items as a string.
+     * This method returns the selected items as a string.
      *
      * @return the concatenated string
      */
@@ -117,6 +117,11 @@ public class CustomSpinner extends Spinner implements DialogInterface.OnClickLis
         return isMultiple;
     }
 
+    /**
+     * This method returns if creating an own category is allowed.
+     *
+     * @return true if allowed, false otherwise
+     */
     public boolean isOwnCategoryAllowed() {
         return ownCategoryAllowed;
     }
@@ -393,18 +398,38 @@ public class CustomSpinner extends Spinner implements DialogInterface.OnClickLis
         mSelectionAtStart[0] = firstDefaultSelection;
     }
 
+    /**
+     * This method sets the listener.
+     *
+     * @param listener the listener
+     */
     public void setListener(OnMultipleItemsSelectedListener listener) {
         this.listener = listener;
     }
 
+    /**
+     * This method sets if the spinner is of single or multiple choice type.
+     *
+     * @param multiple the multiple
+     */
     public void setMultiple(boolean multiple) {
         isMultiple = multiple;
     }
 
+    /**
+     * This method sets if own categories are allowed.
+     *
+     * @param ownCategoryAllowed the ownCategoryAllowed
+     */
     public void setOwnCategoryAllowed(boolean ownCategoryAllowed) {
         this.ownCategoryAllowed = ownCategoryAllowed;
     }
 
+    /**
+     * This method sets the selection manually.
+     *
+     * @param selection the selection
+     */
     public void setSelection(String[] selection) {
         for (int i = 0; i < mSelection.length; i++) {
             mSelection[i] = false;
@@ -422,6 +447,11 @@ public class CustomSpinner extends Spinner implements DialogInterface.OnClickLis
         simpleAdapter.add(getSelectedItemsAsString());
     }
 
+    /**
+     * This method sets the selection manually.
+     *
+     * @param selection the selection
+     */
     public void setSelection(List<String> selection) {
         for (int i = 0; i < mSelection.length; i++) {
             mSelection[i] = false;
@@ -456,6 +486,11 @@ public class CustomSpinner extends Spinner implements DialogInterface.OnClickLis
         simpleAdapter.add(getSelectedItemsAsString());
     }
 
+    /**
+     * This method sets the selected indices manually.
+     *
+     * @param selectedIndices the selectedIndices
+     */
     public void setSelection(int[] selectedIndices) {
         for (int i = 0; i < mSelection.length; i++) {
             mSelection[i] = false;

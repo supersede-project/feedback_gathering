@@ -13,14 +13,14 @@ public class OrchestratorServletParameterTest extends ServletTest {
 	
 	public void testRetrievingAllParameters() throws ClientProtocolException, IOException {
 		FeedbackParameter[] retrievedParameters = GetSuccess(
-				"http://localhost:8080/feedback_orchestrator/en/parameters", 
+				"http://localhost:8080/feedback_orchestrator/feedback/en/parameters", 
 				FeedbackParameter[].class);
 		assertEquals(retrievedParameters.length, NUMBER_OF_PARAMETERS);
 	}
 	
 	public void testRetrievingSingleParameter() throws ClientProtocolException, IOException {
 		FeedbackParameter parameter = GetSuccess(
-				"http://localhost:8080/feedback_orchestrator/en/parameters/6640", 
+				"http://localhost:8080/feedback_orchestrator/feedback/en/parameters/6640", 
 				FeedbackParameter.class);
 		
 		assertEquals(parameter.getId(), new Integer(6640));
@@ -30,14 +30,14 @@ public class OrchestratorServletParameterTest extends ServletTest {
 	
 	public void testRetrievingAllParametersForGeneralConfiguration() throws ClientProtocolException, IOException  {
 		FeedbackParameter[] retrievedParameters = GetSuccess(
-				"http://localhost:8080/feedback_orchestrator/en/general_configurations/148/parameters", 
+				"http://localhost:8080/feedback_orchestrator/feedback/en/general_configurations/148/parameters", 
 				FeedbackParameter[].class);
 		assertEquals(retrievedParameters.length, 2);
 	}
 	
 	public void testRetrievingAllParametersForMechanism() throws ClientProtocolException, IOException  {    
 		FeedbackParameter[] retrievedParameters = GetSuccess(
-				"http://localhost:8080/feedback_orchestrator/en/mechanisms/829/parameters", 
+				"http://localhost:8080/feedback_orchestrator/feedback/en/mechanisms/829/parameters", 
 				FeedbackParameter[].class);
         
 		assertEquals(retrievedParameters.length, 2);
@@ -49,7 +49,7 @@ public class OrchestratorServletParameterTest extends ServletTest {
 		String jsonString = IOUtils.toString(stream); 
 		
 		FeedbackParameter createdParameter = PostSuccess(
-				"http://localhost:8080/feedback_orchestrator/en/general_configurations/148/parameters", 
+				"http://localhost:8080/feedback_orchestrator/feedback/en/applications/35/general_configurations/148/parameters", 
 				jsonString,
 				FeedbackParameter.class);
         
@@ -63,7 +63,7 @@ public class OrchestratorServletParameterTest extends ServletTest {
 		String jsonString = IOUtils.toString(stream); 
 		
 		FeedbackParameter createdParameter = PostSuccess(
-				"http://localhost:8080/feedback_orchestrator/en/mechanisms/829/parameters", 
+				"http://localhost:8080/feedback_orchestrator/feedback/en/applications/35/mechanisms/829/parameters", 
 				jsonString,
 				FeedbackParameter.class);
         
@@ -77,7 +77,7 @@ public class OrchestratorServletParameterTest extends ServletTest {
 		String jsonString = IOUtils.toString(stream); 
 		
 		FeedbackParameter updatedParameter = PutSuccess(
-				"http://localhost:8080/feedback_orchestrator/en/parameters", 
+				"http://localhost:8080/feedback_orchestrator/feedback/en/applications/35/parameters", 
 				jsonString,
 				FeedbackParameter.class);
         

@@ -1,0 +1,6 @@
+{
+  "name": "Monitor feedback",
+  "tagline": "",
+  "body": "# feedback_gathering\r\n\r\n**android_library** Android library to include Feedback Gathering in an Android application\r\n\r\n**web_library** jQuery Plugin to include Feedback Gathering on a Website\r\n",
+  "note": "Don't delete this file! It's used internally to help with page regeneration."
+}

@@ -30,7 +30,7 @@ public class StartActivity extends AppCompatActivity {
             triggerRandomPullV1.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Utils.triggerRandomPullFeedback("http://ec2-54-175-37-30.compute-1.amazonaws.com/", StartActivity.this, 6L, "en");
+                    Utils.triggerRandomPullFeedback("http://ec2-54-175-37-30.compute-1.amazonaws.com/", StartActivity.this, 5L, "en");
                 }
             });
         }
@@ -39,7 +39,7 @@ public class StartActivity extends AppCompatActivity {
             triggerSpecificPullV1Id14.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Utils.triggerSpecificPullFeedback("http://ec2-54-175-37-30.compute-1.amazonaws.com/", StartActivity.this, 6L, "en", 14L, "Would you like to give feedback to pull config 14");
+                    Utils.triggerSpecificPullFeedback("http://ec2-54-175-37-30.compute-1.amazonaws.com/", StartActivity.this, 5L, "en", 11L, "Would you like to give feedback to pull config 14");
                 }
             });
         }
@@ -48,7 +48,7 @@ public class StartActivity extends AppCompatActivity {
             triggerSpecificPullV1Id15.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Utils.triggerSpecificPullFeedback("http://ec2-54-175-37-30.compute-1.amazonaws.com/", StartActivity.this, 6L, "en", 15L, "Would you like to give feedback to pull config 15");
+                    Utils.triggerSpecificPullFeedback("http://ec2-54-175-37-30.compute-1.amazonaws.com/", StartActivity.this, 5L, "en", 12L, "Would you like to give feedback to pull config 15");
                 }
             });
         }
@@ -72,8 +72,8 @@ public class StartActivity extends AppCompatActivity {
             boolean result = Utils.checkSinglePermission(this, PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE, null, null, false);
             if (result) {
                 // Permission is already granted. Taking a screenshot of the current screen automatically and open the FeedbackActivity from the feedback library
-                Utils.startActivityWithScreenshotCapture("http://ec2-54-175-37-30.compute-1.amazonaws.com/", this, 6L, "en");
-                // 6L --> only one mechanisms of the same type
+                Utils.startActivityWithScreenshotCapture("http://ec2-54-175-37-30.compute-1.amazonaws.com/", this, 5L, "en");
+                // 5L --> only one mechanisms of the same type
             }
         }
 
@@ -81,8 +81,8 @@ public class StartActivity extends AppCompatActivity {
             boolean result = Utils.checkSinglePermission(this, PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE, null, null, false);
             if (result) {
                 // Permission is already granted. Taking a screenshot of the current screen automatically and open the FeedbackActivity from the feedback library
-                Utils.startActivityWithScreenshotCapture("http://ec2-54-175-37-30.compute-1.amazonaws.com/", this, 5L, "en");
-                // 5L --> multiple mechanisms of the same type
+                Utils.startActivityWithScreenshotCapture("http://ec2-54-175-37-30.compute-1.amazonaws.com/", this, 6L, "en");
+                // 6L --> multiple mechanisms of the same type
             }
         }
 
@@ -96,8 +96,15 @@ public class StartActivity extends AppCompatActivity {
                 Utils.onRequestPermissionsResultCase(requestCode, permissions, grantResults, this, Manifest.permission.READ_EXTERNAL_STORAGE,
                         com.example.matthias.feedbacklibrary.R.string.supersede_feedbacklibrary_permission_request_title,
                         com.example.matthias.feedbacklibrary.R.string.supersede_feedbacklibrary_external_storage_permission_text_automatic_screenshot_rationale,
-                        6L, "http://ec2-54-175-37-30.compute-1.amazonaws.com/", "en");
+                        5L, "http://ec2-54-175-37-30.compute-1.amazonaws.com/", "en");
                 break;
         }
+    }
+
+    // TODO: remove before release
+    private void startOfflineActivity() {
+        Intent intent = new Intent(this, FeedbackActivity.class);
+        intent.putExtra(FeedbackActivity.IS_PUSH_STRING, true);
+        startActivity(intent);
     }
 }

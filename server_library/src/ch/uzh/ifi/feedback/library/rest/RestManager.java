@@ -32,6 +32,7 @@ import javax.servlet.http.Part;
 
 import org.reflections.*;
 import org.reflections.scanners.MethodAnnotationsScanner;
+import org.reflections.scanners.SubTypesScanner;
 import org.reflections.scanners.TypeAnnotationsScanner;
 import org.reflections.util.ClasspathHelper;
 import org.reflections.util.ConfigurationBuilder;
@@ -96,7 +97,7 @@ public class RestManager implements IRestManager {
 		
 		Reflections reflections = new Reflections(new ConfigurationBuilder()
                 .setUrls(packages)
-                .setScanners(new MethodAnnotationsScanner(), new TypeAnnotationsScanner()));
+                .setScanners(new MethodAnnotationsScanner(), new TypeAnnotationsScanner(), new SubTypesScanner()));
 		
 		InitHandlerTable(reflections);
 	}
@@ -106,7 +107,6 @@ public class RestManager implements IRestManager {
 		Set<Class<?>> controllerAnnotated = reflections.getTypesAnnotatedWith(Controller.class);
 		for(Class<?> clazz : controllerAnnotated){
 			Class<?> parameterClass = clazz.getAnnotation(Controller.class).value();
-			
 			
 			if(parameterClass.isAnnotationPresent(Serialize.class))
 			{
@@ -146,15 +146,13 @@ public class RestManager implements IRestManager {
 					if(_handlers.stream().anyMatch((h) -> h.GetHttpMethod() == methodFinal && h.getUriTemplate().Match(path) != null))
 						throw new AlreadyBoundException("handler for template '" + path + "' already registered!/n");
 				
-					Class<? extends ITokenAuthenticationService> authClass = null;
-					UserRole authRole = null;
+					Authenticate auth = null;
 					if(m.isAnnotationPresent(Authenticate.class))
 					{
-						authClass = m.getAnnotation(Authenticate.class).value();
-						authRole = UserRole.valueOf(m.getAnnotation(Authenticate.class).role());
+						auth = m.getAnnotation(Authenticate.class);
 					}
 					
-					HandlerInfo info = new HandlerInfo(m, method, clazz, parameterClass, template, authClass, authRole);
+					HandlerInfo info = new HandlerInfo(m, method, clazz, parameterClass, template, auth);
 					
 					Parameter[] params = m.getParameters();
 					for(int i = 0; i < params.length; i++){
@@ -189,7 +187,6 @@ public class RestManager implements IRestManager {
 	public void Get(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {	
 		try {
 			InvokeHandler(request, response, HttpMethod.GET);
-			response.setStatus(200);
 		}
 		catch(Exception ex){
 			HandleExceptions(response, ex);
@@ -210,7 +207,6 @@ public class RestManager implements IRestManager {
 	public void Post(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		try {
 			InvokeHandler(request, response, HttpMethod.POST);
-			response.setStatus(201);
 		}
 		catch(Exception ex){
 			HandleExceptions(response, ex);
@@ -250,7 +246,6 @@ public class RestManager implements IRestManager {
 	public void Put(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		try {
 			InvokeHandler(request, response, HttpMethod.PUT);
-			response.setStatus(200);
 		} 
 		catch(Exception ex){
 			HandleExceptions(response, ex);
@@ -261,7 +256,6 @@ public class RestManager implements IRestManager {
 	public void Delete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		try {
 			InvokeHandler(request, response, HttpMethod.DELETE);
-			response.setStatus(200);
 		}
 		catch(Exception ex){
 			HandleExceptions(response, ex);
@@ -286,18 +280,26 @@ public class RestManager implements IRestManager {
 			throw new NotFoundException("ressource '" + path + "' does not exist");
 		}
 		
-		//Do token authentication if needed
-		Class<? extends ITokenAuthenticationService> authServiceClazz = handler.getAuthenticationClass();
-		if(authServiceClazz != null)
-		{
-			ITokenAuthenticationService authService = _injector.getInstance(authServiceClazz);
-			UserRole authRole = handler.getAuthenticationUserRole();
-			if(!authService.Authenticate(request, authRole))
-				throw new AuthenticationException("the provided usertoken does not match!");
-		}
-		
 		Map<String, String> params = handler.getUriTemplate().Match(path);
 		List<Object> parameters = new ArrayList<>();
+		
+		//set application scope variable if exists
+		String application = params.get("application_id");
+		Integer applicationId = application == null ? null : Integer.valueOf(application);
+        request.setAttribute(
+	             Key.get(Integer.class, Names.named("application")).toString(),
+	             applicationId);
+		
+		//Do token authentication if needed
+        Authenticate auth = handler.getAuth();
+        if(auth != null)
+        {
+    		Class<? extends ITokenAuthenticationService> authServiceClazz = auth.service();
+			ITokenAuthenticationService authService = _injector.getInstance(authServiceClazz);
+			if(!authService.Authenticate(request, auth))
+				throw new AuthenticationException("User is not authorized for the provided operation");
+        }
+
 		String language = params.get("lang");
         request.setAttribute(
 	             Key.get(String.class, Names.named("language")).toString(),

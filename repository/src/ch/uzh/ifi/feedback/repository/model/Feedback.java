@@ -22,7 +22,7 @@ public class Feedback extends ItemBase<Feedback> {
 
 	@NotNull
 	@DbAttribute("application_id")
-	private long applicationId;
+	private Integer applicationId;
 
 	@DbAttribute("user_identification")
 	@NotNull
@@ -101,7 +101,7 @@ public class Feedback extends ItemBase<Feedback> {
 		this.id = id;
 	}
 
-	public long getApplicationId() {
+	public Integer getApplicationId() {
 		return applicationId;
 	}
 	

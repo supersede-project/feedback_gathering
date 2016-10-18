@@ -18,6 +18,34 @@ USE `feedback_repository_test`;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
+-- Table structure for table `api_user_permissions`
+--
+
+DROP TABLE IF EXISTS `api_user_permissions`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `api_user_permissions` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `application_id` int(11) NOT NULL,
+  `has_permission` bit(1) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_api_user_permissions_1_idx` (`user_id`),
+  CONSTRAINT `fk_api_user_permissions_1` FOREIGN KEY (`user_id`) REFERENCES `api_users` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=big5;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `api_user_permissions`
+--
+
+LOCK TABLES `api_user_permissions` WRITE;
+/*!40000 ALTER TABLE `api_user_permissions` DISABLE KEYS */;
+INSERT INTO `api_user_permissions` VALUES (1,1,1,'');
+/*!40000 ALTER TABLE `api_user_permissions` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `api_users`
 --
 
@@ -466,4 +494,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-10-10 15:21:54
+-- Dump completed on 2016-10-13 16:24:27

@@ -1,15 +1,11 @@
 package com.example.matthias.feedbacklibrary.views;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.ImageView;
 
 public class TextAnnotationImageView extends TextAnnotationView {
-    private String ownerId;
     private ImageView mainView;
     private int imageResourceId;
 
@@ -25,10 +21,11 @@ public class TextAnnotationImageView extends TextAnnotationView {
         super(context, attrs, defStyle);
     }
 
-    public Bitmap getImageBitmap() {
-        return ((BitmapDrawable) mainView.getDrawable()).getBitmap();
-    }
-
+    /**
+     * This method returns the id of the image resource.
+     *
+     * @return the image resource id
+     */
     public int getImageResourceId() {
         return imageResourceId;
     }
@@ -42,25 +39,13 @@ public class TextAnnotationImageView extends TextAnnotationView {
         return mainView;
     }
 
-    public String getOwnerId() {
-        return ownerId;
-    }
-
-    public void setImageBitmap(Bitmap bmp) {
-        mainView.setImageBitmap(bmp);
-    }
-
-    public void setImageDrawable(Drawable drawable) {
-        mainView.setImageDrawable(drawable);
-    }
-
+    /**
+     * This method sets the id of the image resource.
+     *
+     * @param resId the image resource id
+     */
     public void setImageResource(int resId) {
         imageResourceId = resId;
         mainView.setImageResource(resId);
     }
-
-    public void setOwnerId(String ownerId) {
-        this.ownerId = ownerId;
-    }
-
 }

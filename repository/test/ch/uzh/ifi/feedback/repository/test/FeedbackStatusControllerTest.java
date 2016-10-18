@@ -36,15 +36,15 @@ public class FeedbackStatusControllerTest extends ServletTest {
 		InputStream stream = this.getClass().getResourceAsStream("feedback_insert_small.json");
 		String jsonString = IOUtils.toString(stream); 
 		
-		createdFeedback = PostSuccess("http://localhost:8080/feedback_repository/en/feedbacks", jsonString,Feedback.class);
+		createdFeedback = PostSuccess("http://localhost:8080/feedback_repository/en/applications/1/feedbacks", jsonString,Feedback.class);
 		
 		createdStatus = GetSuccess(
-				"http://localhost:8080/feedback_repository/en/feedbacks/" + createdFeedback.getId() + "/status", 
+				"http://localhost:8080/feedback_repository/en/applications/1/feedbacks/" + createdFeedback.getId() + "/status", 
 				Status.class);
 		assertTrue(createdStatus.getStatus().equals("new"));
 		
 		createdUserStatus = GetSuccess(
-				"http://localhost:8080/feedback_repository/en/feedbacks/" + createdFeedback.getId() + "/api_users/1/status", 
+				"http://localhost:8080/feedback_repository/en/applications/1/feedbacks/" + createdFeedback.getId() + "/api_users/1/status", 
 				Status.class);
 		assertTrue(createdUserStatus.getStatus().equals("unread"));
 	}
@@ -52,7 +52,7 @@ public class FeedbackStatusControllerTest extends ServletTest {
 	public void testUpdateInitialStateForUser() throws ClientProtocolException, IOException
 	{
 		Status updatedStatus = PutSuccess(
-				"http://localhost:8080/feedback_repository/en/states",
+				"http://localhost:8080/feedback_repository/en/applications/1/states",
 				"{ 'id': "+ createdUserStatus.getId() + ", 'status': 'read'}",
 				Status.class);
 		
@@ -62,14 +62,14 @@ public class FeedbackStatusControllerTest extends ServletTest {
 	public void testUpdateInitialStateForFeedback() throws ClientProtocolException, IOException
 	{
 		Status updatedStatus = PutSuccess(
-				"http://localhost:8080/feedback_repository/en/states",
+				"http://localhost:8080/feedback_repository/en/applications/1/states",
 				"{ 'id': "+ createdStatus.getId() + ", 'status': 'approved'}",
 				Status.class);
 		
 		assertTrue(updatedStatus.getStatus().equals("approved"));
 		
 		updatedStatus = PutSuccess(
-				"http://localhost:8080/feedback_repository/en/states",
+				"http://localhost:8080/feedback_repository/en/applications/1/states",
 				"{ 'id': "+ createdStatus.getId() + ", 'status': 'implemented'}",
 				Status.class);
 		

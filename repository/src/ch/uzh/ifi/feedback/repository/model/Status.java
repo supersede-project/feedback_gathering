@@ -18,6 +18,7 @@ public class Status extends ItemBase<Status> {
 	private Integer apiUserId;
 	
 	@DbAttribute("feedback_id")
+	@NotNull
 	private Integer feedbackId;
 	
 	@NotNull

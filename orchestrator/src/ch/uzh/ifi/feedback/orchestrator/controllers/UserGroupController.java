@@ -44,7 +44,7 @@ public class UserGroupController extends RestController<UserGroup> {
 	}
 	
 	@POST
-	@Authenticate(UserAuthenticationService.class)
+	@Authenticate(service = UserAuthenticationService.class, role = "ADMIN")
 	@Path("/user_groups")
 	public UserGroup Insert(UserGroup group) throws Exception
 	{

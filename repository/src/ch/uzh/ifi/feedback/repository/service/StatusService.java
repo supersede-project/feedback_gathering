@@ -2,7 +2,6 @@ package ch.uzh.ifi.feedback.repository.service;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-
 import ch.uzh.ifi.feedback.library.rest.service.ServiceBase;
 import ch.uzh.ifi.feedback.library.transaction.DatabaseConfiguration;
 import ch.uzh.ifi.feedback.repository.model.Status;
@@ -17,5 +16,4 @@ public class StatusService extends ServiceBase<Status> {
 	{
 		super(resultParser, Status.class, "feedback_states", config.getRepositoryDb());
 	}
-
 }

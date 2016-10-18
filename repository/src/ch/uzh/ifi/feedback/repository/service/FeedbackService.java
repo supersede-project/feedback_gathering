@@ -4,11 +4,15 @@ import static java.util.Arrays.asList;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.google.inject.Inject;
+import com.google.inject.Provider;
+import com.google.inject.name.Named;
 
 import ch.uzh.ifi.feedback.library.rest.authorization.ApiUser;
 import ch.uzh.ifi.feedback.library.rest.service.ServiceBase;
@@ -68,7 +72,7 @@ public class FeedbackService extends ServiceBase<Feedback> {
 		this.userService = userService;
 		this.statusService = statusService;
 	}
-
+	
 	@Override
 	public Feedback GetById(int id) throws SQLException, NotFoundException {
 		Feedback feedback = super.GetById(id);
