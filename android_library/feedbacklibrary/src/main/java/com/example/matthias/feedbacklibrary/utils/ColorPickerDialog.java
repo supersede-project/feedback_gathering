@@ -1,6 +1,5 @@
 package com.example.matthias.feedbacklibrary.utils;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
@@ -23,6 +22,11 @@ public class ColorPickerDialog extends DialogFragment {
     OnColorChangeDialogListener mListener;
     private int changedColor;
 
+    /**
+     * This method returns the changed color.
+     *
+     * @return the changed color
+     */
     public int getChangedColor() {
         return changedColor;
     }

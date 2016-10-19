@@ -40,8 +40,9 @@ public class DialogUtils {
     /**
      * This method prompts the user a simple information dialog.
      *
-     * @param activity the activity
-     * @param messages the message(s) to display
+     * @param activity   the activity
+     * @param messages   the message(s) to display
+     * @param cancelable the cancelable
      */
     public static void showInformationDialog(@NonNull final Activity activity, @NonNull String[] messages, boolean cancelable) {
         DialogUtils.DataDialog d = DialogUtils.DataDialog.newInstance(new ArrayList<>(Arrays.asList(messages)));
