@@ -401,7 +401,7 @@ public class AudioMechanismView extends MechanismView implements SeekBar.OnSeekB
     /**
      * This method enables/disables all button clicks.
      *
-     * @param clickable true to set all buttons clickable, else otherwise
+     * @param clickable true to set all buttons clickable, false otherwise
      */
     public void setAllButtonsClickable(boolean clickable) {
         pauseButton.setClickable(clickable);

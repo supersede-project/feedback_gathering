@@ -108,39 +108,26 @@ public class AnnotateImageView extends ImageView {
     private int initW;
     private int initH;
 
-    /**
-     * Constructor
-     *
-     * @param context  the context
-     * @param attrs    the attrs
-     * @param defStyle the defStyle
-     */
     public AnnotateImageView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         setup();
     }
 
-    /**
-     * Constructor
-     *
-     * @param context the context
-     * @param attrs   the attrs
-     */
     public AnnotateImageView(Context context, AttributeSet attrs) {
         super(context, attrs);
         setup();
     }
 
-    /**
-     * Constructor
-     *
-     * @param context the context
-     */
     public AnnotateImageView(Context context) {
         super(context);
         setup();
     }
 
+    /**
+     * This method adds a cropped image to the cropped image history.
+     *
+     * @param file the file
+     */
     public void addCroppedImage(File file) {
         if (!isCroppedImageAdded) {
             croppedImageLists.add(file);
@@ -289,7 +276,7 @@ public class AnnotateImageView extends ImageView {
     /**
      * This method returns the height of the bitmap.
      *
-     * @return the height
+     * @return the bitmap height
      */
     public int getBitmapHeight() {
         return bitmap.getHeight();
@@ -298,14 +285,14 @@ public class AnnotateImageView extends ImageView {
     /**
      * This method returns the width of the bitmap.
      *
-     * @return the width
+     * @return the bitmap width
      */
     public int getBitmapWidth() {
         return bitmap.getWidth();
     }
 
     /**
-     * This method returns the blur factor
+     * This method returns the blur factor.
      *
      * @return the blur
      */
@@ -510,11 +497,6 @@ public class AnnotateImageView extends ImageView {
         }
     }
 
-    /**
-     * This method updates the instance of the canvas, i.e., the view.
-     *
-     * @param canvas the new instance of Canvas
-     */
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
@@ -554,11 +536,6 @@ public class AnnotateImageView extends ImageView {
         super.onSizeChanged(w, h, oldw, oldh);
     }
 
-    /**
-     * This method sets the event listener for drawing.
-     *
-     * @param event the instance of MotionEvent
-     */
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         switch (event.getAction()) {
@@ -692,13 +669,18 @@ public class AnnotateImageView extends ImageView {
         this.mode = mode;
     }
 
+    /**
+     * This method sets if no action has been executed yet.
+     *
+     * @param noActionExecuted true if no action has been executed yet, false otherwise
+     */
     public void setNoActionExecuted(boolean noActionExecuted) {
         this.noActionExecuted = noActionExecuted;
     }
 
     /**
      * This method sets the alpha value.
-     * The 1st argument must be between 0 and 255.
+     * It must be between 0 and 255.
      *
      * @param opacity the opacity
      */
@@ -751,6 +733,11 @@ public class AnnotateImageView extends ImageView {
         this.paintStyle = style;
     }
 
+    /**
+     * This method sets the redo button.
+     *
+     * @param redoButton the redo button
+     */
     public void setRedoButton(ImageButton redoButton) {
         this.redoButton = redoButton;
     }
@@ -764,6 +751,11 @@ public class AnnotateImageView extends ImageView {
         this.text = text;
     }
 
+    /**
+     * This method sets the undo button.
+     *
+     * @param undoButton the undo button
+     */
     public void setUndoButton(ImageButton undoButton) {
         this.undoButton = undoButton;
     }

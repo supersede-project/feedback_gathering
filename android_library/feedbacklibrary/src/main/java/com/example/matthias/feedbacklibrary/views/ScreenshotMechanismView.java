@@ -44,7 +44,7 @@ public class ScreenshotMechanismView extends MechanismView {
     /**
      * This method returns all the sticker annotations.
      *
-     * @return the allStickerAnnotations
+     * @return all sticker annotations
      */
     public HashMap<Integer, String> getAllStickerAnnotations() {
         return allStickerAnnotations;
@@ -53,7 +53,7 @@ public class ScreenshotMechanismView extends MechanismView {
     /**
      * This method returns all the text annotations.
      *
-     * @return the allTextAnnotations
+     * @return all text annotations
      */
     public HashMap<Integer, String> getAllTextAnnotations() {
         return allTextAnnotations;
@@ -177,7 +177,7 @@ public class ScreenshotMechanismView extends MechanismView {
     /**
      * This method sets all the sticker annotations.
      *
-     * @param allStickerAnnotations the allStickerAnnotations
+     * @param allStickerAnnotations all sticker annotations
      */
     public void setAllStickerAnnotations(HashMap<Integer, String> allStickerAnnotations) {
         this.allStickerAnnotations = allStickerAnnotations;
@@ -186,7 +186,7 @@ public class ScreenshotMechanismView extends MechanismView {
     /**
      * This method sets all the text annotations.
      *
-     * @param allTextAnnotations the allTextAnnotations
+     * @param allTextAnnotations all text annotations
      */
     public void setAllTextAnnotations(HashMap<Integer, String> allTextAnnotations) {
         this.allTextAnnotations = allTextAnnotations;
