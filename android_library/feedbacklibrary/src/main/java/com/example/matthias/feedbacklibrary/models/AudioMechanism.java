@@ -10,8 +10,8 @@ import java.util.Map;
  */
 public class AudioMechanism extends Mechanism {
     private String audioPath;
-    private float maxTimeDefault;
-    private float maxTime;
+    // Default value is 10 seconds
+    private float maxTime = 10.0F;
     private String title;
     private int totalDuration;
 
@@ -36,15 +36,6 @@ public class AudioMechanism extends Mechanism {
      */
     public float getMaxTime() {
         return maxTime;
-    }
-
-    /**
-     * This method returns the default maximum allowed recording time.
-     *
-     * @return the default maximum time
-     */
-    public float getMaxTimeDefault() {
-        return maxTimeDefault;
     }
 
     /**
@@ -75,7 +66,6 @@ public class AudioMechanism extends Mechanism {
             // Maximum time
             if (key.equals("maxTime")) {
                 setMaxTime(((Double) param.get("value")).floatValue());
-                setMaxTimeDefault(Float.valueOf((String) param.get("defaultValue")));
             }
         }
         setTitle(getTitle());
@@ -102,15 +92,6 @@ public class AudioMechanism extends Mechanism {
      */
     public void setMaxTime(float maxTime) {
         this.maxTime = maxTime;
-    }
-
-    /**
-     * This method sets the default maximum allowed recording time.
-     *
-     * @param maxTimeDefault the default maximum time
-     */
-    public void setMaxTimeDefault(float maxTimeDefault) {
-        this.maxTimeDefault = maxTimeDefault;
     }
 
     /**
