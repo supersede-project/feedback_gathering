@@ -161,8 +161,9 @@ public class TextMechanism extends Mechanism {
                         setInputTextAlignment("right");
                         break;
                     case "left":
-                        setInputTextAlignment("left");
+                        // No break, because text alignment left represents the default case
                     default:
+                        setInputTextAlignment("left");
                         break;
                 }
             }
