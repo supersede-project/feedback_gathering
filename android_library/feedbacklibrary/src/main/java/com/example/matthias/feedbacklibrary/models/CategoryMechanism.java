@@ -14,9 +14,9 @@ import java.util.Set;
  * Choice mechanism model.
  */
 public class CategoryMechanism extends Mechanism {
-    private boolean mandatory;
+    private boolean mandatory = false;
     private String mandatoryReminder;
-    private boolean multiple;
+    private boolean multiple = false;
     // Options the user can choose from
     private List<String> options = new ArrayList<>();
     private HashMap<String, Long> optionsIds = new HashMap<>();
