@@ -228,22 +228,6 @@ public class FeedbackActivity extends AppCompatActivity implements ScreenshotMec
         }
     }
 
-    // TODO: remove before release
-    private void initOfflineConfiguration() {
-        baseURL = "null";
-        language = "null";
-        System.out.println("offlineConfiguration triggered");
-
-        String jsonString;
-        Gson gson = new Gson();
-        jsonString = Utils.readFileAsString("android_application_v1_offline.json", getAssets());
-        //jsonString = Utils.readFileAsString("android_application_v2_offline_multiple.json", getAssets());
-        orchestratorConfigurationItem = gson.fromJson(jsonString, OrchestratorConfigurationItem.class);
-
-        initModel();
-        initView();
-    }
-
     private void initView() {
         allMechanismViews = new ArrayList<>();
         LayoutInflater layoutInflater = LayoutInflater.from(this);
@@ -668,77 +652,6 @@ public class FeedbackActivity extends AppCompatActivity implements ScreenshotMec
         }
     }
 
-    public void sendStub(View view) {
-        System.out.println("sendStub");
-        if (baseURL != null && language != null) {
-            // The mechanism models are updated with the view values
-            for (MechanismView mechanismView : allMechanismViews) {
-                mechanismView.updateModel();
-            }
-
-            final ArrayList<String> messages = new ArrayList<>();
-            if (validateInput(allMechanisms, messages)) {
-                if (fbAPI == null) {
-                    Retrofit rtf = new Retrofit.Builder().baseUrl(baseURL).addConverterFactory(GsonConverterFactory.create()).build();
-                    fbAPI = rtf.create(feedbackAPI.class);
-                }
-
-                Feedback feedback = new Feedback(allMechanisms);
-                feedback.setTitle(getResources().getString(R.string.supersede_feedbacklibrary_feedback_title_text, System.currentTimeMillis()));
-                feedback.setApplicationId(orchestratorConfiguration.getId());
-                feedback.setConfigurationId(activeConfiguration.getId());
-                feedback.setLanguage(language);
-                feedback.setUserIdentification(Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
-                feedback.initContextInformation();
-
-                // The JSON string of the feedback
-                GsonBuilder builder = new GsonBuilder();
-                builder.excludeFieldsWithoutExposeAnnotation();
-                builder.serializeNulls();
-                Gson gson = builder.create();
-                Type feedbackType = new TypeToken<Feedback>() {
-                }.getType();
-                String feedbackJsonString = gson.toJson(feedback, feedbackType);
-                RequestBody feedbackJSONPart = RequestBody.create(MediaType.parse("multipart/form-data"), feedbackJsonString);
-
-                System.out.println(feedbackJsonString);
-
-                Map<String, RequestBody> files = new HashMap<>();
-                // Audio multipart
-                List<AudioFeedback> audioFeedbackList = feedback.getAudioFeedbacks();
-                if (audioFeedbackList != null) {
-                    for (int pos = 0; pos < audioFeedbackList.size(); ++pos) {
-                        RequestBody requestBody = createRequestBody(new File(audioFeedbackList.get(pos).getAudioPath()));
-                        String fileName = audioFeedbackList.get(pos).getFileName();
-                        String key = String.format("%1$s\"; filename=\"%2$s", audioFeedbackList.get(pos).getPartString() + String.valueOf(pos + 1), fileName);
-                        files.put(key, requestBody);
-                    }
-                }
-                // Screenshots multipart
-                List<ScreenshotFeedback> screenshotFeedbackList = feedback.getScreenshotFeedbacks();
-                if (screenshotFeedbackList != null) {
-                    for (int pos = 0; pos < screenshotFeedbackList.size(); ++pos) {
-                        RequestBody requestBody = createRequestBody(new File(screenshotFeedbackList.get(pos).getImagePath()));
-                        String fileName = screenshotFeedbackList.get(pos).getFileName();
-                        String key = String.format("%1$s\"; filename=\"%2$s", screenshotFeedbackList.get(pos).getPartString() + String.valueOf(pos + 1), fileName);
-                        files.put(key, requestBody);
-                    }
-                }
-            } else {
-                DialogUtils.showInformationDialog(this, messages.toArray(new String[messages.size()]), false);
-            }
-        } else {
-            DialogUtils.showInformationDialog(this, new String[]{getResources().getString(R.string.supersede_feedbacklibrary_error_text)}, true);
-        }
-    }
-
-    /**
-     * This method checks if the inputs of the active mechanisms are valid.
-     *
-     * @param allMechanisms all mechanism to check for their input validity
-     * @param errorMessages error messages to show if the validation fails
-     * @return true if all inputs are valid, false otherwise
-     */
     private boolean validateInput(List<Mechanism> allMechanisms, List<String> errorMessages) {
         // Append an error message and return. The user is confronted with one error message at a time.
         for (Mechanism mechanism : allMechanisms) {
