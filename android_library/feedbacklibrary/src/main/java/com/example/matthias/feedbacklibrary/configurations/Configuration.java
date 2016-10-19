@@ -27,22 +27,47 @@ public class Configuration {
         initMechanisms(configurationItem);
     }
 
+    /**
+     * This method returns the date of creation as a string.
+     *
+     * @return the creation date as a string
+     */
     public String getCreatedAt() {
         return createdAt;
     }
 
+    /**
+     * This method returns the general configuration.
+     *
+     * @return the general configuration
+     */
     public GeneralConfiguration getGeneralConfiguration() {
         return generalConfiguration;
     }
 
+    /**
+     * This method returns the id of the configuration.
+     *
+     * @return the configuration id
+     */
     public long getId() {
         return id;
     }
 
+    /**
+     * This method returns all mechanisms of the configuration.
+     *
+     * @return all mechanisms
+     */
     public List<Mechanism> getMechanisms() {
         return mechanisms;
     }
 
+    /**
+     * This method returns the type of the configuration.
+     *
+     * @return the type, either 'PUSH' or 'PULL'
+     */
     public String getType() {
         return type;
     }
@@ -61,6 +86,11 @@ public class Configuration {
         });
     }
 
+    /**
+     * This method returns if the configuration is of type 'PUSH'.
+     *
+     * @return true if the configuration is of type 'PUSH', false otherwise
+     */
     public boolean isPush() {
         return isPush;
     }
