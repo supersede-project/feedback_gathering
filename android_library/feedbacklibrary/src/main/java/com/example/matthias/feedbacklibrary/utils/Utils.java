@@ -538,6 +538,7 @@ public class Utils {
                                             Collections.shuffle(shuffleIds, rnd);
                                             for (int i = 0; i < shuffleIds.size(); ++i) {
                                                 double likelihood = -1;
+                                                // If no "showIntermediateDialog" is provided, show it
                                                 boolean showIntermediateDialog = true;
                                                 for (Map<String, Object> parameter : idParameters.get(shuffleIds.get(i))) {
                                                     String key = (String) parameter.get("key");
@@ -647,8 +648,8 @@ public class Utils {
                                             }
 
                                             if (selectedPullConfigurationIndex[0] != -1 && selectedConfigurationItem != null) {
-                                                // If no "showIntermediateDialog" is provided, do not show it
-                                                boolean showIntermediateDialog = false;
+                                                // If no "showIntermediateDialog" is provided, show it
+                                                boolean showIntermediateDialog = true;
                                                 for (Map<String, Object> parameter : selectedConfigurationItem.getGeneralConfigurationItem().getParameters()) {
                                                     String key = (String) parameter.get("key");
                                                     // Intermediate dialog
