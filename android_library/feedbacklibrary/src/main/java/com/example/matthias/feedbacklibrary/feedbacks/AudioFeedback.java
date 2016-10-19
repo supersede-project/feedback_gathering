@@ -19,14 +19,29 @@ public class AudioFeedback extends PartFeedback implements Serializable {
         initAudioFeedback(audioMechanism);
     }
 
+    /**
+     * This method returns the path to the audio file.
+     *
+     * @return the audio path
+     */
     public String getAudioPath() {
         return audioPath;
     }
 
+    /**
+     * This method returns the duration of the audio file.
+     *
+     * @return the duration
+     */
     public int getDuration() {
         return duration;
     }
 
+    /**
+     * This method returns the name of the audio file.
+     *
+     * @return the name
+     */
     public String getFileName() {
         return new File(audioPath).getName();
     }
@@ -41,10 +56,20 @@ public class AudioFeedback extends PartFeedback implements Serializable {
         duration = audioMechanism.getTotalDuration();
     }
 
+    /**
+     * This method sets the path to the audio file.
+     *
+     * @param audioPath the audio path
+     */
     public void setAudioPath(String audioPath) {
         this.audioPath = audioPath;
     }
 
+    /**
+     * This method sets the duration of the audio file.
+     *
+     * @param duration the duration.
+     */
     public void setDuration(int duration) {
         this.duration = duration;
     }

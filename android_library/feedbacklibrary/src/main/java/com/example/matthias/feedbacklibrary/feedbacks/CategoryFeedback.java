@@ -20,6 +20,11 @@ public class CategoryFeedback implements Serializable {
         initCategoryFeedback(categoryMechanism);
     }
 
+    /**
+     * This method returns the categories.
+     *
+     * @return the categories
+     */
     public List<HashMap<String, Object>> getCategories() {
         return categories;
     }
