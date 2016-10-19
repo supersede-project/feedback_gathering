@@ -20,22 +20,47 @@ public class AudioMechanism extends Mechanism {
         initAudioMechanism(item);
     }
 
+    /**
+     * This method returns the path to the audio file.
+     *
+     * @return the audio path
+     */
     public String getAudioPath() {
         return audioPath;
     }
 
+    /**
+     * This method returns the maximum allowed recording time.
+     *
+     * @return the maximum time
+     */
     public float getMaxTime() {
         return maxTime;
     }
 
+    /**
+     * This method returns the default maximum allowed recording time.
+     *
+     * @return the default maximum time
+     */
     public float getMaxTimeDefault() {
         return maxTimeDefault;
     }
 
+    /**
+     * This method returns the title.
+     *
+     * @return the title
+     */
     public String getTitle() {
         return title;
     }
 
+    /**
+     * This method returns the total duration of the recorded audio file.
+     *
+     * @return the total duration
+     */
     public int getTotalDuration() {
         return totalDuration;
     }
@@ -61,22 +86,47 @@ public class AudioMechanism extends Mechanism {
         return true;
     }
 
+    /**
+     * This method sets the path to the audio file.
+     *
+     * @param audioPath the audio path
+     */
     public void setAudioPath(String audioPath) {
         this.audioPath = audioPath;
     }
 
+    /**
+     * This method sets the maximum allowed recording time.
+     *
+     * @param maxTime the maximum time
+     */
     public void setMaxTime(float maxTime) {
         this.maxTime = maxTime;
     }
 
+    /**
+     * This method sets the default maximum allowed recording time.
+     *
+     * @param maxTimeDefault the default maximum time
+     */
     public void setMaxTimeDefault(float maxTimeDefault) {
         this.maxTimeDefault = maxTimeDefault;
     }
 
+    /**
+     * This method sets the title.
+     *
+     * @param title the title
+     */
     public void setTitle(String title) {
         this.title = title;
     }
 
+    /**
+     * This method sets the total duration of the recorded audio file.
+     *
+     * @param totalDuration the total duration
+     */
     public void setTotalDuration(int totalDuration) {
         this.totalDuration = totalDuration;
     }

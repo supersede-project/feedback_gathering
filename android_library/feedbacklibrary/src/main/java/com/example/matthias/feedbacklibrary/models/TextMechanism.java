@@ -49,6 +49,11 @@ public class TextMechanism extends Mechanism {
         return hint;
     }
 
+    /**
+     * This method returns the input text.
+     *
+     * @return the input text, or null by default
+     */
     public String getInputText() {
         return inputText;
     }
@@ -89,10 +94,20 @@ public class TextMechanism extends Mechanism {
         return inputTextFontType;
     }
 
+    /**
+     * This method returns the label.
+     *
+     * @return the label, or the empty string by default
+     */
     public String getLabel() {
         return label;
     }
 
+    /**
+     * This method returns the mandatory reminder.
+     *
+     * @return the mandatory reminder
+     */
     public String getMandatoryReminder() {
         return mandatoryReminder;
     }
@@ -106,6 +121,11 @@ public class TextMechanism extends Mechanism {
         return maxLength;
     }
 
+    /**
+     * This method returns the title.
+     *
+     * @return the title
+     */
     public String getTitle() {
         return title;
     }
@@ -187,14 +207,29 @@ public class TextMechanism extends Mechanism {
         }
     }
 
+    /**
+     * This method returns if entering a text is mandatory.
+     *
+     * @return true if it is mandatory, false otherwise
+     */
     public boolean isMandatory() {
         return mandatory;
     }
 
+    /**
+     * This method returns if the maximum length of the input text is visible for the user.
+     *
+     * @return true if it is visible, false otherwise
+     */
     public boolean isMaxLengthVisible() {
         return maxLengthVisible;
     }
 
+    /**
+     * This method returns if the length of the current input text is visible for the user.
+     *
+     * @return true if it is visible, false otherwise
+     */
     public boolean isTextLengthVisible() {
         return textLengthVisible;
     }
@@ -216,54 +251,119 @@ public class TextMechanism extends Mechanism {
         return true;
     }
 
+    /**
+     * This method sets the hint.
+     *
+     * @param hint the hint
+     */
     public void setHint(String hint) {
         this.hint = hint;
     }
 
+    /**
+     * This method sets the input text.
+     *
+     * @param inputText the input text
+     */
     public void setInputText(String inputText) {
         this.inputText = inputText;
     }
 
+    /**
+     * This method sets the alignment of the input text.
+     *
+     * @param inputTextAlignment the input text alignment
+     */
     public void setInputTextAlignment(String inputTextAlignment) {
         this.inputTextAlignment = inputTextAlignment;
     }
 
+    /**
+     * This method sets the text color of the input text.
+     *
+     * @param inputTextFontColor the input text color
+     */
     public void setInputTextFontColor(int inputTextFontColor) {
         this.inputTextFontColor = inputTextFontColor;
     }
 
+    /**
+     * This method sets the size of the input text.
+     *
+     * @param inputTextFontSize the input text size
+     */
     public void setInputTextFontSize(float inputTextFontSize) {
         this.inputTextFontSize = inputTextFontSize;
     }
 
+    /**
+     * This method sets the font type of the input text.
+     *
+     * @param inputTextFontType the input text font type
+     */
     public void setInputTextFontType(int inputTextFontType) {
         this.inputTextFontType = inputTextFontType;
     }
 
+    /**
+     * This method sets the label.
+     *
+     * @param label the label
+     */
     public void setLabel(String label) {
         this.label = label;
     }
 
+    /**
+     * This method sets if entering a text is mandatory.
+     *
+     * @param mandatory true if it is mandatory, false otherwise
+     */
     public void setMandatory(boolean mandatory) {
         this.mandatory = mandatory;
     }
 
+    /**
+     * This method sets the mandatory reminder.
+     *
+     * @param mandatoryReminder the mandatory reminder
+     */
     public void setMandatoryReminder(String mandatoryReminder) {
         this.mandatoryReminder = mandatoryReminder;
     }
 
+    /**
+     * This method sets the maximum length of the input text.
+     *
+     * @param maxLength the maximum length
+     */
     public void setMaxLength(int maxLength) {
         this.maxLength = maxLength;
     }
 
+    /**
+     * This method sets if the maximum length of the input text is visible for the user.
+     *
+     * @param maxLengthVisible true if it is visible, false otherwise
+     */
     public void setMaxLengthVisible(boolean maxLengthVisible) {
         this.maxLengthVisible = maxLengthVisible;
     }
 
+    /**
+     * This method sets if the length of the current input text is visible for the user.
+     *
+     * @param textLengthVisible true if it is visible, false otherwise
+     */
     public void setTextLengthVisible(boolean textLengthVisible) {
         this.textLengthVisible = textLengthVisible;
     }
 
+    /**
+     * This method sets the title.
+     *
+     * @param title the title
+     */
     public void setTitle(String title) {
         this.title = title;
     }

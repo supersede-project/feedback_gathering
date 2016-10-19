@@ -25,6 +25,11 @@ public class ScreenshotMechanism extends Mechanism {
         initScreenshotMechanism(item);
     }
 
+    /**
+     * This method returns all text annotation texts.
+     *
+     * @return all text annotation texts or an empty hash map if there are no text annotation texts
+     */
     public HashMap<Integer, String> getAllTextAnnotationTexts() {
         if (getAllTextAnnotations() != null) {
             HashMap<Integer, String> returnValue = new HashMap<>();
@@ -41,10 +46,20 @@ public class ScreenshotMechanism extends Mechanism {
         return null;
     }
 
+    /**
+     * This method returns all text annotations.
+     *
+     * @return all text annotations
+     */
     public HashMap<Integer, String> getAllTextAnnotations() {
         return allTextAnnotations;
     }
 
+    /**
+     * This method returns the default picture.
+     *
+     * @return the default picture
+     */
     public String getDefaultPicture() {
         return defaultPicture;
     }
@@ -58,10 +73,20 @@ public class ScreenshotMechanism extends Mechanism {
         return imagePath;
     }
 
+    /**
+     * This method returns the maximum allowed number of text annotations.
+     *
+     * @return the maximum number of text annotations or 0 if no maximum is provided
+     */
     public int getMaxNumberTextAnnotation() {
         return maxNumberTextAnnotation;
     }
 
+    /**
+     * This method returns the title.
+     *
+     * @return the title
+     */
     public String getTitle() {
         return title;
     }
@@ -89,22 +114,47 @@ public class ScreenshotMechanism extends Mechanism {
         return true;
     }
 
+    /**
+     * This method sets all the text annotations.
+     *
+     * @param allTextAnnotations all text annotations
+     */
     public void setAllTextAnnotations(HashMap<Integer, String> allTextAnnotations) {
         this.allTextAnnotations = allTextAnnotations;
     }
 
+    /**
+     * This method sets the default picture.
+     *
+     * @param defaultPicture the default picture
+     */
     public void setDefaultPicture(String defaultPicture) {
         this.defaultPicture = defaultPicture;
     }
 
+    /**
+     * This method sets the path of the annotated image.
+     *
+     * @param imagePath the image path
+     */
     public void setImagePath(String imagePath) {
         this.imagePath = imagePath;
     }
 
+    /**
+     * This method sets the maximum allowed number of text annotations.
+     *
+     * @param maxNumberTextAnnotation the maximum number of text annotations
+     */
     public void setMaxNumberTextAnnotation(int maxNumberTextAnnotation) {
         this.maxNumberTextAnnotation = maxNumberTextAnnotation;
     }
 
+    /**
+     * This method sets the title.
+     *
+     * @param title the title
+     */
     public void setTitle(String title) {
         this.title = title;
     }
