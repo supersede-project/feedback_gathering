@@ -25,10 +25,20 @@ public class PullConfiguration {
         initPullConfiguration(item);
     }
 
+    /**
+     * This method returns all pull mechanisms.
+     *
+     * @return all mechanisms
+     */
     public List<Mechanism> getAllPullMechanisms() {
         return allPullMechanisms;
     }
 
+    /**
+     * This method returns the likelihood.
+     *
+     * @return the likelihood
+     */
     public double getLikelihood() {
         return likelihood;
     }
@@ -59,26 +69,56 @@ public class PullConfiguration {
         });
     }
 
+    /**
+     * This method returns if the pull configuration is active.
+     *
+     * @return true if it is active, false otherwise
+     */
     public boolean isActive() {
         return isActive;
     }
 
+    /**
+     * This method returns if a pop up dialog is shown.
+     *
+     * @return true if a pop up dialog is shown, false otherwise
+     */
     public boolean isShowPopupDialog() {
         return showPopupDialog;
     }
 
+    /**
+     * This method sets if the pull configuration is active.
+     *
+     * @param active true if it is active, false otherwise
+     */
     public void setActive(boolean active) {
         isActive = active;
     }
 
+    /**
+     * This method sets all pull mechanisms.
+     *
+     * @param allPullMechanisms all mechanisms
+     */
     public void setAllPullMechanisms(List<Mechanism> allPullMechanisms) {
         this.allPullMechanisms = allPullMechanisms;
     }
 
+    /**
+     * This method sets the likelihood.
+     *
+     * @param likelihood the likelihood
+     */
     public void setLikelihood(double likelihood) {
         this.likelihood = likelihood;
     }
 
+    /**
+     * This method sets if a pop up dialog is shown.
+     *
+     * @param showPopupDialog true if a pop up dialog is shown, false otherwise
+     */
     public void setShowPopupDialog(boolean showPopupDialog) {
         this.showPopupDialog = showPopupDialog;
     }
