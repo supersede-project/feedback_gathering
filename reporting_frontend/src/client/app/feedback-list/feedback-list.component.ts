@@ -28,6 +28,7 @@ export class FeedbackListComponent implements OnInit {
   applications:Application[] = [];
   selectedApplication:Application;
   sortOrder:{} = {'id': '', 'title': '', 'date': ''};
+  loaded:boolean = false;
 
   constructor(public feedbackListService:FeedbackListService, private applicationService:ApplicationService, private router:Router, private route:ActivatedRoute, private feedbackStatusService:FeedbackStatusService) {
   }
@@ -44,6 +45,7 @@ export class FeedbackListComponent implements OnInit {
           this.filteredFeedbacks = feedbacks;
           this.sortFeedbacks('id', false);
           this.getFeedbackStatuses(applicationId);
+          this.loaded = true;
         },
         error => {
           console.log(error);
@@ -155,7 +157,15 @@ export class FeedbackListComponent implements OnInit {
   populateStatusData(feedbackStatuses:FeedbackStatus[]) {
     for(var feedback of this.feedbacks) {
       feedback.personalFeedbackStatus = feedbackStatuses.filter(feedbackStatus => feedbackStatus.feedbackId === feedback.id)[0];
-      feedback.read = feedback.personalFeedbackStatus.status === 'read';
+      if(feedback.personalFeedbackStatus) {
+        feedback.read = feedback.personalFeedbackStatus.status === 'read';
+      }
+    }
+    for(var feedback of this.selectedFeedbacks) {
+      feedback.personalFeedbackStatus = feedbackStatuses.filter(feedbackStatus => feedbackStatus.feedbackId === feedback.id)[0];
+      if(feedback.personalFeedbackStatus) {
+        feedback.read = feedback.personalFeedbackStatus.status === 'read';
+      }
     }
   }
 
@@ -163,22 +173,26 @@ export class FeedbackListComponent implements OnInit {
     var csvContent = "";
     csvContent += "ID, Title, Date, Application, Feedbacks \n";
 
-    for (let feedback of this.filteredFeedbacks) {
+    for (let feedback of this.selectedFeedbacks) {
       csvContent += feedback.id + "," + feedback.title + "," + feedback.createdAt + "," + feedback.applicationId + ",";
 
-      for(let textFeedback of feedback.textFeedbacks) {
-        if(textFeedback.mechanism) {
-          csvContent += textFeedback.mechanism.getParameterValue('title') + ": " + textFeedback.text + ",";
-        } else {
-          csvContent += textFeedback.text + ",";
+      if(feedback.textFeedbacks) {
+        for(let textFeedback of feedback.textFeedbacks) {
+          if(textFeedback.mechanism) {
+            csvContent += textFeedback.mechanism.getParameterValue('title') + ": " + textFeedback.text + ",";
+          } else {
+            csvContent += textFeedback.text + ",";
+          }
         }
       }
 
-      for(let ratingFeedback of feedback.ratingFeedbacks) {
-        if(ratingFeedback.mechanism) {
-          csvContent += ratingFeedback.mechanism.getParameterValue('title') + ": " + ratingFeedback.rating + "/" + ratingFeedback.mechanism.getParameterValue('maxRating') + ",";
-        } else {
-          csvContent += ratingFeedback.rating + ",";
+      if(feedback.ratingFeedbacks) {
+        for(let ratingFeedback of feedback.ratingFeedbacks) {
+          if(ratingFeedback.mechanism) {
+            csvContent += ratingFeedback.mechanism.getParameterValue('title') + ": " + ratingFeedback.rating + "/" + ratingFeedback.mechanism.getParameterValue('maxRating') + ",";
+          } else {
+            csvContent += ratingFeedback.rating + ",";
+          }
         }
       }
 
@@ -215,8 +229,6 @@ export class FeedbackListComponent implements OnInit {
     } else {
       this.selectedFeedbacks.push(feedback);
     }
-
-    console.log(this.selectedFeedbacks);
   }
 
   markAsReadOrUnread(feedbacks:Feedback[], read:boolean):void {
