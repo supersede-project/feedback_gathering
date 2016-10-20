@@ -8,6 +8,8 @@ import {ApplicationService} from '../shared/services/application.service';
 import {TextMechanism} from '../shared/models/mechanisms/text_mechanism';
 import {RatingMechanism} from '../shared/models/mechanisms/rating_mechanism';
 import {FeedbackListService} from '../shared/services/feedback-list.service';
+import {FeedbackStatusService} from '../shared/services/feedback-status.service';
+import {FeedbackStatus} from '../shared/models/feedbacks/feedback_status';
 
 
 @Component({
@@ -24,7 +26,7 @@ export class FeedbackDetailComponent implements OnInit {
   errorMessage:string;
   host:string = 'http://ec2-54-175-37-30.compute-1.amazonaws.com/';
 
-  constructor(public feedbackListService:FeedbackListService, private route:ActivatedRoute, private feedbackService:FeedbackDetailService, private applicationService:ApplicationService, private router:Router) {
+  constructor(public feedbackListService:FeedbackListService, private route:ActivatedRoute, private feedbackService:FeedbackDetailService, private applicationService:ApplicationService, private router:Router, private feedbackStatusService:FeedbackStatusService) {
   }
 
   ngOnInit() {
@@ -37,6 +39,7 @@ export class FeedbackDetailComponent implements OnInit {
             this.feedback = <Feedback>feedback;
             if (feedback && feedback.applicationId) {
               this.loadApplication(feedback.applicationId, feedback.configurationId);
+              this.getFeedbackStatuses(feedback.applicationId);
             }
           },
           error => this.errorMessage = <any>error
@@ -84,10 +87,6 @@ export class FeedbackDetailComponent implements OnInit {
     }
   }
 
-  markAsUnread():void {
-    this.router.navigate(['/']);
-  }
-
   showNextFeedback() {
     if (this.feedback.id !== this.feedbacks[this.feedbacks.length - 1].id) {
       this.feedback = this.feedbacks[this.getCurrentFeedbackIndex() + 1];
@@ -98,6 +97,49 @@ export class FeedbackDetailComponent implements OnInit {
     if (this.feedback.id !== this.feedbacks[0].id) {
       this.feedback = this.feedbacks[this.getCurrentFeedbackIndex() - 1];
     }
+  }
+
+  markAsReadOrUnread(feedback:Feedback, read:boolean):void {
+    if(!feedback.personalFeedbackStatus) {
+      return;
+    }
+    let applicationId = feedback.applicationId;
+    let feedbackStatus = feedback.personalFeedbackStatus;
+    this.feedbackStatusService.updateReadStatus(read, feedbackStatus.id, feedbackStatus.feedbackId, applicationId).subscribe(
+      result => {
+        if(!read) {
+          this.router.navigate(['/']);
+        }
+      },
+      error => {
+        console.log(error);
+      }
+    );
+  }
+
+  getFeedbackStatuses(applicationId:number) {
+    this.feedbackStatusService.get(applicationId)
+      .subscribe(
+        feedbackStatuses => {
+          let currentUserId = +localStorage.getItem('api_user_id');
+          let feedbackStatus = feedbackStatuses.filter(feedbackStatus => {
+            return feedbackStatus.feedbackId === this.feedback.id && feedbackStatus.apiUserId === currentUserId
+          })[0];
+          this.populateStatusData(feedbackStatus);
+        },
+        error => {
+          console.log(error);
+        }
+      );
+  }
+
+  /**
+   * combines repository feedback with the personal feedback status
+   */
+  populateStatusData(feedbackStatus:FeedbackStatus) {
+    this.feedback.personalFeedbackStatus = feedbackStatus;
+    this.feedback.read = this.feedback.personalFeedbackStatus.status === 'read';
+    this.markAsReadOrUnread(this.feedback, true);
   }
 
   private getCurrentFeedbackIndex():number {

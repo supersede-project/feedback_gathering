@@ -6,6 +6,8 @@ import {ApplicationService} from '../shared/services/application.service';
 import {TextMechanism} from '../shared/models/mechanisms/text_mechanism';
 import {RatingMechanism} from '../shared/models/mechanisms/rating_mechanism';
 import {ActivatedRoute, Router} from '@angular/router';
+import {FeedbackStatusService} from '../shared/services/feedback-status.service';
+import {FeedbackStatus} from '../shared/models/feedbacks/feedback_status';
 
 
 /**
@@ -27,7 +29,7 @@ export class FeedbackListComponent implements OnInit {
   selectedApplication:Application;
   sortOrder:{} = {'id': '', 'title': '', 'date': ''};
 
-  constructor(public feedbackListService:FeedbackListService, private applicationService:ApplicationService, private router:Router, private route:ActivatedRoute) {
+  constructor(public feedbackListService:FeedbackListService, private applicationService:ApplicationService, private router:Router, private route:ActivatedRoute, private feedbackStatusService:FeedbackStatusService) {
   }
 
   ngOnInit() {
@@ -41,12 +43,27 @@ export class FeedbackListComponent implements OnInit {
           this.feedbacks = feedbacks;
           this.filteredFeedbacks = feedbacks;
           this.sortFeedbacks('id', false);
+          this.getFeedbackStatuses(applicationId);
         },
         error => {
           console.log(error);
           if(error.status === 403) {
             this.router.navigate(['/login'])
           }
+        }
+      );
+  }
+
+  getFeedbackStatuses(applicationId:number) {
+    this.feedbackStatusService.get(applicationId)
+      .subscribe(
+        feedbackStatuses => {
+          let currentUserId = +localStorage.getItem('api_user_id');
+          let currentUserFeedbackStatuses = feedbackStatuses.filter(feedbackStatus => feedbackStatus.apiUserId === currentUserId);
+          this.populateStatusData(currentUserFeedbackStatuses);
+        },
+        error => {
+          console.log(error);
         }
       );
   }
@@ -132,6 +149,16 @@ export class FeedbackListComponent implements OnInit {
     }
   }
 
+  /**
+   * combines repository feedbacks with the personal feedback statuses
+   */
+  populateStatusData(feedbackStatuses:FeedbackStatus[]) {
+    for(var feedback of this.feedbacks) {
+      feedback.personalFeedbackStatus = feedbackStatuses.filter(feedbackStatus => feedbackStatus.feedbackId === feedback.id)[0];
+      feedback.read = feedback.personalFeedbackStatus.status === 'read';
+    }
+  }
+
   exportAsCSV():void {
     var csvContent = "";
     csvContent += "ID, Title, Date, Application, Feedbacks \n";
@@ -192,8 +219,19 @@ export class FeedbackListComponent implements OnInit {
     console.log(this.selectedFeedbacks);
   }
 
-  markAsRead():void {
-
+  markAsReadOrUnread(feedbacks:Feedback[], read:boolean):void {
+    for(let feedback of feedbacks) {
+      let applicationId = feedback.applicationId;
+      let feedbackStatus = feedback.personalFeedbackStatus;
+      this.feedbackStatusService.updateReadStatus(read, feedbackStatus.id, feedbackStatus.feedbackId, applicationId).subscribe(
+        result => {
+          this.getFeedbacks(applicationId);
+        },
+        error => {
+          console.log(error);
+        }
+      );
+    }
   }
 }
 

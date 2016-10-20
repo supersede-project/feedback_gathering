@@ -35,7 +35,7 @@
            autofocus>
 
     <button (click)="exportAsCSV()" id="export" class="action btn-primary btn-xs">CSV Export</button>
-    <button (click)="markAsRead()" id="markAsRead" class="action btn-default btn-xs"
+    <button (click)="markAsReadOrUnread(selectedFeedbacks, true)" id="markAsRead" class="action btn-default btn-xs"
             [class.btn-primary]="selectedFeedbacks.length > 0">Mark as read
     </button>
     <div class="btn-group">
@@ -81,7 +81,7 @@
       </thead>
       <tbody *ngIf="applications">
       <tr *ngIf="filteredFeedbacks.length === 0"><td colspan="6">No feedbacks yet</td></tr>
-      <tr *ngFor="let feedback of filteredFeedbacks; let i = index" [class.unread]="i < 4">
+      <tr *ngFor="let feedback of filteredFeedbacks; let i = index" [class.unread]="!feedback.read">
         <td>
           <input (change)="select($event, feedback)" class="checkbox" type="checkbox" name="{{feedback.id}}"
                  value="{{feedback.id}}">

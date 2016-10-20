@@ -4,12 +4,13 @@ import {RouterModule} from '@angular/router';
 import {FeedbackListComponent} from './feedback-list.component';
 import {ApplicationNameByIdPipe} from '../shared/pipes/application-name-by-id.pipe';
 import {TruncatePipe} from '../shared/pipes/truncate.pipe';
+import {FeedbackStatusService} from '../shared/services/feedback-status.service';
 
 @NgModule({
   imports: [CommonModule, RouterModule],
   declarations: [FeedbackListComponent, ApplicationNameByIdPipe, TruncatePipe],
   exports: [FeedbackListComponent],
-  providers: []
+  providers: [FeedbackStatusService]
 })
 
 export class FeedbackListModule {
