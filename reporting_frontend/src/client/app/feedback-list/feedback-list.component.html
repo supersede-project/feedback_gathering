@@ -34,7 +34,7 @@
     <input #searchField (keyup)="search(searchField.value)" value="" class="form-control search" placeholder="Search"
            autofocus>
 
-    <button (click)="exportAsCSV()" id="export" class="action btn-primary btn-xs">CSV Export</button>
+    <button (click)="exportAsCSV()" id="export" class="action btn-default btn-xs" [class.btn-primary]="selectedFeedbacks.length > 0">CSV Export</button>
     <button (click)="markAsReadOrUnread(selectedFeedbacks, true)" id="markAsRead" class="action btn-default btn-xs"
             [class.btn-primary]="selectedFeedbacks.length > 0">Mark as read
     </button>

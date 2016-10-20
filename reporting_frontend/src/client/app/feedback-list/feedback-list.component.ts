@@ -165,22 +165,26 @@ export class FeedbackListComponent implements OnInit {
     var csvContent = "";
     csvContent += "ID, Title, Date, Application, Feedbacks \n";
 
-    for (let feedback of this.filteredFeedbacks) {
+    for (let feedback of this.selectedFeedbacks) {
       csvContent += feedback.id + "," + feedback.title + "," + feedback.createdAt + "," + feedback.applicationId + ",";
 
-      for(let textFeedback of feedback.textFeedbacks) {
-        if(textFeedback.mechanism) {
-          csvContent += textFeedback.mechanism.getParameterValue('title') + ": " + textFeedback.text + ",";
-        } else {
-          csvContent += textFeedback.text + ",";
+      if(feedback.textFeedbacks) {
+        for(let textFeedback of feedback.textFeedbacks) {
+          if(textFeedback.mechanism) {
+            csvContent += textFeedback.mechanism.getParameterValue('title') + ": " + textFeedback.text + ",";
+          } else {
+            csvContent += textFeedback.text + ",";
+          }
         }
       }
 
-      for(let ratingFeedback of feedback.ratingFeedbacks) {
-        if(ratingFeedback.mechanism) {
-          csvContent += ratingFeedback.mechanism.getParameterValue('title') + ": " + ratingFeedback.rating + "/" + ratingFeedback.mechanism.getParameterValue('maxRating') + ",";
-        } else {
-          csvContent += ratingFeedback.rating + ",";
+      if(feedback.ratingFeedback) {
+        for(let ratingFeedback of feedback.ratingFeedbacks) {
+          if(ratingFeedback.mechanism) {
+            csvContent += ratingFeedback.mechanism.getParameterValue('title') + ": " + ratingFeedback.rating + "/" + ratingFeedback.mechanism.getParameterValue('maxRating') + ",";
+          } else {
+            csvContent += ratingFeedback.rating + ",";
+          }
         }
       }
 
