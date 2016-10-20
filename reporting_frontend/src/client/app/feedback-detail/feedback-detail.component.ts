@@ -90,12 +90,14 @@ export class FeedbackDetailComponent implements OnInit {
   showNextFeedback() {
     if (this.feedback.id !== this.feedbacks[this.feedbacks.length - 1].id) {
       this.feedback = this.feedbacks[this.getCurrentFeedbackIndex() + 1];
+      this.markAsReadOrUnread(this.feedback, true);
     }
   }
 
   showPreviousFeedback() {
     if (this.feedback.id !== this.feedbacks[0].id) {
       this.feedback = this.feedbacks[this.getCurrentFeedbackIndex() - 1];
+      this.markAsReadOrUnread(this.feedback, true);
     }
   }
 
@@ -126,11 +128,13 @@ export class FeedbackDetailComponent implements OnInit {
             return feedbackStatus.feedbackId === this.feedback.id && feedbackStatus.apiUserId === currentUserId
           })[0];
           this.populateStatusData(feedbackStatus);
+          // populate for other feedbacks as well
+          let currentUserFeedbackStatuses = feedbackStatuses.filter(feedbackStatus => feedbackStatus.apiUserId === currentUserId);
+          this.populateStatusDataForAll(currentUserFeedbackStatuses);
         },
         error => {
           console.log(error);
-        }
-      );
+        });
   }
 
   /**
@@ -140,6 +144,15 @@ export class FeedbackDetailComponent implements OnInit {
     this.feedback.personalFeedbackStatus = feedbackStatus;
     this.feedback.read = this.feedback.personalFeedbackStatus.status === 'read';
     this.markAsReadOrUnread(this.feedback, true);
+  }
+
+  populateStatusDataForAll(feedbackStatuses:FeedbackStatus[]) {
+    for(var feedback of this.feedbacks) {
+      feedback.personalFeedbackStatus = feedbackStatuses.filter(feedbackStatus => feedbackStatus.feedbackId === feedback.id)[0];
+      if(feedback.personalFeedbackStatus) {
+        feedback.read = feedback.personalFeedbackStatus.status === 'read';
+      }
+    }
   }
 
   private getCurrentFeedbackIndex():number {

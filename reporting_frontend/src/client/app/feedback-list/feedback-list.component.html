@@ -17,9 +17,6 @@
     <article *ngIf="filteredFeedbacks" class="feedback-statuses">
       <span class="label label-default">read</span><br/>
       <span class="label label-default">unread</span><br/>
-      <span class="label label-default">rejected</span><br/>
-      <span class="label label-default">approved</span><br/>
-      <span class="label label-default">implemented</span><br/>
     </article>
     <br/>
 
@@ -37,9 +34,6 @@
     <button (click)="exportAsCSV()" id="export" class="action btn-default btn-xs" [class.btn-primary]="selectedFeedbacks.length > 0">CSV Export</button>
     <button (click)="markAsReadOrUnread(selectedFeedbacks, true)" id="markAsRead" class="action btn-default btn-xs"
             [class.btn-primary]="selectedFeedbacks.length > 0">Mark as read
-    </button>
-    <button (click)="markAsReadOrUnread(selectedFeedbacks, false)" id="markAsUnread" class="action btn-default btn-xs"
-            [class.btn-primary]="selectedFeedbacks.length > 0">Mark as unread
     </button>
     <div class="btn-group">
       <button type="button" class="action btn btn-default dropdown-toggle"
