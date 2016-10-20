@@ -410,6 +410,36 @@ var setup = function()
             "parent": MODAL_VIEW,
             "displayReadonly": false
         };
+        fieldConfig.postRender = function(control)
+        {
+            var modal = $(MODAL_TEMPLATE.trim());
+            modal.find(".modal-title").append(field.getTitle());
+            modal.find(".modal-body").append(control.getFieldEl());
+
+            modal.find('.modal-footer').append("<button class='btn btn-primary pull-right okay' data-dismiss='modal' aria-hidden='true'>Okay</button>");
+            modal.find('.modal-footer').append("<button class='btn btn-default pull-left' data-dismiss='modal' aria-hidden='true'>Cancel</button>");
+
+            $(modal).modal({
+                "keyboard": true
+            });
+
+            $(modal).find(".okay").click(function() {
+
+                field.schema = control.getValue();
+
+                var top = findTop(field);
+                regenerate(top);
+
+                if (callback)
+                {
+                    callback();
+                }
+            });
+
+            control.getFieldEl().find("p.help-block").css({
+                "display": "none"
+            });
+        };
 
         var x = $("<div><div class='fieldForm'></div></div>");
         $(x).find(".fieldForm").alpaca(fieldConfig);
@@ -519,28 +549,6 @@ var setup = function()
         });
     };
 
-    var refresh = function(callback)
-    {
-        var current = $("UL.nav.nav-tabs LI.active A.tab-item");
-        $(current).click();
-    };
-
-    var isCoreField = function(type)
-    {
-        var cores = ["any", "array", "checkbox", "file", "hidden", "number", "object", "radio", "select", "text", "textarea"];
-
-        var isCore = false;
-        for (var i = 0; i < cores.length; i++)
-        {
-            if (cores[i] == type)
-            {
-                isCore = true;
-            }
-        }
-
-        return isCore;
-    };
-
     var afterAlpacaInit = function()
     {
             var type = "text"
@@ -558,11 +566,8 @@ var setup = function()
             $(div).append("<div><span class='form-element-title'>" + title + "</span> (<span class='form-element-type'>" + fieldType + "</span>)</div>");
             $(div).append("<div><span class='form-element-description'>Dropable element</span></div>");
 
-            var isCore = isCoreField(fieldType);
-            if (isCore)
-            {
-                $("#basic").append(div);
-            }
+            $("#basic").append(div);
+
 
             // init all of the draggable form elements
             $(".form-element").draggable({
@@ -586,12 +591,6 @@ var setup = function()
         {
             afterAlpacaInit();
         }
-    });
-
-    $(".tab-item-designer").click(function() {
-        setTimeout(function() {
-            refreshDesigner();
-        }, 50);
     });
 
     var insertField = function(schema, options, data, dataType, fieldType, parentField, previousField, previousFieldKey, nextField, nextFieldKey)
@@ -730,7 +729,7 @@ var setup = function()
         editor3.setValue(JSON.stringify(_data, null, "    "));
 
         setTimeout(function() {
-            refresh();
+            refreshDesigner();
         }, 100);
     };
 
@@ -745,7 +744,7 @@ var setup = function()
         });
     };
 
-    $(".tab-item-source").click();
+    refreshDesigner();
 };
 
 $(document).ready(function() {
