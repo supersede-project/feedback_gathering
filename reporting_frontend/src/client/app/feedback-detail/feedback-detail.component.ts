@@ -27,9 +27,10 @@ export class FeedbackDetailComponent implements OnInit {
 
   ngOnInit() {
     this.route.params.subscribe(params => {
-      if (params.hasOwnProperty('id') && params['id']) {
+      if (params.hasOwnProperty('applicationId') && params['applicationId'] && params.hasOwnProperty('id') && params['id']) {
+        let applicationId = +params['applicationId'];
         let id = +params['id'];
-        this.feedbackService.find(id).subscribe(
+        this.feedbackService.find(applicationId, id).subscribe(
           feedback => {
             this.feedback = <Feedback>feedback;
             if(feedback && feedback.applicationId) {

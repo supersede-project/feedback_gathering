@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Http, Response, Headers } from '@angular/http';
-import { Observable } from 'rxjs/Observable';
+import {Observable} from 'rxjs/Rx';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import {Feedback} from '../models/feedbacks/feedback';
@@ -18,14 +18,7 @@ export class FeedbackListService {
 
     return this.http.get(REPOSITORY_HOST + 'en/applications/' + applicationId + '/feedbacks', { headers: headers })
       .map((res: Response) => res.json())
-      .catch(this.handleError);
-  }
-
-  private handleError (error: any) {
-    let errMsg = (error.message) ? error.message :
-      error.status ? `${error.status} - ${error.statusText}` : 'Server error';
-    console.error(errMsg); // log to console instead
-    return Observable.throw(errMsg);
+      .catch((error:any) => Observable.throw(error || 'Server error'));
   }
 }
 

@@ -10,15 +10,20 @@ import {UserService} from '../shared/services/user.service';
   styleUrls: ['login.component.css'],
 })
 export class LoginComponent {
+  errorMessage:string;
+
   constructor(private userService:UserService, private router:Router) {
   }
 
   formSubmitted(event, username, password) {
     event.preventDefault();
-    this.userService.loginOnRepository(username, password).subscribe((result) => {
-      if (result) {
-        this.router.navigate(['']);
-      }
-    });
+    this.userService.loginOnRepository(username, password).subscribe(
+      (result) => {
+        if (result) {
+          this.router.navigate(['']);
+        }
+      },
+      error => this.errorMessage = 'Username or password is wrong'
+    );
   }
 }
