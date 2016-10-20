@@ -10,9 +10,6 @@ import {FeedbackStatusService} from '../shared/services/feedback-status.service'
 import {FeedbackStatus} from '../shared/models/feedbacks/feedback_status';
 
 
-/**
- * This class represents the lazy loaded HomeComponent.
- */
 @Component({
   moduleId: module.id,
   selector: 'sd-feedback-list',
@@ -31,10 +28,10 @@ export class FeedbackListComponent implements OnInit {
   loaded:boolean = false;
 
   constructor(public feedbackListService:FeedbackListService, private applicationService:ApplicationService, private router:Router, private route:ActivatedRoute, private feedbackStatusService:FeedbackStatusService) {
+    this.getApplications();
   }
 
   ngOnInit() {
-    this.getApplications();
   }
 
   getFeedbacks(applicationId:number) {

@@ -10,6 +10,7 @@ import {RatingMechanism} from '../shared/models/mechanisms/rating_mechanism';
 import {FeedbackListService} from '../shared/services/feedback-list.service';
 import {FeedbackStatusService} from '../shared/services/feedback-status.service';
 import {FeedbackStatus} from '../shared/models/feedbacks/feedback_status';
+import {Location} from '@angular/common';
 
 
 @Component({
@@ -26,7 +27,9 @@ export class FeedbackDetailComponent implements OnInit {
   errorMessage:string;
   host:string = 'http://ec2-54-175-37-30.compute-1.amazonaws.com/';
 
-  constructor(public feedbackListService:FeedbackListService, private route:ActivatedRoute, private feedbackService:FeedbackDetailService, private applicationService:ApplicationService, private router:Router, private feedbackStatusService:FeedbackStatusService) {
+  constructor(public feedbackListService:FeedbackListService, private route:ActivatedRoute,
+              private feedbackService:FeedbackDetailService, private applicationService:ApplicationService,
+              private router:Router, private feedbackStatusService:FeedbackStatusService, private location: Location) {
   }
 
   ngOnInit() {
@@ -110,7 +113,7 @@ export class FeedbackDetailComponent implements OnInit {
     this.feedbackStatusService.updateReadStatus(read, feedbackStatus.id, feedbackStatus.feedbackId, applicationId).subscribe(
       result => {
         if(!read) {
-          this.router.navigate(['/']);
+          this.location.back();
         }
       },
       error => {

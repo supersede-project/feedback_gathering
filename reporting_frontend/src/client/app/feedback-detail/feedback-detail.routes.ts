@@ -4,7 +4,7 @@ import {LoggedInGuard} from '../shared/guards/logged-in.guard';
 
 export const FeedbackDetailRoutes: Route[] = [
   {
-    path: 'feedback-detail/:applicationId/:id',
+    path: 'feedbacks/:applicationId/:id',
     component: FeedbackDetailComponent,
     canActivate: [LoggedInGuard]
   }

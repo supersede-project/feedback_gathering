@@ -6,7 +6,7 @@
       <article class="controls">
         <i class="glyphicon glyphicon-star-empty"></i>
         &nbsp;
-        <button (click)="markAsReadOrUnread(feedback, false)" id="markAsUnread" class="action btn-primary btn-xs">Mark as unread</button>
+        <button *ngIf="feedback.personalFeedbackStatus" (click)="markAsReadOrUnread(feedback, false)" id="markAsUnread" class="action btn-primary btn-xs">Mark as unread</button>
         <div class="btn-group">
           <button type="button" class="action btn btn-primary dropdown-toggle btn-xs" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             Status <span class="caret"></span>
