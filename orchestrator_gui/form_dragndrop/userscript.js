@@ -147,10 +147,6 @@ var setup = function()
                         // interaction div
                         var interaction = $("<div class='interaction'></div>");
                         var buttonGroup = $("<div class='btn-group pull-right'></div>");
-                        var schemaButton = $('<button class="btn btn-default btn-xs button-schema" alpaca-ref-id="' + alpacaFieldId + '"><i class="glyphicon glyphicon-list"></i></button>');
-                        buttonGroup.append(schemaButton);
-                        var optionsButton = $('<button class="btn btn-default btn-xs button-options" alpaca-ref-id="' + alpacaFieldId + '"><i class="glyphicon glyphicon-wrench"></i></button>');
-                        buttonGroup.append(optionsButton);
                         var removeButton = $('<button class="btn btn-danger btn-xs button-remove" alpaca-ref-id="' + alpacaFieldId + '"><i class="glyphicon glyphicon-remove"></i></button>');
                         buttonGroup.append(removeButton);
                         interaction.append(buttonGroup);
@@ -171,24 +167,6 @@ var setup = function()
                         $(buttonGroup).css({
                             "margin-top": 5 + (($(interaction).height() / 2) - ($(buttonGroup).height() / 2)),
                             "margin-right": "16px"
-                        });
-                        $(schemaButton).off().click(function(e) {
-
-                            e.preventDefault();
-                            e.stopPropagation();
-
-                            var alpacaId = $(this).attr("alpaca-ref-id");
-
-                            editSchema(alpacaId);
-                        });
-                        $(optionsButton).off().click(function(e) {
-
-                            e.preventDefault();
-                            e.stopPropagation();
-
-                            var alpacaId = $(this).attr("alpaca-ref-id");
-
-                            editOptions(alpacaId);
                         });
                         $(removeButton).off().click(function(e) {
 
