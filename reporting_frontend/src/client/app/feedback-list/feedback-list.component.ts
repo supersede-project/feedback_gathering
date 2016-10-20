@@ -28,6 +28,7 @@ export class FeedbackListComponent implements OnInit {
   applications:Application[] = [];
   selectedApplication:Application;
   sortOrder:{} = {'id': '', 'title': '', 'date': ''};
+  loaded:boolean = false;
 
   constructor(public feedbackListService:FeedbackListService, private applicationService:ApplicationService, private router:Router, private route:ActivatedRoute, private feedbackStatusService:FeedbackStatusService) {
   }
@@ -44,6 +45,7 @@ export class FeedbackListComponent implements OnInit {
           this.filteredFeedbacks = feedbacks;
           this.sortFeedbacks('id', false);
           this.getFeedbackStatuses(applicationId);
+          this.loaded = true;
         },
         error => {
           console.log(error);
@@ -215,8 +217,6 @@ export class FeedbackListComponent implements OnInit {
     } else {
       this.selectedFeedbacks.push(feedback);
     }
-
-    console.log(this.selectedFeedbacks);
   }
 
   markAsReadOrUnread(feedbacks:Feedback[], read:boolean):void {

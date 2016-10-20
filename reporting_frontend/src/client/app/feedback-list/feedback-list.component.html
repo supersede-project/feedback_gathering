@@ -38,6 +38,9 @@
     <button (click)="markAsReadOrUnread(selectedFeedbacks, true)" id="markAsRead" class="action btn-default btn-xs"
             [class.btn-primary]="selectedFeedbacks.length > 0">Mark as read
     </button>
+    <button (click)="markAsReadOrUnread(selectedFeedbacks, false)" id="markAsUnread" class="action btn-default btn-xs"
+            [class.btn-primary]="selectedFeedbacks.length > 0">Mark as unread
+    </button>
     <div class="btn-group">
       <button type="button" class="action btn btn-default dropdown-toggle"
               [class.btn-primary]="selectedFeedbacks.length > 0" data-toggle="dropdown" aria-haspopup="true"
@@ -80,7 +83,7 @@
       </tr>
       </thead>
       <tbody *ngIf="applications">
-      <tr *ngIf="filteredFeedbacks.length === 0"><td colspan="6">No feedbacks yet</td></tr>
+      <tr *ngIf="filteredFeedbacks.length === 0 && loaded"><td colspan="6">No feedbacks yet</td></tr>
       <tr *ngFor="let feedback of filteredFeedbacks; let i = index" [class.unread]="!feedback.read">
         <td>
           <input (change)="select($event, feedback)" class="checkbox" type="checkbox" name="{{feedback.id}}"
