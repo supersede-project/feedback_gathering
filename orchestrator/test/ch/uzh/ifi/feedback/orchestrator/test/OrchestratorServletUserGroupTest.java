@@ -6,14 +6,17 @@ import java.io.InputStream;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.client.ClientProtocolException;
 
+import ch.uzh.ifi.feedback.library.rest.authorization.UserToken;
 import ch.uzh.ifi.feedback.library.test.ServletTest;
+import ch.uzh.ifi.feedback.library.transaction.IDatabaseConfiguration;
+import ch.uzh.ifi.feedback.orchestrator.Transaction.OrchestratorDatabaseConfiguration;
 import ch.uzh.ifi.feedback.orchestrator.model.UserGroup;
 
-public class OrchestratorServletUserGroupTest extends ServletTest {
+public class OrchestratorServletUserGroupTest extends OrchestratorServletTest {
 	
 	public void testRetrievingAllUserGroups() throws ClientProtocolException, IOException {
 		UserGroup[] retrievedUsers = GetSuccess(
-				"http://localhost:8080/feedback_orchestrator/feedback/en/user_groups", 
+				"http://localhost:8080/orchestrator/feedback/en/user_groups", 
 				UserGroup[].class);
 		
 		assertEquals(retrievedUsers.length, 2);
@@ -21,7 +24,7 @@ public class OrchestratorServletUserGroupTest extends ServletTest {
 	
 	public void testRetrievingSingleUserGroup() throws ClientProtocolException, IOException {
 		UserGroup retrievedUserGroup = GetSuccess(
-				"http://localhost:8080/feedback_orchestrator/feedback/en/user_groups/1", 
+				"http://localhost:8080/orchestrator/feedback/en/user_groups/1", 
 				UserGroup.class);
 		
 		assertEquals(retrievedUserGroup.getName(), "default");
@@ -33,7 +36,7 @@ public class OrchestratorServletUserGroupTest extends ServletTest {
 		String jsonString = IOUtils.toString(stream); 
 		
 		UserGroup addedUserGroup = PostSuccess(
-				"http://localhost:8080/feedback_orchestrator/feedback/en/user_groups",
+				"http://localhost:8080/orchestrator/feedback/en/user_groups",
 				jsonString,
 				UserGroup.class);
 		

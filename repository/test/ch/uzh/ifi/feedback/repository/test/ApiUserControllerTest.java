@@ -12,29 +12,11 @@ import ch.uzh.ifi.feedback.library.rest.authorization.ApiUser;
 import ch.uzh.ifi.feedback.library.rest.authorization.UserRole;
 import ch.uzh.ifi.feedback.library.rest.authorization.UserToken;
 import ch.uzh.ifi.feedback.library.test.ServletTest;
+import ch.uzh.ifi.feedback.library.transaction.IDatabaseConfiguration;
+import ch.uzh.ifi.feedback.repository.transaction.RepositoryDatabaseConfiguration;
 
-public class ApiUserControllerTest extends ServletTest {
-
-	@Override
-	protected UserToken AuthenticateUser() throws IOException
-	{
-		InputStream stream = ServletTest.class.getResourceAsStream("api_user.json");
-		String jsonString = IOUtils.toString(stream); 
-		
-		return PostSuccess(
-				"http://localhost:8080/feedback_repository/authenticate", 
-				jsonString,
-				UserToken.class);
-	}
+public class ApiUserControllerTest extends RepositoryServletTest {
 	
-	public void testRetrievingAllApiUsers() throws ClientProtocolException, IOException {
-		ApiUser[] retrievedUsers = GetSuccess(
-				"http://localhost:8080/feedback_repository/en/api_users", 
-				ApiUser[].class);
-
-		assertEquals(retrievedUsers.length, 1);
-	}
-
 	public void testRetrievingSingleUser() throws ClientProtocolException, IOException {
 		ApiUser retrievedUser = GetSuccess(
 				"http://localhost:8080/feedback_repository/en/api_users/1", 

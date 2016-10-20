@@ -6,15 +6,18 @@ import java.io.InputStream;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.client.ClientProtocolException;
 
+import ch.uzh.ifi.feedback.library.rest.authorization.UserToken;
 import ch.uzh.ifi.feedback.library.test.ServletTest;
+import ch.uzh.ifi.feedback.library.transaction.IDatabaseConfiguration;
+import ch.uzh.ifi.feedback.orchestrator.Transaction.OrchestratorDatabaseConfiguration;
 import ch.uzh.ifi.feedback.orchestrator.model.User;
 import ch.uzh.ifi.feedback.orchestrator.model.UserGroup;
 
-public class OrchestratorServletUserTest extends ServletTest {
+public class OrchestratorServletUserTest extends OrchestratorServletTest {
 	
 	public void testRetrievingAllUsers() throws ClientProtocolException, IOException {
 		User[] retrievedUsers = GetSuccess(
-				"http://localhost:8080/feedback_orchestrator/feedback/en/users", 
+				"http://localhost:8080/orchestrator/feedback/en/users", 
 				User[].class);
 		
 		assertEquals(retrievedUsers.length, 1);
@@ -25,7 +28,7 @@ public class OrchestratorServletUserTest extends ServletTest {
 		String jsonString = IOUtils.toString(stream); 
 		
 		User addedUser = PostSuccess(
-				"http://localhost:8080/feedback_orchestrator/feedback/en/user_groups/1/users",
+				"http://localhost:8080/orchestrator/feedback/en/user_groups/1/users",
 				jsonString,
 				User.class);
 		
@@ -38,7 +41,7 @@ public class OrchestratorServletUserTest extends ServletTest {
 		String jsonString = IOUtils.toString(stream); 
 		
 		User updatedUser = PutSuccess(
-				"http://localhost:8080/feedback_orchestrator/feedback/en/users",
+				"http://localhost:8080/orchestrator/feedback/en/users",
 				jsonString,
 				User.class);
 		
@@ -46,13 +49,13 @@ public class OrchestratorServletUserTest extends ServletTest {
 		assertEquals(updatedUser.getGroupId(), 2);
 		
 		UserGroup group1 = GetSuccess(
-				"http://localhost:8080/feedback_orchestrator/feedback/en/user_groups/1",
+				"http://localhost:8080/orchestrator/feedback/en/user_groups/1",
 				UserGroup.class);
 		
 		assertEquals(group1.getUsers().size(), 0);
 		
 		UserGroup group2 = GetSuccess(
-				"http://localhost:8080/feedback_orchestrator/feedback/en/user_groups/2",
+				"http://localhost:8080/orchestrator/feedback/en/user_groups/2",
 				UserGroup.class);
 		
 		assertEquals(group2.getUsers().size(), 1);

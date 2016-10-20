@@ -4,14 +4,18 @@ import java.io.IOException;
 import java.io.InputStream;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.client.ClientProtocolException;
+
+import ch.uzh.ifi.feedback.library.rest.authorization.UserToken;
 import ch.uzh.ifi.feedback.library.test.ServletTest;
+import ch.uzh.ifi.feedback.library.transaction.IDatabaseConfiguration;
+import ch.uzh.ifi.feedback.orchestrator.Transaction.OrchestratorDatabaseConfiguration;
 import ch.uzh.ifi.feedback.orchestrator.model.GeneralConfiguration;
 
-public class OrchestratorServletGeneralConfigurationTest extends ServletTest {
+public class OrchestratorServletGeneralConfigurationTest extends OrchestratorServletTest {
 	
 	public void testRetrievingSingleConfiguration() throws ClientProtocolException, IOException {
 		GeneralConfiguration config = GetSuccess(
-				"http://localhost:8080/feedback_orchestrator/feedback/en/general_configurations/148",
+				"http://localhost:8080/orchestrator/feedback/en/general_configurations/148",
 				GeneralConfiguration.class);
 		
 		assertEquals(config.getId(), new Integer(148));
@@ -20,7 +24,7 @@ public class OrchestratorServletGeneralConfigurationTest extends ServletTest {
 	
 	public void testRetrievingConfigurationForApplication() throws ClientProtocolException, IOException {
 		GeneralConfiguration retrievedConfig = GetSuccess(
-				"http://localhost:8080/feedback_orchestrator/feedback/en/applications/27/general_configuration", 
+				"http://localhost:8080/orchestrator/feedback/en/applications/27/general_configuration", 
 				GeneralConfiguration.class);
 		
 		assertEquals(retrievedConfig.getId(), new Integer(116));
@@ -32,7 +36,7 @@ public class OrchestratorServletGeneralConfigurationTest extends ServletTest {
 		String jsonString = IOUtils.toString(stream); 
 		
 		GeneralConfiguration updatedMechanism = PutSuccess(
-				"http://localhost:8080/feedback_orchestrator/feedback/en/applications/35/general_configurations", 
+				"http://localhost:8080/orchestrator/feedback/en/applications/35/general_configurations", 
 				jsonString,
 				GeneralConfiguration.class);
         

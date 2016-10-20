@@ -18,6 +18,7 @@ import ch.uzh.ifi.feedback.library.rest.service.IDbService;
 import ch.uzh.ifi.feedback.library.rest.service.ServiceBase;
 import ch.uzh.ifi.feedback.library.transaction.DatabaseConfiguration;
 import ch.uzh.ifi.feedback.library.transaction.DbResultParser;
+import ch.uzh.ifi.feedback.library.transaction.IDatabaseConfiguration;
 import ch.uzh.ifi.feedback.library.transaction.TransactionManager;
 import ch.uzh.ifi.feedback.orchestrator.model.FeedbackMechanism;
 import ch.uzh.ifi.feedback.orchestrator.model.FeedbackParameter;
@@ -33,14 +34,14 @@ public class MechanismService extends OrchestratorService<FeedbackMechanism> {
 	public MechanismService(
 			ParameterService parameterService, 
 			MechanismResultParser resultParser,
-			DatabaseConfiguration config,
+			IDatabaseConfiguration config,
 			@Named("timestamp")Provider<Timestamp> timestampProvider)
 	{
 		super(
 				resultParser, 
 				FeedbackMechanism.class, 
 				"mechanisms",
-				config.getOrchestratorDb(),
+				config.getDatabase(),
 				timestampProvider);
 		
 		this.parameterService = parameterService;

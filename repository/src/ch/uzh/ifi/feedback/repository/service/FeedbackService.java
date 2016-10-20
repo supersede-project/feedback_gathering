@@ -17,6 +17,7 @@ import com.google.inject.name.Named;
 import ch.uzh.ifi.feedback.library.rest.authorization.ApiUser;
 import ch.uzh.ifi.feedback.library.rest.service.ServiceBase;
 import ch.uzh.ifi.feedback.library.transaction.DatabaseConfiguration;
+import ch.uzh.ifi.feedback.library.transaction.IDatabaseConfiguration;
 import ch.uzh.ifi.feedback.repository.model.AttachmentFeedback;
 import ch.uzh.ifi.feedback.repository.model.AudioFeedback;
 import ch.uzh.ifi.feedback.repository.model.CategoryFeedback;
@@ -54,12 +55,12 @@ public class FeedbackService extends ServiceBase<Feedback> {
 			StatusOptionService optionService,
 			ApiUserService userService,
 			StatusService statusService,
-			DatabaseConfiguration dbConfig) 
+			IDatabaseConfiguration dbConfig) 
 	{
 		super(  resultParser, 
 				Feedback.class, 
 				"feedbacks", 
-				dbConfig.getRepositoryDb());
+				dbConfig.getDatabase());
 		
 		this.screenshotFeedbackService = screenshotFeedbackService;
 		this.ratingFeedbackService = ratingFeedbackService;

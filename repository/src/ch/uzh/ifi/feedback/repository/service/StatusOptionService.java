@@ -9,6 +9,7 @@ import com.google.inject.Singleton;
 
 import ch.uzh.ifi.feedback.library.rest.service.ServiceBase;
 import ch.uzh.ifi.feedback.library.transaction.DatabaseConfiguration;
+import ch.uzh.ifi.feedback.library.transaction.IDatabaseConfiguration;
 import ch.uzh.ifi.feedback.repository.model.StatusOption;
 import javassist.NotFoundException;
 import static java.util.Arrays.asList;
@@ -19,9 +20,9 @@ public class StatusOptionService extends ServiceBase<StatusOption> {
 	@Inject
 	public StatusOptionService(
 			StatusOptionResultParser resultParser,
-			DatabaseConfiguration config) 
+			IDatabaseConfiguration config) 
 	{
-		super(resultParser, StatusOption.class, "status_options", config.getRepositoryDb());
+		super(resultParser, StatusOption.class, "status_options", config.getDatabase());
 	}
 	
 	@Override

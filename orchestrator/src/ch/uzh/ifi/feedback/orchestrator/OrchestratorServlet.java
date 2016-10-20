@@ -19,7 +19,7 @@ public class OrchestratorServlet extends ServletBase {
      * @see HttpServlet#HttpServlet()
      */
 	@Inject
-    public OrchestratorServlet(IRestManager restManager, DatabaseConfiguration config) {
+    public OrchestratorServlet(IRestManager restManager, IDatabaseConfiguration config) {
         super(restManager, config);
     }
     

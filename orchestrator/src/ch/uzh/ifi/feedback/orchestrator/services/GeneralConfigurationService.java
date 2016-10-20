@@ -18,6 +18,7 @@ import com.google.inject.name.Named;
 import ch.uzh.ifi.feedback.library.rest.service.IDbService;
 import ch.uzh.ifi.feedback.library.rest.service.ServiceBase;
 import ch.uzh.ifi.feedback.library.transaction.DatabaseConfiguration;
+import ch.uzh.ifi.feedback.library.transaction.IDatabaseConfiguration;
 import ch.uzh.ifi.feedback.orchestrator.model.Configuration;
 import ch.uzh.ifi.feedback.orchestrator.model.FeedbackParameter;
 import ch.uzh.ifi.feedback.orchestrator.model.GeneralConfiguration;
@@ -32,14 +33,14 @@ public class GeneralConfigurationService extends OrchestratorService<GeneralConf
 	public GeneralConfigurationService(
 			ParameterService parameterService, 
 			GeneralConfigurationResultParser resultParser,
-			DatabaseConfiguration config,
+			IDatabaseConfiguration config,
 			@Named("timestamp")Provider<Timestamp> timestampProvider) 
 	{
 		super(
 				resultParser, 
 				GeneralConfiguration.class, 
 				"general_configurations",
-				config.getOrchestratorDb(),
+				config.getDatabase(),
 				timestampProvider);
 		
 		this.parameterService = parameterService;

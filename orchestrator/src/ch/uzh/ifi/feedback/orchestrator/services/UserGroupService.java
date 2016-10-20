@@ -12,6 +12,7 @@ import com.google.inject.name.Named;
 
 import ch.uzh.ifi.feedback.library.transaction.DatabaseConfiguration;
 import ch.uzh.ifi.feedback.library.transaction.DbResultParser;
+import ch.uzh.ifi.feedback.library.transaction.IDatabaseConfiguration;
 import ch.uzh.ifi.feedback.orchestrator.model.User;
 import ch.uzh.ifi.feedback.orchestrator.model.UserGroup;
 import javassist.NotFoundException;
@@ -25,11 +26,11 @@ public class UserGroupService extends OrchestratorService<UserGroup>{
 	@Inject
 	public UserGroupService(
 			UserGroupResultParser resultParser, 
-			DatabaseConfiguration config,
+			IDatabaseConfiguration config,
 			@Named("timestamp")Provider<Timestamp> timestampProvider,
 			UserService userService) 
 	{
-		super(resultParser, UserGroup.class, "user_groups", config.getOrchestratorDb(), timestampProvider);
+		super(resultParser, UserGroup.class, "user_groups", config.getDatabase(), timestampProvider);
 		
 		this.userService = userService;
 	}

@@ -8,23 +8,26 @@ import java.util.stream.Collectors;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.client.ClientProtocolException;
 
+import ch.uzh.ifi.feedback.library.rest.authorization.UserToken;
 import ch.uzh.ifi.feedback.library.test.ServletTest;
+import ch.uzh.ifi.feedback.library.transaction.IDatabaseConfiguration;
+import ch.uzh.ifi.feedback.orchestrator.Transaction.OrchestratorDatabaseConfiguration;
 import ch.uzh.ifi.feedback.orchestrator.model.FeedbackMechanism;
 import ch.uzh.ifi.feedback.orchestrator.model.FeedbackParameter;
 import static java.util.Arrays.asList;
 
-public class OrchestratorServletMechanismTest extends ServletTest {
+public class OrchestratorServletMechanismTest extends OrchestratorServletTest {
 	
 	public void testRetrievingAllMechanisms() throws ClientProtocolException, IOException {
 		FeedbackMechanism[] retrievedMechanisms = GetSuccess(
-				"http://localhost:8080/feedback_orchestrator/feedback/en/mechanisms", 
+				"http://localhost:8080/orchestrator/feedback/en/mechanisms", 
 				FeedbackMechanism[].class);
 		assertEquals(retrievedMechanisms.length, 81);
 	}
 	
 	public void testRetrievingSingleMechanism() throws ClientProtocolException, IOException {
 		FeedbackMechanism mechanism = GetSuccess(
-				"http://localhost:8080/feedback_orchestrator/feedback/en/mechanisms/830",
+				"http://localhost:8080/orchestrator/feedback/en/mechanisms/830",
 				FeedbackMechanism.class);
 		
 		assertEquals(mechanism.getId(), new Integer(830));
@@ -33,7 +36,7 @@ public class OrchestratorServletMechanismTest extends ServletTest {
 	
 	public void testRetrievingAllMechanismsForConfiguration() throws ClientProtocolException, IOException {
 		FeedbackMechanism[] retrievedMechanisms = GetSuccess(
-				"http://localhost:8080/feedback_orchestrator/feedback/en/configurations/80/mechanisms", 
+				"http://localhost:8080/orchestrator/feedback/en/configurations/80/mechanisms", 
 				FeedbackMechanism[].class);
 		
 		assertEquals(retrievedMechanisms.length, 4);
@@ -45,7 +48,7 @@ public class OrchestratorServletMechanismTest extends ServletTest {
 		String jsonString = IOUtils.toString(stream); 
 		
 		FeedbackMechanism createdMechanism = PostSuccess(
-				"http://localhost:8080/feedback_orchestrator/feedback/en/applications/35/configurations/80/mechanisms", 
+				"http://localhost:8080/orchestrator/feedback/en/applications/35/configurations/80/mechanisms", 
 				jsonString,
 				FeedbackMechanism.class);
         
@@ -63,7 +66,7 @@ public class OrchestratorServletMechanismTest extends ServletTest {
 		String jsonString = IOUtils.toString(stream); 
 		
 		FeedbackMechanism updatedMechanism = PutSuccess(
-				"http://localhost:8080/feedback_orchestrator/feedback/en/applications/35/configurations/80/mechanisms", 
+				"http://localhost:8080/orchestrator/feedback/en/applications/35/configurations/80/mechanisms", 
 				jsonString,
 				FeedbackMechanism.class);
         
@@ -80,7 +83,7 @@ public class OrchestratorServletMechanismTest extends ServletTest {
 	{
 		//assert that order of other mechanisms is shifted
 		FeedbackMechanism[] allMechanisms = GetSuccess(
-				"http://localhost:8080/feedback_orchestrator/feedback/en/configurations/80/mechanisms", 
+				"http://localhost:8080/orchestrator/feedback/en/configurations/80/mechanisms", 
 				FeedbackMechanism[].class);
 		
 		List<FeedbackMechanism> sorted = asList(allMechanisms).stream().sorted((m1, m2) -> Integer.compare(m1.getOrder(), m2.getOrder())).collect(Collectors.toList());

@@ -15,6 +15,7 @@ import ch.uzh.ifi.feedback.library.rest.authorization.ApiUserResultParser;
 import ch.uzh.ifi.feedback.library.rest.authorization.IApiUserService;
 import ch.uzh.ifi.feedback.library.rest.service.ServiceBase;
 import ch.uzh.ifi.feedback.library.transaction.DatabaseConfiguration;
+import ch.uzh.ifi.feedback.library.transaction.IDatabaseConfiguration;
 import javassist.NotFoundException;
 
 @Singleton
@@ -25,10 +26,10 @@ public class ApiUserService extends ServiceBase<ApiUser> implements IApiUserServ
 	@Inject
 	public ApiUserService(
 			ApiUserResultParser resultParser, 
-			DatabaseConfiguration config,
+			IDatabaseConfiguration config,
 			ApiUserPermissionService permissionService) 
 	{
-		super(resultParser, ApiUser.class, "api_users", config.getRepositoryDb());
+		super(resultParser, ApiUser.class, "api_users", config.getDatabase());
 		this.permissionService = permissionService;
 	}
 	

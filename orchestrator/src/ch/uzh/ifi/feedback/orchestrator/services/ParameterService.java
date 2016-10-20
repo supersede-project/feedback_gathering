@@ -21,6 +21,7 @@ import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils.Collections;
 import ch.uzh.ifi.feedback.library.rest.service.IDbService;
 import ch.uzh.ifi.feedback.library.rest.service.ServiceBase;
 import ch.uzh.ifi.feedback.library.transaction.DatabaseConfiguration;
+import ch.uzh.ifi.feedback.library.transaction.IDatabaseConfiguration;
 import ch.uzh.ifi.feedback.orchestrator.model.FeedbackMechanism;
 import ch.uzh.ifi.feedback.orchestrator.model.FeedbackParameter;
 import javassist.NotFoundException;
@@ -34,11 +35,11 @@ public class ParameterService extends OrchestratorService<FeedbackParameter>{
 	@Inject
 	public ParameterService(
 			ParameterResultParser resultParser, 
-			DatabaseConfiguration config,
+			IDatabaseConfiguration config,
 			@Named("timestamp") Provider<Timestamp> timeStampProvider,
 			@Named("language") Provider<String> languageProvider) 
 	{
-		super(resultParser, FeedbackParameter.class, "parameters", config.getOrchestratorDb(), timeStampProvider);
+		super(resultParser, FeedbackParameter.class, "parameters", config.getDatabase(), timeStampProvider);
 		this.languageProvider = languageProvider;
 	}
 	

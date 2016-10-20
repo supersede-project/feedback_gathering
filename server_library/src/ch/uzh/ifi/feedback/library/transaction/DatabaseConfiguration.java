@@ -9,58 +9,52 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 
 import org.apache.commons.lang3.SystemUtils;
+import org.apache.tomcat.jni.Time;
 
 import com.google.inject.Singleton;
 
 import ch.uzh.ifi.feedback.library.test.ServletTest;
 import ch.uzh.ifi.feedback.library.test.dumps.TestHelper;
 
-@Singleton
-public class DatabaseConfiguration implements IDatabaseConfiguration {
+public abstract class DatabaseConfiguration implements IDatabaseConfiguration {
 	
-	private String repositoryDb;
-	private String orchestratorDb;
-	private String repositoryDbTest;
-	private String orchestratorDbTest;
 	private String dbUser;
 	private String dbPassword;
-	private String orchestratorDumpFile;
-	private String repositoryDumpFile;
+	private String testDatabaseDumpFile;
+
+	protected Map<String, String> properties;
 	
 	public DatabaseConfiguration()
 	{
+		properties = new HashMap<>();
 		ReadConfig();
-    	CreateDumps();
 	}
 	
 	public void StartDebugMode()
 	{
-		repositoryDb = repositoryDbTest;
-		orchestratorDb = orchestratorDbTest;
+    	CreateDumps();
 	}
 	
-	public void RestoreTestDatabases()
+	public void RestoreTestDatabase()
 	{
-        //Restore Databases from dump files
-        String restoreRepositoryCmd = String.format("mysql -u %s -p%s %s < %s", dbUser, dbPassword, repositoryDbTest, repositoryDumpFile);
-        String restoreOrchestratorCmd = String.format("mysql -u %s -p%s %s < %s", dbUser, dbPassword, orchestratorDbTest, orchestratorDumpFile);
+        //Restore Databases from dump file
+        String restoreTestDbCmd = String.format("mysql -u %s -p%s %s < %s", dbUser, dbPassword, getTestDatabase(), testDatabaseDumpFile);
         try {
         	if(SystemUtils.IS_OS_LINUX || SystemUtils.IS_OS_MAC)
         	{
-				Runtime.getRuntime().exec(new String[]{"bash","-c", restoreRepositoryCmd}).waitFor();
-				Runtime.getRuntime().exec(new String[]{"bash", "-c", restoreOrchestratorCmd}).waitFor();
+				Runtime.getRuntime().exec(new String[]{"bash", "-c", restoreTestDbCmd}).waitFor();
         	}else if(SystemUtils.IS_OS_WINDOWS)
         	{
-				Runtime.getRuntime().exec(new String[]{"cmd","/c", restoreRepositoryCmd}).waitFor();
-				Runtime.getRuntime().exec(new String[]{"cmd","/c", restoreOrchestratorCmd}).waitFor();
+				Runtime.getRuntime().exec(new String[]{"cmd","/c", restoreTestDbCmd}).waitFor();
         	}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-       
 	}
 	
 	private void ReadConfig()
@@ -69,12 +63,13 @@ public class DatabaseConfiguration implements IDatabaseConfiguration {
     	try {
     		InputStream propertiesStream = TransactionManager.class.getResourceAsStream("config.properties");
     		prop.load(propertiesStream);
+    		for(Object k : prop.keySet())
+    		{
+    			String key = (String)k;
+    			properties.put(key, prop.getProperty(key));
+    		}
     		dbUser = prop.getProperty("dbuser");
     		dbPassword = prop.getProperty("dbpassword");
-    		repositoryDb = prop.getProperty("repositoryDb");
-    		orchestratorDb = prop.getProperty("orchestratorDb");
-    		repositoryDbTest = prop.getProperty("repositoryTestDb");
-    		orchestratorDbTest = prop.getProperty("orchestratorTestDb");
     	} catch (IOException ex) {
     		ex.printStackTrace();
     	}
@@ -82,14 +77,11 @@ public class DatabaseConfiguration implements IDatabaseConfiguration {
 	
 	private void CreateDumps()
 	{
-		InputStream orchestratorInputStream = this.getClass().getResourceAsStream("orchestrator_test_dump.sql");
-		InputStream repositoryInputStream = this.getClass().getResourceAsStream("repository_test_dump.sql");
-		
-		orchestratorDumpFile = generateTempFile(orchestratorInputStream, "orchestratorDump");
-		repositoryDumpFile = generateTempFile(repositoryInputStream, "repositorDump");
+		InputStream inputStream = getTestDatabaseDump();
+		testDatabaseDumpFile = generateTempFile(inputStream, "dump_" + getTestDatabase());
 	}
 	
-	private String generateTempFile(InputStream input, String filename)
+	protected String generateTempFile(InputStream input, String filename)
 	{
         try {
             File file = File.createTempFile(filename, ".tmp");
@@ -110,20 +102,10 @@ public class DatabaseConfiguration implements IDatabaseConfiguration {
         
         return null;
 	}
+
+	public abstract String getDatabase();
+
+	public abstract String getTestDatabase();
 	
-	public String getRepositoryDb() {
-		return repositoryDb;
-	}
-
-	public String getOrchestratorDb() {
-		return orchestratorDb;
-	}
-
-	public String getRepositoryDbTest() {
-		return repositoryDbTest;
-	}
-
-	public String getOrchestratorDbTest() {
-		return orchestratorDbTest;
-	}
+	protected abstract InputStream getTestDatabaseDump();
 }

@@ -9,6 +9,7 @@ import com.google.inject.Singleton;
 
 import ch.uzh.ifi.feedback.library.rest.service.ServiceBase;
 import ch.uzh.ifi.feedback.library.transaction.DatabaseConfiguration;
+import ch.uzh.ifi.feedback.library.transaction.IDatabaseConfiguration;
 import ch.uzh.ifi.feedback.repository.model.ScreenshotFeedback;
 import ch.uzh.ifi.feedback.repository.model.TextAnnotation;
 import javassist.NotFoundException;
@@ -21,9 +22,9 @@ public class ScreenshotFeedbackService extends ServiceBase<ScreenshotFeedback> {
 	private TextAnnotationService annotationService;
 	
 	@Inject
-	public ScreenshotFeedbackService(ScreenshotFeedbackResultParser resultParser, DatabaseConfiguration dbConfig, TextAnnotationService annotationService) 
+	public ScreenshotFeedbackService(ScreenshotFeedbackResultParser resultParser, IDatabaseConfiguration dbConfig, TextAnnotationService annotationService) 
 	{
-		super(resultParser, ScreenshotFeedback.class, "screenshot_feedbacks", dbConfig.getRepositoryDb());
+		super(resultParser, ScreenshotFeedback.class, "screenshot_feedbacks", dbConfig.getDatabase());
 		this.annotationService = annotationService;
 	}
 	

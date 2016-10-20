@@ -35,17 +35,16 @@ import com.google.gson.GsonBuilder;
 
 import ch.uzh.ifi.feedback.library.rest.authorization.UserToken;
 import ch.uzh.ifi.feedback.library.transaction.DatabaseConfiguration;
+import ch.uzh.ifi.feedback.library.transaction.IDatabaseConfiguration;
 import junit.framework.TestCase;
 
-public class ServletTest extends TestCase {
+public abstract class ServletTest extends TestCase {
 	
-	protected DatabaseConfiguration config;
 	protected Gson gson; 
 	private UserToken token;
 	private CloseableHttpClient client;
 	
 	public ServletTest(){
-		config = new DatabaseConfiguration();
 		gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss.S").create();
 		client = GetHttpClient();
 	}
@@ -92,30 +91,23 @@ public class ServletTest extends TestCase {
 		return null;
 	}
 	
-	protected UserToken AuthenticateUser() throws IOException
-	{
-		InputStream stream = ServletTest.class.getResourceAsStream("api_user.json");
-		String jsonString = IOUtils.toString(stream); 
-		
-		return PostSuccess(
-				"http://localhost:8080/feedback_orchestrator/feedback/authenticate", 
-				jsonString,
-				UserToken.class);
-	}
+	protected abstract UserToken AuthenticateUser() throws IOException;
+	
+	protected abstract IDatabaseConfiguration getDatabaseConfiguration();
 	
     @Override
     protected void setUp() throws Exception
     {
         super.setUp();
-        config.RestoreTestDatabases();
         token = AuthenticateUser();
+        getDatabaseConfiguration().RestoreTestDatabase();
     }
     
    @Override
 	protected void tearDown() throws Exception 
     {
 		super.tearDown();
-		config.RestoreTestDatabases();
+        getDatabaseConfiguration().RestoreTestDatabase();
     }
    
    protected <T> T GetSuccess(String url, Class<T> clazz) throws ClientProtocolException, IOException

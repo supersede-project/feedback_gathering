@@ -34,7 +34,7 @@ public class FeedbackServlet extends ServletBase {
      * @see HttpServlet#HttpServlet()
      */
 	@Inject
-    public FeedbackServlet(IRestManager restManager, DatabaseConfiguration config) {
+    public FeedbackServlet(IRestManager restManager, IDatabaseConfiguration config) {
         super(restManager, config);
     }
     

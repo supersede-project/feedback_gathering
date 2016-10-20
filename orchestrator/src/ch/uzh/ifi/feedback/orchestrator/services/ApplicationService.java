@@ -10,6 +10,7 @@ import com.google.inject.Singleton;
 import com.google.inject.name.Named;
 
 import ch.uzh.ifi.feedback.library.transaction.DatabaseConfiguration;
+import ch.uzh.ifi.feedback.library.transaction.IDatabaseConfiguration;
 import ch.uzh.ifi.feedback.orchestrator.model.Application;
 import ch.uzh.ifi.feedback.orchestrator.model.Configuration;
 import ch.uzh.ifi.feedback.orchestrator.model.GeneralConfiguration;
@@ -30,13 +31,13 @@ public class ApplicationService extends OrchestratorService<Application>{
 			ConfigurationService configurationService,
 			GeneralConfigurationService generalConfigurationService,
 			UserGroupService userGroupService,
-			DatabaseConfiguration config,
+			IDatabaseConfiguration config,
 			@Named("timestamp")Provider<Timestamp> timestampProvider)
 	{
 		super(  resultParser, 
 				Application.class, 
 				"applications1",
-				config.getOrchestratorDb(),
+				config.getDatabase(),
 				timestampProvider);
 
 		this.configurationService = configurationService;

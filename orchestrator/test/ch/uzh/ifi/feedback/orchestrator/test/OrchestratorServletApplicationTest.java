@@ -21,19 +21,22 @@ import org.apache.http.util.EntityUtils;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import ch.uzh.ifi.feedback.library.rest.authorization.UserToken;
 import ch.uzh.ifi.feedback.library.test.ServletTest;
 import ch.uzh.ifi.feedback.library.transaction.DatabaseConfiguration;
+import ch.uzh.ifi.feedback.library.transaction.IDatabaseConfiguration;
+import ch.uzh.ifi.feedback.orchestrator.Transaction.OrchestratorDatabaseConfiguration;
 import ch.uzh.ifi.feedback.orchestrator.model.Application;
 import ch.uzh.ifi.feedback.orchestrator.model.FeedbackParameter;
 import javassist.NotFoundException;
 
-public class OrchestratorServletApplicationTest extends ServletTest {
+public class OrchestratorServletApplicationTest extends OrchestratorServletTest {
 	
 	private static int NUMBER_OF_APPLICATIONS = 9;
-   
+	
 	public void testRetrievingAllApplications() throws ClientProtocolException, IOException {
 		Application[] retrievedApplications = GetSuccess(
-				"http://localhost:8080/feedback_orchestrator/feedback/en/applications", 
+				"http://localhost:8080/orchestrator/feedback/en/applications", 
 				Application[].class);
 		
 		assertEquals(retrievedApplications.length, NUMBER_OF_APPLICATIONS);
@@ -41,7 +44,7 @@ public class OrchestratorServletApplicationTest extends ServletTest {
 	
 	public void testRetrievingSingleApplication() throws ClientProtocolException, IOException {
 		Application application = GetSuccess(
-				"http://localhost:8080/feedback_orchestrator/feedback/en/applications/27", 
+				"http://localhost:8080/orchestrator/feedback/en/applications/27", 
 				Application.class);
 		
 		assertEquals(application.getId(), new Integer(27));
@@ -52,10 +55,10 @@ public class OrchestratorServletApplicationTest extends ServletTest {
 		String jsonString = IOUtils.toString(stream); 
 		
 		Application createdApplication = PostSuccess(
-				"http://localhost:8080/feedback_orchestrator/feedback/en/applications", 
+				"http://localhost:8080/orchestrator/feedback/en/applications", 
 				jsonString,
 				Application.class);
 		
 	    assertEquals(createdApplication.getName(), "Test Website 20");		
-	}	
+	}
 }

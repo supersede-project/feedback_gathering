@@ -7,6 +7,7 @@ import ch.uzh.ifi.feedback.library.rest.authorization.ApiUserPermission;
 import ch.uzh.ifi.feedback.library.rest.authorization.ApiUserPermissionResultParser;
 import ch.uzh.ifi.feedback.library.rest.service.ServiceBase;
 import ch.uzh.ifi.feedback.library.transaction.DatabaseConfiguration;
+import ch.uzh.ifi.feedback.library.transaction.IDatabaseConfiguration;
 
 @Singleton
 public class ApiUserPermissionService extends ServiceBase<ApiUserPermission>{
@@ -14,9 +15,9 @@ public class ApiUserPermissionService extends ServiceBase<ApiUserPermission>{
 	@Inject
 	public ApiUserPermissionService(
 			ApiUserPermissionResultParser resultParser,
-			DatabaseConfiguration config) 
+			IDatabaseConfiguration config) 
 	{
-		super(resultParser, ApiUserPermission.class, "api_user_permissions", config.getOrchestratorDb());
+		super(resultParser, ApiUserPermission.class, "api_user_permissions", config.getDatabase());
 	}
 
 }

@@ -8,26 +8,16 @@ import org.apache.http.client.ClientProtocolException;
 
 import ch.uzh.ifi.feedback.library.rest.authorization.UserToken;
 import ch.uzh.ifi.feedback.library.test.ServletTest;
+import ch.uzh.ifi.feedback.library.transaction.IDatabaseConfiguration;
 import ch.uzh.ifi.feedback.repository.model.Feedback;
 import ch.uzh.ifi.feedback.repository.model.Status;
+import ch.uzh.ifi.feedback.repository.transaction.RepositoryDatabaseConfiguration;
 
-public class FeedbackStatusControllerTest extends ServletTest {
+public class FeedbackStatusControllerTest extends RepositoryServletTest {
 
 	private Feedback createdFeedback;
 	private Status createdStatus;
 	private Status createdUserStatus;
-	
-	@Override
-	protected UserToken AuthenticateUser() throws IOException
-	{
-		InputStream stream = ServletTest.class.getResourceAsStream("api_user.json");
-		String jsonString = IOUtils.toString(stream); 
-		
-		return PostSuccess(
-				"http://localhost:8080/feedback_repository/authenticate", 
-				jsonString,
-				UserToken.class);
-	}
 	
 	@Override
 	protected void setUp() throws Exception {

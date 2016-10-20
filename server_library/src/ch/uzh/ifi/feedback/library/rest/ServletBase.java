@@ -24,9 +24,9 @@ public abstract class ServletBase extends HttpServlet {
 	
     protected IRestManager _restManager;
 
-	private DatabaseConfiguration _dbConfig;;
+	private IDatabaseConfiguration _dbConfig;;
     
-    public ServletBase(IRestManager restManager, DatabaseConfiguration config) {
+    public ServletBase(IRestManager restManager, IDatabaseConfiguration config) {
 		this._restManager = restManager;
 		this._dbConfig = config;
 
