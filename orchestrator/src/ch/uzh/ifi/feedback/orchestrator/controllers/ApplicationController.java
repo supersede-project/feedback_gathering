@@ -29,14 +29,14 @@ public class ApplicationController extends RestController<Application> {
 	}
 	
 	@GET
-	@Path("/applications/{app_id}")
+	@Path("/{lang}/applications/{app_id}")
 	public Application GetById(@PathParam("app_id") Integer id) throws Exception 
 	{
 		return super.GetById(id);
 	}
 
 	@GET
-	@Path("/applications")
+	@Path("/{lang}/applications")
 	public List<Application> GetAll() throws Exception 
 	{
 		return super.GetAll();
@@ -44,7 +44,7 @@ public class ApplicationController extends RestController<Application> {
 	
 	@PUT
 	@Authenticate(service = UserAuthenticationService.class)
-	@Path("/applications")
+	@Path("/{lang}/applications")
 	public Application UpdateApplication(Application app) throws Exception 
 	{
 		return super.Update(app);
@@ -52,7 +52,7 @@ public class ApplicationController extends RestController<Application> {
 	
 	@POST
 	@Authenticate(service = UserAuthenticationService.class)
-	@Path("/applications")
+	@Path("/{lang}/applications")
 	public Application InsertApplication(@PathParam("app_id")Integer appId, Application app) throws Exception 
 	{
 		return super.Insert(app);

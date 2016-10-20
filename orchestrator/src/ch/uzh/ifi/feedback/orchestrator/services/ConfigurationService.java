@@ -14,6 +14,7 @@ import ch.uzh.ifi.feedback.library.transaction.IDatabaseConfiguration;
 import ch.uzh.ifi.feedback.orchestrator.model.Configuration;
 import ch.uzh.ifi.feedback.orchestrator.model.FeedbackMechanism;
 import ch.uzh.ifi.feedback.orchestrator.model.GeneralConfiguration;
+import ch.uzh.ifi.feedback.orchestrator.transaction.OrchestratorDatabaseConfiguration;
 import javassist.NotFoundException;
 import static java.util.Arrays.asList;
 
@@ -28,7 +29,7 @@ public class ConfigurationService extends OrchestratorService<Configuration>{
 			ConfigurationResultParser resultParser, 
 			MechanismService mechanismService,
 			GeneralConfigurationService generalConfigurationService,
-			IDatabaseConfiguration config,
+			OrchestratorDatabaseConfiguration config,
 			@Named("timestamp")Provider<Timestamp> timestampProvider) 
 	{
 		super(

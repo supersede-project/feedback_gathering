@@ -70,7 +70,6 @@ import ch.uzh.ifi.feedback.library.rest.validation.ValidationResult;
 import ch.uzh.ifi.feedback.library.rest.validation.ValidatorBase;
 import javassist.NotFoundException;
 
-@Singleton
 public class RestManager implements IRestManager {
 
 	private List<HandlerInfo> _handlers;
@@ -117,10 +116,7 @@ public class RestManager implements IRestManager {
 			for(Method m : clazz.getMethods()){
 				if(m.isAnnotationPresent(Path.class)){
 					
-					String annotatedPath = m.getAnnotation(Path.class).value();
-					if(RestController.class.isAssignableFrom(clazz))
-						annotatedPath = "{lang}/" + annotatedPath;
-					
+					String annotatedPath = m.getAnnotation(Path.class).value();	
 					String path = annotatedPath;
 					UriTemplate template = UriTemplate.Parse(path);
 					
@@ -300,10 +296,14 @@ public class RestManager implements IRestManager {
 				throw new AuthenticationException("User is not authorized for the provided operation");
         }
 
+        //set language scope variable if exists
 		String language = params.get("lang");
-        request.setAttribute(
-	             Key.get(String.class, Names.named("language")).toString(),
-	             language);
+		if(language != null)
+		{
+	        request.setAttribute(
+		             Key.get(String.class, Names.named("language")).toString(),
+		             language);
+		}
 		
 		for(Entry<String, Parameter> pathParam : handler.getPathParameters().entrySet())
 		{

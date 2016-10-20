@@ -52,7 +52,7 @@ public class FeedbackStatusController extends RestController<Status>{
 		this.optionService = optionService;
 	}
 	
-	@Path("/applications/{application_id}/states")
+	@Path("/{lang}/applications/{application_id}/states")
 	@GET
 	@Authenticate(service = UserAuthenticationService.class, scope = "APPLICATION")
 	public List<Status> GetAllByApplication(@PathParam("application_id")Integer applicationId) throws Exception {
@@ -60,7 +60,7 @@ public class FeedbackStatusController extends RestController<Status>{
 		return states;
 	}
 	
-	@Path("/applications/{application_id}/feedbacks/{id}/status")
+	@Path("/{lang}/applications/{application_id}/feedbacks/{id}/status")
 	@GET
 	@Authenticate(service = UserAuthenticationService.class, scope = "APPLICATION")
 	public Status GetByFeedbackId(
@@ -79,7 +79,7 @@ public class FeedbackStatusController extends RestController<Status>{
 		throw new NotFoundException("feedback with id '" + id + "' does not exist !");
 	}
 	
-	@Path("/applications/{application_id}/feedbacks/{feedback_id}/api_users/{user_id}/status")
+	@Path("/{lang}/applications/{application_id}/feedbacks/{feedback_id}/api_users/{user_id}/status")
 	@GET
 	@Authenticate(service = UserAuthenticationService.class, scope = "APPLICATION")
 	public Status GetByFeedbackAndUserId(
@@ -99,7 +99,7 @@ public class FeedbackStatusController extends RestController<Status>{
 		throw new NotFoundException("feedback with id '" + feedbackId + "' has no status for user '"+ userId  + " '!");
 	}
 	
-	@Path("/applications/{application_id}/api_users/{id}/states")
+	@Path("/{lang}/applications/{application_id}/api_users/{id}/states")
 	@GET
 	@Authenticate(service = UserAuthenticationService.class, scope = "APPLICATION")
 	public List<Status> GetByApiUser(
@@ -110,7 +110,7 @@ public class FeedbackStatusController extends RestController<Status>{
 		return states;
 	}
 
-	@Path("/applications/{application_id}/states/{id}")
+	@Path("/{lang}/applications/{application_id}/states/{id}")
 	@DELETE
 	@Authenticate(service = UserAuthenticationService.class, scope = "APPLICATION")
 	public void DeleteStatus(
@@ -124,7 +124,7 @@ public class FeedbackStatusController extends RestController<Status>{
 		super.Delete(id);
 	}
 	
-	@Path("/applications/{application_id}/states")
+	@Path("/{lang}/applications/{application_id}/states")
 	@PUT
 	@Authenticate(service = UserAuthenticationService.class, scope = "APPLICATION")
 	public Status UpdateStatus(@PathParam("application_id")Integer applicationId, Status status) throws Exception 

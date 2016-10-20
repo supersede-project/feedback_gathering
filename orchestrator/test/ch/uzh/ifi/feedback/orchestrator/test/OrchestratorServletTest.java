@@ -8,7 +8,7 @@ import org.apache.commons.io.IOUtils;
 import ch.uzh.ifi.feedback.library.rest.authorization.UserToken;
 import ch.uzh.ifi.feedback.library.test.ServletTest;
 import ch.uzh.ifi.feedback.library.transaction.IDatabaseConfiguration;
-import ch.uzh.ifi.feedback.orchestrator.Transaction.OrchestratorDatabaseConfiguration;
+import ch.uzh.ifi.feedback.orchestrator.transaction.OrchestratorDatabaseConfiguration;
 
 public abstract class OrchestratorServletTest extends ServletTest {
 

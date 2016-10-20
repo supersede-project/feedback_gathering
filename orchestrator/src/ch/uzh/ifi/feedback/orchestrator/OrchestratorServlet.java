@@ -7,6 +7,7 @@ import ch.uzh.ifi.feedback.library.rest.IRestManager;
 import ch.uzh.ifi.feedback.library.rest.ServletBase;
 import ch.uzh.ifi.feedback.library.transaction.DatabaseConfiguration;
 import ch.uzh.ifi.feedback.library.transaction.IDatabaseConfiguration;
+import ch.uzh.ifi.feedback.orchestrator.transaction.OrchestratorDatabaseConfiguration;
 
 /**
  * Servlet implementation class OrchestratorServlet
@@ -19,7 +20,7 @@ public class OrchestratorServlet extends ServletBase {
      * @see HttpServlet#HttpServlet()
      */
 	@Inject
-    public OrchestratorServlet(IRestManager restManager, IDatabaseConfiguration config) {
+    public OrchestratorServlet(IRestManager restManager, OrchestratorDatabaseConfiguration config) {
         super(restManager, config);
     }
     

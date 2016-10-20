@@ -50,28 +50,28 @@ public class ConfigurationController extends RestController<Configuration>
 	}
 	
 	@GET
-	@Path("/configurations/{config_id}")
+	@Path("/{lang}/configurations/{config_id}")
 	public Configuration GetById( @PathParam("config_id") Integer id) throws Exception 
 	{
 		return super.GetById(id);
 	}
 	
 	@GET
-	@Path("/configurations")
+	@Path("/{lang}/configurations")
 	public List<Configuration> GetAll() throws Exception 
 	{
 		return super.GetAll();
 	}
 	
 	@GET
-	@Path("/applications/{app_id}/configurations")
+	@Path("/{lang}/applications/{app_id}/configurations")
 	public List<Configuration> GetAllByApplication( @PathParam("app_id")Integer appId) throws Exception 
 	{
 		return super.GetAllFor("applications_id", appId);
 	}
 	
 	@GET
-	@Path("/applications/{app_id}/users/{user_id}/configurations")
+	@Path("/{lang}/applications/{app_id}/users/{user_id}/configurations")
 	public List<Configuration> GetAllByUserNameAndApplication( 
 			@PathParam("user_id")Integer userId, 
 			@PathParam("app_id")Integer appId) throws Exception 
@@ -85,7 +85,7 @@ public class ConfigurationController extends RestController<Configuration>
 	}
 	
 	@GET
-	@Path("/applications/{app_id}/user_groups/{group_id}/configurations")
+	@Path("/{lang}/applications/{app_id}/user_groups/{group_id}/configurations")
 	public List<Configuration> GetAllByUserGroupAndApplication( 
 			@PathParam("group_id")Integer groupId,
 			@PathParam("app_id") Integer appId) throws Exception 
@@ -95,7 +95,7 @@ public class ConfigurationController extends RestController<Configuration>
 	
 	@POST
 	@Authenticate(service = UserAuthenticationService.class, scope = "APPLICATION")
-	@Path("/applications/{application_id}/configurations")
+	@Path("/{lang}/applications/{application_id}/configurations")
 	public Configuration InsertConfigurationForApplication(@PathParam("application_id")Integer appId, Configuration config) throws Exception 
 	{
 		//Set default user group id when no group specified
@@ -108,7 +108,7 @@ public class ConfigurationController extends RestController<Configuration>
 	
 	@PUT
 	@Authenticate(service = UserAuthenticationService.class, scope = "APPLICATION")
-	@Path("/applications/{application_id}/configurations")
+	@Path("/{lang}/applications/{application_id}/configurations")
 	public Configuration UpdateConfigurationForApplication(
 			@PathParam("application_id") Integer applicationId,
 			Configuration config) throws Exception
@@ -122,7 +122,7 @@ public class ConfigurationController extends RestController<Configuration>
 	
 	@POST
 	@Authenticate(service = UserAuthenticationService.class, scope = "APPLICATION")
-	@Path("/applications/{application_id}/user_groups/{group_id}/configurations")
+	@Path("/{lang}/applications/{application_id}/user_groups/{group_id}/configurations")
 	public Configuration InsertConfigurationForApplicationAndUserGroup(
 			@PathParam("application_id")Integer appId, 
 			@PathParam("group_id")Integer groupId,

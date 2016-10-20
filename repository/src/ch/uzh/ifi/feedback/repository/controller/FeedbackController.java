@@ -31,14 +31,14 @@ public class FeedbackController extends RestController<Feedback>{
 		super(dbService, validator, request, response);
 	}
 	
-	@Path("/applications/{application_id}/feedbacks")
+	@Path("/{lang}/applications/{application_id}/feedbacks")
 	@GET
 	@Authenticate(service = UserAuthenticationService.class, scope = "APPLICATION")
 	public List<Feedback> GetAllForApplication(@PathParam("application_id")Integer applicationId) throws Exception {
 		return super.GetAllFor("application_id", applicationId);
 	}
 	
-	@Path("/applications/{application_id}/feedbacks/{id}")
+	@Path("/{lang}/applications/{application_id}/feedbacks/{id}")
 	@GET
 	@Authenticate(service = UserAuthenticationService.class, scope = "APPLICATION")
 	public Feedback GetByFeedbackId(@PathParam("id")Integer id, @PathParam("application_id")Integer applicationId) throws Exception 
@@ -50,13 +50,13 @@ public class FeedbackController extends RestController<Feedback>{
 		return feedback;
 	}
 	
-	@Path("/applications/{application_id}/feedbacks")
+	@Path("/{lang}/applications/{application_id}/feedbacks")
 	@POST
 	public Feedback InsertFeedback(Feedback feedback) throws Exception {
 		return super.Insert(feedback);
 	}
 	
-	@Path("/applications/{application_id}/feedbacks/{id}")
+	@Path("/{lang}/applications/{application_id}/feedbacks/{id}")
 	@DELETE
 	@Authenticate(service = UserAuthenticationService.class, scope = "APPLICATION")
 	public void DeleteFeedback(@PathParam("id")Integer id, @PathParam("application_id")Integer applicationId) throws Exception 

@@ -31,7 +31,7 @@ public class UserController extends RestController<User> {
 	}
 	
 	@GET
-	@Path("/users")
+	@Path("/{lang}/users")
 	public List<User> GetAll() throws Exception 
 	{
 		return super.GetAll();
@@ -39,7 +39,7 @@ public class UserController extends RestController<User> {
 	
 	@POST
 	@Authenticate(service = UserAuthenticationService.class, role = "ADMIN")
-	@Path("/user_groups/{group_id}/users")
+	@Path("/{lang}/user_groups/{group_id}/users")
 	public User InsertForGroup(@PathParam("group_id") Integer groupId, User user) throws Exception 
 	{
 		user.setGroupId(groupId);
@@ -48,7 +48,7 @@ public class UserController extends RestController<User> {
 	
 	@PUT
 	@Authenticate(service = UserAuthenticationService.class, role = "ADMIN")
-	@Path("/users")
+	@Path("/{lang}/users")
 	public User UpdateForGroup(User user) throws Exception 
 	{
 		return super.Update(user);

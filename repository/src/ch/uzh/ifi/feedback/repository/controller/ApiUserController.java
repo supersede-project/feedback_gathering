@@ -35,21 +35,21 @@ public class ApiUserController extends RestController<ApiUser> {
 	}
 	
 	@GET
-	@Path("/api_users")
+	@Path("/{lang}/api_users")
 	public List<ApiUser> GetAll() throws Exception
 	{
 		return super.GetAll();
 	}
 	
 	@GET
-	@Path("/api_users/{id}")
+	@Path("/{lang}/api_users/{id}")
 	public ApiUser GetById(@PathParam("id") Integer id) throws Exception
 	{
 		return super.GetById(id);
 	}
 
 	@POST
-	@Path("/api_users")
+	@Path("/{lang}/api_users")
 	@Authenticate(service = UserAuthenticationService.class, role = "ADMIN")
 	public ApiUser Insert(ApiUser user) throws Exception
 	{
@@ -57,7 +57,7 @@ public class ApiUserController extends RestController<ApiUser> {
 	}
 	
 	@PUT
-	@Path("/api_users")
+	@Path("/{lang}/api_users")
 	@Authenticate(service = UserAuthenticationService.class, role = "ADMIN")
 	public ApiUser Update(ApiUser user) throws Exception
 	{
@@ -65,7 +65,7 @@ public class ApiUserController extends RestController<ApiUser> {
 	}
 	
 	@DELETE
-	@Path("/api_users/{id}")
+	@Path("/{lang}/api_users/{id}")
 	@Authenticate(service = UserAuthenticationService.class, role = "ADMIN")
 	public void Delete(@PathParam("id") Integer id) throws Exception
 	{

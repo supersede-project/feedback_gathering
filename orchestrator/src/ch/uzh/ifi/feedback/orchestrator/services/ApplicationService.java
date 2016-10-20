@@ -15,6 +15,7 @@ import ch.uzh.ifi.feedback.orchestrator.model.Application;
 import ch.uzh.ifi.feedback.orchestrator.model.Configuration;
 import ch.uzh.ifi.feedback.orchestrator.model.GeneralConfiguration;
 import ch.uzh.ifi.feedback.orchestrator.model.UserGroup;
+import ch.uzh.ifi.feedback.orchestrator.transaction.OrchestratorDatabaseConfiguration;
 import javassist.NotFoundException;
 import static java.util.Arrays.asList;
 
@@ -31,7 +32,7 @@ public class ApplicationService extends OrchestratorService<Application>{
 			ConfigurationService configurationService,
 			GeneralConfigurationService generalConfigurationService,
 			UserGroupService userGroupService,
-			IDatabaseConfiguration config,
+			OrchestratorDatabaseConfiguration config,
 			@Named("timestamp")Provider<Timestamp> timestampProvider)
 	{
 		super(  resultParser, 

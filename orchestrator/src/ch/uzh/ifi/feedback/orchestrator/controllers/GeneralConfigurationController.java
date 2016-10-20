@@ -53,14 +53,14 @@ public class GeneralConfigurationController extends RestController<GeneralConfig
 	}
 	
 	@GET
-	@Path("/general_configurations/{config_id}")
+	@Path("/{lang}/general_configurations/{config_id}")
 	public GeneralConfiguration GetById( @PathParam("config_id") Integer id) throws Exception 
 	{
 		return super.GetById(id);
 	}
 	
 	@GET
-	@Path("/applications/{app_id}/general_configuration")
+	@Path("/{lang}/applications/{app_id}/general_configuration")
 	public GeneralConfiguration GetByApplication( @PathParam("app_id")Integer appId) throws Exception 
 	{
 		Application app = applicationService.GetById(appId);
@@ -68,7 +68,7 @@ public class GeneralConfigurationController extends RestController<GeneralConfig
 	}
 	
 	@GET
-	@Path("/configurations/{config_id}/general_configuration")
+	@Path("/{lang}/configurations/{config_id}/general_configuration")
 	public GeneralConfiguration GetByConfiguration( @PathParam("config_id")Integer configId) throws Exception 
 	{
 		Configuration config = configurationService.GetById(configId);
@@ -77,7 +77,7 @@ public class GeneralConfigurationController extends RestController<GeneralConfig
 	
 	@PUT
 	@Authenticate(service = UserAuthenticationService.class, scope = "APPLICATION")
-	@Path("/applications/{application_id}/general_configurations")
+	@Path("/{lang}/applications/{application_id}/general_configurations")
 	public GeneralConfiguration UpdateGeneralConfigurationForApplication(
 			@PathParam("application_id") Integer applicationId,
 			GeneralConfiguration config) throws Exception 
@@ -92,7 +92,7 @@ public class GeneralConfigurationController extends RestController<GeneralConfig
 
 	@POST
 	@Authenticate(service = UserAuthenticationService.class, scope = "APPLICATION")
-	@Path("/applications/{application_id}/general_configuration")
+	@Path("/{lang}/applications/{application_id}/general_configuration")
 	public GeneralConfiguration InsertGeneralConfigurationForApplication(
 			@PathParam("app_id")Integer appId, 
 			GeneralConfiguration config) throws Exception 
@@ -113,7 +113,7 @@ public class GeneralConfigurationController extends RestController<GeneralConfig
 	
 	@POST
 	@Authenticate(service = UserAuthenticationService.class, scope = "APPLICATION")
-	@Path("/applications/{application_id}/configurations/{config_id}/general_configuration")
+	@Path("/{lang}/applications/{application_id}/configurations/{config_id}/general_configuration")
 	public GeneralConfiguration InsertGeneralConfigurationForConfiguration(
 			@PathParam("config_id")Integer configId, 
 			@PathParam("application_id") Integer applicationId,

@@ -59,28 +59,28 @@ public class ParameterController extends RestController<FeedbackParameter> {
 	}
 
 	@GET
-	@Path("/parameters/{parameter_id}")
+	@Path("/{lang}/parameters/{parameter_id}")
 	public FeedbackParameter GetParameterById( @PathParam("parameter_id") Integer id) throws Exception 
 	{
 		return super.GetById(id);
 	}
 	
 	@GET
-	@Path("/parameters")
+	@Path("/{lang}/parameters")
 	public List<FeedbackParameter> GetAllParameters() throws Exception 
 	{
 		return super.GetAll();
 	}
 	
 	@GET
-	@Path("/mechanisms/{mechanism_id}/parameters")
+	@Path("/{lang}/mechanisms/{mechanism_id}/parameters")
 	public List<FeedbackParameter> GetParametersByMechanism(@PathParam("mechanism_id") Integer id) throws Exception 
 	{
 		return super.GetAllFor("mechanisms_id", id);
 	}
 	
 	@GET
-	@Path("/general_configurations/{config_id}/parameters")
+	@Path("/{lang}/general_configurations/{config_id}/parameters")
 	public List<FeedbackParameter> GetParametersByGeneralConfigurationId(@PathParam("config_id") Integer id) throws Exception 
 	{
 		return super.GetAllFor("general_configurations_id", id);
@@ -88,7 +88,7 @@ public class ParameterController extends RestController<FeedbackParameter> {
 	
 	@PUT
 	@Authenticate(service = UserAuthenticationService.class, scope = "APPLICATION")
-	@Path("/applications/{application_id}/parameters")
+	@Path("/{lang}/applications/{application_id}/parameters")
 	public FeedbackParameter UpdateParameter(
 			@PathParam("application_id")Integer applicationId, 		
 			FeedbackParameter param) throws Exception 
@@ -100,7 +100,7 @@ public class ParameterController extends RestController<FeedbackParameter> {
 
 	@POST
 	@Authenticate(service = UserAuthenticationService.class, scope = "APPLICATION")
-	@Path("/applications/{application_id}/general_configurations/{config_id}/parameters")
+	@Path("/{lang}/applications/{application_id}/general_configurations/{config_id}/parameters")
 	public FeedbackParameter InsertParameterForGeneralConfiguration(
 			@PathParam("config_id")Integer config_id, 
 			@PathParam("application_id")Integer applicationId, 
@@ -113,7 +113,7 @@ public class ParameterController extends RestController<FeedbackParameter> {
 	
 	@POST
 	@Authenticate(service = UserAuthenticationService.class, scope = "APPLICATION")
-	@Path("/applications/{application_id}/mechanisms/{mechanism_id}/parameters")
+	@Path("/{lang}/applications/{application_id}/mechanisms/{mechanism_id}/parameters")
 	public FeedbackParameter InsertParameterForMechanism(
 			@PathParam("mechanism_id") Integer mechanism_id, 
 			@PathParam("application_id")Integer applicationId, 

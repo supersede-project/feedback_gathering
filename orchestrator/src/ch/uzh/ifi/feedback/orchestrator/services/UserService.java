@@ -10,6 +10,7 @@ import com.google.inject.name.Named;
 import ch.uzh.ifi.feedback.library.transaction.DatabaseConfiguration;
 import ch.uzh.ifi.feedback.library.transaction.IDatabaseConfiguration;
 import ch.uzh.ifi.feedback.orchestrator.model.User;
+import ch.uzh.ifi.feedback.orchestrator.transaction.OrchestratorDatabaseConfiguration;
 
 @Singleton
 public class UserService extends OrchestratorService<User>{
@@ -17,7 +18,7 @@ public class UserService extends OrchestratorService<User>{
 	@Inject
 	public UserService(
 			UserResultParser resultParser,  
-			IDatabaseConfiguration config,
+			OrchestratorDatabaseConfiguration config,
 			@Named("timestamp")Provider<Timestamp> timestampProvider) 
 	{
 		super(resultParser, User.class, "users", config.getDatabase(), timestampProvider);

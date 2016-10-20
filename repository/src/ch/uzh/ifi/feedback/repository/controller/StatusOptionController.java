@@ -35,14 +35,14 @@ public class StatusOptionController extends RestController<StatusOption>{
 	}
 
 	@GET
-	@Path("/status_options")
+	@Path("/{lang}/status_options")
 	public List<StatusOption> GetAll() throws Exception
 	{
 		return super.GetAll();
 	}
 	
 	@POST
-	@Path("/status_options")
+	@Path("/{lang}/status_options")
 	@Authenticate(service = UserAuthenticationService.class)
 	public StatusOption Insert(StatusOption option) throws Exception
 	{
@@ -50,7 +50,7 @@ public class StatusOptionController extends RestController<StatusOption>{
 	}
 	
 	@PUT
-	@Path("/status_options")
+	@Path("/{lang}/status_options")
 	@Authenticate(service = UserAuthenticationService.class)
 	public StatusOption Update(StatusOption option) throws Exception
 	{
@@ -58,7 +58,7 @@ public class StatusOptionController extends RestController<StatusOption>{
 	}
 	
 	@DELETE
-	@Path("/status_options/{id}")
+	@Path("/{lang}/status_options/{id}")
 	@Authenticate(service = UserAuthenticationService.class)
 	public void Delete(@PathParam("id") Integer id) throws Exception
 	{

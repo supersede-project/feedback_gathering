@@ -25,9 +25,9 @@ import ch.uzh.ifi.feedback.library.rest.authorization.UserToken;
 import ch.uzh.ifi.feedback.library.test.ServletTest;
 import ch.uzh.ifi.feedback.library.transaction.DatabaseConfiguration;
 import ch.uzh.ifi.feedback.library.transaction.IDatabaseConfiguration;
-import ch.uzh.ifi.feedback.orchestrator.Transaction.OrchestratorDatabaseConfiguration;
 import ch.uzh.ifi.feedback.orchestrator.model.Application;
 import ch.uzh.ifi.feedback.orchestrator.model.FeedbackParameter;
+import ch.uzh.ifi.feedback.orchestrator.transaction.OrchestratorDatabaseConfiguration;
 import javassist.NotFoundException;
 
 public class OrchestratorServletApplicationTest extends OrchestratorServletTest {

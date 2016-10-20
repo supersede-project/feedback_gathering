@@ -24,6 +24,7 @@ import ch.uzh.ifi.feedback.library.transaction.DatabaseConfiguration;
 import ch.uzh.ifi.feedback.library.transaction.IDatabaseConfiguration;
 import ch.uzh.ifi.feedback.orchestrator.model.FeedbackMechanism;
 import ch.uzh.ifi.feedback.orchestrator.model.FeedbackParameter;
+import ch.uzh.ifi.feedback.orchestrator.transaction.OrchestratorDatabaseConfiguration;
 import javassist.NotFoundException;
 import static java.util.Arrays.asList;
 
@@ -35,7 +36,7 @@ public class ParameterService extends OrchestratorService<FeedbackParameter>{
 	@Inject
 	public ParameterService(
 			ParameterResultParser resultParser, 
-			IDatabaseConfiguration config,
+			OrchestratorDatabaseConfiguration config,
 			@Named("timestamp") Provider<Timestamp> timeStampProvider,
 			@Named("language") Provider<String> languageProvider) 
 	{

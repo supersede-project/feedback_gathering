@@ -8,8 +8,8 @@ import org.apache.http.client.ClientProtocolException;
 import ch.uzh.ifi.feedback.library.rest.authorization.UserToken;
 import ch.uzh.ifi.feedback.library.test.ServletTest;
 import ch.uzh.ifi.feedback.library.transaction.IDatabaseConfiguration;
-import ch.uzh.ifi.feedback.orchestrator.Transaction.OrchestratorDatabaseConfiguration;
 import ch.uzh.ifi.feedback.orchestrator.model.GeneralConfiguration;
+import ch.uzh.ifi.feedback.orchestrator.transaction.OrchestratorDatabaseConfiguration;
 
 public class OrchestratorServletGeneralConfigurationTest extends OrchestratorServletTest {
 	

@@ -42,6 +42,8 @@ public abstract class DatabaseConfiguration implements IDatabaseConfiguration {
 	
 	public void RestoreTestDatabase()
 	{
+		if(testDatabaseDumpFile == null)
+			return;
         //Restore Databases from dump file
         String restoreTestDbCmd = String.format("mysql -u %s -p%s %s < %s", dbUser, dbPassword, getTestDatabase(), testDatabaseDumpFile);
         try {
@@ -78,7 +80,9 @@ public abstract class DatabaseConfiguration implements IDatabaseConfiguration {
 	private void CreateDumps()
 	{
 		InputStream inputStream = getTestDatabaseDump();
-		testDatabaseDumpFile = generateTempFile(inputStream, "dump_" + getTestDatabase());
+		
+		if (inputStream != null)
+			testDatabaseDumpFile = generateTempFile(inputStream, "dump_" + getTestDatabase());
 	}
 	
 	protected String generateTempFile(InputStream input, String filename)
@@ -107,5 +111,8 @@ public abstract class DatabaseConfiguration implements IDatabaseConfiguration {
 
 	public abstract String getTestDatabase();
 	
-	protected abstract InputStream getTestDatabaseDump();
+	protected InputStream getTestDatabaseDump()
+	{
+		return null;
+	}
 }

@@ -45,21 +45,21 @@ public class MechanismController extends RestController<FeedbackMechanism> {
 	}
 
 	@GET
-	@Path("/mechanisms/{mechanism_id}")
+	@Path("/{lang}/mechanisms/{mechanism_id}")
 	public FeedbackMechanism GetById( @PathParam("mechanism_id") Integer id) throws Exception 
 	{
 		return super.GetById(id);
 	}
 	
 	@GET
-	@Path("/mechanisms")
+	@Path("/{lang}/mechanisms")
 	public List<FeedbackMechanism> GetAll() throws Exception 
 	{
 		return super.GetAll();
 	}
 	
 	@GET
-	@Path("/configurations/{config_id}/mechanisms")
+	@Path("/{lang}/configurations/{config_id}/mechanisms")
 	public List<FeedbackMechanism> GetAllByConfiguration( @PathParam("config_id")Integer configId) throws Exception 
 	{
 		return super.GetAllFor("configurations_id", configId);
@@ -67,7 +67,7 @@ public class MechanismController extends RestController<FeedbackMechanism> {
 	
 	@PUT
 	@Authenticate(service = UserAuthenticationService.class, scope = "APPLICATION")
-	@Path("/applications/{application_id}/configurations/{config_id}/mechanisms")
+	@Path("/{lang}/applications/{application_id}/configurations/{config_id}/mechanisms")
 	public FeedbackMechanism UpdateMechanismForConfiguration(
 			@PathParam("config_id")Integer configId, 
 			@PathParam("application_id") Integer applicationId,
@@ -84,7 +84,7 @@ public class MechanismController extends RestController<FeedbackMechanism> {
 	
 	@POST
 	@Authenticate(service = UserAuthenticationService.class, scope = "APPLICATION")
-	@Path("/applications/{application_id}/configurations/{config_id}/mechanisms")
+	@Path("/{lang}/applications/{application_id}/configurations/{config_id}/mechanisms")
 	public FeedbackMechanism InsertMechanismForConfiguration(
 			@PathParam("config_id")Integer configId,
 			@PathParam("application_id") Integer applicationId,

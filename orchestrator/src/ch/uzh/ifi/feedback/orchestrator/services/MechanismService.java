@@ -22,6 +22,7 @@ import ch.uzh.ifi.feedback.library.transaction.IDatabaseConfiguration;
 import ch.uzh.ifi.feedback.library.transaction.TransactionManager;
 import ch.uzh.ifi.feedback.orchestrator.model.FeedbackMechanism;
 import ch.uzh.ifi.feedback.orchestrator.model.FeedbackParameter;
+import ch.uzh.ifi.feedback.orchestrator.transaction.OrchestratorDatabaseConfiguration;
 import javassist.NotFoundException;
 import static java.util.Arrays.asList;
 
@@ -34,7 +35,7 @@ public class MechanismService extends OrchestratorService<FeedbackMechanism> {
 	public MechanismService(
 			ParameterService parameterService, 
 			MechanismResultParser resultParser,
-			IDatabaseConfiguration config,
+			OrchestratorDatabaseConfiguration config,
 			@Named("timestamp")Provider<Timestamp> timestampProvider)
 	{
 		super(

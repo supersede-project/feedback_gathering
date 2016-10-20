@@ -1,4 +1,4 @@
-package ch.uzh.ifi.feedback.orchestrator.Transaction;
+package ch.uzh.ifi.feedback.orchestrator.transaction;
 
 import java.io.InputStream;
 

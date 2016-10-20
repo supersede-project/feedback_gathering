@@ -15,6 +15,7 @@ import ch.uzh.ifi.feedback.library.transaction.DbResultParser;
 import ch.uzh.ifi.feedback.library.transaction.IDatabaseConfiguration;
 import ch.uzh.ifi.feedback.orchestrator.model.User;
 import ch.uzh.ifi.feedback.orchestrator.model.UserGroup;
+import ch.uzh.ifi.feedback.orchestrator.transaction.OrchestratorDatabaseConfiguration;
 import javassist.NotFoundException;
 import static java.util.Arrays.asList;
 
@@ -26,7 +27,7 @@ public class UserGroupService extends OrchestratorService<UserGroup>{
 	@Inject
 	public UserGroupService(
 			UserGroupResultParser resultParser, 
-			IDatabaseConfiguration config,
+			OrchestratorDatabaseConfiguration config,
 			@Named("timestamp")Provider<Timestamp> timestampProvider,
 			UserService userService) 
 	{
