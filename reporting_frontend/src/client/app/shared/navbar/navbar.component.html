@@ -2,5 +2,5 @@
   <a *ngIf="userService.isLoggedIn()" [routerLink]="['/']" [routerLinkActive]="['router-link-active']" [routerLinkActiveOptions]="{exact:true}">FEEDBACKS</a>
   <a *ngIf="userService.isLoggedIn()" [routerLink]="['settings']" [routerLinkActive]="['router-link-active']" [routerLinkActiveOptions]="{exact:true}">SETTINGS</a>
   <a *ngIf="userService.isLoggedIn()" [routerLink]="['users']" [routerLinkActive]="['router-link-active']" [routerLinkActiveOptions]="{exact:true}">USERS</a>
-  <a (click)="userService.logout()" *ngIf="userService.isLoggedIn()">LOGOUT</a>
+  <a class="logout" (click)="userService.logout()" *ngIf="userService.isLoggedIn()">LOGOUT</a>
 </nav>
