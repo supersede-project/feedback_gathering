@@ -18,124 +18,139 @@
             <li><a>Implemented</a></li>
           </ul>
         </div>
+        <button *ngIf="feedbacks" [class.inactive]="feedback?.id === feedbacks[0]?.id" (click)="showPreviousFeedback()" type="button" class="action btn btn-primary btn-xs">
+          <span class="glyphicon glyphicon-chevron-left"></span>
+        </button>
+        <button *ngIf="feedbacks" [class.inactive]="feedback?.id === feedbacks[feedbacks.length - 1]?.id" (click)="showNextFeedback()" type="button" class="action btn btn-primary btn-xs">
+          <span class="glyphicon glyphicon-chevron-right"></span>
+        </button>
       </article>
     </header>
   </div>
 
   <div class="row">
-    <div class="col-md-6">
-      <div class="panel panel-default">
-        <div class="panel-heading">
-          <h3 class="panel-title">Data</h3>
-        </div>
-        <div class="panel-body">
-          <dl class="dl-horizontal">
-            <dt>Application ID</dt>
-            <dd>{{feedback.applicationId}}</dd>
-            <dt>Configuration ID</dt>
-            <dd>{{feedback.configurationId}}</dd>
-            <dt>User ID</dt>
-            <dd>{{feedback.userIdentification}}</dd>
-            <dt>Date</dt>
-            <dd>{{feedback.createdAt}}</dd>
-            <dt>Language</dt>
-            <dd>{{feedback.language}}</dd>
-          </dl>
-        </div>
-      </div>
 
-      <div class="panel panel-default">
-        <div class="panel-heading">
-          <h3 class="panel-title">Text Feedbacks</h3>
-        </div>
-        <div class="panel-body">
-          <p *ngFor="let textFeedback of feedback.textFeedbacks">
-            {{textFeedback.mechanism | parameterValue:'title'}}: <br/>
-            {{textFeedback.text}}
-            <br/>
-            <small>(Mechanism ID: {{textFeedback.mechanismId}})</small>
-          </p>
-        </div>
-      </div>
+    <div>
+      <ul class="nav nav-tabs" role="tablist">
+        <li role="presentation" class="active"><a href="#feedback" aria-controls="feedback" role="tab" data-toggle="tab">Feedback</a></li>
+        <li role="presentation"><a href="#configuration" aria-controls="configuration" role="tab" data-toggle="tab">Configuration</a></li>
+      </ul>
 
-      <div class="panel panel-default">
-        <div class="panel-heading">
-          <h3 class="panel-title">Rating Feedbacks</h3>
-        </div>
-        <div class="panel-body">
-          <p *ngFor="let ratingFeedback of feedback.ratingFeedbacks">
+      <div class="tab-content">
+        <div role="tabpanel" class="tab-pane active" id="feedback">
+          <div *ngIf="feedback" class="panel panel-default">
+            <div class="panel-heading">
+              <h3 class="panel-title">Data</h3>
+            </div>
+            <div class="panel-body">
+              <dl class="dl-horizontal">
+                <dt>Application ID</dt>
+                <dd>{{feedback.applicationId}}</dd>
+                <dt>Configuration ID</dt>
+                <dd>{{feedback.configurationId}}</dd>
+                <dt>User ID</dt>
+                <dd>{{feedback.userIdentification}}</dd>
+                <dt>Date</dt>
+                <dd>{{feedback.createdAt}}</dd>
+                <dt>Language</dt>
+                <dd>{{feedback.language}}</dd>
+              </dl>
+            </div>
+          </div>
+
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h3 class="panel-title">Text Feedbacks</h3>
+            </div>
+            <div class="panel-body">
+              <p *ngFor="let textFeedback of feedback.textFeedbacks">
+                {{textFeedback.mechanism | parameterValue:'title'}}: <br/>
+                {{textFeedback.text}}
+                <br/>
+                <small>(Mechanism ID: {{textFeedback.mechanismId}})</small>
+              </p>
+            </div>
+          </div>
+
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h3 class="panel-title">Rating Feedbacks</h3>
+            </div>
+            <div class="panel-body">
+              <p *ngFor="let ratingFeedback of feedback.ratingFeedbacks">
           <span *ngIf="ratingFeedback.mechanism">
             {{ratingFeedback.mechanism | parameterValue:'title'}}
             {{ratingFeedback.rating}} /
             {{ratingFeedback.mechanism | parameterValue:'maxRating'}}
           </span>
-            <br/>
-            <small>(Mechanism ID: {{ratingFeedback.mechanismId}})</small>
-          </p>
-        </div>
-      </div>
+                <br/>
+                <small>(Mechanism ID: {{ratingFeedback.mechanismId}})</small>
+              </p>
+            </div>
+          </div>
 
-      <div class="panel panel-default">
-        <div class="panel-heading">
-          <h3 class="panel-title">Screenshot Feedbacks</h3>
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h3 class="panel-title">Screenshot Feedbacks</h3>
+            </div>
+            <div class="panel-body">
+              <p *ngFor="let screenshotFeedback of feedback.screenshotFeedbacks">
+                <img src="{{ host }}{{ screenshotFeedback.path }}" class="screenshot img-responsive"/>
+              </p>
+            </div>
+          </div>
         </div>
-        <div class="panel-body">
-          <p *ngFor="let screenshotFeedback of feedback.screenshotFeedbacks">
-            <img src="{{ host }}{{ screenshotFeedback.path }}" class="screenshot img-responsive"/>
-          </p>
-        </div>
-      </div>
-    </div>
 
-    <div class="col-md-6" *ngIf="configuration">
-      <div class="panel panel-default">
-        <div class="panel-heading">
-          <h3 class="panel-title">Configuration {{configuration.id}}</h3>
-        </div>
-        <div class="panel-body">
-          <dl class="dl-horizontal">
-            <dt>Name</dt>
-            <dd>{{application.name}}</dd>
-            <dt>Created at</dt>
-            <dd>{{application.createdAt}}</dd>
-          </dl>
-          <hr/>
+        <div role="tabpanel" class="tab-pane" id="configuration">
+          <div *ngIf="configuration" class="panel panel-default">
+            <div class="panel-heading">
+              <h3 class="panel-title">Configuration {{configuration.id}}</h3>
+            </div>
+            <div class="panel-body">
+              <dl class="dl-horizontal">
+                <dt>Name</dt>
+                <dd>{{application.name}}</dd>
+                <dt>Created at</dt>
+                <dd>{{application.createdAt}}</dd>
+              </dl>
+              <hr/>
 
-          <h4>Mechanisms</h4>
-          <article *ngFor="let mechanism of configuration.mechanisms">
-            <dl class="dl-horizontal">
-              <dt>ID</dt>
-              <dd>{{mechanism.id}}</dd>
-              <dt>Type</dt>
-              <dd>{{mechanism.type}}</dd>
-              <dt>Active</dt>
-              <dd>{{mechanism.active}}</dd>
-              <dt>Order</dt>
-              <dd>{{mechanism.order}}</dd>
-              <br/>
-              <dt>Parameters</dt>
-              <dd>
-                <table class="table table-bordered table-condensed">
-                  <thead>
-                  <tr>
-                    <th>key</th>
-                    <th>value</th>
-                  </tr>
-                  </thead>
-                  <tbody>
-                  <tr *ngFor="let parameter of mechanism.parameters">
-                    <td>{{parameter.key}}</td>
-                    <td>{{parameter.value}}</td>
-                  </tr>
-                  </tbody>
-                </table>
-              </dd>
-            </dl>
-            <hr/>
-          </article>
+              <h4>Mechanisms</h4>
+              <article *ngFor="let mechanism of configuration.mechanisms">
+                <dl class="dl-horizontal">
+                  <dt>ID</dt>
+                  <dd>{{mechanism.id}}</dd>
+                  <dt>Type</dt>
+                  <dd>{{mechanism.type}}</dd>
+                  <dt>Active</dt>
+                  <dd>{{mechanism.active}}</dd>
+                  <dt>Order</dt>
+                  <dd>{{mechanism.order}}</dd>
+                  <br/>
+                  <dt>Parameters</dt>
+                  <dd>
+                    <table class="table table-bordered table-condensed">
+                      <thead>
+                      <tr>
+                        <th>key</th>
+                        <th>value</th>
+                      </tr>
+                      </thead>
+                      <tbody>
+                      <tr *ngFor="let parameter of mechanism.parameters">
+                        <td>{{parameter.key}}</td>
+                        <td>{{parameter.value}}</td>
+                      </tr>
+                      </tbody>
+                    </table>
+                  </dd>
+                </dl>
+                <hr/>
+              </article>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </div>
-
 </article>

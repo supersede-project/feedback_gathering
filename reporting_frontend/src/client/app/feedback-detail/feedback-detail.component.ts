@@ -7,6 +7,7 @@ import {FeedbackDetailService} from '../shared/services/feedback-detail.service'
 import {ApplicationService} from '../shared/services/application.service';
 import {TextMechanism} from '../shared/models/mechanisms/text_mechanism';
 import {RatingMechanism} from '../shared/models/mechanisms/rating_mechanism';
+import {FeedbackListService} from '../shared/services/feedback-list.service';
 
 
 @Component({
@@ -17,12 +18,13 @@ import {RatingMechanism} from '../shared/models/mechanisms/rating_mechanism';
 })
 export class FeedbackDetailComponent implements OnInit {
   feedback:Feedback;
+  feedbacks:Feedback[] = [];
   application:Application;
   configuration:ConfigurationInterface;
   errorMessage:string;
   host:string = 'http://ec2-54-175-37-30.compute-1.amazonaws.com/';
 
-  constructor(private route:ActivatedRoute, private feedbackService:FeedbackDetailService, private applicationService:ApplicationService, private router:Router) {
+  constructor(public feedbackListService:FeedbackListService, private route:ActivatedRoute, private feedbackService:FeedbackDetailService, private applicationService:ApplicationService, private router:Router) {
   }
 
   ngOnInit() {
@@ -33,14 +35,27 @@ export class FeedbackDetailComponent implements OnInit {
         this.feedbackService.find(applicationId, id).subscribe(
           feedback => {
             this.feedback = <Feedback>feedback;
-            if(feedback && feedback.applicationId) {
+            if (feedback && feedback.applicationId) {
               this.loadApplication(feedback.applicationId, feedback.configurationId);
             }
           },
           error => this.errorMessage = <any>error
         );
+        this.getFeedbacks(applicationId);
       }
     });
+  }
+
+  getFeedbacks(applicationId:number) {
+    this.feedbackListService.get(applicationId)
+      .subscribe(
+        feedbacks => {
+          this.feedbacks = feedbacks;
+        },
+        error => {
+          console.log(error);
+        }
+      );
   }
 
   loadApplication(id:number, configurationId:number) {
@@ -55,17 +70,38 @@ export class FeedbackDetailComponent implements OnInit {
   }
 
   populateConfigurationData() {
-    for(var textFeedback of this.feedback.textFeedbacks) {
-      let textMechanism:TextMechanism = <TextMechanism>this.configuration.mechanisms.filter(mechanism => mechanism.id === textFeedback.mechanismId)[0];
-      textFeedback.mechanism = <TextMechanism>textMechanism;
+    if (this.feedback && this.feedback.textFeedbacks) {
+      for (var textFeedback of this.feedback.textFeedbacks) {
+        let textMechanism:TextMechanism = <TextMechanism>this.configuration.mechanisms.filter(mechanism => mechanism.id === textFeedback.mechanismId)[0];
+        textFeedback.mechanism = <TextMechanism>textMechanism;
+      }
     }
-    for(var ratingFeedback of this.feedback.ratingFeedbacks) {
-      let ratingMechanism:RatingMechanism = <RatingMechanism>this.configuration.mechanisms.filter(mechanism => mechanism.id === ratingFeedback.mechanismId)[0];
-      ratingFeedback.mechanism = <RatingMechanism>ratingMechanism;
+    if (this.feedback && this.feedback.ratingFeedbacks) {
+      for (var ratingFeedback of this.feedback.ratingFeedbacks) {
+        let ratingMechanism:RatingMechanism = <RatingMechanism>this.configuration.mechanisms.filter(mechanism => mechanism.id === ratingFeedback.mechanismId)[0];
+        ratingFeedback.mechanism = <RatingMechanism>ratingMechanism;
+      }
     }
   }
 
   markAsUnread():void {
     this.router.navigate(['/']);
+  }
+
+  showNextFeedback() {
+    if (this.feedback.id !== this.feedbacks[this.feedbacks.length - 1].id) {
+      this.feedback = this.feedbacks[this.getCurrentFeedbackIndex() + 1];
+    }
+  }
+
+  showPreviousFeedback() {
+    if (this.feedback.id !== this.feedbacks[0].id) {
+      this.feedback = this.feedbacks[this.getCurrentFeedbackIndex() - 1];
+    }
+  }
+
+  private getCurrentFeedbackIndex():number {
+    let feedbackInArray = this.feedbacks.filter(feedback => feedback.id === this.feedback.id)[0];
+    return this.feedbacks.indexOf(feedbackInArray);
   }
 }

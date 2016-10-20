@@ -7,7 +7,6 @@ header.title {
 }
 
 header.title h2 {
-  display: inline-block;
   margin-right: 10px;
   vertical-align:middle;
 }
@@ -24,4 +23,20 @@ button.action {
   padding: 2px 10px;
   border: 1px solid #cccccc;
   font-size: 12px;
+}
+
+.tablist li {
+  border-radius: 0;
+}
+
+.tab-pane {
+  padding: 20px;
+}
+
+.panel {
+  border-radius: 0;
+}
+
+button.inactive {
+  background: #cccccc;
 }
