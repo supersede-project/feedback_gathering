@@ -26,22 +26,47 @@ public abstract class PartFeedback implements Serializable {
         initPartFeedback(mechanism, filePath, partId);
     }
 
+    /**
+     * This method returns the file extension.
+     *
+     * @return the file extension
+     */
     public String getFileExtension() {
         return fileExtension;
     }
 
+    /**
+     * This method returns the mechanism id.
+     *
+     * @return the mechanism id
+     */
     public long getMechanismId() {
         return mechanismId;
     }
 
+    /**
+     * This method returns the name.
+     *
+     * @return the name
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * This method returns the part.
+     *
+     * @return the part
+     */
     public String getPart() {
         return part;
     }
 
+    /**
+     * This method returns the part string.
+     *
+     * @return the part string
+     */
     public abstract String getPartString();
 
     private void initPartFeedback(Mechanism mechanism, String filePath, int partId) {
@@ -59,18 +84,38 @@ public abstract class PartFeedback implements Serializable {
         setPart(getPartString() + partId);
     }
 
+    /**
+     * This method sets the file extension.
+     *
+     * @param fileExtension the file extension
+     */
     public void setFileExtension(String fileExtension) {
         this.fileExtension = fileExtension;
     }
 
+    /**
+     * This method sets the mechanism id.
+     *
+     * @param mechanismId the mechanism id
+     */
     public void setMechanismId(long mechanismId) {
         this.mechanismId = mechanismId;
     }
 
+    /**
+     * This method sets the name.
+     *
+     * @param name the name
+     */
     public void setName(String name) {
         this.name = name;
     }
 
+    /**
+     * This method sets the part.
+     *
+     * @param part the part
+     */
     public void setPart(String part) {
         this.part = part;
     }

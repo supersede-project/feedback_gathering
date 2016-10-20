@@ -18,10 +18,20 @@ public class AttachmentMechanism extends Mechanism {
         initAttachmentMechanism(item);
     }
 
+    /**
+     * This method returns all the attachment paths.
+     *
+     * @return the attachment paths
+     */
     public List<String> getAttachmentPaths() {
         return attachmentPaths;
     }
 
+    /**
+     * This method returns the title.
+     *
+     * @return the title
+     */
     public String getTitle() {
         return title;
     }
@@ -41,10 +51,20 @@ public class AttachmentMechanism extends Mechanism {
         return true;
     }
 
+    /**
+     * This method sets all the attachment paths.
+     *
+     * @param attachmentPaths the attachment paths
+     */
     public void setAttachmentPaths(List<String> attachmentPaths) {
         this.attachmentPaths = attachmentPaths;
     }
 
+    /**
+     * This method sets the title.
+     *
+     * @param title the title
+     */
     public void setTitle(String title) {
         this.title = title;
     }

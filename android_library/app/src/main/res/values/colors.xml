@@ -1,6 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!--
+    These three colors already override the ones in the feedback library in order
+    to have the same look and feel in the host application as well as in the feedback application.
+    -->
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+
+    <!--
+    Colors used in the feedback library.
+    In order to use other colors simply uncomment the specific color and choose the appropriate color.
+
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+    <color name="whiteColor">#FFFFFF</color>
+
+    <color name="supersede_feedbacklibrary_annotate_image_layout_background_color">#4D4D4D</color>
+
+    <color name="supersede_feedbacklibrary_audio_timer_record_indicator_start_animation_color">
+        #000000
+    </color>
+    <color name="supersede_feedbacklibrary_audio_timer_record_indicator_end_animation_color">
+        #FF4081
+    </color>
+    <color name="progress_start">#009933</color>
+    <color name="progress_end">#996633</color>
+    -->
 </resources>

@@ -88,55 +88,119 @@ public class Feedback implements Serializable {
         }
     }
 
+    /**
+     * This method returns the application id.
+     *
+     * @return the application id
+     */
     public long getApplicationId() {
         return applicationId;
     }
 
+    /**
+     * This method returns the attachment feedbacks.
+     *
+     * @return the attachment feedbacks
+     */
     public List<AttachmentFeedback> getAttachmentFeedbacks() {
         return attachmentFeedbacks;
     }
 
+    /**
+     * This method returns the audio feedbacks.
+     *
+     * @return the audio feedbacks
+     */
     public List<AudioFeedback> getAudioFeedbacks() {
         return audioFeedbacks;
     }
 
+    /**
+     * This method returns the category feedbacks.
+     *
+     * @return the category feedbacks
+     */
     public List<HashMap<String, Object>> getCategoryFeedbacks() {
         return categoryFeedbacks;
     }
 
+    /**
+     * This method returns the configuration id of the active configuration from which the feedback is sent.
+     *
+     * @return the configuration id
+     */
     public long getConfigurationId() {
         return configurationId;
     }
 
+    /**
+     * This method returns the context information.
+     *
+     * @return the context information
+     */
     public Map<String, Object> getContextInformation() {
         return contextInformation;
     }
 
+    /**
+     * This method returns the language.
+     *
+     * @return the language
+     */
     public String getLanguage() {
         return language;
     }
 
+    /**
+     * This method returns the rating feedbacks.
+     *
+     * @return the rating feedbacks.
+     */
     public List<RatingFeedback> getRatingFeedbacks() {
         return ratingFeedbacks;
     }
 
+    /**
+     * This method returns the screenshot feedbacks.
+     *
+     * @return the screenshot feedbacks
+     */
     public List<ScreenshotFeedback> getScreenshotFeedbacks() {
         return screenshotFeedbacks;
     }
 
+    /**
+     * This method returns the text feedbacks.
+     *
+     * @return the text feedbacks
+     */
     public List<TextFeedback> getTextFeedbacks() {
         return textFeedbacks;
     }
 
+    /**
+     * This method returns the title of the feedback.
+     *
+     * @return the title
+     */
     public String getTitle() {
         return title;
     }
 
+    /**
+     * This method returns the user identification.
+     *
+     * @return the user identification
+     */
     public String getUserIdentification() {
         return userIdentification;
     }
 
+    /**
+     * This method initializes the context information
+     */
     public void initContextInformation() {
+        // TODO: not yet sent to the repository, i.e., needs to be implemented
         contextInformation = new HashMap<>();
         contextInformation.put("release", Build.VERSION.RELEASE);
         contextInformation.put("device", Build.DEVICE);
@@ -150,22 +214,47 @@ public class Feedback implements Serializable {
         contextInformation.put("host", Build.HOST);
     }
 
+    /**
+     * This method sets the application id.
+     *
+     * @param applicationId the application id
+     */
     public void setApplicationId(long applicationId) {
         this.applicationId = applicationId;
     }
 
+    /**
+     * This method sets the attachment feedbacks.
+     *
+     * @param attachmentFeedbacks the attachment feedbacks
+     */
     public void setAttachmentFeedbacks(List<AttachmentFeedback> attachmentFeedbacks) {
         this.attachmentFeedbacks = attachmentFeedbacks;
     }
 
+    /**
+     * This method sets the audio feedbacks.
+     *
+     * @param audioFeedbacks the audio feedbacks
+     */
     public void setAudioFeedbacks(List<AudioFeedback> audioFeedbacks) {
         this.audioFeedbacks = audioFeedbacks;
     }
 
+    /**
+     * This method sets the category feedbacks.
+     *
+     * @param categoryFeedbacks the category feedbacks
+     */
     public void setCategoryFeedbacks(List<HashMap<String, Object>> categoryFeedbacks) {
         this.categoryFeedbacks = categoryFeedbacks;
     }
 
+    /**
+     * This method sets the configuration id of the active configuration from which the feedback is sent.
+     *
+     * @param configurationId the configuration id
+     */
     public void setConfigurationId(long configurationId) {
         this.configurationId = configurationId;
     }
@@ -174,28 +263,57 @@ public class Feedback implements Serializable {
         this.contextInformation = contextInformation;
     }
 
+    /**
+     * This method sets the language.
+     *
+     * @param language the language
+     */
     public void setLanguage(String language) {
         this.language = language;
     }
 
+    /**
+     * This method sets the rating feedbacks.
+     *
+     * @param ratingFeedbacks the rating feedbacks
+     */
     public void setRatingFeedbacks(List<RatingFeedback> ratingFeedbacks) {
         this.ratingFeedbacks = ratingFeedbacks;
     }
 
+    /**
+     * This method sets the screenshot feedbacks.
+     *
+     * @param screenshotFeedbacks the screenshot feedbacks
+     */
     public void setScreenshotFeedbacks(List<ScreenshotFeedback> screenshotFeedbacks) {
         this.screenshotFeedbacks = screenshotFeedbacks;
     }
 
+    /**
+     * This method sets the text feedbacks.
+     *
+     * @param textFeedbacks the text feedbacks
+     */
     public void setTextFeedbacks(List<TextFeedback> textFeedbacks) {
         this.textFeedbacks = textFeedbacks;
     }
 
+    /**
+     * This method sets the title of the feedback.
+     *
+     * @param title the title
+     */
     public void setTitle(String title) {
         this.title = title;
     }
 
+    /**
+     * This method sets the user identification.
+     *
+     * @param userIdentification the user identification
+     */
     public void setUserIdentification(String userIdentification) {
         this.userIdentification = userIdentification;
     }
-
 }

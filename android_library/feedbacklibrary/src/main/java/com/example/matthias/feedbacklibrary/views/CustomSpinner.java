@@ -71,11 +71,6 @@ public class CustomSpinner extends Spinner implements DialogInterface.OnClickLis
         return selection;
     }
 
-    /**
-     * This method returns the selected items as a string.
-     *
-     * @return the concatenated string
-     */
     @NonNull
     private String getSelectedItemsAsString() {
         StringBuilder sb = new StringBuilder();
@@ -111,7 +106,7 @@ public class CustomSpinner extends Spinner implements DialogInterface.OnClickLis
     /**
      * This method returns if the spinner is of single or multiple choice type.
      *
-     * @return true if multiple choice, false otherwise
+     * @return true if it is multiple choice, false otherwise
      */
     public boolean isMultiple() {
         return isMultiple;
@@ -120,7 +115,7 @@ public class CustomSpinner extends Spinner implements DialogInterface.OnClickLis
     /**
      * This method returns if creating an own category is allowed.
      *
-     * @return true if allowed, false otherwise
+     * @return true if it is allowed, false otherwise
      */
     public boolean isOwnCategoryAllowed() {
         return ownCategoryAllowed;
@@ -362,7 +357,7 @@ public class CustomSpinner extends Spinner implements DialogInterface.OnClickLis
      * This method sets the items for the selection.
      *
      * @param items                 the items to select
-     * @param firstDefaultSelection the firstDefaultSelection
+     * @param firstDefaultSelection if the first item should be selected by default
      */
     public void setItems(String[] items, boolean firstDefaultSelection) {
         this.items = items;
@@ -382,7 +377,7 @@ public class CustomSpinner extends Spinner implements DialogInterface.OnClickLis
      * This method sets the items for the selection.
      *
      * @param items                 the items to select
-     * @param firstDefaultSelection the firstDefaultSelection
+     * @param firstDefaultSelection if the first item should be selected by default
      */
     public void setItems(List<String> items, boolean firstDefaultSelection) {
         this.items = items.toArray(new String[items.size()]);
@@ -410,7 +405,7 @@ public class CustomSpinner extends Spinner implements DialogInterface.OnClickLis
     /**
      * This method sets if the spinner is of single or multiple choice type.
      *
-     * @param multiple the multiple
+     * @param multiple true if it is multiple choice, false otherwise
      */
     public void setMultiple(boolean multiple) {
         isMultiple = multiple;
@@ -419,7 +414,7 @@ public class CustomSpinner extends Spinner implements DialogInterface.OnClickLis
     /**
      * This method sets if own categories are allowed.
      *
-     * @param ownCategoryAllowed the ownCategoryAllowed
+     * @param ownCategoryAllowed true if it is allowed, false otherwise
      */
     public void setOwnCategoryAllowed(boolean ownCategoryAllowed) {
         this.ownCategoryAllowed = ownCategoryAllowed;
@@ -509,11 +504,6 @@ public class CustomSpinner extends Spinner implements DialogInterface.OnClickLis
         simpleAdapter.add(getSelectedItemsAsString());
     }
 
-    /**
-     * This method updates the category list after the user created an own category.
-     *
-     * @param newCategory the new category
-     */
     private void updateCategoryList(String newCategory) {
         // Update items
         List<String> newItems = new ArrayList<>();

@@ -23,10 +23,20 @@ public class ScreenshotFeedback extends PartFeedback implements Serializable {
         initScreenshotFeedback(screenshotMechanism);
     }
 
+    /**
+     * This method returns the file name.
+     *
+     * @return the file name
+     */
     public String getFileName() {
         return new File(imagePath).getName();
     }
 
+    /**
+     * This method returns the path to the image.
+     *
+     * @return the image path
+     */
     public String getImagePath() {
         return imagePath;
     }
@@ -51,6 +61,11 @@ public class ScreenshotFeedback extends PartFeedback implements Serializable {
         }
     }
 
+    /**
+     * This method sets the path to the image.
+     *
+     * @param imagePath the image path
+     */
     public void setImagePath(String imagePath) {
         this.imagePath = imagePath;
     }

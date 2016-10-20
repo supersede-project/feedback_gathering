@@ -32,7 +32,6 @@ public abstract class MechanismView {
         return layoutInflater;
     }
 
-
     /**
      * This method sets the enclosing layout view
      *

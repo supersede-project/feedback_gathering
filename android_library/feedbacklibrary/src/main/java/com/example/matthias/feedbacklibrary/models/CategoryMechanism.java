@@ -14,9 +14,9 @@ import java.util.Set;
  * Choice mechanism model.
  */
 public class CategoryMechanism extends Mechanism {
-    private boolean mandatory;
+    private boolean mandatory = false;
     private String mandatoryReminder;
-    private boolean multiple;
+    private boolean multiple = false;
     // Options the user can choose from
     private List<String> options = new ArrayList<>();
     private HashMap<String, Long> optionsIds = new HashMap<>();
@@ -30,26 +30,56 @@ public class CategoryMechanism extends Mechanism {
         initChoiceMechanism(item);
     }
 
+    /**
+     * This method returns the mandatory reminder.
+     *
+     * @return the mandatory reminder
+     */
     public String getMandatoryReminder() {
         return mandatoryReminder;
     }
 
+    /**
+     * This method returns all the options.
+     *
+     * @return the options
+     */
     public List<String> getOptions() {
         return options;
     }
 
+    /**
+     * This method returns all the ids of the options.
+     *
+     * @return the option ids
+     */
     public HashMap<String, Long> getOptionsIds() {
         return optionsIds;
     }
 
+    /**
+     * This method returns the selected options as a list.
+     *
+     * @return the selected options
+     */
     public List<String> getSelectedOptions() {
         return selectedOptions;
     }
 
+    /**
+     * This method returns the selected options as a set.
+     *
+     * @return the selected options
+     */
     public Set<String> getSelectedOptionsSet() {
         return new HashSet<>(selectedOptions);
     }
 
+    /**
+     * This method returns the title.
+     *
+     * @return the title
+     */
     public String getTitle() {
         return title;
     }
@@ -97,14 +127,29 @@ public class CategoryMechanism extends Mechanism {
         }
     }
 
+    /**
+     * This method returns if selecting at least one category is mandatory.
+     *
+     * @return true if it is mandatory, false otherwise
+     */
     public boolean isMandatory() {
         return mandatory;
     }
 
+    /**
+     * This method returns if multiple options can be selected.
+     *
+     * @return true if multiple options can be selected, false otherwise (single option choice only)
+     */
     public boolean isMultiple() {
         return multiple;
     }
 
+    /**
+     * This method returns if the user can create own categories.
+     *
+     * @return true if own categories are allowed, false otherwise
+     */
     public boolean isOwnAllowed() {
         return ownAllowed;
     }
@@ -118,30 +163,65 @@ public class CategoryMechanism extends Mechanism {
         return true;
     }
 
+    /**
+     * This method sets if selecting at least one category is mandatory.
+     *
+     * @param mandatory true if it is mandatory, false otherwise
+     */
     public void setMandatory(boolean mandatory) {
         this.mandatory = mandatory;
     }
 
+    /**
+     * This method sets the mandatory reminder.
+     *
+     * @param mandatoryReminder the mandatory reminder
+     */
     public void setMandatoryReminder(String mandatoryReminder) {
         this.mandatoryReminder = mandatoryReminder;
     }
 
+    /**
+     * This method sets if multiple options can be selected.
+     *
+     * @param multiple true if multiple options can be selected, false otherwise (single option choice only)
+     */
     public void setMultiple(boolean multiple) {
         this.multiple = multiple;
     }
 
+    /**
+     * This method sets all the options.
+     *
+     * @param options the options
+     */
     public void setOptions(List<String> options) {
         this.options = options;
     }
 
+    /**
+     * This method sets if the user can create own categories.
+     *
+     * @param ownAllowed true if own categories are allowed, false otherwise
+     */
     public void setOwnAllowed(boolean ownAllowed) {
         this.ownAllowed = ownAllowed;
     }
 
+    /**
+     * This method sets the selected options.
+     *
+     * @param selectedOptions the selected options
+     */
     public void setSelectedOptions(List<String> selectedOptions) {
         this.selectedOptions = selectedOptions;
     }
 
+    /**
+     * This method sets the title.
+     *
+     * @param title the title
+     */
     public void setTitle(String title) {
         this.title = title;
     }

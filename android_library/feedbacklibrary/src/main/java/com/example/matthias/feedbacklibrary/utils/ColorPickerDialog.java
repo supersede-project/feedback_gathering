@@ -1,9 +1,9 @@
 package com.example.matthias.feedbacklibrary.utils;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -22,12 +22,17 @@ public class ColorPickerDialog extends DialogFragment {
     OnColorChangeDialogListener mListener;
     private int changedColor;
 
+    /**
+     * This method returns the changed color.
+     *
+     * @return the changed color
+     */
     public int getChangedColor() {
         return changedColor;
     }
 
     @Override
-    public void onAttach(Activity activity) {
+    public void onAttach(Context activity) {
         super.onAttach(activity);
         try {
             mListener = (OnColorChangeDialogListener) activity;
