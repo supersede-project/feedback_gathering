@@ -6,10 +6,14 @@ import com.google.inject.Singleton;
 import ch.uzh.ifi.feedback.library.rest.authorization.AuthenticationCache;
 import ch.uzh.ifi.feedback.library.rest.authorization.AuthorizationException;
 import ch.uzh.ifi.feedback.library.rest.authorization.ITokenAuthenticationService;
+import ch.uzh.ifi.feedback.library.rest.authorization.PasswordStorage.CannotPerformOperationException;
+import ch.uzh.ifi.feedback.library.rest.authorization.PasswordStorage.InvalidHashException;
 import ch.uzh.ifi.feedback.library.rest.authorization.UserToken;
+import javassist.NotFoundException;
 
 import static java.util.Arrays.asList;
 
+import java.io.UnsupportedEncodingException;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.UUID;
@@ -31,11 +35,20 @@ public class UserAuthenticationService implements ITokenAuthenticationService {
 	
 	public UserToken Authenticate(ApiUser user) throws SQLException, AuthorizationException
 	{
-		List<ApiUser> validatedUsers = userService.GetWhere(asList(user.getName(), user.getPassword()), "`name` = ?", "`password` = ?");
-		if(validatedUsers.size() != 1)
-			throw new AuthorizationException("The user and the provided password dont match!");
+		List<ApiUser> users = userService.GetWhere(asList(user.getName()), "`name` = ?");
+		if(users.size() != 1)
+			throw new AuthorizationException("The user or the provided password dont match!");
 		
-		return cache.Register(validatedUsers.get(0));
+		ApiUser apiUser = users.get(0);
+		try {
+			if(!PasswordStorage.verifyPassword(user.getPassword(), apiUser.getPassword()))
+				throw new AuthorizationException("The user and the provided password dont match!");
+			
+		} catch (CannotPerformOperationException | InvalidHashException e) {
+			throw new AuthorizationException(e.getMessage());
+		}
+		
+		return cache.Register(apiUser);
 	}
 	
 	public boolean Authenticate(HttpServletRequest request, ch.uzh.ifi.feedback.library.rest.annotations.Authenticate auth)

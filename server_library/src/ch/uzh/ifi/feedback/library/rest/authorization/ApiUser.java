@@ -16,12 +16,12 @@ public class ApiUser extends ItemBase<ApiUser> {
 	private Integer id;
 	
 	@Unique
+	@NotNull
 	private String name;
 	
 	@NotNull
 	private String password;
 	
-	@NotNull
 	private UserRole role;
 	
 	@DbIgnore

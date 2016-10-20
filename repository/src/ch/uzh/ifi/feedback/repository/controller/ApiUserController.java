@@ -50,7 +50,6 @@ public class ApiUserController extends RestController<ApiUser> {
 
 	@POST
 	@Path("/{lang}/api_users")
-	@Authenticate(service = UserAuthenticationService.class, role = "ADMIN")
 	public ApiUser Insert(ApiUser user) throws Exception
 	{
 		return super.Insert(user);

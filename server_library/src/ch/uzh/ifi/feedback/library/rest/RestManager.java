@@ -58,6 +58,7 @@ import ch.uzh.ifi.feedback.library.rest.annotations.Path;
 import ch.uzh.ifi.feedback.library.rest.annotations.PathParam;
 import ch.uzh.ifi.feedback.library.rest.annotations.Serialize;
 import ch.uzh.ifi.feedback.library.rest.annotations.Validate;
+import ch.uzh.ifi.feedback.library.rest.authorization.AuthorizationException;
 import ch.uzh.ifi.feedback.library.rest.authorization.ITokenAuthenticationService;
 import ch.uzh.ifi.feedback.library.rest.authorization.UserRole;
 import ch.uzh.ifi.feedback.library.rest.routing.HandlerInfo;
@@ -228,7 +229,12 @@ public class RestManager implements IRestManager {
 		else if(rootCause instanceof ValidationException){
 			response.setStatus(422);
 			response.getWriter().append(rootCause.getMessage());
-		}else if(rootCause instanceof AuthenticationException){
+		}else if(rootCause instanceof AuthenticationException)
+		{
+			response.setStatus(403);
+			response.getWriter().append(rootCause.getMessage());
+		}else if(rootCause instanceof AuthorizationException)
+		{
 			response.setStatus(403);
 			response.getWriter().append(rootCause.getMessage());
 		}
