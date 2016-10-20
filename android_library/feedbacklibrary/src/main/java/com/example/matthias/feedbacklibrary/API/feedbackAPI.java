@@ -32,8 +32,8 @@ import retrofit2.http.Path;
 
 /**
  * API calls to the feedback orchestrator and feedback repository
- * Orchestrator: baseURL/feedback_orchestrator
- * Repository: baseURL/feedback_repository
+ * Orchestrator: baseURL/orchestrator/feedback (http://docs.supersedeorchestratorapi.apiary.io/#reference)
+ * Repository: baseURL/feedback_repository (http://docs.supersederepositoryapi.apiary.io/#reference)
  */
 public interface feedbackAPI {
     /**
@@ -45,25 +45,23 @@ public interface feedbackAPI {
      * @return the JSON object
      */
     @Multipart
-    @POST("feedback_repository/{language}/feedbacks")
-    Call<JsonObject> createFeedbackVariant(@Path("language") String language, @Part("json") RequestBody feedback, @PartMap Map<String, RequestBody> files);
+    @POST("feedback_repository/{language}/applications/{application_id}/feedbacks")
+    Call<JsonObject> createFeedbackVariant(@Path("language") String language, @Path("application_id") long application_id, @Part("json") RequestBody feedback, @PartMap Map<String, RequestBody> files);
 
-    // TODO: Change to updated URL when the new version of the backend is deployed
     /**
      * This method retrieves the feedback configuration from the orchestrator.
      *
      * @return the configuration from the orchestrator
      */
-    @GET("feedback_orchestrator/{language}/applications/{application_id}")
+    @GET("orchestrator/feedback/{language}/applications/{application_id}")
     Call<OrchestratorConfigurationItem> getConfiguration(@Path("language") String language, @Path("application_id") long application_id);
 
-    // TODO: Change to updated URL when the new version of the backend is deployed
     /**
      * This method checks it the orchestrator is up and running.
      *
      * @return 'pong'
      */
-    @GET("feedback_orchestrator/ping")
+    @GET("orchestrator/feedback/ping")
     Call<ResponseBody> pingOrchestrator();
 
     /**

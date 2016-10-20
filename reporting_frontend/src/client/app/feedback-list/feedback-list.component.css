@@ -4,6 +4,7 @@ input.search {
   display: inline-block;
   margin-right: 10px;
   border-radius: 0;
+  margin-top: 20px;
 }
 
 input.checkbox {
@@ -48,6 +49,25 @@ h4.filters {
   padding: 19px 0 4px 0;
 }
 
+.filters-sidebar {
+  border-right: 1px solid #cccccc;
+  padding-top: 10px;
+}
+
 .filters-sidebar h5 {
   margin-top: 20px;
+}
+
+ul.applications {
+  list-style-type: none;
+  padding-left: 0;
+  font-size: 14px;
+}
+
+ul.applications li {
+  cursor: pointer;
+}
+
+ul.applications li.active a {
+  color: black;
 }

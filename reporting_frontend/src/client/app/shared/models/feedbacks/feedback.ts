@@ -5,6 +5,7 @@ import {CategoryFeedback} from './category_feedback';
 import {PushConfiguration} from '../configurations/push_configuration';
 import {mechanismTypes} from '../mechanisms/mechanism_types';
 import {ConfigurationInterface} from '../configurations/configuration_interface';
+import {FeedbackStatus} from './feedback_status';
 
 
 const validationMessages = {
@@ -27,6 +28,8 @@ export class Feedback {
     screenshotFeedbacks:ScreenshotFeedback[];
     categoryFeedbacks:CategoryFeedback[];
     createdAt:Date;
+    personalFeedbackStatus:FeedbackStatus;
+    read:boolean;
 
     constructor(title:string, userIdentification:string, language:string, applicationId:number, configurationId:number,
                 ratingFeedbacks?:RatingFeedback[], textFeedbacks?:TextFeedback[],

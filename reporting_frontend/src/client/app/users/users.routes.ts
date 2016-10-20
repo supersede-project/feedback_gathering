@@ -7,6 +7,6 @@ export const UsersRoutes: Route[] = [
   {
     path: 'users',
     component: UsersComponent,
-    canActivate: [] //[LoggedInGuard]
+    canActivate: [LoggedInGuard]
   }
 ];

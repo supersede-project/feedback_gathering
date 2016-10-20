@@ -85,6 +85,7 @@ public class Utils {
     public static final String SEPARATOR = "::;;::;;";
     public static final String TEXT_ANNOTATION_COUNTER_MAXIMUM = "textAnnotationCounterMaximum";
     private static final String SCREENSHOTS_DIR_NAME = "Screenshots";
+    // General
     private static final String TAG = "Utils";
 
     @NonNull
@@ -181,7 +182,7 @@ public class Utils {
      * @param context the context of the application
      * @param prefix  the prefix, e.g., crop
      * @param suffix  the suffix, e.g., .jpg
-     * @return the created file, null if an exception occurred
+     * @return the created file, or null if an exception occurred
      */
     @Nullable
     public static File createTempChacheFile(Context context, String prefix, String suffix) {
@@ -265,6 +266,36 @@ public class Utils {
                 startActivity(activity, intent, baseURL, false);
             }
         }
+    }
+
+    /**
+     * This method reads a specific file from the assets resource folder and returns it as a string.
+     *
+     * @param fileName     the file to read from
+     * @param assetManager the asset manager
+     * @return the file content as a string, or the empty string if an error occurred
+     */
+    public static String readFileAsString(String fileName, AssetManager assetManager) {
+        String ret = "";
+
+        try {
+            InputStream inputStream = assetManager.open(fileName);
+
+            if (inputStream != null) {
+                BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+                StringBuilder out = new StringBuilder();
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    out.append(line);
+                }
+                reader.close();
+                return out.toString();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return ret;
     }
 
     /**
@@ -507,6 +538,7 @@ public class Utils {
                                             Collections.shuffle(shuffleIds, rnd);
                                             for (int i = 0; i < shuffleIds.size(); ++i) {
                                                 double likelihood = -1;
+                                                // If no "showIntermediateDialog" is provided, show it
                                                 boolean showIntermediateDialog = true;
                                                 for (Map<String, Object> parameter : idParameters.get(shuffleIds.get(i))) {
                                                     String key = (String) parameter.get("key");
@@ -567,7 +599,7 @@ public class Utils {
      * @param applicationId          the application id
      * @param language               the language
      * @param pullConfigurationId    the pull configuration id
-     * @param intermediateDialogText the text for shown in the intermediate dialog
+     * @param intermediateDialogText the text to show in the intermediate dialog
      */
     public static void triggerSpecificPullFeedback(@NonNull final String baseURL, @NonNull final Activity activity, final long applicationId, final @NonNull String language,
                                                    final long pullConfigurationId, final @NonNull String intermediateDialogText) {
@@ -616,8 +648,8 @@ public class Utils {
                                             }
 
                                             if (selectedPullConfigurationIndex[0] != -1 && selectedConfigurationItem != null) {
-                                                // If no "showIntermediateDialog" is provided, do not show it
-                                                boolean showIntermediateDialog = false;
+                                                // If no "showIntermediateDialog" is provided, show it
+                                                boolean showIntermediateDialog = true;
                                                 for (Map<String, Object> parameter : selectedConfigurationItem.getGeneralConfigurationItem().getParameters()) {
                                                     String key = (String) parameter.get("key");
                                                     // Intermediate dialog

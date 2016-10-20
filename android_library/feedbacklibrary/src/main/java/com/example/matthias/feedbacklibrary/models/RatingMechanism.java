@@ -22,22 +22,47 @@ public class RatingMechanism extends Mechanism {
         initRatingMechanism(item);
     }
 
+    /**
+     * This method returns the default rating.
+     *
+     * @return the default rating
+     */
     public float getDefaultRating() {
         return defaultRating;
     }
 
+    /**
+     * This method returns the input rating.
+     *
+     * @return the input rating
+     */
     public float getInputRating() {
         return inputRating;
     }
 
+    /**
+     * This method returns the maximum possible rating.
+     *
+     * @return the maximum rating
+     */
     public int getMaxRating() {
         return maxRating;
     }
 
+    /**
+     * This method returns the rating icon.
+     *
+     * @return the rating icon
+     */
     public String getRatingIcon() {
         return ratingIcon;
     }
 
+    /**
+     * This method returns the title
+     *
+     * @return the title
+     */
     public String getTitle() {
         return title;
     }
@@ -69,22 +94,47 @@ public class RatingMechanism extends Mechanism {
         return true;
     }
 
+    /**
+     * This method sets the default rating.
+     *
+     * @param defaultRating the default rating
+     */
     public void setDefaultRating(float defaultRating) {
         this.defaultRating = defaultRating;
     }
 
+    /**
+     * This method sets the input rating.
+     *
+     * @param inputRating the input rating
+     */
     public void setInputRating(float inputRating) {
         this.inputRating = inputRating;
     }
 
+    /**
+     * This method sets the maximum possible rating.
+     *
+     * @param maxRating the maximum rating
+     */
     public void setMaxRating(int maxRating) {
         this.maxRating = maxRating;
     }
 
+    /**
+     * This method sets the rating icon.
+     *
+     * @param ratingIcon the rating icon
+     */
     public void setRatingIcon(String ratingIcon) {
         this.ratingIcon = ratingIcon;
     }
 
+    /**
+     * This method sets the title.
+     *
+     * @param title the title
+     */
     public void setTitle(String title) {
         this.title = title;
     }

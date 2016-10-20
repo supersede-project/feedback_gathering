@@ -14,17 +14,35 @@ public abstract class MechanismView {
         this.layoutInflater = layoutInflater;
     }
 
+    /**
+     * This method returns the enclosing layout view
+     *
+     * @return the enclosing layout
+     */
     public View getEnclosingLayout() {
         return enclosingLayout;
     }
 
+    /**
+     * This method returns the layout inflater.
+     *
+     * @return the inflater
+     */
     public LayoutInflater getLayoutInflater() {
         return layoutInflater;
     }
 
+    /**
+     * This method sets the enclosing layout view
+     *
+     * @param enclosingLayout the enclosing layout
+     */
     public void setEnclosingLayout(View enclosingLayout) {
         this.enclosingLayout = enclosingLayout;
     }
 
+    /**
+     * This method updates the model with the values from the corresponding view.
+     */
     public abstract void updateModel();
 }

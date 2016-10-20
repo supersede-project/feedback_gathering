@@ -5,6 +5,9 @@ import {FeedbackListService} from '../shared/services/feedback-list.service';
 import {ApplicationService} from '../shared/services/application.service';
 import {TextMechanism} from '../shared/models/mechanisms/text_mechanism';
 import {RatingMechanism} from '../shared/models/mechanisms/rating_mechanism';
+import {ActivatedRoute, Router} from '@angular/router';
+import {FeedbackStatusService} from '../shared/services/feedback-status.service';
+import {FeedbackStatus} from '../shared/models/feedbacks/feedback_status';
 
 
 /**
@@ -23,25 +26,45 @@ export class FeedbackListComponent implements OnInit {
   filteredFeedbacks:Feedback[] = [];
   selectedFeedbacks:Feedback[] = [];
   applications:Application[] = [];
+  selectedApplication:Application;
   sortOrder:{} = {'id': '', 'title': '', 'date': ''};
 
-  constructor(public feedbackListService:FeedbackListService, private applicationService:ApplicationService) {
+  constructor(public feedbackListService:FeedbackListService, private applicationService:ApplicationService, private router:Router, private route:ActivatedRoute, private feedbackStatusService:FeedbackStatusService) {
   }
 
   ngOnInit() {
-    this.getFeedbacks();
     this.getApplications();
   }
 
-  getFeedbacks() {
-    this.feedbackListService.get()
+  getFeedbacks(applicationId:number) {
+    this.feedbackListService.get(applicationId)
       .subscribe(
         feedbacks => {
           this.feedbacks = feedbacks;
           this.filteredFeedbacks = feedbacks;
           this.sortFeedbacks('id', false);
+          this.getFeedbackStatuses(applicationId);
         },
-        error => this.errorMessage = <any>error
+        error => {
+          console.log(error);
+          if(error.status === 403) {
+            this.router.navigate(['/login'])
+          }
+        }
+      );
+  }
+
+  getFeedbackStatuses(applicationId:number) {
+    this.feedbackStatusService.get(applicationId)
+      .subscribe(
+        feedbackStatuses => {
+          let currentUserId = +localStorage.getItem('api_user_id');
+          let currentUserFeedbackStatuses = feedbackStatuses.filter(feedbackStatus => feedbackStatus.apiUserId === currentUserId);
+          this.populateStatusData(currentUserFeedbackStatuses);
+        },
+        error => {
+          console.log(error);
+        }
       );
   }
 
@@ -81,8 +104,8 @@ export class FeedbackListComponent implements OnInit {
   sortFeedbacks(field:string, ascending:boolean = true) {
     var feedbacks = this.filteredFeedbacks.sort(function (feedbackA, feedbackB) {
       if (field === 'date') {
-        var dateA = new Date(feedbackA[field]);
-        var dateB = new Date(feedbackB[field]);
+        var dateA:any = new Date(feedbackA[field]);
+        var dateB:any = new Date(feedbackB[field]);
         return dateA - dateB;
       } else {
         return feedbackA[field] - feedbackB[field];
@@ -101,17 +124,8 @@ export class FeedbackListComponent implements OnInit {
   }
 
   clickedApplicationFilter(application) {
-    var wasActive = application.filterActive;
-
-    for (let application of this.applications) {
-      application.filterActive = false;
-    }
-    application.filterActive = !wasActive;
-    if (application.filterActive) {
-      this.filteredFeedbacks = this.feedbacks.filter(feedback => feedback.applicationId === application.id);
-    } else {
-      this.filteredFeedbacks = this.feedbacks;
-    }
+    this.selectedApplication = application;
+    this.getFeedbacks(application.id);
   }
 
   /**
@@ -132,6 +146,16 @@ export class FeedbackListComponent implements OnInit {
           ratingFeedback.mechanism = new RatingMechanism(ratingMechanism.id, ratingMechanism.type, ratingMechanism.active, ratingMechanism.order, ratingMechanism.canBeActivated, ratingMechanism.parameters);
         }
       }
+    }
+  }
+
+  /**
+   * combines repository feedbacks with the personal feedback statuses
+   */
+  populateStatusData(feedbackStatuses:FeedbackStatus[]) {
+    for(var feedback of this.feedbacks) {
+      feedback.personalFeedbackStatus = feedbackStatuses.filter(feedbackStatus => feedbackStatus.feedbackId === feedback.id)[0];
+      feedback.read = feedback.personalFeedbackStatus.status === 'read';
     }
   }
 
@@ -195,8 +219,19 @@ export class FeedbackListComponent implements OnInit {
     console.log(this.selectedFeedbacks);
   }
 
-  markAsRead():void {
-
+  markAsReadOrUnread(feedbacks:Feedback[], read:boolean):void {
+    for(let feedback of feedbacks) {
+      let applicationId = feedback.applicationId;
+      let feedbackStatus = feedback.personalFeedbackStatus;
+      this.feedbackStatusService.updateReadStatus(read, feedbackStatus.id, feedbackStatus.feedbackId, applicationId).subscribe(
+        result => {
+          this.getFeedbacks(applicationId);
+        },
+        error => {
+          console.log(error);
+        }
+      );
+    }
   }
 }
 

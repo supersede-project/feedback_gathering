@@ -71,13 +71,6 @@ public abstract class StickerAnnotationView extends FrameLayout {
 
     protected abstract View getMainView();
 
-    private float[] getRelativePos(float absX, float absY) {
-        return new float[]{
-                absX - ((View) this.getParent()).getX(),
-                absY - ((View) this.getParent()).getY()
-        };
-    }
-
     private void init(Context context) {
         initOnTouchListener();
 
@@ -166,9 +159,6 @@ public abstract class StickerAnnotationView extends FrameLayout {
         });
     }
 
-    /**
-     * This method initializes the onTouchListener.
-     */
     private void initOnTouchListener() {
         onTouchListener = new OnTouchListener() {
             @Override

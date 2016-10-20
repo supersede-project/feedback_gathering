@@ -31,14 +31,19 @@ public abstract class Mechanism {
     }
 
     /**
-     * This method returns true if the mechanism can be activated/deactivated by the user, false otherwise.
+     * This method returns if the mechanism can be activated/deactivated by the user.
      *
-     * @return canBeActivated
+     * @return true if the mechanism can be activated, false otherwise
      */
     public boolean canBeActivated() {
         return this.canBeActivated;
     }
 
+    /**
+     * This method returns the id of the mechanism.
+     *
+     * @return the mechanism id
+     */
     public long getId() {
         return id;
     }
@@ -55,45 +60,51 @@ public abstract class Mechanism {
     /**
      * This method returns the type of the mechanism.
      *
-     * @return the type
+     * @return the type, i.e., ATTACHMENT_TYPE, AUDIO_TYPE, CATEGORY_TYPE, RATING_TYPE, SCREENSHOT_TYPE or TEXT_TYPE
      */
     public String getType() {
         return this.type;
     }
 
     /**
-     * This method returns true if the mechanism is active, false otherwise.
+     * This method returns if the mechanism is active.
      *
-     * @return isActive
+     * @return true if the mechanism is active, false otherwise
      */
     public boolean isActive() {
         return this.isActive;
     }
 
     /**
-     * This method returns true if the input of the mechanism is valid, false otherwise.
+     * This method returns if the input of the mechanism is valid.
      *
      * @param errorMessage error message to show if the validation fails
-     * @return the validity value
+     * @return true if the input of the mechanism is valid, false otherwise
      */
     public abstract boolean isValid(List<String> errorMessage);
 
     /**
-     * @param canBeActivated the value to set
+     * This method sets if the mechanism can be activated/deactivated by the user.
+     *
+     * @param canBeActivated true if the mechanism can be activated, false otherwise
      */
     public void setCanBeActivated(boolean canBeActivated) {
         this.canBeActivated = canBeActivated;
     }
 
     /**
-     * @param isActive the value to set
+     * This method sets if the mechanism is active.
+     *
+     * @param isActive true if the mechanism is active, false otherwise
      */
     public void setIsActive(boolean isActive) {
         this.isActive = isActive;
     }
 
     /**
-     * @param order the value to set
+     * This method sets the order of the mechanism.
+     *
+     * @param order the order
      */
     public void setOrder(int order) {
         this.order = order;

@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {Http, Response} from '@angular/http';
-import {Observable} from 'rxjs/Observable';
+import {Observable} from 'rxjs/Rx';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import {Application} from '../models/applications/application';
@@ -15,23 +15,13 @@ export class ApplicationService {
   all():Observable<Application[]> {
     return this.http.get(ORCHESTRATOR_HOST + 'en/applications')
       .map((res: Response) => res.json())
-      .catch(this.handleError);
+      .catch((error:any) => Observable.throw(error.json().error || 'Server error'));
   }
 
   find(id:number):Observable<Application> {
     return this.http.get(ORCHESTRATOR_HOST + 'en/applications/' + id)
       .map((res: Response) => res.json())
-      .catch(this.handleError);
-  }
-
-  /**
-   * Handle HTTP error
-   */
-  private handleError(error:any) {
-    let errMsg = (error.message) ? error.message :
-      error.status ? `${error.status} - ${error.statusText}` : 'Server error';
-    console.error(errMsg); // log to console instead
-    return Observable.throw(errMsg);
+      .catch((error:any) => Observable.throw(error.json().error || 'Server error'));
   }
 }
 

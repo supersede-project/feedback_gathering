@@ -661,7 +661,7 @@ public class AnnotateImageActivity extends AppCompatActivity implements ColorPic
         }
     }
 
-    public void showColorPickerDialog() {
+    private void showColorPickerDialog() {
         ColorPickerDialog dialog = createColorPickerDialog(annotateImageView.getPaintStrokeColor());
         dialog.show(getFragmentManager(), "ColorPickerDialog");
     }

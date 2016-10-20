@@ -1,23 +1,58 @@
-<input #searchField (keyup)="search(searchField.value)" value="" class="form-control search" placeholder="Search"
-       autofocus>
-
-<button (click)="exportAsCSV()" id="export" class="action btn-primary btn-xs">CSV Export</button>
-<button (click)="markAsRead()" id="markAsRead" class="action btn-default btn-xs" [class.btn-primary]="selectedFeedbacks.length > 0">Mark as read</button>
-<div class="btn-group">
-  <button type="button" class="action btn btn-default dropdown-toggle" [class.btn-primary]="selectedFeedbacks.length > 0" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-    Status <span class="caret"></span>
-  </button>
-  <ul class="dropdown-menu">
-    <li><a href="#">New</a></li>
-    <li><a href="#">Approved</a></li>
-    <li><a href="#">Rejected</a></li>
-    <li><a href="#">Implemented</a></li>
-  </ul>
-</div>
-
-
 <div class="row">
-  <section class="col-sm-9">
+
+  <section class="filters-sidebar col-sm-3 col-lg-2">
+    <h4>Applications</h4>
+    <article *ngIf="applications" class="filters">
+      <ul class="applications">
+        <li #applicationFilter
+            [class.active]="application == selectedApplication"
+            *ngFor="let application of applications">
+          <a title="{{application.name}}" (click)="clickedApplicationFilter(application)">{{ application.name |
+            truncate:25 }}</a>
+        </li>
+      </ul>
+    </article>
+
+    <h4>Status</h4>
+    <article *ngIf="filteredFeedbacks" class="feedback-statuses">
+      <span class="label label-default">read</span><br/>
+      <span class="label label-default">unread</span><br/>
+      <span class="label label-default">rejected</span><br/>
+      <span class="label label-default">approved</span><br/>
+      <span class="label label-default">implemented</span><br/>
+    </article>
+    <br/>
+
+  </section>
+
+  <section *ngIf="!selectedApplication" class="col-sm-9 col-lg-10">
+    <p>Please select an application</p>
+  </section>
+
+  <section *ngIf="selectedApplication" class="col-sm-9 col-lg-10">
+
+    <input #searchField (keyup)="search(searchField.value)" value="" class="form-control search" placeholder="Search"
+           autofocus>
+
+    <button (click)="exportAsCSV()" id="export" class="action btn-primary btn-xs">CSV Export</button>
+    <button (click)="markAsReadOrUnread(selectedFeedbacks, true)" id="markAsRead" class="action btn-default btn-xs"
+            [class.btn-primary]="selectedFeedbacks.length > 0">Mark as read
+    </button>
+    <div class="btn-group">
+      <button type="button" class="action btn btn-default dropdown-toggle"
+              [class.btn-primary]="selectedFeedbacks.length > 0" data-toggle="dropdown" aria-haspopup="true"
+              aria-expanded="false">
+        Status <span class="caret"></span>
+      </button>
+      <ul class="dropdown-menu">
+        <li><a href="#">New</a></li>
+        <li><a href="#">Approved</a></li>
+        <li><a href="#">Rejected</a></li>
+        <li><a href="#">Implemented</a></li>
+      </ul>
+    </div>
+
+
     <table class="table table-condensed">
       <thead>
       <tr>
@@ -45,13 +80,14 @@
       </tr>
       </thead>
       <tbody *ngIf="applications">
-      <tr *ngFor="let feedback of filteredFeedbacks; let i = index" [class.unread]="i < 4">
+      <tr *ngIf="filteredFeedbacks.length === 0"><td colspan="6">No feedbacks yet</td></tr>
+      <tr *ngFor="let feedback of filteredFeedbacks; let i = index" [class.unread]="!feedback.read">
         <td>
           <input (change)="select($event, feedback)" class="checkbox" type="checkbox" name="{{feedback.id}}"
                  value="{{feedback.id}}">
         </td>
         <td>
-          <a [routerLink]="['/feedback-detail', feedback.id]">#{{feedback.id}}</a>
+          <a [routerLink]="['/feedback-detail', selectedApplication.id, feedback.id]">#{{feedback.id}}</a>
         </td>
         <td><i class="glyphicon glyphicon-star-empty"></i></td>
         <td>{{feedback.title}}</td>
@@ -62,25 +98,4 @@
     </table>
   </section>
 
-  <section class="filters-sidebar col-sm-3">
-    <h4 class="filters">Filters</h4>
-
-    <h5>Application</h5>
-    <article *ngIf="applications" class="filters">
-      <span #applicationFilter (click)="clickedApplicationFilter(application)"
-            [class.label-primary]="application.filterActive" class="label label-default"
-            *ngFor="let application of applications">
-        {{ application.name| truncate: 50 }}
-      </span>
-    </article>
-
-    <h5>Status</h5>
-    <span class="label label-default">read</span><br/>
-    <span class="label label-default">unread</span><br/>
-    <span class="label label-default">rejected</span><br/>
-    <span class="label label-default">approved</span><br/>
-    <span class="label label-default">implemented</span><br/>
-    <br/>
-
-  </section>
 </div>

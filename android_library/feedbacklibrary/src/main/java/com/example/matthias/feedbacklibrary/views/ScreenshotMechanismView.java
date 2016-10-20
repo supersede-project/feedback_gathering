@@ -41,42 +41,83 @@ public class ScreenshotMechanismView extends MechanismView {
         initView(defaultImagePath);
     }
 
+    /**
+     * This method returns all the sticker annotations.
+     *
+     * @return all sticker annotations
+     */
     public HashMap<Integer, String> getAllStickerAnnotations() {
         return allStickerAnnotations;
     }
 
+    /**
+     * This method returns all the text annotations.
+     *
+     * @return all text annotations
+     */
     public HashMap<Integer, String> getAllTextAnnotations() {
         return allTextAnnotations;
     }
 
+    /**
+     * This method returns the button for annotating screenshots.
+     *
+     * @return the annotateScreenshotButton
+     */
     public Button getAnnotateScreenshotButton() {
         return annotateScreenshotButton;
     }
 
-    public String getAnnotatedImagePath() {
-        return annotatedImagePath;
-    }
-
+    /**
+     * This method returns the button for deleting screenshots.
+     *
+     * @return the deleteScreenshotButton
+     */
     public Button getDeleteScreenshotButton() {
         return deleteScreenshotButton;
     }
 
+    /**
+     * This method returns the maximum possible number of text annotations.
+     *
+     * @return the maximum number of possible text annotations
+     */
     public int getMaxNumberTextAnnotation() {
         return screenshotMechanism.getMaxNumberTextAnnotation();
     }
 
+    /**
+     * This method returns the index of the mechanism view.
+     *
+     * @return the mechanism view index
+     */
     public int getMechanismViewIndex() {
         return mechanismViewIndex;
     }
 
+    /**
+     * This method returns the path of the picture.
+     *
+     * @return the picture path
+     */
     public String getPicturePath() {
         return picturePath;
     }
 
+    /**
+     * This method returns the path of the picture without stickers.
+     *
+     * @return the picture path without stickers
+     */
     public String getPicturePathWithoutStickers() {
         return picturePathWithoutStickers;
     }
 
+    /**
+     * This method returns the preview image view.
+     *
+     * @return the preview image view
+     */
     public ImageView getScreenShotPreviewImageView() {
         return screenShotPreviewImageView;
     }
@@ -133,26 +174,56 @@ public class ScreenshotMechanismView extends MechanismView {
         ((TextView) getEnclosingLayout().findViewById(R.id.supersede_feedbacklibrary_screenshot_feedback_title)).setText(screenshotMechanism.getTitle());
     }
 
+    /**
+     * This method sets all the sticker annotations.
+     *
+     * @param allStickerAnnotations all sticker annotations
+     */
     public void setAllStickerAnnotations(HashMap<Integer, String> allStickerAnnotations) {
         this.allStickerAnnotations = allStickerAnnotations;
     }
 
+    /**
+     * This method sets all the text annotations.
+     *
+     * @param allTextAnnotations all text annotations
+     */
     public void setAllTextAnnotations(HashMap<Integer, String> allTextAnnotations) {
         this.allTextAnnotations = allTextAnnotations;
     }
 
+    /**
+     * This method sets the path to the annotated image.
+     *
+     * @param annotatedImagePath the annotated image path
+     */
     public void setAnnotatedImagePath(String annotatedImagePath) {
         this.annotatedImagePath = annotatedImagePath;
     }
 
+    /**
+     * This method sets the picture bitmap.
+     *
+     * @param pictureBitmap the picture bitmap
+     */
     public void setPictureBitmap(Bitmap pictureBitmap) {
         this.pictureBitmap = pictureBitmap;
     }
 
+    /**
+     * This methods sets the path to the picture.
+     *
+     * @param picturePath the picture path
+     */
     public void setPicturePath(String picturePath) {
         this.picturePath = picturePath;
     }
 
+    /**
+     * This methods sets the path to the picture without stickers.
+     *
+     * @param picturePathWithoutStickers the picture path without stickers
+     */
     public void setPicturePathWithoutStickers(String picturePathWithoutStickers) {
         this.picturePathWithoutStickers = picturePathWithoutStickers;
     }

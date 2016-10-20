@@ -60,5 +60,12 @@ button:hover {
 }
 
 main.main {
-  padding: 20px;
+  padding: 0 20px 20px 20px;
+}
+
+.alert-small {
+  margin: 10px 0;
+  width: auto;
+  display: inline-block;
+  padding: 5px 15px;
 }

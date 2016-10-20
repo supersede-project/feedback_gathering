@@ -82,18 +82,38 @@ public abstract class TextAnnotationView extends FrameLayout {
         return (int) px;
     }
 
+    /**
+     * This method returns the input text of the text annotation.
+     *
+     * @return the annotation input text
+     */
     public String getAnnotationInputText() {
         return annotationInputText;
     }
 
+    /**
+     * This method returns the hint of the text annotation.
+     *
+     * @return the annotation hint
+     */
     public String getAnnotationInputTextHint() {
         return annotationInputTextHint;
     }
 
+    /**
+     * This method returns the label of the text annotation.
+     *
+     * @return the annotation label
+     */
     public String getAnnotationInputTextLabel() {
         return annotationInputTextLabel;
     }
 
+    /**
+     * This method returns the annotation number view.
+     *
+     * @return the annotation number view
+     */
     public TextView getAnnotationNumberView() {
         return annotationNumberView;
     }
@@ -103,13 +123,6 @@ public abstract class TextAnnotationView extends FrameLayout {
     }
 
     protected abstract View getMainView();
-
-    private float[] getRelativePos(float absX, float absY) {
-        return new float[]{
-                absX - ((View) this.getParent()).getX(),
-                absY - ((View) this.getParent()).getY()
-        };
-    }
 
     private void init(final Context context) {
         initOnTouchListener();
@@ -194,9 +207,6 @@ public abstract class TextAnnotationView extends FrameLayout {
         });
     }
 
-    /**
-     * This method initializes the onTouchListener.
-     */
     private void initOnTouchListener() {
         onTouchListener = new OnTouchListener() {
             @Override
@@ -311,14 +321,29 @@ public abstract class TextAnnotationView extends FrameLayout {
     protected void onScaling(boolean scaleUp) {
     }
 
+    /**
+     * This method sets the input text of the text annotation.
+     *
+     * @param annotationInputText the annotation input text
+     */
     public void setAnnotationInputText(String annotationInputText) {
         this.annotationInputText = annotationInputText;
     }
 
+    /**
+     * This method sets the hint of the text annotation.
+     *
+     * @param annotationInputTextHint the annotation hint
+     */
     public void setAnnotationInputTextHint(String annotationInputTextHint) {
         this.annotationInputTextHint = annotationInputTextHint;
     }
 
+    /**
+     * This method sets the label of the text annotation.
+     *
+     * @param annotationInputTextLabel the annotation label
+     */
     public void setAnnotationInputTextLabel(String annotationInputTextLabel) {
         this.annotationInputTextLabel = annotationInputTextLabel;
     }
@@ -343,6 +368,11 @@ public abstract class TextAnnotationView extends FrameLayout {
         }
     }
 
+    /**
+     * This method sets the listener for text annotation changes.
+     *
+     * @param onTextAnnotationChangedListener the listener
+     */
     public void setOnTextAnnotationChangedListener(OnTextAnnotationChangedListener onTextAnnotationChangedListener) {
         this.onTextAnnotationChangedListener = onTextAnnotationChangedListener;
     }

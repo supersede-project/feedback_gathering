@@ -71,6 +71,7 @@ import java.util.Map;
 
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -365,6 +366,10 @@ public class FeedbackActivity extends AppCompatActivity implements ScreenshotMec
             // The feedback activity is started on behalf of the user
             Log.v(TAG, "The feedback activity is started via a PUSH configuration");
 
+            // TODO: remove before release
+            //initOfflineConfiguration();
+
+            // TODO: uncomment before release
             // Get the application id and language
             init(intent.getLongExtra(EXTRA_KEY_APPLICATION_ID, -1L), baseURL, language);
         }
@@ -546,70 +551,91 @@ public class FeedbackActivity extends AppCompatActivity implements ScreenshotMec
                     fbAPI = rtf.create(feedbackAPI.class);
                 }
 
-                Feedback feedback = new Feedback(allMechanisms);
-                feedback.setTitle(getResources().getString(R.string.supersede_feedbacklibrary_feedback_title_text, System.currentTimeMillis()));
-                feedback.setApplicationId(orchestratorConfiguration.getId());
-                feedback.setConfigurationId(activeConfiguration.getId());
-                feedback.setLanguage(language);
-                feedback.setUserIdentification(Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
-                //feedback.initContextInformation();
-
-                // The JSON string of the feedback
-                GsonBuilder builder = new GsonBuilder();
-                builder.excludeFieldsWithoutExposeAnnotation();
-                builder.serializeNulls();
-                Gson gson = builder.create();
-                Type feedbackType = new TypeToken<Feedback>() {
-                }.getType();
-                String feedbackJsonString = gson.toJson(feedback, feedbackType);
-                RequestBody feedbackJSONPart = RequestBody.create(MediaType.parse("multipart/form-data"), feedbackJsonString);
-
-                Map<String, RequestBody> files = new HashMap<>();
-                // Audio multipart
-                List<AudioFeedback> audioFeedbackList = feedback.getAudioFeedbacks();
-                if (audioFeedbackList != null) {
-                    for (int pos = 0; pos < audioFeedbackList.size(); ++pos) {
-                        RequestBody requestBody = createRequestBody(new File(audioFeedbackList.get(pos).getAudioPath()));
-                        String fileName = audioFeedbackList.get(pos).getFileName();
-                        String key = String.format("%1$s\"; filename=\"%2$s", audioFeedbackList.get(pos).getPartString() + String.valueOf(pos), fileName);
-                        files.put(key, requestBody);
-                    }
-                }
-                // Screenshots multipart
-                List<ScreenshotFeedback> screenshotFeedbackList = feedback.getScreenshotFeedbacks();
-                if (screenshotFeedbackList != null) {
-                    for (int pos = 0; pos < screenshotFeedbackList.size(); ++pos) {
-                        RequestBody requestBody = createRequestBody(new File(screenshotFeedbackList.get(pos).getImagePath()));
-                        String fileName = screenshotFeedbackList.get(pos).getFileName();
-                        String key = String.format("%1$s\"; filename=\"%2$s", screenshotFeedbackList.get(pos).getPartString() + String.valueOf(pos), fileName);
-                        files.put(key, requestBody);
-                    }
-                }
-
-                // Send the feedback
-                Call<JsonObject> result = fbAPI.createFeedbackVariant(language, feedbackJSONPart, files);
-                if (result != null) {
-                    result.enqueue(new Callback<JsonObject>() {
+                Call<ResponseBody> checkUpAndRunning = fbAPI.pingRepository();
+                if (checkUpAndRunning != null) {
+                    checkUpAndRunning.enqueue(new Callback<ResponseBody>() {
                         @Override
-                        public void onFailure(Call<JsonObject> call, Throwable t) {
-                            Log.e(TAG, "Failed to send the feedback. onFailure method called", t);
+                        public void onFailure(Call<ResponseBody> call, Throwable t) {
+                            Log.e(TAG, "Failed to ping the server. onFailure method called", t);
                             DialogUtils.showInformationDialog(FeedbackActivity.this, new String[]{getResources().getString(R.string.supersede_feedbacklibrary_error_text)}, true);
                         }
 
                         @Override
-                        public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-                            if (response.code() == 200 || response.code() == 201) {
-                                Log.i(TAG, "Feedback successfully sent");
-                                Toast toast = Toast.makeText(getApplicationContext(), getResources().getString(R.string.supersede_feedbacklibrary_success_text), Toast.LENGTH_SHORT);
-                                toast.show();
+                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                            if (response.code() == 200) {
+                                Feedback feedback = new Feedback(allMechanisms);
+                                feedback.setTitle(getResources().getString(R.string.supersede_feedbacklibrary_feedback_title_text, System.currentTimeMillis()));
+                                feedback.setApplicationId(orchestratorConfiguration.getId());
+                                feedback.setConfigurationId(activeConfiguration.getId());
+                                feedback.setLanguage(language);
+                                feedback.setUserIdentification(Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
+
+                                // The JSON string of the feedback
+                                GsonBuilder builder = new GsonBuilder();
+                                builder.excludeFieldsWithoutExposeAnnotation();
+                                builder.serializeNulls();
+                                Gson gson = builder.create();
+                                Type feedbackType = new TypeToken<Feedback>() {
+                                }.getType();
+                                String feedbackJsonString = gson.toJson(feedback, feedbackType);
+                                RequestBody feedbackJSONPart = RequestBody.create(MediaType.parse("multipart/form-data"), feedbackJsonString);
+
+                                Map<String, RequestBody> files = new HashMap<>();
+                                // Audio multipart
+                                List<AudioFeedback> audioFeedbackList = feedback.getAudioFeedbacks();
+                                if (audioFeedbackList != null) {
+                                    for (int pos = 0; pos < audioFeedbackList.size(); ++pos) {
+                                        RequestBody requestBody = createRequestBody(new File(audioFeedbackList.get(pos).getAudioPath()));
+                                        String fileName = audioFeedbackList.get(pos).getFileName();
+                                        String key = String.format("%1$s\"; filename=\"%2$s", audioFeedbackList.get(pos).getPartString() + String.valueOf(pos), fileName);
+                                        files.put(key, requestBody);
+                                    }
+                                }
+                                // Screenshots multipart
+                                List<ScreenshotFeedback> screenshotFeedbackList = feedback.getScreenshotFeedbacks();
+                                if (screenshotFeedbackList != null) {
+                                    for (int pos = 0; pos < screenshotFeedbackList.size(); ++pos) {
+                                        RequestBody requestBody = createRequestBody(new File(screenshotFeedbackList.get(pos).getImagePath()));
+                                        String fileName = screenshotFeedbackList.get(pos).getFileName();
+                                        String key = String.format("%1$s\"; filename=\"%2$s", screenshotFeedbackList.get(pos).getPartString() + String.valueOf(pos), fileName);
+                                        files.put(key, requestBody);
+                                    }
+                                }
+
+                                // Send the feedback
+                                Call<JsonObject> result = fbAPI.createFeedbackVariant(language, feedback.getApplicationId(), feedbackJSONPart, files);
+                                if (result != null) {
+                                    result.enqueue(new Callback<JsonObject>() {
+                                        @Override
+                                        public void onFailure(Call<JsonObject> call, Throwable t) {
+                                            Log.e(TAG, "Failed to send the feedback. onFailure method called", t);
+                                            DialogUtils.showInformationDialog(FeedbackActivity.this, new String[]{getResources().getString(R.string.supersede_feedbacklibrary_error_text)}, true);
+                                        }
+
+                                        @Override
+                                        public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                                            if (response.code() == 201) {
+                                                Log.i(TAG, "Feedback successfully sent");
+                                                Toast toast = Toast.makeText(getApplicationContext(), getResources().getString(R.string.supersede_feedbacklibrary_success_text), Toast.LENGTH_SHORT);
+                                                toast.show();
+                                            } else {
+                                                Log.e(TAG, "Failed to send the feedback. Response code == " + response.code());
+                                                DialogUtils.showInformationDialog(FeedbackActivity.this, new String[]{getResources().getString(R.string.supersede_feedbacklibrary_error_text)}, true);
+                                            }
+                                        }
+                                    });
+                                } else {
+                                    Log.e(TAG, "Failed to send the feebdkack. Call<JsonObject> result is null");
+                                    DialogUtils.showInformationDialog(FeedbackActivity.this, new String[]{getResources().getString(R.string.supersede_feedbacklibrary_error_text)}, true);
+                                }
                             } else {
-                                Log.e(TAG, "Failed to send the feedback. Response code == " + response.code());
+                                Log.e(TAG, "The server is not up and running. Response code == " + response.code());
                                 DialogUtils.showInformationDialog(FeedbackActivity.this, new String[]{getResources().getString(R.string.supersede_feedbacklibrary_error_text)}, true);
                             }
                         }
                     });
                 } else {
-                    Log.e(TAG, "Failed to send the feebdkack. Call<JsonObject> result is null");
+                    Log.e(TAG, "Failed to ping the server. Call<ResponseBody> checkUpAndRunning result is null");
                     DialogUtils.showInformationDialog(FeedbackActivity.this, new String[]{getResources().getString(R.string.supersede_feedbacklibrary_error_text)}, true);
                 }
             } else {
@@ -626,77 +652,6 @@ public class FeedbackActivity extends AppCompatActivity implements ScreenshotMec
         }
     }
 
-    public void sendStub(View view) {
-        System.out.println("sendStub");
-        if (baseURL != null && language != null) {
-            // The mechanism models are updated with the view values
-            for (MechanismView mechanismView : allMechanismViews) {
-                mechanismView.updateModel();
-            }
-
-            final ArrayList<String> messages = new ArrayList<>();
-            if (validateInput(allMechanisms, messages)) {
-                if (fbAPI == null) {
-                    Retrofit rtf = new Retrofit.Builder().baseUrl(baseURL).addConverterFactory(GsonConverterFactory.create()).build();
-                    fbAPI = rtf.create(feedbackAPI.class);
-                }
-
-                Feedback feedback = new Feedback(allMechanisms);
-                feedback.setTitle(getResources().getString(R.string.supersede_feedbacklibrary_feedback_title_text, System.currentTimeMillis()));
-                feedback.setApplicationId(orchestratorConfiguration.getId());
-                feedback.setConfigurationId(activeConfiguration.getId());
-                feedback.setLanguage(language);
-                feedback.setUserIdentification(Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
-                feedback.initContextInformation();
-
-                // The JSON string of the feedback
-                GsonBuilder builder = new GsonBuilder();
-                builder.excludeFieldsWithoutExposeAnnotation();
-                builder.serializeNulls();
-                Gson gson = builder.create();
-                Type feedbackType = new TypeToken<Feedback>() {
-                }.getType();
-                String feedbackJsonString = gson.toJson(feedback, feedbackType);
-                RequestBody feedbackJSONPart = RequestBody.create(MediaType.parse("multipart/form-data"), feedbackJsonString);
-
-                System.out.println(feedbackJsonString);
-
-                Map<String, RequestBody> files = new HashMap<>();
-                // Audio multipart
-                List<AudioFeedback> audioFeedbackList = feedback.getAudioFeedbacks();
-                if (audioFeedbackList != null) {
-                    for (int pos = 0; pos < audioFeedbackList.size(); ++pos) {
-                        RequestBody requestBody = createRequestBody(new File(audioFeedbackList.get(pos).getAudioPath()));
-                        String fileName = audioFeedbackList.get(pos).getFileName();
-                        String key = String.format("%1$s\"; filename=\"%2$s", audioFeedbackList.get(pos).getPartString() + String.valueOf(pos + 1), fileName);
-                        files.put(key, requestBody);
-                    }
-                }
-                // Screenshots multipart
-                List<ScreenshotFeedback> screenshotFeedbackList = feedback.getScreenshotFeedbacks();
-                if (screenshotFeedbackList != null) {
-                    for (int pos = 0; pos < screenshotFeedbackList.size(); ++pos) {
-                        RequestBody requestBody = createRequestBody(new File(screenshotFeedbackList.get(pos).getImagePath()));
-                        String fileName = screenshotFeedbackList.get(pos).getFileName();
-                        String key = String.format("%1$s\"; filename=\"%2$s", screenshotFeedbackList.get(pos).getPartString() + String.valueOf(pos + 1), fileName);
-                        files.put(key, requestBody);
-                    }
-                }
-            } else {
-                DialogUtils.showInformationDialog(this, messages.toArray(new String[messages.size()]), false);
-            }
-        } else {
-            DialogUtils.showInformationDialog(this, new String[]{getResources().getString(R.string.supersede_feedbacklibrary_error_text)}, true);
-        }
-    }
-
-    /**
-     * This method checks if the inputs of the active mechanisms are valid.
-     *
-     * @param allMechanisms all mechanism to check for their input validity
-     * @param errorMessages error messages to show if the validation fails
-     * @return true if all inputs are valid, false otherwise
-     */
     private boolean validateInput(List<Mechanism> allMechanisms, List<String> errorMessages) {
         // Append an error message and return. The user is confronted with one error message at a time.
         for (Mechanism mechanism : allMechanisms) {

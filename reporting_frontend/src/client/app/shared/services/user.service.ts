@@ -1,7 +1,9 @@
 import {Injectable} from '@angular/core';
-import {Http, Headers} from '@angular/http';
+import {Http, Response, Headers} from '@angular/http';
 import {REPOSITORY_HOST} from './config';
 import {Router} from '@angular/router';
+import {Observable} from 'rxjs/Rx';
+import {ApiUser} from '../models/api_user';
 
 
 @Injectable()
@@ -25,11 +27,20 @@ export class UserService {
       .map((res) => {
         if (res.token) {
           localStorage.setItem('auth_token', res.token);
-          console.log(res.token);
           this.loggedIn = true;
         }
         return res;
-      });
+      }).catch((error:any) => Observable.throw(error.json().error || 'Server error'));
+  }
+
+  getUsers():Observable<ApiUser[]> {
+    var headers = new Headers();
+    headers.append('Accept', 'application/json');
+    headers.append('Authorization', localStorage.getItem('auth_token'));
+
+    return this.http.get(REPOSITORY_HOST + 'en/api_users', {headers: headers})
+      .map((res:Response) => res.json())
+      .catch((error:any) => Observable.throw(error || 'Server error'));
   }
 
   logout() {

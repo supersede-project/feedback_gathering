@@ -31,12 +31,12 @@
             android:id="@+id/trigger_specific_pull_config_v1_id14_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Trigger pull feedback from config v1 with id=14"/>
+            android:text="Trigger the specific pull feedback from config v1 with id=11"/>
 
         <Button
             android:id="@+id/trigger_specific_pull_config_v1_id15_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Trigger pull feedback from config v1 with id=15"/>
+            android:text="Trigger the specific pull feedback from config v1 with id=12"/>
     </LinearLayout>
 </LinearLayout>
