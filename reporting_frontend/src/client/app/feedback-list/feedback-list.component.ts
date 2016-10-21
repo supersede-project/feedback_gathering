@@ -80,9 +80,9 @@ export class FeedbackListComponent implements OnInit {
           application.filterActive = false;
         }
         this.populateConfigurationData();
-        let application = this.applicationFilterService.getApplication();
-        if(application) {
-          this.clickedApplicationFilter(application);
+        let selectedApplication = this.applicationFilterService.getApplication();
+        if(selectedApplication ) {
+          this.clickedApplicationFilter(selectedApplication );
         }
       },
       error => this.errorMessage = <any>error
