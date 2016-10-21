@@ -1,8 +1,6 @@
 package ch.uzh.ifi.feedback.orchestrator.services;
 
 import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -10,19 +8,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.inject.Singleton;
 import com.google.inject.name.Named;
-import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils.Collections;
-
-import ch.uzh.ifi.feedback.library.rest.service.IDbService;
-import ch.uzh.ifi.feedback.library.rest.service.ServiceBase;
-import ch.uzh.ifi.feedback.library.transaction.DatabaseConfiguration;
-import ch.uzh.ifi.feedback.library.transaction.IDatabaseConfiguration;
-import ch.uzh.ifi.feedback.orchestrator.model.FeedbackMechanism;
 import ch.uzh.ifi.feedback.orchestrator.model.FeedbackParameter;
 import ch.uzh.ifi.feedback.orchestrator.transaction.OrchestratorDatabaseConfiguration;
 import javassist.NotFoundException;

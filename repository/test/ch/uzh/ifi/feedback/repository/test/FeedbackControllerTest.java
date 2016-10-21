@@ -5,17 +5,11 @@ import java.io.InputStream;
 import java.sql.SQLException;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.http.HttpEntity;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
 
-import ch.uzh.ifi.feedback.library.rest.authorization.UserToken;
-import ch.uzh.ifi.feedback.library.test.ServletTest;
-import ch.uzh.ifi.feedback.library.transaction.IDatabaseConfiguration;
 import ch.uzh.ifi.feedback.repository.model.Feedback;
-import ch.uzh.ifi.feedback.repository.model.Status;
-import ch.uzh.ifi.feedback.repository.transaction.RepositoryDatabaseConfiguration;
 import javassist.NotFoundException;
 import static java.util.Arrays.asList;
 

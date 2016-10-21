@@ -1,4 +1,4 @@
-package ch.uzh.ifi.feedback.library.test;
+package ch.uzh.ifi.feedback.library.rest.test;
 
 import java.io.IOException;
 import java.io.InputStream;

@@ -11,7 +11,7 @@ import org.apache.http.client.ClientProtocolException;
 import ch.uzh.ifi.feedback.library.rest.authorization.ApiUser;
 import ch.uzh.ifi.feedback.library.rest.authorization.UserRole;
 import ch.uzh.ifi.feedback.library.rest.authorization.UserToken;
-import ch.uzh.ifi.feedback.library.test.ServletTest;
+import ch.uzh.ifi.feedback.library.rest.test.ServletTest;
 import ch.uzh.ifi.feedback.library.transaction.IDatabaseConfiguration;
 import ch.uzh.ifi.feedback.repository.transaction.RepositoryDatabaseConfiguration;
 

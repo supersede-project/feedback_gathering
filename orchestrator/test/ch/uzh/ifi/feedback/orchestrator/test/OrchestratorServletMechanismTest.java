@@ -4,16 +4,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 import java.util.stream.Collectors;
-
 import org.apache.commons.io.IOUtils;
 import org.apache.http.client.ClientProtocolException;
-
-import ch.uzh.ifi.feedback.library.rest.authorization.UserToken;
-import ch.uzh.ifi.feedback.library.test.ServletTest;
-import ch.uzh.ifi.feedback.library.transaction.IDatabaseConfiguration;
 import ch.uzh.ifi.feedback.orchestrator.model.FeedbackMechanism;
-import ch.uzh.ifi.feedback.orchestrator.model.FeedbackParameter;
-import ch.uzh.ifi.feedback.orchestrator.transaction.OrchestratorDatabaseConfiguration;
 
 import static java.util.Arrays.asList;
 

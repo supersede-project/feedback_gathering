@@ -5,12 +5,7 @@ import java.io.InputStream;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.http.client.ClientProtocolException;
-
-import ch.uzh.ifi.feedback.library.rest.authorization.UserToken;
-import ch.uzh.ifi.feedback.library.test.ServletTest;
-import ch.uzh.ifi.feedback.library.transaction.IDatabaseConfiguration;
 import ch.uzh.ifi.feedback.orchestrator.model.UserGroup;
-import ch.uzh.ifi.feedback.orchestrator.transaction.OrchestratorDatabaseConfiguration;
 
 public class OrchestratorServletUserGroupTest extends OrchestratorServletTest {
 	

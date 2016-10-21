@@ -5,21 +5,11 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
-
 import org.apache.commons.lang3.SystemUtils;
-import org.apache.tomcat.jni.Time;
 
-import com.google.inject.Singleton;
-
-import ch.uzh.ifi.feedback.library.test.ServletTest;
-import ch.uzh.ifi.feedback.library.test.dumps.TestHelper;
 
 public abstract class DatabaseConfiguration implements IDatabaseConfiguration {
 	

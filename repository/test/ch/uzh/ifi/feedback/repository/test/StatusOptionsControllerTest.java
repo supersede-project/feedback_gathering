@@ -4,18 +4,9 @@ import static java.util.Arrays.asList;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.List;
-import java.util.stream.Collectors;
-
 import org.apache.commons.io.IOUtils;
 import org.apache.http.client.ClientProtocolException;
-
-import ch.uzh.ifi.feedback.library.rest.authorization.UserToken;
-import ch.uzh.ifi.feedback.library.test.ServletTest;
-import ch.uzh.ifi.feedback.library.transaction.IDatabaseConfiguration;
-import ch.uzh.ifi.feedback.repository.model.Feedback;
 import ch.uzh.ifi.feedback.repository.model.StatusOption;
-import ch.uzh.ifi.feedback.repository.transaction.RepositoryDatabaseConfiguration;
 
 import static java.util.Arrays.asList;
 
