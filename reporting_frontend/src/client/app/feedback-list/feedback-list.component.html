@@ -5,7 +5,7 @@
     <article *ngIf="applications" class="filters">
       <ul class="applications">
         <li #applicationFilter
-            [class.active]="application == selectedApplication"
+            [class.active]="selectedApplication && application.id === selectedApplication.id"
             *ngFor="let application of applications">
           <a title="{{application.name}}" (click)="clickedApplicationFilter(application)">{{ application.name |
             truncate:25 }}</a>

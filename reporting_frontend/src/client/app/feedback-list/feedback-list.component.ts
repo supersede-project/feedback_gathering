@@ -8,6 +8,7 @@ import {RatingMechanism} from '../shared/models/mechanisms/rating_mechanism';
 import {ActivatedRoute, Router} from '@angular/router';
 import {FeedbackStatusService} from '../shared/services/feedback-status.service';
 import {FeedbackStatus} from '../shared/models/feedbacks/feedback_status';
+import {ApplicationFilterService} from '../shared/services/application-filter.service';
 
 
 @Component({
@@ -28,11 +29,14 @@ export class FeedbackListComponent implements OnInit {
   readingStateFilter:string = 'all';
   loaded:boolean = false;
 
-  constructor(public feedbackListService:FeedbackListService, private applicationService:ApplicationService, private router:Router, private route:ActivatedRoute, private feedbackStatusService:FeedbackStatusService) {
+  constructor(public feedbackListService:FeedbackListService, private applicationService:ApplicationService,
+              private router:Router, private route:ActivatedRoute, private feedbackStatusService:FeedbackStatusService,
+              private applicationFilterService:ApplicationFilterService) {
     this.getApplications();
   }
 
   ngOnInit() {
+
   }
 
   getFeedbacks(applicationId:number) {
@@ -76,6 +80,10 @@ export class FeedbackListComponent implements OnInit {
           application.filterActive = false;
         }
         this.populateConfigurationData();
+        let application = this.applicationFilterService.getApplication();
+        if(application) {
+          this.clickedApplicationFilter(application);
+        }
       },
       error => this.errorMessage = <any>error
     );
@@ -126,6 +134,7 @@ export class FeedbackListComponent implements OnInit {
   clickedApplicationFilter(application) {
     this.selectedApplication = application;
     this.getFeedbacks(application.id);
+    this.applicationFilterService.setApplication(application);
   }
 
   /**
