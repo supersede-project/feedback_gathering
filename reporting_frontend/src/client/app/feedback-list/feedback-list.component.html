@@ -15,8 +15,8 @@
 
     <h4>Status</h4>
     <article *ngIf="filteredFeedbacks" class="feedback-statuses">
-      <span class="label label-default">read</span><br/>
-      <span class="label label-default">unread</span><br/>
+      <span (click)="filterByRead(true)" class="label label-default" [class.label-primary]="readingStateFilter === 'read'">read</span><br/>
+      <span (click)="filterByRead(false)" class="label label-default" [class.label-primary]="readingStateFilter === 'unread'">unread</span><br/>
     </article>
     <br/>
 

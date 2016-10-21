@@ -25,6 +25,7 @@ export class FeedbackListComponent implements OnInit {
   applications:Application[] = [];
   selectedApplication:Application;
   sortOrder:{} = {'id': '', 'title': '', 'date': ''};
+  readingStateFilter:string = 'all';
   loaded:boolean = false;
 
   constructor(public feedbackListService:FeedbackListService, private applicationService:ApplicationService, private router:Router, private route:ActivatedRoute, private feedbackStatusService:FeedbackStatusService) {
@@ -240,6 +241,33 @@ export class FeedbackListComponent implements OnInit {
           console.log(error);
         }
       );
+    }
+  }
+
+  filterByRead(read:boolean) {
+    if(this.readingStateFilter === 'read') {
+      if(read) {
+        this.readingStateFilter = 'all';
+        this.filteredFeedbacks = this.feedbacks;
+      } else {
+        this.readingStateFilter = 'unread';
+        this.filteredFeedbacks = this.feedbacks.filter(feedback => feedback.read === read);
+      }
+    } else if(this.readingStateFilter === 'unread') {
+      if(read) {
+        this.readingStateFilter = 'read';
+        this.filteredFeedbacks = this.feedbacks.filter(feedback => feedback.read === read);
+      } else {
+        this.readingStateFilter = 'all';
+        this.filteredFeedbacks = this.feedbacks;
+      }
+    } else if(this.readingStateFilter === 'all') {
+      if(read) {
+        this.readingStateFilter = 'read';
+      } else {
+        this.readingStateFilter = 'unread';
+      }
+      this.filteredFeedbacks = this.feedbacks.filter(feedback => feedback.read === read);
     }
   }
 }

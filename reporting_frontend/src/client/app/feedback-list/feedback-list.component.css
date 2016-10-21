@@ -32,6 +32,10 @@ article.filters span {
   width: auto;
 }
 
+.feedback-statuses span {
+  cursor: pointer;
+}
+
 table {
   margin-top: 20px;
 }
