@@ -66,7 +66,7 @@ API tests
 ```
 
 - Deploy the war file on your local machine (#deployment)
-- follow the instructions in the "test" section of the repository_api_test project (https://github.com/supersede-project/monitor_feedback/tree/master/orchestrator_api_tests)
+- follow the instructions in the "test" section of the repository_api_test project (https://github.com/supersede-project/monitor_feedback/tree/master/repository_api_tests)
 
 
 # Directory Structure
