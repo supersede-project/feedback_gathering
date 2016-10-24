@@ -8,8 +8,8 @@ the installation.
 
 - [Introduction](#introduction)
 - [Table of Content](#table-of-content)
-- [Running tests](#running-tests)
 - [Installation](#installation)
+- [Running tests](#running-tests)
 - [Directory Structure](#directory-structure)
 - [License](#license)
 
