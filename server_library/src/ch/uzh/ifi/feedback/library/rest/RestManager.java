@@ -133,16 +133,12 @@ public class RestManager implements IRestManager {
 					}
 					
 					final HttpMethod methodFinal = method;
-					for(HandlerInfo h : _handlers)
-					{
-						UriTemplate t = h.getUriTemplate();
-						if(h.GetHttpMethod() == methodFinal && t.Match(path) != null)
-							throw new AlreadyBoundException("handler for template '" + path + "' already registered!/n");
-					}
 					
 					if(_handlers.stream().anyMatch((h) -> h.GetHttpMethod() == methodFinal && h.getUriTemplate().Match(path) != null))
-						throw new AlreadyBoundException("handler for template '" + path + "' already registered!/n");
-				
+					{
+						continue;
+					}
+
 					Authenticate auth = null;
 					if(m.isAnnotationPresent(Authenticate.class))
 					{

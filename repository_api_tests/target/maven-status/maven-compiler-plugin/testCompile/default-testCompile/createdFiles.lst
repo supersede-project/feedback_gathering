@@ -1,0 +1,5 @@
+ch/uzh/ifi/feedback/repository/test/RepositoryServletTest.class
+ch/uzh/ifi/feedback/repository/test/FeedbackStatusControllerTest.class
+ch/uzh/ifi/feedback/repository/test/StatusOptionsControllerTest.class
+ch/uzh/ifi/feedback/repository/test/FeedbackControllerTest.class
+ch/uzh/ifi/feedback/repository/test/ApiUserControllerTest.class

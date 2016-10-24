@@ -1,8 +1,10 @@
 package ch.uzh.ifi.feedback.library.transaction;
 
-public interface IDatabaseConfiguration {
+public interface IDatabaseConfiguration 
+{
 	void StartDebugMode();
-	void RestoreTestDatabase();
 	String getDatabase();
 	String getTestDatabase();
+	String getUserName();
+	String getPassword();
 }

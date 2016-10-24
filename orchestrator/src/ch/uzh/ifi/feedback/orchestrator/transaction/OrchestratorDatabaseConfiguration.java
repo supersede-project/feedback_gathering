@@ -34,10 +34,4 @@ public class OrchestratorDatabaseConfiguration extends DatabaseConfiguration {
 	public String getTestDatabase() {
 		return testDatabaseName;
 	}
-
-	@Override
-	protected InputStream getTestDatabaseDump() {
-		return this.getClass().getResourceAsStream("orchestrator_test_dump.sql");
-	}
-
 }

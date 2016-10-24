@@ -1,12 +1,16 @@
 package ch.uzh.ifi.feedback.library.rest.test;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.SystemUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpRequest;
 import org.apache.http.HttpResponse;
@@ -43,10 +47,15 @@ public abstract class ServletTest extends TestCase {
 	protected Gson gson; 
 	private UserToken token;
 	private CloseableHttpClient client;
+	private IDatabaseConfiguration config;
+	private String testDatabaseDumpFile;
 	
-	public ServletTest(){
+	public ServletTest(IDatabaseConfiguration config)
+	{
+		this.config = config;
 		gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss.S").create();
 		client = GetHttpClient();
+		CreateDumps();
 	}
 	
 	@SuppressWarnings("deprecation")
@@ -93,22 +102,72 @@ public abstract class ServletTest extends TestCase {
 	
 	protected abstract UserToken AuthenticateUser() throws IOException;
 	
-	protected abstract IDatabaseConfiguration getDatabaseConfiguration();
-	
     @Override
     protected void setUp() throws Exception
     {
         super.setUp();
         token = AuthenticateUser();
-        getDatabaseConfiguration().RestoreTestDatabase();
+        RestoreTestDatabase();
     }
     
    @Override
 	protected void tearDown() throws Exception 
     {
 		super.tearDown();
-        getDatabaseConfiguration().RestoreTestDatabase();
+        RestoreTestDatabase();
     }
+   
+	protected void RestoreTestDatabase()
+	{
+		if(testDatabaseDumpFile == null)
+			return;
+		
+       //Restore Databases from dump file
+       String restoreTestDbCmd = String.format("mysql -u %s -p%s %s < %s", config.getUserName(), config.getPassword(), config.getTestDatabase(), testDatabaseDumpFile);
+       try {
+       	if(SystemUtils.IS_OS_LINUX || SystemUtils.IS_OS_MAC)
+       	{
+				Runtime.getRuntime().exec(new String[]{"bash", "-c", restoreTestDbCmd}).waitFor();
+       	}else if(SystemUtils.IS_OS_WINDOWS)
+       	{
+				Runtime.getRuntime().exec(new String[]{"cmd","/c", restoreTestDbCmd}).waitFor();
+       	}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	protected abstract InputStream getTestDatabaseDump();
+	
+	private void CreateDumps()
+	{
+		InputStream inputStream = getTestDatabaseDump();
+		
+		if (inputStream != null)
+			testDatabaseDumpFile = generateTempFile(inputStream, "dump_" + config.getTestDatabase());
+	}
+	
+	protected String generateTempFile(InputStream input, String filename)
+	{
+       try {
+           File file = File.createTempFile(filename, ".tmp");
+           OutputStream out = new FileOutputStream(file);
+           int read;
+           byte[] bytes = new byte[1024];
+
+           while ((read = input.read(bytes)) != -1) {
+               out.write(bytes, 0, read);
+           }
+           file.deleteOnExit();
+           
+           return file.getAbsolutePath();            
+           
+       } catch (IOException ex) {
+           ex.printStackTrace();
+       }
+       
+       return null;
+	}
    
    protected <T> T GetSuccess(String url, Class<T> clazz) throws ClientProtocolException, IOException
    {
@@ -156,7 +215,6 @@ public abstract class ServletTest extends TestCase {
 		String mimeType = ContentType.getOrDefault(httpResponse.getEntity()).getMimeType();
 
 		String jsonFromResponse = EntityUtils.toString(httpResponse.getEntity());
-		System.out.println(jsonFromResponse);
 		T createdObjects = gson.fromJson(jsonFromResponse, clazz);
 		assertEquals(httpResponse.getStatusLine().getStatusCode(), HttpStatus.SC_CREATED);
 		assertEquals("application/json", mimeType);

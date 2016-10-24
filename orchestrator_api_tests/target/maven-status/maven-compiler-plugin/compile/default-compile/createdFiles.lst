@@ -1,0 +1,8 @@
+ch/uzh/ifi/feedback/orchestrator/test/OrchestratorServletUserTest.class
+ch/uzh/ifi/feedback/orchestrator/test/OrchestratorServletApplicationTest.class
+ch/uzh/ifi/feedback/orchestrator/test/OrchestratorServletGeneralConfigurationTest.class
+ch/uzh/ifi/feedback/orchestrator/test/OrchestratorServletUserGroupTest.class
+ch/uzh/ifi/feedback/orchestrator/test/OrchestratorServletConfigurationTest.class
+ch/uzh/ifi/feedback/orchestrator/test/OrchestratorServletParameterTest.class
+ch/uzh/ifi/feedback/orchestrator/test/OrchestratorServletMechanismTest.class
+ch/uzh/ifi/feedback/orchestrator/test/OrchestratorServletTest.class

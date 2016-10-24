@@ -1,0 +1,22 @@
+  {
+    "type": "AUDIO_TYPE",
+    "active": true,
+    "order": 2,
+    "canBeActivated": false,
+    "parameters": [
+      {
+        "key": "maxTime",
+        "value": 10.0,
+        "defaultValue": 30.0,
+        "editableByUser": false,
+        "language": "en"
+      },
+      {
+        "key": "maxSizeMb",
+        "value": 20.0,
+        "defaultValue": 30.0,
+        "editableByUser": false,
+        "language": "en"
+      }  
+    ]
+  }
