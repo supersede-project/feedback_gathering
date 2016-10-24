@@ -1,6 +1,6 @@
 # Introduction
 
-Is a test project that contains API tests for the repository server (https://github.com/supersede-project/monitor_feedback/tree/master/orchestrator). The API tests are executed against the orchestrator server that is deployed on the local machine.
+Is a test project that contains API tests for the repository server (https://github.com/supersede-project/monitor_feedback/tree/master/repository). The API tests are executed against the repository server that is deployed on the local machine.
 
 
 # Table of Contents
@@ -13,13 +13,13 @@ Is a test project that contains API tests for the repository server (https://git
 
 # running-tests
 
-- to run the tests, the server_library (https://github.com/supersede-project/monitor_feedback/tree/master/server_library) and the orchestrator (https://github.com/supersede-project/monitor_feedback/tree/master/orchestrator) have to be installed in the local maven repository. The orchestrator has to be deployed on the local machine and the "debug" parameter of the web.xml of the war file has to be "true".
+- to run the tests, the server_library (https://github.com/supersede-project/monitor_feedback/tree/master/server_library) and the repository (https://github.com/supersede-project/monitor_feedback/tree/master/repository) have to be installed in the local maven repository. The repository war file has to be deployed on the local machine and the "debug" parameter of the web.xml of the war file has to be "true".
 
 - clone the repository and execute the tests with maven:
 
 ```bash
-git clone https://github.com/supersede-project/monitor_feedback/tree/master/orchestrator_api_tests
-cd orchestrator_api_tests
+git clone https://github.com/supersede-project/monitor_feedback/tree/master/repository_api_tests
+cd repository_api_tests
 mvn test
 ```
 
@@ -27,7 +27,7 @@ mvn test
 
 ```
 .
-├── test                       <- contains API tests for all controllers of the orchestrator
+├── test                       <- contains API tests for all controllers of the repository
 ├── README.md                  <- this file
 ├── pom.xml                    <- maven project file
 ```

@@ -1,6 +1,5 @@
 package ch.uzh.ifi.feedback.library.transaction;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Connection;
@@ -8,29 +7,33 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
+import ch.uzh.ifi.feedback.library.rest.ContextFinalizer;
 import javassist.NotFoundException;
 
 public class TransactionManager {
 
+    private static final Log LOGGER = LogFactory.getLog(ContextFinalizer.class);
+    
     public static void withTransaction(Transaction transaction) throws SQLException, NotFoundException {
 
         Connection dbConnection = createDatabaseConnection();
         dbConnection.setAutoCommit(false);
 
         try {
-
-            System.out.println("Starting transaction");
+            LOGGER.info("Starting transaction");
             transaction.execute(dbConnection);
 
-
-            System.out.println("Committing transaction");
+            LOGGER.info("Committing transaction");
             dbConnection.commit();
 
         } catch (SQLException e) {
 
-            System.out.println(e.getMessage());
+        	LOGGER.error(e.getMessage());
             e.printStackTrace();
-            System.out.println("Rolling back...");
+            LOGGER.error("Rolling back...");
             dbConnection.rollback();
             throw e;
             
@@ -44,6 +47,7 @@ public class TransactionManager {
         try {
 			Class.forName("com.mysql.jdbc.Driver");
 		} catch (ClassNotFoundException e) {
+            LOGGER.error(e.getMessage());
 			e.printStackTrace();
 		}
         
@@ -57,12 +61,14 @@ public class TransactionManager {
     		String dbPassword = prop.getProperty("dbpassword");
             return DriverManager.getConnection(dbUrl, dbUser, dbPassword);
     	} catch (IOException ex) {
+    		LOGGER.error(ex.getMessage());
     		ex.printStackTrace();
     	} finally {
     		if (input != null) {
     			try {
     				input.close();
     			} catch (IOException e) {
+    				LOGGER.error(e.getMessage());
     				e.printStackTrace();
     			}
     		}

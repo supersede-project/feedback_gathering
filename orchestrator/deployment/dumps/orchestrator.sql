@@ -66,7 +66,7 @@ CREATE TABLE `api_users` (
 
 LOCK TABLES `api_users` WRITE;
 /*!40000 ALTER TABLE `api_users` DISABLE KEYS */;
-INSERT INTO `api_users` VALUES (1,'api_user','password','ADMIN');
+INSERT INTO `api_users` VALUES (1,'api_user','sha1:64000:18:7o4NKp8/is9NHCydnIEl0t1RmvT/deam:SgWwtvBSh29qXvAth0vruOik','ADMIN');
 /*!40000 ALTER TABLE `api_users` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -552,4 +552,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-10-14 16:52:47
+-- Dump completed on 2016-10-24 14:49:22
