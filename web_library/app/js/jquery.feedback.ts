@@ -29,6 +29,7 @@ import {RatingFeedback} from '../models/feedbacks/rating_feedback';
 import {ScreenshotFeedback} from '../models/feedbacks/screenshot_feedback';
 import {AttachmentFeedback} from '../models/feedbacks/attachment_feedback';
 import {AudioFeedback} from '../models/feedbacks/audio_feedback';
+import {ContextInformation} from '../models/feedbacks/context_information';
 var mockData = require('json!../services/mocks/dev/applications_mock.json');
 
 
@@ -393,6 +394,7 @@ export var feedbackPluginModule = function ($, window, document) {
 
         container.find('.server-response').removeClass('error').removeClass('success');
         var feedbackObject = new Feedback(feedbackObjectTitle, userId, language, applicationId, configuration.id, [], [], [], [], null, [], []);
+        feedbackObject.contextInformation = ContextInformation.create();
 
         for(var textMechanism of textMechanisms) {
             if(textMechanism.active) {
