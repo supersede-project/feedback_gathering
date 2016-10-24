@@ -54,6 +54,7 @@ Open the index.html file in the browser of your choice.
 - [Introduction](#introduction)
 - [How to start](#how-to-start)
 - [Table of Content](#table-of-content)
+- [Compatibility](#compatibility)
 - [Integration](#integration)
 - [Configuration](#configuration)
 - [Internationalization](#internationalization)
@@ -61,6 +62,16 @@ Open the index.html file in the browser of your choice.
 - [Deployment](#deployment)
 - [Directory Structure](#directory-structure)
 - [License](#license)
+
+# Compatibility
+
+The library should work fine on the following browsers (with Promise polyfill):
+
+Firefox 3.5+
+Google Chrome
+Opera 12+
+IE9+
+Safari 6+
 
 # Integration
 
