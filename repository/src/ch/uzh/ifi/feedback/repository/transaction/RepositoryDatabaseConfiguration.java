@@ -34,10 +34,4 @@ public class RepositoryDatabaseConfiguration extends DatabaseConfiguration {
 	public String getTestDatabase() {
 		return testDatabaseName;
 	}
-
-	@Override
-	protected InputStream getTestDatabaseDump() {
-		return this.getClass().getResourceAsStream("repository_test_dump.sql");
-	}
-
 }

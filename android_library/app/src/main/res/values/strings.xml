@@ -6,6 +6,11 @@
     <string name="action_settings">Settings</string>
     <string name="action_feedback">Feedback</string>
 
+    <!-- Buttons -->
+    <string name="random_pull_feedback_button_text">Trigger a potential random pull feedback from the application with id = 5</string>
+    <string name="specific_pull_feedback_button_text_id11">Trigger the specific pull feedback with id = 11 from the application with id = 5</string>
+    <string name="specific_pull_feedback_button_text_id12">Trigger the specific pull feedback with id = 12 from the application with id = 5</string>
+
     <!--
     Override the strings for multi-language support.
     -->

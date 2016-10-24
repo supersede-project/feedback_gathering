@@ -25,18 +25,18 @@
             android:id="@+id/trigger_random_pull_config_v1_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Trigger a potential random pull feedback from config v1"/>
+            android:text="@string/random_pull_feedback_button_text"/>
 
         <Button
-            android:id="@+id/trigger_specific_pull_config_v1_id14_button"
+            android:id="@+id/trigger_specific_pull_config_v1_id11_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Trigger the specific pull feedback from config v1 with id=11"/>
+            android:text="@string/specific_pull_feedback_button_text_id11"/>
 
         <Button
-            android:id="@+id/trigger_specific_pull_config_v1_id15_button"
+            android:id="@+id/trigger_specific_pull_config_v1_id12_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Trigger the specific pull feedback from config v1 with id=12"/>
+            android:text="@string/specific_pull_feedback_button_text_id12"/>
     </LinearLayout>
 </LinearLayout>

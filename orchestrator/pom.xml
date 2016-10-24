@@ -8,6 +8,7 @@
   <build>
     <sourceDirectory>src</sourceDirectory>
     <testSourceDirectory>test</testSourceDirectory>
+    <finalName>${project.artifactId}</finalName>
     <testResources>
       <testResource>
         <directory>test</directory>
@@ -31,6 +32,8 @@
         <configuration>
           <warSourceDirectory>WebContent</warSourceDirectory>
           <failOnMissingWebXml>false</failOnMissingWebXml>
+          <attachClasses>true</attachClasses>
+          <classesClassifier>classes</classesClassifier>
         </configuration>
       </plugin>
     </plugins>
@@ -39,7 +42,7 @@
     <dependency>
       <groupId>feedback_library</groupId>
 	  <artifactId>feedback_library</artifactId>
-	  <version>0.0.1-SNAPSHOT</version>
+	  <version>0.0.2-SNAPSHOT</version>
     </dependency>
     <dependency>
     <groupId>org.apache.tomcat</groupId>

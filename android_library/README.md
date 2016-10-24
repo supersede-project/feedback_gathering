@@ -2,12 +2,14 @@
 
 The Feedback Mechanisms for Android are realized as an Android Library Module. The Android Library has the following dependencies (see the build.gradle file under 'android_library/feedbacklibrary'):
 * junit:junit:4.12
-* com.android.support:appcompat-v7:24.2.1
-* com.android.support:design:24.2.1
+* com.android.support:appcompat-v7:24.2.1 \*
+* com.android.support:design:24.2.1 \*
 * com.google.code.gson:gson:2.6.2
 * com.squareup.retrofit2:retrofit:2.0.0
 * com.squareup.retrofit2:converter-gson:2.0.0
 * com.theartofdev.edmodo:android-image-cropper:2.3.1
+
+\*In order to build the library, the Android Support Library v7:24.2.1 or higher must be installed.
 
 ## Setup Instructions
 

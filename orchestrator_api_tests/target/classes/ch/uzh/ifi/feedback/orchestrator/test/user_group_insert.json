@@ -1,0 +1,14 @@
+{
+  "name": "test group",
+  "users": [
+    {
+      "name": "u_test1"
+    },
+    {
+      "name": "u_test2"
+    },
+    {
+      "name": "u_test3"
+    }
+  ]
+}

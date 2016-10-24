@@ -69,10 +69,12 @@ public abstract class DatabaseConfiguration implements IDatabaseConfiguration {
 	
 	private void CreateDumps()
 	{
+		/*
 		InputStream inputStream = getTestDatabaseDump();
 		
 		if (inputStream != null)
 			testDatabaseDumpFile = generateTempFile(inputStream, "dump_" + getTestDatabase());
+			*/
 	}
 	
 	protected String generateTempFile(InputStream input, String filename)
@@ -101,8 +103,15 @@ public abstract class DatabaseConfiguration implements IDatabaseConfiguration {
 
 	public abstract String getTestDatabase();
 	
-	protected InputStream getTestDatabaseDump()
+	@Override
+	public String getUserName()
 	{
-		return null;
+		return dbUser;
+	}
+	
+	@Override
+	public String getPassword()
+	{
+		return dbPassword;
 	}
 }
