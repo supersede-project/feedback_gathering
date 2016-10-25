@@ -55,7 +55,7 @@ export var feedbackPluginModule = function ($, window, document) {
      * @param applicationObject
      *  The current application object that configures the library.
      */
-    var initApplication = function(applicationObject:Application) {
+    var initApplication = function (applicationObject:Application) {
         application = applicationObject;
         applicationContext = application.getContextForView();
 
@@ -65,7 +65,7 @@ export var feedbackPluginModule = function ($, window, document) {
         feedbackButton.attr('title', application.generalConfiguration.getParameterValue('quickInfo'));
 
         var alreadyTriggeredOne = false;
-        for(var pullConfiguration of shuffle(application.getPullConfigurations())) {
+        for (var pullConfiguration of shuffle(application.getPullConfigurations())) {
             alreadyTriggeredOne = initPullConfiguration(pullConfiguration, application.generalConfiguration, alreadyTriggeredOne);
         }
     };
@@ -97,9 +97,9 @@ export var feedbackPluginModule = function ($, window, document) {
      * @returns boolean
      *  Whether the pull configuration was triggered or not.
      */
-    var initPullConfiguration = function(configuration:PullConfiguration, generalConfiguration:GeneralConfiguration,
-                                         alreadyTriggeredOne:boolean = false): boolean {
-        if(!alreadyTriggeredOne && configuration.shouldGetTriggered()) {
+    var initPullConfiguration = function (configuration:PullConfiguration, generalConfiguration:GeneralConfiguration,
+                                          alreadyTriggeredOne:boolean = false):boolean {
+        if (!alreadyTriggeredOne && configuration.shouldGetTriggered()) {
             configuration.wasTriggered();
             var pageNavigation = new PageNavigation(configuration, $('#' + pullConfigurationDialogId));
 
@@ -107,21 +107,21 @@ export var feedbackPluginModule = function ($, window, document) {
 
             pullDialog = initTemplate(pullDialogTemplate, pullConfigurationDialogId, context, configuration, pageNavigation, generalConfiguration);
             var delay = 0;
-            if(configuration.generalConfiguration.getParameterValue('delay')) {
+            if (configuration.generalConfiguration.getParameterValue('delay')) {
                 delay = configuration.generalConfiguration.getParameterValue('delay');
             }
-            if(configuration.generalConfiguration.getParameterValue('intermediateDialog')) {
+            if (configuration.generalConfiguration.getParameterValue('intermediateDialog')) {
                 var intermediateDialog = initIntermediateDialogTemplate(intermediateDialogTemplate, 'intermediateDialog', configuration, pullDialog, generalConfiguration);
-                if(intermediateDialog !== null) {
-                    setTimeout(function(){
-                        if(!active) {
+                if (intermediateDialog !== null) {
+                    setTimeout(function () {
+                        if (!active) {
                             intermediateDialog.dialog('open');
                         }
                     }, delay * 1000);
                 }
             } else {
-                setTimeout(function(){
-                    if(!active) {
+                setTimeout(function () {
+                    if (!active) {
                         openDialog(pullDialog, configuration);
                     }
                 }, delay * 1000);
@@ -132,7 +132,7 @@ export var feedbackPluginModule = function ($, window, document) {
     };
 
     var initTemplate = function (template, dialogId, context, configuration, pageNavigation,
-                                 generalConfiguration:GeneralConfiguration): HTMLElement {
+                                 generalConfiguration:GeneralConfiguration):HTMLElement {
         var html = template(context);
         $('body').append(html);
 
@@ -140,21 +140,21 @@ export var feedbackPluginModule = function ($, window, document) {
         new PaginationContainer($('#' + dialogId + '.feedback-container .pages-container'), pageNavigation);
         pageNavigation.screenshotViews = [];
 
-        for(var ratingMechanism of configuration.getMechanismConfig(mechanismTypes.ratingType)) {
+        for (var ratingMechanism of configuration.getMechanismConfig(mechanismTypes.ratingType)) {
             initRating("#" + dialogId + " #ratingMechanism" + ratingMechanism.id + " .rating-input", ratingMechanism);
         }
 
-        for(var screenshotMechanism of configuration.getMechanismConfig(mechanismTypes.screenshotType)) {
+        for (var screenshotMechanism of configuration.getMechanismConfig(mechanismTypes.screenshotType)) {
             var screenshotView = initScreenshot(screenshotMechanism, dialogId);
             pageNavigation.screenshotViews.push(screenshotView);
         }
 
-        for(var audioMechanism of configuration.getMechanismConfig(mechanismTypes.audioType)) {
+        for (var audioMechanism of configuration.getMechanismConfig(mechanismTypes.audioType)) {
             var recordButton = $("#" + dialogId + " #audioMechanism" + audioMechanism.id + " .record-audio");
         }
 
-        for(var attachmentMechanism of configuration.getMechanismConfig(mechanismTypes.attachmentType)) {
-            if(attachmentMechanism.active) {
+        for (var attachmentMechanism of configuration.getMechanismConfig(mechanismTypes.attachmentType)) {
+            if (attachmentMechanism.active) {
                 var sectionSelector = "#attachmentMechanism" + attachmentMechanism.id;
                 dropArea = $('' + sectionSelector).find('.drop-area');
                 dropArea.fileUpload(distPath);
@@ -162,34 +162,34 @@ export var feedbackPluginModule = function ($, window, document) {
         }
 
         var title = "Feedback";
-        if(generalConfiguration.getParameterValue('dialogTitle') !== null && generalConfiguration.getParameterValue('dialogTitle') !== "") {
+        if (generalConfiguration.getParameterValue('dialogTitle') !== null && generalConfiguration.getParameterValue('dialogTitle') !== "") {
             title = generalConfiguration.getParameterValue('dialogTitle');
         }
 
         var modal = false;
-        if(generalConfiguration.getParameterValue('dialogModal') !== null && generalConfiguration.getParameterValue('dialogModal') !== "") {
+        if (generalConfiguration.getParameterValue('dialogModal') !== null && generalConfiguration.getParameterValue('dialogModal') !== "") {
             modal = generalConfiguration.getParameterValue('dialogModal');
         }
 
-        var dialog = initDialog($('#'+ dialogId), title, modal);
+        var dialog = initDialog($('#' + dialogId), title, modal);
         addEvents(dialogId, configuration);
         return dialog;
     };
 
-    var initIntermediateDialogTemplate = function(template, dialogId, configuration, pullDialog,
-                                                  generalConfiguration:GeneralConfiguration): HTMLElement {
+    var initIntermediateDialogTemplate = function (template, dialogId, configuration, pullDialog,
+                                                   generalConfiguration:GeneralConfiguration):HTMLElement {
         var html = template({});
         $('body').append(html);
 
-        var dialog = initDialog($('#'+ dialogId), generalConfiguration.getParameterValue('dialogTitle'), true);
-        $('#feedbackYes').on('click', function() {
+        var dialog = initDialog($('#' + dialogId), generalConfiguration.getParameterValue('dialogTitle'), true);
+        $('#feedbackYes').on('click', function () {
             dialog.dialog('close');
             openDialog(pullDialog, configuration);
         });
-        $('#feedbackNo').on('click', function() {
+        $('#feedbackNo').on('click', function () {
             dialog.dialog('close');
         });
-        $('#feedbackLater').on('click', function() {
+        $('#feedbackLater').on('click', function () {
             dialog.dialog('close');
         });
         return dialog;
@@ -221,12 +221,12 @@ export var feedbackPluginModule = function ($, window, document) {
         });
     };
 
-    var resetPlugin = function(configuration) {
+    var resetPlugin = function (configuration) {
         $('textarea.text-type-text').val('');
-        for(var screenshotMechanism of configuration.getMechanismConfig(mechanismTypes.screenshotType)) {
+        for (var screenshotMechanism of configuration.getMechanismConfig(mechanismTypes.screenshotType)) {
             screenshotMechanism.screenshotView.reset();
         }
-        for(var ratingMechanism of configuration.getMechanismConfig(mechanismTypes.ratingType)) {
+        for (var ratingMechanism of configuration.getMechanismConfig(mechanismTypes.ratingType)) {
             initRating("#" + configuration.dialogId + " #ratingMechanism" + ratingMechanism.id + " .rating-input", ratingMechanism);
         }
     };
@@ -240,23 +240,23 @@ export var feedbackPluginModule = function ($, window, document) {
      * Applies the jQuery star rating plugin on a specified element with the configuration from the rating mechanism.
      */
     var initRating = function (selector, ratingMechanism:RatingMechanism) {
-        if(ratingMechanism !== null && ratingMechanism.active) {
+        if (ratingMechanism !== null && ratingMechanism.active) {
             var options = ratingMechanism.getRatingElementOptions();
             $('' + selector).starRating(options);
             // reset to default rating
-            if(ratingMechanism.initialRating) {
+            if (ratingMechanism.initialRating) {
                 $('' + selector + ' .jq-star:nth-child(' + ratingMechanism.initialRating + ')').click();
             }
         }
     };
 
-    var initScreenshot = function (screenshotMechanism, containerId): ScreenshotView {
-        if(screenshotMechanism == null) {
+    var initScreenshot = function (screenshotMechanism, containerId):ScreenshotView {
+        if (screenshotMechanism == null) {
             return;
         }
 
         var elementToCaptureSelector = 'body';
-        if(screenshotMechanism.getParameterValue('elementToCapture') !== null && screenshotMechanism.getParameterValue('elementToCapture') !== "") {
+        if (screenshotMechanism.getParameterValue('elementToCapture') !== null && screenshotMechanism.getParameterValue('elementToCapture') !== "") {
             elementToCaptureSelector = screenshotMechanism.getParameterValue('elementToCapture');
         }
 
@@ -294,7 +294,7 @@ export var feedbackPluginModule = function ($, window, document) {
                     dialogObject.dialog("close");
                     active = false;
                 },
-                create: function(event, ui) {
+                create: function (event, ui) {
                     var widget = $(this).dialog("widget");
                     $(".ui-dialog-titlebar-close span", widget)
                         .removeClass("ui-icon-closethick")
@@ -329,33 +329,56 @@ export var feedbackPluginModule = function ($, window, document) {
             event.stopPropagation();
 
             // validate anyway before sending
-            if(textMechanisms.length > 0) {
-                textareas.each(function() {
+            if (textMechanisms.length > 0) {
+                textareas.each(function () {
                     $(this).validate();
                 });
 
                 var invalidTextareas = container.find('textarea.text-type-text.invalid');
-                if(invalidTextareas.length == 0) {
-                    prepareFormData(container, configuration, function(formData) {
+                if (invalidTextareas.length == 0) {
+                    prepareFormData(container, configuration, function (formData) {
                         sendFeedback(formData, configuration);
                     });
                 }
             } else {
-                prepareFormData(container, configuration, function(formData) {
+                prepareFormData(container, configuration, function (formData) {
                     sendFeedback(formData, configuration);
                 });
             }
         });
 
         // character length
-        for(var textMechanism of textMechanisms) {
+        for (var textMechanism of textMechanisms) {
             var sectionSelector = "textMechanism" + textMechanism.id;
             var textarea = container.find('section#' + sectionSelector + ' textarea.text-type-text');
             var maxLength = textMechanism.getParameterValue('maxLength');
+            var isMaxLengthStrict = textMechanism.getParameterValue('maxLengthStrict');
 
-            textarea.on('keyup focus paste', function () {
+            textarea.on('keyup focus paste blur', function () {
                 container.find('section#' + sectionSelector + ' span.text-type-max-length').text($(this).val().length + '/' + maxLength);
             });
+
+            if (isMaxLengthStrict) {
+                // prevent typing if max length is reached
+                textarea.on('keypress', function (e) {
+                    if (e.which < 0x20) {
+                        // e.which < 0x20, then it's not a printable character
+                        // e.which === 0 - Not a character
+                        return;     // Do nothing
+                    }
+                    if (this.value.length === maxLength) {
+                        e.preventDefault();
+                    } else if (this.value.length > maxLength) {
+                        this.value = this.value.substring(0, maxLength);
+                    }
+                });
+                // prevent pasting more characters
+                textarea.on('change blur', function () {
+                    if (this.value.length > maxLength) {
+                        this.value = this.value.substring(0, maxLength - 1);
+                    }
+                });
+            }
 
             // text clear button
             container.find('section#' + sectionSelector + ' .text-type-text-clear').on('click', function (event) {
@@ -365,16 +388,16 @@ export var feedbackPluginModule = function ($, window, document) {
             });
         }
 
-        container.find('.discard-feedback').on('click', function() {
-            if(configuration.dialogId === 'pushConfiguration') {
+        container.find('.discard-feedback').on('click', function () {
+            if (configuration.dialogId === 'pushConfiguration') {
                 dialog.dialog("close");
-            } else if(configuration.dialogId === 'pullConfiguration') {
+            } else if (configuration.dialogId === 'pullConfiguration') {
                 pullDialog.dialog("close");
             }
             resetPlugin(configuration);
         });
 
-        for(var categoryMechanism of categoryMechanisms) {
+        for (var categoryMechanism of categoryMechanisms) {
             categoryMechanism.coordinateOwnInputAndRadioBoxes();
         }
     };
@@ -396,22 +419,22 @@ export var feedbackPluginModule = function ($, window, document) {
         var feedbackObject = new Feedback(feedbackObjectTitle, userId, language, applicationId, configuration.id, [], [], [], [], null, [], []);
         feedbackObject.contextInformation = ContextInformation.create();
 
-        for(var textMechanism of textMechanisms) {
-            if(textMechanism.active) {
+        for (var textMechanism of textMechanisms) {
+            if (textMechanism.active) {
                 feedbackObject.textFeedbacks.push(textMechanism.getTextFeedback());
             }
         }
 
-        for(var ratingMechanism of ratingMechanisms) {
+        for (var ratingMechanism of ratingMechanisms) {
             if (ratingMechanism.active) {
                 var rating = new RatingFeedback(ratingMechanism.currentRatingValue, ratingMechanism.id);
                 feedbackObject.ratingFeedbacks.push(rating);
             }
         }
 
-        for(var screenshotMechanism of screenshotMechanisms) {
-            if(screenshotMechanism.active) {
-                if(screenshotMechanism.screenshotView.getScreenshotAsBinary() === null) {
+        for (var screenshotMechanism of screenshotMechanisms) {
+            if (screenshotMechanism.active) {
+                if (screenshotMechanism.screenshotView.getScreenshotAsBinary() === null) {
                     continue;
                 }
                 var partName = "screenshot" + screenshotMechanism.id;
@@ -424,14 +447,14 @@ export var feedbackPluginModule = function ($, window, document) {
         for (var categoryMechanism of categoryMechanisms) {
             if (categoryMechanism.active) {
                 var categoryFeedbacks = categoryMechanism.getCategoryFeedbacks();
-                for(var categoryFeedback of categoryFeedbacks) {
+                for (var categoryFeedback of categoryFeedbacks) {
                     feedbackObject.categoryFeedbacks.push(categoryFeedback);
                 }
             }
         }
 
-        for(var attachmentMechanism of attachmentMechanisms) {
-            if(attachmentMechanism.active) {
+        for (var attachmentMechanism of attachmentMechanisms) {
+            if (attachmentMechanism.active) {
                 var sectionSelector = "attachmentMechanism" + attachmentMechanism.id;
                 var input = container.find('section#' + sectionSelector + ' input[type=file]');
                 var files = dropArea.currentFiles;
@@ -446,23 +469,23 @@ export var feedbackPluginModule = function ($, window, document) {
             }
         }
 
-        for(var audioMechanism of audioMechanisms) {
-            if(audioMechanism.active) {
+        for (var audioMechanism of audioMechanisms) {
+            if (audioMechanism.active) {
                 let partName = "audio" + audioMechanism.id;
                 var audioElement = jQuery('section#audioMechanism' + audioMechanism.id + ' audio')[0];
-                if(!audioElement || Fr.voice.recorder === null) {
+                if (!audioElement || Fr.voice.recorder === null) {
                     continue;
                 }
 
                 try {
                     var audioFeedback = new AudioFeedback(partName, Math.round(audioElement.duration), "wav", audioMechanism.id);
                     console.log('export is called');
-                    Fr.voice.export(function(blob) {
+                    Fr.voice.export(function (blob) {
                         console.log('blob is not called');
                         formData.append(partName, blob);
                         feedbackObject.audioFeedbacks.push(audioFeedback);
                     });
-                } catch (e){
+                } catch (e) {
                     console.log((<Error>e).message);
                 }
             }
@@ -485,16 +508,16 @@ export var feedbackPluginModule = function ($, window, document) {
         active = !active;
     };
 
-    var openDialog = function(dialog, configuration) {
-        for(var screenshotMechanism of configuration.getMechanismConfig(mechanismTypes.screenshotType)) {
-            if(screenshotMechanism !== null && screenshotMechanism !== undefined && screenshotMechanism.screenshotView !== null) {
+    var openDialog = function (dialog, configuration) {
+        for (var screenshotMechanism of configuration.getMechanismConfig(mechanismTypes.screenshotType)) {
+            if (screenshotMechanism !== null && screenshotMechanism !== undefined && screenshotMechanism.screenshotView !== null) {
                 screenshotMechanism.screenshotView.checkAutoTake();
             }
         }
         dialog.dialog('open');
     };
 
-    var prepareTemplateContext = function(context) {
+    var prepareTemplateContext = function (context) {
         var contextWithApplicationContext = $.extend({}, applicationContext, context);
         var pluginContext = {
             'distPath': distPath
@@ -531,7 +554,7 @@ export var feedbackPluginModule = function ($, window, document) {
         // loadDataHere to trigger pull if necessary
         var applicationService = new ApplicationService(language);
         applicationService.retrieveApplication(applicationId, application => {
-            if(application.state === null || application.state === 0) {
+            if (application.state === null || application.state === 0) {
                 feedbackButton.hide();
                 return feedbackButton;
             }

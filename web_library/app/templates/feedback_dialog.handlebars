@@ -20,7 +20,7 @@
                     {{/compare}}
                     {{#compare type "TEXT_TYPE" operator="==="}}
                         {{#if active}}
-                            <section id="textMechanism{{ id }}" class="feedback-mechanism horizontal text-type{{#if mandatory }} mandatory{{/if}}">
+                            <section id="textMechanism{{ id }}" class="feedback-mechanism horizontal text-type{{#if mandatory }} mandatory{{/if}}{{#if maxLengthStrict}} max-length-strict{{/if}}">
                                 <p class="text-type-label explanation col col-left" style="{{ labelStyle }}{{#if mandatory}} {{ ../mandatoryLabelStyle }}{{/if}}">
                                     {{ label }}{{#if mandatory }} {{ ../mandatorySign }}{{/if}}
                                 </p>

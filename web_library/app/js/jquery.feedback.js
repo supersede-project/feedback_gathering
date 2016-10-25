@@ -224,9 +224,28 @@ define(["require", "exports", './config', '../views/pagination_container', '../v
                 var sectionSelector = "textMechanism" + textMechanism.id;
                 var textarea = container.find('section#' + sectionSelector + ' textarea.text-type-text');
                 var maxLength = textMechanism.getParameterValue('maxLength');
-                textarea.on('keyup focus paste', function () {
+                var isMaxLengthStrict = textMechanism.getParameterValue('maxLengthStrict');
+                textarea.on('keyup focus paste blur', function () {
                     container.find('section#' + sectionSelector + ' span.text-type-max-length').text($(this).val().length + '/' + maxLength);
                 });
+                if (isMaxLengthStrict) {
+                    textarea.on('keypress', function (e) {
+                        if (e.which < 0x20) {
+                            return;
+                        }
+                        if (this.value.length === maxLength) {
+                            e.preventDefault();
+                        }
+                        else if (this.value.length > maxLength) {
+                            this.value = this.value.substring(0, maxLength);
+                        }
+                    });
+                    textarea.on('change blur', function () {
+                        if (this.value.length > maxLength) {
+                            this.value = this.value.substring(0, maxLength - 1);
+                        }
+                    });
+                }
                 container.find('section#' + sectionSelector + ' .text-type-text-clear').on('click', function (event) {
                     event.preventDefault();
                     event.stopPropagation();
