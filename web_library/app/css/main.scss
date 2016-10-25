@@ -29,6 +29,7 @@
   padding: 4px 10px;
   text-decoration: none;
   box-shadow: $feedbackEntryPointBoxShadow;
+  display: none;
 }
 
 .feedback-container {
@@ -184,10 +185,6 @@ section.dialog-navigation {
 
 .clearfix {
   clear: both;
-}
-
-.mechanism-review {
-  font-style: italic;
 }
 
 .server-response {
@@ -500,8 +497,6 @@ button.screenshot-operation {
   top: -5px;
 }
 
-/* intermediate dialog */
-
 #intermediateDialog {
   display: none;
   padding: 20px;
@@ -540,4 +535,11 @@ a.discard-feedback {
     color: $dialogTitlebarColor;
     text-decoration: underline;
   }
+}
+
+.submission-message {
+  margin-top: 25px;
+  margin-bottom: 15px;
+  color: #858786;
+  font-size: 13px;
 }

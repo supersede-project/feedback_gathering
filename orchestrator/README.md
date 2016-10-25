@@ -2,50 +2,74 @@
 # Introduction
 
 Is a RESTfull Web API that provides endpoints for storing, receiving and updating the feedback configuration.
+For a detailed API documentation, please visit: http://docs.supersedeorchestratorapi.apiary.io/#
 
 # Table of Contents
 
 - [Introduction](#introduction)
 - [Table of Content](#table-of-content)
+- [Installation](#installation)
 - [Deployment](#deployment)
+- [running tests](#tests)
 - [Directory Structure](#directory-structure)
 - [License](#license)
+
+# Installation
+
+- first install the server_library in your local maven repository: https://github.com/supersede-project/monitor_feedback/tree/master/server_library
+- run the following commands:
+
+```bash
+# clone the repository
+git clone https://github.com/supersede-project/monitor_feedback/tree/master/orchestrator
+cd orchestrator
+# install the project's dependencies
+mvn clean install
+```
 
 # Deployment
 
 To deploy the newest version of the orchestrator:
 
-- clone the github repository:
-
-```bash
-git clone https://github.com/supersede-project/monitor_feedback/tree/master/orchestrator
-cd orchestrator
-```
-
-- execute the mysql script in the /deployment/dumps folder of the project and create the database:
+- first create the database on your deployment server. The sql file is in the "deployment/dumps" folder of the project. To install the database on your local machine, run the following commands with your database credentials:
 
 ```bash
 cd orchestrator/deployment/dumps
 mysql -u username -p orchestrator < orchestrator.sql
 ```
 
-- switch to the war files folder of the deployment folder, open the war file and enter your database 
-  credentials (dbuser and password) in the file "ch/uzh/ifi/feedback/library/transaction/config.properties":
-  
- ``` 
-  dburl=jdbc:mysql://localhost:3306/
-  dbuser=your_user_name
-  dbpassword=your_password
- ```
- 
-- copy the war file to your tomcat WepApps directory. In linux systems, this is usually the directory 
-  "/usr/share/tomcat7/webapps"
+- copy the war file to your tomcat WepApps directory on your deployment server. In linux systems, this is usually the directory "/usr/share/tomcat7/webapps". The war file is in the folder "orchestrator/target" after the installation.
 
 - start the tomcat server over the console
 
 ```bash
 sudo service tomcat7 start
 ```
+
+# Tests
+
+- to run the unit tests, execute the following commands:
+
+```bash
+cd orchestrator
+mvn test
+```
+
+API tests
+
+- Open the web.xml file of the war file after the installation. The config is in the folder "/WebContent/WEB-INF".
+- Search for the following section and set the param-value to "true".
+
+```
+<context-param>
+  <param-name>debug</param-name>
+  <param-value>false</param-value>
+</context-param>
+```
+
+- Deploy the war file on your local machine (#deployment)
+- follow the instructions in the "test" section of the orchestrator_api_test project (https://github.com/supersede-project/monitor_feedback/tree/master/orchestrator_api_tests)
+
 
 # Directory Structure
 

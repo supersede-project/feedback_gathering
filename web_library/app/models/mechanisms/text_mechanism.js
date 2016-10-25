@@ -27,6 +27,7 @@ define(["require", "exports", './mechanism', '../parameters/parameter_value_prop
                 currentLength: 0,
                 maxLength: this.getParameterValue('maxLength'),
                 maxLengthVisible: this.getParameterValue('maxLengthVisible'),
+                maxLengthStrict: this.getParameterValue('maxLengthStrict'),
                 textareaStyle: textareaStyle,
                 labelStyle: labelStyle,
                 clearInput: this.getParameterValue('clearInput'),

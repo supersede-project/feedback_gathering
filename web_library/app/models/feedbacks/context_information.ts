@@ -16,4 +16,31 @@ export class ContextInformation {
         this.country = country;
         this.region = region;
     }
+
+    static create() {
+        var resolution = window.screen.availHeight + 'x' + window.screen.availWidth;
+        var userAgent = navigator.userAgent;
+
+        var d = new Date();
+        var localTime = d.toString();
+        var timeZone = d.toString().split("GMT")[1].split(" (")[0];
+
+        var devicePixelRatio = ContextInformation.getDevicePixelRatio();
+        var country = null;
+        var region = null;
+        return new ContextInformation(resolution, userAgent, localTime, timeZone, devicePixelRatio, country, region);
+    }
+
+    private static getDevicePixelRatio():number {
+        var ratio = 1;
+        // To account for zoom, change to use deviceXDPI instead of systemXDPI
+        if (window.screen.systemXDPI !== undefined && window.screen.logicalXDPI       !== undefined && window.screen.systemXDPI > window.screen.logicalXDPI) {
+            // Only allow for values > 1
+            ratio = window.screen.systemXDPI / window.screen.logicalXDPI;
+        }
+        else if (window.devicePixelRatio !== undefined) {
+            ratio = window.devicePixelRatio;
+        }
+        return ratio;
+    }
 }

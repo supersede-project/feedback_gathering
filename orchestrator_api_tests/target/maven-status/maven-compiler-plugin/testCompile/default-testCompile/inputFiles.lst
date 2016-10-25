@@ -1,8 +1,8 @@
-/home/flo/workspace/orchestrator_api_tests/test/ch/uzh/ifi/feedback/orchestrator/test/OrchestratorServletUserTest.java
-/home/flo/workspace/orchestrator_api_tests/test/ch/uzh/ifi/feedback/orchestrator/test/OrchestratorServletApplicationTest.java
-/home/flo/workspace/orchestrator_api_tests/test/ch/uzh/ifi/feedback/orchestrator/test/OrchestratorServletConfigurationTest.java
-/home/flo/workspace/orchestrator_api_tests/test/ch/uzh/ifi/feedback/orchestrator/test/OrchestratorServletGeneralConfigurationTest.java
-/home/flo/workspace/orchestrator_api_tests/test/ch/uzh/ifi/feedback/orchestrator/test/OrchestratorServletTest.java
-/home/flo/workspace/orchestrator_api_tests/test/ch/uzh/ifi/feedback/orchestrator/test/OrchestratorServletMechanismTest.java
-/home/flo/workspace/orchestrator_api_tests/test/ch/uzh/ifi/feedback/orchestrator/test/OrchestratorServletUserGroupTest.java
-/home/flo/workspace/orchestrator_api_tests/test/ch/uzh/ifi/feedback/orchestrator/test/OrchestratorServletParameterTest.java
+/home/flo/masterproject/repository/feedback_gathering/orchestrator_api_tests/test/ch/uzh/ifi/feedback/orchestrator/test/OrchestratorServletTest.java
+/home/flo/masterproject/repository/feedback_gathering/orchestrator_api_tests/test/ch/uzh/ifi/feedback/orchestrator/test/OrchestratorServletApplicationTest.java
+/home/flo/masterproject/repository/feedback_gathering/orchestrator_api_tests/test/ch/uzh/ifi/feedback/orchestrator/test/OrchestratorServletUserGroupTest.java
+/home/flo/masterproject/repository/feedback_gathering/orchestrator_api_tests/test/ch/uzh/ifi/feedback/orchestrator/test/OrchestratorServletConfigurationTest.java
+/home/flo/masterproject/repository/feedback_gathering/orchestrator_api_tests/test/ch/uzh/ifi/feedback/orchestrator/test/OrchestratorServletParameterTest.java
+/home/flo/masterproject/repository/feedback_gathering/orchestrator_api_tests/test/ch/uzh/ifi/feedback/orchestrator/test/OrchestratorServletUserTest.java
+/home/flo/masterproject/repository/feedback_gathering/orchestrator_api_tests/test/ch/uzh/ifi/feedback/orchestrator/test/OrchestratorServletMechanismTest.java
+/home/flo/masterproject/repository/feedback_gathering/orchestrator_api_tests/test/ch/uzh/ifi/feedback/orchestrator/test/OrchestratorServletGeneralConfigurationTest.java

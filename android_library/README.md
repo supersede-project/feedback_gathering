@@ -51,3 +51,11 @@ In this example Android Studio is used as the IDE with Gradle as the build tool.
 
 More information about the usage of the library can be found in the GitHub Wiki in the Usage section under:
 https://github.com/supersede-project/monitor_feedback/wiki/Usage#android-client
+
+## Compatibility:
+If the library was setup and integrated as instructed, it should work fine on Android mobile phones
+with an SDK version of 17 or higher (Jelly Bean MR1, Android 4.2). There is no guarantee if the library
+works as expected on Tablets or other similar devices running Android.
+The library was thoroughly tested on the following two devices:
+* LG Nexus 5X running Android Nougat version 7.0
+* Samsung Galaxy J1 running Android KitKat version 4.4.4

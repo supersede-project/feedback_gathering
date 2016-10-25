@@ -4,6 +4,7 @@ import {PullConfiguration} from '../configurations/pull_configuration';
 import {PushConfiguration} from '../configurations/push_configuration';
 import {ConfigurationFactory} from '../configurations/configuration_factory';
 import {configurationTypes} from '../../js/config';
+import {ParameterValuePropertyPair} from '../parameters/parameter_value_property_pair';
 
 
 export class Application {
@@ -43,8 +44,64 @@ export class Application {
      *  Context object
      */
     getContextForView() {
+        if(this.generalConfiguration.getParameterValue('reviewFontType') === 'bold') {
+            var reviewFontTypeCSSPair = new ParameterValuePropertyPair('reviewFontType', 'font-weight');
+        } else {
+            var reviewFontTypeCSSPair = new ParameterValuePropertyPair('reviewFontType', 'font-style');
+        }
+
+        var reviewStyle = this.getCssStyle([
+            new ParameterValuePropertyPair('reviewFontFamily', 'font-family'),
+            reviewFontTypeCSSPair
+        ]);
+
+        if(this.generalConfiguration.getParameterValue('mandatoryLabelStyle') === 'bold') {
+            var mandatoryLabelStyle = this.getCssStyle([
+                new ParameterValuePropertyPair('mandatoryLabelStyle', 'font-weight'),
+            ]);
+        } else {
+            var mandatoryLabelStyle = this.getCssStyle([
+                new ParameterValuePropertyPair('mandatoryLabelStyle', 'font-style'),
+            ]);
+        }
+
         return {
-            reviewButtonPosition: this.generalConfiguration.getParameterValue('reviewButtonPosition')
+            reviewButtonPosition: this.generalConfiguration.getParameterValue('reviewButtonPosition'),
+            reviewStyle: reviewStyle,
+            mandatorySign: this.generalConfiguration.getParameterValue('mandatorySign'),
+            mandatoryLabelStyle: mandatoryLabelStyle,
+            discardAsButton: this.generalConfiguration.getParameterValue('discardAsButton'),
+            submissionPageMessage: this.generalConfiguration.getParameterValue('submissionPageMessage'),
         };
+    }
+
+    /**
+     * Method to generate a html style value string.
+     *
+     * @param parameterValuePropertyPair
+     *  The pairs of 1) parameter in the parameters of the config and 2) the css property to use for this parameter's value
+     * @returns {string}
+     */
+    getCssStyle(parameterValuePropertyPair:ParameterValuePropertyPair[]): string {
+        var cssStyles = '';
+        for(var i = 0; i < parameterValuePropertyPair.length; i++) {
+            var parameterPropertyPair = parameterValuePropertyPair[i];
+            if (this.generalConfiguration.getParameterValue(parameterPropertyPair.parameter) !== null) {
+                var unit = this.getCSSPropertyUnit(parameterPropertyPair.property);
+                cssStyles += parameterPropertyPair.property + ': ' + this.generalConfiguration.getParameterValue(parameterPropertyPair.parameter) + unit + ';';
+                if(i !== parameterValuePropertyPair.length - 1) {
+                    cssStyles += ' ';
+                }
+            }
+        }
+        return cssStyles;
+    }
+
+    getCSSPropertyUnit(property: string) {
+        if(property === 'font-size') {
+            return 'px'
+        } else {
+            return '';
+        }
     }
 }
