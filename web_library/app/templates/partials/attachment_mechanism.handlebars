@@ -1,6 +1,6 @@
 {{#if active}}
     <section id="attachmentMechanism{{ id }}" class="feedback-mechanism horizontal attachment-type">
-        <p>{{ title }}</p>
+        <p style="{{#if mandatory}}{{ ../mandatoryLabelStyle }}{{/if}}">{{ title }}{{#if mandatory }} {{ ../mandatorySign }}{{/if}}</p>
 
         <article class="file-upload-box drop-area">
             <input type="file" name="files[]" id="file" multiple/>

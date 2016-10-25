@@ -1009,9 +1009,6 @@ section.dialog-navigation {
 .clearfix {
   clear: both; }
 
-.mechanism-review {
-  font-style: italic; }
-
 .server-response {
   display: block;
   margin-top: 20px;

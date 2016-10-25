@@ -4,7 +4,7 @@
     <script src="{{distPath}}audio/app.js"></script>
     <script src="{{distPath}}audio/Fr.voice.js"></script>
     <section id="audioMechanism{{ id }}" class="feedback-mechanism horizontal audio-type">
-        <p>{{ title }}</p>
+        <p style="{{#if mandatory}}{{ ../mandatoryLabelStyle }}{{/if}}">{{ title }}{{#if mandatory }} {{ ../mandatorySign }}{{/if}}</p>
         <audio controls src="" id="audio"></audio>
         <div class="audio-buttons">
             <a id="record"><img src="{{distPath}}img/ic_mic_none_black_24dp_2x.png" data-default-src="{{distPath}}img/ic_mic_none_black_24dp_2x.png" data-active-src="{{distPath}}img/ic_mic_black_24dp_2x.png" /></a>

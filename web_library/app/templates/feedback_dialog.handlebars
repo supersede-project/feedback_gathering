@@ -20,9 +20,9 @@
                     {{/compare}}
                     {{#compare type "TEXT_TYPE" operator="==="}}
                         {{#if active}}
-                            <section id="textMechanism{{ id }}" class="feedback-mechanism horizontal text-type">
-                                <p class="text-type-label explanation col col-left" style="{{ labelStyle }}">
-                                    {{ label }}
+                            <section id="textMechanism{{ id }}" class="feedback-mechanism horizontal text-type{{#if mandatory }} mandatory{{/if}}">
+                                <p class="text-type-label explanation col col-left" style="{{ labelStyle }}{{#if mandatory}} {{ ../mandatoryLabelStyle }}{{/if}}">
+                                    {{ label }}{{#if mandatory }} {{ ../mandatorySign }}{{/if}}
                                 </p>
 
                                 <article class="col col-right">
@@ -151,7 +151,7 @@
             </article>
             <article data-feedback-page="2" class="feedback-page">
                 <div class="clearfix"></div>
-                <div class="feedback-review">
+                <div class="feedback-review" style="{{ reviewStyle }}">
                     <h2>{{t "general.review_feedback_title" }}:</h2>
                     <p class="mechanism-review text-review">
 
