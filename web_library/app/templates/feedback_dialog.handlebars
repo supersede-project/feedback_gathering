@@ -146,7 +146,11 @@
                     <button class="button pull-right feedback-dialog-forward navigation-button">{{t "general.review_feedback" }}</button>
                 {{/compare}}
 
-                <a href="#" class="discard-feedback">{{t "general.discard_feedback" }}</a>
+                {{#if discardAsButton }}
+                    <button class="button discard-feedback">{{t "general.discard_feedback" }}</button>
+                {{else}}
+                    <a href="#" class="discard-feedback">{{t "general.discard_feedback" }}</a>
+                {{/if}}
                 <div class="clearfix"></div>
             </article>
             <article data-feedback-page="2" class="feedback-page">

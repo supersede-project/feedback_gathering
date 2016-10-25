@@ -48,7 +48,8 @@ define(["require", "exports", '../configurations/general_configuration', '../con
                 reviewButtonPosition: this.generalConfiguration.getParameterValue('reviewButtonPosition'),
                 reviewStyle: reviewStyle,
                 mandatorySign: this.generalConfiguration.getParameterValue('mandatorySign'),
-                mandatoryLabelStyle: mandatoryLabelStyle
+                mandatoryLabelStyle: mandatoryLabelStyle,
+                discardAsButton: this.generalConfiguration.getParameterValue('discardAsButton'),
             };
         };
         Application.prototype.getCssStyle = function (parameterValuePropertyPair) {
