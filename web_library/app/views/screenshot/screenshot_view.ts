@@ -78,6 +78,7 @@ export class ScreenshotView {
         var myThis = this;
 
         html2canvas(this.elementToCapture, {
+            useCORS: true,
             onrendered: function (canvas) {
                 myThis.showElements();
                 myThis.canvas = canvas;

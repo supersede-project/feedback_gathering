@@ -42,6 +42,7 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
             this.hideElements();
             var myThis = this;
             html2canvas(this.elementToCapture, {
+                useCORS: true,
                 onrendered: function (canvas) {
                     myThis.showElements();
                     myThis.canvas = canvas;
