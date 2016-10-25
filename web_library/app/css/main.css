@@ -883,7 +883,8 @@ table.current-files {
   left: 0;
   padding: 4px 10px;
   text-decoration: none;
-  box-shadow: 1px 1px 1px 0 #677a00; }
+  box-shadow: 1px 1px 1px 0 #677a00;
+  display: none; }
 
 .feedback-container {
   display: none;
