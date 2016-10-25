@@ -1246,7 +1246,6 @@ button.screenshot-operation {
   position: relative;
   top: -5px; }
 
-/* intermediate dialog */
 #intermediateDialog {
   display: none;
   padding: 20px;
@@ -1275,5 +1274,11 @@ a.discard-feedback {
   a.discard-feedback:hover {
     color: #7c9009;
     text-decoration: underline; }
+
+.submission-message {
+  margin-top: 25px;
+  margin-bottom: 15px;
+  color: #858786;
+  font-size: 13px; }
 
 /*# sourceMappingURL=main.css.map */

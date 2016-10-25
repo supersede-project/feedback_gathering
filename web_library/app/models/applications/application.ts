@@ -71,6 +71,7 @@ export class Application {
             mandatorySign: this.generalConfiguration.getParameterValue('mandatorySign'),
             mandatoryLabelStyle: mandatoryLabelStyle,
             discardAsButton: this.generalConfiguration.getParameterValue('discardAsButton'),
+            submissionPageMessage: this.generalConfiguration.getParameterValue('submissionPageMessage'),
         };
     }
 

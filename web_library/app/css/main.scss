@@ -497,8 +497,6 @@ button.screenshot-operation {
   top: -5px;
 }
 
-/* intermediate dialog */
-
 #intermediateDialog {
   display: none;
   padding: 20px;
@@ -537,4 +535,11 @@ a.discard-feedback {
     color: $dialogTitlebarColor;
     text-decoration: underline;
   }
+}
+
+.submission-message {
+  margin-top: 25px;
+  margin-bottom: 15px;
+  color: #858786;
+  font-size: 13px;
 }

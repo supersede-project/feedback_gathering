@@ -50,6 +50,7 @@ define(["require", "exports", '../configurations/general_configuration', '../con
                 mandatorySign: this.generalConfiguration.getParameterValue('mandatorySign'),
                 mandatoryLabelStyle: mandatoryLabelStyle,
                 discardAsButton: this.generalConfiguration.getParameterValue('discardAsButton'),
+                submissionPageMessage: this.generalConfiguration.getParameterValue('submissionPageMessage'),
             };
         };
         Application.prototype.getCssStyle = function (parameterValuePropertyPair) {

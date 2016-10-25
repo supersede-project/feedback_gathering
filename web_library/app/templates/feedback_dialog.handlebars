@@ -189,6 +189,11 @@
                         {{/compare}}
                     {{/each}}
                 </div>
+                {{#if submissionPageMessage }}
+                    <p class="submission-message">
+                        {{ submissionPageMessage }}
+                    </p>
+                {{/if}}
                 <section class="dialog-navigation">
                     <button class="button feedback-dialog-backward navigation-button">{{t "general.back" }}</button>
                     <button type="button"
