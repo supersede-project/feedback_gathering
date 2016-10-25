@@ -16,7 +16,8 @@ define(["require", "exports", './mechanism'], function (require, exports, mechan
         };
         ScreenshotMechanism.prototype.getContext = function () {
             return {
-                autoTake: this.getParameterValue('autoTake')
+                autoTake: this.getParameterValue('autoTake'),
+                annotationExplanation: this.getParameterValue('annotationExplanation'),
             };
         };
         return ScreenshotMechanism;

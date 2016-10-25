@@ -18,7 +18,8 @@ export class ScreenshotMechanism extends Mechanism {
 
     getContext():any {
         return {
-            autoTake: this.getParameterValue('autoTake')
+            autoTake: this.getParameterValue('autoTake'),
+            annotationExplanation: this.getParameterValue('annotationExplanation'),
         }
     }
 }
