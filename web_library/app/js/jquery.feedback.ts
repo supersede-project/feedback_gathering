@@ -45,7 +45,6 @@ export var feedbackPluginModule = function ($, window, document) {
     var distPath;
     var userId;
     var language:string;
-    // TODO support multiple attachment mechanisms
     var dropArea;
     var dialogCSSClass;
     var colorPickerCSSClass;
@@ -171,7 +170,7 @@ export var feedbackPluginModule = function ($, window, document) {
             modal = generalConfiguration.getParameterValue('dialogModal');
         }
 
-        var dialog = initDialog($('#' + dialogId), title, modal);
+        var dialog = initDialog($('#' + dialogId), title, modal, dialogId);
         addEvents(dialogId, configuration);
         return dialog;
     };
@@ -181,7 +180,7 @@ export var feedbackPluginModule = function ($, window, document) {
         var html = template({});
         $('body').append(html);
 
-        var dialog = initDialog($('#' + dialogId), generalConfiguration.getParameterValue('dialogTitle'), true);
+        var dialog = initDialog($('#' + dialogId), generalConfiguration.getParameterValue('dialogTitle'), true, dialogId);
         $('#feedbackYes').on('click', function () {
             dialog.dialog('close');
             openDialog(pullDialog, configuration);
@@ -284,15 +283,20 @@ export var feedbackPluginModule = function ($, window, document) {
      *  The title of the dialog
      * @param modal
      *  whether the dialog behaviour is modal or not
+     * @param dialogId
+     *  ID of the dialog
      *
      * Initializes the dialog on a given element and opens it.
      */
-    var initDialog = function (dialogContainer, title, modal) {
+    var initDialog = function (dialogContainer, title, modal, dialogId) {
         var dialogObject = dialogContainer.dialog(
             $.extend({}, dialogOptions, {
                 close: function () {
                     dialogObject.dialog("close");
                     active = false;
+                },
+                open: function() {
+                    $('[aria-describedby="' + dialogId + '"] .ui-dialog-titlebar-close').attr('title', i18n.t('general.dialog_close_button_title'));
                 },
                 create: function (event, ui) {
                     var widget = $(this).dialog("widget");

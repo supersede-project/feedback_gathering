@@ -1,4 +1,4 @@
-define(["require", "exports", './config', '../views/pagination_container', '../views/screenshot/screenshot_view', './helpers/i18n', '../models/feedbacks/feedback', './helpers/page_navigation', '../services/application_service', './helpers/array_shuffle', '../templates/feedback_dialog.handlebars', '../templates/feedback_dialog.handlebars', '../templates/intermediate_dialog.handlebars', '../models/feedbacks/rating_feedback', '../models/feedbacks/screenshot_feedback', '../models/feedbacks/attachment_feedback', '../models/feedbacks/audio_feedback', '../models/feedbacks/context_information', './lib/jquery.star-rating-svg.js', './jquery.validate', './jquery.fileupload', './lib/html2canvas.js'], function (require, exports, config_1, pagination_container_1, screenshot_view_1, i18n_1, feedback_1, page_navigation_1, application_service_1, array_shuffle_1, dialogTemplate, pullDialogTemplate, intermediateDialogTemplate, rating_feedback_1, screenshot_feedback_1, attachment_feedback_1, audio_feedback_1, context_information_1) {
+define(["require", "exports", './config', '../views/pagination_container', '../views/screenshot/screenshot_view', './helpers/i18n', 'i18next', '../models/feedbacks/feedback', './helpers/page_navigation', '../services/application_service', './helpers/array_shuffle', '../templates/feedback_dialog.handlebars', '../templates/feedback_dialog.handlebars', '../templates/intermediate_dialog.handlebars', '../models/feedbacks/rating_feedback', '../models/feedbacks/screenshot_feedback', '../models/feedbacks/attachment_feedback', '../models/feedbacks/audio_feedback', '../models/feedbacks/context_information', './lib/jquery.star-rating-svg.js', './jquery.validate', './jquery.fileupload', './lib/html2canvas.js'], function (require, exports, config_1, pagination_container_1, screenshot_view_1, i18n_1, i18n, feedback_1, page_navigation_1, application_service_1, array_shuffle_1, dialogTemplate, pullDialogTemplate, intermediateDialogTemplate, rating_feedback_1, screenshot_feedback_1, attachment_feedback_1, audio_feedback_1, context_information_1) {
     "use strict";
     var mockData = require('json!../services/mocks/dev/applications_mock.json');
     exports.feedbackPluginModule = function ($, window, document) {
@@ -100,14 +100,14 @@ define(["require", "exports", './config', '../views/pagination_container', '../v
             if (generalConfiguration.getParameterValue('dialogModal') !== null && generalConfiguration.getParameterValue('dialogModal') !== "") {
                 modal = generalConfiguration.getParameterValue('dialogModal');
             }
-            var dialog = initDialog($('#' + dialogId), title, modal);
+            var dialog = initDialog($('#' + dialogId), title, modal, dialogId);
             addEvents(dialogId, configuration);
             return dialog;
         };
         var initIntermediateDialogTemplate = function (template, dialogId, configuration, pullDialog, generalConfiguration) {
             var html = template({});
             $('body').append(html);
-            var dialog = initDialog($('#' + dialogId), generalConfiguration.getParameterValue('dialogTitle'), true);
+            var dialog = initDialog($('#' + dialogId), generalConfiguration.getParameterValue('dialogTitle'), true, dialogId);
             $('#feedbackYes').on('click', function () {
                 dialog.dialog('close');
                 openDialog(pullDialog, configuration);
@@ -176,11 +176,14 @@ define(["require", "exports", './config', '../views/pagination_container', '../v
             screenshotMechanism.setScreenshotView(screenshotView);
             return screenshotView;
         };
-        var initDialog = function (dialogContainer, title, modal) {
+        var initDialog = function (dialogContainer, title, modal, dialogId) {
             var dialogObject = dialogContainer.dialog($.extend({}, config_1.dialogOptions, {
                 close: function () {
                     dialogObject.dialog("close");
                     active = false;
+                },
+                open: function () {
+                    $('[aria-describedby="' + dialogId + '"] .ui-dialog-titlebar-close').attr('title', i18n.t('general.dialog_close_button_title'));
                 },
                 create: function (event, ui) {
                     var widget = $(this).dialog("widget");
