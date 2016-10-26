@@ -8,7 +8,7 @@ To generate the .war file:
 - Download the monitors you are interested in
 - From command line:
 	- _cd /[path-to-specific-monitor]_
-    - _gradle war_
+    - _./gradlew war_
     - Generated war is placed in _/[path-to-specific-monitor]/build/libs_
 - From Eclipse:
 	- Open monitor project in Eclipse
