@@ -268,7 +268,7 @@ export var feedbackPluginModule = function ($, window, document) {
             elementsToHide = ['.ui-widget-overlay.ui-front', dialogSelector];
         // TODO attention: circular dependency
         var screenshotView = new ScreenshotView(screenshotMechanism, screenshotPreview, screenshotCaptureButton,
-            elementToCapture, container, distPath, elementsToHide);
+            elementToCapture, container, distPath, elementsToHide, screenshotMechanism.getParameterValue('manipulationOnObject'));
         screenshotView.colorPickerCSSClass = colorPickerCSSClass;
         screenshotView.setDefaultStrokeWidth(defaultStrokeWidth);
 
