@@ -23,6 +23,7 @@ import {shuffle} from './helpers/array_shuffle';
 import * as dialogTemplate from '../templates/feedback_dialog.handlebars';
 import * as pullDialogTemplate from '../templates/feedback_dialog.handlebars';
 import * as intermediateDialogTemplate from '../templates/intermediate_dialog.handlebars';
+import * as notificationTemplate from '../templates/notification.handlebars';
 import {GeneralConfiguration} from '../models/configurations/general_configuration';
 import {TextFeedback} from '../models/feedbacks/text_feedback';
 import {RatingFeedback} from '../models/feedbacks/rating_feedback';
@@ -171,7 +172,7 @@ export var feedbackPluginModule = function ($, window, document) {
         }
 
         var dialog = initDialog($('#' + dialogId), title, modal, dialogId);
-        addEvents(dialogId, configuration);
+        addEvents(dialogId, configuration, generalConfiguration);
         return dialog;
     };
 
@@ -200,24 +201,35 @@ export var feedbackPluginModule = function ($, window, document) {
      * Then an AJAX request is done to send the submitted feedback to the feedback repository. A success or failure
      * message is shown after the request is done.
      */
-    var sendFeedback = function (formData:FormData, configuration:ConfigurationInterface) {
+    var sendFeedback = function (formData:FormData, configuration:ConfigurationInterface, generalConfiguration:GeneralConfiguration) {
         $.ajax({
-            url: apiEndpointRepository + 'feedback_repository/' + language + '/feedbacks/',
+            url: apiEndpointRepository + 'feedback_repository/' + language + '/applications/' + applicationId + '/feedbacks/',
             type: 'POST',
             data: formData,
             dataType: 'json',
             processData: false,
             contentType: false,
             success: function (data) {
-                $('.server-response').addClass('success').text(defaultSuccessMessage);
-                console.log('response');
-                console.log(data);
                 resetPlugin(configuration);
+                if(generalConfiguration.getParameterValue('closeDialogOnSuccess')) {
+                    dialog.dialog('close');
+                    pageNotification(defaultSuccessMessage);
+                } else {
+                    $('.server-response').addClass('success').text(defaultSuccessMessage);
+                }
             },
             error: function (data) {
                 $('.server-response').addClass('error').text('Failure: ' + JSON.stringify(data));
             }
         });
+    };
+
+    var pageNotification = function(message:string) {
+        var html = notificationTemplate({message: message});
+        $('html').append(html);
+        setTimeout(function() {
+            $(".feedback-notification").remove();
+        }, 3000);
     };
 
     var resetPlugin = function (configuration) {
@@ -322,7 +334,7 @@ export var feedbackPluginModule = function ($, window, document) {
      * - Send event for the feedback form
      * - Character count event for the text mechanism
      */
-    var addEvents = function (containerId, configuration:ConfigurationInterface) {
+    var addEvents = function (containerId, configuration:ConfigurationInterface, generalConfiguration:GeneralConfiguration) {
         var container = $('#' + containerId);
         var textareas = container.find('textarea.text-type-text');
         var textMechanisms = configuration.getMechanismConfig(mechanismTypes.textType);
@@ -341,12 +353,12 @@ export var feedbackPluginModule = function ($, window, document) {
                 var invalidTextareas = container.find('textarea.text-type-text.invalid');
                 if (invalidTextareas.length == 0) {
                     prepareFormData(container, configuration, function (formData) {
-                        sendFeedback(formData, configuration);
+                        sendFeedback(formData, configuration, generalConfiguration);
                     });
                 }
             } else {
                 prepareFormData(container, configuration, function (formData) {
-                    sendFeedback(formData, configuration);
+                    sendFeedback(formData, configuration, generalConfiguration);
                 });
             }
         });
