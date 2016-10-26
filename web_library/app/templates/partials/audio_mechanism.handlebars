@@ -3,7 +3,7 @@
     <script src="{{distPath}}audio/recorder.js"></script>
     <script src="{{distPath}}audio/app.js"></script>
     <script src="{{distPath}}audio/Fr.voice.js"></script>
-    <section id="audioMechanism{{ id }}" class="feedback-mechanism horizontal audio-type">
+    <section id="audioMechanism{{ id }}" class="feedback-mechanism {{../labelPositioning}} audio-type">
         <p style="{{#if mandatory}}{{ ../mandatoryLabelStyle }}{{/if}}">{{ title }}{{#if mandatory }} {{ ../mandatorySign }}{{/if}}</p>
         <audio controls src="" id="audio"></audio>
         <div class="audio-buttons">
