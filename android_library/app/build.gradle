@@ -5,7 +5,7 @@ android {
     buildToolsVersion "23.0.3"
 
     defaultConfig {
-        applicationId "com.example.matthias.hostapplication"
+        applicationId "ch.uzh.supersede.hostapplication"
         minSdkVersion 17
         targetSdkVersion 24
         versionCode 1
