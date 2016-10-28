@@ -23,15 +23,15 @@ public class MonitorTool extends OrchestratorItem<MonitorTool>{
 	@NotNull
 	private String name;
 	
-	@DbAttribute("monitor_type_id")
-	private Integer monitorTypeId;
+	@DbAttribute("monitor_type_name")
+	private String monitorTypeName;
 	
-	public Integer getMonitorTypeId() {
-		return monitorTypeId;
+	public String getMonitorTypeName() {
+		return monitorTypeName;
 	}
 
-	public void setMonitorTypeId(Integer monitorTypeId) {
-		this.monitorTypeId = monitorTypeId;
+	public void setMonitorTypeName(String monitorTypeName) {
+		this.monitorTypeName = monitorTypeName;
 	}
 
 	@DbIgnore

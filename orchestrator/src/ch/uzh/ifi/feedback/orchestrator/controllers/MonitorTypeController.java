@@ -45,14 +45,14 @@ public class MonitorTypeController extends RestController<MonitorType>{
 	
 	@GET
 	@Path("/monitors/{id-type-of-monitor}")
-	public MonitorType GetById(@PathParam("id-type-of-monitor") Integer id) throws Exception {
-		return super.GetById(id);
+	public MonitorType GetById(@PathParam("id-type-of-monitor") String id) throws Exception {
+		return super.GetById(id.hashCode());
 	}
 	
 	@DELETE
 	@Path("/monitors/{id-type-of-monitor}")
-	public void DeleteMonitorTool(@PathParam("id-type-of-monitor") Integer id) throws Exception {
-		super.Delete(id);
+	public void DeleteMonitorTool(@PathParam("id-type-of-monitor") String id) throws Exception {
+		super.Delete(id.hashCode());
 	}
 	
 	

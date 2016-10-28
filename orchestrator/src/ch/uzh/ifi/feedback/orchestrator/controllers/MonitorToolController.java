@@ -28,24 +28,24 @@ public class MonitorToolController extends RestController<MonitorTool> {
 	
 	@POST
 	@Path("/monitors/{id-type-of-monitor}")
-	public MonitorTool InsertMonitorTool(@PathParam("id-type-of-monitor") Integer id, 
+	public MonitorTool InsertMonitorTool(@PathParam("id-type-of-monitor") String id, 
 			MonitorTool tool) throws Exception {
-		tool.setMonitorTypeId(id);
+		tool.setMonitorTypeName(id);
 		return super.Insert(tool);
 	}
 	
 	@GET
 	@Path("/monitors/{id-type-of-monitor}/{id-monitoring-tool}")
-	public MonitorTool GetMonitorTool(@PathParam("id-type-of-monitor") Integer type,
-			@PathParam("id-monitoring-tool") Integer tool) throws Exception {
-		return super.GetById(tool);
+	public MonitorTool GetMonitorTool(@PathParam("id-type-of-monitor") String type,
+			@PathParam("id-monitoring-tool") String tool) throws Exception {
+		return super.GetById(tool.hashCode());
 	}
 	
 	@DELETE
 	@Path("/monitors/{id-type-of-monitor}/{id-monitoring-tool}")
-	public void DeleteTool(@PathParam("id-type-of-monitor") Integer type,
-			@PathParam("id-monitoring-tool") Integer tool) throws Exception {
-		super.Delete(tool);
+	public void DeleteTool(@PathParam("id-type-of-monitor") String type,
+			@PathParam("id-monitoring-tool") String tool) throws Exception {
+		super.Delete(tool.hashCode());
 	}
 	
 

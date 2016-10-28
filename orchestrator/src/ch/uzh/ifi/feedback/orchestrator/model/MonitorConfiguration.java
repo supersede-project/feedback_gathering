@@ -17,15 +17,15 @@ public class MonitorConfiguration extends OrchestratorItem<MonitorConfiguration>
 	@DbAttribute("monitor_configuration_id")
 	private Integer id;
 	
-	@DbAttribute("monitor_tool_id")
-	private Integer monitorToolId;
+	@DbAttribute("monitor_tool_name")
+	private String monitorToolName;
 	
-	public Integer getMonitorToolId() {
-		return monitorToolId;
+	public String getMonitorToolName() {
+		return monitorToolName;
 	}
 
-	public void setMonitorToolId(Integer monitorToolId) {
-		this.monitorToolId = monitorToolId;
+	public void setMonitorToolName(String monitorToolName) {
+		this.monitorToolName = monitorToolName;
 	}
 
 	@NotNull

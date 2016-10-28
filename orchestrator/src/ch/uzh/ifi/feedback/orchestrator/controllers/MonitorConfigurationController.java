@@ -3,6 +3,13 @@ package ch.uzh.ifi.feedback.orchestrator.controllers;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpPut;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
+
+import com.google.gson.JsonObject;
 import com.google.inject.servlet.RequestScoped;
 
 import ch.uzh.ifi.feedback.library.rest.RestController;
@@ -20,6 +27,8 @@ import ch.uzh.ifi.feedback.orchestrator.validation.MonitorConfigurationValidator
 @RequestScoped
 @Controller(MonitorConfigurationController.class)
 public class MonitorConfigurationController extends RestController<MonitorConfiguration> {
+	
+	private String monitorManagerHost = "localhost:8080/monitor_manager/";
 
 	public MonitorConfigurationController(MonitorConfigurationService dbService,
 			MonitorConfigurationValidator validator, 
@@ -29,36 +38,75 @@ public class MonitorConfigurationController extends RestController<MonitorConfig
 	
 	@POST
 	@Path("/monitors/{id-type-of-monitor}/{id-monitoring-tool}")
-	public MonitorConfiguration InsertMonitorConfiguration(@PathParam("id-type-of-monitor") Integer type, 
-			@PathParam("id-monitoring-tool") Integer tool,
+	public MonitorConfiguration InsertMonitorConfiguration(@PathParam("id-type-of-monitor") String type, 
+			@PathParam("id-monitoring-tool") String tool,
 			MonitorConfiguration configuration) throws Exception {
-		configuration.setMonitorToolId(tool);
+		configuration.setMonitorToolName(tool);
+		
+		CloseableHttpClient client = HttpClientBuilder.create().build();
+		String url = monitorManagerHost + "addConfiguration";
+		HttpPost request = new HttpPost(url);
+		request.addHeader("content-type", "application/json");
+		request.setEntity(new StringEntity(getConfigurationJson(configuration).toString()));
+		client.execute(request);
+		
 		return super.Insert(configuration);
 	}
 	
 	@GET
 	@Path("/monitors/{id-type-of-monitor}/{id-monitoring-tool}/{id-tool-configuration}")
-	public MonitorConfiguration GetMonitorConfiguration(@PathParam("id-type-of-monitor") Integer type, 
-			@PathParam("id-monitoring-tool") Integer tool,
+	public MonitorConfiguration GetMonitorConfiguration(@PathParam("id-type-of-monitor") String type, 
+			@PathParam("id-monitoring-tool") String tool,
 			@PathParam("id-tool-configuration") Integer configuration) throws Exception {
-		return super.GetById(configuration);
+		return super.GetById(configuration.hashCode());
 	}
 	
 	@PUT
 	@Path("/monitors/{id-type-of-monitor}/{id-monitoring-tool}/{id-tool-configuration}")
-	public MonitorConfiguration UpdateMonitorConfiguration(@PathParam("id-type-of-monitor") Integer type, 
-			@PathParam("id-monitoring-tool") Integer tool,
+	public MonitorConfiguration UpdateMonitorConfiguration(@PathParam("id-type-of-monitor") String type, 
+			@PathParam("id-monitoring-tool") String tool,
 			@PathParam("id-tool-configuration") Integer configuration,
 			MonitorConfiguration monitorConfiguration) throws Exception {
+		
+		CloseableHttpClient client = HttpClientBuilder.create().build();
+		String url = monitorManagerHost + "updateConfiguration";
+		HttpPut request = new HttpPut(url);
+		request.addHeader("content-type", "application/json");
+		request.setEntity(new StringEntity(getConfigurationJson(monitorConfiguration).toString()));
+		client.execute(request);
+		
 		return super.Insert(monitorConfiguration);
 	}
 	
 	@DELETE
 	@Path("/monitors/{id-type-of-monitor}/{id-monitoring-tool}/{id-tool-configuration}")
-	public void DeleteMonitorConfiguration(@PathParam("id-type-of-monitor") Integer type, 
-			@PathParam("id-monitoring-tool") Integer tool,
+	public void DeleteMonitorConfiguration(@PathParam("id-type-of-monitor") String type, 
+			@PathParam("id-monitoring-tool") String tool,
 			@PathParam("id-tool-configuration") Integer configuration) throws Exception {
+		
+		CloseableHttpClient client = HttpClientBuilder.create().build();
+		String url = monitorManagerHost + "updateConfiguration";
+		HttpPut request = new HttpPut(url);
+		request.addHeader("content-type", "application/json");
+		JsonObject json = new JsonObject();
+		json.addProperty("id", configuration);
+		request.setEntity(new StringEntity(json.toString()));
+		client.execute(request);
+		
 		super.Delete(configuration);
+	}
+	
+	private JsonObject getConfigurationJson(MonitorConfiguration configuration) {
+		JsonObject json = new JsonObject();
+		json.addProperty("id", configuration.getId());
+		json.addProperty("tool", configuration.getMonitorToolName());
+		json.addProperty("timeSlot",configuration.getTimeSlot());
+		json.addProperty("kafkaEndpoint", configuration.getKafkaEndpoint());
+		json.addProperty("kafkaTopic", configuration.getKafkaTopic());
+		for (String key : configuration.getParams().keySet()) {
+			json.addProperty(key, configuration.getParam(key));
+		}
+		return json;
 	}
 
 }
