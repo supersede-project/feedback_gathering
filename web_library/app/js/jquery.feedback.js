@@ -34,34 +34,53 @@ define(["require", "exports", './config', '../views/pagination_container', '../v
             var pageNavigation = new page_navigation_1.PageNavigation(configuration, $('#' + pushConfigurationDialogId));
             dialog = initTemplate(dialogTemplate, pushConfigurationDialogId, context, configuration, pageNavigation, generalConfiguration);
         };
-        var initPullConfiguration = function (configuration, generalConfiguration, alreadyTriggeredOne) {
-            if (alreadyTriggeredOne === void 0) { alreadyTriggeredOne = false; }
-            if (!alreadyTriggeredOne && configuration.shouldGetTriggered()) {
-                configuration.wasTriggered();
-                var pageNavigation = new page_navigation_1.PageNavigation(configuration, $('#' + pullConfigurationDialogId));
-                var context = prepareTemplateContext(configuration.getContextForView());
-                pullDialog = initTemplate(pullDialogTemplate, pullConfigurationDialogId, context, configuration, pageNavigation, generalConfiguration);
-                var delay = 0;
-                if (configuration.generalConfiguration.getParameterValue('delay')) {
-                    delay = configuration.generalConfiguration.getParameterValue('delay');
-                }
-                if (configuration.generalConfiguration.getParameterValue('intermediateDialog')) {
-                    var intermediateDialog = initIntermediateDialogTemplate(intermediateDialogTemplate, 'intermediateDialog', configuration, pullDialog, generalConfiguration);
-                    if (intermediateDialog !== null) {
-                        setTimeout(function () {
-                            if (!active) {
-                                intermediateDialog.dialog('open');
-                            }
-                        }, delay * 1000);
-                    }
-                }
-                else {
+        var showPullDialog = function (configuration, generalConfiguration) {
+            configuration.wasTriggered();
+            var pageNavigation = new page_navigation_1.PageNavigation(configuration, $('#' + pullConfigurationDialogId));
+            var context = prepareTemplateContext(configuration.getContextForView());
+            pullDialog = initTemplate(pullDialogTemplate, pullConfigurationDialogId, context, configuration, pageNavigation, generalConfiguration);
+            var delay = 0;
+            if (configuration.generalConfiguration.getParameterValue('delay')) {
+                delay = configuration.generalConfiguration.getParameterValue('delay');
+            }
+            if (configuration.generalConfiguration.getParameterValue('intermediateDialog')) {
+                var intermediateDialog = initIntermediateDialogTemplate(intermediateDialogTemplate, 'intermediateDialog', configuration, pullDialog, generalConfiguration);
+                if (intermediateDialog !== null) {
                     setTimeout(function () {
                         if (!active) {
-                            openDialog(pullDialog, configuration);
+                            intermediateDialog.dialog('open');
                         }
                     }, delay * 1000);
                 }
+            }
+            else {
+                setTimeout(function () {
+                    if (!active) {
+                        openDialog(pullDialog, configuration);
+                    }
+                }, delay * 1000);
+            }
+        };
+        var initPullConfiguration = function (configuration, generalConfiguration, alreadyTriggeredOne) {
+            if (alreadyTriggeredOne === void 0) { alreadyTriggeredOne = false; }
+            if (configuration.generalConfiguration.getParameterValue('userAction')) {
+                var userAction = configuration.generalConfiguration.getParameterValue('userAction');
+                var actionName = userAction.filter(function (element) { return element.key === 'actionName'; }).length > 0 ? userAction.filter(function (element) { return element.key === 'actionName'; })[0].value : '';
+                var actionElement = userAction.filter(function (element) { return element.key === 'actionElement'; }).length > 0 ? userAction.filter(function (element) { return element.key === 'actionElement'; })[0].value : '';
+                var actionOnlyOncePerPageLoad = userAction.filter(function (element) { return element.key === 'actionOnlyOncePerPageLoad'; }).length > 0 ? userAction.filter(function (element) { return element.key === 'actionOnlyOncePerPageLoad'; })[0].value : true;
+                if (actionOnlyOncePerPageLoad) {
+                    $('' + actionElement).one(actionName, function () {
+                        showPullDialog(configuration, generalConfiguration);
+                    });
+                }
+                else {
+                    $('' + actionElement).on(actionName, function () {
+                        showPullDialog(configuration, generalConfiguration);
+                    });
+                }
+            }
+            if (!alreadyTriggeredOne && configuration.shouldGetTriggered()) {
+                showPullDialog(configuration, generalConfiguration);
                 return true;
             }
             return false;
