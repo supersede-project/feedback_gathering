@@ -694,7 +694,7 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
                                 jQuery(this).remove();
                             },
                             beforeShow: function (color) {
-                                jQuery(this).spectrum("option", 'color', currentObjectColor);
+                                jQuery(this).spectrum("option", 'color', myThis.getObjectColor(target));
                             }
                         });
                         myThis.screenshotPreviewElement.append(colorLinkElement);
@@ -888,6 +888,27 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
                     this.fabricCanvas.getObjects()[i].lockMovementX = lock;
                 }
             }
+        };
+        ScreenshotView.prototype.getObjectColor = function (object) {
+            if (object.get('type') === 'path-group') {
+                for (var _i = 0, _a = object.paths; _i < _a.length; _i++) {
+                    var path = _a[_i];
+                    if (path.getFill() != "") {
+                        var currentObjectColor = path.getFill();
+                        break;
+                    }
+                }
+            }
+            else if (object.get('type') === 'path' || object.get('type') === 'fabricObject') {
+                var currentObjectColor = object.getStroke();
+            }
+            else if (object.get('type') === 'fillRect') {
+                var currentObjectColor = object.getFill();
+            }
+            else {
+                var currentObjectColor = object.getFill();
+            }
+            return currentObjectColor;
         };
         return ScreenshotView;
     }());
