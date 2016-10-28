@@ -345,7 +345,8 @@ public class RestManager implements IRestManager {
 		
 		Object result = handler.getMethod().invoke(instance, parameters.toArray());
 		
-		if(result != null){
+		if(result != null)
+		{
 			if(serializer != null)
 			{
 				response.getWriter().append(serializer.Serialize(result));
