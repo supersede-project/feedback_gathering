@@ -224,6 +224,30 @@ G&uuml;nter D. Alt, Journalist, ehemaliger Moderator bei ZDF WISO und Mitbegr&uu
                             </div>
                         </div>
 
+
+
+                        <div class="row">
+                            <div class="large-12 columns">
+                                <div id="map" style="width: 100%; height: 300px; margin: 20px 0;"></div>
+                                <script>
+                                    function initMap() {
+                                        // Create a map object and specify the DOM element for display.
+                                        var map = new google.maps.Map(document.getElementById('map'), {
+                                            center: {lat: -34.397, lng: 150.644},
+                                            scrollwheel: false,
+                                            zoom: 8
+                                        });
+                                    }
+
+                                </script>
+                                <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCqG_tZRhmf2VHvnqV7gEQit7ycNBT6eWM&callback=initMap"
+                                        async defer></script>
+                            </div>
+                        </div>
+
+
+
+
                         <div class="row teaserrow">
                             <div class="large-12 columns">
                                 <div class="row">

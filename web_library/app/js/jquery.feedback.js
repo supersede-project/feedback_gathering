@@ -1,4 +1,4 @@
-define(["require", "exports", './config', '../views/pagination_container', '../views/screenshot/screenshot_view', './helpers/i18n', 'i18next', '../models/feedbacks/feedback', './helpers/page_navigation', '../services/application_service', './helpers/array_shuffle', '../templates/feedback_dialog.handlebars', '../templates/feedback_dialog.handlebars', '../templates/intermediate_dialog.handlebars', '../models/feedbacks/rating_feedback', '../models/feedbacks/screenshot_feedback', '../models/feedbacks/attachment_feedback', '../models/feedbacks/audio_feedback', '../models/feedbacks/context_information', './lib/jquery.star-rating-svg.js', './jquery.validate', './jquery.fileupload', './lib/html2canvas.js'], function (require, exports, config_1, pagination_container_1, screenshot_view_1, i18n_1, i18n, feedback_1, page_navigation_1, application_service_1, array_shuffle_1, dialogTemplate, pullDialogTemplate, intermediateDialogTemplate, rating_feedback_1, screenshot_feedback_1, attachment_feedback_1, audio_feedback_1, context_information_1) {
+define(["require", "exports", './config', '../views/pagination_container', '../views/screenshot/screenshot_view', './helpers/i18n', 'i18next', '../models/feedbacks/feedback', './helpers/page_navigation', '../services/application_service', './helpers/array_shuffle', '../templates/feedback_dialog.handlebars', '../templates/feedback_dialog.handlebars', '../templates/intermediate_dialog.handlebars', '../templates/notification.handlebars', '../models/feedbacks/rating_feedback', '../models/feedbacks/screenshot_feedback', '../models/feedbacks/attachment_feedback', '../models/feedbacks/audio_feedback', '../models/feedbacks/context_information', './lib/jquery.star-rating-svg.js', './jquery.validate', './jquery.fileupload', './lib/html2canvas.js'], function (require, exports, config_1, pagination_container_1, screenshot_view_1, i18n_1, i18n, feedback_1, page_navigation_1, application_service_1, array_shuffle_1, dialogTemplate, pullDialogTemplate, intermediateDialogTemplate, notificationTemplate, rating_feedback_1, screenshot_feedback_1, attachment_feedback_1, audio_feedback_1, context_information_1) {
     "use strict";
     var mockData = require('json!../services/mocks/dev/applications_mock.json');
     exports.feedbackPluginModule = function ($, window, document) {
@@ -101,7 +101,7 @@ define(["require", "exports", './config', '../views/pagination_container', '../v
                 modal = generalConfiguration.getParameterValue('dialogModal');
             }
             var dialog = initDialog($('#' + dialogId), title, modal, dialogId);
-            addEvents(dialogId, configuration);
+            addEvents(dialogId, configuration, generalConfiguration);
             return dialog;
         };
         var initIntermediateDialogTemplate = function (template, dialogId, configuration, pullDialog, generalConfiguration) {
@@ -120,24 +120,35 @@ define(["require", "exports", './config', '../views/pagination_container', '../v
             });
             return dialog;
         };
-        var sendFeedback = function (formData, configuration) {
+        var sendFeedback = function (formData, configuration, generalConfiguration) {
             $.ajax({
-                url: config_1.apiEndpointRepository + 'feedback_repository/' + language + '/feedbacks/',
+                url: config_1.apiEndpointRepository + 'feedback_repository/' + language + '/applications/' + config_1.applicationId + '/feedbacks/',
                 type: 'POST',
                 data: formData,
                 dataType: 'json',
                 processData: false,
                 contentType: false,
                 success: function (data) {
-                    $('.server-response').addClass('success').text(config_1.defaultSuccessMessage);
-                    console.log('response');
-                    console.log(data);
                     resetPlugin(configuration);
+                    if (generalConfiguration.getParameterValue('closeDialogOnSuccess')) {
+                        dialog.dialog('close');
+                        pageNotification(config_1.defaultSuccessMessage);
+                    }
+                    else {
+                        $('.server-response').addClass('success').text(config_1.defaultSuccessMessage);
+                    }
                 },
                 error: function (data) {
                     $('.server-response').addClass('error').text('Failure: ' + JSON.stringify(data));
                 }
             });
+        };
+        var pageNotification = function (message) {
+            var html = notificationTemplate({ message: message });
+            $('html').append(html);
+            setTimeout(function () {
+                $(".feedback-notification").remove();
+            }, 3000);
         };
         var resetPlugin = function (configuration) {
             $('textarea.text-type-text').val('');
@@ -170,7 +181,7 @@ define(["require", "exports", './config', '../views/pagination_container', '../v
             var container = $('#' + containerId);
             var dialogSelector = '[aria-describedby="' + containerId + '"]';
             var screenshotPreview = container.find('.screenshot-preview'), screenshotCaptureButton = container.find('button.take-screenshot'), elementToCapture = $('' + elementToCaptureSelector), elementsToHide = ['.ui-widget-overlay.ui-front', dialogSelector];
-            var screenshotView = new screenshot_view_1.ScreenshotView(screenshotMechanism, screenshotPreview, screenshotCaptureButton, elementToCapture, container, distPath, elementsToHide);
+            var screenshotView = new screenshot_view_1.ScreenshotView(screenshotMechanism, screenshotPreview, screenshotCaptureButton, elementToCapture, container, distPath, elementsToHide, screenshotMechanism.getParameterValue('manipulationOnObject'));
             screenshotView.colorPickerCSSClass = colorPickerCSSClass;
             screenshotView.setDefaultStrokeWidth(defaultStrokeWidth);
             screenshotMechanism.setScreenshotView(screenshotView);
@@ -197,7 +208,7 @@ define(["require", "exports", './config', '../views/pagination_container', '../v
             dialogObject.dialog('option', 'dialogClass', dialogCSSClass);
             return dialogObject;
         };
-        var addEvents = function (containerId, configuration) {
+        var addEvents = function (containerId, configuration, generalConfiguration) {
             var container = $('#' + containerId);
             var textareas = container.find('textarea.text-type-text');
             var textMechanisms = configuration.getMechanismConfig(config_1.mechanismTypes.textType);
@@ -212,13 +223,13 @@ define(["require", "exports", './config', '../views/pagination_container', '../v
                     var invalidTextareas = container.find('textarea.text-type-text.invalid');
                     if (invalidTextareas.length == 0) {
                         prepareFormData(container, configuration, function (formData) {
-                            sendFeedback(formData, configuration);
+                            sendFeedback(formData, configuration, generalConfiguration);
                         });
                     }
                 }
                 else {
                     prepareFormData(container, configuration, function (formData) {
-                        sendFeedback(formData, configuration);
+                        sendFeedback(formData, configuration, generalConfiguration);
                     });
                 }
             });

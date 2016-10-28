@@ -60,6 +60,11 @@ export class PaginationContainer {
         }
         feedbackPage.hide();
         nextPage.show();
+
+        // show top of dialog
+        jQuery('html, body').animate({
+            scrollTop: nextPage.offset().top - 100
+        }, 0);
     }
 
     navigateBackward() {

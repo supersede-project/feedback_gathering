@@ -72,6 +72,7 @@ export class Application {
             mandatoryLabelStyle: mandatoryLabelStyle,
             discardAsButton: this.generalConfiguration.getParameterValue('discardAsButton'),
             submissionPageMessage: this.generalConfiguration.getParameterValue('submissionPageMessage'),
+            labelPositioning: this.generalConfiguration.getParameterValue('labelPositioning') === 'top' ? '' : 'horizontal',
         };
     }
 

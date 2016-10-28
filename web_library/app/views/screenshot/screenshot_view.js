@@ -16,9 +16,10 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
     var textTypeObjectIdentifier = 'i-text';
     var cropperTypeObjectIdentifier = 'cropper';
     var ScreenshotView = (function () {
-        function ScreenshotView(screenshotMechanism, screenshotPreviewElement, screenshotCaptureButton, elementToCapture, container, distPath, elementsToHide) {
+        function ScreenshotView(screenshotMechanism, screenshotPreviewElement, screenshotCaptureButton, elementToCapture, container, distPath, elementsToHide, hasBordersAndControls) {
             this.colorPickerCSSClass = 'color-picker';
             this.defaultStrokeWidth = 3;
+            this.hasBordersAndControls = true;
             this.screenshotMechanism = screenshotMechanism;
             this.screenshotPreviewElement = screenshotPreviewElement;
             this.screenshotCaptureButton = screenshotCaptureButton;
@@ -32,6 +33,7 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
             this.addCaptureEventToButton();
             this.croppingIsActive = false;
             this.freehandActive = false;
+            this.hasBordersAndControls = (hasBordersAndControls === null || hasBordersAndControls === undefined) ? true : hasBordersAndControls;
         }
         ScreenshotView.prototype.checkAutoTake = function () {
             if (this.screenshotMechanism.getParameterValue('autoTake')) {
@@ -42,6 +44,7 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
             this.hideElements();
             var myThis = this;
             html2canvas(this.elementToCapture, {
+                useCORS: true,
                 onrendered: function (canvas) {
                     myThis.showElements();
                     myThis.canvas = canvas;
@@ -423,6 +426,8 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
                             var svgObject = fabric.util.groupSVGElements(objects, options);
                             svgObject.set('left', offsetX);
                             svgObject.set('top', offsetY);
+                            svgObject.set('hasBorders', myThis.hasBordersAndControls);
+                            svgObject.set('hasControls', myThis.hasBordersAndControls);
                             svgObject.scale(3);
                             myThis.fabricCanvas.add(svgObject).renderAll();
                             myThis.fabricCanvas.setActiveObject(svgObject);
@@ -438,6 +443,8 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
                                 top: offsetY,
                                 width: 50,
                                 height: 50,
+                                hasBorders: myThis.hasBordersAndControls,
+                                hasControls: myThis.hasBordersAndControls,
                                 type: 'fabricObject',
                                 stroke: defaultColor,
                                 strokeWidth: myThis.defaultStrokeWidth,
@@ -453,6 +460,8 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
                                 top: offsetY,
                                 width: 50,
                                 height: 50,
+                                hasBorders: myThis.hasBordersAndControls,
+                                hasControls: myThis.hasBordersAndControls,
                                 type: 'fillRect',
                                 stroke: defaultColor,
                                 strokeWidth: myThis.defaultStrokeWidth,
@@ -467,6 +476,8 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
                                 left: offsetX,
                                 top: offsetY,
                                 radius: 50,
+                                hasBorders: myThis.hasBordersAndControls,
+                                hasControls: myThis.hasBordersAndControls,
                                 startAngle: 0,
                                 type: 'fabricObject',
                                 endAngle: 2 * Math.PI,
@@ -696,7 +707,19 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
                         target.hide();
                         var fabricCanvas = myThis.fabricCanvas;
                         var activeObject = fabricCanvas.getActiveObject(), activeGroup = fabricCanvas.getActiveGroup();
-                        if (activeGroup) {
+                        if (target.customType === 'arrow') {
+                            fabricCanvas.deactivateAll().renderAll();
+                            if (target.line !== undefined) {
+                                target.line.remove();
+                            }
+                            if (target.arrow !== undefined) {
+                                target.arrow.remove();
+                            }
+                            if (target.circle !== undefined) {
+                                target.circle.remove();
+                            }
+                        }
+                        else if (activeGroup) {
                             var objectsInGroup = activeGroup.getObjects();
                             fabricCanvas.discardActiveGroup();
                             objectsInGroup.forEach(function (object) {
@@ -736,12 +759,13 @@ define(["require", "exports", './screenshot_view_drawing', '../../js/helpers/dat
                 selectable: true,
                 strokeWidth: 3,
                 padding: 1,
-                hasBorders: false,
-                hasControls: false,
+                hasBorders: myThis.hasBordersAndControls,
+                hasControls: myThis.hasBordersAndControls,
                 originX: 'center',
                 originY: 'center',
                 lockScalingX: true,
-                lockScalingY: true
+                lockScalingY: true,
+                lockRotation: true,
             });
             var centerX = (line.x1 + line.x2) / 2, centerY = (line.y1 + line.y2) / 2;
             var deltaX = line.left - centerX, deltaY = line.top - centerY;

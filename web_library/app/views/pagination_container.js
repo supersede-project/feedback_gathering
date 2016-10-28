@@ -37,6 +37,9 @@ define(["require", "exports"], function (require, exports) {
             }
             feedbackPage.hide();
             nextPage.show();
+            jQuery('html, body').animate({
+                scrollTop: nextPage.offset().top - 100
+            }, 0);
         };
         PaginationContainer.prototype.navigateBackward = function () {
             var feedbackPage = this.container.find('.feedback-page[data-feedback-page="' + this.activePage + '"]');

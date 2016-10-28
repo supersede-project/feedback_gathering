@@ -23,7 +23,7 @@ The Feedback Mechanisms for Android are realized as an Android Library Module. T
    * Android Studio:
      1. Import the checked out project into Android Studio.
      2. Go to *Build* --> *Rebuild Project*
-3. The feedback library feedbacklibrary-release.aar file is in the following path /feedbacklibrary/build/outputs/aar
+3. The feedback library feedbacklibrary-release.aar file is in the following path /feedbacklibrary/build/outputs/aar.
 Regarding the Lint errors, check the following link/ticket:<br>
 https://github.com/codepath/android_guides/wiki/Consuming-APIs-with-Retrofit#issues
 
@@ -47,7 +47,7 @@ In this example Android Studio is used as the IDE with Gradle as the build tool.
      * tools:replace="android:label, android:allowBackup"
    * The minimum SDK must be 17 or higher.
 8. In order to use the library, only one import statement is needed:
-   import com.example.matthias.feedbacklibrary.utils.Utils;
+   import ch.uzh.supersede.feedbacklibrary.utils.Utils;
 
 More information about the usage of the library can be found in the GitHub Wiki in the Usage section under:
 https://github.com/supersede-project/monitor_feedback/wiki/Usage#android-client

@@ -16,7 +16,18 @@ define(["require", "exports", './mechanism'], function (require, exports, mechan
         };
         ScreenshotMechanism.prototype.getContext = function () {
             return {
-                autoTake: this.getParameterValue('autoTake')
+                autoTake: this.getParameterValue('autoTake'),
+                annotationExplanation: this.getParameterValue('annotationExplanation'),
+                sentimentSatisfiedMouseover: this.getParameterValue('sentimentSatisfiedMouseover'),
+                sentimentDissatisfiedMouseover: this.getParameterValue('sentimentDissatisfiedMouseover'),
+                arrowMouseover: this.getParameterValue('arrowMouseover'),
+                circleMouseover: this.getParameterValue('circleMouseover'),
+                rectMouseover: this.getParameterValue('rectMouseover'),
+                filledRectMouseover: this.getParameterValue('filledRectMouseover'),
+                thumbUpMouseover: this.getParameterValue('thumbUpMouseover'),
+                thumbDownMouseover: this.getParameterValue('thumbDownMouseover'),
+                textMouseover: this.getParameterValue('textMouseover'),
+                freehandMouseover: this.getParameterValue('freehandMouseover'),
             };
         };
         return ScreenshotMechanism;

@@ -51,6 +51,7 @@ define(["require", "exports", '../configurations/general_configuration', '../con
                 mandatoryLabelStyle: mandatoryLabelStyle,
                 discardAsButton: this.generalConfiguration.getParameterValue('discardAsButton'),
                 submissionPageMessage: this.generalConfiguration.getParameterValue('submissionPageMessage'),
+                labelPositioning: this.generalConfiguration.getParameterValue('labelPositioning') === 'top' ? '' : 'horizontal',
             };
         };
         Application.prototype.getCssStyle = function (parameterValuePropertyPair) {

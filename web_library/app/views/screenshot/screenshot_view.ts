@@ -49,9 +49,10 @@ export class ScreenshotView {
     colorPickerCSSClass:string = 'color-picker';
     defaultStrokeWidth:number = 3;
     selectedObjectControls:any;
+    hasBordersAndControls:boolean = true;
 
     constructor(screenshotMechanism:Mechanism, screenshotPreviewElement:JQuery, screenshotCaptureButton:JQuery,
-                elementToCapture:JQuery, container:JQuery, distPath:string, elementsToHide?:any) {
+                elementToCapture:JQuery, container:JQuery, distPath:string, elementsToHide?:any, hasBordersAndControls?:boolean) {
         this.screenshotMechanism = screenshotMechanism;
         this.screenshotPreviewElement = screenshotPreviewElement;
         this.screenshotCaptureButton = screenshotCaptureButton;
@@ -65,6 +66,7 @@ export class ScreenshotView {
         this.addCaptureEventToButton();
         this.croppingIsActive = false;
         this.freehandActive = false;
+        this.hasBordersAndControls = (hasBordersAndControls === null || hasBordersAndControls === undefined) ? true : hasBordersAndControls;
     }
 
     checkAutoTake() {
@@ -78,6 +80,7 @@ export class ScreenshotView {
         var myThis = this;
 
         html2canvas(this.elementToCapture, {
+            useCORS: true,
             onrendered: function (canvas) {
                 myThis.showElements();
                 myThis.canvas = canvas;
@@ -507,6 +510,8 @@ export class ScreenshotView {
                         var svgObject = fabric.util.groupSVGElements(objects, options);
                         svgObject.set('left', offsetX);
                         svgObject.set('top', offsetY);
+                        svgObject.set('hasBorders', myThis.hasBordersAndControls);
+                        svgObject.set('hasControls', myThis.hasBordersAndControls);
                         svgObject.scale(3);
                         myThis.fabricCanvas.add(svgObject).renderAll();
                         myThis.fabricCanvas.setActiveObject(svgObject);
@@ -520,6 +525,8 @@ export class ScreenshotView {
                             top: offsetY,
                             width: 50,
                             height: 50,
+                            hasBorders: myThis.hasBordersAndControls,
+                            hasControls: myThis.hasBordersAndControls,
                             type: 'fabricObject',
                             stroke: defaultColor,
                             strokeWidth: myThis.defaultStrokeWidth,
@@ -534,6 +541,8 @@ export class ScreenshotView {
                             top: offsetY,
                             width: 50,
                             height: 50,
+                            hasBorders: myThis.hasBordersAndControls,
+                            hasControls: myThis.hasBordersAndControls,
                             type: 'fillRect',
                             stroke: defaultColor,
                             strokeWidth: myThis.defaultStrokeWidth,
@@ -547,6 +556,8 @@ export class ScreenshotView {
                             left: offsetX,
                             top: offsetY,
                             radius: 50,
+                            hasBorders: myThis.hasBordersAndControls,
+                            hasControls: myThis.hasBordersAndControls,
                             startAngle: 0,
                             type: 'fabricObject',
                             endAngle: 2 * Math.PI,
@@ -796,7 +807,18 @@ export class ScreenshotView {
                     var activeObject = fabricCanvas.getActiveObject(),
                         activeGroup = fabricCanvas.getActiveGroup();
 
-                    if (activeGroup) {
+                    if(target.customType === 'arrow') {
+                        fabricCanvas.deactivateAll().renderAll();
+                        if (target.line !== undefined) {
+                            target.line.remove();
+                        }
+                        if (target.arrow !== undefined) {
+                            target.arrow.remove();
+                        }
+                        if (target.circle !== undefined) {
+                            target.circle.remove();
+                        }
+                    } else if (activeGroup) {
                         var objectsInGroup = activeGroup.getObjects();
                         fabricCanvas.discardActiveGroup();
                         objectsInGroup.forEach(function (object) {
@@ -844,12 +866,13 @@ export class ScreenshotView {
             selectable: true,
             strokeWidth: 3,
             padding: 1,
-            hasBorders: false,
-            hasControls: false,
+            hasBorders: myThis.hasBordersAndControls,
+            hasControls: myThis.hasBordersAndControls,
             originX: 'center',
             originY: 'center',
             lockScalingX: true,
-            lockScalingY: true
+            lockScalingY: true,
+            lockRotation: true,
         });
 
         var centerX = (line.x1 + line.x2) / 2,
