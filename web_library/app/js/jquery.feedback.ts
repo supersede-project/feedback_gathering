@@ -87,6 +87,34 @@ export var feedbackPluginModule = function ($, window, document) {
         dialog = initTemplate(dialogTemplate, pushConfigurationDialogId, context, configuration, pageNavigation, generalConfiguration);
     };
 
+    var showPullDialog = function (configuration:PullConfiguration, generalConfiguration:GeneralConfiguration) {
+        configuration.wasTriggered();
+        var pageNavigation = new PageNavigation(configuration, $('#' + pullConfigurationDialogId));
+
+        var context = prepareTemplateContext(configuration.getContextForView());
+
+        pullDialog = initTemplate(pullDialogTemplate, pullConfigurationDialogId, context, configuration, pageNavigation, generalConfiguration);
+        var delay = 0;
+        if (configuration.generalConfiguration.getParameterValue('delay')) {
+            delay = configuration.generalConfiguration.getParameterValue('delay');
+        }
+        if (configuration.generalConfiguration.getParameterValue('intermediateDialog')) {
+            var intermediateDialog = initIntermediateDialogTemplate(intermediateDialogTemplate, 'intermediateDialog', configuration, pullDialog, generalConfiguration);
+            if (intermediateDialog !== null) {
+                setTimeout(function () {
+                    if (!active) {
+                        intermediateDialog.dialog('open');
+                    }
+                }, delay * 1000);
+            }
+        } else {
+            setTimeout(function () {
+                if (!active) {
+                    openDialog(pullDialog, configuration);
+                }
+            }, delay * 1000);
+        }
+    };
     /**
      * Initializes the pull mechanisms and triggers the feedback mechanisms if necessary.
      *
@@ -99,33 +127,27 @@ export var feedbackPluginModule = function ($, window, document) {
      */
     var initPullConfiguration = function (configuration:PullConfiguration, generalConfiguration:GeneralConfiguration,
                                           alreadyTriggeredOne:boolean = false):boolean {
-        if (!alreadyTriggeredOne && configuration.shouldGetTriggered()) {
-            configuration.wasTriggered();
-            var pageNavigation = new PageNavigation(configuration, $('#' + pullConfigurationDialogId));
+        // triggers on elements
+        if(configuration.generalConfiguration.getParameterValue('userAction')) {
+            var userAction = configuration.generalConfiguration.getParameterValue('userAction');
+            var actionName = userAction.filter(element => element.key === 'actionName').length > 0 ? userAction.filter(element => element.key === 'actionName')[0].value : '';
+            var actionElement = userAction.filter(element => element.key === 'actionElement').length > 0 ? userAction.filter(element => element.key === 'actionElement')[0].value : '';
+            var actionOnlyOncePerPageLoad = userAction.filter(element => element.key === 'actionOnlyOncePerPageLoad').length > 0 ? userAction.filter(element => element.key === 'actionOnlyOncePerPageLoad')[0].value : true;
 
-            var context = prepareTemplateContext(configuration.getContextForView());
-
-            pullDialog = initTemplate(pullDialogTemplate, pullConfigurationDialogId, context, configuration, pageNavigation, generalConfiguration);
-            var delay = 0;
-            if (configuration.generalConfiguration.getParameterValue('delay')) {
-                delay = configuration.generalConfiguration.getParameterValue('delay');
-            }
-            if (configuration.generalConfiguration.getParameterValue('intermediateDialog')) {
-                var intermediateDialog = initIntermediateDialogTemplate(intermediateDialogTemplate, 'intermediateDialog', configuration, pullDialog, generalConfiguration);
-                if (intermediateDialog !== null) {
-                    setTimeout(function () {
-                        if (!active) {
-                            intermediateDialog.dialog('open');
-                        }
-                    }, delay * 1000);
-                }
+            if(actionOnlyOncePerPageLoad) {
+                $('' + actionElement).one(actionName, function() {
+                    showPullDialog(configuration, generalConfiguration);
+                })
             } else {
-                setTimeout(function () {
-                    if (!active) {
-                        openDialog(pullDialog, configuration);
-                    }
-                }, delay * 1000);
+                $('' + actionElement).on(actionName, function() {
+                    showPullDialog(configuration, generalConfiguration);
+                })
             }
+        }
+
+        // direct triggers
+        if (!alreadyTriggeredOne && configuration.shouldGetTriggered()) {
+            showPullDialog(configuration, generalConfiguration);
             return true;
         }
         return false;
