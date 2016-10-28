@@ -12,6 +12,9 @@
                     {{#compare type "CATEGORY_TYPE" operator="==="}}
                         {{> partials/category_mechanism}}
                     {{/compare}}
+                    {{#compare type "AUDIO_TYPE" operator="==="}}
+                        {{> partials/audio_mechanism parent=../this}}
+                    {{/compare}}
                     {{#compare type "RATING_TYPE" operator="==="}}
                         {{> partials/rating_mechanism}}
                     {{/compare}}
@@ -183,7 +186,7 @@
                                     <i>{{ title }}</i>
                                     {{#each options}}
                                         <input type="{{ ../inputType }}" id="reviewoption{{ key }}"
-                                               name="category_mechanism_{{ ../id }}"
+                                               name="category_mechanism_review_{{ ../id }}"
                                                value="review{{ key }}" disabled>
                                         <label for="reviewOption{{ key }}"> {{ value }}</label> &nbsp;
                                     {{/each}}
