@@ -791,7 +791,7 @@ export class ScreenshotView {
                             jQuery(this).remove();
                         },
                         beforeShow: function (color) {
-                            jQuery(this).spectrum("option", 'color', currentObjectColor);
+                            jQuery(this).spectrum("option", 'color', myThis.getObjectColor(target));
                         }
                     });
                     myThis.screenshotPreviewElement.append(colorLinkElement);
@@ -1024,6 +1024,25 @@ export class ScreenshotView {
                 this.fabricCanvas.getObjects()[i].lockMovementX = lock;
             }
         }
+    }
+
+    getObjectColor(object:any) {
+        if (object.get('type') === 'path-group') {
+            for (var path of object.paths) {
+                if (path.getFill() != "") {
+                    var currentObjectColor = path.getFill();
+                    break;
+                }
+            }
+        } else if (object.get('type') === 'path' || object.get('type') === 'fabricObject') {
+            var currentObjectColor = object.getStroke();
+        } else if (object.get('type') === 'fillRect') {
+            var currentObjectColor = object.getFill();
+        } else {
+            var currentObjectColor = object.getFill();
+        }
+
+        return currentObjectColor;
     }
 }
 
