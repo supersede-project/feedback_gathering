@@ -17,10 +17,6 @@ public class MonitorConfiguration extends OrchestratorItem<MonitorConfiguration>
 	@DbAttribute("monitor_configuration_id")
 	private Integer id;
 	
-	@Unique
-	@NotNull
-	private String name;
-	
 	@DbAttribute("monitor_tool_id")
 	private Integer monitorToolId;
 	
