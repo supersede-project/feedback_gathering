@@ -369,7 +369,7 @@ define(["require", "exports", './config', '../views/pagination_container', '../v
                     callback(formData);
                 }
                 try {
-                    duration = Math.ceil(audioElement.duration === 'NaN' ? 0 : audioElement.duration);
+                    duration = Math.ceil(audioElement.duration === undefined || audioElement.duration === 'NaN' ? 0 : audioElement.duration);
                     if (duration === 0) {
                         hasAudioMechanism = false;
                         return "break";
