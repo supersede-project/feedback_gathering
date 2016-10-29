@@ -6,6 +6,7 @@ define(["require", "exports"], function (require, exports) {
             this.duration = duration;
             this.fileExtension = fileExtension;
             this.mechanismId = mechanismId;
+            this.name = part;
         }
         return AudioFeedback;
     }());

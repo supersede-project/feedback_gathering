@@ -128,18 +128,18 @@ export var feedbackPluginModule = function ($, window, document) {
     var initPullConfiguration = function (configuration:PullConfiguration, generalConfiguration:GeneralConfiguration,
                                           alreadyTriggeredOne:boolean = false):boolean {
         // triggers on elements
-        if(configuration.generalConfiguration.getParameterValue('userAction')) {
+        if (configuration.generalConfiguration.getParameterValue('userAction')) {
             var userAction = configuration.generalConfiguration.getParameterValue('userAction');
             var actionName = userAction.filter(element => element.key === 'actionName').length > 0 ? userAction.filter(element => element.key === 'actionName')[0].value : '';
             var actionElement = userAction.filter(element => element.key === 'actionElement').length > 0 ? userAction.filter(element => element.key === 'actionElement')[0].value : '';
             var actionOnlyOncePerPageLoad = userAction.filter(element => element.key === 'actionOnlyOncePerPageLoad').length > 0 ? userAction.filter(element => element.key === 'actionOnlyOncePerPageLoad')[0].value : true;
 
-            if(actionOnlyOncePerPageLoad) {
-                $('' + actionElement).one(actionName, function() {
+            if (actionOnlyOncePerPageLoad) {
+                $('' + actionElement).one(actionName, function () {
                     showPullDialog(configuration, generalConfiguration);
                 })
             } else {
-                $('' + actionElement).on(actionName, function() {
+                $('' + actionElement).on(actionName, function () {
                     showPullDialog(configuration, generalConfiguration);
                 })
             }
@@ -233,7 +233,7 @@ export var feedbackPluginModule = function ($, window, document) {
             contentType: false,
             success: function (data) {
                 resetPlugin(configuration);
-                if(generalConfiguration.getParameterValue('closeDialogOnSuccess')) {
+                if (generalConfiguration.getParameterValue('closeDialogOnSuccess')) {
                     dialog.dialog('close');
                     pageNotification(defaultSuccessMessage);
                 } else {
@@ -246,10 +246,10 @@ export var feedbackPluginModule = function ($, window, document) {
         });
     };
 
-    var pageNotification = function(message:string) {
+    var pageNotification = function (message:string) {
         var html = notificationTemplate({message: message});
         $('html').append(html);
-        setTimeout(function() {
+        setTimeout(function () {
             $(".feedback-notification").remove();
         }, 3000);
     };
@@ -329,7 +329,7 @@ export var feedbackPluginModule = function ($, window, document) {
                     dialogObject.dialog("close");
                     active = false;
                 },
-                open: function() {
+                open: function () {
                     $('[aria-describedby="' + dialogId + '"] .ui-dialog-titlebar-close').attr('title', i18n.t('general.dialog_close_button_title'));
                 },
                 create: function (event, ui) {
@@ -453,6 +453,8 @@ export var feedbackPluginModule = function ($, window, document) {
         var attachmentMechanisms = configuration.getMechanismConfig(mechanismTypes.attachmentType);
         var audioMechanisms = configuration.getMechanismConfig(mechanismTypes.audioType);
 
+        var hasAudioMechanism = audioMechanisms.filter(audioMechanism => audioMechanism.active === true).length > 0;
+
         container.find('.server-response').removeClass('error').removeClass('success');
         var feedbackObject = new Feedback(feedbackObjectTitle, userId, language, applicationId, configuration.id, [], [], [], [], null, [], []);
         feedbackObject.contextInformation = ContextInformation.create();
@@ -507,30 +509,42 @@ export var feedbackPluginModule = function ($, window, document) {
             }
         }
 
-        for (var audioMechanism of audioMechanisms) {
-            if (audioMechanism.active) {
-                let partName = "audio" + audioMechanism.id;
-                var audioElement = jQuery('section#audioMechanism' + audioMechanism.id + ' audio')[0];
-                if (!audioElement || Fr.voice.recorder === null) {
-                    continue;
-                }
+        // TODO assumes only one audio mechanism
+        for (var audioMechanism of audioMechanisms.filter(mechanism => mechanism.active === true)) {
+            let partName = "audio" + audioMechanism.id;
+            var audioElement = jQuery('section#audioMechanism' + audioMechanism.id + ' audio')[0];
+            if (!audioElement || Fr.voice.recorder === null) {
+                formData.append('json', JSON.stringify(feedbackObject));
+                callback(formData);
+            }
 
-                try {
-                    var audioFeedback = new AudioFeedback(partName, Math.round(audioElement.duration), "wav", audioMechanism.id);
-                    console.log('export is called');
-                    Fr.voice.export(function (blob) {
-                        console.log('blob is not called');
-                        formData.append(partName, blob);
-                        feedbackObject.audioFeedbacks.push(audioFeedback);
-                    });
-                } catch (e) {
-                    console.log((<Error>e).message);
+            try {
+                var duration = Math.ceil(audioElement.duration === 'NaN' ? 0 : audioElement.duration);
+                if(duration === 0) {
+                    hasAudioMechanism = false;
+                    break;
                 }
+                var audioFeedback = new AudioFeedback(partName, duration, "wav", audioMechanism.id);
+                console.log('export is called');
+                Fr.voice.export(function (blob) {
+                    console.log('blob is called');
+                    var date = new Date();
+                    formData.append(partName, blob, "recording" + audioMechanism.id + "_" + date.getTime());
+                    feedbackObject.audioFeedbacks.push(audioFeedback);
+                    formData.append('json', JSON.stringify(feedbackObject));
+                    callback(formData);
+                }, "blob");
+            } catch (e) {
+                formData.append('json', JSON.stringify(feedbackObject));
+                callback(formData);
+                console.log((<Error>e).message);
             }
         }
 
-        formData.append('json', JSON.stringify(feedbackObject));
-        callback(formData);
+        if (!hasAudioMechanism) {
+            formData.append('json', JSON.stringify(feedbackObject));
+            callback(formData);
+        }
     };
 
     /**

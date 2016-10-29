@@ -24,11 +24,11 @@ cd web_library
 npm install
 ```
 
-Create a virtual host on your local machine to avoid problems with cross origin loads:
+Create a virtual host on your local machine to avoid problems with cross origin loads. Ideally use localhost as the ServerName to avoid problems with getUserMedia() in Google Chrome.
 
     <VirtualHost *:80>
         DocumentRoot /<your_path>/web_library
-        ServerName localhost.web-library.dev
+        ServerName localhost
         <Directory "/<your_path>/web_library">
             Options Indexes FollowSymLinks
             AllowOverride All
@@ -37,7 +37,7 @@ Create a virtual host on your local machine to avoid problems with cross origin 
         </Directory>
     </VirtualHost>
 
-Add an entry to your hosts file:
+Add an entry to your hosts file (if you do not use localhost as the ServerName above):
 
     127.0.0.1	localhost.web-library.dev
 

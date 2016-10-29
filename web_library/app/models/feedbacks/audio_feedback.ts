@@ -1,4 +1,5 @@
 export class AudioFeedback {
+    name:string;
     part:string;
     duration:number;
     fileExtension:string;
@@ -9,5 +10,6 @@ export class AudioFeedback {
         this.duration = duration;
         this.fileExtension = fileExtension;
         this.mechanismId = mechanismId;
+        this.name = part;
     }
 }
