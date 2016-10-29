@@ -1,16 +1,13 @@
 {{#if active}}
-    <script src="http://lab.subinsb.com/projects/jquery/voice/jquery.voice.js"></script>
-    <script src="{{parent.distPath}}audio/recorder.js"></script>
-    <script src="{{parent.distPath}}audio/Fr.voice.js"></script>
-    <script src="{{parent.distPath}}audio/app.js"></script>
     <section id="audioMechanism{{ id }}" class="feedback-mechanism {{parent.labelPositioning}} audio-type">
         <p style="{{#if mandatory}}{{ parent.mandatoryLabelStyle }}{{/if}}">{{ title }}{{#if mandatory }} {{ parent.mandatorySign }}{{/if}}</p>
-        <audio controls src="" id="audio"></audio>
+        <audio controls src="" class="audio"></audio>
         <div class="audio-buttons">
-            <a id="record"><img src="{{parent.distPath}}img/ic_mic_none_black_24dp_2x.png" data-default-src="{{parent.distPath}}img/ic_mic_none_black_24dp_2x.png" data-active-src="{{parent.distPath}}img/ic_mic_black_24dp_2x.png" /></a>
-            <a class="disabled one" id="pause" title="pause"><img src="{{parent.distPath}}img/ic_pause_circle_outline_black_24dp_2x.png" data-default-src="{{parent.distPath}}img/ic_pause_circle_outline_black_24dp_2x.png" data-active-src="{{parent.distPath}}img/ic_pause_circle_filled_black_24dp_2x.png" /></a>
-            <a class="disabled one" id="delete" title="reset"><img src="{{parent.distPath}}img/ic_delete_black_24dp_2x.png" /></a>
-            <a class="disabled one" id="play" title="play"><img src="{{parent.distPath}}img/ic_play_arrow_black_24dp_2x.png" /></a>
+            <a class="record"><img src="{{parent.distPath}}img/ic_mic_none_black_24dp_2x.png" data-default-src="{{parent.distPath}}img/ic_mic_none_black_24dp_2x.png" data-active-src="{{parent.distPath}}img/ic_mic_black_24dp_2x.png" /></a>
+            <a class="disabled one pause" title="pause"><img src="{{parent.distPath}}img/ic_pause_circle_outline_black_24dp_2x.png" data-default-src="{{parent.distPath}}img/ic_pause_circle_outline_black_24dp_2x.png" data-active-src="{{parent.distPath}}img/ic_pause_circle_filled_black_24dp_2x.png" /></a>
+            <a class="disabled one delete" title="reset"><img src="{{parent.distPath}}img/ic_delete_black_24dp_2x.png" /></a>
+            <a class="disabled one replay" title="replay"><img src="{{parent.distPath}}img/ic_play_arrow_black_24dp_2x.png" /></a>
+            <a class="download">download</a>
         </div>
     </section>
 {{/if}}
