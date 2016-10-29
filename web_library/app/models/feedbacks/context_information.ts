@@ -22,7 +22,12 @@ export class ContextInformation {
         var userAgent = navigator.userAgent;
 
         var d = new Date();
-        var localTime = d.toString();
+        var localTime = new Date(d.getTime() - d.getTimezoneOffset() * 60000).toISOString();
+        localTime = localTime.replace('T', ' ');
+        localTime = localTime.replace('Z', ' ');
+        localTime = localTime.slice(0, -3);
+        // TODO change to correct date format and remove the following line
+        localTime = null;
         var timeZone = d.toString().split("GMT")[1].split(" (")[0];
 
         var devicePixelRatio = ContextInformation.getDevicePixelRatio();

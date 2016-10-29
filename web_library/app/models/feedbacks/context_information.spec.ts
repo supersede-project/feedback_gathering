@@ -3,8 +3,9 @@ import {ContextInformation} from './context_information';
 
 describe('Context information', () => {
 
-    it('should contain all relevant information when created', () => {
+    fit('should contain all relevant information when created', () => {
         var contextInformation = ContextInformation.create();
+        console.log(contextInformation);
         expect(contextInformation.devicePixelRatio).not.toBeNull();
     });
 });
