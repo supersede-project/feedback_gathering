@@ -29,7 +29,7 @@ export var validatePluginModule = (function($, window, document) {
         };
 
         // reset
-        $('.feedback-form-error').remove();
+        this.next('.feedback-form-error').remove();
         this.removeClass('invalid');
 
         // validate mandatory

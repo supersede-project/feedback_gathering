@@ -6,7 +6,7 @@ define(["require", "exports", 'i18next'], function (require, exports, i18n) {
             var showValidationError = function (errorMessage, element) {
                 element.after('<span class="feedback-form-error">' + errorMessage + '</span>');
             };
-            $('.feedback-form-error').remove();
+            this.next('.feedback-form-error').remove();
             this.removeClass('invalid');
             if (mandatory && content === '') {
                 validMandatory = false;

@@ -15,6 +15,9 @@ define(["require", "exports", 'i18next', '../config', './../jquery.validate', '.
             currentPage.find('.validate').each(function () {
                 $(this).validate();
             });
+            currentPage.find('.validate-category').each(function () {
+                $(this).validateCategory();
+            });
             if (currentPage.find('.invalid').length > 0) {
                 return false;
             }
