@@ -99,9 +99,14 @@ define(["require", "exports", 'i18next', '../config', './../jquery.validate', '.
                     var audioMechanism = audioMechanisms_1[_d];
                     if (audioMechanism !== null && nextPage.find('.audio-review').length > 0 && audioMechanism.active) {
                         var audio = currentPage.find('#audioMechanism' + audioMechanism.id + ' audio:first');
-                        var audioCopy = audio.clone();
-                        audioCopy.css('display', 'block');
-                        nextPage.find('.audio-review').empty().append(audioCopy);
+                        if (audio[0].duration && audio[0].duration > 0) {
+                            var audioCopy = audio.clone();
+                            audioCopy.css('display', 'block');
+                            nextPage.find('.audio-review').empty().append(audioCopy);
+                        }
+                        else {
+                            nextPage.find('.audio-review').empty();
+                        }
                     }
                 }
                 for (var _e = 0, attachmentMechanisms_1 = attachmentMechanisms; _e < attachmentMechanisms_1.length; _e++) {

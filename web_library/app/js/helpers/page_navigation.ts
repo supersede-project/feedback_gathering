@@ -127,9 +127,14 @@ export class PageNavigation {
             for (var audioMechanism of audioMechanisms) {
                 if (audioMechanism !== null && nextPage.find('.audio-review').length > 0 && audioMechanism.active) {
                     var audio =  currentPage.find('#audioMechanism' + audioMechanism.id + ' audio:first');
-                    var audioCopy = audio.clone();
-                    audioCopy.css('display', 'block');
-                    nextPage.find('.audio-review').empty().append(audioCopy);
+                    if(audio[0].duration && audio[0].duration > 0) {
+                        var audioCopy = audio.clone();
+                        audioCopy.css('display', 'block');
+                        nextPage.find('.audio-review').empty().append(audioCopy);
+                    } else {
+                        // to adjust if multiple audio mechanisms should get supported
+                        nextPage.find('.audio-review').empty();
+                    }
                 }
             }
 

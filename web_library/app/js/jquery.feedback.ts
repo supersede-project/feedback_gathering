@@ -511,7 +511,7 @@ export var feedbackPluginModule = function ($, window, document) {
             }
         }
 
-        // TODO assumes only one audio mechanism
+        // TODO assumes only one audio mechanism --> support multiple
         for (var audioMechanism of audioMechanisms.filter(mechanism => mechanism.active === true)) {
             let partName = "audio" + audioMechanism.id;
             var audioElement = jQuery('section#audioMechanism' + audioMechanism.id + ' audio')[0];
@@ -521,7 +521,7 @@ export var feedbackPluginModule = function ($, window, document) {
             }
 
             try {
-                var duration = Math.ceil(audioElement.duration === 'NaN' ? 0 : audioElement.duration);
+                var duration = Math.ceil(audioElement.duration === undefined || audioElement.duration === 'NaN' ? 0 : audioElement.duration);
                 if(duration === 0) {
                     hasAudioMechanism = false;
                     break;
