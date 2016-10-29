@@ -1,6 +1,7 @@
 import Handlebars = require('handlebars');
 import './lib/jquery.star-rating-svg.js';
 import './jquery.validate';
+import './jquery.validate_category';
 import './jquery.fileupload';
 import {
     apiEndpointRepository, feedbackPath, applicationName, defaultSuccessMessage,
