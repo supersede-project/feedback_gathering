@@ -16,7 +16,6 @@ define(["require", "exports", 'handlebars', 'i18next', '../js/helpers/i18n'], fu
                 '<p id="textTypeLabel" class="explanation col col-left" style="{{ textMechanism.labelStyle }}">{{ textMechanism.label }}</p>' +
                 '<article class="col col-right">' +
                 '<textarea class="validate" {{#if textMechanism.mandatory }} data-mandatory="1" ' +
-                'data-mandatory-validate-on-skip="{{ textMechanism.validateOnSkip }}" ' +
                 'data-mandatory-default-text="This field can\'t be blank" data-mandatory-manual-text="{{ textMechanism.mandatoryReminder }}" ' +
                 '{{/if}}placeholder="{{ textMechanism.hint }}" id="textTypeText" style="{{ textMechanism.textareaStyle }}"></textarea>' +
                 '<p class="textarea-bottom">' +

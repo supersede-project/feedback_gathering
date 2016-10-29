@@ -32,7 +32,7 @@ export class PageNavigation {
         currentPage.find('.validate').each(function () {
             $(this).validate();
         });
-        if (currentPage.find('.invalid').length > 0 && currentPage.find('.validate[data-mandatory-validate-on-skip="1"]').length > 0) {
+        if (currentPage.find('.invalid').length > 0) {
             return false;
         }
 

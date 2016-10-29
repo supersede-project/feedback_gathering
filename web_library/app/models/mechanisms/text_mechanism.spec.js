@@ -9,7 +9,6 @@ define(["require", "exports", './text_mechanism'], function (require, exports, t
                 '<article class="col col-right">' +
                 '<textarea class="validate text-type-text" ' +
                 'data-mandatory="1" ' +
-                'data-mandatory-validate-on-skip="0" ' +
                 'data-mandatory-default-text="This field can\'t be blank" ' +
                 'data-mandatory-manual-text="Please put something into this field" ' +
                 'placeholder="Enter your feedback" ' +
@@ -35,7 +34,6 @@ define(["require", "exports", './text_mechanism'], function (require, exports, t
                 { key: 'clearInput', value: 1 },
                 { key: 'mandatory', value: 1 },
                 { key: 'mandatoryReminder', value: 'Please put something into this field' },
-                { key: 'validateOnSkip', value: 0 },
             ];
             textMechanism = new text_mechanism_1.TextMechanism(1, 'TEXT_TYPE', true, 1, true, parameters);
         });

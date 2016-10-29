@@ -10,7 +10,7 @@ describe('jQuery Validate Plugin', () => {
         validatePluginModule($, window, document);
 
         elementMandatory = $(
-            '<textarea class="validate" id="textTypeText" data-mandatory="1" data-mandatory-validate-on-skip="0" ' +
+            '<textarea class="validate" id="textTypeText" data-mandatory="1" ' +
             'data-mandatory-default-text="This field can\'t be blank" ' +
             'data-mandatory-manual-text="Please fill in this field" ></textarea>');
 
