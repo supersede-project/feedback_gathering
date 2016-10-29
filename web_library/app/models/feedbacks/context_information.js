@@ -18,7 +18,6 @@ define(["require", "exports"], function (require, exports) {
             localTime = localTime.replace('T', ' ');
             localTime = localTime.replace('Z', ' ');
             localTime = localTime.slice(0, -3);
-            localTime = null;
             var timeZone = d.toString().split("GMT")[1].split(" (")[0];
             var devicePixelRatio = ContextInformation.getDevicePixelRatio();
             var country = null;

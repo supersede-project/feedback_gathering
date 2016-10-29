@@ -307,6 +307,7 @@ define(["require", "exports", './config', '../views/pagination_container', '../v
             var categoryMechanisms = configuration.getMechanismConfig(config_1.mechanismTypes.categoryType);
             var attachmentMechanisms = configuration.getMechanismConfig(config_1.mechanismTypes.attachmentType);
             var audioMechanisms = configuration.getMechanismConfig(config_1.mechanismTypes.audioType);
+            var hasAudioMechanism = audioMechanisms.filter(function (audioMechanism) { return audioMechanism.active === true; }).length > 0;
             container.find('.server-response').removeClass('error').removeClass('success');
             var feedbackObject = new feedback_1.Feedback(config_1.feedbackObjectTitle, userId, language, config_1.applicationId, configuration.id, [], [], [], [], null, [], []);
             feedbackObject.contextInformation = context_information_1.ContextInformation.create();
@@ -361,34 +362,45 @@ define(["require", "exports", './config', '../views/pagination_container', '../v
                 }
             }
             var _loop_1 = function() {
-                if (audioMechanism.active) {
-                    var partName_2 = "audio" + audioMechanism.id;
-                    audioElement = jQuery('section#audioMechanism' + audioMechanism.id + ' audio')[0];
-                    if (!audioElement || Fr.voice.recorder === null) {
-                        return "continue";
+                var partName_2 = "audio" + audioMechanism.id;
+                audioElement = jQuery('section#audioMechanism' + audioMechanism.id + ' audio')[0];
+                if (!audioElement || Fr.voice.recorder === null) {
+                    formData.append('json', JSON.stringify(feedbackObject));
+                    callback(formData);
+                }
+                try {
+                    duration = Math.ceil(audioElement.duration === 'NaN' ? 0 : audioElement.duration);
+                    if (duration === 0) {
+                        hasAudioMechanism = false;
+                        return "break";
                     }
-                    try {
-                        audioFeedback = new audio_feedback_1.AudioFeedback(partName_2, Math.round(audioElement.duration), "wav", audioMechanism.id);
-                        console.log('export is called');
-                        Fr.voice.export(function (blob) {
-                            console.log('blob is not called');
-                            formData.append(partName_2, blob);
-                            feedbackObject.audioFeedbacks.push(audioFeedback);
-                        });
-                    }
-                    catch (e) {
-                        console.log(e.message);
-                    }
+                    audioFeedback = new audio_feedback_1.AudioFeedback(partName_2, duration, "wav", audioMechanism.id);
+                    console.log('export is called');
+                    Fr.voice.export(function (blob) {
+                        console.log('blob is called');
+                        var date = new Date();
+                        formData.append(partName_2, blob, "recording" + audioMechanism.id + "_" + date.getTime());
+                        feedbackObject.audioFeedbacks.push(audioFeedback);
+                        formData.append('json', JSON.stringify(feedbackObject));
+                        callback(formData);
+                    }, "blob");
+                }
+                catch (e) {
+                    formData.append('json', JSON.stringify(feedbackObject));
+                    callback(formData);
+                    console.log(e.message);
                 }
             };
-            var audioElement, audioFeedback;
-            for (var _f = 0, audioMechanisms_1 = audioMechanisms; _f < audioMechanisms_1.length; _f++) {
-                var audioMechanism = audioMechanisms_1[_f];
+            var audioElement, duration, audioFeedback;
+            for (var _f = 0, _g = audioMechanisms.filter(function (mechanism) { return mechanism.active === true; }); _f < _g.length; _f++) {
+                var audioMechanism = _g[_f];
                 var state_1 = _loop_1();
-                if (state_1 === "continue") continue;
+                if (state_1 === "break") break;
             }
-            formData.append('json', JSON.stringify(feedbackObject));
-            callback(formData);
+            if (!hasAudioMechanism) {
+                formData.append('json', JSON.stringify(feedbackObject));
+                callback(formData);
+            }
         };
         var toggleDialog = function (pushConfiguration) {
             if (!active) {

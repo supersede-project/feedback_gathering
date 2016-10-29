@@ -26,8 +26,6 @@ export class ContextInformation {
         localTime = localTime.replace('T', ' ');
         localTime = localTime.replace('Z', ' ');
         localTime = localTime.slice(0, -3);
-        // TODO change to correct date format and remove the following line
-        localTime = null;
         var timeZone = d.toString().split("GMT")[1].split(" (")[0];
 
         var devicePixelRatio = ContextInformation.getDevicePixelRatio();
@@ -39,7 +37,7 @@ export class ContextInformation {
     private static getDevicePixelRatio():number {
         var ratio = 1;
         // To account for zoom, change to use deviceXDPI instead of systemXDPI
-        if (window.screen.systemXDPI !== undefined && window.screen.logicalXDPI       !== undefined && window.screen.systemXDPI > window.screen.logicalXDPI) {
+        if (window.screen.systemXDPI !== undefined && window.screen.logicalXDPI !== undefined && window.screen.systemXDPI > window.screen.logicalXDPI) {
             // Only allow for values > 1
             ratio = window.screen.systemXDPI / window.screen.logicalXDPI;
         }
