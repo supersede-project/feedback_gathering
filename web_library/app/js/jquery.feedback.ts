@@ -31,6 +31,7 @@ import {ScreenshotFeedback} from '../models/feedbacks/screenshot_feedback';
 import {AttachmentFeedback} from '../models/feedbacks/attachment_feedback';
 import {AudioFeedback} from '../models/feedbacks/audio_feedback';
 import {ContextInformation} from '../models/feedbacks/context_information';
+import {AudioView} from '../views/audio/audio_view';
 var mockData = require('json!../services/mocks/dev/applications_mock.json');
 
 
@@ -50,6 +51,7 @@ export var feedbackPluginModule = function ($, window, document) {
     var dialogCSSClass;
     var colorPickerCSSClass;
     var defaultStrokeWidth;
+    var audioView;
 
     /**
      * @param applicationObject
@@ -171,9 +173,9 @@ export var feedbackPluginModule = function ($, window, document) {
             pageNavigation.screenshotViews.push(screenshotView);
         }
 
-        for (var audioMechanism of configuration.getMechanismConfig(mechanismTypes.audioType)) {
-            var recordButton = $("#" + dialogId + " #audioMechanism" + audioMechanism.id + " .record-audio");
-        }
+        var audioMechanism = configuration.getMechanismConfig(mechanismTypes.audioType).filter(mechanism => mechanism.active === true)[0];
+        var audioContainer = $("#" + dialogId + " #audioMechanism" + audioMechanism.id);
+        audioView = new AudioView(audioMechanism, audioContainer, distPath);
 
         for (var attachmentMechanism of configuration.getMechanismConfig(mechanismTypes.attachmentType)) {
             if (attachmentMechanism.active) {
@@ -525,15 +527,13 @@ export var feedbackPluginModule = function ($, window, document) {
                     break;
                 }
                 var audioFeedback = new AudioFeedback(partName, duration, "wav", audioMechanism.id);
-                console.log('export is called');
-                Fr.voice.export(function (blob) {
-                    console.log('blob is called');
+                audioView.getBlob(function(blob) {
                     var date = new Date();
                     formData.append(partName, blob, "recording" + audioMechanism.id + "_" + date.getTime());
                     feedbackObject.audioFeedbacks.push(audioFeedback);
                     formData.append('json', JSON.stringify(feedbackObject));
                     callback(formData);
-                }, "blob");
+                });
             } catch (e) {
                 formData.append('json', JSON.stringify(feedbackObject));
                 callback(formData);

@@ -1,4 +1,4 @@
-define(["require", "exports", './config', '../views/pagination_container', '../views/screenshot/screenshot_view', './helpers/i18n', 'i18next', '../models/feedbacks/feedback', './helpers/page_navigation', '../services/application_service', './helpers/array_shuffle', '../templates/feedback_dialog.handlebars', '../templates/feedback_dialog.handlebars', '../templates/intermediate_dialog.handlebars', '../templates/notification.handlebars', '../models/feedbacks/rating_feedback', '../models/feedbacks/screenshot_feedback', '../models/feedbacks/attachment_feedback', '../models/feedbacks/audio_feedback', '../models/feedbacks/context_information', './lib/jquery.star-rating-svg.js', './jquery.validate', './jquery.fileupload', './lib/html2canvas.js'], function (require, exports, config_1, pagination_container_1, screenshot_view_1, i18n_1, i18n, feedback_1, page_navigation_1, application_service_1, array_shuffle_1, dialogTemplate, pullDialogTemplate, intermediateDialogTemplate, notificationTemplate, rating_feedback_1, screenshot_feedback_1, attachment_feedback_1, audio_feedback_1, context_information_1) {
+define(["require", "exports", './config', '../views/pagination_container', '../views/screenshot/screenshot_view', './helpers/i18n', 'i18next', '../models/feedbacks/feedback', './helpers/page_navigation', '../services/application_service', './helpers/array_shuffle', '../templates/feedback_dialog.handlebars', '../templates/feedback_dialog.handlebars', '../templates/intermediate_dialog.handlebars', '../templates/notification.handlebars', '../models/feedbacks/rating_feedback', '../models/feedbacks/screenshot_feedback', '../models/feedbacks/attachment_feedback', '../models/feedbacks/audio_feedback', '../models/feedbacks/context_information', '../views/audio/audio_view', './lib/jquery.star-rating-svg.js', './jquery.validate', './jquery.fileupload', './lib/html2canvas.js'], function (require, exports, config_1, pagination_container_1, screenshot_view_1, i18n_1, i18n, feedback_1, page_navigation_1, application_service_1, array_shuffle_1, dialogTemplate, pullDialogTemplate, intermediateDialogTemplate, notificationTemplate, rating_feedback_1, screenshot_feedback_1, attachment_feedback_1, audio_feedback_1, context_information_1, audio_view_1) {
     "use strict";
     var mockData = require('json!../services/mocks/dev/applications_mock.json');
     exports.feedbackPluginModule = function ($, window, document) {
@@ -17,6 +17,7 @@ define(["require", "exports", './config', '../views/pagination_container', '../v
         var dialogCSSClass;
         var colorPickerCSSClass;
         var defaultStrokeWidth;
+        var audioView;
         var initApplication = function (applicationObject) {
             application = applicationObject;
             applicationContext = application.getContextForView();
@@ -99,12 +100,11 @@ define(["require", "exports", './config', '../views/pagination_container', '../v
                 var screenshotView = initScreenshot(screenshotMechanism, dialogId);
                 pageNavigation.screenshotViews.push(screenshotView);
             }
-            for (var _d = 0, _e = configuration.getMechanismConfig(config_1.mechanismTypes.audioType); _d < _e.length; _d++) {
-                var audioMechanism = _e[_d];
-                var recordButton = $("#" + dialogId + " #audioMechanism" + audioMechanism.id + " .record-audio");
-            }
-            for (var _f = 0, _g = configuration.getMechanismConfig(config_1.mechanismTypes.attachmentType); _f < _g.length; _f++) {
-                var attachmentMechanism = _g[_f];
+            var audioMechanism = configuration.getMechanismConfig(config_1.mechanismTypes.audioType).filter(function (mechanism) { return mechanism.active === true; })[0];
+            var audioContainer = $("#" + dialogId + " #audioMechanism" + audioMechanism.id);
+            audioView = new audio_view_1.AudioView(audioMechanism, audioContainer, distPath);
+            for (var _d = 0, _e = configuration.getMechanismConfig(config_1.mechanismTypes.attachmentType); _d < _e.length; _d++) {
+                var attachmentMechanism = _e[_d];
                 if (attachmentMechanism.active) {
                     var sectionSelector = "#attachmentMechanism" + attachmentMechanism.id;
                     dropArea = $('' + sectionSelector).find('.drop-area');
@@ -375,15 +375,13 @@ define(["require", "exports", './config', '../views/pagination_container', '../v
                         return "break";
                     }
                     audioFeedback = new audio_feedback_1.AudioFeedback(partName_2, duration, "wav", audioMechanism.id);
-                    console.log('export is called');
-                    Fr.voice.export(function (blob) {
-                        console.log('blob is called');
+                    audioView.getBlob(function (blob) {
                         var date = new Date();
                         formData.append(partName_2, blob, "recording" + audioMechanism.id + "_" + date.getTime());
                         feedbackObject.audioFeedbacks.push(audioFeedback);
                         formData.append('json', JSON.stringify(feedbackObject));
                         callback(formData);
-                    }, "blob");
+                    });
                 }
                 catch (e) {
                     formData.append('json', JSON.stringify(feedbackObject));
