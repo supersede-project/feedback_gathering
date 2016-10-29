@@ -8,7 +8,7 @@ define(["require", "exports", './pagination_container'], function (require, expo
                 '<article data-feedback-page="1" class="feedback-page">' +
                 '<section class="feedback-mechanism" id="textType">' +
                 '<p id="textTypeHint" class="explanation">Please input text</p>' +
-                '<textarea class="no-validate" id="textTypeText" data-mandatory="1" data-mandatory-validate-on-skip="0" ' +
+                '<textarea class="no-validate" id="textTypeText" data-mandatory="1" ' +
                 'data-mandatory-default-text="This field can\'t be blank" ' +
                 'data-mandatory-manual-text="Please fill in this field" ></textarea>' +
                 '<p class="text-count"><span id="textTypeMaxLength"></span></p>' +
@@ -47,7 +47,7 @@ define(["require", "exports", './pagination_container'], function (require, expo
                 '<article data-feedback-page="1" class="feedback-page">' +
                 '<section class="feedback-mechanism" id="textType">' +
                 '<p id="textTypeHint" class="explanation">Please input text</p>' +
-                '<textarea class="no-validate" id="textTypeText" data-mandatory="1" data-mandatory-validate-on-skip="1" ' +
+                '<textarea class="no-validate" id="textTypeText" data-mandatory="1" ' +
                 'data-mandatory-default-text="This field can\'t be blank" ' +
                 'data-mandatory-manual-text="Please fill in this field" ></textarea>' +
                 '<p class="text-count"><span id="textTypeMaxLength"></span></p>' +

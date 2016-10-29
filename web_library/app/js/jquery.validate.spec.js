@@ -6,7 +6,7 @@ define(["require", "exports", './jquery.validate'], function (require, exports, 
         var $ = $j;
         beforeEach(function () {
             jquery_validate_1.validatePluginModule($, window, document);
-            elementMandatory = $('<textarea class="validate" id="textTypeText" data-mandatory="1" data-mandatory-validate-on-skip="0" ' +
+            elementMandatory = $('<textarea class="validate" id="textTypeText" data-mandatory="1" ' +
                 'data-mandatory-default-text="This field can\'t be blank" ' +
                 'data-mandatory-manual-text="Please fill in this field" ></textarea>');
             elementMaxLength = $('<textarea class="validate" data-validation-max-length="30"></textarea>');

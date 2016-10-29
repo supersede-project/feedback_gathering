@@ -15,7 +15,7 @@ define(["require", "exports", 'i18next', '../config', './../jquery.validate', '.
             currentPage.find('.validate').each(function () {
                 $(this).validate();
             });
-            if (currentPage.find('.invalid').length > 0 && currentPage.find('.validate[data-mandatory-validate-on-skip="1"]').length > 0) {
+            if (currentPage.find('.invalid').length > 0) {
                 return false;
             }
             if (nextPage) {

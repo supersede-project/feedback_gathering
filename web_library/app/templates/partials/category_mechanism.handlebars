@@ -1,6 +1,7 @@
 {{#if active}}
-    <section id="categoryMechanism{{ id }}" class="feedback-mechanism {{../labelPositioning}} category-type">
-        <p style="{{#if mandatory}}{{ ../mandatoryLabelStyle }}{{/if}}">{{ title }}{{#if mandatory }} {{ ../mandatorySign }}{{/if}}</p>
+    <section id="categoryMechanism{{ id }}" class="feedback-mechanism {{parent.labelPositioning}} category-type">
+        <p{{#if mandatory }} data-mandatory="1" data-mandatory-manual-text="{{ mandatoryReminder }}" {{/if}}
+                style="{{#if mandatory}}{{ parent.mandatoryLabelStyle }}{{/if}}">{{ title }}{{#if mandatory }} {{ parent.mandatorySign }}{{/if}}</p>
         {{#each options}}
             <input type="{{ ../inputType }}" id="option{{ key }}" data-parameter-id="{{id}}" name="category_mechanism_{{ ../id }}"
                    value="{{ key }}">

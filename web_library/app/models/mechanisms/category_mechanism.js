@@ -21,7 +21,9 @@ define(["require", "exports", './mechanism', '../feedbacks/category_feedback'], 
                 multiple: this.getParameterValue('multiple'),
                 breakAfterOption: this.getParameterValue('breakAfterOption') ? true : false,
                 options: this.getOptions(),
-                inputType: this.getParameterValue('multiple') ? 'checkbox' : 'radio'
+                inputType: this.getParameterValue('multiple') ? 'checkbox' : 'radio',
+                mandatory: this.getParameterValue('mandatory'),
+                mandatoryReminder: this.getParameterValue('mandatoryReminder')
             };
         };
         CategoryMechanism.prototype.getCategoryFeedbacks = function () {

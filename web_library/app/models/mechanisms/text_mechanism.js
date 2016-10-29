@@ -32,8 +32,7 @@ define(["require", "exports", './mechanism', '../parameters/parameter_value_prop
                 labelStyle: labelStyle,
                 clearInput: this.getParameterValue('clearInput'),
                 mandatory: this.getParameterValue('mandatory'),
-                mandatoryReminder: this.getParameterValue('mandatoryReminder'),
-                validateOnSkip: this.getParameterValue('validateOnSkip')
+                mandatoryReminder: this.getParameterValue('mandatoryReminder')
             };
         };
         return TextMechanism;
