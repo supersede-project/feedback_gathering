@@ -1,10 +1,14 @@
 package ch.uzh.ifi.feedback.orchestrator.controllers;
 
+import java.net.URI;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
+import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
@@ -44,7 +48,7 @@ public class MonitorConfigurationController extends RestController<MonitorConfig
 		configuration.setMonitorToolName(tool);
 		
 		CloseableHttpClient client = HttpClientBuilder.create().build();
-		String url = monitorManagerHost + "addConfiguration";
+		String url = monitorManagerHost + "configuration";
 		HttpPost request = new HttpPost(url);
 		request.addHeader("content-type", "application/json");
 		request.setEntity(new StringEntity(getConfigurationJson(configuration).toString()));
@@ -69,7 +73,7 @@ public class MonitorConfigurationController extends RestController<MonitorConfig
 			MonitorConfiguration monitorConfiguration) throws Exception {
 		
 		CloseableHttpClient client = HttpClientBuilder.create().build();
-		String url = monitorManagerHost + "updateConfiguration";
+		String url = monitorManagerHost + "configuration";
 		HttpPut request = new HttpPut(url);
 		request.addHeader("content-type", "application/json");
 		request.setEntity(new StringEntity(getConfigurationJson(monitorConfiguration).toString()));
@@ -85,13 +89,13 @@ public class MonitorConfigurationController extends RestController<MonitorConfig
 			@PathParam("id-tool-configuration") Integer configuration) throws Exception {
 		
 		CloseableHttpClient client = HttpClientBuilder.create().build();
-		String url = monitorManagerHost + "deleteConfiguration";
-		HttpPut request = new HttpPut(url);
-		request.addHeader("content-type", "application/json");
-		JsonObject json = new JsonObject();
-		json.addProperty("id", configuration);
-		json.addProperty("monitor", super.GetById(configuration).getMonitor());
-		request.setEntity(new StringEntity(json.toString()));
+		URIBuilder builder = new URIBuilder();
+		builder.setScheme("http").setHost(monitorManagerHost)
+			.setPath("configuration")
+		    .setParameter("id", configuration.toString())
+		    .setParameter("monitor", super.GetById(configuration).getMonitor());
+		URI uri = builder.build();
+		HttpDelete request = new HttpDelete(uri);
 		client.execute(request);
 		
 		super.Delete(configuration);
