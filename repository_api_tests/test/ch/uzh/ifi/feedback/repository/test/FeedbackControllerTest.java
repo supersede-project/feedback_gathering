@@ -49,7 +49,7 @@ public class FeedbackControllerTest extends RepositoryServletTest {
 	 */
 	public void testCreationOfFeedbackWithFiles() throws ClientProtocolException, IOException, SQLException, NotFoundException {
 		InputStream stream = this.getClass().getResourceAsStream("feedback_insert.json");
-		String jsonString = IOUtils.toString(stream); 
+		String jsonString = IOUtils.toString(stream);
 		
 		MultipartEntityBuilder builder = MultipartEntityBuilder.create();
 		builder.addTextBody("json", jsonString, ContentType.APPLICATION_JSON);
@@ -68,7 +68,7 @@ public class FeedbackControllerTest extends RepositoryServletTest {
 	    assertEquals(createdFeedback.getApplicationId(), new Integer(1));	
 	    assertEquals(createdFeedback.getTitle(), "test_feedback");
 	    assertEquals(createdFeedback.getRatingFeedbacks().size(), 2);
-	    assertEquals(createdFeedback.getCategoryFeedbacks().size(), 2);
+	    assertEquals(createdFeedback.getCategoryFeedbacks().size(), 3);
 	    assertEquals(createdFeedback.getScreenshotFeedbacks().size(), 2);
 	    assertEquals(createdFeedback.getAttachmentFeedbacks().size(), 2);
 	    assertEquals(createdFeedback.getAudioFeedbacks().size(), 1);

@@ -23,7 +23,11 @@
   		"parameterId": "12"
   	}, {
   		"parameterId": "14"
-  	}],
+  	},
+  	{
+  		"text": "custom text"
+  	}
+  	],
   	"screenshotFeedbacks": [{
   		"textAnnotations": [{
   			"referenceNumber": 1,

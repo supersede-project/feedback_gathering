@@ -1,4 +1,4 @@
-package ch.uzh.ifi.feedback.repository.controller;
+package ch.uzh.ifi.feedback.library.rest.authorization;
 
 import java.util.List;
 
@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.google.inject.Inject;
+import com.google.inject.servlet.RequestScoped;
 
 import ch.uzh.ifi.feedback.library.rest.RestController;
 import ch.uzh.ifi.feedback.library.rest.annotations.Authenticate;
@@ -16,17 +17,14 @@ import ch.uzh.ifi.feedback.library.rest.annotations.POST;
 import ch.uzh.ifi.feedback.library.rest.annotations.PUT;
 import ch.uzh.ifi.feedback.library.rest.annotations.Path;
 import ch.uzh.ifi.feedback.library.rest.annotations.PathParam;
-import ch.uzh.ifi.feedback.library.rest.authorization.ApiUser;
-import ch.uzh.ifi.feedback.library.rest.authorization.ApiUserValidator;
-import ch.uzh.ifi.feedback.library.rest.authorization.IApiUserService;
-import ch.uzh.ifi.feedback.library.rest.authorization.UserAuthenticationService;
 
 @Controller(ApiUser.class)
+@RequestScoped
 public class ApiUserController extends RestController<ApiUser> {
 
 	@Inject
 	public ApiUserController(
-			IApiUserService dbService, 
+			ApiUserService dbService, 
 			ApiUserValidator validator, 
 			HttpServletRequest request,
 			HttpServletResponse response) 

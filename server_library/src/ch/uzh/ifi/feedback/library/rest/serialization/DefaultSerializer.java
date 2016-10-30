@@ -22,7 +22,12 @@ public abstract class DefaultSerializer<T> implements ISerializationService<T> {
 	@Override
 	public String Serialize(T object) {
 		
-		Gson gson = new GsonBuilder().setPrettyPrinting().setDateFormat("yyyy-MM-dd hh:mm:ss.S").create();
+		Gson gson = new GsonBuilder()
+				.setPrettyPrinting()
+				.setDateFormat("yyyy-MM-dd hh:mm:ss.S")
+				.setExclusionStrategies(new DefaultExclusionStrategy())
+				.create();
+		
 		String json = gson.toJson(object);
 		
 		return json;
