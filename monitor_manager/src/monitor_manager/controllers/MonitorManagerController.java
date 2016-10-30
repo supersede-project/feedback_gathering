@@ -4,7 +4,9 @@ import java.io.IOException;
 import java.net.URI;
 
 import javax.inject.Singleton;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 
 import org.apache.http.client.methods.HttpDelete;
