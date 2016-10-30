@@ -2,7 +2,6 @@ import {ConfigurationInterface} from '../../models/configurations/configuration_
 import i18n = require('i18next');
 import './../jquery.validate';
 import {mechanismTypes} from '../config';
-import '../../js/lib/html2canvas.js';
 
 
 export class PageNavigation {
@@ -32,7 +31,11 @@ export class PageNavigation {
         currentPage.find('.validate').each(function () {
             $(this).validate();
         });
-        if (currentPage.find('.invalid').length > 0 && currentPage.find('.validate[data-mandatory-validate-on-skip="1"]').length > 0) {
+        currentPage.find('.validate-category').each(function () {
+            $(this).validateCategory();
+        });
+
+        if (currentPage.find('.invalid').length > 0) {
             return false;
         }
 
@@ -127,9 +130,14 @@ export class PageNavigation {
             for (var audioMechanism of audioMechanisms) {
                 if (audioMechanism !== null && nextPage.find('.audio-review').length > 0 && audioMechanism.active) {
                     var audio =  currentPage.find('#audioMechanism' + audioMechanism.id + ' audio:first');
-                    var audioCopy = audio.clone();
-                    audioCopy.css('display', 'block');
-                    nextPage.find('.audio-review').empty().append(audioCopy);
+                    if(audio[0].duration && audio[0].duration > 0) {
+                        var audioCopy = audio.clone();
+                        audioCopy.css('display', 'block');
+                        nextPage.find('.audio-review').empty().append(audioCopy);
+                    } else {
+                        // to adjust if multiple audio mechanisms should get supported
+                        nextPage.find('.audio-review').empty();
+                    }
                 }
             }
 

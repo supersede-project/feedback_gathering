@@ -5,3 +5,5 @@ repositoryDb=feedback_repository
 repositoryTestDb=feedback_repository_test
 orchestratorDb=feedback_orchestrator
 orchestratorTestDb=feedback_orchestrator_test
+monitoringDb=monitoring_orchestrator
+monitoringTestDb=monitoring_orchestrator_test

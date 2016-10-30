@@ -1,0 +1,24 @@
+/**
+ * Layoutanpassungen fuer den IE8 und darunter
+ *
+ * @author Oliver Albrecht
+ */
+
+/** Breite des Logos im Header korrigieren **/
+.logo img {width: 100%;}
+
+/** Hauptnavigation **/
+.lt-ie9 .navigation-main {padding: 0;}
+
+/** Button in der Loginbox **/
+.login-box button img {max-width: none; vertical-align: top;}
+
+/** Usermenue **/
+.user-navigation-wrapper .menu:hover {border-top: 1px solid #bababa;}
+
+/** Overlay **/
+.reveal-modal-bg {filter:Alpha(opacity=50)}
+.lt-ie9 .reveal-modal .row { width: auto; min-width: 0px;}
+
+/** Hotlinenummer **/
+.cmd_help .hotline-box > DIV SPAN.number {font-size: 1.7em;}

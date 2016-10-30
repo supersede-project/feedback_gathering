@@ -14,4 +14,14 @@ dist
 tmp
 coverage
 
-env/stage.json
+env/stage/stage.json
+
+app/**/*.js
+app/js/*.js
+app/js/helpers/*.js
+!app/js/lib/*.js
+!app/js/lib/**/*.js
+!app/assets/**/*.js
+
+
+
