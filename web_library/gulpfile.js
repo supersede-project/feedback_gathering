@@ -38,7 +38,7 @@ gulp.task('webpack.prod', function() {
 
 gulp.task('deploy', function (done) {
     runSequence(
-        'webpack.dev',
+        'build.dev',
         gulp.src(['index.html']).pipe(gulpSSH.dest(config.serverDest)),
         gulp.src(['dist/**']).pipe(gulpSSH.dest(config.serverDest + '/dist')),
         gulpSSH.shell(['sudo cp -R ' + config.serverDest + '/* ' + config.serverAppDir]),

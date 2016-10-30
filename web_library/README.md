@@ -44,7 +44,7 @@ Add an entry to your hosts file (if you do not use localhost as the ServerName a
 Bundle the project:
 
 ```bash
-webpack
+gulp build.dev
 ```
 
 Open the index.html file in the browser of your choice.
@@ -75,30 +75,39 @@ The library should work fine on the following browsers (with Promise polyfill):
 
 # Integration
 
+Attention: The current dist package is cleaned and overridden. If you have adjusted translations in the locales you need to save them and copy them again after the build.
+
 ```bash
 # create the dist bundle
-webpack
+gulp build.prod
 ```
 
 ```javascript
 
 <!-- header -->
-<link rel="stylesheet" href="https://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css"/>
-<link rel="stylesheet" href="dist/main.css"/>
+<link rel="stylesheet" href="dist/jqueryui/jquery-ui.min.css"/>
+<link rel="stylesheet" href="dist/main.min.css"/>
 
 <!-- footer -->
-<script src="dist/jquery.min.js"></script>
-<script src="dist/spectrum.min.js"></script>
-<script src="https://code.jquery.com/ui/1.10.3/jquery-ui.min.js"></script>
-<script src="dist/screenshot/fabric.js"></script>
+<script src="dist/jquery-1.9.1.js"></script>
+<script src="dist/jqueryui/jquery-ui.min.js"></script>
+<script src="dist/audio/recorder.js"></script>
+<script src="dist/audio/Fr.voice.js"></script>
+<script src="dist/screenshot/fabric.min.js"></script>
 <script src="dist/screenshot/customiseControls.js"></script>
+<script src="dist/screenshot/spectrum.js"></script>
 <script src="dist/jquery.feedback.min.js"></script>
 <script>
     $(document).ready(function () {
         $('#feedbackEntryPoint').feedbackPlugin({
             // optional options
-            'color': '#000000',
-            'distPath': 'dist/'
+            'distPath': 'dist/',
+            'userId': '99999999',
+            'lang': 'en',
+            'fallbackLang': 'de',
+            'dialogCSSClass': 'my-custom-dialog-class',
+            'colorPickerCSSClass': 'my-color-picker',
+            'defaultStrokeWidth': 4
         });
     });
 </script>
@@ -113,12 +122,15 @@ The following options are available to configure the jQuery plugin on the client
 
 |option   |description   |
 |---|---|
-|distPath   |Path to the ressources that are used within the library (css, img, etc.)   |
-|userId|ID that gets sent to the repository component and will be store alongside the feedback|
-|lang|Language to be used|
-|fallbackLang|Language to be used if 'lang' is not available in the locales folder|
-|color|Font color of the feedback button|
 |backgroundColor|Background color of the feedback button|
+|color|Font color of the feedback button|
+|colorPickerCSSClass| Assign a custom css class to the color picker|
+|defaultStrokeWidth| Adjust the stroke width of the screenshot annotations|
+|dialogCSSClass|Assign a custom css class to the dialog|
+|distPath   |Path to the ressources that are used within the library (css, img, etc.)   |
+|fallbackLang|Language to be used if 'lang' is not available in the locales folder|
+|lang|Language to be used|
+|userId|ID that gets sent to the repository component and will be store alongside the feedback|
 
 # Internationalization
 
@@ -133,10 +145,9 @@ npm test
 
 # Deployment
 
-To deploy a demo page please copy env/state.json-dist to env/state.json and fill in the required information. Then execute
+To deploy a demo page please copy env/stage/stage.json-dist to env/stage/stage.json and fill in the required information. Then execute
 
 ```bash
-webpack
 gulp deploy
 ```
 
