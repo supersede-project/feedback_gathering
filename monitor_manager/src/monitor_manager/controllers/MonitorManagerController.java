@@ -54,7 +54,7 @@ public class MonitorManagerController {
 		client.execute(httppost);
 	}
 	
-	@POST
+	@PUT
 	@Path("updateConfiguration")
 	public void updateConfiguration(String json) {
 		JsonObject jsonObj = getJson(json);
@@ -67,7 +67,7 @@ public class MonitorManagerController {
 		//client.execute(request);
 	}
 	
-	@POST
+	@DELETE
 	@Path("deleteConfiguration")
 	public void deleteConfiguration(String json) throws Exception {
 		JsonObject jsonObj = getJson(json);
