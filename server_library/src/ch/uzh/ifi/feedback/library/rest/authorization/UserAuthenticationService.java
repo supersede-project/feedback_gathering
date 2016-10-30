@@ -9,11 +9,9 @@ import ch.uzh.ifi.feedback.library.rest.authorization.ITokenAuthenticationServic
 import ch.uzh.ifi.feedback.library.rest.authorization.PasswordStorage.CannotPerformOperationException;
 import ch.uzh.ifi.feedback.library.rest.authorization.PasswordStorage.InvalidHashException;
 import ch.uzh.ifi.feedback.library.rest.authorization.UserToken;
-import javassist.NotFoundException;
 
 import static java.util.Arrays.asList;
 
-import java.io.UnsupportedEncodingException;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.UUID;
@@ -23,11 +21,11 @@ import javax.servlet.http.HttpServletRequest;
 @Singleton
 public class UserAuthenticationService implements ITokenAuthenticationService {
 
-	private IApiUserService userService;
+	private ApiUserService userService;
 	private AuthenticationCache cache;
 	
 	@Inject
-	public UserAuthenticationService(IApiUserService userService, AuthenticationCache cache)
+	public UserAuthenticationService(ApiUserService userService, AuthenticationCache cache)
 	{
 		this.userService = userService;
 		this.cache = cache;
@@ -37,7 +35,7 @@ public class UserAuthenticationService implements ITokenAuthenticationService {
 	{
 		List<ApiUser> users = userService.GetWhere(asList(user.getName()), "`name` = ?");
 		if(users.size() != 1)
-			throw new AuthorizationException("The user or the provided password dont match!");
+			throw new AuthorizationException("The and the provided password dont match!");
 		
 		ApiUser apiUser = users.get(0);
 		try {

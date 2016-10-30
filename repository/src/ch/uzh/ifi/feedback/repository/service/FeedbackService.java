@@ -15,6 +15,7 @@ import com.google.inject.Provider;
 import com.google.inject.name.Named;
 
 import ch.uzh.ifi.feedback.library.rest.authorization.ApiUser;
+import ch.uzh.ifi.feedback.library.rest.authorization.ApiUserService;
 import ch.uzh.ifi.feedback.library.rest.service.ServiceBase;
 import ch.uzh.ifi.feedback.library.transaction.DatabaseConfiguration;
 import ch.uzh.ifi.feedback.library.transaction.IDatabaseConfiguration;

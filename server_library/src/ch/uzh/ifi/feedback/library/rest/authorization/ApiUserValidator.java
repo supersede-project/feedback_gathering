@@ -10,7 +10,7 @@ import ch.uzh.ifi.feedback.library.rest.validation.ValidatorBase;
 public class ApiUserValidator extends ValidatorBase<ApiUser>{
 
 	@Inject
-	public ApiUserValidator(IApiUserService service, ValidationSerializer serializer) {
+	public ApiUserValidator(ApiUserService service, ValidationSerializer serializer) {
 		super(ApiUser.class, service, serializer);
 	}
 }

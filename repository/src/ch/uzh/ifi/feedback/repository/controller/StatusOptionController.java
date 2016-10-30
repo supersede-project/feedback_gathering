@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.google.inject.Inject;
+import com.google.inject.servlet.RequestScoped;
 
 import ch.uzh.ifi.feedback.library.rest.RestController;
 import ch.uzh.ifi.feedback.library.rest.annotations.Authenticate;
@@ -22,6 +23,7 @@ import ch.uzh.ifi.feedback.repository.service.StatusOptionService;
 import ch.uzh.ifi.feedback.repository.validation.StatusOptionValidator;
 
 @Controller(StatusOption.class)
+@RequestScoped
 public class StatusOptionController extends RestController<StatusOption>{
 
 	@Inject

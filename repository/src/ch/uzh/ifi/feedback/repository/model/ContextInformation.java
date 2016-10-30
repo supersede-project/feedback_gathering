@@ -1,6 +1,6 @@
 package ch.uzh.ifi.feedback.repository.model;
 
-import java.sql.Date;
+import java.sql.Timestamp;
 
 import ch.uzh.ifi.feedback.library.rest.annotations.DbAttribute;
 import ch.uzh.ifi.feedback.library.rest.annotations.Id;
@@ -20,7 +20,7 @@ public class ContextInformation extends ItemBase<ContextInformation> {
 	private String androidVersion;
 
 	@DbAttribute("local_time")
-	private Date localTime;
+	private Timestamp localTime;
 	
 	@DbAttribute("time_zone")
 	private String timeZone;
@@ -56,11 +56,11 @@ public class ContextInformation extends ItemBase<ContextInformation> {
 		this.androidVersion = androidVersion;
 	}
 
-	public Date getLocalTime() {
+	public Timestamp getLocalTime() {
 		return localTime;
 	}
 
-	public void setLocalTime(Date localTime) {
+	public void setLocalTime(Timestamp localTime) {
 		this.localTime = localTime;
 	}
 

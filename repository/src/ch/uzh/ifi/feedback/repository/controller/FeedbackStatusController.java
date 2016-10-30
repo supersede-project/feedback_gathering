@@ -143,10 +143,6 @@ public class FeedbackStatusController extends RestController<Status>{
 		
 		StatusOption newOption = newOptions.get(0);
 		
-		/*
-		if(newOption.getOrder() != oldOption.getOrder() + 1)
-			throw new ValidationException("the status can not be updated to '" + status.getStatus() + "'");
-		*/
 		return super.Update(status);
 	}
 	
