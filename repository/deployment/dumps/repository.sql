@@ -31,7 +31,7 @@ CREATE TABLE `api_user_permissions` (
   `has_permission` bit(1) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_api_user_permissions_1_idx` (`user_id`),
-  CONSTRAINT `fk_api_user_permissions_1` FOREIGN KEY (`user_id`) REFERENCES `api_users` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  CONSTRAINT `fk_api_user_permissions_1` FOREIGN KEY (`user_id`) REFERENCES `api_users` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=big5;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -89,7 +89,7 @@ CREATE TABLE `attachment_feedbacks` (
   `mechanism_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_audio_feedback_idx` (`feedback_id`),
-  CONSTRAINT `fk_audio_feedback0` FOREIGN KEY (`feedback_id`) REFERENCES `feedbacks` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `fk_audio_feedback0` FOREIGN KEY (`feedback_id`) REFERENCES `feedbacks` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=big5;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -122,7 +122,7 @@ CREATE TABLE `audio_feedbacks` (
   `file_extension` varchar(10) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_audio_feedback_idx` (`feedback_id`),
-  CONSTRAINT `fk_audio_feedback` FOREIGN KEY (`feedback_id`) REFERENCES `feedbacks` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `fk_audio_feedback` FOREIGN KEY (`feedback_id`) REFERENCES `feedbacks` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=big5;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -150,7 +150,7 @@ CREATE TABLE `category_feedbacks` (
   `text` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_audio_feedback_idx` (`feedback_id`),
-  CONSTRAINT `fk_audio_feedback00` FOREIGN KEY (`feedback_id`) REFERENCES `feedbacks` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `fk_audio_feedback00` FOREIGN KEY (`feedback_id`) REFERENCES `feedbacks` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=big5;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -176,7 +176,7 @@ CREATE TABLE `context_informations` (
   `resolution` varchar(255) DEFAULT NULL,
   `user_agent` varchar(255) DEFAULT NULL,
   `android_version` varchar(45) DEFAULT NULL,
-  `local_time` time DEFAULT NULL,
+  `local_time` timestamp NULL DEFAULT NULL,
   `time_zone` varchar(45) DEFAULT NULL,
   `device_pixel_ratio` varchar(11) DEFAULT NULL,
   `country` varchar(45) DEFAULT NULL,
@@ -209,7 +209,7 @@ CREATE TABLE `feedback_comments` (
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `fk_feedback_comments_idx` (`feedback_id`),
-  CONSTRAINT `fk_feedback_comments` FOREIGN KEY (`feedback_id`) REFERENCES `feedbacks` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `fk_feedback_comments` FOREIGN KEY (`feedback_id`) REFERENCES `feedbacks` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=big5;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -238,8 +238,8 @@ CREATE TABLE `feedback_states` (
   UNIQUE KEY `UNIQUE` (`feedback_id`,`api_user_id`),
   KEY `fk_feedback_states_1_idx` (`feedback_id`),
   KEY `fk_feedback_states_2_idx` (`api_user_id`),
-  CONSTRAINT `fk_feedback_states_1` FOREIGN KEY (`feedback_id`) REFERENCES `feedbacks` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_feedback_states_2` FOREIGN KEY (`api_user_id`) REFERENCES `api_users` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  CONSTRAINT `fk_feedback_states_1` FOREIGN KEY (`feedback_id`) REFERENCES `feedbacks` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  CONSTRAINT `fk_feedback_states_2` FOREIGN KEY (`api_user_id`) REFERENCES `api_users` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=big5;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -302,7 +302,7 @@ CREATE TABLE `rating_feedbacks` (
   `title` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_rating_feedback_idx` (`feedback_id`),
-  CONSTRAINT `fk_rating_feedback` FOREIGN KEY (`feedback_id`) REFERENCES `feedbacks` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `fk_rating_feedback` FOREIGN KEY (`feedback_id`) REFERENCES `feedbacks` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=big5;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -334,7 +334,7 @@ CREATE TABLE `screenshot_feedbacks` (
   `file_extension` varchar(10) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_screenshot_feedback_idx` (`feedback_id`),
-  CONSTRAINT `fk_screenshot_feedback` FOREIGN KEY (`feedback_id`) REFERENCES `feedbacks` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `fk_screenshot_feedback` FOREIGN KEY (`feedback_id`) REFERENCES `feedbacks` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=big5;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -388,7 +388,7 @@ CREATE TABLE `text_annotations` (
   `reference_number` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_text_annotations_1_idx` (`screenshot_feedbacks_id`),
-  CONSTRAINT `fk_text_annotations_1` FOREIGN KEY (`screenshot_feedbacks_id`) REFERENCES `screenshot_feedbacks` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `fk_text_annotations_1` FOREIGN KEY (`screenshot_feedbacks_id`) REFERENCES `screenshot_feedbacks` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=big5;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -416,7 +416,7 @@ CREATE TABLE `text_feedbacks` (
   `feedback_id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `feedback_id` (`feedback_id`),
-  CONSTRAINT `feedback_id_foreign_key` FOREIGN KEY (`feedback_id`) REFERENCES `feedbacks` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `feedback_id_foreign_key` FOREIGN KEY (`feedback_id`) REFERENCES `feedbacks` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
 ) ENGINE=InnoDB AUTO_INCREMENT=57 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -439,4 +439,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-10-24 14:50:20
+-- Dump completed on 2016-10-30 15:45:26

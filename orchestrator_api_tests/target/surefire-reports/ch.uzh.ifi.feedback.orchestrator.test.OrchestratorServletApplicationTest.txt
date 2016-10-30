@@ -1,4 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: ch.uzh.ifi.feedback.orchestrator.test.OrchestratorServletApplicationTest
 -------------------------------------------------------------------------------
-Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 4.537 sec
+Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 6.015 sec

@@ -7,10 +7,15 @@ import ch.uzh.ifi.feedback.library.rest.validation.ValidationSerializer;
 import ch.uzh.ifi.feedback.library.rest.validation.ValidatorBase;
 
 @Singleton
-public class ApiUserValidator extends ValidatorBase<ApiUser>{
+public class ApiUserPermissionValidator extends ValidatorBase<ApiUserPermission>{
 
 	@Inject
-	public ApiUserValidator(ApiUserService service, ValidationSerializer serializer) {
-		super(ApiUser.class, service, serializer);
+	public ApiUserPermissionValidator(
+			ApiUserPermissionService service,
+			ValidationSerializer serializer) 
+	{
+		super(ApiUserPermission.class, service, serializer);
+
 	}
+
 }

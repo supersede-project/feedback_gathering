@@ -34,4 +34,14 @@ public class ApiUserControllerTest extends RepositoryServletTest {
 		assertEquals(createdUser.getRole(), UserRole.USER);	
 	}
 	
+	public void testDeleteApiUser() throws ClientProtocolException, IOException {
+		DeleteSuccess("http://localhost:8080/feedback_repository/en/api_users/1");
+		
+		ApiUser[] retrievedUsers = GetSuccess(
+				"http://localhost:8080/feedback_repository/en/api_users", 
+				ApiUser[].class);
+		
+		assertEquals(asList(retrievedUsers).size(), 0);		
+	}
+	
 }
