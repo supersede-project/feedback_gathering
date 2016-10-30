@@ -8,6 +8,7 @@ import javax.ws.rs.DELETE;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
+import javax.ws.rs.QueryParam;
 
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpPost;
@@ -28,7 +29,7 @@ public class MonitorManagerController {
 	private ConfigurationParser parser = new ConfigurationParser();
 
 	@POST
-	@Path("addConfiguration")
+	@Path("configuration")
 	public void addConfiguration(String json) throws Exception {
 		JsonObject jsonObj = getJson(json);
 		
@@ -57,7 +58,7 @@ public class MonitorManagerController {
 	}
 	
 	@PUT
-	@Path("updateConfiguration")
+	@Path("configuration")
 	public void updateConfiguration(String json) {
 		JsonObject jsonObj = getJson(json);
 		//TODO still not implemented in monitor's side
@@ -70,14 +71,14 @@ public class MonitorManagerController {
 	}
 	
 	@DELETE
-	@Path("deleteConfiguration")
-	public void deleteConfiguration(String json) throws Exception {
-		JsonObject jsonObj = getJson(json);
+	@Path("configuration")
+	public void deleteConfiguration(@QueryParam("id") String id, @QueryParam("monitor") String monitor) 
+			throws Exception {
 		
 		CloseableHttpClient client = HttpClientBuilder.create().build();
 		String url = monitorHost + 
-				"/" + jsonObj.get("monitor") + 
-				"/configuration/" + jsonObj.get("id");
+				"/" + monitor + 
+				"/configuration/" + id;
 		HttpDelete request = new HttpDelete(url);
 		client.execute(request);
 	}
