@@ -1,4 +1,4 @@
-define(["require", "exports", 'i18next', '../config', './../jquery.validate', '../../js/lib/html2canvas.js'], function (require, exports, i18n, config_1) {
+define(["require", "exports", 'i18next', '../config', './../jquery.validate'], function (require, exports, i18n, config_1) {
     "use strict";
     var PageNavigation = (function () {
         function PageNavigation(configuration, container) {

@@ -2,7 +2,6 @@ import {ConfigurationInterface} from '../../models/configurations/configuration_
 import i18n = require('i18next');
 import './../jquery.validate';
 import {mechanismTypes} from '../config';
-import '../../js/lib/html2canvas.js';
 
 
 export class PageNavigation {
