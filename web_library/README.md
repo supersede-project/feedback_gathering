@@ -49,6 +49,8 @@ gulp build.dev
 
 Open the index.html file in the browser of your choice.
 
+Note: This setup is tested and runs successfully using node v5.10.0 and npm 3.8.3. It might also run with different versions.
+
 # Table of Contents
 
 - [Introduction](#introduction)
