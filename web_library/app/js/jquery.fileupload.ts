@@ -61,7 +61,9 @@ export var fileUploadPluginModule = (function ($, window, document) {
             });
         }
 
-        $(document.body).on('click', 'a.remove-file', function() {
+        $(document.body).on('click', 'a.remove-file', function(event) {
+            event.stopPropagation();
+            event.preventDefault();
             var index = $(this).data('index');
             currentFiles.splice(index, 1);
             showFiles(currentFiles);

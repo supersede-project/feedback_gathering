@@ -1,6 +1,5 @@
 import {Backend} from './backends/backend';
 import {HttpBackend} from './backends/http_backend';
-import {PushConfiguration} from '../models/configurations/push_configuration';
 import {ConfigurationInterface} from '../models/configurations/configuration_interface';
 import {ConfigurationFactory} from '../models/configurations/configuration_factory';
 import {apiEndpointOrchestrator} from '../js/config';

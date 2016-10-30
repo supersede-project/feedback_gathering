@@ -1,5 +1,5 @@
 import Handlebars = require('handlebars');
-import './lib/jquery.star-rating-svg.js';
+import './lib/rating/jquery.star-rating-svg.js';
 import './jquery.validate';
 import './jquery.validate_category';
 import './jquery.fileupload';
@@ -11,7 +11,6 @@ import {PaginationContainer} from '../views/pagination_container';
 import {ScreenshotView} from '../views/screenshot/screenshot_view';
 import {I18nHelper} from './helpers/i18n';
 import i18n = require('i18next');
-import './lib/html2canvas.js';
 import {MockBackend} from '../services/backends/mock_backend';
 import {RatingMechanism} from '../models/mechanisms/rating_mechanism';
 import {PullConfiguration} from '../models/configurations/pull_configuration';

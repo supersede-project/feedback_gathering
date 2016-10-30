@@ -1,6 +1,5 @@
 import {PushConfiguration} from './push_configuration';
 import {readJSON} from '../../services/mocks/mocks_loader';
-import {Mechanism} from '../mechanisms/mechanism';
 import {RatingMechanism} from '../mechanisms/rating_mechanism';
 import {mechanismTypes} from '../../js/config';
 import {ParameterValuePropertyPair} from '../parameters/parameter_value_property_pair';
