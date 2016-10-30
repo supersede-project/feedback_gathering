@@ -13,8 +13,6 @@ export var validateCategoryPluginModule = (function($, window, document) {
     /**
      * @returns {jQuery}
      *
-     * The validate function implements the custom validation logic with the validation either taking place on the
-     * final submit or on skip. Default or custom messages are supported as well.
      */
     $.fn.validateCategory = function () {
         var mandatory = this.data('mandatory'),
