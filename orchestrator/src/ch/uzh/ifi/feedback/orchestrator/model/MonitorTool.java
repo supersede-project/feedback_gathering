@@ -26,6 +26,16 @@ public class MonitorTool extends OrchestratorItem<MonitorTool>{
 	@DbAttribute("monitor_type_name")
 	private String monitorTypeName;
 	
+	private String monitor;
+	
+	public String getMonitorName() {
+		return monitor;
+	}
+	
+	public void setMonitorName(String name) {
+		this.monitor = name;
+	}
+	
 	public String getMonitorTypeName() {
 		return monitorTypeName;
 	}

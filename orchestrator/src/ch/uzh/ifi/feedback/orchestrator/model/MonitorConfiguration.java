@@ -20,6 +20,17 @@ public class MonitorConfiguration extends OrchestratorItem<MonitorConfiguration>
 	@DbAttribute("monitor_tool_name")
 	private String monitorToolName;
 	
+	@DbAttribute("monitor_tool_monitor")
+	private String monitor;
+	
+	public String getMonitor() {
+		return monitor;
+	}
+
+	public void setMonitor(String monitor) {
+		this.monitor = monitor;
+	}
+
 	public String getMonitorToolName() {
 		return monitorToolName;
 	}
@@ -35,7 +46,7 @@ public class MonitorConfiguration extends OrchestratorItem<MonitorConfiguration>
 	private String kafkaTopic;
 	
 	@NotNull
-	private int timeSlot;
+	private String timeSlot;
 	
 	private HashMap<String,String> params;
 
@@ -65,11 +76,11 @@ public class MonitorConfiguration extends OrchestratorItem<MonitorConfiguration>
 		this.kafkaTopic = kafkaTopic;
 	}
 	
-	public Integer getTimeSlot() {
+	public String getTimeSlot() {
 		return timeSlot;
 	}
 
-	public void setTimeSlot(Integer timeSlot) {
+	public void setTimeSlot(String timeSlot) {
 		this.timeSlot = timeSlot;
 	}
 	

@@ -85,11 +85,12 @@ public class MonitorConfigurationController extends RestController<MonitorConfig
 			@PathParam("id-tool-configuration") Integer configuration) throws Exception {
 		
 		CloseableHttpClient client = HttpClientBuilder.create().build();
-		String url = monitorManagerHost + "updateConfiguration";
+		String url = monitorManagerHost + "deleteConfiguration";
 		HttpPut request = new HttpPut(url);
 		request.addHeader("content-type", "application/json");
 		JsonObject json = new JsonObject();
 		json.addProperty("id", configuration);
+		json.addProperty("monitor", super.GetById(configuration).getMonitor());
 		request.setEntity(new StringEntity(json.toString()));
 		client.execute(request);
 		
@@ -99,6 +100,7 @@ public class MonitorConfigurationController extends RestController<MonitorConfig
 	private JsonObject getConfigurationJson(MonitorConfiguration configuration) {
 		JsonObject json = new JsonObject();
 		json.addProperty("id", configuration.getId());
+		json.addProperty("monitor", configuration.getMonitor());
 		json.addProperty("tool", configuration.getMonitorToolName());
 		json.addProperty("timeSlot",configuration.getTimeSlot());
 		json.addProperty("kafkaEndpoint", configuration.getKafkaEndpoint());
