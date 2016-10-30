@@ -2,6 +2,8 @@ package ch.uzh.ifi.feedback.library.rest.authorization;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.gson.annotations.Expose;
+
 import ch.uzh.ifi.feedback.library.rest.annotations.DbIgnore;
 import ch.uzh.ifi.feedback.library.rest.annotations.Id;
 import ch.uzh.ifi.feedback.library.rest.annotations.NotNull;
