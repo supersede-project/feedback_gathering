@@ -95,8 +95,8 @@ export class ScreenshotView {
                 myThis.canvasOriginalWidth = canvas.width;
                 myThis.canvasOriginalHeight = canvas.height;
 
-                myThis.canvasWidth = myThis.screenshotPreviewElement.width();
-                myThis.canvasHeight = myThis.screenshotPreviewElement.width() / windowRatio;
+                myThis.canvasWidth = myThis.screenshotPreviewElement.width() - 2;
+                myThis.canvasHeight = (myThis.screenshotPreviewElement.width() / windowRatio) -2;
 
                 jQuery(canvas).prop('width', myThis.canvasWidth);
                 jQuery(canvas).prop('height', myThis.canvasHeight);
@@ -385,7 +385,8 @@ export class ScreenshotView {
         croppingRect.remove();
         canvas.renderAll.bind(canvas);
 
-        this.updateCanvasState(croppedTop, croppedLeft);
+        var factor = Math.min(canvas.getWidth() / croppWidth, canvas.getHeight() / croppHeight);
+        this.updateCanvasState(croppedTop, croppedLeft, canvas.getZoom());
 
         // Shifting the elements accordingly
         for (var i = 0; i < objectsToMove.length; i++) {
@@ -394,8 +395,10 @@ export class ScreenshotView {
             canvas.getObjects()[i].setCoords();
         }
 
-        canvas.setWidth(croppWidth);
-        canvas.setHeight(croppHeight);
+        canvas.setZoom(factor);
+        canvas.setWidth(croppWidth * factor - 1);
+        canvas.setHeight(croppHeight * factor - 1);
+
         canvas.renderAll.bind(canvas);
     }
 
@@ -496,8 +499,13 @@ export class ScreenshotView {
             drop: function (event:DragEvent, ui) {
                 var sticker = $(ui.helper);
 
-                var offsetY = event.pageY - $(this).offset().top;
-                var offsetX = event.pageX - $(this).offset().left;
+                if(myThis.fabricCanvas.getZoom() === 1) {
+                    var offsetY = event.pageY - $(this).offset().top;
+                    var offsetX = event.pageX - $(this).offset().left;
+                } else {
+                    var offsetY = 20;
+                    var offsetX = 20;
+                }
 
                 offsetY -= 12;
                 offsetX -= 12;
@@ -621,8 +629,8 @@ export class ScreenshotView {
         this.screenshotCaptureButton.text(screenshotCaptureButtonDefaultText);
     }
 
-    updateCanvasState(shiftTop:number, shiftLeft:number) {
-        var canvasState = new CanvasState(JSON.stringify(this.fabricCanvas), this.fabricCanvas.getWidth(), this.fabricCanvas.getHeight(), shiftTop, shiftLeft);
+    updateCanvasState(shiftTop:number, shiftLeft:number, zoomFactor:number) {
+        var canvasState = new CanvasState(JSON.stringify(this.fabricCanvas), this.fabricCanvas.getWidth(), this.fabricCanvas.getHeight(), shiftTop, shiftLeft, zoomFactor);
         this.canvasStates.push(canvasState);
     }
 
@@ -638,6 +646,7 @@ export class ScreenshotView {
 
         this.fabricCanvas.setWidth(canvasStateToRestore.width);
         this.fabricCanvas.setHeight(canvasStateToRestore.height);
+        this.fabricCanvas.setZoom(canvasStateToRestore.zoomFactor);
 
         canvas.loadFromJSON(canvasStateToRestore.src, canvas.renderAll.bind(canvas), function (o, object) {
             // update page screenshot object
