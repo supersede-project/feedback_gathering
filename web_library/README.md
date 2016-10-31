@@ -199,7 +199,7 @@ gulp deploy
 
 # License
 
-tba
+Apache License 2.0
 
 
 
