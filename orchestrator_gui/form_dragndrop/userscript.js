@@ -65,6 +65,7 @@ var setup = function()
     var editor2 = setupEditor("options", options);
     var editor3 = setupEditor("data", data);
 
+    var mainViewField = null;
     var mainDesignerField = null;
 
     var doRefresh = function(el, buildInteractionLayers, disableErrorHandling, cb)
@@ -499,6 +500,30 @@ var setup = function()
         $(x).find(".fieldForm").alpaca(fieldConfig);
     };
 
+    var refreshView = function(callback)
+    {
+        if (mainViewField)
+        {
+            mainViewField.getFieldEl().replaceWith("<div id='viewDiv'></div>");
+            mainViewField.destroy();
+            mainViewField = null;
+        }
+
+        doRefresh($("#viewDiv"), false, false, function(err, form) {
+
+            if (!err)
+            {
+                mainViewField = form;
+            }
+
+            if (callback)
+            {
+                callback();
+            }
+
+        });
+    };
+
     var refreshDesigner = function(callback)
     {
         $(".dropzone").remove();
@@ -708,6 +733,7 @@ var setup = function()
 
         setTimeout(function() {
             refreshDesigner();
+            refreshView();
         }, 100);
     };
 
@@ -723,6 +749,7 @@ var setup = function()
     };
 
     refreshDesigner();
+    refreshView();
 };
 
 $(document).ready(function() {
