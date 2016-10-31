@@ -59,7 +59,7 @@ gulp build.dev
 
 Open the index.html file in the browser of your choice.
 
-Note: This setup is tested and runs successfully using node v5.10.0 and npm 3.8.3. It might also run with different versions. It utilizes the typescript compiler of the WebStorm IDE.
+Note: This setup is tested and runs successfully using node v7.0.0 and npm 3.10.8. It might also run with different versions. It utilizes the typescript compiler of the WebStorm IDE.
 
 # Table of Contents
 
