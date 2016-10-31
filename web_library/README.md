@@ -51,7 +51,7 @@ You then have to define some application settings and the Orchestrator as well a
     export const apiEndpointRepository = 'http://example.com/';
     export const feedbackPath = "feedback_repository/{lang}/feedbacks";
 
-Bundle the project:
+Compile all the .ts files to .js and bundle the project:
 
 ```bash
 gulp build.dev
