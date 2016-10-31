@@ -65,7 +65,13 @@
                                     <div class="screenshot-operations">
                                         <button class="screenshot-operation screenshot-draw-remove"
                                                 title="{{t "screenshot.remove" }}">{{t "screenshot.remove" }}</button>
-
+                                        <!--[if IE]>
+                                        <style>
+                                            .hide-ie {
+                                                display: none;
+                                            }
+                                        </style>
+                                        <![endif]-->
                                         <p>{{t "screenshot.crop" }}</p>
                                         <button class="screenshot-operation screenshot-crop"
                                                 title="{{t "screenshot.crop" }}"><img
@@ -88,23 +94,23 @@
                                         {{#if annotationExplanation }}
                                             <small>{{ annotationExplanation }}</small>
                                         {{/if}}
-                                        <img class="sticker-source svg-sticker-source" title="{{ sentimentSatisfiedMouseover }}"
+                                        <img class="sticker-source svg-sticker-source hide-ie" title="{{ sentimentSatisfiedMouseover }}"
                                              src="{{../distPath}}img/ic_sentiment_satisfied_black_24px.svg"/>
-                                        <img class="sticker-source svg-sticker-source" title="{{ sentimentDissatisfiedMouseover }}"
+                                        <img class="sticker-source svg-sticker-source hide-ie" title="{{ sentimentDissatisfiedMouseover }}"
                                              src="{{../distPath}}img/ic_sentiment_dissatisfied_black_24px.svg"/>
-                                        <img class="sticker-source object-source arrow" title="{{ arrowMouseover }}"
+                                        <img class="sticker-source object-source arrow hide-ie" title="{{ arrowMouseover }}"
                                              src="{{../distPath}}img/ic_arrow_forward_black_24px.svg"/>
-                                        <img class="sticker-source object-source circle" title="{{ circleMouseover }}"
+                                        <img class="sticker-source object-source circle hide-ie" title="{{ circleMouseover }}"
                                              src="{{../distPath}}img/ic_panorama_fish_eye_black_24px.svg"/>
-                                        <img class="sticker-source object-source rect" title="{{ rectMouseover }}"
+                                        <img class="sticker-source object-source rect hide-ie" title="{{ rectMouseover }}"
                                              src="{{../distPath}}img/ic_crop_din_black_24px.svg"/>
-                                        <img class="sticker-source object-source fillRect" title="{{ filledRectMouseover }}"
+                                        <img class="sticker-source object-source fillRect hide-ie" title="{{ filledRectMouseover }}"
                                              src="{{../distPath}}img/ic_stop_black_24px.svg"/>
-                                        <img class="sticker-source svg-sticker-source" title="{{ thumbUpMouseover }}"
+                                        <img class="sticker-source svg-sticker-source hide-ie" title="{{ thumbUpMouseover }}"
                                              src="{{../distPath}}img/ic_thumb_up_black_24px.svg"/>
-                                        <img class="sticker-source svg-sticker-source" title="{{ thumbDownMouseover }}"
+                                        <img class="sticker-source svg-sticker-source hide-ie" title="{{ thumbDownMouseover }}"
                                              src="{{../distPath}}img/ic_thumb_down_black_24px.svg"/>
-                                        <img class="sticker-source svg-sticker-source text" title="{{ textMouseover }}"
+                                        <img class="sticker-source svg-sticker-source text hide-ie" title="{{ textMouseover }}"
                                              src="{{../distPath}}img/ic_title_black_24px.svg"/>
                                         <img class="freehand" title="{{ freehandMouseover }}"
                                              src="{{../distPath}}img/ic_gesture_black_24px.svg" />
