@@ -174,8 +174,10 @@ export var feedbackPluginModule = function ($, window, document) {
         }
 
         var audioMechanism = configuration.getMechanismConfig(mechanismTypes.audioType).filter(mechanism => mechanism.active === true)[0];
-        var audioContainer = $("#" + dialogId + " #audioMechanism" + audioMechanism.id);
-        audioView = new AudioView(audioMechanism, audioContainer, distPath);
+        if(audioMechanism) {
+            var audioContainer = $("#" + dialogId + " #audioMechanism" + audioMechanism.id);
+            audioView = new AudioView(audioMechanism, audioContainer, distPath);
+        }
 
         for (var attachmentMechanism of configuration.getMechanismConfig(mechanismTypes.attachmentType)) {
             if (attachmentMechanism.active) {
