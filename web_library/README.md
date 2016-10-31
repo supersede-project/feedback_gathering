@@ -41,6 +41,16 @@ Add an entry to your hosts file (if you do not use localhost as the ServerName a
 
     127.0.0.1	localhost.web-library.dev
 
+You then have to define some application settings and the Orchestrator as well as the Repository endpoint in the app/js/config.ts:
+
+    export const apiEndpointOrchestrator = 'http://example.com/';
+    export const applicationPath = 'orchestrator/feedback/{lang}/applications/';
+    export const applicationId = 1;
+    export const applicationName = 'example.com Website';
+    
+    export const apiEndpointRepository = 'http://example.com/';
+    export const feedbackPath = "feedback_repository/{lang}/feedbacks";
+
 Bundle the project:
 
 ```bash
