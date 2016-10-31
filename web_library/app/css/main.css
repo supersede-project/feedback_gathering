@@ -866,6 +866,14 @@ table.current-files {
 .attachment-review a.remove-file {
   display: none; }
 
+@media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+  /* IE10+ CSS styles go here */
+  .hide-ie {
+    display: none; } }
+@supports (-ms-accelerator: true) {
+  /* IE Edge 12+ CSS styles go here */
+  .hide-ie {
+    display: none; } }
 .ui-widget input, .ui-widget select, .ui-widget textarea, .ui-widget button {
   font-family: Verdana, Arial, sans-serif;
   font-size: 15px; }
