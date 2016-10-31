@@ -20,6 +20,8 @@ import {ConfigurationInterface} from '../models/configurations/configuration_int
 import {Application} from '../models/applications/application';
 import {ApplicationService} from '../services/application_service';
 import {shuffle} from './helpers/array_shuffle';
+import * as t from '../templates/t';
+import * as compare from '../templates/compare';
 import * as dialogTemplate from '../templates/feedback_dialog.handlebars';
 import * as pullDialogTemplate from '../templates/feedback_dialog.handlebars';
 import * as intermediateDialogTemplate from '../templates/intermediate_dialog.handlebars';
