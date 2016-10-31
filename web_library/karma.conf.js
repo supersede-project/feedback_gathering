@@ -20,17 +20,16 @@ module.exports = function (config) {
             { pattern: 'node_modules/i18next/*.js', included: false },
             { pattern: 'app/**/*.js', included: false },
             { pattern: 'app/services/mocks/**/*.json', included: false },
-            { pattern: 'app/locales/**/*.json', included: false },
-            //{ pattern: 'app/templates/**/*.handlebars', included: true },
-            //{ pattern: 'app/templates/*.handlebars', included: true }
+            { pattern: 'app/locales/**/*.json', included: false }
         ],
 
         proxies: {
-            '/app/js/lib/html2canvas.js': '/base/app/js/lib/html2canvas.js',
-            '/app/js/lib/fabric.js': '/base/app/js/lib/fabric.js',
-            '/app/js/lib/spectrum.js': '/base/app/js/lib/spectrum.js',
-            '/app/js/lib/customiseControls.js': '/base/app/js/lib/customiseControls.js',
-            '/app/js/lib/jquery.star-rating-svg.js': '/base/app/js/lib/jquery.star-rating-svg.js'
+            '/app/js/lib/screenshot/html2canvas.js': '/base/app/js/lib/screenshot/html2canvas.js',
+            '/app/js/lib/screenshot/fabric.min.js': '/base/app/js/lib/screenshot/fabric.min.js',
+            '/app/js/lib/screenshot/spectrum.js': '/base/app/js/lib/screenshot/spectrum.js',
+            '/app/js/lib/screenshot/customiseControls.js': '/base/app/js/lib/screenshot/customiseControls.js',
+            '/app/js/lib/rating/jquery.star-rating-svg.js': '/base/app/js/lib/rating/jquery.star-rating-svg.js',
+            '/app/assets/jquery-ui-1.12.1.custom/jquery-ui.js': '/base/app/assets/jquery-ui-1.12.1.custom/jquery-ui.js'
         },
 
         // list of files to exclude
