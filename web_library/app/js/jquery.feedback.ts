@@ -174,7 +174,7 @@ export var feedbackPluginModule = function ($, window, document) {
         }
 
         var audioMechanism = configuration.getMechanismConfig(mechanismTypes.audioType).filter(mechanism => mechanism.active === true)[0];
-        if(audioMechanism) {
+        if (audioMechanism) {
             var audioContainer = $("#" + dialogId + " #audioMechanism" + audioMechanism.id);
             audioView = new AudioView(audioMechanism, audioContainer, distPath);
         }
@@ -506,7 +506,7 @@ export var feedbackPluginModule = function ($, window, document) {
                 for (var i = 0; i < files.length; i++) {
                     var file = files[i];
                     let partName = 'attachment' + i;
-                    var attachmentFeedback = new AttachmentFeedback(partName, file.name, file.extension, attachmentMechanism.id);
+                    var attachmentFeedback = new AttachmentFeedback(partName, file.name, file.type, attachmentMechanism.id);
                     formData.append(partName, file, file.name);
                     feedbackObject.attachmentFeedbacks.push(attachmentFeedback);
                 }
@@ -524,12 +524,12 @@ export var feedbackPluginModule = function ($, window, document) {
 
             try {
                 var duration = Math.ceil(audioElement.duration === undefined || audioElement.duration === 'NaN' ? 0 : audioElement.duration);
-                if(duration === 0) {
+                if (duration === 0) {
                     hasAudioMechanism = false;
                     break;
                 }
                 var audioFeedback = new AudioFeedback(partName, duration, "wav", audioMechanism.id);
-                audioView.getBlob(function(blob) {
+                audioView.getBlob(function (blob) {
                     var date = new Date();
                     formData.append(partName, blob, "recording" + audioMechanism.id + "_" + date.getTime());
                     feedbackObject.audioFeedbacks.push(audioFeedback);
