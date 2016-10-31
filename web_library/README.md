@@ -69,6 +69,7 @@ Note: This setup is tested and runs successfully using node v5.10.0 and npm 3.8.
 - [Compatibility](#compatibility)
 - [Integration](#integration)
 - [Configuration](#configuration)
+- [Styling](#styling)
 - [Internationalization](#internationalization)
 - [Running tests](#running-tests)
 - [Deployment](#deployment)
@@ -143,6 +144,12 @@ The following options are available to configure the jQuery plugin on the client
 |fallbackLang|Language to be used if 'lang' is not available in the locales folder|
 |lang|Language to be used|
 |userId|ID that gets sent to the repository component and will be store alongside the feedback|
+
+# Styling
+
+In order to adjust the styling of the feedback dialog, please edit app/css/_config.scss. Further adjustments could be done in main.scss or any other .scss file.
+
+Note: This setup assumes that you have a SCSS to CSS compiler in your IDE. So, the main.css should get built.
 
 # Internationalization
 
