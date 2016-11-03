@@ -110,13 +110,11 @@ public class MonitorConfigurationController extends RestController<MonitorConfig
 		
 		CloseableHttpClient client = HttpClientBuilder.create().build();
 		String url = monitorManagerHost + "configuration";
-<<<<<<< HEAD
+
 		Gson gson = new Gson();
 		JsonParser parser = new JsonParser();
 		JsonObject json = parser.parse(gson.toJson(configuration)).getAsJsonObject();
 		json.addProperty("monitor", this.monitorToolService.GetById(tool.hashCode()).getMonitorName());
-=======
->>>>>>> fixed API routes
 		HttpPut request = new HttpPut(url);
 		request.addHeader("content-type", "application/json");
 		request.setEntity(new StringEntity(json.getAsString()));
