@@ -49,6 +49,8 @@ export class ScreenshotView {
     defaultStrokeWidth:number = 3;
     selectedObjectControls:any;
     hasBordersAndControls:boolean = true;
+    panning:boolean = false;
+    blockPanning:boolean = false;
 
     constructor(screenshotMechanism:Mechanism, screenshotPreviewElement:JQuery, screenshotCaptureButton:JQuery,
                 elementToCapture:JQuery, container:JQuery, distPath:string, elementsToHide?:any, hasBordersAndControls?:boolean) {
@@ -114,6 +116,7 @@ export class ScreenshotView {
                 myThis.initStickers();
                 myThis.initScreenshotOperations();
                 myThis.customizeControls();
+                myThis.initZoom();
 
                 let screenshotCaptureButtonActiveText = myThis.screenshotCaptureButton.data('active-text');
                 myThis.screenshotCaptureButton.text(screenshotCaptureButtonActiveText);
@@ -136,6 +139,7 @@ export class ScreenshotView {
         this.selectedObjectControls.hide();
 
         myThis.fabricCanvas.on('object:selected', function (e) {
+            myThis.blockPanning = true;
             var selectedObject = e.target;
 
             selectedObject.bringToFront();
@@ -255,6 +259,7 @@ export class ScreenshotView {
             selectedObjectControls.hide();
             selectedObjectControls.find('.delete').off();
             selectedObjectControls.find('.color').off();
+            myThis.blockPanning = false;
         });
 
         myThis.fabricCanvas.on('object:added', function (object) {
@@ -272,6 +277,31 @@ export class ScreenshotView {
                 if (o.strokeWidthUnscaled) {
                     o.strokeWidth = o.strokeWidthUnscaled / o.scaleX;
                 }
+            }
+        });
+    }
+
+    initZoom() {
+        var myThis = this;
+        this.container.find('img.zoom-in').on('click', function() {
+            myThis.fabricCanvas.setZoom(myThis.fabricCanvas.getZoom() * 1.1);
+        });
+        this.container.find('img.zoom-out').on('click', function() {
+            myThis.fabricCanvas.setZoom(myThis.fabricCanvas.getZoom() / 1.1);
+        });
+
+        this.fabricCanvas.on('mouse:up', function (e) {
+            myThis.panning = false;
+        });
+
+        this.fabricCanvas.on('mouse:down', function (e) {
+            myThis.panning = true;
+        });
+
+        this.fabricCanvas.on('mouse:move', function (e) {
+            if (!myThis.croppingIsActive && !myThis.freehandActive && !myThis.blockPanning && myThis.panning && e && e.e) {
+                var delta = new fabric.Point(e.e.movementX, e.e.movementY);
+                myThis.fabricCanvas.relativePan(delta);
             }
         });
     }
@@ -465,6 +495,7 @@ export class ScreenshotView {
         jQuery('.screenshot-operations .freehand').css('border-bottom', '1px solid black');
         freehandControls.show();
         this.freehandActive = true;
+        this.blockPanning = true;
     }
 
     disableFreehandDrawing() {
@@ -473,6 +504,7 @@ export class ScreenshotView {
         this.fabricCanvas.isDrawingMode = false;
         freehandControls.hide();
         this.freehandActive = false;
+        this.blockPanning = false;
     }
 
     initStickers() {

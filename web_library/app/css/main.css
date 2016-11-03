@@ -1071,6 +1071,9 @@ button.text-type-text-clear {
     position: absolute;
     cursor: move; }
 
+.canvas-container {
+  overflow: scroll; }
+
 .screenshot-review {
   position: relative; }
   .screenshot-review img.base {
@@ -1231,6 +1234,12 @@ button.screenshot-operation {
   width: 24px;
   height: 24px;
   margin: 3px; }
+
+.zoom-in, .zoom-out {
+  width: 24px;
+  height: 24px;
+  margin: 1px;
+  cursor: pointer; }
 
 .svg-sticker-source:hover, .object-source:hover {
   cursor: move; }

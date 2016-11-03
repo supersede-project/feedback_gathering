@@ -265,6 +265,10 @@ button.text-type-text-clear {
   }
 }
 
+.canvas-container {
+  overflow: scroll;
+}
+
 .screenshot-review {
   position: relative;
 
@@ -482,6 +486,13 @@ button.screenshot-operation {
   width: 24px;
   height: 24px;
   margin: 3px;
+}
+
+.zoom-in, .zoom-out {
+  width: 24px;
+  height: 24px;
+  margin: 1px;
+  cursor: pointer;
 }
 
 .svg-sticker-source:hover, .object-source:hover {

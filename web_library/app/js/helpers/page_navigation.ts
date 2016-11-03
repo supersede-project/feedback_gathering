@@ -61,6 +61,9 @@ export class PageNavigation {
             for(var screenshotMechanism of screenshotMechanisms) {
                 if (screenshotMechanism != null && nextPage.find('.screenshot-review').length > 0 && screenshotMechanism.active &&
                     screenshotMechanism.screenshotView !== undefined && screenshotMechanism.screenshotView.screenshotCanvas !== undefined && screenshotMechanism.screenshotView.screenshotCanvas !== null) {
+
+                    screenshotMechanism.screenshotView.fabricCanvas.setZoom(1);
+
                     var img = $('<img src="' + screenshotMechanism.screenshotView.screenshotCanvas.toDataURL() + '" />');
                     img.css('width', '40%');
                     img.addClass('base');
