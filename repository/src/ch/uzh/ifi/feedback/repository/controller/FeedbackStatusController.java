@@ -135,13 +135,16 @@ public class FeedbackStatusController extends RestController<Status>{
 			throw new NotFoundException("The status does not exist for the provided application");	
 		
 		//validate order
-		StatusOption oldOption = optionService.GetWhere(asList(oldStatus.getStatus()), "`name` = ?").get(0);
-		List<StatusOption> newOptions = optionService.GetWhere(asList(status.getStatus()), "`name` = ?");
+		boolean isUserSpecific = oldStatus.getApiUserId() != null;
+		StatusOption oldOption = optionService.GetWhere(asList(oldStatus.getStatus(), isUserSpecific), "`name` = ?", "user_specific = ?").get(0);
+		List<StatusOption> newOptions = optionService.GetWhere(asList(status.getStatus(), isUserSpecific), "`name` = ?", "user_specific = ?");
 		
 		if(newOptions.size() == 0)
-			throw new NotFoundException("Status does not exist!");
+			throw new NotFoundException("Status with name " + status.getStatus() + " does not exist!");
 		
 		StatusOption newOption = newOptions.get(0);
+		if(newOption.getOrder() != oldOption.getOrder() + 1)
+			throw new ValidationException("Can not set status from " + oldStatus.getStatus() + " to " + status.getStatus() + ". Status order is violated!");
 		
 		return super.Update(status);
 	}
