@@ -531,8 +531,6 @@ export class ScreenshotView {
                     var offsetY = event.pageY - $(this).offset().top;
                     var offsetX = event.pageX - $(this).offset().left;
                 } else {
-                    //var offsetY = 20;
-                    //var offsetX = 20;
                     var offsetY = event.pageY - $(this).offset().top - myThis.canvasMovementY;
                     var offsetX = event.pageX - $(this).offset().left - myThis.canvasMovementX;
                 }
