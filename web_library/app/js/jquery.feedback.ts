@@ -610,7 +610,7 @@ export var feedbackPluginModule = function ($, window, document) {
         // loadDataHere to trigger pull if necessary
         var applicationService = new ApplicationService(language);
         applicationService.retrieveApplication(applicationId, application => {
-            if (application.state === null || application.state === 0) {
+            if (application.state) {
                 feedbackButton.hide();
                 return feedbackButton;
             }
