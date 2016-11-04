@@ -10,7 +10,9 @@ public abstract class MonitorConfigurationParams extends OrchestratorItem<Monito
 	
 	@Id
 	@DbAttribute("monitor_configuration_params_id")
-	private Integer id;
+	private Integer intId;
+	
+	private String id;
 	
 	private String timeSlot;
 
@@ -22,11 +24,19 @@ public abstract class MonitorConfigurationParams extends OrchestratorItem<Monito
 
 	@Override
 	public Integer getId() {
-		return id;
+		return intId;
 	}
 
 	@Override
 	public void setId(Integer id) {
+		this.intId = id;
+	}
+	
+	public String getConfId() {
+		return id;
+	}
+	
+	public void setConfId(String id) {
 		this.id = id;
 	}
 	
