@@ -51,6 +51,8 @@ export class ScreenshotView {
     hasBordersAndControls:boolean = true;
     panning:boolean = false;
     blockPanning:boolean = false;
+    canvasMovementX:number = 0;
+    canvasMovementY:number = 0;
 
     constructor(screenshotMechanism:Mechanism, screenshotPreviewElement:JQuery, screenshotCaptureButton:JQuery,
                 elementToCapture:JQuery, container:JQuery, distPath:string, elementsToHide?:any, hasBordersAndControls?:boolean) {
@@ -127,7 +129,6 @@ export class ScreenshotView {
     initFabric(img, canvas) {
         var myThis = this;
         this.fabricCanvas = new fabric.Canvas(canvasId);
-        this.determineCanvasScaleForRetinaDisplay();
 
         var pageScreenshotCanvas = new fabric.Image(img, {width: canvas.width, height: canvas.height});
 
@@ -302,24 +303,19 @@ export class ScreenshotView {
             if (!myThis.croppingIsActive && !myThis.freehandActive && !myThis.blockPanning && myThis.panning && e && e.e) {
                 var delta = new fabric.Point(e.e.movementX, e.e.movementY);
                 myThis.fabricCanvas.relativePan(delta);
+
+                myThis.canvasMovementX += e.e.movementX;
+                myThis.canvasMovementY += e.e.movementY;
             }
         });
-    }
 
-    determineCanvasScaleForRetinaDisplay() {
-        if (window.devicePixelRatio !== 1) {
-            var screenshotPreviewCanvas = jQuery('.screenshot-preview canvas');
-            var height = screenshotPreviewCanvas.height();
-            var width = screenshotPreviewCanvas.width();
-            var canvas = this.fabricCanvas.getElement();
-
-            // TODO get this working!!!
-            canvas.setAttribute('width', window.devicePixelRatio * width);
-            canvas.setAttribute('height', window.devicePixelRatio * height);
-            canvas.setAttribute('style', 'width="' + width + 'px"; height="' + height + 'px";');
-
-            canvas.getContext('2d').scale(window.devicePixelRatio, window.devicePixelRatio);
-        }
+        // retina and co
+        setTimeout(function() {
+            if (window.devicePixelRatio !== 1) {
+                var zoom = 1/window.devicePixelRatio;
+                myThis.fabricCanvas.setZoom(zoom);
+            }
+        }, 500);
     }
 
     initCrop() {
@@ -535,8 +531,10 @@ export class ScreenshotView {
                     var offsetY = event.pageY - $(this).offset().top;
                     var offsetX = event.pageX - $(this).offset().left;
                 } else {
-                    var offsetY = 20;
-                    var offsetX = 20;
+                    //var offsetY = 20;
+                    //var offsetX = 20;
+                    var offsetY = event.pageY - $(this).offset().top - myThis.canvasMovementY;
+                    var offsetX = event.pageX - $(this).offset().left - myThis.canvasMovementX;
                 }
 
                 offsetY -= 12;

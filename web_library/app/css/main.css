@@ -1072,7 +1072,7 @@ button.text-type-text-clear {
     cursor: move; }
 
 .canvas-container {
-  overflow: scroll; }
+  overflow: hidden; }
 
 .screenshot-review {
   position: relative; }
