@@ -22,7 +22,7 @@ $(document).ready(function() {
             "ranking": {
                 "type":"string",
                 "title":"Ranking",
-                "enum":['excellent','ok','so so'],
+                "enum":["excellent","ok","so so"],
                 "required":true
             }
         }
@@ -61,7 +61,7 @@ $(document).ready(function() {
     });
 
     // save button
-    $(".save-button").off().click(function() {
+    $(".save-button").on('click', function() {
 
         if (!localStorage)
         {
@@ -69,7 +69,9 @@ $(document).ready(function() {
             return;
         }
 
-        var config = {};
+        var config = {
+        	"schema": schema
+        };
         if (schema)
         {
             config.schema = schema;
@@ -78,6 +80,7 @@ $(document).ready(function() {
         {
             config.options = options;
         }
+
         var configString = JSON.stringify(config);
 
         localStorage.setItem("alpacaDesignerConfig", configString);
@@ -85,6 +88,20 @@ $(document).ready(function() {
         alert(localStorage.getItem("alpacaDesignerConfig"));
 
         // TODO: create a WebService to write the JSON file or to the database
+        $.ajax({
+        	type: 'POST',
+        	contentType: 'application/json',
+        	data: configString,
+        	url: 'http://localhost/form_export/src/SchemaServlet.java',
+        	dataType: 'json',
+        	success: function() {
+        		alert('done') 
+        	},
+        	error: function(xhr, status, err) {
+        	alert('there was an error posting: ' + status + ' ' + err) 
+        	}
+        })
+        
     });
 
 });
