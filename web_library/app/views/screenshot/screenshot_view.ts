@@ -527,16 +527,12 @@ export class ScreenshotView {
             drop: function (event:DragEvent, ui) {
                 var sticker = $(ui.helper);
 
-                if(myThis.fabricCanvas.getZoom() === 1) {
-                    var offsetY = event.pageY - $(this).offset().top;
-                    var offsetX = event.pageX - $(this).offset().left;
-                } else {
-                    var offsetY = event.pageY - $(this).offset().top - myThis.canvasMovementY;
-                    var offsetX = event.pageX - $(this).offset().left - myThis.canvasMovementX;
-                }
+                var p = {x: event.pageX - $(this).offset().left, y: event.pageY - $(this).offset().top};
+                var invertedMatrix = fabric.util.invertTransform(myThis.fabricCanvas.viewportTransform);
+                var transformedP = fabric.util.transformPoint(p, invertedMatrix);
 
-                offsetY -= 12;
-                offsetX -= 12;
+                var offsetX = transformedP.x;
+                var offsetY = transformedP.y;
 
                 if (sticker.hasClass('text')) {
                     myThis.addTextAnnotation(offsetX, offsetY);
