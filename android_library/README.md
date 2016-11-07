@@ -42,6 +42,7 @@ In this example Android Studio is used as the IDE with Gradle as the build tool.
      * com.google.code.gson:gson:2.6.2 (or higher)
      * com.squareup.retrofit2:retrofit:2.0.0 (or higher)
      * com.squareup.retrofit2:converter-gson:2.0.0 (or higher)
+     * com.theartofdev.edmodo:android-image-cropper:2.3.1
      * project(':feedbacklibrary-release') (from adding the library as a module)
    * The AndroidManifest.xml file of your application must exhibit the following:
      * tools:replace="android:label, android:allowBackup"
