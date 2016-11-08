@@ -1,12 +1,12 @@
-export const apiEndpointOrchestrator = 'http://supersede.es.atos.net:8080/';
+export const apiEndpointOrchestrator = 'http://ec2-54-175-37-30.compute-1.amazonaws.com/';
 export const applicationPath = 'orchestrator/feedback/{lang}/applications/';
-export const applicationId = 14;
-export const applicationName = 'ATOS';
+export const applicationId = 4;
+export const applicationName = 'energiesparkonto.de';
 
-export const apiEndpointRepository = 'http://supersede.es.atos.net:8080/';
+export const apiEndpointRepository = 'http://ec2-54-175-37-30.compute-1.amazonaws.com/';
 export const feedbackPath = "feedback_repository/{lang}/feedbacks";
 
-export const feedbackObjectTitle = 'Feedback ATOS';
+export const feedbackObjectTitle = 'Feedback';
 
 export const defaultSuccessMessage = 'Your feedback was successfully sent';
 
