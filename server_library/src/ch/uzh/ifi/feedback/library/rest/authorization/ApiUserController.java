@@ -58,7 +58,7 @@ public class ApiUserController extends RestController<ApiUser> {
 	@Authenticate(service = UserAuthenticationService.class, role = "ADMIN")
 	public ApiUser Update(ApiUser user) throws Exception
 	{
-		return super.Insert(user);
+		return super.Update(user);
 	}
 	
 	@DELETE
