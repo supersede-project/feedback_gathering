@@ -34,7 +34,9 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.google.inject.servlet.RequestScoped;
 
 import ch.uzh.ifi.feedback.library.rest.RestController;
@@ -47,6 +49,7 @@ import ch.uzh.ifi.feedback.library.rest.annotations.Path;
 import ch.uzh.ifi.feedback.library.rest.annotations.PathParam;
 import ch.uzh.ifi.feedback.orchestrator.model.MonitorConfiguration;
 import ch.uzh.ifi.feedback.orchestrator.services.MonitorConfigurationService;
+import ch.uzh.ifi.feedback.orchestrator.services.MonitorToolService;
 import ch.uzh.ifi.feedback.orchestrator.validation.MonitorConfigurationValidator;
 
 @RequestScoped
@@ -54,11 +57,18 @@ import ch.uzh.ifi.feedback.orchestrator.validation.MonitorConfigurationValidator
 public class MonitorConfigurationController extends RestController<MonitorConfiguration> {
 	
 	private String monitorManagerHost = "localhost:8080/monitor_manager/";
+	
+	private MonitorToolService monitorToolService;
 
-	public MonitorConfigurationController(MonitorConfigurationService dbService,
+	public MonitorConfigurationController(
+			MonitorConfigurationService dbService,
 			MonitorConfigurationValidator validator, 
-			HttpServletRequest request, HttpServletResponse response) {
+			HttpServletRequest request, 
+			HttpServletResponse response,
+			MonitorToolService monitorToolService) {
 		super(dbService, validator, request, response);
+		
+		this.monitorToolService = monitorToolService;
 	}
 	
 	@POST
@@ -70,9 +80,14 @@ public class MonitorConfigurationController extends RestController<MonitorConfig
 		
 		CloseableHttpClient client = HttpClientBuilder.create().build();
 		String url = monitorManagerHost + "configuration";
+
+		Gson gson = new Gson();
+		JsonParser parser = new JsonParser();
+		JsonObject json = parser.parse(gson.toJson(configuration)).getAsJsonObject();
+		json.addProperty("monitor", this.monitorToolService.GetById(tool.hashCode()).getMonitorName());
 		HttpPost request = new HttpPost(url);
 		request.addHeader("content-type", "application/json");
-		request.setEntity(new StringEntity(getConfigurationJson(configuration).toString()));
+		request.setEntity(new StringEntity(json.getAsString()));
 		client.execute(request);
 		
 		return super.Insert(configuration);
@@ -95,9 +110,14 @@ public class MonitorConfigurationController extends RestController<MonitorConfig
 		
 		CloseableHttpClient client = HttpClientBuilder.create().build();
 		String url = monitorManagerHost + "configuration";
+
+		Gson gson = new Gson();
+		JsonParser parser = new JsonParser();
+		JsonObject json = parser.parse(gson.toJson(configuration)).getAsJsonObject();
+		json.addProperty("monitor", this.monitorToolService.GetById(tool.hashCode()).getMonitorName());
 		HttpPut request = new HttpPut(url);
 		request.addHeader("content-type", "application/json");
-		request.setEntity(new StringEntity(getConfigurationJson(monitorConfiguration).toString()));
+		request.setEntity(new StringEntity(json.getAsString()));
 		client.execute(request);
 		
 		return super.Insert(monitorConfiguration);
@@ -120,20 +140,6 @@ public class MonitorConfigurationController extends RestController<MonitorConfig
 		client.execute(request);
 		
 		super.Delete(configuration);
-	}
-	
-	private JsonObject getConfigurationJson(MonitorConfiguration configuration) {
-		JsonObject json = new JsonObject();
-		json.addProperty("id", configuration.getId());
-		json.addProperty("monitor", configuration.getMonitor());
-		json.addProperty("tool", configuration.getMonitorToolName());
-		json.addProperty("timeSlot",configuration.getTimeSlot());
-		json.addProperty("kafkaEndpoint", configuration.getKafkaEndpoint());
-		json.addProperty("kafkaTopic", configuration.getKafkaTopic());
-		for (String key : configuration.getParams().keySet()) {
-			json.addProperty(key, configuration.getParam(key));
-		}
-		return json;
 	}
 
 }
