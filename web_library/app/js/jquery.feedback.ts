@@ -231,7 +231,7 @@ export var feedbackPluginModule = function ($, window, document) {
      */
     var sendFeedback = function (formData:FormData, configuration:ConfigurationInterface, generalConfiguration:GeneralConfiguration) {
         $.ajax({
-            url: apiEndpointRepository + 'feedback_repository/' + language + '/applications/' + applicationId + '/feedbacks/',
+            url: apiEndpointRepository + 'feedback_repository/' + language + '/feedbacks/',
             type: 'POST',
             data: formData,
             dataType: 'json',
@@ -463,7 +463,8 @@ export var feedbackPluginModule = function ($, window, document) {
 
         container.find('.server-response').removeClass('error').removeClass('success');
         var feedbackObject = new Feedback(feedbackObjectTitle, userId, language, applicationId, configuration.id, [], [], [], [], null, [], []);
-        feedbackObject.contextInformation = ContextInformation.create();
+        // TODO add server part for PTV
+        //feedbackObject.contextInformation = ContextInformation.create();
 
         for (var textMechanism of textMechanisms) {
             if (textMechanism.active) {
