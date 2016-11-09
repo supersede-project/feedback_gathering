@@ -18,11 +18,8 @@ module.exports = function (config) {
             { pattern: 'node_modules/handlebars/dist/**/*.js', included: false },
             { pattern: 'node_modules/handlebars/runtime.js', included: false },
             { pattern: 'node_modules/i18next/*.js', included: false },
-            //{ pattern: 'app/templates/*.handlebars', included: true },
-            //{ pattern: 'app/templates/**/*.handlebars', included: true },
             { pattern: 'app/services/mocks/**/*.json', included: false },
             { pattern: 'app/locales/**/*.json', included: false },
-            //{ pattern: 'app/**/*.js', included: false }
             { pattern: 'app/**/*.spec.js', included: false },
             { pattern: 'app/*.spec.js', included: false }
         ],
@@ -33,14 +30,7 @@ module.exports = function (config) {
             '/app/js/lib/screenshot/spectrum.js': '/base/app/js/lib/screenshot/spectrum.js',
             '/app/js/lib/screenshot/customiseControls.js': '/base/app/js/lib/screenshot/customiseControls.js',
             '/app/js/lib/rating/jquery.star-rating-svg.js': '/base/app/js/lib/rating/jquery.star-rating-svg.js',
-            '/app/assets/jquery-ui-1.12.1.custom/jquery-ui.js': '/base/app/assets/jquery-ui-1.12.1.custom/jquery-ui.js',
-            '/app/templates/feedback_dialog.handlebars': '/base/app/templates/feedback_dialog.handlebars',
-            '/app/templates/intermediate_dialog.handlebars': '/base/app/templates/intermediate_dialog.handlebars',
-            '/app/templates/notification.handlebars': '/base/app/templates/notification.handlebars',
-            '/app/templates/partials/attachment_mechanism.handlebars': '/base/app/templates/partials/attachment_mechanism.handlebars',
-            '/app/templates/partials/audio_mechanism.handlebars': '/base/app/templates/partials/audio_mechanism.handlebars',
-            '/app/templates/partials/category_mechanism.handlebars': '/base/app/templates/partials/category_mechanism.handlebars',
-            '/app/templates/partials/rating_mechanism.handlebars': '/base/app/templates/partials/rating_mechanism.handlebars',
+            '/app/assets/jquery-ui-1.12.1.custom/jquery-ui.js': '/base/app/assets/jquery-ui-1.12.1.custom/jquery-ui.js'
         },
 
         // list of files to exclude
