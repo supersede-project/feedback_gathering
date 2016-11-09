@@ -12,6 +12,7 @@ var uglify = require('gulp-uglify');
 var argv = require('yargs').argv;
 var ts = require("gulp-typescript");
 var tsProject = ts.createProject("tsconfig.json");
+var sass = require('gulp-sass');
 
 
 var jqueryUIPath = 'app/assets/jquery-ui-1.12.1.custom/';
@@ -129,7 +130,7 @@ gulp.task('copy-and-uglify-audio-assets', function() {
 /**
  * Builds the configuration according to the passed parameter and also compiles the config js file.
  */
-gulp.task('configure', function() {
+gulp.task('configure.config.ts', function() {
     var configuration = argv.configuration || 'default';
 
     // js/config.* = js/configurations/common.* + js/configurations/<configuration>.*
@@ -139,6 +140,40 @@ gulp.task('configure', function() {
         .pipe(gulp.dest('app/js'))
         .pipe(ts(tsProject))
         .js.pipe(gulp.dest('app/js'));
+});
+
+gulp.task('set.config.scss', function() {
+    var configuration = argv.configuration || 'default';
+
+    gulp.src(['app/css/configurations/_' + configuration + '.scss'])
+        .pipe(rename('_config.scss'))
+        .pipe(gulp.dest('app/css'));
+});
+
+// builds main.css
+gulp.task('build.css', function () {
+    return gulp.src('app/css/main.scss')
+        .pipe(sass().on('error', sass.logError))
+        .pipe(gulp.dest('app/css'));
+});
+
+/**
+ * Build the main.css according to the passed parameter
+ */
+gulp.task('configure.config.scss', function(done) {
+    runSequence(
+        'set.config.scss',
+        'build.css',
+        done
+    );
+});
+
+gulp.task('configure', function(done) {
+    runSequence(
+        'configure.config.scss',
+        'configure.config.ts',
+        done
+    );
 });
 
 gulp.task('build.dev', function(done) {

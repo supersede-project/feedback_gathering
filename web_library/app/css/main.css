@@ -74,7 +74,7 @@
   cursor: pointer;
   border: 1px solid black;
   background: white;
-  opacity: 0.8; }
+  opacity: .8; }
 
 .sp-alpha {
   display: none;
@@ -194,12 +194,11 @@
 @media (max-device-width: 480px) {
   .sp-color {
     right: 40%; }
-
   .sp-hue {
     left: 63%; }
-
   .sp-fill {
     padding-top: 60%; } }
+
 .sp-dragger {
   border-radius: 5px;
   height: 5px;
@@ -220,7 +219,7 @@
   right: -1px;
   border: 1px solid #000;
   background: white;
-  opacity: 0.8; }
+  opacity: .8; }
 
 .sp-container {
   border-radius: 0;
@@ -481,6 +480,7 @@
 
 .audio-type audio {
   display: none; }
+
 .audio-type .audio-buttons {
   margin: 10px 0; }
   .audio-type .audio-buttons a img {
@@ -508,6 +508,7 @@ table.current-files {
 
 .attachment-review tr {
   height: 20px; }
+
 .attachment-review a.remove-file {
   display: none; }
 
@@ -515,10 +516,12 @@ table.current-files {
   /* IE10+ CSS styles go here */
   .hide-ie {
     display: none; } }
-@supports (-ms-accelerator: true) {
-  /* IE Edge 12+ CSS styles go here */
+
+@supports (-ms-accelerator: true) { {
+    /* IE Edge 12+ CSS styles go here */ }
   .hide-ie {
     display: none; } }
+
 .ui-widget input, .ui-widget select, .ui-widget textarea, .ui-widget button {
   font-family: Verdana, Arial, sans-serif;
   font-size: 15px; }
@@ -536,7 +539,7 @@ table.current-files {
   left: 0;
   padding: 4px 10px;
   text-decoration: none;
-  box-shadow: 1px 1px 1px 0 #677a00;
+  box-shadow: 1px 1px 1px 0 #1A6FC2;
   display: none; }
 
 .feedback-container {
@@ -580,9 +583,9 @@ textarea.text-type-text {
 
 .ui-dialog .ui-dialog-titlebar {
   font-family: Arial, sans-serif;
-  color: #7c9009;
+  color: #1A6FC2;
   font-weight: normal;
-  border-bottom: 2px solid #7c9009;
+  border-bottom: 2px solid #1A6FC2;
   font-size: 22px;
   margin: 2px 5px;
   padding: 0 0 0.25rem; }
@@ -598,7 +601,7 @@ textarea.text-type-text {
   padding: 7px 0; }
 
 .ui-dialog-titlebar {
-  border-color: #7c9009;
+  border-color: #1A6FC2;
   border-width: 1px;
   padding: 0;
   margin: 0; }
@@ -624,11 +627,11 @@ section.dialog-navigation {
   margin: 13px 1px 3px 1px; }
 
 .button {
-  background-color: #546300;
-  background-image: -moz-linear-gradient(top, #8aa221 0%, #8eab10 50%, #7c9009 52%, #546300 100%);
-  background-image: -webkit-linear-gradient(top, #8aa221 0%, #8eab10 50%, #7c9009 52%, #546300 100%);
-  background-image: -o-linear-gradient(top, #8aa221 0%, #8eab10 50%, #7c9009 52%, #546300 100%);
-  background-image: linear-gradient(top, #8aa221 0%, #8eab10 50%, #7c9009 52%, #546300 100%);
+  background-color: #1A6FC2;
+  background-image: -moz-linear-gradient(top, #1A6FC2 0%, #1A6FC2 50%, #1A6FC2 52%, #1A6FC2 100%);
+  background-image: -webkit-linear-gradient(top, #1A6FC2 0%, #1A6FC2 50%, #1A6FC2 52%, #1A6FC2 100%);
+  background-image: -o-linear-gradient(top, #1A6FC2 0%, #1A6FC2 50%, #1A6FC2 52%, #1A6FC2 100%);
+  background-image: linear-gradient(top, #1A6FC2 0%, #1A6FC2 50%, #1A6FC2 52%, #1A6FC2 100%);
   background-size: 100% auto;
   color: white;
   display: inline-block;
@@ -643,11 +646,11 @@ section.dialog-navigation {
     text-transform: none; }
 
 .button:hover {
-  background-color: #617203;
-  background-image: -webkit-linear-gradient(top, #7f9718 0%, #7d970b 50%, #7c9009 52%, #617203 100%);
-  background-image: -moz-linear-gradient(top, #7f9718 0%, #7d970b 50%, #7c9009 52%, #617203 100%);
-  background-image: -o-linear-gradient(top, #7f9718 0%, #7d970b 50%, #7c9009 52%, #617203 100%);
-  background-image: linear-gradient(top, #7f9718 0%, #7d970b 50%, #7c9009 52%, #617203 100%); }
+  background-color: #1A6FC2;
+  background-image: -webkit-linear-gradient(top, #1A6FC2 0%, #1A6FC2 50%, #1A6FC2 52%, #1A6FC2 100%);
+  background-image: -moz-linear-gradient(top, #1A6FC2 0%, #1A6FC2 50%, #1A6FC2 52%, #1A6FC2 100%);
+  background-image: -o-linear-gradient(top, #1A6FC2 0%, #1A6FC2 50%, #1A6FC2 52%, #1A6FC2 100%);
+  background-image: linear-gradient(top, #1A6FC2 0%, #1A6FC2 50%, #1A6FC2 52%, #1A6FC2 100%); }
 
 .navigation-button {
   float: right;
@@ -929,12 +932,12 @@ button.screenshot-operation {
 a.discard-feedback {
   float: left;
   display: inline-block;
-  color: #7c9009;
+  color: #1A6FC2;
   text-decoration: none;
   margin-top: 7px;
   font-size: 14px; }
   a.discard-feedback:hover {
-    color: #7c9009;
+    color: #1A6FC2;
     text-decoration: underline; }
 
 .submission-message {
@@ -964,5 +967,3 @@ a.discard-feedback {
   background-color: #dff0d8;
   border-color: #d6e9c6;
   padding: 10px 40px; }
-
-/*# sourceMappingURL=main.css.map */
