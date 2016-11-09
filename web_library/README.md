@@ -53,15 +53,15 @@ You then have to define some application settings and the Orchestrator as well a
 
 Configure the project:
 
-    ```bash
-    gulp configure --configuration=<configuration_name>
-    ```
+```bash
+gulp configure --configuration=<configuration_name>
+```
 
 Use the filename as an argument, e.g.
 
-    ```bash
-    gulp configure --configuration=default
-    ```  
+```bash
+gulp configure --configuration=default
+```  
 
 Compile all the .ts files to .js and bundle the project:
 
