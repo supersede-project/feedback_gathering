@@ -56,5 +56,8 @@
     "wd": "",
     "wrench": "*"
   },
-  "dependencies": {}
+  "dependencies": {
+    "file-system": "^2.2.1",
+    "jsonfile": "^2.4.0"
+  }
 }

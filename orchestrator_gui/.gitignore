@@ -102,4 +102,5 @@ _old/
 deploy.log
 
 package.json.npm
+package.json
 lib/pick-a-color-m/docs/

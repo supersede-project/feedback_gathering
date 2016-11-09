@@ -23,7 +23,7 @@ $(document).ready(function() {
                 "type":"string",
                 "title":"Ranking",
                 "enum":["excellent","ok","so so"],
-                "required":true
+                "required": true
             }
         }
     };
@@ -61,17 +61,18 @@ $(document).ready(function() {
     });
 
     // save button
-    $(".save-button").on('click', function() {
+    $(".save-button").on("click", function() {
 
-        if (!localStorage)
+        /* if (!localStorage)
         {
             alert("Your browser must support HTML5 local storage in order to use this feature");
             return;
-        }
+        } */
 
         var config = {
         	"schema": schema
         };
+
         if (schema)
         {
             config.schema = schema;
@@ -83,25 +84,22 @@ $(document).ready(function() {
 
         var configString = JSON.stringify(config);
 
-        localStorage.setItem("alpacaDesignerConfig", configString);
+        /* localStorage.setItem("alpacaDesignerConfig", configString);
         alert("Your form was saved in HTML5 local storage");
-        alert(localStorage.getItem("alpacaDesignerConfig"));
+        alert(localStorage.getItem("alpacaDesignerConfig")); */
 
-        // TODO: create a WebService to write the JSON file or to the database
-        $.ajax({
-        	type: 'POST',
-        	contentType: 'application/json',
-        	data: configString,
-        	url: 'http://localhost/form_export/src/SchemaServlet.java',
-        	dataType: 'json',
-        	success: function() {
-        		alert('done') 
-        	},
-        	error: function(xhr, status, err) {
-        	alert('there was an error posting: ' + status + ' ' + err) 
-        	}
-        })
-        
+        // Save JSON-String to local JSON-file
+        var blob = new Blob([configString], {type: "application/json"});
+        var saveAs = window.saveAs;
+        saveAs(blob, "GUI_schema.json");
+
+        // FIXME: function not working yet
+        /* var jsonfile = require(['jsonfile'], function (writeFile) {
+		 
+			jsonfile.writeFile("test.json", configString, function (err) {
+			  console.error(err)
+			})
+        }); */
     });
 
 });
