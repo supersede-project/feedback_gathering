@@ -9,6 +9,9 @@ var rename = require('gulp-rename');
 var runSequence = require('run-sequence').use(gulp);
 var del = require('del');
 var uglify = require('gulp-uglify');
+var argv = require('yargs').argv;
+var ts = require("gulp-typescript");
+var tsProject = ts.createProject("tsconfig.json");
 
 
 var jqueryUIPath = 'app/assets/jquery-ui-1.12.1.custom/';
@@ -26,6 +29,10 @@ var gulpSSH = new SSH({
 var copyright = function () {
     var copyrightString = fs.readFileSync('copyright.txt');
     return '/*' + copyrightString + '*/';
+};
+
+var getFileContent = function (path) {
+    return fs.readFileSync(path);
 };
 
 gulp.task('webpack.dev', function() {
@@ -117,6 +124,21 @@ gulp.task('copy-and-uglify-audio-assets', function() {
     gulp.src(['app/js/lib/audio/Fr.voice.js', 'app/js/lib/audio/recorder.js'])
         .pipe(uglify({mangle:false}))
         .pipe(gulp.dest('dist/audio'));
+});
+
+/**
+ * Builds the configuration according to the passed parameter and also compiles the config js file.
+ */
+gulp.task('configure', function() {
+    var configuration = argv.configuration || 'default';
+
+    // js/config.* = js/configurations/common.* + js/configurations/<configuration>.*
+    gulp.src(['app/js/configurations/common.ts'])
+        .pipe(rename('config.ts'))
+        .pipe(insert.append('\n' + getFileContent('app/js/configurations/' + configuration + '.ts')))
+        .pipe(gulp.dest('app/js'))
+        .pipe(ts(tsProject))
+        .js.pipe(gulp.dest('app/js'));
 });
 
 gulp.task('build.dev', function(done) {
