@@ -23,8 +23,10 @@
                     {{/compare}}
                     {{#compare type "TEXT_TYPE" operator="==="}}
                         {{#if active}}
-                            <section id="textMechanism{{ id }}" class="feedback-mechanism {{../labelPositioning}} text-type{{#if mandatory }} mandatory{{/if}}{{#if maxLengthStrict}} max-length-strict{{/if}}">
-                                <p class="text-type-label explanation col col-left" style="{{ labelStyle }}{{#if mandatory}} {{ ../mandatoryLabelStyle }}{{/if}}">
+                            <section id="textMechanism{{ id }}"
+                                     class="feedback-mechanism {{../labelPositioning}} text-type{{#if mandatory }} mandatory{{/if}}{{#if maxLengthStrict}} max-length-strict{{/if}}">
+                                <p class="text-type-label explanation col col-left"
+                                   style="{{ labelStyle }}{{#if mandatory}} {{ ../mandatoryLabelStyle }}{{/if}}">
                                     {{ label }}{{#if mandatory }} {{ ../mandatorySign }}{{/if}}
                                 </p>
 
@@ -102,26 +104,35 @@
                                         {{#if annotationExplanation }}
                                             <small>{{ annotationExplanation }}</small>
                                         {{/if}}
-                                        <img class="sticker-source svg-sticker-source hide-ie" title="{{ sentimentSatisfiedMouseover }}"
+                                        <img class="sticker-source svg-sticker-source hide-ie"
+                                             title="{{ sentimentSatisfiedMouseover }}"
                                              src="{{../distPath}}img/ic_sentiment_satisfied_black_24px.svg"/>
-                                        <img class="sticker-source svg-sticker-source hide-ie" title="{{ sentimentDissatisfiedMouseover }}"
+                                        <img class="sticker-source svg-sticker-source hide-ie"
+                                             title="{{ sentimentDissatisfiedMouseover }}"
                                              src="{{../distPath}}img/ic_sentiment_dissatisfied_black_24px.svg"/>
-                                        <img class="sticker-source object-source arrow hide-ie" title="{{ arrowMouseover }}"
+                                        <img class="sticker-source object-source arrow hide-ie"
+                                             title="{{ arrowMouseover }}"
                                              src="{{../distPath}}img/ic_arrow_forward_black_24px.svg"/>
-                                        <img class="sticker-source object-source circle hide-ie" title="{{ circleMouseover }}"
+                                        <img class="sticker-source object-source circle hide-ie"
+                                             title="{{ circleMouseover }}"
                                              src="{{../distPath}}img/ic_panorama_fish_eye_black_24px.svg"/>
-                                        <img class="sticker-source object-source rect hide-ie" title="{{ rectMouseover }}"
+                                        <img class="sticker-source object-source rect hide-ie"
+                                             title="{{ rectMouseover }}"
                                              src="{{../distPath}}img/ic_crop_din_black_24px.svg"/>
-                                        <img class="sticker-source object-source fillRect hide-ie" title="{{ filledRectMouseover }}"
+                                        <img class="sticker-source object-source fillRect hide-ie"
+                                             title="{{ filledRectMouseover }}"
                                              src="{{../distPath}}img/ic_stop_black_24px.svg"/>
-                                        <img class="sticker-source svg-sticker-source hide-ie" title="{{ thumbUpMouseover }}"
+                                        <img class="sticker-source svg-sticker-source hide-ie"
+                                             title="{{ thumbUpMouseover }}"
                                              src="{{../distPath}}img/ic_thumb_up_black_24px.svg"/>
-                                        <img class="sticker-source svg-sticker-source hide-ie" title="{{ thumbDownMouseover }}"
+                                        <img class="sticker-source svg-sticker-source hide-ie"
+                                             title="{{ thumbDownMouseover }}"
                                              src="{{../distPath}}img/ic_thumb_down_black_24px.svg"/>
-                                        <img class="sticker-source svg-sticker-source text hide-ie" title="{{ textMouseover }}"
+                                        <img class="sticker-source svg-sticker-source text hide-ie"
+                                             title="{{ textMouseover }}"
                                              src="{{../distPath}}img/ic_title_black_24px.svg"/>
                                         <img class="freehand" title="{{ freehandMouseover }}"
-                                             src="{{../distPath}}img/ic_gesture_black_24px.svg" />
+                                             src="{{../distPath}}img/ic_gesture_black_24px.svg"/>
 
                                         <article class="selected-object-controls">
                                             <p>Selection</p>

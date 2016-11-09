@@ -3,7 +3,7 @@ import {mechanismTypes} from '../../js/config';
 import Handlebars = require('handlebars');
 import {ScreenshotMechanism} from '../../models/mechanisms/screenshot_mechanism';
 
-
+/*
 describe('Screenshot View', () => {
     let screenshotView:ScreenshotView;
     let container:JQuery;
