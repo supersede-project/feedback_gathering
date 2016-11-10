@@ -16,7 +16,7 @@ export class RatingMechanism extends Mechanism {
         var ratingMechanismObject = this;
 
         return {
-            starSize: 25,
+            starSize: 30,
             totalStars: this.getParameterValue('maxRating'),
             initialRating: this.initialRating,
             useFullStars: true,

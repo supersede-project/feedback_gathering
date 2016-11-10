@@ -55,7 +55,7 @@ export abstract class Mechanism implements Parameterizable {
     }
 
     getCSSPropertyUnit(property: string) {
-        if(property === 'font-size') {
+        if(property === 'font-size' || property === 'height' || property === 'width' || property === 'border-width') {
             return 'px'
         } else {
             return '';

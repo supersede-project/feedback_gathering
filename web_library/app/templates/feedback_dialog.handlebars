@@ -3,6 +3,10 @@
         <section class="pages-container">
             <article data-feedback-page="1" class="feedback-page">
 
+                {{#if feedbackFormTitle}}
+                    <h2 class="form-title">{{feedbackFormTitle}}</h2>
+                {{/if}}
+
                 {{#compare reviewButtonPosition "top" operator="==="}}
                     <button class="button feedback-dialog-forward navigation-button">{{t "general.review_feedback" }}</button>
                     <div class="clearfix"></div>
@@ -24,7 +28,7 @@
                     {{#compare type "TEXT_TYPE" operator="==="}}
                         {{#if active}}
                             <section id="textMechanism{{ id }}" class="feedback-mechanism {{../labelPositioning}} text-type{{#if mandatory }} mandatory{{/if}}{{#if maxLengthStrict}} max-length-strict{{/if}}">
-                                <p class="text-type-label explanation col col-left" style="{{ labelStyle }}{{#if mandatory}} {{ ../mandatoryLabelStyle }}{{/if}}">
+                                <p class="text-type-label explanation col col-left" style="{{../generalLabelStyle}}{{ labelStyle }}{{#if mandatory}} {{ ../mandatoryLabelStyle }}{{/if}}">
                                     {{ label }}{{#if mandatory }} {{ ../mandatorySign }}{{/if}}
                                 </p>
 
@@ -58,20 +62,20 @@
                             <section id="screenshotMechanism{{ id }}"
                                      class="feedback-mechanism horizontal screenshot-type">
                                 <article class="col col-left">
-                                    <button class="take-screenshot button small"
+                                    <button class="take-screenshot button screenshot"
                                             data-default-text="{{t "screenshot.take_screenshot" }}"
                                             data-active-text="{{t "screenshot.take_new_screenshot" }}">{{t "screenshot.take_screenshot" }}</button>
 
                                     <div class="screenshot-operations">
-                                        <button class="screenshot-operation screenshot-draw-remove"
+                                        <button class="button screenshot-draw-remove screenshot"
                                                 title="{{t "screenshot.remove" }}">{{t "screenshot.remove" }}</button>
 
-                                        <p>
-                                            <img class="zoom-in" title="Zoom"
-                                                 src="{{../distPath}}img/ic_zoom_in_black_24dp_2x.png"/>
-                                            <img class="zoom-out" title="Zoom"
-                                                 src="{{../distPath}}img/ic_zoom_out_black_24dp_2x.png"/>
-                                        </p>
+                                        <p style="{{../generalLabelStyle}}">Zoom</p>
+                                        <img class="zoom-in" title="Zoom"
+                                             src="{{../distPath}}img/ic_zoom_in_black_24dp_2x.png"/>
+                                        <img class="zoom-out" title="Zoom"
+                                             src="{{../distPath}}img/ic_zoom_out_black_24dp_2x.png"/>
+
 
                                         <!--[if IE]>
                                         <style>
@@ -80,7 +84,7 @@
                                             }
                                         </style>
                                         <![endif]-->
-                                        <p>{{t "screenshot.crop" }}</p>
+                                        <p style="{{../generalLabelStyle}}">{{t "screenshot.crop" }}</p>
                                         <button class="screenshot-operation screenshot-crop"
                                                 title="{{t "screenshot.crop" }}"><img
                                                 src="{{../distPath}}img/ic_crop_black_24dp_2x.png"
@@ -98,7 +102,7 @@
                                                 src="{{../distPath}}img/ic_undo_black_24dp_2x.png"
                                                 alt="{{t "screenshot.undo" }}"/></button>
 
-                                        <p class="annotations-heading">Annotations</p>
+                                        <p class="annotations-heading" style="{{../generalLabelStyle}}">Annotations</p>
                                         {{#if annotationExplanation }}
                                             <small>{{ annotationExplanation }}</small>
                                         {{/if}}

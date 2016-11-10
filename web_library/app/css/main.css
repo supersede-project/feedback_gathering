@@ -1,4 +1,3 @@
-@charset "UTF-8";
 @import "https://fonts.googleapis.com/icon?family=Material+Icons";
 .sp-container {
   position: absolute;
@@ -460,8 +459,8 @@
   font-family: helvetica, arial, verdana; }
 
 .jq-star {
-  width: 100px;
-  height: 100px;
+  width: 120px;
+  height: 120px;
   display: inline-block;
   cursor: pointer; }
 
@@ -523,15 +522,41 @@ table.current-files {
     display: none; } }
 
 .ui-widget input, .ui-widget select, .ui-widget textarea, .ui-widget button {
-  font-family: Verdana, Arial, sans-serif;
-  font-size: 15px; }
+  font-family: Tahoma, Verdana, Segoe, sans-serif;
+  font-size: 13px; }
 
 .ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default {
   background: none;
   border: none; }
 
+.ui-dialog {
+  padding: 0; }
+
+.ui-widget.ui-widget-content {
+  border: 1px solid #666; }
+
 .ui-dialog .ui-dialog-titlebar-close {
-  margin: -12px -5px 0; }
+  margin: -12px 4px 0;
+  background: none;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  border-bottom: 4px solid #666666;
+  border-radius: 0; }
+  .ui-dialog .ui-dialog-titlebar-close:hover {
+    border-bottom: 4px solid #000000; }
+  .ui-dialog .ui-dialog-titlebar-close span {
+    display: none; }
+
+h2.form-title {
+  font-size: 26px;
+  color: #1c416f;
+  font-family: Tahoma, Verdana, Segoe, sans-serif;
+  padding-bottom: 6px;
+  border-bottom: 3px solid #666666;
+  margin-top: 5px;
+  font-weight: normal;
+  margin-bottom: 22px; }
 
 #feedbackEntryPoint {
   position: fixed;
@@ -544,9 +569,9 @@ table.current-files {
 
 .feedback-container {
   display: none;
-  min-width: 1000px;
-  max-width: 1000px;
-  font-family: Arial, sans-serif;
+  min-width: 1050px;
+  max-width: 1050px;
+  font-family: Tahoma, Verdana, Segoe, sans-serif;
   padding: 8px;
   color: #333333; }
 
@@ -572,6 +597,9 @@ table.current-files {
     float: right;
     width: 76%; }
 
+.feedback-mechanism.text-type {
+  margin-bottom: 10px; }
+
 textarea.text-type-text {
   width: 100%;
   min-width: 100%;
@@ -582,29 +610,24 @@ textarea.text-type-text {
   margin-top: 6px; }
 
 .ui-dialog .ui-dialog-titlebar {
-  font-family: Arial, sans-serif;
-  color: #1A6FC2;
+  font-family: Tahoma, Verdana, Segoe, sans-serif;
+  color: #282828;
   font-weight: normal;
-  border-bottom: 2px solid #1A6FC2;
+  border-bottom: 2px solid transparent;
   font-size: 22px;
-  margin: 2px 5px;
-  padding: 0 0 0.25rem; }
-
-.ui-dialog h2 {
-  font-family: Arial, sans-serif;
-  font-size: 15px;
-  font-weight: 600;
-  margin-top: 10px;
-  margin-bottom: 5px; }
-
-.ui-dialog .ui-dialog-titlebar {
-  padding: 7px 0; }
+  margin: 0;
+  background-color: #e2e2e2;
+  padding: 7px 7px; }
 
 .ui-dialog-titlebar {
-  border-color: #1A6FC2;
+  border-color: transparent;
   border-width: 1px;
   padding: 0;
   margin: 0; }
+  .ui-dialog-titlebar .ui-dialog-title {
+    font-size: 13px;
+    margin: 3px 0;
+    text-transform: none; }
 
 p.explanation {
   margin-top: 7px;
@@ -627,30 +650,38 @@ section.dialog-navigation {
   margin: 13px 1px 3px 1px; }
 
 .button {
-  background-color: #1A6FC2;
-  background-image: -moz-linear-gradient(top, #1A6FC2 0%, #1A6FC2 50%, #1A6FC2 52%, #1A6FC2 100%);
-  background-image: -webkit-linear-gradient(top, #1A6FC2 0%, #1A6FC2 50%, #1A6FC2 52%, #1A6FC2 100%);
-  background-image: -o-linear-gradient(top, #1A6FC2 0%, #1A6FC2 50%, #1A6FC2 52%, #1A6FC2 100%);
-  background-image: linear-gradient(top, #1A6FC2 0%, #1A6FC2 50%, #1A6FC2 52%, #1A6FC2 100%);
+  background-color: #f9f9f9;
   background-size: 100% auto;
-  color: white;
+  color: #282828;
   display: inline-block;
-  font-size: 10px;
-  padding: 0.375em 1.3em;
+  font-size: 13px;
+  min-height: 32px;
+  padding: 0.375em 2.0em;
   text-decoration: none;
-  text-transform: uppercase;
-  margin-top: 0; }
+  text-transform: none;
+  margin-top: 0;
+  border-width: 1px;
+  border-style: solid;
+  border-color: #b9b9b9; }
   .button.small {
     padding: 0.3em 0.9em;
-    font-size: 12px;
+    font-size: 11px;
     text-transform: none; }
+  .button.submit-feedback {
+    background-color: #1c416f;
+    color: white;
+    font-weight: bold; }
+    .button.submit-feedback:hover {
+      background-color: #5a7393;
+      color: white; }
 
-.button:hover {
-  background-color: #1A6FC2;
-  background-image: -webkit-linear-gradient(top, #1A6FC2 0%, #1A6FC2 50%, #1A6FC2 52%, #1A6FC2 100%);
-  background-image: -moz-linear-gradient(top, #1A6FC2 0%, #1A6FC2 50%, #1A6FC2 52%, #1A6FC2 100%);
-  background-image: -o-linear-gradient(top, #1A6FC2 0%, #1A6FC2 50%, #1A6FC2 52%, #1A6FC2 100%);
-  background-image: linear-gradient(top, #1A6FC2 0%, #1A6FC2 50%, #1A6FC2 52%, #1A6FC2 100%); }
+.button:visited, .button:hover, button:active, button:focus {
+  background-color: #F2F2F2;
+  color: #282828; }
+
+.navigation-button, .discard-feedback, .submit-feedback {
+  margin-top: 15px;
+  font-size: 13px; }
 
 .navigation-button {
   float: right;
@@ -667,11 +698,12 @@ section.dialog-navigation {
   clear: both; }
 
 .server-response {
-  display: block;
+  display: none;
   margin-top: 20px;
   margin-bottom: 5px; }
 
 .server-response.success {
+  display: block;
   background-color: #dff0d8;
   color: #3c763d;
   border: 1px solid #d0e9c6;
@@ -679,6 +711,7 @@ section.dialog-navigation {
   padding: 15px; }
 
 .server-response.error {
+  display: block;
   background-color: #f2dede;
   color: #a94442;
   border: 1px solid #ebcccc;
@@ -697,7 +730,8 @@ button.text-type-text-clear {
     color: #808080; }
 
 .text-type-max-length {
-  font-size: 14px;
+  font-size: 13px;
+  font-family: Tahoma, Verdana, Segoe, sans-serif;
   color: #4b4a4c;
   width: auto;
   display: inline-block;
@@ -709,7 +743,7 @@ button.text-type-text-clear {
   font-size: 13px; }
 
 .screenshot-preview {
-  border: 1px solid #393939;
+  border: 1px solid #b9b9b9;
   height: auto;
   display: none;
   margin-bottom: 10px;
@@ -744,6 +778,15 @@ button.text-type-text-clear {
   .screenshot-operations p {
     font-size: 16px;
     margin-bottom: 2px; }
+
+button.screenshot {
+  width: 95%; }
+
+button.discard-feedback {
+  width: 215px; }
+
+button.take-screenshot {
+  margin-bottom: 10px; }
 
 button.screenshot-operation {
   background: none;
@@ -914,7 +957,7 @@ button.screenshot-operation {
 #intermediateDialog {
   display: none;
   padding: 20px;
-  font-family: Arial,​ sans-serif;
+  font-family: Tahoma, Verdana, Segoe, sans-serif;
   font-size: 16px; }
   #intermediateDialog p {
     margin-top: 1px;
@@ -932,12 +975,12 @@ button.screenshot-operation {
 a.discard-feedback {
   float: left;
   display: inline-block;
-  color: #1A6FC2;
+  color: #282828;
   text-decoration: none;
   margin-top: 7px;
   font-size: 14px; }
   a.discard-feedback:hover {
-    color: #1A6FC2;
+    color: #282828;
     text-decoration: underline; }
 
 .submission-message {
@@ -953,7 +996,7 @@ a.discard-feedback {
   font-style: italic; }
 
 .annotations-heading {
-  margin-top: 25px; }
+  margin-top: 5px; }
 
 .feedback-notification {
   margin-top: 0;

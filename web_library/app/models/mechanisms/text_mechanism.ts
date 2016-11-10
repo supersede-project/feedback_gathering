@@ -17,12 +17,22 @@ export class TextMechanism extends Mechanism {
     }
 
     getContext():any {
-        var textareaStyle = this.getCssStyle([new ParameterValuePropertyPair('textareaFontColor', 'color')]);
+        var textareaStyle = this.getCssStyle([
+            new ParameterValuePropertyPair('textareaFontColor', 'color'),
+            new ParameterValuePropertyPair('borderColor', 'border-color'),
+            new ParameterValuePropertyPair('borderWidth', 'border-width'),
+            new ParameterValuePropertyPair('fieldBackgroundColor', 'background-color'),
+            new ParameterValuePropertyPair('fieldFontSize', 'font-size'),
+            new ParameterValuePropertyPair('fieldFontType', 'font-style'),
+            new ParameterValuePropertyPair('fieldHeight', 'height'),
+            new ParameterValuePropertyPair('fieldTextAlignment', 'text-align'),
+            new ParameterValuePropertyPair('fieldWidth', 'width')
+        ]);
         var labelStyle = this.getCssStyle([
             new ParameterValuePropertyPair('labelPositioning', 'text-align'),
             new ParameterValuePropertyPair('labelColor', 'color'),
-            new ParameterValuePropertyPair('labelFontSize', 'font-size')]
-        );
+            new ParameterValuePropertyPair('labelFontSize', 'font-size')
+        ]);
 
         return {
             active: this.active,

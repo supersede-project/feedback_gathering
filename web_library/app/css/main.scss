@@ -21,8 +21,8 @@
 }
 
 .ui-widget input, .ui-widget select, .ui-widget textarea, .ui-widget button {
-  font-family: Verdana, Arial, sans-serif;
-  font-size: 15px;
+  font-family: $dialogFontFamily;
+  font-size: $buttonFontSize;
 }
 
 .ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default {
@@ -30,8 +30,41 @@
   border: none;
 }
 
+.ui-dialog {
+  padding: 0;
+}
+
+.ui-widget.ui-widget-content {
+  border: 1px solid #666;
+}
+
 .ui-dialog .ui-dialog-titlebar-close {
-  margin: -12px -5px 0;
+  margin: -12px 4px 0;
+  background: none;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  border-bottom: 4px solid #666666;
+  border-radius: 0;
+
+  &:hover {
+    border-bottom: 4px solid #000000;
+  }
+
+  span {
+    display: none;
+  }
+}
+
+h2.form-title {
+  font-size: 26px;
+  color: rgb(28, 65, 111);
+  font-family: $dialogFontFamily;
+  padding-bottom: 6px;
+  border-bottom: 3px solid #666666;
+  margin-top: 5px;
+  font-weight: normal;
+  margin-bottom: 22px;
 }
 
 #feedbackEntryPoint {
@@ -46,9 +79,9 @@
 
 .feedback-container {
   display: none;
-  min-width: 1000px;
-  max-width: 1000px;
-  font-family: Arial, sans-serif;
+  min-width: 1050px;
+  max-width: 1050px;
+  font-family: $dialogFontFamily;
   padding: 8px;
   color: #333333;
 }
@@ -83,6 +116,10 @@
   }
 }
 
+.feedback-mechanism.text-type {
+  margin-bottom: 10px;
+}
+
 textarea.text-type-text {
   width: 100%;
   min-width: 100%;
@@ -94,25 +131,14 @@ textarea.text-type-text {
 }
 
 .ui-dialog .ui-dialog-titlebar {
-  font-family: Arial, sans-serif;
+  font-family: $dialogFontFamily;
   color: $dialogTitlebarColor;
   font-weight: normal;
   border-bottom: 2px solid $dialogTitlebarBorderColor;
   font-size: 22px;
-  margin: 2px 5px;
-  padding: 0 0 0.25rem;
-}
-
-.ui-dialog h2 {
-  font-family: Arial, sans-serif;
-  font-size: 15px;
-  font-weight: 600;
-  margin-top: 10px;
-  margin-bottom: 5px;
-}
-
-.ui-dialog .ui-dialog-titlebar {
-  padding: 7px 0;
+  margin: 0;
+  background-color: $dialogTitlebarBackgroundColor;
+  padding: 7px 7px;
 }
 
 .ui-dialog-titlebar {
@@ -120,6 +146,12 @@ textarea.text-type-text {
   border-width: 1px;
   padding: 0;
   margin: 0;
+
+  .ui-dialog-title {
+    font-size: 13px;
+    margin: 3px 0;
+    text-transform: none;
+  }
 }
 
 p.explanation {
@@ -158,27 +190,48 @@ section.dialog-navigation {
   background-size: 100% auto;
   color: $buttonTextColor;
   display: inline-block;
-  font-size: 10px;
-  padding: 0.375em 1.3em;
+  font-size: $buttonFontSize;
+  min-height: $buttonHeight;
+  padding: 0.375em 2.0em;
   text-decoration: none;
-  text-transform: uppercase;
+  text-transform: $buttonTextTransform;
   margin-top: 0;
+  border-width: $buttonBorderWidth;
+  border-style: $buttonBorderStyle;
+  border-color: $buttonBorderColor;
 
   &.small {
     padding: 0.3em 0.9em;
-    font-size: 12px;
+    font-size: 11px;
     text-transform: none;
+  }
+
+  &.submit-feedback {
+    background-color: $submitButtonBackgroundColor;
+    color: $submitButtonColor;
+    font-weight: $submitButtonFontWeight;
+
+    &:hover {
+      background-color: $submitButtonHoverBackgroundColor;
+      color: $submitButtonHoverColor;
+    }
   }
 }
 
-.button:hover {
+.button:visited, .button:hover, button:active, button:focus {
   background-color: $buttonHoverBackgroundColor;
+  color: $buttonHoverColor;
   @if bool($buttonGradientEnabled) {
     background-image: -webkit-linear-gradient(top, $buttonHoverGradientColor1 0%, $buttonHoverGradientColor2 50%, $buttonGradientColor3 52%, $buttonHoverBackgroundColor 100%);
     background-image: -moz-linear-gradient(top, $buttonHoverGradientColor1 0%, $buttonHoverGradientColor2 50%, $buttonGradientColor3 52%, $buttonHoverBackgroundColor 100%);
     background-image: -o-linear-gradient(top, $buttonHoverGradientColor1 0%, $buttonHoverGradientColor2 50%, $buttonGradientColor3 52%, $buttonHoverBackgroundColor 100%);
     background-image: linear-gradient(top, $buttonHoverGradientColor1 0%, $buttonHoverGradientColor2 50%, $buttonGradientColor3 52%, $buttonHoverBackgroundColor 100%);
   }
+}
+
+.navigation-button, .discard-feedback, .submit-feedback {
+  margin-top: 15px;
+  font-size: 13px;
 }
 
 .navigation-button {
@@ -200,12 +253,13 @@ section.dialog-navigation {
 }
 
 .server-response {
-  display: block;
+  display: none;
   margin-top: 20px;
   margin-bottom: 5px;
 }
 
 .server-response.success {
+  display: block;
   background-color: #dff0d8;
   color: #3c763d;
   border: 1px solid #d0e9c6;
@@ -214,6 +268,7 @@ section.dialog-navigation {
 }
 
 .server-response.error {
+  display: block;
   background-color: #f2dede;
   color: #a94442;
   border: 1px solid #ebcccc;
@@ -237,7 +292,8 @@ button.text-type-text-clear {
 }
 
 .text-type-max-length {
-  font-size: 14px;
+  font-size: 13px;
+  font-family: $dialogFontFamily;
   color: #4b4a4c;
   width: auto;
   display: inline-block;
@@ -251,7 +307,7 @@ button.text-type-text-clear {
 }
 
 .screenshot-preview {
-  border: 1px solid #393939;
+  border: 1px solid #b9b9b9;
   height: auto;
   display: none;
   margin-bottom: 10px;
@@ -302,6 +358,18 @@ button.text-type-text-clear {
     font-size: 16px;
     margin-bottom: 2px;
   }
+}
+
+button.screenshot {
+  width: 95%;
+}
+
+button.discard-feedback {
+  width: 215px;
+}
+
+button.take-screenshot {
+  margin-bottom: 10px;
 }
 
 button.screenshot-operation {
@@ -523,7 +591,7 @@ button.screenshot-operation {
 #intermediateDialog {
   display: none;
   padding: 20px;
-  font-family: Arial,​ sans-serif;
+  font-family: $dialogFontFamily;
   font-size: 16px;
 
   p {
@@ -575,7 +643,7 @@ a.discard-feedback {
 }
 
 .annotations-heading {
-  margin-top: 25px;
+  margin-top: 5px;
 }
 
 .feedback-notification {
