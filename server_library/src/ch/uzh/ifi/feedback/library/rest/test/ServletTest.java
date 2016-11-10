@@ -117,7 +117,7 @@ public abstract class ServletTest extends TestCase {
         RestoreTestDatabase();
     }
    
-	protected void RestoreTestDatabase()
+	private void RestoreTestDatabase()
 	{
 		if(testDatabaseDumpFile == null)
 			return;
@@ -147,7 +147,7 @@ public abstract class ServletTest extends TestCase {
 			testDatabaseDumpFile = generateTempFile(inputStream, "dump_" + config.getTestDatabase());
 	}
 	
-	protected String generateTempFile(InputStream input, String filename)
+	private String generateTempFile(InputStream input, String filename)
 	{
        try {
            File file = File.createTempFile(filename, ".tmp");
@@ -169,100 +169,105 @@ public abstract class ServletTest extends TestCase {
        return null;
 	}
    
-   protected <T> T GetSuccess(String url, Class<T> clazz) throws ClientProtocolException, IOException
-   {
-		HttpUriRequest request = new HttpGet(url);
-		
-		if(token != null)
-			request.setHeader("Authorization", token.getToken().toString());
-		
-		HttpResponse httpResponse = client.execute(request);
-		String mimeType = ContentType.getOrDefault(httpResponse.getEntity()).getMimeType();
-
-		String jsonFromResponse = EntityUtils.toString(httpResponse.getEntity());	    
-		T retrievedObjects = gson.fromJson(jsonFromResponse, clazz);
-		assertEquals(httpResponse.getStatusLine().getStatusCode(), HttpStatus.SC_OK);
-		assertEquals("application/json", mimeType);
-		
-		return retrievedObjects;
-   }
-   
    protected void DeleteSuccess(String url) throws ClientProtocolException, IOException
    {
 		HttpUriRequest request = new HttpDelete(url);
-		
-		if(token != null)
-			request.setHeader("Authorization", token.getToken().toString());
-		
-		HttpResponse httpResponse = client.execute(request);
-		String mimeType = ContentType.getOrDefault(httpResponse.getEntity()).getMimeType();
-
-		assertEquals(httpResponse.getStatusLine().getStatusCode(), HttpStatus.SC_OK);
+		AssertRequestStatus(request, HttpStatus.SC_OK);
+   }
+   
+   protected void DeleteFail(String url, int status) throws ClientProtocolException, IOException
+   {
+		HttpUriRequest request = new HttpDelete(url);
+		AssertRequestStatus(request, status); 
+   }
+   
+   protected <T> T GetSuccess(String url, Class<T> clazz) throws ClientProtocolException, IOException
+   {
+		HttpUriRequest request = new HttpGet(url);
+		HttpResponse response = AssertRequestStatus(request, HttpStatus.SC_OK); 
+		return ExtractObjects(clazz, response);
+   }
+   
+   protected void GetFail(String url, int status) throws ClientProtocolException, IOException
+   {
+		HttpUriRequest request = new HttpGet(url);
+		AssertRequestStatus(request, status); 
    }
    
    protected <T> T PostSuccess(String url, String jsonString, Class<T> clazz) throws ClientProtocolException, IOException
    {
 		HttpPost request = new HttpPost(url);
-
-		if(token != null)
-			request.setHeader("Authorization", token.getToken().toString());
-		
 		StringEntity params = new StringEntity(jsonString);
         request.addHeader("content-type", "application/json");
         request.setEntity(params);
         
-		HttpResponse httpResponse = client.execute(request);
-		String mimeType = ContentType.getOrDefault(httpResponse.getEntity()).getMimeType();
-
-		String jsonFromResponse = EntityUtils.toString(httpResponse.getEntity());
-		T createdObjects = gson.fromJson(jsonFromResponse, clazz);
-		assertEquals(httpResponse.getStatusLine().getStatusCode(), HttpStatus.SC_CREATED);
-		assertEquals("application/json", mimeType);
-		
-		return createdObjects;
+        HttpResponse response = AssertRequestStatus(request, HttpStatus.SC_CREATED);
+		return ExtractObjects(clazz, response);
+   }
+   
+   protected void PostFail(String url, String jsonString, int status) throws ClientProtocolException, IOException
+   {
+		HttpPost request = new HttpPost(url);
+		StringEntity params = new StringEntity(jsonString);
+        request.addHeader("content-type", "application/json");
+        request.setEntity(params);
+        
+        AssertRequestStatus(request, status);
    }
    
    protected <T> T PostSuccess(String url, HttpEntity entity, Class<T> clazz) throws ClientProtocolException, IOException
    {
 		HttpPost request = new HttpPost(url);
 		
-		if(token != null)
-			request.setHeader("Authorization", token.getToken().toString());
-		
         request.addHeader(entity.getContentType());
         request.setEntity(entity);
         
-		HttpResponse httpResponse = client.execute(request);
-		String mimeType = ContentType.getOrDefault(httpResponse.getEntity()).getMimeType();
-
-		String jsonFromResponse = EntityUtils.toString(httpResponse.getEntity());	    
-		T createdObjects = gson.fromJson(jsonFromResponse, clazz);
-		assertEquals(httpResponse.getStatusLine().getStatusCode(), HttpStatus.SC_CREATED);
-		assertEquals("application/json", mimeType);
-		
-		return createdObjects;
+        HttpResponse response = AssertRequestStatus(request, HttpStatus.SC_CREATED);
+		return ExtractObjects(clazz, response);
    }
    
    protected <T> T PutSuccess(String url, String jsonString, Class<T> clazz) throws ClientProtocolException, IOException
    {
 		HttpPut request = new HttpPut(url);
-		
-		if(token != null)
-			request.setHeader("Authorization", token.getToken().toString());
-		
+	
 		StringEntity params = new StringEntity(jsonString);
         request.addHeader("content-type", "application/json");
         request.setEntity(params);
         
+        HttpResponse response = AssertRequestStatus(request, HttpStatus.SC_OK);
+		return ExtractObjects(clazz, response);
+   }
+   
+   protected void PutFail(String url, String jsonString, int status) throws ClientProtocolException, IOException
+   {
+		HttpPut request = new HttpPut(url);
+	
+		StringEntity params = new StringEntity(jsonString);
+        request.addHeader("content-type", "application/json");
+        request.setEntity(params);
+        
+        AssertRequestStatus(request, status);
+   }
+   
+   private HttpResponse AssertRequestStatus(HttpUriRequest request, int status) throws ClientProtocolException, IOException
+   {
+		if(token != null)
+			request.setHeader("Authorization", token.getToken().toString());
+		
 		HttpResponse httpResponse = client.execute(request);
-		String mimeType = ContentType.getOrDefault(httpResponse.getEntity()).getMimeType();
+		assertEquals(httpResponse.getStatusLine().getStatusCode(), status);
+		
+		return httpResponse;
+   }
 
-		String jsonFromResponse = EntityUtils.toString(httpResponse.getEntity());	    
-		T createdObjects = gson.fromJson(jsonFromResponse, clazz);
-		assertEquals(httpResponse.getStatusLine().getStatusCode(), HttpStatus.SC_OK);
+	private <T> T ExtractObjects(Class<T> clazz, HttpResponse httpResponse) throws IOException, ClientProtocolException 
+	{
+		String mimeType = ContentType.getOrDefault(httpResponse.getEntity()).getMimeType();
 		assertEquals("application/json", mimeType);
 		
+		String jsonFromResponse = EntityUtils.toString(httpResponse.getEntity());
+		T createdObjects = gson.fromJson(jsonFromResponse, clazz);
+		
 		return createdObjects;
-   }
-  
+	}
 }

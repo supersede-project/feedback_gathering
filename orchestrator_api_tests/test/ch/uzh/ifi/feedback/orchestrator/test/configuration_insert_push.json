@@ -1,5 +1,5 @@
      {
-        "type": "PULL",
+        "type": "PUSH",
         "generalConfiguration": {
           "parameters": [
             {

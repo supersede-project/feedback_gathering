@@ -46,7 +46,6 @@ public class OrchestratorServletConfigurationTest extends OrchestratorServletTes
 		assertEquals(retrievedConfigs.length, 3);
 	}
 	
-
 	public void testInsertConfigurationForApplication() throws ClientProtocolException, IOException {
 		
 		InputStream stream = this.getClass().getResourceAsStream("configuration_insert.json");
@@ -61,6 +60,15 @@ public class OrchestratorServletConfigurationTest extends OrchestratorServletTes
 		assertNotNull(createdConfig.getGeneralConfiguration());
 		assertEquals(createdConfig.getGeneralConfiguration().getParameters().size(), 3);
 		assertEquals(createdConfig.getFeedbackMechanisms().size(), 2);
+	}
+	
+	public void testInsertPushConfigurationForApplication() throws ClientProtocolException, IOException 
+	{
+		InputStream stream = this.getClass().getResourceAsStream("configuration_insert_push.json");
+		String jsonString = IOUtils.toString(stream); 
+		
+		//This operation fails because there already exists a PUSH configuration for the default group
+		PostFail("http://localhost:8080/orchestrator/feedback/en/applications/27/configurations", jsonString, 422);
 	}
 	
 	public void testInsertConfigurationForApplicationAndUserGroup() throws ClientProtocolException, IOException {
