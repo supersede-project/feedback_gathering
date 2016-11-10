@@ -200,6 +200,17 @@ export var feedbackPluginModule = function ($, window, document) {
         }
 
         var dialog = initDialog($('#' + dialogId), title, modal, dialogId);
+
+        // disable review
+        if(generalConfiguration.getParameterValue('reviewActive') === 0) {
+            var submitFeedbackButton = $('button.submit-feedback');
+            var serverResponse = $('span.server-response');
+            var feedbackDialogForwardButton = $('.feedback-page .feedback-dialog-forward');
+            console.log(feedbackDialogForwardButton.length);
+            $('.feedback-page').append(serverResponse);
+            feedbackDialogForwardButton.replaceWith(submitFeedbackButton);
+        }
+
         addEvents(dialogId, configuration, generalConfiguration);
         return dialog;
     };
@@ -432,7 +443,9 @@ export var feedbackPluginModule = function ($, window, document) {
             });
         }
 
-        container.find('.discard-feedback').on('click', function () {
+        container.find('.discard-feedback').on('click', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
             if (configuration.dialogId === 'pushConfiguration') {
                 dialog.dialog("close");
             } else if (configuration.dialogId === 'pullConfiguration') {
