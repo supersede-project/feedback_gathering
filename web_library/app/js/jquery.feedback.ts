@@ -54,6 +54,8 @@ export var feedbackPluginModule = function ($, window, document) {
     var defaultStrokeWidth;
     var audioView;
 
+    // TODO refactoring: I don't know how yet
+    // TODO check which part of the configuration is really needed by the other modules --> use DI to pass this configuration to other modules as well as to allow to pass testing configuration that way
     /**
      * @param applicationObject
      *  The current application object that configures the library.
@@ -73,6 +75,7 @@ export var feedbackPluginModule = function ($, window, document) {
         }
     };
 
+    // TODO refactoring: I don't know how yet
     /**
      * @param configuration
      *  PushConfiguration data retrieved from the feedback orchestrator
@@ -90,6 +93,7 @@ export var feedbackPluginModule = function ($, window, document) {
         dialog = initTemplate(dialogTemplate, pushConfigurationDialogId, context, configuration, pageNavigation, generalConfiguration);
     };
 
+    // TODO refactoring: I don't know how yet
     var showPullDialog = function (configuration:PullConfiguration, generalConfiguration:GeneralConfiguration) {
         configuration.wasTriggered();
         var pageNavigation = new PageNavigation(configuration, $('#' + pullConfigurationDialogId));
@@ -118,6 +122,8 @@ export var feedbackPluginModule = function ($, window, document) {
             }, delay * 1000);
         }
     };
+
+    // TODO refactoring: I don't know how yet
     /**
      * Initializes the pull mechanisms and triggers the feedback mechanisms if necessary.
      *
@@ -156,6 +162,7 @@ export var feedbackPluginModule = function ($, window, document) {
         return false;
     };
 
+    // TODO refactoring: I don't know how yet
     var initTemplate = function (template, dialogId, context, configuration, pageNavigation,
                                  generalConfiguration:GeneralConfiguration):HTMLElement {
         var html = template(context);
@@ -203,6 +210,7 @@ export var feedbackPluginModule = function ($, window, document) {
         return dialog;
     };
 
+    // TODO refactoring: I don't know how yet
     var initIntermediateDialogTemplate = function (template, dialogId, configuration, pullDialog,
                                                    generalConfiguration:GeneralConfiguration):HTMLElement {
         var html = template({});
@@ -222,6 +230,8 @@ export var feedbackPluginModule = function ($, window, document) {
         return dialog;
     };
 
+    // TODO adjust comment
+    // TODO refactoring: move to FeedbackService
     /**
      * This method takes the data from the text mechanism and the rating mechanism and composes a feedback object with
      * the help of this data.
@@ -251,6 +261,7 @@ export var feedbackPluginModule = function ($, window, document) {
         });
     };
 
+    // TODO refactoring: move to own jquery plugin
     var pageNotification = function (message:string) {
         var html = notificationTemplate({message: message});
         $('html').append(html);
@@ -259,6 +270,8 @@ export var feedbackPluginModule = function ($, window, document) {
         }, 3000);
     };
 
+    // TODO refactoring: move reset() to every mechanism view
+    // TODO refactoring: move resetPlugin() to FeedbackDialog (pay attention to not create a high dependency between dialog and these function that could also be used in other views)
     var resetPlugin = function (configuration) {
         $('textarea.text-type-text').val('');
         for (var screenshotMechanism of configuration.getMechanismConfig(mechanismTypes.screenshotType)) {
@@ -269,6 +282,7 @@ export var feedbackPluginModule = function ($, window, document) {
         }
     };
 
+    // TODO refactoring: move initRating() to RatingView
     /**
      * @param selector
      *  The jQuery selector that matches the element the star rating should be applied on
@@ -288,6 +302,7 @@ export var feedbackPluginModule = function ($, window, document) {
         }
     };
 
+    // TODO refactoring: I don't know how yet
     var initScreenshot = function (screenshotMechanism, containerId):ScreenshotView {
         if (screenshotMechanism == null) {
             return;
@@ -315,6 +330,7 @@ export var feedbackPluginModule = function ($, window, document) {
         return screenshotView;
     };
 
+    // TODO refactoring: move to feedbackDialog
     /**
      * @param dialogContainer
      *  Element that contains the dialog content
@@ -351,6 +367,7 @@ export var feedbackPluginModule = function ($, window, document) {
         return dialogObject;
     };
 
+    // TODO refactoring: see inside function
     /**
      * @param containerId
      *  The ID of the surrounding element that contains the feedback mechanisms
@@ -367,6 +384,7 @@ export var feedbackPluginModule = function ($, window, document) {
         var textMechanisms = configuration.getMechanismConfig(mechanismTypes.textType);
         var categoryMechanisms = configuration.getMechanismConfig(mechanismTypes.categoryType);
 
+        // TODO refactoring: move to feedbackDialog
         container.find('button.submit-feedback').unbind().on('click', function (event) {
             event.preventDefault();
             event.stopPropagation();
@@ -390,6 +408,7 @@ export var feedbackPluginModule = function ($, window, document) {
             }
         });
 
+        // TODO refactoring: move to TextMechanismView
         // character length
         for (var textMechanism of textMechanisms) {
             var sectionSelector = "textMechanism" + textMechanism.id;
@@ -431,6 +450,7 @@ export var feedbackPluginModule = function ($, window, document) {
             });
         }
 
+        // TODO refactoring: move to FeedbackDialog
         container.find('.discard-feedback').on('click', function () {
             if (configuration.dialogId === 'pushConfiguration') {
                 dialog.dialog("close");
@@ -440,11 +460,13 @@ export var feedbackPluginModule = function ($, window, document) {
             resetPlugin(configuration);
         });
 
+        // TODO refactoring: move to CategoryMechanismView
         for (var categoryMechanism of categoryMechanisms) {
             categoryMechanism.coordinateOwnInputAndRadioBoxes();
         }
     };
 
+    // TODO refactoring: the mechanism views should return their feedback data
     /**
      * Creates the multipart form data containing the data of the active mechanisms.
      */
@@ -550,6 +572,7 @@ export var feedbackPluginModule = function ($, window, document) {
         }
     };
 
+    // TODO refactoring: move to FeedbackDialog
     /**
      * The configuration data is fetched from the API if the feedback mechanism is not currently active. In the other
      * case the feedback mechanism dialog is closed. The active variable is toggled on each invocation.
@@ -563,6 +586,7 @@ export var feedbackPluginModule = function ($, window, document) {
         active = !active;
     };
 
+    // TODO refactoring: move to FeedbackDialog
     var openDialog = function (dialog, configuration) {
         for (var screenshotMechanism of configuration.getMechanismConfig(mechanismTypes.screenshotType)) {
             if (screenshotMechanism !== null && screenshotMechanism !== undefined && screenshotMechanism.screenshotView !== null) {
@@ -572,6 +596,7 @@ export var feedbackPluginModule = function ($, window, document) {
         dialog.dialog('open');
     };
 
+    // TODO refactoring: move to FeedbackDialog?
     var prepareTemplateContext = function (context) {
         var contextWithApplicationContext = $.extend({}, applicationContext, context);
         var pluginContext = {
@@ -580,6 +605,7 @@ export var feedbackPluginModule = function ($, window, document) {
         return $.extend({}, pluginContext, contextWithApplicationContext);
     };
 
+    // TODO refactoring: move to FeedbackDialog
     var resetMessageView = function () {
         $('.server-response').removeClass('error').removeClass('success').text('');
     };
