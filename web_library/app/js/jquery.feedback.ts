@@ -234,6 +234,14 @@ export var feedbackPluginModule = function ($, window, document) {
         return dialog;
     };
 
+    var repositoryURL = function(language:string, applicationId?:number):string {
+        var url:string = (apiEndpointRepository + feedbackPath).replace('{lang}', language);
+        if(applicationId) {
+            url = url.replace(new RegExp('{applicationId}'), applicationId.toString());
+        }
+        return url;
+    };
+
     /**
      * This method takes the data from the text mechanism and the rating mechanism and composes a feedback object with
      * the help of this data.
@@ -242,7 +250,7 @@ export var feedbackPluginModule = function ($, window, document) {
      */
     var sendFeedback = function (formData:FormData, configuration:ConfigurationInterface, generalConfiguration:GeneralConfiguration) {
         $.ajax({
-            url: apiEndpointRepository + 'feedback_repository/' + language + '/applications/' + applicationId + '/feedbacks/',
+            url: repositoryURL(language),
             type: 'POST',
             data: formData,
             dataType: 'json',
@@ -476,7 +484,7 @@ export var feedbackPluginModule = function ($, window, document) {
 
         container.find('.server-response').removeClass('error').removeClass('success');
         var feedbackObject = new Feedback(feedbackObjectTitle, userId, language, applicationId, configuration.id, [], [], [], [], null, [], []);
-        feedbackObject.contextInformation = ContextInformation.create();
+        //feedbackObject.contextInformation = ContextInformation.create();
 
         for (var textMechanism of textMechanisms) {
             if (textMechanism.active) {
