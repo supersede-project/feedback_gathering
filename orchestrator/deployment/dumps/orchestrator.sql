@@ -166,6 +166,7 @@ CREATE TABLE `configurations_history` (
   `general_configurations_id` int(11) DEFAULT NULL,
   `configurations_id` int(11) NOT NULL,
   `current_version` bit(1) NOT NULL DEFAULT b'1',
+  `active` bit(1) DEFAULT b'1',
   PRIMARY KEY (`id`),
   KEY `fk_configurations_1_idx` (`applications_id`),
   KEY `fk_configurations_2_idx` (`user_groups_id`),
@@ -184,7 +185,7 @@ CREATE TABLE `configurations_history` (
 
 LOCK TABLES `configurations_history` WRITE;
 /*!40000 ALTER TABLE `configurations_history` DISABLE KEYS */;
-INSERT INTO `configurations_history` VALUES (3,NULL,'2016-09-24 13:55:06',3,1,'PUSH',7,4,'\0'),(4,NULL,'2016-09-24 13:55:06',3,1,'PULL',8,5,'\0'),(5,NULL,'2016-09-24 13:55:06',3,1,'PULL',9,6,'\0'),(6,NULL,'2016-10-05 12:50:56',4,1,'PUSH',11,7,'\0'),(7,NULL,'2016-10-05 12:50:56',4,1,'PULL',12,8,'\0'),(8,NULL,'2016-10-05 12:50:56',4,1,'PULL',13,9,'\0');
+INSERT INTO `configurations_history` VALUES (3,NULL,'2016-09-24 13:55:06',3,1,'PUSH',7,4,'\0',''),(4,NULL,'2016-09-24 13:55:06',3,1,'PULL',8,5,'\0',''),(5,NULL,'2016-09-24 13:55:06',3,1,'PULL',9,6,'\0',''),(6,NULL,'2016-10-05 12:50:56',4,1,'PUSH',11,7,'\0',''),(7,NULL,'2016-10-05 12:50:56',4,1,'PULL',12,8,'\0',''),(8,NULL,'2016-10-05 12:50:56',4,1,'PULL',13,9,'\0','');
 /*!40000 ALTER TABLE `configurations_history` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -552,4 +553,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-10-24 14:49:22
+-- Dump completed on 2016-11-11 12:13:56
