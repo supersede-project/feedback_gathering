@@ -77,64 +77,72 @@
 </head>
 <body data-spy="scroll" data-target=".demo-nav">
 
-<div class="container">
-    <div class="row">
-        <div class="col-md-12">
-            <h1>Orchestrator GUI</h1>
-            <div class="tab-content">
-                <div class="tab-pane" id="source">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="tab-content">
-                                <div class="tab-pane active" id="schema">
-                                </div>
-                                <div class="tab-pane" id="options">
-                                </div>
-                                <div class="tab-pane" id="data">
+    <div class="container">
+
+        <div class="row">
+            <div class="col-md-12">
+                <h1>Orchestrator GUI</h1>
+                <div class="tab-content">
+
+                    <!-- Drop elements here -->
+                    <div class="tab-pane" id="source">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="tab-content">
+                                    <div class="tab-pane active" id="schema">
+                                    </div>
+                                    <div class="tab-pane" id="options">
+                                    </div>
+                                    <div class="tab-pane" id="data">
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-md-6">
+                            <div class="col-md-6">
 
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="tab-pane active" id="designer" class="tab-pane active">
-                    <div class="row">
-                        <div class="col-md-7">
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div id="designerDiv"></div>
+
+                    <!--  Droppable elements -->
+                    <div class="tab-pane active" id="designer" class="tab-pane active">
+                        <div class="row">
+                            <div class="col-md-7">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div id="designerDiv"></div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-md-5">
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="tab-content">
-                                        <div class="tab-pane active" id="basic"></div>
+                            <div class="col-md-5">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="tab-content">
+                                            <div class="tab-pane active" id="basic"></div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
 
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-12">
-            <h2>Preview</h2>
-            <div class="tab-pane" id="view">
-                <div class="row">
-                    <div class="col-md-12">
-                        <div id="viewDiv"></div>
+                </div> <!-- tab-content --> 
+            </div> <!-- col-md-12 --> 
+        </div> <!-- row -->
+
+        <div class="row">
+            <div class="col-md-12">
+                <h2>Preview</h2>
+                <div class="tab-pane" id="view">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div id="viewDiv"></div>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
-</div>
+        </div> <!-- row -->
+
+    </div> <!-- container -->
+
 </body>
 </html>
