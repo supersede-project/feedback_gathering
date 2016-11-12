@@ -36,6 +36,14 @@ import {AudioView} from '../views/audio/audio_view';
 var mockData = require('json!../services/mocks/dev/applications_mock.json');
 
 
+/* TODO REFACTORING PLAN
+    - implement services as singletons --> services are passed to the views via DI
+    - implement methods on services that return cached results
+    - create view (controller) classes that
+    - create template rendering method (handlebars) to easily display data in the templates
+    - split up the mechanisms in own view classes that have less dependencies
+    - reduce this file here to a minimum, i.e. only initialization and configuration
+ */
 export var feedbackPluginModule = function ($, window, document) {
     var dialog;
     var pushConfigurationDialogId = "pushConfiguration";
