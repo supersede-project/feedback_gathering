@@ -575,43 +575,42 @@ var setup = function()
     // creates the components
     var afterAlpacaInit = function()
     {
-            // array with available components
-            var types = ["text", "checkbox", "radio", "any"];
+        // available components
+        var types = ["textarea", "checkbox", "radio", "image", "upload"];
 
-            for (var i = 0; i < types.length; i++) {
+        for (var i = 0; i < types.length; i++) {
 
-                var type = types[i];
-                var instance = new Alpaca.fieldClassRegistry[type]();
+            var type = types[i];
+            var instance = new Alpaca.fieldClassRegistry[type]();
 
-                var schemaSchema = instance.getSchemaOfSchema();
-                var schemaOptions = instance.getOptionsForSchema();
-                var optionsSchema = instance.getSchemaOfOptions();
-                var optionsOptions = instance.getOptionsForOptions();
-                var title = instance.getTitle();
-                var type = instance.getType();
-                var fieldType = instance.getFieldType();
+            var schemaSchema = instance.getSchemaOfSchema();
+            var schemaOptions = instance.getOptionsForSchema();
+            var optionsSchema = instance.getSchemaOfOptions();
+            var optionsOptions = instance.getOptionsForOptions();
+            var title = instance.getTitle();
+            var type = instance.getType();
+            var fieldType = instance.getFieldType();
 
-                var div = $("<div class='form-element draggable ui-widget-content' data-type='" + type + "' data-field-type='" + fieldType + "'></div>");
-                $(div).append("<div><span class='form-element-title'>" + title + "</span> (<span class='form-element-type'>" + fieldType + "</span>)</div>");
-                $(div).append("<div><span class='form-element-description'>Dropable element</span></div>");
+            var div = $("<div class='form-element draggable ui-widget-content' data-type='" + type + "' data-field-type='" + fieldType + "'></div>");
+            $(div).append("<div><span class='form-element-title'>" + title + "</span> (<span class='form-element-type'>" + fieldType + "</span>)</div>");
+            $(div).append("<div><span class='form-element-description'>Dropable element</span></div>");
 
-                $("#basic").append(div);
+            $("#basic").append(div);
 
-
-                // init all of the draggable form elements
-                $(".form-element").draggable({
-                    "appendTo": "body",
-                    "helper": "clone",
-                    "zIndex": 300,
-                    "refreshPositions": true,
-                    "start": function(event, ui) {
-                        $(".dropzone").addClass("dropzone-highlight");
-                    },
-                    "stop": function(event, ui) {
-                        $(".dropzone").removeClass("dropzone-highlight");
-                    }
-                });
-            }
+            // init all of the draggable form elements
+            $(".form-element").draggable({
+                "appendTo": "body",
+                "helper": "clone",
+                "zIndex": 300,
+                "refreshPositions": true,
+                "start": function(event, ui) {
+                    $(".dropzone").addClass("dropzone-highlight");
+                },
+                "stop": function(event, ui) {
+                    $(".dropzone").removeClass("dropzone-highlight");
+                }
+            });
+        }
     };
 
     // lil hack to force compile
