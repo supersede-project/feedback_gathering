@@ -148,8 +148,15 @@ var setup = function()
                         // interaction div
                         var interaction = $("<div class='interaction'></div>");
                         var buttonGroup = $("<div class='btn-group pull-right'></div>");
+
+                        // removeButton
                         var removeButton = $('<button class="btn btn-danger btn-xs button-remove" alpaca-ref-id="' + alpacaFieldId + '"><i class="glyphicon glyphicon-remove"></i></button>');
                         buttonGroup.append(removeButton);
+
+                        // optionsButton
+                        var optionsButton = $('<button class="btn btn-default btn-xs button-options" alpaca-ref-id="' + alpacaFieldId + '"><i class="glyphicon glyphicon-wrench"></i></button>');
+                        buttonGroup.append(optionsButton);
+
                         interaction.append(buttonGroup);
                         interaction.append("<div style='clear:both'></div>");
                         $(interaction).addClass("interaction");
@@ -169,6 +176,19 @@ var setup = function()
                             "margin-top": 5 + (($(interaction).height() / 2) - ($(buttonGroup).height() / 2)),
                             "margin-right": "16px"
                         });
+
+                        // click on optionsButton
+                        $(optionsButton).off().click(function(e) {
+
+                            e.preventDefault();
+                            e.stopPropagation();
+
+                            var alpacaId = $(this).attr("alpaca-ref-id");
+
+                            editOptions(alpacaId);
+                        });
+
+                        // click on removeButton
                         $(removeButton).off().click(function(e) {
 
                             e.preventDefault();
@@ -556,7 +576,7 @@ var setup = function()
     var afterAlpacaInit = function()
     {
             // array with available components
-            var types = ["text", "select", "radio", "any"];
+            var types = ["text", "checkbox", "radio", "any"];
 
             for (var i = 0; i < types.length; i++) {
 
