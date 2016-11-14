@@ -34,17 +34,12 @@ import {ContextInformation} from '../models/feedbacks/context_information';
 import {AudioView} from '../views/audio/audio_view';
 import {FeedbackApp} from './feedback_app';
 import {RatingView} from '../views/rating/rating_view';
+import {AttachmentView} from '../views/attachment/attachment_view';
+import {TextView} from '../views/text/text_view';
+import {DialogView} from '../views/dialog/dialog_view';
+import {CategoryView} from '../views/category/category_view';
 var mockData = require('json!../services/mocks/dev/applications_mock.json');
 
-
-/* TODO REFACTORING PLAN
-    - implement services as singletons --> services are passed to the views via DI --> DONE
-    - implement methods on services that return cached results --> DONE
-    - create view (controller) classes that --> DONE
-    - create template rendering method (handlebars) to easily display data in the templates
-    - split up the mechanisms in own view classes that have less dependencies
-    - reduce this file here to a minimum, i.e. only initialization and configuration
- */
 
 export declare var feedbackApp: FeedbackApp;
 
@@ -129,6 +124,10 @@ export var feedbackPluginModule = function ($, window, document) {
         new PaginationContainer($('#' + dialogId + '.feedback-container .pages-container'), pageNavigation);
         pageNavigation.screenshotViews = [];
 
+        for (var textMechanism of configuration.getMechanismConfig(mechanismTypes.textType)) {
+            new TextView(textMechanism, dialogId);
+        }
+
         for (var ratingMechanism of configuration.getMechanismConfig(mechanismTypes.ratingType)) {
             new RatingView(ratingMechanism, dialogId);
         }
@@ -145,11 +144,7 @@ export var feedbackPluginModule = function ($, window, document) {
         }
 
         for (var attachmentMechanism of configuration.getMechanismConfig(mechanismTypes.attachmentType)) {
-            if (attachmentMechanism.active) {
-                var sectionSelector = "#attachmentMechanism" + attachmentMechanism.id;
-                dropArea = $('' + sectionSelector).find('.drop-area');
-                dropArea.fileUpload(distPath);
-            }
+            new AttachmentView(attachmentMechanism, dialogId);
         }
 
         var title = "Feedback";
@@ -218,25 +213,13 @@ export var feedbackPluginModule = function ($, window, document) {
         });
     };
 
-    // TODO refactoring: move to own jquery plugin or view class
+    // TODO refactoring: move to own view
     var pageNotification = function (message:string) {
         var html = notificationTemplate({message: message});
         $('html').append(html);
         setTimeout(function () {
             $(".feedback-notification").remove();
         }, 3000);
-    };
-
-    // TODO refactoring: move reset() to every mechanism view
-    // TODO refactoring: move resetPlugin() to FeedbackDialog (pay attention to not create a high dependency between dialog and these function that could also be used in other views)
-    var resetPlugin = function (configuration) {
-        $('textarea.text-type-text').val('');
-        for (var screenshotMechanism of configuration.getMechanismConfig(mechanismTypes.screenshotType)) {
-            screenshotMechanism.screenshotView.reset();
-        }
-        for (var ratingMechanism of configuration.getMechanismConfig(mechanismTypes.ratingType)) {
-            initRating("#" + configuration.dialogId + " #ratingMechanism" + ratingMechanism.id + " .rating-input", ratingMechanism);
-        }
     };
 
     // TODO refactoring: I don't know how yet
@@ -283,7 +266,6 @@ export var feedbackPluginModule = function ($, window, document) {
         var container = $('#' + containerId);
         var textareas = container.find('textarea.text-type-text');
         var textMechanisms = configuration.getMechanismConfig(mechanismTypes.textType);
-        var categoryMechanisms = configuration.getMechanismConfig(mechanismTypes.categoryType);
 
         // TODO refactoring: move to feedbackDialog
         container.find('button.submit-feedback').unbind().on('click', function (event) {
@@ -308,132 +290,41 @@ export var feedbackPluginModule = function ($, window, document) {
                 });
             }
         });
-
-        // TODO refactoring: move to TextMechanismView
-        // character length
-        for (var textMechanism of textMechanisms) {
-            var sectionSelector = "textMechanism" + textMechanism.id;
-            var textarea = container.find('section#' + sectionSelector + ' textarea.text-type-text');
-            var maxLength = textMechanism.getParameterValue('maxLength');
-            var isMaxLengthStrict = textMechanism.getParameterValue('maxLengthStrict');
-
-            textarea.on('keyup focus paste blur', function () {
-                container.find('section#' + sectionSelector + ' span.text-type-max-length').text($(this).val().length + '/' + maxLength);
-            });
-
-            if (isMaxLengthStrict) {
-                // prevent typing if max length is reached
-                textarea.on('keypress', function (e) {
-                    if (e.which < 0x20) {
-                        // e.which < 0x20, then it's not a printable character
-                        // e.which === 0 - Not a character
-                        return;     // Do nothing
-                    }
-                    if (this.value.length === maxLength) {
-                        e.preventDefault();
-                    } else if (this.value.length > maxLength) {
-                        this.value = this.value.substring(0, maxLength);
-                    }
-                });
-                // prevent pasting more characters
-                textarea.on('change blur', function () {
-                    if (this.value.length > maxLength) {
-                        this.value = this.value.substring(0, maxLength - 1);
-                    }
-                });
-            }
-
-            // text clear button
-            container.find('section#' + sectionSelector + ' .text-type-text-clear').on('click', function (event) {
-                event.preventDefault();
-                event.stopPropagation();
-                textarea.val('');
-            });
-        }
-
-        // TODO refactoring: move to FeedbackDialog
-        container.find('.discard-feedback').on('click', function () {
-            if (configuration.dialogId === 'pushConfiguration') {
-                dialog.dialog("close");
-            } else if (configuration.dialogId === 'pullConfiguration') {
-                pullDialog.dialog("close");
-            }
-            resetPlugin(configuration);
-        });
-
-        // TODO refactoring: move to CategoryMechanismView
-        for (var categoryMechanism of categoryMechanisms) {
-            categoryMechanism.coordinateOwnInputAndRadioBoxes();
-        }
     };
 
     // TODO refactoring: the mechanism views should return their feedback data
     /**
      * Creates the multipart form data containing the data of the active mechanisms.
      */
-    var prepareFormData = function (container:JQuery, configuration:ConfigurationInterface, callback?:any) {
+    var prepareFormData = function (dialogView:DialogView, configuration:ConfigurationInterface, callback?:any) {
         var formData = new FormData();
-
-        var textMechanisms = configuration.getMechanismConfig(mechanismTypes.textType);
-        var ratingMechanisms = configuration.getMechanismConfig(mechanismTypes.ratingType);
-        var screenshotMechanisms = configuration.getMechanismConfig(mechanismTypes.screenshotType);
-        var categoryMechanisms = configuration.getMechanismConfig(mechanismTypes.categoryType);
-        var attachmentMechanisms = configuration.getMechanismConfig(mechanismTypes.attachmentType);
         var audioMechanisms = configuration.getMechanismConfig(mechanismTypes.audioType);
-
         var hasAudioMechanism = audioMechanisms.filter(audioMechanism => audioMechanism.active === true).length > 0;
 
-        container.find('.server-response').removeClass('error').removeClass('success');
-        var feedbackObject = new Feedback(feedbackObjectTitle, userId, language, applicationId, configuration.id, [], [], [], [], null, [], []);
+        dialogView.resetMessageView();
+
+        var feedbackObject = new Feedback(feedbackObjectTitle, feedbackApp.options.userId, feedbackApp.options.language, applicationId, configuration.id, [], [], [], [], null, [], []);
         feedbackObject.contextInformation = ContextInformation.create();
 
-        for (var textMechanism of textMechanisms) {
-            if (textMechanism.active) {
-                feedbackObject.textFeedbacks.push(textMechanism.getTextFeedback());
-            }
-        }
-
-        for (var ratingMechanism of ratingMechanisms) {
-            if (ratingMechanism.active) {
-                var rating = new RatingFeedback(ratingMechanism.currentRatingValue, ratingMechanism.id);
-                feedbackObject.ratingFeedbacks.push(rating);
-            }
-        }
-
-        for (var screenshotMechanism of screenshotMechanisms) {
-            if (screenshotMechanism.active) {
-                if (screenshotMechanism.screenshotView.getScreenshotAsBinary() === null) {
-                    continue;
+        for(var mechanismView of dialogView.mechanismViews) {
+            if(mechanismView instanceof TextView) {
+                feedbackObject.textFeedbacks.push(mechanismView.getFeedback());
+            } else if (mechanismView instanceof RatingView) {
+                feedbackObject.ratingFeedbacks.push(mechanismView.getFeedback());
+            } else if (mechanismView instanceof AttachmentView) {
+                feedbackObject.attachmentFeedbacks.push(mechanismView.getFeedbacks());
+                for(let i = 0; i < mechanismView.getFiles(); i++) {
+                    let file = mechanismView.getFiles()[i];
+                    formData.append(mechanismView.getPartName(), file, file.name);
                 }
-                var partName = "screenshot" + screenshotMechanism.id;
-                var screenshotFeedback = new ScreenshotFeedback(partName, screenshotMechanism.id, partName, 'png');
-                feedbackObject.screenshotFeedbacks.push(screenshotFeedback);
-                formData.append(partName, screenshotMechanism.screenshotView.getScreenshotAsBinary());
-            }
-        }
-
-        for (var categoryMechanism of categoryMechanisms) {
-            if (categoryMechanism.active) {
-                var categoryFeedbacks = categoryMechanism.getCategoryFeedbacks();
-                for (var categoryFeedback of categoryFeedbacks) {
-                    feedbackObject.categoryFeedbacks.push(categoryFeedback);
+            } else if (mechanismView instanceof ScreenshotView) {
+                let screenshotBinary = mechanismView.getScreenshotAsBinary();
+                if(screenshotBinary !== null) {
+                    feedbackObject.screenshotFeedbacks.push(mechanismView.getFeedback());
+                    formData.append(mechanismView.getPartName(), mechanismView.getScreenshotAsBinary());
                 }
-            }
-        }
-
-        for (var attachmentMechanism of attachmentMechanisms) {
-            if (attachmentMechanism.active) {
-                var sectionSelector = "attachmentMechanism" + attachmentMechanism.id;
-                var input = container.find('section#' + sectionSelector + ' input[type=file]');
-                var files = dropArea.currentFiles;
-
-                for (var i = 0; i < files.length; i++) {
-                    var file = files[i];
-                    let partName = 'attachment' + i;
-                    var attachmentFeedback = new AttachmentFeedback(partName, file.name, file.type, attachmentMechanism.id);
-                    formData.append(partName, file, file.name);
-                    feedbackObject.attachmentFeedbacks.push(attachmentFeedback);
-                }
+            } else if (mechanismView instanceof CategoryView) {
+                feedbackObject.categoryFeedbacks.push(mechanismView.getCategoryFeedbacks());
             }
         }
 

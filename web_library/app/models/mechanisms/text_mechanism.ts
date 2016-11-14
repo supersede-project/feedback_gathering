@@ -11,11 +11,6 @@ export class TextMechanism extends Mechanism {
         super(id, type, active, order, canBeActivated, parameters);
     }
 
-    getTextFeedback():TextFeedback {
-        var text = jQuery('section#textMechanism' + this.id + ' textarea').val();
-        return new TextFeedback(text, this.id)
-    }
-
     getContext():any {
         var textareaStyle = this.getCssStyle([new ParameterValuePropertyPair('textareaFontColor', 'color')]);
         var labelStyle = this.getCssStyle([

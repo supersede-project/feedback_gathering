@@ -1,5 +1,6 @@
 import {dialogOptions} from '../js/config';
 import i18n = require('i18next');
+import {MechanismView} from '../mechanism_view';
 
 
 /**
@@ -7,6 +8,7 @@ import i18n = require('i18next');
  */
 export class DialogView {
     dialog:any;
+    mechanismViews:MechanismView[];
 
     constructor(public dialogId:string, public template:any, public context?:any, public openCallback?:() => void,
                 public closeCallback?:() => void) {
@@ -16,20 +18,25 @@ export class DialogView {
     }
 
     initDialog() {
-        this.dialog = jQuery('#'+ this.dialogId).dialog(
-            this.getDialogOptions()
-        );
+        var myThis = this,
+            dialogContainer = jQuery('#'+ this.dialogId);
+
+        this.dialog = dialogContainer.dialog(this.getDialogOptions());
         this.dialog.dialog('option', 'title', this.context.title);
         this.dialog.dialog('option', 'modal', this.context.modal);
         this.dialog.dialog('option', 'dialogClass', this.context.dialogCSSClass);
+
+        dialogContainer.find('.discard-feedback').on('click', function () {
+            myThis.discardFeedback();
+        });
     }
 
     open() {
-        this.dialog.dialog('close');
+        this.dialog.dialog('opem');
     }
 
     close() {
-        this.dialog.dialog('open');
+        this.dialog.dialog('close');
     }
 
     getDialogOptions():{} {
@@ -55,7 +62,7 @@ export class DialogView {
     }
 
     toggleDialog() {
-        if (this.dialog('isOpen')) {
+        if(this.dialog('isOpen')) {
             this.close();
         } else {
             this.open();
@@ -64,5 +71,16 @@ export class DialogView {
 
     resetMessageView() {
         this.dialog.find('.server-response').removeClass('error').removeClass('success').text('');
+    }
+
+    resetDialog() {
+        for(var mechanismView of this.mechanismViews) {
+            mechanismView.reset();
+        }
+    }
+
+    discardFeedback() {
+        this.resetDialog();
+        this.close();
     }
 }

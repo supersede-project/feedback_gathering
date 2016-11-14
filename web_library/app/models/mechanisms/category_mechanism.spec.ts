@@ -1,7 +1,6 @@
 import {CategoryMechanism} from './category_mechanism';
 import {readJSON} from '../../services/mocks/mocks_loader';
 import {MechanismFactory} from './mechanism_factory';
-import {CategoryFeedback} from '../feedbacks/category_feedback';
 
 
 describe('Category Mechanism', () => {
@@ -38,41 +37,6 @@ describe('Category Mechanism', () => {
         expect(options[1].value).toEqual('Feature Request');
         expect(options[2].key).toEqual('GENERAL_CATEGORY');
         expect(options[2].value).toEqual('General Feedback');
-    });
-
-    it('should return its category feedback object', () => {
-        $('#optionFEATURE_REQUEST_CATEGORY').prop("checked", true);
-
-        var categoryFeedbacks:CategoryFeedback[] = categoryMechanism.getCategoryFeedbacks();
-        var json = JSON.stringify(categoryFeedbacks);
-        var expectedJson = '[{"parameterId":2,"text":""}]';
-
-        expect(json).toEqual(expectedJson);
-    });
-
-    it('should coordinate the behaviour between radio boxes and the text input for the own category', () => {
-        categoryMechanism.coordinateOwnInputAndRadioBoxes();
-
-        var featureRequestRadio = $('#optionFEATURE_REQUEST_CATEGORY');
-        var bugRadio = $('#optionBUG_CATEGORY');
-        var myOwnInput = $('#ownInput1');
-
-        featureRequestRadio.prop("checked", true);
-        expect(myOwnInput.val()).toEqual("");
-
-        myOwnInput.val('My category');
-        myOwnInput.trigger("change");
-        expect(featureRequestRadio.is(':checked')).toBeFalsy();
-
-        bugRadio.trigger("click");
-        expect(myOwnInput.val()).toEqual("");
-
-        myOwnInput.val('My category');
-        myOwnInput.trigger("change");
-        expect(bugRadio.is(':checked')).toBeFalsy();
-
-        featureRequestRadio.trigger("click");
-        expect(myOwnInput.val()).toEqual("");
     });
 });
 

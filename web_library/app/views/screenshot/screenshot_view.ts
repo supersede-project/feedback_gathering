@@ -3,6 +3,8 @@ import {DataHelper} from '../../js/helpers/data_helper';
 import '../../js/lib/screenshot/html2canvas.js';
 import {Mechanism} from '../../models/mechanisms/mechanism';
 import {CanvasState} from './canvas_state';
+import {ScreenshotFeedback} from '../../models/feedbacks/screenshot_feedback';
+import {MechanismView} from '../mechanism_view';
 
 const freehandDrawingMode:string = 'freehandDrawingMode';
 const rectDrawingMode:string = 'rectDrawingMode';
@@ -21,7 +23,7 @@ const textTypeObjectIdentifier:string = 'i-text';
 const cropperTypeObjectIdentifier:string = 'cropper';
 
 
-export class ScreenshotView {
+export class ScreenshotView implements MechanismView {
     screenshotMechanism:Mechanism;
     screenshotPreviewElement:JQuery;
     screenshotCaptureButton:JQuery;
@@ -640,6 +642,14 @@ export class ScreenshotView {
                 jQuery('' + elementToHide).show();
             }
         }
+    }
+
+    getFeedback(): ScreenshotFeedback {
+        return new ScreenshotFeedback(this.getPartName(), this.screenshotMechanism.id, this.getPartName(), 'png');
+    };
+
+    getPartName(): string {
+        return "screenshot" + this.screenshotMechanism.id;
     }
 
     reset() {

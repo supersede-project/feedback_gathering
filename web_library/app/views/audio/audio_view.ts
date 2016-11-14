@@ -1,7 +1,8 @@
 import {AudioMechanism} from '../../models/mechanisms/audio_mechanism';
+import {MechanismView} from '../mechanism_view';
 
 
-export class AudioView {
+export class AudioView implements MechanismView {
     audioMechanism:AudioMechanism;
     container:JQuery;
     distPath:string;
@@ -69,6 +70,10 @@ export class AudioView {
         Fr.voice.export(function (blob) {
             callback(blob);
         }, "blob");
+    }
+
+    reset() {
+        // TODO implement
     }
 }
 
