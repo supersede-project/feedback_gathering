@@ -19,7 +19,6 @@ import {PageNavigation} from './helpers/page_navigation';
 import {ConfigurationInterface} from '../models/configurations/configuration_interface';
 import {Application} from '../models/applications/application';
 import {ApplicationService} from '../services/application_service';
-import {shuffle} from './helpers/array_shuffle';
 import * as t from '../templates/t';
 import * as compare from '../templates/compare';
 var dialogTemplate = require('../templates/feedback_dialog.handlebars');
@@ -33,29 +32,27 @@ import {AttachmentFeedback} from '../models/feedbacks/attachment_feedback';
 import {AudioFeedback} from '../models/feedbacks/audio_feedback';
 import {ContextInformation} from '../models/feedbacks/context_information';
 import {AudioView} from '../views/audio/audio_view';
+import {FeedbackApp} from './feedback_app';
 var mockData = require('json!../services/mocks/dev/applications_mock.json');
 
 
 /* TODO REFACTORING PLAN
-    - implement services as singletons --> services are passed to the views via DI
-    - implement methods on services that return cached results
-    - create view (controller) classes that
+    - implement services as singletons --> services are passed to the views via DI --> DONE
+    - implement methods on services that return cached results --> DONE
+    - create view (controller) classes that --> DONE
     - create template rendering method (handlebars) to easily display data in the templates
     - split up the mechanisms in own view classes that have less dependencies
     - reduce this file here to a minimum, i.e. only initialization and configuration
  */
+
+declare var feedbackApp: FeedbackApp;
+
 export var feedbackPluginModule = function ($, window, document) {
     var dialog;
     var pushConfigurationDialogId = "pushConfiguration";
     var pullDialog;
     var pullConfigurationDialogId = "pullConfiguration";
     var active = false;
-    var application:Application;
-    var feedbackButton;
-    var applicationContext;
-    var distPath;
-    var userId;
-    var language:string;
     var dropArea;
     var dialogCSSClass;
     var colorPickerCSSClass;
@@ -69,21 +66,11 @@ export var feedbackPluginModule = function ($, window, document) {
      *  The current application object that configures the library.
      */
     var initApplication = function (applicationObject:Application) {
-        application = applicationObject;
-        applicationContext = application.getContextForView();
-
-        resetMessageView();
         initPushMechanisms(application.getPushConfiguration(), application.generalConfiguration);
 
-        feedbackButton.attr('title', application.generalConfiguration.getParameterValue('quickInfo'));
-
-        var alreadyTriggeredOne = false;
-        for (var pullConfiguration of shuffle(application.getPullConfigurations())) {
-            alreadyTriggeredOne = initPullConfiguration(pullConfiguration, application.generalConfiguration, alreadyTriggeredOne);
-        }
     };
 
-    // TODO refactoring: I don't know how yet
+    // TODO refactoring: move to dialog view
     /**
      * @param configuration
      *  PushConfiguration data retrieved from the feedback orchestrator
@@ -129,45 +116,6 @@ export var feedbackPluginModule = function ($, window, document) {
                 }
             }, delay * 1000);
         }
-    };
-
-    // TODO refactoring: I don't know how yet
-    /**
-     * Initializes the pull mechanisms and triggers the feedback mechanisms if necessary.
-     *
-     * @param configuration
-     * @param alreadyTriggeredOne
-     *  Boolean that indicated whether a pull configuration has already been triggered.
-     *
-     * @returns boolean
-     *  Whether the pull configuration was triggered or not.
-     */
-    var initPullConfiguration = function (configuration:PullConfiguration, generalConfiguration:GeneralConfiguration,
-                                          alreadyTriggeredOne:boolean = false):boolean {
-        // triggers on elements
-        if (configuration.generalConfiguration.getParameterValue('userAction')) {
-            var userAction = configuration.generalConfiguration.getParameterValue('userAction');
-            var actionName = userAction.filter(element => element.key === 'actionName').length > 0 ? userAction.filter(element => element.key === 'actionName')[0].value : '';
-            var actionElement = userAction.filter(element => element.key === 'actionElement').length > 0 ? userAction.filter(element => element.key === 'actionElement')[0].value : '';
-            var actionOnlyOncePerPageLoad = userAction.filter(element => element.key === 'actionOnlyOncePerPageLoad').length > 0 ? userAction.filter(element => element.key === 'actionOnlyOncePerPageLoad')[0].value : true;
-
-            if (actionOnlyOncePerPageLoad) {
-                $('' + actionElement).one(actionName, function () {
-                    showPullDialog(configuration, generalConfiguration);
-                })
-            } else {
-                $('' + actionElement).on(actionName, function () {
-                    showPullDialog(configuration, generalConfiguration);
-                })
-            }
-        }
-
-        // direct triggers
-        if (!alreadyTriggeredOne && configuration.shouldGetTriggered()) {
-            showPullDialog(configuration, generalConfiguration);
-            return true;
-        }
-        return false;
     };
 
     // TODO refactoring: I don't know how yet
@@ -269,7 +217,7 @@ export var feedbackPluginModule = function ($, window, document) {
         });
     };
 
-    // TODO refactoring: move to own jquery plugin
+    // TODO refactoring: move to own jquery plugin or view class
     var pageNotification = function (message:string) {
         var html = notificationTemplate({message: message});
         $('html').append(html);
@@ -338,42 +286,6 @@ export var feedbackPluginModule = function ($, window, document) {
         return screenshotView;
     };
 
-    // TODO refactoring: move to feedbackDialog
-    /**
-     * @param dialogContainer
-     *  Element that contains the dialog content
-     * @param title
-     *  The title of the dialog
-     * @param modal
-     *  whether the dialog behaviour is modal or not
-     * @param dialogId
-     *  ID of the dialog
-     *
-     * Initializes the dialog on a given element and opens it.
-     */
-    var initDialog = function (dialogContainer, title, modal, dialogId) {
-        var dialogObject = dialogContainer.dialog(
-            $.extend({}, dialogOptions, {
-                close: function () {
-                    dialogObject.dialog("close");
-                    active = false;
-                },
-                open: function () {
-                    $('[aria-describedby="' + dialogId + '"] .ui-dialog-titlebar-close').attr('title', i18n.t('general.dialog_close_button_title'));
-                },
-                create: function (event, ui) {
-                    var widget = $(this).dialog("widget");
-                    $(".ui-dialog-titlebar-close span", widget)
-                        .removeClass("ui-icon-closethick")
-                        .addClass("ui-icon-minusthick");
-                }
-            })
-        );
-        dialogObject.dialog('option', 'title', title);
-        dialogObject.dialog('option', 'modal', modal);
-        dialogObject.dialog('option', 'dialogClass', dialogCSSClass);
-        return dialogObject;
-    };
 
     // TODO refactoring: see inside function
     /**
@@ -613,11 +525,6 @@ export var feedbackPluginModule = function ($, window, document) {
         return $.extend({}, pluginContext, contextWithApplicationContext);
     };
 
-    // TODO refactoring: move to FeedbackDialog
-    var resetMessageView = function () {
-        $('.server-response').removeClass('error').removeClass('success').text('');
-    };
-
     /**
      * @param options
      *  Client side configuration of the feedback library
@@ -628,40 +535,10 @@ export var feedbackPluginModule = function ($, window, document) {
      * server and the feedback mechanism is invoked.
      */
     $.fn.feedbackPlugin = function (options) {
-        feedbackButton = this;
-        this.options = $.extend({}, $.fn.feedbackPlugin.defaults, options);
-        var currentOptions = this.options;
-        distPath = currentOptions.distPath;
-        userId = currentOptions.userId;
-        dialogCSSClass = currentOptions.dialogCSSClass;
-        colorPickerCSSClass = currentOptions.colorPickerCSSClass;
-        defaultStrokeWidth = currentOptions.defaultStrokeWidth;
-
-        language = I18nHelper.getLanguage(this.options);
-        I18nHelper.initializeI18n(this.options);
-
-        // loadDataHere to trigger pull if necessary
-        var applicationService = new ApplicationService(language);
-        applicationService.retrieveApplication(applicationId, application => {
-            if (!application.state) {
-                feedbackButton.hide();
-                return feedbackButton;
-            }
-            initApplication(application);
-            feedbackButton.show();
-        }, errorData => {
-            console.warn('SERVER ERROR ' + errorData.status + ' ' + errorData.statusText + ': ' + errorData.responseText);
-            feedbackButton.hide();
-            return feedbackButton;
-        });
-
-        this.css('background-color', currentOptions.backgroundColor);
-        this.css('color', currentOptions.color);
-        this.on('click', function (event) {
-            event.preventDefault();
-            event.stopPropagation();
-            toggleDialog(application.getPushConfiguration());
-        });
+        I18nHelper.initializeI18n(options);
+        var language = I18nHelper.getLanguage(options);
+        var options = $.extend({}, $.fn.feedbackPlugin.defaults, options);
+        feedbackApp = new FeedbackApp(new ApplicationService(language), applicationId, options, this);
 
         return this;
     };
@@ -677,7 +554,6 @@ export var feedbackPluginModule = function ($, window, document) {
         'colorPickerCSSClass': 'color-picker',
         'defaultStrokeWidth': 4
     };
-
 };
 
 (function ($, window, document) {
