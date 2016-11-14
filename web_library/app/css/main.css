@@ -532,8 +532,17 @@
 .feedback-library.ui-dialog {
   padding: 0; }
 
+.feedback-library.ui-dialog .ui-dialog-content {
+  padding-bottom: 15px; }
+
 .feedback-library.ui-widget.ui-widget-content {
   border: 1px solid #666; }
+
+.feedback-library.ui-corner-all, .ui-corner-bottom, .ui-corner-right, .ui-corner-br {
+  border-bottom-right-radius: 0; }
+
+.feedback-library.ui-corner-all, .ui-corner-bottom, .ui-corner-left, .ui-corner-bl {
+  border-bottom-left-radius: 0; }
 
 .feedback-library.ui-dialog .ui-dialog-titlebar {
   font-family: Tahoma, Verdana, Segoe, sans-serif;
@@ -603,11 +612,13 @@
 .feedback-library textarea.text-type-text {
   width: 100%;
   min-width: 100%;
+  max-width: 100%;
   border: 1px solid #4d4d4d;
   font-size: 15px;
   color: #7d7a7c;
   padding: 5px;
-  margin-top: 6px; }
+  margin-top: 6px;
+  box-sizing: border-box; }
 
 .feedback-library .ui-dialog-titlebar {
   border-color: transparent;
