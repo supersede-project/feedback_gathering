@@ -362,6 +362,7 @@ export var feedbackPluginModule = function ($, window, document) {
                     $(".ui-dialog-titlebar-close span", widget)
                         .removeClass("ui-icon-closethick")
                         .addClass("ui-icon-minusthick");
+                    $(this).closest('.ui-dialog').addClass('feedback-library');
                 }
             })
         );
