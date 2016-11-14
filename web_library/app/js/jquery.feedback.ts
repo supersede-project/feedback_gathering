@@ -33,6 +33,7 @@ import {AudioFeedback} from '../models/feedbacks/audio_feedback';
 import {ContextInformation} from '../models/feedbacks/context_information';
 import {AudioView} from '../views/audio/audio_view';
 import {FeedbackApp} from './feedback_app';
+import {RatingView} from '../views/rating/rating_view';
 var mockData = require('json!../services/mocks/dev/applications_mock.json');
 
 
@@ -45,7 +46,7 @@ var mockData = require('json!../services/mocks/dev/applications_mock.json');
     - reduce this file here to a minimum, i.e. only initialization and configuration
  */
 
-declare var feedbackApp: FeedbackApp;
+export declare var feedbackApp: FeedbackApp;
 
 export var feedbackPluginModule = function ($, window, document) {
     var dialog;
@@ -129,7 +130,7 @@ export var feedbackPluginModule = function ($, window, document) {
         pageNavigation.screenshotViews = [];
 
         for (var ratingMechanism of configuration.getMechanismConfig(mechanismTypes.ratingType)) {
-            initRating("#" + dialogId + " #ratingMechanism" + ratingMechanism.id + " .rating-input", ratingMechanism);
+            new RatingView(ratingMechanism, dialogId);
         }
 
         for (var screenshotMechanism of configuration.getMechanismConfig(mechanismTypes.screenshotType)) {
@@ -140,7 +141,7 @@ export var feedbackPluginModule = function ($, window, document) {
         var audioMechanism = configuration.getMechanismConfig(mechanismTypes.audioType).filter(mechanism => mechanism.active === true)[0];
         if (audioMechanism) {
             var audioContainer = $("#" + dialogId + " #audioMechanism" + audioMechanism.id);
-            audioView = new AudioView(audioMechanism, audioContainer, distPath);
+            new AudioView(audioMechanism, audioContainer, distPath);
         }
 
         for (var attachmentMechanism of configuration.getMechanismConfig(mechanismTypes.attachmentType)) {
@@ -235,26 +236,6 @@ export var feedbackPluginModule = function ($, window, document) {
         }
         for (var ratingMechanism of configuration.getMechanismConfig(mechanismTypes.ratingType)) {
             initRating("#" + configuration.dialogId + " #ratingMechanism" + ratingMechanism.id + " .rating-input", ratingMechanism);
-        }
-    };
-
-    // TODO refactoring: move initRating() to RatingView
-    /**
-     * @param selector
-     *  The jQuery selector that matches the element the star rating should be applied on
-     * @param ratingMechanism
-     *  The rating mechanism object that contains the configuration
-     *
-     * Applies the jQuery star rating plugin on a specified element with the configuration from the rating mechanism.
-     */
-    var initRating = function (selector, ratingMechanism:RatingMechanism) {
-        if (ratingMechanism !== null && ratingMechanism.active) {
-            var options = ratingMechanism.getRatingElementOptions();
-            $('' + selector).starRating(options);
-            // reset to default rating
-            if (ratingMechanism.initialRating) {
-                $('' + selector + ' .jq-star:nth-child(' + ratingMechanism.initialRating + ')').click();
-            }
         }
     };
 
@@ -490,20 +471,6 @@ export var feedbackPluginModule = function ($, window, document) {
             formData.append('json', JSON.stringify(feedbackObject));
             callback(formData);
         }
-    };
-
-    // TODO refactoring: move to FeedbackDialog
-    /**
-     * The configuration data is fetched from the API if the feedback mechanism is not currently active. In the other
-     * case the feedback mechanism dialog is closed. The active variable is toggled on each invocation.
-     */
-    var toggleDialog = function (pushConfiguration) {
-        if (!active) {
-            openDialog(dialog, pushConfiguration);
-        } else {
-            dialog.dialog("close");
-        }
-        active = !active;
     };
 
     // TODO refactoring: move to FeedbackDialog
