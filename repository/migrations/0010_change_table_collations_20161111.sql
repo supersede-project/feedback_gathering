@@ -1,0 +1,15 @@
+ALTER DATABASE feedback_repository CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+ALTER TABLE feedback_repository.api_user_permissions CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+ALTER TABLE feedback_repository.api_users CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+ALTER TABLE feedback_repository.attachment_feedbacks CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+ALTER TABLE feedback_repository.audio_feedbacks CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+ALTER TABLE feedback_repository.category_feedbacks CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+ALTER TABLE feedback_repository.context_informations CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+ALTER TABLE feedback_repository.feedback_comments CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+ALTER TABLE feedback_repository.feedbacks CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+ALTER TABLE feedback_repository.feedback_states CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+ALTER TABLE feedback_repository.rating_feedbacks CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+ALTER TABLE feedback_repository.screenshot_feedbacks CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+ALTER TABLE feedback_repository.status_options CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+ALTER TABLE feedback_repository.text_annotations CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+ALTER TABLE feedback_repository.text_feedbacks CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci;

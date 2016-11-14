@@ -71,6 +71,17 @@ import ch.uzh.ifi.feedback.library.rest.validation.ValidationResult;
 import ch.uzh.ifi.feedback.library.rest.validation.ValidatorBase;
 import javassist.NotFoundException;
 
+
+/**
+ * This class is responsible for managing and invoking controller methods with the correct parameters.
+ * Each controller method is annotated with an @Path-attribute that represents a URL template.
+ * When a request arrives at a Servlet method, the corresponding method (e.g. Get) on an instance of this class is called and the handler method 
+ * with the associated @Path attribute is invoked.
+ *
+ * @author Florian Schüpfer
+ * @version 1.0
+ * @since   2016-11-14
+ */
 public class RestManager implements IRestManager {
 
 	private List<HandlerInfo> _handlers;
@@ -88,7 +99,13 @@ public class RestManager implements IRestManager {
 		_serializerMap = new HashMap<>();
 	}
 
-	public void Init(String packageName) throws Exception {
+
+	/**
+	  * This method is used to start the initialization of the controller handler list from the provided package name.
+	  * @param packageName the fully qualified package name where the controller classes reside
+	 */
+	public void Init(String packageName) throws Exception 
+	{
 		
 		InitParserMap();
 		
@@ -102,6 +119,14 @@ public class RestManager implements IRestManager {
 		InitHandlerTable(reflections);
 	}
 	
+	/**
+	  * This method is used to initialize the controller handler list from the properly initialized reflections object.
+	  * It iterates over all controller annotated classes and stores the associated serializer class in the _serializerMap.
+	  * It then iterates over all methods of the class and stores the following properties in the _handlers list:
+	  * the url template, the http method, the authentication class and the path parameters.
+	  * 
+	  * @param reflections Reflections object that is initialized with the package containing the controller classes.
+	 */
 	private void InitHandlerTable(Reflections reflections) throws Exception
 	{
 		Set<Class<?>> controllerAnnotated = reflections.getTypesAnnotatedWith(Controller.class);
@@ -167,6 +192,9 @@ public class RestManager implements IRestManager {
 		}
 	}
 
+	/**
+	  * This method is used the parser map that is used for parsing the path parameters annotated with the @PathParam attribute
+	 */
 	private void InitParserMap() throws Exception {
 		
 			_parserMap.put(Integer.class, Integer.class.getMethod("parseInt", String.class));
@@ -176,6 +204,13 @@ public class RestManager implements IRestManager {
 			_parserMap.put(Timestamp.class, Timestamp.class.getMethod("valueOf", String.class));
 	}
 	
+	/**
+	  * This method is called from the "doGet" method of a HttpServlet.
+	  * It calls the associated handler method for the provided request.
+
+	  * @param request the HttpServletRequest
+	  * @param response the HttpServletResponse
+	 */
 	@Override
 	public void Get(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {	
 		try {
@@ -186,16 +221,28 @@ public class RestManager implements IRestManager {
 		}
 	}
 	
-	private Throwable GetRootCause(Throwable ex)
+	/**
+	  * this method searches recursively for the root cause of an exception
+	  * 
+	  * @param exception the thrown exception
+	 */
+	private Throwable GetRootCause(Throwable exception)
 	{
-		while(ex.getCause() != null)
+		while(exception.getCause() != null)
 		{
-			ex = ex.getCause();
+			exception = exception.getCause();
 		}
 		
-		return ex;
+		return exception;
 	}
 
+	/**
+	  * This method is called from the "doPost" method of a HttpServlet.
+	  * It calls the associated handler method for the provided request.
+
+	  * @param request the HttpServletRequest
+	  * @param response the HttpServletResponse
+	 */
 	@Override
 	public void Post(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		try {
@@ -206,15 +253,23 @@ public class RestManager implements IRestManager {
 		}
 	}
 
-	private void HandleExceptions(HttpServletResponse response, Exception ex) throws IOException, ServletException {
-		Throwable rootCause = GetRootCause(ex);
+	/**
+	  * This method catches and handles all exceptions that are thrown upon invocation of a handler method. 
+	  * It searches for the root cause of an exception and handles it accordingly. If an exception type is not known,
+	  * a ServletException is thrown that is then handled by the calling HttpServlet.
+	  * 
+	  * @param response the HttpServletResponse
+	  * @param exception the Exception that is thrown by a handler method
+	 */
+	private void HandleExceptions(HttpServletResponse response, Exception exception) throws IOException, ServletException {
+		Throwable rootCause = GetRootCause(exception);
 		if(rootCause instanceof NotFoundException){
-			ex.printStackTrace();
+			exception.printStackTrace();
 			response.setStatus(404);
 			response.getWriter().append(rootCause.getMessage());
 		}else if(rootCause instanceof UnsupportedOperationException)
 		{
-			ex.printStackTrace();
+			exception.printStackTrace();
 			response.setStatus(405);
 			response.getWriter().append(rootCause.getMessage());
 		}
@@ -235,11 +290,18 @@ public class RestManager implements IRestManager {
 			response.getWriter().append(rootCause.getMessage());
 		}
 		else{
-			ex.printStackTrace();
-			throw new ServletException(ex);
+			exception.printStackTrace();
+			throw new ServletException(exception);
 		}
 	}
 	
+	/**
+	  * This method is called from the "doPut" method of a HttpServlet.
+	  * It calls the associated handler method for the provided request.
+
+	  * @param request the HttpServletRequest
+	  * @param response the HttpServletResponse
+	 */
 	@Override
 	public void Put(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		try {
@@ -250,6 +312,13 @@ public class RestManager implements IRestManager {
 		}
 	}
 
+	/**
+	  * This method is called from the "doDelete" method of a HttpServlet.
+	  * It calls the associated handler method for the provided request.
+
+	  * @param request the HttpServletRequest
+	  * @param response the HttpServletResponse
+	 */
 	@Override
 	public void Delete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		try {
@@ -269,6 +338,18 @@ public class RestManager implements IRestManager {
 		return null;
 	}
 	
+	/**
+	  * This method is called from the "doGet", "doPost", "doPut" and "doDelete" methods.
+	  * It searches for a handler registered in the _hanlders list that matches the invoked path and http method. If no such handler is found,
+	  * a NotFoundException is thrown.
+	  * If a handler exists, the parameters of the path are parsed and the handler method is invoked. The result of the handler method (if any)
+	  * gets deserialized and written into the response stream.
+	  * 
+	  * It calls the associated handler method for the provided request.
+	  * @param request the HttpServletRequest
+	  * @param response the HttpServletResponse
+	  * @param method the http method of the request
+	 */
 	private void InvokeHandler(HttpServletRequest request, HttpServletResponse response, HttpMethod method) throws Exception
 	{
 		Map<String, String[]> map = request.getParameterMap();
@@ -307,6 +388,7 @@ public class RestManager implements IRestManager {
 		             language);
 		}
 		
+		//Parse the parameters of the path
 		for(Entry<String, Parameter> pathParam : handler.getPathParameters().entrySet())
 		{
 			if(params.containsKey(pathParam.getKey()))
@@ -329,6 +411,7 @@ public class RestManager implements IRestManager {
 		
 		ISerializationService serializer = null;
 		
+		//Deserialize request payload
 		if(handler.getSerializedParameterClass() != void.class)
 		{
 			serializer = _injector.getInstance(_serializerMap.get(handler.getSerializedParameterClass()));
@@ -345,6 +428,7 @@ public class RestManager implements IRestManager {
 		
 		Object result = handler.getMethod().invoke(instance, parameters.toArray());
 		
+		//write deserialized object of handler into response stream
 		if(result != null)
 		{
 			if(serializer != null)

@@ -20,6 +20,15 @@ import ch.uzh.ifi.feedback.library.transaction.TransactionManager;
 import javassist.NotFoundException;
 import static java.util.Arrays.asList;
 
+/**
+ * This class is the base class for all services that access the database. It provides basic CRUD functionality.
+ * The queries are generated based on field metadata retrieved from the model classes.
+ * 
+ * @param <T> the model class that is processed by this instance
+ * @author Florian Schüpfer
+ * @version 1.0
+ * @since   2016-11-14
+ */
 public abstract class ServiceBase<T extends IDbItem> implements IDbService<T> {
 	
 	protected String tableName;
@@ -40,6 +49,12 @@ public abstract class ServiceBase<T extends IDbItem> implements IDbService<T> {
 		this.dbName = dbName;
 	}
 	
+	
+	/**
+	 * This method retrieves an instance of IDbItem<T> from the database based on its id.
+	 * @param id the id of the object to retrieve
+	 * @return
+	 */
 	@Override
 	public T GetById(int id) throws SQLException, NotFoundException
 	{
@@ -64,6 +79,10 @@ public abstract class ServiceBase<T extends IDbItem> implements IDbService<T> {
 		return instance;
 	}
 	
+	/**
+	 * This method retrieves all instances of IDbItem<T> from the database.
+	 * @return
+	 */
 	@Override
 	public List<T> GetAll() throws SQLException
 	{
@@ -78,6 +97,12 @@ public abstract class ServiceBase<T extends IDbItem> implements IDbService<T> {
 		return resultList;
 	}
 	
+	/**
+	 * This method deletes an instances of IDbItem<T> from the database based on its id.
+	 * @param id the id of the object to delete
+	 * @param con the database connection for this transaction
+	 * @return
+	 */
 	@Override
 	public void Delete(Connection con, int id) throws SQLException, NotFoundException
 	{
@@ -87,6 +112,12 @@ public abstract class ServiceBase<T extends IDbItem> implements IDbService<T> {
 		s.execute();
 	}
 	
+	/**
+	 * This method updates an instances of IDbItem<T> on the database.
+	 * @param con the database connection for this transaction
+	 * @param object the object to update
+	 * @return
+	 */
 	@Override
 	public void Update(Connection con, T object) throws SQLException ,NotFoundException ,UnsupportedOperationException 
 	{
@@ -130,6 +161,12 @@ public abstract class ServiceBase<T extends IDbItem> implements IDbService<T> {
 		s.execute();
 	};
 	
+	/**
+	 * This method inserts an instances of IDbItem<T> into the database.
+	 * @param con the database connection for this transaction
+	 * @param object the object to insert
+	 * @return
+	 */
 	@Override
 	public int Insert(Connection con, T object) throws SQLException ,NotFoundException ,UnsupportedOperationException 
 	{
@@ -182,6 +219,12 @@ public abstract class ServiceBase<T extends IDbItem> implements IDbService<T> {
 	    return keys.getInt(1);
 	}
 	
+	/**
+	 * This method retrieves a subset of instances of IDbItem<T> based on a number of predicates
+	 * @param values the values that are used in the conditions
+	 * @param conditions a list of conditions in the format "? = x", where ? stands for the value that is in the same position in the values list
+	 * @return
+	 */
 	@Override
 	public List<T> GetWhere(List<Object> values, String...conditions) throws SQLException
 	{
@@ -213,6 +256,11 @@ public abstract class ServiceBase<T extends IDbItem> implements IDbService<T> {
 		return resultList;
 	}
 	
+	/**
+	 * This method checks if an object with a specific exists in the database
+	 * @param id the id to check
+	 * @return
+	 */
 	@Override
 	public boolean CheckId(int id) throws SQLException
 	{
@@ -230,6 +278,11 @@ public abstract class ServiceBase<T extends IDbItem> implements IDbService<T> {
 		return true;
 	}
 	
+	/**
+	 * This method retrieves a list of instances of IDbItem<T> from a ResultSet
+	 * @param ResultSet the result object from a database query
+	 * @return
+	 */
 	protected List<T> getList(ResultSet result) throws SQLException
 	{
 		List<T> list = new ArrayList<>();

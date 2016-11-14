@@ -22,7 +22,6 @@ public class RepositoryDatabaseConfiguration extends DatabaseConfiguration {
 	public void StartDebugMode() 
 	{
 		databaseName = testDatabaseName;
-		super.StartDebugMode();
 	}
 
 	@Override

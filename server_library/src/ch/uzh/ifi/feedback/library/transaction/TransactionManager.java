@@ -13,10 +13,25 @@ import org.apache.commons.logging.LogFactory;
 import ch.uzh.ifi.feedback.library.rest.ContextFinalizer;
 import javassist.NotFoundException;
 
+/**
+ * This class is responsible for creating database connections and issuing Transactions against the database.
+ * 
+ * @author Florian Schüpfer
+ * @version 1.0
+ * @since   2016-11-14
+ */
 public class TransactionManager {
 
-    private static final Log LOGGER = LogFactory.getLog(ContextFinalizer.class);
+    private static final Log LOGGER = LogFactory.getLog(TransactionManager.class);
     
+    /**
+     * This method executes a Transaction lambda expression against the database. When an exception occurs, a rollback is executed
+     * to restore the database.
+     * 
+     * @param transaction the transaction to execute against the database
+     * @throws SQLException
+     * @throws NotFoundException
+     */
     public static void withTransaction(Transaction transaction) throws SQLException, NotFoundException {
 
         Connection dbConnection = createDatabaseConnection();
@@ -42,6 +57,12 @@ public class TransactionManager {
         }
     }
 
+    /**
+     * This method creates and returns a Connection object with help of the credentials that are stored in the config.properties file.
+     * 
+     * @return the Connection object
+     * @throws SQLException
+     */
     public static Connection createDatabaseConnection() throws SQLException {
 
         try {

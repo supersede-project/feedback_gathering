@@ -1,4 +1,4 @@
-CREATE DATABASE  IF NOT EXISTS `feedback_repository_test` /*!40100 DEFAULT CHARACTER SET latin1 */;
+CREATE DATABASE  IF NOT EXISTS `feedback_repository_test` /*!40100 DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci */;
 USE `feedback_repository_test`;
 -- MySQL dump 10.13  Distrib 5.5.41, for debian-linux-gnu (x86_64)
 --
@@ -32,7 +32,7 @@ CREATE TABLE `api_user_permissions` (
   PRIMARY KEY (`id`),
   KEY `fk_api_user_permissions_1_idx` (`user_id`),
   CONSTRAINT `fk_api_user_permissions_1` FOREIGN KEY (`user_id`) REFERENCES `api_users` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=big5;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -54,11 +54,11 @@ DROP TABLE IF EXISTS `api_users`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `api_users` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) NOT NULL,
-  `password` varchar(255) NOT NULL,
-  `role` enum('ADMIN','USER') NOT NULL DEFAULT 'USER',
+  `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `password` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `role` enum('ADMIN','USER') COLLATE utf8_unicode_ci NOT NULL DEFAULT 'USER',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -81,16 +81,16 @@ DROP TABLE IF EXISTS `attachment_feedbacks`;
 CREATE TABLE `attachment_feedbacks` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `feedback_id` int(11) NOT NULL,
-  `path` varchar(255) NOT NULL,
+  `path` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `size` int(11) NOT NULL,
-  `file_extension` varchar(10) NOT NULL,
-  `name` varchar(255) DEFAULT NULL,
-  `part` varchar(255) DEFAULT NULL,
+  `file_extension` varchar(10) COLLATE utf8_unicode_ci NOT NULL,
+  `name` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `part` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `mechanism_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_audio_feedback_idx` (`feedback_id`),
   CONSTRAINT `fk_audio_feedback0` FOREIGN KEY (`feedback_id`) REFERENCES `feedbacks` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=big5;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -113,17 +113,17 @@ DROP TABLE IF EXISTS `audio_feedbacks`;
 CREATE TABLE `audio_feedbacks` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `feedback_id` int(11) NOT NULL,
-  `path` varchar(255) NOT NULL,
+  `path` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `size` int(11) NOT NULL,
-  `name` varchar(255) DEFAULT NULL,
+  `name` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `duration` int(11) DEFAULT NULL,
   `mechanism_id` int(11) DEFAULT NULL,
-  `part` varchar(255) DEFAULT NULL,
-  `file_extension` varchar(10) DEFAULT NULL,
+  `part` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `file_extension` varchar(10) COLLATE utf8_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_audio_feedback_idx` (`feedback_id`),
   CONSTRAINT `fk_audio_feedback` FOREIGN KEY (`feedback_id`) REFERENCES `feedbacks` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=big5;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -176,11 +176,11 @@ CREATE TABLE `category_feedbacks` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `feedback_id` int(11) NOT NULL,
   `parameter_id` int(11) DEFAULT NULL,
-  `text` varchar(255) DEFAULT NULL,
+  `text` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_audio_feedback_idx` (`feedback_id`),
   CONSTRAINT `fk_audio_feedback00` FOREIGN KEY (`feedback_id`) REFERENCES `feedbacks` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=big5;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -229,16 +229,16 @@ DROP TABLE IF EXISTS `context_informations`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `context_informations` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `resolution` varchar(255) DEFAULT NULL,
-  `user_agent` varchar(255) DEFAULT NULL,
-  `android_version` varchar(45) DEFAULT NULL,
+  `resolution` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `user_agent` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `android_version` varchar(45) COLLATE utf8_unicode_ci DEFAULT NULL,
   `local_time` timestamp NULL DEFAULT NULL,
-  `time_zone` varchar(45) DEFAULT NULL,
-  `device_pixel_ratio` varchar(11) DEFAULT NULL,
-  `country` varchar(45) DEFAULT NULL,
-  `region` varchar(255) DEFAULT NULL,
+  `time_zone` varchar(45) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `device_pixel_ratio` varchar(11) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `country` varchar(45) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `region` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=big5;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -260,13 +260,13 @@ DROP TABLE IF EXISTS `feedback_comments`;
 CREATE TABLE `feedback_comments` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `feedback_id` int(11) NOT NULL,
-  `comment` text NOT NULL,
-  `user_id` varchar(255) NOT NULL,
+  `comment` mediumtext COLLATE utf8_unicode_ci NOT NULL,
+  `user_id` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `fk_feedback_comments_idx` (`feedback_id`),
   CONSTRAINT `fk_feedback_comments` FOREIGN KEY (`feedback_id`) REFERENCES `feedbacks` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=big5;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -289,14 +289,14 @@ CREATE TABLE `feedback_states` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `feedback_id` int(11) NOT NULL,
   `api_user_id` int(11) DEFAULT NULL,
-  `status` varchar(45) NOT NULL,
+  `status` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `UNIQUE` (`feedback_id`,`api_user_id`),
   KEY `fk_feedback_states_1_idx` (`feedback_id`),
   KEY `fk_feedback_states_2_idx` (`api_user_id`),
   CONSTRAINT `fk_feedback_states_1` FOREIGN KEY (`feedback_id`) REFERENCES `feedbacks` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
   CONSTRAINT `fk_feedback_states_2` FOREIGN KEY (`api_user_id`) REFERENCES `api_users` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=big5;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -317,9 +317,9 @@ DROP TABLE IF EXISTS `feedbacks`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `feedbacks` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `title` varchar(255) NOT NULL,
-  `user_identification` varchar(255) NOT NULL,
-  `language` varchar(3) DEFAULT NULL,
+  `title` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `user_identification` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `language` varchar(3) COLLATE utf8_unicode_ci DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `updated_at` timestamp NULL DEFAULT NULL,
   `application_id` int(11) NOT NULL,
@@ -329,7 +329,7 @@ CREATE TABLE `feedbacks` (
   KEY `fk_feedbacks_application1_idx` (`application_id`),
   KEY `fk_feedbacks_context_informations1_idx` (`context_informations_id`),
   CONSTRAINT `fk_feedbacks_context_informations1` FOREIGN KEY (`context_informations_id`) REFERENCES `context_informations` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=76 DEFAULT CHARSET=big5;
+) ENGINE=InnoDB AUTO_INCREMENT=76 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -354,11 +354,11 @@ CREATE TABLE `rating_feedbacks` (
   `rating` int(11) NOT NULL,
   `feedback_id` int(11) NOT NULL,
   `mechanism_id` int(11) DEFAULT NULL,
-  `title` varchar(255) DEFAULT NULL,
+  `title` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_rating_feedback_idx` (`feedback_id`),
   CONSTRAINT `fk_rating_feedback` FOREIGN KEY (`feedback_id`) REFERENCES `feedbacks` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=big5;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -381,16 +381,16 @@ DROP TABLE IF EXISTS `screenshot_feedbacks`;
 CREATE TABLE `screenshot_feedbacks` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `feedback_id` int(11) NOT NULL,
-  `path` varchar(255) NOT NULL,
+  `path` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `size` int(11) NOT NULL,
-  `name` varchar(255) DEFAULT NULL,
+  `name` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `mechanism_id` int(11) DEFAULT NULL,
-  `part` varchar(255) DEFAULT NULL,
-  `file_extension` varchar(10) DEFAULT NULL,
+  `part` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `file_extension` varchar(10) COLLATE utf8_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_screenshot_feedback_idx` (`feedback_id`),
   CONSTRAINT `fk_screenshot_feedback` FOREIGN KEY (`feedback_id`) REFERENCES `feedbacks` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=big5;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -412,11 +412,11 @@ DROP TABLE IF EXISTS `status_options`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `status_options` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(45) NOT NULL,
+  `name` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
   `order` int(11) NOT NULL,
   `user_specific` bit(1) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -438,13 +438,13 @@ DROP TABLE IF EXISTS `text_annotations`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `text_annotations` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `text` text NOT NULL,
+  `text` mediumtext COLLATE utf8_unicode_ci NOT NULL,
   `screenshot_feedbacks_id` int(11) NOT NULL,
   `reference_number` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_text_annotations_1_idx` (`screenshot_feedbacks_id`),
   CONSTRAINT `fk_text_annotations_1` FOREIGN KEY (`screenshot_feedbacks_id`) REFERENCES `screenshot_feedbacks` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=big5;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -466,13 +466,13 @@ DROP TABLE IF EXISTS `text_feedbacks`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `text_feedbacks` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `text` text NOT NULL,
+  `text` text COLLATE utf8_unicode_ci NOT NULL,
   `mechanism_id` int(11) DEFAULT NULL,
   `feedback_id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `feedback_id` (`feedback_id`),
   CONSTRAINT `feedback_id_foreign_key` FOREIGN KEY (`feedback_id`) REFERENCES `feedbacks` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=63 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=63 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -494,4 +494,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-11-04 11:48:41
+-- Dump completed on 2016-11-11 15:37:53
