@@ -17,8 +17,9 @@
   display: none;
 }
 
-.feedback-library.ui-dialog .ui-dialog-titlebar-close {
+.feedback-library.ui-dialog .ui-dialog-titlebar-close, .feedback-library .ui-dialog-titlebar-close {
   margin: -12px 4px 0;
+  display: block;
   background: none;
   border-top: none;
   border-left: none;
@@ -228,6 +229,7 @@
   .button:visited, .button:hover, button:active, button:focus {
     background-color: $buttonHoverBackgroundColor;
     color: $buttonHoverColor;
+    cursor: pointer;
     @if bool($buttonGradientEnabled) {
       background-image: -webkit-linear-gradient(top, $buttonHoverGradientColor1 0%, $buttonHoverGradientColor2 50%, $buttonGradientColor3 52%, $buttonHoverBackgroundColor 100%);
       background-image: -moz-linear-gradient(top, $buttonHoverGradientColor1 0%, $buttonHoverGradientColor2 50%, $buttonGradientColor3 52%, $buttonHoverBackgroundColor 100%);
