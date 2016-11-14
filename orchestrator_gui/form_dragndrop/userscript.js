@@ -149,13 +149,13 @@ var setup = function()
                         var interaction = $("<div class='interaction'></div>");
                         var buttonGroup = $("<div class='btn-group pull-right'></div>");
 
-                        // removeButton
-                        var removeButton = $('<button class="btn btn-danger btn-xs button-remove" alpaca-ref-id="' + alpacaFieldId + '"><i class="glyphicon glyphicon-remove"></i></button>');
-                        buttonGroup.append(removeButton);
-
                         // optionsButton
                         var optionsButton = $('<button class="btn btn-default btn-xs button-options" alpaca-ref-id="' + alpacaFieldId + '"><i class="glyphicon glyphicon-wrench"></i></button>');
                         buttonGroup.append(optionsButton);
+
+                        // removeButton
+                        var removeButton = $('<button class="btn btn-danger btn-xs button-remove" alpaca-ref-id="' + alpacaFieldId + '"><i class="glyphicon glyphicon-remove"></i></button>');
+                        buttonGroup.append(removeButton);
 
                         interaction.append(buttonGroup);
                         interaction.append("<div style='clear:both'></div>");
@@ -176,6 +176,8 @@ var setup = function()
                             "margin-top": 5 + (($(interaction).height() / 2) - ($(buttonGroup).height() / 2)),
                             "margin-right": "16px"
                         });
+
+
 
                         // click on optionsButton
                         $(optionsButton).off().click(function(e) {
@@ -377,14 +379,20 @@ var setup = function()
         }
     };
 
-    var editSchema = function(alpacaFieldId, callback)
+    var editOptions = function(alpacaFieldId, callback)
     {
         var field = Alpaca.fieldInstances[alpacaFieldId];
 
         var fieldSchemaSchema = field.getSchemaOfSchema();
         var fieldSchemaOptions = field.getOptionsForSchema();
+        var fieldOptionsSchema = field.getSchemaOfOptions();
+        var fieldOptionsOptions = field.getOptionsForOptions();
+
         removeFunctionFields(fieldSchemaSchema, fieldSchemaOptions);
+        removeFunctionFields(fieldOptionsSchema, fieldOptionsOptions);
+
         var fieldData = field.schema;
+        var fieldOptionsData = field.options;
 
         delete fieldSchemaSchema.title;
         delete fieldSchemaSchema.description;
@@ -394,22 +402,57 @@ var setup = function()
             delete fieldSchemaSchema.properties.description;
             delete fieldSchemaSchema.properties.dependencies;
         }
-        var fieldConfig = {
+        delete fieldOptionsSchema.title;
+        delete fieldOptionsSchema.description;
+        if (fieldOptionsSchema.properties)
+        {
+            delete fieldOptionsSchema.properties.title;
+            delete fieldOptionsSchema.properties.description;
+            delete fieldOptionsSchema.properties.dependencies;
+            delete fieldOptionsSchema.properties.readonly;
+        }
+
+        if (fieldOptionsOptions.fields)
+        {
+            delete fieldOptionsOptions.fields.title;
+            delete fieldOptionsOptions.fields.description;
+            delete fieldOptionsOptions.fields.dependencies;
+            delete fieldOptionsOptions.fields.readonly;
+        }
+
+        var fieldConfigSchema = {
             schema: fieldSchemaSchema
+        };
+        var fieldConfigOptions = {
+            schema: fieldOptionsSchema
+
         };
         if (fieldSchemaOptions)
         {
-            fieldConfig.options = fieldSchemaOptions;
+
+            fieldConfigSchema.options = fieldSchemaOptions;
         }
         if (fieldData)
         {
-            fieldConfig.data = fieldData;
+            fieldConfigSchema.data = fieldData;
         }
-        fieldConfig.view = {
+        if (fieldOptionsOptions)
+        {
+            fieldConfigOptions.options = fieldOptionsOptions;
+        }
+        if (fieldOptionsData)
+        {
+            fieldConfigOptions.data = fieldOptionsData;
+        }
+        fieldConfigSchema.view = {
             "parent": MODAL_VIEW,
             "displayReadonly": false
         };
-        fieldConfig.postRender = function(control)
+        fieldConfigOptions.view = {
+            "parent": MODAL_VIEW,
+            "displayReadonly": false
+        };
+        fieldConfigSchema.postRender = function(control)
         {
             var modal = $(MODAL_TEMPLATE.trim());
             modal.find(".modal-title").append(field.getTitle());
@@ -438,54 +481,37 @@ var setup = function()
             control.getFieldEl().find("p.help-block").css({
                 "display": "none"
             });
+
+            // hide unused config options TODO: better not implement the fields at all
+            control.getFieldEl().find("[data-alpaca-container-item-name='readonly']").css({
+                "display": "none"
+            });
+            control.getFieldEl().find("[data-alpaca-container-item-name='default']").css({
+                "display": "none"
+            });
+            control.getFieldEl().find("[data-alpaca-container-item-name='type']").css({
+                "display": "none"
+            });
+            control.getFieldEl().find("[data-alpaca-container-item-name='format']").css({
+                "display": "none"
+            });
+            control.getFieldEl().find("[data-alpaca-container-item-name='disallow']").css({
+                "display": "none"
+            });
+            control.getFieldEl().find("[data-alpaca-container-item-name='enum']").css({
+                "display": "none"
+            });
+            control.getFieldEl().find("[data-alpaca-container-item-name='minLength']").css({
+                "display": "none"
+            });
+            control.getFieldEl().find("[data-alpaca-container-item-name='maxLength']").css({
+                "display": "none"
+            });
+            control.getFieldEl().find("[data-alpaca-container-item-name='pattern']").css({
+                "display": "none"
+            });
         };
-
-        var x = $("<div><div class='fieldForm'></div></div>");
-        $(x).find(".fieldForm").alpaca(fieldConfig);
-    };
-
-    var editOptions = function(alpacaFieldId, callback)
-    {
-        var field = Alpaca.fieldInstances[alpacaFieldId];
-
-        var fieldOptionsSchema = field.getSchemaOfOptions();
-        var fieldOptionsOptions = field.getOptionsForOptions();
-        removeFunctionFields(fieldOptionsSchema, fieldOptionsOptions);
-        var fieldOptionsData = field.options;
-
-        delete fieldOptionsSchema.title;
-        delete fieldOptionsSchema.description;
-        if (fieldOptionsSchema.properties)
-        {
-            delete fieldOptionsSchema.properties.title;
-            delete fieldOptionsSchema.properties.description;
-            delete fieldOptionsSchema.properties.dependencies;
-            delete fieldOptionsSchema.properties.readonly;
-        }
-        if (fieldOptionsOptions.fields)
-        {
-            delete fieldOptionsOptions.fields.title;
-            delete fieldOptionsOptions.fields.description;
-            delete fieldOptionsOptions.fields.dependencies;
-            delete fieldOptionsOptions.fields.readonly;
-        }
-
-        var fieldConfig = {
-            schema: fieldOptionsSchema
-        };
-        if (fieldOptionsOptions)
-        {
-            fieldConfig.options = fieldOptionsOptions;
-        }
-        if (fieldOptionsData)
-        {
-            fieldConfig.data = fieldOptionsData;
-        }
-        fieldConfig.view = {
-            "parent": MODAL_VIEW,
-            "displayReadonly": false
-        };
-        fieldConfig.postRender = function(control)
+        fieldConfigOptions.postRender = function(control)
         {
             var modal = $(MODAL_TEMPLATE.trim());
             modal.find(".modal-title").append(field.getTitle());
@@ -514,10 +540,106 @@ var setup = function()
             control.getFieldEl().find("p.help-block").css({
                 "display": "none"
             });
+
+            // hide unused config options TODO: better not implement the fields at all
+            control.getFieldEl().find("[data-alpaca-container-item-name='data']").css({
+                "display": "none"
+            });
+
+            control.getFieldEl().find("[data-alpaca-container-item-name='autocomplete']").css({
+                "display": "none"
+            });
+
+            control.getFieldEl().find("[data-alpaca-container-item-name='disallowEmptySpaces']").css({
+                "display": "none"
+            });
+
+            control.getFieldEl().find("[data-alpaca-container-item-name='validate']").css({
+                "display": "none"
+            });
+
+            control.getFieldEl().find("[data-alpaca-container-item-name='showMessages']").css({
+                "display": "none"
+            });
+            control.getFieldEl().find("[data-alpaca-container-item-name='helper']").css({
+                "display": "none"
+            });
+            control.getFieldEl().find("[data-alpaca-container-item-name='helpers']").css({
+                "display": "none"
+            });
+            control.getFieldEl().find("[data-alpaca-container-item-name='fieldClass']").css({
+                "display": "none"
+            });
+            control.getFieldEl().find("[data-alpaca-container-item-name='hideInitValidationError']").css({
+                "display": "none"
+            });
+            control.getFieldEl().find("[data-alpaca-container-item-name='focus']").css({
+                "display": "none"
+            });
+            control.getFieldEl().find("[data-alpaca-container-item-name='optionLabels']").css({
+                "display": "none"
+            });
+            control.getFieldEl().find("[data-alpaca-container-item-name='view']").css({
+                "display": "none"
+            });
+            control.getFieldEl().find("[data-alpaca-container-item-name='name']").css({
+                "display": "none"
+            });
+            control.getFieldEl().find("[data-alpaca-container-item-name='size']").css({
+                "display": "none"
+            });
+            control.getFieldEl().find("[data-alpaca-container-item-name='maskString']").css({
+                "display": "none"
+            });
+            control.getFieldEl().find("[data-alpaca-container-item-name='placeholder']").css({
+                "display": "none"
+            });
+            control.getFieldEl().find("[data-alpaca-container-item-name='typeahead']").css({
+                "display": "none"
+            });
+            control.getFieldEl().find("[data-alpaca-container-item-name='allowOptionalEmpty']").css({
+                "display": "none"
+            });
+            control.getFieldEl().find("[data-alpaca-container-item-name='inputType']").css({
+                "display": "none"
+            });
+            control.getFieldEl().find("[data-alpaca-container-item-name='disallowOnlyEmptySpaces']").css({
+                "display": "none"
+            });
+            // additional for checkbox
+            control.getFieldEl().find("[data-alpaca-container-item-name='wordlimit']").css({
+                "display": "none"
+            });
+            control.getFieldEl().find("[data-alpaca-container-item-name='dataSource']").css({
+                "display": "none"
+            });
+            control.getFieldEl().find("[data-alpaca-container-item-name='useDataSourceAsEnum']").css({
+                "display": "none"
+            });
+            // addition for radio
+            control.getFieldEl().find("[data-alpaca-container-item-name='removeDefaultNone']").css({
+                "display": "none"
+            });
+            control.getFieldEl().find("[data-alpaca-container-item-name='noneLabel']").css({
+                "display": "none"
+            });
+            control.getFieldEl().find("[data-alpaca-container-item-name='hideNone']").css({
+                "display": "none"
+            });
+            control.getFieldEl().find("[data-alpaca-container-item-name='emptySelectFirst']").css({
+                "display": "none"
+            });
+            control.getFieldEl().find("[data-alpaca-container-item-name='vertical']").css({
+                "display": "none"
+            });
         };
 
+
         var x = $("<div><div class='fieldForm'></div></div>");
-        $(x).find(".fieldForm").alpaca(fieldConfig);
+        $(x).find(".fieldForm").alpaca(fieldConfigSchema);
+
+        var x = $("<div><div class='fieldForm'></div></div>");
+        $(x).find(".fieldForm").alpaca(fieldConfigOptions);
     };
 
     var refreshView = function(callback)
