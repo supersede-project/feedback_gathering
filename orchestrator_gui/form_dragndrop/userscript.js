@@ -898,6 +898,30 @@ var setup = function()
 
     refreshDesigner();
     refreshView();
+
+    // save button
+    $(".save-button").on("click", function() {
+    var config = {
+            "schema": schema
+        };
+
+        if (schema)
+        {
+            config.schema = schema;
+        }
+        if (options)
+        {
+            config.options = options;
+        }
+
+        var configString = JSON.stringify(config);
+
+        // Save JSON-String to local JSON-file
+        var blob = new Blob([configString], {type: "application/json"});
+        var saveAs = window.saveAs;
+        saveAs(blob, "GUI_schema_options.json");
+
+    });
 };
 
 $(document).ready(function() {
@@ -907,3 +931,6 @@ $(document).ready(function() {
         setup();
     }, 200);
 });
+
+
+
