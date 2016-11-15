@@ -478,30 +478,14 @@ var setup = function()
             });
 
             // hide unused config options TODO: better not implement the fields at all
-            control.getFieldEl().find("[data-alpaca-container-item-name='readonly']").css({
-                "display": "none"
-            });
-            control.getFieldEl().find("[data-alpaca-container-item-name='default']").css({
-                "display": "none"
-            });
-            control.getFieldEl().find("[data-alpaca-container-item-name='type']").css({
-                "display": "none"
-            });
-            control.getFieldEl().find("[data-alpaca-container-item-name='format']").css({
-                "display": "none"
-            });
-            control.getFieldEl().find("[data-alpaca-container-item-name='disallow']").css({
-                "display": "none"
-            });
-            control.getFieldEl().find("[data-alpaca-container-item-name='enum']").css({
-                "display": "none"
-            });
-            control.getFieldEl().find("[data-alpaca-container-item-name='minLength']").css({
-                "display": "none"
-            });
-            control.getFieldEl().find("[data-alpaca-container-item-name='pattern']").css({
-                "display": "none"
-            });
+            control.getFieldEl().find("[data-alpaca-container-item-name='readonly']").remove();
+            control.getFieldEl().find("[data-alpaca-container-item-name='default']").remove();
+            control.getFieldEl().find("[data-alpaca-container-item-name='type']").remove();
+            control.getFieldEl().find("[data-alpaca-container-item-name='format']").remove();
+            control.getFieldEl().find("[data-alpaca-container-item-name='disallow']").remove();
+            control.getFieldEl().find("[data-alpaca-container-item-name='enum']").remove();
+            control.getFieldEl().find("[data-alpaca-container-item-name='minLength']").remove();
+            control.getFieldEl().find("[data-alpaca-container-item-name='pattern']").remove();
         };
         fieldConfigOptions.postRender = function(control)
         {
@@ -534,93 +518,36 @@ var setup = function()
             });
 
             // hide unused config options TODO: better not implement the fields at all
-            control.getFieldEl().find("[data-alpaca-container-item-name='data']").css({
-                "display": "none"
-            });
-
-            control.getFieldEl().find("[data-alpaca-container-item-name='autocomplete']").css({
-                "display": "none"
-            });
-
-            control.getFieldEl().find("[data-alpaca-container-item-name='disallowEmptySpaces']").css({
-                "display": "none"
-            });
-
-            control.getFieldEl().find("[data-alpaca-container-item-name='validate']").css({
-                "display": "none"
-            });
-
-            control.getFieldEl().find("[data-alpaca-container-item-name='showMessages']").css({
-                "display": "none"
-            });
-            control.getFieldEl().find("[data-alpaca-container-item-name='helper']").css({
-                "display": "none"
-            });
-            control.getFieldEl().find("[data-alpaca-container-item-name='helpers']").css({
-                "display": "none"
-            });
-            control.getFieldEl().find("[data-alpaca-container-item-name='fieldClass']").css({
-                "display": "none"
-            });
-            control.getFieldEl().find("[data-alpaca-container-item-name='hideInitValidationError']").css({
-                "display": "none"
-            });
-            control.getFieldEl().find("[data-alpaca-container-item-name='focus']").css({
-                "display": "none"
-            });
-            control.getFieldEl().find("[data-alpaca-container-item-name='optionLabels']").css({
-                "display": "none"
-            });
-            control.getFieldEl().find("[data-alpaca-container-item-name='view']").css({
-                "display": "none"
-            });
-            control.getFieldEl().find("[data-alpaca-container-item-name='name']").css({
-                "display": "none"
-            });
-            control.getFieldEl().find("[data-alpaca-container-item-name='size']").css({
-                "display": "none"
-            });
-            control.getFieldEl().find("[data-alpaca-container-item-name='maskString']").css({
-                "display": "none"
-            });
-            control.getFieldEl().find("[data-alpaca-container-item-name='placeholder']").css({
-                "display": "none"
-            });
-            control.getFieldEl().find("[data-alpaca-container-item-name='typeahead']").css({
-                "display": "none"
-            });
-            control.getFieldEl().find("[data-alpaca-container-item-name='inputType']").css({
-                "display": "none"
-            });
-            control.getFieldEl().find("[data-alpaca-container-item-name='disallowOnlyEmptySpaces']").css({
-                "display": "none"
-            });
+            control.getFieldEl().find("[data-alpaca-container-item-name='data']").remove();
+            control.getFieldEl().find("[data-alpaca-container-item-name='allowOptionalEmpty']").remove();
+            control.getFieldEl().find("[data-alpaca-container-item-name='autocomplete']").remove();
+            control.getFieldEl().find("[data-alpaca-container-item-name='disallowEmptySpaces']").remove();
+            control.getFieldEl().find("[data-alpaca-container-item-name='validate']").remove();
+            control.getFieldEl().find("[data-alpaca-container-item-name='showMessages']").remove();
+            control.getFieldEl().find("[data-alpaca-container-item-name='helper']").remove();
+            control.getFieldEl().find("[data-alpaca-container-item-name='helpers']").remove();
+            control.getFieldEl().find("[data-alpaca-container-item-name='fieldClass']").remove();
+            control.getFieldEl().find("[data-alpaca-container-item-name='hideInitValidationError']").remove;
+            control.getFieldEl().find("[data-alpaca-container-item-name='focus']").remove();
+            control.getFieldEl().find("[data-alpaca-container-item-name='optionLabels']").remove();
+            control.getFieldEl().find("[data-alpaca-container-item-name='view']").remove();
+            control.getFieldEl().find("[data-alpaca-container-item-name='name']").remove();
+            control.getFieldEl().find("[data-alpaca-container-item-name='size']").remove();
+            control.getFieldEl().find("[data-alpaca-container-item-name='maskString']").remove();
+            control.getFieldEl().find("[data-alpaca-container-item-name='placeholder']").remove();
+            control.getFieldEl().find("[data-alpaca-container-item-name='typeahead']").remove();
+            control.getFieldEl().find("[data-alpaca-container-item-name='inputType']").remove();
+            control.getFieldEl().find("[data-alpaca-container-item-name='disallowOnlyEmptySpaces']").remove();
             // additional for checkbox
-            control.getFieldEl().find("[data-alpaca-container-item-name='wordlimit']").css({
-                "display": "none"
-            });
-            control.getFieldEl().find("[data-alpaca-container-item-name='dataSource']").css({
-                "display": "none"
-            });
-            control.getFieldEl().find("[data-alpaca-container-item-name='useDataSourceAsEnum']").css({
-                "display": "none"
-            });
+            control.getFieldEl().find("[data-alpaca-container-item-name='wordlimit']").remove();
+            control.getFieldEl().find("[data-alpaca-container-item-name='dataSource']").remove();
+            control.getFieldEl().find("[data-alpaca-container-item-name='useDataSourceAsEnum']").remove();
             // addition for radio
-            control.getFieldEl().find("[data-alpaca-container-item-name='removeDefaultNone']").css({
-                "display": "none"
-            });
-            control.getFieldEl().find("[data-alpaca-container-item-name='noneLabel']").css({
-                "display": "none"
-            });
-            control.getFieldEl().find("[data-alpaca-container-item-name='hideNone']").css({
-                "display": "none"
-            });
-            control.getFieldEl().find("[data-alpaca-container-item-name='emptySelectFirst']").css({
-                "display": "none"
-            });
-            control.getFieldEl().find("[data-alpaca-container-item-name='vertical']").css({
-                "display": "none"
-            });
+            control.getFieldEl().find("[data-alpaca-container-item-name='removeDefaultNone']").remove();
+            control.getFieldEl().find("[data-alpaca-container-item-name='noneLabel']").remove();
+            control.getFieldEl().find("[data-alpaca-container-item-name='hideNone']").remove();
+            control.getFieldEl().find("[data-alpaca-container-item-name='emptySelectFirst']").remove();
+            control.getFieldEl().find("[data-alpaca-container-item-name='vertical']").remove();
         };
 
         // finds the div with fielForm class and uses it as alpaca form for the schema and option form
