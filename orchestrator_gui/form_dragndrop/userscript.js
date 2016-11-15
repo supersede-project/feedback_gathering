@@ -28,7 +28,6 @@ var setup = function()
     var options = {
     };
     var data = {
-
     };
 
     var setupEditor = function(id, json)
@@ -49,9 +48,9 @@ var setup = function()
         {
             editor.getSession().setMode("ace/mode/javascript");
         }
-        editor.renderer.setHScrollBarAlwaysVisible(false);
-        editor.setShowPrintMargin(false);
-        editor.setValue(text);
+ //       editor.renderer.setHScrollBarAlwaysVisible(false);
+ //       editor.setShowPrintMargin(false);
+ //       editor.setValue(text);
 
         setTimeout(function() {
             editor.clearSelection();
@@ -442,6 +441,8 @@ var setup = function()
         }
         if (fieldOptionsData)
         {
+            // set validation messages to false
+            fieldOptionsData.showMessages = false;
             fieldConfigOptions.data = fieldOptionsData;
         }
         fieldConfigSchema.view = {
@@ -504,10 +505,10 @@ var setup = function()
             control.getFieldEl().find("[data-alpaca-container-item-name='minLength']").css({
                 "display": "none"
             });
-            control.getFieldEl().find("[data-alpaca-container-item-name='maxLength']").css({
+ /*           control.getFieldEl().find("[data-alpaca-container-item-name='maxLength']").css({
                 "display": "none"
             });
-            control.getFieldEl().find("[data-alpaca-container-item-name='pattern']").css({
+  */          control.getFieldEl().find("[data-alpaca-container-item-name='pattern']").css({
                 "display": "none"
             });
         };
@@ -634,12 +635,11 @@ var setup = function()
             });
         };
 
-
+        // finds the div with fielForm class and uses it as alpaca form for the schema and option form
         var x = $("<div><div class='fieldForm'></div></div>");
         $(x).find(".fieldForm").alpaca(fieldConfigSchema);
-
-        var x = $("<div><div class='fieldForm'></div></div>");
         $(x).find(".fieldForm").alpaca(fieldConfigOptions);
+
     };
 
     var refreshView = function(callback)
