@@ -15,6 +15,62 @@ describe('PullConfiguration object', () => {
         pullConfiguration = <PullConfiguration>ConfigurationFactory.createByData(pullConfigurationData);
     });
 
+    fit('should return the context for the application, the configuration itself and all the mechanisms', () => {
+        expect(pullConfiguration.getContext()).toEqual(
+            {
+                dialogId: 'pullConfiguration',
+                mechanisms: [
+                    {
+                        active: true,
+                        hint: 'Please enter your feedback',
+                        label: 'Feedback',
+                        currentLength: 0,
+                        maxLength: 50,
+                        maxLengthVisible: 1,
+                        maxLengthStrict: null,
+                        textareaStyle: '',
+                        labelStyle: 'text-align: left; font-size: 16px;',
+                        clearInput: 0,
+                        mandatory: 1,
+                        mandatoryReminder: 'Please fill in the text field'
+                    },
+                    {
+                        title: 'Please rate the feature that you just used',
+                        ownAllowed: 0,
+                        ownLabel: null,
+                        multiple: 0,
+                        breakAfterOption: false,
+                        options: [
+                            {
+                                key: 'RATING_1',
+                                value: 'Very bad'
+                            },
+                            {
+                                key: 'RATING_2',
+                                value: 'Bad'
+                            },
+                            {
+                                key: 'RATING_3',
+                                value: 'Okay'
+                            },
+                            {
+                                key: 'RATING_4',
+                                value: 'Good'
+                            },
+                            {
+                                key: 'RATING_5',
+                                value: 'Very good'
+                            }
+                        ],
+                        inputType: 'radio',
+                        mandatory: null,
+                        mandatoryReminder: null
+                    }
+                ]
+            }
+        );
+    });
+
     it('should be an object with a complete pull configuration', () => {
         expect(pullConfiguration).toEqual(jasmine.any(PullConfiguration));
         expect(pullConfiguration.id).toBe(2);
@@ -62,5 +118,3 @@ describe('PullConfiguration object', () => {
         expect(pullConfiguration.currentSlug()).toEqual('context.html');
     });
 });
-
-

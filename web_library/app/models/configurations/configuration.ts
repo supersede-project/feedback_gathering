@@ -49,11 +49,8 @@ export abstract class Configuration implements ConfigurationInterface {
         };
 
         for(var mechanism of this.getMechanismsSorted()) {
-            var mechanismContext = jQuery.extend({}, mechanism, mechanism.getContext());
-            context.mechanisms.push(mechanismContext);
+            context.mechanisms.push(mechanism.getContext());
         }
         return context;
     }
-
-
 }

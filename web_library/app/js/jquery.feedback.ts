@@ -49,8 +49,6 @@ export var feedbackPluginModule = function ($, window, document) {
     var pullDialog;
     var pullConfigurationDialogId = "pullConfiguration";
     var active = false;
-    var dropArea;
-    var dialogCSSClass;
     var colorPickerCSSClass;
     var defaultStrokeWidth;
     var audioView;

@@ -17,6 +17,12 @@ export class PullConfiguration extends Configuration {
         this.dialogId = 'pullConfiguration';
     }
 
+    getContext(): any {
+        return jQuery.extend({}, super.getContextForView(), {
+
+        });
+    }
+
     /**
      * Initializes the pull mechanisms and triggers the feedback mechanisms if necessary.
      *
