@@ -1,0 +1,34 @@
+{
+  "general": {
+    "review_feedback": "meer",
+    "review_feedback_title": "Uw Feedback",
+    "feedback_submit_button_title": "Stuur uw feedback",
+    "mandatory_default_text": "Gelieve op dit gebied te vullen",
+    "back": "terug",
+    "validation_max_length_error_message": "De maximale lengte van het veld {{ maxLength }}! U komt binnen {{ currentLength }} tekens.",
+    "discard_feedback": "Teruggooi Feedback",
+    "cancel": "Afbreken",
+    "dialog_close_button_title": "Verkleinen"
+  },
+  "text": {
+    "text_type_text_clear": "tekst wissen"
+  },
+  "screenshot": {
+    "take_screenshot": "Maak Screenshot",
+    "take_new_screenshot": "Genereren van nieuwe screenshot",
+    "actions": "Acties",
+    "stickers": "Sticker",
+    "rectangle": "rechthoek",
+    "blacken": "zwart maken",
+    "circle": "cirkel",
+    "arrow": "pijl",
+    "freehand": "uit de vrije hand",
+    "crop": "uitknippen",
+    "text": "tekst",
+    "undo": "ongedaan",
+    "remove": "Verwijder Screenshot"
+  },
+  "rating": {
+    "review_title": "Rating"
+  }
+}
