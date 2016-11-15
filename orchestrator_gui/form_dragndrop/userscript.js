@@ -1,9 +1,6 @@
 var setup = function()
 {
-    //Alpaca.logLevel = Alpaca.DEBUG;
-
     var MODAL_VIEW = "bootstrap-edit-horizontal";
-    //var MODAL_VIEW = "bootstrap-edit";
 
     var MODAL_TEMPLATE = ' \
         <div class="modal fade"> \
@@ -48,9 +45,6 @@ var setup = function()
         {
             editor.getSession().setMode("ace/mode/javascript");
         }
- //       editor.renderer.setHScrollBarAlwaysVisible(false);
- //       editor.setShowPrintMargin(false);
- //       editor.setValue(text);
 
         setTimeout(function() {
             editor.clearSelection();
@@ -505,10 +499,7 @@ var setup = function()
             control.getFieldEl().find("[data-alpaca-container-item-name='minLength']").css({
                 "display": "none"
             });
- /*           control.getFieldEl().find("[data-alpaca-container-item-name='maxLength']").css({
-                "display": "none"
-            });
-  */          control.getFieldEl().find("[data-alpaca-container-item-name='pattern']").css({
+            control.getFieldEl().find("[data-alpaca-container-item-name='pattern']").css({
                 "display": "none"
             });
         };
@@ -596,9 +587,6 @@ var setup = function()
                 "display": "none"
             });
             control.getFieldEl().find("[data-alpaca-container-item-name='typeahead']").css({
-                "display": "none"
-            });
-            control.getFieldEl().find("[data-alpaca-container-item-name='allowOptionalEmpty']").css({
                 "display": "none"
             });
             control.getFieldEl().find("[data-alpaca-container-item-name='inputType']").css({
