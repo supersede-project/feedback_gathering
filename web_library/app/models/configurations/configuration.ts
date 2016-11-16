@@ -42,14 +42,15 @@ export abstract class Configuration implements ConfigurationInterface {
      * @returns any
      *  Context object that contains all the data to configure the feedback mechanism in the view.
      */
-    getContextForView() {
+    getContext() {
         var context = {
             dialogId: this.dialogId,
             mechanisms: []
         };
 
         for(var mechanism of this.getMechanismsSorted()) {
-            context.mechanisms.push(mechanism.getContext());
+            var mechanismContext = jQuery.extend({}, mechanism.defaultContext(), mechanism.getContext());
+            context.mechanisms.push(mechanismContext);
         }
         return context;
     }

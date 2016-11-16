@@ -33,8 +33,6 @@ export abstract class Mechanism implements Parameterizable {
     /**
      * Method to generate a html style value string.
      *
-     * @param mechanism
-     *  Mechanism to get the parameters from
      * @param parameterValuePropertyPair
      *  The pairs of 1) parameter in the parameters of the config and 2) the css property to use for this parameter's value
      * @returns {string}
@@ -59,6 +57,16 @@ export abstract class Mechanism implements Parameterizable {
             return 'px'
         } else {
             return '';
+        }
+    }
+
+    defaultContext() {
+        return {
+            'id': this.id,
+            'type': this.type,
+            'active': this.active,
+            'order': this.order,
+            'canBeActivated': this.canBeActivated
         }
     }
 }

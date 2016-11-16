@@ -377,6 +377,7 @@
         },
         "mechanisms": [
           {
+            "id": 999,
             "type": "TEXT_TYPE",
             "active": true,
             "order": 1,
@@ -461,6 +462,7 @@
             ]
           },
           {
+            "id": 998,
             "type": "CATEGORY_TYPE",
             "active": true,
             "order": 2,

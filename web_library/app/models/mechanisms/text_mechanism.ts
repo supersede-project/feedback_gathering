@@ -20,7 +20,6 @@ export class TextMechanism extends Mechanism {
         );
 
         return {
-            active: this.active,
             hint: this.getParameterValue('hint'),
             label: this.getParameterValue('label'),
             currentLength: 0,

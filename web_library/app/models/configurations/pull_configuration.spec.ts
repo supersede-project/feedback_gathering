@@ -4,7 +4,7 @@ import {ConfigurationFactory} from './configuration_factory';
 import {platform} from 'os';
 
 
-describe('PullConfiguration object', () => {
+fdescribe('PullConfiguration object', () => {
     let pullConfiguration:PullConfiguration;
 
     beforeEach(() => {
@@ -15,12 +15,16 @@ describe('PullConfiguration object', () => {
         pullConfiguration = <PullConfiguration>ConfigurationFactory.createByData(pullConfigurationData);
     });
 
-    fit('should return the context for the application, the configuration itself and all the mechanisms', () => {
+    it('should return the context for the application, the configuration itself and all the mechanisms', () => {
         expect(pullConfiguration.getContext()).toEqual(
             {
                 dialogId: 'pullConfiguration',
                 mechanisms: [
                     {
+                        id: 999,
+                        type: 'TEXT_TYPE',
+                        order: 1,
+                        canBeActivated: false,
                         active: true,
                         hint: 'Please enter your feedback',
                         label: 'Feedback',
@@ -35,6 +39,11 @@ describe('PullConfiguration object', () => {
                         mandatoryReminder: 'Please fill in the text field'
                     },
                     {
+                        id: 998,
+                        type: 'CATEGORY_TYPE',
+                        order: 2,
+                        canBeActivated: false,
+                        active: true,
                         title: 'Please rate the feature that you just used',
                         ownAllowed: 0,
                         ownLabel: null,
@@ -87,7 +96,7 @@ describe('PullConfiguration object', () => {
     });
 
     it('should return the context for the view with the configuration data', () => {
-        var context = pullConfiguration.getContextForView();
+        var context = pullConfiguration.getContext();
 
         expect(context.dialogId).toEqual('pullConfiguration');
         expect(context.mechanisms.length).toBe(2)
