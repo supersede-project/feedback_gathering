@@ -188,8 +188,8 @@ export class FeedbackDetailComponent implements OnInit {
         console.log(response);
         var filename = attachmentFeedback.name;
         var mediaType = 'application/octet-stream';
-        var blob = new Blob([response._body], {type: mediaType});
-        saveAs(blob, filename)
+        //var blob = new Blob([response._body], {type: mediaType});
+        //saveAs(blob, filename)
       }
     );
   }
