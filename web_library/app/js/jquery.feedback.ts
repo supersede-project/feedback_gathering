@@ -54,6 +54,7 @@ export var feedbackPluginModule = function ($, window, document) {
     var colorPickerCSSClass;
     var defaultStrokeWidth;
     var audioView;
+    var dialogPosition;
 
     /**
      * @param applicationObject
@@ -363,7 +364,8 @@ export var feedbackPluginModule = function ($, window, document) {
                         .removeClass("ui-icon-closethick")
                         .addClass("ui-icon-minusthick");
                     $(this).closest('.ui-dialog').addClass('feedback-library');
-                }
+                },
+                position: dialogPosition
             })
         );
         dialogObject.dialog('option', 'title', title);
@@ -625,6 +627,11 @@ export var feedbackPluginModule = function ($, window, document) {
         dialogCSSClass = currentOptions.dialogCSSClass;
         colorPickerCSSClass = currentOptions.colorPickerCSSClass;
         defaultStrokeWidth = currentOptions.defaultStrokeWidth;
+        dialogPosition = {
+            my: currentOptions.dialogPositionMy,
+            at: currentOptions.dialogPositionAt,
+            of: currentOptions.dialogPositionOf
+        };
 
         language = I18nHelper.getLanguage(this.options);
         I18nHelper.initializeI18n(this.options);
@@ -664,7 +671,10 @@ export var feedbackPluginModule = function ($, window, document) {
         'userId': '',
         'dialogCSSClass': 'feedback-dialog',
         'colorPickerCSSClass': 'color-picker',
-        'defaultStrokeWidth': 4
+        'defaultStrokeWidth': 4,
+        'dialogPositionMy': 'center top',
+        'dialogPositionAt': 'center top+30',
+        'dialogPositionOf': window,
     };
 
 };

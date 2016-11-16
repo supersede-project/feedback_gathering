@@ -152,6 +152,9 @@ The following options are available to configure the jQuery plugin on the client
 |colorPickerCSSClass| Assign a custom css class to the color picker|
 |defaultStrokeWidth| Adjust the stroke width of the screenshot annotations|
 |dialogCSSClass|Assign a custom css class to the dialog|
+|dialogPositionMy|Point of the dialog that is used for positioning. E.g. if you want to use the top left corner of the dialog to align, you specify 'left top'.|
+|dialogPositionAt|Point of the target area defined in dialogPositionOf that is used for the positioning. E.g. if you want to align the dialogPositionMy point at the top of the target area with an offset of 30 pixels and centered horizontally, you specify 'center top+30' |
+|dialogPositionOf|Target area that is used for positioning. E.g. window, $('body'), $('html'), etc. |
 |distPath   |Path to the ressources that are used within the library (css, img, etc.)   |
 |fallbackLang|Language to be used if 'lang' is not available in the locales folder|
 |lang|Language to be used|
