@@ -98,6 +98,10 @@ public class ConfigurationTest {
         Configuration oneActiveConfiguration = oneOrchestratorConfiguration.getActiveConfiguration();
         Configuration twoActiveConfiguration = twoOrchestratorConfiguration.getActiveConfiguration();
 
+        // Check if both configurations are of type PULL
+        assertEquals("PULL", oneActiveConfiguration.getType());
+        assertEquals("PULL", oneActiveConfiguration.getType());
+
         // Check if the triggered configuration id corresponds to the one of the active configuration
         assertEquals(triggerOne, oneActiveConfiguration.getId());
         assertEquals(triggerTwo, twoActiveConfiguration.getId());
