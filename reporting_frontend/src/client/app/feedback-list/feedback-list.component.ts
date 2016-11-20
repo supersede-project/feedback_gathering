@@ -226,15 +226,19 @@ export class FeedbackListComponent implements OnInit {
   markAsReadOrUnread(feedbacks:Feedback[], read:boolean):void {
     for(let feedback of feedbacks) {
       let applicationId = feedback.applicationId;
-      let feedbackStatus = feedback.personalFeedbackStatus;
-      this.feedbackStatusService.updateReadStatus(read, feedbackStatus.id, feedbackStatus.feedbackId, applicationId).subscribe(
-        result => {
-          this.getFeedbacks(applicationId);
-        },
-        error => {
-          console.log(error);
-        }
-      );
+      if(feedback.feedbackStatuses.length > 0 && feedback.feedbackStatuses.filter(feedbackStatus => feedbackStatus.status === 'read' || feedbackStatus.status === 'unread').length > 0) {
+        let feedbackStatus = feedback.feedbackStatuses.filter(feedbackStatus => feedbackStatus.status === 'read' || feedbackStatus.status === 'unread')[0];
+        this.feedbackStatusService.updateReadStatus(read, feedbackStatus.id, feedbackStatus.feedbackId, applicationId).subscribe(
+          result => {
+            if (!read) {
+              this.location.back();
+            }
+          },
+          error => {
+            console.log(error);
+          }
+        );
+      }
     }
   }
 

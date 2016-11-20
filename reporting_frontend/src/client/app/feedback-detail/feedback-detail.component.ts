@@ -50,6 +50,7 @@ export class FeedbackDetailComponent implements OnInit {
             if (feedback && feedback.applicationId) {
               this.loadApplication(feedback.applicationId, feedback.configurationId);
             }
+            this.markAsReadOrUnread(feedback, true);
           },
           error => this.errorMessage = <any>error
         );
@@ -136,23 +137,20 @@ export class FeedbackDetailComponent implements OnInit {
   }
 
   markAsReadOrUnread(feedback:Feedback, read:boolean):void {
-    // TODO remove personalFeedbackStatus
-    if (!feedback.personalFeedbackStatus) {
-      return;
-    }
     let applicationId = feedback.applicationId;
-    // TODO remove personalFeedbackStatus
-    let feedbackStatus = feedback.personalFeedbackStatus;
-    this.feedbackStatusService.updateReadStatus(read, feedbackStatus.id, feedbackStatus.feedbackId, applicationId).subscribe(
-      result => {
-        if (!read) {
-          this.location.back();
+    if(feedback.feedbackStatuses.length > 0 && feedback.feedbackStatuses.filter(feedbackStatus => feedbackStatus.status === 'read' || feedbackStatus.status === 'unread').length > 0) {
+      let feedbackStatus = feedback.feedbackStatuses.filter(feedbackStatus => feedbackStatus.status === 'read' || feedbackStatus.status === 'unread')[0];
+      this.feedbackStatusService.updateReadStatus(read, feedbackStatus.id, feedbackStatus.feedbackId, applicationId).subscribe(
+        result => {
+          if (!read) {
+            this.location.back();
+          }
+        },
+        error => {
+          console.log(error);
         }
-      },
-      error => {
-        console.log(error);
-      }
-    );
+      );
+    }
   }
 
   downloadFile(attachmentFeedback:AttachmentFeedback) {

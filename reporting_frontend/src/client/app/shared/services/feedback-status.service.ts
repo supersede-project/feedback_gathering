@@ -19,7 +19,7 @@ export class FeedbackStatusService {
     headers.append('Accept', 'application/json');
     headers.append('Authorization', localStorage.getItem('auth_token'));
 
-    return this.http.put(REPOSITORY_HOST + 'en/applications/' + applicationId + '/states', JSON.stringify(feedbackStatus), { headers: headers })
+    return this.http.put(REPOSITORY_HOST + 'en/applications/' + applicationId + '/feedbacks/' + feedbackId + '/feedback_statuses/' + feedbackStatusId, JSON.stringify(feedbackStatus), { headers: headers })
       .map((res: Response) => camelizer(res.json()))
       .catch((error:any) => Observable.throw(error || 'Server error'));
   }
