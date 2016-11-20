@@ -153,7 +153,7 @@
                 <div class="panel-body">
                   <span *ngIf="feedback.screenshotFeedbacks.length === 0">No feedbacks</span>
                   <p *ngFor="let screenshotFeedback of feedback.screenshotFeedbacks">
-                    <img src="{{ host }}{{ screenshotFeedback.path }}" class="screenshot img-responsive"/>
+                    <img src="{{ host }}{{ screenshotFeedback.path|correctPathPipe }}" class="screenshot img-responsive"/>
                   </p>
                 </div>
               </div>

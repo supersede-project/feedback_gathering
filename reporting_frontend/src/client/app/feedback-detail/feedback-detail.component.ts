@@ -14,7 +14,7 @@ import {Location} from '@angular/common';
 import {AttachmentMechanism} from '../shared/models/mechanisms/attachment_mechanism';
 import {AudioMechanism} from '../shared/models/mechanisms/audio_mechanism';
 import {CategoryMechanism} from '../shared/models/mechanisms/category_mechanism';
-import {REPOSITORY_HOST} from '../shared/services/config';
+import {REPOSITORY_HOST, FILE_HOST} from '../shared/services/config';
 import { Http, Response, Headers } from '@angular/http';
 import {AttachmentFeedback} from '../shared/models/feedbacks/attachment_feedback';
 
@@ -31,7 +31,7 @@ export class FeedbackDetailComponent implements OnInit {
   application:Application;
   configuration:ConfigurationInterface;
   errorMessage:string;
-  host:string = 'http://ec2-54-175-37-30.compute-1.amazonaws.com/';
+  host:string = FILE_HOST;
 
   constructor(public feedbackListService:FeedbackListService, private route:ActivatedRoute,
               private feedbackService:FeedbackDetailService, private applicationService:ApplicationService,
@@ -49,7 +49,6 @@ export class FeedbackDetailComponent implements OnInit {
             this.feedback = <Feedback>feedback;
             if (feedback && feedback.applicationId) {
               this.loadApplication(feedback.applicationId, feedback.configurationId);
-              this.getFeedbackStatuses(feedback.applicationId);
             }
           },
           error => this.errorMessage = <any>error
@@ -137,10 +136,12 @@ export class FeedbackDetailComponent implements OnInit {
   }
 
   markAsReadOrUnread(feedback:Feedback, read:boolean):void {
+    // TODO remove personalFeedbackStatus
     if (!feedback.personalFeedbackStatus) {
       return;
     }
     let applicationId = feedback.applicationId;
+    // TODO remove personalFeedbackStatus
     let feedbackStatus = feedback.personalFeedbackStatus;
     this.feedbackStatusService.updateReadStatus(read, feedbackStatus.id, feedbackStatus.feedbackId, applicationId).subscribe(
       result => {
@@ -153,27 +154,6 @@ export class FeedbackDetailComponent implements OnInit {
       }
     );
   }
-
-  getFeedbackStatuses(applicationId:number) {
-    this.feedbackStatusService.get(applicationId)
-      .subscribe(
-        feedbackStatuses => {
-          let currentUserId = +localStorage.getItem('api_user_id');
-          let feedbackStatus = feedbackStatuses.filter(feedbackStatus => {
-            return feedbackStatus.feedbackId === this.feedback.id && feedbackStatus.apiUserId === currentUserId
-          })[0];
-          this.populateStatusData(feedbackStatus);
-          // populate for other feedbacks as well
-          let currentUserFeedbackStatuses = feedbackStatuses.filter(feedbackStatus => feedbackStatus.apiUserId === currentUserId);
-          this.populateStatusDataForAll(currentUserFeedbackStatuses);
-        },
-        error => {
-          console.log(error);
-        });
-  }
-
-
-
 
   downloadFile(attachmentFeedback:AttachmentFeedback) {
     var headers = new Headers();
@@ -194,26 +174,7 @@ export class FeedbackDetailComponent implements OnInit {
     );
   }
 
-  /**
-   * combines repository feedback with the personal feedback status
-   */
-  populateStatusData(feedbackStatus:FeedbackStatus) {
-    this.feedback.personalFeedbackStatus = feedbackStatus;
-    this.feedback.read = this.feedback.personalFeedbackStatus.status === 'read';
-    this.markAsReadOrUnread(this.feedback, true);
-  }
-
-  populateStatusDataForAll(feedbackStatuses:FeedbackStatus[]) {
-    for (var feedback of this.feedbacks) {
-      feedback.personalFeedbackStatus = feedbackStatuses.filter(feedbackStatus => feedbackStatus.feedbackId === feedback.id)[0];
-      if (feedback.personalFeedbackStatus) {
-        feedback.read = feedback.personalFeedbackStatus.status === 'read';
-      }
-    }
-  }
-
-  private
-  getCurrentFeedbackIndex():number {
+  private getCurrentFeedbackIndex():number {
     let feedbackInArray = this.feedbacks.filter(feedback => feedback.id === this.feedback.id)[0];
     return this.feedbacks.indexOf(feedbackInArray);
   }

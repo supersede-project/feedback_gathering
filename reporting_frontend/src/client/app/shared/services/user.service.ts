@@ -23,7 +23,7 @@ export class UserService {
         JSON.stringify({"name": username, "password": password}),
         {headers}
       )
-      .map(res => res.json())
+      .map((res: Response) => camelizer(res.json()))
       .map((res) => {
         if (res.token) {
           localStorage.setItem('auth_token', res.token);
@@ -39,7 +39,7 @@ export class UserService {
     headers.append('Authorization', localStorage.getItem('auth_token'));
 
     return this.http.get(REPOSITORY_HOST + 'en/api_users', {headers: headers})
-      .map((res:Response) => res.json())
+      .map((res: Response) => camelizer(res.json()))
       .catch((error:any) => Observable.throw(error || 'Server error'));
   }
 

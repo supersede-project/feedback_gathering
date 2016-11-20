@@ -4,11 +4,12 @@ import { CommonModule } from '@angular/common';
 import {FeedbackDetailComponent} from './feedback-detail.component';
 import {ParameterValuePipe} from '../shared/pipes/parameter-value.pipe';
 import {FeedbackStatusService} from '../shared/services/feedback-status.service';
+import {CorrectPathPipe} from '../shared/pipes/correct-path-pipe';
 
 
 @NgModule({
     imports: [CommonModule, RouterModule],
-    declarations: [FeedbackDetailComponent, ParameterValuePipe],
+    declarations: [FeedbackDetailComponent, ParameterValuePipe, CorrectPathPipe],
     exports: [FeedbackDetailComponent],
     providers: [FeedbackStatusService]
 })

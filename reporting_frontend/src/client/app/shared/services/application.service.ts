@@ -14,13 +14,13 @@ export class ApplicationService {
 
   all():Observable<Application[]> {
     return this.http.get(ORCHESTRATOR_HOST + 'en/applications')
-      .map((res: Response) => res.json())
+      .map((res: Response) => camelizer(res.json()))
       .catch((error:any) => Observable.throw(error.json().error || 'Server error'));
   }
 
   find(id:number):Observable<Application> {
     return this.http.get(ORCHESTRATOR_HOST + 'en/applications/' + id)
-      .map((res: Response) => res.json())
+      .map((res: Response) => camelizer(res.json()))
       .catch((error:any) => Observable.throw(error.json().error || 'Server error'));
   }
 }

@@ -46,7 +46,6 @@ export class FeedbackListComponent implements OnInit {
           this.feedbacks = feedbacks;
           this.filteredFeedbacks = feedbacks;
           this.sortFeedbacks('id', false);
-          this.getFeedbackStatuses(applicationId);
           this.loaded = true;
         },
         error => {
@@ -54,20 +53,6 @@ export class FeedbackListComponent implements OnInit {
           if(error.status === 403) {
             this.router.navigate(['/login'])
           }
-        }
-      );
-  }
-
-  getFeedbackStatuses(applicationId:number) {
-    this.feedbackStatusService.get(applicationId)
-      .subscribe(
-        feedbackStatuses => {
-          let currentUserId = +localStorage.getItem('api_user_id');
-          let currentUserFeedbackStatuses = feedbackStatuses.filter(feedbackStatus => feedbackStatus.apiUserId === currentUserId);
-          this.populateStatusData(currentUserFeedbackStatuses);
-        },
-        error => {
-          console.log(error);
         }
       );
   }

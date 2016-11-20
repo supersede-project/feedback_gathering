@@ -32,7 +32,7 @@ export class Feedback {
   audioFeedbacks:AudioFeedback[];
   attachmentFeedbacks:AttachmentFeedback[];
   createdAt:Date;
-  personalFeedbackStatus:FeedbackStatus;
+  feedbackStatuses:FeedbackStatus[];
   read:boolean;
 
   constructor(title:string, userIdentification:string, language:string, applicationId:number, configurationId:number,
