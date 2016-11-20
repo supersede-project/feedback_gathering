@@ -11,6 +11,12 @@ import {FeedbackListService} from '../shared/services/feedback-list.service';
 import {FeedbackStatusService} from '../shared/services/feedback-status.service';
 import {FeedbackStatus} from '../shared/models/feedbacks/feedback_status';
 import {Location} from '@angular/common';
+import {AttachmentMechanism} from '../shared/models/mechanisms/attachment_mechanism';
+import {AudioMechanism} from '../shared/models/mechanisms/audio_mechanism';
+import {CategoryMechanism} from '../shared/models/mechanisms/category_mechanism';
+import {REPOSITORY_HOST} from '../shared/services/config';
+import { Http, Response, Headers } from '@angular/http';
+import {AttachmentFeedback} from '../shared/models/feedbacks/attachment_feedback';
 
 
 @Component({
@@ -29,7 +35,8 @@ export class FeedbackDetailComponent implements OnInit {
 
   constructor(public feedbackListService:FeedbackListService, private route:ActivatedRoute,
               private feedbackService:FeedbackDetailService, private applicationService:ApplicationService,
-              private router:Router, private feedbackStatusService:FeedbackStatusService, private location: Location) {
+              private router:Router, private feedbackStatusService:FeedbackStatusService, private location:Location,
+              private http: Http) {
   }
 
   ngOnInit() {
@@ -77,15 +84,40 @@ export class FeedbackDetailComponent implements OnInit {
 
   populateConfigurationData() {
     if (this.feedback && this.feedback.textFeedbacks) {
-      for (var textFeedback of this.feedback.textFeedbacks) {
+      for (let textFeedback of this.feedback.textFeedbacks) {
         let textMechanism:TextMechanism = <TextMechanism>this.configuration.mechanisms.filter(mechanism => mechanism.id === textFeedback.mechanismId)[0];
         textFeedback.mechanism = <TextMechanism>textMechanism;
       }
     }
     if (this.feedback && this.feedback.ratingFeedbacks) {
-      for (var ratingFeedback of this.feedback.ratingFeedbacks) {
+      for (let ratingFeedback of this.feedback.ratingFeedbacks) {
         let ratingMechanism:RatingMechanism = <RatingMechanism>this.configuration.mechanisms.filter(mechanism => mechanism.id === ratingFeedback.mechanismId)[0];
         ratingFeedback.mechanism = <RatingMechanism>ratingMechanism;
+      }
+    }
+    if (this.feedback && this.feedback.attachmentFeedbacks) {
+      for (let attachmentFeedback of this.feedback.attachmentFeedbacks) {
+        attachmentFeedback.downloadLink = REPOSITORY_HOST + attachmentFeedback.path;
+        let attachmentMechanism:AttachmentMechanism = <AttachmentMechanism>this.configuration.mechanisms.filter(mechanism => mechanism.id === attachmentFeedback.mechanismId)[0];
+        attachmentFeedback.mechanism = <AttachmentMechanism>attachmentMechanism;
+      }
+    }
+    if (this.feedback && this.feedback.audioFeedbacks) {
+      for (let audioFeedback of this.feedback.audioFeedbacks) {
+        let audioMechanism:AudioMechanism = <AudioMechanism>this.configuration.mechanisms.filter(mechanism => mechanism.id === audioFeedback.mechanismId)[0];
+        audioFeedback.mechanism = <AudioMechanism>audioMechanism;
+      }
+    }
+    if (this.feedback && this.feedback.categoryFeedbacks) {
+      for (let categoryFeedback of this.feedback.categoryFeedbacks) {
+        var matchingCategoryMechanism = null;
+        for (let categoryMechanism of this.configuration.mechanisms.filter(mechanism => mechanism.type === 'CATEGORY_TYPE')) {
+          if (categoryMechanism.parameters.filter(parameter => parameter.id === categoryFeedback.parameterId).length > 0) {
+            matchingCategoryMechanism = categoryMechanism;
+            break;
+          }
+        }
+        categoryFeedback.mechanism = <CategoryMechanism>matchingCategoryMechanism;
       }
     }
   }
@@ -105,14 +137,14 @@ export class FeedbackDetailComponent implements OnInit {
   }
 
   markAsReadOrUnread(feedback:Feedback, read:boolean):void {
-    if(!feedback.personalFeedbackStatus) {
+    if (!feedback.personalFeedbackStatus) {
       return;
     }
     let applicationId = feedback.applicationId;
     let feedbackStatus = feedback.personalFeedbackStatus;
     this.feedbackStatusService.updateReadStatus(read, feedbackStatus.id, feedbackStatus.feedbackId, applicationId).subscribe(
       result => {
-        if(!read) {
+        if (!read) {
           this.location.back();
         }
       },
@@ -140,6 +172,28 @@ export class FeedbackDetailComponent implements OnInit {
         });
   }
 
+
+
+
+  downloadFile(attachmentFeedback:AttachmentFeedback) {
+    var headers = new Headers();
+    headers.append('Authorization', localStorage.getItem('auth_token'));
+    headers.append('accept', 'application/octet-stream');
+
+    var url = attachmentFeedback.downloadLink;
+
+    this.http.get(
+      url, {headers: headers}).subscribe(
+      (response) => {
+        console.log(response);
+        var filename = attachmentFeedback.name;
+        var mediaType = 'application/octet-stream';
+        //var blob = new Blob([response._body], {type: mediaType});
+        //saveAs(blob, filename)
+      }
+    );
+  }
+
   /**
    * combines repository feedback with the personal feedback status
    */
@@ -150,15 +204,16 @@ export class FeedbackDetailComponent implements OnInit {
   }
 
   populateStatusDataForAll(feedbackStatuses:FeedbackStatus[]) {
-    for(var feedback of this.feedbacks) {
+    for (var feedback of this.feedbacks) {
       feedback.personalFeedbackStatus = feedbackStatuses.filter(feedbackStatus => feedbackStatus.feedbackId === feedback.id)[0];
-      if(feedback.personalFeedbackStatus) {
+      if (feedback.personalFeedbackStatus) {
         feedback.read = feedback.personalFeedbackStatus.status === 'read';
       }
     }
   }
 
-  private getCurrentFeedbackIndex():number {
+  private
+  getCurrentFeedbackIndex():number {
     let feedbackInArray = this.feedbacks.filter(feedback => feedback.id === this.feedback.id)[0];
     return this.feedbacks.indexOf(feedbackInArray);
   }

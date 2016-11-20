@@ -42,7 +42,7 @@
     "gulp-tslint": "^3.3.0",
     "gulp-tslint-stylish": "^1.0.4",
     "gulp-typedoc": "^1.2.1",
-    "gulp-typescript": "~2.8.2",
+    "gulp-typescript": "^2.8.3",
     "gulp-uglify": "^1.2.0",
     "gulp-util": "^3.0.7",
     "gulp-watch": "^4.2.4",

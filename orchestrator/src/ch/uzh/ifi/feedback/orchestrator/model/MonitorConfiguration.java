@@ -21,21 +21,17 @@
  *******************************************************************************/
 package ch.uzh.ifi.feedback.orchestrator.model;
 
-import java.util.HashMap;
-
 import ch.uzh.ifi.feedback.library.rest.annotations.DbAttribute;
 import ch.uzh.ifi.feedback.library.rest.annotations.Id;
-import ch.uzh.ifi.feedback.library.rest.annotations.NotNull;
 import ch.uzh.ifi.feedback.library.rest.annotations.Serialize;
 import ch.uzh.ifi.feedback.library.rest.annotations.Unique;
 import ch.uzh.ifi.feedback.orchestrator.serialization.MonitorConfigurationSerializationService;
-import ch.uzh.ifi.feedback.orchestrator.serialization.MonitorTypeSerializationService;
 
 @Serialize(MonitorConfigurationSerializationService.class)
 public class MonitorConfiguration extends OrchestratorItem<MonitorConfiguration> {
 
 	@Id
-	@DbAttribute("monitor_configuration_id")
+	@DbAttribute("monitor_configurations_id")
 	private Integer id;
 	
 	@DbAttribute("monitor_tool_name")
@@ -43,6 +39,15 @@ public class MonitorConfiguration extends OrchestratorItem<MonitorConfiguration>
 	
 	@DbAttribute("monitor_tool_monitor")
 	private String monitor;
+	
+	private String configSender;
+
+	private String timeStamp;
+	
+	//Configuration candidates, only one of them is deserialized
+	private AppStoreConfiguration AppStoreConfiguration;
+	private GooglePlayConfiguration GooglePlayConfiguration;
+	private SocialNetworksMonitorConfiguration SocialNetworksMonitorConfiguration;
 	
 	public String getMonitor() {
 		return monitor;
@@ -60,17 +65,6 @@ public class MonitorConfiguration extends OrchestratorItem<MonitorConfiguration>
 		this.monitorToolName = monitorToolName;
 	}
 
-	@NotNull
-	private String kafkaEndpoint;
-	
-	@NotNull
-	private String kafkaTopic;
-	
-	@NotNull
-	private String timeSlot;
-	
-	private HashMap<String,String> params;
-
 	@Override
 	public Integer getId() {
 		return id;
@@ -81,40 +75,45 @@ public class MonitorConfiguration extends OrchestratorItem<MonitorConfiguration>
 		this.id = id;
 	}
 	
-	public String getKafkaEndpoint() {
-		return kafkaEndpoint;
+	public String getConfigSender() {
+		return configSender;
 	}
 
-	public void setKafkaEndpoint(String kafkaEndpoint) {
-		this.kafkaEndpoint = kafkaEndpoint;
-	}
-	
-	public String getKafkaTopic() {
-		return kafkaTopic;
+	public void setConfigSender(String configSender) {
+		this.configSender = configSender;
 	}
 
-	public void setKafkaTopic(String kafkaTopic) {
-		this.kafkaTopic = kafkaTopic;
-	}
-	
-	public String getTimeSlot() {
-		return timeSlot;
+	public String getTimeStamp() {
+		return timeStamp;
 	}
 
-	public void setTimeSlot(String timeSlot) {
-		this.timeSlot = timeSlot;
+	public void setTimeStamp(String timeStamp) {
+		this.timeStamp = timeStamp;
 	}
 	
-	public String getParam(String key) {
-		return params.get(key);
+	public AppStoreConfiguration getAppStoreConfiguration() {
+		return AppStoreConfiguration;
 	}
-	
-	public HashMap<String, String> getParams() {
-		return params;
+
+	public void setAppStoreConfiguration(AppStoreConfiguration appStoreConfiguration) {
+		AppStoreConfiguration = appStoreConfiguration;
 	}
-	
-	public void setParam(String key, String value) {
-		params.put(key, value);
+
+	public GooglePlayConfiguration getGooglePlayConfiguration() {
+		return GooglePlayConfiguration;
+	}
+
+	public void setGooglePlayConfiguration(GooglePlayConfiguration googlePlayConfiguration) {
+		GooglePlayConfiguration = googlePlayConfiguration;
+	}
+
+	public SocialNetworksMonitorConfiguration getSocialNetworksMonitorConfiguration() {
+		return SocialNetworksMonitorConfiguration;
+	}
+
+	public void setSocialNetworksMonitorConfiguration(
+			SocialNetworksMonitorConfiguration socialNetworksMonitorConfiguration) {
+		SocialNetworksMonitorConfiguration = socialNetworksMonitorConfiguration;
 	}
 
 }

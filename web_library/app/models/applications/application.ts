@@ -65,6 +65,23 @@ export class Application {
             ]);
         }
 
+        var generalLabelStyle = '';
+        if(this.generalConfiguration.getParameterValue('labelFontColor')) {
+            generalLabelStyle += ' ' + this.getCssStyle([
+                    new ParameterValuePropertyPair('labelFontColor', 'color'),
+                ]);
+        }
+        if(this.generalConfiguration.getParameterValue('labelFontSize')) {
+            generalLabelStyle += ' ' + this.getCssStyle([
+                    new ParameterValuePropertyPair('labelFontSize', 'font-size'),
+                ]);
+        }
+        if(this.generalConfiguration.getParameterValue('labelFontWeight')) {
+            generalLabelStyle += ' ' + this.getCssStyle([
+                    new ParameterValuePropertyPair('labelFontWeight', 'font-weight'),
+                ]);
+        }
+
         return {
             reviewButtonPosition: this.generalConfiguration.getParameterValue('reviewButtonPosition'),
             reviewStyle: reviewStyle,
@@ -73,6 +90,8 @@ export class Application {
             discardAsButton: this.generalConfiguration.getParameterValue('discardAsButton'),
             submissionPageMessage: this.generalConfiguration.getParameterValue('submissionPageMessage'),
             labelPositioning: this.generalConfiguration.getParameterValue('labelPositioning') === 'top' ? '' : 'horizontal',
+            feedbackFormTitle: this.generalConfiguration.getParameterValue('feedbackFormTitle'),
+            generalLabelStyle: generalLabelStyle,
         };
     }
 

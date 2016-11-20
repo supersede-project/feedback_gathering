@@ -1,0 +1,34 @@
+{
+  "general": {
+    "review_feedback": "continuer",
+    "review_feedback_title": "Vos Feedback",
+    "feedback_submit_button_title": "Envoyer Feedback",
+    "mandatory_default_text": "S'il vous plaît remplir ce champ",
+    "back": "en arrière",
+    "validation_max_length_error_message": "La longueur maximale est {{ maxLength }}! Vous avez entré {{ currentLength }} caractères.",
+    "discard_feedback": "Jeter Feedback",
+    "cancel": "Annuler",
+    "dialog_close_button_title": "Minimiser"
+  },
+  "text": {
+    "text_type_text_clear": "Effacer le texte"
+  },
+  "screenshot": {
+    "take_screenshot": "Créer une capture d'écran",
+    "take_new_screenshot": "Nouvelle capture d'écran",
+    "actions": "Opérations",
+    "stickers": "Autocollants",
+    "rectangle": "rectangle",
+    "blacken": "noircir",
+    "circle": "cercle",
+    "arrow": "flèche",
+    "freehand": "à main levée",
+    "crop": "surgir",
+    "text": "texte",
+    "undo": "défaire",
+    "remove": "Supprimer la capture d'écran"
+  },
+  "rating": {
+    "review_title": "Rating"
+  }
+}

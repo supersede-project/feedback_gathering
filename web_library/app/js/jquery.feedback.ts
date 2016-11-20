@@ -54,6 +54,7 @@ export var feedbackPluginModule = function ($, window, document) {
     var colorPickerCSSClass;
     var defaultStrokeWidth;
     var audioView;
+    var dialogPosition;
 
     /**
      * @param applicationObject
@@ -200,6 +201,17 @@ export var feedbackPluginModule = function ($, window, document) {
         }
 
         var dialog = initDialog($('#' + dialogId), title, modal, dialogId);
+
+        // disable review
+        if(generalConfiguration.getParameterValue('reviewActive') === 0) {
+            var submitFeedbackButton = $('button.submit-feedback');
+            var serverResponse = $('span.server-response');
+            var feedbackDialogForwardButton = $('.feedback-page .feedback-dialog-forward');
+            console.log(feedbackDialogForwardButton.length);
+            $('.feedback-page').append(serverResponse);
+            feedbackDialogForwardButton.replaceWith(submitFeedbackButton);
+        }
+
         addEvents(dialogId, configuration, generalConfiguration);
         return dialog;
     };
@@ -223,6 +235,14 @@ export var feedbackPluginModule = function ($, window, document) {
         return dialog;
     };
 
+    var repositoryURL = function(language:string, applicationId?:number):string {
+        var url:string = (apiEndpointRepository + feedbackPath).replace('{lang}', language);
+        if(applicationId) {
+            url = url.replace(new RegExp('{applicationId}'), applicationId.toString());
+        }
+        return url;
+    };
+
     /**
      * This method takes the data from the text mechanism and the rating mechanism and composes a feedback object with
      * the help of this data.
@@ -231,7 +251,7 @@ export var feedbackPluginModule = function ($, window, document) {
      */
     var sendFeedback = function (formData:FormData, configuration:ConfigurationInterface, generalConfiguration:GeneralConfiguration) {
         $.ajax({
-            url: apiEndpointRepository + 'feedback_repository/' + language + '/feedbacks/',
+            url: repositoryURL(language),
             type: 'POST',
             data: formData,
             dataType: 'json',
@@ -343,7 +363,9 @@ export var feedbackPluginModule = function ($, window, document) {
                     $(".ui-dialog-titlebar-close span", widget)
                         .removeClass("ui-icon-closethick")
                         .addClass("ui-icon-minusthick");
-                }
+                    $(this).closest('.ui-dialog').addClass('feedback-library');
+                },
+                position: dialogPosition
             })
         );
         dialogObject.dialog('option', 'title', title);
@@ -432,7 +454,9 @@ export var feedbackPluginModule = function ($, window, document) {
             });
         }
 
-        container.find('.discard-feedback').on('click', function () {
+        container.find('.discard-feedback').on('click', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
             if (configuration.dialogId === 'pushConfiguration') {
                 dialog.dialog("close");
             } else if (configuration.dialogId === 'pullConfiguration') {
@@ -463,7 +487,6 @@ export var feedbackPluginModule = function ($, window, document) {
 
         container.find('.server-response').removeClass('error').removeClass('success');
         var feedbackObject = new Feedback(feedbackObjectTitle, userId, language, applicationId, configuration.id, [], [], [], [], null, [], []);
-        // TODO add server part for PTV
         //feedbackObject.contextInformation = ContextInformation.create();
 
         for (var textMechanism of textMechanisms) {
@@ -604,6 +627,11 @@ export var feedbackPluginModule = function ($, window, document) {
         dialogCSSClass = currentOptions.dialogCSSClass;
         colorPickerCSSClass = currentOptions.colorPickerCSSClass;
         defaultStrokeWidth = currentOptions.defaultStrokeWidth;
+        dialogPosition = {
+            my: currentOptions.dialogPositionMy,
+            at: currentOptions.dialogPositionAt,
+            of: currentOptions.dialogPositionOf
+        };
 
         language = I18nHelper.getLanguage(this.options);
         I18nHelper.initializeI18n(this.options);
@@ -611,7 +639,7 @@ export var feedbackPluginModule = function ($, window, document) {
         // loadDataHere to trigger pull if necessary
         var applicationService = new ApplicationService(language);
         applicationService.retrieveApplication(applicationId, application => {
-            if (application.state === null || application.state === 0) {
+            if (!application.state) {
                 feedbackButton.hide();
                 return feedbackButton;
             }
@@ -643,7 +671,10 @@ export var feedbackPluginModule = function ($, window, document) {
         'userId': '',
         'dialogCSSClass': 'feedback-dialog',
         'colorPickerCSSClass': 'color-picker',
-        'defaultStrokeWidth': 4
+        'defaultStrokeWidth': 4,
+        'dialogPositionMy': 'center top',
+        'dialogPositionAt': 'center top+30',
+        'dialogPositionOf': window,
     };
 
 };
