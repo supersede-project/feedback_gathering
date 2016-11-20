@@ -42,6 +42,15 @@ import ch.uzh.ifi.feedback.library.transaction.DatabaseConfiguration;
 import ch.uzh.ifi.feedback.library.transaction.IDatabaseConfiguration;
 import junit.framework.TestCase;
 
+/**
+ * This class is the base class for all servlet tests. 
+ * It provides methods for the validation of requests. Further it provides setUp and tearDown methods to authenticate the test user 
+ * and to restore the test database before and after each request.
+ * 
+ * @author Florian Schüpfer
+ * @version 1.0
+ * @since   2016-11-14
+ */
 public abstract class ServletTest extends TestCase {
 	
 	protected Gson gson; 
@@ -58,6 +67,11 @@ public abstract class ServletTest extends TestCase {
 		CreateDumps();
 	}
 	
+	/**
+	 * Configures a CloseableHttpClient that  accepts unsigned certificates for HTTPS requests.
+	 * 
+	 * @return the CloseableHttpClient for issuing requests
+	 */
 	@SuppressWarnings("deprecation")
 	private CloseableHttpClient GetHttpClient()
 	{
@@ -100,8 +114,17 @@ public abstract class ServletTest extends TestCase {
 		return null;
 	}
 	
+	/**
+	 * Authenticates the test user. This method must be overriden for each servlet since the URL for authentication can change.
+	 * 
+	 * @return the UserToken identifiying the test user
+	 * @throws IOException
+	 */
 	protected abstract UserToken AuthenticateUser() throws IOException;
 	
+	/**
+	 * This method is executed before a request. It authenticates the test user and restores the test database.
+	 */
     @Override
     protected void setUp() throws Exception
     {
@@ -110,6 +133,9 @@ public abstract class ServletTest extends TestCase {
         RestoreTestDatabase();
     }
     
+	/**
+	 * This method is executed after a request. It restores the test database.
+	 */
    @Override
 	protected void tearDown() throws Exception 
     {
@@ -117,6 +143,9 @@ public abstract class ServletTest extends TestCase {
         RestoreTestDatabase();
     }
    
+   /**
+    * Restores the test database from a dump file on the local filesystem.
+    */
 	private void RestoreTestDatabase()
 	{
 		if(testDatabaseDumpFile == null)
@@ -137,8 +166,16 @@ public abstract class ServletTest extends TestCase {
 		}
 	}
 	
+	/**
+	 * This method returns an InputStream to the test database dump file. It must be overriden for different ServletTests.
+	 * @return the InputStream to the test database dump file
+	 */
 	protected abstract InputStream getTestDatabaseDump();
 	
+	/**
+	 * Creates the dump file for the test database. Note that the getTestDatabaseDump() method must return a valid InputStream
+	 * to an SQL file.
+	 */
 	private void CreateDumps()
 	{
 		InputStream inputStream = getTestDatabaseDump();
@@ -147,6 +184,14 @@ public abstract class ServletTest extends TestCase {
 			testDatabaseDumpFile = generateTempFile(inputStream, "dump_" + config.getTestDatabase());
 	}
 	
+	/**
+	 * Creates the dump file for the test database. Note that the getTestDatabaseDump() method must return a valid InputStream
+	 * to an SQL file.
+	 * 
+	 * @param input the InputStream to the SQL dump file
+	 * @param filename the filename for the dump file
+	 * @return
+	 */
 	private String generateTempFile(InputStream input, String filename)
 	{
        try {
@@ -169,18 +214,42 @@ public abstract class ServletTest extends TestCase {
        return null;
 	}
    
+	/**
+	 * Issues a delete request and asserts the HttpStatus 200
+	 * 
+	 * @param url the request url
+	 * @throws ClientProtocolException
+	 * @throws IOException
+	 */
    protected void DeleteSuccess(String url) throws ClientProtocolException, IOException
    {
 		HttpUriRequest request = new HttpDelete(url);
 		AssertRequestStatus(request, HttpStatus.SC_OK);
    }
    
+   /**
+    * Issues a DELETE request and asserts the HttpStatus provided
+    * 
+    * @param url the request url
+    * @param status the status to assert
+    * @throws ClientProtocolException
+    * @throws IOException
+    */
    protected void DeleteFail(String url, int status) throws ClientProtocolException, IOException
    {
 		HttpUriRequest request = new HttpDelete(url);
 		AssertRequestStatus(request, status); 
    }
    
+   /**
+    * Issues a GET request, asserts the HttpStatus 200 and returns the deserialized response object.
+    * 
+    * @param url the request url
+    * @param clazz the class of the response
+    * @return the deserialized response from the servlet
+    * @throws ClientProtocolException
+    * @throws IOException
+    */
    protected <T> T GetSuccess(String url, Class<T> clazz) throws ClientProtocolException, IOException
    {
 		HttpUriRequest request = new HttpGet(url);
@@ -188,12 +257,31 @@ public abstract class ServletTest extends TestCase {
 		return ExtractObjects(clazz, response);
    }
    
+   /**
+    * Issues a GET request and asserts the HttpStatus provided.
+    * 
+    * @param url the request url
+    * @param status the status to assert
+    * @return the deserialized response from the servlet
+    * @throws ClientProtocolException
+    * @throws IOException
+    */
    protected void GetFail(String url, int status) throws ClientProtocolException, IOException
    {
 		HttpUriRequest request = new HttpGet(url);
 		AssertRequestStatus(request, status); 
    }
    
+   /**
+    * Issues a POST request, asserts the HttpStatus 201 and returns the deserialized response object.
+    * 
+    * @param url the request url
+    * @param jsonString the JSON string to send to the servlet
+    * @param clazz the class of the response
+    * @return the deserialized response from the servlet
+    * @throws ClientProtocolException
+    * @throws IOException
+    */
    protected <T> T PostSuccess(String url, String jsonString, Class<T> clazz) throws ClientProtocolException, IOException
    {
 		HttpPost request = new HttpPost(url);
@@ -205,6 +293,16 @@ public abstract class ServletTest extends TestCase {
 		return ExtractObjects(clazz, response);
    }
    
+   /**
+    * Issues a POST request and asserts the HttpStatus provided.
+    * 
+    * @param url the request url
+    * @param jsonString the JSON string to send to the servlet
+    * @param status the status to assert
+    * @return the deserialized response from the servlet
+    * @throws ClientProtocolException
+    * @throws IOException
+    */
    protected void PostFail(String url, String jsonString, int status) throws ClientProtocolException, IOException
    {
 		HttpPost request = new HttpPost(url);
@@ -215,6 +313,16 @@ public abstract class ServletTest extends TestCase {
         AssertRequestStatus(request, status);
    }
    
+   /**
+    * Issues a POST request, asserts the HttpStatus 201 and returns the deserialized response object.
+    * 
+    * @param url the request url
+    * @param entity the HttpEntity to send to the servlet
+    * @param clazz the class of the response
+    * @return the deserialized response from the servlet
+    * @throws ClientProtocolException
+    * @throws IOException
+    */
    protected <T> T PostSuccess(String url, HttpEntity entity, Class<T> clazz) throws ClientProtocolException, IOException
    {
 		HttpPost request = new HttpPost(url);
@@ -226,6 +334,16 @@ public abstract class ServletTest extends TestCase {
 		return ExtractObjects(clazz, response);
    }
    
+   /**
+    * Issues a PUT request, asserts the HttpStatus 200 and returns the deserialized response object.
+    * 
+    * @param url the request url
+    * @param jsonString the JSON string to send to the servlet
+    * @param clazz the class of the response
+    * @return the deserialized response from the servlet
+    * @throws ClientProtocolException
+    * @throws IOException
+    */
    protected <T> T PutSuccess(String url, String jsonString, Class<T> clazz) throws ClientProtocolException, IOException
    {
 		HttpPut request = new HttpPut(url);
@@ -238,6 +356,16 @@ public abstract class ServletTest extends TestCase {
 		return ExtractObjects(clazz, response);
    }
    
+   /**
+    * Issues a PUT request and asserts the HttpStatus provided.
+    * 
+    * @param url the request url
+    * @param jsonString the JSON string to send to the servlet
+    * @param status the status to assert
+    * @return the deserialized response from the servlet
+    * @throws ClientProtocolException
+    * @throws IOException
+    */
    protected void PutFail(String url, String jsonString, int status) throws ClientProtocolException, IOException
    {
 		HttpPut request = new HttpPut(url);
@@ -249,6 +377,15 @@ public abstract class ServletTest extends TestCase {
         AssertRequestStatus(request, status);
    }
    
+   /**
+    * Issues a request to the servlet and asserts the status provided
+    * 
+    * @param request the HttpUriRequest to issue
+    * @param status the status to assert
+    * @return the HttpResponse 
+    * @throws ClientProtocolException
+    * @throws IOException
+    */
    private HttpResponse AssertRequestStatus(HttpUriRequest request, int status) throws ClientProtocolException, IOException
    {
 		if(token != null)
@@ -260,6 +397,15 @@ public abstract class ServletTest extends TestCase {
 		return httpResponse;
    }
 
+   /**
+    * Extracts (deserializes) object(s) of the provided type from an HttpResponse.
+    * 
+    * @param clazz the class of the objects to extract
+    * @param httpResponse the response from the server
+    * @return The deserialized object(s) from the response
+    * @throws IOException
+    * @throws ClientProtocolException
+    */
 	private <T> T ExtractObjects(Class<T> clazz, HttpResponse httpResponse) throws IOException, ClientProtocolException 
 	{
 		String mimeType = ContentType.getOrDefault(httpResponse.getEntity()).getMimeType();

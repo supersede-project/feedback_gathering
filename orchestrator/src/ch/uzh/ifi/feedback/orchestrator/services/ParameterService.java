@@ -35,8 +35,8 @@ public class ParameterService extends OrchestratorService<FeedbackParameter>{
 	
 	@Override
 	public List<FeedbackParameter> GetWhere(List<Object> values, String... conditions)
-			throws SQLException {
-		
+			throws SQLException 
+	{	
 		List<FeedbackParameter> params = super.GetWhere(values, conditions);
 		
 		Map<Integer, List<FeedbackParameter>> childMap = new HashMap<>();
