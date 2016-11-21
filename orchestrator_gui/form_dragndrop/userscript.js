@@ -1,5 +1,4 @@
-var setup = function()
-{
+var setup = function () {
     var MODAL_VIEW = "bootstrap-edit-horizontal";
 
     var MODAL_TEMPLATE = ' \
@@ -22,33 +21,27 @@ var setup = function()
     var schema = {
         "type": "object"
     };
-    var options = {
-    };
-    var data = {
-    };
+    var options = {};
+    var data = {};
 
-    var setupEditor = function(id, json)
-    {
+    var setupEditor = function (id, json) {
         var text = "";
-        if (json)
-        {
+        if (json) {
             text = JSON.stringify(json, null, "    ");
         }
 
         var editor = ace.edit(id);
         editor.setTheme("ace/theme/textmate");
-        if (json)
-        {
+        if (json) {
             editor.getSession().setMode("ace/mode/json");
         }
-        else
-        {
+        else {
             editor.getSession().setMode("ace/mode/javascript");
         }
 
-        setTimeout(function() {
+        setTimeout(function () {
             editor.clearSelection();
-            editor.gotoLine(0,0);
+            editor.gotoLine(0, 0);
         }, 100);
 
         return editor;
@@ -61,57 +54,46 @@ var setup = function()
     var mainViewField = null;
     var mainDesignerField = null;
 
-    var doRefresh = function(el, buildInteractionLayers, disableErrorHandling, cb)
-    {
-        try
-        {
+    var doRefresh = function (el, buildInteractionLayers, disableErrorHandling, cb) {
+        try {
             schema = JSON.parse(editor1.getValue());
         }
-        catch (e)
-        {
+        catch (e) {
         }
 
-        try
-        {
+        try {
             options = JSON.parse(editor2.getValue());
         }
-        catch (e)
-        {
+        catch (e) {
         }
 
-        try
-        {
+        try {
             data = JSON.parse(editor3.getValue());
         }
-        catch (e)
-        {
+        catch (e) {
         }
 
-        if (schema)
-        {
+        if (schema) {
             var config = {
                 "schema": schema
             };
-            if (options)
-            {
+            if (options) {
                 config.options = options;
             }
-            if (data)
-            {
+            if (data) {
                 config.data = data;
             }
             if (!config.options) {
                 config.options = {};
             }
             config.options.focus = false;
-            config.postRender = function(form) {
+            config.postRender = function (form) {
 
-                if (buildInteractionLayers)
-                {
+                if (buildInteractionLayers) {
                     var iCount = 0;
 
                     // cover every control with an interaction layer
-                    form.getFieldEl().find(".alpaca-container-item").each(function() {
+                    form.getFieldEl().find(".alpaca-container-item").each(function () {
 
                         var alpacaFieldId = $(this).children().first().attr("data-alpaca-field-id");
 
@@ -171,9 +153,8 @@ var setup = function()
                         });
 
 
-
                         // click on optionsButton
-                        $(optionsButton).off().click(function(e) {
+                        $(optionsButton).off().click(function (e) {
 
                             e.preventDefault();
                             e.stopPropagation();
@@ -184,7 +165,7 @@ var setup = function()
                         });
 
                         // click on removeButton
-                        $(removeButton).off().click(function(e) {
+                        $(removeButton).off().click(function (e) {
 
                             e.preventDefault();
                             e.stopPropagation();
@@ -194,10 +175,10 @@ var setup = function()
                         });
 
                         // when hover, highlight
-                        $(interaction).hover(function(e) {
+                        $(interaction).hover(function (e) {
                             var iCount = $(interaction).attr("icount-ref");
                             $(".cover[icount-ref='" + iCount + "']").addClass("ui-hover-state");
-                        }, function(e) {
+                        }, function (e) {
                             var iCount = $(interaction).attr("icount-ref");
                             $(".cover[icount-ref='" + iCount + "']").removeClass("ui-hover-state");
                         });
@@ -211,14 +192,14 @@ var setup = function()
 
                     // for every container, add a "first" drop zone element
                     // this covers empty containers as well as 0th index insertions
-                    form.getFieldEl().find(".alpaca-container").each(function() {
+                    form.getFieldEl().find(".alpaca-container").each(function () {
                         var containerEl = this;
 
                         // first insertion point
                         $(this).prepend("<div class='dropzone'></div>");
 
                         // all others
-                        $(containerEl).children(".alpaca-container-item").each(function() {
+                        $(containerEl).children(".alpaca-container-item").each(function () {
                             $(this).after("<div class='dropzone'></div>");
                         });
 
@@ -226,12 +207,11 @@ var setup = function()
 
                     form.getFieldEl().find(".dropzone").droppable({
                         "tolerance": "touch",
-                        "drop": function( event, ui ) {
+                        "drop": function (event, ui) {
 
                             var draggable = $(ui.draggable);
 
-                            if (draggable.hasClass("form-element"))
-                            {
+                            if (draggable.hasClass("form-element")) {
                                 var dataType = draggable.attr("data-type");
                                 var fieldType = draggable.attr("data-field-type");
 
@@ -242,8 +222,7 @@ var setup = function()
                                 var previousField = null;
                                 var previousFieldKey = null;
                                 var previousItemContainer = $(event.target).prev();
-                                if (previousItemContainer)
-                                {
+                                if (previousItemContainer) {
                                     var previousAlpacaId = $(previousItemContainer).children().first().attr("data-alpaca-field-id");
                                     previousField = Alpaca.fieldInstances[previousAlpacaId];
 
@@ -254,8 +233,7 @@ var setup = function()
                                 var nextField = null;
                                 var nextFieldKey = null;
                                 var nextItemContainer = $(event.target).next();
-                                if (nextItemContainer)
-                                {
+                                if (nextItemContainer) {
                                     var nextAlpacaId = $(nextItemContainer).children().first().attr("data-alpaca-field-id");
                                     nextField = Alpaca.fieldInstances[nextAlpacaId];
 
@@ -269,8 +247,7 @@ var setup = function()
                                 // now do the insertion
                                 insertField(schema, options, data, dataType, fieldType, parentField, previousField, previousFieldKey, nextField, nextFieldKey);
                             }
-                            else if (draggable.hasClass("interaction"))
-                            {
+                            else if (draggable.hasClass("interaction")) {
                                 var draggedIndex = $(draggable).attr("icount-ref");
 
                                 // next
@@ -279,14 +256,14 @@ var setup = function()
                                 var nextItemAlpacaId = $(nextItemContainer).children().first().attr("data-alpaca-field-id");
                                 var nextField = Alpaca.fieldInstances[nextItemAlpacaId];
 
-                                form.moveItem(draggedIndex, nextItemContainerIndex, false, function() {
+                                form.moveItem(draggedIndex, nextItemContainerIndex, false, function () {
 
                                     var top = findTop(nextField);
                                     regenerate(top);
                                 });
                             }
                         },
-                        "over": function (event, ui ) {
+                        "over": function (event, ui) {
                             $(event.target).addClass("dropzone-hover");
                         },
                         "out": function (event, ui) {
@@ -297,7 +274,7 @@ var setup = function()
                     // init any in-place draggables
                     form.getFieldEl().find(".interaction").draggable({
                         "appendTo": "body",
-                        "helper": function() {
+                        "helper": function () {
                             var iCount = $(this).attr("icount-ref");
                             var clone = $(".alpaca-container-item[icount='" + iCount + "']").clone();
                             return clone;
@@ -307,10 +284,10 @@ var setup = function()
                         },
                         "zIndex": 300,
                         "refreshPositions": true,
-                        "start": function(event, ui) {
+                        "start": function (event, ui) {
                             $(".dropzone").addClass("dropzone-highlight");
                         },
-                        "stop": function(event, ui) {
+                        "stop": function (event, ui) {
                             $(".dropzone").removeClass("dropzone-highlight");
                         }
                     });
@@ -318,21 +295,18 @@ var setup = function()
 
                 cb(null, form);
             };
-            config.error = function(err)
-            {
+            config.error = function (err) {
                 Alpaca.defaultErrorCallback(err);
 
                 cb(err);
             };
 
-            if (disableErrorHandling)
-            {
-                Alpaca.defaultErrorCallback = function(error) {
+            if (disableErrorHandling) {
+                Alpaca.defaultErrorCallback = function (error) {
                     console.log("Alpaca encountered an error while previewing form -> " + error.message);
                 };
             }
-            else
-            {
+            else {
                 Alpaca.defaultErrorCallback = Alpaca.DEFAULT_ERROR_CALLBACK;
             }
 
@@ -340,28 +314,21 @@ var setup = function()
         }
     };
 
-    var removeFunctionFields = function(schema, options)
-    {
-        if (schema)
-        {
-            if (schema.properties)
-            {
+    var removeFunctionFields = function (schema, options) {
+        if (schema) {
+            if (schema.properties) {
                 var badKeys = [];
 
-                for (var k in schema.properties)
-                {
-                    if (schema.properties[k].type === "function")
-                    {
+                for (var k in schema.properties) {
+                    if (schema.properties[k].type === "function") {
                         badKeys.push(k);
                     }
-                    else
-                    {
+                    else {
                         removeFunctionFields(schema.properties[k], (options && options.fields ? options.fields[k] : null));
                     }
                 }
 
-                for (var i = 0; i < badKeys.length; i++)
-                {
+                for (var i = 0; i < badKeys.length; i++) {
                     delete schema.properties[badKeys[i]];
 
                     if (options && options.fields) {
@@ -372,8 +339,7 @@ var setup = function()
         }
     };
 
-    var editOptions = function(alpacaFieldId, callback)
-    {
+    var editOptions = function (alpacaFieldId, callback) {
         var field = Alpaca.fieldInstances[alpacaFieldId];
 
         var fieldSchemaSchema = field.getSchemaOfSchema();
@@ -389,24 +355,21 @@ var setup = function()
 
         delete fieldSchemaSchema.title;
         delete fieldSchemaSchema.description;
-        if (fieldSchemaSchema.properties)
-        {
+        if (fieldSchemaSchema.properties) {
             delete fieldSchemaSchema.properties.title;
             delete fieldSchemaSchema.properties.description;
             delete fieldSchemaSchema.properties.dependencies;
         }
         delete fieldOptionsSchema.title;
         delete fieldOptionsSchema.description;
-        if (fieldOptionsSchema.properties)
-        {
+        if (fieldOptionsSchema.properties) {
             delete fieldOptionsSchema.properties.title;
             delete fieldOptionsSchema.properties.description;
             delete fieldOptionsSchema.properties.dependencies;
             delete fieldOptionsSchema.properties.readonly;
         }
 
-        if (fieldOptionsOptions.fields)
-        {
+        if (fieldOptionsOptions.fields) {
             delete fieldOptionsOptions.fields.title;
             delete fieldOptionsOptions.fields.description;
             delete fieldOptionsOptions.fields.dependencies;
@@ -420,21 +383,17 @@ var setup = function()
             schema: fieldOptionsSchema
 
         };
-        if (fieldSchemaOptions)
-        {
+        if (fieldSchemaOptions) {
 
             fieldConfigSchema.options = fieldSchemaOptions;
         }
-        if (fieldData)
-        {
+        if (fieldData) {
             fieldConfigSchema.data = fieldData;
         }
-        if (fieldOptionsOptions)
-        {
+        if (fieldOptionsOptions) {
             fieldConfigOptions.options = fieldOptionsOptions;
         }
-        if (fieldOptionsData)
-        {
+        if (fieldOptionsData) {
             // set validation messages to false
             fieldOptionsData.showMessages = false;
             fieldConfigOptions.data = fieldOptionsData;
@@ -447,8 +406,7 @@ var setup = function()
             "parent": MODAL_VIEW,
             "displayReadonly": false
         };
-        fieldConfigSchema.postRender = function(control)
-        {
+        fieldConfigSchema.postRender = function (control) {
             var modal = $(MODAL_TEMPLATE.trim());
             modal.find(".modal-title").append(field.getTitle());
             modal.find(".modal-body").append(control.getFieldEl());
@@ -460,15 +418,14 @@ var setup = function()
                 "keyboard": true
             });
 
-            $(modal).find(".okay").click(function() {
+            $(modal).find(".okay").click(function () {
 
                 field.schema = control.getValue();
 
                 var top = findTop(field);
                 regenerate(top);
 
-                if (callback)
-                {
+                if (callback) {
                     callback();
                 }
             });
@@ -487,8 +444,7 @@ var setup = function()
             control.getFieldEl().find("[data-alpaca-container-item-name='minLength']").remove();
             control.getFieldEl().find("[data-alpaca-container-item-name='pattern']").remove();
         };
-        fieldConfigOptions.postRender = function(control)
-        {
+        fieldConfigOptions.postRender = function (control) {
             var modal = $(MODAL_TEMPLATE.trim());
             modal.find(".modal-title").append(field.getTitle());
             modal.find(".modal-body").append(control.getFieldEl());
@@ -500,15 +456,14 @@ var setup = function()
                 "keyboard": true
             });
 
-            $(modal).find(".okay").click(function() {
+            $(modal).find(".okay").click(function () {
 
                 field.options = control.getValue();
 
                 var top = findTop(field);
                 regenerate(top);
 
-                if (callback)
-                {
+                if (callback) {
                     callback();
                 }
             });
@@ -527,7 +482,7 @@ var setup = function()
             control.getFieldEl().find("[data-alpaca-container-item-name='helper']").remove();
             control.getFieldEl().find("[data-alpaca-container-item-name='helpers']").remove();
             control.getFieldEl().find("[data-alpaca-container-item-name='fieldClass']").remove();
-            control.getFieldEl().find("[data-alpaca-container-item-name='hideInitValidationError']").remove;
+            control.getFieldEl().find("[data-alpaca-container-item-name='hideInitValidationError']").remove();
             control.getFieldEl().find("[data-alpaca-container-item-name='focus']").remove();
             control.getFieldEl().find("[data-alpaca-container-item-name='optionLabels']").remove();
             control.getFieldEl().find("[data-alpaca-container-item-name='view']").remove();
@@ -557,52 +512,44 @@ var setup = function()
 
     };
 
-    var refreshView = function(callback)
-    {
-        if (mainViewField)
-        {
+    var refreshView = function (callback) {
+        if (mainViewField) {
             mainViewField.getFieldEl().replaceWith("<div id='viewDiv'></div>");
             mainViewField.destroy();
             mainViewField = null;
         }
 
-        doRefresh($("#viewDiv"), false, false, function(err, form) {
+        doRefresh($("#viewDiv"), false, false, function (err, form) {
 
-            if (!err)
-            {
+            if (!err) {
                 mainViewField = form;
             }
 
-            if (callback)
-            {
+            if (callback) {
                 callback();
             }
 
         });
     };
 
-    var refreshDesigner = function(callback)
-    {
+    var refreshDesigner = function (callback) {
         $(".dropzone").remove();
         $(".interaction").remove();
         $(".cover").remove();
 
-        if (mainDesignerField)
-        {
+        if (mainDesignerField) {
             mainDesignerField.getFieldEl().replaceWith("<div id='designerDiv'></div>");
             mainDesignerField.destroy();
             mainDesignerField = null;
         }
 
-        doRefresh($("#designerDiv"), true, false, function(err, form) {
+        doRefresh($("#designerDiv"), true, false, function (err, form) {
 
-            if (!err)
-            {
+            if (!err) {
                 mainDesignerField = form;
             }
 
-            if (callback)
-            {
+            if (callback) {
                 callback();
             }
 
@@ -610,8 +557,7 @@ var setup = function()
     };
 
     // creates the components
-    var afterAlpacaInit = function()
-    {
+    var afterAlpacaInit = function () {
         // available components
         var types = ["textarea", "checkbox", "radio", "image", "upload"];
 
@@ -640,10 +586,10 @@ var setup = function()
                 "helper": "clone",
                 "zIndex": 300,
                 "refreshPositions": true,
-                "start": function(event, ui) {
+                "start": function (event, ui) {
                     $(".dropzone").addClass("dropzone-highlight");
                 },
-                "stop": function(event, ui) {
+                "stop": function (event, ui) {
                     $(".dropzone").removeClass("dropzone-highlight");
                 }
             });
@@ -653,54 +599,45 @@ var setup = function()
     // lil hack to force compile
     $("<div></div>").alpaca({
         "data": "test",
-        "postRender": function(control)
-        {
+        "postRender": function (control) {
             afterAlpacaInit();
         }
     });
 
-    var insertField = function(schema, options, data, dataType, fieldType, parentField, previousField, previousFieldKey, nextField, nextFieldKey)
-    {
+    var insertField = function (schema, options, data, dataType, fieldType, parentField, previousField, previousFieldKey, nextField, nextFieldKey) {
         var itemSchema = {
             "type": dataType
         };
         var itemOptions = {};
-        if (fieldType)
-        {
+        if (fieldType) {
             itemOptions.type = fieldType;
         }
         itemOptions.label = "New ";
-        if (fieldType)
-        {
+        if (fieldType) {
             itemOptions.label += fieldType;
         }
-        else if (dataType)
-        {
+        else if (dataType) {
             itemOptions.label += dataType;
         }
         var itemData = null;
 
         var itemKey = null;
-        if (parentField.getType() === "array")
-        {
+        if (parentField.getType() === "array") {
             itemKey = 0;
-            if (previousFieldKey)
-            {
+            if (previousFieldKey) {
                 itemKey = previousFieldKey + 1;
             }
         }
-        else if (parentField.getType() === "object")
-        {
+        else if (parentField.getType() === "object") {
             itemKey = "new" + new Date().getTime();
         }
 
         var insertAfterId = null;
-        if (previousField)
-        {
+        if (previousField) {
             insertAfterId = previousField.id;
         }
 
-        parentField.addItem(itemKey, itemSchema, itemOptions, itemData, insertAfterId, function() {
+        parentField.addItem(itemKey, itemSchema, itemOptions, itemData, insertAfterId, function () {
 
             var top = findTop(parentField);
 
@@ -709,13 +646,10 @@ var setup = function()
 
     };
 
-    var assembleSchema = function(field, schema)
-    {
+    var assembleSchema = function (field, schema) {
         // copy any properties from this field's schema into our schema object
-        for (var k in field.schema)
-        {
-            if (field.schema.hasOwnProperty(k) && typeof(field.schema[k]) !== "function")
-            {
+        for (var k in field.schema) {
+            if (field.schema.hasOwnProperty(k) && typeof(field.schema[k]) !== "function") {
                 schema[k] = field.schema[k];
             }
         }
@@ -724,10 +658,8 @@ var setup = function()
         // reset properties, we handle that one at a time
         delete schema.properties;
         schema.properties = {};
-        if (field.children)
-        {
-            for (var i = 0; i < field.children.length; i++)
-            {
+        if (field.children) {
+            for (var i = 0; i < field.children.length; i++) {
                 var childField = field.children[i];
                 var propertyId = childField.propertyId;
 
@@ -737,13 +669,10 @@ var setup = function()
         }
     };
 
-    var assembleOptions = function(field, options)
-    {
+    var assembleOptions = function (field, options) {
         // copy any properties from this field's options into our options object
-        for (var k in field.options)
-        {
-            if (field.options.hasOwnProperty(k) && typeof(field.options[k]) !== "function")
-            {
+        for (var k in field.options) {
+            if (field.options.hasOwnProperty(k) && typeof(field.options[k]) !== "function") {
                 options[k] = field.options[k];
             }
         }
@@ -752,10 +681,8 @@ var setup = function()
         // reset fields, we handle that one at a time
         delete options.fields;
         options.fields = {};
-        if (field.children)
-        {
-            for (var i = 0; i < field.children.length; i++)
-            {
+        if (field.children) {
+            for (var i = 0; i < field.children.length; i++) {
                 var childField = field.children[i];
                 var propertyId = childField.propertyId;
 
@@ -765,20 +692,17 @@ var setup = function()
         }
     };
 
-    var findTop = function(field)
-    {
+    var findTop = function (field) {
         // now get the top control
         var top = field;
-        while (top.parent)
-        {
+        while (top.parent) {
             top = top.parent;
         }
 
         return top;
     };
 
-    var regenerate = function(top)
-    {
+    var regenerate = function (top) {
         // walk the control tree and re-assemble the schema, options + data
         var _schema = {};
         assembleSchema(top, _schema);
@@ -794,18 +718,17 @@ var setup = function()
         editor2.setValue(JSON.stringify(_options, null, "    "));
         editor3.setValue(JSON.stringify(_data, null, "    "));
 
-        setTimeout(function() {
+        setTimeout(function () {
             refreshDesigner();
             refreshView();
         }, 100);
     };
 
-    var removeField = function(alpacaId)
-    {
+    var removeField = function (alpacaId) {
         var field = Alpaca.fieldInstances[alpacaId];
 
         var parentField = field.parent;
-        parentField.removeItem(field.propertyId, function() {
+        parentField.removeItem(field.propertyId, function () {
             var top = findTop(field);
             regenerate(top);
         });
@@ -815,17 +738,15 @@ var setup = function()
     refreshView();
 
     // save button
-    $(".save-button").on("click", function() {
-    var config = {
+    $(".save-button").on("click", function () {
+        var config = {
             "schema": schema
         };
 
-        if (schema)
-        {
+        if (schema) {
             config.schema = schema;
         }
-        if (options)
-        {
+        if (options) {
             config.options = options;
         }
 
@@ -839,10 +760,10 @@ var setup = function()
     });
 };
 
-$(document).ready(function() {
+$(document).ready(function () {
 
-    // wait a bit to allow ACE to load
-    setTimeout(function() {
+    // load everything before call the orchestrator
+    setTimeout(function () {
         setup();
     }, 200);
 });
