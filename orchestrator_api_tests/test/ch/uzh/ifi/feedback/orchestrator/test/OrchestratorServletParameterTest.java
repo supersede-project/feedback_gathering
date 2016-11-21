@@ -5,6 +5,7 @@ import java.io.InputStream;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.client.ClientProtocolException;
 import ch.uzh.ifi.feedback.orchestrator.model.FeedbackParameter;
+import static java.util.Arrays.asList;
 
 public class OrchestratorServletParameterTest extends OrchestratorServletTest {
 	
@@ -83,5 +84,23 @@ public class OrchestratorServletParameterTest extends OrchestratorServletTest {
 		assertEquals(updatedParameter.getId(), new Integer(6640));
 		assertEquals(updatedParameter.getKey(), "maxLength");
 		assertEquals(updatedParameter.getValue(), 100.0);
+	}
+	
+	public void testRetrievalWithFallbackLanguage() throws ClientProtocolException, IOException
+	{
+		InputStream stream = this.getClass().getResourceAsStream("parameter_insert_de.json");
+		String jsonString = IOUtils.toString(stream); 
+		
+		FeedbackParameter createdParameter = PostSuccess(
+				"http://localhost:8080/orchestrator/feedback/de/applications/35/mechanisms/829/parameters", 
+				jsonString,
+				FeedbackParameter.class);
+		
+		FeedbackParameter[] retrievedParameters = GetSuccess(
+				"http://localhost:8080/orchestrator/feedback/de/mechanisms/829/parameters", FeedbackParameter[].class);
+		
+		assertEquals(retrievedParameters.length, 3);
+		assertTrue(asList(retrievedParameters).stream().filter(p -> p.getLanguage().equals("de")).count() == 1);
+		assertTrue(asList(retrievedParameters).stream().filter(p -> p.getLanguage().equals("en")).count() == 2);
 	}
 }

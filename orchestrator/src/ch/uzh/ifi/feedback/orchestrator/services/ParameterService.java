@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
@@ -42,9 +43,24 @@ public class ParameterService extends OrchestratorService<FeedbackParameter>{
 		Map<Integer, List<FeedbackParameter>> childMap = new HashMap<>();
 		Map<FeedbackParameter, Integer> parameterMap = new HashMap<>();
 
-		params = params.stream().filter(p -> p.getLanguage().equals(languageProvider.get())).collect(Collectors.toList());
+		Map<String, List<FeedbackParameter>> paramMap = params.stream().collect(Collectors.groupingBy(
+				param -> param.getKey() + param.getGenaralConfigurationId() + param.getMechanismId() + param.getParentParameterId()));
 		
-		List<FeedbackParameter> rootParams = GetRootParams(params, parameterMap, childMap);
+		List<FeedbackParameter> resultList = new ArrayList<>();
+		for(String key : paramMap.keySet())
+		{
+			Optional<FeedbackParameter> parameter = paramMap.get(key).stream().filter(p -> p.getLanguage().equals(languageProvider.get())).findFirst();
+			if(parameter.isPresent())
+			{
+				resultList.add(parameter.get());
+			}else{
+				parameter = paramMap.get(key).stream().filter(p -> p.getLanguage().equals("en")).findFirst();
+				if(parameter.isPresent())
+					resultList.add(parameter.get());
+			}
+		}
+		
+		List<FeedbackParameter> rootParams = GetRootParams(resultList, parameterMap, childMap);
 	    
 	    return setParametersRecursive(rootParams, parameterMap, childMap);
 	}
