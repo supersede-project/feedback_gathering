@@ -1025,24 +1025,6 @@ var doReplace = function(text, token, value)
     return text;
 };
 
-gulp.task("update-release-txt", function() {
-
-    if (fs.existsSync("license.txt"))
-    {
-        fs.unlinkSync("license.txt");
-    }
-
-    return gulp.src("license.txt.template", {
-        "cwd": "./config"
-    })
-        .pipe(gulpTemplate({
-            version: pkg.version
-        }))
-        .pipe(rename("license.txt"))
-        .pipe(gulp.dest("."));
-
-});
-
 gulp.task("website", function(cb) {
     runSequence("default", "site", "server", function () {
         cb();
