@@ -6,6 +6,8 @@ import 'rxjs/add/operator/catch';
 import {Application} from '../models/applications/application';
 import {ORCHESTRATOR_HOST} from './config';
 
+declare function camelizer(obj: any): any;
+
 @Injectable()
 export class ApplicationService {
 

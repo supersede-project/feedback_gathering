@@ -6,6 +6,10 @@ import 'rxjs/add/operator/catch';
 import {Feedback} from '../models/feedbacks/feedback';
 import {REPOSITORY_HOST} from './config';
 
+
+declare function camelizer(obj: any): any;
+
+
 @Injectable()
 export class FeedbackListService {
 

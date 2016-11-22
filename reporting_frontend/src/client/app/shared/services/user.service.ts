@@ -5,6 +5,8 @@ import {Router} from '@angular/router';
 import {Observable} from 'rxjs/Rx';
 import {ApiUser} from '../models/api_user';
 
+declare function camelizer(obj: any): any;
+
 
 @Injectable()
 export class UserService {

@@ -9,6 +9,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {FeedbackStatusService} from '../shared/services/feedback-status.service';
 import {FeedbackStatus} from '../shared/models/feedbacks/feedback_status';
 import {ApplicationFilterService} from '../shared/services/application-filter.service';
+import {Location} from '@angular/common';
 
 
 @Component({
@@ -31,7 +32,7 @@ export class FeedbackListComponent implements OnInit {
 
   constructor(public feedbackListService:FeedbackListService, private applicationService:ApplicationService,
               private router:Router, private route:ActivatedRoute, private feedbackStatusService:FeedbackStatusService,
-              private applicationFilterService:ApplicationFilterService) {
+              private applicationFilterService:ApplicationFilterService, private location:Location) {
     this.getApplications();
   }
 
@@ -139,24 +140,6 @@ export class FeedbackListComponent implements OnInit {
           let ratingMechanism:RatingMechanism = <RatingMechanism>configuration.mechanisms.filter(mechanism => mechanism.id === ratingFeedback.mechanismId)[0];
           ratingFeedback.mechanism = new RatingMechanism(ratingMechanism.id, ratingMechanism.type, ratingMechanism.active, ratingMechanism.order, ratingMechanism.canBeActivated, ratingMechanism.parameters);
         }
-      }
-    }
-  }
-
-  /**
-   * combines repository feedbacks with the personal feedback statuses
-   */
-  populateStatusData(feedbackStatuses:FeedbackStatus[]) {
-    for(var feedback of this.feedbacks) {
-      feedback.personalFeedbackStatus = feedbackStatuses.filter(feedbackStatus => feedbackStatus.feedbackId === feedback.id)[0];
-      if(feedback.personalFeedbackStatus) {
-        feedback.read = feedback.personalFeedbackStatus.status === 'read';
-      }
-    }
-    for(var feedback of this.selectedFeedbacks) {
-      feedback.personalFeedbackStatus = feedbackStatuses.filter(feedbackStatus => feedbackStatus.feedbackId === feedback.id)[0];
-      if(feedback.personalFeedbackStatus) {
-        feedback.read = feedback.personalFeedbackStatus.status === 'read';
       }
     }
   }
