@@ -1,15 +1,7 @@
 package ch.uzh.ifi.feedback.orchestrator.model;
 
-import ch.uzh.ifi.feedback.library.rest.annotations.DbAttribute;
-import ch.uzh.ifi.feedback.library.rest.annotations.Id;
-import ch.uzh.ifi.feedback.library.rest.annotations.Serialize;
-import ch.uzh.ifi.feedback.orchestrator.serialization.MonitoringConfigurationParamsSerializationService;
-
-@Serialize(MonitoringConfigurationParamsSerializationService.class)
-public abstract class MonitorConfigurationParams extends OrchestratorItem<MonitorConfigurationParams> {
+public abstract class MonitorConfigurationParams {
 	
-	@Id
-	@DbAttribute("monitor_configuration_params_id")
 	private Integer id;
 		
 	private String timeSlot;
@@ -20,12 +12,10 @@ public abstract class MonitorConfigurationParams extends OrchestratorItem<Monito
 	
 	private String state;
 
-	@Override
 	public Integer getId() {
 		return id;
 	}
 
-	@Override
 	public void setId(Integer id) {
 		this.id = id;
 	}
