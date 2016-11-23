@@ -10,10 +10,8 @@ public abstract class MonitorConfigurationParams extends OrchestratorItem<Monito
 	
 	@Id
 	@DbAttribute("monitor_configuration_params_id")
-	private Integer intId;
-	
-	private String id;
-	
+	private Integer id;
+		
 	private String timeSlot;
 
 	private String kafkaEndpoint;
@@ -24,20 +22,20 @@ public abstract class MonitorConfigurationParams extends OrchestratorItem<Monito
 
 	@Override
 	public Integer getId() {
-		return intId;
+		return id;
 	}
 
 	@Override
 	public void setId(Integer id) {
-		this.intId = id;
+		this.id = id;
 	}
 	
 	public String getConfId() {
-		return id;
+		return id.toString();
 	}
 	
 	public void setConfId(String id) {
-		this.id = id;
+		this.id = Integer.valueOf(id);
 	}
 	
 	public String getTimeSlot() {
