@@ -1,22 +1,10 @@
-#Monitors
+#README
 This project contains the set of implemented monitors (RESTful web services) for the feedback gathering project.
-##Monitor installation
-Find below the instructions to deploy the monitors from scratch in a tomcat server.
-###WAR generation
+##Monitors
+Find below the list of monitors classified by the type of monitoring
+####Social Networks
+* Twitter Monitor: https://github.com/supersede-project/monitor_feedback/tree/master/monitors/twitter
 
-To generate the .war file:
-- Download the monitors you are interested in
-- From command line:
-	- _cd /[path-to-specific-monitor]_
-    - _./gradlew war_
-    - Generated war is placed in _/[path-to-specific-monitor]/build/libs_
-- From Eclipse:
-	- Open monitor project in Eclipse
-    - Right click on source folder in Project Explorer > Export > WAR file
-    - Select the destination of the generated file and Finish
-
-###WAR installation
-
-To install the .war file in Tomcat server:
-- Place the .war file in _/path/to/tomcat/webapps_
-- Monitor should be running on http://localhost:8080/monitorName
+####Maret Places
+* Google Play Monitor: https://github.com/supersede-project/monitor_feedback/tree/master/monitors/googlePlay
+* App Store Monitor: https://github.com/supersede-project/monitor_feedback/tree/master/monitors/appStore
