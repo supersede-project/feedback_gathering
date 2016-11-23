@@ -30,14 +30,11 @@ import ch.uzh.ifi.feedback.orchestrator.serialization.MonitorConfigurationSerial
 public class MonitorConfiguration extends OrchestratorItem<MonitorConfiguration> {
 
 	@Id
-	@DbAttribute("monitor_configurations_id")
+	@DbAttribute("monitor_configuration_id")
 	private Integer id;
 	
 	@DbAttribute("monitor_tool_name")
 	private String monitorToolName;
-	
-	@DbAttribute("monitor_tool_monitor")
-	private String monitor;
 	
 	private String configSender;
 
@@ -46,14 +43,6 @@ public class MonitorConfiguration extends OrchestratorItem<MonitorConfiguration>
 	//Configuration candidates, only one of them is deserialized
 	private MarketPlaces MarketPlaces;
 	private SocialNetworks SocialNetworks;
-	
-	public String getMonitor() {
-		return monitor;
-	}
-
-	public void setMonitor(String monitor) {
-		this.monitor = monitor;
-	}
 
 	public String getMonitorToolName() {
 		return monitorToolName;
