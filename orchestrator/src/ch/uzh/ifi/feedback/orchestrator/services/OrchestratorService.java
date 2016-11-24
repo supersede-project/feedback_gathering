@@ -61,7 +61,7 @@ public class OrchestratorService<T extends IOrchestratorItem<T>> extends Service
 	public T GetById(int id) throws SQLException, NotFoundException 
 	{
 		String idCondition = String.format("%s = ?", mainTableKey);
-		List<Object> list = asList(id, timestampProvider.get(), timestampProvider.get());
+		List<Object> list = asList(id, timestampProvider.get(), timestampProvider.get(), timestampProvider.get());
 		List<T> result = super.GetWhere(list, idCondition, getTimeCondition());
 		
 		if(result.size() == 0)
@@ -79,7 +79,7 @@ public class OrchestratorService<T extends IOrchestratorItem<T>> extends Service
 	@Override
 	public List<T> GetWhere(List<Object> values, String... conditions) throws SQLException {
 		List<Object> newValues = new ArrayList<>();
-		newValues.addAll(asList(timestampProvider.get(), timestampProvider.get()));
+		newValues.addAll(asList(timestampProvider.get(), timestampProvider.get(), timestampProvider.get()));
 		newValues.addAll(values);
 		
 		List<String> conds = new ArrayList<>();
@@ -120,11 +120,11 @@ public class OrchestratorService<T extends IOrchestratorItem<T>> extends Service
 	
 	protected String getTimeCondition()
 	{
-		String condition = 	"abs(timestampdiff(SECOND, t.created_at, ?)) = "
+		String condition = 	"abs(timestampdiff(MICROSECOND, t.created_at, ?)) = "
 							+ "("
-							+ "SELECT min(abs(timestampdiff(SECOND, t2.created_at, ?))) "
+							+ "SELECT min(abs(timestampdiff(MICROSECOND, t2.created_at, ?))) "
 							+ "FROM %s.%s as t2 "
-							+ "WHERE t.%s = t2.%s"
+							+ "WHERE t.%s = t2.%s AND t.created_at <= ?"
 							+ ") ";
 		condition = String.format(condition, dbName, tableName, mainTableKey, mainTableKey);
 		

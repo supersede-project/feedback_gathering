@@ -186,10 +186,11 @@ public class MechanismService extends OrchestratorService<FeedbackMechanism> {
 		
 		s.setObject(1, timestampProvider.get());
 		s.setObject(2, timestampProvider.get());
+		s.setObject(3, timestampProvider.get());
 		
 		for(int i=0; i<values.size();i++)
 		{
-			s.setObject(i+3, values.get(i));
+			s.setObject(i+4, values.get(i));
 		}
 		ResultSet result = s.executeQuery();
 	

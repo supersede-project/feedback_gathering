@@ -7,6 +7,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.inject.Key;
+import com.google.inject.name.Names;
 
 import ch.uzh.ifi.feedback.library.rest.service.IDbItem;
 import ch.uzh.ifi.feedback.library.rest.service.IDbService;
@@ -16,6 +18,9 @@ import ch.uzh.ifi.feedback.library.rest.validation.ValidationResult;
 import ch.uzh.ifi.feedback.library.transaction.TransactionManager;
 
 import static java.util.Arrays.asList;
+
+import java.sql.Timestamp;
+import java.time.Instant;
 
 /**
  * This class is the base class for all controller instances that access the database via the IDbService<T> interface.
@@ -92,6 +97,10 @@ public abstract class RestController<T extends IDbItem<T>> {
 			createdObjectId = dbService.Insert(con, object);
 		});
 		
+        request.setAttribute(
+	             Key.get(Timestamp.class, Names.named("timestamp")).toString(),
+	             Timestamp.from(Instant.now()));
+        
 		return GetById(createdObjectId);
 	}
 	
@@ -109,6 +118,10 @@ public abstract class RestController<T extends IDbItem<T>> {
 			dbService.Update(con, object);
 		});
 		
+        request.setAttribute(
+	             Key.get(Timestamp.class, Names.named("timestamp")).toString(),
+	             Timestamp.from(Instant.now()));
+        
 		return GetById(object.getId());
 	}
 	
