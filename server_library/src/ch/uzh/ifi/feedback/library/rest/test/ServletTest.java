@@ -91,7 +91,6 @@ public abstract class ServletTest extends TestCase {
 			    	            try {
 			    	                isRedirect = super.isRedirected(request, response, context);
 			    	            } catch (ProtocolException e) {
-			    	                // TODO Auto-generated catch block
 			    	                e.printStackTrace();
 			    	            }
 			    	            if (!isRedirect) {

@@ -1,10 +1,8 @@
-CREATE DATABASE  IF NOT EXISTS `feedback_repository_test` /*!40100 DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci */;
-USE `feedback_repository_test`;
--- MySQL dump 10.13  Distrib 5.5.41, for debian-linux-gnu (x86_64)
+-- MySQL dump 10.13  Distrib 5.6.33, for debian-linux-gnu (x86_64)
 --
 -- Host: 127.0.0.1    Database: feedback_repository_test
 -- ------------------------------------------------------
--- Server version	5.5.41-0ubuntu0.14.04.1
+-- Server version	5.6.33-0ubuntu0.14.04.1
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -262,7 +260,7 @@ CREATE TABLE `feedback_comments` (
   `feedback_id` int(11) NOT NULL,
   `comment` mediumtext COLLATE utf8_unicode_ci NOT NULL,
   `user_id` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `created_at` timestamp(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3),
   PRIMARY KEY (`id`),
   KEY `fk_feedback_comments_idx` (`feedback_id`),
   CONSTRAINT `fk_feedback_comments` FOREIGN KEY (`feedback_id`) REFERENCES `feedbacks` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
@@ -320,7 +318,7 @@ CREATE TABLE `feedbacks` (
   `title` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `user_identification` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `language` varchar(3) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `created_at` timestamp(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3),
   `updated_at` timestamp NULL DEFAULT NULL,
   `application_id` int(11) NOT NULL,
   `context_informations_id` int(11) DEFAULT NULL,
@@ -338,7 +336,7 @@ CREATE TABLE `feedbacks` (
 
 LOCK TABLES `feedbacks` WRITE;
 /*!40000 ALTER TABLE `feedbacks` DISABLE KEYS */;
-INSERT INTO `feedbacks` VALUES (54,'Feedback JUnit','u8102390','EN','2016-09-02 13:03:21',NULL,1,NULL,1),(55,'Feedback JUnit','u8102390','EN','2016-09-02 13:22:10',NULL,1,NULL,1),(56,'Feedback JUnit','u8102390','EN','2016-09-02 13:22:47',NULL,1,NULL,1),(57,'Feedback JUnit','u8102390','EN','2016-09-02 13:22:55',NULL,1,NULL,1),(58,'Feedback JUnit','u8102390','EN','2016-09-02 13:22:55',NULL,1,NULL,1),(59,'Feedback JUnit','u8102390','EN','2016-09-02 13:22:56',NULL,1,NULL,1),(60,'Feedback JUnit','u8102390','EN','2016-09-02 13:22:56',NULL,1,NULL,1),(61,'Feedback JUnit','u8102390','EN','2016-09-02 13:22:57',NULL,1,NULL,1),(62,'Feedback JUnit','u8102390','EN','2016-09-02 13:22:57',NULL,1,NULL,1),(63,'Feedback JUnit','u8102390','EN','2016-09-02 13:22:58',NULL,1,NULL,1),(75,'test_feedback','u8102390','EN','2016-09-30 14:02:48',NULL,1,NULL,1);
+INSERT INTO `feedbacks` VALUES (54,'Feedback JUnit','u8102390','EN','2016-09-02 13:03:21.000',NULL,1,NULL,1),(55,'Feedback JUnit','u8102390','EN','2016-09-02 13:22:10.000',NULL,1,NULL,1),(56,'Feedback JUnit','u8102390','EN','2016-09-02 13:22:47.000',NULL,1,NULL,1),(57,'Feedback JUnit','u8102390','EN','2016-09-02 13:22:55.000',NULL,1,NULL,1),(58,'Feedback JUnit','u8102390','EN','2016-09-02 13:22:55.000',NULL,1,NULL,1),(59,'Feedback JUnit','u8102390','EN','2016-09-02 13:22:56.000',NULL,1,NULL,1),(60,'Feedback JUnit','u8102390','EN','2016-09-02 13:22:56.000',NULL,1,NULL,1),(61,'Feedback JUnit','u8102390','EN','2016-09-02 13:22:57.000',NULL,1,NULL,1),(62,'Feedback JUnit','u8102390','EN','2016-09-02 13:22:57.000',NULL,1,NULL,1),(63,'Feedback JUnit','u8102390','EN','2016-09-02 13:22:58.000',NULL,1,NULL,1),(75,'test_feedback','u8102390','EN','2016-09-30 14:02:48.000',NULL,1,NULL,1);
 /*!40000 ALTER TABLE `feedbacks` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -416,7 +414,7 @@ CREATE TABLE `status_options` (
   `order` int(11) NOT NULL,
   `user_specific` bit(1) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -494,4 +492,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-11-11 15:37:53
+-- Dump completed on 2016-11-25 14:52:47

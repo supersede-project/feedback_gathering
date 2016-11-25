@@ -1,9 +1,6 @@
 package ch.uzh.ifi.feedback.repository.controller;
 
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import com.google.inject.Inject;
@@ -17,6 +14,7 @@ import ch.uzh.ifi.feedback.library.rest.annotations.POST;
 import ch.uzh.ifi.feedback.library.rest.annotations.Path;
 import ch.uzh.ifi.feedback.library.rest.annotations.PathParam;
 import ch.uzh.ifi.feedback.library.rest.authorization.UserAuthenticationService;
+import ch.uzh.ifi.feedback.repository.mail.MailService;
 import ch.uzh.ifi.feedback.repository.model.Feedback;
 import ch.uzh.ifi.feedback.repository.service.FeedbackService;
 import ch.uzh.ifi.feedback.repository.validation.FeedbackValidator;
@@ -26,9 +24,17 @@ import javassist.NotFoundException;
 @Controller(Feedback.class)
 public class FeedbackController extends RestController<Feedback>{
 
+	private MailService mailService;
+	
 	@Inject
-	public FeedbackController(FeedbackService dbService, FeedbackValidator validator, HttpServletRequest request, HttpServletResponse response) {
+	public FeedbackController(
+			FeedbackService dbService,
+			MailService mailService,
+			FeedbackValidator validator, 
+			HttpServletRequest request, 
+			HttpServletResponse response) {
 		super(dbService, validator, request, response);
+		this.mailService = mailService;
 	}
 	
 	@Path("/{lang}/applications/{application_id}/feedbacks")
@@ -53,7 +59,9 @@ public class FeedbackController extends RestController<Feedback>{
 	@Path("/{lang}/applications/{application_id}/feedbacks")
 	@POST
 	public Feedback InsertFeedback(Feedback feedback) throws Exception {
-		return super.Insert(feedback);
+		Feedback created =  super.Insert(feedback);
+		mailService.NotifyOfFeedback(feedback.getApplicationId(), created.getId());
+		return created;
 	}
 	
 	@Path("/{lang}/applications/{application_id}/feedbacks/{id}")
