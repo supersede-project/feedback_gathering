@@ -8,6 +8,13 @@ import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import javax.xml.bind.DatatypeConverter;
 
+/**
+ * This class is responsible for the creation and verification of salted hashed passwords.
+ * 
+ * @author Florian Schüpfer
+ * @version 1.0
+ * @since   2016-11-14
+ */
 public class PasswordStorage {
 	@SuppressWarnings("serial")
 	static public class InvalidHashException extends Exception {

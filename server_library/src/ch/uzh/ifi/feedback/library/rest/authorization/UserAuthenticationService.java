@@ -18,6 +18,13 @@ import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 
+/**
+ * This class is responsible for the authentication of API users and requests coming from them.
+ * 
+ * @author Florian Schüpfer
+ * @version 1.0
+ * @since   2016-11-14
+ */
 @Singleton
 public class UserAuthenticationService implements ITokenAuthenticationService {
 
@@ -31,6 +38,14 @@ public class UserAuthenticationService implements ITokenAuthenticationService {
 		this.cache = cache;
 	}
 	
+	/**
+	 * Authenticates an APIUser against the database by its username and password.
+	 * 
+	 * @param user the user to authenticate
+	 * @return A user token that identifies the user in future requests
+	 * @throws SQLException
+	 * @throws AuthorizationException
+	 */
 	public UserToken Authenticate(ApiUser user) throws SQLException, AuthorizationException
 	{
 		List<ApiUser> users = userService.GetWhere(asList(user.getName()), "`name` = ?");
@@ -49,6 +64,13 @@ public class UserAuthenticationService implements ITokenAuthenticationService {
 		return cache.Register(apiUser);
 	}
 	
+	/**
+	 * Authenticates an HttpServletRequest with its UserToken sent in the 'Authorization' header.
+	 * 
+	 * @param request the request to authenticate
+	 * @param auth the authentication annotation attribute describing the authentication logic to use.
+	 * @return true if the token is valid of false when its not valid
+	 */
 	public boolean Authenticate(HttpServletRequest request, ch.uzh.ifi.feedback.library.rest.annotations.Authenticate auth)
 	{
 		String authorizationHeader = request.getHeader("Authorization");

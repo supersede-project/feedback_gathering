@@ -13,6 +13,13 @@ import com.google.inject.name.Named;
 
 import ch.uzh.ifi.feedback.library.rest.authorization.UserToken;
 
+/**
+ * This class stores the user tokens of authenticated users and authenticates requests to resources.
+ * 
+ * @author Florian Schüpfer
+ * @version 1.0
+ * @since   2016-11-14
+ */
 @Singleton
 public class AuthenticationCache {
 	
@@ -28,6 +35,13 @@ public class AuthenticationCache {
 		this.userMap = new ConcurrentHashMap<>();
 	}
 	
+	/**
+	 * Generates and returns a new UserToken and stores the user in the map. If the user is already registered,
+	 * the stored token is returned.
+	 * 
+	 * @param user the user to register
+	 * @return a UserToken to identify the user in future requests
+	 */
 	public UserToken Register(ApiUser user)
 	{
 		if(userTokens.containsKey(user.getId()))
@@ -40,6 +54,14 @@ public class AuthenticationCache {
 		return token;
 	}
 	
+	/**
+	 * Authenticates and authorizes a UserToken for a specific resource. It checks that the user is authenticated and that he has
+	 * the necessary privileges (admin or application specific) for the operation requested.
+	 * 
+	 * @param token the UserToken sent in the request
+	 * @param auth the authentication header that describes the accessed resource
+	 * @return 'true' if the user is authorized for the request, 'false' else
+	 */
 	public boolean Authenticate(UserToken token, ch.uzh.ifi.feedback.library.rest.annotations.Authenticate auth)
 	{
 		//check if user is authenticated
@@ -53,7 +75,7 @@ public class AuthenticationCache {
 		if(auth.role().equals(UserRole.ADMIN.toString()) && !user.getRole().equals(UserRole.ADMIN))
 			return false;
 		
-		//check if authorization is scoped. Not that admin has permission for all use cases
+		//check if authorization is scoped. Note that admin has permission for all use cases
 		if(auth.scope().equals(AuthorizationScope.APPLICATION.toString()))
 		{
 			Integer application = applicationProvider.get();

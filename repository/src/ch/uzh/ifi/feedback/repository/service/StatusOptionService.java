@@ -28,14 +28,6 @@ public class StatusOptionService extends ServiceBase<StatusOption> {
 	@Override
 	public int Insert(Connection con, StatusOption option) throws SQLException, NotFoundException, UnsupportedOperationException {
 		
-		//shift options with higher order
-		List<StatusOption> options = GetWhere(asList(option.getOrder(), option.isUserSpecific()), "`order` >= ?", "user_specific = ?");
-		for(StatusOption op : options)
-		{
-			op.setOrder(op.getOrder() + 1);
-			super.Update(con, op);
-		}
-		
 		return super.Insert(con, option);
 	}
 	
@@ -43,18 +35,43 @@ public class StatusOptionService extends ServiceBase<StatusOption> {
 	public void Update(Connection con, StatusOption option)
 			throws SQLException, NotFoundException, UnsupportedOperationException {
 	
-		StatusOption oldStatus = GetById(option.getId());
+		StatusOption oldOption = GetById(option.getId());
 		
-		//Get option that is at the desired position and switch it to the old position of the updated option
-		List<StatusOption> options = GetWhere(asList(option.getOrder(), option.isUserSpecific()), "`order` = ?", "user_specific = ?");
-		if(options.size() > 0)
+		//switch higher options down if no option is left on the place of the updated option
+		List<StatusOption> oldOptions = GetWhere(asList(oldOption.getOrder(), oldOption.isUserSpecific()), "`order` = ?", "user_specific = ?");
+		if(oldOptions.size() == 1)
 		{
-			StatusOption other = options.get(0);
-			other.setOrder(oldStatus.getOrder());
-			super.Update(con, other);	
+			List<StatusOption> options = GetWhere(asList(oldOption.getOrder(), oldOption.isUserSpecific()), "`order` > ?", "user_specific = ?");
+			for(StatusOption other : options)
+			{
+				if(other.getOrder() == option.getOrder())
+					option.setOrder(option.getOrder() - 1);
+
+				other.setOrder(other.getOrder() - 1);
+				super.Update(con, other);	
+			}	
 		}
 		
 		super.Update(con, option);
+	}
+	
+	@Override
+	public void Delete(Connection con, int id) throws SQLException, NotFoundException {
+		StatusOption oldOption = GetById(id);
+		
+		//shift options with higher order when no option with the same order exists
+		List<StatusOption> oldOptions = GetWhere(asList(oldOption.getOrder(), oldOption.isUserSpecific()), "`order` = ?", "user_specific = ?");
+		if(oldOptions.size() == 1)
+		{
+			List<StatusOption> higherOptions = GetWhere(asList(oldOption.getOrder(), oldOption.isUserSpecific()), "`order` > ?", "user_specific = ?");
+			for(StatusOption op : higherOptions)
+			{
+				op.setOrder(op.getOrder() - 1);
+				super.Update(con, op);
+			}	
+		}
+		
+		super.Delete(con, id);
 	}
 
 }

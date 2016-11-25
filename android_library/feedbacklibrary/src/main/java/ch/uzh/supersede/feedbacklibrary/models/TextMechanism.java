@@ -17,7 +17,7 @@ public class TextMechanism extends Mechanism {
     private String hint = "";
     private String label = "";
     // Font color of the input text
-    private Integer inputTextFontColor = null;
+    private String inputTextFontColor = null;
     // Font size of the input text
     private Float inputTextFontSize = null;
     // Font type of the input text (normal, italic or bold)
@@ -70,7 +70,7 @@ public class TextMechanism extends Mechanism {
      *
      * @return the font color, or null by default
      */
-    public Integer getInputTextFontColor() {
+    public String getInputTextFontColor() {
         return inputTextFontColor;
     }
 
@@ -145,7 +145,7 @@ public class TextMechanism extends Mechanism {
             }
             // Font color
             if (key.equals("textareaFontColor")) {
-                setInputTextFontColor(Color.parseColor((String) param.get("value")));
+                setInputTextFontColor(((String) param.get("value")));
             }
             // Font size
             if (key.equals("fieldFontSize")) {
@@ -281,7 +281,7 @@ public class TextMechanism extends Mechanism {
      *
      * @param inputTextFontColor the input text color
      */
-    public void setInputTextFontColor(int inputTextFontColor) {
+    public void setInputTextFontColor(String inputTextFontColor) {
         this.inputTextFontColor = inputTextFontColor;
     }
 

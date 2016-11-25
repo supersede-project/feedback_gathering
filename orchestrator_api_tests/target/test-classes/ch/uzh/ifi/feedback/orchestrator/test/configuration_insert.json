@@ -1,6 +1,5 @@
      {
         "type": "PULL",
-        "active": true,
         "generalConfiguration": {
           "parameters": [
             {

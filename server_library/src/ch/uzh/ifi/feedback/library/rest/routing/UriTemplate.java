@@ -11,7 +11,14 @@ import java.util.Map.Entry;
 import java.util.Queue;
 import java.util.Set;
 
-
+/**
+ * This class represents an Uri template. It provides methods to create templates from a path and
+ * to match paths.
+ * 
+ * @author Florian Schüpfer
+ * @version 1.0
+ * @since   2016-11-14
+ */
 public class UriTemplate {
 	
 	private List<TemplateEntry> _entries;
@@ -23,6 +30,13 @@ public class UriTemplate {
 		_path = path;
 	}
 	
+	/**
+	 * Matches a url to a UriTemplate. Returns a map containing all static and variable parts inside the path if the path
+	 * matches the template. Returns null if the path does not match.
+	 * 
+	 * @param path the url to match
+	 * @return the map for all string and variables inside the path
+	 */
 	public Map<String, String> Match(String path)
 	{
 		String[] parts = path.split("/");
@@ -56,6 +70,12 @@ public class UriTemplate {
 		return variables;
 	}
 	
+	/**
+	 * Creates a UriTemplate from a String.
+	 * 
+	 * @param path the Uri template path
+	 * @return a UriTemplate 
+	 */
 	public static UriTemplate Parse(String path)
 	{
 		List<TemplateEntry> entries = new LinkedList<>();

@@ -7,6 +7,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.inject.Key;
+import com.google.inject.name.Names;
 
 import ch.uzh.ifi.feedback.library.rest.service.IDbItem;
 import ch.uzh.ifi.feedback.library.rest.service.IDbService;
@@ -17,7 +19,19 @@ import ch.uzh.ifi.feedback.library.transaction.TransactionManager;
 
 import static java.util.Arrays.asList;
 
+import java.sql.Timestamp;
+import java.time.Instant;
 
+/**
+ * This class is the base class for all controller instances that access the database via the IDbService<T> interface.
+ * The class provides basic CRUD functionality including validation and transaction management for insert, update and delete requests.
+ * For accessing of the database, the IDbService<T> interface is used.
+ * 
+ * @author Florian Schüpfer
+ * @version 1.0
+ * @since   2016-11-14
+ * @param <T> the model class that is processed by this controller
+ */
 public abstract class RestController<T extends IDbItem<T>> {
 
 	protected IDbService<T> dbService;
@@ -37,19 +51,45 @@ public abstract class RestController<T extends IDbItem<T>> {
 		this.gson = new GsonBuilder().setPrettyPrinting().setDateFormat("yyyy-MM-dd hh:mm:ss.S").create();
 	}
 
+	
+	/**
+	 * Retrieves and returns an instance of an IDbItem<T> by its id
+	 * @param id
+	 * @return
+	 * @throws Exception
+	 */
 	public T GetById(int id) throws Exception {
+		
 		return dbService.GetById(id);
 	}
 	
+	/**
+	 * Retrieves and returns all instances of IDbItem<T>
+	 * @return
+	 * @throws Exception
+	 */
 	public List<T> GetAll() throws Exception {
 		return dbService.GetAll();
 	}
 	
+	/**
+	 * Retrieves and returns all instances of IDbItem<T> that match a specific foreign key
+	 * @param foreignKeyName the name of the foreign key
+	 * @param foreignKey the value of the foreign key
+	 * @return
+	 * @throws Exception
+	 */
 	public List<T> GetAllFor(String foreignKeyName, int foreignKey) throws Exception
 	{
 		return dbService.GetWhere(asList(foreignKey), foreignKeyName + " = ?");
 	}
 	
+	/**
+	 * Inserts and returns an object of IDbItem<T>
+	 * @param object the object to insert
+	 * @return
+	 * @throws Exception
+	 */
 	public T Insert(T object) throws Exception
 	{
 		Validate(object, false);
@@ -57,9 +97,19 @@ public abstract class RestController<T extends IDbItem<T>> {
 			createdObjectId = dbService.Insert(con, object);
 		});
 		
+        request.setAttribute(
+	             Key.get(Timestamp.class, Names.named("timestamp")).toString(),
+	             Timestamp.from(Instant.now()));
+        
 		return GetById(createdObjectId);
 	}
 	
+	/**
+	 * Updates and returns an object of IDbItem<T>
+	 * @param object the object to update
+	 * @return
+	 * @throws Exception
+	 */
 	public T Update(T object) throws Exception
 	{
 		
@@ -68,9 +118,18 @@ public abstract class RestController<T extends IDbItem<T>> {
 			dbService.Update(con, object);
 		});
 		
+        request.setAttribute(
+	             Key.get(Timestamp.class, Names.named("timestamp")).toString(),
+	             Timestamp.from(Instant.now()));
+        
 		return GetById(object.getId());
 	}
 	
+	/**
+	 * Deletes an object of IDbItem<T> by its id
+	 * @param id the id of the object to delete
+	 * @throws Exception
+	 */
 	public void Delete(int id) throws Exception
 	{
 		TransactionManager.withTransaction((con) -> {
@@ -78,6 +137,13 @@ public abstract class RestController<T extends IDbItem<T>> {
 		});
 	}
 	
+	/**
+	 * Validates an object of IDbItem<T>
+	 * @param object the object to validate
+	 * @param merge indicates whether the object has to merged with the values stored in the database. This is only used for update requests.
+	 * @return
+	 * @throws Exception
+	 */
 	protected void Validate(T object, boolean merge) throws Exception
 	{
 		if (validator != null)

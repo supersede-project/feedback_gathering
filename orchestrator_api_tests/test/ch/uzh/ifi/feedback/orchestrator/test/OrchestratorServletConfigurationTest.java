@@ -17,6 +17,7 @@ public class OrchestratorServletConfigurationTest extends OrchestratorServletTes
 				Configuration.class);
 		
 		assertEquals(config.getId(), new Integer(80));
+		assertEquals(config.isActive(), true);
 		assertEquals(config.getType(), ConfigurationType.PUSH);
 		assertEquals(config.getFeedbackMechanisms().size(), 4);
 		assertNotNull(config.getGeneralConfiguration());
@@ -46,7 +47,6 @@ public class OrchestratorServletConfigurationTest extends OrchestratorServletTes
 		assertEquals(retrievedConfigs.length, 3);
 	}
 	
-
 	public void testInsertConfigurationForApplication() throws ClientProtocolException, IOException {
 		
 		InputStream stream = this.getClass().getResourceAsStream("configuration_insert.json");
@@ -74,6 +74,7 @@ public class OrchestratorServletConfigurationTest extends OrchestratorServletTes
 				Configuration.class);
         
 		assertEquals(createdConfig.getType(), ConfigurationType.PULL);
+		assertEquals(createdConfig.isActive(), true);
 		assertNotNull(createdConfig.getGeneralConfiguration());
 		assertEquals(createdConfig.getGeneralConfiguration().getParameters().size(), 3);
 		assertEquals(createdConfig.getFeedbackMechanisms().size(), 2);

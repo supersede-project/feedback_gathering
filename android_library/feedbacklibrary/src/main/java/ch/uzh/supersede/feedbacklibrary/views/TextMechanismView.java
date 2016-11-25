@@ -1,5 +1,6 @@
 package ch.uzh.supersede.feedbacklibrary.views;
 
+import android.graphics.Color;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.text.Editable;
@@ -35,7 +36,7 @@ public class TextMechanismView extends MechanismView {
 
         // Only set the values if they are initialized (else use the values defined in the layout)
         if (textMechanism.getInputTextFontColor() != null) {
-            textInputEditText.setTextColor(textMechanism.getInputTextFontColor());
+            textInputEditText.setTextColor(Color.parseColor(textMechanism.getInputTextFontColor()));
         }
         if (textMechanism.getInputTextFontSize() != null) {
             textInputEditText.setTextSize(TypedValue.COMPLEX_UNIT_SP, textMechanism.getInputTextFontSize());
