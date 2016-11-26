@@ -782,6 +782,7 @@ var setup = function () {
         // TODO: adjust url to orchestrator url
         $.ajax({
             url: "http://httpbin.org/post",
+            // change url to http://ec2-54-175-37-30.compute-1.amazonaws.com/orchestrator/feedback/language/applications after JSON-parsing is implemented.
             type: "POST",
             data: configString,
             dataType: "json",
@@ -793,9 +794,9 @@ var setup = function () {
                 alert(errorThrown);
             }
         })
-
-
     });
+
+
 };
 
 $(document).ready(function () {
