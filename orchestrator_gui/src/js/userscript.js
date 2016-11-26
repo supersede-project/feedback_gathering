@@ -18,10 +18,15 @@ var setup = function () {
         </div> \
     ';
 
+    // Initial schema setup
     var schema = {
         "type": "object"
     };
+
+    // Initial options setup
     var options = {};
+
+    // Initial data setup
     var data = {};
 
     var setupEditor = function (id, json) {
@@ -737,7 +742,7 @@ var setup = function () {
     refreshDesigner();
     refreshView();
 
-    // save button
+    // click on save button (for developer who creates the form)
     $(".save-button").on("click", function () {
         var config = {
             "schema": schema
@@ -756,6 +761,39 @@ var setup = function () {
         var blob = new Blob([configString], {type: "application/json"});
         var saveAs = window.saveAs;
         saveAs(blob, "GUI_schema_options.json");
+
+    });
+
+    // click on send button (for user to send form data)
+    $(".submit-button").on("click", function () {
+        var config = {
+            "schema": schema
+        };
+
+        if (schema) {
+            config.schema = schema;
+        }
+        if (options) {
+            config.options = options;
+        }
+
+        var configString = JSON.stringify(config);
+
+        // TODO: adjust url to orchestrator url
+        $.ajax({
+            url: "http://httpbin.org/post",
+            type: "POST",
+            data: configString,
+            dataType: "json",
+            success: function (response){
+                alert("Success");
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert(textStatus);
+                alert(errorThrown);
+            }
+        })
+
 
     });
 };
