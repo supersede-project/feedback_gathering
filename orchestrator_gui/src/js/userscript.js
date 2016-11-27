@@ -54,12 +54,11 @@ var setup = function () {
 
     var editor1 = setupEditor("schema", schema);
     var editor2 = setupEditor("options", options);
-    var editor3 = setupEditor("data", data);
 
     var mainViewField = null;
     var mainDesignerField = null;
 
-    var doRefresh = function (el, buildInteractionLayers, disableErrorHandling, cb) {
+    var doRefresh = function (el, buildInteractionLayers, cb) {
         try {
             schema = JSON.parse(editor1.getValue());
         }
@@ -72,12 +71,6 @@ var setup = function () {
         catch (e) {
         }
 
-        try {
-            data = JSON.parse(editor3.getValue());
-        }
-        catch (e) {
-        }
-
         if (schema) {
             var config = {
                 "schema": schema
@@ -85,10 +78,10 @@ var setup = function () {
             if (options) {
                 config.options = options;
             }
-            if (data) {
+        /*    if (data) {
                 config.data = data;
             }
-            if (!config.options) {
+          */  if (!config.options) {
                 config.options = {};
             }
             config.options.focus = false;
@@ -250,7 +243,7 @@ var setup = function () {
                                 var parentField = Alpaca.fieldInstances[parentFieldAlpacaId];
 
                                 // now do the insertion
-                                insertField(schema, options, data, dataType, fieldType, parentField, previousField, previousFieldKey, nextField, nextFieldKey);
+                                insertField(schema, options, dataType, fieldType, parentField, previousField, previousFieldKey, nextField, nextFieldKey);
                             }
                             else if (draggable.hasClass("interaction")) {
                                 var draggedIndex = $(draggable).attr("icount-ref");
@@ -302,23 +295,15 @@ var setup = function () {
             };
             config.error = function (err) {
                 Alpaca.defaultErrorCallback(err);
-
                 cb(err);
             };
 
-            if (disableErrorHandling) {
-                Alpaca.defaultErrorCallback = function (error) {
-                    console.log("Alpaca encountered an error while previewing form -> " + error.message);
-                };
-            }
-            else {
-                Alpaca.defaultErrorCallback = Alpaca.DEFAULT_ERROR_CALLBACK;
-            }
-
+            Alpaca.defaultErrorCallback = Alpaca.DEFAULT_ERROR_CALLBACK;
             $(el).alpaca(config);
         }
     };
 
+    // delete the schema and option fields
     var removeFunctionFields = function (schema, options) {
         if (schema) {
             if (schema.properties) {
@@ -352,7 +337,7 @@ var setup = function () {
         var fieldOptionsSchema = field.getSchemaOfOptions();
         var fieldOptionsOptions = field.getOptionsForOptions();
 
-        removeFunctionFields(fieldSchemaSchema, fieldSchemaOptions);
+//        removeFunctionFields(fieldSchemaSchema, fieldSchemaOptions);
         removeFunctionFields(fieldOptionsSchema, fieldOptionsOptions);
 
         var fieldData = field.schema;
@@ -386,16 +371,15 @@ var setup = function () {
         };
         var fieldConfigOptions = {
             schema: fieldOptionsSchema
-
         };
         if (fieldSchemaOptions) {
 
             fieldConfigSchema.options = fieldSchemaOptions;
         }
-        if (fieldData) {
+/*        if (fieldData) {
             fieldConfigSchema.data = fieldData;
         }
-        if (fieldOptionsOptions) {
+ */       if (fieldOptionsOptions) {
             fieldConfigOptions.options = fieldOptionsOptions;
         }
         if (fieldOptionsData) {
@@ -524,7 +508,7 @@ var setup = function () {
             mainViewField = null;
         }
 
-        doRefresh($("#viewDiv"), false, false, function (err, form) {
+        doRefresh($("#viewDiv"), false, function (err, form) {
 
             if (!err) {
                 mainViewField = form;
@@ -548,7 +532,7 @@ var setup = function () {
             mainDesignerField = null;
         }
 
-        doRefresh($("#designerDiv"), true, false, function (err, form) {
+        doRefresh($("#designerDiv"), true, function (err, form) {
 
             if (!err) {
                 mainDesignerField = form;
@@ -564,7 +548,7 @@ var setup = function () {
     // creates the components
     var afterAlpacaInit = function () {
         // available components
-        var types = ["textarea", "checkbox", "radio", "image", "upload"];
+        var types = ["textarea", "checkbox", "radio", "screenshot", "upload", "audio"];
 
         for (var i = 0; i < types.length; i++) {
 
@@ -609,7 +593,7 @@ var setup = function () {
         }
     });
 
-    var insertField = function (schema, options, data, dataType, fieldType, parentField, previousField, previousFieldKey, nextField, nextFieldKey) {
+    var insertField = function (schema, options, dataType, fieldType, parentField, previousField, previousFieldKey, nextField, nextFieldKey) {
         var itemSchema = {
             "type": dataType
         };
@@ -721,7 +705,6 @@ var setup = function () {
 
         editor1.setValue(JSON.stringify(_schema, null, "    "));
         editor2.setValue(JSON.stringify(_options, null, "    "));
-        editor3.setValue(JSON.stringify(_data, null, "    "));
 
         setTimeout(function () {
             refreshDesigner();
@@ -806,5 +789,26 @@ $(document).ready(function () {
     }, 200);
 });
 
+// audio component extends the object field
+$.alpaca.Fields.AudioComponent = $.alpaca.Fields.ObjectField.extend({
+    getFieldType: function() {
+        return "audio";
+    },
 
+    getTitle: function() {
+        return "Audio Component";
+    }
+});
+Alpaca.registerFieldClass("audio", Alpaca.Fields.AudioComponent);
 
+// screenshot component
+$.alpaca.Fields.ScreenshotComponent = $.alpaca.Fields.ImageField.extend({
+    getFieldType: function() {
+        return "screenshot";
+    },
+
+    getTitle: function() {
+        return "Screenshot Component";
+    }
+});
+Alpaca.registerFieldClass("screenshot", Alpaca.Fields.ScreenshotComponent);
