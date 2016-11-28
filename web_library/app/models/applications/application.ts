@@ -88,6 +88,7 @@ export class Application {
             mandatorySign: this.generalConfiguration.getParameterValue('mandatorySign'),
             mandatoryLabelStyle: mandatoryLabelStyle,
             discardAsButton: this.generalConfiguration.getParameterValue('discardAsButton'),
+            discardPositionClass: this.generalConfiguration.getParameterValue('discardPositionClass') || '',
             submissionPageMessage: this.generalConfiguration.getParameterValue('submissionPageMessage'),
             labelPositioning: this.generalConfiguration.getParameterValue('labelPositioning') === 'top' ? '' : 'horizontal',
             feedbackFormTitle: this.generalConfiguration.getParameterValue('feedbackFormTitle'),

@@ -174,9 +174,9 @@
                 {{/compare}}
 
                 {{#if discardAsButton }}
-                    <button class="button discard-feedback">{{t "general.discard_feedback" }}</button>
+                    <button class="{{discardPositionClass}} button discard-feedback">{{t "general.discard_feedback" }}</button>
                 {{else}}
-                    <a href="#" class="discard-feedback">{{t "general.discard_feedback" }}</a>
+                    <a href="#" class="{{discardPositionClass}} discard-feedback">{{t "general.discard_feedback" }}</a>
                 {{/if}}
                 <div class="clearfix"></div>
             </article>
