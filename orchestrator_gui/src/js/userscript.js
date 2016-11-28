@@ -740,6 +740,8 @@ var setup = function () {
 
         var configString = JSON.stringify(config);
 
+//        var transformedConfig = new ObjectTemplate(tmpl).transform(configString);
+
         // Save JSON-String to local JSON-file
         var blob = new Blob([configString], {type: "application/json"});
         var saveAs = window.saveAs;
@@ -813,3 +815,4 @@ $.alpaca.Fields.ScreenshotComponent = $.alpaca.Fields.ImageField.extend({
     }
 });
 Alpaca.registerFieldClass("screenshot", Alpaca.Fields.ScreenshotComponent);
+// Alpaca.registerDefaultFormatFieldMapping("create_in_app_screenshot", "screenshot");

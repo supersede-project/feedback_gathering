@@ -4,6 +4,9 @@
         path: '.',
         as: {
             configurations: {
+                as: {
+                    type: 'schema.type'
+                },
                 mechanisms: {
                     path: 'schema',
                     as: {

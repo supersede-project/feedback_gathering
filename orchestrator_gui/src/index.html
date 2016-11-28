@@ -52,15 +52,18 @@
     <!-- jQuery UI for draggable support -->
     <script src="../lib/jquery-ui/jquery-ui.js" type="text/javascript" charset="utf-8"></script>
 
-    <script type="text/javascript" src="js/userscript.js"></script>
-    <script type="text/javascript" src="js/fileSaver.js"></script>
-    <link type="text/css" href="css/style.css" rel="stylesheet" />
-
     <!-- for json transformation -->
     <script type="text/javascript" src="../lib/json2json/lib/sysmo.js"></script>
     <script type="text/javascript" src="../lib/json2json/lib/TemplateConfig.js"></script>
     <script type="text/javascript" src="../lib/json2json/lib/ObjectTemplate.js"></script>
+    <script type="text/javascript" src="json-transformer/template.js"></script>
 
+    <!-- for file saving; has to be loaded after transformation -->
+    <script type="text/javascript" src="js/fileSaver.js"></script>
+
+    <!-- for the drag and drop gui -->
+    <script type="text/javascript" src="js/userscript.js"></script>
+    <link type="text/css" href="css/style.css" rel="stylesheet" />
 </head>
 <body data-spy="scroll" data-target=".demo-nav">
 
