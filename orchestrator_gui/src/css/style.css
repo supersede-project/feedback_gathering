@@ -1,6 +1,6 @@
 body
 {
-    padding-top: 70px;
+    padding-top: 0px;
 }
 
 .row
@@ -92,11 +92,12 @@ body
 }
 
 .col-md-12 > #designerDiv {
-    border: 1px solid #000000;
+    border: 1px solid #CCCCCC;
+    border-radius: 5px;
 }
 
 .col-md-12 > #designerDiv::before {
-    content: 'Drop element here.';
+    content: 'Drop components here.';
     padding: 20px;
 }
 
