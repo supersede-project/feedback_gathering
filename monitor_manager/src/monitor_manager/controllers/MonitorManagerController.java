@@ -21,7 +21,6 @@
  *******************************************************************************/
 package monitor_manager.controllers;
 
-import java.io.IOException;
 import java.net.URI;
 
 import javax.inject.Singleton;

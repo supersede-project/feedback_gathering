@@ -21,7 +21,6 @@
  *******************************************************************************/
 package ch.uzh.ifi.feedback.orchestrator.model;
 
-import java.util.HashMap;
 import java.util.List;
 
 import ch.uzh.ifi.feedback.library.rest.annotations.DbAttribute;
@@ -31,7 +30,6 @@ import ch.uzh.ifi.feedback.library.rest.annotations.NotNull;
 import ch.uzh.ifi.feedback.library.rest.annotations.Serialize;
 import ch.uzh.ifi.feedback.library.rest.annotations.Unique;
 import ch.uzh.ifi.feedback.orchestrator.serialization.MonitorToolSerializationService;
-import ch.uzh.ifi.feedback.orchestrator.serialization.MonitorTypeSerializationService;
 
 @Serialize(MonitorToolSerializationService.class)
 public class MonitorTool extends OrchestratorItem<MonitorTool>{
@@ -47,14 +45,15 @@ public class MonitorTool extends OrchestratorItem<MonitorTool>{
 	@DbAttribute("monitor_type_name")
 	private String monitorTypeName;
 	
-	private String monitor;
+	@DbAttribute("monitor_name")
+	private String monitorName;
 	
 	public String getMonitorName() {
-		return monitor;
+		return monitorName;
 	}
 	
 	public void setMonitorName(String name) {
-		this.monitor = name;
+		this.monitorName = name;
 	}
 	
 	public String getMonitorTypeName() {
