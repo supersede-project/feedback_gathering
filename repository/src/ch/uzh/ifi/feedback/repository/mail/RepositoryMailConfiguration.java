@@ -23,5 +23,25 @@ public class RepositoryMailConfiguration extends MailConfiguration {
 	public String getPassword() {
 		return properties.get("repositoryMailPassword");
 	}
+	
+	@Override
+	public String getOrchestratorUrl() {
+		return properties.get("orchestratorBaseUrl");
+	}
+
+	@Override
+	public String getFeedbackMailKeyName() {
+		return properties.get("feedbackMailKeyName");
+	}
+
+	@Override
+	public String getRepositoryUrl() {
+		return properties.get("repositoryBaseUrl");
+	}
+
+	@Override
+	public boolean isMailFeedbackEnabled() {
+		return properties.get("isMailFeedbackEnabled").equalsIgnoreCase("true");
+	}
 
 }

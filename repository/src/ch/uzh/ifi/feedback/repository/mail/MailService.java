@@ -36,6 +36,7 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
 import ch.uzh.ifi.feedback.library.mail.MailClient;
+import ch.uzh.ifi.feedback.library.mail.MailConfiguration;
 
 @Singleton
 public class MailService 
@@ -59,30 +60,39 @@ public class MailService
 	
 	public void NotifyOfFeedback(int applicationId, int feedbackId)
 	{
+		if(!mailClient.isMailFeedbackEnabled())
+			return;
+		
 		try 
 		{
-			String to = getMailAddressForApplication(applicationId);		
-			String message = "A new feedback arrived for application " + applicationId + ". Feedback id: " + feedbackId;
-			mailClient.sendEmail(to, "feedback insert", message);
+			String to = getMailAddressForApplication(applicationId);
+			if(to == null)
+				return;
+			
+			String link = String.format("<a href='%s/en/applications/%d/feedbacks/%d'>feedback</a>", mailClient.getRepositoryUrl(), applicationId, feedbackId);
+			String message = String.format("A new %s was inserted for application %d.", link, applicationId);
+					
+			mailClient.sendEmail(to, "feedback for application " + applicationId, message);
 			
 		}catch(MessagingException ex)
 		{
 			LOGGER.error("Error sending mail to the configured mail address: \n" + ex.getMessage());
 		}catch (IOException e) {
-			LOGGER.error("Error retrieving configured mail address from the orchestrator: \n" + e.getMessage());
+			LOGGER.error("Error retrieving configured mail address from the orchestrator. Communication to orchestrator failed: \n" + e.getMessage());
 		}
 	}
 	
 	private String getMailAddressForApplication(int applicationId) throws ClientProtocolException, IOException
 	{
 		HttpUriRequest request = new HttpGet(
-				"http://localhost:8080/orchestrator/feedback/en/applications/" + applicationId + "/general_configuration");
+			 mailClient.getOrchestratorUrl()+ "/en/applications/" + applicationId + "/general_configuration");
 	
 		HttpResponse httpResponse = httpClient.execute(request);
 		
 		if(httpResponse.getStatusLine().getStatusCode() != HttpStatus.SC_OK)
 		{
-			LOGGER.error("Error retrieving feedback mail address from orchestrator. Response status: \n" + httpResponse.getStatusLine().toString());
+			LOGGER.warn("Could not retrieve feedback mail address from the orchestrator. Response status: \n" + httpResponse.getStatusLine().toString());
+			return null;
 		}
 			
 		InputStream is = httpResponse.getEntity().getContent();
@@ -94,7 +104,7 @@ public class MailService
 			List<Map<String, Object>> params = (List<Map<String, Object>>)response.get("parameters");
 			for(Map<String, Object> param : params)
 			{
-				if(param.get("key").equals("feedbackMailAdress"))
+				if(param.get("key").equals(mailClient.getFeedbackMailKeyName()))
 				{
 					return (String)param.get("value");
 				}

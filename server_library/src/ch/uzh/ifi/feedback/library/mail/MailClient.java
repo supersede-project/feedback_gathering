@@ -24,6 +24,10 @@ public class MailClient {
 	private String user;
 	private String password;
 	private Session session;
+	private String orchestratorUrl;
+	private String feedbackMailKeyName;
+	private String repositoryUrl;
+	private boolean isMailFeedbackEnabled;
 	
 	@Inject
 	public MailClient(IMailConfiguration configuration)
@@ -33,6 +37,10 @@ public class MailClient {
 		this.user = configuration.getUser();
 		this.password = configuration.getPassword();
 		this.session = createSession();
+		this.orchestratorUrl = configuration.getOrchestratorUrl();
+		this.repositoryUrl = configuration.getRepositoryUrl();
+		this.feedbackMailKeyName = configuration.getFeedbackMailKeyName();
+		this.isMailFeedbackEnabled = configuration.isMailFeedbackEnabled();
 	}
 	
     public void sendEmail(String toAddress,
@@ -40,14 +48,14 @@ public class MailClient {
             MessagingException 
     {
         // creates a new e-mail message
-        Message msg = new MimeMessage(session);
+    	MimeMessage msg = new MimeMessage(session);
  
         msg.setFrom(new InternetAddress(user));
         InternetAddress[] toAddresses = { new InternetAddress(toAddress) };
         msg.setRecipients(Message.RecipientType.TO, toAddresses);
         msg.setSubject(subject);
         msg.setSentDate(new Date());
-        msg.setText(message);
+        msg.setContent(message, "text/html; charset=utf-8");
  
         // sends the e-mail
         Transport.send(msg);
@@ -71,5 +79,21 @@ public class MailClient {
  
         Session session = Session.getInstance(properties, auth);
         return session;
+	}
+
+	public String getOrchestratorUrl() {
+		return orchestratorUrl;
+	}
+	
+	public String getRepositoryUrl() {
+		return repositoryUrl;
+	}
+
+	public String getFeedbackMailKeyName() {
+		return feedbackMailKeyName;
+	}
+
+	public boolean isMailFeedbackEnabled() {
+		return isMailFeedbackEnabled;
 	}
 }

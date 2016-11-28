@@ -33,12 +33,4 @@ public abstract class MailConfiguration implements IMailConfiguration {
     		ex.printStackTrace();
     	}
 	}
-	
-	public abstract String getHost();
-
-	public abstract String getPort();
-	
-	public abstract String getUser();
-	
-	public abstract String getPassword();
 }
