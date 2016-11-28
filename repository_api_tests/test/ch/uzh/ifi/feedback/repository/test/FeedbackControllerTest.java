@@ -61,11 +61,11 @@ public class FeedbackControllerTest extends RepositoryServletTest {
 		builder.setContentType(ContentType.MULTIPART_FORM_DATA);
 		
 		Feedback createdFeedback = PostSuccess(
-				"http://localhost:8080/feedback_repository/en/applications/1/feedbacks", 
+				"http://localhost:8080/feedback_repository/en/applications/27/feedbacks", 
 				builder.build(),
 				Feedback.class);
 		
-	    assertEquals(createdFeedback.getApplicationId(), new Integer(1));	
+	    assertEquals(createdFeedback.getApplicationId(), new Integer(27));	
 	    assertEquals(createdFeedback.getTitle(), "test_feedback");
 	    assertEquals(createdFeedback.getRatingFeedbacks().size(), 2);
 	    assertEquals(createdFeedback.getCategoryFeedbacks().size(), 3);
