@@ -974,7 +974,7 @@
   display: inline-block; }
 
 .feedback-library .button-row {
-  margin-top: 15px; }
+  margin-top: 25px; }
 
 .feedback-library a.discard-feedback {
   float: left;
@@ -982,7 +982,7 @@
   color: #282828;
   text-decoration: none;
   margin-top: 23px;
-  margin-right: 20px;
+  margin-right: 30px;
   font-size: 14px; }
   .feedback-library a.discard-feedback.no-float-left {
     float: none; }
