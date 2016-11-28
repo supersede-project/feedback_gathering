@@ -83,12 +83,13 @@ export class Application {
         }
 
         return {
+            buttonRowStyle: this.generalConfiguration.getParameterValue('buttonRowStyle') || '',
             reviewButtonPosition: this.generalConfiguration.getParameterValue('reviewButtonPosition'),
             reviewStyle: reviewStyle,
             mandatorySign: this.generalConfiguration.getParameterValue('mandatorySign'),
             mandatoryLabelStyle: mandatoryLabelStyle,
             discardAsButton: this.generalConfiguration.getParameterValue('discardAsButton'),
-            discardPositionClass: this.generalConfiguration.getParameterValue('discardPositionClass') || '',
+            discardClass: this.generalConfiguration.getParameterValue('discardClass') || '',
             submissionPageMessage: this.generalConfiguration.getParameterValue('submissionPageMessage'),
             labelPositioning: this.generalConfiguration.getParameterValue('labelPositioning') === 'top' ? '' : 'horizontal',
             feedbackFormTitle: this.generalConfiguration.getParameterValue('feedbackFormTitle'),

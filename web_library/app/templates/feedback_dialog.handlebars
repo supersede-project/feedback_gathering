@@ -163,21 +163,23 @@
                     <div class="clearfix"></div>
                 </div>
 
-                {{#compare reviewButtonPosition "bottom" operator="==="}}
-                    <button class="button pull-right feedback-dialog-forward navigation-button">{{t "general.review_feedback" }}</button>
-                {{/compare}}
-                {{#compare reviewButtonPosition undefined operator="==="}}
-                    <button class="button pull-right feedback-dialog-forward navigation-button">{{t "general.review_feedback" }}</button>
-                {{/compare}}
-                {{#compare reviewButtonPosition null operator="==="}}
-                    <button class="button pull-right feedback-dialog-forward navigation-button">{{t "general.review_feedback" }}</button>
-                {{/compare}}
+                <div class="button-row" style="{{buttonRowStyle}}">
+                    {{#compare reviewButtonPosition "bottom" operator="==="}}
+                        <button class="button pull-right feedback-dialog-forward navigation-button">{{t "general.review_feedback" }}</button>
+                    {{/compare}}
+                    {{#compare reviewButtonPosition undefined operator="==="}}
+                        <button class="button pull-right feedback-dialog-forward navigation-button">{{t "general.review_feedback" }}</button>
+                    {{/compare}}
+                    {{#compare reviewButtonPosition null operator="==="}}
+                        <button class="button pull-right feedback-dialog-forward navigation-button">{{t "general.review_feedback" }}</button>
+                    {{/compare}}
 
-                {{#if discardAsButton }}
-                    <button class="{{discardPositionClass}} button discard-feedback">{{t "general.discard_feedback" }}</button>
-                {{else}}
-                    <a href="#" class="{{discardPositionClass}} discard-feedback">{{t "general.discard_feedback" }}</a>
-                {{/if}}
+                    {{#if discardAsButton }}
+                        <button class="{{discardClass}} button discard-feedback">{{t "general.discard_feedback" }}</button>
+                    {{else}}
+                        <a href="#" class="{{discardClass}} discard-feedback">{{t "general.discard_feedback" }}</a>
+                    {{/if}}
+                </div>
                 <div class="clearfix"></div>
             </article>
             <article data-feedback-page="2" class="feedback-page">

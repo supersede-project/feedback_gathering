@@ -138,6 +138,10 @@
     margin-bottom: 10px;
   }
 
+  .feedback-mechanism.category-type {
+    margin-bottom: 25px;
+  }
+
   textarea.text-type-text {
     width: 100%;
     min-width: 100%;
@@ -603,13 +607,22 @@
     display: inline-block;
   }
 
+  .button-row {
+    margin-top: 15px;
+  }
+
   a.discard-feedback {
     float: left;
     display: inline-block;
     color: $dialogTitlebarColor;
     text-decoration: none;
-    margin-top: 7px;
+    margin-top: 23px;
+    margin-right: 20px;
     font-size: 14px;
+
+    &.no-float-left {
+      float: none;
+    }
 
     &:hover {
       color: $dialogTitlebarColor;

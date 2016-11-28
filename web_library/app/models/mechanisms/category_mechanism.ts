@@ -10,7 +10,13 @@ export class CategoryMechanism extends Mechanism {
     }
 
     getOptions(): Parameter[] {
-        return this.getParameterValue('options');
+        return this.getParameterValue('options').filter(option => option.key !== 'defaultOption');
+    }
+
+    getDefaultOptions(): Parameter {
+        if(this.getParameterValue('options').filter(option => option.key === 'defaultOption').length > 0) {
+            return this.getParameterValue('options').filter(option => option.key === 'defaultOption')[0];
+        }
     }
 
     getContext(): any {
@@ -20,6 +26,7 @@ export class CategoryMechanism extends Mechanism {
             ownLabel: this.getParameterValue('ownLabel'),
             breakAfterOption: this.getParameterValue('breakAfterOption') ? true : false,
             options: this.getOptions(),
+            defaultOption: this.getDefaultOptions();
             inputType: this.getParameterValue('multiple') ? 'checkbox' : 'radio',
             multiple: this.getParameterValue('multiple'),
             asDropdown: this.getParameterValue('asDropdown') || false,

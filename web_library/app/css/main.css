@@ -619,6 +619,9 @@
 .feedback-library .feedback-mechanism.text-type {
   margin-bottom: 10px; }
 
+.feedback-library .feedback-mechanism.category-type {
+  margin-bottom: 25px; }
+
 .feedback-library textarea.text-type-text {
   width: 100%;
   min-width: 100%;
@@ -970,13 +973,19 @@
   float: right;
   display: inline-block; }
 
+.feedback-library .button-row {
+  margin-top: 15px; }
+
 .feedback-library a.discard-feedback {
   float: left;
   display: inline-block;
   color: #282828;
   text-decoration: none;
-  margin-top: 7px;
+  margin-top: 23px;
+  margin-right: 20px;
   font-size: 14px; }
+  .feedback-library a.discard-feedback.no-float-left {
+    float: none; }
   .feedback-library a.discard-feedback:hover {
     color: #282828;
     text-decoration: underline; }
