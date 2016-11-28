@@ -1,18 +1,27 @@
 {{#if active}}
-    <section id="categoryMechanism{{ id }}" class="feedback-mechanism {{parent.labelPositioning}} category-type validate-category"
-        {{#if mandatory }} data-mandatory="1" data-mandatory-manual-text="{{ mandatoryReminder }}" {{/if}}>
-        <p style="{{#if mandatory}}{{ parent.mandatoryLabelStyle }}{{/if}}">{{ title }}{{#if mandatory }} {{ parent.mandatorySign }}{{/if}}</p>
-        {{#each options}}
-            <input type="{{ ../inputType }}" id="option{{ key }}" data-parameter-id="{{id}}" name="category_mechanism_{{ ../id }}"
-                   value="{{ key }}">
-            <label for="option{{ key }}"> {{ value }}</label> &nbsp;
-            {{#if ../breakAfterOption}}
-                <br/>
+    <section id="categoryMechanism{{ id }}" class="feedback-mechanism feedback-col {{parent.labelPositioning}} category-type validate-category"
+        {{#if mandatory }} data-mandatory="1" data-mandatory-manual-text="{{ mandatoryReminder }}" {{/if}} style="width: {{boxWidth}}; padding-left: {{boxPaddingLeft}}; padding-right: {{boxPaddingRight}};">
+        <p style="{{parent.generalLabelStyle}}{{ labelStyle }}{{#if mandatory}} {{ parent.mandatoryLabelStyle }}{{/if}}">{{ title }}{{#if mandatory }} {{ parent.mandatorySign }}{{/if}}</p>
+
+        {{#if asDropdown}}
+            <select name="category_mechanism_{{ id }}"{{#if multiple}} multiple{{/if}}>
+                {{#each options}}
+                    <option value="{{ id }}">{{value}}</option>
+                {{/each}}
+            </select>
+        {{else}}
+            {{#each options}}
+                <input type="{{ ../inputType }}" id="option{{ key }}" data-parameter-id="{{id}}" name="category_mechanism_{{ ../id }}"
+                       value="{{ key }}">
+                <label for="option{{ key }}"> {{ value }}</label> &nbsp;
+                {{#if ../breakAfterOption}}
+                    <br/>
+                {{/if}}
+            {{/each}}
+            {{#if ownAllowed}}
+                <label for="ownInput1">{{ ownLabel }}</label>
+                <input class="own-category" id="ownInput1" type="text" />
             {{/if}}
-        {{/each}}
-        {{#if ownAllowed}}
-            <label for="ownInput1">{{ ownLabel }}</label>
-            <input class="own-category" id="ownInput1" type="text" />
         {{/if}}
     </section>
 {{/if}}

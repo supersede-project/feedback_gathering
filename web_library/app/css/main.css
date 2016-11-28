@@ -507,6 +507,15 @@
 .feedback-library .attachment-review a.remove-file {
   display: none; }
 
+.feedback-row {
+  display: block;
+  box-sizing: border-box; }
+
+.feedback-col {
+  float: left;
+  padding-right: 20px;
+  box-sizing: border-box; }
+
 #feedbackEntryPoint {
   position: fixed;
   top: 300px;

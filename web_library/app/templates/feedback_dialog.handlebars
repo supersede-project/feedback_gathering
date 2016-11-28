@@ -12,152 +12,156 @@
                     <div class="clearfix"></div>
                 {{/compare}}
 
-                {{#each mechanisms}}
-                    {{#compare type "CATEGORY_TYPE" operator="==="}}
-                        {{> partials/category_mechanism parent=../this}}
-                    {{/compare}}
-                    {{#compare type "AUDIO_TYPE" operator="==="}}
-                        {{> partials/audio_mechanism parent=../this}}
-                    {{/compare}}
-                    {{#compare type "RATING_TYPE" operator="==="}}
-                        {{> partials/rating_mechanism parent=../this}}
-                    {{/compare}}
-                    {{#compare type "ATTACHMENT_TYPE" operator="==="}}
-                        {{> partials/attachment_mechanism parent=../this}}
-                    {{/compare}}
-                    {{#compare type "TEXT_TYPE" operator="==="}}
-                        {{#if active}}
-                            <section id="textMechanism{{ id }}" class="feedback-mechanism {{../labelPositioning}} text-type{{#if mandatory }} mandatory{{/if}}{{#if maxLengthStrict}} max-length-strict{{/if}}">
-                                <p class="text-type-label explanation col col-left" style="{{../generalLabelStyle}}{{ labelStyle }}{{#if mandatory}} {{ ../mandatoryLabelStyle }}{{/if}}">
-                                    {{ label }}{{#if mandatory }} {{ ../mandatorySign }}{{/if}}
-                                </p>
-
-                                <article class="col col-right">
-                            <textarea class="validate text-type-text"
-                                {{#if mandatory }} data-mandatory="1"
-                                      data-mandatory-default-text="{{t "general.mandatory_default_text" }}"
-                                      data-mandatory-manual-text="{{ mandatoryReminder }}" {{/if}}
-                                      placeholder="{{ hint }}"
-                                      data-validation-max-length="{{ maxLength }}"
-                                      style="{{ textareaStyle }}"></textarea>
-                                    <p class="textarea-bottom">
-                                        {{#if clearInput }}
-                                            <button class="text-type-text-clear"
-                                                    title="{{t "text.text_type_text_clear" }}">x
-                                            </button>
-                                        {{/if}}
-                                        {{#if maxLengthVisible}}
-                                            <span class="text-type-max-length">{{ currentLength }}
-                                                / {{ maxLength }}</span>
-                                        {{/if}}
+                <div class="feedback-row">
+                    {{#each mechanisms}}
+                        {{#compare type "CATEGORY_TYPE" operator="==="}}
+                            {{> partials/category_mechanism parent=../this}}
+                        {{/compare}}
+                        {{#compare type "AUDIO_TYPE" operator="==="}}
+                            {{> partials/audio_mechanism parent=../this}}
+                        {{/compare}}
+                        {{#compare type "RATING_TYPE" operator="==="}}
+                            {{> partials/rating_mechanism parent=../this}}
+                        {{/compare}}
+                        {{#compare type "ATTACHMENT_TYPE" operator="==="}}
+                            {{> partials/attachment_mechanism parent=../this}}
+                        {{/compare}}
+                        {{#compare type "TEXT_TYPE" operator="==="}}
+                            {{#if active}}
+                                <section id="textMechanism{{ id }}" class="feedback-mechanism feedback-col {{../labelPositioning}} text-type{{#if mandatory }} mandatory{{/if}}{{#if maxLengthStrict}} max-length-strict{{/if}}"
+                                         style="width: {{boxWidth}}; padding-left: {{boxPaddingLeft}}; padding-right: {{boxPaddingRight}};">
+                                    <p class="text-type-label explanation col col-left" style="{{../generalLabelStyle}}{{ labelStyle }}{{#if mandatory}} {{ ../mandatoryLabelStyle }}{{/if}}">
+                                        {{ label }}{{#if mandatory }} {{ ../mandatorySign }}{{/if}}
                                     </p>
+
+                                    <article class="col col-right">
+                                <textarea class="validate text-type-text"
+                                    {{#if mandatory }} data-mandatory="1"
+                                          data-mandatory-default-text="{{t "general.mandatory_default_text" }}"
+                                          data-mandatory-manual-text="{{ mandatoryReminder }}" {{/if}}
+                                          placeholder="{{ hint }}"
+                                          data-validation-max-length="{{ maxLength }}"
+                                          style="{{ textareaStyle }}"></textarea>
+                                        <p class="textarea-bottom">
+                                            {{#if clearInput }}
+                                                <button class="text-type-text-clear"
+                                                        title="{{t "text.text_type_text_clear" }}">x
+                                                </button>
+                                            {{/if}}
+                                            {{#if maxLengthVisible}}
+                                                <span class="text-type-max-length">{{ currentLength }}
+                                                    / {{ maxLength }}</span>
+                                            {{/if}}
+                                        </p>
+                                        <div class="clearfix"></div>
+                                    </article>
                                     <div class="clearfix"></div>
-                                </article>
-                                <div class="clearfix"></div>
-                            </section>
-                        {{/if}}
-                    {{/compare}}
-                    {{#compare type "SCREENSHOT_TYPE" operator="==="}}
-                        {{#if active}}
-                            <section id="screenshotMechanism{{ id }}"
-                                     class="feedback-mechanism horizontal screenshot-type">
-                                <article class="col col-left">
-                                    <button class="take-screenshot button screenshot"
-                                            data-default-text="{{t "screenshot.take_screenshot" }}"
-                                            data-active-text="{{t "screenshot.take_new_screenshot" }}">{{t "screenshot.take_screenshot" }}</button>
+                                </section>
+                            {{/if}}
+                        {{/compare}}
+                        {{#compare type "SCREENSHOT_TYPE" operator="==="}}
+                            {{#if active}}
+                                <section id="screenshotMechanism{{ id }}"
+                                         class="feedback-mechanism feedback-col horizontal screenshot-type" style="width: {{boxWidth}}; padding-left: {{boxPaddingLeft}}; padding-right: {{boxPaddingRight}};">
+                                    <article class="col col-left">
+                                        <button class="take-screenshot button screenshot"
+                                                data-default-text="{{t "screenshot.take_screenshot" }}"
+                                                data-active-text="{{t "screenshot.take_new_screenshot" }}">{{t "screenshot.take_screenshot" }}</button>
 
-                                    <div class="screenshot-operations">
-                                        <button class="button screenshot-draw-remove screenshot"
-                                                title="{{t "screenshot.remove" }}">{{t "screenshot.remove" }}</button>
+                                        <div class="screenshot-operations">
+                                            <button class="button screenshot-draw-remove screenshot"
+                                                    title="{{t "screenshot.remove" }}">{{t "screenshot.remove" }}</button>
 
-                                        <p style="{{../generalLabelStyle}}">Zoom</p>
-                                        <img class="zoom-in" title="Zoom"
-                                             src="{{../distPath}}img/ic_zoom_in_black_24dp_2x.png"/>
-                                        <img class="zoom-out" title="Zoom"
-                                             src="{{../distPath}}img/ic_zoom_out_black_24dp_2x.png"/>
+                                            <p style="{{../generalLabelStyle}}">Zoom</p>
+                                            <img class="zoom-in" title="Zoom"
+                                                 src="{{../distPath}}img/ic_zoom_in_black_24dp_2x.png"/>
+                                            <img class="zoom-out" title="Zoom"
+                                                 src="{{../distPath}}img/ic_zoom_out_black_24dp_2x.png"/>
 
 
-                                        <!--[if IE]>
-                                        <style>
-                                            .hide-ie {
-                                                display: none;
-                                            }
-                                        </style>
-                                        <![endif]-->
-                                        <p style="{{../generalLabelStyle}}">{{t "screenshot.crop" }}</p>
-                                        <button class="screenshot-operation screenshot-crop"
-                                                title="{{t "screenshot.crop" }}"><img
-                                                src="{{../distPath}}img/ic_crop_black_24dp_2x.png"
-                                                alt="{{t "screenshot.crop" }}"/></button>
-                                        <button class="screenshot-operation default-hidden screenshot-crop-cancel"
-                                                title="{{t "general.cancel" }}"><img
-                                                src="{{../distPath}}img/ic_clear_black_24dp_2x.png"
-                                                alt="{{t "general.cancel" }}"/></button>
-                                        <button class="screenshot-operation default-hidden screenshot-crop-confirm"
-                                                title="{{t "screenshot.crop" }}"><img
-                                                src="{{../distPath}}img/ic_done_black_24dp_2x.png"
-                                                alt="{{t "screenshot.crop" }}"/></button>
-                                        <button class="screenshot-operation default-hidden screenshot-draw-undo"
-                                                title="{{t "screenshot.undo" }}"><img
-                                                src="{{../distPath}}img/ic_undo_black_24dp_2x.png"
-                                                alt="{{t "screenshot.undo" }}"/></button>
+                                            <!--[if IE]>
+                                            <style>
+                                                .hide-ie {
+                                                    display: none;
+                                                }
+                                            </style>
+                                            <![endif]-->
+                                            <p style="{{../generalLabelStyle}}">{{t "screenshot.crop" }}</p>
+                                            <button class="screenshot-operation screenshot-crop"
+                                                    title="{{t "screenshot.crop" }}"><img
+                                                    src="{{../distPath}}img/ic_crop_black_24dp_2x.png"
+                                                    alt="{{t "screenshot.crop" }}"/></button>
+                                            <button class="screenshot-operation default-hidden screenshot-crop-cancel"
+                                                    title="{{t "general.cancel" }}"><img
+                                                    src="{{../distPath}}img/ic_clear_black_24dp_2x.png"
+                                                    alt="{{t "general.cancel" }}"/></button>
+                                            <button class="screenshot-operation default-hidden screenshot-crop-confirm"
+                                                    title="{{t "screenshot.crop" }}"><img
+                                                    src="{{../distPath}}img/ic_done_black_24dp_2x.png"
+                                                    alt="{{t "screenshot.crop" }}"/></button>
+                                            <button class="screenshot-operation default-hidden screenshot-draw-undo"
+                                                    title="{{t "screenshot.undo" }}"><img
+                                                    src="{{../distPath}}img/ic_undo_black_24dp_2x.png"
+                                                    alt="{{t "screenshot.undo" }}"/></button>
 
-                                        <p class="annotations-heading" style="{{../generalLabelStyle}}">Annotations</p>
-                                        {{#if annotationExplanation }}
-                                            <small>{{ annotationExplanation }}</small>
-                                        {{/if}}
-                                        <img class="sticker-source svg-sticker-source hide-ie" title="{{ sentimentSatisfiedMouseover }}"
-                                             src="{{../distPath}}img/ic_sentiment_satisfied_black_24px.svg"/>
-                                        <img class="sticker-source svg-sticker-source hide-ie" title="{{ sentimentDissatisfiedMouseover }}"
-                                             src="{{../distPath}}img/ic_sentiment_dissatisfied_black_24px.svg"/>
-                                        <img class="sticker-source object-source arrow hide-ie" title="{{ arrowMouseover }}"
-                                             src="{{../distPath}}img/ic_arrow_forward_black_24px.svg"/>
-                                        <img class="sticker-source object-source circle hide-ie" title="{{ circleMouseover }}"
-                                             src="{{../distPath}}img/ic_panorama_fish_eye_black_24px.svg"/>
-                                        <img class="sticker-source object-source rect hide-ie" title="{{ rectMouseover }}"
-                                             src="{{../distPath}}img/ic_crop_din_black_24px.svg"/>
-                                        <img class="sticker-source object-source fillRect hide-ie" title="{{ filledRectMouseover }}"
-                                             src="{{../distPath}}img/ic_stop_black_24px.svg"/>
-                                        <img class="sticker-source svg-sticker-source hide-ie" title="{{ thumbUpMouseover }}"
-                                             src="{{../distPath}}img/ic_thumb_up_black_24px.svg"/>
-                                        <img class="sticker-source svg-sticker-source hide-ie" title="{{ thumbDownMouseover }}"
-                                             src="{{../distPath}}img/ic_thumb_down_black_24px.svg"/>
-                                        <img class="sticker-source svg-sticker-source text hide-ie" title="{{ textMouseover }}"
-                                             src="{{../distPath}}img/ic_title_black_24px.svg"/>
-                                        <img class="freehand" title="{{ freehandMouseover }}"
-                                             src="{{../distPath}}img/ic_gesture_black_24px.svg" />
+                                            <p class="annotations-heading" style="{{../generalLabelStyle}}">Annotations</p>
+                                            {{#if annotationExplanation }}
+                                                <small>{{ annotationExplanation }}</small>
+                                            {{/if}}
+                                            <img class="sticker-source svg-sticker-source hide-ie" title="{{ sentimentSatisfiedMouseover }}"
+                                                 src="{{../distPath}}img/ic_sentiment_satisfied_black_24px.svg"/>
+                                            <img class="sticker-source svg-sticker-source hide-ie" title="{{ sentimentDissatisfiedMouseover }}"
+                                                 src="{{../distPath}}img/ic_sentiment_dissatisfied_black_24px.svg"/>
+                                            <img class="sticker-source object-source arrow hide-ie" title="{{ arrowMouseover }}"
+                                                 src="{{../distPath}}img/ic_arrow_forward_black_24px.svg"/>
+                                            <img class="sticker-source object-source circle hide-ie" title="{{ circleMouseover }}"
+                                                 src="{{../distPath}}img/ic_panorama_fish_eye_black_24px.svg"/>
+                                            <img class="sticker-source object-source rect hide-ie" title="{{ rectMouseover }}"
+                                                 src="{{../distPath}}img/ic_crop_din_black_24px.svg"/>
+                                            <img class="sticker-source object-source fillRect hide-ie" title="{{ filledRectMouseover }}"
+                                                 src="{{../distPath}}img/ic_stop_black_24px.svg"/>
+                                            <img class="sticker-source svg-sticker-source hide-ie" title="{{ thumbUpMouseover }}"
+                                                 src="{{../distPath}}img/ic_thumb_up_black_24px.svg"/>
+                                            <img class="sticker-source svg-sticker-source hide-ie" title="{{ thumbDownMouseover }}"
+                                                 src="{{../distPath}}img/ic_thumb_down_black_24px.svg"/>
+                                            <img class="sticker-source svg-sticker-source text hide-ie" title="{{ textMouseover }}"
+                                                 src="{{../distPath}}img/ic_title_black_24px.svg"/>
+                                            <img class="freehand" title="{{ freehandMouseover }}"
+                                                 src="{{../distPath}}img/ic_gesture_black_24px.svg" />
 
-                                        <article class="selected-object-controls">
-                                            <p>Selection</p>
-                                            <a class="delete" href="#"><i class="material-icons">delete</i></a>
-                                            &nbsp;
-                                            <a class="color" href="#"><i
-                                                    class="material-icons">format_color_fill</i></a>
-                                            <input class="text-size" type="text">
-                                        </article>
-                                        <article class="freehand-controls">
-                                            <p>Color</p>
-                                            <a class="freehand-color" href="#"><i class="material-icons">format_color_fill</i></a>
-                                        </article>
+                                            <article class="selected-object-controls">
+                                                <p>Selection</p>
+                                                <a class="delete" href="#"><i class="material-icons">delete</i></a>
+                                                &nbsp;
+                                                <a class="color" href="#"><i
+                                                        class="material-icons">format_color_fill</i></a>
+                                                <input class="text-size" type="text">
+                                            </article>
+                                            <article class="freehand-controls">
+                                                <p>Color</p>
+                                                <a class="freehand-color" href="#"><i class="material-icons">format_color_fill</i></a>
+                                            </article>
+                                        </div>
+                                    </article>
+                                    <div class="col col-right screenshot-preview">
+
                                     </div>
-                                </article>
-                                <div class="col col-right screenshot-preview">
+                                    <div class="hidden-preview">
 
-                                </div>
-                                <div class="hidden-preview">
+                                    </div>
+                                    <div class="clearfix"></div>
+                                </section>
+                            {{/if}}
+                        {{/compare}}
 
-                                </div>
-                                <div class="clearfix"></div>
-                            </section>
-                        {{/if}}
-                    {{/compare}}
+                        {{#compare ../reviewButtonPosition @index operator="==="}}
+                            <button class="button feedback-dialog-forward navigation-button">{{t "general.review_feedback" }}</button>
+                            <div class="clearfix"></div>
+                        {{/compare}}
 
-                    {{#compare ../reviewButtonPosition @index operator="==="}}
-                        <button class="button feedback-dialog-forward navigation-button">{{t "general.review_feedback" }}</button>
-                        <div class="clearfix"></div>
-                    {{/compare}}
-
-                {{/each}}
+                    {{/each}}
+                    <div class="clearfix"></div>
+                </div>
 
                 {{#compare reviewButtonPosition "bottom" operator="==="}}
                     <button class="button pull-right feedback-dialog-forward navigation-button">{{t "general.review_feedback" }}</button>
