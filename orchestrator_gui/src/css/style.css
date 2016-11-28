@@ -99,3 +99,7 @@ body
     content: 'Drop element here.';
     padding: 20px;
 }
+
+.container {
+    width: 100%;
+}
