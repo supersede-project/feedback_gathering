@@ -574,7 +574,7 @@
   font-size: 22px;
   margin: 0;
   background-color: #e2e2e2;
-  padding: 7px 7px; }
+  padding: 1px 7px; }
 
 .feedback-library.ui-widget input, .feedback-library.ui-widget select, .feedback-library.ui-widget textarea, .feedback-library.ui-widget button {
   font-family: Tahoma, Verdana, Segoe, sans-serif;
@@ -650,7 +650,7 @@
   margin: 0; }
   .feedback-library .ui-dialog-titlebar .ui-dialog-title {
     font-size: 13px;
-    margin: 3px 0;
+    margin: 8px 0;
     text-transform: none; }
 
 .feedback-library p.explanation {

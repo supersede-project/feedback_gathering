@@ -79,7 +79,7 @@
   font-size: 22px;
   margin: 0;
   background-color: $dialogTitlebarBackgroundColor;
-  padding: 7px 7px;
+  padding: 1px 7px;
 }
 
 .feedback-library.ui-widget input, .feedback-library.ui-widget select, .feedback-library.ui-widget textarea, .feedback-library.ui-widget button {
@@ -175,7 +175,7 @@
 
     .ui-dialog-title {
       font-size: 13px;
-      margin: 3px 0;
+      margin: 8px 0;
       text-transform: none;
     }
   }
