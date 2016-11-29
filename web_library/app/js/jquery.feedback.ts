@@ -357,6 +357,7 @@ export var feedbackPluginModule = function ($, window, document) {
                 },
                 open: function () {
                     $('[aria-describedby="' + dialogId + '"] .ui-dialog-titlebar-close').attr('title', i18n.t('general.dialog_close_button_title'));
+                    $('.close-feedback-dialog').find('span').removeClass("ui-icon-minusthick").addClass("ui-icon-closethick");
                 },
                 create: function (event, ui) {
                     var widget = $(this).dialog("widget");
@@ -364,6 +365,14 @@ export var feedbackPluginModule = function ($, window, document) {
                         .removeClass("ui-icon-closethick")
                         .addClass("ui-icon-minusthick");
                     $(this).closest('.ui-dialog').addClass('feedback-library');
+                    var minimizeButton = $(".ui-dialog-titlebar-close");
+
+                    // add close button next to minimize
+                    let closeButton = minimizeButton.clone();
+                    closeButton.css('margin-right', '4px');
+                    closeButton.addClass("ui-icon-closethick").addClass("close-feedback-dialog").removeClass("ui-icon-minusthick").removeClass('ui-dialog-titlebar-close');
+                    closeButton.css('background-color', 'transparent');
+                    minimizeButton.parent().append(closeButton);
                 },
                 position: dialogPosition
             })
@@ -454,7 +463,18 @@ export var feedbackPluginModule = function ($, window, document) {
             });
         }
 
+        // TODO refactor!!!
         container.find('.discard-feedback').on('click', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            if (configuration.dialogId === 'pushConfiguration') {
+                dialog.dialog("close");
+            } else if (configuration.dialogId === 'pullConfiguration') {
+                pullDialog.dialog("close");
+            }
+            resetPlugin(configuration);
+        });
+        $('.close-feedback-dialog').on('click', function (e) {
             e.preventDefault();
             e.stopPropagation();
             if (configuration.dialogId === 'pushConfiguration') {
