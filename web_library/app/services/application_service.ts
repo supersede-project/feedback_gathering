@@ -1,7 +1,7 @@
 import {Backend} from './backends/backend';
 import {HttpBackend} from './backends/http_backend';
 import {Application} from '../models/applications/application';
-import {apiEndpointOrchestrator, applicationPath} from '../js/config';
+import {applicationPath} from '../js/config';
 
 
 /**
@@ -16,9 +16,9 @@ export class ApplicationService {
      * @param backend
      *  Backend to get data from
      */
-    constructor(language:string, backend?:Backend) {
+    constructor(apiEndpoint:string, language:string, backend?:Backend) {
         if(!backend) {
-            this.backend = new HttpBackend(applicationPath, apiEndpointOrchestrator, language);
+            this.backend = new HttpBackend(applicationPath, apiEndpoint, language);
         } else {
             this.backend = backend;
         }

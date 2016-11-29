@@ -34,6 +34,7 @@ import {AttachmentFeedback} from '../models/feedbacks/attachment_feedback';
 import {AudioFeedback} from '../models/feedbacks/audio_feedback';
 import {ContextInformation} from '../models/feedbacks/context_information';
 import {AudioView} from '../views/audio/audio_view';
+import {apiEndpointOrchestrator} from './configurations/default';
 var mockData = require('json!../services/mocks/dev/applications_mock.json');
 
 
@@ -55,6 +56,8 @@ export var feedbackPluginModule = function ($, window, document) {
     var defaultStrokeWidth;
     var audioView;
     var dialogPosition;
+    var apiHostOrchestrator;
+    var apiHostRepository;
 
     /**
      * @param applicationObject
@@ -236,7 +239,7 @@ export var feedbackPluginModule = function ($, window, document) {
     };
 
     var repositoryURL = function(language:string, applicationId?:number):string {
-        var url:string = (apiEndpointRepository + feedbackPath).replace('{lang}', language);
+        var url:string = (apiHostRepository + feedbackPath).replace('{lang}', language);
         if(applicationId) {
             url = url.replace(new RegExp('{applicationId}'), applicationId.toString());
         }
@@ -661,6 +664,9 @@ export var feedbackPluginModule = function ($, window, document) {
         dialogCSSClass = currentOptions.dialogCSSClass;
         colorPickerCSSClass = currentOptions.colorPickerCSSClass;
         defaultStrokeWidth = currentOptions.defaultStrokeWidth;
+        apiHostOrchestrator = currentOptions.apiHostOrchestrator || apiEndpointOrchestrator;
+        apiHostRepository = currentOptions.apiHostRepository || apiEndpointRepository;
+
         dialogPosition = {
             my: currentOptions.dialogPositionMy,
             at: currentOptions.dialogPositionAt,
@@ -671,7 +677,7 @@ export var feedbackPluginModule = function ($, window, document) {
         I18nHelper.initializeI18n(this.options);
 
         // loadDataHere to trigger pull if necessary
-        var applicationService = new ApplicationService(language);
+        var applicationService = new ApplicationService(apiHostOrchestrator, language);
         applicationService.retrieveApplication(applicationId, application => {
             if (!application.state) {
                 feedbackButton.hide();

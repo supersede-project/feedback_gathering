@@ -10,11 +10,15 @@ export class CategoryMechanism extends Mechanism {
     }
 
     getOptions(): Parameter[] {
-        return this.getParameterValue('options').filter(option => option.key !== 'defaultOption').sort((option1, option2) => option1.createdAt > option2.createdAt);
+        if(this.getParameterValue('options') !== null && this.getParameterValue('options').length > 0
+            && this.getParameterValue('options').filter(option => option.key !== 'defaultOption').length > 0) {
+            return this.getParameterValue('options').filter(option => option.key !== 'defaultOption').sort((option1, option2) => option1.createdAt > option2.createdAt);
+        }
     }
 
     getDefaultOptions(): Parameter {
-        if(this.getParameterValue('options').filter(option => option.key === 'defaultOption').length > 0) {
+        if(this.getParameterValue('options') !== null && this.getParameterValue('options').length > 0
+            && this.getParameterValue('options').filter(option => option.key === 'defaultOption').length > 0) {
             return this.getParameterValue('options').filter(option => option.key === 'defaultOption')[0];
         }
     }
