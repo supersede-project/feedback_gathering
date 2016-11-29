@@ -5,10 +5,12 @@
     "feedback_submit_button_title": "Submit feedback",
     "mandatory_default_text": "This field can't be blank",
     "back": "back",
-    "validation_max_length_error_message": "The maximum length of this field is {{ maxLength }}! You typed {{ currentLength }} characters.",
+    "validation_max_length_error_message": "The maximum length of this field is {{ maxLength }}. You typed {{ currentLength }} characters.",
     "discard_feedback": "Cancel",
     "cancel": "Cancel",
-    "dialog_close_button_title": "Minimize"
+    "dialog_close_button_title": "Minimize",
+    "success_message": "Your feedback was successfully sent.",
+    "error_message": "An error occurred while saving the feedback."
   },
   "text": {
     "text_type_text_clear": "Clear the text input"

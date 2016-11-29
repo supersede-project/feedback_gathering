@@ -251,7 +251,7 @@ export var feedbackPluginModule = function ($, window, document) {
      */
     var sendFeedback = function (formData:FormData, configuration:ConfigurationInterface, generalConfiguration:GeneralConfiguration) {
         $.ajax({
-            url: repositoryURL(language),
+            url: repositoryURL(language, applicationId),
             type: 'POST',
             data: formData,
             dataType: 'json',
@@ -261,9 +261,9 @@ export var feedbackPluginModule = function ($, window, document) {
                 resetPlugin(configuration);
                 if (generalConfiguration.getParameterValue('closeDialogOnSuccess')) {
                     dialog.dialog('close');
-                    pageNotification(defaultSuccessMessage);
+                    pageNotification(i18n.t('general.success_message'));
                 } else {
-                    $('.server-response').addClass('success').text(defaultSuccessMessage);
+                    $('.server-response').addClass('success').text(i18n.t('general.success_message'));
                 }
             },
             error: function (data) {
@@ -286,7 +286,14 @@ export var feedbackPluginModule = function ($, window, document) {
             screenshotMechanism.screenshotView.reset();
         }
         for (var ratingMechanism of configuration.getMechanismConfig(mechanismTypes.ratingType)) {
-            initRating("#" + configuration.dialogId + " #ratingMechanism" + ratingMechanism.id + " .rating-input", ratingMechanism);
+            initRating("#" + configuration.dialogId + " #ratingMechanism" + ratingMechanism.id + " .rating-input:first", ratingMechanism, 0);
+        }
+
+        for (var categoryMechanism of configuration.getMechanismConfig(mechanismTypes.categoryType)) {
+            // TODO add this for radio and checkboxes as well
+            var selector = "#" + configuration.dialogId + " #categoryMechanism" + categoryMechanism.id + ".category-type select option:first";
+            var firstOptionVal = jQuery(selector).val();
+            jQuery("#" + configuration.dialogId + " #categoryMechanism" + categoryMechanism.id + ".category-type select").val(firstOptionVal);
         }
     };
 
@@ -298,13 +305,19 @@ export var feedbackPluginModule = function ($, window, document) {
      *
      * Applies the jQuery star rating plugin on a specified element with the configuration from the rating mechanism.
      */
-    var initRating = function (selector, ratingMechanism:RatingMechanism) {
+    var initRating = function (selector, ratingMechanism:RatingMechanism, stars?:number) {
         if (ratingMechanism !== null && ratingMechanism.active) {
             var options = ratingMechanism.getRatingElementOptions();
-            $('' + selector).starRating(options);
+            var ratingObject = $('' + selector);
+            ratingObject.starRating(options);
             // reset to default rating
+
             if (ratingMechanism.initialRating) {
                 $('' + selector + ' .jq-star:nth-child(' + ratingMechanism.initialRating + ')').click();
+            }
+
+            if(stars !== undefined) {
+                ratingObject.starRating('setRating', stars);
             }
         }
     };
@@ -369,6 +382,7 @@ export var feedbackPluginModule = function ($, window, document) {
 
                     // add close button next to minimize
                     let closeButton = minimizeButton.clone();
+                    closeButton.attr('title', i18n.t('general.cancel'));
                     closeButton.css('margin-right', '4px');
                     closeButton.addClass("ui-icon-closethick").addClass("close-feedback-dialog").removeClass("ui-icon-minusthick").removeClass('ui-dialog-titlebar-close');
                     closeButton.css('background-color', 'transparent');

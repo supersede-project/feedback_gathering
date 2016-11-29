@@ -22,7 +22,13 @@ export class RatingMechanism extends Mechanism {
             useFullStars: true,
             disableAfterRate: false,
             callback: function (currentRating, $el) {
+                var oldRatingValue = ratingMechanismObject.currentRatingValue;
                 ratingMechanismObject.currentRatingValue = currentRating;
+
+                if(oldRatingValue === currentRating) {
+                    $el.starRating('setRating', 0);
+                    ratingMechanismObject.currentRatingValue = 0;
+                }
             }
         };
     }

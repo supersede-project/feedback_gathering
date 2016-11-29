@@ -6,7 +6,7 @@
         {{#if asDropdown}}
             <select name="category_mechanism_{{ id }}"{{#if multiple}} multiple{{/if}}>
                 {{#if defaultOption}}
-                    <option value="{{ defaultOption.key }} selected">{{defaultOption.value}}</option>
+                    <option value="{{ defaultOption.id }}" selected>{{defaultOption.value}}</option>
                 {{/if}}
                 {{#each options}}
                     <option value="{{ id }}">{{value}}</option>

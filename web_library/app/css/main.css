@@ -536,15 +536,17 @@
   border-top: none;
   border-left: none;
   border-right: none;
-  border-bottom: 4px solid #666666 !important;
+  width: 16px;
+  height: 18px;
+  border-bottom: 3px solid #666666 !important;
   border-radius: 0; }
   .feedback-library.ui-dialog .ui-dialog-titlebar-close:hover, .feedback-library .ui-dialog-titlebar-close:hover {
-    border-bottom: 4px solid #000000; }
+    border-bottom: 3px solid #000000; }
   .feedback-library.ui-dialog .ui-dialog-titlebar-close span, .feedback-library .ui-dialog-titlebar-close span {
     display: none; }
 
 .feedback-library.ui-dialog .close-feedback-dialog {
-  margin: 0 73px 0;
+  margin: 0 68px 0;
   display: inline-block;
   border: none;
   border-radius: 0; }
@@ -692,7 +694,8 @@
   .feedback-library .button.submit-feedback {
     background-color: #1c416f;
     color: white;
-    font-weight: bold; }
+    font-weight: bold;
+    margin-bottom: 0; }
     .feedback-library .button.submit-feedback:hover {
       background-color: #5a7393;
       color: white; }

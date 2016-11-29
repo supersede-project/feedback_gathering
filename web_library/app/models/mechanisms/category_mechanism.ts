@@ -10,7 +10,7 @@ export class CategoryMechanism extends Mechanism {
     }
 
     getOptions(): Parameter[] {
-        return this.getParameterValue('options').filter(option => option.key !== 'defaultOption');
+        return this.getParameterValue('options').filter(option => option.key !== 'defaultOption').sort((option1, option2) => option1.createdAt > option2.createdAt);
     }
 
     getDefaultOptions(): Parameter {

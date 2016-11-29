@@ -30,11 +30,13 @@
   border-top: none;
   border-left: none;
   border-right: none;
-  border-bottom: 4px solid #666666 !important;
+  width: 16px;
+  height: 18px;
+  border-bottom: 3px solid #666666 !important;
   border-radius: 0;
 
   &:hover {
-    border-bottom: 4px solid #000000;
+    border-bottom: 3px solid #000000;
   }
 
   span {
@@ -43,7 +45,7 @@
 }
 
 .feedback-library.ui-dialog .close-feedback-dialog {
-  margin: 0 73px 0;
+  margin: 0 68px 0;
   display: inline-block;
   border: none;
   border-radius: 0;
@@ -234,6 +236,7 @@
       background-color: $submitButtonBackgroundColor;
       color: $submitButtonColor;
       font-weight: $submitButtonFontWeight;
+      margin-bottom: 0;
 
       &:hover {
         background-color: $submitButtonHoverBackgroundColor;
