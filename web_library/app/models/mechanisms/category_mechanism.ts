@@ -48,17 +48,10 @@ export class CategoryMechanism extends Mechanism {
         var categoryFeedbacks:CategoryFeedback[] = [];
 
         if(this.getParameterValue('asDropdown')) {
-            // TODO test
-            var value = jQuery(selectSelector).val();
-
-            // select multiple will return an array
-            if(jQuery.isArray(value)) {
-                for(var i = 0; i <= value.length; i++) {
-                    categoryFeedbacks.push(new CategoryFeedback(value[i], ""));
-                }
-            } else {
-                categoryFeedbacks.push(new CategoryFeedback(value, ""));
-            }
+            jQuery(selectSelector + " option:selected").each(function() {
+                var parameterId = jQuery(this).val();
+                categoryFeedbacks.push(new CategoryFeedback(parameterId, ""));
+            });
         } else {
             jQuery(inputSelector).each(function () {
                 var input = jQuery(this);

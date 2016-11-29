@@ -210,7 +210,6 @@ export var feedbackPluginModule = function ($, window, document) {
             var submitFeedbackButton = $('button.submit-feedback');
             var serverResponse = $('span.server-response');
             var feedbackDialogForwardButton = $('.feedback-page .feedback-dialog-forward');
-            console.log(feedbackDialogForwardButton.length);
             $('.feedback-page').append(serverResponse);
             feedbackDialogForwardButton.replaceWith(submitFeedbackButton);
         }
