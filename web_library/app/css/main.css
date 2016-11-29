@@ -621,6 +621,8 @@
 
 .feedback-library .feedback-mechanism.category-type {
   margin-bottom: 25px; }
+  .feedback-library .feedback-mechanism.category-type p {
+    margin-top: 6px; }
 
 .feedback-library textarea.text-type-text {
   width: 100%;

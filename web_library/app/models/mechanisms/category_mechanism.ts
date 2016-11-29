@@ -26,7 +26,7 @@ export class CategoryMechanism extends Mechanism {
             ownLabel: this.getParameterValue('ownLabel'),
             breakAfterOption: this.getParameterValue('breakAfterOption') ? true : false,
             options: this.getOptions(),
-            defaultOption: this.getDefaultOptions();
+            defaultOption: this.getDefaultOptions(),
             inputType: this.getParameterValue('multiple') ? 'checkbox' : 'radio',
             multiple: this.getParameterValue('multiple'),
             asDropdown: this.getParameterValue('asDropdown') || false,

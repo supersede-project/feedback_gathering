@@ -6,7 +6,7 @@
     "mandatory_default_text": "Bitte füllen Sie das Feld aus",
     "back": "zurück",
     "validation_max_length_error_message": "Die maximale Länge des Feldes ist {{ maxLength }}! Sie haben {{ currentLength }} Zeichen eingegeben.",
-    "discard_feedback": "Feedback verwerfen",
+    "discard_feedback": "Abbrechen",
     "cancel": "Abbrechen",
     "dialog_close_button_title": "Minimieren"
   },
