@@ -55,13 +55,11 @@ public class MonitorTypeController extends RestController<MonitorType>{
 	}
 	
 	@GET
-	@Path("")
 	public List<MonitorType> GetAll() throws Exception {
 		return super.GetAll();
 	}
 	
 	@POST
-	@Path("")
 	public MonitorType InsertMonitorType(MonitorType monitorType) throws Exception {
 		return super.Insert(monitorType);
 	}
