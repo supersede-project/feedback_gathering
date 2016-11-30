@@ -55,19 +55,19 @@ public class MonitorTypeController extends RestController<MonitorType>{
 	}
 	
 	@GET
-	@Path("/monitors")
+	@Path("")
 	public List<MonitorType> GetAll() throws Exception {
 		return super.GetAll();
 	}
 	
 	@POST
-	@Path("/monitors")
+	@Path("")
 	public MonitorType InsertMonitorType(MonitorType monitorType) throws Exception {
 		return super.Insert(monitorType);
 	}
 	
 	@GET
-	@Path("/monitors/{id-type-of-monitor}")
+	@Path("/{id-type-of-monitor}")
 	public MonitorType GetById(@PathParam("id-type-of-monitor") String id) throws Exception {
 		List<MonitorType> monitorType = this.dbService.GetWhere(Arrays.asList(id), "name = ?");
 		if(monitorType.isEmpty()) {
@@ -77,7 +77,7 @@ public class MonitorTypeController extends RestController<MonitorType>{
 	}
 	
 	@DELETE
-	@Path("/monitors/{id-type-of-monitor}")
+	@Path("/{id-type-of-monitor}")
 	public void DeleteMonitorTool(@PathParam("id-type-of-monitor") String id) throws Exception {
 		List<MonitorType> monitorType = this.dbService.GetWhere(Arrays.asList(id), "name = ?");
 		if(monitorType.isEmpty()) {

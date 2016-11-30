@@ -76,7 +76,7 @@ public class MonitorConfigurationController extends RestController<MonitorConfig
 	}
 	
 	@POST
-	@Path("/monitors/{id-type-of-monitor}/{id-monitoring-tool}")
+	@Path("/{id-type-of-monitor}/{id-monitoring-tool}")
 	public MonitorConfiguration InsertMonitorConfiguration(@PathParam("id-type-of-monitor") String type, 
 			@PathParam("id-monitoring-tool") String tool,
 			MonitorConfiguration configuration) throws Exception {
@@ -101,7 +101,7 @@ public class MonitorConfigurationController extends RestController<MonitorConfig
 	}
 	
 	@GET
-	@Path("/monitors/{id-type-of-monitor}/{id-monitoring-tool}/{id-tool-configuration}")
+	@Path("/{id-type-of-monitor}/{id-monitoring-tool}/{id-tool-configuration}")
 	public MonitorConfiguration GetMonitorConfiguration(@PathParam("id-type-of-monitor") String type, 
 			@PathParam("id-monitoring-tool") String tool,
 			@PathParam("id-tool-configuration") Integer configuration) throws Exception {
@@ -113,7 +113,7 @@ public class MonitorConfigurationController extends RestController<MonitorConfig
 	}
 	
 	@PUT
-	@Path("/monitors/{id-type-of-monitor}/{id-monitoring-tool}/{id-tool-configuration}")
+	@Path("/{id-type-of-monitor}/{id-monitoring-tool}/{id-tool-configuration}")
 	public MonitorConfiguration UpdateMonitorConfiguration(@PathParam("id-type-of-monitor") String type, 
 			@PathParam("id-monitoring-tool") String tool,
 			@PathParam("id-tool-configuration") Integer configuration,
@@ -138,7 +138,7 @@ public class MonitorConfigurationController extends RestController<MonitorConfig
 	}
 	
 	@DELETE
-	@Path("/monitors/{id-type-of-monitor}/{id-monitoring-tool}/{id-tool-configuration}")
+	@Path("/{id-type-of-monitor}/{id-monitoring-tool}/{id-tool-configuration}")
 	public void DeleteMonitorConfiguration(@PathParam("id-type-of-monitor") String type, 
 			@PathParam("id-monitoring-tool") String tool,
 			@PathParam("id-tool-configuration") Integer configuration) throws Exception {

@@ -53,7 +53,7 @@ public class MonitorToolController extends RestController<MonitorTool> {
 	}
 	
 	@POST
-	@Path("/monitors/{id-type-of-monitor}")
+	@Path("/{id-type-of-monitor}")
 	public MonitorTool InsertMonitorTool(@PathParam("id-type-of-monitor") String id, 
 			MonitorTool tool) throws Exception {
 		tool.setMonitorTypeName(id);
@@ -61,7 +61,7 @@ public class MonitorToolController extends RestController<MonitorTool> {
 	}
 	
 	@GET
-	@Path("/monitors/{id-type-of-monitor}/{id-monitoring-tool}")
+	@Path("/{id-type-of-monitor}/{id-monitoring-tool}")
 	public MonitorTool GetMonitorTool(@PathParam("id-type-of-monitor") String type,
 			@PathParam("id-monitoring-tool") String tool) throws Exception {
 		List<MonitorTool> monitorTool = this.dbService.GetWhere(Arrays.asList(type, tool), "monitor_type_name = ? and name = ?");
@@ -72,7 +72,7 @@ public class MonitorToolController extends RestController<MonitorTool> {
 	}
 	
 	@DELETE
-	@Path("/monitors/{id-type-of-monitor}/{id-monitoring-tool}")
+	@Path("/{id-type-of-monitor}/{id-monitoring-tool}")
 	public void DeleteTool(@PathParam("id-type-of-monitor") String type,
 			@PathParam("id-monitoring-tool") String tool) throws Exception {
 		List<MonitorTool> monitorTool = this.dbService.GetWhere(Arrays.asList(type, tool), "monitor_type_name = ? and name = ?");
