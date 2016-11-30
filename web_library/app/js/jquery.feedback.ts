@@ -4,7 +4,7 @@ import './jquery.validate';
 import './jquery.validate_category';
 import './jquery.fileupload';
 import {
-    apiEndpointRepository, feedbackPath, applicationName, defaultSuccessMessage,
+    apiEndpointRepository, apiEndpointOrchestrator, feedbackPath, applicationName, defaultSuccessMessage,
     feedbackObjectTitle, dialogOptions, mechanismTypes, applicationId
 } from './config';
 import {PaginationContainer} from '../views/pagination_container';
@@ -34,7 +34,6 @@ import {AttachmentFeedback} from '../models/feedbacks/attachment_feedback';
 import {AudioFeedback} from '../models/feedbacks/audio_feedback';
 import {ContextInformation} from '../models/feedbacks/context_information';
 import {AudioView} from '../views/audio/audio_view';
-import {apiEndpointOrchestrator} from './configurations/default';
 var mockData = require('json!../services/mocks/dev/applications_mock.json');
 
 
