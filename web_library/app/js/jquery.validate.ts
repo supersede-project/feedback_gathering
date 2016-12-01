@@ -31,6 +31,20 @@ export var validatePluginModule = (function($, window, document) {
             element.after('<span class="feedback-form-error">' + errorMessage + '</span>');
         };
 
+        var isElementInViewport = function (el) {
+            if (typeof jQuery === "function" && el instanceof jQuery) {
+                el = el[0];
+            }
+            var rect = el.getBoundingClientRect();
+
+            return (
+                rect.top >= 0 &&
+                rect.left >= 0 &&
+                rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) && /*or $(window).height() */
+                rect.right <= (window.innerWidth || document.documentElement.clientWidth) /*or $(window).width() */
+            );
+        };
+
         // reset
         this.next('.feedback-form-error').remove();
         this.removeClass('invalid');
@@ -45,7 +59,7 @@ export var validatePluginModule = (function($, window, document) {
             validMaxLength = false;
         }
 
-        if(validationEmail && !emailRegex.test(content)) {
+        if(validationEmail && content !== '' && !emailRegex.test(content)) {
             validEmail = false;
         }
 
@@ -58,10 +72,13 @@ export var validatePluginModule = (function($, window, document) {
                 showValidationError(manualText, this);
             }
 
-            var invalidElement = this;
-            $('html, body').animate({
-                scrollTop: invalidElement.offset().top
-            }, 500);
+            // TODO refactor
+            if(!isElementInViewport(invalidElement)) {
+                var invalidElement = this;
+                $('html, body').animate({
+                    scrollTop: invalidElement.offset().top
+                }, 500);
+            }
         }
 
         if(!validMaxLength) {
@@ -73,9 +90,11 @@ export var validatePluginModule = (function($, window, document) {
             showValidationError(errorMessageMaxLength, this);
 
             var invalidElement = this;
-            $('html, body').animate({
-                scrollTop: invalidElement.offset().top
-            }, 500);
+            if(!isElementInViewport(invalidElement)) {
+                $('html, body').animate({
+                    scrollTop: invalidElement.offset().top
+                }, 500);
+            }
         }
 
         if(!validEmail) {
@@ -84,9 +103,12 @@ export var validatePluginModule = (function($, window, document) {
             showValidationError(errorMessage, this);
 
             var invalidElement = this;
-            $('html, body').animate({
-                scrollTop: invalidElement.offset().top
-            }, 500);
+
+            if(!isElementInViewport(invalidElement)) {
+                $('html, body').animate({
+                    scrollTop: invalidElement.offset().top
+                }, 500);
+            }
         }
         return this;
     };
