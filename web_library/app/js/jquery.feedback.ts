@@ -105,7 +105,7 @@ export var feedbackPluginModule = function ($, window, document) {
         if (configuration.generalConfiguration.getParameterValue('delay')) {
             delay = configuration.generalConfiguration.getParameterValue('delay');
         }
-        if (configuration.generalConfiguration.getParameterValue('intermediateDialog')) {
+        if (configuration.generalConfiguration.getParameterValue('intermediateDialjog')) {
             var intermediateDialog = initIntermediateDialogTemplate(intermediateDialogTemplate, 'intermediateDialog', configuration, pullDialog, generalConfiguration);
             if (intermediateDialog !== null) {
                 setTimeout(function () {
@@ -296,6 +296,10 @@ export var feedbackPluginModule = function ($, window, document) {
             var firstOptionVal = jQuery(selector).val();
             jQuery("#" + configuration.dialogId + " #categoryMechanism" + categoryMechanism.id + ".category-type select").val(firstOptionVal);
         }
+
+        // reset validation
+        jQuery( "#" + configuration.dialogId + " .feedback-form-error").remove();
+        jQuery( "#" + configuration.dialogId + " .invalid").removeClass('invalid');
     };
 
     /**
