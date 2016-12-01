@@ -49,6 +49,10 @@
   display: inline-block;
   border: none;
   border-radius: 0;
+
+  .ui-icon {
+    background-image: url(https://code.jquery.com/ui/1.12.1/themes/base/images/ui-icons_777777_256x240.png) !important;
+  }
 }
 
 .feedback-library.ui-dialog {
@@ -165,6 +169,7 @@
     padding: 5px;
     margin-top: 6px;
     box-sizing: border-box;
+    min-height: 0;
   }
 
   .ui-dialog-titlebar {

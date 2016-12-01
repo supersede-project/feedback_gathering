@@ -550,6 +550,8 @@
   display: inline-block;
   border: none;
   border-radius: 0; }
+  .feedback-library.ui-dialog .close-feedback-dialog .ui-icon {
+    background-image: url(https://code.jquery.com/ui/1.12.1/themes/base/images/ui-icons_777777_256x240.png) !important; }
 
 .feedback-library.ui-dialog {
   padding: 0; }
@@ -641,7 +643,8 @@
   color: #7d7a7c;
   padding: 5px;
   margin-top: 6px;
-  box-sizing: border-box; }
+  box-sizing: border-box;
+  min-height: 0; }
 
 .feedback-library .ui-dialog-titlebar {
   border-color: transparent;

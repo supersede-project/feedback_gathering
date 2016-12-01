@@ -439,10 +439,10 @@ export var feedbackPluginModule = function ($, window, document) {
 
         // character length
         for (var textMechanism of textMechanisms) {
-            var sectionSelector = "textMechanism" + textMechanism.id;
-            var textarea = container.find('section#' + sectionSelector + ' textarea.text-type-text');
-            var maxLength = textMechanism.getParameterValue('maxLength');
-            var isMaxLengthStrict = textMechanism.getParameterValue('maxLengthStrict');
+            let sectionSelector = "textMechanism" + textMechanism.id;
+            let textarea = container.find('section#' + sectionSelector + ' textarea.text-type-text');
+            let maxLength = textMechanism.getParameterValue('maxLength');
+            let isMaxLengthStrict = textMechanism.getParameterValue('maxLengthStrict');
 
             textarea.on('keyup focus paste blur', function () {
                 container.find('section#' + sectionSelector + ' span.text-type-max-length').text($(this).val().length + '/' + maxLength);
