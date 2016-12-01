@@ -23,7 +23,10 @@ export var validatePluginModule = (function($, window, document) {
             manualText = this.data('mandatory-manual-text'),
             maxLength = this.data('validation-max-length'),
             validMandatory = true,
-            validMaxLength = true;
+            validMaxLength = true,
+            validEmail = true,
+            validationEmail = this.data('validation-email'),
+            emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         var showValidationError = function (errorMessage, element) {
             element.after('<span class="feedback-form-error">' + errorMessage + '</span>');
         };
@@ -40,6 +43,10 @@ export var validatePluginModule = (function($, window, document) {
         // validate max length
         if(maxLength && content.length > maxLength) {
             validMaxLength = false;
+        }
+
+        if(validationEmail && !emailRegex.test(content)) {
+            validEmail = false;
         }
 
         // display messages
@@ -64,6 +71,17 @@ export var validatePluginModule = (function($, window, document) {
                 currentLength: content.length
             });
             showValidationError(errorMessageMaxLength, this);
+
+            var invalidElement = this;
+            $('html, body').animate({
+                scrollTop: invalidElement.offset().top
+            }, 500);
+        }
+
+        if(!validEmail) {
+            this.addClass('invalid');
+            let errorMessage = i18n.t('general.validation_invalid_email');
+            showValidationError(errorMessage, this);
 
             var invalidElement = this;
             $('html, body').animate({

@@ -6,6 +6,7 @@
     "mandatory_default_text": "This field can't be blank",
     "back": "back",
     "validation_max_length_error_message": "The maximum length of this field is {{ maxLength }}. You typed {{ currentLength }} characters.",
+    "validation_invalid_email": "E-Mail address is invalid",
     "discard_feedback": "Cancel",
     "cancel": "Cancel",
     "dialog_close_button_title": "Minimize",

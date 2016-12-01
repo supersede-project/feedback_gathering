@@ -49,7 +49,8 @@ export class TextMechanism extends Mechanism {
             mandatoryReminder: this.getParameterValue('mandatoryReminder'),
             boxWidth: this.getParameterValue('boxWidth') || '100%',
             boxPaddingLeft: this.getParameterValue('boxPaddingLeft') || '0',
-            boxPaddingRight: this.getParameterValue('boxPaddingRight') || '20px'
+            boxPaddingRight: this.getParameterValue('boxPaddingRight') || '20px',
+            validationEmail: this.getParameterValue('validateEmail') || false
         }
     }
 }
