@@ -814,7 +814,20 @@ $.alpaca.Fields.ScreenshotComponent = $.alpaca.Fields.ImageField.extend({
 
     getTitle: function() {
         return "Screenshot Component";
+    },
+
+    getSchemaOfOptions: function () {
+        return Alpaca.merge(this.base(), {
+            "properties": {
+                "create_in_app_screenshot": {
+                    "title": "Create in app screenshot",
+                    "type": "boolean"
+                }
+            }
+        });
     }
 });
 Alpaca.registerFieldClass("screenshot", Alpaca.Fields.ScreenshotComponent);
 // Alpaca.registerDefaultFormatFieldMapping("create_in_app_screenshot", "screenshot");
+
+//
