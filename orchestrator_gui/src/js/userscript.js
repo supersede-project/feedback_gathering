@@ -740,9 +740,11 @@ var setup = function () {
         if (options) {
             config.options = options;
         }
-
+/*
         var transformedConfig = new ObjectTemplate(tmpl).transform(config);
         var configString = JSON.stringify(transformedConfig);
+*/
+        var configString = JSON.stringify(config);
 
         // Save JSON-String to local JSON-file
         var blob = new Blob([configString], {type: "application/json"});
@@ -821,7 +823,13 @@ $.alpaca.Fields.ScreenshotComponent = $.alpaca.Fields.ImageField.extend({
             "properties": {
                 "create_in_app_screenshot": {
                     "title": "Create in app screenshot",
-                    "type": "boolean"
+                    "type": "boolean",
+                    "default": false
+                },
+                "add_freehand_drawings": {
+                    "title": "User can add freehand drawings",
+                    "type": "boolean",
+                    "default": false
                 }
             }
         });
