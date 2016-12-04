@@ -329,6 +329,7 @@ var setup = function () {
         }
     };
 
+    // for the edit popup
     var editOptions = function (alpacaFieldId, callback) {
         var field = Alpaca.fieldInstances[alpacaFieldId];
 
@@ -337,7 +338,7 @@ var setup = function () {
         var fieldOptionsSchema = field.getSchemaOfOptions();
         var fieldOptionsOptions = field.getOptionsForOptions();
 
-//        removeFunctionFields(fieldSchemaSchema, fieldSchemaOptions);
+        removeFunctionFields(fieldSchemaSchema, fieldSchemaOptions);
         removeFunctionFields(fieldOptionsSchema, fieldOptionsOptions);
 
         var fieldData = field.schema;
@@ -395,7 +396,11 @@ var setup = function () {
             "parent": MODAL_VIEW,
             "displayReadonly": false
         };
+//        var popup = document.createElement("div");
+//        popup.appendChild(fieldConfigSchema, fieldOptionsOptions);
+
         fieldConfigSchema.postRender = function (control) {
+//            var popup = $(MODAL_TEMPLATE.trim());
             var modal = $(MODAL_TEMPLATE.trim());
             modal.find(".modal-title").append(field.getTitle());
             modal.find(".modal-body").append(control.getFieldEl());
@@ -429,7 +434,6 @@ var setup = function () {
             control.getFieldEl().find("[data-alpaca-container-item-name='type']").remove();
             control.getFieldEl().find("[data-alpaca-container-item-name='format']").remove();
             control.getFieldEl().find("[data-alpaca-container-item-name='disallow']").remove();
-            control.getFieldEl().find("[data-alpaca-container-item-name='enum']").remove();
             control.getFieldEl().find("[data-alpaca-container-item-name='minLength']").remove();
             control.getFieldEl().find("[data-alpaca-container-item-name='pattern']").remove();
         };
@@ -473,7 +477,6 @@ var setup = function () {
             control.getFieldEl().find("[data-alpaca-container-item-name='fieldClass']").remove();
             control.getFieldEl().find("[data-alpaca-container-item-name='hideInitValidationError']").remove();
             control.getFieldEl().find("[data-alpaca-container-item-name='focus']").remove();
-            control.getFieldEl().find("[data-alpaca-container-item-name='optionLabels']").remove();
             control.getFieldEl().find("[data-alpaca-container-item-name='view']").remove();
             control.getFieldEl().find("[data-alpaca-container-item-name='name']").remove();
             control.getFieldEl().find("[data-alpaca-container-item-name='size']").remove();
@@ -738,9 +741,8 @@ var setup = function () {
             config.options = options;
         }
 
-        var configString = JSON.stringify(config);
-
-//        var transformedConfig = new ObjectTemplate(tmpl).transform(configString);
+        var transformedConfig = new ObjectTemplate(tmpl).transform(config);
+        var configString = JSON.stringify(transformedConfig);
 
         // Save JSON-String to local JSON-file
         var blob = new Blob([configString], {type: "application/json"});
