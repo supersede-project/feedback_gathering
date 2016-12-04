@@ -489,6 +489,7 @@ var setup = function () {
             control.getFieldEl().find("[data-alpaca-container-item-name='wordlimit']").remove();
             control.getFieldEl().find("[data-alpaca-container-item-name='dataSource']").remove();
             control.getFieldEl().find("[data-alpaca-container-item-name='useDataSourceAsEnum']").remove();
+            control.getFieldEl().find("[data-alpaca-container-item-name='rightLabel']").remove();
             // addition for radio
             control.getFieldEl().find("[data-alpaca-container-item-name='removeDefaultNone']").remove();
             control.getFieldEl().find("[data-alpaca-container-item-name='noneLabel']").remove();
@@ -700,11 +701,6 @@ var setup = function () {
         assembleSchema(top, _schema);
         var _options = {};
         assembleOptions(top, _options);
-        // data is easy
-        var _data = top.getValue();
-        if (!_data) {
-            _data = {};
-        }
 
         editor1.setValue(JSON.stringify(_schema, null, "    "));
         editor2.setValue(JSON.stringify(_options, null, "    "));
@@ -808,7 +804,7 @@ $.alpaca.Fields.AudioComponent = $.alpaca.Fields.ObjectField.extend({
 });
 Alpaca.registerFieldClass("audio", Alpaca.Fields.AudioComponent);
 
-// screenshot component
+// screenshot component extends alpaca image field
 $.alpaca.Fields.ScreenshotComponent = $.alpaca.Fields.ImageField.extend({
     getFieldType: function() {
         return "screenshot";
@@ -836,6 +832,15 @@ $.alpaca.Fields.ScreenshotComponent = $.alpaca.Fields.ImageField.extend({
     }
 });
 Alpaca.registerFieldClass("screenshot", Alpaca.Fields.ScreenshotComponent);
-// Alpaca.registerDefaultFormatFieldMapping("create_in_app_screenshot", "screenshot");
 
-//
+/// checkbox component extends the alpaca checkbox
+$.alpaca.Fields.CheckboxComponent = $.alpaca.Fields.CheckBoxField.extend({
+    getFieldType: function() {
+        return "checkbox";
+    },
+
+    getTitle: function() {
+        return "Checkbox Component";
+    }
+});
+Alpaca.registerFieldClass("checkbox", Alpaca.Fields.CheckboxComponent);
