@@ -25,6 +25,7 @@ public class OrchestratorServletModule extends ServletModule {
     protected void configureServlets() {
     	
       filter("/feedback/*").through(createTimeStampFilter());
+      filter("/monitors/*").through(createTimeStampFilter());
       serve("/feedback/*").with(OrchestratorServlet.class);
       serve("/monitors/*").with(MonitoringServlet.class);
     }

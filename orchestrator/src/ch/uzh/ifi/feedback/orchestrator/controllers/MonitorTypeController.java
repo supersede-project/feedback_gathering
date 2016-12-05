@@ -45,7 +45,7 @@ import ch.uzh.ifi.feedback.orchestrator.validation.MonitorTypeValidator;
 import javassist.NotFoundException;
 
 @RequestScoped
-@Controller(MonitorTypeController.class)
+@Controller(MonitorType.class)
 public class MonitorTypeController extends RestController<MonitorType>{
 
 	@Inject

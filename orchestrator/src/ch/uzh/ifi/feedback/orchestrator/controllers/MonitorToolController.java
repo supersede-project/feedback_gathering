@@ -27,6 +27,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.google.inject.Inject;
 import com.google.inject.servlet.RequestScoped;
 
 import ch.uzh.ifi.feedback.library.rest.RestController;
@@ -43,9 +44,10 @@ import ch.uzh.ifi.feedback.orchestrator.validation.MonitorToolValidator;
 import javassist.NotFoundException;
 
 @RequestScoped
-@Controller(MonitorToolController.class)
+@Controller(MonitorTool.class)
 public class MonitorToolController extends RestController<MonitorTool> {
 
+	@Inject
 	public MonitorToolController(MonitorToolService dbService, 
 			MonitorToolValidator validator,
 			HttpServletRequest request, HttpServletResponse response) {

@@ -39,6 +39,7 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.google.inject.Inject;
 import com.google.inject.servlet.RequestScoped;
 
 import ch.uzh.ifi.feedback.library.rest.RestController;
@@ -57,13 +58,14 @@ import ch.uzh.ifi.feedback.orchestrator.validation.MonitorConfigurationValidator
 import javassist.NotFoundException;
 
 @RequestScoped
-@Controller(MonitorConfigurationController.class)
+@Controller(MonitorConfiguration.class)
 public class MonitorConfigurationController extends RestController<MonitorConfiguration> {
 	
 	private String monitorManagerHost = "localhost:8080/monitor_manager/";
 	
 	private MonitorToolService monitorToolService;
 
+	@Inject
 	public MonitorConfigurationController(
 			MonitorConfigurationService dbService,
 			MonitorConfigurationValidator validator, 
