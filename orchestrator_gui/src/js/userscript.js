@@ -814,6 +814,11 @@ $.alpaca.Fields.ScreenshotComponent = $.alpaca.Fields.ImageField.extend({
                     "title": "User can add freehand drawings",
                     "type": "boolean",
                     "default": false
+                },
+                "undo_functionality": {
+                    "title": "Activate undo",
+                    "type": "boolean",
+                    "default": false
                 }
             }
         });
