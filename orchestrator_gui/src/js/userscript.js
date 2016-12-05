@@ -1,4 +1,5 @@
 var setup = function () {
+    // view setting
     var MODAL_VIEW = "bootstrap-edit-horizontal";
 
     var MODAL_TEMPLATE = ' \
@@ -78,10 +79,7 @@ var setup = function () {
             if (options) {
                 config.options = options;
             }
-        /*    if (data) {
-                config.data = data;
-            }
-          */  if (!config.options) {
+            if (!config.options) {
                 config.options = {};
             }
             config.options.focus = false;
@@ -377,10 +375,7 @@ var setup = function () {
 
             fieldConfigSchema.options = fieldSchemaOptions;
         }
-/*        if (fieldData) {
-            fieldConfigSchema.data = fieldData;
-        }
- */       if (fieldOptionsOptions) {
+        if (fieldOptionsOptions) {
             fieldConfigOptions.options = fieldOptionsOptions;
         }
         if (fieldOptionsData) {
@@ -396,11 +391,8 @@ var setup = function () {
             "parent": MODAL_VIEW,
             "displayReadonly": false
         };
-//        var popup = document.createElement("div");
-//        popup.appendChild(fieldConfigSchema, fieldOptionsOptions);
 
         fieldConfigSchema.postRender = function (control) {
-//            var popup = $(MODAL_TEMPLATE.trim());
             var modal = $(MODAL_TEMPLATE.trim());
             modal.find(".modal-title").append(field.getTitle());
             modal.find(".modal-body").append(control.getFieldEl());
@@ -485,11 +477,6 @@ var setup = function () {
             control.getFieldEl().find("[data-alpaca-container-item-name='typeahead']").remove();
             control.getFieldEl().find("[data-alpaca-container-item-name='inputType']").remove();
             control.getFieldEl().find("[data-alpaca-container-item-name='disallowOnlyEmptySpaces']").remove();
-            // additional for checkbox
-            control.getFieldEl().find("[data-alpaca-container-item-name='wordlimit']").remove();
-            control.getFieldEl().find("[data-alpaca-container-item-name='dataSource']").remove();
-            control.getFieldEl().find("[data-alpaca-container-item-name='useDataSourceAsEnum']").remove();
-            control.getFieldEl().find("[data-alpaca-container-item-name='rightLabel']").remove();
             // addition for radio
             control.getFieldEl().find("[data-alpaca-container-item-name='removeDefaultNone']").remove();
             control.getFieldEl().find("[data-alpaca-container-item-name='noneLabel']").remove();
@@ -736,17 +723,18 @@ var setup = function () {
         if (options) {
             config.options = options;
         }
-/*
+
         var transformedConfig = new ObjectTemplate(tmpl).transform(config);
         var configString = JSON.stringify(transformedConfig);
-*/
-        var configString = JSON.stringify(config);
+
+//        var configString = JSON.stringify(config);
 
         // Save JSON-String to local JSON-file
         var blob = new Blob([configString], {type: "application/json"});
-        var saveAs = window.saveAs;
+/*        var saveAs = window.saveAs;
         saveAs(blob, "GUI_schema_options.json");
-
+*/
+        console.log(configString);
     });
 
     // click on send button (for user to send form data)
@@ -841,6 +829,15 @@ $.alpaca.Fields.CheckboxComponent = $.alpaca.Fields.CheckBoxField.extend({
 
     getTitle: function() {
         return "Checkbox Component";
+    },
+
+    getSchemaOfOptions: function(){
+        var myProp = this.base();
+        delete myProp.properties.rightLabel;
+        delete myProp.properties.dataSource;
+        delete myProp.properties.useDataSourceAsEnum;
+        delete myProp.properties.wordlimit;
+        return myProp;
     }
 });
 Alpaca.registerFieldClass("checkbox", Alpaca.Fields.CheckboxComponent);
