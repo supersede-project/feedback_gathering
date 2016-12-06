@@ -456,33 +456,6 @@ var setup = function () {
             control.getFieldEl().find("p.help-block").css({
                 "display": "none"
             });
-
-            // hide unused config options TODO: better not implement the fields at all
-            control.getFieldEl().find("[data-alpaca-container-item-name='data']").remove();
-            control.getFieldEl().find("[data-alpaca-container-item-name='allowOptionalEmpty']").remove();
-            control.getFieldEl().find("[data-alpaca-container-item-name='autocomplete']").remove();
-            control.getFieldEl().find("[data-alpaca-container-item-name='disallowEmptySpaces']").remove();
-            control.getFieldEl().find("[data-alpaca-container-item-name='validate']").remove();
-            control.getFieldEl().find("[data-alpaca-container-item-name='showMessages']").remove();
-            control.getFieldEl().find("[data-alpaca-container-item-name='helper']").remove();
-            control.getFieldEl().find("[data-alpaca-container-item-name='helpers']").remove();
-            control.getFieldEl().find("[data-alpaca-container-item-name='fieldClass']").remove();
-            control.getFieldEl().find("[data-alpaca-container-item-name='hideInitValidationError']").remove();
-            control.getFieldEl().find("[data-alpaca-container-item-name='focus']").remove();
-            control.getFieldEl().find("[data-alpaca-container-item-name='view']").remove();
-            control.getFieldEl().find("[data-alpaca-container-item-name='name']").remove();
-            control.getFieldEl().find("[data-alpaca-container-item-name='size']").remove();
-            control.getFieldEl().find("[data-alpaca-container-item-name='maskString']").remove();
-            control.getFieldEl().find("[data-alpaca-container-item-name='placeholder']").remove();
-            control.getFieldEl().find("[data-alpaca-container-item-name='typeahead']").remove();
-            control.getFieldEl().find("[data-alpaca-container-item-name='inputType']").remove();
-            control.getFieldEl().find("[data-alpaca-container-item-name='disallowOnlyEmptySpaces']").remove();
-            // addition for radio
-            control.getFieldEl().find("[data-alpaca-container-item-name='removeDefaultNone']").remove();
-            control.getFieldEl().find("[data-alpaca-container-item-name='noneLabel']").remove();
-            control.getFieldEl().find("[data-alpaca-container-item-name='hideNone']").remove();
-            control.getFieldEl().find("[data-alpaca-container-item-name='emptySelectFirst']").remove();
-            control.getFieldEl().find("[data-alpaca-container-item-name='vertical']").remove();
         };
 
         // finds the div with fielForm class and uses it as alpaca form for the schema and option form
@@ -539,7 +512,7 @@ var setup = function () {
     // creates the components
     var afterAlpacaInit = function () {
         // available components
-        var types = ["textarea", "checkbox", "radio", "screenshot", "upload", "audio"];
+        var types = ["text", "checkbox", "radio", "screenshot", "attachment", "audio"];
 
         for (var i = 0; i < types.length; i++) {
 
@@ -768,8 +741,6 @@ var setup = function () {
             }
         })
     });
-
-
 };
 
 $(document).ready(function () {
@@ -780,30 +751,76 @@ $(document).ready(function () {
     }, 200);
 });
 
+// attachment mechanism extend upload field
+$.alpaca.Fields.AttachmentMechanism = $.alpaca.Fields.UploadField.extend({
+    getFieldType: function () {
+        return "attachment";
+    },
+
+    getTitle: function () {
+        return "Attachment Mechanism";
+    },
+
+    getSchemaOfOptions: function () {
+        var myProp = this.base();
+        delete myProp.properties.validate;
+        delete myProp.properties.showMessages;
+        delete myProp.properties.helper;
+        delete myProp.properties.helpers;
+        delete myProp.properties.hideInitValidationError;
+        delete myProp.properties.name;
+        delete myProp.properties.showMessages;
+        delete myProp.properties.validate;
+        delete myProp.properties.view;
+        return myProp;
+    }
+});
+Alpaca.registerFieldClass("attachment", Alpaca.Fields.AttachmentMechanism);
+
 // audio component extends the object field
-$.alpaca.Fields.AudioComponent = $.alpaca.Fields.ObjectField.extend({
+$.alpaca.Fields.AudioMechanism = $.alpaca.Fields.ObjectField.extend({
     getFieldType: function() {
         return "audio";
     },
 
     getTitle: function() {
-        return "Audio Component";
+        return "Audio Mechanism";
     }
 });
-Alpaca.registerFieldClass("audio", Alpaca.Fields.AudioComponent);
+Alpaca.registerFieldClass("audio", Alpaca.Fields.AudioMechanism);
 
 // screenshot component extends alpaca image field
-$.alpaca.Fields.ScreenshotComponent = $.alpaca.Fields.ImageField.extend({
+$.alpaca.Fields.ScreenshotMechanism = $.alpaca.Fields.ImageField.extend({
     getFieldType: function() {
         return "screenshot";
     },
 
     getTitle: function() {
-        return "Screenshot Component";
+        return "Screenshot Mechanism";
     },
 
     getSchemaOfOptions: function () {
-        return Alpaca.merge(this.base(), {
+        var myProp = this.base();
+        delete myProp.properties.allowOptionalEmpty;
+        delete myProp.properties.autocomplete;
+        delete myProp.properties.disallowEmptySpaces;
+        delete myProp.properties.disallowOnlyEmptySpaces;
+        delete myProp.properties.fieldClass;
+        delete myProp.properties.focus;
+        delete myProp.properties.helper;
+        delete myProp.properties.helpers;
+        delete myProp.properties.hideInitValidationError;
+        delete myProp.properties.inputType;
+        delete myProp.properties.maskString;
+        delete myProp.properties.name;
+        delete myProp.properties.placeholder;
+        delete myProp.properties.showMessages;
+        delete myProp.properties.size;
+        delete myProp.properties.typeahead;
+        delete myProp.properties.validate;
+        delete myProp.properties.view;
+
+        return Alpaca.merge(myProp, {
             "properties": {
                 "create_in_app_screenshot": {
                     "title": "Create in app screenshot",
@@ -824,7 +841,7 @@ $.alpaca.Fields.ScreenshotComponent = $.alpaca.Fields.ImageField.extend({
         });
     }
 });
-Alpaca.registerFieldClass("screenshot", Alpaca.Fields.ScreenshotComponent);
+Alpaca.registerFieldClass("screenshot", Alpaca.Fields.ScreenshotMechanism);
 
 /// checkbox component extends the alpaca checkbox
 $.alpaca.Fields.CheckboxComponent = $.alpaca.Fields.CheckBoxField.extend({
@@ -838,11 +855,89 @@ $.alpaca.Fields.CheckboxComponent = $.alpaca.Fields.CheckBoxField.extend({
 
     getSchemaOfOptions: function(){
         var myProp = this.base();
-        delete myProp.properties.rightLabel;
         delete myProp.properties.dataSource;
+        delete myProp.properties.fieldClass;
+        delete myProp.properties.focus;
+        delete myProp.properties.helper;
+        delete myProp.properties.helpers;
+        delete myProp.properties.hideInitValidationError;
+        delete myProp.properties.name;
+        delete myProp.properties.optionLabels;
+        delete myProp.properties.rightLabel;
+        delete myProp.properties.showMessages;
         delete myProp.properties.useDataSourceAsEnum;
-        delete myProp.properties.wordlimit;
+        delete myProp.properties.validate;
+        delete myProp.properties.view;
         return myProp;
     }
 });
 Alpaca.registerFieldClass("checkbox", Alpaca.Fields.CheckboxComponent);
+
+//radiobutton component extends the alpaca radio button
+$.alpaca.Fields.RadiobuttonComponent = $.alpaca.Fields.RadioField.extend({
+   getFieldType: function() {
+       return "radiobutton";
+   },
+
+   getTitle: function() {
+       return "Radiobutton Component";
+   },
+    getSchemaOfOptions: function() {
+       var myProp = this.base();
+        delete myProp.properties.dataSource;
+        delete myProp.properties.emptySelectFirst;
+        delete myProp.properties.fieldClass;
+        delete myProp.properties.focus;
+        delete myProp.properties.helper;
+        delete myProp.properties.helpers;
+        delete myProp.properties.hideInitValidationError;
+        delete myProp.properties.hideNone;
+        delete myProp.properties.name;
+        delete myProp.properties.noneLabel;
+        delete myProp.properties.optionLabels;
+        delete myProp.properties.removeDefaultNone;
+        delete myProp.properties.showMessages;
+        delete myProp.properties.useDataSourceAsEnum;
+        delete myProp.properties.validate;
+        delete myProp.properties.vertical;
+        delete myProp.properties.view;
+        return myProp;
+    }
+});
+Alpaca.registerFieldClass("radiobutton", Alpaca.Fields.RadiobuttonComponent);
+
+// textarea component extends the alpaca textarea
+$.alpaca.Fields.TextMechanism = $.alpaca.Fields.TextAreaField.extend({
+    getFieldType: function(){
+        return "text";
+    },
+    getTitle: function () {
+        return "Text Mechanism";
+    },
+
+    getSchemaOfOptions: function () {
+        var myProp = this.base();
+        delete myProp.properties.allowOptionalEmpty;
+        delete myProp.properties.autocomplete;
+        delete myProp.properties.data;
+        delete myProp.properties.disallowEmptySpaces;
+        delete myProp.properties.disallowOnlyEmptySpaces;
+        delete myProp.properties.fieldClass;
+        delete myProp.properties.focus;
+        delete myProp.properties.helper;
+        delete myProp.properties.helpers;
+        delete myProp.properties.hideInitValidationError;
+        delete myProp.properties.inputType;
+        delete myProp.properties.maskString;
+        delete myProp.properties.name;
+        delete myProp.properties.optionLabels;
+        delete myProp.properties.placeholder;
+        delete myProp.properties.showMessages;
+        delete myProp.properties.size;
+        delete myProp.properties.typeahead;
+        delete myProp.properties.validate;
+        delete myProp.properties.view;
+        return myProp;
+    }
+});
+Alpaca.registerFieldClass("text", Alpaca.Fields.TextMechanism);
