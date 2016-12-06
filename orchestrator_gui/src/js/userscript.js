@@ -419,15 +419,6 @@ var setup = function () {
             control.getFieldEl().find("p.help-block").css({
                 "display": "none"
             });
-
-            // hide unused config options TODO: better not implement the fields at all
-            control.getFieldEl().find("[data-alpaca-container-item-name='readonly']").remove();
-            control.getFieldEl().find("[data-alpaca-container-item-name='default']").remove();
-            control.getFieldEl().find("[data-alpaca-container-item-name='type']").remove();
-            control.getFieldEl().find("[data-alpaca-container-item-name='format']").remove();
-            control.getFieldEl().find("[data-alpaca-container-item-name='disallow']").remove();
-            control.getFieldEl().find("[data-alpaca-container-item-name='minLength']").remove();
-            control.getFieldEl().find("[data-alpaca-container-item-name='pattern']").remove();
         };
         fieldConfigOptions.postRender = function (control) {
             var modal = $(MODAL_TEMPLATE.trim());
@@ -512,7 +503,7 @@ var setup = function () {
     // creates the components
     var afterAlpacaInit = function () {
         // available components
-        var types = ["text", "checkbox", "radio", "screenshot", "attachment", "audio"];
+        var types = ["text", "category", "rating", "screenshot", "attachment", "audio"];
 
         for (var i = 0; i < types.length; i++) {
 
@@ -763,16 +754,31 @@ $.alpaca.Fields.AttachmentMechanism = $.alpaca.Fields.UploadField.extend({
 
     getSchemaOfOptions: function () {
         var myProp = this.base();
-        delete myProp.properties.validate;
-        delete myProp.properties.showMessages;
+        delete myProp.properties.errorHandler;
+        delete myProp.properties.fieldClass;
+        delete myProp.properties.focus;
         delete myProp.properties.helper;
         delete myProp.properties.helpers;
         delete myProp.properties.hideInitValidationError;
         delete myProp.properties.name;
+        delete myProp.properties.optionLabels;
         delete myProp.properties.showMessages;
+        delete myProp.properties.sort;
+        delete myProp.properties.type;
         delete myProp.properties.validate;
         delete myProp.properties.view;
         return myProp;
+    },
+
+    getSchemaOfSchema: function () {
+        var mySchema = this.base();
+        delete mySchema.properties.default;
+        delete mySchema.properties.disallow;
+        delete mySchema.properties.enum;
+        delete mySchema.properties.format;
+        delete mySchema.properties.readonly;
+        delete mySchema.properties.type;
+        return mySchema;
     }
 });
 Alpaca.registerFieldClass("attachment", Alpaca.Fields.AttachmentMechanism);
@@ -785,6 +791,31 @@ $.alpaca.Fields.AudioMechanism = $.alpaca.Fields.ObjectField.extend({
 
     getTitle: function() {
         return "Audio Mechanism";
+    },
+
+    getSchemaOfObjects: function () {
+        return Alpaca.merge(this.base(), {
+            "properties": {
+                "label": {
+                    "title": "label",
+                    "type": "text"
+                }
+            }
+        });
+    },
+
+    getSchemaOfSchema: function () {
+        var mySchema = this.base();
+        delete mySchema.properties.default;
+        delete mySchema.properties.dependencies;
+        delete mySchema.properties.disallow;
+        delete mySchema.properties.format;
+        delete mySchema.properties.maxProperties;
+        delete mySchema.properties.minProperties;
+        delete mySchema.properties.properties;
+        delete mySchema.properties.readonly;
+        delete mySchema.properties.type;
+        return mySchema;
     }
 });
 Alpaca.registerFieldClass("audio", Alpaca.Fields.AudioMechanism);
@@ -803,8 +834,10 @@ $.alpaca.Fields.ScreenshotMechanism = $.alpaca.Fields.ImageField.extend({
         var myProp = this.base();
         delete myProp.properties.allowOptionalEmpty;
         delete myProp.properties.autocomplete;
+        delete myProp.properties.data;
         delete myProp.properties.disallowEmptySpaces;
         delete myProp.properties.disallowOnlyEmptySpaces;
+        delete myProp.properties.enum;
         delete myProp.properties.fieldClass;
         delete myProp.properties.focus;
         delete myProp.properties.helper;
@@ -814,6 +847,7 @@ $.alpaca.Fields.ScreenshotMechanism = $.alpaca.Fields.ImageField.extend({
         delete myProp.properties.maskString;
         delete myProp.properties.name;
         delete myProp.properties.placeholder;
+        delete myProp.properties.optionLabels;
         delete myProp.properties.showMessages;
         delete myProp.properties.size;
         delete myProp.properties.typeahead;
@@ -839,18 +873,32 @@ $.alpaca.Fields.ScreenshotMechanism = $.alpaca.Fields.ImageField.extend({
                 }
             }
         });
+    },
+
+    getSchemaOfSchema: function () {
+        var mySchema = this.base();
+        delete mySchema.properties.default;
+        delete mySchema.properties.disallow;
+        delete mySchema.properties.enum;
+        delete mySchema.properties.format;
+        delete mySchema.properties.minLength;
+        delete mySchema.properties.maxLength;
+        delete mySchema.properties.pattern;
+        delete mySchema.properties.readonly;
+        delete mySchema.properties.type;
+        return mySchema;
     }
 });
 Alpaca.registerFieldClass("screenshot", Alpaca.Fields.ScreenshotMechanism);
 
 /// checkbox component extends the alpaca checkbox
-$.alpaca.Fields.CheckboxComponent = $.alpaca.Fields.CheckBoxField.extend({
+$.alpaca.Fields.CategoryMechanism = $.alpaca.Fields.SelectField.extend({
     getFieldType: function() {
-        return "checkbox";
+        return "category";
     },
 
     getTitle: function() {
-        return "Checkbox Component";
+        return "Category Mechanism";
     },
 
     getSchemaOfOptions: function(){
@@ -861,27 +909,40 @@ $.alpaca.Fields.CheckboxComponent = $.alpaca.Fields.CheckBoxField.extend({
         delete myProp.properties.helper;
         delete myProp.properties.helpers;
         delete myProp.properties.hideInitValidationError;
+        delete myProp.properties.multiselect;
         delete myProp.properties.name;
-        delete myProp.properties.optionLabels;
-        delete myProp.properties.rightLabel;
         delete myProp.properties.showMessages;
+        delete myProp.properties.sort;
+        delete myProp.properties.type;
         delete myProp.properties.useDataSourceAsEnum;
         delete myProp.properties.validate;
         delete myProp.properties.view;
         return myProp;
+    },
+
+    getSchemaOfSchema: function () {
+        var mySchema = this.base();
+        delete mySchema.properties.default;
+        delete mySchema.properties.dependencies;
+        delete mySchema.properties.disallow;
+        delete mySchema.properties.format;
+        delete mySchema.properties.readonly;
+        delete mySchema.properties.type;
+        return mySchema;
     }
 });
-Alpaca.registerFieldClass("checkbox", Alpaca.Fields.CheckboxComponent);
+Alpaca.registerFieldClass("category", Alpaca.Fields.CategoryMechanism);
 
 //radiobutton component extends the alpaca radio button
-$.alpaca.Fields.RadiobuttonComponent = $.alpaca.Fields.RadioField.extend({
+$.alpaca.Fields.RatingMechanism = $.alpaca.Fields.RadioField.extend({
    getFieldType: function() {
-       return "radiobutton";
+       return "rating";
    },
 
    getTitle: function() {
-       return "Radiobutton Component";
+       return "Rating Mechanism";
    },
+
     getSchemaOfOptions: function() {
        var myProp = this.base();
         delete myProp.properties.dataSource;
@@ -894,7 +955,6 @@ $.alpaca.Fields.RadiobuttonComponent = $.alpaca.Fields.RadioField.extend({
         delete myProp.properties.hideNone;
         delete myProp.properties.name;
         delete myProp.properties.noneLabel;
-        delete myProp.properties.optionLabels;
         delete myProp.properties.removeDefaultNone;
         delete myProp.properties.showMessages;
         delete myProp.properties.useDataSourceAsEnum;
@@ -902,9 +962,19 @@ $.alpaca.Fields.RadiobuttonComponent = $.alpaca.Fields.RadioField.extend({
         delete myProp.properties.vertical;
         delete myProp.properties.view;
         return myProp;
+    },
+
+    getSchemaOfSchema: function () {
+        var mySchema = this.base();
+        delete mySchema.properties.default;
+        delete mySchema.properties.disallow;
+        delete mySchema.properties.format;
+        delete mySchema.properties.readonly;
+        delete mySchema.properties.type;
+        return mySchema;
     }
 });
-Alpaca.registerFieldClass("radiobutton", Alpaca.Fields.RadiobuttonComponent);
+Alpaca.registerFieldClass("rating", Alpaca.Fields.RatingMechanism);
 
 // textarea component extends the alpaca textarea
 $.alpaca.Fields.TextMechanism = $.alpaca.Fields.TextAreaField.extend({
@@ -938,6 +1008,19 @@ $.alpaca.Fields.TextMechanism = $.alpaca.Fields.TextAreaField.extend({
         delete myProp.properties.validate;
         delete myProp.properties.view;
         return myProp;
+    },
+
+    getSchemaOfSchema: function(){
+        var mySchema = this.base();
+        delete mySchema.properties.default;
+        delete mySchema.properties.disallow;
+        delete mySchema.properties.enum;
+        delete mySchema.properties.format;
+        delete mySchema.properties.minLength;
+        delete mySchema.properties.pattern;
+        delete mySchema.properties.readonly;
+        delete mySchema.properties.type;
+        return mySchema;
     }
 });
 Alpaca.registerFieldClass("text", Alpaca.Fields.TextMechanism);
