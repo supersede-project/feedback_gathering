@@ -694,10 +694,10 @@ var setup = function () {
 //        var configString = JSON.stringify(config);
 
         // Save JSON-String to local JSON-file
-        var blob = new Blob([configString], {type: "application/json"});
-/*        var saveAs = window.saveAs;
-        saveAs(blob, "GUI_schema_options.json");
-*/
+        /* var blob = new Blob([configString], {type: "application/json"});
+        var saveAs = window.saveAs;
+        saveAs(blob, "GUI_schema_options.json"); */
+
         console.log(configString);
     });
 

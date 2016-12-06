@@ -16,6 +16,40 @@ var tmpl = {
             }
         }
     },
+
+    as: {
+        configurations: {
+            as: {
+                mechanisms: {
+                    path: "options.fields",
+                    choose: function(node, value, key) {
+                        if (key.indexOf("new") >= 0) {
+                            return key;
+                        }
+                    },
+
+                    nested: true,
+                    as: {
+                        type: "type",
+                        label: "label"
+                    }
+
+                    // all: true
+
+                    /*
+                     choose: ["type", "label"],
+                     as: {
+                     type: "type",
+                     label: "label"
+                     }
+                     */
+
+                }
+            }
+        }
+    }
+
+    /* Lollys iplementations
     as: {
         configurations: {
 
@@ -44,5 +78,5 @@ var tmpl = {
             }
 
         }
-    }
+    } */
 };
