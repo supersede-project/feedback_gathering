@@ -61,7 +61,7 @@
                             {{/if}}
                         {{/compare}}
                         {{#compare type "SCREENSHOT_TYPE" operator="==="}}
-                            {{!-- {{#if active}} --}}
+                            {{#if active}}
                                 <section id="screenshotMechanism{{ id }}"
                                          class="feedback-mechanism feedback-col horizontal screenshot-type" style="width: {{boxWidth}}; padding-left: {{boxPaddingLeft}}; padding-right: {{boxPaddingRight}};">
                                     <article class="col col-left">
@@ -156,7 +156,7 @@
                                     </div>
                                     <div class="clearfix"></div>
                                 </section>
-                            {{!-- {{/if}} --}}
+                            {{/if}}
                         {{/compare}}
 
                         {{#compare ../reviewButtonPosition @index operator="==="}}
