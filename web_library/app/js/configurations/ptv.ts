@@ -1,6 +1,7 @@
-export const apiEndpointOrchestrator = 'https://ptvfeedback.ronnieschaniel.com/';
+export const apiEndpointOrchestrator = 'https://ptv-orchestrator.ronnieschaniel.com/';
 export const applicationPath = 'feedback_orchestrator/{lang}/applications/';
-export const apiEndpointRepository = 'https://ptvfeedback.ronnieschaniel.com/';
+export const apiEndpointRepository = 'http://localhost:3000/';
+//export const apiEndpointRepository = 'https://ptv-repository.ronnieschaniel.com/';
 export const feedbackPath = 'feedback_repository/{lang}/feedbacks';
 export const applicationId = 8;
 export const applicationName = 'PTV';
