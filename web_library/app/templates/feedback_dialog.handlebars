@@ -35,7 +35,7 @@
                                     </p>
 
                                     <article class="col col-right">
-                                <textarea class="validate text-type-text"
+                                <textarea class="validate text-type-text{{#if validationEmail}} email-field{{/if}} "
                                     {{#if mandatory }} data-mandatory="1"
                                           data-mandatory-default-text="{{t "general.mandatory_default_text" }}"
                                           data-mandatory-manual-text="{{ mandatoryReminder }}" {{/if}}

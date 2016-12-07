@@ -172,6 +172,10 @@
     min-height: 0;
   }
 
+  textarea.email-field {
+    overflow-y:hidden;
+  }
+
   .ui-dialog-titlebar {
     border-color: $dialogTitlebarBorderColor;
     border-width: 1px;

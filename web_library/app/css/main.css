@@ -646,6 +646,9 @@
   box-sizing: border-box;
   min-height: 0; }
 
+.feedback-library textarea.email-field {
+  overflow-y: hidden; }
+
 .feedback-library .ui-dialog-titlebar {
   border-color: transparent;
   border-width: 1px;
