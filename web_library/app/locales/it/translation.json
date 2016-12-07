@@ -1,0 +1,37 @@
+﻿{
+  "general": {
+    "review_feedback": "",
+    "review_feedback_title": "",
+    "feedback_submit_button_title": "Invia feedback",
+    "mandatory_default_text": "Compila il modulo",
+    "back": "",
+    "validation_max_length_error_message": "La lunghezza massima del campo è {{ maxLength }}. Sono stati inseriti {{ currentLength }} caratteri.",
+    "validation_invalid_email": "Indirizzo e-mail non valido",
+    "discard_feedback": "Annulla",
+    "cancel": "Annulla",
+    "dialog_close_button_title": "Minimizza",
+    "success_message": "Il feedback è stato inviato correttamente.",
+    "error_message": "Durante il salvataggio del feedback si è verificato un errore."
+  },
+  "text": {
+    "text_type_text_clear": ""
+  },
+  "screenshot": {
+    "take_screenshot": "",
+    "take_new_screenshot": "",
+    "actions": "",
+    "stickers": "",
+    "rectangle": "",
+    "blacken": "",
+    "circle": "",
+    "arrow": "",
+    "freehand": "",
+    "crop": "",
+    "text": "",
+    "undo": "",
+    "remove": ""
+  },
+  "rating": {
+    "review_title": ""
+  }
+}

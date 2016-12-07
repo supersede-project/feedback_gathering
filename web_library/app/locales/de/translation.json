@@ -1,9 +1,9 @@
-{
+﻿{
   "general": {
     "review_feedback": "weiter",
     "review_feedback_title": "Dein Feedback",
     "feedback_submit_button_title": "Feedback abschicken",
-    "mandatory_default_text": "Bitte füllen Sie das Feld aus",
+    "mandatory_default_text": "Bitte Textfeld ausfüllen",
     "back": "zurück",
     "validation_max_length_error_message": "Die maximale Länge des Feldes ist {{ maxLength }}. Sie haben {{ currentLength }} Zeichen eingegeben.",
     "validation_invalid_email": "E-Mail-Adresse ungültig",
@@ -22,7 +22,7 @@
     "actions": "Aktionen",
     "stickers": "Sticker",
     "rectangle": "Rechteck",
-    "blacken": "Einschwärzen",
+    "blacken": "Schwärzen",
     "circle": "Kreis",
     "arrow": "Pfeil",
     "freehand": "Freihand",

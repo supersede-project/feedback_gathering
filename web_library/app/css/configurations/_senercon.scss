@@ -1,12 +1,17 @@
 // feedback button
 $feedbackEntryPointBoxShadow: 1px 1px 1px 0 #677a00;
 
+// feedback dialog
+$dialogFontFamily: Tahoma, Verdana, Segoe, sans-serif;
+
 // feedback dialog title
 $dialogTitlebarColor: #7c9009;
+$dialogTitlebarBackgroundColor: transparent;
 $dialogTitlebarBorderColor: #7c9009;
 
 // dialog buttons
 $buttonBackgroundColor: #546300;
+$buttonHoverColor: white;
 $buttonHoverBackgroundColor: #617203;
 $buttonGradientEnabled: true;
 $buttonGradientColor1: #8aa221;
@@ -15,3 +20,16 @@ $buttonGradientColor3: #7c9009;
 $buttonHoverGradientColor1: #7f9718;
 $buttonHoverGradientColor2: #7d970b;
 $buttonTextColor: white;
+$buttonFontSize: 13px;
+$buttonBorderWidth: 0;
+$buttonBorderStyle: solid;
+$buttonBorderColor: transparent;
+$buttonHeight: 32px;
+$buttonTextTransform: none;
+
+// submit
+$submitButtonBackgroundColor: #546300;
+$submitButtonColor: white;
+$submitButtonHoverBackgroundColor: #617203;
+$submitButtonHoverColor: white;
+$submitButtonFontWeight: normal;

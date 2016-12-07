@@ -1092,7 +1092,7 @@ export class ScreenshotView {
      */
     svgToCanvas() {
         var myThis = this;
-        var svgElements = this.elementToCapture.find('svg');
+        var svgElements = this.elementToCapture.find('svg:not(.jq-star-svg)');
 
         //replace all svgs with a temp canvas
         svgElements.each(function() {

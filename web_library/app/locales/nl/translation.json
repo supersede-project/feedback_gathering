@@ -1,34 +1,38 @@
-{
+﻿{
   "general": {
-    "review_feedback": "meer",
-    "review_feedback_title": "Uw Feedback",
-    "feedback_submit_button_title": "Stuur uw feedback",
-    "mandatory_default_text": "Gelieve op dit gebied te vullen",
-    "back": "terug",
-    "validation_max_length_error_message": "De maximale lengte van het veld {{ maxLength }}! U komt binnen {{ currentLength }} tekens.",
-    "discard_feedback": "Teruggooi Feedback",
-    "cancel": "Afbreken",
-    "dialog_close_button_title": "Verkleinen"
+    "review_feedback": "",
+    "review_feedback_title": "",
+    "feedback_submit_button_title": "Feedback verzenden",
+    "mandatory_default_text": "Vul het tekstveld in",
+    "back": "",
+    "validation_max_length_error_message": "De maximale lengte van het veld is {{ maxLength }}. U hebt {{ currentLength }} tekens ingevoerd.",
+    "validation_invalid_email": "E-mailadres ongeldig",
+    "discard_feedback": "Annuleren",
+    "cancel": "Annuleren",
+    "dialog_close_button_title": "Minimaliseren",
+    "success_message": "Uw feedback is verzonden.",
+    "error_message": "Bij het opslaan van de feedback is een fout opgetreden."
   },
   "text": {
-    "text_type_text_clear": "tekst wissen"
+    "text_type_text_clear": ""
   },
   "screenshot": {
-    "take_screenshot": "Maak Screenshot",
-    "take_new_screenshot": "Genereren van nieuwe screenshot",
-    "actions": "Acties",
-    "stickers": "Sticker",
-    "rectangle": "rechthoek",
-    "blacken": "zwart maken",
-    "circle": "cirkel",
-    "arrow": "pijl",
-    "freehand": "uit de vrije hand",
-    "crop": "uitknippen",
-    "text": "tekst",
-    "undo": "ongedaan",
-    "remove": "Verwijder Screenshot"
+    "take_screenshot": "",
+    "take_new_screenshot": "",
+    "actions": "",
+    "stickers": "",
+    "rectangle": "",
+    "blacken": "",
+    "circle": "",
+    "arrow": "",
+    "freehand": "",
+    "crop": "",
+    "text": "",
+    "undo": "",
+    "remove": ""
   },
   "rating": {
-    "review_title": "Rating"
+    "review_title": ""
   }
 }
+
