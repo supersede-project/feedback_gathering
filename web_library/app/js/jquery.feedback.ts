@@ -4,7 +4,7 @@ import './jquery.validate';
 import './jquery.validate_category';
 import './jquery.fileupload';
 import {
-    apiEndpointRepository, feedbackPath, applicationName, defaultSuccessMessage,
+    apiEndpointRepository, apiEndpointOrchestrator, feedbackPath, applicationName, defaultSuccessMessage,
     feedbackObjectTitle, dialogOptions, mechanismTypes, applicationId
 } from './config';
 import {PaginationContainer} from '../views/pagination_container';
@@ -55,6 +55,8 @@ export var feedbackPluginModule = function ($, window, document) {
     var defaultStrokeWidth;
     var audioView;
     var dialogPosition;
+    var apiHostOrchestrator;
+    var apiHostRepository;
 
     /**
      * @param applicationObject
@@ -103,7 +105,7 @@ export var feedbackPluginModule = function ($, window, document) {
         if (configuration.generalConfiguration.getParameterValue('delay')) {
             delay = configuration.generalConfiguration.getParameterValue('delay');
         }
-        if (configuration.generalConfiguration.getParameterValue('intermediateDialog')) {
+        if (configuration.generalConfiguration.getParameterValue('intermediateDialjog')) {
             var intermediateDialog = initIntermediateDialogTemplate(intermediateDialogTemplate, 'intermediateDialog', configuration, pullDialog, generalConfiguration);
             if (intermediateDialog !== null) {
                 setTimeout(function () {
@@ -207,7 +209,6 @@ export var feedbackPluginModule = function ($, window, document) {
             var submitFeedbackButton = $('button.submit-feedback');
             var serverResponse = $('span.server-response');
             var feedbackDialogForwardButton = $('.feedback-page .feedback-dialog-forward');
-            console.log(feedbackDialogForwardButton.length);
             $('.feedback-page').append(serverResponse);
             feedbackDialogForwardButton.replaceWith(submitFeedbackButton);
         }
@@ -236,7 +237,7 @@ export var feedbackPluginModule = function ($, window, document) {
     };
 
     var repositoryURL = function(language:string, applicationId?:number):string {
-        var url:string = (apiEndpointRepository + feedbackPath).replace('{lang}', language);
+        var url:string = (apiHostRepository + feedbackPath).replace('{lang}', language);
         if(applicationId) {
             url = url.replace(new RegExp('{applicationId}'), applicationId.toString());
         }
@@ -251,7 +252,7 @@ export var feedbackPluginModule = function ($, window, document) {
      */
     var sendFeedback = function (formData:FormData, configuration:ConfigurationInterface, generalConfiguration:GeneralConfiguration) {
         $.ajax({
-            url: repositoryURL(language),
+            url: repositoryURL(language, applicationId),
             type: 'POST',
             data: formData,
             dataType: 'json',
@@ -261,9 +262,9 @@ export var feedbackPluginModule = function ($, window, document) {
                 resetPlugin(configuration);
                 if (generalConfiguration.getParameterValue('closeDialogOnSuccess')) {
                     dialog.dialog('close');
-                    pageNotification(defaultSuccessMessage);
+                    pageNotification(i18n.t('general.success_message'));
                 } else {
-                    $('.server-response').addClass('success').text(defaultSuccessMessage);
+                    $('.server-response').addClass('success').text(i18n.t('general.success_message'));
                 }
             },
             error: function (data) {
@@ -286,8 +287,19 @@ export var feedbackPluginModule = function ($, window, document) {
             screenshotMechanism.screenshotView.reset();
         }
         for (var ratingMechanism of configuration.getMechanismConfig(mechanismTypes.ratingType)) {
-            initRating("#" + configuration.dialogId + " #ratingMechanism" + ratingMechanism.id + " .rating-input", ratingMechanism);
+            initRating("#" + configuration.dialogId + " #ratingMechanism" + ratingMechanism.id + " .rating-input:first", ratingMechanism, 0);
         }
+
+        for (var categoryMechanism of configuration.getMechanismConfig(mechanismTypes.categoryType)) {
+            // TODO add this for radio and checkboxes as well
+            var selector = "#" + configuration.dialogId + " #categoryMechanism" + categoryMechanism.id + ".category-type select option:first";
+            var firstOptionVal = jQuery(selector).val();
+            jQuery("#" + configuration.dialogId + " #categoryMechanism" + categoryMechanism.id + ".category-type select").val(firstOptionVal);
+        }
+
+        // reset validation
+        jQuery( "#" + configuration.dialogId + " .feedback-form-error").remove();
+        jQuery( "#" + configuration.dialogId + " .invalid").removeClass('invalid');
     };
 
     /**
@@ -298,13 +310,19 @@ export var feedbackPluginModule = function ($, window, document) {
      *
      * Applies the jQuery star rating plugin on a specified element with the configuration from the rating mechanism.
      */
-    var initRating = function (selector, ratingMechanism:RatingMechanism) {
+    var initRating = function (selector, ratingMechanism:RatingMechanism, stars?:number) {
         if (ratingMechanism !== null && ratingMechanism.active) {
             var options = ratingMechanism.getRatingElementOptions();
-            $('' + selector).starRating(options);
+            var ratingObject = $('' + selector);
+            ratingObject.starRating(options);
             // reset to default rating
+
             if (ratingMechanism.initialRating) {
                 $('' + selector + ' .jq-star:nth-child(' + ratingMechanism.initialRating + ')').click();
+            }
+
+            if(stars !== undefined) {
+                ratingObject.starRating('setRating', stars);
             }
         }
     };
@@ -357,6 +375,7 @@ export var feedbackPluginModule = function ($, window, document) {
                 },
                 open: function () {
                     $('[aria-describedby="' + dialogId + '"] .ui-dialog-titlebar-close').attr('title', i18n.t('general.dialog_close_button_title'));
+                    $('.close-feedback-dialog').find('span').removeClass("ui-icon-minusthick").addClass("ui-icon-closethick");
                 },
                 create: function (event, ui) {
                     var widget = $(this).dialog("widget");
@@ -364,6 +383,15 @@ export var feedbackPluginModule = function ($, window, document) {
                         .removeClass("ui-icon-closethick")
                         .addClass("ui-icon-minusthick");
                     $(this).closest('.ui-dialog').addClass('feedback-library');
+                    var minimizeButton = $(".ui-dialog-titlebar-close");
+
+                    // add close button next to minimize
+                    let closeButton = minimizeButton.clone();
+                    closeButton.attr('title', i18n.t('general.cancel'));
+                    closeButton.css('margin-right', '4px');
+                    closeButton.addClass("ui-icon-closethick").addClass("close-feedback-dialog").removeClass("ui-icon-minusthick").removeClass('ui-dialog-titlebar-close');
+                    closeButton.css('background-color', 'transparent');
+                    minimizeButton.parent().append(closeButton);
                 },
                 position: dialogPosition
             })
@@ -415,10 +443,10 @@ export var feedbackPluginModule = function ($, window, document) {
 
         // character length
         for (var textMechanism of textMechanisms) {
-            var sectionSelector = "textMechanism" + textMechanism.id;
-            var textarea = container.find('section#' + sectionSelector + ' textarea.text-type-text');
-            var maxLength = textMechanism.getParameterValue('maxLength');
-            var isMaxLengthStrict = textMechanism.getParameterValue('maxLengthStrict');
+            let sectionSelector = "textMechanism" + textMechanism.id;
+            let textarea = container.find('section#' + sectionSelector + ' textarea.text-type-text');
+            let maxLength = textMechanism.getParameterValue('maxLength');
+            let isMaxLengthStrict = textMechanism.getParameterValue('maxLengthStrict');
 
             textarea.on('keyup focus paste blur', function () {
                 container.find('section#' + sectionSelector + ' span.text-type-max-length').text($(this).val().length + '/' + maxLength);
@@ -454,7 +482,18 @@ export var feedbackPluginModule = function ($, window, document) {
             });
         }
 
+        // TODO refactor!!!
         container.find('.discard-feedback').on('click', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            if (configuration.dialogId === 'pushConfiguration') {
+                dialog.dialog("close");
+            } else if (configuration.dialogId === 'pullConfiguration') {
+                pullDialog.dialog("close");
+            }
+            resetPlugin(configuration);
+        });
+        $('.close-feedback-dialog').on('click', function (e) {
             e.preventDefault();
             e.stopPropagation();
             if (configuration.dialogId === 'pushConfiguration') {
@@ -627,6 +666,9 @@ export var feedbackPluginModule = function ($, window, document) {
         dialogCSSClass = currentOptions.dialogCSSClass;
         colorPickerCSSClass = currentOptions.colorPickerCSSClass;
         defaultStrokeWidth = currentOptions.defaultStrokeWidth;
+        apiHostOrchestrator = currentOptions.apiHostOrchestrator || apiEndpointOrchestrator;
+        apiHostRepository = currentOptions.apiHostRepository || apiEndpointRepository;
+
         dialogPosition = {
             my: currentOptions.dialogPositionMy,
             at: currentOptions.dialogPositionAt,
@@ -637,7 +679,7 @@ export var feedbackPluginModule = function ($, window, document) {
         I18nHelper.initializeI18n(this.options);
 
         // loadDataHere to trigger pull if necessary
-        var applicationService = new ApplicationService(language);
+        var applicationService = new ApplicationService(apiHostOrchestrator, language);
         applicationService.retrieveApplication(applicationId, application => {
             if (!application.state) {
                 feedbackButton.hide();

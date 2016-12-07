@@ -1,0 +1,38 @@
+﻿{
+  "general": {
+    "review_feedback": "",
+    "review_feedback_title": "",
+    "feedback_submit_button_title": "Odeslat zpětnou vazbu",
+    "mandatory_default_text": "Vyplňte prosím textové pole",
+    "back": "",
+    "validation_max_length_error_message": "Maximální délka pole je {{ maxLength }}. Zadali jste {{ currentLength }} znaků.",
+    "validation_invalid_email": "Neplatná e-mailová adresa",
+    "discard_feedback": "Zrušit",
+    "cancel": "Zrušit",
+    "dialog_close_button_title": "Minimalizovat",
+    "success_message": "Vaše zpětná vazba byla úspěšně odeslána.",
+    "error_message": "Při ukládání zpětné vazby došlo k chybě."
+  },
+  "text": {
+    "text_type_text_clear": ""
+  },
+  "screenshot": {
+    "take_screenshot": "",
+    "take_new_screenshot": "",
+    "actions": "",
+    "stickers": "",
+    "rectangle": "",
+    "blacken": "",
+    "circle": "",
+    "arrow": "",
+    "freehand": "",
+    "crop": "",
+    "text": "",
+    "undo": "",
+    "remove": ""
+  },
+  "rating": {
+    "review_title": ""
+  }
+}
+

@@ -46,7 +46,11 @@ export class TextMechanism extends Mechanism {
             labelStyle: labelStyle,
             clearInput: this.getParameterValue('clearInput'),
             mandatory: this.getParameterValue('mandatory'),
-            mandatoryReminder: this.getParameterValue('mandatoryReminder')
+            mandatoryReminder: this.getParameterValue('mandatoryReminder'),
+            boxWidth: this.getParameterValue('boxWidth') || '100%',
+            boxPaddingLeft: this.getParameterValue('boxPaddingLeft') || '0',
+            boxPaddingRight: this.getParameterValue('boxPaddingRight') || '20px',
+            validationEmail: this.getParameterValue('validateEmail') || false
         }
     }
 }

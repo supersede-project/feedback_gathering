@@ -10,7 +10,17 @@ export class CategoryMechanism extends Mechanism {
     }
 
     getOptions(): Parameter[] {
-        return this.getParameterValue('options');
+        if(this.getParameterValue('options') !== null && this.getParameterValue('options').length > 0
+            && this.getParameterValue('options').filter(option => option.key !== 'defaultOption').length > 0) {
+            return this.getParameterValue('options').filter(option => option.key !== 'defaultOption').sort((option1, option2) => option1.createdAt > option2.createdAt);
+        }
+    }
+
+    getDefaultOptions(): Parameter {
+        if(this.getParameterValue('options') !== null && this.getParameterValue('options').length > 0
+            && this.getParameterValue('options').filter(option => option.key === 'defaultOption').length > 0) {
+            return this.getParameterValue('options').filter(option => option.key === 'defaultOption')[0];
+        }
     }
 
     getContext(): any {
@@ -18,34 +28,51 @@ export class CategoryMechanism extends Mechanism {
             title: this.getParameterValue('title'),
             ownAllowed: this.getParameterValue('ownAllowed'),
             ownLabel: this.getParameterValue('ownLabel'),
-            multiple: this.getParameterValue('multiple'),
             breakAfterOption: this.getParameterValue('breakAfterOption') ? true : false,
             options: this.getOptions(),
+            defaultOption: this.getDefaultOptions(),
             inputType: this.getParameterValue('multiple') ? 'checkbox' : 'radio',
+            multiple: this.getParameterValue('multiple'),
+            asDropdown: this.getParameterValue('asDropdown') || false,
             mandatory: this.getParameterValue('mandatory'),
-            mandatoryReminder: this.getParameterValue('mandatoryReminder')
+            mandatoryReminder: this.getParameterValue('mandatoryReminder'),
+            boxWidth: this.getParameterValue('boxWidth') || '100%',
+            boxPaddingLeft: this.getParameterValue('boxPaddingLeft') || '0',
+            boxPaddingRight: this.getParameterValue('boxPaddingRight') || '20px'
         }
     }
 
     getCategoryFeedbacks(): CategoryFeedback[] {
         var inputSelector = this.getInputSelector();
+        var selectSelector = this.getSelectSelector();
         var categoryFeedbacks:CategoryFeedback[] = [];
 
-        jQuery(inputSelector).each(function () {
-            var input = jQuery(this);
+        if(this.getParameterValue('asDropdown')) {
+            jQuery(selectSelector + " option:selected").each(function() {
+                var parameterId = jQuery(this).val();
+                categoryFeedbacks.push(new CategoryFeedback(parameterId, ""));
+            });
+        } else {
+            jQuery(inputSelector).each(function () {
+                var input = jQuery(this);
 
-            if((input.attr('type') === 'checkbox' || input.attr('type') === 'radio') && input.is(':checked')) {
-                categoryFeedbacks.push(new CategoryFeedback(input.data('parameter-id'), ""));
-            } else if(input.attr('type') === 'text' && input.val() !== "") {
-                categoryFeedbacks.push(new CategoryFeedback(null, input.val()));
-            }
-        });
+                if((input.attr('type') === 'checkbox' || input.attr('type') === 'radio') && input.is(':checked')) {
+                    categoryFeedbacks.push(new CategoryFeedback(input.data('parameter-id'), ""));
+                } else if(input.attr('type') === 'text' && input.val() !== "") {
+                    categoryFeedbacks.push(new CategoryFeedback(null, input.val()));
+                }
+            });
+        }
 
         return categoryFeedbacks;
     }
 
     getInputSelector() {
         return 'section#categoryMechanism' + this.id + '.category-type input';
+    }
+
+    getSelectSelector() {
+        return 'section#categoryMechanism' + this.id + '.category-type select';
     }
 
     coordinateOwnInputAndRadioBoxes() {

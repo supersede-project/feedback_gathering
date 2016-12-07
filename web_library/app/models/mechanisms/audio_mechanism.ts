@@ -11,7 +11,10 @@ export class AudioMechanism extends Mechanism {
     getContext():any {
         return {
             maxTime: this.getParameterValue('maxTime'),
-            title: this.getParameterValue('title')
+            title: this.getParameterValue('title'),
+            boxWidth: this.getParameterValue('boxWidth'),
+            boxPaddingLeft: this.getParameterValue('boxPaddingLeft') || '0',
+            boxPaddingRight: this.getParameterValue('boxPaddingRight') || '20px'
         }
     }
 }

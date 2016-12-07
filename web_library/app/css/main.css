@@ -507,6 +507,15 @@
 .feedback-library .attachment-review a.remove-file {
   display: none; }
 
+.feedback-row {
+  display: block;
+  box-sizing: border-box; }
+
+.feedback-col {
+  float: left;
+  padding-right: 20px;
+  box-sizing: border-box; }
+
 #feedbackEntryPoint {
   position: fixed;
   top: 300px;
@@ -521,18 +530,28 @@
   border: none; }
 
 .feedback-library.ui-dialog .ui-dialog-titlebar-close, .feedback-library .ui-dialog-titlebar-close {
-  margin: -12px 4px 0;
+  margin: -12px 45px 0;
   display: block;
   background: none;
   border-top: none;
   border-left: none;
   border-right: none;
-  border-bottom: 4px solid #666666 !important;
+  width: 16px;
+  height: 18px;
+  border-bottom: 3px solid #666666 !important;
   border-radius: 0; }
   .feedback-library.ui-dialog .ui-dialog-titlebar-close:hover, .feedback-library .ui-dialog-titlebar-close:hover {
-    border-bottom: 4px solid #000000; }
+    border-bottom: 3px solid #000000; }
   .feedback-library.ui-dialog .ui-dialog-titlebar-close span, .feedback-library .ui-dialog-titlebar-close span {
     display: none; }
+
+.feedback-library.ui-dialog .close-feedback-dialog {
+  margin: 0 68px 0;
+  display: inline-block;
+  border: none;
+  border-radius: 0; }
+  .feedback-library.ui-dialog .close-feedback-dialog .ui-icon {
+    background-image: url(https://code.jquery.com/ui/1.12.1/themes/base/images/ui-icons_777777_256x240.png) !important; }
 
 .feedback-library.ui-dialog {
   padding: 0; }
@@ -557,7 +576,7 @@
   font-size: 22px;
   margin: 0;
   background-color: #e2e2e2;
-  padding: 7px 7px; }
+  padding: 1px 7px; }
 
 .feedback-library.ui-widget input, .feedback-library.ui-widget select, .feedback-library.ui-widget textarea, .feedback-library.ui-widget button {
   font-family: Tahoma, Verdana, Segoe, sans-serif;
@@ -610,6 +629,11 @@
 .feedback-library .feedback-mechanism.text-type {
   margin-bottom: 10px; }
 
+.feedback-library .feedback-mechanism.category-type {
+  margin-bottom: 25px; }
+  .feedback-library .feedback-mechanism.category-type p {
+    margin-top: 6px; }
+
 .feedback-library textarea.text-type-text {
   width: 100%;
   min-width: 100%;
@@ -619,7 +643,11 @@
   color: #7d7a7c;
   padding: 5px;
   margin-top: 6px;
-  box-sizing: border-box; }
+  box-sizing: border-box;
+  min-height: 0; }
+
+.feedback-library textarea.email-field {
+  overflow-y: hidden; }
 
 .feedback-library .ui-dialog-titlebar {
   border-color: transparent;
@@ -628,7 +656,7 @@
   margin: 0; }
   .feedback-library .ui-dialog-titlebar .ui-dialog-title {
     font-size: 13px;
-    margin: 3px 0;
+    margin: 8px 0;
     text-transform: none; }
 
 .feedback-library p.explanation {
@@ -672,7 +700,8 @@
   .feedback-library .button.submit-feedback {
     background-color: #1c416f;
     color: white;
-    font-weight: bold; }
+    font-weight: bold;
+    margin-bottom: 0; }
     .feedback-library .button.submit-feedback:hover {
       background-color: #5a7393;
       color: white; }
@@ -961,13 +990,19 @@
   float: right;
   display: inline-block; }
 
+.feedback-library .button-row {
+  margin-top: 25px; }
+
 .feedback-library a.discard-feedback {
   float: left;
   display: inline-block;
   color: #282828;
   text-decoration: none;
-  margin-top: 7px;
+  margin-top: 23px;
+  margin-right: 30px;
   font-size: 14px; }
+  .feedback-library a.discard-feedback.no-float-left {
+    float: none; }
   .feedback-library a.discard-feedback:hover {
     color: #282828;
     text-decoration: underline; }

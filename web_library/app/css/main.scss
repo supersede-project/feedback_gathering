@@ -5,6 +5,7 @@
 @import "https://fonts.googleapis.com/icon?family=Material+Icons";
 @import "audio";
 @import "attachment";
+@import "grid";
 
 
 #feedbackEntryPoint {
@@ -23,21 +24,34 @@
 }
 
 .feedback-library.ui-dialog .ui-dialog-titlebar-close, .feedback-library .ui-dialog-titlebar-close {
-  margin: -12px 4px 0;
+  margin: -12px 45px 0;
   display: block;
   background: none;
   border-top: none;
   border-left: none;
   border-right: none;
-  border-bottom: 4px solid #666666 !important;
+  width: 16px;
+  height: 18px;
+  border-bottom: 3px solid #666666 !important;
   border-radius: 0;
 
   &:hover {
-    border-bottom: 4px solid #000000;
+    border-bottom: 3px solid #000000;
   }
 
   span {
     display: none;
+  }
+}
+
+.feedback-library.ui-dialog .close-feedback-dialog {
+  margin: 0 68px 0;
+  display: inline-block;
+  border: none;
+  border-radius: 0;
+
+  .ui-icon {
+    background-image: url(https://code.jquery.com/ui/1.12.1/themes/base/images/ui-icons_777777_256x240.png) !important;
   }
 }
 
@@ -69,7 +83,7 @@
   font-size: 22px;
   margin: 0;
   background-color: $dialogTitlebarBackgroundColor;
-  padding: 7px 7px;
+  padding: 1px 7px;
 }
 
 .feedback-library.ui-widget input, .feedback-library.ui-widget select, .feedback-library.ui-widget textarea, .feedback-library.ui-widget button {
@@ -137,6 +151,14 @@
     margin-bottom: 10px;
   }
 
+  .feedback-mechanism.category-type {
+    margin-bottom: 25px;
+
+    p {
+      margin-top: 6px;
+    }
+  }
+
   textarea.text-type-text {
     width: 100%;
     min-width: 100%;
@@ -147,6 +169,11 @@
     padding: 5px;
     margin-top: 6px;
     box-sizing: border-box;
+    min-height: 0;
+  }
+
+  textarea.email-field {
+    overflow-y:hidden;
   }
 
   .ui-dialog-titlebar {
@@ -157,7 +184,7 @@
 
     .ui-dialog-title {
       font-size: 13px;
-      margin: 3px 0;
+      margin: 8px 0;
       text-transform: none;
     }
   }
@@ -218,6 +245,7 @@
       background-color: $submitButtonBackgroundColor;
       color: $submitButtonColor;
       font-weight: $submitButtonFontWeight;
+      margin-bottom: 0;
 
       &:hover {
         background-color: $submitButtonHoverBackgroundColor;
@@ -602,13 +630,22 @@
     display: inline-block;
   }
 
+  .button-row {
+    margin-top: 25px;
+  }
+
   a.discard-feedback {
     float: left;
     display: inline-block;
     color: $dialogTitlebarColor;
     text-decoration: none;
-    margin-top: 7px;
+    margin-top: 23px;
+    margin-right: 30px;
     font-size: 14px;
+
+    &.no-float-left {
+      float: none;
+    }
 
     &:hover {
       color: $dialogTitlebarColor;

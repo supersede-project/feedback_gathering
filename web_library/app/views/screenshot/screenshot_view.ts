@@ -1,9 +1,12 @@
 import {ScreenshotViewDrawing} from './screenshot_view_drawing';
 import {DataHelper} from '../../js/helpers/data_helper';
-import '../../js/lib/screenshot/html2canvas.js';
+import '../../js/lib/screenshot/html2canvas_5_0_3.min.js';
+import '../../js/lib/screenshot/html2canvas_5_0_3.svg.min.js';
+import '../../js/lib/screenshot/rgbcolor.js';
+import '../../js/lib/screenshot/StackBlur.js';
+import '../../js/lib/screenshot/canvg.js';
 import {Mechanism} from '../../models/mechanisms/mechanism';
 import {CanvasState} from './canvas_state';
-
 const freehandDrawingMode:string = 'freehandDrawingMode';
 const rectDrawingMode:string = 'rectDrawingMode';
 const fillRectDrawingMode:string = 'fillRectDrawingMode';
@@ -81,6 +84,8 @@ export class ScreenshotView {
     generateScreenshot() {
         this.hideElements();
         var myThis = this;
+
+        myThis.svgToCanvas();
 
         html2canvas(this.elementToCapture, {
             useCORS: true,
@@ -1075,6 +1080,57 @@ export class ScreenshotView {
         }
 
         return currentObjectColor;
+    }
+
+    /**
+     * Converts SVG objects (e.g. from highcharts lib) to a temporary canvas. This enables us to capture also SVG stuff
+     * on the screenshot.
+     */
+    svgToCanvas() {
+        var myThis = this;
+        var svgElements = this.elementToCapture.find('svg:not(.jq-star-svg)');
+
+        //replace all svgs with a temp canvas
+        svgElements.each(function() {
+            var canvas, xml;
+
+            // canvg doesn't cope very well with em font sizes so find the calculated size in pixels and replace it in the element.
+            jQuery.each(jQuery(this).find('[style*=em]'), function(index, el) {
+                jQuery(this).css('font-size', myThis.getStyle(el, 'font-size'));
+            });
+
+            canvas = document.createElement("canvas");
+            canvas.className = "screenShotTempCanvas";
+            //convert SVG into a XML string
+            xml = (new XMLSerializer()).serializeToString(this);
+
+            // Removing the name space as IE throws an error
+            xml = xml.replace(/xmlns=\"http:\/\/www\.w3\.org\/2000\/svg\"/, '');
+
+            //draw the SVG onto a canvas
+            canvg(canvas, xml);
+            jQuery(canvas).insertAfter(this);
+            //hide the SVG element
+            jQuery(this).attr('class', 'tempHide');
+            jQuery(this).hide();
+        });
+    }
+
+    getStyle(el, styleProp) {
+        let camelize = function (str) {
+            return str.replace(/\-(\w)/g, function(str, letter){
+                return letter.toUpperCase();
+            });
+        };
+
+        if (el.currentStyle) {
+            return el.currentStyle[camelize(styleProp)];
+        } else if (document.defaultView && document.defaultView.getComputedStyle) {
+            return document.defaultView.getComputedStyle(el,null)
+                .getPropertyValue(styleProp);
+        } else {
+            return el.style[camelize(styleProp)];
+        }
     }
 }
 
