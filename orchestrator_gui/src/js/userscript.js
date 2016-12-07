@@ -383,15 +383,15 @@ var setup = function () {
             fieldOptionsData.showMessages = false;
             fieldConfigOptions.data = fieldOptionsData;
         }
-        fieldConfigSchema.view = {
+/*        fieldConfigSchema.view = {
             "parent": MODAL_VIEW,
             "displayReadonly": false
         };
-        fieldConfigOptions.view = {
+*/        fieldConfigOptions.view = {
             "parent": MODAL_VIEW,
             "displayReadonly": false
         };
-
+/*
         fieldConfigSchema.postRender = function (control) {
             var modal = $(MODAL_TEMPLATE.trim());
             modal.find(".modal-title").append(field.getTitle());
@@ -420,6 +420,7 @@ var setup = function () {
                 "display": "none"
             });
         };
+        */
         fieldConfigOptions.postRender = function (control) {
             var modal = $(MODAL_TEMPLATE.trim());
             modal.find(".modal-title").append(field.getTitle());
@@ -451,7 +452,7 @@ var setup = function () {
 
         // finds the div with fielForm class and uses it as alpaca form for the schema and option form
         var x = $("<div><div class='fieldForm'></div></div>");
-        $(x).find(".fieldForm").alpaca(fieldConfigSchema);
+//        $(x).find(".fieldForm").alpaca(fieldConfigSchema);
         $(x).find(".fieldForm").alpaca(fieldConfigOptions);
 
     };
@@ -505,6 +506,7 @@ var setup = function () {
         // available components
         var types = ["text", "category", "rating", "screenshot", "attachment", "audio"];
 
+        // do for all of the types mentioned above
         for (var i = 0; i < types.length; i++) {
 
             var type = types[i];
@@ -518,6 +520,7 @@ var setup = function () {
             var type = instance.getType();
             var fieldType = instance.getFieldType();
 
+            // component box
             var div = $("<div class='form-element draggable ui-widget-content' data-type='" + type + "' data-field-type='" + fieldType + "'></div>");
             $(div).append("<div><span class='form-element-title'>" + title + "</span> (<span class='form-element-type'>" + fieldType + "</span>)</div>");
             $(div).append("<div><span class='form-element-description'>Dropable element</span></div>");
@@ -548,6 +551,7 @@ var setup = function () {
         }
     });
 
+    // add a component to the form
     var insertField = function (schema, options, dataType, fieldType, parentField, previousField, previousFieldKey, nextField, nextFieldKey) {
         var itemSchema = {
             "type": dataType
@@ -767,7 +771,15 @@ $.alpaca.Fields.AttachmentMechanism = $.alpaca.Fields.UploadField.extend({
         delete myProp.properties.type;
         delete myProp.properties.validate;
         delete myProp.properties.view;
-        return myProp;
+        return Alpaca.merge(myProp, {
+            "properties": {
+                "required": {
+                    "title": "Required",
+                    "type": "boolean",
+                    "default": false
+                }
+            }
+        });
     },
 
     getSchemaOfSchema: function () {
@@ -793,12 +805,19 @@ $.alpaca.Fields.AudioMechanism = $.alpaca.Fields.ObjectField.extend({
         return "Audio Mechanism";
     },
 
-    getSchemaOfObjects: function () {
-        return Alpaca.merge(this.base(), {
+    getSchemaOfOptions: function () {
+        var myProp = this.base();
+        delete myProp.properties.fields;
+        return Alpaca.merge(myProp, {
             "properties": {
                 "label": {
-                    "title": "label",
+                    "title": "Label",
                     "type": "text"
+                },
+                "required": {
+                    "title": "Required",
+                    "type": "boolean",
+                    "default": false
                 }
             }
         });
@@ -839,6 +858,7 @@ $.alpaca.Fields.ScreenshotMechanism = $.alpaca.Fields.ImageField.extend({
         delete myProp.properties.disallowOnlyEmptySpaces;
         delete myProp.properties.enum;
         delete myProp.properties.fieldClass;
+        delete myProp.properties.fields;
         delete myProp.properties.focus;
         delete myProp.properties.helper;
         delete myProp.properties.helpers;
@@ -868,6 +888,11 @@ $.alpaca.Fields.ScreenshotMechanism = $.alpaca.Fields.ImageField.extend({
                 },
                 "undo_functionality": {
                     "title": "Activate undo",
+                    "type": "boolean",
+                    "default": false
+                },
+                "required": {
+                    "title": "Required",
                     "type": "boolean",
                     "default": false
                 }
@@ -917,7 +942,19 @@ $.alpaca.Fields.CategoryMechanism = $.alpaca.Fields.SelectField.extend({
         delete myProp.properties.useDataSourceAsEnum;
         delete myProp.properties.validate;
         delete myProp.properties.view;
-        return myProp;
+        return Alpaca.merge(myProp, {
+            "properties": {
+                "required": {
+                    "title": "Required",
+                    "type": "boolean",
+                    "default": false
+                },
+                "enum": {
+                    "title": "Enum values",
+                    "type": "array"
+                }
+            }
+        });
     },
 
     getSchemaOfSchema: function () {
@@ -961,7 +998,19 @@ $.alpaca.Fields.RatingMechanism = $.alpaca.Fields.RadioField.extend({
         delete myProp.properties.validate;
         delete myProp.properties.vertical;
         delete myProp.properties.view;
-        return myProp;
+        return Alpaca.merge(myProp, {
+            "properties": {
+                "required": {
+                    "title": "Required",
+                    "type": "boolean",
+                    "default": false
+                },
+                "enum": {
+                    "title": "Enum values",
+                    "type": "array"
+                }
+            }
+        });
     },
 
     getSchemaOfSchema: function () {
@@ -1007,7 +1056,19 @@ $.alpaca.Fields.TextMechanism = $.alpaca.Fields.TextAreaField.extend({
         delete myProp.properties.typeahead;
         delete myProp.properties.validate;
         delete myProp.properties.view;
-        return myProp;
+        return Alpaca.merge(myProp, {
+            "properties": {
+                "required": {
+                    "title": "Required",
+                    "type": "boolean",
+                    "default": false
+                },
+                "maxLength": {
+                    "title": "Maximum Length",
+                    "type": "string"
+                }
+            }
+        });
     },
 
     getSchemaOfSchema: function(){
