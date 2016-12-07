@@ -32,7 +32,12 @@ export class ScreenshotMechanism extends Mechanism {
             freehandMouseover: this.getParameterValue('freehandMouseover'),
             boxWidth: this.getParameterValue('boxWidth') || '100%',
             boxPaddingLeft: this.getParameterValue('boxPaddingLeft') || '0',
-            boxPaddingRight: this.getParameterValue('boxPaddingRight') || '20px'
+            boxPaddingRight: this.getParameterValue('boxPaddingRight') || '20px',
+            screenshotTakeButtonTitle: this.getParameterValue('screenshotTakeButtonTitle'),
+            screenshotTakeNewButtonTitle: this.getParameterValue('screenshotTakeNewButtonTitle'),
+            screenshotRemoveButtonTitle: this.getParameterValue('screenshotRemoveButtonTitle'),
+            zoomTitle: this.getParameterValue('zoomTitle'),
+            annotationsTitle: this.getParameterValue('annotationsTitle')
         }
     }
 }

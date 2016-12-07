@@ -66,14 +66,18 @@
                                          class="feedback-mechanism feedback-col horizontal screenshot-type" style="width: {{boxWidth}}; padding-left: {{boxPaddingLeft}}; padding-right: {{boxPaddingRight}};">
                                     <article class="col col-left">
                                         <button class="take-screenshot button screenshot"
-                                                data-default-text="{{t "screenshot.take_screenshot" }}"
-                                                data-active-text="{{t "screenshot.take_new_screenshot" }}">{{t "screenshot.take_screenshot" }}</button>
+                                                data-default-text="{{#if screenshotTakeButtonTitle}}{{screenshotTakeButtonTitle}}{{else}}{{t "screenshot.take_screenshot" }}{{/if}}"
+                                                data-active-text="{{#if screenshotTakeNewButtonTitle}}{{screenshotTakeNewButtonTitle}}{{else}}{{t "screenshot.take_new_screenshot" }}{{/if}}">
+                                            {{#if screenshotTakeButtonTitle}}{{screenshotTakeButtonTitle}}{{else}}{{t "screenshot.take_screenshot" }}{{/if}}
+                                        </button>
 
                                         <div class="screenshot-operations">
                                             <button class="button screenshot-draw-remove screenshot"
-                                                    title="{{t "screenshot.remove" }}">{{t "screenshot.remove" }}</button>
+                                                    title="{{#if screenshotRemoveButtonTitle}}{{screenshotRemoveButtonTitle}}{{else}}{{t "screenshot.remove" }}{{/if}}">
+                                                {{#if screenshotRemoveButtonTitle}}{{screenshotRemoveButtonTitle}}{{else}}{{t "screenshot.remove" }}{{/if}}
+                                            </button>
 
-                                            <p style="{{../generalLabelStyle}}">Zoom</p>
+                                            <p style="{{../generalLabelStyle}}">{{zoomTitle}}</p>
                                             <img class="zoom-in" title="Zoom"
                                                  src="{{../distPath}}img/ic_zoom_in_black_24dp_2x.png"/>
                                             <img class="zoom-out" title="Zoom"
@@ -105,7 +109,7 @@
                                                     src="{{../distPath}}img/ic_undo_black_24dp_2x.png"
                                                     alt="{{t "screenshot.undo" }}"/></button>
 
-                                            <p class="annotations-heading" style="{{../generalLabelStyle}}">Annotations</p>
+                                            <p class="annotations-heading" style="{{../generalLabelStyle}}">{{annotationsTitle}}</p>
                                             {{#if annotationExplanation }}
                                                 <small>{{ annotationExplanation }}</small>
                                             {{/if}}
