@@ -707,10 +707,19 @@ var setup = function () {
             config.options = options;
         }
 
-        var transformedConfig = new ObjectTemplate(tmpl).transform(config);
-        var configString = JSON.stringify(transformedConfig);
+        var configuration = {};
+        configuration.mechanisms = [];
 
-//        var configString = JSON.stringify(config);
+        $.each(options.fields, function(key, value){
+            configuration.mechanisms.push(value);
+        });
+
+        var configString = JSON.stringify(configuration);
+
+/*
+        var transformedConfig = new ObjectTemplate(tmpl).transform(mechanisms);
+        var configString = JSON.stringify(transformedConfig);
+*/
 
         // Save JSON-String to local JSON-file
         /* var blob = new Blob([configString], {type: "application/json"});
