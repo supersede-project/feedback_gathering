@@ -620,7 +620,7 @@ var setup = function () {
         }
     };
 
-    var assembleOptions = function (field, options) {
+    var assembleOptions = function (field, options) { // FIXME
         // copy any properties from this field's options into our options object
         for (var k in field.options) {
             if (field.options.hasOwnProperty(k) && typeof(field.options[k]) !== "function") {
@@ -629,16 +629,28 @@ var setup = function () {
         }
         // a few that we handle by hand
         options.type = field.getFieldType();
+
         // reset fields, we handle that one at a time
         delete options.fields;
-        options.fields = {};
+        // options.fields = {};
+
+        var fields = []; // new
+        options.fields = {}; // new
+
+        // var mechanisms = {}; // new
+        // mechanisms.id = {}; // new
+
         if (field.children) {
             for (var i = 0; i < field.children.length; i++) {
                 var childField = field.children[i];
                 var propertyId = childField.propertyId;
+                var mechanisms = field.children[i]; // new
+                mechanisms.id = propertyId; // new
 
-                options.fields[propertyId] = {};
-                assembleOptions(childField, options.fields[propertyId]);
+                // options.fields[propertyId] = {};
+                // mechanisms.id = propertyId; // new
+                // assembleOptions(childField, options.fields[propertyId]);
+                assembleOptions(mechanisms, options.fields[i]); // new
             }
         }
     };
