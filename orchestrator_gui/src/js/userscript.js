@@ -632,10 +632,10 @@ var setup = function () {
 
         // reset fields, we handle that one at a time
         delete options.fields;
-        // options.fields = {};
+        options.fields = {};
 
-        var fields = []; // new
-        options.fields = {}; // new
+        // var fields = []; // new
+        // options.fields = {}; // new
 
         // var mechanisms = {}; // new
         // mechanisms.id = {}; // new
@@ -644,13 +644,13 @@ var setup = function () {
             for (var i = 0; i < field.children.length; i++) {
                 var childField = field.children[i];
                 var propertyId = childField.propertyId;
-                var mechanisms = field.children[i]; // new
-                mechanisms.id = propertyId; // new
-
-                // options.fields[propertyId] = {};
+                // var mechanisms = field.children[i]; // new
                 // mechanisms.id = propertyId; // new
-                // assembleOptions(childField, options.fields[propertyId]);
-                assembleOptions(mechanisms, options.fields[i]); // new
+
+                options.fields[propertyId] = {};
+                // mechanisms.id = propertyId; // new
+                assembleOptions(childField, options.fields[propertyId]);
+                // assembleOptions(mechanisms, options.fields[i]); // new
             }
         }
     };
