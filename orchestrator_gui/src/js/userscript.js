@@ -507,7 +507,7 @@ var setup = function () {
     // creates the components
     var afterAlpacaInit = function () {
         // available components
-        var types = ["text", "category", "rating", "screenshot", "attachment", "audio"];
+        var types = ["textinput", "category", "rating", "screenshot", "attachment", "audio"];
 
         // do for all of the types mentioned above
         for (var i = 0; i < types.length; i++) {
@@ -1050,9 +1050,9 @@ $.alpaca.Fields.RatingMechanism = $.alpaca.Fields.RadioField.extend({
 Alpaca.registerFieldClass("rating", Alpaca.Fields.RatingMechanism);
 
 // textarea component extends the alpaca textarea
-$.alpaca.Fields.TextMechanism = $.alpaca.Fields.TextAreaField.extend({
+$.alpaca.Fields.TextInputMechanism = $.alpaca.Fields.TextAreaField.extend({
     getFieldType: function(){
-        return "text";
+        return "textinput";
     },
     getTitle: function () {
         return "Text Mechanism";
@@ -1108,4 +1108,4 @@ $.alpaca.Fields.TextMechanism = $.alpaca.Fields.TextAreaField.extend({
         return mySchema;
     }
 });
-Alpaca.registerFieldClass("text", Alpaca.Fields.TextMechanism);
+Alpaca.registerFieldClass("textinput", Alpaca.Fields.TextInputMechanism);
