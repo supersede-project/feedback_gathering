@@ -22,61 +22,23 @@ var tmpl = {
             as: {
                 mechanisms: {
                     path: "options.fields",
-   /*                 choose: function(node, value, key) {
-                        if (key.indexOf("new") >= 0) {
-                            return key;
-                        }
-                    },
-*/
-//                    nested: true,
+
                     as: {
                         type: "type",
-                        label: "label"
+                        parameters: { // TODO: parameters should become an array
+                            path: ".",
+
+                            as: {
+                                key: "label", // TODO: set fix string "title" as key.value
+                                value: "label"
+                            }
+
+                        }
                     }
-
-                    // all: true
-
-                    /*
-                     choose: ["type", "label"],
-                     as: {
-                     type: "type",
-                     label: "label"
-                     }
-                     */
 
                 }
             }
         }
     }
 
-    /* Lollys iplementations
-    as: {
-        configurations: {
-
-            path: 'options.fields',
-            choose: function (node, value, key) {
-                return key;
-            },
-            format: function (node, value, key) {
-                return {
-                    key: "mechanisms",
-                    value: key.replace(/new/, '')
-                };
-            },
-            nested: true,
-            as: {
-                type: 'type',
-                parameters: {
-                    as: {
-                        title: "label"
-                    }
-
-                }
-            },
-            mechanisms2: {
-                path: 'options'
-            }
-
-        }
-    } */
 };
