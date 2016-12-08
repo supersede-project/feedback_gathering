@@ -436,6 +436,10 @@ var setup = function () {
             $(modal).find(".okay").click(function () {
 
                 field.options = control.getValue();
+                field.schema.required = field.options.required;
+                if(field.options.enum){
+                    field.schema.enum = field.options.enum;
+                }
 
                 var top = findTop(field);
                 regenerate(top);
@@ -454,7 +458,6 @@ var setup = function () {
         var x = $("<div><div class='fieldForm'></div></div>");
 //        $(x).find(".fieldForm").alpaca(fieldConfigSchema);
         $(x).find(".fieldForm").alpaca(fieldConfigOptions);
-
     };
 
     var refreshView = function (callback) {
