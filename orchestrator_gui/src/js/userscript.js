@@ -707,19 +707,25 @@ var setup = function () {
             config.options = options;
         }
 
-        var configuration = {};
-        configuration.mechanisms = [];
+        console.log(config);
+
+       var configFields = [];
 
         $.each(options.fields, function(key, value){
-            configuration.mechanisms.push(value);
+            configFields.push(value);
         });
 
-        var configString = JSON.stringify(configuration);
+        config.options.fields = configFields;
 
-/*
-        var transformedConfig = new ObjectTemplate(tmpl).transform(mechanisms);
+        console.log(config);
+
+    //    var newConfig = JSON.stringify(config);
+
+   //     console.log(newConfig);
+
+        var transformedConfig = new ObjectTemplate(tmpl).transform(config);
         var configString = JSON.stringify(transformedConfig);
-*/
+
 
         // Save JSON-String to local JSON-file
         /* var blob = new Blob([configString], {type: "application/json"});

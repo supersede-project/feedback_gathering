@@ -22,13 +22,13 @@ var tmpl = {
             as: {
                 mechanisms: {
                     path: "options.fields",
-                    choose: function(node, value, key) {
+   /*                 choose: function(node, value, key) {
                         if (key.indexOf("new") >= 0) {
                             return key;
                         }
                     },
-
-                    nested: true,
+*/
+//                    nested: true,
                     as: {
                         type: "type",
                         label: "label"
