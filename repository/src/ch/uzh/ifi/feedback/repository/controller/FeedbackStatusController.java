@@ -2,8 +2,6 @@ package ch.uzh.ifi.feedback.repository.controller;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import com.google.inject.Inject;
@@ -127,17 +125,6 @@ public class FeedbackStatusController extends RestController<Status>{
 
 		throw new NotFoundException("feedback with id '" + feedbackId + "' has no status for user '"+ userId  + " '!");
 	}
-	
-//	@Path("/{lang}/applications/{application_id}/api_users/{id}/states")
-//	@GET
-//	@Authenticate(service = UserAuthenticationService.class, scope = "APPLICATION")
-//	public List<Status> GetByApiUser(
-//			@PathParam("id")Integer id, 
-//			@PathParam("application_id")Integer applicationId) throws Exception 
-//	{
-//		List<Status> states = dbService.GetWhere(asList(id), "api_user_id = ?").stream().filter(s -> validateApplication(s, applicationId)).collect(Collectors.toList());
-//		return states;
-//	}
 
 	@Path("/{lang}/applications/{application_id}/states/{id}")
 	@DELETE
