@@ -25,9 +25,9 @@ public class OrchestratorServletModule extends ServletModule {
     protected void configureServlets() {
     	
       filter("/feedback/*").through(createTimeStampFilter());
-      filter("/monitors*").through(createTimeStampFilter());
+      filter("/monitoring/*").through(createTimeStampFilter());
       serve("/feedback/*").with(OrchestratorServlet.class);
-      serve("/monitors*").with(MonitoringServlet.class);
+      serve("/monitoring/*").with(MonitoringServlet.class);
     }
     
     @Provides @Named("timestamp") @RequestScoped Timestamp provideTimeStamp() {
