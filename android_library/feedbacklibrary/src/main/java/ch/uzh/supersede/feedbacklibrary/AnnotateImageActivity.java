@@ -278,7 +278,7 @@ public class AnnotateImageActivity extends AppCompatActivity implements ColorPic
     }
 
     @Override
-    public void onDialogPositiveClick(DialogFragment dialog) {
+    public void onDialogPositiveClick(android.support.v4.app.DialogFragment dialog) {
         annotateImageView.setPaintStrokeColor(((ColorPickerDialog) dialog).getChangedColor());
         annotateImageView.setPaintFillColor(((ColorPickerDialog) dialog).getChangedColor());
     }
@@ -663,7 +663,7 @@ public class AnnotateImageActivity extends AppCompatActivity implements ColorPic
 
     private void showColorPickerDialog() {
         ColorPickerDialog dialog = createColorPickerDialog(annotateImageView.getPaintStrokeColor());
-        dialog.show(getFragmentManager(), "ColorPickerDialog");
+        dialog.show(getSupportFragmentManager(), "ColorPickerDialog");
     }
 
     private void showStickerDialog() {

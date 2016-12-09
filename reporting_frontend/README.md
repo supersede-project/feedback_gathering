@@ -34,8 +34,8 @@ In order to start the seed use:
 
 
 ```bash
-git clone --depth 1 https://github.com/mgechev/angular2-seed.git
-cd angular2-seed
+git clone https://github.com/supersede-project/monitor_feedback/tree/master/reporting_frontend
+cd reporting_frontend
 # install the project's dependencies
 npm install
 # watches your files and uses livereload by default

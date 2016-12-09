@@ -24,38 +24,25 @@ package ch.uzh.ifi.feedback.orchestrator.model;
 import ch.uzh.ifi.feedback.library.rest.annotations.DbAttribute;
 import ch.uzh.ifi.feedback.library.rest.annotations.Id;
 import ch.uzh.ifi.feedback.library.rest.annotations.Serialize;
-import ch.uzh.ifi.feedback.library.rest.annotations.Unique;
 import ch.uzh.ifi.feedback.orchestrator.serialization.MonitorConfigurationSerializationService;
 
 @Serialize(MonitorConfigurationSerializationService.class)
 public class MonitorConfiguration extends OrchestratorItem<MonitorConfiguration> {
 
 	@Id
-	@DbAttribute("monitor_configurations_id")
+	@DbAttribute("monitor_configuration_id")
 	private Integer id;
 	
 	@DbAttribute("monitor_tool_name")
 	private String monitorToolName;
-	
-	@DbAttribute("monitor_tool_monitor")
-	private String monitor;
 	
 	private String configSender;
 
 	private String timeStamp;
 	
 	//Configuration candidates, only one of them is deserialized
-	private AppStoreConfiguration AppStoreConfiguration;
-	private GooglePlayConfiguration GooglePlayConfiguration;
-	private SocialNetworksMonitorConfiguration SocialNetworksMonitorConfiguration;
-	
-	public String getMonitor() {
-		return monitor;
-	}
-
-	public void setMonitor(String monitor) {
-		this.monitor = monitor;
-	}
+	private MarketPlaces MarketPlaces;
+	private SocialNetworks SocialNetworks;
 
 	public String getMonitorToolName() {
 		return monitorToolName;
@@ -91,29 +78,20 @@ public class MonitorConfiguration extends OrchestratorItem<MonitorConfiguration>
 		this.timeStamp = timeStamp;
 	}
 	
-	public AppStoreConfiguration getAppStoreConfiguration() {
-		return AppStoreConfiguration;
+	public MarketPlaces getMarketPlaces() {
+		return MarketPlaces;
 	}
 
-	public void setAppStoreConfiguration(AppStoreConfiguration appStoreConfiguration) {
-		AppStoreConfiguration = appStoreConfiguration;
+	public void setMarketPlaces(MarketPlaces marketPlaces) {
+		MarketPlaces = marketPlaces;
 	}
 
-	public GooglePlayConfiguration getGooglePlayConfiguration() {
-		return GooglePlayConfiguration;
+	public SocialNetworks getSocialNetworks() {
+		return SocialNetworks;
 	}
 
-	public void setGooglePlayConfiguration(GooglePlayConfiguration googlePlayConfiguration) {
-		GooglePlayConfiguration = googlePlayConfiguration;
-	}
-
-	public SocialNetworksMonitorConfiguration getSocialNetworksMonitorConfiguration() {
-		return SocialNetworksMonitorConfiguration;
-	}
-
-	public void setSocialNetworksMonitorConfiguration(
-			SocialNetworksMonitorConfiguration socialNetworksMonitorConfiguration) {
-		SocialNetworksMonitorConfiguration = socialNetworksMonitorConfiguration;
+	public void setSocialNetworks(SocialNetworks socialNetworks) {
+		SocialNetworks = socialNetworks;
 	}
 
 }

@@ -22,6 +22,8 @@
 package ch.uzh.ifi.feedback.orchestrator.controllers;
 
 import java.net.URI;
+import java.util.Arrays;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -48,9 +50,11 @@ import ch.uzh.ifi.feedback.library.rest.annotations.PUT;
 import ch.uzh.ifi.feedback.library.rest.annotations.Path;
 import ch.uzh.ifi.feedback.library.rest.annotations.PathParam;
 import ch.uzh.ifi.feedback.orchestrator.model.MonitorConfiguration;
+import ch.uzh.ifi.feedback.orchestrator.model.MonitorTool;
 import ch.uzh.ifi.feedback.orchestrator.services.MonitorConfigurationService;
 import ch.uzh.ifi.feedback.orchestrator.services.MonitorToolService;
 import ch.uzh.ifi.feedback.orchestrator.validation.MonitorConfigurationValidator;
+import javassist.NotFoundException;
 
 @RequestScoped
 @Controller(MonitorConfigurationController.class)
@@ -72,7 +76,7 @@ public class MonitorConfigurationController extends RestController<MonitorConfig
 	}
 	
 	@POST
-	@Path("/monitors/{id-type-of-monitor}/{id-monitoring-tool}")
+	@Path("/{id-type-of-monitor}/{id-monitoring-tool}")
 	public MonitorConfiguration InsertMonitorConfiguration(@PathParam("id-type-of-monitor") String type, 
 			@PathParam("id-monitoring-tool") String tool,
 			MonitorConfiguration configuration) throws Exception {
@@ -84,7 +88,10 @@ public class MonitorConfigurationController extends RestController<MonitorConfig
 		Gson gson = new Gson();
 		JsonParser parser = new JsonParser();
 		JsonObject json = parser.parse(gson.toJson(configuration)).getAsJsonObject();
-		json.addProperty("monitor", this.monitorToolService.GetById(tool.hashCode()).getMonitorName());
+		
+		List<MonitorTool> monitorTool = monitorToolService.GetWhere(Arrays.asList(tool), "name = ?");
+		
+		json.addProperty("monitor", monitorTool.get(0).getMonitorName());
 		HttpPost request = new HttpPost(url);
 		request.addHeader("content-type", "application/json");
 		request.setEntity(new StringEntity(json.getAsString()));
@@ -94,15 +101,19 @@ public class MonitorConfigurationController extends RestController<MonitorConfig
 	}
 	
 	@GET
-	@Path("/monitors/{id-type-of-monitor}/{id-monitoring-tool}/{id-tool-configuration}")
+	@Path("/{id-type-of-monitor}/{id-monitoring-tool}/{id-tool-configuration}")
 	public MonitorConfiguration GetMonitorConfiguration(@PathParam("id-type-of-monitor") String type, 
 			@PathParam("id-monitoring-tool") String tool,
 			@PathParam("id-tool-configuration") Integer configuration) throws Exception {
-		return super.GetById(configuration.hashCode());
+		List<MonitorConfiguration> monitorConfiguration = this.dbService.GetWhere(Arrays.asList(tool, configuration), "monitor_tool_name = ? and monitor_configuration_id = ?");
+		if(monitorConfiguration.isEmpty()) {
+				throw new NotFoundException("There is no monitor configuration with this id for this monitor tool");
+		}
+		return monitorConfiguration.get(0);
 	}
 	
 	@PUT
-	@Path("/monitors/{id-type-of-monitor}/{id-monitoring-tool}/{id-tool-configuration}")
+	@Path("/{id-type-of-monitor}/{id-monitoring-tool}/{id-tool-configuration}")
 	public MonitorConfiguration UpdateMonitorConfiguration(@PathParam("id-type-of-monitor") String type, 
 			@PathParam("id-monitoring-tool") String tool,
 			@PathParam("id-tool-configuration") Integer configuration,
@@ -114,7 +125,10 @@ public class MonitorConfigurationController extends RestController<MonitorConfig
 		Gson gson = new Gson();
 		JsonParser parser = new JsonParser();
 		JsonObject json = parser.parse(gson.toJson(configuration)).getAsJsonObject();
-		json.addProperty("monitor", this.monitorToolService.GetById(tool.hashCode()).getMonitorName());
+		
+		List<MonitorTool> monitorTool = monitorToolService.GetWhere(Arrays.asList(tool), "name = ?");
+		
+		json.addProperty("monitor", monitorTool.get(0).getMonitorName());
 		HttpPut request = new HttpPut(url);
 		request.addHeader("content-type", "application/json");
 		request.setEntity(new StringEntity(json.getAsString()));
@@ -124,17 +138,20 @@ public class MonitorConfigurationController extends RestController<MonitorConfig
 	}
 	
 	@DELETE
-	@Path("/monitors/{id-type-of-monitor}/{id-monitoring-tool}/{id-tool-configuration}")
+	@Path("/{id-type-of-monitor}/{id-monitoring-tool}/{id-tool-configuration}")
 	public void DeleteMonitorConfiguration(@PathParam("id-type-of-monitor") String type, 
 			@PathParam("id-monitoring-tool") String tool,
 			@PathParam("id-tool-configuration") Integer configuration) throws Exception {
 		
 		CloseableHttpClient client = HttpClientBuilder.create().build();
 		URIBuilder builder = new URIBuilder();
+		
+		List<MonitorTool> monitorTool = monitorToolService.GetWhere(Arrays.asList(tool), "name = ?");
+		
 		builder.setScheme("http").setHost(monitorManagerHost)
 			.setPath("configuration")
 		    .setParameter("id", configuration.toString())
-		    .setParameter("monitor", super.GetById(configuration).getMonitor());
+		    .setParameter("monitor", monitorTool.get(0).getMonitorName());
 		URI uri = builder.build();
 		HttpDelete request = new HttpDelete(uri);
 		client.execute(request);

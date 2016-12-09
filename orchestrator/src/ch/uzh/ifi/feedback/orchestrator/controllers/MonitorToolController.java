@@ -21,6 +21,9 @@
  *******************************************************************************/
 package ch.uzh.ifi.feedback.orchestrator.controllers;
 
+import java.util.Arrays;
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -34,8 +37,10 @@ import ch.uzh.ifi.feedback.library.rest.annotations.POST;
 import ch.uzh.ifi.feedback.library.rest.annotations.Path;
 import ch.uzh.ifi.feedback.library.rest.annotations.PathParam;
 import ch.uzh.ifi.feedback.orchestrator.model.MonitorTool;
+import ch.uzh.ifi.feedback.orchestrator.model.MonitorType;
 import ch.uzh.ifi.feedback.orchestrator.services.MonitorToolService;
 import ch.uzh.ifi.feedback.orchestrator.validation.MonitorToolValidator;
+import javassist.NotFoundException;
 
 @RequestScoped
 @Controller(MonitorToolController.class)
@@ -48,7 +53,7 @@ public class MonitorToolController extends RestController<MonitorTool> {
 	}
 	
 	@POST
-	@Path("/monitors/{id-type-of-monitor}")
+	@Path("/{id-type-of-monitor}")
 	public MonitorTool InsertMonitorTool(@PathParam("id-type-of-monitor") String id, 
 			MonitorTool tool) throws Exception {
 		tool.setMonitorTypeName(id);
@@ -56,17 +61,25 @@ public class MonitorToolController extends RestController<MonitorTool> {
 	}
 	
 	@GET
-	@Path("/monitors/{id-type-of-monitor}/{id-monitoring-tool}")
+	@Path("/{id-type-of-monitor}/{id-monitoring-tool}")
 	public MonitorTool GetMonitorTool(@PathParam("id-type-of-monitor") String type,
 			@PathParam("id-monitoring-tool") String tool) throws Exception {
-		return super.GetById(tool.hashCode());
+		List<MonitorTool> monitorTool = this.dbService.GetWhere(Arrays.asList(type, tool), "monitor_type_name = ? and name = ?");
+		if(monitorTool.isEmpty()) {
+				throw new NotFoundException("There is no monitor tool with this name for this monitor type");
+		}
+		return monitorTool.get(0);
 	}
 	
 	@DELETE
-	@Path("/monitors/{id-type-of-monitor}/{id-monitoring-tool}")
+	@Path("/{id-type-of-monitor}/{id-monitoring-tool}")
 	public void DeleteTool(@PathParam("id-type-of-monitor") String type,
 			@PathParam("id-monitoring-tool") String tool) throws Exception {
-		super.Delete(tool.hashCode());
+		List<MonitorTool> monitorTool = this.dbService.GetWhere(Arrays.asList(type, tool), "monitor_type_name = ? and name = ?");
+		if(monitorTool.isEmpty()) {
+				throw new NotFoundException("There is no monitor tool with this name for this monitor type");
+		}
+		super.Delete(monitorTool.get(0).getId());
 	}
 	
 

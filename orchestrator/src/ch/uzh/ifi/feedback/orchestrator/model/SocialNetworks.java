@@ -2,7 +2,7 @@ package ch.uzh.ifi.feedback.orchestrator.model;
 
 import java.util.List;
 
-public class SocialNetworksMonitorConfiguration extends MonitorConfigurationParams {
+public class SocialNetworks extends MonitorConfigurationParams {
 
 	private String keywordExpression;
 	

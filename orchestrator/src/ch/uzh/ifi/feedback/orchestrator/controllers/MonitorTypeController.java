@@ -21,6 +21,7 @@
  *******************************************************************************/
 package ch.uzh.ifi.feedback.orchestrator.controllers;
 
+import java.util.Arrays;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -41,6 +42,7 @@ import ch.uzh.ifi.feedback.orchestrator.model.MonitorTool;
 import ch.uzh.ifi.feedback.orchestrator.model.MonitorType;
 import ch.uzh.ifi.feedback.orchestrator.services.MonitorTypeService;
 import ch.uzh.ifi.feedback.orchestrator.validation.MonitorTypeValidator;
+import javassist.NotFoundException;
 
 @RequestScoped
 @Controller(MonitorTypeController.class)
@@ -53,27 +55,33 @@ public class MonitorTypeController extends RestController<MonitorType>{
 	}
 	
 	@GET
-	@Path("/monitors")
 	public List<MonitorType> GetAll() throws Exception {
 		return super.GetAll();
 	}
 	
 	@POST
-	@Path("/monitors")
 	public MonitorType InsertMonitorType(MonitorType monitorType) throws Exception {
 		return super.Insert(monitorType);
 	}
 	
 	@GET
-	@Path("/monitors/{id-type-of-monitor}")
+	@Path("/{id-type-of-monitor}")
 	public MonitorType GetById(@PathParam("id-type-of-monitor") String id) throws Exception {
-		return super.GetById(id.hashCode());
+		List<MonitorType> monitorType = this.dbService.GetWhere(Arrays.asList(id), "name = ?");
+		if(monitorType.isEmpty()) {
+				throw new NotFoundException("There is no monitor type with this name");
+		}
+		return monitorType.get(0);
 	}
 	
 	@DELETE
-	@Path("/monitors/{id-type-of-monitor}")
+	@Path("/{id-type-of-monitor}")
 	public void DeleteMonitorTool(@PathParam("id-type-of-monitor") String id) throws Exception {
-		super.Delete(id.hashCode());
+		List<MonitorType> monitorType = this.dbService.GetWhere(Arrays.asList(id), "name = ?");
+		if(monitorType.isEmpty()) {
+				throw new NotFoundException("There is no monitor type with this name");
+		}
+		super.Delete(monitorType.get(0).getId());
 	}
 	
 	

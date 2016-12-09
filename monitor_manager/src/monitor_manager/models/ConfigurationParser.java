@@ -26,15 +26,24 @@ import com.google.gson.JsonObject;
 public class ConfigurationParser {
 
 	public JsonObject getTwitterConfiguration(JsonObject json) {
-		return json.getAsJsonObject("SocialNetworksMonitorConfiguration");
+		JsonObject in = json.getAsJsonObject("SocialNetworks");
+		JsonObject out = new JsonObject();
+		out.add("SocialNetworksMonitoringConfProf",in);
+		return out;
 	}
 	
 	public JsonObject getGooglePlayConfiguration(JsonObject json) {
-		return json.getAsJsonObject("GooglePlayConfiguration");
+		JsonObject in = json.getAsJsonObject("MarketPlaces");
+		JsonObject out = new JsonObject();
+		out.add("GooglePlayConfProf",in);
+		return out;
 	}
 	
 	public JsonObject getAppStoreConfiguration(JsonObject json) {
-		return json.getAsJsonObject("AppStoreConfiguration");
+		JsonObject in = json.getAsJsonObject("MarketPlaces");
+		JsonObject out = new JsonObject();
+		out.add("AppStoreConfProf",in);
+		return out;
 	}
 	
 }
