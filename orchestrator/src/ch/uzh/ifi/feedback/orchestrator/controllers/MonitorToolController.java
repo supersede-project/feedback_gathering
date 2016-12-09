@@ -40,18 +40,23 @@ import ch.uzh.ifi.feedback.library.rest.annotations.PathParam;
 import ch.uzh.ifi.feedback.orchestrator.model.MonitorTool;
 import ch.uzh.ifi.feedback.orchestrator.model.MonitorType;
 import ch.uzh.ifi.feedback.orchestrator.services.MonitorToolService;
+import ch.uzh.ifi.feedback.orchestrator.services.MonitorTypeService;
 import ch.uzh.ifi.feedback.orchestrator.validation.MonitorToolValidator;
 import javassist.NotFoundException;
 
 @RequestScoped
 @Controller(MonitorTool.class)
 public class MonitorToolController extends RestController<MonitorTool> {
+	
+	private MonitorTypeService monitorTypeService;
 
 	@Inject
 	public MonitorToolController(MonitorToolService dbService, 
+			MonitorTypeService monitorTypeService,
 			MonitorToolValidator validator,
 			HttpServletRequest request, HttpServletResponse response) {
 		super(dbService, validator, request, response);
+		this.monitorTypeService = monitorTypeService;
 	}
 	
 	@POST
@@ -66,7 +71,11 @@ public class MonitorToolController extends RestController<MonitorTool> {
 	@Path("/monitors/{id-type-of-monitor}/{id-monitoring-tool}")
 	public MonitorTool GetMonitorTool(@PathParam("id-type-of-monitor") String type,
 			@PathParam("id-monitoring-tool") String tool) throws Exception {
-		List<MonitorTool> monitorTool = this.dbService.GetWhere(Arrays.asList(type, tool), "monitor_type_name = ? and name = ?");
+		List<MonitorType> monitorType = this.monitorTypeService.GetWhere(Arrays.asList(type), "name = ?");
+		if (monitorType.isEmpty()) {
+			throw new NotFoundException("There is no monitor type with this name");
+		}
+		List<MonitorTool> monitorTool = this.dbService.GetWhere(Arrays.asList(monitorType.get(0).getId(), tool), "monitor_type_id = ? and name = ?");
 		if(monitorTool.isEmpty()) {
 				throw new NotFoundException("There is no monitor tool with this name for this monitor type");
 		}
