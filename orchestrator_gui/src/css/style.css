@@ -104,3 +104,24 @@ body
 .container {
     width: 100%;
 }
+
+.droppable-elements {
+    background-color: #e2f6fd;
+}
+
+.form-container {
+    background-color: #f4fcfe;
+    border-right: 1px solid #ccc;
+}
+
+.font-helvetica {
+    font-family: "Helvetica";
+}
+
+.font-comicSans {
+    font-family: "Comic Sans MS";
+}
+
+.font-times {
+    font-family: "Times New Roman";
+}

@@ -95,7 +95,7 @@
                     <div class="row">
 
                         <!--  Droppable elements -->
-                        <div class="col-md-2">
+                        <div class="col-md-2 droppable-elements">
                             <h3> Form Components </h3>
                             <div class="row">
                                 <div class="col-md-12">
@@ -117,10 +117,10 @@
                             <!-- Set Form Font -->
                             <div class="form-group">
                                 <label for="SetFont">Select Font</label>
-                                <select class="form-control" id="SetFont">
-                                    <option>Helvetica</option>
-                                    <option>Comic Sans</option>
-                                    <option>Times New Roman</option>
+                                <select class="form-control" id="setFont" name="setFont">
+                                    <option value="font-helvetica">Helvetica</option>
+                                    <option value="font-comicSans">Comic Sans</option>
+                                    <option value="font-times">Times New Roman</option>
                                 </select>
                             </div>
 
@@ -140,17 +140,17 @@
 
 
                         <!-- Drop elements here -->
-                        <div class="col-md-4">
+                        <div class="col-md-4 form-container">
                             <h3> Form Designer </h3>
                             <div class="row">
                                 <div class="col-md-12">
-                                    <div id="designerDiv"></div>
+                                    <div id="designerDiv" class="font-helvetica"></div>
                                 </div>
                             </div>
                         </div>
 
                         <!-- Preview -->
-                        <div class="col-md-6">
+                        <div class="col-md-6" id="preview">
                             <h3>Form Preview</h3>
                             <div class="tab-pane" id="view">
                                 <div class="row">

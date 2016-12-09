@@ -733,11 +733,29 @@ var setup = function () {
         saveAs(blob, "GUI_schema_options.json"); */
 
         console.log(configString);
+
+
+        // TODO: adjust url to orchestrator url
+        /*        $.ajax({
+         url: "http://httpbin.org/post",
+         // change url to http://ec2-54-175-37-30.compute-1.amazonaws.com/orchestrator/feedback/language/applications after JSON-parsing is implemented.
+         type: "POST",
+         data: configString,
+         dataType: "json",
+         success: function (response){
+         alert("Success");
+         },
+         error: function (jqXHR, textStatus, errorThrown) {
+         alert(textStatus);
+         alert(errorThrown);
+         }
+         })
+         */
     });
 
     // click on send button (for user to send form data)
     $(".submit-button").on("click", function () {
-        var config = {
+ /*       var config = {
             "schema": schema
         };
 
@@ -749,22 +767,9 @@ var setup = function () {
         }
 
         var configString = JSON.stringify(config);
+*/
+    alert("Form submitted!");
 
-        // TODO: adjust url to orchestrator url
-        $.ajax({
-            url: "http://httpbin.org/post",
-            // change url to http://ec2-54-175-37-30.compute-1.amazonaws.com/orchestrator/feedback/language/applications after JSON-parsing is implemented.
-            type: "POST",
-            data: configString,
-            dataType: "json",
-            success: function (response){
-                alert("Success");
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-                alert(textStatus);
-                alert(errorThrown);
-            }
-        })
     });
 };
 
@@ -774,6 +779,15 @@ $(document).ready(function () {
     setTimeout(function () {
         setup();
     }, 200);
+
+
+    /* preview update on generalField setting font and fontcolor */
+    $("select#setFont").change(setFontClass);
+
+    function setFontClass() {
+        var fontValue = $("#setFont").val();
+        $( "#preview #viewDiv" ).removeClass().addClass(fontValue);
+    }
 });
 
 // attachment mechanism extend upload field
@@ -801,7 +815,9 @@ $.alpaca.Fields.AttachmentMechanism = $.alpaca.Fields.UploadField.extend({
         delete myProp.properties.type;
         delete myProp.properties.validate;
         delete myProp.properties.view;
-        return Alpaca.merge(myProp, {
+        return myProp;
+ /*  not needed in uzh properties
+      return Alpaca.merge(myProp, {
             "properties": {
                 "required": {
                     "title": "Required",
@@ -810,7 +826,7 @@ $.alpaca.Fields.AttachmentMechanism = $.alpaca.Fields.UploadField.extend({
                 }
             }
         });
-    },
+ */   },
 
     getSchemaOfSchema: function () {
         var mySchema = this.base();
@@ -844,10 +860,9 @@ $.alpaca.Fields.AudioMechanism = $.alpaca.Fields.ObjectField.extend({
                     "title": "Label",
                     "type": "text"
                 },
-                "required": {
-                    "title": "Required",
-                    "type": "boolean",
-                    "default": false
+                "maxTime": {
+                    "title": "Maximal recording time",
+                    "type": "number"
                 }
             }
         });
@@ -920,12 +935,13 @@ $.alpaca.Fields.ScreenshotMechanism = $.alpaca.Fields.ImageField.extend({
                     "title": "Activate undo",
                     "type": "boolean",
                     "default": false
-                },
-                "required": {
-                    "title": "Required",
+/*      not in the uzh parameter list
+ },
+                "mandatory": {
+                    "title": "Mandatory",
                     "type": "boolean",
                     "default": false
-                }
+*/                }
             }
         });
     },
@@ -972,15 +988,17 @@ $.alpaca.Fields.CategoryMechanism = $.alpaca.Fields.SelectField.extend({
         delete myProp.properties.useDataSourceAsEnum;
         delete myProp.properties.validate;
         delete myProp.properties.view;
+        myProp.properties.enumLabel
         return Alpaca.merge(myProp, {
             "properties": {
-                "required": {
-                    "title": "Required",
+                "mandatory": {
+                    "title": "Mandatory",
                     "type": "boolean",
                     "default": false
                 },
+                /* options in uzh */
                 "enum": {
-                    "title": "Enum values",
+                    "title": "Option values",
                     "type": "array"
                 }
             }
@@ -1039,6 +1057,7 @@ $.alpaca.Fields.RatingMechanism = $.alpaca.Fields.RadioField.extend({
                     "title": "Enum values",
                     "type": "array"
                 }
+                /* different properties for the rating... only defautl Rating, maxRating defined in uzh doku */
             }
         });
     },
@@ -1086,16 +1105,36 @@ $.alpaca.Fields.TextInputMechanism = $.alpaca.Fields.TextAreaField.extend({
         delete myProp.properties.typeahead;
         delete myProp.properties.validate;
         delete myProp.properties.view;
+        delete myProp.properties.wordlimit;
         return Alpaca.merge(myProp, {
             "properties": {
-                "required": {
-                    "title": "Required",
+                "mandatory": {
+                    "title": "Mandatory",
                     "type": "boolean",
                     "default": false
                 },
                 "maxLength": {
-                    "title": "Maximum Length",
-                    "type": "string"
+                    "title": "Maximum number of characters",
+                    "type": "number",
+                    "description": "Maximum number of characters allowed in the text input"
+                },
+                "maxLengthStrict": {
+                    "title": "Strict length of character",
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Whether to prevent typing if max length is reached"
+                },
+                "maxLengthVisible": {
+                    "title": "Display max number of characters",
+                    "type": "boolean",
+                    "default": false,
+                    "description": "If the maximum number of allowed characters is visible in the text input field"
+                },
+                "textLengthVisible": {
+                    "title": "Display character counter",
+                    "type": "boolean",
+                    "default": true,
+                    "description": "If the current characters counter is visible in the text input field"
                 }
             }
         });

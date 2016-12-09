@@ -22,7 +22,6 @@ var tmpl = {
             as: {
                 mechanisms: {
                     path: "options.fields",
-
                     as: {
                         type: "type",
                         parameters: { // TODO: parameters should become an array
@@ -42,3 +41,9 @@ var tmpl = {
     }
 
 };
+
+
+/* important!!!
+for the uzh json; all integer values must be set in the format i.0: ex: 200.0
+boolean values must be set as 1.0 and 0.0
+ */
