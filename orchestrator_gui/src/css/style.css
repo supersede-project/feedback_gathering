@@ -125,3 +125,7 @@ body
 .font-times {
     font-family: "Times New Roman";
 }
+
+#orchestrator {
+    display: flex;
+}
