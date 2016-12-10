@@ -49,7 +49,6 @@ public abstract class ServiceBase<T extends IDbItem> implements IDbService<T> {
 		this.dbName = dbName;
 	}
 	
-	
 	/**
 	 * This method retrieves an instance of IDbItem<T> from the database based on its id.
 	 * @param id the id of the object to retrieve
@@ -59,24 +58,29 @@ public abstract class ServiceBase<T extends IDbItem> implements IDbService<T> {
 	public T GetById(int id) throws SQLException, NotFoundException
 	{
 		Connection con = TransactionManager.createDatabaseConnection();
-		String statement = String.format("SELECT * FROM %s.%s as t WHERE t.id = ? ;", dbName, tableName);
-		PreparedStatement s = con.prepareStatement(statement);
-		s.setInt(1, id);
-		ResultSet result = s.executeQuery();
-		if (!result.next())
-		{
-			throw new NotFoundException("Object with id '" + id +"' not found");
-		}
 		
-		T instance = null;
-		try {
-			instance = serviceClass.newInstance();
-		} catch (InstantiationException | IllegalAccessException e) {
-			e.printStackTrace();
+		try{
+			String statement = String.format("SELECT * FROM %s.%s as t WHERE t.id = ? ;", dbName, tableName);
+			PreparedStatement s = con.prepareStatement(statement);
+			s.setInt(1, id);
+			ResultSet result = s.executeQuery();
+			if (!result.next())
+			{
+				throw new NotFoundException("Object with id '" + id +"' not found");
+			}
+			
+			T instance = null;
+			try {
+				instance = serviceClass.newInstance();
+			} catch (InstantiationException | IllegalAccessException e) {
+				e.printStackTrace();
+			}
+			resultParser.SetFields(instance, result);
+			return instance;
+			
+		}finally{
+			con.close();	
 		}
-		resultParser.SetFields(instance, result);
-		con.close();
-		return instance;
 	}
 	
 	/**
@@ -88,13 +92,17 @@ public abstract class ServiceBase<T extends IDbItem> implements IDbService<T> {
 	{
 		Connection con = TransactionManager.createDatabaseConnection();
 		
-		String statement = String.format("SELECT * FROM %s.%s ;", dbName, tableName);
-		PreparedStatement s = con.prepareStatement(statement);
-		ResultSet result = s.executeQuery();
-	
-		List<T> resultList = getList(result);
-		con.close();
-		return resultList;
+		try{
+			String statement = String.format("SELECT * FROM %s.%s ;", dbName, tableName);
+			PreparedStatement s = con.prepareStatement(statement);
+			ResultSet result = s.executeQuery();
+		
+			List<T> resultList = getList(result);
+			return resultList;
+		}
+		finally{
+			con.close();	
+		}
 	}
 	
 	/**
@@ -230,30 +238,35 @@ public abstract class ServiceBase<T extends IDbItem> implements IDbService<T> {
 	{
 		Connection con = TransactionManager.createDatabaseConnection();
 		
-		String statement = 
-				  "SELECT * "
-				+ "FROM %s.%s as t ";
-		statement = String.format(statement, dbName, tableName);
-		statement += "WHERE %s ";
+		try{
+			
+			String statement = 
+					  "SELECT * "
+					+ "FROM %s.%s as t ";
+			statement = String.format(statement, dbName, tableName);
+			statement += "WHERE %s ";
+			
+			for(int i=1; i<conditions.length; i++)
+			{
+				statement += "AND %s ";
+			}
+			statement += ";";
+			statement = String.format(statement, (Object[])conditions);
+			
+			PreparedStatement s = con.prepareStatement(statement);
+			for(int i=0; i<values.size();i++)
+			{
+				s.setObject(i+1, values.get(i));
+			}
+			ResultSet result = s.executeQuery();
 		
-		for(int i=1; i<conditions.length; i++)
-		{
-			statement += "AND %s ";
+			List<T> resultList = getList(result);
+			return resultList;
+			
 		}
-		statement += ";";
-		statement = String.format(statement, (Object[])conditions);
-		
-		PreparedStatement s = con.prepareStatement(statement);
-		for(int i=0; i<values.size();i++)
-		{
-			s.setObject(i+1, values.get(i));
+		finally{
+			con.close();	
 		}
-		ResultSet result = s.executeQuery();
-	
-		List<T> resultList = getList(result);
-		con.close();
-		
-		return resultList;
 	}
 	
 	/**
@@ -266,16 +279,21 @@ public abstract class ServiceBase<T extends IDbItem> implements IDbService<T> {
 	{
 		Connection con = TransactionManager.createDatabaseConnection();
 		
-		String statement = String.format("SELECT * FROM %s.%s as t WHERE t.id = ? ;", dbName, tableName);
-		PreparedStatement s = con.prepareStatement(statement);
-		s.setInt(1, id);
-		
-		ResultSet result = s.executeQuery();
-		
-		if(!result.next())
-			return false;
-		
-		return true;
+		try{
+			String statement = String.format("SELECT * FROM %s.%s as t WHERE t.id = ? ;", dbName, tableName);
+			PreparedStatement s = con.prepareStatement(statement);
+			s.setInt(1, id);
+			
+			ResultSet result = s.executeQuery();
+			
+			if(!result.next())
+				return false;
+			
+			return true;
+			
+		}finally{
+			con.close();	
+		}
 	}
 	
 	/**

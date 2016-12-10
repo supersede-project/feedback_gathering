@@ -1,8 +1,7 @@
 package ch.uzh.ifi.feedback.repository.controller;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import com.google.inject.Inject;
@@ -55,9 +54,37 @@ public class FeedbackStatusController extends RestController<Status>{
 	@Path("/{lang}/applications/{application_id}/states")
 	@GET
 	@Authenticate(service = UserAuthenticationService.class, scope = "APPLICATION")
-	public List<Status> GetAllByApplication(@PathParam("application_id")Integer applicationId) throws Exception {
-		List<Status> states = super.GetAll().stream().filter(s -> validateApplication(s, applicationId)).collect(Collectors.toList());
-		return states;
+	public List<Status> GetGeneralStatesByApplication(@PathParam("application_id")Integer applicationId) throws Exception 
+	{
+		List<Feedback> feedbacks = feedbackService.GetWhere(asList(applicationId), "application_id = ?");
+		List<Status> result = new ArrayList<Status>();
+		for(Feedback f : feedbacks)
+		{
+			List<Status> states = dbService.GetWhere(asList(f.getId(), null), "feedback_id = ?", "api_user_id is ?");
+			if(!states.isEmpty())
+				result.add(states.get(0));
+		}
+
+		return result;
+	}
+	
+	@Path("/{lang}/applications/{application_id}/api_users/{user_id}/states")
+	@GET
+	@Authenticate(service = UserAuthenticationService.class, scope = "APPLICATION")
+	public List<Status> GetAllStatesByApplicationAndUser(
+			@PathParam("application_id")Integer applicationId,
+			@PathParam("user_id")Integer userId) throws Exception 
+	{
+		List<Feedback> feedbacks = feedbackService.GetWhere(asList(applicationId), "application_id = ?");
+		List<Status> result = new ArrayList<Status>();
+		for(Feedback f : feedbacks)
+		{
+			List<Status> states = dbService.GetWhere(asList(f.getId(), userId), "feedback_id = ?", "api_user_id = ?");
+			if(!states.isEmpty())
+				result.add(states.get(0));
+		}
+
+		return result;
 	}
 	
 	@Path("/{lang}/applications/{application_id}/feedbacks/{id}/status")
@@ -97,17 +124,6 @@ public class FeedbackStatusController extends RestController<Status>{
 		}
 
 		throw new NotFoundException("feedback with id '" + feedbackId + "' has no status for user '"+ userId  + " '!");
-	}
-	
-	@Path("/{lang}/applications/{application_id}/api_users/{id}/states")
-	@GET
-	@Authenticate(service = UserAuthenticationService.class, scope = "APPLICATION")
-	public List<Status> GetByApiUser(
-			@PathParam("id")Integer id, 
-			@PathParam("application_id")Integer applicationId) throws Exception 
-	{
-		List<Status> states = dbService.GetWhere(asList(id), "api_user_id = ?").stream().filter(s -> validateApplication(s, applicationId)).collect(Collectors.toList());
-		return states;
 	}
 
 	@Path("/{lang}/applications/{application_id}/states/{id}")

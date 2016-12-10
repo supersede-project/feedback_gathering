@@ -103,19 +103,21 @@ public class OrchestratorService<T extends IOrchestratorItem<T>> extends Service
 		
 		Connection con = TransactionManager.createDatabaseConnection();
 		
-		String statement = String.format("SELECT * FROM %s.%s as t WHERE t.id = ? ;", dbName, mainTableName);
-		PreparedStatement s = con.prepareStatement(statement);
-		s.setInt(1, id);
-		
-		ResultSet result = s.executeQuery();
-		boolean res = result.next();
-		
-		con.close();
-		
-		if(!res)
-			return false;
-		
-		return true;
+		try{
+			String statement = String.format("SELECT * FROM %s.%s as t WHERE t.id = ? ;", dbName, mainTableName);
+			PreparedStatement s = con.prepareStatement(statement);
+			s.setInt(1, id);
+			
+			ResultSet result = s.executeQuery();
+			boolean res = result.next();
+			if(!res)
+				return false;
+			
+			return true;
+		}
+		finally{
+			con.close();	
+		}
 	}
 	
 	protected String getTimeCondition()

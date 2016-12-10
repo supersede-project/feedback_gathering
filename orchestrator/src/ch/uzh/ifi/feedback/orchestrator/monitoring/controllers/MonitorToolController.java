@@ -19,7 +19,7 @@
  * Initially developed in the context of SUPERSEDE EU project
  * www.supersede.eu
  *******************************************************************************/
-package ch.uzh.ifi.feedback.orchestrator.controllers;
+package ch.uzh.ifi.feedback.orchestrator.monitoring.controllers;
 
 import java.util.Arrays;
 import java.util.List;
@@ -60,7 +60,7 @@ public class MonitorToolController extends RestController<MonitorTool> {
 	}
 	
 	@POST
-	@Path("/monitors/{id-type-of-monitor}")
+	@Path("/MonitorTypes/{id-type-of-monitor}/Tools")
 	public MonitorTool InsertMonitorTool(@PathParam("id-type-of-monitor") String id, 
 			MonitorTool tool) throws Exception {
 		tool.setMonitorTypeName(id);
@@ -68,7 +68,7 @@ public class MonitorToolController extends RestController<MonitorTool> {
 	}
 	
 	@GET
-	@Path("/monitors/{id-type-of-monitor}/{id-monitoring-tool}")
+	@Path("/MonitorTypes/{id-type-of-monitor}/Tools/{id-monitoring-tool}")
 	public MonitorTool GetMonitorTool(@PathParam("id-type-of-monitor") String type,
 			@PathParam("id-monitoring-tool") String tool) throws Exception {
 		List<MonitorType> monitorType = this.monitorTypeService.GetWhere(Arrays.asList(type), "name = ?");
@@ -83,7 +83,7 @@ public class MonitorToolController extends RestController<MonitorTool> {
 	}
 	
 	@DELETE
-	@Path("/monitors/{id-type-of-monitor}/{id-monitoring-tool}")
+	@Path("/MonitorTypes/{id-type-of-monitor}/Tools/{id-monitoring-tool}")
 	public void DeleteTool(@PathParam("id-type-of-monitor") String type,
 			@PathParam("id-monitoring-tool") String tool) throws Exception {
 		List<MonitorTool> monitorTool = this.dbService.GetWhere(Arrays.asList(type, tool), "monitor_type_name = ? and name = ?");
