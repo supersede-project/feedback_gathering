@@ -28,7 +28,7 @@ public class OrchestratorServlet extends ServletBase {
     protected void InitController()
     {
         try{
-        	_restManager.Init("ch.uzh.ifi.feedback.orchestrator");
+        	_restManager.Init("ch.uzh.ifi.feedback.orchestrator.controllers");
         }
         catch(Exception ex){
         	System.out.println(ex.getMessage());

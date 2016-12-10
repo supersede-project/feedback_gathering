@@ -19,7 +19,7 @@
  * Initially developed in the context of SUPERSEDE EU project
  * www.supersede.eu
  *******************************************************************************/
-package ch.uzh.ifi.feedback.orchestrator.controllers;
+package ch.uzh.ifi.feedback.orchestrator.monitoring.controllers;
 
 import java.util.Arrays;
 import java.util.List;
