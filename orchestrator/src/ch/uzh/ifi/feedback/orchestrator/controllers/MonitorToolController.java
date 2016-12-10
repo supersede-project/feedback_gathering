@@ -27,6 +27,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.google.inject.Inject;
 import com.google.inject.servlet.RequestScoped;
 
 import ch.uzh.ifi.feedback.library.rest.RestController;
@@ -43,17 +44,19 @@ import ch.uzh.ifi.feedback.orchestrator.validation.MonitorToolValidator;
 import javassist.NotFoundException;
 
 @RequestScoped
-@Controller(MonitorToolController.class)
+@Controller(MonitorTool.class)
 public class MonitorToolController extends RestController<MonitorTool> {
 
-	public MonitorToolController(MonitorToolService dbService, 
+	@Inject
+	public MonitorToolController(
+			MonitorToolService dbService, 
 			MonitorToolValidator validator,
 			HttpServletRequest request, HttpServletResponse response) {
 		super(dbService, validator, request, response);
 	}
 	
 	@POST
-	@Path("/{id-type-of-monitor}")
+	@Path("/MonitorTypes/{id-type-of-monitor}/Tools")
 	public MonitorTool InsertMonitorTool(@PathParam("id-type-of-monitor") String id, 
 			MonitorTool tool) throws Exception {
 		tool.setMonitorTypeName(id);
@@ -61,7 +64,7 @@ public class MonitorToolController extends RestController<MonitorTool> {
 	}
 	
 	@GET
-	@Path("/{id-type-of-monitor}/{id-monitoring-tool}")
+	@Path("/MonitorTypes/{id-type-of-monitor}/Tools/{id-monitoring-tool}")
 	public MonitorTool GetMonitorTool(@PathParam("id-type-of-monitor") String type,
 			@PathParam("id-monitoring-tool") String tool) throws Exception {
 		List<MonitorTool> monitorTool = this.dbService.GetWhere(Arrays.asList(type, tool), "monitor_type_name = ? and name = ?");
@@ -72,7 +75,7 @@ public class MonitorToolController extends RestController<MonitorTool> {
 	}
 	
 	@DELETE
-	@Path("/{id-type-of-monitor}/{id-monitoring-tool}")
+	@Path("/MonitorTypes/{id-type-of-monitor}/Tools/{id-monitoring-tool}")
 	public void DeleteTool(@PathParam("id-type-of-monitor") String type,
 			@PathParam("id-monitoring-tool") String tool) throws Exception {
 		List<MonitorTool> monitorTool = this.dbService.GetWhere(Arrays.asList(type, tool), "monitor_type_name = ? and name = ?");

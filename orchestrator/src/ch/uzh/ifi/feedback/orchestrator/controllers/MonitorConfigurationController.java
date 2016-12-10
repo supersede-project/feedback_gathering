@@ -39,6 +39,7 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.google.inject.Inject;
 import com.google.inject.servlet.RequestScoped;
 
 import ch.uzh.ifi.feedback.library.rest.RestController;
@@ -57,13 +58,14 @@ import ch.uzh.ifi.feedback.orchestrator.validation.MonitorConfigurationValidator
 import javassist.NotFoundException;
 
 @RequestScoped
-@Controller(MonitorConfigurationController.class)
+@Controller(MonitorConfiguration.class)
 public class MonitorConfigurationController extends RestController<MonitorConfiguration> {
 	
 	private String monitorManagerHost = "localhost:8080/monitor_manager/";
 	
 	private MonitorToolService monitorToolService;
 
+	@Inject
 	public MonitorConfigurationController(
 			MonitorConfigurationService dbService,
 			MonitorConfigurationValidator validator, 
@@ -76,7 +78,7 @@ public class MonitorConfigurationController extends RestController<MonitorConfig
 	}
 	
 	@POST
-	@Path("/{id-type-of-monitor}/{id-monitoring-tool}")
+	@Path("/MonitorTypes/{id-type-of-monitor}/Tools/{id-monitoring-tool}")
 	public MonitorConfiguration InsertMonitorConfiguration(@PathParam("id-type-of-monitor") String type, 
 			@PathParam("id-monitoring-tool") String tool,
 			MonitorConfiguration configuration) throws Exception {
@@ -101,7 +103,7 @@ public class MonitorConfigurationController extends RestController<MonitorConfig
 	}
 	
 	@GET
-	@Path("/{id-type-of-monitor}/{id-monitoring-tool}/{id-tool-configuration}")
+	@Path("/MonitorTypes/{id-type-of-monitor}/Tools/{id-monitoring-tool}/ToolConfigurations/{id-tool-configuration}")
 	public MonitorConfiguration GetMonitorConfiguration(@PathParam("id-type-of-monitor") String type, 
 			@PathParam("id-monitoring-tool") String tool,
 			@PathParam("id-tool-configuration") Integer configuration) throws Exception {
@@ -113,7 +115,7 @@ public class MonitorConfigurationController extends RestController<MonitorConfig
 	}
 	
 	@PUT
-	@Path("/{id-type-of-monitor}/{id-monitoring-tool}/{id-tool-configuration}")
+	@Path("/MonitorTypes/{id-type-of-monitor}/Tools/{id-monitoring-tool}/ToolConfigurations/{id-tool-configuration}")
 	public MonitorConfiguration UpdateMonitorConfiguration(@PathParam("id-type-of-monitor") String type, 
 			@PathParam("id-monitoring-tool") String tool,
 			@PathParam("id-tool-configuration") Integer configuration,
@@ -138,7 +140,7 @@ public class MonitorConfigurationController extends RestController<MonitorConfig
 	}
 	
 	@DELETE
-	@Path("/{id-type-of-monitor}/{id-monitoring-tool}/{id-tool-configuration}")
+	@Path("/MonitorTypes/{id-type-of-monitor}/Tools/{id-monitoring-tool}/ToolConfigurations/{id-tool-configuration}")
 	public void DeleteMonitorConfiguration(@PathParam("id-type-of-monitor") String type, 
 			@PathParam("id-monitoring-tool") String tool,
 			@PathParam("id-tool-configuration") Integer configuration) throws Exception {

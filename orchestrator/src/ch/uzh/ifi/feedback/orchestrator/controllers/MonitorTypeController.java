@@ -45,7 +45,7 @@ import ch.uzh.ifi.feedback.orchestrator.validation.MonitorTypeValidator;
 import javassist.NotFoundException;
 
 @RequestScoped
-@Controller(MonitorTypeController.class)
+@Controller(MonitorType.class)
 public class MonitorTypeController extends RestController<MonitorType>{
 
 	@Inject
@@ -65,7 +65,7 @@ public class MonitorTypeController extends RestController<MonitorType>{
 	}
 	
 	@GET
-	@Path("/{id-type-of-monitor}")
+	@Path("/MonitorTypes/{id-type-of-monitor}")
 	public MonitorType GetById(@PathParam("id-type-of-monitor") String id) throws Exception {
 		List<MonitorType> monitorType = this.dbService.GetWhere(Arrays.asList(id), "name = ?");
 		if(monitorType.isEmpty()) {
@@ -75,7 +75,7 @@ public class MonitorTypeController extends RestController<MonitorType>{
 	}
 	
 	@DELETE
-	@Path("/{id-type-of-monitor}")
+	@Path("/MonitorTypes/{id-type-of-monitor}")
 	public void DeleteMonitorTool(@PathParam("id-type-of-monitor") String id) throws Exception {
 		List<MonitorType> monitorType = this.dbService.GetWhere(Arrays.asList(id), "name = ?");
 		if(monitorType.isEmpty()) {
