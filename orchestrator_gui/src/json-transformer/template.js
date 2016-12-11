@@ -24,20 +24,21 @@ var tmpl = {
                     path: "options.fields",
                     as: {
                         type: "type",
-                        parameters: { // TODO: parameters should become an array with objects, object contains key and value
+                        parameters: { // TODO: parameters should become an array
+                            path: ".",
+
                             as: {
-                                key: function (node, value, key) {
-                                    return "title";
-                                },
+                                key: "label", // TODO: set fix string "title" as key.value
                                 value: "label"
                             }
+
                         }
                     }
+
                 }
             }
         }
     }
-
 
 };
 

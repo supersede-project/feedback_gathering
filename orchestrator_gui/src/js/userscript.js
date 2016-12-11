@@ -383,44 +383,12 @@ var setup = function () {
             fieldOptionsData.showMessages = false;
             fieldConfigOptions.data = fieldOptionsData;
         }
-/*        fieldConfigSchema.view = {
+
+        fieldConfigOptions.view = {
             "parent": MODAL_VIEW,
             "displayReadonly": false
         };
-*/        fieldConfigOptions.view = {
-            "parent": MODAL_VIEW,
-            "displayReadonly": false
-        };
-/*
-        fieldConfigSchema.postRender = function (control) {
-            var modal = $(MODAL_TEMPLATE.trim());
-            modal.find(".modal-title").append(field.getTitle());
-            modal.find(".modal-body").append(control.getFieldEl());
 
-            modal.find('.modal-footer').append("<button class='btn btn-primary pull-right okay' data-dismiss='modal' aria-hidden='true'>Okay</button>");
-            modal.find('.modal-footer').append("<button class='btn btn-default pull-left' data-dismiss='modal' aria-hidden='true'>Cancel</button>");
-
-            $(modal).modal({
-                "keyboard": true
-            });
-
-            $(modal).find(".okay").click(function () {
-
-                field.schema = control.getValue();
-
-                var top = findTop(field);
-                regenerate(top);
-
-                if (callback) {
-                    callback();
-                }
-            });
-
-            control.getFieldEl().find("p.help-block").css({
-                "display": "none"
-            });
-        };
-        */
         fieldConfigOptions.postRender = function (control) {
             var modal = $(MODAL_TEMPLATE.trim());
             modal.find(".modal-title").append(field.getTitle());
@@ -460,7 +428,6 @@ var setup = function () {
 
         // finds the div with fielForm class and uses it as alpaca form for the schema and option form
         var x = $("<div><div class='fieldForm'></div></div>");
-//        $(x).find(".fieldForm").alpaca(fieldConfigSchema);
         $(x).find(".fieldForm").alpaca(fieldConfigOptions);
     };
 
@@ -638,23 +605,12 @@ var setup = function () {
         delete options.fields;
         options.fields = {};
 
-        // var fields = []; // new
-        // options.fields = {}; // new
-
-        // var mechanisms = {}; // new
-        // mechanisms.id = {}; // new
-
         if (field.children) {
             for (var i = 0; i < field.children.length; i++) {
                 var childField = field.children[i];
                 var propertyId = childField.propertyId;
-                // var mechanisms = field.children[i]; // new
-                // mechanisms.id = propertyId; // new
-
                 options.fields[propertyId] = {};
-                // mechanisms.id = propertyId; // new
                 assembleOptions(childField, options.fields[propertyId]);
-                // assembleOptions(mechanisms, options.fields[i]); // new
             }
         }
     };
@@ -711,9 +667,34 @@ var setup = function () {
             config.options = options;
         }
 
-        // console.log(config);
+        config.generalConfiguration = {};
+        config.generalConfiguration.parameters = [];
 
-       var configFields = [];
+        var parameters = [];
+
+        var labelFontColorParam = {};
+        labelFontColorParam.key = "labelFontColor";
+        labelFontColorParam.value = labelFontColor;
+        parameters.push(labelFontColorParam);
+
+        labelFontTypeParam = {};
+        labelFontTypeParam.key = "labelFontType";
+        labelFontTypeParam.value = labelFontType;
+        parameters.push(labelFontTypeParam);
+
+        labelFontSizeParam = {};
+        labelFontSizeParam.key = "labelFontSize";
+        labelFontSizeParam.value = labelFontSize;
+        parameters.push(labelFontSizeParam);
+
+        submitTextParam = {};
+        submitTextParam.key = "submitText";
+        submitTextParam.value = submitText;
+        parameters.push(submitTextParam);
+
+        config.generalConfiguration.parameters = parameters;
+
+        var configFields = [];
 
         $.each(options.fields, function(key, value){
             configFields.push(value);
@@ -721,24 +702,16 @@ var setup = function () {
 
         config.options.fields = configFields;
 
-        // console.log(config);
-
-    //    var newConfig = JSON.stringify(config);
-
-   //     console.log(newConfig);
-
         var transformedConfig = new ObjectTemplate(tmpl).transform(config);
         var configString = JSON.stringify(transformedConfig);
 
+        // console.log(configString);
 
         // Save JSON-String to local JSON-file
         /* var blob = new Blob([configString], {type: "application/json"});
         var saveAs = window.saveAs;
         saveAs(blob, "GUI_schema_options.json"); */
-
-        console.log(configString);
-
-
+        
         // TODO: adjust url to orchestrator url
         /*        $.ajax({
          url: "http://httpbin.org/post",
@@ -777,6 +750,11 @@ var setup = function () {
     });
 };
 
+var labelFontType = "Helvetica";
+var labelFontColor = "#000";
+var labelFontSize = "12";
+var submitText = "Success";
+
 $(document).ready(function () {
 
     // load everything before call the orchestrator
@@ -784,23 +762,26 @@ $(document).ready(function () {
         setup();
     }, 200);
 
-
     /* preview update on generalField setting font and fontcolor */
     $("select#setFont").change(setFontFamily);
 
     function setFontFamily() {
-        var fontValue = $("#setFont").val();
-        $( "#preview #viewDiv" ).removeClass().addClass(fontValue);
+        labelFontType = $("#setFont").val();
+        $( "#preview #viewDiv" ).removeClass().addClass(labelFontType);
     }
 
     $("#setFontColor").change(function () {
-        var fontColor = $("#setFontColor").val();
-        $("#preview #viewDiv").css("color", fontColor);
+        labelFontColor = $("#setFontColor").val();
+        $("#preview #viewDiv").css("color", labelFontColor);
     });
 
     $("#fontSize").change(function() {
-        var fontSize = $("#fontSize").val();
-        $("#preview #viewDiv").css("font-size", fontSize + "px");
+        labelFontSize = $("#fontSize").val();
+        $("#preview #viewDiv").css("font-size", labelFontSize + "px");
+    });
+
+    $("#submitText").change(function() {
+        submitText = $("#submitText").val();
     });
 
 });
