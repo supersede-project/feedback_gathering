@@ -219,7 +219,13 @@ public class MonitorConfigurationController extends RestController<MonitorConfig
 		/*if (configuration.getAccounts() != null) {
 		 * json.addProperty("accounts", configuration.getAccounts());
 		 */
-		return json;
+		
+		JsonObject conf = new JsonObject();
+		if (configuration.getAppId() != null || configuration.getPackageName() != null)
+			conf.add("MarketPlaces", json);
+		else if (configuration.getKeywordExpression() != null) 
+			conf.add("SocialNetworks", json);
+		return conf;
 	}
 
 }
