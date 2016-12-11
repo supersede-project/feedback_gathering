@@ -786,12 +786,19 @@ $(document).ready(function () {
 
 
     /* preview update on generalField setting font and fontcolor */
-    $("select#setFont").change(setFontClass);
+    $("select#setFont").change(setFontFamily);
 
-    function setFontClass() {
+    function setFontFamily() {
         var fontValue = $("#setFont").val();
         $( "#preview #viewDiv" ).removeClass().addClass(fontValue);
     }
+
+    $("#SetFontColor").change(function () {
+        var fontColor = $("#SetFontColor").val();
+        $("#preview #viewDiv").css("color", fontColor);
+        console.log(fontColor);
+    });
+
 });
 
 // attachment mechanism extend upload field
