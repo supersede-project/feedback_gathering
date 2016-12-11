@@ -144,7 +144,11 @@ public class MonitorConfigurationController extends RestController<MonitorConfig
 		MonitorConfiguration oldConfig = dbService.GetById(configuration);
 		if(!oldConfig.getId().equals(configuration))
 			throw new NotFoundException("The monitor configuration does not exist");
+		
+		List<MonitorTool> monitorTools = monitorToolService.GetWhere(Arrays.asList(tool), "name = ?");
+
 		monitorConfiguration.setId(configuration);
+		monitorConfiguration.setMonitorToolId(monitorTools.get(0).getId());
 		
 		CloseableHttpClient client = HttpClientBuilder.create().build();
 		String url = monitorManagerHost + "configuration";
