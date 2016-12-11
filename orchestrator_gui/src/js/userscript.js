@@ -711,9 +711,34 @@ var setup = function () {
             config.options = options;
         }
 
-        console.log(config);
+        config.generalConfiguration = {};
+        config.generalConfiguration.parameters = [];
 
-       var configFields = [];
+        var parameters = [];
+
+        var labelFontColorParam = {};
+        labelFontColorParam.key = "labelFontColor";
+        labelFontColorParam.value = labelFontColor;
+        parameters.push(labelFontColorParam);
+
+        labelFontTypeParam = {};
+        labelFontTypeParam.key = "labelFontType";
+        labelFontTypeParam.value = labelFontType;
+        parameters.push(labelFontTypeParam);
+
+        labelFontSizeParam = {};
+        labelFontSizeParam.key = "labelFontSize";
+        labelFontSizeParam.value = labelFontSize;
+        parameters.push(labelFontSizeParam);
+
+        submitTextParam = {};
+        submitTextParam.key = "submitText";
+        submitTextParam.value = submitText;
+        parameters.push(submitTextParam);
+
+        config.generalConfiguration.parameters = parameters;
+
+        var configFields = [];
 
         $.each(options.fields, function(key, value){
             configFields.push(value);
@@ -723,9 +748,8 @@ var setup = function () {
 
         console.log(config);
 
-    //    var newConfig = JSON.stringify(config);
 
-   //     console.log(newConfig);
+    //    var newConfig = JSON.stringify(config);
 
         var transformedConfig = new ObjectTemplate(tmpl).transform(config);
         var configString = JSON.stringify(transformedConfig);
@@ -772,10 +796,15 @@ var setup = function () {
 
         var configString = JSON.stringify(config);
 */
-    alert("Form submitted!");
+    alert(submitText);
 
     });
 };
+
+var labelFontType = "Helvetica";
+var labelFontColor = "#000";
+var labelFontSize = "12";
+var submitText = "Success";
 
 $(document).ready(function () {
 
@@ -784,23 +813,26 @@ $(document).ready(function () {
         setup();
     }, 200);
 
-
     /* preview update on generalField setting font and fontcolor */
     $("select#setFont").change(setFontFamily);
 
     function setFontFamily() {
-        var fontValue = $("#setFont").val();
-        $( "#preview #viewDiv" ).removeClass().addClass(fontValue);
+        labelFontType = $("#setFont").val();
+        $( "#preview #viewDiv" ).removeClass().addClass(labelFontType);
     }
 
     $("#setFontColor").change(function () {
-        var fontColor = $("#setFontColor").val();
-        $("#preview #viewDiv").css("color", fontColor);
+        labelFontColor = $("#setFontColor").val();
+        $("#preview #viewDiv").css("color", labelFontColor);
     });
 
     $("#fontSize").change(function() {
-        var fontSize = $("#fontSize").val();
-        $("#preview #viewDiv").css("font-size", fontSize + "px");
+        labelFontSize = $("#fontSize").val();
+        $("#preview #viewDiv").css("font-size", labelFontSize + "px");
+    });
+
+    $("#submitText").change(function() {
+        submitText = $("#submitText").val();
     });
 
 });
