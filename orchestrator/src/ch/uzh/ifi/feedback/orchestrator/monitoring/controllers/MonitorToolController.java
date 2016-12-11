@@ -59,11 +59,29 @@ public class MonitorToolController extends RestController<MonitorTool> {
 		this.monitorTypeService = monitorTypeService;
 	}
 	
+	@GET
+	@Path("/MonitorTypes/{id-type-of-monitor}/Tools")
+	public List<MonitorTool> GetMonitorTools(@PathParam("id-type-of-monitor") String type) throws Exception {
+		List<MonitorType> monitorType = this.monitorTypeService.GetWhere(Arrays.asList(type), "name = ?");
+		if (monitorType.isEmpty()) {
+			throw new NotFoundException("There is no monitor type with this name");
+		}
+		List<MonitorTool> monitorTool = this.dbService.GetWhere(Arrays.asList(monitorType.get(0).getId()), "monitor_type_id = ?");
+		if(monitorTool.isEmpty()) {
+				throw new NotFoundException("There is no monitor tool with this name for this monitor type");
+		}
+		return monitorTool;
+	}
+	
 	@POST
 	@Path("/MonitorTypes/{id-type-of-monitor}/Tools")
-	public MonitorTool InsertMonitorTool(@PathParam("id-type-of-monitor") String id, 
+	public MonitorTool InsertMonitorTool(@PathParam("id-type-of-monitor") String type, 
 			MonitorTool tool) throws Exception {
-		tool.setMonitorTypeName(id);
+		List<MonitorType> monitorType = this.monitorTypeService.GetWhere(Arrays.asList(type), "name = ?");
+		if (monitorType.isEmpty()) {
+			throw new NotFoundException("There is no monitor type with this name");
+		}
+		tool.setMonitorTypeId(monitorType.get(0).getId());
 		return super.Insert(tool);
 	}
 	
@@ -86,7 +104,11 @@ public class MonitorToolController extends RestController<MonitorTool> {
 	@Path("/MonitorTypes/{id-type-of-monitor}/Tools/{id-monitoring-tool}")
 	public void DeleteTool(@PathParam("id-type-of-monitor") String type,
 			@PathParam("id-monitoring-tool") String tool) throws Exception {
-		List<MonitorTool> monitorTool = this.dbService.GetWhere(Arrays.asList(type, tool), "monitor_type_name = ? and name = ?");
+		List<MonitorType> monitorType = this.monitorTypeService.GetWhere(Arrays.asList(type), "name = ?");
+		if (monitorType.isEmpty()) {
+			throw new NotFoundException("There is no monitor type with this name");
+		}
+		List<MonitorTool> monitorTool = this.dbService.GetWhere(Arrays.asList(monitorType.get(0).getId(), tool), "monitor_type_id = ? and name = ?");
 		if(monitorTool.isEmpty()) {
 				throw new NotFoundException("There is no monitor tool with this name for this monitor type");
 		}

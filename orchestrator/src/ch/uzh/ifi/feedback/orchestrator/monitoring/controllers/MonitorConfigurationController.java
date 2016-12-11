@@ -50,10 +50,13 @@ import ch.uzh.ifi.feedback.library.rest.annotations.POST;
 import ch.uzh.ifi.feedback.library.rest.annotations.PUT;
 import ch.uzh.ifi.feedback.library.rest.annotations.Path;
 import ch.uzh.ifi.feedback.library.rest.annotations.PathParam;
+import ch.uzh.ifi.feedback.orchestrator.model.Configuration;
 import ch.uzh.ifi.feedback.orchestrator.model.MonitorConfiguration;
 import ch.uzh.ifi.feedback.orchestrator.model.MonitorTool;
+import ch.uzh.ifi.feedback.orchestrator.model.MonitorType;
 import ch.uzh.ifi.feedback.orchestrator.services.MonitorConfigurationService;
 import ch.uzh.ifi.feedback.orchestrator.services.MonitorToolService;
+import ch.uzh.ifi.feedback.orchestrator.services.MonitorTypeService;
 import ch.uzh.ifi.feedback.orchestrator.validation.MonitorConfigurationValidator;
 import javassist.NotFoundException;
 
@@ -63,6 +66,7 @@ public class MonitorConfigurationController extends RestController<MonitorConfig
 	
 	private String monitorManagerHost = "localhost:8080/monitor_manager/";
 	
+	private MonitorTypeService monitorTypeService;
 	private MonitorToolService monitorToolService;
 
 	@Inject
@@ -71,33 +75,43 @@ public class MonitorConfigurationController extends RestController<MonitorConfig
 			MonitorConfigurationValidator validator, 
 			HttpServletRequest request, 
 			HttpServletResponse response,
-			MonitorToolService monitorToolService) {
+			MonitorToolService monitorToolService,
+			MonitorTypeService monitorTypeService) {
 		super(dbService, validator, request, response);
 		
+		this.monitorTypeService = monitorTypeService;
 		this.monitorToolService = monitorToolService;
 	}
 	
 	@POST
-	@Path("/MonitorTypes/{id-type-of-monitor}/Tools/{id-monitoring-tool}")
+	@Path("/MonitorTypes/{id-type-of-monitor}/Tools/{id-monitoring-tool}/ToolConfigurations")
 	public MonitorConfiguration InsertMonitorConfiguration(@PathParam("id-type-of-monitor") String type, 
 			@PathParam("id-monitoring-tool") String tool,
 			MonitorConfiguration configuration) throws Exception {
-		configuration.setMonitorToolName(tool);
+		List<MonitorType> monitorType = this.monitorTypeService.GetWhere(Arrays.asList(type), "name = ?");
+		if (monitorType.isEmpty()) {
+			throw new NotFoundException("There is no monitor type with this name");
+		}
+		List<MonitorTool> monitorTool = this.monitorToolService.GetWhere(Arrays.asList(monitorType.get(0).getId(), tool), "monitor_type_id = ? and name = ?");
+		if(monitorTool.isEmpty()) {
+				throw new NotFoundException("There is no monitor tool with this name for this monitor type");
+		}
+		configuration.setMonitorToolId(monitorTool.get(0).getId());
 		
 		CloseableHttpClient client = HttpClientBuilder.create().build();
 		String url = monitorManagerHost + "configuration";
-
-		Gson gson = new Gson();
-		JsonParser parser = new JsonParser();
-		JsonObject json = parser.parse(gson.toJson(configuration)).getAsJsonObject();
 		
-		List<MonitorTool> monitorTool = monitorToolService.GetWhere(Arrays.asList(tool), "name = ?");
-		
+		JsonObject json = configuration.getJson();
+				
 		json.addProperty("monitor", monitorTool.get(0).getMonitorName());
 		HttpPost request = new HttpPost(url);
 		request.addHeader("content-type", "application/json");
-		request.setEntity(new StringEntity(json.getAsString()));
-		client.execute(request);
+		request.setEntity(new StringEntity(json.toString()));
+		try {
+			client.execute(request);
+		} catch (Exception e) {
+			//throw new NotFoundException("There was a connection problem with the Monitor Manager");
+		}
 		
 		return super.Insert(configuration);
 	}
@@ -107,7 +121,15 @@ public class MonitorConfigurationController extends RestController<MonitorConfig
 	public MonitorConfiguration GetMonitorConfiguration(@PathParam("id-type-of-monitor") String type, 
 			@PathParam("id-monitoring-tool") String tool,
 			@PathParam("id-tool-configuration") Integer configuration) throws Exception {
-		List<MonitorConfiguration> monitorConfiguration = this.dbService.GetWhere(Arrays.asList(tool, configuration), "monitor_tool_name = ? and monitor_configuration_id = ?");
+		List<MonitorType> monitorType = this.monitorTypeService.GetWhere(Arrays.asList(type), "name = ?");
+		if (monitorType.isEmpty()) {
+			throw new NotFoundException("There is no monitor type with this name");
+		}
+		List<MonitorTool> monitorTool = this.monitorToolService.GetWhere(Arrays.asList(monitorType.get(0).getId(), tool), "monitor_type_id = ? and name = ?");
+		if(monitorTool.isEmpty()) {
+				throw new NotFoundException("There is no monitor tool with this name for this monitor type");
+		}
+		List<MonitorConfiguration> monitorConfiguration = this.dbService.GetWhere(Arrays.asList(monitorTool.get(0).getId(), configuration), "monitor_tool_id = ? and monitor_configuration_id = ?");
 		if(monitorConfiguration.isEmpty()) {
 				throw new NotFoundException("There is no monitor configuration with this id for this monitor tool");
 		}
@@ -121,22 +143,30 @@ public class MonitorConfigurationController extends RestController<MonitorConfig
 			@PathParam("id-tool-configuration") Integer configuration,
 			MonitorConfiguration monitorConfiguration) throws Exception {
 		
+		MonitorConfiguration oldConfig = dbService.GetById(configuration);
+		if(!oldConfig.getId().equals(configuration))
+			throw new NotFoundException("The monitor configuration does not exist");
+		monitorConfiguration.setId(configuration);
+		
 		CloseableHttpClient client = HttpClientBuilder.create().build();
 		String url = monitorManagerHost + "configuration";
 
-		Gson gson = new Gson();
-		JsonParser parser = new JsonParser();
-		JsonObject json = parser.parse(gson.toJson(configuration)).getAsJsonObject();
+		JsonObject json = monitorConfiguration.getJson();
 		
 		List<MonitorTool> monitorTool = monitorToolService.GetWhere(Arrays.asList(tool), "name = ?");
-		
+		monitorConfiguration.setMonitorToolId(monitorTool.get(0).getId());
 		json.addProperty("monitor", monitorTool.get(0).getMonitorName());
 		HttpPut request = new HttpPut(url);
 		request.addHeader("content-type", "application/json");
-		request.setEntity(new StringEntity(json.getAsString()));
-		client.execute(request);
+		request.setEntity(new StringEntity(json.toString()));
 		
-		return super.Insert(monitorConfiguration);
+		try {
+			client.execute(request);
+		} catch (Exception e) {
+			//throw new NotFoundException("There was a connection problem with the Monitor Manager");
+		}
+		
+		return super.Update(monitorConfiguration);
 	}
 	
 	@DELETE
@@ -156,7 +186,12 @@ public class MonitorConfigurationController extends RestController<MonitorConfig
 		    .setParameter("monitor", monitorTool.get(0).getMonitorName());
 		URI uri = builder.build();
 		HttpDelete request = new HttpDelete(uri);
-		client.execute(request);
+		
+		try {
+			client.execute(request);
+		} catch (Exception e) {
+			//throw new NotFoundException("There was a connection problem with the Monitor Manager");
+		}
 		
 		super.Delete(configuration);
 	}
