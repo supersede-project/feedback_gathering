@@ -711,7 +711,7 @@ var setup = function () {
             config.options = options;
         }
 
-        console.log(config);
+        // console.log(config);
 
        var configFields = [];
 
@@ -721,7 +721,7 @@ var setup = function () {
 
         config.options.fields = configFields;
 
-        console.log(config);
+        // console.log(config);
 
     //    var newConfig = JSON.stringify(config);
 
