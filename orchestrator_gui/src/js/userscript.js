@@ -743,7 +743,7 @@ var setup = function () {
         /*        $.ajax({
          url: "http://httpbin.org/post",
          // change url to http://ec2-54-175-37-30.compute-1.amazonaws.com/orchestrator/feedback/language/applications after JSON-parsing is implemented.
-         type: "POST",
+         type: "PUT",
          data: configString,
          dataType: "json",
          success: function (response){
@@ -772,8 +772,8 @@ var setup = function () {
 
         var configString = JSON.stringify(config);
 */
-    alert("Form submitted!");
-
+        var submitText = $("#SubmitText").val();
+        alert(submitText);
     });
 };
 
@@ -805,7 +805,9 @@ $(document).ready(function () {
 
 });
 
-// attachment mechanism extend upload field
+// Configurations for Options-PopUp
+
+// ATTACHMENT mechanism extend upload field
 $.alpaca.Fields.AttachmentMechanism = $.alpaca.Fields.UploadField.extend({
     getFieldType: function () {
         return "attachment";
@@ -817,31 +819,62 @@ $.alpaca.Fields.AttachmentMechanism = $.alpaca.Fields.UploadField.extend({
 
     getSchemaOfOptions: function () {
         var myProp = this.base();
+        delete myProp.properties.disabled;
         delete myProp.properties.errorHandler;
         delete myProp.properties.fieldClass;
+        delete myProp.properties.fileTypes;
         delete myProp.properties.focus;
         delete myProp.properties.helper;
         delete myProp.properties.helpers;
+        delete myProp.properties.hidden;
         delete myProp.properties.hideInitValidationError;
+        delete myProp.properties.maxFileSize;
+        delete myProp.properties.maxNumberOfFiles;
+        delete myProp.properties.multiple;
         delete myProp.properties.name;
         delete myProp.properties.optionLabels;
         delete myProp.properties.showMessages;
+        delete myProp.properties.showUploadPreview;
         delete myProp.properties.sort;
         delete myProp.properties.type;
         delete myProp.properties.validate;
         delete myProp.properties.view;
-        return myProp;
- /*  not needed in uzh properties
-      return Alpaca.merge(myProp, {
+        return Alpaca.merge(myProp, {
             "properties": {
-                "required": {
-                    "title": "Required",
+                "mandatory": { // not in uzh properties
+                    "title": "Mandatory", // note: alpaca documentation says "required", but its in fact "mandatory"
                     "type": "boolean",
                     "default": false
+                },
+                "multiple": { // not in uzh properties
+                    "title": "Multiple files allowed",
+                    "type": "boolean",
+                    "description": "Whether to allow multiple file uploads. If maxNumberOfFiles is not specified, multiple will toggle between 1 and unlimited."
+                },
+                "fileTypes": { // not in uzh properties
+                    "title": "Allowed Filetypes",
+                    "type": "string",
+                    "description": "A regular expression limiting the file types that can be uploaded based on filename"
+                },
+                "maxNumberOfFiles": { // not in uzh properties
+                    "title": "Maximum number of files (-1 = unlimited)",
+                    "type": "number",
+                    "description": "The maximum number of files to allow to be uploaded. If greater than zero, the maximum number will be constrained. If -1, then no limit is imposed."
+                },
+                "maxFileSize": { // not in uzh properties
+                    "title": "Maximum size of file (in bytes; -1 = unlimited)",
+                    "type": "number",
+                    "description": "The maximum file size allowed per upload. If greater than zero, the maximum file size will be limited to the given size in bytes. If -1, then no limit is imposed."
+                },
+                "showUploadPreview": { // not in uzh properties
+                    "title": "Show file preview",
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Whether to show thumbnails for uploaded assets (requires preview support)"
                 }
             }
         });
- */   },
+    },
 
     getSchemaOfSchema: function () {
         var mySchema = this.base();
@@ -850,13 +883,14 @@ $.alpaca.Fields.AttachmentMechanism = $.alpaca.Fields.UploadField.extend({
         delete mySchema.properties.enum;
         delete mySchema.properties.format;
         delete mySchema.properties.readonly;
+        delete mySchema.properties.required;
         delete mySchema.properties.type;
         return mySchema;
     }
 });
 Alpaca.registerFieldClass("attachment", Alpaca.Fields.AttachmentMechanism);
 
-// audio component extends the object field
+// AUDIO component extends the object field
 $.alpaca.Fields.AudioMechanism = $.alpaca.Fields.ObjectField.extend({
     getFieldType: function() {
         return "audio";
@@ -869,11 +903,29 @@ $.alpaca.Fields.AudioMechanism = $.alpaca.Fields.ObjectField.extend({
     getSchemaOfOptions: function () {
         var myProp = this.base();
         delete myProp.properties.fields;
+
         return Alpaca.merge(myProp, {
             "properties": {
                 "label": {
                     "title": "Label",
                     "type": "text"
+                },
+                "mandatory": { // not in uzh properties
+                    "title": "Mandatory",
+                    "type": "boolean",
+                    "default": false
+                },
+                "hidden": { // not in uzh properties
+                    "title": "Hidden",
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Field will be hidden if true."
+                },
+                "disabled": { // not in uzh properties
+                    "title": "Disabled",
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Field will be disabled if true."
                 },
                 "maxTime": {
                     "title": "Maximal recording time",
@@ -893,13 +945,14 @@ $.alpaca.Fields.AudioMechanism = $.alpaca.Fields.ObjectField.extend({
         delete mySchema.properties.minProperties;
         delete mySchema.properties.properties;
         delete mySchema.properties.readonly;
+        delete mySchema.properties.mandatory;
         delete mySchema.properties.type;
         return mySchema;
     }
 });
 Alpaca.registerFieldClass("audio", Alpaca.Fields.AudioMechanism);
 
-// screenshot component extends alpaca image field
+// SCREENSHOT component extends alpaca image field
 $.alpaca.Fields.ScreenshotMechanism = $.alpaca.Fields.ImageField.extend({
     getFieldType: function() {
         return "screenshot";
@@ -914,6 +967,7 @@ $.alpaca.Fields.ScreenshotMechanism = $.alpaca.Fields.ImageField.extend({
         delete myProp.properties.allowOptionalEmpty;
         delete myProp.properties.autocomplete;
         delete myProp.properties.data;
+        delete myProp.properties.disabled;
         delete myProp.properties.disallowEmptySpaces;
         delete myProp.properties.disallowOnlyEmptySpaces;
         delete myProp.properties.enum;
@@ -922,11 +976,13 @@ $.alpaca.Fields.ScreenshotMechanism = $.alpaca.Fields.ImageField.extend({
         delete myProp.properties.focus;
         delete myProp.properties.helper;
         delete myProp.properties.helpers;
+        delete myProp.properties.hidden;
         delete myProp.properties.hideInitValidationError;
         delete myProp.properties.inputType;
         delete myProp.properties.maskString;
         delete myProp.properties.name;
         delete myProp.properties.placeholder;
+        delete myProp.properties.required;
         delete myProp.properties.optionLabels;
         delete myProp.properties.showMessages;
         delete myProp.properties.size;
@@ -936,27 +992,26 @@ $.alpaca.Fields.ScreenshotMechanism = $.alpaca.Fields.ImageField.extend({
 
         return Alpaca.merge(myProp, {
             "properties": {
-                "create_in_app_screenshot": {
+                "mandatory": { // not in uzh properties
+                    "title": "Mandatory",
+                    "type": "boolean",
+                    "default": false
+                },
+                "create_in_app_screenshot": { // not in uzh properties
                     "title": "Create in app screenshot",
                     "type": "boolean",
                     "default": false
                 },
-                "add_freehand_drawings": {
+                "add_freehand_drawings": { // not in uzh properties
                     "title": "User can add freehand drawings",
                     "type": "boolean",
                     "default": false
                 },
-                "undo_functionality": {
+                "undo_functionality": { // not in uzh properties
                     "title": "Activate undo",
                     "type": "boolean",
                     "default": false
-/*      not in the uzh parameter list
- },
-                "mandatory": {
-                    "title": "Mandatory",
-                    "type": "boolean",
-                    "default": false
-*/                }
+                }
             }
         });
     },
@@ -977,7 +1032,7 @@ $.alpaca.Fields.ScreenshotMechanism = $.alpaca.Fields.ImageField.extend({
 });
 Alpaca.registerFieldClass("screenshot", Alpaca.Fields.ScreenshotMechanism);
 
-/// checkbox component extends the alpaca checkbox
+/// CATEGORY component extends the alpaca select
 $.alpaca.Fields.CategoryMechanism = $.alpaca.Fields.SelectField.extend({
     getFieldType: function() {
         return "category";
@@ -990,31 +1045,79 @@ $.alpaca.Fields.CategoryMechanism = $.alpaca.Fields.SelectField.extend({
     getSchemaOfOptions: function(){
         var myProp = this.base();
         delete myProp.properties.dataSource;
+        delete myProp.properties.disabled;
+        delete myProp.properties.emptySelectFirst;
         delete myProp.properties.fieldClass;
         delete myProp.properties.focus;
         delete myProp.properties.helper;
         delete myProp.properties.helpers;
+        delete myProp.properties.hidden;
         delete myProp.properties.hideInitValidationError;
+        delete myProp.properties.hideNone;
+        delete myProp.properties.mandatory;
         delete myProp.properties.multiselect;
+        delete myProp.properties.multiple;
         delete myProp.properties.name;
+        delete myProp.properties.noneLabel;
+        delete myProp.properties.optionLabels;
+        delete myProp.properties.removeDefaultNone;
         delete myProp.properties.showMessages;
+        delete myProp.properties.size;
         delete myProp.properties.sort;
         delete myProp.properties.type;
         delete myProp.properties.useDataSourceAsEnum;
         delete myProp.properties.validate;
         delete myProp.properties.view;
-        myProp.properties.enumLabel
+
         return Alpaca.merge(myProp, {
             "properties": {
-                "mandatory": {
+                "mandatory": { // not in uzh properties, note: alpaca documentation says "required", but its in fact "mandatory"
                     "title": "Mandatory",
                     "type": "boolean",
                     "default": false
                 },
-                /* options in uzh */
-                "enum": {
-                    "title": "Option values",
+                "optionLabels": {
+                    "title": "Option Labels",
                     "type": "array"
+                },
+                "enum": {
+                    "title": "Option Values",
+                    "type": "array"
+                },
+                "multiple": {
+                    "title": "Allow Multiple Values",
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Allow multiple selection if true."
+                },
+                "size": {
+                    "title": "Number of displayed options",
+                    "type": "number",
+                    "description": "Number of options to be shown."
+                },
+                "emptySelectFirst": { // not in uzh properties
+                    "title": "Select first item in list if data empty",
+                    "type": "boolean",
+                    "default": false,
+                    "description": "If the data is empty, then automatically select the first item in the list."
+                },
+                "noneLabel": { // not in uzh properties
+                    "title": "Label for the 'None'-Option",
+                    "type": "string",
+                    "default": "None",
+                    "description": "The label to use for the 'None' option in a list (select, radio or otherwise)."
+                },
+                "hideNone": { // not in uzh properties
+                    "title": "Hide the option 'None'",
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Whether to hide the None option from a list (select, radio or otherwise). This will be true if the field is required and false otherwise."
+                },
+                "removeDefaultNone": { // not in uzh properties
+                    "title": "Remove the option 'None'",
+                    "type": "boolean",
+                    "default": false,
+                    "description": "If true, the default 'None' option will not be shown."
                 }
             }
         });
@@ -1033,7 +1136,7 @@ $.alpaca.Fields.CategoryMechanism = $.alpaca.Fields.SelectField.extend({
 });
 Alpaca.registerFieldClass("category", Alpaca.Fields.CategoryMechanism);
 
-//radiobutton component extends the alpaca radio button
+//RATING component extends the alpaca radio button
 $.alpaca.Fields.RatingMechanism = $.alpaca.Fields.RadioField.extend({
    getFieldType: function() {
        return "rating";
@@ -1046,15 +1149,19 @@ $.alpaca.Fields.RatingMechanism = $.alpaca.Fields.RadioField.extend({
     getSchemaOfOptions: function() {
        var myProp = this.base();
         delete myProp.properties.dataSource;
+        delete myProp.properties.disabled;
         delete myProp.properties.emptySelectFirst;
         delete myProp.properties.fieldClass;
         delete myProp.properties.focus;
         delete myProp.properties.helper;
         delete myProp.properties.helpers;
+        delete myProp.properties.hidden;
         delete myProp.properties.hideInitValidationError;
         delete myProp.properties.hideNone;
+        delete myProp.properties.mandatory; // note: alpaca documentation says "required", but its in fact "mandatory"
         delete myProp.properties.name;
         delete myProp.properties.noneLabel;
+        delete myProp.properties.optionLabels;
         delete myProp.properties.removeDefaultNone;
         delete myProp.properties.showMessages;
         delete myProp.properties.useDataSourceAsEnum;
@@ -1062,17 +1169,27 @@ $.alpaca.Fields.RatingMechanism = $.alpaca.Fields.RadioField.extend({
         delete myProp.properties.vertical;
         delete myProp.properties.view;
         return Alpaca.merge(myProp, {
+            /* different properties for the rating... only defautl Rating, maxRating defined in uzh doku */
             "properties": {
-                "required": {
-                    "title": "Required",
+                "mandatory": {
+                    "title": "Mandatory", // not in uzh properties, note: alpaca documentation says "required", but its in fact "mandatory"
                     "type": "boolean",
                     "default": false
                 },
-                "enum": {
-                    "title": "Enum values",
+                "optionLabels": {
+                    "title": "Option Labels",
                     "type": "array"
+                },
+                "enum": {
+                    "title": "Option Values",
+                    "type": "array"
+                },
+                "removeDefaultNone": {
+                    "title": "Remove the option 'None'",
+                    "type": "boolean",
+                    "default": false,
+                    "description": "If true, the default 'None' option will not be shown."
                 }
-                /* different properties for the rating... only defautl Rating, maxRating defined in uzh doku */
             }
         });
     },
@@ -1089,7 +1206,7 @@ $.alpaca.Fields.RatingMechanism = $.alpaca.Fields.RadioField.extend({
 });
 Alpaca.registerFieldClass("rating", Alpaca.Fields.RatingMechanism);
 
-// textarea component extends the alpaca textarea
+// TEXTINPUT component extends the alpaca textarea
 $.alpaca.Fields.TextInputMechanism = $.alpaca.Fields.TextAreaField.extend({
     getFieldType: function(){
         return "textinput";
@@ -1102,19 +1219,24 @@ $.alpaca.Fields.TextInputMechanism = $.alpaca.Fields.TextAreaField.extend({
         var myProp = this.base();
         delete myProp.properties.allowOptionalEmpty;
         delete myProp.properties.autocomplete;
+        delete myProp.properties.cols;
         delete myProp.properties.data;
+        delete myProp.properties.disabled;
         delete myProp.properties.disallowEmptySpaces;
         delete myProp.properties.disallowOnlyEmptySpaces;
         delete myProp.properties.fieldClass;
         delete myProp.properties.focus;
         delete myProp.properties.helper;
         delete myProp.properties.helpers;
+        delete myProp.properties.hidden;
         delete myProp.properties.hideInitValidationError;
         delete myProp.properties.inputType;
+        delete myProp.properties.mandatory; // note: alpaca documentation says "required", but its in fact "mandatory"
         delete myProp.properties.maskString;
         delete myProp.properties.name;
         delete myProp.properties.optionLabels;
         delete myProp.properties.placeholder;
+        delete myProp.properties.rows;
         delete myProp.properties.showMessages;
         delete myProp.properties.size;
         delete myProp.properties.typeahead;
@@ -1123,10 +1245,34 @@ $.alpaca.Fields.TextInputMechanism = $.alpaca.Fields.TextAreaField.extend({
         delete myProp.properties.wordlimit;
         return Alpaca.merge(myProp, {
             "properties": {
-                "mandatory": {
+                "mandatory": { // note: alpaca documentation says "required", but its in fact "mandatory"
                     "title": "Mandatory",
                     "type": "boolean",
                     "default": false
+                },
+                "hidden": {
+                    "title": "Hidden",
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Field will be hidden if true."
+                },
+                "disabled": {
+                    "title": "Disabled",
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Field will be disabled if true."
+                },
+                "rows": {
+                    "title": "Rows",
+                    "type": "number",
+                    "default": "5",
+                    "description": "Number of rows"
+                },
+                "cols": {
+                    "title": "Columns",
+                    "type": "number",
+                    "default": "40",
+                    "description": "Number of columns"
                 },
                 "maxLength": {
                     "title": "Maximum number of characters",
