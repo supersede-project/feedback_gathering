@@ -383,44 +383,12 @@ var setup = function () {
             fieldOptionsData.showMessages = false;
             fieldConfigOptions.data = fieldOptionsData;
         }
-/*        fieldConfigSchema.view = {
+
+        fieldConfigOptions.view = {
             "parent": MODAL_VIEW,
             "displayReadonly": false
         };
-*/        fieldConfigOptions.view = {
-            "parent": MODAL_VIEW,
-            "displayReadonly": false
-        };
-/*
-        fieldConfigSchema.postRender = function (control) {
-            var modal = $(MODAL_TEMPLATE.trim());
-            modal.find(".modal-title").append(field.getTitle());
-            modal.find(".modal-body").append(control.getFieldEl());
 
-            modal.find('.modal-footer').append("<button class='btn btn-primary pull-right okay' data-dismiss='modal' aria-hidden='true'>Okay</button>");
-            modal.find('.modal-footer').append("<button class='btn btn-default pull-left' data-dismiss='modal' aria-hidden='true'>Cancel</button>");
-
-            $(modal).modal({
-                "keyboard": true
-            });
-
-            $(modal).find(".okay").click(function () {
-
-                field.schema = control.getValue();
-
-                var top = findTop(field);
-                regenerate(top);
-
-                if (callback) {
-                    callback();
-                }
-            });
-
-            control.getFieldEl().find("p.help-block").css({
-                "display": "none"
-            });
-        };
-        */
         fieldConfigOptions.postRender = function (control) {
             var modal = $(MODAL_TEMPLATE.trim());
             modal.find(".modal-title").append(field.getTitle());
@@ -460,7 +428,6 @@ var setup = function () {
 
         // finds the div with fielForm class and uses it as alpaca form for the schema and option form
         var x = $("<div><div class='fieldForm'></div></div>");
-//        $(x).find(".fieldForm").alpaca(fieldConfigSchema);
         $(x).find(".fieldForm").alpaca(fieldConfigOptions);
     };
 
@@ -638,23 +605,12 @@ var setup = function () {
         delete options.fields;
         options.fields = {};
 
-        // var fields = []; // new
-        // options.fields = {}; // new
-
-        // var mechanisms = {}; // new
-        // mechanisms.id = {}; // new
-
         if (field.children) {
             for (var i = 0; i < field.children.length; i++) {
                 var childField = field.children[i];
                 var propertyId = childField.propertyId;
-                // var mechanisms = field.children[i]; // new
-                // mechanisms.id = propertyId; // new
-
                 options.fields[propertyId] = {};
-                // mechanisms.id = propertyId; // new
                 assembleOptions(childField, options.fields[propertyId]);
-                // assembleOptions(mechanisms, options.fields[i]); // new
             }
         }
     };
@@ -746,11 +702,6 @@ var setup = function () {
 
         config.options.fields = configFields;
 
-        console.log(config);
-
-
-    //    var newConfig = JSON.stringify(config);
-
         var transformedConfig = new ObjectTemplate(tmpl).transform(config);
         var configString = JSON.stringify(transformedConfig);
 
@@ -759,10 +710,7 @@ var setup = function () {
         /* var blob = new Blob([configString], {type: "application/json"});
         var saveAs = window.saveAs;
         saveAs(blob, "GUI_schema_options.json"); */
-
-        console.log(configString);
-
-
+        
         // TODO: adjust url to orchestrator url
         /*        $.ajax({
          url: "http://httpbin.org/post",
@@ -783,21 +731,7 @@ var setup = function () {
 
     // click on send button (for user to send form data)
     $(".submit-button").on("click", function () {
- /*       var config = {
-            "schema": schema
-        };
-
-        if (schema) {
-            config.schema = schema;
-        }
-        if (options) {
-            config.options = options;
-        }
-
-        var configString = JSON.stringify(config);
-*/
-    alert(submitText);
-
+        alert(submitText);
     });
 };
 
