@@ -793,10 +793,14 @@ $(document).ready(function () {
         $( "#preview #viewDiv" ).removeClass().addClass(fontValue);
     }
 
-    $("#SetFontColor").change(function () {
-        var fontColor = $("#SetFontColor").val();
+    $("#setFontColor").change(function () {
+        var fontColor = $("#setFontColor").val();
         $("#preview #viewDiv").css("color", fontColor);
-        console.log(fontColor);
+    });
+
+    $("#fontSize").change(function() {
+        var fontSize = $("#fontSize").val();
+        $("#preview #viewDiv").css("font-size", fontSize + "px");
     });
 
 });
