@@ -441,6 +441,10 @@ var setup = function () {
                     field.schema.enum = field.options.enum;
                 }
 
+                if(field.options.mandatory || field.schema.required){
+                    field.schema.required = field.options.mandatory;
+                }
+
                 var top = findTop(field);
                 regenerate(top);
 
