@@ -22,6 +22,7 @@
 package ch.uzh.ifi.feedback.orchestrator.monitoring.controllers;
 
 import java.net.URI;
+import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -36,9 +37,7 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import com.google.inject.Inject;
 import com.google.inject.servlet.RequestScoped;
 
@@ -50,7 +49,6 @@ import ch.uzh.ifi.feedback.library.rest.annotations.POST;
 import ch.uzh.ifi.feedback.library.rest.annotations.PUT;
 import ch.uzh.ifi.feedback.library.rest.annotations.Path;
 import ch.uzh.ifi.feedback.library.rest.annotations.PathParam;
-import ch.uzh.ifi.feedback.orchestrator.model.Configuration;
 import ch.uzh.ifi.feedback.orchestrator.model.MonitorConfiguration;
 import ch.uzh.ifi.feedback.orchestrator.model.MonitorTool;
 import ch.uzh.ifi.feedback.orchestrator.model.MonitorType;
@@ -101,7 +99,7 @@ public class MonitorConfigurationController extends RestController<MonitorConfig
 		CloseableHttpClient client = HttpClientBuilder.create().build();
 		String url = monitorManagerHost + "configuration";
 		
-		JsonObject json = configuration.getJson();
+		JsonObject json = getJson(configuration);
 				
 		json.addProperty("monitor", monitorTool.get(0).getMonitorName());
 		HttpPost request = new HttpPost(url);
@@ -151,7 +149,7 @@ public class MonitorConfigurationController extends RestController<MonitorConfig
 		CloseableHttpClient client = HttpClientBuilder.create().build();
 		String url = monitorManagerHost + "configuration";
 
-		JsonObject json = monitorConfiguration.getJson();
+		JsonObject json = getJson(monitorConfiguration);
 		
 		List<MonitorTool> monitorTool = monitorToolService.GetWhere(Arrays.asList(tool), "name = ?");
 		monitorConfiguration.setMonitorToolId(monitorTool.get(0).getId());
@@ -194,6 +192,34 @@ public class MonitorConfigurationController extends RestController<MonitorConfig
 		}
 		
 		super.Delete(configuration);
+	}
+	
+	private JsonObject getJson(MonitorConfiguration configuration) throws SQLException, NotFoundException {
+		
+		MonitorTool tool = monitorToolService.GetById(configuration.getMonitorToolId());
+		
+		JsonObject json = new JsonObject();
+		
+		json.addProperty("id", configuration.getId());
+		json.addProperty("kafkaEndpoint", configuration.getKafkaEndpoint());
+		json.addProperty("kafkaTopic", configuration.getKafkaTopic());
+		json.addProperty("toolName",tool.getName());
+		json.addProperty("monitor", tool.getMonitorName());
+		json.addProperty("timeSlot", configuration.getTimeSlot());
+		json.addProperty("timeStamp", configuration.getTimeStamp());
+		if (configuration.getAppId() != null) {
+			json.addProperty("appId", configuration.getAppId());
+		}
+		if (configuration.getPackageName() != null) {
+			json.addProperty("packageName", configuration.getPackageName());
+		}
+		if (configuration.getKeywordExpression() != null) {
+			json.addProperty("keywordExpression", configuration.getKeywordExpression());
+		}
+		/*if (configuration.getAccounts() != null) {
+		 * json.addProperty("accounts", configuration.getAccounts());
+		 */
+		return json;
 	}
 
 }

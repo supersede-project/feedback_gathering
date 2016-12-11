@@ -166,11 +166,4 @@ public class MonitorConfiguration extends OrchestratorItem<MonitorConfiguration>
 		this.timeStamp = timeStamp;
 	}
 
-	public JsonObject getJson() {
-		// TODO Auto-generated method stub
-		JsonObject json = new JsonObject();
-		json.addProperty("check", "ok");
-		return json;
-	}
-
 }
