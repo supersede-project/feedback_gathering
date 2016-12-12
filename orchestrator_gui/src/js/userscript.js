@@ -656,21 +656,43 @@ var setup = function () {
 
     // click on save button (for developer who creates the form)
     $(".save-button").on("click", function () {
-        var config = {
-            "schema": schema
-        };
-
+        var config = {};
+/*
         if (schema) {
             config.schema = schema;
         }
         if (options) {
             config.options = options;
         }
+*/
 
+        var configFields = [];
+
+        $.each(options.fields, function(key, value){
+            var component = {};
+            component.type = value.type;
+            var params = [];
+            $.each(value, function(key, value){
+                var keyValProp = {};
+                keyValProp.key = key;
+                keyValProp.value = value;
+                params.push(keyValProp);
+            });
+            component.parameters = params;
+            configFields.push(component);
+        });
+
+        var mechanismsObject = {};
+        mechanismsObject.mechanisms = configFields;
+
+        config.configurations = [];
+
+        config.configurations.push(mechanismsObject);
+
+        /* general config */
         config.generalConfiguration = {};
         config.generalConfiguration.parameters = [];
 
-        /* general config */
         var parameters = [];
 
         var labelFontColorParam = {};
@@ -695,27 +717,17 @@ var setup = function () {
 
         config.generalConfiguration.parameters = parameters;
 
-        var configFields = [];
 
-        $.each(options.fields, function(key, value){
-            var component = {};
-            component.type = value.type;
-            var params = [];
-            $.each(value, function(key, value){
-                var keyValProp = {};
-                keyValProp.key = key;
-                keyValProp.value = value;
-                params.push(keyValProp);
-            });
-            component.parameters = params;
-            configFields.push(component);
-        });
+        var wholeConfig = [];
+        wholeConfig.push(config);
 
-        config.options.fields = configFields;
-        console.log(config);
+        console.log(wholeConfig);
 
-        var transformedConfig = new ObjectTemplate(tmpl).transform(config);
-        var configString = JSON.stringify(transformedConfig);
+  //      var transformedConfig = new ObjectTemplate(tmpl).transform(wholeConfig);
+        var configString = JSON.stringify(wholeConfig);
+
+
+
 
         console.log(configString);
 
