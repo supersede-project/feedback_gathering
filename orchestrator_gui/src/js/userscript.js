@@ -478,7 +478,7 @@ var setup = function () {
     // creates the components
     var afterAlpacaInit = function () {
         // available components
-        var types = ["textinput", "category", "rating", "screenshot", "attachment", "audio"];
+        var types = ["TEXT_TYPE", "category", "rating", "screenshot", "attachment", "audio"];
 
         // do for all of the types mentioned above
         for (var i = 0; i < types.length; i++) {
@@ -670,6 +670,7 @@ var setup = function () {
         config.generalConfiguration = {};
         config.generalConfiguration.parameters = [];
 
+        /* general config */
         var parameters = [];
 
         var labelFontColorParam = {};
@@ -697,15 +698,26 @@ var setup = function () {
         var configFields = [];
 
         $.each(options.fields, function(key, value){
-            configFields.push(value);
+            var component = {};
+            component.type = value.type;
+            var params = [];
+            $.each(value, function(key, value){
+                var keyValProp = {};
+                keyValProp.key = key;
+                keyValProp.value = value;
+                params.push(keyValProp);
+            });
+            component.parameters = params;
+            configFields.push(component);
         });
 
         config.options.fields = configFields;
+        console.log(config);
 
         var transformedConfig = new ObjectTemplate(tmpl).transform(config);
         var configString = JSON.stringify(transformedConfig);
 
-        // console.log(configString);
+        console.log(configString);
 
         // Save JSON-String to local JSON-file
         /* var blob = new Blob([configString], {type: "application/json"});
@@ -1190,7 +1202,7 @@ Alpaca.registerFieldClass("rating", Alpaca.Fields.RatingMechanism);
 // TEXTINPUT component extends the alpaca textarea
 $.alpaca.Fields.TextInputMechanism = $.alpaca.Fields.TextAreaField.extend({
     getFieldType: function(){
-        return "textinput";
+        return "TEXT_TYPE";
     },
     getTitle: function () {
         return "Text Mechanism";
@@ -1295,4 +1307,4 @@ $.alpaca.Fields.TextInputMechanism = $.alpaca.Fields.TextAreaField.extend({
         return mySchema;
     }
 });
-Alpaca.registerFieldClass("textinput", Alpaca.Fields.TextInputMechanism);
+Alpaca.registerFieldClass("TEXT_TYPE", Alpaca.Fields.TextInputMechanism);
