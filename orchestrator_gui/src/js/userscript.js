@@ -413,6 +413,10 @@ var setup = function () {
                     field.schema.required = field.options.mandatory;
                 }
 
+                if(field.options.hint){
+                    field.options.helper = field.options.hint;
+                }
+
                 var top = findTop(field);
                 regenerate(top);
 
@@ -876,6 +880,11 @@ $.alpaca.Fields.AttachmentMechanism = $.alpaca.Fields.UploadField.extend({
                     "type": "boolean",
                     "default": true,
                     "description": "Whether to show thumbnails for uploaded assets (requires preview support)"
+                },
+                "hint": {
+                    "title": "Tooltip",
+                    "type": "string",
+                    "description": "Hint of the field"
                 }
             }
         });
@@ -935,6 +944,11 @@ $.alpaca.Fields.AudioMechanism = $.alpaca.Fields.ObjectField.extend({
                 "maxTime": {
                     "title": "Maximal recording time",
                     "type": "number"
+                },
+                "hint": {
+                    "title": "Tooltip",
+                    "type": "string",
+                    "description": "Hint of the field"
                 }
             }
         });
@@ -1016,6 +1030,11 @@ $.alpaca.Fields.ScreenshotMechanism = $.alpaca.Fields.ImageField.extend({
                     "title": "Activate undo",
                     "type": "boolean",
                     "default": false
+                },
+                "hint": {
+                    "title": "Tooltip",
+                    "type": "string",
+                    "description": "Hint of the field"
                 }
             }
         });
@@ -1123,6 +1142,11 @@ $.alpaca.Fields.CategoryMechanism = $.alpaca.Fields.SelectField.extend({
                     "type": "boolean",
                     "default": false,
                     "description": "If true, the default 'None' option will not be shown."
+                },
+                "hint": {
+                    "title": "Tooltip",
+                    "type": "string",
+                    "description": "Hint of the field"
                 }
             }
         });
@@ -1194,6 +1218,11 @@ $.alpaca.Fields.RatingMechanism = $.alpaca.Fields.RadioField.extend({
                     "type": "boolean",
                     "default": false,
                     "description": "If true, the default 'None' option will not be shown."
+                },
+                "hint": {
+                    "title": "Tooltip",
+                    "type": "string",
+                    "description": "Hint of the field"
                 }
             }
         });
@@ -1301,6 +1330,11 @@ $.alpaca.Fields.TextInputMechanism = $.alpaca.Fields.TextAreaField.extend({
                     "type": "boolean",
                     "default": true,
                     "description": "If the current characters counter is visible in the text input field"
+                },
+                "hint": {
+                    "title": "Tooltip",
+                    "type": "string",
+                    "description": "Hint of the field"
                 }
             }
         });
