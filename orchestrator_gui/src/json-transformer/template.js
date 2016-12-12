@@ -20,6 +20,7 @@ var tmpl = {
     as: {
         configurations: {
             as: {
+                generalConfiguration: "generalConfiguration",
                 mechanisms: {
                     path: "options.fields",
                     as: {
