@@ -672,9 +672,14 @@ var setup = function () {
 
         var configFields = [];
 
+        var id = 0;
+
         $.each(options.fields, function(key, value){
             var component = {};
             component.type = value.type;
+            component.active = true; // new
+            component.order = ++id; // new
+            component.canBeActivated = false; // new
             var params = [];
             $.each(value, function(key, value){
                 var keyValProp = {};
@@ -691,9 +696,12 @@ var setup = function () {
 
         config.configurations = [];
 
+        config.configurations.push({"type": "PUSH"}); // new, FIXME
+
         config.configurations.push(mechanismsObject);
 
         /* general config */
+        config.id = 12; // new
         config.generalConfiguration = {};
         config.generalConfiguration.parameters = [];
 
@@ -722,16 +730,15 @@ var setup = function () {
         config.generalConfiguration.parameters = parameters;
 
 
-        var wholeConfig = [];
-        wholeConfig.push(config);
+        // var wholeConfig = [];
+        // wholeConfig.push(config);
 
-        console.log(wholeConfig);
+        // console.log(wholeConfig);
+        console.log(config);
 
-  //      var transformedConfig = new ObjectTemplate(tmpl).transform(wholeConfig);
-        var configString = JSON.stringify(wholeConfig);
-
-
-
+        // var transformedConfig = new ObjectTemplate(tmpl).transform(wholeConfig);
+        // var configString = JSON.stringify(wholeConfig);
+        var configString = JSON.stringify(config);
 
         console.log(configString);
 
@@ -739,23 +746,43 @@ var setup = function () {
         /* var blob = new Blob([configString], {type: "application/json"});
         var saveAs = window.saveAs;
         saveAs(blob, "GUI_schema_options.json"); */
-        
-        // TODO: adjust url to orchestrator url
-        /*        $.ajax({
-         url: "http://httpbin.org/post",
-         // change url to http://ec2-54-175-37-30.compute-1.amazonaws.com/orchestrator/feedback/language/applications after JSON-parsing is implemented.
-         type: "PUT",
-         data: configString,
-         dataType: "json",
-         success: function (response){
-         alert("Success");
-         },
-         error: function (jqXHR, textStatus, errorThrown) {
-         alert(textStatus);
-         alert(errorThrown);
-         }
-         })
-         */
+
+        // PUT-REQUEST to orchestrator
+
+        var request = new XMLHttpRequest();
+
+        request.open('PUT', 'http://ec2-54-89-190-92.compute-1.amazonaws.com/orchestrator/feedback/en/applications/');
+
+        request.setRequestHeader('Authorization', '8c69087d-73c1-42dc-9a94-53e48967fc7a');
+        request.setRequestHeader('Content-Type', 'application/json');
+
+        request.onreadystatechange = function () {
+            if (this.readyState === 4) {
+                console.log('Status:', this.status);
+                console.log('Headers:', this.getAllResponseHeaders());
+                console.log('Body:', this.responseText);
+                alert("Status: " + this.status + " " + this.statusText + "\nHeaders: " + this.getAllResponseHeaders() + "\nBody: " + this.responseText);
+            }
+        };
+
+        request.send(configString);
+
+
+        /*
+        $.ajax({
+            url: "http://httpbin.org/post",
+            // change url to http://ec2-54-175-37-30.compute-1.amazonaws.com/orchestrator/feedback/language/applications after JSON-parsing is implemented.
+            type: "PUT",
+            data: configString,
+            dataType: "json",
+            success: function (response) {
+                alert("Success");
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert(textStatus);
+                alert(errorThrown);
+            }
+        }) */
     });
 
     // click on send button (for user to send form data)
