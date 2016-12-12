@@ -478,7 +478,7 @@ var setup = function () {
     // creates the components
     var afterAlpacaInit = function () {
         // available components
-        var types = ["TEXT_TYPE", "category", "rating", "screenshot", "attachment", "audio"];
+        var types = ["TEXT_TYPE", "CATEGORY_TYPE", "RATING_TYPE", "SCREENSHOT_TYPE", "ATTACHMENT_TYPE", "AUDIO_TYPE"];
 
         // do for all of the types mentioned above
         for (var i = 0; i < types.length; i++) {
@@ -496,7 +496,7 @@ var setup = function () {
 
             // component box
             var div = $("<div class='form-element draggable ui-widget-content' data-type='" + type + "' data-field-type='" + fieldType + "'></div>");
-            $(div).append("<div><span class='form-element-title'>" + title + "</span> (<span class='form-element-type'>" + fieldType + "</span>)</div>");
+            $(div).append("<div><span class='form-element-title'>" + title + "</span></div>");
             $(div).append("<div><span class='form-element-description'>Dropable element</span></div>");
 
             $("#basic").append(div);
@@ -536,7 +536,7 @@ var setup = function () {
         }
         itemOptions.label = "New ";
         if (fieldType) {
-            itemOptions.label += fieldType;
+            itemOptions.label += fieldType.substring(0, fieldType.indexOf('_')).toLowerCase();
         }
         else if (dataType) {
             itemOptions.label += dataType;
@@ -803,7 +803,7 @@ $(document).ready(function () {
 // ATTACHMENT mechanism extend upload field
 $.alpaca.Fields.AttachmentMechanism = $.alpaca.Fields.UploadField.extend({
     getFieldType: function () {
-        return "attachment";
+        return "ATTACHMENT_TYPE";
     },
 
     getTitle: function () {
@@ -881,12 +881,12 @@ $.alpaca.Fields.AttachmentMechanism = $.alpaca.Fields.UploadField.extend({
         return mySchema;
     }
 });
-Alpaca.registerFieldClass("attachment", Alpaca.Fields.AttachmentMechanism);
+Alpaca.registerFieldClass("ATTACHMENT_TYPE", Alpaca.Fields.AttachmentMechanism);
 
 // AUDIO component extends the object field
 $.alpaca.Fields.AudioMechanism = $.alpaca.Fields.ObjectField.extend({
     getFieldType: function() {
-        return "audio";
+        return "AUDIO_TYPE";
     },
 
     getTitle: function() {
@@ -943,12 +943,12 @@ $.alpaca.Fields.AudioMechanism = $.alpaca.Fields.ObjectField.extend({
         return mySchema;
     }
 });
-Alpaca.registerFieldClass("audio", Alpaca.Fields.AudioMechanism);
+Alpaca.registerFieldClass("AUDIO_TYPE", Alpaca.Fields.AudioMechanism);
 
 // SCREENSHOT component extends alpaca image field
 $.alpaca.Fields.ScreenshotMechanism = $.alpaca.Fields.ImageField.extend({
     getFieldType: function() {
-        return "screenshot";
+        return "SCREENSHOT_TYPE";
     },
 
     getTitle: function() {
@@ -1023,12 +1023,12 @@ $.alpaca.Fields.ScreenshotMechanism = $.alpaca.Fields.ImageField.extend({
         return mySchema;
     }
 });
-Alpaca.registerFieldClass("screenshot", Alpaca.Fields.ScreenshotMechanism);
+Alpaca.registerFieldClass("SCREENSHOT_TYPE", Alpaca.Fields.ScreenshotMechanism);
 
 /// CATEGORY component extends the alpaca select
 $.alpaca.Fields.CategoryMechanism = $.alpaca.Fields.SelectField.extend({
     getFieldType: function() {
-        return "category";
+        return "CATEGORY_TYPE";
     },
 
     getTitle: function() {
@@ -1127,12 +1127,12 @@ $.alpaca.Fields.CategoryMechanism = $.alpaca.Fields.SelectField.extend({
         return mySchema;
     }
 });
-Alpaca.registerFieldClass("category", Alpaca.Fields.CategoryMechanism);
+Alpaca.registerFieldClass("CATEGORY_TYPE", Alpaca.Fields.CategoryMechanism);
 
 //RATING component extends the alpaca radio button
 $.alpaca.Fields.RatingMechanism = $.alpaca.Fields.RadioField.extend({
    getFieldType: function() {
-       return "rating";
+       return "RATING_TYPE";
    },
 
    getTitle: function() {
@@ -1197,7 +1197,7 @@ $.alpaca.Fields.RatingMechanism = $.alpaca.Fields.RadioField.extend({
         return mySchema;
     }
 });
-Alpaca.registerFieldClass("rating", Alpaca.Fields.RatingMechanism);
+Alpaca.registerFieldClass("RATING_TYPE", Alpaca.Fields.RatingMechanism);
 
 // TEXTINPUT component extends the alpaca textarea
 $.alpaca.Fields.TextInputMechanism = $.alpaca.Fields.TextAreaField.extend({
