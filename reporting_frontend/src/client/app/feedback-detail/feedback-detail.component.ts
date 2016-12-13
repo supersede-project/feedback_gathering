@@ -126,6 +126,7 @@ export class FeedbackDetailComponent implements OnInit {
   showNextFeedback() {
     if (this.feedback.id !== this.feedbacks[this.feedbacks.length - 1].id) {
       this.feedback = this.feedbacks[this.getCurrentFeedbackIndex() + 1];
+      this.loadApplication(this.feedback.applicationId, this.feedback.configurationId);
       this.markAsReadOrUnread(this.feedback, true);
     }
   }
@@ -133,6 +134,7 @@ export class FeedbackDetailComponent implements OnInit {
   showPreviousFeedback() {
     if (this.feedback.id !== this.feedbacks[0].id) {
       this.feedback = this.feedbacks[this.getCurrentFeedbackIndex() - 1];
+      this.loadApplication(this.feedback.applicationId, this.feedback.configurationId);
       this.markAsReadOrUnread(this.feedback, true);
     }
   }
