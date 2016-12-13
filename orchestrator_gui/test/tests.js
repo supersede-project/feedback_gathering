@@ -62,6 +62,31 @@
     });
 }(jQuery) );
 
+// Test for the RADIO_TYPE
+(function($) {
+    QUnit.module("component: RATING_TYPE");
+    QUnit.test("RATING_TYPE component", function(assert) {
+        var done = assert.async();
+        $("#ratingType").alpaca({
+            "options": {
+                "type": "RATING_TYPE",
+                "label": "Test Component",
+                "helper": "Please rate",
+                "optionLabels": ["Bad", "Ok", "Good"]
+            },
+            "schema": {
+                "enum": [1, 2, 3]
+            },
+            "postRender": function (renderedField) {
+                assert.expect(1);
+                var ratingElems = $('#ratingType input:radio');
+                assert.equal(ratingElems.length, 4, 'Right number of radio controls generated.');
+                done();
+            }
+        });
+    });
+}(jQuery) );
+
 // Test for the TEXT_TYPE
 (function($) {
     // module for grouping our tests
