@@ -92,7 +92,12 @@ $.alpaca.Fields.TextInputMechanism = $.alpaca.Fields.TextAreaField.extend({
                     "title": "Tooltip",
                     "type": "string",
                     "description": "Hint of the field"
-                }
+                },
+                "validation": {
+                    "title": "Input validation: (none: 0; Email: 1; Number: 2)",
+                    "type": "number",
+                    "default": 0
+                 }
             }
         });
     },
@@ -150,6 +155,10 @@ $.alpaca.Fields.TextInputMechanism = $.alpaca.Fields.TextAreaField.extend({
 
         if(!this.options.hint){
             this.options.hint = "";
+        }
+
+        if(!this.options.validation){
+            this.options.validation = 0;
         }
     }
 
