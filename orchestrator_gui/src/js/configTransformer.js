@@ -67,7 +67,6 @@ function transformConfig(configuration) {
     parameters.push(submitTextParam);
 
     config.generalConfiguration.parameters = parameters;
-    console.log(config);
 
     return config;
 }
