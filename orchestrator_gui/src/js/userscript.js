@@ -601,7 +601,7 @@ var setup = function () {
         }
     };
 
-    var assembleOptions = function (field, options) { // FIXME
+    var assembleOptions = function (field, options) {
         // copy any properties from this field's options into our options object
         for (var k in field.options) {
             if (field.options.hasOwnProperty(k) && typeof(field.options[k]) !== "function") {
