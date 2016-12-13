@@ -11,7 +11,7 @@
 
 }(jQuery));
 
-// Test for Audio
+// Test for AUDIO_TYPE
 (function($) {
     QUnit.module("component: AUDIO_TYPE");
     QUnit.test("component: AUDIO_TYPE", function(assert) {
@@ -26,6 +26,36 @@
                 var audioType = $('#audioType legend');
                 assert.ok(audioType.length, 'Placeholder for audio generated.');
                 assert.equal(audioType.text().trim(), "Audio Component", 'Placeholder has right label.');
+                done();
+            }
+        });
+    });
+}(jQuery) );
+
+// Test for CATEGORY_TYPE
+(function($) {
+    QUnit.module("component: CATEGORY_TYPE");
+    QUnit.test("CATEGORY_TYPE component", function(assert) {
+        var done = assert.async();
+        $("#categoryType").alpaca({
+            "options": {
+                "label": "Test Component",
+                "helper": "Which option?",
+                "optionLabels": ["Option1", "Option2", "Option3"]
+            },
+            "schema": {
+                "enum": ["Option1", "Option2", "Option3", "Option4", "Option5"]
+            },
+            "postRender": function (renderedField) {
+                assert.expect(4);
+                var selectElems = $('#categoryType select > option');
+                assert.equal(selectElems.length, 6, 'Right number of select options generated.');
+                var rightLabelElem0 = $('#categoryType select > option:eq(1)');
+                assert.equal(rightLabelElem0.text(), 'Option1', 'First option right label text populated correctly.');
+                var rightLabelElem1 = $('#categoryType select > option:eq(2)');
+                assert.equal(rightLabelElem1.text(), 'Option2', 'Second option right label text populated correctly.');
+                var rightLabelElem2 = $('#categoryType select > option:eq(3)');
+                assert.equal(rightLabelElem2.text(), 'Option3', 'Third option right label text populated correctly.');
                 done();
             }
         });
