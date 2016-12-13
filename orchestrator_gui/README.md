@@ -36,6 +36,8 @@ The Orchestrator GUI has been developed with the following browsers:
 * Firefox
 * Google Chrome
 
+The Alpaca-Plugin should work in any browser that supports jQuery 1.10.x and above. 
+
 # Development
 
 - For further Alpaca configuration, visit the [Alpaca Documentation](http://www.alpacajs.org/documentation.html).
@@ -50,18 +52,13 @@ By clicking on "Save Form", the form schema is sent as JSON to the orchestrator 
 
 # Running tests
 
-Tests are written in QUnit v2 (https://qunitjs.com/). They can be found in the test directory. To run the tests simply open the testIndex.html file in the browser. 
+Tests are written in [QUnit v2](https://qunitjs.com/). They can be found in the test directory. To run the tests simply open the testIndex.html file in the browser. 
 
 
 # Directory Structure
 
 ```
-.
-├── build                        
-│   ├── alpaca      <- JavaScript and CSS-Files
-│   ├── tmp                    
-├── deployment
-│   gulp                       
+.                 
 ├── lib             <- Project library
 ├── node_modules               
 ├── src             <- Project Source Code
@@ -69,14 +66,13 @@ Tests are written in QUnit v2 (https://qunitjs.com/). They can be found in the t
     ├── js
     ├── templates
     index.html      <- Webinterface Orchestrator GUI
-├── test            <- Tests
-├── thirdparty                 
+├── test            <- Tests            
 ```
 
 
 # License
 
-Apache License 2.0
+The Alpaca-Plugin is under the Apache 2.0 license.
 
 
 
