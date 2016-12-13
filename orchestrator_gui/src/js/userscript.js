@@ -692,11 +692,12 @@ var setup = function () {
         });
 
         var mechanismsObject = {};
+        mechanismsObject.type = "PUSH";
         mechanismsObject.mechanisms = configFields;
 
         config.configurations = [];
 
-        config.configurations.push({"type": "PUSH"}); // new, FIXME
+
 
         config.configurations.push(mechanismsObject);
 
@@ -730,22 +731,12 @@ var setup = function () {
         config.generalConfiguration.parameters = parameters;
 
 
-        // var wholeConfig = [];
-        // wholeConfig.push(config);
-
-        // console.log(wholeConfig);
         console.log(config);
 
-        // var transformedConfig = new ObjectTemplate(tmpl).transform(wholeConfig);
-        // var configString = JSON.stringify(wholeConfig);
+
         var configString = JSON.stringify(config);
 
         console.log(configString);
-
-        // Save JSON-String to local JSON-file
-        /* var blob = new Blob([configString], {type: "application/json"});
-        var saveAs = window.saveAs;
-        saveAs(blob, "GUI_schema_options.json"); */
 
         // PUT-REQUEST to orchestrator
 
@@ -767,22 +758,6 @@ var setup = function () {
 
         request.send(configString);
 
-
-        /*
-        $.ajax({
-            url: "http://httpbin.org/post",
-            // change url to http://ec2-54-175-37-30.compute-1.amazonaws.com/orchestrator/feedback/language/applications after JSON-parsing is implemented.
-            type: "PUT",
-            data: configString,
-            dataType: "json",
-            success: function (response) {
-                alert("Success");
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-                alert(textStatus);
-                alert(errorThrown);
-            }
-        }) */
     });
 
     // click on send button (for user to send form data)
