@@ -131,10 +131,12 @@ $.alpaca.Fields.TextInputMechanism = $.alpaca.Fields.TextAreaField.extend({
 
         if(!this.options.fieldHeight) {
             this.options.fieldHeight = 5;
+            this.options.rows = this.options.fieldHeight;
         }
 
         if(!this.options.fieldWidth){
             this.options.fieldWidth = 40;
+            this.options.cols = this.options.fieldWidth;
         }
 
         if(!this.options.maxLength){

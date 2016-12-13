@@ -97,7 +97,6 @@
             "options": {
                 "type": "TEXT_TYPE",
                 "label": "Test Component",
-                "hint": "Receipt for Best Homemade Ice Cream",
                 "rows": 6,
                 "cols": 80
             },

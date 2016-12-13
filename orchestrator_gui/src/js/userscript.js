@@ -92,8 +92,6 @@ var setup = function () {
                     form.getFieldEl().find(".alpaca-container-item").each(function () {
 
                         var alpacaFieldId = $(this).children().first().attr("data-alpaca-field-id");
-
-                        //iCount++;
                         $(this).attr("icount", iCount);
 
                         var width = $(this).outerWidth() - 22;
@@ -147,7 +145,6 @@ var setup = function () {
                             "margin-top": 5 + (($(interaction).height() / 2) - ($(buttonGroup).height() / 2)),
                             "margin-right": "16px"
                         });
-
 
                         // click on optionsButton
                         $(optionsButton).off().click(function (e) {
@@ -425,6 +422,10 @@ var setup = function () {
                     field.options.cols = field.options.fieldWidth;
                 }
 
+                if(field.options.fieldHeight){
+                    field.options.rows = field.options.fieldHeight;
+                }
+
                 var top = findTop(field);
                 regenerate(top);
 
@@ -475,7 +476,6 @@ var setup = function () {
         }
 
         doRefresh($("#designerDiv"), true, function (err, form) {
-
             if (!err) {
                 mainDesignerField = form;
             }
@@ -572,9 +572,7 @@ var setup = function () {
         }
 
         parentField.addItem(itemKey, itemSchema, itemOptions, itemData, insertAfterId, function () {
-
             var top = findTop(parentField);
-
             regenerate(top);
         });
 
@@ -670,14 +668,11 @@ var setup = function () {
     $(".save-button").on("click", function () {
         var config = transformConfig(options.fields);
         var configString = JSON.stringify(config);
-        console.log(configString);
 
         // PUT-REQUEST to orchestrator
-
         var request = new XMLHttpRequest();
 
         request.open('PUT', 'http://ec2-54-89-190-92.compute-1.amazonaws.com/orchestrator/feedback/en/applications/');
-
         request.setRequestHeader('Authorization', '8c69087d-73c1-42dc-9a94-53e48967fc7a');
         request.setRequestHeader('Content-Type', 'application/json');
 
@@ -686,12 +681,9 @@ var setup = function () {
                 console.log('Status:', this.status);
                 console.log('Headers:', this.getAllResponseHeaders());
                 console.log('Body:', this.responseText);
-                alert("Status: " + this.status + " " + this.statusText + "\nHeaders: " + this.getAllResponseHeaders() + "\nBody: " + this.responseText);
             }
         };
-
         request.send(configString);
-
     });
 
     // click on send button (for user to send form data)
