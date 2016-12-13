@@ -1,6 +1,6 @@
 var labelFontType = "Helvetica";
 var labelFontColor = "#000";
-var labelFontSize = "12";
+var labelFontSize = 14;
 var submitText = "Success";
 
 $(document).ready(function () {

@@ -17,8 +17,15 @@ function transformConfig(configuration) {
             } else {
                 keyValProp.key = key;
             }
-
-            keyValProp.value = value;
+            if (value == true) {
+                keyValProp.value = (1).toFixed(1);
+            } else if (value == false) {
+                keyValProp.value = (0).toFixed(1);
+            } else if ($.isNumeric(value)){
+                keyValProp.value = (value).toFixed(1);
+            } else {
+                keyValProp.value = value;
+            }
             params.push(keyValProp);
         });
         component.parameters = params;
@@ -51,7 +58,7 @@ function transformConfig(configuration) {
 
     labelFontSizeParam = {};
     labelFontSizeParam.key = "labelFontSize";
-    labelFontSizeParam.value = labelFontSize;
+    labelFontSizeParam.value = (labelFontSize).toFixed(1);
     parameters.push(labelFontSizeParam);
 
     submitTextParam = {};
