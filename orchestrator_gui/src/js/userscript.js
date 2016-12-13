@@ -696,9 +696,6 @@ var setup = function () {
         mechanismsObject.mechanisms = configFields;
 
         config.configurations = [];
-
-
-
         config.configurations.push(mechanismsObject);
 
         /* general config */
@@ -756,7 +753,7 @@ var setup = function () {
             }
         };
 
-        request.send(configString);
+        request.send(config);
 
     });
 
