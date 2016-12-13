@@ -759,19 +759,6 @@ var setup = function () {
 
     // click on send button (for user to send form data)
     $(".submit-button").on("click", function () {
- /*       var config = {
-            "schema": schema
-        };
-
-        if (schema) {
-            config.schema = schema;
-        }
-        if (options) {
-            config.options = options;
-        }
-
-        var configString = JSON.stringify(config);
-*/
         var submitText = $("#SubmitText").val();
         alert(submitText);
     });

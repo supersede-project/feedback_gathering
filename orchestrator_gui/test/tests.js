@@ -11,38 +11,50 @@
 
 }(jQuery));
 
-QUnit.test( "hello test", function( assert ) {
-    assert.ok( 1 == "1", "Passed!" );
-});
-
+// Test for Audio
 (function($) {
-
-    QUnit.module("fields: textarea");
-
-    // Test case 1 : Textarea field with options.
-    QUnit.test("Textarea field with options.", function(assert) {
+    QUnit.module("component: AUDIO_TYPE");
+    QUnit.test("component: AUDIO_TYPE", function(assert) {
         var done = assert.async();
-        var data = "Ice cream or ice-cream is a frozen dessert usually made from dairy products, such as milk and cream, and often combined with fruits or other ingredients and flavours.";
-        $("#textarea-1").alpaca({
-            "data": data,
+        $("#audioType").alpaca({
             "options": {
-                "type": "textarea",
-                "label": "Receipt",
-                "helper": "Receipt for Best Homemade Ice Cream",
-                "rows": 6,
-                "cols": 80
+                "type": 'AUDIO_TYPE',
+                "label": "Audio Component"
             },
             "postRender": function (renderedField) {
-                assert.expect(5);
-                assert.equal(renderedField.getValue(), data, 'Textarea field getValue() method returns correct value.');
-                var inputElem = $('#textarea-1 textarea');
-                assert.ok(inputElem.length, 'Textarea input field generated.');
-                assert.equal(inputElem.val(), data, "Textarea input field value populated correctly.");
-                assert.equal(inputElem.attr('cols'),80, 'Textarea has right number of columns.')
-                assert.equal(inputElem.attr('rows'),6, 'Textarea has right number of rows.')
+                assert.expect(2);
+                var audioType = $('#audioType legend');
+                assert.ok(audioType.length, 'Placeholder for audio generated.');
+                assert.equal(audioType.text().trim(), "Audio Component", 'Placeholder has right label.');
                 done();
             }
         });
     });
-
 }(jQuery) );
+
+// Test for the TEXT_TYPE
+(function($) {
+    // module for grouping our tests
+    QUnit.module("component: TEXT_TYPE");
+    QUnit.test("TEXT_TYPE component", function(assert) {
+        var done = assert.async();
+        $("#textType").alpaca({
+            "options": {
+                "type": "TEXT_TYPE",
+                "label": "Test Component",
+                "hint": "Receipt for Best Homemade Ice Cream",
+                "rows": 6,
+                "cols": 80
+            },
+            "postRender": function (renderedField) {
+                assert.expect(3);
+                var textType = $('#textType textarea');
+                assert.ok(textType.length, 'Textarea input field generated.');
+                assert.equal(textType.attr('cols'),80, 'Textarea has right number of columns.');
+                assert.equal(textType.attr('rows'),6, 'Textarea has right number of rows.');
+                done();
+            }
+        });
+    });
+}(jQuery) );
+
