@@ -20,7 +20,7 @@ $.alpaca.Fields.CategoryMechanism = $.alpaca.Fields.SelectField.extend({
         delete myProp.properties.hidden;
         delete myProp.properties.hideInitValidationError;
         delete myProp.properties.hideNone;
-        delete myProp.properties.mandatory;
+        delete myProp.properties.required;
         delete myProp.properties.multiselect;
         delete myProp.properties.multiple;
         delete myProp.properties.name;
@@ -37,7 +37,7 @@ $.alpaca.Fields.CategoryMechanism = $.alpaca.Fields.SelectField.extend({
 
         return Alpaca.merge(myProp, {
             "properties": {
-                "mandatory": { // not in uzh properties, note: alpaca documentation says "required", but its in fact "mandatory"
+                "mandatory": {
                     "title": "Mandatory",
                     "type": "boolean",
                     "default": false

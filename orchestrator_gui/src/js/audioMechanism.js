@@ -58,7 +58,7 @@ $.alpaca.Fields.AudioMechanism = $.alpaca.Fields.ObjectField.extend({
         delete mySchema.properties.minProperties;
         delete mySchema.properties.properties;
         delete mySchema.properties.readonly;
-        delete mySchema.properties.mandatory;
+        delete mySchema.properties.required;
         delete mySchema.properties.type;
         return mySchema;
     }

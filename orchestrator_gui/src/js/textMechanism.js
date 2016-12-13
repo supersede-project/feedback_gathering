@@ -23,7 +23,7 @@ $.alpaca.Fields.TextInputMechanism = $.alpaca.Fields.TextAreaField.extend({
         delete myProp.properties.hidden;
         delete myProp.properties.hideInitValidationError;
         delete myProp.properties.inputType;
-        delete myProp.properties.mandatory; // note: alpaca documentation says "required", but its in fact "mandatory"
+        delete myProp.properties.required;
         delete myProp.properties.maskString;
         delete myProp.properties.name;
         delete myProp.properties.optionLabels;
@@ -37,7 +37,7 @@ $.alpaca.Fields.TextInputMechanism = $.alpaca.Fields.TextAreaField.extend({
         delete myProp.properties.wordlimit;
         return Alpaca.merge(myProp, {
             "properties": {
-                "mandatory": { // note: alpaca documentation says "required", but its in fact "mandatory"
+                "mandatory": {
                     "title": "Mandatory",
                     "type": "boolean",
                     "default": false
@@ -54,11 +54,11 @@ $.alpaca.Fields.TextInputMechanism = $.alpaca.Fields.TextAreaField.extend({
                     "default": false,
                     "description": "Field will be disabled if true."
                 },
-                "rows": {
-                    "title": "Rows",
+                "fieldHeight": {
+                    "title": "Input height",
                     "type": "number",
                     "default": "5",
-                    "description": "Number of rows"
+                    "description": "Height of the input field"
                 },
                 "fieldWidth": {
                     "title": "Input width",

@@ -20,7 +20,7 @@ $.alpaca.Fields.RatingMechanism = $.alpaca.Fields.RadioField.extend({
         delete myProp.properties.hidden;
         delete myProp.properties.hideInitValidationError;
         delete myProp.properties.hideNone;
-        delete myProp.properties.mandatory; // note: alpaca documentation says "required", but its in fact "mandatory"
+        delete myProp.properties.required;
         delete myProp.properties.name;
         delete myProp.properties.noneLabel;
         delete myProp.properties.optionLabels;
@@ -34,7 +34,7 @@ $.alpaca.Fields.RatingMechanism = $.alpaca.Fields.RadioField.extend({
             /* different properties for the rating... only defautl Rating, maxRating defined in uzh doku */
             "properties": {
                 "mandatory": {
-                    "title": "Mandatory", // not in uzh properties, note: alpaca documentation says "required", but its in fact "mandatory"
+                    "title": "Mandatory",
                     "type": "boolean",
                     "default": false
                 },
