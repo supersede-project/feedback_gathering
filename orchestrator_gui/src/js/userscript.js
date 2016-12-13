@@ -703,8 +703,8 @@ var setup = function () {
         config.configurations.push(mechanismsObject);
 
         /* general config */
-        config.id = 12; // new
-        config.state = 1,
+        config.id = 12; 
+        config.state = 1;
         config.generalConfiguration = {};
         config.generalConfiguration.parameters = [];
 
@@ -731,17 +731,14 @@ var setup = function () {
         parameters.push(submitTextParam);
 
         config.generalConfiguration.parameters = parameters;
-
-
         console.log(config);
-
 
         var configString = JSON.stringify(config);
 
         console.log(configString);
 
         // PUT-REQUEST to orchestrator
-
+/*
         var request = new XMLHttpRequest();
 
         request.open('PUT', 'http://ec2-54-89-190-92.compute-1.amazonaws.com/orchestrator/feedback/en/applications/');
@@ -759,7 +756,7 @@ var setup = function () {
         };
 
         request.send(configString);
-
+*/
     });
 
     // click on send button (for user to send form data)
