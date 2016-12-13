@@ -43,16 +43,15 @@ The Orchestrator GUI has been developed with the following browsers:
 
 # Usage
 
-Once the Orchestrator GUI is opened, the feedback form can be created by dragging and dropping the desired components from the column "Form Components" to the column "Form Designer". By clicking the option-Button, the feedback component can be customized to the corresponding use. In the column "Form Preview", you can see how the form looks like in the end.
+Once the Orchestrator GUI is opened, the feedback form can be created by dragging and dropping the desired components from the column "Form Components" to the column "Form Designer". By clicking the option-button, the feedback component can be customized to the corresponding use. In the column "Form Preview", you can see how the form looks like in the end.
 
-By clicking on "Save Form", the form schema is send as JSON to the orchestrator backend into the corresponding application.
+By clicking on "Save Form", the form schema is sent as JSON to the orchestrator backend into the corresponding application.
 
 
 # Running tests
 
-```bash
-// tbd
-```
+Tests are written in QUnit v2 (https://qunitjs.com/). They can be found in the test directory. To run the tests simply open the testIndex.html file in the browser. 
+
 
 # Directory Structure
 
