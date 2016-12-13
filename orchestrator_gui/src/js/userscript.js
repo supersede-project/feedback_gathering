@@ -417,6 +417,10 @@ var setup = function () {
                     field.options.helper = field.options.hint;
                 }
 
+                if(field.options.fieldWidth){
+                    field.options.cols = field.options.fieldWidth;
+                }
+
                 var top = findTop(field);
                 regenerate(top);
 
@@ -700,6 +704,7 @@ var setup = function () {
 
         /* general config */
         config.id = 12; // new
+        config.state = 1,
         config.generalConfiguration = {};
         config.generalConfiguration.parameters = [];
 
@@ -1288,11 +1293,11 @@ $.alpaca.Fields.TextInputMechanism = $.alpaca.Fields.TextAreaField.extend({
                     "default": "5",
                     "description": "Number of rows"
                 },
-                "cols": {
-                    "title": "Columns",
+                "fieldWidth": {
+                    "title": "Input width",
                     "type": "number",
                     "default": "40",
-                    "description": "Number of columns"
+                    "description": "Width of the text input field"
                 },
                 "maxLength": {
                     "title": "Maximum number of characters",
