@@ -753,7 +753,7 @@ var setup = function () {
             }
         };
 
-        request.send(config);
+        request.send(configString);
 
     });
 
