@@ -17,6 +17,7 @@ function transformConfig(configuration) {
             } else {
                 keyValProp.key = key;
             }
+
             keyValProp.value = value;
             params.push(keyValProp);
         });

@@ -39,17 +39,27 @@ $.alpaca.Fields.RatingMechanism = $.alpaca.Fields.RadioField.extend({
                     "default": false
                 },
                 "optionLabels": {
-                    "title": "Option Labels",
+                    "title": "Option labels",
                     "type": "array"
                 },
                 "enum": {
-                    "title": "Option Values",
+                    "title": "Option values",
                     "type": "array"
+                },
+                "defaultRating": {
+                    "title": "Default value",
+                    "type": "number",
+                    "description": "Predefined rating"
+                },
+                "maxRating": {
+                    "title": "Max rating value",
+                    "type": "number",
+                    "description": "Maximal possible rating"
                 },
                 "removeDefaultNone": {
                     "title": "Remove the option 'None'",
                     "type": "boolean",
-                    "default": false,
+                    "default": true,
                     "description": "If true, the default 'None' option will not be shown."
                 },
                 "hint": {
@@ -79,6 +89,14 @@ $.alpaca.Fields.RatingMechanism = $.alpaca.Fields.RadioField.extend({
 
         if(!this.options.enum){
             this.options.enum = [];
+        }
+
+        if(!this.options.defaultRating){
+            this.options.defaultRating = -1;
+        }
+
+        if(!this.options.maxRating){
+            this.options.maxRating = -1;
         }
 
         if(!this.options.hint){
