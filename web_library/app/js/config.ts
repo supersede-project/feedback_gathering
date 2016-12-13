@@ -26,11 +26,10 @@ export const configurationTypes = {
 export const cookieNames = {
     lastTriggered: 'lastTriggered'
 };
-export const apiEndpointOrchestrator = 'https://ptv-orchestrator.ronnieschaniel.com/';
-export const applicationPath = 'feedback_orchestrator/{lang}/applications/';
-export const apiEndpointRepository = 'http://localhost:3000/';
-//export const apiEndpointRepository = 'https://ptv-repository.ronnieschaniel.com/';
-export const feedbackPath = 'feedback_repository/{lang}/feedbacks';
-export const applicationId = 8;
-export const applicationName = 'PTV';
+export const apiEndpointOrchestrator = 'http://ec2-54-89-190-92.compute-1.amazonaws.com/';
+export const applicationPath = 'orchestrator/feedback/{lang}/applications/';
+export const apiEndpointRepository = 'http://ec2-54-89-190-92.compute-1.amazonaws.com/';
+export const feedbackPath = "feedback_repository/{lang}/applications/{applicationId}/feedbacks";
+export const applicationId = 12;
+export const applicationName = 'energiesparkonto.de';
 export const feedbackObjectTitle = 'Feedback';

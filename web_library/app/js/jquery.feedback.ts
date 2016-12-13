@@ -34,7 +34,7 @@ import {AttachmentFeedback} from '../models/feedbacks/attachment_feedback';
 import {AudioFeedback} from '../models/feedbacks/audio_feedback';
 import {ContextInformation} from '../models/feedbacks/context_information';
 import {AudioView} from '../views/audio/audio_view';
-var mockData = require('json!../services/mocks/dev/applications_mock.json');
+var mockData = require('json!../services/mocks/dev/sandra_und_lorenz_1.json');
 
 
 export var feedbackPluginModule = function ($, window, document) {
@@ -678,8 +678,10 @@ export var feedbackPluginModule = function ($, window, document) {
         language = I18nHelper.getLanguage(this.options);
         I18nHelper.initializeI18n(this.options);
 
+        let mockBackend:MockBackend = new MockBackend(mockData);
+
         // loadDataHere to trigger pull if necessary
-        var applicationService = new ApplicationService(apiHostOrchestrator, language);
+        var applicationService = new ApplicationService(apiHostOrchestrator, language, mockBackend);
         applicationService.retrieveApplication(applicationId, application => {
             if (!application.state) {
                 feedbackButton.hide();
