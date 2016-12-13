@@ -51,15 +51,6 @@
     <!-- jQuery UI for draggable support -->
     <script src="../lib/jquery-ui/jquery-ui.js" type="text/javascript" charset="utf-8"></script>
 
-    <!-- for json transformation -->
-    <script type="text/javascript" src="../lib/json2json/lib/sysmo.js"></script>
-    <script type="text/javascript" src="../lib/json2json/lib/TemplateConfig.js"></script>
-    <script type="text/javascript" src="../lib/json2json/lib/ObjectTemplate.js"></script>
-    <script type="text/javascript" src="json-transformer/template.js"></script>
-
-    <!-- for file saving; has to be loaded after transformation -->
-    <script type="text/javascript" src="js/fileSaver.js"></script>
-
     <!-- for the drag and drop gui -->
     <script type="text/javascript" src="../src/js/userscript.js"></script>
 
@@ -71,8 +62,13 @@
     <link rel="stylesheet" href="https://code.jquery.com/qunit/qunit-2.0.1.css">
 </head>
 <body>
-<div id="qunit"></div>
-<div id="qunit-fixture"></div>
+
+<div id="qunit">
+    <h1 id="qunit-header">Orchestrator GUI Tests</h1>
+</div>
+<div id="qunit-fixture">
+    <div id="textarea-1"></div>
+</div>
 
 <div class="tab-content">
     <div class="tab-pane active" id="schema">
