@@ -673,7 +673,7 @@ var setup = function () {
         console.log(configString);
 
         // PUT-REQUEST to orchestrator
-/*
+
         var request = new XMLHttpRequest();
 
         request.open('PUT', 'http://ec2-54-89-190-92.compute-1.amazonaws.com/orchestrator/feedback/en/applications/');
@@ -691,7 +691,7 @@ var setup = function () {
         };
 
         request.send(configString);
-*/
+
     });
 
     // click on send button (for user to send form data)
