@@ -103,6 +103,22 @@ $.alpaca.Fields.CategoryMechanism = $.alpaca.Fields.SelectField.extend({
         delete mySchema.properties.readonly;
         delete mySchema.properties.type;
         return mySchema;
+    },
+
+    setup: function() {
+        this.base();
+        if(!this.options.mandatory) {
+            this.options.mandatory = false;
+        }
+
+        if(!this.options.enum) {
+            this.options.enum = [];
+        }
+
+        if(!this.options.hint){
+            this.options.hint = "";
+        }
     }
+
 });
 Alpaca.registerFieldClass("CATEGORY_TYPE", Alpaca.Fields.CategoryMechanism);

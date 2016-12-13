@@ -69,6 +69,22 @@ $.alpaca.Fields.RatingMechanism = $.alpaca.Fields.RadioField.extend({
         delete mySchema.properties.readonly;
         delete mySchema.properties.type;
         return mySchema;
+    },
+
+    setup: function() {
+        this.base();
+        if(!this.options.mandatory) {
+            this.options.mandatory = false;
+        }
+
+        if(!this.options.enum){
+            this.options.enum = [];
+        }
+
+        if(!this.options.hint){
+            this.options.hint = "";
+        }
     }
+
 });
 Alpaca.registerFieldClass("RATING_TYPE", Alpaca.Fields.RatingMechanism);

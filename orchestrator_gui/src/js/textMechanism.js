@@ -23,7 +23,6 @@ $.alpaca.Fields.TextInputMechanism = $.alpaca.Fields.TextAreaField.extend({
         delete myProp.properties.hidden;
         delete myProp.properties.hideInitValidationError;
         delete myProp.properties.inputType;
-        delete myProp.properties.required;
         delete myProp.properties.maskString;
         delete myProp.properties.name;
         delete myProp.properties.optionLabels;
@@ -86,7 +85,7 @@ $.alpaca.Fields.TextInputMechanism = $.alpaca.Fields.TextAreaField.extend({
                 "textLengthVisible": {
                     "title": "Display character counter",
                     "type": "boolean",
-                    "default": true,
+                    "default": false,
                     "description": "If the current characters counter is visible in the text input field"
                 },
                 "hint": {
@@ -109,6 +108,50 @@ $.alpaca.Fields.TextInputMechanism = $.alpaca.Fields.TextAreaField.extend({
         delete mySchema.properties.readonly;
         delete mySchema.properties.type;
         return mySchema;
+    },
+
+    setup: function() {
+        this.base();
+        if(!this.options.mandatory) {
+            this.options.mandatory = false;
+        }
+
+        if(!this.options.hidden){
+            this.options.hidden = false;
+        }
+
+        if(!this.options.disabled){
+            this.options.disabled = false;
+        }
+
+        if(!this.options.fieldHeight) {
+            this.options.fieldHeight = 5;
+        }
+
+        if(!this.options.fieldWidth){
+            this.options.fieldWidth = 40;
+        }
+
+        if(!this.options.maxLength){
+            this.options.maxLength = -1;
+        }
+
+        if(!this.options.maxLengthStrict){
+            this.options.maxLengthStrict = false;
+        }
+
+        if(!this.options.maxLengthVisible){
+            this.options.maxLengthVisible = false;
+        }
+
+        if(!this.options.textLengthVisible){
+            this.options.textLengthVisible = false;
+        }
+
+        if(!this.options.hint){
+            this.options.hint = "";
+        }
     }
+
 });
 Alpaca.registerFieldClass("TEXT_TYPE", Alpaca.Fields.TextInputMechanism);

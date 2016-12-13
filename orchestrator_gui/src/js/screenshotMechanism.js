@@ -79,6 +79,30 @@ $.alpaca.Fields.ScreenshotMechanism = $.alpaca.Fields.ImageField.extend({
         delete mySchema.properties.readonly;
         delete mySchema.properties.type;
         return mySchema;
+    },
+
+    setup: function() {
+        this.base();
+        if(!this.options.mandatory) {
+            this.options.mandatory = false;
+        }
+
+        if(!this.options.create_in_app_screenshot){
+            this.options.create_in_app_screenshot = false;
+        }
+
+        if(!this.options.add_freehand_drawings){
+            this.options.add_freehand_drawings = false;
+        }
+
+        if(!this.options.undo_functionality){
+            this.options.undo_functionality = false;
+        }
+
+        if(!this.options.hint){
+            this.options.hint = "";
+        }
     }
+
 });
 Alpaca.registerFieldClass("SCREENSHOT_TYPE", Alpaca.Fields.ScreenshotMechanism);

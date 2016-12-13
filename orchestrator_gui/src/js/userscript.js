@@ -413,6 +413,10 @@ var setup = function () {
                     field.schema.required = field.options.mandatory;
                 }
 
+                if(field.options.title){
+                    field.options.label = field.options.title;
+                }
+
                 if(field.options.hint){
                     field.options.helper = field.options.hint;
                 }

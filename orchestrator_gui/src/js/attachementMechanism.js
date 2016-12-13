@@ -82,6 +82,18 @@ $.alpaca.Fields.AttachmentMechanism = $.alpaca.Fields.UploadField.extend({
         delete mySchema.properties.required;
         delete mySchema.properties.type;
         return mySchema;
+    },
+
+    setup: function() {
+        this.base();
+        if(!this.options.mandatory) {
+            this.options.mandatory = false;
+        }
+
+        if(!this.options.hint){
+            this.options.hint = "";
+        }
     }
+
 });
 Alpaca.registerFieldClass("ATTACHMENT_TYPE", Alpaca.Fields.AttachmentMechanism);

@@ -61,6 +61,22 @@ $.alpaca.Fields.AudioMechanism = $.alpaca.Fields.ObjectField.extend({
         delete mySchema.properties.required;
         delete mySchema.properties.type;
         return mySchema;
+    },
+
+    setup: function() {
+        this.base();
+        if(!this.options.mandatory) {
+            this.options.mandatory = false;
+        }
+
+        if(!this.options.maxTime) {
+            this.options.maxTime = 10;
+        }
+
+        if(!this.options.hint){
+            this.options.hint = "";
+        }
     }
+
 });
 Alpaca.registerFieldClass("AUDIO_TYPE", Alpaca.Fields.AudioMechanism);
