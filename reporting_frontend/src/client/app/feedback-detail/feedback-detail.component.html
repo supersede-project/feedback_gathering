@@ -107,11 +107,14 @@
                 </div>
                 <div class="panel-body">
                   <span *ngIf="feedback.categoryFeedbacks.length === 0">No feedbacks</span>
-                  <p *ngFor="let categoryFeedback of feedback.categoryFeedbacks">
-                    {{categoryFeedback.mechanism | parameterValue:'title'}}: <br/>
-                    <br/>
-                    <small>(Mechanism ID: {{categoryFeedback.mechanismId}})</small>
-                  </p>
+                  <article *ngFor="let categoryFeedback of feedback.categoryFeedbacks">
+                    <p *ngIf="categoryFeedback.mechanism">
+                      {{categoryFeedback.mechanism | parameterValue:'title'}}: <br/>
+                      <br/>
+                      {{categoryFeedback.mechanism | optionValue:categoryFeedback.parameterId:categoryFeedback.text }} <br/>
+                      <small>(Mechanism ID: {{categoryFeedback.mechanism.id}})</small>
+                    </p>
+                  </article>
                 </div>
               </div>
 

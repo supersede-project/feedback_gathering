@@ -87,7 +87,7 @@
           <a [routerLink]="['/feedbacks', selectedApplication.id, feedback.id]">#{{feedback.id}}</a>
         </td>
         <td><i class="glyphicon glyphicon-star-empty"></i></td>
-        <td>{{feedback.title}}</td>
+        <td>{{feedback | textFeedbackTeaser }}</td>
         <td>{{feedback.createdAt | date: 'dd.MM.yyyy H:mm'}}</td>
         <td>{{feedback.applicationId | applicationNameById:applications:feedback.applicationId}}</td>
       </tr>

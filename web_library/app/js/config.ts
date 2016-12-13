@@ -26,10 +26,10 @@ export const configurationTypes = {
 export const cookieNames = {
     lastTriggered: 'lastTriggered'
 };
-export const apiEndpointOrchestrator = 'https://ptv-orchestrator.ronnieschaniel.com/';
-export const applicationPath = 'feedback_orchestrator/{lang}/applications/';
-export const apiEndpointRepository = 'https://ptv-repository.ronnieschaniel.com/';
-export const feedbackPath = 'feedback_repository/{lang}/feedbacks';
-export const applicationId = 8;
-export const applicationName = 'PTV';
-export const feedbackObjectTitle = 'Feedback';
+export const apiEndpointOrchestrator = 'http://supersede.es.atos.net:8080/';
+export const applicationPath = 'orchestrator/feedback/{lang}/applications/';
+export const apiEndpointRepository = 'http://supersede.es.atos.net:8080/';
+export const feedbackPath = "feedback_repository/{lang}/feedbacks";
+export const applicationId = 20;
+export const applicationName = 'Senercon';
+export const feedbackObjectTitle = 'Feedback Senercon';

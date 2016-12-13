@@ -72,7 +72,7 @@ export class FeedbackDetailComponent implements OnInit {
   }
 
   loadApplication(id:number, configurationId:number) {
-    this.applicationService.find(id).subscribe(
+    this.applicationService.find(id, this.feedback.language).subscribe(
       application => {
         this.application = application;
         this.configuration = application.configurations.filter(configuration => configuration.id === configurationId)[0];
@@ -112,7 +112,8 @@ export class FeedbackDetailComponent implements OnInit {
       for (let categoryFeedback of this.feedback.categoryFeedbacks) {
         var matchingCategoryMechanism = null;
         for (let categoryMechanism of this.configuration.mechanisms.filter(mechanism => mechanism.type === 'CATEGORY_TYPE')) {
-          if (categoryMechanism.parameters.filter(parameter => parameter.id === categoryFeedback.parameterId).length > 0) {
+          let optionsParameter = categoryMechanism.parameters.filter(parameter => parameter.key === 'options')[0];
+          if (optionsParameter.value.filter(parameter => parameter.id === categoryFeedback.parameterId).length > 0) {
             matchingCategoryMechanism = categoryMechanism;
             break;
           }
@@ -138,7 +139,7 @@ export class FeedbackDetailComponent implements OnInit {
 
   markAsReadOrUnread(feedback:Feedback, read:boolean):void {
     let applicationId = feedback.applicationId;
-    if(feedback.feedbackStatuses.length > 0 && feedback.feedbackStatuses.filter(feedbackStatus => feedbackStatus.status === 'read' || feedbackStatus.status === 'unread').length > 0) {
+    if(feedback.feedbackStatuses && feedback.feedbackStatuses.length > 0 && feedback.feedbackStatuses.filter(feedbackStatus => feedbackStatus.status === 'read' || feedbackStatus.status === 'unread').length > 0) {
       let feedbackStatus = feedback.feedbackStatuses.filter(feedbackStatus => feedbackStatus.status === 'read' || feedbackStatus.status === 'unread')[0];
       this.feedbackStatusService.updateReadStatus(read, feedbackStatus.id, feedbackStatus.feedbackId, applicationId).subscribe(
         result => {
