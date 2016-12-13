@@ -12,7 +12,11 @@ function transformConfig(configuration) {
         var params = [];
         $.each(value, function(key, value){
             var keyValProp = {};
-            keyValProp.key = key;
+            if (key == "label"){
+                keyValProp.key = "title";
+            } else {
+                keyValProp.key = key;
+            }
             keyValProp.value = value;
             params.push(keyValProp);
         });
