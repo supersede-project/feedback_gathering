@@ -96,7 +96,7 @@ public class Application extends OrchestratorItem<Application> {
 		
 		for(Configuration config : original.getConfigurations())
 		{
-			Optional<Configuration> newConfig = getConfigurations().stream().filter(p -> p.getId().equals(config.getId())).findFirst();
+			Optional<Configuration> newConfig = getConfigurations().stream().filter(p -> config.getId().equals(p.getId())).findFirst();
 			if(!newConfig.isPresent())
 			{
 				configurations.add(config);
