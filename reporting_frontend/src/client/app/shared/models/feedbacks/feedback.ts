@@ -34,6 +34,7 @@ export class Feedback {
   createdAt:Date;
   feedbackStatuses:FeedbackStatus[];
   read:boolean;
+  selected:boolean;
 
   constructor(title:string, userIdentification:string, language:string, applicationId:number, configurationId:number,
               ratingFeedbacks?:RatingFeedback[], textFeedbacks?:TextFeedback[],

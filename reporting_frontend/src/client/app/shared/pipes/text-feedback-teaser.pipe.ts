@@ -22,7 +22,7 @@ export class TextFeedbackTeaser {
 
       return textFeedbackText.length > limit ? textFeedbackText.substring(0, limit) + trail : textFeedbackText;
     } else {
-      return feedback.title;
+      return "";
     }
   }
 }
