@@ -126,7 +126,13 @@ public class ApplicationService extends OrchestratorService<Application>{
 		for(Configuration config : app.getConfigurations())
 		{
 			config.setApplicationId(app.getId());
-			configurationService.Update(con, config);
+			if(config.getId() != null)
+			{
+				configurationService.Update(con, config);
+			}else{
+				configurationService.Insert(con, config);
+			}
+				
 		}
 	}
 }
