@@ -1,7 +1,14 @@
 CREATE DATABASE  IF NOT EXISTS `monitoring_orchestrator` /*!40100 DEFAULT CHARACTER SET latin1 */;
 USE `monitoring_orchestrator`;
 
+##Drop all tables
+DROP TABLE IF EXISTS `monitor_configuration_history`;
+DROP TABLE IF EXISTS `monitor_configuration`;
+DROP TABLE IF EXISTS `monitor_tool_history`;
+DROP TABLE IF EXISTS `monitor_tool`;
+DROP TABLE IF EXISTS `monitor_type_history`;
 DROP TABLE IF EXISTS `monitor_type`;
+
 CREATE TABLE `monitor_type` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`id`)
@@ -13,7 +20,6 @@ INSERT INTO `monitor_type` VALUES (1),(2);
 /*!40000 ALTER TABLE `monitor_type` ENABLE KEYS */;
 UNLOCK TABLES;
 
-DROP TABLE IF EXISTS `monitor_type_history`;
 CREATE TABLE `monitor_type_history` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
@@ -33,7 +39,6 @@ INSERT INTO `monitor_type_history` VALUES
 /*!40000 ALTER TABLE `monitor_type_history` ENABLE KEYS */;
 UNLOCK TABLES;
 
-DROP TABLE IF EXISTS `monitor_tool`;
 CREATE TABLE `monitor_tool` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`id`)
