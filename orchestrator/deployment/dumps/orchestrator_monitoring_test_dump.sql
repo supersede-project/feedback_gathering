@@ -1,7 +1,7 @@
 CREATE DATABASE  IF NOT EXISTS `monitoring_orchestrator` /*!40100 DEFAULT CHARACTER SET latin1 */;
 USE `monitoring_orchestrator`;
 
-##Drop all tables
+/*Drop all tables*/
 DROP TABLE IF EXISTS `monitor_configuration_history`;
 DROP TABLE IF EXISTS `monitor_configuration`;
 DROP TABLE IF EXISTS `monitor_tool_history`;
@@ -50,7 +50,6 @@ INSERT INTO `monitor_tool` VALUES (1),(2),(3),(4),(5);
 /*!40000 ALTER TABLE `monitor_tool` ENABLE KEYS */;
 UNLOCK TABLES;
 
-DROP TABLE IF EXISTS `monitor_tool_history`;
 CREATE TABLE `monitor_tool_history` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
@@ -77,7 +76,6 @@ INSERT INTO `monitor_tool_history` VALUES
 /*!40000 ALTER TABLE `monitor_tool_history` ENABLE KEYS */;
 UNLOCK TABLES;
 
-DROP TABLE IF EXISTS `monitor_configuration`;
 CREATE TABLE `monitor_configuration` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`id`)
@@ -89,7 +87,6 @@ INSERT INTO `monitor_configuration` VALUES (1),(2),(3),(4),(5);
 /*!40000 ALTER TABLE `monitor_configuration` ENABLE KEYS */;
 UNLOCK TABLES;
 
-DROP TABLE IF EXISTS `monitor_configuration_history`;
 CREATE TABLE `monitor_configuration_history` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `created_at` timestamp(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
