@@ -56,6 +56,8 @@ export class ScreenshotView {
     blockPanning:boolean = false;
     canvasMovementX:number = 0;
     canvasMovementY:number = 0;
+    currentObjectInToolbar:any = null;
+    croppingRect:any;
 
     constructor(screenshotMechanism:Mechanism, screenshotPreviewElement:JQuery, screenshotCaptureButton:JQuery,
                 elementToCapture:JQuery, container:JQuery, distPath:string, elementsToHide?:any, hasBordersAndControls?:boolean) {
@@ -334,7 +336,7 @@ export class ScreenshotView {
         var mousey = 0;
         var crop = false;
 
-        var croppingRect = new fabric.Rect({
+        myThis.croppingRect = new fabric.Rect({
             fill: 'transparent',
             originX: 'left',
             originY: 'top',
@@ -348,31 +350,42 @@ export class ScreenshotView {
 
         this.croppingIsActive = true;
 
-        croppingRect.visible = false;
-        this.fabricCanvas.add(croppingRect);
+        myThis.croppingRect.visible = false;
+        this.fabricCanvas.add(myThis.croppingRect);
 
         this.fabricCanvas.on("mouse:down", function (event) {
             if (!myThis.croppingIsActive) {
                 return;
             }
-            croppingRect.left = event.e.pageX - pos[0];
-            croppingRect.top = event.e.pageY - pos[1];
-            croppingRect.visible = true;
-            mousex = event.e.pageX;
-            mousey = event.e.pageY;
+
+            var p = {
+                x: event.e.pageX - myThis.screenshotPreviewElement.offset().left,
+                y: event.e.pageY - myThis.screenshotPreviewElement.offset().top
+            };
+            var invertedMatrix = fabric.util.invertTransform(myThis.fabricCanvas.viewportTransform);
+            var transformedP = fabric.util.transformPoint(p, invertedMatrix);
+
+            myThis.croppingRect.left = transformedP.x;
+            myThis.croppingRect.top = transformedP.y;
+
+            myThis.croppingRect.visible = true;
+            mousex = transformedP.x;
+            mousey = transformedP.y;
             crop = true;
-            myThis.fabricCanvas.bringToFront(croppingRect);
+            myThis.fabricCanvas.bringToFront(myThis.croppingRect);
         });
 
         this.fabricCanvas.on("mouse:move", function (event) {
             if (crop && myThis.croppingIsActive) {
-                if (event.e.pageX - mousex > 0) {
-                    croppingRect.width = event.e.pageX - mousex;
-                }
+                var p = {
+                    x: event.e.pageX - myThis.screenshotPreviewElement.offset().left,
+                    y: event.e.pageY - myThis.screenshotPreviewElement.offset().top
+                };
+                var invertedMatrix = fabric.util.invertTransform(myThis.fabricCanvas.viewportTransform);
+                var transformedP = fabric.util.transformPoint(p, invertedMatrix);
 
-                if (event.e.pageY - mousey > 0) {
-                    croppingRect.height = event.e.pageY - mousey;
-                }
+                myThis.croppingRect.width = transformedP.x - mousex;
+                myThis.croppingRect.height = transformedP.y - mousey;
             }
             myThis.fabricCanvas.renderAll();
         });
@@ -384,17 +397,13 @@ export class ScreenshotView {
         this.container.find('.screenshot-crop-cancel').show().on('click', function (e) {
             e.preventDefault();
             e.stopPropagation();
-            myThis.croppingIsActive = false;
-            jQuery(this).hide();
-            jQuery('.screenshot-crop-confirm').hide();
-            croppingRect.remove();
-            myThis.setCanvasObjectsMovement(false);
+            myThis.cancelCropping();
         });
 
         this.container.find('.screenshot-crop-confirm').show().off().on('click', function (e) {
             e.preventDefault();
             e.stopPropagation();
-            myThis.cropTheCanvas(croppingRect);
+            myThis.cropTheCanvas(myThis.croppingRect);
             myThis.croppingIsActive = false;
             jQuery(this).hide();
             jQuery('.screenshot-crop-cancel').hide();
@@ -402,10 +411,21 @@ export class ScreenshotView {
         });
     }
 
+    cancelCropping() {
+        this.croppingIsActive = false;
+        this.container.find('.screenshot-crop-cancel').hide();
+        jQuery('.screenshot-crop-confirm').hide();
+        if(this.croppingRect) {
+            this.croppingRect.remove();
+        }
+        this.setCanvasObjectsMovement(false);
+    }
+
     cropTheCanvas(croppingRect) {
         this.container.find('.screenshot-draw-undo').show();
 
         var canvas = this.fabricCanvas;
+
         var objectsToMove = canvas.getObjects();
 
         // Cropping canvas according to cropper rectangle
@@ -413,6 +433,7 @@ export class ScreenshotView {
         var croppedLeft = croppingRect.left + 1;
         var croppWidth = croppingRect.width - 2;
         var croppHeight = croppingRect.height - 2;
+
         croppingRect.remove();
         canvas.renderAll.bind(canvas);
 
@@ -491,9 +512,11 @@ export class ScreenshotView {
     }
 
     enableFreehandDrawing() {
+        this.cancelCropping();
+        this.disableCurrentObjectInToolbar();
         var freehandControls = jQuery('.freehand-controls');
         this.fabricCanvas.isDrawingMode = true;
-        jQuery('.screenshot-operations .freehand').css('border-bottom', '1px solid black');
+        jQuery('.screenshot-operations .freehand').css('border-bottom', '2px solid black');
         freehandControls.show();
         this.freehandActive = true;
         this.blockPanning = true;
@@ -508,8 +531,112 @@ export class ScreenshotView {
         this.blockPanning = false;
     }
 
+    disableCurrentObjectInToolbar() {
+        if(this.currentObjectInToolbar) {
+            this.currentObjectInToolbar.css('border-bottom', 'none');
+            this.currentObjectInToolbar = null;
+        }
+    }
+
     initStickers() {
         var myThis = this;
+
+        myThis.container.find('.sticker-source').on('click', function() {
+            myThis.disableFreehandDrawing();
+            myThis.cancelCropping();
+            if(myThis.currentObjectInToolbar) {
+                myThis.currentObjectInToolbar.css('border-bottom', 'none');
+            }
+            if(myThis.currentObjectInToolbar !== null && myThis.currentObjectInToolbar.attr('id') === jQuery(this).attr('id')) {
+                myThis.currentObjectInToolbar = null;
+            } else {
+                myThis.currentObjectInToolbar = jQuery(this);
+                jQuery(this).css('border-bottom', '2px solid black');
+            }
+        });
+        myThis.screenshotPreviewElement.on('click', function(event) {
+           if(myThis.currentObjectInToolbar !== null) {
+                var sticker = myThis.currentObjectInToolbar;
+
+               var p = {x: event.pageX - $(this).offset().left, y: event.pageY - $(this).offset().top};
+               var invertedMatrix = fabric.util.invertTransform(myThis.fabricCanvas.viewportTransform);
+               var transformedP = fabric.util.transformPoint(p, invertedMatrix);
+
+               var offsetX = transformedP.x;
+               var offsetY = transformedP.y;
+
+               if (sticker.hasClass('text')) {
+                   myThis.addTextAnnotation(offsetX, offsetY);
+               } else if (sticker.hasClass('svg-sticker-source')) {
+                   fabric.loadSVGFromURL(sticker.attr('src'), function (objects, options) {
+                       var svgObject = fabric.util.groupSVGElements(objects, options);
+                       svgObject.set('left', offsetX);
+                       svgObject.set('top', offsetY);
+                       svgObject.set('hasBorders', myThis.hasBordersAndControls);
+                       svgObject.set('hasControls', myThis.hasBordersAndControls);
+                       svgObject.scale(3);
+                       myThis.fabricCanvas.add(svgObject).renderAll();
+                       myThis.fabricCanvas.setActiveObject(svgObject);
+                   });
+               } else if (sticker.hasClass('object-source')) {
+                   if (sticker.hasClass('arrow')) {
+                       myThis.addArrowToCanvas(offsetX, offsetY);
+                   } else if (sticker.hasClass('rect')) {
+                       var rect = new fabric.Rect({
+                           left: offsetX,
+                           top: offsetY,
+                           width: 50,
+                           height: 50,
+                           hasBorders: myThis.hasBordersAndControls,
+                           hasControls: myThis.hasBordersAndControls,
+                           type: 'fabricObject',
+                           stroke: defaultColor,
+                           strokeWidth: myThis.defaultStrokeWidth,
+                           lockUniScaling: false,
+                           fill: 'transparent'
+                       });
+                       myThis.fabricCanvas.add(rect).renderAll();
+                       myThis.fabricCanvas.setActiveObject(rect);
+                   } else if (sticker.hasClass('fillRect')) {
+                       var rect = new fabric.Rect({
+                           left: offsetX,
+                           top: offsetY,
+                           width: 50,
+                           height: 50,
+                           hasBorders: myThis.hasBordersAndControls,
+                           hasControls: myThis.hasBordersAndControls,
+                           type: 'fillRect',
+                           stroke: defaultColor,
+                           strokeWidth: myThis.defaultStrokeWidth,
+                           lockUniScaling: false,
+                           fill: defaultColor
+                       });
+                       myThis.fabricCanvas.add(rect).renderAll();
+                       myThis.fabricCanvas.setActiveObject(rect);
+                   } else if (sticker.hasClass('circle')) {
+                       var circle = new fabric.Circle({
+                           left: offsetX,
+                           top: offsetY,
+                           radius: 50,
+                           hasBorders: myThis.hasBordersAndControls,
+                           hasControls: myThis.hasBordersAndControls,
+                           startAngle: 0,
+                           type: 'fabricObject',
+                           endAngle: 2 * Math.PI,
+                           stroke: defaultColor,
+                           strokeWidth: myThis.defaultStrokeWidth,
+                           fill: 'transparent'
+                       });
+                       myThis.fabricCanvas.add(circle).renderAll();
+                       myThis.fabricCanvas.setActiveObject(circle);
+                   }
+               }
+               myThis.currentObjectInToolbar.css('border-bottom', 'none');
+               myThis.currentObjectInToolbar = null;
+           }
+        });
+
+
         myThis.container.find('.sticker-source').draggable({
             cursor: "crosshair",
             revert: "invalid",
@@ -701,6 +828,8 @@ export class ScreenshotView {
             myThis.fabricCanvas.deactivateAll().renderAll();
             myThis.selectedObjectControls.hide();
             myThis.setCanvasObjectsMovement(true);
+            myThis.disableFreehandDrawing();
+            myThis.disableCurrentObjectInToolbar();
             myThis.initCrop();
         });
 
