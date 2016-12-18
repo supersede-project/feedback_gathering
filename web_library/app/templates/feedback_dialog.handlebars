@@ -78,6 +78,9 @@
                                             </button>
 
                                             <p style="{{../generalLabelStyle}}">{{zoomTitle}}</p>
+                                            {{#if zoomExplanation }}
+                                                <small>{{ zoomExplanation }}</small>
+                                            {{/if}}
                                             <img class="zoom-in" title="Zoom"
                                                  src="{{../distPath}}img/ic_zoom_in_black_24dp_2x.png"/>
                                             <img class="zoom-out" title="Zoom"
@@ -91,7 +94,10 @@
                                                 }
                                             </style>
                                             <![endif]-->
-                                            <p style="{{../generalLabelStyle}}">{{t "screenshot.crop" }}</p>
+                                            <p style="{{../generalLabelStyle}}">{{cropTitle}}</p>
+                                            {{#if cropExplanation }}
+                                                <small>{{ cropExplanation }}</small>
+                                            {{/if}}
                                             <button class="screenshot-operation screenshot-crop"
                                                     title="{{t "screenshot.crop" }}"><img
                                                     src="{{../distPath}}img/ic_crop_black_24dp_2x.png"
@@ -109,7 +115,7 @@
                                                     src="{{../distPath}}img/ic_undo_black_24dp_2x.png"
                                                     alt="{{t "screenshot.undo" }}"/></button>
 
-                                            <p class="annotations-heading" style="{{../generalLabelStyle}}">{{annotationsTitle}}</p>
+                                            <p class="annotations-heading" style="{{../generalLabelStyle}}">{{annotationTitle}}</p>
                                             {{#if annotationExplanation }}
                                                 <small>{{ annotationExplanation }}</small>
                                             {{/if}}
@@ -129,13 +135,20 @@
                                                  src="{{../distPath}}img/ic_thumb_up_black_24px.svg"/>
                                             <img class="sticker-source svg-sticker-source hide-ie" title="{{ thumbDownMouseover }}"
                                                  src="{{../distPath}}img/ic_thumb_down_black_24px.svg"/>
-                                            <img class="sticker-source svg-sticker-source text hide-ie" title="{{ textMouseover }}"
-                                                 src="{{../distPath}}img/ic_title_black_24px.svg"/>
                                             <img class="freehand" title="{{ freehandMouseover }}"
                                                  src="{{../distPath}}img/ic_gesture_black_24px.svg" />
 
+                                            <br />
+                                            <br />
+                                            <p class="annotations-heading" style="{{../generalLabelStyle}}">{{textTitle}}</p>
+                                            {{#if textExplanation }}
+                                                <small>{{ textExplanation }}</small>
+                                            {{/if}}
+                                            <img class="sticker-source svg-sticker-source text hide-ie" title="{{ textMouseover }}"
+                                                 src="{{../distPath}}img/ic_title_black_24px.svg"/>
+
                                             <article class="selected-object-controls">
-                                                <p>Selection</p>
+                                                <p>{{t "screenshot.selection"}}</p>
                                                 <a class="delete"><i class="material-icons">delete</i></a>
                                                 &nbsp;
                                                 <a class="color"><i
@@ -143,7 +156,7 @@
                                                 <input class="text-size" type="text">
                                             </article>
                                             <article class="freehand-controls">
-                                                <p>Color</p>
+                                                <p>{{t "screenshot.color"}}</p>
                                                 <a class="freehand-color"><i class="material-icons">format_color_fill</i></a>
                                             </article>
                                         </div>

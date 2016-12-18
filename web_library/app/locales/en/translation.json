@@ -29,7 +29,9 @@
     "crop": "Crop",
     "text": "Add text",
     "undo": "undo",
-    "remove": "Delete screenshot"
+    "remove": "Delete screenshot",
+    "color": "Color",
+    "selection": "Selection"
   },
   "rating": {
     "review_title": "Rating"

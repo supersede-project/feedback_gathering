@@ -29,7 +29,9 @@
     "crop": "Ausschneiden",
     "text": "Text hinzufügen",
     "undo": "Rückgängig",
-    "remove": "Screenshot entfernen"
+    "remove": "Screenshot entfernen",
+    "color": "Farbe",
+    "selection": "Auswahl"
   },
   "rating": {
     "review_title": "Rating"
