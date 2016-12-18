@@ -290,10 +290,12 @@ export class ScreenshotView {
     initZoom() {
         var myThis = this;
         this.container.find('img.zoom-in').on('click', function() {
-            myThis.fabricCanvas.setZoom(myThis.fabricCanvas.getZoom() * 1.1);
+            //myThis.fabricCanvas.setZoom(myThis.fabricCanvas.getZoom() * 1.1);
+            myThis.fabricCanvas.zoomToPoint(new fabric.Point(myThis.fabricCanvas.width / 2, myThis.fabricCanvas.height / 2), myThis.fabricCanvas.getZoom() * 1.1);
         });
         this.container.find('img.zoom-out').on('click', function() {
-            myThis.fabricCanvas.setZoom(myThis.fabricCanvas.getZoom() / 1.1);
+            //myThis.fabricCanvas.setZoom(myThis.fabricCanvas.getZoom() / 1.1);
+            myThis.fabricCanvas.zoomToPoint(new fabric.Point(myThis.fabricCanvas.width / 2, myThis.fabricCanvas.height / 2), myThis.fabricCanvas.getZoom() / 1.1);
         });
 
         this.fabricCanvas.on('mouse:up', function (e) {
