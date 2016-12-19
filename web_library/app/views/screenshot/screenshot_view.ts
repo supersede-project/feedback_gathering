@@ -167,6 +167,15 @@ export class ScreenshotView {
                 myThis.selectedObjectControls.find('.text-size').hide();
             }
 
+            // prevent form submission on enter press
+            myThis.selectedObjectControls.find('.text-size').on('keydown', function(event) {
+                if(event.keyCode == 13) {
+                    event.preventDefault();
+                    return false;
+                }
+                return true;
+            });
+
             if (selectedObject.get('type') === 'path-group') {
                 for (var path of selectedObject.paths) {
                     if (path.getFill() != "") {
