@@ -425,7 +425,6 @@ export class ScreenshotView {
         this.container.find('.screenshot-draw-undo').show();
 
         var canvas = this.fabricCanvas;
-
         var objectsToMove = canvas.getObjects();
 
         // Cropping canvas according to cropper rectangle
