@@ -1,6 +1,21 @@
 <h2>Settings</h2>
 
-<br/>
+<h3>Application</h3>
+
+<main class="row">
+  <article *ngIf="application && application.state === 0" class="col-md-8">
+    <p class="application-state bg-danger">Application is disabled</p><br />
+    <button (click)="toggleApplicationState(application.id)" class="btn-small">Enable Application</button>
+  </article>
+  <article *ngIf="application && application.state === 1" class="col-md-8">
+    <p class="application-state bg-success">Application is enabled</p><br />
+    <button (click)="toggleApplicationState(application.id)" class="btn-small">Disable Application</button>
+  </article>
+</main>
+
+
+<br />
+<h3>Notifications</h3>
 
 <main class="row">
   <article class="col-md-8">
@@ -32,3 +47,4 @@
 
   </article>
 </main>
+
