@@ -37,6 +37,23 @@ button.action {
   border-radius: 0;
 }
 
+.panel-body {
+  padding-bottom: 5px;
+}
+
+.panel-body p {
+  margin-top: 1px;
+}
+
 button.inactive {
   background: #cccccc;
+}
+
+.title-text {
+  font-weight: 500;
+  color: #0d497e;
+}
+
+.feedback-row {
+  margin-bottom: 10px;
 }

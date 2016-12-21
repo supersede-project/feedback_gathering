@@ -10,4 +10,5 @@ export const ORCHESTRATOR_HOST = 'https://ptv-orchestrator.ronnieschaniel.com/fe
 //export const REPOSITORY_HOST = 'http://localhost:3000/repository/';
 //export const ORCHESTRATOR_HOST = 'http://localhost:3000/orchestrator/';
 
-export const FILE_HOST = 'https://ptvfeedback.ronnieschaniel.com';
+export const FILE_HOST = 'https://ptv-feedback.ronnieschaniel.com';
+

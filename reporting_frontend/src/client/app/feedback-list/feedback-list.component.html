@@ -53,7 +53,10 @@
     <table class="table table-condensed">
       <thead>
       <tr>
-        <th></th>
+        <th>
+            <input (change)="selectAll()" class="checkbox" type="checkbox" name="select_all"
+                   value="">
+        </th>
         <th [class.asc]="sortOrder['id'] === 'asc'" [class.desc]="sortOrder['id'] === 'desc'"
             (click)="sortClicked('id')">
           ID
@@ -77,17 +80,16 @@
       </tr>
       </thead>
       <tbody *ngIf="applications">
-      <tr *ngIf="filteredFeedbacks.length === 0 && loaded"><td colspan="6">No feedbacks yet</td></tr>
+      <tr *ngIf="feedbacks.length === 0 && loaded"><td colspan="6">No feedbacks yet</td></tr>
       <tr *ngFor="let feedback of filteredFeedbacks; let i = index" [class.unread]="!feedback.read">
         <td>
-          <input (change)="select($event, feedback)" class="checkbox" type="checkbox" name="{{feedback.id}}"
-                 value="{{feedback.id}}">
+          <input class="checkbox" type="checkbox" name="{{feedback.id}}" [(ngModel)]="feedback.selected" value="{{feedback.id}}" />
         </td>
         <td>
           <a [routerLink]="['/feedbacks', selectedApplication.id, feedback.id]">#{{feedback.id}}</a>
         </td>
         <td><i class="glyphicon glyphicon-star-empty"></i></td>
-        <td>{{feedback.title}}</td>
+        <td>{{feedback | textFeedbackTeaser }}</td>
         <td>{{feedback.createdAt | date: 'dd.MM.yyyy H:mm'}}</td>
         <td>{{feedback.applicationId | applicationNameById:applications:feedback.applicationId}}</td>
       </tr>

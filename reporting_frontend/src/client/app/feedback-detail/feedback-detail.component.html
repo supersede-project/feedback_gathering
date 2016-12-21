@@ -48,6 +48,81 @@
           <div class="row">
 
             <div class="col-sm-12 col-md-6">
+              <div class="panel panel-default">
+                <div class="panel-heading">
+                  <h3 class="panel-title">Text Feedbacks</h3>
+                </div>
+                <div class="panel-body">
+                  <p *ngIf="feedback.textFeedbacks.length === 0">No feedbacks</p>
+                  <article class="row feedback-row" *ngFor="let textFeedback of feedback.textFeedbacks">
+                    <span class="title-text col-xs-4">{{textFeedback.mechanism | parameterValue:'label'}}:</span>
+                    <span class="col-xs-8">{{textFeedback.text}}</span>
+                  </article>
+                </div>
+              </div>
+
+              <div class="panel panel-default">
+                <div class="panel-heading">
+                  <h3 class="panel-title">Rating Feedbacks</h3>
+                </div>
+                <div class="panel-body">
+                  <p *ngIf="feedback.ratingFeedbacks.length === 0">No feedbacks</p>
+                  <article class="row feedback-row" *ngFor="let ratingFeedback of feedback.ratingFeedbacks">
+                    <span *ngIf="ratingFeedback.mechanism">
+                      <span class="title-text col-xs-4">{{ratingFeedback.mechanism | parameterValue:'title'}}:</span>
+                      <span class="col-xs-8">{{ratingFeedback.rating}} /
+                      {{ratingFeedback.mechanism | parameterValue:'maxRating'}}</span>
+                    </span>
+                    <br/>
+                  </article>
+                </div>
+              </div>
+
+              <div class="panel panel-default">
+                <div class="panel-heading">
+                  <h3 class="panel-title">Category Feedbacks</h3>
+                </div>
+                <div class="panel-body">
+                  <p *ngIf="feedback.categoryFeedbacks.length === 0">No feedbacks</p>
+                  <article class="row feedback-row" *ngFor="let categoryFeedback of feedback.categoryFeedbacks">
+                    <p *ngIf="categoryFeedback.mechanism">
+                      <span class="title-text col-xs-4">{{categoryFeedback.mechanism | parameterValue:'title'}}:</span>
+                      <span class="col-xs-8">{{categoryFeedback.mechanism | optionValue:categoryFeedback.parameterId:categoryFeedback.text }}</span>
+                      <br/>
+                    </p>
+                  </article>
+                </div>
+              </div>
+
+              <div class="panel panel-default">
+                <div class="panel-heading">
+                  <h3 class="panel-title">Attachment Feedbacks</h3>
+                </div>
+                <div class="panel-body">
+                  <p *ngIf="feedback.attachmentFeedbacks.length === 0">No feedbacks</p>
+                  <article class="row feedback-row" *ngFor="let attachmentFeedback of feedback.attachmentFeedbacks">
+                    {{attachmentFeedback.mechanism | parameterValue:'title'}}: <br/>
+                    <a (click)="downloadFile(attachmentFeedback)">{{attachmentFeedback.name}}</a>
+                    <br/>
+                  </article>
+                </div>
+              </div>
+
+              <div class="panel panel-default">
+                <div class="panel-heading">
+                  <h3 class="panel-title">Audio Feedbacks</h3>
+                </div>
+                <div class="panel-body">
+                  <p *ngIf="feedback.audioFeedbacks.length === 0">No feedbacks</p>
+                  <article class="row feedback-row" *ngFor="let audioFeedback of feedback.audioFeedbacks">
+                    {{audioFeedback.mechanism | parameterValue:'title'}}: <br/>
+                    <br/>
+                  </article>
+                </div>
+              </div>
+
+            </div>
+            <div class="col-sm-12 col-md-6">
               <div *ngIf="feedback" class="panel panel-default">
                 <div class="panel-heading">
                   <h3 class="panel-title">Data</h3>
@@ -70,90 +145,13 @@
 
               <div class="panel panel-default">
                 <div class="panel-heading">
-                  <h3 class="panel-title">Text Feedbacks</h3>
-                </div>
-                <div class="panel-body">
-                  <span *ngIf="feedback.textFeedbacks.length === 0">No feedbacks</span>
-                  <p *ngFor="let textFeedback of feedback.textFeedbacks">
-                    {{textFeedback.mechanism | parameterValue:'title'}}: <br/>
-                    {{textFeedback.text}}
-                    <br/>
-                    <small>(Mechanism ID: {{textFeedback.mechanismId}})</small>
-                  </p>
-                </div>
-              </div>
-
-              <div class="panel panel-default">
-                <div class="panel-heading">
-                  <h3 class="panel-title">Rating Feedbacks</h3>
-                </div>
-                <div class="panel-body">
-                  <span *ngIf="feedback.ratingFeedbacks.length === 0">No feedbacks</span>
-                  <p *ngFor="let ratingFeedback of feedback.ratingFeedbacks">
-              <span *ngIf="ratingFeedback.mechanism">
-                {{ratingFeedback.mechanism | parameterValue:'title'}}
-                {{ratingFeedback.rating}} /
-                {{ratingFeedback.mechanism | parameterValue:'maxRating'}}
-              </span>
-                    <br/>
-                    <small>(Mechanism ID: {{ratingFeedback.mechanismId}})</small>
-                  </p>
-                </div>
-              </div>
-
-              <div class="panel panel-default">
-                <div class="panel-heading">
-                  <h3 class="panel-title">Category Feedbacks</h3>
-                </div>
-                <div class="panel-body">
-                  <span *ngIf="feedback.categoryFeedbacks.length === 0">No feedbacks</span>
-                  <p *ngFor="let categoryFeedback of feedback.categoryFeedbacks">
-                    {{categoryFeedback.mechanism | parameterValue:'title'}}: <br/>
-                    <br/>
-                    <small>(Mechanism ID: {{categoryFeedback.mechanismId}})</small>
-                  </p>
-                </div>
-              </div>
-
-              <div class="panel panel-default">
-                <div class="panel-heading">
-                  <h3 class="panel-title">Attachment Feedbacks</h3>
-                </div>
-                <div class="panel-body">
-                  <span *ngIf="feedback.attachmentFeedbacks.length === 0">No feedbacks</span>
-                  <p *ngFor="let attachmentFeedback of feedback.attachmentFeedbacks">
-                    {{attachmentFeedback.mechanism | parameterValue:'title'}}: <br/>
-                    <a (click)="downloadFile(attachmentFeedback)">{{attachmentFeedback.name}}</a>
-                    <br/>
-                    <small>(Mechanism ID: {{attachmentFeedback.mechanismId}})</small>
-                  </p>
-                </div>
-              </div>
-
-              <div class="panel panel-default">
-                <div class="panel-heading">
-                  <h3 class="panel-title">Audio Feedbacks</h3>
-                </div>
-                <div class="panel-body">
-                  <span *ngIf="feedback.audioFeedbacks.length === 0">No feedbacks</span>
-                  <p *ngFor="let audioFeedback of feedback.audioFeedbacks">
-                    {{audioFeedback.mechanism | parameterValue:'title'}}: <br/>
-                    <br/>
-                    <small>(Mechanism ID: {{audioFeedback.mechanismId}})</small>
-                  </p>
-                </div>
-              </div>
-
-            </div>
-            <div class="col-sm-12 col-md-6">
-              <div class="panel panel-default">
-                <div class="panel-heading">
                   <h3 class="panel-title">Screenshot Feedbacks</h3>
                 </div>
                 <div class="panel-body">
-                  <span *ngIf="feedback.screenshotFeedbacks.length === 0">No feedbacks</span>
+                  <p *ngIf="feedback.screenshotFeedbacks.length === 0">No feedbacks</p>
                   <p *ngFor="let screenshotFeedback of feedback.screenshotFeedbacks">
-                    <img src="{{ host }}{{ screenshotFeedback.path|correctPathPipe }}" class="screenshot img-responsive"/>
+                    <img src="{{ host }}{{ screenshotFeedback.path|correctPathPipe }}"
+                         class="screenshot img-responsive"/>
                   </p>
                 </div>
               </div>
