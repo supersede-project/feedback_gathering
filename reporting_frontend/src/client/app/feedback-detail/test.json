@@ -1,0 +1,3538 @@
+[
+  {
+    "feedback_statuses": null,
+    "read": null,
+    "id": 213,
+    "title": "Feedback",
+    "user_identification": "",
+    "language": "de",
+    "created_at": "2016-12-12T06:17:58.000Z",
+    "updated_at": "2016-12-12T06:17:58.000Z",
+    "application_id": 8,
+    "configuration_id": 8,
+    "text_feedbacks": [
+      {
+        "id": 243,
+        "text": "Alles Top!!!",
+        "mechanism_id": 7,
+        "feedback_id": 213
+      },
+      {
+        "id": 244,
+        "text": "",
+        "mechanism_id": 44,
+        "feedback_id": 213
+      }
+    ]
+  },
+  {
+    "feedback_statuses": null,
+    "read": null,
+    "id": 214,
+    "title": "Feedback",
+    "user_identification": "",
+    "language": "de",
+    "created_at": "2016-12-12T06:18:01.000Z",
+    "updated_at": "2016-12-12T06:18:01.000Z",
+    "application_id": 8,
+    "configuration_id": 8,
+    "text_feedbacks": [
+      {
+        "id": 245,
+        "text": "Alles Top!!!",
+        "mechanism_id": 7,
+        "feedback_id": 214
+      },
+      {
+        "id": 246,
+        "text": "",
+        "mechanism_id": 44,
+        "feedback_id": 214
+      }
+    ]
+  },
+  {
+    "feedback_statuses": null,
+    "read": null,
+    "id": 215,
+    "title": "Feedback",
+    "user_identification": "",
+    "language": "de",
+    "created_at": "2016-12-12T06:18:26.000Z",
+    "updated_at": "2016-12-12T06:18:26.000Z",
+    "application_id": 8,
+    "configuration_id": 8,
+    "text_feedbacks": [
+      {
+        "id": 247,
+        "text": "Alles Top!!!",
+        "mechanism_id": 7,
+        "feedback_id": 215
+      },
+      {
+        "id": 248,
+        "text": "Lietz@gwe-gruppe.de",
+        "mechanism_id": 44,
+        "feedback_id": 215
+      }
+    ]
+  },
+  {
+    "feedback_statuses": null,
+    "read": null,
+    "id": 216,
+    "title": "Feedback",
+    "user_identification": "",
+    "language": "de",
+    "created_at": "2016-12-12T06:42:31.000Z",
+    "updated_at": "2016-12-12T06:42:31.000Z",
+    "application_id": 8,
+    "configuration_id": 8,
+    "text_feedbacks": [
+      {
+        "id": 249,
+        "text": "",
+        "mechanism_id": 7,
+        "feedback_id": 216
+      },
+      {
+        "id": 250,
+        "text": "",
+        "mechanism_id": 44,
+        "feedback_id": 216
+      }
+    ]
+  },
+  {
+    "feedback_statuses": null,
+    "read": null,
+    "id": 217,
+    "title": "Feedback",
+    "user_identification": "",
+    "language": "pl",
+    "created_at": "2016-12-12T06:54:49.000Z",
+    "updated_at": "2016-12-12T06:54:49.000Z",
+    "application_id": 8,
+    "configuration_id": 8,
+    "text_feedbacks": [
+      {
+        "id": 251,
+        "text": "Witam, dzisiaj od rana nie można pracować.\nPojawia się okienko samouczka, którego nie daje się wyłaczyć\nCo za tym idzie nie można dalej używać programu",
+        "mechanism_id": 7,
+        "feedback_id": 217
+      },
+      {
+        "id": 252,
+        "text": "l.bednarz@quicklog.pl",
+        "mechanism_id": 44,
+        "feedback_id": 217
+      }
+    ]
+  },
+  {
+    "feedback_statuses": null,
+    "read": null,
+    "id": 218,
+    "title": "Feedback",
+    "user_identification": "",
+    "language": "en",
+    "created_at": "2016-12-12T07:24:32.000Z",
+    "updated_at": "2016-12-12T07:24:32.000Z",
+    "application_id": 8,
+    "configuration_id": 8,
+    "text_feedbacks": [
+      {
+        "id": 253,
+        "text": "",
+        "mechanism_id": 7,
+        "feedback_id": 218
+      },
+      {
+        "id": 254,
+        "text": "",
+        "mechanism_id": 44,
+        "feedback_id": 218
+      }
+    ]
+  },
+  {
+    "feedback_statuses": null,
+    "read": null,
+    "id": 219,
+    "title": "Feedback",
+    "user_identification": "",
+    "language": "en",
+    "created_at": "2016-12-12T07:47:59.000Z",
+    "updated_at": "2016-12-12T07:47:59.000Z",
+    "application_id": 8,
+    "configuration_id": 8,
+    "text_feedbacks": [
+      {
+        "id": 255,
+        "text": "Feedback is back",
+        "mechanism_id": 7,
+        "feedback_id": 219
+      },
+      {
+        "id": 256,
+        "text": "holger.indervoort@ptvgroup.com",
+        "mechanism_id": 44,
+        "feedback_id": 219
+      }
+    ]
+  },
+  {
+    "feedback_statuses": null,
+    "read": null,
+    "id": 220,
+    "title": "Feedback",
+    "user_identification": "",
+    "language": "en",
+    "created_at": "2016-12-12T07:50:51.000Z",
+    "updated_at": "2016-12-12T07:50:51.000Z",
+    "application_id": 8,
+    "configuration_id": 8,
+    "text_feedbacks": [
+      {
+        "id": 257,
+        "text": "",
+        "mechanism_id": 7,
+        "feedback_id": 220
+      },
+      {
+        "id": 258,
+        "text": "",
+        "mechanism_id": 44,
+        "feedback_id": 220
+      }
+    ]
+  },
+  {
+    "feedback_statuses": null,
+    "read": null,
+    "id": 221,
+    "title": "Feedback",
+    "user_identification": "",
+    "language": "en",
+    "created_at": "2016-12-12T08:08:28.000Z",
+    "updated_at": "2016-12-12T08:08:28.000Z",
+    "application_id": 8,
+    "configuration_id": 8,
+    "text_feedbacks": [
+      {
+        "id": 259,
+        "text": "Orchestrator is running again",
+        "mechanism_id": 7,
+        "feedback_id": 221
+      },
+      {
+        "id": 260,
+        "text": "ronnieschaniel@gmail.com",
+        "mechanism_id": 44,
+        "feedback_id": 221
+      }
+    ]
+  },
+  {
+    "feedback_statuses": null,
+    "read": null,
+    "id": 222,
+    "title": "Feedback",
+    "user_identification": "",
+    "language": "en",
+    "created_at": "2016-12-12T08:29:17.000Z",
+    "updated_at": "2016-12-12T08:29:17.000Z",
+    "application_id": 8,
+    "configuration_id": 8,
+    "text_feedbacks": [
+      {
+        "id": 261,
+        "text": "Another Test Feedback.",
+        "mechanism_id": 7,
+        "feedback_id": 222
+      },
+      {
+        "id": 262,
+        "text": "ronnieschaniel@gmail.com",
+        "mechanism_id": 44,
+        "feedback_id": 222
+      }
+    ]
+  },
+  {
+    "feedback_statuses": null,
+    "read": null,
+    "id": 223,
+    "title": "Feedback",
+    "user_identification": "",
+    "language": "pl",
+    "created_at": "2016-12-12T08:48:19.000Z",
+    "updated_at": "2016-12-12T08:48:19.000Z",
+    "application_id": 8,
+    "configuration_id": 8,
+    "text_feedbacks": [
+      {
+        "id": 263,
+        "text": "Za każdym razem, gdy planuję trasę przejazdu ze Szwajcarii do UK i ustawiam punkty pośrednie to wyświetlaj się w nielogicznej kolejności, np. dodaję przejazd przez Karlsruhe, następnie przez Luxemburg i Belgię i te 2 ostatnie punkty pojawiaja się na trasie między zaladunkiem a pierwszym punktem przejazdy w Karlsruhe. Niby błahostka, ale dosyć irytujca. Inna rzecz, to że gdy przesuwam mapę myszka, to często przerzuca mnie na drugi koniec swiata, np. nad jakis ocean. Dziekuje",
+        "mechanism_id": 7,
+        "feedback_id": 223
+      },
+      {
+        "id": 264,
+        "text": "mobrusnik@rbtransservice.pl",
+        "mechanism_id": 44,
+        "feedback_id": 223
+      }
+    ]
+  },
+  {
+    "feedback_statuses": null,
+    "read": null,
+    "id": 224,
+    "title": "Feedback",
+    "user_identification": "",
+    "language": "de",
+    "created_at": "2016-12-12T09:23:37.000Z",
+    "updated_at": "2016-12-12T09:23:37.000Z",
+    "application_id": 8,
+    "configuration_id": 8,
+    "text_feedbacks": [
+      {
+        "id": 265,
+        "text": "",
+        "mechanism_id": 7,
+        "feedback_id": 224
+      },
+      {
+        "id": 266,
+        "text": "",
+        "mechanism_id": 44,
+        "feedback_id": 224
+      }
+    ]
+  },
+  {
+    "feedback_statuses": null,
+    "read": null,
+    "id": 225,
+    "title": "Feedback",
+    "user_identification": "",
+    "language": "de",
+    "created_at": "2016-12-12T09:31:44.000Z",
+    "updated_at": "2016-12-12T09:31:44.000Z",
+    "application_id": 8,
+    "configuration_id": 8,
+    "text_feedbacks": [
+      {
+        "id": 267,
+        "text": "",
+        "mechanism_id": 7,
+        "feedback_id": 225
+      },
+      {
+        "id": 268,
+        "text": "",
+        "mechanism_id": 44,
+        "feedback_id": 225
+      }
+    ]
+  },
+  {
+    "feedback_statuses": null,
+    "read": null,
+    "id": 226,
+    "title": "Feedback",
+    "user_identification": "",
+    "language": "de",
+    "created_at": "2016-12-12T09:46:37.000Z",
+    "updated_at": "2016-12-12T09:46:37.000Z",
+    "application_id": 8,
+    "configuration_id": 8,
+    "text_feedbacks": [
+      {
+        "id": 269,
+        "text": "Testfeedback",
+        "mechanism_id": 7,
+        "feedback_id": 226
+      },
+      {
+        "id": 270,
+        "text": "melanie.stade@fhnw.ch",
+        "mechanism_id": 44,
+        "feedback_id": 226
+      }
+    ]
+  },
+  {
+    "feedback_statuses": null,
+    "read": null,
+    "id": 227,
+    "title": "Feedback",
+    "user_identification": "",
+    "language": "en",
+    "created_at": "2016-12-12T09:57:22.000Z",
+    "updated_at": "2016-12-12T09:57:22.000Z",
+    "application_id": 8,
+    "configuration_id": 8,
+    "text_feedbacks": [
+      {
+        "id": 271,
+        "text": "This is a test feedback",
+        "mechanism_id": 7,
+        "feedback_id": 227
+      },
+      {
+        "id": 272,
+        "text": "melanie.stade@fhnw.ch",
+        "mechanism_id": 44,
+        "feedback_id": 227
+      }
+    ]
+  },
+  {
+    "feedback_statuses": null,
+    "read": null,
+    "id": 228,
+    "title": "Feedback",
+    "user_identification": "",
+    "language": "en",
+    "created_at": "2016-12-12T10:01:49.000Z",
+    "updated_at": "2016-12-12T10:01:49.000Z",
+    "application_id": 8,
+    "configuration_id": 8,
+    "text_feedbacks": [
+      {
+        "id": 273,
+        "text": "",
+        "mechanism_id": 7,
+        "feedback_id": 228
+      },
+      {
+        "id": 274,
+        "text": "",
+        "mechanism_id": 44,
+        "feedback_id": 228
+      }
+    ]
+  },
+  {
+    "feedback_statuses": null,
+    "read": null,
+    "id": 229,
+    "title": "Feedback",
+    "user_identification": "",
+    "language": "de",
+    "created_at": "2016-12-12T10:27:03.000Z",
+    "updated_at": "2016-12-12T10:27:03.000Z",
+    "application_id": 8,
+    "configuration_id": 8,
+    "text_feedbacks": [
+      {
+        "id": 275,
+        "text": "",
+        "mechanism_id": 7,
+        "feedback_id": 229
+      },
+      {
+        "id": 276,
+        "text": "",
+        "mechanism_id": 44,
+        "feedback_id": 229
+      }
+    ]
+  },
+  {
+    "feedback_statuses": null,
+    "read": null,
+    "id": 230,
+    "title": "Feedback",
+    "user_identification": "",
+    "language": "it",
+    "created_at": "2016-12-12T10:36:03.000Z",
+    "updated_at": "2016-12-12T10:36:03.000Z",
+    "application_id": 8,
+    "configuration_id": 8,
+    "text_feedbacks": [
+      {
+        "id": 277,
+        "text": "",
+        "mechanism_id": 7,
+        "feedback_id": 230
+      },
+      {
+        "id": 278,
+        "text": "",
+        "mechanism_id": 44,
+        "feedback_id": 230
+      }
+    ]
+  },
+  {
+    "feedback_statuses": null,
+    "read": null,
+    "id": 231,
+    "title": "Feedback",
+    "user_identification": "",
+    "language": "en",
+    "created_at": "2016-12-12T10:54:35.000Z",
+    "updated_at": "2016-12-12T10:54:35.000Z",
+    "application_id": 8,
+    "configuration_id": 8,
+    "text_feedbacks": [
+      {
+        "id": 279,
+        "text": "",
+        "mechanism_id": 7,
+        "feedback_id": 231
+      },
+      {
+        "id": 280,
+        "text": "",
+        "mechanism_id": 44,
+        "feedback_id": 231
+      }
+    ]
+  },
+  {
+    "feedback_statuses": null,
+    "read": null,
+    "id": 232,
+    "title": "Feedback",
+    "user_identification": "",
+    "language": "de",
+    "created_at": "2016-12-12T11:44:14.000Z",
+    "updated_at": "2016-12-12T11:44:14.000Z",
+    "application_id": 8,
+    "configuration_id": 8,
+    "text_feedbacks": [
+      {
+        "id": 281,
+        "text": "",
+        "mechanism_id": 7,
+        "feedback_id": 232
+      },
+      {
+        "id": 282,
+        "text": "",
+        "mechanism_id": 44,
+        "feedback_id": 232
+      }
+    ]
+  },
+  {
+    "feedback_statuses": null,
+    "read": null,
+    "id": 233,
+    "title": "Feedback",
+    "user_identification": "",
+    "language": "en",
+    "created_at": "2016-12-12T11:45:50.000Z",
+    "updated_at": "2016-12-12T11:45:50.000Z",
+    "application_id": 8,
+    "configuration_id": 8,
+    "text_feedbacks": [
+      {
+        "id": 283,
+        "text": "Funktionieren die Ratings?",
+        "mechanism_id": 7,
+        "feedback_id": 233
+      },
+      {
+        "id": 284,
+        "text": "holger.indervoort@ptvgroup.com",
+        "mechanism_id": 44,
+        "feedback_id": 233
+      }
+    ]
+  },
+  {
+    "feedback_statuses": null,
+    "read": null,
+    "id": 234,
+    "title": "Feedback",
+    "user_identification": "",
+    "language": "de",
+    "created_at": "2016-12-12T11:53:51.000Z",
+    "updated_at": "2016-12-12T11:53:51.000Z",
+    "application_id": 8,
+    "configuration_id": 8,
+    "text_feedbacks": [
+      {
+        "id": 285,
+        "text": "",
+        "mechanism_id": 7,
+        "feedback_id": 234
+      },
+      {
+        "id": 286,
+        "text": "",
+        "mechanism_id": 44,
+        "feedback_id": 234
+      }
+    ]
+  },
+  {
+    "feedback_statuses": null,
+    "read": null,
+    "id": 235,
+    "title": "Feedback",
+    "user_identification": "",
+    "language": "en",
+    "created_at": "2016-12-12T11:57:06.000Z",
+    "updated_at": "2016-12-12T11:57:06.000Z",
+    "application_id": 8,
+    "configuration_id": 8,
+    "text_feedbacks": [
+      {
+        "id": 287,
+        "text": "Die Ratings kommen nicht zusammen mit dem Feedback an. Kann das sein?",
+        "mechanism_id": 7,
+        "feedback_id": 235
+      },
+      {
+        "id": 288,
+        "text": "holger.indervoort@googlemail.com",
+        "mechanism_id": 44,
+        "feedback_id": 235
+      }
+    ]
+  },
+  {
+    "feedback_statuses": null,
+    "read": null,
+    "id": 236,
+    "title": "Feedback",
+    "user_identification": "",
+    "language": "de",
+    "created_at": "2016-12-12T12:27:22.000Z",
+    "updated_at": "2016-12-12T12:27:22.000Z",
+    "application_id": 8,
+    "configuration_id": 8,
+    "text_feedbacks": [
+      {
+        "id": 289,
+        "text": "Rating: 4",
+        "mechanism_id": 7,
+        "feedback_id": 236
+      },
+      {
+        "id": 290,
+        "text": "",
+        "mechanism_id": 44,
+        "feedback_id": 236
+      }
+    ]
+  },
+  {
+    "feedback_statuses": null,
+    "read": null,
+    "id": 237,
+    "title": "Feedback",
+    "user_identification": "",
+    "language": "de",
+    "created_at": "2016-12-12T12:30:30.000Z",
+    "updated_at": "2016-12-12T12:30:30.000Z",
+    "application_id": 8,
+    "configuration_id": 8,
+    "text_feedbacks": [
+      {
+        "id": 291,
+        "text": "Alles gut, funktioniert wie es soll. ",
+        "mechanism_id": 7,
+        "feedback_id": 237
+      },
+      {
+        "id": 292,
+        "text": "p.moehle@schauer.de",
+        "mechanism_id": 44,
+        "feedback_id": 237
+      }
+    ]
+  },
+  {
+    "feedback_statuses": null,
+    "read": null,
+    "id": 238,
+    "title": "Feedback",
+    "user_identification": "",
+    "language": "de",
+    "created_at": "2016-12-12T12:30:32.000Z",
+    "updated_at": "2016-12-12T12:30:32.000Z",
+    "application_id": 8,
+    "configuration_id": 8,
+    "text_feedbacks": [
+      {
+        "id": 293,
+        "text": "Alles gut, funktioniert wie es soll. ",
+        "mechanism_id": 7,
+        "feedback_id": 238
+      },
+      {
+        "id": 294,
+        "text": "p.moehle@schauer.de",
+        "mechanism_id": 44,
+        "feedback_id": 238
+      }
+    ]
+  },
+  {
+    "feedback_statuses": null,
+    "read": null,
+    "id": 239,
+    "title": "Feedback",
+    "user_identification": "",
+    "language": "en",
+    "created_at": "2016-12-12T12:32:37.000Z",
+    "updated_at": "2016-12-12T12:32:37.000Z",
+    "application_id": 8,
+    "configuration_id": 8,
+    "text_feedbacks": [
+      {
+        "id": 295,
+        "text": "",
+        "mechanism_id": 7,
+        "feedback_id": 239
+      },
+      {
+        "id": 296,
+        "text": "",
+        "mechanism_id": 44,
+        "feedback_id": 239
+      }
+    ]
+  },
+  {
+    "feedback_statuses": null,
+    "read": null,
+    "id": 240,
+    "title": "Feedback",
+    "user_identification": "",
+    "language": "de",
+    "created_at": "2016-12-12T12:45:17.000Z",
+    "updated_at": "2016-12-12T12:45:17.000Z",
+    "application_id": 8,
+    "configuration_id": 8,
+    "text_feedbacks": [
+      {
+        "id": 297,
+        "text": "",
+        "mechanism_id": 7,
+        "feedback_id": 240
+      },
+      {
+        "id": 298,
+        "text": "",
+        "mechanism_id": 44,
+        "feedback_id": 240
+      }
+    ]
+  },
+  {
+    "feedback_statuses": null,
+    "read": null,
+    "id": 241,
+    "title": "Feedback",
+    "user_identification": "",
+    "language": "en",
+    "created_at": "2016-12-12T12:56:16.000Z",
+    "updated_at": "2016-12-12T12:56:16.000Z",
+    "application_id": 8,
+    "configuration_id": 8,
+    "text_feedbacks": [
+      {
+        "id": 299,
+        "text": "",
+        "mechanism_id": 7,
+        "feedback_id": 241
+      },
+      {
+        "id": 300,
+        "text": "",
+        "mechanism_id": 44,
+        "feedback_id": 241
+      }
+    ]
+  },
+  {
+    "feedback_statuses": null,
+    "read": null,
+    "id": 242,
+    "title": "Feedback",
+    "user_identification": "",
+    "language": "en",
+    "created_at": "2016-12-12T12:56:37.000Z",
+    "updated_at": "2016-12-12T12:56:37.000Z",
+    "application_id": 8,
+    "configuration_id": 8,
+    "text_feedbacks": [
+      {
+        "id": 301,
+        "text": "",
+        "mechanism_id": 7,
+        "feedback_id": 242
+      },
+      {
+        "id": 302,
+        "text": "",
+        "mechanism_id": 44,
+        "feedback_id": 242
+      }
+    ]
+  },
+  {
+    "feedback_statuses": null,
+    "read": null,
+    "id": 243,
+    "title": "Feedback",
+    "user_identification": "",
+    "language": "de",
+    "created_at": "2016-12-12T13:03:54.000Z",
+    "updated_at": "2016-12-12T13:03:54.000Z",
+    "application_id": 8,
+    "configuration_id": 8,
+    "text_feedbacks": [
+      {
+        "id": 303,
+        "text": "",
+        "mechanism_id": 7,
+        "feedback_id": 243
+      },
+      {
+        "id": 304,
+        "text": "",
+        "mechanism_id": 44,
+        "feedback_id": 243
+      }
+    ]
+  },
+  {
+    "feedback_statuses": null,
+    "read": null,
+    "id": 244,
+    "title": "Feedback",
+    "user_identification": "",
+    "language": "de",
+    "created_at": "2016-12-12T13:04:48.000Z",
+    "updated_at": "2016-12-12T13:04:48.000Z",
+    "application_id": 8,
+    "configuration_id": 8,
+    "text_feedbacks": [
+      {
+        "id": 305,
+        "text": "",
+        "mechanism_id": 7,
+        "feedback_id": 244
+      },
+      {
+        "id": 306,
+        "text": "",
+        "mechanism_id": 44,
+        "feedback_id": 244
+      }
+    ]
+  },
+  {
+    "feedback_statuses": null,
+    "read": null,
+    "id": 245,
+    "title": "Feedback",
+    "user_identification": "",
+    "language": "en",
+    "created_at": "2016-12-12T13:05:12.000Z",
+    "updated_at": "2016-12-12T13:05:12.000Z",
+    "application_id": 8,
+    "configuration_id": 8,
+    "text_feedbacks": [
+      {
+        "id": 307,
+        "text": "",
+        "mechanism_id": 7,
+        "feedback_id": 245
+      },
+      {
+        "id": 308,
+        "text": "",
+        "mechanism_id": 44,
+        "feedback_id": 245
+      }
+    ]
+  },
+  {
+    "feedback_statuses": null,
+    "read": null,
+    "id": 246,
+    "title": "Feedback",
+    "user_identification": "",
+    "language": "nl",
+    "created_at": "2016-12-12T14:42:38.000Z",
+    "updated_at": "2016-12-12T14:42:38.000Z",
+    "application_id": 8,
+    "configuration_id": 8,
+    "text_feedbacks": [
+      {
+        "id": 309,
+        "text": "",
+        "mechanism_id": 7,
+        "feedback_id": 246
+      },
+      {
+        "id": 310,
+        "text": "",
+        "mechanism_id": 44,
+        "feedback_id": 246
+      }
+    ]
+  },
+  {
+    "feedback_statuses": null,
+    "read": null,
+    "id": 247,
+    "title": "Feedback",
+    "user_identification": "",
+    "language": "de",
+    "created_at": "2016-12-12T14:55:52.000Z",
+    "updated_at": "2016-12-12T14:55:52.000Z",
+    "application_id": 8,
+    "configuration_id": 8,
+    "text_feedbacks": [
+      {
+        "id": 311,
+        "text": "",
+        "mechanism_id": 7,
+        "feedback_id": 247
+      },
+      {
+        "id": 312,
+        "text": "",
+        "mechanism_id": 44,
+        "feedback_id": 247
+      }
+    ]
+  },
+  {
+    "feedback_statuses": null,
+    "read": null,
+    "id": 248,
+    "title": "Feedback",
+    "user_identification": "",
+    "language": "en",
+    "created_at": "2016-12-12T15:08:23.000Z",
+    "updated_at": "2016-12-12T15:08:23.000Z",
+    "application_id": 8,
+    "configuration_id": 8,
+    "text_feedbacks": [
+      {
+        "id": 313,
+        "text": "",
+        "mechanism_id": 7,
+        "feedback_id": 248
+      },
+      {
+        "id": 314,
+        "text": "",
+        "mechanism_id": 44,
+        "feedback_id": 248
+      }
+    ]
+  },
+  {
+    "feedback_statuses": null,
+    "read": null,
+    "id": 249,
+    "title": "Feedback",
+    "user_identification": "",
+    "language": "en",
+    "created_at": "2016-12-12T15:24:22.000Z",
+    "updated_at": "2016-12-12T15:24:22.000Z",
+    "application_id": 8,
+    "configuration_id": 8,
+    "text_feedbacks": [
+      {
+        "id": 315,
+        "text": "",
+        "mechanism_id": 7,
+        "feedback_id": 249
+      },
+      {
+        "id": 316,
+        "text": "",
+        "mechanism_id": 44,
+        "feedback_id": 249
+      }
+    ]
+  },
+  {
+    "feedback_statuses": null,
+    "read": null,
+    "id": 250,
+    "title": "Feedback",
+    "user_identification": "",
+    "language": "en",
+    "created_at": "2016-12-12T17:54:15.000Z",
+    "updated_at": "2016-12-12T17:54:15.000Z",
+    "application_id": 8,
+    "configuration_id": 8,
+    "text_feedbacks": [
+      {
+        "id": 317,
+        "text": "",
+        "mechanism_id": 7,
+        "feedback_id": 250
+      },
+      {
+        "id": 318,
+        "text": "",
+        "mechanism_id": 44,
+        "feedback_id": 250
+      }
+    ]
+  },
+  {
+    "feedback_statuses": null,
+    "read": null,
+    "id": 251,
+    "title": "Feedback",
+    "user_identification": "",
+    "language": "pl",
+    "created_at": "2016-12-12T23:31:45.000Z",
+    "updated_at": "2016-12-12T23:31:45.000Z",
+    "application_id": 8,
+    "configuration_id": 8,
+    "text_feedbacks": [
+      {
+        "id": 319,
+        "text": "",
+        "mechanism_id": 7,
+        "feedback_id": 251
+      },
+      {
+        "id": 320,
+        "text": "",
+        "mechanism_id": 44,
+        "feedback_id": 251
+      }
+    ]
+  },
+  {
+    "feedback_statuses": null,
+    "read": null,
+    "id": 252,
+    "title": "Feedback",
+    "user_identification": "",
+    "language": "en",
+    "created_at": "2016-12-13T04:20:34.000Z",
+    "updated_at": "2016-12-13T04:20:34.000Z",
+    "application_id": 8,
+    "configuration_id": 8,
+    "text_feedbacks": [
+      {
+        "id": 321,
+        "text": "",
+        "mechanism_id": 7,
+        "feedback_id": 252
+      },
+      {
+        "id": 322,
+        "text": "",
+        "mechanism_id": 44,
+        "feedback_id": 252
+      }
+    ]
+  },
+  {
+    "feedback_statuses": null,
+    "read": null,
+    "id": 253,
+    "title": "Feedback",
+    "user_identification": "",
+    "language": "en",
+    "created_at": "2016-12-13T04:22:54.000Z",
+    "updated_at": "2016-12-13T04:22:54.000Z",
+    "application_id": 8,
+    "configuration_id": 8,
+    "text_feedbacks": [
+      {
+        "id": 323,
+        "text": "vehicle profile is hard to define",
+        "mechanism_id": 7,
+        "feedback_id": 253
+      },
+      {
+        "id": 324,
+        "text": "godorhazy@gmail.com",
+        "mechanism_id": 44,
+        "feedback_id": 253
+      }
+    ]
+  },
+  {
+    "feedback_statuses": null,
+    "read": null,
+    "id": 254,
+    "title": "Feedback",
+    "user_identification": "",
+    "language": "en",
+    "created_at": "2016-12-13T04:24:26.000Z",
+    "updated_at": "2016-12-13T04:24:26.000Z",
+    "application_id": 8,
+    "configuration_id": 8,
+    "text_feedbacks": [
+      {
+        "id": 325,
+        "text": "                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    ",
+        "mechanism_id": 7,
+        "feedback_id": 254
+      },
+      {
+        "id": 326,
+        "text": "godorhazy@gmail.com",
+        "mechanism_id": 44,
+        "feedback_id": 254
+      }
+    ]
+  },
+  {
+    "feedback_statuses": null,
+    "read": null,
+    "id": 255,
+    "title": "Feedback",
+    "user_identification": "",
+    "language": "en",
+    "created_at": "2016-12-13T04:27:35.000Z",
+    "updated_at": "2016-12-13T04:27:35.000Z",
+    "application_id": 8,
+    "configuration_id": 8,
+    "text_feedbacks": [
+      {
+        "id": 327,
+        "text": "                                                                                                                                                d                                                                                              d                                                                                                                                                                                                                                                                    ",
+        "mechanism_id": 7,
+        "feedback_id": 255
+      },
+      {
+        "id": 328,
+        "text": "godorhazy@gmail.com",
+        "mechanism_id": 44,
+        "feedback_id": 255
+      }
+    ]
+  },
+  {
+    "feedback_statuses": null,
+    "read": null,
+    "id": 256,
+    "title": "Feedback",
+    "user_identification": "",
+    "language": "en",
+    "created_at": "2016-12-13T04:28:54.000Z",
+    "updated_at": "2016-12-13T04:28:54.000Z",
+    "application_id": 8,
+    "configuration_id": 8,
+    "text_feedbacks": [
+      {
+        "id": 329,
+        "text": "",
+        "mechanism_id": 7,
+        "feedback_id": 256
+      },
+      {
+        "id": 330,
+        "text": "",
+        "mechanism_id": 44,
+        "feedback_id": 256
+      }
+    ]
+  },
+  {
+    "feedback_statuses": null,
+    "read": null,
+    "id": 257,
+    "title": "Feedback",
+    "user_identification": "",
+    "language": "en",
+    "created_at": "2016-12-13T04:30:00.000Z",
+    "updated_at": "2016-12-13T04:30:00.000Z",
+    "application_id": 8,
+    "configuration_id": 8,
+    "text_feedbacks": [
+      {
+        "id": 331,
+        "text": "kjb jhg khgv ",
+        "mechanism_id": 7,
+        "feedback_id": 257
+      },
+      {
+        "id": 332,
+        "text": "kjhvuzg@kjg.com",
+        "mechanism_id": 44,
+        "feedback_id": 257
+      }
+    ]
+  },
+  {
+    "feedback_statuses": null,
+    "read": null,
+    "id": 258,
+    "title": "Feedback",
+    "user_identification": "",
+    "language": "en",
+    "created_at": "2016-12-13T04:30:24.000Z",
+    "updated_at": "2016-12-13T04:30:24.000Z",
+    "application_id": 8,
+    "configuration_id": 8,
+    "text_feedbacks": [
+      {
+        "id": 333,
+        "text": "",
+        "mechanism_id": 7,
+        "feedback_id": 258
+      },
+      {
+        "id": 334,
+        "text": "",
+        "mechanism_id": 44,
+        "feedback_id": 258
+      }
+    ]
+  },
+  {
+    "feedback_statuses": null,
+    "read": null,
+    "id": 259,
+    "title": "Feedback",
+    "user_identification": "",
+    "language": "en",
+    "created_at": "2016-12-13T04:30:37.000Z",
+    "updated_at": "2016-12-13T04:30:37.000Z",
+    "application_id": 8,
+    "configuration_id": 8,
+    "text_feedbacks": [
+      {
+        "id": 335,
+        "text": "",
+        "mechanism_id": 7,
+        "feedback_id": 259
+      },
+      {
+        "id": 336,
+        "text": "",
+        "mechanism_id": 44,
+        "feedback_id": 259
+      }
+    ]
+  },
+  {
+    "feedback_statuses": null,
+    "read": null,
+    "id": 260,
+    "title": "Feedback",
+    "user_identification": "",
+    "language": "en",
+    "created_at": "2016-12-13T05:05:57.000Z",
+    "updated_at": "2016-12-13T05:05:57.000Z",
+    "application_id": 8,
+    "configuration_id": 8,
+    "text_feedbacks": [
+      {
+        "id": 337,
+        "text": "",
+        "mechanism_id": 7,
+        "feedback_id": 260
+      },
+      {
+        "id": 338,
+        "text": "",
+        "mechanism_id": 44,
+        "feedback_id": 260
+      }
+    ]
+  },
+  {
+    "feedback_statuses": null,
+    "read": null,
+    "id": 261,
+    "title": "Feedback",
+    "user_identification": "",
+    "language": "en",
+    "created_at": "2016-12-13T05:07:16.000Z",
+    "updated_at": "2016-12-13T05:07:16.000Z",
+    "application_id": 8,
+    "configuration_id": 8,
+    "text_feedbacks": [
+      {
+        "id": 339,
+        "text": " d                           ws                                                               aws                                                e                                                                               w   rt a                  et                                                                    et                                       et                                                                                           se                               et          ",
+        "mechanism_id": 7,
+        "feedback_id": 261
+      },
+      {
+        "id": 340,
+        "text": "godorhazy@gmail.com",
+        "mechanism_id": 44,
+        "feedback_id": 261
+      }
+    ]
+  },
+  {
+    "feedback_statuses": null,
+    "read": null,
+    "id": 262,
+    "title": "Feedback",
+    "user_identification": "",
+    "language": "en",
+    "created_at": "2016-12-13T05:07:51.000Z",
+    "updated_at": "2016-12-13T05:07:51.000Z",
+    "application_id": 8,
+    "configuration_id": 8,
+    "text_feedbacks": [
+      {
+        "id": 341,
+        "text": "",
+        "mechanism_id": 7,
+        "feedback_id": 262
+      },
+      {
+        "id": 342,
+        "text": "",
+        "mechanism_id": 44,
+        "feedback_id": 262
+      }
+    ]
+  },
+  {
+    "feedback_statuses": null,
+    "read": null,
+    "id": 263,
+    "title": "Feedback",
+    "user_identification": "",
+    "language": "en",
+    "created_at": "2016-12-13T06:11:08.000Z",
+    "updated_at": "2016-12-13T06:11:08.000Z",
+    "application_id": 8,
+    "configuration_id": 8,
+    "text_feedbacks": [
+      {
+        "id": 343,
+        "text": "Ferry Sjaellands Odde / Aarhus and v.v. is described as not being accesible for trucks which is wrong. Same with ferry Langesund / Hirtshals and v.v.\nSeveral ferrylines seem to be noted more than one time: E.g. Stockholm / Turku",
+        "mechanism_id": 7,
+        "feedback_id": 263
+      },
+      {
+        "id": 344,
+        "text": "erh@ntgnordic.com",
+        "mechanism_id": 44,
+        "feedback_id": 263
+      }
+    ]
+  },
+  {
+    "feedback_statuses": null,
+    "read": null,
+    "id": 264,
+    "title": "Feedback",
+    "user_identification": "",
+    "language": "es",
+    "created_at": "2016-12-13T07:09:49.000Z",
+    "updated_at": "2016-12-13T07:09:49.000Z",
+    "application_id": 8,
+    "configuration_id": 8,
+    "text_feedbacks": [
+      {
+        "id": 345,
+        "text": "",
+        "mechanism_id": 7,
+        "feedback_id": 264
+      },
+      {
+        "id": 346,
+        "text": "",
+        "mechanism_id": 44,
+        "feedback_id": 264
+      }
+    ]
+  },
+  {
+    "feedback_statuses": null,
+    "read": null,
+    "id": 265,
+    "title": "Feedback",
+    "user_identification": "",
+    "language": "pl",
+    "created_at": "2016-12-13T07:09:58.000Z",
+    "updated_at": "2016-12-13T07:09:58.000Z",
+    "application_id": 8,
+    "configuration_id": 8,
+    "text_feedbacks": [
+      {
+        "id": 347,
+        "text": "",
+        "mechanism_id": 7,
+        "feedback_id": 265
+      },
+      {
+        "id": 348,
+        "text": "",
+        "mechanism_id": 44,
+        "feedback_id": 265
+      }
+    ]
+  },
+  {
+    "feedback_statuses": null,
+    "read": null,
+    "id": 266,
+    "title": "Feedback",
+    "user_identification": "",
+    "language": "pl",
+    "created_at": "2016-12-13T07:09:59.000Z",
+    "updated_at": "2016-12-13T07:09:59.000Z",
+    "application_id": 8,
+    "configuration_id": 8,
+    "text_feedbacks": [
+      {
+        "id": 349,
+        "text": "",
+        "mechanism_id": 7,
+        "feedback_id": 266
+      },
+      {
+        "id": 350,
+        "text": "",
+        "mechanism_id": 44,
+        "feedback_id": 266
+      }
+    ]
+  },
+  {
+    "feedback_statuses": null,
+    "read": null,
+    "id": 267,
+    "title": "Feedback",
+    "user_identification": "",
+    "language": "es",
+    "created_at": "2016-12-13T07:12:50.000Z",
+    "updated_at": "2016-12-13T07:12:50.000Z",
+    "application_id": 8,
+    "configuration_id": 8,
+    "text_feedbacks": [
+      {
+        "id": 351,
+        "text": "***",
+        "mechanism_id": 7,
+        "feedback_id": 267
+      },
+      {
+        "id": 352,
+        "text": "",
+        "mechanism_id": 44,
+        "feedback_id": 267
+      }
+    ]
+  },
+  {
+    "feedback_statuses": null,
+    "read": null,
+    "id": 268,
+    "title": "Feedback",
+    "user_identification": "",
+    "language": "pl",
+    "created_at": "2016-12-13T07:50:05.000Z",
+    "updated_at": "2016-12-13T07:50:05.000Z",
+    "application_id": 8,
+    "configuration_id": 8,
+    "text_feedbacks": [
+      {
+        "id": 353,
+        "text": "super ",
+        "mechanism_id": 7,
+        "feedback_id": 268
+      },
+      {
+        "id": 354,
+        "text": "r.trans@op.pl",
+        "mechanism_id": 44,
+        "feedback_id": 268
+      }
+    ]
+  },
+  {
+    "feedback_statuses": null,
+    "read": null,
+    "id": 269,
+    "title": "Feedback",
+    "user_identification": "",
+    "language": "de",
+    "created_at": "2016-12-13T07:53:31.000Z",
+    "updated_at": "2016-12-13T07:53:31.000Z",
+    "application_id": 8,
+    "configuration_id": 8,
+    "text_feedbacks": [
+      {
+        "id": 355,
+        "text": "Sehr geehrte Damen und Herren,\n\nbei jeder Berechnung zeigt mir eine kleine Maske an, dass die Mautgebühren Nettopreise sind. Das nervt. Wo kann ich das abschalten?\n\nM.f.G.\nThomas Kramer\nWiesner Transporte GmbH",
+        "mechanism_id": 7,
+        "feedback_id": 269
+      },
+      {
+        "id": 356,
+        "text": "thomas.kramer@wiesner-trans.de",
+        "mechanism_id": 44,
+        "feedback_id": 269
+      }
+    ]
+  },
+  {
+    "feedback_statuses": null,
+    "read": null,
+    "id": 270,
+    "title": "Feedback",
+    "user_identification": "",
+    "language": "de",
+    "created_at": "2016-12-13T07:53:32.000Z",
+    "updated_at": "2016-12-13T07:53:32.000Z",
+    "application_id": 8,
+    "configuration_id": 8,
+    "text_feedbacks": [
+      {
+        "id": 357,
+        "text": "Sehr geehrte Damen und Herren,\n\nbei jeder Berechnung zeigt mir eine kleine Maske an, dass die Mautgebühren Nettopreise sind. Das nervt. Wo kann ich das abschalten?\n\nM.f.G.\nThomas Kramer\nWiesner Transporte GmbH",
+        "mechanism_id": 7,
+        "feedback_id": 270
+      },
+      {
+        "id": 358,
+        "text": "thomas.kramer@wiesner-trans.de",
+        "mechanism_id": 44,
+        "feedback_id": 270
+      }
+    ]
+  },
+  {
+    "feedback_statuses": null,
+    "read": null,
+    "id": 271,
+    "title": "Feedback",
+    "user_identification": "",
+    "language": "de",
+    "created_at": "2016-12-13T08:07:44.000Z",
+    "updated_at": "2016-12-13T08:07:44.000Z",
+    "application_id": 8,
+    "configuration_id": 8,
+    "text_feedbacks": [
+      {
+        "id": 359,
+        "text": "Test Feedback ",
+        "mechanism_id": 7,
+        "feedback_id": 271
+      },
+      {
+        "id": 360,
+        "text": "ronnieschaniel@gmail.com",
+        "mechanism_id": 44,
+        "feedback_id": 271
+      }
+    ]
+  },
+  {
+    "feedback_statuses": null,
+    "read": null,
+    "id": 272,
+    "title": "Feedback",
+    "user_identification": "",
+    "language": "de",
+    "created_at": "2016-12-13T08:14:14.000Z",
+    "updated_at": "2016-12-13T08:14:14.000Z",
+    "application_id": 8,
+    "configuration_id": 8,
+    "text_feedbacks": [
+      {
+        "id": 361,
+        "text": "Habe gerade versucht meine Tour auszudrucken. \nLeider zum wiederholten male ohne funktion. \nKarte, Route nur ein graues bild.",
+        "mechanism_id": 7,
+        "feedback_id": 272
+      },
+      {
+        "id": 362,
+        "text": "michael.sefrin@ernstings-family.com",
+        "mechanism_id": 44,
+        "feedback_id": 272
+      }
+    ]
+  },
+  {
+    "feedback_statuses": null,
+    "read": null,
+    "id": 273,
+    "title": "Feedback",
+    "user_identification": "",
+    "language": "de",
+    "created_at": "2016-12-13T08:23:19.000Z",
+    "updated_at": "2016-12-13T08:23:19.000Z",
+    "application_id": 8,
+    "configuration_id": 8,
+    "text_feedbacks": [
+      {
+        "id": 363,
+        "text": "Last test feedback. Werde unsere Feedbacks dann noch löschen. Aktualisiere grad das reporting tool.\n\nRouting Resultat\n3 Sterne",
+        "mechanism_id": 7,
+        "feedback_id": 273
+      },
+      {
+        "id": 364,
+        "text": "ronnieschaniel@gmail.com",
+        "mechanism_id": 44,
+        "feedback_id": 273
+      }
+    ]
+  },
+  {
+    "feedback_statuses": null,
+    "read": null,
+    "id": 274,
+    "title": "Feedback",
+    "user_identification": "",
+    "language": "de",
+    "created_at": "2016-12-13T09:09:33.000Z",
+    "updated_at": "2016-12-13T09:09:33.000Z",
+    "application_id": 8,
+    "configuration_id": 8,
+    "text_feedbacks": [
+      {
+        "id": 365,
+        "text": "Ein tolles Programm, einzig und allein die Eingabe von Zielkoordinaten ist etwas kompliziert. Es wäre hier von Vorteil das man statt der Adresseingabe auf eine Dezimalstelleneingabe umschalten könnte. zurzeit muss man immer ein @ und dann die Koordinaten. ",
+        "mechanism_id": 7,
+        "feedback_id": 274
+      },
+      {
+        "id": 366,
+        "text": "m.kopper@leeb-balkone.com",
+        "mechanism_id": 44,
+        "feedback_id": 274
+      }
+    ]
+  },
+  {
+    "feedback_statuses": null,
+    "read": null,
+    "id": 275,
+    "title": "Feedback",
+    "user_identification": "",
+    "language": "de",
+    "created_at": "2016-12-13T09:51:32.000Z",
+    "updated_at": "2016-12-13T09:51:32.000Z",
+    "application_id": 8,
+    "configuration_id": 8,
+    "text_feedbacks": [
+      {
+        "id": 367,
+        "text": "",
+        "mechanism_id": 7,
+        "feedback_id": 275
+      },
+      {
+        "id": 368,
+        "text": "",
+        "mechanism_id": 44,
+        "feedback_id": 275
+      }
+    ]
+  },
+  {
+    "feedback_statuses": null,
+    "read": null,
+    "id": 276,
+    "title": "Feedback",
+    "user_identification": "",
+    "language": "de",
+    "created_at": "2016-12-13T09:51:34.000Z",
+    "updated_at": "2016-12-13T09:51:34.000Z",
+    "application_id": 8,
+    "configuration_id": 8,
+    "text_feedbacks": [
+      {
+        "id": 369,
+        "text": "",
+        "mechanism_id": 7,
+        "feedback_id": 276
+      },
+      {
+        "id": 370,
+        "text": "",
+        "mechanism_id": 44,
+        "feedback_id": 276
+      }
+    ]
+  },
+  {
+    "feedback_statuses": null,
+    "read": null,
+    "id": 277,
+    "title": "Feedback",
+    "user_identification": "",
+    "language": "en",
+    "created_at": "2016-12-13T09:56:13.000Z",
+    "updated_at": "2016-12-13T09:56:13.000Z",
+    "application_id": 8,
+    "configuration_id": 8,
+    "text_feedbacks": [
+      {
+        "id": 371,
+        "text": "Client constantly crashes and slows down so much that it is impossible to use. This happens several times a week",
+        "mechanism_id": 7,
+        "feedback_id": 277
+      },
+      {
+        "id": 372,
+        "text": "",
+        "mechanism_id": 44,
+        "feedback_id": 277
+      }
+    ]
+  },
+  {
+    "feedback_statuses": null,
+    "read": null,
+    "id": 278,
+    "title": "Feedback",
+    "user_identification": "",
+    "language": "de",
+    "created_at": "2016-12-13T09:57:03.000Z",
+    "updated_at": "2016-12-13T09:57:03.000Z",
+    "application_id": 8,
+    "configuration_id": 8,
+    "text_feedbacks": [
+      {
+        "id": 373,
+        "text": "M\u0026G ist ein sehr guter Routenplaner. Beim Maut muss man Abstriche machen, dieser ist teilweise nicht realistisch, besonders Österreich.",
+        "mechanism_id": 7,
+        "feedback_id": 278
+      },
+      {
+        "id": 374,
+        "text": "info@timex-kuriere.de",
+        "mechanism_id": 44,
+        "feedback_id": 278
+      }
+    ]
+  },
+  {
+    "feedback_statuses": null,
+    "read": null,
+    "id": 279,
+    "title": "Feedback",
+    "user_identification": "",
+    "language": "de",
+    "created_at": "2016-12-13T09:59:45.000Z",
+    "updated_at": "2016-12-13T09:59:45.000Z",
+    "application_id": 8,
+    "configuration_id": 8,
+    "text_feedbacks": [
+      {
+        "id": 375,
+        "text": "Support läuft nicht. Gibt's Probleme? Das Programm ist sehr langsam !!!",
+        "mechanism_id": 7,
+        "feedback_id": 279
+      },
+      {
+        "id": 376,
+        "text": "info@brueggelambert.de",
+        "mechanism_id": 44,
+        "feedback_id": 279
+      }
+    ]
+  },
+  {
+    "feedback_statuses": null,
+    "read": null,
+    "id": 280,
+    "title": "Feedback",
+    "user_identification": "",
+    "language": "de",
+    "created_at": "2016-12-13T10:09:30.000Z",
+    "updated_at": "2016-12-13T10:09:30.000Z",
+    "application_id": 8,
+    "configuration_id": 8,
+    "text_feedbacks": [
+      {
+        "id": 377,
+        "text": "t",
+        "mechanism_id": 7,
+        "feedback_id": 280
+      },
+      {
+        "id": 378,
+        "text": "",
+        "mechanism_id": 44,
+        "feedback_id": 280
+      }
+    ]
+  },
+  {
+    "feedback_statuses": null,
+    "read": null,
+    "id": 281,
+    "title": "Feedback",
+    "user_identification": "",
+    "language": "en",
+    "created_at": "2016-12-13T10:09:32.000Z",
+    "updated_at": "2016-12-13T10:09:32.000Z",
+    "application_id": 8,
+    "configuration_id": 8,
+    "text_feedbacks": [
+      {
+        "id": 379,
+        "text": "it isn't always easy to save the  trips ,  i send the trips to my drivers in a PDF file ,, i go to print , then  save as ....   then i can send via computer ,, is there an easuer way ? ",
+        "mechanism_id": 7,
+        "feedback_id": 281
+      },
+      {
+        "id": 380,
+        "text": "philip.nock@telenet.be",
+        "mechanism_id": 44,
+        "feedback_id": 281
+      }
+    ]
+  },
+  {
+    "feedback_statuses": null,
+    "read": null,
+    "id": 282,
+    "title": "Feedback",
+    "user_identification": "",
+    "language": "it",
+    "created_at": "2016-12-13T10:25:39.000Z",
+    "updated_at": "2016-12-13T10:25:39.000Z",
+    "application_id": 8,
+    "configuration_id": 8,
+    "text_feedbacks": [
+      {
+        "id": 381,
+        "text": "",
+        "mechanism_id": 7,
+        "feedback_id": 282
+      },
+      {
+        "id": 382,
+        "text": "",
+        "mechanism_id": 44,
+        "feedback_id": 282
+      }
+    ]
+  },
+  {
+    "feedback_statuses": null,
+    "read": null,
+    "id": 283,
+    "title": "Feedback",
+    "user_identification": "",
+    "language": "en",
+    "created_at": "2016-12-13T11:11:41.000Z",
+    "updated_at": "2016-12-13T11:11:41.000Z",
+    "application_id": 8,
+    "configuration_id": 8,
+    "text_feedbacks": [
+      {
+        "id": 383,
+        "text": "sad",
+        "mechanism_id": 7,
+        "feedback_id": 283
+      },
+      {
+        "id": 384,
+        "text": "",
+        "mechanism_id": 44,
+        "feedback_id": 283
+      }
+    ]
+  },
+  {
+    "feedback_statuses": null,
+    "read": null,
+    "id": 284,
+    "title": "Feedback",
+    "user_identification": "",
+    "language": "en",
+    "created_at": "2016-12-13T11:12:08.000Z",
+    "updated_at": "2016-12-13T11:12:08.000Z",
+    "application_id": 8,
+    "configuration_id": 8,
+    "text_feedbacks": [
+      {
+        "id": 385,
+        "text": "sadfffadf",
+        "mechanism_id": 7,
+        "feedback_id": 284
+      },
+      {
+        "id": 386,
+        "text": "",
+        "mechanism_id": 44,
+        "feedback_id": 284
+      }
+    ]
+  },
+  {
+    "feedback_statuses": null,
+    "read": null,
+    "id": 285,
+    "title": "Feedback",
+    "user_identification": "",
+    "language": "en",
+    "created_at": "2016-12-13T11:12:34.000Z",
+    "updated_at": "2016-12-13T11:12:34.000Z",
+    "application_id": 8,
+    "configuration_id": 8,
+    "text_feedbacks": [
+      {
+        "id": 387,
+        "text": "sadfffadf",
+        "mechanism_id": 7,
+        "feedback_id": 285
+      },
+      {
+        "id": 388,
+        "text": "",
+        "mechanism_id": 44,
+        "feedback_id": 285
+      }
+    ]
+  },
+  {
+    "feedback_statuses": null,
+    "read": null,
+    "id": 286,
+    "title": "Feedback",
+    "user_identification": "",
+    "language": "de",
+    "created_at": "2016-12-13T11:22:00.000Z",
+    "updated_at": "2016-12-13T11:22:00.000Z",
+    "application_id": 8,
+    "configuration_id": 8,
+    "text_feedbacks": [
+      {
+        "id": 389,
+        "text": "",
+        "mechanism_id": 7,
+        "feedback_id": 286
+      },
+      {
+        "id": 390,
+        "text": "",
+        "mechanism_id": 44,
+        "feedback_id": 286
+      }
+    ]
+  },
+  {
+    "feedback_statuses": null,
+    "read": null,
+    "id": 287,
+    "title": "Feedback",
+    "user_identification": "",
+    "language": "en",
+    "created_at": "2016-12-13T12:21:45.000Z",
+    "updated_at": "2016-12-13T12:21:45.000Z",
+    "application_id": 8,
+    "configuration_id": 8,
+    "text_feedbacks": [
+      {
+        "id": 391,
+        "text": "hello, \ntrying to calculate ,  some large routes whit 7-8 point .. never calculates",
+        "mechanism_id": 7,
+        "feedback_id": 287
+      },
+      {
+        "id": 392,
+        "text": "",
+        "mechanism_id": 44,
+        "feedback_id": 287
+      }
+    ]
+  },
+  {
+    "feedback_statuses": null,
+    "read": null,
+    "id": 288,
+    "title": "Feedback",
+    "user_identification": "",
+    "language": "nl",
+    "created_at": "2016-12-13T12:32:29.000Z",
+    "updated_at": "2016-12-13T12:32:29.000Z",
+    "application_id": 8,
+    "configuration_id": 8,
+    "text_feedbacks": [
+      {
+        "id": 393,
+        "text": "",
+        "mechanism_id": 7,
+        "feedback_id": 288
+      },
+      {
+        "id": 394,
+        "text": "",
+        "mechanism_id": 44,
+        "feedback_id": 288
+      }
+    ]
+  },
+  {
+    "feedback_statuses": null,
+    "read": null,
+    "id": 289,
+    "title": "Feedback",
+    "user_identification": "",
+    "language": "nl",
+    "created_at": "2016-12-13T12:41:41.000Z",
+    "updated_at": "2016-12-13T12:41:41.000Z",
+    "application_id": 8,
+    "configuration_id": 8,
+    "text_feedbacks": [
+      {
+        "id": 395,
+        "text": "kan beter de km komen niet goed overeen met wat er gereden word.",
+        "mechanism_id": 7,
+        "feedback_id": 289
+      },
+      {
+        "id": 396,
+        "text": "",
+        "mechanism_id": 44,
+        "feedback_id": 289
+      }
+    ]
+  },
+  {
+    "feedback_statuses": null,
+    "read": null,
+    "id": 290,
+    "title": "Feedback",
+    "user_identification": "",
+    "language": "it",
+    "created_at": "2016-12-13T13:54:37.000Z",
+    "updated_at": "2016-12-13T13:54:37.000Z",
+    "application_id": 8,
+    "configuration_id": 8,
+    "text_feedbacks": [
+      {
+        "id": 397,
+        "text": "",
+        "mechanism_id": 7,
+        "feedback_id": 290
+      },
+      {
+        "id": 398,
+        "text": "",
+        "mechanism_id": 44,
+        "feedback_id": 290
+      }
+    ]
+  },
+  {
+    "feedback_statuses": null,
+    "read": null,
+    "id": 291,
+    "title": "Feedback",
+    "user_identification": "",
+    "language": "de",
+    "created_at": "2016-12-13T14:58:36.000Z",
+    "updated_at": "2016-12-13T14:58:36.000Z",
+    "application_id": 8,
+    "configuration_id": 8,
+    "text_feedbacks": [
+      {
+        "id": 399,
+        "text": "",
+        "mechanism_id": 7,
+        "feedback_id": 291
+      },
+      {
+        "id": 400,
+        "text": "",
+        "mechanism_id": 44,
+        "feedback_id": 291
+      }
+    ]
+  },
+  {
+    "feedback_statuses": null,
+    "read": null,
+    "id": 292,
+    "title": "Feedback",
+    "user_identification": "",
+    "language": "cs",
+    "created_at": "2016-12-13T15:40:54.000Z",
+    "updated_at": "2016-12-13T15:40:54.000Z",
+    "application_id": 8,
+    "configuration_id": 8,
+    "text_feedbacks": [
+      {
+        "id": 401,
+        "text": "",
+        "mechanism_id": 7,
+        "feedback_id": 292
+      },
+      {
+        "id": 402,
+        "text": "",
+        "mechanism_id": 44,
+        "feedback_id": 292
+      }
+    ]
+  },
+  {
+    "feedback_statuses": null,
+    "read": null,
+    "id": 293,
+    "title": "Feedback",
+    "user_identification": "",
+    "language": "cs",
+    "created_at": "2016-12-13T15:41:24.000Z",
+    "updated_at": "2016-12-13T15:41:24.000Z",
+    "application_id": 8,
+    "configuration_id": 8,
+    "text_feedbacks": [
+      {
+        "id": 403,
+        "text": "",
+        "mechanism_id": 7,
+        "feedback_id": 293
+      },
+      {
+        "id": 404,
+        "text": "",
+        "mechanism_id": 44,
+        "feedback_id": 293
+      }
+    ]
+  },
+  {
+    "feedback_statuses": null,
+    "read": null,
+    "id": 294,
+    "title": "Feedback",
+    "user_identification": "",
+    "language": "de",
+    "created_at": "2016-12-14T06:19:50.000Z",
+    "updated_at": "2016-12-14T06:19:50.000Z",
+    "application_id": 8,
+    "configuration_id": 8,
+    "text_feedbacks": [
+      {
+        "id": 405,
+        "text": "",
+        "mechanism_id": 7,
+        "feedback_id": 294
+      },
+      {
+        "id": 406,
+        "text": "",
+        "mechanism_id": 44,
+        "feedback_id": 294
+      }
+    ]
+  },
+  {
+    "feedback_statuses": null,
+    "read": null,
+    "id": 295,
+    "title": "Feedback",
+    "user_identification": "",
+    "language": "cs",
+    "created_at": "2016-12-14T07:13:32.000Z",
+    "updated_at": "2016-12-14T07:13:32.000Z",
+    "application_id": 8,
+    "configuration_id": 8,
+    "text_feedbacks": [
+      {
+        "id": 407,
+        "text": "super systém....jen by to chtělo rozdělit i na dodávky do 3,5 t ",
+        "mechanism_id": 7,
+        "feedback_id": 295
+      },
+      {
+        "id": 408,
+        "text": "ventobohemia@ventobohemia.cz",
+        "mechanism_id": 44,
+        "feedback_id": 295
+      }
+    ]
+  },
+  {
+    "feedback_statuses": null,
+    "read": null,
+    "id": 296,
+    "title": "Feedback",
+    "user_identification": "",
+    "language": "de",
+    "created_at": "2016-12-14T08:14:03.000Z",
+    "updated_at": "2016-12-14T08:14:03.000Z",
+    "application_id": 8,
+    "configuration_id": 8,
+    "text_feedbacks": [
+      {
+        "id": 409,
+        "text": "Wir sind zufrieden mit Ihrer Software!",
+        "mechanism_id": 7,
+        "feedback_id": 296
+      },
+      {
+        "id": 410,
+        "text": "bst-kalk@t-online.de",
+        "mechanism_id": 44,
+        "feedback_id": 296
+      }
+    ]
+  },
+  {
+    "feedback_statuses": null,
+    "read": null,
+    "id": 297,
+    "title": "Feedback",
+    "user_identification": "",
+    "language": "cs",
+    "created_at": "2016-12-14T09:32:38.000Z",
+    "updated_at": "2016-12-14T09:32:38.000Z",
+    "application_id": 8,
+    "configuration_id": 8,
+    "text_feedbacks": [
+      {
+        "id": 411,
+        "text": "OK",
+        "mechanism_id": 7,
+        "feedback_id": 297
+      },
+      {
+        "id": 412,
+        "text": "valasi-trans@valasi-trans.cz",
+        "mechanism_id": 44,
+        "feedback_id": 297
+      }
+    ]
+  },
+  {
+    "feedback_statuses": null,
+    "read": null,
+    "id": 298,
+    "title": "Feedback",
+    "user_identification": "",
+    "language": "cs",
+    "created_at": "2016-12-14T09:33:42.000Z",
+    "updated_at": "2016-12-14T09:33:42.000Z",
+    "application_id": 8,
+    "configuration_id": 8,
+    "text_feedbacks": [
+      {
+        "id": 413,
+        "text": "",
+        "mechanism_id": 7,
+        "feedback_id": 298
+      },
+      {
+        "id": 414,
+        "text": "",
+        "mechanism_id": 44,
+        "feedback_id": 298
+      }
+    ]
+  },
+  {
+    "feedback_statuses": null,
+    "read": null,
+    "id": 299,
+    "title": "Feedback",
+    "user_identification": "",
+    "language": "de",
+    "created_at": "2016-12-14T10:10:09.000Z",
+    "updated_at": "2016-12-14T10:10:09.000Z",
+    "application_id": 8,
+    "configuration_id": 8,
+    "text_feedbacks": [
+      {
+        "id": 415,
+        "text": "Alles gut",
+        "mechanism_id": 7,
+        "feedback_id": 299
+      },
+      {
+        "id": 416,
+        "text": "",
+        "mechanism_id": 44,
+        "feedback_id": 299
+      }
+    ]
+  },
+  {
+    "feedback_statuses": null,
+    "read": null,
+    "id": 300,
+    "title": "Feedback",
+    "user_identification": "",
+    "language": "de",
+    "created_at": "2016-12-14T11:49:41.000Z",
+    "updated_at": "2016-12-14T11:49:41.000Z",
+    "application_id": 8,
+    "configuration_id": 8,
+    "text_feedbacks": [
+      {
+        "id": 417,
+        "text": "",
+        "mechanism_id": 7,
+        "feedback_id": 300
+      },
+      {
+        "id": 418,
+        "text": "",
+        "mechanism_id": 44,
+        "feedback_id": 300
+      }
+    ]
+  },
+  {
+    "feedback_statuses": null,
+    "read": null,
+    "id": 301,
+    "title": "Feedback",
+    "user_identification": "",
+    "language": "de",
+    "created_at": "2016-12-14T11:49:44.000Z",
+    "updated_at": "2016-12-14T11:49:44.000Z",
+    "application_id": 8,
+    "configuration_id": 8,
+    "text_feedbacks": [
+      {
+        "id": 419,
+        "text": "",
+        "mechanism_id": 7,
+        "feedback_id": 301
+      },
+      {
+        "id": 420,
+        "text": "",
+        "mechanism_id": 44,
+        "feedback_id": 301
+      }
+    ]
+  },
+  {
+    "feedback_statuses": null,
+    "read": null,
+    "id": 302,
+    "title": "Feedback",
+    "user_identification": "",
+    "language": "en",
+    "created_at": "2016-12-14T12:21:55.000Z",
+    "updated_at": "2016-12-14T12:21:55.000Z",
+    "application_id": 8,
+    "configuration_id": 8,
+    "text_feedbacks": [
+      {
+        "id": 421,
+        "text": "Das ist ein Feedback in der Beta. Wo kommen jetzt die Feedbacks an?\n\n",
+        "mechanism_id": 7,
+        "feedback_id": 302
+      },
+      {
+        "id": 422,
+        "text": "holger.indervoort@googlemail.com",
+        "mechanism_id": 44,
+        "feedback_id": 302
+      }
+    ]
+  },
+  {
+    "feedback_statuses": null,
+    "read": null,
+    "id": 303,
+    "title": "Feedback",
+    "user_identification": "",
+    "language": "de",
+    "created_at": "2016-12-14T12:58:09.000Z",
+    "updated_at": "2016-12-14T12:58:09.000Z",
+    "application_id": 8,
+    "configuration_id": 8,
+    "text_feedbacks": [
+      {
+        "id": 423,
+        "text": "Das Mautgebühren netto sind wissen wir. Kann man diese Meldung auch wieder löschen. Denn sie nervt ein bischen. ansonsten alles gut.",
+        "mechanism_id": 7,
+        "feedback_id": 303
+      },
+      {
+        "id": 424,
+        "text": "info@td-transport.de",
+        "mechanism_id": 44,
+        "feedback_id": 303
+      }
+    ]
+  },
+  {
+    "feedback_statuses": null,
+    "read": null,
+    "id": 304,
+    "title": "Feedback",
+    "user_identification": "",
+    "language": "de",
+    "created_at": "2016-12-14T14:21:11.000Z",
+    "updated_at": "2016-12-14T14:21:11.000Z",
+    "application_id": 8,
+    "configuration_id": 8,
+    "text_feedbacks": [
+      {
+        "id": 425,
+        "text": "",
+        "mechanism_id": 7,
+        "feedback_id": 304
+      },
+      {
+        "id": 426,
+        "text": "",
+        "mechanism_id": 44,
+        "feedback_id": 304
+      }
+    ]
+  },
+  {
+    "feedback_statuses": null,
+    "read": null,
+    "id": 307,
+    "title": "Feedback",
+    "user_identification": "",
+    "language": "en",
+    "created_at": "2016-12-14T17:59:16.000Z",
+    "updated_at": "2016-12-14T17:59:16.000Z",
+    "application_id": 8,
+    "configuration_id": 8,
+    "text_feedbacks": [
+      {
+        "id": 431,
+        "text": "Hello, there is wrong calculation of costs for Brenner motorway. E.g. if I calculate longer route over Brenner motorway (e.g. Ljubljana - Lienz - Innsbruck), costs for Brenner motorway is much higher (83,3 €) than real (42 €).\nBy making of route, restriction for trucks are visible just at zooming 100 or 200 m, this is problem, it is not good.\n\nBest regards,\nVelimir Jendriš\n",
+        "mechanism_id": 7,
+        "feedback_id": 307
+      },
+      {
+        "id": 432,
+        "text": "vjendris@gmail.com",
+        "mechanism_id": 44,
+        "feedback_id": 307
+      }
+    ]
+  },
+  {
+    "feedback_statuses": null,
+    "read": null,
+    "id": 308,
+    "title": "Feedback",
+    "user_identification": "",
+    "language": "cs",
+    "created_at": "2016-12-15T08:51:42.000Z",
+    "updated_at": "2016-12-15T08:51:42.000Z",
+    "application_id": 8,
+    "configuration_id": 8,
+    "text_feedbacks": [
+      {
+        "id": 433,
+        "text": "",
+        "mechanism_id": 7,
+        "feedback_id": 308
+      },
+      {
+        "id": 434,
+        "text": "",
+        "mechanism_id": 44,
+        "feedback_id": 308
+      }
+    ]
+  },
+  {
+    "feedback_statuses": null,
+    "read": null,
+    "id": 309,
+    "title": "Feedback",
+    "user_identification": "",
+    "language": "de",
+    "created_at": "2016-12-15T09:30:54.000Z",
+    "updated_at": "2016-12-15T09:30:54.000Z",
+    "application_id": 8,
+    "configuration_id": 8,
+    "text_feedbacks": [
+      {
+        "id": 435,
+        "text": "",
+        "mechanism_id": 7,
+        "feedback_id": 309
+      },
+      {
+        "id": 436,
+        "text": "",
+        "mechanism_id": 44,
+        "feedback_id": 309
+      }
+    ]
+  },
+  {
+    "feedback_statuses": null,
+    "read": null,
+    "id": 310,
+    "title": "Feedback",
+    "user_identification": "",
+    "language": "de",
+    "created_at": "2016-12-15T13:07:42.000Z",
+    "updated_at": "2016-12-15T13:07:42.000Z",
+    "application_id": 8,
+    "configuration_id": 8,
+    "text_feedbacks": [
+      {
+        "id": 437,
+        "text": "",
+        "mechanism_id": 7,
+        "feedback_id": 310
+      },
+      {
+        "id": 438,
+        "text": "",
+        "mechanism_id": 44,
+        "feedback_id": 310
+      }
+    ]
+  },
+  {
+    "feedback_statuses": null,
+    "read": null,
+    "id": 311,
+    "title": "Feedback",
+    "user_identification": "",
+    "language": "de",
+    "created_at": "2016-12-15T13:07:43.000Z",
+    "updated_at": "2016-12-15T13:07:43.000Z",
+    "application_id": 8,
+    "configuration_id": 8,
+    "text_feedbacks": [
+      {
+        "id": 439,
+        "text": "",
+        "mechanism_id": 7,
+        "feedback_id": 311
+      },
+      {
+        "id": 440,
+        "text": "",
+        "mechanism_id": 44,
+        "feedback_id": 311
+      }
+    ]
+  },
+  {
+    "feedback_statuses": null,
+    "read": null,
+    "id": 312,
+    "title": "Feedback",
+    "user_identification": "",
+    "language": "de",
+    "created_at": "2016-12-15T13:07:45.000Z",
+    "updated_at": "2016-12-15T13:07:45.000Z",
+    "application_id": 8,
+    "configuration_id": 8,
+    "text_feedbacks": [
+      {
+        "id": 441,
+        "text": "",
+        "mechanism_id": 7,
+        "feedback_id": 312
+      },
+      {
+        "id": 442,
+        "text": "",
+        "mechanism_id": 44,
+        "feedback_id": 312
+      }
+    ]
+  },
+  {
+    "feedback_statuses": null,
+    "read": null,
+    "id": 313,
+    "title": "Feedback",
+    "user_identification": "",
+    "language": "cs",
+    "created_at": "2016-12-15T15:22:15.000Z",
+    "updated_at": "2016-12-15T15:22:15.000Z",
+    "application_id": 8,
+    "configuration_id": 8,
+    "text_feedbacks": [
+      {
+        "id": 443,
+        "text": "Trasování nákladních vozidel neodpovídá mnohdy skutečným trasám, kudy mohou řidiči jet a tím ušetřit nemalé množství km.\nNemyslím tím samozřejmě trasy tipu \"zkratky neznámými ulicemi atd...\"\nNa tomto by bylo potřeba zapracovat.... \nDěkuji, Zeisel, ZOŠI TRANS, s.r.o.\n",
+        "mechanism_id": 7,
+        "feedback_id": 313
+      },
+      {
+        "id": 444,
+        "text": "",
+        "mechanism_id": 44,
+        "feedback_id": 313
+      }
+    ]
+  },
+  {
+    "feedback_statuses": null,
+    "read": null,
+    "id": 314,
+    "title": "Feedback",
+    "user_identification": "",
+    "language": "cs",
+    "created_at": "2016-12-15T15:22:18.000Z",
+    "updated_at": "2016-12-15T15:22:18.000Z",
+    "application_id": 8,
+    "configuration_id": 8,
+    "text_feedbacks": [
+      {
+        "id": 445,
+        "text": "Trasování nákladních vozidel neodpovídá mnohdy skutečným trasám, kudy mohou řidiči jet a tím ušetřit nemalé množství km.\nNemyslím tím samozřejmě trasy tipu \"zkratky neznámými ulicemi atd...\"\nNa tomto by bylo potřeba zapracovat.... \nDěkuji, Zeisel, ZOŠI TRANS, s.r.o.\n",
+        "mechanism_id": 7,
+        "feedback_id": 314
+      },
+      {
+        "id": 446,
+        "text": "",
+        "mechanism_id": 44,
+        "feedback_id": 314
+      }
+    ]
+  },
+  {
+    "feedback_statuses": null,
+    "read": null,
+    "id": 315,
+    "title": "Feedback",
+    "user_identification": "",
+    "language": "cs",
+    "created_at": "2016-12-15T15:22:18.000Z",
+    "updated_at": "2016-12-15T15:22:18.000Z",
+    "application_id": 8,
+    "configuration_id": 8,
+    "text_feedbacks": [
+      {
+        "id": 447,
+        "text": "Trasování nákladních vozidel neodpovídá mnohdy skutečným trasám, kudy mohou řidiči jet a tím ušetřit nemalé množství km.\nNemyslím tím samozřejmě trasy tipu \"zkratky neznámými ulicemi atd...\"\nNa tomto by bylo potřeba zapracovat.... \nDěkuji, Zeisel, ZOŠI TRANS, s.r.o.\n",
+        "mechanism_id": 7,
+        "feedback_id": 315
+      },
+      {
+        "id": 448,
+        "text": "",
+        "mechanism_id": 44,
+        "feedback_id": 315
+      }
+    ]
+  },
+  {
+    "feedback_statuses": null,
+    "read": null,
+    "id": 316,
+    "title": "Feedback",
+    "user_identification": "",
+    "language": "en",
+    "created_at": "2016-12-15T17:16:29.000Z",
+    "updated_at": "2016-12-15T17:16:29.000Z",
+    "application_id": 8,
+    "configuration_id": 8,
+    "text_feedbacks": [
+      {
+        "id": 449,
+        "text": "",
+        "mechanism_id": 7,
+        "feedback_id": 316
+      },
+      {
+        "id": 450,
+        "text": "",
+        "mechanism_id": 44,
+        "feedback_id": 316
+      }
+    ]
+  },
+  {
+    "feedback_statuses": null,
+    "read": null,
+    "id": 317,
+    "title": "Feedback",
+    "user_identification": "",
+    "language": "de",
+    "created_at": "2016-12-16T07:17:13.000Z",
+    "updated_at": "2016-12-16T07:17:13.000Z",
+    "application_id": 8,
+    "configuration_id": 8,
+    "text_feedbacks": [
+      {
+        "id": 451,
+        "text": "Kann nicht drucken. Kann teilweise die Aufentaltsdauer nicht ändern. ",
+        "mechanism_id": 7,
+        "feedback_id": 317
+      },
+      {
+        "id": 452,
+        "text": "michael.sefrin@ernstings-family.com",
+        "mechanism_id": 44,
+        "feedback_id": 317
+      }
+    ]
+  },
+  {
+    "feedback_statuses": null,
+    "read": null,
+    "id": 318,
+    "title": "Feedback",
+    "user_identification": "",
+    "language": "pl",
+    "created_at": "2016-12-16T09:20:11.000Z",
+    "updated_at": "2016-12-16T09:20:11.000Z",
+    "application_id": 8,
+    "configuration_id": 8,
+    "text_feedbacks": [
+      {
+        "id": 453,
+        "text": "",
+        "mechanism_id": 7,
+        "feedback_id": 318
+      },
+      {
+        "id": 454,
+        "text": "",
+        "mechanism_id": 44,
+        "feedback_id": 318
+      }
+    ]
+  },
+  {
+    "feedback_statuses": null,
+    "read": null,
+    "id": 319,
+    "title": "Feedback",
+    "user_identification": "",
+    "language": "pl",
+    "created_at": "2016-12-16T09:20:48.000Z",
+    "updated_at": "2016-12-16T09:20:48.000Z",
+    "application_id": 8,
+    "configuration_id": 8,
+    "text_feedbacks": [
+      {
+        "id": 455,
+        "text": "",
+        "mechanism_id": 7,
+        "feedback_id": 319
+      },
+      {
+        "id": 456,
+        "text": "office.vivaldi@gmail.com",
+        "mechanism_id": 44,
+        "feedback_id": 319
+      }
+    ]
+  },
+  {
+    "feedback_statuses": null,
+    "read": null,
+    "id": 320,
+    "title": "Feedback",
+    "user_identification": "",
+    "language": "pl",
+    "created_at": "2016-12-16T11:29:48.000Z",
+    "updated_at": "2016-12-16T11:29:48.000Z",
+    "application_id": 8,
+    "configuration_id": 8,
+    "text_feedbacks": [
+      {
+        "id": 457,
+        "text": "Brak możliwości zaplanowania w kategorii \"pojazd\" autokarów oraz ich personalizowanie. ",
+        "mechanism_id": 7,
+        "feedback_id": 320
+      },
+      {
+        "id": 458,
+        "text": "w.drzymala@mercus.com.pl",
+        "mechanism_id": 44,
+        "feedback_id": 320
+      }
+    ]
+  },
+  {
+    "feedback_statuses": null,
+    "read": null,
+    "id": 321,
+    "title": "Feedback",
+    "user_identification": "",
+    "language": "pl",
+    "created_at": "2016-12-16T11:29:49.000Z",
+    "updated_at": "2016-12-16T11:29:49.000Z",
+    "application_id": 8,
+    "configuration_id": 8,
+    "text_feedbacks": [
+      {
+        "id": 459,
+        "text": "Brak możliwości zaplanowania w kategorii \"pojazd\" autokarów oraz ich personalizowanie. ",
+        "mechanism_id": 7,
+        "feedback_id": 321
+      },
+      {
+        "id": 460,
+        "text": "w.drzymala@mercus.com.pl",
+        "mechanism_id": 44,
+        "feedback_id": 321
+      }
+    ]
+  },
+  {
+    "feedback_statuses": null,
+    "read": null,
+    "id": 322,
+    "title": "Feedback",
+    "user_identification": "",
+    "language": "de",
+    "created_at": "2016-12-16T13:25:44.000Z",
+    "updated_at": "2016-12-16T13:25:44.000Z",
+    "application_id": 8,
+    "configuration_id": 8,
+    "text_feedbacks": [
+      {
+        "id": 461,
+        "text": "",
+        "mechanism_id": 7,
+        "feedback_id": 322
+      },
+      {
+        "id": 462,
+        "text": "",
+        "mechanism_id": 44,
+        "feedback_id": 322
+      }
+    ]
+  },
+  {
+    "feedback_statuses": null,
+    "read": null,
+    "id": 323,
+    "title": "Feedback",
+    "user_identification": "",
+    "language": "cs",
+    "created_at": "2016-12-17T08:07:00.000Z",
+    "updated_at": "2016-12-17T08:07:00.000Z",
+    "application_id": 8,
+    "configuration_id": 8,
+    "text_feedbacks": [
+      {
+        "id": 463,
+        "text": "Dobrý den, jak jsem již několikrát avizoval, je chyba na mapě.Dálnice D1 mezi Lipníkem a Přerovem není hotová, ale program s ní počítá. \nBurian\nFirma Cemlog",
+        "mechanism_id": 7,
+        "feedback_id": 323
+      },
+      {
+        "id": 464,
+        "text": "cemlog@cemlog.cz",
+        "mechanism_id": 44,
+        "feedback_id": 323
+      }
+    ]
+  },
+  {
+    "feedback_statuses": null,
+    "read": null,
+    "id": 324,
+    "title": "Feedback",
+    "user_identification": "",
+    "language": "de",
+    "created_at": "2016-12-18T08:18:03.000Z",
+    "updated_at": "2016-12-18T08:18:03.000Z",
+    "application_id": 8,
+    "configuration_id": 8,
+    "text_feedbacks": [
+      {
+        "id": 465,
+        "text": "",
+        "mechanism_id": 7,
+        "feedback_id": 324
+      },
+      {
+        "id": 466,
+        "text": "rjfuhr@t-online.de",
+        "mechanism_id": 44,
+        "feedback_id": 324
+      }
+    ]
+  },
+  {
+    "feedback_statuses": null,
+    "read": null,
+    "id": 325,
+    "title": "Feedback",
+    "user_identification": "",
+    "language": "pl",
+    "created_at": "2016-12-18T16:30:57.000Z",
+    "updated_at": "2016-12-18T16:30:57.000Z",
+    "application_id": 8,
+    "configuration_id": 8,
+    "text_feedbacks": [
+      {
+        "id": 467,
+        "text": "",
+        "mechanism_id": 7,
+        "feedback_id": 325
+      },
+      {
+        "id": 468,
+        "text": "",
+        "mechanism_id": 44,
+        "feedback_id": 325
+      }
+    ]
+  },
+  {
+    "feedback_statuses": null,
+    "read": null,
+    "id": 326,
+    "title": "Feedback",
+    "user_identification": "",
+    "language": "pl",
+    "created_at": "2016-12-18T16:30:59.000Z",
+    "updated_at": "2016-12-18T16:30:59.000Z",
+    "application_id": 8,
+    "configuration_id": 8,
+    "text_feedbacks": [
+      {
+        "id": 469,
+        "text": "",
+        "mechanism_id": 7,
+        "feedback_id": 326
+      },
+      {
+        "id": 470,
+        "text": "",
+        "mechanism_id": 44,
+        "feedback_id": 326
+      }
+    ]
+  },
+  {
+    "feedback_statuses": null,
+    "read": null,
+    "id": 327,
+    "title": "Feedback",
+    "user_identification": "",
+    "language": "pl",
+    "created_at": "2016-12-18T20:00:26.000Z",
+    "updated_at": "2016-12-18T20:00:26.000Z",
+    "application_id": 8,
+    "configuration_id": 8,
+    "text_feedbacks": [
+      {
+        "id": 471,
+        "text": "Wszystko ok",
+        "mechanism_id": 7,
+        "feedback_id": 327
+      },
+      {
+        "id": 472,
+        "text": "",
+        "mechanism_id": 44,
+        "feedback_id": 327
+      }
+    ]
+  },
+  {
+    "feedback_statuses": null,
+    "read": null,
+    "id": 328,
+    "title": "Feedback",
+    "user_identification": "",
+    "language": "pl",
+    "created_at": "2016-12-18T20:00:27.000Z",
+    "updated_at": "2016-12-18T20:00:27.000Z",
+    "application_id": 8,
+    "configuration_id": 8,
+    "text_feedbacks": [
+      {
+        "id": 473,
+        "text": "Wszystko ok",
+        "mechanism_id": 7,
+        "feedback_id": 328
+      },
+      {
+        "id": 474,
+        "text": "",
+        "mechanism_id": 44,
+        "feedback_id": 328
+      }
+    ]
+  },
+  {
+    "feedback_statuses": null,
+    "read": null,
+    "id": 329,
+    "title": "Feedback",
+    "user_identification": "",
+    "language": "de",
+    "created_at": "2016-12-19T12:24:06.000Z",
+    "updated_at": "2016-12-19T12:24:06.000Z",
+    "application_id": 8,
+    "configuration_id": 8,
+    "text_feedbacks": [
+      {
+        "id": 475,
+        "text": "",
+        "mechanism_id": 7,
+        "feedback_id": 329
+      },
+      {
+        "id": 476,
+        "text": "",
+        "mechanism_id": 44,
+        "feedback_id": 329
+      }
+    ]
+  },
+  {
+    "feedback_statuses": null,
+    "read": null,
+    "id": 330,
+    "title": "Feedback",
+    "user_identification": "",
+    "language": "de",
+    "created_at": "2016-12-19T12:24:08.000Z",
+    "updated_at": "2016-12-19T12:24:08.000Z",
+    "application_id": 8,
+    "configuration_id": 8,
+    "text_feedbacks": [
+      {
+        "id": 477,
+        "text": "",
+        "mechanism_id": 7,
+        "feedback_id": 330
+      },
+      {
+        "id": 478,
+        "text": "",
+        "mechanism_id": 44,
+        "feedback_id": 330
+      }
+    ]
+  },
+  {
+    "feedback_statuses": null,
+    "read": null,
+    "id": 331,
+    "title": "Feedback",
+    "user_identification": "",
+    "language": "nl",
+    "created_at": "2016-12-20T07:40:23.000Z",
+    "updated_at": "2016-12-20T07:40:23.000Z",
+    "application_id": 8,
+    "configuration_id": 8,
+    "text_feedbacks": [
+      {
+        "id": 479,
+        "text": "",
+        "mechanism_id": 7,
+        "feedback_id": 331
+      },
+      {
+        "id": 480,
+        "text": "",
+        "mechanism_id": 44,
+        "feedback_id": 331
+      }
+    ]
+  },
+  {
+    "feedback_statuses": null,
+    "read": null,
+    "id": 332,
+    "title": "Feedback",
+    "user_identification": "",
+    "language": "nl",
+    "created_at": "2016-12-20T07:40:24.000Z",
+    "updated_at": "2016-12-20T07:40:24.000Z",
+    "application_id": 8,
+    "configuration_id": 8,
+    "text_feedbacks": [
+      {
+        "id": 481,
+        "text": "",
+        "mechanism_id": 7,
+        "feedback_id": 332
+      },
+      {
+        "id": 482,
+        "text": "",
+        "mechanism_id": 44,
+        "feedback_id": 332
+      }
+    ]
+  },
+  {
+    "feedback_statuses": null,
+    "read": null,
+    "id": 333,
+    "title": "Feedback",
+    "user_identification": "",
+    "language": "nl",
+    "created_at": "2016-12-20T07:40:49.000Z",
+    "updated_at": "2016-12-20T07:40:49.000Z",
+    "application_id": 8,
+    "configuration_id": 8,
+    "text_feedbacks": [
+      {
+        "id": 483,
+        "text": "",
+        "mechanism_id": 7,
+        "feedback_id": 333
+      },
+      {
+        "id": 484,
+        "text": "",
+        "mechanism_id": 44,
+        "feedback_id": 333
+      }
+    ]
+  },
+  {
+    "feedback_statuses": null,
+    "read": null,
+    "id": 334,
+    "title": "Feedback",
+    "user_identification": "",
+    "language": "en",
+    "created_at": "2016-12-20T09:14:45.000Z",
+    "updated_at": "2016-12-20T09:14:45.000Z",
+    "application_id": 8,
+    "configuration_id": 8,
+    "text_feedbacks": [
+      {
+        "id": 485,
+        "text": "",
+        "mechanism_id": 7,
+        "feedback_id": 334
+      },
+      {
+        "id": 486,
+        "text": "",
+        "mechanism_id": 44,
+        "feedback_id": 334
+      }
+    ]
+  },
+  {
+    "feedback_statuses": null,
+    "read": null,
+    "id": 335,
+    "title": "Feedback",
+    "user_identification": "",
+    "language": "en",
+    "created_at": "2016-12-20T11:11:02.000Z",
+    "updated_at": "2016-12-20T11:11:02.000Z",
+    "application_id": 8,
+    "configuration_id": 8,
+    "text_feedbacks": [
+      {
+        "id": 487,
+        "text": "",
+        "mechanism_id": 7,
+        "feedback_id": 335
+      },
+      {
+        "id": 488,
+        "text": "",
+        "mechanism_id": 44,
+        "feedback_id": 335
+      }
+    ]
+  },
+  {
+    "feedback_statuses": null,
+    "read": null,
+    "id": 336,
+    "title": "Feedback",
+    "user_identification": "",
+    "language": "en",
+    "created_at": "2016-12-20T11:11:19.000Z",
+    "updated_at": "2016-12-20T11:11:19.000Z",
+    "application_id": 8,
+    "configuration_id": 8,
+    "text_feedbacks": [
+      {
+        "id": 489,
+        "text": "",
+        "mechanism_id": 7,
+        "feedback_id": 336
+      },
+      {
+        "id": 490,
+        "text": "",
+        "mechanism_id": 44,
+        "feedback_id": 336
+      }
+    ]
+  },
+  {
+    "feedback_statuses": null,
+    "read": null,
+    "id": 337,
+    "title": "Feedback",
+    "user_identification": "",
+    "language": "en",
+    "created_at": "2016-12-20T11:13:11.000Z",
+    "updated_at": "2016-12-20T11:13:11.000Z",
+    "application_id": 8,
+    "configuration_id": 8,
+    "text_feedbacks": [
+      {
+        "id": 491,
+        "text": "super funny",
+        "mechanism_id": 7,
+        "feedback_id": 337
+      },
+      {
+        "id": 492,
+        "text": "alexandru.taflan@yahoo.com",
+        "mechanism_id": 44,
+        "feedback_id": 337
+      }
+    ]
+  },
+  {
+    "feedback_statuses": null,
+    "read": null,
+    "id": 338,
+    "title": "Feedback",
+    "user_identification": "",
+    "language": "de",
+    "created_at": "2016-12-20T16:16:46.000Z",
+    "updated_at": "2016-12-20T16:16:46.000Z",
+    "application_id": 8,
+    "configuration_id": 8,
+    "text_feedbacks": [
+      {
+        "id": 493,
+        "text": "",
+        "mechanism_id": 7,
+        "feedback_id": 338
+      },
+      {
+        "id": 494,
+        "text": "",
+        "mechanism_id": 44,
+        "feedback_id": 338
+      }
+    ]
+  },
+  {
+    "feedback_statuses": null,
+    "read": null,
+    "id": 339,
+    "title": "Feedback",
+    "user_identification": "",
+    "language": "pl",
+    "created_at": "2016-12-21T07:04:58.000Z",
+    "updated_at": "2016-12-21T07:04:58.000Z",
+    "application_id": 8,
+    "configuration_id": 8,
+    "text_feedbacks": [
+      {
+        "id": 495,
+        "text": "ok",
+        "mechanism_id": 7,
+        "feedback_id": 339
+      },
+      {
+        "id": 496,
+        "text": "",
+        "mechanism_id": 44,
+        "feedback_id": 339
+      }
+    ]
+  },
+  {
+    "feedback_statuses": null,
+    "read": null,
+    "id": 340,
+    "title": "Feedback",
+    "user_identification": "",
+    "language": "de",
+    "created_at": "2016-12-21T07:18:46.000Z",
+    "updated_at": "2016-12-21T07:18:46.000Z",
+    "application_id": 8,
+    "configuration_id": 8,
+    "text_feedbacks": [
+      {
+        "id": 497,
+        "text": "",
+        "mechanism_id": 7,
+        "feedback_id": 340
+      },
+      {
+        "id": 498,
+        "text": "",
+        "mechanism_id": 44,
+        "feedback_id": 340
+      }
+    ]
+  },
+  {
+    "feedback_statuses": null,
+    "read": null,
+    "id": 341,
+    "title": "Feedback",
+    "user_identification": "",
+    "language": "de",
+    "created_at": "2016-12-21T08:35:17.000Z",
+    "updated_at": "2016-12-21T08:35:17.000Z",
+    "application_id": 8,
+    "configuration_id": 8,
+    "text_feedbacks": [
+      {
+        "id": 499,
+        "text": "",
+        "mechanism_id": 7,
+        "feedback_id": 341
+      },
+      {
+        "id": 500,
+        "text": "",
+        "mechanism_id": 44,
+        "feedback_id": 341
+      }
+    ]
+  },
+  {
+    "feedback_statuses": null,
+    "read": null,
+    "id": 342,
+    "title": "Feedback",
+    "user_identification": "",
+    "language": "de",
+    "created_at": "2016-12-21T08:35:18.000Z",
+    "updated_at": "2016-12-21T08:35:18.000Z",
+    "application_id": 8,
+    "configuration_id": 8,
+    "text_feedbacks": [
+      {
+        "id": 501,
+        "text": "",
+        "mechanism_id": 7,
+        "feedback_id": 342
+      },
+      {
+        "id": 502,
+        "text": "",
+        "mechanism_id": 44,
+        "feedback_id": 342
+      }
+    ]
+  },
+  {
+    "feedback_statuses": null,
+    "read": null,
+    "id": 343,
+    "title": "Feedback",
+    "user_identification": "",
+    "language": "de",
+    "created_at": "2016-12-21T08:35:34.000Z",
+    "updated_at": "2016-12-21T08:35:34.000Z",
+    "application_id": 8,
+    "configuration_id": 8,
+    "text_feedbacks": [
+      {
+        "id": 503,
+        "text": "",
+        "mechanism_id": 7,
+        "feedback_id": 343
+      },
+      {
+        "id": 504,
+        "text": "",
+        "mechanism_id": 44,
+        "feedback_id": 343
+      }
+    ]
+  },
+  {
+    "feedback_statuses": null,
+    "read": null,
+    "id": 344,
+    "title": "Feedback",
+    "user_identification": "",
+    "language": "de",
+    "created_at": "2016-12-21T08:35:34.000Z",
+    "updated_at": "2016-12-21T08:35:34.000Z",
+    "application_id": 8,
+    "configuration_id": 8,
+    "text_feedbacks": [
+      {
+        "id": 505,
+        "text": "",
+        "mechanism_id": 7,
+        "feedback_id": 344
+      },
+      {
+        "id": 506,
+        "text": "",
+        "mechanism_id": 44,
+        "feedback_id": 344
+      }
+    ]
+  },
+  {
+    "feedback_statuses": null,
+    "read": null,
+    "id": 345,
+    "title": "Feedback",
+    "user_identification": "",
+    "language": "fr",
+    "created_at": "2016-12-21T08:56:06.000Z",
+    "updated_at": "2016-12-21T08:56:06.000Z",
+    "application_id": 8,
+    "configuration_id": 8,
+    "text_feedbacks": [
+      {
+        "id": 507,
+        "text": "",
+        "mechanism_id": 7,
+        "feedback_id": 345
+      },
+      {
+        "id": 508,
+        "text": "",
+        "mechanism_id": 44,
+        "feedback_id": 345
+      }
+    ]
+  },
+  {
+    "feedback_statuses": null,
+    "read": null,
+    "id": 346,
+    "title": "Feedback",
+    "user_identification": "",
+    "language": "en",
+    "created_at": "2016-12-21T09:45:57.000Z",
+    "updated_at": "2016-12-21T09:45:57.000Z",
+    "application_id": 8,
+    "configuration_id": 8,
+    "text_feedbacks": [
+      {
+        "id": 509,
+        "text": "Believe road toll cost for Norway are a bit to low with Lorrys.\nfor example just to pass the border between Sweden and Norway is NOK 87 with Autopass.",
+        "mechanism_id": 7,
+        "feedback_id": 346
+      },
+      {
+        "id": 510,
+        "text": "info@bbradley.se",
+        "mechanism_id": 44,
+        "feedback_id": 346
+      }
+    ]
+  },
+  {
+    "feedback_statuses": null,
+    "read": null,
+    "id": 347,
+    "title": "Feedback",
+    "user_identification": "",
+    "language": "fr",
+    "created_at": "2016-12-21T10:02:26.000Z",
+    "updated_at": "2016-12-21T10:02:26.000Z",
+    "application_id": 8,
+    "configuration_id": 8,
+    "text_feedbacks": [
+      {
+        "id": 511,
+        "text": "We need Calc+ fonction here",
+        "mechanism_id": 7,
+        "feedback_id": 347
+      },
+      {
+        "id": 512,
+        "text": "",
+        "mechanism_id": 44,
+        "feedback_id": 347
+      }
+    ]
+  },
+  {
+    "feedback_statuses": null,
+    "read": null,
+    "id": 348,
+    "title": "Feedback",
+    "user_identification": "",
+    "language": "pl",
+    "created_at": "2016-12-21T11:11:22.000Z",
+    "updated_at": "2016-12-21T11:11:22.000Z",
+    "application_id": 8,
+    "configuration_id": 8,
+    "text_feedbacks": [
+      {
+        "id": 513,
+        "text": "",
+        "mechanism_id": 7,
+        "feedback_id": 348
+      },
+      {
+        "id": 514,
+        "text": "",
+        "mechanism_id": 44,
+        "feedback_id": 348
+      }
+    ]
+  },
+  {
+    "feedback_statuses": null,
+    "read": null,
+    "id": 349,
+    "title": "Feedback",
+    "user_identification": "",
+    "language": "pl",
+    "created_at": "2016-12-21T11:11:49.000Z",
+    "updated_at": "2016-12-21T11:11:49.000Z",
+    "application_id": 8,
+    "configuration_id": 8,
+    "text_feedbacks": [
+      {
+        "id": 515,
+        "text": "",
+        "mechanism_id": 7,
+        "feedback_id": 349
+      },
+      {
+        "id": 516,
+        "text": "",
+        "mechanism_id": 44,
+        "feedback_id": 349
+      }
+    ]
+  },
+  {
+    "feedback_statuses": null,
+    "read": null,
+    "id": 350,
+    "title": "Feedback",
+    "user_identification": "",
+    "language": "de",
+    "created_at": "2016-12-21T11:57:08.000Z",
+    "updated_at": "2016-12-21T11:57:08.000Z",
+    "application_id": 8,
+    "configuration_id": 8,
+    "text_feedbacks": [
+      {
+        "id": 517,
+        "text": "Das Fenster der Stationsliste ist deutlich zu klein. Wenn man Touren verschiebt, gleicht es einem Geschicklichkeitsspiel, die betreffende Tour auf die gewünschte Position zu verschieben.",
+        "mechanism_id": 7,
+        "feedback_id": 350
+      },
+      {
+        "id": 518,
+        "text": "joachim.nesseldreher@nesslog.com",
+        "mechanism_id": 44,
+        "feedback_id": 350
+      }
+    ]
+  }
+]

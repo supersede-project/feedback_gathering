@@ -20,8 +20,8 @@ export class ApplicationService {
       .catch((error:any) => Observable.throw(error.json().error || 'Server error'));
   }
 
-  find(id:number):Observable<Application> {
-    return this.http.get(ORCHESTRATOR_HOST + '/en/applications/' + id)
+  find(id:number, lang:string):Observable<Application> {
+    return this.http.get(ORCHESTRATOR_HOST + lang + '/applications/' + id)
       .map((res: Response) => camelizer(res.json()))
       .catch((error:any) => Observable.throw(error.json().error || 'Server error'));
   }

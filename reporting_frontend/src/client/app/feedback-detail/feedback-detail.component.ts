@@ -71,15 +71,31 @@ export class FeedbackDetailComponent implements OnInit {
       );
   }
 
+  getFeedback(applicationId, id) {
+    this.feedbackService.find(applicationId, id).subscribe(
+      feedback => {
+        this.feedback = <Feedback>feedback;
+        if (feedback && feedback.applicationId) {
+          this.loadApplication(feedback.applicationId, feedback.configurationId);
+        }
+        this.markAsReadOrUnread(feedback, true);
+      },
+      error => this.errorMessage = <any>error
+    );
+    this.getFeedbacks(applicationId);
+  }
+
   loadApplication(id:number, configurationId:number) {
-    this.applicationService.find(id).subscribe(
+    this.applicationService.find(id, this.feedback.language).subscribe(
       application => {
         this.application = application;
         this.configuration = application.configurations.filter(configuration => configuration.id === configurationId)[0];
         this.populateConfigurationData();
       },
-      error => this.errorMessage = <any>error
-    );
+      error => {
+        console.log('error loading application: ' + error);
+      }
+    )
   }
 
   populateConfigurationData() {
@@ -124,18 +140,21 @@ export class FeedbackDetailComponent implements OnInit {
   }
 
   showNextFeedback() {
-    if (this.feedback.id !== this.feedbacks[this.feedbacks.length - 1].id) {
+    if (this.feedbacks && this.feedback.id !== this.feedbacks[this.feedbacks.length - 1].id) {
       this.feedback = this.feedbacks[this.getCurrentFeedbackIndex() + 1];
       this.loadApplication(this.feedback.applicationId, this.feedback.configurationId);
       this.markAsReadOrUnread(this.feedback, true);
+      // TODO remove later
+      this.getFeedback(this.feedback.applicationId, this.feedback.id);
     }
   }
 
   showPreviousFeedback() {
-    if (this.feedback.id !== this.feedbacks[0].id) {
+    if (this.feedbacks && this.feedback.id !== this.feedbacks[0].id) {
       this.feedback = this.feedbacks[this.getCurrentFeedbackIndex() - 1];
       this.loadApplication(this.feedback.applicationId, this.feedback.configurationId);
-      this.markAsReadOrUnread(this.feedback, true);
+      // TODO remove later
+      this.getFeedback(this.feedback.applicationId, this.feedback.id);
     }
   }
 

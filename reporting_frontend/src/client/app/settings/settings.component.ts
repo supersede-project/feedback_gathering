@@ -39,7 +39,7 @@ export class SettingsComponent implements OnInit {
   }
 
   getApplication(id:number) {
-    this.applicationService.find(id).subscribe(
+    this.applicationService.find(id, 'en').subscribe(
       application => {
         this.application = application;
       },

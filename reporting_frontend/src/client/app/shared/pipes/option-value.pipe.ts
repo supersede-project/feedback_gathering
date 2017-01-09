@@ -11,7 +11,7 @@ export class OptionValuePipe implements PipeTransform {
     let parameterIdNumber:number = +parameterId;
 
     let optionsParameter = categoryFeedbackMechanism.parameters.filter(parameter => parameter.key === 'options')[0];
-    if (optionsParameter.value.filter(parameter => parameter.id === parameterIdNumber).length > 0) {
+    if (optionsParameter.value.filter(parameter => parameter.id === parameterIdNumber) !== null && optionsParameter.value.filter(parameter => parameter.id === parameterIdNumber).length > 0) {
       return optionsParameter.value.filter(parameter => parameter.id === parameterIdNumber)[0].value;
     } else {
       return "";
