@@ -2,7 +2,7 @@ import {AudioMechanism} from '../../models/mechanisms/audio_mechanism';
 import {MechanismView} from '../mechanism_view';
 
 
-export class AudioView implements  MechanismView {
+export class AudioView implements MechanismView {
     audioMechanism:AudioMechanism;
     container:JQuery;
     distPath:string;

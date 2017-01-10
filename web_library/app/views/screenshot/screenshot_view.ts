@@ -7,6 +7,7 @@ import '../../js/lib/screenshot/StackBlur.js';
 import '../../js/lib/screenshot/canvg.js';
 import {Mechanism} from '../../models/mechanisms/mechanism';
 import {CanvasState} from './canvas_state';
+import {ScreenshotFeedback} from '../../models/feedbacks/screenshot_feedback';
 import {MechanismView} from '../mechanism_view';
 
 const freehandDrawingMode:string = 'freehandDrawingMode';
@@ -778,6 +779,14 @@ export class ScreenshotView implements MechanismView {
                 jQuery('' + elementToHide).show();
             }
         }
+    }
+
+    getFeedback(): ScreenshotFeedback {
+        return new ScreenshotFeedback(this.getPartName(), this.screenshotMechanism.id, this.getPartName(), 'png');
+    };
+
+    getPartName(): string {
+        return "screenshot" + this.screenshotMechanism.id;
     }
 
     reset() {

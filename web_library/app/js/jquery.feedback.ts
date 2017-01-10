@@ -19,7 +19,6 @@ import {PageNavigation} from './helpers/page_navigation';
 import {ConfigurationInterface} from '../models/configurations/configuration_interface';
 import {Application} from '../models/applications/application';
 import {ApplicationService} from '../services/application_service';
-import {shuffle} from './helpers/array_shuffle';
 import * as t from '../templates/t';
 import * as compare from '../templates/compare';
 var dialogTemplate = require('../templates/feedback_dialog.handlebars');
@@ -50,12 +49,6 @@ export var feedbackPluginModule = function ($, window, document) {
     var pullDialog;
     var pullConfigurationDialogId = "pullConfiguration";
     var active = false;
-    var application:Application;
-    var applicationContext;
-    var distPath;
-    var userId;
-    var language:string;
-    var dropArea;
     var colorPickerCSSClass;
     var defaultStrokeWidth;
     var audioView;
@@ -67,7 +60,7 @@ export var feedbackPluginModule = function ($, window, document) {
      *  The current application object that configures the library.
      */
     var initApplication = function (applicationObject:Application) {
-        initPushMechanisms(application.getPushConfiguration(), application.generalConfiguration);
+        initPushMechanisms(applicationObject.getPushConfiguration(), applicationObject.generalConfiguration);
 
     };
 
@@ -94,7 +87,7 @@ export var feedbackPluginModule = function ($, window, document) {
         configuration.wasTriggered();
         var pageNavigation = new PageNavigation(configuration, $('#' + pullConfigurationDialogId));
 
-        var context = prepareTemplateContext(configuration.getContextForView());
+        var context = prepareTemplateContext(configuration.getContext());
 
         pullDialog = initTemplate(pullDialogTemplate, pullConfigurationDialogId, context, configuration, pageNavigation, generalConfiguration);
         var delay = 0;
@@ -118,44 +111,8 @@ export var feedbackPluginModule = function ($, window, document) {
             }, delay * 1000);
         }
     };
-    /**
-     * Initializes the pull mechanisms and triggers the feedback mechanisms if necessary.
-     *
-     * @param configuration
-     * @param alreadyTriggeredOne
-     *  Boolean that indicated whether a pull configuration has already been triggered.
-     *
-     * @returns boolean
-     *  Whether the pull configuration was triggered or not.
-     */
-    var initPullConfiguration = function (configuration:PullConfiguration, generalConfiguration:GeneralConfiguration,
-                                          alreadyTriggeredOne:boolean = false):boolean {
-        // triggers on elements
-        if (configuration.generalConfiguration.getParameterValue('userAction')) {
-            var userAction = configuration.generalConfiguration.getParameterValue('userAction');
-            var actionName = userAction.filter(element => element.key === 'actionName').length > 0 ? userAction.filter(element => element.key === 'actionName')[0].value : '';
-            var actionElement = userAction.filter(element => element.key === 'actionElement').length > 0 ? userAction.filter(element => element.key === 'actionElement')[0].value : '';
-            var actionOnlyOncePerPageLoad = userAction.filter(element => element.key === 'actionOnlyOncePerPageLoad').length > 0 ? userAction.filter(element => element.key === 'actionOnlyOncePerPageLoad')[0].value : true;
 
-            if (actionOnlyOncePerPageLoad) {
-                $('' + actionElement).one(actionName, function () {
-                    showPullDialog(configuration, generalConfiguration);
-                })
-            } else {
-                $('' + actionElement).on(actionName, function () {
-                    showPullDialog(configuration, generalConfiguration);
-                })
-            }
-        }
-
-        // direct triggers
-        if (!alreadyTriggeredOne && configuration.shouldGetTriggered()) {
-            showPullDialog(configuration, generalConfiguration);
-            return true;
-        }
-        return false;
-    };
-
+    // TODO refactoring: I don't know how yet
     var initTemplate = function (template, dialogId, context, configuration, pageNavigation,
                                  generalConfiguration:GeneralConfiguration):HTMLElement {
         var html = template(context);
@@ -199,7 +156,7 @@ export var feedbackPluginModule = function ($, window, document) {
         }
 
         var dialog = initDialog($('#' + dialogId), title, modal, dialogId);
-        //addEvents(dialogId, configuration, generalConfiguration);
+        addEvents(dialogId, configuration, generalConfiguration);
         return dialog;
     };
 
@@ -291,40 +248,6 @@ export var feedbackPluginModule = function ($, window, document) {
         return screenshotView;
     };
 
-    /**
-     * @param dialogContainer
-     *  Element that contains the dialog content
-     * @param title
-     *  The title of the dialog
-     * @param modal
-     *  whether the dialog behaviour is modal or not
-     * @param dialogId
-     *  ID of the dialog
-     *
-     * Initializes the dialog on a given element and opens it.
-     */
-    var initDialog = function (dialogContainer, title, modal, dialogId) {
-        var dialogObject = dialogContainer.dialog(
-            $.extend({}, dialogOptions, {
-                close: function () {
-                    dialogObject.dialog("close");
-                    active = false;
-                },
-                open: function () {
-                    $('[aria-describedby="' + dialogId + '"] .ui-dialog-titlebar-close').attr('title', i18n.t('general.dialog_close_button_title'));
-                    $('.close-feedback-dialog').find('span').removeClass("ui-icon-minusthick").addClass("ui-icon-closethick");
-                },
-                create: function (event, ui) {
-                    var widget = $(this).dialog("widget");
-                    $(".ui-dialog-titlebar-close span", widget)
-                        .removeClass("ui-icon-closethick")
-                        .addClass("ui-icon-minusthick");
-                    $(this).closest('.ui-dialog').addClass('feedback-library');
-                    var minimizeButton = $(".ui-dialog-titlebar-close");
-                }
-            }
-        ));
-    };
 
     // TODO refactoring: see inside function
     /**
@@ -341,8 +264,8 @@ export var feedbackPluginModule = function ($, window, document) {
         var container = $('#' + containerId);
         var textareas = container.find('textarea.text-type-text');
         var textMechanisms = configuration.getMechanismConfig(mechanismTypes.textType);
-        var categoryMechanisms = configuration.getMechanismConfig(mechanismTypes.categoryType);
 
+        // TODO refactoring: move to feedbackDialog
         container.find('button.submit-feedback').unbind().on('click', function (event) {
             event.preventDefault();
             event.stopPropagation();
@@ -365,141 +288,41 @@ export var feedbackPluginModule = function ($, window, document) {
                 });
             }
         });
-
-        // character length
-        for (var textMechanism of textMechanisms) {
-            let sectionSelector = "textMechanism" + textMechanism.id;
-            let textarea = container.find('section#' + sectionSelector + ' textarea.text-type-text');
-            let maxLength = textMechanism.getParameterValue('maxLength');
-            let isMaxLengthStrict = textMechanism.getParameterValue('maxLengthStrict');
-
-            textarea.on('keyup focus paste blur', function () {
-                container.find('section#' + sectionSelector + ' span.text-type-max-length').text($(this).val().length + '/' + maxLength);
-            });
-
-            if (isMaxLengthStrict) {
-                // prevent typing if max length is reached
-                textarea.on('keypress', function (e) {
-                    if (e.which < 0x20) {
-                        // e.which < 0x20, then it's not a printable character
-                        // e.which === 0 - Not a character
-                        return;     // Do nothing
-                    }
-                    if (this.value.length === maxLength) {
-                        e.preventDefault();
-                    } else if (this.value.length > maxLength) {
-                        this.value = this.value.substring(0, maxLength);
-                    }
-                });
-                // prevent pasting more characters
-                textarea.on('change blur', function () {
-                    if (this.value.length > maxLength) {
-                        this.value = this.value.substring(0, maxLength - 1);
-                    }
-                });
-            }
-
-            // text clear button
-            container.find('section#' + sectionSelector + ' .text-type-text-clear').on('click', function (event) {
-                event.preventDefault();
-                event.stopPropagation();
-                textarea.val('');
-            });
-        }
-
-        // TODO refactor!!!
-        container.find('.discard-feedback').on('click', function (e) {
-            e.preventDefault();
-            e.stopPropagation();
-            if (configuration.dialogId === 'pushConfiguration') {
-                dialog.dialog("close");
-            } else if (configuration.dialogId === 'pullConfiguration') {
-                pullDialog.dialog("close");
-            }
-            resetPlugin(configuration);
-        });
-        $('.close-feedback-dialog').on('click', function (e) {
-            e.preventDefault();
-            e.stopPropagation();
-            if (configuration.dialogId === 'pushConfiguration') {
-                dialog.dialog("close");
-            } else if (configuration.dialogId === 'pullConfiguration') {
-                pullDialog.dialog("close");
-            }
-            resetPlugin(configuration);
-        });
-
-        for (var categoryMechanism of categoryMechanisms) {
-            categoryMechanism.coordinateOwnInputAndRadioBoxes();
-        }
     };
 
+    // TODO refactoring: the mechanism views should return their feedback data
     /**
      * Creates the multipart form data containing the data of the active mechanisms.
      */
-    var prepareFormData = function (container:JQuery, configuration:ConfigurationInterface, callback?:any) {
+    var prepareFormData = function (dialogView:DialogView, configuration:ConfigurationInterface, callback?:any) {
         var formData = new FormData();
-
-        var textMechanisms = configuration.getMechanismConfig(mechanismTypes.textType);
-        var ratingMechanisms = configuration.getMechanismConfig(mechanismTypes.ratingType);
-        var screenshotMechanisms = configuration.getMechanismConfig(mechanismTypes.screenshotType);
-        var categoryMechanisms = configuration.getMechanismConfig(mechanismTypes.categoryType);
-        var attachmentMechanisms = configuration.getMechanismConfig(mechanismTypes.attachmentType);
         var audioMechanisms = configuration.getMechanismConfig(mechanismTypes.audioType);
-
         var hasAudioMechanism = audioMechanisms.filter(audioMechanism => audioMechanism.active === true).length > 0;
 
-        container.find('.server-response').removeClass('error').removeClass('success');
-        var feedbackObject = new Feedback(feedbackObjectTitle, userId, language, applicationId, configuration.id, [], [], [], [], null, [], []);
-        //feedbackObject.contextInformation = ContextInformation.create();
+        dialogView.resetMessageView();
 
-        for (var textMechanism of textMechanisms) {
-            if (textMechanism.active) {
-                feedbackObject.textFeedbacks.push(textMechanism.getTextFeedback());
-            }
-        }
+        var feedbackObject = new Feedback(feedbackObjectTitle, feedbackApp.options.userId, feedbackApp.options.language, applicationId, configuration.id, [], [], [], [], null, [], []);
+        feedbackObject.contextInformation = ContextInformation.create();
 
-        for (var ratingMechanism of ratingMechanisms) {
-            if (ratingMechanism.active) {
-                var rating = new RatingFeedback(ratingMechanism.currentRatingValue, ratingMechanism.id);
-                feedbackObject.ratingFeedbacks.push(rating);
-            }
-        }
-
-        for (var screenshotMechanism of screenshotMechanisms) {
-            if (screenshotMechanism.active) {
-                if (screenshotMechanism.screenshotView.getScreenshotAsBinary() === null) {
-                    continue;
+        for(var mechanismView of dialogView.mechanismViews) {
+            if(mechanismView instanceof TextView) {
+                feedbackObject.textFeedbacks.push(mechanismView.getFeedback());
+            } else if (mechanismView instanceof RatingView) {
+                feedbackObject.ratingFeedbacks.push(mechanismView.getFeedback());
+            } else if (mechanismView instanceof AttachmentView) {
+                feedbackObject.attachmentFeedbacks.push(mechanismView.getFeedbacks());
+                for(let i = 0; i < mechanismView.getFiles(); i++) {
+                    let file = mechanismView.getFiles()[i];
+                    formData.append(mechanismView.getPartName(), file, file.name);
                 }
-                var partName = "screenshot" + screenshotMechanism.id;
-                var screenshotFeedback = new ScreenshotFeedback(partName, screenshotMechanism.id, partName, 'png');
-                feedbackObject.screenshotFeedbacks.push(screenshotFeedback);
-                formData.append(partName, screenshotMechanism.screenshotView.getScreenshotAsBinary());
-            }
-        }
-
-        for (var categoryMechanism of categoryMechanisms) {
-            if (categoryMechanism.active) {
-                var categoryFeedbacks = categoryMechanism.getCategoryFeedbacks();
-                for (var categoryFeedback of categoryFeedbacks) {
-                    feedbackObject.categoryFeedbacks.push(categoryFeedback);
+            } else if (mechanismView instanceof ScreenshotView) {
+                let screenshotBinary = mechanismView.getScreenshotAsBinary();
+                if(screenshotBinary !== null) {
+                    feedbackObject.screenshotFeedbacks.push(mechanismView.getFeedback());
+                    formData.append(mechanismView.getPartName(), mechanismView.getScreenshotAsBinary());
                 }
-            }
-        }
-
-        for (var attachmentMechanism of attachmentMechanisms) {
-            if (attachmentMechanism.active) {
-                var sectionSelector = "attachmentMechanism" + attachmentMechanism.id;
-                var input = container.find('section#' + sectionSelector + ' input[type=file]');
-                var files = dropArea.currentFiles;
-
-                for (var i = 0; i < files.length; i++) {
-                    var file = files[i];
-                    let partName = 'attachment' + i;
-                    var attachmentFeedback = new AttachmentFeedback(partName, file.name, file.type, attachmentMechanism.id);
-                    formData.append(partName, file, file.name);
-                    feedbackObject.attachmentFeedbacks.push(attachmentFeedback);
-                }
+            } else if (mechanismView instanceof CategoryView) {
+                feedbackObject.categoryFeedbacks.push(mechanismView.getCategoryFeedbacks());
             }
         }
 
@@ -589,7 +412,6 @@ export var feedbackPluginModule = function ($, window, document) {
         'dialogPositionAt': 'center top+30',
         'dialogPositionOf': window,
     };
-
 };
 
 (function ($, window, document) {
