@@ -1,8 +1,8 @@
-import {CategoryMechanism} from './category_mechanism';
 import {readJSON} from '../../services/mocks/mocks_loader';
 import {CategoryView} from './category_view';
 import {MechanismFactory} from '../../models/mechanisms/mechanism_factory';
 import {CategoryFeedback} from '../../models/feedbacks/category_feedback';
+import {CategoryMechanism} from '../../models/mechanisms/category_mechanism';
 
 
 /*

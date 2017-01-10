@@ -13,6 +13,8 @@ export class CategoryMechanism extends Mechanism {
         if(this.getParameterValue('options') !== null && this.getParameterValue('options').length > 0
             && this.getParameterValue('options').filter(option => option.key !== 'defaultOption').length > 0) {
             return this.getParameterValue('options').filter(option => option.key !== 'defaultOption').sort((option1, option2) => option1.createdAt > option2.createdAt);
+        } else {
+            return [];
         }
     }
 
@@ -20,6 +22,8 @@ export class CategoryMechanism extends Mechanism {
         if(this.getParameterValue('options') !== null && this.getParameterValue('options').length > 0
             && this.getParameterValue('options').filter(option => option.key === 'defaultOption').length > 0) {
             return this.getParameterValue('options').filter(option => option.key === 'defaultOption')[0];
+        } else {
+            return null;
         }
     }
 
@@ -73,29 +77,5 @@ export class CategoryMechanism extends Mechanism {
 
     getSelectSelector() {
         return 'section#categoryMechanism' + this.id + '.category-type select';
-    }
-
-    coordinateOwnInputAndRadioBoxes() {
-        // set constraints between radio boxes and own input fields
-        if(this.active && this.getParameterValue('multiple') === 0 && this.getParameterValue('ownAllowed') === 1) {
-            var ownTextInput = jQuery(this.getInputSelector() + '.own-category');
-            var radioInputs = jQuery(this.getInputSelector() + '[type="radio"]');
-
-            // uncheck all radios if text input gets text
-            ownTextInput.on('keyup change', function() {
-                if(jQuery(this).val().length > 0) {
-                    radioInputs.each(function() {
-                        jQuery(this).prop('checked', false);
-                    });
-                }
-            });
-
-            // empty text input if radio input is checked
-            radioInputs.on('change', function() {
-                if(jQuery(this).is(':checked')) {
-                    ownTextInput.val("");
-                }
-            });
-        }
     }
 }

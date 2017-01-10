@@ -46,13 +46,6 @@ describe('Text Mechanism', () => {
         expect(maxLength).toEqual(100);
     });
 
-    // TODO test in view
-    xit('should return the text feedback object', () => {
-        var textFeedback = textMechanism.getTextFeedback();
-        expect(textFeedback.text).toEqual("Hey this is the feedback text");
-        expect(textFeedback.mechanismId).toEqual(1);
-    });
-
     it('should return the context', () => {
         expect(textMechanism.getContext()).toEqual({
             'active': true,

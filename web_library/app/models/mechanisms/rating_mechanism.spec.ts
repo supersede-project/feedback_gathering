@@ -1,5 +1,5 @@
-import {RatingMechanism} from './rating_mechanism';
 import {mechanismTypes} from '../../js/config';
+import {RatingMechanism} from './rating_mechanism';
 
 
 describe('Rating Mechanism', () => {
