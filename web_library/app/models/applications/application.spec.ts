@@ -4,7 +4,7 @@ import {GeneralConfiguration} from '../configurations/general_configuration';
 import {Parameter} from '../parameters/parameter';
 
 
-describe('Application', () => {
+fdescribe('Application', () => {
     let application:Application;
 
     beforeEach(() => {

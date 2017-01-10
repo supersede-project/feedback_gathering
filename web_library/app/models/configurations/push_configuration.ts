@@ -13,5 +13,14 @@ export class PushConfiguration extends Configuration {
         super(id, mechanisms, configurationTypes.push, generalConfiguration);
         this.dialogId = 'pushConfiguration';
     }
+
+    /**
+     * Returns the context for templates without the contexts of the mechanisms.
+     */
+    getContext():{} {
+        return {
+            'dialogId': this.dialogId
+        }
+    }
 }
 

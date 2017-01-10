@@ -4,7 +4,7 @@ import './jquery.validate';
 import './jquery.validate_category';
 import './jquery.fileupload';
 import {
-    apiEndpointRepository, apiEndpointOrchestrator, feedbackPath, applicationName, defaultSuccessMessage,
+    apiEndpointRepository, feedbackPath, applicationName, defaultSuccessMessage,
     feedbackObjectTitle, dialogOptions, mechanismTypes, applicationId
 } from './config';
 import {PaginationContainer} from '../views/pagination_container';
@@ -22,20 +22,27 @@ import {ApplicationService} from '../services/application_service';
 import {shuffle} from './helpers/array_shuffle';
 import * as t from '../templates/t';
 import * as compare from '../templates/compare';
-import * as dialogTemplate from '../templates/feedback_dialog.handlebars';
-import * as pullDialogTemplate from '../templates/feedback_dialog.handlebars';
-import * as intermediateDialogTemplate from '../templates/intermediate_dialog.handlebars';
-import * as notificationTemplate from '../templates/notification.handlebars';
+var dialogTemplate = require('../templates/feedback_dialog.handlebars');
+var pullDialogTemplate = require('../templates/feedback_dialog.handlebars');
+var intermediateDialogTemplate = require('../templates/intermediate_dialog.handlebars');
+var notificationTemplate = require('../templates/notification.handlebars');
 import {GeneralConfiguration} from '../models/configurations/general_configuration';
-import {TextFeedback} from '../models/feedbacks/text_feedback';
 import {RatingFeedback} from '../models/feedbacks/rating_feedback';
 import {ScreenshotFeedback} from '../models/feedbacks/screenshot_feedback';
 import {AttachmentFeedback} from '../models/feedbacks/attachment_feedback';
 import {AudioFeedback} from '../models/feedbacks/audio_feedback';
 import {ContextInformation} from '../models/feedbacks/context_information';
 import {AudioView} from '../views/audio/audio_view';
-//var mockData = require('json!../services/mocks/dev/sandra_und_lorenz_1.json');
+import {FeedbackApp} from './feedback_app';
+import {RatingView} from '../views/rating/rating_view';
+import {AttachmentView} from '../views/attachment/attachment_view';
+import {TextView} from '../views/text/text_view';
+import {DialogView} from '../views/dialog/dialog_view';
+import {CategoryView} from '../views/category/category_view';
+var mockData = require('json!../services/mocks/dev/applications_mock.json');
 
+
+export declare var feedbackApp: FeedbackApp;
 
 export var feedbackPluginModule = function ($, window, document) {
     var dialog;
@@ -44,39 +51,27 @@ export var feedbackPluginModule = function ($, window, document) {
     var pullConfigurationDialogId = "pullConfiguration";
     var active = false;
     var application:Application;
-    var feedbackButton;
     var applicationContext;
     var distPath;
     var userId;
     var language:string;
     var dropArea;
-    var dialogCSSClass;
     var colorPickerCSSClass;
     var defaultStrokeWidth;
     var audioView;
-    var dialogPosition;
-    var apiHostOrchestrator;
-    var apiHostRepository;
 
+    // TODO refactoring: I don't know how yet
+    // TODO check which part of the configuration is really needed by the other modules --> use DI to pass this configuration to other modules as well as to allow to pass testing configuration that way
     /**
      * @param applicationObject
      *  The current application object that configures the library.
      */
     var initApplication = function (applicationObject:Application) {
-        application = applicationObject;
-        applicationContext = application.getContextForView();
-
-        resetMessageView();
         initPushMechanisms(application.getPushConfiguration(), application.generalConfiguration);
 
-        feedbackButton.attr('title', application.generalConfiguration.getParameterValue('quickInfo'));
-
-        var alreadyTriggeredOne = false;
-        for (var pullConfiguration of shuffle(application.getPullConfigurations())) {
-            alreadyTriggeredOne = initPullConfiguration(pullConfiguration, application.generalConfiguration, alreadyTriggeredOne);
-        }
     };
 
+    // TODO refactoring: move to dialog view
     /**
      * @param configuration
      *  PushConfiguration data retrieved from the feedback orchestrator
@@ -94,6 +89,7 @@ export var feedbackPluginModule = function ($, window, document) {
         dialog = initTemplate(dialogTemplate, pushConfigurationDialogId, context, configuration, pageNavigation, generalConfiguration);
     };
 
+    // TODO refactoring: I don't know how yet
     var showPullDialog = function (configuration:PullConfiguration, generalConfiguration:GeneralConfiguration) {
         configuration.wasTriggered();
         var pageNavigation = new PageNavigation(configuration, $('#' + pullConfigurationDialogId));
@@ -105,7 +101,7 @@ export var feedbackPluginModule = function ($, window, document) {
         if (configuration.generalConfiguration.getParameterValue('delay')) {
             delay = configuration.generalConfiguration.getParameterValue('delay');
         }
-        if (configuration.generalConfiguration.getParameterValue('intermediateDialjog')) {
+        if (configuration.generalConfiguration.getParameterValue('intermediateDialog')) {
             var intermediateDialog = initIntermediateDialogTemplate(intermediateDialogTemplate, 'intermediateDialog', configuration, pullDialog, generalConfiguration);
             if (intermediateDialog !== null) {
                 setTimeout(function () {
@@ -169,8 +165,12 @@ export var feedbackPluginModule = function ($, window, document) {
         new PaginationContainer($('#' + dialogId + '.feedback-container .pages-container'), pageNavigation);
         pageNavigation.screenshotViews = [];
 
+        for (var textMechanism of configuration.getMechanismConfig(mechanismTypes.textType)) {
+            new TextView(textMechanism, dialogId);
+        }
+
         for (var ratingMechanism of configuration.getMechanismConfig(mechanismTypes.ratingType)) {
-            initRating("#" + dialogId + " #ratingMechanism" + ratingMechanism.id + " .rating-input", ratingMechanism);
+            new RatingView(ratingMechanism, dialogId);
         }
 
         for (var screenshotMechanism of configuration.getMechanismConfig(mechanismTypes.screenshotType)) {
@@ -181,15 +181,11 @@ export var feedbackPluginModule = function ($, window, document) {
         var audioMechanism = configuration.getMechanismConfig(mechanismTypes.audioType).filter(mechanism => mechanism.active === true)[0];
         if (audioMechanism) {
             var audioContainer = $("#" + dialogId + " #audioMechanism" + audioMechanism.id);
-            audioView = new AudioView(audioMechanism, audioContainer, distPath);
+            new AudioView(audioMechanism, audioContainer, distPath);
         }
 
         for (var attachmentMechanism of configuration.getMechanismConfig(mechanismTypes.attachmentType)) {
-            if (attachmentMechanism.active) {
-                var sectionSelector = "#attachmentMechanism" + attachmentMechanism.id;
-                dropArea = $('' + sectionSelector).find('.drop-area');
-                dropArea.fileUpload(distPath);
-            }
+            new AttachmentView(attachmentMechanism, dialogId);
         }
 
         var title = "Feedback";
@@ -203,20 +199,11 @@ export var feedbackPluginModule = function ($, window, document) {
         }
 
         var dialog = initDialog($('#' + dialogId), title, modal, dialogId);
-
-        // disable review
-        if(generalConfiguration.getParameterValue('reviewActive') === 0) {
-            var submitFeedbackButton = $('button.submit-feedback');
-            var serverResponse = $('span.server-response');
-            var feedbackDialogForwardButton = $('.feedback-page .feedback-dialog-forward');
-            $('.feedback-page').append(serverResponse);
-            feedbackDialogForwardButton.replaceWith(submitFeedbackButton);
-        }
-
-        addEvents(dialogId, configuration, generalConfiguration);
+        //addEvents(dialogId, configuration, generalConfiguration);
         return dialog;
     };
 
+    // TODO refactoring: I don't know how yet
     var initIntermediateDialogTemplate = function (template, dialogId, configuration, pullDialog,
                                                    generalConfiguration:GeneralConfiguration):HTMLElement {
         var html = template({});
@@ -236,14 +223,8 @@ export var feedbackPluginModule = function ($, window, document) {
         return dialog;
     };
 
-    var repositoryURL = function(language:string, applicationId?:number):string {
-        var url:string = (apiHostRepository + feedbackPath).replace('{lang}', language);
-        if(applicationId) {
-            url = url.replace(new RegExp('{applicationId}'), applicationId.toString());
-        }
-        return url;
-    };
-
+    // TODO adjust comment
+    // TODO refactoring: move to FeedbackService
     /**
      * This method takes the data from the text mechanism and the rating mechanism and composes a feedback object with
      * the help of this data.
@@ -252,7 +233,7 @@ export var feedbackPluginModule = function ($, window, document) {
      */
     var sendFeedback = function (formData:FormData, configuration:ConfigurationInterface, generalConfiguration:GeneralConfiguration) {
         $.ajax({
-            url: repositoryURL(language, applicationId),
+            url: apiEndpointRepository + 'feedback_repository/' + language + '/applications/' + applicationId + '/feedbacks/',
             type: 'POST',
             data: formData,
             dataType: 'json',
@@ -273,6 +254,7 @@ export var feedbackPluginModule = function ($, window, document) {
         });
     };
 
+    // TODO refactoring: move to own view
     var pageNotification = function (message:string) {
         var html = notificationTemplate({message: message});
         $('html').append(html);
@@ -281,52 +263,7 @@ export var feedbackPluginModule = function ($, window, document) {
         }, 3000);
     };
 
-    var resetPlugin = function (configuration) {
-        $('textarea.text-type-text').val('');
-        for (var screenshotMechanism of configuration.getMechanismConfig(mechanismTypes.screenshotType)) {
-            screenshotMechanism.screenshotView.reset();
-        }
-        for (var ratingMechanism of configuration.getMechanismConfig(mechanismTypes.ratingType)) {
-            initRating("#" + configuration.dialogId + " #ratingMechanism" + ratingMechanism.id + " .rating-input:first", ratingMechanism, 0);
-        }
-
-        for (var categoryMechanism of configuration.getMechanismConfig(mechanismTypes.categoryType)) {
-            // TODO add this for radio and checkboxes as well
-            var selector = "#" + configuration.dialogId + " #categoryMechanism" + categoryMechanism.id + ".category-type select option:first";
-            var firstOptionVal = jQuery(selector).val();
-            jQuery("#" + configuration.dialogId + " #categoryMechanism" + categoryMechanism.id + ".category-type select").val(firstOptionVal);
-        }
-
-        // reset validation
-        jQuery( "#" + configuration.dialogId + " .feedback-form-error").remove();
-        jQuery( "#" + configuration.dialogId + " .invalid").removeClass('invalid');
-    };
-
-    /**
-     * @param selector
-     *  The jQuery selector that matches the element the star rating should be applied on
-     * @param ratingMechanism
-     *  The rating mechanism object that contains the configuration
-     *
-     * Applies the jQuery star rating plugin on a specified element with the configuration from the rating mechanism.
-     */
-    var initRating = function (selector, ratingMechanism:RatingMechanism, stars?:number) {
-        if (ratingMechanism !== null && ratingMechanism.active) {
-            var options = ratingMechanism.getRatingElementOptions();
-            var ratingObject = $('' + selector);
-            ratingObject.starRating(options);
-            // reset to default rating
-
-            if (ratingMechanism.initialRating) {
-                $('' + selector + ' .jq-star:nth-child(' + ratingMechanism.initialRating + ')').click();
-            }
-
-            if(stars !== undefined) {
-                ratingObject.starRating('setRating', stars);
-            }
-        }
-    };
-
+    // TODO refactoring: I don't know how yet
     var initScreenshot = function (screenshotMechanism, containerId):ScreenshotView {
         if (screenshotMechanism == null) {
             return;
@@ -384,24 +321,12 @@ export var feedbackPluginModule = function ($, window, document) {
                         .addClass("ui-icon-minusthick");
                     $(this).closest('.ui-dialog').addClass('feedback-library');
                     var minimizeButton = $(".ui-dialog-titlebar-close");
-
-                    // add close button next to minimize
-                    let closeButton = minimizeButton.clone();
-                    closeButton.attr('title', i18n.t('general.cancel'));
-                    closeButton.css('margin-right', '4px');
-                    closeButton.addClass("ui-icon-closethick").addClass("close-feedback-dialog").removeClass("ui-icon-minusthick").removeClass('ui-dialog-titlebar-close');
-                    closeButton.css('background-color', 'transparent');
-                    minimizeButton.parent().append(closeButton);
-                },
-                position: dialogPosition
-            })
-        );
-        dialogObject.dialog('option', 'title', title);
-        dialogObject.dialog('option', 'modal', modal);
-        dialogObject.dialog('option', 'dialogClass', dialogCSSClass);
-        return dialogObject;
+                }
+            }
+        ));
     };
 
+    // TODO refactoring: see inside function
     /**
      * @param containerId
      *  The ID of the surrounding element that contains the feedback mechanisms
@@ -604,7 +529,6 @@ export var feedbackPluginModule = function ($, window, document) {
             } catch (e) {
                 formData.append('json', JSON.stringify(feedbackObject));
                 callback(formData);
-                console.log((<Error>e).message);
             }
         }
 
@@ -614,19 +538,7 @@ export var feedbackPluginModule = function ($, window, document) {
         }
     };
 
-    /**
-     * The configuration data is fetched from the API if the feedback mechanism is not currently active. In the other
-     * case the feedback mechanism dialog is closed. The active variable is toggled on each invocation.
-     */
-    var toggleDialog = function (pushConfiguration) {
-        if (!active) {
-            openDialog(dialog, pushConfiguration);
-        } else {
-            dialog.dialog("close");
-        }
-        active = !active;
-    };
-
+    // TODO refactoring: move to FeedbackDialog
     var openDialog = function (dialog, configuration) {
         for (var screenshotMechanism of configuration.getMechanismConfig(mechanismTypes.screenshotType)) {
             if (screenshotMechanism !== null && screenshotMechanism !== undefined && screenshotMechanism.screenshotView !== null) {
@@ -636,16 +548,13 @@ export var feedbackPluginModule = function ($, window, document) {
         dialog.dialog('open');
     };
 
+    // TODO refactoring: move to FeedbackDialog?
     var prepareTemplateContext = function (context) {
         var contextWithApplicationContext = $.extend({}, applicationContext, context);
         var pluginContext = {
             'distPath': distPath
         };
         return $.extend({}, pluginContext, contextWithApplicationContext);
-    };
-
-    var resetMessageView = function () {
-        $('.server-response').removeClass('error').removeClass('success').text('');
     };
 
     /**
@@ -658,50 +567,10 @@ export var feedbackPluginModule = function ($, window, document) {
      * server and the feedback mechanism is invoked.
      */
     $.fn.feedbackPlugin = function (options) {
-        feedbackButton = this;
-        this.options = $.extend({}, $.fn.feedbackPlugin.defaults, options);
-        var currentOptions = this.options;
-        distPath = currentOptions.distPath;
-        userId = currentOptions.userId;
-        dialogCSSClass = currentOptions.dialogCSSClass;
-        colorPickerCSSClass = currentOptions.colorPickerCSSClass;
-        defaultStrokeWidth = currentOptions.defaultStrokeWidth;
-        apiHostOrchestrator = currentOptions.apiHostOrchestrator || apiEndpointOrchestrator;
-        apiHostRepository = currentOptions.apiHostRepository || apiEndpointRepository;
-
-        dialogPosition = {
-            my: currentOptions.dialogPositionMy,
-            at: currentOptions.dialogPositionAt,
-            of: currentOptions.dialogPositionOf
-        };
-
-        language = I18nHelper.getLanguage(this.options);
-        I18nHelper.initializeI18n(this.options);
-
-        //let mockBackend:MockBackend = new MockBackend(mockData);
-
-        // loadDataHere to trigger pull if necessary
-        var applicationService = new ApplicationService(apiHostOrchestrator, language);
-        applicationService.retrieveApplication(applicationId, application => {
-            if (!application.state) {
-                feedbackButton.hide();
-                return feedbackButton;
-            }
-            initApplication(application);
-            feedbackButton.show();
-        }, errorData => {
-            console.warn('SERVER ERROR ' + errorData.status + ' ' + errorData.statusText + ': ' + errorData.responseText);
-            feedbackButton.hide();
-            return feedbackButton;
-        });
-
-        this.css('background-color', currentOptions.backgroundColor);
-        this.css('color', currentOptions.color);
-        this.on('click', function (event) {
-            event.preventDefault();
-            event.stopPropagation();
-            toggleDialog(application.getPushConfiguration());
-        });
+        I18nHelper.initializeI18n(options);
+        var language = I18nHelper.getLanguage(options);
+        var options = $.extend({}, $.fn.feedbackPlugin.defaults, options);
+        feedbackApp = new FeedbackApp(new ApplicationService(language), applicationId, options, this);
 
         return this;
     };

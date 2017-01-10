@@ -61,6 +61,16 @@ export abstract class Mechanism implements Parameterizable {
             return '';
         }
     }
+
+    defaultContext() {
+        return {
+            'id': this.id,
+            'type': this.type,
+            'active': this.active,
+            'order': this.order,
+            'canBeActivated': this.canBeActivated
+        }
+    }
 }
 
 applyMixins(Mechanism, [Parameterizable]);

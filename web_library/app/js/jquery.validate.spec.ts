@@ -1,7 +1,7 @@
 import {validatePluginModule} from './jquery.validate';
 
 
-describe('jQuery Validate Plugin', () => {
+fdescribe('jQuery Validate Plugin', () => {
     let elementMandatory:any;
     let elementMaxLength:any;
     let $ = $j;

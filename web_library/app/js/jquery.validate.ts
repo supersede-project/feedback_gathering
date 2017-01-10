@@ -35,6 +35,10 @@ export var validatePluginModule = (function($, window, document) {
             if (typeof jQuery === "function" && el instanceof jQuery) {
                 el = el[0];
             }
+            if(el === undefined) {
+                return true;
+            }
+
             var rect = el.getBoundingClientRect();
 
             return (

@@ -24,7 +24,7 @@ export class ApplicationService {
         }
     }
 
-    retrieveApplication(applicationId:number, callback:(application:Application) => void, errorCallback:(data:any) => void) {
+    retrieveApplication(applicationId:number, callback:(application:Application) => void, errorCallback?:(data:any) => void) {
         this.backend.retrieve(applicationId, applicationData => {
             var application = Application.initByData(applicationData);
             callback(application);

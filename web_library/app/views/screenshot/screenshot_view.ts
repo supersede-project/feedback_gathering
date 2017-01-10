@@ -7,6 +7,8 @@ import '../../js/lib/screenshot/StackBlur.js';
 import '../../js/lib/screenshot/canvg.js';
 import {Mechanism} from '../../models/mechanisms/mechanism';
 import {CanvasState} from './canvas_state';
+import {MechanismView} from '../mechanism_view';
+
 const freehandDrawingMode:string = 'freehandDrawingMode';
 const rectDrawingMode:string = 'rectDrawingMode';
 const fillRectDrawingMode:string = 'fillRectDrawingMode';
@@ -24,7 +26,7 @@ const textTypeObjectIdentifier:string = 'i-text';
 const cropperTypeObjectIdentifier:string = 'cropper';
 
 
-export class ScreenshotView {
+export class ScreenshotView implements MechanismView {
     screenshotMechanism:Mechanism;
     screenshotPreviewElement:JQuery;
     screenshotCaptureButton:JQuery;
