@@ -32,8 +32,7 @@ export class CategoryView implements MechanismView {
 
     coordinateOwnInputAndRadioBoxes() {
         // set constraints between radio boxes and own input fields
-        if(this.categoryMechanism.active && this.categoryMechanism.getParameterValue('multiple') === 0
-            && this.categoryMechanism.getParameterValue('ownAllowed') === 1) {
+        if(this.categoryMechanism.active && this.categoryMechanism.getParameterValue('multiple') === 0 && this.categoryMechanism.getParameterValue('ownAllowed') === 1) {
             var ownTextInput = jQuery(this.getInputSelector() + '.own-category');
             var radioInputs = jQuery(this.getInputSelector() + '[type="radio"]');
 

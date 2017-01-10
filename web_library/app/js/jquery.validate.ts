@@ -27,6 +27,7 @@ export var validatePluginModule = (function($, window, document) {
             validEmail = true,
             validationEmail = this.data('validation-email'),
             emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
         var showValidationError = function (errorMessage, element) {
             element.after('<span class="feedback-form-error">' + errorMessage + '</span>');
         };
