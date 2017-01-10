@@ -94,5 +94,4 @@ describe('Screenshot View', () => {
         expect($('.screenshot-operations').css('display')).toBe('none');
     });
 });
-
 */

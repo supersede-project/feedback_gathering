@@ -42,7 +42,7 @@ export abstract class Configuration implements ConfigurationInterface {
      * @returns any
      *  Context object that contains all the data to configure the feedback mechanism in the view.
      */
-    getContext() {
+    getContext():any {
         var context = {
             dialogId: this.dialogId,
             mechanisms: []

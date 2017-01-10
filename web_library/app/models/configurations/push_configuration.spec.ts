@@ -8,7 +8,6 @@ import {ConfigurationFactory} from './configuration_factory';
 import {TextMechanism} from '../mechanisms/text_mechanism';
 
 
-/*
 describe('PushConfiguration object', () => {
     let configuration:PushConfiguration;
 
@@ -47,7 +46,7 @@ describe('PushConfiguration object', () => {
     });
 
     it('should return the context for the view with the configuration data', () => {
-        var context = configuration.getContextForView();
+        var context = configuration.getContext();
 
         expect(context.dialogId).toEqual('pushConfiguration');
         expect(context.mechanisms.length).toBe(7);
@@ -88,4 +87,3 @@ describe('PushConfiguration object', () => {
         expect(cssStyle2).toEqual('color: #7A7A7A; font-style: italic;');
     })
 });
-*/

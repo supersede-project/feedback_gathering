@@ -2,7 +2,6 @@ import Handlebars = require('handlebars');
 import i18n = require('i18next');
 import {I18nHelper} from '../js/helpers/i18n';
 
-
 /*
 describe('Feedback dialog template', () => {
     let feedbackDialogTemplate;
@@ -106,4 +105,3 @@ describe('Feedback dialog template', () => {
     });
 });
 */
-

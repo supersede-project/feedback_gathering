@@ -4,7 +4,6 @@ import {ConfigurationFactory} from './configuration_factory';
 import {platform} from 'os';
 
 
-/*
 describe('PullConfiguration object', () => {
     let pullConfiguration:PullConfiguration;
 
@@ -22,7 +21,6 @@ describe('PullConfiguration object', () => {
                 dialogId: 'pullConfiguration',
                 mechanisms: [
                     {
-                        id: 999,
                         type: 'TEXT_TYPE',
                         order: 1,
                         canBeActivated: false,
@@ -33,14 +31,17 @@ describe('PullConfiguration object', () => {
                         maxLength: 50,
                         maxLengthVisible: 1,
                         maxLengthStrict: null,
-                        textareaStyle: '',
+                        textareaStyle: 'border-color: #000000; border-width: 2px; background-color: #ffffff; height: 50px; width: 200px;',
                         labelStyle: 'text-align: left; font-size: 16px;',
                         clearInput: 0,
                         mandatory: 1,
-                        mandatoryReminder: 'Please fill in the text field'
+                        mandatoryReminder: 'Please fill in the text field',
+                        boxWidth: '100%',
+                        boxPaddingLeft: '0',
+                        boxPaddingRight: '20px',
+                        validationEmail: false
                     },
                     {
-                        id: 998,
                         type: 'CATEGORY_TYPE',
                         order: 2,
                         canBeActivated: false,
@@ -49,6 +50,8 @@ describe('PullConfiguration object', () => {
                         ownAllowed: 0,
                         ownLabel: null,
                         multiple: 0,
+                        defaultOption: null,
+                        asDropdown: false,
                         breakAfterOption: false,
                         options: [
                             {
@@ -74,7 +77,10 @@ describe('PullConfiguration object', () => {
                         ],
                         inputType: 'radio',
                         mandatory: null,
-                        mandatoryReminder: null
+                        mandatoryReminder: null,
+                        boxWidth: '100%',
+                        boxPaddingLeft: '0',
+                        boxPaddingRight: '20px'
                     }
                 ]
             }
@@ -128,6 +134,3 @@ describe('PullConfiguration object', () => {
         expect(pullConfiguration.currentSlug()).toEqual('context.html');
     });
 });
-
-
-*/

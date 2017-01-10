@@ -3,7 +3,6 @@ import {PushConfiguration} from '../configurations/push_configuration';
 import {ConfigurationFactory} from '../configurations/configuration_factory';
 
 
-/*
 describe('Feedback', () => {
 
     it('should validate itself according to the given configuration data', () => {
@@ -41,5 +40,3 @@ describe('Feedback', () => {
         expect(feedback.validate(configuration)).toBeTruthy();
     });
 });
-
-*/

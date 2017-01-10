@@ -17,10 +17,8 @@ export class PushConfiguration extends Configuration {
     /**
      * Returns the context for templates without the contexts of the mechanisms.
      */
-    getContext():{} {
-        return {
-            'dialogId': this.dialogId
-        }
+    getContext():any {
+        return super.getContext();
     }
 }
 
