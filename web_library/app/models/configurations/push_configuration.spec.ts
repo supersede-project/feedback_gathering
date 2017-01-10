@@ -88,3 +88,4 @@ describe('PushConfiguration object', () => {
         expect(cssStyle2).toEqual('color: #7A7A7A; font-style: italic;');
     })
 });
+*/

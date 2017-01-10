@@ -26,3 +26,4 @@ describe('Configuration factory', () => {
         expect(configuration2).toEqual(jasmine.any(PullConfiguration));
     });
 });
+*/

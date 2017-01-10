@@ -21,7 +21,6 @@ export class ScreenshotMechanism extends Mechanism {
             autoTake: this.getParameterValue('autoTake'),
             annotationTitle: this.getParameterValue('annotationTitle'),
             annotationExplanation: this.getParameterValue('annotationExplanation'),
-            cropTitle: this.getParameterValue('cropTitle'),
             cropExplanation: this.getParameterValue('cropExplanation'),
             sentimentSatisfiedMouseover: this.getParameterValue('sentimentSatisfiedMouseover'),
             sentimentDissatisfiedMouseover: this.getParameterValue('sentimentDissatisfiedMouseover'),
@@ -45,7 +44,7 @@ export class ScreenshotMechanism extends Mechanism {
             annotationsTitle: this.getParameterValue('annotationsTitle'),
             selectionTitle: this.getParameterValue('selectionTitle'),
             colorTitle: this.getParameterValue('colorTitle'),
-            cropTitle: this.getParameterValue('cropTitle')
+            cropTitle: this.getParameterValue('cropTitle'),
             zoomExplanation: this.getParameterValue('zoomExplanation'),
         }
     }

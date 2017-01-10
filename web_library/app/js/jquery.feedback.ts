@@ -5,7 +5,7 @@ import './jquery.validate_category';
 import './jquery.fileupload';
 import {
     apiEndpointRepository, feedbackPath, applicationName, defaultSuccessMessage,
-    feedbackObjectTitle, dialogOptions, mechanismTypes, applicationId
+    feedbackObjectTitle, dialogOptions, mechanismTypes, applicationId, apiEndpointOrchestrator
 } from './config';
 import {PaginationContainer} from '../views/pagination_container';
 import {ScreenshotView} from '../views/screenshot/screenshot_view';
@@ -48,6 +48,13 @@ export var feedbackPluginModule = function ($, window, document) {
     var defaultStrokeWidth;
     var audioView;
 
+    // TODO remove the following 5 lines later on
+    var distPath = "/";
+    var applicationContext = {};
+    var initDialog = function(one, two, three, four) {return {};};
+    var language = "en";
+    var resetPlugin = function(one) {return {};};
+
     // TODO refactoring: I don't know how yet
     // TODO check which part of the configuration is really needed by the other modules --> use DI to pass this configuration to other modules as well as to allow to pass testing configuration that way
     /**
@@ -81,7 +88,6 @@ export var feedbackPluginModule = function ($, window, document) {
     var showPullDialog = function (configuration:PullConfiguration, generalConfiguration:GeneralConfiguration) {
         configuration.wasTriggered();
         var pageNavigation = new PageNavigation(configuration, $('#' + pullConfigurationDialogId));
-
         var context = prepareTemplateContext(configuration.getContext());
 
         pullDialog = initTemplate(pullDialogTemplate, pullConfigurationDialogId, context, configuration, pageNavigation, generalConfiguration);
@@ -305,10 +311,10 @@ export var feedbackPluginModule = function ($, window, document) {
             } else if (mechanismView instanceof RatingView) {
                 feedbackObject.ratingFeedbacks.push(mechanismView.getFeedback());
             } else if (mechanismView instanceof AttachmentView) {
-                feedbackObject.attachmentFeedbacks.push(mechanismView.getFeedbacks());
+                feedbackObject.attachmentFeedbacks = mechanismView.getFeedbacks();
                 for(let i = 0; i < mechanismView.getFiles(); i++) {
                     let file = mechanismView.getFiles()[i];
-                    formData.append(mechanismView.getPartName(), file, file.name);
+                    formData.append(mechanismView.getPartName(i), file, file.name);
                 }
             } else if (mechanismView instanceof ScreenshotView) {
                 let screenshotBinary = mechanismView.getScreenshotAsBinary();
@@ -317,7 +323,7 @@ export var feedbackPluginModule = function ($, window, document) {
                     formData.append(mechanismView.getPartName(), mechanismView.getScreenshotAsBinary());
                 }
             } else if (mechanismView instanceof CategoryView) {
-                feedbackObject.categoryFeedbacks.push(mechanismView.getCategoryFeedbacks());
+                feedbackObject.categoryFeedbacks = mechanismView.getCategoryFeedbacks();
             }
         }
 
@@ -388,7 +394,8 @@ export var feedbackPluginModule = function ($, window, document) {
         I18nHelper.initializeI18n(options);
         var language = I18nHelper.getLanguage(options);
         var options = $.extend({}, $.fn.feedbackPlugin.defaults, options);
-        feedbackApp = new FeedbackApp(new ApplicationService(language), applicationId, options, this);
+        var applicationService = new ApplicationService(apiEndpointOrchestrator, language);
+        feedbackApp = new FeedbackApp(applicationService, applicationId, options, this);
 
         return this;
     };
@@ -405,7 +412,7 @@ export var feedbackPluginModule = function ($, window, document) {
         'defaultStrokeWidth': 4,
         'dialogPositionMy': 'center top',
         'dialogPositionAt': 'center top+30',
-        'dialogPositionOf': window,
+        'dialogPositionOf': window
     };
 };
 

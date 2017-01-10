@@ -4,7 +4,6 @@ import {GeneralConfiguration} from '../configurations/general_configuration';
 import {Parameter} from '../parameters/parameter';
 
 
-/*
 describe('Application', () => {
     let application:Application;
 
@@ -37,4 +36,3 @@ describe('Application', () => {
         expect(pullConfiguration2.type).toEqual('PULL');
     });
 });
-*/

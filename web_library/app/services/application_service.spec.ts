@@ -3,7 +3,7 @@ import {readJSON} from './mocks/mocks_loader';
 import {ApplicationService} from './application_service';
 
 
-/*
+
 describe('Application Service', () => {
     let applicationService:ApplicationService;
 
@@ -20,4 +20,3 @@ describe('Application Service', () => {
         });
     });
 });
-

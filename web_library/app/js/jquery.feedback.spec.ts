@@ -49,3 +49,4 @@ describe('jQuery Feedback Plugin', () => {
 });
 
 
+*/
