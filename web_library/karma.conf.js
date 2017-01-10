@@ -18,9 +18,10 @@ module.exports = function (config) {
             { pattern: 'node_modules/handlebars/dist/**/*.js', included: false },
             { pattern: 'node_modules/handlebars/runtime.js', included: false },
             { pattern: 'node_modules/i18next/*.js', included: false },
-            { pattern: 'app/**/*.js', included: false },
             { pattern: 'app/services/mocks/**/*.json', included: false },
-            { pattern: 'app/locales/**/*.json', included: false }
+            { pattern: 'app/locales/**/*.json', included: false },
+            { pattern: 'app/**/*.spec.js', included: false },
+            { pattern: 'app/*.spec.js', included: false }
         ],
 
         proxies: {
@@ -39,23 +40,15 @@ module.exports = function (config) {
         // preprocess matching files before serving them to the browser
         // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
         preprocessors: {
-            'app/templates/*.handlebars': ['handlebars'],
-            'app/templates/**/*.handlebars': ['handlebars'],
-            'app/**/!(*spec|html2canvas|jquery\.star-rating-svg|spectrum|fabric|customiseControl|Fr.voice|libmp3lame.min|mp3Worker|recorder|recorderWorker).js': ['coverage']
+            'app/**/!(*spec|html2canvas|jquery\.star-rating-svg|spectrum|fabric|customiseControl|Fr.voice|libmp3lame.min|mp3Worker|recorder|recorderWorker).js': ['coverage'],
+            'app/*.js': ['webpack'],
+            'app/**/*.js': ['webpack']
         },
 
-        handlebarsPreprocessor: {
-            templates: "Handlebars.templates",
-            amd: false,
-            // translates original file path to template name
-            templateName: function(filepath) {
-                return filepath.replace(/^.*\/([^\/]+)\.handlebars$/, '$1');
-            },
+        webpack: require("./karma.webpack.config.js"),
 
-            // transforms original file path to path of the processed file
-            transformPath: function(path) {
-                return path.replace(/\.handlebars$/, '.js');
-            }
+        webpackMiddleware: {
+            stats: 'errors-only'
         },
 
         // test results reporter to use
