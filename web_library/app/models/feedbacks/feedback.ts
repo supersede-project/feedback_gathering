@@ -1,4 +1,3 @@
-import {ConfigurationService} from '../services/configuration_service';
 import {mechanismTypes} from '../../js/config';
 import {PushConfiguration} from '../configurations/push_configuration';
 import {TextFeedback} from './text_feedback';

@@ -12,7 +12,7 @@ describe('i18n Helper', () => {
         };
         var langNotAvailable = {
             'fallbackLang': 'de',
-            'lang': 'it',
+            'lang': 'ru',
             'distPath': 'base/app/'
         };
 

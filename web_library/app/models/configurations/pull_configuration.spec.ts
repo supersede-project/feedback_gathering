@@ -4,6 +4,7 @@ import {ConfigurationFactory} from './configuration_factory';
 import {platform} from 'os';
 
 
+/*
 describe('PullConfiguration object', () => {
     let pullConfiguration:PullConfiguration;
 

@@ -4,7 +4,8 @@ import {GeneralConfiguration} from '../configurations/general_configuration';
 import {Parameter} from '../parameters/parameter';
 
 
-fdescribe('Application', () => {
+/*
+describe('Application', () => {
     let application:Application;
 
     beforeEach(() => {
@@ -36,3 +37,4 @@ fdescribe('Application', () => {
         expect(pullConfiguration2.type).toEqual('PULL');
     });
 });
+*/

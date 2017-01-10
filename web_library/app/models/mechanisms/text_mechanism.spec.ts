@@ -66,8 +66,11 @@ describe('Text Mechanism', () => {
             'labelStyle': '',
             'clearInput': 1,
             'mandatory': 1,
-            'mandatoryReminder': 'Please put something into this field'
+            'mandatoryReminder': 'Please put something into this field',
+            'boxWidth': '100%',
+            'boxPaddingLeft': '0',
+            'boxPaddingRight': '20px',
+            'validationEmail': false
         })
     });
 });
-

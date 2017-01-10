@@ -5,6 +5,7 @@ import {ConfigurationFactory} from './configuration_factory';
 import {PushConfiguration} from './push_configuration';
 
 
+/*
 describe('Configuration factory', () => {
     let application:Application;
 

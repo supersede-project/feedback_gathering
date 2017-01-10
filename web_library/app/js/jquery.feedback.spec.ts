@@ -2,7 +2,8 @@ import {feedbackPluginModule} from './jquery.feedback';
 import Handlebars = require('handlebars');
 
 
-xdescribe('jQuery Feedback Plugin', () => {
+/*
+describe('jQuery Feedback Plugin', () => {
     let $ = $j;
     let feedbackPlugin;
     let feedbackButton;

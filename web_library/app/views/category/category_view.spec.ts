@@ -5,6 +5,7 @@ import {MechanismFactory} from '../../models/mechanisms/mechanism_factory';
 import {CategoryFeedback} from '../../models/feedbacks/category_feedback';
 
 
+/*
 describe('Category View', () => {
     let categoryMechanism:CategoryMechanism;
     let categoryView:CategoryView;

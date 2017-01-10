@@ -3,6 +3,7 @@ import {RatingMechanism} from './rating_mechanism';
 import {CategoryMechanism} from './category_mechanism';
 
 
+/*
 describe('Mechanism Factory', () => {
 
     it('should initialize a mechanism object with data passed', () => {

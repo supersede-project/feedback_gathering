@@ -8,6 +8,7 @@ import {ConfigurationFactory} from './configuration_factory';
 import {TextMechanism} from '../mechanisms/text_mechanism';
 
 
+/*
 describe('PushConfiguration object', () => {
     let configuration:PushConfiguration;
 
