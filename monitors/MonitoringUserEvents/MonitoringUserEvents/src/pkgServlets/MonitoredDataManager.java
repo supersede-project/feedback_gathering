@@ -1,5 +1,6 @@
 package pkgServlets;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 
 import javax.servlet.ServletException;
@@ -38,7 +39,14 @@ public class MonitoredDataManager extends HttpServlet {
 		jsonObjAux.put("idOutput", request.getParameter("OutputID"));
 		jsonObjAux.put("confId", request.getParameter("ConfigurationID"));
 		jsonObjAux.put("idUser", request.getParameter("UserID"));
-		jsonObjAux.put("currentPage", request.getParameter("CurrentPage"));
+		
+		BufferedReader reader = request.getReader();
+	    String sCurrentURLPage = "";
+	    while ((sCurrentURLPage = reader.readLine()) != null)
+	    {
+	    	jsonObjAux.put("currentPage", sCurrentURLPage);
+	    }
+		
 		jsonObjAux.put("elementType", request.getParameter("Element"));
 		jsonObjAux.put("idElement", request.getParameter("idElement"));
 		jsonObjAux.put("eventType", request.getParameter("EventType"));

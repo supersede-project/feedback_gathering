@@ -32,16 +32,14 @@ function fnGetEventInf(e, sEventType, userID){
     idOutput++;
     confID ++;
     
-    fnSendMonitoredData(idOutput, confID, userID, window.location.href, typeElement, idElement, sEventType, textElement, valueElement);
-}
-
-function fnGetFullURL(){
- window.location.href;
+    fnSendMonitoredData(idOutput, confID, userID, typeElement, idElement, sEventType, textElement, valueElement);
 }
 
 //Calls servlet MonitoredDataManager and sends the information of the event
-function fnSendMonitoredData(idOutput, confID, userID, sCurrentPage, sElement, sIDElement, sEventType, sElementText, sElementValue){
-	var vInfoEvents = "OutputID=" + idOutput + "&ConfigurationID=" + confID + "&UserID=" + userID + "&CurrentPage=" + sCurrentPage  + "&Element=" + sElement + "&idElement=" + sIDElement + "&EventType=" + sEventType + "&Text=" + sElementText + "&Value=" + sElementValue + "&Timestamp=" + Date();
+function fnSendMonitoredData(idOutput, confID, userID, sElement, sIDElement, sEventType, sElementText, sElementValue){
+	var sCurrentURLPage = window.location.href;
+	
+	var vInfoEvents = "OutputID=" + idOutput + "&ConfigurationID=" + confID + "&UserID=" + userID + "&Element=" + sElement + "&idElement=" + sIDElement + "&EventType=" + sEventType + "&Text=" + sElementText + "&Value=" + sElementValue + "&Timestamp=" + Date();
 	
 	var url = "MonitoredDataManager?" + vInfoEvents;
 	
@@ -49,7 +47,7 @@ function fnSendMonitoredData(idOutput, confID, userID, sCurrentPage, sElement, s
 
 	req.onreadystatechange = fnCallback;
 	req.open("POST", url, true);
-	req.send(null);
+	req.send(sCurrentURLPage);
 }
 
 //Create the XMLHttpRequest object
