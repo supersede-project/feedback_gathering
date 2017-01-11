@@ -51,7 +51,7 @@ public class ToolDispatcher {
 	private Map<Integer, ToolInterface> monitoringInstances = new HashMap<>();
 	
 	@POST
-	public String addConfiguration(@QueryParam("configurationJson") String jsonConf) {
+	public String addConfiguration(String jsonConf) {
 		
 		++confId;
 		
@@ -83,7 +83,7 @@ public class ToolDispatcher {
 	
 	@PUT
 	@Path("{id}")
-	public String updateConfiguration(@PathParam("id") Integer id, @QueryParam("configurationJson") String jsonConf) {
+	public String updateConfiguration(@PathParam("id") Integer id, String jsonConf) {
 
 		try {
 			MonitoringParams params = parseJsonConfiguration(jsonConf);

@@ -28,6 +28,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.inject.Singleton;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -62,7 +63,7 @@ public class ToolDispatcher {
 	 * @return				response
 	 */
 	@POST
-	public String addConfiguration(@QueryParam("configurationJson") String jsonConf) {
+	public String addConfiguration(String jsonConf) {
 		
 		++confId;
 				
@@ -95,7 +96,7 @@ public class ToolDispatcher {
 	
 	@PUT
 	@Path("{id}")
-	public String updateConfiguration(@PathParam("id") Integer id, @QueryParam("configurationJson") String jsonConf) {
+	public String updateConfiguration(@PathParam("id") Integer id, String jsonConf) {
 
 		try {
 			MonitoringParams params = parseJsonConfiguration(jsonConf);
