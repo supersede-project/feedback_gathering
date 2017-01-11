@@ -30,6 +30,7 @@ import java.util.Map;
 import javax.inject.Singleton;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.QueryParam;
@@ -49,7 +50,7 @@ public class ToolDispatcher {
 	final static Logger logger = Logger.getLogger(ToolDispatcher.class);
 	
 	//Fake configuration id for testing purposes
-	private int confId = 1;
+	private int confId = 0;
 	private final String packageRoute = "monitoring.tools.";
 	
 	//A data structure storing all monitoring tool instances identified by configuration ID
@@ -62,6 +63,8 @@ public class ToolDispatcher {
 	 */
 	@POST
 	public String addConfiguration(@QueryParam("configurationJson") String jsonConf) {
+		
+		++confId;
 				
 		try {
 			MonitoringParams params = parseJsonConfiguration(jsonConf);
@@ -86,8 +89,27 @@ public class ToolDispatcher {
 		} catch (Exception e) {
 			return throwError("The selected tool is not working properly");
 		}
-		
+
 		return getResponse(confId);
+	}
+	
+	@PUT
+	@Path("{id}")
+	public String updateConfiguration(@PathParam("id") Integer id, @QueryParam("configurationJson") String jsonConf) {
+
+		try {
+			MonitoringParams params = parseJsonConfiguration(jsonConf);
+			if(!monitoringInstances.containsKey(id))
+				return throwError("Not existing configuration with ID " + String.valueOf(id));
+			ToolInterface toolInstance = monitoringInstances.get(id);
+			toolInstance.updateConfiguration(params);
+		} catch (JSONException e) {
+			return throwError("Not a valid JSON configuration object");
+		} catch (Exception e) {
+			return throwError("There was an unexpected error");
+		}
+		
+		return getResponse(id);
 	}
 	
 	/**
@@ -153,7 +175,6 @@ public class ToolDispatcher {
 			resInfo.put("message", error);
 			resInfo.put("status", "error");
 			response.put("SocialNetworksMonitoringConfProfResult", resInfo);
-			++confId;		
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
@@ -169,8 +190,7 @@ public class ToolDispatcher {
 		try {
 			resInfo.put("idConf", String.valueOf(id));
 			resInfo.put("status", "success");
-			response.put("SocialNetworksMonitoringConfProfResult", resInfo);
-			++confId;		
+			response.put("SocialNetworksMonitoringConfProfResult", resInfo);		
 		} catch(Exception e) {
 			e.printStackTrace();
 		}

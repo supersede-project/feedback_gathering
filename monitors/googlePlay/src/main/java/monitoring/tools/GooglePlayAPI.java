@@ -87,33 +87,7 @@ public class GooglePlayAPI implements ToolInterface {
 		this.producer = producer;
 		this.confId = confId;
 		
-		generateNewAccessToken();
-
-		timer = new Timer();
-		timer.schedule(new TimerTask() {
-		    public void run() {
-		    	if (firstConnection) {
-		    		logger.debug("Connection established");
-		    		initTime = new Date();
-					firstConnection = false;
-		    	} else {
-		    		stamp = initTime;
-		    		initTime = new Date();
-					try {
-						apiCall();
-					} catch (IOException e) {
-						logger.debug("Invalid access token. Generating a new one");
-						try {
-							generateNewAccessToken();
-							apiCall();
-						} catch (IOException e1) {
-							logger.error("There was an unexpected error with the API call");
-						}
-					}		    		
-		    	}
-		    }
-
-		}, 0, Integer.parseInt(params.getTimeSlot())* 1000);
+		resetStream();
 		
 	}
 	
@@ -255,6 +229,45 @@ public class GooglePlayAPI implements ToolInterface {
 		.getJSONObject("lastModified").getInt("nanos")/1000000 + 
 		obj.getJSONArray("comments").getJSONObject(0).getJSONObject("userComment")
 		.getJSONObject("lastModified").getLong("seconds")*1000;
+	}
+
+	@Override
+	public void updateConfiguration(MonitoringParams params) throws Exception {
+		deleteConfiguration();
+		apiCall();
+		this.params = params;
+		resetStream();
+	}
+	
+	private void resetStream() throws Exception  {
+		firstConnection = true;
+		generateNewAccessToken();
+
+		timer = new Timer();
+		timer.schedule(new TimerTask() {
+		    public void run() {
+		    	if (firstConnection) {
+		    		logger.debug("Connection established");
+		    		initTime = new Date();
+					firstConnection = false;
+		    	} else {
+		    		stamp = initTime;
+		    		initTime = new Date();
+					try {
+						apiCall();
+					} catch (IOException e) {
+						logger.debug("Invalid access token. Generating a new one");
+						try {
+							generateNewAccessToken();
+							apiCall();
+						} catch (IOException e1) {
+							logger.error("There was an unexpected error with the API call");
+						}
+					}		    		
+		    	}
+		    }
+
+		}, 0, Integer.parseInt(params.getTimeSlot())* 1000);
 	}
 
 }

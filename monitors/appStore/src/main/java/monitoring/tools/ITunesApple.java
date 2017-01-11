@@ -70,28 +70,9 @@ public class ITunesApple implements ToolInterface {
 		
 		this.params = params;
 		this.producer = producer;
-		this.reported = new ArrayList<>();
 		this.confId = confId;
 		
-		firstApiCall();
-		
-		Timer timer = new Timer();
-		timer.schedule(new TimerTask() {
-		    public void run() {
-		    	if (firstConnection) {
-		    		logger.debug("Connection established");
-					firstConnection = false;
-					System.out.println("First connection stablished");		
-		    	} else {
-					try {
-						apiCall();
-					} catch (IOException e) {
-						logger.error("There was an unexpected error with the API call");
-					}	    		
-		    	}
-		    }
-
-		}, 0, Integer.parseInt(params.getTimeSlot())* 1000);
+		resetStream();
 		
 	}
 	
@@ -170,5 +151,37 @@ public class ITunesApple implements ToolInterface {
 		    sb.append(responseBody);
 		}
 		return sb.toString();
+	}
+
+	@Override
+	public void updateConfiguration(MonitoringParams params) throws Exception {
+		deleteConfiguration();
+		apiCall();
+		this.params = params;
+		resetStream();
+	}
+	
+	private void resetStream() throws Exception {
+		this.reported = new ArrayList<>();
+		firstConnection = true;
+		firstApiCall();
+		
+		Timer timer = new Timer();
+		timer.schedule(new TimerTask() {
+		    public void run() {
+		    	if (firstConnection) {
+		    		logger.debug("Connection established");
+					firstConnection = false;
+					System.out.println("First connection stablished");		
+		    	} else {
+					try {
+						apiCall();
+					} catch (IOException e) {
+						logger.error("There was an unexpected error with the API call");
+					}	    		
+		    	}
+		    }
+
+		}, 0, Integer.parseInt(params.getTimeSlot())* 1000);
 	}
 }

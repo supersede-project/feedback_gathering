@@ -25,8 +25,10 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import javax.inject.Singleton;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.QueryParam;
@@ -37,11 +39,12 @@ import org.json.JSONObject;
 import monitoring.kafka.KafkaCommunication;
 import monitoring.model.MonitoringParams;
 
+@Singleton
 @Path("configuration")
 public class ToolDispatcher {
 
 	//Fake configuration id for testing purposes
-	private int confId = 1;
+	private int confId = 0;
 	private final String toolPackageRoute = "monitoring.tools.";
 	
 	//A data structure storing all monitoring tool instances identified by configuration ID
@@ -49,6 +52,8 @@ public class ToolDispatcher {
 	
 	@POST
 	public String addConfiguration(@QueryParam("configurationJson") String jsonConf) {
+		
+		++confId;
 		
 		try {
 			MonitoringParams params = parseJsonConfiguration(jsonConf);
@@ -58,6 +63,7 @@ public class ToolDispatcher {
 			Class monitor = Class.forName(toolPackageRoute + params.getToolName());
 			ToolInterface toolInstance = (ToolInterface) monitor.newInstance();
 			toolInstance.addConfiguration(params, KafkaCommunication.initProducer(params.getKafkaEndpoint()), confId);
+			monitoringInstances.put(confId, toolInstance);
 			
 			return getResponse(confId);
 			
@@ -73,6 +79,25 @@ public class ToolDispatcher {
 			return throwError(e.getMessage());
 		}
 		
+	}
+	
+	@PUT
+	@Path("{id}")
+	public String updateConfiguration(@PathParam("id") Integer id, @QueryParam("configurationJson") String jsonConf) {
+
+		try {
+			MonitoringParams params = parseJsonConfiguration(jsonConf);
+			if(!monitoringInstances.containsKey(id))
+				return throwError("Not existing configuration with ID " + String.valueOf(id));
+			ToolInterface toolInstance = monitoringInstances.get(id);
+			toolInstance.updateConfiguration(params);
+		} catch (JSONException e) {
+			return throwError("Not a valid JSON configuration object");
+		} catch (Exception e) {
+			return throwError("There was an unexpected error");
+		}
+		
+		return getResponse(id);
 	}
 	
 	/**
@@ -141,7 +166,6 @@ public class ToolDispatcher {
 			resInfo.put("message", error);
 			resInfo.put("status", "error");
 			response.put("AppStoreConfProfResult", resInfo);
-			++confId;		
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
@@ -157,8 +181,7 @@ public class ToolDispatcher {
 		try {
 			resInfo.put("idConf", id);
 			resInfo.put("status", "success");
-			response.put("AppStoreConfProfResult", resInfo);
-			++confId;		
+			response.put("AppStoreConfProfResult", resInfo);		
 		} catch(Exception e) {
 			e.printStackTrace();
 		}

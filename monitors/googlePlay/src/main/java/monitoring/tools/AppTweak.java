@@ -84,28 +84,8 @@ public class AppTweak implements ToolInterface {
 		this.params = params;
 		this.producer = producer;
 		this.confId = confId;
-
-		timer = new Timer();
-		timer.schedule(new TimerTask() {
-		    public void run() {
-		    	if (firstConnection) {
-		    		logger.debug("Connection established");
-		    		initTime = new Date();
-					firstConnection = false;
-		    	} else {
-		    		stamp = initTime;
-		    		initTime = new Date();
-					try {
-						apiCall();
-					} catch (IOException e) {
-						logger.error("The API call was not correctly build");
-					} catch (JSONException|ParseException e) {
-						logger.error("The response provided by the API tool was not a valid JSON object");
-					}		
-		    	}
-		    }
-
-		}, 0, Integer.parseInt(params.getTimeSlot())* 1000);
+		
+		resetStream();
 		
 	}
 	
@@ -180,6 +160,39 @@ public class AppTweak implements ToolInterface {
 		    sb.append(responseBody);
 		}
 		return sb.toString();
+	}
+
+	@Override
+	public void updateConfiguration(MonitoringParams params) throws Exception {
+		deleteConfiguration();
+		apiCall();
+		this.params = params;
+		resetStream();
+	}
+
+	private void resetStream() {
+		firstConnection = true;
+		timer = new Timer();
+		timer.schedule(new TimerTask() {
+		    public void run() {
+		    	if (firstConnection) {
+		    		logger.debug("Connection established");
+		    		initTime = new Date();
+					firstConnection = false;
+		    	} else {
+		    		stamp = initTime;
+		    		initTime = new Date();
+					try {
+						apiCall();
+					} catch (IOException e) {
+						logger.error("The API call was not correctly build");
+					} catch (JSONException|ParseException e) {
+						logger.error("The response provided by the API tool was not a valid JSON object");
+					}		
+		    	}
+		    }
+
+		}, 0, Integer.parseInt(params.getTimeSlot())* 1000);
 	}
 
 }

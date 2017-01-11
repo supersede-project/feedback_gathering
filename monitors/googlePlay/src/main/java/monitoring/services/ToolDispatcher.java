@@ -28,6 +28,7 @@ import java.util.Map;
 import javax.inject.Singleton;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.QueryParam;
@@ -51,6 +52,8 @@ public class ToolDispatcher {
 	
 	@POST
 	public String addConfiguration(@QueryParam("configurationJson") String jsonConf) {
+		
+		++confId;		
 		
 		try {
 			MonitoringParams params = parseJsonConfiguration(jsonConf);
@@ -76,6 +79,25 @@ public class ToolDispatcher {
 			return throwError(e.getMessage());
 		}
 		
+	}
+	
+	@PUT
+	@Path("{id}")
+	public String updateConfiguration(@PathParam("id") Integer id, @QueryParam("configurationJson") String jsonConf) {
+
+		try {
+			MonitoringParams params = parseJsonConfiguration(jsonConf);
+			if(!monitoringInstances.containsKey(id))
+				return throwError("Not existing configuration with ID " + String.valueOf(id));
+			ToolInterface toolInstance = monitoringInstances.get(id);
+			toolInstance.updateConfiguration(params);
+		} catch (JSONException e) {
+			return throwError("Not a valid JSON configuration object");
+		} catch (Exception e) {
+			return throwError("There was an unexpected error");
+		}
+		
+		return getResponse(id);
 	}
 	
 	/**
@@ -144,7 +166,6 @@ public class ToolDispatcher {
 			resInfo.put("message", error);
 			resInfo.put("status", "error");
 			response.put("GooglePlayConfProfResult", resInfo);
-			++confId;		
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
@@ -161,7 +182,6 @@ public class ToolDispatcher {
 			resInfo.put("idConf", id);
 			resInfo.put("status", "success");
 			response.put("GooglePlayConfProfResult", resInfo);
-			++confId;		
 		} catch(Exception e) {
 			e.printStackTrace();
 		}

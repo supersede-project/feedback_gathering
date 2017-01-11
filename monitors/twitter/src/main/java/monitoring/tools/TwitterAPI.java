@@ -72,61 +72,8 @@ public class TwitterAPI implements ToolInterface {
 		this.confParams = params;
 		this.producer = producer;
 		this.configurationId = configurationId;
-		firstConnection = true;
-		tweetInfo = new ArrayList<>();
 		
-		stream = new TwitterStreamFactory().getInstance();
-		
-		stream.onStatus(new Consumer<Status>() {
-			@Override
-			public void accept(Status arg0) {
-				if (confParams.getAccounts() != null && !confParams.getAccounts().isEmpty()) {
-					if (confParams.getAccounts().contains(arg0.getUser().getScreenName())) { 
-						tweetInfo.add(arg0);
-					}
-				}
-				else tweetInfo.add(arg0);
-			}
-		});
-		
-		stream.addConnectionLifeCycleListener(new ConnectionLifeCycleListener() {
-
-			@Override
-			public void onCleanUp() {
-			}
-
-			@Override
-			public void onConnect() {
-				logger.debug("Connection established successfully");
-				timer = new Timer();
-				timer.schedule(new TimerTask() {
-				    public void run() {
-				    	if (firstConnection) {
-				    		firstConnection = false;
-				    	} else {
-				    		generateData((new Timestamp((new Date()).getTime()).toString()));
-				    	}
-				    }
-
-				}, 0, Integer.parseInt(confParams.getTimeSlot())* 1000);
-			}
-
-			@Override
-			public void onDisconnect() {
-				logger.debug("Connection closed");
-			}
-			
-		});
-		
-		FilterQuery filterQuery = new FilterQuery();
-		if (params.getKeywordExpression() != null) {
-			filterQuery.track(generateKeywordExp(params.getKeywordExpression()));
-		}
-		
-		System.out.println(filterQuery);
-		
-		//filterQuery.follow(user.getId());
-		stream.filter(filterQuery);
+		resetStream();
 		
 	}
 	
@@ -218,6 +165,72 @@ public class TwitterAPI implements ToolInterface {
 		logger.debug("Data successfully sent to Kafka endpoint");
 		++id;
 		
+	}
+
+	@Override
+	public void updateConfiguration(MonitoringParams params) throws Exception {
+		deleteConfiguration();
+		generateData((new Timestamp((new Date()).getTime()).toString()));
+		this.confParams = params;
+		resetStream();
+	}
+
+	private void resetStream() {
+		
+		firstConnection = true;
+		tweetInfo = new ArrayList<>();
+		stream = new TwitterStreamFactory().getInstance();
+		
+		stream.onStatus(new Consumer<Status>() {
+			@Override
+			public void accept(Status arg0) {
+				if (confParams.getAccounts() != null && !confParams.getAccounts().isEmpty()) {
+					if (confParams.getAccounts().contains(arg0.getUser().getScreenName())) { 
+						tweetInfo.add(arg0);
+					}
+				}
+				else tweetInfo.add(arg0);
+			}
+		});
+				
+		stream.addConnectionLifeCycleListener(new ConnectionLifeCycleListener() {
+
+			@Override
+			public void onCleanUp() {
+			}
+
+			@Override
+			public void onConnect() {
+				logger.debug("Connection established successfully");
+				timer = new Timer();
+				timer.schedule(new TimerTask() {
+				    public void run() {
+				    	if (firstConnection) {
+				    		firstConnection = false;
+				    	} else {
+				    		generateData((new Timestamp((new Date()).getTime()).toString()));
+				    	}
+				    }
+
+				}, 0, Integer.parseInt(confParams.getTimeSlot())* 1000);
+			}
+
+			@Override
+			public void onDisconnect() {
+				logger.debug("Connection closed");
+			}
+			
+		});
+		
+		FilterQuery filterQuery = new FilterQuery();
+		if (this.confParams.getKeywordExpression() != null) {
+			filterQuery.track(generateKeywordExp(this.confParams.getKeywordExpression()));
+		}
+		
+		System.out.println(filterQuery);
+		
+		//filterQuery.follow(user.getId());
+		stream.filter(filterQuery);
 	}
 	
 }

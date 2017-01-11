@@ -29,5 +29,7 @@ public interface ToolInterface {
 	public void addConfiguration(MonitoringParams params, Producer<String,String> producer, int confId) throws Exception;
 	
 	public void deleteConfiguration() throws Exception;
+
+	public void updateConfiguration(MonitoringParams params) throws Exception;
 	
 }
