@@ -29,6 +29,11 @@ module.exports = function (config) {
             '/app/js/lib/screenshot/fabric.min.js': '/base/app/js/lib/screenshot/fabric.min.js',
             '/app/js/lib/screenshot/spectrum.js': '/base/app/js/lib/screenshot/spectrum.js',
             '/app/js/lib/screenshot/customiseControls.js': '/base/app/js/lib/screenshot/customiseControls.js',
+            '/app/js/lib/screenshot/html2canvas_5_0_3.min.js': '/base/app/js/lib/screenshot/html2canvas_5_0_3.min.js',
+            '/app/js/lib/screenshot/html2canvas_5_0_3.svg.min.js': '/base/app/js/lib/screenshot/html2canvas_5_0_3.svg.min.js',
+            '/app/js/lib/screenshot/rgbcolor.js': '/base/app/js/lib/screenshot/rgbcolor.js',
+            '/app/js/lib/screenshot/StackBlur.js': '/base/app/js/lib/screenshot/StackBlur.js',
+            '/app/js/lib/screenshot/canvg.js': '/base/app/js/lib/screenshot/canvg.js',
             '/app/js/lib/rating/jquery.star-rating-svg.js': '/base/app/js/lib/rating/jquery.star-rating-svg.js',
             '/app/assets/jquery-ui-1.12.1.custom/jquery-ui.js': '/base/app/assets/jquery-ui-1.12.1.custom/jquery-ui.js'
         },
@@ -54,7 +59,7 @@ module.exports = function (config) {
         // test results reporter to use
         // possible values: 'dots', 'progress'
         // available reporters: https://npmjs.org/browse/keyword/karma-reporter
-        reporters: ['mocha', 'coverage'],
+        reporters: ['mocha'], //, 'coverage'],
 
 
         // web server port

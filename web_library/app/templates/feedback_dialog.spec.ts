@@ -15,6 +15,8 @@ describe('Feedback dialog template', () => {
             return i18n.t(i18n_key);
         };
         Handlebars.registerHelper('t', t);
+
+        i18n.changeLanguage('en');
     });
 
     beforeEach(() => {
