@@ -41,16 +41,17 @@ public class KafkaCommunication {
 	/**
 	 * Generates a json formatted response and sends it to the IF Kafka consumer
 	 */
-	public void generateResponse(List<MonitoringData> dataList, String timeStamp, 
-		int outputId, int confId) {
+	public void generateResponseIF(List<MonitoringData> dataList, String timeStamp, 
+		int outputId, int confId, String topic) {
 		JSONObject jsonData = generateData(dataList, timeStamp, outputId, confId);
+		proxy.sendMessage(jsonData, topic);
 	}
 	
 	/**
 	 * Generates a json formatted response and sends it to a custom kafka consumer
 	 */
-	public void generateResponse(List<MonitoringData> dataList, String timeStamp, 
-			Producer<String, String> producer, int outputId, int confId, String topic) {
+	public void generateResponseKafka(List<MonitoringData> dataList, String timeStamp,
+			int outputId, int confId, String topic) {
 		JSONObject jsonData = generateData(dataList, timeStamp, outputId, confId);
 		KeyedMessage<String, String> msg = new KeyedMessage<String, String>(topic, jsonData.toString());
 		producer.send(msg);

@@ -146,8 +146,8 @@ public class TwitterAPI implements ToolInterface {
 			data.add(dataObj);
 		}
 		tweetInfo = new ArrayList<>();
-		//kafka.generateResponse(data, searchTimeStamp, this.producer, id, configurationId, this.confParams.getKafkaTopic);
-		kafka.generateResponse(data, searchTimeStamp, id, configurationId);
+		//kafka.generateResponseKafka(data, searchTimeStamp, id, configurationId, this.confParams.getKafkaTopic);
+		kafka.generateResponseIF(data, searchTimeStamp, id, configurationId, this.confParams.getKafkaTopic());
 		logger.debug("Data successfully sent to Kafka endpoint");
 		++id;
 	}
