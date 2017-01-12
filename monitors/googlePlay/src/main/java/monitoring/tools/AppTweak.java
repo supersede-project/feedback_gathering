@@ -49,6 +49,7 @@ import kafka.javaapi.producer.Producer;
 import monitoring.kafka.KafkaCommunication;
 import monitoring.model.MonitoringData;
 import monitoring.model.MonitoringParams;
+import monitoring.model.Utils;
 import monitoring.services.ToolInterface;
 
 public class AppTweak implements ToolInterface {
@@ -57,17 +58,12 @@ public class AppTweak implements ToolInterface {
 	
 	private int confId;
 	
-	//Token credentials
 	private final String token = "iOAbyjaOnWFNpO64RCVnG3TWmR4";
-	
-	//Route params
 	private final String uri = "https://api.apptweak.com/android/applications/";
 	private final String uriParams = "/reviews.json";
 	
 	private MonitoringParams params;
-	
 	private boolean firstConnection = true;
-	
 	private int id = 1;
 	
 	private Date initTime;
@@ -75,23 +71,56 @@ public class AppTweak implements ToolInterface {
 	
 	private Timer timer;
 	
-	//Kafka producer
-	Producer<String, String> producer;
+	KafkaCommunication kafka;
 
 	@Override
-	public void addConfiguration(MonitoringParams params, Producer<String, String> producer, int confId) throws Exception {
-		
+	public void addConfiguration(MonitoringParams params, int confId) throws Exception {
 		this.params = params;
-		this.producer = producer;
 		this.confId = confId;
-		
+		this.kafka = new KafkaCommunication();
 		resetStream();
-		
 	}
 	
 	@Override
 	public void deleteConfiguration() throws Exception {
 		timer.cancel();
+	}
+	
+	@Override
+	public void updateConfiguration(MonitoringParams params) throws Exception {
+		deleteConfiguration();
+		apiCall();
+		this.params = params;
+		resetStream();
+	}
+
+	private void resetStream() {
+		logger.debug("Initialising streaming");
+		//this.kafka.initProducer(this.params.getKafkaEndpoint());
+		this.kafka.initProxy(this.params.getKafkaEndpoint());
+		
+		firstConnection = true;
+		timer = new Timer();
+		timer.schedule(new TimerTask() {
+		    public void run() {
+		    	if (firstConnection) {
+		    		logger.debug("Connection established");
+		    		initTime = new Date();
+					firstConnection = false;
+		    	} else {
+		    		stamp = initTime;
+		    		initTime = new Date();
+					try {
+						apiCall();
+					} catch (IOException e) {
+						logger.error("The API call was not correctly build");
+					} catch (JSONException|ParseException e) {
+						logger.error("The response provided by the API tool was not a valid JSON object");
+					}		
+		    	}
+		    }
+
+		}, 0, Integer.parseInt(params.getTimeSlot())* 1000);
 	}
 
 	protected void apiCall() throws MalformedURLException, IOException, JSONException, ParseException {
@@ -128,7 +157,8 @@ public class AppTweak implements ToolInterface {
 				dataList.add(review);
 			}
 		}
-		KafkaCommunication.generateResponse(dataList, timeStamp, producer, id, confId, params.getKafkaTopic());
+		//kafka.generateResponseKafka(dataList, timeStamp, id, confId, params.getKafkaTopic());
+		kafka.generateResponseIF(dataList, timeStamp, id, confId, params.getKafkaTopic());
 		logger.debug("Data sent to kafka endpoint");
 		++id;
 	}
@@ -150,49 +180,7 @@ public class AppTweak implements ToolInterface {
 		connection.setRequestProperty("X-Apptweak-Key", token);
 		connection.getInputStream();
 		
-		return new JSONObject(streamToString(connection.getInputStream()));
-	}
-	
-	private String streamToString(InputStream stream) {
-		StringBuilder sb = new StringBuilder();
-		try (Scanner scanner = new Scanner(stream)) {
-		    String responseBody = scanner.useDelimiter("\\A").next();
-		    sb.append(responseBody);
-		}
-		return sb.toString();
-	}
-
-	@Override
-	public void updateConfiguration(MonitoringParams params) throws Exception {
-		deleteConfiguration();
-		apiCall();
-		this.params = params;
-		resetStream();
-	}
-
-	private void resetStream() {
-		firstConnection = true;
-		timer = new Timer();
-		timer.schedule(new TimerTask() {
-		    public void run() {
-		    	if (firstConnection) {
-		    		logger.debug("Connection established");
-		    		initTime = new Date();
-					firstConnection = false;
-		    	} else {
-		    		stamp = initTime;
-		    		initTime = new Date();
-					try {
-						apiCall();
-					} catch (IOException e) {
-						logger.error("The API call was not correctly build");
-					} catch (JSONException|ParseException e) {
-						logger.error("The response provided by the API tool was not a valid JSON object");
-					}		
-		    	}
-		    }
-
-		}, 0, Integer.parseInt(params.getTimeSlot())* 1000);
+		return new JSONObject(Utils.streamToString(connection.getInputStream()));
 	}
 
 }

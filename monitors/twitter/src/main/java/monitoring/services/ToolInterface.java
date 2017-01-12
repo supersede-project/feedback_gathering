@@ -25,7 +25,7 @@ import monitoring.model.MonitoringParams;
 
 public interface ToolInterface {
 		
-	public void addConfiguration(MonitoringParams params, int configurationId);
+	public void addConfiguration(MonitoringParams params, int configurationId) throws Exception;
 	
 	public void deleteConfiguration() throws Exception;
 	
