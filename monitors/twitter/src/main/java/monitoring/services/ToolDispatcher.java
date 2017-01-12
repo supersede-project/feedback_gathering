@@ -75,7 +75,8 @@ public class ToolDispatcher {
 			
 			Class monitor = Class.forName(packageRoute + params.getToolName());
 			ToolInterface toolInstance = (ToolInterface) monitor.newInstance();
-			toolInstance.addConfiguration(params, KafkaCommunication.initProducer(params.getKafkaEndpoint()), confId);
+			//toolInstance.addConfiguration(params,producer,confId);
+			toolInstance.addConfiguration(params, confId);
 			
 			monitoringInstances.put(confId, toolInstance);
 			
@@ -128,8 +129,9 @@ public class ToolDispatcher {
 			monitoringInstances.get(id).deleteConfiguration();
 			monitoringInstances.remove(id);
 		} catch (Exception e) {
-			return throwError("There was an unexpected error");
+			return throwError(e.getMessage());
 		}
+		
 		
 		return getResponse(id);
 		

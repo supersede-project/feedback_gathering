@@ -29,7 +29,9 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import org.apache.log4j.Logger;
+import org.json.JSONObject;
 
+import eu.supersede.integration.api.analysis.proxies.KafkaClient;
 import kafka.javaapi.producer.Producer;
 import monitoring.kafka.KafkaCommunication;
 import monitoring.model.MonitoringData;
@@ -65,6 +67,8 @@ public class TwitterAPI implements ToolInterface {
 	
 	//The thread timer for monitoring
 	Timer timer;
+	
+	private KafkaClient proxy;
 
 	@Override
 	public void addConfiguration(MonitoringParams params, Producer<String, String> producer, int configurationId) {
@@ -72,7 +76,17 @@ public class TwitterAPI implements ToolInterface {
 		this.confParams = params;
 		this.producer = producer;
 		this.configurationId = configurationId;
+				
+		resetStream();
 		
+	}
+	
+	@Override
+	public void addConfiguration(MonitoringParams params, int configurationId) {
+		
+		this.confParams = params;
+		this.configurationId = configurationId;
+				
 		resetStream();
 		
 	}
@@ -80,7 +94,6 @@ public class TwitterAPI implements ToolInterface {
 	@Override
 	public void deleteConfiguration() throws Exception {
 		timer.cancel();
-		
 		stream.cleanUp();
 		stream.shutdown();
 	}
@@ -161,7 +174,11 @@ public class TwitterAPI implements ToolInterface {
 			data.add(dataObj);
 		}
 		tweetInfo = new ArrayList<>();
-		KafkaCommunication.generateResponse(data, searchTimeStamp, producer, id, configurationId, confParams.getKafkaTopic());
+		
+		//KafkaCommunication.generateResponse(data, searchTimeStamp, this.producer, id, configurationId, this.confParams.getKafkaTopic);
+		JSONObject response = KafkaCommunication.generateResponse(data, searchTimeStamp, id, configurationId);
+		proxy.sendMessage(response, this.confParams.getKafkaTopic());
+		
 		logger.debug("Data successfully sent to Kafka endpoint");
 		++id;
 		
@@ -176,6 +193,11 @@ public class TwitterAPI implements ToolInterface {
 	}
 
 	private void resetStream() {
+		
+		logger.debug("Initialising streaming...");
+		//Creates the new KafkaClientProxy instance for the specific endpoint
+		proxy = new KafkaClient(this.confParams.getKafkaEndpoint());
+		logger.debug("IF proxy instantiation successful");
 		
 		firstConnection = true;
 		tweetInfo = new ArrayList<>();
