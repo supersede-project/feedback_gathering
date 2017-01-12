@@ -39,25 +39,6 @@ public class KafkaCommunication {
 	private KafkaClient proxy;
 	
 	/**
-	 * Generates a json formatted response and sends it to the IF Kafka consumer
-	 */
-	public void generateResponseIF(List<MonitoringData> dataList, String timeStamp, 
-		int outputId, int confId, String topic) {
-		JSONObject jsonData = generateData(dataList, timeStamp, outputId, confId);
-		proxy.sendMessage(jsonData, topic);
-	}
-	
-	/**
-	 * Generates a json formatted response and sends it to a custom kafka consumer
-	 */
-	public void generateResponseKafka(List<MonitoringData> dataList, String timeStamp,
-			int outputId, int confId, String topic) {
-		JSONObject jsonData = generateData(dataList, timeStamp, outputId, confId);
-		KeyedMessage<String, String> msg = new KeyedMessage<String, String>(topic, jsonData.toString());
-		producer.send(msg);
-	}
-	
-	/**
 	 * Creates a new proxy for IF kafka communication
 	 */
 	public void initProxy(String kafkaEndpoint) {
@@ -74,6 +55,25 @@ public class KafkaCommunication {
 		props.put("request.required.acks", "1");
 		ProducerConfig config = new ProducerConfig(props);
 		this.producer = new Producer<String,String>(config);
+	}
+	
+	/**
+	 * Generates a json formatted response and sends it to the IF Kafka consumer
+	 */
+	public void generateResponseIF(List<MonitoringData> dataList, String timeStamp, 
+		int outputId, int confId, String topic) {
+		JSONObject jsonData = generateData(dataList, timeStamp, outputId, confId);
+		proxy.sendMessage(jsonData, topic);
+	}
+	
+	/**
+	 * Generates a json formatted response and sends it to a custom kafka consumer
+	 */
+	public void generateResponseKafka(List<MonitoringData> dataList, String timeStamp,
+			int outputId, int confId, String topic) {
+		JSONObject jsonData = generateData(dataList, timeStamp, outputId, confId);
+		KeyedMessage<String, String> msg = new KeyedMessage<String, String>(topic, jsonData.toString());
+		producer.send(msg);
 	}
 	
 	/**
