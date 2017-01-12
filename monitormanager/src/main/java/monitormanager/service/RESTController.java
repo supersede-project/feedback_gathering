@@ -1,6 +1,6 @@
 package monitormanager.service;
 
-import org.json.JSONObject;
+import org.apache.log4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,7 +17,7 @@ import monitormanager.model.ConfigurationParser;
 @RestController
 @RequestMapping("/configuration")
 public class RESTController {
-	
+		
 	private ConfigurationParser parser = new ConfigurationParser();
 
 	@RequestMapping(method = RequestMethod.POST)
@@ -69,7 +69,7 @@ public class RESTController {
 		
 	}
 	
-	@RequestMapping(method = RequestMethod.PUT)
+	@RequestMapping(method = RequestMethod.DELETE)
 	@ResponseStatus(value = HttpStatus.OK)
 	public String deleteConfiguration(@RequestParam("id") String id, @RequestParam("monitor") String monitor) {
 		
@@ -86,14 +86,12 @@ public class RESTController {
 	}
 	
 	private String getResponse() {
-		JSONObject resInfo = new JSONObject();
-		
+		JsonObject resInfo = new JsonObject();
 		try {
-			resInfo.put("status", "success");
+			resInfo.addProperty("status", "success");
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
-		
 		return resInfo.toString();
 	}
 	
