@@ -19,7 +19,7 @@
  * Initially developed in the context of SUPERSEDE EU project
  * www.supersede.eu
  *******************************************************************************/
-package monitor_manager.models;
+package monitormanager.model;
 
 import com.google.gson.JsonObject;
 
