@@ -46,7 +46,7 @@ public class RESTController {
 	
 	@RequestMapping(method = RequestMethod.PUT)
 	@ResponseStatus(value = HttpStatus.OK)
-	public String updateConfiguration(@RequestParam("id") String id, @RequestParam("monitor") String monitor, @RequestBody String input) {
+	public String updateConfiguration(@RequestBody String input) {
 		
 		JsonObject jsonObj = getJson(input);
 		JsonObject configuration = null;
@@ -71,7 +71,7 @@ public class RESTController {
 	
 	@RequestMapping(method = RequestMethod.DELETE)
 	@ResponseStatus(value = HttpStatus.OK)
-	public String deleteConfiguration(@RequestParam("id") String id, @RequestParam("monitor") String monitor) {
+	public String deleteConfiguration(@RequestBody String input) {
 		
 		//TODO call monitor
 		
