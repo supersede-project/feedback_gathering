@@ -69,17 +69,12 @@ public class ToolDispatcher {
 				
 		try {
 			MonitoringParams params = parseJsonConfiguration(jsonConf);
-			
 			if (params.getToolName() == null) 
 				return throwError("Missing tool name");
-			
 			Class monitor = Class.forName(packageRoute + params.getToolName());
 			ToolInterface toolInstance = (ToolInterface) monitor.newInstance();
-			//toolInstance.addConfiguration(params,producer,confId);
 			toolInstance.addConfiguration(params, confId);
-			
 			monitoringInstances.put(confId, toolInstance);
-			
 		} catch (JSONException e) {
 			return throwError("Not a valid JSON configuration object");
 		} catch (ClassNotFoundException e) {
@@ -91,7 +86,6 @@ public class ToolDispatcher {
 		} catch (Exception e) {
 			return throwError("The selected tool is not working properly");
 		}
-
 		return getResponse(confId);
 	}
 	
