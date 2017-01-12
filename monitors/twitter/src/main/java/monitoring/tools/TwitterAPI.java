@@ -29,21 +29,17 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import org.apache.log4j.Logger;
-import org.json.JSONObject;
 
-import eu.supersede.integration.api.analysis.proxies.KafkaClient;
-import kafka.javaapi.producer.Producer;
 import monitoring.kafka.KafkaCommunication;
 import monitoring.model.MonitoringData;
 import monitoring.model.MonitoringParams;
+import monitoring.model.Utils;
 import monitoring.services.ToolInterface;
 import twitter4j.ConnectionLifeCycleListener;
 import twitter4j.FilterQuery;
 import twitter4j.Status;
 import twitter4j.TwitterStream;
 import twitter4j.TwitterStreamFactory;
-import twitter4j.conf.Configuration;
-import twitter4j.conf.ConfigurationBuilder;
 import twitter4j.util.function.Consumer;
 
 public class TwitterAPI implements ToolInterface {
@@ -65,6 +61,7 @@ public class TwitterAPI implements ToolInterface {
 	
 	@Override
 	public void addConfiguration(MonitoringParams params, int configurationId) {
+		logger.debug("Adding new configuration");
 		this.confParams = params;
 		this.configurationId = configurationId;
 		this.kafka = new KafkaCommunication();
@@ -132,7 +129,7 @@ public class TwitterAPI implements ToolInterface {
 		
 		FilterQuery filterQuery = new FilterQuery();
 		if (this.confParams.getKeywordExpression() != null) 
-			filterQuery.track(generateKeywordExp(this.confParams.getKeywordExpression()));
+			filterQuery.track(Utils.generateKeywordExp(this.confParams.getKeywordExpression()));
 		stream.filter(filterQuery);
 	}
 	
@@ -149,64 +146,10 @@ public class TwitterAPI implements ToolInterface {
 			data.add(dataObj);
 		}
 		tweetInfo = new ArrayList<>();
-		
 		//kafka.generateResponse(data, searchTimeStamp, this.producer, id, configurationId, this.confParams.getKafkaTopic);
 		kafka.generateResponse(data, searchTimeStamp, id, configurationId);
 		logger.debug("Data successfully sent to Kafka endpoint");
 		++id;
-	}
-
-	private String[] generateKeywordExp(String keywordExpression) {
-		String[] blocks = keywordExpression.split(" AND ");
-		for (int i = 0; i < blocks.length; ++i) {
-			blocks[i] = blocks[i].replace("(", "");
-			blocks[i] = blocks[i].replace(")", "");
-		}
-		List<List<String>> cnfCombinations = new ArrayList<>();
-		for (int i = 0; i < blocks.length; ++i) 
-			cnfCombinations.add(getKeyElements(blocks[i]));
-		List<List<String>> dnfCombinations = new ArrayList<>();
-		for (int i = 0; i < cnfCombinations.get(0).size(); ++i) 
-			dnfCombinations.addAll(getDnfCombination(cnfCombinations, 0, i));
-		
-		String[] keywordDNFExpression = new String[dnfCombinations.size()];
-		for (int i = 0; i < dnfCombinations.size(); ++i) {
-			String keyword = "";
-			for (String s : dnfCombinations.get(i)) 
-				keyword += s + " ";
-			keywordDNFExpression[i] = keyword;
-		}
-		
-		return keywordDNFExpression;
-	}
-	
-	/**
-	 * Backtracking method for getting all combinations in DNF
-	 */
-	private List<List<String>> getDnfCombination(List<List<String>> cnfCombination, int k, int j) {
-		List<List<String>> dnf = new ArrayList<>();
-		if (k == cnfCombination.size() -1 ) {
-			List<String> l = new ArrayList<>();
-			l.add(cnfCombination.get(k).get(j));
-			dnf.add(l);
-		}
-		else {
-			for (int i = 0; i < cnfCombination.get(k+1).size(); ++i) {
-				List<List<String>> lists = getDnfCombination(cnfCombination, k + 1, i);
-				for (List<String> l : lists) l.add(cnfCombination.get(k).get(j));
-				dnf.addAll(lists);
-			}
-		}
-		return dnf;
-	}
-	
-	private List<String> getKeyElements(String block) {
-		String[] elements = block.split(" OR ");
-		List<String> keyElements = new ArrayList<>();
-		for (int i = 0; i < elements.length; ++i) {
-			keyElements.add(elements[i]);
-		}
-		return keyElements;
 	}
 	
 }

@@ -56,12 +56,15 @@ public class KafkaCommunication {
 		producer.send(msg);
 	}
 	
+	/**
+	 * Creates a new proxy for IF kafka communication
+	 */
 	public void initProxy(String kafkaEndpoint) {
 		proxy = new KafkaClient(kafkaEndpoint);
 	}
 	
 	/**
-	 * Creates and returns a new producer for kafka communication purposes
+	 * Creates a new producer for kafka communication
 	 */
 	public void initProducer(String kafkaEndpoint) {
 		Properties props = new Properties();
@@ -69,9 +72,7 @@ public class KafkaCommunication {
 		props.put("serializer.class", "kafka.serializer.StringEncoder");
 		props.put("request.required.acks", "1");
 		ProducerConfig config = new ProducerConfig(props);
-		
 		this.producer = new Producer<String,String>(config);
-		
 	}
 	
 	/**
@@ -89,14 +90,12 @@ public class KafkaCommunication {
 			jsonItem.put("link", item.getLink());
 			items.put(jsonItem);
 		}
-		
 		JSONObject mainInfo = new JSONObject();
 		mainInfo.put("idOutput", String.valueOf(outputId));
 		mainInfo.put("confId", String.valueOf(confId));
 		mainInfo.put("searchTimeStamp", timeStamp);
 		mainInfo.put("numDataItems", dataList.size());
 		mainInfo.put("DataItems", items);
-		
 		++outputId;
 		
 		JSONObject jsonData = new JSONObject();

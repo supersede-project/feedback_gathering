@@ -21,7 +21,6 @@
  *******************************************************************************/
 package monitoring.services;
 
-import kafka.javaapi.producer.Producer;
 import monitoring.model.MonitoringParams;
 
 public interface ToolInterface {
