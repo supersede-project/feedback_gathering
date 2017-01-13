@@ -29,8 +29,12 @@ jar {
 }
 
 war {
-	baseName = 'monitormanager'
-	version = '0.1.0'
+	baseName = 	'monitormanager'
+	version =	'0.1.0'
+}
+
+springBoot {
+    mainClass = "monitormanager.service.Application"
 }
 
 // In this section you declare where to find the dependencies of your project
@@ -47,7 +51,6 @@ repositories {
 dependencies {
     // The production code uses the SLF4J logging API at compile time
     compile 'org.slf4j:slf4j-api:1.7.21'
-
     // Declare the dependency for your favourite test framework you want to use in your tests.
     // TestNG is also supported by the Gradle Test task. Just change the
     // testCompile dependency to testCompile 'org.testng:testng:6.8.1' and add
@@ -55,8 +58,7 @@ dependencies {
     testCompile 'junit:junit:4.12'
     // https://mvnrepository.com/artifact/com.google.code.gson/gson
 	compile group: 'com.google.code.gson', name: 'gson', version: '2.3.1'
-	    
-    
     compile("org.springframework.boot:spring-boot-starter-web")
     testCompile('org.springframework.boot:spring-boot-starter-test')
+    providedRuntime("org.springframework.boot:spring-boot-starter-tomcat")
 }
