@@ -21,10 +21,16 @@ apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'idea'
 apply plugin: 'org.springframework.boot'
+apply plugin: 'war'
 
 jar {
     baseName = 'monitormanager'
     version =  '0.1.0'
+}
+
+war {
+	baseName = 'monitormanager'
+	version = '0.1.0'
 }
 
 // In this section you declare where to find the dependencies of your project
