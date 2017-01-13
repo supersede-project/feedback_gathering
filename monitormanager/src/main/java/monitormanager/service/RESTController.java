@@ -1,6 +1,5 @@
 package monitormanager.service;
 
-import org.json.JSONObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -86,10 +85,10 @@ public class RESTController {
 	}
 	
 	private String getResponse() {
-		JSONObject resInfo = new JSONObject();
+		JsonObject resInfo = new JsonObject();
 		
 		try {
-			resInfo.put("status", "success");
+			resInfo.addProperty("status", "success");
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
