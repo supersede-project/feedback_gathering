@@ -92,6 +92,7 @@ public class TwitterAPI implements ToolInterface {
 		firstConnection = true;
 		tweetInfo = new ArrayList<>();
 		stream = new TwitterStreamFactory().getInstance();
+		timer = new Timer();
 		stream.onStatus(new Consumer<Status>() {
 			@Override
 			public void accept(Status arg0) {
