@@ -80,7 +80,6 @@ public class ITunesApple implements ToolInterface {
 	@Override
 	public void updateConfiguration(MonitoringParams params) throws Exception {
 		deleteConfiguration();
-		apiCall();
 		this.params = params;
 		resetStream();
 	}

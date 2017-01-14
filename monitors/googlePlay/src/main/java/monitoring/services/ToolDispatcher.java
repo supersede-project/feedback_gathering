@@ -33,23 +33,28 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.QueryParam;
 
+import org.apache.log4j.Logger;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import monitoring.kafka.KafkaCommunication;
 import monitoring.model.MonitoringParams;
 import monitoring.model.Utils;
+import monitoring.tools.AppTweak;
 
 @Path("configuration")
 @Singleton
 public class ToolDispatcher {
 
-	private int confId = 1;
+	final static Logger logger = Logger.getLogger(AppTweak.class);
+	
+	private int confId = 0;
 	private final String toolPackageRoute = "monitoring.tools.";
 	private Map<Integer, ToolInterface> monitoringInstances = new HashMap<>();
 	
 	@POST
-	public String addConfiguration(String jsonConf) {
+	public String addConfiguration(String jsonConf) throws Exception {
+		logger.debug("Adding new configuration...");
 		try {
 			++confId;		
 			MonitoringParams params = Utils.parseJsonConfiguration(jsonConf);
@@ -57,6 +62,7 @@ public class ToolDispatcher {
 				return throwError("Missing tool name");
 			Class monitor = Class.forName(toolPackageRoute + params.getToolName());
 			ToolInterface toolInstance = (ToolInterface) monitor.newInstance();
+			logger.debug("Tool instantiation completed");
 			toolInstance.addConfiguration(params, confId);
 			monitoringInstances.put(confId, toolInstance);
 			return getResponse(confId);

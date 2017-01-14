@@ -81,7 +81,7 @@ public class ToolDispatcher {
 	
 	@PUT
 	@Path("{id}")
-	public String updateConfiguration(@PathParam("id") Integer id, String jsonConf) {
+	public String updateConfiguration(@PathParam("id") Integer id, String jsonConf) throws Exception {
 		try {
 			MonitoringParams params = Utils.parseJsonConfiguration(jsonConf);
 			if(!monitoringInstances.containsKey(id))
@@ -90,9 +90,9 @@ public class ToolDispatcher {
 			toolInstance.updateConfiguration(params);
 		} catch (JSONException e) {
 			return throwError("Not a valid JSON configuration object");
-		} catch (Exception e) {
+		} /*catch (Exception e) {
 			return throwError("There was an unexpected error");
-		}
+		}*/
 		return getResponse(id);
 	}
 	
@@ -110,7 +110,7 @@ public class ToolDispatcher {
 			monitoringInstances.get(id).deleteConfiguration();
 			monitoringInstances.remove(id);
 		} catch (Exception e) {
-			return throwError(e.getMessage());
+			return throwError("There was an unexpected error");
 		}
 		return getResponse(id);
 	}

@@ -34,6 +34,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.Scanner;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -57,12 +58,13 @@ public class GooglePlayAPI implements ToolInterface {
 	private int confId;
 	
 	//OAuth credentials for API authentication
-	private final String 	clientID = "785756325088-kes5s8om6n4o6sntvokqjt47tito7mla.apps.googleusercontent.com";
-	private final String 	clientSecret = "hr5Fcj-Awp8XejMWbxBBI6ps";
-	private final String 	refreshToken = "1/MKGHOAO4tTvO2kGECyG_EDUroJ07v55aIV_3EBbvKGA";
+	private String 	clientID;
+	private String 	clientSecret;
+	private String 	refreshToken;
+	private String 	accessToken;
+
 	private final String 	apiUri = "https://www.googleapis.com/androidpublisher/v2/applications/";
 	private final String	tokenUri = "https://accounts.google.com/o/oauth2/token";
-	private String 		 	accessToken = "ya29.Ci8WA5RBcItol_FE18VAHwHuueraVng6wdVi8kma8mDSRpQZtbX2XDM7cHbuMT0rnA";
 	
 	private boolean 		firstConnection = true;
 	private int				id = 1;
@@ -81,6 +83,8 @@ public class GooglePlayAPI implements ToolInterface {
 		this.params = params;
 		this.confId = confId;
 		this.kafka = new KafkaCommunication();
+		
+		loadProperties();
 		resetStream();
 	}
 	
@@ -92,7 +96,6 @@ public class GooglePlayAPI implements ToolInterface {
 	@Override
 	public void updateConfiguration(MonitoringParams params) throws Exception {
 		deleteConfiguration();
-		apiCall();
 		this.params = params;
 		resetStream();
 	}
@@ -230,6 +233,21 @@ public class GooglePlayAPI implements ToolInterface {
 		kafka.generateResponseIF(dataList, timeStamp, id, confId, params.getKafkaTopic());
 		logger.debug("Data sent to kafka endpoint");
 		++id;
+	}
+	
+	private void loadProperties() throws Exception {
+		Properties prop = new Properties();
+		try {
+			ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+			InputStream input = classLoader.getResourceAsStream("config.properties");
+			prop.load(input);
+			clientID = prop.getProperty("clientID");
+			clientSecret = prop.getProperty("clientSecret");
+			refreshToken = prop.getProperty("refreshToken");
+			accessToken = prop.getProperty("accessToken");
+		} catch (Exception e) {
+			throw new IOException("There was an unexpected error loading the properties file.");
+		}
 	}
 
 }

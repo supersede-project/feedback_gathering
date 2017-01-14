@@ -78,7 +78,7 @@ public class TwitterAPI implements ToolInterface {
 	@Override
 	public void updateConfiguration(MonitoringParams params) throws Exception {
 		deleteConfiguration();
-		generateData((new Timestamp((new Date()).getTime()).toString()));
+		//generateData((new Timestamp((new Date()).getTime()).toString()));
 		this.confParams = params;
 		resetStream();
 	}

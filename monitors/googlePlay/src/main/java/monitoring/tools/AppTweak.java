@@ -36,9 +36,14 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.Scanner;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import javax.servlet.Servlet;
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletContext;
 
 import org.apache.log4j.Logger;
 import org.json.JSONArray;
@@ -58,7 +63,7 @@ public class AppTweak implements ToolInterface {
 	
 	private int confId;
 	
-	private final String token = "iOAbyjaOnWFNpO64RCVnG3TWmR4";
+	private String token;
 	private final String uri = "https://api.apptweak.com/android/applications/";
 	private final String uriParams = "/reviews.json";
 	
@@ -75,12 +80,15 @@ public class AppTweak implements ToolInterface {
 
 	@Override
 	public void addConfiguration(MonitoringParams params, int confId) throws Exception {
+		logger.debug("Setting monitorization");
 		this.params = params;
 		this.confId = confId;
 		this.kafka = new KafkaCommunication();
+		
+		loadProperties();
 		resetStream();
 	}
-	
+
 	@Override
 	public void deleteConfiguration() throws Exception {
 		timer.cancel();
@@ -89,7 +97,6 @@ public class AppTweak implements ToolInterface {
 	@Override
 	public void updateConfiguration(MonitoringParams params) throws Exception {
 		deleteConfiguration();
-		apiCall();
 		this.params = params;
 		resetStream();
 	}
@@ -177,10 +184,24 @@ public class AppTweak implements ToolInterface {
 		}
 		URLConnection connection = new URL(URI)
 				.openConnection();
-		connection.setRequestProperty("X-Apptweak-Key", token);
+		connection.setRequestProperty("X-Apptweak-Key",token);
 		connection.getInputStream();
 		
 		return new JSONObject(Utils.streamToString(connection.getInputStream()));
+	}
+	
+	private void loadProperties() throws Exception {
+		logger.debug("Loading properties");
+		Properties prop = new Properties();
+		try {
+			ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+			InputStream input = classLoader.getResourceAsStream("config.properties");
+			prop.load(input);
+			token = prop.getProperty("appTweakToken");
+			logger.debug("Properties loaded successfully");
+		} catch (Exception e) {
+			throw new IOException("There was an unexpected error loading the properties file.");
+		}
 	}
 
 }
