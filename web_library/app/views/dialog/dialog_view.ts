@@ -1,18 +1,19 @@
-import {dialogOptions} from '../js/config';
 import i18n = require('i18next');
 import {MechanismView} from '../mechanism_view';
+import {dialogOptions} from '../../js/config';
 
 
 /**
  * Acts as a wrapper to the jquery UI dialog
  */
 export class DialogView {
-    dialog:any;
+    dialogElement:any;
     mechanismViews:MechanismView[];
 
     constructor(public dialogId:string, public template:any, public context?:any, public openCallback?:() => void,
                 public closeCallback?:() => void) {
-        let html = template(context);
+        let dialogContext = this.buildContext(context);
+        let html = template(dialogContext);
         jQuery('body').append(html);
         this.initDialog();
     }
@@ -21,22 +22,29 @@ export class DialogView {
         var myThis = this,
             dialogContainer = jQuery('#'+ this.dialogId);
 
-        this.dialog = dialogContainer.dialog(this.getDialogOptions());
-        this.dialog.dialog('option', 'title', this.context.title);
-        this.dialog.dialog('option', 'modal', this.context.modal);
-        this.dialog.dialog('option', 'dialogClass', this.context.dialogCSSClass);
+        this.dialogElement = dialogContainer.dialog(this.getDialogOptions());
+        this.dialogElement.dialog('option', 'title', this.context.title);
+        this.dialogElement.dialog('option', 'modal', this.context.modal);
+        this.dialogElement.dialog('option', 'dialogClass', this.context.dialogCSSClass);
 
         dialogContainer.find('.discard-feedback').on('click', function () {
             myThis.discardFeedback();
         });
     }
 
+    buildContext(applicationContext:any) {
+        let dialogContext = {
+            'dialogId': this.dialogId
+        };
+        return $.extend({}, applicationContext, dialogContext );
+    }
+
     open() {
-        this.dialog.dialog('opem');
+        this.dialogElement.dialog('open');
     }
 
     close() {
-        this.dialog.dialog('close');
+        this.dialogElement.dialog('close');
     }
 
     getDialogOptions():{} {
@@ -45,11 +53,15 @@ export class DialogView {
 
         return jQuery.extend({}, dialogOptions, {
             close: function () {
-                closeCallback();
+                if(closeCallback) {
+                    closeCallback();
+                }
                 this.dialog.dialog("close");
             },
             open: function () {
-                openCallback();
+                if(openCallback) {
+                    openCallback();
+                }
                 jQuery('[aria-describedby="' + this.dialogId + '"] .ui-dialog-titlebar-close').attr('title', i18n.t('general.dialog_close_button_title'));
             },
             create: function (event, ui) {
@@ -62,7 +74,7 @@ export class DialogView {
     }
 
     toggleDialog() {
-        if(this.dialog('isOpen')) {
+        if(this.dialogElement.dialog('isOpen')) {
             this.close();
         } else {
             this.open();
@@ -70,7 +82,7 @@ export class DialogView {
     }
 
     resetMessageView() {
-        this.dialog.find('.server-response').removeClass('error').removeClass('success').text('');
+        this.dialogElement.find('.server-response').removeClass('error').removeClass('success').text('');
     }
 
     resetDialog() {

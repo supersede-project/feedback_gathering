@@ -1,5 +1,4 @@
 import {AttachmentMechanism} from '../../models/mechanisms/attachment_mechanism';
-import {feedbackApp} from '../../js/jquery.feedback';
 import {AttachmentFeedback} from '../../models/feedbacks/attachment_feedback';
 import {MechanismView} from '../mechanism_view';
 
@@ -7,10 +6,10 @@ import {MechanismView} from '../mechanism_view';
 export class AttachmentView implements MechanismView {
     dropArea:any;
 
-    constructor(private attachmentMechanism:AttachmentMechanism, private dialogId:string) {
+    constructor(private attachmentMechanism:AttachmentMechanism, private dialogId:string, private distPath:string) {
         if (attachmentMechanism.active) {
             this.dropArea = jQuery('' + this.getSelector()).find('.drop-area');
-            this.dropArea.fileUpload(feedbackApp.options.distPath);
+            this.dropArea.fileUpload(distPath);
         }
     }
 

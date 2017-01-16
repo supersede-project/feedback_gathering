@@ -1,5 +1,17 @@
 const webpack = require('webpack');
+const dev = true;
 var plugins = [];
+
+if(!dev) {
+    plugins.push(new webpack.optimize.UglifyJsPlugin({
+        compress: {
+            warnings: false
+        },
+        output: {
+            comments: false
+        }
+    }));
+}
 
 module.exports = {
     entry: './app/js/jquery.feedback.js',

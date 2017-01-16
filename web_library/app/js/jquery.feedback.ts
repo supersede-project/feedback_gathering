@@ -33,10 +33,11 @@ import {AttachmentView} from '../views/attachment/attachment_view';
 import {TextView} from '../views/text/text_view';
 import {DialogView} from '../views/dialog/dialog_view';
 import {CategoryView} from '../views/category/category_view';
+import {MockBackend} from '../services/backends/mock_backend';
 var mockData = require('json!../services/mocks/dev/applications_mock.json');
 
 
-export declare var feedbackApp: FeedbackApp;
+export declare var feedbackApp:FeedbackApp;
 
 export var feedbackPluginModule = function ($, window, document) {
     var dialog;
@@ -143,7 +144,7 @@ export var feedbackPluginModule = function ($, window, document) {
         }
 
         for (var attachmentMechanism of configuration.getMechanismConfig(mechanismTypes.attachmentType)) {
-            new AttachmentView(attachmentMechanism, dialogId);
+            new AttachmentView(attachmentMechanism, dialogId, distPath);
         }
 
         var title = "Feedback";
@@ -394,8 +395,10 @@ export var feedbackPluginModule = function ($, window, document) {
         I18nHelper.initializeI18n(options);
         var language = I18nHelper.getLanguage(options);
         var options = $.extend({}, $.fn.feedbackPlugin.defaults, options);
-        var applicationService = new ApplicationService(apiEndpointOrchestrator, language);
+        var mockBackend:MockBackend = new MockBackend(mockData);
+        var applicationService = new ApplicationService(apiEndpointOrchestrator, language, mockBackend);
         feedbackApp = new FeedbackApp(applicationService, applicationId, options, this);
+        feedbackApp.loadApplicationConfiguration();
 
         return this;
     };
