@@ -4,8 +4,7 @@ import './jquery.validate';
 import './jquery.validate_category';
 import './jquery.fileupload';
 import {
-    apiEndpointRepository, feedbackPath, applicationName, defaultSuccessMessage,
-    feedbackObjectTitle, dialogOptions, mechanismTypes, applicationId, apiEndpointOrchestrator
+    apiEndpointRepository, feedbackObjectTitle, mechanismTypes, applicationId, apiEndpointOrchestrator
 } from './config';
 import {PaginationContainer} from '../views/pagination_container';
 import {ScreenshotView} from '../views/screenshot/screenshot_view';
@@ -15,14 +14,11 @@ import {PullConfiguration} from '../models/configurations/pull_configuration';
 import {Feedback} from '../models/feedbacks/feedback';
 import {PageNavigation} from './helpers/page_navigation';
 import {ConfigurationInterface} from '../models/configurations/configuration_interface';
-import {Application} from '../models/applications/application';
 import {ApplicationService} from '../services/application_service';
 import * as t from '../templates/t';
 import * as compare from '../templates/compare';
-var dialogTemplate = require('../templates/feedback_dialog.handlebars');
 var pullDialogTemplate = require('../templates/feedback_dialog.handlebars');
 var intermediateDialogTemplate = require('../templates/intermediate_dialog.handlebars');
-var notificationTemplate = require('../templates/notification.handlebars');
 import {GeneralConfiguration} from '../models/configurations/general_configuration';
 import {AudioFeedback} from '../models/feedbacks/audio_feedback';
 import {ContextInformation} from '../models/feedbacks/context_information';
@@ -34,6 +30,7 @@ import {TextView} from '../views/text/text_view';
 import {DialogView} from '../views/dialog/dialog_view';
 import {CategoryView} from '../views/category/category_view';
 import {MockBackend} from '../services/backends/mock_backend';
+import {PageNotification} from '../views/page_notification';
 var mockData = require('json!../services/mocks/dev/applications_mock.json');
 
 
@@ -52,40 +49,16 @@ export var feedbackPluginModule = function ($, window, document) {
     // TODO remove the following 5 lines later on
     var distPath = "/";
     var applicationContext = {};
-    var initDialog = function(one, two, three, four) {return {};};
+    var initDialog = function (one, two, three, four) {
+        return {};
+    };
     var language = "en";
-    var resetPlugin = function(one) {return {};};
-
-    // TODO refactoring: I don't know how yet
-    // TODO check which part of the configuration is really needed by the other modules --> use DI to pass this configuration to other modules as well as to allow to pass testing configuration that way
-    /**
-     * @param applicationObject
-     *  The current application object that configures the library.
-     */
-    var initApplication = function (applicationObject:Application) {
-        initPushMechanisms(applicationObject.getPushConfiguration(), applicationObject.generalConfiguration);
-
+    var resetPlugin = function (one) {
+        return {};
     };
 
-    // TODO refactoring: move to dialog view
-    /**
-     * @param configuration
-     *  PushConfiguration data retrieved from the feedback orchestrator
-     *
-     * Initializes the mechanism objects with the configuration data. It then constructs the context variable for the
-     * template and invokes the feedbackDialog template with the configuration data.
-     * Furthermore, the pagination inside the dialog is initialized, the rating component is configured, the dialog
-     * is configured and displayed and some events are added to the UI.
-     * All events on the HTML have to be added after the template is appended to the body (if not using live binding).
-     */
-    var initPushMechanisms = function (configuration, generalConfiguration:GeneralConfiguration) {
-        var context = prepareTemplateContext(configuration.getContextForView());
 
-        var pageNavigation = new PageNavigation(configuration, $('#' + pushConfigurationDialogId));
-        dialog = initTemplate(dialogTemplate, pushConfigurationDialogId, context, configuration, pageNavigation, generalConfiguration);
-    };
-
-    // TODO refactoring: I don't know how yet
+    // TODO refactoring: move to DialogView class/subclass
     var showPullDialog = function (configuration:PullConfiguration, generalConfiguration:GeneralConfiguration) {
         configuration.wasTriggered();
         var pageNavigation = new PageNavigation(configuration, $('#' + pullConfigurationDialogId));
@@ -162,7 +135,7 @@ export var feedbackPluginModule = function ($, window, document) {
         return dialog;
     };
 
-    // TODO refactoring: I don't know how yet
+    // TODO refactoring: use QuestionDialogView
     var initIntermediateDialogTemplate = function (template, dialogId, configuration, pullDialog,
                                                    generalConfiguration:GeneralConfiguration):HTMLElement {
         var html = template({});
@@ -182,8 +155,7 @@ export var feedbackPluginModule = function ($, window, document) {
         return dialog;
     };
 
-    // TODO adjust comment
-    // TODO refactoring: move to FeedbackService
+    // TODO refactoring: move to FeedbackService with success/error callback
     /**
      * This method takes the data from the text mechanism and the rating mechanism and composes a feedback object with
      * the help of this data.
@@ -202,7 +174,7 @@ export var feedbackPluginModule = function ($, window, document) {
                 resetPlugin(configuration);
                 if (generalConfiguration.getParameterValue('closeDialogOnSuccess')) {
                     dialog.dialog('close');
-                    pageNotification(i18n.t('general.success_message'));
+                    PageNotification.show(i18n.t('general.success_message'));
                 } else {
                     $('.server-response').addClass('success').text(i18n.t('general.success_message'));
                 }
@@ -211,15 +183,6 @@ export var feedbackPluginModule = function ($, window, document) {
                 $('.server-response').addClass('error').text('Failure: ' + JSON.stringify(data));
             }
         });
-    };
-
-    // TODO refactoring: move to own view
-    var pageNotification = function (message:string) {
-        var html = notificationTemplate({message: message});
-        $('html').append(html);
-        setTimeout(function () {
-            $(".feedback-notification").remove();
-        }, 3000);
     };
 
     // TODO refactoring: I don't know how yet
@@ -306,20 +269,20 @@ export var feedbackPluginModule = function ($, window, document) {
         var feedbackObject = new Feedback(feedbackObjectTitle, feedbackApp.options.userId, feedbackApp.options.language, applicationId, configuration.id, [], [], [], [], null, [], []);
         feedbackObject.contextInformation = ContextInformation.create();
 
-        for(var mechanismView of dialogView.mechanismViews) {
-            if(mechanismView instanceof TextView) {
+        for (var mechanismView of dialogView.mechanismViews) {
+            if (mechanismView instanceof TextView) {
                 feedbackObject.textFeedbacks.push(mechanismView.getFeedback());
             } else if (mechanismView instanceof RatingView) {
                 feedbackObject.ratingFeedbacks.push(mechanismView.getFeedback());
             } else if (mechanismView instanceof AttachmentView) {
                 feedbackObject.attachmentFeedbacks = mechanismView.getFeedbacks();
-                for(let i = 0; i < mechanismView.getFiles(); i++) {
+                for (let i = 0; i < mechanismView.getFiles(); i++) {
                     let file = mechanismView.getFiles()[i];
                     formData.append(mechanismView.getPartName(i), file, file.name);
                 }
             } else if (mechanismView instanceof ScreenshotView) {
                 let screenshotBinary = mechanismView.getScreenshotAsBinary();
-                if(screenshotBinary !== null) {
+                if (screenshotBinary !== null) {
                     feedbackObject.screenshotFeedbacks.push(mechanismView.getFeedback());
                     formData.append(mechanismView.getPartName(), mechanismView.getScreenshotAsBinary());
                 }

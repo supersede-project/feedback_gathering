@@ -2,6 +2,9 @@ import {ApplicationService} from '../services/application_service';
 import {Application} from '../models/applications/application';
 import {shuffle} from './helpers/array_shuffle';
 import {DialogView} from '../views/dialog/dialog_view';
+import {PageNavigation} from './helpers/page_navigation';
+import {Configuration} from '../models/configurations/configuration';
+import {PaginationContainer} from '../views/pagination_container';
 
 
 export class FeedbackApp {
@@ -36,9 +39,18 @@ export class FeedbackApp {
     };
 
     configureDialog(application:Application) {
+        let dialogId = 'pushConfiguration';
         var dialogTemplate = require('../templates/feedback_dialog.handlebars');
         var context = application.getContextForView();
+        context = $.extend({}, context, this.options);
+        context = $.extend({}, context, application.getPushConfiguration().getContext());
         this.dialogView = new DialogView('pushConfiguration', dialogTemplate, context);
+        this.configurePageNavigation(application.getPushConfiguration(), dialogId);
+    }
+
+    configurePageNavigation(configuration:Configuration, dialogId:string) {
+        let pageNavigation = new PageNavigation(configuration, $('#' + dialogId));
+        new PaginationContainer($('#' + dialogId + '.feedback-container .pages-container'), pageNavigation);
     }
 
     configureFeedbackButton() {

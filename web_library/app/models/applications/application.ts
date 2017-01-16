@@ -93,7 +93,8 @@ export class Application {
             submissionPageMessage: this.generalConfiguration.getParameterValue('submissionPageMessage'),
             labelPositioning: this.generalConfiguration.getParameterValue('labelPositioning') === 'top' ? '' : 'horizontal',
             feedbackFormTitle: this.generalConfiguration.getParameterValue('feedbackFormTitle'),
-            generalLabelStyle: generalLabelStyle
+            generalLabelStyle: generalLabelStyle,
+            dialogTitle: this.generalConfiguration.getParameterValue('dialogTitle')
         };
     }
 

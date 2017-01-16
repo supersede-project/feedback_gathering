@@ -23,7 +23,7 @@ export class DialogView {
             dialogContainer = jQuery('#'+ this.dialogId);
 
         this.dialogElement = dialogContainer.dialog(this.getDialogOptions());
-        this.dialogElement.dialog('option', 'title', this.context.title);
+        this.dialogElement.dialog('option', 'title', this.context.dialogTitle);
         this.dialogElement.dialog('option', 'modal', this.context.modal);
         this.dialogElement.dialog('option', 'dialogClass', this.context.dialogCSSClass);
 
@@ -36,7 +36,8 @@ export class DialogView {
         let dialogContext = {
             'dialogId': this.dialogId
         };
-        return $.extend({}, applicationContext, dialogContext );
+        this.context = $.extend({}, applicationContext, dialogContext );
+        return this.context;
     }
 
     open() {
