@@ -1,10 +1,7 @@
 import {ApplicationService} from '../services/application_service';
 import {Application} from '../models/applications/application';
 import {shuffle} from './helpers/array_shuffle';
-import {DialogView} from '../views/dialog/dialog_view';
-import {PageNavigation} from './helpers/page_navigation';
-import {Configuration} from '../models/configurations/configuration';
-import {PaginationContainer} from '../views/pagination_container';
+import {FeedbackDialogView} from '../views/dialog/feedback_dialog_view';
 
 
 export class FeedbackApp {
@@ -13,7 +10,7 @@ export class FeedbackApp {
     applicationId:number;
     options:any;
     feedbackButton:JQuery;
-    dialogView:DialogView;
+    dialogView:FeedbackDialogView;
 
     constructor(applicationService:ApplicationService, applicationId:number, options:{}, feedbackButton:JQuery) {
         this.applicationService = applicationService;
@@ -44,13 +41,8 @@ export class FeedbackApp {
         var context = application.getContextForView();
         context = $.extend({}, context, this.options);
         context = $.extend({}, context, application.getPushConfiguration().getContext());
-        this.dialogView = new DialogView('pushConfiguration', dialogTemplate, context);
-        this.configurePageNavigation(application.getPushConfiguration(), dialogId);
-    }
-
-    configurePageNavigation(configuration:Configuration, dialogId:string) {
-        let pageNavigation = new PageNavigation(configuration, $('#' + dialogId));
-        new PaginationContainer($('#' + dialogId + '.feedback-container .pages-container'), pageNavigation);
+        this.dialogView = new FeedbackDialogView('pushConfiguration', dialogTemplate, application.getPushConfiguration(), context);
+        this.dialogView.configurePageNavigation(application.getPushConfiguration(), dialogId);
     }
 
     configureFeedbackButton() {

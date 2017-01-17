@@ -1,5 +1,4 @@
 import i18n = require('i18next');
-import {MechanismView} from '../mechanism_view';
 import {dialogOptions} from '../../js/config';
 
 
@@ -8,35 +7,30 @@ import {dialogOptions} from '../../js/config';
  */
 export class DialogView {
     dialogElement:any;
-    mechanismViews:MechanismView[];
+    dialogContext:any;
 
     constructor(public dialogId:string, public template:any, public context?:any, public openCallback?:() => void,
                 public closeCallback?:() => void) {
-        let dialogContext = this.buildContext(context);
-        let html = template(dialogContext);
+        this.dialogContext = this.buildContext(context);
+        let html = template(this.dialogContext);
         jQuery('body').append(html);
         this.initDialog();
     }
 
     initDialog() {
-        var myThis = this,
-            dialogContainer = jQuery('#'+ this.dialogId);
+        let dialogContainer = jQuery('#'+ this.dialogId);
 
         this.dialogElement = dialogContainer.dialog(this.getDialogOptions());
-        this.dialogElement.dialog('option', 'title', this.context.dialogTitle);
-        this.dialogElement.dialog('option', 'modal', this.context.modal);
-        this.dialogElement.dialog('option', 'dialogClass', this.context.dialogCSSClass);
-
-        dialogContainer.find('.discard-feedback').on('click', function () {
-            myThis.discardFeedback();
-        });
+        this.dialogElement.dialog('option', 'title', this.dialogContext.dialogTitle);
+        this.dialogElement.dialog('option', 'modal', this.dialogContext.modal);
+        this.dialogElement.dialog('option', 'dialogClass', this.dialogContext.dialogCSSClass);
     }
 
     buildContext(applicationContext:any) {
         let dialogContext = {
             'dialogId': this.dialogId
         };
-        this.context = $.extend({}, applicationContext, dialogContext );
+        this.context = $.extend({}, applicationContext, dialogContext);
         return this.context;
     }
 
@@ -57,7 +51,6 @@ export class DialogView {
                 if(closeCallback) {
                     closeCallback();
                 }
-                this.dialog.dialog("close");
             },
             open: function () {
                 if(openCallback) {
@@ -87,13 +80,6 @@ export class DialogView {
     }
 
     resetDialog() {
-        for(var mechanismView of this.mechanismViews) {
-            mechanismView.reset();
-        }
-    }
 
-    discardFeedback() {
-        this.resetDialog();
-        this.close();
     }
 }

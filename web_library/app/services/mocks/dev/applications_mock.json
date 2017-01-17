@@ -218,7 +218,7 @@
           {
             "id": 4,
             "type": "RATING_TYPE",
-            "active": false,
+            "active": true,
             "order": 2,
             "canBeActivated": false,
             "parameters": [
