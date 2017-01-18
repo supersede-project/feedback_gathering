@@ -1,2 +1,5 @@
 config.properties
 /target/
+/gradle.properties
+/build/
+.gradle/
