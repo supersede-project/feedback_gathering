@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
@@ -29,43 +30,49 @@ public class RESTController {
 
 	@RequestMapping(value = "/{monitorName}/configuration", method = RequestMethod.POST)
 	@ResponseStatus(value = HttpStatus.CREATED)
-	public MonitorSpecificConfiguration addConfiguration(@PathVariable String monitorName, @RequestBody String input) throws Exception {
+	public String addConfiguration(@PathVariable String monitorName, @RequestBody String input) throws Exception {
 		JsonObject jsonObj = getJson(input);
 		if (monitorName.equals("Twitter")) {
 			TwitterMonitorProxy<?,?> proxy = new TwitterMonitorProxy<>();
 			TwitterMonitorConfiguration conf = parser.getTwitterConfiguration(jsonObj);
-			return proxy.createMonitorConfiguration(conf);
+			TwitterMonitorConfiguration result = proxy.createMonitorConfiguration(conf);
+			return getResponse(result);
 		} else if (monitorName.equals("GooglePlay")) {
 			GooglePlayMonitorProxy<?,?> proxy = new GooglePlayMonitorProxy<>();
 			GooglePlayMonitorConfiguration conf = parser.getGooglePlayConfiguration(jsonObj);
-			return proxy.createMonitorConfiguration(conf);
+			GooglePlayMonitorConfiguration result = proxy.createMonitorConfiguration(conf);
+			return getResponse(result);
 		} else if (monitorName.equals("AppStore")) {
 			AppStoreMonitorProxy<?,?> proxy = new AppStoreMonitorProxy<>();
 			AppStoreMonitorConfiguration conf = parser.getAppStoreConfiguration(jsonObj);
-			return proxy.createMonitorConfiguration(conf);
+			AppStoreMonitorConfiguration result = proxy.createMonitorConfiguration(conf);
+			return getResponse(result);
 		} else throw new Exception("There is no monitor with this name");
 	}
 	
 	@RequestMapping(value = "/{monitorName}/configuration/{confId}", method = RequestMethod.PUT)
 	@ResponseStatus(value = HttpStatus.OK)
-	public MonitorSpecificConfiguration updateConfiguration(@PathVariable String monitorName,
+	public String updateConfiguration(@PathVariable String monitorName,
 			@PathVariable int confId, @RequestBody String input) throws Exception {
 		JsonObject jsonObj = getJson(input);
 		if (monitorName.equals("Twitter")) {
 			TwitterMonitorProxy<?,?> proxy = new TwitterMonitorProxy<>();
 			TwitterMonitorConfiguration conf = parser.getTwitterConfiguration(jsonObj);
-			return proxy.updateMonitorConfiguration(conf);
+			TwitterMonitorConfiguration result = proxy.updateMonitorConfiguration(conf);
+			return getResponse(result);
 		} else if (monitorName.equals("GooglePlay")) {
 			GooglePlayMonitorProxy<?,?> proxy = new GooglePlayMonitorProxy<>();
 			GooglePlayMonitorConfiguration conf = parser.getGooglePlayConfiguration(jsonObj);
-			return proxy.updateMonitorConfiguration(conf);
+			GooglePlayMonitorConfiguration result = proxy.updateMonitorConfiguration(conf);
+			return getResponse(result);
 		} else if (monitorName.equals("AppStore")) {
 			AppStoreMonitorProxy<?,?> proxy = new AppStoreMonitorProxy<>();
 			AppStoreMonitorConfiguration conf = parser.getAppStoreConfiguration(jsonObj);
-			return proxy.updateMonitorConfiguration(conf);
+			AppStoreMonitorConfiguration result = proxy.updateMonitorConfiguration(conf);
+			return getResponse(result);
 		} else throw new Exception("There is no monitor with this name");
 	}
-	
+
 	@RequestMapping(value = "/{monitorName}/configuration/{confId}", method = RequestMethod.DELETE)
 	@ResponseStatus(value = HttpStatus.OK)
 	public void deleteConfiguration(@PathVariable String monitorName,
@@ -92,6 +99,14 @@ public class RESTController {
 		JsonParser jsonParser = new JsonParser();
 		JsonObject json = (JsonObject)jsonParser.parse(configuration);
 		return json;
+	}
+	
+	
+	private String getResponse(MonitorSpecificConfiguration result) {
+		JsonObject json = new JsonObject();
+		json.addProperty("idConf", result.getId());
+		json.addProperty("status", "success");
+		return json.toString();
 	}
 	
 }
