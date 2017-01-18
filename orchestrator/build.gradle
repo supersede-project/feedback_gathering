@@ -1,5 +1,6 @@
 apply plugin: 'java'
 apply plugin: 'maven'
+apply plugin: 'war'
 
 group = 'orchestrator'
 version = '0.0.1-SNAPSHOT'
@@ -12,8 +13,10 @@ targetCompatibility = 1.8
 
 
 repositories {
-        
-     maven { url "http://repo.maven.apache.org/maven2" }
+    flatDir {
+       dirs '../server_library/build/libs'
+   	}
+    maven { url "http://repo.maven.apache.org/maven2" }
 }
 dependencies {
     compile group: 'feedback_library', name: 'feedback_library', version:'0.0.1-SNAPSHOT'
