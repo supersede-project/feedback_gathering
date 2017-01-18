@@ -42,6 +42,7 @@ repositories {
     add buildscript.repositories.getByName ("maven-supersede-snapshot")
     add buildscript.repositories.getByName ("maven-supersede-release")
 }
+
 dependencies {
     // The production code uses the SLF4J logging API at compile time
     compile 'org.slf4j:slf4j-api:1.7.21'

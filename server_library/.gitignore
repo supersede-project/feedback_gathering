@@ -3,3 +3,4 @@ config.properties
 /gradle.properties
 /build/
 .gradle/
+/bin/
