@@ -18,6 +18,7 @@ import eu.supersede.integration.api.monitoring.manager.types.TwitterMonitorConfi
 import eu.supersede.integration.api.monitoring.monitors.proxies.AppStoreMonitorProxy;
 import eu.supersede.integration.api.monitoring.monitors.proxies.GooglePlayMonitorProxy;
 import eu.supersede.integration.api.monitoring.monitors.proxies.TwitterMonitorProxy;
+
 import monitormanager.model.ConfigurationParser;
 
 @RequestMapping(value = "/")
