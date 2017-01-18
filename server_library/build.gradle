@@ -1,6 +1,5 @@
 apply plugin: 'java'
 apply plugin: 'maven'
-apply plugin: 'war'
 
 group = 'feedback_library'
 version = '0.0.1-SNAPSHOT'
