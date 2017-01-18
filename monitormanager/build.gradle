@@ -10,8 +10,26 @@
 buildscript {
     repositories {
         mavenCentral()
+    maven {
+            url "${artifactory_contextUrl}/libs-snapshot"
+            name = 'maven-supersede-snapshot'
+        credentials {
+                username = "${artifactory_user}"
+                password = "${artifactory_password}"
+        }
+        }
+    maven {
+            url "${artifactory_contextUrl}/libs-release"
+            name = 'maven-supersede-release'
+        credentials {
+                username = "${artifactory_user}"
+                password = "${artifactory_password}"
+        }
+        }
     }
     dependencies {
+    	//Check for the latest version here: http://plugins.gradle.org/plugin/com.jfrog.artifactory
+        classpath "org.jfrog.buildinfo:build-info-extractor-gradle:4+"
         classpath("org.springframework.boot:spring-boot-gradle-plugin:1.4.3.RELEASE")
     }
 }
@@ -43,6 +61,8 @@ repositories {
     // You can declare any Maven/Ivy/file repository here.
     jcenter()
     mavenCentral()
+    add buildscript.repositories.getByName ("maven-supersede-snapshot")
+    add buildscript.repositories.getByName ("maven-supersede-release")
 }
 
 
@@ -56,9 +76,18 @@ dependencies {
     // testCompile dependency to testCompile 'org.testng:testng:6.8.1' and add
     // 'test.useTestNG()' to your build script.
     testCompile 'junit:junit:4.12'
+    compile("eu.supersede.if:eu.supersede.if.api:0.3.0-SNAPSHOT"){changing = true} 
     // https://mvnrepository.com/artifact/com.google.code.gson/gson
 	compile group: 'com.google.code.gson', name: 'gson', version: '2.3.1'
     compile("org.springframework.boot:spring-boot-starter-web")
     testCompile('org.springframework.boot:spring-boot-starter-test')
     providedRuntime("org.springframework.boot:spring-boot-starter-tomcat")
+}
+
+configurations.all {
+        //Avoids conflict: SL4J Multiple bindings were found on the class path
+        exclude group: "org.slf4j", module: "slf4j-log4j12"
+        // check for updates every build
+        resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
+        resolutionStrategy.cacheDynamicVersionsFor 0, 'seconds'
 }

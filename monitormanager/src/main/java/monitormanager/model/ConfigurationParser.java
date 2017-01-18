@@ -21,29 +21,69 @@
  *******************************************************************************/
 package monitormanager.model;
 
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.ArrayList;
+
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+
+import eu.supersede.integration.api.monitoring.manager.types.AppStoreMonitorConfiguration;
+import eu.supersede.integration.api.monitoring.manager.types.GooglePlayMonitorConfiguration;
+import eu.supersede.integration.api.monitoring.manager.types.MonitorSpecificConfiguration;
+import eu.supersede.integration.api.monitoring.manager.types.TwitterMonitorConfiguration;
 
 public class ConfigurationParser {
 
-	public JsonObject getTwitterConfiguration(JsonObject json) {
+	public TwitterMonitorConfiguration getTwitterConfiguration(JsonObject json) throws Exception {
 		JsonObject in = json.getAsJsonObject("SocialNetworks");
-		JsonObject out = new JsonObject();
-		out.add("SocialNetworksMonitoringConfProf",in);
-		return out;
+		TwitterMonitorConfiguration configuration = new TwitterMonitorConfiguration();
+		setMonitorConfigurationParams(configuration, in);
+		if (in.has("keywordExpression")) configuration.setKeywordExpression(in.get("keywordExpression").getAsString());
+		if (in.has("accounts")) {
+			ArrayList<String> listdata = new ArrayList<>();     
+			JsonArray jArray = in.get("accounts").getAsJsonArray(); 
+			if (jArray != null) { 
+			   for (int i=0; i < jArray.size(); ++i){ 
+				   listdata.add(jArray.get(i).getAsString());
+			   } 
+			} 
+			configuration.setAccounts(listdata);
+		}
+		
+		return configuration;
 	}
 	
-	public JsonObject getGooglePlayConfiguration(JsonObject json) {
+	public GooglePlayMonitorConfiguration getGooglePlayConfiguration(JsonObject json) throws Exception {
 		JsonObject in = json.getAsJsonObject("MarketPlaces");
-		JsonObject out = new JsonObject();
-		out.add("GooglePlayConfProf",in);
-		return out;
+		GooglePlayMonitorConfiguration configuration = new GooglePlayMonitorConfiguration();
+		setMonitorConfigurationParams(configuration, in);
+		if (in.has("packageName")) configuration.setPackageName(in.get("packageName").getAsString());
+		
+		return configuration;
 	}
 	
-	public JsonObject getAppStoreConfiguration(JsonObject json) {
+	public AppStoreMonitorConfiguration getAppStoreConfiguration(JsonObject json) throws Exception {
 		JsonObject in = json.getAsJsonObject("MarketPlaces");
-		JsonObject out = new JsonObject();
-		out.add("AppStoreConfProf",in);
-		return out;
+		AppStoreMonitorConfiguration configuration = new AppStoreMonitorConfiguration();
+		setMonitorConfigurationParams(configuration, in);
+		if (in.has("appId")) configuration.setAppId(in.get("appId").getAsString());
+		
+		return configuration;
+	}
+	
+	private void setMonitorConfigurationParams(MonitorSpecificConfiguration configuration, JsonObject in) throws Exception {
+		if (in.has("kafkaEndpoint"))
+			try {
+				configuration.setKafkaEndpoint(new URL(in.get("kafkaEndpoint").getAsString()));
+			} catch (MalformedURLException e) {
+				throw new Exception("Invalid kafkaEndpoint");
+			}
+		if (in.has("kafkaTopic")) configuration.setKafkaTopic(in.get("kafkaTopic").getAsString());
+		if (in.has("timeSlot")) configuration.setTimeSlot(in.get("timeSlot").getAsInt());
+		if (in.has("toolName")) {
+			configuration.setToolName(in.get("toolName").getAsString());
+		}
 	}
 	
 }
