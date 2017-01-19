@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: javax.ws.rs:jsr311-api:1.0">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/javax.ws.rs/jsr311-api/1.0/26338fba74f5934a785b02666b3c16d2b020f843/jsr311-api-1.0.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/javax.ws.rs/jsr311-api/1.0/f6445f7a5a49b1f95e479b95ff53daa0bc0bdfa0/jsr311-api-1.0-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
