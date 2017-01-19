@@ -1,4 +1,4 @@
-package ch.uzh.ifi.feedback.library.rest.test;
+package ch.uzh.ifi.feedback.library.rest.validation.test;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -9,6 +9,7 @@ import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 
+import junit.framework.TestCase;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.SystemUtils;
 import org.apache.http.HttpEntity;
@@ -40,7 +41,7 @@ import com.google.gson.GsonBuilder;
 import ch.uzh.ifi.feedback.library.rest.authorization.UserToken;
 import ch.uzh.ifi.feedback.library.transaction.DatabaseConfiguration;
 import ch.uzh.ifi.feedback.library.transaction.IDatabaseConfiguration;
-import junit.framework.TestCase;
+
 
 /**
  * This class is the base class for all servlet tests. 

@@ -1,5 +1,11 @@
 apply plugin: 'java'
 apply plugin: 'maven'
+apply plugin: 'idea'
+
+jar {
+    baseName = 'feedback_library'
+    version =  '0.0.1'
+}
 
 group = 'feedback_library'
 version = '0.0.1-SNAPSHOT'
@@ -41,6 +47,12 @@ repositories {
     maven { url "http://repo.maven.apache.org/maven2" }
     add buildscript.repositories.getByName ("maven-supersede-snapshot")
     add buildscript.repositories.getByName ("maven-supersede-release")
+}
+
+task fatJar(type: Jar) {
+    baseName = project.name
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    with jar
 }
 
 dependencies {
