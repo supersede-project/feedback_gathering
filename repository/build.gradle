@@ -41,6 +41,7 @@ repositories {
 
 dependencies {
     compile project(':server_library')
+    //compile files('../server_library/build/libs/feedback_library-0.0.1.jar')
     providedCompile group: 'org.apache.tomcat', name: 'tomcat-el-api', version: '9.0.0.M11'
     providedCompile group: 'org.apache.commons', name: 'commons-pool2', version: '2.4.2'
     providedCompile group: 'org.apache.tomcat', name: 'jasper-el', version: '6.0.47'

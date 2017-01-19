@@ -2,137 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="6ca3dd90-96cd-4812-ad2b-b659182c4e10" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/checkstyle-idea.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/gradle.properties-dist" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../server_library/.idea/checkstyle-idea.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../server_library/src/ch/uzh/ifi/feedback/library/rest/integration/DataProvider.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../server_library/src/ch/uzh/ifi/feedback/library/rest/integration/MdmIntegrator.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../server_library/test/ch/uzh/ifi/feedback/library/rest/integration/MdmIntegratorTest.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../server_library/test/ch/uzh/ifi/feedback/library/rest/integration/MetadataManagementProxyTest.java" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/classes/.gitignore" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/classes/ch/uzh/ifi/feedback/repository/FeedbackServlet.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/classes/ch/uzh/ifi/feedback/repository/RepositoryModule.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/classes/ch/uzh/ifi/feedback/repository/controller/FeedbackController.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/classes/ch/uzh/ifi/feedback/repository/model/AttachmentFeedback.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/classes/ch/uzh/ifi/feedback/repository/model/AudioFeedback.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/classes/ch/uzh/ifi/feedback/repository/model/CategoryFeedback.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/classes/ch/uzh/ifi/feedback/repository/model/ContextInformation.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/classes/ch/uzh/ifi/feedback/repository/model/Feedback.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/classes/ch/uzh/ifi/feedback/repository/model/FeedbackComment.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/classes/ch/uzh/ifi/feedback/repository/model/FileFeedback.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/classes/ch/uzh/ifi/feedback/repository/model/RatingFeedback.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/classes/ch/uzh/ifi/feedback/repository/model/ScreenshotFeedback.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/classes/ch/uzh/ifi/feedback/repository/model/TextFeedback.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/classes/ch/uzh/ifi/feedback/repository/serialization/FeedbackSerializationService.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/classes/ch/uzh/ifi/feedback/repository/serialization/FileStorageService.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/classes/ch/uzh/ifi/feedback/repository/serialization/RepositorySerializationService.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/classes/ch/uzh/ifi/feedback/repository/service/AttachmentFeedbackResultParser.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/classes/ch/uzh/ifi/feedback/repository/service/AttachmentFeedbackService.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/classes/ch/uzh/ifi/feedback/repository/service/AudioFeedbackResultParser.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/classes/ch/uzh/ifi/feedback/repository/service/AudioFeedbackService.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/classes/ch/uzh/ifi/feedback/repository/service/CategoryFeedbackService.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/classes/ch/uzh/ifi/feedback/repository/service/CategoryResultParser.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/classes/ch/uzh/ifi/feedback/repository/service/FeedbackResultParser.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/classes/ch/uzh/ifi/feedback/repository/service/FeedbackService.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/classes/ch/uzh/ifi/feedback/repository/service/RatingFeedbackResultParser.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/classes/ch/uzh/ifi/feedback/repository/service/RatingFeedbackService.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/classes/ch/uzh/ifi/feedback/repository/service/ScreenshotFeedbackResultParser.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/classes/ch/uzh/ifi/feedback/repository/service/ScreenshotFeedbackService.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/classes/ch/uzh/ifi/feedback/repository/service/TextFeedbackResultParser.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/classes/ch/uzh/ifi/feedback/repository/service/TextFeedbackService.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/classes/ch/uzh/ifi/feedback/repository/test/FeedbackServletTest.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/classes/ch/uzh/ifi/feedback/repository/test/attachment1.txt" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/classes/ch/uzh/ifi/feedback/repository/test/attachment2.txt" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/classes/ch/uzh/ifi/feedback/repository/test/audio1.mp3" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/classes/ch/uzh/ifi/feedback/repository/test/feedback_insert.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/classes/ch/uzh/ifi/feedback/repository/test/screenshot1.jpeg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/classes/ch/uzh/ifi/feedback/repository/test/screenshot2.jpeg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../server_library/src/META-INF/MANIFEST.MF" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../server_library/src/main/ch/uzh/ifi/feedback/library/mail/IMailConfiguration.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../server_library/src/main/ch/uzh/ifi/feedback/library/mail/MailClient.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../server_library/src/main/ch/uzh/ifi/feedback/library/mail/MailConfiguration.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../server_library/src/main/ch/uzh/ifi/feedback/library/mail/config.properties-dist" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../server_library/src/main/ch/uzh/ifi/feedback/library/rest/ContextFinalizer.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../server_library/src/main/ch/uzh/ifi/feedback/library/rest/IRestController.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../server_library/src/main/ch/uzh/ifi/feedback/library/rest/IRestManager.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../server_library/src/main/ch/uzh/ifi/feedback/library/rest/PingController.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../server_library/src/main/ch/uzh/ifi/feedback/library/rest/RestController.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../server_library/src/main/ch/uzh/ifi/feedback/library/rest/RestManager.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../server_library/src/main/ch/uzh/ifi/feedback/library/rest/ServletBase.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../server_library/src/main/ch/uzh/ifi/feedback/library/rest/annotations/Authenticate.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../server_library/src/main/ch/uzh/ifi/feedback/library/rest/annotations/Controller.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../server_library/src/main/ch/uzh/ifi/feedback/library/rest/annotations/DELETE.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../server_library/src/main/ch/uzh/ifi/feedback/library/rest/annotations/DbAttribute.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../server_library/src/main/ch/uzh/ifi/feedback/library/rest/annotations/DbIgnore.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../server_library/src/main/ch/uzh/ifi/feedback/library/rest/annotations/GET.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../server_library/src/main/ch/uzh/ifi/feedback/library/rest/annotations/Id.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../server_library/src/main/ch/uzh/ifi/feedback/library/rest/annotations/NotNull.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../server_library/src/main/ch/uzh/ifi/feedback/library/rest/annotations/POST.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../server_library/src/main/ch/uzh/ifi/feedback/library/rest/annotations/PUT.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../server_library/src/main/ch/uzh/ifi/feedback/library/rest/annotations/Path.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../server_library/src/main/ch/uzh/ifi/feedback/library/rest/annotations/PathParam.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../server_library/src/main/ch/uzh/ifi/feedback/library/rest/annotations/Serialize.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../server_library/src/main/ch/uzh/ifi/feedback/library/rest/annotations/SerializeParam.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../server_library/src/main/ch/uzh/ifi/feedback/library/rest/annotations/Unique.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../server_library/src/main/ch/uzh/ifi/feedback/library/rest/annotations/Validate.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../server_library/src/main/ch/uzh/ifi/feedback/library/rest/authorization/ApiUser.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../server_library/src/main/ch/uzh/ifi/feedback/library/rest/authorization/ApiUserController.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../server_library/src/main/ch/uzh/ifi/feedback/library/rest/authorization/ApiUserPermission.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../server_library/src/main/ch/uzh/ifi/feedback/library/rest/authorization/ApiUserPermissionController.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../server_library/src/main/ch/uzh/ifi/feedback/library/rest/authorization/ApiUserPermissionResultParser.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../server_library/src/main/ch/uzh/ifi/feedback/library/rest/authorization/ApiUserPermissionSerializationService.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../server_library/src/main/ch/uzh/ifi/feedback/library/rest/authorization/ApiUserPermissionService.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../server_library/src/main/ch/uzh/ifi/feedback/library/rest/authorization/ApiUserPermissionValidator.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../server_library/src/main/ch/uzh/ifi/feedback/library/rest/authorization/ApiUserResultParser.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../server_library/src/main/ch/uzh/ifi/feedback/library/rest/authorization/ApiUserSerializationService.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../server_library/src/main/ch/uzh/ifi/feedback/library/rest/authorization/ApiUserService.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../server_library/src/main/ch/uzh/ifi/feedback/library/rest/authorization/ApiUserValidator.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../server_library/src/main/ch/uzh/ifi/feedback/library/rest/authorization/AuthenticationCache.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../server_library/src/main/ch/uzh/ifi/feedback/library/rest/authorization/AuthorizationException.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../server_library/src/main/ch/uzh/ifi/feedback/library/rest/authorization/AuthorizationScope.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../server_library/src/main/ch/uzh/ifi/feedback/library/rest/authorization/IApiUserService.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../server_library/src/main/ch/uzh/ifi/feedback/library/rest/authorization/ITokenAuthenticationService.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../server_library/src/main/ch/uzh/ifi/feedback/library/rest/authorization/PasswordStorage.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../server_library/src/main/ch/uzh/ifi/feedback/library/rest/authorization/UserAuthenticationService.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../server_library/src/main/ch/uzh/ifi/feedback/library/rest/authorization/UserRole.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../server_library/src/main/ch/uzh/ifi/feedback/library/rest/authorization/UserToken.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../server_library/src/main/ch/uzh/ifi/feedback/library/rest/routing/HandlerInfo.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../server_library/src/main/ch/uzh/ifi/feedback/library/rest/routing/HttpMethod.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../server_library/src/main/ch/uzh/ifi/feedback/library/rest/routing/TemplateEntry.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../server_library/src/main/ch/uzh/ifi/feedback/library/rest/routing/TemplatePart.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../server_library/src/main/ch/uzh/ifi/feedback/library/rest/routing/UriTemplate.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../server_library/src/main/ch/uzh/ifi/feedback/library/rest/serialization/DefaultExclusionStrategy.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../server_library/src/main/ch/uzh/ifi/feedback/library/rest/serialization/DefaultSerializer.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../server_library/src/main/ch/uzh/ifi/feedback/library/rest/serialization/ISerializationService.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../server_library/src/main/ch/uzh/ifi/feedback/library/rest/service/IDbItem.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../server_library/src/main/ch/uzh/ifi/feedback/library/rest/service/IDbService.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../server_library/src/main/ch/uzh/ifi/feedback/library/rest/service/ItemBase.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../server_library/src/main/ch/uzh/ifi/feedback/library/rest/service/ServiceBase.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../server_library/src/main/ch/uzh/ifi/feedback/library/rest/test/ServletTest.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../server_library/src/main/ch/uzh/ifi/feedback/library/rest/test/api_user.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../server_library/src/main/ch/uzh/ifi/feedback/library/rest/validation/IValidator.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../server_library/src/main/ch/uzh/ifi/feedback/library/rest/validation/ValidationError.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../server_library/src/main/ch/uzh/ifi/feedback/library/rest/validation/ValidationException.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../server_library/src/main/ch/uzh/ifi/feedback/library/rest/validation/ValidationResult.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../server_library/src/main/ch/uzh/ifi/feedback/library/rest/validation/ValidationSerializer.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../server_library/src/main/ch/uzh/ifi/feedback/library/rest/validation/ValidatorBase.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../server_library/src/main/ch/uzh/ifi/feedback/library/transaction/DatabaseConfiguration.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../server_library/src/main/ch/uzh/ifi/feedback/library/transaction/DbResultParser.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../server_library/src/main/ch/uzh/ifi/feedback/library/transaction/IDatabaseConfiguration.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../server_library/src/main/ch/uzh/ifi/feedback/library/transaction/IDbResultParser.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../server_library/src/main/ch/uzh/ifi/feedback/library/transaction/Transaction.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../server_library/src/main/ch/uzh/ifi/feedback/library/transaction/TransactionManager.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../server_library/src/main/ch/uzh/ifi/feedback/library/transaction/config.properties-dist" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../server_library/src/test/ch/uzh/ifi/feedback/library/rest/validation/test/TestItem.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../server_library/src/test/ch/uzh/ifi/feedback/library/rest/validation/test/TestItemValidator.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../server_library/src/test/ch/uzh/ifi/feedback/library/rest/validation/test/ValidatorBaseTest.java" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gitignore" afterPath="$PROJECT_DIR$/.gitignore" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/feedback_library_0_0_1.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build.gradle" afterPath="$PROJECT_DIR$/build.gradle" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" afterPath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/settings.gradle" afterPath="$PROJECT_DIR$/settings.gradle" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../server_library/.idea/misc.xml" afterPath="$PROJECT_DIR$/../server_library/.idea/misc.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../server_library/build.gradle" afterPath="$PROJECT_DIR$/../server_library/build.gradle" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../server_library/feedback_library.iml" afterPath="$PROJECT_DIR$/../server_library/feedback_library.iml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/feedback_repository.iml" afterPath="$PROJECT_DIR$/feedback_repository.iml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../server_library/server_library.iml" afterPath="$PROJECT_DIR$/../server_library/server_library.iml" />
     </list>
     <ignored path="feedback_repository.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -224,50 +98,26 @@
         <entry file="file://$PROJECT_DIR$/build.gradle">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="42" column="4" selection-start-line="42" selection-start-column="4" selection-end-line="42" selection-end-column="4" />
+              <caret line="40" column="0" selection-start-line="40" selection-start-column="0" selection-end-line="40" selection-end-column="0" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
       <file leaf-file-name="settings.gradle" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/settings.gradle">
+        <entry file="file://$PROJECT_DIR$/../server_library/settings.gradle">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="4" column="0" selection-start-line="4" selection-start-column="0" selection-end-line="4" selection-end-column="0" />
+              <caret line="1" column="0" selection-start-line="1" selection-start-column="0" selection-end-line="1" selection-end-column="0" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="CategoryFeedback.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/ch/uzh/ifi/feedback/repository/model/CategoryFeedback.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="2" column="7" selection-start-line="2" selection-start-column="7" selection-end-line="2" selection-end-column="7" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="RatingFeedback.java" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/ch/uzh/ifi/feedback/repository/model/RatingFeedback.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.51420176">
-              <caret line="49" column="0" selection-start-line="49" selection-start-column="0" selection-end-line="49" selection-end-column="0" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="GuiceRepositoryContextListener.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="GuiceRepositoryContextListener.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/ch/uzh/ifi/feedback/repository/GuiceRepositoryContextListener.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
+            <state vertical-scroll-proportion="0.22037219">
               <caret line="15" column="0" selection-start-line="15" selection-start-column="0" selection-end-line="15" selection-end-column="0" />
               <folding>
                 <element signature="imports" expanded="true" />
@@ -276,54 +126,22 @@
           </provider>
         </entry>
       </file>
+      <file leaf-file-name="settings.gradle" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/settings.gradle">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="3" column="80" selection-start-line="3" selection-start-column="80" selection-end-line="3" selection-end-column="80" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file leaf-file-name="FeedbackServlet.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/ch/uzh/ifi/feedback/repository/FeedbackServlet.java">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="20" column="38" selection-start-line="20" selection-start-column="38" selection-end-line="20" selection-end-column="38" />
+              <caret line="19" column="47" selection-start-line="19" selection-start-column="47" selection-end-line="19" selection-end-column="47" />
               <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="feedback_repository.ipr" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/feedback_repository.ipr">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="feedback_repository.iml" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/feedback_repository.iml">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="2" column="0" selection-start-line="2" selection-start-column="0" selection-end-line="2" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="StatusOptionService.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/ch/uzh/ifi/feedback/repository/service/StatusOptionService.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="48" column="0" selection-start-line="48" selection-start-column="0" selection-end-line="48" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="RepositoryDatabaseConfiguration.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/ch/uzh/ifi/feedback/repository/transaction/RepositoryDatabaseConfiguration.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="13" column="4" selection-start-line="13" selection-start-column="4" selection-end-line="13" selection-end-column="4" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
             </state>
           </provider>
         </entry>
@@ -639,7 +457,7 @@
     </option>
     <option name="modificationStamps">
       <map>
-        <entry key="$PROJECT_DIR$" value="5939146015000" />
+        <entry key="$PROJECT_DIR$" value="5939146563000" />
         <entry key="$PROJECT_DIR$/../server_library" value="2969460240000" />
         <entry key="$USER_HOME$/WIOTProjects/adherencemonitor" value="2967927194000" />
       </map>
@@ -656,41 +474,6 @@
                       <ExternalModuleBuildClasspathPojo>
                         <option name="entries">
                           <list>
-                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.slf4j/slf4j-api/1.7.21/f285ac123f201fb4b028bac556928d7cf527ef48/slf4j-api-1.7.21-sources.jar" />
-                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.slf4j/slf4j-api/1.7.21/139535a69a4239db087de9bab0bee568bf8e0b70/slf4j-api-1.7.21.jar" />
-                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/eu.supersede.if/eu.supersede.if.api/0.3.0-SNAPSHOT/38b4b55bb761ca461f9bda4c549fe1be707e840e/eu.supersede.if.api-0.3.0-SNAPSHOT.jar" />
-                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/commons-io/commons-io/2.5/caf033a4a7c37b4a8ff3ea084cba591539b0b69/commons-io-2.5-sources.jar" />
-                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/commons-io/commons-io/2.5/2852e6e05fbb95076fc091f6d1780f1f8fe35e0f/commons-io-2.5.jar" />
-                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.commons/commons-lang3/3.4/b49dafc9cfef24c356827f322e773e7c26725dd2/commons-lang3-3.4-sources.jar" />
-                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.commons/commons-lang3/3.4/5fe28b9518e58819180a43a850fbc0dd24b7c050/commons-lang3-3.4.jar" />
-                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/commons-logging/commons-logging/1.2/ecf26c7507d67782a3bbd148d170b31dfad001aa/commons-logging-1.2-sources.jar" />
-                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/commons-logging/commons-logging/1.2/4bfc12adfe4842bf07b657f0369c4cb522955686/commons-logging-1.2.jar" />
-                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.code.gson/gson/2.7/bbb63ca253b483da8ee53a50374593923e3de2e2/gson-2.7-sources.jar" />
-                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.code.gson/gson/2.7/751f548c85fa49f330cecbb1875893f971b33c4e/gson-2.7.jar" />
-                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.inject/guice/4.1.0/3f43f7c8743238f310246cfb13ba3e2e1aca6655/guice-4.1.0-sources.jar" />
-                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.inject/guice/4.1.0/eeb69005da379a10071aa4948c48d89250febb07/guice-4.1.0.jar" />
-                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.inject.extensions/guice-servlet/4.1.0/ecc2cebb8f48d21eac71979235e0edd4b57ace87/guice-servlet-4.1.0-sources.jar" />
-                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.inject.extensions/guice-servlet/4.1.0/90ac2db772d9b85e2b05417b74f7464bcc061dcb/guice-servlet-4.1.0.jar" />
-                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.httpcomponents/httpclient/4.5.2/b9f9e3e5255b6ddc3bf21be05428c7a60d00e042/httpclient-4.5.2-sources.jar" />
-                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.httpcomponents/httpclient/4.5.2/733db77aa8d9b2d68015189df76ab06304406e50/httpclient-4.5.2.jar" />
-                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.httpcomponents/httpclient-cache/4.5.2/cf65fff90f44bf96e937be86e240626f1f3af0ff/httpclient-cache-4.5.2-sources.jar" />
-                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.httpcomponents/httpclient-cache/4.5.2/bd50ea83908dbf2f387a333216e66d2f0c5079bd/httpclient-cache-4.5.2.jar" />
-                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.httpcomponents/httpcore/4.4.4/c5c19e3e6af6b452def290cde12a3ee4c35c893c/httpcore-4.4.4-sources.jar" />
-                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.httpcomponents/httpcore/4.4.4/b31526a230871fbe285fbcbe2813f9c0839ae9b0/httpcore-4.4.4.jar" />
-                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.httpcomponents/httpmime/4.5.2/ca23fd61a082eab682fc0ffd29e37d09eab07180/httpmime-4.5.2-sources.jar" />
-                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.httpcomponents/httpmime/4.5.2/22b4c53dd9b6761024258de8f9240c3dce6ea368/httpmime-4.5.2.jar" />
-                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.mockito/mockito-all/1.9.5/b8086d4e4daa361fc746abea62f77a2ae55d3ed9/mockito-all-1.9.5-sources.jar" />
-                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.mockito/mockito-all/1.9.5/79a8984096fc6591c1e3690e07d41be506356fa5/mockito-all-1.9.5.jar" />
-                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/mysql/mysql-connector-java/5.1.38/b83cac8c938dfb9b7a8e191e2d482be88eb8280c/mysql-connector-java-5.1.38-sources.jar" />
-                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/mysql/mysql-connector-java/5.1.38/dbbd7cd309ce167ec8367de4e41c63c2c8593cc5/mysql-connector-java-5.1.38.jar" />
-                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.reflections/reflections/0.9.9/6876c8eae96dc59b457b0f7499636efa52026064/reflections-0.9.9-sources.jar" />
-                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.reflections/reflections/0.9.9/296d8adb2f22a38025f44b45cac89835ff0bbaf/reflections-0.9.9.jar" />
-                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/commons-fileupload/commons-fileupload/1.3.2/23996750d5a80dc74dad55633c2a0f3db91462cb/commons-fileupload-1.3.2-sources.jar" />
-                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/commons-fileupload/commons-fileupload/1.3.2/5d7491ed6ebd02b6a8d2305f8e6b7fe5dbd95f72/commons-fileupload-1.3.2.jar" />
-                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.hamcrest/hamcrest-core/1.3/1dc37250fbc78e23a65a67fbbaf71d2e9cbc3c0b/hamcrest-core-1.3-sources.jar" />
-                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.hamcrest/hamcrest-core/1.3/42a25dc3219429f0e5d060061f71acb49bf010a0/hamcrest-core-1.3.jar" />
-                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/javax.mail/mail/1.4.7/bb76e5678cdb3e7488bb5578a8461e82fba5fe36/mail-1.4.7-sources.jar" />
-                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/javax.mail/mail/1.4.7/9add058589d5d85adeb625859bf2c5eeaaedf12d/mail-1.4.7.jar" />
                             <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.tomcat/tomcat-el-api/9.0.0.M11/8f6e358ed9e13219bf99bed2073ef42ece6a9617/tomcat-el-api-9.0.0.M11-sources.jar" />
                             <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.tomcat/tomcat-el-api/9.0.0.M11/3bd641ff6d7173417f90547f47ebdbf1aab1d212/tomcat-el-api-9.0.0.M11.jar" />
                             <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.commons/commons-pool2/2.4.2/2c9dcae4975caff05a627b99fae76e6fef2a3a0e/commons-pool2-2.4.2-sources.jar" />
@@ -725,6 +508,54 @@
                             <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.tomcat/tomcat-i18n-fr/9.0.0.M11/f21813894fa50fd1a6f6fb82e3eef380da83be1d/tomcat-i18n-fr-9.0.0.M11.jar" />
                             <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.tomcat/tomcat-jasper/9.0.0.M11/ee854b6892ac145ceeda2ce67172a530056ed923/tomcat-jasper-9.0.0.M11-sources.jar" />
                             <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.tomcat/tomcat-jasper/9.0.0.M11/78aff67347d8f71d809734922600a6df63747782/tomcat-jasper-9.0.0.M11.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.tomcat/el-api/6.0.47/2d82ed72150322f4e94077b32b610603612c58f/el-api-6.0.47.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.tomcat/tomcat-servlet-api/9.0.0.M11/b5710577526120f2b1507bcf6d74babc28ff21f2/tomcat-servlet-api-9.0.0.M11-sources.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.tomcat/tomcat-servlet-api/9.0.0.M11/171c00e64f2f1e4b3867566afba5aec6564bab72/tomcat-servlet-api-9.0.0.M11.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.tomcat/tomcat-jni/9.0.0.M11/3770a27d42300d6f04ac6251bb7d43b2d50a98e5/tomcat-jni-9.0.0.M11-sources.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.tomcat/tomcat-jni/9.0.0.M11/abc674b772637df6ee9089af2cd6b5d6d8b6a5fb/tomcat-jni-9.0.0.M11.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.tomcat/tomcat-juli/9.0.0.M11/9398fb368bab2774c2c300bd48c307d1437f1bcc/tomcat-juli-9.0.0.M11-sources.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.tomcat/tomcat-juli/9.0.0.M11/d2488a071971d1c177e6ebe253788d3f8f8097c1/tomcat-juli-9.0.0.M11.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/commons-logging/commons-logging/1.2/ecf26c7507d67782a3bbd148d170b31dfad001aa/commons-logging-1.2-sources.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/commons-logging/commons-logging/1.2/4bfc12adfe4842bf07b657f0369c4cb522955686/commons-logging-1.2.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.tomcat/tomcat-util-scan/9.0.0.M11/156db312a7400d9d58b122576559140babd7b263/tomcat-util-scan-9.0.0.M11-sources.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.tomcat/tomcat-util-scan/9.0.0.M11/b683bd4b5c13092c047bb7bacc9b5398d81cc1db/tomcat-util-scan-9.0.0.M11.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.eclipse.jdt.core.compiler/ecj/4.5.1/5b2072922a610a373aed03388f762b11b03d763d/ecj-4.5.1-sources.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.eclipse.jdt.core.compiler/ecj/4.5.1/bee1367ac12fb6a20b422ff8711ebeb4f0a42316/ecj-4.5.1.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.tomcat/tomcat-jasper-el/9.0.0.M11/86f1240211e34cfc593bfea0403d3d312aff0b2a/tomcat-jasper-el-9.0.0.M11-sources.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.tomcat/tomcat-jasper-el/9.0.0.M11/383c3e5bad7ebeb5411d35f0e55344a64ef5f1a3/tomcat-jasper-el-9.0.0.M11.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.slf4j/slf4j-api/1.7.21/f285ac123f201fb4b028bac556928d7cf527ef48/slf4j-api-1.7.21-sources.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.slf4j/slf4j-api/1.7.21/139535a69a4239db087de9bab0bee568bf8e0b70/slf4j-api-1.7.21.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/eu.supersede.if/eu.supersede.if.api/0.3.0-SNAPSHOT/38b4b55bb761ca461f9bda4c549fe1be707e840e/eu.supersede.if.api-0.3.0-SNAPSHOT.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/commons-io/commons-io/2.5/caf033a4a7c37b4a8ff3ea084cba591539b0b69/commons-io-2.5-sources.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/commons-io/commons-io/2.5/2852e6e05fbb95076fc091f6d1780f1f8fe35e0f/commons-io-2.5.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.commons/commons-lang3/3.4/b49dafc9cfef24c356827f322e773e7c26725dd2/commons-lang3-3.4-sources.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.commons/commons-lang3/3.4/5fe28b9518e58819180a43a850fbc0dd24b7c050/commons-lang3-3.4.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.code.gson/gson/2.7/bbb63ca253b483da8ee53a50374593923e3de2e2/gson-2.7-sources.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.code.gson/gson/2.7/751f548c85fa49f330cecbb1875893f971b33c4e/gson-2.7.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.inject/guice/4.1.0/3f43f7c8743238f310246cfb13ba3e2e1aca6655/guice-4.1.0-sources.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.inject/guice/4.1.0/eeb69005da379a10071aa4948c48d89250febb07/guice-4.1.0.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.inject.extensions/guice-servlet/4.1.0/ecc2cebb8f48d21eac71979235e0edd4b57ace87/guice-servlet-4.1.0-sources.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.inject.extensions/guice-servlet/4.1.0/90ac2db772d9b85e2b05417b74f7464bcc061dcb/guice-servlet-4.1.0.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.httpcomponents/httpclient/4.5.2/b9f9e3e5255b6ddc3bf21be05428c7a60d00e042/httpclient-4.5.2-sources.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.httpcomponents/httpclient/4.5.2/733db77aa8d9b2d68015189df76ab06304406e50/httpclient-4.5.2.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.httpcomponents/httpclient-cache/4.5.2/cf65fff90f44bf96e937be86e240626f1f3af0ff/httpclient-cache-4.5.2-sources.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.httpcomponents/httpclient-cache/4.5.2/bd50ea83908dbf2f387a333216e66d2f0c5079bd/httpclient-cache-4.5.2.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.httpcomponents/httpcore/4.4.4/c5c19e3e6af6b452def290cde12a3ee4c35c893c/httpcore-4.4.4-sources.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.httpcomponents/httpcore/4.4.4/b31526a230871fbe285fbcbe2813f9c0839ae9b0/httpcore-4.4.4.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.httpcomponents/httpmime/4.5.2/ca23fd61a082eab682fc0ffd29e37d09eab07180/httpmime-4.5.2-sources.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.httpcomponents/httpmime/4.5.2/22b4c53dd9b6761024258de8f9240c3dce6ea368/httpmime-4.5.2.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.mockito/mockito-all/1.9.5/b8086d4e4daa361fc746abea62f77a2ae55d3ed9/mockito-all-1.9.5-sources.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.mockito/mockito-all/1.9.5/79a8984096fc6591c1e3690e07d41be506356fa5/mockito-all-1.9.5.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/mysql/mysql-connector-java/5.1.38/b83cac8c938dfb9b7a8e191e2d482be88eb8280c/mysql-connector-java-5.1.38-sources.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/mysql/mysql-connector-java/5.1.38/dbbd7cd309ce167ec8367de4e41c63c2c8593cc5/mysql-connector-java-5.1.38.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.reflections/reflections/0.9.9/6876c8eae96dc59b457b0f7499636efa52026064/reflections-0.9.9-sources.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.reflections/reflections/0.9.9/296d8adb2f22a38025f44b45cac89835ff0bbaf/reflections-0.9.9.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/commons-fileupload/commons-fileupload/1.3.2/23996750d5a80dc74dad55633c2a0f3db91462cb/commons-fileupload-1.3.2-sources.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/commons-fileupload/commons-fileupload/1.3.2/5d7491ed6ebd02b6a8d2305f8e6b7fe5dbd95f72/commons-fileupload-1.3.2.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.hamcrest/hamcrest-core/1.3/1dc37250fbc78e23a65a67fbbaf71d2e9cbc3c0b/hamcrest-core-1.3-sources.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.hamcrest/hamcrest-core/1.3/42a25dc3219429f0e5d060061f71acb49bf010a0/hamcrest-core-1.3.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/javax.mail/mail/1.4.7/bb76e5678cdb3e7488bb5578a8461e82fba5fe36/mail-1.4.7-sources.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/javax.mail/mail/1.4.7/9add058589d5d85adeb625859bf2c5eeaaedf12d/mail-1.4.7.jar" />
                             <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.axis2/axis2/1.6.1/b784cfe5801fd0cd1e80b7ceea015d58f0e5b672/axis2-1.6.1.jar" />
                             <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.axis2/axis2-transport-http/1.6.1/8d364944d5eee6c329f8d5af909cff63899d5710/axis2-transport-http-1.6.1-sources.jar" />
                             <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.axis2/axis2-transport-http/1.6.1/9a9e988c9505b0d111d0b854983b174ec3b55db0/axis2-transport-http-1.6.1.jar" />
@@ -762,19 +593,6 @@
                             <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.code.findbugs/annotations/2.0.1/9ef6656259841cebfb9fb0697bb122ada4485498/annotations-2.0.1.jar" />
                             <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/javax.activation/activation/1.1/3697e9f67a2ed7ac5f589cff30f21173299440/activation-1.1-sources.jar" />
                             <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/javax.activation/activation/1.1/e6cb541461c2834bdea3eb920f1884d1eb508b50/activation-1.1.jar" />
-                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.tomcat/el-api/6.0.47/2d82ed72150322f4e94077b32b610603612c58f/el-api-6.0.47.jar" />
-                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.tomcat/tomcat-servlet-api/9.0.0.M11/b5710577526120f2b1507bcf6d74babc28ff21f2/tomcat-servlet-api-9.0.0.M11-sources.jar" />
-                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.tomcat/tomcat-servlet-api/9.0.0.M11/171c00e64f2f1e4b3867566afba5aec6564bab72/tomcat-servlet-api-9.0.0.M11.jar" />
-                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.tomcat/tomcat-jni/9.0.0.M11/3770a27d42300d6f04ac6251bb7d43b2d50a98e5/tomcat-jni-9.0.0.M11-sources.jar" />
-                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.tomcat/tomcat-jni/9.0.0.M11/abc674b772637df6ee9089af2cd6b5d6d8b6a5fb/tomcat-jni-9.0.0.M11.jar" />
-                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.tomcat/tomcat-juli/9.0.0.M11/9398fb368bab2774c2c300bd48c307d1437f1bcc/tomcat-juli-9.0.0.M11-sources.jar" />
-                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.tomcat/tomcat-juli/9.0.0.M11/d2488a071971d1c177e6ebe253788d3f8f8097c1/tomcat-juli-9.0.0.M11.jar" />
-                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.tomcat/tomcat-util-scan/9.0.0.M11/156db312a7400d9d58b122576559140babd7b263/tomcat-util-scan-9.0.0.M11-sources.jar" />
-                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.tomcat/tomcat-util-scan/9.0.0.M11/b683bd4b5c13092c047bb7bacc9b5398d81cc1db/tomcat-util-scan-9.0.0.M11.jar" />
-                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.eclipse.jdt.core.compiler/ecj/4.5.1/5b2072922a610a373aed03388f762b11b03d763d/ecj-4.5.1-sources.jar" />
-                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.eclipse.jdt.core.compiler/ecj/4.5.1/bee1367ac12fb6a20b422ff8711ebeb4f0a42316/ecj-4.5.1.jar" />
-                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.tomcat/tomcat-jasper-el/9.0.0.M11/86f1240211e34cfc593bfea0403d3d312aff0b2a/tomcat-jasper-el-9.0.0.M11-sources.jar" />
-                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.tomcat/tomcat-jasper-el/9.0.0.M11/383c3e5bad7ebeb5411d35f0e55344a64ef5f1a3/tomcat-jasper-el-9.0.0.M11.jar" />
                             <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.axis2/axis2-kernel/1.6.1/6feb8b9e4651efd42fee1db6ff2de1c7669c1fd4/axis2-kernel-1.6.1-sources.jar" />
                             <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.axis2/axis2-kernel/1.6.1/5c1d67f4cfe34f63ba1dc92b4dbee5762803b7e7/axis2-kernel-1.6.1.jar" />
                             <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework.boot/spring-boot-starter/1.4.2.RELEASE/6bf5be880db87982d8b5517c7cad9c49452fd475/spring-boot-starter-1.4.2.RELEASE-sources.jar" />
@@ -899,41 +717,6 @@
                       <ExternalModuleBuildClasspathPojo>
                         <option name="entries">
                           <list>
-                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.slf4j/slf4j-api/1.7.21/f285ac123f201fb4b028bac556928d7cf527ef48/slf4j-api-1.7.21-sources.jar" />
-                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.slf4j/slf4j-api/1.7.21/139535a69a4239db087de9bab0bee568bf8e0b70/slf4j-api-1.7.21.jar" />
-                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/eu.supersede.if/eu.supersede.if.api/0.3.0-SNAPSHOT/38b4b55bb761ca461f9bda4c549fe1be707e840e/eu.supersede.if.api-0.3.0-SNAPSHOT.jar" />
-                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/commons-io/commons-io/2.5/caf033a4a7c37b4a8ff3ea084cba591539b0b69/commons-io-2.5-sources.jar" />
-                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/commons-io/commons-io/2.5/2852e6e05fbb95076fc091f6d1780f1f8fe35e0f/commons-io-2.5.jar" />
-                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.commons/commons-lang3/3.4/b49dafc9cfef24c356827f322e773e7c26725dd2/commons-lang3-3.4-sources.jar" />
-                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.commons/commons-lang3/3.4/5fe28b9518e58819180a43a850fbc0dd24b7c050/commons-lang3-3.4.jar" />
-                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/commons-logging/commons-logging/1.2/ecf26c7507d67782a3bbd148d170b31dfad001aa/commons-logging-1.2-sources.jar" />
-                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/commons-logging/commons-logging/1.2/4bfc12adfe4842bf07b657f0369c4cb522955686/commons-logging-1.2.jar" />
-                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.code.gson/gson/2.7/bbb63ca253b483da8ee53a50374593923e3de2e2/gson-2.7-sources.jar" />
-                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.code.gson/gson/2.7/751f548c85fa49f330cecbb1875893f971b33c4e/gson-2.7.jar" />
-                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.inject/guice/4.1.0/3f43f7c8743238f310246cfb13ba3e2e1aca6655/guice-4.1.0-sources.jar" />
-                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.inject/guice/4.1.0/eeb69005da379a10071aa4948c48d89250febb07/guice-4.1.0.jar" />
-                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.inject.extensions/guice-servlet/4.1.0/ecc2cebb8f48d21eac71979235e0edd4b57ace87/guice-servlet-4.1.0-sources.jar" />
-                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.inject.extensions/guice-servlet/4.1.0/90ac2db772d9b85e2b05417b74f7464bcc061dcb/guice-servlet-4.1.0.jar" />
-                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.httpcomponents/httpclient/4.5.2/b9f9e3e5255b6ddc3bf21be05428c7a60d00e042/httpclient-4.5.2-sources.jar" />
-                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.httpcomponents/httpclient/4.5.2/733db77aa8d9b2d68015189df76ab06304406e50/httpclient-4.5.2.jar" />
-                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.httpcomponents/httpclient-cache/4.5.2/cf65fff90f44bf96e937be86e240626f1f3af0ff/httpclient-cache-4.5.2-sources.jar" />
-                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.httpcomponents/httpclient-cache/4.5.2/bd50ea83908dbf2f387a333216e66d2f0c5079bd/httpclient-cache-4.5.2.jar" />
-                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.httpcomponents/httpcore/4.4.4/c5c19e3e6af6b452def290cde12a3ee4c35c893c/httpcore-4.4.4-sources.jar" />
-                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.httpcomponents/httpcore/4.4.4/b31526a230871fbe285fbcbe2813f9c0839ae9b0/httpcore-4.4.4.jar" />
-                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.httpcomponents/httpmime/4.5.2/ca23fd61a082eab682fc0ffd29e37d09eab07180/httpmime-4.5.2-sources.jar" />
-                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.httpcomponents/httpmime/4.5.2/22b4c53dd9b6761024258de8f9240c3dce6ea368/httpmime-4.5.2.jar" />
-                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.mockito/mockito-all/1.9.5/b8086d4e4daa361fc746abea62f77a2ae55d3ed9/mockito-all-1.9.5-sources.jar" />
-                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.mockito/mockito-all/1.9.5/79a8984096fc6591c1e3690e07d41be506356fa5/mockito-all-1.9.5.jar" />
-                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/mysql/mysql-connector-java/5.1.38/b83cac8c938dfb9b7a8e191e2d482be88eb8280c/mysql-connector-java-5.1.38-sources.jar" />
-                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/mysql/mysql-connector-java/5.1.38/dbbd7cd309ce167ec8367de4e41c63c2c8593cc5/mysql-connector-java-5.1.38.jar" />
-                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.reflections/reflections/0.9.9/6876c8eae96dc59b457b0f7499636efa52026064/reflections-0.9.9-sources.jar" />
-                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.reflections/reflections/0.9.9/296d8adb2f22a38025f44b45cac89835ff0bbaf/reflections-0.9.9.jar" />
-                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/commons-fileupload/commons-fileupload/1.3.2/23996750d5a80dc74dad55633c2a0f3db91462cb/commons-fileupload-1.3.2-sources.jar" />
-                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/commons-fileupload/commons-fileupload/1.3.2/5d7491ed6ebd02b6a8d2305f8e6b7fe5dbd95f72/commons-fileupload-1.3.2.jar" />
-                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.hamcrest/hamcrest-core/1.3/1dc37250fbc78e23a65a67fbbaf71d2e9cbc3c0b/hamcrest-core-1.3-sources.jar" />
-                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.hamcrest/hamcrest-core/1.3/42a25dc3219429f0e5d060061f71acb49bf010a0/hamcrest-core-1.3.jar" />
-                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/javax.mail/mail/1.4.7/bb76e5678cdb3e7488bb5578a8461e82fba5fe36/mail-1.4.7-sources.jar" />
-                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/javax.mail/mail/1.4.7/9add058589d5d85adeb625859bf2c5eeaaedf12d/mail-1.4.7.jar" />
                             <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.tomcat/tomcat-el-api/9.0.0.M11/8f6e358ed9e13219bf99bed2073ef42ece6a9617/tomcat-el-api-9.0.0.M11-sources.jar" />
                             <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.tomcat/tomcat-el-api/9.0.0.M11/3bd641ff6d7173417f90547f47ebdbf1aab1d212/tomcat-el-api-9.0.0.M11.jar" />
                             <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.commons/commons-pool2/2.4.2/2c9dcae4975caff05a627b99fae76e6fef2a3a0e/commons-pool2-2.4.2-sources.jar" />
@@ -968,6 +751,54 @@
                             <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.tomcat/tomcat-i18n-fr/9.0.0.M11/f21813894fa50fd1a6f6fb82e3eef380da83be1d/tomcat-i18n-fr-9.0.0.M11.jar" />
                             <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.tomcat/tomcat-jasper/9.0.0.M11/ee854b6892ac145ceeda2ce67172a530056ed923/tomcat-jasper-9.0.0.M11-sources.jar" />
                             <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.tomcat/tomcat-jasper/9.0.0.M11/78aff67347d8f71d809734922600a6df63747782/tomcat-jasper-9.0.0.M11.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.tomcat/el-api/6.0.47/2d82ed72150322f4e94077b32b610603612c58f/el-api-6.0.47.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.tomcat/tomcat-servlet-api/9.0.0.M11/b5710577526120f2b1507bcf6d74babc28ff21f2/tomcat-servlet-api-9.0.0.M11-sources.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.tomcat/tomcat-servlet-api/9.0.0.M11/171c00e64f2f1e4b3867566afba5aec6564bab72/tomcat-servlet-api-9.0.0.M11.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.tomcat/tomcat-jni/9.0.0.M11/3770a27d42300d6f04ac6251bb7d43b2d50a98e5/tomcat-jni-9.0.0.M11-sources.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.tomcat/tomcat-jni/9.0.0.M11/abc674b772637df6ee9089af2cd6b5d6d8b6a5fb/tomcat-jni-9.0.0.M11.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.tomcat/tomcat-juli/9.0.0.M11/9398fb368bab2774c2c300bd48c307d1437f1bcc/tomcat-juli-9.0.0.M11-sources.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.tomcat/tomcat-juli/9.0.0.M11/d2488a071971d1c177e6ebe253788d3f8f8097c1/tomcat-juli-9.0.0.M11.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/commons-logging/commons-logging/1.2/ecf26c7507d67782a3bbd148d170b31dfad001aa/commons-logging-1.2-sources.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/commons-logging/commons-logging/1.2/4bfc12adfe4842bf07b657f0369c4cb522955686/commons-logging-1.2.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.tomcat/tomcat-util-scan/9.0.0.M11/156db312a7400d9d58b122576559140babd7b263/tomcat-util-scan-9.0.0.M11-sources.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.tomcat/tomcat-util-scan/9.0.0.M11/b683bd4b5c13092c047bb7bacc9b5398d81cc1db/tomcat-util-scan-9.0.0.M11.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.eclipse.jdt.core.compiler/ecj/4.5.1/5b2072922a610a373aed03388f762b11b03d763d/ecj-4.5.1-sources.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.eclipse.jdt.core.compiler/ecj/4.5.1/bee1367ac12fb6a20b422ff8711ebeb4f0a42316/ecj-4.5.1.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.tomcat/tomcat-jasper-el/9.0.0.M11/86f1240211e34cfc593bfea0403d3d312aff0b2a/tomcat-jasper-el-9.0.0.M11-sources.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.tomcat/tomcat-jasper-el/9.0.0.M11/383c3e5bad7ebeb5411d35f0e55344a64ef5f1a3/tomcat-jasper-el-9.0.0.M11.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.slf4j/slf4j-api/1.7.21/f285ac123f201fb4b028bac556928d7cf527ef48/slf4j-api-1.7.21-sources.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.slf4j/slf4j-api/1.7.21/139535a69a4239db087de9bab0bee568bf8e0b70/slf4j-api-1.7.21.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/eu.supersede.if/eu.supersede.if.api/0.3.0-SNAPSHOT/38b4b55bb761ca461f9bda4c549fe1be707e840e/eu.supersede.if.api-0.3.0-SNAPSHOT.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/commons-io/commons-io/2.5/caf033a4a7c37b4a8ff3ea084cba591539b0b69/commons-io-2.5-sources.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/commons-io/commons-io/2.5/2852e6e05fbb95076fc091f6d1780f1f8fe35e0f/commons-io-2.5.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.commons/commons-lang3/3.4/b49dafc9cfef24c356827f322e773e7c26725dd2/commons-lang3-3.4-sources.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.commons/commons-lang3/3.4/5fe28b9518e58819180a43a850fbc0dd24b7c050/commons-lang3-3.4.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.code.gson/gson/2.7/bbb63ca253b483da8ee53a50374593923e3de2e2/gson-2.7-sources.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.code.gson/gson/2.7/751f548c85fa49f330cecbb1875893f971b33c4e/gson-2.7.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.inject/guice/4.1.0/3f43f7c8743238f310246cfb13ba3e2e1aca6655/guice-4.1.0-sources.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.inject/guice/4.1.0/eeb69005da379a10071aa4948c48d89250febb07/guice-4.1.0.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.inject.extensions/guice-servlet/4.1.0/ecc2cebb8f48d21eac71979235e0edd4b57ace87/guice-servlet-4.1.0-sources.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.inject.extensions/guice-servlet/4.1.0/90ac2db772d9b85e2b05417b74f7464bcc061dcb/guice-servlet-4.1.0.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.httpcomponents/httpclient/4.5.2/b9f9e3e5255b6ddc3bf21be05428c7a60d00e042/httpclient-4.5.2-sources.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.httpcomponents/httpclient/4.5.2/733db77aa8d9b2d68015189df76ab06304406e50/httpclient-4.5.2.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.httpcomponents/httpclient-cache/4.5.2/cf65fff90f44bf96e937be86e240626f1f3af0ff/httpclient-cache-4.5.2-sources.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.httpcomponents/httpclient-cache/4.5.2/bd50ea83908dbf2f387a333216e66d2f0c5079bd/httpclient-cache-4.5.2.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.httpcomponents/httpcore/4.4.4/c5c19e3e6af6b452def290cde12a3ee4c35c893c/httpcore-4.4.4-sources.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.httpcomponents/httpcore/4.4.4/b31526a230871fbe285fbcbe2813f9c0839ae9b0/httpcore-4.4.4.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.httpcomponents/httpmime/4.5.2/ca23fd61a082eab682fc0ffd29e37d09eab07180/httpmime-4.5.2-sources.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.httpcomponents/httpmime/4.5.2/22b4c53dd9b6761024258de8f9240c3dce6ea368/httpmime-4.5.2.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.mockito/mockito-all/1.9.5/b8086d4e4daa361fc746abea62f77a2ae55d3ed9/mockito-all-1.9.5-sources.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.mockito/mockito-all/1.9.5/79a8984096fc6591c1e3690e07d41be506356fa5/mockito-all-1.9.5.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/mysql/mysql-connector-java/5.1.38/b83cac8c938dfb9b7a8e191e2d482be88eb8280c/mysql-connector-java-5.1.38-sources.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/mysql/mysql-connector-java/5.1.38/dbbd7cd309ce167ec8367de4e41c63c2c8593cc5/mysql-connector-java-5.1.38.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.reflections/reflections/0.9.9/6876c8eae96dc59b457b0f7499636efa52026064/reflections-0.9.9-sources.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.reflections/reflections/0.9.9/296d8adb2f22a38025f44b45cac89835ff0bbaf/reflections-0.9.9.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/commons-fileupload/commons-fileupload/1.3.2/23996750d5a80dc74dad55633c2a0f3db91462cb/commons-fileupload-1.3.2-sources.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/commons-fileupload/commons-fileupload/1.3.2/5d7491ed6ebd02b6a8d2305f8e6b7fe5dbd95f72/commons-fileupload-1.3.2.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.hamcrest/hamcrest-core/1.3/1dc37250fbc78e23a65a67fbbaf71d2e9cbc3c0b/hamcrest-core-1.3-sources.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.hamcrest/hamcrest-core/1.3/42a25dc3219429f0e5d060061f71acb49bf010a0/hamcrest-core-1.3.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/javax.mail/mail/1.4.7/bb76e5678cdb3e7488bb5578a8461e82fba5fe36/mail-1.4.7-sources.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/javax.mail/mail/1.4.7/9add058589d5d85adeb625859bf2c5eeaaedf12d/mail-1.4.7.jar" />
                             <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.axis2/axis2/1.6.1/b784cfe5801fd0cd1e80b7ceea015d58f0e5b672/axis2-1.6.1.jar" />
                             <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.axis2/axis2-transport-http/1.6.1/8d364944d5eee6c329f8d5af909cff63899d5710/axis2-transport-http-1.6.1-sources.jar" />
                             <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.axis2/axis2-transport-http/1.6.1/9a9e988c9505b0d111d0b854983b174ec3b55db0/axis2-transport-http-1.6.1.jar" />
@@ -1005,19 +836,6 @@
                             <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.code.findbugs/annotations/2.0.1/9ef6656259841cebfb9fb0697bb122ada4485498/annotations-2.0.1.jar" />
                             <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/javax.activation/activation/1.1/3697e9f67a2ed7ac5f589cff30f21173299440/activation-1.1-sources.jar" />
                             <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/javax.activation/activation/1.1/e6cb541461c2834bdea3eb920f1884d1eb508b50/activation-1.1.jar" />
-                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.tomcat/el-api/6.0.47/2d82ed72150322f4e94077b32b610603612c58f/el-api-6.0.47.jar" />
-                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.tomcat/tomcat-servlet-api/9.0.0.M11/b5710577526120f2b1507bcf6d74babc28ff21f2/tomcat-servlet-api-9.0.0.M11-sources.jar" />
-                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.tomcat/tomcat-servlet-api/9.0.0.M11/171c00e64f2f1e4b3867566afba5aec6564bab72/tomcat-servlet-api-9.0.0.M11.jar" />
-                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.tomcat/tomcat-jni/9.0.0.M11/3770a27d42300d6f04ac6251bb7d43b2d50a98e5/tomcat-jni-9.0.0.M11-sources.jar" />
-                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.tomcat/tomcat-jni/9.0.0.M11/abc674b772637df6ee9089af2cd6b5d6d8b6a5fb/tomcat-jni-9.0.0.M11.jar" />
-                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.tomcat/tomcat-juli/9.0.0.M11/9398fb368bab2774c2c300bd48c307d1437f1bcc/tomcat-juli-9.0.0.M11-sources.jar" />
-                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.tomcat/tomcat-juli/9.0.0.M11/d2488a071971d1c177e6ebe253788d3f8f8097c1/tomcat-juli-9.0.0.M11.jar" />
-                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.tomcat/tomcat-util-scan/9.0.0.M11/156db312a7400d9d58b122576559140babd7b263/tomcat-util-scan-9.0.0.M11-sources.jar" />
-                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.tomcat/tomcat-util-scan/9.0.0.M11/b683bd4b5c13092c047bb7bacc9b5398d81cc1db/tomcat-util-scan-9.0.0.M11.jar" />
-                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.eclipse.jdt.core.compiler/ecj/4.5.1/5b2072922a610a373aed03388f762b11b03d763d/ecj-4.5.1-sources.jar" />
-                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.eclipse.jdt.core.compiler/ecj/4.5.1/bee1367ac12fb6a20b422ff8711ebeb4f0a42316/ecj-4.5.1.jar" />
-                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.tomcat/tomcat-jasper-el/9.0.0.M11/86f1240211e34cfc593bfea0403d3d312aff0b2a/tomcat-jasper-el-9.0.0.M11-sources.jar" />
-                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.tomcat/tomcat-jasper-el/9.0.0.M11/383c3e5bad7ebeb5411d35f0e55344a64ef5f1a3/tomcat-jasper-el-9.0.0.M11.jar" />
                             <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.axis2/axis2-kernel/1.6.1/6feb8b9e4651efd42fee1db6ff2de1c7669c1fd4/axis2-kernel-1.6.1-sources.jar" />
                             <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.axis2/axis2-kernel/1.6.1/5c1d67f4cfe34f63ba1dc92b4dbee5762803b7e7/axis2-kernel-1.6.1.jar" />
                             <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework.boot/spring-boot-starter/1.4.2.RELEASE/6bf5be880db87982d8b5517c7cad9c49452fd475/spring-boot-starter-1.4.2.RELEASE-sources.jar" />
@@ -1312,10 +1130,11 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/.gitignore" />
-        <option value="$PROJECT_DIR$/src/ch/uzh/ifi/feedback/repository/FeedbackServlet.java" />
         <option value="$PROJECT_DIR$/settings.gradle" />
         <option value="$PROJECT_DIR$/feedback_repository.iml" />
+        <option value="$PROJECT_DIR$/src/ch/uzh/ifi/feedback/repository/FeedbackServlet.java" />
         <option value="$PROJECT_DIR$/build.gradle" />
+        <option value="$PROJECT_DIR$/src/ch/uzh/ifi/feedback/repository/transaction/RepositoryDatabaseConfiguration.java" />
       </list>
     </option>
   </component>
@@ -1373,6 +1192,30 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
+              <option name="myItemId" value="server_library" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="feedback_repository" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="server_library" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="feedback_repository" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
               <option name="myItemId" value="repository" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
@@ -1391,99 +1234,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="ch" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="uzh" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="ifi" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="feedback" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
               <option name="myItemId" value="repository" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="feedback_repository" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="repository" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="ch" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="uzh" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="ifi" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="feedback" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="repository" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="transaction" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="feedback_repository" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="repository" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="ch" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="uzh" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="ifi" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="feedback" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="repository" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="model" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -1500,7 +1251,7 @@
     <property name="MemberChooser.showClasses" value="true" />
     <property name="MemberChooser.copyJavadoc" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
-    <property name="settings.editor.selected.configurable" value="reference.settings.project.maven.repository.indices" />
+    <property name="settings.editor.selected.configurable" value="reference.settingsdialog.project.gradle" />
     <property name="settings.editor.splitter.proportion" value="0.2" />
     <property name="project.structure.last.edited" value="Project" />
     <property name="project.structure.proportion" value="0.0" />
@@ -2135,6 +1886,26 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/ch/uzh/ifi/feedback/repository/model/RatingFeedback.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.51420176">
+          <caret line="49" column="0" selection-start-line="49" selection-start-column="0" selection-end-line="49" selection-end-column="0" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/ch/uzh/ifi/feedback/repository/model/CategoryFeedback.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.029382957">
+          <caret line="2" column="7" selection-start-line="2" selection-start-column="7" selection-end-line="2" selection-end-column="7" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/feedback_repository.ipr">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -2145,59 +1916,33 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/feedback_repository.iml">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
+        <state vertical-scroll-proportion="-1.2624878">
           <caret line="2" column="0" selection-start-line="2" selection-start-column="0" selection-end-line="2" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/ch/uzh/ifi/feedback/repository/transaction/RepositoryDatabaseConfiguration.java">
+    <entry file="file://$PROJECT_DIR$/src/ch/uzh/ifi/feedback/repository/model/FileFeedback.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="13" column="4" selection-start-line="13" selection-start-column="4" selection-end-line="13" selection-end-column="4" />
+        <state vertical-scroll-proportion="0.24975514">
+          <caret line="17" column="12" selection-start-line="17" selection-start-column="12" selection-end-line="17" selection-end-column="12" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/ch/uzh/ifi/feedback/repository/GuiceRepositoryContextListener.java">
+    <entry file="file://$PROJECT_DIR$/src/ch/uzh/ifi/feedback/repository/model/Status.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="15" column="0" selection-start-line="15" selection-start-column="0" selection-end-line="15" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/ch/uzh/ifi/feedback/repository/FeedbackServlet.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="20" column="38" selection-start-line="20" selection-start-column="38" selection-end-line="20" selection-end-column="38" />
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/build.gradle">
+    <entry file="file://$PROJECT_DIR$/src/ch/uzh/ifi/feedback/repository/model/FeedbackComment.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="42" column="4" selection-start-line="42" selection-start-column="4" selection-end-line="42" selection-end-column="4" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/settings.gradle">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="4" column="0" selection-start-line="4" selection-start-column="0" selection-end-line="4" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/ch/uzh/ifi/feedback/repository/model/CategoryFeedback.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
+        <state vertical-scroll-proportion="0.029382957">
           <caret line="2" column="7" selection-start-line="2" selection-start-column="7" selection-end-line="2" selection-end-column="7" />
           <folding>
             <element signature="imports" expanded="true" />
@@ -2205,10 +1950,86 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/ch/uzh/ifi/feedback/repository/model/RatingFeedback.java">
+    <entry file="file://$PROJECT_DIR$/../server_library/src/ch/uzh/ifi/feedback/library/mail/IMailConfiguration.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.51420176">
-          <caret line="49" column="0" selection-start-line="49" selection-start-column="0" selection-end-line="49" selection-end-column="0" />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../server_library/src/ch/uzh/ifi/feedback/library/rest/ServletBase.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="8" selection-start-line="0" selection-start-column="8" selection-end-line="0" selection-end-column="40" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/ch/uzh/ifi/feedback/repository/model/Feedback.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.26444662">
+          <caret line="28" column="38" selection-start-line="28" selection-start-column="38" selection-end-line="28" selection-end-column="38" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/ch/uzh/ifi/feedback/repository/model/AudioFeedback.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/ch/uzh/ifi/feedback/repository/transaction/RepositoryDatabaseConfiguration.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.4260529">
+          <caret line="36" column="0" selection-start-line="36" selection-start-column="0" selection-end-line="36" selection-end-column="0" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/settings.gradle">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="3" column="80" selection-start-line="3" selection-start-column="80" selection-end-line="3" selection-end-column="80" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/build.gradle">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="40" column="0" selection-start-line="40" selection-start-column="0" selection-end-line="40" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../server_library/settings.gradle">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="1" column="0" selection-start-line="1" selection-start-column="0" selection-end-line="1" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/ch/uzh/ifi/feedback/repository/FeedbackServlet.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="19" column="47" selection-start-line="19" selection-start-column="47" selection-end-line="19" selection-end-column="47" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/ch/uzh/ifi/feedback/repository/GuiceRepositoryContextListener.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.22037219">
+          <caret line="15" column="0" selection-start-line="15" selection-start-column="0" selection-end-line="15" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
@@ -2280,7 +2101,7 @@
       </state>
       <state key="ProjectJDKs.UI">
         <settings>
-          <last-edited>1.7</last-edited>
+          <last-edited>1.8</last-edited>
           <splitter-proportions>
             <option name="proportions">
               <list>
@@ -2292,6 +2113,7 @@
       </state>
       <state key="ProjectLibrariesConfigurable.UI">
         <settings>
+          <last-edited>Gradle: aopalliance:aopalliance:1.0</last-edited>
           <splitter-proportions>
             <option name="proportions">
               <list>
