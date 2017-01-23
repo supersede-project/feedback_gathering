@@ -119,7 +119,7 @@ export class FeedbackDialogView extends DialogView {
 
     sendFeedback(feedbackService:FeedbackService, formData:any, generalConfiguration:GeneralConfiguration) {
         var feedbackDialogView = this;
-        var url = apiEndpointRepository + 'feedback_repository/' + feedbackDialogView.dialogContext.language + '/applications/' + applicationId + '/feedbacks/';
+        var url = apiEndpointRepository + 'feedback_repository/' + feedbackDialogView.dialogContext.lang + '/applications/' + applicationId + '/feedbacks/';
 
         feedbackService.sendFeedback(url, formData, function(data) {
             feedbackDialogView.resetDialog();
