@@ -1,8 +1,0 @@
-repositoryMailHost=smtp.gmail.com
-repositoryMailPort=587
-repositoryMailUser=your_email@gmail.com
-repositoryMailPassword=your_password
-orchestratorBaseUrl=http://localhost:8080/orchestrator/feedback
-repositoryBaseUrl=http://localhost:8080/feedback_repository
-isMailFeedbackEnabled=false
-feedbackMailKeyName=feedbackMailAdress

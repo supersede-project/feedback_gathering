@@ -6,15 +6,15 @@ import org.json.JSONObject;
 
 
 // TODO use this in orchestrator and repository
-public class DataProvider {
+public class DataProviderIntegrator {
     private DataProviderProxy proxy;
 
-    public DataProvider() {
+    public DataProviderIntegrator() {
         proxy = new DataProviderProxy();
     }
 
     // TODO after this call check with WP2 people whether they received something
-    public void ingestJsonData(String topic, JSONObject jsonData) throws Exception{
+    public void ingestJsonData(JSONObject jsonData, String topic) throws Exception{
         proxy.ingestData(jsonData, topic);
     }
 }

@@ -1,18 +1,17 @@
 package ch.uzh.ifi.feedback.repository.integration;
 
-
-import eu.supersede.integration.api.analysis.proxies.DataProviderProxy;
 import org.json.JSONObject;
 
+import ch.uzh.ifi.feedback.library.rest.integration.DataProviderIntegrator;;
 
 public class DataProviderIntegratorRepository {
-    private DataProviderProxy proxy;
+    private DataProviderIntegrator dataProviderIntegrator;
 
     public DataProviderIntegratorRepository() {
-        proxy = new DataProviderProxy();
+    	this.dataProviderIntegrator = new DataProviderIntegrator();
     }
 
-    public void ingestJsonData(String topic, JSONObject jsonData) throws Exception{
-        proxy.ingestData(jsonData, topic);
+    public void ingestJsonData(JSONObject jsonData, String topic) throws Exception{
+    	dataProviderIntegrator.ingestJsonData(jsonData, topic);
     }
 }

@@ -15,6 +15,6 @@ public class DataProviderIntegratorRepositoryTest {
         DataProviderIntegratorRepository dataProviderIntegratorRepository = new DataProviderIntegratorRepository();
         JSONObject jsonObject = new JSONObject(jsonData);
 
-        dataProviderIntegratorRepository.ingestJsonData(topic, jsonObject);
+        dataProviderIntegratorRepository.ingestJsonData(jsonObject, topic);
     }
 }
