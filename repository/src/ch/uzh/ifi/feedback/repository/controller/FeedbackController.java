@@ -3,6 +3,11 @@ package ch.uzh.ifi.feedback.repository.controller;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.json.JSONObject;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.inject.Inject;
 import com.google.inject.servlet.RequestScoped;
 import ch.uzh.ifi.feedback.library.rest.RestController;
@@ -14,6 +19,8 @@ import ch.uzh.ifi.feedback.library.rest.annotations.POST;
 import ch.uzh.ifi.feedback.library.rest.annotations.Path;
 import ch.uzh.ifi.feedback.library.rest.annotations.PathParam;
 import ch.uzh.ifi.feedback.library.rest.authorization.UserAuthenticationService;
+import ch.uzh.ifi.feedback.library.rest.validation.ValidationException;
+import ch.uzh.ifi.feedback.repository.integration.DataProviderIntegratorRepository;
 import ch.uzh.ifi.feedback.repository.mail.MailService;
 import ch.uzh.ifi.feedback.repository.model.Feedback;
 import ch.uzh.ifi.feedback.repository.service.FeedbackService;
@@ -25,6 +32,8 @@ import javassist.NotFoundException;
 public class FeedbackController extends RestController<Feedback>{
 
 	private MailService mailService;
+	private DataProviderIntegratorRepository dataProviderIntegratorRepository;
+	private Gson gson;
 	
 	@Inject
 	public FeedbackController(
@@ -35,6 +44,8 @@ public class FeedbackController extends RestController<Feedback>{
 			HttpServletResponse response) {
 		super(dbService, validator, request, response);
 		this.mailService = mailService;
+		this.dataProviderIntegratorRepository = new DataProviderIntegratorRepository();
+		this.gson = new GsonBuilder().setPrettyPrinting().setDateFormat("yyyy-MM-dd hh:mm:ss.S").create();
 	}
 	
 	@Path("/{lang}/applications/{application_id}/feedbacks")
@@ -60,7 +71,15 @@ public class FeedbackController extends RestController<Feedback>{
 	@POST
 	public Feedback InsertFeedback(Feedback feedback) throws Exception {
 		Feedback created =  super.Insert(feedback);
+		
 		mailService.NotifyOfFeedback(feedback.getApplicationId(), created.getId());
+		
+		// WP2 communication
+		String topicIdFeedback = "c9f1b657-d88c-41aa-be00-d7b563bc22fe";
+		String json = gson.toJson(feedback);		
+		JSONObject jsonData = new JSONObject(json);
+		dataProviderIntegratorRepository.ingestJsonData(jsonData, topicIdFeedback);
+		
 		return created;
 	}
 	
