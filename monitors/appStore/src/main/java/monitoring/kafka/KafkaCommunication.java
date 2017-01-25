@@ -27,6 +27,7 @@ import java.util.Properties;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import eu.supersede.integration.api.analysis.proxies.KafkaClient;
 import kafka.javaapi.producer.Producer;
 import kafka.producer.KeyedMessage;
 import kafka.producer.ProducerConfig;
@@ -34,37 +35,53 @@ import monitoring.model.MonitoringData;
 
 public class KafkaCommunication {
 	
+	Producer<String,String> producer;
+	KafkaClient proxy;
+	
 	/**
-	 * Creates and returns a new producer for kafka communication purposes
-	 * @param kafkaEndpoint		the endpoint of the producer
-	 * @return					the created producer
+	 * Creates a new proxy instantiation for IF communication
 	 */
-	public static Producer<String, String> initProducer(String kafkaEndpoint) {
+	public void initProxy(String kafkaEndpoint) {
+		proxy = new KafkaClient(kafkaEndpoint);
+	}
+	
+	/**
+	 * Creates a new producer for kafka communication
+	 */
+	public void initProducer(String kafkaEndpoint) {
 		Properties props = new Properties();
 		props.put("metadata.broker.list", kafkaEndpoint);
 		props.put("serializer.class", "kafka.serializer.StringEncoder");
 		props.put("request.required.acks", "1");
 		ProducerConfig config = new ProducerConfig(props);
-		
-		return new Producer<String,String>(config);
+		this.producer = new Producer<String,String>(config);
+	}
+	
+	/**
+	 * Generates a json formatted response and sends it to the IF
+	 */
+	public void generateResponseIF(List<MonitoringData> dataList, String timeStamp,
+			int outputId, int confId, String topic) {
+		JSONObject res = generateData(dataList, timeStamp, outputId, confId);
+		proxy.sendMessage(res, topic);
 	}
 
 	/**
 	 * Generates a json formatted response and sends it to kafka
-	 * @param dataList			a list with the data to retrieve
-	 * @param timeStamp			the timestamp of the search
-	 * @param producer			the producer to communicate 
-	 * @param id				the id of the response data
-	 * @param topic				the topic for the kafka communication
 	 */
-	public static void generateResponse(List<MonitoringData> dataList, String timeStamp, 
-		Producer<String, String> producer, int outputId, int confId, String topic) {
+	public void generateResponseKafka(List<MonitoringData> dataList, String timeStamp,
+			int outputId, int confId, String topic) {
+		JSONObject res = generateData(dataList, timeStamp, outputId, confId);
+		KeyedMessage<String, String> msg = new KeyedMessage<String, String>(topic, res.toString());
+		producer.send(msg);
 		
+	}
+	
+	private JSONObject generateData(List<MonitoringData> dataList, String timeStamp, 
+			int outputId, int confId) {
 		JSONArray dataItems = new JSONArray();
-		
 		for (MonitoringData data : dataList) {
 			JSONObject review = new JSONObject();
-			
 			if (data.getAppVersion() != null) review.put("appVersion", data.getAppVersion());
 			if (data.getAuthorName() != null) review.put("authorName", data.getAuthorName());
 			if (data.getTimeStamp() != null) review.put("timeStamp", data.getTimeStamp());
@@ -74,10 +91,8 @@ public class KafkaCommunication {
 			if (data.getReviewID() != null) review.put("reviewID", data.getReviewID());
 			if (data.getReviewText() != null) review.put("reviewText", data.getReviewText());
 			if (data.getStarRating() != null) review.put("starRating", data.getStarRating());
-			
 			dataItems.put(review);
 		}
-		
 		JSONObject res = new JSONObject();
 		res.put("idOutput", outputId);
 		res.put("confId", confId);
@@ -87,10 +102,7 @@ public class KafkaCommunication {
 		
 		JSONObject fullResponse = new JSONObject();
 		fullResponse.put("AppStoreMonitoredData", res);
-		System.out.println(dataList.size());
-		KeyedMessage<String, String> msg = new KeyedMessage<String, String>(topic, res.toString());
-		producer.send(msg);
-		
+		return fullResponse;
 	}
 	
 }

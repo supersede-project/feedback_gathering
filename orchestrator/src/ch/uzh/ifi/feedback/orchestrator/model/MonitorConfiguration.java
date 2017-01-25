@@ -21,8 +21,12 @@
  *******************************************************************************/
 package ch.uzh.ifi.feedback.orchestrator.model;
 
+import com.google.gson.JsonObject;
+
 import ch.uzh.ifi.feedback.library.rest.annotations.DbAttribute;
+import ch.uzh.ifi.feedback.library.rest.annotations.DbIgnore;
 import ch.uzh.ifi.feedback.library.rest.annotations.Id;
+import ch.uzh.ifi.feedback.library.rest.annotations.NotNull;
 import ch.uzh.ifi.feedback.library.rest.annotations.Serialize;
 import ch.uzh.ifi.feedback.orchestrator.serialization.MonitorConfigurationSerializationService;
 
@@ -33,23 +37,107 @@ public class MonitorConfiguration extends OrchestratorItem<MonitorConfiguration>
 	@DbAttribute("monitor_configuration_id")
 	private Integer id;
 	
-	@DbAttribute("monitor_tool_name")
-	private String monitorToolName;
+	@DbAttribute("monitor_tool_id")
+	private Integer monitorToolId;
 	
+	@NotNull
+	@DbAttribute("config_sender")
 	private String configSender;
-
+	@NotNull
+	@DbAttribute("timestamp")
 	private String timeStamp;
+	@NotNull
+	@DbAttribute("time_slot")
+	private String timeSlot;
+	@NotNull
+	@DbAttribute("kafka_endpoint")
+	private String kafkaEndpoint;
+	@NotNull
+	@DbAttribute("kafka_topic")
+	private String kafkaTopic;
+	@NotNull
+	private String state;
 	
-	//Configuration candidates, only one of them is deserialized
-	private MarketPlaces MarketPlaces;
-	private SocialNetworks SocialNetworks;
-
-	public String getMonitorToolName() {
-		return monitorToolName;
+	@DbAttribute("keyword_expression")
+	private String keywordExpression;
+	
+	//private List<String> accounts;
+	
+	@DbAttribute("package_name")
+	private String packageName;
+	@DbAttribute("app_id")
+	private String appId;
+	
+	public String getPackageName() {
+		return packageName;
 	}
 
-	public void setMonitorToolName(String monitorToolName) {
-		this.monitorToolName = monitorToolName;
+	public void setPackageName(String packageName) {
+		this.packageName = packageName;
+	}
+	
+	public String getAppId() {
+		return appId;
+	}
+
+	public void setAppId(String appId) {
+		this.appId = appId;
+	}
+	
+	public String getKeywordExpression() {
+		return keywordExpression;
+	}
+
+	public void setKeywordExpression(String keywordExpression) {
+		this.keywordExpression = keywordExpression;
+	}
+
+	/*public List<String> getAccounts() {
+		return accounts;
+	}
+
+	public void setAccounts(List<String> accounts) {
+		this.accounts = accounts;
+	}*/
+	
+	public String getTimeSlot() {
+		return timeSlot;
+	}
+
+	public void setTimeSlot(String timeSlot) {
+		this.timeSlot = timeSlot;
+	}
+
+	public String getKafkaEndpoint() {
+		return kafkaEndpoint;
+	}
+
+	public void setKafkaEndpoint(String kafkaEndpoint) {
+		this.kafkaEndpoint = kafkaEndpoint;
+	}
+
+	public String getKafkaTopic() {
+		return kafkaTopic;
+	}
+
+	public void setKafkaTopic(String kafkaTopic) {
+		this.kafkaTopic = kafkaTopic;
+	}
+
+	public String getState() {
+		return state;
+	}
+
+	public void setState(String state) {
+		this.state = state;
+	}
+
+	public Integer getMonitorToolId() {
+		return monitorToolId;
+	}
+
+	public void setMonitorToolId(Integer monitorToolId) {
+		this.monitorToolId = monitorToolId;
 	}
 
 	@Override
@@ -76,22 +164,6 @@ public class MonitorConfiguration extends OrchestratorItem<MonitorConfiguration>
 
 	public void setTimeStamp(String timeStamp) {
 		this.timeStamp = timeStamp;
-	}
-	
-	public MarketPlaces getMarketPlaces() {
-		return MarketPlaces;
-	}
-
-	public void setMarketPlaces(MarketPlaces marketPlaces) {
-		MarketPlaces = marketPlaces;
-	}
-
-	public SocialNetworks getSocialNetworks() {
-		return SocialNetworks;
-	}
-
-	public void setSocialNetworks(SocialNetworks socialNetworks) {
-		SocialNetworks = socialNetworks;
 	}
 
 }

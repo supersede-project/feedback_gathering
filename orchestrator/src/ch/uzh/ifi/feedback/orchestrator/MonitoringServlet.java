@@ -20,7 +20,7 @@ public class MonitoringServlet extends ServletBase {
 	@Override
 	protected void InitController() {
 		try{
-        	_restManager.Init("ch.uzh.ifi.feedback.orchestrator");
+        	_restManager.Init("ch.uzh.ifi.feedback.orchestrator.monitoring.controllers");
         }
         catch(Exception ex){
         	System.out.println(ex.getMessage());
@@ -28,5 +28,4 @@ public class MonitoringServlet extends ServletBase {
         	super.destroy();
         }
 	}
-
 }

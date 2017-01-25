@@ -42,8 +42,8 @@ public class MonitorTool extends OrchestratorItem<MonitorTool>{
 	@NotNull
 	private String name;
 	
-	@DbAttribute("monitor_type_name")
-	private String monitorTypeName;
+	@DbAttribute("monitor_type_id")
+	private Integer monitorTypeId;
 	
 	@DbAttribute("monitor_name")
 	private String monitorName;
@@ -56,16 +56,13 @@ public class MonitorTool extends OrchestratorItem<MonitorTool>{
 		this.monitorName = name;
 	}
 	
-	public String getMonitorTypeName() {
-		return monitorTypeName;
+	public Integer getMonitorTypeId() {
+		return monitorTypeId;
 	}
 
-	public void setMonitorTypeName(String monitorTypeName) {
-		this.monitorTypeName = monitorTypeName;
+	public void setMonitorTypeId(Integer monitorTypeId) {
+		this.monitorTypeId = monitorTypeId;
 	}
-
-	@DbIgnore
-	private List<MonitorConfiguration> configurations;
 	
 	@Override
 	public Integer getId() {
@@ -83,14 +80,6 @@ public class MonitorTool extends OrchestratorItem<MonitorTool>{
 
 	public void setName(String name) {
 		this.name = name;
-	}
-	
-	public List<MonitorConfiguration> getConfigurations() {
-		return configurations;
-	}
-	
-	public void setConfigurations(List<MonitorConfiguration> configurations) {
-		this.configurations = configurations;
 	}
 
 }

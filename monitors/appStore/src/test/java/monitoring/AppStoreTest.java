@@ -30,7 +30,7 @@ public class AppStoreTest {
 	WebTarget target = client
             .target("http://localhost:8080/appStore/configuration");
 
-	@Test
+	/*@Test
 	public void addConfigurationITunesApple() throws JSONException {
 
         Response response = target.queryParam("configurationJson",
@@ -105,6 +105,6 @@ public class AppStoreTest {
 	        
 	    assertEquals("Not a valid JSON configuration object", jsonResponse.getJSONObject("AppStoreConfProfResult").get("message"));
 		
-	}
+	}*/
 	
 }

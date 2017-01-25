@@ -23,6 +23,8 @@ To install the .war file in Tomcat server:
 
 ##API reference documents
 
-[API to be consumed by Monitor Manager](https://github.com/supersede-project/monitor_feedback/tree/master/monitors/appStore)
+#Monitor Manager
+
+Api documentation: http://docs.appstore7.apiary.io/
 
 

@@ -40,13 +40,13 @@ public class StartActivity extends AppCompatActivity {
                      * This method randomly triggers a potential PULL feedback of a specific application.
                      * If any and which PULL feedback is triggered depends on the likelihood parameter of the each PULL configuration
                      * (the likelihood is a general configuration parameter of a PULL configuration).
-                     * In this uzh, a PULL feedback from the application with id = 5 might be triggered.
+                     * In this uzh, a PULL feedback from the application with id = 9 might be triggered.
                      */
-                    Utils.triggerRandomPullFeedback("http://ec2-54-175-37-30.compute-1.amazonaws.com/", StartActivity.this, 5L, "en");
+                    Utils.triggerRandomPullFeedback("http://ec2-54-175-37-30.compute-1.amazonaws.com/", StartActivity.this, 9L, "en");
                 }
             });
         }
-        Button triggerSpecificPullV1Id14 = (Button) findViewById(R.id.trigger_specific_pull_config_v1_id11_button);
+        Button triggerSpecificPullV1Id14 = (Button) findViewById(R.id.trigger_specific_pull_config_v1_id21_button);
         if (triggerSpecificPullV1Id14 != null) {
             triggerSpecificPullV1Id14.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -57,22 +57,22 @@ public class StartActivity extends AppCompatActivity {
                      * The intermediate dialog text represents the dialog text which is shown to the user if a PULL feedback is triggered.
                      * If an intermediate dialog is shown depends on the showIntermediateDialog parameter of the PULL configuration.
                      * (the showIntermediateDialog is a general configuration parameter of a PULL configuration).
-                     * In this uzh, a PULL feedback with id = 11 from the application with id = 5 will be triggered.
+                     * In this uzh, a PULL feedback with id = 21 from the application with id = 9 will be triggered.
                      */
-                    Utils.triggerSpecificPullFeedback("http://ec2-54-175-37-30.compute-1.amazonaws.com/", StartActivity.this, 5L, "en", 11L, "Intermediate dialog text for pull configuration with id = 11");
+                    Utils.triggerSpecificPullFeedback("http://ec2-54-175-37-30.compute-1.amazonaws.com/", StartActivity.this, 9L, "en", 21L, "Intermediate dialog text for pull configuration with id = 21");
                 }
             });
         }
 
-        Button triggerSpecificPullV1Id15 = (Button) findViewById(R.id.trigger_specific_pull_config_v1_id12_button);
+        Button triggerSpecificPullV1Id15 = (Button) findViewById(R.id.trigger_specific_pull_config_v1_id22_button);
         if (triggerSpecificPullV1Id15 != null) {
             triggerSpecificPullV1Id15.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     /*
-                     * In this uzh, a PULL feedback with id = 12 from the application with id = 5 will be triggered.
+                     * In this uzh, a PULL feedback with id = 22 from the application with id = 9 will be triggered.
                      */
-                    Utils.triggerSpecificPullFeedback("http://ec2-54-175-37-30.compute-1.amazonaws.com/", StartActivity.this, 5L, "en", 12L, "Intermediate dialog text for pull configuration with id = 12");
+                    Utils.triggerSpecificPullFeedback("http://ec2-54-175-37-30.compute-1.amazonaws.com/", StartActivity.this, 9L, "en", 22L, "Intermediate dialog text for pull configuration with id = 22");
                 }
             });
         }
@@ -99,7 +99,7 @@ public class StartActivity extends AppCompatActivity {
                  * The permission is already granted.
                  * The library takes a screenshot of the current screen automatically and opens the FeedbackActivity from the feedback library.
                  */
-                Utils.startActivityWithScreenshotCapture("http://ec2-54-175-37-30.compute-1.amazonaws.com/", this, 5L, "en");
+                Utils.startActivityWithScreenshotCapture("http://ec2-54-175-37-30.compute-1.amazonaws.com/", this, 9L, "en");
             }
         }
 
@@ -118,7 +118,7 @@ public class StartActivity extends AppCompatActivity {
                 Utils.onRequestPermissionsResultCase(requestCode, permissions, grantResults, this, Manifest.permission.READ_EXTERNAL_STORAGE,
                         ch.uzh.supersede.feedbacklibrary.R.string.supersede_feedbacklibrary_permission_request_title,
                         ch.uzh.supersede.feedbacklibrary.R.string.supersede_feedbacklibrary_external_storage_permission_text_automatic_screenshot_rationale,
-                        5L, "http://ec2-54-175-37-30.compute-1.amazonaws.com/", "en");
+                        9L, "http://ec2-54-175-37-30.compute-1.amazonaws.com/", "en");
                 break;
         }
     }

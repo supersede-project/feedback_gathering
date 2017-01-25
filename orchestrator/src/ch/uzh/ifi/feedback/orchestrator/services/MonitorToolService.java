@@ -28,6 +28,7 @@ import com.google.inject.Provider;
 import com.google.inject.name.Named;
 
 import ch.uzh.ifi.feedback.orchestrator.model.MonitorTool;
+import ch.uzh.ifi.feedback.orchestrator.transaction.MonitoringDatabaseConfiguration;
 import ch.uzh.ifi.feedback.orchestrator.transaction.OrchestratorDatabaseConfiguration;
 
 public class MonitorToolService extends OrchestratorService<MonitorTool> {
@@ -35,7 +36,7 @@ public class MonitorToolService extends OrchestratorService<MonitorTool> {
 	@Inject
 	public MonitorToolService(
 			MonitorToolResultParser resultParser, 
-			OrchestratorDatabaseConfiguration config,
+			MonitoringDatabaseConfiguration config,
 			@Named("timestamp")Provider<Timestamp> timestampProvider) {
 		
 		super(resultParser, MonitorTool.class, "monitor_tool", config.getDatabase(), timestampProvider);

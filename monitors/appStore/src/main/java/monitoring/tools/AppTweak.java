@@ -36,6 +36,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.Scanner;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -49,6 +50,7 @@ import kafka.javaapi.producer.Producer;
 import monitoring.kafka.KafkaCommunication;
 import monitoring.model.MonitoringData;
 import monitoring.model.MonitoringParams;
+import monitoring.model.Utils;
 import monitoring.services.ToolInterface;
 
 public class AppTweak implements ToolInterface {
@@ -57,42 +59,56 @@ public class AppTweak implements ToolInterface {
 	
 	private int confId;
 
-	//Token credentials
-	private final String token = "iOAbyjaOnWFNpO64RCVnG3TWmR4";
-	
-	//Route params
+	private String token;
 	private final String uri = "https://api.apptweak.com/ios/applications/";
 	private final String uriParams = "/reviews.json";
 	
 	private MonitoringParams params;
 	
 	private boolean firstConnection = true;
-	
 	private int id = 1;
 	
 	private Date initTime;
 	private Date stamp;
-	
-	//Kafka producer
-	private Producer<String, String> producer;
-	
 	private Timer timer;
+	
+	KafkaCommunication kafka;
 
 	@Override
-	public void addConfiguration(MonitoringParams params, Producer<String, String> producer, int confId) throws Exception {
-		
+	public void addConfiguration(MonitoringParams params, int confId) throws Exception {
 		this.params = params;
-		this.producer = producer;
 		this.confId = confId;
+		this.kafka = new KafkaCommunication();
+		loadProperties();
+		resetStream();
+	}
+	
+	@Override
+	public void deleteConfiguration() throws Exception {
+		timer.cancel();
+	}
+	
+	@Override
+	public void updateConfiguration(MonitoringParams params) throws Exception {
+		deleteConfiguration();
+		this.params = params;
+		resetStream();
+	}
+	
+	private void resetStream() {
 		
-		Timer timer = new Timer();
+		logger.debug("Initializing streaming...");
+		kafka.initProxy(this.params.getKafkaEndpoint());
+		//kafka.initProducer(this.params.getKafkaEndpoint());
+		
+		firstConnection = true;
+		timer = new Timer();
 		timer.schedule(new TimerTask() {
 		    public void run() {
 		    	if (firstConnection) {
 		    		logger.debug("Connection established");
 		    		initTime = new Date();
 					firstConnection = false;
-					System.out.println("First connection stablished");		
 		    	} else {
 		    		stamp = initTime;
 		    		initTime = new Date();
@@ -105,36 +121,23 @@ public class AppTweak implements ToolInterface {
 					}	 		
 		    	}
 		    }
-
 		}, 0, Integer.parseInt(params.getTimeSlot())* 1000);
-		
-	}
-	
-	@Override
-	public void deleteConfiguration() throws Exception {
-		timer.cancel();
 	}
 
 	protected void apiCall() throws MalformedURLException, IOException, JSONException, ParseException {
 		
 		String timeStamp = new Timestamp((new Date()).getTime()).toString();
-
 		JSONObject data = urlConnection();
-		
 		List<MonitoringData> dataList = new ArrayList<>();
 		JSONArray reviews = data.getJSONArray("content");
 		for (int i = 0; i < reviews.length(); ++i) {
-			
 			JSONObject obj = reviews.getJSONObject(i);
-			
 			DateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss z");
 			Date date = format.parse(obj.getString("date"));
 						
 			if (date.compareTo(stamp) > 0) {
-				
 				Iterator<?> keys = obj.keys();
 				MonitoringData review = new MonitoringData();
-				
 				while( keys.hasNext() ) {
 				    String key = (String)keys.next();
 				    if (key.equals("id")) review.setReviewID(obj.getString("id"));
@@ -145,11 +148,11 @@ public class AppTweak implements ToolInterface {
 				    else if (key.equals("rating")) review.setStarRating(String.valueOf(obj.getInt("rating")));
 				    else if (key.equals("version")) review.setAppVersion(obj.getString("version"));
 				}
-				
 				dataList.add(review);
 			}
 		}
-		KafkaCommunication.generateResponse(dataList, timeStamp, producer, id, confId, params.getKafkaTopic());
+		//kafka.generateResponseKafka(dataList, timeStamp, id, confId, params.getKafkaTopic());
+		kafka.generateResponseIF(dataList, timeStamp, id, confId, params.getKafkaTopic());
 		logger.debug("Data sent to kafka endpoint");
 		++id;
 	}
@@ -171,16 +174,22 @@ public class AppTweak implements ToolInterface {
 		connection.setRequestProperty("X-Apptweak-Key", token);
 		connection.getInputStream();
 		
-		return new JSONObject(streamToString(connection.getInputStream()));
+		return new JSONObject(Utils.streamToString(connection.getInputStream()));
 	}
 	
-	private String streamToString(InputStream stream) {
-		StringBuilder sb = new StringBuilder();
-		try (Scanner scanner = new Scanner(stream)) {
-		    String responseBody = scanner.useDelimiter("\\A").next();
-		    sb.append(responseBody);
+	private void loadProperties() throws Exception {
+		logger.debug("Loading properties");
+		Properties prop = new Properties();
+		try {
+			ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+			InputStream input = classLoader.getResourceAsStream("config.properties");
+			prop.load(input);
+			token = prop.getProperty("appTweakToken");
+			logger.debug("Properties loaded successfully");
+		} catch (Exception e) {
+			throw new Exception("There was an unexpected error loading the properties file.");
+
 		}
-		return sb.toString();
 	}
 
 }

@@ -23,6 +23,6 @@ To install the .war file in Tomcat server:
 
 ##API reference documents
 
-[API to be consumed by Monitor Manager](https://github.com/supersede-project/monitor_feedback/tree/master/monitors/twitter)
+ http://docs.twittermonitor.apiary.io/
 
 
