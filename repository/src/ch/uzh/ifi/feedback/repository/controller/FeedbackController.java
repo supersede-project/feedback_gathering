@@ -74,11 +74,16 @@ public class FeedbackController extends RestController<Feedback>{
 		
 		mailService.NotifyOfFeedback(feedback.getApplicationId(), created.getId());
 		
-		// WP2 communication
-		String topicIdFeedback = "9aa65610-2e93-47b1-b3d3-f55ccd9b3781"; // v1 
-		String json = gson.toJson(feedback);		
-		JSONObject jsonData = new JSONObject(json);
-		dataProviderIntegratorRepository.ingestJsonData(jsonData, topicIdFeedback);
+		try {
+			// WP2 communication
+			String topicIdFeedback = "47a790ee-2b35-41bb-bd3e-f3bd940ab3e0"; // v1 
+			String json = gson.toJson(feedback);		
+			JSONObject jsonData = new JSONObject(json);
+			dataProviderIntegratorRepository.ingestJsonData(jsonData, topicIdFeedback);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		return created;
 	}

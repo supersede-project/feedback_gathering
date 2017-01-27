@@ -75,7 +75,7 @@ public class ApplicationController extends RestController<Application> {
 	
 	private void updateDataProvider(Application application) {
 		// WP2 communication
-		String topicIdOrchestratorApplication = "b61ebbf1-aa9b-4e7d-8132-fec6f1e4ced9"; // v1
+		String topicIdOrchestratorApplication = "2c90dce1-ab78-4faa-8375-1f5a5308698f"; // v1
 		String json = gson.toJson(application);		
 		JSONObject jsonData = new JSONObject(json);
 		try {
