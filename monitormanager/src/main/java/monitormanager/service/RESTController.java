@@ -58,16 +58,19 @@ public class RESTController {
 		if (monitorName.equals("Twitter")) {
 			TwitterMonitorProxy<?,?> proxy = new TwitterMonitorProxy<>();
 			TwitterMonitorConfiguration conf = parser.getTwitterConfiguration(jsonObj);
+			conf.setId(confId);
 			TwitterMonitorConfiguration result = proxy.updateMonitorConfiguration(conf);
 			return getResponse(result);
 		} else if (monitorName.equals("GooglePlay")) {
 			GooglePlayMonitorProxy<?,?> proxy = new GooglePlayMonitorProxy<>();
 			GooglePlayMonitorConfiguration conf = parser.getGooglePlayConfiguration(jsonObj);
+			conf.setId(confId);
 			GooglePlayMonitorConfiguration result = proxy.updateMonitorConfiguration(conf);
 			return getResponse(result);
 		} else if (monitorName.equals("AppStore")) {
 			AppStoreMonitorProxy<?,?> proxy = new AppStoreMonitorProxy<>();
 			AppStoreMonitorConfiguration conf = parser.getAppStoreConfiguration(jsonObj);
+			conf.setId(confId);
 			AppStoreMonitorConfiguration result = proxy.updateMonitorConfiguration(conf);
 			return getResponse(result);
 		} else throw new Exception("There is no monitor with this name");
