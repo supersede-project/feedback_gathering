@@ -213,6 +213,7 @@ gulp.task('build.prod', function(done) {
         'copy-and-uglify-audio-assets',
         'copy-images',
         'copy-locales',
+        //exec('webpack'),
         done
     );
 });

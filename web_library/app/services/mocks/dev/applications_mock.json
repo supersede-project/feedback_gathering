@@ -20,6 +20,30 @@
         {
           "key": "dialogTitle",
           "value": "Feedback"
+        },
+        {
+          "key": "labelFontColor",
+          "value": "rgb(28, 65, 111)",
+          "createdAt": "2016-11-10 11:31:00.0",
+          "updatedAt": "2016-11-10 10:07:36.0",
+          "language": "de",
+          "id": 527
+        },
+        {
+          "key": "labelFontSize",
+          "value": 13,
+          "createdAt": "2016-11-10 11:31:30.0",
+          "updatedAt": "2016-11-10 10:07:36.0",
+          "language": "de",
+          "id": 528
+        },
+        {
+          "key": "labelFontWeight",
+          "value": "bold",
+          "createdAt": "2016-11-10 11:31:49.0",
+          "updatedAt": "2016-11-10 10:07:36.0",
+          "language": "de",
+          "id": 529
         }
       ]
     },
@@ -163,7 +187,7 @@
           {
             "id": 222,
             "type": "ATTACHMENT_TYPE",
-            "active": true,
+            "active": false,
             "order": 3,
             "canBeActivated": false,
             "parameters": [
@@ -176,7 +200,7 @@
           {
             "id": 2,
             "type": "AUDIO_TYPE",
-            "active": true,
+            "active": false,
             "order": 2,
             "canBeActivated": false,
             "parameters": [
@@ -212,6 +236,46 @@
               {
                 "key": "autoTake",
                 "value": 1
+              },
+              {
+                "key": "textTitle",
+                "value": "Add text"
+              },
+              {
+                "key": "textExplanation",
+                "value": "You can draw text area."
+              },
+              {
+                "key": "annotationTitle",
+                "value": "Mark areas"
+              },
+              {
+                "key": "annotationExplanation",
+                "value": "You can mark areas or blacken them. Choose a tool and click onto the screenshot."
+              },
+              {
+                "key": "selectionTitle",
+                "value": "Add text"
+              },
+              {
+                "key": "colorTitle",
+                "value": "Add text"
+              },
+              {
+                "key": "cropTitle",
+                "value": "Crop the screenshot"
+              },
+              {
+                "key": "cropExplanation",
+                "value": "If you do not crop the screenshot, the whole image gets sent."
+              },
+              {
+                "key": "zoomTitle",
+                "value": "Zoom your view"
+              },
+              {
+                "key": "zoomExplanation",
+                "value": "Adjust the zoom such that you can better edit the screenshot."
               }
             ]
           },
