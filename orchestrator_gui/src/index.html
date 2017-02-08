@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Orchestrator GUI</title>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- jQuery -->
+    <script type="text/javascript" src="../lib/jquery/dist/jquery.min.js"></script>
+
+    <!-- Bootstrap -->
+    <link href="../lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" media="screen">
+    <link type="text/css" href="../lib/bootstrap/dist/css/bootstrap-theme.css" rel="stylesheet" />
+    <script type="text/javascript" src="../lib/bootstrap/dist/js/bootstrap.js"></script>
+
+    <!-- Handlebars -->
+    <script type="text/javascript" src="../lib/handlebars/handlebars.min.js"></script>
+
+    <!-- Alpaca -->
+    <script type="text/javascript" src="../lib/alpaca/bootstrap/alpaca.js"></script>
+    <link type="text/css" href="../lib/alpaca/bootstrap/alpaca.css" rel="stylesheet" />
+
+    <!-- Beautify (used by EditorField) -->
+    <script src="../lib/js-beautify/js/lib/beautify.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../lib/js-beautify/js/lib/beautify-css.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../lib/js-beautify/js/lib/beautify-html.js" type="text/javascript" charset="utf-8"></script>
+
+    <!-- typeahead.js -->
+    <script src="../lib/typeahead.js/dist/bloodhound.min.js" type="text/javascript"></script>
+    <script src="../lib/typeahead.js/dist/typeahead.bundle.min.js" type="text/javascript"></script>
+
+    <!-- ckeditor (for the ckeditor field) -->
+    <script src="../lib/ckeditor/ckeditor.js" type="text/javascript"></script>
+
+    <!-- fileupload control (for UploadField) -->
+    <link rel="stylesheet" type="text/css" href="../lib/blueimp-file-upload/css/jquery.fileupload.css"/>
+    <link rel="stylesheet" type="text/css" href="../lib/blueimp-file-upload/css/jquery.fileupload-ui.css"/>
+    <script src="../lib/blueimp-file-upload/js/vendor/jquery.ui.widget.js"></script>
+    <script src="../lib/blueimp-file-upload/js/jquery.iframe-transport.js"></script>
+    <script src="../lib/blueimp-file-upload/js/jquery.fileupload.js"></script>
+    <script src="../lib/blueimp-file-upload/js/jquery.fileupload-process.js"></script>
+    <script src="../lib/blueimp-file-upload/js/jquery.fileupload-ui.js"></script>
+
+    <!-- handsontable (for GridField) -->
+    <script src="../lib/handsontable/dist/jquery.handsontable.full.js"></script>
+    <link rel="stylesheet" media="screen" href="../lib/handsontable/dist/jquery.handsontable.full.css"/>
+
+    <!-- ACE editor -->
+    <script src="../lib/ace-builds/src-min-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
+
+    <!-- jQuery UI for draggable support -->
+    <script src="../lib/jquery-ui/jquery-ui.js" type="text/javascript" charset="utf-8"></script>
+
+    <!-- general configurations -->
+    <script type="text/javascript" src="js/generalConfig.js"></script>
+
+    <!-- fild configurations -->
+    <script type="text/javascript" src="js/attachementMechanism.js"></script>
+    <script type="text/javascript" src="js/audioMechanism.js"></script>
+    <script type="text/javascript" src="js/screenshotMechanism.js"></script>
+    <script type="text/javascript" src="js/categoryMechanism.js"></script>
+    <script type="text/javascript" src="js/ratingMechanism.js"></script>
+    <script type="text/javascript" src="js/textMechanism.js"></script>
+
+    <!-- config transformer -->
+    <script type="text/javascript" src="js/configTransformer.js"></script>
+
+    <!-- for the drag and drop gui -->
+    <script type="text/javascript" src="js/userscript.js"></script>
+    <link type="text/css" href="css/style.css" rel="stylesheet" />
+</head>
+<body data-spy="scroll" data-target=".demo-nav">
+
+<div class="container">
+
+    <div class="row">
+        <div class="col-md-12">
+            <h1>Orchestrator GUI</h1>
+            <div class="tab-content">
+
+                <div class="tab-pane" id="source">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="tab-content">
+                                <div class="tab-pane active" id="schema">
+                                </div>
+                                <div class="tab-pane" id="options">
+                                </div>
+                                <div class="tab-pane" id="data">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-pane active" id="designer" class="tab-pane active">
+                    <div class="row" id="orchestrator">
+
+                        <!--  Droppable elements -->
+                        <div class="col-md-2 droppable-elements">
+                            <h3> Form Components </h3>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="tab-content">
+                                        <div class="tab-pane active" id="basic"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- General Form Settings -->
+                            <h3> General Form Settings </h3>
+
+                            <!-- Set Submit Text -->
+                            <div class="form-group">
+                                <label for="SubmitText">Set manual Submit-Text</label>
+                                <input type="text" class="form-control" value="Success!" id="SubmitText">
+                            </div>
+
+                            <!-- Set Form Font -->
+                            <div class="form-group">
+                                <label for="SetFont">Select Font</label>
+                                <select class="form-control" id="setFont" name="setFont">
+                                    <option value="font-helvetica">Helvetica</option>
+                                    <option value="font-comicSans">Comic Sans</option>
+                                    <option value="font-times">Times New Roman</option>
+                                </select>
+                            </div>
+
+                            <!-- Set Form Font Color -->
+                            <div class="form-group">
+                                <label for="setFontColor">Select Font Color</label>
+                                <input type="color" class="form-control" id="setFontColor">
+                            </div>
+
+                            <!-- Set Form Font Size -->
+                            <div class="form-group">
+                                <label for="fontSize">Set Font Size</label>
+                                <input id="fontSize" type="number" value="14" min="1" max="20">
+                            </div>
+
+                        </div> <!-- col-md-2 -->
+
+
+                        <!-- Drop elements here -->
+                        <div class="col-md-4 form-container">
+                            <h3> Form Designer </h3>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div id="designerDiv" class="font-helvetica"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Preview -->
+                        <div class="col-md-6" id="preview">
+                            <h3>Form Preview</h3>
+                            <div class="tab-pane" id="view">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div id="viewDiv"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <button class="btn btn-primary submit-button">Submit Form</button>
+                        </div> <!-- col-md-12 -->
+
+                    </div> <!-- row -->
+                </div> <!-- tab-pane active -->
+            </div> <!-- tab-content -->
+
+        </div> <!-- col-md-12 -->
+    </div> <!-- row -->
+    <button class="btn btn-default save-button">Save Form</button>
+
+</div> <!-- container -->
+
+</body>
+</html>
