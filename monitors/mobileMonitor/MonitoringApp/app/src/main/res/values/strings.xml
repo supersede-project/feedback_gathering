@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">MonitoringApp</string>
+    <string name="gcm_registered">Gcm Registed Well!</string>
+    <string name="gcm_error_register">Gcm Registered Error! Check out your internet Connection if it is working.</string>
+    <string name="metrics_time">time</string>
+    <string name="package_name">package_name</string>
+    <string name="sever_url">http://rubensoto.myddns.me:8080/</string>
+</resources>

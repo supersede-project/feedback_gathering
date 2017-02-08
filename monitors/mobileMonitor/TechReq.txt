@@ -1,0 +1,21 @@
+Eclipse:Eclipse Java EE IDE for Web Developers.
+
+Version: Neon Release (4.6.0)
+Build id: 20160613-1800
+Tomcat v8
+Java 1.8.0_121
+Android Studio: last version
+
+kafka:
+kafka_2.10-0-10-1-0
+Kafka_2.10-0-10-1-0-test-sources
+kafka-clients-0.10.1.0
+kafka-tools-0.10.1.0
+log4j-1.2.17
+metrics-core-2.2.0
+scala-library-2.10.6
+slf4-api
+slf4-log4j12-1.7.21
+
+ReMake GCM API KEY
+ReMake Monitoring/app/google-services.json

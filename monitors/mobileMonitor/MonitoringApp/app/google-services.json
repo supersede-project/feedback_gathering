@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "540761030931",
+    "firebase_url": "https://monitoringapp-6cec7.firebaseio.com",
+    "project_id": "monitoringapp-6cec7",
+    "storage_bucket": "monitoringapp-6cec7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:540761030931:android:c81f4113b297a6f3",
+        "android_client_info": {
+          "package_name": "com.rubn.monitoringapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "540761030931-4puvnmjhh2628f917lj7atdvjrbuh7cr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCJUjREKDnmc0zHPHo-2mOOfqz0-ZonLPY"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
