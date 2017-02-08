@@ -72,6 +72,12 @@
         <groupId>eu.supersede.if</groupId>
         <artifactId>eu.supersede.if.api</artifactId>
         <version>0.3.0-SNAPSHOT</version>
+        <exclusions>
+	        <exclusion>
+		      <groupId>feedback_library</groupId>
+			  <artifactId>feedback_library</artifactId>
+	        </exclusion>
+      	</exclusions> 
      </dependency>
      <dependency>
         <groupId>javax.jms</groupId>

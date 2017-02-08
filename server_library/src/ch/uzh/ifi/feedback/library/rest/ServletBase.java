@@ -104,8 +104,8 @@ public abstract class ServletBase extends HttpServlet {
 	
 	private void SetHeaders(HttpServletResponse response)
 	{
-        response.setContentType("application/json");            
-        response.setCharacterEncoding("UTF-8");
+        response.setContentType("application/json; charset=utf-8");            
+        //response.setCharacterEncoding("UTF-8");
         
         response.setHeader("Access-Control-Allow-Origin", "*");
         response.setHeader("Access-Control-Allow-Methods", "GET,PUT,POST, DELETE, OPTIONS");
