@@ -27,6 +27,7 @@ import java.util.Properties;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import eu.supersede.integration.api.analysis.proxies.DataProviderProxy;
 import eu.supersede.integration.api.analysis.proxies.KafkaClient;
 import kafka.javaapi.producer.Producer;
 import kafka.producer.KeyedMessage;
@@ -63,7 +64,10 @@ public class KafkaCommunication {
 	public void generateResponseIF(List<MonitoringData> dataList, String timeStamp, 
 		int outputId, int confId, String topic) {
 		JSONObject jsonData = generateData(dataList, timeStamp, outputId, confId);
-		proxy.sendMessage(jsonData, topic);
+		//proxy.sendMessage(jsonData, topic);
+		//FIXME 
+		DataProviderProxy proxy = new DataProviderProxy();
+		proxy.ingestData(jsonData, topic);
 	}
 	
 	/**
