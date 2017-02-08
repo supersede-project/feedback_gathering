@@ -72,18 +72,19 @@ public class FeedbackController extends RestController<Feedback>{
 	public Feedback InsertFeedback(Feedback feedback) throws Exception {
 		Feedback created =  super.Insert(feedback);
 		
-		mailService.NotifyOfFeedback(feedback.getApplicationId(), created.getId());
+		//mailService.NotifyOfFeedback(feedback.getApplicationId(), created.getId());
 		
+		/*
 		try {
 			// WP2 communication
-			String topicIdFeedback = "47a790ee-2b35-41bb-bd3e-f3bd940ab3e0"; // v1 
+			String topicIdFeedback = "2985150d-1363-4c18-88d4-a8f03acece52"; // v1 
 			String json = gson.toJson(feedback);		
 			JSONObject jsonData = new JSONObject(json);
 			dataProviderIntegratorRepository.ingestJsonData(jsonData, topicIdFeedback);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
+		}*/
 		
 		return created;
 	}
