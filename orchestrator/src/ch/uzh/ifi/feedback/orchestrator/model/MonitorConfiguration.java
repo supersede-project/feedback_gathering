@@ -40,6 +40,9 @@ public class MonitorConfiguration extends OrchestratorItem<MonitorConfiguration>
 	@DbAttribute("monitor_tool_id")
 	private Integer monitorToolId;
 	
+	@DbAttribute("monitor_manager_configuration_id")
+	private Integer monitorManagerConfigurationId;
+
 	@NotNull
 	@DbAttribute("config_sender")
 	private String configSender;
@@ -67,6 +70,14 @@ public class MonitorConfiguration extends OrchestratorItem<MonitorConfiguration>
 	private String packageName;
 	@DbAttribute("app_id")
 	private String appId;
+	
+	public Integer getMonitorManagerConfigurationId() {
+		return monitorManagerConfigurationId;
+	}
+
+	public void setMonitorManagerConfigurationId(Integer monitorManagerConfigurationId) {
+		this.monitorManagerConfigurationId = monitorManagerConfigurationId;
+	}
 	
 	public String getPackageName() {
 		return packageName;
