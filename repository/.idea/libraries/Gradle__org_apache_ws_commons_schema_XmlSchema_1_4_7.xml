@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: org.apache.ws.commons.schema:XmlSchema:1.4.7">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.ws.commons.schema/XmlSchema/1.4.7/a667ab231d6333105db86efe4a96724f50913e1f/XmlSchema-1.4.7.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.ws.commons.schema/XmlSchema/1.4.7/48c75b575fedcb06f9170deb08954f4f526af8a5/XmlSchema-1.4.7-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

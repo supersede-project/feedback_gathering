@@ -59,13 +59,13 @@ public class FeedbackSerializationService extends RepositorySerializationService
 			
 			for(AudioFeedback audio : feedback.getAudioFeedbacks())
 			{
-				Part filePart = request.getPart(audio.getPart());
+				//Part filePart = request.getPart(audio.getPart());
 				audio = storageService.ParseFilePart(getFileItemsForFeedback(audio, fileItems), audio, "audios");	
 			}
 			
 			for(AttachmentFeedback attachment : feedback.getAttachmentFeedbacks())
 			{
-				Part filePart = request.getPart(attachment.getPart());
+				//Part filePart = request.getPart(attachment.getPart());
 				attachment = storageService.ParseFilePart(getFileItemsForFeedback(attachment, fileItems), attachment, "attachments");	
 			}
 			

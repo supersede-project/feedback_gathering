@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: org.codehaus.woodstox:wstx-asl:3.2.9">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.codehaus.woodstox/wstx-asl/3.2.9/c82b6e8f225bb799540e558b10ee24d268035597/wstx-asl-3.2.9.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.codehaus.woodstox/wstx-asl/3.2.9/709d8744c14fd9c59190a33b3dce2a81015de981/wstx-asl-3.2.9-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
