@@ -90,50 +90,54 @@ export class ScreenshotView implements MechanismView {
         this.hideElements();
         var myThis = this;
 
-        myThis.svgToCanvas();
+        setTimeout(function() {
+            myThis.svgToCanvas();
 
-        html2canvas(this.elementToCapture, {
-            useCORS: true,
-            onrendered: function (canvas) {
-                myThis.showElements();
-                myThis.canvas = canvas;
-                myThis.screenshotPreviewElement.empty().append(canvas);
-                myThis.screenshotPreviewElement.show();
-                jQuery('.screenshot-preview canvas').attr('id', canvasId);
+            html2canvas(myThis.elementToCapture, {
+                useCORS: true,
+                onrendered: function (canvas) {
+                    setTimeout(function() {
+                        myThis.showElements();
+                        myThis.canvas = canvas;
+                        myThis.screenshotPreviewElement.empty().append(canvas);
+                        myThis.screenshotPreviewElement.show();
+                        jQuery('.screenshot-preview canvas').attr('id', canvasId);
 
-                var windowRatio = myThis.elementToCapture.width() / myThis.elementToCapture.height();
+                        var windowRatio = myThis.elementToCapture.width() / myThis.elementToCapture.height();
 
-                // save the canvas content as imageURL
-                var data = canvas.toDataURL("image/png");
-                myThis.context = canvas.getContext("2d");
-                myThis.canvasOriginalWidth = canvas.width;
-                myThis.canvasOriginalHeight = canvas.height;
+                        // save the canvas content as imageURL
+                        var data = canvas.toDataURL("image/png");
+                        myThis.context = canvas.getContext("2d");
+                        myThis.canvasOriginalWidth = canvas.width;
+                        myThis.canvasOriginalHeight = canvas.height;
 
-                myThis.canvasWidth = myThis.screenshotPreviewElement.width() - 2;
-                myThis.canvasHeight = (myThis.screenshotPreviewElement.width() / windowRatio) -2;
+                        myThis.canvasWidth = myThis.screenshotPreviewElement.width() - 2;
+                        myThis.canvasHeight = (myThis.screenshotPreviewElement.width() / windowRatio) - 2;
 
-                jQuery(canvas).prop('width', myThis.canvasWidth);
-                jQuery(canvas).prop('height', myThis.canvasHeight);
+                        jQuery(canvas).prop('width', myThis.canvasWidth);
+                        jQuery(canvas).prop('height', myThis.canvasHeight);
 
-                var img = new Image();
-                myThis.canvasState = img;
-                myThis.screenshotCanvas = canvas;
-                img.src = data;
-                img.onload = function () {
-                    myThis.context.drawImage(img, 0, 0, img.width, img.height, 0, 0, canvas.width, canvas.height);
-                };
+                        var img = new Image();
+                        myThis.canvasState = img;
+                        myThis.screenshotCanvas = canvas;
+                        img.src = data;
+                        img.onload = function () {
+                            myThis.context.drawImage(img, 0, 0, img.width, img.height, 0, 0, canvas.width, canvas.height);
+                        };
 
-                myThis.initFabric(img, canvas);
-                myThis.initFreehandDrawing();
-                myThis.initStickers();
-                myThis.initScreenshotOperations();
-                myThis.customizeControls();
-                myThis.initZoom();
+                        myThis.initFabric(img, canvas);
+                        myThis.initFreehandDrawing();
+                        myThis.initStickers();
+                        myThis.initScreenshotOperations();
+                        myThis.customizeControls();
+                        myThis.initZoom();
 
-                let screenshotCaptureButtonActiveText = myThis.screenshotCaptureButton.data('active-text');
-                myThis.screenshotCaptureButton.text(screenshotCaptureButtonActiveText);
-            }
-        });
+                        let screenshotCaptureButtonActiveText = myThis.screenshotCaptureButton.data('active-text');
+                        myThis.screenshotCaptureButton.text(screenshotCaptureButtonActiveText);
+                    }, 300);
+                }
+            });
+        }, 300);
     }
 
     initFabric(img, canvas) {

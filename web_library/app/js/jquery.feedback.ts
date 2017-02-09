@@ -32,7 +32,7 @@ export var feedbackPluginModule = function ($, window, document) {
         var language = I18nHelper.getLanguage(options);
         var options = $.extend({}, $.fn.feedbackPlugin.defaults, options);
         var mockBackend:MockBackend = new MockBackend(mockData);
-        var applicationService = new ApplicationService(apiEndpointOrchestrator, language, mockBackend);
+        var applicationService = new ApplicationService(apiEndpointOrchestrator, language); //, mockBackend);
         feedbackApp = new FeedbackApp(applicationService, applicationId, options, this);
         feedbackApp.loadApplicationConfiguration();
 
