@@ -21,7 +21,9 @@
  *******************************************************************************/
 package ch.uzh.ifi.feedback.orchestrator.monitoring.controllers;
 
+import java.net.MalformedURLException;
 import java.net.URI;
+import java.net.URL;
 import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
@@ -56,6 +58,11 @@ import ch.uzh.ifi.feedback.orchestrator.services.MonitorConfigurationService;
 import ch.uzh.ifi.feedback.orchestrator.services.MonitorToolService;
 import ch.uzh.ifi.feedback.orchestrator.services.MonitorTypeService;
 import ch.uzh.ifi.feedback.orchestrator.validation.MonitorConfigurationValidator;
+import eu.supersede.integration.api.monitoring.manager.proxies.MonitorManagerProxy;
+import eu.supersede.integration.api.monitoring.manager.types.AppStoreMonitorConfiguration;
+import eu.supersede.integration.api.monitoring.manager.types.GooglePlayMonitorConfiguration;
+import eu.supersede.integration.api.monitoring.manager.types.MonitorSpecificConfiguration;
+import eu.supersede.integration.api.monitoring.manager.types.TwitterMonitorConfiguration;
 import javassist.NotFoundException;
 
 @RequestScoped
@@ -86,6 +93,7 @@ public class MonitorConfigurationController extends RestController<MonitorConfig
 	public MonitorConfiguration InsertMonitorConfiguration(@PathParam("id-type-of-monitor") String type, 
 			@PathParam("id-monitoring-tool") String tool,
 			MonitorConfiguration configuration) throws Exception {
+		
 		List<MonitorType> monitorType = this.monitorTypeService.GetWhere(Arrays.asList(type), "name = ?");
 		if (monitorType.isEmpty()) {
 			throw new NotFoundException("There is no monitor type with this name");
@@ -96,24 +104,17 @@ public class MonitorConfigurationController extends RestController<MonitorConfig
 		}
 		configuration.setMonitorToolId(monitorTool.get(0).getId());
 		
-		CloseableHttpClient client = HttpClientBuilder.create().build();
-		String url = monitorManagerHost + "configuration";
+		MonitorManagerProxy<?, ?> proxy = new MonitorManagerProxy<>();
+		MonitorSpecificConfiguration configurationObj = generateMonitorConf(configuration, monitorTool.get(0));
+		MonitorSpecificConfiguration createConfiguration = proxy.createMonitorConfiguration(configurationObj);
+		configuration.setMonitorManagerConfigurationId(createConfiguration.getId());
 		
-		JsonObject json = getJson(configuration);
-				
-		json.addProperty("monitor", monitorTool.get(0).getMonitorName());
-		HttpPost request = new HttpPost(url);
-		request.addHeader("content-type", "application/json");
-		request.setEntity(new StringEntity(json.toString()));
-		try {
-			client.execute(request);
-		} catch (Exception e) {
-			//throw new NotFoundException("There was a connection problem with the Monitor Manager");
-		}
-		
-		return super.Insert(configuration);
+		MonitorConfiguration conf = super.Insert(configuration);
+		conf.setId(configuration.getMonitorManagerConfigurationId());
+		conf.setMonitorManagerConfigurationId(null);
+		return conf;
 	}
-	
+
 	@GET
 	@Path("/MonitorTypes/{id-type-of-monitor}/Tools/{id-monitoring-tool}/ToolConfigurations/{id-tool-configuration}")
 	public MonitorConfiguration GetMonitorConfiguration(@PathParam("id-type-of-monitor") String type, 
@@ -127,11 +128,14 @@ public class MonitorConfigurationController extends RestController<MonitorConfig
 		if(monitorTool.isEmpty()) {
 				throw new NotFoundException("There is no monitor tool with this name for this monitor type");
 		}
-		List<MonitorConfiguration> monitorConfiguration = this.dbService.GetWhere(Arrays.asList(monitorTool.get(0).getId(), configuration), "monitor_tool_id = ? and monitor_configuration_id = ?");
+		List<MonitorConfiguration> monitorConfiguration = this.dbService.GetWhere(Arrays.asList(monitorTool.get(0).getId(), configuration), "monitor_tool_id = ? and monitor_manager_configuration_id = ?");
 		if(monitorConfiguration.isEmpty()) {
 				throw new NotFoundException("There is no monitor configuration with this id for this monitor tool");
 		}
-		return monitorConfiguration.get(0);
+		MonitorConfiguration conf = monitorConfiguration.get(0);
+		conf.setId(monitorConfiguration.get(0).getMonitorManagerConfigurationId());
+		conf.setMonitorManagerConfigurationId(null);
+		return conf;
 	}
 	
 	@PUT
@@ -141,34 +145,32 @@ public class MonitorConfigurationController extends RestController<MonitorConfig
 			@PathParam("id-tool-configuration") Integer configuration,
 			MonitorConfiguration monitorConfiguration) throws Exception {
 		
-		MonitorConfiguration oldConfig = dbService.GetById(configuration);
-		if(!oldConfig.getId().equals(configuration))
-			throw new NotFoundException("The monitor configuration does not exist");
-		
-		List<MonitorTool> monitorTools = monitorToolService.GetWhere(Arrays.asList(tool), "name = ?");
-
-		monitorConfiguration.setId(configuration);
-		monitorConfiguration.setMonitorToolId(monitorTools.get(0).getId());
-		
-		CloseableHttpClient client = HttpClientBuilder.create().build();
-		String url = monitorManagerHost + "configuration";
-
-		JsonObject json = getJson(monitorConfiguration);
-		
-		List<MonitorTool> monitorTool = monitorToolService.GetWhere(Arrays.asList(tool), "name = ?");
-		monitorConfiguration.setMonitorToolId(monitorTool.get(0).getId());
-		json.addProperty("monitor", monitorTool.get(0).getMonitorName());
-		HttpPut request = new HttpPut(url);
-		request.addHeader("content-type", "application/json");
-		request.setEntity(new StringEntity(json.toString()));
-		
-		try {
-			client.execute(request);
-		} catch (Exception e) {
-			//throw new NotFoundException("There was a connection problem with the Monitor Manager");
+		List<MonitorType> monitorType = this.monitorTypeService.GetWhere(Arrays.asList(type), "name = ?");
+		if (monitorType.isEmpty()) {
+			throw new NotFoundException("There is no monitor type with this name");
+		}
+		List<MonitorTool> monitorTool = this.monitorToolService.GetWhere(Arrays.asList(monitorType.get(0).getId(), tool), "monitor_type_id = ? and name = ?");
+		if(monitorTool.isEmpty()) {
+				throw new NotFoundException("There is no monitor tool with this name for this monitor type");
+		}
+		List<MonitorConfiguration> monitorConf = this.dbService.GetWhere(Arrays.asList(monitorTool.get(0).getId(), configuration), "monitor_tool_id = ? and monitor_manager_configuration_id = ?");
+		if(monitorConf.isEmpty()) {
+				throw new NotFoundException("There is no monitor configuration with this id for this monitor tool");
 		}
 		
-		return super.Update(monitorConfiguration);
+		monitorConfiguration.setMonitorManagerConfigurationId(configuration);
+		monitorConfiguration.setMonitorToolId(monitorTool.get(0).getId());
+		monitorConfiguration.setId(monitorConf.get(0).getId());
+		MonitorConfiguration conf = super.Update(monitorConfiguration);
+		conf.setId(configuration);
+		conf.setMonitorManagerConfigurationId(null);
+		
+		MonitorManagerProxy<?, ?> proxy = new MonitorManagerProxy<>();
+		MonitorSpecificConfiguration configurationObj = generateMonitorConf(monitorConfiguration, monitorTool.get(0));
+		configurationObj.setId(configuration);
+		proxy.updateMonitorConfiguration(configurationObj);
+				
+		return conf;
 	}
 	
 	@DELETE
@@ -177,59 +179,47 @@ public class MonitorConfigurationController extends RestController<MonitorConfig
 			@PathParam("id-monitoring-tool") String tool,
 			@PathParam("id-tool-configuration") Integer configuration) throws Exception {
 		
-		CloseableHttpClient client = HttpClientBuilder.create().build();
-		URIBuilder builder = new URIBuilder();
-		
-		List<MonitorTool> monitorTool = monitorToolService.GetWhere(Arrays.asList(tool), "name = ?");
-		
-		builder.setScheme("http").setHost(monitorManagerHost)
-			.setPath("configuration")
-		    .setParameter("id", configuration.toString())
-		    .setParameter("monitor", monitorTool.get(0).getMonitorName());
-		URI uri = builder.build();
-		HttpDelete request = new HttpDelete(uri);
-		
-		try {
-			client.execute(request);
-		} catch (Exception e) {
-			//throw new NotFoundException("There was a connection problem with the Monitor Manager");
+		List<MonitorType> monitorType = this.monitorTypeService.GetWhere(Arrays.asList(type), "name = ?");
+		if (monitorType.isEmpty()) {
+			throw new NotFoundException("There is no monitor type with this name");
 		}
+		List<MonitorTool> monitorTool = this.monitorToolService.GetWhere(Arrays.asList(monitorType.get(0).getId(), tool), "monitor_type_id = ? and name = ?");
+		if(monitorTool.isEmpty()) {
+				throw new NotFoundException("There is no monitor tool with this name for this monitor type");
+		}
+		List<MonitorConfiguration> monitorConf = this.dbService.GetWhere(Arrays.asList(monitorTool.get(0).getId(), configuration), "monitor_tool_id = ? and monitor_manager_configuration_id = ?");
+		if(monitorConf.isEmpty()) {
+				throw new NotFoundException("There is no monitor configuration with this id for this monitor tool");
+		}
+
+		super.Delete(monitorConf.get(0).getId());
 		
-		super.Delete(configuration);
+		MonitorManagerProxy<?, ?> proxy = new MonitorManagerProxy<>();
+		MonitorSpecificConfiguration deleteConf = generateMonitorConf(monitorConf.get(0), monitorTool.get(0));
+		deleteConf.setId(configuration);
+		proxy.deleteMonitorConfiguration(deleteConf);
+		
 	}
 	
-	private JsonObject getJson(MonitorConfiguration configuration) throws SQLException, NotFoundException {
-		
-		MonitorTool tool = monitorToolService.GetById(configuration.getMonitorToolId());
-		
-		JsonObject json = new JsonObject();
-		
-		json.addProperty("id", configuration.getId());
-		json.addProperty("kafkaEndpoint", configuration.getKafkaEndpoint());
-		json.addProperty("kafkaTopic", configuration.getKafkaTopic());
-		json.addProperty("toolName",tool.getName());
-		json.addProperty("monitor", tool.getMonitorName());
-		json.addProperty("timeSlot", configuration.getTimeSlot());
-		json.addProperty("timeStamp", configuration.getTimeStamp());
-		if (configuration.getAppId() != null) {
-			json.addProperty("appId", configuration.getAppId());
+	private MonitorSpecificConfiguration generateMonitorConf(MonitorConfiguration configuration, MonitorTool tool) throws Exception {
+		MonitorSpecificConfiguration monitorManagerConf = null;
+		if (tool.getMonitorName().equals("Twitter")) {
+			monitorManagerConf = new TwitterMonitorConfiguration();
+			((TwitterMonitorConfiguration) monitorManagerConf).setKeywordExpression(configuration.getKeywordExpression());
 		}
-		if (configuration.getPackageName() != null) {
-			json.addProperty("packageName", configuration.getPackageName());
+		else if (tool.getMonitorName().equals("GooglePlay")) {
+			monitorManagerConf = new GooglePlayMonitorConfiguration();
+			((GooglePlayMonitorConfiguration) monitorManagerConf).setPackageName(configuration.getPackageName());
 		}
-		if (configuration.getKeywordExpression() != null) {
-			json.addProperty("keywordExpression", configuration.getKeywordExpression());
+		else if (tool.getMonitorName().equals("AppStore")) {
+			monitorManagerConf = new AppStoreMonitorConfiguration();
+			((AppStoreMonitorConfiguration) monitorManagerConf).setAppId(configuration.getAppId());
 		}
-		/*if (configuration.getAccounts() != null) {
-		 * json.addProperty("accounts", configuration.getAccounts());
-		 */
-		
-		JsonObject conf = new JsonObject();
-		if (configuration.getAppId() != null || configuration.getPackageName() != null)
-			conf.add("MarketPlaces", json);
-		else if (configuration.getKeywordExpression() != null) 
-			conf.add("SocialNetworks", json);
-		return conf;
+		monitorManagerConf.setKafkaEndpoint(new URL(configuration.getKafkaEndpoint()));
+		monitorManagerConf.setKafkaTopic(configuration.getKafkaTopic());
+		monitorManagerConf.setTimeSlot(Integer.parseInt(configuration.getTimeSlot()));
+		monitorManagerConf.setToolName(tool.getName());
+		return monitorManagerConf;
 	}
 
 }
