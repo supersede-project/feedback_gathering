@@ -99,13 +99,13 @@ public class MonitorManagerTest {
 		
 		JsonObject jsonObject = (new JsonParser()).parse(result.getResponse().getContentAsString()).getAsJsonObject();
 		
-		mockMvc.perform(put("Twitter/configuration/" + jsonObject.get("idConf").getAsInt())
+		mockMvc.perform(put("/Twitter/configuration/" + jsonObject.get("idConf").getAsInt())
 				.content(updateMonitorConf)
 				.contentType(contentType))
 				.andExpect(status().isOk())
 				.andReturn();
 		
-		mockMvc.perform(delete("Twitter/configuration/" + jsonObject.get("idConf").getAsInt()))
+		mockMvc.perform(delete("/Twitter/configuration/" + jsonObject.get("idConf").getAsInt()))
 				.andExpect(status().isOk());
 		
 		System.out.println("Reach here");
