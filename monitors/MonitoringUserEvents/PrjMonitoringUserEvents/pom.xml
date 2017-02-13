@@ -58,14 +58,23 @@
   </dependencies>
   <repositories>
     <repository>
-        <id>central</id>
+      <id>central</id>
+      <name>Maven Repository Switchboard</name>
+      <layout>default</layout>
+      <url>http://repo1.maven.org/maven2</url>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </repository>
+    <repository>
+        <id>supersede-libs-releases</id>
         <url>http://supersede.es.atos.net:10080/artifactory/libs-release</url>
         <snapshots>
             <enabled>false</enabled>
         </snapshots>
     </repository>
     <repository>
-        <id>snapshots</id>
+        <id>supersede-libs-snapshots</id>
         <url>http://supersede.es.atos.net:10080/artifactory/libs-snapshot</url>
         <releases>
             <enabled>false</enabled>
@@ -74,14 +83,14 @@
   </repositories>
   <pluginRepositories>
     <pluginRepository>
-        <id>central</id>
+        <id>supersede-plugins-release</id>
         <url>http://supersede.es.atos.net:10080/artifactory/plugins-release</url>
         <snapshots>
             <enabled>false</enabled>
         </snapshots>
     </pluginRepository>
     <pluginRepository>
-        <id>snapshots</id>
+        <id>supersede-plugins-snapshots</id>
         <url>http://supersede.es.atos.net:10080/artifactory/plugins-snapshot</url>
         <releases>
             <enabled>false</enabled>
