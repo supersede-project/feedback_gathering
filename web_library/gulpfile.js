@@ -82,6 +82,8 @@ gulp.task('build-jquery-ui', function() {
 gulp.task('copy-test-page-assets', function() {
     gulp.src(['env/dev/test_page_assets/**'])
         .pipe(gulp.dest('dist'));
+    gulp.src(['env/dev/Energiesparkonto_ Energie sparen. Kosten senken._files/**'])
+        .pipe(gulp.dest('dist/Energiesparkonto_ Energie sparen. Kosten senken._files'));
 });
 
 gulp.task('clean', function() {
