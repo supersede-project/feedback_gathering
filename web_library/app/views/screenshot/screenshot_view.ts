@@ -135,10 +135,10 @@ export class ScreenshotView implements MechanismView {
 
                         let screenshotCaptureButtonActiveText = myThis.screenshotCaptureButton.data('active-text');
                         myThis.screenshotCaptureButton.text(screenshotCaptureButtonActiveText);
-                    }, 300);
+                    }, 600);
                 }
             });
-        }, 300);
+        }, 600);
     }
 
     initFabric(img, canvas) {
