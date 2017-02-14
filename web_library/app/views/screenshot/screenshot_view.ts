@@ -98,6 +98,7 @@ export class ScreenshotView implements MechanismView {
                 onrendered: function (canvas) {
                     setTimeout(function() {
                         myThis.showElements();
+                        myThis.showAllCanvasElements();
                         myThis.canvas = canvas;
                         myThis.screenshotPreviewElement.empty().append(canvas);
                         myThis.screenshotPreviewElement.show();
@@ -1263,9 +1264,13 @@ export class ScreenshotView implements MechanismView {
             canvg(canvas, xml);
             jQuery(canvas).insertAfter(this);
             //hide the SVG element
-            jQuery(this).attr('class', 'tempHide');
+            jQuery(this).attr('class', 'temp-hide');
             jQuery(this).hide();
         });
+    }
+
+    showAllCanvasElements() {
+        jQuery('.temp-hide').show();
     }
 
     getStyle(el, styleProp) {
