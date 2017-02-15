@@ -19,7 +19,7 @@ module.exports = function () {
         '!' + path_1.join(config_1.APP_SRC, '**/*.spec.ts'),
         '!' + path_1.join(config_1.APP_SRC, '**/*.e2e.ts')
     ];
-    var projectFiles = gulp.src(src); //.pipe(plugins.cached());
+    var projectFiles = gulp.src(src, { base: '.' }); //.pipe(plugins.cached());
     var result = merge(typings, projectFiles)
         .pipe(plugins.plumber())
         .pipe(plugins.sourcemaps.init())
