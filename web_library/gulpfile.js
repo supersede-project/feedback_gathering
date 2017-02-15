@@ -13,6 +13,10 @@ var argv = require('yargs').argv;
 var ts = require("gulp-typescript");
 var tsProject = ts.createProject("tsconfig.json");
 var sass = require('gulp-sass');
+var project_utils = require('./tools/utils');
+var project_config = require('./tools/config');
+
+project_utils.loadTasks(project_config.PROJECT_TASKS_DIR);
 
 
 var jqueryUIPath = 'app/assets/jquery-ui-1.12.1.custom/';
@@ -189,6 +193,7 @@ gulp.task('configure', function(done) {
 gulp.task('build.dev', function(done) {
     runSequence(
         'clean',
+        'build.js.dev',
         'configure',
         'webpack.dev',
         'copy-jquery',
