@@ -3,7 +3,7 @@ import './lib/rating/jquery.star-rating-svg.js';
 import './jquery.validate';
 import './jquery.validate_category';
 import './jquery.fileupload';
-import {applicationId, apiEndpointOrchestrator} from './config';
+import {applicationId, apiEndpointOrchestrator, apiEndpointRepository} from './config';
 import {I18nHelper} from './helpers/i18n';
 import i18n = require('i18next');
 import {ApplicationService} from '../services/application_service';
@@ -32,8 +32,8 @@ export var feedbackPluginModule = function ($, window, document) {
         var language = I18nHelper.getLanguage(options);
         var options = $.extend({}, $.fn.feedbackPlugin.defaults, options);
         var mockBackend:MockBackend = new MockBackend(mockData);
-        var applicationService = new ApplicationService(apiEndpointOrchestrator, language); //, mockBackend);
-        feedbackApp = new FeedbackApp(applicationService, applicationId, options, this);
+        var applicationService = new ApplicationService(options.apiEndpointOrchestrator, language); //, mockBackend);
+        feedbackApp = new FeedbackApp(applicationService, options.applicationId, options, this);
         feedbackApp.loadApplicationConfiguration();
 
         return this;
@@ -51,7 +51,10 @@ export var feedbackPluginModule = function ($, window, document) {
         'defaultStrokeWidth': 4,
         'dialogPositionMy': 'center top',
         'dialogPositionAt': 'center top+30',
-        'dialogPositionOf': window
+        'dialogPositionOf': window,
+        'apiEndpointOrchestrator': apiEndpointOrchestrator,
+        'apiEndpointRepository': apiEndpointRepository,
+        'applicationId': applicationId
     };
 };
 

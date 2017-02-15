@@ -9,7 +9,7 @@ export class DialogView {
     dialogElement:any;
     dialogContext:any;
 
-    constructor(public dialogId:string, public template:any, public context?:any, public openCallback?:() => void,
+    constructor(public dialogId:string, public template:any, public context:any, public openCallback?:() => void,
                 public closeCallback?:() => void) {
         this.dialogContext = this.buildContext(context);
         let html = template(this.dialogContext);

@@ -1,6 +1,6 @@
 import i18n = require('i18next');
 import {MechanismView} from '../mechanism_view';
-import {mechanismTypes, applicationId, apiEndpointRepository} from '../../js/config';
+import {mechanismTypes} from '../../js/config';
 import {DialogView} from './dialog_view';
 import {Configuration} from '../../models/configurations/configuration';
 import {TextView} from '../text/text_view';
@@ -30,7 +30,7 @@ export class FeedbackDialogView extends DialogView {
     pageNavigation:PageNavigation;
     audioView:AudioView;
 
-    constructor(public dialogId:string, public template:any, public configuration:Configuration, public context?:any, public openCallback?:() => void,
+    constructor(public dialogId:string, public template:any, public configuration:Configuration, public context:any, public openCallback?:() => void,
                 public closeCallback?:() => void) {
         super(dialogId, template, context, openCallback, closeCallback);
         this.dialogContext = $.extend({}, this.dialogContext, this.configuration.getContext());
@@ -89,7 +89,7 @@ export class FeedbackDialogView extends DialogView {
         var textMechanisms = configuration.getMechanismConfig(mechanismTypes.textType);
         var feedbackDialogView = this;
 
-        var feedbackService = new FeedbackService(apiEndpointRepository, this.dialogContext.lang);
+        var feedbackService = new FeedbackService(this.context.apiEndpointRepository, this.dialogContext.lang);
 
         container.find('button.submit-feedback').unbind().on('click', function (event) {
             event.preventDefault();
@@ -119,7 +119,7 @@ export class FeedbackDialogView extends DialogView {
 
     sendFeedback(feedbackService:FeedbackService, formData:any, generalConfiguration:GeneralConfiguration) {
         var feedbackDialogView = this;
-        var url = apiEndpointRepository + 'feedback_repository/' + feedbackDialogView.dialogContext.lang + '/applications/' + applicationId + '/feedbacks/';
+        var url = this.context.apiEndpointRepository + 'feedback_repository/' + this.context.lang + '/applications/' + this.context.applicationId + '/feedbacks/';
 
         feedbackService.sendFeedback(url, formData, function(data) {
             feedbackDialogView.resetDialog();
@@ -146,7 +146,7 @@ export class FeedbackDialogView extends DialogView {
 
         dialogView.resetMessageView();
 
-        var feedbackObject = new Feedback('Feedback', this.dialogContext.userId, this.dialogContext.language, applicationId, configuration.id, [], [], [], [], null, [], []);
+        var feedbackObject = new Feedback('Feedback', this.dialogContext.userId, this.dialogContext.language, this.context.applicationId, configuration.id, [], [], [], [], null, [], []);
         feedbackObject.contextInformation = ContextInformation.create();
 
         for (var mechanismView of dialogView.mechanismViews) {
