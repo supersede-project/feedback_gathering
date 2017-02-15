@@ -1,5 +1,5 @@
 {{#if active}}
-    <section id="audioMechanism{{ id }}" class="feedback-mechanism {{parent.labelPositioning}} audio-type">
+    <section id="audioMechanism{{ id }}" class="feedback-mechanism feedback-col {{parent.labelPositioning}} audio-type" style="width: {{boxWidth}}; padding-left: {{boxPaddingLeft}}; padding-right: {{boxPaddingRight}};">
         <p style="{{#if mandatory}}{{ parent.mandatoryLabelStyle }}{{/if}}">{{ title }}{{#if mandatory }} {{ parent.mandatorySign }}{{/if}}</p>
         <audio controls src="" class="audio"></audio>
         <div class="audio-buttons">

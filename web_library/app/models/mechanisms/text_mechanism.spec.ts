@@ -46,10 +46,24 @@ describe('Text Mechanism', () => {
         expect(maxLength).toEqual(100);
     });
 
-    it('should return the text feedback object', () => {
-        var textFeedback = textMechanism.getTextFeedback();
-        expect(textFeedback.text).toEqual("Hey this is the feedback text");
-        expect(textFeedback.mechanismId).toEqual(1);
+    it('should return the context', () => {
+        expect(textMechanism.getContext()).toEqual({
+            'active': true,
+            'hint': 'Enter your feedback',
+            'label': 'Tell us about your problem',
+            'currentLength': 0,
+            'maxLength': 100,
+            'maxLengthVisible': 1,
+            'maxLengthStrict': null,
+            'textareaStyle': '',
+            'labelStyle': '',
+            'clearInput': 1,
+            'mandatory': 1,
+            'mandatoryReminder': 'Please put something into this field',
+            'boxWidth': '100%',
+            'boxPaddingLeft': '0',
+            'boxPaddingRight': '20px',
+            'validationEmail': false
+        })
     });
 });
-

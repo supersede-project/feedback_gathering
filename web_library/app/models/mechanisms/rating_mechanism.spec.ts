@@ -1,5 +1,5 @@
-import {RatingMechanism} from './rating_mechanism';
 import {mechanismTypes} from '../../js/config';
+import {RatingMechanism} from './rating_mechanism';
 
 
 describe('Rating Mechanism', () => {
@@ -16,7 +16,7 @@ describe('Rating Mechanism', () => {
         var options = ratingMechanism.getRatingElementOptions();
 
         var expectedOtions = {
-            starSize: 25,
+            starSize: 30,
             totalStars: 10,
             initialRating: 3,
             useFullStars: true,

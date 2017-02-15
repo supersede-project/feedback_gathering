@@ -15,6 +15,78 @@ describe('PullConfiguration object', () => {
         pullConfiguration = <PullConfiguration>ConfigurationFactory.createByData(pullConfigurationData);
     });
 
+    it('should return the context for the application, the configuration itself and all the mechanisms', () => {
+        expect(pullConfiguration.getContext()).toEqual(
+            {
+                dialogId: 'pullConfiguration',
+                mechanisms: [
+                    {
+                        type: 'TEXT_TYPE',
+                        order: 1,
+                        canBeActivated: false,
+                        active: true,
+                        hint: 'Please enter your feedback',
+                        label: 'Feedback',
+                        currentLength: 0,
+                        maxLength: 50,
+                        maxLengthVisible: 1,
+                        maxLengthStrict: null,
+                        textareaStyle: 'border-color: #000000; border-width: 2px; background-color: #ffffff; height: 50px; width: 200px;',
+                        labelStyle: 'text-align: left; font-size: 16px;',
+                        clearInput: 0,
+                        mandatory: 1,
+                        mandatoryReminder: 'Please fill in the text field',
+                        boxWidth: '100%',
+                        boxPaddingLeft: '0',
+                        boxPaddingRight: '20px',
+                        validationEmail: false
+                    },
+                    {
+                        type: 'CATEGORY_TYPE',
+                        order: 2,
+                        canBeActivated: false,
+                        active: true,
+                        title: 'Please rate the feature that you just used',
+                        ownAllowed: 0,
+                        ownLabel: null,
+                        multiple: 0,
+                        defaultOption: null,
+                        asDropdown: false,
+                        breakAfterOption: false,
+                        options: [
+                            {
+                                key: 'RATING_1',
+                                value: 'Very bad'
+                            },
+                            {
+                                key: 'RATING_2',
+                                value: 'Bad'
+                            },
+                            {
+                                key: 'RATING_3',
+                                value: 'Okay'
+                            },
+                            {
+                                key: 'RATING_4',
+                                value: 'Good'
+                            },
+                            {
+                                key: 'RATING_5',
+                                value: 'Very good'
+                            }
+                        ],
+                        inputType: 'radio',
+                        mandatory: null,
+                        mandatoryReminder: null,
+                        boxWidth: '100%',
+                        boxPaddingLeft: '0',
+                        boxPaddingRight: '20px'
+                    }
+                ]
+            }
+        );
+    });
+
     it('should be an object with a complete pull configuration', () => {
         expect(pullConfiguration).toEqual(jasmine.any(PullConfiguration));
         expect(pullConfiguration.id).toBe(2);
@@ -31,7 +103,7 @@ describe('PullConfiguration object', () => {
     });
 
     it('should return the context for the view with the configuration data', () => {
-        var context = pullConfiguration.getContextForView();
+        var context = pullConfiguration.getContext();
 
         expect(context.dialogId).toEqual('pullConfiguration');
         expect(context.mechanisms.length).toBe(2)
@@ -62,5 +134,3 @@ describe('PullConfiguration object', () => {
         expect(pullConfiguration.currentSlug()).toEqual('context.html');
     });
 });
-
-

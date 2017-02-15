@@ -36,8 +36,7 @@ describe('Feedback', () => {
         };
 
         var configuration = ConfigurationFactory.createByData(configurationData);
-        var feedback = new Feedback('Feedback', 'application', null, 'This is my feedback!', 1.0, []);
+        var feedback = new Feedback('Feedback', 'u11111', 'en', 1, 1, [], [], [], [], null, [], []);
         expect(feedback.validate(configuration)).toBeTruthy();
     });
 });
-

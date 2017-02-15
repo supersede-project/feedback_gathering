@@ -1,0 +1,38 @@
+﻿{
+  "general": {
+    "review_feedback": "",
+    "review_feedback_title": "",
+    "feedback_submit_button_title": "Enviar comentarios",
+    "mandatory_default_text": "Rellene el campo de texto",
+    "back": "",
+    "validation_max_length_error_message": "La longitud máxima del campo es {{ maxLength }}. Ha introducido {{ currentLength }} caracteres.",
+    "validation_invalid_email": "Dirección de correo electrónico no válida",
+    "discard_feedback": "Cancelar",
+    "cancel": "Cancelar",
+    "dialog_close_button_title": "Minimizar",
+    "success_message": "Sus comentarios se han enviado con éxito.",
+    "error_message": "Se ha producido un error al guardar los comentarios."
+  },
+  "text": {
+    "text_type_text_clear": ""
+  },
+  "screenshot": {
+    "take_screenshot": "",
+    "take_new_screenshot": "",
+    "actions": "",
+    "stickers": "",
+    "rectangle": "",
+    "blacken": "",
+    "circle": "",
+    "arrow": "",
+    "freehand": "",
+    "crop": "",
+    "text": "",
+    "undo": "",
+    "remove": ""
+  },
+  "rating": {
+    "review_title": ""
+  }
+}
+

@@ -11,11 +11,11 @@ export class I18nHelper {
      *  Containing the key 'lang' to set the language
      *
      */
-    static initializeI18n = function(options, resources?) {
+    static initializeI18n = function(options, resources?:{}) {
         var language = I18nHelper.getLanguage(options);
 
         if(resources == null || resources == undefined) {
-            var resources = {};
+            resources = {};
             resources[language] = {
                 translation: readJSON(options.distPath + 'locales/' + language + '/translation.json')
             };

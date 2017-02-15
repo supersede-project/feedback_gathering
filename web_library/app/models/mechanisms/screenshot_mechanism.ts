@@ -19,7 +19,9 @@ export class ScreenshotMechanism extends Mechanism {
     getContext():any {
         return {
             autoTake: this.getParameterValue('autoTake'),
+            annotationTitle: this.getParameterValue('annotationTitle'),
             annotationExplanation: this.getParameterValue('annotationExplanation'),
+            cropExplanation: this.getParameterValue('cropExplanation'),
             sentimentSatisfiedMouseover: this.getParameterValue('sentimentSatisfiedMouseover'),
             sentimentDissatisfiedMouseover: this.getParameterValue('sentimentDissatisfiedMouseover'),
             arrowMouseover: this.getParameterValue('arrowMouseover'),
@@ -30,6 +32,20 @@ export class ScreenshotMechanism extends Mechanism {
             thumbDownMouseover: this.getParameterValue('thumbDownMouseover'),
             textMouseover: this.getParameterValue('textMouseover'),
             freehandMouseover: this.getParameterValue('freehandMouseover'),
+            boxWidth: this.getParameterValue('boxWidth') || '100%',
+            boxPaddingLeft: this.getParameterValue('boxPaddingLeft') || '0',
+            boxPaddingRight: this.getParameterValue('boxPaddingRight') || '20px',
+            screenshotTakeButtonTitle: this.getParameterValue('screenshotTakeButtonTitle'),
+            screenshotTakeNewButtonTitle: this.getParameterValue('screenshotTakeNewButtonTitle'),
+            screenshotRemoveButtonTitle: this.getParameterValue('screenshotRemoveButtonTitle'),
+            textTitle: this.getParameterValue('textTitle'),
+            textExplanation: this.getParameterValue('textExplanation'),
+            zoomTitle: this.getParameterValue('zoomTitle'),
+            annotationsTitle: this.getParameterValue('annotationsTitle'),
+            selectionTitle: this.getParameterValue('selectionTitle'),
+            colorTitle: this.getParameterValue('colorTitle'),
+            cropTitle: this.getParameterValue('cropTitle'),
+            zoomExplanation: this.getParameterValue('zoomExplanation'),
         }
     }
 }

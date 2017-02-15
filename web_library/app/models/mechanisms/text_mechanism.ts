@@ -2,7 +2,6 @@ import {Parameter} from './parameters/parameter';
 import {Mechanism} from './mechanism';
 import {ParameterValuePropertyPair} from '../parameters/parameter_value_property_pair';
 import {ParameterInterface} from '../parameters/parameter_interface';
-import {TextFeedback} from '../feedbacks/text_feedback';
 
 
 export class TextMechanism extends Mechanism {
@@ -11,18 +10,23 @@ export class TextMechanism extends Mechanism {
         super(id, type, active, order, canBeActivated, parameters);
     }
 
-    getTextFeedback():TextFeedback {
-        var text = jQuery('section#textMechanism' + this.id + ' textarea').val();
-        return new TextFeedback(text, this.id)
-    }
-
     getContext():any {
-        var textareaStyle = this.getCssStyle([new ParameterValuePropertyPair('textareaFontColor', 'color')]);
+        var textareaStyle = this.getCssStyle([
+            new ParameterValuePropertyPair('textareaFontColor', 'color'),
+            new ParameterValuePropertyPair('borderColor', 'border-color'),
+            new ParameterValuePropertyPair('borderWidth', 'border-width'),
+            new ParameterValuePropertyPair('fieldBackgroundColor', 'background-color'),
+            new ParameterValuePropertyPair('fieldFontSize', 'font-size'),
+            new ParameterValuePropertyPair('fieldFontType', 'font-style'),
+            new ParameterValuePropertyPair('fieldHeight', 'height'),
+            new ParameterValuePropertyPair('fieldTextAlignment', 'text-align'),
+            new ParameterValuePropertyPair('fieldWidth', 'width')
+        ]);
         var labelStyle = this.getCssStyle([
             new ParameterValuePropertyPair('labelPositioning', 'text-align'),
             new ParameterValuePropertyPair('labelColor', 'color'),
-            new ParameterValuePropertyPair('labelFontSize', 'font-size')]
-        );
+            new ParameterValuePropertyPair('labelFontSize', 'font-size')
+        ]);
 
         return {
             active: this.active,
@@ -36,7 +40,11 @@ export class TextMechanism extends Mechanism {
             labelStyle: labelStyle,
             clearInput: this.getParameterValue('clearInput'),
             mandatory: this.getParameterValue('mandatory'),
-            mandatoryReminder: this.getParameterValue('mandatoryReminder')
+            mandatoryReminder: this.getParameterValue('mandatoryReminder'),
+            boxWidth: this.getParameterValue('boxWidth') || '100%',
+            boxPaddingLeft: this.getParameterValue('boxPaddingLeft') || '0',
+            boxPaddingRight: this.getParameterValue('boxPaddingRight') || '20px',
+            validationEmail: this.getParameterValue('validateEmail') || false
         }
     }
 }

@@ -1,0 +1,38 @@
+﻿{
+  "general": {
+    "review_feedback": "",
+    "review_feedback_title": "",
+    "feedback_submit_button_title": "Envoyer commentaire",
+    "mandatory_default_text": "Veuillez compléter la zone de texte",
+    "back": "",
+    "validation_max_length_error_message": "La longueur maximale du champ est de {{ maxLength }} caractères. Vous avez saisi {{ currentLength }} caractères.",
+    "validation_invalid_email": "Adresse e-mail invalide",
+    "discard_feedback": "Annuler",
+    "cancel": "Annuler",
+    "dialog_close_button_title": "Réduire",
+    "success_message": "Votre commentaire a bien été envoyé.",
+    "error_message": "Une erreur s'est produite au cours de l'enregistrement du commentaire."
+  },
+  "text": {
+    "text_type_text_clear": ""
+  },
+  "screenshot": {
+    "take_screenshot": "",
+    "take_new_screenshot": "",
+    "actions": "",
+    "stickers": "",
+    "rectangle": "",
+    "blacken": "",
+    "circle": "",
+    "arrow": "",
+    "freehand": "",
+    "crop": "",
+    "text": "",
+    "undo": "",
+    "remove": ""
+  },
+  "rating": {
+    "review_title": ""
+  }
+}
+

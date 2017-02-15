@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="//s3.eu-central-1.amazonaws.com/supersede/atos_dist/jqueryui/jquery-ui.min.css"/>
+    <link rel="stylesheet" href="//s3.eu-central-1.amazonaws.com/supersede/atos_dist/main.min.css"/>
+    <style>
+        #feedbackEntryPoint {
+            top: 0;
+        }
+    </style>
+</head>
+<body>
+<a id="feedbackEntryPoint" href="#">Feedback</a>
+<script src="//s3.eu-central-1.amazonaws.com/supersede/atos_dist/jquery-1.9.1.js"></script>
+<script src="//s3.eu-central-1.amazonaws.com/supersede/atos_dist/jqueryui/jquery-ui.min.js"></script>
+<script src="//s3.eu-central-1.amazonaws.com/supersede/atos_dist/audio/recorder.js"></script>
+<script src="//s3.eu-central-1.amazonaws.com/supersede/atos_dist/audio/Fr.voice.js"></script>
+<script src="//s3.eu-central-1.amazonaws.com/supersede/atos_dist/screenshot/fabric.min.js"></script>
+<script src="//s3.eu-central-1.amazonaws.com/supersede/atos_dist/screenshot/customiseControls.js"></script>
+<script src="//s3.eu-central-1.amazonaws.com/supersede/atos_dist/screenshot/spectrum.js"></script>
+<script src="//s3.eu-central-1.amazonaws.com/supersede/atos_dist/jquery.feedback.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#feedbackEntryPoint').feedbackPlugin({
+            'distPath': '//s3.eu-central-1.amazonaws.com/supersede/atos_dist/',
+            'lang': 'en',
+            'fallbackLang': 'en',
+            'defaultStrokeWidth': 4
+        });
+    });
+</script>
+</body>
+</html>

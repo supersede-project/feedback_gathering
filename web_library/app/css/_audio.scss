@@ -1,15 +1,17 @@
-.audio-type {
+.feedback-library {
+  .audio-type {
 
-  audio {
-    display: none;
-  }
+    audio {
+      display: none;
+    }
 
-  .audio-buttons {
-    margin: 10px 0;
+    .audio-buttons {
+      margin: 10px 0;
 
-    a img {
-      height: 32px;
-      width: 32px;
+      a img {
+        height: 32px;
+        width: 32px;
+      }
     }
   }
 }

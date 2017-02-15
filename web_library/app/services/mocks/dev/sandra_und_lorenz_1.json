@@ -1,0 +1,129 @@
+[
+  {
+    "configurations": [
+      {
+        "type": "PUSH",
+        "mechanisms": [
+          {
+            "type": "TEXT_TYPE",
+            "active": true,
+            "order": 1,
+            "canBeActivated": false,
+            "parameters": [
+              {
+                "key": "type",
+                "value": "TEXT_TYPE"
+              },
+              {
+                "key": "label",
+                "value": "New text"
+              },
+              {
+                "key": "mandatory",
+                "value": false
+              },
+              {
+                "key": "hidden",
+                "value": false
+              },
+              {
+                "key": "disabled",
+                "value": false
+              },
+              {
+                "key": "rows",
+                "value": 5
+              },
+              {
+                "key": "fieldWidth",
+                "value": 30
+              },
+              {
+                "key": "maxLengthStrict",
+                "value": false
+              },
+              {
+                "key": "maxLengthVisible",
+                "value": false
+              },
+              {
+                "key": "textLengthVisible",
+                "value": true
+              },
+              {
+                "key": "cols",
+                "value": 30
+              },
+              {
+                "key": "fields",
+                "value": {}
+              },
+              {
+                "key": "helpers",
+                "value": []
+              },
+              {
+                "key": "validate",
+                "value": true
+              },
+              {
+                "key": "showMessages",
+                "value": true
+              },
+              {
+                "key": "renderButtons",
+                "value": true
+              },
+              {
+                "key": "data",
+                "value": {}
+              },
+              {
+                "key": "attributes",
+                "value": {}
+              },
+              {
+                "key": "allowOptionalEmpty",
+                "value": true
+              },
+              {
+                "key": "autocomplete",
+                "value": false
+              },
+              {
+                "key": "disallowEmptySpaces",
+                "value": false
+              },
+              {
+                "key": "disallowOnlyEmptySpaces",
+                "value": false
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "id": 12,
+    "state": 1,
+    "generalConfiguration": {
+      "parameters": [
+        {
+          "key": "labelFontColor",
+          "value": "#000"
+        },
+        {
+          "key": "labelFontType",
+          "value": "Helvetica"
+        },
+        {
+          "key": "labelFontSize",
+          "value": "12"
+        },
+        {
+          "key": "submitText",
+          "value": "Success"
+        }
+      ]
+    }
+  }
+]
