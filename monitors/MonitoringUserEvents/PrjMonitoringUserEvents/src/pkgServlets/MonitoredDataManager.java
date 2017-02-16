@@ -81,13 +81,14 @@ public class MonitoredDataManager extends HttpServlet {
 	    System.out.println(jsonObj);
 	    
 	    //Fragment for the IF
-	    /*DataProviderProxy proxy = new DataProviderProxy();
-	    proxy.ingestData(jsonObj, "snf");*/
+	    DataProviderProxy proxy = new DataProviderProxy();
+	    proxy.ingestData(jsonObj, "snf");
 		
 	    //If there is response - specify the code for responding to the client 
-		response.setContentType("text/xml");
-		response.setHeader("Cache-Control", "no-cache");
-		response.getWriter().write("<test>"+ "" +"</test>");
+		response.setContentType("text/plain");
+		response.setHeader("Access-Control-Allow-Origin", "*");
+		response.setHeader("Access-Control-Allow-Credentials", "true");
+		
 	}
 	
 	/**** with json simle
