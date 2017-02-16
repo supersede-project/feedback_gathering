@@ -86,9 +86,9 @@ public class MonitoredDataManager extends HttpServlet {
 		
 	    //If there is response - specify the code for responding to the client 
 		response.setContentType("text/plain");
-		response.setHeader("Access-Control-Allow-Origin", "*");
-		response.setHeader("Access-Control-Allow-Credentials", "true");
-		
+		response.addHeader("Access-Control-Allow-Origin", "*");
+		response.addHeader("Access-Control-Allow-Credentials", "true");
+		response.addHeader("Access-Control-Allow-Methods","GET,POST");
 	}
 	
 	/**** with json simle
