@@ -52,7 +52,69 @@ function fnSendMonitoredData(idOutput, confID, userID, sElement, sIDElement, sEv
 	
 	var vInfoEvents = "OutputID=" + idOutput + "&ConfigurationID=" + confID + "&UserID=" + userID + "&Element=" + sElement + "&idElement=" + sIDElement + "&EventType=" + sEventType + "&Text=" + sElementText + "&Value=" + sElementValue + "&Timestamp=" + Date();
 	
-	var url = "MonitoredDataManager?" + vInfoEvents;
+	//Local
+	//var url = "MonitoredDataManager?" + vInfoEvents;
+	
+	//Remoto
+	var url = "http://supersede.es.atos.net:8081/PrjMonitoringUserEvents/MonitoredDataManager?" + vInfoEvents;
+	
+	var xhr = createCORSRequest('POST', url);
+	if (!xhr) {
+		alert('CORS not supported');
+	    return;
+	}
+	
+	// Response handlers.
+	xhr.onload = function() {
+		var text = xhr.responseText;
+		var title = getTitle(text);
+	    alert('Response from CORS request to ' + url + ': ' + title);
+	};
+
+	xhr.onerror = function() {
+		alert('Woops, there was an error making the request.');
+	};
+
+	xhr.send(sCurrentURLPage);
+}
+
+//Create the XHR object.
+function createCORSRequest(method, url) {
+  var xhr = new XMLHttpRequest();
+  if ("withCredentials" in xhr) {
+    // XHR for Chrome/Firefox/Opera/Safari.
+    xhr.open(method, url, true);
+  } else if (typeof XDomainRequest != "undefined") {
+    // XDomainRequest for IE.
+    xhr = new XDomainRequest();
+    xhr.open(method, url);
+  } else {
+    // CORS not supported.
+    xhr = null;
+  }
+  return xhr;
+}
+
+//Helper method to parse the title tag from the response.
+function getTitle(text) {
+  return text.match('<title>(.*)?</title>')[1];
+}
+
+
+
+
+/*
+//Calls servlet MonitoredDataManager and sends the information of the event
+function fnSendMonitoredData(idOutput, confID, userID, sElement, sIDElement, sEventType, sElementText, sElementValue){
+	var sCurrentURLPage = window.location.href;
+	
+	var vInfoEvents = "OutputID=" + idOutput + "&ConfigurationID=" + confID + "&UserID=" + userID + "&Element=" + sElement + "&idElement=" + sIDElement + "&EventType=" + sEventType + "&Text=" + sElementText + "&Value=" + sElementValue + "&Timestamp=" + Date();
+	
+	//Local
+	//var url = "MonitoredDataManager?" + vInfoEvents;
+	
+	//Remoto
+	var url = "http://supersede.es.atos.net:8081/PrjMonitoringUserEvents/MonitoredDataManager?"
 	
 	fnStartRequest();
 
@@ -77,7 +139,7 @@ function fnCallback() {
 			//alert("done");
 		}
 	}
-}
+}*/
 
 
 
