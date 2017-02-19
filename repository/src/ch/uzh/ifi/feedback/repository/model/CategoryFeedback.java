@@ -26,11 +26,35 @@ public class CategoryFeedback extends ItemBase<CategoryFeedback> {
 		this.parameterId = parameterId;
 	}
 	
+	public CategoryFeedback(Integer id, Integer feedbackId, Integer parameterId, String text) {
+		super();
+		this.id = id;
+		this.feedbackId = feedbackId;
+		this.parameterId = parameterId;
+		this.text = text;
+	}
+
 	public CategoryFeedback(){
 	}
 
 	public Integer getId() {
 		return id;
+	}
+
+	public Integer getParameterId() {
+		return parameterId;
+	}
+
+	public void setParameterId(Integer parameterId) {
+		this.parameterId = parameterId;
+	}
+
+	public String getText() {
+		return text;
+	}
+
+	public void setText(String text) {
+		this.text = text;
 	}
 
 	public void setId(Integer id) {

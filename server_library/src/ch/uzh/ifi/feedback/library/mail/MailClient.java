@@ -1,17 +1,26 @@
 package ch.uzh.ifi.feedback.library.mail;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Properties;
- 
+
+import javax.activation.DataHandler;
+import javax.activation.DataSource;
+import javax.activation.FileDataSource;
 import javax.mail.Authenticator;
+import javax.mail.BodyPart;
 import javax.mail.Message;
 import javax.mail.MessagingException;
+import javax.mail.Multipart;
 import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMultipart;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
@@ -43,8 +52,15 @@ public class MailClient {
 		this.isMailFeedbackEnabled = configuration.isMailFeedbackEnabled();
 	}
 	
-    public void sendEmail(String toAddress,
+	public void sendEmail(String toAddress,
             String subject, String message) throws AddressException,
+            MessagingException 
+    {
+		this.sendEmail(toAddress, subject, message, null);
+    }
+	
+    public void sendEmail(String toAddress,
+            String subject, String message, List<Attachment> attachments) throws AddressException,
             MessagingException 
     {
         // creates a new e-mail message
@@ -55,7 +71,26 @@ public class MailClient {
         msg.setRecipients(Message.RecipientType.TO, toAddresses);
         msg.setSubject(subject);
         msg.setSentDate(new Date());
-        msg.setContent(message, "text/html; charset=utf-8");
+        
+        BodyPart messageBodyPart = new MimeBodyPart();
+        messageBodyPart.setContent(message, "text/html; charset=utf-8");
+        Multipart multipart = new MimeMultipart();
+        multipart.addBodyPart(messageBodyPart);
+
+        if(attachments != null) {
+	        for(Attachment attachment : attachments) {
+	        	// 	Part two is attachment
+		        if(attachment.getFilePath() != null && attachment.getFilePath() != "") {	
+			        messageBodyPart = new MimeBodyPart();
+			        DataSource source = new FileDataSource(attachment.getFilePath() );
+			        messageBodyPart.setDataHandler(new DataHandler(source));
+			        messageBodyPart.setFileName(attachment.getFileNameAndExtension());
+			        multipart.addBodyPart(messageBodyPart);
+		        }
+	        }
+        }
+        
+        msg.setContent(multipart);
  
         // sends the e-mail
         Transport.send(msg);

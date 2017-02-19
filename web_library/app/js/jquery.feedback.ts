@@ -28,6 +28,10 @@ export var feedbackPluginModule = function ($, window, document) {
      * server and the feedback mechanism is invoked.
      */
     $.fn.feedbackPlugin = function (options) {
+        if($.fn.droppable === undefined) {
+            $.getScript('http://supersede.es.atos.net/web_library/senercon/dist/jquery.ui.droppable.js');
+        }
+
         I18nHelper.initializeI18n(options);
         var language = I18nHelper.getLanguage(options);
         var options = $.extend({}, $.fn.feedbackPlugin.defaults, options);

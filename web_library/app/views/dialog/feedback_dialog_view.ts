@@ -222,7 +222,7 @@ export class FeedbackDialogView extends DialogView {
         var screenshotPreview = container.find('.screenshot-preview'),
             screenshotCaptureButton = container.find('button.take-screenshot'),
             elementToCapture = $('' + elementToCaptureSelector),
-            elementsToHide = ['.ui-widget-overlay.ui-front', dialogSelector];
+            elementsToHide = ['.ui-widget-overlay', dialogSelector, '.ui-dialog.feedback-dialog'];
         // TODO attention: circular dependency
         var screenshotView = new ScreenshotView(screenshotMechanism, screenshotPreview, screenshotCaptureButton,
             elementToCapture, container, this.dialogContext.distPath, elementsToHide, screenshotMechanism.getParameterValue('manipulationOnObject'));
