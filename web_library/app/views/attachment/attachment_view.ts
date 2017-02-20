@@ -18,6 +18,9 @@ export class AttachmentView implements MechanismView {
     }
 
     getFiles() {
+        if(this.dropArea === undefined) {
+            return null;
+        }
         return this.dropArea.currentFiles;
     }
 

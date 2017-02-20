@@ -1,5 +1,6 @@
 package ch.uzh.ifi.feedback.library.mail;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -24,10 +25,13 @@ import javax.mail.internet.MimeMultipart;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
- 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 @Singleton
 public class MailClient {
-	
+
+	private static final Log LOGGER = LogFactory.getLog(MailClient.class);
 	private String host;
 	private String port;
 	private String user;
@@ -80,12 +84,20 @@ public class MailClient {
         if(attachments != null) {
 	        for(Attachment attachment : attachments) {
 	        	// 	Part two is attachment
-		        if(attachment.getFilePath() != null && attachment.getFilePath() != "") {	
-			        messageBodyPart = new MimeBodyPart();
-			        DataSource source = new FileDataSource(attachment.getFilePath() );
-			        messageBodyPart.setDataHandler(new DataHandler(source));
-			        messageBodyPart.setFileName(attachment.getFileNameAndExtension());
-			        multipart.addBodyPart(messageBodyPart);
+		        if(attachment.getFilePath() != null && !attachment.getFilePath().equals("")) {
+					try {
+						String rootPath = System.getProperty("catalina.home");
+						String relativePath = "webapps" + File.separator + attachment.getFilePath();
+						String filePath = rootPath + File.separator + relativePath;
+
+						messageBodyPart = new MimeBodyPart();
+						DataSource source = new FileDataSource(filePath);
+						messageBodyPart.setDataHandler(new DataHandler(source));
+						messageBodyPart.setFileName(attachment.getFileNameAndExtension());
+						multipart.addBodyPart(messageBodyPart);
+					} catch (Exception e) {
+						LOGGER.error(e.getMessage());
+					}
 		        }
 	        }
         }

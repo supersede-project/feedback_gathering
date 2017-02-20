@@ -72,7 +72,7 @@ public class FeedbackController extends RestController<Feedback>{
 	public Feedback InsertFeedback(Feedback feedback) throws Exception {
 		Feedback created =  super.Insert(feedback);
 		
-		//mailService.NotifyOfFeedback(feedback.getApplicationId(), created, null);
+		mailService.NotifyOfFeedback(feedback.getApplicationId(), created, null);
 		
 		/*
 		try {
