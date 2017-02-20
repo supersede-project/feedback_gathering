@@ -4,6 +4,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import ch.uzh.ifi.feedback.library.mail.MailClient;
@@ -20,6 +21,7 @@ public class MailServiceTest {
 
 	private MailService mailService;
 
+	@Ignore
     @Test
     public void testNotifyOfFeedback() {
     	MailConfiguration mailConfiguration = new RepositoryMailConfiguration();
@@ -39,7 +41,7 @@ public class MailServiceTest {
     	categoryFeedbacks.add(new CategoryFeedback(null, null, 98, null));
     	categoryFeedbacks.add(new CategoryFeedback(null, null, null, "my own category"));
     			
-    	String testPath = "/Users/ronnieschaniel/Documents/test_documents/test_file.pdf";
+    	String testPath = "test/test_file.pdf";
     	List<ScreenshotFeedback> screenshotFeedbacks = new ArrayList<ScreenshotFeedback>();
     	screenshotFeedbacks.add(new ScreenshotFeedback(null, null, testPath, 18290, "test_file", 55, null, "pdf"));
     	
