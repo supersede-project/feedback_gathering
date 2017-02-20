@@ -49,12 +49,37 @@
     	<groupId>com.googlecode.json-simple</groupId>
     	<artifactId>json-simple</artifactId>
     	<version>1.1</version>
-	</dependency>
-	<dependency>
+    </dependency>
+    <dependency>
     	<groupId>javax.servlet</groupId>
     	<artifactId>javax.servlet-api</artifactId>
     	<version>3.0.1</version>
-	</dependency>
+    </dependency>
+    <dependency>
+    	<groupId>eu.supersede.feedback_gathering</groupId>
+    	<artifactId>feedback_library</artifactId>
+    	<version>0.0.1-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+    	<groupId>org.apache.geronimo.specs.wso2</groupId>
+    	<artifactId>geronimo-jms_1.1_spec</artifactId>
+    	<version>1.1.0.wso2v1</version>
+    </dependency>
+    <dependency>
+    	<groupId>org.wso2.andes.wso2</groupId>
+    	<artifactId>andes-client</artifactId>
+    	<version>3.1.1</version>
+    </dependency>
+    <dependency>
+   	<groupId>org.wso2.carbon</groupId>
+    	<artifactId>org.wso2.carbon.logging</artifactId>
+   	<version>4.4.1</version>
+    </dependency>
+    <dependency>
+    	<groupId>org.wso2.securevault</groupId>
+    	<artifactId>org.wso2.securevault</artifactId>
+    	<version>1.0.0-wso2v2</version>
+    </dependency>
   </dependencies>
   <repositories>
     <repository>
