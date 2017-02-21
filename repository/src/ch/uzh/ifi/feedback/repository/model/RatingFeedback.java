@@ -19,7 +19,10 @@ public class RatingFeedback extends ItemBase<RatingFeedback>{
 
 	@DbAttribute("mechanism_id")
 	private Integer mechanismId;
-	
+
+	public RatingFeedback() {
+	}
+
 	public RatingFeedback(Integer id, String title, int rating, Integer feedbackId, Integer mechanismId) {
 		super();
 		this.id = id;

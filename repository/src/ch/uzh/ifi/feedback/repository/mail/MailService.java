@@ -49,7 +49,6 @@ import ch.uzh.ifi.feedback.repository.model.TextFeedback;
 public class MailService 
 {
 	private static final Log LOGGER = LogFactory.getLog(MailService.class);
-	
 	private CloseableHttpClient httpClient;
 	private MailClient mailClient;
 	private Gson gson;
@@ -84,14 +83,14 @@ public class MailService
 			
 			String textFeedbacksContent = "";
 			for(TextFeedback textFeedback : feedback.getTextFeedbacks()) {
-				textFeedbacksContent += "<br />Text Mechanismus (ID " + textFeedback.getMechanismId() + "): " + textFeedback.getText() + "<br />"; 
+				textFeedbacksContent += "<br />Text mechanism (ID " + textFeedback.getMechanismId() + "): " + textFeedback.getText() + "<br />";
 			}
 			
 			String ratingFeedbacksContent = "";
 			if(feedback.getRatingFeedbacks() != null) {
 				ratingFeedbacksContent += "<br />";
 				for(RatingFeedback ratingFeedback : feedback.getRatingFeedbacks()) {
-					ratingFeedbacksContent += "<br />Rating Mechanismus (ID " + ratingFeedback.getMechanismId() + "): " + ratingFeedback.getTitle() + ": " + ratingFeedback.getRating() + "<br />"; 
+					ratingFeedbacksContent += "<br />Rating mechanism (ID " + ratingFeedback.getMechanismId() + "): " + ratingFeedback.getTitle() + ": " + ratingFeedback.getRating() + "<br />";
 				}
 			}
 			
@@ -99,7 +98,7 @@ public class MailService
 			if(feedback.getCategoryFeedbacks() != null) {
 				categoryFeedbacksContent += "<br />";
 				for(CategoryFeedback categoryFeedback : feedback.getCategoryFeedbacks()) {
-					categoryFeedbacksContent += "<br />Category Mechanismus: " + categoryFeedback.getText() + " " + categoryFeedback.getParameterId() + "<br />"; 
+					categoryFeedbacksContent += "<br />Category mechanism: " + categoryFeedback.getText() + " " + categoryFeedback.getParameterId() + "<br />";
 				}
 			}
 			
@@ -109,10 +108,12 @@ public class MailService
 					attachments.add(new Attachment(screenshotFeedback.getPath(), screenshotFeedback.getName() + "." + screenshotFeedback.getFileExtension()));
 				}
 			}
+
+			String contextInformation = String.format("<br />Resolution: %s<br />User Agent: %s<br />", feedback.getContextInformation().getResolution(), feedback.getContextInformation().getUserAgent());
 			
 			String divider = "---------------------------------------";
-			String message = String.format("Hello,<br />A new feedback was sent for application %d: <br /><br /> %s %s %s %s %s<br /><br />Best regards,<br />Feedback Gathering", 
-					applicationId, divider, textFeedbacksContent, ratingFeedbacksContent, categoryFeedbacksContent, divider);
+			String message = String.format("Hello,<br />A new feedback was sent for application %d: <br /><br /> %s %s %s %s %s %s<br /><br />Best regards,<br />Feedback Gathering",
+					applicationId, divider, textFeedbacksContent, ratingFeedbacksContent, categoryFeedbacksContent, contextInformation, divider);
 					
 			mailClient.sendEmail(to, "New Feedback for Application " + applicationId, message, attachments);
 			LOGGER.info("E-Mail sent to " + to + " for application ID " + applicationId);
