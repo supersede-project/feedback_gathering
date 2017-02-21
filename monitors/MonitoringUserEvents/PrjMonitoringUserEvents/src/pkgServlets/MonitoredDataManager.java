@@ -82,7 +82,7 @@ public class MonitoredDataManager extends HttpServlet {
 	    
 	    //Fragment for the IF
 	    DataProviderProxy proxy = new DataProviderProxy();
-	    proxy.ingestData(jsonObj, "snf");
+	    proxy.ingestData(jsonObj, "6d670f20-3fa4-4f8d-9f7f-3001c66d885a");
 		
 	    //If there is response - specify the code for responding to the client
 	    response.setContentType("text/xml");
