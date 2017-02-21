@@ -27,11 +27,13 @@ export class AttachmentView implements MechanismView {
     getFeedbacks():AttachmentFeedback[] {
         let attachmentFeedbacks = [];
 
-        for (var i = 0; i < this.getFiles().length; i++) {
-            var file = this.getFiles()[i];
-            let partName = 'attachment' + i;
-            var attachmentFeedback = new AttachmentFeedback(partName, file.name, file.type, this.attachmentMechanism.id);
-            attachmentFeedbacks.push(attachmentFeedback);
+        if(this.getFiles() !== null) {
+            for (var i = 0; i < this.getFiles().length; i++) {
+                var file = this.getFiles()[i];
+                let partName = 'attachment' + i;
+                var attachmentFeedback = new AttachmentFeedback(partName, file.name, file.type, this.attachmentMechanism.id);
+                attachmentFeedbacks.push(attachmentFeedback);
+            }
         }
 
         return attachmentFeedbacks;

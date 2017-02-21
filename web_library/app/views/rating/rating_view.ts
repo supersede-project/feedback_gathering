@@ -24,6 +24,6 @@ export class RatingView implements MechanismView {
     }
 
     getFeedback():RatingFeedback {
-        return new RatingFeedback(this.ratingMechanism.currentRatingValue, this.ratingMechanism.id);
+        return new RatingFeedback(this.ratingMechanism.currentRatingValue, this.ratingMechanism.id, this.ratingMechanism.getParameterValue('title'));
     }
 }

@@ -1,5 +1,5 @@
-import {Parameter} from './parameters/parameter';
 import {Mechanism} from './mechanism';
+import {Parameter} from '../parameters/parameter';
 
 
 export class RatingMechanism extends Mechanism {
@@ -24,7 +24,6 @@ export class RatingMechanism extends Mechanism {
             callback: function (currentRating, $el) {
                 var oldRatingValue = ratingMechanismObject.currentRatingValue;
                 ratingMechanismObject.currentRatingValue = currentRating;
-
                 if(oldRatingValue === currentRating) {
                     $el.starRating('setRating', 0);
                     ratingMechanismObject.currentRatingValue = 0;

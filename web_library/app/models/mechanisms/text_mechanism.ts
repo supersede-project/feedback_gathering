@@ -1,4 +1,4 @@
-import {Parameter} from './parameters/parameter';
+import {Parameter} from '../parameters/parameter';
 import {Mechanism} from './mechanism';
 import {ParameterValuePropertyPair} from '../parameters/parameter_value_property_pair';
 import {ParameterInterface} from '../parameters/parameter_interface';

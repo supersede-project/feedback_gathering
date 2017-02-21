@@ -20,6 +20,7 @@ import {ContextInformation} from '../../models/feedbacks/context_information';
 import {FeedbackService} from '../../services/feedback_service';
 import {PageNotification} from '../page_notification';
 import {GeneralConfiguration} from '../../models/configurations/general_configuration';
+import {CategoryMechanism} from '../../models/mechanisms/category_mechanism';
 
 
 /**
@@ -74,6 +75,10 @@ export class FeedbackDialogView extends DialogView {
             this.mechanismViews.push(new AttachmentView(<AttachmentMechanism>attachmentMechanism, this.dialogId, this.dialogContext.distPath));
         }
 
+        for (var categoryMechanism of this.configuration.getMechanismConfig(mechanismTypes.categoryType)) {
+            this.mechanismViews.push(new CategoryView(<CategoryMechanism>categoryMechanism));
+        }
+
         this.addEvents(this.dialogId, this.configuration);
     }
 
@@ -94,6 +99,9 @@ export class FeedbackDialogView extends DialogView {
         container.find('button.submit-feedback').unbind().on('click', function (event) {
             event.preventDefault();
             event.stopPropagation();
+            var submitButton= $(this);
+            submitButton.prop('disabled', true);
+            submitButton.text(submitButton.text() + '...');
 
             // TODO adjust
             // validate anyway before sending
@@ -108,6 +116,9 @@ export class FeedbackDialogView extends DialogView {
                     feedbackDialogView.prepareFormData(configuration, function (formData) {
                         feedbackDialogView.sendFeedback(feedbackService, formData, generalConfiguration);
                     });
+                } else {
+                    submitButton.prop('disabled', false);
+                    submitButton.text(submitButton.text().replace(/...$/,''));
                 }
             } else {
                 feedbackDialogView.prepareFormData(configuration, function (formData) {
@@ -129,8 +140,12 @@ export class FeedbackDialogView extends DialogView {
             } else {
                 $('.server-response').addClass('success').text(i18n.t('general.success_message'));
             }
+            $('button.submit-feedback').prop('disabled', false);
+            $('button.submit-feedback').text($('button.submit-feedback').text().replace(/...$/,''));
         }, function(error) {
             $('.server-response').addClass('error').text('Failure: ' + JSON.stringify(error));
+            $('button.submit-feedback').prop('disabled', false);
+            $('button.submit-feedback').text($('button.submit-feedback').text().replace(/...$/,''));
         });
     }
 
@@ -138,7 +153,6 @@ export class FeedbackDialogView extends DialogView {
      * Creates the multipart form data containing the data of the active mechanisms.
      */
     prepareFormData(configuration:ConfigurationInterface, callback?:any) {
-        // TODO refactoring: the mechanism views should return their feedback data
         var dialogView = this;
         var formData = new FormData();
         var audioMechanisms = configuration.getMechanismConfig(mechanismTypes.audioType);

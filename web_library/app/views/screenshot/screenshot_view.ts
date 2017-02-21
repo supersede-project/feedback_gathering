@@ -1,7 +1,7 @@
 import {ScreenshotViewDrawing} from './screenshot_view_drawing';
 import {DataHelper} from '../../js/helpers/data_helper';
-import '../../js/lib/screenshot/html2canvas_5_0_3.min.js';
-import '../../js/lib/screenshot/html2canvas_5_0_3.svg.min.js';
+import '../../js/lib/screenshot/html2canvas_5_0_4.min.js';
+import '../../js/lib/screenshot/html2canvas_5_0_4.svg.min.js';
 import '../../js/lib/screenshot/rgbcolor.js';
 import '../../js/lib/screenshot/StackBlur.js';
 import '../../js/lib/screenshot/canvg.js';
