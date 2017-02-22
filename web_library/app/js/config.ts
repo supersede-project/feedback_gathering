@@ -26,10 +26,10 @@ export const configurationTypes = {
 export const cookieNames = {
     lastTriggered: 'lastTriggered'
 };
-export const apiEndpointOrchestrator = 'http://localhost:8080/';
+export const apiEndpointOrchestrator = 'https://supersede-develop.atosresearch.eu:8443/';
 export const applicationPath = 'orchestrator/feedback/{lang}/applications/';
-export const apiEndpointRepository = 'http://localhost:8081/';
+export const apiEndpointRepository = 'https://supersede-develop.atosresearch.eu:8443/';
 export const feedbackPath = "feedback_repository/{lang}/applications/{applicationId}/feedbacks";
-export const applicationId = 7;
-export const applicationName = 'energiesparkonto.de';
-export const feedbackObjectTitle = 'Feedback';
+export const applicationId = 20;
+export const applicationName = 'Senercon';
+export const feedbackObjectTitle = 'Feedback Senercon';
