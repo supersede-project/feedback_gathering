@@ -10,7 +10,7 @@ export class CategoryMechanism extends Mechanism {
     }
 
     getOptions(): Parameter[] {
-        if(this.getParameterValue('options') !== null && this.getParameterValue('options').length > 0
+        if(this.getParameterValue('options') !== null && this.getParameterValue('options') !== undefined && this.getParameterValue('options').length > 0
             && this.getParameterValue('options').filter(option => option.key !== 'defaultOption').length > 0) {
             return this.getParameterValue('options').filter(option => option.key !== 'defaultOption').sort((option1, option2) => option1.createdAt > option2.createdAt);
         } else {
@@ -19,7 +19,7 @@ export class CategoryMechanism extends Mechanism {
     }
 
     getDefaultOptions(): Parameter {
-        if(this.getParameterValue('options') !== null && this.getParameterValue('options').length > 0
+        if(this.getParameterValue('options') !== null && this.getParameterValue('options') !== undefined && this.getParameterValue('options').length > 0
             && this.getParameterValue('options').filter(option => option.key === 'defaultOption').length > 0) {
             return this.getParameterValue('options').filter(option => option.key === 'defaultOption')[0];
         } else {

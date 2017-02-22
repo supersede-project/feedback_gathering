@@ -211,6 +211,7 @@ gulp.task('build.dev', function(done) {
 gulp.task('build.prod', function(done) {
     runSequence(
         'clean',
+        'build.js.dev',
         'configure',
         'webpack.prod',
         'copy-jquery',
