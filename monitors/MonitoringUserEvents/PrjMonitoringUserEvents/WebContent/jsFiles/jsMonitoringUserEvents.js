@@ -2,7 +2,7 @@
  * JavaScript for monitoring user events - HTML events
  */
 
-var req; var confID = 1;
+var req; var confID = 1; 
 
 //Listener function
 function fnEventListener(userID){
@@ -52,7 +52,11 @@ function fnSendMonitoredData(idOutput, confID, userID, sElement, sIDElement, sEv
 	
 	var vInfoEvents = "OutputID=" + idOutput + "&ConfigurationID=" + confID + "&UserID=" + userID + "&Element=" + sElement + "&idElement=" + sIDElement + "&EventType=" + sEventType + "&Text=" + sElementText + "&Value=" + sElementValue + "&Timestamp=" + Date();
 	
-	var url = "MonitoredDataManager?" + vInfoEvents;
+	//Local
+	//var url = "MonitoredDataManager?" + vInfoEvents;
+	
+	//Remoto
+	var url = "http://supersede.es.atos.net:8081/PrjMonitoringUserEvents/MonitoredDataManager?" + vInfoEvents;
 	
 	fnStartRequest();
 
@@ -78,6 +82,8 @@ function fnCallback() {
 		}
 	}
 }
+
+
 
 
 
