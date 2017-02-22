@@ -1,7 +1,7 @@
 import {ScreenshotViewDrawing} from './screenshot_view_drawing';
 import {DataHelper} from '../../js/helpers/data_helper';
-import '../../js/lib/screenshot/html2canvas_5_0_4.js';
-import '../../js/lib/screenshot/html2canvas_5_0_4.svg.js';
+import '../../js/lib/screenshot/html2canvas_5_0_4.min.js';
+import '../../js/lib/screenshot/html2canvas_5_0_4.svg.min.js';
 import '../../js/lib/screenshot/rgbcolor.js';
 import '../../js/lib/screenshot/StackBlur.js';
 import '../../js/lib/screenshot/canvg.js';
@@ -86,17 +86,45 @@ export class ScreenshotView implements MechanismView {
         }
     }
 
+    replaceOptionsWithTemporarySpans() {
+        jQuery('select').each(function() {
+            var selectText = jQuery(this).find('option:selected').text();
+
+            jQuery(this).data('original-color', jQuery(this).css('color'));
+            jQuery(this).css('color', 'transparent');
+            var textOverlay = jQuery('<span class="html2canvas-option">' + selectText + '</span>');
+            textOverlay.css('position', 'absolute')
+                .css('top', jQuery(this).offset().top - 30 + 'px')
+                .css('left', jQuery(this).offset().left + 10 + 'px')
+                .css('width', 'auto')
+                .css('height', '25px')
+                .css('display', 'block')
+                .css('z-index', 9000);
+            jQuery('body').append(textOverlay);
+        });
+    }
+
+    removeTemporarySpans() {
+        jQuery('.html2canvas-option').remove();
+        jQuery('select').each(function() {
+            var originalColor = jQuery(this).data('original-color');
+            jQuery(this).css('color', originalColor);
+        });
+    }
+
     generateScreenshot() {
         this.hideElements();
         var myThis = this;
 
         setTimeout(function() {
             myThis.svgToCanvas();
+            myThis.replaceOptionsWithTemporarySpans();
 
             html2canvas(myThis.elementToCapture, {
                 useCORS: true,
                 onrendered: function (canvas) {
                     setTimeout(function() {
+                        myThis.removeTemporarySpans();
                         myThis.showElements();
                         myThis.showAllCanvasElements();
                         myThis.canvas = canvas;
