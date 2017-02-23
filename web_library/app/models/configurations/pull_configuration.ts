@@ -18,6 +18,42 @@ export class PullConfiguration extends Configuration {
     }
 
     /**
+     * Initializes the pull mechanisms and triggers the feedback mechanisms if necessary.
+     *
+     * @param alreadyTriggeredOne
+     *  Boolean that indicated whether a pull configuration has already been triggered.
+     *
+     * @returns boolean
+     *  Whether the pull configuration was triggered or not.
+     */
+    checkTrigger(alreadyTriggeredOne:boolean = false):boolean {
+        // triggers on elements
+        if (this.generalConfiguration.getParameterValue('userAction')) {
+            var userAction = this.generalConfiguration.getParameterValue('userAction');
+            var actionName = userAction.filter(element => element.key === 'actionName').length > 0 ? userAction.filter(element => element.key === 'actionName')[0].value : '';
+            var actionElement = userAction.filter(element => element.key === 'actionElement').length > 0 ? userAction.filter(element => element.key === 'actionElement')[0].value : '';
+            var actionOnlyOncePerPageLoad = userAction.filter(element => element.key === 'actionOnlyOncePerPageLoad').length > 0 ? userAction.filter(element => element.key === 'actionOnlyOncePerPageLoad')[0].value : true;
+
+            if (actionOnlyOncePerPageLoad) {
+                jQuery('' + actionElement).one(actionName, function () {
+                    // TODO showPullDialog(configuration, generalConfiguration);
+                })
+            } else {
+                jQuery('' + actionElement).on(actionName, function () {
+                    // TODO showPullDialog(configuration, generalConfiguration);
+                })
+            }
+        }
+
+        // direct triggers
+        if (!alreadyTriggeredOne && this.shouldGetTriggered()) {
+            // TODO showPullDialog(this, generalConfiguration);
+            return true;
+        }
+        return false;
+    };
+
+    /**
      * Decides whether the mechanisms associated with this configuration should get activated or not.
      *
      * @returns {boolean} true if the mechanismes should get triggered.

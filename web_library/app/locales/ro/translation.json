@@ -1,0 +1,38 @@
+﻿{
+  "general": {
+    "review_feedback": "",
+    "review_feedback_title": "",
+    "feedback_submit_button_title": "Trimiteți feedback",
+    "mandatory_default_text": "Vă rugăm să completați câmpul de text",
+    "back": "",
+    "validation_max_length_error_message": "Lungimea maximă a câmpului este {{ maxLength }}. Ați introdus {{ currentLength }} rânduri.",
+    "validation_invalid_email": "Adresă de e-mail invalidă",
+    "discard_feedback": "Revocare",
+    "cancel": "Revocare",
+    "dialog_close_button_title": "Micșorare",
+    "success_message": "Feedback-ul dvs. a fost trimis cu succes.",
+    "error_message": "A apărut o eroare la salvarea feedback-ului."
+  },
+  "text": {
+    "text_type_text_clear": ""
+  },
+  "screenshot": {
+    "take_screenshot": "",
+    "take_new_screenshot": "",
+    "actions": "",
+    "stickers": "",
+    "rectangle": "",
+    "blacken": "",
+    "circle": "",
+    "arrow": "",
+    "freehand": "",
+    "crop": "",
+    "text": "",
+    "undo": "",
+    "remove": ""
+  },
+  "rating": {
+    "review_title": ""
+  }
+}
+

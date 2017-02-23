@@ -16,6 +16,8 @@ import ch.uzh.ifi.feedback.library.rest.validation.IValidator;
 import ch.uzh.ifi.feedback.library.rest.validation.ValidationException;
 import ch.uzh.ifi.feedback.library.rest.validation.ValidationResult;
 import ch.uzh.ifi.feedback.library.transaction.TransactionManager;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import static java.util.Arrays.asList;
 
@@ -41,7 +43,7 @@ public abstract class RestController<T extends IDbItem<T>> {
 	
 	private Gson gson; 
 	private int createdObjectId;
-	
+
 	public RestController(IDbService<T> dbService, IValidator<T> validator, HttpServletRequest request, HttpServletResponse response)
 	{
 		this.dbService = dbService;
@@ -59,7 +61,6 @@ public abstract class RestController<T extends IDbItem<T>> {
 	 * @throws Exception
 	 */
 	public T GetById(int id) throws Exception {
-		
 		return dbService.GetById(id);
 	}
 	
@@ -96,7 +97,7 @@ public abstract class RestController<T extends IDbItem<T>> {
 		TransactionManager.withTransaction((con) -> {
 			createdObjectId = dbService.Insert(con, object);
 		});
-		
+
         request.setAttribute(
 	             Key.get(Timestamp.class, Names.named("timestamp")).toString(),
 	             Timestamp.from(Instant.now()));
@@ -112,7 +113,6 @@ public abstract class RestController<T extends IDbItem<T>> {
 	 */
 	public T Update(T object) throws Exception
 	{
-		
 		Validate(object, true);
 		TransactionManager.withTransaction((con) -> {
 			dbService.Update(con, object);

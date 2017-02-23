@@ -57,22 +57,44 @@ export class Application {
 
         if(this.generalConfiguration.getParameterValue('mandatoryLabelStyle') === 'bold') {
             var mandatoryLabelStyle = this.getCssStyle([
-                new ParameterValuePropertyPair('mandatoryLabelStyle', 'font-weight'),
+                new ParameterValuePropertyPair('mandatoryLabelStyle', 'font-weight')
             ]);
         } else {
             var mandatoryLabelStyle = this.getCssStyle([
-                new ParameterValuePropertyPair('mandatoryLabelStyle', 'font-style'),
+                new ParameterValuePropertyPair('mandatoryLabelStyle', 'font-style')
             ]);
         }
 
+        var generalLabelStyle = '';
+        if(this.generalConfiguration.getParameterValue('labelFontColor')) {
+            generalLabelStyle += ' ' + this.getCssStyle([
+                    new ParameterValuePropertyPair('labelFontColor', 'color')
+                ]);
+        }
+        if(this.generalConfiguration.getParameterValue('labelFontSize')) {
+            generalLabelStyle += ' ' + this.getCssStyle([
+                    new ParameterValuePropertyPair('labelFontSize', 'font-size')
+                ]);
+        }
+        if(this.generalConfiguration.getParameterValue('labelFontWeight')) {
+            generalLabelStyle += ' ' + this.getCssStyle([
+                    new ParameterValuePropertyPair('labelFontWeight', 'font-weight')
+                ]);
+        }
+
         return {
+            buttonRowStyle: this.generalConfiguration.getParameterValue('buttonRowStyle') || '',
             reviewButtonPosition: this.generalConfiguration.getParameterValue('reviewButtonPosition'),
             reviewStyle: reviewStyle,
             mandatorySign: this.generalConfiguration.getParameterValue('mandatorySign'),
             mandatoryLabelStyle: mandatoryLabelStyle,
             discardAsButton: this.generalConfiguration.getParameterValue('discardAsButton'),
+            discardClass: this.generalConfiguration.getParameterValue('discardClass') || '',
             submissionPageMessage: this.generalConfiguration.getParameterValue('submissionPageMessage'),
             labelPositioning: this.generalConfiguration.getParameterValue('labelPositioning') === 'top' ? '' : 'horizontal',
+            feedbackFormTitle: this.generalConfiguration.getParameterValue('feedbackFormTitle'),
+            generalLabelStyle: generalLabelStyle,
+            dialogTitle: this.generalConfiguration.getParameterValue('dialogTitle')
         };
     }
 

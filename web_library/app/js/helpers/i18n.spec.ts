@@ -3,7 +3,7 @@ import {I18nHelper} from './i18n';
 
 describe('i18n Helper', () => {
 
-    /* assumes that the only 'de' and 'en' are available */
+    //assumes that de and en are available, but ru not
     it('should determine the correct language depending on fallback and set language options', () => {
         var optionsBothAvailable = {
             'fallbackLang': 'de',
@@ -12,7 +12,7 @@ describe('i18n Helper', () => {
         };
         var langNotAvailable = {
             'fallbackLang': 'de',
-            'lang': 'it',
+            'lang': 'ru',
             'distPath': 'base/app/'
         };
 
@@ -20,4 +20,3 @@ describe('i18n Helper', () => {
         expect(I18nHelper.getLanguage(langNotAvailable)).toEqual('de');
     });
 });
-

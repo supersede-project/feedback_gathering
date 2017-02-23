@@ -46,7 +46,7 @@ describe('PushConfiguration object', () => {
     });
 
     it('should return the context for the view with the configuration data', () => {
-        var context = configuration.getContextForView();
+        var context = configuration.getContext();
 
         expect(context.dialogId).toEqual('pushConfiguration');
         expect(context.mechanisms.length).toBe(7);

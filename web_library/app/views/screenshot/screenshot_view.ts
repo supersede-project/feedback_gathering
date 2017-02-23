@@ -1,8 +1,14 @@
 import {ScreenshotViewDrawing} from './screenshot_view_drawing';
 import {DataHelper} from '../../js/helpers/data_helper';
-import '../../js/lib/screenshot/html2canvas.js';
+import '../../js/lib/screenshot/html2canvas_5_0_4.min.js';
+import '../../js/lib/screenshot/html2canvas_5_0_4.svg.min.js';
+import '../../js/lib/screenshot/rgbcolor.js';
+import '../../js/lib/screenshot/StackBlur.js';
+import '../../js/lib/screenshot/canvg.js';
 import {Mechanism} from '../../models/mechanisms/mechanism';
 import {CanvasState} from './canvas_state';
+import {ScreenshotFeedback} from '../../models/feedbacks/screenshot_feedback';
+import {MechanismView} from '../mechanism_view';
 
 const freehandDrawingMode:string = 'freehandDrawingMode';
 const rectDrawingMode:string = 'rectDrawingMode';
@@ -21,7 +27,7 @@ const textTypeObjectIdentifier:string = 'i-text';
 const cropperTypeObjectIdentifier:string = 'cropper';
 
 
-export class ScreenshotView {
+export class ScreenshotView implements MechanismView {
     screenshotMechanism:Mechanism;
     screenshotPreviewElement:JQuery;
     screenshotCaptureButton:JQuery;
@@ -49,6 +55,12 @@ export class ScreenshotView {
     defaultStrokeWidth:number = 3;
     selectedObjectControls:any;
     hasBordersAndControls:boolean = true;
+    panning:boolean = false;
+    blockPanning:boolean = false;
+    canvasMovementX:number = 0;
+    canvasMovementY:number = 0;
+    currentObjectInToolbar:any = null;
+    croppingRect:any;
 
     constructor(screenshotMechanism:Mechanism, screenshotPreviewElement:JQuery, screenshotCaptureButton:JQuery,
                 elementToCapture:JQuery, container:JQuery, distPath:string, elementsToHide?:any, hasBordersAndControls?:boolean) {
@@ -74,57 +86,92 @@ export class ScreenshotView {
         }
     }
 
+    replaceOptionsWithTemporarySpans() {
+        jQuery('select').each(function() {
+            var selectText = jQuery(this).find('option:selected').text();
+
+            jQuery(this).data('original-color', jQuery(this).css('color'));
+            jQuery(this).css('color', 'transparent');
+            var textOverlay = jQuery('<span class="html2canvas-option">' + selectText + '</span>');
+            textOverlay.css('position', 'absolute')
+                .css('top', jQuery(this).offset().top - 30 + 'px')
+                .css('left', jQuery(this).offset().left + 10 + 'px')
+                .css('width', 'auto')
+                .css('height', '25px')
+                .css('display', 'block')
+                .css('z-index', 9000);
+            jQuery('body').append(textOverlay);
+        });
+    }
+
+    removeTemporarySpans() {
+        jQuery('.html2canvas-option').remove();
+        jQuery('select').each(function() {
+            var originalColor = jQuery(this).data('original-color');
+            jQuery(this).css('color', originalColor);
+        });
+    }
+
     generateScreenshot() {
         this.hideElements();
         var myThis = this;
 
-        html2canvas(this.elementToCapture, {
-            useCORS: true,
-            onrendered: function (canvas) {
-                myThis.showElements();
-                myThis.canvas = canvas;
-                myThis.screenshotPreviewElement.empty().append(canvas);
-                myThis.screenshotPreviewElement.show();
-                jQuery('.screenshot-preview canvas').attr('id', canvasId);
+        setTimeout(function() {
+            myThis.svgToCanvas();
+            myThis.replaceOptionsWithTemporarySpans();
 
-                var windowRatio = myThis.elementToCapture.width() / myThis.elementToCapture.height();
+            html2canvas(myThis.elementToCapture, {
+                useCORS: true,
+                onrendered: function (canvas) {
+                    setTimeout(function() {
+                        myThis.removeTemporarySpans();
+                        myThis.showElements();
+                        myThis.showAllCanvasElements();
+                        myThis.canvas = canvas;
+                        myThis.screenshotPreviewElement.empty().append(canvas);
+                        myThis.screenshotPreviewElement.show();
+                        jQuery('.screenshot-preview canvas').attr('id', canvasId);
 
-                // save the canvas content as imageURL
-                var data = canvas.toDataURL("image/png");
-                myThis.context = canvas.getContext("2d");
-                myThis.canvasOriginalWidth = canvas.width;
-                myThis.canvasOriginalHeight = canvas.height;
+                        var windowRatio = myThis.elementToCapture.width() / myThis.elementToCapture.height();
 
-                myThis.canvasWidth = myThis.screenshotPreviewElement.width() - 2;
-                myThis.canvasHeight = (myThis.screenshotPreviewElement.width() / windowRatio) -2;
+                        // save the canvas content as imageURL
+                        var data = canvas.toDataURL("image/png");
+                        myThis.context = canvas.getContext("2d");
+                        myThis.canvasOriginalWidth = canvas.width;
+                        myThis.canvasOriginalHeight = canvas.height;
 
-                jQuery(canvas).prop('width', myThis.canvasWidth);
-                jQuery(canvas).prop('height', myThis.canvasHeight);
+                        myThis.canvasWidth = myThis.screenshotPreviewElement.width() - 2;
+                        myThis.canvasHeight = (myThis.screenshotPreviewElement.width() / windowRatio) - 2;
 
-                var img = new Image();
-                myThis.canvasState = img;
-                myThis.screenshotCanvas = canvas;
-                img.src = data;
-                img.onload = function () {
-                    myThis.context.drawImage(img, 0, 0, img.width, img.height, 0, 0, canvas.width, canvas.height);
-                };
+                        jQuery(canvas).prop('width', myThis.canvasWidth);
+                        jQuery(canvas).prop('height', myThis.canvasHeight);
 
-                myThis.initFabric(img, canvas);
-                myThis.initFreehandDrawing();
-                myThis.initStickers();
-                myThis.initScreenshotOperations();
-                myThis.customizeControls();
+                        var img = new Image();
+                        myThis.canvasState = img;
+                        myThis.screenshotCanvas = canvas;
+                        img.src = data;
+                        img.onload = function () {
+                            myThis.context.drawImage(img, 0, 0, img.width, img.height, 0, 0, canvas.width, canvas.height);
+                        };
 
-                let screenshotCaptureButtonActiveText = myThis.screenshotCaptureButton.data('active-text');
-                myThis.screenshotCaptureButton.text(screenshotCaptureButtonActiveText);
-            }
-        });
+                        myThis.initFabric(img, canvas);
+                        myThis.initFreehandDrawing();
+                        myThis.initStickers();
+                        myThis.initScreenshotOperations();
+                        myThis.customizeControls();
+                        myThis.initZoom();
+
+                        let screenshotCaptureButtonActiveText = myThis.screenshotCaptureButton.data('active-text');
+                        myThis.screenshotCaptureButton.text(screenshotCaptureButtonActiveText);
+                    }, 200);
+                }
+            });
+        }, 200);
     }
 
     initFabric(img, canvas) {
         var myThis = this;
         this.fabricCanvas = new fabric.Canvas(canvasId);
-        this.determineCanvasScaleForRetinaDisplay();
 
         var pageScreenshotCanvas = new fabric.Image(img, {width: canvas.width, height: canvas.height});
 
@@ -136,6 +183,7 @@ export class ScreenshotView {
         this.selectedObjectControls.hide();
 
         myThis.fabricCanvas.on('object:selected', function (e) {
+            myThis.blockPanning = true;
             var selectedObject = e.target;
 
             selectedObject.bringToFront();
@@ -154,6 +202,15 @@ export class ScreenshotView {
             } else {
                 myThis.selectedObjectControls.find('.text-size').hide();
             }
+
+            // prevent form submission on enter press
+            myThis.selectedObjectControls.find('.text-size').on('keydown', function(event) {
+                if(event.keyCode == 13) {
+                    event.preventDefault();
+                    return false;
+                }
+                return true;
+            });
 
             if (selectedObject.get('type') === 'path-group') {
                 for (var path of selectedObject.paths) {
@@ -255,6 +312,7 @@ export class ScreenshotView {
             selectedObjectControls.hide();
             selectedObjectControls.find('.delete').off();
             selectedObjectControls.find('.color').off();
+            myThis.blockPanning = false;
         });
 
         myThis.fabricCanvas.on('object:added', function (object) {
@@ -276,20 +334,40 @@ export class ScreenshotView {
         });
     }
 
-    determineCanvasScaleForRetinaDisplay() {
-        if (window.devicePixelRatio !== 1) {
-            var screenshotPreviewCanvas = jQuery('.screenshot-preview canvas');
-            var height = screenshotPreviewCanvas.height();
-            var width = screenshotPreviewCanvas.width();
-            var canvas = this.fabricCanvas.getElement();
+    initZoom() {
+        var myThis = this;
+        this.container.find('img.zoom-in').on('click', function() {
+            myThis.fabricCanvas.zoomToPoint(new fabric.Point(myThis.fabricCanvas.width / 2, myThis.fabricCanvas.height / 2), myThis.fabricCanvas.getZoom() * 1.1);
+        });
+        this.container.find('img.zoom-out').on('click', function() {
+            myThis.fabricCanvas.zoomToPoint(new fabric.Point(myThis.fabricCanvas.width / 2, myThis.fabricCanvas.height / 2), myThis.fabricCanvas.getZoom() / 1.1);
+        });
 
-            // TODO get this working!!!
-            canvas.setAttribute('width', window.devicePixelRatio * width);
-            canvas.setAttribute('height', window.devicePixelRatio * height);
-            canvas.setAttribute('style', 'width="' + width + 'px"; height="' + height + 'px";');
+        this.fabricCanvas.on('mouse:up', function (e) {
+            myThis.panning = false;
+        });
 
-            canvas.getContext('2d').scale(window.devicePixelRatio, window.devicePixelRatio);
-        }
+        this.fabricCanvas.on('mouse:down', function (e) {
+            myThis.panning = true;
+        });
+
+        this.fabricCanvas.on('mouse:move', function (e) {
+            if (!myThis.croppingIsActive && !myThis.freehandActive && !myThis.blockPanning && myThis.panning && e && e.e) {
+                var delta = new fabric.Point(e.e.movementX, e.e.movementY);
+                myThis.fabricCanvas.relativePan(delta);
+
+                myThis.canvasMovementX += e.e.movementX;
+                myThis.canvasMovementY += e.e.movementY;
+            }
+        });
+
+        // retina and co
+        setTimeout(function() {
+            if (window.devicePixelRatio !== 1) {
+                var zoom = 1/window.devicePixelRatio;
+                myThis.fabricCanvas.setZoom(zoom);
+            }
+        }, 500);
     }
 
     initCrop() {
@@ -303,7 +381,7 @@ export class ScreenshotView {
         var mousey = 0;
         var crop = false;
 
-        var croppingRect = new fabric.Rect({
+        myThis.croppingRect = new fabric.Rect({
             fill: 'transparent',
             originX: 'left',
             originY: 'top',
@@ -317,31 +395,42 @@ export class ScreenshotView {
 
         this.croppingIsActive = true;
 
-        croppingRect.visible = false;
-        this.fabricCanvas.add(croppingRect);
+        myThis.croppingRect.visible = false;
+        this.fabricCanvas.add(myThis.croppingRect);
 
         this.fabricCanvas.on("mouse:down", function (event) {
             if (!myThis.croppingIsActive) {
                 return;
             }
-            croppingRect.left = event.e.pageX - pos[0];
-            croppingRect.top = event.e.pageY - pos[1];
-            croppingRect.visible = true;
-            mousex = event.e.pageX;
-            mousey = event.e.pageY;
+
+            var p = {
+                x: event.e.pageX - myThis.screenshotPreviewElement.offset().left,
+                y: event.e.pageY - myThis.screenshotPreviewElement.offset().top
+            };
+            var invertedMatrix = fabric.util.invertTransform(myThis.fabricCanvas.viewportTransform);
+            var transformedP = fabric.util.transformPoint(p, invertedMatrix);
+
+            myThis.croppingRect.left = transformedP.x;
+            myThis.croppingRect.top = transformedP.y;
+
+            myThis.croppingRect.visible = true;
+            mousex = transformedP.x;
+            mousey = transformedP.y;
             crop = true;
-            myThis.fabricCanvas.bringToFront(croppingRect);
+            myThis.fabricCanvas.bringToFront(myThis.croppingRect);
         });
 
         this.fabricCanvas.on("mouse:move", function (event) {
             if (crop && myThis.croppingIsActive) {
-                if (event.e.pageX - mousex > 0) {
-                    croppingRect.width = event.e.pageX - mousex;
-                }
+                var p = {
+                    x: event.e.pageX - myThis.screenshotPreviewElement.offset().left,
+                    y: event.e.pageY - myThis.screenshotPreviewElement.offset().top
+                };
+                var invertedMatrix = fabric.util.invertTransform(myThis.fabricCanvas.viewportTransform);
+                var transformedP = fabric.util.transformPoint(p, invertedMatrix);
 
-                if (event.e.pageY - mousey > 0) {
-                    croppingRect.height = event.e.pageY - mousey;
-                }
+                myThis.croppingRect.width = transformedP.x - mousex;
+                myThis.croppingRect.height = transformedP.y - mousey;
             }
             myThis.fabricCanvas.renderAll();
         });
@@ -353,22 +442,28 @@ export class ScreenshotView {
         this.container.find('.screenshot-crop-cancel').show().on('click', function (e) {
             e.preventDefault();
             e.stopPropagation();
-            myThis.croppingIsActive = false;
-            jQuery(this).hide();
-            jQuery('.screenshot-crop-confirm').hide();
-            croppingRect.remove();
-            myThis.setCanvasObjectsMovement(false);
+            myThis.cancelCropping();
         });
 
         this.container.find('.screenshot-crop-confirm').show().off().on('click', function (e) {
             e.preventDefault();
             e.stopPropagation();
-            myThis.cropTheCanvas(croppingRect);
+            myThis.cropTheCanvas(myThis.croppingRect);
             myThis.croppingIsActive = false;
             jQuery(this).hide();
             jQuery('.screenshot-crop-cancel').hide();
             myThis.setCanvasObjectsMovement(false);
         });
+    }
+
+    cancelCropping() {
+        this.croppingIsActive = false;
+        this.container.find('.screenshot-crop-cancel').hide();
+        jQuery('.screenshot-crop-confirm').hide();
+        if(this.croppingRect) {
+            this.croppingRect.remove();
+        }
+        this.setCanvasObjectsMovement(false);
     }
 
     cropTheCanvas(croppingRect) {
@@ -382,6 +477,7 @@ export class ScreenshotView {
         var croppedLeft = croppingRect.left + 1;
         var croppWidth = croppingRect.width - 2;
         var croppHeight = croppingRect.height - 2;
+
         croppingRect.remove();
         canvas.renderAll.bind(canvas);
 
@@ -460,11 +556,14 @@ export class ScreenshotView {
     }
 
     enableFreehandDrawing() {
+        this.cancelCropping();
+        this.disableCurrentObjectInToolbar();
         var freehandControls = jQuery('.freehand-controls');
         this.fabricCanvas.isDrawingMode = true;
-        jQuery('.screenshot-operations .freehand').css('border-bottom', '1px solid black');
+        jQuery('.screenshot-operations .freehand').css('border-bottom', '2px solid black');
         freehandControls.show();
         this.freehandActive = true;
+        this.blockPanning = true;
     }
 
     disableFreehandDrawing() {
@@ -473,10 +572,115 @@ export class ScreenshotView {
         this.fabricCanvas.isDrawingMode = false;
         freehandControls.hide();
         this.freehandActive = false;
+        this.blockPanning = false;
+    }
+
+    disableCurrentObjectInToolbar() {
+        if(this.currentObjectInToolbar) {
+            this.currentObjectInToolbar.css('border-bottom', 'none');
+            this.currentObjectInToolbar = null;
+        }
     }
 
     initStickers() {
         var myThis = this;
+
+        myThis.container.find('.sticker-source').on('click', function() {
+            myThis.disableFreehandDrawing();
+            myThis.cancelCropping();
+            if(myThis.currentObjectInToolbar) {
+                myThis.currentObjectInToolbar.css('border-bottom', 'none');
+            }
+            if(myThis.currentObjectInToolbar !== null && myThis.currentObjectInToolbar.attr('id') === jQuery(this).attr('id')) {
+                myThis.currentObjectInToolbar = null;
+            } else {
+                myThis.currentObjectInToolbar = jQuery(this);
+                jQuery(this).css('border-bottom', '2px solid black');
+            }
+        });
+        myThis.screenshotPreviewElement.on('click', function(event) {
+           if(myThis.currentObjectInToolbar !== null) {
+                var sticker = myThis.currentObjectInToolbar;
+
+               var p = {x: event.pageX - $(this).offset().left, y: event.pageY - $(this).offset().top};
+               var invertedMatrix = fabric.util.invertTransform(myThis.fabricCanvas.viewportTransform);
+               var transformedP = fabric.util.transformPoint(p, invertedMatrix);
+
+               var offsetX = transformedP.x;
+               var offsetY = transformedP.y;
+
+               if (sticker.hasClass('text')) {
+                   myThis.addTextAnnotation(offsetX, offsetY);
+               } else if (sticker.hasClass('svg-sticker-source')) {
+                   fabric.loadSVGFromURL(sticker.attr('src'), function (objects, options) {
+                       var svgObject = fabric.util.groupSVGElements(objects, options);
+                       svgObject.set('left', offsetX);
+                       svgObject.set('top', offsetY);
+                       svgObject.set('hasBorders', myThis.hasBordersAndControls);
+                       svgObject.set('hasControls', myThis.hasBordersAndControls);
+                       svgObject.scale(3);
+                       myThis.fabricCanvas.add(svgObject).renderAll();
+                       myThis.fabricCanvas.setActiveObject(svgObject);
+                   });
+               } else if (sticker.hasClass('object-source')) {
+                   if (sticker.hasClass('arrow')) {
+                       myThis.addArrowToCanvas(offsetX, offsetY);
+                   } else if (sticker.hasClass('rect')) {
+                       var rect = new fabric.Rect({
+                           left: offsetX,
+                           top: offsetY,
+                           width: 50,
+                           height: 50,
+                           hasBorders: myThis.hasBordersAndControls,
+                           hasControls: myThis.hasBordersAndControls,
+                           type: 'fabricObject',
+                           stroke: defaultColor,
+                           strokeWidth: myThis.defaultStrokeWidth,
+                           lockUniScaling: false,
+                           fill: 'transparent'
+                       });
+                       myThis.fabricCanvas.add(rect).renderAll();
+                       myThis.fabricCanvas.setActiveObject(rect);
+                   } else if (sticker.hasClass('fillRect')) {
+                       var rect = new fabric.Rect({
+                           left: offsetX,
+                           top: offsetY,
+                           width: 50,
+                           height: 50,
+                           hasBorders: myThis.hasBordersAndControls,
+                           hasControls: myThis.hasBordersAndControls,
+                           type: 'fillRect',
+                           stroke: defaultColor,
+                           strokeWidth: myThis.defaultStrokeWidth,
+                           lockUniScaling: false,
+                           fill: defaultColor
+                       });
+                       myThis.fabricCanvas.add(rect).renderAll();
+                       myThis.fabricCanvas.setActiveObject(rect);
+                   } else if (sticker.hasClass('circle')) {
+                       var circle = new fabric.Circle({
+                           left: offsetX,
+                           top: offsetY,
+                           radius: 50,
+                           hasBorders: myThis.hasBordersAndControls,
+                           hasControls: myThis.hasBordersAndControls,
+                           startAngle: 0,
+                           type: 'fabricObject',
+                           endAngle: 2 * Math.PI,
+                           stroke: defaultColor,
+                           strokeWidth: myThis.defaultStrokeWidth,
+                           fill: 'transparent'
+                       });
+                       myThis.fabricCanvas.add(circle).renderAll();
+                       myThis.fabricCanvas.setActiveObject(circle);
+                   }
+               }
+               myThis.currentObjectInToolbar.css('border-bottom', 'none');
+               myThis.currentObjectInToolbar = null;
+           }
+        });
+
+
         myThis.container.find('.sticker-source').draggable({
             cursor: "crosshair",
             revert: "invalid",
@@ -499,16 +703,12 @@ export class ScreenshotView {
             drop: function (event:DragEvent, ui) {
                 var sticker = $(ui.helper);
 
-                if(myThis.fabricCanvas.getZoom() === 1) {
-                    var offsetY = event.pageY - $(this).offset().top;
-                    var offsetX = event.pageX - $(this).offset().left;
-                } else {
-                    var offsetY = 20;
-                    var offsetX = 20;
-                }
+                var p = {x: event.pageX - $(this).offset().left, y: event.pageY - $(this).offset().top};
+                var invertedMatrix = fabric.util.invertTransform(myThis.fabricCanvas.viewportTransform);
+                var transformedP = fabric.util.transformPoint(p, invertedMatrix);
 
-                offsetY -= 12;
-                offsetX -= 12;
+                var offsetX = transformedP.x;
+                var offsetY = transformedP.y;
 
                 if (sticker.hasClass('text')) {
                     myThis.addTextAnnotation(offsetX, offsetY);
@@ -614,6 +814,14 @@ export class ScreenshotView {
         }
     }
 
+    getFeedback(): ScreenshotFeedback {
+        return new ScreenshotFeedback(this.getPartName(), this.screenshotMechanism.id, this.getPartName(), 'png');
+    };
+
+    getPartName(): string {
+        return "screenshot" + this.screenshotMechanism.id;
+    }
+
     reset() {
         this.screenshotPreviewElement.hide();
         if (this.context) {
@@ -672,6 +880,8 @@ export class ScreenshotView {
             myThis.fabricCanvas.deactivateAll().renderAll();
             myThis.selectedObjectControls.hide();
             myThis.setCanvasObjectsMovement(true);
+            myThis.disableFreehandDrawing();
+            myThis.disableCurrentObjectInToolbar();
             myThis.initCrop();
         });
 
@@ -1051,6 +1261,61 @@ export class ScreenshotView {
         }
 
         return currentObjectColor;
+    }
+
+    /**
+     * Converts SVG objects (e.g. from highcharts lib) to a temporary canvas. This enables us to capture also SVG stuff
+     * on the screenshot.
+     */
+    svgToCanvas() {
+        var myThis = this;
+        var svgElements = this.elementToCapture.find('svg:not(.jq-star-svg)');
+
+        //replace all svgs with a temp canvas
+        svgElements.each(function() {
+            var canvas, xml;
+
+            // canvg doesn't cope very well with em font sizes so find the calculated size in pixels and replace it in the element.
+            jQuery.each(jQuery(this).find('[style*=em]'), function(index, el) {
+                jQuery(this).css('font-size', myThis.getStyle(el, 'font-size'));
+            });
+
+            canvas = document.createElement("canvas");
+            canvas.className = "screenShotTempCanvas";
+            //convert SVG into a XML string
+            xml = (new XMLSerializer()).serializeToString(this);
+
+            // Removing the name space as IE throws an error
+            xml = xml.replace(/xmlns=\"http:\/\/www\.w3\.org\/2000\/svg\"/, '');
+
+            //draw the SVG onto a canvas
+            canvg(canvas, xml);
+            jQuery(canvas).insertAfter(this);
+            //hide the SVG element
+            jQuery(this).attr('class', 'temp-hide');
+            jQuery(this).hide();
+        });
+    }
+
+    showAllCanvasElements() {
+        jQuery('.temp-hide').show();
+    }
+
+    getStyle(el, styleProp) {
+        let camelize = function (str) {
+            return str.replace(/\-(\w)/g, function(str, letter){
+                return letter.toUpperCase();
+            });
+        };
+
+        if (el.currentStyle) {
+            return el.currentStyle[camelize(styleProp)];
+        } else if (document.defaultView && document.defaultView.getComputedStyle) {
+            return document.defaultView.getComputedStyle(el,null)
+                .getPropertyValue(styleProp);
+        } else {
+            return el.style[camelize(styleProp)];
+        }
     }
 }
 

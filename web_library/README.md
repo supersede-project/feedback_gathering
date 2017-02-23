@@ -41,7 +41,7 @@ Add an entry to your hosts file (if you do not use localhost as the ServerName a
 
     127.0.0.1	localhost.web-library.dev
 
-You then have to define some application settings and the Orchestrator as well as the Repository endpoint in the app/js/config.ts:
+You then have to define some application settings and the Orchestrator as well as the Repository endpoint in the app/js/config.ts or in a configuration file under app/js/configurations:
 
     export const apiEndpointOrchestrator = 'http://example.com/';
     export const applicationPath = 'orchestrator/feedback/{lang}/applications/';
@@ -50,6 +50,18 @@ You then have to define some application settings and the Orchestrator as well a
     
     export const apiEndpointRepository = 'http://example.com/';
     export const feedbackPath = "feedback_repository/{lang}/feedbacks";
+
+Configure the project:
+
+```bash
+gulp configure --configuration=<configuration_name>
+```
+
+Use the filename as an argument, e.g.
+
+```bash
+gulp configure --configuration=default
+```  
 
 Compile all the .ts files to .js and bundle the project:
 
@@ -140,6 +152,9 @@ The following options are available to configure the jQuery plugin on the client
 |colorPickerCSSClass| Assign a custom css class to the color picker|
 |defaultStrokeWidth| Adjust the stroke width of the screenshot annotations|
 |dialogCSSClass|Assign a custom css class to the dialog|
+|dialogPositionMy|Point of the dialog that is used for positioning. E.g. if you want to use the top left corner of the dialog to align, you specify 'left top'.|
+|dialogPositionAt|Point of the target area defined in dialogPositionOf that is used for the positioning. E.g. if you want to align the dialogPositionMy point at the top of the target area with an offset of 30 pixels and centered horizontally, you specify 'center top+30' |
+|dialogPositionOf|Target area that is used for positioning. E.g. window, $('body'), $('html'), etc. |
 |distPath   |Path to the ressources that are used within the library (css, img, etc.)   |
 |fallbackLang|Language to be used if 'lang' is not available in the locales folder|
 |lang|Language to be used|

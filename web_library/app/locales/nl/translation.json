@@ -1,0 +1,38 @@
+﻿{
+  "general": {
+    "review_feedback": "",
+    "review_feedback_title": "",
+    "feedback_submit_button_title": "Feedback verzenden",
+    "mandatory_default_text": "Vul het tekstveld in",
+    "back": "",
+    "validation_max_length_error_message": "De maximale lengte van het veld is {{ maxLength }}. U hebt {{ currentLength }} tekens ingevoerd.",
+    "validation_invalid_email": "E-mailadres ongeldig",
+    "discard_feedback": "Annuleren",
+    "cancel": "Annuleren",
+    "dialog_close_button_title": "Minimaliseren",
+    "success_message": "Uw feedback is verzonden.",
+    "error_message": "Bij het opslaan van de feedback is een fout opgetreden."
+  },
+  "text": {
+    "text_type_text_clear": ""
+  },
+  "screenshot": {
+    "take_screenshot": "",
+    "take_new_screenshot": "",
+    "actions": "",
+    "stickers": "",
+    "rectangle": "",
+    "blacken": "",
+    "circle": "",
+    "arrow": "",
+    "freehand": "",
+    "crop": "",
+    "text": "",
+    "undo": "",
+    "remove": ""
+  },
+  "rating": {
+    "review_title": ""
+  }
+}
+

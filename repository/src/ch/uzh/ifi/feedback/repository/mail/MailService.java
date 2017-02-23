@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -36,13 +37,18 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
 import ch.uzh.ifi.feedback.library.mail.MailClient;
+import ch.uzh.ifi.feedback.library.mail.Attachment;
 import ch.uzh.ifi.feedback.library.mail.MailConfiguration;
+import ch.uzh.ifi.feedback.repository.model.CategoryFeedback;
+import ch.uzh.ifi.feedback.repository.model.Feedback;
+import ch.uzh.ifi.feedback.repository.model.RatingFeedback;
+import ch.uzh.ifi.feedback.repository.model.ScreenshotFeedback;
+import ch.uzh.ifi.feedback.repository.model.TextFeedback;
 
 @Singleton
 public class MailService 
 {
 	private static final Log LOGGER = LogFactory.getLog(MailService.class);
-	
 	private CloseableHttpClient httpClient;
 	private MailClient mailClient;
 	private Gson gson;
@@ -58,22 +64,59 @@ public class MailService
 				.create();
 	}
 	
-	public void NotifyOfFeedback(int applicationId, int feedbackId)
+	public void NotifyOfFeedback(int applicationId, Feedback feedback, String to)
 	{
-		if(!mailClient.isMailFeedbackEnabled())
+		if(!mailClient.isMailFeedbackEnabled()) {
+			LOGGER.info("NotifyOfFeedback");
 			return;
+		}
 		
 		try 
 		{
-			String to = getMailAddressForApplication(applicationId);
-			if(to == null)
-				return;
+			if(to == null) {
+				String configTo = getMailAddressForApplication(applicationId);
+				if(configTo == null) {
+					return;
+				}
+				to = configTo;
+			}
 			
-			String link = String.format("<a href='%s/en/applications/%d/feedbacks/%d'>feedback</a>", mailClient.getRepositoryUrl(), applicationId, feedbackId);
-			String message = String.format("A new %s was inserted for application %d.", link, applicationId);
+			String textFeedbacksContent = "";
+			for(TextFeedback textFeedback : feedback.getTextFeedbacks()) {
+				textFeedbacksContent += "<br />Text mechanism (ID " + textFeedback.getMechanismId() + "): " + textFeedback.getText() + "<br />";
+			}
+			
+			String ratingFeedbacksContent = "";
+			if(feedback.getRatingFeedbacks() != null) {
+				ratingFeedbacksContent += "<br />";
+				for(RatingFeedback ratingFeedback : feedback.getRatingFeedbacks()) {
+					ratingFeedbacksContent += "<br />Rating mechanism (ID " + ratingFeedback.getMechanismId() + "): " + ratingFeedback.getTitle() + ": " + ratingFeedback.getRating() + "<br />";
+				}
+			}
+			
+			String categoryFeedbacksContent = "";
+			if(feedback.getCategoryFeedbacks() != null) {
+				categoryFeedbacksContent += "<br />";
+				for(CategoryFeedback categoryFeedback : feedback.getCategoryFeedbacks()) {
+					categoryFeedbacksContent += "<br />Category mechanism: " + categoryFeedback.getText() + " " + categoryFeedback.getParameterId() + "<br />";
+				}
+			}
+			
+			List<Attachment> attachments = new ArrayList<Attachment>();
+			if(feedback.getScreenshotFeedbacks() != null) {
+				for(ScreenshotFeedback screenshotFeedback : feedback.getScreenshotFeedbacks()) {
+					attachments.add(new Attachment(screenshotFeedback.getPath(), screenshotFeedback.getName() + "." + screenshotFeedback.getFileExtension()));
+				}
+			}
+
+			String contextInformation = String.format("<br />Resolution: %s<br />User Agent: %s<br />", feedback.getContextInformation().getResolution(), feedback.getContextInformation().getUserAgent());
+			
+			String divider = "---------------------------------------";
+			String message = String.format("Hello,<br />A new feedback was sent for application %d: <br /><br /> %s %s %s %s %s %s<br /><br />Best regards,<br />Feedback Gathering",
+					applicationId, divider, textFeedbacksContent, ratingFeedbacksContent, categoryFeedbacksContent, contextInformation, divider);
 					
-			mailClient.sendEmail(to, "feedback for application " + applicationId, message);
-			
+			mailClient.sendEmail(to, "New Feedback for Application " + applicationId, message, attachments);
+			LOGGER.info("E-Mail sent to " + to + " for application ID " + applicationId);
 		}catch(MessagingException ex)
 		{
 			LOGGER.error("Error sending mail to the configured mail address: \n" + ex.getMessage());

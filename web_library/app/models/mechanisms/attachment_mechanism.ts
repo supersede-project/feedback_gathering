@@ -1,5 +1,5 @@
-import {Parameter} from './parameters/parameter';
 import {Mechanism} from './mechanism';
+import {Parameter} from '../parameters/parameter';
 
 
 export class AttachmentMechanism extends Mechanism {
@@ -11,7 +11,10 @@ export class AttachmentMechanism extends Mechanism {
 
     getContext():any {
         return {
-            title: this.getParameterValue('title')
+            title: this.getParameterValue('title'),
+            boxWidth: this.getParameterValue('boxWidth') || '100%',
+            boxPaddingLeft: this.getParameterValue('boxPaddingLeft') || '0',
+            boxPaddingRight: this.getParameterValue('boxPaddingRight') || '20px'
         }
     }
 }
