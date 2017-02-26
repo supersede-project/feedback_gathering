@@ -102,4 +102,12 @@ export class DialogView {
     resetDialog() {
 
     }
+
+    setTitle(title:string) {
+        this.dialogElement.dialog('option', 'title', title);
+    }
+
+    setModal(modal:boolean) {
+        this.dialogElement.dialog('option', 'modal', modal);
+    }
 }

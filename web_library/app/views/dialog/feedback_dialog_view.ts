@@ -21,6 +21,7 @@ import {FeedbackService} from '../../services/feedback_service';
 import {PageNotification} from '../page_notification';
 import {GeneralConfiguration} from '../../models/configurations/general_configuration';
 import {CategoryMechanism} from '../../models/mechanisms/category_mechanism';
+import {QuestionDialogView} from './question_dialog_view';
 
 
 /**
@@ -134,9 +135,20 @@ export class FeedbackDialogView extends DialogView {
 
         feedbackService.sendFeedback(url, formData, function(data) {
             feedbackDialogView.resetDialog();
-            if (generalConfiguration.getParameterValue('closeDialogOnSuccess')) {
+            if(generalConfiguration.getParameterValue('successDialog')) {
                 feedbackDialogView.close();
-                PageNotification.show(i18n.t('general.success_message'));
+                let dialogTemplate = require('../../templates/info_dialog.handlebars');
+                let successMessage = i18n.t('general.success_message');
+                let successDialogView = new QuestionDialogView('infoDialog', dialogTemplate, {'message': <string>successMessage});
+                successDialogView.setTitle('Info');
+                successDialogView.setModal(true);
+                successDialogView.addAnswerOption('#infoDialogOkay', function() {
+                    successDialogView.close();
+                });
+                successDialogView.open();
+            } else if (generalConfiguration.getParameterValue('closeDialogOnSuccess')) {
+                feedbackDialogView.close();
+                PageNotification.show(<string>i18n.t('general.success_message'));
             } else {
                 $('.server-response').addClass('success').text(i18n.t('general.success_message'));
             }

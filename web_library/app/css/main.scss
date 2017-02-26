@@ -7,7 +7,6 @@
 @import "attachment";
 @import "grid";
 
-
 #feedbackEntryPoint {
   position: fixed;
   top: 300px;
@@ -173,7 +172,7 @@
   }
 
   textarea.email-field {
-    overflow-y:hidden;
+    overflow-y: hidden;
   }
 
   .ui-dialog-titlebar {
@@ -672,7 +671,6 @@
   }
 }
 
-
 // top level element styles
 
 .feedback-library.feedback-container {
@@ -717,4 +715,17 @@
   background-color: #dff0d8;
   border-color: #d6e9c6;
   padding: 10px 40px;
+}
+
+.feedback-library#infoDialog {
+  min-width: 500px;
+
+  p.message {
+    margin-bottom: 25px;
+  }
+
+  button.button {
+    float: right;
+    margin-bottom: 5px;
+  }
 }
