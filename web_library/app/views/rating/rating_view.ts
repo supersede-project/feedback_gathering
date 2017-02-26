@@ -9,7 +9,6 @@ export class RatingView implements MechanismView {
         if (ratingMechanism.active) {
             var options = ratingMechanism.getRatingElementOptions();
             jQuery('' + this.getSelector()).starRating(options);
-            this.reset();
         }
     }
 
@@ -18,9 +17,8 @@ export class RatingView implements MechanismView {
     }
 
     reset() {
-        if (this.ratingMechanism.initialRating) {
-            jQuery('' + this.getSelector() + ' .jq-star:nth-child(' + this.ratingMechanism.initialRating + ')').click();
-        }
+        jQuery('' + this.getSelector()).starRating('setRating', this.ratingMechanism.getParameterValue('defaultRating'));
+        this.ratingMechanism.currentRatingValue = this.ratingMechanism.getParameterValue('defaultRating');
     }
 
     getFeedback():RatingFeedback {

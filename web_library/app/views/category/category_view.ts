@@ -55,6 +55,8 @@ export class CategoryView implements MechanismView {
     }
 
     reset() {
-        // TODO implement
+        jQuery(this.getInputSelector()).each(function () {
+           jQuery(this).prop('checked', false);
+        });
     }
 }
