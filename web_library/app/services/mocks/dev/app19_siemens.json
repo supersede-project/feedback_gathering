@@ -1,0 +1,419 @@
+[{
+  "id": 19,
+  "name": "Siemens Test Application",
+  "state": 1,
+  "generalConfiguration": {
+    "id": 55,
+    "parameters": [
+      {
+        "id": 425,
+        "key": "reviewActive",
+        "value": 1.0,
+        "language": "en",
+        "createdAt": "2016-11-09 09:53:18.0"
+      },
+      {
+        "id": 426,
+        "key": "mainColor",
+        "value": "#00ff00",
+        "language": "en",
+        "createdAt": "2016-11-09 09:53:18.0"
+      }
+    ],
+    "createdAt": "2016-11-09 09:53:18.0"
+  },
+  "configurations": [
+    {
+      "id": 38,
+      "type": "PUSH",
+      "mechanisms": [
+        {
+          "id": 52,
+          "configurationsId": 38,
+          "type": "TEXT_TYPE",
+          "active": true,
+          "order": 1,
+          "canBeActivated": false,
+          "parameters": [
+            {
+              "id": 427,
+              "key": "maxLength",
+              "value": 200.0,
+              "language": "en",
+              "createdAt": "2016-11-09 09:53:18.0"
+            },
+            {
+              "id": 448,
+              "key": "maxLengthVisible",
+              "value": 1.0,
+              "language": "en",
+              "createdAt": "2016-11-09 09:53:18.0"
+            },
+            {
+              "id": 438,
+              "key": "undoSteps",
+              "value": 1.0,
+              "language": "en",
+              "createdAt": "2016-11-09 09:53:18.0"
+            },
+            {
+              "id": 433,
+              "key": "labelFontSize",
+              "value": 15.0,
+              "language": "en",
+              "createdAt": "2016-11-09 09:53:18.0"
+            },
+            {
+              "id": 431,
+              "key": "labelPositioning",
+              "value": "left",
+              "language": "en",
+              "createdAt": "2016-11-09 09:53:18.0"
+            },
+            {
+              "id": 444,
+              "key": "fieldFontSize",
+              "value": 13.0,
+              "language": "en",
+              "createdAt": "2016-11-09 09:53:18.0"
+            },
+            {
+              "id": 441,
+              "key": "borderColor",
+              "value": "#000000",
+              "language": "en",
+              "createdAt": "2016-11-09 09:53:18.0"
+            },
+            {
+              "id": 437,
+              "key": "undoEnabled",
+              "value": 1.0,
+              "language": "en",
+              "createdAt": "2016-11-09 09:53:18.0"
+            },
+            {
+              "id": 432,
+              "key": "labelColor",
+              "value": "#353535",
+              "language": "en",
+              "createdAt": "2016-11-09 09:53:18.0"
+            },
+            {
+              "id": 428,
+              "key": "title",
+              "value": "Feedback",
+              "language": "en",
+              "createdAt": "2016-11-09 09:53:18.0"
+            },
+            {
+              "id": 440,
+              "key": "borderWidth",
+              "value": 2.0,
+              "language": "en",
+              "createdAt": "2016-11-09 09:53:18.0"
+            },
+            {
+              "id": 449,
+              "key": "validationRegex",
+              "value": ".",
+              "language": "en",
+              "createdAt": "2016-11-09 09:53:18.0"
+            },
+            {
+              "id": 435,
+              "key": "mandatory",
+              "value": 1.0,
+              "language": "en",
+              "createdAt": "2016-11-09 09:53:18.0"
+            },
+            {
+              "id": 447,
+              "key": "fieldBackgroundColor",
+              "value": "#ffffff",
+              "language": "en",
+              "createdAt": "2016-11-09 09:53:18.0"
+            },
+            {
+              "id": 446,
+              "key": "fieldTextAlignment",
+              "value": "left",
+              "language": "en",
+              "createdAt": "2016-11-09 09:53:18.0"
+            },
+            {
+              "id": 430,
+              "key": "label",
+              "value": "Please write about your problem",
+              "language": "en",
+              "createdAt": "2016-11-09 09:53:18.0"
+            },
+            {
+              "id": 443,
+              "key": "fieldHeight",
+              "value": 50.0,
+              "language": "en",
+              "createdAt": "2016-11-09 09:53:18.0"
+            },
+            {
+              "id": 450,
+              "key": "validateOnSkip",
+              "value": 1.0,
+              "language": "en",
+              "createdAt": "2016-11-09 09:53:18.0"
+            },
+            {
+              "id": 436,
+              "key": "mandatoryReminder",
+              "value": "Please fill in the text field",
+              "language": "en",
+              "createdAt": "2016-11-09 09:53:18.0"
+            },
+            {
+              "id": 429,
+              "key": "hint",
+              "value": "Please enter your feedback",
+              "language": "en",
+              "createdAt": "2016-11-09 09:53:18.0"
+            },
+            {
+              "id": 439,
+              "key": "clearInput",
+              "value": 0.0,
+              "language": "en",
+              "createdAt": "2016-11-09 09:53:18.0"
+            },
+            {
+              "id": 434,
+              "key": "textareaFontColor",
+              "value": "#7A7A7A",
+              "language": "en",
+              "createdAt": "2016-11-09 09:53:18.0"
+            },
+            {
+              "id": 445,
+              "key": "fieldFontType",
+              "value": "italic",
+              "language": "en",
+              "createdAt": "2016-11-09 09:53:18.0"
+            },
+            {
+              "id": 442,
+              "key": "fieldWidth",
+              "value": 200.0,
+              "language": "en",
+              "createdAt": "2016-11-09 09:53:18.0"
+            }
+          ],
+          "createdAt": "2016-11-09 09:53:18.0"
+        },
+        {
+          "id": 53,
+          "configurationsId": 38,
+          "type": "AUDIO_TYPE",
+          "active": false,
+          "order": 2,
+          "canBeActivated": false,
+          "parameters": [
+            {
+              "id": 451,
+              "key": "maxTime",
+              "value": 30.0,
+              "defaultValue": "30.0",
+              "editableByUser": false,
+              "language": "en",
+              "createdAt": "2016-11-09 09:53:18.0"
+            }
+          ],
+          "createdAt": "2016-11-09 09:53:18.0"
+        },
+        {
+          "id": 54,
+          "configurationsId": 38,
+          "type": "SCREENSHOT_TYPE",
+          "active": true,
+          "order": 3,
+          "canBeActivated": false,
+          "parameters": [
+            {
+              "id": 452,
+              "key": "title",
+              "value": "Title for screenshot feedback",
+              "language": "en",
+              "createdAt": "2016-11-09 09:53:18.0"
+            },
+            {
+              "id": 453,
+              "key": "defaultPicture",
+              "value": "lastScreenshot",
+              "defaultValue": "noImage",
+              "editableByUser": true,
+              "language": "en",
+              "createdAt": "2016-11-09 09:53:18.0"
+            }
+          ],
+          "createdAt": "2016-11-09 09:53:18.0"
+        },
+        {
+          "id": 55,
+          "configurationsId": 38,
+          "type": "RATING_TYPE",
+          "active": true,
+          "order": 4,
+          "canBeActivated": false,
+          "parameters": [
+            {
+              "id": 455,
+              "key": "ratingIcon",
+              "value": "star",
+              "language": "en",
+              "createdAt": "2016-11-09 09:53:18.0"
+            },
+            {
+              "id": 454,
+              "key": "title",
+              "value": "Rate your user experience on this page",
+              "language": "en",
+              "createdAt": "2016-11-09 09:53:18.0"
+            },
+            {
+              "id": 456,
+              "key": "maxRating",
+              "value": 5.0,
+              "language": "en",
+              "createdAt": "2016-11-09 09:53:18.0"
+            },
+            {
+              "id": 457,
+              "key": "defaultRating",
+              "value": 3.0,
+              "defaultValue": "0.0",
+              "editableByUser": false,
+              "language": "en",
+              "createdAt": "2016-11-09 09:53:18.0"
+            }
+          ],
+          "createdAt": "2016-11-09 09:53:18.0"
+        },
+        {
+          "id": 56,
+          "configurationsId": 38,
+          "type": "AUDIO_TYPE",
+          "active": false,
+          "order": 2,
+          "canBeActivated": false,
+          "parameters": [
+            {
+              "id": 458,
+              "key": "maxTime",
+              "value": 30.0,
+              "defaultValue": "30.0",
+              "editableByUser": false,
+              "language": "en",
+              "createdAt": "2016-10-05 12:50:56.0"
+            }
+          ],
+          "createdAt": "2016-11-09 09:53:18.0"
+        },
+        {
+          "id": 57,
+          "configurationsId": 38,
+          "type": "CATEGORY_TYPE",
+          "active": true,
+          "order": 5,
+          "canBeActivated": false,
+          "parameters": [
+            {
+              "id": 464,
+              "key": "options",
+              "value": [
+                {
+                  "id": 467,
+                  "key": "GENERAL_CATEGORY",
+                  "value": "General Feedback",
+                  "defaultValue": "en",
+                  "language": "en",
+                  "createdAt": "2016-11-09 09:53:18.0"
+                },
+                {
+                  "id": 465,
+                  "key": "BUG_CATEGORY",
+                  "value": "Bug",
+                  "defaultValue": "en",
+                  "language": "en",
+                  "createdAt": "2016-11-09 09:53:18.0"
+                },
+                {
+                  "id": 466,
+                  "key": "FEATURE_REQUEST_CATEGORY",
+                  "value": "Feature Request",
+                  "defaultValue": "en",
+                  "language": "en",
+                  "createdAt": "2016-11-09 09:53:18.0"
+                }
+              ],
+              "language": "en",
+              "createdAt": "2016-10-24 01:45:36.0"
+            },
+            {
+              "id": 463,
+              "key": "mandatoryReminder",
+              "value": "Please select at least one category",
+              "language": "en",
+              "createdAt": "2016-10-24 01:45:36.0"
+            },
+            {
+              "id": 462,
+              "key": "mandatory",
+              "value": 1.0,
+              "language": "en",
+              "createdAt": "2016-10-24 01:45:36.0"
+            },
+            {
+              "id": 459,
+              "key": "title",
+              "value": "Please choose one of the following categories",
+              "language": "en",
+              "createdAt": "2016-10-24 01:45:36.0"
+            },
+            {
+              "id": 460,
+              "key": "ownAllowed",
+              "value": 0.0,
+              "language": "en",
+              "createdAt": "2016-10-24 01:45:36.0"
+            },
+            {
+              "id": 461,
+              "key": "multiple",
+              "value": 0.0,
+              "language": "en",
+              "createdAt": "2016-10-24 01:45:36.0"
+            }
+          ],
+          "createdAt": "2016-11-09 09:53:18.0"
+        },
+        {
+          "id": 58,
+          "configurationsId": 38,
+          "type": "ATTACHMENT_TYPE",
+          "active": false,
+          "order": 7,
+          "canBeActivated": false,
+          "parameters": [
+            {
+              "id": 468,
+              "key": "title",
+              "value": "You can also attach some files to your feedback",
+              "language": "en",
+              "createdAt": "2016-10-24 01:45:37.0"
+            }
+          ],
+          "createdAt": "2016-11-09 09:53:18.0"
+        }
+      ],
+      "createdAt": "2016-11-09 09:53:18.0"
+    }
+  ],
+  "createdAt": "2016-11-09 09:53:18.0"
+}
+  ]

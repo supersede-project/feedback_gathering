@@ -11,7 +11,7 @@ import * as t from '../templates/t';
 import * as compare from '../templates/compare';
 import {FeedbackApp} from './feedback_app';
 import {MockBackend} from '../services/backends/mock_backend';
-var mockData = require('json!../services/mocks/dev/applications_mock.json');
+var mockData = require('json!../services/mocks/dev/app19_siemens.json');
 
 
 export declare var feedbackApp:FeedbackApp;
