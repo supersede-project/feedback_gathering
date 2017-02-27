@@ -9,6 +9,8 @@ import {Mechanism} from '../../models/mechanisms/mechanism';
 import {CanvasState} from './canvas_state';
 import {ScreenshotFeedback} from '../../models/feedbacks/screenshot_feedback';
 import {MechanismView} from '../mechanism_view';
+import IPoint = fabric.IPoint;
+import {clickBlocked} from '../dialog/dialog_view';
 
 const freehandDrawingMode:string = 'freehandDrawingMode';
 const rectDrawingMode:string = 'rectDrawingMode';
@@ -345,10 +347,14 @@ export class ScreenshotView implements MechanismView {
 
         this.fabricCanvas.on('mouse:up', function (e) {
             myThis.panning = false;
+            setTimeout(function () {
+                clickBlocked = false;
+            }, 100);
         });
 
         this.fabricCanvas.on('mouse:down', function (e) {
             myThis.panning = true;
+            clickBlocked = true;
         });
 
         this.fabricCanvas.on('mouse:move', function (e) {
@@ -403,12 +409,12 @@ export class ScreenshotView implements MechanismView {
                 return;
             }
 
-            var p = {
-                x: event.e.pageX - myThis.screenshotPreviewElement.offset().left,
-                y: event.e.pageY - myThis.screenshotPreviewElement.offset().top
-            };
+            let x = event.e.pageX - myThis.screenshotPreviewElement.offset().left,
+                y = event.e.pageY - myThis.screenshotPreviewElement.offset().top;
+            let point:IPoint = new fabric.Point(x, y);
+
             var invertedMatrix = fabric.util.invertTransform(myThis.fabricCanvas.viewportTransform);
-            var transformedP = fabric.util.transformPoint(p, invertedMatrix);
+            var transformedP = fabric.util.transformPoint(point, invertedMatrix);
 
             myThis.croppingRect.left = transformedP.x;
             myThis.croppingRect.top = transformedP.y;
@@ -422,12 +428,12 @@ export class ScreenshotView implements MechanismView {
 
         this.fabricCanvas.on("mouse:move", function (event) {
             if (crop && myThis.croppingIsActive) {
-                var p = {
-                    x: event.e.pageX - myThis.screenshotPreviewElement.offset().left,
-                    y: event.e.pageY - myThis.screenshotPreviewElement.offset().top
-                };
+                let x = event.e.pageX - myThis.screenshotPreviewElement.offset().left,
+                    y = event.e.pageY - myThis.screenshotPreviewElement.offset().top;
+                let point:IPoint = new fabric.Point(x, y);
+
                 var invertedMatrix = fabric.util.invertTransform(myThis.fabricCanvas.viewportTransform);
-                var transformedP = fabric.util.transformPoint(p, invertedMatrix);
+                var transformedP = fabric.util.transformPoint(point, invertedMatrix);
 
                 myThis.croppingRect.width = transformedP.x - mousex;
                 myThis.croppingRect.height = transformedP.y - mousey;
@@ -468,15 +474,13 @@ export class ScreenshotView implements MechanismView {
 
     cropTheCanvas(croppingRect) {
         this.container.find('.screenshot-draw-undo').show();
-
-        var canvas = this.fabricCanvas;
-        var objectsToMove = canvas.getObjects();
+        let canvas = this.fabricCanvas;
 
         // Cropping canvas according to cropper rectangle
-        var croppedTop = croppingRect.top + 1;
-        var croppedLeft = croppingRect.left + 1;
-        var croppWidth = croppingRect.width - 2;
-        var croppHeight = croppingRect.height - 2;
+        let croppedTop = croppingRect.top + 1;
+        let croppedLeft = croppingRect.left + 1;
+        let croppWidth = croppingRect.width - 2;
+        let croppHeight = croppingRect.height - 2;
 
         croppingRect.remove();
         canvas.renderAll.bind(canvas);
@@ -485,7 +489,7 @@ export class ScreenshotView implements MechanismView {
         this.updateCanvasState(croppedTop, croppedLeft, canvas.getZoom());
 
         // Shifting the elements accordingly
-        for (var i = 0; i < objectsToMove.length; i++) {
+        for (var i = 0; i < canvas.getObjects().length; i++) {
             canvas.getObjects()[i].left = canvas.getObjects()[i].left - croppedLeft;
             canvas.getObjects()[i].top = canvas.getObjects()[i].top - croppedTop;
             canvas.getObjects()[i].setCoords();

@@ -1,6 +1,7 @@
 import i18n = require('i18next');
 import {dialogOptions} from '../../js/config';
 
+export declare var clickBlocked:boolean;
 
 /**
  * Acts as a wrapper to the jquery UI dialog
@@ -37,7 +38,7 @@ export class DialogView {
     }
 
     setupCloseOnOutsideClick() {
-        let clickBlocked = false;
+        clickBlocked = false;
         var dialogView = this;
 
         // prevent dialog close on drag stop click
