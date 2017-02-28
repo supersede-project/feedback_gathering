@@ -15,6 +15,10 @@ cd ../googlePlay
 echo -e "\nCleaning and building Google Play Monitor...\n"
 ./gradlew clean build --refresh-dependencies
 
+cd ../HttpMonitoring
+echo -e "\nCleaning and building HTTP Monitor...\n"
+./gradlew clean build --refresh-dependencies
+
 cd ../MonitoringUserEvents/PrjMonitoringUserEvents
 echo -e "\nCleaning and building MonitoringUserEvents Monitor...\n"
 mvn clean package 
