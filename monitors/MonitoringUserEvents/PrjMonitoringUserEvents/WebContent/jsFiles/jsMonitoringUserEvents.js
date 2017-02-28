@@ -26,7 +26,8 @@ function fnGetEventInf(e, sEventType, userID){
     var target = e.target || e.srcElement,
         typeElement = target.nodeName || typeElement.innerText,
         idElement = target.id,
-        textElement = target.textContent,
+        //textElement = target.textContent,
+        textElement = "Text-Content",
         valueElement = target.value;
     
     fnSendMonitoredData(generateUUID(), confID, userID, typeElement, idElement, sEventType, textElement, valueElement);
@@ -50,19 +51,21 @@ function generateUUID(){
 function fnSendMonitoredData(idOutput, confID, userID, sElement, sIDElement, sEventType, sElementText, sElementValue){
 	var sCurrentURLPage = window.location.href;
 	
-	var vInfoEvents = "OutputID=" + idOutput + "&ConfigurationID=" + confID + "&UserID=" + userID + "&Element=" + sElement + "&idElement=" + sIDElement + "&EventType=" + sEventType + "&Text=" + sElementText + "&Value=" + sElementValue + "&Timestamp=" + Date();
+	//var vInfoEvents = "OutputID=" + idOutput + "&ConfigurationID=" + confID + "&UserID=" + userID + "&Element=" + sElement + "&idElement=" + sIDElement + "&EventType=" + sEventType + "&Text=" + sElementText + "&Value=" + sElementValue + "&Timestamp=" + Date();
 	
 	//Local
 	//var url = "MonitoredDataManager?" + vInfoEvents;
+	//var url = "MonitoredDataManager?";
 	
 	//Remoto
-	var url = "http://supersede.es.atos.net:8081/PrjMonitoringUserEvents/MonitoredDataManager?" + vInfoEvents;
+	//var url = "http://supersede.es.atos.net:8081/PrjMonitoringUserEvents/MonitoredDataManager?" + vInfoEvents;
+	var url = "http://supersede.es.atos.net:8081/PrjMonitoringUserEvents/MonitoredDataManager?";
 	
 	fnStartRequest();
 
 	req.onreadystatechange = fnCallback;
 	req.open("POST", url, true);
-	req.send(sCurrentURLPage);
+	req.send(confID + "&&" + userID + "&&" + Date() + "&&" + sIDElement + "&&" + sElementText + "&&" + sEventType + "&&" + sElementValue + "&&" + idOutput + "&&" + sCurrentURLPage + "&&" + sElement);
 }
 
 //Create the XMLHttpRequest object

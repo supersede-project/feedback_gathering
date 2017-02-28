@@ -58,23 +58,24 @@ public class MonitoredDataManager extends HttpServlet {
 		JSONObject jsonObj = new JSONObject();
 		JSONObject jsonObjAux = new JSONObject();
 		
-		jsonObjAux.put("idOutput", request.getParameter("OutputID"));
-		jsonObjAux.put("confId", request.getParameter("ConfigurationID"));
-		jsonObjAux.put("idUser", request.getParameter("UserID"));
-		
 		BufferedReader reader = request.getReader();
-	    String sCurrentURLPage = "";
-	    while ((sCurrentURLPage = reader.readLine()) != null)
+	    String sMonitoredData = "";
+	    String[] parts = null;
+	    while ((sMonitoredData = reader.readLine()) != null)
 	    {
-	    	jsonObjAux.put("currentPage", sCurrentURLPage);
+	    	parts = sMonitoredData.split("&&");
+	    	
+	    	jsonObjAux.put("confId", parts[0]);
+	    	jsonObjAux.put("idUser", parts[1]);
+	    	jsonObjAux.put("timeStamp", parts[2]);
+	    	jsonObjAux.put("idElement", parts[3]);
+	    	jsonObjAux.put("elementText", parts[4]);
+	    	jsonObjAux.put("eventType", parts[5]);
+	    	jsonObjAux.put("elementValue", parts[6]);
+	    	jsonObjAux.put("idOutput", parts[7]);
+	    	jsonObjAux.put("currentPage", parts[8]);
+	    	jsonObjAux.put("elementType", parts[9]);			
 	    }
-		
-		jsonObjAux.put("elementType", request.getParameter("Element"));
-		jsonObjAux.put("idElement", request.getParameter("idElement"));
-		jsonObjAux.put("eventType", request.getParameter("EventType"));
-		jsonObjAux.put("elementText", request.getParameter("Text"));
-		jsonObjAux.put("elementValue", request.getParameter("Value"));
-		jsonObjAux.put("timeStamp", request.getParameter("Timestamp"));
 		
 		jsonObj.put("HTMLEventsMonitoredData", jsonObjAux);
 	    
