@@ -21,7 +21,11 @@
  *******************************************************************************/
 package monitoring.model;
 
-public class MonitoringData {
+import org.json.JSONObject;
+
+import monitoring.model.MonitoringData;
+
+public class TwitterMonitoringData implements MonitoringData {
 	
 	private String id;
 	private String timeStamp;
@@ -29,7 +33,7 @@ public class MonitoringData {
 	private String author;
 	private String link;
 	
-	public MonitoringData(String id, String timeStamp, String message, String author, String link) {
+	public TwitterMonitoringData(String id, String timeStamp, String message, String author, String link) {
 		this.id = id;
 		this.timeStamp = timeStamp;
 		this.message = message;
@@ -75,6 +79,17 @@ public class MonitoringData {
 
 	public void setLink(String link) {
 		this.link = link;
+	}
+
+	@Override
+	public JSONObject toJsonObject() {
+		JSONObject json = new JSONObject();
+		json.put("id", this.id);
+		json.put("timeStamp", this.timeStamp);
+		json.put("message", this.message);
+		json.put("author", this.author);
+		json.put("link", this.link);
+		return json;
 	}
 
 }

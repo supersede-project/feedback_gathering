@@ -50,23 +50,6 @@ repositories {
 
 // In this section you declare the dependencies for your production and test code
 dependencies {
-    // The production code uses the SLF4J logging API at compile time
-    compile 'org.slf4j:slf4j-api:1.7.21'
-    compile("eu.supersede.if:eu.supersede.if.api:0.3.0-SNAPSHOT"){changing = true} 
-    
-    compile 'log4j:log4j:1.2.17'
-
-    // Declare the dependency for your favourite test framework you want to use in your tests.
-    // TestNG is also supported by the Gradle Test task. Just change the
-    // testCompile dependency to testCompile 'org.testng:testng:6.8.1' and add
-    // 'test.useTestNG()' to your build script.
-    testCompile 'junit:junit:4.12'
-
-	// https://mvnrepository.com/artifact/org.json/json
-	compile group: 'org.json', name: 'json', version: '20160212'
-
-	// https://mvnrepository.com/artifact/org.codehaus.jackson/jackson-jaxrs
-	compile group: 'org.codehaus.jackson', name: 'jackson-jaxrs', version: '1.9.13'
 	
 	// https://mvnrepository.com/artifact/org.twitter4j/twitter4j-core
 	compile group: 'org.twitter4j', name: 'twitter4j-core', version: '4.0.4'
@@ -75,10 +58,7 @@ dependencies {
 	// https://mvnrepository.com/artifact/org.twitter4j/twitter4j-async
 	compile group: 'org.twitter4j', name: 'twitter4j-async', version: '4.0.4'
 	
-	// https://mvnrepository.com/artifact/org.glassfish.jersey.containers/jersey-container-servlet-core
-	compile group: 'org.glassfish.jersey.containers', name: 'jersey-container-servlet-core', version: '2.23.1'
-	// https://mvnrepository.com/artifact/org.glassfish.jersey.core/jersey-common
-	compile group: 'org.glassfish.jersey.core', name: 'jersey-common', version: '2.23.1'
+	compile project(':monitoring')
 	
 }
 
@@ -86,7 +66,4 @@ configurations.all {
         //Avoids conflict: SL4J Multiple bindings were found on the class path
         exclude group: "org.slf4j", module: "slf4j-log4j12"
         exclude group: "javax.ws.rs", module: "jsr311-api"
-        // check for updates every build
-        resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
-        resolutionStrategy.cacheDynamicVersionsFor 0, 'seconds'
 }

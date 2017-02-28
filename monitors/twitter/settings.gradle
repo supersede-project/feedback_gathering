@@ -17,3 +17,6 @@ include 'services:webservice'
 */
 
 rootProject.name = 'twitterAPI'
+
+include ':monitoring'
+project(':monitoring').projectDir = new File(settingsDir, '../../monitoring')

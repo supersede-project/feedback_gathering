@@ -19,16 +19,41 @@
  * Initially developed in the context of SUPERSEDE EU project
  * www.supersede.eu
  *******************************************************************************/
-package monitoring.services;
+package monitoring.model;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import monitoring.model.MonitoringParams;
 
-public interface ToolInterface {
-		
-	public void addConfiguration(MonitoringParams params, int configurationId) throws Exception;
+public class TwitterMonitoringParams extends MonitoringParams {
 	
-	public void deleteConfiguration() throws Exception;
+	private String keywordExpression;
+	private List<String> accounts;
 	
-	public void updateConfiguration(MonitoringParams params) throws Exception;
+	public TwitterMonitoringParams() {
+		accounts = new ArrayList<>();
+	}
+
+	public String getKeywordExpression() {
+		return keywordExpression;
+	}
+
+	public void setKeywordExpression(String keywordExpression) {
+		this.keywordExpression = keywordExpression;
+	}
+
+	public List<String> getAccounts() {
+		return accounts;
+	}
+
+	public void setAccounts(List<String> accounts) {
+		this.accounts = accounts;
+	}
 	
+	public void addAcount(String account) {
+		this.accounts.add(account);
+	}
+	
+
 }
