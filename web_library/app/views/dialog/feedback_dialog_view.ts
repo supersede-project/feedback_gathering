@@ -43,6 +43,11 @@ export class FeedbackDialogView extends DialogView {
         var myThis = this,
             dialogContainer = jQuery('#' + this.dialogId);
         super.initDialog();
+        this.dialogElement.dialog('option', 'position', {
+            my: this.dialogContext.dialogPositionMy,
+            at: this.dialogContext.dialogPositionAt,
+            of: this.dialogContext.dialogPositionOf
+        });
 
         dialogContainer.find('.discard-feedback').on('click', function () {
             myThis.discardFeedback();

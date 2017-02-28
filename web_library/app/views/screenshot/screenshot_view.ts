@@ -115,6 +115,7 @@ export class ScreenshotView implements MechanismView {
     }
 
     generateScreenshot() {
+        var scrollPosition = this.container.offset().top;
         this.hideElements();
         var myThis = this;
 
@@ -126,6 +127,11 @@ export class ScreenshotView implements MechanismView {
                 useCORS: true,
                 onrendered: function (canvas) {
                     setTimeout(function() {
+                        console.log(myThis.container.offset().top);
+                        jQuery('html, body').animate({
+                            scrollTop: scrollPosition - 85
+                        }, 0);
+
                         myThis.removeTemporarySpans();
                         myThis.showElements();
                         myThis.showAllCanvasElements();
