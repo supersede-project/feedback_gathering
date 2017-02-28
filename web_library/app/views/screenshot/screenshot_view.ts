@@ -506,9 +506,15 @@ export class ScreenshotView implements MechanismView {
 
         // Shifting the elements accordingly
         for (var i = 0; i < canvas.getObjects().length; i++) {
-            canvas.getObjects()[i].left = canvas.getObjects()[i].left * factorX - croppedLeft;
-            canvas.getObjects()[i].top = canvas.getObjects()[i].top * factorY - croppedTop;
-            canvas.getObjects()[i].setCoords();
+            if(canvas.getObjects()[i].type === 'image') {
+                canvas.getObjects()[i].left = canvas.getObjects()[i].left * factorX - croppedLeft;
+                canvas.getObjects()[i].top = canvas.getObjects()[i].top * factorY - croppedTop;
+                canvas.getObjects()[i].setCoords();
+            } else {
+                canvas.getObjects()[i].left = canvas.getObjects()[i].left - croppedLeft;
+                canvas.getObjects()[i].top = canvas.getObjects()[i].top - croppedTop;
+                canvas.getObjects()[i].setCoords();
+            }
         }
 
         canvas.setWidth(croppWidth * factor - 1);
