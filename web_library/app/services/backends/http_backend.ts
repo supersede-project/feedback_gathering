@@ -32,8 +32,10 @@ export class HttpBackend implements Backend {
 
         jQuery.ajax({
             url: url,
-            async: true,
+            crossDomain: true,
             dataType: 'json',
+            cache: false,
+            contentType: "application/json; charset=utf-8;",
             type: 'GET',
             success: function (data) {
                 callback(data);
