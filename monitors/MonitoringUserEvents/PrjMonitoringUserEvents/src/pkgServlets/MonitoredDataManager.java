@@ -20,7 +20,10 @@ import java.io.BufferedReader;
 @WebServlet("/MonitoredDataManager")
 public class MonitoredDataManager extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	private static DataProviderProxy proxy;
        
+//	private DataProviderProxy proxy;
+	
     /**
      * @see HttpServlet#HttpServlet()
      */
@@ -28,6 +31,24 @@ public class MonitoredDataManager extends HttpServlet {
         super();
         // TODO Auto-generated constructor stub
     }
+    
+    public static DataProviderProxy getProxy() {
+    	
+    	if (proxy == null) {
+    		proxy = new DataProviderProxy();
+    	}
+    	
+    	return proxy;
+    }
+
+//    public DataProviderProxy getProxy() {
+//    	
+//    	if (proxy == null) {
+//    		proxy = new DataProviderProxy();
+//    	}
+//    	
+//    	return proxy;
+//    }
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
@@ -55,6 +76,11 @@ public class MonitoredDataManager extends HttpServlet {
 	
 	public void generateResponse(HttpServletRequest request, HttpServletResponse response) throws IOException, JSONException
 	{	
+		//If there is response - specify the code for responding to the client
+	    response.setContentType("text/xml");
+		response.setHeader("Cache-Control", "no-cache");
+		response.getWriter().write("<test>"+ "sucessfull" +"</test>");
+
 		JSONObject jsonObj = new JSONObject();
 		JSONObject jsonObjAux = new JSONObject();
 		
@@ -81,14 +107,13 @@ public class MonitoredDataManager extends HttpServlet {
 	    
 	    System.out.println(jsonObj);
 	    
-	    //Fragment for the IF
-	    DataProviderProxy proxy = new DataProviderProxy();
+	    //Fragment for the IF	//Without singleton pattern
+	    //DataProviderProxy proxy = new DataProviderProxy();
+	    //proxy.ingestData(jsonObj, "6d670f20-3fa4-4f8d-9f7f-3001c66d885a");
+	    
+	    //Fragment for the IF	//With singleton pattern
+	    DataProviderProxy proxy = getProxy();
 	    proxy.ingestData(jsonObj, "6d670f20-3fa4-4f8d-9f7f-3001c66d885a");
-		
-	    //If there is response - specify the code for responding to the client
-	    response.setContentType("text/xml");
-		response.setHeader("Cache-Control", "no-cache");
-		response.getWriter().write("<test>"+ "sucessfull" +"</test>");
 	}
 	
 	/**** with json simle
