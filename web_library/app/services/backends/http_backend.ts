@@ -32,6 +32,7 @@ export class HttpBackend implements Backend {
 
         jQuery.ajax({
             url: url,
+            async: true,
             dataType: 'json',
             type: 'GET',
             success: function (data) {
