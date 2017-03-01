@@ -27,8 +27,12 @@ export const cookieNames = {
     lastTriggered: 'lastTriggered'
 };
 export const apiEndpointOrchestrator = 'https://supersede-develop.atosresearch.eu:8443/';
+//export const apiEndpointOrchestrator = 'http://supersede.es.atos.net:8081/';
+
 export const applicationPath = 'orchestrator/feedback/{lang}/applications/';
 export const apiEndpointRepository = 'https://supersede-develop.atosresearch.eu:8443/';
+//export const apiEndpointRepository = 'http://supersede.es.atos.net:8081/';
+
 export const feedbackPath = "feedback_repository/{lang}/applications/{applicationId}/feedbacks";
 export const applicationId = 20;
 export const applicationName = 'Senercon';

@@ -37,6 +37,8 @@ public class FeedbackController extends RestController<Feedback>{
 	private MailService mailService;
 	private DataProviderIntegratorRepository dataProviderIntegratorRepository;
 	private Gson gson;
+	private final int corePoolSize = 20;
+	private ScheduledThreadPoolExecutor executor;
 	
 	@Inject
 	public FeedbackController(
@@ -50,7 +52,13 @@ public class FeedbackController extends RestController<Feedback>{
 		this.dataProviderIntegratorRepository = new DataProviderIntegratorRepository();
 		this.gson = new GsonBuilder().setPrettyPrinting().setDateFormat("yyyy-MM-dd hh:mm:ss.S").create();
 	}
-	
+
+	@Override
+	protected void finalize() throws Throwable {
+		super.finalize();
+		resetScheduler();
+	}
+
 	@Path("/{lang}/applications/{application_id}/feedbacks")
 	@GET
 	@Authenticate(service = UserAuthenticationService.class, scope = "APPLICATION")
@@ -75,7 +83,7 @@ public class FeedbackController extends RestController<Feedback>{
 	public Feedback InsertFeedback(Feedback feedback) throws Exception {
 		Feedback created =  super.Insert(feedback);
 
-		ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(20);
+		executor = new ScheduledThreadPoolExecutor(corePoolSize);
 		executor.execute(new AsyncEmailNotification(created));
 		executor.execute(new AsyncDataProviderIntegrator(created));
 		
@@ -102,7 +110,13 @@ public class FeedbackController extends RestController<Feedback>{
 		}
 
 		public void run() {
-			mailService.NotifyOfFeedback(feedback.getApplicationId(), feedback, null);
+			try {
+				mailService.NotifyOfFeedback(feedback.getApplicationId(), feedback, null);
+				resetScheduler();
+			} catch (Exception e) {
+				resetScheduler();
+				e.printStackTrace();
+			}
 		}
 	}
 
@@ -123,9 +137,28 @@ public class FeedbackController extends RestController<Feedback>{
 				String json = gson.toJson(feedback);
 				JSONObject jsonData = new JSONObject(json);
 				dataProviderIntegratorRepository.ingestJsonData(jsonData, topicIdFeedback);
+				resetScheduler();
 			} catch (Exception e) {
+				resetScheduler();
 				e.printStackTrace();
 			}
+		}
+	}
+
+	private void resetScheduler() {
+		if (executor != null && !executor.isTerminating()) {
+			// Cancel scheduled but not started task, and avoid new ones
+			executor.shutdown();
+
+			// Wait for the running tasks
+			try {
+				executor.awaitTermination(20, TimeUnit.SECONDS);
+			} catch (InterruptedException ex) {
+				LOGGER.warn("Interupt during awating termination", ex);
+			}
+
+			// Interrupt the threads and shutdown the scheduler
+			executor.shutdownNow();
 		}
 	}
 }
