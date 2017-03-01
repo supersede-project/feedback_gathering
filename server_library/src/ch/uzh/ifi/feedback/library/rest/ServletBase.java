@@ -107,11 +107,10 @@ public abstract class ServletBase extends HttpServlet {
         response.setContentType("application/json; charset=utf-8");            
         //response.setCharacterEncoding("UTF-8");
         
-        response.setHeader("Access-Control-Allow-Origin", "http://dev.energiesparkonto.de");
+        response.setHeader("Access-Control-Allow-Origin", "*");
         response.setHeader("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE,OPTIONS");
 		response.setHeader("Access-Control-Allow-Headers", "Content-Type");
 		response.setHeader("Connection", "keep-alive");
-		response.setHeader("X-Frame-Options", "SAMEORIGIN");
 		//response.setHeader("Access-Control-Allow-Headers", "Authorization, Content-Type, Access-Control-Allow-Headers");
         response.setHeader("Access-Control-Max-Age", "86400");
 	}
