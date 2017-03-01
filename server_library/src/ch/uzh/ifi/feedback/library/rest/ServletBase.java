@@ -110,6 +110,7 @@ public abstract class ServletBase extends HttpServlet {
         response.setHeader("Access-Control-Allow-Origin", "*");
         response.setHeader("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE,OPTIONS");
 		response.setHeader("Connection", "keep-alive");
+		response.setHeader("Access-Control-Allow-Credential", "true");
 		response.setHeader("Access-Control-Allow-Headers", "Authorization, X-Requested-With, Content-Type, Access-Control-Allow-Headers, Accept");
         response.setHeader("Access-Control-Max-Age", "86400");
 	}
