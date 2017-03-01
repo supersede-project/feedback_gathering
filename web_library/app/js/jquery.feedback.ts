@@ -33,11 +33,11 @@ export var feedbackPluginModule = function ($, window, document) {
             $.getScript('https://supersede-develop.atosresearch.eu/web_library/senercon/dist/jquery.ui.droppable.js');
         }
         let button = this;
+        var options = $.extend({}, $.fn.feedbackPlugin.defaults, options);
+        var mockBackend:MockBackend = new MockBackend(mockData);
 
         I18nHelper.initializeI18n(options);
         I18nHelper.getLanguage(options, function(language) {
-            var options = $.extend({}, $.fn.feedbackPlugin.defaults, options);
-            var mockBackend:MockBackend = new MockBackend(mockData);
             var applicationService = new ApplicationService(options.apiEndpointOrchestrator, language); //, mockBackend);
             feedbackApp = new FeedbackApp(applicationService, options.applicationId, options, button);
             feedbackApp.loadApplicationConfiguration();
