@@ -50,7 +50,7 @@ export var feedbackPluginModule = function ($, window, document) {
         'color': '#fff',
         'lang': 'de',
         'backgroundColor': '#7c9009',
-        'fallbackLang': 'en',
+        'fallbackLang': 'de',
         'distPath': 'dist/',
         'userId': '',
         'dialogCSSClass': 'feedback-dialog',
