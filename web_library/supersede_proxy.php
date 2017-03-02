@@ -1,6 +1,6 @@
 <?php
-    $jsonurl = "https://supersede-develop.atosresearch.eu:8443/". $_GET['url'];
-    //$jsonurl = "http://supersede.es.atos.net:8081/". $_GET['url'];
+    //$jsonurl = "https://supersede-develop.atosresearch.eu:8443/". $_GET['url'];
+    $jsonurl = "http://supersede.es.atos.net:8280/" . $_GET['url'];
 
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $jsonurl);
