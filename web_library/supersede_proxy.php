@@ -8,12 +8,6 @@
     curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 7);
     curl_setopt($ch, CURLOPT_TIMEOUT, 7);
 
-    if(isset($_GET['method']) && $_GET['method'] == 'POST') {
-        curl_setopt($ch, CURLOPT_POST, true);
-
-    }
-
-
     $result = curl_exec($ch);
 
     if( !$result ) {

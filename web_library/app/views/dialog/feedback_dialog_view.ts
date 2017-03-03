@@ -30,6 +30,7 @@ import {QuestionDialogView} from './question_dialog_view';
 export class FeedbackDialogView extends DialogView {
     mechanismViews:MechanismView[];
     pageNavigation:PageNavigation;
+    paginationContainer:PaginationContainer;
     audioView:AudioView;
 
     constructor(public dialogId:string, public template:any, public configuration:Configuration, public context:any, public openCallback?:() => void,
@@ -37,6 +38,7 @@ export class FeedbackDialogView extends DialogView {
         super(dialogId, template, context, openCallback, closeCallback);
         this.dialogContext = $.extend({}, this.dialogContext, this.configuration.getContext());
         this.initMechanismViews();
+        this.configurePageNavigation();
     }
 
     initDialog() {
@@ -88,9 +90,9 @@ export class FeedbackDialogView extends DialogView {
         this.addEvents(this.dialogId, this.configuration);
     }
 
-    configurePageNavigation(configuration:Configuration, dialogId:string) {
-        this.pageNavigation = new PageNavigation(configuration, $('#' + dialogId));
-        new PaginationContainer($('#' + dialogId + '.feedback-container .pages-container'), this.pageNavigation);
+    configurePageNavigation() {
+        this.pageNavigation = new PageNavigation(this.configuration, jQuery('#' + this.dialogId));
+        this.paginationContainer = new PaginationContainer(jQuery('#' + this.dialogId + '.feedback-container .pages-container'), this.pageNavigation);
     }
 
     addEvents(containerId, configuration:ConfigurationInterface) {
@@ -139,9 +141,9 @@ export class FeedbackDialogView extends DialogView {
         var url = this.context.apiEndpointRepository + 'feedback_repository/' + this.context.lang + '/applications/' + this.context.applicationId + '/feedbacks/';
 
         feedbackService.sendFeedback(url, formData, function(data) {
-            feedbackDialogView.resetDialog();
             if(generalConfiguration && generalConfiguration.getParameterValue('successDialog')) {
-                feedbackDialogView.close();
+                feedbackDialogView.discardFeedback();
+                feedbackDialogView.paginationContainer.showFirstPage();
                 let dialogTemplate = require('../../templates/info_dialog.handlebars');
                 let successMessage = i18n.t('general.success_message');
                 let successDialogView = new QuestionDialogView('infoDialog', dialogTemplate, {'message': <string>successMessage});
@@ -152,9 +154,11 @@ export class FeedbackDialogView extends DialogView {
                 });
                 successDialogView.open();
             } else if (generalConfiguration && generalConfiguration.getParameterValue('closeDialogOnSuccess')) {
-                feedbackDialogView.close();
+                feedbackDialogView.discardFeedback();
+                feedbackDialogView.paginationContainer.showFirstPage();
                 PageNotification.show(<string>i18n.t('general.success_message'));
             } else {
+                feedbackDialogView.resetDialog();
                 $('.server-response').addClass('success').text(i18n.t('general.success_message'));
             }
             $('button.submit-feedback').prop('disabled', false);

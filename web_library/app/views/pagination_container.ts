@@ -22,12 +22,12 @@ export class PaginationContainer {
         this.pageNavigation = pageNavigation;
         this.pages = this.container.find('.feedback-page');
         this.showFirstPage();
-        this.activePage = 1;
         this.addNavigationEvents();
     }
 
     showFirstPage() {
         this.pages.hide();
+        this.activePage = 1;
         this.container.find('.feedback-page[data-feedback-page="1"]').show();
     }
 
