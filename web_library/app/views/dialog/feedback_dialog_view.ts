@@ -140,7 +140,7 @@ export class FeedbackDialogView extends DialogView {
 
         feedbackService.sendFeedback(url, formData, function(data) {
             feedbackDialogView.resetDialog();
-            if(generalConfiguration.getParameterValue('successDialog')) {
+            if(generalConfiguration && generalConfiguration.getParameterValue('successDialog')) {
                 feedbackDialogView.close();
                 let dialogTemplate = require('../../templates/info_dialog.handlebars');
                 let successMessage = i18n.t('general.success_message');
@@ -151,7 +151,7 @@ export class FeedbackDialogView extends DialogView {
                     successDialogView.close();
                 });
                 successDialogView.open();
-            } else if (generalConfiguration.getParameterValue('closeDialogOnSuccess')) {
+            } else if (generalConfiguration && generalConfiguration.getParameterValue('closeDialogOnSuccess')) {
                 feedbackDialogView.close();
                 PageNotification.show(<string>i18n.t('general.success_message'));
             } else {
