@@ -87,14 +87,20 @@ public class MailClient {
 		        if(attachment.getFilePath() != null && !attachment.getFilePath().equals("")) {
 					try {
 						String rootPath = System.getProperty("catalina.home");
+						if(rootPath == null) {
+							break;
+						}
 						String relativePath = "webapps" + File.separator + attachment.getFilePath();
 						String filePath = rootPath + File.separator + relativePath;
 
-						messageBodyPart = new MimeBodyPart();
-						DataSource source = new FileDataSource(filePath);
-						messageBodyPart.setDataHandler(new DataHandler(source));
-						messageBodyPart.setFileName(attachment.getFileNameAndExtension());
-						multipart.addBodyPart(messageBodyPart);
+						File file = new File(filePath);
+						if (file.exists()) {
+							messageBodyPart = new MimeBodyPart();
+							DataSource source = new FileDataSource(filePath);
+							messageBodyPart.setDataHandler(new DataHandler(source));
+							messageBodyPart.setFileName(attachment.getFileNameAndExtension());
+							multipart.addBodyPart(messageBodyPart);
+						}
 					} catch (Exception e) {
 						LOGGER.error(e.getMessage());
 					}

@@ -111,7 +111,7 @@ public class FeedbackController extends RestController<Feedback>{
 
 		public void run() {
 			try {
-				mailService.NotifyOfFeedback(feedback.getApplicationId(), feedback, null);
+				mailService.NotifyOfFeedback(feedback.getApplicationId(), feedback, null, null);
 				resetScheduler();
 			} catch (Exception e) {
 				resetScheduler();
