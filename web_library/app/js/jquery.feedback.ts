@@ -1,5 +1,5 @@
 import Handlebars = require('handlebars');
-import './lib/rating/jquery.star-rating-svg.js';
+import './lib/rating/jquery.star-rating-svg.min.js';
 import './jquery.validate';
 import './jquery.validate_category';
 import './jquery.fileupload';

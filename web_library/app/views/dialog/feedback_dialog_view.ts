@@ -42,7 +42,7 @@ export class FeedbackDialogView extends DialogView {
     }
 
     initDialog() {
-        var myThis = this,
+        let myThis = this,
             dialogContainer = jQuery('#' + this.dialogId);
         super.initDialog();
         this.dialogElement.dialog('option', 'position', {
