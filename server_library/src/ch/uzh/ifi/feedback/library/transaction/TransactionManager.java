@@ -74,12 +74,19 @@ public class TransactionManager {
         
         Properties prop = new Properties();
     	InputStream input = null;
-    	try {
-    		InputStream propertiesStream   = TransactionManager.class.getResourceAsStream("config.properties");
+        InputStream propertiesStream = null;
+
+        try {
+    		propertiesStream = TransactionManager.class.getResourceAsStream("config.properties");
     		prop.load(propertiesStream);
     		String dbUrl = prop.getProperty("dburl");
     		String dbUser = prop.getProperty("dbuser");
     		String dbPassword = prop.getProperty("dbpassword");
+
+            if(propertiesStream != null) {
+                propertiesStream.close();
+            }
+
             return DriverManager.getConnection(dbUrl, dbUser, dbPassword);
     	} catch (IOException ex) {
     		LOGGER.error(ex.getMessage());

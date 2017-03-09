@@ -1,5 +1,5 @@
 import Handlebars = require('handlebars');
-import './lib/rating/jquery.star-rating-svg.js';
+import './lib/rating/jquery.star-rating-svg.min.js';
 import './jquery.validate';
 import './jquery.validate_category';
 import './jquery.fileupload';
@@ -11,7 +11,8 @@ import * as t from '../templates/t';
 import * as compare from '../templates/compare';
 import {FeedbackApp} from './feedback_app';
 import {MockBackend} from '../services/backends/mock_backend';
-var mockData = require('json!../services/mocks/dev/applications_mock.json');
+import {QuestionDialogView} from '../views/dialog/question_dialog_view';
+var mockData = require('json!../services/mocks/dev/app19_siemens.json');
 
 
 export declare var feedbackApp:FeedbackApp;
@@ -31,14 +32,16 @@ export var feedbackPluginModule = function ($, window, document) {
         if($.fn.droppable === undefined) {
             $.getScript('https://supersede-develop.atosresearch.eu/web_library/senercon/dist/jquery.ui.droppable.js');
         }
-
-        I18nHelper.initializeI18n(options);
-        var language = I18nHelper.getLanguage(options);
+        let button = this;
         var options = $.extend({}, $.fn.feedbackPlugin.defaults, options);
         var mockBackend:MockBackend = new MockBackend(mockData);
-        var applicationService = new ApplicationService(options.apiEndpointOrchestrator, language); //, mockBackend);
-        feedbackApp = new FeedbackApp(applicationService, options.applicationId, options, this);
-        feedbackApp.loadApplicationConfiguration();
+
+        I18nHelper.initializeI18n(options);
+        I18nHelper.getLanguage(options, function(language) {
+            var applicationService = new ApplicationService(options.apiEndpointOrchestrator, language); //, mockBackend);
+            feedbackApp = new FeedbackApp(applicationService, options.applicationId, options, button);
+            feedbackApp.loadApplicationConfiguration();
+        });
 
         return this;
     };
@@ -47,7 +50,7 @@ export var feedbackPluginModule = function ($, window, document) {
         'color': '#fff',
         'lang': 'de',
         'backgroundColor': '#7c9009',
-        'fallbackLang': 'en',
+        'fallbackLang': 'de',
         'distPath': 'dist/',
         'userId': '',
         'dialogCSSClass': 'feedback-dialog',

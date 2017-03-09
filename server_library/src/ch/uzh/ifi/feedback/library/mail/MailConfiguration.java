@@ -28,7 +28,7 @@ public abstract class MailConfiguration implements IMailConfiguration {
     			String key = (String)k;
     			properties.put(key, prop.getProperty(key));
     		}
-
+			propertiesStream.close();
     	} catch (IOException ex) {
     		ex.printStackTrace();
     	}

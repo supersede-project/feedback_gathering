@@ -17,6 +17,7 @@ export class RatingMechanism extends Mechanism {
 
         return {
             starSize: 30,
+            baseUrl: true,
             totalStars: this.getParameterValue('maxRating'),
             initialRating: this.initialRating,
             useFullStars: true,

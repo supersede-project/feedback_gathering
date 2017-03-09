@@ -29,10 +29,12 @@ export class HttpBackend implements Backend {
 
     retrieve(id:number, callback:(data:any) => void, errorCallback?:(data:any) => void): void {
         var url = this.getUrl() + id;
-
         jQuery.ajax({
             url: url,
+            crossDomain: true,
             dataType: 'json',
+            cache: false,
+            contentType: "application/json; charset=utf-8;",
             type: 'GET',
             success: function (data) {
                 callback(data);

@@ -42,6 +42,7 @@ public abstract class DatabaseConfiguration implements IDatabaseConfiguration {
     		}
     		dbUser = prop.getProperty("dbuser");
     		dbPassword = prop.getProperty("dbpassword");
+			propertiesStream.close();
     	} catch (IOException ex) {
     		ex.printStackTrace();
     	}

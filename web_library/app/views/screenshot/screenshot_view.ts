@@ -9,6 +9,8 @@ import {Mechanism} from '../../models/mechanisms/mechanism';
 import {CanvasState} from './canvas_state';
 import {ScreenshotFeedback} from '../../models/feedbacks/screenshot_feedback';
 import {MechanismView} from '../mechanism_view';
+import IPoint = fabric.IPoint;
+import {clickBlocked} from '../dialog/dialog_view';
 
 const freehandDrawingMode:string = 'freehandDrawingMode';
 const rectDrawingMode:string = 'rectDrawingMode';
@@ -113,6 +115,7 @@ export class ScreenshotView implements MechanismView {
     }
 
     generateScreenshot() {
+        var scrollPosition = this.container.offset().top;
         this.hideElements();
         var myThis = this;
 
@@ -124,6 +127,11 @@ export class ScreenshotView implements MechanismView {
                 useCORS: true,
                 onrendered: function (canvas) {
                     setTimeout(function() {
+                        console.log(myThis.container.offset().top);
+                        jQuery('html, body').animate({
+                            scrollTop: scrollPosition - 85
+                        }, 0);
+
                         myThis.removeTemporarySpans();
                         myThis.showElements();
                         myThis.showAllCanvasElements();
@@ -345,10 +353,14 @@ export class ScreenshotView implements MechanismView {
 
         this.fabricCanvas.on('mouse:up', function (e) {
             myThis.panning = false;
+            setTimeout(function () {
+                clickBlocked = false;
+            }, 100);
         });
 
         this.fabricCanvas.on('mouse:down', function (e) {
             myThis.panning = true;
+            clickBlocked = true;
         });
 
         this.fabricCanvas.on('mouse:move', function (e) {
@@ -403,34 +415,30 @@ export class ScreenshotView implements MechanismView {
                 return;
             }
 
-            var p = {
-                x: event.e.pageX - myThis.screenshotPreviewElement.offset().left,
-                y: event.e.pageY - myThis.screenshotPreviewElement.offset().top
-            };
-            var invertedMatrix = fabric.util.invertTransform(myThis.fabricCanvas.viewportTransform);
-            var transformedP = fabric.util.transformPoint(p, invertedMatrix);
+            let x = event.e.pageX - myThis.screenshotPreviewElement.offset().left,
+                y = event.e.pageY - myThis.screenshotPreviewElement.offset().top;
+            let point:IPoint = new fabric.Point(x, y);
+            let transformedPoint = myThis.transformClickPointToCoordinates(point);
 
-            myThis.croppingRect.left = transformedP.x;
-            myThis.croppingRect.top = transformedP.y;
+            myThis.croppingRect.left = transformedPoint.x;
+            myThis.croppingRect.top = transformedPoint.y;
 
             myThis.croppingRect.visible = true;
-            mousex = transformedP.x;
-            mousey = transformedP.y;
+            mousex = transformedPoint.x;
+            mousey = transformedPoint.y;
             crop = true;
             myThis.fabricCanvas.bringToFront(myThis.croppingRect);
         });
 
         this.fabricCanvas.on("mouse:move", function (event) {
             if (crop && myThis.croppingIsActive) {
-                var p = {
-                    x: event.e.pageX - myThis.screenshotPreviewElement.offset().left,
-                    y: event.e.pageY - myThis.screenshotPreviewElement.offset().top
-                };
-                var invertedMatrix = fabric.util.invertTransform(myThis.fabricCanvas.viewportTransform);
-                var transformedP = fabric.util.transformPoint(p, invertedMatrix);
+                let x = event.e.pageX - myThis.screenshotPreviewElement.offset().left,
+                    y = event.e.pageY - myThis.screenshotPreviewElement.offset().top;
+                let point:IPoint = new fabric.Point(x, y);
+                let transformedPoint = myThis.transformClickPointToCoordinates(point);
 
-                myThis.croppingRect.width = transformedP.x - mousex;
-                myThis.croppingRect.height = transformedP.y - mousey;
+                myThis.croppingRect.width = transformedPoint.x - mousex;
+                myThis.croppingRect.height = transformedPoint.y - mousey;
             }
             myThis.fabricCanvas.renderAll();
         });
@@ -456,6 +464,15 @@ export class ScreenshotView implements MechanismView {
         });
     }
 
+    transformClickPointToCoordinates(clickPoint:IPoint):IPoint {
+        var invertedMatrix = fabric.util.invertTransform(this.fabricCanvas.viewportTransform);
+        return fabric.util.transformPoint(clickPoint, invertedMatrix);
+    }
+
+    transformCoordinatesToClickPoint(coordinates:IPoint):IPoint {
+        return fabric.util.transformPoint(coordinates, this.fabricCanvas.viewportTransform);
+    }
+
     cancelCropping() {
         this.croppingIsActive = false;
         this.container.find('.screenshot-crop-cancel').hide();
@@ -467,16 +484,22 @@ export class ScreenshotView implements MechanismView {
     }
 
     cropTheCanvas(croppingRect) {
+        let canvas = this.fabricCanvas;
+        let oldZoom = canvas.getZoom();
+        // reset zoom temporarily to 1 as it simplifies the calculation a lot
+        canvas.setZoom(1);
+
         this.container.find('.screenshot-draw-undo').show();
 
-        var canvas = this.fabricCanvas;
-        var objectsToMove = canvas.getObjects();
-
         // Cropping canvas according to cropper rectangle
-        var croppedTop = croppingRect.top + 1;
-        var croppedLeft = croppingRect.left + 1;
-        var croppWidth = croppingRect.width - 2;
-        var croppHeight = croppingRect.height - 2;
+        let croppedTop = croppingRect.top + 1;
+        let croppedLeft = croppingRect.left + 1;
+        let croppWidth = croppingRect.width - 2;
+        let croppHeight = croppingRect.height - 2;
+
+        let reverseTransformedPoint:IPoint = this.transformCoordinatesToClickPoint(new fabric.Point(croppedLeft, croppedTop));
+        croppedTop = reverseTransformedPoint.y;
+        croppedLeft = reverseTransformedPoint.x;
 
         croppingRect.remove();
         canvas.renderAll.bind(canvas);
@@ -484,17 +507,26 @@ export class ScreenshotView implements MechanismView {
         var factor = Math.min(canvas.getWidth() / croppWidth, canvas.getHeight() / croppHeight);
         this.updateCanvasState(croppedTop, croppedLeft, canvas.getZoom());
 
+        var factorX = canvas.getWidth() / croppWidth;
+        var factorY = canvas.getHeight() / croppHeight;
+
         // Shifting the elements accordingly
-        for (var i = 0; i < objectsToMove.length; i++) {
-            canvas.getObjects()[i].left = canvas.getObjects()[i].left - croppedLeft;
-            canvas.getObjects()[i].top = canvas.getObjects()[i].top - croppedTop;
-            canvas.getObjects()[i].setCoords();
+        for (var i = 0; i < canvas.getObjects().length; i++) {
+            if(canvas.getObjects()[i].type === 'image') {
+                canvas.getObjects()[i].left = canvas.getObjects()[i].left * factorX - croppedLeft;
+                canvas.getObjects()[i].top = canvas.getObjects()[i].top * factorY - croppedTop;
+                canvas.getObjects()[i].setCoords();
+            } else {
+                canvas.getObjects()[i].left = canvas.getObjects()[i].left - croppedLeft;
+                canvas.getObjects()[i].top = canvas.getObjects()[i].top - croppedTop;
+                canvas.getObjects()[i].setCoords();
+            }
         }
 
-        canvas.setZoom(factor);
         canvas.setWidth(croppWidth * factor - 1);
         canvas.setHeight(croppHeight * factor - 1);
-
+        canvas.setZoom(oldZoom);
+        canvas.setZoom(factor);
         canvas.renderAll.bind(canvas);
     }
 
