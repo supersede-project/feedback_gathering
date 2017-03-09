@@ -82,7 +82,7 @@ public class ApacheHttp implements ToolInterface<HttpMonitoringParams> {
 		//logger.debug("Initialising kafka producer...");
 		//kafka.initProducer(confParams.getKafkaEndpoint());
 		logger.debug("Initialising proxy...");
-		kafka.initProxy(confParams.getKafkaEndpoint());
+		kafka.initProxy();
 		logger.debug("Initialising streaming...");
 		timer = new Timer();
 		timer.schedule(new TimerTask() {
