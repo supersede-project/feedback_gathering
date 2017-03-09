@@ -80,7 +80,7 @@ export class DialogView {
                 jQuery('[aria-describedby="' + this.dialogId + '"] .ui-dialog-titlebar-close').attr('title', i18n.t('general.dialog_close_button_title'));
             },
             create: function (event, ui) {
-                var widget = $(this).dialog("widget");
+                let widget = $(this).dialog("widget");
                 jQuery(".ui-dialog-titlebar-close span", widget)
                     .removeClass("ui-icon-closethick")
                     .addClass("ui-icon-minusthick");

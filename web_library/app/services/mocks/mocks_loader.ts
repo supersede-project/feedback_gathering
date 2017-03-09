@@ -32,3 +32,20 @@ export var readJSON = function (url, base:string = '') {
     xhr.send(null);
     return json;
 };
+
+export var readJSONAsync = function(url, callback:(data) => void, base:string = '') {
+    jQuery.ajax({
+        url: base + url,
+        async: true,
+        dataType: 'json',
+        success: function (response) {
+            callback(response);
+        },
+        error: function(error) {
+            console.error('jQuery JSON load error: ' + error);
+            callback(null)
+        }
+    });
+};
+
+

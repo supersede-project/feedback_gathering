@@ -9,12 +9,12 @@ function fnEventListener(userID){
 	sessionStorage.setItem('userID', userID);
 	
 	if (document.addEventListener) {					// For all major browsers, except IE 8 
-		document.addEventListener('mousedown', function(e){fnGetEventInf(e, "mousedown", sessionStorage.getItem('userID'));}, false);
+		//document.addEventListener('mousedown', function(e){fnGetEventInf(e, "mousedown", sessionStorage.getItem('userID'));}, false);
 		document.addEventListener('click', function(e){fnGetEventInf(e, "click", sessionStorage.getItem('userID'));}, false);
 		document.addEventListener('contextmenu', function(e){fnGetEventInf(e, "right-button mouse click", sessionStorage.getItem('userID'));}, false);
 		document.addEventListener('dblclick', function(e){fnGetEventInf(e, "dblclick", sessionStorage.getItem('userID'));}, false);
 	} else if (document.attachEvent) {			        // For IE 8 and earlier versions
-		document.attachEvent('mousedown', function(e){fnGetEventInf(e, "mousedown", sessionStorage.getItem('userID'));}, false);
+		//document.attachEvent('mousedown', function(e){fnGetEventInf(e, "mousedown", sessionStorage.getItem('userID'));}, false);
 		document.attachEvent('click', function(e){fnGetEventInf(e, "click", sessionStorage.getItem('userID'));}, false);
 		document.attachEvent('contextmenu', function(e){fnGetEventInf(e, "right-button mouse click", sessionStorage.getItem('userID'));}, false);
 		document.attachEvent('dblclick', function(e){fnGetEventInf(e, "dblclick", sessionStorage.getItem('userID'));}, false);
@@ -26,9 +26,11 @@ function fnGetEventInf(e, sEventType, userID){
     var target = e.target || e.srcElement,
         typeElement = target.nodeName || typeElement.innerText,
         idElement = target.id,
-        //textElement = target.textContent,
-        textElement = "Text-Content",
+        textElement = target.textContent,
         valueElement = target.value;
+
+    textElement = textElement.replace(/(\r\n|\n|\r)/gm,"");
+    textElement = textElement.substring(0, 150);
     
     fnSendMonitoredData(generateUUID(), confID, userID, typeElement, idElement, sEventType, textElement, valueElement);
 }

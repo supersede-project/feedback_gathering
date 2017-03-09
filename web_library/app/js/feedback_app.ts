@@ -41,8 +41,7 @@ export class FeedbackApp {
         var context = application.getContextForView();
         context = $.extend({}, context, this.options);
         context = $.extend({}, context, application.getPushConfiguration().getContext());
-        this.dialogView = new FeedbackDialogView('pushConfiguration', dialogTemplate, application.getPushConfiguration(), context);
-        this.dialogView.configurePageNavigation(application.getPushConfiguration(), dialogId);
+        this.dialogView = new FeedbackDialogView(dialogId, dialogTemplate, application.getPushConfiguration(), context);
     }
 
     configureFeedbackButton() {

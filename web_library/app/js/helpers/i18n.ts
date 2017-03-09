@@ -1,5 +1,5 @@
 import i18next = require('i18next');
-import {readJSON} from '../../services/mocks/mocks_loader';
+import {readJSONAsync} from '../../services/mocks/mocks_loader';
 
 
 export class I18nHelper {
@@ -9,33 +9,53 @@ export class I18nHelper {
      *
      * @param options
      *  Containing the key 'lang' to set the language
-     *
+     * @param resources
+     *  Hash containing languages and their translations, e.g.:
+     *  'de' : {
+     *      'translation': {
+     *          'key1': 'value1',
+     *          'key2': 'value2'
+     *      }
+     *  }
      */
-    static initializeI18n = function(options, resources?:{}) {
-        var language = I18nHelper.getLanguage(options);
-
-        if(resources == null || resources == undefined) {
-            resources = {};
-            resources[language] = {
-                translation: readJSON(options.distPath + 'locales/' + language + '/translation.json')
-            };
-        }
-
-        i18next.init({
-            resources: resources,
-            debug: false,
-            fallbackLng: options.fallbackLang,
-            lng: options.lang,
-            load: 'currentOnly'
+    static initializeI18n = function (options, resources?:{}) {
+        I18nHelper.getLanguage(options, function(language) {
+            if (resources == null || resources == undefined) {
+                resources = {};
+                let url = options.distPath + 'locales/' + language + '/translation.json';
+                readJSONAsync(url, function (data) {
+                    resources[language] = {
+                        translation: data
+                    };
+                    i18next.init({
+                        resources: resources,
+                        debug: false,
+                        fallbackLng: options.fallbackLang,
+                        lng: options.lang,
+                        load: 'currentOnly'
+                    });
+                });
+            } else {
+                i18next.init({
+                    resources: resources,
+                    debug: false,
+                    fallbackLng: options.fallbackLang,
+                    lng: options.lang,
+                    load: 'currentOnly'
+                });
+            }
         });
     };
 
-    // TODO maybe remove this and use i18next method instead
-    static getLanguage = function(options): string {
-        if(readJSON(options.distPath + 'locales/' + options.lang + '/translation.json') !== null) {
-            return options.lang;
-        } else {
-            return options.fallbackLang;
-        }
+    static getLanguage = function (options, callbackLang:(language:string) => void):void {
+        let url = options.distPath + 'locales/' + options.lang + '/translation.json';
+
+        readJSONAsync(url, function(data) {
+            if(data === null) {
+                callbackLang(options.fallbackLang);
+            } else {
+                callbackLang(options.lang);
+            }
+        });
     };
 }
