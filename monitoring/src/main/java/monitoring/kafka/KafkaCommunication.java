@@ -6,6 +6,7 @@ import java.util.Properties;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import eu.supersede.integration.api.analysis.proxies.DataProviderProxy;
 import eu.supersede.integration.api.analysis.proxies.KafkaClient;
 import kafka.javaapi.producer.Producer;
 import kafka.producer.KeyedMessage;
@@ -16,13 +17,13 @@ public class KafkaCommunication {
 
 	
 	Producer<String, String> producer;
-	KafkaClient proxy;
+	DataProviderProxy proxy;
 	
 	/**
 	 * Creates a new instantiation of the IF kafka client proxy
 	 */
-	public void initProxy(String kafkaEndpoint) {
-		proxy = new KafkaClient(kafkaEndpoint);
+	public void initProxy() {
+		proxy = new DataProviderProxy();
 	}
 	
 	/**
@@ -43,7 +44,7 @@ public class KafkaCommunication {
 	public void generateResponseIF(List<? extends MonitoringData> dataList, String timeStamp, 
 			int outputId, int confId, String topic, String responseName) {
 		JSONObject res = generateData(dataList, timeStamp, outputId, confId, responseName);
-		proxy.sendMessage(res, topic);
+		proxy.ingestData(res, topic);
 	}
 	
 	/**
