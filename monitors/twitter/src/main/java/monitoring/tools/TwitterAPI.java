@@ -88,7 +88,7 @@ public class TwitterAPI implements ToolInterface<TwitterMonitoringParams> {
 		//logger.debug("Initialising kafka producer...");
 		//kafka.initProducer(confParams.getKafkaEndpoint());
 		logger.debug("Initialising proxy...");
-		kafka.initProxy(confParams.getKafkaEndpoint());
+		kafka.initProxy();
 		logger.debug("Initialising streaming...");
 		firstConnection = true;
 		tweetInfo = new ArrayList<>();
@@ -148,7 +148,7 @@ public class TwitterAPI implements ToolInterface<TwitterMonitoringParams> {
 			data.add(dataObj);
 		}
 		tweetInfo = new ArrayList<>();
-		//kafka.generateResponseKafka(data, searchTimeStamp, id, configurationId, this.confParams.getKafkaTopic, "SocialNetworksMonitoredData");
+		//kafka.generateResponseKafka(data, searchTimeStamp, id, configurationId, this.confParams.getKafkaTopic(), "SocialNetworksMonitoredData");
 		kafka.generateResponseIF(data, searchTimeStamp, id, configurationId, this.confParams.getKafkaTopic(), "SocialNetworksMonitoredData");
 		logger.debug("Data successfully sent to Kafka endpoint");
 		++id;
