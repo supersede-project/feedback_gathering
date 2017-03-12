@@ -44,13 +44,13 @@ export class DialogView {
         // prevent dialog close on drag stop click
         jQuery('body').on('dragstart', function () {
             clickBlocked = true;
-        }).on('dragstop', function () {
-            setTimeout(function () {
-                clickBlocked = false;
-            }, 100);
         }).on('click', function (event) {
             if (!clickBlocked && dialogView.dialogElement.dialog('isOpen') && !jQuery(event.target).is('.ui-dialog, a') && !jQuery(event.target).closest('.ui-dialog').length) {
                 dialogView.dialogElement.dialog('close');
+            }
+
+            if(clickBlocked) {
+                clickBlocked = false;
             }
         });
     }
