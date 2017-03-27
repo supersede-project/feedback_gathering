@@ -24,9 +24,14 @@ public class SendJSONs {
 	int id = 1;
 	int configurationId = 0;
 	
-	KafkaCommunication kafka;	
+	KafkaCommunication kafka = new KafkaCommunication();	
 	
 	
+	public SendJSONs() {
+		super();
+	}
+
+
 	public void generateData(String filename, String kafkaEndPoint, String kafkaTopic) throws Exception {
 		
 		//logger.debug("Initialising kafka producer...");
@@ -51,9 +56,7 @@ public class SendJSONs {
 				}
 				else{
 					continue;
-				}
-			    //System.out.println(input);
-				
+				}				
 				
 				JsonLogsMonitoringData params = new JsonLogsMonitoringData();
 				
