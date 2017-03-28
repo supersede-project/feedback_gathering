@@ -61,7 +61,7 @@ function fnSendMonitoredData(idOutput, confID, userID, sElement, sIDElement, sEv
 	
 	//Remoto
 	//var url = "https://supersede.es.atos.net:8081/PrjMonitoringUserEvents/MonitoredDataManager?" + vInfoEvents;
-	var url = "http://platform.supersede.eu:8081/PrjMonitoringUserEvents/MonitoredDataManager?";
+	var url = "https://supersede.es.atos.net:8081/PrjMonitoringUserEvents/MonitoredDataManager?";
 	
 	fnStartRequest();
 
@@ -87,3 +87,46 @@ function fnCallback() {
 		}
 	}
 }
+
+
+
+
+
+
+
+
+/*------------------------------------------------------*/
+/* Other form to get implement the Listener
+ * //Listener function
+function fnEventListener(){
+	
+	//Listener for buttons
+	/*
+	for (var iI = 0; iI < document.getElementsByTagName("button").length; iI++){
+		document.getElementsByTagName("button")[iI].addEventListener("click", function(){fnSendMonitoredData("button", this.id, "click", this.textContent);});
+	}
+	
+	for (var iI = 0; iI < document.getElementsByTagName("button").length; iI++){
+		document.getElementsByTagName("button")[iI].addEventListener("contextmenu", function(){fnSendMonitoredData("button", this.id, "right-button mouse click", this.textContent);});
+	}
+	
+	for (var iI = 0; iI < document.getElementsByTagName("button").length; iI++){
+		document.getElementsByTagName("button")[iI].addEventListener("dblclick", function(){fnSendMonitoredData("button", this.id, "dblclick", this.textContent);});
+	}
+}
+ */
+
+//Other for to implement fnSendMonitoredData
+/*
+function fnSendMonitoredData(sElement, sIDElement, sEventType, sElementText) {
+	var sElementValue = document.getElementById(sIDElement).value;
+	var vInfoEvents = "Element=" + sElement + "&idElement=" + sIDElement + "&EventType=" + sEventType + "&Text=" + sElementText + "&Value=" + sElementValue + "&Timestamp=" + Date();
+	
+	var url = "MonitoredDataManager?" + vInfoEvents;
+	
+	fnStartRequest();
+	
+	req.onreadystatechange = fnCallback;
+	req.open("POST", url, true);
+	req.send(null);
+}*/
