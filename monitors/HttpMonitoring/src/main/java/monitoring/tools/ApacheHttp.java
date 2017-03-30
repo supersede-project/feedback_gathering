@@ -121,7 +121,7 @@ public class ApacheHttp implements ToolInterface<HttpMonitoringParams> {
 
         data.add(new HttpMonitoringData(String.valueOf(watch.getTotalTimeMillis()), String.valueOf(method.getStatusCode())));
 		logger.debug("Sent data: " + watch.getTotalTimeMillis() + "/" + method.getStatusCode());
-        
+		method.releaseConnection();
 		//kafka.generateResponseKafka(data, searchTimeStamp, id, configurationId, this.confParams.getKafkaTopic(), "HttpMonitoredData");
 		kafka.generateResponseIF(data, searchTimeStamp, id, configurationId, this.confParams.getKafkaTopic(), "HttpMonitoredData");
 		logger.debug("Data successfully sent to Kafka endpoint");
