@@ -55,6 +55,9 @@ public class ApacheHttp implements ToolInterface<HttpMonitoringParams> {
 	
 	KafkaCommunication kafka;
 	
+	HttpClient client;
+    HttpMethod method;
+	
 	@Override
 	public void addConfiguration(HttpMonitoringParams params, int configurationId) throws Exception {
 		logger.debug("Adding new configuration");
@@ -62,6 +65,8 @@ public class ApacheHttp implements ToolInterface<HttpMonitoringParams> {
 		this.confParams = params;
 		this.configurationId = configurationId;
 		this.kafka = new KafkaCommunication();
+		this.client = new HttpClient();
+        this.method = new HeadMethod(this.confParams.getUrl());
 		resetStream();
 	}
 	
@@ -75,6 +80,7 @@ public class ApacheHttp implements ToolInterface<HttpMonitoringParams> {
 		deleteConfiguration();
 		//generateData((new Timestamp((new Date()).getTime()).toString()));
 		this.confParams = params;
+        this.method = new HeadMethod(this.confParams.getUrl());
 		resetStream();
 	}
 	
@@ -82,7 +88,7 @@ public class ApacheHttp implements ToolInterface<HttpMonitoringParams> {
 		//logger.debug("Initialising kafka producer...");
 		//kafka.initProducer(confParams.getKafkaEndpoint());
 		logger.debug("Initialising proxy...");
-		kafka.initProxy(confParams.getKafkaEndpoint());
+		kafka.initProxy();
 		logger.debug("Initialising streaming...");
 		timer = new Timer();
 		timer.schedule(new TimerTask() {
@@ -103,8 +109,6 @@ public class ApacheHttp implements ToolInterface<HttpMonitoringParams> {
 		List<HttpMonitoringData> data = new ArrayList<>();
 		
 		StopWatch watch = new StopWatch();
-        HttpClient client = new HttpClient();
-        HttpMethod method = new HeadMethod(this.confParams.getUrl());
 
         try {
             watch.start();

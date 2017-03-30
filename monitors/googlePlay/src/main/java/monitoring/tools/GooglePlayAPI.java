@@ -34,6 +34,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.Scanner;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -44,51 +45,70 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import kafka.javaapi.producer.Producer;
+import monitoring.controller.ToolInterface;
 import monitoring.kafka.KafkaCommunication;
+import monitoring.model.GooglePlayMonitoringData;
+import monitoring.model.GooglePlayMonitoringParams;
 import monitoring.model.MonitoringData;
 import monitoring.model.MonitoringParams;
-import monitoring.services.ToolInterface;
+import monitoring.model.Utils;
 
-public class GooglePlayAPI implements ToolInterface {
+public class GooglePlayAPI implements ToolInterface<GooglePlayMonitoringParams> {
 	
 	final static Logger logger = Logger.getLogger(GooglePlayAPI.class);
 	
 	private int confId;
 	
 	//OAuth credentials for API authentication
-	private final String 	clientID = "785756325088-kes5s8om6n4o6sntvokqjt47tito7mla.apps.googleusercontent.com";
-	private final String 	clientSecret = "hr5Fcj-Awp8XejMWbxBBI6ps";
-	private final String 	refreshToken = "1/MKGHOAO4tTvO2kGECyG_EDUroJ07v55aIV_3EBbvKGA";
-	//API Uri
+	private String 	clientID;
+	private String 	clientSecret;
+	private String 	refreshToken;
+	private String 	accessToken;
+
 	private final String 	apiUri = "https://www.googleapis.com/androidpublisher/v2/applications/";
 	private final String	tokenUri = "https://accounts.google.com/o/oauth2/token";
-	//Access token for API authentication
-	private String 		 	accessToken = "ya29.Ci8WA5RBcItol_FE18VAHwHuueraVng6wdVi8kma8mDSRpQZtbX2XDM7cHbuMT0rnA";
 	
 	private boolean 		firstConnection = true;
-	
-	//temporal fake id
 	private int				id = 1;
 	
 	private Date initTime;
 	private Date stamp;
 	
-	private MonitoringParams params;
-	
-	//Kafka producer
-	private Producer<String, String> producer;
+	private GooglePlayMonitoringParams params;
 	
 	private Timer timer;
 	
+	KafkaCommunication kafka;
+	
 	@Override
-	public void addConfiguration(MonitoringParams params, Producer<String, String> producer, int confId) throws Exception {
-
+	public void addConfiguration(GooglePlayMonitoringParams params, int confId) throws Exception {
 		this.params = params;
-		this.producer = producer;
 		this.confId = confId;
+		this.kafka = new KafkaCommunication();
 		
+		loadProperties();
+		resetStream();
+	}
+	
+	@Override
+	public void deleteConfiguration() throws Exception {
+		timer.cancel();
+	}
+	
+	@Override
+	public void updateConfiguration(GooglePlayMonitoringParams params) throws Exception {
+		deleteConfiguration();
+		this.params = params;
+		resetStream();
+	}
+	
+	private void resetStream() throws Exception  {
+		
+		//this.kafka.initProducer(this.params.getKafkaEndpoint());
+		this.kafka.initProxy();
+		
+		firstConnection = true;
 		generateNewAccessToken();
-
 		timer = new Timer();
 		timer.schedule(new TimerTask() {
 		    public void run() {
@@ -112,14 +132,7 @@ public class GooglePlayAPI implements ToolInterface {
 					}		    		
 		    	}
 		    }
-
 		}, 0, Integer.parseInt(params.getTimeSlot())* 1000);
-		
-	}
-	
-	@Override
-	public void deleteConfiguration() throws Exception {
-		timer.cancel();
 	}
 	
 	protected JSONArray getNextPage(String token) throws MalformedURLException, IOException {
@@ -128,15 +141,12 @@ public class GooglePlayAPI implements ToolInterface {
 				+ "&maxResults=100"
 				+ "&token=" + token)
 				.openConnection();
-		
-		JSONObject data = new JSONObject(streamToString(connection.getInputStream()));
+		JSONObject data = new JSONObject(Utils.streamToString(connection.getInputStream()));
 		JSONArray reviews = data.getJSONArray("reviews");
-		
 		if (data.has("tokenPagination")) {
 			JSONArray next = getNextPage(data.getJSONObject("tokenPagination")
 					.getString("nextPageToken"));
 			for (int i = 0; i < next.length(); ++i) reviews.put(next.get(i));
-
 		} 
 		return reviews;
 	}
@@ -146,7 +156,6 @@ public class GooglePlayAPI implements ToolInterface {
 				+ "?access_token=" + accessToken
 				+ "&maxResults=100")
 				.openConnection();
-		
 		generateData(connection.getInputStream(), (new Date()).getTime());
 	}
 
@@ -159,18 +168,15 @@ public class GooglePlayAPI implements ToolInterface {
 				+ "&client_id=" + clientID 
 				+ "&client_secret=" + clientSecret 
 				+ "&refresh_token=" + refreshToken;
-		
 		URLConnection httpConnection = new URL(tokenUri 
 				+ "?" + query)
 				.openConnection();
 		httpConnection.setDoOutput(true);
 		//httpConnection.setFixedLengthStreamingMode(0);
-		
 		try (OutputStream output = httpConnection.getOutputStream()) {
 		    output.write(query.getBytes("UTF-8"));
 		}
-		
-		JSONObject res = new JSONObject(streamToString(httpConnection.getInputStream()));
+		JSONObject res = new JSONObject(Utils.streamToString(httpConnection.getInputStream()));
 		accessToken = res.getString("access_token");
 		
 	}
@@ -180,10 +186,8 @@ public class GooglePlayAPI implements ToolInterface {
 	 */
 	protected void generateData(InputStream response, long date) throws MalformedURLException, JSONException, IOException {
 
-		JSONObject data = new JSONObject(streamToString(response));
-		
+		JSONObject data = new JSONObject(Utils.streamToString(response));
 		JSONArray reviews = data.getJSONArray("reviews");
-		
 		if (data.has("tokenPagination")) {
 			JSONArray next = getNextPage(data.getJSONObject("tokenPagination")
 					.getString("nextPageToken"));
@@ -193,22 +197,17 @@ public class GooglePlayAPI implements ToolInterface {
 		}
 		
 		List<MonitoringData> dataList = new ArrayList<>();
-		
 		for (int i = 0; i < reviews.length(); ++i) {
-			
 			JSONObject obj = reviews.getJSONObject(i);
-			
 			//review time in milliseconds
-			Long l = getDateTimeInMillis(obj);
-						
+			Long l = Utils.getDateTimeInMillis(obj);
 			//Check if the review has already been reported;
 			//if so, check if the last update was reported;
 			//if it wasn't, check if the review datetime is later than the initMonitorization time
 			//if so, report the review
 			if (l.compareTo(stamp.getTime()) > 0) {
 				Iterator<?> keys = obj.keys();
-				MonitoringData review = new MonitoringData();
-				
+				GooglePlayMonitoringData review = new GooglePlayMonitoringData();
 				while( keys.hasNext() ) {
 				    String key = (String)keys.next();
 				    if (key.equals("reviewId")) review.setReviewID(obj.getString("reviewId"));
@@ -230,31 +229,27 @@ public class GooglePlayAPI implements ToolInterface {
 				review.setTimeStamp(new Timestamp(l).toString());
 				dataList.add(review);
 			}
-			
 		}
-		
 		String timeStamp = new Timestamp(date).toString();
-		
-		KafkaCommunication.generateResponse(dataList, timeStamp, producer, id, confId, params.getKafkaTopic());
+		//kafka.generateResponseKafka(dataList, timeStamp, id, confId, params.getKafkaTopic());
+		kafka.generateResponseIF(dataList, timeStamp, id, confId, params.getKafkaTopic(), "GooglePlayMonitoredData");
 		logger.debug("Data sent to kafka endpoint");
 		++id;
-		
-	}
-
-	private String streamToString(InputStream stream) {
-		StringBuilder sb = new StringBuilder();
-		try (Scanner scanner = new Scanner(stream)) {
-		    String responseBody = scanner.useDelimiter("\\A").next();
-		    sb.append(responseBody);
-		}
-		return sb.toString();
 	}
 	
-	private long getDateTimeInMillis(JSONObject obj) {
-		return obj.getJSONArray("comments").getJSONObject(0).getJSONObject("userComment")
-		.getJSONObject("lastModified").getInt("nanos")/1000000 + 
-		obj.getJSONArray("comments").getJSONObject(0).getJSONObject("userComment")
-		.getJSONObject("lastModified").getLong("seconds")*1000;
+	private void loadProperties() throws Exception {
+		Properties prop = new Properties();
+		try {
+			ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+			InputStream input = classLoader.getResourceAsStream("config.properties");
+			prop.load(input);
+			clientID = prop.getProperty("clientID");
+			clientSecret = prop.getProperty("clientSecret");
+			refreshToken = prop.getProperty("refreshToken");
+			accessToken = prop.getProperty("accessToken");
+		} catch (Exception e) {
+			throw new IOException("There was an unexpected error loading the properties file.");
+		}
 	}
 
 }
