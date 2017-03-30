@@ -19,16 +19,33 @@
  * Initially developed in the context of SUPERSEDE EU project
  * www.supersede.eu
  *******************************************************************************/
-package monitoring.services;
+package monitoring.model;
 
 import monitoring.model.MonitoringParams;
 
-public interface ToolInterface {
-
-	public void addConfiguration(MonitoringParams params, int confId) throws Exception;
+public class GooglePlayMonitoringParams extends MonitoringParams {
 	
-	public void deleteConfiguration() throws Exception;
-
-	public void updateConfiguration(MonitoringParams params) throws Exception;
+	private String packageName;
+	private String country;
+	private String language;
 	
+	public String getPackageName() {
+		return packageName;
+	}
+	public void setPackageName(String packageName) {
+		this.packageName = packageName;
+	}
+	public String getCountry() {
+		return country;
+	}
+	public void setCountry(String country) {
+		this.country = country;
+	}
+	public String getLanguage() {
+		return language;
+	}
+	public void setLanguage(String language) {
+		this.language = language;
+	}
+
 }

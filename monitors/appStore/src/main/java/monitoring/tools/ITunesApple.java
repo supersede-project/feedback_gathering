@@ -39,13 +39,13 @@ import org.apache.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import monitoring.controller.ToolInterface;
 import monitoring.kafka.KafkaCommunication;
-import monitoring.model.MonitoringData;
-import monitoring.model.MonitoringParams;
+import monitoring.model.AppStoreMonitoringData;
+import monitoring.model.AppStoreMonitoringParams;
 import monitoring.model.Utils;
-import monitoring.services.ToolInterface;
 
-public class ITunesApple implements ToolInterface {
+public class ITunesApple implements ToolInterface<AppStoreMonitoringParams> {
 	
 	final static Logger logger = Logger.getLogger(AppTweak.class);
 	
@@ -54,7 +54,7 @@ public class ITunesApple implements ToolInterface {
 	private String uri = "https://itunes.apple.com/es/rss/customerreviews/id=";
 	private String uriParams = "/sortBy=mostRecent/json";
 
-	private MonitoringParams params;
+	private AppStoreMonitoringParams params;
 	private List<String> reported;
 	
 	private int id = 1;
@@ -65,7 +65,7 @@ public class ITunesApple implements ToolInterface {
 	KafkaCommunication kafka;
 
 	@Override
-	public void addConfiguration(MonitoringParams params,int confId) throws Exception {
+	public void addConfiguration(AppStoreMonitoringParams params,int confId) throws Exception {
 		this.params = params;
 		this.confId = confId;
 		this.kafka = new KafkaCommunication();
@@ -78,7 +78,7 @@ public class ITunesApple implements ToolInterface {
 	}
 	
 	@Override
-	public void updateConfiguration(MonitoringParams params) throws Exception {
+	public void updateConfiguration(AppStoreMonitoringParams params) throws Exception {
 		deleteConfiguration();
 		this.params = params;
 		resetStream();
@@ -86,7 +86,7 @@ public class ITunesApple implements ToolInterface {
 	
 	private void resetStream() throws Exception {
 		
-		kafka.initProxy(this.params.getKafkaEndpoint());
+		kafka.initProxy();
 		//kafka.initProducer(this.params.getKafkaEndpoint());
 		
 		this.reported = new ArrayList<>();
@@ -118,14 +118,14 @@ public class ITunesApple implements ToolInterface {
 		
 		JSONObject data = urlConnection();
 		JSONArray reviews = data.getJSONObject("feed").getJSONArray("entry");
-		List<MonitoringData> dataList = new ArrayList<>();
+		List<AppStoreMonitoringData> dataList = new ArrayList<>();
 		
 		for (int i = 1; i < reviews.length(); ++i) {
 			JSONObject obj = reviews.getJSONObject(i);
 			String id = obj.getJSONObject("id").getString("label");
 			if (!reported.contains(id)) {
 				Iterator<?> keys = obj.keys();
-				MonitoringData review = new MonitoringData();
+				AppStoreMonitoringData review = new AppStoreMonitoringData();
 				review.setReviewID(id);
 				while( keys.hasNext() ) {
 				    String key = (String)keys.next();
@@ -142,7 +142,7 @@ public class ITunesApple implements ToolInterface {
 			}
 		}
 		//kafka.generateResponseKafka(dataList, timeStamp, id, confId, params.getKafkaTopic());
-		kafka.generateResponseIF(dataList, timeStamp, id, confId, params.getKafkaTopic());
+		kafka.generateResponseIF(dataList, timeStamp, id, confId, params.getKafkaTopic(), "AppStoreMonitoredData");
 		logger.debug("Data sent to kafka endpoint");
 		++id;
 	}

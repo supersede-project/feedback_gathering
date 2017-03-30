@@ -21,7 +21,9 @@
  *******************************************************************************/
 package monitoring.model;
 
-public class MonitoringData {
+import org.json.JSONObject;
+
+public class AppStoreMonitoringData implements MonitoringData {
 
 	private String reviewID;
 	private String authorName;
@@ -93,6 +95,21 @@ public class MonitoringData {
 	}
 	public void setLink(String link) {
 		this.link = link;
+	}
+	@Override
+	public JSONObject toJsonObject() {
+		JSONObject json = new JSONObject();
+		json.put("reviewID", reviewID);
+		json.put("authorName", authorName);
+		json.put("timeStamp", timeStamp);
+		json.put("appVersion", appVersion);
+		json.put("device", device);
+		json.put("reviewerLanguage", reviewerLanguage);
+		json.put("starRating", starRating);
+		json.put("reviewTitle", reviewTitle);
+		json.put("reviewText", reviewText);
+		json.put("link", link);
+		return json;
 	}
 	
 }

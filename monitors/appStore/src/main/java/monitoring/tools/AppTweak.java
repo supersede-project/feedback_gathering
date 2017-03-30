@@ -47,13 +47,13 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import kafka.javaapi.producer.Producer;
+import monitoring.controller.ToolInterface;
 import monitoring.kafka.KafkaCommunication;
-import monitoring.model.MonitoringData;
-import monitoring.model.MonitoringParams;
+import monitoring.model.AppStoreMonitoringData;
+import monitoring.model.AppStoreMonitoringParams;
 import monitoring.model.Utils;
-import monitoring.services.ToolInterface;
 
-public class AppTweak implements ToolInterface {
+public class AppTweak implements ToolInterface<AppStoreMonitoringParams> {
 	
 	final static Logger logger = Logger.getLogger(AppTweak.class);
 	
@@ -63,7 +63,7 @@ public class AppTweak implements ToolInterface {
 	private final String uri = "https://api.apptweak.com/ios/applications/";
 	private final String uriParams = "/reviews.json";
 	
-	private MonitoringParams params;
+	private AppStoreMonitoringParams params;
 	
 	private boolean firstConnection = true;
 	private int id = 1;
@@ -75,7 +75,7 @@ public class AppTweak implements ToolInterface {
 	KafkaCommunication kafka;
 
 	@Override
-	public void addConfiguration(MonitoringParams params, int confId) throws Exception {
+	public void addConfiguration(AppStoreMonitoringParams params, int confId) throws Exception {
 		this.params = params;
 		this.confId = confId;
 		this.kafka = new KafkaCommunication();
@@ -89,7 +89,7 @@ public class AppTweak implements ToolInterface {
 	}
 	
 	@Override
-	public void updateConfiguration(MonitoringParams params) throws Exception {
+	public void updateConfiguration(AppStoreMonitoringParams params) throws Exception {
 		deleteConfiguration();
 		this.params = params;
 		resetStream();
@@ -98,7 +98,7 @@ public class AppTweak implements ToolInterface {
 	private void resetStream() {
 		
 		logger.debug("Initializing streaming...");
-		kafka.initProxy(this.params.getKafkaEndpoint());
+		kafka.initProxy();
 		//kafka.initProducer(this.params.getKafkaEndpoint());
 		
 		firstConnection = true;
@@ -128,7 +128,7 @@ public class AppTweak implements ToolInterface {
 		
 		String timeStamp = new Timestamp((new Date()).getTime()).toString();
 		JSONObject data = urlConnection();
-		List<MonitoringData> dataList = new ArrayList<>();
+		List<AppStoreMonitoringData> dataList = new ArrayList<>();
 		JSONArray reviews = data.getJSONArray("content");
 		for (int i = 0; i < reviews.length(); ++i) {
 			JSONObject obj = reviews.getJSONObject(i);
@@ -137,7 +137,7 @@ public class AppTweak implements ToolInterface {
 						
 			if (date.compareTo(stamp) > 0) {
 				Iterator<?> keys = obj.keys();
-				MonitoringData review = new MonitoringData();
+				AppStoreMonitoringData review = new AppStoreMonitoringData();
 				while( keys.hasNext() ) {
 				    String key = (String)keys.next();
 				    if (key.equals("id")) review.setReviewID(obj.getString("id"));
@@ -152,7 +152,7 @@ public class AppTweak implements ToolInterface {
 			}
 		}
 		//kafka.generateResponseKafka(dataList, timeStamp, id, confId, params.getKafkaTopic());
-		kafka.generateResponseIF(dataList, timeStamp, id, confId, params.getKafkaTopic());
+		kafka.generateResponseIF(dataList, timeStamp, id, confId, params.getKafkaTopic(), "AppStoreMonitoredData");
 		logger.debug("Data sent to kafka endpoint");
 		++id;
 	}

@@ -45,13 +45,15 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import kafka.javaapi.producer.Producer;
+import monitoring.controller.ToolInterface;
 import monitoring.kafka.KafkaCommunication;
+import monitoring.model.GooglePlayMonitoringData;
+import monitoring.model.GooglePlayMonitoringParams;
 import monitoring.model.MonitoringData;
 import monitoring.model.MonitoringParams;
 import monitoring.model.Utils;
-import monitoring.services.ToolInterface;
 
-public class GooglePlayAPI implements ToolInterface {
+public class GooglePlayAPI implements ToolInterface<GooglePlayMonitoringParams> {
 	
 	final static Logger logger = Logger.getLogger(GooglePlayAPI.class);
 	
@@ -72,14 +74,14 @@ public class GooglePlayAPI implements ToolInterface {
 	private Date initTime;
 	private Date stamp;
 	
-	private MonitoringParams params;
+	private GooglePlayMonitoringParams params;
 	
 	private Timer timer;
 	
 	KafkaCommunication kafka;
 	
 	@Override
-	public void addConfiguration(MonitoringParams params, int confId) throws Exception {
+	public void addConfiguration(GooglePlayMonitoringParams params, int confId) throws Exception {
 		this.params = params;
 		this.confId = confId;
 		this.kafka = new KafkaCommunication();
@@ -94,7 +96,7 @@ public class GooglePlayAPI implements ToolInterface {
 	}
 	
 	@Override
-	public void updateConfiguration(MonitoringParams params) throws Exception {
+	public void updateConfiguration(GooglePlayMonitoringParams params) throws Exception {
 		deleteConfiguration();
 		this.params = params;
 		resetStream();
@@ -103,7 +105,7 @@ public class GooglePlayAPI implements ToolInterface {
 	private void resetStream() throws Exception  {
 		
 		//this.kafka.initProducer(this.params.getKafkaEndpoint());
-		this.kafka.initProxy(this.params.getKafkaEndpoint());
+		this.kafka.initProxy();
 		
 		firstConnection = true;
 		generateNewAccessToken();
@@ -205,7 +207,7 @@ public class GooglePlayAPI implements ToolInterface {
 			//if so, report the review
 			if (l.compareTo(stamp.getTime()) > 0) {
 				Iterator<?> keys = obj.keys();
-				MonitoringData review = new MonitoringData();
+				GooglePlayMonitoringData review = new GooglePlayMonitoringData();
 				while( keys.hasNext() ) {
 				    String key = (String)keys.next();
 				    if (key.equals("reviewId")) review.setReviewID(obj.getString("reviewId"));
@@ -230,7 +232,7 @@ public class GooglePlayAPI implements ToolInterface {
 		}
 		String timeStamp = new Timestamp(date).toString();
 		//kafka.generateResponseKafka(dataList, timeStamp, id, confId, params.getKafkaTopic());
-		kafka.generateResponseIF(dataList, timeStamp, id, confId, params.getKafkaTopic());
+		kafka.generateResponseIF(dataList, timeStamp, id, confId, params.getKafkaTopic(), "GooglePlayMonitoredData");
 		logger.debug("Data sent to kafka endpoint");
 		++id;
 	}

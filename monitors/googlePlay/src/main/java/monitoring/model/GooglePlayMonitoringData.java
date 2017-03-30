@@ -21,7 +21,11 @@
  *******************************************************************************/
 package monitoring.model;
 
-public class MonitoringData {
+import org.json.JSONObject;
+
+import monitoring.model.MonitoringData;
+
+public class GooglePlayMonitoringData implements MonitoringData {
 	
 	private String reviewID;
 	private String authorName;
@@ -33,6 +37,25 @@ public class MonitoringData {
 	private String reviewTitle;
 	private String reviewText;
 	private String link;
+	
+	public GooglePlayMonitoringData() {
+		
+	}
+	
+	public GooglePlayMonitoringData(String reviewId, String authorName, String timeStamp, String appVersion,
+			String device, String reviewerLanguage, String starRating, String reviewTitle, String reviewText,
+			String link) {
+		this.reviewID = reviewId;
+		this.authorName = authorName;
+		this.timeStamp = timeStamp;
+		this.appVersion = appVersion;
+		this.device = device;
+		this.reviewerLanguage = reviewerLanguage;
+		this.starRating = starRating;
+		this.reviewTitle = reviewTitle;
+		this.reviewText = reviewText;
+		this.link = link;
+	}
 
 	public String getReviewID() {
 		return reviewID;
@@ -94,5 +117,21 @@ public class MonitoringData {
 	public void setLink(String link) {
 		this.link = link;
 	}
-	
+
+	@Override
+	public JSONObject toJsonObject() {
+		JSONObject json = new JSONObject();
+		json.put("reviewID", reviewID);
+		json.put("authorName", authorName);
+		json.put("timeStamp", timeStamp);
+		json.put("appVersion", appVersion);
+		json.put("device", device);
+		json.put("reviewerLanguage", reviewerLanguage);
+		json.put("starRating", starRating);
+		json.put("reviewTitle", reviewTitle);
+		json.put("reviewText", reviewText);
+		json.put("link", link);
+		return json;
+	}
+
 }

@@ -51,13 +51,13 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import kafka.javaapi.producer.Producer;
+import monitoring.controller.ToolInterface;
 import monitoring.kafka.KafkaCommunication;
-import monitoring.model.MonitoringData;
-import monitoring.model.MonitoringParams;
+import monitoring.model.GooglePlayMonitoringData;
+import monitoring.model.GooglePlayMonitoringParams;
 import monitoring.model.Utils;
-import monitoring.services.ToolInterface;
 
-public class AppTweak implements ToolInterface {
+public class AppTweak implements ToolInterface<GooglePlayMonitoringParams> {
 	
 	final static Logger logger = Logger.getLogger(AppTweak.class);
 	
@@ -67,7 +67,7 @@ public class AppTweak implements ToolInterface {
 	private final String uri = "https://api.apptweak.com/android/applications/";
 	private final String uriParams = "/reviews.json";
 	
-	private MonitoringParams params;
+	private GooglePlayMonitoringParams params;
 	private boolean firstConnection = true;
 	private int id = 1;
 	
@@ -79,7 +79,7 @@ public class AppTweak implements ToolInterface {
 	KafkaCommunication kafka;
 
 	@Override
-	public void addConfiguration(MonitoringParams params, int confId) throws Exception {
+	public void addConfiguration(GooglePlayMonitoringParams params, int confId) throws Exception {
 		logger.debug("Setting monitorization");
 		this.params = params;
 		this.confId = confId;
@@ -95,7 +95,7 @@ public class AppTweak implements ToolInterface {
 	}
 	
 	@Override
-	public void updateConfiguration(MonitoringParams params) throws Exception {
+	public void updateConfiguration(GooglePlayMonitoringParams params) throws Exception {
 		deleteConfiguration();
 		this.params = params;
 		resetStream();
@@ -103,8 +103,7 @@ public class AppTweak implements ToolInterface {
 
 	private void resetStream() {
 		logger.debug("Initialising streaming");
-		//this.kafka.initProducer(this.params.getKafkaEndpoint());
-		this.kafka.initProxy(this.params.getKafkaEndpoint());
+		this.kafka.initProxy();
 		
 		firstConnection = true;
 		timer = new Timer();
@@ -136,7 +135,7 @@ public class AppTweak implements ToolInterface {
 		
 		JSONObject data = urlConnection();
 		
-		List<MonitoringData> dataList = new ArrayList<>();
+		List<GooglePlayMonitoringData> dataList = new ArrayList<>();
 		JSONArray reviews = data.getJSONArray("content");
 		for (int i = 0; i < reviews.length(); ++i) {
 			
@@ -148,7 +147,7 @@ public class AppTweak implements ToolInterface {
 			if (date.compareTo(stamp) > 0) {
 				
 				Iterator<?> keys = obj.keys();
-				MonitoringData review = new MonitoringData();
+				GooglePlayMonitoringData review = new GooglePlayMonitoringData();
 				
 				while( keys.hasNext() ) {
 				    String key = (String)keys.next();
@@ -164,8 +163,8 @@ public class AppTweak implements ToolInterface {
 				dataList.add(review);
 			}
 		}
-		//kafka.generateResponseKafka(dataList, timeStamp, id, confId, params.getKafkaTopic());
-		kafka.generateResponseIF(dataList, timeStamp, id, confId, params.getKafkaTopic());
+		//kafka.generateResponseKafka(dataList, timeStamp, id, confId, params.getKafkaTopic(), "GooglePlayMonitoredData");
+		kafka.generateResponseIF(dataList, timeStamp, id, confId, params.getKafkaTopic(), "GooglePlayMonitoredData");
 		logger.debug("Data sent to kafka endpoint");
 		++id;
 	}
