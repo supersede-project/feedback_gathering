@@ -45,7 +45,7 @@ public class StatusOptionController extends RestController<StatusOption>{
 	
 	@POST
 	@Path("/{lang}/status_options")
-	@Authenticate(service = UserAuthenticationService.class)
+	//@Authenticate(service = UserAuthenticationService.class)
 	public StatusOption Insert(StatusOption option) throws Exception
 	{
 		return super.Insert(option);
