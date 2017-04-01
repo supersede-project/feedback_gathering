@@ -2,4 +2,4 @@
 RemoteSystemsTempFiles/*
 reporting_frontend/node_modules
 server_library/src/ch/uzh/ifi/feedback/library/transaction/config.properties
-
+.idea/
