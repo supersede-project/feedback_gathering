@@ -26,13 +26,20 @@ export class Application {
         var generalConfiguration = GeneralConfiguration.initByData(data.generalConfiguration);
         var configurations = [];
         for(var configuration of data.configurations) {
-            configurations.push(ConfigurationFactory.createByData(configuration));
+            let configurationObject = ConfigurationFactory.createByData(configuration);
+            if(configurationObject !== null) {
+                configurations.push(configurationObject);
+            }
         }
         return new Application(data.id, data.name, data.state, generalConfiguration, configurations);
     }
 
     getPushConfiguration(): PushConfiguration {
         return <PushConfiguration>this.configurations.filter(configuration => configuration.type === configurationTypes.push)[0];
+    }
+
+    getElementSpecificPushConfigurations(): [PushConfiguration] {
+        return <[PushConfiguration]>this.configurations.filter(configuration => configuration.type === configurationTypes.elementSpecificPush);
     }
 
     getPullConfigurations(): PullConfiguration[] {

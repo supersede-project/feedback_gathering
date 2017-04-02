@@ -19,7 +19,8 @@ export const mechanismTypes = {
 };
 export const configurationTypes = {
     push: 'PUSH',
-    pull: 'PULL'
+    pull: 'PULL',
+    elementSpecificPush: 'ELEMENT_SPECIFIC_PUSH'
 };
 export const cookieNames = {
     lastTriggered: 'lastTriggered'

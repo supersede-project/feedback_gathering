@@ -28,6 +28,7 @@ export class FeedbackApp {
             this.checkPullConfigurations(loadedApplication);
             this.configureDialog(loadedApplication);
             this.configureFeedbackButton();
+            this.configureElementSpecificPush(loadedApplication);
             this.feedbackButton.show();
         }, errorData => {
             console.warn('SERVER ERROR ' + errorData.status + ' ' + errorData.statusText + ': ' + errorData.responseText);
@@ -59,8 +60,28 @@ export class FeedbackApp {
 
     checkPullConfigurations(application:Application) {
         var alreadyTriggeredOne = false;
-        for (var pullConfiguration of shuffle(application.getPullConfigurations())) {
+        for (let pullConfiguration of shuffle(application.getPullConfigurations())) {
             alreadyTriggeredOne = pullConfiguration.checkTrigger(alreadyTriggeredOne);
+        }
+    }
+
+    configureElementSpecificPush(application:Application) {
+        for(let elementSpecificPushConfiguration of application.getElementSpecificPushConfigurations()) {
+            let template_name = elementSpecificPushConfiguration.generalConfiguration.getParameterValue('baloonTemplate');
+            let baloonTemplate = require('../templates/baloons/' + template_name + '.handlebars');
+            let baloonTemplateContext = {
+                'linkTitle': elementSpecificPushConfiguration.generalConfiguration.getParameterValue('linkTitle'),
+                'linkText': elementSpecificPushConfiguration.generalConfiguration.getParameterValue('linkText')
+            };
+
+            let elementSelector = elementSpecificPushConfiguration.generalConfiguration.getParameterValue('element');
+            let html = baloonTemplate(baloonTemplateContext);
+
+            // TODO initialize a dialog view with the configuration, an example configuration is in applications_mock.json (see configuration of type ELEMENT_SPECIFIC_PUSH)
+            // TODO position the baloon template html near the element (maybe parameters for x and y offsets or something like bottom, left, right, top)
+            // TODO create other baloon templates if needed
+            // TODO maybe add some animation to the baloon template
+            // TODO event: baloon click --> open dialog
         }
     }
 }
