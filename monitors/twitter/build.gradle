@@ -6,6 +6,33 @@
  * For more details take a look at the Java Quickstart chapter in the Gradle
  * user guide available at https://docs.gradle.org/2.13/userguide/tutorial_java_projects.html
  */
+ 
+ buildscript {
+    repositories {
+        mavenCentral()
+    maven {
+            url "${artifactory_contextUrl}/libs-snapshot"
+            name = 'maven-supersede-snapshot'
+        credentials {
+                username = "${artifactory_user}"
+                password = "${artifactory_password}"
+        }
+        }
+    maven {
+            url "${artifactory_contextUrl}/libs-release"
+            name = 'maven-supersede-release'
+        credentials {
+                username = "${artifactory_user}"
+                password = "${artifactory_password}"
+        }
+        }
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.4.2.RELEASE")
+    //Check for the latest version here: http://plugins.gradle.org/plugin/com.jfrog.artifactory
+        classpath "org.jfrog.buildinfo:build-info-extractor-gradle:4+"
+    }
+}
 
 // Apply the java plugin to add support for Java
 apply plugin: 'java'
@@ -17,32 +44,12 @@ repositories {
     // Use 'jcenter' for resolving your dependencies.
     // You can declare any Maven/Ivy/file repository here.
     mavenCentral();
+    add buildscript.repositories.getByName ("maven-supersede-snapshot")
+    add buildscript.repositories.getByName ("maven-supersede-release")
 }
 
 // In this section you declare the dependencies for your production and test code
 dependencies {
-    // The production code uses the SLF4J logging API at compile time
-    compile 'org.slf4j:slf4j-api:1.7.21'
-
-    // Declare the dependency for your favourite test framework you want to use in your tests.
-    // TestNG is also supported by the Gradle Test task. Just change the
-    // testCompile dependency to testCompile 'org.testng:testng:6.8.1' and add
-    // 'test.useTestNG()' to your build script.
-    testCompile 'junit:junit:4.12'
-	
-	
-	// https://mvnrepository.com/artifact/javax.ws.rs/javax.ws.rs-api
-	compile group: 'javax.ws.rs', name: 'javax.ws.rs-api', version: '2.0'
-
-	// https://mvnrepository.com/artifact/org.json/json
-	compile group: 'org.json', name: 'json', version: '20160212'
-	
-	// https://mvnrepository.com/artifact/javax.ws.rs/javax.ws.rs-api
-	compile group: 'org.apache.kafka', name: 'kafka-clients', version: '0.9.0.0'
-	// https://mvnrepository.com/artifact/org.apache.kafka/kafka_2.10
-	compile group: 'org.apache.kafka', name: 'kafka_2.10', version: '0.9.0.0'
-	// https://mvnrepository.com/artifact/org.codehaus.jackson/jackson-jaxrs
-	compile group: 'org.codehaus.jackson', name: 'jackson-jaxrs', version: '1.9.13'
 	
 	// https://mvnrepository.com/artifact/org.twitter4j/twitter4j-core
 	compile group: 'org.twitter4j', name: 'twitter4j-core', version: '4.0.4'
@@ -51,14 +58,12 @@ dependencies {
 	// https://mvnrepository.com/artifact/org.twitter4j/twitter4j-async
 	compile group: 'org.twitter4j', name: 'twitter4j-async', version: '4.0.4'
 	
-	// https://mvnrepository.com/artifact/org.glassfish.jersey.containers/jersey-container-servlet-core
-	compile group: 'org.glassfish.jersey.containers', name: 'jersey-container-servlet-core', version: '2.23.1'
-	// https://mvnrepository.com/artifact/org.glassfish.jersey.core/jersey-common
-	compile group: 'org.glassfish.jersey.core', name: 'jersey-common', version: '2.23.1'
+	compile project(':monitoring')
 	
-	// https://mvnrepository.com/artifact/log4j/log4j
-	compile group: 'log4j', name: 'log4j', version: '1.2.17'
-	// https://mvnrepository.com/artifact/log4j/apache-log4j-extras
-	compile group: 'log4j', name: 'apache-log4j-extras', version: '1.2.17'
-	
+}
+
+configurations.all {
+        //Avoids conflict: SL4J Multiple bindings were found on the class path
+        exclude group: "org.slf4j", module: "slf4j-log4j12"
+        exclude group: "javax.ws.rs", module: "jsr311-api"
 }
