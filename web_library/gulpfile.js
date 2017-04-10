@@ -36,6 +36,11 @@ var copyright = function () {
     return '/*' + copyrightString + '*/';
 };
 
+var version = function () {
+    var versionString = fs.readFileSync('version.txt');
+    return '/*' + versionString + '*/';
+};
+
 var getFileContent = function (path) {
     return fs.readFileSync(path);
 };
@@ -59,8 +64,14 @@ gulp.task('deploy', function (done) {
 
 gulp.task('add-copyright', function () {
     gulp.src(['dist/jquery.feedback.min.js'])
-    .pipe(insert.prepend(copyright))
-    .pipe(gulp.dest('dist/'));
+        .pipe(insert.prepend(copyright))
+        .pipe(gulp.dest('dist'));
+});
+
+gulp.task('add-version', function () {
+    gulp.src(['dist/jquery.feedback.min.js'])
+        .pipe(insert.prepend(version))
+        .pipe(gulp.dest('dist'));
 });
 
 gulp.task('copy-and-minify-css', function () {
@@ -204,6 +215,8 @@ gulp.task('build.dev', function(done) {
         'copy-test-page-assets',
         'copy-images',
         'copy-locales',
+        'add-copyright',
+        'add-version',
         done
     );
 });
@@ -221,7 +234,8 @@ gulp.task('build.prod', function(done) {
         'copy-and-uglify-audio-assets',
         'copy-images',
         'copy-locales',
-        //exec('webpack'),
+        'add-copyright',
+        'add-version',
         done
     );
 });
