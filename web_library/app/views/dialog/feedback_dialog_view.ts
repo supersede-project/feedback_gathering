@@ -20,6 +20,8 @@ import {ContextInformation} from '../../models/feedbacks/context_information';
 import {FeedbackService} from '../../services/feedback_service';
 import {PageNotification} from '../page_notification';
 import {GeneralConfiguration} from '../../models/configurations/general_configuration';
+import {InfoView} from '../info/info_view';
+import {InfoMechanism} from '../../models/mechanisms/info_mechanism';
 
 
 /**
@@ -50,28 +52,32 @@ export class FeedbackDialogView extends DialogView {
     initMechanismViews() {
         this.mechanismViews = [];
 
-        for (var textMechanism of this.configuration.getMechanismConfig(mechanismTypes.textType)) {
+        for (let textMechanism of this.configuration.getMechanismConfig(mechanismTypes.textType)) {
             this.mechanismViews.push(new TextView(textMechanism, this.dialogId));
         }
 
-        for (var ratingMechanism of this.configuration.getMechanismConfig(mechanismTypes.ratingType)) {
+        for (let ratingMechanism of this.configuration.getMechanismConfig(mechanismTypes.ratingType)) {
             this.mechanismViews.push(new RatingView(<RatingMechanism>ratingMechanism, this.dialogId));
         }
 
-        for (var screenshotMechanism of this.configuration.getMechanismConfig(mechanismTypes.screenshotType)) {
-            var screenshotView = this.initScreenshot(screenshotMechanism, this.dialogId);
+        for (let screenshotMechanism of this.configuration.getMechanismConfig(mechanismTypes.screenshotType)) {
+            let screenshotView = this.initScreenshot(screenshotMechanism, this.dialogId);
             this.mechanismViews.push(screenshotView);
         }
 
-        var audioMechanism = this.configuration.getMechanismConfig(mechanismTypes.audioType).filter(mechanism => mechanism.active === true)[0];
+        let audioMechanism = this.configuration.getMechanismConfig(mechanismTypes.audioType).filter(mechanism => mechanism.active === true)[0];
         if (audioMechanism) {
-            var audioContainer = $("#" + this.dialogId + " #audioMechanism" + audioMechanism.id);
+            let audioContainer = $("#" + this.dialogId + " #audioMechanism" + audioMechanism.id);
             this.audioView = new AudioView(audioMechanism, audioContainer, this.dialogContext.distPath);
             this.mechanismViews.push(this.audioView);
         }
 
-        for (var attachmentMechanism of this.configuration.getMechanismConfig(mechanismTypes.attachmentType)) {
+        for (let attachmentMechanism of this.configuration.getMechanismConfig(mechanismTypes.attachmentType)) {
             this.mechanismViews.push(new AttachmentView(<AttachmentMechanism>attachmentMechanism, this.dialogId, this.dialogContext.distPath));
+        }
+
+        for (let infoMechanism of this.configuration.getMechanismConfig(mechanismTypes.infoType)) {
+            this.mechanismViews.push(new InfoView(<InfoMechanism>infoMechanism, this.dialogId));
         }
 
         this.addEvents(this.dialogId, this.configuration);

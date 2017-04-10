@@ -405,6 +405,119 @@
                 ]
               }
             ]
+          },
+          {
+            "id": 8,
+            "type": "INFO_TYPE",
+            "active": true,
+            "order": 7,
+            "canBeActivated": false,
+            "parameters": [
+              {
+                "key": "page",
+                "value": "review"
+              },
+              {
+                "key": "text",
+                "value": "Bevor Sie Ihr Feedback absenden:"
+              },
+              {
+                "key": "boxWidth",
+                "value": "103%"
+              }
+            ]
+          },
+          {
+            "id": 9,
+            "type": "RATING_TYPE",
+            "active": true,
+            "order": 8,
+            "canBeActivated": false,
+            "parameters": [
+              {
+                "key": "title",
+                "value": "Wie zufrieden sind Sie mit dem Feedback Tool?"
+              },
+              {
+                "key": "ratingIcon",
+                "value": "star"
+              },
+              {
+                "key": "maxRating",
+                "value": 5
+              },
+              {
+                "key": "defaultRating",
+                "value": 0,
+                "defaultValue": 0,
+                "editableByUser": false
+              },
+              {
+                "key": "boxWidth",
+                "value": "103%"
+              }
+            ]
+          },
+          {
+            "id": 10,
+            "type": "TEXT_TYPE",
+            "active": true,
+            "order": 9,
+            "canBeActivated": false,
+            "parameters": [
+              {
+                "key": "maxLength",
+                "value": 2000
+              },
+              {
+                "key": "title",
+                "value": "Feedback"
+              },
+              {
+                "key": "label",
+                "value": "Ihr Kommentar"
+              },
+              {
+                "key": "labelPositioning",
+                "value": "left"
+              },
+              {
+                "key": "mandatory",
+                "value": 0
+              },
+              {
+                "key": "borderWidth",
+                "value": 1
+              },
+              {
+                "key": "fieldWidth",
+                "value": 200
+              },
+              {
+                "key": "fieldHeight",
+                "value": 50
+              },
+              {
+                "key": "fieldFontSize",
+                "value": 13
+              },
+              {
+                "key": "maxLengthVisible",
+                "value": 0
+              },
+              {
+                "key": "validationRegex",
+                "value": "."
+              },
+              {
+                "key": "validateOnSkip",
+                "value": 1
+              },
+              {
+                "key": "boxWidth",
+                "value": "103%"
+              }
+            ]
           }
         ]
       },

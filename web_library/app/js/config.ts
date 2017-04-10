@@ -17,7 +17,8 @@ export const mechanismTypes = {
     screenshotType: 'SCREENSHOT_TYPE',
     audioType: 'AUDIO_TYPE',
     categoryType: 'CATEGORY_TYPE',
-    attachmentType: 'ATTACHMENT_TYPE'
+    attachmentType: 'ATTACHMENT_TYPE',
+    infoType: 'INFO_TYPE'
 };
 export const configurationTypes = {
     push: 'PUSH',

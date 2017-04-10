@@ -1,0 +1,109 @@
+{{#if active}}
+    <section id="screenshotMechanism{{ id }}"
+             class="feedback-mechanism feedback-col horizontal screenshot-type" style="width: {{boxWidth}}; padding-left: {{boxPaddingLeft}}; padding-right: {{boxPaddingRight}};">
+        <article class="col col-left">
+            <button class="take-screenshot button screenshot"
+                    data-default-text="{{#if screenshotTakeButtonTitle}}{{screenshotTakeButtonTitle}}{{else}}{{t "screenshot.take_screenshot" }}{{/if}}"
+                    data-active-text="{{#if screenshotTakeNewButtonTitle}}{{screenshotTakeNewButtonTitle}}{{else}}{{t "screenshot.take_new_screenshot" }}{{/if}}">
+                {{#if screenshotTakeButtonTitle}}{{screenshotTakeButtonTitle}}{{else}}{{t "screenshot.take_screenshot" }}{{/if}}
+            </button>
+
+            <div class="screenshot-operations">
+                <button class="button screenshot-draw-remove screenshot"
+                        title="{{#if screenshotRemoveButtonTitle}}{{screenshotRemoveButtonTitle}}{{else}}{{t "screenshot.remove" }}{{/if}}">
+                    {{#if screenshotRemoveButtonTitle}}{{screenshotRemoveButtonTitle}}{{else}}{{t "screenshot.remove" }}{{/if}}
+                </button>
+
+                <p style="{{parent.generalLabelStyle}}">{{zoomTitle}}</p>
+                {{#if zoomExplanation }}
+                    <small>{{ zoomExplanation }}</small>
+                {{/if}}
+                <img class="zoom-in" title="Zoom"
+                     src="{{parent.distPath}}img/ic_zoom_in_black_24dp_2x.png"/>
+                <img class="zoom-out" title="Zoom"
+                     src="{{parent.distPath}}img/ic_zoom_out_black_24dp_2x.png"/>
+
+
+                <!--[if IE]>
+                <style>
+                    .hide-ie {
+                        display: none;
+                    }
+                </style>
+                <![endif]-->
+                <p style="{{parent.generalLabelStyle}}">{{cropTitle}}</p>
+                {{#if cropExplanation }}
+                    <small>{{ cropExplanation }}</small>
+                {{/if}}
+                <button class="screenshot-operation screenshot-crop"
+                        title="{{t "screenshot.crop" }}"><img
+                        src="{{parent.distPath}}img/ic_crop_black_24dp_2x.png"
+                        alt="{{t "screenshot.crop" }}"/></button>
+                <button class="screenshot-operation default-hidden screenshot-crop-cancel"
+                        title="{{t "general.cancel" }}"><img
+                        src="{{parent.distPath}}img/ic_clear_black_24dp_2x.png"
+                        alt="{{t "general.cancel" }}"/></button>
+                <button class="screenshot-operation default-hidden screenshot-crop-confirm"
+                        title="{{t "screenshot.crop" }}"><img
+                        src="{{parent.distPath}}img/ic_done_black_24dp_2x.png"
+                        alt="{{t "screenshot.crop" }}"/></button>
+                <button class="screenshot-operation default-hidden screenshot-draw-undo"
+                        title="{{t "screenshot.undo" }}"><img
+                        src="{{parent.distPath}}img/ic_undo_black_24dp_2x.png"
+                        alt="{{t "screenshot.undo" }}"/></button>
+
+                <p class="annotations-heading" style="{{parent.generalLabelStyle}}">{{annotationTitle}}</p>
+                {{#if annotationExplanation }}
+                    <small>{{ annotationExplanation }}</small>
+                {{/if}}
+                <img id="sentimentSatisfiedSticker" class="sticker-source svg-sticker-source hide-ie" title="{{ sentimentSatisfiedMouseover }}"
+                     src="{{parent.distPath}}img/ic_sentiment_satisfied_black_24px.svg"/>
+                <img id="sentimentDissatisfiedSticker" class="sticker-source svg-sticker-source hide-ie" title="{{ sentimentDissatisfiedMouseover }}"
+                     src="{{parent.distPath}}img/ic_sentiment_dissatisfied_black_24px.svg"/>
+                <img id="arrowSticker" class="sticker-source object-source arrow hide-ie" title="{{ arrowMouseover }}"
+                     src="{{parent.distPath}}img/ic_arrow_forward_black_24px.svg"/>
+                <img id="circleSticker" class="sticker-source object-source circle hide-ie" title="{{ circleMouseover }}"
+                     src="{{parent.distPath}}img/ic_panorama_fish_eye_black_24px.svg"/>
+                <img id="rectangleSticker" class="sticker-source object-source rect hide-ie" title="{{ rectMouseover }}"
+                     src="{{parent.distPath}}img/ic_crop_din_black_24px.svg"/>
+                <img id="blackenSticker" class="sticker-source object-source fillRect hide-ie" title="{{ filledRectMouseover }}"
+                     src="{{parent.distPath}}img/ic_stop_black_24px.svg"/>
+                <img id="thumbUpSticker" class="sticker-source svg-sticker-source hide-ie" title="{{ thumbUpMouseover }}"
+                     src="{{parent.distPath}}img/ic_thumb_up_black_24px.svg"/>
+                <img id="thumbDownSticker" class="sticker-source svg-sticker-source hide-ie" title="{{ thumbDownMouseover }}"
+                     src="{{parent.distPath}}img/ic_thumb_down_black_24px.svg"/>
+                <img class="freehand" title="{{ freehandMouseover }}"
+                     src="{{parent.distPath}}img/ic_gesture_black_24px.svg" />
+
+                <br />
+                <br />
+                <p class="annotations-heading" style="{{parent.generalLabelStyle}}">{{textTitle}}</p>
+                {{#if textExplanation }}
+                    <small>{{ textExplanation }}</small>
+                {{/if}}
+                <img id="textSticker" class="sticker-source svg-sticker-source text hide-ie" title="{{ textMouseover }}"
+                     src="{{parent.distPath}}img/ic_title_black_24px.svg"/>
+
+                <article class="selected-object-controls">
+                    <p>{{selectionTitle}}</p>
+                    <a class="delete"><i class="material-icons">delete</i></a>
+                    &nbsp;
+                    <a class="color"><i
+                            class="material-icons">format_color_fill</i></a>
+                    <input class="text-size" type="text">
+                </article>
+                <article class="freehand-controls">
+                    <p>{{colorTitle}}</p>
+                    <a class="freehand-color"><i class="material-icons">format_color_fill</i></a>
+                </article>
+            </div>
+        </article>
+        <div class="col col-right screenshot-preview">
+
+        </div>
+        <div class="hidden-preview">
+
+        </div>
+        <div class="clearfix"></div>
+    </section>
+{{/if}}
