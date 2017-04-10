@@ -1,9 +1,9 @@
 import Handlebars = require('handlebars');
-import './lib/rating/jquery.star-rating-svg.js';
+import './lib/rating/jquery.star-rating-svg.min.js';
 import './jquery.validate';
 import './jquery.validate_category';
 import './jquery.fileupload';
-import {applicationId, apiEndpointOrchestrator} from './config';
+import {applicationId, apiEndpointOrchestrator, apiEndpointRepository} from './config';
 import {I18nHelper} from './helpers/i18n';
 import i18n = require('i18next');
 import {ApplicationService} from '../services/application_service';
@@ -11,6 +11,8 @@ import * as t from '../templates/t';
 import * as compare from '../templates/compare';
 import {FeedbackApp} from './feedback_app';
 import {MockBackend} from '../services/backends/mock_backend';
+import {QuestionDialogView} from '../views/dialog/question_dialog_view';
+import * as i18next from 'i18next';
 var mockData = require('json!../services/mocks/dev/applications_mock.json');
 
 
@@ -28,13 +30,19 @@ export var feedbackPluginModule = function ($, window, document) {
      * server and the feedback mechanism is invoked.
      */
     $.fn.feedbackPlugin = function (options) {
-        I18nHelper.initializeI18n(options);
-        var language = I18nHelper.getLanguage(options);
+        if($.fn.droppable === undefined) {
+            // TODO change to prod
+            $.getScript('https://supersede-develop.atosresearch.eu/web_library/senercon/dist/jquery.ui.droppable.js');
+        }
+        let button = this;
         var options = $.extend({}, $.fn.feedbackPlugin.defaults, options);
         var mockBackend:MockBackend = new MockBackend(mockData);
-        var applicationService = new ApplicationService(apiEndpointOrchestrator, language, mockBackend);
-        feedbackApp = new FeedbackApp(applicationService, applicationId, options, this);
-        feedbackApp.loadApplicationConfiguration();
+
+        I18nHelper.initializeI18n(options, function(language) {
+            var applicationService = new ApplicationService(options.apiEndpointOrchestrator, language, mockBackend);
+            feedbackApp = new FeedbackApp(applicationService, options.applicationId, options, button);
+            feedbackApp.loadApplicationConfiguration();
+        });
 
         return this;
     };
@@ -51,7 +59,10 @@ export var feedbackPluginModule = function ($, window, document) {
         'defaultStrokeWidth': 4,
         'dialogPositionMy': 'center top',
         'dialogPositionAt': 'center top+30',
-        'dialogPositionOf': window
+        'dialogPositionOf': window,
+        'apiEndpointOrchestrator': apiEndpointOrchestrator,
+        'apiEndpointRepository': apiEndpointRepository,
+        'applicationId': applicationId
     };
 };
 

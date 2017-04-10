@@ -717,6 +717,18 @@
   padding: 10px 40px;
 }
 
+.feedback-library#infoDialog {
+  min-width: 500px;
+
+  p.message {
+    margin-bottom: 25px;
+  }
+
+  button.button {
+    float: right;
+    margin-bottom: 5px;
+  }
+}
 
 .feedback-library .feedback-mechanism.user-question:first-child {
   margin-top: 50px;

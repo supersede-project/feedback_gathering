@@ -22,6 +22,8 @@ import {PageNotification} from '../page_notification';
 import {GeneralConfiguration} from '../../models/configurations/general_configuration';
 import {InfoView} from '../info/info_view';
 import {InfoMechanism} from '../../models/mechanisms/info_mechanism';
+import {CategoryMechanism} from '../../models/mechanisms/category_mechanism';
+import {QuestionDialogView} from './question_dialog_view';
 
 
 /**
@@ -30,19 +32,26 @@ import {InfoMechanism} from '../../models/mechanisms/info_mechanism';
 export class FeedbackDialogView extends DialogView {
     mechanismViews:MechanismView[];
     pageNavigation:PageNavigation;
+    paginationContainer:PaginationContainer;
     audioView:AudioView;
 
-    constructor(public dialogId:string, public template:any, public configuration:Configuration, public context?:any, public openCallback?:() => void,
+    constructor(public dialogId:string, public template:any, public configuration:Configuration, public context:any, public openCallback?:() => void,
                 public closeCallback?:() => void) {
         super(dialogId, template, context, openCallback, closeCallback);
         this.dialogContext = $.extend({}, this.dialogContext, this.configuration.getContext());
         this.initMechanismViews();
+        this.configurePageNavigation();
     }
 
     initDialog() {
-        var myThis = this,
+        let myThis = this,
             dialogContainer = jQuery('#' + this.dialogId);
         super.initDialog();
+        this.dialogElement.dialog('option', 'position', {
+            my: this.dialogContext.dialogPositionMy,
+            at: this.dialogContext.dialogPositionAt,
+            of: this.dialogContext.dialogPositionOf
+        });
 
         dialogContainer.find('.discard-feedback').on('click', function () {
             myThis.discardFeedback();
@@ -83,9 +92,9 @@ export class FeedbackDialogView extends DialogView {
         this.addEvents(this.dialogId, this.configuration);
     }
 
-    configurePageNavigation(configuration:Configuration, dialogId:string) {
-        this.pageNavigation = new PageNavigation(configuration, $('#' + dialogId));
-        new PaginationContainer($('#' + dialogId + '.feedback-container .pages-container'), this.pageNavigation);
+    configurePageNavigation() {
+        this.pageNavigation = new PageNavigation(this.configuration, jQuery('#' + this.dialogId));
+        this.paginationContainer = new PaginationContainer(jQuery('#' + this.dialogId + '.feedback-container .pages-container'), this.pageNavigation);
     }
 
     addEvents(containerId, configuration:ConfigurationInterface) {
@@ -96,14 +105,19 @@ export class FeedbackDialogView extends DialogView {
         var textMechanisms = configuration.getMechanismConfig(mechanismTypes.textType);
         var feedbackDialogView = this;
 
-        var feedbackService = new FeedbackService(apiEndpointRepository, this.dialogContext.lang);
+        var feedbackService = new FeedbackService(this.context.apiEndpointRepository, this.dialogContext.lang);
 
         container.find('button.submit-feedback').unbind().on('click', function (event) {
             event.preventDefault();
             event.stopPropagation();
+            var submitButton= $(this);
+            submitButton.prop('disabled', true);
+            submitButton.text(submitButton.text() + '...');
 
 
             if(!myThis.ratingMechanismsAreValid(container)) {
+                submitButton.prop('disabled', false);
+                submitButton.text(submitButton.text().replace(/...$/,''));
                 return;
             }
 
@@ -120,6 +134,9 @@ export class FeedbackDialogView extends DialogView {
                     feedbackDialogView.prepareFormData(configuration, function (formData) {
                         feedbackDialogView.sendFeedback(feedbackService, formData, generalConfiguration);
                     });
+                } else {
+                    submitButton.prop('disabled', false);
+                    submitButton.text(submitButton.text().replace(/...$/,''));
                 }
             } else {
                 feedbackDialogView.prepareFormData(configuration, function (formData) {
@@ -144,18 +161,35 @@ export class FeedbackDialogView extends DialogView {
 
     sendFeedback(feedbackService:FeedbackService, formData:any, generalConfiguration:GeneralConfiguration) {
         var feedbackDialogView = this;
-        var url = apiEndpointRepository + 'feedback_repository/' + feedbackDialogView.dialogContext.lang + '/applications/' + applicationId + '/feedbacks/';
+        var url = this.context.apiEndpointRepository + 'feedback_repository/' + this.context.lang + '/applications/' + this.context.applicationId + '/feedbacks/';
 
         feedbackService.sendFeedback(url, formData, function(data) {
-            feedbackDialogView.resetDialog();
-            if (generalConfiguration.getParameterValue('closeDialogOnSuccess')) {
-                feedbackDialogView.close();
-                PageNotification.show(i18n.t('general.success_message'));
+            if(generalConfiguration && generalConfiguration.getParameterValue('successDialog')) {
+                feedbackDialogView.discardFeedback();
+                feedbackDialogView.paginationContainer.showFirstPage();
+                let dialogTemplate = require('../../templates/info_dialog.handlebars');
+                let successMessage = generalConfiguration.getParameterValue('successMessage') || i18n.t('general.success_message');
+                let successDialogView = new QuestionDialogView('infoDialog', dialogTemplate, {'message': <string>successMessage});
+                successDialogView.setTitle('Info');
+                successDialogView.setModal(true);
+                successDialogView.addAnswerOption('#infoDialogOkay', function() {
+                    successDialogView.close();
+                });
+                successDialogView.open();
+            } else if (generalConfiguration && generalConfiguration.getParameterValue('closeDialogOnSuccess')) {
+                feedbackDialogView.discardFeedback();
+                feedbackDialogView.paginationContainer.showFirstPage();
+                PageNotification.show(<string>i18n.t('general.success_message'));
             } else {
+                feedbackDialogView.resetDialog();
                 $('.server-response').addClass('success').text(i18n.t('general.success_message'));
             }
+            $('button.submit-feedback').prop('disabled', false);
+            $('button.submit-feedback').text($('button.submit-feedback').text().replace(/...$/,''));
         }, function(error) {
             $('.server-response').addClass('error').text('Failure: ' + JSON.stringify(error));
+            $('button.submit-feedback').prop('disabled', false);
+            $('button.submit-feedback').text($('button.submit-feedback').text().replace(/...$/,''));
         });
     }
 
@@ -171,7 +205,7 @@ export class FeedbackDialogView extends DialogView {
 
         dialogView.resetMessageView();
 
-        var feedbackObject = new Feedback('Feedback', this.dialogContext.userId, this.dialogContext.language, applicationId, configuration.id, [], [], [], [], null, [], []);
+        var feedbackObject = new Feedback('Feedback', this.dialogContext.userId, this.dialogContext.language, this.context.applicationId, configuration.id, [], [], [], [], null, [], []);
         feedbackObject.contextInformation = ContextInformation.create();
 
         for (var mechanismView of dialogView.mechanismViews) {
@@ -247,7 +281,7 @@ export class FeedbackDialogView extends DialogView {
         var screenshotPreview = container.find('.screenshot-preview'),
             screenshotCaptureButton = container.find('button.take-screenshot'),
             elementToCapture = $('' + elementToCaptureSelector),
-            elementsToHide = ['.ui-widget-overlay.ui-front', dialogSelector];
+            elementsToHide = ['.ui-widget-overlay', dialogSelector, '.ui-dialog.feedback-dialog', '.' + this.context.dialogCSSClass];
         // TODO attention: circular dependency
         var screenshotView = new ScreenshotView(screenshotMechanism, screenshotPreview, screenshotCaptureButton,
             elementToCapture, container, this.dialogContext.distPath, elementsToHide, screenshotMechanism.getParameterValue('manipulationOnObject'));

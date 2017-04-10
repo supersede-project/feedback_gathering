@@ -29,10 +29,10 @@ export class PageNavigation {
         var attachmentMechanisms = this.configuration.getMechanismConfig(mechanismTypes.attachmentType);
 
         currentPage.find('.validate').each(function () {
-            $(this).validate();
+            jQuery(this).validate();
         });
         currentPage.find('.validate-category').each(function () {
-            $(this).validateCategory();
+            jQuery(this).validateCategory();
         });
 
         if (currentPage.find('.invalid').length > 0) {
@@ -63,13 +63,13 @@ export class PageNavigation {
                     screenshotMechanism.screenshotView !== undefined && screenshotMechanism.screenshotView.screenshotCanvas !== undefined && screenshotMechanism.screenshotView.screenshotCanvas !== null
                     && screenshotMechanism.getParameterValue('page') != "review") {
 
-                    var img = $('<img src="' + screenshotMechanism.screenshotView.screenshotCanvas.toDataURL() + '" />');
+                    var img = jQuery('<img src="' + screenshotMechanism.screenshotView.screenshotCanvas.toDataURL() + '" />');
                     img.css('width', '40%');
                     img.addClass('base');
                     var screenshotReviewElement = nextPage.find('.screenshot-review');
                     screenshotReviewElement.append(img);
 
-                    var screenshotTextReview = $('<p class="screenshot-text-review"></p>');
+                    var screenshotTextReview = jQuery('<p class="screenshot-text-review"></p>');
                     screenshotReviewElement.append(screenshotTextReview);
 
                     // TODO get this 965 from the actual html
@@ -77,12 +77,12 @@ export class PageNavigation {
 
                 }
                 jQuery('section#screenshotMechanism' + screenshotMechanism.id + ' .sticker-container').each(function() {
-                    var x = $(this).position().left;
-                    var y = $(this).position().top;
-                    var width = $(this).width();
-                    var height = $(this).height();
+                    var x = jQuery(this).position().left;
+                    var y = jQuery(this).position().top;
+                    var width = jQuery(this).width();
+                    var height = jQuery(this).height();
 
-                    var reviewClone = $(this).clone();
+                    var reviewClone = jQuery(this).clone();
                     reviewClone.removeClass('ui-resizable');
                     reviewClone.removeClass('ui-draggable');
                     reviewClone.removeClass('ui-draggable-handle');
@@ -95,8 +95,8 @@ export class PageNavigation {
                     reviewClone.find('a').remove();
 
                     // adjust sizes of text
-                    if($(this).hasClass('text-2')) {
-                        var textarea = $(this).find('textarea');
+                    if(jQuery(this).hasClass('text-2')) {
+                        var textarea = jQuery(this).find('textarea');
                         var text = textarea.val();
                         var oldFontSize = textarea.css('font-size');
                         var newFontSize = ratio * parseInt(oldFontSize);
@@ -104,12 +104,12 @@ export class PageNavigation {
                     }
 
                     // text review on hover
-                    if($(this).hasClass('text') || $(this).hasClass('text-2')) {
-                        var text = $(this).find('textarea').val();
+                    if(jQuery(this).hasClass('text') || jQuery(this).hasClass('text-2')) {
+                        var text = jQuery(this).find('textarea').val();
                         reviewClone.on('mouseover mouseenter', function() {
-                            $('.screenshot-text-review').text(text).css('display', 'inline');
+                            jQuery('.screenshot-text-review').text(text).css('display', 'inline');
                         }).on('mouseleave', function() {
-                            $('.screenshot-text-review').text("").css('display', 'none');
+                            jQuery('.screenshot-text-review').text("").css('display', 'none');
                         });
                     }
 
@@ -121,7 +121,7 @@ export class PageNavigation {
                 if (categoryMechanism !== null && nextPage.find('.category-review').length > 0 && categoryMechanism.active && categoryMechanism.getParameterValue('page') != "review") {
                     var inputSelector = 'section#categoryMechanism' + categoryMechanism.id + '.category-type input';
                     currentPage.find(inputSelector).each(function () {
-                        var input = $(this);
+                        var input = jQuery(this);
                         var selector = 'input#review' + input.attr('id');
                         var correspondingReviewInput = nextPage.find(selector);
                         correspondingReviewInput.prop("checked", input.is(':checked'));

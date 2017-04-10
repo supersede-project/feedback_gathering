@@ -11,6 +11,8 @@ export class ApplicationService {
     private backend:Backend;
 
     /**
+     * @param apiEndpoint
+     *  Base URL to the backend service
      * @param language
      *  Language to use when getting the data
      * @param backend

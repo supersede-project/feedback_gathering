@@ -75,6 +75,14 @@
               "id": 1,
               "key": "aKey",
               "value": "aPushSpecificValue"
+            },
+            {
+              "key": "successDialog",
+              "value": 1
+            },
+            {
+              "key": "successMessage",
+              "value": "<p>Vielen Dank für Ihr Feedback!</p><p>Dürfen wir Ihnen noch weitere Fragen zum Feedback Tool stellen? Dann klicken Sie hier <a target='_blank' href='http://google.com'>kurzer Fragebogen</a></p>"
             }
           ]
         },
@@ -540,6 +548,31 @@
               {
                 "key": "validateOnSkip",
                 "value": 1
+              },
+              {
+                "key": "boxWidth",
+                "value": "103%"
+              }
+            ]
+          },
+          {
+            "id": 11,
+            "type": "INFO_TYPE",
+            "active": true,
+            "order": 10,
+            "canBeActivated": false,
+            "parameters": [
+              {
+                "key": "page",
+                "value": "review"
+              },
+              {
+                "key": "cssClass",
+                "value": "user-question"
+              },
+              {
+                "key": "text",
+                "value": "Wollen Sie uns noch mehr mitteilen: <a target='_blank' href='http://google.com'>kurzer Fragebogen</a>"
               },
               {
                 "key": "boxWidth",

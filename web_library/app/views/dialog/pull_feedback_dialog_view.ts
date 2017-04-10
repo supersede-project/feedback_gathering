@@ -11,7 +11,7 @@ import {QuestionDialogView} from './question_dialog_view';
  */
 export class PullFeedbackDialogView extends FeedbackDialogView {
 
-    constructor(public dialogId:string, public template:any, public configuration:PullConfiguration, public context?:any, public openCallback?:() => void,
+    constructor(public dialogId:string, public template:any, public configuration:PullConfiguration, public context:any, public openCallback?:() => void,
                 public closeCallback?:() => void) {
         super(dialogId, template, configuration, context, openCallback, closeCallback);
     }
@@ -26,7 +26,7 @@ export class PullFeedbackDialogView extends FeedbackDialogView {
         }
         if (this.configuration.generalConfiguration.getParameterValue('intermediateDialog')) {
             let intermediateDialogTemplate = require('../templates/intermediate_dialog.handlebars');
-            let intermediateDialog = new QuestionDialogView('intermediateDialog', intermediateDialogTemplate, '');
+            let intermediateDialog = new QuestionDialogView('intermediateDialog', intermediateDialogTemplate, {});
             intermediateDialog.addAnswerOption('#feedbackYes', function() {
                 intermediateDialog.close();
                 setTimeout(function () {
