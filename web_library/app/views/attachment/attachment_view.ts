@@ -18,7 +18,11 @@ export class AttachmentView implements MechanismView {
     }
 
     getFiles() {
-        return this.dropArea.currentFiles;
+        if(this.dropArea) {
+            return this.dropArea.currentFiles;
+        } else {
+            return [];
+        }
     }
 
     getFeedbacks():AttachmentFeedback[] {

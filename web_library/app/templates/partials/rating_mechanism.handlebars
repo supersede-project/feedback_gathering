@@ -1,9 +1,11 @@
 {{#if active}}
-    <section id="ratingMechanism{{ id }}" class="feedback-mechanism feedback-col {{parent.labelPositioning}} rating-type" style="width: {{boxWidth}}; padding-left: {{boxPaddingLeft}}; padding-right: {{boxPaddingRight}};">
+    <section id="ratingMechanism{{ id }}"
+             class="feedback-mechanism feedback-col {{parent.labelPositioning}} {{cssClass}} rating-type{{#if mandatory }} mandatory{{/if}}"
+             style="width: {{boxWidth}}; padding-left: {{boxPaddingLeft}}; padding-right: {{boxPaddingRight}};">
         <p style="{{parent.generalLabelStyle}}{{#if mandatory}}{{ parent.mandatoryLabelStyle }}{{/if}}" class="rating-text col col-left">
             {{ title }}{{#if mandatory }} {{ parent.mandatorySign }}{{/if}}
         </p>
-        <p class="rating-input col col-right">
+        <p class="rating-input col col-right" data-mandatory-message="{{mandatoryReminder}}">
 
         </p>
         <div class="clearfix"></div>

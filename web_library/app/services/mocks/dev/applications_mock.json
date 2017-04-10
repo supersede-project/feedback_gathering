@@ -418,6 +418,10 @@
                 "value": "review"
               },
               {
+                "key": "cssClass",
+                "value": "user-question"
+              },
+              {
                 "key": "text",
                 "value": "Bevor Sie Ihr Feedback absenden:"
               },
@@ -435,8 +439,24 @@
             "canBeActivated": false,
             "parameters": [
               {
+                "key": "page",
+                "value": "review"
+              },
+              {
                 "key": "title",
                 "value": "Wie zufrieden sind Sie mit dem Feedback Tool?"
+              },
+              {
+                "key": "cssClass",
+                "value": "user-question"
+              },
+              {
+                "key": "mandatory",
+                "value": 1
+              },
+              {
+                "key": "mandatoryReminder",
+                "value": "Bitte ein Rating setzen."
               },
               {
                 "key": "ratingIcon",
@@ -465,6 +485,14 @@
             "order": 9,
             "canBeActivated": false,
             "parameters": [
+              {
+                "key": "page",
+                "value": "review"
+              },
+              {
+                "key": "cssClass",
+                "value": "user-question"
+              },
               {
                 "key": "maxLength",
                 "value": 2000

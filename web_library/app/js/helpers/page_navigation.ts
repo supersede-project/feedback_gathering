@@ -44,23 +44,24 @@ export class PageNavigation {
             nextPage.find('.rating-review').empty();
             nextPage.find('.screenshot-review').empty();
 
-            for (var textMechanism of textMechanisms) {
-                if (textMechanism != null && nextPage.find('.text-review').length > 0 && textMechanism.active) {
-                    var sectionSelector = "textMechanism" + textMechanism.id;
-                    var textarea = currentPage.find('section#' + sectionSelector + ' textarea.text-type-text');
+            for (let textMechanism of textMechanisms) {
+                if (textMechanism != null && nextPage.find('.text-review').length > 0 && textMechanism.active && textMechanism.getParameterValue('page') != "review") {
+                    let sectionSelector = "textMechanism" + textMechanism.id;
+                    let textarea = currentPage.find('section#' + sectionSelector + ' textarea.text-type-text');
                     nextPage.find('.text-review').append('<p>' + textarea.val() + '</p>');
                 }
             }
 
-            for(var ratingMechanism of ratingMechanisms) {
-                if (ratingMechanism != null && nextPage.find('.rating-review').length > 0 && ratingMechanism.active) {
+            for(let ratingMechanism of ratingMechanisms) {
+                if (ratingMechanism != null && nextPage.find('.rating-review').length > 0 && ratingMechanism.active && ratingMechanism.getParameterValue('page') != "review") {
                     nextPage.find('.rating-review').append(i18n.t('rating.review_title') + ": " + ratingMechanism.currentRatingValue + " / " + ratingMechanism.getParameterValue("maxRating"));
                 }
             }
 
-            for(var screenshotMechanism of screenshotMechanisms) {
+            for(let screenshotMechanism of screenshotMechanisms) {
                 if (screenshotMechanism != null && nextPage.find('.screenshot-review').length > 0 && screenshotMechanism.active &&
-                    screenshotMechanism.screenshotView !== undefined && screenshotMechanism.screenshotView.screenshotCanvas !== undefined && screenshotMechanism.screenshotView.screenshotCanvas !== null) {
+                    screenshotMechanism.screenshotView !== undefined && screenshotMechanism.screenshotView.screenshotCanvas !== undefined && screenshotMechanism.screenshotView.screenshotCanvas !== null
+                    && screenshotMechanism.getParameterValue('page') != "review") {
 
                     var img = $('<img src="' + screenshotMechanism.screenshotView.screenshotCanvas.toDataURL() + '" />');
                     img.css('width', '40%');
@@ -116,8 +117,8 @@ export class PageNavigation {
                 });
             }
 
-            for (var categoryMechanism of categoryMechanisms) {
-                if (categoryMechanism !== null && nextPage.find('.category-review').length > 0 && categoryMechanism.active) {
+            for (let categoryMechanism of categoryMechanisms) {
+                if (categoryMechanism !== null && nextPage.find('.category-review').length > 0 && categoryMechanism.active && categoryMechanism.getParameterValue('page') != "review") {
                     var inputSelector = 'section#categoryMechanism' + categoryMechanism.id + '.category-type input';
                     currentPage.find(inputSelector).each(function () {
                         var input = $(this);
@@ -128,8 +129,8 @@ export class PageNavigation {
                 }
             }
 
-            for (var audioMechanism of audioMechanisms) {
-                if (audioMechanism !== null && nextPage.find('.audio-review').length > 0 && audioMechanism.active) {
+            for (let audioMechanism of audioMechanisms) {
+                if (audioMechanism !== null && nextPage.find('.audio-review').length > 0 && audioMechanism.active && audioMechanism.getParameterValue('page') != "review") {
                     var audio =  currentPage.find('#audioMechanism' + audioMechanism.id + ' audio:first');
                     if(audio[0].duration && audio[0].duration > 0) {
                         var audioCopy = audio.clone();
@@ -142,8 +143,8 @@ export class PageNavigation {
                 }
             }
 
-            for (var attachmentMechanism of attachmentMechanisms) {
-                if (attachmentMechanism !== null && nextPage.find('.attachment-review').length > 0 && attachmentMechanism.active) {
+            for (let attachmentMechanism of attachmentMechanisms) {
+                if (attachmentMechanism !== null && nextPage.find('.attachment-review').length > 0 && attachmentMechanism.active && attachmentMechanism.getParameterValue('page') != "review") {
                     var table =  currentPage.find('#attachmentMechanism' + attachmentMechanism.id + ' table.current-files:first');
                     var tableCopy = table.clone();
                     nextPage.find('.attachment-review').empty().append(tableCopy);

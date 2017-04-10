@@ -1,6 +1,6 @@
 {{#if active}}
     <section id="screenshotMechanism{{ id }}"
-             class="feedback-mechanism feedback-col horizontal screenshot-type" style="width: {{boxWidth}}; padding-left: {{boxPaddingLeft}}; padding-right: {{boxPaddingRight}};">
+             class="feedback-mechanism feedback-col horizontal {{cssClass}} screenshot-type" style="width: {{boxWidth}}; padding-left: {{boxPaddingLeft}}; padding-right: {{boxPaddingRight}};">
         <article class="col col-left">
             <button class="take-screenshot button screenshot"
                     data-default-text="{{#if screenshotTakeButtonTitle}}{{screenshotTakeButtonTitle}}{{else}}{{t "screenshot.take_screenshot" }}{{/if}}"

@@ -1,5 +1,5 @@
 {{#if active}}
-    <section id="textMechanism{{ id }}" class="feedback-mechanism feedback-col {{parent.labelPositioning}} text-type{{#if mandatory }} mandatory{{/if}}{{#if maxLengthStrict}} max-length-strict{{/if}}"
+    <section id="textMechanism{{ id }}" class="feedback-mechanism feedback-col {{parent.labelPositioning}} {{cssClass}} text-type{{#if mandatory }} mandatory{{/if}}{{#if maxLengthStrict}} max-length-strict{{/if}}"
              style="width: {{boxWidth}}; padding-left: {{boxPaddingLeft}}; padding-right: {{boxPaddingRight}};">
         <p class="text-type-label explanation col col-left" style="{{../generalLabelStyle}}{{ labelStyle }}{{#if mandatory}} {{ ../mandatoryLabelStyle }}{{/if}}">
             {{ label }}{{#if mandatory }} {{ parent.mandatorySign }}{{/if}}

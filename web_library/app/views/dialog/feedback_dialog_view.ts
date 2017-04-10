@@ -89,6 +89,7 @@ export class FeedbackDialogView extends DialogView {
     }
 
     addEvents(containerId, configuration:ConfigurationInterface) {
+        let myThis = this;
         let generalConfiguration = configuration.generalConfiguration;
         var container = $('#' + containerId);
         var textareas = container.find('textarea.text-type-text');
@@ -100,6 +101,11 @@ export class FeedbackDialogView extends DialogView {
         container.find('button.submit-feedback').unbind().on('click', function (event) {
             event.preventDefault();
             event.stopPropagation();
+
+
+            if(!myThis.ratingMechanismsAreValid(container)) {
+                return;
+            }
 
             // TODO adjust
             // validate anyway before sending
@@ -122,6 +128,19 @@ export class FeedbackDialogView extends DialogView {
             }
         });
     };
+
+    ratingMechanismsAreValid(container:any):boolean {
+        let valid = true;
+        container.find('.review-page-mechanisms .rating-type.mandatory .rating-input').each(function() {
+            if(parseInt(jQuery(this).starRating('getRating')) === 0) {
+                valid = false;
+                let errorMessage = jQuery(this).data('mandatory-message');
+                jQuery(this).append('<span class="feedback-form-error">' + errorMessage + '</span>');
+            }
+        });
+
+        return valid;
+    }
 
     sendFeedback(feedbackService:FeedbackService, formData:any, generalConfiguration:GeneralConfiguration) {
         var feedbackDialogView = this;
