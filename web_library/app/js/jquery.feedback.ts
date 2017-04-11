@@ -31,7 +31,7 @@ export var feedbackPluginModule = function ($, window, document) {
      */
     $.fn.feedbackPlugin = function (options) {
         if($.fn.droppable === undefined) {
-            $.getScript('https://supersede-develop.atosresearch.eu/web_library/senercon/dist/jquery.ui.droppable.js');
+            $.getScript('https://platform.supersede.eu/web_library/senercon/dist/jquery.ui.droppable.js');
         }
         let button = this;
         var options = $.extend({}, $.fn.feedbackPlugin.defaults, options);
