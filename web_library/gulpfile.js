@@ -64,14 +64,14 @@ gulp.task('deploy', function (done) {
 
 gulp.task('add-copyright', function () {
     gulp.src(['dist/jquery.feedback.min.js'])
-        .pipe(insert.prepend(copyright))
-        .pipe(gulp.dest('dist'));
+        .pipe(insert.prepend(copyright()))
+        .pipe(gulp.dest('dist/'));
 });
 
 gulp.task('add-version', function () {
     gulp.src(['dist/jquery.feedback.min.js'])
-        .pipe(insert.prepend(version))
-        .pipe(gulp.dest('dist'));
+        .pipe(insert.prepend(version()))
+        .pipe(gulp.dest('dist/'));
 });
 
 gulp.task('copy-and-minify-css', function () {
@@ -84,6 +84,11 @@ gulp.task('copy-and-minify-css', function () {
 gulp.task('copy-css', function () {
     gulp.src(['app/css/main.css'])
         .pipe(rename('main.min.css'))
+        .pipe(gulp.dest('dist'));
+});
+
+gulp.task('copy-jquery-ui-droppable', function () {
+    gulp.src(['app/js/lib/jquery.ui.droppable.js'])
         .pipe(gulp.dest('dist'));
 });
 
@@ -215,6 +220,7 @@ gulp.task('build.dev', function(done) {
         'copy-test-page-assets',
         'copy-images',
         'copy-locales',
+        'copy-jquery-ui-droppable',
         'add-copyright',
         'add-version',
         done
@@ -234,6 +240,7 @@ gulp.task('build.prod', function(done) {
         'copy-and-uglify-audio-assets',
         'copy-images',
         'copy-locales',
+        'copy-jquery-ui-droppable',
         'add-copyright',
         'add-version',
         done

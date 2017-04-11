@@ -55,7 +55,6 @@ export class I18nHelper {
 
     static getLanguage = function (options, callbackLang:(language:string) => void):void {
         let url = options.distPath + 'locales/' + options.lang + '/translation.json';
-
         readJSONAsync(url, function(data) {
             if(data === null) {
                 callbackLang(options.fallbackLang);
