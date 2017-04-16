@@ -17,8 +17,11 @@ export class RatingView implements MechanismView {
     }
 
     reset() {
-        jQuery('' + this.getSelector()).starRating('setRating', this.ratingMechanism.getParameterValue('defaultRating'));
+        if(jQuery('' + this.getSelector()).starRating) {
+            jQuery('' + this.getSelector()).starRating('setRating', this.ratingMechanism.getParameterValue('defaultRating'));
+        }
         this.ratingMechanism.currentRatingValue = this.ratingMechanism.getParameterValue('defaultRating');
+
     }
 
     getFeedback():RatingFeedback {

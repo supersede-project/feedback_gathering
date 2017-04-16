@@ -89,7 +89,8 @@
                     {{#each mechanisms}}
                         {{#compare type "CATEGORY_TYPE" operator="==="}}
                             {{#if active}}
-                                <p class="mechanism-review category-review">
+                                {{#compare page "review" operator="!="}}
+                                    <p class="mechanism-review category-review">
                                     <i>{{ title }}</i>
                                     {{#each options}}
                                         <input type="{{ ../inputType }}" id="reviewoption{{ key }}"
@@ -97,7 +98,8 @@
                                                value="review{{ key }}" disabled>
                                         <label for="reviewOption{{ key }}"> {{ value }}</label> &nbsp;
                                     {{/each}}
-                                </p>
+                                    </p>
+                                {{/compare}}
                             {{/if}}
                         {{/compare}}
                     {{/each}}

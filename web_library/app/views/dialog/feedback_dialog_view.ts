@@ -24,6 +24,7 @@ import {InfoView} from '../info/info_view';
 import {InfoMechanism} from '../../models/mechanisms/info_mechanism';
 import {CategoryMechanism} from '../../models/mechanisms/category_mechanism';
 import {QuestionDialogView} from './question_dialog_view';
+import {CategoryFeedback} from '../../models/feedbacks/category_feedback';
 
 
 /**
@@ -61,31 +62,35 @@ export class FeedbackDialogView extends DialogView {
     initMechanismViews() {
         this.mechanismViews = [];
 
-        for (let textMechanism of this.configuration.getMechanismConfig(mechanismTypes.textType)) {
+        for (let textMechanism of this.configuration.getActiveMechanismConfig(mechanismTypes.textType)) {
             this.mechanismViews.push(new TextView(textMechanism, this.dialogId));
         }
 
-        for (let ratingMechanism of this.configuration.getMechanismConfig(mechanismTypes.ratingType)) {
+        for (let ratingMechanism of this.configuration.getActiveMechanismConfig(mechanismTypes.ratingType)) {
             this.mechanismViews.push(new RatingView(<RatingMechanism>ratingMechanism, this.dialogId));
         }
 
-        for (let screenshotMechanism of this.configuration.getMechanismConfig(mechanismTypes.screenshotType)) {
+        for (let categoryMechanism of this.configuration.getActiveMechanismConfig(mechanismTypes.categoryType)) {
+            this.mechanismViews.push(new CategoryView(<CategoryMechanism>categoryMechanism));
+        }
+
+        for (let screenshotMechanism of this.configuration.getActiveMechanismConfig(mechanismTypes.screenshotType)) {
             let screenshotView = this.initScreenshot(screenshotMechanism, this.dialogId);
             this.mechanismViews.push(screenshotView);
         }
 
-        let audioMechanism = this.configuration.getMechanismConfig(mechanismTypes.audioType).filter(mechanism => mechanism.active === true)[0];
+        let audioMechanism = this.configuration.getActiveMechanismConfig(mechanismTypes.audioType)[0];
         if (audioMechanism) {
             let audioContainer = $("#" + this.dialogId + " #audioMechanism" + audioMechanism.id);
             this.audioView = new AudioView(audioMechanism, audioContainer, this.dialogContext.distPath);
             this.mechanismViews.push(this.audioView);
         }
 
-        for (let attachmentMechanism of this.configuration.getMechanismConfig(mechanismTypes.attachmentType)) {
+        for (let attachmentMechanism of this.configuration.getActiveMechanismConfig(mechanismTypes.attachmentType)) {
             this.mechanismViews.push(new AttachmentView(<AttachmentMechanism>attachmentMechanism, this.dialogId, this.dialogContext.distPath));
         }
 
-        for (let infoMechanism of this.configuration.getMechanismConfig(mechanismTypes.infoType)) {
+        for (let infoMechanism of this.configuration.getActiveMechanismConfig(mechanismTypes.infoType)) {
             this.mechanismViews.push(new InfoView(<InfoMechanism>infoMechanism, this.dialogId));
         }
 
@@ -116,6 +121,12 @@ export class FeedbackDialogView extends DialogView {
 
 
             if(!myThis.ratingMechanismsAreValid(container)) {
+                submitButton.prop('disabled', false);
+                submitButton.text(submitButton.text().replace(/...$/,''));
+                return;
+            }
+
+            if(!myThis.categoryMechanismsAreValid(container)) {
                 submitButton.prop('disabled', false);
                 submitButton.text(submitButton.text().replace(/...$/,''));
                 return;
@@ -157,6 +168,16 @@ export class FeedbackDialogView extends DialogView {
         });
 
         return valid;
+    }
+
+    categoryMechanismsAreValid(container:any):boolean {
+        container.find('.review-page-mechanisms .category-type.mandatory').validateCategory();
+
+        if(container.find('.review-page-mechanisms .category-type.mandatory.invalid').length > 0) {
+            return false;
+        } else {
+            return true;
+        }
     }
 
     sendFeedback(feedbackService:FeedbackService, formData:any, generalConfiguration:GeneralConfiguration) {
@@ -226,7 +247,9 @@ export class FeedbackDialogView extends DialogView {
                     formData.append(mechanismView.getPartName(), mechanismView.getScreenshotAsBinary());
                 }
             } else if (mechanismView instanceof CategoryView) {
-                feedbackObject.categoryFeedbacks = mechanismView.getCategoryFeedbacks();
+                for(let categoryFeedback of mechanismView.getCategoryFeedbacks()) {
+                    feedbackObject.categoryFeedbacks.push(categoryFeedback);
+                }
             }
         }
 

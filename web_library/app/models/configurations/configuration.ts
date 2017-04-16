@@ -24,7 +24,16 @@ export abstract class Configuration implements ConfigurationInterface {
      *  The matched mechanisms
      */
     getMechanismConfig(mechanismTypeConstant:string): Mechanism[] {
-        var filteredArray = this.mechanisms.filter(mechanism => mechanism.type === mechanismTypeConstant);
+        let filteredArray = this.mechanisms.filter(mechanism => mechanism.type === mechanismTypeConstant);
+        if(filteredArray.length > 0) {
+            return filteredArray;
+        } else {
+            return [];
+        }
+    }
+
+    getActiveMechanismConfig(mechanismTypeConstant:string): Mechanism[] {
+        let filteredArray = this.mechanisms.filter(mechanism => mechanism.active && mechanism.type === mechanismTypeConstant);
         if(filteredArray.length > 0) {
             return filteredArray;
         } else {

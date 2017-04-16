@@ -399,14 +399,17 @@
                 "key": "options",
                 "value": [
                   {
+                    "id": 992,
                     "key": "FEATURE_1",
                     "value": "Twitter Login"
                   },
                   {
+                    "id": 993,
                     "key": "FEATURE_2",
                     "value": "Google Login"
                   },
                   {
+                    "id": 994,
                     "key": "FEATURE_3",
                     "value": "Registration"
                   }
@@ -442,7 +445,7 @@
           {
             "id": 9,
             "type": "RATING_TYPE",
-            "active": true,
+            "active": false,
             "order": 8,
             "canBeActivated": false,
             "parameters": [
@@ -487,6 +490,81 @@
             ]
           },
           {
+            "id": 1991,
+            "type": "CATEGORY_TYPE",
+            "active": true,
+            "order": 8,
+            "canBeActivated": false,
+            "parameters": [
+              {
+                "key": "page",
+                "value": "review"
+              },
+              {
+                "key": "cssClass",
+                "value": "user-question"
+              },
+              {
+                "key": "boxWidth",
+                "value": "103%"
+              },
+              {
+                "key": "title",
+                "value": "Wie zufrieden sind Sie mit dem Feedback Formular?"
+              },
+              {
+                "key": "ownAllowed",
+                "value": 0
+              },
+              {
+                "key": "multiple",
+                "value": 0
+              },
+              {
+                "key": "mandatory",
+                "value": 1
+              },
+              {
+                "key": "mandatoryReminder",
+                "value": "Bitte eine Option wählen."
+              },
+              {
+                "key": "breakAfterOption",
+                "value": 0
+              },
+              {
+                "key": "options",
+                "value": [
+                  {
+                    "id": 1992,
+                    "key": "1",
+                    "value": "gar nicht zufrieden"
+                  },
+                  {
+                    "id": 1993,
+                    "key": "2",
+                    "value": "weniger zufrieden"
+                  },
+                  {
+                    "id": 1994,
+                    "key": "3",
+                    "value": "mittelmäßig"
+                  },
+                  {
+                    "id": 1995,
+                    "key": "4",
+                    "value": "zufrieden"
+                  },
+                  {
+                    "id": 1996,
+                    "key": "5",
+                    "value": "sehr zufrieden"
+                  }
+                ]
+              }
+            ]
+          },
+          {
             "id": 10,
             "type": "TEXT_TYPE",
             "active": true,
@@ -511,7 +589,7 @@
               },
               {
                 "key": "label",
-                "value": "Ihr Kommentar"
+                "value": "Ihr Kommentar:"
               },
               {
                 "key": "labelPositioning",
@@ -558,7 +636,7 @@
           {
             "id": 11,
             "type": "INFO_TYPE",
-            "active": true,
+            "active": false,
             "order": 10,
             "canBeActivated": false,
             "parameters": [
