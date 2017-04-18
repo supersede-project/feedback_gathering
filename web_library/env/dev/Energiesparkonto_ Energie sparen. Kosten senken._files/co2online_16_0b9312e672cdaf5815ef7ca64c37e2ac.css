@@ -7587,7 +7587,7 @@ select {
 .action_editZaehlerabrechnungMulti .back-bottom > a, .action_editTankrechnung .back-top > a, .action_editTankrechnung .back-bottom > a, .action_editHeizkostenabrechnung .back-top > a, .action_editHeizkostenabrechnung .back-bottom > a,
 .action_editFuellstand .back-top > a,
 .action_editFuellstand .back-bottom > a, .action_editVerbrauch .back-top > a, .action_editVerbrauch .back-bottom > a, .action_editHeiznebenkostenabrechnung .back-top > a, .action_editHeiznebenkostenabrechnung .back-bottom > a, .action_formImportexport .back-top > a, .action_formImportexport .back-bottom > a, .action_editVerbrauchsabrechnung .back-top > a, .action_editVerbrauchsabrechnung .back-bottom > a, .sprite-icons-linkarrow_grey, .sprite-icons-linkarrow_white, .sprite-icons-mustermann, .user-navigation-wrapper .name a, .sprite-icons-no1, .content-module.householdOverview .welcome-screen article h2.no1, .sprite-icons-no2, .content-module.householdOverview .welcome-screen article h2.no2, .sprite-icons-no3, .content-module.householdOverview .welcome-screen article h2.no3, .sprite-icons-ok, .sprite-icons-ok_quadrat, .sprite-icons-opened, .sprite-icons-progress_bar, .sprite-icons-progress_bar_background, .sprite-icons-progress_bar_frame, .sprite-icons-schliessen, .ui-datepicker .ui-datepicker-buttonpane button.ui-datepicker-close, .reveal-modal .lightbox-frame > .columns .lightbox-frame-header .close .close-reveal-modal, .sprite-icons-slider_next, .public.action_app .contentbox .orbit-container .orbit-next, .sprite-icons-slider_prev, .public.action_app .contentbox .orbit-container .orbit-prev, .sprite-icons-telefon, .hotline .nr, .sprite-icons-telefon_handwerker, .cmd_info .handwerker .showHandwerker ul li.telefon, .sprite-icons-telefon_hilfe, .hotline-box > div span.number, .sprite-icons-todo, .content-module.aktionen > h2 {
-  background: url("/gfx/esk/sprite-icons-s341b85c209.png") no-repeat;
+  background: url("/dist/Energiesparkonto_ Energie sparen. Kosten senken._files/gfx/esk/sprite-icons-s341b85c209.png") no-repeat;
 }
 
 /* line 60, ../../../../../Ruby200-x64/lib/ruby/gems/2.0.0/gems/compass-0.12.7/frameworks/compass/stylesheets/compass/utilities/sprites/_base.scss */
@@ -10199,27 +10199,27 @@ select {
 }
 /* line 159, ../../../view/sass/esk/_modules.scss */
 .content-module.householdOverview .sections .section .section-headline .strom.headline, .reveal-modal .lightbox-frame > .columns .lightbox-frame-header .strom.headline {
-  background: url(/gfx/esk/sprite-icons/icon_strom.png) no-repeat 0.125em center;
+  background: url(/dist/Energiesparkonto_ Energie sparen. Kosten senken._files/gfx/esk/sprite-icons/icon_strom.png) no-repeat 0.125em center;
 }
 /* line 162, ../../../view/sass/esk/_modules.scss */
 .content-module.householdOverview .sections .section .section-headline .heizen.headline, .reveal-modal .lightbox-frame > .columns .lightbox-frame-header .heizen.headline {
-  background: url(/gfx/esk/sprite-icons/icon_heizen.png) no-repeat 0.125em center;
+  background: url(/dist/Energiesparkonto_ Energie sparen. Kosten senken._files/gfx/esk/sprite-icons/icon_heizen.png) no-repeat 0.125em center;
 }
 /* line 165, ../../../view/sass/esk/_modules.scss */
 .content-module.householdOverview .sections .section .section-headline .wasser.headline, .reveal-modal .lightbox-frame > .columns .lightbox-frame-header .wasser.headline {
-  background: url(/gfx/esk/sprite-icons/icon_wasser.png) no-repeat 0.125em center;
+  background: url(/dist/Energiesparkonto_ Energie sparen. Kosten senken._files/gfx/esk/sprite-icons/icon_wasser.png) no-repeat 0.125em center;
 }
 /* line 168, ../../../view/sass/esk/_modules.scss */
 .content-module.householdOverview .sections .section .section-headline .mobilitaet.headline, .reveal-modal .lightbox-frame > .columns .lightbox-frame-header .mobilitaet.headline {
-  background: url(/gfx/esk/sprite-icons/icon_mobilitaet.png) no-repeat 0.125em center;
+  background: url(/dist/Energiesparkonto_ Energie sparen. Kosten senken._files/gfx/esk/sprite-icons/icon_mobilitaet.png) no-repeat 0.125em center;
 }
 /* line 171, ../../../view/sass/esk/_modules.scss */
 .content-module.householdOverview .sections .section .section-headline .pv.headline, .reveal-modal .lightbox-frame > .columns .lightbox-frame-header .pv.headline {
-  background: url(/gfx/esk/sprite-icons/icon_pv.png) no-repeat 0.125em center;
+  background: url(/dist/Energiesparkonto_ Energie sparen. Kosten senken._files/gfx/esk/sprite-icons/icon_pv.png) no-repeat 0.125em center;
 }
 /* line 174, ../../../view/sass/esk/_modules.scss */
 .content-module.householdOverview .sections .section .section-headline .klima.headline, .reveal-modal .lightbox-frame > .columns .lightbox-frame-header .klima.headline {
-  background: url(/gfx/esk/sprite-icons/icon_klima.png) no-repeat 0.125em center;
+  background: url(/dist/Energiesparkonto_ Energie sparen. Kosten senken._files/gfx/esk/sprite-icons/icon_klima.png) no-repeat 0.125em center;
 }
 /* line 179, ../../../view/sass/esk/_modules.scss */
 .content-module.householdOverview .sections .section .section-headline .headline h1, .reveal-modal .lightbox-frame > .columns .lightbox-frame-header .headline h1, .content-module.householdOverview .sections .section .section-headline .headline h2, .reveal-modal .lightbox-frame > .columns .lightbox-frame-header .headline h2, .content-module.householdOverview .sections .section .section-headline .headline h3, .reveal-modal .lightbox-frame > .columns .lightbox-frame-header .headline h3, .content-module.householdOverview .sections .section .section-headline .headline h4, .reveal-modal .lightbox-frame > .columns .lightbox-frame-header .headline h4 {
@@ -10822,11 +10822,11 @@ body .ui-tooltip {
 }
 /* line 539, ../../../view/sass/esk/partials/_layout.scss */
 .open-close-list-link.opened > span {
-  background: url("/gfx/esk/sprite-icons/opened.png") left center no-repeat;
+  background: url("/dist/Energiesparkonto_ Energie sparen. Kosten senken._files/gfx/esk/sprite-icons/opened.png") left center no-repeat;
 }
 /* line 543, ../../../view/sass/esk/partials/_layout.scss */
 .open-close-list-link.closed > span {
-  background: url("/gfx/esk/sprite-icons/closed.png") left center no-repeat;
+  background: url("/dist/Energiesparkonto_ Energie sparen. Kosten senken._files/gfx/esk/sprite-icons/closed.png") left center no-repeat;
 }
 /* line 548, ../../../view/sass/esk/partials/_layout.scss */
 .open-close-list-link .open-close-list {
@@ -11261,7 +11261,7 @@ header.row .columns.language, header.row .columns.follow-us {
   display: block;
   width: 16px;
   height: 11px;
-  background: transparent url(/gfx/flaggen/de.png) 0 100%;
+  background: transparent url(/dist/Energiesparkonto_ Energie sparen. Kosten senken._files/gfx/flaggen/de.png) 0 100%;
 }
 /* line 55, ../../../view/sass/esk/partials/_header.scss */
 .language .sprachauswahl li a:hover {
@@ -11277,87 +11277,87 @@ header.row .columns.language, header.row .columns.follow-us {
 }
 /* line 65, ../../../view/sass/esk/partials/_header.scss */
 .language .sprachauswahl li.au a {
-  background-image: url(/gfx/flaggen/au.png);
+  background-image: url(/dist/Energiesparkonto_ Energie sparen. Kosten senken._files/gfx/flaggen/au.png);
 }
 /* line 68, ../../../view/sass/esk/partials/_header.scss */
 .language .sprachauswahl li.bg a {
-  background-image: url(/gfx/flaggen/bg.png);
+  background-image: url(/dist/Energiesparkonto_ Energie sparen. Kosten senken._files/gfx/flaggen/bg.png);
 }
 /* line 71, ../../../view/sass/esk/partials/_header.scss */
 .language .sprachauswahl li.da a {
-  background-image: url(/gfx/flaggen/da.png);
+  background-image: url(/dist/Energiesparkonto_ Energie sparen. Kosten senken._files/gfx/flaggen/da.png);
 }
 /* line 74, ../../../view/sass/esk/partials/_header.scss */
 .language .sprachauswahl li.de a {
-  background-image: url(/gfx/flaggen/de.png);
+  background-image: url(/dist/Energiesparkonto_ Energie sparen. Kosten senken._files/gfx/flaggen/de.png);
 }
 /* line 77, ../../../view/sass/esk/partials/_header.scss */
 .language .sprachauswahl li.el a {
-  background-image: url(/gfx/flaggen/el.png);
+  background-image: url(/dist/Energiesparkonto_ Energie sparen. Kosten senken._files/gfx/flaggen/el.png);
 }
 /* line 80, ../../../view/sass/esk/partials/_header.scss */
 .language .sprachauswahl li.en a {
-  background-image: url(/gfx/flaggen/en.png);
+  background-image: url(/dist/Energiesparkonto_ Energie sparen. Kosten senken._files/gfx/flaggen/en.png);
 }
 /* line 83, ../../../view/sass/esk/partials/_header.scss */
 .language .sprachauswahl li.es a {
-  background-image: url(/gfx/flaggen/es.png);
+  background-image: url(/dist/Energiesparkonto_ Energie sparen. Kosten senken._files/gfx/flaggen/es.png);
 }
 /* line 86, ../../../view/sass/esk/partials/_header.scss */
 .language .sprachauswahl li.fr a {
-  background-image: url(/gfx/flaggen/fr.png);
+  background-image: url(/dist/Energiesparkonto_ Energie sparen. Kosten senken._files/gfx/flaggen/fr.png);
 }
 /* line 89, ../../../view/sass/esk/partials/_header.scss */
 .language .sprachauswahl li.it a {
-  background-image: url(/gfx/flaggen/it.png);
+  background-image: url(/dist/Energiesparkonto_ Energie sparen. Kosten senken._files/gfx/flaggen/it.png);
 }
 /* line 92, ../../../view/sass/esk/partials/_header.scss */
 .language .sprachauswahl li.lt a {
-  background-image: url(/gfx/flaggen/lt.png);
+  background-image: url(/dist/Energiesparkonto_ Energie sparen. Kosten senken._files/gfx/flaggen/lt.png);
 }
 /* line 95, ../../../view/sass/esk/partials/_header.scss */
 .language .sprachauswahl li.mk a {
-  background-image: url(/gfx/flaggen/mk.png);
+  background-image: url(/dist/Energiesparkonto_ Energie sparen. Kosten senken._files/gfx/flaggen/mk.png);
 }
 /* line 98, ../../../view/sass/esk/partials/_header.scss */
 .language .sprachauswahl li.mt a {
-  background-image: url(/gfx/flaggen/mt.png);
+  background-image: url(/dist/Energiesparkonto_ Energie sparen. Kosten senken._files/gfx/flaggen/mt.png);
 }
 /* line 101, ../../../view/sass/esk/partials/_header.scss */
 .language .sprachauswahl li.pt a {
-  background-image: url(/gfx/flaggen/pt.png);
+  background-image: url(/dist/Energiesparkonto_ Energie sparen. Kosten senken._files/gfx/flaggen/pt.png);
 }
 /* line 104, ../../../view/sass/esk/partials/_header.scss */
 .language .sprachauswahl li.ru a {
-  background-image: url(/gfx/flaggen/ru.png);
+  background-image: url(/dist/Energiesparkonto_ Energie sparen. Kosten senken._files/gfx/flaggen/ru.png);
 }
 /* line 107, ../../../view/sass/esk/partials/_header.scss */
 .language .sprachauswahl li.tr a {
-  background-image: url(/gfx/flaggen/tr.png);
+  background-image: url(/dist/Energiesparkonto_ Energie sparen. Kosten senken._files/gfx/flaggen/tr.png);
 }
 /* line 110, ../../../view/sass/esk/partials/_header.scss */
 .language .sprachauswahl li.us a {
-  background-image: url(/gfx/flaggen/us.png);
+  background-image: url(/dist/Energiesparkonto_ Energie sparen. Kosten senken._files/gfx/flaggen/us.png);
 }
 /* line 113, ../../../view/sass/esk/partials/_header.scss */
 .language .sprachauswahl li.ca a {
-  background-image: url(/gfx/flaggen/ca.png);
+  background-image: url(/dist/Energiesparkonto_ Energie sparen. Kosten senken._files/gfx/flaggen/ca.png);
 }
 /* line 116, ../../../view/sass/esk/partials/_header.scss */
 .language .sprachauswahl li.cl a {
-  background-image: url(/gfx/flaggen/cl.png);
+  background-image: url(/dist/Energiesparkonto_ Energie sparen. Kosten senken._files/gfx/flaggen/cl.png);
 }
 /* line 119, ../../../view/sass/esk/partials/_header.scss */
 .language .sprachauswahl li.ir a {
-  background-image: url(/gfx/flaggen/ir.png);
+  background-image: url(/dist/Energiesparkonto_ Energie sparen. Kosten senken._files/gfx/flaggen/ir.png);
 }
 /* line 122, ../../../view/sass/esk/partials/_header.scss */
 .language .sprachauswahl li.lv a {
-  background-image: url(/gfx/flaggen/lv.png);
+  background-image: url(/dist/Energiesparkonto_ Energie sparen. Kosten senken._files/gfx/flaggen/lv.png);
 }
 /* line 125, ../../../view/sass/esk/partials/_header.scss */
 .language .sprachauswahl li.none a {
-  background-image: url(/gfx/flaggen/none.png);
+  background-image: url(/dist/Energiesparkonto_ Energie sparen. Kosten senken._files/gfx/flaggen/none.png);
 }
 
 /** Links zu einzelnen Sprachen **/
@@ -11700,7 +11700,7 @@ header.row .columns.language, header.row .columns.follow-us {
 /* line 424, ../../../view/sass/esk/partials/_header.scss */
 .user-navigation-wrapper ul li > a.link {
   padding-left: 1.1875em;
-  background: url(/gfx/esk/sprite-icons/linkarrow_black.png) no-repeat 0.125em center;
+  background: url(/dist/Energiesparkonto_ Energie sparen. Kosten senken._files/gfx/esk/sprite-icons/linkarrow_black.png) no-repeat 0.125em center;
 }
 /* line 432, ../../../view/sass/esk/partials/_header.scss */
 .user-navigation-wrapper ul .last {
@@ -11797,7 +11797,7 @@ header.row .columns.language, header.row .columns.follow-us {
   right: 0.3rem;
   height: 15px;
   width: 15px;
-  background: url(/gfx/esk/sprite-icons/delete.png) no-repeat center center;
+  background: url(/dist/Energiesparkonto_ Energie sparen. Kosten senken._files/gfx/esk/sprite-icons/delete.png) no-repeat center center;
   background-size: contain;
 }
 
@@ -12500,7 +12500,7 @@ footer div .row nav ul li:last-child:after {
   color: #333333;
   font-size: 0.875rem;
   padding-left: 1.1875em;
-  background: url(/gfx/esk/sprite-icons/linkarrow_black.png) no-repeat 0.1875em center;
+  background: url(/dist/Energiesparkonto_ Energie sparen. Kosten senken._files/gfx/esk/sprite-icons/linkarrow_black.png) no-repeat 0.1875em center;
 }
 /* line 94, ../../../view/sass/esk/partials/_menu.scss */
 .navigation-main > ul ul a:hover {
@@ -13469,7 +13469,7 @@ ul.formstep li .wohnungsLageFrame {
 }
 /* line 315, ../../../view/sass/esk/partials/_forms.scss */
 ul.formstep li .wohnungsLageFrame .wohnungsLage {
-  background: url(../../gfx/esk/widgets/EskWohnungslage/wohnung_lage_freistehend.png) no-repeat left top;
+  background: url(../../dist/Energiesparkonto_ Energie sparen. Kosten senken._files/gfx/esk/widgets/EskWohnungslage/wohnung_lage_freistehend.png) no-repeat left top;
   padding: 39px 0 10px 14px;
 }
 /* line 319, ../../../view/sass/esk/partials/_forms.scss */
@@ -13650,7 +13650,7 @@ ul.formstep li .information5050 .right {
 ul.formstep li .information5050 .right #dachschraege {
   width: 200px;
   height: 120px;
-  background: transparent url(../../gfx/sdc/dachschraege_bg.png) 0 0 no-repeat;
+  background: transparent url(../../dist/Energiesparkonto_ Energie sparen. Kosten senken._files/gfx/sdc/dachschraege_bg.png) 0 0 no-repeat;
   position: relative;
   margin-top: 35px;
 }
@@ -13874,7 +13874,7 @@ ul.formstep .info-show-button img {
   left: 0;
   height: 100%;
   width: 100%;
-  background: #333333 url(/gfx/esk/spinner/waiting_transparent.gif) no-repeat center center;
+  background: #333333 url(/dist/Energiesparkonto_ Energie sparen. Kosten senken._files/gfx/esk/spinner/waiting_transparent.gif) no-repeat center center;
   background-color: transparent;
   zoom: 1;
   background-color: rgba(255, 255, 255, 0.5);
@@ -14377,7 +14377,7 @@ p.form-introText {
 /* Buehne */
 /* line 10, ../../../view/sass/esk/partials/_stage.scss */
 .buehne {
-  background: url("/gfx/esk/pics/landingpage_stage_couple_in_kitchen.png");
+  background: url("/dist/Energiesparkonto_ Energie sparen. Kosten senken._files/gfx/esk/pics/landingpage_stage_couple_in_kitchen.png");
   background-repeat: no-repeat;
   background-size: 100% 100%;
   /** Testimonial **/
@@ -14495,7 +14495,7 @@ p.form-introText {
 }
 /* line 124, ../../../view/sass/esk/partials/_stage.scss */
 .register-box.no-list + .login-with-facebook a {
-  background-image: url(/gfx/esk/sprite-icons/icon-facebook-big.png);
+  background-image: url(/dist/Energiesparkonto_ Energie sparen. Kosten senken._files/gfx/esk/sprite-icons/icon-facebook-big.png);
   background-position: 0 0;
   background-repeat: no-repeat;
   background-color: #3b5998;
@@ -15255,7 +15255,7 @@ article.contentbox {
 .highchartsDiagramm .custom-highcharts-tooltip .tooltip-content .ereignisse .headline {
   margin-top: 10px;
   padding-left: 25px;
-  background-image: url("/gfx/esk/diagramme/ereignis.png");
+  background-image: url("/dist/Energiesparkonto_ Energie sparen. Kosten senken._files/gfx/esk/diagramme/ereignis.png");
   background-repeat: no-repeat;
   background-position: 0px 0px;
   font-weight: bold;
@@ -15282,7 +15282,7 @@ article.contentbox {
    */
   min-width: 325px;
   padding-left: 30px;
-  background-image: url("/gfx/esk/diagramme/lupe.png");
+  background-image: url("/dist/Energiesparkonto_ Energie sparen. Kosten senken._files/gfx/esk/diagramme/lupe.png");
   background-repeat: no-repeat;
   background-position: 3px 10px;
   font-size: 13px;
@@ -16328,7 +16328,7 @@ article.contentbox {
   left: 0;
   height: 100%;
   width: 100%;
-  background: #BED947 url(/gfx/esk/spinner/waiting_BED947.gif) no-repeat center center;
+  background: #BED947 url(/dist/Energiesparkonto_ Energie sparen. Kosten senken._files/gfx/esk/spinner/waiting_BED947.gif) no-repeat center center;
 }
 
 @media only screen and (max-width: 40em) {
@@ -16542,27 +16542,27 @@ article.contentbox {
 }
 /* line 203, ../../../view/sass/esk/partials/_contentmodules.scss */
 .content-module.householdOverview .add-bereiche > .row > form .dropdown > ul > li.strom {
-  background: url(/gfx/esk/sprite-icons/icon_strom.png) no-repeat 0.125em center;
+  background: url(/dist/Energiesparkonto_ Energie sparen. Kosten senken._files/gfx/esk/sprite-icons/icon_strom.png) no-repeat 0.125em center;
 }
 /* line 206, ../../../view/sass/esk/partials/_contentmodules.scss */
 .content-module.householdOverview .add-bereiche > .row > form .dropdown > ul > li.heizen {
-  background: url(/gfx/esk/sprite-icons/icon_heizen.png) no-repeat 0.125em center;
+  background: url(/dist/Energiesparkonto_ Energie sparen. Kosten senken._files/gfx/esk/sprite-icons/icon_heizen.png) no-repeat 0.125em center;
 }
 /* line 209, ../../../view/sass/esk/partials/_contentmodules.scss */
 .content-module.householdOverview .add-bereiche > .row > form .dropdown > ul > li.wasser {
-  background: url(/gfx/esk/sprite-icons/icon_wasser.png) no-repeat 0.125em center;
+  background: url(/dist/Energiesparkonto_ Energie sparen. Kosten senken._files/gfx/esk/sprite-icons/icon_wasser.png) no-repeat 0.125em center;
 }
 /* line 212, ../../../view/sass/esk/partials/_contentmodules.scss */
 .content-module.householdOverview .add-bereiche > .row > form .dropdown > ul > li.mobilitaet {
-  background: url(/gfx/esk/sprite-icons/icon_mobilitaet.png) no-repeat 0.125em center;
+  background: url(/dist/Energiesparkonto_ Energie sparen. Kosten senken._files/gfx/esk/sprite-icons/icon_mobilitaet.png) no-repeat 0.125em center;
 }
 /* line 215, ../../../view/sass/esk/partials/_contentmodules.scss */
 .content-module.householdOverview .add-bereiche > .row > form .dropdown > ul > li.pv {
-  background: url(/gfx/esk/sprite-icons/icon_pv.png) no-repeat 0.125em center;
+  background: url(/dist/Energiesparkonto_ Energie sparen. Kosten senken._files/gfx/esk/sprite-icons/icon_pv.png) no-repeat 0.125em center;
 }
 /* line 218, ../../../view/sass/esk/partials/_contentmodules.scss */
 .content-module.householdOverview .add-bereiche > .row > form .dropdown > ul > li.klima {
-  background: url(/gfx/esk/sprite-icons/icon_klima.png) no-repeat 0.125em center;
+  background: url(/dist/Energiesparkonto_ Energie sparen. Kosten senken._files/gfx/esk/sprite-icons/icon_klima.png) no-repeat 0.125em center;
 }
 /* line 233, ../../../view/sass/esk/partials/_contentmodules.scss */
 .content-module.householdOverview .sections {
@@ -16598,7 +16598,7 @@ article.contentbox {
   color: #666666;
   padding-right: 27px;
   text-decoration: none;
-  background: url(/gfx/esk/sprite-icons/delete.png) no-repeat right center;
+  background: url(/dist/Energiesparkonto_ Energie sparen. Kosten senken._files/gfx/esk/sprite-icons/delete.png) no-repeat right center;
 }
 /* line 271, ../../../view/sass/esk/partials/_contentmodules.scss */
 .content-module.householdOverview .sections .section .section-horizontal-line {
@@ -17683,7 +17683,7 @@ article.contentbox {
 }
 /* line 1057, ../../../view/sass/esk/partials/_contentmodules.scss */
 .content-module.diagrams .diagramFrame > .diagramInner #hemonSlider .eventTooltip, .content-module.diagrams .diagramFrame > .diagramInner #eavSlider .eventTooltip, .content-module.diagrams .diagramFrame > .diagramInner #erfolgskontrolleSlider .eventTooltip, .content-module.diagrams .diagramFrame > .diagramInner #erfolgskontrolleSlider1 .eventTooltip, .content-module.diagrams .diagramFrame > .diagramInner #eavDataSlider .eventTooltip, .content-module.diagrams .diagramFrame > .diagramInner #jahresnutzungsgradSlider .eventTooltip {
-  background: url(/gfx/esk/diagramme/ereignis_fahne.png) 0 0 no-repeat;
+  background: url(/dist/Energiesparkonto_ Energie sparen. Kosten senken._files/gfx/esk/diagramme/ereignis_fahne.png) 0 0 no-repeat;
   position: absolute;
   z-index: 1000;
   bottom: 15px;
@@ -17706,7 +17706,7 @@ article.contentbox {
 }
 /* line 1065, ../../../view/sass/esk/partials/_contentmodules.scss */
 .content-module.diagrams .diagramFrame > .diagramInner #hemonSlider .eventTooltip > div .eventTooltipHeader, .content-module.diagrams .diagramFrame > .diagramInner #eavSlider .eventTooltip > div .eventTooltipHeader, .content-module.diagrams .diagramFrame > .diagramInner #erfolgskontrolleSlider .eventTooltip > div .eventTooltipHeader, .content-module.diagrams .diagramFrame > .diagramInner #erfolgskontrolleSlider1 .eventTooltip > div .eventTooltipHeader, .content-module.diagrams .diagramFrame > .diagramInner #eavDataSlider .eventTooltip > div .eventTooltipHeader, .content-module.diagrams .diagramFrame > .diagramInner #jahresnutzungsgradSlider .eventTooltip > div .eventTooltipHeader {
-  background: url(/gfx/esk/diagramme/ereignis.png) 0 0 no-repeat;
+  background: url(/dist/Energiesparkonto_ Energie sparen. Kosten senken._files/gfx/esk/diagramme/ereignis.png) 0 0 no-repeat;
   font-weight: bold;
   height: 25px;
   margin: 0;
@@ -17721,7 +17721,7 @@ article.contentbox {
 }
 /* line 1091, ../../../view/sass/esk/partials/_contentmodules.scss */
 .content-module.diagrams .diagramFrame > .diagramInner #hemonSlider .eventTooltip.visible, .content-module.diagrams .diagramFrame > .diagramInner #eavSlider .eventTooltip.visible, .content-module.diagrams .diagramFrame > .diagramInner #erfolgskontrolleSlider .eventTooltip.visible, .content-module.diagrams .diagramFrame > .diagramInner #erfolgskontrolleSlider1 .eventTooltip.visible, .content-module.diagrams .diagramFrame > .diagramInner #eavDataSlider .eventTooltip.visible, .content-module.diagrams .diagramFrame > .diagramInner #jahresnutzungsgradSlider .eventTooltip.visible {
-  background-image: url(/gfx/esk/diagramme/ereignis.png);
+  background-image: url(/dist/Energiesparkonto_ Energie sparen. Kosten senken._files/gfx/esk/diagramme/ereignis.png);
 }
 /* line 1095, ../../../view/sass/esk/partials/_contentmodules.scss */
 .content-module.diagrams .diagramFrame > .diagramInner #hemonSlider .slider-tooltip, .content-module.diagrams .diagramFrame > .diagramInner #eavSlider .slider-tooltip, .content-module.diagrams .diagramFrame > .diagramInner #erfolgskontrolleSlider .slider-tooltip, .content-module.diagrams .diagramFrame > .diagramInner #erfolgskontrolleSlider1 .slider-tooltip, .content-module.diagrams .diagramFrame > .diagramInner #eavDataSlider .slider-tooltip, .content-module.diagrams .diagramFrame > .diagramInner #jahresnutzungsgradSlider .slider-tooltip {
@@ -17933,7 +17933,7 @@ article.contentbox {
   left: 0;
   height: 100%;
   width: 100%;
-  background: #333333 url(/gfx/esk/spinner/waiting_transparent.gif) no-repeat center center;
+  background: #333333 url(/dist/Energiesparkonto_ Energie sparen. Kosten senken._files/gfx/esk/spinner/waiting_transparent.gif) no-repeat center center;
   background-color: transparent;
   zoom: 1;
   background-color: rgba(255, 255, 255, 0.5);
@@ -18076,64 +18076,64 @@ article.contentbox {
 }
 /* line 1429, ../../../view/sass/esk/partials/_contentmodules.scss */
 .content-module.geraete .zaehler, .content-module.geraete .waermemengenzaehler {
-  background: url("/gfx/esk/sprite-icons/geraet_zaehler.png") no-repeat 0.4375em center;
+  background: url("/dist/Energiesparkonto_ Energie sparen. Kosten senken._files/gfx/esk/sprite-icons/geraet_zaehler.png") no-repeat 0.4375em center;
 }
 /* line 1432, ../../../view/sass/esk/partials/_contentmodules.scss */
 .content-module.geraete .umwaelzpumpe {
-  background: url("/gfx/esk/sprite-icons/geraet_umwaelzpumpe.png") no-repeat 0.4375em center;
+  background: url("/dist/Energiesparkonto_ Energie sparen. Kosten senken._files/gfx/esk/sprite-icons/geraet_umwaelzpumpe.png") no-repeat 0.4375em center;
 }
 /* line 1435, ../../../view/sass/esk/partials/_contentmodules.scss */
 .content-module.geraete .klimageraet {
-  background: url("/gfx/esk/sprite-icons/geraet_klimageraet.png") no-repeat 0.4375em center;
+  background: url("/dist/Energiesparkonto_ Energie sparen. Kosten senken._files/gfx/esk/sprite-icons/geraet_klimageraet.png") no-repeat 0.4375em center;
 }
 /* line 1438, ../../../view/sass/esk/partials/_contentmodules.scss */
 .content-module.geraete .pkw {
-  background: url("/gfx/esk/sprite-icons/geraet_pkw.png") no-repeat 0.4375em center;
+  background: url("/dist/Energiesparkonto_ Energie sparen. Kosten senken._files/gfx/esk/sprite-icons/geraet_pkw.png") no-repeat 0.4375em center;
 }
 /* line 1441, ../../../view/sass/esk/partials/_contentmodules.scss */
 .content-module.geraete .heizsystem_primaer, .content-module.geraete .heizsystem_sekundaer {
-  background: url("/gfx/esk/sprite-icons/geraet_heizsystem.png") no-repeat 0.4375em center;
+  background: url("/dist/Energiesparkonto_ Energie sparen. Kosten senken._files/gfx/esk/sprite-icons/geraet_heizsystem.png") no-repeat 0.4375em center;
 }
 /* line 1444, ../../../view/sass/esk/partials/_contentmodules.scss */
 .content-module.geraete .heizkessel {
-  background: url("/gfx/esk/sprite-icons/geraet_heizkessel.png") no-repeat 0.4375em center;
+  background: url("/dist/Energiesparkonto_ Energie sparen. Kosten senken._files/gfx/esk/sprite-icons/geraet_heizkessel.png") no-repeat 0.4375em center;
 }
 /* line 1447, ../../../view/sass/esk/partials/_contentmodules.scss */
 .content-module.geraete .thermosolaranlage {
-  background: url("/gfx/esk/sprite-icons/geraet_thermosolaranlage.png") no-repeat 0.4375em center;
+  background: url("/dist/Energiesparkonto_ Energie sparen. Kosten senken._files/gfx/esk/sprite-icons/geraet_thermosolaranlage.png") no-repeat 0.4375em center;
 }
 /* line 1450, ../../../view/sass/esk/partials/_contentmodules.scss */
 .content-module.geraete .thermostat {
-  background: url("/gfx/esk/sprite-icons/geraet_thermostat.png") no-repeat 0.4375em center;
+  background: url("/dist/Energiesparkonto_ Energie sparen. Kosten senken._files/gfx/esk/sprite-icons/geraet_thermostat.png") no-repeat 0.4375em center;
   background-position: 0.35521rem 0.3rem;
 }
 /* line 1454, ../../../view/sass/esk/partials/_contentmodules.scss */
 .content-module.geraete .pvanlage, .content-module.geraete .geraet_allgemein.photovoltaik {
-  background: url("/gfx/esk/sprite-icons/geraet_pvanlage.png") no-repeat 0.4375em center;
+  background: url("/dist/Energiesparkonto_ Energie sparen. Kosten senken._files/gfx/esk/sprite-icons/geraet_pvanlage.png") no-repeat 0.4375em center;
 }
 /* line 1458, ../../../view/sass/esk/partials/_contentmodules.scss */
 .content-module.geraete .geraet_allgemein.bhkw {
-  background: url("/gfx/esk/sprite-icons/geraet_bhkw.png") no-repeat 0.625em center;
+  background: url("/dist/Energiesparkonto_ Energie sparen. Kosten senken._files/gfx/esk/sprite-icons/geraet_bhkw.png") no-repeat 0.625em center;
   background-size: auto 2.5em;
 }
 /* line 1462, ../../../view/sass/esk/partials/_contentmodules.scss */
 .content-module.geraete .geraet_allgemein.biogas {
-  background: url("/gfx/esk/sprite-icons/geraet_biogas.png") no-repeat 0.625em center;
+  background: url("/dist/Energiesparkonto_ Energie sparen. Kosten senken._files/gfx/esk/sprite-icons/geraet_biogas.png") no-repeat 0.625em center;
   background-size: auto 2.5em;
 }
 /* line 1466, ../../../view/sass/esk/partials/_contentmodules.scss */
 .content-module.geraete .geraet_allgemein.windkraft {
-  background: url("/gfx/esk/sprite-icons/geraet_windkraft.png") no-repeat 0.625em center;
+  background: url("/dist/Energiesparkonto_ Energie sparen. Kosten senken._files/gfx/esk/sprite-icons/geraet_windkraft.png") no-repeat 0.625em center;
   background-size: auto 2.5em;
 }
 /* line 1470, ../../../view/sass/esk/partials/_contentmodules.scss */
 .content-module.geraete .geraet_allgemein.wasserkraft {
-  background: url("/gfx/esk/sprite-icons/geraet_wasserkraft.png") no-repeat 0.625em center;
+  background: url("/dist/Energiesparkonto_ Energie sparen. Kosten senken._files/gfx/esk/sprite-icons/geraet_wasserkraft.png") no-repeat 0.625em center;
   background-size: auto 2.5em;
 }
 /* line 1474, ../../../view/sass/esk/partials/_contentmodules.scss */
 .content-module.geraete .geraet_allgemein.sonstiges {
-  background: url("/gfx/esk/sprite-icons/geraet_sonstiges.png") no-repeat 0.625em center;
+  background: url("/dist/Energiesparkonto_ Energie sparen. Kosten senken._files/gfx/esk/sprite-icons/geraet_sonstiges.png") no-repeat 0.625em center;
   background-size: auto 2.5em;
 }
 
@@ -18160,7 +18160,7 @@ article.contentbox {
 }
 /* line 1510, ../../../view/sass/esk/partials/_contentmodules.scss */
 .content-module.aktionen > a {
-  background: url("/gfx/esk/sprite-icons/linkarrow_green.png") no-repeat;
+  background: url("/dist/Energiesparkonto_ Energie sparen. Kosten senken._files/gfx/esk/sprite-icons/linkarrow_green.png") no-repeat;
   display: block;
   margin-bottom: 0.75em;
   line-height: 1.375em;
@@ -18306,19 +18306,19 @@ article.contentbox {
 }
 /* line 1648, ../../../view/sass/esk/partials/_contentmodules.scss */
 .content-module.analyses .analysis-container .analysis-body .analysis-body-state.ok {
-  background: url("/gfx/esk/sprite-icons/hint_success.png") no-repeat;
+  background: url("/dist/Energiesparkonto_ Energie sparen. Kosten senken._files/gfx/esk/sprite-icons/hint_success.png") no-repeat;
   background-color: #F2F4E6;
   color: #7C9009;
 }
 /* line 1653, ../../../view/sass/esk/partials/_contentmodules.scss */
 .content-module.analyses .analysis-container .analysis-body .analysis-body-state.notOk {
-  background: url("/gfx/esk/sprite-icons/hint_error.png") no-repeat;
+  background: url("/dist/Energiesparkonto_ Energie sparen. Kosten senken._files/gfx/esk/sprite-icons/hint_error.png") no-repeat;
   background-color: #FDEEE7;
   color: #F05714;
 }
 /* line 1658, ../../../view/sass/esk/partials/_contentmodules.scss */
 .content-module.analyses .analysis-container .analysis-body .analysis-body-state.pending {
-  background: url("/gfx/esk/sprite-icons/hint_pending.png") no-repeat;
+  background: url("/dist/Energiesparkonto_ Energie sparen. Kosten senken._files/gfx/esk/sprite-icons/hint_pending.png") no-repeat;
   background-color: #FDF4E5;
   color: #EF9702;
 }
@@ -18354,7 +18354,7 @@ article.contentbox {
 }
 /* line 1686, ../../../view/sass/esk/partials/_contentmodules.scss */
 .content-module.analyses .analysis-container .analysis-body .analysis-body-container .analysis-body-right a {
-  background: url("/gfx/esk/sprite-icons/linkarrow_green.png") no-repeat;
+  background: url("/dist/Energiesparkonto_ Energie sparen. Kosten senken._files/gfx/esk/sprite-icons/linkarrow_green.png") no-repeat;
   display: block;
   margin-bottom: 0.5625em;
   line-height: 1.375em;
@@ -19443,7 +19443,7 @@ article.contentbox {
   left: 0;
   height: 100%;
   width: 100%;
-  background: #333333 url(/gfx/esk/spinner/waiting_transparent.gif) no-repeat center center;
+  background: #333333 url(/dist/Energiesparkonto_ Energie sparen. Kosten senken._files/gfx/esk/spinner/waiting_transparent.gif) no-repeat center center;
   background-color: transparent;
   zoom: 1;
   background-color: rgba(255, 255, 255, 0.5);
@@ -19825,7 +19825,7 @@ article.contentbox {
   left: 0;
   height: 100%;
   width: 100%;
-  background: #333333 url(/gfx/esk/spinner/waiting_transparent.gif) no-repeat center center;
+  background: #333333 url(/dist/Energiesparkonto_ Energie sparen. Kosten senken._files/gfx/esk/spinner/waiting_transparent.gif) no-repeat center center;
   background-color: transparent;
   zoom: 1;
   background-color: rgba(255, 255, 255, 0.5);
@@ -19944,7 +19944,7 @@ article.contentbox {
   left: 0;
   height: 100%;
   width: 100%;
-  background: #333333 url(/gfx/esk/spinner/waiting_transparent.gif) no-repeat center center;
+  background: #333333 url(/dist/Energiesparkonto_ Energie sparen. Kosten senken._files/gfx/esk/spinner/waiting_transparent.gif) no-repeat center center;
   background-color: transparent;
   zoom: 1;
   background-color: rgba(255, 255, 255, 0.5);
