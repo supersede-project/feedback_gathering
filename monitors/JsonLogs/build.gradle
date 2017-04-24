@@ -9,6 +9,7 @@
  buildscript {
    		repositories {
        			mavenCentral()
+			jcenter()
     		maven {
             		url "${artifactory_contextUrl}/libs-snapshot"
             		name = 'maven-supersede-snapshot'
@@ -29,13 +30,17 @@
 		dependencies {
         	classpath("org.springframework.boot:spring-boot-gradle-plugin:1.4.2.RELEASE")
         	classpath "org.jfrog.buildinfo:build-info-extractor-gradle:4+"
+		classpath 'eu.appsatori:gradle-fatjar-plugin:0.3'
     	}
 }
+
+
 
 // Apply the java plugin to add support for Java
 apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'war'
+apply plugin: 'eu.appsatori.fatjar'
 
 // In this section you declare where to find the dependencies of your project
 repositories {
