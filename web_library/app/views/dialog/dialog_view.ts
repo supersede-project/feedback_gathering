@@ -39,12 +39,14 @@ export class DialogView {
 
     setupCloseOnOutsideClick() {
         clickBlocked = false;
-        var dialogView = this;
+        let dialogView = this;
 
         // prevent dialog close on drag stop click
-        jQuery('body').on('dragstart', function () {
+        jQuery('.ui-dialog').on('dragstart', function () {
             clickBlocked = true;
-        }).on('click', function (event) {
+        });
+
+        jQuery('body').on('click', function (event) {
             if (!clickBlocked && dialogView.dialogElement.dialog('isOpen') && !jQuery(event.target).is('.ui-dialog, a') && !jQuery(event.target).closest('.ui-dialog').length) {
                 dialogView.dialogElement.dialog('close');
             }
