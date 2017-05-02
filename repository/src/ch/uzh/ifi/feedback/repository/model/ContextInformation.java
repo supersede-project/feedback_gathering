@@ -24,10 +24,13 @@ public class ContextInformation extends ItemBase<ContextInformation> {
 	
 	@DbAttribute("time_zone")
 	private String timeZone;
-	
+
 	@DbAttribute("device_pixel_ratio")
 	private Float devicePixelRatio;
-	
+
+	@DbAttribute("url")
+	private String url;
+
 	private String country;
 	
 	private String region;
@@ -94,6 +97,14 @@ public class ContextInformation extends ItemBase<ContextInformation> {
 
 	public void setRegion(String region) {
 		this.region = region;
+	}
+
+	public String getUrl() {
+		return url;
+	}
+
+	public void setUrl(String url) {
+		this.url = url;
 	}
 
 	@Override

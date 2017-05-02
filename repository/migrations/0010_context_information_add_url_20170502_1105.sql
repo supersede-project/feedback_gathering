@@ -1,0 +1,1 @@
+ALTER TABLE `feedback_repository`.`context_informations` ADD COLUMN `url` text AFTER `region`;

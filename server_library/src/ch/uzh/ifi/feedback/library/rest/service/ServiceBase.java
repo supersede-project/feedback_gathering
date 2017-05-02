@@ -20,6 +20,15 @@ import ch.uzh.ifi.feedback.library.transaction.TransactionManager;
 import javassist.NotFoundException;
 import static java.util.Arrays.asList;
 
+/**
+ * This class is the base class for all services that access the database. It provides basic CRUD functionality.
+ * The queries are generated based on field metadata retrieved from the model classes.
+ *
+ * @param <T> the model class that is processed by this instance
+ * @author Florian Schüpfer
+ * @version 1.0
+ * @since   2016-11-14
+ */
 public abstract class ServiceBase<T extends IDbItem> implements IDbService<T> {
 	
 	protected String tableName;
@@ -40,6 +49,11 @@ public abstract class ServiceBase<T extends IDbItem> implements IDbService<T> {
 		this.dbName = dbName;
 	}
 	
+	/**
+	 * This method retrieves an instance of IDbItem<T> from the database based on its id.
+	 * @param id the id of the object to retrieve
+	 * @return
+	 */
 	@Override
 	public T GetById(int id) throws SQLException, NotFoundException
 	{
@@ -64,6 +78,10 @@ public abstract class ServiceBase<T extends IDbItem> implements IDbService<T> {
 		return instance;
 	}
 	
+	/**
+	 * This method retrieves all instances of IDbItem<T> from the database.
+	 * @return
+	 */
 	@Override
 	public List<T> GetAll() throws SQLException
 	{

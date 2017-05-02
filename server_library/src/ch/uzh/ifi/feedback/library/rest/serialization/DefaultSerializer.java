@@ -10,7 +10,16 @@ import javax.servlet.http.HttpServletRequest;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-
+/**
+ * This class is the base class of all implementations of ISerializationService. It provides methods
+ * for serializing and deserializing objects of class T.
+ * Gson is used to serialize/deserialize objects to/from the JSON format.
+ *
+ * @author Florian Schüpfer
+ * @version 1.0
+ * @since   2016-11-14
+ * @param <T> the serialized class
+ */
 public abstract class DefaultSerializer<T> implements ISerializationService<T> {
 
 	protected Type serializationType;
@@ -19,6 +28,9 @@ public abstract class DefaultSerializer<T> implements ISerializationService<T> {
 		setSerializationType();
 	}
 	
+	/**
+	 * Serializes an object to JSON
+	 */
 	@Override
 	public String Serialize(T object) {
 		
@@ -33,6 +45,9 @@ public abstract class DefaultSerializer<T> implements ISerializationService<T> {
 		return json;
 	}
 
+	/**
+	 * Deserializes an object from the JSON format.
+	 */
 	@Override
 	public T Deserialize(HttpServletRequest request) 
 	{
@@ -43,6 +58,9 @@ public abstract class DefaultSerializer<T> implements ISerializationService<T> {
 		return requestObject;
 	}
 	
+	/**
+	 * Finds the Serialization type for this instance.
+	 */
 	private void setSerializationType()
 	{
 		Type superclass = this.getClass().getGenericSuperclass();
