@@ -26,8 +26,11 @@ import ch.uzh.ifi.feedback.library.rest.annotations.Id;
 import ch.uzh.ifi.feedback.library.rest.annotations.NotNull;
 import ch.uzh.ifi.feedback.library.rest.annotations.Serialize;
 import ch.uzh.ifi.feedback.library.rest.annotations.Unique;
+import ch.uzh.ifi.feedback.library.rest.annotations.Validate;
 import ch.uzh.ifi.feedback.orchestrator.serialization.MonitorTypeSerializationService;
+import ch.uzh.ifi.feedback.orchestrator.validation.MonitorTypeValidator;
 
+@Validate(MonitorTypeValidator.class)
 @Serialize(MonitorTypeSerializationService.class)
 public class MonitorType extends OrchestratorItem<MonitorType> {
 	

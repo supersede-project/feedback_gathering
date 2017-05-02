@@ -21,6 +21,8 @@
  *******************************************************************************/
 package ch.uzh.ifi.feedback.orchestrator.serialization;
 
+import javax.servlet.http.HttpServletRequest;
+
 import com.google.inject.Singleton;
 
 import ch.uzh.ifi.feedback.library.rest.serialization.DefaultSerializer;
@@ -28,5 +30,11 @@ import ch.uzh.ifi.feedback.orchestrator.model.MonitorConfiguration;
 
 @Singleton
 public class MonitorConfigurationSerializationService extends DefaultSerializer<MonitorConfiguration>{
+
+	@Override
+	public MonitorConfiguration Deserialize(HttpServletRequest request) {
+		MonitorConfiguration monitorConfiguration = super.Deserialize(request);
+		return monitorConfiguration;
+	}
 
 }

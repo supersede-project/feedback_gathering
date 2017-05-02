@@ -15,7 +15,7 @@
  *
  * Contributors:
  * 	Quim Motger (UPC) - main development
- * 	
+ *
  * Initially developed in the context of SUPERSEDE EU project
  * www.supersede.eu
  *******************************************************************************/
@@ -53,19 +53,19 @@ public class MonitorTypeController extends RestController<MonitorType>{
 			HttpServletResponse response) {
 		super(dbService, validator, request, response);
 	}
-	
+
 	@GET
 	@Path("/MonitorTypes")
 	public List<MonitorType> GetAll() throws Exception {
 		return super.GetAll();
 	}
-	
+
 	@POST
 	@Path("/MonitorTypes")
 	public MonitorType InsertMonitorType(MonitorType monitorType) throws Exception {
 		return super.Insert(monitorType);
 	}
-	
+
 	@GET
 	@Path("/MonitorTypes/{id-type-of-monitor}")
 	public MonitorType GetById(@PathParam("id-type-of-monitor") String id) throws Exception {
@@ -75,7 +75,7 @@ public class MonitorTypeController extends RestController<MonitorType>{
 		}
 		return monitorType.get(0);
 	}
-	
+
 	@DELETE
 	@Path("/MonitorTypes/{id-type-of-monitor}")
 	public void DeleteMonitorTool(@PathParam("id-type-of-monitor") String id) throws Exception {
@@ -85,6 +85,6 @@ public class MonitorTypeController extends RestController<MonitorType>{
 		}
 		super.Delete(monitorType.get(0).getId());
 	}
-	
-	
+
+
 }

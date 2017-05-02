@@ -28,6 +28,7 @@ import com.google.inject.Provider;
 import com.google.inject.name.Named;
 
 import ch.uzh.ifi.feedback.orchestrator.model.MonitorType;
+import ch.uzh.ifi.feedback.orchestrator.transaction.MonitoringDatabaseConfiguration;
 import ch.uzh.ifi.feedback.orchestrator.transaction.OrchestratorDatabaseConfiguration;
 
 public class MonitorTypeService extends OrchestratorService<MonitorType> {
@@ -35,7 +36,7 @@ public class MonitorTypeService extends OrchestratorService<MonitorType> {
 	@Inject
 	public MonitorTypeService(
 			MonitorTypeResultParser resultParser, 
-			OrchestratorDatabaseConfiguration config,
+			MonitoringDatabaseConfiguration config,
 			@Named("timestamp")Provider<Timestamp> timestampProvider) {
 		
 		super(resultParser, MonitorType.class, "monitor_type", config.getDatabase(), timestampProvider);

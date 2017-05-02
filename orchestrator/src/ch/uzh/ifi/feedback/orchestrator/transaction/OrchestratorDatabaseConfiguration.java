@@ -22,7 +22,6 @@ public class OrchestratorDatabaseConfiguration extends DatabaseConfiguration {
 	public void StartDebugMode() 
 	{
 		databaseName = testDatabaseName;
-		super.StartDebugMode();
 	}
 
 	@Override

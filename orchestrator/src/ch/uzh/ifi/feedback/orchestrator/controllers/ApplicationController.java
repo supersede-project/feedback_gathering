@@ -4,6 +4,11 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.json.JSONObject;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.inject.Inject;
 import com.google.inject.servlet.RequestScoped;
 import ch.uzh.ifi.feedback.library.rest.RestController;
@@ -18,14 +23,20 @@ import ch.uzh.ifi.feedback.library.rest.authorization.UserAuthenticationService;
 import ch.uzh.ifi.feedback.orchestrator.model.Application;
 import ch.uzh.ifi.feedback.orchestrator.services.ApplicationService;
 import ch.uzh.ifi.feedback.orchestrator.validation.ApplicationValidator;
+import integration.DataProviderIntegratorOrchestrator;
 
 @RequestScoped
 @Controller(Application.class)
 public class ApplicationController extends RestController<Application> {
 
+	private DataProviderIntegratorOrchestrator dataProviderIntegratorOrchestrator;
+	private Gson gson;
+
 	@Inject
 	public ApplicationController(ApplicationService dbService, ApplicationValidator validator, HttpServletRequest request, HttpServletResponse response) {
 		super(dbService, validator, request, response);
+		this.dataProviderIntegratorOrchestrator = new DataProviderIntegratorOrchestrator();
+		this.gson = new GsonBuilder().setPrettyPrinting().setDateFormat("yyyy-MM-dd hh:mm:ss.S").create();
 	}
 	
 	@GET
@@ -47,7 +58,9 @@ public class ApplicationController extends RestController<Application> {
 	@Path("/{lang}/applications")
 	public Application UpdateApplication(Application app) throws Exception 
 	{
-		return super.Update(app);
+		Application updatedApplication = super.Update(app);
+		updateDataProvider(updatedApplication);
+		return updatedApplication;
 	}
 	
 	@POST
@@ -55,6 +68,21 @@ public class ApplicationController extends RestController<Application> {
 	@Path("/{lang}/applications")
 	public Application InsertApplication(@PathParam("app_id")Integer appId, Application app) throws Exception 
 	{
-		return super.Insert(app);
+		Application createdApplication = super.Insert(app);
+		updateDataProvider(createdApplication);
+		return createdApplication;
+	}
+
+	private void updateDataProvider(Application application) {
+		// WP2 communication
+		String topicIdOrchestratorApplication = "2c90dce1-ab78-4faa-8375-1f5a5308698f"; // v1
+		String json = gson.toJson(application);
+		JSONObject jsonData = new JSONObject(json);
+		try {
+			dataProviderIntegratorOrchestrator.ingestJsonData(jsonData, topicIdOrchestratorApplication);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }

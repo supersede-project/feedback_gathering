@@ -24,6 +24,8 @@ public class Configuration extends OrchestratorItem<Configuration> {
 	@Unique
 	private String name;
 	
+	private Boolean active;
+
 	@NotNull
 	private ConfigurationType type;
 	@DbIgnore
@@ -131,5 +133,13 @@ public class Configuration extends OrchestratorItem<Configuration> {
 
 	public void setUserGroupsId(Integer userGroupsId) {
 		this.userGroupsId = userGroupsId;
+	}
+
+	public boolean isActive() {
+		return active;
+	}
+
+	public void setActive(boolean active) {
+		this.active = active;
 	}
 }

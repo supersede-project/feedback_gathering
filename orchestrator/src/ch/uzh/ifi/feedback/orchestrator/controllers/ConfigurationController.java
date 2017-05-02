@@ -18,6 +18,7 @@ import ch.uzh.ifi.feedback.library.rest.annotations.PathParam;
 import ch.uzh.ifi.feedback.library.rest.authorization.UserAuthenticationService;
 import ch.uzh.ifi.feedback.library.rest.validation.ValidationException;
 import ch.uzh.ifi.feedback.orchestrator.model.Configuration;
+import ch.uzh.ifi.feedback.orchestrator.model.ConfigurationType;
 import ch.uzh.ifi.feedback.orchestrator.model.User;
 import ch.uzh.ifi.feedback.orchestrator.services.ConfigurationService;
 import ch.uzh.ifi.feedback.orchestrator.services.UserGroupService;
@@ -101,7 +102,6 @@ public class ConfigurationController extends RestController<Configuration>
 		//Set default user group id when no group specified
 		int groupId = userGroupService.GetWhere(asList("default"), "name = ?").get(0).getId();
 		config.setUserGroupsId(groupId);
-		
 		config.setApplicationId(appId);
 		return super.Insert(config);
 	}
@@ -133,4 +133,5 @@ public class ConfigurationController extends RestController<Configuration>
 		
 		return super.Insert(config);
 	}
+
 }

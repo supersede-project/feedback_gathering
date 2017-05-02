@@ -15,7 +15,7 @@
  *
  * Contributors:
  * 	Quim Motger (UPC) - main development
- * 	
+ *
  * Initially developed in the context of SUPERSEDE EU project
  * www.supersede.eu
  *******************************************************************************/
@@ -72,7 +72,7 @@ public class MonitorToolController extends RestController<MonitorTool> {
 		}
 		return monitorTool;
 	}
-	
+
 	@POST
 	@Path("/MonitorTypes/{id-type-of-monitor}/Tools")
 	public MonitorTool InsertMonitorTool(@PathParam("id-type-of-monitor") String type,
@@ -84,7 +84,7 @@ public class MonitorToolController extends RestController<MonitorTool> {
 		tool.setMonitorTypeId(monitorType.get(0).getId());
 		return super.Insert(tool);
 	}
-	
+
 	@GET
 	@Path("/MonitorTypes/{id-type-of-monitor}/Tools/{id-monitoring-tool}")
 	public MonitorTool GetMonitorTool(@PathParam("id-type-of-monitor") String type,
@@ -99,7 +99,7 @@ public class MonitorToolController extends RestController<MonitorTool> {
 		}
 		return monitorTool.get(0);
 	}
-	
+
 	@DELETE
 	@Path("/MonitorTypes/{id-type-of-monitor}/Tools/{id-monitoring-tool}")
 	public void DeleteTool(@PathParam("id-type-of-monitor") String type,
@@ -114,6 +114,6 @@ public class MonitorToolController extends RestController<MonitorTool> {
 		}
 		super.Delete(monitorTool.get(0).getId());
 	}
-	
+
 
 }
