@@ -2,6 +2,7 @@ package ch.uzh.ifi.feedback.repository.serialization;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
@@ -22,6 +23,8 @@ import ch.uzh.ifi.feedback.repository.model.AudioFeedback;
 import ch.uzh.ifi.feedback.repository.model.Feedback;
 import ch.uzh.ifi.feedback.repository.model.FileFeedback;
 import ch.uzh.ifi.feedback.repository.model.ScreenshotFeedback;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 @Singleton
 public class FeedbackSerializationService extends RepositorySerializationService<Feedback> {
@@ -37,7 +40,7 @@ public class FeedbackSerializationService extends RepositorySerializationService
 
 	@Override
 	public Feedback Deserialize(HttpServletRequest request) {
-		
+
 		Feedback feedback;
 		if(!request.getContentType().contains("multipart/form-data"))
 		{
@@ -50,7 +53,7 @@ public class FeedbackSerializationService extends RepositorySerializationService
 		String data = fileItems.stream().filter(i -> i.getFieldName().equals("json")).findFirst().get().getString();
 		Gson gson = new GsonBuilder().setPrettyPrinting().setDateFormat("yyyy-MM-dd hh:mm:ss.S").create();
 		feedback = gson.fromJson(data, Feedback.class);
-		
+
 		try {
 			for(ScreenshotFeedback screenshot : feedback.getScreenshotFeedbacks())
 			{
@@ -59,13 +62,15 @@ public class FeedbackSerializationService extends RepositorySerializationService
 			
 			for(AudioFeedback audio : feedback.getAudioFeedbacks())
 			{
-				Part filePart = request.getPart(audio.getPart());
+				// TODO check this filePart: necessary?
+				//Part filePart = request.getPart(audio.getPart());
 				audio = storageService.ParseFilePart(getFileItemsForFeedback(audio, fileItems), audio, "audios");	
 			}
 			
 			for(AttachmentFeedback attachment : feedback.getAttachmentFeedbacks())
 			{
-				Part filePart = request.getPart(attachment.getPart());
+				// TODO check this filePart: necessary?
+				//Part filePart = request.getPart(attachment.getPart());
 				attachment = storageService.ParseFilePart(getFileItemsForFeedback(attachment, fileItems), attachment, "attachments");	
 			}
 			

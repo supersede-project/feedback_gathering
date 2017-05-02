@@ -10,6 +10,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import ch.uzh.ifi.feedback.repository.mail.MailService;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.inject.name.Named;
@@ -29,6 +30,8 @@ import ch.uzh.ifi.feedback.repository.model.Status;
 import ch.uzh.ifi.feedback.repository.model.StatusOption;
 import ch.uzh.ifi.feedback.repository.model.TextFeedback;
 import javassist.NotFoundException;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 public class FeedbackService extends ServiceBase<Feedback> {
 
@@ -42,7 +45,7 @@ public class FeedbackService extends ServiceBase<Feedback> {
 	private StatusOptionService optionService;
 	private ApiUserService userService;
 	private StatusService statusService;
-	
+
 	@Inject
 	public FeedbackService(
 			FeedbackResultParser resultParser, 
@@ -96,7 +99,7 @@ public class FeedbackService extends ServiceBase<Feedback> {
 
 	@Override
 	public int Insert(Connection con, Feedback feedback) throws SQLException, NotFoundException, UnsupportedOperationException {
-		
+
 		if(feedback.getContextInformation() != null)
 		{
 			int contextId = contextInformationService.Insert(con, feedback.getContextInformation());
@@ -165,7 +168,7 @@ public class FeedbackService extends ServiceBase<Feedback> {
 			status.setApiUserId(user.getId());
 			statusService.Insert(con, status);
 		}
-		
+
 		return feedbackId;
 	}
 
