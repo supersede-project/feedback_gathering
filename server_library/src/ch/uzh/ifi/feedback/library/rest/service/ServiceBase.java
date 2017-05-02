@@ -58,24 +58,29 @@ public abstract class ServiceBase<T extends IDbItem> implements IDbService<T> {
 	public T GetById(int id) throws SQLException, NotFoundException
 	{
 		Connection con = TransactionManager.createDatabaseConnection();
-		String statement = String.format("SELECT * FROM %s.%s as t WHERE t.id = ? ;", dbName, tableName);
-		PreparedStatement s = con.prepareStatement(statement);
-		s.setInt(1, id);
-		ResultSet result = s.executeQuery();
-		if (!result.next())
-		{
-			throw new NotFoundException("Object with id '" + id +"' not found");
+
+		try{
+			String statement = String.format("SELECT * FROM %s.%s as t WHERE t.id = ? ;", dbName, tableName);
+			PreparedStatement s = con.prepareStatement(statement);
+			s.setInt(1, id);
+			ResultSet result = s.executeQuery();
+			if (!result.next())
+			{
+				throw new NotFoundException("Object with id '" + id +"' not found");
+			}
+
+			T instance = null;
+			try {
+				instance = serviceClass.newInstance();
+			} catch (InstantiationException | IllegalAccessException e) {
+				e.printStackTrace();
+			}
+			resultParser.SetFields(instance, result);
+			return instance;
+
+		}finally{
+			con.close();
 		}
-		
-		T instance = null;
-		try {
-			instance = serviceClass.newInstance();
-		} catch (InstantiationException | IllegalAccessException e) {
-			e.printStackTrace();
-		}
-		resultParser.SetFields(instance, result);
-		con.close();
-		return instance;
 	}
 	
 	/**
@@ -87,15 +92,25 @@ public abstract class ServiceBase<T extends IDbItem> implements IDbService<T> {
 	{
 		Connection con = TransactionManager.createDatabaseConnection();
 		
-		String statement = String.format("SELECT * FROM %s.%s ;", dbName, tableName);
-		PreparedStatement s = con.prepareStatement(statement);
-		ResultSet result = s.executeQuery();
-	
-		List<T> resultList = getList(result);
-		con.close();
-		return resultList;
+		try{
+			String statement = String.format("SELECT * FROM %s.%s ;", dbName, tableName);
+			PreparedStatement s = con.prepareStatement(statement);
+			ResultSet result = s.executeQuery();
+
+			List<T> resultList = getList(result);
+			return resultList;
+		}
+		finally{
+			con.close();
+		}
 	}
 	
+	/**
+	 * This method deletes an instances of IDbItem<T> from the database based on its id.
+	 * @param id the id of the object to delete
+	 * @param con the database connection for this transaction
+	 * @return
+	 */
 	@Override
 	public void Delete(Connection con, int id) throws SQLException, NotFoundException
 	{
@@ -105,6 +120,12 @@ public abstract class ServiceBase<T extends IDbItem> implements IDbService<T> {
 		s.execute();
 	}
 	
+	/**
+	 * This method updates an instances of IDbItem<T> on the database.
+	 * @param con the database connection for this transaction
+	 * @param object the object to update
+	 * @return
+	 */
 	@Override
 	public void Update(Connection con, T object) throws SQLException ,NotFoundException ,UnsupportedOperationException 
 	{
@@ -148,6 +169,12 @@ public abstract class ServiceBase<T extends IDbItem> implements IDbService<T> {
 		s.execute();
 	};
 	
+	/**
+	 * This method inserts an instances of IDbItem<T> into the database.
+	 * @param con the database connection for this transaction
+	 * @param object the object to insert
+	 * @return
+	 */
 	@Override
 	public int Insert(Connection con, T object) throws SQLException ,NotFoundException ,UnsupportedOperationException 
 	{
@@ -200,54 +227,80 @@ public abstract class ServiceBase<T extends IDbItem> implements IDbService<T> {
 	    return keys.getInt(1);
 	}
 	
+	/**
+	 * This method retrieves a subset of instances of IDbItem<T> based on a number of predicates
+	 * @param values the values that are used in the conditions
+	 * @param conditions a list of conditions in the format "? = x", where ? stands for the value that is in the same position in the values list
+	 * @return
+	 */
 	@Override
 	public List<T> GetWhere(List<Object> values, String...conditions) throws SQLException
 	{
 		Connection con = TransactionManager.createDatabaseConnection();
 		
-		String statement = 
-				  "SELECT * "
-				+ "FROM %s.%s as t ";
-		statement = String.format(statement, dbName, tableName);
-		statement += "WHERE %s ";
-		
-		for(int i=1; i<conditions.length; i++)
-		{
-			statement += "AND %s ";
+		try{
+
+			String statement =
+					  "SELECT * "
+					+ "FROM %s.%s as t ";
+			statement = String.format(statement, dbName, tableName);
+			statement += "WHERE %s ";
+
+			for(int i=1; i<conditions.length; i++)
+			{
+				statement += "AND %s ";
+			}
+			statement += ";";
+			statement = String.format(statement, (Object[])conditions);
+
+			PreparedStatement s = con.prepareStatement(statement);
+			for(int i=0; i<values.size();i++)
+			{
+				s.setObject(i+1, values.get(i));
+			}
+			ResultSet result = s.executeQuery();
+
+			List<T> resultList = getList(result);
+			return resultList;
+
 		}
-		statement += ";";
-		statement = String.format(statement, (Object[])conditions);
-		
-		PreparedStatement s = con.prepareStatement(statement);
-		for(int i=0; i<values.size();i++)
-		{
-			s.setObject(i+1, values.get(i));
+		finally{
+			con.close();
 		}
-		ResultSet result = s.executeQuery();
-	
-		List<T> resultList = getList(result);
-		con.close();
-		
-		return resultList;
 	}
 	
+	/**
+	 * This method checks if an object with a specific exists in the database
+	 * @param id the id to check
+	 * @return
+	 */
 	@Override
 	public boolean CheckId(int id) throws SQLException
 	{
 		Connection con = TransactionManager.createDatabaseConnection();
 		
-		String statement = String.format("SELECT * FROM %s.%s as t WHERE t.id = ? ;", dbName, tableName);
-		PreparedStatement s = con.prepareStatement(statement);
-		s.setInt(1, id);
-		
-		ResultSet result = s.executeQuery();
-		
-		if(!result.next())
-			return false;
-		
-		return true;
+		try{
+			String statement = String.format("SELECT * FROM %s.%s as t WHERE t.id = ? ;", dbName, tableName);
+			PreparedStatement s = con.prepareStatement(statement);
+			s.setInt(1, id);
+
+			ResultSet result = s.executeQuery();
+
+			if(!result.next())
+				return false;
+
+			return true;
+
+		}finally{
+			con.close();
+		}
 	}
 	
+	/**
+	 * This method retrieves a list of instances of IDbItem<T> from a ResultSet
+	 * @param ResultSet the result object from a database query
+	 * @return
+	 */
 	protected List<T> getList(ResultSet result) throws SQLException
 	{
 		List<T> list = new ArrayList<>();

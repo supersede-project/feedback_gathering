@@ -4,6 +4,8 @@ import java.sql.Driver;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Enumeration;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
@@ -12,6 +14,14 @@ import org.apache.commons.logging.LogFactory;
 
 import com.mysql.jdbc.AbandonedConnectionCleanupThread;
 
+/**
+ * This class is responsible for unregistering of database drivers after the ServletContext has been destroyed.
+ * This will prevent potential memory leaks.
+ *
+ * @author Florian Schüpfer
+ * @version 1.0
+ * @since   2016-11-14
+ */
 public class ContextFinalizer implements ServletContextListener {
 
     private static final Log LOGGER = LogFactory.getLog(ContextFinalizer.class);

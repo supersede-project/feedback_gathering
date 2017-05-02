@@ -10,7 +10,14 @@ import java.util.Map;
 import java.util.Properties;
 import org.apache.commons.lang3.SystemUtils;
 
-
+/**
+ * This class stores the database configuration for a server.
+ * This includes the userName, password, the database name and the test database name.
+ *
+ * @author Florian Schüpfer
+ * @version 1.0
+ * @since   2016-11-14
+ */
 public abstract class DatabaseConfiguration implements IDatabaseConfiguration {
 	
 	private String dbUser;
@@ -62,6 +69,7 @@ public abstract class DatabaseConfiguration implements IDatabaseConfiguration {
     		}
     		dbUser = prop.getProperty("dbuser");
     		dbPassword = prop.getProperty("dbpassword");
+			propertiesStream.close();
     	} catch (IOException ex) {
     		ex.printStackTrace();
     	}

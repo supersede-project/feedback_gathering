@@ -17,7 +17,12 @@ import ch.uzh.ifi.feedback.library.transaction.DatabaseConfiguration;
 import ch.uzh.ifi.feedback.library.transaction.IDatabaseConfiguration;
 
 /**
- * Servlet base implementation
+ * This class is the base class for all HttpServlets used in the feedback_repository and orchestrator projects.
+ * It contains methods for the setup and invocation of the RestManager. It also starts the debug mode when the debug context parameter is set to true.
+ *
+ * @author Florian Schüpfer
+ * @version 1.0
+ * @since   2016-11-14
  */
 public abstract class ServletBase extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -33,10 +38,14 @@ public abstract class ServletBase extends HttpServlet {
         InitController();
 	}
     
+    /**
+     * This method configures the RestManager with the package name containing the controller classes.
+     */
     protected abstract void InitController();
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 * Sets the headers for the response and invokes the corresponding method on the RestManager instance
 	 */
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
@@ -48,6 +57,7 @@ public abstract class ServletBase extends HttpServlet {
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 * Sets the headers for the response and invokes the corresponding method on the RestManager instance
 	 */
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
@@ -60,6 +70,7 @@ public abstract class ServletBase extends HttpServlet {
 	
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 * Sets the headers for the response and invokes the corresponding method on the RestManager instance
 	 */
 	@Override
 	protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
@@ -69,6 +80,10 @@ public abstract class ServletBase extends HttpServlet {
 		_restManager.Delete(request, response);
 	}
 
+	/**
+	 * @see HttpServlet#doPut(HttpServletRequest request, HttpServletResponse response)
+	 * Sets the headers for the response and invokes the corresponding method on the RestManager instance
+	 */
 	@Override
 	protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
 	{
@@ -77,6 +92,9 @@ public abstract class ServletBase extends HttpServlet {
 		_restManager.Put(request, response);
 	}
 	
+	/**
+	 * @see HttpServlet#doOptions(HttpServletRequest request, HttpServletResponse response)
+	 */
 	@Override
 	protected void doOptions(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		SetHeaders(response);
@@ -85,16 +103,21 @@ public abstract class ServletBase extends HttpServlet {
 	
 	private void SetHeaders(HttpServletResponse response)
 	{
-        response.setContentType("application/json");            
-        response.setCharacterEncoding("UTF-8");
+        response.setContentType("application/json; charset=utf-8");
+        //response.setCharacterEncoding("UTF-8");
         
         response.setHeader("Access-Control-Allow-Origin", "*");
-        response.setHeader("Access-Control-Allow-Methods", "GET,PUT,POST, DELETE, OPTIONS");
-        response.setHeader("Access-Control-Allow-Headers", "Content-Type");
-        response.setHeader("Access-Control-Allow-Headers", "Authorization, Content-Type, Access-Control-Allow-Headers");
+        response.setHeader("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE,OPTIONS");
+		response.setHeader("Connection", "keep-alive");
+		response.setHeader("Access-Control-Allow-Credential", "true");
+		response.setHeader("Access-Control-Allow-Headers", "Authorization, X-Requested-With, Content-Type, Access-Control-Allow-Headers, Accept");
         response.setHeader("Access-Control-Max-Age", "86400");
 	}
 	
+	/**
+	 * Sets the Debug mode of the DatabaseConfiguration to "true" if the ServletContext parameter "debug" is set to "true".
+	 * If "debug" is set to "true", all queries will be executed against the test database configured in the DatabaseConfiguration.
+	 */
 	private void SetDebugMode()
 	{
     	String debugMode = getServletContext().getInitParameter("debug");

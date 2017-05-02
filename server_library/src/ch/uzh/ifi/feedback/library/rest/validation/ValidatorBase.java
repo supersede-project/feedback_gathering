@@ -16,6 +16,14 @@ import javassist.NotFoundException;
 
 import static java.util.Arrays.asList;
 
+/**
+ * This class provides basic functionality for validating instances of IDbItem.
+ *
+ * @param <T> the model class
+ * @author Florian Schüpfer
+ * @version 1.0
+ * @since   2016-11-14
+ */
 public class ValidatorBase<T extends IDbItem> implements IValidator<T> {
 	
 	private Class<?> clazz;
@@ -29,6 +37,12 @@ public class ValidatorBase<T extends IDbItem> implements IValidator<T> {
 		this.serializer = serializer;
 	}
 	
+	/**
+	 * This method validates each field on an instance based on annotations found on that field.
+	 *
+	 * @param object the object to validate
+	 * @return the ValidationResult containing the validation errors
+	 */
 	public ValidationResult Validate(T object) throws Exception
 	{
 		ValidationResult result = new ValidationResult();
@@ -65,6 +79,12 @@ public class ValidatorBase<T extends IDbItem> implements IValidator<T> {
 		return result;
 	}
 	
+	/**
+	 * This method merges an object with its old version stored in the database.
+	 *
+	 * @param object the object to merge
+	 * @return the merged object
+	 */
 	public T Merge(T object) throws Exception
 	{
 		if(object.getId() == null)
@@ -79,16 +99,29 @@ public class ValidatorBase<T extends IDbItem> implements IValidator<T> {
 		return object;
 	}
 	
-	protected void CheckNotNull(Field f, Object o, ValidationResult result)
+	/**
+	 * This method checks that a field is not null and stores the result in the ValidationResult object.
+	 *
+	 * @param field the field to validate
+	 * @param object the object to validate
+	 * @param result the ValidationResult object
+	 */
+	protected void CheckNotNull(Field field, Object object, ValidationResult result)
 	{
-		if (o == null)
+		if (object == null)
 		{
 			result.setHasErrors(true);
-			ValidationError error = new ValidationError(f.getName(), o, "Not null: Field must not be null");
+			ValidationError error = new ValidationError(field.getName(), object, "Not null: Field must not be null");
 			result.GetValidationErrors().add(error);
 		}
 	}
 	
+	/**
+	 * This method checks that an object with a specific id exists in the database and stores the result in the ValidationResult object.
+	 *
+	 * @param object the object to validate
+	 * @param result the ValidationResult object
+	 */
 	protected void CheckId(T object, ValidationResult result) throws Exception
 	{
 		if(object.getId() != null)
@@ -104,11 +137,19 @@ public class ValidatorBase<T extends IDbItem> implements IValidator<T> {
 		}
 	}
 	
-	protected void CheckUnique(Field f, Object value, T object, ValidationResult result) throws Exception
+	/**
+	 * This method checks that the value of a field is unique in the database.
+	 *
+	 * @param field the field to validate
+	 * @param value the value for the field that has to be checked for uniqueness
+	 * @param object the object to validate
+	 * @param result the ValidationResult object
+	 */
+	protected void CheckUnique(Field field, Object value, T object, ValidationResult result) throws Exception
 	{
-		String fieldName = f.getName();
-		if(f.isAnnotationPresent(DbAttribute.class))
-			fieldName = f.getAnnotation(DbAttribute.class).value();
+		String fieldName = field.getName();
+		if(field.isAnnotationPresent(DbAttribute.class))
+			fieldName = field.getAnnotation(DbAttribute.class).value();
 		
 		List<T> dbResult = dbService.GetWhere(asList(value), fieldName + " = ?");
 		if(dbResult.size() > 0)
@@ -121,7 +162,7 @@ public class ValidatorBase<T extends IDbItem> implements IValidator<T> {
 			}
 			
 			result.setHasErrors(true);
-			ValidationError error = new ValidationError(f.getName(), value, "unique: field must be unique");
+			ValidationError error = new ValidationError(field.getName(), value, "unique: field must be unique");
 			result.GetValidationErrors().add(error);
 		}
 	}

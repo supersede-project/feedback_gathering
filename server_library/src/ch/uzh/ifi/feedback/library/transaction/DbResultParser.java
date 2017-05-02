@@ -15,6 +15,14 @@ import java.util.Map;
 import ch.uzh.ifi.feedback.library.rest.annotations.DbAttribute;
 import ch.uzh.ifi.feedback.library.rest.service.ItemBase;
 
+/**
+ * This class is responsible for setting fields for objects of type T from a ResultSet received from the database server.
+ *
+ * @author Florian Schüpfer
+ * @version 1.0
+ * @since   2016-11-14
+ * @param <T> the type of the objects parsed
+ */
 public abstract class DbResultParser<T> {
 	
 	private Map<String, Field> fields;
@@ -24,6 +32,12 @@ public abstract class DbResultParser<T> {
 		InitFields(clazz);
 	}
 	
+	/**
+	 * Retrieves and stores field metadata for the provided class. Each field is stored by its name or by the value of its
+	 * @DbAttribute annotation (if present)
+	 *
+	 * @param clazz the class for which the fields should be stored
+	 */
 	private void InitFields(Class<?> clazz)
 	{
 		fields = new HashMap<>();
@@ -39,6 +53,13 @@ public abstract class DbResultParser<T> {
 		}
 	}
 	
+	/**
+	 * Sets the values of all fields of an object from a ResultSet. The fields are matched by the names stored in the fields map.
+	 *
+	 * @param obj the object to initialize from the ResultSet
+	 * @param rs the ResultSet from a Db query
+	 * @throws SQLException
+	 */
 	public void SetFields(T obj, ResultSet rs) throws SQLException
 	{
 		ResultSetMetaData metadata = rs.getMetaData();
