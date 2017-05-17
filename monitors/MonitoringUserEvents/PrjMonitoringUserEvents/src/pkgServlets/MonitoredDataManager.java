@@ -25,17 +25,16 @@ import java.io.BufferedReader;
  */
 @WebServlet("/MonitoredDataManager")
 public class MonitoredDataManager extends HttpServlet {
+	
 	private static final long serialVersionUID = 1L;
 	private static DataProviderProxy proxy;
-       
-//	private DataProviderProxy proxy;
+    
 	
     /**
      * @see HttpServlet#HttpServlet()
      */
     public MonitoredDataManager() {
         super();
-        // TODO Auto-generated constructor stub
     }
     
     public static DataProviderProxy getProxy() {
@@ -46,15 +45,6 @@ public class MonitoredDataManager extends HttpServlet {
     	
     	return proxy;
     }
-
-//    public DataProviderProxy getProxy() {
-//    	
-//    	if (proxy == null) {
-//    		proxy = new DataProviderProxy();
-//    	}
-//    	
-//    	return proxy;
-//    }
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
@@ -129,15 +119,11 @@ public class MonitoredDataManager extends HttpServlet {
 		JSONObject jsonObj = new JSONObject();
 		jsonObj.put("HTMLEventsMonitoredData", jsonObjAux);
 	    
-	    System.out.println(jsonObj);
-	    
-	    //Fragment for the IF	//Without singleton pattern
-	    //DataProviderProxy proxy = new DataProviderProxy();
-	    //proxy.ingestData(jsonObj, kafkaTopic); //"6d670f20-3fa4-4f8d-9f7f-3001c66d885a"
+	    //System.out.println(jsonObj);
 	    
 	    //Fragment for the IF	//With singleton pattern
-	    //DataProviderProxy proxy = getProxy();
-	    //proxy.ingestData(jsonObj, kafkaTopic); //"6d670f20-3fa4-4f8d-9f7f-3001c66d885a"
+	    DataProviderProxy proxy = getProxy();
+	    proxy.ingestData(jsonObj, kafkaTopic);
 	}
 	
 	

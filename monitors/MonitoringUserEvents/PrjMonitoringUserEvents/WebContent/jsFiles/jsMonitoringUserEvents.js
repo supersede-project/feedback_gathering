@@ -100,10 +100,10 @@ function fnSendMonitoredData(idOutput, confID, userID, sElement, sIDElement, sEv
 	var sCurrentURLPage = window.location.href;
 	
 	//Local
-	var url = "MonitoredDataManager?";
+	//var url = "MonitoredDataManager?";
 	
 	//Remoto	
-	/*if (config.server=='production'){
+	if (config.server=='production'){
 		if (protocol=='HTTPS'){
 			var url = "https://platform.supersede.eu:8443/PrjMonitoringUserEvents/MonitoredDataManager?";
 		}
@@ -118,7 +118,7 @@ function fnSendMonitoredData(idOutput, confID, userID, sElement, sIDElement, sEv
 		if (config.protocol=='HTTP'){
 			var url = "http://supersede.es.atos.net:8081/PrjMonitoringUserEvents/MonitoredDataManager?";
 		}
-	}*/
+	}
 	
 	
 	fnStartRequest();
