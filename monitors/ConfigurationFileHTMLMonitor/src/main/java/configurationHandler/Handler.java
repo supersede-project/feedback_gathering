@@ -10,6 +10,8 @@ import org.json.JSONObject;
 public class Handler {
 	
 	private String monitorResponse;
+	
+	//the path where the configuration file of the HTML monitor will be saved
 	private static final String filename = "C:/Users/Panagiotis/Documents/monitor_feedback/monitors/MonitoringUserEvents/PrjMonitoringUserEvents/WebContent/WEB-INF/ConfigurationFile.txt"; 
 
 	public Handler(String monitorResponse) {
@@ -25,30 +27,30 @@ public class Handler {
 			JSONObject json = new JSONObject(jsonConf);
 			
 			if(!json.has("UserEventsConfProf")){
-	    		throw new InvalidJSONException ("A valid UserEventsConfProf JSON file is missing");
+				return throwError ("A valid UserEventsConfProf JSON file is missing");
 	    	}
 			
 			JSONObject jsonAux = json.getJSONObject("UserEventsConfProf");
 			if (!jsonAux.has("toolName")){
-		    	throw new InvalidJSONException ("A valid toolName is missing"); 
+				return throwError ("A valid toolName is missing"); 
 		    }
 			if (!jsonAux.has("kafkaEndpoint")){
-		    	throw new InvalidJSONException ("A valid kafkaEndpoint is missing");
+				return throwError ("A valid kafkaEndpoint is missing");
 		    }
 			if (!jsonAux.has("kafkaTopic")){
-		    	throw new InvalidJSONException ("A valid kafkaTopic is missing");
+				return throwError ("A valid kafkaTopic is missing");
 		    }
 			if (!jsonAux.has("server")){
-		    	throw new InvalidJSONException ("A valid server is missing");
+				return throwError ("A valid server is missing");
 		    }
 			if (!jsonAux.has("protocol")){
-		    	throw new InvalidJSONException ("A valid protocol is missing");
+				return throwError ("A valid protocol is missing");
 		    }
 			if (!jsonAux.has("textContentSize")){
-		    	throw new InvalidJSONException ("A valid textContentSize is missing");
+				return throwError ("A valid textContentSize is missing");
 		    }
 			if (!jsonAux.has("ListOfEvents")){
-		    	throw new InvalidJSONException ("A valid ListOfEvents is missing");
+				return throwError ("A valid ListOfEvents is missing");
 		    }
 			
 			BufferedWriter bw = new BufferedWriter(new FileWriter(filename));
@@ -59,7 +61,7 @@ public class Handler {
 		} catch (JSONException e) {
 			return throwError("Not a valid JSON configuration object");
 		} catch (IOException e) {
-			return throwError("An error occurred when I was trying to write the file");
+			return throwError("An error occurred when I tried to write the file");
 		} catch (Exception e) {
 			return throwError(e.getMessage());
 		}
