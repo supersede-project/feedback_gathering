@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="ISO-8859-1">
+<meta charset="UTF-8">
 <title>Insert title here</title>
 <script src="jsFiles/jsMonitoringUserEvents.js" type="text/javascript"></script>
 </head>
@@ -9,12 +9,18 @@
 	<form action="demo_form.html">
 		First name: <input type="text" name="FirstName" value="Mickey"><br>
 		Last name: <input type="text" name="LastName" value="Mouse"><br>
+		Server: <input type="text" name="Server" id="SelectedServer" readonly><br>
+		Protocol: <input type="text" name="Protocol" id="SelectedProtocol" readonly><br><br>
 	<input type="submit" value="Submit">
 	</form>
 
 	<p>Click the "Submit" button and the form-data will be sent to a page on the server called "demo_form.asp".</p>
+	
     
-    <script>fnEventListener("useride008");</script>
+    <script>
+    var supersedeMonitor = new SupersedeHTMLMonitor();
+    supersedeMonitor.watchUser("useride008");
+    </script>
     
 </body>
 </html>

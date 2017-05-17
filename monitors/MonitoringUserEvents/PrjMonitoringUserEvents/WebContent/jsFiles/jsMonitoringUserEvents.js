@@ -4,24 +4,69 @@
 
 var req; var confID = 1; 
 
-//Listener function
-function fnEventListener(userID){
-	sessionStorage.setItem('userID', userID);
-	
-	if (document.addEventListener) {					// For all major browsers, except IE 8 
-		//document.addEventListener('mousedown', function(e){fnGetEventInf(e, "mousedown", sessionStorage.getItem('userID'));}, false);
-		document.addEventListener('click', function(e){fnGetEventInf(e, "click", sessionStorage.getItem('userID'));}, false);
-		document.addEventListener('contextmenu', function(e){fnGetEventInf(e, "right-button mouse click", sessionStorage.getItem('userID'));}, false);
-		document.addEventListener('dblclick', function(e){fnGetEventInf(e, "dblclick", sessionStorage.getItem('userID'));}, false);
-	} else if (document.attachEvent) {			        // For IE 8 and earlier versions
-		//document.attachEvent('mousedown', function(e){fnGetEventInf(e, "mousedown", sessionStorage.getItem('userID'));}, false);
-		document.attachEvent('click', function(e){fnGetEventInf(e, "click", sessionStorage.getItem('userID'));}, false);
-		document.attachEvent('contextmenu', function(e){fnGetEventInf(e, "right-button mouse click", sessionStorage.getItem('userID'));}, false);
-		document.attachEvent('dblclick', function(e){fnGetEventInf(e, "dblclick", sessionStorage.getItem('userID'));}, false);
-	}
+function SupersedeHTMLMonitor(){
+	this.watchUser = function(userID){
+		configureMonitoringEvents(userID);
+	};
 }
 
-function fnGetEventInf(e, sEventType, userID){
+//a function that gets the information needed from the configuration file
+function configureMonitoringEvents(userID) {
+	
+    var xhttp;
+    
+    //the configuration file is saved locally
+    var url = "MonitoredDataManager?";
+    
+    if (window.XMLHttpRequest) {
+      xhttp = new XMLHttpRequest();
+    } 
+    else if (window.ActiveXObject) {
+      xhttp = new ActiveXObject("Microsoft.XMLHTTP");
+    }        
+    
+    xhttp.onreadystatechange = function () {
+        if(xhttp.readyState === 4)
+        {
+            if(xhttp.status === 200 || xhttp.status == 0)
+            {
+                var config = JSON.parse(xhttp.responseText);
+                fnEventListener(userID, config);
+            }
+        }
+      };
+      
+      xhttp.open("GET", url, true);
+
+      xhttp.send();
+      
+}
+
+
+//Listener function
+function fnEventListener(userID, config){
+	
+	sessionStorage.setItem('userID', userID);
+	
+	var ListOfEvents = config.ListOfEvents;
+	
+	document.getElementById("SelectedServer").value = config.server;
+	document.getElementById("SelectedProtocol").value = config.protocol;
+	
+	for (var i = 0; i < ListOfEvents.length; i++) {
+		(function (i) {
+			if(document.addEventListener){  // For all major browsers, except IE 8
+				document.addEventListener(ListOfEvents[i].trim(), function(e){fnGetEventInf(e, ListOfEvents[i].trim(), sessionStorage.getItem('userID'), config);}, false);
+			}
+			else if (document.attachEvent){  // For IE 8 and earlier versions
+				document.attachEvent(ListOfEvents[i].trim(), function(e){fnGetEventInf(e, ListOfEvents[i].trim(), sessionStorage.getItem('userID'), config);}, false);
+			}			
+		}(i));
+	}
+	
+}
+
+function fnGetEventInf(e, sEventType, userID, config){
 	e = e || window.event;
     var target = e.target || e.srcElement,
         typeElement = target.nodeName || typeElement.innerText,
@@ -29,10 +74,11 @@ function fnGetEventInf(e, sEventType, userID){
         textElement = target.textContent,
         valueElement = target.value;
 
-    textElement = textElement.replace(/(\r\n|\n|\r)/gm,"");
-    textElement = textElement.substring(0, 150);
     
-    fnSendMonitoredData(generateUUID(), confID, userID, typeElement, idElement, sEventType, textElement, valueElement);
+    textElement = textElement.replace(/(\r\n|\n|\r)/gm,"");
+    textElement = textElement.substring(0, config.textContentSize);
+    
+    fnSendMonitoredData(generateUUID(), confID, userID, typeElement, idElement, sEventType, textElement, valueElement, config);
 }
 
 //Function for generating the output id
@@ -50,24 +96,50 @@ function generateUUID(){
 }
 
 //Calls servlet MonitoredDataManager and sends the information of the event
-function fnSendMonitoredData(idOutput, confID, userID, sElement, sIDElement, sEventType, sElementText, sElementValue){
+function fnSendMonitoredData(idOutput, confID, userID, sElement, sIDElement, sEventType, sElementText, sElementValue, config){
 	var sCurrentURLPage = window.location.href;
 	
-	//var vInfoEvents = "OutputID=" + idOutput + "&ConfigurationID=" + confID + "&UserID=" + userID + "&Element=" + sElement + "&idElement=" + sIDElement + "&EventType=" + sEventType + "&Text=" + sElementText + "&Value=" + sElementValue + "&Timestamp=" + Date();
-	
 	//Local
-	//var url = "MonitoredDataManager?" + vInfoEvents;
-	//var url = "MonitoredDataManager?";
+	var url = "MonitoredDataManager?";
 	
-	//Remoto
-	//var url = "http://supersede.es.atos.net:8081/PrjMonitoringUserEvents/MonitoredDataManager?" + vInfoEvents;
-	var url = "http://supersede.es.atos.net:8081/PrjMonitoringUserEvents/MonitoredDataManager?";
+	//Remoto	
+	/*if (config.server=='production'){
+		if (protocol=='HTTPS'){
+			var url = "https://platform.supersede.eu:8443/PrjMonitoringUserEvents/MonitoredDataManager?";
+		}
+		if (config.protocol=='HTTP'){
+			var url = "http://platform.supersede.eu:8081/PrjMonitoringUserEvents/MonitoredDataManager?";
+		}
+	}
+	if (config.server=='development'){
+		if (protocol=='HTTPS'){
+			var url = "https://supersede-develop.atosresearch.eu:8443/PrjMonitoringUserEvents/MonitoredDataManager?";
+		}
+		if (config.protocol=='HTTP'){
+			var url = "http://supersede.es.atos.net:8081/PrjMonitoringUserEvents/MonitoredDataManager?";
+		}
+	}*/
+	
 	
 	fnStartRequest();
 
 	req.onreadystatechange = fnCallback;
 	req.open("POST", url, true);
-	req.send(confID + "&&" + userID + "&&" + Date() + "&&" + sIDElement + "&&" + sElementText + "&&" + sEventType + "&&" + sElementValue + "&&" + idOutput + "&&" + sCurrentURLPage + "&&" + sElement);
+	
+	var data = new Object();
+	data.confId = confID;
+	data.idUser  = userID;
+	data.timeStamp = Date();
+	data.idElement = sIDElement;
+	data.elementText = sElementText;
+	data.eventType = sEventType;
+	data.elementValue = sElementValue;
+	data.idOutput = idOutput;
+	data.currentPage = sCurrentURLPage;
+	data.elementType = sElement;
+	data.kafkaTopic = config.kafkaTopic;
+	
+	req.send(JSON.stringify(data));
 }
 
 //Create the XMLHttpRequest object
@@ -87,46 +159,3 @@ function fnCallback() {
 		}
 	}
 }
-
-
-
-
-
-
-
-
-/*------------------------------------------------------*/
-/* Other form to get implement the Listener
- * //Listener function
-function fnEventListener(){
-	
-	//Listener for buttons
-	/*
-	for (var iI = 0; iI < document.getElementsByTagName("button").length; iI++){
-		document.getElementsByTagName("button")[iI].addEventListener("click", function(){fnSendMonitoredData("button", this.id, "click", this.textContent);});
-	}
-	
-	for (var iI = 0; iI < document.getElementsByTagName("button").length; iI++){
-		document.getElementsByTagName("button")[iI].addEventListener("contextmenu", function(){fnSendMonitoredData("button", this.id, "right-button mouse click", this.textContent);});
-	}
-	
-	for (var iI = 0; iI < document.getElementsByTagName("button").length; iI++){
-		document.getElementsByTagName("button")[iI].addEventListener("dblclick", function(){fnSendMonitoredData("button", this.id, "dblclick", this.textContent);});
-	}
-}
- */
-
-//Other for to implement fnSendMonitoredData
-/*
-function fnSendMonitoredData(sElement, sIDElement, sEventType, sElementText) {
-	var sElementValue = document.getElementById(sIDElement).value;
-	var vInfoEvents = "Element=" + sElement + "&idElement=" + sIDElement + "&EventType=" + sEventType + "&Text=" + sElementText + "&Value=" + sElementValue + "&Timestamp=" + Date();
-	
-	var url = "MonitoredDataManager?" + vInfoEvents;
-	
-	fnStartRequest();
-	
-	req.onreadystatechange = fnCallback;
-	req.open("POST", url, true);
-	req.send(null);
-}*/
