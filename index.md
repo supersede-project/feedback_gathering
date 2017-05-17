@@ -1,7 +1,7 @@
 <link rel="shortcut icon" type="image/png" href="images/favicon.png">
-# FAME (Feedback Acquisition and Monitoring Enabler) is a Feedback Gathering and Monitoring Tool of [![SUPERSEDE](images/SUPERSEDE-logo.png)](https://www.supersede.eu/) project
+# FAME (Feedback Acquisition and Monitoring Enabler) of [![SUPERSEDE](images/SUPERSEDE-logo.png)](https://www.supersede.eu/) project
 
-This prototype enables end-users to communicate their feedback about a service or application in a flexible and multi-modal way. This means that end-users can document their feedback using text input, audio recording, ratings and screenshot annotations. The developed solution is available for Android and web applications and deployed on the SUPERSEDE platform.
+FAME (Feedback Acquisition and Monitoring Enabler) is a Feedback Gathering and Monitoring Tool of the SUPERSEDE project. This prototype enables end-users to communicate their feedback about a service or application in a flexible and multi-modal way. This means that end-users can document their feedback using text input, audio recording, ratings and screenshot annotations. The developed solution is available for Android and web applications and deployed on the SUPERSEDE platform.
 
 The feedback gathering and the monitoring tool is composed by seven components:
 
