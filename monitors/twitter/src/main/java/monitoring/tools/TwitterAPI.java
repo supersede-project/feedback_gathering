@@ -30,12 +30,11 @@ import java.util.TimerTask;
 
 import org.apache.log4j.Logger;
 
-import monitoring.controller.ToolInterface;
 import monitoring.kafka.KafkaCommunication;
+import monitoring.model.MonitoringData;
 import monitoring.model.MonitoringParams;
-import monitoring.model.TwitterMonitoringData;
-import monitoring.model.TwitterMonitoringParams;
 import monitoring.model.Utils;
+import monitoring.services.ToolInterface;
 import twitter4j.ConnectionLifeCycleListener;
 import twitter4j.FilterQuery;
 import twitter4j.Status;
@@ -43,7 +42,7 @@ import twitter4j.TwitterStream;
 import twitter4j.TwitterStreamFactory;
 import twitter4j.util.function.Consumer;
 
-public class TwitterAPI implements ToolInterface<TwitterMonitoringParams> {
+public class TwitterAPI implements ToolInterface {
 	
 	final static Logger logger = Logger.getLogger(TwitterAPI.class);
 	
@@ -53,7 +52,7 @@ public class TwitterAPI implements ToolInterface<TwitterMonitoringParams> {
 	Timer timer;
 	
 	//Data object instances
-	TwitterMonitoringParams confParams;
+	MonitoringParams confParams;
 	boolean firstConnection;
 	int id = 1;
 	int configurationId;
@@ -61,7 +60,7 @@ public class TwitterAPI implements ToolInterface<TwitterMonitoringParams> {
 	KafkaCommunication kafka;
 	
 	@Override
-	public void addConfiguration(TwitterMonitoringParams params, int configurationId) throws Exception {
+	public void addConfiguration(MonitoringParams params, int configurationId) {
 		logger.debug("Adding new configuration");
 		this.confParams = params;
 		this.configurationId = configurationId;
@@ -77,7 +76,7 @@ public class TwitterAPI implements ToolInterface<TwitterMonitoringParams> {
 	}
 	
 	@Override
-	public void updateConfiguration(TwitterMonitoringParams params) throws Exception {
+	public void updateConfiguration(MonitoringParams params) throws Exception {
 		deleteConfiguration();
 		//generateData((new Timestamp((new Date()).getTime()).toString()));
 		this.confParams = params;
@@ -88,7 +87,7 @@ public class TwitterAPI implements ToolInterface<TwitterMonitoringParams> {
 		//logger.debug("Initialising kafka producer...");
 		//kafka.initProducer(confParams.getKafkaEndpoint());
 		logger.debug("Initialising proxy...");
-		kafka.initProxy();
+		kafka.initProxy(confParams.getKafkaEndpoint());
 		logger.debug("Initialising streaming...");
 		firstConnection = true;
 		tweetInfo = new ArrayList<>();
@@ -137,19 +136,19 @@ public class TwitterAPI implements ToolInterface<TwitterMonitoringParams> {
 	
 	private void generateData(String searchTimeStamp) {
 		
-		List<TwitterMonitoringData> data = new ArrayList<>();
+		List<MonitoringData> data = new ArrayList<>();
 		for (Status s : tweetInfo) {
 			String id = String.valueOf(s.getId());
 			String timeStamp = String.valueOf(s.getCreatedAt());
 			String message = s.getText();
 			String author = "@" + s.getUser().getScreenName();
 			String link = "https://twitter.com/" + s.getUser().getName().replace(" ", "")+ "/status/" + s.getId();
-			TwitterMonitoringData dataObj = new TwitterMonitoringData(id, timeStamp, message, author, link);
+			MonitoringData dataObj = new MonitoringData(id, timeStamp, message, author, link);
 			data.add(dataObj);
 		}
 		tweetInfo = new ArrayList<>();
-		//kafka.generateResponseKafka(data, searchTimeStamp, id, configurationId, this.confParams.getKafkaTopic(), "SocialNetworksMonitoredData");
-		kafka.generateResponseIF(data, searchTimeStamp, id, configurationId, this.confParams.getKafkaTopic(), "SocialNetworksMonitoredData");
+		//kafka.generateResponseKafka(data, searchTimeStamp, id, configurationId, this.confParams.getKafkaTopic);
+		kafka.generateResponseIF(data, searchTimeStamp, id, configurationId, this.confParams.getKafkaTopic());
 		logger.debug("Data successfully sent to Kafka endpoint");
 		++id;
 	}
