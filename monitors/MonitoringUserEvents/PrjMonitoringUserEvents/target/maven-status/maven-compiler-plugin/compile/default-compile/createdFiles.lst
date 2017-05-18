@@ -1,0 +1,3 @@
+monitoring\controller\ConfigurationController.class
+configuration\Handler.class
+pkgServlets\MonitoredDataManager.class

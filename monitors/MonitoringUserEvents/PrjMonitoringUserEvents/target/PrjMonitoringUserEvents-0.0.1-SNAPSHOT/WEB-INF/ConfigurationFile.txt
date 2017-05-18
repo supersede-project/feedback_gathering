@@ -1,0 +1,11 @@
+{
+    "UserEventsConfProf": {
+        "toolName":"HTMLMonitor", 
+        "kafkaEndpoint":"http://localhost:9092", 
+        "kafkaTopic":"blablabla",
+        "server":"production",
+		"protocol":"HTTPS",
+        "textContentSize":150,
+        "ListOfEvents":[ "change", "input", "submit" ]
+    }
+}
