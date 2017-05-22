@@ -1,6 +1,8 @@
 package ch.fhnw.cere.orchestrator.models;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.Date;
 
@@ -12,6 +14,7 @@ public class ConfigurationMechanism {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "configuration_id")
     private Configuration configuration;

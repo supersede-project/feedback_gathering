@@ -1,6 +1,8 @@
 package ch.fhnw.cere.orchestrator.models;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
@@ -16,16 +18,19 @@ public class Parameter {
     private Date updatedAt;
 
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name="parent_parameter_id")
     private Parameter parentParameter;
     @OneToMany(mappedBy="parentParameter")
     private List<Parameter> parameters;
 
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name="generalConfiguration")
     private GeneralConfiguration generalConfiguration;
 
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name="mechanism_id")
     private Mechanism mechanism;
 

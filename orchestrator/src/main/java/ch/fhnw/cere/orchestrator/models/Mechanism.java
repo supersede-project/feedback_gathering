@@ -1,6 +1,8 @@
 package ch.fhnw.cere.orchestrator.models;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
@@ -14,6 +16,7 @@ public class Mechanism {
     private MechanismType type;
     private Date createdAt;
     private Date updatedAt;
+    @JsonIgnore
     @OneToMany(mappedBy = "mechanism")
     private List<ConfigurationMechanism> configurationMechanisms;
     @OneToMany(mappedBy = "mechanism")

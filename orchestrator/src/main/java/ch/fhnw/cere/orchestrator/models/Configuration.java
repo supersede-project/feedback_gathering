@@ -1,5 +1,7 @@
 package ch.fhnw.cere.orchestrator.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.*;
 
@@ -12,9 +14,11 @@ public class Configuration {
     private TriggerType type;
     private Date createdAt;
     private Date updatedAt;
+    @JsonIgnore
     @OneToMany(mappedBy = "configuration", cascade = CascadeType.ALL, orphanRemoval = false)
     private List<ConfigurationMechanism> configurationMechanisms;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name="application_id")
     private Application application;
