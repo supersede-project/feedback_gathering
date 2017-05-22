@@ -1,61 +1,36 @@
 package ch.fhnw.cere.orchestrator.controllers;
 
 
-import ch.fhnw.cere.orchestrator.OrchestratorApplication;
 import ch.fhnw.cere.orchestrator.models.Application;
 import ch.fhnw.cere.orchestrator.repositories.ApplicationRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hamcrest.Matchers;
-import org.junit.After;
+import static org.hamcrest.Matchers.nullValue;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.MediaType;
-import org.springframework.http.converter.HttpMessageConverter;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.web.context.WebApplicationContext;
 
-import java.nio.charset.Charset;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static org.springframework.test.web.servlet.setup.MockMvcBuilders.*;
 
 
-@RunWith(SpringRunner.class)
-@SpringBootTest(classes = OrchestratorApplication.class)
-@WebAppConfiguration
-@ActiveProfiles("test")
-public class ApplicationsControllerTest {
+public class ApplicationsIntegrationTest extends BaseIntegrationTest {
 
-    private MediaType contentType = new MediaType(MediaType.APPLICATION_JSON.getType(),
-            MediaType.APPLICATION_JSON.getSubtype(),
-            Charset.forName("utf8"));
-
-    private MockMvc mockMvc;
     private Application application1;
     private Application application2;
 
     @Autowired
     private ApplicationRepository applicationRepository;
 
-    @Autowired
-    private WebApplicationContext webApplicationContext;
 
     @Before
     public void setup() throws Exception {
-        this.mockMvc = webAppContextSetup(webApplicationContext).build();
+        super.setup();
 
         this.applicationRepository.deleteAllInBatch();
 
@@ -65,7 +40,7 @@ public class ApplicationsControllerTest {
 
     @Test
     public void applicationNotFound() throws Exception {
-        mockMvc.perform(get("/applications/9999999"))
+        this.mockMvc.perform(get("/applications/9999999"))
                 .andExpect(status().isNotFound());
     }
 
@@ -96,6 +71,28 @@ public class ApplicationsControllerTest {
                 .contentType(contentType)
                 .content(applicationJson))
                 .andExpect(status().isCreated());
+    }
+
+    @Test
+    public void deleteApplication() throws Exception {
+        this.mockMvc.perform(delete("/applications/" + application1.getId()))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void updateApplication() throws Exception {
+        this.application2.setName("Updated name for App 2");
+        this.application2.setState(0);
+        String applicationJson = toJson(this.application2);
+
+        this.mockMvc.perform(put("/applications/")
+                .contentType(contentType)
+                .content(applicationJson))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id", is((int) this.application2.getId())))
+                .andExpect(jsonPath("$.name", is("Updated name for App 2")))
+                .andExpect(jsonPath("$.state", is(0)))
+                .andExpect(jsonPath("$.configurations", is(nullValue())));
     }
 
     protected String toJson(Object object) {

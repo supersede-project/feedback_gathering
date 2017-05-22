@@ -35,19 +35,19 @@ public class ApplicationsController {
     @ResponseStatus(HttpStatus.CREATED)
     @RequestMapping(method = RequestMethod.POST, value = "")
     public Application createApplication(@RequestBody Application application) {
-        Application created = applicationService.save(application);
-        System.err.println(application);
-        System.err.println(created);
-        return created;
+        return applicationService.save(application);
     }
 
-    @RequestMapping(method = RequestMethod.DELETE, value = "/delete/{id}")
+    @RequestMapping(method = RequestMethod.DELETE, value = "/{id}")
     public void deleteApplication(@PathVariable long id) {
-        Application application = new Application();
-        application.setId(id);
         applicationService.delete(id);
     }
-    
+
+    @RequestMapping(method = RequestMethod.PUT, value = "/")
+    public Application updateApplication(@RequestBody Application application) {
+        return applicationService.save(application);
+    }
+
     @RequestMapping(method = RequestMethod.GET, value = "/search/name/{name}")
     public List<Application> getApplicationByName(@PathVariable String name) {
         List<Application> applications = applicationService.findByName(name);
