@@ -3,25 +3,25 @@ package configurationHandler;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 public class Handler {
 	
-	private String monitorResponse;
+	private String monitorResponse;  
 	
-	//the path where the configuration file of the HTML monitor will be saved
-	private static final String filename = "C:/Users/Panagiotis/Documents/monitor_feedback/monitors/MonitoringUserEvents/PrjMonitoringUserEvents/WebContent/WEB-INF/ConfigurationFile.txt"; 
-
 	public Handler(String monitorResponse) {
 		super();
 		this.monitorResponse = monitorResponse;
 	}
 	
 	
-	public String addConfiguration(String jsonConf) {
+	public String addConfiguration(String jsonConf)  {
 		
+				
 		try {			
 			
 			JSONObject json = new JSONObject(jsonConf);
@@ -52,6 +52,12 @@ public class Handler {
 			if (!jsonAux.has("ListOfEvents")){
 				return throwError ("A valid ListOfEvents is missing");
 		    }
+			
+			//the properties file contains the absolute path where the configuration file of the HTML monitor is going to be saved
+			InputStream input = this.getClass().getClassLoader().getResourceAsStream("config.properties");
+			Properties prop = new Properties();
+			prop.load(input);
+			String filename = prop.getProperty("path");
 			
 			BufferedWriter bw = new BufferedWriter(new FileWriter(filename));
 			bw.write(json.toString());
