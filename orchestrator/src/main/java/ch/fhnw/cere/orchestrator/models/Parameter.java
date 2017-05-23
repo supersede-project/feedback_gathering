@@ -4,8 +4,7 @@ package ch.fhnw.cere.orchestrator.models;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Entity
 public class Parameter {
@@ -49,6 +48,29 @@ public class Parameter {
 
     public Parameter() {
 
+    }
+
+    List<Parameter> parametersByLanguage(String language, String fallbackLanguage) {
+        if(this.parameters == null) {
+            return null;
+        }
+        Map<String, Parameter> keyValuePairs = new HashMap<>();
+        for(Parameter parameter : this.parameters) {
+            if(parameter.getParameters() != null && parameter.getParameters().size() > 0) {
+                parameter.setParameters(parameter.parametersByLanguage(language, fallbackLanguage));
+            } else {
+                if(keyValuePairs.containsKey(parameter.key)) {
+                    if(parameter.getLanguage().equals(language)) {
+                        keyValuePairs.put(parameter.key, parameter);
+                    } else if (!keyValuePairs.get(parameter.key).getLanguage().equals(language) && parameter.getLanguage().equals(fallbackLanguage)) {
+                        keyValuePairs.put(parameter.key, parameter);
+                    }
+                } else if(parameter.getLanguage().equals(language) || parameter.getLanguage().equals(fallbackLanguage)) {
+                    keyValuePairs.put(parameter.key, parameter);
+                }
+            }
+        }
+        return new ArrayList<Parameter>(keyValuePairs.values());
     }
 
     public Parameter(String key, String value, Date createdAt, Date updatedAt, String language, Parameter parentParameter, List<Parameter> parameters, GeneralConfiguration generalConfiguration, Mechanism mechanism) {

@@ -47,6 +47,11 @@ public class Application {
                 id, name, state);
     }
 
+    Application filterParametersByLanguage(Application application, String language) {
+        // TODO filter children
+        return application;
+    }
+
     public long getId() {
         return id;
     }
