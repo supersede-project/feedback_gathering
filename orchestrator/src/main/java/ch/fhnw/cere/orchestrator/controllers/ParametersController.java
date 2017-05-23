@@ -20,7 +20,7 @@ public class ParametersController extends BaseController {
 
     @RequestMapping(method = RequestMethod.GET, value = "")
     public List<Parameter> getParameters() {
-        return parameterService.findAll();
+        return parameterService.findByLanguage(language());
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/{id}")

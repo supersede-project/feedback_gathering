@@ -43,6 +43,12 @@ public class Mechanism {
         this.parameters = parameters;
     }
 
+    public Mechanism(MechanismType type, List<ConfigurationMechanism> configurationMechanisms, List<Parameter> parameters) {
+        this.type = type;
+        this.configurationMechanisms = configurationMechanisms;
+        this.parameters = parameters;
+    }
+
     @Override
     public String toString() {
         return String.format(

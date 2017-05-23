@@ -20,6 +20,10 @@ public class ParameterServiceImpl implements ParameterService {
         return parameterRepository.findAll();
     }
 
+    public List<Parameter> findByLanguage(String language) {
+        return parameterRepository.findByLanguage(language);
+    }
+
     public Parameter save(Parameter application){
         return parameterRepository.save(application);
     }
@@ -34,5 +38,9 @@ public class ParameterServiceImpl implements ParameterService {
 
     public void delete(long id){
         parameterRepository.delete(id);
+    }
+
+    public List<Parameter> findByMechanismIdAndLanguage(long mechanismId, String language) {
+        return parameterRepository.findByMechanismIdAndLanguage(mechanismId, language);
     }
 }

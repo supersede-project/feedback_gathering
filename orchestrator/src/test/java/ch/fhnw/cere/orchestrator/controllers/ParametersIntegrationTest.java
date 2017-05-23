@@ -1,6 +1,9 @@
 package ch.fhnw.cere.orchestrator.controllers;
 
+import ch.fhnw.cere.orchestrator.models.Mechanism;
+import ch.fhnw.cere.orchestrator.models.MechanismType;
 import ch.fhnw.cere.orchestrator.models.Parameter;
+import ch.fhnw.cere.orchestrator.repositories.MechanismRepository;
 import ch.fhnw.cere.orchestrator.repositories.ParameterRepository;
 import org.junit.Before;
 import org.junit.Test;
@@ -21,9 +24,13 @@ public class ParametersIntegrationTest extends BaseIntegrationTest {
 
     private Parameter parameter1;
     private Parameter parameter2;
+    private Parameter parameter3;
+    private Mechanism mechanism1;
 
     @Autowired
     private ParameterRepository parameterRepository;
+    @Autowired
+    private MechanismRepository mechanismRepository;
     private String basePathEn = "/en/parameters";
     private String basePathDe = "/de/parameters";
 
@@ -33,9 +40,13 @@ public class ParametersIntegrationTest extends BaseIntegrationTest {
         super.setup();
 
         this.parameterRepository.deleteAllInBatch();
+        this.mechanismRepository.deleteAllInBatch();
 
-        this.parameter1 = parameterRepository.save(new Parameter("title", "Title EN", new Date(), new Date(), "en", null, null, null));
-        this.parameter2 = parameterRepository.save(new Parameter("title", "Titel DE", new Date(), new Date(), "de", null, null, null));
+        this.mechanism1 = mechanismRepository.save(new Mechanism(MechanismType.TEXT_TYPE, null, null));
+
+        this.parameter1 = parameterRepository.save(new Parameter("title", "Title EN", new Date(), new Date(), "en", null, null, mechanism1));
+        this.parameter2 = parameterRepository.save(new Parameter("title", "Titel DE", new Date(), new Date(), "de", null, null, mechanism1));
+        this.parameter3 = parameterRepository.save(new Parameter("font-size", "10", new Date(), new Date(), "en", null, null, mechanism1));
     }
 
     @Test
@@ -48,7 +59,13 @@ public class ParametersIntegrationTest extends BaseIntegrationTest {
     public void getParameters() throws Exception {
         mockMvc.perform(get(basePathEn + "/"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize(2)));
+                .andExpect(jsonPath("$", hasSize(2)))
+                .andExpect(jsonPath("$[0].language", is("en")));
+
+        mockMvc.perform(get(basePathDe + "/"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(1)))
+                .andExpect(jsonPath("$[0].language", is("de")));
     }
 
     @Test

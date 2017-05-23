@@ -29,7 +29,7 @@ public class Parameter {
 
     @ManyToOne
     @JsonIgnore
-    @JoinColumn(name="generalConfiguration")
+    @JoinColumn(name="general_configuration_id")
     private GeneralConfiguration generalConfiguration;
 
     @ManyToOne
