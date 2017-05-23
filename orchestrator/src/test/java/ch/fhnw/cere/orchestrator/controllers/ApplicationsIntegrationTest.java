@@ -3,8 +3,6 @@ package ch.fhnw.cere.orchestrator.controllers;
 
 import ch.fhnw.cere.orchestrator.models.Application;
 import ch.fhnw.cere.orchestrator.repositories.ApplicationRepository;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hamcrest.Matchers;
 import static org.hamcrest.Matchers.nullValue;
 import org.junit.Before;
@@ -26,6 +24,7 @@ public class ApplicationsIntegrationTest extends BaseIntegrationTest {
 
     @Autowired
     private ApplicationRepository applicationRepository;
+    private String basePath = "/en/applications";
 
 
     @Before
@@ -40,20 +39,20 @@ public class ApplicationsIntegrationTest extends BaseIntegrationTest {
 
     @Test
     public void applicationNotFound() throws Exception {
-        this.mockMvc.perform(get("/applications/9999999"))
+        this.mockMvc.perform(get(basePath + "/9999999"))
                 .andExpect(status().isNotFound());
     }
 
     @Test
     public void getApplications() throws Exception {
-        mockMvc.perform(get("/applications/"))
+        mockMvc.perform(get(basePath + "/"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(2)));
     }
 
     @Test
     public void getApplication() throws Exception {
-        mockMvc.perform(get("/applications/" + application1.getId()))
+        mockMvc.perform(get(basePath + "/" + application1.getId()))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(contentType))
                 .andExpect(jsonPath("$.id", is((int) this.application1.getId())))
@@ -67,7 +66,7 @@ public class ApplicationsIntegrationTest extends BaseIntegrationTest {
         Application application = new Application("Test App 3", 1, new Date(), new Date(), null);
         String applicationJson = toJson(application);
 
-        this.mockMvc.perform(post("/applications")
+        this.mockMvc.perform(post(basePath)
                 .contentType(contentType)
                 .content(applicationJson))
                 .andExpect(status().isCreated());
@@ -75,7 +74,7 @@ public class ApplicationsIntegrationTest extends BaseIntegrationTest {
 
     @Test
     public void deleteApplication() throws Exception {
-        this.mockMvc.perform(delete("/applications/" + application1.getId()))
+        this.mockMvc.perform(delete(basePath + "/" + application1.getId()))
                 .andExpect(status().isOk());
     }
 
@@ -85,7 +84,7 @@ public class ApplicationsIntegrationTest extends BaseIntegrationTest {
         this.application2.setState(0);
         String applicationJson = toJson(this.application2);
 
-        this.mockMvc.perform(put("/applications/")
+        this.mockMvc.perform(put(basePath + "/")
                 .contentType(contentType)
                 .content(applicationJson))
                 .andExpect(status().isOk())
@@ -93,16 +92,5 @@ public class ApplicationsIntegrationTest extends BaseIntegrationTest {
                 .andExpect(jsonPath("$.name", is("Updated name for App 2")))
                 .andExpect(jsonPath("$.state", is(0)))
                 .andExpect(jsonPath("$.configurations", is(nullValue())));
-    }
-
-    protected String toJson(Object object) {
-        ObjectMapper mapper = new ObjectMapper();
-        String jsonString= null;
-        try {
-            jsonString = mapper.writeValueAsString(object);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
-        return jsonString;
     }
 }

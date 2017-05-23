@@ -16,6 +16,7 @@ public class Parameter {
     private String value;
     private Date createdAt;
     private Date updatedAt;
+    private String language;
 
     @ManyToOne
     @JsonIgnore
@@ -48,11 +49,12 @@ public class Parameter {
 
     }
 
-    public Parameter(String key, String value, Date createdAt, Date updatedAt, Parameter parentParameter, List<Parameter> parameters, GeneralConfiguration generalConfiguration, Mechanism mechanism) {
+    public Parameter(String key, String value, Date createdAt, Date updatedAt, String language, Parameter parentParameter, List<Parameter> parameters, GeneralConfiguration generalConfiguration, Mechanism mechanism) {
         this.key = key;
         this.value = value;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+        this.language = language;
         this.parentParameter = parentParameter;
         this.parameters = parameters;
         this.generalConfiguration = generalConfiguration;
@@ -136,6 +138,14 @@ public class Parameter {
 
     public void setGeneralConfiguration(GeneralConfiguration generalConfiguration) {
         this.generalConfiguration = generalConfiguration;
+    }
+
+    public String getLanguage() {
+        return language;
+    }
+
+    public void setLanguage(String language) {
+        this.language = language;
     }
 }
 
