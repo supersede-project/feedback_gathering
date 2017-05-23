@@ -12,6 +12,8 @@ public class Parameter {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
+
+    @Column(name="`key`")
     private String key;
     private String value;
     private Date createdAt;
@@ -57,6 +59,17 @@ public class Parameter {
         this.language = language;
         this.parentParameter = parentParameter;
         this.parameters = parameters;
+        this.generalConfiguration = generalConfiguration;
+        this.mechanism = mechanism;
+    }
+
+    public Parameter(String key, String value, Date createdAt, Date updatedAt, String language, Parameter parentParameter, GeneralConfiguration generalConfiguration, Mechanism mechanism) {
+        this.key = key;
+        this.value = value;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.language = language;
+        this.parentParameter = parentParameter;
         this.generalConfiguration = generalConfiguration;
         this.mechanism = mechanism;
     }

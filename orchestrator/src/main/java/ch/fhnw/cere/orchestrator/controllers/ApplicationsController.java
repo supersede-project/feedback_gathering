@@ -7,11 +7,8 @@ import ch.fhnw.cere.orchestrator.services.ApplicationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.HandlerMapping;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
-import java.util.Map;
 
 
 @RestController
@@ -28,8 +25,6 @@ public class ApplicationsController extends BaseController {
 
     @RequestMapping(method = RequestMethod.GET, value = "/{id}")
     public Application getApplication(@PathVariable long id) {
-        System.err.println("DEBUG PRINT");
-        System.err.println(language());
         Application application = applicationService.find(id);
         if(application == null) {
             throw new NotFoundException();
