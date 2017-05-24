@@ -58,16 +58,16 @@ public class Parameter {
         for(Parameter parameter : this.parameters) {
             if(parameter.getParameters() != null && parameter.getParameters().size() > 0) {
                 parameter.setParameters(parameter.parametersByLanguage(language, fallbackLanguage));
-            } else {
-                if(keyValuePairs.containsKey(parameter.key)) {
-                    if(parameter.getLanguage().equals(language)) {
-                        keyValuePairs.put(parameter.key, parameter);
-                    } else if (!keyValuePairs.get(parameter.key).getLanguage().equals(language) && parameter.getLanguage().equals(fallbackLanguage)) {
-                        keyValuePairs.put(parameter.key, parameter);
-                    }
-                } else if(parameter.getLanguage().equals(language) || parameter.getLanguage().equals(fallbackLanguage)) {
-                    keyValuePairs.put(parameter.key, parameter);
+            }
+
+            if(keyValuePairs.containsKey(parameter.getKey())) {
+                if(parameter.getLanguage().equals(language)) {
+                    keyValuePairs.put(parameter.getKey(), parameter);
+                } else if (!keyValuePairs.get(parameter.getKey()).getLanguage().equals(language) && parameter.getLanguage().equals(fallbackLanguage)) {
+                    keyValuePairs.put(parameter.getKey(), parameter);
                 }
+            } else if(parameter.getLanguage().equals(language) || parameter.getLanguage().equals(fallbackLanguage)) {
+                keyValuePairs.put(parameter.getKey(), parameter);
             }
         }
         return new ArrayList<Parameter>(keyValuePairs.values());
@@ -99,8 +99,8 @@ public class Parameter {
     @Override
     public String toString() {
         return String.format(
-                "Parameter[id=%d, key='%s', vale='%s']",
-                id, key, value);
+                "Parameter[id=%d, key='%s', value='%s', language='%s']",
+                id, key, value, language);
     }
 
     public long getId() {

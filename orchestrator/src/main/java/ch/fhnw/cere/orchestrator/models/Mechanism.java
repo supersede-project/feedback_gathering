@@ -4,8 +4,7 @@ package ch.fhnw.cere.orchestrator.models;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Entity
 public class Mechanism {
@@ -54,6 +53,28 @@ public class Mechanism {
         return String.format(
                 "Mechanism[id=%d, type='%s']",
                 id, type);
+    }
+
+    List<Parameter> parametersByLanguage(String language, String fallbackLanguage) {
+        if(this.parameters == null) {
+            return null;
+        }
+        Map<String, Parameter> keyValuePairs = new HashMap<>();
+        for(Parameter parameter : this.parameters) {
+            if(parameter.getParameters() != null && parameter.getParameters().size() > 0) {
+                parameter.setParameters(parameter.parametersByLanguage(language, fallbackLanguage));
+            }
+            if(keyValuePairs.containsKey(parameter.getKey())) {
+                if(parameter.getLanguage().equals(language)) {
+                    keyValuePairs.put(parameter.getKey(), parameter);
+                } else if (!keyValuePairs.get(parameter.getKey()).getLanguage().equals(language) && parameter.getLanguage().equals(fallbackLanguage)) {
+                    keyValuePairs.put(parameter.getKey(), parameter);
+                }
+            } else if(parameter.getLanguage().equals(language) || parameter.getLanguage().equals(fallbackLanguage)) {
+                keyValuePairs.put(parameter.getKey(), parameter);
+            }
+        }
+        return new ArrayList<Parameter>(keyValuePairs.values());
     }
 
     public long getId() {
