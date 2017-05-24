@@ -13,6 +13,8 @@ public class BaseController {
     @Autowired
     HttpServletRequest req;
 
+    protected String fallbackLanguage = "en";
+
     protected String language() {
         Map<String, String> variables = (Map<String, String>) req.getAttribute(HandlerMapping.URI_TEMPLATE_VARIABLES_ATTRIBUTE);
         return variables.get("language");

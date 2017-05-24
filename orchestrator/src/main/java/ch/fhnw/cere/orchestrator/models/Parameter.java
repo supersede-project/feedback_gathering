@@ -50,29 +50,6 @@ public class Parameter {
 
     }
 
-    List<Parameter> parametersByLanguage(String language, String fallbackLanguage) {
-        if(this.parameters == null) {
-            return null;
-        }
-        Map<String, Parameter> keyValuePairs = new HashMap<>();
-        for(Parameter parameter : this.parameters) {
-            if(parameter.getParameters() != null && parameter.getParameters().size() > 0) {
-                parameter.setParameters(parameter.parametersByLanguage(language, fallbackLanguage));
-            }
-
-            if(keyValuePairs.containsKey(parameter.getKey())) {
-                if(parameter.getLanguage().equals(language)) {
-                    keyValuePairs.put(parameter.getKey(), parameter);
-                } else if (!keyValuePairs.get(parameter.getKey()).getLanguage().equals(language) && parameter.getLanguage().equals(fallbackLanguage)) {
-                    keyValuePairs.put(parameter.getKey(), parameter);
-                }
-            } else if(parameter.getLanguage().equals(language) || parameter.getLanguage().equals(fallbackLanguage)) {
-                keyValuePairs.put(parameter.getKey(), parameter);
-            }
-        }
-        return new ArrayList<Parameter>(keyValuePairs.values());
-    }
-
     public Parameter(String key, String value, Date createdAt, Date updatedAt, String language, Parameter parentParameter, List<Parameter> parameters, GeneralConfiguration generalConfiguration, Mechanism mechanism) {
         this.key = key;
         this.value = value;
@@ -101,6 +78,39 @@ public class Parameter {
         return String.format(
                 "Parameter[id=%d, key='%s', value='%s', language='%s']",
                 id, key, value, language);
+    }
+
+    List<Parameter> parametersByLanguage(String language, String fallbackLanguage) {
+        if(this.getParameters() == null) {
+            return null;
+        }
+        Map<String, Parameter> keyValuePairs = new HashMap<>();
+        for(Parameter parameter : this.getParameters()) {
+            if(parameter.getParameters() != null && parameter.getParameters().size() > 0) {
+                parameter.setParameters(parameter.parametersByLanguage(language, fallbackLanguage));
+            }
+
+            if(keyValuePairs.containsKey(parameter.getKey())) {
+                if(parameter.getLanguage().equals(language)) {
+                    keyValuePairs.put(parameter.getKey(), parameter);
+                } else if (!keyValuePairs.get(parameter.getKey()).getLanguage().equals(language) && parameter.getLanguage().equals(fallbackLanguage)) {
+                    keyValuePairs.put(parameter.getKey(), parameter);
+                }
+            } else if(parameter.getLanguage().equals(language) || parameter.getLanguage().equals(fallbackLanguage)) {
+                keyValuePairs.put(parameter.getKey(), parameter);
+            }
+        }
+        return new ArrayList<Parameter>(keyValuePairs.values());
+    }
+
+    void filterByLanguage(String language, String fallbackLanguage) {
+        if(this.getParameters() == null) {
+            return;
+        }
+        for(Parameter parameter : this.getParameters()) {
+            parameter.filterByLanguage(language, fallbackLanguage);
+        }
+        this.setParameters(this.parametersByLanguage(language, fallbackLanguage));
     }
 
     public long getId() {

@@ -20,7 +20,9 @@ public class ApplicationsController extends BaseController {
 
     @RequestMapping(method = RequestMethod.GET, value = "")
     public List<Application> getApplications() {
-        return applicationService.findAll();
+        List<Application> applications = applicationService.findAll();
+        applications.stream().forEach(application -> application.filterByLanguage(language(), this.fallbackLanguage));
+        return applications;
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/{id}")
@@ -29,6 +31,7 @@ public class ApplicationsController extends BaseController {
         if(application == null) {
             throw new NotFoundException();
         }
+        application.filterByLanguage(language(), this.fallbackLanguage);
         return application;
     }
 

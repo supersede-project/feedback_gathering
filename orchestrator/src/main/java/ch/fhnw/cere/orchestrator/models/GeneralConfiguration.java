@@ -2,8 +2,7 @@ package ch.fhnw.cere.orchestrator.models;
 
 
 import javax.persistence.*;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Entity
 public class GeneralConfiguration {
@@ -42,6 +41,29 @@ public class GeneralConfiguration {
         return String.format(
                 "GeneralConfiguration[id=%d, name='%s']",
                 id, name);
+    }
+
+    List<Parameter> parametersByLanguage(String language, String fallbackLanguage) {
+        if(this.getParameters() == null) {
+            return null;
+        }
+        Map<String, Parameter> keyValuePairs = new HashMap<>();
+        for(Parameter parameter : this.getParameters()) {
+            if(parameter.getParameters() != null && parameter.getParameters().size() > 0) {
+                parameter.setParameters(parameter.parametersByLanguage(language, fallbackLanguage));
+            }
+
+            if(keyValuePairs.containsKey(parameter.getKey())) {
+                if(parameter.getLanguage().equals(language)) {
+                    keyValuePairs.put(parameter.getKey(), parameter);
+                } else if (!keyValuePairs.get(parameter.getKey()).getLanguage().equals(language) && parameter.getLanguage().equals(fallbackLanguage)) {
+                    keyValuePairs.put(parameter.getKey(), parameter);
+                }
+            } else if(parameter.getLanguage().equals(language) || parameter.getLanguage().equals(fallbackLanguage)) {
+                keyValuePairs.put(parameter.getKey(), parameter);
+            }
+        }
+        return new ArrayList<Parameter>(keyValuePairs.values());
     }
 
     public long getId() {

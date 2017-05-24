@@ -8,23 +8,24 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 
 public class MechanismTest {
 
-    Mechanism mechanism1;
+    private Mechanism mechanism1;
 
-    Parameter parameter1;
-    Parameter parameter2;
-    Parameter parameter3;
+    private Parameter parameter1;
+    private Parameter parameter2;
+    private Parameter parameter3;
 
-    Parameter parentParameter1;
-    Parameter childParameter1;
-    Parameter childParameter2;
-    Parameter childParameter3;
-    Parameter childParameter4;
+    private Parameter parentParameter1;
+    private Parameter childParameter1;
+    private Parameter childParameter2;
+    private Parameter childParameter3;
+    private Parameter childParameter4;
 
     @Before
     public void setup() {
@@ -89,5 +90,19 @@ public class MechanismTest {
         assertTrue(languageParameters5.contains(parameter1));
         assertTrue(languageParameters5.contains(parameter3));
         assertTrue(languageParameters5.contains(parentParameter1));
+    }
+
+    @Test
+    public void testFilterByLanguage() {
+        mechanism1.filterByLanguage("de", "en");
+        System.out.println(mechanism1.getParameters());
+
+        assertEquals(3, mechanism1.getParameters().size());
+        assertTrue(mechanism1.getParameters().contains(parameter2));
+        assertTrue(mechanism1.getParameters().contains(parameter3));
+        assertTrue(mechanism1.getParameters().contains(parentParameter1));
+        Parameter optionsParameter = mechanism1.getParameters().stream().filter(parameter -> parameter.getKey().equals("options")).findFirst().get();
+        assertTrue(optionsParameter.getParameters().contains(childParameter2));
+        assertTrue(optionsParameter.getParameters().contains(childParameter3));
     }
 }

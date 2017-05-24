@@ -8,21 +8,22 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 
 public class ParameterTest {
 
-    Parameter parameter1;
-    Parameter parameter2;
-    Parameter parameter3;
+    private Parameter parameter1;
+    private Parameter parameter2;
+    private Parameter parameter3;
 
-    Parameter parentParameter1;
-    Parameter childParameter1;
-    Parameter childParameter2;
-    Parameter childParameter3;
-    Parameter childParameter4;
+    private Parameter parentParameter1;
+    private Parameter childParameter1;
+    private Parameter childParameter2;
+    private Parameter childParameter3;
+    private Parameter childParameter4;
 
     @Before
     public void setup() {
@@ -71,5 +72,14 @@ public class ParameterTest {
         assertTrue(languageParameters5.size() == 2);
         assertTrue(languageParameters5.contains(childParameter1));
         assertTrue(languageParameters5.contains(childParameter2));
+    }
+
+    @Test
+    public void testFilterByLanguage() {
+        parentParameter1.filterByLanguage("de", "en");
+
+        assertEquals(2, parentParameter1.getParameters().size());
+        assertTrue(parentParameter1.getParameters().contains(childParameter2));
+        assertTrue(parentParameter1.getParameters().contains(childParameter3));
     }
 }

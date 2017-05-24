@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Entity
 public class Configuration {
@@ -47,8 +48,15 @@ public class Configuration {
     @Override
     public String toString() {
         return String.format(
-                "Configuration[id=%d, name='%s', type='%s']",
-                id, name, type);
+                "Configuration[id=%d, name='%s', type='%s', mechanisms='%s']",
+                id, name, type, this.getMechanisms().stream().map(Object::toString)
+                        .collect(Collectors.joining(", ")));
+    }
+
+    void filterByLanguage(String language, String fallbackLanguage) {
+        for(Mechanism mechanism : this.getMechanisms()) {
+            mechanism.setParameters(mechanism.parametersByLanguage(language, fallbackLanguage));
+        }
     }
 
     public long getId() {

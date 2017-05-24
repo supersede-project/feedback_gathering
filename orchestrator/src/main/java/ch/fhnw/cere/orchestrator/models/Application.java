@@ -1,8 +1,10 @@
 package ch.fhnw.cere.orchestrator.models;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 public class Application {
@@ -43,13 +45,15 @@ public class Application {
     @Override
     public String toString() {
         return String.format(
-                "Application[id=%d, name='%s', state='%d']",
-                id, name, state);
+                "Application[id=%d, name='%s', state='%d', configurations='%s']",
+                id, name, state,  this.configurations.stream().map(Object::toString)
+                        .collect(Collectors.joining(", ")));
     }
 
-    Application filterParametersByLanguage(Application application, String language) {
-        // TODO filter children
-        return application;
+    public void filterByLanguage(String language, String fallbackLanguage) {
+        for(Configuration configuration: this.configurations) {
+            configuration.filterByLanguage(language, fallbackLanguage);
+        }
     }
 
     public long getId() {
