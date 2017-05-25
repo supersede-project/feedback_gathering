@@ -133,7 +133,7 @@ public class FeedbackController extends RestController<Feedback>{
 		public void run() {
 			LOGGER.debug("WP2 communication");
 			try {
-				String topicIdFeedback = "9c2b5ce9-5e5a-423d-aca9-945c1f1e42a2";
+				String topicIdFeedback = "5ff7d393-e2a5-49fd-a4de-f4e1f7480bf4";
 				String json = gson.toJson(feedback);
 				JSONObject jsonData = new JSONObject(json);
 				dataProviderIntegratorRepository.ingestJsonData(jsonData, topicIdFeedback);
