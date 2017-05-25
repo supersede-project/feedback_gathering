@@ -123,7 +123,7 @@ public class MailService
 			String message = String.format("Hello,<br />A new feedback was sent for application %d: <br /><br /> %s %s %s %s %s %s<br /><br />Best regards,<br />Feedback Gathering",
 					applicationId, divider, textFeedbacksContent, ratingFeedbacksContent, categoryFeedbacksContent, contextInformation, divider);
 					
-			mailClient.sendEmail(to, "New Feedback for Application " + applicationId, message, attachments);
+			mailClient.sendEmail(to, "Feedback from user " + feedback.getUserIdentification(), message, attachments);
 			LOGGER.info("E-Mail sent to " + to + " for application ID " + applicationId);
 		}catch(MessagingException ex)
 		{
