@@ -18,7 +18,7 @@ public class Application {
     private Date createdAt;
     private Date updatedAt;
 
-    @OneToMany(mappedBy = "application")
+    @OneToMany(mappedBy = "application", cascade=CascadeType.ALL)
     private List<Configuration> configurations;
 
     @PrePersist

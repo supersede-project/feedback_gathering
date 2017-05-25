@@ -23,7 +23,7 @@ public class Parameter {
     @JsonIgnore
     @JoinColumn(name="parent_parameter_id")
     private Parameter parentParameter;
-    @OneToMany(mappedBy="parentParameter")
+    @OneToMany(mappedBy="parentParameter", cascade=CascadeType.ALL)
     private List<Parameter> parameters;
 
     @ManyToOne

@@ -19,7 +19,7 @@ public class Mechanism {
     @JsonIgnore
     @OneToMany(mappedBy = "mechanism")
     private List<ConfigurationMechanism> configurationMechanisms;
-    @OneToMany(mappedBy = "mechanism")
+    @OneToMany(mappedBy = "mechanism", cascade=CascadeType.ALL)
     private List<Parameter> parameters;
 
     @PrePersist

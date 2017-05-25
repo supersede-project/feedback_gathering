@@ -18,7 +18,7 @@ public class ConfigurationMechanism {
     @ManyToOne
     @JoinColumn(name = "configuration_id")
     private Configuration configuration;
-    @ManyToOne
+    @ManyToOne(cascade=CascadeType.ALL)
     @JoinColumn(name = "mechanism_id")
     private Mechanism mechanism;
     private boolean active;

@@ -16,7 +16,7 @@ public class Configuration {
     private Date createdAt;
     private Date updatedAt;
     @JsonIgnore
-    @OneToMany(mappedBy = "configuration", cascade = CascadeType.ALL, orphanRemoval = false)
+    @OneToMany(mappedBy = "configuration", cascade = CascadeType.ALL)
     private List<ConfigurationMechanism> configurationMechanisms;
 
     @JsonIgnore
