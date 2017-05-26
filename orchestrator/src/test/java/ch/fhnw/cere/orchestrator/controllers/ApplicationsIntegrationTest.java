@@ -36,6 +36,9 @@ public class ApplicationsIntegrationTest extends BaseIntegrationTest {
     private ConfigurationMechanism configurationMechanism1;
     private ConfigurationMechanism configurationMechanism2;
 
+    private GeneralConfiguration applicationGeneralConfiguration;
+    private GeneralConfiguration pushConfigurationGeneralConfiguration;
+
     private Parameter parameter1;
     private Parameter parameter2;
     private Parameter parameter3;
@@ -45,6 +48,9 @@ public class ApplicationsIntegrationTest extends BaseIntegrationTest {
     private Parameter childParameter2;
     private Parameter childParameter3;
     private Parameter childParameter4;
+
+    private Parameter applicationGeneralConfigurationParameter;
+    private Parameter pushConfigurationGeneralConfigurationParameter;
 
     @Autowired
     private ApplicationRepository applicationRepository;
@@ -94,13 +100,21 @@ public class ApplicationsIntegrationTest extends BaseIntegrationTest {
                 .andExpect(jsonPath("$.id", is((int) this.application3.getId())))
                 .andExpect(jsonPath("$.name", is("Test application 3")))
                 .andExpect(jsonPath("$.state", is(1)))
+                .andExpect(jsonPath("$.generalConfiguration.name", is("General configuration Test application 3")))
+                .andExpect(jsonPath("$.generalConfiguration.parameters", hasSize(1)))
+                .andExpect(jsonPath("$.generalConfiguration.parameters[0].key", is("reviewActive")))
+                .andExpect(jsonPath("$.generalConfiguration.parameters[0].value", is("true")))
                 .andExpect(jsonPath("$.configurations", hasSize(2)))
                 .andExpect(jsonPath("$.configurations[0].mechanisms[0].active", is(true)))
                 .andExpect(jsonPath("$.configurations[0].mechanisms[0].order", is(1)))
                 .andExpect(jsonPath("$.configurations[0].mechanisms[0].parameters", hasSize(3)))
                 .andExpect(jsonPath("$.configurations[0].mechanisms[0].parameters[0].language", is("en")))
                 .andExpect(jsonPath("$.configurations[0].mechanisms[0].parameters[1].language", is("en")))
-                .andExpect(jsonPath("$.configurations[0].mechanisms[0].parameters[2].language", is("en")));
+                .andExpect(jsonPath("$.configurations[0].mechanisms[0].parameters[2].language", is("en")))
+                .andExpect(jsonPath("$.configurations[0].generalConfiguration.name", is("General configuration for push configuration")))
+                .andExpect(jsonPath("$.configurations[0].generalConfiguration.parameters", hasSize(1)))
+                .andExpect(jsonPath("$.configurations[0].generalConfiguration.parameters[0].key", is("reviewActive")))
+                .andExpect(jsonPath("$.configurations[0].generalConfiguration.parameters[0].value", is("false")));
 
         mockMvc.perform(get(basePathDe + "/" + application3.getId()))
                 .andExpect(status().isOk())
@@ -134,6 +148,8 @@ public class ApplicationsIntegrationTest extends BaseIntegrationTest {
         Application application = buildApplicationTree("Test App 4");
         String applicationJson = toJson(application);
 
+        System.err.println(applicationJson);
+
         this.mockMvc.perform(post(basePathEn)
                 .contentType(contentType)
                 .content(applicationJson))
@@ -141,12 +157,20 @@ public class ApplicationsIntegrationTest extends BaseIntegrationTest {
                 .andExpect(jsonPath("$.name", is("Test App 4")))
                 .andExpect(jsonPath("$.state", is(1)))
                 .andExpect(jsonPath("$.configurations", hasSize(2)))
+                .andExpect(jsonPath("$.generalConfiguration.name", is("General configuration Test App 4")))
+                .andExpect(jsonPath("$.generalConfiguration.parameters", hasSize(1)))
+                .andExpect(jsonPath("$.generalConfiguration.parameters[0].key", is("reviewActive")))
+                .andExpect(jsonPath("$.generalConfiguration.parameters[0].value", is("true")))
                 .andExpect(jsonPath("$.configurations[0].name", is("Push configuration 1 of Test App 4")))
                 .andExpect(jsonPath("$.configurations[0].type", is("PUSH")))
                 .andExpect(jsonPath("$.configurations[0].mechanisms[0].type", is("TEXT_TYPE")))
                 .andExpect(jsonPath("$.configurations[0].mechanisms[0].active", is(true)))
                 .andExpect(jsonPath("$.configurations[0].mechanisms[0].order", is(1)))
-                .andExpect(jsonPath("$.configurations[0].mechanisms[0].parameters", hasSize(4)));
+                .andExpect(jsonPath("$.configurations[0].mechanisms[0].parameters", hasSize(4)))
+                .andExpect(jsonPath("$.configurations[0].generalConfiguration.name", is("General configuration for push configuration")))
+                .andExpect(jsonPath("$.configurations[0].generalConfiguration.parameters", hasSize(1)))
+                .andExpect(jsonPath("$.configurations[0].generalConfiguration.parameters[0].key", is("reviewActive")))
+                .andExpect(jsonPath("$.configurations[0].generalConfiguration.parameters[0].value", is("false")));
     }
 
     @Test
@@ -237,6 +261,17 @@ public class ApplicationsIntegrationTest extends BaseIntegrationTest {
             }
         };
         application.setConfigurations(configurations);
+
+        applicationGeneralConfiguration = new GeneralConfiguration("General configuration " + applicationName, new Date(), new Date(), null, application, null);
+        applicationGeneralConfigurationParameter = new Parameter("reviewActive", "true", new Date(), new Date(), "en", null, applicationGeneralConfiguration, null);
+        applicationGeneralConfiguration.setParameters(new ArrayList<Parameter>(){{add(applicationGeneralConfigurationParameter);}});
+
+        pushConfigurationGeneralConfiguration = new GeneralConfiguration("General configuration for push configuration", new Date(), new Date(), null, null, pushConfiguration1);
+        pushConfigurationGeneralConfigurationParameter = new Parameter("reviewActive", "false", new Date(), new Date(), "en", null, pushConfigurationGeneralConfiguration, null);
+        pushConfigurationGeneralConfiguration.setParameters(new ArrayList<Parameter>(){{add(pushConfigurationGeneralConfigurationParameter);}});
+
+        pushConfiguration1.setGeneralConfiguration(pushConfigurationGeneralConfiguration);
+        application.setGeneralConfiguration(applicationGeneralConfiguration);
 
         return application;
     }

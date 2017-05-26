@@ -15,7 +15,7 @@ public class GeneralConfiguration {
     private Date createdAt;
     private Date updatedAt;
 
-    @OneToMany(mappedBy = "generalConfiguration")
+    @OneToMany(mappedBy = "generalConfiguration", cascade = {CascadeType.REMOVE, CascadeType.PERSIST})
     private List<Parameter> parameters;
 
     @PrePersist
@@ -29,11 +29,11 @@ public class GeneralConfiguration {
     }
 
     @JsonIgnore
-    @OneToOne(mappedBy="generalConfiguration")
+    @OneToOne(mappedBy="generalConfiguration", cascade = {CascadeType.REMOVE, CascadeType.PERSIST})
     private Application application;
 
     @JsonIgnore
-    @OneToOne(mappedBy="generalConfiguration")
+    @OneToOne(mappedBy="generalConfiguration", cascade = {CascadeType.REMOVE, CascadeType.PERSIST})
     private Configuration configuration;
 
     public GeneralConfiguration() {

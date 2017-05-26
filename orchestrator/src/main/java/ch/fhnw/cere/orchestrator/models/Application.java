@@ -63,8 +63,8 @@ public class Application {
     @Override
     public String toString() {
         return String.format(
-                "Application[id=%d, name='%s', state='%d', configurations='%s']",
-                id, name, state,  this.configurations != null ? this.configurations.stream().map(Object::toString)
+                "Application[id=%d, name='%s', state='%d', generalConfiguration='%s', configurations='%s']",
+                id, name, state,  this.generalConfiguration != null ? this.generalConfiguration : "null", this.configurations != null ? this.configurations.stream().map(Object::toString)
                         .collect(Collectors.joining(", ")): "null");
     }
 
