@@ -2,6 +2,8 @@ package ch.fhnw.cere.orchestrator.models;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.util.*;
@@ -21,9 +23,10 @@ public class Parameter {
 
     @ManyToOne
     @JsonIgnore
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name="parent_parameter_id")
     private Parameter parentParameter;
-    @OneToMany(mappedBy="parentParameter", cascade=CascadeType.ALL)
+    @OneToMany(mappedBy="parentParameter", cascade={CascadeType.REMOVE, CascadeType.PERSIST})
     private List<Parameter> parameters;
 
     @ManyToOne

@@ -1,6 +1,8 @@
 package ch.fhnw.cere.orchestrator.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.util.*;
@@ -16,12 +18,13 @@ public class Configuration {
     private Date createdAt;
     private Date updatedAt;
     @JsonIgnore
-    @OneToMany(mappedBy = "configuration", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "configuration", cascade = {CascadeType.REMOVE, CascadeType.PERSIST})
     private List<ConfigurationMechanism> configurationMechanisms;
 
     @JsonIgnore
     @ManyToOne
-    @JoinColumn(name="application_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JoinColumn(name = "application_id")
     private Application application;
 
     @PrePersist

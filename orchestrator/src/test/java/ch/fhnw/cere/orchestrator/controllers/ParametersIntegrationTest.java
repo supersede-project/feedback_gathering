@@ -27,6 +27,12 @@ public class ParametersIntegrationTest extends BaseIntegrationTest {
     private Parameter parameter3;
     private Mechanism mechanism1;
 
+    private Parameter parentParameter1;
+    private Parameter childParameter1;
+    private Parameter childParameter2;
+    private Parameter childParameter3;
+    private Parameter childParameter4;
+
     @Autowired
     private ParameterRepository parameterRepository;
     @Autowired
