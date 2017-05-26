@@ -16,6 +16,11 @@ public class Mechanism {
     private MechanismType type;
     private Date createdAt;
     private Date updatedAt;
+    @Transient
+    private boolean active;
+    @Transient
+    private int order;
+
     @JsonIgnore
     @OneToMany(mappedBy = "mechanism")
     private List<ConfigurationMechanism> configurationMechanisms;
@@ -136,6 +141,22 @@ public class Mechanism {
 
     public void setParameters(List<Parameter> parameters) {
         this.parameters = parameters;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
+    public int getOrder() {
+        return order;
+    }
+
+    public void setOrder(int order) {
+        this.order = order;
     }
 }
 

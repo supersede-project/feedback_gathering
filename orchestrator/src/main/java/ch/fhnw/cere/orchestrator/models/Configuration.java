@@ -118,10 +118,19 @@ public class Configuration {
         this.configurationMechanisms = configurationMechanisms;
     }
 
+    public void setMechanisms(ArrayList<Mechanism> mechanisms) {
+
+    }
+
     public List<Mechanism> getMechanisms() {
         if (this.configurationMechanisms != null) {
             List<Mechanism> mechanisms = new ArrayList<>();
-            this.configurationMechanisms.forEach(configurationMechanism -> mechanisms.add(configurationMechanism.getMechanism()));
+            this.configurationMechanisms.forEach(configurationMechanism -> {
+                Mechanism mechanism = configurationMechanism.getMechanism();
+                mechanism.setActive(configurationMechanism.isActive());
+                mechanism.setOrder(configurationMechanism.getOrder());
+                mechanisms.add(mechanism);
+            });
             return mechanisms;
         }
         return null;

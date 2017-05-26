@@ -22,7 +22,8 @@ public class ConfigurationMechanism {
     @JoinColumn(name = "mechanism_id")
     private Mechanism mechanism;
     private boolean active;
-    private int elementOrder;
+    @Column(name="`order`")
+    private int order;
     private Date createdAt;
     private Date updatedAt;
 
@@ -39,11 +40,11 @@ public class ConfigurationMechanism {
     public ConfigurationMechanism() {
     }
 
-    public ConfigurationMechanism(Configuration configuration, Mechanism mechanism, boolean active, int elementOrder, Date createdAt, Date updatedAt) {
+    public ConfigurationMechanism(Configuration configuration, Mechanism mechanism, boolean active, int order, Date createdAt, Date updatedAt) {
         this.configuration = configuration;
         this.mechanism = mechanism;
         this.active = active;
-        this.elementOrder = elementOrder;
+        this.order = order;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
@@ -80,12 +81,12 @@ public class ConfigurationMechanism {
         this.active = active;
     }
 
-    public int getElementOrder() {
-        return elementOrder;
+    public int getOrder() {
+        return order;
     }
 
-    public void setElementOrder(int elementOrder) {
-        this.elementOrder = elementOrder;
+    public void setOrder(int order) {
+        this.order = order;
     }
 
     public Date getCreatedAt() {

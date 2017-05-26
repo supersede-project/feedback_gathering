@@ -6,6 +6,7 @@ import ch.fhnw.cere.orchestrator.repositories.ApplicationRepository;
 import org.hamcrest.Matchers;
 import static org.hamcrest.Matchers.nullValue;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -47,6 +48,7 @@ public class ApplicationsIntegrationTest extends BaseIntegrationTest {
     @Autowired
     private ApplicationRepository applicationRepository;
     private String basePathEn = "/en/applications";
+    private String basePathDe = "/de/applications";
 
 
     @Before
@@ -58,8 +60,7 @@ public class ApplicationsIntegrationTest extends BaseIntegrationTest {
         this.application1 = applicationRepository.save(new Application("Test App 1", 1, new Date(), new Date(), null));
         this.application2 = applicationRepository.save(new Application("Test App 2", 1, new Date(), new Date(), null));
 
-        buildApplicationTree();
-        this.application3 = applicationRepository.save(this.application3);
+        this.application3 = applicationRepository.save(buildApplicationTree("Test application 3"));
     }
 
     @Test
@@ -92,7 +93,28 @@ public class ApplicationsIntegrationTest extends BaseIntegrationTest {
                 .andExpect(jsonPath("$.id", is((int) this.application3.getId())))
                 .andExpect(jsonPath("$.name", is("Test application 3")))
                 .andExpect(jsonPath("$.state", is(1)))
-                .andExpect(jsonPath("$.configurations", hasSize(2)));
+                .andExpect(jsonPath("$.configurations", hasSize(2)))
+                .andExpect(jsonPath("$.configurations[0].mechanisms[0].active", is(true)))
+                .andExpect(jsonPath("$.configurations[0].mechanisms[0].order", is(1)))
+                .andExpect(jsonPath("$.configurations[0].mechanisms[0].parameters", hasSize(3)))
+                .andExpect(jsonPath("$.configurations[0].mechanisms[0].parameters[0].language", is("en")))
+                .andExpect(jsonPath("$.configurations[0].mechanisms[0].parameters[1].language", is("en")))
+                .andExpect(jsonPath("$.configurations[0].mechanisms[0].parameters[2].language", is("en")));
+
+        mockMvc.perform(get(basePathDe + "/" + application3.getId()))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(contentType))
+                .andExpect(jsonPath("$.id", is((int) this.application3.getId())))
+                .andExpect(jsonPath("$.name", is("Test application 3")))
+                .andExpect(jsonPath("$.state", is(1)))
+                .andExpect(jsonPath("$.configurations", hasSize(2)))
+                .andExpect(jsonPath("$.configurations[0].mechanisms[0].parameters", hasSize(3)))
+                .andExpect(jsonPath("$.configurations[0].mechanisms[0].parameters[0].key", is("options")))
+                .andExpect(jsonPath("$.configurations[0].mechanisms[0].parameters[0].language", is("en")))
+                .andExpect(jsonPath("$.configurations[0].mechanisms[0].parameters[1].key", is("font-size")))
+                .andExpect(jsonPath("$.configurations[0].mechanisms[0].parameters[1].language", is("en")))
+                .andExpect(jsonPath("$.configurations[0].mechanisms[0].parameters[2].key", is("title")))
+                .andExpect(jsonPath("$.configurations[0].mechanisms[0].parameters[2].language", is("de")));
     }
 
     @Test
@@ -104,6 +126,26 @@ public class ApplicationsIntegrationTest extends BaseIntegrationTest {
                 .contentType(contentType)
                 .content(applicationJson))
                 .andExpect(status().isCreated());
+    }
+
+    @Ignore
+    @Test
+    public void postApplicationObjectTree() throws Exception {
+        Application application = buildApplicationTree("Test App 4");
+        String applicationJson = toJson(application);
+
+        System.err.println(applicationJson);
+
+        this.mockMvc.perform(post(basePathEn)
+                .contentType(contentType)
+                .content(applicationJson))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.name", is("Test App 4")))
+                .andExpect(jsonPath("$.state", is(1)))
+                .andExpect(jsonPath("$.configurations", hasSize(2)))
+                .andExpect(jsonPath("$.configurations[0].name", is("Push configuration 1")))
+                .andExpect(jsonPath("$.configurations[0].type", is("PUSH")))
+                .andExpect(jsonPath("$.configurations[0].mechanisms", hasSize(1)));
     }
 
     @Test
@@ -128,11 +170,11 @@ public class ApplicationsIntegrationTest extends BaseIntegrationTest {
                 .andExpect(jsonPath("$.configurations", is(nullValue())));
     }
 
-    private void buildApplicationTree() {
-        application3 = new Application("Test application 3", 1, new Date(), new Date(), new ArrayList<>());
+    private Application buildApplicationTree(String applicationName) {
+        Application application = new Application(applicationName, 1, new Date(), new Date(), new ArrayList<>());
 
-        pushConfiguration1 = new Configuration("Push configuration 1", TriggerType.PUSH, new Date(), new Date(), null, application3);
-        pullConfiguration1 = new Configuration("Pull configuration 1", TriggerType.PULL, new Date(), new Date(), null, application3);
+        pushConfiguration1 = new Configuration("Push configuration 1", TriggerType.PUSH, new Date(), new Date(), null, application);
+        pullConfiguration1 = new Configuration("Pull configuration 1", TriggerType.PULL, new Date(), new Date(), null, application);
 
         mechanism1 = new Mechanism(MechanismType.TEXT_TYPE, null, new ArrayList<>());
 
@@ -192,6 +234,8 @@ public class ApplicationsIntegrationTest extends BaseIntegrationTest {
                 add(pullConfiguration1);
             }
         };
-        application3.setConfigurations(configurations);
+        application.setConfigurations(configurations);
+
+        return application;
     }
 }
