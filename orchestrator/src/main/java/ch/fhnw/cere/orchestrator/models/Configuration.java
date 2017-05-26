@@ -1,6 +1,9 @@
 package ch.fhnw.cere.orchestrator.models;
 
+import ch.fhnw.cere.orchestrator.serialization.ConfigurationDeserializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -8,7 +11,9 @@ import javax.persistence.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
+
 @Entity
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Configuration {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -22,7 +27,7 @@ public class Configuration {
     private List<ConfigurationMechanism> configurationMechanisms;
 
     @JsonIgnore
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.REMOVE, CascadeType.PERSIST})
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "application_id")
     private Application application;
@@ -37,6 +42,9 @@ public class Configuration {
         updatedAt = new Date();
     }
 
+    @Transient
+    private ArrayList<Mechanism> mechanisms;
+
     public Configuration() {}
 
     public Configuration(String name, TriggerType type, Date createdAt, Date updatedAt, List<ConfigurationMechanism> configurationMechanisms, Application application) {
@@ -44,6 +52,13 @@ public class Configuration {
         this.type = type;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+        this.configurationMechanisms = configurationMechanisms;
+        this.application = application;
+    }
+
+    public Configuration(String name, TriggerType type, List<ConfigurationMechanism> configurationMechanisms, Application application) {
+        this.name = name;
+        this.type = type;
         this.configurationMechanisms = configurationMechanisms;
         this.application = application;
     }
@@ -119,7 +134,13 @@ public class Configuration {
     }
 
     public void setMechanisms(ArrayList<Mechanism> mechanisms) {
-
+        if(this.configurationMechanisms == null) {
+            this.configurationMechanisms = new ArrayList<ConfigurationMechanism>();
+        }
+        for(Mechanism mechanism : mechanisms) {
+            ConfigurationMechanism configurationMechanism = new ConfigurationMechanism(this, mechanism, mechanism.isActive(), mechanism.getOrder(), new Date(), new Date());
+            this.configurationMechanisms.add(configurationMechanism);
+        }
     }
 
     public List<Mechanism> getMechanisms() {
@@ -133,6 +154,6 @@ public class Configuration {
             });
             return mechanisms;
         }
-        return null;
+        return new ArrayList<Mechanism>();
     }
 }

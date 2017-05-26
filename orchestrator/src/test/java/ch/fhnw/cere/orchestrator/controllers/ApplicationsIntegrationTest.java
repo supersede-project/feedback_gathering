@@ -31,6 +31,7 @@ public class ApplicationsIntegrationTest extends BaseIntegrationTest {
     private Configuration pullConfiguration1;
 
     private Mechanism mechanism1;
+    private Mechanism mechanism2;
 
     private ConfigurationMechanism configurationMechanism1;
     private ConfigurationMechanism configurationMechanism2;
@@ -128,13 +129,10 @@ public class ApplicationsIntegrationTest extends BaseIntegrationTest {
                 .andExpect(status().isCreated());
     }
 
-    @Ignore
     @Test
     public void postApplicationObjectTree() throws Exception {
         Application application = buildApplicationTree("Test App 4");
         String applicationJson = toJson(application);
-
-        System.err.println(applicationJson);
 
         this.mockMvc.perform(post(basePathEn)
                 .contentType(contentType)
@@ -143,9 +141,12 @@ public class ApplicationsIntegrationTest extends BaseIntegrationTest {
                 .andExpect(jsonPath("$.name", is("Test App 4")))
                 .andExpect(jsonPath("$.state", is(1)))
                 .andExpect(jsonPath("$.configurations", hasSize(2)))
-                .andExpect(jsonPath("$.configurations[0].name", is("Push configuration 1")))
+                .andExpect(jsonPath("$.configurations[0].name", is("Push configuration 1 of Test App 4")))
                 .andExpect(jsonPath("$.configurations[0].type", is("PUSH")))
-                .andExpect(jsonPath("$.configurations[0].mechanisms", hasSize(1)));
+                .andExpect(jsonPath("$.configurations[0].mechanisms[0].type", is("TEXT_TYPE")))
+                .andExpect(jsonPath("$.configurations[0].mechanisms[0].active", is(true)))
+                .andExpect(jsonPath("$.configurations[0].mechanisms[0].order", is(1)))
+                .andExpect(jsonPath("$.configurations[0].mechanisms[0].parameters", hasSize(4)));
     }
 
     @Test
@@ -173,13 +174,14 @@ public class ApplicationsIntegrationTest extends BaseIntegrationTest {
     private Application buildApplicationTree(String applicationName) {
         Application application = new Application(applicationName, 1, new Date(), new Date(), new ArrayList<>());
 
-        pushConfiguration1 = new Configuration("Push configuration 1", TriggerType.PUSH, new Date(), new Date(), null, application);
-        pullConfiguration1 = new Configuration("Pull configuration 1", TriggerType.PULL, new Date(), new Date(), null, application);
+        pushConfiguration1 = new Configuration("Push configuration 1 of " + applicationName, TriggerType.PUSH, new Date(), new Date(), null, application);
+        pullConfiguration1 = new Configuration("Pull configuration 1 of " + applicationName, TriggerType.PULL, new Date(), new Date(), null, application);
 
         mechanism1 = new Mechanism(MechanismType.TEXT_TYPE, null, new ArrayList<>());
+        mechanism2 = new Mechanism(MechanismType.TEXT_TYPE, null, new ArrayList<>());
 
         configurationMechanism1 = new ConfigurationMechanism(pushConfiguration1, mechanism1, true, 1, new Date(), new Date());
-        configurationMechanism2 = new ConfigurationMechanism(pullConfiguration1, mechanism1, true, 1, new Date(), new Date());
+        configurationMechanism2 = new ConfigurationMechanism(pullConfiguration1, mechanism2, true, 1, new Date(), new Date());
 
         mechanism1.setConfigurationMechanisms(new ArrayList<ConfigurationMechanism>() {
             {

@@ -1,9 +1,13 @@
 package ch.fhnw.cere.orchestrator.models;
 
+import ch.fhnw.cere.orchestrator.serialization.ConfigurationDeserializer;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
+
 
 @Entity
 public class Application {
@@ -45,8 +49,8 @@ public class Application {
     public String toString() {
         return String.format(
                 "Application[id=%d, name='%s', state='%d', configurations='%s']",
-                id, name, state,  this.configurations.stream().map(Object::toString)
-                        .collect(Collectors.joining(", ")));
+                id, name, state,  this.configurations != null ? this.configurations.stream().map(Object::toString)
+                        .collect(Collectors.joining(", ")): "null");
     }
 
     public void filterByLanguage(String language, String fallbackLanguage) {
