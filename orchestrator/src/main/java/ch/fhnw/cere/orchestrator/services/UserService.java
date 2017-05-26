@@ -11,6 +11,8 @@ public interface UserService {
     public User save(User user);
     public User find(long id);
     public void delete(long id);
+    public List<User> findByApplicationId(long id);
+    public List<User> findByUserGroupId(long id);
 }
 
 

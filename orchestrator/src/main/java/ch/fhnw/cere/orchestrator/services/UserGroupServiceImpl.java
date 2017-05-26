@@ -31,4 +31,9 @@ public class UserGroupServiceImpl implements UserGroupService {
     public void delete(long id){
         userGroupRepository.delete(id);
     }
+
+    @Override
+    public List<UserGroup> findByApplicationId(long id) {
+        return userGroupRepository.findByApplicationId(id);
+    }
 }

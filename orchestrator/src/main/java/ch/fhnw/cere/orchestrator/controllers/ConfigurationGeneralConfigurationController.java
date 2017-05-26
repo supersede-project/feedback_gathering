@@ -5,8 +5,8 @@ import ch.fhnw.cere.orchestrator.controllers.exceptions.NotFoundException;
 import ch.fhnw.cere.orchestrator.models.Application;
 import ch.fhnw.cere.orchestrator.models.Configuration;
 import ch.fhnw.cere.orchestrator.models.GeneralConfiguration;
-import ch.fhnw.cere.orchestrator.repositories.ApplicationRepository;
-import ch.fhnw.cere.orchestrator.repositories.ConfigurationRepository;
+import ch.fhnw.cere.orchestrator.services.ApplicationService;
+import ch.fhnw.cere.orchestrator.services.ConfigurationService;
 import ch.fhnw.cere.orchestrator.services.GeneralConfigurationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,10 +21,10 @@ public class ConfigurationGeneralConfigurationController extends BaseController 
     private GeneralConfigurationService generalConfigurationService;
 
     @Autowired
-    private ApplicationRepository applicationRepository;
+    private ApplicationService applicationService;
 
     @Autowired
-    private ConfigurationRepository configurationRepository;
+    private ConfigurationService configurationService;
 
     @RequestMapping(method = RequestMethod.GET, value = "general_configuration")
     public GeneralConfiguration getConfigurationGeneralConfiguration() {
@@ -65,10 +65,10 @@ public class ConfigurationGeneralConfigurationController extends BaseController 
     }
 
     private Application getApplication() {
-        return applicationRepository.getOne(applicationId());
+        return applicationService.find(applicationId());
     }
 
     private Configuration getConfiguration() {
-        return configurationRepository.getOne(configurationId());
+        return configurationService.find(configurationId());
     }
 }

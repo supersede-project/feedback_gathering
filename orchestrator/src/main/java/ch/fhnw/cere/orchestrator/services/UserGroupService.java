@@ -11,6 +11,7 @@ public interface UserGroupService {
     public UserGroup save(UserGroup userGroup);
     public UserGroup find(long id);
     public void delete(long id);
+    public List<UserGroup> findByApplicationId(long id);
 }
 
 
