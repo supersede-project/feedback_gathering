@@ -1,9 +1,7 @@
 package ch.fhnw.cere.orchestrator.models;
 
-import ch.fhnw.cere.orchestrator.serialization.ConfigurationDeserializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -27,10 +25,18 @@ public class Configuration {
     private List<ConfigurationMechanism> configurationMechanisms;
 
     @JsonIgnore
+    @OneToMany(mappedBy = "configuration", cascade = {CascadeType.REMOVE, CascadeType.PERSIST})
+    private List<ConfigurationUserGroup> configurationUserGroups;
+
+    @JsonIgnore
     @ManyToOne(cascade = {CascadeType.REMOVE, CascadeType.PERSIST})
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "application_id")
     private Application application;
+
+    @OneToOne(cascade = {CascadeType.REMOVE, CascadeType.PERSIST})
+    @JoinColumn(name = "general_configuration_id")
+    private GeneralConfiguration generalConfiguration;
 
     @PrePersist
     protected void onCreate() {
@@ -63,6 +69,18 @@ public class Configuration {
         this.application = application;
     }
 
+    public Configuration(String name, TriggerType type, Date createdAt, Date updatedAt, List<ConfigurationMechanism> configurationMechanisms, List<ConfigurationUserGroup> configurationUserGroups, Application application, GeneralConfiguration generalConfiguration, ArrayList<Mechanism> mechanisms) {
+        this.name = name;
+        this.type = type;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.configurationMechanisms = configurationMechanisms;
+        this.configurationUserGroups = configurationUserGroups;
+        this.application = application;
+        this.generalConfiguration = generalConfiguration;
+        this.mechanisms = mechanisms;
+    }
+
     @Override
     public String toString() {
         return String.format(
@@ -79,6 +97,53 @@ public class Configuration {
 
     public long getId() {
         return id;
+    }
+
+    public void setMechanisms(ArrayList<Mechanism> mechanisms) {
+        if(this.configurationMechanisms == null) {
+            this.configurationMechanisms = new ArrayList<ConfigurationMechanism>();
+        }
+        for(Mechanism mechanism : mechanisms) {
+            ConfigurationMechanism configurationMechanism = new ConfigurationMechanism(this, mechanism, mechanism.isActive(), mechanism.getOrder(), new Date(), new Date());
+            this.configurationMechanisms.add(configurationMechanism);
+        }
+    }
+
+    public List<Mechanism> getMechanisms() {
+        if (this.configurationMechanisms != null) {
+            List<Mechanism> mechanisms = new ArrayList<>();
+            this.configurationMechanisms.forEach(configurationMechanism -> {
+                Mechanism mechanism = configurationMechanism.getMechanism();
+                mechanism.setActive(configurationMechanism.isActive());
+                mechanism.setOrder(configurationMechanism.getOrder());
+                mechanisms.add(mechanism);
+            });
+            return mechanisms;
+        }
+        return new ArrayList<Mechanism>();
+    }
+
+    public void setUserGroups(ArrayList<UserGroup> userGroups) {
+        if(this.configurationUserGroups == null) {
+            this.configurationUserGroups = new ArrayList<ConfigurationUserGroup>();
+        }
+        for(UserGroup userGroup : userGroups) {
+            ConfigurationUserGroup configurationUserGroup = new ConfigurationUserGroup(this, userGroup, userGroup.isActive(), new Date(), new Date());
+            this.configurationUserGroups.add(configurationUserGroup);
+        }
+    }
+
+    public List<UserGroup> getUserGroups() {
+        if (this.configurationUserGroups != null) {
+            List<UserGroup> userGroups = new ArrayList<>();
+            this.configurationUserGroups.forEach(configurationUserGroup -> {
+                UserGroup userGroup = configurationUserGroup.getUserGroup();
+                userGroup.setActive(configurationUserGroup.isActive());
+                userGroups.add(userGroup);
+            });
+            return userGroups;
+        }
+        return new ArrayList<UserGroup>();
     }
 
     public void setId(long id) {
@@ -133,27 +198,19 @@ public class Configuration {
         this.configurationMechanisms = configurationMechanisms;
     }
 
-    public void setMechanisms(ArrayList<Mechanism> mechanisms) {
-        if(this.configurationMechanisms == null) {
-            this.configurationMechanisms = new ArrayList<ConfigurationMechanism>();
-        }
-        for(Mechanism mechanism : mechanisms) {
-            ConfigurationMechanism configurationMechanism = new ConfigurationMechanism(this, mechanism, mechanism.isActive(), mechanism.getOrder(), new Date(), new Date());
-            this.configurationMechanisms.add(configurationMechanism);
-        }
+    public List<ConfigurationUserGroup> getConfigurationUserGroups() {
+        return configurationUserGroups;
     }
 
-    public List<Mechanism> getMechanisms() {
-        if (this.configurationMechanisms != null) {
-            List<Mechanism> mechanisms = new ArrayList<>();
-            this.configurationMechanisms.forEach(configurationMechanism -> {
-                Mechanism mechanism = configurationMechanism.getMechanism();
-                mechanism.setActive(configurationMechanism.isActive());
-                mechanism.setOrder(configurationMechanism.getOrder());
-                mechanisms.add(mechanism);
-            });
-            return mechanisms;
-        }
-        return new ArrayList<Mechanism>();
+    public void setConfigurationUserGroups(List<ConfigurationUserGroup> configurationUserGroups) {
+        this.configurationUserGroups = configurationUserGroups;
+    }
+
+    public GeneralConfiguration getGeneralConfiguration() {
+        return generalConfiguration;
+    }
+
+    public void setGeneralConfiguration(GeneralConfiguration generalConfiguration) {
+        this.generalConfiguration = generalConfiguration;
     }
 }

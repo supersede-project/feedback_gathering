@@ -19,7 +19,7 @@ public interface ParameterRepository extends JpaRepository<Parameter, Long> {
             "COALESCE(p2.id, p.id) as id, p.key, " +
             "COALESCE(p2.value, p.value) as value, " +
             "COALESCE(p2.language, p.language) as language, " +
-            "p.created_at, p.updated_at, p.general_configuration_id, p.mechanism_id, p.parent_parameter_id, p.general_configuration " +
+            "p.created_at, p.updated_at, p.general_configuration_id, p.mechanism_id, p.parent_parameter_id " +
             "    FROM parameter p " +
             "        LEFT OUTER JOIN parameter p2 ON p.key=p2.key and p2.language = ?2 and p2.mechanism_id = ?1 " +
             "    WHERE p.language='en' and p.mechanism_id = ?1", nativeQuery = true)

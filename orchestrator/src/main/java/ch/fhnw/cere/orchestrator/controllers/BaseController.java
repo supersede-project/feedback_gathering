@@ -19,4 +19,14 @@ public class BaseController {
         Map<String, String> variables = (Map<String, String>) req.getAttribute(HandlerMapping.URI_TEMPLATE_VARIABLES_ATTRIBUTE);
         return variables.get("language");
     }
+
+    protected long applicationId() {
+        Map<String, String> variables = (Map<String, String>) req.getAttribute(HandlerMapping.URI_TEMPLATE_VARIABLES_ATTRIBUTE);
+        return Long.parseLong(variables.get("applicationId"));
+    }
+
+    protected long configurationId() {
+        Map<String, String> variables = (Map<String, String>) req.getAttribute(HandlerMapping.URI_TEMPLATE_VARIABLES_ATTRIBUTE);
+        return Long.parseLong(variables.get("configurationId"));
+    }
 }

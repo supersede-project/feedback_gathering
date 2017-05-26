@@ -1,6 +1,8 @@
 package ch.fhnw.cere.orchestrator.models;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.*;
 
@@ -26,14 +28,30 @@ public class GeneralConfiguration {
         updatedAt = new Date();
     }
 
+    @JsonIgnore
+    @OneToOne(mappedBy="generalConfiguration")
+    private Application application;
+
+    @JsonIgnore
+    @OneToOne(mappedBy="generalConfiguration")
+    private Configuration configuration;
+
     public GeneralConfiguration() {
     }
 
-    public GeneralConfiguration(String name, Date createdAt, Date updatedAt, List<Parameter> parameters) {
+    public GeneralConfiguration(String name, Date createdAt, Date updatedAt, List<Parameter> parameters, Application application, Configuration configuration) {
         this.name = name;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.parameters = parameters;
+        this.application = application;
+        this.configuration = configuration;
+    }
+
+    public void filterByLanguage(String language, String fallbackLanguage) {
+        for(Parameter parameter : this.parameters) {
+            parameter.filterByLanguage(language, fallbackLanguage);
+        }
     }
 
     @Override
@@ -104,5 +122,21 @@ public class GeneralConfiguration {
 
     public void setParameters(List<Parameter> parameters) {
         this.parameters = parameters;
+    }
+
+    public Application getApplication() {
+        return application;
+    }
+
+    public void setApplication(Application application) {
+        this.application = application;
+    }
+
+    public Configuration getConfiguration() {
+        return configuration;
+    }
+
+    public void setConfiguration(Configuration configuration) {
+        this.configuration = configuration;
     }
 }

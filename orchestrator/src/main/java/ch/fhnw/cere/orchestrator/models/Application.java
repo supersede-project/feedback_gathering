@@ -1,7 +1,9 @@
 package ch.fhnw.cere.orchestrator.models;
 
-import ch.fhnw.cere.orchestrator.serialization.ConfigurationDeserializer;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -20,6 +22,10 @@ public class Application {
     private int state;
     private Date createdAt;
     private Date updatedAt;
+
+    @OneToOne(cascade = {CascadeType.REMOVE, CascadeType.PERSIST})
+    @JoinColumn(name = "general_configuration_id")
+    private GeneralConfiguration generalConfiguration;
 
     @OneToMany(mappedBy = "application", cascade = {CascadeType.REMOVE, CascadeType.PERSIST})
     private List<Configuration> configurations;
@@ -42,6 +48,15 @@ public class Application {
         this.state = state;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+        this.configurations = configurations;
+    }
+
+    public Application(String name, int state, Date createdAt, Date updatedAt, GeneralConfiguration generalConfiguration, List<Configuration> configurations) {
+        this.name = name;
+        this.state = state;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.generalConfiguration = generalConfiguration;
         this.configurations = configurations;
     }
 
@@ -105,5 +120,13 @@ public class Application {
 
     public void setConfigurations(List<Configuration> configurations) {
         this.configurations = configurations;
+    }
+
+    public GeneralConfiguration getGeneralConfiguration() {
+        return generalConfiguration;
+    }
+
+    public void setGeneralConfiguration(GeneralConfiguration generalConfiguration) {
+        this.generalConfiguration = generalConfiguration;
     }
 }
