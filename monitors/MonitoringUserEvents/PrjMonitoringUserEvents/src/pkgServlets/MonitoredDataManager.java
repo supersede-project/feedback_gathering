@@ -113,7 +113,7 @@ public class MonitoredDataManager extends HttpServlet {
 	    
 	    //Fragment for the IF	//With singleton pattern
 	    DataProviderProxy proxy = getProxy();
-	    proxy.ingestData(jsonObj, "6d670f20-3fa4-4f8d-9f7f-3001c66d885a");
+	    proxy.ingestData(jsonObj, "81513722-56a9-4bec-90b1-d3084586aabd");
 	}
 	
 	/**** with json simle
