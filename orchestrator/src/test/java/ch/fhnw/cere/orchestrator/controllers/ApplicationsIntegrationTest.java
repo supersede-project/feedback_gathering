@@ -109,7 +109,7 @@ public class ApplicationsIntegrationTest extends BaseIntegrationTest {
                 .andExpect(jsonPath("$.generalConfiguration.name", is("General configuration Test application 3")))
                 .andExpect(jsonPath("$.generalConfiguration.parameters", hasSize(1)))
                 .andExpect(jsonPath("$.generalConfiguration.parameters[0].key", is("reviewActive")))
-                .andExpect(jsonPath("$.generalConfiguration.parameters[0].value", is("true")))
+                .andExpect(jsonPath("$.generalConfiguration.parameters[0].value", is(true)))
                 .andExpect(jsonPath("$.configurations", hasSize(2)))
                 .andExpect(jsonPath("$.configurations[0].mechanisms[0].active", is(true)))
                 .andExpect(jsonPath("$.configurations[0].mechanisms[0].order", is(1)))
@@ -120,7 +120,7 @@ public class ApplicationsIntegrationTest extends BaseIntegrationTest {
                 .andExpect(jsonPath("$.configurations[0].generalConfiguration.name", is("General configuration for push configuration")))
                 .andExpect(jsonPath("$.configurations[0].generalConfiguration.parameters", hasSize(1)))
                 .andExpect(jsonPath("$.configurations[0].generalConfiguration.parameters[0].key", is("reviewActive")))
-                .andExpect(jsonPath("$.configurations[0].generalConfiguration.parameters[0].value", is("false")));
+                .andExpect(jsonPath("$.configurations[0].generalConfiguration.parameters[0].value", is(false)));
 
         mockMvc.perform(get(basePathDe + "/" + application3.getId()))
                 .andExpect(status().isOk())
@@ -181,7 +181,7 @@ public class ApplicationsIntegrationTest extends BaseIntegrationTest {
                 .andExpect(jsonPath("$.generalConfiguration.name", is("General configuration Test App 4")))
                 .andExpect(jsonPath("$.generalConfiguration.parameters", hasSize(1)))
                 .andExpect(jsonPath("$.generalConfiguration.parameters[0].key", is("reviewActive")))
-                .andExpect(jsonPath("$.generalConfiguration.parameters[0].value", is("true")))
+                .andExpect(jsonPath("$.generalConfiguration.parameters[0].value", is(true)))
                 .andExpect(jsonPath("$.configurations[0].name", is("Push configuration 1 of Test App 4")))
                 .andExpect(jsonPath("$.configurations[0].type", is("PUSH")))
                 .andExpect(jsonPath("$.configurations[0].mechanisms[0].type", is("TEXT_TYPE")))
@@ -191,7 +191,7 @@ public class ApplicationsIntegrationTest extends BaseIntegrationTest {
                 .andExpect(jsonPath("$.configurations[0].generalConfiguration.name", is("General configuration for push configuration")))
                 .andExpect(jsonPath("$.configurations[0].generalConfiguration.parameters", hasSize(1)))
                 .andExpect(jsonPath("$.configurations[0].generalConfiguration.parameters[0].key", is("reviewActive")))
-                .andExpect(jsonPath("$.configurations[0].generalConfiguration.parameters[0].value", is("false")));
+                .andExpect(jsonPath("$.configurations[0].generalConfiguration.parameters[0].value", is(false)));
     }
 
     @Test(expected = ServletException.class)

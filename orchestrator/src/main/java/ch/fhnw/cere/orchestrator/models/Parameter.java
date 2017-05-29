@@ -1,7 +1,9 @@
 package ch.fhnw.cere.orchestrator.models;
 
 
+import ch.fhnw.cere.orchestrator.serialization.ParameterValueSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -16,6 +18,7 @@ public class Parameter {
 
     @Column(name="`key`")
     private String key;
+    @JsonSerialize(using = ParameterValueSerializer.class)
     private String value;
     private Date createdAt;
     private Date updatedAt;

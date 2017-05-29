@@ -45,6 +45,7 @@ public class GeneralConfigurationIntegrationTest extends BaseIntegrationTest {
 
     private Parameter applicationGeneralConfigurationParameter;
     private Parameter pushConfigurationGeneralConfigurationParameter;
+    private Parameter pushConfigurationGeneralConfigurationParameter2;
 
     @Autowired
     private ParameterRepository parameterRepository;
@@ -92,7 +93,7 @@ public class GeneralConfigurationIntegrationTest extends BaseIntegrationTest {
                 .andExpect(jsonPath("$.name", is("General configuration Test application for general configuration")))
                 .andExpect(jsonPath("$.parameters", hasSize(1)))
                 .andExpect(jsonPath("$.parameters[0].key", is("reviewActive")))
-                .andExpect(jsonPath("$.parameters[0].value", is("true")));
+                .andExpect(jsonPath("$.parameters[0].value", is(true)));
 
         mockMvc.perform(get(basePathEn + "/" + application.getId() + "/general_configuration/" + applicationGeneralConfiguration.getId()))
                 .andExpect(status().isOk())
@@ -101,7 +102,7 @@ public class GeneralConfigurationIntegrationTest extends BaseIntegrationTest {
                 .andExpect(jsonPath("$.name", is("General configuration Test application for general configuration")))
                 .andExpect(jsonPath("$.parameters", hasSize(1)))
                 .andExpect(jsonPath("$.parameters[0].key", is("reviewActive")))
-                .andExpect(jsonPath("$.parameters[0].value", is("true")));
+                .andExpect(jsonPath("$.parameters[0].value", is(true)));
     }
 
     @Test
@@ -111,18 +112,22 @@ public class GeneralConfigurationIntegrationTest extends BaseIntegrationTest {
                 .andExpect(content().contentType(contentType))
                 .andExpect(jsonPath("$.id", is((int) this.pushConfigurationGeneralConfiguration.getId())))
                 .andExpect(jsonPath("$.name", is("General configuration for push configuration")))
-                .andExpect(jsonPath("$.parameters", hasSize(1)))
+                .andExpect(jsonPath("$.parameters", hasSize(2)))
                 .andExpect(jsonPath("$.parameters[0].key", is("reviewActive")))
-                .andExpect(jsonPath("$.parameters[0].value", is("false")));
+                .andExpect(jsonPath("$.parameters[0].value", is(false)))
+                .andExpect(jsonPath("$.parameters[1].key", is("font-family")))
+                .andExpect(jsonPath("$.parameters[1].value", is("Arial")));
 
         mockMvc.perform(get(basePathEn + "/" + application.getId() + "/general_configuration/" + pushConfigurationGeneralConfiguration.getId()))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(contentType))
                 .andExpect(jsonPath("$.id", is((int) this.pushConfigurationGeneralConfiguration.getId())))
                 .andExpect(jsonPath("$.name", is("General configuration for push configuration")))
-                .andExpect(jsonPath("$.parameters", hasSize(1)))
+                .andExpect(jsonPath("$.parameters", hasSize(2)))
                 .andExpect(jsonPath("$.parameters[0].key", is("reviewActive")))
-                .andExpect(jsonPath("$.parameters[0].value", is("false")));
+                .andExpect(jsonPath("$.parameters[0].value", is(false)))
+                .andExpect(jsonPath("$.parameters[1].key", is("font-family")))
+                .andExpect(jsonPath("$.parameters[1].value", is("Arial")));
     }
 
     private Application buildApplicationTree(String applicationName) {
@@ -198,7 +203,11 @@ public class GeneralConfigurationIntegrationTest extends BaseIntegrationTest {
 
         pushConfigurationGeneralConfiguration = new GeneralConfiguration("General configuration for push configuration", new Date(), new Date(), null, null, pushConfiguration1);
         pushConfigurationGeneralConfigurationParameter = new Parameter("reviewActive", "false", new Date(), new Date(), "en", null, pushConfigurationGeneralConfiguration, null);
-        pushConfigurationGeneralConfiguration.setParameters(new ArrayList<Parameter>(){{add(pushConfigurationGeneralConfigurationParameter);}});
+        pushConfigurationGeneralConfigurationParameter2 = new Parameter("font-family", "Arial", new Date(), new Date(), "en", null, pushConfigurationGeneralConfiguration, null);
+        pushConfigurationGeneralConfiguration.setParameters(new ArrayList<Parameter>(){{
+            add(pushConfigurationGeneralConfigurationParameter);
+            add(pushConfigurationGeneralConfigurationParameter2);
+        }});
 
         pushConfiguration1.setGeneralConfiguration(pushConfigurationGeneralConfiguration);
         application.setGeneralConfiguration(applicationGeneralConfiguration);
