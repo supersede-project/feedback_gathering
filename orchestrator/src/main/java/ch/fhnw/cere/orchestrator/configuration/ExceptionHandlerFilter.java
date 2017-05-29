@@ -20,8 +20,6 @@ public class ExceptionHandlerFilter extends OncePerRequestFilter {
 
     @Override
     public void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        System.err.println("REQUEST ------------------------------------------------");
-
         try {
             filterChain.doFilter(request, response);
         } catch (AuthenticationCredentialsNotFoundException authenticationCredentialsNotFoundException) {

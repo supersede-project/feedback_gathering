@@ -14,7 +14,7 @@ import java.util.Map;
 
 
 @RestController
-@RequestMapping(value = "/{language}/mechanisms/{mechanismId}/parameters")
+@RequestMapping(value = "${supersede.base_path.feedback}/{language}/mechanisms/{mechanismId}/parameters")
 public class MechanismsParametersController extends BaseController {
 
     @Autowired

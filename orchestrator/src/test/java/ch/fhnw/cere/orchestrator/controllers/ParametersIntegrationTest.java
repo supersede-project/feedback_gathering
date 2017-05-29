@@ -42,8 +42,8 @@ public class ParametersIntegrationTest extends BaseIntegrationTest {
     private MechanismRepository mechanismRepository;
     @Autowired
     private ConfigurationMechanismRepository configurationMechanismRepository;
-    private String basePathEn = "/en/parameters";
-    private String basePathDe = "/de/parameters";
+    private String basePathEn = "/orchestrator/feedback/en/parameters";
+    private String basePathDe = "/orchestrator/feedback/de/parameters";
 
 
     @Before

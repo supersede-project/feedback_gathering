@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
-@RequestMapping("/authenticate")
+@RequestMapping("${supersede.base_path.feedback}/authenticate")
 public class AuthenticationController {
 
     @Value("Authorization")

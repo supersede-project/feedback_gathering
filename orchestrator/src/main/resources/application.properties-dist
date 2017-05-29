@@ -62,3 +62,10 @@ spring.jackson.serialization.write_dates_as_timestamps=false
 
 
 jwt.secret=<your secret>
+
+
+# ----------------------------------------
+# SUPERSEDE
+# ----------------------------------------
+supersede.base_path.feedback=/orchestrator/feedback
+supersede.base_path.monitoring=/orchestrator/monitoring

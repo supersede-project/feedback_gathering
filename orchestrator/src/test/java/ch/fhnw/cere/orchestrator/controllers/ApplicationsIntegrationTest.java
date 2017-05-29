@@ -57,8 +57,8 @@ public class ApplicationsIntegrationTest extends BaseIntegrationTest {
 
     @Autowired
     private ApplicationRepository applicationRepository;
-    private String basePathEn = "/en/applications";
-    private String basePathDe = "/de/applications";
+    private String basePathEn = "/orchestrator/feedback/en/applications";
+    private String basePathDe = "/orchestrator/feedback/de/applications";
 
     @Before
     public void setup() throws Exception {

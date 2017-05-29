@@ -4,6 +4,7 @@ package ch.fhnw.cere.orchestrator.configuration;
 import ch.fhnw.cere.orchestrator.security.AuthenticationTokenFilter;
 import ch.fhnw.cere.orchestrator.security.RestAuthenticationEntryPoint;
 import ch.fhnw.cere.orchestrator.services.SecurityService;
+import com.google.common.collect.ImmutableList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -22,6 +23,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.RegexRequestMatcher;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 
 @SuppressWarnings("SpringJavaAutowiringInspection")
@@ -80,14 +84,26 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                .antMatchers("/authenticate/**").permitAll()
-                .requestMatchers(new RegexRequestMatcher("/\\w{2}/applications/\\d+/?", "GET", true)).permitAll()
-                .requestMatchers(new RegexRequestMatcher("/\\w{2}/applications/?", "GET", true)).permitAll()
+                .antMatchers(HttpMethod.OPTIONS, "/feedback/orchestrator/**").permitAll()
+                .antMatchers("/feedback/orchestrator/authenticate/**").permitAll()
+                .requestMatchers(new RegexRequestMatcher("/feedback/orchestrator/\\w{2}/applications/\\d+/?", "GET", true)).permitAll()
+                .requestMatchers(new RegexRequestMatcher("/feedback/orchestrator/\\w{2}/applications/?", "GET", true)).permitAll()
                 .anyRequest().authenticated();
 
-        // Custom JWT based authentication
-        httpSecurity
-                .addFilterBefore(authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter.class);
+        httpSecurity.addFilterBefore(authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter.class);
+
+        httpSecurity.cors();
+    }
+
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        final CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(ImmutableList.of("*"));
+        configuration.setAllowedMethods(ImmutableList.of("HEAD", "GET", "POST", "PUT", "DELETE", "PATCH"));
+        configuration.setAllowCredentials(true);
+        configuration.setAllowedHeaders(ImmutableList.of("Authorization", "Cache-Control", "Content-Type"));
+        final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
     }
 }

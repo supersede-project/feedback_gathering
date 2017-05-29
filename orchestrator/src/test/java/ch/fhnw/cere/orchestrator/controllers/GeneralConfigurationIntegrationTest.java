@@ -56,8 +56,8 @@ public class GeneralConfigurationIntegrationTest extends BaseIntegrationTest {
     private ConfigurationRepository configurationRepository;
     @Autowired
     private ConfigurationMechanismRepository configurationMechanismRepository;
-    private String basePathEn = "/en/applications";
-    private String basePathDe = "/de/applications";
+    private String basePathEn = "/orchestrator/feedback/en/applications";
+    private String basePathDe = "/orchestrator/feedback/de/applications";
 
 
     @Before

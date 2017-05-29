@@ -52,14 +52,14 @@ public class AuthenticationIntegrationTest extends BaseIntegrationTest {
     @Test
     public void testAuthenticationWithWrongCredentials() throws Exception {
         String authenticationJsonUsernameWrong = toJson(new AuthenticationRequest("username", "asdfasd"));
-        mockMvc.perform(post("/authenticate")
+        mockMvc.perform(post("/orchestrator/feedback/authenticate")
                 .contentType(contentType)
                 .content(authenticationJsonUsernameWrong))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$", is("Wrong credentials")));
 
         String authenticationJsonPasswordWrong = toJson(new AuthenticationRequest("usernameeeee", "password"));
-        mockMvc.perform(post("/authenticate")
+        mockMvc.perform(post("/orchestrator/feedback/authenticate")
                 .contentType(contentType)
                 .content(authenticationJsonPasswordWrong))
                 .andExpect(status().isBadRequest())
@@ -69,13 +69,13 @@ public class AuthenticationIntegrationTest extends BaseIntegrationTest {
     @Test
     public void testAuthentication() throws Exception {
         String authenticationJson = toJson(new AuthenticationRequest("admin", "password"));
-        mockMvc.perform(post("/authenticate")
+        mockMvc.perform(post("/orchestrator/feedback/authenticate")
                 .contentType(contentType)
                 .content(authenticationJson))
                 .andExpect(status().isOk());
 
         String authenticationJsonSuperAdmin = toJson(new AuthenticationRequest("super_admin", "superpassword"));
-        mockMvc.perform(post("/authenticate")
+        mockMvc.perform(post("/orchestrator/feedback/authenticate")
                 .contentType(contentType)
                 .content(authenticationJsonSuperAdmin))
                 .andExpect(status().isOk());

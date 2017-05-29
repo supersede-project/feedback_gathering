@@ -17,7 +17,7 @@ import java.util.List;
 
 
 @RestController
-@RequestMapping(value = "/{language}/applications/{applicationId}/users")
+@RequestMapping(value = "${supersede.base_path.feedback}/{language}/applications/{applicationId}/users")
 public class UsersController extends BaseController {
 
     @Autowired

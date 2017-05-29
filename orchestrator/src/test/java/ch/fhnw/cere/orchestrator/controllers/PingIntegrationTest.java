@@ -25,7 +25,7 @@ public class PingIntegrationTest extends BaseIntegrationTest {
 
     @Test
     public void testPing() throws Exception {
-        mockMvc.perform(get("/ping"))
+        mockMvc.perform(get("/orchestrator/feedback/ping"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", is("pong")));
     }

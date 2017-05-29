@@ -13,7 +13,7 @@ import java.util.List;
 
 
 @RestController
-@RequestMapping(value = "/{language}/applications")
+@RequestMapping(value = "${supersede.base_path.feedback}/{language}/applications")
 public class ApplicationsController extends BaseController {
 
     @Autowired

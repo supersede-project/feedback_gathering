@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 
 @RestController
-@RequestMapping(value = "/{language}/applications/{applicationId}/configurations/{configurationId}")
+@RequestMapping(value = "${supersede.base_path.feedback}/{language}/applications/{applicationId}/configurations/{configurationId}")
 public class ConfigurationGeneralConfigurationController extends BaseController {
 
     @Autowired

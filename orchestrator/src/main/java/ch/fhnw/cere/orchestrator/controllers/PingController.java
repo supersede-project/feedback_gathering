@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.*;
 
 
 @RestController
-@RequestMapping(value = "/ping")
+@RequestMapping(value = "${supersede.base_path.feedback}/ping")
 public class PingController extends BaseController {
 
     @RequestMapping(method = RequestMethod.GET, value = "")

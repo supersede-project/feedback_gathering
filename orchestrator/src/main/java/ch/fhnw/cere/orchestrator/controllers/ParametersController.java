@@ -13,7 +13,7 @@ import java.util.List;
 
 
 @RestController
-@RequestMapping(value = "/{language}/parameters")
+@RequestMapping(value = "${supersede.base_path.feedback}/{language}/parameters")
 public class ParametersController extends BaseController {
 
     @Autowired

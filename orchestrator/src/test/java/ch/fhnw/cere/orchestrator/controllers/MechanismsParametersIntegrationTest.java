@@ -34,8 +34,8 @@ public class MechanismsParametersIntegrationTest extends BaseIntegrationTest {
     private MechanismRepository mechanismRepository;
     @Autowired
     private ConfigurationMechanismRepository configurationMechanismRepository;
-    private String basePathEn = "/en/mechanisms/";
-    private String basePathDe = "/de/mechanisms/";
+    private String basePathEn = "/orchestrator/feedback/en/mechanisms/";
+    private String basePathDe = "/orchestrator/feedback/de/mechanisms/";
 
 
     @Before

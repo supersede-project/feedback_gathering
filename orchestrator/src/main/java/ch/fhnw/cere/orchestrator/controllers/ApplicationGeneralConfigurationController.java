@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 
 @RestController
-@RequestMapping(value = "/{language}/applications/{applicationId}/general_configuration")
+@RequestMapping(value = "${supersede.base_path.feedback}/{language}/applications/{applicationId}/general_configuration")
 public class ApplicationGeneralConfigurationController extends BaseController {
 
     @Autowired

@@ -115,7 +115,7 @@ public abstract class BaseIntegrationTest {
         this.mockMvc = webAppContextSetup(webApplicationContext).build();
         MvcResult result = null;
         try {
-            result = mockMvc.perform(post("/authenticate").contentType(MediaType.APPLICATION_JSON)
+            result = mockMvc.perform(post("/orchestrator/feedback/authenticate").contentType(MediaType.APPLICATION_JSON)
                     .content("{\"name\":\"admin\",\"password\":\"password\"}"))
                     .andReturn();
             String json = result.getResponse().getContentAsString();
@@ -131,7 +131,7 @@ public abstract class BaseIntegrationTest {
         this.mockMvc = webAppContextSetup(webApplicationContext).build();
         MvcResult result = null;
         try {
-            result = mockMvc.perform(post("/authenticate").contentType(MediaType.APPLICATION_JSON)
+            result = mockMvc.perform(post("/orchestrator/feedback/authenticate").contentType(MediaType.APPLICATION_JSON)
                     .content("{\"name\":\"super_admin\",\"password\":\"superpassword\"}"))
                     .andReturn();
             String json = result.getResponse().getContentAsString();
