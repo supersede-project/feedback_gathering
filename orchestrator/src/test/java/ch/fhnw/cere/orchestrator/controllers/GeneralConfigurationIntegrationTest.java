@@ -1,10 +1,8 @@
 package ch.fhnw.cere.orchestrator.controllers;
 
 import ch.fhnw.cere.orchestrator.models.*;
-import ch.fhnw.cere.orchestrator.repositories.ApplicationRepository;
-import ch.fhnw.cere.orchestrator.repositories.ConfigurationRepository;
-import ch.fhnw.cere.orchestrator.repositories.MechanismRepository;
-import ch.fhnw.cere.orchestrator.repositories.ParameterRepository;
+import ch.fhnw.cere.orchestrator.repositories.*;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,6 +54,8 @@ public class GeneralConfigurationIntegrationTest extends BaseIntegrationTest {
     private ApplicationRepository applicationRepository;
     @Autowired
     private ConfigurationRepository configurationRepository;
+    @Autowired
+    private ConfigurationMechanismRepository configurationMechanismRepository;
     private String basePathEn = "/en/applications";
     private String basePathDe = "/de/applications";
 
@@ -65,11 +65,22 @@ public class GeneralConfigurationIntegrationTest extends BaseIntegrationTest {
         super.setup();
 
         this.parameterRepository.deleteAllInBatch();
+        this.configurationMechanismRepository.deleteAllInBatch();
         this.mechanismRepository.deleteAllInBatch();
         this.configurationRepository.deleteAllInBatch();
         this.applicationRepository.deleteAllInBatch();
 
         this.application = applicationRepository.save(buildApplicationTree("Test application for general configuration"));
+    }
+
+    @After
+    public void cleanUp() {
+        super.cleanUp();
+        this.parameterRepository.deleteAllInBatch();
+        this.configurationMechanismRepository.deleteAllInBatch();
+        this.mechanismRepository.deleteAllInBatch();
+        this.configurationRepository.deleteAllInBatch();
+        this.applicationRepository.deleteAllInBatch();
     }
 
     @Test

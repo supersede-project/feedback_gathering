@@ -53,3 +53,12 @@ spring.devtools.restart.exclude=META-INF/maven/**,META-INF/resources/**,resource
 spring.devtools.restart.poll-interval=1000
 spring.devtools.restart.quiet-period=400
 
+
+
+# ----------------------------------------
+# JACKSON JSON SERIALIZATION
+# ----------------------------------------
+spring.jackson.serialization.write_dates_as_timestamps=false
+
+
+jwt.secret=<your secret>

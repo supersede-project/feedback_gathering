@@ -3,8 +3,10 @@ package ch.fhnw.cere.orchestrator.controllers;
 import ch.fhnw.cere.orchestrator.models.Mechanism;
 import ch.fhnw.cere.orchestrator.models.MechanismType;
 import ch.fhnw.cere.orchestrator.models.Parameter;
+import ch.fhnw.cere.orchestrator.repositories.ConfigurationMechanismRepository;
 import ch.fhnw.cere.orchestrator.repositories.MechanismRepository;
 import ch.fhnw.cere.orchestrator.repositories.ParameterRepository;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -30,6 +32,8 @@ public class MechanismsParametersIntegrationTest extends BaseIntegrationTest {
     private ParameterRepository parameterRepository;
     @Autowired
     private MechanismRepository mechanismRepository;
+    @Autowired
+    private ConfigurationMechanismRepository configurationMechanismRepository;
     private String basePathEn = "/en/mechanisms/";
     private String basePathDe = "/de/mechanisms/";
 
@@ -39,6 +43,7 @@ public class MechanismsParametersIntegrationTest extends BaseIntegrationTest {
         super.setup();
 
         this.parameterRepository.deleteAllInBatch();
+        this.configurationMechanismRepository.deleteAllInBatch();
         this.mechanismRepository.deleteAllInBatch();
 
         this.mechanism1 = mechanismRepository.save(new Mechanism(MechanismType.TEXT_TYPE, null, null));
@@ -46,6 +51,14 @@ public class MechanismsParametersIntegrationTest extends BaseIntegrationTest {
         this.parameter1 = parameterRepository.save(new Parameter("title", "Title EN", new Date(), new Date(), "en", null, null, mechanism1));
         this.parameter2 = parameterRepository.save(new Parameter("title", "Titel DE", new Date(), new Date(), "de", null, null, mechanism1));
         this.parameter3 = parameterRepository.save(new Parameter("font-size", "10px", new Date(), new Date(), "en", null, null, mechanism1));
+    }
+
+    @After
+    public void cleanUp() {
+        super.cleanUp();
+        this.parameterRepository.deleteAllInBatch();
+        this.configurationMechanismRepository.deleteAllInBatch();
+        this.mechanismRepository.deleteAllInBatch();
     }
 
     @Test

@@ -8,6 +8,7 @@ import ch.fhnw.cere.orchestrator.services.ApplicationService;
 import ch.fhnw.cere.orchestrator.services.UserGroupService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -41,6 +42,7 @@ public class UserGroupsController extends BaseController {
         return userGroup;
     }
 
+    @PreAuthorize("@securityService.hasAdminPermission()")
     @ResponseStatus(HttpStatus.CREATED)
     @RequestMapping(method = RequestMethod.POST, value = "")
     public UserGroup createApplicationUserGroup(@RequestBody UserGroup userGroup) {
@@ -48,11 +50,13 @@ public class UserGroupsController extends BaseController {
         return userGroupService.save(userGroup);
     }
 
+    @PreAuthorize("@securityService.hasAdminPermission()")
     @RequestMapping(method = RequestMethod.DELETE, value = "/{id}")
     public void deleteApplicationUserGroup(@PathVariable long id) {
         userGroupService.delete(id);
     }
 
+    @PreAuthorize("@securityService.hasAdminPermission()")
     @RequestMapping(method = RequestMethod.PUT, value = "")
     public UserGroup updateApplicationUserGroup(@RequestBody UserGroup userGroup) {
         return userGroupService.save(userGroup);

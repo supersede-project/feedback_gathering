@@ -8,6 +8,7 @@ import ch.fhnw.cere.orchestrator.services.ApplicationService;
 import ch.fhnw.cere.orchestrator.services.GeneralConfigurationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -41,18 +42,21 @@ public class ApplicationGeneralConfigurationController extends BaseController {
         return generalConfiguration;
     }
 
+    @PreAuthorize("@securityService.hasAdminPermission(#applicationId)")
     @ResponseStatus(HttpStatus.CREATED)
     @RequestMapping(method = RequestMethod.POST, value = "")
-    public GeneralConfiguration createApplicationGeneralConfiguration(@RequestBody GeneralConfiguration generalConfiguration) {
+    public GeneralConfiguration createApplicationGeneralConfiguration(@PathVariable long applicationId, @RequestBody GeneralConfiguration generalConfiguration) {
         generalConfiguration.setApplication(getApplication());
         return generalConfigurationService.save(generalConfiguration);
     }
 
+    @PreAuthorize("@securityService.hasAdminPermission()")
     @RequestMapping(method = RequestMethod.DELETE, value = "/{id}")
     public void deleteApplicationGeneralConfiguration(@PathVariable long id) {
         generalConfigurationService.delete(id);
     }
 
+    @PreAuthorize("@securityService.hasAdminPermission()")
     @RequestMapping(method = RequestMethod.PUT, value = "")
     public GeneralConfiguration updateApplicationGeneralConfiguration(@RequestBody GeneralConfiguration generalConfiguration) {
         return generalConfigurationService.save(generalConfiguration);

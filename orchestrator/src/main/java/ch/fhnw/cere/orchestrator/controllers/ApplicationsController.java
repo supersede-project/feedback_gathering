@@ -6,6 +6,7 @@ import ch.fhnw.cere.orchestrator.models.Application;
 import ch.fhnw.cere.orchestrator.services.ApplicationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -35,17 +36,20 @@ public class ApplicationsController extends BaseController {
         return application;
     }
 
+    @PreAuthorize("@securityService.hasAdminPermission()")
     @ResponseStatus(HttpStatus.CREATED)
     @RequestMapping(method = RequestMethod.POST, value = "")
     public Application createApplication(@RequestBody Application application) {
         return applicationService.save(application);
     }
 
+    @PreAuthorize("@securityService.hasAdminPermission(#applicationId)")
     @RequestMapping(method = RequestMethod.DELETE, value = "/{id}")
     public void deleteApplication(@PathVariable long id) {
         applicationService.delete(id);
     }
 
+    @PreAuthorize("@securityService.hasAdminPermission(#application)")
     @RequestMapping(method = RequestMethod.PUT, value = "/")
     public Application updateApplication(@RequestBody Application application) {
         return applicationService.save(application);

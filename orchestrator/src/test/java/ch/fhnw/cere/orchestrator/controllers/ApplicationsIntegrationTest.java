@@ -5,11 +5,14 @@ import ch.fhnw.cere.orchestrator.models.*;
 import ch.fhnw.cere.orchestrator.repositories.ApplicationRepository;
 import org.hamcrest.Matchers;
 import static org.hamcrest.Matchers.nullValue;
+
+import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 
+import javax.servlet.ServletException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -57,17 +60,20 @@ public class ApplicationsIntegrationTest extends BaseIntegrationTest {
     private String basePathEn = "/en/applications";
     private String basePathDe = "/de/applications";
 
-
     @Before
     public void setup() throws Exception {
         super.setup();
-
         this.applicationRepository.deleteAllInBatch();
 
         this.application1 = applicationRepository.save(new Application("Test App 1", 1, new Date(), new Date(), null));
         this.application2 = applicationRepository.save(new Application("Test App 2", 1, new Date(), new Date(), null));
-
         this.application3 = applicationRepository.save(buildApplicationTree("Test application 3"));
+    }
+
+    @After
+    public void cleanUp() {
+        super.cleanUp();
+        this.applicationRepository.deleteAllInBatch();
     }
 
     @Test
@@ -132,13 +138,27 @@ public class ApplicationsIntegrationTest extends BaseIntegrationTest {
                 .andExpect(jsonPath("$.configurations[0].mechanisms[0].parameters[2].language", is("de")));
     }
 
-    @Test
-    public void postApplication() throws Exception {
+    @Test(expected = ServletException.class)
+    public void postApplicationUnauthorized() throws Exception {
         Application application = new Application("Test App 4", 1, new Date(), new Date(), null);
         String applicationJson = toJson(application);
 
         this.mockMvc.perform(post(basePathEn)
                 .contentType(contentType)
+                .content(applicationJson))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void postApplication() throws Exception {
+        Application application = new Application("Test App 4", 1, new Date(), new Date(), null);
+        String applicationJson = toJson(application);
+
+        String adminJWTToken = requestAdminJWTToken();
+
+        this.mockMvc.perform(post(basePathEn)
+                .contentType(contentType)
+                .header("Authorization", adminJWTToken)
                 .content(applicationJson))
                 .andExpect(status().isCreated());
     }
@@ -148,10 +168,11 @@ public class ApplicationsIntegrationTest extends BaseIntegrationTest {
         Application application = buildApplicationTree("Test App 4");
         String applicationJson = toJson(application);
 
-        System.err.println(applicationJson);
+        String adminJWTToken = requestAdminJWTToken();
 
         this.mockMvc.perform(post(basePathEn)
                 .contentType(contentType)
+                .header("Authorization", adminJWTToken)
                 .content(applicationJson))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.name", is("Test App 4")))
@@ -173,10 +194,36 @@ public class ApplicationsIntegrationTest extends BaseIntegrationTest {
                 .andExpect(jsonPath("$.configurations[0].generalConfiguration.parameters[0].value", is("false")));
     }
 
-    @Test
-    public void deleteApplication() throws Exception {
+    @Test(expected = ServletException.class)
+    public void deleteApplicationUnauthorized() throws Exception {
+
         this.mockMvc.perform(delete(basePathEn + "/" + application1.getId()))
                 .andExpect(status().isOk());
+    }
+
+    @Test
+    public void deleteApplication() throws Exception {
+        String adminJWTToken = requestAdminJWTToken();
+
+        this.mockMvc.perform(delete(basePathEn + "/" + application1.getId())
+                .header("Authorization", adminJWTToken))
+                .andExpect(status().isOk());
+    }
+
+    @Test(expected = ServletException.class)
+    public void updateApplicationUnauthorized() throws Exception {
+        this.application2.setName("Updated name for App 2");
+        this.application2.setState(0);
+        String applicationJson = toJson(this.application2);
+
+        this.mockMvc.perform(put(basePathEn + "/")
+                .contentType(contentType)
+                .content(applicationJson))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id", is((int) this.application2.getId())))
+                .andExpect(jsonPath("$.name", is("Updated name for App 2")))
+                .andExpect(jsonPath("$.state", is(0)))
+                .andExpect(jsonPath("$.configurations", is(nullValue())));
     }
 
     @Test
@@ -185,9 +232,12 @@ public class ApplicationsIntegrationTest extends BaseIntegrationTest {
         this.application2.setState(0);
         String applicationJson = toJson(this.application2);
 
+        String adminJWTToken = requestAdminJWTToken();
+
         this.mockMvc.perform(put(basePathEn + "/")
                 .contentType(contentType)
-                .content(applicationJson))
+                .content(applicationJson)
+                .header("Authorization", adminJWTToken))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is((int) this.application2.getId())))
                 .andExpect(jsonPath("$.name", is("Updated name for App 2")))

@@ -10,6 +10,7 @@ import ch.fhnw.cere.orchestrator.services.ApplicationService;
 import ch.fhnw.cere.orchestrator.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -43,6 +44,7 @@ public class UsersController extends BaseController {
         return user;
     }
 
+    @PreAuthorize("@securityService.hasAdminPermission()")
     @ResponseStatus(HttpStatus.CREATED)
     @RequestMapping(method = RequestMethod.POST, value = "")
     public User createApplicationUser(@RequestBody User user) {
@@ -50,11 +52,13 @@ public class UsersController extends BaseController {
         return userRepository.save(user);
     }
 
+    @PreAuthorize("@securityService.hasAdminPermission()")
     @RequestMapping(method = RequestMethod.DELETE, value = "/{id}")
     public void deleteApplicationUser(@PathVariable long id) {
         userRepository.delete(id);
     }
 
+    @PreAuthorize("@securityService.hasAdminPermission()")
     @RequestMapping(method = RequestMethod.PUT, value = "")
     public User updateApplicationUser(@RequestBody User user) {
         return userRepository.save(user);

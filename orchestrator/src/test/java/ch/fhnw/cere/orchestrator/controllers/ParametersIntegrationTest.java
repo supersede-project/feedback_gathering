@@ -3,12 +3,15 @@ package ch.fhnw.cere.orchestrator.controllers;
 import ch.fhnw.cere.orchestrator.models.Mechanism;
 import ch.fhnw.cere.orchestrator.models.MechanismType;
 import ch.fhnw.cere.orchestrator.models.Parameter;
+import ch.fhnw.cere.orchestrator.repositories.ConfigurationMechanismRepository;
 import ch.fhnw.cere.orchestrator.repositories.MechanismRepository;
 import ch.fhnw.cere.orchestrator.repositories.ParameterRepository;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.servlet.ServletException;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -37,6 +40,8 @@ public class ParametersIntegrationTest extends BaseIntegrationTest {
     private ParameterRepository parameterRepository;
     @Autowired
     private MechanismRepository mechanismRepository;
+    @Autowired
+    private ConfigurationMechanismRepository configurationMechanismRepository;
     private String basePathEn = "/en/parameters";
     private String basePathDe = "/de/parameters";
 
@@ -46,6 +51,7 @@ public class ParametersIntegrationTest extends BaseIntegrationTest {
         super.setup();
 
         this.parameterRepository.deleteAllInBatch();
+        this.configurationMechanismRepository.deleteAllInBatch();
         this.mechanismRepository.deleteAllInBatch();
 
         this.mechanism1 = mechanismRepository.save(new Mechanism(MechanismType.TEXT_TYPE, null, null));
@@ -53,6 +59,14 @@ public class ParametersIntegrationTest extends BaseIntegrationTest {
         this.parameter1 = parameterRepository.save(new Parameter("title", "Title EN", new Date(), new Date(), "en", null, null, mechanism1));
         this.parameter2 = parameterRepository.save(new Parameter("title", "Titel DE", new Date(), new Date(), "de", null, null, mechanism1));
         this.parameter3 = parameterRepository.save(new Parameter("font-size", "10", new Date(), new Date(), "en", null, null, mechanism1));
+    }
+
+    @After
+    public void cleanUp() {
+        super.cleanUp();
+        this.parameterRepository.deleteAllInBatch();
+        this.configurationMechanismRepository.deleteAllInBatch();
+        this.mechanismRepository.deleteAllInBatch();
     }
 
     @Test
@@ -84,8 +98,8 @@ public class ParametersIntegrationTest extends BaseIntegrationTest {
                 .andExpect(jsonPath("$.value", is("Title EN")));
     }
 
-    @Test
-    public void postParameter() throws Exception {
+    @Test(expected = ServletException.class)
+    public void postParameterUnauthorized() throws Exception {
         Parameter parameter = new Parameter("newKey", "newValue", new Date(), new Date(), "en", null, null, null, null);
         String parameterJson = toJson(parameter);
 
@@ -96,19 +110,56 @@ public class ParametersIntegrationTest extends BaseIntegrationTest {
     }
 
     @Test
-    public void deleteParameter() throws Exception {
+    public void postParameter() throws Exception {
+        Parameter parameter = new Parameter("newKey", "newValue", new Date(), new Date(), "en", null, null, null, null);
+        String parameterJson = toJson(parameter);
+        String adminJWTToken = requestAdminJWTToken();
+
+        this.mockMvc.perform(post(basePathEn)
+                .contentType(contentType)
+                .header("Authorization", adminJWTToken)
+                .content(parameterJson))
+                .andExpect(status().isCreated());
+    }
+
+    @Test(expected = ServletException.class)
+    public void deleteParameterUnauthorized() throws Exception {
         this.mockMvc.perform(delete(basePathEn + "/" + parameter1.getId()))
                 .andExpect(status().isOk());
     }
 
     @Test
-    public void updateParameter() throws Exception {
+    public void deleteParameter() throws Exception {
+        String adminJWTToken = requestAdminJWTToken();
+        this.mockMvc.perform(delete(basePathEn + "/" + parameter1.getId())
+                .header("Authorization", adminJWTToken))
+                .andExpect(status().isOk());
+    }
+
+    @Test(expected = ServletException.class)
+    public void updateParameterUnauthorized() throws Exception {
         this.parameter2.setValue("Titel DE updated");
         String parameterJson = toJson(this.parameter2);
 
         this.mockMvc.perform(put(basePathEn + "/")
                 .contentType(contentType)
                 .content(parameterJson))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id", is((int) this.parameter2.getId())))
+                .andExpect(jsonPath("$.key", is("title")))
+                .andExpect(jsonPath("$.value", is("Titel DE updated")));
+    }
+
+    @Test
+    public void updateParameter() throws Exception {
+        this.parameter2.setValue("Titel DE updated");
+        String parameterJson = toJson(this.parameter2);
+        String adminJWTToken = requestAdminJWTToken();
+
+        this.mockMvc.perform(put(basePathEn + "/")
+                .contentType(contentType)
+                .content(parameterJson)
+                .header("Authorization", adminJWTToken))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is((int) this.parameter2.getId())))
                 .andExpect(jsonPath("$.key", is("title")))
