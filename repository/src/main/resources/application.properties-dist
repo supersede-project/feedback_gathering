@@ -67,5 +67,4 @@ jwt.secret=<your secret>
 # ----------------------------------------
 # SUPERSEDE
 # ----------------------------------------
-supersede.base_path.feedback=/orchestrator/feedback
-supersede.base_path.monitoring=/orchestrator/monitoring
+supersede.base_path.feedback=/feedback_repository
