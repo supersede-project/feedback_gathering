@@ -7,6 +7,7 @@ import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -16,12 +17,19 @@ import monitoring.model.MonitoringData;
 public class TestSocialSearcherAPI {
 
 	public static void main(String[] args) {
-
+		
 		try {
 			
 			long start = System.currentTimeMillis();
-
-			String key = "63dc2a9e0fb6693c36ac5c1b0edadd87";
+			
+			
+			ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+			InputStream input = classLoader.getResourceAsStream("SocialSearcher.properties");
+			Properties prop = new Properties();
+			prop.load(input);
+			String key = prop.getProperty("user_key");
+			//String key = "63dc2a9e0fb6693c36ac5c1b0edadd87";
+			
 			String keywordExpression = "(Angela Merkel OR Donald Trump) AND (Emmanuel Macron)";
 			String q = "\"" + keywordExpression.replaceAll(" AND ", "\"AND\"")
 					.replaceAll("[()]", "").replaceAll(" OR ", "\"OR\"") + "\"";
