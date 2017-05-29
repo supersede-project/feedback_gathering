@@ -74,5 +74,4 @@ public class AuthenticationController {
             return ResponseEntity.badRequest().body(null);
         }
     }
-
 }
