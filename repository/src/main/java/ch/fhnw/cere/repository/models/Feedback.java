@@ -16,6 +16,7 @@ public class Feedback {
     private String userIdentification;
     private Date createdAt;
     private Date updatedAt;
+    private long applicationId;
     private long configurationId;
     private String language;
 
@@ -63,11 +64,12 @@ public class Feedback {
     public Feedback() {
     }
 
-    public Feedback(String title, String userIdentification, Date createdAt, Date updatedAt, long configurationId, String language, ContextInformation contextInformation, List<AttachmentFeedback> attachmentFeedbacks, List<AudioFeedback> audioFeedbacks, List<CategoryFeedback> categoryFeedbacks, List<RatingFeedback> ratingFeedbacks, List<ScreenshotFeedback> screenshotFeedbacks, List<TextFeedback> textFeedbacks) {
+    public Feedback(String title, String userIdentification, Date createdAt, Date updatedAt, long applicationId, long configurationId, String language, ContextInformation contextInformation, List<AttachmentFeedback> attachmentFeedbacks, List<AudioFeedback> audioFeedbacks, List<CategoryFeedback> categoryFeedbacks, List<RatingFeedback> ratingFeedbacks, List<ScreenshotFeedback> screenshotFeedbacks, List<TextFeedback> textFeedbacks, List<Status> statuses) {
         this.title = title;
         this.userIdentification = userIdentification;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+        this.applicationId = applicationId;
         this.configurationId = configurationId;
         this.language = language;
         this.contextInformation = contextInformation;
@@ -77,6 +79,7 @@ public class Feedback {
         this.ratingFeedbacks = ratingFeedbacks;
         this.screenshotFeedbacks = screenshotFeedbacks;
         this.textFeedbacks = textFeedbacks;
+        this.statuses = statuses;
     }
 
     public long getId() {
@@ -125,6 +128,22 @@ public class Feedback {
 
     public void setConfigurationId(long configurationId) {
         this.configurationId = configurationId;
+    }
+
+    public long getApplicationId() {
+        return applicationId;
+    }
+
+    public void setApplicationId(long applicationId) {
+        this.applicationId = applicationId;
+    }
+
+    public List<Status> getStatuses() {
+        return statuses;
+    }
+
+    public void setStatuses(List<Status> statuses) {
+        this.statuses = statuses;
     }
 
     public String getLanguage() {
