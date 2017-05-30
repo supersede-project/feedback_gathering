@@ -26,6 +26,9 @@ public class ApiUser implements UserDetails {
     @OneToMany(mappedBy = "apiUser", fetch = FetchType.EAGER, cascade = {CascadeType.REMOVE, CascadeType.PERSIST})
     private List<ApiUserApiUserRole> apiUserApiUserRoles;
 
+    @OneToMany(mappedBy = "apiUser", cascade = {CascadeType.REMOVE, CascadeType.PERSIST})
+    private List<Status> statuses;
+
     @Transient
     private List<ApiUserRole> authorities;
     @Transient
@@ -43,6 +46,13 @@ public class ApiUser implements UserDetails {
     public ApiUser(String name, String password) {
         this.name = name;
         this.password = password;
+    }
+
+    public ApiUser(String name, String password, List<ApiUserApiUserRole> apiUserApiUserRoles, List<Status> statuses) {
+        this.name = name;
+        this.password = password;
+        this.apiUserApiUserRoles = apiUserApiUserRoles;
+        this.statuses = statuses;
     }
 
     @Override
@@ -158,5 +168,21 @@ public class ApiUser implements UserDetails {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public List<ApiUserApiUserRole> getApiUserApiUserRoles() {
+        return apiUserApiUserRoles;
+    }
+
+    public void setApiUserApiUserRoles(List<ApiUserApiUserRole> apiUserApiUserRoles) {
+        this.apiUserApiUserRoles = apiUserApiUserRoles;
+    }
+
+    public List<Status> getStatuses() {
+        return statuses;
+    }
+
+    public void setStatuses(List<Status> statuses) {
+        this.statuses = statuses;
     }
 }
