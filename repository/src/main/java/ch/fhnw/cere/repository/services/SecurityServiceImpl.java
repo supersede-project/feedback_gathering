@@ -12,12 +12,6 @@ import java.util.stream.Collectors;
 public class SecurityServiceImpl implements SecurityService {
 
     @Override
-    public Boolean hasAdminPermission() {
-        // TODO check whether always admin user is in security context
-        return isSuperAdmin() || isAdmin();
-    }
-
-    @Override
     public Boolean hasAdminPermission(long applicationId) {
         // TODO check application permission
         return isSuperAdmin() || isAdmin();

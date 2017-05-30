@@ -4,6 +4,7 @@ package ch.fhnw.cere.repository.models;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 
@@ -21,6 +22,7 @@ public class TextFeedback {
     @JoinColumn(name = "feedback_id")
     private Feedback feedback;
 
+    @Type(type="text")
     private String text;
     private long mechanismId;
 

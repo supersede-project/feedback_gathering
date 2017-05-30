@@ -64,6 +64,14 @@ public class Feedback {
     public Feedback() {
     }
 
+    public Feedback(String title, String userIdentification, long applicationId, long configurationId, String language) {
+        this.title = title;
+        this.userIdentification = userIdentification;
+        this.applicationId = applicationId;
+        this.configurationId = configurationId;
+        this.language = language;
+    }
+
     public Feedback(String title, String userIdentification, Date createdAt, Date updatedAt, long applicationId, long configurationId, String language, ContextInformation contextInformation, List<AttachmentFeedback> attachmentFeedbacks, List<AudioFeedback> audioFeedbacks, List<CategoryFeedback> categoryFeedbacks, List<RatingFeedback> ratingFeedbacks, List<ScreenshotFeedback> screenshotFeedbacks, List<TextFeedback> textFeedbacks, List<Status> statuses) {
         this.title = title;
         this.userIdentification = userIdentification;

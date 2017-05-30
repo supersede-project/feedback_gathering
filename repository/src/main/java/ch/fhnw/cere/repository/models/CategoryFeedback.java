@@ -50,6 +50,18 @@ public class CategoryFeedback {
         this.text = text;
     }
 
+    public CategoryFeedback(Feedback feedback, long mechanismId, String text) {
+        this.feedback = feedback;
+        this.mechanismId = mechanismId;
+        this.text = text;
+    }
+
+    public CategoryFeedback(Feedback feedback, long mechanismId, long parameterId) {
+        this.feedback = feedback;
+        this.mechanismId = mechanismId;
+        this.parameterId = parameterId;
+    }
+
     public long getId() {
         return id;
     }

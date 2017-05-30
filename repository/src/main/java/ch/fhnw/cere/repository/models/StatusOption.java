@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 
 
 @Entity
+@Table(name = "status_options")
 public class StatusOption {
 
     @Id

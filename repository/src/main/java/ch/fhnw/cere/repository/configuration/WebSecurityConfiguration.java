@@ -100,6 +100,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                 .antMatchers("/feedback_repository/authenticate/**").permitAll()
+                .antMatchers("/feedback_repository/ping").permitAll()
                 .requestMatchers(new RegexRequestMatcher("/feedback_repository/\\w{2}/applications/\\d+/?", "GET", true)).permitAll()
                 .requestMatchers(new RegexRequestMatcher("/feedback_repository/\\w{2}/applications/?", "GET", true)).permitAll()
                 .anyRequest().authenticated();
