@@ -3,8 +3,10 @@ package ch.fhnw.cere.repository.controllers;
 
 import ch.fhnw.cere.repository.controllers.exceptions.NotFoundException;
 import ch.fhnw.cere.repository.models.Feedback;
+import ch.fhnw.cere.repository.models.FileFeedback;
 import ch.fhnw.cere.repository.services.FeedbackService;
 import ch.fhnw.cere.repository.services.FileStorageService;
+import ch.fhnw.cere.repository.services.SecurityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -15,7 +17,11 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 
@@ -28,6 +34,9 @@ public class FeedbackController extends BaseController {
 
     @Autowired
     private FileStorageService fileStorageService;
+
+    @Autowired
+    private SecurityService securityService;
 
     @PreAuthorize("@securityService.hasAdminPermission(#applicationId)")
     @RequestMapping(method = RequestMethod.GET, value = "")
@@ -66,14 +75,53 @@ public class FeedbackController extends BaseController {
     }
 
     @PreAuthorize("@securityService.hasAdminPermission(#applicationId)")
+    @RequestMapping(value = "/attachments/{path:.+}", method = RequestMethod.GET)
+    public void downloadFeedbackAttachmentFile(@PathVariable long applicationId, @PathVariable("path") String fileName, HttpServletResponse response) {
+        try {
+            InputStream inputStream = new FileInputStream(fileStorageService.getFeedbackAttachmentFileByPath(fileName, applicationId));
+            org.apache.commons.io.IOUtils.copy(inputStream, response.getOutputStream());
+            response.addHeader("Content-disposition", "attachment;filename=" + fileName);
+            response.flushBuffer();
+        } catch (IOException ex) {
+            throw new RuntimeException("IOError writing file to output stream");
+        }
+    }
+
+    @PreAuthorize("@securityService.hasAdminPermission(#applicationId)")
+    @RequestMapping(value = "/audios/{path:.+}", method = RequestMethod.GET)
+    public void downloadFeedbackAudioFile(@PathVariable long applicationId, @PathVariable("path") String fileName, HttpServletResponse response) {
+        try {
+            InputStream inputStream = new FileInputStream(fileStorageService.getFeedbackAudioFileByPath(fileName, applicationId));
+            org.apache.commons.io.IOUtils.copy(inputStream, response.getOutputStream());
+            response.addHeader("Content-disposition", "attachment;filename=" + fileName);
+            response.flushBuffer();
+        } catch (IOException ex) {
+            throw new RuntimeException("IOError writing file to output stream");
+        }
+    }
+
+    @PreAuthorize("@securityService.hasAdminPermission(#applicationId)")
+    @RequestMapping(value = "/screenshots/{path:.+}", method = RequestMethod.GET)
+    public void downloadFeedbackScreenshotFile(@PathVariable long applicationId, @PathVariable("path") String fileName, HttpServletResponse response) {
+        try {
+            InputStream inputStream = new FileInputStream(fileStorageService.getFeedbackScreenshotFileByPath(fileName, applicationId));
+            org.apache.commons.io.IOUtils.copy(inputStream, response.getOutputStream());
+            response.addHeader("Content-disposition", "attachment;filename=" + fileName);
+            response.flushBuffer();
+        } catch (IOException ex) {
+            throw new RuntimeException("IOError writing file to output stream");
+        }
+    }
+
+    @PreAuthorize("@securityService.hasAdminPermission(#applicationId)")
     @RequestMapping(method = RequestMethod.DELETE, value = "/{id}")
-    public void deleteFeedback(@PathVariable long id) {
+    public void deleteFeedback(@PathVariable long applicationId, @PathVariable long id) {
         feedbackService.delete(id);
     }
 
     @PreAuthorize("@securityService.hasAdminPermission(#applicationId)")
     @RequestMapping(method = RequestMethod.PUT, value = "")
-    public Feedback updateFeedback(@RequestBody Feedback feedback) {
+    public Feedback updateFeedback(@PathVariable long applicationId, @RequestBody Feedback feedback) {
         return feedbackService.save(feedback);
     }
 }

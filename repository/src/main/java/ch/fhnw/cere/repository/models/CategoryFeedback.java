@@ -4,14 +4,8 @@ package ch.fhnw.cere.repository.models;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.stream.Collectors;
 
 
 @Entity
@@ -29,7 +23,7 @@ public class CategoryFeedback {
 
     private long mechanismId;
 
-    private long parameterId;
+    private Long parameterId;
 
     private String text;
 
@@ -43,7 +37,7 @@ public class CategoryFeedback {
     public CategoryFeedback() {
     }
 
-    public CategoryFeedback(Feedback feedback, long mechanismId, long parameterId, String text) {
+    public CategoryFeedback(Feedback feedback, long mechanismId, Long parameterId, String text) {
         this.feedback = feedback;
         this.mechanismId = mechanismId;
         this.parameterId = parameterId;
@@ -56,7 +50,7 @@ public class CategoryFeedback {
         this.text = text;
     }
 
-    public CategoryFeedback(Feedback feedback, long mechanismId, long parameterId) {
+    public CategoryFeedback(Feedback feedback, long mechanismId, Long parameterId) {
         this.feedback = feedback;
         this.mechanismId = mechanismId;
         this.parameterId = parameterId;
@@ -86,11 +80,11 @@ public class CategoryFeedback {
         this.mechanismId = mechanismId;
     }
 
-    public long getParameterId() {
+    public Long getParameterId() {
         return parameterId;
     }
 
-    public void setParameterId(long parameterId) {
+    public void setParameterId(Long parameterId) {
         this.parameterId = parameterId;
     }
 

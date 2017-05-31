@@ -15,7 +15,11 @@ import java.util.stream.Collectors;
 
 
 @Entity
-public class ScreenshotFeedback extends FileFeedback {
+public class ScreenshotFeedback implements FileFeedback {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    protected long id;
 
     @JsonIgnore
     @ManyToOne(cascade = {CascadeType.REMOVE, CascadeType.PERSIST})
@@ -24,6 +28,12 @@ public class ScreenshotFeedback extends FileFeedback {
     private Feedback feedback;
 
     private long mechanismId;
+
+    private String path;
+    private  int size;
+    @Transient
+    private String part;
+    private String fileExtension;
 
     @OneToMany(mappedBy = "screenshotFeedback", cascade = {CascadeType.REMOVE, CascadeType.PERSIST})
     private List<TextAnnotation> textAnnotations;
@@ -45,14 +55,17 @@ public class ScreenshotFeedback extends FileFeedback {
     }
 
     public ScreenshotFeedback(String part, Feedback feedback, long mechanismId, List<TextAnnotation> textAnnotations) {
-        super(null, part, null);
+        this.part = part;
         this.feedback = feedback;
         this.mechanismId = mechanismId;
         this.textAnnotations = textAnnotations;
     }
 
     public ScreenshotFeedback(String path, int size, String part, String fileExtension, Feedback feedback, long mechanismId, List<TextAnnotation> textAnnotations) {
-        super(path, size, part, fileExtension);
+        this.path = path;
+        this.size = size;
+        this.part = part;
+        this.fileExtension = fileExtension;
         this.feedback = feedback;
         this.mechanismId = mechanismId;
         this.textAnnotations = textAnnotations;
@@ -80,5 +93,48 @@ public class ScreenshotFeedback extends FileFeedback {
 
     public void setTextAnnotations(List<TextAnnotation> textAnnotations) {
         this.textAnnotations = textAnnotations;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    @Override
+    public void setPath(String path) {
+        this.path = path;
+    }
+
+    public int getSize() {
+        return size;
+    }
+
+    @Override
+    public void setSize(int size) {
+        this.size = size;
+    }
+
+    @Override
+    public String getPart() {
+        return part;
+    }
+
+    public void setPart(String part) {
+        this.part = part;
+    }
+
+    public String getFileExtension() {
+        return fileExtension;
+    }
+
+    public void setFileExtension(String fileExtension) {
+        this.fileExtension = fileExtension;
     }
 }

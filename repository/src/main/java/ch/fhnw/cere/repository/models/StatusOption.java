@@ -1,15 +1,7 @@
 package ch.fhnw.cere.repository.models;
 
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.stream.Collectors;
 
 
 @Entity
@@ -31,5 +23,37 @@ public class StatusOption {
         return String.format(
                 "StatusOption[id=%d, name='%s', order='%d', userSpecific='%b']",
                 id, name, order, userSpecific);
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public int getOrder() {
+        return order;
+    }
+
+    public void setOrder(int order) {
+        this.order = order;
+    }
+
+    public boolean isUserSpecific() {
+        return userSpecific;
+    }
+
+    public void setUserSpecific(boolean userSpecific) {
+        this.userSpecific = userSpecific;
     }
 }

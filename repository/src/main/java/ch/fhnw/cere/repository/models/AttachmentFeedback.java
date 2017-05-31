@@ -9,7 +9,11 @@ import javax.persistence.*;
 
 
 @Entity
-public class AttachmentFeedback extends FileFeedback {
+public class AttachmentFeedback implements FileFeedback {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    protected long id;
 
     @JsonIgnore
     @ManyToOne(cascade = {CascadeType.REMOVE, CascadeType.PERSIST})
@@ -18,6 +22,13 @@ public class AttachmentFeedback extends FileFeedback {
     private Feedback feedback;
 
     private long mechanismId;
+
+    private String path;
+    private  int size;
+    @Transient
+    private String part;
+    private String fileExtension;
+
 
     @Override
     public String toString() {
@@ -35,13 +46,16 @@ public class AttachmentFeedback extends FileFeedback {
     }
 
     public AttachmentFeedback(String part, Feedback feedback, long mechanismId) {
-        super(null, part, null);
+        this.part = part;
         this.feedback = feedback;
         this.mechanismId = mechanismId;
     }
 
     public AttachmentFeedback(String path, int size, String part, String fileExtension, Feedback feedback, long mechanismId) {
-        super(path, size, part, fileExtension);
+        this.path = path;
+        this.size = size;
+        this.part = part;
+        this.fileExtension = fileExtension;
         this.feedback = feedback;
         this.mechanismId = mechanismId;
     }
@@ -60,5 +74,48 @@ public class AttachmentFeedback extends FileFeedback {
 
     public void setMechanismId(long mechanismId) {
         this.mechanismId = mechanismId;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    @Override
+    public void setPath(String path) {
+        this.path = path;
+    }
+
+    public int getSize() {
+        return size;
+    }
+
+    @Override
+    public void setSize(int size) {
+        this.size = size;
+    }
+
+    @Override
+    public String getPart() {
+        return part;
+    }
+
+    public void setPart(String part) {
+        this.part = part;
+    }
+
+    public String getFileExtension() {
+        return fileExtension;
+    }
+
+    public void setFileExtension(String fileExtension) {
+        this.fileExtension = fileExtension;
     }
 }

@@ -40,6 +40,29 @@ public class FileStorageServiceImpl implements FileStorageService {
         return feedback;
     }
 
+    @Override
+    public File getFeedbackAttachmentFileByPath(String path, long applicationId) {
+        path = sanitizeFileName(path);
+        return this.getFeedbackFileByPath(attachmentsFolderName + "/" + path, applicationId);
+    }
+
+    @Override
+    public File getFeedbackAudioFileByPath(String path, long applicationId) {
+        path = sanitizeFileName(path);
+        return this.getFeedbackFileByPath(audiosFolderName + "/" + path, applicationId);
+    }
+
+    @Override
+    public File getFeedbackScreenshotFileByPath(String path, long applicationId) {
+        path = sanitizeFileName(path);
+        return this.getFeedbackFileByPath(screenshotsFolderName + "/" + path, applicationId);
+    }
+
+    private File getFeedbackFileByPath(String path, long applicationId) {
+        // TODO check permission
+        return new File(uploadDirectory + "/" + path);
+    }
+
     private List<?> storeFileFeedbackFiles(Feedback feedback, List<? extends FileFeedback> fileFeedbacks, MultiValueMap<String, MultipartFile> parts, String folderName) throws IOException {
         if(fileFeedbacks == null) {
             return null;

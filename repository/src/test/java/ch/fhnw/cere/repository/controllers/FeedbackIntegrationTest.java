@@ -163,8 +163,8 @@ public class FeedbackIntegrationTest extends BaseIntegrationTest {
             add(new TextFeedback(feedback, "info@example.com", 2));
         }});
         feedback.setCategoryFeedbacks(new ArrayList<CategoryFeedback>(){{
-            add(new CategoryFeedback(feedback, 1, 99, null));
-            add(new CategoryFeedback(feedback, 1, 98));
+            add(new CategoryFeedback(feedback, 1, 99L, null));
+            add(new CategoryFeedback(feedback, 1, 98L));
             add(new CategoryFeedback(feedback, 1, "custom category"));
         }});
         feedback.setRatingFeedbacks(new ArrayList<RatingFeedback>(){{
@@ -205,7 +205,7 @@ public class FeedbackIntegrationTest extends BaseIntegrationTest {
                 .andExpect(jsonPath("$.categoryFeedbacks[1].parameterId", is(98)))
                 .andExpect(jsonPath("$.categoryFeedbacks[1].text", is(nullValue())))
                 .andExpect(jsonPath("$.categoryFeedbacks[2].mechanismId", is(1)))
-                .andExpect(jsonPath("$.categoryFeedbacks[2].parameterId", is(0)))
+                .andExpect(jsonPath("$.categoryFeedbacks[2].parameterId", is(nullValue())))
                 .andExpect(jsonPath("$.categoryFeedbacks[2].text", is("custom category")))
 
                 .andExpect(jsonPath("$.ratingFeedbacks", hasSize(2)))

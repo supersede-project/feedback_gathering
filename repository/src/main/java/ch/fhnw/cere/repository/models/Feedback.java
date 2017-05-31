@@ -1,6 +1,8 @@
 package ch.fhnw.cere.repository.models;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
@@ -51,6 +53,7 @@ public class Feedback {
     @OneToMany(mappedBy = "feedback", cascade = {CascadeType.REMOVE, CascadeType.PERSIST})
     private List<TextFeedback> textFeedbacks;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "feedback", cascade = {CascadeType.REMOVE, CascadeType.PERSIST})
     private List<Status> statuses;
 

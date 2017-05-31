@@ -47,4 +47,36 @@ public class Status {
                 "Status[id=%d, statusOption=%s]",
                 id, statusOption);
     }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public ApiUser getApiUser() {
+        return apiUser;
+    }
+
+    public void setApiUser(ApiUser apiUser) {
+        this.apiUser = apiUser;
+    }
+
+    public Feedback getFeedback() {
+        return feedback;
+    }
+
+    public void setFeedback(Feedback feedback) {
+        this.feedback = feedback;
+    }
+
+    public StatusOption getStatusOption() {
+        return statusOption;
+    }
+
+    public void setStatusOption(StatusOption statusOption) {
+        this.statusOption = statusOption;
+    }
 }

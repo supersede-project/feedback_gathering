@@ -9,7 +9,11 @@ import javax.persistence.*;
 
 
 @Entity
-public class AudioFeedback extends FileFeedback {
+public class AudioFeedback implements FileFeedback {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    protected long id;
 
     @JsonIgnore
     @ManyToOne(cascade = {CascadeType.REMOVE, CascadeType.PERSIST})
@@ -19,6 +23,13 @@ public class AudioFeedback extends FileFeedback {
 
     private long mechanismId;
     private int duration;
+
+    private String path;
+    private  int size;
+    @Transient
+    private String part;
+    private String fileExtension;
+
 
     @Override
     public String toString() {
@@ -37,7 +48,10 @@ public class AudioFeedback extends FileFeedback {
     }
 
     public AudioFeedback(String path, int size, String part, String fileExtension, Feedback feedback, long mechanismId, int duration) {
-        super(path, size, part, fileExtension);
+        this.path = path;
+        this.size = size;
+        this.part = part;
+        this.fileExtension = fileExtension;
         this.feedback = feedback;
         this.mechanismId = mechanismId;
         this.duration = duration;
@@ -65,5 +79,48 @@ public class AudioFeedback extends FileFeedback {
 
     public void setDuration(int duration) {
         this.duration = duration;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    @Override
+    public void setPath(String path) {
+        this.path = path;
+    }
+
+    public int getSize() {
+        return size;
+    }
+
+    @Override
+    public void setSize(int size) {
+        this.size = size;
+    }
+
+    @Override
+    public String getPart() {
+        return part;
+    }
+
+    public void setPart(String part) {
+        this.part = part;
+    }
+
+    public String getFileExtension() {
+        return fileExtension;
+    }
+
+    public void setFileExtension(String fileExtension) {
+        this.fileExtension = fileExtension;
     }
 }
