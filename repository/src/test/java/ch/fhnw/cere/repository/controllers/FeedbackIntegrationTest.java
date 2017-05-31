@@ -6,8 +6,11 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mock.web.MockMultipartFile;
 
 import javax.servlet.ServletException;
+import java.io.File;
+import java.io.FileInputStream;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
@@ -15,6 +18,7 @@ import java.util.Date;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.nullValue;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.fileUpload;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -110,9 +114,10 @@ public class FeedbackIntegrationTest extends BaseIntegrationTest {
         Feedback feedback = new Feedback("New Feedback", "userId1", 1, 11, "en");
         String feedbackJson = toJson(feedback);
 
-        this.mockMvc.perform(post(basePathEn + "applications/" + 1 + "/feedbacks")
-                .contentType(contentType)
-                .content(feedbackJson))
+        MockMultipartFile jsonFile = new MockMultipartFile("json", "", "application/json", feedbackJson.getBytes());
+
+        this.mockMvc.perform(fileUpload(basePathEn + "applications/" + 1 + "/feedbacks")
+                .file(jsonFile))
                 .andExpect(status().isCreated());
     }
 
@@ -126,9 +131,10 @@ public class FeedbackIntegrationTest extends BaseIntegrationTest {
         feedback.setContextInformation(new ContextInformation(feedback, "1920x1080", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36", null, new Timestamp(new Date().getTime()), "+0200", 2.0f, "CH", "ZH"));
         String feedbackJson = toJson(feedback);
 
-        this.mockMvc.perform(post(basePathEn + "applications/" + 1 + "/feedbacks")
-                .contentType(contentType)
-                .content(feedbackJson))
+        MockMultipartFile jsonFile = new MockMultipartFile("json", "", "application/json", feedbackJson.getBytes());
+
+        this.mockMvc.perform(fileUpload(basePathEn + "applications/" + 1 + "/feedbacks")
+                .file(jsonFile))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.title", is("New Feedback")))
                 .andExpect(jsonPath("$.userIdentification", is("userId1")))
@@ -168,9 +174,10 @@ public class FeedbackIntegrationTest extends BaseIntegrationTest {
         feedback.setContextInformation(new ContextInformation(feedback, "1920x1080", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36", null, new Timestamp(new Date().getTime()), "+0200", 2.0f, "CH", "ZH"));
         String feedbackJson = toJson(feedback);
 
-        this.mockMvc.perform(post(basePathEn + "applications/" + 1 + "/feedbacks")
-                .contentType(contentType)
-                .content(feedbackJson))
+        MockMultipartFile jsonFile = new MockMultipartFile("json", "", "application/json", feedbackJson.getBytes());
+
+        this.mockMvc.perform(fileUpload(basePathEn + "applications/" + 1 + "/feedbacks")
+                .file(jsonFile))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.title", is("New Feedback")))
                 .andExpect(jsonPath("$.userIdentification", is("userId1")))
@@ -208,5 +215,64 @@ public class FeedbackIntegrationTest extends BaseIntegrationTest {
                 .andExpect(jsonPath("$.ratingFeedbacks[1].rating", is(0)))
                 .andExpect(jsonPath("$.ratingFeedbacks[1].title", is("Please rate Y")))
                 .andExpect(jsonPath("$.ratingFeedbacks[1].mechanismId", is(2)));
+    }
+
+
+    @Test
+    public void postFeedbackTreeWithFile() throws Exception {
+        Feedback feedback = new Feedback("New Feedback", "userId1", 1, 11, "en");
+        feedback.setTextFeedbacks(new ArrayList<TextFeedback>(){{
+            add(new TextFeedback(feedback, "Text Feedback 1", 1));
+            add(new TextFeedback(feedback, "info@example.com", 2));
+        }});
+        feedback.setContextInformation(new ContextInformation(feedback, "1920x1080", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36", null, new Timestamp(new Date().getTime()), "+0200", 2.0f, "CH", "ZH"));
+        feedback.setAttachmentFeedbacks(new ArrayList<AttachmentFeedback>(){{
+            add(new AttachmentFeedback("attachment1", feedback, 3));
+        }});
+        feedback.setScreenshotFeedbacks(new ArrayList<ScreenshotFeedback>(){{
+            add(new ScreenshotFeedback("screenshot1", feedback, 4, null));
+        }});
+        String feedbackJson = toJson(feedback);
+        MockMultipartFile jsonFile = new MockMultipartFile("json", "", "application/json", feedbackJson.getBytes());
+
+        File resourcesDirectory = new File("src/test/resources");
+
+        FileInputStream fileInputStream1 = new FileInputStream(new File(resourcesDirectory.getAbsolutePath() + "/test_file.pdf"));
+        FileInputStream fineInputStream2 = new FileInputStream(new File(resourcesDirectory.getAbsolutePath() + "/screenshot_1_example.png"));
+        MockMultipartFile pdfFile = new MockMultipartFile("attachment1", "test_Kopie.pdf", "application/pdf", fileInputStream1);
+        MockMultipartFile screenshotFile = new MockMultipartFile("screenshot1", "screenshot_1_example.png", "image/png", fineInputStream2);
+
+        this.mockMvc.perform(fileUpload(basePathEn + "applications/" + 1 + "/feedbacks")
+                .file(jsonFile)
+                .file(pdfFile)
+                .file(screenshotFile))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.title", is("New Feedback")))
+                .andExpect(jsonPath("$.userIdentification", is("userId1")))
+                .andExpect(jsonPath("$.applicationId", is(1)))
+                .andExpect(jsonPath("$.configurationId", is(11)))
+                .andExpect(jsonPath("$.language", is("en")))
+
+                .andExpect(jsonPath("$.textFeedbacks", hasSize(2)))
+                .andExpect(jsonPath("$.textFeedbacks[0].text", is("Text Feedback 1")))
+                .andExpect(jsonPath("$.textFeedbacks[1].text", is("info@example.com")))
+
+                .andExpect(jsonPath("$.contextInformation.resolution", is("1920x1080")))
+                .andExpect(jsonPath("$.contextInformation.userAgent", is("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36")))
+                .andExpect(jsonPath("$.contextInformation.androidVersion", is(nullValue())))
+                .andExpect(jsonPath("$.contextInformation.timeZone", is("+0200")))
+                .andExpect(jsonPath("$.contextInformation.devicePixelRatio", is(2.0)))
+                .andExpect(jsonPath("$.contextInformation.country", is("CH")))
+                .andExpect(jsonPath("$.contextInformation.region", is("ZH")))
+
+                .andExpect(jsonPath("$.attachmentFeedbacks", hasSize(1)))
+                .andExpect(jsonPath("$.attachmentFeedbacks[0].part", is("attachment1")))
+                .andExpect(jsonPath("$.attachmentFeedbacks[0].mechanismId", is(3)))
+                .andExpect(jsonPath("$.attachmentFeedbacks[0].path", is("1_userId1_test_Kopie.pdf")))
+
+                .andExpect(jsonPath("$.screenshotFeedbacks", hasSize(1)))
+                .andExpect(jsonPath("$.screenshotFeedbacks[0].part", is("screenshot1")))
+                .andExpect(jsonPath("$.screenshotFeedbacks[0].mechanismId", is(4)))
+                .andExpect(jsonPath("$.screenshotFeedbacks[0].path", is("1_userId1_screenshot_1_example.png")));
     }
 }

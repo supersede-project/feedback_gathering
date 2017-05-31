@@ -35,6 +35,13 @@ public class FileFeedback {
         this.fileExtension = fileExtension;
     }
 
+    public FileFeedback(String path, String part, String fileExtension) {
+        this.path = path;
+        this.size = size;
+        this.part = part;
+        this.fileExtension = fileExtension;
+    }
+
     @Override
     public String toString() {
         return String.format(

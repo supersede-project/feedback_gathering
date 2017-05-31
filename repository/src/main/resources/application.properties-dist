@@ -63,8 +63,13 @@ spring.jackson.serialization.write_dates_as_timestamps=false
 
 jwt.secret=<your secret>
 
+spring.http.multipart.enabled=false
 
 # ----------------------------------------
 # SUPERSEDE
 # ----------------------------------------
 supersede.base_path.feedback=/feedback_repository
+supersede.upload_directory=/home/supersede/software/be/webapps
+supersede.upload_directory.attachments_folder_name=attachments
+supersede.upload_directory.audios_folder_name=audios
+supersede.upload_directory.screenshots_folder_name=screenshots

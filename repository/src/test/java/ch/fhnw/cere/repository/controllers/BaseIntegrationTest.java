@@ -15,6 +15,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -25,6 +26,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.web.context.WebApplicationContext;
 
+import java.io.File;
 import java.nio.charset.Charset;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -59,6 +61,18 @@ public abstract class BaseIntegrationTest {
     protected ApiUser adminUser;
     protected ApiUser superAdminUser;
 
+    @Value("${supersede.upload_directory}")
+    protected String uploadDirectory;
+
+    @Value("${supersede.upload_directory.attachments_folder_name}")
+    protected String attachmentsFolderName;
+
+    @Value("${supersede.upload_directory.audios_folder_name}")
+    protected String audiosFolderName;
+
+    @Value("${supersede.upload_directory.screenshots_folder_name}")
+    protected String screenshotsFolderName;
+
     @Before
     public void setup() throws Exception {
         SecurityContextHolder.clearContext();
@@ -78,6 +92,8 @@ public abstract class BaseIntegrationTest {
         apiUserRepository.deleteAllInBatch();
 
         SecurityContextHolder.clearContext();
+
+        deleteUploadDirectorySubFolders();
     }
 
     protected String toJson(Object object) {
@@ -141,5 +157,25 @@ public abstract class BaseIntegrationTest {
             e.printStackTrace();
             return "";
         }
+    }
+
+    protected void deleteUploadDirectorySubFolders() {
+        deleteFolder(new File(uploadDirectory + "/" + attachmentsFolderName));
+        deleteFolder(new File(uploadDirectory + "/" + screenshotsFolderName));
+        deleteFolder(new File(uploadDirectory + "/" + audiosFolderName));
+    }
+
+    protected void deleteFolder(File folder) {
+        File[] files = folder.listFiles();
+        if(files!=null) { //some JVMs return null for empty dirs
+            for(File f: files) {
+                if(f.isDirectory()) {
+                    deleteFolder(f);
+                } else {
+                    f.delete();
+                }
+            }
+        }
+        folder.delete();
     }
 }

@@ -48,6 +48,7 @@ nbdist/
 .nb-gradle/
 
 application.properties
+application-test.properties
 src/main/resources/application.properties
 classes
 target/

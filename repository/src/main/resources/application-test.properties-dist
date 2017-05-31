@@ -63,8 +63,15 @@ spring.jackson.serialization.write_dates_as_timestamps=false
 
 jwt.secret=3Q1lQkv15YVz2N6agDad
 
+spring.http.multipart.enabled=false
 
 # ----------------------------------------
 # SUPERSEDE
 # ----------------------------------------
 supersede.base_path.feedback=/feedback_repository
+
+# ATTENTION: upload directory MUST NOT be the same as specified in application.properties when running the tests on the production system (files get deleted after test!)
+supersede.upload_directory=/Users/ronnieschaniel/SupersedeProjects/repository_files
+supersede.upload_directory.attachments_folder_name=attachments
+supersede.upload_directory.audios_folder_name=audios
+supersede.upload_directory.screenshots_folder_name=screenshots

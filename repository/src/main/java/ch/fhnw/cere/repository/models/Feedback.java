@@ -57,8 +57,8 @@ public class Feedback {
     @Override
     public String toString() {
         return String.format(
-                "Feedback[id=%d]",
-                id);
+                "Feedback[id=%d, configurationId=%d]",
+                id, configurationId);
     }
 
     public Feedback() {

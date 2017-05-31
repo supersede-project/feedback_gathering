@@ -22,14 +22,20 @@ public class AttachmentFeedback extends FileFeedback {
     @Override
     public String toString() {
         return String.format(
-                "AttachmentFeedback[id=%d, feedbackId='%d', mechanismId='%d', path='%s', fileExtension='%s']",
-                id, feedback.getId(), mechanismId, path, fileExtension);
+                "AttachmentFeedback[id=%d, feedbackId='%d', mechanismId='%d', path='%s']",
+                id, feedback.getId(), mechanismId, path);
     }
 
     public AttachmentFeedback() {
     }
 
     public AttachmentFeedback(Feedback feedback, long mechanismId) {
+        this.feedback = feedback;
+        this.mechanismId = mechanismId;
+    }
+
+    public AttachmentFeedback(String part, Feedback feedback, long mechanismId) {
+        super(null, part, null);
         this.feedback = feedback;
         this.mechanismId = mechanismId;
     }

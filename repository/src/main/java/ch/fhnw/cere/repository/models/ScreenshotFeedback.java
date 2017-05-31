@@ -44,6 +44,13 @@ public class ScreenshotFeedback extends FileFeedback {
         this.textAnnotations = textAnnotations;
     }
 
+    public ScreenshotFeedback(String part, Feedback feedback, long mechanismId, List<TextAnnotation> textAnnotations) {
+        super(null, part, null);
+        this.feedback = feedback;
+        this.mechanismId = mechanismId;
+        this.textAnnotations = textAnnotations;
+    }
+
     public ScreenshotFeedback(String path, int size, String part, String fileExtension, Feedback feedback, long mechanismId, List<TextAnnotation> textAnnotations) {
         super(path, size, part, fileExtension);
         this.feedback = feedback;

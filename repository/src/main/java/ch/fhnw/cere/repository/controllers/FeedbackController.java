@@ -4,11 +4,18 @@ package ch.fhnw.cere.repository.controllers;
 import ch.fhnw.cere.repository.controllers.exceptions.NotFoundException;
 import ch.fhnw.cere.repository.models.Feedback;
 import ch.fhnw.cere.repository.services.FeedbackService;
+import ch.fhnw.cere.repository.services.FileStorageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.util.List;
 
 
@@ -18,6 +25,9 @@ public class FeedbackController extends BaseController {
 
     @Autowired
     private FeedbackService feedbackService;
+
+    @Autowired
+    private FileStorageService fileStorageService;
 
     @PreAuthorize("@securityService.hasAdminPermission(#applicationId)")
     @RequestMapping(method = RequestMethod.GET, value = "")
@@ -29,7 +39,7 @@ public class FeedbackController extends BaseController {
     @RequestMapping(method = RequestMethod.GET, value = "/{id}")
     public Feedback getFeedback(@PathVariable long applicationId, @PathVariable long id) {
         Feedback feedback = feedbackService.find(id);
-        if(feedback == null) {
+        if (feedback == null) {
             throw new NotFoundException();
         }
         return feedback;
@@ -42,11 +52,16 @@ public class FeedbackController extends BaseController {
         return feedbacks;
     }
 
-
     @ResponseStatus(HttpStatus.CREATED)
-    @RequestMapping(method = RequestMethod.POST, value = "")
-    public Feedback createFeedback(@RequestBody Feedback feedback) {
+    @RequestMapping(method = RequestMethod.POST, value = "", consumes = "multipart/form-data")
+    public Feedback createFeedback(HttpServletRequest request, @RequestPart("json") Feedback feedback) throws IOException, ServletException {
         feedback.setApplicationId(applicationId());
+
+        MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
+        MultiValueMap<String, MultipartFile> parts = multipartRequest.getMultiFileMap();
+        parts.remove("json");
+        feedback = fileStorageService.storeFiles(feedback, parts);
+
         return feedbackService.save(feedback);
     }
 
