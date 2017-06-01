@@ -23,10 +23,13 @@ public class UserGroup {
     private boolean active;
 
     @JsonIgnore
-    @ManyToOne(cascade = {CascadeType.REMOVE, CascadeType.PERSIST})
+    @ManyToOne(cascade = {CascadeType.REMOVE, CascadeType.MERGE})
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "application_id")
     private Application application;
+
+    public UserGroup() {
+    }
 
     public UserGroup(String name, List<User> users, Application application) {
         this.name = name;

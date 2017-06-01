@@ -30,6 +30,12 @@ public class Application {
     @OneToMany(mappedBy = "application", cascade = {CascadeType.REMOVE, CascadeType.PERSIST})
     private List<Configuration> configurations;
 
+    @OneToMany(mappedBy = "application", cascade = {CascadeType.REMOVE, CascadeType.PERSIST})
+    private List<User> users;
+
+    @OneToMany(mappedBy = "application", cascade = {CascadeType.REMOVE, CascadeType.PERSIST})
+    private List<UserGroup> userGroups;
+
     @PrePersist
     protected void onCreate() {
         createdAt = new Date();
@@ -58,6 +64,27 @@ public class Application {
         this.updatedAt = updatedAt;
         this.generalConfiguration = generalConfiguration;
         this.configurations = configurations;
+    }
+
+    public Application(String name, int state, Date createdAt, Date updatedAt, GeneralConfiguration generalConfiguration, List<Configuration> configurations, List<User> users) {
+        this.name = name;
+        this.state = state;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.generalConfiguration = generalConfiguration;
+        this.configurations = configurations;
+        this.users = users;
+    }
+
+    public Application(String name, int state, Date createdAt, Date updatedAt, GeneralConfiguration generalConfiguration, List<Configuration> configurations, List<User> users, List<UserGroup> userGroups) {
+        this.name = name;
+        this.state = state;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.generalConfiguration = generalConfiguration;
+        this.configurations = configurations;
+        this.users = users;
+        this.userGroups = userGroups;
     }
 
     @Override
@@ -128,5 +155,21 @@ public class Application {
 
     public void setGeneralConfiguration(GeneralConfiguration generalConfiguration) {
         this.generalConfiguration = generalConfiguration;
+    }
+
+    public List<User> getUsers() {
+        return users;
+    }
+
+    public void setUsers(List<User> users) {
+        this.users = users;
+    }
+
+    public List<UserGroup> getUserGroups() {
+        return userGroups;
+    }
+
+    public void setUserGroups(List<UserGroup> userGroups) {
+        this.userGroups = userGroups;
     }
 }

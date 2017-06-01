@@ -19,7 +19,7 @@ public class User {
     private String userIdentification;
 
     @JsonIgnore
-    @ManyToOne(cascade = {CascadeType.REMOVE, CascadeType.PERSIST})
+    @ManyToOne(cascade = {CascadeType.REMOVE, CascadeType.MERGE})
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "application_id")
     private Application application;
@@ -28,6 +28,9 @@ public class User {
     @ManyToOne
     @JoinColumn(name = "user_group_id")
     private UserGroup userGroup;
+
+    public User() {
+    }
 
     public User(String name, String userIdentification, Application application, UserGroup userGroup) {
         this.name = name;

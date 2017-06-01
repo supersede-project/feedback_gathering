@@ -25,7 +25,7 @@ public class UserGroupsController extends BaseController {
     private ApplicationService applicationService;
 
     @RequestMapping(method = RequestMethod.GET, value = "")
-    public List<UserGroup> getApplicationUserGroups() {
+    public List<UserGroup> getApplicationUserGroups(@PathVariable long applicationId) {
         List<UserGroup> userGroups = userGroupService.findByApplicationId(applicationId());
         if(userGroups == null) {
             throw new NotFoundException();
@@ -34,7 +34,7 @@ public class UserGroupsController extends BaseController {
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/{id}")
-    public UserGroup getApplicationUserGroup(@PathVariable long id) {
+    public UserGroup getApplicationUserGroup(@PathVariable long applicationId, @PathVariable long id) {
         UserGroup userGroup = userGroupService.find(id);
         if(userGroup == null) {
             throw new NotFoundException();
@@ -42,23 +42,29 @@ public class UserGroupsController extends BaseController {
         return userGroup;
     }
 
-    @PreAuthorize("@securityService.hasAdminPermission()")
+    @PreAuthorize("@securityService.hasAdminPermission(#applicationId)")
     @ResponseStatus(HttpStatus.CREATED)
     @RequestMapping(method = RequestMethod.POST, value = "")
-    public UserGroup createApplicationUserGroup(@RequestBody UserGroup userGroup) {
+    public UserGroup createApplicationUserGroup(@PathVariable long applicationId, @RequestBody UserGroup userGroup) {
         userGroup.setApplication(getApplication());
         return userGroupService.save(userGroup);
     }
 
-    @PreAuthorize("@securityService.hasAdminPermission()")
+    @PreAuthorize("@securityService.hasAdminPermission(#applicationId)")
     @RequestMapping(method = RequestMethod.DELETE, value = "/{id}")
-    public void deleteApplicationUserGroup(@PathVariable long id) {
+    public void deleteApplicationUserGroup(@PathVariable long applicationId, @PathVariable long id) {
         userGroupService.delete(id);
     }
 
-    @PreAuthorize("@securityService.hasAdminPermission()")
+    @PreAuthorize("@securityService.hasAdminPermission(#applicationId)")
     @RequestMapping(method = RequestMethod.PUT, value = "")
-    public UserGroup updateApplicationUserGroup(@RequestBody UserGroup userGroup) {
+    public UserGroup updateApplicationUserGroup(@PathVariable long applicationId, @RequestBody UserGroup userGroup) {
+        return userGroupService.save(userGroup);
+    }
+
+    @PreAuthorize("@securityService.hasAdminPermission(#applicationId)")
+    @RequestMapping(method = RequestMethod.PUT, value = "/{id}")
+    public UserGroup updateApplicationUserGroupById(@PathVariable long applicationId, @RequestBody UserGroup userGroup) {
         return userGroupService.save(userGroup);
     }
 

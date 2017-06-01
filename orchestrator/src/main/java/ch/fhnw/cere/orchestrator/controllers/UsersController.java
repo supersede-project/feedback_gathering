@@ -4,8 +4,6 @@ package ch.fhnw.cere.orchestrator.controllers;
 import ch.fhnw.cere.orchestrator.controllers.exceptions.NotFoundException;
 import ch.fhnw.cere.orchestrator.models.Application;
 import ch.fhnw.cere.orchestrator.models.User;
-import ch.fhnw.cere.orchestrator.repositories.ApplicationRepository;
-import ch.fhnw.cere.orchestrator.repositories.UserRepository;
 import ch.fhnw.cere.orchestrator.services.ApplicationService;
 import ch.fhnw.cere.orchestrator.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +25,7 @@ public class UsersController extends BaseController {
     private ApplicationService applicationService;
 
     @RequestMapping(method = RequestMethod.GET, value = "")
-    public List<User> getApplicationUser() {
+    public List<User> getUser() {
         List<User> users = userRepository.findByApplicationId(applicationId());
         if(users == null) {
             throw new NotFoundException();
@@ -36,7 +34,7 @@ public class UsersController extends BaseController {
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/{id}")
-    public User getApplicationUser(@PathVariable long id) {
+    public User getUser(@PathVariable long id) {
         User user = userRepository.find(id);
         if(user == null) {
             throw new NotFoundException();
@@ -44,23 +42,29 @@ public class UsersController extends BaseController {
         return user;
     }
 
-    @PreAuthorize("@securityService.hasAdminPermission()")
+    @PreAuthorize("@securityService.hasAdminPermission(#applicationId)")
     @ResponseStatus(HttpStatus.CREATED)
     @RequestMapping(method = RequestMethod.POST, value = "")
-    public User createApplicationUser(@RequestBody User user) {
+    public User createUser(@PathVariable long applicationId, @RequestBody User user) {
         user.setApplication(getApplication());
         return userRepository.save(user);
     }
 
-    @PreAuthorize("@securityService.hasAdminPermission()")
+    @PreAuthorize("@securityService.hasAdminPermission(#applicationId)")
     @RequestMapping(method = RequestMethod.DELETE, value = "/{id}")
-    public void deleteApplicationUser(@PathVariable long id) {
+    public void deleteUser(@PathVariable long applicationId, @PathVariable long id) {
         userRepository.delete(id);
     }
 
-    @PreAuthorize("@securityService.hasAdminPermission()")
+    @PreAuthorize("@securityService.hasAdminPermission(#applicationId)")
     @RequestMapping(method = RequestMethod.PUT, value = "")
-    public User updateApplicationUser(@RequestBody User user) {
+    public User updateUser(@PathVariable long applicationId, @RequestBody User user) {
+        return userRepository.save(user);
+    }
+
+    @PreAuthorize("@securityService.hasAdminPermission(#applicationId)")
+    @RequestMapping(method = RequestMethod.PUT, value = "/{id}")
+    public User updateUserById(@PathVariable long applicationId, @RequestBody User user) {
         return userRepository.save(user);
     }
 
