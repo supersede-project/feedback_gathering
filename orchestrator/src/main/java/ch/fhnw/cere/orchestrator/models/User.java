@@ -25,7 +25,7 @@ public class User {
     private Application application;
 
     @JsonIgnore
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.REMOVE, CascadeType.PERSIST})
     @JoinColumn(name = "user_group_id")
     private UserGroup userGroup;
 

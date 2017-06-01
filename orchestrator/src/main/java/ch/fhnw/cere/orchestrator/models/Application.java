@@ -101,6 +101,50 @@ public class Application {
         }
     }
 
+    /**
+     * Filters the applications's configurations for a user that is not yet known by the orchestrator. That means the
+     * user gets the push configuration that is not user group specific and the default pull configurations.
+     *
+     * @return Application
+     */
+    public Application filterForAnonymousUser() {
+        this.configurations = this.configurations.stream().filter(configuration ->
+                configuration.isPushDefault() || configuration.isPullDefault()
+        ).collect(Collectors.toList());
+        return this;
+    }
+
+    /**
+     * Filters the applications's configurations for a certain user identification. That means the user gets the
+     * user group push configuration if any and the pull configurations his group is assigned to.
+     * If no configuration is assigned to his group, he does not get any configuration at all.
+     *
+     * @param userIdentification which is the user ID that is passed to the client side component and stored alongside
+     *                           the feedback the user submitted.
+     * @return Application
+     */
+    public Application filterByUserIdentification(String userIdentification) {
+        this.configurations = this.configurations.stream().filter(configuration ->
+                configuration.containsUserWithUserIdentification(userIdentification)
+        ).collect(Collectors.toList());
+        return this;
+    }
+
+    /**
+     * Filters the applications's configurations for a certain user group. That means the users get the
+     * user group push configuration if any (or the default push) and the pull configurations their group is assigned to.
+     * If no pull configuration is assigned to their group, they do not get any pull configuration at all.
+     *
+     * @param userGroupId id of the user group
+     * @return Application
+     */
+    public Application filterByUserGroupId(long userGroupId) {
+        this.configurations = this.configurations.stream().filter(configuration ->
+                configuration.containsUserGroupWithId(userGroupId)
+        ).collect(Collectors.toList());
+        return this;
+    }
+
     public long getId() {
         return id;
     }

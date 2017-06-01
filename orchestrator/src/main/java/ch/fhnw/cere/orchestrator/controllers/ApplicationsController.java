@@ -4,6 +4,8 @@ package ch.fhnw.cere.orchestrator.controllers;
 import ch.fhnw.cere.orchestrator.controllers.exceptions.NotFoundException;
 import ch.fhnw.cere.orchestrator.models.Application;
 import ch.fhnw.cere.orchestrator.services.ApplicationService;
+import ch.fhnw.cere.orchestrator.services.UserGroupService;
+import ch.fhnw.cere.orchestrator.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -18,6 +20,10 @@ public class ApplicationsController extends BaseController {
 
     @Autowired
     private ApplicationService applicationService;
+    @Autowired
+    private UserService userService;
+    @Autowired
+    private UserGroupService userGroupService;
 
     @RequestMapping(method = RequestMethod.GET, value = "")
     public List<Application> getApplications() {
@@ -27,8 +33,55 @@ public class ApplicationsController extends BaseController {
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/{id}")
-    public Application getApplication(@PathVariable long id) {
+    public Application getAnonymousUserApplication(@PathVariable long id) {
         Application application = applicationService.find(id);
+        if(application == null) {
+            throw new NotFoundException();
+        }
+        application.filterByLanguage(language(), this.fallbackLanguage);
+        application = application.filterForAnonymousUser();
+        return application;
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/{id}/full")
+    public Application getFullApplication(@PathVariable long id) {
+        Application application = applicationService.find(id);
+        if(application == null) {
+            throw new NotFoundException();
+        }
+        application.filterByLanguage(language(), this.fallbackLanguage);
+        return application;
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/{id}/full/polylang")
+    public Application getFullApplicationWithAllLanguages(@PathVariable long id) {
+        Application application = applicationService.find(id);
+        if(application == null) {
+            throw new NotFoundException();
+        }
+        return application;
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/{id}/user_identification/{userIdentification}")
+    public Application getApplicationByIdAndUserIdentification(@PathVariable long id, @PathVariable String userIdentification) {
+        Application application;
+        if(userService.findByApplicationIdAndUserIdentification(id, userIdentification) == null || userGroupService.findByUserIdentification(id, userIdentification).size() == 0) {
+            application = applicationService.find(id);
+            application = application.filterForAnonymousUser();
+        } else {
+            application = applicationService.findByIdAndUserIdentification(id, userIdentification);
+        }
+
+        if(application == null) {
+            throw new NotFoundException();
+        }
+        application.filterByLanguage(language(), this.fallbackLanguage);
+        return application;
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/{id}/user_group/{userGroupId}")
+    public Application getApplicationByIdAndUserGroupId(@PathVariable long id, @PathVariable long userGroupId) {
+        Application application = applicationService.findByIdAndUserGroupId(id, userGroupId);
         if(application == null) {
             throw new NotFoundException();
         }

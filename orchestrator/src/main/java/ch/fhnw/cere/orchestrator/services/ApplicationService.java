@@ -12,6 +12,8 @@ public interface ApplicationService {
     public Application find(long id);
     public List<Application> findByName(String name);
     public void delete(long id);
+    public Application findByIdAndUserGroupId(long id, long userGroupId);
+    public Application findByIdAndUserIdentification(long id, String userIdentification);
 }
 
 

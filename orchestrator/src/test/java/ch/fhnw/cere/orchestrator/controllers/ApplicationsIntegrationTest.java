@@ -1,6 +1,7 @@
 package ch.fhnw.cere.orchestrator.controllers;
 
 
+import ch.fhnw.cere.orchestrator.controllers.helpers.ApplicationTreeBuilder;
 import ch.fhnw.cere.orchestrator.models.*;
 import ch.fhnw.cere.orchestrator.repositories.ApplicationRepository;
 import org.hamcrest.Matchers;
@@ -10,12 +11,9 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
 
 import javax.servlet.ServletException;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.hasSize;
@@ -27,38 +25,15 @@ public class ApplicationsIntegrationTest extends BaseIntegrationTest {
 
     private Application application1;
     private Application application2;
-
     private Application application3;
-
-    private Configuration pushConfiguration1;
-    private Configuration pullConfiguration1;
-
-    private Mechanism mechanism1;
-    private Mechanism mechanism2;
-
-    private ConfigurationMechanism configurationMechanism1;
-    private ConfigurationMechanism configurationMechanism2;
-
-    private GeneralConfiguration applicationGeneralConfiguration;
-    private GeneralConfiguration pushConfigurationGeneralConfiguration;
-
-    private Parameter parameter1;
-    private Parameter parameter2;
-    private Parameter parameter3;
-
-    private Parameter parentParameter1;
-    private Parameter childParameter1;
-    private Parameter childParameter2;
-    private Parameter childParameter3;
-    private Parameter childParameter4;
-
-    private Parameter applicationGeneralConfigurationParameter;
-    private Parameter pushConfigurationGeneralConfigurationParameter;
 
     @Autowired
     private ApplicationRepository applicationRepository;
     private String basePathEn = "/orchestrator/feedback/en/applications";
     private String basePathDe = "/orchestrator/feedback/de/applications";
+
+    @Autowired
+    private ApplicationTreeBuilder applicationTreeBuilder;
 
     @Before
     public void setup() throws Exception {
@@ -67,7 +42,7 @@ public class ApplicationsIntegrationTest extends BaseIntegrationTest {
 
         this.application1 = applicationRepository.save(new Application("Test App 1", 1, new Date(), new Date(), null));
         this.application2 = applicationRepository.save(new Application("Test App 2", 1, new Date(), new Date(), null));
-        this.application3 = applicationRepository.save(buildApplicationTree("Test application 3"));
+        this.application3 = applicationRepository.save(applicationTreeBuilder.buildApplicationTree("Test application 3"));
     }
 
     @After
@@ -165,7 +140,7 @@ public class ApplicationsIntegrationTest extends BaseIntegrationTest {
 
     @Test
     public void postApplicationObjectTree() throws Exception {
-        Application application = buildApplicationTree("Test App 4");
+        Application application = applicationTreeBuilder.buildApplicationTree("Test App 4");
         String applicationJson = toJson(application);
 
         String adminJWTToken = requestAdminJWTToken();
@@ -243,86 +218,5 @@ public class ApplicationsIntegrationTest extends BaseIntegrationTest {
                 .andExpect(jsonPath("$.name", is("Updated name for App 2")))
                 .andExpect(jsonPath("$.state", is(0)))
                 .andExpect(jsonPath("$.configurations", is(nullValue())));
-    }
-
-    private Application buildApplicationTree(String applicationName) {
-        Application application = new Application(applicationName, 1, new Date(), new Date(), new ArrayList<>());
-
-        pushConfiguration1 = new Configuration("Push configuration 1 of " + applicationName, TriggerType.PUSH, new Date(), new Date(), null, application);
-        pullConfiguration1 = new Configuration("Pull configuration 1 of " + applicationName, TriggerType.PULL, new Date(), new Date(), null, application);
-
-        mechanism1 = new Mechanism(MechanismType.TEXT_TYPE, null, new ArrayList<>());
-        mechanism2 = new Mechanism(MechanismType.TEXT_TYPE, null, new ArrayList<>());
-
-        configurationMechanism1 = new ConfigurationMechanism(pushConfiguration1, mechanism1, true, 1, new Date(), new Date());
-        configurationMechanism2 = new ConfigurationMechanism(pullConfiguration1, mechanism2, true, 1, new Date(), new Date());
-
-        mechanism1.setConfigurationMechanisms(new ArrayList<ConfigurationMechanism>() {
-            {
-                add(configurationMechanism1);
-                add(configurationMechanism2);
-            }
-        });
-
-        pushConfiguration1.setConfigurationMechanisms(new ArrayList<ConfigurationMechanism>() {
-            {
-                add(configurationMechanism1);
-            }
-        });
-
-        pullConfiguration1.setConfigurationMechanisms(new ArrayList<ConfigurationMechanism>() {
-            {
-                add(configurationMechanism2);
-            }
-        });
-
-        parameter1 = new Parameter("title", "Title EN", new Date(), new Date(), "en", null, null, mechanism1);
-        parameter2 = new Parameter("title", "Titel DE", new Date(), new Date(), "de", null, null, mechanism1);
-        parameter3 = new Parameter("font-size", "10", new Date(), new Date(), "en", null, null, mechanism1);
-
-        parentParameter1 = new Parameter("options", null, new Date(), new Date(), "en", null, null, mechanism1);
-        childParameter1 = new Parameter("CAT_1", "Cat 1 EN", new Date(), new Date(), "en", parentParameter1, null, null);
-        childParameter2 = new Parameter("CAT_2", "Cat 2 EN", new Date(), new Date(), "en", parentParameter1, null, null);
-        childParameter3 = new Parameter("CAT_1", "Cat 1 DE", new Date(), new Date(), "de", parentParameter1, null, null);
-        childParameter4 = new Parameter("CAT_3", "Cat 3 FR", new Date(), new Date(), "fr", parentParameter1, null, null);
-        List<Parameter> childParameters = new ArrayList<Parameter>() {
-            {
-                add(childParameter1);
-                add(childParameter2);
-                add(childParameter3);
-                add(childParameter4);
-            }
-        };
-        parentParameter1.setParameters(childParameters);
-
-        mechanism1.setParameters(new ArrayList<Parameter>() {
-            {
-                add(parameter1);
-                add(parameter2);
-                add(parameter3);
-                add(parentParameter1);
-            }
-        });
-
-        ArrayList<Configuration> configurations = new ArrayList<Configuration>() {
-            {
-                add(pushConfiguration1);
-                add(pullConfiguration1);
-            }
-        };
-        application.setConfigurations(configurations);
-
-        applicationGeneralConfiguration = new GeneralConfiguration("General configuration " + applicationName, new Date(), new Date(), null, application, null);
-        applicationGeneralConfigurationParameter = new Parameter("reviewActive", "true", new Date(), new Date(), "en", null, applicationGeneralConfiguration, null);
-        applicationGeneralConfiguration.setParameters(new ArrayList<Parameter>(){{add(applicationGeneralConfigurationParameter);}});
-
-        pushConfigurationGeneralConfiguration = new GeneralConfiguration("General configuration for push configuration", new Date(), new Date(), null, null, pushConfiguration1);
-        pushConfigurationGeneralConfigurationParameter = new Parameter("reviewActive", "false", new Date(), new Date(), "en", null, pushConfigurationGeneralConfiguration, null);
-        pushConfigurationGeneralConfiguration.setParameters(new ArrayList<Parameter>(){{add(pushConfigurationGeneralConfigurationParameter);}});
-
-        pushConfiguration1.setGeneralConfiguration(pushConfigurationGeneralConfiguration);
-        application.setGeneralConfiguration(applicationGeneralConfiguration);
-
-        return application;
     }
 }

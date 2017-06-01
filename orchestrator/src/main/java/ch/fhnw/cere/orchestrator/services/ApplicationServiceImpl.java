@@ -35,4 +35,18 @@ public class ApplicationServiceImpl implements ApplicationService {
     public void delete(long id){
         applicationRepository.delete(id);
     }
+
+    @Override
+    public Application findByIdAndUserGroupId(long id, long userGroupId) {
+        Application application = applicationRepository.findOne(id);
+        application = application.filterByUserGroupId(userGroupId);
+        return application;
+    }
+
+    @Override
+    public Application findByIdAndUserIdentification(long id, String userIdentification) {
+        Application application = applicationRepository.findOne(id);
+        application = application.filterByUserIdentification(userIdentification);
+        return application;
+    }
 }

@@ -16,7 +16,7 @@ public class UserGroup {
 
     private String name;
 
-    @OneToMany(mappedBy = "userGroup")
+    @OneToMany(mappedBy = "userGroup", fetch=FetchType.EAGER)
     private List<User> users;
 
     @Transient
@@ -35,6 +35,10 @@ public class UserGroup {
         this.name = name;
         this.users = users;
         this.application = application;
+    }
+
+    public boolean containsUserWithUserIdentification(String userIdentification) {
+        return this.getUsers() != null && this.getUsers().stream().filter(user -> user.getUserIdentification().equals(userIdentification)).count() > 0;
     }
 
     public long getId() {

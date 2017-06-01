@@ -13,6 +13,7 @@ public interface UserService {
     public void delete(long id);
     public List<User> findByApplicationId(long id);
     public List<User> findByUserGroupId(long id);
+    public User findByApplicationIdAndUserIdentification(long id, String userIdentification);
 }
 
 

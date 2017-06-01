@@ -41,4 +41,9 @@ public class UserServiceImpl implements UserService {
     public List<User> findByUserGroupId(long id) {
         return userRepository.findByUserGroupId(id);
     }
+
+    @Override
+    public User findByApplicationIdAndUserIdentification(long id, String userIdentification) {
+        return userRepository.findByApplicationIdAndUserIdentification(id, userIdentification);
+    }
 }

@@ -13,4 +13,5 @@ import java.util.List;
 public interface UserRepository extends JpaRepository<User, Long> {
     List<User> findByApplicationId(@Param("applicationId") long applicationId);
     List<User> findByUserGroupId(@Param("userGroupId") long userGroupId);
+    User findByApplicationIdAndUserIdentification(@Param("applicationId") long id, @Param("userIdentification") String userIdentification);
 }

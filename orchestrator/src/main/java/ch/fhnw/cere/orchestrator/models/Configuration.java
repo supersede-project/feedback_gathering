@@ -38,6 +38,10 @@ public class Configuration {
     @JoinColumn(name = "general_configuration_id")
     private GeneralConfiguration generalConfiguration;
 
+    private boolean pullDefault;
+
+    private boolean pushDefault;
+
     @PrePersist
     protected void onCreate() {
         createdAt = new Date();
@@ -78,6 +82,20 @@ public class Configuration {
         this.configurationUserGroups = configurationUserGroups;
         this.application = application;
         this.generalConfiguration = generalConfiguration;
+        this.mechanisms = mechanisms;
+    }
+
+    public Configuration(String name, TriggerType type, Date createdAt, Date updatedAt, List<ConfigurationMechanism> configurationMechanisms, List<ConfigurationUserGroup> configurationUserGroups, Application application, GeneralConfiguration generalConfiguration, boolean pullDefault, boolean pushDefault, ArrayList<Mechanism> mechanisms) {
+        this.name = name;
+        this.type = type;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.configurationMechanisms = configurationMechanisms;
+        this.configurationUserGroups = configurationUserGroups;
+        this.application = application;
+        this.generalConfiguration = generalConfiguration;
+        this.pullDefault = pullDefault;
+        this.pushDefault = pushDefault;
         this.mechanisms = mechanisms;
     }
 
@@ -146,6 +164,14 @@ public class Configuration {
         return new ArrayList<UserGroup>();
     }
 
+    public boolean containsUserWithUserIdentification(String userIdentification) {
+        return this.getUserGroups() != null && this.getUserGroups().stream().filter(userGroup -> userGroup.containsUserWithUserIdentification(userIdentification)).count() > 0;
+    }
+
+    public boolean containsUserGroupWithId(long userGroupId) {
+        return this.getUserGroups() != null && this.getUserGroups().stream().filter(userGroup -> userGroup.getId() == userGroupId).count() > 0;
+    }
+
     public void setId(long id) {
         this.id = id;
     }
@@ -212,5 +238,21 @@ public class Configuration {
 
     public void setGeneralConfiguration(GeneralConfiguration generalConfiguration) {
         this.generalConfiguration = generalConfiguration;
+    }
+
+    public boolean isPullDefault() {
+        return pullDefault;
+    }
+
+    public void setPullDefault(boolean pullDefault) {
+        this.pullDefault = pullDefault;
+    }
+
+    public boolean isPushDefault() {
+        return pushDefault;
+    }
+
+    public void setPushDefault(boolean pushDefault) {
+        this.pushDefault = pushDefault;
     }
 }

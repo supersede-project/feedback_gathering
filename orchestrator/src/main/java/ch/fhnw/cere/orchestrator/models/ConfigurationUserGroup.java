@@ -35,12 +35,21 @@ public class ConfigurationUserGroup {
         updatedAt = new Date();
     }
 
+    public ConfigurationUserGroup() {
+    }
+
     public ConfigurationUserGroup(Configuration configuration, UserGroup userGroup, boolean active, Date createdAt, Date updatedAt) {
         this.configuration = configuration;
         this.userGroup = userGroup;
         this.active = active;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+    }
+
+    public ConfigurationUserGroup(Configuration configuration, UserGroup userGroup, boolean active) {
+        this.configuration = configuration;
+        this.userGroup = userGroup;
+        this.active = active;
     }
 
     public long getId() {
