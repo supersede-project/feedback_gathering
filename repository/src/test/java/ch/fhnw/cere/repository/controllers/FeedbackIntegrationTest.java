@@ -184,7 +184,7 @@ public class FeedbackIntegrationTest extends BaseIntegrationTest {
             add(new TextFeedback(feedback, "Text Feedback 1", 1));
             add(new TextFeedback(feedback, "info@example.com", 2));
         }});
-        feedback.setContextInformation(new ContextInformation(feedback, "1920x1080", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36", null, new Timestamp(new Date().getTime()), "+0200", 2.0f, "CH", "ZH"));
+        feedback.setContextInformation(new ContextInformation(feedback, "1920x1080", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36", null, new Timestamp(new Date().getTime()), "+0200", 2.0f, "CH", "ZH", "http://example.com/subpage1"));
         String feedbackJson = toJson(feedback);
 
         MockMultipartFile jsonFile = new MockMultipartFile("json", "", "application/json", feedbackJson.getBytes());
@@ -208,7 +208,8 @@ public class FeedbackIntegrationTest extends BaseIntegrationTest {
                 .andExpect(jsonPath("$.contextInformation.timeZone", is("+0200")))
                 .andExpect(jsonPath("$.contextInformation.devicePixelRatio", is(2.0)))
                 .andExpect(jsonPath("$.contextInformation.country", is("CH")))
-                .andExpect(jsonPath("$.contextInformation.region", is("ZH")));
+                .andExpect(jsonPath("$.contextInformation.region", is("ZH")))
+                .andExpect(jsonPath("$.contextInformation.url", is("http://example.com/subpage1")));
     }
 
     @Test
@@ -227,7 +228,7 @@ public class FeedbackIntegrationTest extends BaseIntegrationTest {
             add(new RatingFeedback(feedback, "Please rate X", 5, 1));
             add(new RatingFeedback(feedback, "Please rate Y", 0, 2));
         }});
-        feedback.setContextInformation(new ContextInformation(feedback, "1920x1080", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36", null, new Timestamp(new Date().getTime()), "+0200", 2.0f, "CH", "ZH"));
+        feedback.setContextInformation(new ContextInformation(feedback, "1920x1080", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36", null, new Timestamp(new Date().getTime()), "+0200", 2.0f, "CH", "ZH", "http://example.com/subpage1"));
         String feedbackJson = toJson(feedback);
 
         MockMultipartFile jsonFile = new MockMultipartFile("json", "", "application/json", feedbackJson.getBytes());
@@ -281,7 +282,7 @@ public class FeedbackIntegrationTest extends BaseIntegrationTest {
             add(new TextFeedback(feedback, "Text Feedback 1", 1));
             add(new TextFeedback(feedback, "info@example.com", 2));
         }});
-        feedback.setContextInformation(new ContextInformation(feedback, "1920x1080", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36", null, new Timestamp(new Date().getTime()), "+0200", 2.0f, "CH", "ZH"));
+        feedback.setContextInformation(new ContextInformation(feedback, "1920x1080", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36", null, new Timestamp(new Date().getTime()), "+0200", 2.0f, "CH", "ZH", "http://example.com/subpage1"));
         feedback.setAttachmentFeedbacks(new ArrayList<AttachmentFeedback>(){{
             add(new AttachmentFeedback("attachment1", feedback, 3));
         }});
