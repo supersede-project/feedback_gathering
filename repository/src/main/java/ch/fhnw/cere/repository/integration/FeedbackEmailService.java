@@ -37,7 +37,6 @@ public class FeedbackEmailService {
         String recipients = setting.getFeedbackEmailReceivers();
 
         JavaMailSenderImpl sender = new JavaMailSenderImpl();
-        sender.setHost("mail.host.com");
         MimeMessage message = sender.createMimeMessage();
 
         MimeMessageHelper helper = null;

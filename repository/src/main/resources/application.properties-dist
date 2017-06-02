@@ -61,9 +61,26 @@ spring.devtools.restart.quiet-period=400
 spring.jackson.serialization.write_dates_as_timestamps=false
 
 
+# ----------------------------------------
+# OTHERS
+# ----------------------------------------
 jwt.secret=<your secret>
-
 spring.http.multipart.enabled=false
+
+
+# ----------------------------------------
+# SPRING MAIL
+# ----------------------------------------
+spring.mail.properties.mail.smtp.connecttimeout=5000
+spring.mail.properties.mail.smtp.timeout=3000
+spring.mail.properties.mail.smtp.writetimeout=5000
+spring.mail.port=587
+spring.mail.host=smtp.gmail.com
+spring.mail.username=
+spring.mail.password=
+spring.mail.protocol=smtp
+spring.mail.defaultEncoding=UTF-8
+
 
 # ----------------------------------------
 # SUPERSEDE
