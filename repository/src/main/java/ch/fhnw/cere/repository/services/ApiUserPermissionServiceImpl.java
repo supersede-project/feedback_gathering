@@ -1,7 +1,7 @@
-package ch.fhnw.cere.orchestrator.services;
+package ch.fhnw.cere.repository.services;
 
-import ch.fhnw.cere.orchestrator.models.ApiUserPermission;
-import ch.fhnw.cere.orchestrator.repositories.ApiUserPermissionRepository;
+import ch.fhnw.cere.repository.models.ApiUserPermission;
+import ch.fhnw.cere.repository.repositories.ApiUserPermissionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

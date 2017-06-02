@@ -59,6 +59,7 @@ public abstract class BaseIntegrationTest {
     private TokenUtils tokenUtils;
 
     protected ApiUser adminUser;
+    protected ApiUser appAdminUser;
     protected ApiUser superAdminUser;
 
     @Value("${supersede.upload_directory}")
@@ -83,6 +84,7 @@ public abstract class BaseIntegrationTest {
         apiUserRepository.deleteAllInBatch();
 
         this.adminUser = insertAdminApiUser();
+        this.appAdminUser = insertAppAdminApiUser();
         this.superAdminUser = insertSuperAdminApiUser();
     }
 
@@ -119,6 +121,16 @@ public abstract class BaseIntegrationTest {
 
     /**
      *
+     * @return an ApiUser with username 'app_admin', password 'password' and the ADMIN role
+     */
+    protected ApiUser insertAppAdminApiUser() {
+        ApiUser adminUser = apiUserRepository.save(new ApiUser("app_admin", PASSWORD_HASH_ADMIN));
+        apiUserApiUserRoleRepository.save(new ApiUserApiUserRole(adminUser, ApiUserRole.ADMIN));
+        return adminUser;
+    }
+
+    /**
+     *
      * @return an ApiUser with username 'super_admin', password 'superpassword' and the SUPER_ADMIN role
      */
     protected ApiUser insertSuperAdminApiUser() {
@@ -133,6 +145,22 @@ public abstract class BaseIntegrationTest {
         try {
             result = mockMvc.perform(post("/feedback_repository/authenticate").contentType(MediaType.APPLICATION_JSON)
                     .content("{\"name\":\"admin\",\"password\":\"password\"}"))
+                    .andReturn();
+            String json = result.getResponse().getContentAsString();
+            JSONObject obj = new JSONObject(json);
+            return obj.getString("token");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "";
+        }
+    }
+
+    protected String requestAppAdminJWTToken() {
+        this.mockMvc = webAppContextSetup(webApplicationContext).build();
+        MvcResult result = null;
+        try {
+            result = mockMvc.perform(post("/feedback_repository/authenticate").contentType(MediaType.APPLICATION_JSON)
+                    .content("{\"name\":\"app_admin\",\"password\":\"password\"}"))
                     .andReturn();
             String json = result.getResponse().getContentAsString();
             JSONObject obj = new JSONObject(json);

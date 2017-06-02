@@ -1,6 +1,7 @@
 package ch.fhnw.cere.repository.controllers;
 
 import ch.fhnw.cere.repository.models.*;
+import ch.fhnw.cere.repository.repositories.ApiUserPermissionRepository;
 import ch.fhnw.cere.repository.repositories.FeedbackRepository;
 import org.junit.After;
 import org.junit.Before;
@@ -30,6 +31,9 @@ public class FeedbackIntegrationTest extends BaseIntegrationTest {
     @Autowired
     private FeedbackRepository feedbackRepository;
 
+    @Autowired
+    private ApiUserPermissionRepository apiUserPermissionRepository;
+
     private String basePathEn = "/feedback_repository/en/";
     private String basePathDe = "/feedback_repository/de/";
 
@@ -46,12 +50,15 @@ public class FeedbackIntegrationTest extends BaseIntegrationTest {
         feedback1 = feedbackRepository.save(new Feedback("Feedback 1 App 1", "userId1", 1, 11, "en"));
         feedback2 = feedbackRepository.save(new Feedback("Feedback 2 App 1", "userId2", 1, 11, "it"));
         feedback3 = feedbackRepository.save(new Feedback("Feedback 3 App 2", "userId3", 2, 22, "de"));
+
+        apiUserPermissionRepository.save(new ApiUserPermission(appAdminUser, 1, true));
     }
 
     @After
     public void cleanUp() {
         super.cleanUp();
         feedbackRepository.deleteAllInBatch();
+        apiUserPermissionRepository.deleteAllInBatch();
     }
 
     @Test(expected = ServletException.class)
@@ -65,8 +72,8 @@ public class FeedbackIntegrationTest extends BaseIntegrationTest {
                 .andExpect(jsonPath("$", hasSize(1)));
     }
 
-    @Test
-    public void getFeedbacks() throws Exception {
+    @Test(expected = ServletException.class)
+    public void getFeedbacksWithoutPermission() throws Exception {
         String adminJWTToken = requestAdminJWTToken();
 
         mockMvc.perform(get(basePathEn + "applications/" + 1 + "/feedbacks")
@@ -86,8 +93,34 @@ public class FeedbackIntegrationTest extends BaseIntegrationTest {
                 .andExpect(jsonPath("$[0].title", is("Feedback 3 App 2")));
     }
 
+    @Test(expected = ServletException.class)
+    public void getFeedbacksOfAnotherApplication() throws Exception {
+        String adminJWTToken = requestAppAdminJWTToken();
+
+        mockMvc.perform(get(basePathEn + "applications/" + 2 + "/feedbacks")
+                .header("Authorization", adminJWTToken))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(1)))
+                .andExpect(jsonPath("$[0].id", is((int) feedback3.getId())))
+                .andExpect(jsonPath("$[0].title", is("Feedback 3 App 2")));
+    }
+
     @Test
-    public void getFeedback() throws Exception {
+    public void getFeedbacks() throws Exception {
+        String adminJWTToken = requestAppAdminJWTToken();
+
+        mockMvc.perform(get(basePathEn + "applications/" + 1 + "/feedbacks")
+                .header("Authorization", adminJWTToken))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(2)))
+                .andExpect(jsonPath("$[0].id", is((int) feedback1.getId())))
+                .andExpect(jsonPath("$[0].title", is("Feedback 1 App 1")))
+                .andExpect(jsonPath("$[1].id", is((int) feedback2.getId())))
+                .andExpect(jsonPath("$[1].title", is("Feedback 2 App 1")));
+    }
+
+    @Test(expected = ServletException.class)
+    public void getFeedbackWithoutPermission() throws Exception {
         String adminJWTToken = requestAdminJWTToken();
 
         mockMvc.perform(get(basePathEn + "applications/" + 1 + "/feedbacks/" + feedback1.getId())
@@ -98,8 +131,31 @@ public class FeedbackIntegrationTest extends BaseIntegrationTest {
     }
 
     @Test
-    public void getFeedbacksByUserIdentification() throws Exception {
+    public void getFeedback() throws Exception {
+        String adminJWTToken = requestAppAdminJWTToken();
+
+        mockMvc.perform(get(basePathEn + "applications/" + 1 + "/feedbacks/" + feedback1.getId())
+                .header("Authorization", adminJWTToken))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id", is((int) feedback1.getId())))
+                .andExpect(jsonPath("$.title", is("Feedback 1 App 1")));
+    }
+
+    @Test(expected = ServletException.class)
+    public void getFeedbacksByUserIdentificationWithoutPermission() throws Exception {
         String adminJWTToken = requestAdminJWTToken();
+
+        mockMvc.perform(get(basePathEn + "applications/" + 1 + "/feedbacks/user_identification/userId1")
+                .header("Authorization", adminJWTToken))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(1)))
+                .andExpect(jsonPath("$[0].id", is((int) feedback1.getId())))
+                .andExpect(jsonPath("$[0].title", is("Feedback 1 App 1")));
+    }
+
+    @Test
+    public void getFeedbacksByUserIdentification() throws Exception {
+        String adminJWTToken = requestAppAdminJWTToken();
 
         mockMvc.perform(get(basePathEn + "applications/" + 1 + "/feedbacks/user_identification/userId1")
                 .header("Authorization", adminJWTToken))

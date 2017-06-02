@@ -1,7 +1,7 @@
-package ch.fhnw.cere.orchestrator.services;
+package ch.fhnw.cere.repository.services;
 
 
-import ch.fhnw.cere.orchestrator.models.ApiUserPermission;
+import ch.fhnw.cere.repository.models.ApiUserPermission;
 
 import java.util.List;
 

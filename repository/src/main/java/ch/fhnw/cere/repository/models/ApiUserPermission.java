@@ -1,4 +1,4 @@
-package ch.fhnw.cere.orchestrator.models;
+package ch.fhnw.cere.repository.models;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -8,7 +8,6 @@ import javax.persistence.*;
 
 @Entity
 public class ApiUserPermission {
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
@@ -18,19 +17,16 @@ public class ApiUserPermission {
     @JoinColumn(name = "api_user_id")
     private ApiUser apiUser;
 
-    @ManyToOne(cascade = {CascadeType.REMOVE, CascadeType.MERGE})
-    @JsonIgnore
-    @JoinColumn(name = "application_id")
-    private Application application;
+    private long applicationId;
 
     private boolean hasPermission;
 
     public ApiUserPermission() {
     }
 
-    public ApiUserPermission(ApiUser apiUser, Application application, boolean hasPermission) {
+    public ApiUserPermission(ApiUser apiUser, long applicationId, boolean hasPermission) {
         this.apiUser = apiUser;
-        this.application = application;
+        this.applicationId = applicationId;
         this.hasPermission = hasPermission;
     }
 
@@ -50,12 +46,20 @@ public class ApiUserPermission {
         this.apiUser = apiUser;
     }
 
-    public Application getApplication() {
-        return application;
+    public long getApplicationId() {
+        return applicationId;
     }
 
-    public void setApplication(Application application) {
-        this.application = application;
+    public void setApplicationId(long applicationId) {
+        this.applicationId = applicationId;
+    }
+
+    public boolean isHasPermission() {
+        return hasPermission;
+    }
+
+    public void setHasPermission(boolean hasPermission) {
+        this.hasPermission = hasPermission;
     }
 
     public boolean hasPermission() {

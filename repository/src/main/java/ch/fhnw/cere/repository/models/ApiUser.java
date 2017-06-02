@@ -29,6 +29,9 @@ public class ApiUser implements UserDetails {
     @OneToMany(mappedBy = "apiUser", cascade = {CascadeType.REMOVE, CascadeType.PERSIST})
     private List<Status> statuses;
 
+    @OneToMany(mappedBy = "apiUser", cascade = {CascadeType.REMOVE, CascadeType.PERSIST})
+    private List<ApiUserPermission> apiUserPermissions;
+
     @Transient
     private List<ApiUserRole> authorities;
     @Transient
@@ -184,5 +187,13 @@ public class ApiUser implements UserDetails {
 
     public void setStatuses(List<Status> statuses) {
         this.statuses = statuses;
+    }
+
+    public List<ApiUserPermission> getApiUserPermissions() {
+        return apiUserPermissions;
+    }
+
+    public void setApiUserPermissions(List<ApiUserPermission> apiUserPermissions) {
+        this.apiUserPermissions = apiUserPermissions;
     }
 }
