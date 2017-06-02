@@ -2,6 +2,7 @@ package ch.fhnw.cere.repository.controllers;
 
 
 import ch.fhnw.cere.repository.controllers.exceptions.NotFoundException;
+import ch.fhnw.cere.repository.integration.DataProviderIntegrator;
 import ch.fhnw.cere.repository.models.Feedback;
 import ch.fhnw.cere.repository.models.FileFeedback;
 import ch.fhnw.cere.repository.services.FeedbackService;
@@ -36,7 +37,8 @@ public class FeedbackController extends BaseController {
     private FileStorageService fileStorageService;
 
     @Autowired
-    private SecurityService securityService;
+    private DataProviderIntegrator dataProviderIntegrator;
+
 
     @PreAuthorize("@securityService.hasAdminPermission(#applicationId)")
     @RequestMapping(method = RequestMethod.GET, value = "")
@@ -63,7 +65,7 @@ public class FeedbackController extends BaseController {
 
     @ResponseStatus(HttpStatus.CREATED)
     @RequestMapping(method = RequestMethod.POST, value = "", consumes = "multipart/form-data")
-    public Feedback createFeedback(HttpServletRequest request, @RequestPart("json") Feedback feedback) throws IOException, ServletException {
+    public Feedback createFeedback(HttpServletRequest request, @RequestPart("json") Feedback feedback) throws IOException {
         feedback.setApplicationId(applicationId());
 
         MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
@@ -71,7 +73,10 @@ public class FeedbackController extends BaseController {
         parts.remove("json");
         feedback = fileStorageService.storeFiles(feedback, parts);
 
-        return feedbackService.save(feedback);
+        Feedback createdFeedback = feedbackService.save(feedback);
+        dataProviderIntegrator.ingestJsonData(feedback);
+
+        return createdFeedback;
     }
 
     @PreAuthorize("@securityService.hasAdminPermission(#applicationId)")
