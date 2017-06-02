@@ -102,6 +102,8 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/feedback_repository/authenticate/**").permitAll()
                 .antMatchers("/feedback_repository/ping").permitAll()
                 .requestMatchers(new RegexRequestMatcher("/feedback_repository/\\w{2}/applications/\\d+/feedbacks/?", "POST", true)).permitAll()
+                .requestMatchers(new RegexRequestMatcher("/feedback_repository/\\w{2}/applications/\\d+/feedbacks/?\\?_=\\d+", "POST", true)).permitAll()
+
                 .anyRequest().authenticated();
 
         httpSecurity.addFilterBefore(authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter.class);
