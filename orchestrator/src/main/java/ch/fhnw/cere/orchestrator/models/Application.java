@@ -36,6 +36,9 @@ public class Application {
     @OneToMany(mappedBy = "application", cascade = {CascadeType.REMOVE, CascadeType.PERSIST})
     private List<UserGroup> userGroups;
 
+    @OneToMany(mappedBy = "application", cascade = {CascadeType.REMOVE, CascadeType.PERSIST})
+    private List<ApiUserPermission> apiUserPermissions;
+
     @PrePersist
     protected void onCreate() {
         createdAt = new Date();
@@ -85,6 +88,18 @@ public class Application {
         this.configurations = configurations;
         this.users = users;
         this.userGroups = userGroups;
+    }
+
+    public Application(String name, int state, Date createdAt, Date updatedAt, GeneralConfiguration generalConfiguration, List<Configuration> configurations, List<User> users, List<UserGroup> userGroups, List<ApiUserPermission> apiUserPermissions) {
+        this.name = name;
+        this.state = state;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.generalConfiguration = generalConfiguration;
+        this.configurations = configurations;
+        this.users = users;
+        this.userGroups = userGroups;
+        this.apiUserPermissions = apiUserPermissions;
     }
 
     @Override
@@ -215,5 +230,13 @@ public class Application {
 
     public void setUserGroups(List<UserGroup> userGroups) {
         this.userGroups = userGroups;
+    }
+
+    public List<ApiUserPermission> getApiUserPermissions() {
+        return apiUserPermissions;
+    }
+
+    public void setApiUserPermissions(List<ApiUserPermission> apiUserPermissions) {
+        this.apiUserPermissions = apiUserPermissions;
     }
 }

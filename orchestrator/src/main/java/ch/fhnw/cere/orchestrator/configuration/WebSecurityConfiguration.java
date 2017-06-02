@@ -104,7 +104,6 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                 .antMatchers("/orchestrator/feedback/authenticate/**").permitAll()
-                .requestMatchers(new RegexRequestMatcher("/orchestrator/feedback/\\w{2}/applications/\\d+\\?_=\\d+", "GET", true)).permitAll()
                 .requestMatchers(new RegexRequestMatcher("/orchestrator/feedback/\\w{2}/applications/\\d+/?\\?_=\\d+", "GET", true)).permitAll()
                 .requestMatchers(new RegexRequestMatcher("/orchestrator/feedback/\\w{2}/applications/\\d+/?", "GET", true)).permitAll()
                 .requestMatchers(new RegexRequestMatcher("/orchestrator/feedback/\\w{2}/applications/?", "GET", true)).permitAll()

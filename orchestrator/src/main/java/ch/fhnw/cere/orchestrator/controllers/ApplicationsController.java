@@ -96,7 +96,7 @@ public class ApplicationsController extends BaseController {
         return applicationService.save(application);
     }
 
-    @PreAuthorize("@securityService.hasAdminPermission(#applicationId)")
+    @PreAuthorize("@securityService.hasAdminPermission(#id)")
     @RequestMapping(method = RequestMethod.DELETE, value = "/{id}")
     public void deleteApplication(@PathVariable long id) {
         applicationService.delete(id);

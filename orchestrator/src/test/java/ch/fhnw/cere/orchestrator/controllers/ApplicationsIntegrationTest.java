@@ -3,6 +3,7 @@ package ch.fhnw.cere.orchestrator.controllers;
 
 import ch.fhnw.cere.orchestrator.controllers.helpers.ApplicationTreeBuilder;
 import ch.fhnw.cere.orchestrator.models.*;
+import ch.fhnw.cere.orchestrator.repositories.ApiUserPermissionRepository;
 import ch.fhnw.cere.orchestrator.repositories.ApplicationRepository;
 import org.hamcrest.Matchers;
 import static org.hamcrest.Matchers.nullValue;
@@ -35,6 +36,9 @@ public class ApplicationsIntegrationTest extends BaseIntegrationTest {
     @Autowired
     private ApplicationTreeBuilder applicationTreeBuilder;
 
+    @Autowired
+    private ApiUserPermissionRepository apiUserPermissionRepository;
+
     @Before
     public void setup() throws Exception {
         super.setup();
@@ -43,12 +47,15 @@ public class ApplicationsIntegrationTest extends BaseIntegrationTest {
         this.application1 = applicationRepository.save(new Application("Test App 1", 1, new Date(), new Date(), null));
         this.application2 = applicationRepository.save(new Application("Test App 2", 1, new Date(), new Date(), null));
         this.application3 = applicationRepository.save(applicationTreeBuilder.buildApplicationTree("Test application 3"));
+
+        apiUserPermissionRepository.save(new ApiUserPermission(appAdminUser, application2, true));
     }
 
     @After
     public void cleanUp() {
         super.cleanUp();
         this.applicationRepository.deleteAllInBatch();
+        this.apiUserPermissionRepository.deleteAllInBatch();
     }
 
     @Test
@@ -176,11 +183,29 @@ public class ApplicationsIntegrationTest extends BaseIntegrationTest {
                 .andExpect(status().isOk());
     }
 
-    @Test
-    public void deleteApplication() throws Exception {
+    @Test(expected = ServletException.class)
+    public void deleteApplicationWithoutPermission() throws Exception {
         String adminJWTToken = requestAdminJWTToken();
 
         this.mockMvc.perform(delete(basePathEn + "/" + application1.getId())
+                .header("Authorization", adminJWTToken))
+                .andExpect(status().isOk());
+    }
+
+    @Test(expected = ServletException.class)
+    public void deleteApplicationOtherPermission() throws Exception {
+        String adminJWTToken = requestAppAdminJWTToken();
+
+        this.mockMvc.perform(delete(basePathEn + "/" + application1.getId())
+                .header("Authorization", adminJWTToken))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void deleteApplication() throws Exception {
+        String adminJWTToken = requestAppAdminJWTToken();
+
+        this.mockMvc.perform(delete(basePathEn + "/" + application2.getId())
                 .header("Authorization", adminJWTToken))
                 .andExpect(status().isOk());
     }
@@ -201,13 +226,32 @@ public class ApplicationsIntegrationTest extends BaseIntegrationTest {
                 .andExpect(jsonPath("$.configurations", is(nullValue())));
     }
 
+    @Test(expected = ServletException.class)
+    public void updateApplicationWithoutPermission() throws Exception {
+        this.application2.setName("Updated name for App 2");
+        this.application2.setState(0);
+        String applicationJson = toJson(this.application2);
+
+        String adminJWTToken = requestAdminJWTToken();
+
+        this.mockMvc.perform(put(basePathEn + "/")
+                .contentType(contentType)
+                .content(applicationJson)
+                .header("Authorization", adminJWTToken))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id", is((int) this.application2.getId())))
+                .andExpect(jsonPath("$.name", is("Updated name for App 2")))
+                .andExpect(jsonPath("$.state", is(0)))
+                .andExpect(jsonPath("$.configurations", is(nullValue())));
+    }
+
     @Test
     public void updateApplication() throws Exception {
         this.application2.setName("Updated name for App 2");
         this.application2.setState(0);
         String applicationJson = toJson(this.application2);
 
-        String adminJWTToken = requestAdminJWTToken();
+        String adminJWTToken = requestAppAdminJWTToken();
 
         this.mockMvc.perform(put(basePathEn + "/")
                 .contentType(contentType)
