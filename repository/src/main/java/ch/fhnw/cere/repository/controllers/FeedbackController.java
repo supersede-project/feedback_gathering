@@ -3,11 +3,10 @@ package ch.fhnw.cere.repository.controllers;
 
 import ch.fhnw.cere.repository.controllers.exceptions.NotFoundException;
 import ch.fhnw.cere.repository.integration.DataProviderIntegrator;
+import ch.fhnw.cere.repository.services.FeedbackEmailService;
 import ch.fhnw.cere.repository.models.Feedback;
-import ch.fhnw.cere.repository.models.FileFeedback;
 import ch.fhnw.cere.repository.services.FeedbackService;
 import ch.fhnw.cere.repository.services.FileStorageService;
-import ch.fhnw.cere.repository.services.SecurityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -16,10 +15,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -38,6 +35,9 @@ public class FeedbackController extends BaseController {
 
     @Autowired
     private DataProviderIntegrator dataProviderIntegrator;
+
+    @Autowired
+    private FeedbackEmailService feedbackEmailService;
 
 
     @PreAuthorize("@securityService.hasAdminPermission(#applicationId)")
@@ -75,6 +75,7 @@ public class FeedbackController extends BaseController {
 
         Feedback createdFeedback = feedbackService.save(feedback);
         dataProviderIntegrator.ingestJsonData(feedback);
+        feedbackEmailService.sendFeedbackNotification(createdFeedback);
 
         return createdFeedback;
     }

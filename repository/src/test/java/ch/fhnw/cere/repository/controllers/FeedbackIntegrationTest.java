@@ -3,10 +3,12 @@ package ch.fhnw.cere.repository.controllers;
 import ch.fhnw.cere.repository.models.*;
 import ch.fhnw.cere.repository.repositories.ApiUserPermissionRepository;
 import ch.fhnw.cere.repository.repositories.FeedbackRepository;
+import ch.fhnw.cere.repository.repositories.SettingRepository;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mock.web.MockMultipartFile;
 
 import javax.servlet.ServletException;
@@ -34,6 +36,9 @@ public class FeedbackIntegrationTest extends BaseIntegrationTest {
     @Autowired
     private ApiUserPermissionRepository apiUserPermissionRepository;
 
+    @Autowired
+    private SettingRepository settingRepository;
+
     private String basePathEn = "/feedback_repository/en/";
     private String basePathDe = "/feedback_repository/de/";
 
@@ -41,23 +46,31 @@ public class FeedbackIntegrationTest extends BaseIntegrationTest {
     private Feedback feedback2;
     private Feedback feedback3;
 
+    @Value("${supersede.test_email_receivers}")
+    protected String testEmailReceivers;
+
     @Before
     public void setup() throws Exception {
         super.setup();
 
         feedbackRepository.deleteAllInBatch();
+        settingRepository.deleteAllInBatch();
+        apiUserPermissionRepository.deleteAllInBatch();
 
         feedback1 = feedbackRepository.save(new Feedback("Feedback 1 App 1", "userId1", 1, 11, "en"));
         feedback2 = feedbackRepository.save(new Feedback("Feedback 2 App 1", "userId2", 1, 11, "it"));
         feedback3 = feedbackRepository.save(new Feedback("Feedback 3 App 2", "userId3", 2, 22, "de"));
 
         apiUserPermissionRepository.save(new ApiUserPermission(appAdminUser, 1, true));
+
+        settingRepository.save(new Setting(1, testEmailReceivers, null));
     }
 
     @After
     public void cleanUp() {
         super.cleanUp();
         feedbackRepository.deleteAllInBatch();
+        settingRepository.deleteAllInBatch();
         apiUserPermissionRepository.deleteAllInBatch();
     }
 

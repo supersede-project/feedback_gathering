@@ -75,11 +75,13 @@ spring.mail.properties.mail.smtp.connecttimeout=5000
 spring.mail.properties.mail.smtp.timeout=3000
 spring.mail.properties.mail.smtp.writetimeout=5000
 spring.mail.port=587
-spring.mail.host=smtp.gmail.com
+spring.mail.host=
 spring.mail.username=
 spring.mail.password=
-spring.mail.protocol=smtp
-spring.mail.defaultEncoding=UTF-8
+spring.mail.properties.mail.smtp.starttls.enable=true
+spring.mail.properties.mail.smtp.starttls.required=true
+spring.mail.properties.mail.smtp.auth=true
+spring.mail.properties.mail.smtp.connectiontimeout=5000
 
 
 # ----------------------------------------
@@ -92,3 +94,5 @@ supersede.upload_directory=/Users/ronnieschaniel/SupersedeProjects/repository_fi
 supersede.upload_directory.attachments_folder_name=attachments
 supersede.upload_directory.audios_folder_name=audios
 supersede.upload_directory.screenshots_folder_name=screenshots
+
+supersede.test_email_receivers=

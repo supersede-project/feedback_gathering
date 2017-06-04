@@ -19,8 +19,6 @@ import org.springframework.stereotype.Component;
 @Component
 public class TokenUtils {
 
-    private final Logger logger = Logger.getLogger(this.getClass());
-
     @Value("${jwt.secret}")
     private String secret;
 
@@ -121,7 +119,6 @@ public class TokenUtils {
                     .compact();
         } catch (UnsupportedEncodingException ex) {
             //didn't want to have this method throw the exception, would rather log it and sign the token like it was before
-            logger.warn(ex.getMessage());
             return Jwts.builder()
                     .setClaims(claims)
                     .setExpiration(this.generateExpirationDate())
