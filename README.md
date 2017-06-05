@@ -14,6 +14,8 @@ The feedback gathering and the monitoring tool is composed by seven components:
 
 *Please check the respective README.md for details.*
 
+The Feedback Acquisition and Monitoring Enabler is licensed under the [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0)
+
 Main contact: Norbert Seyff <norbert.seyff@fhnw.ch>
 
 ![Project funded by the European Union](images/european.union.logo.png)  
