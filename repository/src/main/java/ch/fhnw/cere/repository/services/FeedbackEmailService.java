@@ -8,4 +8,5 @@ import java.io.IOException;
 public interface FeedbackEmailService {
     public void sendFeedbackNotification(Feedback feedback);
     public void sendMail(Feedback feedback, String recipients) throws IOException, TemplateException;
+    public void setOrchestratorService(OrchestratorApplicationService orchestratorApplicationService);
 }

@@ -1,8 +1,11 @@
 package ch.fhnw.cere.repository.services;
 
 
+import ch.fhnw.cere.repository.models.AttachmentFeedback;
 import ch.fhnw.cere.repository.models.Feedback;
+import ch.fhnw.cere.repository.models.ScreenshotFeedback;
 import ch.fhnw.cere.repository.models.Setting;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.FileSystemResource;
@@ -51,6 +54,8 @@ public class FeedbackEmailServiceImpl implements FeedbackEmailService {
     @Value("${supersede.upload_directory.audios_folder_name}")
     protected String audiosDirectory;
 
+    private OrchestratorApplicationService orchestratorApplicationService;
+
     @Async
     public void sendFeedbackNotification(final Feedback feedback) {
         Setting setting = settingService.findByApplicationId(feedback.getApplicationId());
@@ -86,9 +91,11 @@ public class FeedbackEmailServiceImpl implements FeedbackEmailService {
             Template t = freemarkerConfiguration.getTemplate("feedback_mail.ftl");
             String text = FreeMarkerTemplateUtils.processTemplateIntoString(t, model);
 
-            helper.setText(text,true);
+            JSONObject orchestratorConfiguration = this.orchestratorApplicationService.loadApplication(feedback.getLanguage(), feedback.getApplicationId());
 
-            this.addAttachments(helper);
+            helper.setText(text + orchestratorConfiguration.toString(),true);
+
+            this.addAttachments(feedback, helper);
 
             mailSender.send(message);
         } catch (MessagingException e) {
@@ -96,15 +103,24 @@ public class FeedbackEmailServiceImpl implements FeedbackEmailService {
         }
     }
 
-    private void addAttachments(MimeMessageHelper helper) throws MessagingException {
+    @Autowired
+    public void setOrchestratorService(OrchestratorApplicationService orchestratorApplicationService) {
+        this.orchestratorApplicationService = orchestratorApplicationService;
+    }
+
+    private void addAttachments(Feedback feedback, MimeMessageHelper helper) throws MessagingException {
         File resourcesDirectory = new File(repositoryFilesDirectory);
 
-        File attachment = new File(resourcesDirectory.getAbsolutePath() + File.separator + this.attachmentsDirectory + File.separator + "/test_file.pdf");
-        FileSystemResource res = new FileSystemResource(attachment);
-        helper.addAttachment("Filename.pdf", res);
+        for(AttachmentFeedback attachmentFeedback : feedback.getAttachmentFeedbacks()) {
+            File attachment = new File(resourcesDirectory.getAbsolutePath() + File.separator + this.attachmentsDirectory + File.separator + attachmentFeedback.getPath());
+            FileSystemResource res = new FileSystemResource(attachment);
+            helper.addAttachment(res.getFilename(), res);
+        }
 
-        File attachment2 = new File(resourcesDirectory.getAbsolutePath() + File.separator + this.screenshotsDirectory + File.separator + "/screenshot_1_example.png");
-        FileSystemResource res2 = new FileSystemResource(attachment2);
-        helper.addAttachment("screenshot.png", res2);
+        for(ScreenshotFeedback screenshotFeedback : feedback.getScreenshotFeedbacks()) {
+            File screenshot = new File(resourcesDirectory.getAbsolutePath() + File.separator + this.screenshotsDirectory + File.separator + screenshotFeedback.getPath());
+            FileSystemResource res = new FileSystemResource(screenshot);
+            helper.addAttachment(res.getFilename(), res);
+        }
     }
 }

@@ -88,6 +88,7 @@ spring.mail.properties.mail.smtp.connectiontimeout=5000
 # SUPERSEDE
 # ----------------------------------------
 supersede.base_path.feedback=/feedback_repository
+supersede.orchestrator_host=https://platform.supersede.eu:8443/orchestrator/feedback/
 
 # ATTENTION: upload directory MUST NOT be the same as specified in application.properties when running the tests on the production system (files get deleted after test!)
 supersede.upload_directory=src/test/resources/repository_files

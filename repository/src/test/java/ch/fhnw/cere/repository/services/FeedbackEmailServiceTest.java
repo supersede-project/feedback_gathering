@@ -2,15 +2,19 @@ package ch.fhnw.cere.repository.services;
 
 
 import ch.fhnw.cere.repository.RepositoryApplication;
+import ch.fhnw.cere.repository.models.AttachmentFeedback;
 import ch.fhnw.cere.repository.models.Feedback;
+import ch.fhnw.cere.repository.models.ScreenshotFeedback;
 import ch.fhnw.cere.repository.models.Setting;
 import ch.fhnw.cere.repository.repositories.SettingRepository;
 import freemarker.template.TemplateException;
 import org.apache.commons.io.FileUtils;
+import org.json.JSONObject;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -20,9 +24,11 @@ import org.springframework.test.context.web.WebAppConfiguration;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.StandardCopyOption;
+import java.nio.file.Paths;
+import java.util.ArrayList;
 
 
 @RunWith(SpringRunner.class)
@@ -52,13 +58,14 @@ public class FeedbackEmailServiceTest {
     @Value("${supersede.upload_directory.audios_folder_name}")
     protected String audiosDirectory;
 
-    private long applicationId = 1;
+    private long applicationId = 20;
 
     @Before
     public void setup() throws Exception {
         settingRepository.deleteAllInBatch();
         settingRepository.save(new Setting(applicationId, testEmailReceivers, null));
 
+        setOrchestratorMockService();
         createRepositoryFilesDirectory();
     }
 
@@ -69,20 +76,29 @@ public class FeedbackEmailServiceTest {
 
     @Test
     public void sendMail() throws IOException, TemplateException {
-        Feedback feedback = new Feedback("Test feedback", "userId3", applicationId, 22, "de");
+        Feedback feedback = new Feedback("Test feedback", "userId3", applicationId, 22, "en");
+        ScreenshotFeedback screenshotFeedback = new ScreenshotFeedback("screenshot_1_example.png", 20000, "screenshot1", "png", feedback, 3, null);
+        AttachmentFeedback attachmentFeedback = new AttachmentFeedback("test_file.pdf", 10000, "attachment1", "pdf", feedback, 4);
+        feedback.setScreenshotFeedbacks(new ArrayList<ScreenshotFeedback>(){{add(screenshotFeedback);}});
+        feedback.setAttachmentFeedbacks(new ArrayList<AttachmentFeedback>(){{add(attachmentFeedback);}});
+
         Setting setting = settingRepository.findByApplicationId(feedback.getApplicationId());
         String recipients = setting.getFeedbackEmailReceivers();
         feedbackEmailService.sendMail(feedback, recipients);
     }
 
+    private void setOrchestratorMockService() throws IOException {
+        OrchestratorApplicationService orchestratorApplicationServiceMock = Mockito.mock(OrchestratorApplicationService.class);
+
+        String exampleConfiguration = readFile("src/test/resources/orchestrator_application.json",  StandardCharsets.UTF_8);
+        Mockito.when(orchestratorApplicationServiceMock.loadApplication("en", applicationId)).thenReturn(new JSONObject(exampleConfiguration));
+        feedbackEmailService.setOrchestratorService(orchestratorApplicationServiceMock);
+    }
+
     private void createRepositoryFilesDirectory() throws IOException {
         File repositoryFiles = new File(repositoryFilesDirectory);
         if (!repositoryFiles.exists()) {
-            if (repositoryFiles.mkdir()) {
-                System.out.println("Directory is created!");
-            } else {
-                System.out.println("Failed to create directory!");
-            }
+            repositoryFiles.mkdir();
         }
 
         File srcAttachment = new File("src/test/resources" + File.separator + "test_file.pdf");
@@ -96,5 +112,10 @@ public class FeedbackEmailServiceTest {
 
     private void removeRepositoryFilesDirectory() throws IOException {
         FileUtils.deleteDirectory(new File(repositoryFilesDirectory));
+    }
+
+    static String readFile(String path, Charset encoding) throws IOException {
+        byte[] encoded = Files.readAllBytes(Paths.get(path));
+        return new String(encoded, encoding);
     }
 }
