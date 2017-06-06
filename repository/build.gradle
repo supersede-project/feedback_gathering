@@ -51,6 +51,8 @@ dependencies {
 	compile 'org.springframework.boot:spring-boot-starter-security'
 	compile 'org.springframework.boot:spring-boot-starter-web'
     compile 'org.springframework.boot:spring-boot-starter-mail'
+    compile "org.springframework.boot:spring-boot-starter-freemarker:${springBootVersion}"
+
     compile 'org.springframework.boot:spring-boot-devtools'
     compile 'com.google.guava:guava:21.0'
     compile group: 'io.jsonwebtoken', name: 'jjwt', version: '0.7.0'

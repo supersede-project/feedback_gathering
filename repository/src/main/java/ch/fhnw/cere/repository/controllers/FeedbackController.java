@@ -4,6 +4,7 @@ package ch.fhnw.cere.repository.controllers;
 import ch.fhnw.cere.repository.controllers.exceptions.NotFoundException;
 import ch.fhnw.cere.repository.integration.DataProviderIntegrator;
 import ch.fhnw.cere.repository.services.FeedbackEmailService;
+import ch.fhnw.cere.repository.services.FeedbackEmailServiceImpl;
 import ch.fhnw.cere.repository.models.Feedback;
 import ch.fhnw.cere.repository.services.FeedbackService;
 import ch.fhnw.cere.repository.services.FileStorageService;
