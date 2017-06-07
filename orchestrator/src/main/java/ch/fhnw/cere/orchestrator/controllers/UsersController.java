@@ -19,14 +19,14 @@ import java.util.List;
 public class UsersController extends BaseController {
 
     @Autowired
-    private UserService userRepository;
+    private UserService userService;
 
     @Autowired
     private ApplicationService applicationService;
 
     @RequestMapping(method = RequestMethod.GET, value = "")
     public List<User> getUser() {
-        List<User> users = userRepository.findByApplicationId(applicationId());
+        List<User> users = userService.findByApplicationId(applicationId());
         if(users == null) {
             throw new NotFoundException();
         }
@@ -35,7 +35,7 @@ public class UsersController extends BaseController {
 
     @RequestMapping(method = RequestMethod.GET, value = "/{id}")
     public User getUser(@PathVariable long id) {
-        User user = userRepository.find(id);
+        User user = userService.find(id);
         if(user == null) {
             throw new NotFoundException();
         }
@@ -47,25 +47,25 @@ public class UsersController extends BaseController {
     @RequestMapping(method = RequestMethod.POST, value = "")
     public User createUser(@PathVariable long applicationId, @RequestBody User user) {
         user.setApplication(getApplication());
-        return userRepository.save(user);
+        return userService.save(user);
     }
 
     @PreAuthorize("@securityService.hasAdminPermission(#applicationId)")
     @RequestMapping(method = RequestMethod.DELETE, value = "/{id}")
     public void deleteUser(@PathVariable long applicationId, @PathVariable long id) {
-        userRepository.delete(id);
+        userService.delete(id);
     }
 
     @PreAuthorize("@securityService.hasAdminPermission(#applicationId)")
     @RequestMapping(method = RequestMethod.PUT, value = "")
     public User updateUser(@PathVariable long applicationId, @RequestBody User user) {
-        return userRepository.save(user);
+        return userService.save(user);
     }
 
     @PreAuthorize("@securityService.hasAdminPermission(#applicationId)")
     @RequestMapping(method = RequestMethod.PUT, value = "/{id}")
     public User updateUserById(@PathVariable long applicationId, @RequestBody User user) {
-        return userRepository.save(user);
+        return userService.save(user);
     }
 
     private Application getApplication() {

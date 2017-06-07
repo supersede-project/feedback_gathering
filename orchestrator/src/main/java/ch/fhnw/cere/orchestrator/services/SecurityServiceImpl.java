@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 public class SecurityServiceImpl implements SecurityService {
 
     @Autowired
-    ApiUserPermissionService apiUserPermissionService;
+    private ApiUserPermissionService apiUserPermissionService;
 
     @Override
     public Boolean hasAdminPermission() {

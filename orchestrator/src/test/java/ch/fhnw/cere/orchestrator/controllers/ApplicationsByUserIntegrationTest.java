@@ -2,24 +2,18 @@ package ch.fhnw.cere.orchestrator.controllers;
 
 
 import ch.fhnw.cere.orchestrator.controllers.helpers.ApplicationTreeBuilder;
-import ch.fhnw.cere.orchestrator.models.*;
+import ch.fhnw.cere.orchestrator.models.Application;
+import ch.fhnw.cere.orchestrator.models.User;
 import ch.fhnw.cere.orchestrator.repositories.ApplicationRepository;
 import ch.fhnw.cere.orchestrator.repositories.UserRepository;
-import org.hamcrest.Matchers;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.servlet.ServletException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.nullValue;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 
@@ -308,33 +302,6 @@ public class ApplicationsByUserIntegrationTest extends BaseIntegrationTest {
                 .andExpect(jsonPath("$.configurations[2].pullDefault", is(true)));
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

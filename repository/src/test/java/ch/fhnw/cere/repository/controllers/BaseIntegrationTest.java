@@ -10,6 +10,7 @@ import ch.fhnw.cere.repository.repositories.ApiUserRepository;
 import ch.fhnw.cere.repository.security.TokenUtils;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.commons.io.FileUtils;
 import org.json.JSONObject;
 import org.junit.After;
 import org.junit.Before;
@@ -27,6 +28,7 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.web.context.WebApplicationContext;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.charset.Charset;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -205,5 +207,20 @@ public abstract class BaseIntegrationTest {
             }
         }
         folder.delete();
+    }
+
+    protected void createRepositoryFilesDirectory() throws IOException {
+        File repositoryFiles = new File(uploadDirectory);
+        if (!repositoryFiles.exists()) {
+            repositoryFiles.mkdir();
+        }
+
+        File srcAttachment = new File("src/test/resources" + File.separator + "test_file.pdf");
+        File destAttachment = new File(uploadDirectory + File.separator + attachmentsFolderName + File.separator + "test_file.pdf");
+        FileUtils.copyFile(srcAttachment, destAttachment);
+
+        File srcScreenshot = new File("src/test/resources" + File.separator + "screenshot_1_example.png");
+        File destScreenshot = new File(uploadDirectory + File.separator + screenshotsFolderName + File.separator + "screenshot_1_example.png");
+        FileUtils.copyFile(srcScreenshot, destScreenshot);
     }
 }

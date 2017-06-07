@@ -1,9 +1,11 @@
 package ch.fhnw.cere.orchestrator.controllers;
 
 
+import ch.fhnw.cere.orchestrator.models.ApiUserPermission;
 import ch.fhnw.cere.orchestrator.models.Application;
 import ch.fhnw.cere.orchestrator.models.User;
 import ch.fhnw.cere.orchestrator.models.UserGroup;
+import ch.fhnw.cere.orchestrator.repositories.ApiUserPermissionRepository;
 import ch.fhnw.cere.orchestrator.repositories.ApplicationRepository;
 import ch.fhnw.cere.orchestrator.repositories.UserGroupRepository;
 import ch.fhnw.cere.orchestrator.repositories.UserRepository;
@@ -42,6 +44,8 @@ public class UserGroupsIntegrationTest extends BaseIntegrationTest {
     private UserGroupRepository userGroupRepository;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private ApiUserPermissionRepository apiUserPermissionRepository;
 
     private String basePathEn = "/orchestrator/feedback/en/applications";
 
@@ -52,6 +56,7 @@ public class UserGroupsIntegrationTest extends BaseIntegrationTest {
         this.userRepository.deleteAllInBatch();
         this.userGroupRepository.deleteAllInBatch();
         this.applicationRepository.deleteAllInBatch();
+        this.apiUserPermissionRepository.deleteAllInBatch();
 
         this.application1 = applicationRepository.save(new Application("Test App 1", 1, new Date(), new Date(), null));
         this.application2 = applicationRepository.save(new Application("Test App 2", 1, new Date(), new Date(), null));
@@ -65,6 +70,9 @@ public class UserGroupsIntegrationTest extends BaseIntegrationTest {
         this.user3 = userRepository.save(new User("User 3", "u333333", application1, app1userGroup2));
         this.user4 = userRepository.save(new User("User 4", "44-44-44-44", application2, app2userGroup1));
         this.user5 = userRepository.save(new User("User 5", "55-55-55-55", application2, app2userGroup1));
+
+        apiUserPermissionRepository.save(new ApiUserPermission(appAdminUser, application1, true));
+        apiUserPermissionRepository.save(new ApiUserPermission(appAdminUser, application2, true));
     }
 
     @After
@@ -72,6 +80,7 @@ public class UserGroupsIntegrationTest extends BaseIntegrationTest {
         super.cleanUp();
         this.userRepository.deleteAllInBatch();
         this.userGroupRepository.deleteAllInBatch();
+        this.apiUserPermissionRepository.deleteAllInBatch();
         this.applicationRepository.deleteAllInBatch();
     }
 
@@ -118,9 +127,9 @@ public class UserGroupsIntegrationTest extends BaseIntegrationTest {
         UserGroup userGroup = new UserGroup("App 2 New User Group", null, application2);
         String userGroupJson = toJson(userGroup);
 
-        String adminJWTToken = requestAdminJWTToken();
+        String adminJWTToken = requestAppAdminJWTToken();
 
-        this.mockMvc.perform(post(basePathEn + "/" + this.application1.getId() + "/user_groups")
+        this.mockMvc.perform(post(basePathEn + "/" + this.application2.getId() + "/user_groups")
                 .contentType(contentType)
                 .header("Authorization", adminJWTToken)
                 .content(userGroupJson))
@@ -128,7 +137,7 @@ public class UserGroupsIntegrationTest extends BaseIntegrationTest {
                 .andExpect(jsonPath("$.name", is("App 2 New User Group")));
     }
 
-    @Test(expected = ServletException.class)
+    @Test(expected = Exception.class)
     public void deleteUserGroupUnauthorized() throws Exception {
         this.mockMvc.perform(delete(basePathEn + "/" + application1.getId() + "/user_groups/" + app1userGroup1.getId()))
                 .andExpect(status().isOk());
@@ -136,7 +145,7 @@ public class UserGroupsIntegrationTest extends BaseIntegrationTest {
 
     @Test
     public void deleteUserGroup() throws Exception {
-        String adminJWTToken = requestAdminJWTToken();
+        String adminJWTToken = requestAppAdminJWTToken();
 
         this.mockMvc.perform(delete(basePathEn + "/" + application1.getId() + "/user_groups/" + app1userGroup1.getId())
                 .header("Authorization", adminJWTToken))
@@ -161,7 +170,7 @@ public class UserGroupsIntegrationTest extends BaseIntegrationTest {
         app1userGroup1.setName("App 1 user group 1 new name");
         String userGroupJson = toJson(app1userGroup1);
 
-        String adminJWTToken = requestAdminJWTToken();
+        String adminJWTToken = requestAppAdminJWTToken();
 
         this.mockMvc.perform(put(basePathEn + "/" + application1.getId() + "/user_groups/" + app1userGroup1.getId())
                 .contentType(contentType)

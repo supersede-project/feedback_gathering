@@ -53,6 +53,7 @@ public class FeedbackIntegrationTest extends BaseIntegrationTest {
     public void setup() throws Exception {
         super.setup();
 
+        createRepositoryFilesDirectory();
         feedbackRepository.deleteAllInBatch();
         settingRepository.deleteAllInBatch();
         apiUserPermissionRepository.deleteAllInBatch();

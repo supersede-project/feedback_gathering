@@ -2,6 +2,7 @@ package ch.fhnw.cere.orchestrator.controllers;
 
 
 import ch.fhnw.cere.orchestrator.models.*;
+import ch.fhnw.cere.orchestrator.repositories.ApiUserPermissionRepository;
 import ch.fhnw.cere.orchestrator.repositories.ApplicationRepository;
 import ch.fhnw.cere.orchestrator.repositories.UserRepository;
 import org.junit.After;
@@ -29,6 +30,8 @@ public class UsersIntegrationTest extends BaseIntegrationTest {
     private ApplicationRepository applicationRepository;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private ApiUserPermissionRepository apiUserPermissionRepository;
 
     private String basePathEn = "/orchestrator/feedback/en/applications";
 
@@ -42,6 +45,8 @@ public class UsersIntegrationTest extends BaseIntegrationTest {
         this.application1 = applicationRepository.save(new Application("Test App 1", 1, new Date(), new Date(), null));
         this.user1 = userRepository.save(new User("User 1", "u111111", application1, null));
         this.user2 = userRepository.save(new User("User 2", "u222222", application1, null));
+
+        apiUserPermissionRepository.save(new ApiUserPermission(appAdminUser, application1, true));
     }
 
     @After
@@ -49,6 +54,7 @@ public class UsersIntegrationTest extends BaseIntegrationTest {
         super.cleanUp();
         this.userRepository.deleteAllInBatch();
         this.applicationRepository.deleteAllInBatch();
+        this.apiUserPermissionRepository.deleteAllInBatch();
     }
 
     @Test
@@ -90,7 +96,7 @@ public class UsersIntegrationTest extends BaseIntegrationTest {
         User user = new User("User 3", "u333333", application1, null);
         String userJson = toJson(user);
 
-        String adminJWTToken = requestAdminJWTToken();
+        String adminJWTToken = requestAppAdminJWTToken();
 
         this.mockMvc.perform(post(basePathEn + "/" + this.application1.getId() + "/users")
                 .contentType(contentType)
@@ -101,16 +107,15 @@ public class UsersIntegrationTest extends BaseIntegrationTest {
                 .andExpect(jsonPath("$.userIdentification", is("u333333")));
     }
 
-    @Test(expected = ServletException.class)
+    @Test(expected = Exception.class)
     public void deleteUserUnauthorized() throws Exception {
-
         this.mockMvc.perform(delete(basePathEn + "/" + application1.getId() + "/users/" + user1.getId()))
                 .andExpect(status().isOk());
     }
 
     @Test
     public void deleteUser() throws Exception {
-        String adminJWTToken = requestAdminJWTToken();
+        String adminJWTToken = requestAppAdminJWTToken();
 
         this.mockMvc.perform(delete(basePathEn + "/" + application1.getId() + "/users/" + user1.getId())
                 .header("Authorization", adminJWTToken))
@@ -138,7 +143,7 @@ public class UsersIntegrationTest extends BaseIntegrationTest {
         user1.setUserIdentification("u11111x");
         String userJson = toJson(user1);
 
-        String adminJWTToken = requestAdminJWTToken();
+        String adminJWTToken = requestAppAdminJWTToken();
 
         this.mockMvc.perform(put(basePathEn + "/" + application1.getId() + "/users/" + user1.getId())
                 .contentType(contentType)
