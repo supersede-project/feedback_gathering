@@ -1,7 +1,11 @@
 package ch.fhnw.cere.repository.services;
 
-import org.json.JSONObject;
+
+import ch.fhnw.cere.repository.models.orchestrator.Application;
+
+import java.io.IOException;
+
 
 public interface OrchestratorApplicationService {
-    public JSONObject loadApplication(String language, long applicationId);
+    public Application loadApplication(String language, long applicationId) throws IOException;
 }

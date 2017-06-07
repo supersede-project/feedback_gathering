@@ -5,6 +5,7 @@ import ch.fhnw.cere.repository.models.AttachmentFeedback;
 import ch.fhnw.cere.repository.models.Feedback;
 import ch.fhnw.cere.repository.models.ScreenshotFeedback;
 import ch.fhnw.cere.repository.models.Setting;
+import ch.fhnw.cere.repository.models.orchestrator.Application;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -91,9 +92,10 @@ public class FeedbackEmailServiceImpl implements FeedbackEmailService {
             Template t = freemarkerConfiguration.getTemplate("feedback_mail.ftl");
             String text = FreeMarkerTemplateUtils.processTemplateIntoString(t, model);
 
-            JSONObject orchestratorConfiguration = this.orchestratorApplicationService.loadApplication(feedback.getLanguage(), feedback.getApplicationId());
+            Application orchestratorConfiguration = this.orchestratorApplicationService.loadApplication(feedback.getLanguage(), feedback.getApplicationId());
+            // TODO add mechanism objects to the feedback objects
 
-            helper.setText(text + orchestratorConfiguration.toString(),true);
+            helper.setText(text,true);
 
             this.addAttachments(feedback, helper);
 

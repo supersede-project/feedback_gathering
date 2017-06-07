@@ -6,7 +6,9 @@ import ch.fhnw.cere.repository.models.AttachmentFeedback;
 import ch.fhnw.cere.repository.models.Feedback;
 import ch.fhnw.cere.repository.models.ScreenshotFeedback;
 import ch.fhnw.cere.repository.models.Setting;
+import ch.fhnw.cere.repository.models.orchestrator.Application;
 import ch.fhnw.cere.repository.repositories.SettingRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import freemarker.template.TemplateException;
 import org.apache.commons.io.FileUtils;
 import org.json.JSONObject;
@@ -91,7 +93,9 @@ public class FeedbackEmailServiceTest {
         OrchestratorApplicationService orchestratorApplicationServiceMock = Mockito.mock(OrchestratorApplicationService.class);
 
         String exampleConfiguration = readFile("src/test/resources/orchestrator_application.json",  StandardCharsets.UTF_8);
-        Mockito.when(orchestratorApplicationServiceMock.loadApplication("en", applicationId)).thenReturn(new JSONObject(exampleConfiguration));
+        ObjectMapper mapper = new ObjectMapper();
+        Application application = mapper.readValue(exampleConfiguration, Application.class);
+        Mockito.when(orchestratorApplicationServiceMock.loadApplication("en", applicationId)).thenReturn(application);
         feedbackEmailService.setOrchestratorService(orchestratorApplicationServiceMock);
     }
 
