@@ -1,0 +1,9 @@
+{
+    "SocialNetworks": {
+        "toolName": "TwitterAPI",
+        "timeSlot": "500",
+        "kafkaEndpoint": "http://localhost:9092",
+        "kafkaTopic": "tweeterMonitoring",
+        "keywordExpression": "(olympics) AND (streaming)"
+    }
+}
