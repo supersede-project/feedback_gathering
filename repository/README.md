@@ -29,6 +29,8 @@ cd repository
 gradle build
 ```
 
+DB dump in src/main/resources/supersede_repository_db_structure.sql
+
 # Tests
 
 To run the integration tests, execute the following commands:
