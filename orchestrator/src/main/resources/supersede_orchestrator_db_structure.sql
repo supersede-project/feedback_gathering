@@ -5,13 +5,13 @@
  Source Server Type    : MySQL
  Source Server Version : 50710
  Source Host           : localhost
- Source Database       : supersede_orchestrator_spring
+ Source Database       : supersede_orchestrator_spring_test
 
  Target Server Type    : MySQL
  Target Server Version : 50710
  File Encoding         : utf-8
 
- Date: 05/29/2017 13:42:06 PM
+ Date: 06/08/2017 11:51:48 AM
 */
 
 SET NAMES utf8mb4;
@@ -27,14 +27,7 @@ CREATE TABLE `api_user` (
   `password` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `UK_scb81k0sobpewfaxhwyquccop` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
-
--- ----------------------------
---  Records of `api_user`
--- ----------------------------
-BEGIN;
-INSERT INTO `api_user` VALUES ('1', 'admin', '$2a$10$HM01Z2Vfhw5s4LG2Svze1.IpC7Vn0vkU1or.4h9WaSbTRwwOCOEAy');
-COMMIT;
+) ENGINE=InnoDB AUTO_INCREMENT=3320 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 --  Table structure for `api_user_api_user_role`
@@ -46,15 +39,24 @@ CREATE TABLE `api_user_api_user_role` (
   `api_user_id` bigint(20) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `FKmh0ci62ckvoi95vgx5nj4n0a3` (`api_user_id`),
-  CONSTRAINT `FKmh0ci62ckvoi95vgx5nj4n0a3` FOREIGN KEY (`api_user_id`) REFERENCES `api_user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+  CONSTRAINT `FKmh0ci62ckvoi95vgx5nj4n0a3` FOREIGN KEY (`api_user_id`) REFERENCES `api_user` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=3320 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
---  Records of `api_user_api_user_role`
+--  Table structure for `api_user_permission`
 -- ----------------------------
-BEGIN;
-INSERT INTO `api_user_api_user_role` VALUES ('1', '1', '1');
-COMMIT;
+DROP TABLE IF EXISTS `api_user_permission`;
+CREATE TABLE `api_user_permission` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `api_user_id` bigint(11) NOT NULL,
+  `application_id` bigint(11) NOT NULL,
+  `has_permission` bit(1) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_api_user_permissions_1_idx` (`api_user_id`),
+  KEY `application_id` (`application_id`),
+  CONSTRAINT `api_user_fk` FOREIGN KEY (`api_user_id`) REFERENCES `api_user` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  CONSTRAINT `application_fk` FOREIGN KEY (`application_id`) REFERENCES `application` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=304 DEFAULT CHARSET=big5;
 
 -- ----------------------------
 --  Table structure for `application`
@@ -69,15 +71,8 @@ CREATE TABLE `application` (
   `general_configuration_id` bigint(20) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `FKgr1ty9ysqn7wjxja8s3oe3c7n` (`general_configuration_id`),
-  CONSTRAINT `FKgr1ty9ysqn7wjxja8s3oe3c7n` FOREIGN KEY (`general_configuration_id`) REFERENCES `general_configuration` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
-
--- ----------------------------
---  Records of `application`
--- ----------------------------
-BEGIN;
-INSERT INTO `application` VALUES ('1', '2017-05-28 20:20:39', 'App 1', '1', '2017-05-28 20:20:46', '1');
-COMMIT;
+  CONSTRAINT `FKgr1ty9ysqn7wjxja8s3oe3c7n` FOREIGN KEY (`general_configuration_id`) REFERENCES `general_configuration` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=1935 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 --  Table structure for `configuration`
@@ -91,19 +86,14 @@ CREATE TABLE `configuration` (
   `updated_at` datetime DEFAULT NULL,
   `application_id` bigint(20) DEFAULT NULL,
   `general_configuration_id` bigint(20) DEFAULT NULL,
+  `pull_default` bit(1) NOT NULL,
+  `push_default` bit(1) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `FKdmg5qpjmd9vjc35xqu229ifer` (`application_id`),
   KEY `FKh7to010nk73crcdcx9asyb0u0` (`general_configuration_id`),
-  CONSTRAINT `FKdmg5qpjmd9vjc35xqu229ifer` FOREIGN KEY (`application_id`) REFERENCES `application` (`id`),
-  CONSTRAINT `FKh7to010nk73crcdcx9asyb0u0` FOREIGN KEY (`general_configuration_id`) REFERENCES `general_configuration` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
-
--- ----------------------------
---  Records of `configuration`
--- ----------------------------
-BEGIN;
-INSERT INTO `configuration` VALUES ('1', null, 'Conf 1', '0', null, '1', null);
-COMMIT;
+  CONSTRAINT `FKdmg5qpjmd9vjc35xqu229ifer` FOREIGN KEY (`application_id`) REFERENCES `application` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `FKh7to010nk73crcdcx9asyb0u0` FOREIGN KEY (`general_configuration_id`) REFERENCES `general_configuration` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=1975 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 --  Table structure for `configuration_mechanism`
@@ -118,18 +108,11 @@ CREATE TABLE `configuration_mechanism` (
   `configuration_id` bigint(20) DEFAULT NULL,
   `mechanism_id` bigint(20) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `FKcwcp85xb3nhmb3wfo9gaqwm2f` (`configuration_id`),
   KEY `FKawk60ramkm20rwvamslgmfbd5` (`mechanism_id`),
+  KEY `FKcwcp85xb3nhmb3wfo9gaqwm2f` (`configuration_id`),
   CONSTRAINT `FKawk60ramkm20rwvamslgmfbd5` FOREIGN KEY (`mechanism_id`) REFERENCES `mechanism` (`id`),
-  CONSTRAINT `FKcwcp85xb3nhmb3wfo9gaqwm2f` FOREIGN KEY (`configuration_id`) REFERENCES `configuration` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
-
--- ----------------------------
---  Records of `configuration_mechanism`
--- ----------------------------
-BEGIN;
-INSERT INTO `configuration_mechanism` VALUES ('1', b'1', null, '1', null, '1', '1');
-COMMIT;
+  CONSTRAINT `FKcwcp85xb3nhmb3wfo9gaqwm2f` FOREIGN KEY (`configuration_id`) REFERENCES `configuration` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=1193 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 --  Table structure for `configuration_user_group`
@@ -143,11 +126,11 @@ CREATE TABLE `configuration_user_group` (
   `configuration_id` bigint(20) DEFAULT NULL,
   `user_group_id` bigint(20) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `FKnn84fh468kguhrgxwyusc7ob5` (`configuration_id`),
   KEY `FK4bsbu6bghmv7dow7y82qn45gx` (`user_group_id`),
-  CONSTRAINT `FK4bsbu6bghmv7dow7y82qn45gx` FOREIGN KEY (`user_group_id`) REFERENCES `user_group` (`id`),
-  CONSTRAINT `FKnn84fh468kguhrgxwyusc7ob5` FOREIGN KEY (`configuration_id`) REFERENCES `configuration` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  KEY `FKnn84fh468kguhrgxwyusc7ob5` (`configuration_id`),
+  CONSTRAINT `FK4bsbu6bghmv7dow7y82qn45gx` FOREIGN KEY (`user_group_id`) REFERENCES `user_group` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `FKnn84fh468kguhrgxwyusc7ob5` FOREIGN KEY (`configuration_id`) REFERENCES `configuration` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=904 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 --  Table structure for `general_configuration`
@@ -159,14 +142,7 @@ CREATE TABLE `general_configuration` (
   `name` varchar(255) DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
-
--- ----------------------------
---  Records of `general_configuration`
--- ----------------------------
-BEGIN;
-INSERT INTO `general_configuration` VALUES ('1', '2017-05-28 22:33:15', 'App 1 General Configuration', '2017-05-28 22:33:24');
-COMMIT;
+) ENGINE=InnoDB AUTO_INCREMENT=1707 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 --  Table structure for `mechanism`
@@ -178,14 +154,7 @@ CREATE TABLE `mechanism` (
   `type` int(11) DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
-
--- ----------------------------
---  Records of `mechanism`
--- ----------------------------
-BEGIN;
-INSERT INTO `mechanism` VALUES ('1', null, '0', null);
-COMMIT;
+) ENGINE=InnoDB AUTO_INCREMENT=1423 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 --  Table structure for `monitor_configuration`
@@ -246,20 +215,13 @@ CREATE TABLE `parameter` (
   `mechanism_id` bigint(20) DEFAULT NULL,
   `parent_parameter_id` bigint(20) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `FKmb21havly9lxv0e9ni7x038f5` (`general_configuration_id`),
   KEY `FKfps9auc9gm7jl1rtmbip6f9qc` (`mechanism_id`),
   KEY `FKkd28xfrmcnn0mb00m1qvk5w39` (`parent_parameter_id`),
-  CONSTRAINT `FKfps9auc9gm7jl1rtmbip6f9qc` FOREIGN KEY (`mechanism_id`) REFERENCES `mechanism` (`id`),
-  CONSTRAINT `FKkd28xfrmcnn0mb00m1qvk5w39` FOREIGN KEY (`parent_parameter_id`) REFERENCES `parameter` (`id`),
-  CONSTRAINT `FKmb21havly9lxv0e9ni7x038f5` FOREIGN KEY (`general_configuration_id`) REFERENCES `general_configuration` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
-
--- ----------------------------
---  Records of `parameter`
--- ----------------------------
-BEGIN;
-INSERT INTO `parameter` VALUES ('1', null, 'title', 'en', null, 'Title', null, '1', null);
-COMMIT;
+  KEY `FKmb21havly9lxv0e9ni7x038f5` (`general_configuration_id`),
+  CONSTRAINT `FKfps9auc9gm7jl1rtmbip6f9qc` FOREIGN KEY (`mechanism_id`) REFERENCES `mechanism` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `FKkd28xfrmcnn0mb00m1qvk5w39` FOREIGN KEY (`parent_parameter_id`) REFERENCES `parameter` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `FKmb21havly9lxv0e9ni7x038f5` FOREIGN KEY (`general_configuration_id`) REFERENCES `general_configuration` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=6726 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 --  Table structure for `user`
@@ -272,11 +234,11 @@ CREATE TABLE `user` (
   `application_id` bigint(20) DEFAULT NULL,
   `user_group_id` bigint(20) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `FKloqygibpr0cjij9v6hm7a5cus` (`application_id`),
   KEY `FKd5uhmsqhax1l70pck9lmgphjr` (`user_group_id`),
-  CONSTRAINT `FKd5uhmsqhax1l70pck9lmgphjr` FOREIGN KEY (`user_group_id`) REFERENCES `user_group` (`id`),
-  CONSTRAINT `FKloqygibpr0cjij9v6hm7a5cus` FOREIGN KEY (`application_id`) REFERENCES `application` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  KEY `FKloqygibpr0cjij9v6hm7a5cus` (`application_id`),
+  CONSTRAINT `FKd5uhmsqhax1l70pck9lmgphjr` FOREIGN KEY (`user_group_id`) REFERENCES `user_group` (`id`) ON DELETE SET NULL,
+  CONSTRAINT `FKloqygibpr0cjij9v6hm7a5cus` FOREIGN KEY (`application_id`) REFERENCES `application` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=2079 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 --  Table structure for `user_group`
@@ -288,7 +250,7 @@ CREATE TABLE `user_group` (
   `application_id` bigint(20) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `FK7nf0lyfnicwik0tpkd9lmk4ig` (`application_id`),
-  CONSTRAINT `FK7nf0lyfnicwik0tpkd9lmk4ig` FOREIGN KEY (`application_id`) REFERENCES `application` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  CONSTRAINT `FK7nf0lyfnicwik0tpkd9lmk4ig` FOREIGN KEY (`application_id`) REFERENCES `application` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=1092 DEFAULT CHARSET=utf8;
 
 SET FOREIGN_KEY_CHECKS = 1;

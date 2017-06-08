@@ -1,6 +1,7 @@
 package ch.fhnw.cere.repository.models.orchestrator;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -9,17 +10,17 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Application {
     @JsonProperty("createdAt")
-    public String createdAt;
+    protected String createdAt;
     @JsonProperty("configurations")
-    public List<Configuration> configurations = null;
+    protected List<Configuration> configurations = null;
     @JsonProperty("name")
-    public String name;
+    protected String name;
     @JsonProperty("id")
-    public Long id;
+    protected Long id;
     @JsonProperty("state")
-    public Long state;
+    protected Long state;
     @JsonProperty("generalConfiguration")
-    public GeneralConfiguration generalConfiguration;
+    protected GeneralConfiguration generalConfiguration;
 
     public Application() {
     }
@@ -34,11 +35,13 @@ public class Application {
     }
 
     public Mechanism mechanismByConfigurationIdAndMechanismId(long configurationId, long mechanismId) {
-        Configuration configuration = this.configurations.stream().filter(conf -> conf.getId() == configurationId).findFirst().get();
-        if(configuration != null) {
-            return configuration.getMechanisms().stream().filter(
+        Optional<Configuration> configurationOptional = this.configurations.stream().filter(conf -> conf.getId() == configurationId).findFirst();
+        if(configurationOptional.isPresent()) {
+            Configuration configuration = configurationOptional.get();
+            Optional<Mechanism> mechanismOptional = configuration.getMechanisms().stream().filter(
                     mechanism -> mechanism.getId() == mechanismId
-            ).findFirst().get();
+            ).findFirst();
+            return mechanismOptional.orElse(null);
         } else {
             return null;
         }

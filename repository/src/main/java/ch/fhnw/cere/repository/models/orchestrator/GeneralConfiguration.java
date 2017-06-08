@@ -10,13 +10,13 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class GeneralConfiguration {
     @JsonProperty("createdAt")
-    public String createdAt;
+    protected String createdAt;
     @JsonProperty("name")
-    public String name;
+    protected String name;
     @JsonProperty("id")
-    public Long id;
+    protected Long id;
     @JsonProperty("parameters")
-    public List<Parameter> parameters = null;
+    protected List<Parameter> parameters = null;
 
     public GeneralConfiguration() {
     }

@@ -5,26 +5,27 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Mechanism {
     @JsonProperty("configurationsId")
-    public Long configurationsId;
+    protected Long configurationsId;
     @JsonProperty("createdAt")
-    public String createdAt;
+    protected String createdAt;
     @JsonProperty("active")
-    public Boolean active;
+    protected Boolean active;
     @JsonProperty("id")
-    public Long id;
+    protected Long id;
     @JsonProperty("type")
-    public String type;
+    protected String type;
     @JsonProperty("parameters")
-    public List<Parameter> parameters = null;
+    protected List<Parameter> parameters = null;
     @JsonProperty("canBeActivated")
-    public Boolean canBeActivated;
+    protected Boolean canBeActivated;
     @JsonProperty("order")
-    public Long order;
+    protected Long order;
 
     public Mechanism() {
     }

@@ -18,10 +18,10 @@ Is a RESTfull Web API that provides endpoints for storing, receiving and deletin
 # clone the repository
 git clone https://github.com/supersede-project/monitor_feedback/tree/master/repository
 cp src/main/resources/application.properties-dist src/main/resources/application.properties
+cp src/main/resources/application-test.properties-dist src/main/resources/application-test.properties
 ```
 
-Fill in your DB credentials in the newly created application.properties. Do not add this file to the GIT index. 
-Create the test database according to the credentials in src/main/resources/application-test.properties.
+Fill in your DB credentials and all other required values in the newly created application.properties and application-test.properties. Do not add this file to the GIT index.
 
 ```bash
 cd repository
@@ -39,4 +39,4 @@ gradle test
 
 # License
 
-tba
+Apache License 2.0

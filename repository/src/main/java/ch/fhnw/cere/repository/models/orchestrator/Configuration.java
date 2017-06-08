@@ -10,15 +10,15 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Configuration {
     @JsonProperty("createdAt")
-    public String createdAt;
+    protected String createdAt;
     @JsonProperty("id")
-    public Long id;
+    protected Long id;
     @JsonProperty("generalConfiguration")
-    public GeneralConfiguration generalConfiguration;
+    protected GeneralConfiguration generalConfiguration;
     @JsonProperty("type")
-    public String type;
+    protected String type;
     @JsonProperty("mechanisms")
-    public List<Mechanism> mechanisms = null;
+    protected List<Mechanism> mechanisms = null;
 
     public Configuration() {
     }

@@ -1,6 +1,7 @@
 package ch.fhnw.cere.repository.models;
 
 
+import ch.fhnw.cere.repository.models.orchestrator.Mechanism;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -15,7 +16,7 @@ import java.util.stream.Collectors;
 
 
 @Entity
-public class ScreenshotFeedback implements FileFeedback {
+public class ScreenshotFeedback implements FileFeedback, MechanismFeedback {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -37,6 +38,10 @@ public class ScreenshotFeedback implements FileFeedback {
 
     @OneToMany(mappedBy = "screenshotFeedback", cascade = {CascadeType.REMOVE, CascadeType.PERSIST})
     private List<TextAnnotation> textAnnotations;
+
+    @JsonIgnore
+    @Transient
+    private Mechanism mechanism;
 
     @Override
     public String toString() {
@@ -136,5 +141,15 @@ public class ScreenshotFeedback implements FileFeedback {
 
     public void setFileExtension(String fileExtension) {
         this.fileExtension = fileExtension;
+    }
+
+    @Override
+    public Mechanism getMechanism() {
+        return mechanism;
+    }
+
+    @Override
+    public void setMechanism(Mechanism mechanism) {
+        this.mechanism = mechanism;
     }
 }

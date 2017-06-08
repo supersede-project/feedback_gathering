@@ -1,6 +1,7 @@
 package ch.fhnw.cere.repository.models;
 
 
+import ch.fhnw.cere.repository.models.orchestrator.Mechanism;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -10,7 +11,7 @@ import javax.persistence.*;
 
 
 @Entity
-public class TextFeedback {
+public class TextFeedback implements MechanismFeedback {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -25,6 +26,10 @@ public class TextFeedback {
     @Type(type="text")
     private String text;
     private long mechanismId;
+
+    @JsonIgnore
+    @Transient
+    private Mechanism mechanism;
 
     public TextFeedback() {
 
@@ -73,5 +78,15 @@ public class TextFeedback {
 
     public void setMechanismId(long mechanismId) {
         this.mechanismId = mechanismId;
+    }
+
+    @Override
+    public Mechanism getMechanism() {
+        return mechanism;
+    }
+
+    @Override
+    public void setMechanism(Mechanism mechanism) {
+        this.mechanism = mechanism;
     }
 }

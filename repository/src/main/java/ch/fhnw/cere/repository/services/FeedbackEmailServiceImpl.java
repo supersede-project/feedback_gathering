@@ -1,11 +1,10 @@
 package ch.fhnw.cere.repository.services;
 
 
-import ch.fhnw.cere.repository.models.AttachmentFeedback;
-import ch.fhnw.cere.repository.models.Feedback;
-import ch.fhnw.cere.repository.models.ScreenshotFeedback;
-import ch.fhnw.cere.repository.models.Setting;
+import ch.fhnw.cere.repository.models.*;
 import ch.fhnw.cere.repository.models.orchestrator.Application;
+import ch.fhnw.cere.repository.models.orchestrator.Mechanism;
+import ch.fhnw.cere.repository.models.orchestrator.MechanismTemplateModel;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -27,7 +26,9 @@ import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
@@ -86,17 +87,16 @@ public class FeedbackEmailServiceImpl implements FeedbackEmailService {
                 helper.setSubject("New Feedback from " + feedback.getUserIdentification());
             }
 
+            Application orchestratorApplication = this.orchestratorApplicationService.loadApplication(feedback.getLanguage(), feedback.getApplicationId());
+            this.appendMechanismsToFeedback(orchestratorApplication, feedback);
+
             Map<String, Object> model = new HashMap<>();
             model.put("feedback", feedback);
 
             Template t = freemarkerConfiguration.getTemplate("feedback_mail.ftl");
             String text = FreeMarkerTemplateUtils.processTemplateIntoString(t, model);
 
-            Application orchestratorConfiguration = this.orchestratorApplicationService.loadApplication(feedback.getLanguage(), feedback.getApplicationId());
-            // TODO add mechanism objects to the feedback objects
-
             helper.setText(text,true);
-
             this.addAttachments(feedback, helper);
 
             mailSender.send(message);
@@ -124,5 +124,36 @@ public class FeedbackEmailServiceImpl implements FeedbackEmailService {
             FileSystemResource res = new FileSystemResource(screenshot);
             helper.addAttachment(res.getFilename(), res);
         }
+
+        for(AudioFeedback audioFeedback : feedback.getAudioFeedbacks()) {
+            File screenshot = new File(resourcesDirectory.getAbsolutePath() + File.separator + this.audiosDirectory + File.separator + audioFeedback.getPath());
+            FileSystemResource res = new FileSystemResource(screenshot);
+            helper.addAttachment(res.getFilename(), res);
+        }
+    }
+
+    private Feedback appendMechanismsToFeedback(Application application, Feedback feedback) {
+        feedback.setAttachmentFeedbacks((List<AttachmentFeedback>)appendMechanismToMechanismFeedbacks(application, feedback.getAttachmentFeedbacks(), feedback.getConfigurationId()));
+        feedback.setScreenshotFeedbacks((List<ScreenshotFeedback>)appendMechanismToMechanismFeedbacks(application, feedback.getScreenshotFeedbacks(), feedback.getConfigurationId()));
+        feedback.setAudioFeedbacks((List<AudioFeedback>)appendMechanismToMechanismFeedbacks(application, feedback.getAudioFeedbacks(), feedback.getConfigurationId()));
+        feedback.setRatingFeedbacks((List<RatingFeedback>)appendMechanismToMechanismFeedbacks(application, feedback.getRatingFeedbacks(), feedback.getConfigurationId()));
+        feedback.setCategoryFeedbacks((List<CategoryFeedback>)appendMechanismToMechanismFeedbacks(application, feedback.getCategoryFeedbacks(), feedback.getConfigurationId()));
+        feedback.setTextFeedbacks((List<TextFeedback>)appendMechanismToMechanismFeedbacks(application, feedback.getTextFeedbacks(), feedback.getConfigurationId()));
+        return feedback;
+    }
+
+    private List<? extends MechanismFeedback> appendMechanismToMechanismFeedbacks(Application application, List<? extends MechanismFeedback> mechanismFeedbacks, long configurationId) {
+        List<MechanismFeedback> mechanismFeedbacksWithMechanism = new ArrayList<>();
+        if(mechanismFeedbacks == null) {
+            return null;
+        }
+
+        for(MechanismFeedback mechanismFeedback : mechanismFeedbacks) {
+            Mechanism mechanism = application.mechanismByConfigurationIdAndMechanismId(configurationId, mechanismFeedback.getMechanismId());
+            MechanismTemplateModel mechanismTemplateModel = new MechanismTemplateModel(mechanism);
+            mechanismFeedback.setMechanism(mechanismTemplateModel);
+            mechanismFeedbacksWithMechanism.add(mechanismFeedback);
+        }
+        return mechanismFeedbacksWithMechanism;
     }
 }

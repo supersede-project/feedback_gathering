@@ -2,16 +2,12 @@ package ch.fhnw.cere.repository.services;
 
 
 import ch.fhnw.cere.repository.RepositoryApplication;
-import ch.fhnw.cere.repository.models.AttachmentFeedback;
-import ch.fhnw.cere.repository.models.Feedback;
-import ch.fhnw.cere.repository.models.ScreenshotFeedback;
-import ch.fhnw.cere.repository.models.Setting;
+import ch.fhnw.cere.repository.models.*;
 import ch.fhnw.cere.repository.models.orchestrator.Application;
 import ch.fhnw.cere.repository.repositories.SettingRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import freemarker.template.TemplateException;
 import org.apache.commons.io.FileUtils;
-import org.json.JSONObject;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -78,11 +74,24 @@ public class FeedbackEmailServiceTest {
 
     @Test
     public void sendMail() throws IOException, TemplateException {
-        Feedback feedback = new Feedback("Test feedback", "userId3", applicationId, 22, "en");
-        ScreenshotFeedback screenshotFeedback = new ScreenshotFeedback("screenshot_1_example.png", 20000, "screenshot1", "png", feedback, 3, null);
-        AttachmentFeedback attachmentFeedback = new AttachmentFeedback("test_file.pdf", 10000, "attachment1", "pdf", feedback, 4);
+        Feedback feedback = new Feedback("Test feedback", "userId3", applicationId, 39, "en");
+        ScreenshotFeedback screenshotFeedback = new ScreenshotFeedback("screenshot_1_example.png", 20000, "screenshot1", "png", feedback, 61, null);
+        AttachmentFeedback attachmentFeedback = new AttachmentFeedback("test_file.pdf", 10000, "attachment1", "pdf", feedback, 65);
+        TextFeedback textFeedback = new TextFeedback(feedback, "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.", 59);
+        RatingFeedback ratingFeedback = new RatingFeedback(feedback, "Rate your user experience on this page", 4, 62);
+        AudioFeedback audioFeedback = new AudioFeedback("audio_example.wav", 44, "audio1", "wav", feedback, 60,0);
+        CategoryFeedback categoryFeedback1 = new CategoryFeedback(feedback, 64L, 511L);
+        CategoryFeedback categoryFeedback2 = new CategoryFeedback(feedback, 64L, "Praise");
+
         feedback.setScreenshotFeedbacks(new ArrayList<ScreenshotFeedback>(){{add(screenshotFeedback);}});
         feedback.setAttachmentFeedbacks(new ArrayList<AttachmentFeedback>(){{add(attachmentFeedback);}});
+        feedback.setTextFeedbacks(new ArrayList<TextFeedback>(){{add(textFeedback);}});
+        feedback.setRatingFeedbacks(new ArrayList<RatingFeedback>(){{add(ratingFeedback);}});
+        feedback.setAudioFeedbacks(new ArrayList<AudioFeedback>(){{add(audioFeedback);}});
+        feedback.setCategoryFeedbacks(new ArrayList<CategoryFeedback>(){{
+            add(categoryFeedback1);
+            add(categoryFeedback2);
+        }});
 
         Setting setting = settingRepository.findByApplicationId(feedback.getApplicationId());
         String recipients = setting.getFeedbackEmailReceivers();
@@ -112,6 +121,10 @@ public class FeedbackEmailServiceTest {
         File srcScreenshot = new File("src/test/resources" + File.separator + "screenshot_1_example.png");
         File destScreenshot = new File(repositoryFilesDirectory + File.separator + screenshotsDirectory + File.separator + "screenshot_1_example.png");
         FileUtils.copyFile(srcScreenshot, destScreenshot);
+
+        File srcAudio = new File("src/test/resources" + File.separator + "audio_example.wav");
+        File destAudio = new File(repositoryFilesDirectory + File.separator + audiosDirectory + File.separator + "audio_example.wav");
+        FileUtils.copyFile(srcAudio, destAudio);
     }
 
     private void removeRepositoryFilesDirectory() throws IOException {

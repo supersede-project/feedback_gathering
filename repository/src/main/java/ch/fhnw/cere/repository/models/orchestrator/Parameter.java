@@ -8,15 +8,15 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Parameter {
     @JsonProperty("createdAt")
-    public String createdAt;
+    protected String createdAt;
     @JsonProperty("language")
-    public String language;
+    protected String language;
     @JsonProperty("id")
-    public Long id;
+    protected Long id;
     @JsonProperty("value")
-    public Object value;
+    protected Object value;
     @JsonProperty("key")
-    public String key;
+    protected String key;
 
     public Parameter() {
     }

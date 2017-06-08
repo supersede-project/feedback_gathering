@@ -1,6 +1,7 @@
 package ch.fhnw.cere.repository.models;
 
 
+import ch.fhnw.cere.repository.models.orchestrator.Mechanism;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -9,7 +10,7 @@ import javax.persistence.*;
 
 
 @Entity
-public class AudioFeedback implements FileFeedback {
+public class AudioFeedback implements FileFeedback, MechanismFeedback {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -30,6 +31,9 @@ public class AudioFeedback implements FileFeedback {
     private String part;
     private String fileExtension;
 
+    @JsonIgnore
+    @Transient
+    private Mechanism mechanism;
 
     @Override
     public String toString() {
@@ -122,5 +126,15 @@ public class AudioFeedback implements FileFeedback {
 
     public void setFileExtension(String fileExtension) {
         this.fileExtension = fileExtension;
+    }
+
+    @Override
+    public Mechanism getMechanism() {
+        return mechanism;
+    }
+
+    @Override
+    public void setMechanism(Mechanism mechanism) {
+        this.mechanism = mechanism;
     }
 }
