@@ -27,6 +27,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Date;
 
 
 @RunWith(SpringRunner.class)
@@ -82,6 +83,7 @@ public class FeedbackEmailServiceTest {
         AudioFeedback audioFeedback = new AudioFeedback("audio_example.wav", 44, "audio1", "wav", feedback, 60,0);
         CategoryFeedback categoryFeedback1 = new CategoryFeedback(feedback, 64L, 511L);
         CategoryFeedback categoryFeedback2 = new CategoryFeedback(feedback, 64L, "Praise");
+        ContextInformation contextInformation = new ContextInformation(feedback, "2500x1200", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36", null, null, "+0200", 2.0f, null, null, "http://example.com/subpage/path");
 
         feedback.setScreenshotFeedbacks(new ArrayList<ScreenshotFeedback>(){{add(screenshotFeedback);}});
         feedback.setAttachmentFeedbacks(new ArrayList<AttachmentFeedback>(){{add(attachmentFeedback);}});
@@ -92,6 +94,7 @@ public class FeedbackEmailServiceTest {
             add(categoryFeedback1);
             add(categoryFeedback2);
         }});
+        feedback.setContextInformation(contextInformation);
 
         Setting setting = settingRepository.findByApplicationId(feedback.getApplicationId());
         String recipients = setting.getFeedbackEmailReceivers();

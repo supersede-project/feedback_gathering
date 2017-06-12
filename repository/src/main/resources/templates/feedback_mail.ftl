@@ -3,7 +3,7 @@
 Hello,<br/>
 A new feedback was sent for application ${feedback.applicationId}.
 
-<p>${feedback.userIdentification}</p>
+<p>User ID: ${feedback.userIdentification}</p>
 
 <p>
     <b>Text Feedback</b><br/>
@@ -81,6 +81,21 @@ A new feedback was sent for application ${feedback.applicationId}.
 <#else>
     No audio feedbacks
 </#if>
+</p>
+
+<p>
+    <b>Context Information</b><br />
+    <#if feedback.contextInformation??>
+        Resolution: ${(feedback.contextInformation.resolution)!} <br />
+        User agent: ${(feedback.contextInformation.userAgent)!} <br />
+        <#if feedback.contextInformation.androidVersion??>
+            Android version: ${(feedback.contextInformation.androidVersion)!} <br />
+        </#if>
+        Local time: ${(feedback.contextInformation.localTime)!} <br />
+        Time zone: ${(feedback.contextInformation.timeZone)!} <br />
+        Device pixel ratio: ${(feedback.contextInformation.devicePixelRatio)!} <br />
+        URL: ${(feedback.contextInformation.url)!} <br />
+    </#if>
 </p>
 
 <p>
