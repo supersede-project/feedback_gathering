@@ -31,8 +31,7 @@ cd orchestrator
 gradle build
 ```
 
-DB dump in src/main/resources/supersede_orchestrator_db_structure.sql
-
+DB dump in src/main/resources/db/migrations/feedback/supersede_orchestrator_db_structure.sql
 
 # Tests
 
