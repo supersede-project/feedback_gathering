@@ -1,0 +1,29 @@
+FROM frolvlad/alpine-oraclejdk8:slim
+VOLUME /tmp
+ADD build/libs/feedback_orchestrator-2.0.0.jar app.jar
+RUN sh -c 'touch /app.jar'
+ENV JAVA_OPTS=""
+ENTRYPOINT [ "sh", "-c", "java $JAVA_OPTS -Djava.security.egd=file:/dev/./urandom -jar /app.jar" ]
+
+
+
+
+# WEB
+# docker build -t supersede_orchestrator -f Dockerfile.web .
+# docker run --name supersede_orchestrator -p 4000:8080 -d supersede_orchestrator
+# docker start supersede_orchestrator
+# debugging: docker exec -it supersede_orchestrator /bin/sh
+
+
+# DB
+# docker build -t tutum/mysql .
+# docker logs $CONTAINER_ID
+# docker port $CONTAINER_ID 3306
+# or docker ps --all
+# login and execute: GRANT ALL PRIVILEGES ON supersede_orchestrator_spring.* TO 'user'@'localhost';
+# execute:  FLUSH PRIVILEGES;
+# logout
+# mysql -h localhost -u root -P 32768 supersede_orchestrator_spring < orchestrator/src/main/resources/db/migrations/feedback/supersede_orchestrator_db_structure.sql
+# mysql -h localhost -u root -P 32768 supersede_orchestrator_spring < orchestrator/docker/create_super_admin_api_user.sql
+# debugging: docker exec -it $CONTAINER_ID /bin/sh
+# edit my.cnf and add comment (#) before  "bind-address          = 127.0.0.1"
