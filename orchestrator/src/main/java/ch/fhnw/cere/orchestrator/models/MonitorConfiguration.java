@@ -1,5 +1,9 @@
 package ch.fhnw.cere.orchestrator.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
@@ -9,11 +13,13 @@ public class MonitorConfiguration {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name="monitor_configuration_id")
-    private Integer id;
+    private long id;
 
-    @Column(name="monitor_tool_id")
-    private Integer monitorToolId;
+    @JsonIgnore
+    @ManyToOne(cascade = {CascadeType.REMOVE, CascadeType.MERGE})
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JoinColumn(name = "monitor_tool_id")
+    private MonitorTool monitorTool;
 
     @Column(name="monitor_manager_configuration_id")
     private Integer monitorManagerConfigurationId;
@@ -46,8 +52,11 @@ public class MonitorConfiguration {
     @Column(name="app_id")
     private String appId;
 
-    public MonitorConfiguration(Integer monitorToolId, Integer monitorManagerConfigurationId, String configSender, String timeStamp, String timeSlot, String kafkaEndpoint, String kafkaTopic, String state, String keywordExpression, String packageName, String appId) {
-        this.monitorToolId = monitorToolId;
+    public MonitorConfiguration() {
+    }
+
+    public MonitorConfiguration(MonitorTool monitorTool, Integer monitorManagerConfigurationId, String configSender, String timeStamp, String timeSlot, String kafkaEndpoint, String kafkaTopic, String state, String keywordExpression, String packageName, String appId) {
+        this.monitorTool = monitorTool;
         this.monitorManagerConfigurationId = monitorManagerConfigurationId;
         this.configSender = configSender;
         this.timeStamp = timeStamp;
@@ -60,20 +69,31 @@ public class MonitorConfiguration {
         this.appId = appId;
     }
 
-    public Integer getId() {
+    @Override
+    public String toString() {
+        return String.format(
+                "MonitorConfiguration[id=%d, monitorTool='%s', monitorManagerConfigurationId=%d, configSender='%s', " +
+                        "timeStamp='%s', timeSlot='%s', kafkaEndpoint='%s', " +
+                        "kafkaTopic='%s', state='%s', keywordExpression='%s', packageName='%s', appId='%s']",
+                id, monitorTool, monitorManagerConfigurationId, configSender,
+                timeStamp, timeSlot, kafkaEndpoint,
+                kafkaTopic, state, keywordExpression, packageName, appId);
+    }
+
+    public long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(long id) {
         this.id = id;
     }
 
-    public Integer getMonitorToolId() {
-        return monitorToolId;
+    public MonitorTool getMonitorTool() {
+        return monitorTool;
     }
 
-    public void setMonitorToolId(Integer monitorToolId) {
-        this.monitorToolId = monitorToolId;
+    public void setMonitorTool(MonitorTool monitorTool) {
+        this.monitorTool = monitorTool;
     }
 
     public Integer getMonitorManagerConfigurationId() {
