@@ -24,14 +24,15 @@ import monitormanager.model.ConfigurationParser;
 
 @RequestMapping(value = "/")
 @RestController
-public class RESTController {
+public class MonitorManager implements IMonitorManager {
 		
 	private ConfigurationParser parser = new ConfigurationParser();
 
+	@Override
 	@RequestMapping(value = "/{monitorName}/configuration", method = RequestMethod.POST)
 	@ResponseStatus(value = HttpStatus.CREATED)
-	public String addConfiguration(@PathVariable String monitorName, @RequestBody String input) throws Exception {
-		JsonObject jsonObj = getJson(input);
+	public JsonObject addConfiguration(@PathVariable String monitorName, @RequestBody JsonObject jsonObj) throws Exception {
+		//JsonObject jsonObj = getJson(input);
 		if (monitorName.equals("Twitter")) {
 			TwitterMonitorProxy<?,?> proxy = new TwitterMonitorProxy<>();
 			TwitterMonitorConfiguration conf = parser.getTwitterConfiguration(jsonObj);
@@ -50,11 +51,12 @@ public class RESTController {
 		} else throw new Exception("There is no monitor with this name");
 	}
 	
+	@Override
 	@RequestMapping(value = "/{monitorName}/configuration/{confId}", method = RequestMethod.PUT)
 	@ResponseStatus(value = HttpStatus.OK)
-	public String updateConfiguration(@PathVariable String monitorName,
-			@PathVariable int confId, @RequestBody String input) throws Exception {
-		JsonObject jsonObj = getJson(input);
+	public JsonObject updateConfiguration(@PathVariable String monitorName,
+			@PathVariable int confId, @RequestBody JsonObject jsonObj) throws Exception {
+		//JsonObject jsonObj = getJson(input);
 		if (monitorName.equals("Twitter")) {
 			TwitterMonitorProxy<?,?> proxy = new TwitterMonitorProxy<>();
 			TwitterMonitorConfiguration conf = parser.getTwitterConfiguration(jsonObj);
@@ -76,6 +78,7 @@ public class RESTController {
 		} else throw new Exception("There is no monitor with this name");
 	}
 
+	@Override
 	@RequestMapping(value = "/{monitorName}/configuration/{confId}", method = RequestMethod.DELETE)
 	@ResponseStatus(value = HttpStatus.OK)
 	public void deleteConfiguration(@PathVariable String monitorName,
@@ -105,11 +108,11 @@ public class RESTController {
 	}
 	
 	
-	private String getResponse(MonitorSpecificConfiguration result) {
+	private JsonObject getResponse(MonitorSpecificConfiguration result) {
 		JsonObject json = new JsonObject();
 		json.addProperty("idConf", result.getId());
 		json.addProperty("status", "success");
-		return json.toString();
+		return json;
 	}
 	
 }
