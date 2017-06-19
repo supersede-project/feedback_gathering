@@ -61,6 +61,10 @@ public class FeedbackEmailServiceImpl implements FeedbackEmailService {
     @Async
     public void sendFeedbackNotification(final Feedback feedback) {
         Setting setting = settingService.findByApplicationId(feedback.getApplicationId());
+        if(setting == null) {
+            return;
+        }
+
         String recipients = setting.getFeedbackEmailReceivers();
 
         if(recipients == null || recipients.equals("")) {

@@ -258,7 +258,7 @@ export class FeedbackDialogView extends DialogView {
             let partName = "audio" + audioMechanism.id;
             var audioElement = jQuery('section#audioMechanism' + audioMechanism.id + ' audio')[0];
             if (!audioElement || Fr.voice.recorder === null) {
-                formData.append('json', JSON.stringify(feedbackObject));
+                formData.append('json', new Blob([JSON.stringify(feedbackObject)], { type: 'application/json' }));
                 callback(formData);
             }
 
@@ -273,17 +273,17 @@ export class FeedbackDialogView extends DialogView {
                     var date = new Date();
                     formData.append(partName, blob, "recording" + audioMechanism.id + "_" + date.getTime());
                     feedbackObject.audioFeedbacks.push(audioFeedback);
-                    formData.append('json', JSON.stringify(feedbackObject));
+                    formData.append('json', new Blob([JSON.stringify(feedbackObject)], { type: 'application/json' }));
                     callback(formData);
                 });
             } catch (e) {
-                formData.append('json', JSON.stringify(feedbackObject));
+                formData.append('json', new Blob([JSON.stringify(feedbackObject)], { type: 'application/json' }));
                 callback(formData);
             }
         }
 
         if (!hasAudioMechanism) {
-            formData.append('json', JSON.stringify(feedbackObject));
+            formData.append('json', new Blob([JSON.stringify(feedbackObject)], { type: 'application/json' }));
             callback(formData);
         }
     };

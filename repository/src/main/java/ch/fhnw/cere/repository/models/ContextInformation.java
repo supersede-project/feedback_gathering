@@ -1,7 +1,9 @@
 package ch.fhnw.cere.repository.models;
 
 
+import ch.fhnw.cere.repository.serialization.CustomDateDeserializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -26,6 +28,8 @@ public class ContextInformation {
     private String resolution;
     private String userAgent;
     private String androidVersion;
+
+    @JsonDeserialize(using = CustomDateDeserializer.class)
     private Timestamp localTime;
     private String timeZone;
     private Float devicePixelRatio;

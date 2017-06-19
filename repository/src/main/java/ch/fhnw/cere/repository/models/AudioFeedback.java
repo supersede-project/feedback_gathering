@@ -3,6 +3,7 @@ package ch.fhnw.cere.repository.models;
 
 import ch.fhnw.cere.repository.models.orchestrator.Mechanism;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -10,6 +11,7 @@ import javax.persistence.*;
 
 
 @Entity
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class AudioFeedback implements FileFeedback, MechanismFeedback {
 
     @Id

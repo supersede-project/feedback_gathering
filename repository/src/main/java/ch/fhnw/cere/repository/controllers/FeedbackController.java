@@ -8,6 +8,8 @@ import ch.fhnw.cere.repository.services.FeedbackEmailServiceImpl;
 import ch.fhnw.cere.repository.models.Feedback;
 import ch.fhnw.cere.repository.services.FeedbackService;
 import ch.fhnw.cere.repository.services.FileStorageService;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -16,8 +18,11 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.Part;
+import java.io.ByteArrayInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -66,11 +71,21 @@ public class FeedbackController extends BaseController {
 
     @ResponseStatus(HttpStatus.CREATED)
     @RequestMapping(method = RequestMethod.POST, value = "", consumes = "multipart/form-data")
-    public Feedback createFeedback(HttpServletRequest request, @RequestPart("json") Feedback feedback) throws IOException {
-        feedback.setApplicationId(applicationId());
-
+    public Feedback createFeedback(HttpServletRequest request) throws IOException, ServletException {
         MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
         MultiValueMap<String, MultipartFile> parts = multipartRequest.getMultiFileMap();
+
+        MultipartFile jsonPart = parts.getFirst("json");
+        ByteArrayInputStream stream = new ByteArrayInputStream(jsonPart.getBytes());
+        String jsonString = IOUtils.toString(stream, "UTF-8");
+
+        ObjectMapper mapper = new ObjectMapper();
+        Feedback feedback = mapper.readValue(jsonString, Feedback.class);
+        feedback.setApplicationId(applicationId());
+        if(feedback.getLanguage() == null) {
+            feedback.setLanguage("en");
+        }
+
         parts.remove("json");
         feedback = fileStorageService.storeFiles(feedback, parts);
 
