@@ -26,14 +26,13 @@ public class CustomDateDeserializer extends StdDeserializer<Timestamp> {
     }
 
     @Override
-    public Timestamp deserialize(JsonParser jsonparser, DeserializationContext context)
-            throws IOException, JsonProcessingException {
-        String date = jsonparser.getText();
+    public Timestamp deserialize(JsonParser jsonparser, DeserializationContext context) throws IOException, JsonProcessingException {
         try {
+            String date = jsonparser.getText();
             Date parsedDate = formatter.parse(date);
             return new Timestamp(parsedDate.getTime());
-        } catch (ParseException e) {
-            throw new RuntimeException(e);
+        } catch (Exception e) {
+            return new Timestamp(new Date().getTime());
         }
     }
 }

@@ -72,7 +72,12 @@ public class FileStorageServiceImpl implements FileStorageService {
         for(FileFeedback fileFeedback : fileFeedbacks) {
             if(parts.containsKey(fileFeedback.getPart())) {
                 MultipartFile file = parts.getFirst(fileFeedback.getPart());
-                String generatedFilename = buildFilename(file.getOriginalFilename(), feedback) + "." + fileFeedback.getFileExtension();
+                String generatedFilename = "";
+                if(fileFeedback.getFileExtension() != null) {
+                    generatedFilename = buildFilename(file.getOriginalFilename(), feedback) + "." + fileFeedback.getFileExtension();
+                } else {
+                    generatedFilename = buildFilename(file.getOriginalFilename(), feedback);
+                }
                 String repositoryFilesDirectory = uploadDirectory + "/" + folderName + "/" + generatedFilename;
                 file.transferTo(new File(repositoryFilesDirectory));
                 fileFeedback.setPath(generatedFilename);

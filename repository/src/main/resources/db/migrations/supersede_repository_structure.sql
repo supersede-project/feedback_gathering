@@ -11,7 +11,7 @@
  Target Server Version : 50710
  File Encoding         : utf-8
 
- Date: 06/08/2017 11:52:23 AM
+ Date: 06/20/2017 21:20:25 PM
 */
 
 SET NAMES utf8mb4;
@@ -27,7 +27,7 @@ CREATE TABLE `api_user` (
   `password` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `UK_scb81k0sobpewfaxhwyquccop` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=1762 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=337 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 --  Table structure for `api_user_api_user_role`
@@ -40,7 +40,7 @@ CREATE TABLE `api_user_api_user_role` (
   PRIMARY KEY (`id`),
   KEY `FKmh0ci62ckvoi95vgx5nj4n0a3` (`api_user_id`),
   CONSTRAINT `FKmh0ci62ckvoi95vgx5nj4n0a3` FOREIGN KEY (`api_user_id`) REFERENCES `api_user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1762 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=337 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 --  Table structure for `api_user_permission`
@@ -54,7 +54,7 @@ CREATE TABLE `api_user_permission` (
   PRIMARY KEY (`id`),
   KEY `api_user_id` (`api_user_id`),
   CONSTRAINT `api_user_fk` FOREIGN KEY (`api_user_id`) REFERENCES `api_user` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=279 DEFAULT CHARSET=big5;
+) ENGINE=InnoDB AUTO_INCREMENT=85 DEFAULT CHARSET=big5;
 
 -- ----------------------------
 --  Table structure for `attachment_feedback`
@@ -70,7 +70,7 @@ CREATE TABLE `attachment_feedback` (
   PRIMARY KEY (`id`),
   KEY `FKoq4taf5qmyusdvl1m5kj4rgco` (`feedback_id`),
   CONSTRAINT `FKoq4taf5qmyusdvl1m5kj4rgco` FOREIGN KEY (`feedback_id`) REFERENCES `feedback` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 --  Table structure for `audio_feedback`
@@ -102,7 +102,7 @@ CREATE TABLE `category_feedback` (
   PRIMARY KEY (`id`),
   KEY `FK83xs7iqr1bq6a5isel0ceded8` (`feedback_id`),
   CONSTRAINT `FK83xs7iqr1bq6a5isel0ceded8` FOREIGN KEY (`feedback_id`) REFERENCES `feedback` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=90 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=111 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 --  Table structure for `context_information`
@@ -123,7 +123,7 @@ CREATE TABLE `context_information` (
   PRIMARY KEY (`id`),
   KEY `FKgjes53m9wrcpnnq0kl898yjul` (`feedback_id`),
   CONSTRAINT `FKgjes53m9wrcpnnq0kl898yjul` FOREIGN KEY (`feedback_id`) REFERENCES `feedback` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=146 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=167 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 --  Table structure for `feedback`
@@ -139,7 +139,7 @@ CREATE TABLE `feedback` (
   `updated_at` datetime DEFAULT NULL,
   `user_identification` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1816 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=278 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 --  Table structure for `file_feedback`
@@ -172,7 +172,7 @@ CREATE TABLE `rating_feedback` (
   PRIMARY KEY (`id`),
   KEY `FKa5merp6x61nokyyvx17snw5bb` (`feedback_id`),
   CONSTRAINT `FKa5merp6x61nokyyvx17snw5bb` FOREIGN KEY (`feedback_id`) REFERENCES `feedback` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=60 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=74 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 --  Table structure for `screenshot_feedback`
@@ -188,7 +188,7 @@ CREATE TABLE `screenshot_feedback` (
   PRIMARY KEY (`id`),
   KEY `FKsekb4tg5bivjepodpeyt7eplc` (`feedback_id`),
   CONSTRAINT `FKsekb4tg5bivjepodpeyt7eplc` FOREIGN KEY (`feedback_id`) REFERENCES `feedback` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 --  Table structure for `setting`
@@ -200,7 +200,7 @@ CREATE TABLE `setting` (
   `feedback_email_receivers` varchar(510) NOT NULL,
   `kafka_topic_id` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=318 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=425 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 --  Table structure for `status`
@@ -228,7 +228,7 @@ CREATE TABLE `status_options` (
   `order` int(11) NOT NULL,
   `user_specific` bit(1) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- ----------------------------
 --  Table structure for `text_annotation`
@@ -256,6 +256,6 @@ CREATE TABLE `text_feedback` (
   PRIMARY KEY (`id`),
   KEY `FKtidcgd0wra4sxqlawcp4li155` (`feedback_id`),
   CONSTRAINT `FKtidcgd0wra4sxqlawcp4li155` FOREIGN KEY (`feedback_id`) REFERENCES `feedback` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=307 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=349 DEFAULT CHARSET=utf8;
 
 SET FOREIGN_KEY_CHECKS = 1;
