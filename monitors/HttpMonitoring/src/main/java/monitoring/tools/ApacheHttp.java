@@ -31,6 +31,7 @@ import java.util.TimerTask;
 
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpMethod;
+import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.HeadMethod;
 import org.apache.log4j.Logger;
 import org.springframework.util.StopWatch;
@@ -66,7 +67,8 @@ public class ApacheHttp implements ToolInterface<HttpMonitoringParams> {
 		this.configurationId = configurationId;
 		this.kafka = new KafkaCommunication();
 		this.client = new HttpClient();
-        this.method = new HeadMethod(this.confParams.getUrl());
+		//HEAD METHOD --> 
+        this.method = new GetMethod(this.confParams.getUrl());
 		resetStream();
 	}
 	
@@ -85,10 +87,10 @@ public class ApacheHttp implements ToolInterface<HttpMonitoringParams> {
 	}
 	
 	private void resetStream() {
-		//logger.debug("Initialising kafka producer...");
-		//kafka.initProducer(confParams.getKafkaEndpoint());
-		logger.debug("Initialising proxy...");
-		kafka.initProxy();
+		logger.debug("Initialising kafka producer...");
+		kafka.initProducer(confParams.getKafkaEndpoint());
+		//logger.debug("Initialising proxy...");
+		//kafka.initProxy();
 		logger.debug("Initialising streaming...");
 		timer = new Timer();
 		timer.schedule(new TimerTask() {
@@ -122,8 +124,8 @@ public class ApacheHttp implements ToolInterface<HttpMonitoringParams> {
         data.add(new HttpMonitoringData(String.valueOf(watch.getTotalTimeMillis()), String.valueOf(method.getStatusCode())));
 		logger.debug("Sent data: " + watch.getTotalTimeMillis() + "/" + method.getStatusCode());
 		method.releaseConnection();
-		//kafka.generateResponseKafka(data, searchTimeStamp, id, configurationId, this.confParams.getKafkaTopic(), "HttpMonitoredData");
-		kafka.generateResponseIF(data, searchTimeStamp, id, configurationId, this.confParams.getKafkaTopic(), "HttpMonitoredData");
+		kafka.generateResponseKafka(data, searchTimeStamp, id, configurationId, this.confParams.getKafkaTopic(), "HttpMonitoredData");
+		//kafka.generateResponseIF(data, searchTimeStamp, id, configurationId, this.confParams.getKafkaTopic(), "HttpMonitoredData");
 		logger.debug("Data successfully sent to Kafka endpoint");
 		++id;
 	}
