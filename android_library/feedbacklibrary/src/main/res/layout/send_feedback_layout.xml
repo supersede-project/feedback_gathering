@@ -20,7 +20,8 @@
         android:layout_gravity="fill"
         android:layout_toStartOf="@+id/supersede_feedbacklibrary_send_feedback_button"
         android:paddingTop="5dp"
-        android:text="@string/supersede_feedbacklibrary_sendconfirmation_text"/>
+        android:text="@string/supersede_feedbacklibrary_sendconfirmation_text"
+        android:textSize="12sp"/>
 
     <Button
         android:id="@+id/supersede_feedbacklibrary_send_feedback_button"

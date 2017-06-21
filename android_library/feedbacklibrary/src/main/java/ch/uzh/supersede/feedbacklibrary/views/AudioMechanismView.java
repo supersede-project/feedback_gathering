@@ -11,6 +11,7 @@ import android.media.MediaRecorder;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -42,13 +43,13 @@ public class AudioMechanismView extends MechanismView implements SeekBar.OnSeekB
     private boolean isRecording = false;
     private MediaPlayer mediaPlayer;
     private MediaRecorder mediaRecorder;
-    private ImageButton pauseButton;
-    private ImageButton playButton;
-    private ImageButton recordButton;
+    private ImageView pauseButton;
+    private ImageView playButton;
+    private ImageView recordButton;
     private TextView recordIndicator;
     private ValueAnimator recordIndicatorAnimator;
     private Resources resources;
-    private ImageButton stopButton;
+    private ImageView stopButton;
     private String tempAudioFilePath;
     private int totalDuration;
 
@@ -132,16 +133,16 @@ public class AudioMechanismView extends MechanismView implements SeekBar.OnSeekB
     private void initView() {
         ((TextView) getEnclosingLayout().findViewById(ch.uzh.supersede.feedbacklibrary.R.id.supersede_feedbacklibrary_audio_title)).setText(audioMechanism.getTitle());
         ((TextView) getEnclosingLayout().findViewById(ch.uzh.supersede.feedbacklibrary.R.id.supersede_feedbacklibrary_audio_time_limit)).setText(applicationContext.getResources().getString(ch.uzh.supersede.feedbacklibrary.R.string.supersede_feedbacklibrary_audio_maximum_length_text, (Float.valueOf(audioMechanism.getMaxTime())).intValue()));
-        pauseButton = (ImageButton) getEnclosingLayout().findViewById(ch.uzh.supersede.feedbacklibrary.R.id.supersede_feedbacklibrary_audio_player_button_pause);
+        pauseButton = (ImageView) getEnclosingLayout().findViewById(ch.uzh.supersede.feedbacklibrary.R.id.supersede_feedbacklibrary_audio_player_button_pause);
         setButtonEnabled(pauseButton, false);
-        playButton = (ImageButton) getEnclosingLayout().findViewById(ch.uzh.supersede.feedbacklibrary.R.id.supersede_feedbacklibrary_audio_player_button_play);
+        playButton = (ImageView) getEnclosingLayout().findViewById(ch.uzh.supersede.feedbacklibrary.R.id.supersede_feedbacklibrary_audio_player_button_play);
         setButtonEnabled(playButton, false);
         recordAnimationColorStart = resources.getColor(ch.uzh.supersede.feedbacklibrary.R.color.supersede_feedbacklibrary_audio_timer_record_indicator_start_animation_color);
         recordAnimationColorEnd = resources.getColor(ch.uzh.supersede.feedbacklibrary.R.color.supersede_feedbacklibrary_audio_timer_record_indicator_end_animation_color);
-        recordButton = (ImageButton) getEnclosingLayout().findViewById(ch.uzh.supersede.feedbacklibrary.R.id.supersede_feedbacklibrary_audio_player_button_record);
+        recordButton = (ImageView) getEnclosingLayout().findViewById(ch.uzh.supersede.feedbacklibrary.R.id.supersede_feedbacklibrary_audio_player_button_record);
         recordIndicator = (TextView) getEnclosingLayout().findViewById(ch.uzh.supersede.feedbacklibrary.R.id.supersede_feedbacklibrary_audio_timer_record_indicator);
         seekBar = (SeekBar) getEnclosingLayout().findViewById(ch.uzh.supersede.feedbacklibrary.R.id.supersede_feedbacklibrary_audio_seekbar);
-        stopButton = (ImageButton) getEnclosingLayout().findViewById(ch.uzh.supersede.feedbacklibrary.R.id.supersede_feedbacklibrary_audio_player_button_stop);
+        stopButton = (ImageView) getEnclosingLayout().findViewById(ch.uzh.supersede.feedbacklibrary.R.id.supersede_feedbacklibrary_audio_player_button_stop);
         setButtonEnabled(stopButton, false);
         totalDurationLabel = (TextView) getEnclosingLayout().findViewById(ch.uzh.supersede.feedbacklibrary.R.id.supersede_feedbacklibrary_audio_timer_total_duration);
         String startTotalDurationLabel = "-/" + milliSecondsToTimer(((long) audioMechanism.getMaxTime()) * 1000);
@@ -410,7 +411,7 @@ public class AudioMechanismView extends MechanismView implements SeekBar.OnSeekB
         seekBar.setEnabled(clickable);
     }
 
-    private void setButtonEnabled(ImageButton imageButton, boolean enabled) {
+    private void setButtonEnabled(ImageView imageButton, boolean enabled) {
         if (imageButton != null) {
             imageButton.setEnabled(enabled);
             imageButton.setAlpha(enabled ? 1.0F : 0.4F);

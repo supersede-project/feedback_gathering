@@ -9,10 +9,11 @@
         android:id="@+id/supersede_feedbacklibrary_choice_feedback_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="16sp"/>
+        android:textSize="12sp"/>
 
     <ch.uzh.supersede.feedbacklibrary.views.CustomSpinner
         android:id="@+id/supersede_feedbacklibrary_custom_spinner"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="12dp"/>
 </LinearLayout>

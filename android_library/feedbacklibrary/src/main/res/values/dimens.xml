@@ -6,4 +6,5 @@
     <!-- AnnotateImageView -->
     <dimen name="supersede_feedbacklibrary_annotate_image_layout_padding">1dp</dimen>
     <dimen name="supersede_feedbacklibrary_sticker_row_layout_margin">4dp</dimen>
+    <dimen name="rating_bar_min_height">42dp</dimen>
 </resources>
