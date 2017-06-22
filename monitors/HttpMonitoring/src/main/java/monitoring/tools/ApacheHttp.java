@@ -87,10 +87,10 @@ public class ApacheHttp implements ToolInterface<HttpMonitoringParams> {
 	}
 	
 	private void resetStream() {
-		logger.debug("Initialising kafka producer...");
-		kafka.initProducer(confParams.getKafkaEndpoint());
-		//logger.debug("Initialising proxy...");
-		//kafka.initProxy();
+		//logger.debug("Initialising kafka producer...");
+		//kafka.initProducer(confParams.getKafkaEndpoint());
+		logger.debug("Initialising proxy...");
+		kafka.initProxy();
 		logger.debug("Initialising streaming...");
 		timer = new Timer();
 		timer.schedule(new TimerTask() {
@@ -124,8 +124,8 @@ public class ApacheHttp implements ToolInterface<HttpMonitoringParams> {
         data.add(new HttpMonitoringData(String.valueOf(watch.getTotalTimeMillis()), String.valueOf(method.getStatusCode())));
 		logger.debug("Sent data: " + watch.getTotalTimeMillis() + "/" + method.getStatusCode());
 		method.releaseConnection();
-		kafka.generateResponseKafka(data, searchTimeStamp, id, configurationId, this.confParams.getKafkaTopic(), "HttpMonitoredData");
-		//kafka.generateResponseIF(data, searchTimeStamp, id, configurationId, this.confParams.getKafkaTopic(), "HttpMonitoredData");
+		//kafka.generateResponseKafka(data, searchTimeStamp, id, configurationId, this.confParams.getKafkaTopic(), "HttpMonitoredData");
+		kafka.generateResponseIF(data, searchTimeStamp, id, configurationId, this.confParams.getKafkaTopic(), "HttpMonitoredData");
 		logger.debug("Data successfully sent to Kafka endpoint");
 		++id;
 	}
