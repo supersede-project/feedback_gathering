@@ -22,6 +22,7 @@
 package monitoring.tools;
 
 import java.io.IOException;
+import java.net.SocketTimeoutException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
@@ -33,12 +34,12 @@ import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.HeadMethod;
+import org.apache.commons.httpclient.params.HttpClientParams;
 import org.apache.log4j.Logger;
 import org.springframework.util.StopWatch;
 
 import monitoring.controller.ToolInterface;
 import monitoring.kafka.KafkaCommunication;
-import monitoring.model.MonitoringParams;
 import monitoring.model.HttpMonitoringData;
 import monitoring.model.HttpMonitoringParams;
 
@@ -66,9 +67,7 @@ public class ApacheHttp implements ToolInterface<HttpMonitoringParams> {
 		this.confParams = params;
 		this.configurationId = configurationId;
 		this.kafka = new KafkaCommunication();
-		this.client = new HttpClient();
-		//HEAD METHOD --> 
-        this.method = new GetMethod(this.confParams.getUrl());
+		
 		resetStream();
 	}
 	
@@ -92,6 +91,16 @@ public class ApacheHttp implements ToolInterface<HttpMonitoringParams> {
 		logger.debug("Initialising proxy...");
 		kafka.initProxy();
 		logger.debug("Initialising streaming...");
+		
+		this.firstConnection = true;
+		
+		HttpClientParams httpParams = new HttpClientParams();
+		httpParams.setConnectionManagerTimeout(20000);
+		httpParams.setSoTimeout(20000);
+	    this.client = new HttpClient();
+	    this.client.setParams(httpParams);
+        this.method = new GetMethod(this.confParams.getUrl());
+        
 		timer = new Timer();
 		timer.schedule(new TimerTask() {
 			@Override
@@ -107,21 +116,30 @@ public class ApacheHttp implements ToolInterface<HttpMonitoringParams> {
 	}
 	
 	private void generateData(String searchTimeStamp) {
-		
-		List<HttpMonitoringData> data = new ArrayList<>();
-		
+				
 		StopWatch watch = new StopWatch();
+		boolean success = true;
 
         try {
             watch.start();
             client.executeMethod(method);
+        } catch (SocketTimeoutException e) {
+        	success = false;
+        	e.printStackTrace();
+        	resetStream();
         } catch (IOException e) {
+        	success = false;
             e.printStackTrace();
         } finally {
             watch.stop();
+            if (success) sendData(watch, searchTimeStamp);
         }
 
-        data.add(new HttpMonitoringData(String.valueOf(watch.getTotalTimeMillis()), String.valueOf(method.getStatusCode())));
+	}
+	
+	private void sendData(StopWatch watch, String searchTimeStamp) {
+		List<HttpMonitoringData> data = new ArrayList<>();
+		data.add(new HttpMonitoringData(String.valueOf(watch.getTotalTimeMillis()), String.valueOf(method.getStatusCode())));
 		logger.debug("Sent data: " + watch.getTotalTimeMillis() + "/" + method.getStatusCode());
 		method.releaseConnection();
 		//kafka.generateResponseKafka(data, searchTimeStamp, id, configurationId, this.confParams.getKafkaTopic(), "HttpMonitoredData");
