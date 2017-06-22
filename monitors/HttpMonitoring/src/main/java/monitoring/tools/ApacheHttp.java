@@ -123,13 +123,10 @@ public class ApacheHttp implements ToolInterface<HttpMonitoringParams> {
         try {
             watch.start();
             client.executeMethod(method);
-        } catch (SocketTimeoutException e) {
+        } catch (Exception e) {
         	success = false;
         	e.printStackTrace();
         	resetStream();
-        } catch (IOException e) {
-        	success = false;
-            e.printStackTrace();
         } finally {
             watch.stop();
             if (success) sendData(watch, searchTimeStamp);
