@@ -95,8 +95,8 @@ public class ApacheHttp implements ToolInterface<HttpMonitoringParams> {
 		this.firstConnection = true;
 		
 		HttpClientParams httpParams = new HttpClientParams();
-		httpParams.setConnectionManagerTimeout(20000);
-		httpParams.setSoTimeout(20000);
+		httpParams.setConnectionManagerTimeout(30000);
+		httpParams.setSoTimeout(30000);
 	    this.client = new HttpClient();
 	    this.client.setParams(httpParams);
         this.method = new GetMethod(this.confParams.getUrl());
@@ -125,27 +125,24 @@ public class ApacheHttp implements ToolInterface<HttpMonitoringParams> {
             client.executeMethod(method);
         } catch (Exception e) {
         	success = false;
-            watch.stop();
-        	e.printStackTrace();
-        	resetStream();
+        	solveHttpConnection(searchTimeStamp, watch, 404);
         } finally {
-            if (success) {
-            	watch.stop();
-            	sendData(watch, searchTimeStamp);
-            }else{
-		//@Quim: check better way to ensure method connection is released.
-		method.releaseConnection();
-	    }
-	    
+        	if (success) {
+	        	solveHttpConnection(searchTimeStamp, watch, method.getStatusCode());
+        	}
         }
-
 	}
 	
-	private void sendData(StopWatch watch, String searchTimeStamp) {
-		List<HttpMonitoringData> data = new ArrayList<>();
-		data.add(new HttpMonitoringData(String.valueOf(watch.getTotalTimeMillis()), String.valueOf(method.getStatusCode())));
-		logger.debug("Sent data: " + watch.getTotalTimeMillis() + "/" + method.getStatusCode());
+	private void solveHttpConnection(String searchTimeStamp, StopWatch watch, int code) {
+		watch.stop();
+		sendData(searchTimeStamp, watch.getTotalTimeMillis(), code);
 		method.releaseConnection();
+	}
+	
+	private void sendData(String searchTimeStamp, long responseTime, int code) {
+		List<HttpMonitoringData> data = new ArrayList<>();
+		data.add(new HttpMonitoringData(String.valueOf(responseTime), String.valueOf(code)));
+		logger.debug("Sent data: " + responseTime + "/" + code);
 		//kafka.generateResponseKafka(data, searchTimeStamp, id, configurationId, this.confParams.getKafkaTopic(), "HttpMonitoredData");
 		kafka.generateResponseIF(data, searchTimeStamp, id, configurationId, this.confParams.getKafkaTopic(), "HttpMonitoredData");
 		logger.debug("Data successfully sent to Kafka endpoint");
