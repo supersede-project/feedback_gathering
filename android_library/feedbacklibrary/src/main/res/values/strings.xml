@@ -98,4 +98,10 @@
         \n\n\t\u2022 audio - you can make a voice recording, max 30 seconds
         \n\n\t You also can rate by stars your experience with app.
     </string>
+
+    <!--Copy by email-->
+    <string name="get_feedback_copy_by_email">Get a copy by email</string>
+    <string name="email">Email</string>
+    <string name="invalid_email">Invalid email</string>
+    <string name="check_network_state">Check network state</string>
 </resources>

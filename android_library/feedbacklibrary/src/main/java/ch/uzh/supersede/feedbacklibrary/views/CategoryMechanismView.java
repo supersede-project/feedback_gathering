@@ -39,6 +39,7 @@ public class CategoryMechanismView extends MechanismView implements CustomSpinne
         customSpinner.setItems(items, false);
         customSpinner.setListener(this);
         customSpinner.setMultiple(categoryMechanism.isMultiple());
+        customSpinner.setSelection(0);
     }
 
     @Override

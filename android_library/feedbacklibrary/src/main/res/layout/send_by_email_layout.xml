@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="8dp"
+    android:paddingTop="8dp">
+
+    <CheckBox
+        android:id="@+id/sbe_get_copy_cb"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/get_feedback_copy_by_email"
+        android:textSize="12sp"/>
+
+    <EditText
+        android:id="@+id/sbe_email_et"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/email"
+        android:enabled="false"
+        android:inputType="textEmailAddress"
+
+        android:textSize="12sp"/>
+
+</LinearLayout>
