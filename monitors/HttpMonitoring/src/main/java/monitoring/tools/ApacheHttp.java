@@ -132,7 +132,11 @@ public class ApacheHttp implements ToolInterface<HttpMonitoringParams> {
             if (success) {
             	watch.stop();
             	sendData(watch, searchTimeStamp);
-            }
+            }else{
+		//@Quim: check better way to ensure method connection is released.
+		method.releaseConnection();
+	    }
+	    
         }
 
 	}
