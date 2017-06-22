@@ -383,8 +383,8 @@ public class CustomSpinner extends Spinner implements DialogInterface.OnClickLis
         mSelectionAtStart = new boolean[this.items.length];
         simpleAdapter.clear();
         if (firstDefaultSelection && this.items.length > 0) {
-            simpleAdapter.add(this.items[0]);
-            checkedIndex = 0;
+            simpleAdapter.add("My feedback is about…");
+            checkedIndex = -1;
         }
         Arrays.fill(mSelection, false);
         mSelection[0] = firstDefaultSelection;
