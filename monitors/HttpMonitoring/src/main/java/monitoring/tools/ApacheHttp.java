@@ -125,11 +125,14 @@ public class ApacheHttp implements ToolInterface<HttpMonitoringParams> {
             client.executeMethod(method);
         } catch (Exception e) {
         	success = false;
+            watch.stop();
         	e.printStackTrace();
         	resetStream();
         } finally {
-            watch.stop();
-            if (success) sendData(watch, searchTimeStamp);
+            if (success) {
+            	watch.stop();
+            	sendData(watch, searchTimeStamp);
+            }
         }
 
 	}
