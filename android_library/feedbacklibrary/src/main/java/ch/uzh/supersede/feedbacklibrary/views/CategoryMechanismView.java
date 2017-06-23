@@ -53,4 +53,8 @@ public class CategoryMechanismView extends MechanismView implements CustomSpinne
     public void updateModel() {
         categoryMechanism.setSelectedOptions(customSpinner.getSelectedStrings());
     }
+
+    public CustomSpinner getCustomSpinner() {
+        return customSpinner;
+    }
 }

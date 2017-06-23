@@ -22,6 +22,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.database.Cursor;
@@ -39,6 +40,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -59,6 +61,7 @@ import ch.uzh.supersede.feedbacklibrary.feedbacks.AudioFeedback;
 import ch.uzh.supersede.feedbacklibrary.feedbacks.Feedback;
 import ch.uzh.supersede.feedbacklibrary.feedbacks.ScreenshotFeedback;
 import ch.uzh.supersede.feedbacklibrary.models.Mechanism;
+import ch.uzh.supersede.feedbacklibrary.models.ScreenshotMechanism;
 import ch.uzh.supersede.feedbacklibrary.utils.DialogUtils;
 import ch.uzh.supersede.feedbacklibrary.utils.Utils;
 import ch.uzh.supersede.feedbacklibrary.views.AudioMechanismView;
@@ -161,6 +164,8 @@ public class FeedbackActivity extends AppCompatActivity implements ScreenshotMec
     private Feedback feedback;
     private List<ScreenshotFeedback> screenshotFeedbackList;
     private List<AudioFeedback> audioFeedbackList;
+    private String savedEmail;
+    private SharedPreferences sharedPreferences;
 
     private void closeProgressDialog() {
         if (progressDialog != null && progressDialog.isShowing()) {
@@ -319,10 +324,16 @@ public class FeedbackActivity extends AppCompatActivity implements ScreenshotMec
     }
 
     private void initCopyByEmailLayout(LayoutInflater layoutInflater, LinearLayout linearLayout) {
+        //CHeck sharedPreferences on email existing
+        sharedPreferences = getSharedPreferences("FeedbackApp", Context.MODE_PRIVATE);
+        savedEmail = sharedPreferences.getString("email","");
+
         View view = layoutInflater.inflate(R.layout.send_by_email_layout, null, false);
         linearLayout.addView(view);
 
         emailEditText = (EditText)view.findViewById(R.id.sbe_email_et);
+        if(!TextUtils.isEmpty(savedEmail)) emailEditText.setText(savedEmail);
+
         getCopyCheckBox = (CheckBox)view.findViewById(R.id.sbe_get_copy_cb);
 
         getCopyCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -331,7 +342,6 @@ public class FeedbackActivity extends AppCompatActivity implements ScreenshotMec
                 if (b) emailEditText.setEnabled(true);
                 else {
                     emailEditText.setEnabled(false);
-                    emailEditText.setText("");
                 }
             }
         });
@@ -492,6 +502,12 @@ public class FeedbackActivity extends AppCompatActivity implements ScreenshotMec
             }
         });
         builder.show();
+    }
+
+    @Override
+    public void onImageClick(ScreenshotMechanismView screenshotMechanismView) {
+        tempMechanismViewId = screenshotMechanismView.getMechanismViewIndex();
+        galleryIntent();
     }
 
     @Override
@@ -758,6 +774,7 @@ public class FeedbackActivity extends AppCompatActivity implements ScreenshotMec
         Thread emailThread = new Thread(new Runnable() {
             @Override
             public void run() {
+                //TODO replace with your email
                 final String username = "supersede.zurich@gmail.com";
                 final String password = "University2017";
 
@@ -782,8 +799,18 @@ public class FeedbackActivity extends AppCompatActivity implements ScreenshotMec
 
                     BodyPart messageBodyPart = new MimeBodyPart();
 
+                    String feedbackText = feedback.getTextFeedbacks().get(0).getText();
+
+                    CategoryMechanismView categoryMechanismView = (CategoryMechanismView) allMechanismViews.get(4);
+                    String category = categoryMechanismView.getCustomSpinner().getSelectedItem().toString();
+
+                    if(category.equals("My feedback is about…")) category = "-";
+
+                    RatingMechanismView ratingMechanismView = (RatingMechanismView) allMechanismViews.get(3);
+                    String rating = String.valueOf(ratingMechanismView.getRating());
+
                     // Now set the actual message
-                    messageBodyPart.setText(feedback.getTextFeedbacks().get(0).getText());
+                    messageBodyPart.setText(String.format("Feedback text: %s, Rating: %s, Category: %s", feedbackText, rating, category));
 
                     Multipart multipart = new MimeMultipart();
 
@@ -800,6 +827,14 @@ public class FeedbackActivity extends AppCompatActivity implements ScreenshotMec
                     message.setContent(multipart);
 
                     Transport.send(message);
+
+                    if (TextUtils.isEmpty(savedEmail)){
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+                        editor.putString("email", email);
+
+                        editor.apply();
+                    }
 
                 } catch (MessagingException e) {
                     throw new RuntimeException(e);

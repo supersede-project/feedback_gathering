@@ -132,8 +132,7 @@ public class AudioMechanismView extends MechanismView implements SeekBar.OnSeekB
     }
 
     private void initView() {
-        ((TextView) getEnclosingLayout().findViewById(ch.uzh.supersede.feedbacklibrary.R.id.supersede_feedbacklibrary_audio_title)).setText(audioMechanism.getTitle());
-        ((TextView) getEnclosingLayout().findViewById(ch.uzh.supersede.feedbacklibrary.R.id.supersede_feedbacklibrary_audio_time_limit)).setText(applicationContext.getResources().getString(ch.uzh.supersede.feedbacklibrary.R.string.supersede_feedbacklibrary_audio_maximum_length_text, (Float.valueOf(audioMechanism.getMaxTime())).intValue()));
+        ((TextView) getEnclosingLayout().findViewById(ch.uzh.supersede.feedbacklibrary.R.id.supersede_feedbacklibrary_audio_title)).setText(R.string.short_audio_message);
         playButton = (ImageView) getEnclosingLayout().findViewById(ch.uzh.supersede.feedbacklibrary.R.id.supersede_feedbacklibrary_audio_player_button_play);
         setButtonEnabled(playButton, false);
         recordAnimationColorStart = resources.getColor(ch.uzh.supersede.feedbacklibrary.R.color.supersede_feedbacklibrary_audio_timer_record_indicator_start_animation_color);
@@ -199,7 +198,7 @@ public class AudioMechanismView extends MechanismView implements SeekBar.OnSeekB
                 }
                 else if (isPaused && !isPlaying && !isRecording && mediaPlayer != null && !mediaPlayer.isPlaying()) {
                     resumePlaying();
-                    playButton.setImageResource(R.drawable.ic_pause_black_48dp);
+
                 }
                 else if (!isPaused && isPlaying && mediaPlayer != null){
                     pausePlaying();

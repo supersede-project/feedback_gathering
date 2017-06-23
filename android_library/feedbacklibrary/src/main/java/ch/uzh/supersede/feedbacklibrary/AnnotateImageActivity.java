@@ -113,11 +113,11 @@ public class AnnotateImageActivity extends AppCompatActivity implements ColorPic
                 relativeLayout.addView(stickerViewTextAnnotationImageView);
             }
             if (textAnnotationCounter > textAnnotationCounterMaximum) {
-                ImageButton textAnnotationButton = (ImageButton) findViewById(R.id.supersede_feedbacklibrary_text_comment_btn);
+                /*ImageButton textAnnotationButton = (ImageButton) findViewById(R.id.supersede_feedbacklibrary_text_comment_btn);
                 if (textAnnotationButton != null) {
                     textAnnotationButton.setEnabled(false);
                     textAnnotationButton.setAlpha(0.4F);
-                }
+                }*/
             }
             return stickerViewTextAnnotationImageView;
         }
@@ -352,11 +352,11 @@ public class AnnotateImageActivity extends AppCompatActivity implements ColorPic
         if (relativeLayout != null) {
             refreshAnnotationNumber(relativeLayout);
         }
-        ImageButton textAnnotationButton = (ImageButton) findViewById(R.id.supersede_feedbacklibrary_text_comment_btn);
+        /*ImageButton textAnnotationButton = (ImageButton) findViewById(R.id.supersede_feedbacklibrary_text_comment_btn);
         if (textAnnotationButton != null) {
             textAnnotationButton.setEnabled(true);
             textAnnotationButton.setAlpha(1.0F);
-        }
+        }*/
     }
 
     private HashMap<Integer, String> processStickerAnnotations(ViewGroup viewGroup) {
@@ -479,7 +479,7 @@ public class AnnotateImageActivity extends AppCompatActivity implements ColorPic
     }
 
     private void setListeners() {
-        final ImageButton penButton = (ImageButton) findViewById(R.id.supersede_feedbacklibrary_pen_btn);
+        /*final ImageButton penButton = (ImageButton) findViewById(R.id.supersede_feedbacklibrary_pen_btn);
         final ImageButton rectangleButton = (ImageButton) findViewById(R.id.supersede_feedbacklibrary_rectangle_btn);
         final ImageButton circleButton = (ImageButton) findViewById(R.id.supersede_feedbacklibrary_circle_btn);
         final ImageButton lineButton = (ImageButton) findViewById(R.id.supersede_feedbacklibrary_line_btn);
@@ -658,7 +658,7 @@ public class AnnotateImageActivity extends AppCompatActivity implements ColorPic
                     addTextAnnotation(R.drawable.ic_comment_black_48dp);
                 }
             });
-        }
+        }*/
     }
 
     private void showColorPickerDialog() {

@@ -16,8 +16,8 @@
         android:id="@+id/supersede_feedbacklibrary_rating_feedback_rating"
         android:layout_width="wrap_content"
         android:layout_height="@dimen/rating_bar_min_height"
-        android:scaleX=".5"
-        android:scaleY=".5"
+        android:scaleX=".75"
+        android:scaleY=".75"
         android:transformPivotX="0dp"
         android:transformPivotY="0dp"/>
 </LinearLayout>

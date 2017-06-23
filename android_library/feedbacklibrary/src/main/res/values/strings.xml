@@ -79,8 +79,8 @@
     <string name="supersede_feedbacklibrary_pull_feedback_question_string">Would you like to give feedback?</string>
 
     <!-- Screenshot mechanism -->
-    <string name="supersede_feedbacklibrary_screenshotbutton_text">Screenshot</string>
-    <string name="supersede_feedbacklibrary_annotatebutton_text">Annotate</string>
+    <string name="supersede_feedbacklibrary_screenshotbutton_text">Add</string>
+    <string name="supersede_feedbacklibrary_annotatebutton_text">Edit</string>
     <string name="supersede_feedbacklibrary_previewbutton_text">Preview</string>
     <string name="supersede_feedbacklibrary_erasebutton_text">Erase</string>
 
@@ -104,4 +104,6 @@
     <string name="email">Email</string>
     <string name="invalid_email">Invalid email</string>
     <string name="check_network_state">Check network state</string>
+
+    <string name="short_audio_message">Express your feedback with a short audio message</string>
 </resources>

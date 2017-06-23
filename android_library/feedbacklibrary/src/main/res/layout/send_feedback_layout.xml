@@ -29,7 +29,10 @@
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignParentTop="true"
+        android:padding="8dp"
         android:minWidth="88dp"
+        android:background="@drawable/button_selector"
+        android:textColor="@android:color/white"
         android:onClick="sendButtonClicked"
         android:text="@string/supersede_feedbacklibrary_sendbutton_text"/>
 

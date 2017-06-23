@@ -14,20 +14,12 @@
         android:paddingBottom="5dp"
         android:textSize="12sp"/>
 
-    <TextView
-        android:id="@+id/supersede_feedbacklibrary_audio_time_limit"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/supersede_feedbacklibrary_audio_title"
-        android:paddingBottom="5dp"
-        android:textSize="12sp"/>
-
     <!-- Timer display -->
     <LinearLayout
         android:id="@+id/supersede_feedbacklibrary_audio_timer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/supersede_feedbacklibrary_audio_time_limit"
+        android:layout_below="@id/supersede_feedbacklibrary_audio_title"
         android:layout_marginBottom="5dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
@@ -87,34 +79,6 @@
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:orientation="horizontal">
-        <!-- Stop button -->
-        <!--<ImageButton
-            android:id="@+id/supersede_feedbacklibrary_audio_player_button_record"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.5"
-            android:src="@drawable/ic_mic_black_48dp"/>
-        &lt;!&ndash; Stop button &ndash;&gt;
-        <ImageButton
-            android:id="@+id/supersede_feedbacklibrary_audio_player_button_stop"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.5"
-            android:src="@drawable/ic_stop_black_48dp"/>
-        &lt;!&ndash; Pause button &ndash;&gt;
-        <ImageButton
-            android:id="@+id/supersede_feedbacklibrary_audio_player_button_pause"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.5"
-            android:src="@drawable/ic_pause_black_48dp"/>
-        &lt;!&ndash; Play button &ndash;&gt;
-        <ImageButton
-            android:id="@+id/supersede_feedbacklibrary_audio_player_button_play"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.5"
-            android:src="@drawable/ic_play_arrow_black_48dp"/>-->
         <ImageView
             android:id="@+id/supersede_feedbacklibrary_audio_player_button_record"
             android:layout_width="32dp"

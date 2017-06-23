@@ -203,6 +203,11 @@ public class CustomSpinner extends Spinner implements DialogInterface.OnClickLis
     }
 
     @Override
+    public SpinnerAdapter getAdapter() {
+        return super.getAdapter();
+    }
+
+    @Override
     public void onClick(DialogInterface dialog, int which) {
         final AlertDialog spinnerDialog = (AlertDialog) dialog;
         final int spinnerWhich = which;
