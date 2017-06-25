@@ -60,6 +60,7 @@ import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import ch.uzh.supersede.feedbacklibrary.models.EditImageItem;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;

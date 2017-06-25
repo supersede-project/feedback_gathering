@@ -45,6 +45,11 @@
     <string name="supersede_feedbacklibrary_text_annotation_dialog_label">Text annotation</string>
     <string name="supersede_feedbacklibrary_text_annotation_dialog_hint">Please enter your text annotation</string>
     <string name="supersede_feedbacklibrary_text_processing_dialog">Please wait. Processing image</string>
+    <string name="short_audio_message">Express your feedback with a short audio message</string>
+    <string name="favorite">Favorite</string>
+    <string name="quick_edit">Quick edit</string>
+    <string name="color">Color</string>
+    <string name="crop">Crop</string>
 
     <!-- Miscellaneous -->
     <string name="supersede_feedbacklibrary_sendconfirmation_text">By sending the feedback, you agree with the terms and conditions.</string>
@@ -104,6 +109,4 @@
     <string name="email">Email</string>
     <string name="invalid_email">Invalid email</string>
     <string name="check_network_state">Check network state</string>
-
-    <string name="short_audio_message">Express your feedback with a short audio message</string>
 </resources>

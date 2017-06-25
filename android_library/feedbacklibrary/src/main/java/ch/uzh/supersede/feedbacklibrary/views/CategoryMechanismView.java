@@ -24,8 +24,6 @@ public class CategoryMechanismView extends MechanismView implements CustomSpinne
     }
 
     private void initView() {
-        final TextView textView = (TextView) getEnclosingLayout().findViewById(ch.uzh.supersede.feedbacklibrary.R.id.supersede_feedbacklibrary_choice_feedback_title);
-        textView.setText(categoryMechanism.getTitle());
         customSpinner = (CustomSpinner) getEnclosingLayout().findViewById(ch.uzh.supersede.feedbacklibrary.R.id.supersede_feedbacklibrary_custom_spinner);
         List<String> items = new ArrayList<>(categoryMechanism.getOptions());
         if (categoryMechanism.isOwnAllowed()) {

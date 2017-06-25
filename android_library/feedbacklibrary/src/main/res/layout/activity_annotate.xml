@@ -29,19 +29,23 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:layout_weight="0"
-                android:layout_gravity="center_vertical">
+                android:layout_gravity="center_vertical"
+                android:layout_marginEnd="8dp">
 
                 <ImageButton
                     android:id="@+id/supersede_feedbacklibrary_undo_btn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_undo_black_48dp"/>
+                    android:src="@drawable/ic_undo_black_48dp"
+                    android:background="#00000000"
+                    android:layout_marginBottom="8dp"/>
 
                 <ImageButton
                     android:id="@+id/supersede_feedbacklibrary_redo_btn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_redo_black_48dp"/>
+                    android:src="@drawable/ic_redo_black_48dp"
+                    android:background="#00000000"/>
 
             </LinearLayout>
 
@@ -57,145 +61,44 @@
         android:weightSum="4">
 
         <Button
+            android:id="@+id/aa_favorite_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Favorite"
+            android:text="@string/favorite"
             android:layout_weight="1"
             android:textAllCaps="false"
             android:background="@drawable/button_selector"
             android:textColor="@android:color/white"
             android:layout_margin="8dp"/>
         <Button
+            android:id="@+id/aa_quick_edit_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Quit edit"
+            android:text="@string/quick_edit"
             android:layout_weight="1"
             android:textAllCaps="false"
             android:background="@drawable/button_selector"
             android:textColor="@android:color/white"
             android:layout_margin="8dp"/>
         <Button
+            android:id="@+id/aa_color_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Color"
+            android:text="@string/color"
             android:layout_weight="1"
             android:textAllCaps="false"
             android:background="@drawable/button_selector"
             android:textColor="@android:color/white"
             android:layout_margin="8dp"/>
         <Button
+            android:id="@+id/aa_crop_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Crop"
+            android:text="@string/crop"
             android:layout_weight="1"
             android:textAllCaps="false"
             android:background="@drawable/button_selector"
             android:textColor="@android:color/white"
             android:layout_margin="8dp"/>
-
-        <!--<LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <ImageButton
-                android:id="@+id/supersede_feedbacklibrary_pen_btn"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:src="@drawable/ic_lead_pencil_black_48dp"/>
-
-            <ImageButton
-                android:id="@+id/supersede_feedbacklibrary_line_btn"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:src="@drawable/icon_line"/>
-
-            <ImageButton
-                android:id="@+id/supersede_feedbacklibrary_arrow_btn"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:src="@drawable/ic_call_made_black_48dp"/>
-
-            <ImageButton
-                android:id="@+id/supersede_feedbacklibrary_rectangle_btn"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:src="@drawable/ic_crop_din_black_48dp"/>
-
-            <ImageButton
-                android:id="@+id/supersede_feedbacklibrary_circle_btn"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:src="@drawable/ic_checkbox_blank_circle_outline_black_48dp"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <ImageButton
-                android:id="@+id/supersede_feedbacklibrary_sticker_btn"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:src="@drawable/ic_insert_emoticon_black_48dp"/>
-
-            <ImageButton
-                android:id="@+id/supersede_feedbacklibrary_color_picker_btn"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:src="@drawable/ic_palette_black_48dp"/>
-
-            <ImageButton
-                android:id="@+id/supersede_feedbacklibrary_crop_btn"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:src="@drawable/ic_crop_black_48dp"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <ImageButton
-                android:id="@+id/supersede_feedbacklibrary_text_comment_btn"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:src="@drawable/ic_comment_black_48dp"/>
-
-            <Button
-                android:id="@+id/supersede_feedbacklibrary_blur_btn"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="@string/supersede_feedbacklibrary_blurbutton_text"
-                android:textSize="13sp"/>
-
-            <Button
-                android:id="@+id/supersede_feedbacklibrary_fill_btn"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="@string/supersede_feedbacklibrary_fillbutton_text"
-                android:textSize="13sp"/>
-
-            <Button
-                android:id="@+id/supersede_feedbacklibrary_black_btn"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="@string/supersede_feedbacklibrary_blackbutton_text"
-                android:textSize="13sp"/>
-        </LinearLayout>-->
     </LinearLayout>
 </LinearLayout>
