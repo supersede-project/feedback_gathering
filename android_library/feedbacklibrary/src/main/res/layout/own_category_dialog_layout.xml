@@ -33,7 +33,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif"
             android:inputType="textMultiLine|textCapSentences"
-            android:textSize="12sp"
+            android:textSize="16sp"
             android:textStyle="normal"/>
     </android.support.design.widget.TextInputLayout>
 

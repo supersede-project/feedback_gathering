@@ -175,7 +175,7 @@ public class ScreenshotMechanismView extends MechanismView {
                 annotateScreenshotButton.setEnabled(false);
                 deleteScreenshotButton.setEnabled(false);
                 screenShotPreviewImageView.setImageBitmap(null);
-                screenShotPreviewImageView.setBackgroundResource(R.drawable.camera_picture_big);
+                screenShotPreviewImageView.setBackgroundResource(R.drawable.ic_folder_open_black_24dp);
             }
         });
         ((TextView) getEnclosingLayout().findViewById(R.id.supersede_feedbacklibrary_screenshot_feedback_title)).setText(screenshotMechanism.getTitle());

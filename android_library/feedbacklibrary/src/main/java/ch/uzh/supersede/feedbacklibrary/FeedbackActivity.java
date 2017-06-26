@@ -339,9 +339,11 @@ public class FeedbackActivity extends AppCompatActivity implements ScreenshotMec
         getCopyCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if (b) emailEditText.setEnabled(true);
+                if (b) {
+                    emailEditText.setVisibility(View.VISIBLE);
+                }
                 else {
-                    emailEditText.setEnabled(false);
+                    emailEditText.setVisibility(View.GONE);
                 }
             }
         });

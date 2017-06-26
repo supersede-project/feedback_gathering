@@ -65,11 +65,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/favorite"
-            android:layout_weight="1"
+            android:layout_weight="0"
             android:textAllCaps="false"
             android:background="@drawable/button_selector"
             android:textColor="@android:color/white"
-            android:layout_margin="8dp"/>
+            android:layout_margin="4dp"
+            android:drawableStart="@drawable/ic_star_white_24dp"/>
         <Button
             android:id="@+id/aa_quick_edit_button"
             android:layout_width="wrap_content"
@@ -79,7 +80,7 @@
             android:textAllCaps="false"
             android:background="@drawable/button_selector"
             android:textColor="@android:color/white"
-            android:layout_margin="8dp"/>
+            android:layout_margin="4dp"/>
         <Button
             android:id="@+id/aa_color_button"
             android:layout_width="wrap_content"
@@ -89,7 +90,7 @@
             android:textAllCaps="false"
             android:background="@drawable/button_selector"
             android:textColor="@android:color/white"
-            android:layout_margin="8dp"/>
+            android:layout_margin="4dp"/>
         <Button
             android:id="@+id/aa_crop_button"
             android:layout_width="wrap_content"
@@ -99,6 +100,6 @@
             android:textAllCaps="false"
             android:background="@drawable/button_selector"
             android:textColor="@android:color/white"
-            android:layout_margin="8dp"/>
+            android:layout_margin="4dp"/>
     </LinearLayout>
 </LinearLayout>

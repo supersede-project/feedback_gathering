@@ -10,6 +10,7 @@ import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.SeekBar;
@@ -151,6 +152,8 @@ public class AudioMechanismView extends MechanismView implements SeekBar.OnSeekB
         clearButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                clearFocus();
+
                 stopRecordAnimation();
 
                 removeUpdateSeekBarTaskRecorder();
@@ -192,6 +195,8 @@ public class AudioMechanismView extends MechanismView implements SeekBar.OnSeekB
         playButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                clearFocus();
+
                 if (!isPaused && !isPlaying && !isRecording) {
                     startPlaying();
                     playButton.setImageResource(R.drawable.ic_pause_black_48dp);
@@ -209,6 +214,8 @@ public class AudioMechanismView extends MechanismView implements SeekBar.OnSeekB
         recordButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                clearFocus();
+
                 boolean result = Utils.checkSinglePermission(activity, FeedbackActivity.PERMISSIONS_REQUEST_RECORD_AUDIO, Manifest.permission.RECORD_AUDIO, null, null, false);
                 if (result) {
                     removeUpdateSeekBarTask();
@@ -288,6 +295,8 @@ public class AudioMechanismView extends MechanismView implements SeekBar.OnSeekB
         stopButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                clearFocus();
+
                 if (!isPlaying && isRecording) {
                     onRecordSuccess();
                     Toast toast = Toast.makeText(applicationContext, applicationContext.getResources().getString(ch.uzh.supersede.feedbacklibrary.R.string.supersede_feedbacklibrary_audio_stopped_recording_text), Toast.LENGTH_SHORT);
@@ -299,6 +308,14 @@ public class AudioMechanismView extends MechanismView implements SeekBar.OnSeekB
                 playButton.setImageResource(R.drawable.ic_play_arrow_black_48dp);
             }
         });
+    }
+
+    private void clearFocus() {
+        if (activity.getCurrentFocus() != null) {
+            activity.getCurrentFocus().clearFocus();
+            InputMethodManager imm = (InputMethodManager)activity.getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
+        }
     }
 
     private String milliSecondsToTimer(long milliseconds) {

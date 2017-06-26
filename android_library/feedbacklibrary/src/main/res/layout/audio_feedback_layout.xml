@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:paddingBottom="5dp"
-        android:textSize="12sp"/>
+        android:textSize="16sp"/>
 
     <!-- Timer display -->
     <LinearLayout
@@ -31,7 +31,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="start"
-            android:textSize="12sp"
+            android:textSize="16sp"
             android:text="@string/supersede_feedbacklibrary_audio_default_current_duration"/>
         <!-- Recording indicator -->
         <TextView
@@ -40,7 +40,7 @@
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
             android:text="@string/supersede_feedbacklibrary_audio_record_indicator"
-            android:textSize="12sp"
+            android:textSize="16sp"
             android:textStyle="bold"
             android:visibility="invisible"/>
         <!-- Total duration -->
@@ -50,7 +50,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="end"
-            android:textSize="12sp"
+            android:textSize="16sp"
             android:text="@string/supersede_feedbacklibrary_audio_default_total_duration"/>
     </LinearLayout>
 
@@ -103,5 +103,12 @@
             android:layout_height="32dp"
             android:layout_marginEnd="10dp"
             android:src="@drawable/ic_clear_black_24dp"/>
+
     </LinearLayout>
+
+    <View
+        android:layout_below="@id/supersede_feedbacklibrary_audio_player_buttonbar"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/colorPrimaryDark"/>
 </RelativeLayout>

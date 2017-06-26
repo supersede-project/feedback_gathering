@@ -27,7 +27,6 @@ public class RatingMechanismView extends MechanismView {
         bar = ((RatingBar) getEnclosingLayout().findViewById(R.id.supersede_feedbacklibrary_rating_feedback_rating));
         bar.setNumStars(ratingMechanism.getMaxRating());
         bar.setStepSize(1.0f);
-        bar.setRating(ratingMechanism.getDefaultRating());
     }
 
     @Override

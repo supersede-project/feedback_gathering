@@ -10,14 +10,11 @@
         android:id="@+id/supersede_feedbacklibrary_rating_feedback_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="12sp"/>
+        android:textSize="16sp"/>
 
     <RatingBar
         android:id="@+id/supersede_feedbacklibrary_rating_feedback_rating"
         android:layout_width="wrap_content"
-        android:layout_height="@dimen/rating_bar_min_height"
-        android:scaleX=".75"
-        android:scaleY=".75"
-        android:transformPivotX="0dp"
-        android:transformPivotY="0dp"/>
+        android:layout_height="wrap_content"
+        android:rating="0"/>
 </LinearLayout>

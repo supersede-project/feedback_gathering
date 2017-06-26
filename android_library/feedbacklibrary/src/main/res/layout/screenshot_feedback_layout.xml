@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingBottom="8dp"
-        android:textSize="12sp"/>
+        android:textSize="16sp"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -35,7 +35,8 @@
                 android:layout_marginLeft="2dp"
                 android:layout_marginRight="2dp"
                 android:layout_marginTop="2dp"
-                android:background="@drawable/camera_picture_big"/>
+                android:background="@drawable/ic_folder_open_black_24dp"
+                android:layout_centerInParent="true"/>
         </RelativeLayout>
 
         <LinearLayout
