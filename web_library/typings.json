@@ -1,0 +1,5 @@
+{
+  "globalDependencies": {
+    "jasmine-jquery": "registry:dt/jasmine-jquery#1.5.8+20170315092920"
+  }
+}
