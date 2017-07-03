@@ -22,9 +22,16 @@ export class DialogView {
         let dialogContainer = jQuery('#'+ this.dialogId);
 
         this.dialogElement = dialogContainer.dialog(this.getDialogOptions());
-        this.dialogElement.dialog('option', 'title', this.dialogContext.dialogTitle);
         this.dialogElement.dialog('option', 'modal', this.dialogContext.modal);
         this.dialogElement.dialog('option', 'dialogClass', this.dialogContext.dialogCSSClass);
+
+        if(this.context.localesOverride && this.context.localesOverride.dialog && this.context.localesOverride.dialog.titles) {
+            if(this.context.localesOverride.dialog.titles["1"]) {
+                this.dialogElement.dialog('option', 'title', this.context.localesOverride.dialog.titles["1"]);
+            } else {
+                this.dialogElement.dialog('option', 'title', this.dialogContext.dialogTitle);
+            }
+        }
 
         this.setupCloseOnOutsideClick();
     }

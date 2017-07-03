@@ -7,8 +7,10 @@ import {PageNavigation} from '../js/helpers/page_navigation';
 export class PaginationContainer {
     container:JQuery;
     pages:JQuery;
+    titles:any;
     activePage:number;
     pageNavigation:PageNavigation;
+    navigationCallback:any;
 
     /**
      *
@@ -16,10 +18,13 @@ export class PaginationContainer {
      *  The element that contains the pages and buttons to move forward or backward
      * @param pageNavigation
      *  Object that has a method which is called on forward navigation
+     * @param navigationCallback
+     *  Method that is called when the page changes. Has the page number of the page after change as parameter.
      */
-    constructor(container, pageNavigation?) {
+    constructor(container, pageNavigation?, navigationCallback?:(pageNumber:number) => void) {
         this.container = container;
         this.pageNavigation = pageNavigation;
+        this.navigationCallback = navigationCallback;
         this.pages = this.container.find('.feedback-page');
         this.showFirstPage();
         this.addNavigationEvents();
@@ -61,6 +66,8 @@ export class PaginationContainer {
         feedbackPage.hide();
         nextPage.show();
 
+        this.navigationCallback(this.activePage);
+
         // show top of dialog
         jQuery('html, body').animate({
             scrollTop: nextPage.offset().top - 100
@@ -74,5 +81,7 @@ export class PaginationContainer {
         }
         feedbackPage.hide();
         this.container.find('.feedback-page[data-feedback-page="' + this.activePage + '"]').show();
+
+        this.navigationCallback(this.activePage);
     }
 }

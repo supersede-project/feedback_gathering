@@ -98,8 +98,21 @@ export class FeedbackDialogView extends DialogView {
     }
 
     configurePageNavigation() {
+        let myThis = this;
         this.pageNavigation = new PageNavigation(this.configuration, jQuery('#' + this.dialogId));
-        this.paginationContainer = new PaginationContainer(jQuery('#' + this.dialogId + '.feedback-container .pages-container'), this.pageNavigation);
+        this.paginationContainer = new PaginationContainer(jQuery('#' + this.dialogId + '.feedback-container .pages-container'), this.pageNavigation, (changedPageNumber) => {
+            myThis.changeDialogTitle(changedPageNumber);
+        });
+    }
+
+    changeDialogTitle(pageNumber:number) {
+        if(this.context.localesOverride && this.context.localesOverride.dialog && this.context.localesOverride.dialog.titles) {
+            if(this.context.localesOverride.dialog.titles[pageNumber]) {
+                this.dialogElement.dialog('option', 'title', this.context.localesOverride.dialog.titles[pageNumber]);
+            } else {
+                this.dialogElement.dialog('option', 'title', this.dialogContext.dialogTitle);
+            }
+        }
     }
 
     addEvents(containerId, configuration:ConfigurationInterface) {
