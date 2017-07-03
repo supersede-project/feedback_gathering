@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "target": "es5",
-    "module": "amd",
+    "module": "commonjs",
     "declaration": false,
     "removeComments": true,
     "noLib": false,
@@ -14,19 +14,21 @@
     "noImplicitAny": false,
     "noImplicitReturns": true,
     "noImplicitUseStrict": false,
-    "noFallthroughCasesInSwitch": true
+    "noFallthroughCasesInSwitch": true,
+    "moduleResolution": "node",
+    "types": [
+      "i18next",
+      "jasmine-jquery"
+    ]
   },
   "exclude": [
     "node_modules",
+    "!node_modules/@types",
     "typings/browser.d.ts",
     "typings/browser/**",
     "typings/main/**",
     "tools/*.ts",
-    "tools/**/*.ts",
-    "app/**/*.e2e.ts",
-    "app/**/*.spec.ts",
-    "app/**/**/*.e2e.ts",
-    "app/**/**/*.spec.ts"
+    "tools/**/*.ts"
   ],
   "compileOnSave": true
 }

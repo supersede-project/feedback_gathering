@@ -1,7 +1,6 @@
-import i18next = require('i18next');
 import {readJSONAsync} from '../../services/mocks/mocks_loader';
+import i18next = require('i18next');
 import ResourceStore = I18next.ResourceStore;
-import i18n = require('i18next');
 
 
 export class I18nHelper {
@@ -28,6 +27,7 @@ export class I18nHelper {
                 resources = {};
                 let url = options.distPath + 'locales/' + language + '/translation.json';
                 readJSONAsync(url, function (data) {
+                    data = I18nHelper.overrideLocales(data, options.localesOverride);
                     resources[language] = {
                         translation: data
                     };
@@ -51,6 +51,20 @@ export class I18nHelper {
                 afterInitialization(language);
             }
         });
+    };
+
+    /**
+     *
+     * @param data
+     *  Default locale object.
+     * @param customLocales
+     *  Custom locale object to override the default translations.
+     * @returns {any}
+     *  The overriden translation object
+     */
+    static overrideLocales = function (data, customLocales):{} {
+        data = jQuery.extend(true, data, customLocales);
+        return data;
     };
 
     static getLanguage = function (options, callbackLang:(language:string) => void):void {

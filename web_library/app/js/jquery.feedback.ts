@@ -49,8 +49,9 @@ export var feedbackPluginModule = function ($, window, document) {
     $.fn.feedbackPlugin.defaults = {
         'color': '#ffffff',
         'lang': 'de',
-        'backgroundColor': '#7c9009',
         'fallbackLang': 'en',
+        'localesOverride': null,
+        'backgroundColor': '#7c9009',
         'distPath': 'dist/',
         'userId': '',
         'dialogCSSClass': 'feedback-dialog',

@@ -15,9 +15,7 @@ module.exports = function () {
         config_1.TOOLS_DIR + '/manual_typings/**/*.d.ts'
     ]);
     var src = [
-        path_1.join(config_1.APP_SRC, '**/*.ts'),
-        '!' + path_1.join(config_1.APP_SRC, '**/*.spec.ts'),
-        '!' + path_1.join(config_1.APP_SRC, '**/*.e2e.ts')
+        path_1.join(config_1.APP_SRC, '**/*.ts')
     ];
     var projectFiles = gulp.src(src, { base: '.' }); //.pipe(plugins.cached());
     var result = merge(typings, projectFiles)

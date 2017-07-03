@@ -7,15 +7,14 @@ describe('jQuery Feedback Plugin', () => {
     let $ = $j;
     let feedbackPlugin;
     let feedbackButton;
-    let styledFeedbackButton;
 
     beforeEach(() => {
         $('body').append('<a id="feedbackEntryPoint" href="#">Feedback</a>');
-        $('body').append('<a id="styledFeedbackEntryPoint" href="#">Feedback</a>');
         feedbackPlugin = feedbackPluginModule($, window, document);
         feedbackButton = $('#feedbackEntryPoint');
-        styledFeedbackButton = $('#styledFeedbackEntryPoint');
+    });
 
+    it('should assign the default color to the element if no color defined in the options', () => {
         feedbackButton.feedbackPlugin({
             'distPath': 'base/app/',
             'userId': '99999999',
@@ -26,7 +25,11 @@ describe('jQuery Feedback Plugin', () => {
             'defaultStrokeWidth': 4
         });
 
-        styledFeedbackButton.feedbackPlugin({
+        expect(feedbackButton.css('color')).toEqual('rgb(0, 0, 238)');
+    });
+
+    it('should assign the defined color in the options to the element', () => {
+        feedbackButton.feedbackPlugin({
             'color': '#000',
             'backgroundColor': '#ffffff',
             'distPath': 'base/app/',
@@ -37,14 +40,8 @@ describe('jQuery Feedback Plugin', () => {
             'colorPickerCSSClass': 'my-color-picker',
             'defaultStrokeWidth': 4
         });
-    });
 
-    xit('should assign the default color to the element if no color defined in the options', () => {
         expect(feedbackButton.css('color')).toEqual('rgb(0, 0, 238)');
-    });
-
-    xit('should assign the defined color in the options to the element', () => {
-        expect(styledFeedbackButton.css('color')).toEqual('rgb(0, 0, 0)');
     });
 });
 

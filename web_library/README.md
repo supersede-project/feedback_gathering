@@ -158,6 +158,7 @@ The following options are available to configure the jQuery plugin on the client
 |distPath   |Path to the ressources that are used within the library (css, img, etc.)   |
 |fallbackLang|Language to be used if 'lang' is not available in the locales folder|
 |lang|Language to be used|
+|localesOverride|A JS object to control all the texts within the tool.|
 |userId|ID that gets sent to the repository component and will be store alongside the feedback|
 
 # Styling
