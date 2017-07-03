@@ -3,7 +3,7 @@ import Handlebars = require('handlebars');
 
 
 
-xdescribe('jQuery Feedback Plugin', () => {
+describe('jQuery Feedback Plugin', () => {
     let $ = $j;
     let feedbackPlugin;
     let feedbackButton;
@@ -39,11 +39,11 @@ xdescribe('jQuery Feedback Plugin', () => {
         });
     });
 
-    it('should assign the default color to the element if no color defined in the options', () => {
-        expect(feedbackButton.css('color')).toEqual('rgb(255, 255, 255)');
+    xit('should assign the default color to the element if no color defined in the options', () => {
+        expect(feedbackButton.css('color')).toEqual('rgb(0, 0, 238)');
     });
 
-    it('should assign the defined color in the options to the element', () => {
+    xit('should assign the defined color in the options to the element', () => {
         expect(styledFeedbackButton.css('color')).toEqual('rgb(0, 0, 0)');
     });
 });

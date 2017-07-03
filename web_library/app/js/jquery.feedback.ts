@@ -47,7 +47,7 @@ export var feedbackPluginModule = function ($, window, document) {
     };
 
     $.fn.feedbackPlugin.defaults = {
-        'color': '#fff',
+        'color': '#ffffff',
         'lang': 'de',
         'backgroundColor': '#7c9009',
         'fallbackLang': 'en',
