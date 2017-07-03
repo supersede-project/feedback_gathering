@@ -1,18 +1,29 @@
 FROM frolvlad/alpine-oraclejdk8:slim
 VOLUME /tmp
-ADD build/libs/feedback_orchestrator-2.0.0.jar app.jar
-RUN sh -c 'touch /app.jar'
+ADD build/libs/feedback_orchestrator-2.0.0.jar feedback_orchestrator-2.0.0.jar
+RUN sh -c 'touch /feedback_orchestrator-2.0.0.jar'
 ENV JAVA_OPTS=""
-ENTRYPOINT [ "sh", "-c", "java $JAVA_OPTS -Djava.security.egd=file:/dev/./urandom -jar /app.jar" ]
+ENTRYPOINT [ "sh", "-c", "java $JAVA_OPTS -Djava.security.egd=file:/dev/./urandom -jar /feedback_orchestrator-2.0.0.jar" ]
+
+
+
+FROM tomcat:8
+
+
 
 
 
 
 # WEB
+# gradle build jar (-x test)
 # docker build -t supersede_orchestrator -f Dockerfile.web .
-# docker run --name supersede_orchestrator -p 4000:8080 -d supersede_orchestrator
+# docker run --name supersede_orchestrator -p 8085:8080 --link loving_swirles:loving_swirles -d supersede_orchestrator
 # docker start supersede_orchestrator
 # debugging: docker exec -it supersede_orchestrator /bin/sh
+# logs: docker logs supersede_orchestrator
+
+
+# docker cp build/libs/feedback_orchestrator-2.0.0.war supersede_orchestrator:/usr/local/tomcat/webapps
 
 
 # DB
@@ -20,10 +31,11 @@ ENTRYPOINT [ "sh", "-c", "java $JAVA_OPTS -Djava.security.egd=file:/dev/./urando
 # docker logs $CONTAINER_ID
 # docker port $CONTAINER_ID 3306
 # or docker ps --all
-# login and execute: GRANT ALL PRIVILEGES ON supersede_orchestrator_spring.* TO 'user'@'localhost';
+# login and execute: create database supersede_orchestrator_spring;
+# execute: GRANT ALL PRIVILEGES ON supersede_orchestrator_spring.* TO 'user'@'localhost';
 # execute:  FLUSH PRIVILEGES;
 # logout
-# mysql -h localhost -u root -P 32768 supersede_orchestrator_spring < orchestrator/src/main/resources/db/migrations/feedback/supersede_orchestrator_db_structure.sql
-# mysql -h localhost -u root -P 32768 supersede_orchestrator_spring < orchestrator/docker/create_super_admin_api_user.sql
+# mysql -h localhost -u root -P 32768 supersede_orchestrator_spring < src/main/resources/db/migrations/feedback/supersede_orchestrator_db_structure.sql
+# mysql -h localhost -u root -P 32768 supersede_orchestrator_spring < docker/create_super_admin_api_user.sql
 # debugging: docker exec -it $CONTAINER_ID /bin/sh
 # edit my.cnf and add comment (#) before  "bind-address          = 127.0.0.1"

@@ -26,6 +26,9 @@ Create a test database and a local database to run the application locally if ne
 
 ```bash
 cd repository
+# create the gradle properties file and fill in the credentials (ask Yosu <jesus.gorronogoitia@atos.net> or Ronnie <ronnieschaniel@gmail.com>)
+cp gradle.properties-dist gradle.properties 
+
 # install the project's dependencies and generate the war file in build/libs/
 gradle build
 ```
