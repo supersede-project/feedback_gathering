@@ -30,8 +30,9 @@ import java.util.TimerTask;
 
 import org.apache.log4j.Logger;
 
+import eu.supersede.integration.api.analysis.proxies.DataProviderProxy;
+import eu.supersede.integration.api.analysis.types.MonitoringData;
 import monitoring.kafka.KafkaCommunication;
-import monitoring.model.MonitoringData;
 import monitoring.model.MonitoringParams;
 import monitoring.model.Utils;
 import monitoring.services.ToolInterface;
@@ -57,14 +58,14 @@ public class TwitterAPI implements ToolInterface {
 	int id = 1;
 	int configurationId;
 	
-	KafkaCommunication kafka;
+	DataProviderProxy kafka;
 	
 	@Override
 	public void addConfiguration(MonitoringParams params, int configurationId) {
 		logger.debug("Adding new configuration");
 		this.confParams = params;
 		this.configurationId = configurationId;
-		this.kafka = new KafkaCommunication();
+		this.kafka = new DataProviderProxy();
 		resetStream();
 	}
 	
@@ -87,7 +88,6 @@ public class TwitterAPI implements ToolInterface {
 		//logger.debug("Initialising kafka producer...");
 		//kafka.initProducer(confParams.getKafkaEndpoint());
 		logger.debug("Initialising proxy...");
-		kafka.initProxy(confParams.getKafkaEndpoint());
 		logger.debug("Initialising streaming...");
 		firstConnection = true;
 		tweetInfo = new ArrayList<>();
@@ -148,7 +148,7 @@ public class TwitterAPI implements ToolInterface {
 		}
 		tweetInfo = new ArrayList<>();
 		//kafka.generateResponseKafka(data, searchTimeStamp, id, configurationId, this.confParams.getKafkaTopic);
-		kafka.generateResponseIF(data, searchTimeStamp, id, configurationId, this.confParams.getKafkaTopic());
+		kafka.ingestMonitoringData(data, searchTimeStamp, id, configurationId, this.confParams.getKafkaTopic());
 		logger.debug("Data successfully sent to Kafka endpoint");
 		++id;
 	}
