@@ -49,9 +49,13 @@ public class GeneralConfiguration {
     }
 
     public void filterByLanguage(String language, String fallbackLanguage) {
-        for(Parameter parameter : this.parameters) {
+        if(this.getParameters() == null) {
+            return;
+        }
+        for(Parameter parameter : this.getParameters()) {
             parameter.filterByLanguage(language, fallbackLanguage);
         }
+        this.setParameters(this.parametersByLanguage(language, fallbackLanguage));
     }
 
     @Override
@@ -61,7 +65,7 @@ public class GeneralConfiguration {
                 id, name);
     }
 
-    List<Parameter> parametersByLanguage(String language, String fallbackLanguage) {
+    public List<Parameter> parametersByLanguage(String language, String fallbackLanguage) {
         if(this.getParameters() == null) {
             return null;
         }

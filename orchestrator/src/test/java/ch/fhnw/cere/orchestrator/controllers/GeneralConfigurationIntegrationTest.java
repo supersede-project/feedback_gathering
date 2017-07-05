@@ -113,10 +113,10 @@ public class GeneralConfigurationIntegrationTest extends BaseIntegrationTest {
                 .andExpect(jsonPath("$.id", is((int) this.pushConfigurationGeneralConfiguration.getId())))
                 .andExpect(jsonPath("$.name", is("General configuration for push configuration")))
                 .andExpect(jsonPath("$.parameters", hasSize(2)))
-                .andExpect(jsonPath("$.parameters[0].key", is("reviewActive")))
-                .andExpect(jsonPath("$.parameters[0].value", is(false)))
-                .andExpect(jsonPath("$.parameters[1].key", is("font-family")))
-                .andExpect(jsonPath("$.parameters[1].value", is("Arial")));
+                .andExpect(jsonPath("$.parameters[0].key", is("font-family")))
+                .andExpect(jsonPath("$.parameters[0].value", is("Arial")))
+                .andExpect(jsonPath("$.parameters[1].key", is("reviewActive")))
+                .andExpect(jsonPath("$.parameters[1].value", is(false)));
 
         mockMvc.perform(get(basePathEn + "/" + application.getId() + "/general_configuration/" + pushConfigurationGeneralConfiguration.getId()))
                 .andExpect(status().isOk())
@@ -124,10 +124,10 @@ public class GeneralConfigurationIntegrationTest extends BaseIntegrationTest {
                 .andExpect(jsonPath("$.id", is((int) this.pushConfigurationGeneralConfiguration.getId())))
                 .andExpect(jsonPath("$.name", is("General configuration for push configuration")))
                 .andExpect(jsonPath("$.parameters", hasSize(2)))
-                .andExpect(jsonPath("$.parameters[0].key", is("reviewActive")))
-                .andExpect(jsonPath("$.parameters[0].value", is(false)))
-                .andExpect(jsonPath("$.parameters[1].key", is("font-family")))
-                .andExpect(jsonPath("$.parameters[1].value", is("Arial")));
+                .andExpect(jsonPath("$.parameters[0].key", is("font-family")))
+                .andExpect(jsonPath("$.parameters[0].value", is("Arial")))
+                .andExpect(jsonPath("$.parameters[1].key", is("reviewActive")))
+                .andExpect(jsonPath("$.parameters[1].value", is(false)));
     }
 
     private Application buildApplicationTree(String applicationName) {

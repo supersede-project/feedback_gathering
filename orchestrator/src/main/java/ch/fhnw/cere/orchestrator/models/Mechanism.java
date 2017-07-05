@@ -56,10 +56,16 @@ public class Mechanism {
 
     @Override
     public String toString() {
-        return String.format(
-                "Mechanism[id=%d, type='%s', parameters='%s']",
-                id, type, this.getParameters().stream().map(Object::toString)
-                        .collect(Collectors.joining(", ")));
+        if(this.getParameters() != null) {
+            return String.format(
+                    "Mechanism[id=%d, type='%s', parameters='%s']",
+                    id, type, this.getParameters().stream().map(Object::toString)
+                            .collect(Collectors.joining(", ")));
+        } else {
+            return String.format(
+                    "Mechanism[id=%d, type='%s', parameters=[]]",
+                    id, type);
+        }
     }
 
     List<Parameter> parametersByLanguage(String language, String fallbackLanguage) {

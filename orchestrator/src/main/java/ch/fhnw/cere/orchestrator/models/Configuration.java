@@ -30,7 +30,6 @@ public class Configuration {
 
     @JsonIgnore
     @ManyToOne(cascade = {CascadeType.REMOVE, CascadeType.PERSIST})
-    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "application_id")
     private Application application;
 
@@ -110,6 +109,9 @@ public class Configuration {
     void filterByLanguage(String language, String fallbackLanguage) {
         for(Mechanism mechanism : this.getMechanisms()) {
             mechanism.setParameters(mechanism.parametersByLanguage(language, fallbackLanguage));
+        }
+        if(this.generalConfiguration != null) {
+            generalConfiguration.setParameters(generalConfiguration.parametersByLanguage(language, fallbackLanguage));
         }
     }
 

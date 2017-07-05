@@ -3,6 +3,9 @@ package ch.fhnw.cere.orchestrator.controllers;
 
 import ch.fhnw.cere.orchestrator.controllers.exceptions.NotFoundException;
 import ch.fhnw.cere.orchestrator.models.Application;
+import ch.fhnw.cere.orchestrator.models.Configuration;
+import ch.fhnw.cere.orchestrator.models.Mechanism;
+import ch.fhnw.cere.orchestrator.models.Parameter;
 import ch.fhnw.cere.orchestrator.services.ApplicationService;
 import ch.fhnw.cere.orchestrator.services.UserGroupService;
 import ch.fhnw.cere.orchestrator.services.UserService;
@@ -93,6 +96,71 @@ public class ApplicationsController extends BaseController {
     @ResponseStatus(HttpStatus.CREATED)
     @RequestMapping(method = RequestMethod.POST, value = "")
     public Application createApplication(@RequestBody Application application) {
+        // TODO rewrite
+        String defaultLanguage = "en";
+        if(application.getConfigurations() != null) {
+            for(Configuration configuration : application.getConfigurations()) {
+                configuration.setApplication(application);
+                if(configuration.getGeneralConfiguration() != null) {
+                    configuration.getGeneralConfiguration().setConfiguration(configuration);
+                    if(configuration.getGeneralConfiguration().getParameters() != null) {
+                        for(Parameter parameter : configuration.getGeneralConfiguration().getParameters()) {
+                            parameter.setGeneralConfiguration(configuration.getGeneralConfiguration());
+                            if(parameter.getLanguage() == null) {
+                                parameter.setLanguage(defaultLanguage);
+                            }
+                            if(parameter.getParameters() != null) {
+                                for(Parameter subParameter : parameter.getParameters()) {
+                                    subParameter.setParentParameter(parameter);
+                                    if(subParameter.getLanguage() == null) {
+                                        subParameter.setLanguage(defaultLanguage);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                if(configuration.getMechanisms() != null) {
+                    for(Mechanism mechanism : configuration.getMechanisms()) {
+                        if(mechanism.getParameters() != null) {
+                            for(Parameter parameter : mechanism.getParameters()) {
+                                parameter.setMechanism(mechanism);
+                                if(parameter.getLanguage() == null) {
+                                    parameter.setLanguage(defaultLanguage);
+                                }
+                                if(parameter.getParameters() != null) {
+                                    for(Parameter subParameter : parameter.getParameters()) {
+                                        subParameter.setParentParameter(parameter);
+                                        if(subParameter.getLanguage() == null) {
+                                            subParameter.setLanguage(defaultLanguage);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        if(application.getGeneralConfiguration() != null) {
+            application.getGeneralConfiguration().setApplication(application);
+            if(application.getGeneralConfiguration().getParameters() != null) {
+                for(Parameter parameter : application.getGeneralConfiguration().getParameters()) {
+                    parameter.setGeneralConfiguration(application.getGeneralConfiguration());
+                    if(parameter.getLanguage() == null) {
+                        parameter.setLanguage(defaultLanguage);
+                    }
+                    if(parameter.getParameters() != null) {
+                        for(Parameter subParameter : parameter.getParameters()) {
+                            subParameter.setParentParameter(parameter);
+                            if(subParameter.getLanguage() == null) {
+                                subParameter.setLanguage(defaultLanguage);
+                            }
+                        }
+                    }
+                }
+            }
+        }
         return applicationService.save(application);
     }
 

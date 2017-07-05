@@ -114,6 +114,9 @@ public class Application {
         for(Configuration configuration: this.configurations) {
             configuration.filterByLanguage(language, fallbackLanguage);
         }
+        if(this.generalConfiguration != null) {
+            generalConfiguration.setParameters(generalConfiguration.parametersByLanguage(language, fallbackLanguage));
+        }
     }
 
     /**

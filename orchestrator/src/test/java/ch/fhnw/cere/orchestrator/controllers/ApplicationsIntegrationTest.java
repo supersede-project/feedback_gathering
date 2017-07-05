@@ -5,6 +5,7 @@ import ch.fhnw.cere.orchestrator.controllers.helpers.ApplicationTreeBuilder;
 import ch.fhnw.cere.orchestrator.models.*;
 import ch.fhnw.cere.orchestrator.repositories.ApiUserPermissionRepository;
 import ch.fhnw.cere.orchestrator.repositories.ApplicationRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hamcrest.Matchers;
 import static org.hamcrest.Matchers.nullValue;
 
@@ -12,12 +13,14 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.web.servlet.MvcResult;
 
 import javax.servlet.ServletException;
 import java.util.Date;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.hasSize;
+import static org.junit.Assert.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -152,7 +155,7 @@ public class ApplicationsIntegrationTest extends BaseIntegrationTest {
 
         String adminJWTToken = requestAdminJWTToken();
 
-        this.mockMvc.perform(post(basePathEn)
+        MvcResult result = this.mockMvc.perform(post(basePathEn)
                 .contentType(contentType)
                 .header("Authorization", adminJWTToken)
                 .content(applicationJson))
@@ -173,7 +176,89 @@ public class ApplicationsIntegrationTest extends BaseIntegrationTest {
                 .andExpect(jsonPath("$.configurations[0].generalConfiguration.name", is("General configuration for push configuration")))
                 .andExpect(jsonPath("$.configurations[0].generalConfiguration.parameters", hasSize(1)))
                 .andExpect(jsonPath("$.configurations[0].generalConfiguration.parameters[0].key", is("reviewActive")))
+                .andExpect(jsonPath("$.configurations[0].generalConfiguration.parameters[0].value", is(false))).andReturn();
+
+
+        String createdApplicationString = result.getResponse().getContentAsString();
+        ObjectMapper mapper = new ObjectMapper();
+        Application createdApplication = mapper.readValue(createdApplicationString, Application.class);
+        assertEquals(createdApplication.getName(), "Test App 4");
+
+        mockMvc.perform(get(basePathEn + "/" + createdApplication.getId()))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(contentType))
+                .andExpect(jsonPath("$.name", is("Test App 4")))
+                .andExpect(jsonPath("$.state", is(1)))
+                .andExpect(jsonPath("$.configurations", hasSize(2)))
+                .andExpect(jsonPath("$.generalConfiguration.name", is("General configuration Test App 4")))
+                .andExpect(jsonPath("$.generalConfiguration.parameters", hasSize(1)))
+                .andExpect(jsonPath("$.generalConfiguration.parameters[0].key", is("reviewActive")))
+                .andExpect(jsonPath("$.generalConfiguration.parameters[0].value", is(true)))
+                .andExpect(jsonPath("$.configurations[0].name", is("Push configuration 1 of Test App 4")))
+                .andExpect(jsonPath("$.configurations[0].type", is("PUSH")))
+                .andExpect(jsonPath("$.configurations[0].mechanisms[0].type", is("TEXT_TYPE")))
+                .andExpect(jsonPath("$.configurations[0].mechanisms[0].active", is(true)))
+                .andExpect(jsonPath("$.configurations[0].mechanisms[0].order", is(1)))
+                .andExpect(jsonPath("$.configurations[0].mechanisms[0].parameters", hasSize(3)))
+                .andExpect(jsonPath("$.configurations[0].generalConfiguration.name", is("General configuration for push configuration")))
+                .andExpect(jsonPath("$.configurations[0].generalConfiguration.parameters", hasSize(1)))
+                .andExpect(jsonPath("$.configurations[0].generalConfiguration.parameters[0].key", is("reviewActive")))
                 .andExpect(jsonPath("$.configurations[0].generalConfiguration.parameters[0].value", is(false)));
+    }
+
+    @Test
+    public void postJsonTree() throws Exception {
+        String applicationJson = "{\"name\":\"Grid Data UI\",\"state\":1,\"createdAt\":null,\"updatedAt\":null,\"generalConfiguration\":{\"name\":\"Push Configuration Grid\",\"createdAt\":null,\"updatedAt\":null,\"parameters\":null},\"configurations\":[{\"name\":\"Grid Data 2\",\"type\":\"PUSH\",\"createdAt\":null,\"updatedAt\":null,\"generalConfiguration\":null,\"pullDefault\":true,\"pushDefault\":true,\"mechanisms\":[{\"type\":\"TEXT_TYPE\",\"createdAt\":null,\"updatedAt\":null,\"active\":true,\"order\":1,\"parameters\":[{\"key\":\"label\",\"value\":\"Please give your feedback\",\"createdAt\":null,\"updatedAt\":null,\"language\":\"en\",\"parameters\":null}]},{\"type\":\"RATING_TYPE\",\"createdAt\":null,\"updatedAt\":null,\"active\":true,\"order\":2,\"canBeActivated\":true,\"parameters\":[{\"key\":\"title\",\"value\":\"Rate Grid Data UI\",\"defaultValue\":\"\",\"editableByUser\":false,\"language\":\"en\",\"createdAt\":null,\"updatedAt\":null,\"parameters\":null},{\"key\":\"defaultRating\",\"value\":0,\"defaultValue\":\"\",\"editableByUser\":false,\"createdAt\":null,\"updatedAt\":null,\"parameters\":null},{\"key\":\"maxRating\",\"value\":5,\"defaultValue\":\"\",\"editableByUser\":false,\"language\":\"en\",\"createdAt\":null,\"updatedAt\":null,\"parameters\":null}]},{\"type\":\"SCREENSHOT_TYPE\",\"createdAt\":null,\"updatedAt\":null,\"active\":true,\"order\":3,\"parameters\":null},{\"type\":\"ATTACHMENT_TYPE\",\"active\":true,\"order\":4,\"canBeActivated\":true,\"createdAt\":null,\"updatedAt\":null,\"parameters\":[{\"key\":\"title\",\"value\":\"Attach files (optional)\",\"language\":\"en\",\"createdAt\":null,\"updatedAt\":null,\"parameters\":null}]}],\"userGroups\":[]}],\"users\":null,\"userGroups\":null,\"apiUserPermissions\":null}";
+
+        String adminJWTToken = requestAdminJWTToken();
+
+        MvcResult result = this.mockMvc.perform(post(basePathEn)
+                .contentType(contentType)
+                .header("Authorization", adminJWTToken)
+                .content(applicationJson))
+                .andExpect(status().isCreated()).andReturn();
+
+        String createdApplicationString = result.getResponse().getContentAsString();
+        ObjectMapper mapper = new ObjectMapper();
+        Application createdApplication = mapper.readValue(createdApplicationString, Application.class);
+        assertEquals(createdApplication.getName(), "Grid Data UI");
+
+        mockMvc.perform(get(basePathEn + "/" + createdApplication.getId()))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(contentType))
+                .andExpect(jsonPath("$.name", is("Grid Data UI")))
+                .andExpect(jsonPath("$.state", is(1)))
+                .andExpect(jsonPath("$.generalConfiguration.name", is("Push Configuration Grid")))
+                .andExpect(jsonPath("$.generalConfiguration.parameters", hasSize(0)))
+                .andExpect(jsonPath("$.configurations", hasSize(1)))
+                .andExpect(jsonPath("$.configurations[0].name", is("Grid Data 2")))
+                .andExpect(jsonPath("$.configurations[0].type", is("PUSH")))
+                .andExpect(jsonPath("$.configurations[0].mechanisms", hasSize(4)))
+                .andExpect(jsonPath("$.configurations[0].mechanisms[0].type", is("TEXT_TYPE")))
+                .andExpect(jsonPath("$.configurations[0].mechanisms[0].active", is(true)))
+                .andExpect(jsonPath("$.configurations[0].mechanisms[0].order", is(1)))
+                .andExpect(jsonPath("$.configurations[0].mechanisms[0].parameters", hasSize(1)))
+                .andExpect(jsonPath("$.configurations[0].mechanisms[0].parameters[0].key", is("label")))
+                .andExpect(jsonPath("$.configurations[0].mechanisms[0].parameters[0].value", is("Please give your feedback")))
+                .andExpect(jsonPath("$.configurations[0].mechanisms[1].type", is("RATING_TYPE")))
+                .andExpect(jsonPath("$.configurations[0].mechanisms[1].active", is(true)))
+                .andExpect(jsonPath("$.configurations[0].mechanisms[1].order", is(2)))
+                .andExpect(jsonPath("$.configurations[0].mechanisms[1].parameters", hasSize(3)))
+                .andExpect(jsonPath("$.configurations[0].mechanisms[1].parameters[0].key", is("defaultRating")))
+                .andExpect(jsonPath("$.configurations[0].mechanisms[1].parameters[0].value", is("0")))
+                .andExpect(jsonPath("$.configurations[0].mechanisms[1].parameters[1].key", is("maxRating")))
+                .andExpect(jsonPath("$.configurations[0].mechanisms[1].parameters[1].value", is("5")))
+                .andExpect(jsonPath("$.configurations[0].mechanisms[1].parameters[2].key", is("title")))
+                .andExpect(jsonPath("$.configurations[0].mechanisms[1].parameters[2].value", is("Rate Grid Data UI")))
+                .andExpect(jsonPath("$.configurations[0].mechanisms[2].type", is("SCREENSHOT_TYPE")))
+                .andExpect(jsonPath("$.configurations[0].mechanisms[2].active", is(true)))
+                .andExpect(jsonPath("$.configurations[0].mechanisms[2].order", is(3)))
+                .andExpect(jsonPath("$.configurations[0].mechanisms[3].type", is("ATTACHMENT_TYPE")))
+                .andExpect(jsonPath("$.configurations[0].mechanisms[3].active", is(true)))
+                .andExpect(jsonPath("$.configurations[0].mechanisms[3].order", is(4)))
+                .andExpect(jsonPath("$.configurations[0].mechanisms[3].parameters", hasSize(1)))
+                .andExpect(jsonPath("$.configurations[0].mechanisms[3].parameters[0].key", is("title")))
+                .andExpect(jsonPath("$.configurations[0].mechanisms[3].parameters[0].value", is("Attach files (optional)")));
     }
 
     @Test(expected = ServletException.class)
