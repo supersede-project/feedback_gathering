@@ -1,15 +1,15 @@
 package ch.fhnw.cere.repository.controllers;
 
 import ch.fhnw.cere.repository.models.*;
-import ch.fhnw.cere.repository.repositories.ApiUserPermissionRepository;
-import ch.fhnw.cere.repository.repositories.FeedbackRepository;
-import ch.fhnw.cere.repository.repositories.SettingRepository;
+import ch.fhnw.cere.repository.repositories.*;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.test.web.servlet.MvcResult;
 
 import javax.servlet.ServletException;
 import java.io.File;
@@ -32,6 +32,22 @@ public class FeedbackIntegrationTest extends BaseIntegrationTest {
 
     @Autowired
     private FeedbackRepository feedbackRepository;
+    @Autowired
+    private AttachmentFeedbackRepository attachmentFeedbackRepository;
+    @Autowired
+    private AudioFeedbackRepository audioFeedbackRepository;
+    @Autowired
+    private CategoryFeedbackRepository categoryFeedbackRepository;
+    @Autowired
+    private ContextInformationRepository contextInformationRepository;
+    @Autowired
+    private RatingFeedbackRepository ratingFeedbackRepository;
+    @Autowired
+    private TextAnnotationRepository textAnnotationRepository;
+    @Autowired
+    private ScreenshotFeedbackRepository screenshotFeedbackRepository;
+    @Autowired
+    private TextFeedbackRepository textFeedbackRepository;
 
     @Autowired
     private ApiUserPermissionRepository apiUserPermissionRepository;
@@ -54,6 +70,15 @@ public class FeedbackIntegrationTest extends BaseIntegrationTest {
         super.setup();
 
         createRepositoryFilesDirectory();
+
+        attachmentFeedbackRepository.deleteAllInBatch();
+        audioFeedbackRepository.deleteAllInBatch();
+        categoryFeedbackRepository.deleteAllInBatch();
+        contextInformationRepository.deleteAllInBatch();
+        ratingFeedbackRepository.deleteAllInBatch();
+        textAnnotationRepository.deleteAllInBatch();
+        screenshotFeedbackRepository.deleteAllInBatch();
+        textFeedbackRepository.deleteAllInBatch();
         feedbackRepository.deleteAllInBatch();
         settingRepository.deleteAllInBatch();
         apiUserPermissionRepository.deleteAllInBatch();
@@ -70,6 +95,15 @@ public class FeedbackIntegrationTest extends BaseIntegrationTest {
     @After
     public void cleanUp() {
         super.cleanUp();
+
+        attachmentFeedbackRepository.deleteAllInBatch();
+        audioFeedbackRepository.deleteAllInBatch();
+        categoryFeedbackRepository.deleteAllInBatch();
+        contextInformationRepository.deleteAllInBatch();
+        ratingFeedbackRepository.deleteAllInBatch();
+        textAnnotationRepository.deleteAllInBatch();
+        screenshotFeedbackRepository.deleteAllInBatch();
+        textFeedbackRepository.deleteAllInBatch();
         feedbackRepository.deleteAllInBatch();
         settingRepository.deleteAllInBatch();
         apiUserPermissionRepository.deleteAllInBatch();
@@ -247,9 +281,55 @@ public class FeedbackIntegrationTest extends BaseIntegrationTest {
 
         MockMultipartFile jsonFile = new MockMultipartFile("json", "", "application/json", feedbackJson.getBytes());
 
-        this.mockMvc.perform(fileUpload(basePathEn + "applications/" + 1 + "/feedbacks")
+        MvcResult result = this.mockMvc.perform(fileUpload(basePathEn + "applications/" + 1 + "/feedbacks")
                 .file(jsonFile))
                 .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.title", is("New Feedback")))
+                .andExpect(jsonPath("$.userIdentification", is("userId1")))
+                .andExpect(jsonPath("$.applicationId", is(1)))
+                .andExpect(jsonPath("$.configurationId", is(11)))
+                .andExpect(jsonPath("$.language", is("en")))
+
+                .andExpect(jsonPath("$.textFeedbacks", hasSize(2)))
+                .andExpect(jsonPath("$.textFeedbacks[0].text", is("Text Feedback 1")))
+                .andExpect(jsonPath("$.textFeedbacks[1].text", is("info@example.com")))
+
+                .andExpect(jsonPath("$.contextInformation.resolution", is("1920x1080")))
+                .andExpect(jsonPath("$.contextInformation.userAgent", is("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36")))
+                .andExpect(jsonPath("$.contextInformation.androidVersion", is(nullValue())))
+                .andExpect(jsonPath("$.contextInformation.timeZone", is("+0200")))
+                .andExpect(jsonPath("$.contextInformation.devicePixelRatio", is(2.0)))
+                .andExpect(jsonPath("$.contextInformation.country", is("CH")))
+                .andExpect(jsonPath("$.contextInformation.region", is("ZH")))
+
+                .andExpect(jsonPath("$.categoryFeedbacks", hasSize(3)))
+                .andExpect(jsonPath("$.categoryFeedbacks[0].mechanismId", is(1)))
+                .andExpect(jsonPath("$.categoryFeedbacks[0].parameterId", is(99)))
+                .andExpect(jsonPath("$.categoryFeedbacks[0].text", is(nullValue())))
+                .andExpect(jsonPath("$.categoryFeedbacks[1].mechanismId", is(1)))
+                .andExpect(jsonPath("$.categoryFeedbacks[1].parameterId", is(98)))
+                .andExpect(jsonPath("$.categoryFeedbacks[1].text", is(nullValue())))
+                .andExpect(jsonPath("$.categoryFeedbacks[2].mechanismId", is(1)))
+                .andExpect(jsonPath("$.categoryFeedbacks[2].parameterId", is(nullValue())))
+                .andExpect(jsonPath("$.categoryFeedbacks[2].text", is("custom category")))
+
+                .andExpect(jsonPath("$.ratingFeedbacks", hasSize(2)))
+                .andExpect(jsonPath("$.ratingFeedbacks[0].rating", is(5)))
+                .andExpect(jsonPath("$.ratingFeedbacks[0].title", is("Please rate X")))
+                .andExpect(jsonPath("$.ratingFeedbacks[0].mechanismId", is(1)))
+                .andExpect(jsonPath("$.ratingFeedbacks[1].rating", is(0)))
+                .andExpect(jsonPath("$.ratingFeedbacks[1].title", is("Please rate Y")))
+                .andExpect(jsonPath("$.ratingFeedbacks[1].mechanismId", is(2))).andReturn();
+
+        String createdFeedbackString = result.getResponse().getContentAsString();
+        ObjectMapper mapper = new ObjectMapper();
+        Feedback createdFeedback = mapper.readValue(createdFeedbackString, Feedback.class);
+
+        String adminJWTToken = requestAppAdminJWTToken();
+        mockMvc.perform(get(basePathEn + "applications/" + createdFeedback.getApplicationId() + "/feedbacks/" + createdFeedback.getId())
+                .header("Authorization", adminJWTToken))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id", is((int) createdFeedback.getId())))
                 .andExpect(jsonPath("$.title", is("New Feedback")))
                 .andExpect(jsonPath("$.userIdentification", is("userId1")))
                 .andExpect(jsonPath("$.applicationId", is(1)))

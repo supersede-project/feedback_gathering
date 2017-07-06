@@ -5,6 +5,7 @@ import ch.fhnw.cere.repository.models.*;
 import ch.fhnw.cere.repository.models.orchestrator.Application;
 import ch.fhnw.cere.repository.models.orchestrator.Mechanism;
 import ch.fhnw.cere.repository.models.orchestrator.MechanismTemplateModel;
+import com.sun.media.jfxmedia.logging.Logger;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -91,14 +92,19 @@ public class FeedbackEmailServiceImpl implements FeedbackEmailService {
                 helper.setSubject("New Feedback from " + feedback.getUserIdentification());
             }
 
-            Application orchestratorApplication = this.orchestratorApplicationService.loadApplication(feedback.getLanguage(), feedback.getApplicationId());
-            this.appendMechanismsToFeedback(orchestratorApplication, feedback);
+            Template emailTemplate = freemarkerConfiguration.getTemplate("feedback_mail.ftl");
+
+            try {
+                Application orchestratorApplication = this.orchestratorApplicationService.loadApplication(feedback.getLanguage(), feedback.getApplicationId());
+                this.appendMechanismsToFeedback(orchestratorApplication, feedback);
+            } catch(Exception e) {
+                Logger.logMsg(Logger.ERROR, "Orchestrator not available for repository email sender. Alternative email template chosen.");
+                emailTemplate = freemarkerConfiguration.getTemplate("feedback_mail_without_configuration.ftl");
+            }
 
             Map<String, Object> model = new HashMap<>();
             model.put("feedback", feedback);
-
-            Template t = freemarkerConfiguration.getTemplate("feedback_mail.ftl");
-            String text = FreeMarkerTemplateUtils.processTemplateIntoString(t, model);
+            String text = FreeMarkerTemplateUtils.processTemplateIntoString(emailTemplate, model);
 
             helper.setText(text,true);
             this.addAttachments(feedback, helper);
@@ -117,22 +123,28 @@ public class FeedbackEmailServiceImpl implements FeedbackEmailService {
     private void addAttachments(Feedback feedback, MimeMessageHelper helper) throws MessagingException {
         File resourcesDirectory = new File(repositoryFilesDirectory);
 
-        for(AttachmentFeedback attachmentFeedback : feedback.getAttachmentFeedbacks()) {
-            File attachment = new File(resourcesDirectory.getAbsolutePath() + File.separator + this.attachmentsDirectory + File.separator + attachmentFeedback.getPath());
-            FileSystemResource res = new FileSystemResource(attachment);
-            helper.addAttachment(res.getFilename(), res);
+        if(feedback.getAttachmentFeedbacks() != null) {
+            for(AttachmentFeedback attachmentFeedback : feedback.getAttachmentFeedbacks()) {
+                File attachment = new File(resourcesDirectory.getAbsolutePath() + File.separator + this.attachmentsDirectory + File.separator + attachmentFeedback.getPath());
+                FileSystemResource res = new FileSystemResource(attachment);
+                helper.addAttachment(res.getFilename(), res);
+            }
         }
 
-        for(ScreenshotFeedback screenshotFeedback : feedback.getScreenshotFeedbacks()) {
-            File screenshot = new File(resourcesDirectory.getAbsolutePath() + File.separator + this.screenshotsDirectory + File.separator + screenshotFeedback.getPath());
-            FileSystemResource res = new FileSystemResource(screenshot);
-            helper.addAttachment(res.getFilename(), res);
+        if(feedback.getScreenshotFeedbacks() != null) {
+            for(ScreenshotFeedback screenshotFeedback : feedback.getScreenshotFeedbacks()) {
+                File screenshot = new File(resourcesDirectory.getAbsolutePath() + File.separator + this.screenshotsDirectory + File.separator + screenshotFeedback.getPath());
+                FileSystemResource res = new FileSystemResource(screenshot);
+                helper.addAttachment(res.getFilename(), res);
+            }
         }
 
-        for(AudioFeedback audioFeedback : feedback.getAudioFeedbacks()) {
-            File screenshot = new File(resourcesDirectory.getAbsolutePath() + File.separator + this.audiosDirectory + File.separator + audioFeedback.getPath());
-            FileSystemResource res = new FileSystemResource(screenshot);
-            helper.addAttachment(res.getFilename(), res);
+        if(feedback.getAudioFeedbacks() != null) {
+            for(AudioFeedback audioFeedback : feedback.getAudioFeedbacks()) {
+                File screenshot = new File(resourcesDirectory.getAbsolutePath() + File.separator + this.audiosDirectory + File.separator + audioFeedback.getPath());
+                FileSystemResource res = new FileSystemResource(screenshot);
+                helper.addAttachment(res.getFilename(), res);
+            }
         }
     }
 

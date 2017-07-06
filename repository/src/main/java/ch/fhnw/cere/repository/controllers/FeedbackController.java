@@ -3,12 +3,13 @@ package ch.fhnw.cere.repository.controllers;
 
 import ch.fhnw.cere.repository.controllers.exceptions.NotFoundException;
 import ch.fhnw.cere.repository.integration.DataProviderIntegrator;
+import ch.fhnw.cere.repository.models.*;
 import ch.fhnw.cere.repository.services.FeedbackEmailService;
 import ch.fhnw.cere.repository.services.FeedbackEmailServiceImpl;
-import ch.fhnw.cere.repository.models.Feedback;
 import ch.fhnw.cere.repository.services.FeedbackService;
 import ch.fhnw.cere.repository.services.FileStorageService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import javafx.stage.Screen;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -84,6 +85,46 @@ public class FeedbackController extends BaseController {
         feedback.setApplicationId(applicationId());
         if(feedback.getLanguage() == null) {
             feedback.setLanguage("en");
+        }
+
+        // TODO rewrite
+        if(feedback.getContextInformation() != null) {
+            feedback.getContextInformation().setFeedback(feedback);
+        }
+        if(feedback.getTextFeedbacks() != null) {
+            for(TextFeedback textFeedback : feedback.getTextFeedbacks()) {
+                textFeedback.setFeedback(feedback);
+            }
+        }
+        if(feedback.getRatingFeedbacks() != null) {
+            for(RatingFeedback ratingFeedback : feedback.getRatingFeedbacks()) {
+                ratingFeedback.setFeedback(feedback);
+            }
+        }
+        if(feedback.getCategoryFeedbacks() != null) {
+            for(CategoryFeedback categoryFeedback : feedback.getCategoryFeedbacks()) {
+                categoryFeedback.setFeedback(feedback);
+            }
+        }
+        if(feedback.getScreenshotFeedbacks() != null) {
+            for(ScreenshotFeedback screenshotFeedback : feedback.getScreenshotFeedbacks()) {
+                screenshotFeedback.setFeedback(feedback);
+            }
+        }
+        if(feedback.getAttachmentFeedbacks() != null) {
+            for(AttachmentFeedback attachmentFeedback : feedback.getAttachmentFeedbacks()) {
+                attachmentFeedback.setFeedback(feedback);
+            }
+        }
+        if(feedback.getAudioFeedbacks() != null) {
+            for(AudioFeedback audioFeedback : feedback.getAudioFeedbacks()) {
+                audioFeedback.setFeedback(feedback);
+            }
+        }
+        if(feedback.getStatuses() != null) {
+            for(Status status : feedback.getStatuses()) {
+                status.setFeedback(feedback);
+            }
         }
 
         parts.remove("json");
