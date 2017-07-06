@@ -1703,24 +1703,36 @@
             'distPath': 'dist/',
             //'distPath': 'https://platform.supersede.eu/web_library/senercon/dist/',
 
-            'applicationId': 20,
-            'apiEndpointOrchestrator': 'https://platform.supersede.eu:8443/',
-            'apiEndpointRepository': 'https://platform.supersede.eu:8443/',
+            //'applicationId': 20,
+            //'apiEndpointOrchestrator': 'https://platform.supersede.eu:8443/',
+            //'apiEndpointRepository': 'https://platform.supersede.eu:8443/',
 
-            //'applicationId': 1,
+            //'applicationId': 7,
             //'apiEndpointOrchestrator': 'http://localhost:8081/',
             //'apiEndpointRepository': 'http://localhost:8082/',
 
             'localesOverride': {
-              'general': {
-                  "review_feedback": "nächste Seite"
-              },
-              'dialog': {
-                  'titles': {
-                      1: 'Schritt 1/2',
-                      2: 'Schritt 2/2'
-                  }
-              }
+                'dialog': {
+                    'general': {
+                        "review_feedback": "nächste Seite"
+                    },
+                    'dialog': {
+                        'titles': {
+                            1: 'Schritt 1/2',
+                            2: 'Schritt 2/2'
+                        }
+                    }
+                },
+                'mechanisms': [
+                    {
+                        'id': 59,
+                        'label': 'Label override text'
+                    },
+                    {
+                        'id': 64,
+                        'title': 'Label override category'
+                    }
+                ]
             },
 
             'userId': '99999999',

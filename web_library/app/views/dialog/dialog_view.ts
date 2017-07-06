@@ -25,9 +25,9 @@ export class DialogView {
         this.dialogElement.dialog('option', 'modal', this.dialogContext.modal);
         this.dialogElement.dialog('option', 'dialogClass', this.dialogContext.dialogCSSClass);
 
-        if(this.context.localesOverride && this.context.localesOverride.dialog && this.context.localesOverride.dialog.titles) {
-            if(this.context.localesOverride.dialog.titles["1"]) {
-                this.dialogElement.dialog('option', 'title', this.context.localesOverride.dialog.titles["1"]);
+        if(this.context.localesOverride && this.context.localesOverride.dialog && this.context.localesOverride.dialog.dialog && this.context.localesOverride.dialog.dialog.titles) {
+            if(this.context.localesOverride.dialog.dialog.titles["1"]) {
+                this.dialogElement.dialog('option', 'title', this.context.localesOverride.dialog.dialog.titles["1"]);
             } else {
                 this.dialogElement.dialog('option', 'title', this.dialogContext.dialogTitle);
             }
@@ -36,11 +36,32 @@ export class DialogView {
         this.setupCloseOnOutsideClick();
     }
 
+    overrideMechanismConfiguration(context:any, localesOverride:any): any {
+        console.log(context.mechanisms);
+        console.log(localesOverride.mechanisms);
+
+        if(localesOverride.mechanisms && context.mechanisms) {
+            let mechanismsOverride = localesOverride.mechanisms;
+
+            for(let mechanismOverride of mechanismsOverride) {
+                if(context.mechanisms.filter(mechanism => mechanism.id === mechanismOverride.id).length > 0) {
+                    let foundMechanism = context.mechanisms.filter(mechanism => mechanism.id === mechanismOverride.id)[0];
+                    let index = context.mechanisms.indexOf(foundMechanism);
+                    context.mechanisms[index] = jQuery.extend(true, context.mechanisms[index], mechanismOverride);
+                }
+            }
+        }
+        return context;
+    }
+
     buildContext(applicationContext:any) {
         let dialogContext = {
             'dialogId': this.dialogId
         };
         this.context = $.extend({}, applicationContext, dialogContext);
+        if(this.context.localesOverride) {
+            this.context = this.overrideMechanismConfiguration(this.context, this.context.localesOverride);
+        }
         return this.context;
     }
 

@@ -106,9 +106,9 @@ export class FeedbackDialogView extends DialogView {
     }
 
     changeDialogTitle(pageNumber:number) {
-        if(this.context.localesOverride && this.context.localesOverride.dialog && this.context.localesOverride.dialog.titles) {
-            if(this.context.localesOverride.dialog.titles[pageNumber]) {
-                this.dialogElement.dialog('option', 'title', this.context.localesOverride.dialog.titles[pageNumber]);
+        if(this.context.localesOverride && this.context.localesOverride.dialog && this.context.localesOverride.dialog.dialog && this.context.localesOverride.dialog.dialog.titles) {
+            if(this.context.localesOverride.dialog.dialog.titles[pageNumber]) {
+                this.dialogElement.dialog('option', 'title', this.context.localesOverride.dialog.dialog.titles[pageNumber]);
             } else {
                 this.dialogElement.dialog('option', 'title', this.dialogContext.dialogTitle);
             }
