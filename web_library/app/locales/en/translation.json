@@ -11,6 +11,8 @@
     "cancel": "Cancel",
     "dialog_close_button_title": "Minimize",
     "success_message": "Your feedback was successfully sent.",
+    "success_dialog_title": "Info",
+    "success_dialog_okay_button_title": "ok",
     "error_message": "An error occurred while saving the feedback."
   },
   "text": {
@@ -31,9 +33,15 @@
     "undo": "undo",
     "remove": "Delete screenshot",
     "color": "Color",
-    "selection": "Selection"
+    "selection": "Selection",
+    "zoom_in": "Zoom",
+    "zoom_out": "Zoom"
   },
   "rating": {
     "review_title": "Rating"
+  },
+  "attachment": {
+    "choose_file": "Choose a file",
+    "drop_file": "or drop it here"
   }
 }

@@ -22,6 +22,10 @@ export class DialogView {
         let dialogContainer = jQuery('#'+ this.dialogId);
 
         this.dialogElement = dialogContainer.dialog(this.getDialogOptions());
+
+        this.dialogElement.parent('.ui-dialog').wrapAll('<div class="feedback-library-wrapper"></div>');
+        this.dialogElement.parent('.ui-dialog').closest('.ui-widget-overlay').wrapAll('<div class="feedback-library-wrapper"></div>');
+
         this.dialogElement.dialog('option', 'modal', this.dialogContext.modal);
         this.dialogElement.dialog('option', 'dialogClass', this.dialogContext.dialogCSSClass);
 
@@ -37,9 +41,6 @@ export class DialogView {
     }
 
     overrideMechanismConfiguration(context:any, localesOverride:any): any {
-        console.log(context.mechanisms);
-        console.log(localesOverride.mechanisms);
-
         if(localesOverride.mechanisms && context.mechanisms) {
             let mechanismsOverride = localesOverride.mechanisms;
 

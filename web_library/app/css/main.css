@@ -516,6 +516,13 @@
   padding-right: 20px;
   box-sizing: border-box; }
 
+.feedback-library-wrapper {
+  width: auto;
+  height: auto;
+  display: inline-block;
+  position: absolute;
+  top: 0; }
+
 #feedbackEntryPoint {
   position: fixed;
   top: 300px;

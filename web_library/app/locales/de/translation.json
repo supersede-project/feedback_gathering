@@ -11,6 +11,8 @@
     "cancel": "Abbrechen",
     "dialog_close_button_title": "Minimieren",
     "success_message": "Ihr Feedback wurde erfolgreich abgeschickt.",
+    "success_dialog_title": "Info",
+    "success_dialog_okay_button_title": "ok",
     "error_message": "Beim Speichern des Feedbacks ist ein Fehler aufgetreten."
   },
   "text": {
@@ -31,9 +33,15 @@
     "undo": "Rückgängig",
     "remove": "Screenshot entfernen",
     "color": "Farbe",
-    "selection": "Auswahl"
+    "selection": "Auswahl",
+    "zoom_in": "Zoom",
+    "zoom_out": "Zoom"
   },
   "rating": {
     "review_title": "Rating"
+  },
+  "attachment": {
+    "choose_file": "Datei auswählen",
+    "drop_file": "oder hier ablegen"
   }
 }

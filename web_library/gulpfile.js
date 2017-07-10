@@ -93,8 +93,12 @@ gulp.task('copy-jquery-ui-droppable', function () {
 });
 
 gulp.task('build-jquery-ui', function() {
-    gulp.src([jqueryUIPath + 'jquery-ui.min.js', jqueryUIPath + 'jquery-ui.min.css', jqueryUIPath + 'LICENSE.txt'])
+    gulp.src([jqueryUIPath + 'jquery-ui.min.js', jqueryUIPath + 'LICENSE.txt'])
         .pipe(gulp.dest('dist/jqueryui/'));
+    gulp.src([jqueryUIPath + 'jquery-ui.css'])
+        .pipe(cleanCSS())
+        .pipe(rename('jquery-ui.min.css'))
+        .pipe(gulp.dest('dist/jqueryui'));
     gulp.src([jqueryUIPath + 'images/*'])
         .pipe(gulp.dest('dist/jqueryui/images'));
 });

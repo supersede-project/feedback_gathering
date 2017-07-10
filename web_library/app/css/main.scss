@@ -7,6 +7,15 @@
 @import "attachment";
 @import "grid";
 
+
+.feedback-library-wrapper {
+  width: auto;
+  height: auto;
+  display: inline-block;
+  position: absolute;
+  top: 0;
+}
+
 #feedbackEntryPoint {
   position: fixed;
   top: 300px;

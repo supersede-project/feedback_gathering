@@ -8,7 +8,8 @@
                 {{/if}}
 
                 {{#compare reviewButtonPosition "top" operator="==="}}
-                    <button class="button feedback-dialog-forward navigation-button">{{t "general.review_feedback" }}</button>
+                    <button class="button feedback-dialog-forward navigation-button">{{t
+                            "general.review_feedback" }}</button>
                     <div class="clearfix"></div>
                 {{/compare}}
 
@@ -38,7 +39,8 @@
                             {{/compare}}
 
                             {{#compare ../reviewButtonPosition @index operator="==="}}
-                                <button class="button feedback-dialog-forward navigation-button">{{t "general.review_feedback" }}</button>
+                                <button class="button feedback-dialog-forward navigation-button">{{t
+                                        "general.review_feedback" }}</button>
                                 <div class="clearfix"></div>
                             {{/compare}}
 
@@ -49,17 +51,21 @@
 
                 <div class="button-row" style="{{buttonRowStyle}}">
                     {{#compare reviewButtonPosition "bottom" operator="==="}}
-                        <button class="button pull-right feedback-dialog-forward navigation-button">{{t "general.review_feedback" }}</button>
+                        <button class="button pull-right feedback-dialog-forward navigation-button">{{t
+                                "general.review_feedback" }}</button>
                     {{/compare}}
                     {{#compare reviewButtonPosition undefined operator="==="}}
-                        <button class="button pull-right feedback-dialog-forward navigation-button">{{t "general.review_feedback" }}</button>
+                        <button class="button pull-right feedback-dialog-forward navigation-button">{{t
+                                "general.review_feedback" }}</button>
                     {{/compare}}
                     {{#compare reviewButtonPosition null operator="==="}}
-                        <button class="button pull-right feedback-dialog-forward navigation-button">{{t "general.review_feedback" }}</button>
+                        <button class="button pull-right feedback-dialog-forward navigation-button">{{t
+                                "general.review_feedback" }}</button>
                     {{/compare}}
 
                     {{#if discardAsButton }}
-                        <button class="{{discardClass}} button discard-feedback">{{t "general.discard_feedback" }}</button>
+                        <button class="{{discardClass}} button discard-feedback">{{t
+                                "general.discard_feedback" }}</button>
                     {{else}}
                         <a class="{{discardClass}} discard-feedback">{{t "general.discard_feedback" }}</a>
                     {{/if}}
@@ -91,13 +97,13 @@
                             {{#if active}}
                                 {{#compare page "review" operator="!="}}
                                     <p class="mechanism-review category-review">
-                                    <i>{{ title }}</i>
-                                    {{#each options}}
-                                        <input type="{{ ../inputType }}" id="reviewoption{{ key }}"
-                                               name="category_mechanism_review_{{ ../id }}"
-                                               value="review{{ key }}" disabled>
-                                        <label for="reviewOption{{ key }}"> {{ value }}</label> &nbsp;
-                                    {{/each}}
+                                        <i>{{ title }}</i>
+                                        {{#each options}}
+                                            <input type="{{ ../inputType }}" id="reviewoption{{ key }}"
+                                                   name="category_mechanism_review_{{ ../id }}"
+                                                   value="review{{ key }}" disabled>
+                                            <label for="reviewOption{{ key }}"> {{ value }}</label> &nbsp;
+                                        {{/each}}
                                     </p>
                                 {{/compare}}
                             {{/if}}
@@ -139,7 +145,8 @@
                 <section class="dialog-navigation">
                     <button class="button feedback-dialog-backward navigation-button">{{t "general.back" }}</button>
                     <button type="button"
-                            class="button navigation-button submit-feedback">{{t "general.feedback_submit_button_title" }}
+                            class="button navigation-button submit-feedback">{{t
+                            "general.feedback_submit_button_title" }}
                     </button>
                     <div class="clearfix"></div>
                     <span class="server-response"></span>
