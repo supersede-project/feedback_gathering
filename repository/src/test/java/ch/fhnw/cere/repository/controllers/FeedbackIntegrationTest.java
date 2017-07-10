@@ -96,6 +96,7 @@ public class FeedbackIntegrationTest extends BaseIntegrationTest {
     public void cleanUp() {
         super.cleanUp();
 
+        /*
         attachmentFeedbackRepository.deleteAllInBatch();
         audioFeedbackRepository.deleteAllInBatch();
         categoryFeedbackRepository.deleteAllInBatch();
@@ -107,6 +108,7 @@ public class FeedbackIntegrationTest extends BaseIntegrationTest {
         feedbackRepository.deleteAllInBatch();
         settingRepository.deleteAllInBatch();
         apiUserPermissionRepository.deleteAllInBatch();
+        */
     }
 
     @Test(expected = ServletException.class)
@@ -379,6 +381,7 @@ public class FeedbackIntegrationTest extends BaseIntegrationTest {
         feedback.setContextInformation(new ContextInformation(feedback, "1920x1080", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36", null, new Timestamp(new Date().getTime()), "+0200", 2.0f, "CH", "ZH", "http://example.com/subpage1"));
         feedback.setAttachmentFeedbacks(new ArrayList<AttachmentFeedback>(){{
             add(new AttachmentFeedback("attachment1", feedback, 3));
+            add(new AttachmentFeedback("attachment2", feedback, 3));
         }});
         feedback.setScreenshotFeedbacks(new ArrayList<ScreenshotFeedback>(){{
             add(new ScreenshotFeedback("screenshot1", feedback, 4, null));
@@ -389,13 +392,16 @@ public class FeedbackIntegrationTest extends BaseIntegrationTest {
         File resourcesDirectory = new File("src/test/resources");
 
         FileInputStream fileInputStream1 = new FileInputStream(new File(resourcesDirectory.getAbsolutePath() + "/test_file.pdf"));
-        FileInputStream fineInputStream2 = new FileInputStream(new File(resourcesDirectory.getAbsolutePath() + "/screenshot_1_example.png"));
+        FileInputStream fileInputStream2 = new FileInputStream(new File(resourcesDirectory.getAbsolutePath() + "/test_file"));
+        FileInputStream fineInputStream3 = new FileInputStream(new File(resourcesDirectory.getAbsolutePath() + "/screenshot_1_example.png"));
         MockMultipartFile pdfFile = new MockMultipartFile("attachment1", "test_Kopie.pdf", "application/pdf", fileInputStream1);
-        MockMultipartFile screenshotFile = new MockMultipartFile("screenshot1", "screenshot_1_example.png", "image/png", fineInputStream2);
+        MockMultipartFile pdfFile2 = new MockMultipartFile("attachment2", "test_Kopie", "application/pdf", fileInputStream2);
+        MockMultipartFile screenshotFile = new MockMultipartFile("screenshot1", "screenshot_1_example.png", "image/png", fineInputStream3);
 
-        this.mockMvc.perform(fileUpload(basePathEn + "applications/" + 1 + "/feedbacks")
+        MvcResult result = this.mockMvc.perform(fileUpload(basePathEn + "applications/" + 1 + "/feedbacks")
                 .file(jsonFile)
                 .file(pdfFile)
+                .file(pdfFile2)
                 .file(screenshotFile))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.title", is("New Feedback")))
@@ -416,7 +422,7 @@ public class FeedbackIntegrationTest extends BaseIntegrationTest {
                 .andExpect(jsonPath("$.contextInformation.country", is("CH")))
                 .andExpect(jsonPath("$.contextInformation.region", is("ZH")))
 
-                .andExpect(jsonPath("$.attachmentFeedbacks", hasSize(1)))
+                .andExpect(jsonPath("$.attachmentFeedbacks", hasSize(2)))
                 .andExpect(jsonPath("$.attachmentFeedbacks[0].part", is("attachment1")))
                 .andExpect(jsonPath("$.attachmentFeedbacks[0].mechanismId", is(3)))
                 .andExpect(jsonPath("$.attachmentFeedbacks[0].path", is("1_userId1_test_Kopie.pdf")))
@@ -424,6 +430,63 @@ public class FeedbackIntegrationTest extends BaseIntegrationTest {
                 .andExpect(jsonPath("$.screenshotFeedbacks", hasSize(1)))
                 .andExpect(jsonPath("$.screenshotFeedbacks[0].part", is("screenshot1")))
                 .andExpect(jsonPath("$.screenshotFeedbacks[0].mechanismId", is(4)))
-                .andExpect(jsonPath("$.screenshotFeedbacks[0].path", is("1_userId1_screenshot_1_example.png")));
+                .andExpect(jsonPath("$.screenshotFeedbacks[0].path", is("1_userId1_screenshot_1_example.png"))).andReturn();
+
+        String createdFeedbackString = result.getResponse().getContentAsString();
+        ObjectMapper mapper = new ObjectMapper();
+        Feedback createdFeedback = mapper.readValue(createdFeedbackString, Feedback.class);
+
+        String adminJWTToken = requestAppAdminJWTToken();
+        mockMvc.perform(get(basePathEn + "applications/" + createdFeedback.getApplicationId() + "/feedbacks/" + createdFeedback.getId())
+                .header("Authorization", adminJWTToken))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id", is((int) createdFeedback.getId())))
+
+                .andExpect(jsonPath("$.title", is("New Feedback")))
+                .andExpect(jsonPath("$.userIdentification", is("userId1")))
+                .andExpect(jsonPath("$.applicationId", is(1)))
+                .andExpect(jsonPath("$.configurationId", is(11)))
+                .andExpect(jsonPath("$.language", is("en")))
+
+                .andExpect(jsonPath("$.textFeedbacks", hasSize(2)))
+                .andExpect(jsonPath("$.textFeedbacks[0].text", is("Text Feedback 1")))
+                .andExpect(jsonPath("$.textFeedbacks[1].text", is("info@example.com")))
+
+                .andExpect(jsonPath("$.contextInformation.resolution", is("1920x1080")))
+                .andExpect(jsonPath("$.contextInformation.userAgent", is("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36")))
+                .andExpect(jsonPath("$.contextInformation.androidVersion", is(nullValue())))
+                .andExpect(jsonPath("$.contextInformation.timeZone", is("+0200")))
+                .andExpect(jsonPath("$.contextInformation.devicePixelRatio", is(2.0)))
+                .andExpect(jsonPath("$.contextInformation.country", is("CH")))
+                .andExpect(jsonPath("$.contextInformation.region", is("ZH")))
+
+                .andExpect(jsonPath("$.screenshotFeedbacks", hasSize(1)))
+                .andExpect(jsonPath("$.screenshotFeedbacks[0].mechanismId", is(4)))
+                .andExpect(jsonPath("$.screenshotFeedbacks[0].path", is("1_userId1_screenshot_1_example.png")))
+
+                .andExpect(jsonPath("$.attachmentFeedbacks", hasSize(2)))
+                .andExpect(jsonPath("$.attachmentFeedbacks[0].mechanismId", is(3)))
+                .andExpect(jsonPath("$.attachmentFeedbacks[0].path", is("1_userId1_test_Kopie.pdf")))
+                .andExpect(jsonPath("$.attachmentFeedbacks[1].mechanismId", is(3)))
+                .andExpect(jsonPath("$.attachmentFeedbacks[1].path", is("1_userId1_test_Kopie")));
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -6,4 +6,5 @@ public interface FileFeedback {
     void setPath(String path);
     void setSize(int size);
     String getFileExtension();
+    void setFileExtension(String fileExtension);
 }

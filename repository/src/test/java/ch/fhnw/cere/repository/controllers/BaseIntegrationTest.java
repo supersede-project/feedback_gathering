@@ -219,6 +219,10 @@ public abstract class BaseIntegrationTest {
         File destAttachment = new File(uploadDirectory + File.separator + attachmentsFolderName + File.separator + "test_file.pdf");
         FileUtils.copyFile(srcAttachment, destAttachment);
 
+        File srcAttachment2 = new File("src/test/resources" + File.separator + "test_file");
+        File destAttachment2 = new File(uploadDirectory + File.separator + attachmentsFolderName + File.separator + "test_file");
+        FileUtils.copyFile(srcAttachment2, destAttachment2);
+
         File srcScreenshot = new File("src/test/resources" + File.separator + "screenshot_1_example.png");
         File destScreenshot = new File(uploadDirectory + File.separator + screenshotsFolderName + File.separator + "screenshot_1_example.png");
         FileUtils.copyFile(srcScreenshot, destScreenshot);

@@ -2,6 +2,7 @@ package ch.fhnw.cere.repository.services;
 
 import ch.fhnw.cere.repository.models.*;
 import com.sun.media.jfxmedia.logging.Logger;
+import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.MultiValueMap;
@@ -72,12 +73,11 @@ public class FileStorageServiceImpl implements FileStorageService {
         for(FileFeedback fileFeedback : fileFeedbacks) {
             if(parts.containsKey(fileFeedback.getPart())) {
                 MultipartFile file = parts.getFirst(fileFeedback.getPart());
-                String generatedFilename = "";
-                if(fileFeedback.getFileExtension() != null) {
-                    generatedFilename = buildFilename(file.getOriginalFilename(), feedback) + "." + fileFeedback.getFileExtension();
-                } else {
-                    generatedFilename = buildFilename(file.getOriginalFilename(), feedback);
-                }
+
+                String fileExtension =  FilenameUtils.getExtension(file.getOriginalFilename());
+                fileFeedback.setFileExtension(fileExtension);
+
+                String generatedFilename = buildFilename(file.getOriginalFilename(), feedback);
                 String repositoryFilesDirectory = uploadDirectory + "/" + folderName + "/" + generatedFilename;
                 file.transferTo(new File(repositoryFilesDirectory));
                 fileFeedback.setPath(generatedFilename);
