@@ -31,4 +31,9 @@ public class ConfigurationServiceImpl implements ConfigurationService {
     public void delete(long id){
         configurationRepository.delete(id);
     }
+
+    @Override
+    public List<Configuration> findByApplicationId(long applicationId) {
+        return configurationRepository.findByApplicationId(applicationId);
+    }
 }

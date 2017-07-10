@@ -3,6 +3,7 @@ package ch.fhnw.cere.orchestrator.models;
 
 import ch.fhnw.cere.orchestrator.serialization.ParameterValueSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -57,6 +58,44 @@ public class Parameter {
     }
 
     public Parameter(String key, String value, Date createdAt, Date updatedAt, String language, Parameter parentParameter, List<Parameter> parameters, GeneralConfiguration generalConfiguration, Mechanism mechanism) {
+        this.key = key;
+        this.value = value;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.language = language;
+        this.parentParameter = parentParameter;
+        this.parameters = parameters;
+        this.generalConfiguration = generalConfiguration;
+        this.mechanism = mechanism;
+    }
+
+    public Parameter(long id, String key, String value, Date createdAt, Date updatedAt, String language, Parameter parentParameter, List<Parameter> parameters, GeneralConfiguration generalConfiguration, Mechanism mechanism) {
+        this.id = id;
+        this.key = key;
+        this.value = value;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.language = language;
+        this.parentParameter = parentParameter;
+        this.parameters = parameters;
+        this.generalConfiguration = generalConfiguration;
+        this.mechanism = mechanism;
+    }
+
+    public Parameter(long id, String key, String value, Date createdAt, Date updatedAt, String language, Parameter parentParameter, List<Parameter> parameters) {
+        this.id = id;
+        this.key = key;
+        this.value = value;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.language = language;
+        this.parentParameter = parentParameter;
+        this.parameters = parameters;
+        this.generalConfiguration = generalConfiguration;
+        this.mechanism = mechanism;
+    }
+
+    public Parameter(String key, String value, Date createdAt, Date updatedAt, String language, Parameter parentParameter, List<Parameter> parameters) {
         this.key = key;
         this.value = value;
         this.createdAt = createdAt;

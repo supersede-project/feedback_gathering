@@ -11,6 +11,7 @@ public interface ConfigurationService {
     public Configuration save(Configuration configuration);
     public Configuration find(long id);
     public void delete(long id);
+    public List<Configuration> findByApplicationId(long applicationId);
 }
 
 

@@ -91,7 +91,7 @@ public class Mechanism {
         return new ArrayList<Parameter>(keyValuePairs.values());
     }
 
-    void filterByLanguage(String language, String fallbackLanguage) {
+    public void filterByLanguage(String language, String fallbackLanguage) {
         if(this.getParameters() == null) {
             return;
         }

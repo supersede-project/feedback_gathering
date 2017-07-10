@@ -106,7 +106,7 @@ public class Configuration {
                         .collect(Collectors.joining(", ")));
     }
 
-    void filterByLanguage(String language, String fallbackLanguage) {
+    public void filterByLanguage(String language, String fallbackLanguage) {
         for(Mechanism mechanism : this.getMechanisms()) {
             mechanism.setParameters(mechanism.parametersByLanguage(language, fallbackLanguage));
         }

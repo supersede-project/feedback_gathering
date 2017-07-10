@@ -11,4 +11,5 @@ import java.util.List;
 
 @Repository
 public interface ConfigurationRepository extends JpaRepository<Configuration, Long> {
+    List<Configuration> findByApplicationId(@Param("applicationId") long applicationId);
 }
