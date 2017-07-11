@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.stream.Collectors;
 
 
 @Entity
@@ -18,7 +19,7 @@ public class ConfigurationMechanism {
     @ManyToOne
     @JoinColumn(name = "configuration_id")
     private Configuration configuration;
-    @ManyToOne(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
+    @ManyToOne(cascade = {CascadeType.REMOVE, CascadeType.PERSIST}, fetch=FetchType.EAGER)
     @JoinColumn(name = "mechanism_id")
     private Mechanism mechanism;
     private boolean active;
@@ -47,6 +48,26 @@ public class ConfigurationMechanism {
         this.order = order;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+    }
+
+    public ConfigurationMechanism(Configuration configuration, Mechanism mechanism, boolean active, int order) {
+        this.configuration = configuration;
+        this.mechanism = mechanism;
+        this.active = active;
+        this.order = order;
+    }
+
+    public ConfigurationMechanism(Configuration configuration, boolean active, int order) {
+        this.configuration = configuration;
+        this.active = active;
+        this.order = order;
+    }
+
+    @Override
+    public String toString() {
+        return String.format(
+                "ConfigurationMechanism[id=%d, active='%b', order='%d', configuration.id='%d', mechanism.id='%d']",
+                id, active, order, this.configuration == null ? 0 : this.configuration.getId(), this.mechanism == null ? 0 : this.mechanism.getId());
     }
 
     public long getId() {

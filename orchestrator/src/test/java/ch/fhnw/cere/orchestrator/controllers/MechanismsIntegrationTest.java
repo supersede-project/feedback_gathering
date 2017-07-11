@@ -3,10 +3,12 @@ package ch.fhnw.cere.orchestrator.controllers;
 import ch.fhnw.cere.orchestrator.controllers.helpers.ApplicationTreeBuilder;
 import ch.fhnw.cere.orchestrator.models.*;
 import ch.fhnw.cere.orchestrator.repositories.*;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.web.servlet.MvcResult;
 
 import javax.servlet.ServletException;
 
@@ -14,6 +16,7 @@ import java.util.ArrayList;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.hasSize;
+import static org.junit.Assert.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -281,11 +284,32 @@ public class MechanismsIntegrationTest extends BaseIntegrationTest {
 
         String adminJWTToken = requestAppAdminJWTToken();
 
-        this.mockMvc.perform(post(basePathEn + "/" + application1.getId()+ "/configurations/" + configuration1.getId() + "/mechanisms")
+        MvcResult result = this.mockMvc.perform(post(basePathEn + "/" + application1.getId() + "/configurations/" + configuration1.getId() + "/mechanisms")
                 .contentType(contentType)
                 .header("Authorization", adminJWTToken)
                 .content(mechanismJson))
-                .andExpect(status().isCreated());
+                .andExpect(status().isCreated()).andReturn();
+
+        String createdMechanismString = result.getResponse().getContentAsString();
+        ObjectMapper mapper = new ObjectMapper();
+        Mechanism createdMechanism = mapper.readValue(createdMechanismString, Mechanism.class);
+
+        mockMvc.perform(get(basePathEn + "/" + application1.getId() + "/mechanisms/" + createdMechanism.getId()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.type", is("CATEGORY_TYPE")))
+                .andExpect(jsonPath("$.parameters", is(hasSize(4))));
+
+        mockMvc.perform(get(basePathEn + "/" + application1.getId() + "/configurations/" + configuration1.getId() + "/mechanisms/" + createdMechanism.getId()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.type", is("CATEGORY_TYPE")))
+                .andExpect(jsonPath("$.parameters", is(hasSize(4))));
+
+
+        mockMvc.perform(get(basePathEn + "/" + application1.getId() + "/configurations/" + configuration1.getId() + "/mechanisms"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(2)))
+                .andExpect(jsonPath("$[0].type", is("TEXT_TYPE")))
+                .andExpect(jsonPath("$[1].type", is("CATEGORY_TYPE")));
     }
 
     @Test(expected = ServletException.class)

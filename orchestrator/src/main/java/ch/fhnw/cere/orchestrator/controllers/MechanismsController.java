@@ -59,6 +59,23 @@ public class MechanismsController extends BaseController {
     @ResponseStatus(HttpStatus.CREATED)
     @RequestMapping(method = RequestMethod.POST, value = "mechanisms")
     public Mechanism createMechanism(@PathVariable long applicationId, @RequestBody Mechanism mechanism) {
+        String defaultLanguage = "en";
+        if(mechanism.getParameters() != null) {
+            for(Parameter parameter : mechanism.getParameters()) {
+                parameter.setMechanism(mechanism);
+                if(parameter.getLanguage() == null) {
+                    parameter.setLanguage(defaultLanguage);
+                }
+                if(parameter.getParameters() != null) {
+                    for(Parameter subParameter : parameter.getParameters()) {
+                        subParameter.setParentParameter(parameter);
+                        if(subParameter.getLanguage() == null) {
+                            subParameter.setLanguage(defaultLanguage);
+                        }
+                    }
+                }
+            }
+        }
         return mechanismRepository.save(mechanism);
     }
 
@@ -102,7 +119,30 @@ public class MechanismsController extends BaseController {
     @ResponseStatus(HttpStatus.CREATED)
     @RequestMapping(method = RequestMethod.POST, value = "configurations/{configurationId}/mechanisms")
     public Mechanism createMechanismForConfiguration(@PathVariable long applicationId, @PathVariable long configurationId, @RequestBody Mechanism mechanism) {
-        return mechanismRepository.save(mechanism);
+        String defaultLanguage = "en";
+        if(mechanism.getParameters() != null) {
+            for(Parameter parameter : mechanism.getParameters()) {
+                parameter.setMechanism(mechanism);
+                if(parameter.getLanguage() == null) {
+                    parameter.setLanguage(defaultLanguage);
+                }
+                if(parameter.getParameters() != null) {
+                    for(Parameter subParameter : parameter.getParameters()) {
+                        subParameter.setParentParameter(parameter);
+                        if(subParameter.getLanguage() == null) {
+                            subParameter.setLanguage(defaultLanguage);
+                        }
+                    }
+                }
+            }
+        }
+
+        Mechanism createdMechanism = mechanismRepository.save(mechanism);
+
+        ConfigurationMechanism configurationMechanism = new ConfigurationMechanism(getConfiguration(), createdMechanism, mechanism.isActive(), mechanism.getOrder());
+        configurationMechanismRepository.save(configurationMechanism);
+
+        return createdMechanism;
     }
 
     @PreAuthorize("@securityService.hasAdminPermission(#applicationId)")
@@ -121,5 +161,9 @@ public class MechanismsController extends BaseController {
             throw new NotFoundException();
         }
         return mechanismRepository.save(mechanism);
+    }
+
+    private Configuration getConfiguration() {
+        return configurationRepository.findOne(configurationId());
     }
 }

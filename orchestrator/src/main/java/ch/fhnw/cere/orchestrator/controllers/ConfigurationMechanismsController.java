@@ -5,9 +5,11 @@ import ch.fhnw.cere.orchestrator.controllers.exceptions.NotFoundException;
 import ch.fhnw.cere.orchestrator.models.Application;
 import ch.fhnw.cere.orchestrator.models.Configuration;
 import ch.fhnw.cere.orchestrator.models.ConfigurationMechanism;
+import ch.fhnw.cere.orchestrator.models.Mechanism;
 import ch.fhnw.cere.orchestrator.repositories.ConfigurationMechanismRepository;
 import ch.fhnw.cere.orchestrator.services.ApplicationService;
 import ch.fhnw.cere.orchestrator.services.ConfigurationService;
+import ch.fhnw.cere.orchestrator.services.MechanismService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -27,10 +29,12 @@ public class ConfigurationMechanismsController extends BaseController {
     private ApplicationService applicationService;
     @Autowired
     private ConfigurationService configurationService;
+    @Autowired
+    private MechanismService mechanismService;
 
     @RequestMapping(method = RequestMethod.GET, value = "")
     public List<ConfigurationMechanism> getConfigurationMechanisms(@PathVariable long applicationId, @PathVariable long configurationId) {
-        return configurationMechanismRepository.findByConfigurationId(applicationId());
+        return configurationMechanismRepository.findByConfigurationId(configurationId());
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/{id}")
@@ -44,8 +48,10 @@ public class ConfigurationMechanismsController extends BaseController {
 
     @PreAuthorize("@securityService.hasAdminPermission(#applicationId)")
     @ResponseStatus(HttpStatus.CREATED)
-    @RequestMapping(method = RequestMethod.POST, value = "")
-    public ConfigurationMechanism createConfigurationMechanism(@PathVariable long applicationId, @PathVariable long configurationId, @RequestBody ConfigurationMechanism configurationMechanism) {
+    @RequestMapping(method = RequestMethod.POST, value = "/mechanisms/{mechanismId}")
+    public ConfigurationMechanism createConfigurationMechanism(@PathVariable long applicationId, @PathVariable long configurationId, @PathVariable long mechanismId, @RequestBody ConfigurationMechanism configurationMechanism) {
+        Mechanism mechanism = mechanismService.find(mechanismId);
+        configurationMechanism.setMechanism(mechanism);
         configurationMechanism.setConfiguration(getConfiguration());
         return configurationMechanismRepository.save(configurationMechanism);
     }
@@ -59,6 +65,7 @@ public class ConfigurationMechanismsController extends BaseController {
     @PreAuthorize("@securityService.hasAdminPermission(#applicationId)")
     @RequestMapping(method = RequestMethod.PUT, value = "")
     public ConfigurationMechanism updateConfigurationMechanism(@PathVariable long applicationId, @PathVariable long configurationId, @RequestBody ConfigurationMechanism configurationMechanism) {
+        configurationMechanism.setConfiguration(getConfiguration());
         return configurationMechanismRepository.save(configurationMechanism);
     }
 
