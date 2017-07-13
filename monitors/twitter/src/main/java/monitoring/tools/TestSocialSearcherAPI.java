@@ -12,7 +12,7 @@ import java.util.Properties;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import monitoring.model.MonitoringData;
+import monitoring.model.TwitterMonitoringData;
 
 public class TestSocialSearcherAPI {
 
@@ -57,7 +57,7 @@ public class TestSocialSearcherAPI {
 
 			JSONArray json_array = new JSONObject(content).getJSONArray("posts");
 
-			List<MonitoringData> data = new ArrayList<>();
+			List<TwitterMonitoringData> data = new ArrayList<>();
 			for (int i = 0; i < json_array.length(); i++) {
 
 				JSONObject json = json_array.getJSONObject(i);
@@ -69,7 +69,7 @@ public class TestSocialSearcherAPI {
 				String timeStamp = json.getString("posted");
 				String message = json.getString("text");
 				String link = json.getString("url");
-				MonitoringData dataObj = new MonitoringData(id, timeStamp, message, author, link);
+				TwitterMonitoringData dataObj = new TwitterMonitoringData(id, timeStamp, message, author, link);
 				data.add(dataObj);
 
 			}
