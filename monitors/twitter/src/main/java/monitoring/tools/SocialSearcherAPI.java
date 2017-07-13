@@ -17,19 +17,19 @@ import org.apache.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import monitoring.controller.ToolInterface;
 import monitoring.kafka.KafkaCommunication;
-import monitoring.model.MonitoringData;
-import monitoring.model.MonitoringParams;
-import monitoring.services.ToolInterface;
+import monitoring.model.TwitterMonitoringData;
+import monitoring.model.TwitterMonitoringParams;
 
-public class SocialSearcherAPI implements ToolInterface {
+public class SocialSearcherAPI implements ToolInterface<TwitterMonitoringParams> {
 	
 	final static Logger logger = Logger.getLogger(SocialSearcherAPI.class);
 	
 	Timer timer;
 	
 	//Data object instances
-	MonitoringParams confParams;
+	TwitterMonitoringParams confParams;
 	boolean firstConnection;
 	int id = 1;
 	int configurationId;
@@ -37,7 +37,7 @@ public class SocialSearcherAPI implements ToolInterface {
 	KafkaCommunication kafka;
 	
 	@Override
-	public void addConfiguration(MonitoringParams params, int configurationId) {
+	public void addConfiguration(TwitterMonitoringParams params, int configurationId) throws Exception {
 		logger.debug("Adding new configuration");
 		this.confParams = params;
 		this.configurationId = configurationId;
@@ -51,7 +51,7 @@ public class SocialSearcherAPI implements ToolInterface {
 	}
 	
 	@Override
-	public void updateConfiguration(MonitoringParams params) throws Exception {
+	public void updateConfiguration(TwitterMonitoringParams params) throws Exception {
 		deleteConfiguration();
 		//generateData((new Timestamp((new Date()).getTime()).toString()));
 		this.confParams = params;
@@ -62,7 +62,7 @@ public class SocialSearcherAPI implements ToolInterface {
 		//logger.debug("Initialising kafka producer...");
 		//kafka.initProducer(confParams.getKafkaEndpoint());
 		logger.debug("Initialising proxy...");
-		kafka.initProxy(confParams.getKafkaEndpoint());
+		kafka.initProxy();
 		logger.debug("Initialising streaming...");
 		firstConnection = true;
 		timer = new Timer();
@@ -87,7 +87,7 @@ public class SocialSearcherAPI implements ToolInterface {
 			Properties prop = new Properties();
 			prop.load(input);
 			String key = prop.getProperty("user_key");
-			
+
 			String q = "\"" + this.confParams.getKeywordExpression().replaceAll(" AND ", "\"AND\"").replaceAll("[()]", "").replaceAll(" OR ", "\"OR\"") + "\"";
 			String network = "twitter";
 			String fields = "text,user,posted,url";
@@ -115,7 +115,7 @@ public class SocialSearcherAPI implements ToolInterface {
 			
 			JSONArray json_array = new JSONObject(content).getJSONArray("posts"); 
 			
-			List<MonitoringData> data = new ArrayList<>();
+			List<TwitterMonitoringData> data = new ArrayList<>();
 			for(int i=0;i<json_array.length();i++){
 				
 				JSONObject json = json_array.getJSONObject(i);
@@ -125,13 +125,13 @@ public class SocialSearcherAPI implements ToolInterface {
 				String timeStamp = json.getString("posted");				
 				String message = json.getString("text");				
 				String link = json.getString("url");				
-				MonitoringData dataObj = new MonitoringData(id, timeStamp, message, author, link);
+				TwitterMonitoringData dataObj = new TwitterMonitoringData(id, timeStamp, message, author, link);
 				data.add(dataObj);				
 				
 			}
 			
-			//kafka.generateResponseKafka(data, searchTimeStamp, id, configurationId, this.confParams.getKafkaTopic);
-			kafka.generateResponseIF(data, searchTimeStamp, id, configurationId, this.confParams.getKafkaTopic());
+			//kafka.generateResponseKafka(data, searchTimeStamp, id, configurationId, this.confParams.getKafkaTopic, "SocialNetworksMonitoredData");
+			kafka.generateResponseIF(data, searchTimeStamp, id, configurationId, this.confParams.getKafkaTopic(), "SocialNetworksMonitoredData");
 			logger.debug("Data successfully sent to Kafka endpoint");
 			++id;			
 			

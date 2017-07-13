@@ -9,35 +9,7 @@ import org.json.JSONObject;
 
 public class Utils {
 	
-	public static MonitoringParams parseJsonConfiguration(String json) throws Exception {
-		
-		MonitoringParams params = new MonitoringParams();
-		
-		JSONObject jsonParams = new JSONObject(json);
-		jsonParams = jsonParams.getJSONObject("SocialNetworksMonitoringConfProf");
-		
-		Iterator<?> keys = jsonParams.keys();
-		params = new MonitoringParams();
-		while( keys.hasNext() ) {
-		    String key = (String)keys.next();
-		    if (key.equals("timeSlot")) params.setTimeSlot(jsonParams.getString(key).replaceAll("\"", ""));
-		    else if (key.equals("toolName")) params.setToolName(jsonParams.getString(key).replaceAll("\"", ""));
-		    else if (key.equals("kafkaEndpoint")) params.setKafkaEndpoint(jsonParams.getString(key).replaceAll("\"", "").replace("http://", ""));
-		    else if (key.equals("kafkaTopic")) params.setKafkaTopic(jsonParams.getString(key).replaceAll("\"", ""));
-		    else if (key.equals("keywordExpression")) params.setKeywordExpression(jsonParams.getString(key).replaceAll("\"", ""));
-		    else if (key.equals("accounts")) {
-		    	JSONArray jsonAccounts = jsonParams.getJSONArray(key);
-	    		List<String> accounts = new ArrayList<>();
-	    		for (int i = 0; i < jsonAccounts.length(); ++i) {
-	    			accounts.add(jsonAccounts.getString(i).replaceAll("\"", "").replaceAll("@", ""));
-	    		}
-	    		params.setAccounts(accounts);
-		    }
-		}
-		return params;
-		
-	}
-	
+
 	public static String[] generateKeywordExp(String keywordExpression) {
 		String[] blocks = keywordExpression.split(" AND ");
 		for (int i = 0; i < blocks.length; ++i) {
