@@ -1,8 +1,12 @@
 package ch.fhnw.cere.orchestrator.models;
 
 
+import ch.fhnw.cere.orchestrator.serialization.ParameterDefaultSerializer;
+import ch.fhnw.cere.orchestrator.serialization.ParameterSerializer;
+import ch.fhnw.cere.orchestrator.serialization.ParameterValueDeserializer;
 import ch.fhnw.cere.orchestrator.serialization.ParameterValueSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.hibernate.annotations.OnDelete;
@@ -12,6 +16,8 @@ import javax.persistence.*;
 import java.util.*;
 
 @Entity
+@JsonSerialize(using = ParameterSerializer.class)
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Parameter {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -19,6 +25,7 @@ public class Parameter {
 
     @Column(name="`key`")
     private String key;
+    @JsonDeserialize(using = ParameterValueDeserializer.class)
     @JsonSerialize(using = ParameterValueSerializer.class)
     private String value;
     private Date createdAt;

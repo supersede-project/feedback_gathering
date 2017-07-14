@@ -2,12 +2,14 @@ package ch.fhnw.cere.orchestrator.models;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
 @Entity
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Mechanism {
 
     @Id

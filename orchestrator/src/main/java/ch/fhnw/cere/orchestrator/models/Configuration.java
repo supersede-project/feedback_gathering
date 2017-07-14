@@ -119,7 +119,7 @@ public class Configuration {
         return id;
     }
 
-    public void setMechanisms(ArrayList<Mechanism> mechanisms) {
+    public void setMechanisms(List<Mechanism> mechanisms) {
         if(this.configurationMechanisms == null) {
             this.configurationMechanisms = new ArrayList<ConfigurationMechanism>();
         }

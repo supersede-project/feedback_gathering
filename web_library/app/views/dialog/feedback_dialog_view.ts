@@ -249,7 +249,7 @@ export class FeedbackDialogView extends DialogView {
                 feedbackObject.ratingFeedbacks.push(mechanismView.getFeedback());
             } else if (mechanismView instanceof AttachmentView) {
                 feedbackObject.attachmentFeedbacks = mechanismView.getFeedbacks();
-                for (let i = 0; i < mechanismView.getFiles(); i++) {
+                for (let i = 0; i < mechanismView.getFiles().length; i++) {
                     let file = mechanismView.getFiles()[i];
                     formData.append(mechanismView.getPartName(i), file, file.name);
                 }

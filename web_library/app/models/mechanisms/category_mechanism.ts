@@ -28,14 +28,19 @@ export class CategoryMechanism extends Mechanism {
     }
 
     getContext(): any {
+        let inputType = 'checkbox';
+        if(this.getParameterValue('multiple') === false){
+            inputType = 'radio';
+        }
+
         return {
             title: this.getParameterValue('title'),
             ownAllowed: this.getParameterValue('ownAllowed'),
             ownLabel: this.getParameterValue('ownLabel'),
-            breakAfterOption: this.getParameterValue('breakAfterOption') ? true : false,
+            breakAfterOption: !!this.getParameterValue('breakAfterOption'),
             options: this.getOptions(),
             defaultOption: this.getDefaultOptions(),
-            inputType: this.getParameterValue('multiple') ? 'checkbox' : 'radio',
+            inputType: inputType,
             multiple: this.getParameterValue('multiple'),
             asDropdown: this.getParameterValue('asDropdown') || false,
             mandatory: this.getParameterValue('mandatory'),

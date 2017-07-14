@@ -9,8 +9,12 @@ import ch.fhnw.cere.orchestrator.repositories.ApiUserApiUserRoleRepository;
 import ch.fhnw.cere.orchestrator.repositories.ApiUserPermissionRepository;
 import ch.fhnw.cere.orchestrator.repositories.ApiUserRepository;
 import ch.fhnw.cere.orchestrator.security.TokenUtils;
+import ch.fhnw.cere.orchestrator.serialization.ParameterDefaultSerializer;
+import ch.fhnw.cere.orchestrator.serialization.ParameterSerializerModifier;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.Version;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.module.SimpleModule;
 import org.json.JSONObject;
 import org.junit.After;
 import org.junit.Before;
@@ -84,8 +88,11 @@ public abstract class BaseIntegrationTest {
     }
 
     protected String toJson(Object object) {
-        ObjectMapper mapper = new ObjectMapper();
-        String jsonString= null;
+        ObjectMapper mapper = new ObjectMapper()
+                .registerModule(new SimpleModule()
+                        .setSerializerModifier(new ParameterSerializerModifier()));
+
+        String jsonString = null;
         try {
             jsonString = mapper.writeValueAsString(object);
         } catch (JsonProcessingException e) {

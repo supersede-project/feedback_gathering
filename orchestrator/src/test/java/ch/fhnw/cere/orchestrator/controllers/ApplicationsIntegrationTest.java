@@ -5,7 +5,9 @@ import ch.fhnw.cere.orchestrator.controllers.helpers.ApplicationTreeBuilder;
 import ch.fhnw.cere.orchestrator.models.*;
 import ch.fhnw.cere.orchestrator.repositories.ApiUserPermissionRepository;
 import ch.fhnw.cere.orchestrator.repositories.ApplicationRepository;
+import ch.fhnw.cere.orchestrator.serialization.ParameterSerializerModifier;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.module.SimpleModule;
 import org.hamcrest.Matchers;
 import static org.hamcrest.Matchers.nullValue;
 
@@ -121,6 +123,27 @@ public class ApplicationsIntegrationTest extends BaseIntegrationTest {
                 .andExpect(jsonPath("$.configurations[0].mechanisms[0].parameters[1].language", is("en")))
                 .andExpect(jsonPath("$.configurations[0].mechanisms[0].parameters[2].key", is("title")))
                 .andExpect(jsonPath("$.configurations[0].mechanisms[0].parameters[2].language", is("de")));
+    }
+
+    @Test
+    public void getApplicationWithNestedParameters() throws Exception {
+        mockMvc.perform(get(basePathEn + "/" + application3.getId()))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(contentType))
+                .andExpect(jsonPath("$.id", is((int) this.application3.getId())))
+                .andExpect(jsonPath("$.name", is("Test application 3")))
+                .andExpect(jsonPath("$.configurations[0].mechanisms[0].active", is(true)))
+                .andExpect(jsonPath("$.configurations[0].mechanisms[0].order", is(1)))
+                .andExpect(jsonPath("$.configurations[0].mechanisms[0].parameters", hasSize(3)))
+                .andExpect(jsonPath("$.configurations[0].mechanisms[0].parameters[0].key", is("options")))
+                .andExpect(jsonPath("$.configurations[0].mechanisms[0].parameters[0].value[0].key", is("CAT_1")))
+                .andExpect(jsonPath("$.configurations[0].mechanisms[0].parameters[0].language", is("en")))
+                .andExpect(jsonPath("$.configurations[0].mechanisms[0].parameters[1].key", is("font-size")))
+                .andExpect(jsonPath("$.configurations[0].mechanisms[0].parameters[1].value", is("10")))
+                .andExpect(jsonPath("$.configurations[0].mechanisms[0].parameters[1].language", is("en")))
+                .andExpect(jsonPath("$.configurations[0].mechanisms[0].parameters[2].key", is("title")))
+                .andExpect(jsonPath("$.configurations[0].mechanisms[0].parameters[2].value", is("Title EN")))
+                .andExpect(jsonPath("$.configurations[0].mechanisms[0].parameters[2].language", is("en")));
     }
 
     @Test(expected = ServletException.class)

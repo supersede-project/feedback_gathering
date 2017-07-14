@@ -1,11 +1,19 @@
 package ch.fhnw.cere.orchestrator.serialization;
 
+import ch.fhnw.cere.orchestrator.controllers.helpers.ApplicationTreeBuilder;
 import ch.fhnw.cere.orchestrator.models.Application;
+import ch.fhnw.cere.orchestrator.models.Mechanism;
+import ch.fhnw.cere.orchestrator.models.MechanismType;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.module.SimpleModule;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
@@ -33,5 +41,20 @@ public class ApplicationSerializationTest {
         assertEquals(application2.getState(), 1);
         assertEquals(application2.getConfigurations().size(), 2);
         assertEquals(application2.getConfigurations().get(0).getMechanisms().size(), 1);
+    }
+
+    @Test
+    public void testSerialization() throws IOException {
+        ApplicationTreeBuilder applicationTreeBuilder = new ApplicationTreeBuilder();
+        Application application = applicationTreeBuilder.buildApplicationTree("Test App 4");
+
+        assertEquals(2, application.getConfigurations().size());
+
+        ObjectMapper mapper = new ObjectMapper();
+        String jsonString = mapper.writeValueAsString(application);
+
+        Application application1 = mapper.readValue(jsonString, Application.class);
+        System.err.println(application1);
+        assertEquals(2, application1.getConfigurations().size());
     }
 }
