@@ -30,7 +30,6 @@
 		dependencies {
         	classpath("org.springframework.boot:spring-boot-gradle-plugin:1.4.2.RELEASE")
         	classpath "org.jfrog.buildinfo:build-info-extractor-gradle:4+"
-		classpath 'eu.appsatori:gradle-fatjar-plugin:0.3'
     	}
 }
 
@@ -40,7 +39,6 @@
 apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'war'
-apply plugin: 'eu.appsatori.fatjar'
 
 // In this section you declare where to find the dependencies of your project
 repositories {
@@ -52,10 +50,11 @@ repositories {
 }
 
 dependencies {
-    // The production code uses Guava
-    compile 'com.google.guava:guava:20.0'
     
     compile project(':monitoring')
+    
+    compile("org.springframework.boot:spring-boot-starter-web")
+    testCompile('org.springframework.boot:spring-boot-starter-test')
 
     // Use JUnit test framework
     testCompile 'junit:junit:4.12'

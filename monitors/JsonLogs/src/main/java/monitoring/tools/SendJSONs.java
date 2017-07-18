@@ -21,8 +21,7 @@ public class SendJSONs {
 	int id = 1;
 	int configurationId = 0;
 	
-	KafkaCommunication kafka = new KafkaCommunication();	
-	
+	KafkaCommunication kafka = new KafkaCommunication();
 	
 	public SendJSONs() {
 		super();
