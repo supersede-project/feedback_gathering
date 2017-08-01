@@ -129,7 +129,7 @@ public class MailService
 		{
 			LOGGER.error("Error sending mail to the configured mail address: \n" + ex.getMessage());
 		}catch (IOException e) {
-			LOGGER.error("Error retrieving configured mail address from the orchestrator. Communication to orchestrator failed: \n" + e.getMessage());
+			LOGGER.error("Error retrieving configured mail address from the orchestrator (" + url + "). Communication to orchestrator failed: \n" + e.getMessage());
 		}
 	}
 
