@@ -2,6 +2,8 @@ package ch.uzh.ifi.feedback.repository.mail;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
@@ -68,6 +70,8 @@ public class MailService
 	
 	public void NotifyOfFeedback(int applicationId, Feedback feedback, String to, String url)
 	{
+		LOGGER.debug("NotifyOfFeedback");
+
 		if(!mailClient.isMailFeedbackEnabled()) {
 			LOGGER.info("NotifyOfFeedback");
 			return;
@@ -75,6 +79,7 @@ public class MailService
 		
 		try 
 		{
+			LOGGER.debug("getConfigurationForApplication(" + applicationId + ", " + url + ")");
 			Map<String, Object> pushConfiguration = getConfigurationForApplication(applicationId, url);
 
 			if(to == null) {
@@ -129,7 +134,11 @@ public class MailService
 		{
 			LOGGER.error("Error sending mail to the configured mail address: \n" + ex.getMessage());
 		}catch (IOException e) {
-			LOGGER.error("Error retrieving configured mail address from the orchestrator (" + url + "). Communication to orchestrator failed: \n" + e.getMessage());
+			StringWriter errors = new StringWriter();
+			e.printStackTrace(new PrintWriter(errors));
+			String stackTrace = errors.toString();
+
+			LOGGER.error("Error retrieving configured mail address from the orchestrator (" + url + "). Communication to orchestrator failed: \n" + e.getMessage() + " Stacktrace: " + stackTrace);
 		}
 	}
 
@@ -202,8 +211,10 @@ public class MailService
 			url = mailClient.getOrchestratorUrl()+ "/de/applications/" + applicationId + "/configurations";
 		}
 		HttpUriRequest request = new HttpGet(url);
+		LOGGER.debug("httpClient.execute(request)");
 		HttpResponse httpResponse = httpClient.execute(request);
 
+		LOGGER.debug("httpResponse.getStatusLine().getStatusCode()");
 		if(httpResponse.getStatusLine().getStatusCode() != HttpStatus.SC_OK)
 		{
 			LOGGER.warn("Could not retrieve the configuration from the orchestrator at " + url + ". Response status: \n" + httpResponse.getStatusLine().toString());
