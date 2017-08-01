@@ -31,6 +31,7 @@ import java.util.TimerTask;
 
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpMethod;
+import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.HeadMethod;
 import org.apache.log4j.Logger;
 import org.springframework.util.StopWatch;
@@ -66,7 +67,8 @@ public class ApacheHttp implements ToolInterface<HttpMonitoringParams> {
 		this.configurationId = configurationId;
 		this.kafka = new KafkaCommunication();
 		this.client = new HttpClient();
-        this.method = new HeadMethod(this.confParams.getUrl());
+		//HEAD METHOD --> 
+        this.method = new GetMethod(this.confParams.getUrl());
 		resetStream();
 	}
 	
