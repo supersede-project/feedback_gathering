@@ -210,6 +210,8 @@ public class MailService
 		if(url == null) {
 			url = mailClient.getOrchestratorUrl()+ "/de/applications/" + applicationId + "/configurations";
 		}
+		LOGGER.error("URL = " + url);
+
 		HttpUriRequest request = new HttpGet(url);
 		LOGGER.debug("httpClient.execute(request)");
 		HttpResponse httpResponse = httpClient.execute(request);
