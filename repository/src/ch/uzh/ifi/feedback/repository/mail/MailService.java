@@ -138,7 +138,7 @@ public class MailService
 			e.printStackTrace(new PrintWriter(errors));
 			String stackTrace = errors.toString();
 
-			LOGGER.error("Error retrieving configured mail address from the orchestrator (" + url + "). Communication to orchestrator failed: \n" + e.getMessage() + " Stacktrace: " + stackTrace);
+			LOGGER.error("TAG 1 - Error retrieving configured mail address from the orchestrator (" + url + "). Communication to orchestrator failed: \n" + e.getMessage() + " Stacktrace: " + stackTrace);
 		}
 	}
 
