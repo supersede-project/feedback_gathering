@@ -27,7 +27,8 @@ export var validateCategoryPluginModule = (function($, window, document) {
         this.removeClass('invalid');
 
         // validate mandatory
-        if(mandatory && this.find('input:checked').length === 0) {
+        if(mandatory &&
+            (this.find('input:checked').length === 0 && jQuery(this).find('.own-category').val().length === 0)) {
             validMandatory = false;
         }
 

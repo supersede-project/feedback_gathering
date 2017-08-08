@@ -38,6 +38,7 @@ export class AudioView implements MechanismView {
                 myThis.recordButton.find('img').attr('src', activeSrc);
                 myThis.container.find(".one").removeClass("disabled");
             });
+            myThis.container.addClass('dirty');
         });
 
         this.stopButton.on('click', function() {
@@ -50,6 +51,7 @@ export class AudioView implements MechanismView {
         this.deleteButton.on('click', function() {
             myThis.audioElement.attr("src", null);
             myThis.restore();
+            myThis.reset();
         });
 
         this.replayButton.on('click', function() {
@@ -73,7 +75,7 @@ export class AudioView implements MechanismView {
     }
 
     reset() {
-        // TODO implement
+        this.container.removeClass('dirty');
     }
 }
 

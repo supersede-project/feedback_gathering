@@ -250,6 +250,10 @@
               "editableByUser": true,
               "language": "en",
               "createdAt": "2016-11-09 09:53:39.0"
+            },
+            {
+              "key": "cssClass",
+              "value": "valid-on-its-own"
             }
           ],
           "createdAt": "2016-11-09 09:53:39.0"
@@ -291,6 +295,12 @@
               "value": 5.0,
               "language": "en",
               "createdAt": "2016-11-09 09:53:39.0"
+            },
+            {
+              "key": "mandatory",
+              "value": 0.0,
+              "language": "en",
+              "createdAt": "2016-11-09 09:53:39.0"
             }
           ],
           "createdAt": "2016-11-09 09:53:39.0"
@@ -311,6 +321,10 @@
               "editableByUser": false,
               "language": "en",
               "createdAt": "2016-10-05 12:50:56.0"
+            },
+            {
+              "key": "cssClass",
+              "value": "valid-on-its-own"
             }
           ],
           "createdAt": "2016-11-09 09:53:39.0"
@@ -372,7 +386,7 @@
             {
               "id": 504,
               "key": "ownAllowed",
-              "value": 0.0,
+              "value": 1.0,
               "language": "en",
               "createdAt": "2016-10-24 01:45:36.0"
             },
@@ -694,6 +708,10 @@
               "editableByUser": false,
               "language": "en",
               "createdAt": "2016-11-09 09:53:39.0"
+            },
+            {
+              "key": "cssClass",
+              "value": "valid-on-its-own"
             }
           ],
           "createdAt": "2017-07-07 10:19:44.20"

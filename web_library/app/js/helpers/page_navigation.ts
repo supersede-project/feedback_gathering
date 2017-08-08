@@ -39,6 +39,10 @@ export class PageNavigation {
             return false;
         }
 
+        if(!this.validWithNoMechanismMandatory(currentPage)) {
+            return false;
+        }
+
         if (nextPage) {
             nextPage.find('.text-review').empty();
             nextPage.find('.rating-review').empty();
@@ -152,5 +156,53 @@ export class PageNavigation {
             }
         }
         return true;
+    }
+
+    /**
+     * If no mechanism is mandatory, at least one mechansim should be used by the user to have a meaningful feedback.
+     *
+     * @param currentPage
+     * @returns {boolean}
+     */
+    validWithNoMechanismMandatory(currentPage):boolean {
+        if(currentPage.find('.feedback-mechanism.mandatory').length === 0 && !this.atLeastOneMechanismWasUsed(currentPage)) {
+            currentPage.parent().find('.at-least-one-mechanism').remove();
+            let errorMessage = i18n.t('general.validation_at_least_one_mechanism');
+            currentPage.after('<p class="feedback-form-error at-least-one-mechanism">' + errorMessage + '</p>');
+            return false;
+        } else {
+            currentPage.parent().find('.at-least-one-mechanism').remove();
+        }
+        return true;
+    }
+
+    atLeastOneMechanismWasUsed(currentPage):boolean {
+        let mechanismWasUsed = false;
+
+        currentPage.find('.feedback-mechanism.text-type').each(function() {
+            let textarea = jQuery(this).find('textarea.text-type-text');
+            if(textarea.val().length > 0) {
+                mechanismWasUsed = true;
+            }
+        });
+        // only meaningful category mechanism should alone be valid for a feedback
+        currentPage.find('.feedback-mechanism.category-type.valid-on-its-own').each(function() {
+            if(jQuery(this).find('input:checked').length > 0 || jQuery(this).find('.own-category').val().length > 0) {
+                mechanismWasUsed = true;
+            }
+        });
+        currentPage.find('.feedback-mechanism.rating-type.valid-on-its-own').each(function() {
+            if(parseInt(jQuery(this).find('.rating-input').starRating('getRating')) !== 0) {
+                mechanismWasUsed = true;
+            }
+        });
+        if(currentPage.find('.feedback-mechanism.screenshot-type.valid-on-its-own.dirty').length > 0) {
+            mechanismWasUsed = true;
+        }
+        if(currentPage.find('.feedback-mechanism.audio-type.valid-on-its-own.dirty').length > 0) {
+            mechanismWasUsed = true;
+        }
+
+        return mechanismWasUsed;
     }
 }

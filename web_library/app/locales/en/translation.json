@@ -5,6 +5,7 @@
     "feedback_submit_button_title": "Submit feedback",
     "mandatory_default_text": "Please fill in the text field",
     "back": "back",
+    "validation_at_least_one_mechanism": "You should use at least one input element.",
     "validation_max_length_error_message": "The maximum length of this field is {{ maxLength }}. You typed {{ currentLength }} characters.",
     "validation_invalid_email": "Invalid e-mail address",
     "discard_feedback": "Cancel",

@@ -5,6 +5,7 @@
     "feedback_submit_button_title": "Feedback abschicken",
     "mandatory_default_text": "Bitte Textfeld ausfüllen",
     "back": "zurück",
+    "validation_at_least_one_mechanism": "Bitte benutzen Sie mindestens ein Eingabe Element.",
     "validation_max_length_error_message": "Die maximale Länge des Feldes ist {{ maxLength }}. Sie haben {{ currentLength }} Zeichen eingegeben.",
     "validation_invalid_email": "E-Mail-Adresse ungültig",
     "discard_feedback": "Abbrechen",

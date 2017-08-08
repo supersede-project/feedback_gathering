@@ -169,6 +169,8 @@ export class ScreenshotView implements MechanismView {
                         myThis.customizeControls();
                         myThis.initZoom();
 
+                        myThis.container.find('#screenshotMechanism' + myThis.screenshotMechanism.id).addClass('dirty');
+
                         let screenshotCaptureButtonActiveText = myThis.screenshotCaptureButton.data('active-text');
                         myThis.screenshotCaptureButton.text(screenshotCaptureButtonActiveText);
                     }, 200);
@@ -867,6 +869,8 @@ export class ScreenshotView implements MechanismView {
 
         let screenshotCaptureButtonDefaultText = this.screenshotCaptureButton.data('default-text');
         this.screenshotCaptureButton.text(screenshotCaptureButtonDefaultText);
+
+        this.container.find('#screenshotMechanism' + this.screenshotMechanism.id).removeClass('dirty');
     }
 
     updateCanvasState(shiftTop:number, shiftLeft:number, zoomFactor:number) {

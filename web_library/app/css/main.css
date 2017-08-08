@@ -497,6 +497,9 @@
 section.feedback-mechanism {
   padding-right: 0 !important; }
 
+.feedback-library a.discard-feedback {
+  color: #63bc4e; }
+
 .feedback-library .audio-type audio {
   display: none; }
 
@@ -1045,6 +1048,9 @@ section.feedback-mechanism {
   .feedback-library a.discard-feedback:hover {
     color: transparent;
     text-decoration: underline; }
+
+.feedback-library .at-least-one-mechanism {
+  text-align: right; }
 
 .feedback-library .submission-message {
   margin-top: 25px;
