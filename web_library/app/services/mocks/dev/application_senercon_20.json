@@ -49,6 +49,30 @@
       "type": "PUSH",
       "mechanisms": [
         {
+          "id": 187,
+          "configurationsId": 39,
+          "type": "INFO_TYPE",
+          "active": true,
+          "order": 10,
+          "canBeActivated": false,
+          "parameters": [
+            {
+              "id": 744,
+              "key": "text",
+              "value": "All fields are optional",
+              "language": "en",
+              "createdAt": "2017-05-24 11:22:55.0"
+            },
+            {
+              "id": 732,
+              "key": "cssClass",
+              "value": "mute-text optional-info",
+              "language": "en",
+              "createdAt": "2017-04-16 09:26:53.27"
+            }
+          ]
+        },
+        {
           "id": 59,
           "configurationsId": 39,
           "type": "TEXT_TYPE",
@@ -236,13 +260,6 @@
           "canBeActivated": false,
           "parameters": [
             {
-              "id": 496,
-              "key": "title",
-              "value": "Title for screenshot feedback",
-              "language": "en",
-              "createdAt": "2016-11-09 09:53:39.0"
-            },
-            {
               "id": 497,
               "key": "defaultPicture",
               "value": "lastScreenshot",
@@ -254,6 +271,10 @@
             {
               "key": "cssClass",
               "value": "valid-on-its-own"
+            },
+            {
+              "key": "title",
+              "value": "Make a screenshot of the page you just visited and annotate it with icons and texts"
             }
           ],
           "createdAt": "2016-11-09 09:53:39.0"
@@ -321,10 +342,6 @@
               "editableByUser": false,
               "language": "en",
               "createdAt": "2016-10-05 12:50:56.0"
-            },
-            {
-              "key": "cssClass",
-              "value": "valid-on-its-own"
             }
           ],
           "createdAt": "2016-11-09 09:53:39.0"
@@ -712,6 +729,10 @@
             {
               "key": "cssClass",
               "value": "valid-on-its-own"
+            },
+            {
+              "key": "title",
+              "value": "Please record your voice feedback"
             }
           ],
           "createdAt": "2017-07-07 10:19:44.20"

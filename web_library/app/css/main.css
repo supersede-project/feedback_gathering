@@ -628,6 +628,13 @@ section.feedback-mechanism {
     .feedback-library .hide-ie {
       display: none; } }
 
+.feedback-library .mute-text {
+  color: #a7a7a7; }
+
+.feedback-library .optional-info p {
+  margin: 10px 0 1px 0;
+  font-size: 12px; }
+
 .feedback-library h2.form-title {
   font-size: 26px;
   color: #1c416f;

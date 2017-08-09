@@ -13,7 +13,7 @@ import {FeedbackApp} from './feedback_app';
 import {MockBackend} from '../services/backends/mock_backend';
 import {QuestionDialogView} from '../views/dialog/question_dialog_view';
 import * as i18next from 'i18next';
-var mockData = require('json!../services/mocks/dev/application_senercon_20.json');
+let mockData = require('json!../services/mocks/dev/application_senercon_20.json');
 
 
 export declare var feedbackApp:FeedbackApp;

@@ -39,6 +39,7 @@ export class ScreenshotMechanism extends Mechanism {
             screenshotRemoveButtonTitle: this.getParameterValue('screenshotRemoveButtonTitle'),
             textTitle: this.getParameterValue('textTitle'),
             textExplanation: this.getParameterValue('textExplanation'),
+            title: this.getParameterValue('title'),
             zoomTitle: this.getParameterValue('zoomTitle'),
             annotationsTitle: this.getParameterValue('annotationsTitle'),
             selectionTitle: this.getParameterValue('selectionTitle'),
