@@ -96,7 +96,7 @@ public class FeedbackEmailServiceImpl implements FeedbackEmailService {
 
             try {
                 Application orchestratorApplication = this.orchestratorApplicationService.loadApplication(feedback.getLanguage(), feedback.getApplicationId());
-                this.appendMechanismsToFeedback(orchestratorApplication, feedback);
+                Feedback.appendMechanismsToFeedback(orchestratorApplication, feedback);
             } catch(Exception e) {
                 Logger.logMsg(Logger.ERROR, "Orchestrator not available for repository email sender. Alternative email template chosen.");
                 emailTemplate = freemarkerConfiguration.getTemplate("feedback_mail_without_configuration.ftl");
@@ -146,30 +146,5 @@ public class FeedbackEmailServiceImpl implements FeedbackEmailService {
                 helper.addAttachment(res.getFilename(), res);
             }
         }
-    }
-
-    private Feedback appendMechanismsToFeedback(Application application, Feedback feedback) {
-        feedback.setAttachmentFeedbacks((List<AttachmentFeedback>)appendMechanismToMechanismFeedbacks(application, feedback.getAttachmentFeedbacks(), feedback.getConfigurationId()));
-        feedback.setScreenshotFeedbacks((List<ScreenshotFeedback>)appendMechanismToMechanismFeedbacks(application, feedback.getScreenshotFeedbacks(), feedback.getConfigurationId()));
-        feedback.setAudioFeedbacks((List<AudioFeedback>)appendMechanismToMechanismFeedbacks(application, feedback.getAudioFeedbacks(), feedback.getConfigurationId()));
-        feedback.setRatingFeedbacks((List<RatingFeedback>)appendMechanismToMechanismFeedbacks(application, feedback.getRatingFeedbacks(), feedback.getConfigurationId()));
-        feedback.setCategoryFeedbacks((List<CategoryFeedback>)appendMechanismToMechanismFeedbacks(application, feedback.getCategoryFeedbacks(), feedback.getConfigurationId()));
-        feedback.setTextFeedbacks((List<TextFeedback>)appendMechanismToMechanismFeedbacks(application, feedback.getTextFeedbacks(), feedback.getConfigurationId()));
-        return feedback;
-    }
-
-    private List<? extends MechanismFeedback> appendMechanismToMechanismFeedbacks(Application application, List<? extends MechanismFeedback> mechanismFeedbacks, long configurationId) {
-        List<MechanismFeedback> mechanismFeedbacksWithMechanism = new ArrayList<>();
-        if(mechanismFeedbacks == null) {
-            return null;
-        }
-
-        for(MechanismFeedback mechanismFeedback : mechanismFeedbacks) {
-            Mechanism mechanism = application.mechanismByConfigurationIdAndMechanismId(configurationId, mechanismFeedback.getMechanismId());
-            MechanismTemplateModel mechanismTemplateModel = new MechanismTemplateModel(mechanism);
-            mechanismFeedback.setMechanism(mechanismTemplateModel);
-            mechanismFeedbacksWithMechanism.add(mechanismFeedback);
-        }
-        return mechanismFeedbacksWithMechanism;
     }
 }

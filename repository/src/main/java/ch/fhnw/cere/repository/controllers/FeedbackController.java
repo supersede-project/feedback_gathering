@@ -4,10 +4,8 @@ package ch.fhnw.cere.repository.controllers;
 import ch.fhnw.cere.repository.controllers.exceptions.NotFoundException;
 import ch.fhnw.cere.repository.integration.DataProviderIntegrator;
 import ch.fhnw.cere.repository.models.*;
-import ch.fhnw.cere.repository.services.FeedbackEmailService;
-import ch.fhnw.cere.repository.services.FeedbackEmailServiceImpl;
-import ch.fhnw.cere.repository.services.FeedbackService;
-import ch.fhnw.cere.repository.services.FileStorageService;
+import ch.fhnw.cere.repository.models.orchestrator.Application;
+import ch.fhnw.cere.repository.services.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import javafx.stage.Screen;
 import org.apache.commons.io.IOUtils;
@@ -46,11 +44,32 @@ public class FeedbackController extends BaseController {
     @Autowired
     private FeedbackEmailService feedbackEmailService;
 
+    @Autowired
+    private OrchestratorApplicationService orchestratorApplicationService;
 
     @PreAuthorize("@securityService.hasAdminPermission(#applicationId)")
     @RequestMapping(method = RequestMethod.GET, value = "")
     public List<Feedback> getApplicationFeedbacks(@PathVariable long applicationId) {
         return feedbackService.findByApplicationId(applicationId());
+    }
+
+    @PreAuthorize("@securityService.hasAdminPermission(#applicationId)")
+    @RequestMapping(method = RequestMethod.GET, value = "/full")
+    public List<Feedback> getDetailedApplicationFeedbacks(@PathVariable long applicationId) {
+        List<Feedback> feedbacks = feedbackService.findByApplicationId(applicationId());
+
+        Application orchestratorApplication = null;
+        try {
+            orchestratorApplication = this.orchestratorApplicationService.loadApplication(feedbacks.get(0).getLanguage(), feedbacks.get(0).getApplicationId());
+            for(Feedback feedback : feedbacks) {
+                Feedback.appendMechanismsToFeedback(orchestratorApplication, feedback);
+                feedback.setApplication(orchestratorApplication);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return feedbacks;
     }
 
     @PreAuthorize("@securityService.hasAdminPermission(#applicationId)")

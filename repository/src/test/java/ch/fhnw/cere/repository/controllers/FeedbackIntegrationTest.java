@@ -61,6 +61,8 @@ public class FeedbackIntegrationTest extends BaseIntegrationTest {
     private Feedback feedback1;
     private Feedback feedback2;
     private Feedback feedback3;
+    private Feedback feedback4;
+    private Feedback feedback5;
 
     @Value("${supersede.test_email_receivers}")
     protected String testEmailReceivers;
@@ -87,7 +89,11 @@ public class FeedbackIntegrationTest extends BaseIntegrationTest {
         feedback2 = feedbackRepository.save(new Feedback("Feedback 2 App 1", "userId2", 1, 11, "it"));
         feedback3 = feedbackRepository.save(new Feedback("Feedback 3 App 2", "userId3", 2, 22, "de"));
 
+        feedback4 = feedbackRepository.save(new Feedback("Feedback 4 App 20", "userId1", 20, 39, "en"));
+        feedback5 = feedbackRepository.save(new Feedback("Feedback 5 App 20", "userId2", 20, 39, "it"));
+
         apiUserPermissionRepository.save(new ApiUserPermission(appAdminUser, 1, true));
+        apiUserPermissionRepository.save(new ApiUserPermission(appAdminUser, 20, true));
 
         settingRepository.save(new Setting(1, testEmailReceivers, null));
     }
@@ -167,6 +173,27 @@ public class FeedbackIntegrationTest extends BaseIntegrationTest {
                 .andExpect(jsonPath("$[0].title", is("Feedback 1 App 1")))
                 .andExpect(jsonPath("$[1].id", is((int) feedback2.getId())))
                 .andExpect(jsonPath("$[1].title", is("Feedback 2 App 1")));
+    }
+
+    @Test
+    public void getDetailedFeedbacks() throws Exception {
+        String adminJWTToken = requestAppAdminJWTToken();
+
+        // TODO: add mock orchestrator. Currently the supersede platform's orchestrator application 20 is called
+        MvcResult result = mockMvc.perform(get(basePathEn + "applications/" + 20 + "/feedbacks/full")
+                .header("Authorization", adminJWTToken))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(2)))
+                .andExpect(jsonPath("$[0].id", is((int) feedback4.getId())))
+                .andExpect(jsonPath("$[0].title", is("Feedback 4 App 20")))
+                .andExpect(jsonPath("$[1].id", is((int) feedback5.getId())))
+                .andExpect(jsonPath("$[1].title", is("Feedback 5 App 20")))
+                .andExpect(jsonPath("$[0].application.id", is(20)))
+                .andExpect(jsonPath("$[1].application.name", is("Senercon Test Application")))
+                .andExpect(jsonPath("$[0].application.id", is(20)))
+                .andExpect(jsonPath("$[1].application.name", is("Senercon Test Application"))).andReturn();
+
+        System.err.println(result.getResponse().getContentAsString());
     }
 
     @Test(expected = ServletException.class)
