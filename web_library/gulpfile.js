@@ -5,6 +5,8 @@ var exec = require('child_process').exec;
 var fs = require('fs');
 var insert = require('gulp-insert');
 var cleanCSS = require('gulp-clean-css');
+var concatCss = require('gulp-concat-css');
+var replace = require('gulp-replace');
 var rename = require('gulp-rename');
 var runSequence = require('run-sequence').use(gulp);
 var del = require('del');
@@ -87,6 +89,21 @@ gulp.task('copy-css', function () {
         .pipe(gulp.dest('dist'));
 });
 
+gulp.task('concat-copy-all-css', function () {
+    return gulp.src([jqueryUIPath + 'jquery-ui.css', 'app/css/main.css'])
+        .pipe(replace('url("images/', 'url("jqueryui/images/'))
+        .pipe(concatCss("main.min.css"))
+        .pipe(gulp.dest('dist'));
+});
+
+gulp.task('concat-minify-copy-all-css', function () {
+    return gulp.src([jqueryUIPath + 'jquery-ui.css', 'app/css/main.css'])
+        .pipe(replace('url("images/', 'url("jqueryui/images/'))
+        .pipe(concatCss("main.min.css"))
+        .pipe(cleanCSS())
+        .pipe(gulp.dest('dist'));
+});
+
 gulp.task('copy-jquery-ui-droppable', function () {
     gulp.src(['app/js/lib/jquery.ui.droppable.js'])
         .pipe(gulp.dest('dist'));
@@ -95,10 +112,12 @@ gulp.task('copy-jquery-ui-droppable', function () {
 gulp.task('build-jquery-ui', function() {
     gulp.src([jqueryUIPath + 'jquery-ui.min.js', jqueryUIPath + 'LICENSE.txt'])
         .pipe(gulp.dest('dist/jqueryui/'));
+    /*
     gulp.src([jqueryUIPath + 'jquery-ui.css'])
         .pipe(cleanCSS())
         .pipe(rename('jquery-ui.min.css'))
         .pipe(gulp.dest('dist/jqueryui'));
+        */
     gulp.src([jqueryUIPath + 'images/*'])
         .pipe(gulp.dest('dist/jqueryui/images'));
 });
@@ -217,7 +236,8 @@ gulp.task('build.dev', function(done) {
         'configure',
         'webpack.dev',
         'copy-jquery',
-        'copy-css',
+        'concat-copy-all-css',
+        //'copy-css',
         'build-jquery-ui',
         'copy-screenshot-assets',
         'copy-audio-assets',
@@ -238,7 +258,8 @@ gulp.task('build.prod', function(done) {
         'configure',
         'webpack.prod',
         'copy-jquery',
-        'copy-and-minify-css',
+        'concat-minify-copy-all-css',
+        //'copy-and-minify-css',
         'build-jquery-ui',
         'copy-and-uglify-screenshot-assets',
         'copy-and-uglify-audio-assets',
