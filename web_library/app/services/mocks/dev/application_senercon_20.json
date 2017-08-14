@@ -306,7 +306,7 @@
             {
               "id": 498,
               "key": "title",
-              "value": "Rate your user experience on the energy consumption page",
+              "value": "Rate your experience with the feature you just used.",
               "language": "en",
               "createdAt": "2016-11-09 09:53:39.0"
             },
@@ -406,6 +406,10 @@
               "value": 1.0,
               "language": "en",
               "createdAt": "2016-10-24 01:45:36.0"
+            },
+            {
+              "key": "ownLabel",
+              "value": "Other:"
             },
             {
               "id": 505,

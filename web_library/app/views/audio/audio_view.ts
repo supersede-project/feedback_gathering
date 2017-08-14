@@ -104,7 +104,7 @@ export class AudioView implements MechanismView {
         });
 
         this.stopReplayButton.on('click', function() {
-            myThis.audioElement[0].stop();
+            myThis.audioElement[0].pause();
             clearInterval(myThis.replayInterval);
         });
     }
