@@ -1,4 +1,4 @@
-[{
+{
   "id": 20,
   "name": "Senercon Test Application",
   "state": 1,
@@ -48,30 +48,6 @@
       "id": 39,
       "type": "PUSH",
       "mechanisms": [
-        {
-          "id": 187,
-          "configurationsId": 39,
-          "type": "INFO_TYPE",
-          "active": true,
-          "order": 10,
-          "canBeActivated": false,
-          "parameters": [
-            {
-              "id": 744,
-              "key": "text",
-              "value": "All fields are optional",
-              "language": "en",
-              "createdAt": "2017-05-24 11:22:55.0"
-            },
-            {
-              "id": 732,
-              "key": "cssClass",
-              "value": "mute-text optional-info",
-              "language": "en",
-              "createdAt": "2017-04-16 09:26:53.27"
-            }
-          ]
-        },
         {
           "id": 59,
           "configurationsId": 39,
@@ -781,4 +757,4 @@
     }
   ],
   "createdAt": "2016-11-09 09:53:39.0"
-}]
+}

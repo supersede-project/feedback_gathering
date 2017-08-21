@@ -1,0 +1,68 @@
+// feedback button
+$feedbackEntryPointBoxShadow: 1px 1px 1px 0 #63bc4e;
+
+// feedback dialog
+$dialogFontFamily: Tahoma, Verdana, Segoe, sans-serif;
+
+// feedback dialog title
+$dialogTitlebarColor: transparent;
+$dialogTitlebarBackgroundColor: transparent;
+$dialogTitlebarBorderColor: #63bc4e;
+
+// dialog buttons
+$buttonBackgroundColor: #63bc4e;
+$buttonHoverColor: white;
+$buttonHoverBackgroundColor: #63bc4e;
+$buttonGradientEnabled: true;
+$buttonGradientColor1: #63bc4e;
+$buttonGradientColor2: #63bc4e;
+$buttonGradientColor3: #63bc4e;
+$buttonHoverGradientColor1: #63bc4e;
+$buttonHoverGradientColor2: #63bc4e;
+$buttonTextColor: white;
+$buttonFontSize: 13px;
+$buttonBorderWidth: 0;
+$buttonBorderStyle: solid;
+$buttonBorderColor: transparent;
+$buttonHeight: 32px;
+$buttonTextTransform: none;
+
+// submit
+$submitButtonBackgroundColor: #63bc4e;
+$submitButtonColor: white;
+$submitButtonHoverBackgroundColor: #63bc4e;
+$submitButtonHoverColor: white;
+$submitButtonFontWeight: normal;
+
+.feedback-library-wrapper .ui-widget-header {
+  border: none;
+  border-bottom: 3px solid #187e91;
+  border-radius: 0;
+  font-size: 17px;
+  background-color: transparent;
+  margin-left: 15px;
+  margin-right: 15px;
+  margin-bottom: 15px;
+}
+
+.feedback-library-wrapper .ui-dialog .ui-dialog-titlebar {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.feedback-library-wrapper .ui-widget .ui-widget {
+  background: transparent;
+  border: none;
+}
+
+.feedback-library-wrapper .ui-widget button {
+  font-size: 0.9em;
+}
+
+section.feedback-mechanism {
+  padding-right: 0 !important;
+}
+
+.feedback-library a.discard-feedback {
+  color: #63bc4e;
+}

@@ -38,7 +38,7 @@ export var feedbackPluginModule = function ($, window, document) {
         let mockBackend:MockBackend = new MockBackend(mockData);
 
         I18nHelper.initializeI18n(options, function(language) {
-            let applicationService = new ApplicationService(options.apiEndpointOrchestrator, language, mockBackend);
+            let applicationService = new ApplicationService(options.apiEndpointOrchestrator, language); //, mockBackend);
             feedbackApp = new FeedbackApp(applicationService, options.applicationId, options, button);
             feedbackApp.loadApplicationConfiguration();
         });

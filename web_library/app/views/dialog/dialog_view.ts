@@ -109,6 +109,7 @@ export class DialogView {
                     openCallback();
                 }
                 jQuery('[aria-describedby="' + this.dialogId + '"] .ui-dialog-titlebar-close').attr('title', i18n.t('general.dialog_close_button_title'));
+                jQuery('.ui-widget-overlay').attr('style', 'height: 0 !important;');
             },
             create: function (event, ui) {
                 let widget = $(this).dialog("widget");
