@@ -3,6 +3,7 @@ package ch.fhnw.cere.repository.controllers;
 
 import ch.fhnw.cere.repository.controllers.exceptions.NotFoundException;
 import ch.fhnw.cere.repository.integration.DataProviderIntegrator;
+import ch.fhnw.cere.repository.integration.FeedbackCentralIntegrator;
 import ch.fhnw.cere.repository.models.*;
 import ch.fhnw.cere.repository.models.orchestrator.Application;
 import ch.fhnw.cere.repository.services.*;
@@ -10,6 +11,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import javafx.stage.Screen;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.util.MultiValueMap;
@@ -42,10 +44,16 @@ public class FeedbackController extends BaseController {
     private DataProviderIntegrator dataProviderIntegrator;
 
     @Autowired
+    private FeedbackCentralIntegrator feedbackCentralIntegrator;
+
+    @Autowired
     private FeedbackEmailService feedbackEmailService;
 
     @Autowired
     private OrchestratorApplicationService orchestratorApplicationService;
+
+    @Value("${integration.feedback_central}")
+    private boolean feedbackCentralIntegrationEnabled;
 
     @PreAuthorize("@securityService.hasAdminPermission(#applicationId)")
     @RequestMapping(method = RequestMethod.GET, value = "")
@@ -152,6 +160,9 @@ public class FeedbackController extends BaseController {
         Feedback createdFeedback = feedbackService.save(feedback);
         dataProviderIntegrator.ingestJsonData(feedback);
         feedbackEmailService.sendFeedbackNotification(createdFeedback);
+        if(feedbackCentralIntegrationEnabled) {
+            feedbackCentralIntegrator.ingestJsonData(feedback);
+        }
 
         return createdFeedback;
     }

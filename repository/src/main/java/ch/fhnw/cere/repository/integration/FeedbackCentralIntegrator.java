@@ -2,46 +2,38 @@ package ch.fhnw.cere.repository.integration;
 
 
 import ch.fhnw.cere.repository.models.Feedback;
-import ch.fhnw.cere.repository.models.Setting;
+import ch.fhnw.cere.repository.services.FeedbackCentralSender;
 import ch.fhnw.cere.repository.services.SettingService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import eu.supersede.integration.api.analysis.proxies.DataProviderProxy;
+import eu.supersede.integration.api.analysis.proxies.KafkaClient;
 import org.json.JSONObject;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 
-/**
- * Forwards the feedback data to WP2 if there is a kafka topic ID set in the setting table.
- */
 @Component
-public class DataProviderIntegrator {
-    private DataProviderProxy proxy;
+public class FeedbackCentralIntegrator {
 
     @Autowired
-    private SettingService settingService;
+    private FeedbackCentralSender feedbackCentralSender;
 
-    private DataProviderProxy dataProviderProxy;
+    private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(FeedbackCentralIntegrator.class);
 
-    public DataProviderIntegrator() {
-        dataProviderProxy = new DataProviderProxy();
+    public FeedbackCentralIntegrator() {
     }
 
     @Async
     public void ingestJsonData(Feedback feedback) {
-        Setting setting = settingService.findByApplicationId(feedback.getApplicationId());
-        if(setting == null) {
-            return;
-        }
-        String topic = setting.getKafkaTopicId();
+        String rawFeedbackTopic = "raw-feedback";
+        String json = toJson(feedback);
 
-        if(topic != null && !topic.equals("")) {
-            String json = toJson(feedback);
-            JSONObject jsonData = new JSONObject(json);
-            dataProviderProxy.ingestData(jsonData, topic);
-        }
+        feedbackCentralSender.send(rawFeedbackTopic, json);
+
+        LOGGER.info("Feedback sent to localhost 9092 to topic raw-feedback ='{}'", json);
     }
 
     private String toJson(Object object) {
