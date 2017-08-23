@@ -27,7 +27,7 @@ public class AttachmentFeedback implements FileFeedback, MechanismFeedback {
     private long mechanismId;
 
     private String path;
-    private  int size;
+    private int size;
     @Transient
     private String part;
     private String fileExtension;

@@ -10,6 +10,7 @@ import ch.fhnw.cere.repository.services.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import javafx.stage.Screen;
 import org.apache.commons.io.IOUtils;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -33,6 +34,8 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "${supersede.base_path.feedback}/{language}/applications/{applicationId}/feedbacks")
 public class FeedbackController extends BaseController {
+
+    private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(FeedbackController.class);
 
     @Autowired
     private FeedbackService feedbackService;
@@ -106,6 +109,8 @@ public class FeedbackController extends BaseController {
         MultipartFile jsonPart = parts.getFirst("json");
         ByteArrayInputStream stream = new ByteArrayInputStream(jsonPart.getBytes());
         String jsonString = IOUtils.toString(stream, "UTF-8");
+
+        LOGGER.info(jsonString);
 
         ObjectMapper mapper = new ObjectMapper();
         Feedback feedback = mapper.readValue(jsonString, Feedback.class);
