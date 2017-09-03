@@ -102,7 +102,6 @@ public class FeedbackIntegrationTest extends BaseIntegrationTest {
     public void cleanUp() {
         super.cleanUp();
 
-        /*
         attachmentFeedbackRepository.deleteAllInBatch();
         audioFeedbackRepository.deleteAllInBatch();
         categoryFeedbackRepository.deleteAllInBatch();
@@ -114,7 +113,6 @@ public class FeedbackIntegrationTest extends BaseIntegrationTest {
         feedbackRepository.deleteAllInBatch();
         settingRepository.deleteAllInBatch();
         apiUserPermissionRepository.deleteAllInBatch();
-        */
     }
 
     @Test(expected = ServletException.class)
@@ -237,7 +235,7 @@ public class FeedbackIntegrationTest extends BaseIntegrationTest {
         mockMvc.perform(get(basePathEn + "applications/" + 1 + "/feedbacks/user_identification/userId1")
                 .header("Authorization", adminJWTToken))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize(1)))
+                .andExpect(jsonPath("$", hasSize(2)))
                 .andExpect(jsonPath("$[0].id", is((int) feedback1.getId())))
                 .andExpect(jsonPath("$[0].title", is("Feedback 1 App 1")));
     }
