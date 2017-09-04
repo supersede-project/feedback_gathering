@@ -1,0 +1,31 @@
+version : '3.3'
+services:
+  springappserver:
+    build:
+      context: .
+      dockerfile: web.dockerfile
+    ports:
+      - "8081:8080"
+    networks:
+      - mt-network
+    volumes:
+      - .:/vol/development
+    depends_on:
+      - orchestrator_mysqldbserver
+  orchestrator_mysqldbserver:
+    build:
+      context: .
+      dockerfile: db.dockerfile
+    ports:
+      - "13306:3306"
+    networks:
+      - mt-network
+    environment:
+      MYSQL_DATABASE: supersede_orchestrator_spring
+      MYSQL_USER:
+      MYSQL_PASSWORD:
+      MYSQL_ROOT_PASSWORD:
+    container_name: orchestrator_mysqldbserver
+networks:
+  mt-network:
+    driver: bridge

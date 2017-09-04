@@ -1,13 +1,16 @@
-FROM frolvlad/alpine-oraclejdk8:slim
+FROM java:8-jre
+MAINTAINER Ronnie Schaniel <ronnieschaniel@gmail.com>
+
 VOLUME /tmp
-ADD build/libs/feedback_orchestrator-2.0.0.jar feedback_orchestrator-2.0.0.jar
-RUN sh -c 'touch /feedback_orchestrator-2.0.0.jar'
-ENV JAVA_OPTS=""
-ENTRYPOINT [ "sh", "-c", "java $JAVA_OPTS -Djava.security.egd=file:/dev/./urandom -jar /feedback_orchestrator-2.0.0.jar" ]
+ADD build/libs/feedback_orchestrator-2.0.0.jar app.jar
 
+RUN apt-get update
+RUN apt-get install mysql-client -y
+RUN apt-get install libmysql-java -y
 
+RUN bash -c 'touch /app.jar'
 
-FROM tomcat:8
+ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","/app.jar"]
 
 
 
