@@ -1,1 +1,0 @@
-create database supersede_orchestrator_spring;
