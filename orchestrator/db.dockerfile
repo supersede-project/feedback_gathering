@@ -1,4 +1,4 @@
-FROM mysql/mysql-server
+FROM mysql:5.7
 MAINTAINER Ronnie Schaniel <ronnieschaniel@gmail.com>
 
 # Contents of /docker-entrypoint-initdb.d are run on mysqld startup

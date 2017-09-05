@@ -10,35 +10,4 @@ RUN apt-get install libmysql-java -y
 
 RUN bash -c 'touch /app.jar'
 
-ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","/app.jar"]
-
-
-
-
-
-
-# WEB
-# gradle build jar (-x test)
-# docker build -t supersede_orchestrator -f Dockerfile.web .
-# docker run --name supersede_orchestrator -p 8085:8080 --link loving_swirles:loving_swirles -d supersede_orchestrator
-# docker start supersede_orchestrator
-# debugging: docker exec -it supersede_orchestrator /bin/sh
-# logs: docker logs supersede_orchestrator
-
-
-# docker cp build/libs/feedback_orchestrator-2.0.0.war supersede_orchestrator:/usr/local/tomcat/webapps
-
-
-# DB
-# docker build -t tutum/mysql .
-# docker logs $CONTAINER_ID
-# docker port $CONTAINER_ID 3306
-# or docker ps --all
-# login and execute: create database supersede_orchestrator_spring;
-# execute: GRANT ALL PRIVILEGES ON supersede_orchestrator_spring.* TO 'user'@'localhost';
-# execute:  FLUSH PRIVILEGES;
-# logout
-# mysql -h localhost -u root -P 32768 supersede_orchestrator_spring < src/main/resources/db/migrations/feedback/supersede_orchestrator_db_structure.sql
-# mysql -h localhost -u root -P 32768 supersede_orchestrator_spring < docker/create_super_admin_api_user.sql
-# debugging: docker exec -it $CONTAINER_ID /bin/sh
-# edit my.cnf and add comment (#) before  "bind-address          = 127.0.0.1"
+ENTRYPOINT ["java", "-Djava.security.egd=file:/dev/./urandom -Djava.net.preferIPv4Stack=true", "-jar", "/app.jar"]
