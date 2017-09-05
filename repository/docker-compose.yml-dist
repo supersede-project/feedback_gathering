@@ -7,7 +7,7 @@ services:
     ports:
       - "13306:3306"
     networks:
-      - mt-network-orchestrator
+      - mt-network
     environment:
       MYSQL_DATABASE: supersede_orchestrator_spring
       MYSQL_USER:
@@ -21,11 +21,11 @@ services:
     ports:
       - "8081:8080"
     networks:
-      - mt-network-orchestrator
+      - mt-network
     volumes:
       - .:/vol/development
     depends_on:
       - mysqldbserver
 networks:
-  mt-network-orchestrator:
+  mt-network:
     driver: bridge
