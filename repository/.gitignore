@@ -54,3 +54,6 @@ application-test.properties
 src/main/resources/application.properties
 classes
 target/
+
+docker-compose.yml
+out/

@@ -36,6 +36,25 @@ apply plugin: 'war'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = 1.8
 
+war {
+    baseName = 'feedback_repository'
+    version = '2.0.0'
+}
+
+jar {
+    baseName = 'feedback_repository'
+    version = '2.0.0'
+    manifest {
+        attributes(
+                'Main-Class': 'ch.fhnw.cere.repository.RepositoryApplication'
+        )
+    }
+    from {
+        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+        configurations.runtime.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}
+
 repositories {
 	mavenCentral()
     add buildscript.repositories.getByName ("maven-supersede-snapshot")

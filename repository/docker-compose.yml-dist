@@ -5,27 +5,27 @@ services:
       context: .
       dockerfile: db.dockerfile
     ports:
-      - "13306:3306"
+      - "13307:3306"
     networks:
-      - mt-network
+      - mt-network-repository
     environment:
-      MYSQL_DATABASE: supersede_orchestrator_spring
+      MYSQL_DATABASE: supersede_repository_spring
       MYSQL_USER:
       MYSQL_PASSWORD:
       MYSQL_ROOT_PASSWORD:
-    container_name: orchestrator_mysqldbserver
+    container_name: repository_mysqldbserver
   springappserver:
     build:
       context: .
       dockerfile: web.dockerfile
     ports:
-      - "8081:8080"
+      - "8082:8080"
     networks:
-      - mt-network
+      - mt-network-repository
     volumes:
       - .:/vol/development
     depends_on:
       - mysqldbserver
 networks:
-  mt-network:
+  mt-network-repository:
     driver: bridge
