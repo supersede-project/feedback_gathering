@@ -10,8 +10,9 @@ For a detailed API documentation, please visit: http://docs.supersedeorchestrato
 - [Table of Content](#table-of-content)
 - [Installation](#installation)
 - [Deployment](#deployment)
-- [running tests](#tests)
+- [Tests](#tests)
 - [Directory Structure](#directory-structure)
+- [Docker](#docker)
 - [License](#license)
 
 # Installation
@@ -40,6 +41,55 @@ To run the integration tests, execute the following commands:
 
 ```bash
 gradle test
+```
+
+# Docker
+
+Build the JAR and the images and containers for the Java Spring Repository and the Repository DB. 
+
+The jdbs connection string in the application.properties should have the DB container service name as host:
+
+```bash
+spring.datasource.url = jdbc:mysql://mysqldbserver:3306/<db_name>?useSSL=false
+```
+
+```bash
+gradle clean build jar
+docker-compose up -d
+```
+
+Check if the 2 containers are up and running:
+ 
+```bash
+docker ps -a  
+```
+
+## Troubleshooting
+
+You might get: 
+```bash
+ERROR org.springframework.boot.SpringApplication - Application startup failed
+...
+Caused by: java.lang.IllegalArgumentException: No auto configuration classes found in META-INF/spring.factories. If you are using a custom packaging, make sure that file is correct.
+```
+
+Completely delete the container and image: 
+```bash
+docker rm -v <container_name>
+docker rmi <image_name>
+```
+
+**Attention:** This would delete all stopped containers and all unused images:
+```bash
+docker ps -q |xargs docker rm
+docker images -q |xargs docker rmi
+```
+
+Finally execute:
+```bash
+gradle build jar -x test
+gradle bootRepackage
+docker-compose up -d 
 ```
 
 # License
