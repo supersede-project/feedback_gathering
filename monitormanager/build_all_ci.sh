@@ -27,3 +27,6 @@ cd ../MonitoringUserEvents/PrjMonitoringUserEvents
 echo -e "\nCleaning and building MonitoringUserEvents Monitor...\n"
 mvn clean package 
 
+cd ../../ConfigurationFileHTMLMonitor/
+echo -e "\nCleaning and building ConfigurationFileHTML Monitor...\n"
+mvn clean package
