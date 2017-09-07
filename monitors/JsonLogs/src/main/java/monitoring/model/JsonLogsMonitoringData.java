@@ -1,42 +1,39 @@
 package monitoring.model;
 
-import java.math.BigInteger;
-
 import org.json.JSONObject;
 
 import monitoring.model.MonitoringData;
 
 public class JsonLogsMonitoringData implements MonitoringData {
 	
-	private BigInteger timeMillis;
-	private String thread;
+	private String serial_no;
+	private String Date;
 	private String level;
-	private String loggerName;
+	private String type;
+	private String class_name;
+	private String method_name;
+	private String line_number;
+	private String Location;
 	private String message;
-	private Boolean endOfBatch;
-	private String loggerFqcn;
-	private int threadId;
-	private int threadPriority;	
-	
 		
 	public JsonLogsMonitoringData() {
 		super();
 	}
 
-	public BigInteger getTimeMillis() {
-		return timeMillis;
+	public String getSerial_no() {
+		return serial_no;
 	}
 
-	public void setTimeMillis(BigInteger timeMillis) {
-		this.timeMillis = timeMillis;
+	public void setSerial_no(String serial_no) {
+		this.serial_no = serial_no;
 	}
 
-	public String getThread() {
-		return thread;
+	public String getDate() {
+		return Date;
 	}
 
-	public void setThread(String thread) {
-		this.thread = thread;
+	public void setDate(String date) {
+		Date = date;
 	}
 
 	public String getLevel() {
@@ -47,12 +44,44 @@ public class JsonLogsMonitoringData implements MonitoringData {
 		this.level = level;
 	}
 
-	public String getLoggerName() {
-		return loggerName;
+	public String getType() {
+		return type;
 	}
 
-	public void setLoggerName(String loggerName) {
-		this.loggerName = loggerName;
+	public void setType(String type) {
+		this.type = type;
+	}
+
+	public String getClass_name() {
+		return class_name;
+	}
+
+	public void setClass_name(String class_name) {
+		this.class_name = class_name;
+	}
+
+	public String getMethod_name() {
+		return method_name;
+	}
+
+	public void setMethod_name(String method_name) {
+		this.method_name = method_name;
+	}
+
+	public String getLine_number() {
+		return line_number;
+	}
+
+	public void setLine_number(String line_number) {
+		this.line_number = line_number;
+	}
+
+	public String getLocation() {
+		return Location;
+	}
+
+	public void setLocation(String location) {
+		Location = location;
 	}
 
 	public String getMessage() {
@@ -63,53 +92,18 @@ public class JsonLogsMonitoringData implements MonitoringData {
 		this.message = message;
 	}
 
-	public Boolean getEndOfBatch() {
-		return endOfBatch;
-	}
-
-	public void setEndOfBatch(Boolean endOfBatch) {
-		this.endOfBatch = endOfBatch;
-	}
-
-	public String getLoggerFqcn() {
-		return loggerFqcn;
-	}
-
-	public void setLoggerFqcn(String loggerFqcn) {
-		this.loggerFqcn = loggerFqcn;
-	}
-
-	public int getThreadId() {
-		return threadId;
-	}
-
-	public void setThreadId(int threadId) {
-		this.threadId = threadId;
-	}
-
-	public int getThreadPriority() {
-		return threadPriority;
-	}
-
-	public void setThreadPriority(int threadPriority) {
-		this.threadPriority = threadPriority;
-	}
-
-
-
-
 	@Override
 	public JSONObject toJsonObject() {
 		JSONObject json = new JSONObject();
-		json.put("timeMillis", this.timeMillis);
-		json.put("thread", this.thread);
+		json.put("serial_no", this.serial_no);
+		json.put("Date", this.Date);
 		json.put("level", this.level);
-		json.put("loggerName", this.loggerName);
+		json.put("type",  this.type);
+		json.put("class_name", this.class_name);
+		json.put("method_name", this.method_name);
+		json.put("line_number", this.line_number);
+		json.put("Location", this.Location);
 		json.put("message", this.message);
-		json.put("endOfBatch", this.endOfBatch);
-		json.put("loggerFqcn", this.loggerFqcn);
-		json.put("threadId", this.threadId);
-		json.put("threadPriority", this.threadPriority);
 		return json;
 	}
 

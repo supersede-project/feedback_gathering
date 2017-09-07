@@ -31,7 +31,7 @@ public class SendJSONs {
 	public void generateData(String json, String kafkaTopic) throws Exception {
 		
 		//logger.debug("Initialising kafka producer...");
-		//kafka.initProducer(kafkaEndPoint);
+		//kafka.initProducer("localhost:9092");
 		logger.debug("Initialising proxy...");
 		kafka.initProxy();
 		
@@ -48,15 +48,15 @@ public class SendJSONs {
 			Iterator<?> keys = jsonParams.keys();
 			while( keys.hasNext() ) {
 				String key = (String)keys.next();
-				if (key.equals("timeMillis")) params.setTimeMillis(jsonParams.getBigInteger(key));
-				else if (key.equals("thread")) params.setThread(jsonParams.getString(key).replaceAll("\"", ""));
+				if (key.equals("serial_no")) params.setSerial_no(jsonParams.getString(key).replaceAll("\"", ""));
+				else if (key.equals("Date")) params.setDate(jsonParams.getString(key).replaceAll("\"", ""));
 				else if (key.equals("level")) params.setLevel(jsonParams.getString(key).replaceAll("\"", ""));
-				else if (key.equals("loggerName")) params.setLoggerName(jsonParams.getString(key).replaceAll("\"", ""));
+				else if (key.equals("type")) params.setType(jsonParams.getString(key).replaceAll("\"", ""));
+				else if (key.equals("class_name")) params.setClass_name(jsonParams.getString(key).replaceAll("\"", ""));
+				else if (key.equals("method_name")) params.setMethod_name(jsonParams.getString(key).replaceAll("\"", ""));
+				else if (key.equals("line_number")) params.setLine_number(jsonParams.getString(key).replaceAll("\"", ""));
+				else if (key.equals("Location")) params.setLocation(jsonParams.getString(key).replaceAll("\"", ""));
 				else if (key.equals("message")) params.setMessage(jsonParams.getString(key).replaceAll("\"", ""));
-				else if (key.equals("endOfBatch")) params.setEndOfBatch(jsonParams.getBoolean(key));
-				else if (key.equals("loggerFqcn")) params.setLoggerFqcn(jsonParams.getString(key).replaceAll("\"", ""));
-				else if (key.equals("threadId")) params.setThreadId(jsonParams.getInt(key));
-				else if (key.equals("threadPriority")) params.setThreadPriority(jsonParams.getInt(key));
 			}
 				
 			data.add(params);
