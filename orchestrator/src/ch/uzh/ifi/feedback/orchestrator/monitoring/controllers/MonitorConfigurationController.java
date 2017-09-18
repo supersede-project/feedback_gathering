@@ -68,9 +68,7 @@ import javassist.NotFoundException;
 @RequestScoped
 @Controller(MonitorConfiguration.class)
 public class MonitorConfigurationController extends RestController<MonitorConfiguration> {
-	
-	private String monitorManagerHost = "localhost:8080/monitor_manager/";
-	
+		
 	private MonitorTypeService monitorTypeService;
 	private MonitorToolService monitorToolService;
 
@@ -214,6 +212,10 @@ public class MonitorConfigurationController extends RestController<MonitorConfig
 		else if (tool.getMonitorName().equals("AppStore")) {
 			monitorManagerConf = new AppStoreMonitorConfiguration();
 			((AppStoreMonitorConfiguration) monitorManagerConf).setAppId(configuration.getAppId());
+		}
+		else if (tool.getMonitorName().equals("Http")) {
+			monitorManagerConf = new HttpMonitorConfiguration();
+			((HttpMonitorConfiguration) monitorManagerConf).setUrl(configuration.getUrl());
 		}
 		monitorManagerConf.setKafkaEndpoint(new URL(configuration.getKafkaEndpoint()));
 		monitorManagerConf.setKafkaTopic(configuration.getKafkaTopic());

@@ -71,6 +71,9 @@ public class MonitorConfiguration extends OrchestratorItem<MonitorConfiguration>
 	@DbAttribute("app_id")
 	private String appId;
 	
+	@DbAttribute("url")
+	private String url;
+	
 	public Integer getMonitorManagerConfigurationId() {
 		return monitorManagerConfigurationId;
 	}
@@ -175,6 +178,14 @@ public class MonitorConfiguration extends OrchestratorItem<MonitorConfiguration>
 
 	public void setTimeStamp(String timeStamp) {
 		this.timeStamp = timeStamp;
+	}
+	
+	public String getUrl() {
+		return url;
+	}
+
+	public void setUrl(String url) {
+		this.url = url;
 	}
 
 }

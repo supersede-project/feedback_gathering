@@ -33,22 +33,29 @@ public class MonitorManager implements IMonitorManager {
 	@ResponseStatus(value = HttpStatus.CREATED)
 	public JsonObject addConfiguration(@PathVariable String monitorName, @RequestBody JsonObject jsonObj) throws Exception {
 		//JsonObject jsonObj = getJson(input);
-		if (monitorName.equals("Twitter")) {
-			TwitterMonitorProxy<?,?> proxy = new TwitterMonitorProxy<>();
-			TwitterMonitorConfiguration conf = parser.getTwitterConfiguration(jsonObj);
-			TwitterMonitorConfiguration result = proxy.createMonitorConfiguration(conf);
-			return getResponse(result);
-		} else if (monitorName.equals("GooglePlay")) {
-			GooglePlayMonitorProxy<?,?> proxy = new GooglePlayMonitorProxy<>();
-			GooglePlayMonitorConfiguration conf = parser.getGooglePlayConfiguration(jsonObj);
-			GooglePlayMonitorConfiguration result = proxy.createMonitorConfiguration(conf);
-			return getResponse(result);
-		} else if (monitorName.equals("AppStore")) {
-			AppStoreMonitorProxy<?,?> proxy = new AppStoreMonitorProxy<>();
-			AppStoreMonitorConfiguration conf = parser.getAppStoreConfiguration(jsonObj);
-			AppStoreMonitorConfiguration result = proxy.createMonitorConfiguration(conf);
-			return getResponse(result);
-		} else throw new Exception("There is no monitor with this name");
+		switch (monitorName) {
+			case "Twitter":
+				TwitterMonitorProxy<?,?> proxyT = new TwitterMonitorProxy<>();
+				TwitterMonitorConfiguration confT = parser.getTwitterConfiguration(jsonObj);
+				TwitterMonitorConfiguration resultT = proxyT.createMonitorConfiguration(confT);
+				return getResponse(resultT);
+			case "GooglePlay":
+				GooglePlayMonitorProxy<?,?> proxyG = new GooglePlayMonitorProxy<>();
+				GooglePlayMonitorConfiguration confG = parser.getGooglePlayConfiguration(jsonObj);
+				GooglePlayMonitorConfiguration resultG = proxyG.createMonitorConfiguration(confG);
+				return getResponse(resultG);
+			case "AppStore":
+				AppStoreMonitorProxy<?,?> proxyA = new AppStoreMonitorProxy<>();
+				AppStoreMonitorConfiguration confA = parser.getAppStoreConfiguration(jsonObj);
+				AppStoreMonitorConfiguration resultA = proxyA.createMonitorConfiguration(confA);
+				return getResponse(resultA);
+			case "Http":
+				HttpMonitorProxy<?,?> proxyH = new HttpMonitorProxy<>();
+				HttpMonitorConfiguration confH = parser.getHttpConfiguration(jsonObj);
+				HttpMoniotrConfiguration resultH = proxyH.createMonitorConfiguration(confH);
+				return getResponse(resultH);
+			default: throw new Exception("There is no monitor with this name");
+		}
 	}
 	
 	@Override

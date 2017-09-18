@@ -72,6 +72,15 @@ public class ConfigurationParser {
 		return configuration;
 	}
 	
+	public HttpMonitorConfiguration getHttpConfiguration(JsonObject json) {
+		JsonObject in = json.getAsJsonObject("QoS");
+		AppStoreMonitorConfiguration configuration = new AppStoreMonitorConfiguration();
+		setMonitorConfigurationParams(configuration, in);
+		if (in.has("url")) configuration.setAppId(in.get("appId").getAsString());
+		
+		return configuration;
+	}
+	
 	private void setMonitorConfigurationParams(MonitorSpecificConfiguration configuration, JsonObject in) throws Exception {
 		if (in.has("kafkaEndpoint"))
 			try {
