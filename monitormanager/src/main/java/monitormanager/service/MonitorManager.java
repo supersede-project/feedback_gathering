@@ -15,9 +15,11 @@ import com.google.gson.JsonParser;
 import eu.supersede.integration.api.monitoring.manager.types.MonitorSpecificConfiguration;
 import eu.supersede.integration.api.monitoring.manager.types.AppStoreMonitorConfiguration;
 import eu.supersede.integration.api.monitoring.manager.types.GooglePlayMonitorConfiguration;
+import eu.supersede.integration.api.monitoring.manager.types.HttpMonitorConfiguration;
 import eu.supersede.integration.api.monitoring.manager.types.TwitterMonitorConfiguration;
 import eu.supersede.integration.api.monitoring.monitors.proxies.AppStoreMonitorProxy;
 import eu.supersede.integration.api.monitoring.monitors.proxies.GooglePlayMonitorProxy;
+import eu.supersede.integration.api.monitoring.monitors.proxies.HttpMonitorProxy;
 import eu.supersede.integration.api.monitoring.monitors.proxies.TwitterMonitorProxy;
 
 import monitormanager.model.ConfigurationParser;
@@ -52,7 +54,7 @@ public class MonitorManager implements IMonitorManager {
 			case "Http":
 				HttpMonitorProxy<?,?> proxyH = new HttpMonitorProxy<>();
 				HttpMonitorConfiguration confH = parser.getHttpConfiguration(jsonObj);
-				HttpMoniotrConfiguration resultH = proxyH.createMonitorConfiguration(confH);
+				HttpMonitorConfiguration resultH = proxyH.createMonitorConfiguration(confH);
 				return getResponse(resultH);
 			default: throw new Exception("There is no monitor with this name");
 		}
