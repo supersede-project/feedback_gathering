@@ -152,7 +152,8 @@ public class JSchTool implements ToolInterface<DiskMonitoringParams> {
 			String msg = null;
 			StringBuilder sb = new StringBuilder();
 			while( (msg = in.readLine()) !=null){
-				sb.append(msg + "\n");
+				if (sb.length() != 0) sb.append("\n");
+				sb.append(msg);
 			}
 			sendData(searchTimeStamp, sb.toString());	
 		} catch (Exception e) {
