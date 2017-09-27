@@ -34,13 +34,7 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.HttpMethod;
-import org.apache.commons.httpclient.methods.GetMethod;
-import org.apache.commons.httpclient.methods.HeadMethod;
-import org.apache.commons.httpclient.params.HttpClientParams;
 import org.apache.log4j.Logger;
-import org.springframework.util.StopWatch;
 
 import com.jcraft.jsch.ChannelExec;
 import com.jcraft.jsch.JSch;
@@ -105,10 +99,10 @@ public class JSchTool implements ToolInterface<DiskMonitoringParams> {
 	}
 	
 	private void resetStream() throws Exception {
-		logger.debug("Initialising kafka producer...");
-		kafka.initProducer(confParams.getKafkaEndpoint());
-		//logger.debug("Initialising proxy...");
-		//kafka.initProxy();
+		//logger.debug("Initialising kafka producer...");
+		//kafka.initProducer(confParams.getKafkaEndpoint());
+		logger.debug("Initialising proxy...");
+		kafka.initProxy();
 		logger.debug("Initialising streaming...");
 		
 		this.firstConnection = true;
@@ -165,8 +159,8 @@ public class JSchTool implements ToolInterface<DiskMonitoringParams> {
 	private void sendData(String searchTimeStamp, String output) {
 		List<DiskMonitoringData> data = new ArrayList<>();
 		data.add(new DiskMonitoringData(this.confParams.getLabel(), this.confParams.getInstruction(), output));
-		kafka.generateResponseKafka(data, searchTimeStamp, id, configurationId, this.confParams.getKafkaTopic(), "HttpMonitoredData");
-		//kafka.generateResponseIF(data, searchTimeStamp, id, configurationId, this.confParams.getKafkaTopic(), "HttpMonitoredData");
+		//kafka.generateResponseKafka(data, searchTimeStamp, id, configurationId, this.confParams.getKafkaTopic(), "HttpMonitoredData");
+		kafka.generateResponseIF(data, searchTimeStamp, id, configurationId, this.confParams.getKafkaTopic(), "HttpMonitoredData");
 		logger.debug("Data successfully sent to Kafka endpoint");
 		++id;
 	}
