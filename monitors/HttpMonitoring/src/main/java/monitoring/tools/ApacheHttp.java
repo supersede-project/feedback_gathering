@@ -21,8 +21,6 @@
  *******************************************************************************/
 package monitoring.tools;
 
-import java.io.IOException;
-import java.net.SocketTimeoutException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
@@ -66,7 +64,7 @@ public class ApacheHttp implements ToolInterface<HttpMonitoringParams> {
 		this.firstConnection = true;
 		this.confParams = params;
 		this.configurationId = configurationId;
-		this.kafka = new KafkaCommunication();
+		this.kafka = new KafkaCommunication(this.confParams.getKafkaEndpoint());
 		
 		resetStream();
 	}
@@ -79,17 +77,12 @@ public class ApacheHttp implements ToolInterface<HttpMonitoringParams> {
 	@Override
 	public void updateConfiguration(HttpMonitoringParams params) throws Exception {
 		deleteConfiguration();
-		//generateData((new Timestamp((new Date()).getTime()).toString()));
 		this.confParams = params;
         this.method = new HeadMethod(this.confParams.getUrl());
 		resetStream();
 	}
 	
 	private void resetStream() {
-		//logger.debug("Initialising kafka producer...");
-		//kafka.initProducer(confParams.getKafkaEndpoint());
-		logger.debug("Initialising proxy...");
-		kafka.initProxy();
 		logger.debug("Initialising streaming...");
 		
 		this.firstConnection = true;
@@ -143,8 +136,7 @@ public class ApacheHttp implements ToolInterface<HttpMonitoringParams> {
 		List<HttpMonitoringData> data = new ArrayList<>();
 		data.add(new HttpMonitoringData(String.valueOf(responseTime), String.valueOf(code)));
 		logger.debug("Sent data: " + responseTime + "/" + code);
-		//kafka.generateResponseKafka(data, searchTimeStamp, id, configurationId, this.confParams.getKafkaTopic(), "HttpMonitoredData");
-		kafka.generateResponseIF(data, searchTimeStamp, id, configurationId, this.confParams.getKafkaTopic(), "HttpMonitoredData");
+		kafka.sendData(data, searchTimeStamp, id, configurationId, this.confParams.getKafkaTopic(), "HttpMonitoredData");
 		logger.debug("Data successfully sent to Kafka endpoint");
 		++id;
 	}
