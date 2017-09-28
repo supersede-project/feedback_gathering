@@ -68,7 +68,7 @@ public class ITunesApple implements ToolInterface<AppStoreMonitoringParams> {
 	public void addConfiguration(AppStoreMonitoringParams params,int confId) throws Exception {
 		this.params = params;
 		this.confId = confId;
-		this.kafka = new KafkaCommunication();
+		this.kafka = new KafkaCommunication(this.params.getKafkaEndpoint());
 		resetStream();
 	}
 	
@@ -85,9 +85,6 @@ public class ITunesApple implements ToolInterface<AppStoreMonitoringParams> {
 	}
 	
 	private void resetStream() throws Exception {
-		
-		kafka.initProxy();
-		//kafka.initProducer(this.params.getKafkaEndpoint());
 		
 		this.reported = new ArrayList<>();
 		firstConnection = true;
@@ -141,8 +138,7 @@ public class ITunesApple implements ToolInterface<AppStoreMonitoringParams> {
 				reported.add(id);
 			}
 		}
-		//kafka.generateResponseKafka(dataList, timeStamp, id, confId, params.getKafkaTopic());
-		kafka.generateResponseIF(dataList, timeStamp, id, confId, params.getKafkaTopic(), "AppStoreMonitoredData");
+		kafka.sendData(dataList, timeStamp, id, confId, params.getKafkaTopic(), "AppStoreMonitoredData");
 		logger.debug("Data sent to kafka endpoint");
 		++id;
 	}

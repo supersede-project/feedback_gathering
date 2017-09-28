@@ -84,7 +84,7 @@ public class GooglePlayAPI implements ToolInterface<GooglePlayMonitoringParams> 
 	public void addConfiguration(GooglePlayMonitoringParams params, int confId) throws Exception {
 		this.params = params;
 		this.confId = confId;
-		this.kafka = new KafkaCommunication();
+		this.kafka = new KafkaCommunication(this.params.getKafkaEndpoint());
 		
 		loadProperties();
 		resetStream();
@@ -103,9 +103,6 @@ public class GooglePlayAPI implements ToolInterface<GooglePlayMonitoringParams> 
 	}
 	
 	private void resetStream() throws Exception  {
-		
-		//this.kafka.initProducer(this.params.getKafkaEndpoint());
-		this.kafka.initProxy();
 		
 		firstConnection = true;
 		generateNewAccessToken();
@@ -231,8 +228,7 @@ public class GooglePlayAPI implements ToolInterface<GooglePlayMonitoringParams> 
 			}
 		}
 		String timeStamp = new Timestamp(date).toString();
-		//kafka.generateResponseKafka(dataList, timeStamp, id, confId, params.getKafkaTopic());
-		kafka.generateResponseIF(dataList, timeStamp, id, confId, params.getKafkaTopic(), "GooglePlayMonitoredData");
+		kafka.sendData(dataList, timeStamp, id, confId, params.getKafkaTopic(), "GooglePlayMonitoredData");
 		logger.debug("Data sent to kafka endpoint");
 		++id;
 	}

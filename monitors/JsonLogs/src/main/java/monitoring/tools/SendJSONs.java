@@ -21,7 +21,7 @@ public class SendJSONs {
 	int id = 1;
 	int configurationId = 0;
 	
-	KafkaCommunication kafka = new KafkaCommunication();
+	KafkaCommunication kafka;
 	
 	public SendJSONs() {
 		super();
@@ -30,10 +30,7 @@ public class SendJSONs {
 
 	public void generateData(String json, String kafkaTopic) throws Exception {
 		
-		//logger.debug("Initialising kafka producer...");
-		//kafka.initProducer("localhost:9092");
-		logger.debug("Initialising proxy...");
-		kafka.initProxy();
+		kafka = new KafkaCommunication(null);
 		
 		String timestamp;
 		
@@ -65,8 +62,7 @@ public class SendJSONs {
 				
 			
 			timestamp = new Timestamp((new Date()).getTime()).toString();
-			//kafka.generateResponseKafka(data, timestamp, id, configurationId, kafkaTopic, "JSONFiles");
-			kafka.generateResponseIF(data, timestamp, id, configurationId, kafkaTopic, "JSONFiles");
+			kafka.sendData(data, timestamp, id, configurationId, kafkaTopic, "JSONFiles");
 			logger.debug("Data successfully sent to Kafka endpoint");
 			++id;
 			
