@@ -60,9 +60,12 @@ public class JSchTool implements ToolInterface<DiskMonitoringParams> {
 	
 	KafkaCommunication kafka;
 	
+	//SSH connection tools
 	JSch jsch;
 	ChannelExec channel;
 	Session session;
+	
+	//localhost connection tools
 
 	@Override
 	public void addConfiguration(DiskMonitoringParams params, int configurationId) throws Exception {
@@ -71,6 +74,35 @@ public class JSchTool implements ToolInterface<DiskMonitoringParams> {
 		this.configurationId = configurationId;
 		this.kafka = new KafkaCommunication(this.confParams.getKafkaEndpoint());
 		
+		if (this.confParams.getHost().equals("localhost")) 
+			initLocalhostConnection();
+		else
+			initSshConnection();
+		
+	}
+	
+	@Override
+	public void deleteConfiguration() throws Exception {
+		if (this.confParams.getHost().equals("localhost")) 
+			deleteLocalhostConnection();
+		else 
+			deleteSshConnection();
+	}
+	
+	@Override
+	public void updateConfiguration(DiskMonitoringParams params) throws Exception {
+		this.confParams = params;
+		if (this.confParams.getHost().equals("localhost")) 
+			updateLocalhostConnection();
+		else 
+			updateSshConnection();
+	}
+	
+	private void initLocalhostConnection() throws Exception {
+		resetLocalhostStream();
+	}
+	
+	private void initSshConnection() throws Exception {
 		ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
 		URL url = classLoader.getResource("ssh");
 		jsch = new JSch();
@@ -81,24 +113,49 @@ public class JSchTool implements ToolInterface<DiskMonitoringParams> {
 		}
 		logger.debug("Added private key file");
 		
-		resetStream();
+		resetSshStream();
 	}
 	
-	@Override
-	public void deleteConfiguration() throws Exception {
+	private void deleteLocalhostConnection() throws Exception  {
+		timer.cancel();
+	}
+	
+	private void deleteSshConnection() throws Exception {
 		session.disconnect();
 		channel.disconnect();
 		timer.cancel();
 	}
 	
-	@Override
-	public void updateConfiguration(DiskMonitoringParams params) throws Exception {
-		deleteConfiguration();
-		this.confParams = params;
-		resetStream();
+	private void updateLocalhostConnection() throws Exception {
+		deleteLocalhostConnection();
+		resetLocalhostStream();
 	}
 	
-	private void resetStream() throws Exception {
+	private void updateSshConnection() throws Exception {
+		deleteSshConnection();
+		resetSshStream();
+	}
+	
+	private void resetLocalhostStream() throws Exception {
+		logger.debug("Initialising streaming...");
+		this.firstConnection = true;
+		
+		//TODO
+		
+		timer = new Timer();
+		timer.schedule(new TimerTask() {
+			@Override
+			public void run() {
+				if (firstConnection) {
+		    		firstConnection = false;
+		    	} else {
+		    		generateLocalhostData((new Timestamp((new Date()).getTime()).toString()));
+		    	}
+			}
+		}, 0, Integer.parseInt(confParams.getTimeSlot())* 1000);
+	}
+
+	private void resetSshStream() throws Exception {
 		
 		logger.debug("Initialising streaming...");
 		
@@ -126,14 +183,14 @@ public class JSchTool implements ToolInterface<DiskMonitoringParams> {
 				if (firstConnection) {
 		    		firstConnection = false;
 		    	} else {
-		    		generateData((new Timestamp((new Date()).getTime()).toString()));
+		    		generateSshData((new Timestamp((new Date()).getTime()).toString()));
 		    	}
 			}
 		}, 0, Integer.parseInt(confParams.getTimeSlot())* 1000);
 		
 	}
 	
-	private void generateData(String searchTimeStamp) {
+	private void generateSshData(String searchTimeStamp) {
 		BufferedReader in;
 		try {
 			channel = (ChannelExec) session.openChannel("exec");
@@ -142,7 +199,7 @@ public class JSchTool implements ToolInterface<DiskMonitoringParams> {
 			in = new BufferedReader(new InputStreamReader(channel.getInputStream()));
 			String msg = null;
 			StringBuilder sb = new StringBuilder();
-			while( (msg = in.readLine()) !=null){
+			while( (msg = in.readLine()) != null){
 				if (sb.length() != 0) sb.append("\n");
 				sb.append(msg);
 			}
@@ -151,6 +208,27 @@ public class JSchTool implements ToolInterface<DiskMonitoringParams> {
 			logger.error(e.getMessage());
 		}
 		
+	}
+	
+	private void generateLocalhostData(String searchTimeStamp) {        
+		try {
+			
+			Process proc = Runtime.getRuntime().exec(this.confParams.getInstruction());
+			BufferedReader reader =  
+		              new BufferedReader(new InputStreamReader(proc.getInputStream()));
+			String msg = null;
+			StringBuilder sb = new StringBuilder();
+	        while( (msg = reader.readLine()) != null) {
+	            if (sb.length() != 0) sb.append("\n");
+	            sb.append(msg);
+	        }
+
+	        proc.waitFor();   
+			
+			sendData(searchTimeStamp, sb.toString());
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+		}
 	}
 	
 	private void sendData(String searchTimeStamp, String output) {
