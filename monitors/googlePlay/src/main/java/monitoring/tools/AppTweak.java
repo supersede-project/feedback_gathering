@@ -83,7 +83,7 @@ public class AppTweak implements ToolInterface<GooglePlayMonitoringParams> {
 		logger.debug("Setting monitorization");
 		this.params = params;
 		this.confId = confId;
-		this.kafka = new KafkaCommunication();
+		this.kafka = new KafkaCommunication(this.params.getKafkaEndpoint());
 		
 		loadProperties();
 		resetStream();
@@ -103,7 +103,6 @@ public class AppTweak implements ToolInterface<GooglePlayMonitoringParams> {
 
 	private void resetStream() {
 		logger.debug("Initialising streaming");
-		this.kafka.initProxy();
 		
 		firstConnection = true;
 		timer = new Timer();
@@ -163,8 +162,7 @@ public class AppTweak implements ToolInterface<GooglePlayMonitoringParams> {
 				dataList.add(review);
 			}
 		}
-		//kafka.generateResponseKafka(dataList, timeStamp, id, confId, params.getKafkaTopic(), "GooglePlayMonitoredData");
-		kafka.generateResponseIF(dataList, timeStamp, id, confId, params.getKafkaTopic(), "GooglePlayMonitoredData");
+		kafka.sendData(dataList, timeStamp, id, confId, params.getKafkaTopic(), "GooglePlayMonitoredData");
 		logger.debug("Data sent to kafka endpoint");
 		++id;
 	}

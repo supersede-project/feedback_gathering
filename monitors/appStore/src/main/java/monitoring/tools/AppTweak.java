@@ -78,7 +78,7 @@ public class AppTweak implements ToolInterface<AppStoreMonitoringParams> {
 	public void addConfiguration(AppStoreMonitoringParams params, int confId) throws Exception {
 		this.params = params;
 		this.confId = confId;
-		this.kafka = new KafkaCommunication();
+		this.kafka = new KafkaCommunication(this.params.getKafkaEndpoint());
 		loadProperties();
 		resetStream();
 	}
@@ -98,8 +98,6 @@ public class AppTweak implements ToolInterface<AppStoreMonitoringParams> {
 	private void resetStream() {
 		
 		logger.debug("Initializing streaming...");
-		kafka.initProxy();
-		//kafka.initProducer(this.params.getKafkaEndpoint());
 		
 		firstConnection = true;
 		timer = new Timer();
@@ -151,8 +149,7 @@ public class AppTweak implements ToolInterface<AppStoreMonitoringParams> {
 				dataList.add(review);
 			}
 		}
-		//kafka.generateResponseKafka(dataList, timeStamp, id, confId, params.getKafkaTopic());
-		kafka.generateResponseIF(dataList, timeStamp, id, confId, params.getKafkaTopic(), "AppStoreMonitoredData");
+		kafka.sendData(dataList, timeStamp, id, confId, params.getKafkaTopic(), "AppStoreMonitoredData");
 		logger.debug("Data sent to kafka endpoint");
 		++id;
 	}
