@@ -61,6 +61,7 @@ import ch.uzh.ifi.feedback.orchestrator.validation.MonitorConfigurationValidator
 import eu.supersede.integration.api.monitoring.manager.proxies.MonitorManagerProxy;
 import eu.supersede.integration.api.monitoring.manager.types.AppStoreMonitorConfiguration;
 import eu.supersede.integration.api.monitoring.manager.types.GooglePlayMonitorConfiguration;
+import eu.supersede.integration.api.monitoring.manager.types.HttpMonitorConfiguration;
 import eu.supersede.integration.api.monitoring.manager.types.MonitorSpecificConfiguration;
 import eu.supersede.integration.api.monitoring.manager.types.TwitterMonitorConfiguration;
 import javassist.NotFoundException;

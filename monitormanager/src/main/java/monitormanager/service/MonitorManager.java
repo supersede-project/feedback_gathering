@@ -34,7 +34,6 @@ public class MonitorManager implements IMonitorManager {
 	@RequestMapping(value = "/{monitorName}/configuration", method = RequestMethod.POST)
 	@ResponseStatus(value = HttpStatus.CREATED)
 	public JsonObject addConfiguration(@PathVariable String monitorName, @RequestBody JsonObject jsonObj) throws Exception {
-		//JsonObject jsonObj = getJson(input);
 		switch (monitorName) {
 			case "Twitter":
 				TwitterMonitorProxy<?,?> proxyT = new TwitterMonitorProxy<>();
@@ -84,6 +83,11 @@ public class MonitorManager implements IMonitorManager {
 			conf.setId(confId);
 			AppStoreMonitorConfiguration result = proxy.updateMonitorConfiguration(conf);
 			return getResponse(result);
+		} else if (monitorName.contentEquals("Http")) {
+			HttpMonitorProxy<?,?> proxy = new HttpMonitorProxy<>();
+			HttpMonitorConfiguration conf = parser.getHttpConfiguration(jsonObj);
+			HttpMonitorConfiguration result = proxy.updateMonitorConfiguration(conf);
+			return getResponse(result);
 		} else throw new Exception("There is no monitor with this name");
 	}
 
@@ -107,15 +111,13 @@ public class MonitorManager implements IMonitorManager {
 			AppStoreMonitorConfiguration conf = new AppStoreMonitorConfiguration();
 			conf.setId(confId);
 			proxy.deleteMonitorConfiguration(conf);
+		} else if (monitorName.equals("Http")) {
+			HttpMonitorProxy<?,?> proxy = new HttpMonitorProxy<>();
+			HttpMonitorConfiguration conf = new HttpMonitorConfiguration();
+			conf.setId(confId);
+			proxy.deleteMonitorConfiguration(conf);
 		} else throw new Exception("There is no monitor with this name");
 	}
-
-	private JsonObject getJson(String configuration) {
-		JsonParser jsonParser = new JsonParser();
-		JsonObject json = (JsonObject)jsonParser.parse(configuration);
-		return json;
-	}
-	
 	
 	private JsonObject getResponse(MonitorSpecificConfiguration result) {
 		JsonObject json = new JsonObject();
