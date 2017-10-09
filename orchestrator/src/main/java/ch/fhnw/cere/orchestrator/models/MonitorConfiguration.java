@@ -42,20 +42,31 @@ public class MonitorConfiguration {
     @NotNull
     private String state;
 
+    /*
+     * SocialNetwork params
+     */
     @Column(name="keyword_expression")
     private String keywordExpression;
-
     //private List<String> accounts;
 
+    /*
+     * MarketPlaces params
+     */
     @Column(name="package_name")
     private String packageName;
     @Column(name="app_id")
     private String appId;
+    
+    /*
+     * QoS params
+     */
+    @Column(name="url")
+    private String url;
 
     public MonitorConfiguration() {
     }
 
-    public MonitorConfiguration(MonitorTool monitorTool, Integer monitorManagerConfigurationId, String configSender, String timeStamp, String timeSlot, String kafkaEndpoint, String kafkaTopic, String state, String keywordExpression, String packageName, String appId) {
+    public MonitorConfiguration(MonitorTool monitorTool, Integer monitorManagerConfigurationId, String configSender, String timeStamp, String timeSlot, String kafkaEndpoint, String kafkaTopic, String state, String keywordExpression, String packageName, String appId, String url) {
         this.monitorTool = monitorTool;
         this.monitorManagerConfigurationId = monitorManagerConfigurationId;
         this.configSender = configSender;
@@ -67,6 +78,7 @@ public class MonitorConfiguration {
         this.keywordExpression = keywordExpression;
         this.packageName = packageName;
         this.appId = appId;
+        this.url = url;
     }
 
     @Override
@@ -74,10 +86,10 @@ public class MonitorConfiguration {
         return String.format(
                 "MonitorConfiguration[id=%d, monitorTool='%s', monitorManagerConfigurationId=%d, configSender='%s', " +
                         "timeStamp='%s', timeSlot='%s', kafkaEndpoint='%s', " +
-                        "kafkaTopic='%s', state='%s', keywordExpression='%s', packageName='%s', appId='%s']",
+                        "kafkaTopic='%s', state='%s', keywordExpression='%s', packageName='%s', appId='%s', url='%s']",
                 id, monitorTool, monitorManagerConfigurationId, configSender,
                 timeStamp, timeSlot, kafkaEndpoint,
-                kafkaTopic, state, keywordExpression, packageName, appId);
+                kafkaTopic, state, keywordExpression, packageName, appId, url);
     }
 
     public long getId() {
@@ -174,5 +186,13 @@ public class MonitorConfiguration {
 
     public void setAppId(String appId) {
         this.appId = appId;
+    }
+    
+    public String getUrl() {
+    	return url;
+    }
+    
+    public void setUrl(String url) {
+    	this.url = url;
     }
 }

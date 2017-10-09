@@ -40,12 +40,15 @@ public class MonitorConfigurationController extends BaseController {
     @RequestMapping(method = RequestMethod.POST, value = "")
     public MonitorConfiguration createMonitorConfiguration(@RequestBody MonitorConfiguration monitorConfiguration) {
         monitorConfiguration.setMonitorTool(getMonitoringTool());
-        return monitorConfigurationRepository.save(monitorConfiguration);
+        MonitorConfiguration newMonitorConfiguration = monitorConfigurationRepository.save(monitorConfiguration);
+        //TODO add connection to MonitorManager
+        return newMonitorConfiguration;
     }
 
     @PreAuthorize("@securityService.hasAdminPermission()")
     @RequestMapping(method = RequestMethod.DELETE, value = "/{id}")
     public void deleteMonitorConfiguration(@PathVariable long id) {
+    	//TODO add connection to MonitorManager
         monitorConfigurationRepository.delete(id);
     }
 
@@ -53,7 +56,9 @@ public class MonitorConfigurationController extends BaseController {
     @RequestMapping(method = RequestMethod.PUT, value = "/{id}")
     public MonitorConfiguration updateMonitorConfiguration(@RequestBody MonitorConfiguration monitorConfiguration) {
         monitorConfiguration.setMonitorTool(getMonitoringTool());
-        return monitorConfigurationRepository.save(monitorConfiguration);
+        MonitorConfiguration updatedMonitorConfiguration = monitorConfigurationRepository.save(monitorConfiguration);
+        //TODO add connection to MonitorManager
+        return updatedMonitorConfiguration;
     }
 
     private MonitorType getMonitorType() {
