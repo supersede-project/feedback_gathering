@@ -212,8 +212,8 @@ public class JSchTool implements ToolInterface<DiskMonitoringParams> {
 	
 	private void generateLocalhostData(String searchTimeStamp) {        
 		try {
-			
-			Process proc = Runtime.getRuntime().exec(this.confParams.getInstruction());
+			String[] cmd = { "/bin/sh", "-c", this.confParams.getInstruction() };
+			Process proc = Runtime.getRuntime().exec(cmd);
 			BufferedReader reader =  
 		              new BufferedReader(new InputStreamReader(proc.getInputStream()));
 			String msg = null;
