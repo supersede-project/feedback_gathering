@@ -73,7 +73,6 @@ public class JSchTool implements ToolInterface<DiskMonitoringParams> {
 		this.confParams = params;
 		this.configurationId = configurationId;
 		this.kafka = new KafkaCommunication(this.confParams.getKafkaEndpoint());
-		
 		if (this.confParams.getHost().equals("localhost")) 
 			initLocalhostConnection();
 		else
@@ -103,17 +102,18 @@ public class JSchTool implements ToolInterface<DiskMonitoringParams> {
 	}
 	
 	private void initSshConnection() throws Exception {
-		ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-		URL url = classLoader.getResource("ssh");
-		jsch = new JSch();
 		try {
+			ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+			System.out.println(classLoader.getResource(".").getPath());
+			URL url = classLoader.getResource("ssh");
+			jsch = new JSch();
 			jsch.addIdentity(url.toURI().getPath());
-		} catch (JSchException | URISyntaxException e) {
+			resetSshStream();
+		} catch (Exception e) {
 			throw new Exception ("Unable to load identity in SSH connection");
 		}
 		logger.debug("Added private key file");
 		
-		resetSshStream();
 	}
 	
 	private void deleteLocalhostConnection() throws Exception  {
