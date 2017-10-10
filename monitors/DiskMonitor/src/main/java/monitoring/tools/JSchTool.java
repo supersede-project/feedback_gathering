@@ -108,12 +108,11 @@ public class JSchTool implements ToolInterface<DiskMonitoringParams> {
 			URL url = classLoader.getResource("ssh");
 			jsch = new JSch();
 			jsch.addIdentity(url.toURI().getPath());
-			resetSshStream();
 		} catch (Exception e) {
 			throw new Exception ("Unable to load identity in SSH connection");
 		}
 		logger.debug("Added private key file");
-		
+		resetSshStream();
 	}
 	
 	private void deleteLocalhostConnection() throws Exception  {
