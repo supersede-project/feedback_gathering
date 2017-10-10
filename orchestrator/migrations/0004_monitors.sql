@@ -30,7 +30,7 @@ CREATE TABLE `monitor_tool` (
   `monitor_name` varchar(255) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_monitor_type_id` (`monitor_type_id`),
-  CONSTRAINT `fk_monitor_type_id` FOREIGN KEY (`monitor_type_id`) REFERENCES `monitor_type` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `fk_monitor_type_id` FOREIGN KEY (`monitor_type_id`) REFERENCES `monitor_type` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
@@ -47,7 +47,7 @@ CREATE TABLE `monitor_configuration` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `created_at` timestamp(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
   `monitor_tool_id` int(11) NOT NULL,
-  `monitor_manager_configuration_id` int(11) NOT NULL,
+  `monitor_manager_id` int(11) NOT NULL,
   `config_sender` varchar(255) NOT NULL,
   `timestamp` varchar(255) NOT NULL,
   `time_slot` varchar(255) NOT NULL,
@@ -60,7 +60,7 @@ CREATE TABLE `monitor_configuration` (
   `url` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_monitor_tool_id` (`monitor_tool_id`),
-  CONSTRAINT `fk_monitor_tool_id` FOREIGN KEY (`monitor_tool_id`) REFERENCES `monitor_tool` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `fk_monitor_tool_id` FOREIGN KEY (`monitor_tool_id`) REFERENCES `monitor_tool` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
 
 -- ----------------------------

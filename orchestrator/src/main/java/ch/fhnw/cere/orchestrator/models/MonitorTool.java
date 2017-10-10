@@ -25,7 +25,6 @@ public class MonitorTool {
 
     @JsonIgnore
     @ManyToOne(cascade = {CascadeType.REMOVE, CascadeType.MERGE})
-    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "monitor_type_id")
     private MonitorType monitorType;
 

@@ -1,6 +1,9 @@
 package ch.fhnw.cere.orchestrator.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -9,21 +12,22 @@ import javax.validation.constraints.NotNull;
 
 
 @Entity
+@JsonInclude(Include.NON_NULL)
 public class MonitorConfiguration {
 
     @Id
+    @JsonIgnore
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
     @JsonIgnore
     @ManyToOne(cascade = {CascadeType.REMOVE, CascadeType.MERGE})
-    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "monitor_tool_id")
     private MonitorTool monitorTool;
 
-    @Column(name="monitor_manager_configuration_id")
-    private Integer monitorManagerConfigurationId;
-
+    @Column(name="monitor_manager_id")
+    private long monitorManagerId;
+    
     @NotNull
     @Column(name="config_sender")
     private String configSender;
@@ -66,9 +70,8 @@ public class MonitorConfiguration {
     public MonitorConfiguration() {
     }
 
-    public MonitorConfiguration(MonitorTool monitorTool, Integer monitorManagerConfigurationId, String configSender, String timeStamp, String timeSlot, String kafkaEndpoint, String kafkaTopic, String state, String keywordExpression, String packageName, String appId, String url) {
+    public MonitorConfiguration(MonitorTool monitorTool, String configSender, String timeStamp, String timeSlot, String kafkaEndpoint, String kafkaTopic, String state, String keywordExpression, String packageName, String appId, String url) {
         this.monitorTool = monitorTool;
-        this.monitorManagerConfigurationId = monitorManagerConfigurationId;
         this.configSender = configSender;
         this.timeStamp = timeStamp;
         this.timeSlot = timeSlot;
@@ -84,10 +87,10 @@ public class MonitorConfiguration {
     @Override
     public String toString() {
         return String.format(
-                "MonitorConfiguration[id=%d, monitorTool='%s', monitorManagerConfigurationId=%d, configSender='%s', " +
+                "MonitorConfiguration[id=%d, monitorTool='%s', configSender='%s', " +
                         "timeStamp='%s', timeSlot='%s', kafkaEndpoint='%s', " +
                         "kafkaTopic='%s', state='%s', keywordExpression='%s', packageName='%s', appId='%s', url='%s']",
-                id, monitorTool, monitorManagerConfigurationId, configSender,
+                id, monitorTool, configSender,
                 timeStamp, timeSlot, kafkaEndpoint,
                 kafkaTopic, state, keywordExpression, packageName, appId, url);
     }
@@ -106,14 +109,6 @@ public class MonitorConfiguration {
 
     public void setMonitorTool(MonitorTool monitorTool) {
         this.monitorTool = monitorTool;
-    }
-
-    public Integer getMonitorManagerConfigurationId() {
-        return monitorManagerConfigurationId;
-    }
-
-    public void setMonitorManagerConfigurationId(Integer monitorManagerConfigurationId) {
-        this.monitorManagerConfigurationId = monitorManagerConfigurationId;
     }
 
     public String getConfigSender() {
@@ -194,5 +189,13 @@ public class MonitorConfiguration {
     
     public void setUrl(String url) {
     	this.url = url;
+    }
+    
+    public long getMonitorManagerId() {
+    	return monitorManagerId;
+    }
+    
+    public void setMonitorManagerId(long id) {
+    	this.monitorManagerId = id;
     }
 }

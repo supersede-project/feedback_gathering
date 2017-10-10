@@ -49,8 +49,8 @@ public class MonitorConfigurationIntegrationTest extends BaseIntegrationTest {
         this.monitorTool1 = monitorToolRepository.save(new MonitorTool("SocialNetworksTool1", null, monitorType1, "Social Networks Tool 1 Name"));
         this.monitorTool2 = monitorToolRepository.save(new MonitorTool("MarketPlacesTool1", null, monitorType2, "Market Places Tool 1 Name"));
 
-        this.monitorConfiguration1 = monitorConfigurationRepository.save(new MonitorConfiguration(monitorTool1, 1, "WP4", "Sat June 08 02:16:57 2016", "500", "http://localhost:9092", "olympicGamesTwitterMonitoring", "active", "keyword1 AND keyword2", null, null, null));
-        this.monitorConfiguration2 = monitorConfigurationRepository.save(new MonitorConfiguration(monitorTool1, 1, "manual", "Sat June 08 02:16:57 2016", "304", "http://localhost:9092", "ignoreMe", "active", "keyword4 AND keyword AND keyword5", null, null, null));
+        this.monitorConfiguration1 = monitorConfigurationRepository.save(new MonitorConfiguration(monitorTool1, "WP4", "Sat June 08 02:16:57 2016", "500", "http://localhost:9092", "olympicGamesTwitterMonitoring", "active", "keyword1 AND keyword2", null, null, null));
+        this.monitorConfiguration2 = monitorConfigurationRepository.save(new MonitorConfiguration(monitorTool1, "manual", "Sat June 08 02:16:57 2016", "304", "http://localhost:9092", "ignoreMe", "active", "keyword4 AND keyword AND keyword5", null, null, null));
     }
 
     @After
@@ -73,7 +73,7 @@ public class MonitorConfigurationIntegrationTest extends BaseIntegrationTest {
 
     @Test(expected = Exception.class)
     public void createMonitorConfigurationUnauthorized() throws Exception {
-        MonitorConfiguration monitorConfiguration = new MonitorConfiguration(monitorTool1, 1, "sender", "Sat June 08 02:16:57 2017", "100", "http://localhost:9092", "ignoreMeAgain", "active", "keyword44 AND keyword AND keyword55", null, null, null);
+        MonitorConfiguration monitorConfiguration = new MonitorConfiguration(monitorTool1, "sender", "Sat June 08 02:16:57 2017", "100", "http://localhost:9092", "ignoreMeAgain", "active", "keyword44 AND keyword AND keyword55", null, null, null);
         String monitorConfigurationJson = toJson(monitorConfiguration);
 
         this.mockMvc.perform(post(basePath + "/SocialNetworks/Tools/SocialNetworksTool1/ToolConfigurations")
@@ -85,7 +85,7 @@ public class MonitorConfigurationIntegrationTest extends BaseIntegrationTest {
     @Test
     public void createMonitorConfiguration() throws Exception {
         String adminJWTToken = requestAppAdminJWTToken();
-        MonitorConfiguration monitorConfiguration = new MonitorConfiguration(monitorTool1, 1, "sender", "Sat June 08 02:16:57 2017", "100", "http://localhost:9092", "ignoreMeAgain", "active", "keyword44 AND keyword AND keyword55", null, null, null);
+        MonitorConfiguration monitorConfiguration = new MonitorConfiguration(monitorTool1, "sender", "Sat June 08 02:16:57 2017", "100", "http://localhost:9092", "ignoreMeAgain", "active", "keyword44 AND keyword AND keyword55", null, null, null);
         String monitorConfigurationJson = toJson(monitorConfiguration);
 
         this.mockMvc.perform(post(basePath + "/SocialNetworks/Tools/SocialNetworksTool1/ToolConfigurations")
