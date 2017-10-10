@@ -33,6 +33,6 @@ mvn clean package
 
 cd ../DiskMonitor
 echo -e "\nCleaning and building DiskMonitor Monitor...\n"
-cp /home/tomcat/.ssh/id_rsa src/main/webapp/ssh
+cp /home/tomcat/ssh src/main/resources/ssh
 ./gradlew clean build --refresh-dependencies
 
