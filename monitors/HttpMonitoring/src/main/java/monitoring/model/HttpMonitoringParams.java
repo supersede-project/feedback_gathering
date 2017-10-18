@@ -21,27 +21,20 @@
  *******************************************************************************/
 package monitoring.model;
 
-import java.io.File;
-import java.util.List;
 import java.util.Map;
+
+import org.json.JSONObject;
+import org.springframework.web.multipart.MultipartFile;
 
 import monitoring.model.MonitoringParams;
 
 public class HttpMonitoringParams extends MonitoringParams {
 	
 	String url;
-	String method;
+	Method method;
 	Map<String, String> headers;
-	String body;
-	List<File> files;
-
-	public List<File> getFiles() {
-		return files;
-	}
-
-	public void setFiles(List<File> files) {
-		this.files = files;
-	}
+	JSONObject body;
+	MultipartFile file;
 
 	public String getUrl() {
 		return url;
@@ -51,11 +44,11 @@ public class HttpMonitoringParams extends MonitoringParams {
 		this.url = url;
 	}
 	
-	public String getMethod() {
+	public Method getMethod() {
 		return method;
 	}
 	
-	public void setMethod(String method) {
+	public void setMethod(Method method) {
 		this.method = method;
 	}
 	
@@ -67,12 +60,20 @@ public class HttpMonitoringParams extends MonitoringParams {
 		this.headers = headers;
 	}
 	
-	public String getBody() {
+	public JSONObject getBody() {
 		return body;
 	}
 	
-	public void setBody(String body) {
+	public void setBody(JSONObject body) {
 		this.body = body;
+	}
+	
+	public MultipartFile getFile() {
+		return file;
+	}
+	
+	public void setFile(MultipartFile file) {
+		this.file = file;
 	}
 	
 }

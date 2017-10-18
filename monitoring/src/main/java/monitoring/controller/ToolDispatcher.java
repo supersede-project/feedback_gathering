@@ -69,7 +69,7 @@ public class ToolDispatcher {
 			monitoringInstances.put(confId, toolInstance);
 			return getResponse(confId);
 		} catch (JSONException e) {
-			return throwError("Not a valid JSON configuration object");
+			return throwError("Wrong JSON Object");
 		} catch (InstantiationException e) {
 			return throwError("Monitor class must be concrete");
 		} catch (IllegalAccessException e) {

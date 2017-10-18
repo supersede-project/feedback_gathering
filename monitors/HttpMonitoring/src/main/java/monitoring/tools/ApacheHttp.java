@@ -21,6 +21,8 @@
  *******************************************************************************/
 package monitoring.tools;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
@@ -32,14 +34,21 @@ import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.HeadMethod;
+import org.apache.commons.httpclient.methods.PostMethod;
+import org.apache.commons.httpclient.methods.multipart.FilePart;
+import org.apache.commons.httpclient.methods.multipart.MultipartRequestEntity;
+import org.apache.commons.httpclient.methods.multipart.Part;
+import org.apache.commons.httpclient.methods.multipart.StringPart;
 import org.apache.commons.httpclient.params.HttpClientParams;
 import org.apache.log4j.Logger;
 import org.springframework.util.StopWatch;
+import org.springframework.web.multipart.MultipartFile;
 
 import monitoring.controller.ToolInterface;
 import monitoring.kafka.KafkaCommunication;
 import monitoring.model.HttpMonitoringData;
 import monitoring.model.HttpMonitoringParams;
+import monitoring.model.Method;
 
 public class ApacheHttp implements ToolInterface<HttpMonitoringParams> {
 	
@@ -82,7 +91,7 @@ public class ApacheHttp implements ToolInterface<HttpMonitoringParams> {
 		resetStream();
 	}
 	
-	private void resetStream() {
+	private void resetStream() throws Exception {
 		logger.debug("Initialising streaming...");
 		
 		this.firstConnection = true;
@@ -90,11 +99,31 @@ public class ApacheHttp implements ToolInterface<HttpMonitoringParams> {
 		HttpClientParams httpParams = new HttpClientParams();
 		httpParams.setConnectionManagerTimeout(30000);
 		httpParams.setSoTimeout(30000);
+		
 	    this.client = new HttpClient();
 	    this.client.setParams(httpParams);
-        this.method = new GetMethod(this.confParams.getUrl());
+        if (this.confParams.getMethod().equals(Method.GET)) {
+        	
+        	this.method = new GetMethod(this.confParams.getUrl());
+        	
+        } else if (this.confParams.getMethod().equals(Method.POST)) {
+        	
+        	PostMethod postMethod = new PostMethod(this.confParams.getUrl());
+        	for (String key : this.confParams.getHeaders().keySet()) {
+        		postMethod.setRequestHeader(key, this.confParams.getHeaders().get(key));
+        	}
+        	Part[] parts = {
+        			new StringPart("json", this.confParams.getBody().toString()),
+        			new FilePart(this.confParams.getFile().getName(), convert(this.confParams.getFile()))
+        	};
+        	postMethod.setRequestEntity(
+        			new MultipartRequestEntity(parts, postMethod.getParams())
+        			);
+        	this.method = postMethod;
+        }
         
 		timer = new Timer();
+		long time = (long) (Double.parseDouble(confParams.getTimeSlot())*1000);
 		timer.schedule(new TimerTask() {
 			@Override
 			public void run() {
@@ -104,8 +133,17 @@ public class ApacheHttp implements ToolInterface<HttpMonitoringParams> {
 		    		generateData((new Timestamp((new Date()).getTime()).toString()));
 		    	}
 			}
-		}, 0, Integer.parseInt(confParams.getTimeSlot())* 1000);
+		}, 0, time);
 		
+	}
+	
+	public File convert(MultipartFile file) throws Exception {    
+	    File convFile = new File(file.getOriginalFilename());
+	    convFile.createNewFile(); 
+	    FileOutputStream fos = new FileOutputStream(convFile); 
+	    fos.write(file.getBytes());
+	    fos.close(); 
+	    return convFile;
 	}
 	
 	private void generateData(String searchTimeStamp) {
@@ -118,6 +156,7 @@ public class ApacheHttp implements ToolInterface<HttpMonitoringParams> {
             client.executeMethod(method);
         } catch (Exception e) {
         	success = false;
+        	System.out.println(e);
         	solveHttpConnection(searchTimeStamp, watch, 404);
         } finally {
         	if (success) {
