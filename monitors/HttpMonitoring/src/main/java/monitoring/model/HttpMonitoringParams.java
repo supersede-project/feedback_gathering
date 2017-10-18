@@ -21,11 +21,27 @@
  *******************************************************************************/
 package monitoring.model;
 
+import java.io.File;
+import java.util.List;
+import java.util.Map;
+
 import monitoring.model.MonitoringParams;
 
 public class HttpMonitoringParams extends MonitoringParams {
 	
 	String url;
+	String method;
+	Map<String, String> headers;
+	String body;
+	List<File> files;
+
+	public List<File> getFiles() {
+		return files;
+	}
+
+	public void setFiles(List<File> files) {
+		this.files = files;
+	}
 
 	public String getUrl() {
 		return url;
@@ -35,5 +51,28 @@ public class HttpMonitoringParams extends MonitoringParams {
 		this.url = url;
 	}
 	
-
+	public String getMethod() {
+		return method;
+	}
+	
+	public void setMethod(String method) {
+		this.method = method;
+	}
+	
+	public Map<String, String> getHeaders() {
+		return headers;
+	}
+	
+	public void setHeaders(Map<String,String> headers) {
+		this.headers = headers;
+	}
+	
+	public String getBody() {
+		return body;
+	}
+	
+	public void setBody(String body) {
+		this.body = body;
+	}
+	
 }
