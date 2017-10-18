@@ -113,8 +113,12 @@ public class ToolDispatcher {
 		}
 		return getResponse(id);
 	}
+	
+	public ParserConfiguration getParser() {
+		return parser;
+	}
 
-	public String throwError(String error) {
+	private String throwError(String error) {
 		JSONObject response = new JSONObject();
 		JSONObject resInfo = new JSONObject();
 		try {
@@ -127,7 +131,7 @@ public class ToolDispatcher {
 		return response.toString();
 	}
 	
-	public String getResponse(int id) {
+	private String getResponse(int id) {
 		JSONObject response = new JSONObject();
 		JSONObject resInfo = new JSONObject();
 		try {

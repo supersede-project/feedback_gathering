@@ -54,9 +54,7 @@ public class HttpToolDispatcher {
 			@RequestParam(value="file", required=false) MultipartFile file, 
 			@RequestBody(required=false) String jsonConf, HttpServletRequest request) {
 		if (request.getContentType().contains(MediaType.MULTIPART_FORM_DATA.toString())) {
-			HttpParserConfiguration parser = new HttpParserConfiguration();
-			parser.setFile(file);
-			toolDispatcher = new ToolDispatcher(parser, result);
+			((HttpParserConfiguration) toolDispatcher.getParser()).setFile(file);
 			return toolDispatcher.addConfiguration(json);
 		} else {
 			return toolDispatcher.addConfiguration(jsonConf);

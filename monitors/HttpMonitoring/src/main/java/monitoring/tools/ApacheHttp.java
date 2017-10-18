@@ -36,11 +36,13 @@ import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.HeadMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
+import org.apache.commons.httpclient.methods.StringRequestEntity;
 import org.apache.commons.httpclient.methods.multipart.FilePart;
 import org.apache.commons.httpclient.methods.multipart.MultipartRequestEntity;
 import org.apache.commons.httpclient.methods.multipart.Part;
 import org.apache.commons.httpclient.methods.multipart.StringPart;
 import org.apache.commons.httpclient.params.HttpClientParams;
+import org.apache.http.entity.StringEntity;
 import org.apache.log4j.Logger;
 import org.springframework.util.StopWatch;
 import org.springframework.web.multipart.MultipartFile;
@@ -132,13 +134,17 @@ public class ApacheHttp implements ToolInterface<HttpMonitoringParams> {
     	for (String key : this.confParams.getHeaders().keySet()) {
     		postMethod.setRequestHeader(key, this.confParams.getHeaders().get(key));
     	}
-    	Part[] parts = {
-    			new StringPart("json", this.confParams.getBody().toString()),
-    			new FilePart(this.confParams.getFile().getName(), convert(this.confParams.getFile()))
-    	};
-    	postMethod.setRequestEntity(
-    			new MultipartRequestEntity(parts, postMethod.getParams())
-    			);
+    	if (this.confParams.getFile() != null) {
+	    	Part[] parts = {
+	    			new StringPart("json", this.confParams.getBody().toString()),
+	    			new FilePart(this.confParams.getFile().getName(), convert(this.confParams.getFile()))
+	    	};
+	    	postMethod.setRequestEntity(
+	    			new MultipartRequestEntity(parts, postMethod.getParams())
+	    			);
+    	} else {
+    		postMethod.setRequestEntity(new StringRequestEntity(this.confParams.getBody().toString()));
+    	}
     	this.method = postMethod;
 	}
 
@@ -166,7 +172,7 @@ public class ApacheHttp implements ToolInterface<HttpMonitoringParams> {
         } catch (Exception e) {
         	success = false;
         	System.out.println(e);
-        	solveHttpConnection(searchTimeStamp, watch, 404);
+        	solveHttpConnection(searchTimeStamp, watch, 500);
         } finally {
         	if (success) {
 	        	solveHttpConnection(searchTimeStamp, watch, method.getStatusCode());
