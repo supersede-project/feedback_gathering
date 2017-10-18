@@ -22,6 +22,7 @@
 package monitoring.tools;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -102,25 +103,14 @@ public class ApacheHttp implements ToolInterface<HttpMonitoringParams> {
 		
 	    this.client = new HttpClient();
 	    this.client.setParams(httpParams);
-        if (this.confParams.getMethod().equals(Method.GET)) {
-        	
-        	this.method = new GetMethod(this.confParams.getUrl());
-        	
-        } else if (this.confParams.getMethod().equals(Method.POST)) {
-        	
-        	PostMethod postMethod = new PostMethod(this.confParams.getUrl());
-        	for (String key : this.confParams.getHeaders().keySet()) {
-        		postMethod.setRequestHeader(key, this.confParams.getHeaders().get(key));
-        	}
-        	Part[] parts = {
-        			new StringPart("json", this.confParams.getBody().toString()),
-        			new FilePart(this.confParams.getFile().getName(), convert(this.confParams.getFile()))
-        	};
-        	postMethod.setRequestEntity(
-        			new MultipartRequestEntity(parts, postMethod.getParams())
-        			);
-        	this.method = postMethod;
-        }
+	    
+	    if (this.confParams.getMethod() == null)
+	    	throw new Exception("Missing method type");
+        if (this.confParams.getMethod().equals(Method.GET)) 
+        	initGetMethod();
+        else if (this.confParams.getMethod().equals(Method.POST)) 
+        	initPostMethod();
+        else throw new Exception("Method type not implemented");
         
 		timer = new Timer();
 		long time = (long) (Double.parseDouble(confParams.getTimeSlot())*1000);
@@ -137,6 +127,25 @@ public class ApacheHttp implements ToolInterface<HttpMonitoringParams> {
 		
 	}
 	
+	private void initPostMethod() throws FileNotFoundException, Exception {
+		PostMethod postMethod = new PostMethod(this.confParams.getUrl());
+    	for (String key : this.confParams.getHeaders().keySet()) {
+    		postMethod.setRequestHeader(key, this.confParams.getHeaders().get(key));
+    	}
+    	Part[] parts = {
+    			new StringPart("json", this.confParams.getBody().toString()),
+    			new FilePart(this.confParams.getFile().getName(), convert(this.confParams.getFile()))
+    	};
+    	postMethod.setRequestEntity(
+    			new MultipartRequestEntity(parts, postMethod.getParams())
+    			);
+    	this.method = postMethod;
+	}
+
+	private void initGetMethod() {
+		this.method = new GetMethod(this.confParams.getUrl());
+	}
+
 	public File convert(MultipartFile file) throws Exception {    
 	    File convFile = new File(file.getOriginalFilename());
 	    convFile.createNewFile(); 
