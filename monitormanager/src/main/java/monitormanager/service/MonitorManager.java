@@ -45,8 +45,8 @@ public class MonitorManager implements IMonitorManager {
 				TwitterMonitorProxy<?,?> proxyT = new TwitterMonitorProxy<>();
 				TwitterMonitorConfiguration confT = parser.getTwitterConfiguration(jsonObj);
 				TwitterMonitorConfiguration resultT = proxyT.createMonitorConfiguration(confT);
-				log.debug("Obtained TwitterMonitorConfiguration: " + resultT);
-				System.out.println("Obtained TwitterMonitorConfiguration: " + resultT);
+				log.debug("Obtained TwitterMonitorConfiguration with id: " + resultT.getId());
+				System.out.println("Obtained TwitterMonitorConfiguration with id: " + resultT.getId());
 				return getResponse(resultT);
 			case "GooglePlay":
 				GooglePlayMonitorProxy<?,?> proxyG = new GooglePlayMonitorProxy<>();
@@ -138,6 +138,8 @@ public class MonitorManager implements IMonitorManager {
 		JsonObject json = new JsonObject();
 		json.addProperty("idConf", result.getId());
 		json.addProperty("status", "success");
+		log.debug("Created JsonObject response with id: " + result.getId());
+		System.out.println("Created JsonObject response with id: " + result.getId());
 		return json;
 	}
 	
