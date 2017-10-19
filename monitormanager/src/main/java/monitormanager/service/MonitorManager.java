@@ -39,12 +39,14 @@ public class MonitorManager implements IMonitorManager {
 	public JsonObject addConfiguration(@PathVariable String monitorName, @RequestBody String input) throws Exception {
 		JsonObject jsonObj = getJson(input);
 		log.debug("Received new configuration for monitor: " + monitorName);
+		System.out.println("Received new configuration for monitor: " + monitorName);
 		switch (monitorName) {
 			case "Twitter":
 				TwitterMonitorProxy<?,?> proxyT = new TwitterMonitorProxy<>();
 				TwitterMonitorConfiguration confT = parser.getTwitterConfiguration(jsonObj);
 				TwitterMonitorConfiguration resultT = proxyT.createMonitorConfiguration(confT);
 				log.debug("Obtained TwitterMonitorConfiguration: " + resultT);
+				System.out.println("Obtained TwitterMonitorConfiguration: " + resultT);
 				return getResponse(resultT);
 			case "GooglePlay":
 				GooglePlayMonitorProxy<?,?> proxyG = new GooglePlayMonitorProxy<>();
