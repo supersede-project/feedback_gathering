@@ -1,5 +1,8 @@
 package monitormanager.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -27,7 +30,7 @@ import monitormanager.model.ConfigurationParser;
 @RequestMapping(value = "/")
 @RestController
 public class MonitorManager implements IMonitorManager {
-		
+	private final Logger log = LoggerFactory.getLogger(this.getClass());	
 	private ConfigurationParser parser = new ConfigurationParser();
 
 	@Override
@@ -40,6 +43,7 @@ public class MonitorManager implements IMonitorManager {
 				TwitterMonitorProxy<?,?> proxyT = new TwitterMonitorProxy<>();
 				TwitterMonitorConfiguration confT = parser.getTwitterConfiguration(jsonObj);
 				TwitterMonitorConfiguration resultT = proxyT.createMonitorConfiguration(confT);
+				log.debug("Obtained TwitterMonitorConfiguration: " + resultT);
 				return getResponse(resultT);
 			case "GooglePlay":
 				GooglePlayMonitorProxy<?,?> proxyG = new GooglePlayMonitorProxy<>();
@@ -71,6 +75,7 @@ public class MonitorManager implements IMonitorManager {
 			TwitterMonitorConfiguration conf = parser.getTwitterConfiguration(jsonObj);
 			conf.setId(confId);
 			TwitterMonitorConfiguration result = proxy.updateMonitorConfiguration(conf);
+			
 			return getResponse(result);
 		} else if (monitorName.equals("GooglePlay")) {
 			GooglePlayMonitorProxy<?,?> proxy = new GooglePlayMonitorProxy<>();
