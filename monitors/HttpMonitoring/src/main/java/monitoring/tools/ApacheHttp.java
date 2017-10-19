@@ -31,6 +31,7 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import org.apache.commons.httpclient.Header;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.methods.GetMethod;
@@ -143,7 +144,10 @@ public class ApacheHttp implements ToolInterface<HttpMonitoringParams> {
 	    			new MultipartRequestEntity(parts, postMethod.getParams())
 	    			);
     	} else {
-    		postMethod.setRequestEntity(new StringRequestEntity(this.confParams.getBody().toString()));
+    		postMethod.setRequestEntity(
+    				new StringRequestEntity(this.confParams.getBody().toString(), 
+    				"application/json",
+    			    "UTF-8"));
     	}
     	this.method = postMethod;
 	}
