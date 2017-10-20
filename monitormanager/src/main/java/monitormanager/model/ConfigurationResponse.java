@@ -5,9 +5,7 @@ public class ConfigurationResponse {
 	private int id;
 
 	private String status;
-	
-	private String message;
-	
+		
 	public int getId() {
 		return id;
 	}
@@ -22,14 +20,6 @@ public class ConfigurationResponse {
 
 	public void setStatus(String status) {
 		this.status = status;
-	}
-
-	public String getMessage() {
-		return message;
-	}
-
-	public void setMessage(String message) {
-		this.message = message;
 	}
 	
 }

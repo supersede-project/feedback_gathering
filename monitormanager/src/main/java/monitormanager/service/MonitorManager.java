@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
@@ -26,6 +25,7 @@ import eu.supersede.integration.api.monitoring.monitors.proxies.HttpMonitorProxy
 import eu.supersede.integration.api.monitoring.monitors.proxies.TwitterMonitorProxy;
 
 import monitormanager.model.ConfigurationParser;
+import monitormanager.model.ConfigurationResponse;
 
 @RequestMapping(value = "/")
 @RestController
@@ -36,7 +36,7 @@ public class MonitorManager implements IMonitorManager {
 	@Override
 	@RequestMapping(value = "/{monitorName}/configuration", method = RequestMethod.POST)
 	@ResponseStatus(value = HttpStatus.CREATED)
-	public JsonObject addConfiguration(@PathVariable String monitorName, @RequestBody String input) throws Exception {
+	public ConfigurationResponse addConfiguration(@PathVariable String monitorName, @RequestBody String input) throws Exception {
 		JsonObject jsonObj = getJson(input);
 		log.debug("Received new configuration for monitor: " + monitorName);
 		System.out.println("Received new configuration for monitor: " + monitorName);
@@ -70,7 +70,7 @@ public class MonitorManager implements IMonitorManager {
 	@Override
 	@RequestMapping(value = "/{monitorName}/configuration/{confId}", method = RequestMethod.PUT)
 	@ResponseStatus(value = HttpStatus.OK)
-	public JsonObject updateConfiguration(@PathVariable String monitorName,
+	public ConfigurationResponse updateConfiguration(@PathVariable String monitorName,
 			@PathVariable int confId, @RequestBody String input) throws Exception {
 		JsonObject jsonObj = getJson(input);
 		if (monitorName.equals("Twitter")) {
@@ -134,13 +134,16 @@ public class MonitorManager implements IMonitorManager {
 		return json;
 }
 	
-	private JsonObject getResponse(MonitorSpecificConfiguration result) {
-		JsonObject json = new JsonObject();
+	private ConfigurationResponse getResponse(MonitorSpecificConfiguration result) {
+		/*JsonObject json = new JsonObject();
 		json.addProperty("idConf", result.getId());
-		json.addProperty("status", "success");
+		json.addProperty("status", "success");*/
+		ConfigurationResponse res = new ConfigurationResponse();
+		res.setId(result.getId());
+		res.setStatus("Success");
 		log.debug("Created JsonObject response with id: " + result.getId());
 		System.out.println("Created JsonObject response with id: " + result.getId());
-		return json;
+		return res;
 	}
 	
 }
