@@ -116,7 +116,6 @@ public class ApacheHttp implements ToolInterface<HttpMonitoringParams> {
         else throw new Exception("Method type not implemented");
         
 		timer = new Timer();
-		long time = (long) (Double.parseDouble(confParams.getTimeSlot())*1000);
 		timer.schedule(new TimerTask() {
 			@Override
 			public void run() {
@@ -126,7 +125,7 @@ public class ApacheHttp implements ToolInterface<HttpMonitoringParams> {
 		    		generateData((new Timestamp((new Date()).getTime()).toString()));
 		    	}
 			}
-		}, 0, time);
+		}, 0, Integer.parseInt(confParams.getTimeSlot()));
 		
 	}
 	
