@@ -1,12 +1,13 @@
 package monitormanager.service;
 
-import monitormanager.model.ConfigurationResponse;
+import monitormanager.model.MonitorManagerSpecificConfiguration;
+import monitormanager.model.MonitorManagerSpecificConfigurationResult;
 
 public interface IMonitorManager {
 	
-	ConfigurationResponse addConfiguration(String monitorName, String input) throws Exception;
+	MonitorManagerSpecificConfigurationResult addConfiguration(String monitorName, MonitorManagerSpecificConfiguration input) throws Exception;
 	
-	ConfigurationResponse updateConfiguration(String monitorName, int confId, String input) throws Exception;
+	MonitorManagerSpecificConfigurationResult updateConfiguration(String monitorName, int confId, MonitorManagerSpecificConfiguration input) throws Exception;
 	
 	void deleteConfiguration(String monitorName, int confId) throws Exception;
 

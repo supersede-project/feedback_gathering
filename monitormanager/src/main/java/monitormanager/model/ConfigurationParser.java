@@ -21,13 +21,6 @@
  *******************************************************************************/
 package monitormanager.model;
 
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.ArrayList;
-
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-
 import eu.supersede.integration.api.monitoring.manager.types.AppStoreMonitorConfiguration;
 import eu.supersede.integration.api.monitoring.manager.types.GooglePlayMonitorConfiguration;
 import eu.supersede.integration.api.monitoring.manager.types.HttpMonitorConfiguration;
@@ -36,64 +29,41 @@ import eu.supersede.integration.api.monitoring.manager.types.TwitterMonitorConfi
 
 public class ConfigurationParser {
 
-	public TwitterMonitorConfiguration getTwitterConfiguration(JsonObject json) throws Exception {
-		JsonObject in = json.getAsJsonObject("SocialNetworks");
-		TwitterMonitorConfiguration configuration = new TwitterMonitorConfiguration();
-		setMonitorConfigurationParams(configuration, in);
-		if (in.has("keywordExpression")) configuration.setKeywordExpression(in.get("keywordExpression").getAsString());
-		if (in.has("accounts")) {
-			ArrayList<String> listdata = new ArrayList<>();     
-			JsonArray jArray = in.get("accounts").getAsJsonArray(); 
-			if (jArray != null) { 
-			   for (int i=0; i < jArray.size(); ++i){ 
-				   listdata.add(jArray.get(i).getAsString());
-			   } 
-			} 
-			configuration.setAccounts(listdata);
-		}
-		
-		return configuration;
+	public TwitterMonitorConfiguration getTwitterConfiguration(TwitterMonitorManagerConfiguration conf) throws Exception {
+		TwitterMonitorConfiguration newConf = new TwitterMonitorConfiguration();
+		setMonitorConfigurationParams(newConf, conf);
+		newConf.setAccounts(conf.getAccounts());
+		newConf.setKeywordExpression(conf.getKeywordExpression());
+		return newConf;
 	}
 	
-	public GooglePlayMonitorConfiguration getGooglePlayConfiguration(JsonObject json) throws Exception {
-		JsonObject in = json.getAsJsonObject("MarketPlaces");
-		GooglePlayMonitorConfiguration configuration = new GooglePlayMonitorConfiguration();
-		setMonitorConfigurationParams(configuration, in);
-		if (in.has("packageName")) configuration.setPackageName(in.get("packageName").getAsString());
-		
-		return configuration;
+	public GooglePlayMonitorConfiguration getGooglePlayConfiguration(GooglePlayMonitorManagerConfiguration conf) throws Exception {
+		GooglePlayMonitorConfiguration newConf = new GooglePlayMonitorConfiguration();
+		setMonitorConfigurationParams(newConf, conf);
+		newConf.setPackageName(conf.getPackageName());
+		return newConf;
 	}
 	
-	public AppStoreMonitorConfiguration getAppStoreConfiguration(JsonObject json) throws Exception {
-		JsonObject in = json.getAsJsonObject("MarketPlaces");
-		AppStoreMonitorConfiguration configuration = new AppStoreMonitorConfiguration();
-		setMonitorConfigurationParams(configuration, in);
-		if (in.has("appId")) configuration.setAppId(in.get("appId").getAsString());
-		
-		return configuration;
+	public AppStoreMonitorConfiguration getAppStoreConfiguration(AppStoreMonitorManagerConfiguration conf) throws Exception {
+		AppStoreMonitorConfiguration newConf = new AppStoreMonitorConfiguration();
+		setMonitorConfigurationParams(newConf, conf);
+		newConf.setAppId(conf.getappId());
+		return newConf;
 	}
 	
-	public HttpMonitorConfiguration getHttpConfiguration(JsonObject json) throws Exception {
-		JsonObject in = json.getAsJsonObject("QoS");
-		HttpMonitorConfiguration configuration = new HttpMonitorConfiguration();
-		setMonitorConfigurationParams(configuration, in);
-		if (in.has("url")) configuration.setUrl(in.get("url").getAsString());
-		
-		return configuration;
+	public HttpMonitorConfiguration getHttpConfiguration(HttpMonitorManagerConfiguration conf) throws Exception {
+		HttpMonitorConfiguration newConf = new HttpMonitorConfiguration();
+		setMonitorConfigurationParams(newConf, conf);
+		newConf.setUrl(conf.getUrl());
+		return newConf;
 	}
 	
-	private void setMonitorConfigurationParams(MonitorSpecificConfiguration configuration, JsonObject in) throws Exception {
-		if (in.has("kafkaEndpoint"))
-			try {
-				configuration.setKafkaEndpoint(new URL(in.get("kafkaEndpoint").getAsString()));
-			} catch (MalformedURLException e) {
-				throw new Exception("Invalid kafkaEndpoint");
-			}
-		if (in.has("kafkaTopic")) configuration.setKafkaTopic(in.get("kafkaTopic").getAsString());
-		if (in.has("timeSlot")) configuration.setTimeSlot(in.get("timeSlot").getAsInt());
-		if (in.has("toolName")) {
-			configuration.setToolName(in.get("toolName").getAsString());
-		}
+	private void setMonitorConfigurationParams(MonitorSpecificConfiguration newConfiguration, MonitorManagerSpecificConfiguration conf) throws Exception {
+		newConfiguration.setId(conf.getId());
+		newConfiguration.setKafkaEndpoint(conf.getKafkaEndpoint());
+		newConfiguration.setKafkaTopic(conf.getKafkaTopic());
+		newConfiguration.setTimeSlot(conf.getTimeSlot());
+		newConfiguration.setToolName(conf.getToolName());
 	}
 	
 }
