@@ -62,8 +62,15 @@ public class HttpToolDispatcher {
 	}
 	
 	@RequestMapping(value = "/configuration/{id}", method = RequestMethod.PUT)
-	public String updateConfiguration(@PathVariable("id") Integer id, @RequestBody String jsonConf) throws Exception {
-		return toolDispatcher.updateConfiguration(id,  jsonConf);
+	public String updateConfiguration(@PathVariable("id") Integer id, @RequestParam(value="json", required=false) String json, 
+			@RequestParam(value="file", required=false) MultipartFile file, 
+			@RequestBody(required=false) String jsonConf, HttpServletRequest request) throws Exception {
+		if (request.getContentType().contains(MediaType.MULTIPART_FORM_DATA.toString())) {
+			((HttpParserConfiguration) toolDispatcher.getParser()).setFile(file);
+			return toolDispatcher.updateConfiguration(id, json);
+		} else {
+			return toolDispatcher.updateConfiguration(id, jsonConf);
+		}
 	}
 	
 	@RequestMapping(value = "/configuration/{id}", method = RequestMethod.DELETE)
