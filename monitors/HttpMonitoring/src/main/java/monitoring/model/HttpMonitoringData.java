@@ -29,11 +29,22 @@ public class HttpMonitoringData implements MonitoringData {
 	
 	private String responseTime;
 	private String responseCode;
+	private String timeSlot;
 	
-	public HttpMonitoringData(String responseTime, String responseCode) {
+	public HttpMonitoringData(String responseTime, String responseCode, String timeSlot) {
 		this.responseTime = responseTime;
 		this.responseCode = responseCode;
+		this.timeSlot = timeSlot;
 	}
+	
+	public String getTimeSlot() {
+		return timeSlot;
+	}
+
+	public void setTimeSlot(String timeSlot) {
+		this.timeSlot = timeSlot;
+	}
+
 	
 	public String getResponseTime() {
 		return responseTime;
