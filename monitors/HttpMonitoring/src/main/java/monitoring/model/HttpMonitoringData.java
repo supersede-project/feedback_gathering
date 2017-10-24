@@ -67,6 +67,7 @@ public class HttpMonitoringData implements MonitoringData {
 		JSONObject json = new JSONObject();
 		json.put("responseTime", this.responseTime);
 		json.put("responseCode", this.responseCode);
+		json.put("timeSlot", this.timeSlot);
 		return json;
 	}
 
