@@ -21,41 +21,59 @@
  *******************************************************************************/
 package monitoring.controller;
 
-import javax.inject.Singleton;
-import javax.ws.rs.DELETE;
-import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-
 import org.apache.log4j.Logger;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import monitoring.controller.ToolDispatcher;
 import monitoring.model.HttpParserConfiguration;
 
-@Path("configuration")
-@Singleton
+@RequestMapping(value = "/")
+@RestController
 public class HttpToolDispatcher {
 	
-	final static Logger logger = Logger.getLogger(HttpToolDispatcher.class);
+	private final static Logger logger = Logger.getLogger(HttpToolDispatcher.class);
+	private final static String result = "HttpMonitoringConfProfResult";
 	
 	private ToolDispatcher toolDispatcher = 
-			new ToolDispatcher(new HttpParserConfiguration(), "HttpMonitoringConfProfResult");
+			new ToolDispatcher(new HttpParserConfiguration(), result);
 	
-	@POST
-	public String addConfiguration(String jsonConf) {
-		return toolDispatcher.addConfiguration(jsonConf);
+	@RequestMapping(value = "/configuration", method = RequestMethod.POST, consumes="application/json")
+	@ResponseStatus(value = HttpStatus.CREATED)
+	public String addConfiguration(@RequestBody String json) {
+			return toolDispatcher.addConfiguration(json);
 	}
 	
-	@PUT
-	@Path("{id}")
-	public String updateConfiguration(@PathParam("id") Integer id, String jsonConf) throws Exception {
-		return toolDispatcher.updateConfiguration(id,  jsonConf);
+	@RequestMapping(value = "/configuration", method = RequestMethod.POST, consumes="multipart/form-data")
+	@ResponseStatus(value = HttpStatus.CREATED)
+	public String addConfiguration(@RequestParam(value="json") String json, 
+			@RequestParam(value="file") MultipartFile file) {
+			((HttpParserConfiguration) toolDispatcher.getParser()).setFile(file);
+			return toolDispatcher.addConfiguration(json);
 	}
 	
-	@DELETE
-	@Path("{id}")
-	public String deleteConfiguration(@PathParam("id") Integer id) {
+	@RequestMapping(value = "/configuration/{id}", method = RequestMethod.PUT, consumes="application/json")
+	public String updateConfiguration(@PathVariable("id") Integer id, 
+			@RequestBody(required=false) String jsonConf) throws Exception {
+			return toolDispatcher.updateConfiguration(id, jsonConf);
+	}
+	
+	@RequestMapping(value = "/configuration/{id}", method = RequestMethod.PUT, consumes="multipart/form-data")
+	public String updateConfiguration(@PathVariable("id") Integer id, @RequestParam(value="json", required=false) String json, 
+			@RequestParam(value="file", required=false) MultipartFile file) throws Exception {
+			((HttpParserConfiguration) toolDispatcher.getParser()).setFile(file);
+			return toolDispatcher.updateConfiguration(id, json);
+	}
+	
+	@RequestMapping(value = "/configuration/{id}", method = RequestMethod.DELETE)
+	public String deleteConfiguration(@PathVariable("id") Integer id) {
 		return toolDispatcher.deleteConfiguration(id);
 	}
 

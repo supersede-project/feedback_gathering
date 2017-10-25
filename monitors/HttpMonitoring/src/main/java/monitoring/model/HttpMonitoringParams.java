@@ -21,11 +21,20 @@
  *******************************************************************************/
 package monitoring.model;
 
+import java.util.Map;
+
+import org.json.JSONObject;
+import org.springframework.web.multipart.MultipartFile;
+
 import monitoring.model.MonitoringParams;
 
 public class HttpMonitoringParams extends MonitoringParams {
 	
 	String url;
+	Method method;
+	Map<String, String> headers;
+	JSONObject body;
+	MultipartFile file;
 
 	public String getUrl() {
 		return url;
@@ -35,5 +44,36 @@ public class HttpMonitoringParams extends MonitoringParams {
 		this.url = url;
 	}
 	
-
+	public Method getMethod() {
+		return method;
+	}
+	
+	public void setMethod(Method method) {
+		this.method = method;
+	}
+	
+	public Map<String, String> getHeaders() {
+		return headers;
+	}
+	
+	public void setHeaders(Map<String,String> headers) {
+		this.headers = headers;
+	}
+	
+	public JSONObject getBody() {
+		return body;
+	}
+	
+	public void setBody(JSONObject body) {
+		this.body = body;
+	}
+	
+	public MultipartFile getFile() {
+		return file;
+	}
+	
+	public void setFile(MultipartFile file) {
+		this.file = file;
+	}
+	
 }
