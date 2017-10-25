@@ -21,11 +21,8 @@
  *******************************************************************************/
 package monitoring.controller;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.log4j.Logger;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -48,29 +45,31 @@ public class HttpToolDispatcher {
 	private ToolDispatcher toolDispatcher = 
 			new ToolDispatcher(new HttpParserConfiguration(), result);
 	
-	@RequestMapping(value = "/configuration", method = RequestMethod.POST)
+	@RequestMapping(value = "/configuration", method = RequestMethod.POST, consumes="application/json")
 	@ResponseStatus(value = HttpStatus.CREATED)
-	public String addConfiguration(@RequestParam(value="json", required=false) String json, 
-			@RequestParam(value="file", required=false) MultipartFile file, 
-			@RequestBody(required=false) String jsonConf, HttpServletRequest request) {
-		if (request.getContentType().contains(MediaType.MULTIPART_FORM_DATA.toString())) {
-			((HttpParserConfiguration) toolDispatcher.getParser()).setFile(file);
+	public String addConfiguration(@RequestBody String json) {
 			return toolDispatcher.addConfiguration(json);
-		} else {
-			return toolDispatcher.addConfiguration(jsonConf);
-		}
 	}
 	
-	@RequestMapping(value = "/configuration/{id}", method = RequestMethod.PUT)
+	@RequestMapping(value = "/configuration", method = RequestMethod.POST, consumes="multipart/form-data")
+	@ResponseStatus(value = HttpStatus.CREATED)
+	public String addConfiguration(@RequestParam(value="json") String json, 
+			@RequestParam(value="file") MultipartFile file) {
+			((HttpParserConfiguration) toolDispatcher.getParser()).setFile(file);
+			return toolDispatcher.addConfiguration(json);
+	}
+	
+	@RequestMapping(value = "/configuration/{id}", method = RequestMethod.PUT, consumes="application/json")
+	public String updateConfiguration(@PathVariable("id") Integer id, 
+			@RequestBody(required=false) String jsonConf) throws Exception {
+			return toolDispatcher.updateConfiguration(id, jsonConf);
+	}
+	
+	@RequestMapping(value = "/configuration/{id}", method = RequestMethod.PUT, consumes="multipart/form-data")
 	public String updateConfiguration(@PathVariable("id") Integer id, @RequestParam(value="json", required=false) String json, 
-			@RequestParam(value="file", required=false) MultipartFile file, 
-			@RequestBody(required=false) String jsonConf, HttpServletRequest request) throws Exception {
-		if (request.getContentType().contains(MediaType.MULTIPART_FORM_DATA.toString())) {
+			@RequestParam(value="file", required=false) MultipartFile file) throws Exception {
 			((HttpParserConfiguration) toolDispatcher.getParser()).setFile(file);
 			return toolDispatcher.updateConfiguration(id, json);
-		} else {
-			return toolDispatcher.updateConfiguration(id, jsonConf);
-		}
 	}
 	
 	@RequestMapping(value = "/configuration/{id}", method = RequestMethod.DELETE)

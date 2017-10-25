@@ -70,11 +70,9 @@ public class ApacheHttp implements ToolInterface<HttpMonitoringParams> {
 	@Override
 	public void addConfiguration(HttpMonitoringParams params, int configurationId) throws Exception {
 		logger.debug("Adding new configuration");
-		this.firstConnection = true;
 		this.confParams = params;
 		this.configurationId = configurationId;
 		this.kafka = new KafkaCommunication(this.confParams.getKafkaEndpoint());
-		
 		resetStream();
 	}
 	
@@ -87,6 +85,7 @@ public class ApacheHttp implements ToolInterface<HttpMonitoringParams> {
 	public void updateConfiguration(HttpMonitoringParams params) throws Exception {
 		deleteConfiguration();
 		this.confParams = params;
+		this.kafka = new KafkaCommunication(this.confParams.getKafkaEndpoint());
 		resetStream();
 	}
 	
@@ -98,13 +97,16 @@ public class ApacheHttp implements ToolInterface<HttpMonitoringParams> {
 		this.firstConnection = true;
 		
 		if (this.confParams.getFile() != null) {
-			Part[] parts = {
-	    			new StringPart("json", this.confParams.getBody().toString()),
-	    			new FilePart(this.confParams.getFile().getName(), convert(this.confParams.getFile()))
-	    	};
-			this.parts = parts;
+			try {
+				Part[] parts = {
+		    			new StringPart("json", this.confParams.getBody().toString()),
+		    			new FilePart(this.confParams.getFile().getName(), convert(this.confParams.getFile()))
+		    	};
+				this.parts = parts;
+			} catch (Exception e) {
+				
+			}
 		}
-        
 		timer = new Timer();
 		timer.schedule(new TimerTask() {
 			@Override
