@@ -192,9 +192,9 @@ public class ApacheHttp implements ToolInterface<HttpMonitoringParams> {
 		
 		private void initPostMethod() throws UnsupportedEncodingException {
 			PostMethod postMethod = new PostMethod(confParams.getUrl());
-	    	for (String key : confParams.getHeaders().keySet()) {
+	    	/*for (String key : confParams.getHeaders().keySet()) {
 	    		postMethod.setRequestHeader(key, confParams.getHeaders().get(key));
-	    	}
+	    	}*/
 	    	if (confParams.getFile() != null) {
 		    	postMethod.setRequestEntity(
 		    			new MultipartRequestEntity(parts, postMethod.getParams())
