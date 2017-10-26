@@ -46,13 +46,11 @@ public class HttpToolDispatcher {
 			new ToolDispatcher(new HttpParserConfiguration(), result);
 	
 	@RequestMapping(value = "/configuration", method = RequestMethod.POST, consumes="application/json")
-	@ResponseStatus(value = HttpStatus.CREATED)
 	public String addConfiguration(@RequestBody String json) {
 			return toolDispatcher.addConfiguration(json);
 	}
 	
 	@RequestMapping(value = "/configuration", method = RequestMethod.POST, consumes="multipart/form-data")
-	@ResponseStatus(value = HttpStatus.CREATED)
 	public String addConfiguration(@RequestParam(value="json") String json, 
 			@RequestParam(value="file") MultipartFile file) {
 			((HttpParserConfiguration) toolDispatcher.getParser()).setFile(file);
