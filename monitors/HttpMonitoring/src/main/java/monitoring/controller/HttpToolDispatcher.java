@@ -23,6 +23,7 @@ package monitoring.controller;
 
 import org.apache.log4j.Logger;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -52,8 +53,7 @@ public class HttpToolDispatcher {
 	
 	@RequestMapping(value = "/configuration", method = RequestMethod.POST, consumes="multipart/form-data")
 	public String addConfiguration(@RequestParam(value="json") String json, 
-			@RequestParam(value="file") MultipartFile file) {
-			System.out.println ("Invoke addConfiguration. Json: " + json);
+			@ModelAttribute("file") MultipartFile file) {
 			((HttpParserConfiguration) toolDispatcher.getParser()).setFile(file);
 			return toolDispatcher.addConfiguration(json);
 	}
@@ -66,7 +66,8 @@ public class HttpToolDispatcher {
 	
 	@RequestMapping(value = "/configuration/{id}", method = RequestMethod.PUT, consumes="multipart/form-data")
 	public String updateConfiguration(@PathVariable("id") Integer id, @RequestParam(value="json", required=false) String json, 
-			@RequestParam(value="file", required=false) MultipartFile file) throws Exception {
+			@ModelAttribute("file") MultipartFile file) throws Exception {
+			System.out.println("File: " + file);
 			((HttpParserConfiguration) toolDispatcher.getParser()).setFile(file);
 			return toolDispatcher.updateConfiguration(id, json);
 	}
