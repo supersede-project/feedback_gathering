@@ -53,6 +53,7 @@ public class HttpToolDispatcher {
 	@RequestMapping(value = "/configuration", method = RequestMethod.POST, consumes="multipart/form-data")
 	public String addConfiguration(@RequestParam(value="json") String json, 
 			@RequestParam(value="file") MultipartFile file) {
+			System.out.println ("Invoke addConfiguration. Json: " + json);
 			((HttpParserConfiguration) toolDispatcher.getParser()).setFile(file);
 			return toolDispatcher.addConfiguration(json);
 	}
