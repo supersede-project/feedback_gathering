@@ -121,6 +121,7 @@ public class FeedbackEmailServiceTest {
         File destAttachment = new File(repositoryFilesDirectory + File.separator + attachmentsDirectory + File.separator + "test_file.pdf");
         FileUtils.copyFile(srcAttachment, destAttachment);
 
+
         File srcScreenshot = new File("src/test/resources" + File.separator + "screenshot_1_example.png");
         File destScreenshot = new File(repositoryFilesDirectory + File.separator + screenshotsDirectory + File.separator + "screenshot_1_example.png");
         FileUtils.copyFile(srcScreenshot, destScreenshot);
