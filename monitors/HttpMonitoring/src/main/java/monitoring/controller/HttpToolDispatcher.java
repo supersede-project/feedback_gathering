@@ -47,33 +47,44 @@ public class HttpToolDispatcher {
 			new ToolDispatcher(new HttpParserConfiguration(), result);
 	
 	@RequestMapping(value = "/configuration", method = RequestMethod.POST, consumes="application/json")
+	@ResponseStatus(HttpStatus.CREATED)
 	public String addConfiguration(@RequestBody String json) {
+			logger.debug("Creating a new configuration for HTTP monitor with conf: " + json);
 			return toolDispatcher.addConfiguration(json);
 	}
 	
 	@RequestMapping(value = "/configuration", method = RequestMethod.POST, consumes="multipart/form-data")
+	@ResponseStatus(HttpStatus.CREATED)
 	public String addConfiguration(@RequestParam(value="json") String json, 
 			@ModelAttribute("file") MultipartFile file) {
 			((HttpParserConfiguration) toolDispatcher.getParser()).setFile(file);
+			logger.debug("Creating a new configuration for HTTP monitor with conf: " + json);
+			logger.debug("File: " + file);
 			return toolDispatcher.addConfiguration(json);
 	}
 	
 	@RequestMapping(value = "/configuration/{id}", method = RequestMethod.PUT, consumes="application/json")
+	@ResponseStatus(HttpStatus.OK)
 	public String updateConfiguration(@PathVariable("id") Integer id, 
-			@RequestBody(required=false) String jsonConf) throws Exception {
-			return toolDispatcher.updateConfiguration(id, jsonConf);
+			@RequestBody(required=false) String json) throws Exception {
+			logger.debug("Updating configuration " + id + " for HTTP monitor with conf: " + json);
+			return toolDispatcher.updateConfiguration(id, json);
 	}
 	
 	@RequestMapping(value = "/configuration/{id}", method = RequestMethod.PUT, consumes="multipart/form-data")
-	public String updateConfiguration(@PathVariable("id") Integer id, @RequestParam(value="json", required=false) String json, 
+	@ResponseStatus(HttpStatus.OK)
+	public String updateConfiguration(@PathVariable("id") Integer id, @RequestParam(value="json") String json, 
 			@ModelAttribute("file") MultipartFile file) throws Exception {
-			System.out.println("File: " + file);
 			((HttpParserConfiguration) toolDispatcher.getParser()).setFile(file);
+			logger.debug("Updating configuration " + id + " for HTTP monitor with conf: " + json);
+			logger.debug("File: " + file);
 			return toolDispatcher.updateConfiguration(id, json);
 	}
 	
 	@RequestMapping(value = "/configuration/{id}", method = RequestMethod.DELETE)
+	@ResponseStatus(HttpStatus.OK)
 	public String deleteConfiguration(@PathVariable("id") Integer id) {
+		logger.debug("Deleting configuration " + id);
 		return toolDispatcher.deleteConfiguration(id);
 	}
 
