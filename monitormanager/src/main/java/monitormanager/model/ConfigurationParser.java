@@ -31,6 +31,7 @@ import com.google.gson.JsonObject;
 import eu.supersede.integration.api.monitoring.manager.types.AppStoreMonitorConfiguration;
 import eu.supersede.integration.api.monitoring.manager.types.GooglePlayMonitorConfiguration;
 import eu.supersede.integration.api.monitoring.manager.types.HttpMonitorConfiguration;
+import eu.supersede.integration.api.monitoring.manager.types.Method;
 import eu.supersede.integration.api.monitoring.manager.types.MonitorSpecificConfiguration;
 import eu.supersede.integration.api.monitoring.manager.types.TwitterMonitorConfiguration;
 
@@ -78,6 +79,7 @@ public class ConfigurationParser {
 		HttpMonitorConfiguration configuration = new HttpMonitorConfiguration();
 		setMonitorConfigurationParams(configuration, in);
 		if (in.has("url")) configuration.setUrl(in.get("url").getAsString());
+		if (in.has("method")) configuration.setMethod(Method.valueOf(in.get("method").getAsString()));
 		
 		return configuration;
 	}
