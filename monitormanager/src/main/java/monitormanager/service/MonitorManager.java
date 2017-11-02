@@ -58,7 +58,7 @@ public class MonitorManager implements IMonitorManager {
 				AppStoreMonitorConfiguration confA = parser.getAppStoreConfiguration(jsonObj);
 				AppStoreMonitorConfiguration resultA = proxyA.createMonitorConfiguration(confA);
 				return getResponse(resultA);
-			case "Http":
+			case "HttpMonitor":
 				HttpMonitorProxy<?,?> proxyH = new HttpMonitorProxy<>();
 				HttpMonitorConfiguration confH = parser.getHttpConfiguration(jsonObj);
 				HttpMonitorConfiguration resultH = proxyH.createMonitorConfiguration(confH);
