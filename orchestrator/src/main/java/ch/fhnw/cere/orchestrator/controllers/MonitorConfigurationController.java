@@ -55,9 +55,8 @@ public class MonitorConfigurationController extends BaseController {
         try {
 	        MonitorManagerProxy<?, ?> proxy = new MonitorManagerProxy<>();
 			MonitorSpecificConfiguration configurationObj = generateMonitorConf(monitorConfiguration, getMonitoringTool());
-			//MonitorSpecificConfiguration createConfiguration = proxy.createMonitorConfiguration(configurationObj);
-			//FIXME setMonitorManagerId
-			monitorConfiguration.setMonitorManagerId(100);
+			MonitorSpecificConfiguration createConfiguration = proxy.createMonitorConfiguration(configurationObj);
+			monitorConfiguration.setMonitorManagerId(createConfiguration.getId());
 			MonitorConfiguration newMonitorConfiguration = monitorConfigurationRepository.save(monitorConfiguration);
 			return newMonitorConfiguration;
         } catch(Exception e) {
@@ -134,11 +133,13 @@ public class MonitorConfigurationController extends BaseController {
 			monitorManagerConf = new AppStoreMonitorConfiguration();
 			((AppStoreMonitorConfiguration) monitorManagerConf).setAppId(configuration.getAppId());
 		}
-		else if (tool.getMonitorName().equals("Http")) {
+		else if (tool.getMonitorName().equals("HttpMonitor")) {
 			monitorManagerConf = new HttpMonitorConfiguration();
 			((HttpMonitorConfiguration) monitorManagerConf).setUrl(configuration.getUrl());
+			((HttpMonitorConfiguration) monitorManagerConf).setMethod(configuration.getMethod());
 		}
-		monitorManagerConf.setKafkaEndpoint(new URL(configuration.getKafkaEndpoint()));
+		if (configuration.getKafkaEndpoint() != null) 
+			monitorManagerConf.setKafkaEndpoint(new URL(configuration.getKafkaEndpoint()));
 		monitorManagerConf.setKafkaTopic(configuration.getKafkaTopic());
 		monitorManagerConf.setTimeSlot(Integer.parseInt(configuration.getTimeSlot()));
 		monitorManagerConf.setToolName(tool.getName());

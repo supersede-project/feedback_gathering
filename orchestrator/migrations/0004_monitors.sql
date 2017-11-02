@@ -58,6 +58,8 @@ CREATE TABLE `monitor_configuration` (
   `app_id` varchar(255) DEFAULT NULL,
   `package_name` varchar(255) DEFAULT NULL,
   `url` varchar(255) DEFAULT NULL,
+  `method` varchar(255) DEFAULT NULL,
+  `body` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_monitor_tool_id` (`monitor_tool_id`),
   CONSTRAINT `fk_monitor_tool_id` FOREIGN KEY (`monitor_tool_id`) REFERENCES `monitor_tool` (`id`)

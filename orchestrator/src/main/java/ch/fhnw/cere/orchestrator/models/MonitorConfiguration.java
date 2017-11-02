@@ -4,8 +4,11 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
+import eu.supersede.integration.api.monitoring.manager.types.Method;
+
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+import org.json.JSONObject;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -21,7 +24,7 @@ public class MonitorConfiguration {
     private long id;
 
     @JsonIgnore
-    @ManyToOne(cascade = {CascadeType.REMOVE, CascadeType.MERGE})
+    @ManyToOne
     @JoinColumn(name = "monitor_tool_id")
     private MonitorTool monitorTool;
 
@@ -37,7 +40,6 @@ public class MonitorConfiguration {
     @NotNull
     @Column(name="time_slot")
     private String timeSlot;
-    @NotNull
     @Column(name="kafka_endpoint")
     private String kafkaEndpoint;
     @NotNull
@@ -66,6 +68,8 @@ public class MonitorConfiguration {
      */
     @Column(name="url")
     private String url;
+    @Column(name="method")
+    private Method method;
 
     public MonitorConfiguration() {
     }
@@ -190,6 +194,14 @@ public class MonitorConfiguration {
     public void setUrl(String url) {
     	this.url = url;
     }
+    
+    public Method getMethod() {
+		return method;
+	}
+
+	public void setMethod(Method method) {
+		this.method = method;
+	}
     
     public long getMonitorManagerId() {
     	return monitorManagerId;

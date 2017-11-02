@@ -24,7 +24,7 @@ public class MonitorTool {
     private List<MonitorConfiguration> monitorConfigurations;
 
     @JsonIgnore
-    @ManyToOne(cascade = {CascadeType.REMOVE, CascadeType.MERGE})
+    @ManyToOne
     @JoinColumn(name = "monitor_type_id")
     private MonitorType monitorType;
 
