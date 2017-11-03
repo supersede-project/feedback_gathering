@@ -95,6 +95,7 @@ public class MonitorManager implements IMonitorManager {
 		} else if (monitorName.contentEquals("HttpMonitor")) {
 			HttpMonitorProxy<?,?> proxy = new HttpMonitorProxy<>();
 			HttpMonitorConfiguration conf = parser.getHttpConfiguration(jsonObj);
+			conf.setId(confId);
 			HttpMonitorConfiguration result = proxy.updateMonitorConfiguration(conf);
 			return getResponse(result);
 		} else throw new Exception("There is no monitor with this name");
