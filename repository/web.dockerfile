@@ -10,4 +10,7 @@ RUN apt-get install libmysql-java -y
 
 RUN bash -c 'touch /app.jar'
 
+RUN mkdir /supersede_files
+RUN chmod ugoa+w /supersede_files
+
 ENTRYPOINT ["java", "-Djava.security.egd=file:/dev/./urandom -Djava.net.preferIPv4Stack=true", "-jar", "/app.jar"]

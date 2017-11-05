@@ -5,7 +5,6 @@ import javax.persistence.*;
 
 
 @Entity
-@Table(name = "status_options")
 public class StatusOption {
 
     @Id
