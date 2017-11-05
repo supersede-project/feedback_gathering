@@ -54,6 +54,18 @@ Executing 'gradle build' in the root folder creates a build folder. In build/lib
 
 The suggested IDE is IntelliJ, but Eclipse works as well. 
 
+The prerequisites for running the application locally are a local Tomcat installation (just download the zip and unzip) and the Tomcat Server Plugin in IntelliJ. Then you can setup a run configuration for a local Tomcat: 
+
+Select new local configuration:
+![Run configuration](https://github.com/supersede-project/monitor_feedback/raw/develop_ronnie/images/tomcat_configuration.png)
+
+Create the run configuration:
+
+![Run configuration](https://raw.githubusercontent.com/supersede-project/monitor_feedback/develop_ronnie/images/run_configuation.png)
+
+Add the war from build/libs as the artefact:
+
+![Run configuration](https://github.com/supersede-project/monitor_feedback/raw/develop_ronnie/images/tomcat_configuration_artefact.png)
 
 
 # Docker
