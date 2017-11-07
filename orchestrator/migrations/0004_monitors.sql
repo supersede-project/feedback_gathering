@@ -37,7 +37,7 @@ CREATE TABLE `monitor_tool` (
 --  Records of `monitor_tool`
 -- ----------------------------
 BEGIN;
-INSERT INTO `monitor_tool` VALUES ('1', 'TwitterAPI', '2016-11-01 13:55:06.000', '1', 'Twitter'), ('2', 'GooglePlayAPI', '2016-11-01 13:55:06.000', '2', 'GooglePlay'), ('3', 'AppTweak-GooglePlay', '2016-11-01 13:55:06.000', '2', 'GooglePlay'), ('4', 'AppStoreAPI', '2016-11-01 13:55:06.000', '2', 'AppStore'), ('5', 'AppTweak-AppStore', '2016-11-01 13:55:06.000', '2', 'AppStore'), ('6', 'ApacheHttp', '2017-02-20 17:49:06.432', '3', 'Http');
+INSERT INTO `monitor_tool` VALUES ('1', 'TwitterAPI', '2016-11-01 13:55:06.000', '1', 'Twitter'), ('2', 'GooglePlayAPI', '2016-11-01 13:55:06.000', '2', 'GooglePlay'), ('3', 'AppTweak-GooglePlay', '2016-11-01 13:55:06.000', '2', 'GooglePlay'), ('4', 'AppStoreAPI', '2016-11-01 13:55:06.000', '2', 'AppStore'), ('5', 'AppTweak-AppStore', '2016-11-01 13:55:06.000', '2', 'AppStore'), ('6', 'ApacheHttp', '2017-02-20 17:49:06.432', '3', 'HttpMonitor');
 COMMIT;
 
 -- ----------------------------
