@@ -1,29 +1,36 @@
 package ch.fhnw.cere.orchestrator.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+
+import eu.supersede.integration.api.monitoring.manager.types.Method;
+
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+import org.json.JSONObject;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 
 @Entity
+@JsonInclude(Include.NON_NULL)
 public class MonitorConfiguration {
 
     @Id
+    @JsonIgnore
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
     @JsonIgnore
-    @ManyToOne(cascade = {CascadeType.REMOVE, CascadeType.MERGE})
-    @OnDelete(action = OnDeleteAction.CASCADE)
+    @ManyToOne
     @JoinColumn(name = "monitor_tool_id")
     private MonitorTool monitorTool;
 
-    @Column(name="monitor_manager_configuration_id")
-    private Integer monitorManagerConfigurationId;
-
+    @Column(name="monitor_manager_id")
+    private long monitorManagerId;
+    
     @NotNull
     @Column(name="config_sender")
     private String configSender;
@@ -33,7 +40,6 @@ public class MonitorConfiguration {
     @NotNull
     @Column(name="time_slot")
     private String timeSlot;
-    @NotNull
     @Column(name="kafka_endpoint")
     private String kafkaEndpoint;
     @NotNull
@@ -42,22 +48,34 @@ public class MonitorConfiguration {
     @NotNull
     private String state;
 
+    /*
+     * SocialNetwork params
+     */
     @Column(name="keyword_expression")
     private String keywordExpression;
-
     //private List<String> accounts;
 
+    /*
+     * MarketPlaces params
+     */
     @Column(name="package_name")
     private String packageName;
     @Column(name="app_id")
     private String appId;
+    
+    /*
+     * QoS params
+     */
+    @Column(name="url")
+    private String url;
+    @Column(name="method")
+    private Method method;
 
     public MonitorConfiguration() {
     }
 
-    public MonitorConfiguration(MonitorTool monitorTool, Integer monitorManagerConfigurationId, String configSender, String timeStamp, String timeSlot, String kafkaEndpoint, String kafkaTopic, String state, String keywordExpression, String packageName, String appId) {
+    public MonitorConfiguration(MonitorTool monitorTool, String configSender, String timeStamp, String timeSlot, String kafkaEndpoint, String kafkaTopic, String state, String keywordExpression, String packageName, String appId, String url) {
         this.monitorTool = monitorTool;
-        this.monitorManagerConfigurationId = monitorManagerConfigurationId;
         this.configSender = configSender;
         this.timeStamp = timeStamp;
         this.timeSlot = timeSlot;
@@ -67,17 +85,18 @@ public class MonitorConfiguration {
         this.keywordExpression = keywordExpression;
         this.packageName = packageName;
         this.appId = appId;
+        this.url = url;
     }
 
     @Override
     public String toString() {
         return String.format(
-                "MonitorConfiguration[id=%d, monitorTool='%s', monitorManagerConfigurationId=%d, configSender='%s', " +
+                "MonitorConfiguration[id=%d, monitorTool='%s', configSender='%s', " +
                         "timeStamp='%s', timeSlot='%s', kafkaEndpoint='%s', " +
-                        "kafkaTopic='%s', state='%s', keywordExpression='%s', packageName='%s', appId='%s']",
-                id, monitorTool, monitorManagerConfigurationId, configSender,
+                        "kafkaTopic='%s', state='%s', keywordExpression='%s', packageName='%s', appId='%s', url='%s']",
+                id, monitorTool, configSender,
                 timeStamp, timeSlot, kafkaEndpoint,
-                kafkaTopic, state, keywordExpression, packageName, appId);
+                kafkaTopic, state, keywordExpression, packageName, appId, url);
     }
 
     public long getId() {
@@ -94,14 +113,6 @@ public class MonitorConfiguration {
 
     public void setMonitorTool(MonitorTool monitorTool) {
         this.monitorTool = monitorTool;
-    }
-
-    public Integer getMonitorManagerConfigurationId() {
-        return monitorManagerConfigurationId;
-    }
-
-    public void setMonitorManagerConfigurationId(Integer monitorManagerConfigurationId) {
-        this.monitorManagerConfigurationId = monitorManagerConfigurationId;
     }
 
     public String getConfigSender() {
@@ -174,5 +185,29 @@ public class MonitorConfiguration {
 
     public void setAppId(String appId) {
         this.appId = appId;
+    }
+    
+    public String getUrl() {
+    	return url;
+    }
+    
+    public void setUrl(String url) {
+    	this.url = url;
+    }
+    
+    public Method getMethod() {
+		return method;
+	}
+
+	public void setMethod(Method method) {
+		this.method = method;
+	}
+    
+    public long getMonitorManagerId() {
+    	return monitorManagerId;
+    }
+    
+    public void setMonitorManagerId(long id) {
+    	this.monitorManagerId = id;
     }
 }
