@@ -342,6 +342,7 @@ INSERT INTO `text_feedback` (`id`, `mechanism_id`, `text`, `feedback_id`)
 
 /* Let's remove the old tables */
 
+/*
 DROP TABLES `api_user_permissions`;
 DROP TABLES `api_users`;
 DROP TABLES `attachment_feedbacks`;
@@ -359,7 +360,7 @@ DROP TABLES `status_options`;
 DROP TABLES `statuses`;
 DROP TABLES `text_annotations`;
 DROP TABLES `text_feedbacks`;
-
+*/
 
 SET foreign_key_checks = 1;
 
