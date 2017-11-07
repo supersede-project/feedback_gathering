@@ -1,0 +1,1 @@
+ALTER TABLE `context_information` ADD COLUMN `meta_data` text AFTER `url`;
