@@ -154,6 +154,33 @@ CREATE TABLE `mechanism` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8;
 
+
+-- ----------------------------
+--  Table structure for `monitor_type`
+-- ----------------------------
+CREATE TABLE `monitor_type` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `created_at` timestamp(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+
+
+-- ----------------------------
+--  Table structure for `monitor_tool`
+-- ----------------------------
+CREATE TABLE `monitor_tool` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `created_at` timestamp(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+  `monitor_type_id` int(11) NOT NULL,
+  `monitor_name` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_monitor_type_id` (`monitor_type_id`),
+  CONSTRAINT `fk_monitor_type_id_2` FOREIGN KEY (`monitor_type_id`) REFERENCES `monitor_type` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+
+
 -- ----------------------------
 --  Table structure for `monitor_configuration`
 -- ----------------------------
@@ -173,32 +200,9 @@ CREATE TABLE `monitor_configuration` (
   `package_name` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_monitor_tool_id` (`monitor_tool_id`),
-  CONSTRAINT `fk_monitor_tool_id_1` FOREIGN KEY (`monitor_tool_id`) REFERENCES `monitor_tool` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `fk_monitor_tool_id_2` FOREIGN KEY (`monitor_tool_id`) REFERENCES `monitor_tool` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
 
--- ----------------------------
---  Table structure for `monitor_tool`
--- ----------------------------
-CREATE TABLE `monitor_tool` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) NOT NULL,
-  `created_at` timestamp(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
-  `monitor_type_id` int(11) NOT NULL,
-  `monitor_name` varchar(255) NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `fk_monitor_type_id` (`monitor_type_id`),
-  CONSTRAINT `fk_monitor_type_id_1` FOREIGN KEY (`monitor_type_id`) REFERENCES `monitor_type` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
-
--- ----------------------------
---  Table structure for `monitor_type`
--- ----------------------------
-CREATE TABLE `monitor_type` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) NOT NULL,
-  `created_at` timestamp(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 --  Table structure for `parameter`
@@ -283,81 +287,161 @@ INSERT INTO `api_user_permission` (`id`, `api_user_id`, `application_id`, `has_p
 --  Content for `application`
 -- ----------------------------
 INSERT INTO `application` (`id`, `created_at`, `name`, `state`, `updated_at`, `general_configuration_id`)
-  SELECT `applications1_id`, `created_at`, `name`, `state`, from_unixtime(UNIX_TIMESTAMP(`created_at`)),
+  SELECT `applications1_id`, from_unixtime(UNIX_TIMESTAMP(`created_at`)), `name`, `state`, from_unixtime(UNIX_TIMESTAMP(`created_at`)),
   `general_configurations_id` FROM `applications1_history`
-/* TODO get most recent record */
-/* TODO check which ID is actually referenced in the foreign keys. Strategy: Replace the _history ID as foreign key with the actual id */
+  INNER JOIN (
+    SELECT applications1_id, MAX(created_at) AS created_at
+    FROM applications1_history GROUP BY applications1_id
+  ) AS max USING (applications1_id, created_at);
+/* get most recent record */
+/* check which ID is actually referenced in the foreign keys. Strategy: Replace the _history ID as foreign key with the actual id */
+
 
 -- ----------------------------
 --  Content for `configuration`
 -- ----------------------------
 INSERT INTO `configuration` (`id`, `created_at`, `name`, `type`, `updated_at`, `application_id`, `general_configuration_id`,
   `pull_default`, `push_default`)
+   SELECT `configurations_id`, from_unixtime(UNIX_TIMESTAMP(`created_at`)), `name`,
+    case
+      when `type` = 'PUSH' then 0
+      when `type` = 'PULL' then 1
+      else 0
+    end as `type`,
+    from_unixtime(UNIX_TIMESTAMP(`created_at`)), `applications_id`, `general_configurations_id`,
+    0, 1 FROM `configurations_history`
+  INNER JOIN (
+    SELECT configurations_id, MAX(created_at) AS created_at
+    FROM configurations_history GROUP BY configurations_id
+  ) AS max USING (configurations_id, created_at);
+
 
 -- ----------------------------
 --  Content for `configuration_mechanism`
 -- ----------------------------
 INSERT INTO `configuration_mechanism` (`id`, `active`, `created_at`, `order`, `updated_at`, `configuration_id`, `mechanism_id`)
+   SELECT `id`, `active`, from_unixtime(UNIX_TIMESTAMP(`created_at`)), `order`,
+    from_unixtime(UNIX_TIMESTAMP(`created_at`)), `configurations_id`, `mechanisms_history_id`
+    FROM `configurations_mechanisms_history`
+  INNER JOIN (
+    SELECT id, MAX(created_at) AS created_at
+    FROM configurations_mechanisms_history GROUP BY id
+  ) AS max USING (id, created_at);
+
 
 -- ----------------------------
 --  Content for `configuration_user_group`
 -- ----------------------------
-INSERT INTO `configuration_user_group` (`id`, `active`, `created_at`, `updated_at`, `configuration_id`, `user_group_id`)
+/*INSERT INTO `configuration_user_group` (`id`, `active`, `created_at`, `updated_at`, `configuration_id`, `user_group_id`)*/
+/* no records */
 
 -- ----------------------------
 --  Content for `general_configuration`
 -- ----------------------------
 INSERT INTO `general_configuration` (`id`, `created_at`, `name`, `updated_at`)
+  SELECT `general_configurations_id`, from_unixtime(UNIX_TIMESTAMP(`created_at`)), `name`, from_unixtime(UNIX_TIMESTAMP(`created_at`))
+  FROM general_configurations_history
+  INNER JOIN (
+    SELECT general_configurations_id, MAX(created_at) AS created_at
+    FROM general_configurations_history GROUP BY general_configurations_id
+  ) AS max USING (general_configurations_id, created_at);
 
 -- ----------------------------
 --  Content for `mechanism`
 -- ----------------------------
+
 INSERT INTO `mechanism` (`id`, `created_at`, `type`, `updated_at`)
-  SELECT m.`mechanism_id`, from_unixtime(UNIX_TIMESTAMP(m.`created_at`)), m.`type`, from_unixtime(UNIX_TIMESTAMP(m.`created_at`))
-  FROM mechanisms_history m
-  INNER JOIN (
+  SELECT `id`, from_unixtime(UNIX_TIMESTAMP(`created_at`)),
+  case
+    when `name` = 'TEXT_TYPE' then 0
+    when `name` = 'RATING_TYPE' then 1
+    when `name` = 'CATEGORY_TYPE' then 2
+    when `name` = 'SCREENSHOT_TYPE' then 3
+    when `name` = 'ATTACHMENT_TYPE' then 4
+    when `name` = 'AUDIO_TYPE' then 5
+    when `name` = 'INFO_TYPE' then 6
+    else 0
+  end as `type`,
+  from_unixtime(UNIX_TIMESTAMP(`created_at`))
+  FROM mechanisms_history
+    INNER JOIN (
     SELECT mechanisms_id, MAX(created_at) AS created_at
     FROM mechanisms_history GROUP BY mechanisms_id
   ) AS max USING (mechanisms_id, created_at);
 
-/*
+
+/* FIRST INSERT THE 3 HISTORY MONITORING TABLES INTO THE ORCHESTRATOR DB MANUALLY!! */
+
 -- ----------------------------
 --  Content for `monitor_configuration`
 -- ----------------------------
 INSERT INTO `monitor_configuration` (`id`, `created_at`, `monitor_tool_id`, `monitor_manager_configuration_id`, `config_sender`,
   `timestamp`, `time_slot`, `kafka_endpoint`, `kafka_topic`, `state`, `keyword_expression`, `app_id`, `package_name`)
+    SELECT `monitor_configuration_id`, from_unixtime(UNIX_TIMESTAMP(`created_at`)), `monitor_tool_id`,
+    `monitor_manager_configuration_id`, `config_sender`, `timestamp`, `time_slot`, `kafka_endpoint`, `kafka_topic`,
+    `state`, `keyword_expression`, `app_id`, `package_name`
+  FROM monitor_configuration_history
+  INNER JOIN (
+    SELECT monitor_configuration_id, MAX(created_at) AS created_at
+    FROM monitor_configuration_history GROUP BY monitor_configuration_id
+  ) AS max USING (monitor_configuration_id, created_at);
+
 
 -- ----------------------------
 --  Content for `monitor_tool`
 -- ----------------------------
 INSERT INTO `monitor_tool` (`id`, `name`, `created_at`, `monitor_type_id`, `monitor_name`)
+  SELECT `monitor_tool_id`, `name`, from_unixtime(UNIX_TIMESTAMP(`created_at`)), `monitor_type_id`, `monitor_name`
+  FROM monitor_tool_history
+  INNER JOIN (
+    SELECT monitor_tool_id, MAX(created_at) AS created_at
+    FROM monitor_tool_history GROUP BY monitor_tool_id
+  ) AS max USING (monitor_tool_id, created_at);
+
 
 -- ----------------------------
 --  Content for `monitor_type`
 -- ----------------------------
 INSERT INTO `monitor_type` (`id`, `name`, `created_at`)
-*/
+  SELECT `monitor_type_id`, `name`, from_unixtime(UNIX_TIMESTAMP(`created_at`))
+  FROM monitor_type_history
+  INNER JOIN (
+    SELECT monitor_type_id, MAX(created_at) AS created_at
+    FROM monitor_type_history GROUP BY monitor_type_id
+  ) AS max USING (monitor_type_id, created_at);
+
 
 -- ----------------------------
 --  Content for `parameter`
 -- ----------------------------
 INSERT INTO `parameter` (`id`, `created_at`, `key`, `language`, `updated_at`, `value`, `general_configuration_id`,
   `mechanism_id`, `parent_parameter_id`)
+  SELECT `parameters_id`, from_unixtime(UNIX_TIMESTAMP(`created_at`)), `key`, `language`,
+  from_unixtime(UNIX_TIMESTAMP(`created_at`)), `value`, `general_configurations_id`, `mechanisms_id`,
+  `parent_parameters_id`
+  FROM parameters_history
+  INNER JOIN (
+    SELECT parameters_id, MAX(created_at) AS created_at
+    FROM parameters_history GROUP BY parameters_id
+  ) AS max USING (parameters_id, created_at);
 
 -- ----------------------------
 --  Content for `user`
 -- ----------------------------
-INSERT INTO `user` (`id`, `name`, `user_identification`, `application_id`, `user_group_id`)
+/* INSERT INTO `user` (`id`, `name`, `user_identification`, `application_id`, `user_group_id`) */
+/* no records, useless data in v1 */
+
 
 -- ----------------------------
 --  Content for `user_group`
 -- ----------------------------
-INSERT INTO `user_group` (`id`, `name`, `application_id`)
-
+/*INSERT INTO `user_group` (`id`, `name`, `application_id`)*/
+/* no records, useless data in v1 */
 
 
 /* Let's remove the old tables */
 
+/*
 DROP TABLES `parameters`;
 DROP TABLES `paramters_history`;
 DROP TABLES `applications1`;
@@ -377,7 +461,7 @@ DROP TABLES `user_groups`;
 DROP TABLES `user_groups_history`;
 DROP TABLES `api_users`;
 DROP TABLES `api_user_permissions`;
-
+*/
 
 SET foreign_key_checks = 1;
 
