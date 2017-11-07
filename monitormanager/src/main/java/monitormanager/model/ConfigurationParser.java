@@ -75,6 +75,7 @@ public class ConfigurationParser {
 	}
 	
 	public HttpMonitorConfiguration getHttpConfiguration(JsonObject json) throws Exception {
+		System.out.println("\t" + json);
 		JsonObject in = json.getAsJsonObject("QoS");
 		HttpMonitorConfiguration configuration = new HttpMonitorConfiguration();
 		setMonitorConfigurationParams(configuration, in);

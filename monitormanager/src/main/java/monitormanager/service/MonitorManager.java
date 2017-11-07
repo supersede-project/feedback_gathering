@@ -58,7 +58,7 @@ public class MonitorManager implements IMonitorManager {
 				AppStoreMonitorConfiguration confA = parser.getAppStoreConfiguration(jsonObj);
 				AppStoreMonitorConfiguration resultA = proxyA.createMonitorConfiguration(confA);
 				return getResponse(resultA);
-			case "Http":
+			case "HttpMonitor":
 				HttpMonitorProxy<?,?> proxyH = new HttpMonitorProxy<>();
 				HttpMonitorConfiguration confH = parser.getHttpConfiguration(jsonObj);
 				HttpMonitorConfiguration resultH = proxyH.createMonitorConfiguration(confH);
@@ -92,9 +92,10 @@ public class MonitorManager implements IMonitorManager {
 			conf.setId(confId);
 			AppStoreMonitorConfiguration result = proxy.updateMonitorConfiguration(conf);
 			return getResponse(result);
-		} else if (monitorName.contentEquals("Http")) {
+		} else if (monitorName.contentEquals("HttpMonitor")) {
 			HttpMonitorProxy<?,?> proxy = new HttpMonitorProxy<>();
 			HttpMonitorConfiguration conf = parser.getHttpConfiguration(jsonObj);
+			conf.setId(confId);
 			HttpMonitorConfiguration result = proxy.updateMonitorConfiguration(conf);
 			return getResponse(result);
 		} else throw new Exception("There is no monitor with this name");
@@ -120,7 +121,7 @@ public class MonitorManager implements IMonitorManager {
 			AppStoreMonitorConfiguration conf = new AppStoreMonitorConfiguration();
 			conf.setId(confId);
 			proxy.deleteMonitorConfiguration(conf);
-		} else if (monitorName.equals("Http")) {
+		} else if (monitorName.equals("HttpMonitor")) {
 			HttpMonitorProxy<?,?> proxy = new HttpMonitorProxy<>();
 			HttpMonitorConfiguration conf = new HttpMonitorConfiguration();
 			conf.setId(confId);
