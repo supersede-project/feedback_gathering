@@ -94,6 +94,15 @@ gradle bootRepackage
 docker-compose up -d 
 ```
 
+If you execute tests, and you get 
+```bash
+Process finished with exit code 1
+Class not found: "ch.fhnw.cere.orchestrator.OrchestratorApplicationTests"Empty test suite.
+```
+
+In IntelliJ: Right-click on the project and choose "Open Module Settings". 
+
+
 # License
 
 Apache License 2.0

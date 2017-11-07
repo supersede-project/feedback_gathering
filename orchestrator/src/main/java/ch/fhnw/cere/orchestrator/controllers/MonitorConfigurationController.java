@@ -8,7 +8,6 @@ import ch.fhnw.cere.orchestrator.models.MonitorType;
 import ch.fhnw.cere.orchestrator.repositories.MonitorConfigurationRepository;
 import ch.fhnw.cere.orchestrator.repositories.MonitorToolRepository;
 import ch.fhnw.cere.orchestrator.repositories.MonitorTypeRepository;
-import ch.uzh.ifi.feedback.library.rest.annotations.PathParam;
 import eu.supersede.integration.api.monitoring.manager.proxies.MonitorManagerProxy;
 import eu.supersede.integration.api.monitoring.manager.types.AppStoreMonitorConfiguration;
 import eu.supersede.integration.api.monitoring.manager.types.GooglePlayMonitorConfiguration;
