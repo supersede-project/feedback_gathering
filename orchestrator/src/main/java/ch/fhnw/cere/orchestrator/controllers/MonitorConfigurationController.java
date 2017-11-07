@@ -77,7 +77,7 @@ public class MonitorConfigurationController extends BaseController {
 	    	    	MonitorSpecificConfiguration deleteConf = 
 	    	    			generateMonitorConf(monitorConfigurationRepository.findOne(cnf.getId()), getMonitoringTool());
 	    	    	deleteConf.setId((int) id);
-	    	    	//proxy.deleteMonitorConfiguration(deleteConf);
+	    	    	proxy.deleteMonitorConfiguration(deleteConf);
 	    			monitorConfigurationRepository.delete(cnf.getId());
 	    		}
 	    	}
@@ -99,10 +99,11 @@ public class MonitorConfigurationController extends BaseController {
 	    			MonitorManagerProxy<?, ?> proxy = new MonitorManagerProxy<>();
 	    			MonitorSpecificConfiguration configurationObj = generateMonitorConf(monitorConfiguration, getMonitoringTool());
 	    			configurationObj.setId((int) id);
-	    			//proxy.updateMonitorConfiguration(configurationObj);
+	    			proxy.updateMonitorConfiguration(configurationObj);
 	    			monitorConfiguration.setMonitorManagerId(id);
 	    			monitorConfiguration.setId(cnf.getId());
 	    			monitorConfigurationRepository.save(monitorConfiguration);
+	    			return monitorConfiguration;
 	    		}
 	    	}
     	} catch (Exception e) {
