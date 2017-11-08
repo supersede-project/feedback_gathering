@@ -240,7 +240,7 @@ export class FeedbackDialogView extends DialogView {
         dialogView.resetMessageView();
 
         var feedbackObject = new Feedback('Feedback', this.dialogContext.userId, this.dialogContext.language, this.context.applicationId, configuration.id, [], [], [], [], null, [], []);
-        feedbackObject.contextInformation = ContextInformation.create();
+        feedbackObject.contextInformation = ContextInformation.create(this.context.metaData);
 
         for (var mechanismView of dialogView.mechanismViews) {
             if (mechanismView instanceof TextView) {
@@ -257,7 +257,7 @@ export class FeedbackDialogView extends DialogView {
                 let screenshotBinary = mechanismView.getScreenshotAsBinary();
                 if (screenshotBinary !== null) {
                     feedbackObject.screenshotFeedbacks.push(mechanismView.getFeedback());
-                    formData.append(mechanismView.getPartName(), mechanismView.getScreenshotAsBinary());
+                    formData.append(mechanismView.getPartName(), mechanismView.getScreenshotAsBinary(), 'weblib_screenshot_' + this.context.userId + '.png');
                 }
             } else if (mechanismView instanceof CategoryView) {
                 for(let categoryFeedback of mechanismView.getCategoryFeedbacks()) {

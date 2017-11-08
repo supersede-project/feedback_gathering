@@ -95,6 +95,7 @@ A new feedback was sent for application ${feedback.applicationId}.
         Time zone: ${(feedback.contextInformation.timeZone)!} <br />
         Device pixel ratio: ${(feedback.contextInformation.devicePixelRatio)!} <br />
         URL: ${(feedback.contextInformation.url)!} <br />
+        Meta Data: ${(feedback.contextInformation.metaData)!} <br />
     </#if>
 </p>
 

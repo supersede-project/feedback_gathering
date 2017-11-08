@@ -36,11 +36,12 @@ public class ContextInformation {
     private String country;
     private String region;
     private String url;
+    private String metaData;
 
     public ContextInformation() {
     }
 
-    public ContextInformation(Feedback feedback, String resolution, String userAgent, String androidVersion, Timestamp localTime, String timeZone, Float devicePixelRatio, String country, String region, String url) {
+    public ContextInformation(Feedback feedback, String resolution, String userAgent, String androidVersion, Timestamp localTime, String timeZone, Float devicePixelRatio, String country, String region, String url, String metaData) {
         this.feedback = feedback;
         this.resolution = resolution;
         this.userAgent = userAgent;
@@ -51,6 +52,7 @@ public class ContextInformation {
         this.country = country;
         this.region = region;
         this.url = url;
+        this.metaData = metaData;
     }
 
     @Override
@@ -146,5 +148,13 @@ public class ContextInformation {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public String getMetaData() {
+        return metaData;
+    }
+
+    public void setMetaData(String metaData) {
+        this.metaData = metaData;
     }
 }

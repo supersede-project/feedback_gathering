@@ -17,12 +17,14 @@ Is a RESTfull Web API that provides endpoints for storing, receiving and deletin
 ```bash
 # clone the repository
 
+cd repository
+
 # copy the configuration files for your configuration
 cp src/main/resources/application.properties-dist src/main/resources/application.properties
 cp src/main/resources/application-test.properties-dist src/main/resources/application-test.properties
 ```
 
-Create a test database and a local database to run the application locally if needed. Fill in your DB credentials and all other required values in the newly created application.properties and application-test.properties. Do not add this file to the GIT index.
+Create a test database and a local database to run the application locally if needed. You can find the newest DB dump in src/main/resources/db. Fill in your DB credentials and all other required values in the newly created application.properties and application-test.properties. Do not add this file to the GIT index.
 
 ```bash
 cd repository
@@ -42,6 +44,29 @@ To run the integration tests, execute the following commands:
 ```bash
 gradle test
 ```
+
+# Deployment
+
+Executing 'gradle build' in the root folder creates a build folder. In build/libs there is a war file. This war file can be deployed, e.g. on a Apache Tomcat. 
+
+
+# IntelliJ
+
+The suggested IDE is IntelliJ, but Eclipse works as well. 
+
+The prerequisites for running the application locally are a local Tomcat installation (just download the zip and unzip) and the Tomcat Server Plugin in IntelliJ. Then you can setup a run configuration for a local Tomcat: 
+
+Select new local configuration:
+![Run configuration](https://github.com/supersede-project/monitor_feedback/raw/develop_ronnie/images/tomcat_configuration.png)
+
+Create the run configuration:
+
+![Run configuration](https://raw.githubusercontent.com/supersede-project/monitor_feedback/develop_ronnie/images/run_configuation.png)
+
+Add the war from build/libs as the artefact:
+
+![Run configuration](https://github.com/supersede-project/monitor_feedback/raw/develop_ronnie/images/tomcat_configuration_artefact.png)
+
 
 # Docker
 
@@ -79,10 +104,11 @@ docker rm -v <container_name>
 docker rmi <image_name>
 ```
 
-**Attention:** This would delete all stopped containers and all unused images:
+**Attention:** This would delete all stopped containers, all unused images and all dangling volumes:
 ```bash
 docker ps -q |xargs docker rm
 docker images -q |xargs docker rmi
+docker volume rm `docker volume ls -q -f dangling=true`
 ```
 
 Finally execute:

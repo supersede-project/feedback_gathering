@@ -28,6 +28,7 @@ public class FeedbackCentralIntegrator {
 
     @Async
     public void ingestJsonData(Feedback feedback) {
+        // TODO change to value from conf
         String rawFeedbackTopic = "raw-feedback";
         String json = toJson(feedback);
 

@@ -54,3 +54,5 @@ target/
 
 docker-compose.yml
 out/
+
+gradle.properties
