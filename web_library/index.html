@@ -1855,9 +1855,12 @@
             //'apiEndpointOrchestrator': 'https://platform.supersede.eu:8443/',
             //'apiEndpointRepository': 'https://platform.supersede.eu:8443/',
 
-            'applicationId': 7,
+            'applicationId': 1,
             'apiEndpointOrchestrator': 'http://localhost:8081/',
             'apiEndpointRepository': 'http://localhost:8082/',
+
+            //'apiEndpointOrchestrator': 'http://mt.ronnieschaniel.com:8080/feedback_orchestrator-2.0.0/',
+            //'apiEndpointRepository': 'http://mt.ronnieschaniel.com:8080/feedback_repository-2.0.0/',
 
             'userId': '99999999',
             'lang': 'en',
@@ -1865,46 +1868,16 @@
             'modal': 1,
             'dialogCSSClass': 'my-custom-dialog-class',
             'colorPickerCSSClass': 'my-color-picker',
-            'defaultStrokeWidth': 4
+            'defaultStrokeWidth': 4,
+            'metaData': {
+                'diagram': 'diagram X 02',
+                'section': 'section#diagramSection'
+            }
         });
     });
 </script>
 
 <iframe src="/dist/Energiesparkonto_ Energie sparen. Kosten senken._files/saved_resource.html"
         style="position: absolute; top: -999px; left: -999px; visibility: hidden;"></iframe>
-<script aria-hidden="true" type="application/x-lastpass" id="hiddenlpsubmitdiv" style="display: none;"></script>
-<script>try {
-    (function () {
-        for (var lastpass_iter = 0; lastpass_iter < document.forms.length; lastpass_iter++) {
-            var lastpass_f = document.forms[lastpass_iter];
-            if (typeof(lastpass_f.lpsubmitorig2) == "undefined") {
-                lastpass_f.lpsubmitorig2 = lastpass_f.submit;
-                if (typeof(lastpass_f.lpsubmitorig2) == 'object') {
-                    continue;
-                }
-                lastpass_f.submit = function () {
-                    var form = this;
-                    var customEvent = document.createEvent("Event");
-                    customEvent.initEvent("lpCustomEvent", true, true);
-                    var d = document.getElementById("hiddenlpsubmitdiv");
-                    if (d) {
-                        for (var i = 0; i < document.forms.length; i++) {
-                            if (document.forms[i] == form) {
-                                if (typeof(d.innerText) != 'undefined') {
-                                    d.innerText = i.toString();
-                                } else {
-                                    d.textContent = i.toString();
-                                }
-                            }
-                        }
-                        d.dispatchEvent(customEvent);
-                    }
-                    form.lpsubmitorig2();
-                }
-            }
-        }
-    })()
-} catch (e) {
-}</script>
 </body>
 </html>

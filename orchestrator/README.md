@@ -20,12 +20,14 @@ For a detailed API documentation, please visit: http://docs.supersedeorchestrato
 ```bash
 # clone the repository
 
+cd orchestrator
+
 # copy the configuration files for your configuration
 cp src/main/resources/application.properties-dist src/main/resources/application.properties
 cp src/main/resources/application-test.properties-dist src/main/resources/application-test.properties
 ```
 
-Create a test database and a local database to run the application locally if needed. Fill in your DB credentials and all other required values in the newly created application.properties and application-test.properties. Do not add this file to the GIT index.
+Create a test database and a local database to run the application locally if needed. You can find the newest DB dump in src/main/resources/db. Fill in your DB credentials and all other required values in the newly created application.properties and application-test.properties. Do not add this file to the GIT index.
 
 ```bash
 cd orchestrator
@@ -91,6 +93,15 @@ gradle build jar -x test
 gradle bootRepackage
 docker-compose up -d 
 ```
+
+If you execute tests, and you get 
+```bash
+Process finished with exit code 1
+Class not found: "ch.fhnw.cere.orchestrator.OrchestratorApplicationTests"Empty test suite.
+```
+
+In IntelliJ: Right-click on the project and choose "Open Module Settings". 
+
 
 # License
 

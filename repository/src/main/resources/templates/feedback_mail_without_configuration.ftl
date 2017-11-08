@@ -97,6 +97,7 @@ Unfortunately the orchestrator was not available. So, the configuration of the m
         Time zone: ${(feedback.contextInformation.timeZone)!} <br />
         Device pixel ratio: ${(feedback.contextInformation.devicePixelRatio)!} <br />
         URL: ${(feedback.contextInformation.url)!} <br />
+        Meta Data: ${(feedback.contextInformation.metaData)!} <br />
     </#if>
 </p>
 

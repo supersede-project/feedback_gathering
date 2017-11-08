@@ -51,6 +51,7 @@ export var feedbackPluginModule = function ($, window, document) {
         'lang': 'de',
         'fallbackLang': 'en',
         'localesOverride': null,
+        'metaData': null,
         'backgroundColor': '#7c9009',
         'distPath': 'dist/',
         'userId': '',

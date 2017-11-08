@@ -109,6 +109,9 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .requestMatchers(new RegexRequestMatcher("/orchestrator/feedback/\\w{2}/applications/\\d+/?\\?_=\\d+", "GET", true)).permitAll()
                 .requestMatchers(new RegexRequestMatcher("/orchestrator/feedback/\\w{2}/applications/\\d+/?", "GET", true)).permitAll()
                 .requestMatchers(new RegexRequestMatcher("/orchestrator/feedback/\\w{2}/applications/?", "GET", true)).permitAll()
+                .requestMatchers(new RegexRequestMatcher("/orchestrator/monitoring/MonitorTypes/?", "GET", true)).permitAll()
+                .requestMatchers(new RegexRequestMatcher("/orchestrator/monitoring/MonitorTypes/\\w+/?/Tools/\\w+/?", "GET", true)).permitAll()
+                .requestMatchers(new RegexRequestMatcher("/orchestrator/monitoring/MonitorTypes/\\w+/?/Tools/\\w+/ToolConfigurations/\\d+/?", "GET", true)).permitAll()
                 .anyRequest().authenticated();
 
         httpSecurity.addFilterBefore(authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter.class);

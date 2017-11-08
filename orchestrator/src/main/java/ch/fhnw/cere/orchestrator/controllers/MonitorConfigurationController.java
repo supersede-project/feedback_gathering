@@ -8,6 +8,15 @@ import ch.fhnw.cere.orchestrator.models.MonitorType;
 import ch.fhnw.cere.orchestrator.repositories.MonitorConfigurationRepository;
 import ch.fhnw.cere.orchestrator.repositories.MonitorToolRepository;
 import ch.fhnw.cere.orchestrator.repositories.MonitorTypeRepository;
+import eu.supersede.integration.api.monitoring.manager.proxies.MonitorManagerProxy;
+import eu.supersede.integration.api.monitoring.manager.types.AppStoreMonitorConfiguration;
+import eu.supersede.integration.api.monitoring.manager.types.GooglePlayMonitorConfiguration;
+import eu.supersede.integration.api.monitoring.manager.types.HttpMonitorConfiguration;
+import eu.supersede.integration.api.monitoring.manager.types.MonitorSpecificConfiguration;
+import eu.supersede.integration.api.monitoring.manager.types.TwitterMonitorConfiguration;
+
+import java.net.URL;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -27,12 +36,14 @@ public class MonitorConfigurationController extends BaseController {
 
     @RequestMapping(method = RequestMethod.GET, value = "/{id}")
     public MonitorConfiguration getMonitorConfiguration(@PathVariable long id) {
-        MonitorConfiguration monitorConfiguration = monitorConfigurationRepository.findOne(id);
+    	
+    	for (MonitorConfiguration cnf : monitorConfigurationRepository.findAll()) {
+    		if (cnf.getMonitorTool().equals(getMonitoringTool()) && 
+    				cnf.getMonitorManagerId() == id) return cnf;
+    	}
+    	
+    	throw new NotFoundException();
 
-        if(monitorConfiguration == null) {
-            throw new NotFoundException();
-        }
-        return monitorConfiguration;
     }
 
     @PreAuthorize("@securityService.hasAdminPermission()")
@@ -40,20 +51,64 @@ public class MonitorConfigurationController extends BaseController {
     @RequestMapping(method = RequestMethod.POST, value = "")
     public MonitorConfiguration createMonitorConfiguration(@RequestBody MonitorConfiguration monitorConfiguration) {
         monitorConfiguration.setMonitorTool(getMonitoringTool());
-        return monitorConfigurationRepository.save(monitorConfiguration);
+        try {
+	        MonitorManagerProxy<?, ?> proxy = new MonitorManagerProxy<>();
+			MonitorSpecificConfiguration configurationObj = generateMonitorConf(monitorConfiguration, getMonitoringTool());
+			MonitorSpecificConfiguration createConfiguration = proxy.createMonitorConfiguration(configurationObj);
+			monitorConfiguration.setMonitorManagerId(createConfiguration.getId());
+			MonitorConfiguration newMonitorConfiguration = monitorConfigurationRepository.save(monitorConfiguration);
+			return newMonitorConfiguration;
+        } catch(Exception e) {
+        	e.printStackTrace();
+        	return null;
+        }        		
     }
 
     @PreAuthorize("@securityService.hasAdminPermission()")
     @RequestMapping(method = RequestMethod.DELETE, value = "/{id}")
     public void deleteMonitorConfiguration(@PathVariable long id) {
-        monitorConfigurationRepository.delete(id);
+    	
+    	try {
+    		for (MonitorConfiguration cnf : monitorConfigurationRepository.findAll()) {
+	    		if (cnf.getMonitorTool().equals(getMonitoringTool()) && 
+	    				cnf.getMonitorManagerId() == id) {
+	    	    	MonitorManagerProxy<?, ?> proxy = new MonitorManagerProxy<>();
+	    	    	MonitorSpecificConfiguration deleteConf = 
+	    	    			generateMonitorConf(monitorConfigurationRepository.findOne(cnf.getId()), getMonitoringTool());
+	    	    	deleteConf.setId((int) id);
+	    	    	proxy.deleteMonitorConfiguration(deleteConf);
+	    			monitorConfigurationRepository.delete(cnf.getId());
+	    		}
+	    	}
+    	} catch (Exception e) {
+    		e.printStackTrace();
+    	}
+    	
     }
 
     @PreAuthorize("@securityService.hasAdminPermission()")
     @RequestMapping(method = RequestMethod.PUT, value = "/{id}")
-    public MonitorConfiguration updateMonitorConfiguration(@RequestBody MonitorConfiguration monitorConfiguration) {
+    public MonitorConfiguration updateMonitorConfiguration(@RequestBody MonitorConfiguration monitorConfiguration,
+    		@PathVariable long id) {
         monitorConfiguration.setMonitorTool(getMonitoringTool());
-        return monitorConfigurationRepository.save(monitorConfiguration);
+    	try {
+    		for (MonitorConfiguration cnf : monitorConfigurationRepository.findAll()) {
+	    		if (cnf.getMonitorTool().equals(getMonitoringTool()) && 
+	    				cnf.getMonitorManagerId() == id) {
+	    			MonitorManagerProxy<?, ?> proxy = new MonitorManagerProxy<>();
+	    			MonitorSpecificConfiguration configurationObj = generateMonitorConf(monitorConfiguration, getMonitoringTool());
+	    			configurationObj.setId((int) id);
+	    			proxy.updateMonitorConfiguration(configurationObj);
+	    			monitorConfiguration.setMonitorManagerId(id);
+	    			monitorConfiguration.setId(cnf.getId());
+	    			monitorConfigurationRepository.save(monitorConfiguration);
+	    			return monitorConfiguration;
+	    		}
+	    	}
+    	} catch (Exception e) {
+    		e.printStackTrace();
+    	}
+		return null;
     }
 
     private MonitorType getMonitorType() {
@@ -63,4 +118,31 @@ public class MonitorConfigurationController extends BaseController {
     private MonitorTool getMonitoringTool() {
         return monitorToolRepository.findByMonitorTypeAndName(getMonitorType(), monitorToolName());
     }
+    
+    private MonitorSpecificConfiguration generateMonitorConf(MonitorConfiguration configuration, MonitorTool tool) throws Exception {
+		MonitorSpecificConfiguration monitorManagerConf = null;
+		if (tool.getMonitorName().equals("Twitter")) {
+			monitorManagerConf = new TwitterMonitorConfiguration();
+			((TwitterMonitorConfiguration) monitorManagerConf).setKeywordExpression(configuration.getKeywordExpression());
+		}
+		else if (tool.getMonitorName().equals("GooglePlay")) {
+			monitorManagerConf = new GooglePlayMonitorConfiguration();
+			((GooglePlayMonitorConfiguration) monitorManagerConf).setPackageName(configuration.getPackageName());
+		}
+		else if (tool.getMonitorName().equals("AppStore")) {
+			monitorManagerConf = new AppStoreMonitorConfiguration();
+			((AppStoreMonitorConfiguration) monitorManagerConf).setAppId(configuration.getAppId());
+		}
+		else if (tool.getMonitorName().equals("HttpMonitor")) {
+			monitorManagerConf = new HttpMonitorConfiguration();
+			((HttpMonitorConfiguration) monitorManagerConf).setUrl(configuration.getUrl());
+			((HttpMonitorConfiguration) monitorManagerConf).setMethod(configuration.getMethod());
+		}
+		if (configuration.getKafkaEndpoint() != null) 
+			monitorManagerConf.setKafkaEndpoint(new URL(configuration.getKafkaEndpoint()));
+		monitorManagerConf.setKafkaTopic(configuration.getKafkaTopic());
+		monitorManagerConf.setTimeSlot(Integer.parseInt(configuration.getTimeSlot()));
+		monitorManagerConf.setToolName(tool.getName());
+		return monitorManagerConf;
+}
 }
