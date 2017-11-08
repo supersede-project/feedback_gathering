@@ -85,12 +85,12 @@ public class FeedbackIntegrationTest extends BaseIntegrationTest {
         settingRepository.deleteAllInBatch();
         apiUserPermissionRepository.deleteAllInBatch();
 
-        feedback1 = feedbackRepository.save(new Feedback("Feedback 1 App 1", "userId1", 1, 11, "en"));
-        feedback2 = feedbackRepository.save(new Feedback("Feedback 2 App 1", "userId2", 1, 11, "it"));
-        feedback3 = feedbackRepository.save(new Feedback("Feedback 3 App 2", "userId3", 2, 22, "de"));
+        feedback1 = feedbackRepository.save(new Feedback("Feedback 1 App 1", "userId1", 1, 11, "en", commentCount, likeCount, dislikeCount, unreadCommentCount));
+        feedback2 = feedbackRepository.save(new Feedback("Feedback 2 App 1", "userId2", 1, 11, "it", commentCount, likeCount, dislikeCount, unreadCommentCount));
+        feedback3 = feedbackRepository.save(new Feedback("Feedback 3 App 2", "userId3", 2, 22, "de", commentCount, likeCount, dislikeCount, unreadCommentCount));
 
-        feedback4 = feedbackRepository.save(new Feedback("Feedback 4 App 20", "userId1", 20, 39, "en"));
-        feedback5 = feedbackRepository.save(new Feedback("Feedback 5 App 20", "userId2", 20, 39, "it"));
+        feedback4 = feedbackRepository.save(new Feedback("Feedback 4 App 20", "userId1", 20, 39, "en", commentCount, likeCount, dislikeCount, unreadCommentCount));
+        feedback5 = feedbackRepository.save(new Feedback("Feedback 5 App 20", "userId2", 20, 39, "it", commentCount, likeCount, dislikeCount, unreadCommentCount));
 
         apiUserPermissionRepository.save(new ApiUserPermission(appAdminUser, 1, true));
         apiUserPermissionRepository.save(new ApiUserPermission(appAdminUser, 20, true));
@@ -242,7 +242,7 @@ public class FeedbackIntegrationTest extends BaseIntegrationTest {
 
     @Test
     public void postFeedback() throws Exception {
-        Feedback feedback = new Feedback("New Feedback", "userId1", 1, 11, "en");
+        Feedback feedback = new Feedback("New Feedback", "userId1", 1, 11, "en", commentCount, likeCount, dislikeCount, unreadCommentCount);
         String feedbackJson = toJson(feedback);
 
         MockMultipartFile jsonFile = new MockMultipartFile("json", "", "application/json", feedbackJson.getBytes());
@@ -254,7 +254,7 @@ public class FeedbackIntegrationTest extends BaseIntegrationTest {
 
     @Test
     public void postFeedbackTree() throws Exception {
-        Feedback feedback = new Feedback("New Feedback", "userId1", 1, 11, "en");
+        Feedback feedback = new Feedback("New Feedback", "userId1", 1, 11, "en", commentCount, likeCount, dislikeCount, unreadCommentCount);
         feedback.setTextFeedbacks(new ArrayList<TextFeedback>(){{
             add(new TextFeedback(feedback, "Text Feedback 1", 1));
             add(new TextFeedback(feedback, "info@example.com", 2));
@@ -291,7 +291,7 @@ public class FeedbackIntegrationTest extends BaseIntegrationTest {
 
     @Test
     public void postFeedbackTree2() throws Exception {
-        Feedback feedback = new Feedback("New Feedback", "userId1", 1, 11, "en");
+        Feedback feedback = new Feedback("New Feedback", "userId1", 1, 11, "en", commentCount, likeCount, dislikeCount, unreadCommentCount);
         feedback.setTextFeedbacks(new ArrayList<TextFeedback>(){{
             add(new TextFeedback(feedback, "Text Feedback 1", 1));
             add(new TextFeedback(feedback, "info@example.com", 2));
@@ -401,7 +401,7 @@ public class FeedbackIntegrationTest extends BaseIntegrationTest {
 
     @Test
     public void postFeedbackTreeWithFile() throws Exception {
-        Feedback feedback = new Feedback("New Feedback", "userId1", 1, 11, "en");
+        Feedback feedback = new Feedback("New Feedback", "userId1", 1, 11, "en", commentCount, likeCount, dislikeCount, unreadCommentCount);
         feedback.setTextFeedbacks(new ArrayList<TextFeedback>(){{
             add(new TextFeedback(feedback, "Text Feedback 1", 1));
             add(new TextFeedback(feedback, "info@example.com", 2));
