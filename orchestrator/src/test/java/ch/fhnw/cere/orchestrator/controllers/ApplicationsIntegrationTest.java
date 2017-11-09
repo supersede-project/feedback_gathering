@@ -8,6 +8,7 @@ import ch.fhnw.cere.orchestrator.repositories.ApplicationRepository;
 import ch.fhnw.cere.orchestrator.serialization.ParameterSerializerModifier;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
+import com.google.common.collect.Lists;
 import org.hamcrest.Matchers;
 import static org.hamcrest.Matchers.nullValue;
 
@@ -174,6 +175,8 @@ public class ApplicationsIntegrationTest extends BaseIntegrationTest {
     @Test
     public void postApplicationObjectTree() throws Exception {
         Application application = applicationTreeBuilder.buildApplicationTree("Test App 4");
+        application.setConfigurations(Lists.reverse(application.getConfigurations()));
+
         String applicationJson = toJson(application);
 
         String adminJWTToken = requestAdminJWTToken();
@@ -190,16 +193,16 @@ public class ApplicationsIntegrationTest extends BaseIntegrationTest {
                 .andExpect(jsonPath("$.generalConfiguration.parameters", hasSize(1)))
                 .andExpect(jsonPath("$.generalConfiguration.parameters[0].key", is("reviewActive")))
                 .andExpect(jsonPath("$.generalConfiguration.parameters[0].value", is(true)))
-                .andExpect(jsonPath("$.configurations[0].name", is("Push configuration 1 of Test App 4")))
-                .andExpect(jsonPath("$.configurations[0].type", is("PUSH")))
-                .andExpect(jsonPath("$.configurations[0].mechanisms[0].type", is("TEXT_TYPE")))
-                .andExpect(jsonPath("$.configurations[0].mechanisms[0].active", is(true)))
-                .andExpect(jsonPath("$.configurations[0].mechanisms[0].order", is(1)))
-                .andExpect(jsonPath("$.configurations[0].mechanisms[0].parameters", hasSize(4)))
-                .andExpect(jsonPath("$.configurations[0].generalConfiguration.name", is("General configuration for push configuration")))
-                .andExpect(jsonPath("$.configurations[0].generalConfiguration.parameters", hasSize(1)))
-                .andExpect(jsonPath("$.configurations[0].generalConfiguration.parameters[0].key", is("reviewActive")))
-                .andExpect(jsonPath("$.configurations[0].generalConfiguration.parameters[0].value", is(false))).andReturn();
+                .andExpect(jsonPath("$.configurations[1].name", is("Push configuration 1 of Test App 4")))
+                .andExpect(jsonPath("$.configurations[1].type", is("PUSH")))
+                .andExpect(jsonPath("$.configurations[1].mechanisms[0].type", is("TEXT_TYPE")))
+                .andExpect(jsonPath("$.configurations[1].mechanisms[0].active", is(true)))
+                .andExpect(jsonPath("$.configurations[1].mechanisms[0].order", is(1)))
+                .andExpect(jsonPath("$.configurations[1].mechanisms[0].parameters", hasSize(4)))
+                .andExpect(jsonPath("$.configurations[1].generalConfiguration.name", is("General configuration for push configuration")))
+                .andExpect(jsonPath("$.configurations[1].generalConfiguration.parameters", hasSize(1)))
+                .andExpect(jsonPath("$.configurations[1].generalConfiguration.parameters[0].key", is("reviewActive")))
+                .andExpect(jsonPath("$.configurations[1].generalConfiguration.parameters[0].value", is(false))).andReturn();
 
 
         String createdApplicationString = result.getResponse().getContentAsString();
@@ -217,16 +220,16 @@ public class ApplicationsIntegrationTest extends BaseIntegrationTest {
                 .andExpect(jsonPath("$.generalConfiguration.parameters", hasSize(1)))
                 .andExpect(jsonPath("$.generalConfiguration.parameters[0].key", is("reviewActive")))
                 .andExpect(jsonPath("$.generalConfiguration.parameters[0].value", is(true)))
-                .andExpect(jsonPath("$.configurations[0].name", is("Push configuration 1 of Test App 4")))
-                .andExpect(jsonPath("$.configurations[0].type", is("PUSH")))
-                .andExpect(jsonPath("$.configurations[0].mechanisms[0].type", is("TEXT_TYPE")))
-                .andExpect(jsonPath("$.configurations[0].mechanisms[0].active", is(true)))
-                .andExpect(jsonPath("$.configurations[0].mechanisms[0].order", is(1)))
-                .andExpect(jsonPath("$.configurations[0].mechanisms[0].parameters", hasSize(3)))
-                .andExpect(jsonPath("$.configurations[0].generalConfiguration.name", is("General configuration for push configuration")))
-                .andExpect(jsonPath("$.configurations[0].generalConfiguration.parameters", hasSize(1)))
-                .andExpect(jsonPath("$.configurations[0].generalConfiguration.parameters[0].key", is("reviewActive")))
-                .andExpect(jsonPath("$.configurations[0].generalConfiguration.parameters[0].value", is(false)));
+                .andExpect(jsonPath("$.configurations[1].name", is("Push configuration 1 of Test App 4")))
+                .andExpect(jsonPath("$.configurations[1].type", is("PUSH")))
+                .andExpect(jsonPath("$.configurations[1].mechanisms[0].type", is("TEXT_TYPE")))
+                .andExpect(jsonPath("$.configurations[1].mechanisms[0].active", is(true)))
+                .andExpect(jsonPath("$.configurations[1].mechanisms[0].order", is(1)))
+                .andExpect(jsonPath("$.configurations[1].mechanisms[0].parameters", hasSize(2)))
+                .andExpect(jsonPath("$.configurations[1].generalConfiguration.name", is("General configuration for push configuration")))
+                .andExpect(jsonPath("$.configurations[1].generalConfiguration.parameters", hasSize(1)))
+                .andExpect(jsonPath("$.configurations[1].generalConfiguration.parameters[0].key", is("reviewActive")))
+                .andExpect(jsonPath("$.configurations[1].generalConfiguration.parameters[0].value", is(false)));
     }
 
     @Test

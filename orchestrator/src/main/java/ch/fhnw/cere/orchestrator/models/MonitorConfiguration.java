@@ -8,7 +8,6 @@ import eu.supersede.integration.api.monitoring.manager.types.Method;
 
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
-import org.json.JSONObject;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -86,6 +85,22 @@ public class MonitorConfiguration {
         this.packageName = packageName;
         this.appId = appId;
         this.url = url;
+    }
+
+    public MonitorConfiguration(MonitorTool monitorTool, long monitorManagerId, String configSender, String timeStamp, String timeSlot, String kafkaEndpoint, String kafkaTopic, String state, String keywordExpression, String packageName, String appId, String url, Method method) {
+        this.monitorTool = monitorTool;
+        this.monitorManagerId = monitorManagerId;
+        this.configSender = configSender;
+        this.timeStamp = timeStamp;
+        this.timeSlot = timeSlot;
+        this.kafkaEndpoint = kafkaEndpoint;
+        this.kafkaTopic = kafkaTopic;
+        this.state = state;
+        this.keywordExpression = keywordExpression;
+        this.packageName = packageName;
+        this.appId = appId;
+        this.url = url;
+        this.method = method;
     }
 
     @Override
