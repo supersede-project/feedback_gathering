@@ -161,8 +161,8 @@ public class ParametersIntegrationTest extends BaseIntegrationTest {
                 .content(parameterJson)
                 .header("Authorization", adminJWTToken))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id", is((int) this.parameter2.getId())))
                 .andExpect(jsonPath("$.key", is("title")))
-                .andExpect(jsonPath("$.value", is("Titel DE updated")));
+                .andExpect(jsonPath("$.value", is("Titel DE updated")))
+                .andExpect(jsonPath("$.id", is((int) this.parameter2.getId())));
     }
 }

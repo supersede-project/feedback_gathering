@@ -155,7 +155,7 @@ public class ConfigurationMechanismsIntegrationTest extends BaseIntegrationTest 
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(1)))
                 .andExpect(jsonPath("$[0].active", is(false)))
-                .andExpect(jsonPath("$[0].order", is(0)))
+                .andExpect(jsonPath("$[0].order", is(2)))
                 .andExpect(jsonPath("$[0].mechanism.id", is((int) mechanism1.getId())));
     }
 
