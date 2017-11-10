@@ -22,7 +22,6 @@
 package monitoring.tools;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.UnsupportedEncodingException;
 import java.sql.Timestamp;
@@ -35,7 +34,6 @@ import java.util.TimerTask;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.methods.GetMethod;
-import org.apache.commons.httpclient.methods.HeadMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.methods.StringRequestEntity;
 import org.apache.commons.httpclient.methods.multipart.FilePart;
@@ -43,6 +41,7 @@ import org.apache.commons.httpclient.methods.multipart.MultipartRequestEntity;
 import org.apache.commons.httpclient.methods.multipart.Part;
 import org.apache.commons.httpclient.methods.multipart.StringPart;
 import org.apache.commons.httpclient.params.HttpClientParams;
+import org.apache.http.params.CoreConnectionPNames;
 import org.apache.log4j.Logger;
 import org.springframework.util.StopWatch;
 import org.springframework.web.multipart.MultipartFile;
@@ -146,12 +145,11 @@ public class ApacheHttp implements ToolInterface<HttpMonitoringParams> {
 		
 		@Override
 		public void run() {
-			HttpClientParams httpParams = new HttpClientParams();
-			httpParams.setConnectionManagerTimeout(30000);
-			httpParams.setSoTimeout(30000);
 			
 		    this.client = new HttpClient();
-		    this.client.setParams(httpParams);
+		    
+		    client.getHttpConnectionManager().getParams().setConnectionTimeout(30000);
+		    client.getHttpConnectionManager().getParams().setSoTimeout(30000);
 		    
 	        if (confParams.getMethod().equals(Method.GET)) 
 	        	initGetMethod();
