@@ -236,7 +236,7 @@ public class ParameterSerializationTest {
         JSONObject data2 = new JSONObject(parameterJson2);
 
         assertEquals("title", data2.getString("key"));
-        assertEquals("null", data2.getString("value"));
+        assertEquals(JSONObject.NULL, data2.get("value"));
         assertEquals("en", data2.getString("language"));
 
 
