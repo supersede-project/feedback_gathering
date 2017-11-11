@@ -35,6 +35,7 @@ public class Parameter {
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name="parent_parameter_id")
     private Parameter parentParameter;
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @OneToMany(mappedBy="parentParameter", cascade={CascadeType.REMOVE, CascadeType.PERSIST})
     private List<Parameter> parameters;
 

@@ -402,7 +402,24 @@ public class ApplicationsIntegrationTest extends BaseIntegrationTest {
                 .header("Authorization", superAdminJWTToken)
                 .content(applicationsJson))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$", hasSize(7)));
+                .andExpect(jsonPath("$", hasSize(7)))
+                .andExpect(jsonPath("$[0].name", is("Test")))
+                .andExpect(jsonPath("$[0].configurations[0].type", is("PUSH")))
+                .andExpect(jsonPath("$[0].configurations[0].mechanisms[0].type", is("CATEGORY_TYPE")))
+                .andExpect(jsonPath("$[0].configurations[0].mechanisms[0].parameters", hasSize(6)))
+                .andExpect(jsonPath("$[0].configurations[0].mechanisms[0].parameters[0].key", is("mandatoryReminder")))
+                .andExpect(jsonPath("$[0].configurations[0].mechanisms[0].parameters[0].value", is("Please select at least one category")))
+                .andExpect(jsonPath("$[0].configurations[0].mechanisms[0].parameters[1].key", is("options")))
+                .andExpect(jsonPath("$[0].configurations[0].mechanisms[0].parameters[1].value[0].key", is("SLOW_CONNECTION")))
+                .andExpect(jsonPath("$[0].configurations[0].mechanisms[0].parameters[1].value[0].value", is("Slow connection")))
+                .andExpect(jsonPath("$[0].configurations[0].mechanisms[0].parameters[1].value[1].key", is("VIDEO_IS_FREEZING")))
+                .andExpect(jsonPath("$[0].configurations[0].mechanisms[0].parameters[1].value[1].value", is("Video is freezing")))
+                .andExpect(jsonPath("$[0].configurations[0].mechanisms[0].parameters[1].value[2].key", is("BUG_CATEGORY")))
+                .andExpect(jsonPath("$[0].configurations[0].mechanisms[0].parameters[1].value[2].value", is("Bug")))
+                .andExpect(jsonPath("$[0].configurations[0].mechanisms[0].parameters[1].value[3].key", is("FEATURE_REQUEST_CATEGORY")))
+                .andExpect(jsonPath("$[0].configurations[0].mechanisms[0].parameters[1].value[3].value", is("Feature request")))
+                .andExpect(jsonPath("$[0].configurations[0].mechanisms[0].parameters[1].value[4].key", is("GENERAL_CATEGORY")))
+                .andExpect(jsonPath("$[0].configurations[0].mechanisms[0].parameters[1].value[4].value", is("General feedback")));
 
 
         mockMvc.perform(get(basePathEn + "/"))

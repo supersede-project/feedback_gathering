@@ -16,7 +16,7 @@ public class ConfigurationMechanism {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
     @JsonIgnore
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.REMOVE})
     @JoinColumn(name = "configuration_id")
     private Configuration configuration;
     @ManyToOne(cascade = {CascadeType.REMOVE, CascadeType.PERSIST}, fetch=FetchType.EAGER)

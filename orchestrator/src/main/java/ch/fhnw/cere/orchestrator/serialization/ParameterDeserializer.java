@@ -34,10 +34,10 @@ public class ParameterDeserializer extends StdDeserializer<Parameter> {
         List<Parameter> parameters = new ArrayList<Parameter>();
         String value = null;
 
-        if(node.get("value") == null || node.get("value").asText() == null || node.get("value").asText().length() < 1) {
+        if(node.get("value") == null || node.get("value").toString() == null || node.get("value").toString().length() < 1) {
             value = null;
-        } else if(node.get("value").asText().trim().substring(0,1).equals("[")) {
-            parameters = mapper.readValue(node.get("value").asText(), new TypeReference<List<Parameter>>() {});
+        } else if(node.get("value").toString().trim().substring(0,1).equals("[")) {
+            parameters = mapper.readValue(node.get("value").toString(), new TypeReference<List<Parameter>>() {});
         } else {
             value = node.get("value").asText();
         }

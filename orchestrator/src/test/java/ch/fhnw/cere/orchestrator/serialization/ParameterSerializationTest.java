@@ -23,6 +23,7 @@ public class ParameterSerializationTest {
     private String parameterJson2;
     private String parameterJson3;
     private String parameterJson4;
+    private String parameterJson5;
 
     @Before
     public void setup() {
@@ -127,6 +128,39 @@ public class ParameterSerializationTest {
                 "                \"language\": \"en\"\n" +
                 "              }\n" +
                 "            ]";
+        parameterJson5 =  "{\n" +
+                "                \"key\": \"options\",\n" +
+                "                \"value\": [\n" +
+                "                  {\n" +
+                "                    \"key\": \"SLOW_CONNECTION\",\n" +
+                "                    \"value\": \"Slow connection\",\n" +
+                "                    \"language\": \"en\"\n" +
+                "                  },\n" +
+                "                  {\n" +
+                "                    \"key\": \"VIDEO_IS_FREEZING\",\n" +
+                "                    \"value\": \"Video is freezing\",\n" +
+                "                    \"language\": \"en\"\n" +
+                "                  },\n" +
+                "                  {\n" +
+                "                    \"key\": \"BUG_CATEGORY\",\n" +
+                "                    \"value\": \"Bug\",\n" +
+                "                    \"language\": \"en\"\n" +
+                "                  },\n" +
+                "                  {\n" +
+                "                    \"key\": \"FEATURE_REQUEST_CATEGORY\",\n" +
+                "                    \"value\": \"Feature request\",\n" +
+                "                    \"defaultValue\": \"\",\n" +
+                "                    \"editableByUser\": false,\n" +
+                "                    \"language\": \"en\"\n" +
+                "                  },\n" +
+                "                  {\n" +
+                "                    \"key\": \"GENERAL_CATEGORY\",\n" +
+                "                    \"value\": \"General feedback\",\n" +
+                "                    \"language\": \"en\"\n" +
+                "                  }\n" +
+                "                ],\n" +
+                "                \"language\": \"en\"\n" +
+                "              },\n";
     }
 
     @Test
@@ -155,11 +189,23 @@ public class ParameterSerializationTest {
     }
 
     @Test
+    public void testDeserializationOfParameterWithNestedParameters2() throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        Parameter parameter = mapper.readValue(parameterJson5, Parameter.class);
+
+        assertEquals("options", parameter.getKey());
+        assertEquals(null, parameter.getValue());
+        assertEquals(5, parameter.getParameters().size());
+    }
+
+    @Test
     public void testDeserializationOfParameterWithNestedParametersInList() throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         List<Parameter> parameters = mapper.readValue(parameterJson4, new TypeReference<List<Parameter>>() {});
 
         assertEquals(6, parameters.size());
+        assertEquals("options", parameters.get(1).getKey());
+        assertEquals(5, parameters.get(1).getParameters().size());
     }
 
     @Test

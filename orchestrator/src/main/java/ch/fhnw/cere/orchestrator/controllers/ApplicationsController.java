@@ -118,13 +118,8 @@ public class ApplicationsController extends BaseController {
         payload = jsonHelper.stripOffTimestamps(payload);
         payload = jsonHelper.stripOffInvalidCommas(payload);
 
-        System.err.println(payload);
-
         ObjectMapper mapper = new ObjectMapper();
         List<Application> applications = mapper.readValue(payload, new TypeReference<List<Application>>(){});
-
-        System.err.println(applications);
-        System.err.println("Number of applications = " + applications.size());
 
         List<Application> createdApplications = new ArrayList<>();
 
