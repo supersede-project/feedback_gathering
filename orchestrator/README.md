@@ -10,84 +10,99 @@ For a detailed API documentation, please visit: http://docs.supersedeorchestrato
 - [Table of Content](#table-of-content)
 - [Installation](#installation)
 - [Deployment](#deployment)
-- [running tests](#tests)
+- [Tests](#tests)
 - [Directory Structure](#directory-structure)
+- [Docker](#docker)
 - [License](#license)
 
 # Installation
 
-- first install the server_library in your local maven repository: https://github.com/supersede-project/monitor_feedback/tree/master/server_library
-- run the following commands:
-
 ```bash
 # clone the repository
-git clone https://github.com/supersede-project/monitor_feedback/tree/master/orchestrator
+
 cd orchestrator
-# install the project's dependencies
-mvn clean install
+
+# copy the configuration files for your configuration
+cp src/main/resources/application.properties-dist src/main/resources/application.properties
+cp src/main/resources/application-test.properties-dist src/main/resources/application-test.properties
 ```
 
-# Deployment
-
-To deploy the newest version of the orchestrator:
-
-- first create the database on your deployment server. The sql file is in the "deployment/dumps" folder of the project. To install the database on your local machine, run the following commands with your database credentials:
+Create a test database and a local database to run the application locally if needed. You can find the newest DB dump in src/main/resources/db. Fill in your DB credentials and all other required values in the newly created application.properties and application-test.properties. Do not add this file to the GIT index.
 
 ```bash
-cd orchestrator/deployment/dumps
-mysql -u username -p orchestrator < orchestrator.sql
+cd orchestrator
+# install the project's dependencies and generate the war file in build/libs/
+gradle build
 ```
 
-- copy the war file to your tomcat WepApps directory on your deployment server. In linux systems, this is usually the directory "/usr/share/tomcat7/webapps". The war file is in the folder "orchestrator/target" after the installation.
-
-- start the tomcat server over the console
-
-```bash
-sudo service tomcat7 start
-```
+DB dump in src/main/resources/db/migrations/supersede_orchestrator_db_structure.sql 
 
 # Tests
 
-- to run the unit tests, execute the following commands:
+To run the integration tests, execute the following commands:
 
 ```bash
-cd orchestrator
-mvn test
+gradle test
 ```
 
-API tests
+# Docker
 
-- Open the web.xml file of the war file after the installation. The config is in the folder "/WebContent/WEB-INF".
-- Search for the following section and set the param-value to "true".
+Build the JAR and the images and containers for the Java Spring Repository and the Repository DB. 
 
-```
-<context-param>
-  <param-name>debug</param-name>
-  <param-value>false</param-value>
-</context-param>
+The jdbs connection string in the application.properties should have the DB container service name as host:
+
+```bash
+spring.datasource.url = jdbc:mysql://mysqldbserver:3306/<db_name>?useSSL=false
 ```
 
-- Deploy the war file on your local machine (#deployment)
-- follow the instructions in the "test" section of the orchestrator_api_test project (https://github.com/supersede-project/monitor_feedback/tree/master/orchestrator_api_tests)
-
-
-# Directory Structure
-
+```bash
+gradle clean build jar
+docker-compose up -d
 ```
-.
-├── src                        <- source code of the application
-|   |                          <- servlet class and guice modules 
-│   ├── controllers            <- controller classes
-│   ├── model                  <- model classes
-│   ├── serialization          <- serialization classes
-│   ├── services               <- service classes
-│   ├── validation             <- validation classes
-├── WebContent                 <- compiled classes and libs
-├── deployment                 <- SQL dumps and war files for deployment
-├── test                       <- API- and unit-tests
-│   ├── test                   <- API tests for all controllers
+
+Check if the 2 containers are up and running:
+ 
+```bash
+docker ps -a  
 ```
+
+## Troubleshooting
+
+You might get: 
+```bash
+ERROR org.springframework.boot.SpringApplication - Application startup failed
+...
+Caused by: java.lang.IllegalArgumentException: No auto configuration classes found in META-INF/spring.factories. If you are using a custom packaging, make sure that file is correct.
+```
+
+Completely delete the container and image: 
+```bash
+docker rm -v <container_name>
+docker rmi <image_name>
+```
+
+**Attention:** This would delete all stopped containers and all unused images:
+```bash
+docker ps -q |xargs docker rm
+docker images -q |xargs docker rmi
+```
+
+Finally execute:
+```bash
+gradle build jar -x test
+gradle bootRepackage
+docker-compose up -d 
+```
+
+If you execute tests, and you get 
+```bash
+Process finished with exit code 1
+Class not found: "ch.fhnw.cere.orchestrator.OrchestratorApplicationTests"Empty test suite.
+```
+
+In IntelliJ: Right-click on the project and choose "Open Module Settings". Go to modules --> paths and set the output path to out/production and the test path to out/test. 
+
 
 # License
 
-tba
+Apache License 2.0

@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="Gradle: org.wso2.carbon:org.wso2.carbon.tenant.mgt.stub:4.2.0">
-    <CLASSES>
-      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.wso2.carbon/org.wso2.carbon.tenant.mgt.stub/4.2.0/d7552340db8c5ab9b16831ac536f3540eba2a9b6/org.wso2.carbon.tenant.mgt.stub-4.2.0.jar!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>

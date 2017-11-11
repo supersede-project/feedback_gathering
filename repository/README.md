@@ -8,84 +8,117 @@ Is a RESTfull Web API that provides endpoints for storing, receiving and deletin
 - [Table of Content](#table-of-content)
 - [Installation](#installation)
 - [Deployment](#deployment)
-- [running tests](#tests)
-- [Directory Structure](#directory-structure)
+- [Tests](#tests)
+- [Docker](#docker)
 - [License](#license)
 
 # Installation
 
-- first install the server_library in your local maven repository: https://github.com/supersede-project/monitor_feedback/tree/master/server_library
-- run the following commands:
-
 ```bash
 # clone the repository
-git clone https://github.com/supersede-project/monitor_feedback/tree/master/repository
+
 cd repository
-# install the project's dependencies
-mvn clean install
+
+# copy the configuration files for your configuration
+cp src/main/resources/application.properties-dist src/main/resources/application.properties
+cp src/main/resources/application-test.properties-dist src/main/resources/application-test.properties
+```
+
+Create a test database and a local database to run the application locally if needed. You can find the newest DB dump in src/main/resources/db. Fill in your DB credentials and all other required values in the newly created application.properties and application-test.properties. Do not add this file to the GIT index.
+
+```bash
+cd repository
+# create the gradle properties file and fill in the credentials (ask Yosu <jesus.gorronogoitia@atos.net> or Ronnie <ronnieschaniel@gmail.com>)
+cp gradle.properties-dist gradle.properties 
+
+# install the project's dependencies and generate the war file in build/libs/
+gradle build
+```
+
+DB dump in src/main/resources/db/migrations/supersede_repository_db_structure.sql
+
+# Tests
+
+To run the integration tests, execute the following commands:
+
+```bash
+gradle test
 ```
 
 # Deployment
 
-To deploy the newest version of the repository:
+Executing 'gradle build' in the root folder creates a build folder. In build/libs there is a war file. This war file can be deployed, e.g. on a Apache Tomcat. 
 
-- first create the database on your deployment server. The sql file is in the "deployment/dumps" folder of the project. To install the database on your local machine, run the following commands with your database credentials:
+
+# IntelliJ
+
+The suggested IDE is IntelliJ, but Eclipse works as well. 
+
+The prerequisites for running the application locally are a local Tomcat installation (just download the zip and unzip) and the Tomcat Server Plugin in IntelliJ. Then you can setup a run configuration for a local Tomcat: 
+
+Select new local configuration:
+![Run configuration](https://github.com/supersede-project/monitor_feedback/raw/develop_ronnie/images/tomcat_configuration.png)
+
+Create the run configuration:
+
+![Run configuration](https://raw.githubusercontent.com/supersede-project/monitor_feedback/develop_ronnie/images/run_configuation.png)
+
+Add the war from build/libs as the artefact:
+
+![Run configuration](https://github.com/supersede-project/monitor_feedback/raw/develop_ronnie/images/tomcat_configuration_artefact.png)
+
+
+# Docker
+
+Build the JAR and the images and containers for the Java Spring Repository and the Repository DB. 
+
+The jdbs connection string in the application.properties should have the DB container service name as host:
 
 ```bash
-cd repository/deployment/dumps
-mysql -u username -p orchestrator < orchestrator.sql
+spring.datasource.url = jdbc:mysql://mysqldbserver:3306/<db_name>?useSSL=false
 ```
-
-- copy the war file to your tomcat WepApps directory on your deployment server. In linux systems, this is usually the directory "/usr/share/tomcat7/webapps". The war file is in the folder "repository/target" after the installation.
-
-- start the tomcat server over the console
 
 ```bash
-sudo service tomcat7 start
+gradle clean build jar
+docker-compose up -d
 ```
 
-# Tests
-
-- to run the unit tests, execute the following commands:
-
+Check if the 2 containers are up and running:
+ 
 ```bash
-cd repository
-mvn test
+docker ps -a  
 ```
 
-API tests
+## Troubleshooting
 
-- Open the web.xml file of the war file after the installation. The config is in the folder "/WebContent/WEB-INF".
-- Search for the following section and set the param-value to "true".
-
-```
-<context-param>
-  <param-name>debug</param-name>
-  <param-value>false</param-value>
-</context-param>
+You might get: 
+```bash
+ERROR org.springframework.boot.SpringApplication - Application startup failed
+...
+Caused by: java.lang.IllegalArgumentException: No auto configuration classes found in META-INF/spring.factories. If you are using a custom packaging, make sure that file is correct.
 ```
 
-- Deploy the war file on your local machine (#deployment)
-- follow the instructions in the "test" section of the repository_api_test project (https://github.com/supersede-project/monitor_feedback/tree/master/repository_api_tests)
-
-
-# Directory Structure
-
+Completely delete the container and image: 
+```bash
+docker rm -v <container_name>
+docker rmi <image_name>
 ```
-.
-├── src                        <- source code of the application
-|   |                          <- servlet class and guice modules 
-│   ├── controllers            <- controller classes
-│   ├── model                  <- model classes
-│   ├── serialization          <- serialization classes
-│   ├── services               <- service classes
-│   ├── validation             <- validation classes
-├── WebContent                 <- compiled classes and libs
-├── deployment                 <- SQL dumps and war files for deployment
-├── test                       <- API- and unit-tests
-│   ├── test                   <- API tests for all controllers
+
+**Attention:** This would delete all stopped containers, all unused images and all dangling volumes:
+```bash
+docker ps -q |xargs docker rm
+docker images -q |xargs docker rmi
+docker volume rm `docker volume ls -q -f dangling=true`
 ```
+
+Finally execute:
+```bash
+gradle build jar -x test
+gradle bootRepackage
+docker-compose up -d 
+```
+
 
 # License
 
-tba
+Apache License 2.0
