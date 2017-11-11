@@ -91,7 +91,7 @@ spring.mail.properties.mail.smtp.connectiontimeout=5000
 supersede.base_path.feedback=/feedback_repository
 supersede.orchestrator_host=<insert_orchestrator_url_here>   # https://platform.supersede.eu:8443/orchestrator/feedback/
 
-supersede.upload_directory=/home/supersede/software/be/webapps
+supersede.upload_directory=/home/supersede/software/be/webapps/
 supersede.upload_directory.attachments_folder_name=attachments
 supersede.upload_directory.audios_folder_name=audios
 supersede.upload_directory.screenshots_folder_name=screenshots
