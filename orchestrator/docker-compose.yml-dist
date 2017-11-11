@@ -10,9 +10,9 @@ services:
       - mt-network-orchestrator
     environment:
       MYSQL_DATABASE: supersede_orchestrator_spring
-      MYSQL_USER:
-      MYSQL_PASSWORD:
-      MYSQL_ROOT_PASSWORD:
+      MYSQL_USER: <insert_mysql_user_here>
+      MYSQL_PASSWORD: <insert_mysql_password_here>
+      MYSQL_ROOT_PASSWORD: <insert_mysql_root_password_here>
     container_name: orchestrator_mysqldbserver
   springappserver:
     build:
