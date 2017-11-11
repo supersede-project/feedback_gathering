@@ -285,11 +285,11 @@ INSERT INTO `context_information` (`id`, `android_version`, `country`, `device_p
 `local_time`, `region`, `resolution`, `time_zone`, `user_agent`, `feedback_id`, `url`, `meta_data`)
 	SELECT c.`id`, c.`android_version`, c.`country`, c.`device_pixel_ratio`, 
 	STR_TO_DATE(
-		CONCAT(DATE(f.`created_at`), ' ', c.`local_time`), 
+		c.`local_time`,
 		'%Y-%m-%d %H:%i:%s'
 	) as local_time, 
 	c.`region`, 
-		c.`resolution`, c.`time_zone`, c.`user_agent`, f.`id` AS feedback_id, `url`, ''
+		c.`resolution`, c.`time_zone`, c.`user_agent`, f.`id` AS feedback_id, '', ''
 
 	FROM `context_informations` AS c, `feedbacks` AS f
 	WHERE f.`context_informations_id` = c.`id`;
