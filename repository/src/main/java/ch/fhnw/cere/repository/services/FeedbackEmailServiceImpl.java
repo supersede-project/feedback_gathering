@@ -1,12 +1,14 @@
 package ch.fhnw.cere.repository.services;
 
 
+import ch.fhnw.cere.repository.controllers.FeedbackController;
 import ch.fhnw.cere.repository.models.*;
 import ch.fhnw.cere.repository.models.orchestrator.Application;
 import ch.fhnw.cere.repository.models.orchestrator.Mechanism;
 import ch.fhnw.cere.repository.models.orchestrator.MechanismTemplateModel;
 import com.sun.media.jfxmedia.logging.Logger;
 import org.json.JSONObject;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.FileSystemResource;
@@ -35,6 +37,8 @@ import java.util.Map;
 
 @Service
 public class FeedbackEmailServiceImpl implements FeedbackEmailService {
+
+    private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(FeedbackController.class);
 
     @Autowired
     private SettingService settingService;
@@ -85,7 +89,8 @@ public class FeedbackEmailServiceImpl implements FeedbackEmailService {
         MimeMessageHelper helper = null;
         try {
             helper = new MimeMessageHelper(message, true);
-            helper.setTo(recipients);
+            String[] recipientArray = recipients.split(",");
+            helper.setTo(recipientArray);
             if(feedback.getContextInformation() != null && feedback.getContextInformation().getUrl() != null) {
                 helper.setSubject("New Feedback for " + feedback.getContextInformation().getUrl() + " from " + feedback.getUserIdentification());
             } else {
@@ -110,7 +115,9 @@ public class FeedbackEmailServiceImpl implements FeedbackEmailService {
             this.addAttachments(feedback, helper);
 
             mailSender.send(message);
+            LOGGER.debug("Feedback email sent to " + recipients);
         } catch (MessagingException e) {
+            LOGGER.debug("Problem occurred when sending email");
             e.printStackTrace();
         }
     }
