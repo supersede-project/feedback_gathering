@@ -90,6 +90,15 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(WebSecurity web) throws Exception {
         web.debug(true);
+        web.ignoring().antMatchers(HttpMethod.GET, "/orchestrator/feedback/ping");
+        web.ignoring().antMatchers(HttpMethod.POST, "/orchestrator/feedback/authenticate");
+        web.ignoring().antMatchers(HttpMethod.OPTIONS, "/**");
+        web.ignoring().requestMatchers(new RegexRequestMatcher("/orchestrator/feedback/\\w{2}/applications/\\d+/?\\?_=\\d+", "GET", true));
+        web.ignoring().requestMatchers(new RegexRequestMatcher("/orchestrator/feedback/\\w{2}/applications/\\d+/?", "GET", true));
+        web.ignoring().requestMatchers(new RegexRequestMatcher("/orchestrator/feedback/\\w{2}/applications/?", "GET", true));
+        web.ignoring().requestMatchers(new RegexRequestMatcher("/orchestrator/monitoring/MonitorTypes/?", "GET", true));
+        web.ignoring().requestMatchers(new RegexRequestMatcher("/orchestrator/monitoring/MonitorTypes/\\w+/?/Tools/\\w+/?", "GET", true));
+        web.ignoring().requestMatchers(new RegexRequestMatcher("/orchestrator/monitoring/MonitorTypes/\\w+/?/Tools/\\w+/ToolConfigurations/\\d+/?", "GET", true));
     }
 
     @Override
