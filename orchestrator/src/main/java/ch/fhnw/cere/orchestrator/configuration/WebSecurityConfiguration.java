@@ -90,15 +90,15 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(WebSecurity web) throws Exception {
         web.debug(true);
-        web.ignoring().antMatchers(HttpMethod.GET, "/orchestrator/feedback/ping");
-        web.ignoring().antMatchers(HttpMethod.POST, "/orchestrator/feedback/authenticate");
+        web.ignoring().antMatchers(HttpMethod.GET, "/feedback/ping");
+        web.ignoring().antMatchers(HttpMethod.POST, "/feedback/authenticate");
         web.ignoring().antMatchers(HttpMethod.OPTIONS, "/**");
-        web.ignoring().requestMatchers(new RegexRequestMatcher("/orchestrator/feedback/\\w{2}/applications/\\d+/?\\?_=\\d+", "GET", true));
-        web.ignoring().requestMatchers(new RegexRequestMatcher("/orchestrator/feedback/\\w{2}/applications/\\d+/?", "GET", true));
-        web.ignoring().requestMatchers(new RegexRequestMatcher("/orchestrator/feedback/\\w{2}/applications/?", "GET", true));
-        web.ignoring().requestMatchers(new RegexRequestMatcher("/orchestrator/monitoring/MonitorTypes/?", "GET", true));
-        web.ignoring().requestMatchers(new RegexRequestMatcher("/orchestrator/monitoring/MonitorTypes/\\w+/?/Tools/\\w+/?", "GET", true));
-        web.ignoring().requestMatchers(new RegexRequestMatcher("/orchestrator/monitoring/MonitorTypes/\\w+/?/Tools/\\w+/ToolConfigurations/\\d+/?", "GET", true));
+        web.ignoring().requestMatchers(new RegexRequestMatcher("/feedback/\\w{2}/applications/\\d+/?\\?_=\\d+", "GET", true));
+        web.ignoring().requestMatchers(new RegexRequestMatcher("/feedback/\\w{2}/applications/\\d+/?", "GET", true));
+        web.ignoring().requestMatchers(new RegexRequestMatcher("/feedback/\\w{2}/applications/?", "GET", true));
+        web.ignoring().requestMatchers(new RegexRequestMatcher("/monitoring/MonitorTypes/?", "GET", true));
+        web.ignoring().requestMatchers(new RegexRequestMatcher("/monitoring/MonitorTypes/\\w+/?/Tools/\\w+/?", "GET", true));
+        web.ignoring().requestMatchers(new RegexRequestMatcher("/monitoring/MonitorTypes/\\w+/?/Tools/\\w+/ToolConfigurations/\\d+/?", "GET", true));
     }
 
     @Override
@@ -118,14 +118,14 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                .antMatchers("/orchestrator/feedback/authenticate/**").permitAll()
-                .antMatchers("/orchestrator/feedback/ping").permitAll()
-                .requestMatchers(new RegexRequestMatcher("/orchestrator/feedback/\\w{2}/applications/\\d+/?\\?_=\\d+", "GET", true)).permitAll()
-                .requestMatchers(new RegexRequestMatcher("/orchestrator/feedback/\\w{2}/applications/\\d+/?", "GET", true)).permitAll()
-                .requestMatchers(new RegexRequestMatcher("/orchestrator/feedback/\\w{2}/applications/?", "GET", true)).permitAll()
-                .requestMatchers(new RegexRequestMatcher("/orchestrator/monitoring/MonitorTypes/?", "GET", true)).permitAll()
-                .requestMatchers(new RegexRequestMatcher("/orchestrator/monitoring/MonitorTypes/\\w+/?/Tools/\\w+/?", "GET", true)).permitAll()
-                .requestMatchers(new RegexRequestMatcher("/orchestrator/monitoring/MonitorTypes/\\w+/?/Tools/\\w+/ToolConfigurations/\\d+/?", "GET", true)).permitAll()
+                .antMatchers("/feedback/authenticate/**").permitAll()
+                .antMatchers("/feedback/ping").permitAll()
+                .requestMatchers(new RegexRequestMatcher("/feedback/\\w{2}/applications/\\d+/?\\?_=\\d+", "GET", true)).permitAll()
+                .requestMatchers(new RegexRequestMatcher("/feedback/\\w{2}/applications/\\d+/?", "GET", true)).permitAll()
+                .requestMatchers(new RegexRequestMatcher("/feedback/\\w{2}/applications/?", "GET", true)).permitAll()
+                .requestMatchers(new RegexRequestMatcher("/monitoring/MonitorTypes/?", "GET", true)).permitAll()
+                .requestMatchers(new RegexRequestMatcher("/monitoring/MonitorTypes/\\w+/?/Tools/\\w+/?", "GET", true)).permitAll()
+                .requestMatchers(new RegexRequestMatcher("/monitoring/MonitorTypes/\\w+/?/Tools/\\w+/ToolConfigurations/\\d+/?", "GET", true)).permitAll()
                 .anyRequest().authenticated();
 
         httpSecurity.addFilterBefore(authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter.class);
