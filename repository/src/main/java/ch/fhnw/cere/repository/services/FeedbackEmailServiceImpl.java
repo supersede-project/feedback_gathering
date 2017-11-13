@@ -135,9 +135,6 @@ public class FeedbackEmailServiceImpl implements FeedbackEmailService {
                 File attachment = new File(resourcesDirectory.getAbsolutePath() + File.separator + this.attachmentsDirectory + File.separator + attachmentFeedback.getPath());
                 FileSystemResource res = new FileSystemResource(attachment);
                 String filename = res.getFilename();
-                if(!filename.endsWith(".png")) {
-                    filename = filename + ".png";
-                }
                 helper.addAttachment(filename, res);
             }
         }
@@ -159,9 +156,6 @@ public class FeedbackEmailServiceImpl implements FeedbackEmailService {
                 File screenshot = new File(resourcesDirectory.getAbsolutePath() + File.separator + this.audiosDirectory + File.separator + audioFeedback.getPath());
                 FileSystemResource res = new FileSystemResource(screenshot);
                 String filename = res.getFilename();
-                if(!filename.endsWith(".png")) {
-                    filename = filename + ".png";
-                }
                 helper.addAttachment(filename, res);
             }
         }
