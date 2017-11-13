@@ -134,7 +134,11 @@ public class FeedbackEmailServiceImpl implements FeedbackEmailService {
             for(AttachmentFeedback attachmentFeedback : feedback.getAttachmentFeedbacks()) {
                 File attachment = new File(resourcesDirectory.getAbsolutePath() + File.separator + this.attachmentsDirectory + File.separator + attachmentFeedback.getPath());
                 FileSystemResource res = new FileSystemResource(attachment);
-                helper.addAttachment(res.getFilename(), res);
+                String filename = res.getFilename();
+                if(!filename.endsWith(".png")) {
+                    filename = filename + ".png";
+                }
+                helper.addAttachment(filename, res);
             }
         }
 
@@ -142,7 +146,11 @@ public class FeedbackEmailServiceImpl implements FeedbackEmailService {
             for(ScreenshotFeedback screenshotFeedback : feedback.getScreenshotFeedbacks()) {
                 File screenshot = new File(resourcesDirectory.getAbsolutePath() + File.separator + this.screenshotsDirectory + File.separator + screenshotFeedback.getPath());
                 FileSystemResource res = new FileSystemResource(screenshot);
-                helper.addAttachment(res.getFilename(), res);
+                String filename = res.getFilename();
+                if(!filename.endsWith(".png")) {
+                    filename = filename + ".png";
+                }
+                helper.addAttachment(filename, res);
             }
         }
 
@@ -150,7 +158,11 @@ public class FeedbackEmailServiceImpl implements FeedbackEmailService {
             for(AudioFeedback audioFeedback : feedback.getAudioFeedbacks()) {
                 File screenshot = new File(resourcesDirectory.getAbsolutePath() + File.separator + this.audiosDirectory + File.separator + audioFeedback.getPath());
                 FileSystemResource res = new FileSystemResource(screenshot);
-                helper.addAttachment(res.getFilename(), res);
+                String filename = res.getFilename();
+                if(!filename.endsWith(".png")) {
+                    filename = filename + ".png";
+                }
+                helper.addAttachment(filename, res);
             }
         }
     }
