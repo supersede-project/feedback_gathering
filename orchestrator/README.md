@@ -100,7 +100,7 @@ Process finished with exit code 1
 Class not found: "ch.fhnw.cere.orchestrator.OrchestratorApplicationTests"Empty test suite.
 ```
 
-In IntelliJ: Right-click on the project and choose "Open Module Settings". 
+In IntelliJ: Right-click on the project and choose "Open Module Settings". Go to modules --> paths and set the output path to out/production and the test path to out/test. 
 
 
 # License
