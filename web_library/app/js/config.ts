@@ -28,9 +28,9 @@ export const configurationTypes = {
 export const cookieNames = {
     lastTriggered: 'lastTriggered'
 };
-export const apiEndpointOrchestrator = 'https://platform.supersede.eu:8443/';
+export const apiEndpointOrchestrator = 'https://localhost:8082/';
 export const applicationPath = 'orchestrator/feedback/{lang}/applications/';
-export const apiEndpointRepository = 'https://platform.supersede.eu:8443/';
+export const apiEndpointRepository = 'https://localhost:8082/';
 export const feedbackPath = "feedback_repository/{lang}/applications/{applicationId}/feedbacks";
 export const applicationId = 20;
 export const applicationName = 'Senercon';

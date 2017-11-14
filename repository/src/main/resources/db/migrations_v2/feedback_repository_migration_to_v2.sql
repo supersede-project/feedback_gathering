@@ -125,10 +125,10 @@ CREATE TABLE `feedback` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `application_id` bigint(20) NOT NULL,
   `configuration_id` bigint(20) NOT NULL,
-  `created_at` datetime DEFAULT NULL,
+  `createdAt` datetime DEFAULT NULL,
   `language` varchar(255) DEFAULT NULL,
   `title` varchar(255) DEFAULT NULL,
-  `updated_at` datetime DEFAULT NULL,
+  `updatedAt` datetime DEFAULT NULL,
   `user_identification` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=40 DEFAULT CHARSET=utf8;
@@ -248,8 +248,8 @@ INSERT INTO `api_user_permission` (`id`, `api_user_id`, `application_id`, `has_p
 --  Data for `feedback`
 -- ----------------------------
 
-INSERT INTO `feedback` (`id`, `application_id`, `configuration_id`, `created_at`, `language`, `title`, `updated_at`, `user_identification`)
-	SELECT `id`, `application_id`, `configuration_id`, from_unixtime(UNIX_TIMESTAMP(`created_at`)), `language`, `title`, from_unixtime(UNIX_TIMESTAMP(`created_at`)), `user_identification` FROM `feedbacks`;
+INSERT INTO `feedback` (`id`, `application_id`, `configuration_id`, `createdAt`, `language`, `title`, `updatedAt`, `user_identification`)
+	SELECT `id`, `application_id`, `configuration_id`, from_unixtime(UNIX_TIMESTAMP(`createdAt`)), `language`, `title`, from_unixtime(UNIX_TIMESTAMP(`createdAt`)), `user_identification` FROM `feedbacks`;
 
 
 -- ----------------------------
@@ -285,7 +285,7 @@ INSERT INTO `context_information` (`id`, `android_version`, `country`, `device_p
 `local_time`, `region`, `resolution`, `time_zone`, `user_agent`, `feedback_id`, `url`, `meta_data`)
 	SELECT c.`id`, c.`android_version`, c.`country`, c.`device_pixel_ratio`, 
 	STR_TO_DATE(
-		CONCAT(DATE(f.`created_at`), ' ', c.`local_time`), 
+		CONCAT(DATE(f.`createdAt`), ' ', c.`local_time`),
 		'%Y-%m-%d %H:%i:%s'
 	) as local_time, 
 	c.`region`, 

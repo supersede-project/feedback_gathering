@@ -176,10 +176,10 @@ CREATE TABLE `feedback` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `application_id` bigint(20) NOT NULL,
   `configuration_id` bigint(20) NOT NULL,
-  `created_at` datetime DEFAULT NULL,
+  `createdAt` datetime DEFAULT NULL,
   `language` varchar(255) DEFAULT NULL,
   `title` varchar(255) DEFAULT NULL,
-  `updated_at` datetime DEFAULT NULL,
+  `updatedAt` datetime DEFAULT NULL,
   `user_identification` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=40 DEFAULT CHARSET=utf8;
