@@ -10,6 +10,7 @@ import java.util.Date;
 /**
  * Created by Aydinli on 08.11.2017.
  */
+@Entity
 public class UserFBLike {
 
     @Id
@@ -26,7 +27,7 @@ public class UserFBLike {
     @ManyToOne(cascade = {CascadeType.PERSIST})
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "user_id")
-    private EndUser endUser;
+    private EndUser enduser;
 
     private Date createdAt;
 
@@ -40,7 +41,7 @@ public class UserFBLike {
 
     public UserFBLike(Feedback feedback, EndUser endUser, Date createdAt) {
         this.feedback = feedback;
-        this.endUser = endUser;
+        this.enduser = endUser;
         this.createdAt = createdAt;
     }
 
@@ -60,12 +61,12 @@ public class UserFBLike {
         this.feedback = feedback;
     }
 
-    public EndUser getEndUser() {
-        return endUser;
+    public EndUser getEnduser() {
+        return enduser;
     }
 
-    public void setEndUser(EndUser endUser) {
-        this.endUser = endUser;
+    public void setEnduser(EndUser enduser) {
+        this.enduser = enduser;
     }
 
     public Date getCreatedAt() {

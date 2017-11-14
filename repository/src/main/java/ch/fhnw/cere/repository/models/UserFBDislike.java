@@ -10,6 +10,7 @@ import java.util.Date;
 /**
  * Created by Aydinli on 08.11.2017.
  */
+@Entity
 public class UserFBDislike {
 
     @Id
