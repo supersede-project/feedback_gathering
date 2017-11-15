@@ -15,8 +15,32 @@ public class EndUser {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
-
     private Date createdAt;
+    private Date updatedAt;
+    private long applicationId;
+    private String username;
+    /**
+     * Default NULL
+     */
+    @Column(name = "phone_number", nullable = true)
+    private int phoneNumber;
+
+    @OneToMany(mappedBy = "enduser", cascade = {CascadeType.REMOVE, CascadeType.PERSIST})
+    private List<UserFBDislike> userFBDislikes;
+
+    @OneToMany(mappedBy = "enduser", cascade = {CascadeType.REMOVE, CascadeType.PERSIST})
+    private List<UserFBLike> userFBLikes;
+
+    public EndUser() {
+    }
+
+    public EndUser(Date createdAt, Date updatedAt, long applicationId, String username, int phoneNumber) {
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.applicationId = applicationId;
+        this.username = username;
+        this.phoneNumber = phoneNumber;
+    }
 
     public long getId() {
         return id;
@@ -66,14 +90,6 @@ public class EndUser {
         this.phoneNumber = phoneNumber;
     }
 
-    private Date updatedAt;
-    private long applicationId;
-    private String username;
-    /**
-     * Default NULL
-     */
-    @Column(name = "phone_number", nullable = true)
-    private int phoneNumber;
 
     @PrePersist
     protected void onCreate() {
@@ -85,29 +101,11 @@ public class EndUser {
         updatedAt = new Date();
     }
 
-    @OneToMany(mappedBy = "enduser", cascade = {CascadeType.REMOVE, CascadeType.PERSIST})
-    private List<UserFBDislike> userFBDislikes;
-
-    @OneToMany(mappedBy = "enduser", cascade = {CascadeType.REMOVE, CascadeType.PERSIST})
-    private List<UserFBLike> userFBLikes;
-
     @Override
     public String toString() {
         return String.format(
                 "Enduser[id=%d, username=%s]",
                 id, username);
     }
-
-    public EndUser() {
-    }
-
-    public EndUser(Date createdAt, Date updatedAt, long applicationId, String username, int phoneNumber) {
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
-        this.applicationId = applicationId;
-        this.username = username;
-        this.phoneNumber = phoneNumber;
-    }
-
 
 }

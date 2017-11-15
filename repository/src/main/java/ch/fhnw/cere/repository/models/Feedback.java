@@ -133,6 +133,14 @@ public class Feedback {
     public Feedback() {
     }
 
+    public Feedback(String title, String userIdentification, long applicationId, long configurationId, String language) {
+        this.title = title;
+        this.userIdentification = userIdentification;
+        this.applicationId = applicationId;
+        this.configurationId = configurationId;
+        this.language = language;
+    }
+
     public Feedback(String title, String userIdentification, long applicationId, long configurationId, String language, int commentCount, int likeCount, int dislikeCount, int unreadCommentCount) {
         this.title = title;
         this.userIdentification = userIdentification;
@@ -143,6 +151,25 @@ public class Feedback {
         this.likeCount = likeCount;
         this.dislikeCount = dislikeCount;
         this.unreadCommentCount = unreadCommentCount;
+    }
+
+    public Feedback(String title, String userIdentification, Date createdAt, Date updatedAt, long applicationId, long configurationId, String language, ContextInformation contextInformation, List<AttachmentFeedback> attachmentFeedbacks, List<AudioFeedback> audioFeedbacks, List<CategoryFeedback> categoryFeedbacks, List<RatingFeedback> ratingFeedbacks, List<ScreenshotFeedback> screenshotFeedbacks, List<TextFeedback> textFeedbacks, List<Status> statuses, List<FeedbackCompany> feedbackCompanies) {
+        this.title = title;
+        this.userIdentification = userIdentification;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.applicationId = applicationId;
+        this.configurationId = configurationId;
+        this.language = language;
+        this.contextInformation = contextInformation;
+        this.attachmentFeedbacks = attachmentFeedbacks;
+        this.audioFeedbacks = audioFeedbacks;
+        this.categoryFeedbacks = categoryFeedbacks;
+        this.ratingFeedbacks = ratingFeedbacks;
+        this.screenshotFeedbacks = screenshotFeedbacks;
+        this.textFeedbacks = textFeedbacks;
+        this.statuses = statuses;
+        this.feedbackCompanies = feedbackCompanies;
     }
 
     public Feedback(String title, String userIdentification, Date createdAt, Date updatedAt, long applicationId, long configurationId, String language, int commentCount, int likeCount, int dislikeCount, ContextInformation contextInformation, List<AttachmentFeedback> attachmentFeedbacks, List<AudioFeedback> audioFeedbacks, List<CategoryFeedback> categoryFeedbacks, List<RatingFeedback> ratingFeedbacks, List<ScreenshotFeedback> screenshotFeedbacks, List<TextFeedback> textFeedbacks, List<Status> statuses, List<FeedbackCompany> feedbackCompanies) {
