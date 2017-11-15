@@ -103,8 +103,10 @@ public class ApiUser implements UserDetails {
         if(this.apiUserApiUserRoles == null) {
             this.apiUserApiUserRoles = new ArrayList<>();
         }
-        for(ApiUserRole apiUserRole : this.authorities) {
-            this.apiUserApiUserRoles.add(new ApiUserApiUserRole(this, apiUserRole));
+        if(this.authorities != null) {
+            for(ApiUserRole apiUserRole : this.authorities) {
+                this.apiUserApiUserRoles.add(new ApiUserApiUserRole(this, apiUserRole));
+            }
         }
     }
 

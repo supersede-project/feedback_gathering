@@ -37,4 +37,9 @@ public class ApiUserPermissionServiceImpl implements ApiUserPermissionService {
     public ApiUserPermission findByApiUserIdAndApplicationId(long apiUserId, long applicationId) {
         return apiUserPermissionRepository.findByApiUserIdAndApplicationId(apiUserId, applicationId);
     }
+
+    @Override
+    public List<ApiUserPermission> findByApiUserId(long apiUserId) {
+        return apiUserPermissionRepository.findByApiUserId(apiUserId);
+    }
 }

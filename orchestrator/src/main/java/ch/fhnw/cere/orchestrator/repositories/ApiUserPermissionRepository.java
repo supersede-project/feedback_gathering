@@ -12,4 +12,5 @@ import java.util.List;
 @Repository
 public interface ApiUserPermissionRepository extends JpaRepository<ApiUserPermission, Long> {
     ApiUserPermission findByApiUserIdAndApplicationId(@Param("apiUserId") long apiUserId, @Param("applicationId") long applicationId);
+    List<ApiUserPermission> findByApiUserId(@Param("apiUserId") long apiUserId);
 }

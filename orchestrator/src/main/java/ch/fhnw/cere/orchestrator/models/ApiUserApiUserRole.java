@@ -1,6 +1,8 @@
 package ch.fhnw.cere.orchestrator.models;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 
 
@@ -13,6 +15,7 @@ public class ApiUserApiUserRole {
 
     @ManyToOne
     @JoinColumn(name = "api_user_id")
+    @JsonIgnore
     private ApiUser apiUser;
 
     private ApiUserRole apiUserRole;

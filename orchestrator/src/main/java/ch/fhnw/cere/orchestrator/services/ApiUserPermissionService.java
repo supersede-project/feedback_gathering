@@ -12,6 +12,7 @@ public interface ApiUserPermissionService {
     public ApiUserPermission find(long id);
     public void delete(long id);
     public ApiUserPermission findByApiUserIdAndApplicationId(long apiUserId, long applicationId);
+    public List<ApiUserPermission> findByApiUserId(long apiUserId);
 }
 
 

@@ -40,4 +40,9 @@ public class BaseController {
         Map<String, String> variables = (Map<String, String>) req.getAttribute(HandlerMapping.URI_TEMPLATE_VARIABLES_ATTRIBUTE);
         return variables.get("monitorToolName");
     }
+
+    protected long apiUserId() {
+        Map<String, String> variables = (Map<String, String>) req.getAttribute(HandlerMapping.URI_TEMPLATE_VARIABLES_ATTRIBUTE);
+        return Long.parseLong(variables.get("apiUserId"));
+    }
 }
