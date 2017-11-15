@@ -84,7 +84,7 @@ public class ConfigurationMechanismsIntegrationTest extends BaseIntegrationTest 
 
     @Test
     public void getConfigurationMechanisms() throws Exception {
-        mockMvc.perform(get(basePathEn + "/" + application1.getId() + "/configurations/" + configuration1.getId() + "/configurationMechanisms"))
+        mockMvc.perform(get(basePathEn + "/" + application1.getId() + "/configurations/" + configuration1.getId() + "/configuration_mechanisms"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(1)))
                 .andExpect(jsonPath("$[0].active", is(true)))
@@ -94,7 +94,7 @@ public class ConfigurationMechanismsIntegrationTest extends BaseIntegrationTest 
 
     @Test
     public void getConfigurationMechanism() throws Exception {
-        mockMvc.perform(get(basePathEn + "/" + application1.getId() + "/configurations/" + configuration1.getId() + "/configurationMechanisms/" + configurationMechanism1.getId()))
+        mockMvc.perform(get(basePathEn + "/" + application1.getId() + "/configurations/" + configuration1.getId() + "/configuration_mechanisms/" + configurationMechanism1.getId()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.active", is(true)))
                 .andExpect(jsonPath("$.order", is(1)))
@@ -108,7 +108,7 @@ public class ConfigurationMechanismsIntegrationTest extends BaseIntegrationTest 
 
         String adminJWTToken = requestAppAdminJWTToken();
 
-        mockMvc.perform(post(basePathEn + "/" + application1.getId() + "/configurations/" + configuration1.getId() + "/configurationMechanisms/mechanisms/" + mechanism3.getId())
+        mockMvc.perform(post(basePathEn + "/" + application1.getId() + "/configurations/" + configuration1.getId() + "/configuration_mechanisms/mechanisms/" + mechanism3.getId())
                 .contentType(contentType)
                 .header("Authorization", adminJWTToken)
                 .content(configurationMechanismJson))
@@ -118,7 +118,7 @@ public class ConfigurationMechanismsIntegrationTest extends BaseIntegrationTest 
                 .andExpect(jsonPath("$.mechanism.id", is((int) mechanism3.getId())));
 
 
-        mockMvc.perform(get(basePathEn + "/" + application1.getId() + "/configurations/" + configuration1.getId() + "/configurationMechanisms"))
+        mockMvc.perform(get(basePathEn + "/" + application1.getId() + "/configurations/" + configuration1.getId() + "/configuration_mechanisms"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(2)))
                 .andExpect(jsonPath("$[0].active", is(true)))
@@ -138,20 +138,20 @@ public class ConfigurationMechanismsIntegrationTest extends BaseIntegrationTest 
 
         String adminJWTToken = requestAppAdminJWTToken();
 
-        mockMvc.perform(get(basePathEn + "/" + application1.getId() + "/configurations/" + configuration1.getId() + "/configurationMechanisms"))
+        mockMvc.perform(get(basePathEn + "/" + application1.getId() + "/configurations/" + configuration1.getId() + "/configuration_mechanisms"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(1)))
                 .andExpect(jsonPath("$[0].active", is(true)))
                 .andExpect(jsonPath("$[0].order", is(1)))
                 .andExpect(jsonPath("$[0].mechanism.id", is((int) mechanism1.getId())));
 
-        mockMvc.perform(put(basePathEn + "/" + application1.getId() + "/configurations/" + configuration1.getId() + "/configurationMechanisms")
+        mockMvc.perform(put(basePathEn + "/" + application1.getId() + "/configurations/" + configuration1.getId() + "/configuration_mechanisms")
                 .contentType(contentType)
                 .header("Authorization", adminJWTToken)
                 .content(configurationMechanismJson))
                 .andExpect(status().isOk());
 
-        mockMvc.perform(get(basePathEn + "/" + application1.getId() + "/configurations/" + configuration1.getId() + "/configurationMechanisms"))
+        mockMvc.perform(get(basePathEn + "/" + application1.getId() + "/configurations/" + configuration1.getId() + "/configuration_mechanisms"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(1)))
                 .andExpect(jsonPath("$[0].active", is(false)))
@@ -163,18 +163,18 @@ public class ConfigurationMechanismsIntegrationTest extends BaseIntegrationTest 
     public void deleteConfigurationMechanism() throws Exception {
         String adminJWTToken = requestAppAdminJWTToken();
 
-        mockMvc.perform(get(basePathEn + "/" + application1.getId() + "/configurations/" + configuration1.getId() + "/configurationMechanisms"))
+        mockMvc.perform(get(basePathEn + "/" + application1.getId() + "/configurations/" + configuration1.getId() + "/configuration_mechanisms"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(1)))
                 .andExpect(jsonPath("$[0].active", is(true)))
                 .andExpect(jsonPath("$[0].order", is(1)))
                 .andExpect(jsonPath("$[0].mechanism.id", is((int) mechanism1.getId())));
 
-        mockMvc.perform(delete(basePathEn + "/" + application1.getId() + "/configurations/" + configuration1.getId() + "/configurationMechanisms/" + this.configurationMechanism1.getId())
+        mockMvc.perform(delete(basePathEn + "/" + application1.getId() + "/configurations/" + configuration1.getId() + "/configuration_mechanisms/" + this.configurationMechanism1.getId())
                 .header("Authorization", adminJWTToken))
                 .andExpect(status().isOk());
 
-        mockMvc.perform(get(basePathEn + "/" + application1.getId() + "/configurations/" + configuration1.getId() + "/configurationMechanisms"))
+        mockMvc.perform(get(basePathEn + "/" + application1.getId() + "/configurations/" + configuration1.getId() + "/configuration_mechanisms"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(0)));
     }

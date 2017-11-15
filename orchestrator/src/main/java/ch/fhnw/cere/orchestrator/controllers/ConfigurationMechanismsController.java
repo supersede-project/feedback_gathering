@@ -19,7 +19,7 @@ import java.util.List;
 
 
 @RestController
-@RequestMapping(value = "${supersede.base_path.feedback}/{language}/applications/{applicationId}/configurations/{configurationId}/configurationMechanisms")
+@RequestMapping(value = "${supersede.base_path.feedback}/{language}/applications/{applicationId}/configurations/{configurationId}/configuration_mechanisms")
 public class ConfigurationMechanismsController extends BaseController {
 
     @Autowired
