@@ -13,6 +13,8 @@ It provides the following features:
 - Flexible configuration of feedback requests
 - Pull and push feedback request presentation
 
+The web library runs well with node v6.10.2, npm 4.5.0 and gulp 3.9.1. 
+
 # How to start
 
 In order to get the project running use:
@@ -84,8 +86,10 @@ Note: This setup is tested and runs successfully using node v7.0.0 and npm 3.10.
 - [Styling](#styling)
 - [Internationalization](#internationalization)
 - [Running tests](#running-tests)
+- [WebStorm](#webstorm)
 - [Deployment](#deployment)
 - [Directory Structure](#directory-structure)
+- [Troubleshooting](#troubleshooting)
 - [License](#license)
 
 # Compatibility
@@ -97,6 +101,7 @@ The library should work fine on the following browsers (with Promise polyfill):
 * Opera 12+
 * IE9+
 * Safari 6+
+
 
 # Integration
 
@@ -177,6 +182,21 @@ To add new languages please create a folder using the ISO-691-1 language code as
 npm test
 ```
 
+# WebStorm
+
+To build the web library you can either execute 'gulp build.dev' on the command line or create corresponding run configurations in WebStorm.
+
+The configuration parameter takes the file from app/js/configurations and from app/css/configurations:
+![Run configuration with JS conf](https://raw.githubusercontent.com/supersede-project/monitor_feedback/master/images/web_lib_docu_run_conf_1.png)
+
+The configuration parameter takes the file from app/js/configurations and a different one from app/css/configurations: 
+![Run configuration with JS conf and SCSS conf](https://raw.githubusercontent.com/supersede-project/monitor_feedback/master/images/web_lib_docu_run_conf_2.png)
+
+The typescript compiler should be enabled in WebStorm to compile .ts files to .js files. 
+![Typescript settings](https://raw.githubusercontent.com/supersede-project/monitor_feedback/master/images/web_lib_docu_typescript.png)
+
+
+
 # Deployment
 
 To deploy a demo page please copy env/stage/stage.json-dist to env/stage/stage.json and fill in the required information. Then execute
@@ -209,6 +229,14 @@ gulp deploy
 ├── tsconfig.json              <- configuration of the typescript project
 ├── tslint.json                <- tslint configuration
 └── webpack.config.js          <- bundler configuration
+```
+
+# Troubleshooting
+
+If the web library does not run:
+
+```bash
+npm install -g webpack gulp-cli typescript
 ```
 
 
