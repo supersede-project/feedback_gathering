@@ -1,6 +1,6 @@
 var gulp = require('gulp');
-var config = require('./env/stage/stage.json');
-var SSH  = require('gulp-ssh');
+//var config = require('./env/stage/stage.json');
+//var SSH  = require('gulp-ssh');
 var exec = require('child_process').exec;
 var fs = require('fs');
 var insert = require('gulp-insert');
@@ -21,6 +21,7 @@ project_utils.loadTasks(project_config.PROJECT_TASKS_DIR);
 
 var jqueryUIPath = 'app/assets/jquery-ui-1.12.1.custom/';
 
+/*
 var gulpSSH = new SSH({
     ignoreErrors: false,
     sshConfig: {
@@ -30,6 +31,7 @@ var gulpSSH = new SSH({
         "privateKey": fs.readFileSync(config.privateKeyPath)
     }
 });
+*/
 
 var copyright = function () {
     var copyrightString = fs.readFileSync('copyright.txt');
@@ -48,6 +50,7 @@ gulp.task('webpack.prod', function() {
     exec('webpack -p');
 });
 
+/*
 gulp.task('deploy', function (done) {
     runSequence(
         gulp.src(['index.html']).pipe(gulpSSH.dest(config.serverDest)),
@@ -56,6 +59,7 @@ gulp.task('deploy', function (done) {
         done
     );
 });
+*/
 
 gulp.task('add-copyright', function () {
     gulp.src(['dist/jquery.feedback.min.js'])
