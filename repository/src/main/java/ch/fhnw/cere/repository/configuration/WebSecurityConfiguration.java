@@ -6,6 +6,7 @@ import ch.fhnw.cere.repository.security.RestAuthenticationEntryPoint;
 import ch.fhnw.cere.repository.services.SecurityService;
 import com.google.common.collect.ImmutableList;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -43,6 +44,10 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private SecurityService securityService;
+
+    @Value("${supersede.base_path.feedback}")
+    private String basePathFeedback;
+
 
     @Autowired
     public void configureAuthentication(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
@@ -99,10 +104,10 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                .antMatchers("/authenticate/**").permitAll()
-                .antMatchers("/ping").permitAll()
-                .requestMatchers(new RegexRequestMatcher("/\\w{2}/applications/\\d+/feedbacks/?", "POST", true)).permitAll()
-                .requestMatchers(new RegexRequestMatcher("/\\w{2}/applications/\\d+/feedbacks/?\\?_=\\d+", "POST", true)).permitAll()
+                .antMatchers(basePathFeedback + "/authenticate/**").permitAll()
+                .antMatchers(basePathFeedback + "/ping").permitAll()
+                .requestMatchers(new RegexRequestMatcher(basePathFeedback + "/\\w{2}/applications/\\d+/feedbacks/?", "POST", true)).permitAll()
+                .requestMatchers(new RegexRequestMatcher(basePathFeedback + "/\\w{2}/applications/\\d+/feedbacks/?\\?_=\\d+", "POST", true)).permitAll()
 
                 .anyRequest().authenticated();
 
