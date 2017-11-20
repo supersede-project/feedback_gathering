@@ -26,6 +26,14 @@ cd web_library
 npm install
 ```
 
+To install the type definitions for typings:
+```bash
+typings install dt~yargs --save
+```
+
+where yargs is the package name. If the module is installed globally, the global flag (--global) needs to be added at the end of the command.
+
+
 Create a virtual host on your local machine to avoid problems with cross origin loads. Ideally use localhost as the ServerName to avoid problems with getUserMedia() in Google Chrome.
 
     <VirtualHost *:80>
