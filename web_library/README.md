@@ -152,6 +152,9 @@ The following options are available to configure the jQuery plugin on the client
 
 |option   |description   |
 |---|---|
+|apiEndpointOrchestrator|Orchestrator endpoint url, e.g. https://platform.supersede.eu:8443/|
+|apiEndpointRepository|Repository endpoint url|
+|applicationId|Application ID used for the Orchestrator endpoint, e.g. 20 for Senercon|
 |backgroundColor|Background color of the feedback button|
 |color|Font color of the feedback button|
 |colorPickerCSSClass| Assign a custom css class to the color picker|
