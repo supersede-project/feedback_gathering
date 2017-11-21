@@ -83,7 +83,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
         configuration.setAllowedOrigins(ImmutableList.of("*"));
         configuration.setAllowedMethods(ImmutableList.of("HEAD", "GET", "POST", "PUT", "DELETE", "PATCH"));
         configuration.setAllowCredentials(true);
-        configuration.setAllowedHeaders(ImmutableList.of("Authorization", "Cache-Control", "Content-Type"));
+        configuration.setAllowedHeaders(ImmutableList.of("Authorization", "X-Requested-With", "Content-Type", "Access-Control-Allow-Headers", "Accept"));
         final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
@@ -106,6 +106,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                .antMatchers(HttpMethod.POST, basePathFeedback + "/authenticate").permitAll()
                 .antMatchers(basePathFeedback + "/authenticate/**").permitAll()
                 .antMatchers(basePathFeedback + "/ping").permitAll()
                 .requestMatchers(new RegexRequestMatcher(basePathFeedback + "/\\w{2}/applications/\\d+/feedbacks/?", "POST", true)).permitAll()
