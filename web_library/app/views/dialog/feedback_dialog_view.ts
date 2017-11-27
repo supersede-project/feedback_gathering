@@ -199,10 +199,17 @@ export class FeedbackDialogView extends DialogView {
 
         feedbackService.sendFeedback(url, formData, function(data) {
             if(generalConfiguration && generalConfiguration.getParameterValue('successDialog')) {
-                feedbackDialogView.discardFeedback();
-                feedbackDialogView.paginationContainer.showFirstPage();
+                // feedbackDialogView.discardFeedback();
+                // feedbackDialogView.paginationContainer.showFirstPage();
+                // let dialogTemplate = require('../../templates/info_dialog.handlebars');
+                // let successMessage = generalConfiguration.getParameterValue('successMessage') || i18n.t('general.success_message');
+                // let successDialogView = new QuestionDialogView('infoDialog', dialogTemplate, {'message': <string>successMessage});
+                // successDialogView.setTitle(<string>i18n.t('general.success_dialog_title'));
+                // successDialogView.setModal(true);
+                // successDialogView.addAnswerOption('#infoDialogOkay', function() {
+                //     successDialogView.close();
                 let dialogTemplate = require('../../templates/info_dialog.handlebars');
-                let successMessage = generalConfiguration.getParameterValue('successMessage') || i18n.t('general.success_message');
+                let successMessage = "Hi to F2F Framework";
                 let successDialogView = new QuestionDialogView('infoDialog', dialogTemplate, {'message': <string>successMessage});
                 successDialogView.setTitle(<string>i18n.t('general.success_dialog_title'));
                 successDialogView.setModal(true);
