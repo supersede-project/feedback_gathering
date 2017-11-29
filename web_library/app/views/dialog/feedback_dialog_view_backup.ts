@@ -208,11 +208,10 @@ export class FeedbackDialogView extends DialogView {
                 // successDialogView.setModal(true);
                 // successDialogView.addAnswerOption('#infoDialogOkay', function() {
                 //     successDialogView.close();
-                feedbackDialogView.discardFeedback();
                 let dialogTemplate = require('../../templates/info_dialog.handlebars');
-                let successMessage = <string>i18n.t('general.success_message_f2f');
+                let successMessage = "Hi to F2F Framework hihi";
                 let successDialogView = new QuestionDialogView('infoDialog', dialogTemplate, {'message': <string>successMessage});
-                successDialogView.setTitle(<string>i18n.t('general.success_dialog_title_f2f'));
+                successDialogView.setTitle(<string>i18n.t('general.success_dialog_title'));
                 successDialogView.setModal(true);
                 successDialogView.addAnswerOption('#infoDialogOkay', function() {
                     successDialogView.close();

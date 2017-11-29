@@ -12,7 +12,9 @@
     "cancel": "Abbrechen",
     "dialog_close_button_title": "Minimieren",
     "success_message": "Ihr Feedback wurde erfolgreich abgeschickt.",
+    "success_message_f2f": "Vielen Dank für Ihr Feedback! Bitte wählen Sie eine Option für Statusupdates zu Ihrem Feedback",
     "success_dialog_title": "Info",
+    "success_dialog_title_f2f": "Feedback-To-Feedback Zentrale",
     "success_dialog_okay_button_title": "ok",
     "error_message": "Beim Speichern des Feedbacks ist ein Fehler aufgetreten."
   },

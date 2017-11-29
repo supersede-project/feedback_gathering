@@ -12,7 +12,9 @@
     "cancel": "Cancel",
     "dialog_close_button_title": "Minimize",
     "success_message": "Your feedback was successfully sent.",
+    "success_message_f2f": "Thank you for your feedback! Please choose one of the following options for status updates to your feedback",
     "success_dialog_title": "Info",
+    "success_dialog_title_f2f": "Feedback-To-Feedback Central",
     "success_dialog_okay_button_title": "ok",
     "error_message": "An error occurred while saving the feedback."
   },
