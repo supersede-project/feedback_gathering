@@ -111,6 +111,12 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers(basePathFeedback + "/ping").permitAll()
                 .requestMatchers(new RegexRequestMatcher(basePathFeedback + "/\\w{2}/applications/\\d+/feedbacks/?", "POST", true)).permitAll()
                 .requestMatchers(new RegexRequestMatcher(basePathFeedback + "/\\w{2}/applications/\\d+/feedbacks/?\\?_=\\d+", "POST", true)).permitAll()
+                .requestMatchers(new RegexRequestMatcher("/\\w{2}/applications/\\d+/feedbacks/?", "POST", true)).permitAll()
+                .requestMatchers(new RegexRequestMatcher("/\\w{2}/applications/\\d+/feedbacks/?\\?_=\\d+", "POST", true)).permitAll()
+                .requestMatchers(new RegexRequestMatcher("/feedback_repository/\\w{2}/applications/\\d+/feedbacks/?", "POST", true)).permitAll()
+                .requestMatchers(new RegexRequestMatcher("/feedback_repository/\\w{2}/applications/\\d+/feedbacks/?\\?_=\\d+", "POST", true)).permitAll()
+                .requestMatchers(new RegexRequestMatcher("feedback_repository/\\w{2}/applications/\\d+/feedbacks/?", "POST", true)).permitAll()
+                .requestMatchers(new RegexRequestMatcher("feedback_repository/\\w{2}/applications/\\d+/feedbacks/?\\?_=\\d+", "POST", true)).permitAll()
 
                 .anyRequest().authenticated();
 
