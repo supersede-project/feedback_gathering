@@ -1,22 +1,27 @@
 <section id="UpdateForm" class="feedback-library feedback-container">
-    <h1>{{dialogTitle}}</h1>
-    <div id="allowDivision" class="update_division">
-        <p class="message">{{{ messageAllowDescription }}}</p>
-        <p class="message"><i>{{{ messageHint }}}</i></p>
-
-        <input type="radio" id="allowContact" value="Yes">
-        <label for="allowContact"> {{t "general.f2f_dialog_allowContact" }}</label>
-        <input type="radio" id="denyContact" value="No">
-        <label for="denyContact"> {{t "general.f2f_dialog_denyContact" }}</label>
+    <h3>{{dialogTitle}}</h3>
+    <div style="width: 100%">
+        <div id="allowDivision" class="update_division_left">
+            <p class="message">{{{ messageAllowDescription }}}</p>
+            <p class="message"><i>{{{ messageHint }}}</i></p>
+            <form>
+                <input type="radio" name="allowContact" id="allowContact" value="Yes">
+                <label for="allowContact"> {{t "general.f2f_dialog_allowContact" }}</label>
+                <input type="radio" name="allowContact" id="denyContact" value="No">
+                <label for="denyContact"> {{t "general.f2f_dialog_denyContact" }}</label>
+            </form>
+        </div>
+        <div id="allowDivision" class="update_division_right">
+            <p class="message">{{{ messageChannelDescription }}}</p>
+            <form>
+                <input type="radio" name="contactChannel" id="emailChannel" value="Email">
+                <label for="emailChannel"> {{t "general.f2f_dialog_contactEmail" }}</label>
+                <input type="radio" name="contactChannel" id="accountChannel" value="Account">
+                <label for="accountChannel"> {{t "general.f2f_dialog_contactAccount" }}</label>
+            </form>
+        </div>
     </div>
-    <div id="allowDivision" class="update_division">
-        <p class="message">{{{ messageChannelDescription }}}</p>
-
-        <input type="radio" id="emailChannel" value="Email">
-        <label for="emailChannel"> {{t "general.f2f_dialog_contactEmail" }}</label>
-        <input type="radio" id="accountChannel" value="Account">
-        <label for="accountChannel"> {{t "general.f2f_dialog_denyContact" }}</label>
+    <div>
+        <button class="button" id="f2fDialogContinue">{{t "general.f2f_dialog_continue_button" }}</button>
     </div>
-    <button class="button" id="f2fDialogContinue">{{t "general.f2f_dialog_continue_button" }}</button>
-
 </section>

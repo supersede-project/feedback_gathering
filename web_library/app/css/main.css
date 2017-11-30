@@ -543,6 +543,9 @@ section.feedback-mechanism {
   padding-right: 20px;
   box-sizing: border-box; }
 
+.hide {
+  display: none; }
+
 .feedback-library-wrapper {
   width: auto;
   height: auto;
@@ -1133,3 +1136,11 @@ section.feedback-mechanism {
   .feedback-library .feedback-mechanism.user-question p {
     font-size: 14px !important;
     color: #000000 !important; }
+
+.update_division_left {
+  width: 50%;
+  float: left; }
+
+.update_division_right {
+  width: 50%;
+  float: right; }

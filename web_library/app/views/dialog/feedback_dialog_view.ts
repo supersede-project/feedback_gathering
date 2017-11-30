@@ -232,13 +232,14 @@ export class FeedbackDialogView extends DialogView {
                         'messageAllowDescription': <string>messageInquiryDescription,
                         'messageHint': <string>messageHint,
                         'messageChannelDescription': <string>messageChannelDescription});
-                updateDialogView.setTitle(<string>i18n.t('general.success_dialog_title_f2f'));
-                updateDialogView.setModal(true);
+                inquiryDialogView.setTitle(<string>i18n.t('general.success_dialog_title_f2f'));
+                inquiryDialogView.setModal(true);
 
                 updateDialogView.addAnswerOption('#f2fDialogContinue', function() {
                     updateDialogView.close();
                     inquiryDialogView.open();
                 });
+                console.log("test console");
                 updateDialogView.open();
             } else if (generalConfiguration && generalConfiguration.getParameterValue('closeDialogOnSuccess')) {
                 feedbackDialogView.discardFeedback();

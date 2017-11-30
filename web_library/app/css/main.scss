@@ -7,6 +7,9 @@
 @import "attachment";
 @import "grid";
 
+.hide {
+  display: none;
+}
 
 .feedback-library-wrapper {
   width: auto;
@@ -771,6 +774,16 @@
     font-size: 14px !important;
     color: #000000 !important;
   }
+}
+
+.update_division_left {
+  width: 50%;
+  float: left;
+}
+
+.update_division_right {
+  width: 50%;
+  float: right;
 }
 
 
