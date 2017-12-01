@@ -208,39 +208,15 @@ export class FeedbackDialogView extends DialogView {
                 // successDialogView.setModal(true);
                 // successDialogView.addAnswerOption('#infoDialogOkay', function() {
                 //     successDialogView.close();
-                feedbackDialogView.discardFeedback();
                 let dialogTemplate = require('../../templates/info_dialog.handlebars');
-
-                let f2fUpdateTemplate = require('../../templates/f2f_dialog_updateform.handlebars');
-                let titleMessageUpdate = <string>i18n.t('general.success_message_f2f_update');
-                let titleMessageInquiry = <string>i18n.t('general.success_message_f2f_inquiry');
-                let messageAllowDescription = <string>i18n.t('general.f2f_dialog_allowDescription');
-                let messageInquiryDescription = <string>i18n.t('general.f2f_dialog_inquiryDescription');
-                let messageChannelDescription = <string>i18n.t('general.f2f_dialog_channelDescription');
-                let messageHint = <string>i18n.t('general.f2f_dialog_hint');
-
-                let updateDialogView = new QuestionDialogView('UpdateForm', f2fUpdateTemplate,
-                    {'dialogTitle': <string>titleMessageUpdate,
-                        'messageAllowDescription': <string>messageAllowDescription,
-                        'messageHint': <string>messageHint,
-                        'messageChannelDescription': <string>messageChannelDescription});
-                updateDialogView.setTitle(<string>i18n.t('general.success_dialog_title_f2f'));
-                updateDialogView.setModal(true);
-
-                let inquiryDialogView = new QuestionDialogView('UpdateForm', f2fUpdateTemplate,
-                    {'dialogTitle': <string>titleMessageInquiry,
-                        'messageAllowDescription': <string>messageInquiryDescription,
-                        'messageHint': <string>messageHint,
-                        'messageChannelDescription': <string>messageChannelDescription});
-                inquiryDialogView.setTitle(<string>i18n.t('general.success_dialog_title_f2f'));
-                inquiryDialogView.setModal(true);
-
-                updateDialogView.addAnswerOption('#f2fDialogContinue', function() {
-                    updateDialogView.close();
-                    inquiryDialogView.open();
+                let successMessage = "Hi to F2F Framework hihi";
+                let successDialogView = new QuestionDialogView('infoDialog', dialogTemplate, {'message': <string>successMessage});
+                successDialogView.setTitle(<string>i18n.t('general.success_dialog_title'));
+                successDialogView.setModal(true);
+                successDialogView.addAnswerOption('#infoDialogOkay', function() {
+                    successDialogView.close();
                 });
-                console.log("test console");
-                updateDialogView.open();
+                successDialogView.open();
             } else if (generalConfiguration && generalConfiguration.getParameterValue('closeDialogOnSuccess')) {
                 feedbackDialogView.discardFeedback();
                 feedbackDialogView.paginationContainer.showFirstPage();

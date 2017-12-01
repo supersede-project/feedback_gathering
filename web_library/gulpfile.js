@@ -23,15 +23,15 @@ project_utils.loadTasks(project_config.PROJECT_TASKS_DIR);
 
 var jqueryUIPath = 'app/assets/jquery-ui-1.12.1.custom/';
 
-var gulpSSH = new SSH({
-    ignoreErrors: false,
-    sshConfig: {
-        "host": config.host,
-        "port": config.port,
-        "username": config.username,
-        "privateKey": fs.readFileSync(config.privateKeyPath)
-    }
-});
+// var gulpSSH = new SSH({
+//     ignoreErrors: false,
+//     sshConfig: {
+//         "host": config.host,
+//         "port": config.port,
+//         "username": config.username,
+//         "privateKey": fs.readFileSync(config.privateKeyPath)
+//     }
+// });
 
 var copyright = function () {
     var copyrightString = fs.readFileSync('copyright.txt');
