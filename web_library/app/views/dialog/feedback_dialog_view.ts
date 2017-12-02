@@ -212,6 +212,9 @@ export class FeedbackDialogView extends DialogView {
                 let dialogTemplate = require('../../templates/info_dialog.handlebars');
 
                 let f2fUpdateTemplate = require('../../templates/f2f_dialog_updateform.handlebars');
+                let f2fInquiryTemplate = require('../../templates/f2f_dialog_inquiryform.handlebars');
+                let f2fSummaryTemplate = require('../../templates/f2f_dialog_summary.handlebars');
+
                 let titleMessageUpdate = <string>i18n.t('general.success_message_f2f_update');
                 let titleMessageInquiry = <string>i18n.t('general.success_message_f2f_inquiry');
                 let messageAllowDescription = <string>i18n.t('general.f2f_dialog_allowDescription');
@@ -227,7 +230,7 @@ export class FeedbackDialogView extends DialogView {
                 updateDialogView.setTitle(<string>i18n.t('general.success_dialog_title_f2f'));
                 updateDialogView.setModal(true);
 
-                let inquiryDialogView = new QuestionDialogView('UpdateForm', f2fUpdateTemplate,
+                let inquiryDialogView = new QuestionDialogView('InquiryForm', f2fInquiryTemplate,
                     {'dialogTitle': <string>titleMessageInquiry,
                         'messageAllowDescription': <string>messageInquiryDescription,
                         'messageHint': <string>messageHint,
@@ -235,10 +238,20 @@ export class FeedbackDialogView extends DialogView {
                 inquiryDialogView.setTitle(<string>i18n.t('general.success_dialog_title_f2f'));
                 inquiryDialogView.setModal(true);
 
+                let summaryDialogView = new QuestionDialogView('SummaryForm', f2fSummaryTemplate);
+                summaryDialogView.setTitle(<string>i18n.t('general.success_dialog_title_f2f'));
+                summaryDialogView.setModal(true);
+
                 updateDialogView.addAnswerOption('#f2fDialogContinue', function() {
                     updateDialogView.close();
                     inquiryDialogView.open();
                 });
+
+                inquiryDialogView.addAnswerOption('#f2fFinishSettings', function() {
+                    inquiryDialogView.close();
+                    summaryDialogView.open();
+                });
+
                 console.log("test console");
                 updateDialogView.open();
             } else if (generalConfiguration && generalConfiguration.getParameterValue('closeDialogOnSuccess')) {
