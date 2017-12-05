@@ -211,8 +211,8 @@ export class FeedbackDialogView extends DialogView {
                 feedbackDialogView.discardFeedback();
                 let dialogTemplate = require('../../templates/info_dialog.handlebars');
 
-                let f2fUpdateTemplate = require('../../templates/f2f_dialog_updateform.handlebars');
-                let f2fInquiryTemplate = require('../../templates/f2f_dialog_inquiryform.handlebars');
+                let f2fUpdateTemplate = require('../../templates/f2f_dialog_updateform_v2.handlebars');
+                let f2fInquiryTemplate = require('../../templates/f2f_dialog_inquiryform_v2.handlebars');
                 let f2fSummaryTemplate = require('../../templates/f2f_dialog_summary.handlebars');
 
                 let titleMessageUpdate = <string>i18n.t('general.success_message_f2f_update');
@@ -222,19 +222,21 @@ export class FeedbackDialogView extends DialogView {
                 let messageChannelDescription = <string>i18n.t('general.f2f_dialog_channelDescription');
                 let messageHint = <string>i18n.t('general.f2f_dialog_hint');
 
-                let updateDialogView = new QuestionDialogView('UpdateForm', f2fUpdateTemplate,
-                    {'dialogTitle': <string>titleMessageUpdate,
-                        'messageAllowDescription': <string>messageAllowDescription,
-                        'messageHint': <string>messageHint,
-                        'messageChannelDescription': <string>messageChannelDescription});
+                // let updateDialogView = new QuestionDialogView('UpdateForm_v2', f2fUpdateTemplate,
+                //     {'dialogTitle': <string>titleMessageUpdate,
+                //         'messageAllowDescription': <string>messageAllowDescription,
+                //         'messageHint': <string>messageHint,
+                //         'messageChannelDescription': <string>messageChannelDescription});
+                let updateDialogView = new QuestionDialogView('UpdateForm_v2', f2fUpdateTemplate);
                 updateDialogView.setTitle(<string>i18n.t('general.success_dialog_title_f2f'));
                 updateDialogView.setModal(true);
 
-                let inquiryDialogView = new QuestionDialogView('InquiryForm', f2fInquiryTemplate,
-                    {'dialogTitle': <string>titleMessageInquiry,
-                        'messageAllowDescription': <string>messageInquiryDescription,
-                        'messageHint': <string>messageHint,
-                        'messageChannelDescription': <string>messageChannelDescription});
+                // let inquiryDialogView = new QuestionDialogView('InquiryForm', f2fInquiryTemplate,
+                //     {'dialogTitle': <string>titleMessageInquiry,
+                //         'messageAllowDescription': <string>messageInquiryDescription,
+                //         'messageHint': <string>messageHint,
+                //         'messageChannelDescription': <string>messageChannelDescription});
+                let inquiryDialogView = new QuestionDialogView('InquiryForm_v2', f2fInquiryTemplate);
                 inquiryDialogView.setTitle(<string>i18n.t('general.success_dialog_title_f2f'));
                 inquiryDialogView.setModal(true);
 
@@ -247,13 +249,18 @@ export class FeedbackDialogView extends DialogView {
                     inquiryDialogView.open();
                 });
 
-                inquiryDialogView.addAnswerOption('#f2fFinishSettings', function() {
+                inquiryDialogView.addAnswerOption('#f2fDialogFinish', function() {
                     inquiryDialogView.close();
                     summaryDialogView.open();
                 });
 
+                summaryDialogView.addAnswerOption('#f2fDialogSave', function() {
+                    summaryDialogView.close();
+                });
+
                 console.log("test console");
                 updateDialogView.open();
+
             } else if (generalConfiguration && generalConfiguration.getParameterValue('closeDialogOnSuccess')) {
                 feedbackDialogView.discardFeedback();
                 feedbackDialogView.paginationContainer.showFirstPage();

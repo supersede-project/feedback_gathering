@@ -1,7 +1,42 @@
 <section id="SummaryForm" class="feedback-library feedback-container">
-    <div class="row">
-        <div class="col-md-4">.col-sm-4</div>
-        <div class="col-md-4">.col-sm-4</div>
-        <div class="col-md-4">.col-sm-4</div>
-    </div>
+    <form>
+        <h3>Thank you! Your feedback and settings have been saved.</h3>
+        <h4>Following settings related to your feedback have been saved:</h4>
+        <div class="row" style="padding: 30px">
+            <div class="col-md-6">
+                <i><p style="font-weight: bold">Status Updates</p></i>
+                <div class="custom-controls-stacked">
+                    <p>New Updates: Yes</p>
+                    <p>Contact channel: E-Mail</p>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <i><p style="font-weight: bold">Inquiries</p></i>
+                <div class="custom-controls-stacked">
+                    <p>Inquiries: Yes</p>
+                    <p>Contact channel: Feedback-To-Feedback Central</p>
+                </div>
+            </div>
+        </div>
+        <div class="row" style="padding: 30px">
+            Would you like to save this settings for further feedbacks?
+        </div>
+        <div class="row" style="padding: 30px">
+            <div class="col-md-8">
+                <label class="custom-control custom-radio">
+                    <input id="summaryFormSaveYes" name="saveSettings" type="radio" class="custom-control-input">
+                    <span class="custom-control-indicator"></span>
+                    <span class="custom-control-description">Yes</span>
+                </label>
+                <label class="custom-control custom-radio">
+                    <input id="summaryFormSaveNo" name="saveSettings" type="radio" class="custom-control-input">
+                    <span class="custom-control-indicator"></span>
+                    <span class="custom-control-description">No, I would like to adjust the settings for the next time</span>
+                </label>
+            </div>
+            <div class="col-md-4">
+                <button type="button" id="f2fDialogSave" class="btn btn-success">Save</button>
+            </div>
+        </div>
+    </form>
 </section>
