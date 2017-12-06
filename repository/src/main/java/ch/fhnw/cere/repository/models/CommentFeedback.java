@@ -17,15 +17,13 @@ public class CommentFeedback {
     @JsonIgnore
     @ManyToOne(cascade = {CascadeType.REMOVE, CascadeType.MERGE})
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn(name = "feedback_id")
-    @Column(name = "feedback_id", nullable = false)
+    @JoinColumn(name = "feedback_id", nullable = false)
     private Feedback feedback;
 
     @JsonIgnore
     @ManyToOne(cascade = {CascadeType.REMOVE, CascadeType.MERGE})
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn(name = "user_id")
-    @Column(name = "user_id", nullable = false)
+    @JoinColumn(name = "user_id", nullable = false)
     private EndUser user;
 
     private String commentText;
