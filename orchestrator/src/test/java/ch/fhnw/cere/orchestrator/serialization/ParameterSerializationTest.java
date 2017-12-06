@@ -1,15 +1,14 @@
 package ch.fhnw.cere.orchestrator.serialization;
 
-import ch.fhnw.cere.orchestrator.models.Mechanism;
-import ch.fhnw.cere.orchestrator.models.MechanismType;
+
 import ch.fhnw.cere.orchestrator.models.Parameter;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
-import org.skyscreamer.jsonassert.JSONAssert;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -20,9 +19,11 @@ import static org.junit.Assert.assertEquals;
 
 
 public class ParameterSerializationTest {
-    String parameterJson1;
-    String parameterJson2;
-    String parameterJson3;
+    private String parameterJson1;
+    private String parameterJson2;
+    private String parameterJson3;
+    private String parameterJson4;
+    private String parameterJson5;
 
     @Before
     public void setup() {
@@ -66,6 +67,100 @@ public class ParameterSerializationTest {
                 "            }\n" +
                 "          ]\n" +
                 "        }";
+
+        parameterJson4 = "[\n" +
+                "              {\n" +
+                "                \"key\": \"mandatoryReminder\",\n" +
+                "                \"value\": \"Please select at least one category\",\n" +
+                "                \"language\": \"en\"\n" +
+                "              },\n" +
+                "              {\n" +
+                "                \"key\": \"options\",\n" +
+                "                \"value\": [\n" +
+                "                  {\n" +
+                "                    \"key\": \"SLOW_CONNECTION\",\n" +
+                "                    \"value\": \"Slow connection\",\n" +
+                "                    \"language\": \"en\"\n" +
+                "                  },\n" +
+                "                  {\n" +
+                "                    \"key\": \"VIDEO_IS_FREEZING\",\n" +
+                "                    \"value\": \"Video is freezing\",\n" +
+                "                    \"language\": \"en\"\n" +
+                "                  },\n" +
+                "                  {\n" +
+                "                    \"key\": \"BUG_CATEGORY\",\n" +
+                "                    \"value\": \"Bug\",\n" +
+                "                    \"language\": \"en\"\n" +
+                "                  },\n" +
+                "                  {\n" +
+                "                    \"key\": \"FEATURE_REQUEST_CATEGORY\",\n" +
+                "                    \"value\": \"Feature request\",\n" +
+                "                    \"defaultValue\": \"\",\n" +
+                "                    \"editableByUser\": false,\n" +
+                "                    \"language\": \"en\"\n" +
+                "                  },\n" +
+                "                  {\n" +
+                "                    \"key\": \"GENERAL_CATEGORY\",\n" +
+                "                    \"value\": \"General feedback\",\n" +
+                "                    \"language\": \"en\"\n" +
+                "                  }\n" +
+                "                ],\n" +
+                "                \"language\": \"en\"\n" +
+                "              },\n" +
+                "              {\n" +
+                "                \"key\": \"ownAllowed\",\n" +
+                "                \"value\": 0.0,\n" +
+                "                \"language\": \"en\"\n" +
+                "              },\n" +
+                "              {\n" +
+                "                \"key\": \"multiple\",\n" +
+                "                \"value\": 0.0,\n" +
+                "                \"language\": \"en\"\n" +
+                "              },\n" +
+                "              {\n" +
+                "                \"key\": \"mandatory\",\n" +
+                "                \"value\": 1.0,\n" +
+                "                \"language\": \"en\"\n" +
+                "              },\n" +
+                "              {\n" +
+                "                \"key\": \"title\",\n" +
+                "                \"value\": \"Please choose one of the following categories\",\n" +
+                "                \"language\": \"en\"\n" +
+                "              }\n" +
+                "            ]";
+        parameterJson5 =  "{\n" +
+                "                \"key\": \"options\",\n" +
+                "                \"value\": [\n" +
+                "                  {\n" +
+                "                    \"key\": \"SLOW_CONNECTION\",\n" +
+                "                    \"value\": \"Slow connection\",\n" +
+                "                    \"language\": \"en\"\n" +
+                "                  },\n" +
+                "                  {\n" +
+                "                    \"key\": \"VIDEO_IS_FREEZING\",\n" +
+                "                    \"value\": \"Video is freezing\",\n" +
+                "                    \"language\": \"en\"\n" +
+                "                  },\n" +
+                "                  {\n" +
+                "                    \"key\": \"BUG_CATEGORY\",\n" +
+                "                    \"value\": \"Bug\",\n" +
+                "                    \"language\": \"en\"\n" +
+                "                  },\n" +
+                "                  {\n" +
+                "                    \"key\": \"FEATURE_REQUEST_CATEGORY\",\n" +
+                "                    \"value\": \"Feature request\",\n" +
+                "                    \"defaultValue\": \"\",\n" +
+                "                    \"editableByUser\": false,\n" +
+                "                    \"language\": \"en\"\n" +
+                "                  },\n" +
+                "                  {\n" +
+                "                    \"key\": \"GENERAL_CATEGORY\",\n" +
+                "                    \"value\": \"General feedback\",\n" +
+                "                    \"language\": \"en\"\n" +
+                "                  }\n" +
+                "                ],\n" +
+                "                \"language\": \"en\"\n" +
+                "              },\n";
     }
 
     @Test
@@ -91,6 +186,26 @@ public class ParameterSerializationTest {
         assertEquals("Feature Request", parameter1.getParameters().get(1).getValue());
         assertEquals("GENERAL_CATEGORY", parameter1.getParameters().get(2).getKey());
         assertEquals("General Feedback", parameter1.getParameters().get(2).getValue());
+    }
+
+    @Test
+    public void testDeserializationOfParameterWithNestedParameters2() throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        Parameter parameter = mapper.readValue(parameterJson5, Parameter.class);
+
+        assertEquals("options", parameter.getKey());
+        assertEquals(null, parameter.getValue());
+        assertEquals(5, parameter.getParameters().size());
+    }
+
+    @Test
+    public void testDeserializationOfParameterWithNestedParametersInList() throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        List<Parameter> parameters = mapper.readValue(parameterJson4, new TypeReference<List<Parameter>>() {});
+
+        assertEquals(6, parameters.size());
+        assertEquals("options", parameters.get(1).getKey());
+        assertEquals(5, parameters.get(1).getParameters().size());
     }
 
     @Test

@@ -5,3 +5,5 @@ server_library/src/ch/uzh/ifi/feedback/library/transaction/config.properties
 .idea/
 /repository/src/main/resources/application.properties
 /repository/src/main/resources/application-test.properties
+
+.DS_Store/

@@ -1,10 +1,7 @@
 package ch.fhnw.cere.orchestrator.models;
 
 
-import ch.fhnw.cere.orchestrator.serialization.ParameterDefaultSerializer;
-import ch.fhnw.cere.orchestrator.serialization.ParameterSerializer;
-import ch.fhnw.cere.orchestrator.serialization.ParameterValueDeserializer;
-import ch.fhnw.cere.orchestrator.serialization.ParameterValueSerializer;
+import ch.fhnw.cere.orchestrator.serialization.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -15,8 +12,10 @@ import org.hibernate.annotations.OnDeleteAction;
 import javax.persistence.*;
 import java.util.*;
 
+
 @Entity
 @JsonSerialize(using = ParameterSerializer.class)
+@JsonDeserialize(using = ParameterDeserializer.class)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Parameter {
     @Id
@@ -25,7 +24,6 @@ public class Parameter {
 
     @Column(name="`key`")
     private String key;
-    @JsonDeserialize(using = ParameterValueDeserializer.class)
     @JsonSerialize(using = ParameterValueSerializer.class)
     private String value;
     private Date createdAt;
@@ -37,6 +35,7 @@ public class Parameter {
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name="parent_parameter_id")
     private Parameter parentParameter;
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @OneToMany(mappedBy="parentParameter", cascade={CascadeType.REMOVE, CascadeType.PERSIST})
     private List<Parameter> parameters;
 
@@ -123,6 +122,23 @@ public class Parameter {
         this.parentParameter = parentParameter;
         this.generalConfiguration = generalConfiguration;
         this.mechanism = mechanism;
+    }
+
+    public Parameter(String key, String value, String language, Parameter parentParameter, List<Parameter> parameters) {
+        this.key = key;
+        this.value = value;
+        this.language = language;
+        this.parentParameter = parentParameter;
+        this.parameters = parameters;
+    }
+
+    public Parameter(long id, String key, String value, String language, Parameter parentParameter, List<Parameter> parameters) {
+        this.id = id;
+        this.key = key;
+        this.value = value;
+        this.language = language;
+        this.parentParameter = parentParameter;
+        this.parameters = parameters;
     }
 
     @Override
