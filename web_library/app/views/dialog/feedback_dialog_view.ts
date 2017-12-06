@@ -216,10 +216,10 @@ export class FeedbackDialogView extends DialogView {
                 let f2fInquiryTemplate = require('../../templates/f2f_dialog_inquiryform_v2.handlebars');
                 let f2fSummaryTemplate = require('../../templates/f2f_dialog_summary.handlebars');
 
-                // let titleMessageUpdate = <string>i18n.t('general.success_message_f2f_update');
-                // let titleMessageInquiry = <string>i18n.t('general.success_message_f2f_inquiry');
-                // let messageAllowDescription = <string>i18n.t('general.f2f_dialog_allowDescription');
-                // let messageInquiryDescription = <string>i18n.t('general.f2f_dialog_inquiryDescription');
+                let summaryAllowUpdate = <string>i18n.t('general.success_message_f2f_update');
+                let summaryChannelUpdate = <string>i18n.t('general.success_message_f2f_inquiry');
+                let summaryAllowInquiry = <string>i18n.t('general.f2f_dialog_allowDescription');
+                let summaryChannelInquiry = <string>i18n.t('general.f2f_dialog_inquiryDescription');
                 // let messageChannelDescription = <string>i18n.t('general.f2f_dialog_channelDescription');
                 // let messageHint = <string>i18n.t('general.f2f_dialog_hint');
 
@@ -241,22 +241,35 @@ export class FeedbackDialogView extends DialogView {
                 inquiryDialogView.setTitle(<string>i18n.t('general.success_dialog_title_f2f'));
                 inquiryDialogView.setModal(true);
 
-                let summaryDialogView = new QuestionDialogView('SummaryForm', f2fSummaryTemplate);
-                summaryDialogView.setTitle(<string>i18n.t('general.success_dialog_title_f2f'));
-                summaryDialogView.setModal(true);
-
                 updateDialogView.addAnswerOption('#f2fDialogContinue', function() {
+                    let allowContactUpdate = jQuery('#UpdateForm_v2').find('input[name="allowUpdate"]:checked').val();
+                    summaryAllowUpdate = allowContactUpdate;
+                    let channelUpdate = jQuery('#UpdateForm_v2').find('input[name="contactChannel"]:checked').val();
+                    summaryChannelUpdate = channelUpdate;
                     updateDialogView.close();
+                    console.log("allowContactReply:" + allowContactUpdate);
+                    console.log("contactChannel:" + channelUpdate);
                     inquiryDialogView.open();
                 });
 
                 inquiryDialogView.addAnswerOption('#f2fDialogFinish', function() {
+                    let allowContactInquiry = jQuery('#InquiryForm_v2').find('input[name="allowInquiry"]:checked').val();
+                    let channelInquiry = jQuery('#InquiryForm_v2').find('input[name="contactChannel"]:checked').val();
+                    summaryAllowInquiry = allowContactInquiry;
+                    summaryChannelInquiry = channelInquiry;
                     inquiryDialogView.close();
-                    summaryDialogView.open();
-                });
+                    let summaryDialogView = new QuestionDialogView('SummaryForm', f2fSummaryTemplate,
+                        {'allowUpdate': summaryAllowUpdate,
+                            'allowInquiry': summaryAllowInquiry,
+                            'contactChannelUpdate': summaryChannelUpdate,
+                            'contactChannelInquiry': summaryChannelInquiry});
+                    summaryDialogView.setTitle(<string>i18n.t('general.success_dialog_title_f2f'));
+                    summaryDialogView.setModal(true);
 
-                summaryDialogView.addAnswerOption('#f2fDialogSave', function() {
-                    summaryDialogView.close();
+                    summaryDialogView.addAnswerOption('#f2fDialogSave', function() {
+                        summaryDialogView.close();
+                    });
+                    summaryDialogView.open();
                 });
 
                 console.log("test console");
