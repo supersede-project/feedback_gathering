@@ -27,6 +27,7 @@ import {QuestionDialogView} from './question_dialog_view';
 import {CategoryFeedback} from '../../models/feedbacks/category_feedback';
 
 
+
 /**
  * Acts as a wrapper to the jquery UI dialog
  */
@@ -215,12 +216,12 @@ export class FeedbackDialogView extends DialogView {
                 let f2fInquiryTemplate = require('../../templates/f2f_dialog_inquiryform_v2.handlebars');
                 let f2fSummaryTemplate = require('../../templates/f2f_dialog_summary.handlebars');
 
-                let titleMessageUpdate = <string>i18n.t('general.success_message_f2f_update');
-                let titleMessageInquiry = <string>i18n.t('general.success_message_f2f_inquiry');
-                let messageAllowDescription = <string>i18n.t('general.f2f_dialog_allowDescription');
-                let messageInquiryDescription = <string>i18n.t('general.f2f_dialog_inquiryDescription');
-                let messageChannelDescription = <string>i18n.t('general.f2f_dialog_channelDescription');
-                let messageHint = <string>i18n.t('general.f2f_dialog_hint');
+                // let titleMessageUpdate = <string>i18n.t('general.success_message_f2f_update');
+                // let titleMessageInquiry = <string>i18n.t('general.success_message_f2f_inquiry');
+                // let messageAllowDescription = <string>i18n.t('general.f2f_dialog_allowDescription');
+                // let messageInquiryDescription = <string>i18n.t('general.f2f_dialog_inquiryDescription');
+                // let messageChannelDescription = <string>i18n.t('general.f2f_dialog_channelDescription');
+                // let messageHint = <string>i18n.t('general.f2f_dialog_hint');
 
                 // let updateDialogView = new QuestionDialogView('UpdateForm_v2', f2fUpdateTemplate,
                 //     {'dialogTitle': <string>titleMessageUpdate,
