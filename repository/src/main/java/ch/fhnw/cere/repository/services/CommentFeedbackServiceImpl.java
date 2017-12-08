@@ -39,12 +39,12 @@ public class CommentFeedbackServiceImpl implements CommentFeedbackService {
     }
 
     @Override
-    public List<CommentFeedback> findByUserIdentification(long userId) {
-        return commentFeedbackRepository.findByUserIdentification(userId);
+    public List<CommentFeedback> findByUserId(long userId) {
+        return commentFeedbackRepository.findByUserId(userId);
     }
 
     @Override
-    public List<CommentFeedback> findByApplicationId(long applicationId) {
-        return commentFeedbackRepository.findByApplicationId(applicationId);
+    public List<CommentFeedback> findByFeedbackId(long feedbackId) {
+        return commentFeedbackRepository.findByFeedbackId(feedbackId);
     }
 }

@@ -11,6 +11,6 @@ import java.util.List;
 
 @Repository
 public interface CommentFeedbackRepository extends JpaRepository<CommentFeedback, Long> {
-    List<CommentFeedback> findByUserIdentification(@Param("userId") long userId);
-    List<CommentFeedback> findByApplicationId(@Param("applicationId") long applicationId);
+    List<CommentFeedback> findByUserId(@Param("userId") long userId);
+    List<CommentFeedback> findByFeedbackId(@Param("feedbackId") long applicationId);
 }

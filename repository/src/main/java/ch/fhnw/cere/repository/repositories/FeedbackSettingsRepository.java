@@ -14,5 +14,5 @@ import java.util.List;
 @Repository
 public interface FeedbackSettingsRepository extends JpaRepository<FeedbackSettings, Long> {
     FeedbackSettings findByFeedbackId(@Param("feedbackId") long feedbackId);
-    List<FeedbackSettings> findByUserId(@Param("userId") String userId);
+    List<FeedbackSettings> findByUserId(@Param("userId") long userId);
 }

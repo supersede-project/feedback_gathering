@@ -13,7 +13,7 @@ public interface UserFeedbackLikeService {
     public UserFBLike find(long id);
     public void delete(long id);
     List<UserFBLike> findByFeedbackId(long feedbackId);
-    List<UserFBLike> findByUserId(long userId);
+    List<UserFBLike> findByEnduserId(long userId);
 }
 
 

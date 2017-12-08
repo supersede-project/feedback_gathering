@@ -45,7 +45,7 @@ public class UserFeedbackLikeServiceImpl implements UserFeedbackLikeService {
     }
 
     @Override
-    public List<UserFBLike> findByUserId(long userId) {
-        return userFeedbackLikeRepository.findByUserId(userId);
+    public List<UserFBLike> findByEnduserId(long userId) {
+        return userFeedbackLikeRepository.findByEnduserId(userId);
     }
 }

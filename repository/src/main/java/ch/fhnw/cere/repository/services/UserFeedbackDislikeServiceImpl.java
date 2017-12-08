@@ -44,7 +44,7 @@ public class UserFeedbackDislikeServiceImpl implements UserFeedbackDislikeServic
     }
 
     @Override
-    public List<UserFBDislike> findByUserId(long userId) {
-        return userFeedbackDislikeRepository.findByUserId(userId);
+    public List<UserFBDislike> findByEnduserId(long userId) {
+        return userFeedbackDislikeRepository.findByEnduserId(userId);
     }
 }

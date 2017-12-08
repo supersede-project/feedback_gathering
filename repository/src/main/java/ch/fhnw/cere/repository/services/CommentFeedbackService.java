@@ -13,8 +13,8 @@ public interface CommentFeedbackService {
     public CommentFeedback save(CommentFeedback commentFeedback);
     public CommentFeedback find(long id);
     public void delete(long id);
-    List<CommentFeedback> findByUserIdentification(long userId);
-    List<CommentFeedback> findByApplicationId(long applicationId);
+    List<CommentFeedback> findByUserId(long userId);
+    List<CommentFeedback> findByFeedbackId(long feedbackId);
 }
 
 

@@ -44,7 +44,7 @@ public class FeedbackSettingsServiceImpl implements FeedbackSettingsService {
     }
 
     @Override
-    public List<FeedbackSettings> findByUserId(String userId) {
+    public List<FeedbackSettings> findByUserId(long userId) {
         return feedbackSettingsRepository.findByUserId(userId);
     }
 }
