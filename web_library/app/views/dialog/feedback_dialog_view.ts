@@ -197,6 +197,7 @@ export class FeedbackDialogView extends DialogView {
     sendFeedback(feedbackService:FeedbackService, formData:any, generalConfiguration:GeneralConfiguration) {
         var feedbackDialogView = this;
         var url = this.context.apiEndpointRepository + 'feedback_repository/' + this.context.lang + '/applications/' + this.context.applicationId + '/feedbacks/';
+        var urlSettings = this.context.apiEndpointRepository + 'feedback_repository/' + this.context.lang + '/applications/' + this.context.applicationId + '/feedbacks/feedbacksettings';
 
         feedbackService.sendFeedback(url, formData, function(data) {
             if(generalConfiguration && generalConfiguration.getParameterValue('successDialog')) {
@@ -216,10 +217,10 @@ export class FeedbackDialogView extends DialogView {
                 let f2fInquiryTemplate = require('../../templates/f2f_dialog_inquiryform_v2.handlebars');
                 let f2fSummaryTemplate = require('../../templates/f2f_dialog_summary.handlebars');
 
-                let summaryAllowUpdate = <string>i18n.t('general.success_message_f2f_update');
-                let summaryChannelUpdate = <string>i18n.t('general.success_message_f2f_inquiry');
-                let summaryAllowInquiry = <string>i18n.t('general.f2f_dialog_allowDescription');
-                let summaryChannelInquiry = <string>i18n.t('general.f2f_dialog_inquiryDescription');
+                let summaryAllowUpdate:string = <string>i18n.t('general.success_message_f2f_update');
+                let summaryChannelUpdate:string = <string>i18n.t('general.success_message_f2f_inquiry');
+                let summaryAllowInquiry:string = <string>i18n.t('general.f2f_dialog_allowDescription');
+                let summaryChannelInquiry:string = <string>i18n.t('general.f2f_dialog_inquiryDescription');
                 // let messageChannelDescription = <string>i18n.t('general.f2f_dialog_channelDescription');
                 // let messageHint = <string>i18n.t('general.f2f_dialog_hint');
 
@@ -268,6 +269,20 @@ export class FeedbackDialogView extends DialogView {
 
                     summaryDialogView.addAnswerOption('#f2fDialogSave', function() {
                         summaryDialogView.close();
+
+                        var formDataSettings:FormData = new FormData();
+                        formDataSettings.append("summaryAllowUpdate",summaryAllowUpdate);
+                        formDataSettings.append("summaryAllowInquiry",summaryAllowInquiry);
+                        formDataSettings.append("summaryChannelUpdate",summaryChannelUpdate);
+                        formDataSettings.append("summaryChannelInquiry",summaryChannelInquiry);
+
+                        feedbackService.sendFeedbackSettings(urlSettings, formDataSettings, function(data) {
+                            console.log("it worked");
+                            console.log(JSON.stringify(data))
+                        }, function(error) {
+                            console.log("sendFeedbackSettings: Error");
+                            console.log('Failure: ' + JSON.stringify(error));
+                        });
                     });
                     summaryDialogView.open();
                 });
@@ -292,6 +307,11 @@ export class FeedbackDialogView extends DialogView {
         });
     }
 
+    sendFeedbackSettings(feedbackSettingsService:FeedbackSettingsService, formData:any){
+        var feedbackDialogView = this;
+        var url = this.context.apiEndpointRepository + 'feedback_repository/' + this.context.lang + '/applications/' + this.context.applicationId + '/feedbacks/';
+
+    }
     /**
      * Creates the multipart form data containing the data of the active mechanisms.
      */

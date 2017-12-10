@@ -2,6 +2,7 @@ import {Backend} from './backends/backend';
 import {HttpBackend} from './backends/http_backend';
 import {applicationPath} from '../js/config';
 import {Feedback} from '../models/feedbacks/feedback';
+import {FeedbackSettings} from "../models/feedbacks/feedback_settings";
 
 
 /**
@@ -26,6 +27,23 @@ export class FeedbackService {
     }
 
     sendFeedback(url: string, formData:FormData, callback:(feedback:Feedback) => void, errorCallback?:(data:any) => void) {
+        $.ajax({
+            url: url,
+            type: 'POST',
+            data: formData,
+            dataType: 'json',
+            processData: false,
+            contentType: false,
+            success: function (data) {
+                callback(data);
+            },
+            error: function (data) {
+                errorCallback(data);
+            }
+        });
+    }
+
+    sendFeedbackSettings(url: string, formData:FormData, callback:(feedbackSettings:FeedbackSettings) => void, errorCallback?:(data:any) => void) {
         $.ajax({
             url: url,
             type: 'POST',
