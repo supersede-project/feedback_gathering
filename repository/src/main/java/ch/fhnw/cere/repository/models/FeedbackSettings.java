@@ -37,6 +37,10 @@ public class FeedbackSettings {
     @NotNull
     private Boolean globalFeedbackSetting;
 
+    public void setFeedback(Feedback feedback) {
+        this.feedback = feedback;
+    }
+
     public EndUser getUser() { return user;}
     public Feedback getFeedback() { return feedback; }
     public Application getApplication() { return application; }
@@ -46,10 +50,33 @@ public class FeedbackSettings {
     public long getId() { return id; }
     public String getFeedbackQueryChannel() { return feedbackQueryChannel; }
     public String getStatusUpdatesContactChannel() { return statusUpdatesContactChannel; }
-    public void setFeedbackQuery(Boolean feedbackQuery) { this.feedbackQuery = feedbackQuery;}
 
     @Transient
     private Application application;
+
+    public void setUser(EndUser user) {
+        this.user = user;
+    }
+
+    public void setStatusUpdates(Boolean statusUpdates) {
+        this.statusUpdates = statusUpdates;
+    }
+
+    public void setStatusUpdatesContactChannel(String statusUpdatesContactChannel) {
+        this.statusUpdatesContactChannel = statusUpdatesContactChannel;
+    }
+
+    public void setFeedbackQuery(Boolean feedbackQuery) {
+        this.feedbackQuery = feedbackQuery;
+    }
+
+    public void setFeedbackQueryChannel(String feedbackQueryChannel) {
+        this.feedbackQueryChannel = feedbackQueryChannel;
+    }
+
+    public void setGlobalFeedbackSetting(Boolean globalFeedbackSetting) {
+        this.globalFeedbackSetting = globalFeedbackSetting;
+    }
 
     public FeedbackSettings(){}
 
@@ -62,5 +89,4 @@ public class FeedbackSettings {
       this.feedbackQueryChannel = statusUpdatesContactChannel;
       this.globalFeedbackSetting = globalFeedbackSetting;
     }
-
 }

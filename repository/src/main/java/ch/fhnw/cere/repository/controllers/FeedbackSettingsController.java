@@ -39,6 +39,12 @@ public class FeedbackSettingsController extends BaseController {
     private FeedbackSettingsService feedbackSettingsService;
 
     @PreAuthorize("@securityService.hasAdminPermission(#applicationId)")
+    @RequestMapping(method = RequestMethod.GET, value = "/feedbacksettings")
+    public List<FeedbackSettings> getAllFeedbackSettings(@PathVariable long applicationId) {
+        return feedbackSettingsService.findAll();
+    }
+
+    @PreAuthorize("@securityService.hasAdminPermission(#applicationId)")
     @RequestMapping(method = RequestMethod.GET, value = "/{feedbackId}/feedbacksettings")
     public FeedbackSettings getSettingsForFeedback(@PathVariable long applicationId, @PathVariable long feedbackId) {
         FeedbackSettings feedbackSettings = feedbackSettingsService.find(feedbackId);
@@ -55,22 +61,52 @@ public class FeedbackSettingsController extends BaseController {
         return listFeedbackSettings;
     }
 
+//    @ResponseStatus(HttpStatus.CREATED)
+//    @RequestMapping(method = RequestMethod.POST, value = "/feedbacksettings")
+//    public FeedbackSettings createFeedbackSetting(@RequestBody FeedbackSettings feedbackSettings) throws IOException, ServletException {
+//        System.out.println("Some Stats");
+//        Feedback mockFeedback = new Feedback();
+//        EndUser mockUser = new EndUser();
+//        mockUser.setId(1);
+//        mockFeedback.setId(1);
+//        feedbackSettings.setFeedback(mockFeedback);
+//        feedbackSettings.setUser(mockUser);
+//        System.out.println(feedbackSettings.getFeedback());
+//        System.out.println(feedbackSettings.getFeedbackQuery());
+//        FeedbackSettings createdSettings = feedbackSettingsService.save(feedbackSettings);
+//        return createdSettings;
+//    }
     @ResponseStatus(HttpStatus.CREATED)
     @RequestMapping(method = RequestMethod.POST, value = "/feedbacksettings")
-    public FeedbackSettings createFeedbackSetting(HttpServletRequest request) throws IOException, ServletException {
-        MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
-        MultiValueMap<String, MultipartFile> parts = multipartRequest.getMultiFileMap();
-
-        MultipartFile jsonPart = parts.getFirst("json");
-        ByteArrayInputStream stream = new ByteArrayInputStream(jsonPart.getBytes());
-        String jsonString = IOUtils.toString(stream, "UTF-8");
-
-        LOGGER.info(jsonString);
-
-        ObjectMapper mapper = new ObjectMapper();
-        FeedbackSettings feedbackSettings = mapper.readValue(jsonString, FeedbackSettings.class);
-        feedbackSettingsService.save(feedbackSettings);
-        return feedbackSettings;
+    public FeedbackSettings createFeedbackSetting(@RequestBody FeedbackSettings feedbackSettings) throws IOException, ServletException {
+        if(feedbackSettings != null){
+            System.out.println("Request is not null hihi");
+            Feedback mockFeedback = new Feedback();
+            EndUser mockUser = new EndUser();
+            mockUser.setId(1000);
+            mockFeedback.setId(1000);
+            feedbackSettings.setFeedback(mockFeedback);
+            feedbackSettings.setUser(mockUser);
+//            if(request.getPart("statusUpdates").toString().toLowerCase().equals("yes")){
+//                feedbackSettings.setStatusUpdates(true);
+//            } else {
+//                feedbackSettings.setStatusUpdates(false);
+//            }
+//            if(request.getPart("feedbackQuery").toString().toLowerCase().equals("yes")){
+//                feedbackSettings.setFeedbackQuery(true);
+//            } else {
+//                feedbackSettings.setFeedbackQuery(false);
+//            }
+//            feedbackSettings.setStatusUpdatesContactChannel(request.getPart("statusUpdatesContactChannel").toString());
+//            feedbackSettings.setFeedbackQueryChannel(request.getPart("feedbackQueryChannel").toString());
+//            if(request.getPart("globalFeedbackSetting").toString().toLowerCase().equals("true")){
+//                feedbackSettings.setGlobalFeedbackSetting(true);
+//            } else {
+//                feedbackSettings.setGlobalFeedbackSetting(false);
+//            }
+            return feedbackSettingsService.save(feedbackSettings);
+        }
+        return null;
     }
 
     @PreAuthorize("@securityService.hasAdminPermission(#applicationId)")
