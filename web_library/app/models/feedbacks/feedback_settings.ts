@@ -13,11 +13,11 @@ import {AudioFeedback} from './audio_feedback';
 export class FeedbackSettings {
     feedbackQuery:string;
     feedbackQueryChannel:string;
-    globalFeedbackSetting:number;
+    globalFeedbackSetting:boolean;
     statusUpdates:string;
     statusUpdatesContactChannel:string;
 
-    constructor(feedbackQuery: string, feedbackQueryChannel: string, globalFeedbackSetting: number, statusUpdates: string, statusUpdatesContactChannel: string) {
+    constructor(feedbackQuery: string, feedbackQueryChannel: string, globalFeedbackSetting: boolean, statusUpdates: string, statusUpdatesContactChannel: string) {
         this.feedbackQuery = feedbackQuery;
         this.feedbackQueryChannel = feedbackQueryChannel;
         this.globalFeedbackSetting = globalFeedbackSetting;

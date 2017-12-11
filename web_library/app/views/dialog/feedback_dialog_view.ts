@@ -14,6 +14,7 @@ import {PageNavigation} from '../../js/helpers/page_navigation';
 import {PaginationContainer} from '../pagination_container';
 import {ConfigurationInterface} from '../../models/configurations/configuration_interface';
 import {Feedback} from '../../models/feedbacks/feedback';
+import {FeedbackSettings} from '../../models/feedbacks/feedback_settings'
 import {CategoryView} from '../category/category_view';
 import {AudioFeedback} from '../../models/feedbacks/audio_feedback';
 import {ContextInformation} from '../../models/feedbacks/context_information';
@@ -217,10 +218,11 @@ export class FeedbackDialogView extends DialogView {
                 let f2fInquiryTemplate = require('../../templates/f2f_dialog_inquiryform_v2.handlebars');
                 let f2fSummaryTemplate = require('../../templates/f2f_dialog_summary.handlebars');
 
-                let summaryAllowUpdate:string = <string>i18n.t('general.success_message_f2f_update');
-                let summaryChannelUpdate:string = <string>i18n.t('general.success_message_f2f_inquiry');
-                let summaryAllowInquiry:string = <string>i18n.t('general.f2f_dialog_allowDescription');
-                let summaryChannelInquiry:string = <string>i18n.t('general.f2f_dialog_inquiryDescription');
+                let summaryAllowUpdate:string = "";
+                let summaryChannelUpdate:string = "";
+                let summaryAllowInquiry:string = "";
+                let summaryChannelInquiry:string = "";
+                let summarySetGlobal:boolean = false;
                 // let messageChannelDescription = <string>i18n.t('general.f2f_dialog_channelDescription');
                 // let messageHint = <string>i18n.t('general.f2f_dialog_hint');
 
@@ -268,15 +270,34 @@ export class FeedbackDialogView extends DialogView {
                     summaryDialogView.setModal(true);
 
                     summaryDialogView.addAnswerOption('#f2fDialogSave', function() {
+                        let setGlobal:string = jQuery('#SummaryForm').find('input[name="saveSettings"]:checked').val();
+                        if (setGlobal.toLowerCase() == "yes"){
+                            summarySetGlobal = true;
+                        }
                         summaryDialogView.close();
 
-                        var formDataSettings:FormData = new FormData();
-                        formDataSettings.append("summaryAllowUpdate",summaryAllowUpdate);
-                        formDataSettings.append("summaryAllowInquiry",summaryAllowInquiry);
-                        formDataSettings.append("summaryChannelUpdate",summaryChannelUpdate);
-                        formDataSettings.append("summaryChannelInquiry",summaryChannelInquiry);
+                        var createdFeedbackSettings:FeedbackSettings = new FeedbackSettings(summaryAllowInquiry,summaryChannelInquiry,
+                            summarySetGlobal,summaryAllowUpdate,summaryChannelUpdate);
 
-                        feedbackService.sendFeedbackSettings(urlSettings, formDataSettings, function(data) {
+                        var finalSettings:JSON = {};
+                        if(summaryAllowUpdate.toLowerCase() == "yes"){
+                            finalSettings.statusUpdates = true;
+                        } else {
+                            finalSettings.statusUpdates = false;
+                        }
+
+                        finalSettings.statusUpdatesContactChannel = summaryChannelUpdate;
+
+                        if(summaryAllowInquiry.toLowerCase() == "yes"){
+                            finalSettings.feedbackQuery = true;
+                        } else {
+                            finalSettings.feedbackQuery = false;
+                        }
+                        finalSettings.feedbackQueryChannel = summaryChannelInquiry;
+
+                        finalSettings.globalFeedbackSetting = summarySetGlobal;
+
+                        feedbackService.sendFeedbackSettings(urlSettings, finalSettings, function(data) {
                             console.log("it worked");
                             console.log(JSON.stringify(data))
                         }, function(error) {
@@ -307,11 +328,6 @@ export class FeedbackDialogView extends DialogView {
         });
     }
 
-    sendFeedbackSettings(feedbackSettingsService:FeedbackSettingsService, formData:any){
-        var feedbackDialogView = this;
-        var url = this.context.apiEndpointRepository + 'feedback_repository/' + this.context.lang + '/applications/' + this.context.applicationId + '/feedbacks/';
-
-    }
     /**
      * Creates the multipart form data containing the data of the active mechanisms.
      */

@@ -43,14 +43,18 @@ export class FeedbackService {
         });
     }
 
-    sendFeedbackSettings(url: string, formData:FormData, callback:(feedbackSettings:FeedbackSettings) => void, errorCallback?:(data:any) => void) {
+    sendFeedbackSettings(url: string, formData:any, callback:(feedbackSettings:FeedbackSettings) => void, errorCallback?:(data:any) => void) {
         $.ajax({
             url: url,
             type: 'POST',
-            data: formData,
-            dataType: 'json',
+            data: JSON.stringify(formData),
+            contentType: 'application/json',
             processData: false,
-            contentType: false,
+            beforeSend:function(xhr){
+                /* Authorization header */
+                xhr.setRequestHeader("Authorization", "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJzdXBlcl9hZG1pbiIsImNyZWF0ZWQiOjE1MTI4OTQ4NTI0MDMsImV4cCI6MTUxMzQ5OTY1Mn0.RRZ_OOM_39Lhl_jTpRBhlcQHix8KDVu0CF4EgPH84uTMCb4693Y88h29AnnV7B1mZMHfnvBHcf7tqCImfBJ6cQ");
+                xhr.setRequestHeader("Cache-Control", "no-cache");
+            },
             success: function (data) {
                 callback(data);
             },
