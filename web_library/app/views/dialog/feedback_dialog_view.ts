@@ -244,6 +244,25 @@ export class FeedbackDialogView extends DialogView {
                 inquiryDialogView.setTitle(<string>i18n.t('general.success_dialog_title_f2f'));
                 inquiryDialogView.setModal(true);
 
+                $("input[name='allowUpdate']").change(function(){
+                    if(jQuery('#UpdateForm_v2').find('input[name="allowUpdate"]:checked').val() == "No"){
+                        $("#hideDivUpdate").hide();
+                    }
+                    if(jQuery('#UpdateForm_v2').find('input[name="allowUpdate"]:checked').val() == "Yes"){
+                        $("#hideDivUpdate").show();
+                    }
+                });
+
+                $("input[name='allowInquiry']").change(function(){
+                    if(jQuery('#InquiryForm_v2').find('input[name="allowInquiry"]:checked').val() == "No"){
+                        $("#hideDivInquiry").hide();
+                    }
+                    if(jQuery('#InquiryForm_v2').find('input[name="allowInquiry"]:checked').val() == "Yes"){
+                        $("#hideDivInquiry").show();
+                    }
+                });
+
+
                 updateDialogView.addAnswerOption('#f2fDialogContinue', function() {
                     let allowContactUpdate = jQuery('#UpdateForm_v2').find('input[name="allowUpdate"]:checked').val();
                     summaryAllowUpdate = allowContactUpdate;
