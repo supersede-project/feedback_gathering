@@ -247,6 +247,8 @@ export class FeedbackDialogView extends DialogView {
                 $("input[name='allowUpdate']").change(function(){
                     if(jQuery('#UpdateForm_v2').find('input[name="allowUpdate"]:checked').val() == "No"){
                         $("#hideDivUpdate").hide();
+                        $("#updateFormEmail").prop('checked',false);
+                        $("#updateFormCentral").prop('checked',false);
                     }
                     if(jQuery('#UpdateForm_v2').find('input[name="allowUpdate"]:checked').val() == "Yes"){
                         $("#hideDivUpdate").show();
@@ -256,6 +258,8 @@ export class FeedbackDialogView extends DialogView {
                 $("input[name='allowInquiry']").change(function(){
                     if(jQuery('#InquiryForm_v2').find('input[name="allowInquiry"]:checked').val() == "No"){
                         $("#hideDivInquiry").hide();
+                        $("#inquiryFormEmail").prop('checked',false);
+                        $("#inquiryFormCentral").prop('checked',false);
                     }
                     if(jQuery('#InquiryForm_v2').find('input[name="allowInquiry"]:checked').val() == "Yes"){
                         $("#hideDivInquiry").show();
@@ -294,9 +298,6 @@ export class FeedbackDialogView extends DialogView {
                             summarySetGlobal = true;
                         }
                         summaryDialogView.close();
-
-                        var createdFeedbackSettings:FeedbackSettings = new FeedbackSettings(summaryAllowInquiry,summaryChannelInquiry,
-                            summarySetGlobal,summaryAllowUpdate,summaryChannelUpdate);
 
                         var finalSettings:JSON = {};
                         if(summaryAllowUpdate.toLowerCase() == "yes"){
