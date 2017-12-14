@@ -219,9 +219,9 @@ export class FeedbackDialogView extends DialogView {
                 let f2fSummaryTemplate = require('../../templates/f2f_dialog_summary.handlebars');
 
                 let summaryAllowUpdate:string = "";
-                let summaryChannelUpdate:string = "";
+                let summaryChannelUpdate:string = "No information provided";
                 let summaryAllowInquiry:string = "";
-                let summaryChannelInquiry:string = "";
+                let summaryChannelInquiry:string = "No information provided";
                 let summarySetGlobal:boolean = false;
                 // let messageChannelDescription = <string>i18n.t('general.f2f_dialog_channelDescription');
                 // let messageHint = <string>i18n.t('general.f2f_dialog_hint');
@@ -267,22 +267,25 @@ export class FeedbackDialogView extends DialogView {
                 });
 
 
+
                 updateDialogView.addAnswerOption('#f2fDialogContinue', function() {
-                    let allowContactUpdate = jQuery('#UpdateForm_v2').find('input[name="allowUpdate"]:checked').val();
-                    summaryAllowUpdate = allowContactUpdate;
-                    let channelUpdate = jQuery('#UpdateForm_v2').find('input[name="contactChannel"]:checked').val();
-                    summaryChannelUpdate = channelUpdate;
+                    summaryAllowUpdate = jQuery('#UpdateForm_v2').find('input[name="allowUpdate"]:checked').val();
+                    let channelUpdate = jQuery('#UpdateForm_v2').find('input[name="contactChannelUpdate"]:checked').val();
+                    if(typeof channelUpdate !== 'undefined'){
+                        summaryChannelUpdate = channelUpdate;
+                    }
                     updateDialogView.close();
-                    console.log("allowContactReply:" + allowContactUpdate);
+                    console.log("allowContactReply:" + summaryAllowUpdate);
                     console.log("contactChannel:" + channelUpdate);
                     inquiryDialogView.open();
                 });
 
                 inquiryDialogView.addAnswerOption('#f2fDialogFinish', function() {
-                    let allowContactInquiry = jQuery('#InquiryForm_v2').find('input[name="allowInquiry"]:checked').val();
-                    let channelInquiry = jQuery('#InquiryForm_v2').find('input[name="contactChannel"]:checked').val();
-                    summaryAllowInquiry = allowContactInquiry;
-                    summaryChannelInquiry = channelInquiry;
+                    summaryAllowInquiry = jQuery('#InquiryForm_v2').find('input[name="allowInquiry"]:checked').val();
+                    let channelInquiry = jQuery('#InquiryForm_v2').find('input[name="contactChannelInquiry"]:checked').val();
+                    if(typeof channelInquiry !== 'undefined'){
+                        summaryChannelInquiry = channelInquiry;
+                    }
                     inquiryDialogView.close();
                     let summaryDialogView = new QuestionDialogView('SummaryForm', f2fSummaryTemplate,
                         {'allowUpdate': summaryAllowUpdate,
@@ -293,29 +296,37 @@ export class FeedbackDialogView extends DialogView {
                     summaryDialogView.setModal(true);
 
                     summaryDialogView.addAnswerOption('#f2fDialogSave', function() {
-                        let setGlobal:string = jQuery('#SummaryForm').find('input[name="saveSettings"]:checked').val();
+                        let setGlobal:string= jQuery('#SummaryForm').find('input[name="saveSettings"]:checked').val();
                         if (setGlobal.toLowerCase() == "yes"){
                             summarySetGlobal = true;
                         }
                         summaryDialogView.close();
 
-                        var finalSettings:JSON = {};
+                        let finalSettings: JSON = {};
                         if(summaryAllowUpdate.toLowerCase() == "yes"){
                             finalSettings.statusUpdates = true;
+                            finalSettings.statusUpdatesContactChannel = summaryChannelUpdate;
                         } else {
                             finalSettings.statusUpdates = false;
+                            finalSettings.statusUpdatesContactChannel = "";
                         }
-
-                        finalSettings.statusUpdatesContactChannel = summaryChannelUpdate;
 
                         if(summaryAllowInquiry.toLowerCase() == "yes"){
                             finalSettings.feedbackQuery = true;
+                            finalSettings.feedbackQueryChannel = summaryChannelInquiry;
                         } else {
                             finalSettings.feedbackQuery = false;
+                            finalSettings.feedbackQueryChannel = "";
                         }
-                        finalSettings.feedbackQueryChannel = summaryChannelInquiry;
+
+                        let feedbackJson = JSON.parse(JSON.stringify(data));
+                        console.log("FEEDBACK ID: " + feedbackJson.id);
+
 
                         finalSettings.globalFeedbackSetting = summarySetGlobal;
+                        finalSettings.feedback_id = feedbackJson.id;
+                        // finalSettings.feedback = JSON.stringify(data);
+                        console.log("Feedback data: " + JSON.stringify(data));
 
                         feedbackService.sendFeedbackSettings(urlSettings, finalSettings, function(data) {
                             console.log("it worked");
