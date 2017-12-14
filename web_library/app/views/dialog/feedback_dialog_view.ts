@@ -280,6 +280,11 @@ export class FeedbackDialogView extends DialogView {
                     inquiryDialogView.open();
                 });
 
+                inquiryDialogView.addAnswerOption('#f2fDialogBackToUpdate', function () {
+                   inquiryDialogView.close();
+                   updateDialogView.open();
+                });
+
                 inquiryDialogView.addAnswerOption('#f2fDialogFinish', function() {
                     summaryAllowInquiry = jQuery('#InquiryForm_v2').find('input[name="allowInquiry"]:checked').val();
                     let channelInquiry = jQuery('#InquiryForm_v2').find('input[name="contactChannelInquiry"]:checked').val();
@@ -294,6 +299,11 @@ export class FeedbackDialogView extends DialogView {
                             'contactChannelInquiry': summaryChannelInquiry});
                     summaryDialogView.setTitle(<string>i18n.t('general.success_dialog_title_f2f'));
                     summaryDialogView.setModal(true);
+
+                    summaryDialogView.addAnswerOption('#f2fDialogBackToInquiry',function () {
+                       summaryDialogView.close();
+                       inquiryDialogView.open();
+                    });
 
                     summaryDialogView.addAnswerOption('#f2fDialogSave', function() {
                         let setGlobal:string= jQuery('#SummaryForm').find('input[name="saveSettings"]:checked').val();
