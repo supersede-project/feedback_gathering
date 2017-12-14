@@ -3,9 +3,12 @@ package ch.fhnw.cere.repository.services;
 import ch.fhnw.cere.repository.models.Feedback;
 import ch.fhnw.cere.repository.repositories.FeedbackRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import scala.collection.immutable.Page;
 
+import java.awt.print.Pageable;
 import java.util.List;
 
 
@@ -38,5 +41,16 @@ public class FeedbackServiceImpl implements FeedbackService {
 
     public List<Feedback> findByUserIdentification(String userIdentification) {
         return feedbackRepository.findByUserIdentification(userIdentification);
+    }
+
+//    @Override
+//    public Page<Feedback> firstFeedback() {
+//        return feedbackRepository.firstFeedback(
+//                (Pageable) new PageRequest(feedbackRepository.findAll().size() -1 ,feedbackRepository.findAll().size()));
+//    }
+
+    @Override
+    public List<Feedback> findAllByOrderByIdDesc() {
+        return feedbackRepository.findAllByOrderByIdDesc();
     }
 }
