@@ -225,7 +225,6 @@ export class FeedbackDialogView extends DialogView {
                 let summarySetGlobal:boolean = false;
                 // let messageChannelDescription = <string>i18n.t('general.f2f_dialog_channelDescription');
                 // let messageHint = <string>i18n.t('general.f2f_dialog_hint');
-
                 // let updateDialogView = new QuestionDialogView('UpdateForm_v2', f2fUpdateTemplate,
                 //     {'dialogTitle': <string>titleMessageUpdate,
                 //         'messageAllowDescription': <string>messageAllowDescription,
@@ -280,10 +279,10 @@ export class FeedbackDialogView extends DialogView {
                     inquiryDialogView.open();
                 });
 
-                inquiryDialogView.addAnswerOption('#f2fDialogBackToUpdate', function () {
-                   inquiryDialogView.close();
-                   updateDialogView.open();
-                });
+                // inquiryDialogView.addAnswerOption('#f2fDialogBackToUpdate', function () {
+                //     inquiryDialogView.close();
+                //     updateDialogView.open();
+                // });
 
                 inquiryDialogView.addAnswerOption('#f2fDialogFinish', function() {
                     summaryAllowInquiry = jQuery('#InquiryForm_v2').find('input[name="allowInquiry"]:checked').val();
@@ -300,10 +299,10 @@ export class FeedbackDialogView extends DialogView {
                     summaryDialogView.setTitle(<string>i18n.t('general.success_dialog_title_f2f'));
                     summaryDialogView.setModal(true);
 
-                    summaryDialogView.addAnswerOption('#f2fDialogBackToInquiry',function () {
-                       summaryDialogView.close();
-                       inquiryDialogView.open();
-                    });
+                    // summaryDialogView.addAnswerOption('#f2fDialogBackToInquiry',function () {
+                    //     summaryDialogView.close();
+                    //     inquiryDialogView.open();
+                    // });
 
                     summaryDialogView.addAnswerOption('#f2fDialogSave', function() {
                         let setGlobal:string= jQuery('#SummaryForm').find('input[name="saveSettings"]:checked').val();
