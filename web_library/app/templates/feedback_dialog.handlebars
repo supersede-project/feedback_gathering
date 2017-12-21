@@ -142,6 +142,23 @@
                         {{ submissionPageMessage }}
                     </p>
                 {{/if}}
+                <section>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="alert alert-success" role="alert">
+                                Set your feedback as public if you want it to be published in the Feedback Forum!
+                            </div>
+                            <label class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" id="checkPublic" value="public" checked="checked">
+                                <span class="custom-control-indicator"></span>
+                                <span class="custom-control-description">Feedback public</span>
+                            </label>
+                            <div class="alert alert-danger" role="alert">
+                                <i>Hint: </i> Your feedback will only be published upon approval through the company!
+                            </div>
+                        </div>
+                    </div>
+                </section>
                 <section class="dialog-navigation">
                     <button class="button feedback-dialog-backward navigation-button">{{t "general.back" }}</button>
                     <button type="button"
