@@ -19,7 +19,7 @@ public class Feedback {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
     private String title;
-    private String userIdentification;
+    private long userIdentification;
     private Date createdAt;
     private Date updatedAt;
     private long applicationId;
@@ -29,9 +29,39 @@ public class Feedback {
     private int likeCount;
     private int dislikeCount;
     @Column(columnDefinition="tinyint(1) default 0")
-    private Boolean isBlocked;
+    private boolean isBlocked;
     private String iconPath;
     private int unreadCommentCount;
+
+    @Column(columnDefinition="tinyint(1) default 0")
+    private boolean visibility;
+
+    @Column(columnDefinition="tinyint(1) default 0")
+    private boolean published;
+
+    public boolean isBlocked() {
+        return isBlocked;
+    }
+
+    public void setBlocked(boolean blocked) {
+        isBlocked = blocked;
+    }
+
+    public boolean isVisibility() {
+        return visibility;
+    }
+
+    public void setVisibility(boolean visibility) {
+        this.visibility = visibility;
+    }
+
+    public boolean isPublished() {
+        return published;
+    }
+
+    public void setPublished(boolean published) {
+        this.published = published;
+    }
 
     public int getCommentCount() {
         return commentCount;
@@ -133,7 +163,7 @@ public class Feedback {
     public Feedback() {
     }
 
-    public Feedback(String title, String userIdentification, long applicationId, long configurationId, String language) {
+    public Feedback(String title, long userIdentification, long applicationId, long configurationId, String language) {
         this.title = title;
         this.userIdentification = userIdentification;
         this.applicationId = applicationId;
@@ -141,7 +171,7 @@ public class Feedback {
         this.language = language;
     }
 
-    public Feedback(String title, String userIdentification, long applicationId, long configurationId, String language, int commentCount, int likeCount, int dislikeCount, int unreadCommentCount) {
+    public Feedback(String title, long userIdentification, long applicationId, long configurationId, String language, int commentCount, int likeCount, int dislikeCount, int unreadCommentCount) {
         this.title = title;
         this.userIdentification = userIdentification;
         this.applicationId = applicationId;
@@ -153,7 +183,7 @@ public class Feedback {
         this.unreadCommentCount = unreadCommentCount;
     }
 
-    public Feedback(String title, String userIdentification, Date createdAt, Date updatedAt, long applicationId, long configurationId, String language, ContextInformation contextInformation, List<AttachmentFeedback> attachmentFeedbacks, List<AudioFeedback> audioFeedbacks, List<CategoryFeedback> categoryFeedbacks, List<RatingFeedback> ratingFeedbacks, List<ScreenshotFeedback> screenshotFeedbacks, List<TextFeedback> textFeedbacks, List<Status> statuses, List<FeedbackCompany> feedbackCompanies) {
+    public Feedback(String title, long userIdentification, Date createdAt, Date updatedAt, long applicationId, long configurationId, String language, ContextInformation contextInformation, List<AttachmentFeedback> attachmentFeedbacks, List<AudioFeedback> audioFeedbacks, List<CategoryFeedback> categoryFeedbacks, List<RatingFeedback> ratingFeedbacks, List<ScreenshotFeedback> screenshotFeedbacks, List<TextFeedback> textFeedbacks, List<Status> statuses, List<FeedbackCompany> feedbackCompanies) {
         this.title = title;
         this.userIdentification = userIdentification;
         this.createdAt = createdAt;
@@ -172,7 +202,7 @@ public class Feedback {
         this.feedbackCompanies = feedbackCompanies;
     }
 
-    public Feedback(String title, String userIdentification, Date createdAt, Date updatedAt, long applicationId, long configurationId, String language, int commentCount, int likeCount, int dislikeCount, ContextInformation contextInformation, List<AttachmentFeedback> attachmentFeedbacks, List<AudioFeedback> audioFeedbacks, List<CategoryFeedback> categoryFeedbacks, List<RatingFeedback> ratingFeedbacks, List<ScreenshotFeedback> screenshotFeedbacks, List<TextFeedback> textFeedbacks, List<Status> statuses, List<FeedbackCompany> feedbackCompanies) {
+    public Feedback(String title, long userIdentification, Date createdAt, Date updatedAt, long applicationId, long configurationId, String language, int commentCount, int likeCount, int dislikeCount, ContextInformation contextInformation, List<AttachmentFeedback> attachmentFeedbacks, List<AudioFeedback> audioFeedbacks, List<CategoryFeedback> categoryFeedbacks, List<RatingFeedback> ratingFeedbacks, List<ScreenshotFeedback> screenshotFeedbacks, List<TextFeedback> textFeedbacks, List<Status> statuses, List<FeedbackCompany> feedbackCompanies) {
         this.title = title;
         this.userIdentification = userIdentification;
         this.createdAt = createdAt;
@@ -235,11 +265,11 @@ public class Feedback {
         this.title = title;
     }
 
-    public String getUserIdentification() {
+    public long getUserIdentification() {
         return userIdentification;
     }
 
-    public void setUserIdentification(String userIdentification) {
+    public void setUserIdentification(long userIdentification) {
         this.userIdentification = userIdentification;
     }
 

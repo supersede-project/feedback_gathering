@@ -95,7 +95,7 @@ public class FeedbackController extends BaseController {
 
     @PreAuthorize("@securityService.hasAdminPermission(#applicationId)")
     @RequestMapping(method = RequestMethod.GET, value = "/user_identification/{userIdentification}")
-    public List<Feedback> getFeedbacksByUserIdentification(@PathVariable long applicationId, @PathVariable String userIdentification) {
+    public List<Feedback> getFeedbacksByUserIdentification(@PathVariable long applicationId, @PathVariable long userIdentification) {
         List<Feedback> feedbacks = feedbackService.findByUserIdentification(userIdentification);
         return feedbacks;
     }

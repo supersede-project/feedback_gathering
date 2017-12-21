@@ -109,7 +109,7 @@ public class FileStorageServiceImpl implements FileStorageService {
     }
 
     private String buildFilename(String filename, Feedback feedback) {
-        return feedback.getApplicationId() + "_" + sanitizeFileName(feedback.getUserIdentification()) + "_" + String.valueOf(System.currentTimeMillis()) + "_" + sanitizeFileName(filename);
+        return feedback.getApplicationId() + "_" + sanitizeFileName(String.valueOf(feedback.getUserIdentification())) + "_" + String.valueOf(System.currentTimeMillis()) + "_" + sanitizeFileName(filename);
     }
 
     private String sanitizeFileName(String filename) {

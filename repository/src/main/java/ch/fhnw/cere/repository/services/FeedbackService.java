@@ -14,7 +14,7 @@ public interface FeedbackService {
     public Feedback find(long id);
     public void delete(long id);
     List<Feedback> findByApplicationId(long applicationId);
-    List<Feedback> findByUserIdentification(String userIdentification);
+    List<Feedback> findByUserIdentification(long userIdentification);
 //    Page<Feedback> firstFeedback();
     List<Feedback> findAllByOrderByIdDesc();
 }

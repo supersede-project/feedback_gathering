@@ -5,6 +5,7 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
+import java.util.Collection;
 import java.util.Date;
 
 @Entity
@@ -25,6 +26,28 @@ public class CommentFeedback {
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "user_id", nullable = false)
     private EndUser user;
+
+    @ManyToOne
+    @JoinColumn(name="fk_parent_comment")
+    private CommentFeedback parentComment;
+    @OneToMany(mappedBy="parentComment")
+    private Collection<CommentFeedback> children;
+
+    public CommentFeedback getParentComment() {
+        return parentComment;
+    }
+
+    public void setParentComment(CommentFeedback parentComment) {
+        this.parentComment = parentComment;
+    }
+
+    public Collection<CommentFeedback> getChildren() {
+        return children;
+    }
+
+    public void setChildren(Collection<CommentFeedback> children) {
+        this.children = children;
+    }
 
     private String commentText;
     private Date createdAt;
@@ -64,5 +87,4 @@ public class CommentFeedback {
         this.updatedAt = updatedAt;
         this.activeStatus = activeStatus;
     }
-
 }
