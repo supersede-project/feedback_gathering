@@ -199,9 +199,9 @@ export class FeedbackDialogView extends DialogView {
         var feedbackDialogView = this;
         var url = this.context.apiEndpointRepository + 'feedback_repository/' + this.context.lang + '/applications/' + this.context.applicationId + '/feedbacks/';
         var urlSettings = this.context.apiEndpointRepository + 'feedback_repository/' + this.context.lang + '/applications/' + this.context.applicationId + '/feedbacks/feedbacksettings';
-
         feedbackService.sendFeedback(url, formData, function(data) {
             if(generalConfiguration && generalConfiguration.getParameterValue('successDialog')) {
+                console.log("FormData to be sent: " + JSON.stringify(data));
                 // feedbackDialogView.discardFeedback();
                 // feedbackDialogView.paginationContainer.showFirstPage();
                 // let dialogTemplate = require('../../templates/info_dialog.handlebars');
@@ -375,12 +375,13 @@ export class FeedbackDialogView extends DialogView {
         // TODO refactoring: the mechanism views should return their feedback data
         var dialogView = this;
         var formData = new FormData();
+        var feedbackVisibility = jQuery('#checkPublic').is(":checked");
         var audioMechanisms = configuration.getMechanismConfig(mechanismTypes.audioType);
         var hasAudioMechanism = audioMechanisms.filter(audioMechanism => audioMechanism.active === true).length > 0;
 
         dialogView.resetMessageView();
 
-        var feedbackObject = new Feedback('Feedback', this.dialogContext.userId, this.dialogContext.language, this.context.applicationId, configuration.id, [], [], [], [], null, [], []);
+        var feedbackObject = new Feedback('Feedback', this.dialogContext.userId, this.dialogContext.language, this.context.applicationId, configuration.id, [], [], [], [], null, [], [],false,feedbackVisibility);
         feedbackObject.contextInformation = ContextInformation.create(this.context.metaData);
 
         for (var mechanismView of dialogView.mechanismViews) {
