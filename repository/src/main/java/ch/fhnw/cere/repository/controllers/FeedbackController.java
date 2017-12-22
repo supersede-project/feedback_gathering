@@ -7,6 +7,7 @@ import ch.fhnw.cere.repository.integration.FeedbackCentralIntegrator;
 import ch.fhnw.cere.repository.models.*;
 import ch.fhnw.cere.repository.models.orchestrator.Application;
 import ch.fhnw.cere.repository.services.*;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import javafx.stage.Screen;
 import org.apache.commons.io.IOUtils;
@@ -103,6 +104,7 @@ public class FeedbackController extends BaseController {
     @ResponseStatus(HttpStatus.CREATED)
     @RequestMapping(method = RequestMethod.POST, value = "", consumes = "multipart/form-data")
     public Feedback createFeedback(HttpServletRequest request) throws IOException, ServletException {
+        LOGGER.info("request feedback: " + request.toString());
         MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
         MultiValueMap<String, MultipartFile> parts = multipartRequest.getMultiFileMap();
 
@@ -110,9 +112,11 @@ public class FeedbackController extends BaseController {
         ByteArrayInputStream stream = new ByteArrayInputStream(jsonPart.getBytes());
         String jsonString = IOUtils.toString(stream, "UTF-8");
 
+        LOGGER.info("Feedback Json");
         LOGGER.info(jsonString);
 
         ObjectMapper mapper = new ObjectMapper();
+        mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
         Feedback feedback = mapper.readValue(jsonString, Feedback.class);
         feedback.setApplicationId(applicationId());
         if(feedback.getLanguage() == null) {

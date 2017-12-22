@@ -55,7 +55,7 @@ public class FeedbackSettingsController extends BaseController {
     @PreAuthorize("@securityService.hasAdminPermission(#applicationId)")
     @RequestMapping(method = RequestMethod.GET, value = "/{feedbackId}/feedbacksettings")
     public FeedbackSettings getSettingsForFeedback(@PathVariable long applicationId, @PathVariable long feedbackId) {
-        FeedbackSettings feedbackSettings = feedbackSettingsService.find(feedbackId);
+        FeedbackSettings feedbackSettings = feedbackSettingsService.findByFeedbackId(feedbackId);
         if (feedbackSettings == null) {
             throw new NotFoundException();
         }
