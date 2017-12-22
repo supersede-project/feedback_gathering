@@ -75,6 +75,7 @@
     <div id="LndsHG7ibS0m"
          style="position: absolute; top: 0px; left: 0px; width: 1px; height: 1px; z-index: 2147483647;"></div>
 </div>
+
 <div id="pullFeedbackOverlay_background container-fluid" class="popup_background"
      style="opacity: 0; visibility: hidden; background-color: black; position: fixed; top: 0px; right: 0px; bottom: 0px; left: 0px; z-index: 100000;"></div>
 <div id="pullFeedbackOverlay_wrapper container-fluid" class="popup_wrapper"
@@ -375,6 +376,8 @@
 
                 </header>
                 <!--###endheader###-->
+                <button type="button" id="openF2fcentral">ClickMe</button>
+                <div id="f2fcentral" style="width: 400px; height: 500px;"></div>
                 <!--###startnav###-->
                 <div class="row">
                     <nav class="large-12 columns navigation-main">
@@ -1864,7 +1867,7 @@
 
             //'apiEndpointOrchestrator': 'http://mt.ronnieschaniel.com:8080/feedback_orchestrator-2.0.0/',
 //            'apiEndpointRepository': 'http://mt.ronnieschaniel.com:8080/feedback_repository-2.0.0/',
-            'apiEndpointRepository': 'http://mt.ronnieschaniel.com:8080/feedback_repository/',
+            'apiEndpointRepository': 'http://mt.ronnieschaniel.com:8080/feedback_repository/ping',
             'userId': '99999999',
             'lang': 'de',
             'fallbackLang': 'en',
@@ -1879,6 +1882,8 @@
         });
     });
 </script>
+
+<script type="text/javascript" src="/dist/f2fcentral.min.js"></script>
 
 <iframe src="/dist/Energiesparkonto_ Energie sparen. Kosten senken._files/saved_resource.html"
         style="position: absolute; top: -999px; left: -999px; visibility: hidden;"></iframe>

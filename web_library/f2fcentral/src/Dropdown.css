@@ -1,0 +1,8 @@
+/*
+This CSS, and the Bootstrap CSS library (in 'External Resources'), are not required and can safely be removed. They're only here to make the select less ugly and to show it can be styled in the same way as a 'regular' select.
+*/
+
+
+select.form-control {
+    width: 70%;
+}

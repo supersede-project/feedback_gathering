@@ -1,6 +1,6 @@
 import {readJSONAsync} from '../../services/mocks/mocks_loader';
 import i18next = require('i18next');
-import ResourceStore = I18next.ResourceStore;
+import ResourceStore = i18next.ResourceStore;
 
 
 export class I18nHelper {
