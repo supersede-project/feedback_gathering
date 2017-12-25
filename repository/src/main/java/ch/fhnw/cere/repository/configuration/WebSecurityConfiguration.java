@@ -103,6 +103,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/feedback_repository/ping").permitAll()
                 .requestMatchers(new RegexRequestMatcher("/feedback_repository/\\w{2}/applications/\\d+/feedbacks/?", null, true)).permitAll()
                 .requestMatchers(new RegexRequestMatcher("/feedback_repository/\\w{2}/applications/\\d+/feedbacks/feedbacksettings/?", "POST", true)).permitAll()
+                .requestMatchers(new RegexRequestMatcher("/feedback_repository/\\w{2}/applications/\\d+/feedbacks/comments/?", "POST", true)).permitAll()
                 .requestMatchers(new RegexRequestMatcher("/feedback_repository/\\w{2}/applications/\\d+/feedbacks/?\\?_=\\d+", "POST", true)).permitAll()
                 .antMatchers("/feedback_repository/feedback_repository/authenticate/**").permitAll()
                 .antMatchers("/feedback_repository/feedback_repository/ping").permitAll()

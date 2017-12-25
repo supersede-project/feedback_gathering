@@ -39,7 +39,7 @@ public class FeedbackChatInformationServiceImpl implements FeedbackChatInformati
     }
 
     @Override
-    public FeedbackChatInformation findByUserId(long userId) {
+    public List<FeedbackChatInformation> findByUserId(long userId) {
         return feedbackChatInformationRepository.findByUserId(userId);
     }
 

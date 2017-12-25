@@ -40,7 +40,10 @@ public class FeedbackSettingsController extends BaseController {
     private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(FeedbackSettingsController.class);
 
     @Autowired
-    private FeedbackServiceImpl feedbackService;
+    private FeedbackService feedbackService;
+
+    @Autowired
+    private EndUserService endUserService;
 
     @Autowired
     private FeedbackSettingsService feedbackSettingsService;
@@ -98,8 +101,7 @@ public class FeedbackSettingsController extends BaseController {
             LOGGER.info("Feedback of the setting" + feedbackSettings.getFeedback());
 
             EndUser mockUser = new EndUser();
-            mockUser.setId(1000);
-            feedbackSettings.setUser(mockUser);
+            feedbackSettings.setUser(endUserService.find(1));
             return feedbackSettingsService.save(feedbackSettings);
         }
         return null;

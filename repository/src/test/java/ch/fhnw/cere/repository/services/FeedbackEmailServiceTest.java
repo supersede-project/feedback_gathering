@@ -74,7 +74,7 @@ public class FeedbackEmailServiceTest {
 
     @Test
     public void sendMail() throws IOException, TemplateException {
-        Feedback feedback = new Feedback("Test feedback", "userId3", applicationId, 39, "en");
+        Feedback feedback = new Feedback("Test feedback", 33333, applicationId, 39, "en");
         ScreenshotFeedback screenshotFeedback = new ScreenshotFeedback("screenshot_1_example.png", 20000, "screenshot1", "png", feedback, 61, null);
         AttachmentFeedback attachmentFeedback = new AttachmentFeedback("test_file.pdf", 10000, "attachment1", "pdf", feedback, 65);
         TextFeedback textFeedback = new TextFeedback(feedback, "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.", 59);

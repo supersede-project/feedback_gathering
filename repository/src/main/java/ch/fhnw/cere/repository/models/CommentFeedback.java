@@ -33,6 +33,20 @@ public class CommentFeedback {
     @OneToMany(mappedBy="parentComment")
     private Collection<CommentFeedback> children;
 
+    private String commentText;
+    private Date createdAt;
+    private Date updatedAt;
+    private Boolean bool_is_developer;
+    private Boolean activeStatus;
+
+    public void setFeedback(Feedback feedback) {
+        this.feedback = feedback;
+    }
+
+    public void setUser(EndUser user) {
+        this.user = user;
+    }
+
     public CommentFeedback getParentComment() {
         return parentComment;
     }
@@ -49,12 +63,6 @@ public class CommentFeedback {
         this.children = children;
     }
 
-    private String commentText;
-    private Date createdAt;
-    private Date updatedAt;
-    private Boolean bool_is_developer;
-    private Boolean activeStatus;
-
     public String getCommentText(){ return commentText;}
     public Boolean check_is_developer() { return bool_is_developer;}
     public Boolean getActiveStatus() { return activeStatus; }
@@ -64,11 +72,9 @@ public class CommentFeedback {
     public Feedback getFeedback() { return feedback; }
     public EndUser getUser() { return user;}
 
-    public void setCreatedAt(){this.createdAt = createdAt; }
-    public void setUpdatedAt(){this.updatedAt = updatedAt;}
-    public void setCommentText(){this.commentText = commentText;}
-    public void setBool_is_developer(){this.bool_is_developer = bool_is_developer;}
-    public void setActiveStatus(){this.activeStatus = activeStatus;}
+    public void setCommentText(String commentText){this.commentText = commentText;}
+    public void setBool_is_developer(Boolean is_developer){this.bool_is_developer = is_developer;}
+    public void setActiveStatus(Boolean activeStatus){this.activeStatus = activeStatus;}
 
     @PrePersist
     protected void onCreate(){ createdAt = new Date();}
