@@ -7,40 +7,63 @@ import FaWechat from 'react-icons/lib/fa/wechat';
 import FaLightbulbO from 'react-icons/lib/fa/lightbulb-o';
 import FaHandPeaceO from 'react-icons/lib/fa/hand-peace-o';
 
-class ForumTitle extends Component
-{
+import './App.css';
 
-  constructor(props) {
-    super(props);
-    this.handleShowCommentChange = this.handleShowCommentChange.bind(this);
-  }
+class ForumTitle extends Component {
 
-  handleShowCommentChange(e) {
-    this.props.onShowCommentChange({showComment: true, index: this.props.index});
-  }
+    constructor(props) {
+        super(props);
+        this.handleShowCommentChange = this.handleShowCommentChange.bind(this);
+        this.state = {
+            thumbsUp: parseInt(this.props.thumbsUp),
+            thumbsDown: parseInt(this.props.thumbsDown)
+        }
+    }
 
-  getIconForFeedbackType(type) {
-      if (type === "Bug") {
-          return <FaBug size={35} padding={75}/>;
-      }
+    handleShowCommentChange(e) {
+        this.props.onShowCommentChange({showComment: true, index: this.props.index});
+    }
 
-      if (type === "Feature") {
-          return <FaLightbulbO size={35} padding={75}/>;
-      }
+    getIconForFeedbackType(type) {
+        if (type === "Bug") {
+            return <FaBug size={35} padding={75}/>;
+        }
 
-      return <FaHandPeaceO size={35} padding={75}/>;
-  }
+        if (type === "Feature") {
+            return <FaLightbulbO size={35} padding={75}/>;
+        }
 
-  handleLikes(e){
-     return <label for="likes">2</label>
-  }
+        return <FaHandPeaceO size={35} padding={75}/>;
+    }
 
-  render() {
-    return (<div style={{display: "flex", justifyContent: "flex-start"}}>
-        <h5 align="left" style={{flexGrow: 5, fontSize: 12, fontStyle: 'italic'}}>{this.getIconForFeedbackType(this.props.type)}&nbsp; {this.props.title}</h5>
-        <div class="iconContainer" style={{flexGrow: 1, marginTop: '20px'}}><FaWechat align="left" size={35} color={'#63C050'} onClick={this.handleShowCommentChange}/><FaThumbsOUp size={20} onClick={this.handleLikes} /><FaThumbsODown size={20} color={'black'} padding={10}/></div>
-    </div>);
-  }
+    addLike(e) {
+        this.setState({thumbsUp: this.state.thumbsUp + 1});
+    }
+
+    addDislike(e) {
+        this.setState({thumbsDown: this.state.thumbsDown + 1});
+    }
+
+    render() {
+        return (<div style={{display: "flex", justifyContent: "flex-start"}}>
+            <h5 align="left" style={{
+                flexGrow: 5,
+                fontSize: 12,
+                fontStyle: 'italic'
+            }}>{this.getIconForFeedbackType(this.props.type)}&nbsp; {this.props.title}</h5>
+            <div className="iconContainer" style={{flexGrow: 1, marginTop: '20px'}}>
+                <FaWechat align="left" size={35} color={'#63C050'} onClick={this.handleShowCommentChange}/>
+                <div className="thumbsIconContainer">
+                    <FaThumbsOUp size={20} onClick={this.addLike}/>
+                    <span className="thumbsCount">{this.state.thumbsUp}</span>
+                </div>
+                <div className="thumbsIconContainer">
+                    <FaThumbsODown size={20} color={'black'} padding={10} onClick={this.addDislike}/>
+                    <span className="thumbsCount">{this.state.thumbsDown}</span>
+                </div>
+            </div>
+        </div>);
+    }
 }
 
 export default ForumTitle;

@@ -49,7 +49,7 @@ class CommentUI extends Component {
             createCommentContent = <button type="button" onClick={this.createComment}>Add comment</button>
         }
         else {
-          createCommentContent = <div class="createCommentContainer">
+          createCommentContent = <div className="createCommentContainer">
           <textarea value={this.state.formValue} rows="10" cols="80" onChange={this.handleTextAreaChange} placeholder="Insert your comment..."></textarea>
           <button type="button" onClick={this.addComment}>Submit comment</button>
           </div>

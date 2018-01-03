@@ -15,7 +15,7 @@ class ForumBody extends Component {
     {
         return (<div><div align="left" style={{fontSize: 10}}>sent on {this.props.date}</div>
             <div align="left" style={{fontSize: 10, color: '#169BDD'}}>Status: {this.props.status}</div>
-            <div align="left" class="forum-body-show-comment-container"><button type="button" onClick={this.handleShowCommentChange}>Show comments</button></div></div>);
+            <div align="left" className="forum-body-show-comment-container"><button type="button" onClick={this.handleShowCommentChange}>Show comments</button></div></div>);
     }
 }
 

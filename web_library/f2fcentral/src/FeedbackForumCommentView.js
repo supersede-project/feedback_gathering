@@ -6,7 +6,7 @@ class FeedbackForumCommentView extends Component {
 
   render()
   {
-    return (<div><ForumCommentTitle class="forumComment" title={this.props.post.title} type={this.props.post.type} /><CommentUI/></div>);
+    return (<div><ForumCommentTitle className="forumComment" title={this.props.post.title} type={this.props.post.type} /><CommentUI/></div>);
   }
 }
 

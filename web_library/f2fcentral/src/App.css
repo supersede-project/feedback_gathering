@@ -117,6 +117,19 @@ button {
   margin-left: 0px;
 }
 
+.iconContainer .thumbsIconContainer {
+  position: relative;
+  margin-left: 10px;
+}
+
+.iconContainer .thumbsIconContainer .thumbsCount {
+  position: absolute;
+  top: -10px;
+  background: red;
+  padding: 3px;
+  color: white;
+}
+
 @keyframes App-logo-spin {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }

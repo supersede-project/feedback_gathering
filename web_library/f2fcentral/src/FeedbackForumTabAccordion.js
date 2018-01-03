@@ -65,7 +65,7 @@ class FeedbackForumTabAccordion extends Component {
                     return (
                         <AccordionItem key={index}>
                             <AccordionItemTitle>
-                                <ForumTitle title={testItem.title} type={testItem.type} onShowCommentChange={instance.handleShowCommentChange} index={index}/>
+                                <ForumTitle title={testItem.title} thumbsUp="0" thumbsDown="10" type={testItem.type} onShowCommentChange={instance.handleShowCommentChange} index={index}/>
                             </AccordionItemTitle>
                             <AccordionItemBody>
                                 <div>

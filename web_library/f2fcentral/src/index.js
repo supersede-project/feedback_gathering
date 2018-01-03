@@ -10,11 +10,13 @@ document.getElementById("openF2fcentral").onclick = function() {
     if(!f2fCentralOpened) {
 
     ReactDOM.render(<App/>, document.getElementById('f2fcentral'));
+    document.getElementById('f2fcentral').style.display = 'block';
     registerServiceWorker();
     f2fCentralOpened = true;
     }
     else {
         ReactDOM.unmountComponentAtNode(document.getElementById('f2fcentral'));
+        document.getElementById('f2fcentral').style.display = 'none';
         f2fCentralOpened = false;
     }
 };

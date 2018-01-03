@@ -8,7 +8,7 @@ import {toggleWidget} from 'react-chat-widget';
 import FaCogs from 'react-icons/lib/fa/cogs';
 import MdVisibilityOff from 'react-icons/lib/md/visibility-off';
 
-class FeedbackTitle extends Component {
+ class FeedbackTitle extends Component {
 
   constructor(props) {
     super(props);
