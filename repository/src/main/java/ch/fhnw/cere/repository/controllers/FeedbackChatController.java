@@ -83,7 +83,7 @@ public class FeedbackChatController {
     }
 
     @PreAuthorize("@securityService.hasAdminPermission(#applicationId)")
-    @RequestMapping(method = RequestMethod.GET, value = "/feedback_company/{feedbackCompanyId}")
+    @RequestMapping(method = RequestMethod.GET, value = "/feedback_Chat/{feedbackChatId}")
     public FeedbackChatInformation getFeedbackChat(@PathVariable long applicationId,
                                               @PathVariable long feedbackChatId) {
         FeedbackChatInformation feedbackChatInformation = feedbackChatInformationService.find(feedbackChatId);
