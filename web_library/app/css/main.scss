@@ -19,6 +19,23 @@
   top: 0;
 }
 
+#f2fcentral-container {
+  position: relative;
+  display: inline-block;
+}
+
+#f2fcentral-container #f2fcentral {
+  display: none;
+  width: 500px;
+  height: 500px;
+  padding: 20px;
+  position: absolute;
+  left: 0px;
+  top: 20px;
+  z-index: 1000;
+  background: #F2F2F2;
+}
+
 #feedbackEntryPoint {
   position: fixed;
   top: 300px;

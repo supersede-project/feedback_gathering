@@ -7,3 +7,4 @@ server_library/src/ch/uzh/ifi/feedback/library/transaction/config.properties
 /repository/src/main/resources/application-test.properties
 
 .DS_Store/
+.DS_Store

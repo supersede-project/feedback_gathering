@@ -18,7 +18,11 @@
     "moduleResolution": "node",
     "types": [
       "i18next",
-      "jasmine-jquery"
+      "jasmine-jquery",
+      "node"
+    ],
+    "typeRoots": [
+      "node_modules/@types"
     ]
   },
   "exclude": [
