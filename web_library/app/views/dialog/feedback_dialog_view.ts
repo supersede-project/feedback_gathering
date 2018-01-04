@@ -200,8 +200,8 @@ export class FeedbackDialogView extends DialogView {
         var url = this.context.apiEndpointRepository + 'feedback_repository/' + this.context.lang + '/applications/' + this.context.applicationId + '/feedbacks/';
         var urlSettings = this.context.apiEndpointRepository + 'feedback_repository/' + this.context.lang + '/applications/' + this.context.applicationId + '/feedbacks/feedbacksettings';
         feedbackService.sendFeedback(url, formData, function(data) {
+            console.log("FormData to be sent: " + JSON.stringify(data));
             if(generalConfiguration && generalConfiguration.getParameterValue('successDialog')) {
-                console.log("FormData to be sent: " + JSON.stringify(data));
                 // feedbackDialogView.discardFeedback();
                 // feedbackDialogView.paginationContainer.showFirstPage();
                 // let dialogTemplate = require('../../templates/info_dialog.handlebars');
