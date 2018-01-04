@@ -56,7 +56,7 @@ public class FeedbackSettingsController extends BaseController {
     }
 
     @PreAuthorize("@securityService.hasAdminPermission(#applicationId)")
-    @RequestMapping(method = RequestMethod.GET, value = "/{feedbackId}/feedbacksettings")
+    @RequestMapping(method = RequestMethod.GET, value = "/feedbacksettings/feedback/{feedbackId}")
     public FeedbackSettings getSettingsForFeedback(@PathVariable long applicationId, @PathVariable long feedbackId) {
         FeedbackSettings feedbackSettings = feedbackSettingsService.findByFeedbackId(feedbackId);
         if (feedbackSettings == null) {
@@ -114,8 +114,19 @@ public class FeedbackSettingsController extends BaseController {
     }
 
     @PreAuthorize("@securityService.hasAdminPermission(#applicationId)")
-    @RequestMapping(method = RequestMethod.PUT, value = "/feedbacksettings")
+    @RequestMapping(method = RequestMethod.PUT, value = "/feedbacksettings/{feedbacksettinsgId}")
     public FeedbackSettings updateFeedbackSettings(@PathVariable long applicationId, @RequestBody FeedbackSettings feedbackSettings) {
         return feedbackSettingsService.save(feedbackSettings);
+    }
+
+    @PreAuthorize("@securityService.hasAdminPermission(#applicationId)")
+    @RequestMapping(method = RequestMethod.GET, value = "/feedbacksettings/{feedbacksettingsId}")
+    public FeedbackSettings getFeedbackSettings(@PathVariable long applicationId,
+                                                   @PathVariable long feedbacksettingsId) {
+        FeedbackSettings feedbackSettings = feedbackSettingsService.find(feedbacksettingsId);
+        if(feedbackSettings == null){
+            throw new NotFoundException();
+        }
+        return feedbackSettings;
     }
 }

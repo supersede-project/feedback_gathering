@@ -42,7 +42,7 @@ public class EndUserController {
 
     @PreAuthorize("@securityService.hasAdminPermission(#applicationId)")
     @RequestMapping(method = RequestMethod.POST, value = "/end_user")
-    public EndUser createFeedbackChat(HttpEntity<String> feedbackChatJSON) {
+    public EndUser createEndUser(HttpEntity<String> feedbackChatJSON) {
         if(feedbackChatJSON.getBody() != null){
             JSONObject object = new JSONObject();
             String username = object.getString("username");

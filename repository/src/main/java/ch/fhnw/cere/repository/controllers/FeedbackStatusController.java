@@ -46,7 +46,7 @@ public class FeedbackStatusController {
     }
 
     @PreAuthorize("@securityService.hasAdminPermission(#applicationId)")
-    @RequestMapping(method = RequestMethod.GET, value = "/status/feedback/{status}")
+    @RequestMapping(method = RequestMethod.GET, value = "/status/{status}")
     public List<FeedbackStatus> getStatusForStatus(@PathVariable long applicationId,
                                                      @PathVariable String status) {
         return feedbackStatusService.findByStatus(status);
