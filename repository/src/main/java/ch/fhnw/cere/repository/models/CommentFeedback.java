@@ -1,6 +1,7 @@
 package ch.fhnw.cere.repository.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -15,21 +16,23 @@ public class CommentFeedback {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
-    @JsonIgnore
+
     @ManyToOne(cascade = {CascadeType.REMOVE, CascadeType.MERGE})
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "feedback_id", nullable = false)
     private Feedback feedback;
 
-    @JsonIgnore
+
     @ManyToOne(cascade = {CascadeType.REMOVE, CascadeType.MERGE})
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "user_id", nullable = false)
     private EndUser user;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name="fk_parent_comment")
     private CommentFeedback parentComment;
+
     @OneToMany(mappedBy="parentComment")
     private Collection<CommentFeedback> children;
 
@@ -85,12 +88,13 @@ public class CommentFeedback {
     public CommentFeedback(){
     }
 
-    public CommentFeedback(Feedback feedback, EndUser user, boolean is_developer, String commentText, Date createdAt, Date updatedAt, boolean activeStatus){
+    public CommentFeedback(Feedback feedback, EndUser user, boolean is_developer, String commentText, boolean activeStatus, CommentFeedback parentComment,
+                           Collection<CommentFeedback>... children){
+        this.feedback = feedback;
+        this.user = user;
         this.bool_is_developer = is_developer;
         this.commentText = commentText;
-        this.user = user;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
         this.activeStatus = activeStatus;
+        this.parentComment = parentComment;
     }
 }

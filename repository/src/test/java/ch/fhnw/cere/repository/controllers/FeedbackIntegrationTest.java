@@ -88,7 +88,6 @@ public class FeedbackIntegrationTest extends BaseIntegrationTest {
         feedback1 = feedbackRepository.save(new Feedback("Feedback 1 App 1", 11111, 1, 11, "en"));
         feedback2 = feedbackRepository.save(new Feedback("Feedback 2 App 1", 22222, 1, 11, "it"));
         feedback3 = feedbackRepository.save(new Feedback("Feedback 3 App 2", 33333, 2, 22, "de"));
-
         feedback4 = feedbackRepository.save(new Feedback("Feedback 4 App 20", 11111, 20, 39, "en"));
         feedback5 = feedbackRepository.save(new Feedback("Feedback 5 App 20", 22222, 20, 39, "it"));
 
