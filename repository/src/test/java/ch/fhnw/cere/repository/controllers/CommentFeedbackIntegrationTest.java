@@ -8,16 +8,20 @@ import ch.fhnw.cere.repository.repositories.ApiUserPermissionRepository;
 import ch.fhnw.cere.repository.repositories.CommentFeedbackRepository;
 import ch.fhnw.cere.repository.repositories.EndUserRepository;
 import ch.fhnw.cere.repository.repositories.FeedbackRepository;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.nullValue;
+
+import kafka.utils.Json;
+import org.json.JSONObject;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.servlet.ServletException;
-
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -173,5 +177,108 @@ public class CommentFeedbackIntegrationTest extends BaseIntegrationTest{
                 .andExpect(jsonPath("$[7].commentText", is("First Comment of Feedback 3")))
                 .andExpect(jsonPath("$[7].feedback.id", is((int) feedback3.getId())))
                 .andExpect(jsonPath("$[7].user.id", is((int) endUser3.getId())));
+    }
+
+    @Test
+    public void getCommentsForFeedback() throws Exception {
+        String adminJWTToken = requestAppAdminJWTToken();
+
+        String jsonReturn = mockMvc.perform(get(basePathEn + "applications/" + 1 + "/feedbacks/comments/" +
+                "feedback/"+feedback1.getId())
+                .header("Authorization", adminJWTToken)).andReturn().getResponse().getContentAsString();
+
+        mockMvc.perform(get(basePathEn + "applications/" + 1 + "/feedbacks/comments/" +
+                "feedback/"+feedback1.getId())
+                .header("Authorization", adminJWTToken))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(4)))
+                .andExpect(jsonPath("$[0].id", is((int) commentFeedback1_1.getId())))
+                .andExpect(jsonPath("$[0].commentText", is("First Comment of Feedback 1")))
+                .andExpect(jsonPath("$[0].feedback.id", is((int) feedback1.getId())))
+                .andExpect(jsonPath("$[0].user.id", is((int) endUser1.getId())))
+
+                .andExpect(jsonPath("$[1].id", is((int) commentFeedback1_1_1.getId())))
+                .andExpect(jsonPath("$[1].commentText", is("First Subcomment of Comment 1")))
+                .andExpect(jsonPath("$[1].feedback.id", is((int) feedback1.getId())))
+                .andExpect(jsonPath("$[1].user.id", is((int) endUser1.getId())))
+
+                .andExpect(jsonPath("$[2].id", is((int) commentFeedback1_1_2.getId())))
+                .andExpect(jsonPath("$[2].commentText", is("Second Subcomment of Comment 1")))
+                .andExpect(jsonPath("$[2].feedback.id", is((int) feedback1.getId())))
+                .andExpect(jsonPath("$[2].user.id", is((int) endUser1.getId())))
+
+                .andExpect(jsonPath("$[3].id", is((int) commentFeedback1_2.getId())))
+                .andExpect(jsonPath("$[3].commentText", is("Second Comment of Feedback 1")))
+                .andExpect(jsonPath("$[3].feedback.id", is((int) feedback1.getId())))
+                .andExpect(jsonPath("$[3].user.id", is((int) endUser1.getId())));
+    }
+
+    @Test
+    public void getCommentsForUser() throws Exception {
+        String adminJWTToken = requestAppAdminJWTToken();
+
+        String jsonReturn = mockMvc.perform(get(basePathEn + "applications/" + 1 + "/feedbacks/comments/" +
+                "user/"+endUser1.getId())
+                .header("Authorization", adminJWTToken)).andReturn().getResponse().getContentAsString();
+
+        mockMvc.perform(get(basePathEn + "applications/" + 1 + "/feedbacks/comments/" +
+                "user/"+endUser1.getId())
+                .header("Authorization", adminJWTToken))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(4)))
+                .andExpect(jsonPath("$[0].user.id", is((int) endUser1.getId())))
+                .andExpect(jsonPath("$[1].user.id", is((int) endUser1.getId())))
+                .andExpect(jsonPath("$[2].user.id", is((int) endUser1.getId())))
+                .andExpect(jsonPath("$[3].user.id", is((int) endUser1.getId())));
+
+        mockMvc.perform(get(basePathEn + "applications/" + 1 + "/feedbacks/comments/" +
+                "user/"+endUser2.getId())
+                .header("Authorization", adminJWTToken))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(3)))
+                .andExpect(jsonPath("$[0].user.id", is((int) endUser2.getId())))
+                .andExpect(jsonPath("$[1].user.id", is((int) endUser2.getId())))
+                .andExpect(jsonPath("$[2].user.id", is((int) endUser2.getId())));
+
+        mockMvc.perform(get(basePathEn + "applications/" + 1 + "/feedbacks/comments/" +
+                "user/"+endUser3.getId())
+                .header("Authorization", adminJWTToken))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(1)))
+                .andExpect(jsonPath("$[0].user.id", is((int) endUser3.getId())));
+    }
+
+    @Test
+    public void getComment() throws Exception {
+        String adminJWTToken = requestAppAdminJWTToken();
+
+        String jsonReturn = mockMvc.perform(get(basePathEn + "applications/" + 1 + "/feedbacks/comments/" +
+                commentFeedback1_1.getId())
+                .header("Authorization", adminJWTToken)).andReturn().getResponse().getContentAsString();
+
+        mockMvc.perform(get(basePathEn + "applications/" + 1 + "/feedbacks/comments/" +
+                commentFeedback1_1.getId())
+                .header("Authorization", adminJWTToken))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id",is((int) commentFeedback1_1.getId())))
+                .andExpect(jsonPath("$.commentText", is("First Comment of Feedback 1")));
+    }
+
+    @Test
+    public void postComment() throws Exception {
+        CommentFeedback commentFeedback = new CommentFeedback(feedback1,endUser1,false,
+                "test comment for posting",false,null);
+        String commentJson = new JSONObject()
+                .put("feedback_id",commentFeedback.getFeedback().getId())
+                .put("user_id",commentFeedback.getUser().getId())
+                .put("commentText",commentFeedback.getCommentText())
+                .put("bool_is_developer",commentFeedback.check_is_developer())
+                .put("activeStatus",commentFeedback.getActiveStatus())
+                .toString();
+
+        this.mockMvc.perform(post(basePathEn + "applications/" + 1 + "/feedbacks/comments")
+            .contentType(contentType)
+            .content(commentJson))
+        .andExpect(status().isCreated());
     }
 }

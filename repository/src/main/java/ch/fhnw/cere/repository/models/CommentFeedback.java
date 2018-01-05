@@ -97,4 +97,11 @@ public class CommentFeedback {
         this.activeStatus = activeStatus;
         this.parentComment = parentComment;
     }
+    public CommentFeedback(Feedback feedback, EndUser user, boolean is_developer, String commentText, boolean activeStatus){
+        this.feedback = feedback;
+        this.user = user;
+        this.bool_is_developer = is_developer;
+        this.commentText = commentText;
+        this.activeStatus = activeStatus;
+    }
 }

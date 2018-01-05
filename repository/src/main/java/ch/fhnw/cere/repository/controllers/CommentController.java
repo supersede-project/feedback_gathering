@@ -50,8 +50,8 @@ public class CommentController extends BaseController{
     @PreAuthorize("@securityService.hasAdminPermission(#applicationId)")
     @RequestMapping(method = RequestMethod.GET, value = "/comments/user/{userId}")
     public List<CommentFeedback> getCommentsForUser(@PathVariable long applicationId,
-                                                        @PathVariable long commentId) {
-        return commentFeedbackService.findByUserId(commentId);
+                                                        @PathVariable long userId) {
+        return commentFeedbackService.findByUserId(userId);
     }
 
     @PreAuthorize("@securityService.hasAdminPermission(#applicationId)")
@@ -72,18 +72,21 @@ public class CommentController extends BaseController{
         if(commentFeedbackJSON.getBody() != null){
             LOGGER.info("Create Comment: Body not null");
 
+            CommentFeedback commentFeedback = new CommentFeedback();
+
             JSONObject object = new JSONObject(commentFeedbackJSON.getBody());
             long feedbackId = object.getLong("feedback_id");
             long userId = object.getLong("user_id");
-            long parentId = object.getLong("fk_parent_comment");
+            if(object.has("fk_parent_comment") && object.get("fk_parent_comment") != null){
+                long parentId = object.getLong("fk_parent_comment");
+                commentFeedback.setParentComment(commentFeedbackService.find(parentId));
+            }
             String commentText = object.getString("commentText");
             Boolean bool_is_developer = object.getBoolean("bool_is_developer");
             Boolean activeStatus = object.getBoolean("activeStatus");
 
-            CommentFeedback commentFeedback = new CommentFeedback();
             commentFeedback.setFeedback(feedbackService.find(feedbackId));
             commentFeedback.setUser(endUserService.find(userId));
-            commentFeedback.setParentComment(commentFeedbackService.find(parentId));
             commentFeedback.setCommentText(commentText);
             commentFeedback.setBool_is_developer(bool_is_developer);
             commentFeedback.setActiveStatus(activeStatus);
