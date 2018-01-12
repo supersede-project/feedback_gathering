@@ -24,7 +24,6 @@ import {InfoView} from '../info/info_view';
 import {InfoMechanism} from '../../models/mechanisms/info_mechanism';
 import {CategoryMechanism} from '../../models/mechanisms/category_mechanism';
 import {QuestionDialogView} from './question_dialog_view';
-import {CategoryFeedback} from '../../models/feedbacks/category_feedback';
 
 
 /**

@@ -84,7 +84,7 @@ export class ScreenshotView implements MechanismView {
 
     checkAutoTake() {
         if (this.screenshotMechanism.getParameterValue('autoTake')) {
-            this.generateScreenshot();
+            this.makeScreenshot();
         }
     }
 
@@ -112,6 +112,94 @@ export class ScreenshotView implements MechanismView {
             var originalColor = jQuery(this).data('original-color');
             jQuery(this).css('color', originalColor);
         });
+    }
+
+    makeScreenshot() {
+        if(this.screenshotMechanism.getParameterValue('screenshotUrl')) {
+            this.generateScreenshotFromUrl();
+        } else {
+            this.generateScreenshot();
+        }
+    }
+
+    generateScreenshotFromUrl() {
+        let screenshotDelay = 8000;
+        let myThis = this;
+
+        setTimeout(function() {
+            let screenshotImageUrl = myThis.screenshotMechanism.getParameterValue('screenshotUrl');
+
+            let canvas: HTMLCanvasElement = <HTMLCanvasElement>(jQuery('<canvas width="478" height="251"></canvas>').get(0));
+            myThis.canvas = canvas;
+            myThis.screenshotPreviewElement.empty().append(canvas);
+            myThis.screenshotPreviewElement.show();
+            jQuery('.screenshot-preview canvas').attr('id', canvasId);
+
+            fabric.util.loadImage(screenshotImageUrl, function(img) {
+                let imgWidth = +img.width;
+                let imgHeight = +img.height;
+
+                let windowRatio = imgWidth / imgHeight;
+                myThis.canvasWidth = myThis.screenshotPreviewElement.width() - 2;
+                myThis.canvasHeight = (myThis.screenshotPreviewElement.width() / windowRatio) - 2;
+                jQuery(canvas).prop('width', myThis.canvasWidth);
+                jQuery(canvas).prop('height', myThis.canvasHeight);
+
+
+                myThis.canvasState = img;
+                myThis.screenshotCanvas = canvas;
+                myThis.context = canvas.getContext("2d");
+                img.onload = function () {
+                    myThis.context.drawImage(img, 0, 0, img.width, img.height, 0, 0, canvas.width, canvas.height);
+                };
+
+                myThis.initFabric(img, canvas);
+                myThis.initFreehandDrawing();
+                myThis.initStickers();
+                myThis.initScreenshotOperations();
+                myThis.customizeControls();
+                myThis.initZoom();
+
+                let screenshotCaptureButtonActiveText = myThis.screenshotCaptureButton.data('active-text');
+                myThis.screenshotCaptureButton.text(screenshotCaptureButtonActiveText);
+            }, null, {crossOrigin: 'Anonymous'});
+
+            /*
+            let img = new Image();
+            img.src = screenshotImageUrl;
+            $("<img/>", {
+                load: function () {
+                    let imgWidth = +this.width;
+                    let imgHeight = +this.height;
+
+                    let windowRatio = imgWidth / imgHeight;
+                    myThis.canvasWidth = myThis.screenshotPreviewElement.width() - 2;
+                    myThis.canvasHeight = (myThis.screenshotPreviewElement.width() / windowRatio) - 2;
+                    jQuery(canvas).prop('width', myThis.canvasWidth);
+                    jQuery(canvas).prop('height', myThis.canvasHeight);
+
+
+                    myThis.canvasState = img;
+                    myThis.screenshotCanvas = canvas;
+                    myThis.context = canvas.getContext("2d");
+                    img.onload = function () {
+                        myThis.context.drawImage(img, 0, 0, img.width, img.height, 0, 0, canvas.width, canvas.height);
+                    };
+
+                    myThis.initFabric(img, canvas);
+                    myThis.initFreehandDrawing();
+                    myThis.initStickers();
+                    myThis.initScreenshotOperations();
+                    myThis.customizeControls();
+                    myThis.initZoom();
+
+                    let screenshotCaptureButtonActiveText = myThis.screenshotCaptureButton.data('active-text');
+                    myThis.screenshotCaptureButton.text(screenshotCaptureButtonActiveText);
+                },
+                src: screenshotImageUrl
+            });
+            */
+        }, screenshotDelay);
     }
 
     generateScreenshot() {
@@ -168,8 +256,6 @@ export class ScreenshotView implements MechanismView {
                         myThis.initScreenshotOperations();
                         myThis.customizeControls();
                         myThis.initZoom();
-
-                        myThis.container.find('#screenshotMechanism' + myThis.screenshotMechanism.id).addClass('dirty');
 
                         let screenshotCaptureButtonActiveText = myThis.screenshotCaptureButton.data('active-text');
                         myThis.screenshotCaptureButton.text(screenshotCaptureButtonActiveText);
@@ -828,7 +914,7 @@ export class ScreenshotView implements MechanismView {
         this.screenshotCaptureButton.on('click', function (event) {
             event.preventDefault();
             event.stopPropagation();
-            myThis.generateScreenshot();
+            myThis.makeScreenshot();
         });
     }
 
@@ -869,8 +955,6 @@ export class ScreenshotView implements MechanismView {
 
         let screenshotCaptureButtonDefaultText = this.screenshotCaptureButton.data('default-text');
         this.screenshotCaptureButton.text(screenshotCaptureButtonDefaultText);
-
-        this.container.find('#screenshotMechanism' + this.screenshotMechanism.id).removeClass('dirty');
     }
 
     updateCanvasState(shiftTop:number, shiftLeft:number, zoomFactor:number) {

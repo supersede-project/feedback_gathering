@@ -36,7 +36,7 @@ export class ScreenshotMechanism extends Mechanism {
             boxPaddingRight: this.getParameterValue('boxPaddingRight') || '20px',
             screenshotTakeButtonTitle: this.getParameterValue('screenshotTakeButtonTitle'),
             screenshotTakeNewButtonTitle: this.getParameterValue('screenshotTakeNewButtonTitle'),
-            screenshotRemoveButtonTitle: this.getParameterValue('screenshotRemoveButtonTitle'),
+            screenshotUrl: this.getParameterValue('screenshotUrl'),
             textTitle: this.getParameterValue('textTitle'),
             textExplanation: this.getParameterValue('textExplanation'),
             title: this.getParameterValue('title'),
