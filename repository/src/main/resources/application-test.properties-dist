@@ -66,6 +66,8 @@ spring.jackson.serialization.write_dates_as_timestamps=false
 # ----------------------------------------
 jwt.secret=3Q1lQkv15YVz2N6agDad
 spring.http.multipart.enabled=false
+spring.http.multipart.max-file-size=16MB
+spring.http.multipart.max-request-size=16MB
 
 
 # ----------------------------------------
