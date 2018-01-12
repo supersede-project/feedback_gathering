@@ -11,6 +11,27 @@ import FeedbackForumTabAccordion from "./FeedbackForumTabAccordion";
 
 class App extends Component {
 
+    componentWillMount() {
+      if(sessionStorage.getItem('token') === null)
+      {
+        fetch(process.env.REACT_APP_BASE_URL + 'authenticate', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            name: 'admin',
+            password: 'password'
+          })
+        }).then(result=>result.json())
+        .then(result=>
+          {
+            sessionStorage.setItem('token', result.token);
+            console.log(result);
+          });
+      }
+    }
+
     componentDidMount() {
         addResponseMessage("Thank you for your time. We have some additional questions regarding your feedback.");
     }
@@ -25,8 +46,6 @@ class App extends Component {
       <div className="App">
         <header className="App-header">
         </header>
-
-
             <Tabs style={ {activeTabContentStyle: {backgroundColor:'#1A7E92', borderColor: '#1A7E92'}}}>
                 <TabList>
                     <Tab selectedClassName="tabselected">My Feedbacks</Tab>
