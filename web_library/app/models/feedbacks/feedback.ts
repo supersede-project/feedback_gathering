@@ -30,6 +30,26 @@ export class Feedback {
     contextInformation:ContextInformation;
     attachmentFeedbacks:AttachmentFeedback[];
     audioFeedbacks:AudioFeedback[];
+    published:boolean;
+    visibility:boolean;
+
+
+    constructor(title: string, userIdentification: string, language: string, applicationId: number, configurationId: number, ratingFeedbacks: RatingFeedback[], textFeedbacks: TextFeedback[], screenshotFeedbacks: ScreenshotFeedback[], categoryFeedbacks: CategoryFeedback[], contextInformation: ContextInformation, attachmentFeedbacks: AttachmentFeedback[], audioFeedbacks: AudioFeedback[], published: boolean, visibility: boolean) {
+        this.title = title;
+        this.userIdentification = userIdentification;
+        this.language = language;
+        this.applicationId = applicationId;
+        this.configurationId = configurationId;
+        this.ratingFeedbacks = ratingFeedbacks;
+        this.textFeedbacks = textFeedbacks;
+        this.screenshotFeedbacks = screenshotFeedbacks;
+        this.categoryFeedbacks = categoryFeedbacks;
+        this.contextInformation = contextInformation;
+        this.attachmentFeedbacks = attachmentFeedbacks;
+        this.audioFeedbacks = audioFeedbacks;
+        this.published = published;
+        this.visibility = visibility;
+    }
 
     constructor(title:string, userIdentification:string, language:string, applicationId:number, configurationId:number,
                 ratingFeedbacks:RatingFeedback[], textFeedbacks:TextFeedback[], screenshotFeedbacks:ScreenshotFeedback[],

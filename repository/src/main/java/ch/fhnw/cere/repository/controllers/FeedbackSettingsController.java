@@ -40,7 +40,10 @@ public class FeedbackSettingsController extends BaseController {
     private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(FeedbackSettingsController.class);
 
     @Autowired
-    private FeedbackServiceImpl feedbackService;
+    private FeedbackService feedbackService;
+
+    @Autowired
+    private EndUserService endUserService;
 
     @Autowired
     private FeedbackSettingsService feedbackSettingsService;
@@ -53,9 +56,9 @@ public class FeedbackSettingsController extends BaseController {
     }
 
     @PreAuthorize("@securityService.hasAdminPermission(#applicationId)")
-    @RequestMapping(method = RequestMethod.GET, value = "/{feedbackId}/feedbacksettings")
+    @RequestMapping(method = RequestMethod.GET, value = "/feedbacksettings/feedback/{feedbackId}")
     public FeedbackSettings getSettingsForFeedback(@PathVariable long applicationId, @PathVariable long feedbackId) {
-        FeedbackSettings feedbackSettings = feedbackSettingsService.find(feedbackId);
+        FeedbackSettings feedbackSettings = feedbackSettingsService.findByFeedbackId(feedbackId);
         if (feedbackSettings == null) {
             throw new NotFoundException();
         }
@@ -98,8 +101,7 @@ public class FeedbackSettingsController extends BaseController {
             LOGGER.info("Feedback of the setting" + feedbackSettings.getFeedback());
 
             EndUser mockUser = new EndUser();
-            mockUser.setId(1000);
-            feedbackSettings.setUser(mockUser);
+            feedbackSettings.setUser(endUserService.find(1));
             return feedbackSettingsService.save(feedbackSettings);
         }
         return null;
@@ -112,8 +114,19 @@ public class FeedbackSettingsController extends BaseController {
     }
 
     @PreAuthorize("@securityService.hasAdminPermission(#applicationId)")
-    @RequestMapping(method = RequestMethod.PUT, value = "/feedbacksettings")
+    @RequestMapping(method = RequestMethod.PUT, value = "/feedbacksettings/{feedbacksettinsgId}")
     public FeedbackSettings updateFeedbackSettings(@PathVariable long applicationId, @RequestBody FeedbackSettings feedbackSettings) {
         return feedbackSettingsService.save(feedbackSettings);
+    }
+
+    @PreAuthorize("@securityService.hasAdminPermission(#applicationId)")
+    @RequestMapping(method = RequestMethod.GET, value = "/feedbacksettings/{feedbacksettingsId}")
+    public FeedbackSettings getFeedbackSettings(@PathVariable long applicationId,
+                                                   @PathVariable long feedbacksettingsId) {
+        FeedbackSettings feedbackSettings = feedbackSettingsService.find(feedbacksettingsId);
+        if(feedbackSettings == null){
+            throw new NotFoundException();
+        }
+        return feedbackSettings;
     }
 }

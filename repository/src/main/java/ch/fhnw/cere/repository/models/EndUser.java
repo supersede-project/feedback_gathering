@@ -42,6 +42,12 @@ public class EndUser {
         this.phoneNumber = phoneNumber;
     }
 
+    public EndUser(long applicationId, String username, int phoneNumber) {
+        this.applicationId = applicationId;
+        this.username = username;
+        this.phoneNumber = phoneNumber;
+    }
+
     public long getId() {
         return id;
     }

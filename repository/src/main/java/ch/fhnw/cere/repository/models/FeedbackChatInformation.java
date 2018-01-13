@@ -31,6 +31,14 @@ public class FeedbackChatInformation {
     private String chatText;
     private Boolean initatedByUser;
 
+    public void setFeedback(Feedback feedback) {
+        this.feedback = feedback;
+    }
+
+    public void setUser(EndUser user) {
+        this.user = user;
+    }
+
     public Boolean getInitatedByUser() { return initatedByUser;  }
     public Date getChatDate() { return chatDate; }
     public Feedback getFeedback() { return feedback; }

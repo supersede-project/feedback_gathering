@@ -12,6 +12,6 @@ import java.util.List;
 
 @Repository
 public interface FeedbackChatInformationRepository extends JpaRepository<FeedbackChatInformation, Long> {
-    FeedbackChatInformation findByUserId(@Param("userId") long userId);
+    List<FeedbackChatInformation> findByUserId(@Param("userId") long userId);
     List<FeedbackChatInformation> findByFeedbackId(@Param("feedbackId") long feedbackId);
 }

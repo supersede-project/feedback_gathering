@@ -12,7 +12,7 @@ public interface FeedbackChatInformationService {
     public FeedbackChatInformation save(FeedbackChatInformation feedbackChatInformation);
     public FeedbackChatInformation find(long id);
     public void delete(long id);
-    FeedbackChatInformation findByUserId(long userId);
+    List<FeedbackChatInformation> findByUserId(long userId);
     List<FeedbackChatInformation> findByFeedbackId(long feedbackId);
 }
 

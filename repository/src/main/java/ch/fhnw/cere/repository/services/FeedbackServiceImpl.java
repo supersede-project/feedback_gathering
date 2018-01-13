@@ -39,7 +39,7 @@ public class FeedbackServiceImpl implements FeedbackService {
         return feedbackRepository.findByApplicationId(applicationId);
     }
 
-    public List<Feedback> findByUserIdentification(String userIdentification) {
+    public List<Feedback> findByUserIdentification(long userIdentification) {
         return feedbackRepository.findByUserIdentification(userIdentification);
     }
 
