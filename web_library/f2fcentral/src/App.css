@@ -109,8 +109,13 @@ button {
   padding: 20px;
 }
 
+.iconContainer {
+  display: flex;
+}
+
 .iconContainer svg {
   margin-left: 10px;
+  flex-grow: 1;
 }
 
 .iconContainer svg:first-child {
@@ -120,14 +125,16 @@ button {
 .iconContainer .thumbsIconContainer {
   position: relative;
   margin-left: 10px;
+  flex-grow: 1;
 }
 
-.iconContainer .thumbsIconContainer .thumbsCount {
-  position: absolute;
+.thumbsCount {
+  position: relative;
   top: -10px;
+  left: 2px;
   background: red;
-  padding: 3px;
   color: white;
+  padding: 0 2px;
 }
 
 @keyframes App-logo-spin {

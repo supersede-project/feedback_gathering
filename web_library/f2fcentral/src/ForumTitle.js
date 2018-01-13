@@ -7,13 +7,15 @@ import FaWechat from 'react-icons/lib/fa/wechat';
 import FaLightbulbO from 'react-icons/lib/fa/lightbulb-o';
 import FaHandPeaceO from 'react-icons/lib/fa/hand-peace-o';
 
-import './App.css';
+import style from './App.css';
 
 class ForumTitle extends Component {
 
     constructor(props) {
         super(props);
         this.handleShowCommentChange = this.handleShowCommentChange.bind(this);
+        this.addLike = this.addLike.bind(this);
+        this.addDislike = this.addDislike.bind(this);
         this.state = {
             thumbsUp: parseInt(this.props.thumbsUp),
             thumbsDown: parseInt(this.props.thumbsDown)
@@ -37,11 +39,17 @@ class ForumTitle extends Component {
     }
 
     addLike(e) {
-        this.setState({thumbsUp: this.state.thumbsUp + 1});
+        this.setState((prevState) => {
+          return {thumbsUp: prevState.thumbsUp + 1};
+        });
+        e.stopPropagation();
     }
 
     addDislike(e) {
-        this.setState({thumbsDown: this.state.thumbsDown + 1});
+        this.setState((prevState) => {
+          return {thumbsDown: prevState.thumbsDown + 1};
+        });
+        e.stopPropagation();
     }
 
     render() {
@@ -51,15 +59,15 @@ class ForumTitle extends Component {
                 fontSize: 12,
                 fontStyle: 'italic'
             }}>{this.getIconForFeedbackType(this.props.type)}&nbsp; {this.props.title}</h5>
-            <div className="iconContainer" style={{flexGrow: 1, marginTop: '20px'}}>
+            <div className={style.iconContainer} style={{flexGrow: 1, marginTop: '20px'}}>
                 <FaWechat align="left" size={35} color={'#63C050'} onClick={this.handleShowCommentChange}/>
-                <div className="thumbsIconContainer">
+                <div className={style.thumbsIconContainer}>
                     <FaThumbsOUp size={20} onClick={this.addLike}/>
-                    <span className="thumbsCount">{this.state.thumbsUp}</span>
+                    <span className={style.thumbsCount}>{this.state.thumbsUp}</span>
                 </div>
-                <div className="thumbsIconContainer">
+                <div className={style.thumbsIconContainer}>
                     <FaThumbsODown size={20} color={'black'} padding={10} onClick={this.addDislike}/>
-                    <span className="thumbsCount">{this.state.thumbsDown}</span>
+                    <span className={style.thumbsCount}>{this.state.thumbsDown}</span>
                 </div>
             </div>
         </div>);

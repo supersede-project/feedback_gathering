@@ -1,5 +1,6 @@
 const webpack = require('webpack');
 const dev = true;
+const NODE_ENV = process.env.NODE_ENV || 'development';
 var plugins = [];
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
 
@@ -35,7 +36,7 @@ module.exports = [{
         }
     }
 },
-    {
+
         entry: './f2fcentral/src/index.js',
         output: {
             path: './dist',
@@ -44,6 +45,14 @@ module.exports = [{
         resolve: {
             extensions: ['','.js', '.jsx']
         },
+        plugins: [
+        new webpack.DefinePlugin({
+            'process.env': {
+                'NODE_ENV': JSON.stringify(NODE_ENV),
+                'REACT_APP_BASE_URL': JSON.stringify("http://private-89eb2e-supersederepositoryapi.apiary-mock.com/feedback_repository/")
+            }
+        })
+    ],
         module: {
             loaders: [
                 {
