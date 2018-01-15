@@ -16,7 +16,8 @@ if (!dev) {
     }));
 }
 
-module.exports = [{
+module.exports = [
+  {
     entry: './app/js/jquery.feedback.js',
     output: {
         path: './dist',
@@ -35,7 +36,7 @@ module.exports = [{
             handlebars: 'handlebars/dist/handlebars.amd.min.js'
         }
     }
-},
+},{
 
         entry: './f2fcentral/src/index.js',
         output: {
@@ -49,7 +50,7 @@ module.exports = [{
         new webpack.DefinePlugin({
             'process.env': {
                 'NODE_ENV': JSON.stringify(NODE_ENV),
-                'REACT_APP_BASE_URL': JSON.stringify("http://private-89eb2e-supersederepositoryapi.apiary-mock.com/feedback_repository/")
+                'REACT_APP_BASE_URL': JSON.stringify("http://mt.ronnieschaniel.com:8080/feedback_repository/feedback_repository/")
             }
         })
     ],
