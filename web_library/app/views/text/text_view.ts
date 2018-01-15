@@ -15,7 +15,7 @@ export class TextView implements MechanismView {
         var container = jQuery('#' + this.dialogId);
         var sectionSelector = "textMechanism" + this.textMechanism.id;
         var textarea = container.find('section#' + sectionSelector + ' textarea.text-type-text');
-        var maxLength = this.textMechanism.getParameterValue('maxLength');
+        var maxLength = Math.trunc(this.textMechanism.getParameterValue('maxLength'));
         var isMaxLengthStrict = this.textMechanism.getParameterValue('maxLengthStrict');
 
         textarea.on('keyup focus paste blur', function () {
