@@ -126,6 +126,8 @@ export class ScreenshotView implements MechanismView {
         let screenshotDelay = 8000;
         let myThis = this;
 
+        myThis.addAndShowLoading();
+
         setTimeout(function() {
             let screenshotImageUrl = myThis.screenshotMechanism.getParameterValue('screenshotUrl');
 
@@ -136,6 +138,7 @@ export class ScreenshotView implements MechanismView {
             jQuery('.screenshot-preview canvas').attr('id', canvasId);
 
             fabric.util.loadImage(screenshotImageUrl, function(img) {
+                myThis.removeLoading();
                 let imgWidth = +img.width;
                 let imgHeight = +img.height;
 
@@ -163,48 +166,13 @@ export class ScreenshotView implements MechanismView {
                 let screenshotCaptureButtonActiveText = myThis.screenshotCaptureButton.data('active-text');
                 myThis.screenshotCaptureButton.text(screenshotCaptureButtonActiveText);
             }, null, {crossOrigin: 'Anonymous'});
-
-            /*
-            let img = new Image();
-            img.src = screenshotImageUrl;
-            $("<img/>", {
-                load: function () {
-                    let imgWidth = +this.width;
-                    let imgHeight = +this.height;
-
-                    let windowRatio = imgWidth / imgHeight;
-                    myThis.canvasWidth = myThis.screenshotPreviewElement.width() - 2;
-                    myThis.canvasHeight = (myThis.screenshotPreviewElement.width() / windowRatio) - 2;
-                    jQuery(canvas).prop('width', myThis.canvasWidth);
-                    jQuery(canvas).prop('height', myThis.canvasHeight);
-
-
-                    myThis.canvasState = img;
-                    myThis.screenshotCanvas = canvas;
-                    myThis.context = canvas.getContext("2d");
-                    img.onload = function () {
-                        myThis.context.drawImage(img, 0, 0, img.width, img.height, 0, 0, canvas.width, canvas.height);
-                    };
-
-                    myThis.initFabric(img, canvas);
-                    myThis.initFreehandDrawing();
-                    myThis.initStickers();
-                    myThis.initScreenshotOperations();
-                    myThis.customizeControls();
-                    myThis.initZoom();
-
-                    let screenshotCaptureButtonActiveText = myThis.screenshotCaptureButton.data('active-text');
-                    myThis.screenshotCaptureButton.text(screenshotCaptureButtonActiveText);
-                },
-                src: screenshotImageUrl
-            });
-            */
         }, screenshotDelay);
     }
 
     generateScreenshot() {
         var scrollPosition = this.container.offset().top;
         this.hideElements();
+        this.addAndShowLoading();
         var myThis = this;
 
         setTimeout(function() {
@@ -220,6 +188,7 @@ export class ScreenshotView implements MechanismView {
                             scrollTop: scrollPosition - 85
                         }, 0);
 
+                        myThis.removeLoading();
                         myThis.removeTemporarySpans();
                         myThis.showElements();
                         myThis.showAllCanvasElements();
@@ -263,6 +232,19 @@ export class ScreenshotView implements MechanismView {
                 }
             });
         }, 200);
+    }
+
+    addAndShowLoading() {
+        let loadingCircle = jQuery('<div id="loadingCircle" class="loader"></div>');
+        this.screenshotPreviewElement.css('min-width', '200px');
+        this.screenshotPreviewElement.css('min-height', '200px');
+        this.screenshotPreviewElement.css('display', 'block');
+        this.screenshotPreviewElement.empty()
+        this.screenshotPreviewElement.append(loadingCircle);
+    }
+
+    removeLoading() {
+        this.screenshotPreviewElement.find('#loadingCircle').remove();
     }
 
     initFabric(img, canvas) {
