@@ -123,13 +123,15 @@ export class ScreenshotView implements MechanismView {
     }
 
     generateScreenshotFromUrl() {
-        let screenshotDelay = 8000;
+        let screenshotDelay = 4000;
         let myThis = this;
 
         myThis.addAndShowLoading();
 
         setTimeout(function() {
-            let screenshotImageUrl = myThis.screenshotMechanism.getParameterValue('screenshotUrl');
+            let screenshotImageUrl = myThis.screenshotMechanism.getParameterValue('screenshotUrl') + "?anti_cache=" + new Date().getTime();
+
+            console.log(screenshotImageUrl);
 
             let canvas: HTMLCanvasElement = <HTMLCanvasElement>(jQuery('<canvas width="478" height="251"></canvas>').get(0));
             myThis.canvas = canvas;
@@ -239,7 +241,7 @@ export class ScreenshotView implements MechanismView {
         this.screenshotPreviewElement.css('min-width', '200px');
         this.screenshotPreviewElement.css('min-height', '200px');
         this.screenshotPreviewElement.css('display', 'block');
-        this.screenshotPreviewElement.empty()
+        this.screenshotPreviewElement.empty();
         this.screenshotPreviewElement.append(loadingCircle);
     }
 
