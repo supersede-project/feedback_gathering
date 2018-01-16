@@ -16,10 +16,10 @@
 package ch.uzh.supersede.feedbacklibrary;
 
 import android.app.AlertDialog;
-import android.app.DialogFragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -30,6 +30,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -44,9 +46,13 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import ch.uzh.supersede.feedbacklibrary.models.DialogType;
+import ch.uzh.supersede.feedbacklibrary.models.EditImageItem;
 import ch.uzh.supersede.feedbacklibrary.utils.ColorPickerDialog;
 import ch.uzh.supersede.feedbacklibrary.utils.Utils;
 import ch.uzh.supersede.feedbacklibrary.views.AnnotateImageView;
+import ch.uzh.supersede.feedbacklibrary.views.EditImageDialog;
+import ch.uzh.supersede.feedbacklibrary.views.EditImageViewAdapter;
 import ch.uzh.supersede.feedbacklibrary.views.StickerAnnotationImageView;
 import ch.uzh.supersede.feedbacklibrary.views.StickerAnnotationView;
 import ch.uzh.supersede.feedbacklibrary.views.TextAnnotationImageView;
@@ -62,10 +68,13 @@ import java.util.Map;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import static ch.uzh.supersede.feedbacklibrary.models.DialogType.Favorite;
+import static ch.uzh.supersede.feedbacklibrary.models.DialogType.QuickEdit;
+
 /**
  * Activity for annotating the screenshot
  */
-public class AnnotateImageActivity extends AppCompatActivity implements ColorPickerDialog.OnColorChangeDialogListener, TextAnnotationView.OnTextAnnotationChangedListener {
+public class AnnotateImageActivity extends AppCompatActivity implements ColorPickerDialog.OnColorChangeDialogListener, TextAnnotationView.OnTextAnnotationChangedListener, EditImageDialog.OnEditImageListener {
     private int mechanismViewId = -1;
     private boolean blackModeOn = false;
     private int oldPaintStrokeColor;
@@ -81,6 +90,13 @@ public class AnnotateImageActivity extends AppCompatActivity implements ColorPic
     private List<String> stickerLabels;
     private AlertDialog stickerDialog;
 
+    private Button favoriteButton;
+    private Button quickEditButton;
+    private Button colorButton;
+    private Button cropButton;
+
+    private EditImageDialog dialog;
+
     @Nullable
     private StickerAnnotationImageView addSticker(int imageResourceId) {
         RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.supersede_feedbacklibrary_annotate_image_layout);
@@ -92,6 +108,10 @@ public class AnnotateImageActivity extends AppCompatActivity implements ColorPic
             return stickerAnnotationImageView;
         }
         return null;
+    }
+
+    public AnnotateImageView getAnnotateImageView() {
+        return annotateImageView;
     }
 
     @Nullable
@@ -113,11 +133,11 @@ public class AnnotateImageActivity extends AppCompatActivity implements ColorPic
                 relativeLayout.addView(stickerViewTextAnnotationImageView);
             }
             if (textAnnotationCounter > textAnnotationCounterMaximum) {
-                ImageButton textAnnotationButton = (ImageButton) findViewById(R.id.supersede_feedbacklibrary_text_comment_btn);
+                /*ImageButton textAnnotationButton = (ImageButton) findViewById(R.id.supersede_feedbacklibrary_text_comment_btn);
                 if (textAnnotationButton != null) {
                     textAnnotationButton.setEnabled(false);
                     textAnnotationButton.setAlpha(0.4F);
-                }
+                }*/
             }
             return stickerViewTextAnnotationImageView;
         }
@@ -352,11 +372,11 @@ public class AnnotateImageActivity extends AppCompatActivity implements ColorPic
         if (relativeLayout != null) {
             refreshAnnotationNumber(relativeLayout);
         }
-        ImageButton textAnnotationButton = (ImageButton) findViewById(R.id.supersede_feedbacklibrary_text_comment_btn);
+        /*ImageButton textAnnotationButton = (ImageButton) findViewById(R.id.supersede_feedbacklibrary_text_comment_btn);
         if (textAnnotationButton != null) {
             textAnnotationButton.setEnabled(true);
             textAnnotationButton.setAlpha(1.0F);
-        }
+        }*/
     }
 
     private HashMap<Integer, String> processStickerAnnotations(ViewGroup viewGroup) {
@@ -479,104 +499,49 @@ public class AnnotateImageActivity extends AppCompatActivity implements ColorPic
     }
 
     private void setListeners() {
-        final ImageButton penButton = (ImageButton) findViewById(R.id.supersede_feedbacklibrary_pen_btn);
-        final ImageButton rectangleButton = (ImageButton) findViewById(R.id.supersede_feedbacklibrary_rectangle_btn);
-        final ImageButton circleButton = (ImageButton) findViewById(R.id.supersede_feedbacklibrary_circle_btn);
-        final ImageButton lineButton = (ImageButton) findViewById(R.id.supersede_feedbacklibrary_line_btn);
-        final ImageButton arrowButton = (ImageButton) findViewById(R.id.supersede_feedbacklibrary_arrow_btn);
-        final ImageButton stickerButton = (ImageButton) findViewById(R.id.supersede_feedbacklibrary_sticker_btn);
-        final ImageButton colorPickerButton = (ImageButton) findViewById(R.id.supersede_feedbacklibrary_color_picker_btn);
-        final ImageButton cropButton = (ImageButton) findViewById(R.id.supersede_feedbacklibrary_crop_btn);
-        final ImageButton textAnnotationButton = (ImageButton) findViewById(R.id.supersede_feedbacklibrary_text_comment_btn);
+        favoriteButton = (Button)findViewById(R.id.aa_favorite_button);
+
+        favoriteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showDialog(Favorite);
+            }
+        });
+
+        quickEditButton = (Button)findViewById(R.id.aa_quick_edit_button);
+        quickEditButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showDialog(QuickEdit);
+            }
+        });
+
+        colorButton = (Button)findViewById(R.id.aa_color_button);
+        colorButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showDialog(DialogType.Color);
+            }
+        });
+
+        cropButton = (Button)findViewById(R.id.aa_crop_button);
+        cropButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Bitmap tempBitmap = annotateImageView.getBitmap();
+                Bitmap croppedBitmap = Bitmap.createBitmap(tempBitmap, 0, 0, tempBitmap.getWidth(), tempBitmap.getHeight());
+
+                File tempFile = Utils.createTempChacheFile(getApplicationContext(), "crop", ".jpg");
+                if (Utils.saveBitmapToFile(tempFile, croppedBitmap, Bitmap.CompressFormat.JPEG, 100)) {
+                    Uri cropInput = Uri.fromFile(tempFile);
+                    CropImage.activity(cropInput).setGuidelines(CropImageView.Guidelines.ON).start(AnnotateImageActivity.this);
+                }
+            }
+        });
+
         final ImageButton undoButton = (ImageButton) findViewById(R.id.supersede_feedbacklibrary_undo_btn);
         final ImageButton redoButton = (ImageButton) findViewById(R.id.supersede_feedbacklibrary_redo_btn);
-        final Button blurButton = (Button) findViewById(R.id.supersede_feedbacklibrary_blur_btn);
-        final Button fillButton = (Button) findViewById(R.id.supersede_feedbacklibrary_fill_btn);
-        final Button blackButton = (Button) findViewById(R.id.supersede_feedbacklibrary_black_btn);
 
-        if (colorPickerButton != null) {
-            colorPickerButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    showColorPickerDialog();
-                }
-            });
-        }
-        if (blurButton != null) {
-            blurButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (!(annotateImageView.getBlur() > 0F)) {
-                        annotateImageView.setOpacity(180);
-                        annotateImageView.setBlur(10F);
-                        blurButton.setText(R.string.supersede_feedbacklibrary_unblurbutton_text);
-                    } else {
-                        annotateImageView.setOpacity(255);
-                        annotateImageView.setBlur(0F);
-                        blurButton.setText(R.string.supersede_feedbacklibrary_blurbutton_text);
-                    }
-                }
-            });
-        }
-        if (fillButton != null) {
-            fillButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (annotateImageView.getPaintStyle() == Paint.Style.FILL) {
-                        annotateImageView.setPaintStyle(Paint.Style.STROKE);
-                        fillButton.setText(R.string.supersede_feedbacklibrary_fillbutton_text);
-                    } else {
-                        annotateImageView.setPaintStyle(Paint.Style.FILL);
-                        fillButton.setText(R.string.supersede_feedbacklibrary_strokebutton_text);
-                    }
-                }
-            });
-        }
-        if (blackButton != null && colorPickerButton != null) {
-            blackButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (!blackModeOn) {
-                        oldPaintStrokeColor = annotateImageView.getPaintStrokeColor();
-                        oldPaintFillColor = annotateImageView.getPaintFillColor();
-                        annotateImageView.setPaintStrokeColor(Color.BLACK);
-                        annotateImageView.setPaintFillColor(Color.BLACK);
-                        colorPickerButton.setEnabled(false);
-                        blackButton.setText(R.string.supersede_feedbacklibrary_colorbutton_text);
-                    } else {
-                        annotateImageView.setPaintStrokeColor(oldPaintStrokeColor);
-                        annotateImageView.setPaintFillColor(oldPaintFillColor);
-                        colorPickerButton.setEnabled(true);
-                        blackButton.setText(R.string.supersede_feedbacklibrary_blackbutton_text);
-                    }
-                    blackModeOn = !blackModeOn;
-                }
-            });
-        }
-        if (penButton != null) {
-            penButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    annotateImageView.setDrawer(AnnotateImageView.Drawer.PEN);
-                }
-            });
-        }
-        if (lineButton != null) {
-            lineButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    annotateImageView.setDrawer(AnnotateImageView.Drawer.LINE);
-                }
-            });
-        }
-        if (arrowButton != null) {
-            arrowButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    annotateImageView.setDrawer(AnnotateImageView.Drawer.ARROW);
-                }
-            });
-        }
         if (undoButton != null && redoButton != null) {
             annotateImageView.setUndoButton(undoButton);
             undoButton.setEnabled(false);
@@ -612,52 +577,27 @@ public class AnnotateImageActivity extends AppCompatActivity implements ColorPic
                 }
             });
         }
-        if (rectangleButton != null) {
-            rectangleButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    annotateImageView.setDrawer(AnnotateImageView.Drawer.RECTANGLE);
-                }
-            });
-        }
-        if (circleButton != null) {
-            circleButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    annotateImageView.setDrawer(AnnotateImageView.Drawer.CIRCLE);
-                }
-            });
-        }
-        if (cropButton != null) {
-            cropButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Bitmap tempBitmap = annotateImageView.getBitmap();
-                    Bitmap croppedBitmap = Bitmap.createBitmap(tempBitmap, 0, 0, tempBitmap.getWidth(), tempBitmap.getHeight());
+    }
 
-                    File tempFile = Utils.createTempChacheFile(getApplicationContext(), "crop", ".jpg");
-                    if (Utils.saveBitmapToFile(tempFile, croppedBitmap, Bitmap.CompressFormat.JPEG, 100)) {
-                        Uri cropInput = Uri.fromFile(tempFile);
-                        CropImage.activity(cropInput).setGuidelines(CropImageView.Guidelines.ON).start(AnnotateImageActivity.this);
-                    }
-                }
-            });
-        }
-        if (stickerButton != null) {
-            stickerButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    showStickerDialog();
-                }
-            });
-        }
-        if (textAnnotationButton != null) {
-            textAnnotationButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    addTextAnnotation(R.drawable.ic_comment_black_48dp);
-                }
-            });
+    private void showDialog(DialogType type) {
+
+        dialog = new EditImageDialog();
+        Bundle args = new Bundle();
+        args.putString("type", type.name());
+        dialog.setArguments(args);
+
+        switch (type){
+            case Favorite:
+                dialog.show(getSupportFragmentManager(), "EditImageDialog");
+                break;
+
+            case QuickEdit:
+                dialog.show(getSupportFragmentManager(), "EditImageDialog");
+                break;
+
+            case Color:
+                dialog.show(getSupportFragmentManager(), "EditImageDialog");
+                break;
         }
     }
 
@@ -690,6 +630,78 @@ public class AnnotateImageActivity extends AppCompatActivity implements ColorPic
             stickerDialog = builder.create();
         }
         stickerDialog.show();
+    }
+
+    @Override
+    public void onColorClicked() {
+        dialog.dismiss();
+        showColorPickerDialog();
+    }
+
+    @Override
+    public void onBlackClicked() {
+        if (!blackModeOn) {
+            annotateImageView.setPaintStrokeColor(oldPaintStrokeColor);
+            annotateImageView.setPaintFillColor(oldPaintFillColor);
+        } else {
+            oldPaintStrokeColor = annotateImageView.getPaintStrokeColor();
+            oldPaintFillColor = annotateImageView.getPaintFillColor();
+            annotateImageView.setPaintStrokeColor(Color.BLACK);
+            annotateImageView.setPaintFillColor(Color.BLACK);
+            showColorPickerDialog();
+        }
+        blackModeOn = !blackModeOn;
+        dialog.dismiss();
+    }
+
+    public boolean isBlackModeOn(){
+        return blackModeOn;
+    }
+
+    @Override
+    public void onFillClicked() {
+        if (annotateImageView.getPaintStyle() == Paint.Style.FILL) {
+            annotateImageView.setPaintStyle(Paint.Style.STROKE);
+        } else {
+            annotateImageView.setPaintStyle(Paint.Style.FILL);
+        }
+        dialog.dismiss();
+    }
+
+    @Override
+    public void onPencilClicked() {
+        annotateImageView.setDrawer(AnnotateImageView.Drawer.PEN);
+        dialog.dismiss();
+    }
+
+    @Override
+    public void onArrowsClicked() {
+        annotateImageView.setDrawer(AnnotateImageView.Drawer.ARROW);
+        dialog.dismiss();
+    }
+
+    @Override
+    public void onTextClicked() {
+        addTextAnnotation(R.drawable.ic_comment_black_48dp);
+        dialog.dismiss();
+    }
+
+    @Override
+    public void onSmileyFaceClicked() {
+        showStickerDialog();
+        dialog.dismiss();
+    }
+
+    @Override
+    public void onLineClicked() {
+        annotateImageView.setDrawer(AnnotateImageView.Drawer.LINE);
+        dialog.dismiss();
+    }
+
+    @Override
+    public void onSquareClicked() {
+        annotateImageView.setDrawer(AnnotateImageView.Drawer.RECTANGLE);
+        dialog.dismiss();
     }
 
     private class StickerArrayAdapter extends ArrayAdapter<String> {

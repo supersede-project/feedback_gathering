@@ -45,6 +45,11 @@
     <string name="supersede_feedbacklibrary_text_annotation_dialog_label">Text annotation</string>
     <string name="supersede_feedbacklibrary_text_annotation_dialog_hint">Please enter your text annotation</string>
     <string name="supersede_feedbacklibrary_text_processing_dialog">Please wait. Processing image</string>
+    <string name="short_audio_message">Express your feedback with a short audio message</string>
+    <string name="favorite">Favorite</string>
+    <string name="quick_edit">Quick edit</string>
+    <string name="color">Color</string>
+    <string name="crop">Crop</string>
 
     <!-- Miscellaneous -->
     <string name="supersede_feedbacklibrary_sendconfirmation_text">By sending the feedback, you agree with the terms and conditions.</string>
@@ -79,8 +84,8 @@
     <string name="supersede_feedbacklibrary_pull_feedback_question_string">Would you like to give feedback?</string>
 
     <!-- Screenshot mechanism -->
-    <string name="supersede_feedbacklibrary_screenshotbutton_text">Screenshot</string>
-    <string name="supersede_feedbacklibrary_annotatebutton_text">Annotate</string>
+    <string name="supersede_feedbacklibrary_screenshotbutton_text">Add</string>
+    <string name="supersede_feedbacklibrary_annotatebutton_text">Edit</string>
     <string name="supersede_feedbacklibrary_previewbutton_text">Preview</string>
     <string name="supersede_feedbacklibrary_erasebutton_text">Erase</string>
 
@@ -89,4 +94,19 @@
 
     <!-- Overriding string resources in com.theartofdev.edmodo:android-image-cropper -->
     <string name="crop_image_menu_crop">@string/supersede_feedbacklibrary_crop_string</string>
+    <string name="help">help</string>
+
+    <!--Help activity text-->
+    <string name="help_text">\tHere you can send your feedback to developer. \n\n\tThere are 3 options available: image, text, audio.
+        \n\n\t\u2022 image - you can add a screenshot (with the problem appeared) there is a function "edit" which you can use if have a wish to add more information to the screenshot.
+        \n\n\t\u2022 text - you can write your feedback, max 250
+        \n\n\t\u2022 audio - you can make a voice recording, max 30 seconds
+        \n\n\t You also can rate by stars your experience with app.
+    </string>
+
+    <!--Copy by email-->
+    <string name="get_feedback_copy_by_email">Get a copy by email</string>
+    <string name="email">Email</string>
+    <string name="invalid_email">Invalid email</string>
+    <string name="check_network_state">Check network state</string>
 </resources>

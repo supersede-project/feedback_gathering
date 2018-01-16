@@ -5,14 +5,15 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/supersede_feedbacklibrary_choice_feedback_title"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="16sp"/>
-
     <ch.uzh.supersede.feedbacklibrary.views.CustomSpinner
         android:id="@+id/supersede_feedbacklibrary_custom_spinner"
+        android:layout_width="270dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="12dp"
+        android:layout_marginTop="12dp"/>
+
+    <View
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="1dp"
+        android:background="@color/colorPrimaryDark"/>
 </LinearLayout>

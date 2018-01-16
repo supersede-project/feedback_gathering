@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="8dp">
+
+    <ImageView
+        android:id="@+id/edil_element_iv"
+        android:layout_width="32dp"
+        android:layout_height="32dp" />
+
+    <TextView
+        android:id="@+id/edil_title_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="title stub"
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="16dp"
+        android:layout_toEndOf="@id/edil_element_iv"/>
+
+    <CheckBox
+        android:id="@+id/edil_star_cb"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_alignParentEnd="true"
+        android:button="@drawable/favorite_selector" />
+
+</RelativeLayout>

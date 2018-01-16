@@ -10,5 +10,4 @@
     <style name="counterOverride">
         <item name="android:textColor">#e53935</item>
     </style>
-
 </resources>

@@ -20,7 +20,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:dividerPadding="8dp"
-        android:paddingBottom="16dp"
+        android:layout_marginBottom="12dp"
         app:counterOverflowTextAppearance="@style/counterOverride">
 
         <android.support.design.widget.TextInputEditText
@@ -30,7 +30,8 @@
             android:fontFamily="sans-serif"
             android:inputType="textMultiLine|textCapSentences"
             android:textSize="16sp"
-            android:textStyle="normal"/>
+            android:textStyle="normal"
+            android:maxHeight="80dp"
+            android:scrollbars="vertical"/>
     </android.support.design.widget.TextInputLayout>
-
 </LinearLayout>

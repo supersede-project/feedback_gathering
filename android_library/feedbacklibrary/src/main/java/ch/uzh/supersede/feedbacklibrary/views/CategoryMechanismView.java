@@ -24,8 +24,6 @@ public class CategoryMechanismView extends MechanismView implements CustomSpinne
     }
 
     private void initView() {
-        final TextView textView = (TextView) getEnclosingLayout().findViewById(ch.uzh.supersede.feedbacklibrary.R.id.supersede_feedbacklibrary_choice_feedback_title);
-        textView.setText(categoryMechanism.getTitle());
         customSpinner = (CustomSpinner) getEnclosingLayout().findViewById(ch.uzh.supersede.feedbacklibrary.R.id.supersede_feedbacklibrary_custom_spinner);
         List<String> items = new ArrayList<>(categoryMechanism.getOptions());
         if (categoryMechanism.isOwnAllowed()) {
@@ -36,7 +34,7 @@ public class CategoryMechanismView extends MechanismView implements CustomSpinne
             }
         }
         customSpinner.setOwnCategoryAllowed(categoryMechanism.isOwnAllowed());
-        customSpinner.setItems(items, false);
+        customSpinner.setItems(items, true);
         customSpinner.setListener(this);
         customSpinner.setMultiple(categoryMechanism.isMultiple());
     }
@@ -52,5 +50,9 @@ public class CategoryMechanismView extends MechanismView implements CustomSpinne
     @Override
     public void updateModel() {
         categoryMechanism.setSelectedOptions(customSpinner.getSelectedStrings());
+    }
+
+    public CustomSpinner getCustomSpinner() {
+        return customSpinner;
     }
 }

@@ -6,11 +6,6 @@
                 android:orientation="horizontal"
                 android:paddingTop="@dimen/activity_horizontal_margin">
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="#000000"/>
-
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -20,7 +15,8 @@
         android:layout_gravity="fill"
         android:layout_toStartOf="@+id/supersede_feedbacklibrary_send_feedback_button"
         android:paddingTop="5dp"
-        android:text="@string/supersede_feedbacklibrary_sendconfirmation_text"/>
+        android:text="@string/supersede_feedbacklibrary_sendconfirmation_text"
+        android:textSize="16sp"/>
 
     <Button
         android:id="@+id/supersede_feedbacklibrary_send_feedback_button"
@@ -28,7 +24,10 @@
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignParentTop="true"
+        android:padding="8dp"
         android:minWidth="88dp"
+        android:background="@drawable/pink_button_selector"
+        android:textColor="@android:color/white"
         android:onClick="sendButtonClicked"
         android:text="@string/supersede_feedbacklibrary_sendbutton_text"/>
 

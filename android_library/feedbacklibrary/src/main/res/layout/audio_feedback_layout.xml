@@ -14,20 +14,13 @@
         android:paddingBottom="5dp"
         android:textSize="16sp"/>
 
-    <TextView
-        android:id="@+id/supersede_feedbacklibrary_audio_time_limit"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/supersede_feedbacklibrary_audio_title"
-        android:paddingBottom="5dp"/>
-
     <!-- Timer display -->
     <LinearLayout
         android:id="@+id/supersede_feedbacklibrary_audio_timer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/supersede_feedbacklibrary_audio_time_limit"
-        android:layout_marginBottom="10dp"
+        android:layout_below="@id/supersede_feedbacklibrary_audio_title"
+        android:layout_marginBottom="5dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:orientation="horizontal">
@@ -38,6 +31,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="start"
+            android:textSize="16sp"
             android:text="@string/supersede_feedbacklibrary_audio_default_current_duration"/>
         <!-- Recording indicator -->
         <TextView
@@ -56,6 +50,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="end"
+            android:textSize="16sp"
             android:text="@string/supersede_feedbacklibrary_audio_default_total_duration"/>
     </LinearLayout>
 
@@ -64,7 +59,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/supersede_feedbacklibrary_audio_timer"
-        android:layout_marginBottom="10dp"
+        android:layout_marginBottom="5dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:progressDrawable="@drawable/progress_drawable"
@@ -84,33 +79,36 @@
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:orientation="horizontal">
-        <!-- Stop button -->
-        <ImageButton
+        <ImageView
             android:id="@+id/supersede_feedbacklibrary_audio_player_button_record"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginEnd="10dp"
             android:src="@drawable/ic_mic_black_48dp"/>
-        <!-- Stop button -->
-        <ImageButton
+        <ImageView
             android:id="@+id/supersede_feedbacklibrary_audio_player_button_stop"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginEnd="10dp"
             android:src="@drawable/ic_stop_black_48dp"/>
-        <!-- Pause button -->
-        <ImageButton
-            android:id="@+id/supersede_feedbacklibrary_audio_player_button_pause"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:src="@drawable/ic_pause_black_48dp"/>
-        <!-- Play button -->
-        <ImageButton
+        <ImageView
             android:id="@+id/supersede_feedbacklibrary_audio_player_button_play"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginEnd="10dp"
             android:src="@drawable/ic_play_arrow_black_48dp"/>
+        <ImageView
+            android:id="@+id/supersede_feedbacklibrary_audio_player_button_clear"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginEnd="10dp"
+            android:src="@drawable/ic_clear_black_24dp"/>
+
     </LinearLayout>
+
+    <View
+        android:layout_below="@id/supersede_feedbacklibrary_audio_player_buttonbar"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/colorPrimaryDark"/>
 </RelativeLayout>

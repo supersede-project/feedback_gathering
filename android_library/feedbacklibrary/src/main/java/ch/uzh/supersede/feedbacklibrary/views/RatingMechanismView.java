@@ -13,6 +13,7 @@ import ch.uzh.supersede.feedbacklibrary.models.RatingMechanism;
  */
 public class RatingMechanismView extends MechanismView {
     private RatingMechanism ratingMechanism = null;
+    private RatingBar bar;
 
     public RatingMechanismView(LayoutInflater layoutInflater, Mechanism mechanism) {
         super(layoutInflater);
@@ -23,14 +24,17 @@ public class RatingMechanismView extends MechanismView {
 
     private void initView() {
         ((TextView) getEnclosingLayout().findViewById(R.id.supersede_feedbacklibrary_rating_feedback_title)).setText(ratingMechanism.getTitle());
-        RatingBar bar = ((RatingBar) getEnclosingLayout().findViewById(R.id.supersede_feedbacklibrary_rating_feedback_rating));
+        bar = ((RatingBar) getEnclosingLayout().findViewById(R.id.supersede_feedbacklibrary_rating_feedback_rating));
         bar.setNumStars(ratingMechanism.getMaxRating());
         bar.setStepSize(1.0f);
-        bar.setRating(ratingMechanism.getDefaultRating());
     }
 
     @Override
     public void updateModel() {
         ratingMechanism.setInputRating(((RatingBar) getEnclosingLayout().findViewById(R.id.supersede_feedbacklibrary_rating_feedback_rating)).getRating());
+    }
+
+    public float getRating(){
+        return bar.getRating();
     }
 }

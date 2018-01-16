@@ -22,12 +22,17 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
+import android.os.Handler;
+import android.os.StrictMode;
 import android.os.UserManager;
 import android.provider.MediaStore;
 import android.provider.Settings;
@@ -35,9 +40,16 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -49,6 +61,7 @@ import ch.uzh.supersede.feedbacklibrary.feedbacks.AudioFeedback;
 import ch.uzh.supersede.feedbacklibrary.feedbacks.Feedback;
 import ch.uzh.supersede.feedbacklibrary.feedbacks.ScreenshotFeedback;
 import ch.uzh.supersede.feedbacklibrary.models.Mechanism;
+import ch.uzh.supersede.feedbacklibrary.models.ScreenshotMechanism;
 import ch.uzh.supersede.feedbacklibrary.utils.DialogUtils;
 import ch.uzh.supersede.feedbacklibrary.utils.Utils;
 import ch.uzh.supersede.feedbacklibrary.views.AudioMechanismView;
@@ -64,10 +77,28 @@ import com.google.gson.reflect.TypeToken;
 
 import java.io.File;
 import java.lang.reflect.Type;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
+
+import javax.activation.DataHandler;
+import javax.activation.DataSource;
+import javax.activation.FileDataSource;
+import javax.mail.BodyPart;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.Multipart;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeBodyPart;
+import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMultipart;
 
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
@@ -125,6 +156,16 @@ public class FeedbackActivity extends AppCompatActivity implements ScreenshotMec
     private String baseURL;
     private ProgressDialog progressDialog;
     private String userScreenshotChosenTask = "";
+    private String email;
+    private Map<String, RequestBody> files = new HashMap<>();
+
+    private EditText emailEditText;
+    private CheckBox getCopyCheckBox;
+    private Feedback feedback;
+    private List<ScreenshotFeedback> screenshotFeedbackList;
+    private List<AudioFeedback> audioFeedbackList;
+    private String savedEmail;
+    private SharedPreferences sharedPreferences;
 
     private void closeProgressDialog() {
         if (progressDialog != null && progressDialog.isShowing()) {
@@ -234,6 +275,9 @@ public class FeedbackActivity extends AppCompatActivity implements ScreenshotMec
         LinearLayout linearLayout = (LinearLayout) findViewById(R.id.supersede_feedbacklibrary_feedback_activity_layout);
 
         if (linearLayout != null) {
+
+            orderMechanisms();
+
             for (int i = 0; i < allMechanisms.size(); ++i) {
                 if (allMechanisms.get(i).isActive()) {
                     MechanismView mechanismView = null;
@@ -274,8 +318,46 @@ public class FeedbackActivity extends AppCompatActivity implements ScreenshotMec
                 }
             }
 
+            initCopyByEmailLayout(layoutInflater, linearLayout);
             layoutInflater.inflate(R.layout.send_feedback_layout, linearLayout);
         }
+    }
+
+    private void initCopyByEmailLayout(LayoutInflater layoutInflater, LinearLayout linearLayout) {
+        //CHeck sharedPreferences on email existing
+        sharedPreferences = getSharedPreferences("FeedbackApp", Context.MODE_PRIVATE);
+        savedEmail = sharedPreferences.getString("email","");
+
+        View view = layoutInflater.inflate(R.layout.send_by_email_layout, null, false);
+        linearLayout.addView(view);
+
+        emailEditText = (EditText)view.findViewById(R.id.sbe_email_et);
+        if(!TextUtils.isEmpty(savedEmail)) emailEditText.setText(savedEmail);
+
+        getCopyCheckBox = (CheckBox)view.findViewById(R.id.sbe_get_copy_cb);
+
+        getCopyCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (b) {
+                    emailEditText.setVisibility(View.VISIBLE);
+                }
+                else {
+                    emailEditText.setVisibility(View.GONE);
+                }
+            }
+        });
+    }
+
+    private void orderMechanisms() {
+        ArrayList<Mechanism> list = new ArrayList<>();
+        list.add(allMechanisms.get(2));
+        list.add(allMechanisms.get(0));
+        list.add(allMechanisms.get(1));
+        list.add(allMechanisms.get(3));
+        list.add(allMechanisms.get(4));
+
+        allMechanisms = list;
     }
 
     private boolean isPush() {
@@ -425,6 +507,12 @@ public class FeedbackActivity extends AppCompatActivity implements ScreenshotMec
     }
 
     @Override
+    public void onImageClick(ScreenshotMechanismView screenshotMechanismView) {
+        tempMechanismViewId = screenshotMechanismView.getMechanismViewIndex();
+        galleryIntent();
+    }
+
+    @Override
     public void onRecordStart(long audioMechanismId) {
         for (MechanismView mechanismView : allMechanismViews) {
             if (mechanismView instanceof AudioMechanismView) {
@@ -538,6 +626,12 @@ public class FeedbackActivity extends AppCompatActivity implements ScreenshotMec
      * This method performs a POST request in order to send the feedback to the repository.
      */
     public void sendButtonClicked(View view) {
+
+        if (!isOnline()) {
+            DialogUtils.showInformationDialog(this, new String[]{getResources().getString(R.string.check_network_state)}, true);
+            return;
+        }
+
         if (baseURL != null && language != null) {
             // The mechanism models are updated with the view values
             for (MechanismView mechanismView : allMechanismViews) {
@@ -563,7 +657,7 @@ public class FeedbackActivity extends AppCompatActivity implements ScreenshotMec
                         @Override
                         public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                             if (response.code() == 200) {
-                                Feedback feedback = new Feedback(allMechanisms);
+                                feedback = new Feedback(allMechanisms);
                                 feedback.setTitle(getResources().getString(R.string.supersede_feedbacklibrary_feedback_title_text, System.currentTimeMillis()));
                                 feedback.setApplicationId(orchestratorConfiguration.getId());
                                 feedback.setConfigurationId(activeConfiguration.getId());
@@ -580,27 +674,8 @@ public class FeedbackActivity extends AppCompatActivity implements ScreenshotMec
                                 String feedbackJsonString = gson.toJson(feedback, feedbackType);
                                 RequestBody feedbackJSONPart = RequestBody.create(MediaType.parse("multipart/form-data"), feedbackJsonString);
 
-                                Map<String, RequestBody> files = new HashMap<>();
-                                // Audio multipart
-                                List<AudioFeedback> audioFeedbackList = feedback.getAudioFeedbacks();
-                                if (audioFeedbackList != null) {
-                                    for (int pos = 0; pos < audioFeedbackList.size(); ++pos) {
-                                        RequestBody requestBody = createRequestBody(new File(audioFeedbackList.get(pos).getAudioPath()));
-                                        String fileName = audioFeedbackList.get(pos).getFileName();
-                                        String key = String.format("%1$s\"; filename=\"%2$s", audioFeedbackList.get(pos).getPartString() + String.valueOf(pos), fileName);
-                                        files.put(key, requestBody);
-                                    }
-                                }
-                                // Screenshots multipart
-                                List<ScreenshotFeedback> screenshotFeedbackList = feedback.getScreenshotFeedbacks();
-                                if (screenshotFeedbackList != null) {
-                                    for (int pos = 0; pos < screenshotFeedbackList.size(); ++pos) {
-                                        RequestBody requestBody = createRequestBody(new File(screenshotFeedbackList.get(pos).getImagePath()));
-                                        String fileName = screenshotFeedbackList.get(pos).getFileName();
-                                        String key = String.format("%1$s\"; filename=\"%2$s", screenshotFeedbackList.get(pos).getPartString() + String.valueOf(pos), fileName);
-                                        files.put(key, requestBody);
-                                    }
-                                }
+                                getAudioMultipart(feedback, files);
+                                getScreenshotMultipart(feedback, files);
 
                                 // Send the feedback
                                 Call<JsonObject> result = fbAPI.createFeedbackVariant(language, feedback.getApplicationId(), feedbackJSONPart, files);
@@ -628,6 +703,9 @@ public class FeedbackActivity extends AppCompatActivity implements ScreenshotMec
                                     Log.e(TAG, "Failed to send the feebdkack. Call<JsonObject> result is null");
                                     DialogUtils.showInformationDialog(FeedbackActivity.this, new String[]{getResources().getString(R.string.supersede_feedbacklibrary_error_text)}, true);
                                 }
+
+                                checkAndSendViaEmail();
+
                             } else {
                                 Log.e(TAG, "The server is not up and running. Response code == " + response.code());
                                 DialogUtils.showInformationDialog(FeedbackActivity.this, new String[]{getResources().getString(R.string.supersede_feedbacklibrary_error_text)}, true);
@@ -652,6 +730,148 @@ public class FeedbackActivity extends AppCompatActivity implements ScreenshotMec
         }
     }
 
+    private void getAudioMultipart(Feedback feedback, Map<String, RequestBody> files) {
+        // Audio multipart
+        audioFeedbackList = feedback.getAudioFeedbacks();
+        if (audioFeedbackList != null) {
+            for (int pos = 0; pos < audioFeedbackList.size(); ++pos) {
+                RequestBody requestBody = createRequestBody(new File(audioFeedbackList.get(pos).getAudioPath()));
+                String fileName = audioFeedbackList.get(pos).getFileName();
+                String key = String.format("%1$s\"; filename=\"%2$s", audioFeedbackList.get(pos).getPartString() + String.valueOf(pos), fileName);
+                files.put(key, requestBody);
+            }
+        }
+    }
+
+    private void getScreenshotMultipart(Feedback feedback, Map<String, RequestBody> files) {
+        // Screenshots multipart
+        screenshotFeedbackList = feedback.getScreenshotFeedbacks();
+        if (screenshotFeedbackList != null) {
+            for (int pos = 0; pos < screenshotFeedbackList.size(); ++pos) {
+                RequestBody requestBody = createRequestBody(new File(screenshotFeedbackList.get(pos).getImagePath()));
+                String fileName = screenshotFeedbackList.get(pos).getFileName();
+                String key = String.format("%1$s\"; filename=\"%2$s", screenshotFeedbackList.get(pos).getPartString() + String.valueOf(pos), fileName);
+                files.put(key, requestBody);
+            }
+        }
+    }
+
+    private void checkAndSendViaEmail() {
+        if (getCopyCheckBox.isChecked())
+        {
+            email = emailEditText.getText().toString();
+            if (Utils.isEmailValid(email))
+            {
+                sendCopyByEmail();
+            }
+
+            else DialogUtils.showInformationDialog(this, new String[]{getResources().getString(R.string.invalid_email)}, true);
+        }
+    }
+
+    private void sendCopyByEmail() {
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+
+        Thread emailThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                //TODO replace with your email
+                final String username = "supersede.zurich@gmail.com";
+                final String password = "University2017";
+
+                Properties props = new Properties();
+                props.put("mail.smtp.auth", "true");
+                props.put("mail.smtp.starttls.enable", "true");
+                props.put("mail.smtp.host", "smtp.gmail.com");
+                props.put("mail.smtp.port", "587");
+
+                Session session = Session.getInstance(props,
+                        new javax.mail.Authenticator() {
+                            protected PasswordAuthentication getPasswordAuthentication() {
+                                return new PasswordAuthentication(username, password);
+                            }
+                        });
+                try {
+                    Message message = new MimeMessage(session);
+                    message.setFrom(new InternetAddress(username));
+                    message.setRecipients(Message.RecipientType.TO,
+                            InternetAddress.parse(email));
+                    message.setSubject("Copy of your feedback");
+
+                    BodyPart messageBodyPart = new MimeBodyPart();
+
+                    String feedbackText = feedback.getTextFeedbacks().get(0).getText();
+
+                    CategoryMechanismView categoryMechanismView = (CategoryMechanismView) allMechanismViews.get(4);
+                    String category = categoryMechanismView.getCustomSpinner().getSelectedItem().toString();
+
+                    if(category.equals("My feedback is about…")) category = "-";
+
+                    RatingMechanismView ratingMechanismView = (RatingMechanismView) allMechanismViews.get(3);
+                    String rating = String.valueOf(ratingMechanismView.getRating());
+
+                    // Now set the actual message
+                    messageBodyPart.setText(String.format("Feedback text: %s, Rating: %s, Category: %s", feedbackText, rating, category));
+
+                    Multipart multipart = new MimeMultipart();
+
+                    // Set text message part
+                    multipart.addBodyPart(messageBodyPart);
+
+                    for (ScreenshotFeedback feedback:screenshotFeedbackList) {
+                        addAttachment(multipart, feedback.getImagePath());
+                    }
+                    for (AudioFeedback feedback:audioFeedbackList) {
+                        addAttachment(multipart, feedback.getAudioPath());
+                    }
+
+                    message.setContent(multipart);
+
+                    Transport.send(message);
+
+                    if (TextUtils.isEmpty(savedEmail)){
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+                        editor.putString("email", email);
+
+                        editor.apply();
+                    }
+
+                } catch (MessagingException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        });
+
+        emailThread.start();
+    }
+
+    private void addAttachment(Multipart multipart, String filePath) throws MessagingException {
+
+        URI uri = null;
+        try {
+            uri = new URI(filePath);
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
+        String[] segments = uri.getPath().split("/");
+        String filename = segments[segments.length-1];
+
+        DataSource source = new FileDataSource(filePath);
+        BodyPart messageBodyPart = new MimeBodyPart();
+        messageBodyPart.setDataHandler(new DataHandler(source));
+        messageBodyPart.setFileName(filename);
+        multipart.addBodyPart(messageBodyPart);
+    }
+
+    private boolean isOnline() {
+        ConnectivityManager cm =
+                (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        return netInfo != null && netInfo.isConnectedOrConnecting();
+    }
+
     private boolean validateInput(List<Mechanism> allMechanisms, List<String> errorMessages) {
         // Append an error message and return. The user is confronted with one error message at a time.
         for (Mechanism mechanism : allMechanisms) {
@@ -663,5 +883,22 @@ public class FeedbackActivity extends AppCompatActivity implements ScreenshotMec
             }
         }
         return true;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_help, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.mh_help) {
+            Intent intent = new Intent(this, HelpActivity.class);
+            startActivity(intent);
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }

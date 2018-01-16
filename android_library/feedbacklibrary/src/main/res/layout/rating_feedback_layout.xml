@@ -15,5 +15,6 @@
     <RatingBar
         android:id="@+id/supersede_feedbacklibrary_rating_feedback_rating"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:rating="0"/>
 </LinearLayout>

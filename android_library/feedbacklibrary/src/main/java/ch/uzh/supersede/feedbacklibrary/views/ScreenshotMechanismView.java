@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import ch.uzh.supersede.feedbacklibrary.R;
 import ch.uzh.supersede.feedbacklibrary.models.Mechanism;
@@ -126,6 +127,12 @@ public class ScreenshotMechanismView extends MechanismView {
         View view = getEnclosingLayout();
         boolean isEnabled = false;
         screenShotPreviewImageView = (ImageView) view.findViewById(R.id.supersede_feedbacklibrary_screenshot_imageview);
+        screenShotPreviewImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onImageChangedListener.onImageClick(ScreenshotMechanismView.this);
+            }
+        });
 
         // Use the default image path for the screenshot if present
         if (defaultImagePath != null) {
@@ -168,7 +175,7 @@ public class ScreenshotMechanismView extends MechanismView {
                 annotateScreenshotButton.setEnabled(false);
                 deleteScreenshotButton.setEnabled(false);
                 screenShotPreviewImageView.setImageBitmap(null);
-                screenShotPreviewImageView.setBackgroundResource(R.drawable.camera_picture_big);
+                screenShotPreviewImageView.setBackgroundResource(R.drawable.ic_folder_open_black_24dp);
             }
         });
         ((TextView) getEnclosingLayout().findViewById(R.id.supersede_feedbacklibrary_screenshot_feedback_title)).setText(screenshotMechanism.getTitle());
@@ -238,5 +245,7 @@ public class ScreenshotMechanismView extends MechanismView {
         void onImageAnnotate(ScreenshotMechanismView screenshotMechanismView);
 
         void onImageSelect(ScreenshotMechanismView screenshotMechanismView);
+
+        void onImageClick(ScreenshotMechanismView screenshotMechanismView);
     }
 }

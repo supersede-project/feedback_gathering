@@ -10,12 +10,15 @@ import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import ch.uzh.supersede.feedbacklibrary.FeedbackActivity;
+import ch.uzh.supersede.feedbacklibrary.R;
 import ch.uzh.supersede.feedbacklibrary.models.AudioMechanism;
 import ch.uzh.supersede.feedbacklibrary.models.Mechanism;
 import ch.uzh.supersede.feedbacklibrary.utils.Utils;
@@ -42,13 +45,13 @@ public class AudioMechanismView extends MechanismView implements SeekBar.OnSeekB
     private boolean isRecording = false;
     private MediaPlayer mediaPlayer;
     private MediaRecorder mediaRecorder;
-    private ImageButton pauseButton;
-    private ImageButton playButton;
-    private ImageButton recordButton;
+    private ImageView playButton;
+    private ImageView recordButton;
+    private ImageView clearButton;
     private TextView recordIndicator;
     private ValueAnimator recordIndicatorAnimator;
     private Resources resources;
-    private ImageButton stopButton;
+    private ImageView stopButton;
     private String tempAudioFilePath;
     private int totalDuration;
 
@@ -130,43 +133,89 @@ public class AudioMechanismView extends MechanismView implements SeekBar.OnSeekB
     }
 
     private void initView() {
-        ((TextView) getEnclosingLayout().findViewById(ch.uzh.supersede.feedbacklibrary.R.id.supersede_feedbacklibrary_audio_title)).setText(audioMechanism.getTitle());
-        ((TextView) getEnclosingLayout().findViewById(ch.uzh.supersede.feedbacklibrary.R.id.supersede_feedbacklibrary_audio_time_limit)).setText(applicationContext.getResources().getString(ch.uzh.supersede.feedbacklibrary.R.string.supersede_feedbacklibrary_audio_maximum_length_text, (Float.valueOf(audioMechanism.getMaxTime())).intValue()));
-        pauseButton = (ImageButton) getEnclosingLayout().findViewById(ch.uzh.supersede.feedbacklibrary.R.id.supersede_feedbacklibrary_audio_player_button_pause);
-        setButtonEnabled(pauseButton, false);
-        playButton = (ImageButton) getEnclosingLayout().findViewById(ch.uzh.supersede.feedbacklibrary.R.id.supersede_feedbacklibrary_audio_player_button_play);
+        ((TextView) getEnclosingLayout().findViewById(ch.uzh.supersede.feedbacklibrary.R.id.supersede_feedbacklibrary_audio_title)).setText(R.string.short_audio_message);
+        playButton = (ImageView) getEnclosingLayout().findViewById(ch.uzh.supersede.feedbacklibrary.R.id.supersede_feedbacklibrary_audio_player_button_play);
         setButtonEnabled(playButton, false);
         recordAnimationColorStart = resources.getColor(ch.uzh.supersede.feedbacklibrary.R.color.supersede_feedbacklibrary_audio_timer_record_indicator_start_animation_color);
         recordAnimationColorEnd = resources.getColor(ch.uzh.supersede.feedbacklibrary.R.color.supersede_feedbacklibrary_audio_timer_record_indicator_end_animation_color);
-        recordButton = (ImageButton) getEnclosingLayout().findViewById(ch.uzh.supersede.feedbacklibrary.R.id.supersede_feedbacklibrary_audio_player_button_record);
+        recordButton = (ImageView) getEnclosingLayout().findViewById(ch.uzh.supersede.feedbacklibrary.R.id.supersede_feedbacklibrary_audio_player_button_record);
         recordIndicator = (TextView) getEnclosingLayout().findViewById(ch.uzh.supersede.feedbacklibrary.R.id.supersede_feedbacklibrary_audio_timer_record_indicator);
         seekBar = (SeekBar) getEnclosingLayout().findViewById(ch.uzh.supersede.feedbacklibrary.R.id.supersede_feedbacklibrary_audio_seekbar);
-        stopButton = (ImageButton) getEnclosingLayout().findViewById(ch.uzh.supersede.feedbacklibrary.R.id.supersede_feedbacklibrary_audio_player_button_stop);
+        stopButton = (ImageView) getEnclosingLayout().findViewById(ch.uzh.supersede.feedbacklibrary.R.id.supersede_feedbacklibrary_audio_player_button_stop);
         setButtonEnabled(stopButton, false);
+        clearButton = (ImageView) getEnclosingLayout().findViewById(R.id.supersede_feedbacklibrary_audio_player_button_clear);
+        setButtonEnabled(clearButton, false);
         totalDurationLabel = (TextView) getEnclosingLayout().findViewById(ch.uzh.supersede.feedbacklibrary.R.id.supersede_feedbacklibrary_audio_timer_total_duration);
-        String startTotalDurationLabel = "-/" + milliSecondsToTimer(((long) audioMechanism.getMaxTime()) * 1000);
+        final String startTotalDurationLabel = "-/" + milliSecondsToTimer(((long) audioMechanism.getMaxTime()) * 1000);
         totalDurationLabel.setText(startTotalDurationLabel);
 
-        pauseButton.setOnClickListener(new View.OnClickListener() {
+        clearButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                pausePlaying();
+            public void onClick(View view) {
+                clearFocus();
+
+                stopRecordAnimation();
+
+                removeUpdateSeekBarTaskRecorder();
+                removeUpdateSeekBarTask();
+
+                tempAudioFilePath = null;
+                audioFilePath = null;
+
+                currentRecordDuration = 1L;
+                recordIndicator.setVisibility(View.INVISIBLE);
+
+                if(mediaRecorder != null) {
+                    mediaRecorder.stop();
+                    mediaRecorder.reset();
+                    mediaRecorder = null;
+                }
+
+                if (mediaPlayer != null) {
+                    mediaPlayer.stop();
+                    mediaPlayer.reset();
+                    mediaPlayer = null;
+                }
+
+                isPaused = false;
+                isPlaying = false;
+                isRecording = false;
+
+                setButtonEnabled(clearButton, false);
+                setButtonEnabled(playButton, false);
+                setButtonEnabled(stopButton, false);
+                setButtonEnabled(recordButton, true);
+
+                seekBar.setProgress(0);
+                totalDurationLabel.setText(startTotalDurationLabel);
+                playButton.setImageResource(R.drawable.ic_play_arrow_black_48dp);
             }
         });
+
         playButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                clearFocus();
+
                 if (!isPaused && !isPlaying && !isRecording) {
                     startPlaying();
+                    playButton.setImageResource(R.drawable.ic_pause_black_48dp);
                 }
-                if (isPaused && !isPlaying && !isRecording && mediaPlayer != null && !mediaPlayer.isPlaying()) {
+                else if (isPaused && !isPlaying && !isRecording && mediaPlayer != null && !mediaPlayer.isPlaying()) {
                     resumePlaying();
+
+                }
+                else if (!isPaused && isPlaying && mediaPlayer != null){
+                    pausePlaying();
+                    playButton.setImageResource(R.drawable.ic_play_arrow_black_48dp);
                 }
             }
         });
         recordButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                clearFocus();
+
                 boolean result = Utils.checkSinglePermission(activity, FeedbackActivity.PERMISSIONS_REQUEST_RECORD_AUDIO, Manifest.permission.RECORD_AUDIO, null, null, false);
                 if (result) {
                     removeUpdateSeekBarTask();
@@ -230,6 +279,7 @@ public class AudioMechanismView extends MechanismView implements SeekBar.OnSeekB
                     setButtonEnabled(playButton, false);
                     setButtonEnabled(recordButton, false);
                     setButtonEnabled(stopButton, true);
+                    setButtonEnabled(clearButton, true);
 
                     multipleAudioMechanismsListener.onRecordStart(audioMechanism.getId());
 
@@ -245,6 +295,8 @@ public class AudioMechanismView extends MechanismView implements SeekBar.OnSeekB
         stopButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                clearFocus();
+
                 if (!isPlaying && isRecording) {
                     onRecordSuccess();
                     Toast toast = Toast.makeText(applicationContext, applicationContext.getResources().getString(ch.uzh.supersede.feedbacklibrary.R.string.supersede_feedbacklibrary_audio_stopped_recording_text), Toast.LENGTH_SHORT);
@@ -252,8 +304,18 @@ public class AudioMechanismView extends MechanismView implements SeekBar.OnSeekB
                 } else {
                     stopPlaying();
                 }
+
+                playButton.setImageResource(R.drawable.ic_play_arrow_black_48dp);
             }
         });
+    }
+
+    private void clearFocus() {
+        if (activity.getCurrentFocus() != null) {
+            activity.getCurrentFocus().clearFocus();
+            InputMethodManager imm = (InputMethodManager)activity.getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
+        }
     }
 
     private String milliSecondsToTimer(long milliseconds) {
@@ -295,7 +357,6 @@ public class AudioMechanismView extends MechanismView implements SeekBar.OnSeekB
         isPaused = false;
         isPlaying = false;
         isRecording = false;
-        setButtonEnabled(pauseButton, false);
         setButtonEnabled(playButton, true);
         setButtonEnabled(recordButton, true);
         setButtonEnabled(stopButton, false);
@@ -312,13 +373,13 @@ public class AudioMechanismView extends MechanismView implements SeekBar.OnSeekB
                 @Override
                 public void onCompletion(MediaPlayer mp) {
                     isPlaying = false;
-                    setButtonEnabled(pauseButton, false);
                     setButtonEnabled(playButton, true);
                     setButtonEnabled(recordButton, true);
                     setButtonEnabled(stopButton, false);
                     removeUpdateSeekBarTask();
                     resetToStartState();
                     addUpdateSeekBarTask();
+                    playButton.setImageResource(R.drawable.ic_play_arrow_black_48dp);
                 }
             });
             mediaPlayer.setDataSource(audioFilePath);
@@ -357,13 +418,9 @@ public class AudioMechanismView extends MechanismView implements SeekBar.OnSeekB
     }
 
     private void pausePlaying() {
-        if (!isPaused && isPlaying && !isRecording && mediaPlayer != null && mediaPlayer.isPlaying()) {
-            mediaPlayer.pause();
-            isPaused = true;
-            isPlaying = false;
-            setButtonEnabled(pauseButton, false);
-            setButtonEnabled(playButton, true);
-        }
+        mediaPlayer.pause();
+        isPaused = true;
+        isPlaying = false;
     }
 
     private int progressToTimer(int progress, int totalDuration) {
@@ -393,8 +450,6 @@ public class AudioMechanismView extends MechanismView implements SeekBar.OnSeekB
         mediaPlayer.start();
         isPaused = false;
         isPlaying = true;
-        setButtonEnabled(pauseButton, true);
-        setButtonEnabled(playButton, false);
     }
 
     /**
@@ -403,14 +458,14 @@ public class AudioMechanismView extends MechanismView implements SeekBar.OnSeekB
      * @param clickable true to set all buttons clickable, false otherwise
      */
     public void setAllButtonsClickable(boolean clickable) {
-        pauseButton.setClickable(clickable);
         playButton.setClickable(clickable);
         recordButton.setClickable(clickable);
         stopButton.setClickable(clickable);
         seekBar.setEnabled(clickable);
+        clearButton.setEnabled(clickable);
     }
 
-    private void setButtonEnabled(ImageButton imageButton, boolean enabled) {
+    private void setButtonEnabled(ImageView imageButton, boolean enabled) {
         if (imageButton != null) {
             imageButton.setEnabled(enabled);
             imageButton.setAlpha(enabled ? 1.0F : 0.4F);
@@ -422,10 +477,9 @@ public class AudioMechanismView extends MechanismView implements SeekBar.OnSeekB
         isPaused = false;
         isPlaying = true;
         isRecording = false;
-        setButtonEnabled(pauseButton, true);
-        setButtonEnabled(playButton, false);
         setButtonEnabled(recordButton, false);
         setButtonEnabled(stopButton, true);
+        setButtonEnabled(clearButton, true);
     }
 
     private void stopPlaying() {
@@ -437,7 +491,6 @@ public class AudioMechanismView extends MechanismView implements SeekBar.OnSeekB
         isPaused = false;
         isPlaying = false;
         isRecording = false;
-        setButtonEnabled(pauseButton, false);
         setButtonEnabled(playButton, true);
         setButtonEnabled(recordButton, true);
         setButtonEnabled(stopButton, false);
