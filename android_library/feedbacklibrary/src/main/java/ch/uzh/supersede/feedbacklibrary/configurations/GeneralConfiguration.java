@@ -12,9 +12,11 @@ public class GeneralConfiguration {
     private List<Map<String, Object>> parameters;
 
     public GeneralConfiguration(GeneralConfigurationItem generalConfigurationItem) {
-        createdAt = generalConfigurationItem.getCreatedAt();
-        id = generalConfigurationItem.getId();
-        parameters = generalConfigurationItem.getParameters();
+        if(generalConfigurationItem != null) {
+            createdAt = generalConfigurationItem.getCreatedAt();
+            id = generalConfigurationItem.getId();
+            parameters = generalConfigurationItem.getParameters();
+        }
     }
 
     /**

@@ -42,7 +42,7 @@ public class StartActivity extends AppCompatActivity {
                      * (the likelihood is a general configuration parameter of a PULL configuration).
                      * In this uzh, a PULL feedback from the application with id = 9 might be triggered.
                      */
-                    Utils.triggerRandomPullFeedback("http://ec2-54-175-37-30.compute-1.amazonaws.com/", StartActivity.this, 9L, "en");
+                    Utils.triggerRandomPullFeedback("https://platform.supersede.eu:8443/", StartActivity.this, 14L, "en");
                 }
             });
         }
@@ -59,7 +59,7 @@ public class StartActivity extends AppCompatActivity {
                      * (the showIntermediateDialog is a general configuration parameter of a PULL configuration).
                      * In this uzh, a PULL feedback with id = 21 from the application with id = 9 will be triggered.
                      */
-                    Utils.triggerSpecificPullFeedback("http://ec2-54-175-37-30.compute-1.amazonaws.com/", StartActivity.this, 9L, "en", 21L, "Intermediate dialog text for pull configuration with id = 21");
+                    Utils.triggerSpecificPullFeedback("https://platform.supersede.eu:8443/", StartActivity.this, 14L, "en", 21L, "Intermediate dialog text for pull configuration with id = 21");
                 }
             });
         }
@@ -72,7 +72,7 @@ public class StartActivity extends AppCompatActivity {
                     /*
                      * In this uzh, a PULL feedback with id = 22 from the application with id = 9 will be triggered.
                      */
-                    Utils.triggerSpecificPullFeedback("http://ec2-54-175-37-30.compute-1.amazonaws.com/", StartActivity.this, 9L, "en", 22L, "Intermediate dialog text for pull configuration with id = 22");
+                    Utils.triggerSpecificPullFeedback("https://platform.supersede.eu:8443/", StartActivity.this, 14L, "en", 22L, "Intermediate dialog text for pull configuration with id = 22");
                 }
             });
         }
@@ -99,7 +99,7 @@ public class StartActivity extends AppCompatActivity {
                  * The permission is already granted.
                  * The library takes a screenshot of the current screen automatically and opens the FeedbackActivity from the feedback library.
                  */
-                Utils.startActivityWithScreenshotCapture("http://ec2-54-175-37-30.compute-1.amazonaws.com/", this, 9L, "en");
+                Utils.startActivityWithScreenshotCapture("https://platform.supersede.eu:8443/", this, 14L, "en");
             }
         }
 
@@ -118,7 +118,7 @@ public class StartActivity extends AppCompatActivity {
                 Utils.onRequestPermissionsResultCase(requestCode, permissions, grantResults, this, Manifest.permission.READ_EXTERNAL_STORAGE,
                         ch.uzh.supersede.feedbacklibrary.R.string.supersede_feedbacklibrary_permission_request_title,
                         ch.uzh.supersede.feedbacklibrary.R.string.supersede_feedbacklibrary_external_storage_permission_text_automatic_screenshot_rationale,
-                        9L, "http://ec2-54-175-37-30.compute-1.amazonaws.com/", "en");
+                        14L, "https://platform.supersede.eu:8443/", "en");
                 break;
         }
     }

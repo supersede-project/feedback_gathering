@@ -1,14 +1,14 @@
 package ch.uzh.supersede.feedbacklibrary.models;
 
-import ch.uzh.supersede.feedbacklibrary.configurations.MechanismConfigurationItem;
-import ch.uzh.supersede.feedbacklibrary.utils.Utils;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import ch.uzh.supersede.feedbacklibrary.configurations.MechanismConfigurationItem;
+import ch.uzh.supersede.feedbacklibrary.utils.Utils;
 
 /**
  * Choice mechanism model.
@@ -94,7 +94,8 @@ public class CategoryMechanism extends Mechanism {
             }
             // Mandatory
             if (key.equals("mandatory")) {
-                setMandatory(Utils.intToBool(((Double) param.get("value")).intValue()));
+                Double doubleValue = Double.parseDouble((String)param.get("value"));
+                setMandatory(Utils.intToBool(doubleValue.intValue()));
             }
             // Mandatory reminder
             if (key.equals("mandatoryReminder")) {
@@ -102,11 +103,13 @@ public class CategoryMechanism extends Mechanism {
             }
             // Multiple
             if (key.equals("multiple")) {
-                setMultiple(Utils.intToBool(((Double) param.get("value")).intValue()));
+                Double doubleValue = Double.parseDouble((String)param.get("value"));
+                setMultiple(Utils.intToBool(doubleValue.intValue()));
             }
             // Own category allowed
             if (key.equals("ownAllowed")) {
-                setOwnAllowed(Utils.intToBool(((Double) param.get("value")).intValue()));
+                Double doubleValue = Double.parseDouble((String)param.get("value"));
+                setOwnAllowed(Utils.intToBool(doubleValue.intValue()));
             }
             // Options
             if (key.equals("options")) {

@@ -1,9 +1,9 @@
 package ch.uzh.supersede.feedbacklibrary.models;
 
-import ch.uzh.supersede.feedbacklibrary.configurations.MechanismConfigurationItem;
-
 import java.util.List;
 import java.util.Map;
+
+import ch.uzh.supersede.feedbacklibrary.configurations.MechanismConfigurationItem;
 
 /**
  * Rating mechanism model
@@ -79,11 +79,13 @@ public class RatingMechanism extends Mechanism {
             }
             // Maximum rating
             if (key.equals("maxRating")) {
-                setMaxRating(((Double) param.get("value")).intValue());
+                Double doubleValue = Double.parseDouble((String)param.get("value"));
+                setDefaultRating(doubleValue.floatValue());
             }
             // Default rating
             if (key.equals("defaultRating")) {
-                setDefaultRating(((Double) param.get("value")).floatValue());
+                Double doubleValue = Double.parseDouble((String)param.get("value"));
+                setDefaultRating(doubleValue.floatValue());
             }
         }
     }

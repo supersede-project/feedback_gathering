@@ -1,13 +1,12 @@
 package ch.uzh.supersede.feedbacklibrary.models;
 
-import android.graphics.Color;
 import android.graphics.Typeface;
-
-import ch.uzh.supersede.feedbacklibrary.configurations.MechanismConfigurationItem;
-import ch.uzh.supersede.feedbacklibrary.utils.Utils;
 
 import java.util.List;
 import java.util.Map;
+
+import ch.uzh.supersede.feedbacklibrary.configurations.MechanismConfigurationItem;
+import ch.uzh.supersede.feedbacklibrary.utils.Utils;
 
 /**
  * Text mechanism model
@@ -149,7 +148,7 @@ public class TextMechanism extends Mechanism {
             }
             // Font size
             if (key.equals("fieldFontSize")) {
-                setInputTextFontSize(((Double) param.get("value")).floatValue());
+                setInputTextFontSize(Float.parseFloat((String) param.get("value")));
             }
             // Font type
             if (key.equals("fieldFontType")) {
@@ -187,16 +186,20 @@ public class TextMechanism extends Mechanism {
             }
             // Maximum length
             if (key.equals("maxLength")) {
-                setMaxLength(((Double) param.get("value")).intValue());
+                Double doubleValue = Double.parseDouble((String)param.get("value"));
+                setMaxLength(doubleValue.intValue());
             }
             if (key.equals("maxLengthVisible")) {
-                setMaxLengthVisible(Utils.intToBool(((Double) param.get("value")).intValue()));
+                Double doubleValue = Double.parseDouble((String)param.get("value"));
+                setMaxLengthVisible(Utils.intToBool(doubleValue.intValue()));
             }
             if (key.equals("textLengthVisible")) {
-                setTextLengthVisible(Utils.intToBool(((Double) param.get("value")).intValue()));
+                Double doubleValue = Double.parseDouble((String)param.get("value"));
+                setTextLengthVisible(Utils.intToBool(doubleValue.intValue()));
             }
             if (key.equals("mandatory")) {
-                setMandatory(Utils.intToBool(((Double) param.get("value")).intValue()));
+                Double doubleValue = Double.parseDouble((String)param.get("value"));
+                setMandatory(Utils.intToBool(doubleValue.intValue()));
                 // If TI 11 is set, TI 11.1 should always be activated, i.e., the user always needs a reminder for a mandatory field
             }
             if (key.equals("mandatoryReminder")) {

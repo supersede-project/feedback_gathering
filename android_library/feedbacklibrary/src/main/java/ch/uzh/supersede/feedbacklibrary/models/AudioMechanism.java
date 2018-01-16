@@ -1,9 +1,9 @@
 package ch.uzh.supersede.feedbacklibrary.models;
 
-import ch.uzh.supersede.feedbacklibrary.configurations.MechanismConfigurationItem;
-
 import java.util.List;
 import java.util.Map;
+
+import ch.uzh.supersede.feedbacklibrary.configurations.MechanismConfigurationItem;
 
 /**
  * Audio mechanism model
@@ -65,7 +65,7 @@ public class AudioMechanism extends Mechanism {
             }
             // Maximum time
             if (key.equals("maxTime")) {
-                setMaxTime(((Double) param.get("value")).floatValue());
+                setMaxTime(Float.parseFloat((String)param.get("value")));
             }
         }
         setTitle(getTitle());
