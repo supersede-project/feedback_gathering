@@ -64,7 +64,7 @@ The library was thoroughly tested on the following two devices:
 
 ## Troubleshooting:
 
-# Missing style
+### Missing style
 
 It might be, that after integrating the library into a host application and building, the following error occurs:
 
