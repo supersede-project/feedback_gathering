@@ -60,3 +60,16 @@ works as expected on Tablets or other similar devices running Android.
 The library was thoroughly tested on the following two devices:
 * LG Nexus 5X running Android Nougat version 7.0
 * Samsung Galaxy J1 running Android KitKat version 4.4.4
+
+
+## Troubleshooting:
+
+# Missing style
+
+It might be, that after integrating the library into a host application and building, the following error occurs:
+
+  Error:(22) No resource identifier found for attribute 'counterOverflowTextAppearance' in package '<host app package>'
+  
+In this case a style is missing in the host application. The following dependency solves this problem and should be added to the app's gradle file:
+
+    compile 'com.android.support:design:24.2.1'
