@@ -33,3 +33,33 @@ $submitButtonColor: white;
 $submitButtonHoverBackgroundColor: #5a7393;
 $submitButtonHoverColor: white;
 $submitButtonFontWeight: bold;
+
+
+.feedback-library p.rating-text {
+  line-height: 1em !important;
+}
+
+.category-type label {
+  font-size: 15px;
+}
+
+.feedback-library-wrapper .ui-widget-header {
+  background: none;
+  border: none;
+  border-bottom: 2px solid #5a7393;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  margin: 0 14px;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  margin-bottom: 10px;
+}
+
+.feedback-library-wrapper button.ui-dialog-titlebar-close {
+  background: none;
+  border: none;
+}
+
+.feedback-library .feedback-mechanism.category-type p {
+  margin-bottom: 5px;
+}

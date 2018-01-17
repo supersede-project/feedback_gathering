@@ -1,6 +1,7 @@
 import {Parameter} from '../parameters/parameter';
 import {Mechanism} from './mechanism';
 import {CategoryFeedback} from '../feedbacks/category_feedback';
+import { ParameterValuePropertyPair } from '../parameters/parameter_value_property_pair';
 
 
 export class CategoryMechanism extends Mechanism {
@@ -32,6 +33,10 @@ export class CategoryMechanism extends Mechanism {
         if(this.getParameterValue('multiple') === false){
             inputType = 'radio';
         }
+        var labelStyle = this.getCssStyle([
+            new ParameterValuePropertyPair('labelColor', 'color'),
+            new ParameterValuePropertyPair('labelFontSize', 'font-size')
+        ]);
 
         return {
             title: this.getParameterValue('title'),
@@ -41,6 +46,7 @@ export class CategoryMechanism extends Mechanism {
             options: this.getOptions(),
             defaultOption: this.getDefaultOptions(),
             inputType: inputType,
+            labelStyle: labelStyle,
             multiple: this.getParameterValue('multiple'),
             asDropdown: this.getParameterValue('asDropdown') || false,
             mandatory: this.getParameterValue('mandatory'),

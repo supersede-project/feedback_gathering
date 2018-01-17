@@ -1,6 +1,7 @@
 import {Mechanism} from './mechanism';
 import {ScreenshotView} from '../../views/screenshot/screenshot_view';
 import {Parameter} from '../parameters/parameter';
+import { ParameterValuePropertyPair } from '../parameters/parameter_value_property_pair';
 
 
 export class ScreenshotMechanism extends Mechanism {
@@ -16,6 +17,11 @@ export class ScreenshotMechanism extends Mechanism {
     }
 
     getContext():any {
+        var labelStyle = this.getCssStyle([
+            new ParameterValuePropertyPair('labelColor', 'color'),
+            new ParameterValuePropertyPair('labelFontSize', 'font-size')
+        ]);
+
         return {
             autoTake: this.getParameterValue('autoTake'),
             annotationTitle: this.getParameterValue('annotationTitle'),
@@ -31,6 +37,7 @@ export class ScreenshotMechanism extends Mechanism {
             thumbDownMouseover: this.getParameterValue('thumbDownMouseover'),
             textMouseover: this.getParameterValue('textMouseover'),
             freehandMouseover: this.getParameterValue('freehandMouseover'),
+            labelStyle: labelStyle,
             boxWidth: this.getParameterValue('boxWidth') || '100%',
             boxPaddingLeft: this.getParameterValue('boxPaddingLeft') || '0',
             boxPaddingRight: this.getParameterValue('boxPaddingRight') || '20px',
