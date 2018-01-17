@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@color/supersede_feedbacklibrary_annotate_image_layout_background_color"
     tools:context="ch.uzh.supersede.feedbacklibrary.AnnotateImageActivity">
 
     <RelativeLayout

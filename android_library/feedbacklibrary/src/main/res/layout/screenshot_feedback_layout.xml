@@ -46,21 +46,21 @@
             android:orientation="vertical">
 
             <Button
-                android:id="@+id/supersede_feedbacklibrary_select_screenshot_btn"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:minWidth="88dp"
-                android:text="@string/supersede_feedbacklibrary_screenshotbutton_text"
-                android:background="@drawable/button_selector"
-                android:textColor="@android:color/white"
-                android:layout_margin="4dp"/>
-
-            <Button
                 android:id="@+id/supersede_feedbacklibrary_annotate_screenshot_btn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:minWidth="88dp"
                 android:text="@string/supersede_feedbacklibrary_annotatebutton_text"
+                android:background="@drawable/button_selector_edit"
+                android:textColor="@android:color/white"
+                android:layout_margin="4dp"/>
+
+            <Button
+                android:id="@+id/supersede_feedbacklibrary_select_screenshot_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minWidth="88dp"
+                android:text="@string/supersede_feedbacklibrary_screenshotbutton_text"
                 android:background="@drawable/button_selector"
                 android:textColor="@android:color/white"
                 android:layout_margin="4dp"/>
