@@ -15,4 +15,6 @@ import java.util.List;
 public interface UserFeedbackDislikeRepository extends JpaRepository<UserFBDislike, Long> {
     List<UserFBDislike> findByFeedbackId(@Param("feedbackId") long feedbackId);
     List<UserFBDislike> findByEnduserId(@Param("userId") long userId);
+    UserFBDislike findByEnduserIdAndFeedbackId(@Param("feedbackId") long feedbackId,
+                                            @Param("userId") long userId);
 }

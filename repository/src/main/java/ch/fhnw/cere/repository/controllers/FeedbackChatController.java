@@ -59,7 +59,7 @@ public class FeedbackChatController {
     @RequestMapping(method = RequestMethod.POST, value = "/feedback_chat")
     public FeedbackChatInformation createFeedbackChat(HttpEntity<String> feedbackChatJSON) {
         if(feedbackChatJSON.getBody() != null){
-            JSONObject object = new JSONObject();
+            JSONObject object = new JSONObject(feedbackChatJSON.getBody());
             long feedbackId = object.getLong("feedback_id");
             long userId = object.getLong("user_id");
             String chat_text = object.getString("chat_text");

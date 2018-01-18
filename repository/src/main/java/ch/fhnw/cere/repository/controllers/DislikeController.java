@@ -8,11 +8,9 @@ import org.json.JSONObject;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -33,6 +31,9 @@ public class DislikeController {
 
     @Autowired
     private UserFeedbackDislikeService feedbackDislikeService;
+
+    @Autowired
+    private UserFeedbackLikeService feedbackLikeService;
 
     @PreAuthorize("@securityService.hasAdminPermission(#applicationId)")
     @RequestMapping(method = RequestMethod.GET, value = "/dislikes")
@@ -55,13 +56,30 @@ public class DislikeController {
     }
 
     @PreAuthorize("@securityService.hasAdminPermission(#applicationId)")
+    @RequestMapping(method = RequestMethod.GET, value = "/dislikes/both/{userId}/{feedbackId}")
+    public UserFBDislike getLikesForUserAndFeedback(@PathVariable long applicationId,
+                                                 @PathVariable long userId,
+                                                 @PathVariable long feedbackId) {
+        return feedbackDislikeService.findByEnduserIdAndFeedbackId(userId,feedbackId);
+    }
+
+    @ResponseStatus(HttpStatus.CREATED)
     @RequestMapping(method = RequestMethod.POST, value = "/dislikes")
     public UserFBDislike createDislike(HttpEntity<String> dislikeJSON) {
         LOGGER.info("Create Like: " + dislikeJSON.getBody());
         if(dislikeJSON.getBody() != null){
-            JSONObject object = new JSONObject();
+            JSONObject object = new JSONObject(dislikeJSON.getBody());
             long feedbackId = object.getLong("feedback_id");
             long userId = object.getLong("user_id");
+
+            if(feedbackLikeService.findByEnduserIdAndFeedbackId(userId,feedbackId) != null){
+                feedbackLikeService.delete(feedbackLikeService.findByEnduserIdAndFeedbackId(userId,
+                        feedbackId).getId());
+            }
+
+            if(feedbackDislikeService.findByEnduserIdAndFeedbackId(userId,feedbackId) != null){
+                return feedbackDislikeService.findByEnduserIdAndFeedbackId(userId,feedbackId);
+            }
 
             UserFBDislike userFBDislike = new UserFBDislike();
             userFBDislike.setFeedback(feedbackService.find(feedbackId));

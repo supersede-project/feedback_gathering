@@ -14,6 +14,7 @@ public interface UserFeedbackLikeService {
     public void delete(long id);
     List<UserFBLike> findByFeedbackId(long feedbackId);
     List<UserFBLike> findByEnduserId(long userId);
+    UserFBLike findByEnduserIdAndFeedbackId(long userId, long feedbackId);
 }
 
 

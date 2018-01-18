@@ -48,7 +48,7 @@ public class FeedbackCompanyController {
     @RequestMapping(method = RequestMethod.POST, value = "/feedback_company")
     public FeedbackCompany createFeedbackCompany(HttpEntity<String> feedbackCompanyJSON) {
         if(feedbackCompanyJSON.getBody() != null){
-            JSONObject object = new JSONObject();
+            JSONObject object = new JSONObject(feedbackCompanyJSON.getBody());
             long feedbackId = object.getLong("feedback_id");
             String status = object.getString("status");
             String text = object.getString("text");

@@ -57,7 +57,7 @@ public class FeedbackStatusController {
     public FeedbackStatus createStatus(HttpEntity<String> statusJSON) {
         LOGGER.info("Create Like: " + statusJSON.getBody());
         if(statusJSON.getBody() != null){
-            JSONObject object = new JSONObject();
+            JSONObject object = new JSONObject(statusJSON.getBody());
             long feedbackId = object.getLong("feedback_id");
             String status = object.getString("status");
 

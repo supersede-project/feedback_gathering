@@ -44,7 +44,7 @@ public class EndUserController {
     @RequestMapping(method = RequestMethod.POST, value = "/end_user")
     public EndUser createEndUser(HttpEntity<String> feedbackChatJSON) {
         if(feedbackChatJSON.getBody() != null){
-            JSONObject object = new JSONObject();
+            JSONObject object = new JSONObject(feedbackChatJSON.getBody());
             String username = object.getString("username");
 
             EndUser endUser = new EndUser();

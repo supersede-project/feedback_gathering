@@ -5,17 +5,16 @@ import ch.fhnw.cere.repository.models.CommentFeedback;
 import ch.fhnw.cere.repository.models.UserFBLike;
 import ch.fhnw.cere.repository.services.EndUserServiceImpl;
 import ch.fhnw.cere.repository.services.FeedbackServiceImpl;
+import ch.fhnw.cere.repository.services.UserFeedbackDislikeService;
 import ch.fhnw.cere.repository.services.UserFeedbackLikeService;
 import org.apache.catalina.User;
 import org.json.JSONObject;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -35,6 +34,9 @@ public class LikeController {
 
     @Autowired
     private UserFeedbackLikeService feedbackLikeService;
+
+    @Autowired
+    private UserFeedbackDislikeService feedbackDislikeService;
 
     @PreAuthorize("@securityService.hasAdminPermission(#applicationId)")
     @RequestMapping(method = RequestMethod.GET, value = "/likes")
@@ -57,13 +59,30 @@ public class LikeController {
     }
 
     @PreAuthorize("@securityService.hasAdminPermission(#applicationId)")
+    @RequestMapping(method = RequestMethod.GET, value = "/likes/both/{userId}/{feedbackId}")
+    public UserFBLike getLikesForUserAndFeedback(@PathVariable long applicationId,
+                                            @PathVariable long userId,
+                                                 @PathVariable long feedbackId) {
+        return feedbackLikeService.findByEnduserIdAndFeedbackId(userId,feedbackId);
+    }
+
+    @ResponseStatus(HttpStatus.CREATED)
     @RequestMapping(method = RequestMethod.POST, value = "/likes")
     public UserFBLike createLike(HttpEntity<String> likeJSON) {
         LOGGER.info("Create Like: " + likeJSON.getBody());
         if(likeJSON.getBody() != null){
-            JSONObject object = new JSONObject();
+            JSONObject object = new JSONObject(likeJSON.getBody());
             long feedbackId = object.getLong("feedback_id");
             long userId = object.getLong("user_id");
+
+            if(feedbackDislikeService.findByEnduserIdAndFeedbackId(userId,feedbackId) != null){
+                feedbackDislikeService.delete(feedbackDislikeService.findByEnduserIdAndFeedbackId(userId,
+                        feedbackId).getId());
+            }
+
+            if(feedbackLikeService.findByEnduserIdAndFeedbackId(userId,feedbackId) != null){
+                return feedbackLikeService.findByEnduserIdAndFeedbackId(userId,feedbackId);
+            }
 
             UserFBLike userFBLike = new UserFBLike();
             userFBLike.setFeedback(feedbackService.find(feedbackId));
