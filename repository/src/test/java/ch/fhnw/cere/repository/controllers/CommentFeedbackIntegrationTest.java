@@ -118,6 +118,7 @@ public class CommentFeedbackIntegrationTest extends BaseIntegrationTest{
         feedbackRepository.deleteAllInBatch();
         commentFeedbackRepository.deleteAllInBatch();
         endUserRepository.deleteAllInBatch();
+        apiUserPermissionRepository.deleteAllInBatch();
     }
 
     @Test(expected = ServletException.class)

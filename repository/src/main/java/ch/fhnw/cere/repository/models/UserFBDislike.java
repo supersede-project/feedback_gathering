@@ -18,13 +18,13 @@ public class UserFBDislike {
     private long id;
 
     @JsonIgnore
-    @ManyToOne(cascade = {CascadeType.PERSIST})
+    @ManyToOne(cascade = {CascadeType.MERGE})
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "feedback_id")
     private Feedback feedback;
 
     @JsonIgnore
-    @ManyToOne(cascade = {CascadeType.PERSIST})
+    @ManyToOne(cascade = {CascadeType.MERGE})
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "user_id")
     private EndUser enduser;
@@ -39,10 +39,9 @@ public class UserFBDislike {
     public UserFBDislike() {
     }
 
-    public UserFBDislike(Feedback feedback, EndUser enduser, Date createdAt) {
-        this.feedback = feedback;
+    public UserFBDislike(EndUser enduser, Feedback feedback) {
         this.enduser = enduser;
-        this.createdAt = createdAt;
+        this.feedback = feedback;
     }
 
     public long getId() {
