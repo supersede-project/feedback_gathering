@@ -7,11 +7,9 @@ import org.json.JSONObject;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -40,15 +38,17 @@ public class EndUserController {
         return endUserService.findByUsername(username);
     }
 
-    @PreAuthorize("@securityService.hasAdminPermission(#applicationId)")
+    @ResponseStatus(HttpStatus.CREATED)
     @RequestMapping(method = RequestMethod.POST, value = "/end_user")
     public EndUser createEndUser(HttpEntity<String> feedbackChatJSON) {
         if(feedbackChatJSON.getBody() != null){
             JSONObject object = new JSONObject(feedbackChatJSON.getBody());
             String username = object.getString("username");
+            long applicationId = object.getLong("application_id");
 
             EndUser endUser = new EndUser();
             endUser.setUsername(username);
+            endUser.setApplicationId(applicationId);
 
             return endUserService.save(endUser);
         }

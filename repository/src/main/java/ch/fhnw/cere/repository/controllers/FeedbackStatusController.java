@@ -9,11 +9,9 @@ import org.json.JSONObject;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.ws.rs.Path;
 import java.util.List;
@@ -52,7 +50,7 @@ public class FeedbackStatusController {
         return feedbackStatusService.findByStatus(status);
     }
 
-    @PreAuthorize("@securityService.hasAdminPermission(#applicationId)")
+    @ResponseStatus(HttpStatus.CREATED)
     @RequestMapping(method = RequestMethod.POST, value = "/status")
     public FeedbackStatus createStatus(HttpEntity<String> statusJSON) {
         LOGGER.info("Create Like: " + statusJSON.getBody());

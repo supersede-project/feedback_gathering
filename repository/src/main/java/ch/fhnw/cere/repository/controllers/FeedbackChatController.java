@@ -9,11 +9,9 @@ import org.json.JSONObject;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -55,7 +53,7 @@ public class FeedbackChatController {
         return feedbackChatInformationService.findByUserId(userId);
     }
 
-    @PreAuthorize("@securityService.hasAdminPermission(#applicationId)")
+    @ResponseStatus(HttpStatus.CREATED)
     @RequestMapping(method = RequestMethod.POST, value = "/feedback_chat")
     public FeedbackChatInformation createFeedbackChat(HttpEntity<String> feedbackChatJSON) {
         if(feedbackChatJSON.getBody() != null){
@@ -63,13 +61,16 @@ public class FeedbackChatController {
             long feedbackId = object.getLong("feedback_id");
             long userId = object.getLong("user_id");
             String chat_text = object.getString("chat_text");
-            Boolean initiatedByUser = object.getBoolean("initiated_by_user");
-
             FeedbackChatInformation feedbackChatInformation = new FeedbackChatInformation();
+
+            if(object.has("initiated_by_user") && object.get("initiated_by_user") != null){
+                Boolean initiatedByUser = object.getBoolean("initiated_by_user");
+                feedbackChatInformation.setInitatedByUser(initiatedByUser);
+            }
+
             feedbackChatInformation.setFeedback(feedbackService.find(feedbackId));
             feedbackChatInformation.setUser(endUserService.find(userId));
             feedbackChatInformation.setChatText(chat_text);
-            feedbackChatInformation.setInitatedByUser(initiatedByUser);
 
             return feedbackChatInformationService.save(feedbackChatInformation);
         }
