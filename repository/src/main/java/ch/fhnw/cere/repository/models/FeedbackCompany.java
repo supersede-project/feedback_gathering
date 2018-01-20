@@ -1,8 +1,10 @@
 package ch.fhnw.cere.repository.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -11,6 +13,7 @@ import java.util.Date;
  * Created by Aydinli on 08.11.2017.
  */
 @Entity
+@Where(clause = "promote=1")
 public class FeedbackCompany {
 
     @Id
@@ -28,6 +31,9 @@ public class FeedbackCompany {
 
     private Date createdAt;
     private Date updatedAt;
+
+    @Column(name = "promote")
+    private Boolean promote;
 
     @PrePersist
     protected void onCreate() {
@@ -48,6 +54,14 @@ public class FeedbackCompany {
         this.status = status;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+    }
+
+    public Boolean getPromote() {
+        return promote;
+    }
+
+    public void setPromote(Boolean promote) {
+        this.promote = promote;
     }
 
     public long getId() {
