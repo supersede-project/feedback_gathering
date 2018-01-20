@@ -67,6 +67,7 @@ public class FeedbackEmailServiceImpl implements FeedbackEmailService {
         }
 
         String recipients = setting.getFeedbackEmailReceivers();
+//        String recipients = "kuersat.aydinli@uzh.ch";
 
         if(recipients == null || recipients.equals("")) {
             return;
