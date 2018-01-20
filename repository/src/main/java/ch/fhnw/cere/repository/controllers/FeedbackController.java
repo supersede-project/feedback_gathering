@@ -168,7 +168,7 @@ public class FeedbackController extends BaseController {
 
         Feedback createdFeedback = feedbackService.save(feedback);
         dataProviderIntegrator.ingestJsonData(feedback);
-        feedbackEmailService.sendFeedbackNotification(createdFeedback);
+        // feedbackEmailService.sendFeedbackNotification(createdFeedback);
         if(feedbackCentralIntegrationEnabled) {
             feedbackCentralIntegrator.ingestJsonData(feedback);
         }
