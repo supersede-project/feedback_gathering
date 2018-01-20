@@ -1,5 +1,7 @@
 package ch.fhnw.cere.repository.mail;
 
+import java.util.Map;
+
 /**
  * Created by Aydinli on 20.01.2018.
  */
@@ -8,6 +10,7 @@ public class Mail {
     private String to;
     private String subject;
     private String content;
+    private Map model;
 
     public Mail() {
     }
@@ -59,5 +62,13 @@ public class Mail {
                 ", subject='" + subject + '\'' +
                 ", content='" + content + '\'' +
                 '}';
+    }
+
+    public void setModel(Map model) {
+        this.model = model;
+    }
+
+    public Map getModel() {
+        return model;
     }
 }

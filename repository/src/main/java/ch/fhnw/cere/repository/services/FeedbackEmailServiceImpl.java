@@ -8,6 +8,7 @@ import ch.fhnw.cere.repository.models.orchestrator.MechanismTemplateModel;
 import com.sun.media.jfxmedia.logging.Logger;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -42,6 +43,7 @@ public class FeedbackEmailServiceImpl implements FeedbackEmailService {
     @Autowired
     private JavaMailSender mailSender;
 
+    @Qualifier("freeMarkerConfiguration")
     @Autowired
     private Configuration freemarkerConfiguration;
 
