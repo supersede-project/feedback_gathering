@@ -190,16 +190,29 @@ public class TextMechanism extends Mechanism {
                 setMaxLength(doubleValue.intValue());
             }
             if (key.equals("maxLengthVisible")) {
-                Double doubleValue = Double.parseDouble((String)param.get("value"));
-                setMaxLengthVisible(Utils.intToBool(doubleValue.intValue()));
+                if(param.get("value") instanceof Boolean) {
+                    setMaxLengthVisible((Boolean)param.get("value"));
+                } else {
+                    Double doubleValue = Double.parseDouble((String) param.get("value"));
+                    setMaxLengthVisible(Utils.intToBool(doubleValue.intValue()));
+                }
             }
             if (key.equals("textLengthVisible")) {
-                Double doubleValue = Double.parseDouble((String)param.get("value"));
-                setTextLengthVisible(Utils.intToBool(doubleValue.intValue()));
+                if(param.get("value") instanceof Boolean) {
+                    setTextLengthVisible((Boolean)param.get("value"));
+                } else {
+                    Double doubleValue = Double.parseDouble((String) param.get("value"));
+                    setTextLengthVisible(Utils.intToBool(doubleValue.intValue()));
+                }
             }
             if (key.equals("mandatory")) {
-                Double doubleValue = Double.parseDouble((String)param.get("value"));
-                setMandatory(Utils.intToBool(doubleValue.intValue()));
+                if(param.get("value") instanceof Boolean) {
+                    setMandatory((Boolean)param.get("value"));
+                } else {
+                    Double doubleValue = Double.parseDouble((String)param.get("value"));
+                    setMandatory(Utils.intToBool(doubleValue.intValue()));
+                }
+
                 // If TI 11 is set, TI 11.1 should always be activated, i.e., the user always needs a reminder for a mandatory field
             }
             if (key.equals("mandatoryReminder")) {

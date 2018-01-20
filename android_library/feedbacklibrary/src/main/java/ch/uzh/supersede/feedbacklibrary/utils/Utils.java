@@ -34,12 +34,8 @@ import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
 
-import ch.uzh.supersede.feedbacklibrary.API.feedbackAPI;
-import ch.uzh.supersede.feedbacklibrary.FeedbackActivity;
-import ch.uzh.supersede.feedbacklibrary.R;
-import ch.uzh.supersede.feedbacklibrary.configurations.ConfigurationItem;
-import ch.uzh.supersede.feedbacklibrary.configurations.OrchestratorConfigurationItem;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -60,7 +56,11 @@ import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import ch.uzh.supersede.feedbacklibrary.models.EditImageItem;
+import ch.uzh.supersede.feedbacklibrary.API.feedbackAPI;
+import ch.uzh.supersede.feedbacklibrary.FeedbackActivity;
+import ch.uzh.supersede.feedbacklibrary.R;
+import ch.uzh.supersede.feedbacklibrary.configurations.ConfigurationItem;
+import ch.uzh.supersede.feedbacklibrary.configurations.OrchestratorConfigurationItem;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -557,7 +557,10 @@ public class Utils {
 
                                                 if (!(rnd.nextDouble() > likelihood)) {
                                                     Intent intent = new Intent(activity, FeedbackActivity.class);
-                                                    String jsonString = new Gson().toJson(configuration);
+                                                    GsonBuilder gsonBuilder = new GsonBuilder();
+                                                    gsonBuilder.setLenient();
+                                                    Gson gson = gsonBuilder.create();
+                                                    String jsonString = gson.toJson(configuration);
                                                     intent.putExtra(FeedbackActivity.IS_PUSH_STRING, false);
                                                     intent.putExtra(FeedbackActivity.JSON_CONFIGURATION_STRING, jsonString);
                                                     intent.putExtra(FeedbackActivity.SELECTED_PULL_CONFIGURATION_INDEX_STRING, shuffleIds.get(i));
@@ -662,7 +665,10 @@ public class Utils {
                                                 }
 
                                                 Intent intent = new Intent(activity, FeedbackActivity.class);
-                                                String jsonString = new Gson().toJson(configuration);
+                                                GsonBuilder gsonBuilder = new GsonBuilder();
+                                                gsonBuilder.setLenient();
+                                                Gson gson = gsonBuilder.create();
+                                                String jsonString = gson.toJson(configuration);
                                                 intent.putExtra(FeedbackActivity.IS_PUSH_STRING, false);
                                                 intent.putExtra(FeedbackActivity.JSON_CONFIGURATION_STRING, jsonString);
                                                 intent.putExtra(FeedbackActivity.SELECTED_PULL_CONFIGURATION_INDEX_STRING, selectedPullConfigurationIndex[0]);

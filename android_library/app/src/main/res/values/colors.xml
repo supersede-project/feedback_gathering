@@ -8,6 +8,9 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
 
+    <color name="supersede_feedbacklibrary_annotate_image_layout_background_color">#ffffff</color>
+
+
     <!--
     Colors used in the feedback library.
     In order to use other colors simply uncomment the specific color and choose the appropriate color.
@@ -16,8 +19,6 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
     <color name="whiteColor">#FFFFFF</color>
-
-    <color name="supersede_feedbacklibrary_annotate_image_layout_background_color">#4D4D4D</color>
 
     <color name="supersede_feedbacklibrary_audio_timer_record_indicator_start_animation_color">
         #000000

@@ -94,8 +94,12 @@ public class CategoryMechanism extends Mechanism {
             }
             // Mandatory
             if (key.equals("mandatory")) {
-                Double doubleValue = Double.parseDouble((String)param.get("value"));
-                setMandatory(Utils.intToBool(doubleValue.intValue()));
+                if(param.get("value") instanceof Boolean) {
+                    setMandatory((Boolean)param.get("value"));
+                } else {
+                    Double doubleValue = Double.parseDouble((String) param.get("value"));
+                    setMandatory(Utils.intToBool(doubleValue.intValue()));
+                }
             }
             // Mandatory reminder
             if (key.equals("mandatoryReminder")) {
@@ -103,13 +107,21 @@ public class CategoryMechanism extends Mechanism {
             }
             // Multiple
             if (key.equals("multiple")) {
-                Double doubleValue = Double.parseDouble((String)param.get("value"));
-                setMultiple(Utils.intToBool(doubleValue.intValue()));
+                if(param.get("value") instanceof Boolean) {
+                    setMultiple((Boolean)param.get("value"));
+                } else {
+                    Double doubleValue = Double.parseDouble((String) param.get("value"));
+                    setMultiple(Utils.intToBool(doubleValue.intValue()));
+                }
             }
             // Own category allowed
             if (key.equals("ownAllowed")) {
-                Double doubleValue = Double.parseDouble((String)param.get("value"));
-                setOwnAllowed(Utils.intToBool(doubleValue.intValue()));
+                if(param.get("value") instanceof Boolean) {
+                    setOwnAllowed((Boolean)param.get("value"));
+                } else {
+                    Double doubleValue = Double.parseDouble((String) param.get("value"));
+                    setOwnAllowed(Utils.intToBool(doubleValue.intValue()));
+                }
             }
             // Options
             if (key.equals("options")) {

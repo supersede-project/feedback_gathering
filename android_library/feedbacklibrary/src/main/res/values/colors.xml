@@ -5,6 +5,7 @@
     <color name="colorAccent">#FF4081</color>
     <color name="colorAccentDark">#ac2a56</color>
     <color name="whiteColor">#FFFFFF</color>
+    <color name="feedbackActivityBackground">#eeeeee</color>
 
     <!-- AnnotateImageView -->
     <color name="supersede_feedbacklibrary_annotate_image_layout_background_color">#4D4D4D</color>

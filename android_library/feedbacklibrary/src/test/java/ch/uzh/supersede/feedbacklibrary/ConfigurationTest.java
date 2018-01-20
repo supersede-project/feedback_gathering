@@ -1,6 +1,7 @@
 package ch.uzh.supersede.feedbacklibrary;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import org.junit.Test;
 
@@ -54,7 +55,9 @@ public class ConfigurationTest {
 
     private OrchestratorConfiguration createConfiguration(String configurationFile, long selectedPullConfigurationId) throws IOException {
         String jsonString;
-        Gson gson = new Gson();
+        GsonBuilder gsonBuilder = new GsonBuilder();
+        gsonBuilder.setLenient();
+        Gson gson = gsonBuilder.create();
         jsonString = readJSONFile(configurationFile);
         if (selectedPullConfigurationId == -1) {
             return new OrchestratorConfiguration(gson.fromJson(jsonString, OrchestratorConfigurationItem.class), true, -1);

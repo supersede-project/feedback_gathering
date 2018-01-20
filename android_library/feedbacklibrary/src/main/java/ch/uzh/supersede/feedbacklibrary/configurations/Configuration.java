@@ -1,11 +1,11 @@
 package ch.uzh.supersede.feedbacklibrary.configurations;
 
-import ch.uzh.supersede.feedbacklibrary.models.Mechanism;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+
+import ch.uzh.supersede.feedbacklibrary.models.Mechanism;
 
 /**
  * Configuration either of type 'PUSH' or 'PULL'.
@@ -78,12 +78,17 @@ public class Configuration {
             mechanisms.add(mechanismConfigurationItem.createMechanism());
         }
 
-        Collections.sort(mechanisms, new Comparator<Mechanism>() {
-            @Override
-            public int compare(Mechanism a, Mechanism b) {
-                return ((Integer) a.getOrder()).compareTo(b.getOrder());
-            }
-        });
+        if(mechanisms != null) {
+            Collections.sort(mechanisms, new Comparator<Mechanism>() {
+                @Override
+                public int compare(Mechanism a, Mechanism b) {
+                    if(a == null || b == null) {
+                        return -1;
+                    }
+                    return ((Integer) a.getOrder()).compareTo(b.getOrder());
+                }
+            });
+        }
     }
 
     /**

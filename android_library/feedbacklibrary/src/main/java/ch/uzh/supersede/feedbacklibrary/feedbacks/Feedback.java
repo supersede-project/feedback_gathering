@@ -3,13 +3,6 @@ package ch.uzh.supersede.feedbacklibrary.feedbacks;
 import android.os.Build;
 import android.util.Log;
 
-import ch.uzh.supersede.feedbacklibrary.models.AttachmentMechanism;
-import ch.uzh.supersede.feedbacklibrary.models.AudioMechanism;
-import ch.uzh.supersede.feedbacklibrary.models.CategoryMechanism;
-import ch.uzh.supersede.feedbacklibrary.models.Mechanism;
-import ch.uzh.supersede.feedbacklibrary.models.RatingMechanism;
-import ch.uzh.supersede.feedbacklibrary.models.ScreenshotMechanism;
-import ch.uzh.supersede.feedbacklibrary.models.TextMechanism;
 import com.google.gson.annotations.Expose;
 
 import java.io.Serializable;
@@ -17,6 +10,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import ch.uzh.supersede.feedbacklibrary.models.AttachmentMechanism;
+import ch.uzh.supersede.feedbacklibrary.models.AudioMechanism;
+import ch.uzh.supersede.feedbacklibrary.models.CategoryMechanism;
+import ch.uzh.supersede.feedbacklibrary.models.Mechanism;
+import ch.uzh.supersede.feedbacklibrary.models.RatingMechanism;
+import ch.uzh.supersede.feedbacklibrary.models.ScreenshotMechanism;
+import ch.uzh.supersede.feedbacklibrary.models.TextMechanism;
 
 /**
  * Feedback
@@ -51,7 +52,7 @@ public class Feedback implements Serializable {
 
     public Feedback(List<Mechanism> allMechanisms) {
         for (Mechanism mechanism : allMechanisms) {
-            if (mechanism.isActive()) {
+            if (mechanism != null && mechanism.isActive()) {
                 String type = mechanism.getType();
                 switch (type) {
                     case Mechanism.ATTACHMENT_TYPE:

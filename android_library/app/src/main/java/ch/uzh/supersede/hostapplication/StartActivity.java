@@ -99,7 +99,7 @@ public class StartActivity extends AppCompatActivity {
                  * The permission is already granted.
                  * The library takes a screenshot of the current screen automatically and opens the FeedbackActivity from the feedback library.
                  */
-                Utils.startActivityWithScreenshotCapture("https://platform.supersede.eu:8443/", this, 14L, "en");
+                Utils.startActivityWithScreenshotCapture("https://platform.supersede.eu:8443/", this, 29L, "en");
             }
         }
 
@@ -118,7 +118,7 @@ public class StartActivity extends AppCompatActivity {
                 Utils.onRequestPermissionsResultCase(requestCode, permissions, grantResults, this, Manifest.permission.READ_EXTERNAL_STORAGE,
                         ch.uzh.supersede.feedbacklibrary.R.string.supersede_feedbacklibrary_permission_request_title,
                         ch.uzh.supersede.feedbacklibrary.R.string.supersede_feedbacklibrary_external_storage_permission_text_automatic_screenshot_rationale,
-                        14L, "https://platform.supersede.eu:8443/", "en");
+                        29L, "https://platform.supersede.eu:8443/", "en");
                 break;
         }
     }

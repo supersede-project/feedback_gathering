@@ -31,7 +31,7 @@ import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
-import android.os.Handler;
+import android.os.Bundle;
 import android.os.StrictMode;
 import android.os.UserManager;
 import android.provider.MediaStore;
@@ -39,7 +39,6 @@ import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -53,23 +52,6 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import ch.uzh.supersede.feedbacklibrary.API.feedbackAPI;
-import ch.uzh.supersede.feedbacklibrary.configurations.Configuration;
-import ch.uzh.supersede.feedbacklibrary.configurations.OrchestratorConfiguration;
-import ch.uzh.supersede.feedbacklibrary.configurations.OrchestratorConfigurationItem;
-import ch.uzh.supersede.feedbacklibrary.feedbacks.AudioFeedback;
-import ch.uzh.supersede.feedbacklibrary.feedbacks.Feedback;
-import ch.uzh.supersede.feedbacklibrary.feedbacks.ScreenshotFeedback;
-import ch.uzh.supersede.feedbacklibrary.models.Mechanism;
-import ch.uzh.supersede.feedbacklibrary.models.ScreenshotMechanism;
-import ch.uzh.supersede.feedbacklibrary.utils.DialogUtils;
-import ch.uzh.supersede.feedbacklibrary.utils.Utils;
-import ch.uzh.supersede.feedbacklibrary.views.AudioMechanismView;
-import ch.uzh.supersede.feedbacklibrary.views.CategoryMechanismView;
-import ch.uzh.supersede.feedbacklibrary.views.MechanismView;
-import ch.uzh.supersede.feedbacklibrary.views.RatingMechanismView;
-import ch.uzh.supersede.feedbacklibrary.views.ScreenshotMechanismView;
-import ch.uzh.supersede.feedbacklibrary.views.TextMechanismView;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
@@ -100,6 +82,22 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 
+import ch.uzh.supersede.feedbacklibrary.API.feedbackAPI;
+import ch.uzh.supersede.feedbacklibrary.configurations.Configuration;
+import ch.uzh.supersede.feedbacklibrary.configurations.OrchestratorConfiguration;
+import ch.uzh.supersede.feedbacklibrary.configurations.OrchestratorConfigurationItem;
+import ch.uzh.supersede.feedbacklibrary.feedbacks.AudioFeedback;
+import ch.uzh.supersede.feedbacklibrary.feedbacks.Feedback;
+import ch.uzh.supersede.feedbacklibrary.feedbacks.ScreenshotFeedback;
+import ch.uzh.supersede.feedbacklibrary.models.Mechanism;
+import ch.uzh.supersede.feedbacklibrary.utils.DialogUtils;
+import ch.uzh.supersede.feedbacklibrary.utils.Utils;
+import ch.uzh.supersede.feedbacklibrary.views.AudioMechanismView;
+import ch.uzh.supersede.feedbacklibrary.views.CategoryMechanismView;
+import ch.uzh.supersede.feedbacklibrary.views.MechanismView;
+import ch.uzh.supersede.feedbacklibrary.views.RatingMechanismView;
+import ch.uzh.supersede.feedbacklibrary.views.ScreenshotMechanismView;
+import ch.uzh.supersede.feedbacklibrary.views.TextMechanismView;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
@@ -232,7 +230,9 @@ public class FeedbackActivity extends AppCompatActivity implements ScreenshotMec
                             Log.i(TAG, "Configuration successfully retrieved");
                             orchestratorConfigurationItem = response.body();
                             // Save the current configuration under FeedbackActivity.CONFIGURATION_DIR}/FeedbackActivity.JSON_CONFIGURATION_FILE_NAME
-                            Gson gson = new Gson();
+                            GsonBuilder gsonBuilder = new GsonBuilder();
+                            gsonBuilder.setLenient();
+                            Gson gson = gsonBuilder.create();
                             String jsonString = gson.toJson(orchestratorConfigurationItem);
                             Utils.saveStringContentToInternalStorage(getApplicationContext(), CONFIGURATION_DIR, JSON_CONFIGURATION_FILE_NAME, jsonString, MODE_PRIVATE);
                             initModel();
@@ -279,7 +279,7 @@ public class FeedbackActivity extends AppCompatActivity implements ScreenshotMec
             orderMechanisms();
 
             for (int i = 0; i < allMechanisms.size(); ++i) {
-                if (allMechanisms.get(i).isActive()) {
+                if (allMechanisms.get(i) != null && allMechanisms.get(i).isActive()) {
                     MechanismView mechanismView = null;
                     View view = null;
                     String type = allMechanisms.get(i).getType();
@@ -351,13 +351,15 @@ public class FeedbackActivity extends AppCompatActivity implements ScreenshotMec
 
     private void orderMechanisms() {
         ArrayList<Mechanism> list = new ArrayList<>();
+        /*
         list.add(allMechanisms.get(2));
         list.add(allMechanisms.get(0));
         list.add(allMechanisms.get(1));
         list.add(allMechanisms.get(3));
         list.add(allMechanisms.get(4));
+        */
 
-        allMechanisms = list;
+        //allMechanisms = list;
     }
 
     private boolean isPush() {
@@ -441,7 +443,10 @@ public class FeedbackActivity extends AppCompatActivity implements ScreenshotMec
 
             // Save the current configuration under FeedbackActivity.CONFIGURATION_DIR}/FeedbackActivity.JSON_CONFIGURATION_FILE_NAME
             Utils.saveStringContentToInternalStorage(getApplicationContext(), CONFIGURATION_DIR, JSON_CONFIGURATION_FILE_NAME, jsonString, MODE_PRIVATE);
-            orchestratorConfigurationItem = new Gson().fromJson(jsonString, OrchestratorConfigurationItem.class);
+            GsonBuilder gsonBuilder = new GsonBuilder();
+            gsonBuilder.setLenient();
+            Gson gson = gsonBuilder.create();
+            orchestratorConfigurationItem = gson.fromJson(jsonString, OrchestratorConfigurationItem.class);
             initModel();
             initView();
         } else {
@@ -673,6 +678,7 @@ public class FeedbackActivity extends AppCompatActivity implements ScreenshotMec
                                 }.getType();
                                 String feedbackJsonString = gson.toJson(feedback, feedbackType);
                                 RequestBody feedbackJSONPart = RequestBody.create(MediaType.parse("multipart/form-data"), feedbackJsonString);
+                                //RequestBody feedbackJSONPart = RequestBody.create(MediaType.parse("application/json"), feedbackJsonString);
 
                                 getAudioMultipart(feedback, files);
                                 getScreenshotMultipart(feedback, files);
@@ -875,7 +881,7 @@ public class FeedbackActivity extends AppCompatActivity implements ScreenshotMec
     private boolean validateInput(List<Mechanism> allMechanisms, List<String> errorMessages) {
         // Append an error message and return. The user is confronted with one error message at a time.
         for (Mechanism mechanism : allMechanisms) {
-            if (mechanism.isActive()) {
+            if (mechanism != null && mechanism.isActive()) {
                 boolean isValid = mechanism.isValid(errorMessages);
                 if (!isValid) {
                     return false;
