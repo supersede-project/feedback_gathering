@@ -18,4 +18,9 @@ public interface FeedbackRepository extends JpaRepository<Feedback, Long> {
     List<Feedback> findByUserIdentification(@Param("userIdentification") long userIdentification);
 //    Page<Feedback> firstFeedback(Pageable limit);
     List<Feedback> findAllByOrderByIdDesc();
+    List<Feedback> findByPublishedAndVisibility(@Param("published") boolean published,
+                                                @Param("visibility") boolean visibility);
+    List<Feedback> findByPublished(@Param("published") boolean published);
+    List<Feedback> findByVisibility(@Param("visibility") boolean visibility);
+//    List<Feedback> findByBlocked(@Param("is_blocked") boolean is_blocked);
 }

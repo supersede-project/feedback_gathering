@@ -53,4 +53,24 @@ public class FeedbackServiceImpl implements FeedbackService {
     public List<Feedback> findAllByOrderByIdDesc() {
         return feedbackRepository.findAllByOrderByIdDesc();
     }
+
+    @Override
+    public List<Feedback> findByPublishedAndVisibility(boolean published, boolean visibility) {
+        return feedbackRepository.findByPublishedAndVisibility(published,visibility);
+    }
+
+    @Override
+    public List<Feedback> findByPublished(boolean published) {
+        return feedbackRepository.findByPublished(published);
+    }
+
+    @Override
+    public List<Feedback> findByVisibility(boolean visibility) {
+        return feedbackRepository.findByVisibility(visibility);
+    }
+
+//    @Override
+//    public List<Feedback> findByBlocked(boolean is_blocked) {
+//        return feedbackRepository.findByBlocked(is_blocked);
+//    }
 }

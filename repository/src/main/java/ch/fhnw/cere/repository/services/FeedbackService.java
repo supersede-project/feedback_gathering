@@ -17,6 +17,11 @@ public interface FeedbackService {
     List<Feedback> findByUserIdentification(long userIdentification);
 //    Page<Feedback> firstFeedback();
     List<Feedback> findAllByOrderByIdDesc();
+
+    List<Feedback> findByPublishedAndVisibility(boolean published, boolean visibility);
+    List<Feedback> findByPublished(boolean published);
+    List<Feedback> findByVisibility(boolean visibility);
+//    List<Feedback> findByBlocked(boolean is_blocked);
 }
 
 

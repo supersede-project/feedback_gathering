@@ -142,6 +142,7 @@ public class Feedback {
     @OneToMany(mappedBy = "feedback", cascade = {CascadeType.REMOVE, CascadeType.PERSIST})
     private List<ScreenshotFeedback> screenshotFeedbacks;
 
+
     @OneToMany(mappedBy = "feedback", cascade = {CascadeType.REMOVE, CascadeType.PERSIST})
     private List<TextFeedback> textFeedbacks;
 

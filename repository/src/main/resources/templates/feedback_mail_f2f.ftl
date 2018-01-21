@@ -21,23 +21,45 @@
 <table align="center" border="0" cellpadding="0" cellspacing="0" width="600" style="border-collapse: collapse;">
     <tr>
         <td align="center" bgcolor="#78ab46" style="padding: 40px 0 30px 0;">
-            <img src="cid:logo.png" alt="https://memorynotfound.com" style="display: block;" />
+            <#--<img src="F:/SuperSede/monitor_feedback/repository/src/main/resources/icon_notification_red.png" alt="notification icon" style="display: block;" />-->
+            <img src="cid:logo.png" alt="notification icon" style="display: block;" />
         </td>
     </tr>
     <tr>
         <td bgcolor="#eaeaea" style="padding: 40px 30px 40px 30px;">
-            <p>Dear ${name},</p>
-            <p>Sending Email using Spring Boot with <b>FreeMarker template !!!</b></p>
-            <p>Thanks</p>
+            <p>Dear ${enduser.username},</p>
+            <p>Below you can get an overview of your feedbacks and the feedbacks
+                from the forum</p>
+            <p>Enjoy exploring</p>
+        </td>
+    </tr>
+    <tr>
+        <td bgcolor="#eacb60" style="padding: 40px 30px 40px 30px;">
+            <p>Your Feedbacks</p>
+            <#list user_feedbacks as user_feedback>
+                <p><b>User Feedback ID: </b>${user_feedback.id}</p>
+            </#list>
+        </td>
+    </tr>
+    <tr>
+        <td bgcolor="#ea8f2e" style="padding: 40px 30px 40px 30px;">
+            <p>Feedbacks Forum</p>
+            <#list forum_feedbacks as forum_feedback>
+                <p><b>Forum Feedback ID: </b>${forum_feedback.id}</p>
+            </#list>
         </td>
     </tr>
     <tr>
         <td bgcolor="#777777" style="padding: 30px 30px 30px 30px;">
-            <p>${signature}</p>
-            <p>${location}</p>
+            <p>Best Regards,</p>
+            <p>Feedback-To-Feebdack Central</p>
         </td>
     </tr>
 </table>
+<p>
+    ----------------------------------------------------------------------------<br/>
+    This is an automatically generated message. Do not reply.
+</p>
 
 </body>
 </html>

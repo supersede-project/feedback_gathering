@@ -39,7 +39,7 @@ public class EmailService {
                 MimeMessageHelper.MULTIPART_MODE_MIXED_RELATED,
                 StandardCharsets.UTF_8.name());
 
-        // helper.addAttachment("logo.png", new ClassPathResource("memorynotfound-logo.png"));
+        helper.addAttachment("logo.png", new ClassPathResource("icon_notification_red.png"));
 
         Template t = freemarkerConfig.getTemplate("feedback_mail_f2f.ftl");
         String html = FreeMarkerTemplateUtils.processTemplateIntoString(t, mail.getModel());
