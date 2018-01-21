@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import scala.xml.PrettyPrinter;
 
 import java.util.List;
 
@@ -27,7 +28,7 @@ public class ParametersController extends BaseController {
     @RequestMapping(method = RequestMethod.GET, value = "/{id}")
     public Parameter getParameter(@PathVariable long id) {
         Parameter parameter = parameterService.find(id);
-        if(parameter == null) {
+        if (parameter == null) {
             throw new NotFoundException();
         }
         return parameter;

@@ -53,6 +53,7 @@ public class ParameterSerializer extends JsonSerializer<Parameter> {
             jgen.writeStringField("language", parameter.getLanguage());
             jgen.writeStringField("createdAt", dateToString(parameter.getCreatedAt()));
             jgen.writeStringField("updatedAt", dateToString(parameter.getUpdatedAt()));
+            jgen.writeNumberField("order", parameter.getOrder());
             jgen.writeEndObject();
         } else {
             jgen.writeNull();

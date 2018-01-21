@@ -29,6 +29,8 @@ public class Parameter {
     private Date createdAt;
     private Date updatedAt;
     private String language;
+    @Column(name="`order`")
+    private int order;
 
     @ManyToOne
     @JsonIgnore
@@ -141,11 +143,24 @@ public class Parameter {
         this.parameters = parameters;
     }
 
+    public Parameter(String key, String value, Date createdAt, Date updatedAt, String language, int order, Parameter parentParameter, List<Parameter> parameters, GeneralConfiguration generalConfiguration, Mechanism mechanism) {
+        this.key = key;
+        this.value = value;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.language = language;
+        this.order = order;
+        this.parentParameter = parentParameter;
+        this.parameters = parameters;
+        this.generalConfiguration = generalConfiguration;
+        this.mechanism = mechanism;
+    }
+
     @Override
     public String toString() {
         return String.format(
-                "Parameter[id=%d, key='%s', value='%s', language='%s']",
-                id, key, value, language);
+                "Parameter[id=%d, key='%s', value='%s', language='%s', order='%d']",
+                id, key, value, language, order);
     }
 
     List<Parameter> parametersByLanguage(String language, String fallbackLanguage) {
@@ -168,7 +183,9 @@ public class Parameter {
                 keyValuePairs.put(parameter.getKey(), parameter);
             }
         }
-        return new ArrayList<Parameter>(keyValuePairs.values());
+        List<Parameter> parameters = new ArrayList<>(keyValuePairs.values());
+        parameters.sort(Comparator.comparingInt(Parameter::getOrder));
+        return parameters;
     }
 
     void filterByLanguage(String language, String fallbackLanguage) {
@@ -259,6 +276,14 @@ public class Parameter {
 
     public void setLanguage(String language) {
         this.language = language;
+    }
+
+    public int getOrder() {
+        return order;
+    }
+
+    public void setOrder(int order) {
+        this.order = order;
     }
 }
 

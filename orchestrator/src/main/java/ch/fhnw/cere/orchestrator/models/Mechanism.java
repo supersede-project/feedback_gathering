@@ -90,7 +90,9 @@ public class Mechanism {
                 keyValuePairs.put(parameter.getKey(), parameter);
             }
         }
-        return new ArrayList<Parameter>(keyValuePairs.values());
+        List<Parameter> parameters = new ArrayList<>(keyValuePairs.values());
+        parameters.sort(Comparator.comparingInt(Parameter::getOrder));
+        return parameters;
     }
 
     public void filterByLanguage(String language, String fallbackLanguage) {

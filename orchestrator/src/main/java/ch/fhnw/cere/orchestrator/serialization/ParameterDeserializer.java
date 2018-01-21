@@ -42,6 +42,7 @@ public class ParameterDeserializer extends StdDeserializer<Parameter> {
             value = node.get("value").asText();
         }
         String language = node.get("language") == null ? null : node.get("language").asText();
+        int order = node.get("order") == null ? 0 : node.get("order").asInt();
 
         if(parameters.size() == 0 && node.get("parameters") != null) {
             // if no nested parameters then the value under 'parameters' key can hold parameters
@@ -50,9 +51,13 @@ public class ParameterDeserializer extends StdDeserializer<Parameter> {
 
         if(node.get("id") != null && node.get("id").numberValue() != null) {
             long id = node.get("id").numberValue().longValue();
-            return new Parameter(id, key, value, language, null, parameters);
+            Parameter parameter = new Parameter(id, key, value, language, null, parameters);
+            parameter.setOrder(order);
+            return parameter;
         } else {
-            return new Parameter(key, value, language, null, parameters);
+            Parameter parameter = new Parameter(key, value, language, null, parameters);
+            parameter.setOrder(order);
+            return parameter;
         }
     }
 }
