@@ -8,6 +8,8 @@ import {toggleWidget} from 'react-chat-widget';
 import FaCogs from 'react-icons/lib/fa/cogs';
 import MdVisibilityOff from 'react-icons/lib/md/visibility-off';
 
+import './App.css';
+
  class FeedbackTitle extends Component {
 
   constructor(props) {
@@ -42,7 +44,8 @@ import MdVisibilityOff from 'react-icons/lib/md/visibility-off';
           fontSize: 12,
           fontStyle: 'italic'
       }} onClick={this.toggleExpanded}>{this.getIconForFeedbackType()}&nbsp; {(!this.state.expanded && this.props.title.length > 20)? this.props.title.substring(0, 20) + "...": this.props.title}</h5>
-      <MdVisibilityOff size={35}/><FaWechat align="left" size={35} color={'#63C050'} style={{flexGrow: "1"}} onClick={toggleWidget}/><FaCogs size={35}/></div>);
+      <div className="iconContainer">
+      <MdVisibilityOff size={35}/><FaWechat align="left" size={35} color={'#63C050'} style={{flexGrow: "1"}} onClick={toggleWidget}/><FaCogs size={35}/></div></div>);
   }
 }
 

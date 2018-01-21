@@ -6,16 +6,16 @@ import FaHandPeaceO from 'react-icons/lib/fa/hand-peace-o';
 
 class ForumCommentTitle extends Component {
 
-  getIconForFeedbackType(type) {
-      if (type === "Bug") {
-          return <FaBug Icon size={35} padding={75}/>;
+  getIconForFeedbackType() {
+      if (this.props.type === 1) {
+          return <FaBug size={35} padding={75}/>;
       }
 
-      if (type === "Feature") {
-          return <FaLightbulbO Icon size={35} padding={75}/>;
+      if (this.props.type === 2) {
+          return <FaLightbulbO size={35} padding={75}/>;
       }
 
-      return <FaHandPeaceO Icon size={35} padding={75}/>;
+      return <FaHandPeaceO size={35} padding={75}/>;
   }
 
 

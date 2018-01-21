@@ -1,8 +1,13 @@
 <?php
 $user_id = intval($_GET['user_id']);
+$application_id = intval($_GET['application_id']);
 
 if(!isset($user_id) || $user_id == 0) {
-    $user_id = '999999';
+    $user_id = '99999999';
+}
+
+if(!isset($application_id) || $application_id == 0) {
+  $application_id = 20;
 }
 ?>
 
@@ -383,6 +388,10 @@ if(!isset($user_id) || $user_id == 0) {
 
                 </header>
                 <!--###endheader###-->
+                <div id="f2fcentral-container">
+                    <button type="button" id="openF2fcentral">ClickMe</button>
+                    <div id="f2fcentral"></div>
+                </div>
                 <!--###startnav###-->
                 <div class="row">
                     <nav class="large-12 columns navigation-main">
@@ -1885,7 +1894,12 @@ if(!isset($user_id) || $user_id == 0) {
             }
         });
     });
+
+    var userId = <?php echo $user_id; ?>;
+    var applicationId = <?php echo $application_id; ?>;
 </script>
+
+<script type="text/javascript" src="/dist/f2fcentral.min.js"></script>
 
 <iframe src="/dist/Energiesparkonto_ Energie sparen. Kosten senken._files/saved_resource.html"
         style="position: absolute; top: -999px; left: -999px; visibility: hidden;"></iframe>

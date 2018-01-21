@@ -26,12 +26,12 @@ class ForumTitle extends Component {
         this.props.onShowCommentChange({showComment: true, index: this.props.index});
     }
 
-    getIconForFeedbackType(type) {
-        if (type === "Bug") {
+    getIconForFeedbackType() {
+        if (this.props.type === 1) {
             return <FaBug size={35} padding={75}/>;
         }
 
-        if (type === "Feature") {
+        if (this.props.type === 2) {
             return <FaLightbulbO size={35} padding={75}/>;
         }
 
@@ -39,16 +39,42 @@ class ForumTitle extends Component {
     }
 
     addLike(e) {
+      fetch(process.env.REACT_APP_BASE_URL + 'en/applications/'+ sessionStorage.getItem('applicationId')+'/feedbacks/likes', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': sessionStorage.getItem('token')
+        },
+        body: JSON.stringify({
+          user_id: sessionStorage.getItem('userId'),
+          feedback_id: this.props.feedbackId
+        })
+      }).then(result=>result.json())
+      .then(result=> {
         this.setState((prevState) => {
-          return {thumbsUp: prevState.thumbsUp + 1};
+          return {thumbsUp: result.id};
         });
+      });
         e.stopPropagation();
     }
 
     addDislike(e) {
+      fetch(process.env.REACT_APP_BASE_URL + 'en/applications/'+ sessionStorage.getItem('applicationId')+'/feedbacks/dislikes', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': sessionStorage.getItem('token')
+        },
+        body: JSON.stringify({
+          user_id: sessionStorage.getItem('userId'),
+          feedback_id: this.props.feedbackId
+        })
+      }).then(result=>result.json())
+      .then(result=> {
         this.setState((prevState) => {
-          return {thumbsDown: prevState.thumbsDown + 1};
+          return {thumbsDown: result.id};
         });
+      });
         e.stopPropagation();
     }
 
@@ -66,7 +92,7 @@ class ForumTitle extends Component {
                     <span className={style.thumbsCount}>{this.state.thumbsUp}</span>
                 </div>
                 <div className={style.thumbsIconContainer}>
-                    <FaThumbsODown size={20} color={'black'} padding={10} onClick={this.addDislike}/>
+                    <FaThumbsODown size={20} onClick={this.addDislike}/>
                     <span className={style.thumbsCount}>{this.state.thumbsDown}</span>
                 </div>
             </div>

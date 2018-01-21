@@ -12,8 +12,7 @@ import FeedbackForumTabAccordion from "./FeedbackForumTabAccordion";
 class App extends Component {
 
     componentWillMount() {
-      if(sessionStorage.getItem('token') === null)
-      {
+      if(sessionStorage.getItem('token') === null) {
         fetch(process.env.REACT_APP_BASE_URL + 'authenticate', {
           method: 'POST',
           headers: {
@@ -24,11 +23,21 @@ class App extends Component {
             password: 'password'
           })
         }).then(result=>result.json())
-        .then(result=>
-          {
+        .then(result=> {
             sessionStorage.setItem('token', result.token);
             console.log(result);
           });
+      }
+      if(sessionStorage.getItem('userId') === null) {
+        console.log("window userid" + window.userId);
+        if(window.userId !== null) {
+          sessionStorage.setItem('userId', window.userId);
+        }
+      }
+      if(sessionStorage.getItem('applicationId') === null) {
+        if(window.applicationId !== null) {
+          sessionStorage.setItem('applicationId', window.applicationId);
+        }
       }
     }
 
