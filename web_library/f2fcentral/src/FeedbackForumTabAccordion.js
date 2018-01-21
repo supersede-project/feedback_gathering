@@ -1,10 +1,12 @@
 import React, {Component} from 'react';
-import {
+/*import {
     Accordion,
     AccordionItem,
     AccordionItemTitle,
     AccordionItemBody
-} from 'react-accessible-accordion';
+} from 'react-accessible-accordion';*/
+
+import { Accordion, AccordionItem } from 'react-sanfona';
 
 import './App.css';
 import 'react-tabs/style/react-tabs.css';
@@ -21,31 +23,32 @@ class FeedbackForumTabAccordion extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            testData: [
-                {
-                    type: "Bug",
-                    title: "Is it possible to display...",
-                    status: "work in progress",
-                    date: "25.09.2017 at 01:02 pm"
-                },
-                {
-                    type: "Feature",
-                    title: "Help text should be bigger...",
-                    status: "work in progress",
-                    date: "10.09.2017 at 06:22 pm"
-                },
-                {
-                    type: "Response",
-                    title: "I like your company...",
-                    status: "Public",
-                    date: "03.09.2017 at 10:31 am"
-                }
-            ],
+            data: [],
             showComment: false,
             commentIndex: null,
             sorting: ''
         };
         this.handleShowCommentChange = this.handleShowCommentChange.bind(this);
+    }
+
+    componentDidMount() {
+      var that = this;
+      fetch(process.env.REACT_APP_BASE_URL + 'en/applications/'+ sessionStorage.getItem('applicationId')+'/feedbacks', {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': sessionStorage.getItem('token')
+          }
+      }).then(result=>result.json())
+      .then(result=> {
+        var cleanedResult = [];
+        result.map(function(item, index) {
+          if(item.visibility) {
+            console.log(item);
+            cleanedResult.push(item);
+          }
+        })
+        that.setState({data: cleanedResult});
+      });
     }
 
     handleShowCommentChange(e) {
@@ -61,25 +64,25 @@ class FeedbackForumTabAccordion extends Component {
             let instance = this;
             content = <div><ForumSorting onUpdate={this.onUpdate.bind(this)} />
             <Accordion>
-                {this.state.testData.map(function (testItem, index) {
+                {this.state.data.map(function (item, index) {
+                  console.log(item);
+                  if(item.textFeedbacks.length > 0 && item.categoryFeedbacks.length > 0)
+                  {
                     return (
-                        <AccordionItem key={index}>
-                            <AccordionItemTitle>
-                                <ForumTitle title={testItem.title} thumbsUp="0" thumbsDown="10" type={testItem.type} onShowCommentChange={instance.handleShowCommentChange} index={index}/>
-                            </AccordionItemTitle>
-                            <AccordionItemBody>
+                        <AccordionItem titleTag="span" title={<ForumTitle feedbackId={item.id} title={item.textFeedbacks[0].text} thumbsUp={item.likeCount} thumbsDown={item.dislikeCount} type={item.categoryFeedbacks[0].mechanismId} onShowCommentChange={instance.handleShowCommentChange} index={index}/>}>
                                 <div>
-                                    <ForumBody status={testItem.status} date={testItem.date} onShowCommentChange={instance.handleShowCommentChange} index={index}/>
+                                    <ForumBody status="WIP" date={item.createdAt} onShowCommentChange={instance.handleShowCommentChange} index={index}/>
                                 </div>
-                            </AccordionItemBody>
                         </AccordionItem>
                     )
+                  }
+                  return false;
                 })}
             </Accordion></div>
         }
         else {
 
-            content = <FeedbackForumCommentView post={this.state.testData[this.state.commentIndex]}/>;
+            content = <FeedbackForumCommentView post={this.state.data[this.state.commentIndex]}/>;
 
         }
 

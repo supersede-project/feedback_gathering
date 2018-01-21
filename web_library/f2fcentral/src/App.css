@@ -137,6 +137,22 @@ button {
   padding: 0 2px;
 }
 
+.accordion {
+  border-top: 1px;
+  border-bottom: 1px;
+}
+
+.accodion .active, .accordion:hover {
+  background-color: #ccc;
+}
+
+.accorion-content {
+  display: none;
+  background-color: white;
+  overflow: hidden;
+  padding: 0 18px;
+}
+
 @keyframes App-logo-spin {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }

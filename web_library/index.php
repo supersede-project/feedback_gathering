@@ -1,9 +1,20 @@
+<?php
+$user_id = intval($_GET['user_id']);
+$application_id = intval($_GET['application_id']);
+
+if(!isset($user_id) || $user_id == 0) {
+    $user_id = '99999999';
+}
+
+if(!isset($application_id) || $application_id == 0) {
+  $application_id = 20;
+}
+?>
+
 <!DOCTYPE html>
 <!-- saved from url=(0076)https://www.energiesparkonto.de/esk/content/bereichePage/?bereich=mobilitaet -->
 <html class=" js no-touch svg inlinesvg svgclippaths no-ie8compat" lang="de">
 <head>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css"
-          integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
     <title>Energiesparkonto: Energie sparen. Kosten senken.</title>
@@ -31,7 +42,6 @@
     <link rel="stylesheet" type="text/css"
           href="/dist/Energiesparkonto_ Energie sparen. Kosten senken._files/co2online_16.css">
     <!--###endcss###-->
-
 
     <!--[if IE 6]>
     <link rel="stylesheet" type="text/css" href="css/base-ie6.css"/>
@@ -72,15 +82,13 @@
 </head>
 
 <body class="co2online secure cmd_content action_bereichePage">
-<div id="eTN166066H8B" class="container-fluid"
-     style="position: absolute; top: 0px; left: 0px; width: 1px; height: 1px; z-index: 2147483647;">
+<div id="eTN166066H8B" style="position: absolute; top: 0px; left: 0px; width: 1px; height: 1px; z-index: 2147483647;">
     <div id="LndsHG7ibS0m"
          style="position: absolute; top: 0px; left: 0px; width: 1px; height: 1px; z-index: 2147483647;"></div>
 </div>
-
-<div id="pullFeedbackOverlay_background container-fluid" class="popup_background"
+<div id="pullFeedbackOverlay_background" class="popup_background"
      style="opacity: 0; visibility: hidden; background-color: black; position: fixed; top: 0px; right: 0px; bottom: 0px; left: 0px; z-index: 100000;"></div>
-<div id="pullFeedbackOverlay_wrapper container-fluid" class="popup_wrapper"
+<div id="pullFeedbackOverlay_wrapper" class="popup_wrapper"
      style="opacity: 0; visibility: hidden; position: fixed; overflow: auto; z-index: 100001; width: 100%; height: 100%; top: 0px; left: 0px; text-align: center; display: none;">
     <div id="pullFeedbackOverlay" class="pullFeedbackOverlay reveal-modal popup_content" data-popup-initialized="true"
          aria-hidden="true" role="dialog" aria-labelledby="open_70960482"
@@ -174,7 +182,7 @@
     <div class="popup_align" style="display: inline-block; vertical-align: middle; height: 100%;"></div>
 </div>
 <!--###startheader###-->
-<div class="off-canvas-wrap container-fluid">
+<div class="off-canvas-wrap">
     <div class="inner-wrap">
         <div id="mobile-header">
             <button id="responsive-menu-button" class="cmn-toggle-switch cmn-toggle-switch__htx">
@@ -290,7 +298,7 @@
                     </button>
                 </div>
             </div>
-            <div class="page-wrapper container-fluid" id="page-wrapper_1">
+            <div class="page-wrapper" id="page-wrapper_1">
                 <!--###startheader###-->
                 <header class="row">
 
@@ -343,15 +351,17 @@
                             <div class="large-3 small-12 columns right">
                                 <div class="user-navigation-wrapper">
                                     <div class="name">
-                                        <a href="javascript:void(null)" id="user-navigation">Nur Leseberechtigung Max
-                                            Mustermann<span></span>
+
+
+
+                                        <a href="javascript:void(null)" id="user-navigation">Nur Leseberechtigung USER ID <?php echo $user_id; ?><span></span>
                                         </a>
                                     </div>
                                     <nav class="menu">
                                         <span></span>
 
-
                                         <ul class="menu-user itemcount-1">
+
 
 
                                             <li class="
@@ -571,7 +581,7 @@
                         </div>
                         <div class="row">
 
-                            <div class="large-12">
+                            <div class="large-12" style="height: 500px;">
 
                                 <div class="large-3 columns right">
                                     <div class="help-navigation-wrapper bereiche-page">
@@ -1530,8 +1540,8 @@
                 (function (i, s, o, g, r, a, m) {
                     i['GoogleAnalyticsObject'] = r;
                     i[r] = i[r] || function () {
-                        (i[r].q = i[r].q || []).push(arguments)
-                    }, i[r].l = 1 * new Date();
+                            (i[r].q = i[r].q || []).push(arguments)
+                        }, i[r].l = 1 * new Date();
                     a = s.createElement(o),
                         m = s.getElementsByTagName(o)[0];
                     a.async = 1;
@@ -1861,20 +1871,18 @@
             //'distPath': 'https://platform.supersede.eu/web_library/senercon/dist/',
 
             //'applicationId': 20,
-            //'apiEndpointOrchestrator': 'https://platform.supersede.eu:8443/',
-            //'apiEndpointRepository': 'https://platform.supersede.eu:8443/',
-
-            'applicationId': 20,
-//            'apiEndpointOrchestrator': 'http://localhost:9998/',
             'apiEndpointOrchestrator': 'https://platform.supersede.eu:8443/',
-//            'apiEndpointRepository': 'http://localhost:9999/',
+            'apiEndpointRepository': 'https://platform.supersede.eu:8443/',
+
+            'applicationId': 14,
+            //'apiEndpointOrchestrator': 'http://localhost:8081/',
+            //'apiEndpointRepository': 'http://localhost:8082/',
 
             //'apiEndpointOrchestrator': 'http://mt.ronnieschaniel.com:8080/feedback_orchestrator-2.0.0/',
-//            'apiEndpointRepository': 'http://mt.ronnieschaniel.com:8080/feedback_repository-2.0.0/',
-            'apiEndpointRepository': 'http://mt.ronnieschaniel.com:8080/feedback_repository/',
-//            'apiEndpointRepository': 'http://localhost:9999/',
-            'userId': '99999999',
-            'lang': 'de',
+            //'apiEndpointRepository': 'http://mt.ronnieschaniel.com:8080/feedback_repository-2.0.0/',
+
+            'userId': <?php echo $user_id; ?>,
+            'lang': 'en',
             'fallbackLang': 'en',
             'modal': 1,
             'dialogCSSClass': 'my-custom-dialog-class',
@@ -1887,20 +1895,13 @@
         });
     });
 
-    var userId = '99999999';
-    var applicationId = 20;
+    var userId = <?php echo $user_id; ?>;
+    var applicationId = <?php echo $application_id; ?>;
 </script>
 
 <script type="text/javascript" src="/dist/f2fcentral.min.js"></script>
 
 <iframe src="/dist/Energiesparkonto_ Energie sparen. Kosten senken._files/saved_resource.html"
         style="position: absolute; top: -999px; left: -999px; visibility: hidden;"></iframe>
-<!--<script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>-->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"
-        integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb"
-        crossorigin="anonymous"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js"
-        integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn"
-        crossorigin="anonymous"></script>
 </body>
 </html>
