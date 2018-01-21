@@ -2,9 +2,8 @@ package ch.fhnw.cere.repository.controllers;
 
 import ch.fhnw.cere.repository.controllers.exceptions.NotFoundException;
 import ch.fhnw.cere.repository.models.CommentFeedback;
-import ch.fhnw.cere.repository.services.CommentFeedbackService;
-import ch.fhnw.cere.repository.services.EndUserServiceImpl;
-import ch.fhnw.cere.repository.services.FeedbackServiceImpl;
+import ch.fhnw.cere.repository.models.Feedback;
+import ch.fhnw.cere.repository.services.*;
 import com.sun.org.apache.xpath.internal.operations.Bool;
 import eu.supersede.integration.api.feedback.repository.types.FeedbackComment;
 import org.json.JSONObject;
@@ -29,10 +28,10 @@ public class CommentController extends BaseController{
     private CommentFeedbackService commentFeedbackService;
 
     @Autowired
-    private FeedbackServiceImpl feedbackService;
+    private FeedbackService feedbackService;
 
     @Autowired
-    private EndUserServiceImpl endUserService;
+    private EndUserService endUserService;
 
     @PreAuthorize("@securityService.hasAdminPermission(#applicationId)")
     @RequestMapping(method = RequestMethod.GET, value = "/comments")
@@ -84,6 +83,10 @@ public class CommentController extends BaseController{
             String commentText = object.getString("commentText");
             Boolean bool_is_developer = object.getBoolean("bool_is_developer");
             Boolean activeStatus = object.getBoolean("activeStatus");
+
+            Feedback feedbackAdust = feedbackService.find(feedbackId);
+            feedbackAdust.setCommentCount(feedbackAdust.getCommentCount() +1 );
+            feedbackService.save(feedbackAdust);
 
             commentFeedback.setFeedback(feedbackService.find(feedbackId));
             commentFeedback.setUser(endUserService.find(userId));
