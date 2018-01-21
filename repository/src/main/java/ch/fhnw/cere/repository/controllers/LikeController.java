@@ -2,6 +2,7 @@ package ch.fhnw.cere.repository.controllers;
 
 import ch.fhnw.cere.repository.controllers.exceptions.NotFoundException;
 import ch.fhnw.cere.repository.models.CommentFeedback;
+import ch.fhnw.cere.repository.models.Feedback;
 import ch.fhnw.cere.repository.models.UserFBLike;
 import ch.fhnw.cere.repository.services.EndUserServiceImpl;
 import ch.fhnw.cere.repository.services.FeedbackServiceImpl;
@@ -75,14 +76,20 @@ public class LikeController {
             long feedbackId = object.getLong("feedback_id");
             long userId = object.getLong("user_id");
 
-            if(feedbackDislikeService.findByEnduserIdAndFeedbackId(userId,feedbackId) != null){
-                feedbackDislikeService.delete(feedbackDislikeService.findByEnduserIdAndFeedbackId(userId,
-                        feedbackId).getId());
-            }
-
             if(feedbackLikeService.findByEnduserIdAndFeedbackId(userId,feedbackId) != null){
                 return feedbackLikeService.findByEnduserIdAndFeedbackId(userId,feedbackId);
             }
+
+            Feedback feedbackAdjust = feedbackService.find(feedbackId);
+            feedbackAdjust.setLikeCount(feedbackAdjust.getLikeCount()+1);
+
+            if(feedbackDislikeService.findByEnduserIdAndFeedbackId(userId,feedbackId) != null){
+                feedbackDislikeService.delete(feedbackDislikeService.findByEnduserIdAndFeedbackId(userId,
+                        feedbackId).getId());
+                feedbackAdjust.setDislikeCount(feedbackAdjust.getDislikeCount()-1);
+            }
+
+            feedbackService.save(feedbackAdjust);
 
             UserFBLike userFBLike = new UserFBLike();
             userFBLike.setFeedback(feedbackService.find(feedbackId));
