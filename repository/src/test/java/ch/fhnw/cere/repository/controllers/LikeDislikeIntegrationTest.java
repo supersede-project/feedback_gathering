@@ -101,8 +101,6 @@ public class LikeDislikeIntegrationTest extends BaseIntegrationTest{
     public void testEndUser1DislikeFeedback1() throws Exception{
         String adminJWTToken = requestAppAdminJWTToken();
 
-        UserFBDislike dislikeFeedback1 = new UserFBDislike(endUser1,feedback1);
-
         String postDislike = new JSONObject()
                 .put("user_id",endUser1.getId())
                 .put("feedback_id",feedback1.getId())
@@ -122,6 +120,17 @@ public class LikeDislikeIntegrationTest extends BaseIntegrationTest{
                 +endUser1.getId()+"/"+feedback1.getId())
                 .header("Authorization", adminJWTToken))
                 .andExpect(content().string(""));
+
+//        String jsonReturn2 = mockMvc.perform(get(basePathEn + "applications/" + 1 +
+//                "/feedbacks/" + feedback1.getId())
+//                .header("Authorization", adminJWTToken))
+//                .andReturn().getResponse().getContentAsString();
+//
+//        mockMvc.perform(get(basePathEn + "applications/" + 1 + "/feedbacks/"
+//                +feedback1.getId())
+//                .header("Authorization", adminJWTToken))
+//                .andExpect(jsonPath("$.likeCount", is(0)))
+//                .andExpect(jsonPath("$.dislikeCount", is(2)));
     }
 
 

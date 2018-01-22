@@ -121,6 +121,30 @@ public class CommentFeedbackIntegrationTest extends BaseIntegrationTest{
         apiUserPermissionRepository.deleteAllInBatch();
     }
 
+    @Test
+    public void testFeedbackCommentCountUpdate() throws Exception{
+        CommentFeedback commentFeedback = new CommentFeedback(feedback1,endUser1,false,
+                "test comment for feedback1",false,null);
+        String commentJson = new JSONObject()
+                .put("feedback_id",commentFeedback.getFeedback().getId())
+                .put("user_id",commentFeedback.getUser().getId())
+                .put("commentText",commentFeedback.getCommentText())
+                .put("bool_is_developer",commentFeedback.check_is_developer())
+                .put("activeStatus",commentFeedback.getActiveStatus())
+                .toString();
+
+        String adminJWTToken = requestAppAdminJWTToken();
+
+        this.mockMvc.perform(post(basePathEn + "applications/" + 1 + "/feedbacks/comments")
+                .contentType(contentType)
+                .content(commentJson));
+
+        mockMvc.perform(get(basePathEn + "applications/" + 1 + "/feedbacks/"
+                +feedback1.getId())
+                .header("Authorization", adminJWTToken))
+                .andExpect(jsonPath("$.commentCount", is((int) 1)));
+    }
+
     @Test(expected = ServletException.class)
     public void getFeedbacksUnauthorized() throws Exception {
         mockMvc.perform(get(basePathEn + "applications/" + 1 + "/feedbacks"))
