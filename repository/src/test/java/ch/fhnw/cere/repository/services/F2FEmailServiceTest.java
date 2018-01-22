@@ -6,8 +6,12 @@ import ch.fhnw.cere.repository.mail.Mail;
 import ch.fhnw.cere.repository.models.EndUser;
 import ch.fhnw.cere.repository.models.Feedback;
 import ch.fhnw.cere.repository.models.orchestrator.Application;
+import ch.fhnw.cere.repository.repositories.EndUserRepository;
+import ch.fhnw.cere.repository.repositories.FeedbackRepository;
 import freemarker.template.TemplateException;
 import org.hibernate.Hibernate;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -32,6 +36,12 @@ import java.util.*;
 public class F2FEmailServiceTest {
 
     @Autowired
+    private FeedbackRepository feedbackRepository;
+
+    @Autowired
+    private EndUserRepository endUserRepository;
+
+    @Autowired
     private FeedbackService feedbackService;
 
     @Autowired
@@ -39,7 +49,47 @@ public class F2FEmailServiceTest {
 
     @Autowired
     private EmailService emailService;
+
     private static Logger log = LoggerFactory.getLogger(Application.class);
+
+    private Feedback feedback1;
+    private Feedback feedback2;
+    private Feedback feedback3;
+    private Feedback feedback4;
+    private Feedback feedback5;
+    private Feedback feedback6;
+    private Feedback feedback7;
+    private Feedback feedback8;
+
+    private EndUser endUser1;
+    private EndUser endUser2;
+
+    @Before
+    public void setup(){
+        feedbackRepository.deleteAllInBatch();
+        endUserRepository.deleteAllInBatch();
+
+        endUser1 = endUserRepository.save(new EndUser(1,"kaydin1",123));
+        endUser2 = endUserRepository.save(new EndUser(1,"kaydin2",123));
+
+        feedback1 = feedbackRepository.save(new Feedback("Feedback 1 User 1", endUser1.getId(), 1, 11, "en"));
+        feedback2 = feedbackRepository.save(new Feedback("Feedback 2 User 1", endUser1.getId(), 1, 11, "en"));
+        feedback2.setPublished(true);feedbackRepository.save(feedback2);
+        feedback3 = feedbackRepository.save(new Feedback("Feedback 3 User 1", endUser1.getId(), 1, 22, "en"));
+        feedback4 = feedbackRepository.save(new Feedback("Feedback 4 User 1", endUser1.getId(), 1, 22, "en"));
+        feedback4.setPublished(true);feedbackRepository.save(feedback4);
+        feedback5 = feedbackRepository.save(new Feedback("Feedback 5 User 2", endUser2.getId(), 1, 11, "en"));
+        feedback6 = feedbackRepository.save(new Feedback("Feedback 6 User 2", endUser2.getId(), 1, 11, "en"));
+        feedback6.setPublished(true);feedbackRepository.save(feedback6);
+        feedback7 = feedbackRepository.save(new Feedback("Feedback 7 User 2", endUser2.getId(), 1, 22, "en"));
+        feedback8 = feedbackRepository.save(new Feedback("Feedback 8 User 2", endUser2.getId(), 1, 22, "en"));
+    }
+
+    @After
+    public void cleanup(){
+        feedbackRepository.deleteAllInBatch();
+        endUserRepository.deleteAllInBatch();
+    }
 
     @Test
     public void testMail() throws MessagingException, IOException, TemplateException {
@@ -56,12 +106,8 @@ public class F2FEmailServiceTest {
 //        long intevalPeriod = 1000;
 //        timer.scheduleAtFixedRate(timerTask, delay,
 //                intevalPeriod);
-        EndUser testUser = endUserService.find(1);
-        Hibernate.initialize(feedbackService.findByUserIdentification(1));
-        List<Feedback> userFeedbacks = feedbackService.findByUserIdentification(1);
-
-        userFeedbacks.forEach(feedback -> feedback.setTextFeedbacks(feedback.getTextFeedbacks()));
-
+        EndUser testUser = endUserService.find(endUser1.getId());
+        List<Feedback> userFeedbacks = feedbackService.findByUserIdentification(endUser1.getId());
         List<Feedback> forumFeedbacks = feedbackService.findByPublished(true);
 
         log.info("==== seinding mail ====");
@@ -87,6 +133,5 @@ public class F2FEmailServiceTest {
 //        mail.setContent("This tutorial demonstrates how to send a simple email using Spring Framework.");
 //
 //        emailService.sendSimpleMessage(mail);
-
     }
 }

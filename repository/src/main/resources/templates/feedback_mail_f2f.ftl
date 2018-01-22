@@ -37,7 +37,7 @@
         <td bgcolor="#eacb60" style="padding: 40px 30px 40px 30px;">
             <p>Your Feedbacks</p>
             <#list user_feedbacks as user_feedback>
-                <p><b>User Feedback ID: </b>${user_feedback.id}</p>
+                <p><b>User Feedback Title: </b>${user_feedback.title}</p>
             </#list>
         </td>
     </tr>
@@ -45,7 +45,7 @@
         <td bgcolor="#ea8f2e" style="padding: 40px 30px 40px 30px;">
             <p>Feedbacks Forum</p>
             <#list forum_feedbacks as forum_feedback>
-                <p><b>Forum Feedback ID: </b>${forum_feedback.id}</p>
+                <p><b>Forum Feedback Title: </b>${forum_feedback.title}</p>
             </#list>
         </td>
     </tr>
