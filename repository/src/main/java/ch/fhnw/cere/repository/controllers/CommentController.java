@@ -84,10 +84,6 @@ public class CommentController extends BaseController{
             Boolean bool_is_developer = object.getBoolean("bool_is_developer");
             Boolean activeStatus = object.getBoolean("activeStatus");
 
-            Feedback feedbackAdust = feedbackService.find(feedbackId);
-            feedbackAdust.setCommentCount(feedbackAdust.getCommentCount() +1 );
-            feedbackService.save(feedbackAdust);
-
             commentFeedback.setFeedback(feedbackService.find(feedbackId));
             commentFeedback.setUser(endUserService.find(userId));
             commentFeedback.setCommentText(commentText);

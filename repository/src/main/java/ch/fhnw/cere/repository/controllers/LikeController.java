@@ -80,16 +80,10 @@ public class LikeController {
                 return feedbackLikeService.findByEnduserIdAndFeedbackId(userId,feedbackId);
             }
 
-            Feedback feedbackAdjust = feedbackService.find(feedbackId);
-            feedbackAdjust.setLikeCount(feedbackAdjust.getLikeCount()+1);
-
             if(feedbackDislikeService.findByEnduserIdAndFeedbackId(userId,feedbackId) != null){
                 feedbackDislikeService.delete(feedbackDislikeService.findByEnduserIdAndFeedbackId(userId,
                         feedbackId).getId());
-                feedbackAdjust.setDislikeCount(feedbackAdjust.getDislikeCount()-1);
             }
-
-            feedbackService.save(feedbackAdjust);
 
             UserFBLike userFBLike = new UserFBLike();
             userFBLike.setFeedback(feedbackService.find(feedbackId));

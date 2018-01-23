@@ -77,16 +77,10 @@ public class DislikeController {
                 return feedbackDislikeService.findByEnduserIdAndFeedbackId(userId,feedbackId);
             }
 
-            Feedback feedbackAdjust = feedbackService.find(feedbackId);
-            feedbackAdjust.setDislikeCount(feedbackAdjust.getDislikeCount()+1);
-
             if(feedbackLikeService.findByEnduserIdAndFeedbackId(userId,feedbackId) != null){
                 feedbackLikeService.delete(feedbackLikeService.findByEnduserIdAndFeedbackId(userId,
                         feedbackId).getId());
-                feedbackAdjust.setLikeCount(feedbackAdjust.getLikeCount()-1);
             }
-
-            feedbackService.save(feedbackAdjust);
 
             UserFBDislike userFBDislike = new UserFBDislike();
             userFBDislike.setFeedback(feedbackService.find(feedbackId));
