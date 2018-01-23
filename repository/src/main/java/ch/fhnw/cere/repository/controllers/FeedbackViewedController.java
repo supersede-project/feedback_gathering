@@ -86,7 +86,7 @@ public class FeedbackViewedController {
 
     @PreAuthorize("@securityService.hasAdminPermission(#applicationId)")
     @RequestMapping(method = RequestMethod.GET, value = "/feedback_views/{feedbackViewId}")
-    public FeedbackViewed getLike(@PathVariable long applicationId,
+    public FeedbackViewed getFeedbackView(@PathVariable long applicationId,
                               @PathVariable long feedbackViewId) {
         FeedbackViewed feedbackView = feedbackViewedService.find(feedbackViewId);
         if(feedbackView == null){
