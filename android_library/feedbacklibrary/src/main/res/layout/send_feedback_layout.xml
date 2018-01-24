@@ -14,6 +14,7 @@
         android:layout_gravity="fill"
         android:layout_toStartOf="@+id/supersede_feedbacklibrary_send_feedback_button"
         android:paddingTop="5dp"
+        android:visibility="gone"
         android:text="@string/supersede_feedbacklibrary_sendconfirmation_text"
         android:textSize="16sp"/>
 
@@ -23,6 +24,9 @@
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignParentTop="true"
+        android:layout_marginTop="0dp"
+        android:layout_marginRight="3dp"
+        android:layout_marginBottom="10dp"
         android:padding="8dp"
         android:minWidth="88dp"
         android:background="@drawable/pink_button_selector"

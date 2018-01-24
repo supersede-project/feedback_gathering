@@ -25,6 +25,8 @@ export class FeedbackApp {
             if (!loadedApplication.state) {
                 this.feedbackButton.hide();
             }
+            console.log('loadedApplication');
+            console.log(loadedApplication);
             this.checkPullConfigurations(loadedApplication);
             this.configureDialog(loadedApplication);
             this.configureFeedbackButton();
@@ -38,6 +40,12 @@ export class FeedbackApp {
     configureDialog(application:Application) {
         let dialogId = 'pushConfiguration';
         var dialogTemplate = require('../templates/feedback_dialog.handlebars');
+        if(application === undefined) {
+            console.error('application undefined');
+        }
+        if(application.getPushConfiguration() === undefined) {
+            console.error('application.getPushConfiguration() undefined');
+        }
         var context = application.getContextForView();
         context = $.extend({}, context, this.options);
         context = $.extend({}, context, application.getPushConfiguration().getContext());

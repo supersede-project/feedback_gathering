@@ -20,5 +20,5 @@
     <color name="progress_start">#009933</color>
     <color name="progress_end">#996633</color>
 
-    <color name="ratingFeedbackTextColor">#000000</color>
+    <color name="ratingFeedbackTextColor">#767676</color>
 </resources>

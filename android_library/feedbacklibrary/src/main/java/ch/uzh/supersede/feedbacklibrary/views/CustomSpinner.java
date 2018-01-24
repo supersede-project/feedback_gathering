@@ -282,15 +282,17 @@ public class CustomSpinner extends Spinner implements DialogInterface.OnClickLis
                 builder.setNegativeButton(getResources().getString(ch.uzh.supersede.feedbacklibrary.R.string.supersede_feedbacklibrary_cancel_string), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        mSelection[spinnerWhich] = false;
-                        mSelection[checkedIndex] = true;
-                        spinnerDialog.getListView().setItemChecked(spinnerWhich, false);
-                        spinnerDialog.getListView().setItemChecked(checkedIndex, true);
+                        if(mSelection.length >= Math.max(spinnerWhich, checkedIndex) + 1) {
+                            mSelection[spinnerWhich] = false;
+                            mSelection[checkedIndex] = true;
+                            spinnerDialog.getListView().setItemChecked(spinnerWhich, false);
+                            spinnerDialog.getListView().setItemChecked(checkedIndex, true);
 
-                        ownCategoryDialogInputEditText.setText(null);
+                            ownCategoryDialogInputEditText.setText(null);
 
-                        if (emptyLayout != null) {
-                            emptyLayout.requestFocus();
+                            if (emptyLayout != null) {
+                                emptyLayout.requestFocus();
+                            }
                         }
                     }
                 });

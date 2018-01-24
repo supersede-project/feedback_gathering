@@ -146,7 +146,9 @@ export class FeedbackDialogView extends DialogView {
                 feedbackDialogView.paginationContainer.showFirstPage();
                 let dialogTemplate = require('../../templates/info_dialog.handlebars');
                 let successMessage = i18n.t('general.success_message');
-                let successDialogView = new QuestionDialogView('infoDialog', dialogTemplate, {'message': <string>successMessage});
+                let successDialogId = 'infoDialog';
+                jQuery('#' + successDialogId).remove();
+                let successDialogView = new QuestionDialogView(successDialogId, dialogTemplate, {'message': <string>successMessage});
                 successDialogView.setTitle('Info');
                 successDialogView.setModal(true);
                 successDialogView.addAnswerOption('#infoDialogOkay', function() {
