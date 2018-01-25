@@ -83,7 +83,7 @@ class MyFeedbacksTabAccordion extends Component {
             if(item.textFeedbacks.length > 0 && item.categoryFeedbacks.length > 0)
             {
               return (
-                  <AccordionItem titleTag="span" title={<FeedbackTitle type={item.categoryFeedbacks[0].mechanismId} title={item.textFeedbacks[0].text}/>}>
+                  <AccordionItem titleTag="span" title={<FeedbackTitle type={item.categoryFeedbacks[0].parameterId} title={item.textFeedbacks[0].text}/>}>
                   </AccordionItem>
               )
             }

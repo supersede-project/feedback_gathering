@@ -25,16 +25,18 @@ import './App.css';
     this.setState({expanded: !this.state.expanded});
   }
 
+  //bug=661, function=662, generalfeedback=663
   getIconForFeedbackType() {
-      if (this.props.type === 1) {
+      if (this.props.type === 661) {
           return <FaBug size={35} padding={75}/>;
       }
 
-      if (this.props.type === 2) {
+      if (this.props.type === 662) {
           return <FaLightbulbO size={35} padding={75}/>;
       }
-
-      return <FaHandPeaceO size={35} padding={75}/>;
+      if(this.props.type === 663) {
+          return <FaHandPeaceO size={35} padding={75}/>;
+      }
   }
 
   render()
