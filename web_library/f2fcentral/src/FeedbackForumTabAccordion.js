@@ -5,7 +5,7 @@ import React, {Component} from 'react';
     AccordionItemTitle,
     AccordionItemBody
 } from 'react-accessible-accordion';*/
-
+import { PulseLoader } from 'react-spinners';
 import { Accordion, AccordionItem } from 'react-sanfona';
 
 import './App.css';
@@ -26,7 +26,8 @@ class FeedbackForumTabAccordion extends Component {
             data: [],
             showComment: false,
             commentIndex: null,
-            sorting: 'date1'
+            sorting: 'date1',
+            loading: true
         };
         this.handleShowCommentChange = this.handleShowCommentChange.bind(this);
         this.fetchData = this.fetchData.bind(this);
@@ -51,7 +52,7 @@ class FeedbackForumTabAccordion extends Component {
             cleanedResult.push(item);
           }
         })
-        that.setState({data: cleanedResult});
+        that.setState({data: cleanedResult, loading: false});
       });
     }
 
@@ -146,7 +147,8 @@ class FeedbackForumTabAccordion extends Component {
         {
             let data = this.state.data;
             let sortedData = this.sortData();
-            content = <div><ForumSorting onUpdate={this.onUpdate.bind(this)} />
+            content = <div>
+            <ForumSorting onUpdate={this.onUpdate.bind(this)} />
             <Accordion>
                 {sortedData.map(function (item, index) {
                   if(item.textFeedbacks.length > 0 && item.categoryFeedbacks.length > 0)
@@ -161,7 +163,20 @@ class FeedbackForumTabAccordion extends Component {
                   }
                   return false;
                 })}
-            </Accordion></div>
+            </Accordion>
+            </div>
+        }
+        else if (this.state.loading) {
+          var divStyle = {
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            marginRight: '-50%',
+            transform: 'translate(-50%, -50%)'
+          }
+          content = <div style={divStyle}><PulseLoader
+            loading={this.state.loading}
+          /></div>
         }
         else {
 

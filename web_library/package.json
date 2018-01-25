@@ -134,6 +134,7 @@
     "react-sanfona": "^1.0.6",
     "react-scripts": "^1.0.17",
     "react-select": "^1.1.0",
+    "react-spinners": "^0.2.5",
     "react-tabs": "^2.1.1",
     "react-uikit-comment": "^2.0.2",
     "react-uikit-comment-list": "^2.0.1",

@@ -5,6 +5,7 @@ import React, {Component} from 'react';
     AccordionItemTitle,
     AccordionItemBody
 } from 'react-accessible-accordion';*/
+import { PulseLoader } from 'react-spinners';
 
 import { Accordion, AccordionItem } from 'react-sanfona';
 
@@ -22,7 +23,8 @@ class MyFeedbacksTabAccordion extends Component {
     constructor(props) {
         super(props);
         this.state = {
-          data : []
+          data : [],
+          loading: true
         }
     }
 
@@ -35,7 +37,7 @@ class MyFeedbacksTabAccordion extends Component {
           }
       }).then(result=>result.json())
       .then(result=> {
-        that.setState({data: result})
+        that.setState({data: result, loading: false})
       });
     }
 
@@ -88,6 +90,18 @@ class MyFeedbacksTabAccordion extends Component {
             return false;
         })}
                   </Accordion>;
+      }
+      else if (this.state.loading) {
+        var divStyle = {
+          position: 'absolute',
+          top: '50%',
+          left: '50%',
+          marginRight: '-50%',
+          transform: 'translate(-50%, -50%)'
+        }
+        toRender = <div style={divStyle}><PulseLoader
+          loading={this.state.loading}
+        /></div>
       }
       else {
         toRender = <p>No Elements to show</p>;
