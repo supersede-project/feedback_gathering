@@ -26,12 +26,17 @@ class FeedbackForumTabAccordion extends Component {
             data: [],
             showComment: false,
             commentIndex: null,
-            sorting: ''
+            sorting: 'date1'
         };
         this.handleShowCommentChange = this.handleShowCommentChange.bind(this);
+        this.fetchData = this.fetchData.bind(this);
     }
 
     componentDidMount() {
+      this.fetchData(null);
+    }
+
+    fetchData(e) {
       var that = this;
       fetch(process.env.REACT_APP_BASE_URL + 'en/applications/'+ sessionStorage.getItem('applicationId')+'/feedbacks', {
           headers: {
@@ -43,7 +48,6 @@ class FeedbackForumTabAccordion extends Component {
         var cleanedResult = [];
         result.map(function(item, index) {
           if(item.visibility) {
-            console.log(item);
             cleanedResult.push(item);
           }
         })
@@ -55,21 +59,100 @@ class FeedbackForumTabAccordion extends Component {
       this.setState({showComment: e.showComment, commentIndex: e.index});
     }
 
-    onUpdate(sorting) { this.setState({sorting: sorting}); }
+    onUpdate(sorting) {
+      var data = this.state.data;
+      switch(this.state.sorting) {
+        case "date1":
+        data = [].concat(this.state.data).sort(function (a, b){
+          return new Date(b.createdAt.substring(0, b.createdAt.indexOf('.')) + "Z") - new Date(a.createdAt.substring(0, a.createdAt.indexOf('.')) + "Z");
+        });
+        break;
+        case "date2":
+        data = [].concat(this.state.data).sort(function (a, b) {
+          if (new Date(a.createdAt.substring(0, a.createdAt.indexOf('.')) + "Z") < new Date(b.createdAt.substring(0, b.createdAt.indexOf('.')) + "Z")) return -1;
+          if (new Date(a.createdAt.substring(0, a.createdAt.indexOf('.')) + "Z") > new Date(b.createdAt.substring(0, b.createdAt.indexOf('.')) + "Z")) return 1;
+          return 0;
+        });
+        break;
+        case "myfeedback":
+        data = [].concat(this.state.data).sort(function (a, b) {
+          if(a.userIdentification === sessionStorage.getItem('userId')) return 1;
+          if(b.userIdentification === sessionStorage.getItem('userId')) return -1;
+          return 1;
+        });
+        break;
+        case "mostlike":
+        data = [].concat(this.state.data).sort(function (a, b) {
+          if(a.likeCount > b.likeCount) return -1;
+          if(b.likeCount > a.likeCount) return 1;
+          return 0;
+        });
+        break;
+        case "unrated":
+        data = [].concat(this.state.data).sort(function(a,b) {
+          if(a.ratingFeedbacks.length == 0) return -1;
+          if(b.ratingFeedbacks.length == 0) return 1;
+          return 0;
+        });
+        break;
+        default:
+      }
+      this.setState({sorting: sorting, data: data});
+    }
+
+    sortData() {
+      switch(this.state.sorting) {
+        case "date1":
+        return [].concat(this.state.data).sort(function (a, b){
+          return new Date(b.createdAt.substring(0, b.createdAt.indexOf('.')) + "Z") - new Date(a.createdAt.substring(0, a.createdAt.indexOf('.')) + "Z");
+        });
+        break;
+        case "date2":
+        return [].concat(this.state.data).sort(function (a, b) {
+          if (new Date(a.createdAt.substring(0, a.createdAt.indexOf('.')) + "Z") < new Date(b.createdAt.substring(0, b.createdAt.indexOf('.')) + "Z")) return -1;
+          if (new Date(a.createdAt.substring(0, a.createdAt.indexOf('.')) + "Z") > new Date(b.createdAt.substring(0, b.createdAt.indexOf('.')) + "Z")) return 1;
+          return 0;
+        });
+        break;
+        case "myfeedback":
+        return [].concat(this.state.data).sort(function (a, b) {
+          if(a.userIdentification === sessionStorage.getItem('userId')) return 1;
+          if(b.userIdentification === sessionStorage.getItem('userId')) return -1;
+          return 1;
+        });
+        break;
+        case "mostlike":
+        return [].concat(this.state.data).sort(function (a, b) {
+          if(a.likeCount > b.likeCount) return -1;
+          if(b.likeCount > a.likeCount) return 1;
+          return 0;
+        });
+        break;
+        case "unrated":
+        return [].concat(this.state.data).sort(function(a,b) {
+          if(a.ratingFeedbacks.length == 0) return -1;
+          if(b.ratingFeedbacks.length == 0) return 1;
+          return 0;
+        });
+        break;
+        default:
+      }
+    }
 
     render() {
         let content = null;
+        let instance = this;
         if(!this.state.showComment)
         {
-            let instance = this;
+            let data = this.state.data;
+            let sortedData = this.sortData();
             content = <div><ForumSorting onUpdate={this.onUpdate.bind(this)} />
             <Accordion>
-                {this.state.data.map(function (item, index) {
-                  console.log(item);
+                {sortedData.map(function (item, index) {
                   if(item.textFeedbacks.length > 0 && item.categoryFeedbacks.length > 0)
                   {
                     return (
-                        <AccordionItem titleTag="span" title={<ForumTitle feedbackId={item.id} title={item.textFeedbacks[0].text} thumbsUp={item.likeCount} thumbsDown={item.dislikeCount} type={item.categoryFeedbacks[0].mechanismId} onShowCommentChange={instance.handleShowCommentChange} index={index}/>}>
+                        <AccordionItem titleTag="span" title={<ForumTitle feedbackId={item.id} title={item.textFeedbacks[0].text} thumbsUp={item.likeCount} thumbsDown={item.dislikeCount} type={item.categoryFeedbacks[0].mechanismId} onShowCommentChange={instance.handleShowCommentChange} update={instance.fetchData.bind(instance)} index={index}/>}>
                                 <div>
                                     <ForumBody status="WIP" date={item.createdAt} onShowCommentChange={instance.handleShowCommentChange} index={index}/>
                                 </div>
@@ -82,7 +165,10 @@ class FeedbackForumTabAccordion extends Component {
         }
         else {
 
-            content = <FeedbackForumCommentView post={this.state.data[this.state.commentIndex]}/>;
+            content = <FeedbackForumCommentView post={this.state.data.find(function(a)
+            {
+              return a.id === instance.state.commentIndex;
+            })}/>;
 
         }
 

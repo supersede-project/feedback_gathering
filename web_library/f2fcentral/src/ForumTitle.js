@@ -22,8 +22,13 @@ class ForumTitle extends Component {
         }
     }
 
+    componentWillReceiveProps(nextProps) {
+      this.setState({ thumbsUp: parseInt(nextProps.thumbsUp),
+      thumbsDown: parseInt(nextProps.thumbsDown) });
+    }
+
     handleShowCommentChange(e) {
-        this.props.onShowCommentChange({showComment: true, index: this.props.index});
+        this.props.onShowCommentChange({showComment: true, index: this.props.feedbackId});
     }
 
     getIconForFeedbackType() {
@@ -51,9 +56,7 @@ class ForumTitle extends Component {
         })
       }).then(result=>result.json())
       .then(result=> {
-        this.setState((prevState) => {
-          return {thumbsUp: result.id};
-        });
+        this.props.update();
       });
         e.stopPropagation();
     }
@@ -71,9 +74,7 @@ class ForumTitle extends Component {
         })
       }).then(result=>result.json())
       .then(result=> {
-        this.setState((prevState) => {
-          return {thumbsDown: result.id};
-        });
+        this.props.update();
       });
         e.stopPropagation();
     }

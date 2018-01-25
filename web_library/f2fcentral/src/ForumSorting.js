@@ -11,15 +11,15 @@ class ForumSorting extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            selectedOption: '',
-            selectedOptionValue: ''
+            selectedOption: ''
         };
-
+        this.handleChange = this.handleChange.bind(this);
     }
 
     handleChange(selectedOption) {
         this.setState({selectedOption: selectedOption});
-        console.log(`Selected: ${selectedOption.label}`);
+        this.props.onUpdate(selectedOption.value);
+        console.log(`Selected: ${selectedOption.value}`);
     }
 
     render() {
@@ -45,10 +45,6 @@ class ForumSorting extends Component {
             />
 
         );
-    }
-
-    update() {
-        this.props.onUpdate(this.state.selectedOption);
     }
 }
 
