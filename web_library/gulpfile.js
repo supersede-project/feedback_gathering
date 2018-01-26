@@ -127,6 +127,8 @@ gulp.task('copy-test-page-assets', function() {
         .pipe(gulp.dest('dist'));
     gulp.src(['env/dev/Energiesparkonto_ Energie sparen. Kosten senken._files/**'])
         .pipe(gulp.dest('dist/Energiesparkonto_ Energie sparen. Kosten senken._files'));
+    gulp.src(['env/dev/digitale_doerfer_files/**'])
+        .pipe(gulp.dest('dist/digitale_doerfer_files'));
 });
 
 gulp.task('clean', function() {
