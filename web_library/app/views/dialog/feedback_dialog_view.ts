@@ -198,10 +198,16 @@ export class FeedbackDialogView extends DialogView {
     sendFeedback(feedbackService:FeedbackService, formData:any, generalConfiguration:GeneralConfiguration) {
         var feedbackDialogView = this;
         var url = this.context.apiEndpointRepository + 'feedback_repository/' + this.context.lang + '/applications/' + this.context.applicationId + '/feedbacks/';
+        var urlAuthenticate = this.context.apiEndpointRepository + 'feedback_repository/authenticate';
         var urlSettings = this.context.apiEndpointRepository + 'feedback_repository/' + this.context.lang + '/applications/' + this.context.applicationId + '/feedbacks/feedbacksettings';
         feedbackService.sendFeedback(url, formData, function(data) {
-            console.log("FormData to be sent: " + JSON.stringify(data));
+            // console.log("FormData to be sent: " + JSON.stringify(data));
+            var feedbackJson = JSON.parse(JSON.stringify(data));
+            console.log("urlForUser: " + feedbackJson.userIdentification);
+            var urlForUser = url + 'user_identification/'+feedbackJson.userIdentification;
+            console.log(urlForUser);
             if(generalConfiguration && generalConfiguration.getParameterValue('successDialog')) {
+                console.log("=== feedback successfully sent ===");
                 // feedbackDialogView.discardFeedback();
                 // feedbackDialogView.paginationContainer.showFirstPage();
                 // let dialogTemplate = require('../../templates/info_dialog.handlebars');
@@ -211,7 +217,66 @@ export class FeedbackDialogView extends DialogView {
                 // successDialogView.setModal(true);
                 // successDialogView.addAnswerOption('#infoDialogOkay', function() {
                 //     successDialogView.close();
+
                 feedbackDialogView.discardFeedback();
+
+                // Überprüfung ob ein Feedback existiert für user 99999999
+                //  ==> Falls ja, check ob globalSetting = true ==> falls ja, zeige die nachfolgenden Dialoge nicht
+                //                                       = false ==> lade die settings in die templates
+                //  ==> Falls nein, zeige Dialog felder so auf
+
+                var authenticationToken = "";
+
+                var previousFeedbacksExist:boolean = false;
+
+                $.ajax({
+                    url: urlAuthenticate,
+                    type: 'POST',
+                    data: JSON.stringify({
+                        name: 'admin',
+                        password: 'password'
+                    }),
+                    contentType: 'application/json',
+                    success: function (data) {
+                        authenticationToken = JSON.parse(JSON.stringify(data)).token;
+                        console.log("token: " + authenticationToken);
+                        feedbackService.getFeedbacks(urlForUser,authenticationToken, function (data) {
+                            console.log("success on getting feedbacks for user 99999999");
+                            var feedbackArrayLength = JSON.parse(JSON.stringify(data)).length;
+                            var previousFeedbacks = JSON.parse(JSON.stringify(data));
+                            console.log("json array length: " + feedbackArrayLength);
+                            console.log("json string length: " + JSON.stringify(data).length);
+
+                            if(feedbackArrayLength > 1){
+                                previousFeedbacksExist = true;
+                            }
+
+                            if(previousFeedbacksExist){
+                                var lastFeedbackId = previousFeedbacks[previousFeedbacks.length -1].id;
+                                console.log("lastFeedbackId: " + lastFeedbackId);
+                                var urlSettingsRetrieve = urlSettings + "/feedback/"+lastFeedbackId;
+                                console.log("urlSettingsRetrieve: " + urlSettingsRetrieve);
+                                feedbackService.getFeedbackSettings(urlSettingsRetrieve,authenticationToken,function (data) {
+                                    console.log("data settings: " + JSON.stringify(data));
+                                }, function (error) {
+                                    $('.server-response').addClass('error').text('Failure: ' + JSON.stringify(error));
+                                    console.log("Could not retrieve settings for " + lastFeedbackId);
+                                })
+                            } else {
+
+                            }
+
+                        }, function (error) {
+                            $('.server-response').addClass('error').text('Failure: ' + JSON.stringify(error));
+                            console.log("Could not retrieve feedbacks for 99999999");
+                        });
+                    },
+                    error: function (data) {
+                        $('.server-response').addClass('error').text('Failure: ' + JSON.stringify(data));
+                    }
+                });
+
+
                 let dialogTemplate = require('../../templates/info_dialog.handlebars');
 
                 let f2fUpdateTemplate = require('../../templates/f2f_dialog_updateform_v2.handlebars');
@@ -231,6 +296,10 @@ export class FeedbackDialogView extends DialogView {
                 //         'messageHint': <string>messageHint,
                 //         'messageChannelDescription': <string>messageChannelDescription});
                 let updateDialogView = new QuestionDialogView('UpdateForm_v2', f2fUpdateTemplate);
+                // let updateDialogView = new QuestionDialogView('UpdateForm_v2', f2fUpdateTemplate,
+                //     {
+                //         'previousFeedbacksExist':previousFeedbacksExist
+                //     });
                 updateDialogView.setTitle(<string>i18n.t('general.success_dialog_title_f2f'));
                 updateDialogView.setModal(true);
 
@@ -328,8 +397,9 @@ export class FeedbackDialogView extends DialogView {
                             finalSettings.feedbackQueryChannel = "";
                         }
 
-                        let feedbackJson = JSON.parse(JSON.stringify(data));
+
                         console.log("FEEDBACK ID: " + feedbackJson.id);
+                        console.log("User ID: " + feedbackJson.userIdentification);
 
 
                         finalSettings.globalFeedbackSetting = summarySetGlobal;
