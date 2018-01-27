@@ -252,7 +252,7 @@ export class FeedbackDialogView extends DialogView {
                             }
 
                             if(previousFeedbacksExist){
-                                var lastFeedbackId = previousFeedbacks[previousFeedbacks.length -1].id;
+                                var lastFeedbackId = previousFeedbacks[previousFeedbacks.length -2].id;
                                 console.log("lastFeedbackId: " + lastFeedbackId);
                                 var urlSettingsRetrieve = urlSettings + "/feedback/"+lastFeedbackId;
                                 console.log("urlSettingsRetrieve: " + urlSettingsRetrieve);
