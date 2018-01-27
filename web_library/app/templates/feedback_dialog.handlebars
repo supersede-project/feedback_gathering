@@ -8,8 +8,16 @@
                 {{/if}}
 
                 {{#compare reviewButtonPosition "top" operator="==="}}
-                    <button class="button feedback-dialog-forward navigation-button">{{t
-                            "general.review_feedback" }}</button>
+                    {{#compare dialogId "pullConfiguration" operator="!="}}
+                        <button class="button feedback-dialog-forward navigation-button">{{t
+                                "general.review_feedback" }}</button>
+                    {{/compare}}
+                    {{#compare dialogId "pullConfiguration" operator="==="}}
+                        <button type="button"
+                                class="button navigation-button submit-feedback">{{t
+                                "general.feedback_submit_button_title" }}
+                        </button>
+                    {{/compare}}
                     <div class="clearfix"></div>
                 {{/compare}}
 
@@ -39,8 +47,16 @@
                             {{/compare}}
 
                             {{#compare ../reviewButtonPosition @index operator="==="}}
-                                <button class="button feedback-dialog-forward navigation-button">{{t
+                                {{#compare dialogId "pullConfiguration" operator="!="}}
+                                    <button class="button feedback-dialog-forward navigation-button">{{t
                                         "general.review_feedback" }}</button>
+                                {{/compare}}
+                                {{#compare dialogId "pullConfiguration" operator="==="}}
+                                    <button type="button"
+                                            class="button navigation-button submit-feedback">{{t
+                                            "general.feedback_submit_button_title" }}
+                                    </button>
+                                {{/compare}}
                                 <div class="clearfix"></div>
                             {{/compare}}
 
@@ -48,19 +64,42 @@
                     {{/each}}
                     <div class="clearfix"></div>
                 </div>
-
                 <div class="button-row" style="{{buttonRowStyle}}">
                     {{#compare reviewButtonPosition "bottom" operator="==="}}
-                        <button class="button pull-right feedback-dialog-forward navigation-button">{{t
-                                "general.review_feedback" }}</button>
+                        {{#compare dialogId "pullConfiguration" operator="!="}}
+                            <button class="button feedback-dialog-forward navigation-button">{{t
+                                    "general.review_feedback" }}</button>
+                        {{/compare}}
+                        {{#compare dialogId "pullConfiguration" operator="==="}}
+                            <button type="button"
+                                    class="button navigation-button submit-feedback">{{t
+                                    "general.feedback_submit_button_title" }}
+                            </button>
+                        {{/compare}}
                     {{/compare}}
                     {{#compare reviewButtonPosition undefined operator="==="}}
-                        <button class="button pull-right feedback-dialog-forward navigation-button">{{t
-                                "general.review_feedback" }}</button>
+                        {{#compare dialogId "pullConfiguration" operator="!="}}
+                            <button class="button feedback-dialog-forward navigation-button">{{t
+                                    "general.review_feedback" }}</button>
+                        {{/compare}}
+                        {{#compare dialogId "pullConfiguration" operator="==="}}
+                            <button type="button"
+                                    class="button navigation-button submit-feedback">{{t
+                                    "general.feedback_submit_button_title" }}
+                            </button>
+                        {{/compare}}
                     {{/compare}}
                     {{#compare reviewButtonPosition null operator="==="}}
-                        <button class="button pull-right feedback-dialog-forward navigation-button">{{t
-                                "general.review_feedback" }}</button>
+                        {{#compare dialogId "pullConfiguration" operator="!="}}
+                            <button class="button feedback-dialog-forward navigation-button">{{t
+                                    "general.review_feedback" }}</button>
+                        {{/compare}}
+                        {{#compare dialogId "pullConfiguration" operator="==="}}
+                            <button type="button"
+                                    class="button navigation-button submit-feedback">{{t
+                                    "general.feedback_submit_button_title" }}
+                            </button>
+                        {{/compare}}
                     {{/compare}}
 
                     {{#if discardAsButton }}

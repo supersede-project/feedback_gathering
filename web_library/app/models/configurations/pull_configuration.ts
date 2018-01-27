@@ -3,6 +3,8 @@ import {Configuration} from './configuration';
 import {GeneralConfiguration} from './general_configuration';
 import {configurationTypes, cookieNames} from '../../js/config';
 import {ParameterInterface} from '../parameters/parameter_interface';
+import { Application } from '../applications/application';
+import { PullFeedbackDialogView } from '../../views/dialog/pull_feedback_dialog_view';
 
 
 /**
@@ -20,13 +22,16 @@ export class PullConfiguration extends Configuration {
     /**
      * Initializes the pull mechanisms and triggers the feedback mechanisms if necessary.
      *
+     * @param application
+     * @param options
      * @param alreadyTriggeredOne
      *  Boolean that indicated whether a pull configuration has already been triggered.
      *
      * @returns boolean
      *  Whether the pull configuration was triggered or not.
      */
-    checkTrigger(alreadyTriggeredOne:boolean = false):boolean {
+    checkTrigger(application:Application, options:any, alreadyTriggeredOne:boolean = false):boolean {
+
         // triggers on elements
         if (this.generalConfiguration.getParameterValue('userAction')) {
             var userAction = this.generalConfiguration.getParameterValue('userAction');
@@ -36,22 +41,44 @@ export class PullConfiguration extends Configuration {
 
             if (actionOnlyOncePerPageLoad) {
                 jQuery('' + actionElement).one(actionName, function () {
-                    // TODO showPullDialog(configuration, generalConfiguration);
+                    this.showPullDialog(application, options);
                 })
             } else {
                 jQuery('' + actionElement).on(actionName, function () {
-                    // TODO showPullDialog(configuration, generalConfiguration);
+                    this.showPullDialog(application, options);
                 })
             }
         }
 
         // direct triggers
         if (!alreadyTriggeredOne && this.shouldGetTriggered()) {
-            // TODO showPullDialog(this, generalConfiguration);
+            this.showPullDialog(application, options);
             return true;
         }
         return false;
     };
+
+    showPullDialog(application:Application, options:any) {
+        let dialogId = 'pullConfiguration';
+        var dialogTemplate = require('../../templates/feedback_dialog.handlebars');
+        var context = application.getContextForView();
+        context = $.extend({}, context, options);
+        context = $.extend({}, context, this.getContext());
+        let pullFeedbackDialogView = new PullFeedbackDialogView(dialogId, dialogTemplate, this, context);
+
+        let pullDelay = this.generalConfiguration.getParameterValue('pullDelay') || 0;
+
+        setTimeout(function() {
+            pullFeedbackDialogView.open();
+        }, pullDelay * 1000);
+    }
+
+    /**
+     * Returns the context for templates without the contexts of the mechanisms.
+     */
+    getContext():any {
+        return super.getContext();
+    }
 
     /**
      * Decides whether the mechanisms associated with this configuration should get activated or not.
@@ -59,11 +86,32 @@ export class PullConfiguration extends Configuration {
      * @returns {boolean} true if the mechanismes should get triggered.
      */
     shouldGetTriggered():boolean {
-        return this.pageDoesMatch(this.currentSlug()) && this.isDoNotDisturbTimeDurationOver() && (this.generalConfiguration.getParameterValue('askOnAppStartup') ||
-            Math.random() <= this.generalConfiguration.getParameterValue('likelihood'));
+        console.log('shouldGetTriggered');
+        let pullActive = this.isActive();
+        let pageDoesMatch = this.pageDoesMatch(this.currentSlug());
+        let doNotDisturbTimeIsOver = this.isDoNotDisturbTimeDurationOver();
+        let askOnStartUp = this.generalConfiguration.getParameterValue('askOnAppStartup') || false;
+        let likeliHoodOkay = Math.random() <= this.generalConfiguration.getParameterValue('likelihood');
+
+        console.log('------');
+        console.log(pullActive);
+        console.log(doNotDisturbTimeIsOver);
+        console.log(likeliHoodOkay);
+        console.log(askOnStartUp);
+        console.log('------');
+
+        return pullActive && pageDoesMatch && doNotDisturbTimeIsOver && (askOnStartUp || likeliHoodOkay);
     }
 
-    private isDoNotDisturbTimeDurationOver() {
+    isActive():boolean {
+        return this.generalConfiguration.getParameterValue('pullActive') || false;
+    }
+
+    isSpecificActive():boolean {
+        return this.generalConfiguration.getParameterValue('pullSpecificActive') || false;
+    }
+
+    isDoNotDisturbTimeDurationOver() {
         var doNotDisturbTimeDuration = 5 * 60;
         if (this.generalConfiguration.getParameterValue('doNotDisturbTimeDuration') != null) {
             doNotDisturbTimeDuration = this.generalConfiguration.getParameterValue('doNotDisturbTimeDuration');

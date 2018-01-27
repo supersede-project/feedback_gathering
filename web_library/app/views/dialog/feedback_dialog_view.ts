@@ -193,6 +193,7 @@ export class FeedbackDialogView extends DialogView {
     }
 
     sendFeedback(feedbackService:FeedbackService, formData:any, generalConfiguration:GeneralConfiguration) {
+        let myThis = this;
         var feedbackDialogView = this;
         var url = this.context.apiEndpointRepository + 'feedback_repository/' + this.context.lang + '/applications/' + this.context.applicationId + '/feedbacks/';
 
@@ -219,12 +220,12 @@ export class FeedbackDialogView extends DialogView {
                 feedbackDialogView.resetDialog();
                 $('.server-response').addClass('success').text(i18n.t('general.success_message'));
             }
-            $('button.submit-feedback').prop('disabled', false);
-            $('button.submit-feedback').text($('button.submit-feedback').text().replace(/...$/,''));
+            myThis.dialogElement.find('button.submit-feedback').prop('disabled', false);
+            myThis.dialogElement.find('button.submit-feedback').text(myThis.dialogElement.find('button.submit-feedback').text().replace(/...$/,''));
         }, function(error) {
-            $('.server-response').addClass('error').text('Failure: ' + JSON.stringify(error));
-            $('button.submit-feedback').prop('disabled', false);
-            $('button.submit-feedback').text($('button.submit-feedback').text().replace(/...$/,''));
+            myThis.dialogElement.find('.server-response').addClass('error').text('Failure: ' + JSON.stringify(error));
+            myThis.dialogElement.find('button.submit-feedback').prop('disabled', false);
+            myThis.dialogElement.find('button.submit-feedback').text(myThis.dialogElement.find('button.submit-feedback').text().replace(/...$/,''));
         });
     }
 

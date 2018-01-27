@@ -28,6 +28,10 @@ export class CategoryMechanism extends Mechanism {
         }
     }
 
+    sortParameters(parameters:Parameter[]):Parameter[] {
+        return parameters.sort((p1, p2) => p1.order - p2.order);
+    }
+
     getContext(): any {
         let inputType = 'checkbox';
         if(this.getParameterValue('multiple') === false){
@@ -43,7 +47,7 @@ export class CategoryMechanism extends Mechanism {
             ownAllowed: this.getParameterValue('ownAllowed'),
             ownLabel: this.getParameterValue('ownLabel'),
             breakAfterOption: !!this.getParameterValue('breakAfterOption'),
-            options: this.getOptions(),
+            options: this.sortParameters(this.getOptions()),
             defaultOption: this.getDefaultOptions(),
             inputType: inputType,
             labelStyle: labelStyle,

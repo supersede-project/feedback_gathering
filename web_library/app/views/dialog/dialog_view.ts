@@ -97,6 +97,7 @@ export class DialogView {
     getDialogOptions():{} {
         let closeCallback = this.closeCallback;
         let openCallback = this.openCallback;
+        let myThis = this;
 
         return jQuery.extend({}, dialogOptions, {
             close: function () {
@@ -108,8 +109,11 @@ export class DialogView {
                 if(openCallback) {
                     openCallback();
                 }
-                jQuery('[aria-describedby="' + this.dialogId + '"] .ui-dialog-titlebar-close').attr('title', i18n.t('general.dialog_close_button_title'));
+                jQuery('[aria-describedby="' + myThis.dialogId + '"] .ui-dialog-titlebar-close').attr('title', i18n.t('general.dialog_close_button_title'));
                 jQuery('.ui-widget-overlay').attr('style', 'height: 0 !important;');
+                if(myThis.dialogId === 'pullConfiguration') {
+                    jQuery('[aria-describedby="' + myThis.dialogId + '"] .ui-dialog-titlebar-close').hide();
+                }
             },
             create: function (event, ui) {
                 let widget = $(this).dialog("widget");

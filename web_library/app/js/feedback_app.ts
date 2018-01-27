@@ -2,6 +2,8 @@ import {ApplicationService} from '../services/application_service';
 import {Application} from '../models/applications/application';
 import {shuffle} from './helpers/array_shuffle';
 import {FeedbackDialogView} from '../views/dialog/feedback_dialog_view';
+import { logError } from 'typings/dist/support/cli';
+import { PullConfiguration } from '../models/configurations/pull_configuration';
 
 
 export class FeedbackApp {
@@ -55,12 +57,45 @@ export class FeedbackApp {
             event.stopPropagation();
             myThis.dialogView.toggleDialog();
         });
+
+        if ("onhashchange" in window) {
+            console.log("onhashchange supported");
+        } else {
+            console.log("onhashchange not supported");
+        }
+
+        jQuery(window).on('hashchange', function(event){
+            console.log('hashchange');
+            console.log(event);
+            let url = window.location.href;
+            console.log(url);
+            let urlParts = url.split('/');
+            let site = urlParts[urlParts.length - 1];
+            if(site === undefined || site === '') {
+                console.log('site 2');
+                site = urlParts[urlParts.length - 2];
+            }
+            console.log(site);
+
+            if(myThis.application.id === 14 && site === 'medalsView') {
+                console.log('feedback app trigger');
+                let pullConfigurationMedalsView = myThis.application.getPullConfigurations().filter(pullConfiguration => pullConfiguration.id === 52)[0];
+
+                console.log(pullConfigurationMedalsView.isSpecificActive());
+                console.log(pullConfigurationMedalsView.isDoNotDisturbTimeDurationOver());
+
+                if(pullConfigurationMedalsView.isDoNotDisturbTimeDurationOver() && pullConfigurationMedalsView.isSpecificActive()) {
+                    console.log('feedback app trigger 2');
+                    pullConfigurationMedalsView.showPullDialog(myThis.application, myThis.options);
+                }
+            }
+        });
     }
 
     checkPullConfigurations(application:Application) {
         var alreadyTriggeredOne = false;
         for (let pullConfiguration of shuffle(application.getPullConfigurations())) {
-            alreadyTriggeredOne = pullConfiguration.checkTrigger(alreadyTriggeredOne);
+            alreadyTriggeredOne = pullConfiguration.checkTrigger(application, this.options, alreadyTriggeredOne);
         }
     }
 

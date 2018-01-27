@@ -63,7 +63,8 @@ export var feedbackPluginModule = function ($, window, document) {
         'dialogPositionOf': window,
         'apiEndpointOrchestrator': apiEndpointOrchestrator,
         'apiEndpointRepository': apiEndpointRepository,
-        'applicationId': applicationId
+        'applicationId': applicationId,
+        'reviewActive': true,
     };
 };
 
