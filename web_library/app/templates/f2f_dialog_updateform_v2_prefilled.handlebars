@@ -1,0 +1,45 @@
+<section id="UpdateForm_v2" class="feedback-library feedback-container">
+    <form>
+        <div class="alert alert-success" role="alert">
+            Thank you for your feedback! Please choose an option for status updates with respect to your feedback.
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <p>May we contact you in case of updates for your feedback?</p>
+                <div class="custom-controls-stacked">
+                    <label class="custom-control custom-radio">
+                        <input id="updateFormAllowUpdate" name="allowUpdate" value="Yes" type="radio" class="custom-control-input" required>
+                        <span class="custom-control-indicator"></span>
+                        <span class="custom-control-description">Yes</span>
+                    </label>
+                    <label class="custom-control custom-radio">
+                        <input id="updateFormDenyUpdate" name="allowUpdate" value="No" type="radio" class="custom-control-input" required>
+                        <span class="custom-control-indicator"></span>
+                        <span class="custom-control-description">No</span>
+                    </label>
+                </div>
+            </div>
+            <div class="col-md-6" id="hideDivUpdate">
+                <p>Please choose a contact channel</p>
+                <div class="custom-controls-stacked">
+                    <label class="custom-control custom-radio">
+                        <input id="updateFormEmail" name="contactChannelUpdate" value="Email" type="radio" class="custom-control-input" required>
+                        <span class="custom-control-indicator"></span>
+                        <span class="custom-control-description">Email</span>
+                    </label>
+                    <label class="custom-control custom-radio">
+                        <input id="updateFormCentral" name="contactChannelUpdate" value="Feedback-To-Feedback Central" type="radio" class="custom-control-input" required>
+                        <span class="custom-control-indicator"></span>
+                        <span class="custom-control-description">Feedback-To-Feedback Central</span>
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-11"></div>
+            <div class="col-md-1">
+                <button type="button" id="f2fDialogContinue" class="btn btn-primary">Continue</button>
+            </div>
+        </div>
+    </form>
+</section>

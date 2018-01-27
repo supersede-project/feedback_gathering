@@ -70,6 +70,7 @@ export class FeedbackService {
             url: url,
             type: 'GET',
             contentType: 'application/json',
+            async: false,
             beforeSend:function(xhr){
                 /* Authorization header */
                 xhr.setRequestHeader("Authorization", token);
@@ -90,6 +91,7 @@ export class FeedbackService {
             url: url,
             type: 'GET',
             contentType: 'application/json',
+            async: false,
             beforeSend:function(xhr){
                 /* Authorization header */
                 xhr.setRequestHeader("Authorization", token);
