@@ -221,7 +221,7 @@ CREATE TABLE `status` (
 -- ----------------------------
 --  Table structure for `status_options`
 -- ----------------------------
-DROP TABLE IF EXISTS `status_options`;
+DROP TABLE IF EXISTS status_option;
 CREATE TABLE `status_options` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(45) COLLATE utf8_unicode_ci NOT NULL,

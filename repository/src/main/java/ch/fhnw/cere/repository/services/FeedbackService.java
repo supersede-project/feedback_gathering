@@ -2,6 +2,7 @@ package ch.fhnw.cere.repository.services;
 
 
 import ch.fhnw.cere.repository.models.Feedback;
+import ch.fhnw.cere.repository.models.TextFeedback;
 import scala.collection.immutable.Page;
 
 import java.awt.print.Pageable;

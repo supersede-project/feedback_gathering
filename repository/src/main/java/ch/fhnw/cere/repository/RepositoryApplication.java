@@ -17,6 +17,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.security.SecurityAutoConfiguration;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
 import javax.mail.MessagingException;
@@ -45,9 +46,14 @@ public class RepositoryApplication {
 		SpringApplication.run(RepositoryApplication.class, args);
 	}
 
+//	@Transactional
 //	@PostConstruct
 ////	@Scheduled(fixedRate = 5000)
 //	public void sendEmail() throws MessagingException, IOException, TemplateException {
+////		EndUser testUser = endUserService.find(99999999);
+////		List<Feedback> userFeedbacks = feedbackService.findByUserIdentification(99999999);
+////		userFeedbacks.removeIf(feedback -> feedback.getId() < 149);
+//
 //		EndUser testUser = endUserService.find(1);
 //		List<Feedback> userFeedbacks = feedbackService.findByUserIdentification(1);
 //		List<Feedback> forumFeedbacks = feedbackService.findByPublished(true);

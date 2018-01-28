@@ -576,7 +576,7 @@ UNLOCK TABLES;
 -- Table structure for table `status_options`
 --
 
-DROP TABLE IF EXISTS `status_options`;
+DROP TABLE IF EXISTS status_option;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `status_options` (
@@ -592,9 +592,9 @@ CREATE TABLE `status_options` (
 -- Dumping data for table `status_options`
 --
 
-LOCK TABLES `status_options` WRITE;
-/*!40000 ALTER TABLE `status_options` DISABLE KEYS */;
-/*!40000 ALTER TABLE `status_options` ENABLE KEYS */;
+LOCK TABLES status_option WRITE;
+/*!40000 ALTER TABLE status_option DISABLE KEYS */;
+/*!40000 ALTER TABLE status_option ENABLE KEYS */;
 UNLOCK TABLES;
 
 --

@@ -1,6 +1,7 @@
 package ch.fhnw.cere.repository.services;
 
 import ch.fhnw.cere.repository.models.Feedback;
+import ch.fhnw.cere.repository.models.TextFeedback;
 import ch.fhnw.cere.repository.repositories.FeedbackRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -68,7 +69,6 @@ public class FeedbackServiceImpl implements FeedbackService {
     public List<Feedback> findByVisibility(boolean visibility) {
         return feedbackRepository.findByVisibility(visibility);
     }
-
 //    @Override
 //    public List<Feedback> findByBlocked(boolean is_blocked) {
 //        return feedbackRepository.findByBlocked(is_blocked);

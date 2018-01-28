@@ -15,13 +15,13 @@ public class FeedbackSettings {
     private long id;
 
     @JsonIgnore
-    @OneToOne(cascade = {CascadeType.REMOVE, CascadeType.MERGE})
+    @OneToOne
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "feedback_id", nullable = false)
     private Feedback feedback;
 
     @JsonIgnore
-    @OneToOne(cascade = {CascadeType.REMOVE, CascadeType.MERGE})
+    @OneToOne
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "user_id", nullable = false)
     private EndUser user;

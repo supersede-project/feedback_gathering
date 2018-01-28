@@ -754,7 +754,7 @@ ALTER TABLE `status`
 --
 -- Indizes für die Tabelle `status_options`
 --
-ALTER TABLE `status_options`
+ALTER TABLE status_option
   ADD PRIMARY KEY (`id`);
 
 --
@@ -889,7 +889,7 @@ ALTER TABLE `status`
 --
 -- AUTO_INCREMENT für Tabelle `status_options`
 --
-ALTER TABLE `status_options`
+ALTER TABLE status_option
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT für Tabelle `text_annotation`

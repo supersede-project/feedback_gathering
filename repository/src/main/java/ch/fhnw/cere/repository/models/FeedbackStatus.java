@@ -22,7 +22,7 @@ public class FeedbackStatus {
     private long id;
 
     @JsonIgnore
-    @ManyToOne(cascade = {CascadeType.REMOVE, CascadeType.MERGE})
+    @ManyToOne
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "feedback_id", nullable = false)
     private Feedback feedback;

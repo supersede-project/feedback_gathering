@@ -5,6 +5,7 @@ import ch.fhnw.cere.repository.mail.EmailService;
 import ch.fhnw.cere.repository.mail.Mail;
 import ch.fhnw.cere.repository.models.EndUser;
 import ch.fhnw.cere.repository.models.Feedback;
+import ch.fhnw.cere.repository.models.TextFeedback;
 import ch.fhnw.cere.repository.models.orchestrator.Application;
 import ch.fhnw.cere.repository.repositories.EndUserRepository;
 import ch.fhnw.cere.repository.repositories.FeedbackRepository;
@@ -21,6 +22,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.mail.MessagingException;
 import java.io.IOException;
@@ -73,6 +75,12 @@ public class F2FEmailServiceTest {
         endUser2 = endUserRepository.save(new EndUser(1,"kaydin2",123));
 
         feedback1 = feedbackRepository.save(new Feedback("Feedback 1 User 1", endUser1.getId(), 1, 11, "en"));
+        TextFeedback textFeedback1 = new TextFeedback(feedback1,
+                "This is test text of Feedback 1 and User 1",88);
+        List<TextFeedback> textFeedbacks1 = new ArrayList<>();
+        textFeedbacks1.add(textFeedback1);
+        feedback1.setTextFeedbacks(textFeedbacks1);feedbackRepository.save(feedback1);
+
         feedback2 = feedbackRepository.save(new Feedback("Feedback 2 User 1", endUser1.getId(), 1, 11, "en"));
         feedback2.setPublished(true);feedbackRepository.save(feedback2);
         feedback3 = feedbackRepository.save(new Feedback("Feedback 3 User 1", endUser1.getId(), 1, 22, "en"));
@@ -91,7 +99,9 @@ public class F2FEmailServiceTest {
         endUserRepository.deleteAllInBatch();
     }
 
+
     @Test
+    @Transactional
     public void testMail() throws MessagingException, IOException, TemplateException {
 
 //        TimerTask timerTask = new TimerTask() {
@@ -110,6 +120,9 @@ public class F2FEmailServiceTest {
         List<Feedback> userFeedbacks = feedbackService.findByUserIdentification(endUser1.getId());
         List<Feedback> forumFeedbacks = feedbackService.findByPublished(true);
 
+//        List<TextFeedback> textFeedbacks = feedbackService.getTextFeedbacks(
+//                feedback1.getId()
+//        );
         log.info("==== seinding mail ====");
         Mail mail = new Mail();
         mail.setFrom("kuersat.aydinli@gmail.com");

@@ -2,15 +2,14 @@ package ch.fhnw.cere.repository.controllers;
 
 import ch.fhnw.cere.repository.controllers.exceptions.NotFoundException;
 import ch.fhnw.cere.repository.models.CommentFeedback;
-import ch.fhnw.cere.repository.models.Feedback;
 import ch.fhnw.cere.repository.services.*;
-import com.sun.org.apache.xpath.internal.operations.Bool;
-import eu.supersede.integration.api.feedback.repository.types.FeedbackComment;
+import org.apache.velocity.exception.ResourceNotFoundException;
 import org.json.JSONObject;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -92,5 +91,26 @@ public class CommentController extends BaseController{
             return commentFeedbackService.save(commentFeedback);
         }
         return null;
+    }
+
+    @PreAuthorize("@securityService.hasAdminPermission(#applicationId)")
+    @RequestMapping(method = RequestMethod.DELETE, value = "/comments/{id}")
+    public void deleteFeedback(@PathVariable long applicationId, @PathVariable long id,
+                               @RequestHeader(value = "Authentication") String admin) {
+        if(admin.equals("admin")){
+            commentFeedbackService.delete(id);
+        }
+    }
+
+//    @PreAuthorize("@securityService.hasAdminPermission(#applicationId)")
+//    @RequestMapping(method = RequestMethod.DELETE, value = "/comments/{id}")
+//    public void deleteComment(@PathVariable long applicationId, @PathVariable long id) {
+//        commentFeedbackService.delete(id);
+//    }
+
+    @PreAuthorize("@securityService.hasAdminPermission(#applicationId)")
+    @RequestMapping(method = RequestMethod.PUT, value = "/comments")
+    public CommentFeedback updateComment(@PathVariable long applicationId, @RequestBody CommentFeedback comment) {
+        return commentFeedbackService.save(comment);
     }
 }

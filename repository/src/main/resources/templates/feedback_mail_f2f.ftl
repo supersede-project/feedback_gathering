@@ -38,6 +38,14 @@
             <p>Your Feedbacks</p>
             <#list user_feedbacks as user_feedback>
                 <p><b>User Feedback Title: </b>${user_feedback.title}</p>
+
+                <#if user_feedback.textFeedbacks??>
+                    <#list user_feedback.textFeedbacks as textFeedback>
+                        <p><b>Feedback Text: </b>${textFeedback.text}</p>
+                    </#list>
+                <#else>
+                    No text feedbacks
+                </#if>
             </#list>
         </td>
     </tr>
@@ -46,6 +54,14 @@
             <p>Feedbacks Forum</p>
             <#list forum_feedbacks as forum_feedback>
                 <p><b>Forum Feedback Title: </b>${forum_feedback.title}</p>
+
+                <#if forum_feedback.textFeedbacks??>
+                    <#list forum_feedback.textFeedbacks as textFeedback>
+                        <p><b>Feedback Text: </b>${textFeedback.text}</p>
+                    </#list>
+                <#else>
+                    No text feedbacks
+                </#if>
             </#list>
         </td>
     </tr>

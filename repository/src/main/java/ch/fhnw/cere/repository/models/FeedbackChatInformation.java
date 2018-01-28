@@ -16,13 +16,13 @@ public class FeedbackChatInformation {
     private long feedbackChatId;
 
     @JsonIgnore
-    @ManyToOne(cascade = {CascadeType.REMOVE, CascadeType.MERGE})
+    @ManyToOne
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "feedback_id", nullable = false)
     private Feedback feedback;
 
     @JsonIgnore
-    @ManyToOne(cascade = {CascadeType.REMOVE, CascadeType.MERGE})
+    @ManyToOne
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "user_id", nullable = false)
     private EndUser user;

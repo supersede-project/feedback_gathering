@@ -5,6 +5,9 @@ import ch.fhnw.cere.repository.models.orchestrator.Application;
 import ch.fhnw.cere.repository.models.orchestrator.Mechanism;
 import ch.fhnw.cere.repository.models.orchestrator.MechanismTemplateModel;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+import org.springframework.context.annotation.Lazy;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -142,8 +145,8 @@ public class Feedback {
     @OneToMany(mappedBy = "feedback", cascade = {CascadeType.REMOVE, CascadeType.PERSIST})
     private List<ScreenshotFeedback> screenshotFeedbacks;
 
-
     @OneToMany(mappedBy = "feedback", cascade = {CascadeType.REMOVE, CascadeType.PERSIST})
+    @LazyCollection(LazyCollectionOption.FALSE)
     private List<TextFeedback> textFeedbacks;
 
     @JsonIgnore

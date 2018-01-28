@@ -75,10 +75,8 @@ public class FeedbackSettingsController extends BaseController {
     @ResponseStatus(HttpStatus.CREATED)
     @RequestMapping(method = RequestMethod.POST, value = "/feedbacksettings")
     public FeedbackSettings createFeedbackSetting(HttpEntity<String> feedbackSettingsJSON) throws IOException, ServletException {
-        LOGGER.info("Hey ho");
         LOGGER.info("request string: " + feedbackSettingsJSON.getBody());
         if(feedbackSettingsJSON.getBody() != null){
-            LOGGER.info("Hey huhuhu");
 
             JSONObject obj = new JSONObject(feedbackSettingsJSON.getBody());
             Boolean statusUpdates = obj.getBoolean("statusUpdates");
@@ -100,8 +98,8 @@ public class FeedbackSettingsController extends BaseController {
 
             LOGGER.info("Feedback of the setting" + feedbackSettings.getFeedback());
 
-            EndUser mockUser = new EndUser();
-            feedbackSettings.setUser(endUserService.find(1));
+            feedbackSettings.setUser(endUserService.
+                    find(feedbackService.find(feedbackId).getUserIdentification()));
             return feedbackSettingsService.save(feedbackSettings);
         }
         return null;
