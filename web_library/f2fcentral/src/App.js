@@ -40,9 +40,6 @@ class App extends Component {
           sessionStorage.setItem('applicationId', window.applicationId);
         }
       }
-      if(sessionStorage.getItem('adminUser') || window.adminUser) {
-          sessionStorage.setItem('adminUser', window.adminUser);
-      }
     }
 
     componentDidMount() {
@@ -57,7 +54,7 @@ class App extends Component {
   render() {
     var toRender;
 
-    if(sessionStorage.getItem('adminUser')) {
+    if(window.adminUser) {
       toRender = <CompanyViewAccordion/>
     }
     else {
