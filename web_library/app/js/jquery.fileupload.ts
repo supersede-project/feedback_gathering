@@ -1,49 +1,98 @@
 export interface JQuery {
-    fileUpload(distPath:string):JQuery;
+    fileUpload(distPath: string, maximumTotalFileSize?: number): JQuery;
 }
 
 export var fileUploadPluginModule = (function ($, window, document) {
-    var distPath;
+    let distPath;
     var dropArea;
-    var fileInput;
-    var fileTable;
-    var currentFiles = [];
+    let fileInput;
+    let fileTable;
+    this.maximumTotalFileSize = 0;
+    let currentFiles = [];
+    var plugin;
 
-    var isAdvancedUpload = function () {
-        var div = document.createElement('div');
+    let isAdvancedUpload = function () {
+        let div = document.createElement('div');
         return (('draggable' in div) || ('ondragstart' in div && 'ondrop' in div)) && 'FormData' in window && 'FileReader' in window;
     }();
 
-    var addToCurrentFiles = function(files) {
-        if(files.length > 1) {
-            for(var i = 0; i < files.length; i++) {
+    let addToCurrentFiles = function (files) {
+        hideFileSizeErrorMessage();
+        let currentTotal = getTotalFileSizeForFiles(currentFiles);
+        let filesToAddTotal = getTotalFileSizeForFiles(files);
+        if(currentTotal + filesToAddTotal > plugin.maximumTotalFileSize) {
+            showFileSizeErrorMessage(filesToAddTotal);
+            return;
+        }
+
+        if (files.length > 1) {
+            for (let i = 0; i < files.length; i++) {
                 currentFiles.push(files[i]);
             }
         } else {
-            var file = files[0];
+            let file = files[0];
             currentFiles.push(file);
         }
+
+        currentTotal = getTotalFileSizeForFiles(currentFiles);
+        updateFileSizeDisplay(currentTotal);
+
         showFiles(currentFiles);
     };
 
-    var showFiles = function(files) {
+    let getTotalFileSizeForFiles = function(files):number {
+        let totalFileSize = 0;
+        for (let i = 0; i < files.length; i++) {
+            totalFileSize += files[i].size;
+        }
+        return totalFileSize;
+    };
+
+    let showFileSizeErrorMessage = function(fileSize:number) {
+        let errorText = 'File size(s) (' + formatBytes(fileSize) + ') too big. In total ' + formatBytes(plugin.maximumTotalFileSize) + ' are aloud.';
+        dropArea.find('.error').text(errorText).show();
+    };
+
+    let hideFileSizeErrorMessage = function() {
+        dropArea.find('.error').empty().hide();
+    };
+
+    let updateFileSizeDisplay = function (currentTotalFileSize: number) {
+        let currentTotalFileSizeString:string = formatBytes(currentTotalFileSize);
+        plugin.parent().find('.current-total-file-size').text(currentTotalFileSizeString);
+    };
+
+    let formatBytes = function (bytes, decimals?):string {
+        if (0 == bytes) return "0 Bytes";
+        let c = 1024, d = decimals || 2, e = ["Bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"],
+            f = Math.floor(Math.log(bytes) / Math.log(c));
+        return parseFloat((bytes / Math.pow(c, f)).toFixed(d)) + " " + e[f]
+    };
+
+    let showFiles = function (files) {
         fileTable.empty();
-        for(var i = 0; i < files.length; i++) {
-            var fileLi = $('<tr>' +
+        for (let i = 0; i < files.length; i++) {
+            let fileLi = $('<tr>' +
                 '<td>' + files[i].name + '</td>' +
                 '<td>' + files[i].type + '</td>' +
+                '<td>' + formatBytes(files[i].size) + '</td>' +
                 '<td><a class="remove-file" data-index="' + i + '" href="#"><img src="' + distPath + 'img/ic_delete_black_24dp_1x.png" /></a></td>' +
                 '</tr>');
             fileTable.append(fileLi);
         }
     };
 
-    $.fn.fileUpload = function (distPathString:string) {
-        this.currentFiles = currentFiles;
+    $.fn.fileUpload = function (distPathString: string, maximumTotalFileSize?: number) {
+        if (maximumTotalFileSize === null || maximumTotalFileSize === undefined) {
+            maximumTotalFileSize = 0;
+        }
+        plugin = this;
+        plugin.currentFiles = currentFiles;
+        plugin.maximumTotalFileSize = maximumTotalFileSize;
         distPath = distPathString;
-        dropArea = this;
-        fileInput = this.find('input[type=file]');
-        fileTable = this.parent('.attachment-type').find('table.current-files');
+        dropArea = plugin;
+        fileInput = plugin.find('input[type=file]');
+        fileTable = plugin.parent('.attachment-type').find('table.current-files');
 
         if (isAdvancedUpload) {
             var droppedFiles = false;
@@ -61,15 +110,15 @@ export var fileUploadPluginModule = (function ($, window, document) {
             });
         }
 
-        $(document.body).on('click', 'a.remove-file', function(event) {
+        $(document.body).on('click', 'a.remove-file', function (event) {
             event.stopPropagation();
             event.preventDefault();
-            var index = $(this).data('index');
+            let index = $(plugin).data('index');
             currentFiles.splice(index, 1);
             showFiles(currentFiles);
         });
 
-        fileInput.on('change', function(e) {
+        fileInput.on('change', function (e) {
             addToCurrentFiles(e.target.files);
         });
 

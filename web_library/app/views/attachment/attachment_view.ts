@@ -9,7 +9,7 @@ export class AttachmentView implements MechanismView {
     constructor(private attachmentMechanism:AttachmentMechanism, private dialogId:string, private distPath:string) {
         if (attachmentMechanism.active) {
             this.dropArea = jQuery('' + this.getSelector()).find('.drop-area');
-            this.dropArea.fileUpload(distPath);
+            this.dropArea.fileUpload(distPath, Number(attachmentMechanism.getParameterValue("maximumTotalFileSize")));
         }
     }
 

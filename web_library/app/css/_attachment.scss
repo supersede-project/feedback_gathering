@@ -12,6 +12,12 @@
     &.active {
       background: #d8d8d8;
     }
+
+    .error {
+      display: none;
+      color: red;
+      margin-top: 20px;
+    }
   }
 
   table.current-files {

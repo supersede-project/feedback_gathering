@@ -6,7 +6,13 @@
         <article class="file-upload-box drop-area">
             <input type="file" name="files[]" id="file" multiple/>
             <label for="file"><strong>{{t "attachment.choose_file" }}</strong><span> {{t "attachment.drop_file" }}</span>.</label>
+            <br />
+            <span class="error"></span>
         </article>
+
+        {{#if maximumTotalFileSize}}
+            <p class="file-size-status">Total File Size: <span class="current-total-file-size">0</span> / {{maximumTotalFileSizeDisplay}}</p>
+        {{/if}}
 
         <table class="current-files">
 
