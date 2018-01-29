@@ -551,6 +551,8 @@ var wpcf7={"apiSettings":{"root":"https:\/\/www.goellheim-aktuell.de\/wp-json\/c
 <script src="dist/jqueryui/jquery-ui.min.js"></script>
 <script src="dist/audio/recorder.js"></script>
 <script src="dist/audio/Fr.voice.js"></script>
+<script src="dist/screenshot/html2canvas_5_0_4.min.js"></script>
+<script src="dist/screenshot/html2canvas_5_0_4.svg.min.js"></script>
 <script src="dist/screenshot/fabric.min.js"></script>
 <script src="dist/screenshot/customiseControls.js"></script>
 <script src="dist/screenshot/spectrum.js"></script>
@@ -558,19 +560,13 @@ var wpcf7={"apiSettings":{"root":"https:\/\/www.goellheim-aktuell.de\/wp-json\/c
 <script>
     jQuery(document).ready(function () {
         jQuery('#feedbackEntryPoint').feedbackPlugin({
-            //'distPath': 'http://supersede.es.atos.net/web_library/senercon/dist',
-
-			//'distPath': 'dist/',
-            //'distPath': 'https://platform.supersede.eu/web_library/senercon/dist/',
-
-            'applicationId': 20,
-            'apiEndpointOrchestrator': 'https://platform.supersede.eu:8443/',
-            'apiEndpointRepository': 'https://platform.supersede.eu:8443/',
-
+            'distPath': 'dist/',
             'userId': '99999999',
             'lang': 'de',
             'fallbackLang': 'en',
             'modal': 1,
+            'color': '#FFFFFF',
+            'backgroundColor': '#2156A0',
             'dialogCSSClass': 'my-custom-dialog-class',
             'colorPickerCSSClass': 'my-color-picker',
             'defaultStrokeWidth': 4,

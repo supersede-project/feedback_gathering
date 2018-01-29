@@ -2,7 +2,7 @@
     <section id="ratingMechanism{{ id }}"
              class="feedback-mechanism feedback-col {{parent.labelPositioning}} {{cssClass}} rating-type{{#if mandatory }} mandatory{{/if}}"
              style="width: {{boxWidth}}; padding-left: {{boxPaddingLeft}}; padding-right: {{boxPaddingRight}};">
-        <p style="{{parent.generalLabelStyle}}{{#if mandatory}}{{ parent.mandatoryLabelStyle }}{{/if}}" class="rating-text col col-left">
+        <p style="{{parent.generalLabelStyle}}{{#if mandatory}}{{ parent.mandatoryLabelStyle }}{{/if}}" class="rating-text rating-type-label col col-left">
             {{ title }}{{#if mandatory }} {{ parent.mandatorySign }}{{/if}}
         </p>
         <p class="rating-input col col-right" data-mandatory-message="{{mandatoryReminder}}">

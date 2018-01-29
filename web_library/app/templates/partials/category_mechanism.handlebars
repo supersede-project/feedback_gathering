@@ -1,7 +1,7 @@
 {{#if active}}
     <section id="categoryMechanism{{ id }}" class="feedback-mechanism feedback-col {{parent.labelPositioning}} {{cssClass}} category-type validate-category{{#if mandatory}} mandatory{{/if}}"
         {{#if mandatory }} data-mandatory="1" data-mandatory-manual-text="{{ mandatoryReminder }}" {{/if}} style="width: {{boxWidth}}; padding-left: {{boxPaddingLeft}}; padding-right: {{boxPaddingRight}};">
-        <p style="{{parent.generalLabelStyle}}{{ labelStyle }}{{#if mandatory}} {{ parent.mandatoryLabelStyle }}{{/if}}">{{ title }}{{#if mandatory }} {{ parent.mandatorySign }}{{/if}}</p>
+        <p class="category-type-label" style="{{parent.generalLabelStyle}}{{ labelStyle }}{{#if mandatory}} {{ parent.mandatoryLabelStyle }}{{/if}}">{{ title }}{{#if mandatory }} {{ parent.mandatorySign }}{{/if}}</p>
 
         {{#if asDropdown}}
             <select name="category_mechanism_{{ id }}"{{#if multiple}} multiple{{/if}}>

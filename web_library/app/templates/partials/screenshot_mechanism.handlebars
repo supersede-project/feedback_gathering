@@ -15,7 +15,7 @@
                     {{#if screenshotRemoveButtonTitle}}{{screenshotRemoveButtonTitle}}{{else}}{{t "screenshot.remove" }}{{/if}}
                 </button>
 
-                <p style="{{parent.generalLabelStyle}}">{{zoomTitle}}</p>
+                <p class="screenshot-action-title" style="{{parent.generalLabelStyle}}">{{zoomTitle}}</p>
                 {{#if zoomExplanation }}
                     <small>{{ zoomExplanation }}</small>
                 {{/if}}
@@ -32,7 +32,7 @@
                     }
                 </style>
                 <![endif]-->
-                <p style="{{parent.generalLabelStyle}}">{{cropTitle}}</p>
+                <p class="screenshot-action-title" style="{{parent.generalLabelStyle}}">{{cropTitle}}</p>
                 {{#if cropExplanation }}
                     <small>{{ cropExplanation }}</small>
                 {{/if}}
@@ -53,7 +53,7 @@
                         src="{{parent.distPath}}img/ic_undo_black_24dp_2x.png"
                         alt="{{t "screenshot.undo" }}"/></button>
 
-                <p class="annotations-heading" style="{{parent.generalLabelStyle}}">{{annotationTitle}}</p>
+                <p class="screenshot-action-title" class="annotations-heading" style="{{parent.generalLabelStyle}}">{{annotationTitle}}</p>
                 {{#if annotationExplanation }}
                     <small>{{ annotationExplanation }}</small>
                 {{/if}}
@@ -76,9 +76,7 @@
                 <img class="freehand" title="{{ freehandMouseover }}"
                      src="{{parent.distPath}}img/ic_gesture_black_24px.svg" />
 
-                <br />
-                <br />
-                <p class="annotations-heading" style="{{parent.generalLabelStyle}}">{{textTitle}}</p>
+                <p class="screenshot-action-title" class="annotations-heading" style="{{parent.generalLabelStyle}}">{{textTitle}}</p>
                 {{#if textExplanation }}
                     <small>{{ textExplanation }}</small>
                 {{/if}}
