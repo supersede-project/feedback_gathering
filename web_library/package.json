@@ -130,6 +130,7 @@
     "react-accessible-accordion": "^1.0.2",
     "react-chat-widget": "^2.1.2",
     "react-dom": "^16.2.0",
+    "react-file-input": "^0.2.5",
     "react-icons": "^2.2.7",
     "react-sanfona": "^1.0.6",
     "react-scripts": "^1.0.17",

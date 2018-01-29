@@ -40,6 +40,9 @@ class App extends Component {
           sessionStorage.setItem('applicationId', window.applicationId);
         }
       }
+      if(sessionStorage.getItem('adminUser') || window.adminUser) {
+          sessionStorage.setItem('adminUser', window.adminUser);
+      }
     }
 
     componentDidMount() {
@@ -52,25 +55,34 @@ class App extends Component {
     }
 
   render() {
+    var toRender;
+
+    if(sessionStorage.getItem('adminUser')) {
+      toRender = <CompanyViewAccordion/>
+    }
+    else {
+      toRender = <Tabs style={ {activeTabContentStyle: {backgroundColor:'#1A7E92', borderColor: '#1A7E92'}}}>
+          <TabList>
+              <Tab selectedClassName="tabselected">My Feedbacks</Tab>
+              <Tab selectedClassName="tabselected">Feedback Forum</Tab>
+          </TabList>
+
+          <TabPanel>
+              <MyFeedbacksTabAccordion/>
+              <Widget handleNewUserMessage={this.handleNewUserMessage}/>
+          </TabPanel>
+          <TabPanel>
+              <FeedbackForumTabAccordion/>
+          </TabPanel>
+
+      </Tabs>;
+    }
+
     return (
       <div className="App">
         <header className="App-header">
         </header>
-            <Tabs style={ {activeTabContentStyle: {backgroundColor:'#1A7E92', borderColor: '#1A7E92'}}}>
-                <TabList>
-                    <Tab selectedClassName="tabselected">Company View</Tab>
-                    <Tab selectedClassName="tabselected">Feedback Forum</Tab>
-                </TabList>
-
-                <TabPanel>
-                    <CompanyViewAccordion/>
-                    <Widget handleNewUserMessage={this.handleNewUserMessage}/>
-                </TabPanel>
-                <TabPanel>
-                    <FeedbackForumTabAccordion/>
-                </TabPanel>
-
-            </Tabs>
+        {toRender}
       </div>
     );
   }

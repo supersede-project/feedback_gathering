@@ -11,7 +11,7 @@ import FaCogs from 'react-icons/lib/fa/cogs';
 import MdVisibilityOff from 'react-icons/lib/md/visibility-off';
 import FaClose from 'react-icons/lib/fa/close';
 import FaFileImageO from 'react-icons/lib/fa/file-image-o';
-import FileInput from 'react-file-input';
+//import FileInput from 'react-file-input';
 
 import style from './App.css';
 import FeedbackSettings from "./FeedbackSettings";
@@ -27,9 +27,11 @@ import FeedbackSettings from "./FeedbackSettings";
 
     this.toggleExpanded = this.toggleExpanded.bind(this);
     this.openSettings = this.openSettings.bind(this);
-    handleChange: function () {
-        
-    }
+    this.openFileDialog = this.openFileDialog.bind(this);
+  }
+
+  handleChange() {
+
   }
 
   toggleExpanded()
@@ -46,7 +48,7 @@ import FeedbackSettings from "./FeedbackSettings";
           </div>
       }
   }
-     
+
   //bug=661, function=662, generalfeedback=663
   getIconForFeedbackType() {
       if (this.props.type === 661) {
@@ -73,9 +75,9 @@ import FeedbackSettings from "./FeedbackSettings";
 
   }
 
-  openFileDialog(){
-      
-      
+  openFileDialog(e){
+
+
   }
 
   render()

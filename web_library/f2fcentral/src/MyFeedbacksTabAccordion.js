@@ -1,10 +1,4 @@
 import React, {Component} from 'react';
-/*import {
-    Accordion,
-    AccordionItem,
-    AccordionItemTitle,
-    AccordionItemBody
-} from 'react-accessible-accordion';*/
 import { PulseLoader } from 'react-spinners';
 
 import { Accordion, AccordionItem } from 'react-sanfona';
@@ -45,39 +39,6 @@ class MyFeedbacksTabAccordion extends Component {
       let toRender = null;
       var that = this;
       if(that.state.data.length > 0) {
-        /*toRender = <Accordion>
-            {that.state.data.map(function (item, index) {
-                console.log(item);
-                if(item.textFeedbacks.length > 0 && item.categoryFeedbacks.length > 0)
-                {
-                  return (
-                      <AccordionItem key={index}>
-                          <AccordionItemTitle>
-                              <FeedbackTitle type={item.categoryFeedbacks[0].mechanismId} title={item.textFeedbacks[0].text}/>
-                          </AccordionItemTitle>
-                          <AccordionItemBody>
-                              <FeedbackBody date={item.createdAt} status="WIP"/>
-                          </AccordionItemBody>
-                      </AccordionItem>
-                  )
-                }
-                return false;
-            })}
-        </Accordion>;*/
-
-        /*toRender = this.state.data.map(function(item, index) {
-          console.log(item);
-          if(item.textFeedbacks.length > 0 && item.categoryFeedbacks.length > 0)
-          {
-            return (
-              <li>
-              <div className="accordion">{item.textFeedbacks[0].text}</div>
-              <div className="accordion-content"></div>
-              </li>
-            )
-          }
-          return false;
-        })*/
         toRender = <Accordion>
         {that.state.data.map(function (item, index) {
             if(item.textFeedbacks.length > 0 && item.categoryFeedbacks.length > 0)

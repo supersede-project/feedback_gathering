@@ -1,6 +1,7 @@
 <?php
 $user_id = intval($_GET['user_id']);
 $application_id = intval($_GET['application_id']);
+$admin_user = $_GET['admin_user'];
 
 if(!isset($user_id) || $user_id == 0) {
     $user_id = '99999999';
@@ -8,6 +9,10 @@ if(!isset($user_id) || $user_id == 0) {
 
 if(!isset($application_id) || $application_id == 0) {
   $application_id = 20;
+}
+
+if(!isset($admin_user) || $admin_user === '') {
+  $admin_user = false;
 }
 ?>
 
@@ -1897,6 +1902,7 @@ if(!isset($application_id) || $application_id == 0) {
 
     var userId = <?php echo $user_id; ?>;
     var applicationId = <?php echo $application_id; ?>;
+    var adminUser = <?php echo $admin_user; ?>;
 </script>
 
 <script type="text/javascript" src="/dist/f2fcentral.min.js"></script>
