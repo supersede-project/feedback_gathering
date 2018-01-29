@@ -141,6 +141,11 @@ button {
   margin-left: 0px;
 }
 
+.companytitle .disabled {
+  color: #EEE;
+  background-color: red;
+}
+
 .thumbsCount {
   position: relative;
   top: -10px;

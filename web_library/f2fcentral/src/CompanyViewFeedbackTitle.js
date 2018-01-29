@@ -29,6 +29,7 @@ import FeedbackSettings from "./FeedbackSettings";
     this.toggleExpanded = this.toggleExpanded.bind(this);
     this.openSettings = this.openSettings.bind(this);
     this.openFileDialog = this.openFileDialog.bind(this);
+    this.closeThread = this.closeThread.bind(this);
   }
 
   handleChange() {
@@ -64,16 +65,7 @@ import FeedbackSettings from "./FeedbackSettings";
       }
   }
 
-  closeThread(){
-          var divStyle = {
-              background: '#1A7E92',
-
-          };
-          toRender = <div style={divStyle}>
-          /></div>
-
-      this.setState({expanded: this.state.expanded});
-
+  closeThread(e){
   }
 
   openFileDialog(e){
