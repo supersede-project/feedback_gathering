@@ -154,7 +154,7 @@ class FeedbackForumTabAccordion extends Component {
                   if(item.textFeedbacks.length > 0 && item.categoryFeedbacks.length > 0)
                   {
                     return (
-                        <AccordionItem titleTag="span" title={<ForumTitle feedbackId={item.id} title={item.textFeedbacks[0].text} thumbsUp={item.likeCount} thumbsDown={item.dislikeCount} type={item.categoryFeedbacks[0].mechanismId} onShowCommentChange={instance.handleShowCommentChange} update={instance.fetchData.bind(instance)} index={index}/>}>
+                        <AccordionItem titleTag="span" title={<ForumTitle feedbackId={item.id} title={item.textFeedbacks[0].text} thumbsUp={item.likeCount} thumbsDown={item.dislikeCount} type={item.categoryFeedbacks[0].parameterId} onShowCommentChange={instance.handleShowCommentChange} update={instance.fetchData.bind(instance)} index={index}/>}>
                                 <div>
                                     <ForumBody status="WIP" date={item.createdAt} onShowCommentChange={instance.handleShowCommentChange} index={index}/>
                                 </div>

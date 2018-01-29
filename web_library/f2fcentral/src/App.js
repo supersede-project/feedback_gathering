@@ -8,6 +8,7 @@ import './App.css';
 import MyFeedbacksTabAccordion from "./MyFeedbacksTabAccordion";
 import { Widget, addResponseMessage } from 'react-chat-widget';
 import FeedbackForumTabAccordion from "./FeedbackForumTabAccordion";
+import CompanyViewAccordion from "./CompanyViewAccordion";
 
 class App extends Component {
 
@@ -57,12 +58,12 @@ class App extends Component {
         </header>
             <Tabs style={ {activeTabContentStyle: {backgroundColor:'#1A7E92', borderColor: '#1A7E92'}}}>
                 <TabList>
-                    <Tab selectedClassName="tabselected">My Feedbacks</Tab>
+                    <Tab selectedClassName="tabselected">Company View</Tab>
                     <Tab selectedClassName="tabselected">Feedback Forum</Tab>
                 </TabList>
 
                 <TabPanel>
-                    <MyFeedbacksTabAccordion/>
+                    <CompanyViewAccordion/>
                     <Widget handleNewUserMessage={this.handleNewUserMessage}/>
                 </TabPanel>
                 <TabPanel>

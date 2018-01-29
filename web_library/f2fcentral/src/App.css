@@ -128,6 +128,19 @@ button {
   flex-grow: 1;
 }
 
+.companyIconContainer {
+  display: flex;
+}
+
+.companyIconContainer svg {
+  margin-left: 6px;
+  flex-grow: 1;
+}
+
+.companyIconContainer svg:first-child{
+  margin-left: 0px;
+}
+
 .thumbsCount {
   position: relative;
   top: -10px;
@@ -135,6 +148,32 @@ button {
   background: red;
   color: white;
   padding: 0 2px;
+}
+
+.counts {
+  position: relative;
+  top: -10px;
+  left: 2px;
+  background: red;
+  color: white;
+  padding: 0 2px;
+}
+
+.settingsbox {
+  -webkit-box-sizing: content-box;
+  -moz-box-sizing: content-box;
+  box-sizing: content-box;
+  float: right;
+  width: 63%;
+  height: 14%;
+  position: relative;
+  right: 66%;
+  left: 0;
+  padding: 20px;
+  overflow: hidden;
+  background: #efefef;
+  -webkit-box-shadow: 1px 1px 1px 0 rgba(0,0,0,0.3) ;
+  box-shadow: 1px 1px 1px 0 rgba(0,0,0,0.3) ;
 }
 
 .accordion {
@@ -146,7 +185,7 @@ button {
   background-color: #ccc;
 }
 
-.accorion-content {
+.accordion-content {
   display: none;
   background-color: white;
   overflow: hidden;
