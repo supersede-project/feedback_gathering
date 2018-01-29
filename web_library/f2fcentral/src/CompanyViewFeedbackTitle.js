@@ -11,6 +11,7 @@ import FaCogs from 'react-icons/lib/fa/cogs';
 import MdVisibilityOff from 'react-icons/lib/md/visibility-off';
 import FaClose from 'react-icons/lib/fa/close';
 import FaFileImageO from 'react-icons/lib/fa/file-image-o';
+import GoCircleSlash from 'react-icons/lib/go/circle-slash';
 //import FileInput from 'react-file-input';
 
 import style from './App.css';
@@ -86,7 +87,7 @@ import FeedbackSettings from "./FeedbackSettings";
           flexGrow: 2,
           fontSize: 12,
           fontStyle: 'italic'
-      }} onClick={this.toggleExpanded}><FaClose size={30} color="red" onClick={this.closeThread}/>{this.getIconForFeedbackType()}&nbsp; {(!this.state.expanded && this.props.title.length > 20)? this.props.title.substring(0, 20) + "...": this.props.title}
+      }} onClick={this.toggleExpanded}><GoCircleSlash size={30} color="red" onClick={this.closeThread}/>{this.getIconForFeedbackType()}&nbsp; {(!this.state.expanded && this.props.title.length > 20)? this.props.title.substring(0, 20) + "...": this.props.title}
           <div><div align="left" style={{fontSize: 10}}>sent on {this.props.date}</div>
               <div align="left" style={{fontSize: 10, color: '#169BDD'}}>Status: {this.props.status}</div>
               <div align="left" style={{fontSize: 10, color: '#169BDD'}}>Forum activity:
