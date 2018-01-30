@@ -42,6 +42,12 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     }
 
     @Bean
+    public MultipartResolver multipartResolverCommons() {
+        CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver();
+        return multipartResolver;
+    }
+
+    @Bean
     public Boolean disableSSLValidation() throws Exception {
         final SSLContext sslContext = SSLContext.getInstance("TLS");
 
