@@ -87,7 +87,7 @@ public class UploadController {
                 return "The uploaded image size is too small. Please select an image with at least " +
                         "40 x 40 Pixels";
             } else {
-                String format = FilenameUtils.getExtension(file.getOriginalFilename());
+                String format = FilenameUtils.getExtension(file.getOriginalFilename()).toLowerCase();
                 File destination = new File(UPLOADED_FOLDER + "//profile_pic_api_user_"+
                         api_user_id + "." + format); // something like C:/Users/tom/Documents/nameBasedOnSomeId.png
                 ImageIO.write(src, format, destination);

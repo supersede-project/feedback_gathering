@@ -9,6 +9,7 @@ import ch.fhnw.cere.repository.models.TextFeedback;
 import ch.fhnw.cere.repository.models.orchestrator.Application;
 import ch.fhnw.cere.repository.repositories.EndUserRepository;
 import ch.fhnw.cere.repository.repositories.FeedbackRepository;
+import ch.fhnw.cere.repository.repositories.TextFeedbackRepository;
 import freemarker.template.TemplateException;
 import org.hibernate.Hibernate;
 import org.junit.After;
@@ -44,6 +45,9 @@ public class F2FEmailServiceTest {
     private EndUserRepository endUserRepository;
 
     @Autowired
+    private TextFeedbackRepository textFeedbackRepository;
+
+    @Autowired
     private FeedbackService feedbackService;
 
     @Autowired
@@ -71,32 +75,82 @@ public class F2FEmailServiceTest {
         feedbackRepository.deleteAllInBatch();
         endUserRepository.deleteAllInBatch();
 
-        endUser1 = endUserRepository.save(new EndUser(1,"kaydin1",123));
-        endUser2 = endUserRepository.save(new EndUser(1,"kaydin2",123));
+        endUser1 = endUserRepository.save(new EndUser(1,"kaydin1",123,"f2f_central@hotmail.com"));
+        endUser2 = endUserRepository.save(new EndUser(1,"kaydin2",123,"f2f_central@hotmail.com"));
 
         feedback1 = feedbackRepository.save(new Feedback("Feedback 1 User 1", endUser1.getId(), 1, 11, "en"));
         TextFeedback textFeedback1 = new TextFeedback(feedback1,
                 "This is test text of Feedback 1 and User 1",88);
+        textFeedbackRepository.save(textFeedback1);
         List<TextFeedback> textFeedbacks1 = new ArrayList<>();
         textFeedbacks1.add(textFeedback1);
         feedback1.setTextFeedbacks(textFeedbacks1);feedbackRepository.save(feedback1);
 
         feedback2 = feedbackRepository.save(new Feedback("Feedback 2 User 1", endUser1.getId(), 1, 11, "en"));
+        TextFeedback textFeedback2 = new TextFeedback(feedback2,
+                "This is test text of Feedback 2 and User 1 - PUBLISHED",88);
+        textFeedbackRepository.save(textFeedback2);
+        List<TextFeedback> textFeedbacks2 = new ArrayList<>();
+        textFeedbacks2.add(textFeedback2);
+        feedback2.setTextFeedbacks(textFeedbacks2);;
         feedback2.setPublished(true);feedbackRepository.save(feedback2);
+
         feedback3 = feedbackRepository.save(new Feedback("Feedback 3 User 1", endUser1.getId(), 1, 22, "en"));
+        TextFeedback textFeedback3 = new TextFeedback(feedback3,
+                "This is test text of Feedback 3 and User 1",88);
+        textFeedbackRepository.save(textFeedback3);
+        List<TextFeedback> textFeedbacks3 = new ArrayList<>();
+        textFeedbacks3.add(textFeedback3);
+        feedback3.setTextFeedbacks(textFeedbacks3);feedbackRepository.save(feedback3);
+
         feedback4 = feedbackRepository.save(new Feedback("Feedback 4 User 1", endUser1.getId(), 1, 22, "en"));
+        TextFeedback textFeedback4 = new TextFeedback(feedback4,
+                "This is test text of Feedback 4 and User 1 - PUBLISHED",88);
+        textFeedbackRepository.save(textFeedback4);
+        List<TextFeedback> textFeedbacks4 = new ArrayList<>();
+        textFeedbacks4.add(textFeedback4);
+        feedback4.setTextFeedbacks(textFeedbacks4);
         feedback4.setPublished(true);feedbackRepository.save(feedback4);
+
         feedback5 = feedbackRepository.save(new Feedback("Feedback 5 User 2", endUser2.getId(), 1, 11, "en"));
+        TextFeedback textFeedback5 = new TextFeedback(feedback5,
+                "This is test text of Feedback 5 and User 2",88);
+        textFeedbackRepository.save(textFeedback5);
+        List<TextFeedback> textFeedbacks5 = new ArrayList<>();
+        textFeedbacks5.add(textFeedback5);
+        feedback5.setTextFeedbacks(textFeedbacks5);feedbackRepository.save(feedback5);
+
         feedback6 = feedbackRepository.save(new Feedback("Feedback 6 User 2", endUser2.getId(), 1, 11, "en"));
+        TextFeedback textFeedback6 = new TextFeedback(feedback6,
+                "This is test text of Feedback 6 and User 2 - PUBLISHED",88);
+        textFeedbackRepository.save(textFeedback6);
+        List<TextFeedback> textFeedbacks6 = new ArrayList<>();
+        textFeedbacks6.add(textFeedback6);
+        feedback6.setTextFeedbacks(textFeedbacks6);
         feedback6.setPublished(true);feedbackRepository.save(feedback6);
+
         feedback7 = feedbackRepository.save(new Feedback("Feedback 7 User 2", endUser2.getId(), 1, 22, "en"));
+        TextFeedback textFeedback7 = new TextFeedback(feedback7,
+                "This is test text of Feedback 7 and User 2",88);
+        textFeedbackRepository.save(textFeedback7);
+        List<TextFeedback> textFeedbacks7 = new ArrayList<>();
+        textFeedbacks7.add(textFeedback7);
+        feedback7.setTextFeedbacks(textFeedbacks7);feedbackRepository.save(feedback7);
+
         feedback8 = feedbackRepository.save(new Feedback("Feedback 8 User 2", endUser2.getId(), 1, 22, "en"));
+        TextFeedback textFeedback8 = new TextFeedback(feedback8,
+                "This is test text of Feedback 8 and User 2",88);
+        textFeedbackRepository.save(textFeedback8);
+        List<TextFeedback> textFeedbacks8 = new ArrayList<>();
+        textFeedbacks8.add(textFeedback8);
+        feedback8.setTextFeedbacks(textFeedbacks8);feedbackRepository.save(feedback8);
     }
 
     @After
     public void cleanup(){
         feedbackRepository.deleteAllInBatch();
         endUserRepository.deleteAllInBatch();
+        textFeedbackRepository.deleteAllInBatch();
     }
 
 
@@ -116,35 +170,46 @@ public class F2FEmailServiceTest {
 //        long intevalPeriod = 1000;
 //        timer.scheduleAtFixedRate(timerTask, delay,
 //                intevalPeriod);
-        EndUser testUser = endUserService.find(endUser1.getId());
-        List<Feedback> userFeedbacks = feedbackService.findByUserIdentification(endUser1.getId());
-        List<Feedback> forumFeedbacks = feedbackService.findByPublished(true);
+        List<EndUser> endUsers = endUserRepository.findAll();
+        for(EndUser user : endUsers){
+            List<Feedback> userFeedbacks = feedbackService.findByUserIdentification(user.getId());
+            List<Feedback> forumFeedbacks = feedbackService.findByPublished(true);
 
-//        List<TextFeedback> textFeedbacks = feedbackService.getTextFeedbacks(
-//                feedback1.getId()
-//        );
-        log.info("==== seinding mail ====");
-        Mail mail = new Mail();
-        mail.setFrom("kuersat.aydinli@gmail.com");
-        mail.setTo("f2f_central@hotmail.com");
-        mail.setSubject("Notifications - Feedback Activities from the last 2 weeks");
+            log.info("==== seinding mail ====");
+            Mail mail = new Mail();
+            mail.setFrom("kuersat.aydinli@gmail.com");
+            mail.setTo("f2f_central@hotmail.com");
+            mail.setSubject("Notifications - Feedback Activities from the last 2 weeks");
 
-        Map<String, Object> model = new HashMap<>();
-        model.put("enduser",testUser);
-        model.put("user_feedbacks",userFeedbacks);
-        model.put("forum_feedbacks",forumFeedbacks);
+            Map<String, Object> model = new HashMap<>();
+            model.put("enduser",user);
+            model.put("user_feedbacks",userFeedbacks);
+            model.put("forum_feedbacks",forumFeedbacks);
 
-        mail.setModel(model);
+            mail.setModel(model);
 
-        emailService.sendSimpleMessage(mail);
-        log.info("==== mail sent ====");
+            emailService.sendSimpleMessage(mail);
+            log.info("==== mail sent ====");
+        }
+
+//        EndUser testUser = endUserService.find(endUser1.getId());
+//        List<Feedback> userFeedbacks = feedbackService.findByUserIdentification(endUser1.getId());
+//        List<Feedback> forumFeedbacks = feedbackService.findByPublished(true);
 //
+//        log.info("==== seinding mail ====");
 //        Mail mail = new Mail();
 //        mail.setFrom("kuersat.aydinli@gmail.com");
 //        mail.setTo("f2f_central@hotmail.com");
-//        mail.setSubject("Sending Simple Email with JavaMailSender Example");
-//        mail.setContent("This tutorial demonstrates how to send a simple email using Spring Framework.");
+//        mail.setSubject("Notifications - Feedback Activities from the last 2 weeks");
+//
+//        Map<String, Object> model = new HashMap<>();
+//        model.put("enduser",testUser);
+//        model.put("user_feedbacks",userFeedbacks);
+//        model.put("forum_feedbacks",forumFeedbacks);
+//
+//        mail.setModel(model);
 //
 //        emailService.sendSimpleMessage(mail);
+//        log.info("==== mail sent ====");
     }
 }
