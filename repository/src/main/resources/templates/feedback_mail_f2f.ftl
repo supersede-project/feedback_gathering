@@ -22,7 +22,7 @@
     <tr>
         <td align="center" bgcolor="#78ab46" style="padding: 40px 0 30px 0;">
             <#--<img src="F:/SuperSede/monitor_feedback/repository/src/main/resources/icon_notification_red.png" alt="notification icon" style="display: block;" />-->
-            <img src="cid:logo.png" alt="notification icon" style="display: block;" />
+            <img src="/icon_notification_red.png" width="100" height="100" alt="notification icon" style="display: block;" />
         </td>
     </tr>
     <tr>
@@ -37,7 +37,7 @@
         <td bgcolor="#eacb60" style="padding: 40px 30px 40px 30px;">
             <p>Your Feedbacks</p>
             <#list user_feedbacks as user_feedback>
-                <p><b>User Feedback Title: </b>${user_feedback.title}</p>
+                <p>Feedback Title: ${user_feedback.title}</p>
 
                 <#if user_feedback.textFeedbacks??>
                     <#list user_feedback.textFeedbacks as textFeedback>
@@ -53,7 +53,7 @@
         <td bgcolor="#ea8f2e" style="padding: 40px 30px 40px 30px;">
             <p>Feedbacks Forum</p>
             <#list forum_feedbacks as forum_feedback>
-                <p><b>Forum Feedback Title: </b>${forum_feedback.title}</p>
+                <p>Feedback Title: ${forum_feedback.title}</p>
 
                 <#if forum_feedback.textFeedbacks??>
                     <#list forum_feedback.textFeedbacks as textFeedback>

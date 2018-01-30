@@ -31,6 +31,11 @@ public class FeedbackStatus {
 
     private Date date;
 
+    @PrePersist
+    protected void onCreate() {
+        date = new Date();
+    }
+
 
     public FeedbackStatus() {
     }
@@ -39,6 +44,11 @@ public class FeedbackStatus {
         this.feedback = feedback;
         this.status = status;
         this.date = date;
+    }
+
+    public FeedbackStatus(Feedback feedback, String status) {
+        this.feedback = feedback;
+        this.status = status;
     }
 
     public long getId() {

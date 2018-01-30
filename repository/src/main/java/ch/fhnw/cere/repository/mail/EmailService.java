@@ -8,6 +8,7 @@ import freemarker.template.Template;
 import freemarker.template.TemplateException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -33,13 +34,16 @@ public class EmailService {
     @Autowired
     private Configuration freemarkerConfig;
 
+    @Value("${spring.mail.username}")
+    protected String mailUsername;
+
     public void sendSimpleMessage(Mail mail) throws MessagingException, IOException, TemplateException {
         MimeMessage message = emailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message,
                 MimeMessageHelper.MULTIPART_MODE_MIXED_RELATED,
                 StandardCharsets.UTF_8.name());
 
-        helper.addAttachment("logo.png", new ClassPathResource("icon_notification_red.png"));
+//        helper.addAttachment("logo.png", new ClassPathResource("icon_notification_red.png"));
 
         Template t = freemarkerConfig.getTemplate("feedback_mail_f2f.ftl");
         String html = FreeMarkerTemplateUtils.processTemplateIntoString(t, mail.getModel());
@@ -47,7 +51,7 @@ public class EmailService {
         helper.setTo(mail.getTo());
         helper.setText(html, true);
         helper.setSubject(mail.getSubject());
-        helper.setFrom(mail.getFrom());
+        helper.setFrom(mailUsername);
 
         emailSender.send(message);
     }
