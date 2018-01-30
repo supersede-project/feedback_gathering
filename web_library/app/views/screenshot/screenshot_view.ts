@@ -11,6 +11,7 @@ import {ScreenshotFeedback} from '../../models/feedbacks/screenshot_feedback';
 import {MechanismView} from '../mechanism_view';
 import IPoint = fabric.IPoint;
 import {clickBlocked} from '../dialog/dialog_view';
+import { ScreenshotMechanism } from "../../models/mechanisms/screenshot_mechanism";
 
 const freehandDrawingMode:string = 'freehandDrawingMode';
 const rectDrawingMode:string = 'rectDrawingMode';
@@ -30,7 +31,7 @@ const cropperTypeObjectIdentifier:string = 'cropper';
 
 
 export class ScreenshotView implements MechanismView {
-    screenshotMechanism:Mechanism;
+    screenshotMechanism:ScreenshotMechanism;
     screenshotPreviewElement:JQuery;
     screenshotCaptureButton:JQuery;
     elementToCapture:JQuery;
@@ -884,10 +885,38 @@ export class ScreenshotView implements MechanismView {
         });
     }
 
+    getWidthHeightForMaxResolution(maxWidth:number, maxHeight:number, originalWidth:number, originalHeight:number):number[] {
+        let factor = Math.min(maxWidth / originalWidth, maxHeight / originalHeight);
+        if(factor > 1) {
+            return [originalWidth, originalHeight];
+        }
+        return [originalWidth * factor, originalHeight * factor];
+    }
+
+    /**
+     * @returns {any} The image binary (blob) for the canvas. If the max resolution is set, the image might be scaled down
+     * before retrieving the blob.
+     */
+    // TODO test it with backend, probably digitale doerfer test application
     getScreenshotAsBinary() {
         if (this.screenshotCanvas) {
-            var dataURL = this.screenshotCanvas.toDataURL("image/png");
-            return DataHelper.dataURItoBlob(dataURL);
+            var dataUrl = this.screenshotCanvas.toDataURL("image/png");
+
+            //draw image on another canvas considering the max resolution
+            let maxResolution = this.screenshotMechanism.getMaxResolutionWidthAndHeight();
+            if(Math.max(maxResolution[0], maxResolution[1]) > Math.max(this.canvasWidth, this.canvasHeight) &&
+                Math.min(maxResolution[0], maxResolution[1]) > Math.min(this.canvasWidth, this.canvasHeight)) {
+                // we are fine with the current canvas, let's return the image
+                return DataHelper.dataURItoBlob(dataUrl);
+            }
+
+            let scaleCanvas = document.createElement('canvas');
+            let scaleCanvasContext = scaleCanvas.getContext('2d');
+            let getWidthHeightForMaxResolution = this.getWidthHeightForMaxResolution(maxResolution[0], maxResolution[1], this.canvasWidth, this.canvasHeight);
+            scaleCanvasContext.drawImage(dataUrl, 0, 0, getWidthHeightForMaxResolution[0], getWidthHeightForMaxResolution[1]);
+            dataUrl = scaleCanvas.toDataURL("image/png");
+
+            return DataHelper.dataURItoBlob(dataUrl);
         } else {
             return null;
         }

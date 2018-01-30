@@ -483,6 +483,10 @@
   margin-right: 15px;
   margin-bottom: 15px; }
 
+#feedbackEntryPoint {
+  font-size: 16px;
+  top: 310px !important; }
+
 .feedback-library-wrapper .ui-dialog .ui-dialog-titlebar {
   padding-left: 0;
   padding-right: 0; }
@@ -498,7 +502,54 @@ section.feedback-mechanism {
   padding-right: 0 !important; }
 
 .feedback-library a.discard-feedback {
-  color: #63bc4e; }
+  color: #2156A0; }
+
+.feedback-library-wrapper .ui-button.ui-dialog-titlebar-close {
+  color: #ffffff !important; }
+
+.feedback-library .button {
+  padding: 0.375em 1.5em !important; }
+
+.feedback-library-wrapper .ui-dialog .ui-dialog-titlebar {
+  padding: 3px 0 !important; }
+
+.feedback-library .feedback-mechanism.horizontal .col-left {
+  padding-left: 0 !important; }
+
+.feedback-library p.attachment-type-label,
+.feedback-library p.screenshot-title,
+.feedback-library p.text-type-label,
+.feedback-library p.rating-type-label,
+.feedback-library p.audio-type-label,
+.feedback-library p.category-type-label,
+.feedback-library p.rating-type-label {
+  font-size: 17px !important;
+  line-height: 21px !important; }
+
+.feedback-library p.attachment-type-label,
+.feedback-library p.screenshot-title,
+.feedback-library p.audio-type-label,
+.feedback-library p.category-type-label {
+  margin-bottom: 7px !important; }
+
+.feedback-library .category-type label {
+  font-size: 16px !important; }
+
+.feedback-library .category-type input.own-category {
+  height: 24px !important;
+  padding: 1px !important; }
+
+.feedback-library article.file-upload-box input {
+  line-height: 16px; }
+
+.feedback-library .drop-area {
+  height: 90px !important;
+  padding-top: 27px !important;
+  font-size: 16px !important; }
+
+.feedback-library .screenshot-action-title {
+  margin-top: 10px !important;
+  margin-bottom: 0 !important; }
 
 .feedback-library .audio-type audio {
   display: none; }
@@ -560,7 +611,7 @@ section.feedback-mechanism {
   left: 0;
   padding: 2px 7px;
   text-decoration: none;
-  box-shadow: 1px 1px 1px 0 #63bc4e;
+  box-shadow: 1px 1px 1px 0 #2156A0;
   display: none; }
 
 .feedback-library.ui-state-default, .feedback-library.ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default {
@@ -607,17 +658,17 @@ section.feedback-mechanism {
   border-bottom-left-radius: 0; }
 
 .feedback-library.ui-dialog .ui-dialog-titlebar {
-  font-family: Tahoma, Verdana, Segoe, sans-serif;
+  font-family: Lato, sans-serif;
   color: transparent;
   font-weight: normal;
-  border-bottom: 2px solid #63bc4e;
+  border-bottom: 2px solid #2156A0;
   font-size: 22px;
   margin: 0;
   background-color: transparent;
   padding: 1px 7px; }
 
 .feedback-library.ui-widget input, .feedback-library.ui-widget select, .feedback-library.ui-widget textarea, .feedback-library.ui-widget button {
-  font-family: Tahoma, Verdana, Segoe, sans-serif;
+  font-family: Lato, sans-serif;
   font-size: 13px; }
 
 @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
@@ -642,7 +693,7 @@ section.feedback-mechanism {
 .feedback-library h2.form-title {
   font-size: 26px;
   color: #1c416f;
-  font-family: Tahoma, Verdana, Segoe, sans-serif;
+  font-family: Lato, sans-serif;
   padding-bottom: 6px;
   border-bottom: 3px solid #666666;
   margin-top: 5px;
@@ -695,7 +746,7 @@ section.feedback-mechanism {
   overflow-y: hidden; }
 
 .feedback-library .ui-dialog-titlebar {
-  border-color: #63bc4e;
+  border-color: #2156A0;
   border-width: 1px;
   padding: 0;
   margin: 0; }
@@ -725,11 +776,11 @@ section.feedback-mechanism {
   margin: 13px 1px 3px 1px; }
 
 .feedback-library .button {
-  background-color: #63bc4e;
-  background-image: -moz-linear-gradient(top, #63bc4e 0%, #63bc4e 50%, #63bc4e 52%, #63bc4e 100%);
-  background-image: -webkit-linear-gradient(top, #63bc4e 0%, #63bc4e 50%, #63bc4e 52%, #63bc4e 100%);
-  background-image: -o-linear-gradient(top, #63bc4e 0%, #63bc4e 50%, #63bc4e 52%, #63bc4e 100%);
-  background-image: linear-gradient(top, #63bc4e 0%, #63bc4e 50%, #63bc4e 52%, #63bc4e 100%);
+  background-color: #2156A0;
+  background-image: -moz-linear-gradient(top, #2156A0 0%, #2156A0 50%, #2156A0 52%, #2156A0 100%);
+  background-image: -webkit-linear-gradient(top, #2156A0 0%, #2156A0 50%, #2156A0 52%, #2156A0 100%);
+  background-image: -o-linear-gradient(top, #2156A0 0%, #2156A0 50%, #2156A0 52%, #2156A0 100%);
+  background-image: linear-gradient(top, #2156A0 0%, #2156A0 50%, #2156A0 52%, #2156A0 100%);
   background-size: 100% auto;
   color: white;
   display: inline-block;
@@ -747,22 +798,22 @@ section.feedback-mechanism {
     font-size: 11px;
     text-transform: none; }
   .feedback-library .button.submit-feedback {
-    background-color: #63bc4e;
+    background-color: #2156A0;
     color: white;
     font-weight: normal;
     margin-bottom: 0; }
     .feedback-library .button.submit-feedback:hover {
-      background-color: #63bc4e;
+      background-color: #2156A0;
       color: white; }
 
 .feedback-library .button:visited, .feedback-library .button:hover, .feedback-library button:active, .feedback-library button:focus {
-  background-color: #63bc4e;
+  background-color: #2156A0;
   color: white;
   cursor: pointer;
-  background-image: -webkit-linear-gradient(top, #63bc4e 0%, #63bc4e 50%, #63bc4e 52%, #63bc4e 100%);
-  background-image: -moz-linear-gradient(top, #63bc4e 0%, #63bc4e 50%, #63bc4e 52%, #63bc4e 100%);
-  background-image: -o-linear-gradient(top, #63bc4e 0%, #63bc4e 50%, #63bc4e 52%, #63bc4e 100%);
-  background-image: linear-gradient(top, #63bc4e 0%, #63bc4e 50%, #63bc4e 52%, #63bc4e 100%); }
+  background-image: -webkit-linear-gradient(top, #2156A0 0%, #2156A0 50%, #2156A0 52%, #2156A0 100%);
+  background-image: -moz-linear-gradient(top, #2156A0 0%, #2156A0 50%, #2156A0 52%, #2156A0 100%);
+  background-image: -o-linear-gradient(top, #2156A0 0%, #2156A0 50%, #2156A0 52%, #2156A0 100%);
+  background-image: linear-gradient(top, #2156A0 0%, #2156A0 50%, #2156A0 52%, #2156A0 100%); }
 
 .feedback-library .navigation-button, .feedback-library .discard-feedback, .feedback-library .submit-feedback {
   margin-top: 15px;
@@ -816,7 +867,7 @@ section.feedback-mechanism {
 
 .feedback-library .text-type-max-length {
   font-size: 13px;
-  font-family: Tahoma, Verdana, Segoe, sans-serif;
+  font-family: Lato, sans-serif;
   color: #4b4a4c;
   width: auto;
   display: inline-block;
@@ -1100,14 +1151,14 @@ section.feedback-mechanism {
   display: none;
   min-width: 1050px;
   max-width: 1050px;
-  font-family: Tahoma, Verdana, Segoe, sans-serif;
+  font-family: Lato, sans-serif;
   padding: 15px;
   color: #333333; }
 
 .feedback-library#intermediateDialog {
   display: none;
   padding: 20px;
-  font-family: Tahoma, Verdana, Segoe, sans-serif;
+  font-family: Lato, sans-serif;
   font-size: 16px; }
   .feedback-library#intermediateDialog p {
     margin-top: 1px;
