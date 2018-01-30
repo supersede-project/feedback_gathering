@@ -50,7 +50,8 @@ public class UploadIntegrationTest extends BaseIntegrationTest{
     private String basePathEn = "/feedback_repository/en/";
 
     @Before
-    public void setup(){
+    public void setup() throws Exception{
+        super.setup();
         try {
             Files.deleteIfExists(Paths.get("src/test/resources/upload_directory/profile_pic_api_user_1.png"));
         } catch (IOException e) {
@@ -60,6 +61,7 @@ public class UploadIntegrationTest extends BaseIntegrationTest{
 
     @After
     public void cleanup(){
+        super.cleanUp();
         try {
             Files.deleteIfExists(Paths.get("src/test/resources/upload_directory/profile_pic_api_user_1.png"));
         } catch (IOException e) {
