@@ -242,7 +242,7 @@ CREATE TABLE `feedback` (
 -- Daten für Tabelle `feedback`
 --
 
-INSERT INTO `feedback` (`id`, `application_id`, `configuration_id`, `created_at`, `language`, `title`, `updated_at`, `user_identification`, `comment_count`, `dislike_count`, `icon_path`, `is_blocked`, `like_count`, `unread_comment_count`, `published`, `visibility`) VALUES
+INSERT INTO `feedback` (`id`, `application_id`, `configuration_id`, `created_at`, `language`, `title`, `updated_at`, `user_identification`, `comment_count`, `dislike_count`, `icon_path`, blocked, `like_count`, `unread_comment_count`, `published`, `visibility`) VALUES
 (1, 20, 46, '2017-11-27 10:55:55', 'en', 'Feedback', NULL, 99999999, 0, 0, NULL, 0, 0, 0, 0, 0),
 (2, 20, 46, '2017-11-27 10:59:46', 'en', 'Feedback', NULL, 99999999, 0, 0, NULL, 0, 0, 0, 0, 0),
 (3, 20, 46, '2017-11-27 11:01:05', 'en', 'Feedback', NULL, 99999999, 0, 0, NULL, 0, 0, 0, 0, 0),

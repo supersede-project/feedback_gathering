@@ -239,16 +239,14 @@ public class FeedbackController extends BaseController {
     }
 
 
-    // ================ Add to APIARY =================================== //
-
     @PreAuthorize("@securityService.hasAdminPermission(#applicationId)")
-    @RequestMapping(method = RequestMethod.PUT, value = "/is_blocked/{feedbackId}")
+    @RequestMapping(method = RequestMethod.PUT, value = "/blocked/{feedbackId}")
     public String feedbackBlock(@PathVariable long applicationId,
                                 @PathVariable long feedbackId,
                                 HttpEntity<String> blockJSON){
         if(blockJSON.getBody() != null){
             JSONObject obj = new JSONObject(blockJSON.getBody());
-            Boolean blocked = obj.getBoolean("is_blocked");
+            Boolean blocked = obj.getBoolean("blocked");
             Feedback updateFeedback = feedbackService.find(feedbackId);
             if(updateFeedback != null) {
                 updateFeedback.setBlocked(blocked);
@@ -299,6 +297,27 @@ public class FeedbackController extends BaseController {
             }
         }
         return "JSON Body is NULL";
+    }
+
+    @PreAuthorize("@securityService.hasAdminPermission(#applicationId)")
+    @RequestMapping(method = RequestMethod.GET, value = "/get_blocked/{value}")
+    public List<Feedback> blockedFeedbacks(@PathVariable long applicationId,
+                                    @PathVariable boolean value){
+        return feedbackService.findByBlocked(value);
+    }
+
+    @PreAuthorize("@securityService.hasAdminPermission(#applicationId)")
+    @RequestMapping(method = RequestMethod.GET, value = "/get_visible/{value}")
+    public List<Feedback> visibleFeedbacks(@PathVariable long applicationId,
+                                            @PathVariable boolean value){
+        return feedbackService.findByVisibility(value);
+    }
+
+    @PreAuthorize("@securityService.hasAdminPermission(#applicationId)")
+    @RequestMapping(method = RequestMethod.GET, value = "/get_published/{value}")
+    public List<Feedback> publishedFeedbacks(@PathVariable long applicationId,
+                                           @PathVariable boolean value){
+        return feedbackService.findByPublished(value);
     }
 
     private EnumStatus randomState(){

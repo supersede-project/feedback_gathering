@@ -7,7 +7,6 @@ import ch.fhnw.cere.repository.models.orchestrator.MechanismTemplateModel;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
-import org.springframework.context.annotation.Lazy;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -32,7 +31,7 @@ public class Feedback {
     private int likeCount;
     private int dislikeCount;
     @Column(columnDefinition="tinyint(1) default 0")
-    private boolean isBlocked;
+    private boolean blocked;
     private String iconPath;
     private int unreadCommentCount;
 
@@ -42,13 +41,6 @@ public class Feedback {
     @Column(columnDefinition="tinyint(1) default 0")
     private boolean published;
 
-    public boolean isBlocked() {
-        return isBlocked;
-    }
-
-    public void setBlocked(boolean blocked) {
-        isBlocked = blocked;
-    }
 
     public boolean isVisibility() {
         return visibility;
@@ -91,11 +83,11 @@ public class Feedback {
     }
 
     public Boolean getBlocked() {
-        return isBlocked;
+        return blocked;
     }
 
-    public void setBlocked(Boolean blocked) {
-        isBlocked = blocked;
+    public void setBlocked(boolean blocked) {
+        this.blocked = blocked;
     }
 
     public String getIconPath() {

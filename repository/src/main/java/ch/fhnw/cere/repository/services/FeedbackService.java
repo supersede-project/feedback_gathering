@@ -22,7 +22,8 @@ public interface FeedbackService {
     List<Feedback> findByPublishedAndVisibility(boolean published, boolean visibility);
     List<Feedback> findByPublished(boolean published);
     List<Feedback> findByVisibility(boolean visibility);
-//    List<Feedback> findByBlocked(boolean is_blocked);
+    List<Feedback> findByBlocked(boolean is_blocked);
+
 }
 
 

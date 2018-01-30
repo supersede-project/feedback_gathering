@@ -90,7 +90,8 @@ public class F2FEmailServiceTest {
         textFeedbackRepository.save(textFeedback1);
         List<TextFeedback> textFeedbacks1 = new ArrayList<>();
         textFeedbacks1.add(textFeedback1);
-        feedback1.setTextFeedbacks(textFeedbacks1);feedbackRepository.save(feedback1);
+        feedback1.setTextFeedbacks(textFeedbacks1);
+        feedback1.setBlocked(true);feedbackRepository.save(feedback1);
 
         feedback2 = feedbackRepository.save(new Feedback("Feedback 2 Ronnie", endUser1.getId(), 1, 11, "en"));
         TextFeedback textFeedback2 = new TextFeedback(feedback2,
@@ -99,7 +100,8 @@ public class F2FEmailServiceTest {
         List<TextFeedback> textFeedbacks2 = new ArrayList<>();
         textFeedbacks2.add(textFeedback2);
         feedback2.setTextFeedbacks(textFeedbacks2);;
-        feedback2.setPublished(true);feedbackRepository.save(feedback2);
+        feedback2.setPublished(true);
+        feedback2.setBlocked(true);feedbackRepository.save(feedback2);
 
         feedback3 = feedbackRepository.save(new Feedback("Feedback 3 Ronnie", endUser1.getId(), 1, 22, "en"));
         TextFeedback textFeedback3 = new TextFeedback(feedback3,
@@ -107,7 +109,8 @@ public class F2FEmailServiceTest {
         textFeedbackRepository.save(textFeedback3);
         List<TextFeedback> textFeedbacks3 = new ArrayList<>();
         textFeedbacks3.add(textFeedback3);
-        feedback3.setTextFeedbacks(textFeedbacks3);feedbackRepository.save(feedback3);
+        feedback3.setTextFeedbacks(textFeedbacks3);
+        feedback3.setBlocked(true);feedbackRepository.save(feedback3);
 
         feedback4 = feedbackRepository.save(new Feedback("Feedback 4 Melanie", endUser2.getId(), 1, 22, "en"));
         TextFeedback textFeedback4 = new TextFeedback(feedback4,
@@ -181,6 +184,7 @@ public class F2FEmailServiceTest {
         for(EndUser user : endUsers){
             List<Feedback> userFeedbacks = feedbackService.findByUserIdentification(user.getId());
             List<Feedback> forumFeedbacks = feedbackService.findByPublished(true);
+            List<Feedback> blockedFeedbacks = feedbackService.findByBlocked(true);
 
             log.info("==== SENDING MAIL ====");
             Mail mail = new Mail();
