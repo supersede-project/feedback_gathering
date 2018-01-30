@@ -266,6 +266,10 @@ public class CustomSpinner extends Spinner implements DialogInterface.OnClickLis
                             }
                             spinnerDialog.dismiss();
                         } else {
+                            if(mSelection.length - 1 > spinnerWhich|| mSelection.length - 1 > checkedIndex) {
+                                return;
+                            }
+
                             mSelection[spinnerWhich] = false;
                             mSelection[checkedIndex] = true;
                             spinnerDialog.getListView().setItemChecked(spinnerWhich, false);
