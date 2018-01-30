@@ -7,6 +7,8 @@ import FaHandPeaceO from 'react-icons/lib/fa/hand-peace-o';
 import {toggleWidget} from 'react-chat-widget';
 import FaCogs from 'react-icons/lib/fa/cogs';
 import MdVisibilityOff from 'react-icons/lib/md/visibility-off';
+import MdCheckBoxOutlineBlank from 'react-icons/lib/md/check-box-outline-blank';
+
 
 import './App.css';
 
@@ -37,6 +39,7 @@ import './App.css';
       if(this.props.type === 663) {
           return <FaHandPeaceO size={35} padding={75}/>;
       }
+      return <MdCheckBoxOutlineBlank size={35} padding={75} visibility="hidden"/>;
   }
 
   render()

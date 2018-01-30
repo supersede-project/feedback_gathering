@@ -6,6 +6,8 @@ import FaThumbsODown from 'react-icons/lib/fa/thumbs-o-down';
 import FaWechat from 'react-icons/lib/fa/wechat';
 import FaLightbulbO from 'react-icons/lib/fa/lightbulb-o';
 import FaHandPeaceO from 'react-icons/lib/fa/hand-peace-o';
+import MdCheckBoxOutlineBlank from 'react-icons/lib/md/check-box-outline-blank';
+
 
 import style from './App.css';
 
@@ -42,6 +44,7 @@ class ForumTitle extends Component {
         if(this.props.type === 663) {
             return <FaHandPeaceO size={35} padding={75}/>;
         }
+        return <MdCheckBoxOutlineBlank size={35} padding={75} visibility="hidden"/>;
     }
 
     addLike(e) {

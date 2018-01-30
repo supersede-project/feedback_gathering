@@ -12,6 +12,9 @@ import MdVisibilityOff from 'react-icons/lib/md/visibility-off';
 import FaClose from 'react-icons/lib/fa/close';
 import FaFileImageO from 'react-icons/lib/fa/file-image-o';
 import GoCircleSlash from 'react-icons/lib/go/circle-slash';
+import MdCheckBoxOutlineBlank from 'react-icons/lib/md/check-box-outline-blank';
+
+
 //import FileInput from 'react-file-input';
 
 import style from './App.css';
@@ -63,6 +66,7 @@ import FeedbackSettings from "./FeedbackSettings";
       if(this.props.type === 663) {
           return <FaHandPeaceO size={35} padding={75}/>;
       }
+      return <MdCheckBoxOutlineBlank size={35} padding={75} visibility="hidden"/>;
   }
 
   closeThread(e){
