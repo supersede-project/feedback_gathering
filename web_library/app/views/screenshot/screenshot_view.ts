@@ -37,6 +37,7 @@ export class ScreenshotView implements MechanismView {
     elementToCapture:JQuery;
     elementsToHide:[string];
     screenshotCanvas:any;
+    scaledScreenshotCanvas:any;
     context:any;
     startX:number;
     startY:number;
@@ -65,7 +66,7 @@ export class ScreenshotView implements MechanismView {
     currentObjectInToolbar:any = null;
     croppingRect:any;
 
-    constructor(screenshotMechanism:Mechanism, screenshotPreviewElement:JQuery, screenshotCaptureButton:JQuery,
+    constructor(screenshotMechanism:ScreenshotMechanism, screenshotPreviewElement:JQuery, screenshotCaptureButton:JQuery,
                 elementToCapture:JQuery, container:JQuery, distPath:string, elementsToHide?:any, hasBordersAndControls?:boolean) {
         this.screenshotMechanism = screenshotMechanism;
         this.screenshotPreviewElement = screenshotPreviewElement;
@@ -885,8 +886,12 @@ export class ScreenshotView implements MechanismView {
         });
     }
 
+    getScaleFactor(maxWidth:number, maxHeight:number, originalWidth:number, originalHeight:number):number {
+        return Math.min(maxWidth / originalWidth, maxHeight / originalHeight);
+    }
+
     getWidthHeightForMaxResolution(maxWidth:number, maxHeight:number, originalWidth:number, originalHeight:number):number[] {
-        let factor = Math.min(maxWidth / originalWidth, maxHeight / originalHeight);
+        let factor = this.getScaleFactor(maxWidth, maxHeight, originalWidth, originalHeight);
         if(factor > 1) {
             return [originalWidth, originalHeight];
         }
@@ -897,28 +902,41 @@ export class ScreenshotView implements MechanismView {
      * @returns {any} The image binary (blob) for the canvas. If the max resolution is set, the image might be scaled down
      * before retrieving the blob.
      */
-    // TODO test it with backend, probably digitale doerfer test application
     getScreenshotAsBinary() {
-        if (this.screenshotCanvas) {
-            var dataUrl = this.screenshotCanvas.toDataURL("image/png");
-
-            //draw image on another canvas considering the max resolution
-            let maxResolution = this.screenshotMechanism.getMaxResolutionWidthAndHeight();
-            if(Math.max(maxResolution[0], maxResolution[1]) > Math.max(this.canvasWidth, this.canvasHeight) &&
-                Math.min(maxResolution[0], maxResolution[1]) > Math.min(this.canvasWidth, this.canvasHeight)) {
-                // we are fine with the current canvas, let's return the image
-                return DataHelper.dataURItoBlob(dataUrl);
-            }
-
-            let scaleCanvas = document.createElement('canvas');
-            let scaleCanvasContext = scaleCanvas.getContext('2d');
-            let getWidthHeightForMaxResolution = this.getWidthHeightForMaxResolution(maxResolution[0], maxResolution[1], this.canvasWidth, this.canvasHeight);
-            scaleCanvasContext.drawImage(dataUrl, 0, 0, getWidthHeightForMaxResolution[0], getWidthHeightForMaxResolution[1]);
-            dataUrl = scaleCanvas.toDataURL("image/png");
-
+        if (this.scaledScreenshotCanvas) {
+            var dataUrl = this.scaledScreenshotCanvas.toDataURL("image/png");
             return DataHelper.dataURItoBlob(dataUrl);
-        } else {
-            return null;
+        }
+        return null;
+    }
+
+    /**
+     * Creates a in-memory scaled down version of the canvas depending on the max resolution set in the configuration.
+     */
+    createScaledDownCanvas() {
+        let myThis = this;
+        if (this.screenshotCanvas) {
+            let dataUrl = this.screenshotCanvas.toDataURL("image/png");
+            let maxResolution = this.screenshotMechanism.getMaxResolutionWidthAndHeight();
+            let resolutionIsAnywaySmaller = (Math.max(maxResolution[0], maxResolution[1]) > Math.max(myThis.canvasWidth, myThis.canvasHeight) &&
+                Math.min(maxResolution[0], maxResolution[1]) > Math.min(myThis.canvasWidth, myThis.canvasHeight));
+
+            this.scaledScreenshotCanvas = document.createElement('canvas');
+            let scaleCanvasContext = this.scaledScreenshotCanvas.getContext('2d');
+            let getWidthHeightForMaxResolution = this.getWidthHeightForMaxResolution(maxResolution[0], maxResolution[1], myThis.canvasWidth, myThis.canvasHeight);
+            let factor = this.getScaleFactor(maxResolution[0], maxResolution[1], myThis.canvasWidth, myThis.canvasHeight);
+
+            let imgToScaleDown = new Image();
+            imgToScaleDown.src = dataUrl;
+            imgToScaleDown.onload = function () {
+                if(maxResolution === null || resolutionIsAnywaySmaller) {
+                    myThis.scaledScreenshotCanvas = myThis.screenshotCanvas;
+                } else {
+                    // TODO get this working
+                    scaleCanvasContext.scale(factor, factor);
+                    scaleCanvasContext.drawImage(imgToScaleDown, 0, 0, imgToScaleDown.width, imgToScaleDown.height, 0, 0, myThis.canvasWidth, myThis.canvasHeight);
+                }
+            };
         }
     }
 

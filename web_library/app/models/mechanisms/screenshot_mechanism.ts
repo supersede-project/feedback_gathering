@@ -17,6 +17,10 @@ export class ScreenshotMechanism extends Mechanism {
     }
 
     getMaxResolutionWidthAndHeight():number[] {
+        if(this.getParameterValue('maxResolution') === null || this.getParameterValue('maxResolution') === undefined) {
+            return null;
+        }
+
         let split = this.getParameterValue('maxResolution').split('x');
         if(split.length === 2) {
             return split;
