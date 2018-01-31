@@ -126,6 +126,11 @@ gulp build.prod
     $(document).ready(function () {
         $('#feedbackEntryPoint').feedbackPlugin({
             // optional options
+            
+            'applicationId': 25,
+            'apiEndpointOrchestrator': 'https://platform.supersede.eu:8443/',
+            'apiEndpointRepository': 'https://platform.supersede.eu:8443/',
+            
             'distPath': 'dist/',
             'userId': '99999999',
             'lang': 'en',
