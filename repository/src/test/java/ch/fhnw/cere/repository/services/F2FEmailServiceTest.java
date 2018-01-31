@@ -3,6 +3,7 @@ package ch.fhnw.cere.repository.services;
 import ch.fhnw.cere.repository.RepositoryApplication;
 import ch.fhnw.cere.repository.mail.EmailService;
 import ch.fhnw.cere.repository.mail.Mail;
+import ch.fhnw.cere.repository.models.EmailUnsubscribed;
 import ch.fhnw.cere.repository.models.EndUser;
 import ch.fhnw.cere.repository.models.Feedback;
 import ch.fhnw.cere.repository.models.TextFeedback;
@@ -56,6 +57,9 @@ public class F2FEmailServiceTest {
     @Autowired
     private EmailService emailService;
 
+    @Autowired
+    private EmailUnsubscribedService emailUnsubscribedService;
+
     private static Logger log = LoggerFactory.getLogger(Application.class);
 
     private Feedback feedback1;
@@ -71,11 +75,15 @@ public class F2FEmailServiceTest {
     private EndUser endUser2;
     private EndUser endUser3;
 
+    long DAY_IN_MS = 1000 * 60 * 60 * 24;
+
     @Before
     public void setup(){
         feedbackRepository.deleteAllInBatch();
         endUserRepository.deleteAllInBatch();
         textFeedbackRepository.deleteAllInBatch();
+
+        Date now = new Date();
 
 //        endUser1 = endUserRepository.save(new EndUser(1,"Ronnie Schaniel",123,"ronnieschaniel@gmail.com"));
 //        endUser2 = endUserRepository.save(new EndUser(1,"Melanie Stade",123,"mela.stade@gmail.com"));
@@ -120,6 +128,8 @@ public class F2FEmailServiceTest {
         textFeedbacks4.add(textFeedback4);
         feedback4.setTextFeedbacks(textFeedbacks4);
         feedback4.setPublished(true);feedbackRepository.save(feedback4);
+        feedback4.setCreatedAt(new Date(now.getTime() - (15 * DAY_IN_MS)));
+        feedbackRepository.save(feedback4);
 
         feedback5 = feedbackRepository.save(new Feedback("Feedback 5 Melanie", endUser2.getId(), 1, 11, "en"));
         TextFeedback textFeedback5 = new TextFeedback(feedback5,
@@ -145,6 +155,8 @@ public class F2FEmailServiceTest {
         List<TextFeedback> textFeedbacks7 = new ArrayList<>();
         textFeedbacks7.add(textFeedback7);
         feedback7.setTextFeedbacks(textFeedbacks7);feedbackRepository.save(feedback7);
+        feedback7.setCreatedAt(new Date(now.getTime() - (15 * DAY_IN_MS)));
+        feedbackRepository.save(feedback7);
 
         feedback8 = feedbackRepository.save(new Feedback("Feedback 8 Marina", endUser3.getId(), 1, 22, "en"));
         TextFeedback textFeedback8 = new TextFeedback(feedback8,
@@ -180,10 +192,39 @@ public class F2FEmailServiceTest {
 //        long intevalPeriod = 1000;
 //        timer.scheduleAtFixedRate(timerTask, delay,
 //                intevalPeriod);
+
+        Date currentDate = new Date();
+
+        Date twoWeeksAgo = new Date(currentDate.getTime() - (14 * DAY_IN_MS));
+
         List<EndUser> endUsers = endUserRepository.findAll();
+
+        EmailUnsubscribed emailUnsubscribed = new EmailUnsubscribed(endUser1,endUser1.getEmail());
+        emailUnsubscribedService.save(emailUnsubscribed);
+
         for(EndUser user : endUsers){
+            if(emailUnsubscribedService.findByEnduserId(user.getId()) != null){
+                continue;
+            }
+
             List<Feedback> userFeedbacks = feedbackService.findByUserIdentification(user.getId());
+            List<Feedback> userFeedbacksRemoved = new ArrayList<>();
+            for(Feedback userFeedback : userFeedbacks){
+                if(userFeedback.getCreatedAt().before(twoWeeksAgo)){
+                    userFeedbacksRemoved.add(userFeedback);
+                }
+            }
+            userFeedbacks.removeAll(userFeedbacksRemoved);
+
             List<Feedback> forumFeedbacks = feedbackService.findByPublished(true);
+            List<Feedback> forumFeedbacksRemoved = new ArrayList<>();
+            for(Feedback forumFeedback : forumFeedbacks){
+                if(forumFeedback.getCreatedAt().before(twoWeeksAgo)){
+                    forumFeedbacksRemoved.add(forumFeedback);
+                }
+            }
+            forumFeedbacks.removeAll(forumFeedbacksRemoved);
+
             List<Feedback> blockedFeedbacks = feedbackService.findByBlocked(true);
 
             log.info("==== SENDING MAIL ====");
