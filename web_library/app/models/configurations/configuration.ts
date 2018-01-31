@@ -24,7 +24,16 @@ export abstract class Configuration implements ConfigurationInterface {
      *  The matched mechanisms
      */
     getMechanismConfig(mechanismTypeConstant:string): Mechanism[] {
-        var filteredArray = this.mechanisms.filter(mechanism => mechanism.type === mechanismTypeConstant);
+        let filteredArray = this.mechanisms.filter(mechanism => mechanism.type === mechanismTypeConstant);
+        if(filteredArray.length > 0) {
+            return filteredArray;
+        } else {
+            return [];
+        }
+    }
+
+    getActiveMechanismConfig(mechanismTypeConstant:string): Mechanism[] {
+        let filteredArray = this.mechanisms.filter(mechanism => mechanism.active && mechanism.type === mechanismTypeConstant);
         if(filteredArray.length > 0) {
             return filteredArray;
         } else {
@@ -43,15 +52,16 @@ export abstract class Configuration implements ConfigurationInterface {
      *  Context object that contains all the data to configure the feedback mechanism in the view.
      */
     getContext():any {
-        var context = {
+        let context = {
             dialogId: this.dialogId,
             mechanisms: []
         };
 
-        for(var mechanism of this.getMechanismsSorted()) {
-            var mechanismContext = jQuery.extend({}, mechanism.defaultContext(), mechanism.getContext());
+        for(let mechanism of this.getMechanismsSorted()) {
+            let mechanismContext = jQuery.extend({}, mechanism.defaultContext(), mechanism.getContext());
             context.mechanisms.push(mechanismContext);
         }
+
         return context;
     }
 

@@ -7,11 +7,20 @@
 @import "attachment";
 @import "grid";
 
+
+.feedback-library-wrapper {
+  width: auto;
+  height: auto;
+  display: inline-block;
+  position: absolute;
+  top: 0;
+}
+
 #feedbackEntryPoint {
   position: fixed;
   top: 300px;
   left: 0;
-  padding: 4px 10px;
+  padding: 2px 7px;
   text-decoration: none;
   box-shadow: $feedbackEntryPointBoxShadow;
   display: none;
@@ -103,6 +112,15 @@
     .hide-ie {
       display: none;
     }
+  }
+
+  .mute-text {
+    color: #a7a7a7;
+  }
+
+  .optional-info p {
+    margin: 10px 0 1px 0;
+    font-size: 12px;
   }
 
   h2.form-title {
@@ -652,6 +670,10 @@
     }
   }
 
+  .at-least-one-mechanism {
+    text-align: right;
+  }
+
   .submission-message {
     margin-top: 25px;
     margin-bottom: 15px;
@@ -668,6 +690,22 @@
 
   .annotations-heading {
     margin-top: 5px;
+  }
+
+  .loader {
+    margin: 0 auto;
+    margin-top: 70px;
+    border: 10px solid #f3f3f3; /* Light grey */
+    border-top: 10px solid #3498db; /* Blue */
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    animation: spin 2s linear infinite;
+  }
+
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
   }
 }
 
@@ -729,3 +767,28 @@
     margin-bottom: 5px;
   }
 }
+
+.feedback-library .feedback-mechanism.user-question:first-child {
+  margin-top: 50px;
+}
+
+.feedback-library .feedback-mechanism.user-question {
+  margin-top: 0;
+  margin-bottom: 0;
+  padding-top: 10px;
+  padding-bottom: 5px;
+  background-color: #f5f5f5;
+  margin-left: -15px;
+  margin-right: -15px;
+  padding-left: 30px !important;
+  padding-right: 30px !important;
+
+  p {
+    font-size: 14px !important;
+    color: #000000 !important;
+  }
+}
+
+
+
+

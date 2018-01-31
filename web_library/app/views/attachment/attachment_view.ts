@@ -9,7 +9,7 @@ export class AttachmentView implements MechanismView {
     constructor(private attachmentMechanism:AttachmentMechanism, private dialogId:string, private distPath:string) {
         if (attachmentMechanism.active) {
             this.dropArea = jQuery('' + this.getSelector()).find('.drop-area');
-            this.dropArea.fileUpload(distPath);
+            this.dropArea.fileUpload(distPath, Number(attachmentMechanism.getParameterValue("maximumTotalFileSize")));
         }
     }
 
@@ -18,10 +18,11 @@ export class AttachmentView implements MechanismView {
     }
 
     getFiles() {
-        if(this.dropArea === undefined) {
-            return null;
+        if(this.dropArea) {
+            return this.dropArea.currentFiles;
+        } else {
+            return [];
         }
-        return this.dropArea.currentFiles;
     }
 
     getFeedbacks():AttachmentFeedback[] {

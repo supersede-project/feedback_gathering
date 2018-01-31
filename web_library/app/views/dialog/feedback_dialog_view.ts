@@ -1,6 +1,6 @@
 import i18n = require('i18next');
 import {MechanismView} from '../mechanism_view';
-import {mechanismTypes} from '../../js/config';
+import {mechanismTypes, applicationId, apiEndpointRepository} from '../../js/config';
 import {DialogView} from './dialog_view';
 import {Configuration} from '../../models/configurations/configuration';
 import {TextView} from '../text/text_view';
@@ -20,6 +20,8 @@ import {ContextInformation} from '../../models/feedbacks/context_information';
 import {FeedbackService} from '../../services/feedback_service';
 import {PageNotification} from '../page_notification';
 import {GeneralConfiguration} from '../../models/configurations/general_configuration';
+import {InfoView} from '../info/info_view';
+import {InfoMechanism} from '../../models/mechanisms/info_mechanism';
 import {CategoryMechanism} from '../../models/mechanisms/category_mechanism';
 import {QuestionDialogView} from './question_dialog_view';
 
@@ -59,43 +61,61 @@ export class FeedbackDialogView extends DialogView {
     initMechanismViews() {
         this.mechanismViews = [];
 
-        for (var textMechanism of this.configuration.getMechanismConfig(mechanismTypes.textType)) {
+        for (let textMechanism of this.configuration.getActiveMechanismConfig(mechanismTypes.textType)) {
             this.mechanismViews.push(new TextView(textMechanism, this.dialogId));
         }
 
-        for (var ratingMechanism of this.configuration.getMechanismConfig(mechanismTypes.ratingType)) {
+        for (let ratingMechanism of this.configuration.getActiveMechanismConfig(mechanismTypes.ratingType)) {
             this.mechanismViews.push(new RatingView(<RatingMechanism>ratingMechanism, this.dialogId));
         }
 
-        for (var screenshotMechanism of this.configuration.getMechanismConfig(mechanismTypes.screenshotType)) {
-            var screenshotView = this.initScreenshot(screenshotMechanism, this.dialogId);
+        for (let categoryMechanism of this.configuration.getActiveMechanismConfig(mechanismTypes.categoryType)) {
+            this.mechanismViews.push(new CategoryView(<CategoryMechanism>categoryMechanism));
+        }
+
+        for (let screenshotMechanism of this.configuration.getActiveMechanismConfig(mechanismTypes.screenshotType)) {
+            let screenshotView = this.initScreenshot(screenshotMechanism, this.dialogId);
             this.mechanismViews.push(screenshotView);
         }
 
-        var audioMechanism = this.configuration.getMechanismConfig(mechanismTypes.audioType).filter(mechanism => mechanism.active === true)[0];
+        let audioMechanism = this.configuration.getActiveMechanismConfig(mechanismTypes.audioType)[0];
         if (audioMechanism) {
-            var audioContainer = $("#" + this.dialogId + " #audioMechanism" + audioMechanism.id);
+            let audioContainer = $("#" + this.dialogId + " #audioMechanism" + audioMechanism.id);
             this.audioView = new AudioView(audioMechanism, audioContainer, this.dialogContext.distPath);
             this.mechanismViews.push(this.audioView);
         }
 
-        for (var attachmentMechanism of this.configuration.getMechanismConfig(mechanismTypes.attachmentType)) {
+        for (let attachmentMechanism of this.configuration.getActiveMechanismConfig(mechanismTypes.attachmentType)) {
             this.mechanismViews.push(new AttachmentView(<AttachmentMechanism>attachmentMechanism, this.dialogId, this.dialogContext.distPath));
         }
 
-        for (var categoryMechanism of this.configuration.getMechanismConfig(mechanismTypes.categoryType)) {
-            this.mechanismViews.push(new CategoryView(<CategoryMechanism>categoryMechanism));
+        for (let infoMechanism of this.configuration.getActiveMechanismConfig(mechanismTypes.infoType)) {
+            this.mechanismViews.push(new InfoView(<InfoMechanism>infoMechanism, this.dialogId));
         }
 
         this.addEvents(this.dialogId, this.configuration);
     }
 
     configurePageNavigation() {
+        let myThis = this;
         this.pageNavigation = new PageNavigation(this.configuration, jQuery('#' + this.dialogId));
-        this.paginationContainer = new PaginationContainer(jQuery('#' + this.dialogId + '.feedback-container .pages-container'), this.pageNavigation);
+        this.paginationContainer = new PaginationContainer(jQuery('#' + this.dialogId + '.feedback-container .pages-container'), this.pageNavigation, (changedPageNumber) => {
+            myThis.changeDialogTitle(changedPageNumber);
+        });
+    }
+
+    changeDialogTitle(pageNumber:number) {
+        if(this.context.localesOverride && this.context.localesOverride.dialog && this.context.localesOverride.dialog.dialog && this.context.localesOverride.dialog.dialog.titles) {
+            if(this.context.localesOverride.dialog.dialog.titles[pageNumber]) {
+                this.dialogElement.dialog('option', 'title', this.context.localesOverride.dialog.dialog.titles[pageNumber]);
+            } else {
+                this.dialogElement.dialog('option', 'title', this.dialogContext.dialogTitle);
+            }
+        }
     }
 
     addEvents(containerId, configuration:ConfigurationInterface) {
+        let myThis = this;
         let generalConfiguration = configuration.generalConfiguration;
         var container = $('#' + containerId);
         var textareas = container.find('textarea.text-type-text');
@@ -110,6 +130,19 @@ export class FeedbackDialogView extends DialogView {
             var submitButton= $(this);
             submitButton.prop('disabled', true);
             submitButton.text(submitButton.text() + '...');
+
+
+            if(!myThis.ratingMechanismsAreValid(container)) {
+                submitButton.prop('disabled', false);
+                submitButton.text(submitButton.text().replace(/...$/,''));
+                return;
+            }
+
+            if(!myThis.categoryMechanismsAreValid(container)) {
+                submitButton.prop('disabled', false);
+                submitButton.text(submitButton.text().replace(/...$/,''));
+                return;
+            }
 
             // TODO adjust
             // validate anyway before sending
@@ -136,7 +169,31 @@ export class FeedbackDialogView extends DialogView {
         });
     };
 
+    ratingMechanismsAreValid(container:any):boolean {
+        let valid = true;
+        container.find('.review-page-mechanisms .rating-type.mandatory .rating-input').each(function() {
+            if(parseInt(jQuery(this).starRating('getRating')) === 0) {
+                valid = false;
+                let errorMessage = jQuery(this).data('mandatory-message');
+                jQuery(this).append('<span class="feedback-form-error">' + errorMessage + '</span>');
+            }
+        });
+
+        return valid;
+    }
+
+    categoryMechanismsAreValid(container:any):boolean {
+        container.find('.review-page-mechanisms .category-type.mandatory').validateCategory();
+
+        if(container.find('.review-page-mechanisms .category-type.mandatory.invalid').length > 0) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
     sendFeedback(feedbackService:FeedbackService, formData:any, generalConfiguration:GeneralConfiguration) {
+        let myThis = this;
         var feedbackDialogView = this;
         var url = this.context.apiEndpointRepository + 'feedback_repository/' + this.context.lang + '/applications/' + this.context.applicationId + '/feedbacks/';
 
@@ -145,11 +202,11 @@ export class FeedbackDialogView extends DialogView {
                 feedbackDialogView.discardFeedback();
                 feedbackDialogView.paginationContainer.showFirstPage();
                 let dialogTemplate = require('../../templates/info_dialog.handlebars');
-                let successMessage = i18n.t('general.success_message');
+                let successMessage = generalConfiguration.getParameterValue('successMessage') || i18n.t('general.success_message');
                 let successDialogId = 'infoDialog';
                 jQuery('#' + successDialogId).remove();
                 let successDialogView = new QuestionDialogView(successDialogId, dialogTemplate, {'message': <string>successMessage});
-                successDialogView.setTitle('Info');
+                successDialogView.setTitle(<string>i18n.t('general.success_dialog_title'));
                 successDialogView.setModal(true);
                 successDialogView.addAnswerOption('#infoDialogOkay', function() {
                     successDialogView.close();
@@ -163,12 +220,12 @@ export class FeedbackDialogView extends DialogView {
                 feedbackDialogView.resetDialog();
                 $('.server-response').addClass('success').text(i18n.t('general.success_message'));
             }
-            $('button.submit-feedback').prop('disabled', false);
-            $('button.submit-feedback').text($('button.submit-feedback').text().replace(/...$/,''));
+            myThis.dialogElement.find('button.submit-feedback').prop('disabled', false);
+            myThis.dialogElement.find('button.submit-feedback').text(myThis.dialogElement.find('button.submit-feedback').text().replace(/...$/,''));
         }, function(error) {
-            $('.server-response').addClass('error').text('Failure: ' + JSON.stringify(error));
-            $('button.submit-feedback').prop('disabled', false);
-            $('button.submit-feedback').text($('button.submit-feedback').text().replace(/...$/,''));
+            myThis.dialogElement.find('.server-response').addClass('error').text('Failure: ' + JSON.stringify(error));
+            myThis.dialogElement.find('button.submit-feedback').prop('disabled', false);
+            myThis.dialogElement.find('button.submit-feedback').text(myThis.dialogElement.find('button.submit-feedback').text().replace(/...$/,''));
         });
     }
 
@@ -176,6 +233,7 @@ export class FeedbackDialogView extends DialogView {
      * Creates the multipart form data containing the data of the active mechanisms.
      */
     prepareFormData(configuration:ConfigurationInterface, callback?:any) {
+        // TODO refactoring: the mechanism views should return their feedback data
         var dialogView = this;
         var formData = new FormData();
         var audioMechanisms = configuration.getMechanismConfig(mechanismTypes.audioType);
@@ -184,7 +242,7 @@ export class FeedbackDialogView extends DialogView {
         dialogView.resetMessageView();
 
         var feedbackObject = new Feedback('Feedback', this.dialogContext.userId, this.dialogContext.language, this.context.applicationId, configuration.id, [], [], [], [], null, [], []);
-        feedbackObject.contextInformation = ContextInformation.create();
+        feedbackObject.contextInformation = ContextInformation.create(this.context.metaData);
 
         for (var mechanismView of dialogView.mechanismViews) {
             if (mechanismView instanceof TextView) {
@@ -193,7 +251,7 @@ export class FeedbackDialogView extends DialogView {
                 feedbackObject.ratingFeedbacks.push(mechanismView.getFeedback());
             } else if (mechanismView instanceof AttachmentView) {
                 feedbackObject.attachmentFeedbacks = mechanismView.getFeedbacks();
-                for (let i = 0; i < mechanismView.getFiles(); i++) {
+                for (let i = 0; i < mechanismView.getFiles().length; i++) {
                     let file = mechanismView.getFiles()[i];
                     formData.append(mechanismView.getPartName(i), file, file.name);
                 }
@@ -201,10 +259,12 @@ export class FeedbackDialogView extends DialogView {
                 let screenshotBinary = mechanismView.getScreenshotAsBinary();
                 if (screenshotBinary !== null) {
                     feedbackObject.screenshotFeedbacks.push(mechanismView.getFeedback());
-                    formData.append(mechanismView.getPartName(), mechanismView.getScreenshotAsBinary());
+                    formData.append(mechanismView.getPartName(), mechanismView.getScreenshotAsBinary(), 'weblib_screenshot_' + this.context.userId + '.png');
                 }
             } else if (mechanismView instanceof CategoryView) {
-                feedbackObject.categoryFeedbacks = mechanismView.getCategoryFeedbacks();
+                for(let categoryFeedback of mechanismView.getCategoryFeedbacks()) {
+                    feedbackObject.categoryFeedbacks.push(categoryFeedback);
+                }
             }
         }
 
@@ -213,7 +273,7 @@ export class FeedbackDialogView extends DialogView {
             let partName = "audio" + audioMechanism.id;
             var audioElement = jQuery('section#audioMechanism' + audioMechanism.id + ' audio')[0];
             if (!audioElement || Fr.voice.recorder === null) {
-                formData.append('json', JSON.stringify(feedbackObject));
+                formData.append('json', new Blob([JSON.stringify(feedbackObject)], { type: 'application/json' }));
                 callback(formData);
             }
 
@@ -228,17 +288,17 @@ export class FeedbackDialogView extends DialogView {
                     var date = new Date();
                     formData.append(partName, blob, "recording" + audioMechanism.id + "_" + date.getTime());
                     feedbackObject.audioFeedbacks.push(audioFeedback);
-                    formData.append('json', JSON.stringify(feedbackObject));
+                    formData.append('json', new Blob([JSON.stringify(feedbackObject)], { type: 'application/json' }));
                     callback(formData);
                 });
             } catch (e) {
-                formData.append('json', JSON.stringify(feedbackObject));
+                formData.append('json', new Blob([JSON.stringify(feedbackObject)], { type: 'application/json' }));
                 callback(formData);
             }
         }
 
         if (!hasAudioMechanism) {
-            formData.append('json', JSON.stringify(feedbackObject));
+            formData.append('json', new Blob([JSON.stringify(feedbackObject)], { type: 'application/json' }));
             callback(formData);
         }
     };

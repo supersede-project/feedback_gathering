@@ -1,0 +1,132 @@
+// feedback button
+$feedbackEntryPointBoxShadow: 1px 1px 1px 0 #2156A0
+;
+
+// feedback dialog
+$dialogFontFamily: Lato, sans-serif;
+
+// feedback dialog title
+$dialogTitlebarColor: transparent;
+$dialogTitlebarBackgroundColor: transparent;
+$dialogTitlebarBorderColor: #2156A0;
+
+// dialog buttons
+$buttonBackgroundColor: #2156A0;
+$buttonHoverColor: white;
+$buttonHoverBackgroundColor: #2156A0;
+$buttonGradientEnabled: true;
+$buttonGradientColor1: #2156A0;
+$buttonGradientColor2: #2156A0;
+$buttonGradientColor3: #2156A0;
+$buttonHoverGradientColor1: #2156A0;
+$buttonHoverGradientColor2: #2156A0;
+$buttonTextColor: white;
+$buttonFontSize: 13px;
+$buttonBorderWidth: 0;
+$buttonBorderStyle: solid;
+$buttonBorderColor: transparent;
+$buttonHeight: 32px;
+$buttonTextTransform: none;
+
+// submit
+$submitButtonBackgroundColor: #2156A0;
+$submitButtonColor: white;
+$submitButtonHoverBackgroundColor: #2156A0;
+$submitButtonHoverColor: white;
+$submitButtonFontWeight: normal;
+
+.feedback-library-wrapper .ui-widget-header {
+  border: none;
+  border-bottom: 3px solid #187e91;
+  border-radius: 0;
+  font-size: 17px;
+  background-color: transparent;
+  margin-left: 15px;
+  margin-right: 15px;
+  margin-bottom: 15px;
+}
+
+#feedbackEntryPoint {
+  font-size: 16px;
+  top: 310px !important;
+}
+
+.feedback-library-wrapper .ui-dialog .ui-dialog-titlebar {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.feedback-library-wrapper .ui-widget .ui-widget {
+  background: transparent;
+  border: none;
+}
+
+.feedback-library-wrapper .ui-widget button {
+  font-size: 0.9em;
+}
+
+section.feedback-mechanism {
+  padding-right: 0 !important;
+}
+
+.feedback-library a.discard-feedback {
+  color: #2156A0;
+}
+
+.feedback-library-wrapper .ui-button.ui-dialog-titlebar-close {
+  color: #ffffff !important;
+}
+
+.feedback-library .button {
+  padding: 0.375em 1.5em !important;
+}
+
+.feedback-library-wrapper .ui-dialog .ui-dialog-titlebar {
+  padding: 3px 0 !important
+}
+
+.feedback-library .feedback-mechanism.horizontal .col-left {
+  padding-left: 0 !important;
+}
+
+.feedback-library p.attachment-type-label,
+.feedback-library p.screenshot-title,
+.feedback-library p.text-type-label,
+.feedback-library p.rating-type-label,
+.feedback-library p.audio-type-label,
+.feedback-library p.category-type-label,
+.feedback-library p.rating-type-label {
+  font-size: 17px !important;
+  line-height: 21px !important;
+}
+
+.feedback-library p.attachment-type-label,
+.feedback-library p.screenshot-title,
+.feedback-library p.audio-type-label,
+.feedback-library p.category-type-label {
+  margin-bottom: 7px !important;
+}
+
+.feedback-library .category-type label {
+  font-size: 16px !important;
+}
+
+.feedback-library .category-type input.own-category {
+  height: 24px !important;
+  padding: 1px !important;
+}
+
+.feedback-library article.file-upload-box input {
+  line-height: 16px;
+}
+
+.feedback-library .drop-area {
+  height: 90px !important;
+  padding-top: 27px !important;
+  font-size: 16px !important;
+}
+
+.feedback-library .screenshot-action-title {
+  margin-top: 10px !important;
+  margin-bottom: 0 !important;
+}

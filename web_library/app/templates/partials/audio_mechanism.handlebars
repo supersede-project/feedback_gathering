@@ -1,13 +1,14 @@
 {{#if active}}
-    <section id="audioMechanism{{ id }}" class="feedback-mechanism feedback-col {{parent.labelPositioning}} audio-type" style="width: {{boxWidth}}; padding-left: {{boxPaddingLeft}}; padding-right: {{boxPaddingRight}};">
-        <p style="{{#if mandatory}}{{ parent.mandatoryLabelStyle }}{{/if}}">{{ title }}{{#if mandatory }} {{ parent.mandatorySign }}{{/if}}</p>
+    <section id="audioMechanism{{ id }}" class="feedback-mechanism feedback-col {{parent.labelPositioning}} {{cssClass}} audio-type" style="width: {{boxWidth}}; padding-left: {{boxPaddingLeft}}; padding-right: {{boxPaddingRight}};">
+        <p class="audio-type-label" style="{{#if mandatory}}{{ parent.mandatoryLabelStyle }}{{/if}}">{{ title }}{{#if mandatory }} {{ parent.mandatorySign }}{{/if}}</p>
         <audio controls src="" class="audio"></audio>
         <div class="audio-buttons">
             <a class="record"><img src="{{parent.distPath}}img/ic_mic_none_black_24dp_2x.png" data-default-src="{{parent.distPath}}img/ic_mic_none_black_24dp_2x.png" data-active-src="{{parent.distPath}}img/ic_mic_black_24dp_2x.png" /></a>
             <a class="disabled one stop" title="stop"><img src="{{parent.distPath}}img/ic_stop_black_24dp_2x.png" /></a>
             <a class="disabled one delete" title="reset"><img src="{{parent.distPath}}img/ic_delete_black_24dp_2x.png" /></a>
             <a class="disabled one replay" title="replay"><img src="{{parent.distPath}}img/ic_play_arrow_black_24dp_2x.png" /></a>
-            <span class="audio-time"></span>
+            <a class="disabled one stop-replay" title="stop replay"><img src="{{parent.distPath}}img/ic_stop_black_24dp_2x.png" /></a>
+            <span class="replay-time"></span><span class="audio-time"></span>
         </div>
     </section>
 {{/if}}

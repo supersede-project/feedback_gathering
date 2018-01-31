@@ -7,6 +7,7 @@ import {CategoryMechanism} from './category_mechanism';
 import {TextMechanism} from './text_mechanism';
 import {AudioMechanism} from './audio_mechanism';
 import {AttachmentMechanism} from './attachment_mechanism';
+import {InfoMechanism} from './info_mechanism';
 
 
 export class MechanismFactory {
@@ -38,6 +39,8 @@ export class MechanismFactory {
             return new AudioMechanism(data.id, data.type, data.active, data.order, data.canBeActivated, parameters);
         } else if (data.type === mechanismTypes.attachmentType) {
             return new AttachmentMechanism(data.id, data.type, data.active, data.order, data.canBeActivated, parameters);
+        } else if (data.type === mechanismTypes.infoType) {
+            return new InfoMechanism(data.id, data.type, data.active, data.order, data.canBeActivated, parameters);
         } else {
             console.warn('This mechanism type is not supported by the mechanism factory: ' + data.type);
             return null;

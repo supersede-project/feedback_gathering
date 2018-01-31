@@ -1,6 +1,5 @@
 import {Backend} from './backends/backend';
 import {HttpBackend} from './backends/http_backend';
-import {Application} from '../models/applications/application';
 import {applicationPath} from '../js/config';
 import {Feedback} from '../models/feedbacks/feedback';
 

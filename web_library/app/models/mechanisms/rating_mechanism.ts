@@ -37,6 +37,8 @@ export class RatingMechanism extends Mechanism {
         return {
             title: this.getParameterValue('title'),
             boxWidth: this.getParameterValue('boxWidth') || '100%',
+            mandatory: this.getParameterValue('mandatory'),
+            mandatoryReminder: this.getParameterValue('mandatoryReminder'),
             boxPaddingLeft: this.getParameterValue('boxPaddingLeft') || '0',
             boxPaddingRight: this.getParameterValue('boxPaddingRight') || '20px'
         }

@@ -68,7 +68,9 @@ export abstract class Mechanism implements Parameterizable {
             'type': this.type,
             'active': this.active,
             'order': this.order,
-            'canBeActivated': this.canBeActivated
+            'canBeActivated': this.canBeActivated,
+            'page': this.getParameterValue('page') || 1,
+            'cssClass': this.getParameterValue('cssClass') || '',
         }
     }
 }

@@ -4,7 +4,7 @@ export class RatingFeedback {
     title:string;
 
     constructor(rating:number, mechanismId:number, title:string) {
-        this.rating = rating;
+        this.rating = Math.round(rating);
         this.mechanismId = mechanismId;
         this.title = title;
     }

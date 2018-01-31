@@ -1,6 +1,7 @@
 import {Parameter} from '../parameters/parameter';
 import {Mechanism} from './mechanism';
 import {CategoryFeedback} from '../feedbacks/category_feedback';
+import { ParameterValuePropertyPair } from '../parameters/parameter_value_property_pair';
 
 
 export class CategoryMechanism extends Mechanism {
@@ -27,15 +28,29 @@ export class CategoryMechanism extends Mechanism {
         }
     }
 
+    sortParameters(parameters:Parameter[]):Parameter[] {
+        return parameters.sort((p1, p2) => p1.order - p2.order);
+    }
+
     getContext(): any {
+        let inputType = 'checkbox';
+        if(this.getParameterValue('multiple') === false){
+            inputType = 'radio';
+        }
+        var labelStyle = this.getCssStyle([
+            new ParameterValuePropertyPair('labelColor', 'color'),
+            new ParameterValuePropertyPair('labelFontSize', 'font-size')
+        ]);
+
         return {
             title: this.getParameterValue('title'),
             ownAllowed: this.getParameterValue('ownAllowed'),
             ownLabel: this.getParameterValue('ownLabel'),
-            breakAfterOption: this.getParameterValue('breakAfterOption') ? true : false,
-            options: this.getOptions(),
+            breakAfterOption: !!this.getParameterValue('breakAfterOption'),
+            options: this.sortParameters(this.getOptions()),
             defaultOption: this.getDefaultOptions(),
-            inputType: this.getParameterValue('multiple') ? 'checkbox' : 'radio',
+            inputType: inputType,
+            labelStyle: labelStyle,
             multiple: this.getParameterValue('multiple'),
             asDropdown: this.getParameterValue('asDropdown') || false,
             mandatory: this.getParameterValue('mandatory'),

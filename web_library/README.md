@@ -13,8 +13,6 @@ It provides the following features:
 - Flexible configuration of feedback requests
 - Pull and push feedback request presentation
 
-The web library runs well with node v6.10.2, npm 4.5.0 and gulp 3.9.1. 
-
 # How to start
 
 In order to get the project running use:
@@ -25,14 +23,6 @@ cd web_library
 # install the project's dependencies
 npm install
 ```
-
-To install the type definitions for typings:
-```bash
-typings install dt~yargs --save
-```
-
-where yargs is the package name. If the module is installed globally, the global flag (--global) needs to be added at the end of the command.
-
 
 Create a virtual host on your local machine to avoid problems with cross origin loads. Ideally use localhost as the ServerName to avoid problems with getUserMedia() in Google Chrome.
 
@@ -94,10 +84,8 @@ Note: This setup is tested and runs successfully using node v7.0.0 and npm 3.10.
 - [Styling](#styling)
 - [Internationalization](#internationalization)
 - [Running tests](#running-tests)
-- [WebStorm](#webstorm)
 - [Deployment](#deployment)
 - [Directory Structure](#directory-structure)
-- [Troubleshooting](#troubleshooting)
 - [License](#license)
 
 # Compatibility
@@ -109,7 +97,6 @@ The library should work fine on the following browsers (with Promise polyfill):
 * Opera 12+
 * IE9+
 * Safari 6+
-
 
 # Integration
 
@@ -160,9 +147,6 @@ The following options are available to configure the jQuery plugin on the client
 
 |option   |description   |
 |---|---|
-|apiEndpointOrchestrator|Orchestrator endpoint url, e.g. https://platform.supersede.eu:8443/|
-|apiEndpointRepository|Repository endpoint url|
-|applicationId|Application ID used for the Orchestrator endpoint, e.g. 20 for Senercon|
 |backgroundColor|Background color of the feedback button|
 |color|Font color of the feedback button|
 |colorPickerCSSClass| Assign a custom css class to the color picker|
@@ -174,6 +158,7 @@ The following options are available to configure the jQuery plugin on the client
 |distPath   |Path to the ressources that are used within the library (css, img, etc.)   |
 |fallbackLang|Language to be used if 'lang' is not available in the locales folder|
 |lang|Language to be used|
+|localesOverride|A JS object to control all the texts within the tool.|
 |userId|ID that gets sent to the repository component and will be store alongside the feedback|
 
 # Styling
@@ -192,21 +177,6 @@ To add new languages please create a folder using the ISO-691-1 language code as
 ```bash
 npm test
 ```
-
-# WebStorm
-
-To build the web library you can either execute 'gulp build.dev' on the command line or create corresponding run configurations in WebStorm.
-
-The configuration parameter takes the file from app/js/configurations and from app/css/configurations:
-![Run configuration with JS conf](https://raw.githubusercontent.com/supersede-project/monitor_feedback/master/images/web_lib_docu_run_conf_1.png)
-
-The configuration parameter takes the file from app/js/configurations and a different one from app/css/configurations: 
-![Run configuration with JS conf and SCSS conf](https://raw.githubusercontent.com/supersede-project/monitor_feedback/master/images/web_lib_docu_run_conf_2.png)
-
-The typescript compiler should be enabled in WebStorm to compile .ts files to .js files. 
-![Typescript settings](https://raw.githubusercontent.com/supersede-project/monitor_feedback/master/images/web_lib_docu_typescript.png)
-
-
 
 # Deployment
 
@@ -240,14 +210,6 @@ gulp deploy
 ├── tsconfig.json              <- configuration of the typescript project
 ├── tslint.json                <- tslint configuration
 └── webpack.config.js          <- bundler configuration
-```
-
-# Troubleshooting
-
-If the web library does not run:
-
-```bash
-npm install -g webpack gulp-cli typescript
 ```
 
 

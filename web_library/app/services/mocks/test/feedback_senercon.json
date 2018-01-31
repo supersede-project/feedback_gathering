@@ -1,0 +1,3369 @@
+[
+  {
+    "contextInformation": {
+      "timeZone": "+0100",
+      "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36",
+      "id": 30,
+      "resolution": "2137x3840"
+    },
+    "textFeedbacks": [
+      {
+        "id": 102,
+        "text": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.",
+        "mechanismId": 52
+      }
+    ],
+    "attachmentFeedbacks": [],
+    "title": "Feedback",
+    "createdAt": "2017-02-21 03:25:34.0",
+    "ratingFeedbacks": [
+      {
+        "rating": 4,
+        "id": 48,
+        "title": "Rate your user experience",
+        "mechanismId": 55
+      }
+    ],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": [
+      {
+        "parameterId": 390,
+        "id": 55,
+        "text": ""
+      }
+    ],
+    "userIdentification": "99999999",
+    "id": 111,
+    "configurationId": 16,
+    "applicationId": 7,
+    "screenshotFeedbacks": []
+  },
+  {
+    "contextInformation": {
+      "timeZone": "+0100",
+      "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36",
+      "id": 31,
+      "resolution": "2137x3840"
+    },
+    "textFeedbacks": [
+      {
+        "id": 103,
+        "text": "Lorem ipsum...",
+        "mechanismId": 52
+      }
+    ],
+    "attachmentFeedbacks": [],
+    "title": "Feedback",
+    "createdAt": "2017-02-21 03:31:54.0",
+    "ratingFeedbacks": [
+      {
+        "rating": 5,
+        "id": 49,
+        "title": "Rate your user experience",
+        "mechanismId": 55
+      }
+    ],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": [
+      {
+        "parameterId": 390,
+        "id": 56,
+        "text": ""
+      }
+    ],
+    "userIdentification": "99999999",
+    "id": 112,
+    "configurationId": 16,
+    "applicationId": 7,
+    "screenshotFeedbacks": [
+      {
+        "path": "screenshots/98423_1487687509502.png",
+        "size": 98423,
+        "fileExtension": "png",
+        "name": "screenshot54",
+        "textAnnotations": [],
+        "id": 44,
+        "mechanismId": 54
+      }
+    ]
+  },
+  {
+    "contextInformation": {
+      "localTime": "2017-02-22 08:14:18.0",
+      "timeZone": "+0100",
+      "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36",
+      "id": 24,
+      "resolution": "873x1440"
+    },
+    "textFeedbacks": [
+      {
+        "id": 91,
+        "text": "Feedback from a site with secured senercon prod assets.",
+        "mechanismId": 59
+      }
+    ],
+    "attachmentFeedbacks": [],
+    "title": "Feedback",
+    "createdAt": "2017-02-22 08:14:20.720",
+    "ratingFeedbacks": [
+      {
+        "rating": 5,
+        "id": 42,
+        "title": "Rate your user experience on this page",
+        "mechanismId": 62
+      }
+    ],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": [
+      {
+        "parameterId": 511,
+        "id": 23,
+        "text": ""
+      }
+    ],
+    "userIdentification": "99999999",
+    "id": 104,
+    "configurationId": 39,
+    "applicationId": 20,
+    "screenshotFeedbacks": [
+      {
+        "path": "screenshots/385568_1487747660398.png",
+        "size": 385568,
+        "fileExtension": "png",
+        "name": "screenshot61",
+        "textAnnotations": [],
+        "id": 22,
+        "mechanismId": 61
+      }
+    ]
+  },
+  {
+    "contextInformation": {
+      "localTime": "2017-02-22 02:05:39.0",
+      "timeZone": "+0100",
+      "userAgent": "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36",
+      "id": 25,
+      "resolution": "1040x1920"
+    },
+    "textFeedbacks": [
+      {
+        "id": 92,
+        "text": "this is the first test. i've found two issues and have one question:\n1. it's difficult to reproduce that bug: after drag-and-drop and/or zooming a screenshot, the crop-function doesn't work always proper. some times i only see a white box.\n2. the feedback-box will be displayed in every screenshot but i always want to see the website underneath. is it possible to hide the feedback-box in the screenshots?\n3. what's the difference (in the behaviour) between the small \"-\" (hide) button in the upper right corner an the \"cancel\"-button in the left-bottom corner? is it possible to keep the already done input in the feedback-formular when clicking the \"-\"-button on the right upper corner an restore that content when clicking the feedback button again? (just a feature-request, no problem if it's not possible ;) )",
+        "mechanismId": 59
+      }
+    ],
+    "attachmentFeedbacks": [],
+    "title": "Feedback",
+    "createdAt": "2017-02-22 02:05:41.393",
+    "ratingFeedbacks": [
+      {
+        "rating": 4,
+        "id": 43,
+        "title": "Rate your user experience on this page",
+        "mechanismId": 62
+      }
+    ],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": [
+      {
+        "parameterId": 509,
+        "id": 24,
+        "text": ""
+      }
+    ],
+    "userIdentification": "99999999",
+    "id": 105,
+    "configurationId": 39,
+    "applicationId": 20,
+    "screenshotFeedbacks": [
+      {
+        "path": "screenshots/54504_1487768740962.png",
+        "size": 54504,
+        "fileExtension": "png",
+        "name": "screenshot61",
+        "textAnnotations": [],
+        "id": 23,
+        "mechanismId": 61
+      }
+    ]
+  },
+  {
+    "contextInformation": {
+      "localTime": "2017-02-22 02:38:33.0",
+      "timeZone": "+0100",
+      "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36",
+      "id": 26,
+      "resolution": "1080x1920"
+    },
+    "textFeedbacks": [
+      {
+        "id": 93,
+        "text": "The Feeback form is still visible in the screenshot",
+        "mechanismId": 59
+      }
+    ],
+    "attachmentFeedbacks": [],
+    "title": "Feedback",
+    "createdAt": "2017-02-22 02:38:34.374",
+    "ratingFeedbacks": [
+      {
+        "rating": 4,
+        "id": 44,
+        "title": "Rate your user experience on this page",
+        "mechanismId": 62
+      }
+    ],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": [
+      {
+        "parameterId": 509,
+        "id": 25,
+        "text": ""
+      }
+    ],
+    "userIdentification": "99999999",
+    "id": 106,
+    "configurationId": 39,
+    "applicationId": 20,
+    "screenshotFeedbacks": [
+      {
+        "path": "screenshots/153706_1487770714368.png",
+        "size": 153706,
+        "fileExtension": "png",
+        "name": "screenshot61",
+        "textAnnotations": [],
+        "id": 24,
+        "mechanismId": 61
+      }
+    ]
+  },
+  {
+    "contextInformation": {
+      "localTime": "2017-02-22 04:07:51.0",
+      "timeZone": "+0100",
+      "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36",
+      "id": 27,
+      "resolution": "2137x3840"
+    },
+    "textFeedbacks": [
+      {
+        "id": 94,
+        "text": "Hallo,\nFeedback Dialog ist nicht mehr sichtbar. \n\nBeste Gr??sse\nRonnie",
+        "mechanismId": 59
+      }
+    ],
+    "attachmentFeedbacks": [],
+    "title": "Feedback",
+    "createdAt": "2017-02-22 04:07:53.32",
+    "ratingFeedbacks": [
+      {
+        "rating": 5,
+        "id": 45,
+        "title": "Rate your user experience on this page",
+        "mechanismId": 62
+      }
+    ],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": [
+      {
+        "parameterId": 511,
+        "id": 26,
+        "text": ""
+      }
+    ],
+    "userIdentification": "99999999",
+    "id": 107,
+    "configurationId": 39,
+    "applicationId": 20,
+    "screenshotFeedbacks": [
+      {
+        "path": "screenshots/102219_1487776073023.png",
+        "size": 102219,
+        "fileExtension": "png",
+        "name": "screenshot61",
+        "textAnnotations": [],
+        "id": 25,
+        "mechanismId": 61
+      }
+    ]
+  },
+  {
+    "contextInformation": {
+      "timeZone": "+0100",
+      "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36",
+      "id": 32,
+      "resolution": "2137x3840"
+    },
+    "textFeedbacks": [
+      {
+        "id": 104,
+        "text": "test siemens 19",
+        "mechanismId": 52
+      }
+    ],
+    "attachmentFeedbacks": [],
+    "title": "Feedback",
+    "createdAt": "2017-02-22 04:47:47.0",
+    "ratingFeedbacks": [
+      {
+        "rating": 5,
+        "id": 50,
+        "title": "Rate your user experience on this page",
+        "mechanismId": 55
+      }
+    ],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": [
+      {
+        "parameterId": 467,
+        "id": 57,
+        "text": ""
+      }
+    ],
+    "userIdentification": "99999999",
+    "id": 113,
+    "configurationId": 38,
+    "applicationId": 19,
+    "screenshotFeedbacks": []
+  },
+  {
+    "contextInformation": {
+      "timeZone": "+0100",
+      "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36",
+      "id": 33,
+      "resolution": "2137x3840"
+    },
+    "textFeedbacks": [
+      {
+        "id": 105,
+        "text": "test",
+        "mechanismId": 52
+      }
+    ],
+    "attachmentFeedbacks": [],
+    "title": "Feedback",
+    "createdAt": "2017-02-22 04:49:28.0",
+    "ratingFeedbacks": [
+      {
+        "rating": 5,
+        "id": 51,
+        "title": "Rate your user experience on this page",
+        "mechanismId": 55
+      }
+    ],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": [
+      {
+        "parameterId": 467,
+        "id": 58,
+        "text": ""
+      }
+    ],
+    "userIdentification": "99999999",
+    "id": 114,
+    "configurationId": 38,
+    "applicationId": 19,
+    "screenshotFeedbacks": []
+  },
+  {
+    "contextInformation": {
+      "localTime": "2017-02-26 09:37:53.0",
+      "timeZone": "+0100",
+      "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36",
+      "id": 28,
+      "resolution": "1413x2560"
+    },
+    "textFeedbacks": [
+      {
+        "id": 95,
+        "text": "Test success dialog",
+        "mechanismId": 59
+      }
+    ],
+    "attachmentFeedbacks": [],
+    "title": "Feedback",
+    "createdAt": "2017-02-26 09:37:57.757",
+    "ratingFeedbacks": [
+      {
+        "rating": 4,
+        "id": 46,
+        "title": "Bewerten Sie die aktuelle Ansicht",
+        "mechanismId": 62
+      }
+    ],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": [
+      {
+        "parameterId": 576,
+        "id": 27,
+        "text": ""
+      }
+    ],
+    "userIdentification": "99999999",
+    "id": 108,
+    "configurationId": 39,
+    "applicationId": 20,
+    "screenshotFeedbacks": []
+  },
+  {
+    "contextInformation": {
+      "localTime": "2017-02-26 09:42:38.0",
+      "timeZone": "+0100",
+      "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36",
+      "id": 29,
+      "resolution": "1413x2560"
+    },
+    "textFeedbacks": [
+      {
+        "id": 96,
+        "text": "test",
+        "mechanismId": 59
+      }
+    ],
+    "attachmentFeedbacks": [],
+    "title": "Feedback",
+    "createdAt": "2017-02-26 09:42:38.368",
+    "ratingFeedbacks": [
+      {
+        "rating": 5,
+        "id": 47,
+        "title": "Bewerten Sie die aktuelle Ansicht",
+        "mechanismId": 62
+      }
+    ],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": [
+      {
+        "parameterId": 576,
+        "id": 28,
+        "text": ""
+      }
+    ],
+    "userIdentification": "99999999",
+    "id": 109,
+    "configurationId": 39,
+    "applicationId": 20,
+    "screenshotFeedbacks": []
+  },
+  {
+    "contextInformation": {
+      "localTime": "2017-02-26 09:45:53.0",
+      "timeZone": "+0100",
+      "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36",
+      "id": 30,
+      "resolution": "1413x2560"
+    },
+    "textFeedbacks": [
+      {
+        "id": 97,
+        "text": "success dialog shown",
+        "mechanismId": 59
+      }
+    ],
+    "attachmentFeedbacks": [],
+    "title": "Feedback",
+    "createdAt": "2017-02-26 09:45:53.253",
+    "ratingFeedbacks": [
+      {
+        "rating": 5,
+        "id": 48,
+        "title": "Bewerten Sie die aktuelle Ansicht",
+        "mechanismId": 62
+      }
+    ],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": [
+      {
+        "parameterId": 576,
+        "id": 29,
+        "text": ""
+      }
+    ],
+    "userIdentification": "99999999",
+    "id": 110,
+    "configurationId": 39,
+    "applicationId": 20,
+    "screenshotFeedbacks": []
+  },
+  {
+    "contextInformation": {
+      "localTime": "2017-02-26 10:04:00.0",
+      "timeZone": "+0100",
+      "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36",
+      "id": 31,
+      "resolution": "1413x2560"
+    },
+    "textFeedbacks": [
+      {
+        "id": 98,
+        "text": "Success dialog shown after submit.",
+        "mechanismId": 59
+      }
+    ],
+    "attachmentFeedbacks": [],
+    "title": "Feedback",
+    "createdAt": "2017-02-26 10:04:00.731",
+    "ratingFeedbacks": [
+      {
+        "rating": 5,
+        "id": 49,
+        "title": "Bewerten Sie die aktuelle Ansicht",
+        "mechanismId": 62
+      }
+    ],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": [
+      {
+        "parameterId": 576,
+        "id": 30,
+        "text": ""
+      }
+    ],
+    "userIdentification": "99999999",
+    "id": 111,
+    "configurationId": 39,
+    "applicationId": 20,
+    "screenshotFeedbacks": []
+  },
+  {
+    "contextInformation": {
+      "localTime": "2017-02-26 10:09:21.0",
+      "timeZone": "+0100",
+      "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36",
+      "id": 32,
+      "resolution": "1413x2560"
+    },
+    "textFeedbacks": [
+      {
+        "id": 99,
+        "text": "Test overlay",
+        "mechanismId": 59
+      }
+    ],
+    "attachmentFeedbacks": [],
+    "title": "Feedback",
+    "createdAt": "2017-02-26 10:09:21.189",
+    "ratingFeedbacks": [
+      {
+        "rating": 4,
+        "id": 50,
+        "title": "Rate your user experience on this page",
+        "mechanismId": 62
+      }
+    ],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": [
+      {
+        "parameterId": 511,
+        "id": 31,
+        "text": ""
+      }
+    ],
+    "userIdentification": "99999999",
+    "id": 112,
+    "configurationId": 39,
+    "applicationId": 20,
+    "screenshotFeedbacks": []
+  },
+  {
+    "contextInformation": {
+      "localTime": "2017-02-28 08:53:48.0",
+      "timeZone": "+0100",
+      "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36",
+      "id": 33,
+      "resolution": "1173x1920"
+    },
+    "textFeedbacks": [
+      {
+        "id": 100,
+        "text": "Hallo,\nCrop bei gezoomter und verschobener Ansicht sollte nun klappen.\nBeste Gr??sse\nRonnie",
+        "mechanismId": 59
+      }
+    ],
+    "attachmentFeedbacks": [],
+    "title": "Feedback",
+    "createdAt": "2017-02-28 08:53:51.18",
+    "ratingFeedbacks": [
+      {
+        "rating": 5,
+        "id": 51,
+        "title": "Rate your user experience on this page",
+        "mechanismId": 62
+      }
+    ],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": [
+      {
+        "parameterId": 511,
+        "id": 32,
+        "text": ""
+      }
+    ],
+    "userIdentification": "99999999",
+    "id": 113,
+    "configurationId": 39,
+    "applicationId": 20,
+    "screenshotFeedbacks": [
+      {
+        "path": "screenshots/96020_1488268430728.png",
+        "size": 96020,
+        "fileExtension": "png",
+        "name": "screenshot61",
+        "textAnnotations": [],
+        "id": 26,
+        "mechanismId": 61
+      }
+    ]
+  },
+  {
+    "contextInformation": {
+      "localTime": "2017-02-28 08:56:46.0",
+      "timeZone": "+0100",
+      "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36",
+      "id": 34,
+      "resolution": "1173x1920"
+    },
+    "textFeedbacks": [
+      {
+        "id": 101,
+        "text": "Test feedback Deutsch",
+        "mechanismId": 59
+      }
+    ],
+    "attachmentFeedbacks": [],
+    "title": "Feedback",
+    "createdAt": "2017-02-28 08:56:46.515",
+    "ratingFeedbacks": [
+      {
+        "rating": 5,
+        "id": 52,
+        "title": "Bewerten Sie die aktuelle Ansicht",
+        "mechanismId": 62
+      }
+    ],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": [
+      {
+        "parameterId": 576,
+        "id": 33,
+        "text": ""
+      }
+    ],
+    "userIdentification": "99999999",
+    "id": 114,
+    "configurationId": 39,
+    "applicationId": 20,
+    "screenshotFeedbacks": [
+      {
+        "path": "screenshots/39222_1488268606506.png",
+        "size": 39222,
+        "fileExtension": "png",
+        "name": "screenshot61",
+        "textAnnotations": [],
+        "id": 27,
+        "mechanismId": 61
+      }
+    ]
+  },
+  {
+    "contextInformation": {
+      "localTime": "2017-02-28 03:27:53.0",
+      "timeZone": "+0100",
+      "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36",
+      "id": 35,
+      "resolution": "1080x1920"
+    },
+    "textFeedbacks": [
+      {
+        "id": 102,
+        "text": "This is a Test-Feedback",
+        "mechanismId": 59
+      }
+    ],
+    "attachmentFeedbacks": [],
+    "title": "Feedback",
+    "createdAt": "2017-02-28 03:27:55.12",
+    "ratingFeedbacks": [
+      {
+        "rating": 3,
+        "id": 53,
+        "title": "Bewerten Sie die aktuelle Ansicht",
+        "mechanismId": 62
+      }
+    ],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": [
+      {
+        "parameterId": 574,
+        "id": 34,
+        "text": ""
+      }
+    ],
+    "userIdentification": "99999999",
+    "id": 115,
+    "configurationId": 39,
+    "applicationId": 20,
+    "screenshotFeedbacks": [
+      {
+        "path": "screenshots/168648_1488292074981.png",
+        "size": 168648,
+        "fileExtension": "png",
+        "name": "screenshot61",
+        "textAnnotations": [],
+        "id": 28,
+        "mechanismId": 61
+      }
+    ]
+  },
+  {
+    "contextInformation": {
+      "localTime": "2017-02-28 03:32:20.0",
+      "timeZone": "+0100",
+      "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36",
+      "id": 36,
+      "resolution": "1080x1920"
+    },
+    "textFeedbacks": [
+      {
+        "id": 103,
+        "text": "The calculation of my consumption is wrong",
+        "mechanismId": 59
+      }
+    ],
+    "attachmentFeedbacks": [],
+    "title": "Feedback",
+    "createdAt": "2017-02-28 03:32:20.439",
+    "ratingFeedbacks": [
+      {
+        "rating": 1,
+        "id": 54,
+        "title": "Bewerten Sie die aktuelle Ansicht",
+        "mechanismId": 62
+      }
+    ],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": [
+      {
+        "parameterId": 574,
+        "id": 35,
+        "text": ""
+      }
+    ],
+    "userIdentification": "99999999",
+    "id": 116,
+    "configurationId": 39,
+    "applicationId": 20,
+    "screenshotFeedbacks": [
+      {
+        "path": "screenshots/57368_1488292340433.png",
+        "size": 57368,
+        "fileExtension": "png",
+        "name": "screenshot61",
+        "textAnnotations": [],
+        "id": 29,
+        "mechanismId": 61
+      }
+    ]
+  },
+  {
+    "contextInformation": {
+      "localTime": "2017-02-28 03:49:33.0",
+      "timeZone": "+0100",
+      "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/602.4.8 (KHTML, like Gecko) Version/10.0.3 Safari/602.4.8",
+      "id": 37,
+      "resolution": "1053x1920"
+    },
+    "textFeedbacks": [
+      {
+        "id": 104,
+        "text": "Feedback from MacOS",
+        "mechanismId": 59
+      }
+    ],
+    "attachmentFeedbacks": [],
+    "title": "Feedback",
+    "createdAt": "2017-02-28 03:49:34.298",
+    "ratingFeedbacks": [
+      {
+        "rating": 3,
+        "id": 55,
+        "title": "Bewerten Sie die aktuelle Ansicht",
+        "mechanismId": 62
+      }
+    ],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": [
+      {
+        "parameterId": 575,
+        "id": 36,
+        "text": ""
+      }
+    ],
+    "userIdentification": "99999999",
+    "id": 117,
+    "configurationId": 39,
+    "applicationId": 20,
+    "screenshotFeedbacks": [
+      {
+        "path": "screenshots/216516_1488293374293.png",
+        "size": 216516,
+        "fileExtension": "png",
+        "name": "screenshot61",
+        "textAnnotations": [],
+        "id": 30,
+        "mechanismId": 61
+      }
+    ]
+  },
+  {
+    "contextInformation": {
+      "localTime": "2017-03-02 06:11:49.0",
+      "timeZone": "+0100",
+      "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36",
+      "id": 38,
+      "resolution": "1413x2560"
+    },
+    "textFeedbacks": [
+      {
+        "id": 105,
+        "text": "Test with proxy",
+        "mechanismId": 59
+      }
+    ],
+    "attachmentFeedbacks": [],
+    "title": "Feedback",
+    "createdAt": "2017-03-02 06:12:13.474",
+    "ratingFeedbacks": [
+      {
+        "rating": 5,
+        "id": 56,
+        "title": "Bewerten Sie die aktuelle Ansicht",
+        "mechanismId": 62
+      }
+    ],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": [
+      {
+        "parameterId": 576,
+        "id": 37,
+        "text": ""
+      }
+    ],
+    "userIdentification": "99999999",
+    "id": 118,
+    "configurationId": 39,
+    "applicationId": 20,
+    "screenshotFeedbacks": []
+  },
+  {
+    "contextInformation": {
+      "localTime": "2017-03-02 06:11:49.0",
+      "timeZone": "+0100",
+      "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36",
+      "id": 39,
+      "resolution": "1413x2560"
+    },
+    "textFeedbacks": [
+      {
+        "id": 106,
+        "text": "Test with proxy",
+        "mechanismId": 59
+      }
+    ],
+    "attachmentFeedbacks": [],
+    "title": "Feedback",
+    "createdAt": "2017-03-02 06:13:12.144",
+    "ratingFeedbacks": [
+      {
+        "rating": 5,
+        "id": 57,
+        "title": "Bewerten Sie die aktuelle Ansicht",
+        "mechanismId": 62
+      }
+    ],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": [
+      {
+        "parameterId": 576,
+        "id": 38,
+        "text": ""
+      }
+    ],
+    "userIdentification": "99999999",
+    "id": 119,
+    "configurationId": 39,
+    "applicationId": 20,
+    "screenshotFeedbacks": []
+  },
+  {
+    "contextInformation": {
+      "localTime": "2017-03-06 04:38:06.0",
+      "timeZone": "+0100",
+      "userAgent": "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/57.0.2987.88 Safari/537.36",
+      "id": 40,
+      "resolution": "1010x1680"
+    },
+    "textFeedbacks": [
+      {
+        "id": 107,
+        "text": "test with file",
+        "mechanismId": 52
+      }
+    ],
+    "language": "en",
+    "attachmentFeedbacks": [
+      {
+        "path": "attachments/4_1488814688385.txt",
+        "size": 4,
+        "fileExtension": "txt",
+        "name": "test.txt",
+        "id": 15,
+        "mechanismId": 58
+      }
+    ],
+    "title": "Feedback Siemens",
+    "createdAt": "2017-03-06 04:38:08.887",
+    "ratingFeedbacks": [
+      {
+        "rating": 4,
+        "id": 58,
+        "mechanismId": 55
+      }
+    ],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": [
+      {
+        "parameterId": 467,
+        "id": 39,
+        "text": ""
+      }
+    ],
+    "userIdentification": "",
+    "id": 120,
+    "configurationId": 38,
+    "applicationId": 19,
+    "screenshotFeedbacks": []
+  },
+  {
+    "contextInformation": {
+      "localTime": "2017-03-08 08:10:27.0",
+      "timeZone": "+0000",
+      "userAgent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:51.0) Gecko/20100101 Firefox/51.0",
+      "id": 42,
+      "resolution": "1123x1407"
+    },
+    "textFeedbacks": [
+      {
+        "id": 109,
+        "text": "Test feedback from firefox on ubuntu",
+        "mechanismId": 59
+      }
+    ],
+    "attachmentFeedbacks": [],
+    "title": "Feedback",
+    "createdAt": "2017-03-08 09:10:30.615",
+    "ratingFeedbacks": [
+      {
+        "rating": 0,
+        "id": 60,
+        "title": "Bewerten Sie die aktuelle Ansicht",
+        "mechanismId": 62
+      }
+    ],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": [
+      {
+        "parameterId": 576,
+        "id": 40,
+        "text": ""
+      }
+    ],
+    "userIdentification": "99999999",
+    "id": 122,
+    "configurationId": 39,
+    "applicationId": 20,
+    "screenshotFeedbacks": [
+      {
+        "path": "screenshots/454363_1488960630042.png",
+        "size": 454363,
+        "fileExtension": "png",
+        "name": "screenshot61",
+        "textAnnotations": [],
+        "id": 31,
+        "mechanismId": 61
+      }
+    ]
+  },
+  {
+    "contextInformation": {
+      "localTime": "2017-03-08 12:48:23.0",
+      "timeZone": "-0800",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.79 Safari/537.36 Edge/14.14393",
+      "id": 43,
+      "resolution": "824x1152"
+    },
+    "textFeedbacks": [
+      {
+        "id": 110,
+        "text": "Test Feedback Edge",
+        "mechanismId": 59
+      }
+    ],
+    "attachmentFeedbacks": [],
+    "title": "Feedback",
+    "createdAt": "2017-03-08 09:48:24.879",
+    "ratingFeedbacks": [
+      {
+        "rating": 0,
+        "id": 61,
+        "title": "Bewerten Sie die aktuelle Ansicht",
+        "mechanismId": 62
+      }
+    ],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": [
+      {
+        "parameterId": 576,
+        "id": 41,
+        "text": ""
+      }
+    ],
+    "userIdentification": "99999999",
+    "id": 123,
+    "configurationId": 39,
+    "applicationId": 20,
+    "screenshotFeedbacks": [
+      {
+        "path": "screenshots/581167_1488962904871.png",
+        "size": 581167,
+        "fileExtension": "png",
+        "name": "screenshot61",
+        "textAnnotations": [],
+        "id": 32,
+        "mechanismId": 61
+      }
+    ]
+  },
+  {
+    "contextInformation": {
+      "localTime": "2017-03-08 10:00:48.0",
+      "timeZone": "+0100",
+      "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/602.4.8 (KHTML, like Gecko) Version/10.0.3 Safari/602.4.8",
+      "id": 44,
+      "resolution": "2137x3840"
+    },
+    "textFeedbacks": [
+      {
+        "id": 111,
+        "text": "Safari MacOS with working rating",
+        "mechanismId": 59
+      }
+    ],
+    "attachmentFeedbacks": [],
+    "title": "Feedback",
+    "createdAt": "2017-03-08 10:00:49.490",
+    "ratingFeedbacks": [
+      {
+        "rating": 4,
+        "id": 62,
+        "title": "Bewerten Sie die aktuelle Ansicht",
+        "mechanismId": 62
+      }
+    ],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": [
+      {
+        "parameterId": 575,
+        "id": 42,
+        "text": ""
+      }
+    ],
+    "userIdentification": "99999999",
+    "id": 124,
+    "configurationId": 39,
+    "applicationId": 20,
+    "screenshotFeedbacks": [
+      {
+        "path": "screenshots/265054_1488963649471.png",
+        "size": 265054,
+        "fileExtension": "png",
+        "name": "screenshot61",
+        "textAnnotations": [],
+        "id": 33,
+        "mechanismId": 61
+      }
+    ]
+  },
+  {
+    "contextInformation": {
+      "localTime": "2017-03-08 12:58:13.0",
+      "timeZone": "+0100",
+      "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36",
+      "id": 45,
+      "resolution": "2137x3840"
+    },
+    "textFeedbacks": [
+      {
+        "id": 112,
+        "text": "Test E-Mail\n4/5\nNeue Funktion gew??nscht\nScreenshot",
+        "mechanismId": 59
+      }
+    ],
+    "attachmentFeedbacks": [],
+    "title": "Feedback",
+    "createdAt": "2017-03-08 12:58:14.530",
+    "ratingFeedbacks": [
+      {
+        "rating": 4,
+        "id": 63,
+        "title": "Bewerten Sie die aktuelle Ansicht",
+        "mechanismId": 62
+      }
+    ],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": [
+      {
+        "parameterId": 575,
+        "id": 43,
+        "text": ""
+      }
+    ],
+    "userIdentification": "99999999",
+    "id": 125,
+    "configurationId": 39,
+    "applicationId": 20,
+    "screenshotFeedbacks": [
+      {
+        "path": "screenshots/68231_1488974294040.png",
+        "size": 68231,
+        "fileExtension": "png",
+        "name": "screenshot61",
+        "textAnnotations": [],
+        "id": 34,
+        "mechanismId": 61
+      }
+    ]
+  },
+  {
+    "contextInformation": {
+      "localTime": "2017-03-19 08:13:35.0",
+      "timeZone": "+0100",
+      "userAgent": "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36",
+      "id": 52,
+      "resolution": "1080x1920"
+    },
+    "textFeedbacks": [
+      {
+        "id": 119,
+        "text": "asdasdasdasdasdasd",
+        "mechanismId": 59
+      }
+    ],
+    "attachmentFeedbacks": [],
+    "title": "Feedback",
+    "createdAt": "2017-03-19 08:13:36.297",
+    "ratingFeedbacks": [
+      {
+        "rating": 3,
+        "id": 70,
+        "title": "Bewerten Sie die aktuelle Ansicht",
+        "mechanismId": 62
+      }
+    ],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": [
+      {
+        "parameterId": 575,
+        "id": 44,
+        "text": ""
+      }
+    ],
+    "userIdentification": "99999999",
+    "id": 132,
+    "configurationId": 39,
+    "applicationId": 20,
+    "screenshotFeedbacks": [
+      {
+        "path": "screenshots/144627_1489907616269.png",
+        "size": 144627,
+        "fileExtension": "png",
+        "name": "screenshot61",
+        "textAnnotations": [],
+        "id": 36,
+        "mechanismId": 61
+      }
+    ]
+  },
+  {
+    "contextInformation": {
+      "localTime": "2017-03-19 09:51:01.0",
+      "timeZone": "+0100",
+      "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/57.0.2987.98 Safari/537.36",
+      "id": 53,
+      "resolution": "877x1376"
+    },
+    "textFeedbacks": [
+      {
+        "id": 120,
+        "text": "nihao adf 'fd;aklfad",
+        "mechanismId": 59
+      }
+    ],
+    "attachmentFeedbacks": [],
+    "title": "Feedback",
+    "createdAt": "2017-03-19 09:51:01.623",
+    "ratingFeedbacks": [
+      {
+        "rating": 5,
+        "id": 71,
+        "title": "Bewerten Sie die aktuelle Ansicht",
+        "mechanismId": 62
+      }
+    ],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": [
+      {
+        "parameterId": 576,
+        "id": 45,
+        "text": ""
+      }
+    ],
+    "userIdentification": "99999999",
+    "id": 133,
+    "configurationId": 39,
+    "applicationId": 20,
+    "screenshotFeedbacks": [
+      {
+        "path": "screenshots/112356_1489913461613.png",
+        "size": 112356,
+        "fileExtension": "png",
+        "name": "screenshot61",
+        "textAnnotations": [],
+        "id": 37,
+        "mechanismId": 61
+      }
+    ]
+  },
+  {
+    "contextInformation": {
+      "localTime": "2017-03-19 06:37:15.0",
+      "timeZone": "+0100",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:52.0) Gecko/20100101 Firefox/52.0",
+      "id": 54,
+      "resolution": "738x1360"
+    },
+    "textFeedbacks": [
+      {
+        "id": 121,
+        "text": "test",
+        "mechanismId": 59
+      }
+    ],
+    "attachmentFeedbacks": [],
+    "title": "Feedback",
+    "createdAt": "2017-03-19 06:37:18.609",
+    "ratingFeedbacks": [
+      {
+        "rating": 0,
+        "id": 72,
+        "title": "Bewerten Sie die aktuelle Ansicht",
+        "mechanismId": 62
+      }
+    ],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": [
+      {
+        "parameterId": 574,
+        "id": 46,
+        "text": ""
+      }
+    ],
+    "userIdentification": "99999999",
+    "id": 134,
+    "configurationId": 39,
+    "applicationId": 20,
+    "screenshotFeedbacks": []
+  },
+  {
+    "contextInformation": {
+      "localTime": "2017-03-19 06:38:08.0",
+      "timeZone": "+0100",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:52.0) Gecko/20100101 Firefox/52.0",
+      "id": 55,
+      "resolution": "738x1360"
+    },
+    "textFeedbacks": [
+      {
+        "id": 122,
+        "text": "test",
+        "mechanismId": 59
+      }
+    ],
+    "attachmentFeedbacks": [],
+    "title": "Feedback",
+    "createdAt": "2017-03-19 06:38:10.715",
+    "ratingFeedbacks": [
+      {
+        "rating": 0,
+        "id": 73,
+        "title": "Bewerten Sie die aktuelle Ansicht",
+        "mechanismId": 62
+      }
+    ],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": [
+      {
+        "parameterId": 574,
+        "id": 47,
+        "text": ""
+      }
+    ],
+    "userIdentification": "99999999",
+    "id": 135,
+    "configurationId": 39,
+    "applicationId": 20,
+    "screenshotFeedbacks": [
+      {
+        "path": "screenshots/58706_1489945090705.png",
+        "size": 58706,
+        "fileExtension": "png",
+        "name": "screenshot61",
+        "textAnnotations": [],
+        "id": 38,
+        "mechanismId": 61
+      }
+    ]
+  },
+  {
+    "contextInformation": {
+      "localTime": "2017-03-19 06:39:49.0",
+      "timeZone": "+0100",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:52.0) Gecko/20100101 Firefox/52.0",
+      "id": 56,
+      "resolution": "738x1360"
+    },
+    "textFeedbacks": [
+      {
+        "id": 123,
+        "text": "tests",
+        "mechanismId": 59
+      }
+    ],
+    "attachmentFeedbacks": [],
+    "title": "Feedback",
+    "createdAt": "2017-03-19 06:39:52.24",
+    "ratingFeedbacks": [
+      {
+        "rating": 4,
+        "id": 74,
+        "title": "Bewerten Sie die aktuelle Ansicht",
+        "mechanismId": 62
+      }
+    ],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": [
+      {
+        "parameterId": 574,
+        "id": 48,
+        "text": ""
+      }
+    ],
+    "userIdentification": "99999999",
+    "id": 136,
+    "configurationId": 39,
+    "applicationId": 20,
+    "screenshotFeedbacks": [
+      {
+        "path": "screenshots/62764_1489945192017.png",
+        "size": 62764,
+        "fileExtension": "png",
+        "name": "screenshot61",
+        "textAnnotations": [],
+        "id": 39,
+        "mechanismId": 61
+      }
+    ]
+  },
+  {
+    "contextInformation": {
+      "localTime": "2017-03-19 06:47:43.0",
+      "timeZone": "+0100",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:52.0) Gecko/20100101 Firefox/52.0",
+      "id": 57,
+      "resolution": "738x1360"
+    },
+    "textFeedbacks": [
+      {
+        "id": 124,
+        "text": "tests",
+        "mechanismId": 59
+      }
+    ],
+    "attachmentFeedbacks": [],
+    "title": "Feedback",
+    "createdAt": "2017-03-19 06:47:46.413",
+    "ratingFeedbacks": [
+      {
+        "rating": 0,
+        "id": 75,
+        "title": "Bewerten Sie die aktuelle Ansicht",
+        "mechanismId": 62
+      }
+    ],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": [
+      {
+        "parameterId": 574,
+        "id": 49,
+        "text": ""
+      }
+    ],
+    "userIdentification": "99999999",
+    "id": 137,
+    "configurationId": 39,
+    "applicationId": 20,
+    "screenshotFeedbacks": []
+  },
+  {
+    "contextInformation": {
+      "localTime": "2017-03-19 06:48:54.0",
+      "timeZone": "+0100",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:52.0) Gecko/20100101 Firefox/52.0",
+      "id": 58,
+      "resolution": "738x1360"
+    },
+    "textFeedbacks": [
+      {
+        "id": 125,
+        "text": "a",
+        "mechanismId": 59
+      }
+    ],
+    "attachmentFeedbacks": [],
+    "title": "Feedback",
+    "createdAt": "2017-03-19 06:48:56.926",
+    "ratingFeedbacks": [
+      {
+        "rating": 0,
+        "id": 76,
+        "title": "Bewerten Sie die aktuelle Ansicht",
+        "mechanismId": 62
+      }
+    ],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": [
+      {
+        "parameterId": 574,
+        "id": 50,
+        "text": ""
+      }
+    ],
+    "userIdentification": "99999999",
+    "id": 138,
+    "configurationId": 39,
+    "applicationId": 20,
+    "screenshotFeedbacks": []
+  },
+  {
+    "contextInformation": {
+      "localTime": "2017-03-19 06:49:29.0",
+      "timeZone": "+0100",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:52.0) Gecko/20100101 Firefox/52.0",
+      "id": 59,
+      "resolution": "738x1360"
+    },
+    "textFeedbacks": [
+      {
+        "id": 126,
+        "text": "a",
+        "mechanismId": 59
+      }
+    ],
+    "attachmentFeedbacks": [],
+    "title": "Feedback",
+    "createdAt": "2017-03-19 06:49:32.242",
+    "ratingFeedbacks": [
+      {
+        "rating": 0,
+        "id": 77,
+        "title": "Bewerten Sie die aktuelle Ansicht",
+        "mechanismId": 62
+      }
+    ],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": [],
+    "userIdentification": "99999999",
+    "id": 139,
+    "configurationId": 39,
+    "applicationId": 20,
+    "screenshotFeedbacks": []
+  },
+  {
+    "contextInformation": {
+      "localTime": "2017-03-19 06:50:21.0",
+      "timeZone": "+0100",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:52.0) Gecko/20100101 Firefox/52.0",
+      "id": 60,
+      "resolution": "738x1360"
+    },
+    "textFeedbacks": [
+      {
+        "id": 127,
+        "text": "a",
+        "mechanismId": 59
+      }
+    ],
+    "attachmentFeedbacks": [],
+    "title": "Feedback",
+    "createdAt": "2017-03-19 06:50:24.436",
+    "ratingFeedbacks": [
+      {
+        "rating": 0,
+        "id": 78,
+        "title": "Bewerten Sie die aktuelle Ansicht",
+        "mechanismId": 62
+      }
+    ],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": [],
+    "userIdentification": "99999999",
+    "id": 140,
+    "configurationId": 39,
+    "applicationId": 20,
+    "screenshotFeedbacks": []
+  },
+  {
+    "contextInformation": {
+      "localTime": "2017-03-19 06:51:06.0",
+      "timeZone": "+0100",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:52.0) Gecko/20100101 Firefox/52.0",
+      "id": 61,
+      "resolution": "738x1360"
+    },
+    "textFeedbacks": [
+      {
+        "id": 128,
+        "text": "a",
+        "mechanismId": 59
+      }
+    ],
+    "attachmentFeedbacks": [],
+    "title": "Feedback",
+    "createdAt": "2017-03-19 06:51:09.244",
+    "ratingFeedbacks": [
+      {
+        "rating": 0,
+        "id": 79,
+        "title": "Bewerten Sie die aktuelle Ansicht",
+        "mechanismId": 62
+      }
+    ],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": [],
+    "userIdentification": "99999999",
+    "id": 141,
+    "configurationId": 39,
+    "applicationId": 20,
+    "screenshotFeedbacks": []
+  },
+  {
+    "contextInformation": {
+      "localTime": "2017-03-19 06:53:27.0",
+      "timeZone": "+0100",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:52.0) Gecko/20100101 Firefox/52.0",
+      "id": 62,
+      "resolution": "738x1360"
+    },
+    "textFeedbacks": [
+      {
+        "id": 129,
+        "text": "tests",
+        "mechanismId": 59
+      }
+    ],
+    "attachmentFeedbacks": [],
+    "title": "Feedback",
+    "createdAt": "2017-03-19 06:53:30.730",
+    "ratingFeedbacks": [
+      {
+        "rating": 2,
+        "id": 80,
+        "title": "Bewerten Sie die aktuelle Ansicht",
+        "mechanismId": 62
+      }
+    ],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": [
+      {
+        "parameterId": 574,
+        "id": 51,
+        "text": ""
+      }
+    ],
+    "userIdentification": "99999999",
+    "id": 142,
+    "configurationId": 39,
+    "applicationId": 20,
+    "screenshotFeedbacks": [
+      {
+        "path": "screenshots/58316_1489946010722.png",
+        "size": 58316,
+        "fileExtension": "png",
+        "name": "screenshot61",
+        "textAnnotations": [],
+        "id": 40,
+        "mechanismId": 61
+      }
+    ]
+  },
+  {
+    "contextInformation": {
+      "localTime": "2017-03-19 07:07:55.0",
+      "timeZone": "+0100",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:52.0) Gecko/20100101 Firefox/52.0",
+      "id": 63,
+      "resolution": "738x1360"
+    },
+    "textFeedbacks": [
+      {
+        "id": 130,
+        "text": "tests",
+        "mechanismId": 59
+      }
+    ],
+    "attachmentFeedbacks": [],
+    "title": "Feedback",
+    "createdAt": "2017-03-19 07:07:57.946",
+    "ratingFeedbacks": [
+      {
+        "rating": 4,
+        "id": 81,
+        "title": "Bewerten Sie die aktuelle Ansicht",
+        "mechanismId": 62
+      }
+    ],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": [
+      {
+        "parameterId": 576,
+        "id": 52,
+        "text": ""
+      }
+    ],
+    "userIdentification": "99999999",
+    "id": 143,
+    "configurationId": 39,
+    "applicationId": 20,
+    "screenshotFeedbacks": []
+  },
+  {
+    "contextInformation": {
+      "localTime": "2017-03-19 07:11:26.0",
+      "timeZone": "+0100",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:52.0) Gecko/20100101 Firefox/52.0",
+      "id": 64,
+      "resolution": "738x1360"
+    },
+    "textFeedbacks": [
+      {
+        "id": 131,
+        "text": "tests",
+        "mechanismId": 59
+      }
+    ],
+    "attachmentFeedbacks": [],
+    "title": "Feedback",
+    "createdAt": "2017-03-19 07:11:29.337",
+    "ratingFeedbacks": [
+      {
+        "rating": 3,
+        "id": 82,
+        "title": "Bewerten Sie die aktuelle Ansicht",
+        "mechanismId": 62
+      }
+    ],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": [
+      {
+        "parameterId": 574,
+        "id": 53,
+        "text": ""
+      }
+    ],
+    "userIdentification": "99999999",
+    "id": 144,
+    "configurationId": 39,
+    "applicationId": 20,
+    "screenshotFeedbacks": []
+  },
+  {
+    "contextInformation": {
+      "localTime": "2017-03-19 08:13:57.0",
+      "timeZone": "+0100",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:52.0) Gecko/20100101 Firefox/52.0",
+      "id": 65,
+      "resolution": "738x1360"
+    },
+    "textFeedbacks": [
+      {
+        "id": 132,
+        "text": "test text",
+        "mechanismId": 59
+      }
+    ],
+    "attachmentFeedbacks": [],
+    "title": "Feedback",
+    "createdAt": "2017-03-19 08:14:00.475",
+    "ratingFeedbacks": [
+      {
+        "rating": 3,
+        "id": 83,
+        "title": "Bewerten Sie die aktuelle Ansicht",
+        "mechanismId": 62
+      }
+    ],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": [
+      {
+        "parameterId": 574,
+        "id": 54,
+        "text": ""
+      }
+    ],
+    "userIdentification": "99999999",
+    "id": 145,
+    "configurationId": 39,
+    "applicationId": 20,
+    "screenshotFeedbacks": []
+  },
+  {
+    "contextInformation": {
+      "localTime": "2017-03-19 08:48:20.0",
+      "timeZone": "+0100",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:52.0) Gecko/20100101 Firefox/52.0",
+      "id": 66,
+      "resolution": "738x1360"
+    },
+    "textFeedbacks": [
+      {
+        "id": 133,
+        "text": "test text",
+        "mechanismId": 59
+      }
+    ],
+    "attachmentFeedbacks": [],
+    "title": "Feedback",
+    "createdAt": "2017-03-19 08:48:23.95",
+    "ratingFeedbacks": [
+      {
+        "rating": 0,
+        "id": 84,
+        "title": "Bewerten Sie die aktuelle Ansicht",
+        "mechanismId": 62
+      }
+    ],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": [
+      {
+        "parameterId": 574,
+        "id": 55,
+        "text": ""
+      }
+    ],
+    "userIdentification": "99999999",
+    "id": 146,
+    "configurationId": 39,
+    "applicationId": 20,
+    "screenshotFeedbacks": []
+  },
+  {
+    "contextInformation": {
+      "localTime": "2017-03-20 05:39:42.0",
+      "timeZone": "+0100",
+      "userAgent": "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/57.0.2987.110 Safari/537.36",
+      "id": 67,
+      "resolution": "1040x1920"
+    },
+    "textFeedbacks": [
+      {
+        "id": 134,
+        "text": "the images cant load because of cross-origin-problem",
+        "mechanismId": 59
+      }
+    ],
+    "attachmentFeedbacks": [],
+    "title": "Feedback",
+    "createdAt": "2017-03-20 05:39:42.826",
+    "ratingFeedbacks": [
+      {
+        "rating": 2,
+        "id": 85,
+        "title": "Bewerten Sie die aktuelle Ansicht",
+        "mechanismId": 62
+      }
+    ],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": [
+      {
+        "parameterId": 574,
+        "id": 56,
+        "text": ""
+      }
+    ],
+    "userIdentification": "99999999",
+    "id": 147,
+    "configurationId": 39,
+    "applicationId": 20,
+    "screenshotFeedbacks": [
+      {
+        "path": "screenshots/67285_1489984782818.png",
+        "size": 67285,
+        "fileExtension": "png",
+        "name": "screenshot61",
+        "textAnnotations": [],
+        "id": 41,
+        "mechanismId": 61
+      }
+    ]
+  },
+  {
+    "contextInformation": {
+      "localTime": "2017-03-20 09:38:24.0",
+      "timeZone": "+0100",
+      "userAgent": "Mozilla/5.0 (Windows NT 6.3; WOW64; Trident/7.0; .NET4.0E; .NET4.0C; .NET CLR 3.5.30729; .NET CLR 2.0.50727; .NET CLR 3.0.30729; rv:11.0) like Gecko",
+      "id": 68,
+      "resolution": "1050x1680"
+    },
+    "textFeedbacks": [
+      {
+        "id": 135,
+        "text": "dsad",
+        "mechanismId": 59
+      }
+    ],
+    "attachmentFeedbacks": [],
+    "title": "Feedback",
+    "createdAt": "2017-03-20 09:38:11.876",
+    "ratingFeedbacks": [
+      {
+        "rating": 3,
+        "id": 86,
+        "title": "Bewerten Sie die aktuelle Ansicht",
+        "mechanismId": 62
+      }
+    ],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": [
+      {
+        "parameterId": 576,
+        "id": 57,
+        "text": ""
+      }
+    ],
+    "userIdentification": "99999999",
+    "id": 148,
+    "configurationId": 39,
+    "applicationId": 20,
+    "screenshotFeedbacks": []
+  },
+  {
+    "contextInformation": {
+      "localTime": "2017-03-20 09:49:38.0",
+      "timeZone": "+0100",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.79 Safari/537.36 Edge/14.14393",
+      "id": 69,
+      "resolution": "1050x1680"
+    },
+    "textFeedbacks": [
+      {
+        "id": 136,
+        "text": "wd",
+        "mechanismId": 59
+      }
+    ],
+    "attachmentFeedbacks": [],
+    "title": "Feedback",
+    "createdAt": "2017-03-20 09:49:29.973",
+    "ratingFeedbacks": [
+      {
+        "rating": 0,
+        "id": 87,
+        "title": "Bewerten Sie die aktuelle Ansicht",
+        "mechanismId": 62
+      }
+    ],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": [
+      {
+        "parameterId": 576,
+        "id": 58,
+        "text": ""
+      }
+    ],
+    "userIdentification": "99999999",
+    "id": 149,
+    "configurationId": 39,
+    "applicationId": 20,
+    "screenshotFeedbacks": [
+      {
+        "path": "screenshots/57688_1489999769966.png",
+        "size": 57688,
+        "fileExtension": "png",
+        "name": "screenshot61",
+        "textAnnotations": [],
+        "id": 42,
+        "mechanismId": 61
+      }
+    ]
+  },
+  {
+    "contextInformation": {
+      "localTime": "2017-03-20 10:01:41.0",
+      "timeZone": "+0100",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/53.0.2785.116 Safari/537.36",
+      "id": 70,
+      "resolution": "775x1259"
+    },
+    "textFeedbacks": [
+      {
+        "id": 137,
+        "text": "Feedback Text",
+        "mechanismId": 59
+      }
+    ],
+    "attachmentFeedbacks": [],
+    "title": "Feedback",
+    "createdAt": "2017-03-20 10:01:41.179",
+    "ratingFeedbacks": [
+      {
+        "rating": 3,
+        "id": 88,
+        "title": "Bewerten Sie die aktuelle Ansicht",
+        "mechanismId": 62
+      }
+    ],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": [
+      {
+        "parameterId": 576,
+        "id": 59,
+        "text": ""
+      }
+    ],
+    "userIdentification": "99999999",
+    "id": 150,
+    "configurationId": 39,
+    "applicationId": 20,
+    "screenshotFeedbacks": []
+  },
+  {
+    "contextInformation": {
+      "localTime": "2017-03-20 10:05:22.0",
+      "timeZone": "+0100",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/53.0.2785.116 Safari/537.36",
+      "id": 71,
+      "resolution": "775x1259"
+    },
+    "textFeedbacks": [
+      {
+        "id": 138,
+        "text": "Feedback Text",
+        "mechanismId": 59
+      }
+    ],
+    "attachmentFeedbacks": [],
+    "title": "Feedback",
+    "createdAt": "2017-03-20 10:05:20.929",
+    "ratingFeedbacks": [
+      {
+        "rating": 3,
+        "id": 89,
+        "title": "Bewerten Sie die aktuelle Ansicht",
+        "mechanismId": 62
+      }
+    ],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": [
+      {
+        "parameterId": 576,
+        "id": 60,
+        "text": ""
+      }
+    ],
+    "userIdentification": "99999999",
+    "id": 151,
+    "configurationId": 39,
+    "applicationId": 20,
+    "screenshotFeedbacks": []
+  },
+  {
+    "contextInformation": {
+      "localTime": "2017-03-20 10:13:16.0",
+      "timeZone": "+0100",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/53.0.2785.116 Safari/537.36",
+      "id": 72,
+      "resolution": "775x1259"
+    },
+    "textFeedbacks": [
+      {
+        "id": 139,
+        "text": "Feedback Text",
+        "mechanismId": 59
+      }
+    ],
+    "attachmentFeedbacks": [],
+    "title": "Feedback",
+    "createdAt": "2017-03-20 10:13:14.923",
+    "ratingFeedbacks": [
+      {
+        "rating": 3,
+        "id": 90,
+        "title": "Bewerten Sie die aktuelle Ansicht",
+        "mechanismId": 62
+      }
+    ],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": [
+      {
+        "parameterId": 576,
+        "id": 61,
+        "text": ""
+      }
+    ],
+    "userIdentification": "99999999",
+    "id": 152,
+    "configurationId": 39,
+    "applicationId": 20,
+    "screenshotFeedbacks": []
+  },
+  {
+    "contextInformation": {
+      "localTime": "2017-03-20 10:13:40.0",
+      "timeZone": "+0100",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/53.0.2785.116 Safari/537.36",
+      "id": 73,
+      "resolution": "775x1259"
+    },
+    "textFeedbacks": [
+      {
+        "id": 140,
+        "text": "Feedback Text",
+        "mechanismId": 59
+      }
+    ],
+    "attachmentFeedbacks": [],
+    "title": "Feedback",
+    "createdAt": "2017-03-20 10:13:39.109",
+    "ratingFeedbacks": [
+      {
+        "rating": 3,
+        "id": 91,
+        "title": "Bewerten Sie die aktuelle Ansicht",
+        "mechanismId": 62
+      }
+    ],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": [
+      {
+        "parameterId": 576,
+        "id": 62,
+        "text": ""
+      }
+    ],
+    "userIdentification": "99999999",
+    "id": 153,
+    "configurationId": 39,
+    "applicationId": 20,
+    "screenshotFeedbacks": []
+  },
+  {
+    "contextInformation": {
+      "localTime": "2017-03-20 10:15:36.0",
+      "timeZone": "+0100",
+      "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/602.4.8 (KHTML, like Gecko) Version/10.0.3 Safari/602.4.8",
+      "id": 74,
+      "resolution": "1053x1920"
+    },
+    "textFeedbacks": [
+      {
+        "id": 141,
+        "text": "test",
+        "mechanismId": 59
+      }
+    ],
+    "attachmentFeedbacks": [],
+    "title": "Feedback",
+    "createdAt": "2017-03-20 10:15:37.470",
+    "ratingFeedbacks": [
+      {
+        "rating": 2,
+        "id": 92,
+        "title": "Bewerten Sie die aktuelle Ansicht",
+        "mechanismId": 62
+      }
+    ],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": [
+      {
+        "parameterId": 575,
+        "id": 63,
+        "text": ""
+      }
+    ],
+    "userIdentification": "99999999",
+    "id": 154,
+    "configurationId": 39,
+    "applicationId": 20,
+    "screenshotFeedbacks": [
+      {
+        "path": "screenshots/95757_1490001337458.png",
+        "size": 95757,
+        "fileExtension": "png",
+        "name": "screenshot61",
+        "textAnnotations": [],
+        "id": 43,
+        "mechanismId": 61
+      }
+    ]
+  },
+  {
+    "contextInformation": {
+      "localTime": "2017-03-20 12:34:00.0",
+      "timeZone": "+0100",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/53.0.2785.116 Safari/537.36",
+      "id": 75,
+      "resolution": "775x1259"
+    },
+    "textFeedbacks": [
+      {
+        "id": 142,
+        "text": "foo",
+        "mechanismId": 59
+      }
+    ],
+    "attachmentFeedbacks": [],
+    "title": "Feedback",
+    "createdAt": "2017-03-20 12:33:59.812",
+    "ratingFeedbacks": [
+      {
+        "rating": 5,
+        "id": 93,
+        "title": "Bewerten Sie die aktuelle Ansicht",
+        "mechanismId": 62
+      }
+    ],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": [
+      {
+        "parameterId": 576,
+        "id": 64,
+        "text": ""
+      }
+    ],
+    "userIdentification": "99999999",
+    "id": 155,
+    "configurationId": 39,
+    "applicationId": 20,
+    "screenshotFeedbacks": [
+      {
+        "path": "screenshots/129212_1490009639805.png",
+        "size": 129212,
+        "fileExtension": "png",
+        "name": "screenshot61",
+        "textAnnotations": [],
+        "id": 44,
+        "mechanismId": 61
+      }
+    ]
+  },
+  {
+    "contextInformation": {
+      "localTime": "2017-03-20 12:35:19.0",
+      "timeZone": "+0100",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/53.0.2785.116 Safari/537.36",
+      "id": 76,
+      "resolution": "775x1259"
+    },
+    "textFeedbacks": [
+      {
+        "id": 143,
+        "text": "foo",
+        "mechanismId": 59
+      }
+    ],
+    "attachmentFeedbacks": [],
+    "title": "Feedback",
+    "createdAt": "2017-03-20 12:35:19.46",
+    "ratingFeedbacks": [
+      {
+        "rating": 5,
+        "id": 94,
+        "title": "Bewerten Sie die aktuelle Ansicht",
+        "mechanismId": 62
+      }
+    ],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": [
+      {
+        "parameterId": 576,
+        "id": 65,
+        "text": ""
+      }
+    ],
+    "userIdentification": "99999999",
+    "id": 156,
+    "configurationId": 39,
+    "applicationId": 20,
+    "screenshotFeedbacks": [
+      {
+        "path": "screenshots/129212_1490009719034.png",
+        "size": 129212,
+        "fileExtension": "png",
+        "name": "screenshot61",
+        "textAnnotations": [],
+        "id": 45,
+        "mechanismId": 61
+      }
+    ]
+  },
+  {
+    "contextInformation": {
+      "localTime": "2017-03-20 12:35:39.0",
+      "timeZone": "+0100",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/53.0.2785.116 Safari/537.36",
+      "id": 77,
+      "resolution": "775x1259"
+    },
+    "textFeedbacks": [
+      {
+        "id": 144,
+        "text": "foo",
+        "mechanismId": 59
+      }
+    ],
+    "attachmentFeedbacks": [],
+    "title": "Feedback",
+    "createdAt": "2017-03-20 12:35:38.912",
+    "ratingFeedbacks": [
+      {
+        "rating": 5,
+        "id": 95,
+        "title": "Bewerten Sie die aktuelle Ansicht",
+        "mechanismId": 62
+      }
+    ],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": [
+      {
+        "parameterId": 576,
+        "id": 66,
+        "text": ""
+      }
+    ],
+    "userIdentification": "99999999",
+    "id": 157,
+    "configurationId": 39,
+    "applicationId": 20,
+    "screenshotFeedbacks": [
+      {
+        "path": "screenshots/129212_1490009738905.png",
+        "size": 129212,
+        "fileExtension": "png",
+        "name": "screenshot61",
+        "textAnnotations": [],
+        "id": 46,
+        "mechanismId": 61
+      }
+    ]
+  },
+  {
+    "contextInformation": {
+      "localTime": "2017-03-20 12:36:00.0",
+      "timeZone": "+0100",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/53.0.2785.116 Safari/537.36",
+      "id": 78,
+      "resolution": "775x1259"
+    },
+    "textFeedbacks": [
+      {
+        "id": 145,
+        "text": "foo",
+        "mechanismId": 59
+      }
+    ],
+    "attachmentFeedbacks": [],
+    "title": "Feedback",
+    "createdAt": "2017-03-20 12:35:59.737",
+    "ratingFeedbacks": [
+      {
+        "rating": 5,
+        "id": 96,
+        "title": "Bewerten Sie die aktuelle Ansicht",
+        "mechanismId": 62
+      }
+    ],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": [
+      {
+        "parameterId": 576,
+        "id": 67,
+        "text": ""
+      }
+    ],
+    "userIdentification": "99999999",
+    "id": 158,
+    "configurationId": 39,
+    "applicationId": 20,
+    "screenshotFeedbacks": [
+      {
+        "path": "screenshots/129212_1490009759731.png",
+        "size": 129212,
+        "fileExtension": "png",
+        "name": "screenshot61",
+        "textAnnotations": [],
+        "id": 47,
+        "mechanismId": 61
+      }
+    ]
+  },
+  {
+    "contextInformation": {
+      "localTime": "2017-03-20 12:52:46.0",
+      "timeZone": "+0100",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:52.0) Gecko/20100101 Firefox/52.0",
+      "id": 79,
+      "resolution": "860x1600"
+    },
+    "textFeedbacks": [
+      {
+        "id": 146,
+        "text": "Feedback text for testing purposes",
+        "mechanismId": 59
+      }
+    ],
+    "attachmentFeedbacks": [],
+    "title": "Feedback",
+    "createdAt": "2017-03-20 12:52:44.991",
+    "ratingFeedbacks": [
+      {
+        "rating": 4,
+        "id": 97,
+        "title": "Bewerten Sie die aktuelle Ansicht",
+        "mechanismId": 62
+      }
+    ],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": [
+      {
+        "parameterId": 574,
+        "id": 68,
+        "text": ""
+      }
+    ],
+    "userIdentification": "99999999",
+    "id": 159,
+    "configurationId": 39,
+    "applicationId": 20,
+    "screenshotFeedbacks": []
+  },
+  {
+    "contextInformation": {
+      "localTime": "2017-03-20 12:55:55.0",
+      "timeZone": "+0100",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:52.0) Gecko/20100101 Firefox/52.0",
+      "id": 80,
+      "resolution": "860x1600"
+    },
+    "textFeedbacks": [
+      {
+        "id": 147,
+        "text": "Feedback text for testing purposes",
+        "mechanismId": 59
+      }
+    ],
+    "attachmentFeedbacks": [],
+    "title": "Feedback",
+    "createdAt": "2017-03-20 12:55:54.132",
+    "ratingFeedbacks": [
+      {
+        "rating": 0,
+        "id": 98,
+        "title": "Bewerten Sie die aktuelle Ansicht",
+        "mechanismId": 62
+      }
+    ],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": [
+      {
+        "parameterId": 574,
+        "id": 69,
+        "text": ""
+      }
+    ],
+    "userIdentification": "99999999",
+    "id": 160,
+    "configurationId": 39,
+    "applicationId": 20,
+    "screenshotFeedbacks": []
+  },
+  {
+    "contextInformation": {
+      "localTime": "2017-03-20 01:02:26.0",
+      "timeZone": "+0100",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36",
+      "id": 81,
+      "resolution": "720x1280"
+    },
+    "textFeedbacks": [
+      {
+        "id": 148,
+        "text": "sdadsa",
+        "mechanismId": 59
+      }
+    ],
+    "attachmentFeedbacks": [],
+    "title": "Feedback",
+    "createdAt": "2017-03-20 01:02:27.308",
+    "ratingFeedbacks": [
+      {
+        "rating": 2,
+        "id": 99,
+        "title": "Bewerten Sie die aktuelle Ansicht",
+        "mechanismId": 62
+      }
+    ],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": [
+      {
+        "parameterId": 574,
+        "id": 70,
+        "text": ""
+      }
+    ],
+    "userIdentification": "99999999",
+    "id": 161,
+    "configurationId": 39,
+    "applicationId": 20,
+    "screenshotFeedbacks": []
+  },
+  {
+    "contextInformation": {
+      "localTime": "2017-03-20 01:12:25.0",
+      "timeZone": "+0100",
+      "userAgent": "Mozilla/5.0 (Windows NT 6.2; WOW64; Trident/7.0; rv:11.0) like Gecko",
+      "id": 82,
+      "resolution": "720x1280"
+    },
+    "textFeedbacks": [
+      {
+        "id": 149,
+        "text": "i am steve",
+        "mechanismId": 59
+      }
+    ],
+    "attachmentFeedbacks": [],
+    "title": "Feedback",
+    "createdAt": "2017-03-20 01:12:25.256",
+    "ratingFeedbacks": [
+      {
+        "rating": 5,
+        "id": 100,
+        "title": "Bewerten Sie die aktuelle Ansicht",
+        "mechanismId": 62
+      }
+    ],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": [
+      {
+        "parameterId": 576,
+        "id": 71,
+        "text": ""
+      }
+    ],
+    "userIdentification": "99999999",
+    "id": 162,
+    "configurationId": 39,
+    "applicationId": 20,
+    "screenshotFeedbacks": []
+  },
+  {
+    "contextInformation": {
+      "localTime": "2017-03-20 01:18:58.0",
+      "timeZone": "+0100",
+      "userAgent": "Mozilla/5.0 (Windows NT 6.2; WOW64; Trident/7.0; rv:11.0) like Gecko",
+      "id": 83,
+      "resolution": "720x1280"
+    },
+    "textFeedbacks": [
+      {
+        "id": 150,
+        "text": "i am steve",
+        "mechanismId": 59
+      }
+    ],
+    "attachmentFeedbacks": [],
+    "title": "Feedback",
+    "createdAt": "2017-03-20 01:18:58.800",
+    "ratingFeedbacks": [
+      {
+        "rating": 5,
+        "id": 101,
+        "title": "Bewerten Sie die aktuelle Ansicht",
+        "mechanismId": 62
+      }
+    ],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": [
+      {
+        "parameterId": 576,
+        "id": 72,
+        "text": ""
+      }
+    ],
+    "userIdentification": "99999999",
+    "id": 163,
+    "configurationId": 39,
+    "applicationId": 20,
+    "screenshotFeedbacks": []
+  },
+  {
+    "contextInformation": {
+      "localTime": "2017-03-20 04:19:39.0",
+      "timeZone": "+0100",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:52.0) Gecko/20100101 Firefox/52.0",
+      "id": 84,
+      "resolution": "860x1600"
+    },
+    "textFeedbacks": [
+      {
+        "id": 151,
+        "text": "Feedback text for testing purposes",
+        "mechanismId": 59
+      }
+    ],
+    "attachmentFeedbacks": [],
+    "title": "Feedback",
+    "createdAt": "2017-03-20 04:19:38.775",
+    "ratingFeedbacks": [
+      {
+        "rating": 2,
+        "id": 102,
+        "title": "Bewerten Sie die aktuelle Ansicht",
+        "mechanismId": 62
+      }
+    ],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": [
+      {
+        "parameterId": 574,
+        "id": 73,
+        "text": ""
+      }
+    ],
+    "userIdentification": "99999999",
+    "id": 164,
+    "configurationId": 39,
+    "applicationId": 20,
+    "screenshotFeedbacks": []
+  },
+  {
+    "contextInformation": {
+      "localTime": "2017-03-20 04:21:37.0",
+      "timeZone": "+0100",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:52.0) Gecko/20100101 Firefox/52.0",
+      "id": 85,
+      "resolution": "860x1600"
+    },
+    "textFeedbacks": [
+      {
+        "id": 152,
+        "text": "Feedback text for testing purposes",
+        "mechanismId": 59
+      }
+    ],
+    "attachmentFeedbacks": [],
+    "title": "Feedback",
+    "createdAt": "2017-03-20 04:21:36.124",
+    "ratingFeedbacks": [
+      {
+        "rating": 2,
+        "id": 103,
+        "title": "Bewerten Sie die aktuelle Ansicht",
+        "mechanismId": 62
+      }
+    ],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": [
+      {
+        "parameterId": 574,
+        "id": 74,
+        "text": ""
+      }
+    ],
+    "userIdentification": "99999999",
+    "id": 165,
+    "configurationId": 39,
+    "applicationId": 20,
+    "screenshotFeedbacks": []
+  },
+  {
+    "contextInformation": {
+      "localTime": "2017-03-20 04:22:40.0",
+      "timeZone": "+0100",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:52.0) Gecko/20100101 Firefox/52.0",
+      "id": 86,
+      "resolution": "860x1600"
+    },
+    "textFeedbacks": [
+      {
+        "id": 153,
+        "text": "Feedback text for testing purposes",
+        "mechanismId": 59
+      }
+    ],
+    "attachmentFeedbacks": [],
+    "title": "Feedback",
+    "createdAt": "2017-03-20 04:22:39.953",
+    "ratingFeedbacks": [
+      {
+        "rating": 2,
+        "id": 104,
+        "title": "Bewerten Sie die aktuelle Ansicht",
+        "mechanismId": 62
+      }
+    ],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": [
+      {
+        "parameterId": 574,
+        "id": 75,
+        "text": ""
+      }
+    ],
+    "userIdentification": "99999999",
+    "id": 166,
+    "configurationId": 39,
+    "applicationId": 20,
+    "screenshotFeedbacks": []
+  },
+  {
+    "contextInformation": {
+      "localTime": "2017-03-20 04:24:15.0",
+      "timeZone": "+0100",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:52.0) Gecko/20100101 Firefox/52.0",
+      "id": 87,
+      "resolution": "860x1600"
+    },
+    "textFeedbacks": [
+      {
+        "id": 154,
+        "text": "Feedback text for testing purposes",
+        "mechanismId": 59
+      }
+    ],
+    "attachmentFeedbacks": [],
+    "title": "Feedback",
+    "createdAt": "2017-03-20 04:24:14.484",
+    "ratingFeedbacks": [
+      {
+        "rating": 2,
+        "id": 105,
+        "title": "Bewerten Sie die aktuelle Ansicht",
+        "mechanismId": 62
+      }
+    ],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": [
+      {
+        "parameterId": 574,
+        "id": 76,
+        "text": ""
+      }
+    ],
+    "userIdentification": "99999999",
+    "id": 167,
+    "configurationId": 39,
+    "applicationId": 20,
+    "screenshotFeedbacks": []
+  },
+  {
+    "contextInformation": {
+      "localTime": "2017-03-20 04:24:27.0",
+      "timeZone": "+0100",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:52.0) Gecko/20100101 Firefox/52.0",
+      "id": 88,
+      "resolution": "860x1600"
+    },
+    "textFeedbacks": [
+      {
+        "id": 155,
+        "text": "Feedback text for testing purposes",
+        "mechanismId": 59
+      }
+    ],
+    "attachmentFeedbacks": [],
+    "title": "Feedback",
+    "createdAt": "2017-03-20 04:24:27.58",
+    "ratingFeedbacks": [
+      {
+        "rating": 2,
+        "id": 106,
+        "title": "Bewerten Sie die aktuelle Ansicht",
+        "mechanismId": 62
+      }
+    ],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": [
+      {
+        "parameterId": 574,
+        "id": 77,
+        "text": ""
+      }
+    ],
+    "userIdentification": "99999999",
+    "id": 168,
+    "configurationId": 39,
+    "applicationId": 20,
+    "screenshotFeedbacks": []
+  },
+  {
+    "contextInformation": {
+      "localTime": "2017-03-20 04:24:54.0",
+      "timeZone": "+0100",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/53.0.2785.116 Safari/537.36",
+      "id": 89,
+      "resolution": "775x1259"
+    },
+    "textFeedbacks": [
+      {
+        "id": 156,
+        "text": "Feedback Text",
+        "mechanismId": 59
+      }
+    ],
+    "attachmentFeedbacks": [],
+    "title": "Feedback",
+    "createdAt": "2017-03-20 04:24:53.883",
+    "ratingFeedbacks": [
+      {
+        "rating": 3,
+        "id": 107,
+        "title": "Bewerten Sie die aktuelle Ansicht",
+        "mechanismId": 62
+      }
+    ],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": [
+      {
+        "parameterId": 576,
+        "id": 78,
+        "text": ""
+      }
+    ],
+    "userIdentification": "99999999",
+    "id": 169,
+    "configurationId": 39,
+    "applicationId": 20,
+    "screenshotFeedbacks": []
+  },
+  {
+    "contextInformation": {
+      "localTime": "2017-03-20 04:38:52.0",
+      "timeZone": "+0100",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:52.0) Gecko/20100101 Firefox/52.0",
+      "id": 90,
+      "resolution": "860x1600"
+    },
+    "textFeedbacks": [
+      {
+        "id": 157,
+        "text": "Test feedback, please ignore",
+        "mechanismId": 59
+      }
+    ],
+    "attachmentFeedbacks": [],
+    "title": "Feedback",
+    "createdAt": "2017-03-20 04:38:52.150",
+    "ratingFeedbacks": [
+      {
+        "rating": 4,
+        "id": 108,
+        "title": "Bewerten Sie die aktuelle Ansicht",
+        "mechanismId": 62
+      }
+    ],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": [
+      {
+        "parameterId": 574,
+        "id": 79,
+        "text": ""
+      }
+    ],
+    "userIdentification": "99999999",
+    "id": 170,
+    "configurationId": 39,
+    "applicationId": 20,
+    "screenshotFeedbacks": [
+      {
+        "path": "screenshots/104903_1490024332103.png",
+        "size": 104903,
+        "fileExtension": "png",
+        "name": "screenshot61",
+        "textAnnotations": [],
+        "id": 48,
+        "mechanismId": 61
+      }
+    ]
+  },
+  {
+    "contextInformation": {
+      "localTime": "2017-03-20 04:44:00.0",
+      "timeZone": "+0100",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:52.0) Gecko/20100101 Firefox/52.0",
+      "id": 91,
+      "resolution": "860x1600"
+    },
+    "textFeedbacks": [
+      {
+        "id": 158,
+        "text": "Test feedback, please ignore",
+        "mechanismId": 59
+      }
+    ],
+    "attachmentFeedbacks": [],
+    "title": "Feedback",
+    "createdAt": "2017-03-20 04:43:59.464",
+    "ratingFeedbacks": [
+      {
+        "rating": 4,
+        "id": 109,
+        "title": "Bewerten Sie die aktuelle Ansicht",
+        "mechanismId": 62
+      }
+    ],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": [
+      {
+        "parameterId": 574,
+        "id": 80,
+        "text": ""
+      }
+    ],
+    "userIdentification": "99999999",
+    "id": 171,
+    "configurationId": 39,
+    "applicationId": 20,
+    "screenshotFeedbacks": [
+      {
+        "path": "screenshots/104163_1490024639458.png",
+        "size": 104163,
+        "fileExtension": "png",
+        "name": "screenshot61",
+        "textAnnotations": [],
+        "id": 49,
+        "mechanismId": 61
+      }
+    ]
+  },
+  {
+    "contextInformation": {
+      "localTime": "2017-03-20 05:00:38.0",
+      "timeZone": "+0100",
+      "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.12; rv:52.0) Gecko/20100101 Firefox/52.0",
+      "id": 93,
+      "resolution": "677x1366"
+    },
+    "textFeedbacks": [
+      {
+        "id": 160,
+        "text": "very nice!",
+        "mechanismId": 59
+      }
+    ],
+    "attachmentFeedbacks": [],
+    "title": "Feedback",
+    "createdAt": "2017-03-20 05:00:38.813",
+    "ratingFeedbacks": [
+      {
+        "rating": 5,
+        "id": 111,
+        "title": "Bewerten Sie die aktuelle Ansicht",
+        "mechanismId": 62
+      }
+    ],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": [
+      {
+        "parameterId": 574,
+        "id": 81,
+        "text": ""
+      }
+    ],
+    "userIdentification": "99999999",
+    "id": 173,
+    "configurationId": 39,
+    "applicationId": 20,
+    "screenshotFeedbacks": []
+  },
+  {
+    "contextInformation": {
+      "localTime": "2017-03-31 04:33:52.0",
+      "timeZone": "+0200",
+      "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/57.0.2987.110 Safari/537.36",
+      "id": 95,
+      "resolution": "1413x2560"
+    },
+    "textFeedbacks": [
+      {
+        "id": 162,
+        "text": "Test Ronnie",
+        "mechanismId": 59
+      }
+    ],
+    "attachmentFeedbacks": [],
+    "title": "Feedback",
+    "createdAt": "2017-03-31 04:36:35.887",
+    "ratingFeedbacks": [
+      {
+        "rating": 4,
+        "id": 113,
+        "title": "Bewerten Sie die aktuelle Ansicht",
+        "mechanismId": 62
+      }
+    ],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": [
+      {
+        "parameterId": 576,
+        "id": 82,
+        "text": ""
+      }
+    ],
+    "userIdentification": "99999999",
+    "id": 175,
+    "configurationId": 39,
+    "applicationId": 20,
+    "screenshotFeedbacks": []
+  },
+  {
+    "contextInformation": {
+      "localTime": "2017-03-31 05:28:27.0",
+      "timeZone": "+0200",
+      "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/57.0.2987.110 Safari/537.36",
+      "id": 103,
+      "resolution": "1413x2560"
+    },
+    "textFeedbacks": [
+      {
+        "id": 171,
+        "text": "my test feedback\nronnie",
+        "mechanismId": 59
+      }
+    ],
+    "attachmentFeedbacks": [],
+    "title": "Feedback",
+    "createdAt": "2017-03-31 05:28:27.194",
+    "ratingFeedbacks": [
+      {
+        "rating": 4,
+        "id": 122,
+        "title": "Bewerten Sie die aktuelle Ansicht",
+        "mechanismId": 62
+      }
+    ],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": [
+      {
+        "parameterId": 576,
+        "id": 91,
+        "text": ""
+      }
+    ],
+    "userIdentification": "99999999",
+    "id": 184,
+    "configurationId": 39,
+    "applicationId": 20,
+    "screenshotFeedbacks": []
+  },
+  {
+    "contextInformation": {
+      "localTime": "2017-03-31 05:33:22.0",
+      "timeZone": "+0200",
+      "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/57.0.2987.110 Safari/537.36",
+      "id": 104,
+      "resolution": "1413x2560"
+    },
+    "textFeedbacks": [
+      {
+        "id": 172,
+        "text": "second one",
+        "mechanismId": 59
+      }
+    ],
+    "attachmentFeedbacks": [],
+    "title": "Feedback",
+    "createdAt": "2017-03-31 05:33:23.147",
+    "ratingFeedbacks": [
+      {
+        "rating": 5,
+        "id": 123,
+        "title": "Bewerten Sie die aktuelle Ansicht",
+        "mechanismId": 62
+      }
+    ],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": [
+      {
+        "parameterId": 576,
+        "id": 92,
+        "text": ""
+      }
+    ],
+    "userIdentification": "99999999",
+    "id": 185,
+    "configurationId": 39,
+    "applicationId": 20,
+    "screenshotFeedbacks": [
+      {
+        "path": "screenshots/158314_1490974403144.png",
+        "size": 158314,
+        "fileExtension": "png",
+        "name": "screenshot61",
+        "textAnnotations": [],
+        "id": 51,
+        "mechanismId": 61
+      }
+    ]
+  },
+  {
+    "contextInformation": {
+      "localTime": "2017-03-31 05:47:24.0",
+      "timeZone": "+0200",
+      "userAgent": "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36",
+      "id": 105,
+      "resolution": "1040x1920"
+    },
+    "textFeedbacks": [
+      {
+        "id": 173,
+        "text": "Olegs test feedback.",
+        "mechanismId": 59
+      }
+    ],
+    "attachmentFeedbacks": [],
+    "title": "Feedback",
+    "createdAt": "2017-03-31 05:47:17.965",
+    "ratingFeedbacks": [
+      {
+        "rating": 5,
+        "id": 124,
+        "title": "Bewerten Sie die aktuelle Ansicht",
+        "mechanismId": 62
+      }
+    ],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": [
+      {
+        "parameterId": 576,
+        "id": 93,
+        "text": ""
+      }
+    ],
+    "userIdentification": "99999999",
+    "id": 186,
+    "configurationId": 39,
+    "applicationId": 20,
+    "screenshotFeedbacks": [
+      {
+        "path": "screenshots/150628_1490975237962.png",
+        "size": 150628,
+        "fileExtension": "png",
+        "name": "screenshot61",
+        "textAnnotations": [],
+        "id": 52,
+        "mechanismId": 61
+      }
+    ]
+  },
+  {
+    "contextInformation": {
+      "localTime": "2017-03-31 06:21:49.0",
+      "timeZone": "+0200",
+      "userAgent": "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36",
+      "id": 106,
+      "resolution": "994x1280"
+    },
+    "textFeedbacks": [
+      {
+        "id": 174,
+        "text": "Hallo,\nes w??re sch??n, das Exportieren der Daten zu vereinfachen. Z, B, alle Z??hlerst??nde in einer Datei, evtl. sogar eine automatisierbare Schnittstelle. ",
+        "mechanismId": 59
+      }
+    ],
+    "attachmentFeedbacks": [],
+    "title": "Feedback",
+    "createdAt": "2017-03-31 06:21:53.307",
+    "ratingFeedbacks": [
+      {
+        "rating": 0,
+        "id": 125,
+        "title": "Bewerten Sie die aktuelle Ansicht",
+        "mechanismId": 62
+      }
+    ],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": [
+      {
+        "parameterId": 575,
+        "id": 94,
+        "text": ""
+      }
+    ],
+    "userIdentification": "99999999",
+    "id": 187,
+    "configurationId": 39,
+    "applicationId": 20,
+    "screenshotFeedbacks": []
+  },
+  {
+    "contextInformation": {
+      "localTime": "2017-04-01 12:52:25.0",
+      "timeZone": "+0200",
+      "userAgent": "Mozilla/5.0 (iPad; CPU OS 9_3_5 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13G36 Safari/601.1",
+      "id": 107,
+      "resolution": "748x1024"
+    },
+    "textFeedbacks": [
+      {
+        "id": 175,
+        "text": "Habe gerade immense Probleme meine Werte am IPad einzugeben! Es fehlt eine gescheite App!",
+        "mechanismId": 59
+      }
+    ],
+    "attachmentFeedbacks": [],
+    "title": "Feedback",
+    "createdAt": "2017-04-01 12:52:26.847",
+    "ratingFeedbacks": [
+      {
+        "rating": 0,
+        "id": 126,
+        "title": "Bewerten Sie die aktuelle Ansicht",
+        "mechanismId": 62
+      }
+    ],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": [
+      {
+        "parameterId": 576,
+        "id": 95,
+        "text": ""
+      }
+    ],
+    "userIdentification": "99999999",
+    "id": 188,
+    "configurationId": 39,
+    "applicationId": 20,
+    "screenshotFeedbacks": []
+  },
+  {
+    "contextInformation": {
+      "localTime": "2017-04-01 03:30:18.0",
+      "timeZone": "+0200",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.79 Safari/537.36 Edge/14.14393",
+      "id": 108,
+      "resolution": "691x1097"
+    },
+    "textFeedbacks": [
+      {
+        "id": 176,
+        "text": "Neue Funktion(en)\nin meinem Haushalt wird Warmwasser mit der Heizung erzeugt, ebenfalls wird bei meiner Heizung \n(a) der Brenner elektrisch betrieben\n(b) die Umw??lzpumpen (Niedrigenergie-Umw??lzpumpe) elektrisch betrieben,\ndieser Energieverbrauch f??r WW und Hzg. wird in der aktuellen Stromstatistik nicht erfa??t, bzw nicht dargestellt.\n\nMein Wunsch: dieser Energieverbrauch separat darstellen\n\ndanke",
+        "mechanismId": 59
+      }
+    ],
+    "attachmentFeedbacks": [],
+    "title": "Feedback",
+    "createdAt": "2017-04-01 03:30:16.222",
+    "ratingFeedbacks": [
+      {
+        "rating": 0,
+        "id": 127,
+        "title": "Bewerten Sie die aktuelle Ansicht",
+        "mechanismId": 62
+      }
+    ],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": [
+      {
+        "parameterId": 575,
+        "id": 96,
+        "text": ""
+      }
+    ],
+    "userIdentification": "99999999",
+    "id": 189,
+    "configurationId": 39,
+    "applicationId": 20,
+    "screenshotFeedbacks": []
+  },
+  {
+    "contextInformation": {
+      "localTime": "2017-04-01 08:10:36.0",
+      "timeZone": "+0200",
+      "userAgent": "Mozilla/5.0 (iPad; CPU OS 10_2_1 like Mac OS X) AppleWebKit/602.4.6 (KHTML, like Gecko) Version/10.0 Mobile/14D27 Safari/602.1",
+      "id": 109,
+      "resolution": "768x1024"
+    },
+    "textFeedbacks": [
+      {
+        "id": 177,
+        "text": "Mein gr????ter Wunsch w??re die vern??nftige Auswertung der PV-Anlage mit Eigenverbrauch: Hier fehlt die Hinzurechnung des selbst-genutzten Stromes zum Gesamtstromverbrauch (und meine Werte im Vergleich zu gering).\nAu??erdem w??re es sch??n, wenn beim Heizen irgendwie ein Vergleich in Bezug auf die Klimadaten m??glich w??re (klimabereinigter Verbrauch), um Vergleiche von Sparma??nahmen deutlicher zu machen. Danke f??r sicher Unterst??tzung!",
+        "mechanismId": 59
+      }
+    ],
+    "attachmentFeedbacks": [],
+    "title": "Feedback",
+    "createdAt": "2017-04-01 08:10:36.676",
+    "ratingFeedbacks": [
+      {
+        "rating": 0,
+        "id": 128,
+        "title": "Bewerten Sie die aktuelle Ansicht",
+        "mechanismId": 62
+      }
+    ],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": [
+      {
+        "parameterId": 575,
+        "id": 97,
+        "text": ""
+      }
+    ],
+    "userIdentification": "99999999",
+    "id": 190,
+    "configurationId": 39,
+    "applicationId": 20,
+    "screenshotFeedbacks": []
+  },
+  {
+    "contextInformation": {
+      "localTime": "2017-04-02 02:13:37.0",
+      "timeZone": "+0200",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36",
+      "id": 110,
+      "resolution": "1040x1920"
+    },
+    "textFeedbacks": [
+      {
+        "id": 178,
+        "text": "Die Funktion Z??hler tauschen ist super !\nIch w??rde aber auch gerne Vorg??nger-Z??hler eingeben, so dass ich alte Verbrauchswerte nachtrage kann.\nDas geht bisher leider noch nicht - w??re aber eine super Funktion.\nSonst alles gut - weiter so :-)\nBernd Reinhardt",
+        "mechanismId": 59
+      }
+    ],
+    "attachmentFeedbacks": [],
+    "title": "Feedback",
+    "createdAt": "2017-04-02 02:13:35.493",
+    "ratingFeedbacks": [
+      {
+        "rating": 4,
+        "id": 129,
+        "title": "Bewerten Sie die aktuelle Ansicht",
+        "mechanismId": 62
+      }
+    ],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": [
+      {
+        "parameterId": 575,
+        "id": 98,
+        "text": ""
+      }
+    ],
+    "userIdentification": "99999999",
+    "id": 191,
+    "configurationId": 39,
+    "applicationId": 20,
+    "screenshotFeedbacks": []
+  },
+  {
+    "contextInformation": {
+      "localTime": "2017-04-02 02:17:32.0",
+      "timeZone": "+0200",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36",
+      "id": 111,
+      "resolution": "1040x1920"
+    },
+    "textFeedbacks": [
+      {
+        "id": 179,
+        "text": "Der Druck bzw. Download der Verbrauchsverl??ufe ist gut. Ich w??rde gerne die Daten aber auch in Excel haben. Einen entsprechenden Export habe ich aber leider nicht gefunden.\nDamit lie??en sich die Verbrauch besser (individuell) vergleichen.\n\nLG\nBernd Reinhardt",
+        "mechanismId": 59
+      }
+    ],
+    "attachmentFeedbacks": [],
+    "title": "Feedback",
+    "createdAt": "2017-04-02 02:17:30.348",
+    "ratingFeedbacks": [
+      {
+        "rating": 4,
+        "id": 130,
+        "title": "Bewerten Sie die aktuelle Ansicht",
+        "mechanismId": 62
+      }
+    ],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": [
+      {
+        "parameterId": 575,
+        "id": 99,
+        "text": ""
+      }
+    ],
+    "userIdentification": "99999999",
+    "id": 192,
+    "configurationId": 39,
+    "applicationId": 20,
+    "screenshotFeedbacks": []
+  },
+  {
+    "contextInformation": {
+      "localTime": "2017-04-02 04:19:10.0",
+      "timeZone": "+0200",
+      "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/57.0.2987.133 Safari/537.36",
+      "id": 95,
+      "resolution": "873x1440"
+    },
+    "textFeedbacks": [
+      {
+        "id": 162,
+        "text": "Test feedback after dump execution. ronnie",
+        "mechanismId": 59
+      }
+    ],
+    "attachmentFeedbacks": [],
+    "title": "Feedback",
+    "createdAt": "2017-04-02 04:19:09.675",
+    "ratingFeedbacks": [
+      {
+        "rating": 4,
+        "id": 113,
+        "title": "Bewerten Sie die aktuelle Ansicht",
+        "mechanismId": 62
+      }
+    ],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": [
+      {
+        "parameterId": 576,
+        "id": 82,
+        "text": ""
+      }
+    ],
+    "userIdentification": "99999999",
+    "id": 175,
+    "configurationId": 39,
+    "applicationId": 20,
+    "screenshotFeedbacks": []
+  }
+]

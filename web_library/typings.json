@@ -1,32 +1,5 @@
 {
   "globalDependencies": {
-    "core-js": "registry:dt/core-js#0.9.0+20170324193834",
-    "gulp-load-plugins": "registry:dt/gulp-load-plugins#0.0.0+20160510010627",
-    "handlebars": "registry:dt/handlebars#4.0.5+20170310072326",
-    "jasmine": "registry:dt/jasmine#2.5.2+20170317130948",
-    "jquery": "registry:dt/jquery#1.10.0+20170310222111",
-    "karma": "registry:dt/karma#0.13.9+20160811111312",
-    "karma-jasmine": "registry:dt/karma-jasmine#0.0.0+20170207112528",
-    "node": "registry:dt/node#7.0.0+20170322231424",
-    "requirejs": "registry:dt/requirejs#2.1.20+20160921164505",
-    "vinyl": "registry:dt/vinyl#1.2.0+20160924121322",
-    "zone.js": "registry:dt/zone.js#0.0.0+20160510002910"
-  },
-  "dependencies": {
-    "bluebird": "registry:dt/bluebird#3.5.0+20170323165310",
-    "chalk": "registry:dt/chalk#0.4.0+20161012090828",
-    "express": "registry:dt/express#4.0.0+20170118060322",
-    "express-serve-static-core": "registry:dt/express-serve-static-core#4.0.0+20170324160323",
-    "fabric": "registry:dt/fabric#1.5.0+20170324151803",
-    "gulp": "registry:dt/gulp#4.0.0+20170315213030",
-    "gulp-util": "registry:dt/gulp-util#3.0.0+20161129185857",
-    "log4js": "registry:dt/log4js#0.0.0+20160726182927",
-    "mime": "registry:dt/mime#0.0.0+20160428043022",
-    "orchestrator": "registry:dt/orchestrator#0.0.0+20170315012124",
-    "q": "registry:dt/q#1.0.0+20170315012124",
-    "run-sequence": "registry:dt/run-sequence#0.0.0+20160510010627",
-    "serve-static": "registry:dt/serve-static#1.7.1+20161128184045",
-    "through2": "registry:dt/through2#2.0.0+20161122001659",
-    "yargs": "registry:dt/yargs#6.6.0+20170202172539"
+    "jasmine-jquery": "registry:dt/jasmine-jquery#1.5.8+20170315092920"
   }
 }

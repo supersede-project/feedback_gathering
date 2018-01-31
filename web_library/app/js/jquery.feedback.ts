@@ -12,7 +12,8 @@ import * as compare from '../templates/compare';
 import {FeedbackApp} from './feedback_app';
 import {MockBackend} from '../services/backends/mock_backend';
 import {QuestionDialogView} from '../views/dialog/question_dialog_view';
-var mockData = require('json!../services/mocks/dev/app19_siemens.json');
+import * as i18next from 'i18next';
+let mockData = require('json!../services/mocks/dev/application_senercon_20.json');
 
 
 export declare var feedbackApp:FeedbackApp;
@@ -30,15 +31,14 @@ export var feedbackPluginModule = function ($, window, document) {
      */
     $.fn.feedbackPlugin = function (options) {
         if($.fn.droppable === undefined) {
-            $.getScript('https://supersede-develop.atosresearch.eu/web_library/senercon/dist/jquery.ui.droppable.js');
+            $.getScript('https://platform.supersede.eu/web_library/senercon/dist/jquery.ui.droppable.js');
         }
         let button = this;
         var options = $.extend({}, $.fn.feedbackPlugin.defaults, options);
-        var mockBackend:MockBackend = new MockBackend(mockData);
+        let mockBackend:MockBackend = new MockBackend(mockData);
 
-        I18nHelper.initializeI18n(options);
-        I18nHelper.getLanguage(options, function(language) {
-            var applicationService = new ApplicationService(options.apiEndpointOrchestrator, language); //, mockBackend);
+        I18nHelper.initializeI18n(options, function(language) {
+            let applicationService = new ApplicationService(options.apiEndpointOrchestrator, language); //, mockBackend);
             feedbackApp = new FeedbackApp(applicationService, options.applicationId, options, button);
             feedbackApp.loadApplicationConfiguration();
         });
@@ -47,10 +47,12 @@ export var feedbackPluginModule = function ($, window, document) {
     };
 
     $.fn.feedbackPlugin.defaults = {
-        'color': '#fff',
+        'color': '#ffffff',
         'lang': 'de',
+        'fallbackLang': 'en',
+        'localesOverride': null,
+        'metaData': null,
         'backgroundColor': '#7c9009',
-        'fallbackLang': 'de',
         'distPath': 'dist/',
         'userId': '',
         'dialogCSSClass': 'feedback-dialog',
@@ -61,7 +63,8 @@ export var feedbackPluginModule = function ($, window, document) {
         'dialogPositionOf': window,
         'apiEndpointOrchestrator': apiEndpointOrchestrator,
         'apiEndpointRepository': apiEndpointRepository,
-        'applicationId': applicationId
+        'applicationId': applicationId,
+        'reviewActive': true,
     };
 };
 

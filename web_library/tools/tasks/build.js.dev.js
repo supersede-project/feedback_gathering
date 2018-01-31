@@ -23,7 +23,7 @@ module.exports = function () {
     var result = merge(typings, projectFiles)
         .pipe(plugins.plumber())
         .pipe(plugins.sourcemaps.init())
-        .pipe(plugins.typescript(tsProject));
+        .pipe(tsProject());
     return result.js
         .pipe(plugins.sourcemaps.write())
         .pipe(gulp.dest('.'));

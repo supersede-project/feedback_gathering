@@ -17,19 +17,21 @@ export const mechanismTypes = {
     screenshotType: 'SCREENSHOT_TYPE',
     audioType: 'AUDIO_TYPE',
     categoryType: 'CATEGORY_TYPE',
-    attachmentType: 'ATTACHMENT_TYPE'
+    attachmentType: 'ATTACHMENT_TYPE',
+    infoType: 'INFO_TYPE'
 };
 export const configurationTypes = {
     push: 'PUSH',
-    pull: 'PULL'
+    pull: 'PULL',
+    elementSpecificPush: 'ELEMENT_SPECIFIC_PUSH'
 };
 export const cookieNames = {
     lastTriggered: 'lastTriggered'
 };
-export const apiEndpointOrchestrator = 'http://supersede.es.atos.net:8081/';
+export const apiEndpointOrchestrator = 'https://platform.supersede.eu:8443/';
 export const applicationPath = 'orchestrator/feedback/{lang}/applications/';
-export const apiEndpointRepository = 'http://supersede.es.atos.net:8081/';
+export const apiEndpointRepository = 'https://platform.supersede.eu:8443/';
 export const feedbackPath = "feedback_repository/{lang}/applications/{applicationId}/feedbacks";
-export const applicationId = 14;
-export const applicationName = 'ATOS';
-export const feedbackObjectTitle = 'Feedback ATOS';
+export const applicationId = 20;
+export const applicationName = 'Senercon';
+export const feedbackObjectTitle = 'Feedback Senercon';

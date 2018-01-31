@@ -11,6 +11,7 @@ import {ScreenshotFeedback} from '../../models/feedbacks/screenshot_feedback';
 import {MechanismView} from '../mechanism_view';
 import IPoint = fabric.IPoint;
 import {clickBlocked} from '../dialog/dialog_view';
+import { ScreenshotMechanism } from "../../models/mechanisms/screenshot_mechanism";
 
 const freehandDrawingMode:string = 'freehandDrawingMode';
 const rectDrawingMode:string = 'rectDrawingMode';
@@ -30,12 +31,13 @@ const cropperTypeObjectIdentifier:string = 'cropper';
 
 
 export class ScreenshotView implements MechanismView {
-    screenshotMechanism:Mechanism;
+    screenshotMechanism:ScreenshotMechanism;
     screenshotPreviewElement:JQuery;
     screenshotCaptureButton:JQuery;
     elementToCapture:JQuery;
     elementsToHide:[string];
     screenshotCanvas:any;
+    scaledScreenshotCanvas:any;
     context:any;
     startX:number;
     startY:number;
@@ -64,7 +66,7 @@ export class ScreenshotView implements MechanismView {
     currentObjectInToolbar:any = null;
     croppingRect:any;
 
-    constructor(screenshotMechanism:Mechanism, screenshotPreviewElement:JQuery, screenshotCaptureButton:JQuery,
+    constructor(screenshotMechanism:ScreenshotMechanism, screenshotPreviewElement:JQuery, screenshotCaptureButton:JQuery,
                 elementToCapture:JQuery, container:JQuery, distPath:string, elementsToHide?:any, hasBordersAndControls?:boolean) {
         this.screenshotMechanism = screenshotMechanism;
         this.screenshotPreviewElement = screenshotPreviewElement;
@@ -84,7 +86,7 @@ export class ScreenshotView implements MechanismView {
 
     checkAutoTake() {
         if (this.screenshotMechanism.getParameterValue('autoTake')) {
-            this.generateScreenshot();
+            this.makeScreenshot();
         }
     }
 
@@ -114,9 +116,67 @@ export class ScreenshotView implements MechanismView {
         });
     }
 
+    makeScreenshot() {
+        if(this.screenshotMechanism.getParameterValue('screenshotUrl')) {
+            this.generateScreenshotFromUrl();
+        } else {
+            this.generateScreenshot();
+        }
+    }
+
+    generateScreenshotFromUrl() {
+        let screenshotDelay = 4000;
+        let myThis = this;
+
+        myThis.addAndShowLoading();
+
+        setTimeout(function() {
+            let screenshotImageUrl = myThis.screenshotMechanism.getParameterValue('screenshotUrl') + "?anti_cache=" + new Date().getTime();
+
+            console.log(screenshotImageUrl);
+
+            let canvas: HTMLCanvasElement = <HTMLCanvasElement>(jQuery('<canvas width="478" height="251"></canvas>').get(0));
+            myThis.canvas = canvas;
+            myThis.screenshotPreviewElement.empty().append(canvas);
+            myThis.screenshotPreviewElement.show();
+            jQuery('.screenshot-preview canvas').attr('id', canvasId);
+
+            fabric.util.loadImage(screenshotImageUrl, function(img) {
+                myThis.removeLoading();
+                let imgWidth = +img.width;
+                let imgHeight = +img.height;
+
+                let windowRatio = imgWidth / imgHeight;
+                myThis.canvasWidth = myThis.screenshotPreviewElement.width() - 2;
+                myThis.canvasHeight = (myThis.screenshotPreviewElement.width() / windowRatio) - 2;
+                jQuery(canvas).prop('width', myThis.canvasWidth);
+                jQuery(canvas).prop('height', myThis.canvasHeight);
+
+
+                myThis.canvasState = img;
+                myThis.screenshotCanvas = canvas;
+                myThis.context = canvas.getContext("2d");
+                img.onload = function () {
+                    myThis.context.drawImage(img, 0, 0, img.width, img.height, 0, 0, canvas.width, canvas.height);
+                };
+
+                myThis.initFabric(img, canvas);
+                myThis.initFreehandDrawing();
+                myThis.initStickers();
+                myThis.initScreenshotOperations();
+                myThis.customizeControls();
+                myThis.initZoom();
+
+                let screenshotCaptureButtonActiveText = myThis.screenshotCaptureButton.data('active-text');
+                myThis.screenshotCaptureButton.text(screenshotCaptureButtonActiveText);
+            }, null, {crossOrigin: 'Anonymous'});
+        }, screenshotDelay);
+    }
+
     generateScreenshot() {
         var scrollPosition = this.container.offset().top;
         this.hideElements();
+        this.addAndShowLoading();
         var myThis = this;
 
         setTimeout(function() {
@@ -132,6 +192,7 @@ export class ScreenshotView implements MechanismView {
                             scrollTop: scrollPosition - 85
                         }, 0);
 
+                        myThis.removeLoading();
                         myThis.removeTemporarySpans();
                         myThis.showElements();
                         myThis.showAllCanvasElements();
@@ -175,6 +236,19 @@ export class ScreenshotView implements MechanismView {
                 }
             });
         }, 200);
+    }
+
+    addAndShowLoading() {
+        let loadingCircle = jQuery('<div id="loadingCircle" class="loader"></div>');
+        this.screenshotPreviewElement.css('min-width', '200px');
+        this.screenshotPreviewElement.css('min-height', '200px');
+        this.screenshotPreviewElement.css('display', 'block');
+        this.screenshotPreviewElement.empty();
+        this.screenshotPreviewElement.append(loadingCircle);
+    }
+
+    removeLoading() {
+        this.screenshotPreviewElement.find('#loadingCircle').remove();
     }
 
     initFabric(img, canvas) {
@@ -812,12 +886,57 @@ export class ScreenshotView implements MechanismView {
         });
     }
 
+    getScaleFactor(maxWidth:number, maxHeight:number, originalWidth:number, originalHeight:number):number {
+        return Math.min(maxWidth / originalWidth, maxHeight / originalHeight);
+    }
+
+    getWidthHeightForMaxResolution(maxWidth:number, maxHeight:number, originalWidth:number, originalHeight:number):number[] {
+        let factor = this.getScaleFactor(maxWidth, maxHeight, originalWidth, originalHeight);
+        if(factor > 1) {
+            return [originalWidth, originalHeight];
+        }
+        return [originalWidth * factor, originalHeight * factor];
+    }
+
+    /**
+     * @returns {any} The image binary (blob) for the canvas. If the max resolution is set, the image might be scaled down
+     * before retrieving the blob.
+     */
     getScreenshotAsBinary() {
+        if (this.scaledScreenshotCanvas) {
+            var dataUrl = this.scaledScreenshotCanvas.toDataURL("image/png");
+            return DataHelper.dataURItoBlob(dataUrl);
+        }
+        return null;
+    }
+
+    /**
+     * Creates a in-memory scaled down version of the canvas depending on the max resolution set in the configuration.
+     */
+    createScaledDownCanvas() {
+        let myThis = this;
         if (this.screenshotCanvas) {
-            var dataURL = this.screenshotCanvas.toDataURL("image/png");
-            return DataHelper.dataURItoBlob(dataURL);
-        } else {
-            return null;
+            let dataUrl = this.screenshotCanvas.toDataURL("image/png");
+            let maxResolution = this.screenshotMechanism.getMaxResolutionWidthAndHeight();
+            let resolutionIsAnywaySmaller = (Math.max(maxResolution[0], maxResolution[1]) > Math.max(myThis.canvasWidth, myThis.canvasHeight) &&
+                Math.min(maxResolution[0], maxResolution[1]) > Math.min(myThis.canvasWidth, myThis.canvasHeight));
+
+            this.scaledScreenshotCanvas = document.createElement('canvas');
+            let scaleCanvasContext = this.scaledScreenshotCanvas.getContext('2d');
+            let getWidthHeightForMaxResolution = this.getWidthHeightForMaxResolution(maxResolution[0], maxResolution[1], myThis.canvasWidth, myThis.canvasHeight);
+            let factor = this.getScaleFactor(maxResolution[0], maxResolution[1], myThis.canvasWidth, myThis.canvasHeight);
+
+            let imgToScaleDown = new Image();
+            imgToScaleDown.src = dataUrl;
+            imgToScaleDown.onload = function () {
+                if(maxResolution === null || resolutionIsAnywaySmaller) {
+                    myThis.scaledScreenshotCanvas = myThis.screenshotCanvas;
+                } else {
+                    // TODO get this working
+                    scaleCanvasContext.scale(factor, factor);
+                    scaleCanvasContext.drawImage(imgToScaleDown, 0, 0, imgToScaleDown.width, imgToScaleDown.height, 0, 0, myThis.canvasWidth, myThis.canvasHeight);
+                }
+            };
         }
     }
 
@@ -826,7 +945,7 @@ export class ScreenshotView implements MechanismView {
         this.screenshotCaptureButton.on('click', function (event) {
             event.preventDefault();
             event.stopPropagation();
-            myThis.generateScreenshot();
+            myThis.makeScreenshot();
         });
     }
 

@@ -10,11 +10,11 @@ export class CategoryView implements MechanismView {
     }
 
     getCategoryFeedbacks(): CategoryFeedback[] {
-        var inputSelector = this.getInputSelector();
-        var categoryFeedbacks:CategoryFeedback[] = [];
+        let inputSelector = this.getInputSelector();
+        let categoryFeedbacks:CategoryFeedback[] = [];
 
         jQuery(inputSelector).each(function () {
-            var input = jQuery(this);
+            let input = jQuery(this);
 
             if((input.attr('type') === 'checkbox' || input.attr('type') === 'radio') && input.is(':checked')) {
                 categoryFeedbacks.push(new CategoryFeedback(input.data('parameter-id'), ""));

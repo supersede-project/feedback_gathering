@@ -39,28 +39,36 @@ export class PageNavigation {
             return false;
         }
 
+        if(!this.validWithNoMechanismMandatory(currentPage)) {
+            return false;
+        }
+
         if (nextPage) {
             nextPage.find('.text-review').empty();
             nextPage.find('.rating-review').empty();
             nextPage.find('.screenshot-review').empty();
 
-            for (var textMechanism of textMechanisms) {
-                if (textMechanism != null && nextPage.find('.text-review').length > 0 && textMechanism.active) {
-                    var sectionSelector = "textMechanism" + textMechanism.id;
-                    var textarea = currentPage.find('section#' + sectionSelector + ' textarea.text-type-text');
+            for (let textMechanism of textMechanisms) {
+                if (textMechanism != null && nextPage.find('.text-review').length > 0 && textMechanism.active && textMechanism.getParameterValue('page') != "review") {
+                    let sectionSelector = "textMechanism" + textMechanism.id;
+                    let textarea = currentPage.find('section#' + sectionSelector + ' textarea.text-type-text');
                     nextPage.find('.text-review').append('<p>' + textarea.val() + '</p>');
                 }
             }
 
-            for(var ratingMechanism of ratingMechanisms) {
-                if (ratingMechanism != null && nextPage.find('.rating-review').length > 0 && ratingMechanism.active) {
+            for(let ratingMechanism of ratingMechanisms) {
+                if (ratingMechanism != null && nextPage.find('.rating-review').length > 0 && ratingMechanism.active && ratingMechanism.getParameterValue('page') != "review") {
                     nextPage.find('.rating-review').append(i18n.t('rating.review_title') + ": " + ratingMechanism.currentRatingValue + " / " + ratingMechanism.getParameterValue("maxRating"));
                 }
             }
 
-            for(var screenshotMechanism of screenshotMechanisms) {
+            for(let screenshotMechanism of screenshotMechanisms) {
                 if (screenshotMechanism != null && nextPage.find('.screenshot-review').length > 0 && screenshotMechanism.active &&
-                    screenshotMechanism.screenshotView !== undefined && screenshotMechanism.screenshotView.screenshotCanvas !== undefined && screenshotMechanism.screenshotView.screenshotCanvas !== null) {
+                    screenshotMechanism.screenshotView !== undefined && screenshotMechanism.screenshotView.screenshotCanvas !== undefined && screenshotMechanism.screenshotView.screenshotCanvas !== null
+                    && screenshotMechanism.getParameterValue('page') != "review") {
+
+                    // canvas that is later on used to create the binary that get's sent
+                    screenshotMechanism.screenshotView.createScaledDownCanvas();
 
                     var img = jQuery('<img src="' + screenshotMechanism.screenshotView.screenshotCanvas.toDataURL() + '" />');
                     img.css('width', '40%');
@@ -116,8 +124,8 @@ export class PageNavigation {
                 });
             }
 
-            for (var categoryMechanism of categoryMechanisms) {
-                if (categoryMechanism !== null && nextPage.find('.category-review').length > 0 && categoryMechanism.active) {
+            for (let categoryMechanism of categoryMechanisms) {
+                if (categoryMechanism !== null && nextPage.find('.category-review').length > 0 && categoryMechanism.active && categoryMechanism.getParameterValue('page') != "review") {
                     var inputSelector = 'section#categoryMechanism' + categoryMechanism.id + '.category-type input';
                     currentPage.find(inputSelector).each(function () {
                         var input = jQuery(this);
@@ -128,8 +136,8 @@ export class PageNavigation {
                 }
             }
 
-            for (var audioMechanism of audioMechanisms) {
-                if (audioMechanism !== null && nextPage.find('.audio-review').length > 0 && audioMechanism.active) {
+            for (let audioMechanism of audioMechanisms) {
+                if (audioMechanism !== null && nextPage.find('.audio-review').length > 0 && audioMechanism.active && audioMechanism.getParameterValue('page') != "review") {
                     var audio =  currentPage.find('#audioMechanism' + audioMechanism.id + ' audio:first');
                     if(audio[0].duration && audio[0].duration > 0) {
                         var audioCopy = audio.clone();
@@ -142,8 +150,8 @@ export class PageNavigation {
                 }
             }
 
-            for (var attachmentMechanism of attachmentMechanisms) {
-                if (attachmentMechanism !== null && nextPage.find('.attachment-review').length > 0 && attachmentMechanism.active) {
+            for (let attachmentMechanism of attachmentMechanisms) {
+                if (attachmentMechanism !== null && nextPage.find('.attachment-review').length > 0 && attachmentMechanism.active && attachmentMechanism.getParameterValue('page') != "review") {
                     var table =  currentPage.find('#attachmentMechanism' + attachmentMechanism.id + ' table.current-files:first');
                     var tableCopy = table.clone();
                     nextPage.find('.attachment-review').empty().append(tableCopy);
@@ -151,5 +159,53 @@ export class PageNavigation {
             }
         }
         return true;
+    }
+
+    /**
+     * If no mechanism is mandatory, at least one mechansim should be used by the user to have a meaningful feedback.
+     *
+     * @param currentPage
+     * @returns {boolean}
+     */
+    validWithNoMechanismMandatory(currentPage):boolean {
+        if(currentPage.find('.feedback-mechanism.mandatory').length === 0 && !this.atLeastOneMechanismWasUsed(currentPage)) {
+            currentPage.parent().find('.at-least-one-mechanism').remove();
+            let errorMessage = i18n.t('general.validation_at_least_one_mechanism');
+            currentPage.after('<p class="feedback-form-error at-least-one-mechanism">' + errorMessage + '</p>');
+            return false;
+        } else {
+            currentPage.parent().find('.at-least-one-mechanism').remove();
+        }
+        return true;
+    }
+
+    atLeastOneMechanismWasUsed(currentPage):boolean {
+        let mechanismWasUsed = false;
+
+        currentPage.find('.feedback-mechanism.text-type').each(function() {
+            let textarea = jQuery(this).find('textarea.text-type-text');
+            if(textarea.val().length > 0) {
+                mechanismWasUsed = true;
+            }
+        });
+        // only meaningful category mechanism should alone be valid for a feedback
+        currentPage.find('.feedback-mechanism.category-type.valid-on-its-own').each(function() {
+            if(jQuery(this).find('input:checked').length > 0 || jQuery(this).find('.own-category').val().length > 0) {
+                mechanismWasUsed = true;
+            }
+        });
+        currentPage.find('.feedback-mechanism.rating-type.valid-on-its-own').each(function() {
+            if(parseInt(jQuery(this).find('.rating-input').starRating('getRating')) !== 0) {
+                mechanismWasUsed = true;
+            }
+        });
+        if(currentPage.find('.feedback-mechanism.screenshot-type.valid-on-its-own.dirty').length > 0) {
+            mechanismWasUsed = true;
+        }
+        if(currentPage.find('.feedback-mechanism.audio-type.valid-on-its-own.dirty').length > 0) {
+            mechanismWasUsed = true;
+        }
+
+        return mechanismWasUsed;
     }
 }

@@ -1,12 +1,18 @@
 {{#if active}}
-    <section id="attachmentMechanism{{ id }}" class="feedback-mechanism feedback-col {{../labelPositioning}} attachment-type"
+    <section id="attachmentMechanism{{ id }}" class="feedback-mechanism feedback-col {{../labelPositioning}} {{cssClass}} attachment-type"
              style="width: {{boxWidth}}; padding-left: {{boxPaddingLeft}}; padding-right: {{boxPaddingRight}};">
-        <p style="{{#if mandatory}}{{ ../mandatoryLabelStyle }}{{/if}}">{{ title }}{{#if mandatory }} {{ ../mandatorySign }}{{/if}}</p>
+        <p class="attachment-type-label" style="{{#if mandatory}}{{ ../mandatoryLabelStyle }}{{/if}}">{{ title }}{{#if mandatory }} {{ ../mandatorySign }}{{/if}}</p>
 
         <article class="file-upload-box drop-area">
             <input type="file" name="files[]" id="file" multiple/>
-            <label for="file"><strong>Choose a file</strong><span> or drop it here</span>.</label>
+            <label for="file"><strong>{{t "attachment.choose_file" }}</strong><span> {{t "attachment.drop_file" }}</span>.</label>
+            <br />
+            <span class="error"></span>
         </article>
+
+        {{#if maximumTotalFileSize}}
+            <p class="file-size-status">Total File Size: <span class="current-total-file-size">0</span> / {{maximumTotalFileSizeDisplay}}</p>
+        {{/if}}
 
         <table class="current-files">
 

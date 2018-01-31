@@ -1,8 +1,8 @@
 {
-    "host": "ec2-54-175-37-30.compute-1.amazonaws.com",
+    "host": "",
     "port": 22,
-    "username": "bitnami",
-    "privateKeyPath": "/Users/ronnieschaniel/.ssh/mp_aws_ec2_dev.pem",
-    "serverDest": "/home/bitnami/htdocs/senercon_dev",
-    "serverAppDir": "/home/bitnami/stack/apache-tomcat/webapps/examples/senercon_dev/"
+    "username": "",
+    "privateKeyPath": "",
+    "serverDest": "",
+    "serverAppDir": ""
 }

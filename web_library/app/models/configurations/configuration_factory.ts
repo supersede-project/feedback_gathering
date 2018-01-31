@@ -5,6 +5,7 @@ import {GeneralConfiguration} from './general_configuration';
 import {PullConfiguration} from './pull_configuration';
 import {Mechanism} from '../mechanisms/mechanism';
 import {ConfigurationInterface} from './configuration_interface';
+import {ElementSpecificPushConfiguration} from './element_specific_push_configuration';
 
 
 export class ConfigurationFactory {
@@ -32,6 +33,8 @@ export class ConfigurationFactory {
             return new PushConfiguration(data.id, mechanisms, generalConfiguration);
         } else if (data.type === configurationTypes.pull) {
             return new PullConfiguration(data.id, mechanisms, generalConfiguration);
+        } else if (data.type === configurationTypes.elementSpecificPush) {
+            return new ElementSpecificPushConfiguration(data.id, mechanisms, generalConfiguration);
         } else {
             return null;
         }

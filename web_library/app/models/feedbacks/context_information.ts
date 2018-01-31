@@ -6,8 +6,10 @@ export class ContextInformation {
     devicePixelRatio:number;
     country:string;
     region:string;
+    url:string;
+    metaData:any;
 
-    constructor(resolution:string, userAgent:string, localTime:string, timeZone:string, devicePixelRatio:number, country:string, region:string) {
+    constructor(resolution:string, userAgent:string, localTime:string, timeZone:string, devicePixelRatio:number, country:string, region:string, url:string, metaData:any) {
         this.resolution = resolution;
         this.userAgent = userAgent;
         this.localTime = localTime;
@@ -15,9 +17,11 @@ export class ContextInformation {
         this.devicePixelRatio = devicePixelRatio;
         this.country = country;
         this.region = region;
+        this.url = url;
+        this.metaData = metaData;
     }
 
-    static create() {
+    static create(metaData) {
         var resolution = window.screen.availHeight + 'x' + window.screen.availWidth;
         var userAgent = navigator.userAgent;
 
@@ -31,7 +35,8 @@ export class ContextInformation {
         var devicePixelRatio = ContextInformation.getDevicePixelRatio();
         var country = null;
         var region = null;
-        return new ContextInformation(resolution, userAgent, localTime, timeZone, devicePixelRatio, country, region);
+        var url = window.location.href;
+        return new ContextInformation(resolution, userAgent, localTime, timeZone, devicePixelRatio, country, region, url, JSON.stringify(metaData));
     }
 
     private static getDevicePixelRatio():number {

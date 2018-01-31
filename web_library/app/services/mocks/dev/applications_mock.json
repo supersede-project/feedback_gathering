@@ -75,6 +75,14 @@
               "id": 1,
               "key": "aKey",
               "value": "aPushSpecificValue"
+            },
+            {
+              "key": "successDialog",
+              "value": 1
+            },
+            {
+              "key": "successMessage",
+              "value": "<p>Vielen Dank für Ihr Feedback!</p><p>Dürfen wir Ihnen noch weitere Fragen zum Feedback Tool stellen? Dann klicken Sie hier <a target='_blank' href='http://google.com'>kurzer Fragebogen</a></p>"
             }
           ]
         },
@@ -289,6 +297,576 @@
               {
                 "key": "title",
                 "value": "Rate your user experience on this page"
+              },
+              {
+                "key": "ratingIcon",
+                "value": "star"
+              },
+              {
+                "key": "maxRating",
+                "value": 5
+              },
+              {
+                "key": "defaultRating",
+                "value": 3,
+                "defaultValue": 0,
+                "editableByUser": false
+              }
+            ]
+          },
+          {
+            "id": 5,
+            "type": "CATEGORY_TYPE",
+            "active": false,
+            "order": 3,
+            "canBeActivated": false,
+            "parameters": [
+              {
+                "key": "title",
+                "value": "How likely are you to recommend this website to your friends? (1 = not very likely, 5 = very likely)"
+              },
+              {
+                "key": "ownAllowed",
+                "value": 1
+              },
+              {
+                "key": "ownLabel",
+                "value": "Other:"
+              },
+              {
+                "key": "multiple",
+                "value": 0
+              },
+              {
+                "key": "breakAfterOption",
+                "value": 0
+              },
+              {
+                "key": "options",
+                "value": [
+                  {
+                    "key": "1",
+                    "value": "1"
+                  },
+                  {
+                    "key": "2",
+                    "value": "2"
+                  },
+                  {
+                    "key": "3",
+                    "value": "3"
+                  },
+                  {
+                    "key": "4",
+                    "value": "4"
+                  },
+                  {
+                    "key": "5",
+                    "value": "5"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": 991,
+            "type": "CATEGORY_TYPE",
+            "active": true,
+            "order": 3,
+            "canBeActivated": false,
+            "parameters": [
+              {
+                "key": "title",
+                "value": "Which feature should we work on next?"
+              },
+              {
+                "key": "ownAllowed",
+                "value": 1
+              },
+              {
+                "key": "ownLabel",
+                "value": "Other:"
+              },
+              {
+                "key": "multiple",
+                "value": 0
+              },
+              {
+                "key": "breakAfterOption",
+                "value": 0
+              },
+              {
+                "key": "options",
+                "value": [
+                  {
+                    "id": 992,
+                    "key": "FEATURE_1",
+                    "value": "Twitter Login"
+                  },
+                  {
+                    "id": 993,
+                    "key": "FEATURE_2",
+                    "value": "Google Login"
+                  },
+                  {
+                    "id": 994,
+                    "key": "FEATURE_3",
+                    "value": "Registration"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": 8,
+            "type": "INFO_TYPE",
+            "active": true,
+            "order": 7,
+            "canBeActivated": false,
+            "parameters": [
+              {
+                "key": "page",
+                "value": "review"
+              },
+              {
+                "key": "cssClass",
+                "value": "user-question"
+              },
+              {
+                "key": "text",
+                "value": "Bevor Sie Ihr Feedback absenden:"
+              },
+              {
+                "key": "boxWidth",
+                "value": "103%"
+              }
+            ]
+          },
+          {
+            "id": 9,
+            "type": "RATING_TYPE",
+            "active": false,
+            "order": 8,
+            "canBeActivated": false,
+            "parameters": [
+              {
+                "key": "page",
+                "value": "review"
+              },
+              {
+                "key": "title",
+                "value": "Wie zufrieden sind Sie mit dem Feedback Tool?"
+              },
+              {
+                "key": "cssClass",
+                "value": "user-question"
+              },
+              {
+                "key": "mandatory",
+                "value": 1
+              },
+              {
+                "key": "mandatoryReminder",
+                "value": "Bitte ein Rating setzen."
+              },
+              {
+                "key": "ratingIcon",
+                "value": "star"
+              },
+              {
+                "key": "maxRating",
+                "value": 5
+              },
+              {
+                "key": "defaultRating",
+                "value": 0,
+                "defaultValue": 0,
+                "editableByUser": false
+              },
+              {
+                "key": "boxWidth",
+                "value": "103%"
+              }
+            ]
+          },
+          {
+            "id": 1991,
+            "type": "CATEGORY_TYPE",
+            "active": true,
+            "order": 8,
+            "canBeActivated": false,
+            "parameters": [
+              {
+                "key": "page",
+                "value": "review"
+              },
+              {
+                "key": "cssClass",
+                "value": "user-question"
+              },
+              {
+                "key": "boxWidth",
+                "value": "103%"
+              },
+              {
+                "key": "title",
+                "value": "Wie zufrieden sind Sie mit dem Feedback Formular?"
+              },
+              {
+                "key": "ownAllowed",
+                "value": 0
+              },
+              {
+                "key": "multiple",
+                "value": 0
+              },
+              {
+                "key": "mandatory",
+                "value": 1
+              },
+              {
+                "key": "mandatoryReminder",
+                "value": "Bitte eine Option wählen."
+              },
+              {
+                "key": "breakAfterOption",
+                "value": 0
+              },
+              {
+                "key": "options",
+                "value": [
+                  {
+                    "id": 1992,
+                    "key": "1",
+                    "value": "gar nicht zufrieden"
+                  },
+                  {
+                    "id": 1993,
+                    "key": "2",
+                    "value": "weniger zufrieden"
+                  },
+                  {
+                    "id": 1994,
+                    "key": "3",
+                    "value": "mittelmäßig"
+                  },
+                  {
+                    "id": 1995,
+                    "key": "4",
+                    "value": "zufrieden"
+                  },
+                  {
+                    "id": 1996,
+                    "key": "5",
+                    "value": "sehr zufrieden"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": 10,
+            "type": "TEXT_TYPE",
+            "active": true,
+            "order": 9,
+            "canBeActivated": false,
+            "parameters": [
+              {
+                "key": "page",
+                "value": "review"
+              },
+              {
+                "key": "cssClass",
+                "value": "user-question"
+              },
+              {
+                "key": "maxLength",
+                "value": 2000
+              },
+              {
+                "key": "title",
+                "value": "Feedback"
+              },
+              {
+                "key": "label",
+                "value": "Ihr Kommentar:"
+              },
+              {
+                "key": "labelPositioning",
+                "value": "left"
+              },
+              {
+                "key": "mandatory",
+                "value": 0
+              },
+              {
+                "key": "borderWidth",
+                "value": 1
+              },
+              {
+                "key": "fieldWidth",
+                "value": 200
+              },
+              {
+                "key": "fieldHeight",
+                "value": 50
+              },
+              {
+                "key": "fieldFontSize",
+                "value": 13
+              },
+              {
+                "key": "maxLengthVisible",
+                "value": 0
+              },
+              {
+                "key": "validationRegex",
+                "value": "."
+              },
+              {
+                "key": "validateOnSkip",
+                "value": 1
+              },
+              {
+                "key": "boxWidth",
+                "value": "103%"
+              }
+            ]
+          },
+          {
+            "id": 11,
+            "type": "INFO_TYPE",
+            "active": false,
+            "order": 10,
+            "canBeActivated": false,
+            "parameters": [
+              {
+                "key": "page",
+                "value": "review"
+              },
+              {
+                "key": "cssClass",
+                "value": "user-question"
+              },
+              {
+                "key": "text",
+                "value": "Wollen Sie uns noch mehr mitteilen: <a target='_blank' href='http://google.com'>kurzer Fragebogen</a>"
+              },
+              {
+                "key": "boxWidth",
+                "value": "103%"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": 4,
+        "type": "ELEMENT_SPECIFIC_PUSH",
+        "userGroup": null,
+        "generalConfiguration": {
+          "parameters": [
+            {
+              "id": 1,
+              "key": "element",
+              "value": "div.contentbox.aktionen"
+            },
+            {
+              "id": 2,
+              "key": "baloonTemplate",
+              "value": "default"
+            },
+            {
+              "id": 3,
+              "key": "linkTitle",
+              "value": "Give feedback to this element"
+            },
+            {
+              "id": 3,
+              "key": "linkText",
+              "value": "Hey!"
+            }
+          ]
+        },
+        "mechanisms": [
+          {
+            "id": 1,
+            "type": "TEXT_TYPE",
+            "active": true,
+            "order": 1,
+            "canBeActivated": false,
+            "parameters": [
+              {
+                "key": "maxLength",
+                "value": 200
+              },
+              {
+                "key": "title",
+                "value": "Feedback"
+              },
+              {
+                "key": "hint",
+                "value": "Please enter your feedback"
+              },
+              {
+                "key": "label",
+                "value": "Please give us feedback to this element"
+              },
+              {
+                "key": "labelPositioning",
+                "value": "left"
+              },
+              {
+                "key": "labelColor",
+                "value": "#353535"
+              },
+              {
+                "key": "labelFontSize",
+                "value": 15
+              },
+              {
+                "key": "textareaFontColor",
+                "value": "#7A7A7A"
+              },
+              {
+                "key": "mandatory",
+                "value": 1
+              },
+              {
+                "key": "mandatoryReminder",
+                "value": "Please fill in the text field"
+              },
+              {
+                "key": "undoEnabled",
+                "value": 1
+              },
+              {
+                "key": "undoSteps",
+                "value": 1
+              },
+              {
+                "key": "clearInput",
+                "value": 0
+              },
+              {
+                "key": "borderWidth",
+                "value": 2
+              },
+              {
+                "key": "borderColor",
+                "value": "#000000"
+              },
+              {
+                "key": "fieldWidth",
+                "value": 200
+              },
+              {
+                "key": "fieldHeight",
+                "value": 50
+              },
+              {
+                "key": "fieldFontSize",
+                "value": 13
+              },
+              {
+                "key": "fieldFontType",
+                "value": "italic"
+              },
+              {
+                "key": "fieldTextAlignment",
+                "value": "left"
+              },
+              {
+                "key": "fieldBackgroundColor",
+                "value": "#ffffff"
+              },
+              {
+                "key": "maxLengthVisible",
+                "value": 1
+              },
+              {
+                "key": "validationRegex",
+                "value": "."
+              },
+              {
+                "key": "validateOnSkip",
+                "value": 1
+              }
+            ]
+          },
+          {
+            "id": 3,
+            "type": "SCREENSHOT_TYPE",
+            "active": true,
+            "order": 3,
+            "canBeActivated": false,
+            "parameters": [
+              {
+                "key": "title",
+                "value": "Title for screenshot feedback"
+              },
+              {
+                "key": "defaultPicture",
+                "value": "lastScreenshot",
+                "defaultValue": "noImage",
+                "editableByUser": true
+              },
+              {
+                "key": "autoTake",
+                "value": 1
+              },
+              {
+                "key": "textTitle",
+                "value": "Add text"
+              },
+              {
+                "key": "textExplanation",
+                "value": "You can draw text area."
+              },
+              {
+                "key": "annotationTitle",
+                "value": "Mark areas"
+              },
+              {
+                "key": "annotationExplanation",
+                "value": "You can mark areas or blacken them. Choose a tool and click onto the screenshot."
+              },
+              {
+                "key": "selectionTitle",
+                "value": "Add text"
+              },
+              {
+                "key": "colorTitle",
+                "value": "Add text"
+              },
+              {
+                "key": "cropTitle",
+                "value": "Crop the screenshot"
+              },
+              {
+                "key": "cropExplanation",
+                "value": "If you do not crop the screenshot, the whole image gets sent."
+              },
+              {
+                "key": "zoomTitle",
+                "value": "Zoom your view"
+              },
+              {
+                "key": "zoomExplanation",
+                "value": "Adjust the zoom such that you can better edit the screenshot."
+              }
+            ]
+          },
+          {
+            "id": 4,
+            "type": "RATING_TYPE",
+            "active": true,
+            "order": 2,
+            "canBeActivated": false,
+            "parameters": [
+              {
+                "key": "title",
+                "value": "Rate this element"
               },
               {
                 "key": "ratingIcon",
