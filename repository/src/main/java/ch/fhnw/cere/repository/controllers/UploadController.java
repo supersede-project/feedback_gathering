@@ -88,9 +88,15 @@ public class UploadController {
                         "40 x 40 Pixels";
             } else {
                 String format = FilenameUtils.getExtension(file.getOriginalFilename()).toLowerCase();
+                try {
+                    Files.deleteIfExists(Paths.get(UPLOADED_FOLDER + "/profile_pic_api_user_"+
+                            api_user_id + "." + format));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
                 File destination = new File(UPLOADED_FOLDER + "//profile_pic_api_user_"+
-                        api_user_id + "." + format); // something like C:/Users/tom/Documents/nameBasedOnSomeId.png
-                ImageIO.write(src, format, destination);
+                        api_user_id + ".png"); // something like C:/Users/tom/Documents/nameBasedOnSomeId.png
+                ImageIO.write(src, "png", destination);
                 return "Image successfully uploaded";
             }
         }

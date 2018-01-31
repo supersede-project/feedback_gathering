@@ -79,7 +79,7 @@ public class F2FEmailServiceTest {
 
 //        endUser1 = endUserRepository.save(new EndUser(1,"Ronnie Schaniel",123,"ronnieschaniel@gmail.com"));
 //        endUser2 = endUserRepository.save(new EndUser(1,"Melanie Stade",123,"mela.stade@gmail.com"));
-//        endUser2 = endUserRepository.save(new EndUser(1,"Marina Melwin",123,"marina.melwin@uzh.ch"));
+//        endUser3 = endUserRepository.save(new EndUser(1,"Marina Melwin",123,"marina.melwin@uzh.ch"));
         endUser1 = endUserRepository.save(new EndUser(1,"Ronnie Schaniel",123,"f2f_central@hotmail.com"));
         endUser2 = endUserRepository.save(new EndUser(1,"Melanie Stade",123,"f2f_central@hotmail.com"));
         endUser3 = endUserRepository.save(new EndUser(1,"Marina Melwin",123,"f2f_central@hotmail.com"));
@@ -188,7 +188,7 @@ public class F2FEmailServiceTest {
 
             log.info("==== SENDING MAIL ====");
             Mail mail = new Mail();
-            mail.setTo("f2f_central@hotmail.com");
+            mail.setTo(user.getEmail());
             mail.setSubject("Notifications - Feedback Activities from the F2F Central");
 
             Map<String, Object> model = new HashMap<>();

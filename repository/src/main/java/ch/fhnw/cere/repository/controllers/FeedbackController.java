@@ -320,6 +320,12 @@ public class FeedbackController extends BaseController {
         return feedbackService.findByPublished(value);
     }
 
+    @PreAuthorize("@securityService.hasAdminPermission(#applicationId)")
+    @RequestMapping(method = RequestMethod.GET, value = "/pending_publication")
+    public List<Feedback> getPendingFeedbacks(@PathVariable long applicationId){
+        return feedbackService.findByPublishedAndVisibility(false,true);
+    }
+
     private EnumStatus randomState(){
         int pick = new Random().nextInt(EnumStatus.values().length);
         return EnumStatus.values()[pick];
