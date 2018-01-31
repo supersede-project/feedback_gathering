@@ -61,19 +61,25 @@
         <td bgcolor="#eacb60" style="padding: 40px 30px 40px 30px;">
             <h2><b>Your Feedbacks</b></h2>
             <ul>
-                <#list user_feedbacks as user_feedback>
-                    <li>Feedback Title: ${user_feedback.title}
-                        <ul>
-                            <#if user_feedback.textFeedbacks??>
-                                <#list user_feedback.textFeedbacks as textFeedback>
-                                    <li><i>Feedback Text: </i>${textFeedback.text}</li>
-                                </#list>
-                            <#else>
-                                <li>No text feedbacks</li>
-                            </#if>
-                        </ul>
+                <#if user_feedbacks?size != 0>
+                    <#list user_feedbacks as user_feedback>
+                        <li>Feedback Title: ${user_feedback.title}
+                            <ul>
+                                <#if user_feedback.textFeedbacks??>
+                                    <#list user_feedback.textFeedbacks as textFeedback>
+                                        <li><i>Feedback Text: </i>${textFeedback.text}</li>
+                                    </#list>
+                                <#else>
+                                    <li>No text feedbacks</li>
+                                </#if>
+                            </ul>
+                        </li>
+                    </#list>
+                <#else>
+                    <li>
+                        You did not provide any feedbacks!
                     </li>
-                </#list>
+                </#if>
             </ul>
         </td>
     </tr>
@@ -81,19 +87,25 @@
         <td bgcolor="#ea8f2e" style="padding: 40px 30px 40px 30px;">
             <h2><b>Community Feedbacks from the Forum</b></h2>
             <ul>
-            <#list forum_feedbacks as forum_feedback>
-                <li>Feedback Title: ${forum_feedback.title}
-                    <ul>
-                        <#if forum_feedback.textFeedbacks??>
-                            <#list forum_feedback.textFeedbacks as textFeedback>
-                                <li><i>Feedback Text: </i>${textFeedback.text}</li>
-                            </#list>
-                        <#else>
-                            <li>No text feedbacks</li>
-                        </#if>
-                    </ul>
-                </li>
-            </#list>
+                <#if forum_feedbacks?size != 0>
+                    <#list forum_feedbacks as forum_feedback>
+                        <li>Feedback Title: ${forum_feedback.title}
+                            <ul>
+                                <#if forum_feedback.textFeedbacks??>
+                                    <#list forum_feedback.textFeedbacks as textFeedback>
+                                        <li><i>Feedback Text: </i>${textFeedback.text}</li>
+                                    </#list>
+                                <#else>
+                                    <li>No text feedbacks</li>
+                                </#if>
+                            </ul>
+                        </li>
+                    </#list>
+                <#else>
+                    <li>
+                        There are no feedbacks published in the Forum yet!
+                    </li>
+                </#if>
             </ul>
         </td>
     </tr>
