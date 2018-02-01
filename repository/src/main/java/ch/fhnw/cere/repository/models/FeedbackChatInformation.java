@@ -63,4 +63,10 @@ public class FeedbackChatInformation {
        this.feedback = feedback;
        this.initatedByUser = initiatedByUser;
     }
+
+    public FeedbackChatInformation(EndUser user, Feedback feedback, String chatText){
+        this.user = user;
+        this.feedback = feedback;
+        this.chatText = chatText;
+    }
 }

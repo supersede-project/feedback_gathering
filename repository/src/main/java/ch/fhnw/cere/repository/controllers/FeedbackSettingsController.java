@@ -112,9 +112,30 @@ public class FeedbackSettingsController extends BaseController {
     }
 
     @PreAuthorize("@securityService.hasAdminPermission(#applicationId)")
-    @RequestMapping(method = RequestMethod.PUT, value = "/feedbacksettings/{feedbacksettinsgId}")
-    public FeedbackSettings updateFeedbackSettings(@PathVariable long applicationId, @RequestBody FeedbackSettings feedbackSettings) {
-        return feedbackSettingsService.save(feedbackSettings);
+    @RequestMapping(method = RequestMethod.PUT, value = "/feedbacksettings")
+    public FeedbackSettings updateFeedbackSetting(@PathVariable long applicationId,
+                                                  HttpEntity<String> feedbackSettingsJSON) throws IOException, ServletException {
+        JSONObject obj = new JSONObject(feedbackSettingsJSON.getBody());
+        Boolean statusUpdates = obj.getBoolean("statusUpdates");
+        String statusUpdatesContactChannel = obj.getString("statusUpdatesContactChannel");
+        Boolean feedbackQuery = obj.getBoolean("feedbackQuery");
+        String feedbackQueryChannel = obj.getString("feedbackQueryChannel");
+            Boolean globalFeedbackSetting = obj.getBoolean("globalFeedbackSetting");
+        long feedbackId = obj.getLong("feedback_id");
+
+        FeedbackSettings feedbackSettings = feedbackSettingsService.findByFeedbackId(feedbackId);
+        if(feedbackSettings != null){
+            feedbackSettings.setFeedback(feedbackService.find(feedbackId));
+            feedbackSettings.setStatusUpdates(statusUpdates);
+            feedbackSettings.setStatusUpdatesContactChannel(statusUpdatesContactChannel);
+            feedbackSettings.setFeedbackQuery(feedbackQuery);
+            feedbackSettings.setFeedbackQueryChannel(feedbackQueryChannel);
+            feedbackSettings.setGlobalFeedbackSetting(globalFeedbackSetting);
+            feedbackSettings.setUser(endUserService.
+                    find(feedbackService.find(feedbackId).getUserIdentification()));
+            return feedbackSettingsService.save(feedbackSettings);
+        }
+        return null;
     }
 
     @PreAuthorize("@securityService.hasAdminPermission(#applicationId)")

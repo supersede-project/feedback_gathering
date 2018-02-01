@@ -219,7 +219,7 @@ public class FeedbackIntegrationTest extends BaseIntegrationTest {
     public void getFeedbacksByUserIdentificationWithoutPermission() throws Exception {
         String adminJWTToken = requestAdminJWTToken();
 
-        mockMvc.perform(get(basePathEn + "applications/" + 1 + "/feedbacks/user_identification/userId1")
+        mockMvc.perform(get(basePathEn + "applications/" + 1 + "/feedbacks/user_identification/"+11111)
                 .header("Authorization", adminJWTToken))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(1)))
@@ -231,7 +231,7 @@ public class FeedbackIntegrationTest extends BaseIntegrationTest {
     public void getFeedbacksByUserIdentification() throws Exception {
         String adminJWTToken = requestAppAdminJWTToken();
 
-        mockMvc.perform(get(basePathEn + "applications/" + 1 + "/feedbacks/user_identification/userId1")
+        mockMvc.perform(get(basePathEn + "applications/" + 1 + "/feedbacks/user_identification/"+11111)
                 .header("Authorization", adminJWTToken))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(2)))
@@ -268,7 +268,7 @@ public class FeedbackIntegrationTest extends BaseIntegrationTest {
                 .file(jsonFile))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.title", is("New Feedback")))
-                .andExpect(jsonPath("$.userIdentification", is("userId1")))
+                .andExpect(jsonPath("$.userIdentification", is(11111)))
                 .andExpect(jsonPath("$.applicationId", is(1)))
                 .andExpect(jsonPath("$.configurationId", is(11)))
                 .andExpect(jsonPath("$.language", is("en")))
@@ -314,7 +314,7 @@ public class FeedbackIntegrationTest extends BaseIntegrationTest {
                 .file(jsonFile))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.title", is("New Feedback")))
-                .andExpect(jsonPath("$.userIdentification", is("userId1")))
+                .andExpect(jsonPath("$.userIdentification", is(11111)))
                 .andExpect(jsonPath("$.applicationId", is(1)))
                 .andExpect(jsonPath("$.configurationId", is(11)))
                 .andExpect(jsonPath("$.language", is("en")))
@@ -360,7 +360,7 @@ public class FeedbackIntegrationTest extends BaseIntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is((int) createdFeedback.getId())))
                 .andExpect(jsonPath("$.title", is("New Feedback")))
-                .andExpect(jsonPath("$.userIdentification", is("userId1")))
+                .andExpect(jsonPath("$.userIdentification", is(11111)))
                 .andExpect(jsonPath("$.applicationId", is(1)))
                 .andExpect(jsonPath("$.configurationId", is(11)))
                 .andExpect(jsonPath("$.language", is("en")))
@@ -433,7 +433,7 @@ public class FeedbackIntegrationTest extends BaseIntegrationTest {
                 .file(screenshotFile))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.title", is("New Feedback")))
-                .andExpect(jsonPath("$.userIdentification", is("userId1")))
+                .andExpect(jsonPath("$.userIdentification", is(11111)))
                 .andExpect(jsonPath("$.applicationId", is(1)))
                 .andExpect(jsonPath("$.configurationId", is(11)))
                 .andExpect(jsonPath("$.language", is("en")))
@@ -472,7 +472,7 @@ public class FeedbackIntegrationTest extends BaseIntegrationTest {
                 .andExpect(jsonPath("$.id", is((int) createdFeedback.getId())))
 
                 .andExpect(jsonPath("$.title", is("New Feedback")))
-                .andExpect(jsonPath("$.userIdentification", is("userId1")))
+                .andExpect(jsonPath("$.userIdentification", is(11111)))
                 .andExpect(jsonPath("$.applicationId", is(1)))
                 .andExpect(jsonPath("$.configurationId", is(11)))
                 .andExpect(jsonPath("$.language", is("en")))
