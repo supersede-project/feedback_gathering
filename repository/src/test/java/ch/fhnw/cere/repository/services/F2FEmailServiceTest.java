@@ -8,6 +8,7 @@ import ch.fhnw.cere.repository.models.EndUser;
 import ch.fhnw.cere.repository.models.Feedback;
 import ch.fhnw.cere.repository.models.TextFeedback;
 import ch.fhnw.cere.repository.models.orchestrator.Application;
+import ch.fhnw.cere.repository.repositories.EmailUnsubscribedRepository;
 import ch.fhnw.cere.repository.repositories.EndUserRepository;
 import ch.fhnw.cere.repository.repositories.FeedbackRepository;
 import ch.fhnw.cere.repository.repositories.TextFeedbackRepository;
@@ -20,6 +21,7 @@ import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -38,6 +40,9 @@ import java.util.*;
 @WebAppConfiguration
 @ActiveProfiles("test")
 public class F2FEmailServiceTest {
+
+    @Value("${supersede.email.newsletter.day.interval}")
+    protected long emailDayInterval;
 
     @Autowired
     private FeedbackRepository feedbackRepository;
@@ -59,6 +64,9 @@ public class F2FEmailServiceTest {
 
     @Autowired
     private EmailUnsubscribedService emailUnsubscribedService;
+
+    @Autowired
+    private EmailUnsubscribedRepository emailUnsubscribedRepository;
 
     private static Logger log = LoggerFactory.getLogger(Application.class);
 
@@ -82,6 +90,7 @@ public class F2FEmailServiceTest {
         feedbackRepository.deleteAllInBatch();
         endUserRepository.deleteAllInBatch();
         textFeedbackRepository.deleteAllInBatch();
+        emailUnsubscribedRepository.deleteAllInBatch();
 
         Date now = new Date();
 
@@ -166,6 +175,9 @@ public class F2FEmailServiceTest {
         textFeedbacks8.add(textFeedback8);
         feedback8.setTextFeedbacks(textFeedbacks8);
         feedback8.setPublished(true);feedbackRepository.save(feedback8);
+
+        EmailUnsubscribed emailUnsubscribed = new EmailUnsubscribed(endUser1,endUser1.getEmail());
+        emailUnsubscribedService.save(emailUnsubscribed);
     }
 
     @After
@@ -173,6 +185,7 @@ public class F2FEmailServiceTest {
         feedbackRepository.deleteAllInBatch();
         endUserRepository.deleteAllInBatch();
         textFeedbackRepository.deleteAllInBatch();
+        emailUnsubscribedRepository.deleteAllInBatch();
     }
 
 
@@ -195,12 +208,9 @@ public class F2FEmailServiceTest {
 
         Date currentDate = new Date();
 
-        Date twoWeeksAgo = new Date(currentDate.getTime() - (14 * DAY_IN_MS));
+        Date twoWeeksAgo = new Date(currentDate.getTime() - (emailDayInterval * DAY_IN_MS));
 
         List<EndUser> endUsers = endUserRepository.findAll();
-
-        EmailUnsubscribed emailUnsubscribed = new EmailUnsubscribed(endUser1,endUser1.getEmail());
-        emailUnsubscribedService.save(emailUnsubscribed);
 
         for(EndUser user : endUsers){
             if(emailUnsubscribedService.findByEnduserId(user.getId()) != null){
