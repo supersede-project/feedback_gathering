@@ -13,9 +13,6 @@ import './App.css';
 import 'react-tabs/style/react-tabs.css';
 
 import 'react-accessible-accordion/dist/react-accessible-accordion.css';
-import FeedbackTitle from './FeedbackTitle';
-import FeedbackBody from './FeedbackBody';
-import FeedbackData from './FeedbackData';
 import CompanyViewFeedbackTitle from "./CompanyViewFeedbackTitle";
 import FaFileImageO from 'react-icons/lib/fa/file-image-o';
 
@@ -47,39 +44,7 @@ class CompanyViewAccordion extends Component {
       let toRender = null;
       var that = this;
       if(that.state.data.length > 0) {
-        /*toRender = <Accordion>
-            {that.state.data.map(function (item, index) {
-                console.log(item);
-                if(item.textFeedbacks.length > 0 && item.categoryFeedbacks.length > 0)
-                {
-                  return (
-                      <AccordionItem key={index}>
-                          <AccordionItemTitle>
-                              <FeedbackTitle type={item.categoryFeedbacks[0].mechanismId} title={item.textFeedbacks[0].text}/>
-                          </AccordionItemTitle>
-                          <AccordionItemBody>
-                              <FeedbackBody date={item.createdAt} status="WIP"/>
-                          </AccordionItemBody>
-                      </AccordionItem>
-                  )
-                }
-                return false;
-            })}
-        </Accordion>;*/
 
-        /*toRender = this.state.data.map(function(item, index) {
-          console.log(item);
-          if(item.textFeedbacks.length > 0 && item.categoryFeedbacks.length > 0)
-          {
-            return (
-              <li>
-              <div className="accordion">{item.textFeedbacks[0].text}</div>
-              <div className="accordion-content"></div>
-              </li>
-            )
-          }
-          return false;
-        })*/
         toRender = <Accordion>
         {that.state.data.map(function (item, index) {
             if(item.textFeedbacks.length > 0 && item.categoryFeedbacks.length > 0)
