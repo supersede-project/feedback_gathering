@@ -45,6 +45,7 @@ import monitoring.controller.ToolInterface;
 import monitoring.kafka.KafkaCommunication;
 import monitoring.model.DiskMonitoringData;
 import monitoring.model.DiskMonitoringParams;
+import monitoring.model.Instruction;
 
 public class JSchTool implements ToolInterface<DiskMonitoringParams> {
 	
@@ -54,6 +55,7 @@ public class JSchTool implements ToolInterface<DiskMonitoringParams> {
 	
 	//Data object instances
 	DiskMonitoringParams confParams;
+	List<DiskMonitoringData> data;
 	boolean firstConnection;
 	int id = 1;
 	int configurationId;
@@ -73,6 +75,7 @@ public class JSchTool implements ToolInterface<DiskMonitoringParams> {
 		this.confParams = params;
 		this.configurationId = configurationId;
 		this.kafka = new KafkaCommunication(this.confParams.getKafkaEndpoint());
+		this.data = new ArrayList<>();
 		if (this.confParams.getHost().equals("localhost")) 
 			initLocalhostConnection();
 		else
@@ -82,6 +85,7 @@ public class JSchTool implements ToolInterface<DiskMonitoringParams> {
 	
 	@Override
 	public void deleteConfiguration() throws Exception {
+		this.data = new ArrayList<>();
 		if (this.confParams.getHost().equals("localhost")) 
 			deleteLocalhostConnection();
 		else 
@@ -91,6 +95,7 @@ public class JSchTool implements ToolInterface<DiskMonitoringParams> {
 	@Override
 	public void updateConfiguration(DiskMonitoringParams params) throws Exception {
 		this.confParams = params;
+		this.data = new ArrayList<>();
 		if (this.confParams.getHost().equals("localhost")) 
 			updateLocalhostConnection();
 		else 
@@ -109,7 +114,8 @@ public class JSchTool implements ToolInterface<DiskMonitoringParams> {
 			jsch = new JSch();
 			jsch.addIdentity(url.toURI().getPath());
 		} catch (Exception e) {
-			throw new Exception ("Unable to load identity in SSH connection");
+			//throw new Exception ("Unable to load identity in SSH connection");
+			throw e;
 		}
 		logger.debug("Added private key file");
 		resetSshStream();
@@ -191,18 +197,26 @@ public class JSchTool implements ToolInterface<DiskMonitoringParams> {
 	
 	private void generateSshData(String searchTimeStamp) {
 		BufferedReader in;
-		try {
-			channel = (ChannelExec) session.openChannel("exec");
-			channel.setCommand(this.confParams.getInstruction());
-			channel.connect();
-			in = new BufferedReader(new InputStreamReader(channel.getInputStream()));
-			String msg = null;
-			StringBuilder sb = new StringBuilder();
-			while( (msg = in.readLine()) != null){
-				if (sb.length() != 0) sb.append("\n");
-				sb.append(msg);
+		try {	
+			for (int i = 0; i < confParams.getInstructions().size(); ++i) {
+				Instruction instruction = confParams.getInstructions().get(i);
+				
+				channel = (ChannelExec) session.openChannel("exec");
+				channel.setCommand(instruction.getInstruction());
+				channel.connect();
+				
+				in = new BufferedReader(new InputStreamReader(channel.getInputStream()));
+				String msg = null;
+				StringBuilder sb = new StringBuilder();
+				while( (msg = in.readLine()) != null){
+					if (sb.length() != 0) sb.append("\n");
+					sb.append(msg);
+				}
+				
+				data.add(new DiskMonitoringData(instruction.getLabel(), instruction.getInstruction(), sb.toString()));
 			}
-			sendData(searchTimeStamp, sb.toString());	
+			
+			sendData(searchTimeStamp);	
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 		}
@@ -211,31 +225,37 @@ public class JSchTool implements ToolInterface<DiskMonitoringParams> {
 	
 	private void generateLocalhostData(String searchTimeStamp) {        
 		try {
-			String[] cmd = { "/bin/sh", "-c", this.confParams.getInstruction() };
-			Process proc = Runtime.getRuntime().exec(cmd);
-			BufferedReader reader =  
-		              new BufferedReader(new InputStreamReader(proc.getInputStream()));
-			String msg = null;
-			StringBuilder sb = new StringBuilder();
-	        while( (msg = reader.readLine()) != null) {
-	            if (sb.length() != 0) sb.append("\n");
-	            sb.append(msg);
-	        }
-
-	        proc.waitFor();   
 			
-			sendData(searchTimeStamp, sb.toString());
+			for (int i = 0; i < confParams.getInstructions().size(); ++i) {
+				Instruction instruction = confParams.getInstructions().get(i);
+				
+				String[] cmd = { "/bin/sh", "-c", instruction.getInstruction() };
+				Process proc = Runtime.getRuntime().exec(cmd);
+				BufferedReader reader =  
+			              new BufferedReader(new InputStreamReader(proc.getInputStream()));
+				
+				String msg = null;
+				StringBuilder sb = new StringBuilder();
+		        while( (msg = reader.readLine()) != null) {
+		            if (sb.length() != 0) sb.append("\n");
+		            sb.append(msg);
+		        }
+		        proc.waitFor();   
+		        data.add(new DiskMonitoringData(instruction.getLabel(), instruction.getInstruction(), sb.toString()));
+			
+			}
+			
+			sendData(searchTimeStamp);
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 		}
 	}
 	
-	private void sendData(String searchTimeStamp, String output) {
-		List<DiskMonitoringData> data = new ArrayList<>();
-		data.add(new DiskMonitoringData(this.confParams.getLabel(), this.confParams.getInstruction(), output));
+	private void sendData(String searchTimeStamp) {
 		kafka.sendData(data, searchTimeStamp, id, configurationId, this.confParams.getKafkaTopic(), "DiskMonitoredData");
 		logger.debug("Data successfully sent to Kafka endpoint");
 		++id;
+		data = new ArrayList<>();
 	}
 	
 }

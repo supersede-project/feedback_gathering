@@ -64,9 +64,8 @@ public class DiskMonitoringData implements MonitoringData {
 	@Override
 	public JSONObject toJsonObject() {
 		JSONObject json = new JSONObject();
-		json.put("label", this.label);
+		json.put(this.label, this.output);
 		json.put("instruction", this.instruction);
-		json.put("output", this.output);
 		return json;
 	}
 

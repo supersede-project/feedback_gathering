@@ -1,7 +1,10 @@
 package monitoring.model;
 
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import monitoring.model.MonitoringParams;
@@ -24,10 +27,18 @@ public class DiskParserConfiguration implements ParserConfiguration {
 		    else if (key.equals("toolName")) params.setToolName(jsonParams.getString(key).replaceAll("\"", ""));
 		    else if (key.equals("kafkaEndpoint")) params.setKafkaEndpoint(jsonParams.getString(key).replaceAll("\"", "").replace("http://", ""));
 		    else if (key.equals("kafkaTopic")) params.setKafkaTopic(jsonParams.getString(key).replaceAll("\"", ""));
-		    else if (key.equals("label")) params.setLabel(jsonParams.getString(key).replaceAll("\"", ""));
 		    else if (key.equals("user")) params.setUser(jsonParams.getString(key).replaceAll("\"", ""));
 		    else if (key.equals("host")) params.setHost(jsonParams.getString(key).replaceAll("\"", ""));
-		    else if (key.equals("instruction")) params.setInstruction(jsonParams.getString(key).replaceAll("\"", ""));
+		    else if (key.equals("instructions")) {
+		    	List<Instruction> instructions = new ArrayList<>();
+		    	JSONArray array = jsonParams.getJSONArray("instructions");
+		    	for (int i = 0; i < array.length(); ++i) {
+		    		Instruction instruction = new Instruction(array.getJSONObject(i).getString("instruction").replaceAll("\"", ""),
+		    				array.getJSONObject(i).getString("label").replaceAll("\"", ""));
+		    		instructions.add(instruction);
+		    	}
+		    	params.setInstructions(instructions);
+		    }
 		}
 		return params;
 	}

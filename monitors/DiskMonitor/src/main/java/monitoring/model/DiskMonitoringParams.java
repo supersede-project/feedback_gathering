@@ -21,14 +21,15 @@
  *******************************************************************************/
 package monitoring.model;
 
+import java.util.List;
+
 import monitoring.model.MonitoringParams;
 
 public class DiskMonitoringParams extends MonitoringParams {
 	
 	private String user;
 	private String host;
-	private String instruction;
-	private String label;
+	private List<Instruction> instructions;
 
 	public String getUser() {
 		return this.user;
@@ -46,20 +47,12 @@ public class DiskMonitoringParams extends MonitoringParams {
 		this.host = host;
 	}
 
-	public String getInstruction() {
-		return this.instruction;
+	public List<Instruction> getInstructions() {
+		return this.instructions;
 	}
 	
-	public void setInstruction(String instruction) {
-		this.instruction = instruction;
-	}
-	
-	public String getLabel() {
-		return this.label;
-	}
-
-	public void setLabel(String label) {
-		this.label = label;
+	public void setInstructions(List<Instruction> instructions) {
+		this.instructions = instructions;
 	}
 	
 }
