@@ -79,6 +79,10 @@ public class CommentController extends BaseController{
                 long parentId = object.getLong("fk_parent_comment");
                 commentFeedback.setParentComment(commentFeedbackService.find(parentId));
             }
+            if(object.has("anonymous") && object.get("anonymous") != null){
+                boolean anonymous = object.getBoolean("anonymous");
+                commentFeedback.setAnonymous(anonymous);
+            }
             String commentText = object.getString("commentText");
             Boolean bool_is_developer = object.getBoolean("bool_is_developer");
             Boolean activeStatus = object.getBoolean("activeStatus");

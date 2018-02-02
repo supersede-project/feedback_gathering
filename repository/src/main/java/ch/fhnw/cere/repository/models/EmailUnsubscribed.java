@@ -1,6 +1,7 @@
 package ch.fhnw.cere.repository.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -16,7 +17,8 @@ public class EmailUnsubscribed {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
-    @JsonIgnore
+    @JsonIgnoreProperties({"createdAt","updatedAt","applicationId","username","email",
+            "phoneNumber"})
     @ManyToOne(cascade = {CascadeType.MERGE})
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "user_id")

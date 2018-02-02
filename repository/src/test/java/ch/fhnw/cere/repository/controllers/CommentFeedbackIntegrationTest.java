@@ -21,8 +21,8 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.servlet.ServletException;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -174,6 +174,22 @@ public class CommentFeedbackIntegrationTest extends BaseIntegrationTest{
     }
 
     @Test
+    public void testDeleteComment() throws Exception{
+        String adminJWTToken = requestAppAdminJWTToken();
+
+        this.mockMvc.perform(delete(basePathEn + "applications/" + 1 + "/feedbacks" +
+                "/comments/"+commentFeedback1_2.getId())
+                .header("Authorization", adminJWTToken)
+                .header("Authentication","admin"))
+                .andExpect(status().isOk());
+
+        mockMvc.perform(get(basePathEn + "applications/" + 1 + "/feedbacks/comments")
+                .header("Authorization", adminJWTToken))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(7)));
+    }
+
+    @Test
     public void getCommentsForFeedback() throws Exception {
         String adminJWTToken = requestAppAdminJWTToken();
 
@@ -248,12 +264,20 @@ public class CommentFeedbackIntegrationTest extends BaseIntegrationTest{
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id",is((int) commentFeedback1_1.getId())))
                 .andExpect(jsonPath("$.commentText", is("First Comment of Feedback 1")));
+
+        mockMvc.perform(get(basePathEn + "applications/" + 1 + "/feedbacks/comments/"+0)
+                .header("Authorization", adminJWTToken))
+                .andExpect(status().isNotFound());
     }
 
     @Test
     public void postComment() throws Exception {
         CommentFeedback commentFeedback = new CommentFeedback(feedback1,endUser1,false,
                 "test comment for posting",false,null);
+
+        CommentFeedback commentFeedbackChild = new CommentFeedback(feedback1,endUser1,false,
+                "test comment for posting",false,null);
+
         String commentJson = new JSONObject()
                 .put("feedback_id",commentFeedback.getFeedback().getId())
                 .put("user_id",commentFeedback.getUser().getId())
@@ -262,10 +286,24 @@ public class CommentFeedbackIntegrationTest extends BaseIntegrationTest{
                 .put("activeStatus",commentFeedback.getActiveStatus())
                 .toString();
 
+        String commentJsonChild = new JSONObject()
+                .put("feedback_id",commentFeedbackChild.getFeedback().getId())
+                .put("user_id",commentFeedbackChild.getUser().getId())
+                .put("commentText",commentFeedbackChild.getCommentText())
+                .put("bool_is_developer",commentFeedbackChild.check_is_developer())
+                .put("activeStatus",commentFeedbackChild.getActiveStatus())
+                .put("fk_parent_comment",commentFeedback1_2.getId())
+                .toString();
+
         this.mockMvc.perform(post(basePathEn + "applications/" + 1 + "/feedbacks/comments")
             .contentType(contentType)
             .content(commentJson))
-        .andExpect(status().isCreated());
+            .andExpect(status().isCreated());
+
+        this.mockMvc.perform(post(basePathEn + "applications/" + 1 + "/feedbacks/comments")
+                .contentType(contentType)
+                .content(commentJsonChild))
+                .andExpect(status().isCreated());
     }
 
     @Test

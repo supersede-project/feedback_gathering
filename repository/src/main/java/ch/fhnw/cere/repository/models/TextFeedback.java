@@ -3,6 +3,7 @@ package ch.fhnw.cere.repository.models;
 
 import ch.fhnw.cere.repository.models.orchestrator.Mechanism;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.annotations.Type;
@@ -17,7 +18,11 @@ public class TextFeedback implements MechanismFeedback {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
-    @JsonIgnore
+    @JsonIgnoreProperties({"title","userIdentification","createdAt","updatedAt",
+            "applicationId","configurationId","language","commentCount","likeCount","dislikeCount",
+            "blocked","iconPath","unreadCommentCount","visibility","published","application",
+            "contextInformation","attachmentFeedbacks","audioFeedbacks","categoryFeedbacks",
+            "ratingFeedbacks","screenshotFeedbacks","textFeedbacks"})
     @ManyToOne(cascade = {CascadeType.PERSIST})
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "feedback_id")

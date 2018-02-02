@@ -36,46 +36,46 @@ public class UploadController {
     @Value("${supersede.profile_pic_upload_directory}")
     protected String UPLOADED_FOLDER;
 
-    @RequestMapping(value = "/upload", method = RequestMethod.POST)
-    public String singleFileUpload(@RequestParam("file") MultipartFile file,
-                                   @RequestHeader(value = "api_user_id") long api_user_id){
-        try {
-            byte[] bytes = file.getBytes();
-//            Path path = Paths.get(UPLOADED_FOLDER + file.getOriginalFilename());
-            Path path = Paths.get(UPLOADED_FOLDER + "/profile_pic_api_user_"+api_user_id + "."
-                    + FilenameUtils.getExtension(file.getOriginalFilename()));
-            Files.write(path, bytes);
-
-            return "successfully uploaded file";
-
-        } catch (IOException e) {
-            e.printStackTrace();
-            return "file upload did not work";
-        }
-    }
-
-    @RequestMapping(value = "/uploadMulti", method = RequestMethod.POST)
-    public String multiFileUpload(@RequestParam("files") MultipartFile[] files){
-        StringJoiner sj = new StringJoiner(" , ");
-
-        for(MultipartFile file: files){
-            if (file.isEmpty()) {
-                continue; //next pls
-            }
-
-            try {
-                byte[] bytes = file.getBytes();
-                Path path = Paths.get(UPLOADED_FOLDER + file.getOriginalFilename());
-                Files.write(path, bytes);
-
-                sj.add(file.getOriginalFilename());
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        return "successfully uploaded files";
-    }
+//    @RequestMapping(value = "/upload", method = RequestMethod.POST)
+//    public String singleFileUpload(@RequestParam("file") MultipartFile file,
+//                                   @RequestHeader(value = "api_user_id") long api_user_id){
+//        try {
+//            byte[] bytes = file.getBytes();
+////            Path path = Paths.get(UPLOADED_FOLDER + file.getOriginalFilename());
+//            Path path = Paths.get(UPLOADED_FOLDER + "/profile_pic_api_user_"+api_user_id + "."
+//                    + FilenameUtils.getExtension(file.getOriginalFilename()));
+//            Files.write(path, bytes);
+//
+//            return "successfully uploaded file";
+//
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//            return "file upload did not work";
+//        }
+//    }
+//
+//    @RequestMapping(value = "/uploadMulti", method = RequestMethod.POST)
+//    public String multiFileUpload(@RequestParam("files") MultipartFile[] files){
+//        StringJoiner sj = new StringJoiner(" , ");
+//
+//        for(MultipartFile file: files){
+//            if (file.isEmpty()) {
+//                continue; //next pls
+//            }
+//
+//            try {
+//                byte[] bytes = file.getBytes();
+//                Path path = Paths.get(UPLOADED_FOLDER + file.getOriginalFilename());
+//                Files.write(path, bytes);
+//
+//                sj.add(file.getOriginalFilename());
+//
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//        }
+//        return "successfully uploaded files";
+//    }
 
     @RequestMapping(value = "/uploadImage", method = RequestMethod.POST)
     public String handleFormUpload(@RequestParam("file") MultipartFile file,

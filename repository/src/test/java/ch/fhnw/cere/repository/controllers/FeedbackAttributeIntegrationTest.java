@@ -68,6 +68,7 @@ public class FeedbackAttributeIntegrationTest extends BaseIntegrationTest{
     private Feedback feedback6;
     private Feedback feedback7;
     private Feedback feedback8;
+    private Feedback feedback9;
 
     private EndUser endUser1;
     private EndUser endUser2;
@@ -172,6 +173,17 @@ public class FeedbackAttributeIntegrationTest extends BaseIntegrationTest{
                 .header("Authorization", adminJWTToken))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(5)));
+    }
+
+    @Test
+    public void testGetPendingFeedbacks() throws Exception{
+        String adminJWTToken = requestSuperAdminJWTToken();
+
+        mockMvc.perform(get(basePathEn + "applications/" + 1 + "/feedbacks" +
+                "/pending_publication")
+                .header("Authorization", adminJWTToken))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(3)));
     }
 
     @Test

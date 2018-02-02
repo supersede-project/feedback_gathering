@@ -135,6 +135,7 @@ public class EmailService {
 
             log.info("==== SENDING MAIL ====");
             Mail mail = new Mail();
+            if(user.getEmail() == null || user.getEmail().equals("")){continue;}
             mail.setTo(user.getEmail());
             mail.setSubject("Notifications - Feedback Activities from the F2F Central");
 

@@ -1,6 +1,7 @@
 package ch.fhnw.cere.repository.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -15,13 +16,18 @@ public class FeedbackChatInformation {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long feedbackChatId;
 
-    @JsonIgnore
+    @JsonIgnoreProperties({"title","userIdentification","createdAt","updatedAt",
+            "applicationId","configurationId","language","commentCount","likeCount","dislikeCount",
+            "blocked","iconPath","unreadCommentCount","visibility","published","application",
+            "contextInformation","attachmentFeedbacks","audioFeedbacks","categoryFeedbacks",
+            "ratingFeedbacks","screenshotFeedbacks","textFeedbacks"})
     @ManyToOne
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "feedback_id", nullable = false)
     private Feedback feedback;
 
-    @JsonIgnore
+    @JsonIgnoreProperties({"createdAt","updatedAt","applicationId","username","email",
+            "phoneNumber"})
     @ManyToOne
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "user_id", nullable = false)

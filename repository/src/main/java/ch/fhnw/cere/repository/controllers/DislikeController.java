@@ -92,16 +92,16 @@ public class DislikeController {
     }
 
     @PreAuthorize("@securityService.hasAdminPermission(#applicationId)")
-    @RequestMapping(method = RequestMethod.DELETE, value = "/dislike/{dislikeId}")
-    public void deleteDislike(@PathVariable long applicationId, @PathVariable long likeId) {
-        feedbackDislikeService.delete(likeId);
+    @RequestMapping(method = RequestMethod.DELETE, value = "/dislikes/{dislikeId}")
+    public void deleteDislike(@PathVariable long applicationId, @PathVariable long dislikeId) {
+        feedbackDislikeService.delete(dislikeId);
     }
 
     @PreAuthorize("@securityService.hasAdminPermission(#applicationId)")
-    @RequestMapping(method = RequestMethod.GET, value = "/dislike/{dislikeId}")
+    @RequestMapping(method = RequestMethod.GET, value = "/dislikes/{dislikeId}")
     public UserFBDislike getDislike(@PathVariable long applicationId,
-                           @PathVariable long likeId) {
-        UserFBDislike userFBDislike = feedbackDislikeService.find(likeId);
+                           @PathVariable long dislikeId) {
+        UserFBDislike userFBDislike = feedbackDislikeService.find(dislikeId);
         if(userFBDislike == null){
             throw new NotFoundException();
         }

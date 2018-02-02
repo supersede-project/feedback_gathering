@@ -21,9 +21,7 @@ import java.util.Date;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.nullValue;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.fileUpload;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -170,6 +168,16 @@ public class FeedbackIntegrationTest extends BaseIntegrationTest {
                 .andExpect(jsonPath("$[0].title", is("Feedback 1 App 1")))
                 .andExpect(jsonPath("$[1].id", is((int) feedback2.getId())))
                 .andExpect(jsonPath("$[1].title", is("Feedback 2 App 1")));
+
+        this.mockMvc.perform(delete(basePathEn + "applications/" + 1 + "/feedbacks/" +
+                feedback1.getId())
+                .header("Authorization", adminJWTToken))
+                .andExpect(status().isOk());
+
+        mockMvc.perform(get(basePathEn + "applications/" + 1 + "/feedbacks")
+                .header("Authorization", adminJWTToken))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(1)));
     }
 
     @Test

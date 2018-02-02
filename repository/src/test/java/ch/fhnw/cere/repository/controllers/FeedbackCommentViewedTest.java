@@ -1,9 +1,6 @@
 package ch.fhnw.cere.repository.controllers;
 
-import ch.fhnw.cere.repository.models.ApiUserPermission;
-import ch.fhnw.cere.repository.models.CommentFeedback;
-import ch.fhnw.cere.repository.models.EndUser;
-import ch.fhnw.cere.repository.models.Feedback;
+import ch.fhnw.cere.repository.models.*;
 import ch.fhnw.cere.repository.repositories.*;
 import ch.fhnw.cere.repository.services.*;
 import org.json.JSONObject;
@@ -13,8 +10,11 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -77,6 +77,9 @@ public class FeedbackCommentViewedTest extends BaseIntegrationTest{
     private EndUser endUser2;
     private EndUser endUser3;
 
+    private CommentViewed commentViewed;
+    private FeedbackViewed feedbackViewed;
+
     @Before
     public void setup() throws Exception{
         super.setup();
@@ -126,6 +129,9 @@ public class FeedbackCommentViewedTest extends BaseIntegrationTest{
                 endUser3,false,"First Comment of Feedback 3",
                 false,null));
 
+        commentViewed = commentViewedRepository.save(new CommentViewed(endUser1,commentFeedback1_1));
+        feedbackViewed = feedbackViewedRepository.save(new FeedbackViewed(endUser1,feedback1));
+
         apiUserPermissionRepository.save(new ApiUserPermission(appAdminUser, 1, true));
         apiUserPermissionRepository.save(new ApiUserPermission(appAdminUser, 20, true));
     }
@@ -140,6 +146,140 @@ public class FeedbackCommentViewedTest extends BaseIntegrationTest{
         commentViewedRepository.deleteAllInBatch();
         endUserRepository.deleteAllInBatch();
         apiUserPermissionRepository.deleteAllInBatch();
+    }
+
+    @Test
+    public void testEnduser() throws Exception{
+        String adminJWTToken = requestAppAdminJWTToken();
+
+        mockMvc.perform(get(basePathEn + "applications/" + 1 + "/feedbacks/end_user")
+                .header("Authorization", adminJWTToken))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(3)));
+
+        mockMvc.perform(get(basePathEn + "applications/" + 1 + "/feedbacks/end_user" +
+                "/username/kaydin1")
+                .header("Authorization", adminJWTToken))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.username", is("kaydin1")));
+
+        String enduser = new JSONObject()
+                .put("username","kaydin4")
+                .put("application_id",20)
+                .toString();
+
+        this.mockMvc.perform(post(basePathEn + "applications/" + 1 + "/feedbacks" +
+                "/end_user")
+                .header("Authorization", adminJWTToken)
+                .content(enduser))
+                .andExpect(status().isCreated());
+
+        this.mockMvc.perform(delete(basePathEn + "applications/" + 1 + "/feedbacks" +
+                "/end_user/"+endUser1.getId())
+                .header("Authorization", adminJWTToken))
+                .andExpect(status().isOk());
+
+        mockMvc.perform(get(basePathEn + "applications/" + 1 + "/feedbacks/end_user/" +
+                endUser2.getId())
+                .header("Authorization", adminJWTToken))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.username", is(endUser2.getUsername())));
+
+        mockMvc.perform(get(basePathEn + "applications/" + 1 + "/feedbacks/end_user/" +
+                0)
+                .header("Authorization", adminJWTToken))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    public void testGetCommentViews() throws Exception{
+        String adminJWTToken = requestAppAdminJWTToken();
+
+        mockMvc.perform(get(basePathEn + "applications/" + 1 + "/feedbacks/comment_views")
+                .header("Authorization", adminJWTToken))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(1)));
+
+        mockMvc.perform(get(basePathEn + "applications/" + 1 + "/feedbacks/comment_views" +
+                "/comment/"+commentFeedback1_1.getId())
+                .header("Authorization", adminJWTToken))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(1)));
+
+        String result = mockMvc.perform(get(basePathEn + "applications/" + 1 + "/feedbacks/comment_views" +
+                "/both/"+endUser1.getId()+"/"+commentFeedback1_1.getId())
+                .header("Authorization", adminJWTToken)).andReturn().getResponse()
+                .getContentAsString();
+
+        mockMvc.perform(get(basePathEn + "applications/" + 1 + "/feedbacks/comment_views" +
+                "/both/"+endUser1.getId()+"/"+commentFeedback1_1.getId())
+                .header("Authorization", adminJWTToken))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id", is((int) commentViewed.getId())));
+
+        mockMvc.perform(get(basePathEn + "applications/" + 1 + "/feedbacks/comment_views/" +
+                commentViewed.getId())
+                .header("Authorization", adminJWTToken))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id", is((int) commentViewed.getId())));
+
+        mockMvc.perform(get(basePathEn + "applications/" + 1 + "/feedbacks/comment_views/" +
+                0)
+                .header("Authorization", adminJWTToken))
+                .andExpect(status().isNotFound());
+
+        this.mockMvc.perform(delete(basePathEn + "applications/" + 1 + "/feedbacks" +
+                "/comment_views/"+commentViewed.getId())
+                .header("Authorization", adminJWTToken))
+                .andExpect(status().isOk());
+
+        mockMvc.perform(get(basePathEn + "applications/" + 1 + "/feedbacks/comment_views")
+                .header("Authorization", adminJWTToken))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(0)));
+    }
+
+    @Test
+    public void testGetFeedbackViews() throws Exception{
+        String adminJWTToken = requestAppAdminJWTToken();
+
+        mockMvc.perform(get(basePathEn + "applications/" + 1 + "/feedbacks/feedback_views")
+                .header("Authorization", adminJWTToken))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(1)));
+
+        mockMvc.perform(get(basePathEn + "applications/" + 1 + "/feedbacks/feedback_views" +
+                "/feedback/"+feedback1.getId())
+                .header("Authorization", adminJWTToken))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(1)));
+
+        mockMvc.perform(get(basePathEn + "applications/" + 1 + "/feedbacks/feedback_views" +
+                "/both/"+endUser1.getId()+"/"+feedback1.getId())
+                .header("Authorization", adminJWTToken))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id", is((int) feedbackViewed.getId())));
+
+        mockMvc.perform(get(basePathEn + "applications/" + 1 + "/feedbacks/feedback_views/" +
+                feedbackViewed.getId())
+                .header("Authorization", adminJWTToken))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id", is((int) feedbackViewed.getId())));
+
+        mockMvc.perform(get(basePathEn + "applications/" + 1 + "/feedbacks/feedback_views/" +
+                0)
+                .header("Authorization", adminJWTToken))
+                .andExpect(status().isNotFound());
+
+        this.mockMvc.perform(delete(basePathEn + "applications/" + 1 + "/feedbacks" +
+                "/feedback_views/"+feedbackViewed.getId())
+                .header("Authorization", adminJWTToken))
+                .andExpect(status().isOk());
+
+        mockMvc.perform(get(basePathEn + "applications/" + 1 + "/feedbacks/feedback_views")
+                .header("Authorization", adminJWTToken))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(0)));
     }
 
     @Test
@@ -173,7 +313,7 @@ public class FeedbackCommentViewedTest extends BaseIntegrationTest{
                 endUser1.getId())
                 .header("Authorization", adminJWTToken))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize(2)));
+                .andExpect(jsonPath("$", hasSize(3)));
     }
 
     @Test
@@ -218,6 +358,6 @@ public class FeedbackCommentViewedTest extends BaseIntegrationTest{
                 endUser1.getId())
                 .header("Authorization", adminJWTToken))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize(3)));
+                .andExpect(jsonPath("$", hasSize(4)));
     }
 }

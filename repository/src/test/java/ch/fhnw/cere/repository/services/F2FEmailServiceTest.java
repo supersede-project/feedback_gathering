@@ -192,66 +192,54 @@ public class F2FEmailServiceTest {
     @Test
     @Transactional
     public void testMail() throws MessagingException, IOException, TemplateException {
+        emailService.sendNewsletter();
 
-//        TimerTask timerTask = new TimerTask() {
-//            @Override
-//            public void run() {
-//                System.out.println("Hello !!!");
-//            }
-//        };
+//        Date currentDate = new Date();
 //
-//        Timer timer = new Timer();
-//        long delay = 0;
-//        long intevalPeriod = 1000;
-//        timer.scheduleAtFixedRate(timerTask, delay,
-//                intevalPeriod);
-
-        Date currentDate = new Date();
-
-        Date twoWeeksAgo = new Date(currentDate.getTime() - (emailDayInterval * DAY_IN_MS));
-
-        List<EndUser> endUsers = endUserRepository.findAll();
-
-        for(EndUser user : endUsers){
-            if(emailUnsubscribedService.findByEnduserId(user.getId()) != null){
-                continue;
-            }
-
-            List<Feedback> userFeedbacks = feedbackService.findByUserIdentification(user.getId());
-            List<Feedback> userFeedbacksRemoved = new ArrayList<>();
-            for(Feedback userFeedback : userFeedbacks){
-                if(userFeedback.getCreatedAt().before(twoWeeksAgo)){
-                    userFeedbacksRemoved.add(userFeedback);
-                }
-            }
-            userFeedbacks.removeAll(userFeedbacksRemoved);
-
-            List<Feedback> forumFeedbacks = feedbackService.findByPublished(true);
-            List<Feedback> forumFeedbacksRemoved = new ArrayList<>();
-            for(Feedback forumFeedback : forumFeedbacks){
-                if(forumFeedback.getCreatedAt().before(twoWeeksAgo)){
-                    forumFeedbacksRemoved.add(forumFeedback);
-                }
-            }
-            forumFeedbacks.removeAll(forumFeedbacksRemoved);
-
-            List<Feedback> blockedFeedbacks = feedbackService.findByBlocked(true);
-
-            log.info("==== SENDING MAIL ====");
-            Mail mail = new Mail();
-            mail.setTo(user.getEmail());
-            mail.setSubject("Notifications - Feedback Activities from the F2F Central");
-
-            Map<String, Object> model = new HashMap<>();
-            model.put("enduser",user);
-            model.put("user_feedbacks",userFeedbacks);
-            model.put("forum_feedbacks",forumFeedbacks);
-
-            mail.setModel(model);
-
-            emailService.sendSimpleMessage(mail);
-            log.info("==== MAIL SENT ====");
-        }
+//        Date twoWeeksAgo = new Date(currentDate.getTime() - (emailDayInterval * DAY_IN_MS));
+//
+//        List<EndUser> endUsers = endUserRepository.findAll();
+//
+//        for(EndUser user : endUsers){
+//            if(emailUnsubscribedService.findByEnduserId(user.getId()) != null){
+//                continue;
+//            }
+//
+//            List<Feedback> userFeedbacks = feedbackService.findByUserIdentification(user.getId());
+//            List<Feedback> userFeedbacksRemoved = new ArrayList<>();
+//            for(Feedback userFeedback : userFeedbacks){
+//                if(userFeedback.getCreatedAt().before(twoWeeksAgo)){
+//                    userFeedbacksRemoved.add(userFeedback);
+//                }
+//            }
+//            userFeedbacks.removeAll(userFeedbacksRemoved);
+//
+//            List<Feedback> forumFeedbacks = feedbackService.findByPublished(true);
+//            List<Feedback> forumFeedbacksRemoved = new ArrayList<>();
+//            for(Feedback forumFeedback : forumFeedbacks){
+//                if(forumFeedback.getCreatedAt().before(twoWeeksAgo)){
+//                    forumFeedbacksRemoved.add(forumFeedback);
+//                }
+//            }
+//            forumFeedbacks.removeAll(forumFeedbacksRemoved);
+//
+//            List<Feedback> blockedFeedbacks = feedbackService.findByBlocked(true);
+//
+//            log.info("==== SENDING MAIL ====");
+//            Mail mail = new Mail();
+//            mail.setTo(user.getEmail());
+//            mail.setSubject("Notifications - Feedback Activities from the F2F Central");
+//
+//            Map<String, Object> model = new HashMap<>();
+//            model.put("enduser",user);
+//            model.put("user_feedbacks",userFeedbacks);
+//            model.put("forum_feedbacks",forumFeedbacks);
+//
+//            mail.setModel(model);
+//
+//            emailService.sendSimpleMessage(mail);
+//            log.info("==== MAIL SENT ====");
+//        }
 
 //        EndUser testUser = endUserService.find(endUser1.getId());
 //        List<Feedback> userFeedbacks = feedbackService.findByUserIdentification(endUser1.getId());

@@ -1,6 +1,7 @@
 package ch.fhnw.cere.repository.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import eu.supersede.integration.api.feedback.repository.types.FeedbackComment;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -17,13 +18,15 @@ public class CommentViewed {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
-    @JsonIgnore
+    @JsonIgnoreProperties({"feedback","user","parentComment","children","commentText",
+            "createdAt","updatedAt","bool_is_developer","activeStatus"})
     @ManyToOne(cascade = {CascadeType.MERGE})
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "comment_id")
     private CommentFeedback comment;
 
-    @JsonIgnore
+    @JsonIgnoreProperties({"createdAt","updatedAt","applicationId","username","email",
+            "phoneNumber"})
     @ManyToOne(cascade = {CascadeType.MERGE})
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "user_id")
