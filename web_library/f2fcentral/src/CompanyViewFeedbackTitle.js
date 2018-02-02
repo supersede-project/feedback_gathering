@@ -9,12 +9,11 @@ import FaThumbsODown from 'react-icons/lib/fa/thumbs-o-down';
 import {toggleWidget} from 'react-chat-widget';
 import FaCogs from 'react-icons/lib/fa/cogs';
 import MdVisibilityOff from 'react-icons/lib/md/visibility-off';
-import FaClose from 'react-icons/lib/fa/close';
-import FaFileImageO from 'react-icons/lib/fa/file-image-o';
 import GoCircleSlash from 'react-icons/lib/go/circle-slash';
 import MdCheckBoxOutlineBlank from 'react-icons/lib/md/check-box-outline-blank';
-
-
+import MdVisibility from 'react-icons/lib/md/visibility';
+import MdEmail from 'react-icons/lib/md/email';
+import MdNotificationsActive from 'react-icons/lib/md/notifications-active';
 //import FileInput from 'react-file-input';
 
 import style from './App.css';
@@ -26,13 +25,17 @@ import FeedbackSettings from "./FeedbackSettings";
     super(props);
     this.state = {
       expanded: false,
-        showSettings : false
+        showSettings : false,
+        visibleColor : 'black'
+
+
     }
 
     this.toggleExpanded = this.toggleExpanded.bind(this);
     this.openSettings = this.openSettings.bind(this);
-    this.openFileDialog = this.openFileDialog.bind(this);
     this.closeThread = this.closeThread.bind(this);
+    this.enableVisibility=this.enableVisibility.bind(this);
+
   }
 
   handleChange() {
@@ -72,10 +75,40 @@ import FeedbackSettings from "./FeedbackSettings";
   closeThread(e){
   }
 
-  openFileDialog(e){
 
 
+  handleMailIcon(){
+      if(this.props.visibility === false){
+         return <MdEmail size={35} color='black'/>;
+
+      }
+      if(this.props.visibility === true){
+          return <MdEmail size={35} color='green'/>;
+          }
   }
+
+  handleVisibility(){
+         if(this.props.visibility === false){
+             return <MdVisibilityOff size={35} onClick={this.enableVisibility}/>;
+         }
+         if(this.props.visibility === true){
+             return <MdVisibility size={35}/>
+         }
+     }
+
+     enableVisibility(){
+         if(this.state.visibleColor==='black') {
+             this.setState({
+                 visibleColor: 'green'
+             });
+         }
+         if(this.state.visibleColor==='green'){
+             this.setState({
+                 visibleColor: 'black'
+             });
+         }
+     }
+
 
   render()
   {
@@ -95,8 +128,10 @@ import FeedbackSettings from "./FeedbackSettings";
                   <span className={style.counts}>{this.props.commentnumber}</span>
               </div></div></h5>
       <div className="companyIconContainer">
-      <MdVisibilityOff size={35}/><FaWechat align="left" size={35} color={'#63C050'} style={{flexGrow: "1"}} onClick={toggleWidget}/><FaCogs size={35} onClick={this.openSettings.bind(this)}/>
-      <FaFileImageO size={35} align="left" onClick={this.openFileDialog}/>
+          {this.handleVisibility()}<FaWechat align="left" size={35} color={'#63C050'} style={{flexGrow: "1"}} onClick={toggleWidget}/>
+          {this.handleMailIcon()}
+          <MdNotificationsActive size={35}/>
+          <FaCogs size={35} onClick={this.openSettings.bind(this)}/>
       </div></div>);
   }
 }

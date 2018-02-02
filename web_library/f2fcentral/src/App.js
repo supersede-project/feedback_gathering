@@ -10,6 +10,7 @@ import { Widget, addResponseMessage } from 'react-chat-widget';
 import FeedbackForumTabAccordion from "./FeedbackForumTabAccordion";
 import CompanyViewAccordion from "./CompanyViewAccordion";
 
+
 class App extends Component {
 
     componentWillMount() {

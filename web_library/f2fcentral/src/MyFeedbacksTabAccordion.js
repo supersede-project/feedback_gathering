@@ -18,21 +18,26 @@ class MyFeedbacksTabAccordion extends Component {
         super(props);
         this.state = {
           data : [],
-          loading: true
+          loading: true,
         }
+        this.fetchData = this.fetchData.bind(this);
     }
 
     componentDidMount() {
-      var that = this;
-      fetch(process.env.REACT_APP_BASE_URL + 'en/applications/'+ sessionStorage.getItem('applicationId')+'/feedbacks/user_identification/' + sessionStorage.getItem('userId'), {
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': sessionStorage.getItem('token')
-          }
-      }).then(result=>result.json())
-      .then(result=> {
-        that.setState({data: result, loading: false})
-      });
+      this.fetchData(null);
+    }
+
+    fetchData(e) {
+        var that = this;
+        fetch(process.env.REACT_APP_BASE_URL + 'en/applications/'+ sessionStorage.getItem('applicationId')+'/feedbacks/user_identification/' + sessionStorage.getItem('userId'), {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': sessionStorage.getItem('token')
+            }
+        }).then(result=>result.json())
+            .then(result=> {
+                that.setState({data: result, loading: false})
+            });
     }
 
     render() {
@@ -44,7 +49,7 @@ class MyFeedbacksTabAccordion extends Component {
             if(item.textFeedbacks.length > 0 && item.categoryFeedbacks.length > 0)
             {
               return (
-                  <AccordionItem titleTag="span" title={<FeedbackTitle type={item.categoryFeedbacks[0].parameterId} title={item.textFeedbacks[0].text}/>}>
+                  <AccordionItem titleTag="span" title={<FeedbackTitle feedbackId={item.id} update={that.fetchData} type={item.categoryFeedbacks[0].parameterId} title={item.textFeedbacks[0].text} visibility={item.visibility} date={item.createdAt} status="WIP"/>}>
                   </AccordionItem>
               )
             }

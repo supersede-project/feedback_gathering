@@ -1875,16 +1875,16 @@ if(!isset($admin_user) || $admin_user === '') {
             //'distPath': 'dist/',
             //'distPath': 'https://platform.supersede.eu/web_library/senercon/dist/',
 
-            //'applicationId': 20,
+            'applicationId': 20,
             'apiEndpointOrchestrator': 'https://platform.supersede.eu:8443/',
-            'apiEndpointRepository': 'https://platform.supersede.eu:8443/',
+            //'apiEndpointRepository': 'https://platform.supersede.eu:8443/',
 
-            'applicationId': 14,
+            //'applicationId': 14,
             //'apiEndpointOrchestrator': 'http://localhost:8081/',
             //'apiEndpointRepository': 'http://localhost:8082/',
 
             //'apiEndpointOrchestrator': 'http://mt.ronnieschaniel.com:8080/feedback_orchestrator-2.0.0/',
-            //'apiEndpointRepository': 'http://mt.ronnieschaniel.com:8080/feedback_repository-2.0.0/',
+            'apiEndpointRepository': 'http://mt.ronnieschaniel.com:8080/feedback_repository/',
 
             'userId': <?php echo $user_id; ?>,
             'lang': 'en',

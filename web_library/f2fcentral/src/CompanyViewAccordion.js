@@ -17,6 +17,7 @@ import FeedbackTitle from './FeedbackTitle';
 import FeedbackBody from './FeedbackBody';
 import FeedbackData from './FeedbackData';
 import CompanyViewFeedbackTitle from "./CompanyViewFeedbackTitle";
+import FaFileImageO from 'react-icons/lib/fa/file-image-o';
 
 
 class CompanyViewAccordion extends Component {
@@ -84,7 +85,7 @@ class CompanyViewAccordion extends Component {
             if(item.textFeedbacks.length > 0 && item.categoryFeedbacks.length > 0)
             {
               return (
-                  <AccordionItem titleTag="span" title={<CompanyViewFeedbackTitle type={item.categoryFeedbacks[0].parameterId} title={item.textFeedbacks[0].text} date={item.createdAt} status="WIP" likes={item.likeCount} dislikes={item.dislikeCount} commentnumber={item.commentCount}/>}>
+                  <AccordionItem titleTag="span" title={<CompanyViewFeedbackTitle type={item.categoryFeedbacks[0].parameterId} title={item.textFeedbacks[0].text} date={item.createdAt} status="WIP" visibility={item.visibility} likes={item.likeCount} dislikes={item.dislikeCount} commentnumber={item.commentCount}/>}>
                   </AccordionItem>
               )
             }
@@ -109,6 +110,7 @@ class CompanyViewAccordion extends Component {
       }
         return (
             <div className="CompanyViewAccordion">
+                <FaFileImageO/>
                 <div className="CompanyFeedback">
                 <ul>
                     {toRender}
