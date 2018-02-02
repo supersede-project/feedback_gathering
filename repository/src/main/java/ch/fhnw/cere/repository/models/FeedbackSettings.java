@@ -80,13 +80,13 @@ public class FeedbackSettings {
 
     public FeedbackSettings(){}
 
-    public FeedbackSettings(EndUser user, Feedback feedback, boolean statusUpdates, String statusUpdatesContactChannel, boolean feedbackQuery, String feedbackQueryChannel, boolean globalFeedbackSetting, Application application){
-      this.application =   application;
+    public FeedbackSettings(EndUser user, Feedback feedback, boolean statusUpdates, String statusUpdatesContactChannel, boolean feedbackQuery, String feedbackQueryChannel, boolean globalFeedbackSetting){
+      this.user = user;
       this.feedback = feedback;
       this.feedbackQuery = feedbackQuery;
       this.feedbackQueryChannel = feedbackQueryChannel;
       this.statusUpdates = statusUpdates;
-      this.feedbackQueryChannel = statusUpdatesContactChannel;
+      this.statusUpdatesContactChannel = statusUpdatesContactChannel;
       this.globalFeedbackSetting = globalFeedbackSetting;
     }
 }

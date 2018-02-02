@@ -48,12 +48,18 @@ public class FeedbackCompany {
     public FeedbackCompany() {
     }
 
-    public FeedbackCompany(Feedback feedback, String text, String status, Date createdAt, Date updatedAt) {
-        this.feedback = feedback;
+//    public FeedbackCompany(Feedback feedback, String text, String status, Date createdAt, Date updatedAt) {
+//        this.feedback = feedback;
+//        this.text = text;
+//        this.status = status;
+//        this.createdAt = createdAt;
+//        this.updatedAt = updatedAt;
+//    }
+
+    public FeedbackCompany(String text, String status,Boolean promote) {
         this.text = text;
         this.status = status;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
+        this.promote = promote;
     }
 
     public Boolean getPromote() {
