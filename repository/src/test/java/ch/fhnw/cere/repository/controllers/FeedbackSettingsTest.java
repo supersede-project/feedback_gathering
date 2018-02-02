@@ -125,6 +125,11 @@ public class FeedbackSettingsTest extends BaseIntegrationTest{
                 .andExpect(jsonPath("$.statusUpdates", is(true)));
 
         this.mockMvc.perform(get(basePathEn + "applications/" + 1 + "/feedbacks" +
+                "/feedbacksettings/feedback/"+0)
+                .header("Authorization", adminJWTToken))
+                .andExpect(status().isNotFound());
+
+        this.mockMvc.perform(get(basePathEn + "applications/" + 1 + "/feedbacks" +
                 "/feedbacksettings/user_identification/"+endUser.getId())
                 .header("Authorization", adminJWTToken))
                 .andExpect(status().isOk())
@@ -136,6 +141,11 @@ public class FeedbackSettingsTest extends BaseIntegrationTest{
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.statusUpdates", is(feedbackSettings1.getStatusUpdates())))
                 .andExpect(jsonPath("$.feedbackQuery", is(feedbackSettings1.getFeedbackQuery())));
+
+        this.mockMvc.perform(get(basePathEn + "applications/" + 1 + "/feedbacks" +
+                "/feedbacksettings/"+0)
+                .header("Authorization", adminJWTToken))
+                .andExpect(status().isNotFound());
     }
 
     @Test

@@ -40,12 +40,6 @@ public class FeedbackStatus {
     public FeedbackStatus() {
     }
 
-    public FeedbackStatus(Feedback feedback, String status, Date date) {
-        this.feedback = feedback;
-        this.status = status;
-        this.date = date;
-    }
-
     public FeedbackStatus(Feedback feedback, String status) {
         this.feedback = feedback;
         this.status = status;

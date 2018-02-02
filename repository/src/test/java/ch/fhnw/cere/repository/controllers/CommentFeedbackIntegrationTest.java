@@ -118,7 +118,6 @@ public class CommentFeedbackIntegrationTest extends BaseIntegrationTest{
     @After
     public void cleanUp(){
         super.cleanUp();
-
         feedbackRepository.deleteAllInBatch();
         commentFeedbackRepository.deleteAllInBatch();
         endUserRepository.deleteAllInBatch();
