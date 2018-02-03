@@ -6,7 +6,6 @@ import 'react-tabs/style/react-tabs.css';
 import '../../node_modules/react-accessible-accordion/dist/react-accessible-accordion.css';
 import './App.css';
 import MyFeedbacksTabAccordion from "./MyFeedbacksTabAccordion";
-import { Widget, addResponseMessage } from 'react-chat-widget';
 import FeedbackForumTabAccordion from "./FeedbackForumTabAccordion";
 import CompanyViewAccordion from "./CompanyViewAccordion";
 
@@ -43,15 +42,6 @@ class App extends Component {
       }
     }
 
-    componentDidMount() {
-        addResponseMessage("Thank you for your time. We have some additional questions regarding your feedback.");
-    }
-
-    handleNewUserMessage(newMessage) {
-        console.log(`New message incoming! ${newMessage}`);
-
-    }
-
   render() {
     var toRender;
 
@@ -67,7 +57,6 @@ class App extends Component {
 
           <TabPanel>
               <MyFeedbacksTabAccordion/>
-              <Widget handleNewUserMessage={this.handleNewUserMessage}/>
           </TabPanel>
           <TabPanel>
               <FeedbackForumTabAccordion/>
