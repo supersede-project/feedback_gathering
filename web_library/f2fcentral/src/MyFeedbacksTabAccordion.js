@@ -48,7 +48,6 @@ class MyFeedbacksTabAccordion extends Component {
         {that.state.data.map(function (item, index) {
             if(item.textFeedbacks.length > 0 && item.categoryFeedbacks.length > 0)
             {
-              console.log(item);
               return (
                   <AccordionItem titleTag="span" title={<FeedbackTitle feedbackId={item.id} update={that.fetchData} type={item.categoryFeedbacks[0].parameterId} title={item.textFeedbacks[0].text} visibility={item.visibility} date={item.createdAt} status="WIP"/>}>
                   </AccordionItem>
