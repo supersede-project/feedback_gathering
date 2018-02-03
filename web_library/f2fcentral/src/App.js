@@ -20,6 +20,7 @@ class App extends Component {
   }
 
   componentWillMount() {
+    var that = this;
     if (sessionStorage.getItem('token') === null) {
       fetch(process.env.REACT_APP_BASE_URL + 'authenticate', {
         method: 'POST',
@@ -33,7 +34,6 @@ class App extends Component {
       }).then(result => result.json())
       .then(result => {
         sessionStorage.setItem('token', result.token);
-        console.log(result);
       });
     }
     if (sessionStorage.getItem('userId') === null) {
@@ -75,7 +75,6 @@ class App extends Component {
 
         <TabPanel>
           <MyFeedbacksTabAccordion/>
-          <Widget handleNewUserMessage={this.handleNewUserMessage}/>
         </TabPanel>
         <TabPanel>
           <FeedbackForumTabAccordion/>
