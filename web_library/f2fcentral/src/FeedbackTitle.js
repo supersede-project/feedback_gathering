@@ -75,27 +75,29 @@ class FeedbackTitle extends Component {
   }
 
   showChatWindow(e) {
-    fetch(process.env.REACT_APP_BASE_URL + 'en/applications/'+ sessionStorage.getItem('applicationId')+'/feedbacks/feedback_chat/feedback/' + this.props.feedbackId, {
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': sessionStorage.getItem('token')
-      }
-    }).then(result=>result.json())
-    .then(result=> {
-      result.sort((a, b) => {
-        if (new Date(a.chatDate.substring(0, a.chatDate.indexOf('.')) + "Z") < new Date(b.chatDate.substring(0, b.chatDate.indexOf('.')) + "Z")) return -1;
-        if (new Date(a.chatDate.substring(0, a.chatDate.indexOf('.')) + "Z") > new Date(b.chatDate.substring(0, b.chatDate.indexOf('.')) + "Z")) return 1;
-        return 0;
-      })
-      result.map((item, index) => {
-        if(item.user.id === parseInt(sessionStorage.getItem('userId'))) {
-          addUserMessage(item.chatText);
+    if(!this.state.showChat) {
+      fetch(process.env.REACT_APP_BASE_URL + 'en/applications/'+ sessionStorage.getItem('applicationId')+'/feedbacks/feedback_chat/feedback/' + this.props.feedbackId, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': sessionStorage.getItem('token')
         }
-        else {
-          addResponseMessage(item.chatText);
-        }
-      })
-    });
+      }).then(result=>result.json())
+      .then(result=> {
+        result.sort((a, b) => {
+          if (new Date(a.chatDate.substring(0, a.chatDate.indexOf('.')) + "Z") < new Date(b.chatDate.substring(0, b.chatDate.indexOf('.')) + "Z")) return -1;
+          if (new Date(a.chatDate.substring(0, a.chatDate.indexOf('.')) + "Z") > new Date(b.chatDate.substring(0, b.chatDate.indexOf('.')) + "Z")) return 1;
+          return 0;
+        })
+        result.map((item, index) => {
+          if(item.user.id === parseInt(sessionStorage.getItem('userId'))) {
+            addUserMessage(item.chatText);
+          }
+          else {
+            addResponseMessage(item.chatText);
+          }
+        })
+      });
+    }
     this.setState({showChat: true, lastPulled: new Date()});
     toggleWidget();
     setInterval(this.fetchResponses, 3000);
