@@ -26,6 +26,8 @@ public class EndUser {
     @Column(name = "phone_number")
     private int phoneNumber;
 
+
+
     @OneToMany(mappedBy = "enduser", cascade = {CascadeType.REMOVE, CascadeType.PERSIST})
     private List<UserFBDislike> userFBDislikes;
 

@@ -52,6 +52,12 @@ public class FeedbackCompanyController {
             String text = object.getString("text");
 
             FeedbackCompany feedbackCompany = new FeedbackCompany();
+
+            if(object.has("promote") && object.get("promote") != null){
+                boolean promote = object.getBoolean("promote");
+                feedbackCompany.setPromote(promote);
+            }
+
             feedbackCompany.setFeedback(feedbackService.find(feedbackId));
             feedbackCompany.setStatus(status);
             feedbackCompany.setText(text);
