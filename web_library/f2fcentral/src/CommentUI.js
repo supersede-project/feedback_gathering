@@ -27,6 +27,7 @@ class CommentUI extends Component {
 
   componentDidMount() {
     this.fetchData();
+    setInterval(this.fetchData, 5000);
   }
 
   fetchData() {
