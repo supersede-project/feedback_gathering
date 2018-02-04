@@ -12,7 +12,7 @@ public interface FeedbackCompanyService {
     public FeedbackCompany save(FeedbackCompany feedbackCompany);
     public FeedbackCompany find(long id);
     public void delete(long id);
-    List<FeedbackCompany> findByFeedbackId(long feedbackId);
+    List<FeedbackCompany> findByPromote(boolean promote);
 }
 
 

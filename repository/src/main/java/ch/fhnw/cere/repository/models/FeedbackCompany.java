@@ -14,22 +14,21 @@ import java.util.Date;
  * Created by Aydinli on 08.11.2017.
  */
 @Entity
-@Where(clause = "promote=1")
 public class FeedbackCompany {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
-    @JsonIgnoreProperties({"title","userIdentification","createdAt","updatedAt",
-            "applicationId","configurationId","language","commentCount","likeCount","dislikeCount",
-            "blocked","iconPath","unreadCommentCount","visibility","published","application",
-            "contextInformation","attachmentFeedbacks","audioFeedbacks","categoryFeedbacks",
-            "ratingFeedbacks","screenshotFeedbacks","textFeedbacks"})
-    @ManyToOne(cascade = {CascadeType.PERSIST})
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn(name = "feedback_id")
-    private Feedback feedback;
+//    @JsonIgnoreProperties({"title","userIdentification","createdAt","updatedAt",
+//            "applicationId","configurationId","language","commentCount","likeCount","dislikeCount",
+//            "blocked","iconPath","unreadCommentCount","visibility","published","application",
+//            "contextInformation","attachmentFeedbacks","audioFeedbacks","categoryFeedbacks",
+//            "ratingFeedbacks","screenshotFeedbacks","textFeedbacks"})
+//    @ManyToOne(cascade = {CascadeType.PERSIST})
+//    @OnDelete(action = OnDeleteAction.CASCADE)
+//    @JoinColumn(name = "feedback_id")
+//    private Feedback feedback;
 
     private String text;
     private String status;
@@ -37,7 +36,6 @@ public class FeedbackCompany {
     private Date createdAt;
     private Date updatedAt;
 
-    @Column(name = "promote")
     private Boolean promote;
 
     @PrePersist
@@ -83,13 +81,13 @@ public class FeedbackCompany {
         this.id = id;
     }
 
-    public Feedback getFeedback() {
-        return feedback;
-    }
-
-    public void setFeedback(Feedback feedback) {
-        this.feedback = feedback;
-    }
+//    public Feedback getFeedback() {
+//        return feedback;
+//    }
+//
+//    public void setFeedback(Feedback feedback) {
+//        this.feedback = feedback;
+//    }
 
     public String getText() {
         return text;

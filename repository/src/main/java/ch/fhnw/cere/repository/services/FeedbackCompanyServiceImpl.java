@@ -39,7 +39,7 @@ public class FeedbackCompanyServiceImpl implements FeedbackCompanyService {
     }
 
     @Override
-    public List<FeedbackCompany> findByFeedbackId(long feedbackId) {
-        return feedbackCompanyRepository.findByFeedbackId(feedbackId);
+    public List<FeedbackCompany> findByPromote(boolean promote) {
+        return feedbackCompanyRepository.findByPromote(promote);
     }
 }

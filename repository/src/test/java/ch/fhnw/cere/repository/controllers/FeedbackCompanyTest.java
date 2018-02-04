@@ -49,13 +49,13 @@ public class FeedbackCompanyTest extends BaseIntegrationTest{
         feedbackCompanyRepository.deleteAllInBatch();
 
         feedbackCompany1 = feedbackCompanyRepository.save(new FeedbackCompany("hey ho 1",
-                "upcoming",true));
+                "upcoming",false));
 
         feedbackCompany2 = feedbackCompanyRepository.save(new FeedbackCompany("hey ho 2",
                 "upcoming",true));
 
         feedbackCompany3 = feedbackCompanyRepository.save(new FeedbackCompany("hey ho 3",
-                "upcoming",true));
+                "upcoming",false));
         apiUserPermissionRepository.save(new ApiUserPermission(appAdminUser, 1, true));
         apiUserPermissionRepository.save(new ApiUserPermission(appAdminUser, 20, true));
     }
@@ -71,14 +71,15 @@ public class FeedbackCompanyTest extends BaseIntegrationTest{
     public void testGetFeedbackCompanies() throws Exception{
         String adminJWTToken = requestAppAdminJWTToken();
 
-        String result = this.mockMvc.perform(get(basePathEn + "applications/" + 1 + "/feedbacks" +
-                "/feedback_company")
-                .header("Authorization", adminJWTToken)).andReturn().getResponse()
-                .getContentAsString();
+//        String result = this.mockMvc.perform(get(basePathEn + "applications/" + 1 + "/feedbacks" +
+//                "/feedback_company")
+//                .header("Authorization", adminJWTToken)).andReturn().getResponse()
+//                .getContentAsString();
 
         this.mockMvc.perform(get(basePathEn + "applications/" + 1 + "/feedbacks" +
                 "/feedback_company")
-                .header("Authorization", adminJWTToken))
+                .header("Authorization", adminJWTToken)
+                .header("promote",false))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(3)));
     }
@@ -103,7 +104,8 @@ public class FeedbackCompanyTest extends BaseIntegrationTest{
 
         this.mockMvc.perform(get(basePathEn + "applications/" + 1 + "/feedbacks" +
                 "/feedback_company")
-                .header("Authorization", adminJWTToken))
+                .header("Authorization", adminJWTToken)
+                .header("promote",false))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(2)));
     }
@@ -124,9 +126,9 @@ public class FeedbackCompanyTest extends BaseIntegrationTest{
         String adminJWTToken = requestAppAdminJWTToken();
 
         String feedbackCompany = new JSONObject()
-                .put("feedback_id",100)
                 .put("status","pending")
                 .put("text","crazy feature")
+                .put("promote",true)
                 .toString();
 
         this.mockMvc.perform(post(basePathEn + "applications/" + 1 + "/feedbacks" +
