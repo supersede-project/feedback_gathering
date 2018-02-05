@@ -144,7 +144,8 @@
     "react-uikit-comment": "^2.0.2",
     "react-uikit-comment-list": "^2.0.1",
     "svg-inline-loader": "^0.8.0",
-    "svg-react-loader": "^0.4.5"
+    "svg-react-loader": "^0.4.5",
+    "uikit": "^3.0.0-beta.39"
   },
   "scripts": {
     "build.test": "gulp build.js.test",
