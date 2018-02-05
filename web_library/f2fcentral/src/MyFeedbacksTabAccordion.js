@@ -10,6 +10,7 @@ import 'react-accessible-accordion/dist/react-accessible-accordion.css';
 import FeedbackTitle from './FeedbackTitle';
 import FeedbackBody from './FeedbackBody';
 import FeedbackData from './FeedbackData';
+import MdNotificationsActive from 'react-icons/lib/md/notifications-active';
 
 
 class MyFeedbacksTabAccordion extends Component {
@@ -38,6 +39,10 @@ class MyFeedbacksTabAccordion extends Component {
             .then(result=> {
                 that.setState({data: result, loading: false})
             });
+    }
+
+    disableNotifications(){
+        return <MdNotificationsActive size={35} align="right" color='black'/>;
     }
 
     render() {
@@ -74,6 +79,7 @@ class MyFeedbacksTabAccordion extends Component {
       }
         return (
             <div className="MyFeedbacksTabAccordion">
+                <MdNotificationsActive size={35} align="right" color='green' onClick={this.disableNotifications}/>
                 <div className="MyFeedback">
                 <ul>
                     {toRender}

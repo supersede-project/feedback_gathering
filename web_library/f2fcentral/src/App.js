@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {Tab, Tabs, TabList, TabPanel} from 'react-tabs';
 
 import 'react-tabs/style/react-tabs.css';
+import style from 'react-tabs/style/react-tabs.css';
 
 import '../../node_modules/react-accessible-accordion/dist/react-accessible-accordion.css';
 import './App.css';
@@ -67,7 +68,7 @@ class App extends Component {
       }
     }
     else {
-      toRender = <Tabs style={{activeTabContentStyle: {backgroundColor: '#1A7E92', borderColor: '#1A7E92'}}}>
+      toRender = <Tabs style={{activeTabContentStyle: {backgroundColor: '#006CEF', borderColor: '#006CEF', color: '#006CEF'}}}>
         <TabList>
           <Tab selectedClassName="tabselected">My Feedbacks</Tab>
           <Tab selectedClassName="tabselected">Feedback Forum</Tab>

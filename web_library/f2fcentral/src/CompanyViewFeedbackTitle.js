@@ -13,8 +13,7 @@ import GoCircleSlash from 'react-icons/lib/go/circle-slash';
 import MdCheckBoxOutlineBlank from 'react-icons/lib/md/check-box-outline-blank';
 import MdVisibility from 'react-icons/lib/md/visibility';
 import MdEmail from 'react-icons/lib/md/email';
-import MdNotificationsActive from 'react-icons/lib/md/notifications-active';
-//import FileInput from 'react-file-input';
+import MdPublish from 'react-icons/lib/md/publish';
 
 import style from './App.css';
 import FeedbackSettings from "./FeedbackSettings";
@@ -22,24 +21,19 @@ import FeedbackSettings from "./FeedbackSettings";
  class CompanyViewFeedbackTitle extends Component {
 
   constructor(props) {
-    super(props);
-    this.state = {
-      expanded: false,
-        showSettings : false,
-        visibleColor : 'black'
-
-
-    }
-
-    this.toggleExpanded = this.toggleExpanded.bind(this);
-    this.openSettings = this.openSettings.bind(this);
-    this.closeThread = this.closeThread.bind(this);
-    this.enableVisibility=this.enableVisibility.bind(this);
-
-  }
-
-  handleChange() {
-
+      super(props);
+      this.state = {
+          expanded: false,
+          showSettings: false,
+          visibleColor: 'black',
+          showChat: false,
+          lastPulled: null,
+          visiblePublishedIcon: 'hidden'
+      },
+          this.toggleExpanded = this.toggleExpanded.bind(this);
+      this.openSettings = this.openSettings.bind(this);
+      this.closeThread = this.closeThread.bind(this);
+      this.handleVisibility = this.handleVisibility.bind(this);
   }
 
   toggleExpanded()
@@ -76,7 +70,6 @@ import FeedbackSettings from "./FeedbackSettings";
   }
 
 
-
   handleMailIcon(){
       if(this.props.visibility === false){
          return <MdEmail size={35} color='black'/>;
@@ -89,26 +82,40 @@ import FeedbackSettings from "./FeedbackSettings";
 
   handleVisibility(){
          if(this.props.visibility === false){
-             return <MdVisibilityOff size={35} onClick={this.enableVisibility}/>;
+             if(this.props.published === false) {
+                 this.setState({visiblePublishedIcon: 'hidden'});
+                 return <MdVisibilityOff size={35}/>;
+             }
          }
+
          if(this.props.visibility === true){
-             return <MdVisibility size={35}/>
+             if(this.props.published === false) {
+                 this.setState({visiblePublishedIcon: 'visible'});
+                 return <MdVisibilityOff size={35}/>;
+             }
+         }
+         if(this.props.visibility === true) {
+             if(this.props.published === true) {
+                 this.setState({visiblePublishedIcon: 'hidden'});
+                 return <MdVisibility size={35}/>
+             }
          }
      }
 
-     enableVisibility(){
-         if(this.state.visibleColor==='black') {
-             this.setState({
-                 visibleColor: 'green'
-             });
-         }
-         if(this.state.visibleColor==='green'){
-             this.setState({
-                 visibleColor: 'black'
-             });
-         }
-     }
-
+     publishFeedback(){
+         var that = this;
+         fetch(process.env.REACT_APP_BASE_URL + 'en/applications/'+ sessionStorage.getItem('applicationId')+'/feedbacks/published/' + that.props.feedbackId, {
+             method: 'PUT',
+             headers: {
+                 'Content-Type': 'application/json',
+                 'Authorization': sessionStorage.getItem('token')
+             },
+             body: JSON.stringify({
+                 published: true
+             })
+         }).then(result=> that.props.update());
+         e.stopPropagation();
+        }
 
   render()
   {
@@ -127,10 +134,12 @@ import FeedbackSettings from "./FeedbackSettings";
                   <FaWechat size={20} color={'#63C050'} padding={10}/>
                   <span className={style.counts}>{this.props.commentnumber}</span>
               </div></div></h5>
+
       <div className="companyIconContainer">
-          {this.handleVisibility()}<FaWechat align="left" size={35} color={'#63C050'} style={{flexGrow: "1"}} onClick={toggleWidget}/>
+          {this.handleVisibility()}
+          <MdPublish className={style.counts} size={20} padding={10} visibility={this.state.visiblePublishedIcon} onClick={this.publishFeedback}/>
+          <FaWechat align="left" size={35} color={'#63C050'} style={{flexGrow: "1"}} />
           {this.handleMailIcon()}
-          <MdNotificationsActive size={35}/>
           <FaCogs size={35} onClick={this.openSettings.bind(this)}/>
       </div></div>);
   }
