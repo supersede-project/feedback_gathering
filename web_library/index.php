@@ -1876,10 +1876,10 @@ if(!isset($application_id) || $application_id == 0) {
 
             'applicationId': 20,
             //'apiEndpointOrchestrator': 'http://localhost:8081/',
-            'apiEndpointRepository': 'http://localhost:9999/',
+            // 'apiEndpointRepository': 'http://localhost:9999/',
 
             //'apiEndpointOrchestrator': 'http://mt.ronnieschaniel.com:8080/feedback_orchestrator-2.0.0/',
-            //'apiEndpointRepository': 'http://mt.ronnieschaniel.com:8080/feedback_repository-2.0.0/',
+            'apiEndpointRepository': 'http://mt.ronnieschaniel.com:8080/feedback_repository/',
 
             'userId': <?php echo $user_id; ?>,
             'lang': 'en',
