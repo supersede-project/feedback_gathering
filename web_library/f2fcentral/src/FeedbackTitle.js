@@ -25,9 +25,10 @@ class FeedbackTitle extends Component {
     this.toggleExpanded = this.toggleExpanded.bind(this);
     this.changeMailSetting = this.changeMailSetting.bind(this);
     this.setVisibility = this.setVisibility.bind(this);
-    this.showChatWindow = this.showChatWindow.bind(this);
-    this.fetchResponses = this.fetchResponses.bind(this);
     this.handleNewUserMessage = this.handleNewUserMessage.bind(this);
+      this.handleShowChat = this.handleShowChat.bind(this);
+/*      this.showChatWindow = this.showChatWindow.bind(this);
+      this.fetchResponses = this.fetchResponses.bind(this);*/
   }
 
   handleNewUserMessage(newMessage) {
@@ -47,6 +48,9 @@ class FeedbackTitle extends Component {
     })
   }
 
+    handleShowChat(e) {
+        this.props.onShowChat({showChat: true, index: this.props.feedbackId, title: this.props.title});
+    }
 
   toggleExpanded()
   {
@@ -68,7 +72,7 @@ class FeedbackTitle extends Component {
     return <TiTag size={35} padding={75}/>;
   }
 
-  showChatWindow(e) {
+  /*showChatWindow(e) {
     if(!this.state.showChat) {
       fetch(process.env.REACT_APP_BASE_URL + 'en/applications/'+ sessionStorage.getItem('applicationId')+'/feedbacks/feedback_chat/feedback/' + this.props.feedbackId, {
         headers: {
@@ -95,9 +99,9 @@ class FeedbackTitle extends Component {
     this.setState({showChat: true, lastPulled: new Date()});
     toggleWidget();
     setInterval(this.fetchResponses, 3000);
-  }
+  }*/
 
-  fetchResponses() {
+  /*fetchResponses() {
     var that = this;
     fetch(process.env.REACT_APP_BASE_URL + 'en/applications/'+ sessionStorage.getItem('applicationId')+'/feedbacks/feedback_chat/feedback/' + this.props.feedbackId, {
       headers: {
@@ -118,7 +122,7 @@ class FeedbackTitle extends Component {
       })
     })
     that.setState({lastPulled: new Date()});
-  }
+  }*/
 
   changeMailSetting(){
     if(this.state.iconColor==='black') {
@@ -177,7 +181,7 @@ class FeedbackTitle extends Component {
   <div className="iconContainer">
     {this.handleVisibility()}
     <MdEmail size={35} onClick={this.changeMailSetting} color={this.state.iconColor}/>
-    <FaWechat align="left" color={'#63C050'} style={{flexGrow: "1"}} onClick={this.showChatWindow} size={35}/>
+    <FaWechat align="left" color={'#63C050'} style={{flexGrow: "1"}} onClick={this.handleShowChat} size={35}/>
     </div></div>);
     }
   }

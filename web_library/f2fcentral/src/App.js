@@ -38,11 +38,13 @@ class App extends Component {
       });
     }
     if (sessionStorage.getItem('userId') === null) {
-      if (window.userId !== null) {
-        sessionStorage.setItem('userId', window.userId);
-      }
     }
-    if (sessionStorage.getItem('applicationId') === null) {
+
+      if (window.userId !== null) {
+          sessionStorage.setItem('userId', window.userId);
+      }
+
+      if (sessionStorage.getItem('applicationId') === null) {
       if (window.applicationId !== null) {
         sessionStorage.setItem('applicationId', window.applicationId);
       }
@@ -60,6 +62,7 @@ class App extends Component {
     var toRender;
 
     if (window.adminUser) {
+
       if (!this.state.loggedIn || sessionStorage.getItem('token') === null) {
         toRender = <LoginAdmin loginSuccess={this.adminLoggedIn}/>
       }

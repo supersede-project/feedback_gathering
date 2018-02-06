@@ -93,7 +93,7 @@ class ChatView extends Component {
     if(sessionStorage.getItem('userId') == parseInt(id)) {
       return style.usermessage;
     }
-    return '';
+    return style.oppositionmessage;
   }
 
   render() {

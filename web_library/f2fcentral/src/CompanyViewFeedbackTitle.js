@@ -23,6 +23,7 @@ class CompanyViewFeedbackTitle extends Component {
       expanded: false,
       showSettings : false,
       showChat: false,
+      chatUser: null,
       lastPulled: null,
       visiblePublishedIcon: 'hidden',
       feedbackSetting: null
