@@ -35,9 +35,6 @@ class ChatView extends Component {
       }
     }).then(result=>result.json())
     .then(result=> {
-      console.log("RESULT");
-      console.log(result);
-
         result.sort((a, b) => {
           if (new Date(a.chatDate.substring(0, a.chatDate.indexOf('.')) + "Z") < new Date(b.chatDate.substring(0, b.chatDate.indexOf('.')) + "Z")) return -1;
           if (new Date(a.chatDate.substring(0, a.chatDate.indexOf('.')) + "Z") > new Date(b.chatDate.substring(0, b.chatDate.indexOf('.')) + "Z")) return 1;
@@ -101,13 +98,11 @@ class ChatView extends Component {
 
   render() {
     let that = this;
-    console.log(this.state.data);
     return (
       <div>
         <h3>{that.props.title}</h3>
         <CommentList>
           {this.state.data.map(function(item, index) {
-            console.log(item);
             var userId = item.user.id;
             return (<Comment className={that.messageFromCurrentUser(userId)} meta={new Date(item.chatDate.substring(0, item.chatDate.indexOf('.')) + "Z").toString()}
               avatar={{src: placeholder_avatar, alt: 'Avatar placeholder'}}>
