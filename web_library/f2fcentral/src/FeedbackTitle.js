@@ -9,7 +9,6 @@ import FaCogs from 'react-icons/lib/fa/cogs';
 import MdVisibilityOff from 'react-icons/lib/md/visibility-off';
 import MdCheckBoxOutlineBlank from 'react-icons/lib/md/check-box-outline-blank';
 import MdEmail from 'react-icons/lib/md/email';
-import MdNotificationsActive from 'react-icons/lib/md/notifications-active';
 import MdVisibility from 'react-icons/lib/md/visibility';
 
 import './App.css';
@@ -179,7 +178,7 @@ class FeedbackTitle extends Component {
   <div className="iconContainer">
     {this.handleVisibility()}
     <MdEmail size={35} onClick={this.changeMailSetting} color={this.state.iconColor}/>
-    <MdNotificationsActive size={35}/><FaWechat align="left" color={'#63C050'} style={{flexGrow: "1"}} onClick={this.showChatWindow} size={35}/>
+    <FaWechat align="left" color={'#63C050'} style={{flexGrow: "1"}} onClick={this.showChatWindow} size={35}/>
     <FaCogs size={35}/></div></div>);
     }
   }

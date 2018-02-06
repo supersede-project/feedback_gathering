@@ -16,7 +16,12 @@ import 'react-tabs/style/react-tabs.css';
 import 'react-accessible-accordion/dist/react-accessible-accordion.css';
 import CompanyViewFeedbackTitle from "./CompanyViewFeedbackTitle";
 import FaFileImageO from 'react-icons/lib/fa/file-image-o';
-
+import Dropzone from 'react-dropzone';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
+import MdDelete from 'react-icons/lib/md/delete';
+import MdAnnouncement from 'react-icons/lib/md/announcement';
+import ReactModal from 'react-modal/lib/components/Modal';
+import CompanyFeedbackInputForm from "./CompanyFeedbackInputForm";
 
 class CompanyViewAccordion extends Component {
 
@@ -27,27 +32,85 @@ class CompanyViewAccordion extends Component {
           loading: true,
           showChat: false,
           chatIndex: null,
-          chatTitle: ''
-        }
-        this.handleShowChat = this.handleShowChat.bind(this);
-        this.handleBackButtonPressed = this.handleBackButtonPressed.bind(this);
+          chatTitle: '',
+          filesToBeSent: [],
+          filesPreview: [],
+            printcount: 1,
+            showModal: false
+          },
+            this.handleOpenModal = this.handleOpenModal.bind(this);
+            this.handleCloseModal = this.handleCloseModal.bind(this);
+            this.createFeedback = this.createFeedback.bind(this);
+            this.fetchData = this.fetchData.bind(this);
+            this.handleShowChat = this.handleShowChat.bind(this);
+            this.handleBackButtonPressed = this.handleBackButtonPressed.bind(this);
     }
 
-    componentDidMount() {
-      var that = this;
-      fetch(process.env.REACT_APP_BASE_URL + 'en/applications/'+ sessionStorage.getItem('applicationId')+'/feedbacks/', {
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': sessionStorage.getItem('token')
-          }
-      }).then(result=>result.json())
-      .then(result=> {
-        that.setState({data: result, loading: false})
-      });
+
+    handleOpenModal(){
+        this.setState({ showModal: true});
+    }
+
+
+    handleCloseModal(){
+        this.setState({ showModal: false});
+    }
+
+    fetchData(e){
+        var that = this;
+        fetch(process.env.REACT_APP_BASE_URL + 'en/applications/'+ sessionStorage.getItem('applicationId')+'/feedbacks/', {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': sessionStorage.getItem('token')
+            }
+        }).then(result=>result.json())
+            .then(result=> {
+                that.setState({data: result, loading: false})
+            });
+    }
+
+    componentDidMount(){
+     this.fetchData(null);
+    }
+
+    openFile(){
+        return (
+        <div>
+        <Dropzone onDrop={(files) => this.onDrop(files)}/>
+            <div>Upload a new image by dropping your file here or click to select file to upload.</div>
+        </div>
+
+        )
+    }
+
+    onDrop(acceptedFiles, rejectedFiles){
+        var filesToBeSent=this.state.filesToBeSent;
+        if(filesToBeSent.length == this.state.printcount) {
+            filesToBeSent.push(acceptedFiles);
+            var filesPreview = [];
+            for(var i in filesToBeSent){
+                filesPreview.push(<div>{filesToBeSent[i][0].name}
+                <MuiThemeProvider>
+                    <a href="#"><MdDelete color="red" >clear</MdDelete>
+                    </a>
+                </MuiThemeProvider>
+                </div>
+                )}
+                this.setState({filesToBeSent, filesPreview});
+        }
+        else {
+            alert("Please select a file to upload")
+        }
+    }
+
+    createFeedback(){
+        var that = this;
+        return <ReactModal isOpen={that.state.showModal}>
+            <button onClick={that.handleCloseModal}>Close Modal</button>
+        </ReactModal>
     }
 
     handleShowChat(e) {
-      console.log(e);
       this.setState({showChat: e.showChat, chatIndex: e.index, chatTitle: e.title});
     }
 
@@ -65,7 +128,7 @@ class CompanyViewAccordion extends Component {
             if(item.textFeedbacks.length > 0 && item.categoryFeedbacks.length > 0)
             {
               return (
-                  <AccordionItem titleTag="span" title={<CompanyViewFeedbackTitle onShowChat={that.handleShowChat} feedbackId={item.id} type={item.categoryFeedbacks[0].parameterId} title={item.textFeedbacks[0].text} date={item.createdAt} status="WIP" visibility={item.visibility} likes={item.likeCount} dislikes={item.dislikeCount} commentnumber={item.commentCount}/>}>
+                  <AccordionItem titleTag="span" title={<CompanyViewFeedbackTitle published={item.published} update={that.fetchData} onShowChat={that.handleShowChat} feedbackId={item.id} type={item.categoryFeedbacks[0].parameterId} title={item.textFeedbacks[0].text} date={item.createdAt} status="WIP" visibility={item.visibility} likes={item.likeCount} dislikes={item.dislikeCount} commentnumber={item.commentCount}/>}>
                   </AccordionItem>
               )
             }
@@ -93,7 +156,8 @@ class CompanyViewAccordion extends Component {
       }
         return (
             <div className="CompanyViewAccordion">
-                <FaFileImageO/>
+                <FaFileImageO onClick={this.openFile} size={35}/>&nbsp;
+                <MdAnnouncement onClick={this.createFeedback} size={35}/>
                 <div className="CompanyFeedback">
                 <ul>
                     {toRender}

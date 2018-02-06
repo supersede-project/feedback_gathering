@@ -1,6 +1,6 @@
 .App {
   text-align: center;
-  background: #F2F2F2;
+  background: white;
 }
 
 .App-logo {
@@ -34,15 +34,6 @@
 
 .widget-container > .hide-sm {
   display: block;
-}
-
-.react-tabs {
-  color: #000;
-}
-
-.tabselected {
-  background: #1A7E92;
-  color: #FFF;
 }
 
 .MyFeedbacksTabAccordion {
