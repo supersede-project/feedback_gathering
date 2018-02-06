@@ -5,10 +5,10 @@ import FaWechat from 'react-icons/lib/fa/wechat';
 import FaLightbulbO from 'react-icons/lib/fa/lightbulb-o';
 import TiInfoLargeOutline from 'react-icons/lib/ti/info-large-outline';
 import { Widget, addResponseMessage, addUserMessage, toggleWidget } from 'react-chat-widget';
-import MdVisibilityOff from 'react-icons/lib/md/visibility-off';
+import TiGroupOutline from 'react-icons/lib/ti/group-outline';
 import TiTag from 'react-icons/lib/ti/tag';
 import MdEmail from 'react-icons/lib/md/email';
-import MdVisibility from 'react-icons/lib/md/visibility';
+import TiGroup from 'react-icons/lib/ti/group';
 
 import './App.css';
 
@@ -137,10 +137,10 @@ class FeedbackTitle extends Component {
 
   handleVisibility(){
     if(this.props.visibility === false){
-      return <MdVisibilityOff size={35} onClick={this.setVisibility}/>;
+      return <TiGroupOutline size={35} onClick={this.setVisibility}/>;
     }
     if(this.props.visibility === true){
-      return <MdVisibility size={35}/>
+      return <TiGroup size={35}/>
     }
   }
 
