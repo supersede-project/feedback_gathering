@@ -11,6 +11,7 @@ import FeedbackTitle from './FeedbackTitle';
 import FeedbackBody from './FeedbackBody';
 import FeedbackData from './FeedbackData';
 import MdNotificationsActive from 'react-icons/lib/md/notifications-active';
+import ChatView from './ChatView';
 
 
 class MyFeedbacksTabAccordion extends Component {
@@ -20,8 +21,13 @@ class MyFeedbacksTabAccordion extends Component {
         this.state = {
           data : [],
           loading: true,
+          showChat: false,
+          chatIndex: null,
+          chatTitle: ''
         }
         this.fetchData = this.fetchData.bind(this);
+        this.handleShowChat = this.handleShowChat.bind(this);
+        this.handleBackButtonPressed = this.handleBackButtonPressed.bind(this);
     }
 
     componentDidMount() {
@@ -45,16 +51,25 @@ class MyFeedbacksTabAccordion extends Component {
         return <MdNotificationsActive size={35} align="right" color='black'/>;
     }
 
+    handleShowChat(e) {
+        this.setState({showChat: e.showChat, chatIndex: e.index, chatTitle: e.title});
+    }
+
+    handleBackButtonPressed() {
+        this.setState({showChat: false, chatIndex: null, chatTitle: ''});
+    }
+
     render() {
       let toRender = null;
       var that = this;
-      if(that.state.data.length > 0) {
+      if(!that.state.showChat && that.state.data.length > 0) {
+
         toRender = <Accordion>
         {that.state.data.map(function (item, index) {
             if(item.textFeedbacks.length > 0 && item.categoryFeedbacks.length > 0)
             {
               return (
-                  <AccordionItem titleTag="span" title={<FeedbackTitle feedbackId={item.id} update={that.fetchData} type={item.categoryFeedbacks[0].parameterId} title={item.textFeedbacks[0].text} visibility={item.visibility} date={item.createdAt} status="WIP"/>}>
+                  <AccordionItem titleTag="span" title={<FeedbackTitle feedbackId={item.id} update={that.fetchData} updateSetting={that.fetchData} onShowChat={that.handleShowChat} type={item.categoryFeedbacks[0].parameterId} title={item.textFeedbacks[0].text} visibility={item.visibility} date={item.createdAt} status="WIP" likes={item.likeCount} dislikes={item.dislikeCount} commentnumber={item.commentCount}/>}>
                   </AccordionItem>
               )
             }
@@ -73,6 +88,9 @@ class MyFeedbacksTabAccordion extends Component {
         toRender = <div style={divStyle}><PulseLoader
           loading={this.state.loading}
         /></div>
+      }
+      else if(this.state.showChat) {
+          toRender = <ChatView feedbackId={this.state.chatIndex} title={this.state.chatTitle} onBackButtonPressed={this.handleBackButtonPressed}/>
       }
       else {
         toRender = <p>No Elements to show</p>;

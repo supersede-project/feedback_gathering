@@ -6,15 +6,14 @@ import FaLightbulbO from 'react-icons/lib/fa/lightbulb-o';
 import TiInfoLargeOutline from 'react-icons/lib/ti/info-large-outline';
 import FaThumbsOUp from 'react-icons/lib/fa/thumbs-o-up';
 import FaThumbsODown from 'react-icons/lib/fa/thumbs-o-down';
-import MdVisibilityOff from 'react-icons/lib/md/visibility-off';
+import TiGroupOutline from 'react-icons/lib/ti/group-outline';
 import GoCircleSlash from 'react-icons/lib/go/circle-slash';
 import TiTag from 'react-icons/lib/ti/tag';
-import MdVisibility from 'react-icons/lib/md/visibility';
+import TiGroup from 'react-icons/lib/ti/group';
 import MdEmail from 'react-icons/lib/md/email';
 import MdPublish from 'react-icons/lib/md/publish';
 
 import style from './App.css';
-import FeedbackSettings from "./FeedbackSettings";
 
 class CompanyViewFeedbackTitle extends Component {
 
@@ -23,10 +22,11 @@ class CompanyViewFeedbackTitle extends Component {
     this.state = {
       expanded: false,
       showSettings : false,
-      visibleColor : 'black',
       showChat: false,
+      chatUser: null,
       lastPulled: null,
-      visiblePublishedIcon: 'hidden'
+      visiblePublishedIcon: 'hidden',
+      feedbackSetting: null
     }
 
     this.toggleExpanded = this.toggleExpanded.bind(this);
@@ -34,6 +34,12 @@ class CompanyViewFeedbackTitle extends Component {
     this.handleNewUserMessage = this.handleNewUserMessage.bind(this);
     this.handleShowChat = this.handleShowChat.bind(this);
     this.handleVisibility = this.handleVisibility.bind(this);
+    this.fetchFeedbackSettings = this.fetchFeedbackSettings.bind(this);
+    this.handleMailIcon = this.handleMailIcon.bind(this);
+  }
+
+    componentDidMount(){
+      this.fetchFeedbackSettings();
   }
 
   handleNewUserMessage(newMessage) {
@@ -62,16 +68,6 @@ class CompanyViewFeedbackTitle extends Component {
     this.setState({expanded: !this.state.expanded});
   }
 
-  openSettings(){
-    this.setState({showSettings: true})
-    if(this.state.showSettings){
-      return <div>
-        <input type="checkbox"/>
-        <label>No notification</label>
-      </div>
-    }
-  }
-
   //bug=661, function=662, generalfeedback=663
   getIconForFeedbackType() {
     if (this.props.type === 661) {
@@ -91,14 +87,25 @@ class CompanyViewFeedbackTitle extends Component {
   }
 
   handleMailIcon(){
-    if(this.props.visibility === false){
-      return <MdEmail size={35} color='black'/>;
+        if(this.state.feedbackSetting ===  null || this.state.feedbackSetting.feedbackQuery === false) {
+              return <MdEmail size={35} color='black'/>;
+        }
+          if(this.state.feedbackSetting.feedbackQueryChannel === "Email"){
+              return <MdEmail size={35} color='green'/>;
+          }
+          else {
+              return <MdEmail size={35} color='black'/>;
+          }
+      }
+      /*if(this.state.feedbackQuery === 'Feedback-To-Feedback Central'){
+          return <MdEmail size={35} color='black'/>;
+      }
 
-    }
-    if(this.props.visibility === true){
+    if(this.state.feedbackQuery === 'Email'){
       return <MdEmail size={35} color='green'/>;
-    }
-  }
+    }*/
+
+
 
   handleVisibility(){
     if(this.props.visibility === false){
@@ -106,7 +113,7 @@ class CompanyViewFeedbackTitle extends Component {
         if(this.state.visiblePublishedIcon !== 'hidden') {
             this.setState({visiblePublishedIcon: 'hidden'});
         }
-        return <MdVisibilityOff size={35}/>;
+        return <TiGroupOutline size={35}/>;
       }
     }
 
@@ -115,7 +122,7 @@ class CompanyViewFeedbackTitle extends Component {
         if(this.state.visiblePublishedIcon !== 'visible') {
             this.setState({visiblePublishedIcon: 'visible'});
         }
-        return <MdVisibilityOff size={35}/>;
+        return <TiGroupOutline size={35}/>;
       }
     }
     if(this.props.visibility === true) {
@@ -123,14 +130,29 @@ class CompanyViewFeedbackTitle extends Component {
         if(this.state.visiblePublishedIcon !== 'hidden') {
             this.setState({visiblePublishedIcon: 'hidden'});
         }
-        return <MdVisibility size={35}/>
+        return <TiGroup size={35}/>
       }
     }
   }
 
+  fetchFeedbackSettings(){
+      //feedbacksettings/feedback/
+      var that = this;
+      fetch(process.env.REACT_APP_BASE_URL + 'en/applications/'+ sessionStorage.getItem('applicationId')+'/feedbacks/feedbacksettings/feedback/' + this.props.feedbackId, {
+          method: 'GET',
+          headers: {
+              'Content-Type': 'application/json',
+              'Authorization': sessionStorage.getItem('token')
+          }
+      }).then(result=>result.json())
+          .then(result=> {
+               that.setState({feedbackSetting: result})
+          });
+  }
+
   publishFeedback(){
     var that = this;
-    fetch(process.env.REACT_APP_BASE_URL + 'en/applications/'+ sessionStorage.getItem('applicationId')+'/feedbacks/published/' + that.props.feedbackId, {
+    fetch(process.env.REACT_APP_BASE_URL + 'en/applications/'+ sessionStorage.getItem('applicationId')+'/feedbacks/published/' + this.props.feedbackId, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -139,7 +161,7 @@ class CompanyViewFeedbackTitle extends Component {
       body: JSON.stringify({
         published: true
       })
-    }).then(result=> that.props.update());
+    }).then(result=> this.props.update());
     e.stopPropagation();
   }
 

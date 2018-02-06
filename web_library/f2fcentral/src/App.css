@@ -93,6 +93,16 @@ button {
 
 .usermessage {
   background: #82CAFF;
+  float: inherit;
+  line-height: 1.6;
+  margin-left: 38%;
+}
+
+.oppositionmessage{
+  background: #DAE2F3;
+  float: inherit;
+  line-height: 1.6;
+  margin-right: 38%;
 }
 
 .Select {
