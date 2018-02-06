@@ -8,6 +8,7 @@ import React, {Component} from 'react';
 import { PulseLoader } from 'react-spinners';
 
 import { Accordion, AccordionItem } from 'react-sanfona';
+import ChatView from './ChatView';
 
 import './App.css';
 import 'react-tabs/style/react-tabs.css';
@@ -23,8 +24,13 @@ class CompanyViewAccordion extends Component {
         super(props);
         this.state = {
           data : [],
-          loading: true
+          loading: true,
+          showChat: false,
+          chatIndex: null,
+          chatTitle: ''
         }
+        this.handleShowChat = this.handleShowChat.bind(this);
+        this.handleBackButtonPressed = this.handleBackButtonPressed.bind(this);
     }
 
     componentDidMount() {
@@ -40,17 +46,26 @@ class CompanyViewAccordion extends Component {
       });
     }
 
+    handleShowChat(e) {
+      console.log(e);
+      this.setState({showChat: e.showChat, chatIndex: e.index, chatTitle: e.title});
+    }
+
+    handleBackButtonPressed() {
+      this.setState({showChat: false, chatIndex: null, chatTitle: ''});
+    }
+
     render() {
       let toRender = null;
       var that = this;
-      if(that.state.data.length > 0) {
+      if(!that.state.showChat && that.state.data.length > 0) {
 
         toRender = <Accordion>
         {that.state.data.map(function (item, index) {
             if(item.textFeedbacks.length > 0 && item.categoryFeedbacks.length > 0)
             {
               return (
-                  <AccordionItem titleTag="span" title={<CompanyViewFeedbackTitle type={item.categoryFeedbacks[0].parameterId} title={item.textFeedbacks[0].text} date={item.createdAt} status="WIP" visibility={item.visibility} likes={item.likeCount} dislikes={item.dislikeCount} commentnumber={item.commentCount}/>}>
+                  <AccordionItem titleTag="span" title={<CompanyViewFeedbackTitle onShowChat={that.handleShowChat} feedbackId={item.id} type={item.categoryFeedbacks[0].parameterId} title={item.textFeedbacks[0].text} date={item.createdAt} status="WIP" visibility={item.visibility} likes={item.likeCount} dislikes={item.dislikeCount} commentnumber={item.commentCount}/>}>
                   </AccordionItem>
               )
             }
@@ -69,6 +84,9 @@ class CompanyViewAccordion extends Component {
         toRender = <div style={divStyle}><PulseLoader
           loading={this.state.loading}
         /></div>
+      }
+      else if(this.state.showChat) {
+        toRender = <ChatView feedbackId={this.state.chatIndex} title={this.state.chatTitle} onBackButtonPressed={this.handleBackButtonPressed}/>
       }
       else {
         toRender = <p>No Elements to show</p>;

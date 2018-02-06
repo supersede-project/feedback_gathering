@@ -32,10 +32,6 @@ class FeedbackTitle extends Component {
     this.handleNewUserMessage = this.handleNewUserMessage.bind(this);
   }
 
-  componentDidMount() {
-
-  }
-
   handleNewUserMessage(newMessage) {
     var that = this;
     fetch(process.env.REACT_APP_BASE_URL + 'en/applications/' + sessionStorage.getItem('applicationId') + '/feedbacks/feedback_chat', {
