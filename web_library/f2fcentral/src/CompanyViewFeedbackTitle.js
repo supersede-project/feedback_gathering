@@ -6,7 +6,6 @@ import FaLightbulbO from 'react-icons/lib/fa/lightbulb-o';
 import FaHandPeaceO from 'react-icons/lib/fa/hand-peace-o';
 import FaThumbsOUp from 'react-icons/lib/fa/thumbs-o-up';
 import FaThumbsODown from 'react-icons/lib/fa/thumbs-o-down';
-import { Widget, addResponseMessage, addUserMessage, toggleWidget } from 'react-chat-widget';
 import FaCogs from 'react-icons/lib/fa/cogs';
 import MdVisibilityOff from 'react-icons/lib/md/visibility-off';
 import GoCircleSlash from 'react-icons/lib/go/circle-slash';
@@ -34,8 +33,7 @@ import FeedbackSettings from "./FeedbackSettings";
     this.toggleExpanded = this.toggleExpanded.bind(this);
     this.openSettings = this.openSettings.bind(this);
     this.closeThread = this.closeThread.bind(this);
-    this.enableVisibility=this.enableVisibility.bind(this);
-    this.fetchResponses = this.fetchResponses.bind(this);
+    //this.enableVisibility=this.enableVisibility.bind(this);
     this.handleNewUserMessage = this.handleNewUserMessage.bind(this);
     this.handleShowChat = this.handleShowChat.bind(this);
     this.handleVisibility = this.handleVisibility.bind(this);
@@ -95,35 +93,6 @@ import FeedbackSettings from "./FeedbackSettings";
   closeThread(e){
   }
 
-  showChatWindow(e) {
-    if(!this.state.showChat) {
-      fetch(process.env.REACT_APP_BASE_URL + 'en/applications/'+ sessionStorage.getItem('applicationId')+'/feedbacks/feedback_chat/feedback/' + this.props.feedbackId, {
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': sessionStorage.getItem('token')
-        }
-      }).then(result=>result.json())
-      .then(result=> {
-        result.sort((a, b) => {
-          if (new Date(a.chatDate.substring(0, a.chatDate.indexOf('.')) + "Z") < new Date(b.chatDate.substring(0, b.chatDate.indexOf('.')) + "Z")) return -1;
-          if (new Date(a.chatDate.substring(0, a.chatDate.indexOf('.')) + "Z") > new Date(b.chatDate.substring(0, b.chatDate.indexOf('.')) + "Z")) return 1;
-          return 0;
-        })
-        result.map((item, index) => {
-          if(item.user.id === parseInt(sessionStorage.getItem('userId'))) {
-            addUserMessage(item.chatText);
-          }
-          else {
-            addResponseMessage(item.chatText);
-          }
-        })
-      });
-    }
-    this.setState({showChat: true, lastPulled: new Date()});
-    toggleWidget();
-    setInterval(this.fetchResponses, 3000);
-  }
-
   handleMailIcon(){
       if(this.props.visibility === false){
          return <MdEmail size={35} color='black'/>;
@@ -174,9 +143,6 @@ import FeedbackSettings from "./FeedbackSettings";
   render()
   {
     var showChat = null;
-    if(this.state.showChat) {
-      showChat = <Widget title={this.props.title} subtitle="" handleNewUserMessage={this.handleNewUserMessage}/>
-    }
       return (<div style={{display: "flex", justifyContent: "flex-start"}}><h5 align="left" style={{
           flexGrow: 2,
           fontSize: 12,
