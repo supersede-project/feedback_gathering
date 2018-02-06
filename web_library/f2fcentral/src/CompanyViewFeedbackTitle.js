@@ -161,7 +161,7 @@ class CompanyViewFeedbackTitle extends Component {
       body: JSON.stringify({
         published: true
       })
-    }).then(result=> that.props.update());
+    }).then(result=> this.props.update());
     e.stopPropagation();
   }
 

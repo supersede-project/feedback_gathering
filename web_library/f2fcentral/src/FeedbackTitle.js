@@ -20,15 +20,21 @@ class FeedbackTitle extends Component {
       expanded: false,
       iconColor: 'black',
       showChat: false,
+      feedbackSetting : null,
       lastPulled: null
     }
     this.toggleExpanded = this.toggleExpanded.bind(this);
-    this.changeMailSetting = this.changeMailSetting.bind(this);
     this.setVisibility = this.setVisibility.bind(this);
     this.handleNewUserMessage = this.handleNewUserMessage.bind(this);
       this.handleShowChat = this.handleShowChat.bind(this);
+      this.handleMailIcon = this.handleMailIcon.bind(this);
+      this.fetchFeedbackSettings = this.fetchFeedbackSettings.bind(this);
 /*      this.showChatWindow = this.showChatWindow.bind(this);
       this.fetchResponses = this.fetchResponses.bind(this);*/
+  }
+
+    componentDidMount(){
+     this.fetchFeedbackSettings();
   }
 
   handleNewUserMessage(newMessage) {
@@ -72,73 +78,6 @@ class FeedbackTitle extends Component {
     return <TiTag size={35} padding={75}/>;
   }
 
-  /*showChatWindow(e) {
-    if(!this.state.showChat) {
-      fetch(process.env.REACT_APP_BASE_URL + 'en/applications/'+ sessionStorage.getItem('applicationId')+'/feedbacks/feedback_chat/feedback/' + this.props.feedbackId, {
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': sessionStorage.getItem('token')
-        }
-      }).then(result=>result.json())
-      .then(result=> {
-        result.sort((a, b) => {
-          if (new Date(a.chatDate.substring(0, a.chatDate.indexOf('.')) + "Z") < new Date(b.chatDate.substring(0, b.chatDate.indexOf('.')) + "Z")) return -1;
-          if (new Date(a.chatDate.substring(0, a.chatDate.indexOf('.')) + "Z") > new Date(b.chatDate.substring(0, b.chatDate.indexOf('.')) + "Z")) return 1;
-          return 0;
-        })
-        result.map((item, index) => {
-          if(item.user.id === parseInt(sessionStorage.getItem('userId'))) {
-            addUserMessage(item.chatText);
-          }
-          else {
-            addResponseMessage(item.chatText);
-          }
-        })
-      });
-    }
-    this.setState({showChat: true, lastPulled: new Date()});
-    toggleWidget();
-    setInterval(this.fetchResponses, 3000);
-  }*/
-
-  /*fetchResponses() {
-    var that = this;
-    fetch(process.env.REACT_APP_BASE_URL + 'en/applications/'+ sessionStorage.getItem('applicationId')+'/feedbacks/feedback_chat/feedback/' + this.props.feedbackId, {
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': sessionStorage.getItem('token')
-      }
-    }).then(result=>result.json())
-    .then(result=> {
-      result.sort((a, b) => {
-        if (new Date(a.chatDate.substring(0, a.chatDate.indexOf('.')) + "Z") < new Date(b.chatDate.substring(0, b.chatDate.indexOf('.')) + "Z")) return -1;
-        if (new Date(a.chatDate.substring(0, a.chatDate.indexOf('.')) + "Z") > new Date(b.chatDate.substring(0, b.chatDate.indexOf('.')) + "Z")) return 1;
-        return 0;
-      })
-      result.map((item, index) => {
-        if(that.state.lastPulled < new Date(item.chatDate.substring(0, item.chatDate.indexOf('.')) + "Z") && item.user.id !== sessionStorage.getItem('userId')) {
-          addResponseMessage(item.chatText);
-        }
-      })
-    })
-    that.setState({lastPulled: new Date()});
-  }*/
-
-  changeMailSetting(){
-    if(this.state.iconColor==='black') {
-      this.setState({
-        iconColor: 'green',
-
-
-      });
-    }
-    if(this.state.iconColor==='green'){
-      this.setState({
-        iconColor: 'black'
-      });
-    }
-  }
-
   handleVisibility(){
     if(this.props.visibility === false){
       return <TiGroupOutline size={35} onClick={this.setVisibility}/>;
@@ -163,6 +102,51 @@ class FeedbackTitle extends Component {
     e.stopPropagation();
   }
 
+    handleMailIcon(){
+        if(this.state.feedbackSetting ===  null || this.state.feedbackSetting.feedbackQuery === false) {
+            return <MdEmail size={35} color='black' onClick={this.changeMailSetting}/>;
+        }
+        if(this.state.feedbackSetting.feedbackQueryChannel === "Email"){
+            return <MdEmail size={35} color='green' onClick={this.changeMailSetting}/>;
+        }
+        else {
+            return <MdEmail size={35} color='black' onClick={this.changeMailSetting}/>;
+        }
+    }
+
+    fetchFeedbackSettings(){
+        var that = this;
+        fetch(process.env.REACT_APP_BASE_URL + 'en/applications/'+ sessionStorage.getItem('applicationId')+'/feedbacks/feedbacksettings/feedback/' + this.props.feedbackId, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': sessionStorage.getItem('token')
+            }
+        }).then(result=>result.json())
+            .then(result=> {
+                that.setState({feedbackSetting: result})
+            });
+    }
+
+    changeMailSetting(e){
+        var that = this;
+        fetch(process.env.REACT_APP_BASE_URL + 'en/applications/'+ sessionStorage.getItem('applicationId')+'/feedbacks/feedbacksettings/',  {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': sessionStorage.getItem('token')
+            },
+            body: JSON.stringify({
+                statusUpdates: true,
+                statusUpdatesContactChannel: 'Email',
+                feedbackQuery: true,
+                feedbackQueryChannel: 'Email',
+                feedback_id: that.props.feedbackId
+            })
+        }).then(result=> that.props.updateSetting());
+        e.stopPropagation();
+    }
+
   render()
   {
     var showChat = null;
@@ -180,7 +164,10 @@ class FeedbackTitle extends Component {
   {showChat}
   <div className="iconContainer">
     {this.handleVisibility()}
+    {/*
     <MdEmail size={35} onClick={this.changeMailSetting} color={this.state.iconColor}/>
+    */}
+      {this.handleMailIcon()}
     <FaWechat align="left" color={'#63C050'} style={{flexGrow: "1"}} onClick={this.handleShowChat} size={35}/>
     </div></div>);
     }

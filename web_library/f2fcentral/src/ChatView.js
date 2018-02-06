@@ -104,8 +104,7 @@ class ChatView extends Component {
         <CommentList>
           {this.state.data.map(function(item, index) {
             var userId = item.user.id;
-            return (<Comment className={that.messageFromCurrentUser(userId)} meta={new Date(item.chatDate.substring(0, item.chatDate.indexOf('.')) + "Z").toString()}
-              avatar={{src: placeholder_avatar, alt: 'Avatar placeholder'}}>
+            return (<Comment className={that.messageFromCurrentUser(userId)} meta={new Date(item.chatDate.substring(0, item.chatDate.indexOf('.')) + "Z").toString()}>
               <p>
                 {item.chatText}
               </p>
@@ -113,7 +112,7 @@ class ChatView extends Component {
           })}
         </CommentList>
         <div className="createCommentContainer">
-          <input value={this.state.formValue} type="text" onChange={this.handleInputChange} placeholder="Type message..."/>
+          <input value={this.state.formValue} type="text" onChange={this.handleInputChange} placeholder="Please enter your response here..."/>
           <button type="button" onClick={(e) => this.addChatEntry()}>Send</button>
         </div>
         <button type="button" onClick={this.backButtonPressed}>Back</button>
