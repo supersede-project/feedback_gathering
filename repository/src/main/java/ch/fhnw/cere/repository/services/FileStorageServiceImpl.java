@@ -9,6 +9,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -88,6 +89,32 @@ public class FileStorageServiceImpl implements FileStorageService {
             }
         }
         return fileFeedbacksWithPath;
+    }
+
+    public List<File> getFeedbackFiles(Feedback feedback, List<? extends FileFeedback> fileFeedbacks, MultiValueMap<String, MultipartFile> parts) throws IOException {
+        if(fileFeedbacks == null) {
+            return null;
+        }
+
+        List<File> files = new ArrayList<>();
+
+        List<FileFeedback> fileFeedbacksWithPath = new ArrayList<>();
+        for(FileFeedback fileFeedback : fileFeedbacks) {
+            if(parts.containsKey(fileFeedback.getPart())) {
+                MultipartFile file = parts.getFirst(fileFeedback.getPart());
+                files.add(convert(file));
+            }
+        }
+        return files;
+    }
+
+    private File convert(MultipartFile file) throws IOException {
+        File convFile = new File(file.getOriginalFilename());
+        convFile.createNewFile();
+        FileOutputStream fos = new FileOutputStream(convFile);
+        fos.write(file.getBytes());
+        fos.close();
+        return convFile;
     }
 
     private void createDirectories() {
