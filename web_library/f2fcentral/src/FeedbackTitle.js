@@ -9,8 +9,10 @@ import TiGroupOutline from 'react-icons/lib/ti/group-outline';
 import TiTag from 'react-icons/lib/ti/tag';
 import MdEmail from 'react-icons/lib/md/email';
 import TiGroup from 'react-icons/lib/ti/group';
+import FaThumbsOUp from 'react-icons/lib/fa/thumbs-o-up';
+import FaThumbsODown from 'react-icons/lib/fa/thumbs-o-down';
 
-import './App.css';
+import style from './App.css';
 
 class FeedbackTitle extends Component {
 
@@ -160,6 +162,14 @@ class FeedbackTitle extends Component {
     }} onClick={this.toggleExpanded}>{this.getIconForFeedbackType()}&nbsp; {(!this.state.expanded && this.props.title.length > 20)? this.props.title.substring(0, 20) + "...": this.props.title}
     <div><div align="left" style={{fontSize: 10}}>sent on {this.props.date}</div>
     <div align="left" style={{fontSize: 10, color: '#169BDD'}}>Status: {this.props.status}</div>
+      <div align="left" style={{fontSize: 10, color: '#169BDD'}}>Forum activity:
+        <FaThumbsOUp size={20} color={'black'} padding={10}/>
+        <span className={style.counts}>{this.props.likes}</span>
+        <FaThumbsODown size={20} color={'black'} padding={10}/>
+        <span className={style.counts}>{this.props.dislikes}</span>
+        <FaWechat size={20} color={'#63C050'} padding={10}/>
+        <span className={style.counts}>{this.props.commentnumber}</span>
+      </div>
   </div></h5>
   {showChat}
   <div className="iconContainer">

@@ -84,6 +84,8 @@ if(!isset($admin_user) || $admin_user === '') {
     -->
     <!--<link rel="stylesheet" href="/dist/jqueryui/jquery-ui.min.css"/>-->
     <link rel="stylesheet" href="/dist/main.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
+
 </head>
 
 <body class="co2online secure cmd_content action_bereichePage">
@@ -394,8 +396,9 @@ if(!isset($admin_user) || $admin_user === '') {
                 </header>
                 <!--###endheader###-->
                 <div id="f2fcentral-container">
-                    <button type="button" id="openF2fcentral">ClickMe</button>
-                    <div id="f2fcentral"></div>
+                     <!--<button type="button" id="openF2fcentral">ClickMe</button>-->
+                     <div class="fa fa-user" style="font-size:50px" id="openF2fcentral"}></div>
+                     <div id="f2fcentral"></div>
                 </div>
                 <!--###startnav###-->
                 <div class="row">
