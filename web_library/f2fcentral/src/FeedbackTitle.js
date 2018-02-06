@@ -1,13 +1,12 @@
 import React, {Component} from 'react';
 
-import FaBug from 'react-icons/lib/fa/bug';
+import TiInfoOutline from 'react-icons/lib/ti/info-outline';
 import FaWechat from 'react-icons/lib/fa/wechat';
 import FaLightbulbO from 'react-icons/lib/fa/lightbulb-o';
-import FaHandPeaceO from 'react-icons/lib/fa/hand-peace-o';
+import TiInfoLargeOutline from 'react-icons/lib/ti/info-large-outline';
 import { Widget, addResponseMessage, addUserMessage, toggleWidget } from 'react-chat-widget';
-import FaCogs from 'react-icons/lib/fa/cogs';
 import MdVisibilityOff from 'react-icons/lib/md/visibility-off';
-import MdCheckBoxOutlineBlank from 'react-icons/lib/md/check-box-outline-blank';
+import TiTag from 'react-icons/lib/ti/tag';
 import MdEmail from 'react-icons/lib/md/email';
 import MdVisibility from 'react-icons/lib/md/visibility';
 
@@ -57,16 +56,16 @@ class FeedbackTitle extends Component {
   //bug=661, function=662, generalfeedback=663
   getIconForFeedbackType() {
     if (this.props.type === 661) {
-      return <FaBug size={35} padding={75}/>;
+      return <TiInfoOutline size={35} padding={75}/>;
     }
 
     if (this.props.type === 662) {
       return <FaLightbulbO size={35} padding={75}/>;
     }
     if(this.props.type === 663) {
-      return <FaHandPeaceO size={35} padding={75}/>;
+      return <TiInfoLargeOutline size={35} padding={75}/>;
     }
-    return <MdCheckBoxOutlineBlank size={35} padding={75} visibility="hidden"/>;
+    return <TiTag size={35} padding={75}/>;
   }
 
   showChatWindow(e) {
@@ -179,7 +178,7 @@ class FeedbackTitle extends Component {
     {this.handleVisibility()}
     <MdEmail size={35} onClick={this.changeMailSetting} color={this.state.iconColor}/>
     <FaWechat align="left" color={'#63C050'} style={{flexGrow: "1"}} onClick={this.showChatWindow} size={35}/>
-    <FaCogs size={35}/></div></div>);
+    </div></div>);
     }
   }
 

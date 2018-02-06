@@ -1,12 +1,12 @@
 import React, {Component} from 'react';
 
-import FaBug from 'react-icons/lib/fa/bug';
+import TiInfoOutline from 'react-icons/lib/ti/info-outline';
 import FaThumbsOUp from 'react-icons/lib/fa/thumbs-o-up';
 import FaThumbsODown from 'react-icons/lib/fa/thumbs-o-down';
 import FaWechat from 'react-icons/lib/fa/wechat';
 import FaLightbulbO from 'react-icons/lib/fa/lightbulb-o';
-import FaHandPeaceO from 'react-icons/lib/fa/hand-peace-o';
-import MdCheckBoxOutlineBlank from 'react-icons/lib/md/check-box-outline-blank';
+import TiInfoLargeOutline from 'react-icons/lib/ti/info-large-outline';
+import TiTag from 'react-icons/lib/ti/tag';
 
 
 import style from './App.css';
@@ -35,16 +35,16 @@ class ForumTitle extends Component {
 
     getIconForFeedbackType() {
         if (this.props.type === 661) {
-            return <FaBug size={35} padding={75}/>;
+            return <TiInfoOutline size={35} padding={75}/>;
         }
 
         if (this.props.type === 662) {
             return <FaLightbulbO size={35} padding={75}/>;
         }
         if(this.props.type === 663) {
-            return <FaHandPeaceO size={35} padding={75}/>;
+            return <TiInfoLargeOutline size={35} padding={75}/>;
         }
-        return <MdCheckBoxOutlineBlank size={35} padding={75} visibility="hidden"/>;
+        return <TiTag size={35} padding={75}/>;
     }
 
     addLike(e) {

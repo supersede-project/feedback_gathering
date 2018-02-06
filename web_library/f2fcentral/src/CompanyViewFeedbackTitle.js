@@ -1,15 +1,14 @@
 import React, {Component} from 'react';
 
-import FaBug from 'react-icons/lib/fa/bug';
+import TiInfoOutline from 'react-icons/lib/ti/info-outline';
 import FaWechat from 'react-icons/lib/fa/wechat';
 import FaLightbulbO from 'react-icons/lib/fa/lightbulb-o';
-import FaHandPeaceO from 'react-icons/lib/fa/hand-peace-o';
+import TiInfoLargeOutline from 'react-icons/lib/ti/info-large-outline';
 import FaThumbsOUp from 'react-icons/lib/fa/thumbs-o-up';
 import FaThumbsODown from 'react-icons/lib/fa/thumbs-o-down';
-import FaCogs from 'react-icons/lib/fa/cogs';
 import MdVisibilityOff from 'react-icons/lib/md/visibility-off';
 import GoCircleSlash from 'react-icons/lib/go/circle-slash';
-import MdCheckBoxOutlineBlank from 'react-icons/lib/md/check-box-outline-blank';
+import TiTag from 'react-icons/lib/ti/tag';
 import MdVisibility from 'react-icons/lib/md/visibility';
 import MdEmail from 'react-icons/lib/md/email';
 import MdPublish from 'react-icons/lib/md/publish';
@@ -31,7 +30,6 @@ class CompanyViewFeedbackTitle extends Component {
     }
 
     this.toggleExpanded = this.toggleExpanded.bind(this);
-    this.openSettings = this.openSettings.bind(this);
     this.closeThread = this.closeThread.bind(this);
     this.handleNewUserMessage = this.handleNewUserMessage.bind(this);
     this.handleShowChat = this.handleShowChat.bind(this);
@@ -77,16 +75,16 @@ class CompanyViewFeedbackTitle extends Component {
   //bug=661, function=662, generalfeedback=663
   getIconForFeedbackType() {
     if (this.props.type === 661) {
-      return <FaBug size={35} padding={75}/>;
+      return <TiInfoOutline size={35} padding={75}/>;
     }
 
     if (this.props.type === 662) {
       return <FaLightbulbO size={35} padding={75}/>;
     }
     if(this.props.type === 663) {
-      return <FaHandPeaceO size={35} padding={75}/>;
+      return <TiInfoLargeOutline size={35} padding={75}/>;
     }
-    return <MdCheckBoxOutlineBlank size={35} padding={75} visibility="hidden"/>;
+    return <TiTag size={35} padding={75}/>;
   }
 
   closeThread(e){
@@ -169,7 +167,6 @@ class CompanyViewFeedbackTitle extends Component {
       <MdPublish className={style.counts} size={20} padding={10} visibility={this.state.visiblePublishedIcon} onClick={this.publishFeedback}/>
       <FaWechat align="left" size={35} color={'#63C050'} style={{flexGrow: "1"}} onClick={this.handleShowChat}/>
       {this.handleMailIcon()}
-      <FaCogs size={35} onClick={this.openSettings.bind(this)}/>
     </div></div>);
   }
 }
