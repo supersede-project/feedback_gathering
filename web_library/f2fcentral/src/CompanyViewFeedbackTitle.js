@@ -39,6 +39,7 @@ class CompanyViewFeedbackTitle extends Component {
     this.handleMailIcon = this.handleMailIcon.bind(this);
     this.fetchFeedbackStatus = this.fetchFeedbackStatus.bind(this);
     this.handleFeedbackStatus = this.handleFeedbackStatus.bind(this);
+    this.publishFeedback = this.publishFeedback.bind(this);
   }
 
     componentDidMount(){
