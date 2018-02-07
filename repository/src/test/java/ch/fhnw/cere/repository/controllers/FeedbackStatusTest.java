@@ -104,7 +104,7 @@ public class FeedbackStatusTest extends BaseIntegrationTest {
                 "/status/feedback/"+feedback1.getId())
                 .header("Authorization", adminJWTToken))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize(1)));
+                .andExpect(jsonPath("$.feedback.id", is((int) feedback1.getId())));
 
         this.mockMvc.perform(get(basePathEn + "applications/" + 1 + "/feedbacks" +
                 "/status/state/status1")
