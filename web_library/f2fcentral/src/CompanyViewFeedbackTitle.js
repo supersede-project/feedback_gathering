@@ -155,7 +155,7 @@ class CompanyViewFeedbackTitle extends Component {
           });
   }
 
-  publishFeedback(){
+  publishFeedback(e){
     var that = this;
     fetch(process.env.REACT_APP_BASE_URL + 'en/applications/'+ sessionStorage.getItem('applicationId')+'/feedbacks/published/' + this.props.feedbackId, {
       method: 'PUT',
