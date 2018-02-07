@@ -38,7 +38,7 @@ public class FeedbackStatusController {
 
     @PreAuthorize("@securityService.hasAdminPermission(#applicationId)")
     @RequestMapping(method = RequestMethod.GET, value = "/status/feedback/{feedbackId}")
-    public List<FeedbackStatus> getStatusForFeedback(@PathVariable long applicationId,
+    public FeedbackStatus getStatusForFeedback(@PathVariable long applicationId,
                                                      @PathVariable long feedbackId) {
         return feedbackStatusService.findByFeedbackId(feedbackId);
     }
@@ -53,11 +53,18 @@ public class FeedbackStatusController {
     @ResponseStatus(HttpStatus.CREATED)
     @RequestMapping(method = RequestMethod.POST, value = "/status")
     public FeedbackStatus createStatus(HttpEntity<String> statusJSON) {
-        LOGGER.info("Create Like: " + statusJSON.getBody());
         if(statusJSON.getBody() != null){
             JSONObject object = new JSONObject(statusJSON.getBody());
             long feedbackId = object.getLong("feedback_id");
             String status = object.getString("status");
+
+            if(feedbackStatusService.findByFeedbackId(feedbackId) != null){
+                FeedbackStatus existing = feedbackStatusService.find(feedbackStatusService.findByFeedbackId(feedbackId)
+                        .getId());
+
+                existing.setStatus(status);
+                return feedbackStatusService.save(existing);
+            }
 
             FeedbackStatus feedbackStatus = new FeedbackStatus();
             feedbackStatus.setFeedback(feedbackService.find(feedbackId));

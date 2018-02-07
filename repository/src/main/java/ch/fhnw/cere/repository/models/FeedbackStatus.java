@@ -41,6 +41,11 @@ public class FeedbackStatus {
         date = new Date();
     }
 
+    @PreUpdate
+    protected void onUpdate() {
+        date = new Date();
+    }
+
 
     public FeedbackStatus() {
     }
