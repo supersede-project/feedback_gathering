@@ -23,6 +23,7 @@ class FeedbackTitle extends Component {
       iconColor: 'black',
       showChat: false,
       feedbackSetting : null,
+      feedbackStatus : null,
       lastPulled: null
     }
     this.toggleExpanded = this.toggleExpanded.bind(this);
@@ -31,12 +32,14 @@ class FeedbackTitle extends Component {
       this.handleShowChat = this.handleShowChat.bind(this);
       this.handleMailIcon = this.handleMailIcon.bind(this);
       this.fetchFeedbackSettings = this.fetchFeedbackSettings.bind(this);
-/*      this.showChatWindow = this.showChatWindow.bind(this);
-      this.fetchResponses = this.fetchResponses.bind(this);*/
+      this.handleFeedbackStatus = this.handleFeedbackStatus.bind(this);
+
   }
 
+  //Ensure request is sent upon loading of component
     componentDidMount(){
      this.fetchFeedbackSettings();
+     this.fetchFeedbackStatus();
   }
 
   handleNewUserMessage(newMessage) {
@@ -149,6 +152,43 @@ class FeedbackTitle extends Component {
         e.stopPropagation();
     }
 
+    fetchFeedbackStatus(){
+        var that = this;
+        fetch(process.env.REACT_APP_BASE_URL + 'en/applications/'+ sessionStorage.getItem('applicationId')+'/feedbacks/status/feedback/' + this.props.feedbackId, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': sessionStorage.getItem('token')
+            }
+        }).then(result=>result.json())
+            .then(result=> {
+                that.setState({feedbackStatus: result})
+            });
+    }
+
+    handleFeedbackStatus(){
+        //var that = this;
+        if(this.state.feedbackStatus === null || this.state.feedbackStatus.status === null){
+            return <label className={style.statusunknown}>Status loading</label>
+        }
+        if(this.state.feedbackStatus.status === 'completed'){
+            return <label className={style.statuscomplete}>Completed</label>
+        }
+        if(this.state.feedbackStatus.status === 'in_progress'){
+            return <label className={style.statusprogress}>In Progress</label>
+        }
+        if(this.state.feedbackStatus.status === 'declined'){
+            return <label className={style.statusdeclined}>Declined</label>
+        }
+        if(this.state.feedbackStatus.status === 'received'){
+            return <label className={style.statusreceived}>Received</label>
+        }
+        else {
+            return <label className={style.statusunknown}>No Status available</label>
+        }
+    }
+
+
   render()
   {
     var showChat = null;
@@ -160,8 +200,8 @@ class FeedbackTitle extends Component {
       fontSize: 12,
       fontStyle: 'italic'
     }} onClick={this.toggleExpanded}>{this.getIconForFeedbackType()}&nbsp; {(!this.state.expanded && this.props.title.length > 20)? this.props.title.substring(0, 20) + "...": this.props.title}
-    <div><div align="left" style={{fontSize: 10}}>sent on {this.props.date}</div>
-    <div align="left" style={{fontSize: 10, color: '#169BDD'}}>Status: {this.props.status}</div>
+    <div className={style.spacingstyle}><div align="left" style={{fontSize: 10}}>sent on {this.props.date}</div>
+    <div align="left" style={{fontSize: 10, color: '#169BDD'}}>Status: {this.handleFeedbackStatus()}</div>
       <div align="left" style={{fontSize: 10, color: '#169BDD'}}>Forum activity:
         <FaThumbsOUp size={20} color={'black'} padding={10}/>
         <span className={style.counts}>{this.props.likes}</span>

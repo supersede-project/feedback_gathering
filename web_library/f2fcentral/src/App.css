@@ -133,6 +133,25 @@ button {
   flex-grow: 1;
 }
 
+.forumIconContainer {
+  display: inline-block;
+}
+
+.forumIconContainer svg {
+  margin-left: 10px;
+  flex-grow: 1;
+}
+
+.forumIconContainer svg:first-child {
+  margin-left: 0px;
+}
+
+.forumIconContainer .thumbsIconContainer {
+  position: relative;
+  margin-left: 8px;
+  flex-grow: 1;
+}
+
 .companyIconContainer {
   display: flex;
 }
@@ -200,6 +219,50 @@ button {
   background-color: white;
   overflow: hidden;
   padding: 0 18px;
+}
+
+.spacingstyle{
+  line-height: 200%;
+}
+
+.statuscomplete{
+  border: 1px solid #333333;
+  padding: 3px 7px;
+  background-image: linear-gradient(180deg, #009933,  #00e64d);
+  fontSize: 8px;
+  line-height: 200%;
+}
+
+.statusprogress{
+  border: 1px solid #333333;
+  padding: 3px 7px;
+  background-image: linear-gradient(180deg, #ff884d, #ffbb99);
+  fontSize: 8px;
+  line-height: 200%;
+}
+
+.statusdeclined{
+  border: 1px solid #333333;
+  padding: 3px 7px;
+  background-image: linear-gradient(180deg, #b3003b, #ff1a66);
+  fontSize: 8px;
+  line-height: 200%;
+}
+
+.statusreceived{
+  border: 1px solid #333333;
+  padding: 3px 7px;
+  background-image: linear-gradient(180deg, #1a8cff,  #99ccff);
+  fontSize: 8px;
+  line-height: 200%;
+}
+
+.statusunknown{
+  border: 1px solid #333333;
+  padding: 3px 7px;
+  background-image: linear-gradient(180deg, #fff, #ddd 40%, #ccc);
+  fontSize: 8px;
+  line-height: 200%;
 }
 
 @keyframes App-logo-spin {

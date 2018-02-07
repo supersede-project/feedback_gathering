@@ -19,9 +19,11 @@ class ForumTitle extends Component {
         this.addLike = this.addLike.bind(this);
         this.addDislike = this.addDislike.bind(this);
         this.state = {
+            expanded: false,
             thumbsUp: parseInt(this.props.thumbsUp),
             thumbsDown: parseInt(this.props.thumbsDown)
         }
+        this.toggleExpanded = this.toggleExpanded.bind(this);
     }
 
     componentWillReceiveProps(nextProps) {
@@ -83,20 +85,27 @@ class ForumTitle extends Component {
         e.stopPropagation();
     }
 
+    toggleExpanded()
+    {
+        this.setState({expanded: !this.state.expanded});
+    }
+
+
+
     render() {
-        return (<div style={{display: "flex", justifyContent: "flex-start"}}>
-            <h5 align="left" style={{
-                flexGrow: 5,
-                fontSize: 12,
-                fontStyle: 'italic'
-            }}>{this.getIconForFeedbackType(this.props.type)}&nbsp; {this.props.title}</h5>
-            <div className={style.iconContainer} style={{flexGrow: 1, marginTop: '20px'}}>
-                <FaWechat align="left" size={35} color={'#63C050'} onClick={this.handleShowCommentChange}/>
-                <div className={style.thumbsIconContainer}>
+        return  (<div style={{display: "flex", justifyContent: "flex-start"}}><h5 align="left" style={{
+            flexGrow: 2,
+            fontSize: 12,
+            fontStyle: 'italic'
+        }} onClick={this.toggleExpanded}>{this.getIconForFeedbackType()}&nbsp; {(!this.state.expanded && this.props.title.length > 20)? this.props.title.substring(0, 20) + "...": this.props.title}
+            </h5>
+            <div className="forumIconContainer">
+                <FaWechat align="left" size={35} style={{flexGrow: "1"}} color={'#63C050'} onClick={this.handleShowCommentChange}/>
+                <div className={style.forumIconContainer.thumbsIconContainer}>
                     <FaThumbsOUp size={20} onClick={this.addLike}/>
                     <span className={style.thumbsCount}>{this.state.thumbsUp}</span>
                 </div>
-                <div className={style.thumbsIconContainer}>
+                <div className={style.forumIconContainer.thumbsIconContainer}>
                     <FaThumbsODown size={20} onClick={this.addDislike}/>
                     <span className={style.thumbsCount}>{this.state.thumbsDown}</span>
                 </div>

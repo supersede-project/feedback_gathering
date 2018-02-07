@@ -26,6 +26,7 @@ class CompanyViewFeedbackTitle extends Component {
       chatUser: null,
       lastPulled: null,
       visiblePublishedIcon: 'hidden',
+      feedbackStatus : null,
       feedbackSetting: null
     }
 
@@ -36,10 +37,13 @@ class CompanyViewFeedbackTitle extends Component {
     this.handleVisibility = this.handleVisibility.bind(this);
     this.fetchFeedbackSettings = this.fetchFeedbackSettings.bind(this);
     this.handleMailIcon = this.handleMailIcon.bind(this);
+    this.fetchFeedbackStatus = this.fetchFeedbackStatus.bind(this);
+    this.handleFeedbackStatus = this.handleFeedbackStatus.bind(this);
   }
 
     componentDidMount(){
       this.fetchFeedbackSettings();
+      this.fetchFeedbackStatus();
   }
 
   handleNewUserMessage(newMessage) {
@@ -165,6 +169,42 @@ class CompanyViewFeedbackTitle extends Component {
     e.stopPropagation();
   }
 
+  fetchFeedbackStatus(){
+      var that = this;
+      fetch(process.env.REACT_APP_BASE_URL + 'en/applications/'+ sessionStorage.getItem('applicationId')+'/feedbacks/status/feedback/' + this.props.feedbackId, {
+          method: 'GET',
+          headers: {
+              'Content-Type': 'application/json',
+              'Authorization': sessionStorage.getItem('token')
+          }
+      }).then(result=>result.json())
+          .then(result=> {
+              that.setState({feedbackStatus: result})
+          });
+  }
+
+  handleFeedbackStatus(){
+    //var that = this;
+      if(this.state.feedbackStatus === null || this.state.feedbackStatus.status === null){
+        return <label className={style.statusunknown}>Status loading</label>
+      }
+      if(this.state.feedbackStatus.status === 'completed'){
+        return <label className={style.statuscomplete}>Completed</label>
+      }
+      if(this.state.feedbackStatus.status === 'in_progress'){
+          return <label className={style.statusprogress}>In Progress</label>
+      }
+      if(this.state.feedbackStatus.status === 'declined'){
+          return <label className={style.statusdeclined}>Declined</label>
+      }
+      if(this.state.feedbackStatus.status === 'received'){
+          return <label className={style.statusreceived}>Received</label>
+      }
+      else {
+        return <label className={style.statusunknown}>No Status available</label>
+      }
+  }
+
   render()
   {
     var showChat = null;
@@ -173,8 +213,9 @@ class CompanyViewFeedbackTitle extends Component {
       fontSize: 12,
       fontStyle: 'italic'
     }} onClick={this.toggleExpanded}><GoCircleSlash size={30} color="red" onClick={this.closeThread}/>{this.getIconForFeedbackType()}&nbsp; {(!this.state.expanded && this.props.title.length > 20)? this.props.title.substring(0, 20) + "...": this.props.title}
-    <div><div align="left" style={{fontSize: 10}}>sent on {this.props.date}</div>
-    <div align="left" style={{fontSize: 10, color: '#169BDD'}}>Status: {this.props.status}</div>
+    <div className={style.spacingstyle}><div align="left" style={{fontSize: 10}}>sent on {this.props.date}</div>
+      <div align="left" style={{fontSize: 10, color: '#169BDD'}}>Status: {this.handleFeedbackStatus()}
+     </div>
     <div align="left" style={{fontSize: 10, color: '#169BDD'}}>Forum activity:
       <FaThumbsOUp size={20} color={'black'} padding={10}/>
       <span className={style.counts}>{this.props.likes}</span>
