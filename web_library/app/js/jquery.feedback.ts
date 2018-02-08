@@ -14,6 +14,7 @@ import { MockBackend } from '../services/backends/mock_backend';
 import { QuestionDialogView } from '../views/dialog/question_dialog_view';
 import * as i18next from 'i18next';
 import { PullFeedbackDialogView } from '../views/dialog/pull_feedback_dialog_view';
+import { FeedbackDialogView } from '../views/dialog/feedback_dialog_view';
 
 let mockData = require('json!../services/mocks/dev/application_senercon_20.json');
 
@@ -60,7 +61,7 @@ export var feedbackPluginModule = function ($, window, document) {
                 let context = loadedApplication.getContextForView();
                 context = $.extend(options, context, configuration.getContext());
 
-                let pullDialog = new PullFeedbackDialogView("pullConfiguration" + pullConfigurationId, dialogTemplate, configuration, context);
+                let pullDialog = new FeedbackDialogView("pullConfiguration" + pullConfigurationId, dialogTemplate, configuration, context);
                 pullDialog.open();
             });
         });
