@@ -44,13 +44,15 @@ class CompanyViewAccordion extends Component {
     this.fetchData = this.fetchData.bind(this);
     this.handleShowChat = this.handleShowChat.bind(this);
     this.handleBackButtonPressed = this.handleBackButtonPressed.bind(this);
+    this.openFile = this.openFile.bind(this);
+    this.createFeedback = this.createFeedback.bind(this);
+    this.onDrop = this.onDrop.bind(this);
   }
 
 
-  handleOpenModal(){
+  handleOpenModal(e){
     this.setState({ showModal: true});
   }
-
 
   handleCloseModal(){
     this.setState({ showModal: false});
@@ -104,10 +106,11 @@ class CompanyViewAccordion extends Component {
 }
 
 createFeedback(){
-  var that = this;
-  return <ReactModal isOpen={that.state.showModal}>
-    <button onClick={that.handleCloseModal}>Close Modal</button>
-  </ReactModal>
+    {this.handleOpenModal()};
+  /*return
+  <ReactModal isOpen={this.state.showModal}>
+    <button onClick={this.handleCloseModal}>Close Modal</button>
+  </ReactModal>*/
 }
 
 handleShowChat(e) {
@@ -121,7 +124,7 @@ handleBackButtonPressed() {
 render() {
   let toRender = null;
   var that = this;
-  if(!that.state.showChat && that.state.data.length > 0) {
+  if(!that.state.showChat && that.state.data.length > 0 && !that.state.showModal) {
 
     toRender = <Accordion>
       {that.state.data.map(function (item, index) {
@@ -151,14 +154,18 @@ render() {
   else if(this.state.showChat) {
     toRender = <ChatView feedbackId={this.state.chatIndex} title={this.state.chatTitle} onBackButtonPressed={this.handleBackButtonPressed}/>
   }
+  else if(this.state.showModal){
+      toRender = <CompanyFeedbackInputForm onBackButtonSelected={this.handleCloseModal}/>;
+  }
   else {
     toRender = <p>No Elements to show</p>;
     }
+
     return (
       <div className="CompanyViewAccordion">
         <FaFileImageO onClick={this.openFile} size={35}/>&nbsp;
-          <MdAnnouncement onClick={this.createFeedback} size={35}/>
-          <div className="CompanyFeedback">
+          <MdAnnouncement onClick={this.handleOpenModal} size={35}/>{console.log(this.state.showModal)}
+        <div className="CompanyFeedback">
             <ul>
               {toRender}
             </ul>
