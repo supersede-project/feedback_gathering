@@ -31,6 +31,7 @@ import java.io.ByteArrayInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -43,6 +44,9 @@ public class FeedbackController extends BaseController {
 
     @Autowired
     private FeedbackService feedbackService;
+
+    @Autowired
+    private FeedbackViewedService feedbackViewedService;
 
     @Autowired
     private FileStorageService fileStorageService;
@@ -318,6 +322,22 @@ public class FeedbackController extends BaseController {
     public List<Feedback> publishedFeedbacks(@PathVariable long applicationId,
                                            @PathVariable boolean value){
         return feedbackService.findByPublished(value);
+    }
+
+    @PreAuthorize("@securityService.hasAdminPermission(#applicationId)")
+    @RequestMapping(method = RequestMethod.GET, value = "/get_published/unread" +
+            "/user/{userId}")
+    public List<Feedback> publishedUnreadFeedbacks(@PathVariable long applicationId,
+                                                   @PathVariable long userId){
+        List<FeedbackViewed> viewedFeedbacks = feedbackViewedService.findByEnduserId(userId);
+        List<Feedback> publishedFeedbacks = feedbackService.findByPublished(true);
+        List<Feedback> ownFeedbacks = feedbackService.findByUserIdentification(userId);
+        publishedFeedbacks.removeAll(ownFeedbacks);
+
+        for(FeedbackViewed feedbackViewed:viewedFeedbacks){
+            publishedFeedbacks.removeIf(feedback -> feedback.getId()==feedbackViewed.getFeedback().getId());
+        }
+        return publishedFeedbacks;
     }
 
     @PreAuthorize("@securityService.hasAdminPermission(#applicationId)")

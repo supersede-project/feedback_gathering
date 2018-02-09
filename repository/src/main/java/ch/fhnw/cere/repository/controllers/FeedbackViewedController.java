@@ -69,6 +69,10 @@ public class FeedbackViewedController {
             long feedbackId = object.getLong("feedback_id");
             long userId = object.getLong("user_id");
 
+            if(feedbackViewedService.findByEnduserIdAndFeedbackId(userId,feedbackId) != null){
+                return feedbackViewedService.findByEnduserIdAndFeedbackId(userId,feedbackId);
+            }
+
             FeedbackViewed feedbackViewed = new FeedbackViewed();
             feedbackViewed.setFeedback(feedbackService.find(feedbackId));
             feedbackViewed.setEnduser(endUserService.find(userId));
