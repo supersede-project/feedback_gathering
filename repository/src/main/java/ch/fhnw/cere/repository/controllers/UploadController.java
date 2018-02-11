@@ -15,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.imageio.ImageIO;
 import javax.print.attribute.standard.Media;
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletResponse;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -77,10 +78,12 @@ public class UploadController {
 //        return "successfully uploaded files";
 //    }
 
-    @RequestMapping(value = "/uploadImage", method = RequestMethod.POST)
+    @RequestMapping(value = "/uploadImage/user/{api_user_id}", method = RequestMethod.POST)
     public String handleFormUpload(@RequestParam("file") MultipartFile file,
-                                   @RequestHeader(value = "api_user_id") long api_user_id) throws IOException{
+                                   @PathVariable long api_user_id,
+                                   HttpServletResponse response) throws IOException{
         if (!file.isEmpty()) {
+            response.setHeader("Access-Control-Allow-Headers","api_user_id");
             BufferedImage src = ImageIO.read(new ByteArrayInputStream(file.getBytes()));
             LOGGER.info("Upload Image Size: " + "("+src.getWidth()+" , "+src.getHeight()+")");
             if(src.getWidth() < 40 || src.getHeight() < 40){
@@ -104,8 +107,8 @@ public class UploadController {
     }
 
 
-    @RequestMapping(value = "/getImage", method = RequestMethod.GET)
-    public ResponseEntity<byte[]> getImage(@RequestHeader(value = "api_user_id") long api_user_id) throws IOException {
+    @RequestMapping(value = "/getImage/user/{api_user_id}", method = RequestMethod.GET)
+    public ResponseEntity<byte[]> getImage(@PathVariable long api_user_id) throws IOException {
         Path path = Paths.get(UPLOADED_FOLDER + "/profile_pic_api_user_"+api_user_id + ".png");
         byte[] bytes = Files.readAllBytes(path);
 

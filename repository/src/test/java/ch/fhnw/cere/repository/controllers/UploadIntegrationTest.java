@@ -78,10 +78,9 @@ public class UploadIntegrationTest extends BaseIntegrationTest{
 
         MockMvc mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
         mockMvc.perform(MockMvcRequestBuilders.fileUpload(basePathEn + "applications/" + 1 + "/feedbacks/"
-                +"/uploadImage")
+                +"/uploadImage/user/"+1)
                 .file(mockMultipartFile)
-                .header("Authorization", adminJWTToken)
-                .header("api_user_id",1))
+                .header("Authorization", adminJWTToken))
                 .andExpect(content().string("Image successfully uploaded"));
     }
 
@@ -94,10 +93,9 @@ public class UploadIntegrationTest extends BaseIntegrationTest{
 
         MockMvc mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
         mockMvc.perform(MockMvcRequestBuilders.fileUpload(basePathEn + "applications/" + 1 + "/feedbacks/"
-                +"/uploadImage")
+                +"/uploadImage/user/"+1)
                 .file(mockMultipartFile)
-                .header("Authorization", adminJWTToken)
-                .header("api_user_id",1))
+                .header("Authorization", adminJWTToken))
                 .andExpect(content().string("The uploaded image size is too small. " +
                         "Please select an image with at least 40 x 40 Pixels"));
     }
@@ -107,9 +105,9 @@ public class UploadIntegrationTest extends BaseIntegrationTest{
         String adminJWTToken = requestAppAdminJWTToken();
         long api_user_id = 99999999;
 
-        mockMvc.perform(get(basePathEn + "applications/" + 1 + "/feedbacks/getImage")
-                .header("Authorization", adminJWTToken)
-                .header("api_user_id", api_user_id))
+        mockMvc.perform(get(basePathEn + "applications/" + 1 + "/feedbacks/getImage/user/"
+            +api_user_id)
+                .header("Authorization", adminJWTToken))
                 .andExpect(content().contentType(MediaType.IMAGE_PNG));
 
     }
