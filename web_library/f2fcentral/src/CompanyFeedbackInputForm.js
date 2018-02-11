@@ -6,8 +6,8 @@ class CompanyFeedbackInputForm extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            selectedOption: '',
-            isChecked: false,
+            selectedOption: 'status',
+            isChecked: true,
             formText: ''
         };
 
@@ -21,26 +21,29 @@ class CompanyFeedbackInputForm extends Component {
         this.props.onBackButtonSelected();
     }
 
-    handleSelection(selectedOption){
-        this.setState({selectedOption: selectedOption});
-        console.log(`Selected: ${selectedOption.value}`);
+    handleSelection(event){
+        this.setState({selectedOption: event.target.value});
+        console.log(`Selected: ${event.target.value}`);
     }
 
     handleTextareaTextInput(e){
         this.setState({formText: e.target.value});
+        console.log(`Textarea: ${e.target.value}`);
     }
 
     changeCheckbox(){
+        /*if(this.state.isChecked === false){
+          this.setState({isChecked: true});
+        }
+        else if(this.state.isChecked === true) {
+            this.setState({isChecked: false});
+        }*/
         this.setState({isChecked: !this.state.isChecked});
+        console.log(`Checkbox: ${this.state.isChecked}`);
     }
 
 
     submitForm(e){
-        let postFeedback = {
-            status: this.state.selectedOption.value,
-            text: this.state.formText,
-            promote: this.state.isChecked
-        }
         var that = this;
         fetch(process.env.REACT_APP_BASE_URL + 'en/applications/'+ sessionStorage.getItem('applicationId')+'/feedbacks/feedback_company/', {
             method: 'POST',
@@ -48,9 +51,12 @@ class CompanyFeedbackInputForm extends Component {
                 'Content-Type': 'application/json',
                 'Authorization': sessionStorage.getItem('token')
             },
-            body: JSON.stringify(postFeedback)
-        }).then(result=> that.props.update());
-        e.stopPropagation();
+            body: JSON.stringify({
+                status: this.state.selectedOption,
+                text: this.state.formText,
+                promote: this.state.isChecked
+            })
+        });
     }
 
 
@@ -59,9 +65,9 @@ class CompanyFeedbackInputForm extends Component {
              <div>
                 <form>Please enter following information to add a new entry<br/>
                     <div>
-                    Entry title: <input type="text" name="feedbackTitle"/><br/><br/>
+                        <h4>Entry text </h4>
                     <div className={style.companyfeedbacktext}>
-                    Entry text:
+                    Please enter the content of your forum entry: <br/>
                     <textarea name="feedbacktext" rows="4" cols="50" value={this.state.formText} onChange={this.handleTextareaTextInput} placeholder="Please enter your text here...">
                     </textarea><br/></div>
                     <div>
@@ -69,7 +75,8 @@ class CompanyFeedbackInputForm extends Component {
                     </div>
                     </div>
                     <div>
-                    <select name="feedbackStatus" required={true} value={this.state.selectedOption.value} onChange={this.handleSelection}>
+                    Please select a status for your new entry
+                    <select name="feedbackStatus" value={this.state.selectedOption} onChange={this.handleSelection}>
                         <option value="completed">Completed</option>
                         <option value="inProgress">In Progress</option>
                         <option value="declined">Declined</option>
