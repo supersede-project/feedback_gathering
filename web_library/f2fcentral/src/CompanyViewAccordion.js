@@ -16,12 +16,9 @@ import 'react-tabs/style/react-tabs.css';
 import 'react-accessible-accordion/dist/react-accessible-accordion.css';
 import CompanyViewFeedbackTitle from "./CompanyViewFeedbackTitle";
 import FaFileImageO from 'react-icons/lib/fa/file-image-o';
-import Dropzone from 'react-dropzone';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
-import MdDelete from 'react-icons/lib/md/delete';
 import MdAnnouncement from 'react-icons/lib/md/announcement';
-import ReactModal from 'react-modal/lib/components/Modal';
 import CompanyFeedbackInputForm from "./CompanyFeedbackInputForm";
+import DropzoneAvatar from "./DropzoneAvatar";
 
 class CompanyViewAccordion extends Component {
 
@@ -36,6 +33,7 @@ class CompanyViewAccordion extends Component {
       filesToBeSent: [],
       filesPreview: [],
       printcount: 1,
+      showDropzone: false,
       showModal: false
     },
     this.handleOpenModal = this.handleOpenModal.bind(this);
@@ -44,9 +42,9 @@ class CompanyViewAccordion extends Component {
     this.fetchData = this.fetchData.bind(this);
     this.handleShowChat = this.handleShowChat.bind(this);
     this.handleBackButtonPressed = this.handleBackButtonPressed.bind(this);
-    this.openFile = this.openFile.bind(this);
     this.createFeedback = this.createFeedback.bind(this);
-    this.onDrop = this.onDrop.bind(this);
+    this.openDropzone = this.openDropzone.bind(this);
+    this.closeDropzone = this.closeDropzone.bind(this);
   }
 
 
@@ -57,6 +55,14 @@ class CompanyViewAccordion extends Component {
   handleCloseModal(){
     this.setState({ showModal: false});
   }
+
+  openDropzone(e){
+    this.setState({ showDropzone: true});
+  }
+
+   closeDropzone(){
+    this.setState({ showDropzone: false});
+   }
 
   fetchData(e){
     var that = this;
@@ -71,39 +77,11 @@ class CompanyViewAccordion extends Component {
     });
   }
 
+
+
   componentDidMount(){
     this.fetchData(null);
   }
-
-  openFile(){
-    return (
-      <div>
-        <Dropzone onDrop={(files) => this.onDrop(files)}/>
-        <div>Upload a new image by dropping your file here or click to select file to upload.</div>
-      </div>
-
-    )
-  }
-
-  onDrop(acceptedFiles, rejectedFiles){
-    var filesToBeSent=this.state.filesToBeSent;
-    if(filesToBeSent.length == this.state.printcount) {
-      filesToBeSent.push(acceptedFiles);
-      var filesPreview = [];
-      for(var i in filesToBeSent){
-        filesPreview.push(<div>{filesToBeSent[i][0].name}
-          <MuiThemeProvider>
-            <a href="#"><MdDelete color="red" >clear</MdDelete>
-          </a>
-        </MuiThemeProvider>
-      </div>
-    )}
-    this.setState({filesToBeSent, filesPreview});
-  }
-  else {
-    alert("Please select a file to upload")
-  }
-}
 
 createFeedback(){
     {this.handleOpenModal()};
@@ -124,7 +102,7 @@ handleBackButtonPressed() {
 render() {
   let toRender = null;
   var that = this;
-  if(!that.state.showChat && that.state.data.length > 0 && !that.state.showModal) {
+  if(!that.state.showChat && that.state.data.length > 0 && !that.state.showModal && !that.state.showDropzone) {
 
     toRender = <Accordion>
       {that.state.data.map(function (item, index) {
@@ -157,13 +135,16 @@ render() {
   else if(this.state.showModal){
       toRender = <CompanyFeedbackInputForm onBackButtonSelected={this.handleCloseModal}/>;
   }
+  else if(this.state.showDropzone){
+    toRender = <DropzoneAvatar onDropzoneBackButtonSelected={this.closeDropzone}/>;
+  }
   else {
     toRender = <p>No Elements to show</p>;
     }
 
     return (
       <div className="CompanyViewAccordion">
-        <FaFileImageO onClick={this.openFile} size={35}/>&nbsp;
+        <FaFileImageO onClick={this.openDropzone} size={35}/>&nbsp;
           <MdAnnouncement onClick={this.handleOpenModal} size={35}/>{console.log(this.state.showModal)}
         <div className="CompanyFeedback">
             <ul>

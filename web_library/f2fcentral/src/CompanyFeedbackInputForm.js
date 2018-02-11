@@ -15,6 +15,7 @@ class CompanyFeedbackInputForm extends Component {
         this.handleSelection = this.handleSelection.bind(this);
         this.handleTextareaTextInput = this.handleTextareaTextInput.bind(this);
         this.changeCheckbox = this.changeCheckbox.bind(this);
+        this.submitForm = this.submitForm.bind(this);
     }
 
     backButtonPressed(e){
@@ -83,7 +84,7 @@ class CompanyFeedbackInputForm extends Component {
                         <option value="received">Received</option>
                     </select><br/></div>
                     <div>
-                    <button type="button" className={style.formbuttons1} onClick={this.submitForm}>Submit</button><br/>
+                    <button type="button" className={style.formbuttons1} onClick={this.submitForm}>Submit</button>&nbsp;
                     <button type="button" className={style.formbuttons1} onClick={this.backButtonPressed}>Back</button>
                     </div>
                 </form>
