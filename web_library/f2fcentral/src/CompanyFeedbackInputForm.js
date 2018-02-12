@@ -83,7 +83,7 @@ class CompanyFeedbackInputForm extends Component {
                         <option value="declined">Declined</option>
                         <option value="received">Received</option>
                     </select><br/></div>
-                    <div>
+                    <div align="right">
                     <button type="button" className={style.formbuttons1} onClick={this.submitForm}>Submit</button>&nbsp;
                     <button type="button" className={style.formbuttons1} onClick={this.backButtonPressed}>Back</button>
                     </div>

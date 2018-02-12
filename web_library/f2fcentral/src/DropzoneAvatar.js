@@ -8,6 +8,7 @@ class DropzoneAvatar extends Component {
         super(props);
         this.state = {
             files: [],
+            formData: '',
             disabled: true
         }
         this.backButtonPressed = this.backButtonPressed.bind(this);
@@ -24,18 +25,32 @@ class DropzoneAvatar extends Component {
 
     submitForm(e){
         var that = this;
-        fetch(process.env.REACT_APP_BASE_URL + 'en/applications/'+ sessionStorage.getItem('applicationId')+'/feedbacks/uploadImage/' + sessionStorage.getItem('userId'), {
+        var formData = new FormData();
+
+        var name = '';
+
+        name = this.state.files.map(f => f.name);
+
+            formData.append('name', name);
+            formData.append('file', {
+                uri: this.state.files.map(f => f.uri),
+                type: 'image/png'
+            });
+
+        fetch(process.env.REACT_APP_BASE_URL + 'en/applications/'+ sessionStorage.getItem('applicationId')+'/feedbacks/uploadImage/user/' + sessionStorage.getItem('userId'), {
             method: 'POST',
-            setHeaders: 'Access-Control-Allow-Headers',
             headers: {
+                'Content-Type': 'image/png',
                 'Authorization': sessionStorage.getItem('token')
             },
-            body: that.state.files
+            body: formData
         });
     }
 
     render(){
+        var fname = '';
         return (
+
             <section>
                 <div className={style.companyfeedbackform}>
                     <Dropzone accept="image/png" onDrop={this.onDrop.bind(this)}>
@@ -47,7 +62,7 @@ class DropzoneAvatar extends Component {
                     <h2>Dropped files</h2>
                     <ul>
                         {
-                            this.state.files.map(f => <li key={f.name}>{f.name} - {f.size} bytes</li>)
+                           this.state.files.map(f => <li key={f.name}>{f.name} - {f.size} bytes</li>)
                         }
                     </ul>
                 </aside>
