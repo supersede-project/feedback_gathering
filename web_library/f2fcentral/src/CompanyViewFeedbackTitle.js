@@ -40,6 +40,7 @@ class CompanyViewFeedbackTitle extends Component {
     this.fetchFeedbackStatus = this.fetchFeedbackStatus.bind(this);
     this.handleFeedbackStatus = this.handleFeedbackStatus.bind(this);
     this.publishFeedback = this.publishFeedback.bind(this);
+    this.handleShowCommentChange = this.handleShowCommentChange.bind(this);
   }
 
     componentDidMount(){
@@ -59,7 +60,8 @@ class CompanyViewFeedbackTitle extends Component {
         feedback_id: that.props.feedbackId,
         user_id: sessionStorage.getItem('userId'),
         chat_text: newMessage,
-        initiated_by_user: false
+        initiated_by_user: false,
+
       })
     })
   }
@@ -87,6 +89,10 @@ class CompanyViewFeedbackTitle extends Component {
     }
     return <TiTag size={35} padding={75}/>;
   }
+
+    handleShowCommentChange(e) {
+        this.props.onShowCommentChange({showComment: true, index: this.props.feedbackId});
+    }
 
   closeThread(e){
   }
@@ -222,7 +228,7 @@ class CompanyViewFeedbackTitle extends Component {
       <span className={style.counts}>{this.props.likes}</span>
       <FaThumbsODown size={20} color={'black'} padding={10}/>
       <span className={style.counts}>{this.props.dislikes}</span>
-      <FaWechat size={20} color={'#63C050'} padding={10}/>
+      <FaWechat size={20} color={'#63C050'} padding={10} onClick={this.handleShowCommentChange}/>
       <span className={style.counts}>{this.props.commentnumber}</span>
     </div></div></h5>
 

@@ -4,7 +4,7 @@ import Comment from 'react-uikit-comment';
 import placeholder_avatar from './placeholder_avatar.svg'
 import ForumCommentTitle from './ForumCommentTitle';
 
-import './App.css';
+import style from './App.css';
 
 
 class CommentUI extends Component {
@@ -23,6 +23,8 @@ class CommentUI extends Component {
     this.fetchData = this.fetchData.bind(this);
     this.setReplyCommentId = this.setReplyCommentId.bind(this);
     this.renderChildren = this.renderChildren.bind(this);
+    this.backButtonPressed = this.backButtonPressed.bind(this);
+    this.backButton = this.backButton.bind(this);
   }
 
   componentDidMount() {
@@ -41,6 +43,14 @@ class CommentUI extends Component {
       that.setState({commentData: result, formValue: '', replyCommentId: 0, createComment: false});
     });
   }
+
+    backButtonPressed(e){
+        this.setState({createComment: false});
+    }
+
+    backButton(e){
+        this.props.backButtonSelected();
+    }
 
   createComment() {
     this.setState({createComment: true});
@@ -107,12 +117,17 @@ class CommentUI extends Component {
     let that = this;
     if(!this.state.createComment && this.state.replyCommentId == 0)
     {
-      createCommentContent = <button type="button" onClick={this.createComment}>Add comment</button>
+      createCommentContent =
+          <div>
+          <button className={style.formbuttons1} type="button" onClick={this.createComment}>Add comment</button>&nbsp;
+          <button className={style.formbuttons1} onClick={this.backButton}>Back</button>
+      </div>
     }
     else {
       createCommentContent = <div className="createCommentContainer">
         <textarea value={this.state.formValue} rows="10" cols="80" onChange={this.handleTextAreaChange} placeholder="Insert your comment..."></textarea>
-        <button type="button" onClick={(e) => this.addComment(e)}>Submit comment</button>
+        <button className={style.formbuttons1} type="button" onClick={(e) => this.addComment(e)}>Submit comment</button>&nbsp;
+        <button className={style.formbuttons1} type="button" onClick={this.backButton}>Back</button>
       </div>
     }
 
@@ -128,7 +143,7 @@ class CommentUI extends Component {
                 <p>
                   {comment.commentText}
                 </p>
-                <button type="button" onClick={(e) => that.setReplyCommentId(e, comment.id)}>Reply</button>
+                <button className={style.formbuttons1} type="button" onClick={(e) => that.setReplyCommentId(e, comment.id)}>Reply</button>
                 {that.renderChildren(comment)}
                 </Comment>
               )}})}

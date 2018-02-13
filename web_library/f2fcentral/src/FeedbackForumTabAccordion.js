@@ -31,6 +31,7 @@ class FeedbackForumTabAccordion extends Component {
         };
         this.handleShowCommentChange = this.handleShowCommentChange.bind(this);
         this.fetchData = this.fetchData.bind(this);
+        this.handleBackButton = this.handleBackButton.bind(this);
     }
 
     componentDidMount() {
@@ -58,6 +59,10 @@ class FeedbackForumTabAccordion extends Component {
 
     handleShowCommentChange(e) {
       this.setState({showComment: e.showComment, commentIndex: e.index});
+    }
+
+    handleBackButton(){
+        this.setState({ showComment: false, commentIndex: null});
     }
 
     onUpdate(sorting) {
@@ -154,7 +159,7 @@ class FeedbackForumTabAccordion extends Component {
                   if(item.textFeedbacks.length > 0 && item.categoryFeedbacks.length > 0)
                   {
                     return (
-                        <AccordionItem titleTag="span" title={<ForumTitle feedbackId={item.id} title={item.textFeedbacks[0].text} thumbsUp={item.likeCount} thumbsDown={item.dislikeCount} type={item.categoryFeedbacks[0].parameterId} onShowCommentChange={instance.handleShowCommentChange} update={instance.fetchData.bind(instance)} index={index}/>}>
+                        <AccordionItem titleTag="span" title={<ForumTitle feedbackId={item.id} title={item.textFeedbacks[0].text} thumbsUp={item.likeCount} thumbsDown={item.dislikeCount} comment={item.commentCount} type={item.categoryFeedbacks[0].parameterId} onShowCommentChange={instance.handleShowCommentChange} update={instance.fetchData.bind(instance)} index={index}/>}>
                                 {/*<div>
                                     <ForumBody status="WIP" date={item.createdAt} onShowCommentChange={instance.handleShowCommentChange} index={index}/>
                                 </div>*/}
@@ -180,7 +185,7 @@ class FeedbackForumTabAccordion extends Component {
         }
         else {
 
-            content = <FeedbackForumCommentView post={this.state.data.find(function(a)
+            content = <FeedbackForumCommentView backButtonSelected={this.handleBackButton} post={this.state.data.find(function(a)
             {
               return a.id === instance.state.commentIndex;
             })}/>;

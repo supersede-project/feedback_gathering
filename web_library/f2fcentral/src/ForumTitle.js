@@ -21,14 +21,22 @@ class ForumTitle extends Component {
         this.state = {
             expanded: false,
             thumbsUp: parseInt(this.props.thumbsUp),
-            thumbsDown: parseInt(this.props.thumbsDown)
+            thumbsDown: parseInt(this.props.thumbsDown),
+            comment: parseInt(this.props.comment),
+            unread: false,
+            unreadFeedback: null
         }
         this.toggleExpanded = this.toggleExpanded.bind(this);
+        this.fetchUnreadFeedback = this.fetchUnreadFeedback.bind(this);
+    }
+
+    componentDidMount(){
+        this.fetchUnreadFeedback();
     }
 
     componentWillReceiveProps(nextProps) {
       this.setState({ thumbsUp: parseInt(nextProps.thumbsUp),
-      thumbsDown: parseInt(nextProps.thumbsDown) });
+      thumbsDown: parseInt(nextProps.thumbsDown), comment: parseInt(nextProps.comment) });
     }
 
     handleShowCommentChange(e) {
@@ -47,6 +55,23 @@ class ForumTitle extends Component {
             return <TiInfoLargeOutline size={35} padding={75}/>;
         }
         return <TiTag size={35} padding={75}/>;
+    }
+
+    fetchUnreadFeedback(){
+        var that = this;
+        fetch(process.env.REACT_APP_BASE_URL + 'en/applications/'+ sessionStorage.getItem('applicationId')+'/feedbacks/get_published/unread/user/' + sessionStorage.getItem('userId'), {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': sessionStorage.getItem('token')
+            }
+        }).then(result=>result.json())
+            .then(result=> {
+                that.setState({unreadFeedback: result})
+                if(that.state.unreadFeedback.id === that.props.feedbackId){
+                    that.setState({unread: true});
+                }
+            });
     }
 
     addLike(e) {
@@ -93,24 +118,57 @@ class ForumTitle extends Component {
 
 
     render() {
-        return  (<div style={{display: "flex", justifyContent: "flex-start"}}><h5 align="left" style={{
-            flexGrow: 2,
-            fontSize: 12,
-            fontStyle: 'italic'
-        }} onClick={this.toggleExpanded}>{this.getIconForFeedbackType()}&nbsp; {(!this.state.expanded && this.props.title.length > 20)? this.props.title.substring(0, 20) + "...": this.props.title}
-            </h5>
-            <div className="forumIconContainer">
-                <FaWechat align="left" size={35} style={{flexGrow: "1"}} color={'#63C050'} onClick={this.handleShowCommentChange}/>
-                <div className={style.forumIconContainer.thumbsIconContainer}>
-                    <FaThumbsOUp size={20} onClick={this.addLike}/>
-                    <span className={style.thumbsCount}>{this.state.thumbsUp}</span>
+        let toRender = null;
+
+        if(!this.state.unread) {
+            return (<div style={{display: "flex", justifyContent: "flex-start"}}>
+                <h5 align="left" style={{
+                    flexGrow: 2,
+                    fontSize: 12,
+                    fontStyle: 'italic'
+                }}
+                    onClick={this.toggleExpanded}>{this.getIconForFeedbackType()}&nbsp; {(!this.state.expanded && this.props.title.length > 20) ? this.props.title.substring(0, 20) + "..." : this.props.title}
+                </h5>
+                <div className="forumIconContainer">
+                    <FaWechat align="left" size={35} style={{flexGrow: "1"}} color={'#63C050'}
+                              onClick={this.handleShowCommentChange}/>
+                    <span className={style.thumbsCount}>{this.state.comment}</span>
+                    <div className={style.forumIconContainer.thumbsIconContainer}>
+                        <FaThumbsOUp size={20} onClick={this.addLike}/>
+                        <span className={style.thumbsCount}>{this.state.thumbsUp}</span>
+                    </div>
+                    <div className={style.forumIconContainer.thumbsIconContainer}>
+                        <FaThumbsODown size={20} onClick={this.addDislike}/>
+                        <span className={style.thumbsCount}>{this.state.thumbsDown}</span>
+                    </div>
                 </div>
-                <div className={style.forumIconContainer.thumbsIconContainer}>
-                    <FaThumbsODown size={20} onClick={this.addDislike}/>
-                    <span className={style.thumbsCount}>{this.state.thumbsDown}</span>
+            </div>);
+        }
+        else if(this.state.unread){
+
+            return (<div style={{display: "flex", justifyContent: "flex-start", background: '#1a8cff'}}>
+                <h5 align="left" style={{
+                    flexGrow: 2,
+                    fontSize: 12,
+                    fontStyle: 'italic'
+                }}
+                    onClick={this.toggleExpanded}>{this.getIconForFeedbackType()}&nbsp; {(!this.state.expanded && this.props.title.length > 20) ? this.props.title.substring(0, 20) + "..." : this.props.title}
+                </h5>
+                <div className="forumIconContainer">
+                    <FaWechat align="left" size={35} style={{flexGrow: "1"}} color={'#63C050'}
+                              onClick={this.handleShowCommentChange}/>
+                    <span className={style.thumbsCount}>{this.state.comment}</span>
+                    <div className={style.forumIconContainer.thumbsIconContainer}>
+                        <FaThumbsOUp size={20} onClick={this.addLike}/>
+                        <span className={style.thumbsCount}>{this.state.thumbsUp}</span>
+                    </div>
+                    <div className={style.forumIconContainer.thumbsIconContainer}>
+                        <FaThumbsODown size={20} onClick={this.addDislike}/>
+                        <span className={style.thumbsCount}>{this.state.thumbsDown}</span>
+                    </div>
                 </div>
-            </div>
-        </div>);
+            </div>);
+        }
     }
 }
 

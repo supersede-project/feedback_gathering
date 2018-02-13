@@ -19,6 +19,7 @@ import FaFileImageO from 'react-icons/lib/fa/file-image-o';
 import MdAnnouncement from 'react-icons/lib/md/announcement';
 import CompanyFeedbackInputForm from "./CompanyFeedbackInputForm";
 import DropzoneAvatar from "./DropzoneAvatar";
+import FeedbackForumCommentView from "./FeedbackForumCommentView";
 
 class CompanyViewAccordion extends Component {
 
@@ -28,6 +29,7 @@ class CompanyViewAccordion extends Component {
       data : [],
       loading: true,
       showChat: false,
+      showComment: false,
       chatIndex: null,
       chatTitle: '',
       filesToBeSent: [],
@@ -45,8 +47,14 @@ class CompanyViewAccordion extends Component {
     this.createFeedback = this.createFeedback.bind(this);
     this.openDropzone = this.openDropzone.bind(this);
     this.closeDropzone = this.closeDropzone.bind(this);
+    this.handleShowCommentChange = this.handleShowCommentChange.bind(this);
+
   }
 
+
+  handleShowCommentChange(e) {
+    this.setState({showComment: e.showComment, commentIndex: e.index});
+  }
 
   handleOpenModal(e){
     this.setState({ showModal: true});
@@ -102,7 +110,7 @@ handleBackButtonPressed() {
 render() {
   let toRender = null;
   var that = this;
-  if(!that.state.showChat && that.state.data.length > 0 && !that.state.showModal && !that.state.showDropzone) {
+  if(!that.state.showChat && that.state.data.length > 0 && !that.state.showModal && !that.state.showDropzone && !that.state.showComment) {
 
     toRender = <Accordion>
       {that.state.data.map(function (item, index) {
@@ -137,6 +145,13 @@ render() {
   }
   else if(this.state.showDropzone){
     toRender = <DropzoneAvatar onDropzoneBackButtonSelected={this.closeDropzone}/>;
+  }
+
+  else if(this.state.showComment){
+    toRender = <FeedbackForumCommentView post={this.state.data.find(function (a)
+    {
+       return a.id === instance.state.commentIndex;
+    })}/>
   }
   else {
     toRender = <p>No Elements to show</p>;

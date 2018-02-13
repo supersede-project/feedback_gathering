@@ -226,38 +226,47 @@ button {
 }
 
 .statuscomplete{
+  color: black;
   border: 1px solid #333333;
   padding: 3px 7px;
-  background-image: linear-gradient(180deg, #009933,  #00e64d);
+ /* background-image: linear-gradient(180deg, #009933,  #00e64d);*/
+  background-color: #009933;
   fontSize: 8px;
   line-height: 200%;
 }
 
 .statusprogress{
+  color: black;
   border: 1px solid #333333;
   padding: 3px 7px;
-  background-image: linear-gradient(180deg, #ff884d, #ffbb99);
+/*  background-image: linear-gradient(180deg, #ff884d, #ffbb99);*/
+  background-color: #ff884d;
   fontSize: 8px;
   line-height: 200%;
 }
 
 .statusdeclined{
+  color: black;
   border: 1px solid #333333;
   padding: 3px 7px;
-  background-image: linear-gradient(180deg, #b3003b, #ff1a66);
+/*  background-image: linear-gradient(180deg, #b3003b, #ff1a66);*/
+  background-color: #ff1a66;
   fontSize: 8px;
   line-height: 200%;
 }
 
 .statusreceived{
+  color: black;
   border: 1px solid #333333;
   padding: 3px 7px;
-  background-image: linear-gradient(180deg, #1a8cff,  #99ccff);
+ /* background-image: linear-gradient(180deg, #1a8cff,  #99ccff);*/
+  background-color: #1a8cff;
   fontSize: 8px;
   line-height: 200%;
 }
 
 .statusunknown{
+  color: black;
   border: 1px solid #333333;
   padding: 3px 7px;
   background-image: linear-gradient(180deg, #fff, #ddd 40%, #ccc);
@@ -307,6 +316,22 @@ button {
 .formbuttons1:active {
   background-color: #006CEF;
   transform: translateY(4px);
+}
+
+.successful {
+  background-color: #8cd9b1;
+  color: #FFFFFF;
+}
+
+.dropzone {
+  width: 600px;
+  height: 240px;
+  border-width: 2px;
+  border-color: #676767;
+  border-style: dashed;
+  border-radius: 9px;
+  background-color: #eeee;
+
 }
 
 @keyframes App-logo-spin {
