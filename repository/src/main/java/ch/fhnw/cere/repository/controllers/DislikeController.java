@@ -73,6 +73,15 @@ public class DislikeController {
             long feedbackId = object.getLong("feedback_id");
             long userId = object.getLong("user_id");
 
+            if(feedbackService.findByUserIdentification(userId) != null){
+                List<Feedback> userFeedbacks = feedbackService.findByUserIdentification(userId);
+                for(Feedback feedback:userFeedbacks){
+                    if(feedback.getId() == feedbackId){
+                        return null;
+                    }
+                }
+            }
+
             if(feedbackDislikeService.findByEnduserIdAndFeedbackId(userId,feedbackId) != null){
                 return feedbackDislikeService.findByEnduserIdAndFeedbackId(userId,feedbackId);
             }

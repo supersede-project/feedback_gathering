@@ -4,16 +4,14 @@ import ch.fhnw.cere.repository.controllers.exceptions.NotFoundException;
 import ch.fhnw.cere.repository.models.CommentFeedback;
 import ch.fhnw.cere.repository.models.Feedback;
 import ch.fhnw.cere.repository.models.UserFBLike;
-import ch.fhnw.cere.repository.services.EndUserServiceImpl;
-import ch.fhnw.cere.repository.services.FeedbackServiceImpl;
-import ch.fhnw.cere.repository.services.UserFeedbackDislikeService;
-import ch.fhnw.cere.repository.services.UserFeedbackLikeService;
+import ch.fhnw.cere.repository.services.*;
 import org.apache.catalina.User;
 import org.json.JSONObject;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,10 +26,10 @@ import java.util.List;
 public class LikeController {
     private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(FeedbackController.class);
     @Autowired
-    private FeedbackServiceImpl feedbackService;
+    private FeedbackService feedbackService;
 
     @Autowired
-    private EndUserServiceImpl endUserService;
+    private EndUserService endUserService;
 
     @Autowired
     private UserFeedbackLikeService feedbackLikeService;
@@ -75,6 +73,15 @@ public class LikeController {
             JSONObject object = new JSONObject(likeJSON.getBody());
             long feedbackId = object.getLong("feedback_id");
             long userId = object.getLong("user_id");
+
+            if(feedbackService.findByUserIdentification(userId) != null){
+                List<Feedback> userFeedbacks = feedbackService.findByUserIdentification(userId);
+                for(Feedback feedback:userFeedbacks){
+                    if(feedback.getId() == feedbackId){
+                        return null;
+                    }
+                }
+            }
 
             if(feedbackLikeService.findByEnduserIdAndFeedbackId(userId,feedbackId) != null){
                 return feedbackLikeService.findByEnduserIdAndFeedbackId(userId,feedbackId);
