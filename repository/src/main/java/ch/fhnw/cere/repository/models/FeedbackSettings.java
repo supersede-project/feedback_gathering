@@ -9,6 +9,9 @@ import org.hibernate.annotations.OnDeleteAction;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
+/**
+ * This class stores settings for a feedback in terms of status and inquiry options
+ */
 @Entity
 public class FeedbackSettings {
     @Id

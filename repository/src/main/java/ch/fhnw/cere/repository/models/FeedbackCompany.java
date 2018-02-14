@@ -12,6 +12,10 @@ import java.util.Date;
 
 /**
  * Created by Aydinli on 08.11.2017.
+ * This class represents feedback entries which are issued by the company. They are
+ * comprised of a text and a status. User interaction in form of like/dislike or comment
+ * are restricted. The main objective of this class is to notify users in terms of
+ * upcoming events or features
  */
 @Entity
 public class FeedbackCompany {

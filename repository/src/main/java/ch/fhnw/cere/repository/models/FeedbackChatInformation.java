@@ -9,6 +9,9 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.persistence.*;
 import java.util.Date;
 
+/**
+ * This class represents single messages exchanged between developers and end-users
+ */
 @Entity
 public class FeedbackChatInformation {
 

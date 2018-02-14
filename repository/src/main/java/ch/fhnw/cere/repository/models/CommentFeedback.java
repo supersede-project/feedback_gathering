@@ -10,6 +10,10 @@ import javax.persistence.*;
 import java.util.Collection;
 import java.util.Date;
 
+/**
+ * This class represents single comments posted on feedback entries. Handling of
+ * sub-comments is done in a recursive manner by referencing the parent comment id
+ */
 @Entity
 public class CommentFeedback {
 

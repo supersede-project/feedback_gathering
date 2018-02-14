@@ -10,6 +10,7 @@ import java.util.Date;
 
 /**
  * Created by Aydinli on 23.01.2018.
+ * This class stores information related to which user viewed (clicked) which feedback
  */
 @Entity
 public class FeedbackViewed {

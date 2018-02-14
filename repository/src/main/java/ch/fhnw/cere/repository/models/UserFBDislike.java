@@ -10,6 +10,7 @@ import java.util.Date;
 
 /**
  * Created by Aydinli on 08.11.2017.
+ * This class denotes which user disliked which feedback
  */
 @Entity
 public class UserFBDislike {
