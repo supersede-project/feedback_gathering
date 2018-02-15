@@ -12,8 +12,9 @@ import ChatView from './ChatView';
 
 import './App.css';
 import 'react-tabs/style/react-tabs.css';
+import style from './App.css';
 
-import 'react-accessible-accordion/dist/react-accessible-accordion.css';
+//import 'react-accessible-accordion/dist/react-accessible-accordion.css';
 import CompanyViewFeedbackTitle from "./CompanyViewFeedbackTitle";
 import FaFileImageO from 'react-icons/lib/fa/file-image-o';
 import MdAnnouncement from 'react-icons/lib/md/announcement';
@@ -90,7 +91,7 @@ class CompanyViewAccordion extends Component {
     this.fetchData(null);
   }
 
-createFeedback(){
+  createFeedback(){
     {this.handleOpenModal()};
   /*return
   <ReactModal isOpen={this.state.showModal}>

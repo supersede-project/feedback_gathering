@@ -13,6 +13,7 @@ class ChatView extends Component {
       lastPulled: null,
       data: [],
       formValue: '',
+      userAvatars: []
     }
     this.fetchData = this.fetchData.bind(this);
     this.addChatEntry = this.addChatEntry.bind(this);
@@ -20,6 +21,7 @@ class ChatView extends Component {
     this.handleInputChange = this.handleInputChange.bind(this);
     this.backButtonPressed = this.backButtonPressed.bind(this);
     this.messageFromCurrentUser = this.messageFromCurrentUser.bind(this);
+    this.handleAvatar = this.handleAvatar.bind(this);
   }
 
   componentDidMount() {
@@ -41,6 +43,7 @@ class ChatView extends Component {
           return 0;
         });
         that.setState({data: result, lastPulled: new Date()});
+        that.handleAvatar();
     });
     setInterval(this.fetchResponses, 3000);
   }
@@ -59,7 +62,7 @@ class ChatView extends Component {
           if (new Date(a.chatDate.substring(0, a.chatDate.indexOf('.')) + "Z") > new Date(b.chatDate.substring(0, b.chatDate.indexOf('.')) + "Z")) return 1;
           return 0;
         })
-
+        that.handleAvatar()
         that.setState({data: result, lastPulled: new Date()})
     })
   }
@@ -96,6 +99,31 @@ class ChatView extends Component {
     return style.oppositionmessage;
   }
 
+  handleAvatar(){
+    var that = this;
+    var userIdList = [];
+    //src: placeholder_avatar, alt: 'Avatar placeholder'}
+      this.state.data.map((item, index) => {
+          if(!userIdList.includes(item.user.id)) {
+              userIdList.push(item.user.id);
+          }
+      });
+
+      userIdList.forEach((el) => {
+          fetch(process.env.REACT_APP_BASE_URL + 'en/applications/' + sessionStorage.getItem('applicationId') + '/feedbacks/getImage/user/' + el, {
+              method: 'GET',
+              headers: {
+                  'Content-Type': 'image/png',
+                  'Authorization': sessionStorage.getItem('token')
+              }
+          }).then(result => result.blob()).then(result => {
+              var item = that.state.userAvatars.filter((item) => item.userId == el);
+
+              that.state.userAvatars.push({userId: el, avatar: URL.createObjectURL(result)})
+          });
+      });
+  }
+
   render() {
     let that = this;
     return (
@@ -104,7 +132,12 @@ class ChatView extends Component {
         <CommentList>
           {this.state.data.map(function(item, index) {
             var userId = item.user.id;
-            return (<Comment className={that.messageFromCurrentUser(userId)} meta={new Date(item.chatDate.substring(0, item.chatDate.indexOf('.')) + "Z").toString()}>
+            var userAvatars = that.state.userAvatars.filter(el => el.userId === userId);
+            var avatar = '';
+            if(userAvatars.length > 0) {
+                avatar = userAvatars[0].avatar;
+            }
+            return (<Comment className={that.messageFromCurrentUser(userId)} meta={new Date(item.chatDate.substring(0, item.chatDate.indexOf('.')) + "Z").toString()} avatar={{src: avatar}}>
               <p>
                 {item.chatText}
               </p>

@@ -127,7 +127,7 @@ class CommentUI extends Component {
       createCommentContent = <div className="createCommentContainer">
         <textarea value={this.state.formValue} rows="10" cols="80" onChange={this.handleTextAreaChange} placeholder="Insert your comment..."></textarea>
         <button className={style.formbuttons1} type="button" onClick={(e) => this.addComment(e)}>Submit comment</button>&nbsp;
-        <button className={style.formbuttons1} type="button" onClick={this.backButton}>Back</button>
+        <button className={style.formbuttons1} type="button" onClick={this.backButtonPressed}>Back</button>
       </div>
     }
 

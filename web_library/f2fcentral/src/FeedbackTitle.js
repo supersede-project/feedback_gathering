@@ -212,7 +212,7 @@ class FeedbackTitle extends Component {
       flexGrow: 2,
       fontSize: 12,
       fontStyle: 'italic'
-    }} onClick={this.toggleExpanded}>{this.getIconForFeedbackType()}&nbsp; {(!this.state.expanded && this.props.title.length > 20)? this.props.title.substring(0, 20) + "...": this.props.title}
+    }} onClick={this.toggleExpanded}>{this.getIconForFeedbackType()}&nbsp; {(!this.state.expanded && this.props.title.length > 30)? this.props.title.substring(0, 30) + "...": this.props.title}
     <div className={style.spacingstyle}><div align="left" style={{fontSize: 10}}>sent on {this.props.date}</div>
     <div align="left" style={{fontSize: 10, color: '#169BDD'}}>Status: {this.handleFeedbackStatus()}</div>
       <div align="left" style={{fontSize: 10, color: '#169BDD'}}>Forum activity:

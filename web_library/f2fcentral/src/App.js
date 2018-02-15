@@ -4,8 +4,9 @@ import {Tab, Tabs, TabList, TabPanel} from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
 import style from 'react-tabs/style/react-tabs.css';
 
-import '../../node_modules/react-accessible-accordion/dist/react-accessible-accordion.css';
+//import '../../node_modules/react-accessible-accordion/dist/react-accessible-accordion.css';
 import './App.css';
+
 import MyFeedbacksTabAccordion from "./MyFeedbacksTabAccordion";
 import FeedbackForumTabAccordion from "./FeedbackForumTabAccordion";
 import CompanyViewAccordion from "./CompanyViewAccordion";
