@@ -36,7 +36,7 @@ class ForumSorting extends Component {
                     {value: 'unrated', label: 'Unrated feedbacks'},
                     {value: 'mostlike', label: 'Most liked feedbacks'},
                     {value: 'company', label: 'Company entries'},
-                    {value: 'status1', label: 'Status received'},
+                    {value: 'status1', label: 'Received'},
                     {value: 'status2', label: 'In progress'},
                     {value: 'status3', label: 'Declined'},
                     {value: 'status4', label: 'Completed'},

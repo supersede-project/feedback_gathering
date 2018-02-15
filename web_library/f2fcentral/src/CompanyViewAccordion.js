@@ -51,7 +51,6 @@ class CompanyViewAccordion extends Component {
 
   }
 
-
   handleShowCommentChange(e) {
     this.setState({showComment: e.showComment, commentIndex: e.index});
   }

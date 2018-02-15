@@ -119,8 +119,9 @@ button {
 }
 
 .iconContainer svg {
-  margin-left: 10px;
+  margin-left: 6px;
   flex-grow: 1;
+  padding: 0 20px;
 }
 
 .iconContainer svg:first-child {
@@ -134,7 +135,12 @@ button {
 }
 
 .forumIconContainer {
+  padding-top: 10px;
+}
+
+.forumIconContainer > div {
   display: inline-block;
+  margin-left: 10px;
 }
 
 .forumIconContainer svg {
@@ -208,6 +214,7 @@ button {
 .accordion {
   border-top: 1px;
   border-bottom: 1px;
+  border: solid;
 }
 
 .accodion .active, .accordion:hover {
@@ -219,6 +226,7 @@ button {
   background-color: white;
   overflow: hidden;
   padding: 0 18px;
+  border: 1px solid #333333;
 }
 
 .spacingstyle{
@@ -331,7 +339,16 @@ button {
   border-style: dashed;
   border-radius: 9px;
   background-color: #eeee;
+}
 
+.react-sanfona-item {
+  border-bottom: 1px solid #cacaca;
+  padding-top: 3px;
+  padding-bottom: 3px;
+}
+
+.react-sanfona-item:last-child{
+  border-bottom: none;
 }
 
 @keyframes App-logo-spin {

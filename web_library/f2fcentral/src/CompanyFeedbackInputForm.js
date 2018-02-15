@@ -34,7 +34,6 @@ class CompanyFeedbackInputForm extends Component {
     }
 
     changeCheckbox(){
-
         this.setState((previousState) => { return {isChecked: !previousState.isChecked}});
         console.log(`Checkbox: ${this.state.isChecked}`);
     }

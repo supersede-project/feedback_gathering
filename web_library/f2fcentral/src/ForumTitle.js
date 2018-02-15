@@ -67,10 +67,11 @@ class ForumTitle extends Component {
             }
         }).then(result=>result.json())
             .then(result=> {
-                that.setState({unreadFeedback: result})
-                if(that.state.unreadFeedback.id === that.props.feedbackId){
-                    that.setState({unread: true});
+                var unread = false;
+                if(result.id === that.props.feedbackId){
+                    unread = true;
                 }
+                that.setState({unreadFeedback: result, unread: unread})
             });
     }
 

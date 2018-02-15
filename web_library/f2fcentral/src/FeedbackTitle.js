@@ -33,6 +33,7 @@ class FeedbackTitle extends Component {
       this.handleMailIcon = this.handleMailIcon.bind(this);
       this.fetchFeedbackSettings = this.fetchFeedbackSettings.bind(this);
       this.handleFeedbackStatus = this.handleFeedbackStatus.bind(this);
+      this.changeMailSetting = this.changeMailSetting.bind(this);
 
   }
 
@@ -85,10 +86,10 @@ class FeedbackTitle extends Component {
 
   handleVisibility(){
     if(this.props.visibility === false){
-      return <TiGroupOutline size={35} onClick={this.setVisibility}/>;
+      return <TiGroupOutline size={35} onClick={this.setVisibility} padding={30}/>;
     }
     if(this.props.visibility === true){
-      return <TiGroup size={35}/>
+      return <TiGroup size={35} padding={30}/>
     }
   }
 
@@ -135,8 +136,19 @@ class FeedbackTitle extends Component {
 
     changeMailSetting(e){
         var that = this;
+        var method = "";
+        if(this.state.feedbackSetting === null || this.state.feedbackSetting.status === 404) {
+            method = "POST";
+        }
+        else {
+            method = "PUT";
+        }
+        var channel = "Feedback-To-Feedback Central";
+        if(this.state.feedbackSetting.feedbackQueryChannel !== 'Email') {
+            channel = "Email";
+        }
         fetch(process.env.REACT_APP_BASE_URL + 'en/applications/'+ sessionStorage.getItem('applicationId')+'/feedbacks/feedbacksettings/',  {
-            method: 'PUT',
+            method: method,
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': sessionStorage.getItem('token')
@@ -145,10 +157,11 @@ class FeedbackTitle extends Component {
                 statusUpdates: true,
                 statusUpdatesContactChannel: 'Email',
                 feedbackQuery: true,
-                feedbackQueryChannel: 'Email',
-                feedback_id: that.props.feedbackId
+                feedbackQueryChannel: channel,
+                feedback_id: that.props.feedbackId,
+                globalFeedbackSetting: false
             })
-        }).then(result=> that.props.updateSetting());
+        }).then(result=> that.fetchFeedbackSettings());
         e.stopPropagation();
     }
 
@@ -218,7 +231,7 @@ class FeedbackTitle extends Component {
     <MdEmail size={35} onClick={this.changeMailSetting} color={this.state.iconColor}/>
     */}
       {this.handleMailIcon()}
-    <FaWechat align="left" color={'#63C050'} style={{flexGrow: "1"}} onClick={this.handleShowChat} size={35}/>
+    <FaWechat align="left" color={'#63C050'} style={{flexGrow: "1"}} onClick={this.handleShowChat} size={35} />
     </div></div>);
     }
   }

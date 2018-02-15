@@ -27,11 +27,13 @@ class FeedbackForumTabAccordion extends Component {
             showComment: false,
             commentIndex: null,
             sorting: 'date1',
-            loading: true
+            loading: true,
+            isChecked: true
         };
         this.handleShowCommentChange = this.handleShowCommentChange.bind(this);
         this.fetchData = this.fetchData.bind(this);
         this.handleBackButton = this.handleBackButton.bind(this);
+        this.handleSelection = this.handleSelection.bind(this);
     }
 
     componentDidMount() {
@@ -63,6 +65,10 @@ class FeedbackForumTabAccordion extends Component {
 
     handleBackButton(){
         this.setState({ showComment: false, commentIndex: null});
+    }
+
+    handleSelection(){
+        this.setState((previousState) => { return {isChecked: !previousState.isChecked}});
     }
 
     onUpdate(sorting) {
@@ -101,6 +107,34 @@ class FeedbackForumTabAccordion extends Component {
           return 0;
         });
         break;
+          case "status1":
+          data = [].concat(this.state.data).sort(function(a,b) {
+          if(a.ratingFeedbacks.length == 0) return -1;
+          if(b.ratingFeedbacks.length == 0) return 1;
+          return 0;
+         });
+         break;
+         case "status2":
+           data = [].concat(this.state.data).sort(function(a,b) {
+           if(a.ratingFeedbacks.length == 0) return -1;
+           if(b.ratingFeedbacks.length == 0) return 1;
+           return 0;
+         });
+         break;
+          case "status3":
+          data = [].concat(this.state.data).sort(function(a,b) {
+          if(a.ratingFeedbacks.length == 0) return -1;
+          if(b.ratingFeedbacks.length == 0) return 1;
+          return 0;
+         });
+         break;
+          case "status4":
+          data = [].concat(this.state.data).sort(function(a,b) {
+          if(a.ratingFeedbacks.length == 0) return -1;
+          if(b.ratingFeedbacks.length == 0) return 1;
+          return 0;
+         });
+         break;
         default:
       }
       this.setState({sorting: sorting, data: data});
@@ -154,6 +188,7 @@ class FeedbackForumTabAccordion extends Component {
             let sortedData = this.sortData();
             content = <div>
             <ForumSorting onUpdate={this.onUpdate.bind(this)} />
+                <input type="checkbox" name="status" checked={this.state.isChecked} onChange={this.handleSelection}/>Status: Completed
             <Accordion>
                 {sortedData.map(function (item, index) {
                   if(item.textFeedbacks.length > 0 && item.categoryFeedbacks.length > 0)

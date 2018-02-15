@@ -100,7 +100,7 @@ class ChatView extends Component {
     let that = this;
     return (
       <div>
-        <h3>{that.props.title}</h3>
+        <h4 className={style.companyfeedbacktext}>{that.props.title}</h4>
         <CommentList>
           {this.state.data.map(function(item, index) {
             var userId = item.user.id;
@@ -112,10 +112,10 @@ class ChatView extends Component {
           })}
         </CommentList>
         <div className="createCommentContainer">
-          <input value={this.state.formValue} type="text" onChange={this.handleInputChange} placeholder="Please enter your response here..."/>
-          <button type="button" onClick={(e) => this.addChatEntry()}>Send</button>
+          <textarea value={this.state.formValue} type="text" rows="4" cols="50" onChange={this.handleInputChange} placeholder="Please enter your response here..."/>
         </div>
-        <button type="button" onClick={this.backButtonPressed}>Back</button>
+        <button className={style.formbuttons1} type="button" onClick={(e) => this.addChatEntry()}>Submit</button>&nbsp;
+        <button className={style.formbuttons1} type="button" onClick={this.backButtonPressed}>Back</button>
       </div>
     );
   }
