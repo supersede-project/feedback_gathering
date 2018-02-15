@@ -110,11 +110,24 @@ public class UploadController {
     @RequestMapping(value = "/getImage/user/{api_user_id}", method = RequestMethod.GET)
     public ResponseEntity<byte[]> getImage(@PathVariable long api_user_id) throws IOException {
         Path path = Paths.get(UPLOADED_FOLDER + "/profile_pic_api_user_"+api_user_id + ".png");
-        byte[] bytes = Files.readAllBytes(path);
+        if(Files.exists(path)){
+            byte[] bytes = Files.readAllBytes(path);
 
-        final HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.IMAGE_PNG);
+            final HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.IMAGE_PNG);
 
-        return new ResponseEntity<byte[]> (bytes, headers, HttpStatus.CREATED);
+            return new ResponseEntity<byte[]> (bytes, headers, HttpStatus.CREATED);
+        } else {
+            Path pathNotExists = Paths.get(String.valueOf(this.getClass().getClassLoader().
+                    getResource("no-image-available.png").getFile())
+                    .replaceFirst("^/(.:/)", "$1"));
+//            this.getClass().getClassLoader().getResource("no-image-available.png");
+            byte[] bytesNotExists = Files.readAllBytes(pathNotExists);
+
+            final HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.IMAGE_PNG);
+
+            return new ResponseEntity<byte[]> (bytesNotExists, headers, HttpStatus.CREATED);
+        }
     }
 }
