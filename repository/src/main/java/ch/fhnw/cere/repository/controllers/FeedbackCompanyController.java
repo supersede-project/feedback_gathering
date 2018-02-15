@@ -33,13 +33,13 @@ public class FeedbackCompanyController {
 
     @PreAuthorize("@securityService.hasAdminPermission(#applicationId)")
     @RequestMapping(method = RequestMethod.GET, value = "/feedback_company")
-    public List<FeedbackCompany> getAllCompanyFeedbacks(@PathVariable long applicationId,
-                                                        @RequestHeader(value = "promote") Boolean promote) {
-        if(promote){
-            return feedbackCompanyService.findByPromote(true);
-        } else {
-            return feedbackCompanyService.findAll();
-        }
+    public List<FeedbackCompany> getAllCompanyFeedbacks(@PathVariable long applicationId) {
+//        if(promote){
+//            return feedbackCompanyService.findByPromote(true);
+//        } else {
+//            return feedbackCompanyService.findAll();
+//        }
+        return feedbackCompanyService.findAll();
     }
 
 //    @PreAuthorize("@securityService.hasAdminPermission(#applicationId)")

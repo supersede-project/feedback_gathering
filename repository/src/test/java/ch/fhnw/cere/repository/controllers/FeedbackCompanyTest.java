@@ -78,8 +78,7 @@ public class FeedbackCompanyTest extends BaseIntegrationTest{
 
         this.mockMvc.perform(get(basePathEn + "applications/" + 1 + "/feedbacks" +
                 "/feedback_company")
-                .header("Authorization", adminJWTToken)
-                .header("promote",false))
+                .header("Authorization", adminJWTToken))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(3)));
     }
@@ -104,8 +103,7 @@ public class FeedbackCompanyTest extends BaseIntegrationTest{
 
         this.mockMvc.perform(get(basePathEn + "applications/" + 1 + "/feedbacks" +
                 "/feedback_company")
-                .header("Authorization", adminJWTToken)
-                .header("promote",false))
+                .header("Authorization", adminJWTToken))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(2)));
     }

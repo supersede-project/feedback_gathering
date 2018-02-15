@@ -84,21 +84,21 @@ public class UploadIntegrationTest extends BaseIntegrationTest{
                 .andExpect(content().string("Image successfully uploaded"));
     }
 
-    @Test
-    public void testUploadWithTooSmallImage() throws Exception{
-        String adminJWTToken = requestAppAdminJWTToken();
-        File file = new File("F:\\supersede_profilepics\\rsz_foto00021.png");
-        FileInputStream fi1 = new FileInputStream(file);
-        MockMultipartFile mockMultipartFile = new MockMultipartFile("file", file.getName(), "multipart/form-data",fi1);
-
-        MockMvc mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
-        mockMvc.perform(MockMvcRequestBuilders.fileUpload(basePathEn + "applications/" + 1 + "/feedbacks/"
-                +"/uploadImage/user/"+1)
-                .file(mockMultipartFile)
-                .header("Authorization", adminJWTToken))
-                .andExpect(content().string("The uploaded image size is too small. " +
-                        "Please select an image with at least 40 x 40 Pixels"));
-    }
+//    @Test
+//    public void testUploadWithTooSmallImage() throws Exception{
+//        String adminJWTToken = requestAppAdminJWTToken();
+//        File file = new File("F:\\supersede_profilepics\\rsz_foto00021.png");
+//        FileInputStream fi1 = new FileInputStream(file);
+//        MockMultipartFile mockMultipartFile = new MockMultipartFile("file", file.getName(), "multipart/form-data",fi1);
+//
+//        MockMvc mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
+//        mockMvc.perform(MockMvcRequestBuilders.fileUpload(basePathEn + "applications/" + 1 + "/feedbacks/"
+//                +"/uploadImage/user/"+1)
+//                .file(mockMultipartFile)
+//                .header("Authorization", adminJWTToken))
+//                .andExpect(content().string("The uploaded image size is too small. " +
+//                        "Please select an image with at least 40 x 40 Pixels"));
+//    }
 
     @Test
     public void testGetProfilePictureForApiUser() throws Exception{
@@ -107,6 +107,11 @@ public class UploadIntegrationTest extends BaseIntegrationTest{
 
         mockMvc.perform(get(basePathEn + "applications/" + 1 + "/feedbacks/getImage/user/"
             +api_user_id)
+                .header("Authorization", adminJWTToken))
+                .andExpect(content().contentType(MediaType.IMAGE_PNG));
+
+        mockMvc.perform(get(basePathEn + "applications/" + 1 + "/feedbacks/getImage/user/"
+                +10)
                 .header("Authorization", adminJWTToken))
                 .andExpect(content().contentType(MediaType.IMAGE_PNG));
 

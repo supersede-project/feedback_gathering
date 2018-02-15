@@ -84,7 +84,10 @@ public class UploadController {
                                    HttpServletResponse response) throws IOException{
         if (!file.isEmpty()) {
             response.setHeader("Access-Control-Allow-Headers","api_user_id");
-            BufferedImage src = ImageIO.read(new ByteArrayInputStream(file.getBytes()));
+            BufferedImage srcOriginal = ImageIO.read(new ByteArrayInputStream(file.getBytes()));
+
+            BufferedImage src = scale(srcOriginal,64,64);
+
             LOGGER.info("Upload Image Size: " + "("+src.getWidth()+" , "+src.getHeight()+")");
             if(src.getWidth() < 40 || src.getHeight() < 40){
                 return "The uploaded image size is too small. Please select an image with at least " +
@@ -129,5 +132,25 @@ public class UploadController {
 
             return new ResponseEntity<byte[]> (bytesNotExists, headers, HttpStatus.CREATED);
         }
+    }
+
+    private static BufferedImage scale(BufferedImage src, int w, int h)
+    {
+        BufferedImage img =
+                new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);
+        int x, y;
+        int ww = src.getWidth();
+        int hh = src.getHeight();
+        int[] ys = new int[h];
+        for (y = 0; y < h; y++)
+            ys[y] = y * hh / h;
+        for (x = 0; x < w; x++) {
+            int newX = x * ww / w;
+            for (y = 0; y < h; y++) {
+                int col = src.getRGB(newX, ys[y]);
+                img.setRGB(x, y, col);
+            }
+        }
+        return img;
     }
 }
