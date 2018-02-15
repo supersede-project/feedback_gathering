@@ -9,6 +9,7 @@ Is a RESTfull Web API that provides endpoints for storing, receiving and deletin
 - [Installation](#installation)
 - [Deployment](#deployment)
 - [Tests](#tests)
+- [Upload Directory Profile Picture](#upload-directory-profile-picture)
 - [Docker](#docker)
 - [License](#license)
 
@@ -24,7 +25,17 @@ cp src/main/resources/application.properties-dist src/main/resources/application
 cp src/main/resources/application-test.properties-dist src/main/resources/application-test.properties
 ```
 
-Create a test database and a local database to run the application locally if needed. You can find the newest DB dump in src/main/resources/db. Fill in your DB credentials and all other required values in the newly created application.properties and application-test.properties. Do not add this file to the GIT index.
+Create a test database and a local database to run 
+the application locally if needed. You can find the 
+newest DB dump in `src/main/resources/db/f2f_repository`.
+ The dumps include SQL schemas for the (1) production db,
+ (2) local db and (3) test db.
+Fill in your DB credentials and all other required 
+values in the newly created application.properties 
+and application-test.properties. 
+Do not add this file to the GIT index.
+To configure the email newsletter, please refer to a detailed
+description in the corresponding [WIKI page](https://github.com/supersede-project/monitor_feedback/wiki/F2F-Email-Newsletter-Serice).
 
 ```bash
 cd repository
@@ -35,7 +46,10 @@ cp gradle.properties-dist gradle.properties
 gradle build
 ```
 
-DB dump in src/main/resources/db/migrations/supersede_repository_db_structure.sql
+DB dump in `src/main/resources/db/migrations/supersede_repository_db_structure.sql`.
+In order to update the db schema to incorporate the
+additional feedback-to-feedback data models, apply
+the change script located in `rc/main/resources/db/migrations/migration_supersede_f2f_repository.sql`.
 
 # Tests
 
@@ -44,10 +58,11 @@ To run the integration tests, execute the following commands:
 ```bash
 gradle test
 ```
-
+Make sure to create a separate test db and apply
+the script located in `src/main/resources/db/f2f_repository/test_monitor_feedback_repository_15_02_18.sql`.
 # Deployment
 
-Executing 'gradle build' in the root folder creates a build folder. In build/libs there is a war file. This war file can be deployed, e.g. on a Apache Tomcat. 
+Executing `gradle build` in the root folder creates a build folder. In `build/libs` there is a war file. This war file can be deployed, e.g. on a Apache Tomcat. 
 
 
 # IntelliJ
@@ -63,10 +78,22 @@ Create the run configuration:
 
 ![Run configuration](https://raw.githubusercontent.com/supersede-project/monitor_feedback/develop_ronnie/images/run_configuation.png)
 
-Add the war from build/libs as the artefact:
+Add the war from `build/libs` as the artefact:
 
 ![Run configuration](https://github.com/supersede-project/monitor_feedback/raw/develop_ronnie/images/tomcat_configuration_artefact.png)
 
+# Upload Directory Profile Picture
+The newly integrated backward-feedback mechanisms
+allow company representatives (e.g, developers) to
+upload a profile picture (.png). This facilitates
+end-users to recognize actors with admin privileges.
+The upload directory on the production server as well
+as local file system can be specified in the
+`application.properties` respectively `application-test.properties`
+files unter the key
+```bash
+supersede.profile_pic_upload_directory=/home/path/to/profile_pictures
+```
 
 # Docker
 
