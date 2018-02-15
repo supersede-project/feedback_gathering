@@ -134,6 +134,12 @@ public class Parameter {
         this.parameters = parameters;
     }
 
+    public Parameter(String key, String value) {
+        this.key = key;
+        this.value = value;
+        this.language = "en";
+    }
+
     public Parameter(long id, String key, String value, String language, Parameter parentParameter, List<Parameter> parameters) {
         this.id = id;
         this.key = key;

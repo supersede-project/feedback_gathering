@@ -93,12 +93,9 @@ export class PullConfiguration extends Configuration {
         let askOnStartUp = this.generalConfiguration.getParameterValue('askOnAppStartup') || false;
         let likeliHoodOkay = Math.random() <= this.generalConfiguration.getParameterValue('likelihood');
 
-        console.log('------');
-        console.log(pullActive);
-        console.log(doNotDisturbTimeIsOver);
-        console.log(likeliHoodOkay);
-        console.log(askOnStartUp);
-        console.log('------');
+        if (this.shouldOnlyBeDisplayedOnce()) {
+            return pullActive && !this.pullDialogAlreadyDisplayed()
+        }
 
         return pullActive && pageDoesMatch && doNotDisturbTimeIsOver && (askOnStartUp || likeliHoodOkay);
     }
@@ -119,6 +116,25 @@ export class PullConfiguration extends Configuration {
         return this.currentTimeStamp() - Number(this.getCookie(cookieNames.lastTriggered)) > doNotDisturbTimeDuration;
     }
 
+    shouldOnlyBeDisplayedOnce() {
+        return this.generalConfiguration.getParameterValue('onlyDisplayOnce') != null && this.generalConfiguration.getParameterValue('onlyDisplayOnce');
+    }
+
+    pullDialogAlreadyDisplayed() {
+        if (this.shouldOnlyBeDisplayedOnce()) {
+            return this.getCookie(this.getCookieNameForDisplayOnce()) !== null;
+        }
+        return false;
+    }
+
+    setDisplayOnceCookie() {
+        this.setCookie(this.getCookieNameForDisplayOnce(), this.currentTimeStamp(), 365);
+    }
+
+    getCookieNameForDisplayOnce():string {
+        return cookieNames.displayed_ + String(this.id);
+    }
+
     currentTimeStamp():number {
         if (!Date.now) {
             Date.now = function () {
@@ -129,6 +145,9 @@ export class PullConfiguration extends Configuration {
     }
 
     wasTriggered():void {
+        if(this.shouldOnlyBeDisplayedOnce()) {
+            this.setDisplayOnceCookie();
+        }
         this.setCookie(cookieNames.lastTriggered, this.currentTimeStamp(), 365);
     }
 
