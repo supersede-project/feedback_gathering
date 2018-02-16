@@ -3,7 +3,7 @@ import { PulseLoader } from 'react-spinners';
 
 import { Accordion, AccordionItem } from 'react-sanfona';
 
-import './App.css';
+import style from './App.css';
 import 'react-tabs/style/react-tabs.css';
 
 import 'react-accessible-accordion/dist/react-accessible-accordion.css';
@@ -69,7 +69,7 @@ class MyFeedbacksTabAccordion extends Component {
             if(item.textFeedbacks.length > 0 && item.categoryFeedbacks.length > 0)
             {
               return (
-                  <AccordionItem titleTag="span" title={<FeedbackTitle feedbackId={item.id} update={that.fetchData} updateSetting={that.fetchData} onShowChat={that.handleShowChat} type={item.categoryFeedbacks[0].parameterId} title={item.textFeedbacks[0].text} visibility={item.visibility} date={item.createdAt} likes={item.likeCount} dislikes={item.dislikeCount} commentnumber={item.commentCount}/>}>
+                  <AccordionItem className={style.reactsanfonaitem} titleTag="span" title={<FeedbackTitle feedbackId={item.id} update={that.fetchData} updateSetting={that.fetchData} onShowChat={that.handleShowChat} type={item.categoryFeedbacks[0].parameterId} title={item.textFeedbacks[0].text} visibility={item.visibility} date={item.createdAt} likes={item.likeCount} dislikes={item.dislikeCount} commentnumber={item.commentCount}/>}>
                   </AccordionItem>
               )
             }
@@ -96,9 +96,9 @@ class MyFeedbacksTabAccordion extends Component {
         toRender = <p>No Elements to show</p>;
       }
         return (
-            <div className="MyFeedbacksTabAccordion">
+            <div className={style.MyFeedbacksTabAccordion}>
                 <MdNotificationsActive size={35} align="right" color='green' onClick={this.disableNotifications}/>
-                <div className="MyFeedback">
+                <div className={style.MyFeedback}>
                 <ul>
                     {toRender}
                     </ul>

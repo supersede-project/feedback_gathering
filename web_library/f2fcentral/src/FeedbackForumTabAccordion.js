@@ -25,6 +25,7 @@ class FeedbackForumTabAccordion extends Component {
         super(props);
         this.state = {
             data: [],
+            unsortedData: [],
             showComment: false,
             commentIndex: null,
             sorting: 'date1',
@@ -71,7 +72,7 @@ class FeedbackForumTabAccordion extends Component {
 
                     });
                 });
-                that.setState({data: cleanedResult, loading: false});
+                that.setState({data: cleanedResult, unsortedData: cleanedResult, loading: false});
                 this.fetchUnreadFeedback();
                 this.fetchStatus();
             });
@@ -125,70 +126,86 @@ class FeedbackForumTabAccordion extends Component {
     }
 
     onUpdate(sorting) {
-        var data = this.state.data;
+        var data = this.state.unsortedData;
         switch (this.state.sorting) {
             case "date1":
-                data = [].concat(this.state.data).sort(function (a, b) {
+                data = [].concat(this.state.unsortedData).sort(function (a, b) {
                     return new Date(b.createdAt.substring(0, b.createdAt.indexOf('.')) + "Z") - new Date(a.createdAt.substring(0, a.createdAt.indexOf('.')) + "Z");
                 });
                 break;
             case "date2":
-                data = [].concat(this.state.data).sort(function (a, b) {
+                data = [].concat(this.state.unsortedData).sort(function (a, b) {
                     if (new Date(a.createdAt.substring(0, a.createdAt.indexOf('.')) + "Z") < new Date(b.createdAt.substring(0, b.createdAt.indexOf('.')) + "Z")) return -1;
                     if (new Date(a.createdAt.substring(0, a.createdAt.indexOf('.')) + "Z") > new Date(b.createdAt.substring(0, b.createdAt.indexOf('.')) + "Z")) return 1;
                     return 0;
                 });
                 break;
             case "myfeedback":
-                data = [].concat(this.state.data).sort(function (a, b) {
+                data = [].concat(this.state.unsortedData).sort(function (a, b) {
                     if (a.userIdentification === sessionStorage.getItem('userId')) return 1;
                     if (b.userIdentification === sessionStorage.getItem('userId')) return -1;
                     return 0;
                 });
                 break;
             case "mostlike":
-                data = [].concat(this.state.data).sort(function (a, b) {
+                data = [].concat(this.state.unsortedData).sort(function (a, b) {
                     if (a.likeCount > b.likeCount) return -1;
                     if (b.likeCount > a.likeCount) return 1;
                     return 0;
                 });
                 break;
             case "unrated":
-                data = [].concat(this.state.data).sort(function (a, b) {
+                data = [].concat(this.state.unsortedData).sort(function (a, b) {
                     if (a.ratingFeedbacks.length == 0) return -1;
                     if (b.ratingFeedbacks.length == 0) return 1;
                     return 0;
                 });
                 break;
-            case "status1":
-                data = [].concat(this.state.data).sort(function (a, b) {
-                    if (a.ratingFeedbacks.length == 0) return -1;
-                    if (b.ratingFeedbacks.length == 0) return 1;
-                    return 0;
+            case "received":
+                data = [].concat(this.state.unsortedData).filter(element => {
+                    if(!element.hasOwnProperty("status")) {
+                        return false;
+                    }
+                    return element.status.status === 'received';
                 });
                 break;
-            case "status2":
-                data = [].concat(this.state.data).sort(function (a, b) {
-                    if (a.ratingFeedbacks.length == 0) return -1;
-                    if (b.ratingFeedbacks.length == 0) return 1;
-                    return 0;
+            case "progress":
+                data = [].concat(this.state.unsortedData).filter(element => {
+                    if (!element.hasOwnProperty("status")) {
+                        return false;
+                    }
+                    return element.status.status === 'in_progress';
                 });
                 break;
-            case "status3":
-                data = [].concat(this.state.data).sort(function (a, b) {
-                    if (a.ratingFeedbacks.length == 0) return -1;
-                    if (b.ratingFeedbacks.length == 0) return 1;
-                    return 0;
+            case "declined":
+                data = [].concat(this.state.unsortedData).filter(element => {
+                    if (!element.hasOwnProperty("status")) {
+                        return false;
+                    }
+                    return element.status.status === 'declined';
                 });
                 break;
-            case "status4":
-                data = [].concat(this.state.data).sort(function (a, b) {
-                    if (a.ratingFeedbacks.length == 0) return -1;
-                    if (b.ratingFeedbacks.length == 0) return 1;
-                    return 0;
+            case "completed":
+                data = [].concat(this.state.unsortedData).filter(element => {
+                    if (!element.hasOwnProperty("status")) {
+                        return false;
+                    }
+                    return element.status.status === 'completed';
                 });
                 break;
+            case "company":
+                data = [].concat(this.state.unsortedData).filter(element => {
+                    if (element.hasOwnProperty("promote")) {
+                        console.log(element);
+                        return element;
+                    }
+                });
+                break;
+
             default:
+                data = [].concat(this.state.unsortedData).sort(function (a, b) {
+                    return new Date(b.createdAt.substring(0, b.createdAt.indexOf('.')) + "Z") - new Date(a.createdAt.substring(0, a.createdAt.indexOf('.')) + "Z");
+                });
         }
         this.setState({sorting: sorting, data: data});
     }
@@ -196,39 +213,82 @@ class FeedbackForumTabAccordion extends Component {
     sortData() {
         switch (this.state.sorting) {
             case "date1":
-                return [].concat(this.state.data).sort(function (a, b) {
+                return [].concat(this.state.unsortedData).sort(function (a, b) {
                     return new Date(b.createdAt.substring(0, b.createdAt.indexOf('.')) + "Z") - new Date(a.createdAt.substring(0, a.createdAt.indexOf('.')) + "Z");
                 });
                 break;
             case "date2":
-                return [].concat(this.state.data).sort(function (a, b) {
+                return [].concat(this.state.unsortedData).sort(function (a, b) {
                     if (new Date(a.createdAt.substring(0, a.createdAt.indexOf('.')) + "Z") < new Date(b.createdAt.substring(0, b.createdAt.indexOf('.')) + "Z")) return -1;
                     if (new Date(a.createdAt.substring(0, a.createdAt.indexOf('.')) + "Z") > new Date(b.createdAt.substring(0, b.createdAt.indexOf('.')) + "Z")) return 1;
                     return 0;
                 });
                 break;
             case "myfeedback":
-                return [].concat(this.state.data).sort(function (a, b) {
+                return [].concat(this.state.unsortedData).sort(function (a, b) {
                     if (a.userIdentification === sessionStorage.getItem('userId')) return 1;
                     if (b.userIdentification === sessionStorage.getItem('userId')) return -1;
                     return 0;
                 });
                 break;
             case "mostlike":
-                return [].concat(this.state.data).sort(function (a, b) {
+                return [].concat(this.state.unsortedData).sort(function (a, b) {
                     if (a.likeCount > b.likeCount) return -1;
                     if (b.likeCount > a.likeCount) return 1;
                     return 0;
                 });
                 break;
             case "unrated":
-                return [].concat(this.state.data).sort(function (a, b) {
+                return [].concat(this.state.unsortedData).sort(function (a, b) {
                     if (a.ratingFeedbacks.length == 0) return -1;
                     if (b.ratingFeedbacks.length == 0) return 1;
                     return 0;
                 });
                 break;
+            case "received":
+                return [].concat(this.state.unsortedData).filter(element => {
+                    if(!element.hasOwnProperty("status")) {
+                        return false;
+                    }
+                    return element.status.status === 'received';
+                });
+                break;
+            case "progress":
+                return [].concat(this.state.unsortedData).filter(element => {
+                    if (!element.hasOwnProperty("status")) {
+                        return false;
+                    }
+                    return element.status.status === 'in_progress';
+                });
+                break;
+            case "declined":
+                return [].concat(this.state.unsortedData).filter(element => {
+                    if (!element.hasOwnProperty("status")) {
+                        return false;
+                    }
+                    return element.status.status === 'declined';
+                });
+                break;
+            case "completed":
+                return [].concat(this.state.unsortedData).filter(element => {
+                    if (!element.hasOwnProperty("status")) {
+                        return false;
+                    }
+                    return element.status.status === 'completed';
+                });
+                break;
+            case "company":
+                return [].concat(this.state.unsortedData).filter(element => {
+                    if (element.hasOwnProperty("promote")) {
+                        console.log(element);
+                        return element;
+                    }
+                });
+                break;
             default:
+                return [].concat(this.state.unsortedData).sort(function (a, b) {
+                    return new Date(b.createdAt.substring(0, b.createdAt.indexOf('.')) + "Z") - new Date(a.createdAt.substring(0, a.createdAt.indexOf('.')) + "Z");
+                });
         }
     }
 
@@ -242,6 +302,7 @@ class FeedbackForumTabAccordion extends Component {
                 <ForumSorting onUpdate={this.onUpdate.bind(this)}/>
                 <Accordion>
                     {sortedData.map(function (item, index) {
+                        console.log(sortedData);
                         if (!item.hasOwnProperty("textFeedbacks") || (item.textFeedbacks.length > 0 && item.categoryFeedbacks.length > 0)) {
                             var unread = false;
                             if (instance.state.unreadFeedbacks.filter((element) => element.id == item.id).length > 0) {

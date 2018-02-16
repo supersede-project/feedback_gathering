@@ -17,6 +17,9 @@ class ForumSorting extends Component {
     }
 
     handleChange(selectedOption) {
+        if(selectedOption === null) {
+            selectedOption = {value: ''};
+        }
         this.setState({selectedOption: selectedOption});
         this.props.onUpdate(selectedOption.value);
         console.log(`Selected: ${selectedOption.value}`);
@@ -28,6 +31,7 @@ class ForumSorting extends Component {
                 name="form-field-name"
                 value={this.state.selectedOption.value}
                 onChange={this.handleChange}
+                placeholder="Please select an option"
                 options={[
                     {value: 'date1', label: 'Decreasing date (Newest first)'},
                     {value: 'date2', label: 'Increasing date (Oldest first)'},
@@ -36,10 +40,10 @@ class ForumSorting extends Component {
                     {value: 'unrated', label: 'Unrated feedbacks'},
                     {value: 'mostlike', label: 'Most liked feedbacks'},
                     {value: 'company', label: 'Company entries'},
-                    {value: 'status1', label: 'Received'},
-                    {value: 'status2', label: 'In progress'},
-                    {value: 'status3', label: 'Declined'},
-                    {value: 'status4', label: 'Completed'},
+                    {value: 'received', label: 'Received'},
+                    {value: 'progress', label: 'In progress'},
+                    {value: 'declined', label: 'Declined'},
+                    {value: 'completed', label: 'Completed'},
 
                 ]}
             />

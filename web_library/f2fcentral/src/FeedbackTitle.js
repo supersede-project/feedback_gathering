@@ -4,7 +4,7 @@ import TiInfoOutline from 'react-icons/lib/ti/info-outline';
 import FaWechat from 'react-icons/lib/fa/wechat';
 import FaLightbulbO from 'react-icons/lib/fa/lightbulb-o';
 import TiInfoLargeOutline from 'react-icons/lib/ti/info-large-outline';
-import { Widget, addResponseMessage, addUserMessage, toggleWidget } from 'react-chat-widget';
+import {Widget, addResponseMessage, addUserMessage, toggleWidget} from 'react-chat-widget';
 import TiGroupOutline from 'react-icons/lib/ti/group-outline';
 import TiTag from 'react-icons/lib/ti/tag';
 import MdEmail from 'react-icons/lib/md/email';
@@ -16,103 +16,102 @@ import style from './App.css';
 
 class FeedbackTitle extends Component {
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      expanded: false,
-      iconColor: 'black',
-      showChat: false,
-      feedbackSetting : null,
-      feedbackStatus : null,
-      lastPulled: null
+    constructor(props) {
+        super(props);
+        this.state = {
+            expanded: false,
+            iconColor: 'black',
+            showChat: false,
+            feedbackSetting: null,
+            feedbackStatus: null,
+            lastPulled: null
+        }
+        this.toggleExpanded = this.toggleExpanded.bind(this);
+        this.setVisibility = this.setVisibility.bind(this);
+        this.handleNewUserMessage = this.handleNewUserMessage.bind(this);
+        this.handleShowChat = this.handleShowChat.bind(this);
+        this.handleMailIcon = this.handleMailIcon.bind(this);
+        this.fetchFeedbackSettings = this.fetchFeedbackSettings.bind(this);
+        this.handleFeedbackStatus = this.handleFeedbackStatus.bind(this);
+        this.changeMailSetting = this.changeMailSetting.bind(this);
+
     }
-    this.toggleExpanded = this.toggleExpanded.bind(this);
-    this.setVisibility = this.setVisibility.bind(this);
-    this.handleNewUserMessage = this.handleNewUserMessage.bind(this);
-      this.handleShowChat = this.handleShowChat.bind(this);
-      this.handleMailIcon = this.handleMailIcon.bind(this);
-      this.fetchFeedbackSettings = this.fetchFeedbackSettings.bind(this);
-      this.handleFeedbackStatus = this.handleFeedbackStatus.bind(this);
-      this.changeMailSetting = this.changeMailSetting.bind(this);
 
-  }
+    //Ensure request is sent upon loading of component
+    componentDidMount() {
+        this.fetchFeedbackSettings();
+        this.fetchFeedbackStatus();
+    }
 
-  //Ensure request is sent upon loading of component
-    componentDidMount(){
-     this.fetchFeedbackSettings();
-     this.fetchFeedbackStatus();
-  }
-
-  handleNewUserMessage(newMessage) {
-    var that = this;
-    fetch(process.env.REACT_APP_BASE_URL + 'en/applications/' + sessionStorage.getItem('applicationId') + '/feedbacks/feedback_chat', {
-      header: {
-        'Content-Type': 'application/json',
-        'Authorization': sessionStorage.getItem('token')
-      },
-      method: 'POST',
-      body: JSON.stringify({
-        feedback_id: that.props.feedbackId,
-        user_id: sessionStorage.getItem('userId'),
-        chat_text: newMessage,
-        initiated_by_user: false
-      })
-    })
-  }
+    handleNewUserMessage(newMessage) {
+        var that = this;
+        fetch(process.env.REACT_APP_BASE_URL + 'en/applications/' + sessionStorage.getItem('applicationId') + '/feedbacks/feedback_chat', {
+            header: {
+                'Content-Type': 'application/json',
+                'Authorization': sessionStorage.getItem('token')
+            },
+            method: 'POST',
+            body: JSON.stringify({
+                feedback_id: that.props.feedbackId,
+                user_id: sessionStorage.getItem('userId'),
+                chat_text: newMessage,
+                initiated_by_user: false
+            })
+        })
+    }
 
     handleShowChat(e) {
         this.props.onShowChat({showChat: true, index: this.props.feedbackId, title: this.props.title});
     }
 
-  toggleExpanded()
-  {
-    this.setState({expanded: !this.state.expanded});
-  }
-
-  //bug=661, function=662, generalfeedback=663
-  getIconForFeedbackType() {
-    if (this.props.type === 661) {
-      return <TiInfoOutline size={35} padding={75}/>;
+    toggleExpanded() {
+        this.setState({expanded: !this.state.expanded});
     }
 
-    if (this.props.type === 662) {
-      return <FaLightbulbO size={35} padding={75}/>;
-    }
-    if(this.props.type === 663) {
-      return <TiInfoLargeOutline size={35} padding={75}/>;
-    }
-    return <TiTag size={35} padding={75}/>;
-  }
+    //bug=661, function=662, generalfeedback=663
+    getIconForFeedbackType() {
+        if (this.props.type === 661) {
+            return <TiInfoOutline size={35} padding={75}/>;
+        }
 
-  handleVisibility(){
-    if(this.props.visibility === false){
-      return <TiGroupOutline size={35} onClick={this.setVisibility} padding={30}/>;
+        if (this.props.type === 662) {
+            return <FaLightbulbO size={35} padding={75}/>;
+        }
+        if (this.props.type === 663) {
+            return <TiInfoLargeOutline size={35} padding={75}/>;
+        }
+        return <TiTag size={35} padding={75}/>;
     }
-    if(this.props.visibility === true){
-      return <TiGroup size={35} padding={30}/>
+
+    handleVisibility() {
+        if (this.props.visibility === false) {
+            return <TiGroupOutline size={35} onClick={this.setVisibility} padding={30}/>;
+        }
+        if (this.props.visibility === true) {
+            return <TiGroup size={35} padding={30}/>
+        }
     }
-  }
 
-  setVisibility(e){
-    var that = this;
-    fetch(process.env.REACT_APP_BASE_URL + 'en/applications/'+ sessionStorage.getItem('applicationId')+'/feedbacks/visibility/' + that.props.feedbackId, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': sessionStorage.getItem('token')
-      },
-      body: JSON.stringify({
-        visible: true
-      })
-    }).then(result=> that.props.update());
-    e.stopPropagation();
-  }
+    setVisibility(e) {
+        var that = this;
+        fetch(process.env.REACT_APP_BASE_URL + 'en/applications/' + sessionStorage.getItem('applicationId') + '/feedbacks/visibility/' + that.props.feedbackId, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': sessionStorage.getItem('token')
+            },
+            body: JSON.stringify({
+                visible: true
+            })
+        }).then(result => that.props.update());
+        e.stopPropagation();
+    }
 
-    handleMailIcon(){
-        if(this.state.feedbackSetting ===  null || this.state.feedbackSetting.feedbackQuery === false) {
+    handleMailIcon() {
+        if (this.state.feedbackSetting === null || this.state.feedbackSetting.feedbackQuery === false) {
             return <MdEmail size={35} color='black' onClick={this.changeMailSetting}/>;
         }
-        if(this.state.feedbackSetting.feedbackQueryChannel === "Email"){
+        if (this.state.feedbackSetting.feedbackQueryChannel === "Email") {
             return <MdEmail size={35} color='green' onClick={this.changeMailSetting}/>;
         }
         else {
@@ -120,34 +119,34 @@ class FeedbackTitle extends Component {
         }
     }
 
-    fetchFeedbackSettings(){
+    fetchFeedbackSettings() {
         var that = this;
-        fetch(process.env.REACT_APP_BASE_URL + 'en/applications/'+ sessionStorage.getItem('applicationId')+'/feedbacks/feedbacksettings/feedback/' + this.props.feedbackId, {
+        fetch(process.env.REACT_APP_BASE_URL + 'en/applications/' + sessionStorage.getItem('applicationId') + '/feedbacks/feedbacksettings/feedback/' + this.props.feedbackId, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': sessionStorage.getItem('token')
             }
-        }).then(result=>result.json())
-            .then(result=> {
+        }).then(result => result.json())
+            .then(result => {
                 that.setState({feedbackSetting: result})
             });
     }
 
-    changeMailSetting(e){
+    changeMailSetting(e) {
         var that = this;
         var method = "";
-        if(this.state.feedbackSetting === null || this.state.feedbackSetting.status === 404) {
+        if (this.state.feedbackSetting === null || this.state.feedbackSetting.status === 404) {
             method = "POST";
         }
         else {
             method = "PUT";
         }
         var channel = "Feedback-To-Feedback Central";
-        if(this.state.feedbackSetting.feedbackQueryChannel !== 'Email') {
+        if (this.state.feedbackSetting.feedbackQueryChannel !== 'Email') {
             channel = "Email";
         }
-        fetch(process.env.REACT_APP_BASE_URL + 'en/applications/'+ sessionStorage.getItem('applicationId')+'/feedbacks/feedbacksettings/',  {
+        fetch(process.env.REACT_APP_BASE_URL + 'en/applications/' + sessionStorage.getItem('applicationId') + '/feedbacks/feedbacksettings/', {
             method: method,
             headers: {
                 'Content-Type': 'application/json',
@@ -161,39 +160,39 @@ class FeedbackTitle extends Component {
                 feedback_id: that.props.feedbackId,
                 globalFeedbackSetting: false
             })
-        }).then(result=> that.fetchFeedbackSettings());
+        }).then(result => that.fetchFeedbackSettings());
         e.stopPropagation();
     }
 
-    fetchFeedbackStatus(){
+    fetchFeedbackStatus() {
         var that = this;
-        fetch(process.env.REACT_APP_BASE_URL + 'en/applications/'+ sessionStorage.getItem('applicationId')+'/feedbacks/status/feedback/' + this.props.feedbackId, {
+        fetch(process.env.REACT_APP_BASE_URL + 'en/applications/' + sessionStorage.getItem('applicationId') + '/feedbacks/status/feedback/' + this.props.feedbackId, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': sessionStorage.getItem('token')
             }
-        }).then(result=>result.json())
-            .then(result=> {
+        }).then(result => result.json())
+            .then(result => {
                 that.setState({feedbackStatus: result})
             });
     }
 
-    handleFeedbackStatus(){
+    handleFeedbackStatus() {
         //var that = this;
-        if(this.state.feedbackStatus === null || this.state.feedbackStatus.status === null){
+        if (this.state.feedbackStatus === null || this.state.feedbackStatus.status === null) {
             return <label className={style.statusunknown}>Status loading</label>
         }
-        if(this.state.feedbackStatus.status === 'completed'){
+        if (this.state.feedbackStatus.status === 'completed') {
             return <label className={style.statuscomplete}>Completed</label>
         }
-        if(this.state.feedbackStatus.status === 'in_progress'){
+        if (this.state.feedbackStatus.status === 'in_progress') {
             return <label className={style.statusprogress}>In Progress</label>
         }
-        if(this.state.feedbackStatus.status === 'declined'){
+        if (this.state.feedbackStatus.status === 'declined') {
             return <label className={style.statusdeclined}>Declined</label>
         }
-        if(this.state.feedbackStatus.status === 'received'){
+        if (this.state.feedbackStatus.status === 'received') {
             return <label className={style.statusreceived}>Received</label>
         }
         else {
@@ -202,38 +201,53 @@ class FeedbackTitle extends Component {
     }
 
 
-  render()
-  {
-    var showChat = null;
-    if(this.state.showChat) {
-      showChat = <Widget title={this.props.title} subtitle="" handleNewUserMessage={this.handleNewUserMessage}/>
-    }
-    return (<div style={{display: "flex", justifyContent: "flex-start"}}><h5 align="left" style={{
-      flexGrow: 2,
-      fontSize: 12,
-      fontStyle: 'italic'
-    }} onClick={this.toggleExpanded}>{this.getIconForFeedbackType()}&nbsp; {(!this.state.expanded && this.props.title.length > 30)? this.props.title.substring(0, 30) + "...": this.props.title}
-    <div className={style.spacingstyle}><div align="left" style={{fontSize: 10}}>sent on {this.props.date}</div>
-    <div align="left" style={{fontSize: 10, color: '#169BDD'}}>Status: {this.handleFeedbackStatus()}</div>
-      <div align="left" style={{fontSize: 10, color: '#169BDD'}}>Forum activity:
-        <FaThumbsOUp size={20} color={'black'} padding={10}/>
-        <span className={style.counts}>{this.props.likes}</span>
-        <FaThumbsODown size={20} color={'black'} padding={10}/>
-        <span className={style.counts}>{this.props.dislikes}</span>
-        <FaWechat size={20} color={'#63C050'} padding={10}/>
-        <span className={style.counts}>{this.props.commentnumber}</span>
-      </div>
-  </div></h5>
-  {showChat}
-  <div className="iconContainer">
-    {this.handleVisibility()}
-    {/*
-    <MdEmail size={35} onClick={this.changeMailSetting} color={this.state.iconColor}/>
-    */}
-      {this.handleMailIcon()}
-    <FaWechat align="left" color={'#63C050'} style={{flexGrow: "1"}} onClick={this.handleShowChat} size={35} />
-    </div></div>);
-    }
-  }
+    render() {
+        var showChat = null;
+        if (this.state.showChat) {
+            showChat = <Widget title={this.props.title} subtitle="" handleNewUserMessage={this.handleNewUserMessage}/>
+        }
 
-  export default FeedbackTitle;
+        var dateText = "";
+        var tmpDate = new Date(this.props.date.substring(0, this.props.date.indexOf('.')) + "Z");
+        var options = {year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric'}
+        dateText = new Intl.DateTimeFormat('de-DE', options).format(tmpDate);
+
+        return (<div style={{display: "flex", justifyContent: "space-around", background: 'linear-gradient(to top, #dfe9f3 0%, white 100%)'}}>
+            <h5 align="left" style={{
+                flexGrow: 2,
+                fontSize: 12,
+                fontStyle: 'italic'
+            }}
+                onClick={this.toggleExpanded}>{this.getIconForFeedbackType()}&nbsp; {(!this.state.expanded && this.props.title.length > 30) ? this.props.title.substring(0, 30) + "..." : this.props.title}
+                <div className={style.spacingstyle}>
+                    <div align="left" style={{fontSize: 10}}>sent on {dateText}</div>
+                    <div align="left" style={{fontSize: 10, color: '#169BDD'}}>
+                        Status: {this.handleFeedbackStatus()}</div>
+                    <div align="left" style={{fontSize: 10, color: '#169BDD'}}>Forum activity:
+                        <FaThumbsOUp size={20} color={'black'} padding={10}/>
+                        <span className={style.counts}>{this.props.likes}</span>
+                        <FaThumbsODown size={20} color={'black'} padding={10}/>
+                        <span className={style.counts}>{this.props.dislikes}</span>
+                        <FaWechat size={20} color={'#63C050'} padding={10}/>
+                        <span className={style.counts}>{this.props.commentnumber}</span>
+                    </div>
+                </div>
+            </h5>
+            {showChat}
+            <div className={style.iconContainer}>
+
+                {this.handleVisibility()}
+
+
+                {this.handleMailIcon()}
+
+
+                <FaWechat align="left" color={'#63C050'} style={{flexGrow: "1"}} onClick={this.handleShowChat}
+                          size={35}/>
+
+            </div>
+        </div>);
+    }
+}
+
+export default FeedbackTitle;

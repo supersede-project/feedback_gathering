@@ -7,6 +7,7 @@ import FaWechat from 'react-icons/lib/fa/wechat';
 import FaLightbulbO from 'react-icons/lib/fa/lightbulb-o';
 import TiInfoLargeOutline from 'react-icons/lib/ti/info-large-outline';
 import TiTag from 'react-icons/lib/ti/tag';
+import MdVisibility from 'react-icons/lib/md/visibility';
 
 
 import style from './App.css';
@@ -127,7 +128,11 @@ class ForumTitle extends Component {
                     fontStyle: 'italic'
                 }}
                     onClick={this.toggleExpanded}>{this.getIconForFeedbackType()}&nbsp; {(!this.state.expanded && this.props.title.length > 30) ? this.props.title.substring(0, 30) + "..." : this.props.title}
-                </h5>
+
+                <div className={style.spacingstyle}>
+                    <div align="left" style={{fontSize: 10, color: 'black'}}>
+                        <MdVisibility size={17} color={"black"}/>Status: Feedback under review</div>
+                </div></h5>
                 <div className={style.forumIconContainer}>
                     <div className={style.bundledIcon}>
                         <FaWechat align="left" size={35} style={{flexGrow: "1"}} color={'#63C050'}
@@ -177,7 +182,7 @@ class ForumTitle extends Component {
         }
         else {
 
-            return (<div style={{display: "flex", justifyContent: "space-around", background: '#1a8cff'}}>
+            return (<div style={{display: "flex", justifyContent: "space-around", background: 'linear-gradient(to bottom, #ffffff 0%, #f2f8ff 20%, #e6f2ff 52%, #cce5ff 100%)'}}>
                 <h5 align="left" style={{
                     flexGrow: 2,
                     fontSize: 12,

@@ -115,13 +115,16 @@ button {
 }
 
 .iconContainer {
+  padding-top: 10px;
+  flex-grow: 1;
   display: flex;
+  flex-wrap: nowrap;
+  flex-direction: row;
 }
 
 .iconContainer svg {
-  margin-left: 6px;
+  margin-left: 10px;
   flex-grow: 1;
-  padding: 0 20px;
 }
 
 .iconContainer svg:first-child {
@@ -141,12 +144,6 @@ button {
   flex-wrap: nowrap;
   flex-direction: row;
 }
-
-/*
-.forumIconContainer {
-  display: inline-block;
-  margin-left: 10px;
-}*/
 
 .forumIconContainer svg {
   margin-left: 10px;
@@ -169,11 +166,15 @@ button {
 }
 
 .companyIconContainer {
+  padding-top: 10px;
+  flex-grow: 1;
   display: flex;
+  flex-wrap: nowrap;
+  flex-direction: row;
 }
 
 .companyIconContainer svg {
-  margin-left: 6px;
+  margin-left: 10px;
   flex-grow: 1;
 }
 
