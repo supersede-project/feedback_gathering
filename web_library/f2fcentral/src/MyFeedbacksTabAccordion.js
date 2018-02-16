@@ -24,7 +24,9 @@ class MyFeedbacksTabAccordion extends Component {
           loading: true,
           showChat: false,
           chatIndex: null,
-          chatTitle: ''
+          chatTitle: '',
+          showFeedback: false,
+          tab: null
         }
         this.fetchData = this.fetchData.bind(this);
         this.handleShowChat = this.handleShowChat.bind(this);
@@ -60,23 +62,28 @@ class MyFeedbacksTabAccordion extends Component {
         this.setState({showChat: false, chatIndex: null, chatTitle: ''});
     }
 
+
+
     render() {
       let toRender = null;
       var that = this;
       if(!that.state.showChat && that.state.data.length > 0) {
 
-        toRender = <Accordion>
+        toRender = <div><Accordion>
         {that.state.data.map(function (item, index) {
             if(item.textFeedbacks.length > 0 && item.categoryFeedbacks.length > 0)
             {
               return (
-                  <AccordionItem className={style.reactsanfonaitem} titleTag="span" title={<FeedbackTitle feedbackId={item.id} update={that.fetchData} updateSetting={that.fetchData} onShowChat={that.handleShowChat} type={item.categoryFeedbacks[0].parameterId} title={item.textFeedbacks[0].text} visibility={item.visibility} date={item.createdAt} likes={item.likeCount} dislikes={item.dislikeCount} commentnumber={item.commentCount}/>}>
+                  <AccordionItem className={style.reactsanfonaitem} titleTag="span" title={<FeedbackTitle feedbackId={item.id} update={that.fetchData} updateSetting={that.fetchData} onShowChat={that.handleShowChat} type={item.categoryFeedbacks[0].parameterId} title={item.textFeedbacks[0].text} visibility={item.visibility} published={item.published} date={item.createdAt} likes={item.likeCount} dislikes={item.dislikeCount} commentnumber={item.commentCount}/>}>
                   </AccordionItem>
               )
             }
             return false;
         })}
-                  </Accordion>;
+                  </Accordion>
+        <div>
+            <PromotingBanner positioning=""/>
+        </div></div>;
       }
       else if (this.state.loading) {
         var divStyle = {
@@ -89,7 +96,7 @@ class MyFeedbacksTabAccordion extends Component {
         toRender = <div style={divStyle}><PulseLoader
           loading={this.state.loading}
         /></div>
-          //718x126
+
       }
       else if(this.state.showChat) {
           toRender = <ChatView feedbackId={this.state.chatIndex} title={this.state.chatTitle} onBackButtonPressed={this.handleBackButtonPressed}/>
@@ -99,7 +106,7 @@ class MyFeedbacksTabAccordion extends Component {
               <div>
               <p>No Elements to show</p>
                 <div>
-                  <PromotingBanner/>
+                  <PromotingBanner positioning="absolute"/>
                 </div>
               </div>    ;
       }

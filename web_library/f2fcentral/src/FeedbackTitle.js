@@ -84,11 +84,26 @@ class FeedbackTitle extends Component {
     }
 
     handleVisibility() {
+        var statusStyle={
+        color: 'black',
+        border: '1px solid #333333',
+        padding: '3px 7px',
+        background: 'linear-gradient(180deg, #fff, #ddd 40%, #ccc)',
+        textAlign: 'center',
+        fontSize: '7px'
+        }
         if (this.props.visibility === false) {
             return <TiGroupOutline size={35} onClick={this.setVisibility} padding={30}/>;
         }
-        if (this.props.visibility === true) {
+        if (this.props.visibility === true && this.props.published=== true) {
             return <TiGroup size={35} padding={30}/>
+        }
+        if(this.props.visibility === true && this.props.published === false){
+            return <div><TiGroup color={'grey'} size={35} padding={30}/><br/>
+                <div style={{fontSize: '10'}}>
+            Status:<br/><div style={statusStyle}>Request pending</div>
+            </div>
+            </div>
         }
     }
 

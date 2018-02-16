@@ -9,47 +9,72 @@ class PromotingBanner extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            data: []
+            data: [],
+            showFeedback: false,
+            toggled: false
         }
         this.fetchCompanyFeedbacks = this.fetchCompanyFeedbacks.bind(this);
+        this.toggleMessage = this.toggleMessage.bind(this);
     }
 
-    componentDidMount(){
+    componentDidMount() {
         this.fetchCompanyFeedbacks();
     }
 
-    fetchCompanyFeedbacks(){
+    fetchCompanyFeedbacks() {
+        var that = this;
         fetch(process.env.REACT_APP_BASE_URL + 'en/applications/' + sessionStorage.getItem('applicationId') + '/feedbacks/feedback_company', {
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': sessionStorage.getItem('token')
-                }
-            }).then(result => result.json())
-                .then(result => {
-                    this.setState({data: result})
-                });
-        }
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': sessionStorage.getItem('token')
+            }
+        }).then(result => result.json())
+            .then(result => {
+                that.setState({data: result})
+            });
+    }
+
+    toggleMessage(e){
+        this.setState({toggled: !this.state.toggled});
+    }
 
     render() {
-        return (
-                <div>
-                    {this.state.data.map(function(item, index) {
-                    <div style={{
-                        display: "flex",
-                        justifyContent: "space-around",
-                        background: 'linear-gradient(to top, lightgrey 0%, lightgrey 1%, #e0e0e0 26%, #efefef 48%, #d9d9d9 75%, #bcbcbc 100%)'
-                    }}>
-                        <h5 align="left" style={{
-                            flexGrow: 2,
-                            fontSize: 12,
-                            fontStyle: 'italic'
-                        }}><TiNews size={35}
-                                   padding={75}/>&nbsp; {(item.text.length > 30) ? item.text.substring(0, 30) + "..." : item.text}
-                        </h5>
-                    </div>
+        var that = this;
+        if(!that.state.toggled) {
+            return (
+                <div className={style.promotingbanner}
+                     style={{
+                         position: this.props.positioning,
+                         background: 'linear-gradient(to bottom, lightgrey 0%, #CCCCCC 1%, #e0e0e0 26%, #d9d9d9 48%, #bfbfbf 75%, #b3b3b3 100%)'
+                     }}>
+                    {that.state.data.map(function (item, index) {
+                        if (item.promote === true) {
+                            return (<div>
+                                <h5 align="left" style={{
+                                    fontSize: 10,
+                                    fontStyle: 'italic'
+                                }} onClick={that.toggleMessage}>
+                                    <TiNews size={35}
+                                            padding={75}/>&nbsp; {(item.text.length > 30) ? item.text.substring(0, 30) + "..." : item.text}
+                                </h5>
+                            </div>);
+                        }
                     })}
                 </div>
-        );
+            );
+        }
+        else if(that.state.toggled){
+            return (
+                <div className={style.promotingbanner}
+                     style={{
+                         position: this.props.positioning,
+                         background: 'linear-gradient(to bottom, lightgrey 0%, lightgrey 1%, #e0e0e0 26%, #efefef 48%, #d9d9d9 75%, #bcbcbc 100%)'
+                     }}>
+                    <p onClick={that.toggleMessage} style={{color: 'red', fontStyle: 'oblique', fontSize: 10}}>Check out the forum for more details</p>
+                </div>
+            );
+
+        }
     }
 }
 

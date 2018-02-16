@@ -141,11 +141,18 @@ class FeedbackForumTabAccordion extends Component {
                 });
                 break;
             case "myfeedback":
-                data = [].concat(this.state.unsortedData).sort(function (a, b) {
-                    if (a.userIdentification === sessionStorage.getItem('userId')) return 1;
-                    if (b.userIdentification === sessionStorage.getItem('userId')) return -1;
-                    return 0;
+                data = [].concat(this.state.unsortedData).filter(element => {
+                        if(!element.hasOwnProperty("userIdentification")){
+                            return false;
+                        }
+                        return element.userIdentification === parseInt(sessionStorage.getItem('userId'));
                 });
+
+                /* sort(function (a, b) {
+                  if (a.userIdentification === sessionStorage.getItem('userId')) return 1;
+                  if (b.userIdentification === sessionStorage.getItem('userId')) return -1;
+                  return 0;
+                });*/
                 break;
             case "mostlike":
                 data = [].concat(this.state.unsortedData).sort(function (a, b) {
@@ -223,11 +230,18 @@ class FeedbackForumTabAccordion extends Component {
                 });
                 break;
             case "myfeedback":
-                return [].concat(this.state.unsortedData).sort(function (a, b) {
+
+                return [].concat(this.state.unsortedData).filter(element => {
+                    if(!element.hasOwnProperty("userIdentification")){
+                        return false;
+                    }
+                    return element.userIdentification === parseInt(sessionStorage.getItem('userId'));
+                });
+                /*return [].concat(this.state.unsortedData).sort(function (a, b) {
                     if (a.userIdentification === sessionStorage.getItem('userId')) return 1;
                     if (b.userIdentification === sessionStorage.getItem('userId')) return -1;
                     return 0;
-                });
+                });*/
                 break;
             case "mostlike":
                 return [].concat(this.state.unsortedData).sort(function (a, b) {
@@ -299,6 +313,7 @@ class FeedbackForumTabAccordion extends Component {
                 <ForumSorting onUpdate={this.onUpdate.bind(this)}/>
                 <Accordion>
                     {sortedData.map(function (item, index) {
+                        console.log(sortedData);
                         if (!item.hasOwnProperty("textFeedbacks") || (item.textFeedbacks.length > 0 && item.categoryFeedbacks.length > 0)) {
                             var unread = false;
                             if (instance.state.unreadFeedbacks.filter((element) => element.id == item.id).length > 0) {

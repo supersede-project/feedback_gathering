@@ -294,10 +294,12 @@ button {
 }
 
 .promotingbanner{
-  color: #cacaca;
-  border: 1px solid #333333;
-  font-size: 8px;
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #CCCCCC;
+  color: white;
   line-height: 200%;
+  bottom: 0px;
 }
 
 .companyfeedbackform{
