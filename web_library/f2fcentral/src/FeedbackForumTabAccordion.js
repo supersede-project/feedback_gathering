@@ -196,12 +196,10 @@ class FeedbackForumTabAccordion extends Component {
             case "company":
                 data = [].concat(this.state.unsortedData).filter(element => {
                     if (element.hasOwnProperty("promote")) {
-                        console.log(element);
                         return element;
                     }
                 });
                 break;
-
             default:
                 data = [].concat(this.state.unsortedData).sort(function (a, b) {
                     return new Date(b.createdAt.substring(0, b.createdAt.indexOf('.')) + "Z") - new Date(a.createdAt.substring(0, a.createdAt.indexOf('.')) + "Z");
@@ -280,7 +278,6 @@ class FeedbackForumTabAccordion extends Component {
             case "company":
                 return [].concat(this.state.unsortedData).filter(element => {
                     if (element.hasOwnProperty("promote")) {
-                        console.log(element);
                         return element;
                     }
                 });
@@ -302,7 +299,6 @@ class FeedbackForumTabAccordion extends Component {
                 <ForumSorting onUpdate={this.onUpdate.bind(this)}/>
                 <Accordion>
                     {sortedData.map(function (item, index) {
-                        console.log(sortedData);
                         if (!item.hasOwnProperty("textFeedbacks") || (item.textFeedbacks.length > 0 && item.categoryFeedbacks.length > 0)) {
                             var unread = false;
                             if (instance.state.unreadFeedbacks.filter((element) => element.id == item.id).length > 0) {

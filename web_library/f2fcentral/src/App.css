@@ -293,6 +293,13 @@ button {
   line-height: 200%;
 }
 
+.promotingbanner{
+  color: #cacaca;
+  border: 1px solid #333333;
+  font-size: 8px;
+  line-height: 200%;
+}
+
 .companyfeedbackform{
   line-height: 200%;
   color: #006CEF;

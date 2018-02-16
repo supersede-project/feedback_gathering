@@ -12,6 +12,7 @@ import FeedbackBody from './FeedbackBody';
 import FeedbackData from './FeedbackData';
 import MdNotificationsActive from 'react-icons/lib/md/notifications-active';
 import ChatView from './ChatView';
+import PromotingBanner from "./PromotingBanner";
 
 
 class MyFeedbacksTabAccordion extends Component {
@@ -88,12 +89,19 @@ class MyFeedbacksTabAccordion extends Component {
         toRender = <div style={divStyle}><PulseLoader
           loading={this.state.loading}
         /></div>
+          //718x126
       }
       else if(this.state.showChat) {
           toRender = <ChatView feedbackId={this.state.chatIndex} title={this.state.chatTitle} onBackButtonPressed={this.handleBackButtonPressed}/>
       }
       else {
-        toRender = <p>No Elements to show</p>;
+          toRender =
+              <div>
+              <p>No Elements to show</p>
+                <div>
+                  <PromotingBanner/>
+                </div>
+              </div>    ;
       }
         return (
             <div className={style.MyFeedbacksTabAccordion}>
