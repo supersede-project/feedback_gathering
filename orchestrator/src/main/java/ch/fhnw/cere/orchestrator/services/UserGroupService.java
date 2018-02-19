@@ -12,7 +12,7 @@ public interface UserGroupService {
     public UserGroup find(long id);
     public void delete(long id);
     public List<UserGroup> findByApplicationId(long id);
-    public List<UserGroup> findByUserIdentification(long applicationId, String userIdentification);
+    public UserGroup findByApplicationIdAndUserIdentification(long applicationId, String userIdentification);
 }
 
 
