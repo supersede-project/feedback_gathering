@@ -16,7 +16,7 @@ public class UserGroup {
 
     private String name;
 
-    @OneToMany(mappedBy = "userGroup", fetch=FetchType.EAGER)
+    @OneToMany(mappedBy = "userGroup", fetch=FetchType.EAGER, cascade = {CascadeType.PERSIST})
     private List<User> users;
 
     @Transient

@@ -4,6 +4,7 @@ import {PageNavigation} from '../../js/helpers/page_navigation';
 import {FeedbackDialogView} from './feedback_dialog_view';
 import {PullConfiguration} from '../../models/configurations/pull_configuration';
 import {QuestionDialogView} from './question_dialog_view';
+import { mechanismTypes } from '../../js/config';
 
 
 /**
@@ -14,6 +15,7 @@ export class PullFeedbackDialogView extends FeedbackDialogView {
     constructor(public dialogId:string, public template:any, public configuration:PullConfiguration, public context:any, public openCallback?:() => void,
                 public closeCallback?:() => void) {
         super(dialogId, template, configuration, context, openCallback, closeCallback);
+        this.checkMechanisms();
     }
 
     open() {
@@ -43,6 +45,17 @@ export class PullFeedbackDialogView extends FeedbackDialogView {
             setTimeout(function () {
                 pullFeedbackDialogView.dialogElement.dialog('open');
             }, delay * 1000);
+        }
+    }
+
+    checkMechanisms() {
+        if(!this.configuration) {
+            return;
+        }
+        let mechanisms = this.configuration.mechanisms;
+        if(mechanisms.length === 1 && mechanisms[0].type === mechanismTypes.infoType) {
+            let container = jQuery('#'+ this.dialogId);
+            container.find('button.submit-feedback').hide();
         }
     }
 }

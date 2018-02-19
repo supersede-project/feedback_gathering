@@ -24,5 +24,5 @@ export const configurationTypes = {
     elementSpecificPush: 'ELEMENT_SPECIFIC_PUSH'
 };
 export const cookieNames = {
-    lastTriggered: 'lastTriggered'
+    lastTriggered: 'lastTriggered',
 };

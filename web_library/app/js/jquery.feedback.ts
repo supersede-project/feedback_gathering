@@ -15,6 +15,7 @@ import { QuestionDialogView } from '../views/dialog/question_dialog_view';
 import * as i18next from 'i18next';
 import { PullFeedbackDialogView } from '../views/dialog/pull_feedback_dialog_view';
 import { FeedbackDialogView } from '../views/dialog/feedback_dialog_view';
+import { EndUserApplicationService } from "../services/end_user_application_service";
 
 let mockData = require('json!../services/mocks/dev/application_senercon_20.json');
 
@@ -42,8 +43,11 @@ export var feedbackPluginModule = function ($, window, document) {
 
         I18nHelper.initializeI18n(options, function (language) {
             let applicationService = new ApplicationService(options.apiEndpointOrchestrator, language); //, mockBackend);
+            let endUserApplicationSerivce = new EndUserApplicationService(options.apiEndpointOrchestrator, options.lang);
+
             feedbackApp = new FeedbackApp(applicationService, options.applicationId, options, button);
-            feedbackApp.loadApplicationConfiguration();
+            feedbackApp.endUserApplicationService = endUserApplicationSerivce;
+            feedbackApp.loadApplicationConfiguration(options.userId);
         });
 
         return this;

@@ -119,8 +119,10 @@ public class Feedback {
 
         for(MechanismFeedback mechanismFeedback : mechanismFeedbacks) {
             Mechanism mechanism = application.mechanismByConfigurationIdAndMechanismId(configurationId, mechanismFeedback.getMechanismId());
-            MechanismTemplateModel mechanismTemplateModel = new MechanismTemplateModel(mechanism);
-            mechanismFeedback.setMechanism(mechanismTemplateModel);
+            if(mechanism != null) {
+                MechanismTemplateModel mechanismTemplateModel = new MechanismTemplateModel(mechanism);
+                mechanismFeedback.setMechanism(mechanismTemplateModel);
+            }
             mechanismFeedbacksWithMechanism.add(mechanismFeedback);
         }
         return mechanismFeedbacksWithMechanism;

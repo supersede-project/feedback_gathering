@@ -2,12 +2,12 @@ import {ApplicationService} from '../services/application_service';
 import {Application} from '../models/applications/application';
 import {shuffle} from './helpers/array_shuffle';
 import {FeedbackDialogView} from '../views/dialog/feedback_dialog_view';
-import { logError } from 'typings/dist/support/cli';
-import { PullConfiguration } from '../models/configurations/pull_configuration';
+import { EndUserApplicationService } from "../services/end_user_application_service";
 
 
 export class FeedbackApp {
     applicationService:ApplicationService;
+    endUserApplicationService:EndUserApplicationService;
     application:Application;
     applicationId:number;
     options:any;
@@ -21,7 +21,33 @@ export class FeedbackApp {
         this.feedbackButton = feedbackButton;
     }
 
-    loadApplicationConfiguration() {
+    loadApplicationConfiguration(userId:string) {
+        if(userId !== undefined && userId !== '' && this.endUserApplicationService !== null) {
+            this.loadApplicationConfigurationForEndUser(userId);
+        } else {
+            this.loadApplicationConfigurationForAnonymousUser();
+        }
+    }
+
+    // TODO refactor and simplify loading for end user or anonymous user (no user present)
+    loadApplicationConfigurationForEndUser(userId:string) {
+        this.endUserApplicationService.retrieveApplicationForEndUser(this.applicationId, userId,loadedApplication => {
+            this.application = loadedApplication;
+            if (!loadedApplication.state) {
+                this.feedbackButton.hide();
+            }
+            this.checkPullConfigurations(loadedApplication);
+            this.configureDialog(loadedApplication);
+            this.configureFeedbackButton();
+            this.configureElementSpecificPush(loadedApplication);
+            this.feedbackButton.show();
+        }, errorData => {
+            console.warn('SERVER ERROR ' + errorData.status + ' ' + errorData.statusText + ': ' + errorData.responseText);
+            this.feedbackButton.hide();
+        });
+    }
+
+    loadApplicationConfigurationForAnonymousUser() {
         this.applicationService.retrieveApplication(this.applicationId, loadedApplication => {
             this.application = loadedApplication;
             if (!loadedApplication.state) {

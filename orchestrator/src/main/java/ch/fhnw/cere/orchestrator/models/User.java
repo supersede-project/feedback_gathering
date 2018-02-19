@@ -39,6 +39,12 @@ public class User {
         this.userGroup = userGroup;
     }
 
+    public User(String name, String userIdentification, Application application) {
+        this.name = name;
+        this.userIdentification = userIdentification;
+        this.application = application;
+    }
+
     public long getId() {
         return id;
     }

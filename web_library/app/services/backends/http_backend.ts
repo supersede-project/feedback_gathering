@@ -5,11 +5,13 @@ export class HttpBackend implements Backend {
     private path:string;
     private apiEndpoint:string;
     private language:string;
+    private url:string;
 
     constructor(path:string, apiEndpoint:string, language:string) {
         this.path = path;
         this.apiEndpoint = apiEndpoint;
         this.language = language;
+        this.url = (this.apiEndpoint + this.path).replace('{lang}', this.language);
     }
 
     list(callback:(data:any) => void, errorCallback?:(data:any) => void): void {
@@ -57,7 +59,11 @@ export class HttpBackend implements Backend {
         return null;
     }
 
+    setUrl(url:string) {
+        this.url = url;
+    }
+
     getUrl(): string {
-        return (this.apiEndpoint + this.path).replace('{lang}', this.language);
+        return this.url;
     }
 }
