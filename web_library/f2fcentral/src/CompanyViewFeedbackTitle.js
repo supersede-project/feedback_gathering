@@ -27,7 +27,8 @@ class CompanyViewFeedbackTitle extends Component {
       lastPulled: null,
       visiblePublishedIcon: 'hidden',
       feedbackStatus : null,
-      feedbackSetting: null
+      feedbackSetting: null,
+      backgroundcolor: ''
     }
 
     this.toggleExpanded = this.toggleExpanded.bind(this);
@@ -41,11 +42,14 @@ class CompanyViewFeedbackTitle extends Component {
     this.handleFeedbackStatus = this.handleFeedbackStatus.bind(this);
     this.publishFeedback = this.publishFeedback.bind(this);
     this.handleShowCommentChange = this.handleShowCommentChange.bind(this);
+    this.handleBlockedThread = this.handleBlockedThread.bind(this);
+    this.handleBackgroundColor = this.handleBackgroundColor.bind(this);
   }
 
     componentDidMount(){
       this.fetchFeedbackSettings();
       this.fetchFeedbackStatus();
+      this.handleBackgroundColor();
   }
 
   handleNewUserMessage(newMessage) {
@@ -95,6 +99,36 @@ class CompanyViewFeedbackTitle extends Component {
     }
 
   closeThread(e){
+      var that = this;
+
+      if(this.props.blocked === false) {
+          fetch(process.env.REACT_APP_BASE_URL + 'en/applications/' + sessionStorage.getItem('applicationId') + '/feedbacks/blocked/' + this.props.feedbackId, {
+              method: 'PUT',
+              headers: {
+                  'Content-Type': 'application/json',
+                  'Authorization': sessionStorage.getItem('token')
+              },
+              body: JSON.stringify({
+                  blocked: true
+              })
+          }).then(result => this.props.update());
+          that.setState({backgroundcolor: 'linear-gradient(-180deg, rgba(255,255,255,0.50) 0%, rgba(0,0,0,0.50) 100%)'});
+          e.stopPropagation();
+      }
+      else if(this.props.blocked === true){
+          fetch(process.env.REACT_APP_BASE_URL + 'en/applications/' + sessionStorage.getItem('applicationId') + '/feedbacks/blocked/' + this.props.feedbackId, {
+              method: 'PUT',
+              headers: {
+                  'Content-Type': 'application/json',
+                  'Authorization': sessionStorage.getItem('token')
+              },
+              body: JSON.stringify({
+                  blocked: false
+              })
+          }).then(result => this.props.update());
+          that.setState({backgroundcolor: 'linear-gradient(to top, #e6e9f0 0%, #eef1f5 100%)'});
+          e.stopPropagation();
+      }
   }
 
   handleMailIcon(){
@@ -108,15 +142,27 @@ class CompanyViewFeedbackTitle extends Component {
               return <MdEmail size={35} color='black'/>;
           }
       }
-      /*if(this.state.feedbackQuery === 'Feedback-To-Feedback Central'){
-          return <MdEmail size={35} color='black'/>;
+
+
+      handleBackgroundColor(){
+        if(this.props.blocked === false){
+            this.setState({backgroundcolor: 'linear-gradient(to top, #e6e9f0 0%, #eef1f5 100%)'});
+        }
+        else if(this.props.blocked === true){
+            this.setState({backgroundcolor: 'linear-gradient(-180deg, rgba(255,255,255,0.50) 0%, rgba(0,0,0,0.50) 100%)'});
+        }
       }
 
-    if(this.state.feedbackQuery === 'Email'){
-      return <MdEmail size={35} color='green'/>;
-    }*/
+  handleBlockedThread(){
+          var that = this;
 
-
+      if(this.props.blocked === true){
+          return <GoCircleSlash size={30} color="black" onClick={this.closeThread}/>
+      }
+      else if(this.props.blocked === false) {
+          return <GoCircleSlash size={30} color="red" onClick={this.closeThread}/>
+      }
+  }
 
   handleVisibility(){
     if(this.props.visibility === false){
@@ -212,32 +258,41 @@ class CompanyViewFeedbackTitle extends Component {
       }
   }
 
-  render()
-  {
-    var showChat = null;
-    return (<div style={{display: "flex", justifyContent: "flex-start"}}><h5 align="left" style={{
-      flexGrow: 2,
-      fontSize: 12,
-      fontStyle: 'italic'
-    }} onClick={this.toggleExpanded}><GoCircleSlash size={30} color="red" onClick={this.closeThread}/>{this.getIconForFeedbackType()}&nbsp; {(!this.state.expanded && this.props.title.length > 20)? this.props.title.substring(0, 20) + "...": this.props.title}
-    <div className={style.spacingstyle}><div align="left" style={{fontSize: 10}}>sent on {this.props.date}</div>
-      <div align="left" style={{fontSize: 10, color: '#169BDD'}}>Status: {this.handleFeedbackStatus()}
-     </div>
-    <div align="left" style={{fontSize: 10, color: '#169BDD'}}>Forum activity:
-      <FaThumbsOUp size={20} color={'black'} padding={10}/>
-      <span className={style.counts}>{this.props.likes}</span>
-      <FaThumbsODown size={20} color={'black'} padding={10}/>
-      <span className={style.counts}>{this.props.dislikes}</span>
-      <FaWechat size={20} color={'#63C050'} padding={10} onClick={this.handleShowCommentChange}/>
-      <span className={style.counts}>{this.props.commentnumber}</span>
-    </div></div></h5>
+  render() {
+      var showChat = null;
+      var that=this;
 
-    <div className="companyIconContainer">
-      {this.handleVisibility()}
-      <MdPublish className={style.counts} size={20} padding={10} visibility={this.state.visiblePublishedIcon} onClick={this.publishFeedback}/>
-      <FaWechat align="left" size={35} color={'#63C050'} style={{flexGrow: "1"}} onClick={this.handleShowChat}/>
-      {this.handleMailIcon()}
-    </div></div>);
+          return (<div style={{display: "flex", justifyContent: "space-around", background: this.state.backgroundcolor}}>
+              <h5 align="left" style={{
+                  flexGrow: 2,
+                  fontSize: 12,
+                  fontStyle: 'italic'
+              }} onClick={that.toggleExpanded}>{that.handleBlockedThread()}{that.getIconForFeedbackType()}&nbsp; {(!this.state.expanded && this.props.title.length > 20) ? this.props.title.substring(0, 20) + "..." : this.props.title}
+                  <div className={style.spacingstyle}>
+                      <div align="left" style={{fontSize: 10}}>sent on {this.props.date}</div>
+                      <div align="left" style={{fontSize: 10, color: '#169BDD'}}>Status: {this.handleFeedbackStatus()}
+                      </div>
+                      <div align="left" style={{fontSize: 10, color: '#169BDD'}}>Forum activity:
+                          <FaThumbsOUp size={20} color={'black'} padding={10}/>
+                          <span className={style.counts}>{this.props.likes}</span>
+                          <FaThumbsODown size={20} color={'black'} padding={10}/>
+                          <span className={style.counts}>{this.props.dislikes}</span>
+                          <FaWechat size={20} color={'#63C050'} padding={10} onClick={this.handleShowCommentChange}/>
+                          <span className={style.counts}>{this.props.commentnumber}</span>
+                      </div>
+                  </div>
+              </h5>
+
+              <div className="companyIconContainer">
+                  {that.handleVisibility()}
+                  <MdPublish className={style.counts} size={20} padding={10}
+                             visibility={this.state.visiblePublishedIcon} onClick={this.publishFeedback}/>
+                  <FaWechat align="left" size={35} color={'#63C050'} style={{flexGrow: "1"}}
+                            onClick={this.handleShowChat}/>
+                  {that.handleMailIcon()}
+              </div>
+          </div>);
+
   }
 }
 

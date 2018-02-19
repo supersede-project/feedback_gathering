@@ -86,7 +86,7 @@ class FeedbackTitle extends Component {
     handleVisibility() {
         var statusStyle={
         color: 'black',
-        border: '1px solid #333333',
+        //border: '1px solid #333333',
         padding: '3px 7px',
         background: 'linear-gradient(180deg, #fff, #ddd 40%, #ccc)',
         textAlign: 'center',
@@ -100,9 +100,7 @@ class FeedbackTitle extends Component {
         }
         if(this.props.visibility === true && this.props.published === false){
             return <div><TiGroup color={'grey'} size={35} padding={30}/><br/>
-                <div style={{fontSize: '10'}}>
-            Status:<br/><div style={statusStyle}>Request pending</div>
-            </div>
+           <div style={statusStyle}>Request pending</div>
             </div>
         }
     }
@@ -235,10 +233,10 @@ class FeedbackTitle extends Component {
             }}
                 onClick={this.toggleExpanded}>{this.getIconForFeedbackType()}&nbsp; {(!this.state.expanded && this.props.title.length > 30) ? this.props.title.substring(0, 30) + "..." : this.props.title}
                 <div className={style.spacingstyle}>
-                    <div align="left" style={{fontSize: 10}}>sent on {dateText}</div>
-                    <div align="left" style={{fontSize: 10, color: '#169BDD'}}>
+                    <div align="left" style={{fontSize: 10, fontStyle: 'normal', fontWeight: 'normal'}}>sent on {dateText}</div>
+                    <div align="left" style={{fontSize: 10, color: '#169BDD', fontStyle: 'normal'}}>
                         Status: {this.handleFeedbackStatus()}</div>
-                    <div align="left" style={{fontSize: 10, color: '#169BDD'}}>Forum activity:
+                    <div align="left" style={{fontSize: 10, color: '#169BDD', fontStyle: 'normal'}}>Forum activity:
                         <FaThumbsOUp size={20} color={'black'} padding={10}/>
                         <span className={style.counts}>{this.props.likes}</span>
                         <FaThumbsODown size={20} color={'black'} padding={10}/>

@@ -162,11 +162,20 @@ class FeedbackForumTabAccordion extends Component {
                 });
                 break;
             case "unrated":
-                data = [].concat(this.state.unsortedData).sort(function (a, b) {
-                    if (a.ratingFeedbacks.length == 0) return -1;
-                    if (b.ratingFeedbacks.length == 0) return 1;
-                    return 0;
+                data = [].concat(this.state.unsortedData).filter(element => {
+                    if(!element.hasOwnProperty("ratingFeedbacks")){
+                        return element;
+                    }
+                    return element.ratingFeedbacks.length == 0;
                 });
+
+                    /*sort(function (a, b) {
+                        if (a.ratingFeedbacks.length == 0) return -1;
+                        if (b.ratingFeedbacks.length == 0) return 1;
+                        return 0;
+                    });*/
+
+
                 break;
             case "received":
                 data = [].concat(this.state.unsortedData).filter(element => {
@@ -207,6 +216,7 @@ class FeedbackForumTabAccordion extends Component {
                     }
                 });
                 break;
+
             default:
                 data = [].concat(this.state.unsortedData).sort(function (a, b) {
                     return new Date(b.createdAt.substring(0, b.createdAt.indexOf('.')) + "Z") - new Date(a.createdAt.substring(0, a.createdAt.indexOf('.')) + "Z");
@@ -251,11 +261,17 @@ class FeedbackForumTabAccordion extends Component {
                 });
                 break;
             case "unrated":
-                return [].concat(this.state.unsortedData).sort(function (a, b) {
+                return [].concat(this.state.unsortedData).filter(element => {
+                    if(!element.hasOwnProperty("ratingFeedbacks")){
+                        return element;
+                    }
+                    return element.ratingFeedbacks.length == 0;
+                });
+                /*return [].concat(this.state.unsortedData).sort(function (a, b) {
                     if (a.ratingFeedbacks.length == 0) return -1;
                     if (b.ratingFeedbacks.length == 0) return 1;
                     return 0;
-                });
+                });*/
                 break;
             case "received":
                 return [].concat(this.state.unsortedData).filter(element => {
@@ -323,6 +339,11 @@ class FeedbackForumTabAccordion extends Component {
                             if (item.visibility === true && item.published === false) {
                                 visibility = true;
                             }
+                            var blocked = false;
+                            if(item.blocked === true && item.visibility === true && item.published === true){
+                                blocked = true;
+                            }
+
                             var accordionItemTitle = '';
                             if (!item.hasOwnProperty("textFeedbacks")) {
                                 accordionItemTitle = <CompanyFeedback title={item.text}/>;

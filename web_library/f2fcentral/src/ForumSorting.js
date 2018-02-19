@@ -36,7 +36,7 @@ class ForumSorting extends Component {
                     {value: 'date1', label: 'Decreasing date (Newest first)'},
                     {value: 'date2', label: 'Increasing date (Oldest first)'},
                     {value: 'myfeedback', label: 'My feedbacks'},
-                    {value: 'unseen', label: 'Unread feedbacks'},
+                    //{value: 'unread', label: 'Unread feedbacks'},
                     {value: 'unrated', label: 'Unrated feedbacks'},
                     {value: 'mostlike', label: 'Most liked feedbacks'},
                     {value: 'company', label: 'Company entries'},

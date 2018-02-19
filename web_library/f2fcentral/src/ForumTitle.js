@@ -180,6 +180,38 @@ class ForumTitle extends Component {
                 </div>
             </div>);
         }
+        else if(this.props.blocked === true){
+            return (<div style={{display: "flex", justifyContent: "space-around", background: 'linear-gradient(to bottom, #f2f2f2 0%, #e6e6e6 50%, #d9d9d9 52%, #cccccc 100%)'}}>
+                <h5 align="left" style={{
+                    flexGrow: 2,
+                    fontSize: 12,
+                    fontStyle: 'italic'
+                }}
+                    onClick={this.toggleExpanded}>{this.getIconForFeedbackType()}&nbsp; {(!this.state.expanded && this.props.title.length > 30) ? this.props.title.substring(0, 30) + "..." : this.props.title}
+
+                    <div className={style.spacingstyle}>
+                        <div align="left" style={{fontSize: 10, color: 'black'}}>
+                            <MdVisibility size={17} color={"black"}/>Status: Feedback blocked</div>
+                    </div></h5>
+                <div className={style.forumIconContainer}>
+                    <div className={style.bundledIcon}>
+                        <FaWechat align="left" size={35} style={{flexGrow: "1"}} color={'#63C050'}
+                                  onClick={this.handleShowCommentChange}/>
+                        <span className={style.thumbsCount}>{this.state.comment}</span>
+                    </div>
+
+                    <div className={style.bundledIcon}>
+                        <FaThumbsOUp size={35} onClick={this.addLike}/>
+                        <span className={style.thumbsCount}>{this.state.thumbsUp}</span>
+                    </div>
+
+                    <div className={style.bundledIcon}>
+                        <FaThumbsODown size={35} onClick={this.addDislike}/>
+                        <span className={style.thumbsCount}>{this.state.thumbsDown}</span>
+                    </div>
+                </div>
+            </div>);
+        }
         else {
 
             return (<div style={{display: "flex", justifyContent: "space-around", background: 'linear-gradient(to bottom, #ffffff 0%, #f2f8ff 20%, #e6f2ff 52%, #cce5ff 100%)'}}>
