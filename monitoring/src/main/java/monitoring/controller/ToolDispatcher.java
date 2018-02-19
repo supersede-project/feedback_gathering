@@ -69,7 +69,7 @@ public class ToolDispatcher {
 			monitoringInstances.put(confId, toolInstance);
 			return getResponse(confId);
 		} catch (JSONException e) {
-			return throwError("Not a valid JSON configuration object");
+			return throwError("Wrong JSON Object");
 		} catch (InstantiationException e) {
 			return throwError("Monitor class must be concrete");
 		} catch (IllegalAccessException e) {
@@ -113,8 +113,12 @@ public class ToolDispatcher {
 		}
 		return getResponse(id);
 	}
+	
+	public ParserConfiguration getParser() {
+		return parser;
+	}
 
-	public String throwError(String error) {
+	private String throwError(String error) {
 		JSONObject response = new JSONObject();
 		JSONObject resInfo = new JSONObject();
 		try {
@@ -127,7 +131,7 @@ public class ToolDispatcher {
 		return response.toString();
 	}
 	
-	public String getResponse(int id) {
+	private String getResponse(int id) {
 		JSONObject response = new JSONObject();
 		JSONObject resInfo = new JSONObject();
 		try {

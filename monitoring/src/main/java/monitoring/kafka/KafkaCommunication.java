@@ -19,9 +19,43 @@ public class KafkaCommunication {
 	Producer<String, String> producer;
 	DataProviderProxy proxy;
 	
+	public KafkaCommunication() {
+		
+	}
+	
+	/**
+	 * Creates a new IF proxy if kafkaEndpoint is null; else creates a Kafka Producer
+	 * @param kafkaEndpoint
+	 */
+	public KafkaCommunication(String kafkaEndpoint) {
+		if (kafkaEndpoint == null) {
+			proxy = new DataProviderProxy();
+		}
+		else {
+			Properties props = new Properties();
+			props.put("metadata.broker.list", kafkaEndpoint);
+			props.put("serializer.class", "kafka.serializer.StringEncoder");
+			props.put("request.required.acks", "1");
+			ProducerConfig config = new ProducerConfig(props);
+			this.producer = new Producer<String,String>(config);
+		}
+	}
+	
+	public void sendData(List<? extends MonitoringData> dataList, String timeStamp, 
+			int outputId, int confId, String topic, String responseName) {
+		JSONObject res = generateData(dataList, timeStamp, outputId, confId, responseName);
+		if (this.producer == null) {
+			proxy.ingestData(res, topic);
+		} else {
+			KeyedMessage<String, String> msg = new KeyedMessage<String, String>(topic, res.toString());
+			producer.send(msg);
+		}
+	}
+	
 	/**
 	 * Creates a new instantiation of the IF kafka client proxy
 	 */
+	@Deprecated
 	public void initProxy() {
 		proxy = new DataProviderProxy();
 	}
@@ -29,6 +63,7 @@ public class KafkaCommunication {
 	/**
 	 * Creates a new producer for kafka communication
 	 */
+	@Deprecated
 	public void initProducer(String kafkaEndpoint) {
 		Properties props = new Properties();
 		props.put("metadata.broker.list", kafkaEndpoint);
@@ -41,6 +76,7 @@ public class KafkaCommunication {
 	/**
 	 * Generates a json formatted response and sends it to the IF kafka consumer
 	 */
+	@Deprecated
 	public void generateResponseIF(List<? extends MonitoringData> dataList, String timeStamp, 
 			int outputId, int confId, String topic, String responseName) {
 		JSONObject res = generateData(dataList, timeStamp, outputId, confId, responseName);
@@ -50,6 +86,7 @@ public class KafkaCommunication {
 	/**
 	 * Generates a json formatted response and sends it to a custom kafka consumer
 	 */
+	@Deprecated
 	public void generateResponseKafka(List<? extends MonitoringData> dataList, String timeStamp, 
 			int outputId, int confId, String topic, String responseName) {
 		JSONObject res = generateData(dataList, timeStamp, outputId, confId, responseName);
