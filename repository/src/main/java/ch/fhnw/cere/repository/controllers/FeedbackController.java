@@ -248,4 +248,25 @@ public class FeedbackController extends BaseController {
     public Feedback updateFeedback(@PathVariable long applicationId, @RequestBody Feedback feedback) {
         return feedbackService.save(feedback);
     }
+
+    @PreAuthorize("@securityService.hasSuperAdminPermission()")
+    @ResponseStatus(HttpStatus.OK)
+    @RequestMapping(method = RequestMethod.POST, value = "/merge")
+    public List<Feedback> mergeFeedbackListWithOrchestratorConfiguration(@RequestBody OrchestratorRepositoryDataMergeRequest orchestratorRepositoryDataMergeRequest) throws IOException, ServletException {
+        System.err.println("MERGE");
+        List<Feedback> feedbacks = orchestratorRepositoryDataMergeRequest.getFeedback();
+        Application orchestratorApplication = orchestratorRepositoryDataMergeRequest.getApplication();
+
+        try {
+            for(Feedback feedback : feedbacks) {
+                Feedback.appendMechanismsToFeedback(orchestratorApplication, feedback);
+                feedback.setApplication(orchestratorApplication);
+            }
+        } catch (Exception e) {
+            System.err.println("MERGE FAILED");
+            e.printStackTrace();
+        }
+
+        return feedbacks;
+    }
 }

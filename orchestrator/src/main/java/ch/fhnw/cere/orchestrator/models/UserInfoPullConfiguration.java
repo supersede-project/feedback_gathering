@@ -31,6 +31,7 @@ public class UserInfoPullConfiguration {
         }};
 
         Mechanism infoMechanism = new Mechanism(MechanismType.INFO_TYPE, null, parameters);
+        infoMechanism.setActive(true);
         List<Mechanism> mechanisms = new ArrayList<Mechanism>() {{
             add(infoMechanism);
         }};
@@ -47,6 +48,23 @@ public class UserInfoPullConfiguration {
         configuration.setType(TriggerType.PULL);
         configuration.setApplication(application);
         configuration.setMechanisms(mechanisms);
+
+        GeneralConfiguration generalConfiguration = new GeneralConfiguration();
+
+        Parameter generalConfigurationParameter1 = new Parameter("pullActive", "1", "en", generalConfiguration);
+        Parameter generalConfigurationParameter2 = new Parameter("pullSpecificActive", "1", "en", generalConfiguration);
+        Parameter generalConfigurationParameter3 = new Parameter("onlyDisplayOnce", "1", "en", generalConfiguration);
+        List<Parameter> generalConfigurationParameters = new ArrayList<Parameter>() {{
+            add(generalConfigurationParameter1);
+            add(generalConfigurationParameter2);
+            add(generalConfigurationParameter3);
+        }};
+
+        generalConfiguration.setApplication(application);
+        generalConfiguration.setParameters(generalConfigurationParameters);
+        generalConfiguration.setName("General Configuration for " + userIdentification);
+
+        configuration.setGeneralConfiguration(generalConfiguration);
 
         ConfigurationUserGroup configurationUserGroup = new ConfigurationUserGroup(configuration, userGroup, true);
         configuration.setConfigurationUserGroups(new ArrayList<ConfigurationUserGroup>() {{add(configurationUserGroup);}});

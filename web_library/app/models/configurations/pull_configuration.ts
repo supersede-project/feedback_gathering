@@ -33,7 +33,7 @@ export class PullConfiguration extends Configuration {
     checkTrigger(application:Application, options:any, alreadyTriggeredOne:boolean = false):boolean {
 
         // triggers on elements
-        if (this.generalConfiguration.getParameterValue('userAction')) {
+        if (this.generalConfiguration && this.generalConfiguration.getParameterValue('userAction')) {
             var userAction = this.generalConfiguration.getParameterValue('userAction');
             var actionName = userAction.filter(element => element.key === 'actionName').length > 0 ? userAction.filter(element => element.key === 'actionName')[0].value : '';
             var actionElement = userAction.filter(element => element.key === 'actionElement').length > 0 ? userAction.filter(element => element.key === 'actionElement')[0].value : '';
@@ -90,8 +90,12 @@ export class PullConfiguration extends Configuration {
         let pullActive = this.isActive();
         let pageDoesMatch = this.pageDoesMatch(this.currentSlug());
         let doNotDisturbTimeIsOver = this.isDoNotDisturbTimeDurationOver();
-        let askOnStartUp = this.generalConfiguration.getParameterValue('askOnAppStartup') || false;
-        let likeliHoodOkay = Math.random() <= this.generalConfiguration.getParameterValue('likelihood');
+        let askOnStartUp = false;
+        let likeliHoodOkay = true;
+        if(this.generalConfiguration) {
+            askOnStartUp = this.generalConfiguration.getParameterValue('askOnAppStartup') || false;
+            likeliHoodOkay = Math.random() <= this.generalConfiguration.getParameterValue('likelihood');
+        }
 
         if (this.shouldOnlyBeDisplayedOnce()) {
             return pullActive && !this.pullDialogAlreadyDisplayed()
@@ -132,7 +136,7 @@ export class PullConfiguration extends Configuration {
     }
 
     getCookieNameForDisplayOnce():string {
-        return cookieNames.displayed_ + String(this.id);
+        return 'displayed_pull_id_' + String(this.id);
     }
 
     currentTimeStamp():number {

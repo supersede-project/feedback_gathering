@@ -115,6 +115,8 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers(basePathFeedback + "/ping").permitAll()
                 .requestMatchers(new RegexRequestMatcher(basePathFeedback + "/\\w{2}/applications/\\d+/?\\?_=\\d+", "GET", true)).permitAll()
                 .requestMatchers(new RegexRequestMatcher(basePathFeedback + "/\\w{2}/applications/\\d+/?", "GET", true)).permitAll()
+                .requestMatchers(new RegexRequestMatcher(basePathFeedback + "/\\w{2}/applications/\\d+/user_identification/\\d+/?", "GET", true)).permitAll()
+                .requestMatchers(new RegexRequestMatcher(basePathFeedback + "/\\w{2}/applications/\\d+/user_identification/\\d+/?\\?_=\\d+", "GET", true)).permitAll()
                 .requestMatchers(new RegexRequestMatcher(basePathFeedback + "/\\w{2}/applications/?", "GET", true)).permitAll()
                 .requestMatchers(new RegexRequestMatcher(basePathMonitoring + "/MonitorTypes/?", "GET", true)).permitAll()
                 .requestMatchers(new RegexRequestMatcher(basePathMonitoring + "/MonitorTypes/\\w+/?/Tools/\\w+/?", "GET", true)).permitAll()

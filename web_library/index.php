@@ -1727,11 +1727,11 @@ if(!isset($user_id) || $user_id == 0) {
             'distPath': 'dist/',
             //'distPath': 'https://platform.supersede.eu/web_library/senercon/dist/',
 
-            //'applicationId': 20,
+            'applicationId': 20,
             //'apiEndpointOrchestrator': 'https://platform.supersede.eu:8443/',
             //'apiEndpointRepository': 'https://platform.supersede.eu:8443/',
 
-            'applicationId': 14,
+            //'applicationId': 14,
             'apiEndpointOrchestrator': 'http://localhost:8081/',
             'apiEndpointRepository': 'http://localhost:8082/',
 
