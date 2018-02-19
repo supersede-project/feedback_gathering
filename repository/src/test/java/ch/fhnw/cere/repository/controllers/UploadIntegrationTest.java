@@ -72,9 +72,15 @@ public class UploadIntegrationTest extends BaseIntegrationTest{
     @Test
     public void testUpload() throws Exception{
         String adminJWTToken = requestAppAdminJWTToken();
-        File file = new File("F:\\supersede_profilepics\\profile_pic_api_user_1.png");
-        FileInputStream fi1 = new FileInputStream(file);
-        MockMultipartFile mockMultipartFile = new MockMultipartFile("file", file.getName(), "multipart/form-data",fi1);
+//        File file = new File("F:\\supersede_profilepics\\profile_pic_api_user_1.png");
+
+
+        Path file = Paths.get(String.valueOf(this.getClass().getClassLoader().
+                getResource("profile_pic_api_user_1.png").getFile())
+                .replaceFirst("^/(.:/)", "$1"));
+
+        FileInputStream fi1 = new FileInputStream(String.valueOf(file));
+        MockMultipartFile mockMultipartFile = new MockMultipartFile("file", String.valueOf(file.getFileName()), "multipart/form-data",fi1);
 
         MockMvc mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
         mockMvc.perform(MockMvcRequestBuilders.fileUpload(basePathEn + "applications/" + 1 + "/feedbacks/"

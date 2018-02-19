@@ -90,4 +90,24 @@ public class FeedbackCompanyController {
         }
         return feedbackCompany;
     }
+
+    @PreAuthorize("@securityService.hasAdminPermission(#applicationId)")
+    @RequestMapping(method = RequestMethod.PUT, value = "/feedback_company/promote/{companyFeedbackId}")
+    public String companyFeedbackPromote(@PathVariable long applicationId,
+                                @PathVariable long companyFeedbackId,
+                                HttpEntity<String> promoteJSON){
+        if(promoteJSON.getBody() != null){
+            JSONObject obj = new JSONObject(promoteJSON.getBody());
+            Boolean promote = obj.getBoolean("promote");
+            FeedbackCompany updateFeedbackCompany = feedbackCompanyService.find(companyFeedbackId);
+            if(updateFeedbackCompany != null) {
+                updateFeedbackCompany.setPromote(promote);
+                feedbackCompanyService.save(updateFeedbackCompany);
+                return "Company Feedback promote attribute changed!";
+            } else {
+                return "Requested Company Feedback does not exist";
+            }
+        }
+        return "JSON Body is NULL";
+    }
 }

@@ -82,16 +82,28 @@ public class CommentController extends BaseController{
             if(object.has("anonymous") && object.get("anonymous") != null){
                 boolean anonymous = object.getBoolean("anonymous");
                 commentFeedback.setAnonymous(anonymous);
+            } else {
+                commentFeedback.setAnonymous(false);
             }
             String commentText = object.getString("commentText");
-            Boolean bool_is_developer = object.getBoolean("bool_is_developer");
-            Boolean activeStatus = object.getBoolean("activeStatus");
+
+            if(object.has("bool_is_developer") && object.get("bool_is_developer") != null){
+                boolean bool_is_developer = object.getBoolean("bool_is_developer");
+                commentFeedback.setBool_is_developer(bool_is_developer);
+            } else {
+                commentFeedback.setBool_is_developer(false);
+            }
+
+            if(object.has("activeStatus") && object.get("activeStatus") != null){
+                boolean activeStatus = object.getBoolean("activeStatus");
+                commentFeedback.setActiveStatus(activeStatus);
+            } else {
+                commentFeedback.setActiveStatus(false);
+            }
 
             commentFeedback.setFeedback(feedbackService.find(feedbackId));
             commentFeedback.setUser(endUserService.find(userId));
             commentFeedback.setCommentText(commentText);
-            commentFeedback.setBool_is_developer(bool_is_developer);
-            commentFeedback.setActiveStatus(activeStatus);
             return commentFeedbackService.save(commentFeedback);
         }
         return null;
