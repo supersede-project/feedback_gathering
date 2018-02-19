@@ -266,7 +266,7 @@ public class ApplicationsByUserIntegrationTest extends BaseIntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(contentType))
                 .andExpect(jsonPath("$.id", is((int) this.application1.getId())))
-                .andExpect(jsonPath("$.configurations", hasSize(0)));
+                .andExpect(jsonPath("$.configurations", hasSize(2)));
 
         mockMvc.perform(get(basePathEn + "/" + application1.getId() + "/user_identification/notAssignedToAGroupYet"))
                 .andExpect(status().isOk())

@@ -21,5 +21,10 @@ echo -e "\nCleaning and building HTTP Monitor...\n"
 
 cd ../MonitoringUserEvents/PrjMonitoringUserEvents
 echo -e "\nCleaning and building MonitoringUserEvents Monitor...\n"
-mvn clean package 
+mvn clean package --refresh-dependencies
+
+cd ../../DiskMonitor
+echo -e "\nCleaning and building DiskMonitor Monitor...\n"
+cp /home/tomcat/ssh src/main/resources/ssh
+./gradlew clean build --refresh-dependencies
 

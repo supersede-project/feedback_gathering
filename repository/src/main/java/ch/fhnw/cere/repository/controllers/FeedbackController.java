@@ -4,6 +4,7 @@ package ch.fhnw.cere.repository.controllers;
 import ch.fhnw.cere.repository.controllers.exceptions.NotFoundException;
 import ch.fhnw.cere.repository.integration.DataProviderIntegrator;
 import ch.fhnw.cere.repository.integration.FeedbackCentralIntegrator;
+import ch.fhnw.cere.repository.integration.MdmFileIntegrator;
 import ch.fhnw.cere.repository.models.*;
 import ch.fhnw.cere.repository.models.orchestrator.Application;
 import ch.fhnw.cere.repository.services.*;
@@ -14,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
@@ -24,10 +26,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
-import java.io.ByteArrayInputStream;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -45,6 +45,9 @@ public class FeedbackController extends BaseController {
 
     @Autowired
     private DataProviderIntegrator dataProviderIntegrator;
+
+    @Autowired
+    private MdmFileIntegrator mdmFileIntegrator;
 
     @Autowired
     private FeedbackCentralIntegrator feedbackCentralIntegrator;
@@ -169,6 +172,29 @@ public class FeedbackController extends BaseController {
             feedbackCentralIntegrator.ingestJsonData(feedback);
         }
 
+        try {
+            List<File> attachmentFiles = fileStorageService.getFeedbackFiles(feedback, feedback.getAttachmentFeedbacks(), parts);
+            List<File> screenshotFiles = fileStorageService.getFeedbackFiles(feedback, feedback.getScreenshotFeedbacks(), parts);
+            List<File> audioFiles = fileStorageService.getFeedbackFiles(feedback, feedback.getAudioFeedbacks(), parts);
+            List<File> allFiles = new ArrayList<File>() {{
+                if(attachmentFiles != null) {
+                    addAll(attachmentFiles);
+                }
+                if(screenshotFiles != null) {
+                    addAll(screenshotFiles);
+                }
+                if(audioFiles != null) {
+                    addAll(audioFiles);
+                }
+            }};
+            for(File file : allFiles) {
+                mdmFileIntegrator.sendFile(file);
+            }
+        } catch (Exception e) {
+            LOGGER.error("Files could not be forwarded to WP2: " + e.getLocalizedMessage());
+            e.printStackTrace();
+        }
+
         return createdFeedback;
     }
 
@@ -221,5 +247,26 @@ public class FeedbackController extends BaseController {
     @RequestMapping(method = RequestMethod.PUT, value = "")
     public Feedback updateFeedback(@PathVariable long applicationId, @RequestBody Feedback feedback) {
         return feedbackService.save(feedback);
+    }
+
+    @PreAuthorize("@securityService.hasSuperAdminPermission()")
+    @ResponseStatus(HttpStatus.OK)
+    @RequestMapping(method = RequestMethod.POST, value = "/merge")
+    public List<Feedback> mergeFeedbackListWithOrchestratorConfiguration(@RequestBody OrchestratorRepositoryDataMergeRequest orchestratorRepositoryDataMergeRequest) throws IOException, ServletException {
+        System.err.println("MERGE");
+        List<Feedback> feedbacks = orchestratorRepositoryDataMergeRequest.getFeedback();
+        Application orchestratorApplication = orchestratorRepositoryDataMergeRequest.getApplication();
+
+        try {
+            for(Feedback feedback : feedbacks) {
+                Feedback.appendMechanismsToFeedback(orchestratorApplication, feedback);
+                feedback.setApplication(orchestratorApplication);
+            }
+        } catch (Exception e) {
+            System.err.println("MERGE FAILED");
+            e.printStackTrace();
+        }
+
+        return feedbacks;
     }
 }

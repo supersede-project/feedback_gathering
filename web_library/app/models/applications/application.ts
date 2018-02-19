@@ -43,7 +43,10 @@ export class Application {
     }
 
     getPullConfigurations(): PullConfiguration[] {
-        return <PullConfiguration[]>this.configurations.filter(configuration => configuration.type === configurationTypes.pull);
+        if(this.configurations) {
+            return <PullConfiguration[]>this.configurations.filter(configuration => configuration.type === configurationTypes.pull);
+        }
+        return null;
     }
 
     /**

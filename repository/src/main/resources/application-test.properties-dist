@@ -99,3 +99,6 @@ supersede.upload_directory.audios_folder_name=audios
 supersede.upload_directory.screenshots_folder_name=screenshots
 
 supersede.test_email_receivers=
+
+
+mdm.file_endpoint=http://supersede.es.atos.net:3001/files

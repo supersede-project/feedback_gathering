@@ -106,3 +106,4 @@ supersede.upload_directory.screenshots_folder_name=screenshots
 integration.feedback_central=false
 kafka.bootstrap-servers: localhost:9092
 kafka.topic.raw-feedback: raw-feedback
+mdm.file_endpoint=http://supersede.es.atos.net:3001/files

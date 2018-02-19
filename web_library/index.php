@@ -1724,153 +1724,17 @@ if(!isset($user_id) || $user_id == 0) {
         jQuery('#feedbackEntryPoint').feedbackPlugin({
             //'distPath': 'http://supersede.es.atos.net/web_library/senercon/dist',
 
-            /*
-            'localesOverride': {
-                'dialog': {
-                    'general': {
-                        "review_feedback": "dialog.general.review_feedback",
-                        "review_feedback_title": "dialog.general.review_feedback_title",
-                        "feedback_submit_button_title": "dialog.general.feedback_submit_button_title",
-                        "mandatory_default_text": "dialog.general.mandatory_default_text",
-                        "back": "dialog.general.back",
-                        "validation_max_length_error_message": "dialog.general.validation_max_length_error_message[{{ maxLength }}{{ currentLength }}]",
-                        "validation_invalid_email": "dialog.general.validation_invalid_email",
-                        "discard_feedback": "dialog.general.discard_feedback",
-                        "cancel": "dialog.general.cancel",
-                        "dialog_close_button_title": "dialog.general.dialog_close_button_title",
-                        "success_message": "dialog.general.success_message",
-                        "success_dialog_title": "dialog.general.success_dialog_title",
-                        "success_dialog_okay_button_title": "dialog.general.success_dialog_okay_button_title",
-                        "error_message": "dialog.general.error_message"
-                    },
-                    "text": {
-                        "text_type_text_clear": "dialog.text.text_type_text_clear"
-                    },
-                    "screenshot": {
-                        "take_screenshot": "dialog.screenshot.take_screenshot",
-                        "take_new_screenshot": "dialog.screenshot.take_new_screenshot",
-                        "actions": "dialog.screenshot.actions",
-                        "stickers": "dialog.screenshot.stickers",
-                        "rectangle": "dialog.screenshot.rectangle",
-                        "blacken": "dialog.screenshot.blacken",
-                        "circle": "dialog.screenshot.circle",
-                        "arrow": "dialog.screenshot.arrow",
-                        "freehand": "dialog.screenshot.freehand",
-                        "crop": "dialog.screenshot.crop",
-                        "text": "dialog.screenshot.text",
-                        "undo": "dialog.screenshot.undo",
-                        "remove": "dialog.screenshot.remove",
-                        "color": "dialog.screenshot.color",
-                        "selection": "dialog.screenshot.selection"
-                    },
-                    "rating": {
-                        "review_title": "dialog.rating.review_title"
-                    },
-                    "attachment": {
-                        "choose_file": "dialog.attachment.choose_file",
-                        "drop_file": "dialog.attachment.drop_file"
-                    },
-                    'dialog': {
-                        'titles': {
-                            1: 'dialog.dialog.titles.1',
-                            2: 'dialog.dialog.titles.2'
-                        }
-                    }
-                },
-                'mechanisms': [
-                    {
-                        'id': 59,
-                        'label': 'mechanisms[id=59].label',
-                        'hint': 'mechanisms[id=59].hint',
-                        'mandatoryReminder': 'mechanisms[id=59].mandatoryReminder'
-                    },
-                    {
-                        'id': 61,
-                        'annotationTitle': 'mechanisms[id=61].annotationTitle',
-                        'cropTitle': 'mechanisms[id=61].cropTitle',
-                        'freehandMouseover': 'mechanisms[id=61].freehandMouseover',
-                        'textTitle': 'mechanisms[id=61].textTitle',
-                        'zoomTitle': 'mechanisms[id=61].zoomTitle'
-                    },
-                    {
-                        'id': 62,
-                        'title': 'mechanisms[id=62].title'
-                    },
-                    {
-                        'id': 64,
-                        'title': 'mechanisms[id=64].title',
-                        'options': [
-                            {
-                                id: 509,
-                                value: "mechanisms[id=64].options[id=509].value"
-                            },
-                            {
-                                id: 575,
-                                value: "mechanisms[id=64].options[id=575].value"
-                            },
-                            {
-                                id: 576,
-                                value: "mechanisms[id=64].options[id=576].value"
-                            }
-                        ],
-                        'mandatoryReminder': 'mechanisms[id=64].mandatoryReminder'
-                    },
-                    {
-                        'id': 65,
-                        'title': 'mechanisms[id=65].title'
-                    },
-                    {
-                        'id': 87,
-                        'text': 'mechanisms[id=87].text'
-                    },
-                    {
-                        'id': 85,
-                        'mandatoryReminder': 'mechanisms[id=85].mandatoryReminder',
-                        'title': 'mechanisms[id=85].title',
-                        'options': [
-                            {
-                                id: 736,
-                                value: "mechanisms[id=85].options[id=736].value"
-                            },
-                            {
-                                id: 737,
-                                value: "mechanisms[id=85].options[id=737].value"
-                            },
-                            {
-                                id: 738,
-                                value: "mechanisms[id=85].options[id=738].value"
-                            },
-                            {
-                                id: 739,
-                                value: "mechanisms[id=85].options[id=739].value"
-                            },
-                            {
-                                id: 740,
-                                value: "mechanisms[id=85].options[id=740].value"
-                            }
-                        ]
-                    },
-                    {
-                        'id': 86,
-                        'label': 'mechanisms[id=85].label'
-                    }
-                ]
-            },
-            */
-
-            //'distPath': 'dist/',
+            'distPath': 'dist/',
             //'distPath': 'https://platform.supersede.eu/web_library/senercon/dist/',
 
-            //'applicationId': 20,
-            'apiEndpointOrchestrator': 'https://platform.supersede.eu:8443/',
-            'apiEndpointRepository': 'https://platform.supersede.eu:8443/',
+            'applicationId': 20,
+            //'apiEndpointOrchestrator': 'https://platform.supersede.eu:8443/',
+            //'apiEndpointRepository': 'https://platform.supersede.eu:8443/',
 
-            'applicationId': 14,
-            //'apiEndpointOrchestrator': 'http://localhost:8081/',
-            //'apiEndpointRepository': 'http://localhost:8082/',
+            //'applicationId': 14,
+            'apiEndpointOrchestrator': 'http://localhost:8081/',
+            'apiEndpointRepository': 'http://localhost:8082/',
 
-            //'apiEndpointOrchestrator': 'http://mt.ronnieschaniel.com:8080/feedback_orchestrator-2.0.0/',
-            //'apiEndpointRepository': 'http://mt.ronnieschaniel.com:8080/feedback_repository-2.0.0/',
 
             'userId': <?php echo $user_id; ?>,
             'lang': 'en',
