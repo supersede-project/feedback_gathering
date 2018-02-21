@@ -48,11 +48,11 @@ class CompanyViewAccordion extends Component {
     this.createFeedback = this.createFeedback.bind(this);
     this.openDropzone = this.openDropzone.bind(this);
     this.closeDropzone = this.closeDropzone.bind(this);
-    this.handleShowCommentChange = this.handleShowCommentChange.bind(this);
+    this.handleShowComment = this.handleShowComment.bind(this);
 
   }
 
-  handleShowCommentChange(e) {
+  handleShowComment(e) {
     this.setState({showComment: e.showComment, commentIndex: e.index});
   }
 
@@ -117,7 +117,7 @@ render() {
         if(item.textFeedbacks.length > 0 && item.categoryFeedbacks.length > 0)
         {
           return (
-            <AccordionItem titleTag="span" title={<CompanyViewFeedbackTitle published={item.published} update={that.fetchData} onShowChat={that.handleShowChat} feedbackId={item.id} type={item.categoryFeedbacks[0].parameterId} title={item.textFeedbacks[0].text} date={item.createdAt} visibility={item.visibility} likes={item.likeCount} dislikes={item.dislikeCount} commentnumber={item.commentCount} blocked={item.blocked}/>}>
+            <AccordionItem titleTag="span" title={<CompanyViewFeedbackTitle published={item.published} update={that.fetchData} onShowChat={that.handleShowChat} feedbackId={item.id} type={item.categoryFeedbacks[0].parameterId} title={item.textFeedbacks[0].text} date={item.createdAt} visibility={item.visibility} likes={item.likeCount} dislikes={item.dislikeCount} commentnumber={item.commentCount} blocked={item.blocked} onShowComment={instance.handleShowComment}/>}>
             </AccordionItem>
           )
         }

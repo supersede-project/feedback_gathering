@@ -94,8 +94,8 @@ class CompanyViewFeedbackTitle extends Component {
     return <TiTag size={35} padding={75}/>;
   }
 
-    handleShowCommentChange(e) {
-        this.props.onShowCommentChange({showComment: true, index: this.props.feedbackId});
+    handleShowComment(e) {
+        this.props.onShowComment({showComment: true, index: this.props.feedbackId});
     }
 
   closeThread(e){
@@ -277,7 +277,7 @@ class CompanyViewFeedbackTitle extends Component {
                           <span className={style.counts}>{this.props.likes}</span>
                           <FaThumbsODown size={20} color={'black'} padding={10}/>
                           <span className={style.counts}>{this.props.dislikes}</span>
-                          <FaWechat size={20} color={'#63C050'} padding={10} onClick={this.handleShowCommentChange}/>
+                          <FaWechat size={20} color={'#63C050'} padding={10} onClick={this.handleShowComment}/>
                           <span className={style.counts}>{this.props.commentnumber}</span>
                       </div>
                   </div>

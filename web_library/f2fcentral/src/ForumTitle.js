@@ -181,7 +181,7 @@ class ForumTitle extends Component {
             </div>);
         }
         else if(this.props.blocked === true){
-            return (<div style={{display: "flex", justifyContent: "space-around", background: 'linear-gradient(to bottom, #f2f2f2 0%, #e6e6e6 50%, #d9d9d9 52%, #cccccc 100%)'}}>
+            return (<div style={{display: "flex", justifyContent: "space-around", background: '#b300b3'}}>
                 <h5 align="left" style={{
                     flexGrow: 2,
                     fontSize: 12,
