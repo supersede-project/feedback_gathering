@@ -1,7 +1,9 @@
 package ch.fhnw.cere.repository.controllers;
 
 import ch.fhnw.cere.repository.controllers.exceptions.NotFoundException;
+import ch.fhnw.cere.repository.models.ChatUnread;
 import ch.fhnw.cere.repository.models.FeedbackChatInformation;
+import ch.fhnw.cere.repository.services.ChatUnreadService;
 import ch.fhnw.cere.repository.services.EndUserService;
 import ch.fhnw.cere.repository.services.FeedbackChatInformationService;
 import ch.fhnw.cere.repository.services.FeedbackService;
@@ -26,6 +28,9 @@ public class FeedbackChatController {
 
     @Autowired
     private FeedbackService feedbackService;
+
+    @Autowired
+    private ChatUnreadService chatUnreadService;
 
     @Autowired
     private EndUserService endUserService;
@@ -72,7 +77,20 @@ public class FeedbackChatController {
             feedbackChatInformation.setUser(endUserService.find(userId));
             feedbackChatInformation.setChatText(chat_text);
 
-            return feedbackChatInformationService.save(feedbackChatInformation);
+            FeedbackChatInformation feedbackChatInformationSave =
+                    feedbackChatInformationService.save(feedbackChatInformation);
+
+            if(feedbackService.find(feedbackId).getUserIdentification() != userId){
+                ChatUnread chatUnread = new ChatUnread();
+                chatUnread.setFeedback(feedbackService.find(feedbackId));
+                chatUnread.setEnduser(endUserService.find(
+                        feedbackService.find(feedbackId).getUserIdentification()));
+                chatUnread.setFeedbackChatInformation(feedbackChatInformationSave);
+
+                chatUnreadService.save(chatUnread);
+            }
+
+            return feedbackChatInformationSave;
         }
         return null;
     }
