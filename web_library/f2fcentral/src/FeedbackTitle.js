@@ -231,7 +231,7 @@ class FeedbackTitle extends Component {
                 fontSize: 12,
                 fontStyle: 'italic'
             }}
-                onClick={this.toggleExpanded}>{this.getIconForFeedbackType()}&nbsp; {(!this.state.expanded && this.props.title.length > 30) ? this.props.title.substring(0, 30) + "..." : this.props.title}
+                onClick={this.toggleExpanded}>{this.getIconForFeedbackType()}&nbsp; {(!this.state.expanded && this.props.title.length > 30) ? this.props.title.substring(0, 30) + "...more" : this.props.title}
                 <div className={style.spacingstyle}>
                     <div align="left" style={{fontSize: 10, fontStyle: 'normal', fontWeight: 'normal'}}>sent on {dateText}</div>
                     <div align="left" style={{fontSize: 10, color: '#169BDD', fontStyle: 'normal'}}>

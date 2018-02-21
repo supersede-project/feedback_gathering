@@ -93,10 +93,7 @@ class CompanyViewAccordion extends Component {
 
   createFeedback(){
     {this.handleOpenModal()};
-  /*return
-  <ReactModal isOpen={this.state.showModal}>
-    <button onClick={this.handleCloseModal}>Close Modal</button>
-  </ReactModal>*/
+
 }
 
 handleShowChat(e) {

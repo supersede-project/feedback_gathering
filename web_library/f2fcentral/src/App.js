@@ -10,6 +10,7 @@ import MyFeedbacksTabAccordion from "./MyFeedbacksTabAccordion";
 import FeedbackForumTabAccordion from "./FeedbackForumTabAccordion";
 import CompanyViewAccordion from "./CompanyViewAccordion";
 import LoginAdmin from "./LoginAdmin";
+import CompanyFeedbackListViewAccordion from "./CompanyFeedbackListViewAccordion";
 
 
 class App extends Component {
@@ -67,7 +68,22 @@ class App extends Component {
         toRender = <LoginAdmin loginSuccess={this.adminLoggedIn}/>
       }
       else {
-        toRender = <CompanyViewAccordion/>
+        toRender =
+            <Tabs style={{activeTabContentStyle: {backgroundColor: '#006CEF', borderColor: '#006CEF', color: '#006CEF'}}}>
+              <TabList>
+                <Tab selectedClassName="tabselected">User Feedbacks</Tab>
+                <Tab selectedClassName="tabselected">Company Feedbacks</Tab>
+              </TabList>
+
+              <TabPanel>
+                <CompanyViewAccordion/>
+              </TabPanel>
+              <TabPanel>
+                <CompanyFeedbackListViewAccordion/>
+              </TabPanel>
+
+            </Tabs>;
+            //<CompanyViewAccordion/>
       }
     }
     else {
