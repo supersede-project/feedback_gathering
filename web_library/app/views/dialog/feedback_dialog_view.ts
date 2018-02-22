@@ -124,49 +124,64 @@ export class FeedbackDialogView extends DialogView {
 
         var feedbackService = new FeedbackService(this.context.apiEndpointRepository, this.dialogContext.lang);
 
-        container.find('button.submit-feedback').unbind().on('click', function (event) {
-            event.preventDefault();
-            event.stopPropagation();
-            var submitButton= $(this);
-            submitButton.prop('disabled', true);
-            submitButton.text(submitButton.text() + '...');
+        if(myThis.context.reviewActive !== null && myThis.context.reviewActive === false) {
+            let submitButtonText =  container.find('button.submit-feedback').text();
+            let forwardButton = container.find('.feedback-dialog-forward');
+
+            forwardButton.text(submitButtonText).unbind().on('click', (event) =>
+                myThis.submitFeedback(event, containerId, textMechanisms, textareas, feedbackService, generalConfiguration, feedbackDialogView, configuration, forwardButton)
+            );
+        }
+
+        let submitButton = container.find('button.submit-feedback');
+        submitButton.unbind().on('click', (event) =>
+            myThis.submitFeedback(event, containerId, textMechanisms, textareas, feedbackService, generalConfiguration, feedbackDialogView, configuration, submitButton)
+        );
+    };
+
+    submitFeedback(event, containerId, textMechanisms, textareas, feedbackService, generalConfiguration, feedbackDialogView, configuration, submitButton) {
+        let container = jQuery('#' + containerId);
+
+        event.preventDefault();
+        event.stopPropagation();
+        submitButton.prop('disabled', true);
+        submitButton.text(submitButton.text() + '...');
 
 
-            if(!myThis.ratingMechanismsAreValid(container)) {
-                submitButton.prop('disabled', false);
-                submitButton.text(submitButton.text().replace(/...$/,''));
-                return;
-            }
+        if(!feedbackDialogView.ratingMechanismsAreValid(container)) {
+            submitButton.prop('disabled', false);
+            submitButton.text(submitButton.text().replace(/...$/,''));
+            return;
+        }
 
-            if(!myThis.categoryMechanismsAreValid(container)) {
-                submitButton.prop('disabled', false);
-                submitButton.text(submitButton.text().replace(/...$/,''));
-                return;
-            }
+        if(!feedbackDialogView.categoryMechanismsAreValid(container)) {
+            submitButton.prop('disabled', false);
+            submitButton.text(submitButton.text().replace(/...$/,''));
+            return;
+        }
 
-            // TODO adjust
-            // validate anyway before sending
-            if (textMechanisms.length > 0) {
-                textareas.each(function () {
-                    $(this).validate();
-                });
+        // TODO adjust
+        // validate anyway before sending
+        if (textMechanisms.length > 0) {
+            textareas.each(function () {
+                jQuery(this).validate();
+            });
 
 
-                var invalidTextareas = container.find('textarea.text-type-text.invalid');
-                if (invalidTextareas.length == 0) {
-                    feedbackDialogView.prepareFormData(configuration, function (formData) {
-                        feedbackDialogView.sendFeedback(feedbackService, formData, generalConfiguration);
-                    });
-                } else {
-                    submitButton.prop('disabled', false);
-                    submitButton.text(submitButton.text().replace(/...$/,''));
-                }
-            } else {
+            var invalidTextareas = container.find('textarea.text-type-text.invalid');
+            if (invalidTextareas.length == 0) {
                 feedbackDialogView.prepareFormData(configuration, function (formData) {
                     feedbackDialogView.sendFeedback(feedbackService, formData, generalConfiguration);
                 });
+            } else {
+                submitButton.prop('disabled', false);
+                submitButton.text(submitButton.text().replace(/...$/,''));
             }
-        });
+        } else {
+            feedbackDialogView.prepareFormData(configuration, function (formData) {
+                feedbackDialogView.sendFeedback(feedbackService, formData, generalConfiguration);
+            });
+        }
     };
 
     ratingMechanismsAreValid(container:any):boolean {
