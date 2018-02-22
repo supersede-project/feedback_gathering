@@ -70,7 +70,7 @@ export class PageNavigation {
                     // canvas that is later on used to create the binary that get's sent
                     screenshotMechanism.screenshotView.createScaledDownCanvas();
 
-                    var img = jQuery('<img src="' + screenshotMechanism.screenshotView.screenshotCanvas.toDataURL() + '" />');
+                    var img = jQuery('<img src="' + screenshotMechanism.screenshotView.scaledScreenshotCanvas.toDataURL() + '" />');
                     img.css('width', '40%');
                     img.addClass('base');
                     var screenshotReviewElement = nextPage.find('.screenshot-review');

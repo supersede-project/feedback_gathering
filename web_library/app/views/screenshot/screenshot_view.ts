@@ -921,20 +921,46 @@ export class ScreenshotView implements MechanismView {
             let resolutionIsAnywaySmaller = (Math.max(maxResolution[0], maxResolution[1]) > Math.max(myThis.canvasWidth, myThis.canvasHeight) &&
                 Math.min(maxResolution[0], maxResolution[1]) > Math.min(myThis.canvasWidth, myThis.canvasHeight));
 
+            console.log(maxResolution);
+
             this.scaledScreenshotCanvas = document.createElement('canvas');
             let scaleCanvasContext = this.scaledScreenshotCanvas.getContext('2d');
-            let getWidthHeightForMaxResolution = this.getWidthHeightForMaxResolution(maxResolution[0], maxResolution[1], myThis.canvasWidth, myThis.canvasHeight);
+            let widthHeightForMaxResolution = this.getWidthHeightForMaxResolution(maxResolution[0], maxResolution[1], myThis.canvasWidth, myThis.canvasHeight);
             let factor = this.getScaleFactor(maxResolution[0], maxResolution[1], myThis.canvasWidth, myThis.canvasHeight);
+
+            console.log('scale factor');
+            console.log(factor);
 
             let imgToScaleDown = new Image();
             imgToScaleDown.src = dataUrl;
             imgToScaleDown.onload = function () {
                 if(maxResolution === null || resolutionIsAnywaySmaller) {
+                    console.log('not scaled');
                     myThis.scaledScreenshotCanvas = myThis.screenshotCanvas;
                 } else {
-                    // TODO get this working
+                    console.log('scaled');
+
+                    let newCanvasWidth = widthHeightForMaxResolution[0];
+                    let newCanvasHeight = widthHeightForMaxResolution[1];
+
+                    console.log('newCanvasWidth:');
+                    console.log(newCanvasWidth);
+
+                    console.log('newCanvasHeight:');
+                    console.log(newCanvasHeight);
+
+                    let scaledContext = myThis.screenshotCanvas.getContext("2d");
+                    scaledContext.drawImage(imgToScaleDown, 0, 0, imgToScaleDown.width, imgToScaleDown.height, 0, 0, newCanvasWidth, newCanvasHeight);
+
+                    /*
                     scaleCanvasContext.scale(factor, factor);
-                    scaleCanvasContext.drawImage(imgToScaleDown, 0, 0, imgToScaleDown.width, imgToScaleDown.height, 0, 0, myThis.canvasWidth, myThis.canvasHeight);
+                    let newCanvasWidth = myThis.canvasOriginalWidth * factor;
+                    let newCanvasHeight = myThis.canvasOriginalHeight * factor;
+                    console.log(newCanvasWidth + "x" + newCanvasHeight);
+                    myThis.scaledScreenshotCanvas.width = newCanvasWidth;
+                    myThis.scaledScreenshotCanvas.height = newCanvasHeight;
+                    scaleCanvasContext.drawImage(imgToScaleDown, 0, 0, imgToScaleDown.width, imgToScaleDown.height, 0, 0, newCanvasWidth, newCanvasHeight);
+                    */
                 }
             };
         }
