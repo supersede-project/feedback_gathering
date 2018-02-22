@@ -24,6 +24,7 @@ class FeedbackTitle extends Component {
             showChat: false,
             feedbackSetting: null,
             feedbackStatus: null,
+            unreadChat: [],
             lastPulled: null
         }
         this.toggleExpanded = this.toggleExpanded.bind(this);
@@ -34,6 +35,7 @@ class FeedbackTitle extends Component {
         this.fetchFeedbackSettings = this.fetchFeedbackSettings.bind(this);
         this.handleFeedbackStatus = this.handleFeedbackStatus.bind(this);
         this.changeMailSetting = this.changeMailSetting.bind(this);
+        this.fetchUnreadChat = this.fetchUnreadChat.bind(this);
 
     }
 
@@ -41,6 +43,7 @@ class FeedbackTitle extends Component {
     componentDidMount() {
         this.fetchFeedbackSettings();
         this.fetchFeedbackStatus();
+        this.fetchUnreadChat();
     }
 
     handleNewUserMessage(newMessage) {
@@ -191,6 +194,35 @@ class FeedbackTitle extends Component {
             });
     }
 
+    fetchUnreadChat() {
+        var that = this;
+        fetch(process.env.REACT_APP_BASE_URL + 'en/applications/' + sessionStorage.getItem('applicationId') + '/feedbacks/chat_unread/user/' + sessionStorage.getItem('userId'), {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': sessionStorage.getItem('token')
+            }
+        }).then(result => result.json())
+            .then(result => {
+                that.setState({unreadChat: result})
+                console.log(`unread chat json: ${result}`);
+                console.log(result);
+
+            });
+    }
+
+    handleUnreadChat(){
+        var that = this;
+        var data = this.state.unreadChat;
+
+        that.state.unreadChat.map(function (item, index) {
+             if(item.hasOwnProperty("feedback") && item.feedback.hasOwnProperty("id")) {
+                 console.log(`Juhu` + `feedbackID: ${item.feedback.id}`);
+                 return <label className={style.statusunknown} color='#990000' size={35}>Blubb</label>
+             }
+        })
+    }
+
     handleFeedbackStatus() {
         //var that = this;
         if (this.state.feedbackStatus === null || this.state.feedbackStatus.status === null) {
@@ -257,6 +289,7 @@ class FeedbackTitle extends Component {
 
                 <FaWechat align="left" color={'#63C050'} style={{flexGrow: "1"}} onClick={this.handleShowChat}
                           size={35}/>
+                <span>{this.handleUnreadChat()}</span>
 
             </div>
         </div>);
