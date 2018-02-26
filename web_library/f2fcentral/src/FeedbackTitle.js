@@ -64,7 +64,14 @@ class FeedbackTitle extends Component {
     }
 
     handleShowChat(e) {
-        this.props.onShowChat({showChat: true, index: this.props.feedbackId, title: this.props.title});
+        var that = this;
+        fetch(process.env.REACT_APP_BASE_URL + 'en/applications/' + sessionStorage.getItem('applicationId') + '/feedbacks/chat_unread/feedback/' + that.props.feedbackId + '/user/' + sessionStorage.getItem('userId'), {
+            header: {
+                'Content-Type': 'application/json',
+                'Authorization': sessionStorage.getItem('token')
+            },
+            method: 'POST'
+        }).then(result => result.json()).then(result => that.props.onShowChat({showChat: true, index: this.props.feedbackId, unreadChat: [], title: that.props.title}));
     }
 
     toggleExpanded() {
@@ -199,8 +206,7 @@ class FeedbackTitle extends Component {
         fetch(process.env.REACT_APP_BASE_URL + 'en/applications/' + sessionStorage.getItem('applicationId') + '/feedbacks/chat_unread/user/' + sessionStorage.getItem('userId'), {
             method: 'GET',
             headers: {
-                'Content-Type': 'application/json',
-                'Authorization': sessionStorage.getItem('token')
+                'Content-Type': 'application/json'
             }
         }).then(result => result.json())
             .then(result => {
@@ -214,13 +220,16 @@ class FeedbackTitle extends Component {
     handleUnreadChat(){
         var that = this;
         var data = this.state.unreadChat;
+        var content = "";
 
         that.state.unreadChat.map(function (item, index) {
-             if(item.hasOwnProperty("feedback") && item.feedback.hasOwnProperty("id")) {
+             if(item.hasOwnProperty("feedback") && item.feedback.hasOwnProperty("id") && item.feedback.id === that.props.feedbackId) {
                  console.log(`Juhu` + `feedbackID: ${item.feedback.id}`);
-                 return <label className={style.statusunknown} color='#990000' size={35}>Blubb</label>
+                 content = <label className={style.counts} size={35}>!</label>
+                 return null;
              }
-        })
+        });
+        return content;
     }
 
     handleFeedbackStatus() {
@@ -286,11 +295,11 @@ class FeedbackTitle extends Component {
 
                 {this.handleMailIcon()}
 
-
+                <div>
                 <FaWechat align="left" color={'#63C050'} style={{flexGrow: "1"}} onClick={this.handleShowChat}
                           size={35}/>
                 <span>{this.handleUnreadChat()}</span>
-
+                </div>
             </div>
         </div>);
     }

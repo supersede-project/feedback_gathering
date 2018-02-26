@@ -41,7 +41,7 @@ class CompanyViewFeedbackTitle extends Component {
     this.fetchFeedbackStatus = this.fetchFeedbackStatus.bind(this);
     this.handleFeedbackStatus = this.handleFeedbackStatus.bind(this);
     this.publishFeedback = this.publishFeedback.bind(this);
-    this.handleShowCommentChange = this.handleShowCommentChange.bind(this);
+    this.handleShowComment = this.handleShowComment.bind(this);
     this.handleBlockedThread = this.handleBlockedThread.bind(this);
     this.handleBackgroundColor = this.handleBackgroundColor.bind(this);
   }
