@@ -17,11 +17,13 @@ export class AudioView implements MechanismView {
     replayStart:Date;
     replayInterval:any;
     recordTime:number;
+    maxTime:number;
 
     constructor(audioMechanism:AudioMechanism, container:JQuery, distPath:string) {
         this.audioMechanism = audioMechanism;
         this.container = container;
         this.distPath = distPath;
+        this.maxTime = audioMechanism.getParameterValue('maxTime') || 60;
         this.initElements();
         this.initEvents()
     }
@@ -42,6 +44,8 @@ export class AudioView implements MechanismView {
 
     initEvents() {
         var myThis = this;
+        let maxTime = Math.abs(myThis.maxTime);
+
         this.recordButton.on('click', function() {
             Fr.voice.record(false, function () {
                 myThis.recordButton.addClass("disabled");
@@ -54,8 +58,13 @@ export class AudioView implements MechanismView {
                 let seconds:number = (new Date().getTime() - myThis.recordStart.getTime()) / 1000;
                 seconds = Math.abs(seconds);
                 myThis.recordTime = seconds;
-                myThis.container.find('.audio-time').empty().text(myThis.toMMSS(seconds));
-            }, 1000);
+                myThis.container.find('.audio-time').empty().text(myThis.toMMSS(seconds) + " / " + myThis.toMMSS(maxTime));
+
+                if(Math.abs(Math.abs(seconds) - Math.abs(myThis.maxTime)) < 0.1) {
+                    myThis.stopButton.click();
+                }
+
+            }, 200);
 
             myThis.stopButton.show();
             myThis.container.addClass('dirty');
@@ -66,9 +75,11 @@ export class AudioView implements MechanismView {
             Fr.voice.export(function (url) {
                 myThis.audioElement.attr("src", url);
             }, "URL");
+
             myThis.replayButton.show();
             myThis.deleteButton.show();
             myThis.stopButton.hide();
+            myThis.container.find('.audio-time').empty().text(myThis.toMMSS(myThis.recordTime));
 
             clearInterval(myThis.recordInterval);
         });
@@ -100,7 +111,7 @@ export class AudioView implements MechanismView {
                 if(seconds <= myThis.recordTime) {
                     myThis.container.find('.replay-time').empty().text(myThis.toMMSS(seconds) + " / ");
                 }
-            }, 1000);
+            }, 300);
         });
 
         this.stopReplayButton.on('click', function() {
@@ -142,7 +153,7 @@ export class AudioView implements MechanismView {
         if (hours   < 10) {hours   = "0"+hours;}
         if (minutes < 10) {minutes = "0"+minutes;}
         if (seconds < 10) {seconds = "0"+seconds;}
-        return minutes + ':' + seconds.substring(0, 2);
+        return minutes + ':' + String(seconds).substring(0, 2);
     }
 }
 
