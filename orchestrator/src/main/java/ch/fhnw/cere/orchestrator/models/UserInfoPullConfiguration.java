@@ -22,7 +22,7 @@ public class UserInfoPullConfiguration {
                 '}';
     }
 
-    public Configuration buildConfiguration(String userIdentification, Application application) {
+    public Configuration buildConfiguration(String userIdentification, Application application, User user, UserGroup userGroup) {
         String infoMechanismText = this.text;
 
         Parameter parameter1 = new Parameter("text", infoMechanismText);
@@ -36,11 +36,6 @@ public class UserInfoPullConfiguration {
             add(infoMechanism);
         }};
         parameter1.setMechanism(infoMechanism);
-
-        UserGroup userGroup = new UserGroup("Group for " + userIdentification, null, application);
-        User user = new User(userIdentification, userIdentification, application);
-        userGroup.setUsers(new ArrayList<User>() {{add(user);}});
-        user.setUserGroup(userGroup);
 
         String configurationName = "Info Pull Configuration for " + userIdentification;
         Configuration configuration = new Configuration();

@@ -77,7 +77,7 @@ public class ApplicationsController extends BaseController {
     @RequestMapping(method = RequestMethod.GET, value = "/{id}/user_identification/{userIdentification}")
     public Application getApplicationByIdAndUserIdentification(@PathVariable long id, @PathVariable String userIdentification) {
         Application application;
-        if(userService.findByApplicationIdAndUserIdentification(id, userIdentification) == null || userGroupService.findByUserIdentification(id, userIdentification).size() == 0) {
+        if(userService.findByApplicationIdAndUserIdentification(id, userIdentification) == null || userGroupService.findByApplicationIdAndUserIdentification(id, userIdentification) == null) {
             application = applicationService.find(id);
             application = application.filterForAnonymousUser();
         } else {
