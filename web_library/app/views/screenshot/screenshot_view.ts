@@ -903,8 +903,8 @@ export class ScreenshotView implements MechanismView {
      * before retrieving the blob.
      */
     getScreenshotAsBinary() {
-        if (this.scaledScreenshotCanvas) {
-            var dataUrl = this.scaledScreenshotCanvas.toDataURL("image/png");
+        if(this.screenshotCanvas) {
+            let dataUrl = this.screenshotCanvas.toDataURL("image/png");
             return DataHelper.dataURItoBlob(dataUrl);
         }
         return null;
