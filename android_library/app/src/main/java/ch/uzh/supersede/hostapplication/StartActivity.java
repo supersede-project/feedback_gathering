@@ -15,7 +15,7 @@ import ch.uzh.supersede.feedbacklibrary.utils.Utils;
  * This class represents an activity of the host application,
  * i.e., StartActivity integrates the feedback library.
  */
-public class StartActivity extends AppCompatActivity {
+public class StartActivity extends AbstractBaseActivity {
     /*
      * This integer is used in the onRequestPermissionsResult method.
      * The value of this integer can be arbitrary. The only requirement is
@@ -27,8 +27,7 @@ public class StartActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
-
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = getView(R.id.toolbar, Toolbar.class);
         setSupportActionBar(toolbar);
 
         Button triggerRandomPullV1 = (Button) findViewById(R.id.trigger_random_pull_config_v1_button);
