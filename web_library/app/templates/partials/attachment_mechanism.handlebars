@@ -1,6 +1,7 @@
 {{#if active}}
-    <section id="attachmentMechanism{{ id }}" class="feedback-mechanism feedback-col {{../labelPositioning}} {{cssClass}} attachment-type"
-             style="width: {{boxWidth}}; padding-left: {{boxPaddingLeft}}; padding-right: {{boxPaddingRight}};">
+    <section id="attachmentMechanism{{ id }}"
+             data-mechanism-id="{{ id }}" class="feedback-mechanism feedback-col {{../labelPositioning}} {{cssClass}} attachment-type"
+             style="width: {{boxWidth}}; padding-left: {{boxPaddingLeft}}; padding-right: {{boxPaddingRight}}; {{mechanismStyle}}">
         <p class="attachment-type-label" style="{{#if mandatory}}{{ ../mandatoryLabelStyle }}{{/if}}">{{ title }}{{#if mandatory }} {{ ../mandatorySign }}{{/if}}</p>
 
         <article class="file-upload-box drop-area">

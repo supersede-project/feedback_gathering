@@ -55,7 +55,8 @@ export abstract class Mechanism implements Parameterizable {
     }
 
     getCSSPropertyUnit(property: string) {
-        if(property === 'font-size' || property === 'height' || property === 'width' || property === 'border-width') {
+        if(property === 'font-size' || property === 'height' || property === 'width' || property === 'border-width' ||
+            property === 'margin-top' || property === 'margin-bottom') {
             return 'px'
         } else {
             return '';
@@ -63,6 +64,11 @@ export abstract class Mechanism implements Parameterizable {
     }
 
     defaultContext() {
+        let mechanismStyle = this.getCssStyle([
+            new ParameterValuePropertyPair('marginTop', 'margin-top'),
+            new ParameterValuePropertyPair('marginBottom', 'margin-bottom'),
+        ]);
+
         return {
             'id': this.id,
             'type': this.type,
@@ -71,6 +77,7 @@ export abstract class Mechanism implements Parameterizable {
             'canBeActivated': this.canBeActivated,
             'page': this.getParameterValue('page') || 1,
             'cssClass': this.getParameterValue('cssClass') || '',
+            'mechanismStyle': mechanismStyle
         }
     }
 }

@@ -1,5 +1,6 @@
 {{#if active}}
-    <section id="audioMechanism{{ id }}" class="feedback-mechanism feedback-col {{parent.labelPositioning}} {{cssClass}} audio-type" style="width: {{boxWidth}}; padding-left: {{boxPaddingLeft}}; padding-right: {{boxPaddingRight}};">
+    <section id="audioMechanism{{ id }}"
+             data-mechanism-id="{{ id }}" class="feedback-mechanism feedback-col {{parent.labelPositioning}} {{cssClass}} audio-type" style="width: {{boxWidth}}; padding-left: {{boxPaddingLeft}}; padding-right: {{boxPaddingRight}}; {{mechanismStyle}}">
         <p class="audio-type-label" style="{{#if mandatory}}{{ parent.mandatoryLabelStyle }}{{/if}}">{{ title }}{{#if mandatory }} {{ parent.mandatorySign }}{{/if}}</p>
         <audio controls src="" class="audio"></audio>
         <div class="audio-buttons">
