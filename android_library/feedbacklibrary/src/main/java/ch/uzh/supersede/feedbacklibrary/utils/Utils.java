@@ -515,6 +515,7 @@ public class Utils {
                         // Asynchronous call
                         if (result != null) {
                             result.enqueue(new Callback<OrchestratorConfigurationItem>() {
+
                                 @Override
                                 public void onFailure(Call<OrchestratorConfigurationItem> call, Throwable t) {
                                     Log.e(TAG, "Failed to retrieve the configuration. onFailure method called", t);
