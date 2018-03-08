@@ -37,6 +37,7 @@ import android.graphics.Path;
 import android.graphics.PointF;
 import android.graphics.RectF;
 import android.graphics.Typeface;
+import android.support.v7.widget.AppCompatImageView;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.ViewGroup;
@@ -58,7 +59,7 @@ import java.util.List;
  * Android Application Library
  * https://github.com/Korilakkuma/CanvasView
  */
-public class AnnotateImageView extends ImageView {
+public class AnnotateImageView extends AppCompatImageView {
     private final Paint emptyPaint = new Paint();
     private Bitmap bitmap = null;
     private List<Path> pathLists = new ArrayList<>();

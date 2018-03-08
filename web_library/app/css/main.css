@@ -473,83 +473,32 @@
     -webkit-filter: drop-shadow(-2px -2px 2px #888);
     filter: drop-shadow(-2px -2px 2px #888); }
 
+.feedback-library p.rating-text {
+  line-height: 1em !important; }
+
+.category-type label {
+  font-size: 15px; }
+
 .feedback-library-wrapper .ui-widget-header {
+  background: none;
   border: none;
-  border-bottom: 3px solid #187e91;
-  border-radius: 0;
-  font-size: 17px;
-  background-color: transparent;
-  margin-left: 15px;
-  margin-right: 15px;
-  margin-bottom: 15px; }
+  border-bottom: 2px solid #5a7393;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  margin: 0 14px;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  margin-bottom: 10px; }
 
-#feedbackEntryPoint {
-  font-size: 16px;
-  top: 310px !important; }
-
-.feedback-library-wrapper .ui-dialog .ui-dialog-titlebar {
-  padding-left: 0;
-  padding-right: 0; }
-
-.feedback-library-wrapper .ui-widget .ui-widget {
-  background: transparent;
+.feedback-library-wrapper button.ui-dialog-titlebar-close {
+  background: none;
   border: none; }
 
-.feedback-library-wrapper .ui-widget button {
-  font-size: 0.9em; }
+.feedback-library .feedback-mechanism.category-type p {
+  margin-bottom: 5px; }
 
-section.feedback-mechanism {
-  padding-right: 0 !important; }
-
-.feedback-library a.discard-feedback {
-  color: #2156A0; }
-
-.feedback-library-wrapper .ui-button.ui-dialog-titlebar-close {
-  color: #ffffff !important; }
-
-.feedback-library .button {
-  padding: 0.375em 1.5em !important; }
-
-.feedback-library-wrapper .ui-dialog .ui-dialog-titlebar {
-  padding: 3px 0 !important; }
-
-.feedback-library .feedback-mechanism.horizontal .col-left {
-  padding-left: 0 !important; }
-
-.feedback-library p.attachment-type-label,
-.feedback-library p.screenshot-title,
-.feedback-library p.text-type-label,
-.feedback-library p.rating-type-label,
-.feedback-library p.audio-type-label,
-.feedback-library p.category-type-label,
-.feedback-library p.rating-type-label {
-  font-size: 17px !important;
-  line-height: 21px !important; }
-
-.feedback-library p.attachment-type-label,
-.feedback-library p.screenshot-title,
-.feedback-library p.audio-type-label,
-.feedback-library p.category-type-label {
-  margin-bottom: 7px !important; }
-
-.feedback-library .category-type label {
-  font-size: 16px !important; }
-
-.feedback-library .category-type input.own-category {
-  height: 24px !important;
-  padding: 1px !important; }
-
-.feedback-library article.file-upload-box input {
-  line-height: 16px; }
-
-.feedback-library .drop-area {
-  height: 90px !important;
-  padding-top: 27px !important;
-  font-size: 16px !important; }
-
-.feedback-library .screenshot-action-title {
-  margin-top: 10px !important;
-  margin-bottom: 0 !important; }
+.feedback-library p.rating-text {
+  margin-top: 7px; }
 
 .feedback-library .audio-type audio {
   display: none; }
@@ -611,7 +560,7 @@ section.feedback-mechanism {
   left: 0;
   padding: 2px 7px;
   text-decoration: none;
-  box-shadow: 1px 1px 1px 0 #2156A0;
+  box-shadow: 1px 1px 1px 0 #1A6FC2;
   display: none; }
 
 .feedback-library.ui-state-default, .feedback-library.ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default {
@@ -658,17 +607,17 @@ section.feedback-mechanism {
   border-bottom-left-radius: 0; }
 
 .feedback-library.ui-dialog .ui-dialog-titlebar {
-  font-family: Lato, sans-serif;
-  color: transparent;
+  font-family: Tahoma, Verdana, Segoe, sans-serif;
+  color: #282828;
   font-weight: normal;
-  border-bottom: 2px solid #2156A0;
+  border-bottom: 2px solid transparent;
   font-size: 22px;
   margin: 0;
-  background-color: transparent;
+  background-color: #e2e2e2;
   padding: 1px 7px; }
 
 .feedback-library.ui-widget input, .feedback-library.ui-widget select, .feedback-library.ui-widget textarea, .feedback-library.ui-widget button {
-  font-family: Lato, sans-serif;
+  font-family: Tahoma, Verdana, Segoe, sans-serif;
   font-size: 13px; }
 
 @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
@@ -693,7 +642,7 @@ section.feedback-mechanism {
 .feedback-library h2.form-title {
   font-size: 26px;
   color: #1c416f;
-  font-family: Lato, sans-serif;
+  font-family: Tahoma, Verdana, Segoe, sans-serif;
   padding-bottom: 6px;
   border-bottom: 3px solid #666666;
   margin-top: 5px;
@@ -746,7 +695,7 @@ section.feedback-mechanism {
   overflow-y: hidden; }
 
 .feedback-library .ui-dialog-titlebar {
-  border-color: #2156A0;
+  border-color: transparent;
   border-width: 1px;
   padding: 0;
   margin: 0; }
@@ -776,13 +725,9 @@ section.feedback-mechanism {
   margin: 13px 1px 3px 1px; }
 
 .feedback-library .button {
-  background-color: #2156A0;
-  background-image: -moz-linear-gradient(top, #2156A0 0%, #2156A0 50%, #2156A0 52%, #2156A0 100%);
-  background-image: -webkit-linear-gradient(top, #2156A0 0%, #2156A0 50%, #2156A0 52%, #2156A0 100%);
-  background-image: -o-linear-gradient(top, #2156A0 0%, #2156A0 50%, #2156A0 52%, #2156A0 100%);
-  background-image: linear-gradient(top, #2156A0 0%, #2156A0 50%, #2156A0 52%, #2156A0 100%);
+  background-color: #f9f9f9;
   background-size: 100% auto;
-  color: white;
+  color: #282828;
   display: inline-block;
   font-size: 13px;
   min-height: 32px;
@@ -790,30 +735,26 @@ section.feedback-mechanism {
   text-decoration: none;
   text-transform: none;
   margin-top: 0;
-  border-width: 0;
+  border-width: 1px;
   border-style: solid;
-  border-color: transparent; }
+  border-color: #b9b9b9; }
   .feedback-library .button.small {
     padding: 0.3em 0.9em;
     font-size: 11px;
     text-transform: none; }
   .feedback-library .button.submit-feedback {
-    background-color: #2156A0;
+    background-color: #1c416f;
     color: white;
-    font-weight: normal;
+    font-weight: bold;
     margin-bottom: 0; }
     .feedback-library .button.submit-feedback:hover {
-      background-color: #2156A0;
+      background-color: #5a7393;
       color: white; }
 
 .feedback-library .button:visited, .feedback-library .button:hover, .feedback-library button:active, .feedback-library button:focus {
-  background-color: #2156A0;
-  color: white;
-  cursor: pointer;
-  background-image: -webkit-linear-gradient(top, #2156A0 0%, #2156A0 50%, #2156A0 52%, #2156A0 100%);
-  background-image: -moz-linear-gradient(top, #2156A0 0%, #2156A0 50%, #2156A0 52%, #2156A0 100%);
-  background-image: -o-linear-gradient(top, #2156A0 0%, #2156A0 50%, #2156A0 52%, #2156A0 100%);
-  background-image: linear-gradient(top, #2156A0 0%, #2156A0 50%, #2156A0 52%, #2156A0 100%); }
+  background-color: #F2F2F2;
+  color: #282828;
+  cursor: pointer; }
 
 .feedback-library .navigation-button, .feedback-library .discard-feedback, .feedback-library .submit-feedback {
   margin-top: 15px;
@@ -867,7 +808,7 @@ section.feedback-mechanism {
 
 .feedback-library .text-type-max-length {
   font-size: 13px;
-  font-family: Lato, sans-serif;
+  font-family: Tahoma, Verdana, Segoe, sans-serif;
   color: #4b4a4c;
   width: auto;
   display: inline-block;
@@ -1100,7 +1041,7 @@ section.feedback-mechanism {
 .feedback-library a.discard-feedback {
   float: left;
   display: inline-block;
-  color: transparent;
+  color: #282828;
   text-decoration: none;
   margin-top: 23px;
   margin-right: 30px;
@@ -1108,7 +1049,7 @@ section.feedback-mechanism {
   .feedback-library a.discard-feedback.no-float-left {
     float: none; }
   .feedback-library a.discard-feedback:hover {
-    color: transparent;
+    color: #282828;
     text-decoration: underline; }
 
 .feedback-library .at-least-one-mechanism {
@@ -1151,14 +1092,14 @@ section.feedback-mechanism {
   display: none;
   min-width: 1050px;
   max-width: 1050px;
-  font-family: Lato, sans-serif;
+  font-family: Tahoma, Verdana, Segoe, sans-serif;
   padding: 15px;
   color: #333333; }
 
 .feedback-library#intermediateDialog {
   display: none;
   padding: 20px;
-  font-family: Lato, sans-serif;
+  font-family: Tahoma, Verdana, Segoe, sans-serif;
   font-size: 16px; }
   .feedback-library#intermediateDialog p {
     margin-top: 1px;

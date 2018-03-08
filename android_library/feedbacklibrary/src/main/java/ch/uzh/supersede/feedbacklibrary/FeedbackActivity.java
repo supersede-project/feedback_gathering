@@ -55,10 +55,8 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
-import com.google.gson.reflect.TypeToken;
 
 import java.io.File;
-import java.lang.reflect.Type;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
@@ -99,6 +97,7 @@ import ch.uzh.supersede.feedbacklibrary.views.RatingMechanismView;
 import ch.uzh.supersede.feedbacklibrary.views.ScreenshotMechanismView;
 import ch.uzh.supersede.feedbacklibrary.views.TextMechanismView;
 import okhttp3.MediaType;
+import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -674,17 +673,16 @@ public class FeedbackActivity extends AppCompatActivity implements ScreenshotMec
                                 builder.excludeFieldsWithoutExposeAnnotation();
                                 builder.serializeNulls();
                                 Gson gson = builder.create();
-                                Type feedbackType = new TypeToken<Feedback>() {
-                                }.getType();
-                                String feedbackJsonString = gson.toJson(feedback, feedbackType);
-                                RequestBody feedbackJSONPart = RequestBody.create(MediaType.parse("multipart/form-data"), feedbackJsonString);
-                                //RequestBody feedbackJSONPart = RequestBody.create(MediaType.parse("application/json"), feedbackJsonString);
 
-                                getAudioMultipart(feedback, files);
-                                getScreenshotMultipart(feedback, files);
+                                String jsonString = gson.toJson(feedback);
+                                MultipartBody.Part jsonPart = MultipartBody.Part.createFormData("json", "json", RequestBody.create(MediaType.parse("application/json"), jsonString.getBytes()));
 
-                                // Send the feedback
-                                Call<JsonObject> result = fbAPI.createFeedbackVariant(language, feedback.getApplicationId(), feedbackJSONPart, files);
+                                List<MultipartBody.Part> multipartFiles = new ArrayList<>();
+
+                                multipartFiles.addAll(getScreenshotMultipartbodyParts(feedback));
+                                multipartFiles.addAll(getAudioMultipartbodyParts(feedback));
+
+                                Call<JsonObject> result = fbAPI.createFeedbackVariant(language, feedback.getApplicationId(), jsonPart, multipartFiles);
                                 if (result != null) {
                                     result.enqueue(new Callback<JsonObject>() {
                                         @Override
@@ -736,30 +734,40 @@ public class FeedbackActivity extends AppCompatActivity implements ScreenshotMec
         }
     }
 
-    private void getAudioMultipart(Feedback feedback, Map<String, RequestBody> files) {
-        // Audio multipart
-        audioFeedbackList = feedback.getAudioFeedbacks();
-        if (audioFeedbackList != null) {
-            for (int pos = 0; pos < audioFeedbackList.size(); ++pos) {
-                RequestBody requestBody = createRequestBody(new File(audioFeedbackList.get(pos).getAudioPath()));
-                String fileName = audioFeedbackList.get(pos).getFileName();
-                String key = String.format("%1$s\"; filename=\"%2$s", audioFeedbackList.get(pos).getPartString() + String.valueOf(pos), fileName);
-                files.put(key, requestBody);
-            }
-        }
-    }
+    private List<MultipartBody.Part> getScreenshotMultipartbodyParts(Feedback feedback) {
+        List<MultipartBody.Part> multipartFiles = new ArrayList<>();
 
-    private void getScreenshotMultipart(Feedback feedback, Map<String, RequestBody> files) {
-        // Screenshots multipart
         screenshotFeedbackList = feedback.getScreenshotFeedbacks();
         if (screenshotFeedbackList != null) {
             for (int pos = 0; pos < screenshotFeedbackList.size(); ++pos) {
-                RequestBody requestBody = createRequestBody(new File(screenshotFeedbackList.get(pos).getImagePath()));
+                File screenshotFile = new File(screenshotFeedbackList.get(pos).getImagePath());
                 String fileName = screenshotFeedbackList.get(pos).getFileName();
-                String key = String.format("%1$s\"; filename=\"%2$s", screenshotFeedbackList.get(pos).getPartString() + String.valueOf(pos), fileName);
-                files.put(key, requestBody);
+                String partName = "screenshot" + pos;
+
+                MultipartBody.Part filePart = MultipartBody.Part.createFormData(partName, fileName, RequestBody.create(MediaType.parse("image/png"), screenshotFile));
+                multipartFiles.add(filePart);
             }
         }
+
+        return multipartFiles;
+    }
+
+    private List<MultipartBody.Part> getAudioMultipartbodyParts(Feedback feedback) {
+        List<MultipartBody.Part> multipartFiles = new ArrayList<>();
+
+        audioFeedbackList = feedback.getAudioFeedbacks();
+        if (audioFeedbackList != null) {
+            for (int pos = 0; pos < audioFeedbackList.size(); ++pos) {
+                File audioFile = new File(audioFeedbackList.get(pos).getAudioPath());
+                String fileName = audioFeedbackList.get(pos).getFileName();
+                String partName = "audio" + pos;
+
+                MultipartBody.Part filePart = MultipartBody.Part.createFormData(partName, fileName, RequestBody.create(MediaType.parse("audio/mp3"), audioFile));
+                multipartFiles.add(filePart);
+            }
+        }
+
+        return multipartFiles;
     }
 
     private void checkAndSendViaEmail() {

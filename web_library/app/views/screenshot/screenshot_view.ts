@@ -122,6 +122,14 @@ export class ScreenshotView implements MechanismView {
         } else {
             this.generateScreenshot();
         }
+
+        let myThis = this;
+        this.container.find('.scale-screenshot').on('click', (event) => {
+            event.preventDefault();
+            event.stopPropagation();
+            let factor = myThis.container.find('.scale-screenshot-factor').val();
+            myThis.scaleTheCanvas(factor);
+        });
     }
 
     generateScreenshotFromUrl() {
@@ -604,6 +612,32 @@ export class ScreenshotView implements MechanismView {
         canvas.renderAll.bind(canvas);
     }
 
+    scaleTheCanvas(factor) {
+        console.log('scaleTheCanvas: ' + factor);
+        let myThis = this;
+        let canvas = this.canvas;
+
+        // save the canvas content as imageURL
+        let data = canvas.toDataURL("image/png");
+        myThis.context = canvas.getContext("2d");
+        myThis.canvasOriginalWidth = canvas.width;
+        myThis.canvasOriginalHeight = canvas.height;
+
+        myThis.canvasWidth = myThis.canvasWidth * factor;
+        myThis.canvasHeight = myThis.canvasHeight * factor;
+
+        jQuery(canvas).prop('width', myThis.canvasWidth);
+        jQuery(canvas).prop('height', myThis.canvasHeight);
+
+        let img = new Image();
+        myThis.canvasState = img;
+        myThis.screenshotCanvas = canvas;
+        img.src = data;
+        img.onload = function () {
+            myThis.context.drawImage(img, 0, 0, img.width * factor, img.height * factor, 0, 0, canvas.width, canvas.height);
+        };
+    }
+
     addTextAnnotation(left, top) {
         var text = new fabric.IText('Your text', {
             left: left,
@@ -903,8 +937,8 @@ export class ScreenshotView implements MechanismView {
      * before retrieving the blob.
      */
     getScreenshotAsBinary() {
-        if (this.scaledScreenshotCanvas) {
-            var dataUrl = this.scaledScreenshotCanvas.toDataURL("image/png");
+        if(this.screenshotCanvas) {
+            let dataUrl = this.screenshotCanvas.toDataURL("image/png");
             return DataHelper.dataURItoBlob(dataUrl);
         }
         return null;

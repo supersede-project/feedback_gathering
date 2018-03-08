@@ -171,12 +171,10 @@ public class Utils {
                     ActivityCompat.requestPermissions((Activity) context, new String[]{permission}, requestCode);
                 }
                 return false;
-            } else {
-                return true;
             }
-        } else {
-            return true;
         }
+        return true;
+
     }
 
     /**
@@ -515,6 +513,7 @@ public class Utils {
                         // Asynchronous call
                         if (result != null) {
                             result.enqueue(new Callback<OrchestratorConfigurationItem>() {
+
                                 @Override
                                 public void onFailure(Call<OrchestratorConfigurationItem> call, Throwable t) {
                                     Log.e(TAG, "Failed to retrieve the configuration. onFailure method called", t);
@@ -547,7 +546,7 @@ public class Utils {
                                                     String key = (String) parameter.get("key");
                                                     // Likelihood
                                                     if (key.equals("likelihood")) {
-                                                        likelihood = (((Double) parameter.get("value")).floatValue());
+                                                        likelihood = Double.parseDouble((String) parameter.get("value"));
                                                     }
                                                     // Intermediate dialog
                                                     if (key.equals("showIntermediateDialog")) {
