@@ -15,19 +15,18 @@
  */
 package ch.uzh.supersede.feedbacklibrary.API;
 
-import ch.uzh.supersede.feedbacklibrary.configurations.OrchestratorConfigurationItem;
 import com.google.gson.JsonObject;
 
-import java.util.Map;
+import java.util.List;
 
-import okhttp3.RequestBody;
+import ch.uzh.supersede.feedbacklibrary.configurations.OrchestratorConfigurationItem;
+import okhttp3.MultipartBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
-import retrofit2.http.PartMap;
 import retrofit2.http.Path;
 
 /**
@@ -46,7 +45,7 @@ public interface feedbackAPI {
      */
     @Multipart
     @POST("feedback_repository/{language}/applications/{application_id}/feedbacks")
-    Call<JsonObject> createFeedbackVariant(@Path("language") String language, @Path("application_id") long application_id, @Part("json") RequestBody feedback, @PartMap Map<String, RequestBody> files);
+    Call<JsonObject> createFeedbackVariant(@Path("language") String language, @Path("application_id") long application_id, @Part MultipartBody.Part feedback, @Part List<MultipartBody.Part> files);
 
     /**
      * This method retrieves the feedback configuration from the orchestrator.

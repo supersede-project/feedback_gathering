@@ -55,7 +55,7 @@ dependencies {
     
     // https://mvnrepository.com/artifact/commons-httpclient/commons-httpclient
 	compile group: 'commons-httpclient', name: 'commons-httpclient', version: '3.1'
-    
+	
     compile project(':monitoring')
 
     // Declare the dependency for your favourite test framework you want to use in your tests.

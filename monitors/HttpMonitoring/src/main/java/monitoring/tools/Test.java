@@ -30,7 +30,7 @@ public class Test {
 	            watch.stop();
 	        }
 
-	        data.add(new HttpMonitoringData(String.valueOf(watch.getTotalTimeMillis()), String.valueOf(method.getStatusCode())));
+	        data.add(new HttpMonitoringData(String.valueOf(watch.getTotalTimeMillis()), String.valueOf(method.getStatusCode()), "1000"));
 			System.out.println("Sent data: " + watch.getTotalTimeMillis() + "/" + method.getStatusCode());
 	 }
 

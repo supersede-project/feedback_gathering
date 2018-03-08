@@ -1,5 +1,7 @@
 {{#if active}}
-    <section id="infoMechanism{{ id }}" class="feedback-mechanism feedback-col {{parent.labelPositioning}} {{cssClass}} info-type" style="width: {{boxWidth}}; padding-left: {{boxPaddingLeft}}; padding-right: {{boxPaddingRight}};">
+    <section id="infoMechanism{{ id }}"
+             data-mechanism-id="{{ id }}"
+             class="feedback-mechanism feedback-col {{parent.labelPositioning}} {{cssClass}} info-type" style="width: {{boxWidth}}; padding-left: {{boxPaddingLeft}}; padding-right: {{boxPaddingRight}}; {{mechanismStyle}}">
         <p class="info-type-text">
             {{{ text }}}
         </p>

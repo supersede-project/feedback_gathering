@@ -89,6 +89,7 @@ export class PullConfiguration extends Configuration {
         console.log('shouldGetTriggered');
         let pullActive = this.isActive();
         let pageDoesMatch = this.pageDoesMatch(this.currentSlug());
+        let hashDoesMatch = this.hashDoesMatch(this.currentHash());
         let doNotDisturbTimeIsOver = this.isDoNotDisturbTimeDurationOver();
         let askOnStartUp = false;
         let likeliHoodOkay = true;
@@ -97,11 +98,23 @@ export class PullConfiguration extends Configuration {
             likeliHoodOkay = Math.random() <= this.generalConfiguration.getParameterValue('likelihood');
         }
 
+        console.log('------');
+        console.log('config ID ' + this.id);
+        console.log('pullActive = ' + pullActive);
+        console.log('pageDoesMatch = ' + pageDoesMatch);
+        console.log('hashDoesMatch = ' + hashDoesMatch);
+        console.log('doNotDisturbTimeIsOver = ' + doNotDisturbTimeIsOver);
+        console.log('askOnStartUp = ' + askOnStartUp);
+        console.log('likeliHoodOkay = ' + likeliHoodOkay);
+        console.log('all = ' + pullActive && (pageDoesMatch || hashDoesMatch) && doNotDisturbTimeIsOver && (askOnStartUp || likeliHoodOkay));
+        console.log('------');
+
+
         if (this.shouldOnlyBeDisplayedOnce()) {
-            return pullActive && !this.pullDialogAlreadyDisplayed()
+            return pullActive && !this.pullDialogAlreadyDisplayed() && (pageDoesMatch || hashDoesMatch) && likeliHoodOkay;
         }
 
-        return pullActive && pageDoesMatch && doNotDisturbTimeIsOver && (askOnStartUp || likeliHoodOkay);
+        return pullActive && (pageDoesMatch || hashDoesMatch) && doNotDisturbTimeIsOver && (askOnStartUp || likeliHoodOkay);
     }
 
     isActive():boolean {
@@ -158,6 +171,33 @@ export class PullConfiguration extends Configuration {
     currentSlug():string {
         var url = location.href;
         return url.replace(/http(s*):\/\/[^\/]*\//i, "");
+    }
+
+    currentHash():string {
+        let url = window.location.href;
+        let urlParts = url.split('/');
+        let site = urlParts[urlParts.length - 1];
+        if(site === undefined || site === '') {
+            site = urlParts[urlParts.length - 2];
+            return site;
+        }
+        return site;
+    }
+
+    hashDoesMatch(hash:string):boolean {
+        let hashes:ParameterInterface[] = this.generalConfiguration.getParameterValue('hashes');
+
+        if(hashes === null || hashes.length === 0) {
+            return true;
+        } else {
+            for(var page of hashes) {
+                console.log(page);
+                if(page.value === hash) {
+                    return true;
+                }
+            }
+            return false;
+        }
     }
 
     pageDoesMatch(slug:string):boolean {
