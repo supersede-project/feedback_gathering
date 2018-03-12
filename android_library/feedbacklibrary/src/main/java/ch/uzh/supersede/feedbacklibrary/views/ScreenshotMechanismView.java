@@ -2,18 +2,19 @@ package ch.uzh.supersede.feedbacklibrary.views;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import ch.uzh.supersede.feedbacklibrary.R;
 import ch.uzh.supersede.feedbacklibrary.models.Mechanism;
 import ch.uzh.supersede.feedbacklibrary.models.ScreenshotMechanism;
-
-import java.util.HashMap;
 
 /**
  * Screenshot mechanism view
@@ -24,8 +25,8 @@ public class ScreenshotMechanismView extends MechanismView {
     private int mechanismViewIndex;
     private String annotatedImagePath = null;
     private ImageView screenShotPreviewImageView;
-    private HashMap<Integer, String> allStickerAnnotations = null;
-    private HashMap<Integer, String> allTextAnnotations = null;
+    private HashMap<Integer, String> allStickerAnnotations;
+    private HashMap<Integer, String> allTextAnnotations;
     private Button annotateScreenshotButton;
     private Button deleteScreenshotButton;
     private Bitmap pictureBitmap;

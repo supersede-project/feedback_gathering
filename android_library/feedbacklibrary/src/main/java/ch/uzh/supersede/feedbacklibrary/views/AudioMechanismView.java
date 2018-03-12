@@ -24,6 +24,7 @@ import ch.uzh.supersede.feedbacklibrary.FeedbackActivity;
 import ch.uzh.supersede.feedbacklibrary.R;
 import ch.uzh.supersede.feedbacklibrary.models.AudioMechanism;
 import ch.uzh.supersede.feedbacklibrary.models.Mechanism;
+import ch.uzh.supersede.feedbacklibrary.utils.Constants;
 import ch.uzh.supersede.feedbacklibrary.utils.Utils;
 
 
@@ -213,14 +214,14 @@ public class AudioMechanismView extends MechanismView implements SeekBar.OnSeekB
             public void onClick(View v) {
                 clearFocus();
 
-                boolean result = Utils.checkSinglePermission(activity, FeedbackActivity.PERMISSIONS_REQUEST_RECORD_AUDIO, Manifest.permission.RECORD_AUDIO, null, null, false);
+                boolean result = Utils.checkSinglePermission(activity, Constants.PERMISSIONS_REQUEST_RECORD_AUDIO, Manifest.permission.RECORD_AUDIO, null, null, false);
                 if (result) {
                     removeUpdateSeekBarTask();
                     removeUpdateSeekBarTaskRecorder();
 
                     // Output file
-                    File audioDirectory = applicationContext.getDir(Utils.AUDIO_DIR, Context.MODE_PRIVATE);
-                    tempAudioFilePath = audioDirectory.getAbsolutePath() + "/" + audioMechanism.getId() + Utils.AUDIO_FILENAME + "." + Utils.AUDIO_EXTENSION;
+                    File audioDirectory = applicationContext.getDir(Constants.AUDIO_DIR, Context.MODE_PRIVATE);
+                    tempAudioFilePath = audioDirectory.getAbsolutePath() + "/" + audioMechanism.getId() + Constants.AUDIO_FILENAME + "." + Constants.AUDIO_EXTENSION;
 
                     // Setup recorder
                     mediaRecorder = new MediaRecorder();
