@@ -384,6 +384,11 @@ public class FeedbackActivity extends AppCompatActivity implements ScreenshotMec
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //TODO [jfo]: remove me
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+
         setContentView(R.layout.activity_feedback);
 
         UserManager userManager = (UserManager) getApplicationContext().getSystemService(Context.USER_SERVICE);

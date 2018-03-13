@@ -7,7 +7,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.os.StrictMode;
 
+import ch.uzh.supersede.feedbacklibrary.FeedbackActivity;
 import ch.uzh.supersede.feedbacklibrary.utils.ActivityService;
 import ch.uzh.supersede.feedbacklibrary.utils.Constants;
 import ch.uzh.supersede.feedbacklibrary.utils.Utils;
@@ -27,6 +29,11 @@ public class StartActivity extends AbstractBaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //TODO [jfo]: remove me
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+
         setContentView(R.layout.activity_start);
         Toolbar toolbar = getView(R.id.toolbar, Toolbar.class);
         setSupportActionBar(toolbar);

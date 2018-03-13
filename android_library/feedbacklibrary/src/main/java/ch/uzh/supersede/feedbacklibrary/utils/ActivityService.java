@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import ch.uzh.supersede.feedbacklibrary.FeedbackActivity;
 import ch.uzh.supersede.feedbacklibrary.R;
 import ch.uzh.supersede.feedbacklibrary.configurations.ConfigurationItem;
 import ch.uzh.supersede.feedbacklibrary.configurations.OrchestratorConfigurationItem;
@@ -138,10 +139,10 @@ public class ActivityService {
     /**
      * Takes a screenshot of the current screen automatically and opens the FeedbackActivity from the feedback library in case if a PUSH feedback is triggered.
      */
-    public static void startActivityWithScreenshotCapture(@NonNull final String baseURL, @NonNull final Activity activity, final long applicationId, @NonNull final String language) {
+    public void startActivityWithScreenshotCapture(@NonNull final String baseURL, @NonNull final Activity activity, final long applicationId, @NonNull final String language) {
         FeedbackService.getInstance().pingOrchestrator();
 
-        Intent intent = new Intent(activity, activity.getClass());
+        Intent intent = new Intent(activity, FeedbackActivity.class);
         String defaultImagePath = Utils.captureScreenshot(activity);
         intent.putExtra(Constants.DEFAULT_IMAGE_PATH, defaultImagePath);
         intent.putExtra(Constants.EXTRA_KEY_APPLICATION_ID, applicationId);
@@ -150,7 +151,7 @@ public class ActivityService {
         activity.startActivity(intent);
     }
 
-    private static Intent createPullFeedbackIntent(String baseURL, Activity activity, String jsonConfiguration, String language, long selectedPullConfigurationIndex) {
+    private Intent createPullFeedbackIntent(String baseURL, Activity activity, String jsonConfiguration, String language, long selectedPullConfigurationIndex) {
         Intent intent = new Intent(activity, activity.getClass());
         intent.putExtra(Constants.IS_PUSH_STRING, false);
         intent.putExtra(Constants.JSON_CONFIGURATION_STRING, jsonConfiguration);
