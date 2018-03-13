@@ -130,29 +130,31 @@ public class TextMechanism extends Mechanism {
     private void initTextMechanism(MechanismConfigurationItem item) {
         for (Map<String, Object> param : item.getParameters()) {
             String key = (String) param.get("key");
+            Object value = param.get("value");
+
             // Title
             if (key.equals("title")) {
-                setTitle((String) param.get("value"));
+                setTitle((String) value);
             }
             // Hint
             if (key.equals("hint")) {
-                setHint((String) param.get("value"));
+                setHint((String) value);
             }
             // Label
             if (key.equals("label")) {
-                setLabel((String) param.get("value"));
+                setLabel((String) value);
             }
             // Font color
             if (key.equals("textareaFontColor")) {
-                setInputTextFontColor(((String) param.get("value")));
+                setInputTextFontColor(((String) value));
             }
             // Font size
             if (key.equals("fieldFontSize")) {
-                setInputTextFontSize(Float.parseFloat((String) param.get("value")));
+                setInputTextFontSize(Float.parseFloat((String) value));
             }
             // Font type
             if (key.equals("fieldFontType")) {
-                String fontType = (String) param.get("value");
+                String fontType = (String) value;
                 switch (fontType) {
                     case "italic":
                         setInputTextFontType(Typeface.ITALIC);
@@ -169,7 +171,7 @@ public class TextMechanism extends Mechanism {
             }
             // Alignment
             if (key.equals("fieldTextAlignment")) {
-                String alignment = (String) param.get("value");
+                String alignment = (String) value;
                 switch (alignment) {
                     case "center":
                         setInputTextAlignment("center");
@@ -186,37 +188,37 @@ public class TextMechanism extends Mechanism {
             }
             // Maximum length
             if (key.equals("maxLength")) {
-                Double doubleValue = Double.parseDouble((String)param.get("value"));
+                Double doubleValue = Double.parseDouble((String) value);
                 setMaxLength(doubleValue.intValue());
             }
             if (key.equals("maxLengthVisible")) {
-                if(param.get("value") instanceof Boolean) {
-                    setMaxLengthVisible((Boolean)param.get("value"));
+                if (value instanceof Boolean) {
+                    setMaxLengthVisible((Boolean) value);
                 } else {
-                    Double doubleValue = Double.parseDouble((String) param.get("value"));
+                    Double doubleValue = Double.parseDouble((String) value);
                     setMaxLengthVisible(Utils.intToBool(doubleValue.intValue()));
                 }
             }
             if (key.equals("textLengthVisible")) {
-                if(param.get("value") instanceof Boolean) {
-                    setTextLengthVisible((Boolean)param.get("value"));
+                if (value instanceof Boolean) {
+                    setTextLengthVisible((Boolean) value);
                 } else {
-                    Double doubleValue = Double.parseDouble((String) param.get("value"));
+                    Double doubleValue = Double.parseDouble((String) value);
                     setTextLengthVisible(Utils.intToBool(doubleValue.intValue()));
                 }
             }
             if (key.equals("mandatory")) {
-                if(param.get("value") instanceof Boolean) {
-                    setMandatory((Boolean)param.get("value"));
+                if (value instanceof Boolean) {
+                    setMandatory((Boolean) value);
                 } else {
-                    Double doubleValue = Double.parseDouble((String)param.get("value"));
+                    Double doubleValue = Double.parseDouble((String) value);
                     setMandatory(Utils.intToBool(doubleValue.intValue()));
                 }
 
                 // If TI 11 is set, TI 11.1 should always be activated, i.e., the user always needs a reminder for a mandatory field
             }
             if (key.equals("mandatoryReminder")) {
-                setMandatoryReminder((String) param.get("value"));
+                setMandatoryReminder((String) value);
             }
         }
     }
@@ -250,16 +252,14 @@ public class TextMechanism extends Mechanism {
 
     @Override
     public boolean isValid(List<String> errorMessage) {
-        if (isMandatory() && !(inputText.length() > 0)) {
+        if (isMandatory() && inputText.length() <= 0) {
             errorMessage.add(mandatoryReminder);
             return false;
         }
 
-        if (maxLength != null) {
-            if (inputText.length() > maxLength) {
-                errorMessage.add("Text has " + inputText.length() + " characters. Maximum allowed characters are " + maxLength);
-                return false;
-            }
+        if (maxLength != null && inputText.length() > maxLength) {
+            errorMessage.add("Text has " + inputText.length() + " characters. Maximum allowed characters are " + maxLength);
+            return false;
         }
 
         return true;

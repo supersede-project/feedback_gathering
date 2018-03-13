@@ -70,21 +70,22 @@ public class RatingMechanism extends Mechanism {
         for (Map<String, Object> param : item.getParameters()) {
             String key = (String) param.get("key");
             // Title
+            Object value = param.get("value");
             if (key.equals("title")) {
-                setTitle((String) param.get("value"));
+                setTitle((String) value);
             }
             // Rating icon
             if (key.equals("ratingIcon")) {
-                setRatingIcon((String) param.get("value"));
+                setRatingIcon((String) value);
             }
             // Maximum rating
             if (key.equals("maxRating")) {
-                Double doubleValue = Double.parseDouble((String)param.get("value"));
+                Double doubleValue = Double.parseDouble((String) value);
                 setDefaultRating(doubleValue.floatValue());
             }
             // Default rating
             if (key.equals("defaultRating")) {
-                Double doubleValue = Double.parseDouble((String)param.get("value"));
+                Double doubleValue = Double.parseDouble((String) value);
                 setDefaultRating(doubleValue.floatValue());
             }
         }

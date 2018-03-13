@@ -26,6 +26,7 @@ import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -68,11 +69,25 @@ import static android.graphics.Color.RED;
 import static android.graphics.Color.WHITE;
 import static ch.uzh.supersede.feedbacklibrary.models.DialogType.*;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.FeedbackActivityConstants.*;
+import ch.uzh.supersede.feedbacklibrary.models.DialogType;
+import ch.uzh.supersede.feedbacklibrary.utils.ColorPickerDialog;
+import ch.uzh.supersede.feedbacklibrary.utils.Constants;
+import ch.uzh.supersede.feedbacklibrary.utils.Utils;
+import ch.uzh.supersede.feedbacklibrary.views.AnnotateImageView;
+import ch.uzh.supersede.feedbacklibrary.views.EditImageDialog;
+import ch.uzh.supersede.feedbacklibrary.views.StickerAnnotationImageView;
+import ch.uzh.supersede.feedbacklibrary.views.StickerAnnotationView;
+import ch.uzh.supersede.feedbacklibrary.views.TextAnnotationImageView;
+import ch.uzh.supersede.feedbacklibrary.views.TextAnnotationView;
+
+import static ch.uzh.supersede.feedbacklibrary.models.DialogType.Favorite;
+import static ch.uzh.supersede.feedbacklibrary.models.DialogType.QuickEdit;
 
 /**
  * Activity for annotating the screenshot
  */
 public class AnnotateImageActivity extends AppCompatActivity implements ColorPickerDialog.OnColorChangeDialogListener, TextAnnotationView.OnTextAnnotationChangedListener, EditImageDialog.OnEditImageListener {
+    private static final String TAG = "AnnotateImageActivity";
     private int mechanismViewId = -1;
     private boolean blackModeOn = false;
     private int oldPaintStrokeColor;
@@ -87,11 +102,6 @@ public class AnnotateImageActivity extends AppCompatActivity implements ColorPic
     private List<Integer> stickerIcons;
     private List<String> stickerLabels;
     private AlertDialog stickerDialog;
-
-    private Button favoriteButton;
-    private Button quickEditButton;
-    private Button colorButton;
-    private Button cropButton;
 
     private EditImageDialog dialog;
 
@@ -130,24 +140,17 @@ public class AnnotateImageActivity extends AppCompatActivity implements ColorPic
             if (relativeLayout != null) {
                 relativeLayout.addView(stickerViewTextAnnotationImageView);
             }
-            if (textAnnotationCounter > textAnnotationCounterMaximum) {
-                /*ImageButton textAnnotationButton = (ImageButton) findViewById(R.id.supersede_feedbacklibrary_text_comment_btn);
-                if (textAnnotationButton != null) {
-                    textAnnotationButton.setEnabled(false);
-                    textAnnotationButton.setAlpha(0.4F);
-                }*/
-            }
             return stickerViewTextAnnotationImageView;
         }
         return null;
     }
 
     private ColorPickerDialog createColorPickerDialog(int mInitialColor) {
-        ColorPickerDialog dialog = new ColorPickerDialog();
+        ColorPickerDialog colorPickerDialog = new ColorPickerDialog();
         Bundle args = new Bundle();
         args.putInt("mInitialColor", mInitialColor);
-        dialog.setArguments(args);
-        return dialog;
+        colorPickerDialog.setArguments(args);
+        return colorPickerDialog;
     }
 
     private void hideAllControlItems(ViewGroup viewGroup) {
@@ -202,36 +205,44 @@ public class AnnotateImageActivity extends AppCompatActivity implements ColorPic
     private void initAnnotations(Intent intent) {
         RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.supersede_feedbacklibrary_annotate_image_layout);
         if (relativeLayout != null) {
-            if (intent.getBooleanExtra(Utils.EXTRA_KEY_HAS_STICKER_ANNOTATIONS, false)) {
-                HashMap<Integer, String> allStickerAnnotations = (HashMap<Integer, String>) intent.getSerializableExtra(Utils.EXTRA_KEY_ALL_STICKER_ANNOTATIONS);
-                for (Map.Entry<Integer, String> entry : allStickerAnnotations.entrySet()) {
-                    // Array will be of length 6 --> imageResourceId, x, y, width, height, rotation
-                    String[] split = entry.getValue().split(Utils.SEPARATOR);
-                    StickerAnnotationImageView stickerAnnotationImageView = addSticker(Integer.valueOf(split[0]));
-                    if (stickerAnnotationImageView != null) {
-                        stickerAnnotationImageView.setX(Float.valueOf(split[1]));
-                        stickerAnnotationImageView.setY(Float.valueOf(split[2]));
-                        stickerAnnotationImageView.getLayoutParams().width = Integer.valueOf(split[3]);
-                        stickerAnnotationImageView.getLayoutParams().height = Integer.valueOf(split[4]);
-                        stickerAnnotationImageView.setRotation(Float.valueOf(split[5]));
-                    }
-                }
+            if (intent.getBooleanExtra(Constants.EXTRA_KEY_HAS_STICKER_ANNOTATIONS, false)) {
+                handleStickerAnnotations(intent);
             }
-            if (intent.getBooleanExtra(Utils.EXTRA_KEY_HAS_TEXT_ANNOTATIONS, false)) {
-                HashMap<Integer, String> allTextAnnotations = (HashMap<Integer, String>) intent.getSerializableExtra(Utils.EXTRA_KEY_ALL_TEXT_ANNOTATIONS);
-                SortedSet<Integer> keys = new TreeSet<>(allTextAnnotations.keySet());
-                for (Integer key : keys) {
-                    // Array will be of length 4 --> annotationText, imageResourceId, x, y
-                    String[] split = (allTextAnnotations.get(key)).split(Utils.SEPARATOR);
-                    TextAnnotationImageView textAnnotationImageView = addTextAnnotation(Integer.valueOf(split[1]));
-                    if (textAnnotationImageView != null) {
-                        textAnnotationImageView.setAnnotationInputText(split[0]);
-                        textAnnotationImageView.setX(Float.valueOf(split[2]));
-                        textAnnotationImageView.setY(Float.valueOf(split[3]));
-                    }
-                }
+            if (intent.getBooleanExtra(Constants.EXTRA_KEY_HAS_TEXT_ANNOTATIONS, false)) {
+                handleTextAnnotations(intent);
             }
             hideAllControlItems(relativeLayout);
+        }
+    }
+
+    private void handleStickerAnnotations(Intent intent) {
+        HashMap<Integer, String> allStickerAnnotations = (HashMap<Integer, String>) intent.getSerializableExtra(Constants.EXTRA_KEY_ALL_STICKER_ANNOTATIONS);
+        for (Map.Entry<Integer, String> entry : allStickerAnnotations.entrySet()) {
+            // Array will be of length 6 --> imageResourceId, x, y, width, height, rotation
+            String[] split = entry.getValue().split(Constants.SEPARATOR);
+            StickerAnnotationImageView stickerAnnotationImageView = addSticker(Integer.valueOf(split[0]));
+            if (stickerAnnotationImageView != null) {
+                stickerAnnotationImageView.setX(Float.valueOf(split[1]));
+                stickerAnnotationImageView.setY(Float.valueOf(split[2]));
+                stickerAnnotationImageView.getLayoutParams().width = Integer.valueOf(split[3]);
+                stickerAnnotationImageView.getLayoutParams().height = Integer.valueOf(split[4]);
+                stickerAnnotationImageView.setRotation(Float.valueOf(split[5]));
+            }
+        }
+    }
+
+    private void handleTextAnnotations(Intent intent) {
+        HashMap<Integer, String> allTextAnnotations = (HashMap<Integer, String>) intent.getSerializableExtra(Constants.EXTRA_KEY_ALL_TEXT_ANNOTATIONS);
+        SortedSet<Integer> keys = new TreeSet<>(allTextAnnotations.keySet());
+        for (Integer key : keys) {
+            // Array will be of length 4 --> annotationText, imageResourceId, x, y
+            String[] split = (allTextAnnotations.get(key)).split(Constants.SEPARATOR);
+            TextAnnotationImageView textAnnotationImageView = addTextAnnotation(Integer.valueOf(split[1]));
+            if (textAnnotationImageView != null) {
+                textAnnotationImageView.setAnnotationInputText(split[0]);
+                textAnnotationImageView.setX(Float.valueOf(split[2]));
+                textAnnotationImageView.setY(Float.valueOf(split[3]));
+            }
         }
     }
 
@@ -270,11 +281,16 @@ public class AnnotateImageActivity extends AppCompatActivity implements ColorPic
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //TODO [jfo]: remove me
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+
         setContentView(R.layout.activity_annotate);
 
         Intent intent = getIntent();
         // If mechanismViewId == -1, an error occurred
-        mechanismViewId = intent.getIntExtra(Utils.EXTRA_KEY_MECHANISM_VIEW_ID, -1);
+        mechanismViewId = intent.getIntExtra(Constants.EXTRA_KEY_MECHANISM_VIEW_ID, -1);
         if (mechanismViewId != -1) {
             String imagePath = intent.getStringExtra("imagePath");
             textAnnotationCounter = 1;
@@ -286,7 +302,7 @@ public class AnnotateImageActivity extends AppCompatActivity implements ColorPic
             initStickerLists();
             setListeners();
         } else {
-            Log.e("AnnotateImageActivity", "Failed to create the activity. No mechanismViewID provided");
+            Log.e(TAG, "Failed to create the activity. No mechanismViewID provided");
         }
     }
 
@@ -309,7 +325,9 @@ public class AnnotateImageActivity extends AppCompatActivity implements ColorPic
         // In both cases whether the action is accepted or cancelled, the temporary stored files need to be deleted
         List<File> tempFiles = annotateImageView.getCroppedImageLists();
         for (int i = 1; i < tempFiles.size(); ++i) {
-            tempFiles.get(i).delete();
+            if (!tempFiles.get(i).delete()) {
+                Log.w(TAG, "File " + tempFiles.get(i).getName() + "could not be deleted.");
+            }
         }
         tempFiles.clear();
 
@@ -333,7 +351,7 @@ public class AnnotateImageActivity extends AppCompatActivity implements ColorPic
                 if (allStickerAnnotations.size() > 0 || allTextAnnotations.size() > 0) {
                     // Get the bitmap (image without stickers if there are any)
                     Bitmap annotatedBitmapWithoutStickers = annotateImageView.getBitmap();
-                    annotatedImagePathWithoutStickers = Utils.saveBitmapToInternalStorage(getApplicationContext(), "imageDir", mechanismViewId + ANNOTATED_IMAGE_NAME_WITHOUT_STICKERS, annotatedBitmapWithoutStickers, Context.MODE_PRIVATE, Bitmap.CompressFormat.PNG, 100);
+                    annotatedImagePathWithoutStickers = Utils.saveBitmapToInternalStorage(getApplicationContext(), "imageDir", mechanismViewId + Constants.ANNOTATED_IMAGE_NAME_WITHOUT_STICKERS, annotatedBitmapWithoutStickers, Context.MODE_PRIVATE, Bitmap.CompressFormat.PNG, 100);
                 }
 
                 // Convert the ViewGroup, i.e., the supersede_feedbacklibrary_annotate_picture_layout into a bitmap (image with stickers)
@@ -348,13 +366,13 @@ public class AnnotateImageActivity extends AppCompatActivity implements ColorPic
                 String annotatedImagePathWithStickers = Utils.saveBitmapToInternalStorage(getApplicationContext(), "imageDir", mechanismViewId + ANNOTATED_IMAGE_NAME_WITH_STICKERS, croppedBitmap, Context.MODE_PRIVATE, Bitmap.CompressFormat.PNG, 100);
 
                 Intent intent = new Intent();
-                intent.putExtra(Utils.EXTRA_KEY_MECHANISM_VIEW_ID, mechanismViewId);
-                intent.putExtra(Utils.EXTRA_KEY_ANNOTATED_IMAGE_PATH_WITHOUT_STICKERS, annotatedImagePathWithoutStickers);
-                intent.putExtra(Utils.EXTRA_KEY_ANNOTATED_IMAGE_PATH_WITH_STICKERS, annotatedImagePathWithStickers);
-                intent.putExtra(Utils.EXTRA_KEY_HAS_STICKER_ANNOTATIONS, allStickerAnnotations.size() > 0);
-                intent.putExtra(Utils.EXTRA_KEY_ALL_STICKER_ANNOTATIONS, allStickerAnnotations);
-                intent.putExtra(Utils.EXTRA_KEY_HAS_TEXT_ANNOTATIONS, allTextAnnotations.size() > 0);
-                intent.putExtra(Utils.EXTRA_KEY_ALL_TEXT_ANNOTATIONS, allTextAnnotations);
+                intent.putExtra(Constants.EXTRA_KEY_MECHANISM_VIEW_ID, mechanismViewId);
+                intent.putExtra(Constants.EXTRA_KEY_ANNOTATED_IMAGE_PATH_WITHOUT_STICKERS, annotatedImagePathWithoutStickers);
+                intent.putExtra(Constants.EXTRA_KEY_ANNOTATED_IMAGE_PATH_WITH_STICKERS, annotatedImagePathWithStickers);
+                intent.putExtra(Constants.EXTRA_KEY_HAS_STICKER_ANNOTATIONS, allStickerAnnotations.size() > 0);
+                intent.putExtra(Constants.EXTRA_KEY_ALL_STICKER_ANNOTATIONS, allStickerAnnotations);
+                intent.putExtra(Constants.EXTRA_KEY_HAS_TEXT_ANNOTATIONS, allTextAnnotations.size() > 0);
+                intent.putExtra(Constants.EXTRA_KEY_ALL_TEXT_ANNOTATIONS, allTextAnnotations);
                 setResult(RESULT_OK, intent);
             }
             super.onBackPressed();
@@ -371,11 +389,6 @@ public class AnnotateImageActivity extends AppCompatActivity implements ColorPic
         if (relativeLayout != null) {
             refreshAnnotationNumber(relativeLayout);
         }
-        /*ImageButton textAnnotationButton = (ImageButton) findViewById(R.id.supersede_feedbacklibrary_text_comment_btn);
-        if (textAnnotationButton != null) {
-            textAnnotationButton.setEnabled(true);
-            textAnnotationButton.setAlpha(1.0F);
-        }*/
     }
 
     private HashMap<Integer, String> processStickerAnnotations(ViewGroup viewGroup) {
@@ -392,7 +405,7 @@ public class AnnotateImageActivity extends AppCompatActivity implements ColorPic
                     int width = child.getWidth();
                     int height = child.getHeight();
                     float rotation = child.getRotation();
-                    String value = annotationImageResource + Utils.SEPARATOR + getX + Utils.SEPARATOR + getY + Utils.SEPARATOR + width + Utils.SEPARATOR + height + Utils.SEPARATOR + rotation;
+                    String value = annotationImageResource + Constants.SEPARATOR + getX + Constants.SEPARATOR + getY + Constants.SEPARATOR + width + Constants.SEPARATOR + height + Constants.SEPARATOR + rotation;
                     allStickerAnnotations.put(i, value);
                 }
             }
@@ -418,7 +431,7 @@ public class AnnotateImageActivity extends AppCompatActivity implements ColorPic
                     int annotationImageResource = textAnnotationView.getImageResourceId();
                     float getX = child.getX();
                     float getY = child.getY();
-                    String value = annotationInputText + Utils.SEPARATOR + annotationImageResource + Utils.SEPARATOR + getX + Utils.SEPARATOR + getY;
+                    String value = annotationInputText + Constants.SEPARATOR + annotationImageResource + Constants.SEPARATOR + getX + Constants.SEPARATOR + getY;
                     allTextAnnotations.put(key, value);
                 }
             }
@@ -444,62 +457,65 @@ public class AnnotateImageActivity extends AppCompatActivity implements ColorPic
 
     private void removeOutOfBoundsAnnotations() {
         RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.supersede_feedbacklibrary_annotate_image_layout);
-        if (relativeLayout != null) {
-            List<View> toRemove = new ArrayList<>();
-            int newBitmapWidth = annotateImageView.getBitmapWidth();
-            int newBitmapHeight = annotateImageView.getBitmapHeight();
-            float fraction = 0.5f;
-            for (int i = 0; i < relativeLayout.getChildCount(); ++i) {
-                View child = relativeLayout.getChildAt(i);
-                if (child instanceof StickerAnnotationView || child instanceof TextAnnotationView) {
-                    // A fraction the sticker should be visible, if not the sticker will be removed
-                    float deleteThresholdX = child.getWidth() * fraction;
-                    float deleteThresholdY = child.getHeight() * fraction;
-                    float x = child.getX();
-                    float y = child.getY();
 
-                    boolean xOk = true;
-                    boolean yOk = true;
-                    if (x < 0) {
-                        xOk = Math.abs(x) < deleteThresholdX;
-                    } else if (x > 0 && !(x < 0)) {
-                        xOk = x + deleteThresholdX < newBitmapWidth;
-                    }
-                    if (y < 0) {
-                        yOk = Math.abs(y) < deleteThresholdY;
-                    } else if (y > 0 && !(y < 0)) {
-                        yOk = y + deleteThresholdY < newBitmapHeight;
-                    }
+        List<View> toRemove = calculateViewsToRemove(relativeLayout);
+        for (View view : toRemove) {
+            relativeLayout.removeView(view);
+        }
+        toRemove.clear();
 
-                    if (!(xOk && yOk)) {
-                        toRemove.add(child);
-                    }
-                }
+        textAnnotationCounter = 1;
+        for (int i = 0; i < relativeLayout.getChildCount(); ++i) {
+            View child = relativeLayout.getChildAt(i);
+            if (child instanceof TextAnnotationView) {
+                String newAnnotationNumber = Integer.toString(textAnnotationCounter);
+                ((TextAnnotationImageView) child).getAnnotationNumberView().setText(newAnnotationNumber);
+                textAnnotationCounter++;
             }
-
-            for (int i = 0; i < toRemove.size(); ++i) {
-                relativeLayout.removeView(toRemove.get(i));
-            }
-            toRemove.clear();
-
-            textAnnotationCounter = 1;
-            for (int i = 0; i < relativeLayout.getChildCount(); ++i) {
-                View child = relativeLayout.getChildAt(i);
-                if (child instanceof TextAnnotationView) {
-                    String newAnnotationNumber = Integer.toString(textAnnotationCounter);
-                    ((TextAnnotationImageView) child).getAnnotationNumberView().setText(newAnnotationNumber);
-                    textAnnotationCounter++;
-                }
-                if (textAnnotationCounter > textAnnotationCounterMaximum) {
-                    break;
-                }
+            if (textAnnotationCounter > textAnnotationCounterMaximum) {
+                break;
             }
         }
     }
 
-    private void setListeners() {
-        favoriteButton = (Button)findViewById(R.id.aa_favorite_button);
+    private List<View> calculateViewsToRemove(RelativeLayout relativeLayout){
+        int newBitmapWidth = annotateImageView.getBitmapWidth();
+        int newBitmapHeight = annotateImageView.getBitmapHeight();
+        float fraction = 0.5f;
 
+        List<View> toRemove = new ArrayList<>();
+        for (int i = 0; i < relativeLayout.getChildCount(); ++i) {
+            View child = relativeLayout.getChildAt(i);
+            if (child instanceof StickerAnnotationView || child instanceof TextAnnotationView) {
+                // A fraction the sticker should be visible, if not the sticker will be removed
+                float deleteThresholdX = child.getWidth() * fraction;
+                float deleteThresholdY = child.getHeight() * fraction;
+                float x = child.getX();
+                float y = child.getY();
+                boolean xOk = true;
+                boolean yOk = true;
+
+                if (x < 0) {
+                    xOk = Math.abs(x) < deleteThresholdX;
+                } else if (x >= 0) {
+                    xOk = x + deleteThresholdX < newBitmapWidth;
+                }
+                if (y < 0) {
+                    yOk = Math.abs(y) < deleteThresholdY;
+                } else if (y >= 0) {
+                    yOk = y + deleteThresholdY < newBitmapHeight;
+                }
+
+                if (!(xOk && yOk)) {
+                    toRemove.add(child);
+                }
+            }
+        }
+        return toRemove;
+    }
+
+    private void setListeners() {
+        Button favoriteButton = (Button) findViewById(R.id.aa_favorite_button);
         favoriteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -507,7 +523,7 @@ public class AnnotateImageActivity extends AppCompatActivity implements ColorPic
             }
         });
 
-        quickEditButton = (Button)findViewById(R.id.aa_quick_edit_button);
+        Button quickEditButton = (Button) findViewById(R.id.aa_quick_edit_button);
         quickEditButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -515,7 +531,7 @@ public class AnnotateImageActivity extends AppCompatActivity implements ColorPic
             }
         });
 
-        colorButton = (Button)findViewById(R.id.aa_color_button);
+        Button colorButton = (Button) findViewById(R.id.aa_color_button);
         colorButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -523,7 +539,7 @@ public class AnnotateImageActivity extends AppCompatActivity implements ColorPic
             }
         });
 
-        cropButton = (Button)findViewById(R.id.aa_crop_button);
+        Button cropButton = (Button) findViewById(R.id.aa_crop_button);
         cropButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -551,11 +567,10 @@ public class AnnotateImageActivity extends AppCompatActivity implements ColorPic
                     if (annotateImageView.isUndoable()) {
                         redoButton.setEnabled(annotateImageView.undo());
                         redoButton.setAlpha(1.0F);
-                        if (!annotateImageView.isUndoable()) {
-                            undoButton.setEnabled(false);
-                            undoButton.setAlpha(0.4F);
-                            annotateImageView.setNoActionExecuted(true);
-                        }
+                    } else if (!annotateImageView.isUndoable()) {
+                        undoButton.setEnabled(false);
+                        undoButton.setAlpha(0.4F);
+                        annotateImageView.setNoActionExecuted(true);
                     }
                 }
             });
@@ -568,10 +583,9 @@ public class AnnotateImageActivity extends AppCompatActivity implements ColorPic
                     if (annotateImageView.isRedoable()) {
                         undoButton.setEnabled(annotateImageView.redo());
                         undoButton.setAlpha(1.0F);
-                        if (!annotateImageView.isRedoable()) {
-                            redoButton.setEnabled(false);
-                            redoButton.setAlpha(0.4F);
-                        }
+                    } else if (!annotateImageView.isRedoable()) {
+                        redoButton.setEnabled(false);
+                        redoButton.setAlpha(0.4F);
                     }
                 }
             });
@@ -579,30 +593,24 @@ public class AnnotateImageActivity extends AppCompatActivity implements ColorPic
     }
 
     private void showDialog(DialogType type) {
-
         dialog = new EditImageDialog();
         Bundle args = new Bundle();
         args.putString("type", type.name());
         dialog.setArguments(args);
 
-        switch (type){
+        switch (type) {
             case Favorite:
-                dialog.show(getSupportFragmentManager(), "EditImageDialog");
-                break;
-
             case QuickEdit:
-                dialog.show(getSupportFragmentManager(), "EditImageDialog");
-                break;
-
             case Color:
                 dialog.show(getSupportFragmentManager(), "EditImageDialog");
                 break;
+            default:
         }
     }
 
     private void showColorPickerDialog() {
-        ColorPickerDialog dialog = createColorPickerDialog(annotateImageView.getPaintStrokeColor());
-        dialog.show(getSupportFragmentManager(), "ColorPickerDialog");
+        ColorPickerDialog colorPickerDialog = createColorPickerDialog(annotateImageView.getPaintStrokeColor());
+        colorPickerDialog.show(getSupportFragmentManager(), "ColorPickerDialog");
     }
 
     private void showStickerDialog() {
@@ -653,7 +661,7 @@ public class AnnotateImageActivity extends AppCompatActivity implements ColorPic
         dialog.dismiss();
     }
 
-    public boolean isBlackModeOn(){
+    public boolean isBlackModeOn() {
         return blackModeOn;
     }
 

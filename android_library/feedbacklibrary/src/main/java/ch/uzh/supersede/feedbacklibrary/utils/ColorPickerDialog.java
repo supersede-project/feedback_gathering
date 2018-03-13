@@ -75,6 +75,7 @@ public class ColorPickerDialog extends DialogFragment {
                 })
                 .setNegativeButton(getResources().getString(R.string.supersede_feedbacklibrary_discard_string), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
+                        //do nothing
                     }
                 });
         return builder.create();

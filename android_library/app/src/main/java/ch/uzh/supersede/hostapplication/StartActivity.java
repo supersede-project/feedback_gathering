@@ -2,13 +2,16 @@ package ch.uzh.supersede.hostapplication;
 
 import android.Manifest;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.os.StrictMode;
 
+import ch.uzh.supersede.feedbacklibrary.FeedbackActivity;
+import ch.uzh.supersede.feedbacklibrary.utils.ActivityService;
+import ch.uzh.supersede.feedbacklibrary.utils.Constants;
 import ch.uzh.supersede.feedbacklibrary.utils.Utils;
 
 /**
@@ -26,6 +29,11 @@ public class StartActivity extends AbstractBaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //TODO [jfo]: remove me
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+
         setContentView(R.layout.activity_start);
         Toolbar toolbar = getView(R.id.toolbar, Toolbar.class);
         setSupportActionBar(toolbar);
@@ -41,7 +49,7 @@ public class StartActivity extends AbstractBaseActivity {
                      * (the likelihood is a general configuration parameter of a PULL configuration).
                      * In this uzh, a PULL feedback from the application with id = 9 might be triggered.
                      */
-                    Utils.triggerRandomPullFeedback("https://platform.supersede.eu:8443/", StartActivity.this, 14L, "en");
+                    ActivityService.getInstance().triggerRandomPullFeedback(Constants.SUPERSEEDE_BASE_URL, StartActivity.this, 14L, "en");
                 }
             });
         }
@@ -58,7 +66,7 @@ public class StartActivity extends AbstractBaseActivity {
                      * (the showIntermediateDialog is a general configuration parameter of a PULL configuration).
                      * In this uzh, a PULL feedback with id = 21 from the application with id = 9 will be triggered.
                      */
-                    Utils.triggerSpecificPullFeedback("https://platform.supersede.eu:8443/", StartActivity.this, 14L, "en", 21L, "Intermediate dialog text for pull configuration with id = 21");
+                    ActivityService.getInstance().triggerSpecificPullFeedback(Constants.SUPERSEEDE_BASE_URL, StartActivity.this, 14L, "en", 21L, "Intermediate dialog text for pull configuration with id = 21");
                 }
             });
         }
@@ -71,7 +79,7 @@ public class StartActivity extends AbstractBaseActivity {
                     /*
                      * In this uzh, a PULL feedback with id = 22 from the application with id = 9 will be triggered.
                      */
-                    Utils.triggerSpecificPullFeedback("https://platform.supersede.eu:8443/", StartActivity.this, 14L, "en", 22L, "Intermediate dialog text for pull configuration with id = 22");
+                    ActivityService.getInstance().triggerSpecificPullFeedback(Constants.SUPERSEEDE_BASE_URL, StartActivity.this, 14L, "en", 22L, "Intermediate dialog text for pull configuration with id = 22");
                 }
             });
         }
@@ -98,7 +106,7 @@ public class StartActivity extends AbstractBaseActivity {
                  * The permission is already granted.
                  * The library takes a screenshot of the current screen automatically and opens the FeedbackActivityConstants from the feedback library.
                  */
-                Utils.startActivityWithScreenshotCapture("https://platform.supersede.eu:8443/", this, 29L, "en");
+                ActivityService.getInstance().startActivityWithScreenshotCapture(Constants.SUPERSEEDE_BASE_URL, this, 29L, "en");
             }
         }
 
@@ -107,18 +115,16 @@ public class StartActivity extends AbstractBaseActivity {
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        switch (requestCode) {
-            case PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE:
+        if (requestCode == PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE) {
                 /*
                  * In case the permission was not already granted, a rationale is shown to the user asking for the permission.
                  * The result of the request permission, i.e., if the user allowed or denied the permission,
                  * is handled in the onRequestPermissionsResultCase method.
                  */
-                Utils.onRequestPermissionsResultCase(requestCode, permissions, grantResults, this, Manifest.permission.READ_EXTERNAL_STORAGE,
-                        ch.uzh.supersede.feedbacklibrary.R.string.supersede_feedbacklibrary_permission_request_title,
-                        ch.uzh.supersede.feedbacklibrary.R.string.supersede_feedbacklibrary_external_storage_permission_text_automatic_screenshot_rationale,
-                        29L, "https://platform.supersede.eu:8443/", "en");
-                break;
+            Utils.onRequestPermissionsResultCase(requestCode, grantResults, this, Manifest.permission.READ_EXTERNAL_STORAGE,
+                    ch.uzh.supersede.feedbacklibrary.R.string.supersede_feedbacklibrary_permission_request_title,
+                    ch.uzh.supersede.feedbacklibrary.R.string.supersede_feedbacklibrary_external_storage_permission_text_automatic_screenshot_rationale,
+                    29L, Constants.SUPERSEEDE_BASE_URL, "en");
         }
     }
 }

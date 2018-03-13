@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright [2016] [Matthias Scherrer]
  * <p/>
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -34,7 +34,7 @@ import retrofit2.http.Path;
  * Orchestrator: baseURL/orchestrator/feedback (http://docs.supersedeorchestratorapi.apiary.io/#reference)
  * Repository: baseURL/feedback_repository (http://docs.supersederepositoryapi.apiary.io/#reference)
  */
-public interface feedbackAPI {
+public interface IFeedbackAPI {
     /**
      * This methods sends the feedback to the repository.
      *

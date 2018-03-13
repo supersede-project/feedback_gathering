@@ -221,8 +221,8 @@ public class AudioMechanismView extends MechanismView implements SeekBar.OnSeekB
                     removeUpdateSeekBarTaskRecorder();
 
                     // Output file
-                    File audioDirectory = applicationContext.getDir(Utils.AUDIO_DIR, Context.MODE_PRIVATE);
-                    tempAudioFilePath = audioDirectory.getAbsolutePath() + "/" + audioMechanism.getId() + Utils.AUDIO_FILENAME + "." + Utils.AUDIO_EXTENSION;
+                    File audioDirectory = applicationContext.getDir(Constants.AUDIO_DIR, Context.MODE_PRIVATE);
+                    tempAudioFilePath = audioDirectory.getAbsolutePath() + "/" + audioMechanism.getId() + Constants.AUDIO_FILENAME + "." + Constants.AUDIO_EXTENSION;
 
                     // Setup recorder
                     mediaRecorder = new MediaRecorder();

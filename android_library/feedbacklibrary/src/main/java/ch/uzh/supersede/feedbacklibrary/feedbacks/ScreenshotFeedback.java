@@ -1,6 +1,9 @@
 package ch.uzh.supersede.feedbacklibrary.feedbacks;
 
+import android.util.SparseArray;
+
 import ch.uzh.supersede.feedbacklibrary.models.ScreenshotMechanism;
+
 import com.google.gson.annotations.Expose;
 
 import java.io.File;

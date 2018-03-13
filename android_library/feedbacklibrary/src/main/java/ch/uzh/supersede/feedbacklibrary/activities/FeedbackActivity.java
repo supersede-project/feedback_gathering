@@ -1,4 +1,4 @@
-/*
+/**
  * Copyright [2016] [Matthias Scherrer]
  * <p/>
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ch.uzh.supersede.feedbacklibrary.activities;
+package ch.uzh.supersede.feedbacklibrary;
 
 import android.Manifest;
 import android.app.Activity;
@@ -53,7 +53,6 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonObject;
 
 import java.io.File;
 import java.net.URI;
@@ -80,6 +79,7 @@ import javax.mail.internet.MimeMultipart;
 
 import ch.uzh.supersede.feedbacklibrary.API.feedbackAPI;
 import ch.uzh.supersede.feedbacklibrary.R;
+import ch.uzh.supersede.feedbacklibrary.API.IFeedbackAPI;
 import ch.uzh.supersede.feedbacklibrary.configurations.Configuration;
 import ch.uzh.supersede.feedbacklibrary.configurations.OrchestratorConfiguration;
 import ch.uzh.supersede.feedbacklibrary.configurations.OrchestratorConfigurationItem;
@@ -89,6 +89,7 @@ import ch.uzh.supersede.feedbacklibrary.feedbacks.ScreenshotFeedback;
 import ch.uzh.supersede.feedbacklibrary.models.Mechanism;
 import ch.uzh.supersede.feedbacklibrary.utils.Constants;
 import ch.uzh.supersede.feedbacklibrary.utils.DialogUtils;
+import ch.uzh.supersede.feedbacklibrary.utils.FeedbackService;
 import ch.uzh.supersede.feedbacklibrary.utils.Utils;
 import ch.uzh.supersede.feedbacklibrary.views.AudioMechanismView;
 import ch.uzh.supersede.feedbacklibrary.views.CategoryMechanismView;
@@ -121,9 +122,9 @@ public class FeedbackActivity extends AbstractBaseActivity implements Screenshot
     // Active configuration
     private Configuration activeConfiguration;
     // All mechanisms including inactive ones which represent the models
-    private List<Mechanism> allMechanisms;
+    private List<Mechanism> mechanisms;
     // All views of active mechanisms which represent the views
-    private List<MechanismView> allMechanismViews;
+    private List<MechanismView> mechanismViews;
     // Image annotation
     private int tempMechanismViewId = -1;
     private String defaultImagePath;
@@ -149,11 +150,6 @@ public class FeedbackActivity extends AbstractBaseActivity implements Screenshot
         if (progressDialog != null && progressDialog.isShowing()) {
             progressDialog.dismiss();
         }
-    }
-
-    @NonNull
-    private RequestBody createRequestBody(@NonNull File file) {
-        return RequestBody.create(MediaType.parse(MULTIPART_FORM_DATA), file);
     }
 
     private void galleryIntent() {
@@ -187,48 +183,8 @@ public class FeedbackActivity extends AbstractBaseActivity implements Screenshot
     private void init(long applicationId, String baseURL, String language) {
         if (applicationId != -1 && baseURL != null && language != null) {
             Retrofit rtf = new Retrofit.Builder().baseUrl(baseURL).addConverterFactory(GsonConverterFactory.create()).build();
-            fbAPI = rtf.create(feedbackAPI.class);
-            Call<OrchestratorConfigurationItem> result = fbAPI.getConfiguration(language, applicationId);
-            this.language = language;
-
-            // Asynchronous call
-            if (result != null) {
-                // Make progress dialog visible
-                progressDialog = DialogUtils.createProgressDialog(FeedbackActivity.this, getResources().getString(R.string.supersede_feedbacklibrary_loading_string), false);
-                progressDialog.show();
-                result.enqueue(new Callback<OrchestratorConfigurationItem>() {
-                    @Override
-                    public void onFailure(Call<OrchestratorConfigurationItem> call, Throwable t) {
-                        Log.e(TAG, "Failed to retrieve the configuration. onFailure method called", t);
-                        closeProgressDialog();
-                        handleConfigurationRetrievalError();
-                    }
-
-                    @Override
-                    public void onResponse(Call<OrchestratorConfigurationItem> call, Response<OrchestratorConfigurationItem> response) {
-                        if (response.code() == 200) {
-                            Log.i(TAG, "Configuration successfully retrieved");
-                            orchestratorConfigurationItem = response.body();
-                            // Save the current configuration under FeedbackActivityConstants.CONFIGURATION_DIR}/FeedbackActivityConstants.JSON_CONFIGURATION_FILE_NAME
-                            GsonBuilder gsonBuilder = new GsonBuilder();
-                            gsonBuilder.setLenient();
-                            Gson gson = gsonBuilder.create();
-                            String jsonString = gson.toJson(orchestratorConfigurationItem);
-                            Utils.saveStringContentToInternalStorage(getApplicationContext(), CONFIGURATION_DIR, JSON_CONFIGURATION_FILE_NAME, jsonString, MODE_PRIVATE);
-                            initModel();
-                            initView();
-                            closeProgressDialog();
-                        } else {
-                            Log.e(TAG, "Failed to retrieve the configuration. Response code == " + response.code());
-                            closeProgressDialog();
-                            handleConfigurationRetrievalError();
-                        }
-                    }
-                });
-            } else {
-                Log.e(TAG, "Failed to retrieve the configuration. Call<OrchestratorConfigurationItem> result is null");
-                handleConfigurationRetrievalError();
-            }
+            feedbackAPI = rtf.create(IFeedbackAPI.class);
+            initConfiguration(language, applicationId);
         } else {
             if (applicationId == -1) {
                 Log.e(TAG, "Failed to retrieve the configuration. applicationId is -1");
@@ -241,16 +197,60 @@ public class FeedbackActivity extends AbstractBaseActivity implements Screenshot
         }
     }
 
+    private void initConfiguration(String language, long applicationId) {
+        Call<OrchestratorConfigurationItem> result = feedbackAPI.getConfiguration(language, applicationId);
+        this.language = language;
+
+        // Asynchronous call
+        if (result != null) {
+            // Make progress dialog visible
+            progressDialog = DialogUtils.createProgressDialog(FeedbackActivity.this, getResources().getString(R.string.supersede_feedbacklibrary_loading_string), false);
+            progressDialog.show();
+            result.enqueue(new Callback<OrchestratorConfigurationItem>() {
+                @Override
+                public void onFailure(Call<OrchestratorConfigurationItem> call, Throwable t) {
+                    Log.e(TAG, "Failed to retrieve the configuration. onFailure method called", t);
+                    closeProgressDialog();
+                    handleConfigurationRetrievalError();
+                }
+
+                @Override
+                public void onResponse(Call<OrchestratorConfigurationItem> call, Response<OrchestratorConfigurationItem> response) {
+                    if (response.code() == 200) {
+                        Log.i(TAG, "Configuration successfully retrieved");
+                        orchestratorConfigurationItem = response.body();
+                        // Save the current configuration under FeedbackActivity.CONFIGURATION_DIR}/FeedbackActivity.JSON_CONFIGURATION_FILE_NAME
+                        GsonBuilder gsonBuilder = new GsonBuilder();
+                        gsonBuilder.setLenient();
+                        Gson gson = gsonBuilder.create();
+                        String jsonString = gson.toJson(orchestratorConfigurationItem);
+                        Utils.saveStringContentToInternalStorage(getApplicationContext(), Constants.CONFIGURATION_DIR, Constants.JSON_CONFIGURATION_FILE_NAME, jsonString, MODE_PRIVATE);
+                        initModel();
+                        initView();
+                        closeProgressDialog();
+                    } else {
+                        Log.e(TAG, "Failed to retrieve the configuration. Response code == " + response.code());
+                        closeProgressDialog();
+                        handleConfigurationRetrievalError();
+                    }
+                }
+            });
+        } else {
+            Log.e(TAG, "Failed to retrieve the configuration. Call<OrchestratorConfigurationItem> result is null");
+            handleConfigurationRetrievalError();
+        }
+    }
+
     private void initModel() {
         if (orchestratorConfigurationItem != null) {
             orchestratorConfiguration = new OrchestratorConfiguration(orchestratorConfigurationItem, isPush(), getSelectedPullConfigurationIndex());
             activeConfiguration = orchestratorConfiguration.getActiveConfiguration();
-            allMechanisms = activeConfiguration.getMechanisms();
+            mechanisms = activeConfiguration.getMechanisms();
         }
     }
 
     private void initView() {
-        allMechanismViews = new ArrayList<>();
+        mechanismViews = new ArrayList<>();
         LayoutInflater layoutInflater = LayoutInflater.from(this);
         LinearLayout linearLayout = getView(R.id.supersede_feedbacklibrary_feedback_activity_layout,LinearLayout.class);
 
@@ -304,25 +304,24 @@ public class FeedbackActivity extends AbstractBaseActivity implements Screenshot
     }
 
     private void initCopyByEmailLayout(LayoutInflater layoutInflater, LinearLayout linearLayout) {
-        //CHeck sharedPreferences on email existing
+        //Check sharedPreferences on email existing
         sharedPreferences = getSharedPreferences("FeedbackApp", Context.MODE_PRIVATE);
-        savedEmail = sharedPreferences.getString("email","");
+        savedEmail = sharedPreferences.getString("email", "");
 
         View view = layoutInflater.inflate(R.layout.send_by_email_layout, null, false);
         linearLayout.addView(view);
 
-        emailEditText = (EditText)view.findViewById(R.id.sbe_email_et);
-        if(!TextUtils.isEmpty(savedEmail)) emailEditText.setText(savedEmail);
+        emailEditText = (EditText) view.findViewById(R.id.sbe_email_et);
+        if (!TextUtils.isEmpty(savedEmail)) emailEditText.setText(savedEmail);
 
-        getCopyCheckBox = (CheckBox)view.findViewById(R.id.sbe_get_copy_cb);
+        getCopyCheckBox = (CheckBox) view.findViewById(R.id.sbe_get_copy_cb);
 
         getCopyCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (b) {
                     emailEditText.setVisibility(View.VISIBLE);
-                }
-                else {
+                } else {
                     emailEditText.setVisibility(View.GONE);
                 }
             }
@@ -337,55 +336,65 @@ public class FeedbackActivity extends AbstractBaseActivity implements Screenshot
     @SuppressWarnings("unchecked")
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == Activity.RESULT_OK) resolveRequestCode(requestCode, data);
-    }
 
-    private void resolveRequestCode(int requestCode, Intent data) {
+        if (resultCode != Activity.RESULT_OK || data == null) {
+            return;
+        }
+
         if (requestCode == REQUEST_PHOTO) {
             onSelectFromGalleryResult(data);
-        } else if (requestCode == REQUEST_CAMERA) {
-            //TODO: remove or handle
-        } else if (requestCode == REQUEST_ANNOTATE && data != null) {
-            // If mechanismViewId == -1, an error occurred
-            int mechanismViewId = data.getIntExtra(Utils.EXTRA_KEY_MECHANISM_VIEW_ID, -1);
-            if (mechanismViewId != -1) {
-                ScreenshotMechanismView screenshotMechanismView = (ScreenshotMechanismView) allMechanismViews.get(mechanismViewId);
+        } else if (requestCode == REQUEST_ANNOTATE) {
+            annotateMechanismView(data);
+        }
+    }
 
-                // Sticker annotations
-                if (data.getBooleanExtra(Utils.EXTRA_KEY_HAS_STICKER_ANNOTATIONS, false)) {
-                    screenshotMechanismView.setAllStickerAnnotations((HashMap<Integer, String>) data.getSerializableExtra(Utils.EXTRA_KEY_ALL_STICKER_ANNOTATIONS));
-                }
-                // Text annotations
-                if (data.getBooleanExtra(Utils.EXTRA_KEY_HAS_TEXT_ANNOTATIONS, false)) {
-                    screenshotMechanismView.setAllTextAnnotations((HashMap<Integer, String>) data.getSerializableExtra(Utils.EXTRA_KEY_ALL_TEXT_ANNOTATIONS));
-                }
+    @SuppressWarnings("unchecked")
+    private void annotateMechanismView(Intent data) {
+        int mechanismViewId = data.getIntExtra(Constants.EXTRA_KEY_MECHANISM_VIEW_ID, -1);
 
-                // Annotated image with stickers
-                String tempPathWithStickers = data.getStringExtra(Utils.EXTRA_KEY_ANNOTATED_IMAGE_PATH_WITH_STICKERS) + "/" + mechanismViewId + ANNOTATED_IMAGE_NAME_WITH_STICKERS;
-                screenshotMechanismView.setAnnotatedImagePath(tempPathWithStickers);
-                screenshotMechanismView.setPicturePath(tempPathWithStickers);
-                Bitmap annotatedBitmap = Utils.loadImageFromStorage(tempPathWithStickers);
-                if (annotatedBitmap != null) {
-                    screenshotMechanismView.setPictureBitmap(annotatedBitmap);
-                    screenshotMechanismView.getScreenShotPreviewImageView().setImageBitmap(annotatedBitmap);
-                }
+        if (mechanismViewId == -1) {
+            Log.e(TAG, "Failed to annotate the image. No mechanismViewID provided");
+            return;
+        }
 
-                // Annotated image without stickers
-                if (data.getStringExtra(Utils.EXTRA_KEY_ANNOTATED_IMAGE_PATH_WITHOUT_STICKERS) == null) {
-                    screenshotMechanismView.setPicturePathWithoutStickers(null);
-                } else {
-                    String tempPathWithoutStickers = data.getStringExtra(Utils.EXTRA_KEY_ANNOTATED_IMAGE_PATH_WITHOUT_STICKERS) + Constants.PATH_DELIMITER + mechanismViewId + ANNOTATED_IMAGE_NAME_WITHOUT_STICKERS;
-                    screenshotMechanismView.setPicturePathWithoutStickers(tempPathWithoutStickers);
-                }
-            } else {
-                Log.e(TAG, "Failed to annotate the image. No mechanismViewID provided");
-            }
+        ScreenshotMechanismView screenshotMechanismView = (ScreenshotMechanismView) mechanismViews.get(mechanismViewId);
+
+        // Sticker annotations
+        if (data.getBooleanExtra(Constants.EXTRA_KEY_HAS_STICKER_ANNOTATIONS, false)) {
+            screenshotMechanismView.setAllStickerAnnotations((HashMap<Integer, String>) data.getSerializableExtra(Constants.EXTRA_KEY_ALL_STICKER_ANNOTATIONS));
+        }
+        // Text annotations
+        if (data.getBooleanExtra(Constants.EXTRA_KEY_HAS_TEXT_ANNOTATIONS, false)) {
+            screenshotMechanismView.setAllTextAnnotations((HashMap<Integer, String>) data.getSerializableExtra(Constants.EXTRA_KEY_ALL_TEXT_ANNOTATIONS));
+        }
+
+        // Annotated image with stickers
+        String tempPathWithStickers = data.getStringExtra(Constants.EXTRA_KEY_ANNOTATED_IMAGE_PATH_WITH_STICKERS) + Constants.PATH_DELIMITER + mechanismViewId + Constants.ANNOTATED_IMAGE_NAME_WITH_STICKERS;
+        screenshotMechanismView.setAnnotatedImagePath(tempPathWithStickers);
+        screenshotMechanismView.setPicturePath(tempPathWithStickers);
+        Bitmap annotatedBitmap = Utils.loadImageFromStorage(tempPathWithStickers);
+        if (annotatedBitmap != null) {
+            screenshotMechanismView.setPictureBitmap(annotatedBitmap);
+            screenshotMechanismView.getScreenShotPreviewImageView().setImageBitmap(annotatedBitmap);
+        }
+
+        // Annotated image without stickers
+        if (data.getStringExtra(Constants.EXTRA_KEY_ANNOTATED_IMAGE_PATH_WITHOUT_STICKERS) == null) {
+            screenshotMechanismView.setPicturePathWithoutStickers(null);
+        } else {
+            String tempPathWithoutStickers = data.getStringExtra(Constants.EXTRA_KEY_ANNOTATED_IMAGE_PATH_WITHOUT_STICKERS) + Constants.PATH_DELIMITER + mechanismViewId + Constants.ANNOTATED_IMAGE_NAME_WITHOUT_STICKERS;
+            screenshotMechanismView.setPicturePathWithoutStickers(tempPathWithoutStickers);
         }
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //TODO [jfo]: remove me
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+
         setContentView(R.layout.activity_feedback);
 
         UserManager userManager = (UserManager) getApplicationContext().getSystemService(Context.USER_SERVICE);
@@ -397,22 +406,22 @@ public class FeedbackActivity extends AbstractBaseActivity implements Screenshot
 
         Intent intent = getIntent();
         // Get the default image path for the screenshot if present
-        defaultImagePath = intent.getStringExtra(DEFAULT_IMAGE_PATH);
+        defaultImagePath = intent.getStringExtra(Constants.DEFAULT_IMAGE_PATH);
         // Get the configuration type
-        isPush = intent.getBooleanExtra(IS_PUSH_STRING, true);
+        isPush = intent.getBooleanExtra(Constants.IS_PUSH_STRING, true);
         // Get values related to a pull configuration
-        selectedPullConfigurationIndex = intent.getLongExtra(SELECTED_PULL_CONFIGURATION_INDEX_STRING, -1);
-        String jsonString = intent.getStringExtra(JSON_CONFIGURATION_STRING);
+        selectedPullConfigurationIndex = intent.getLongExtra(Constants.SELECTED_PULL_CONFIGURATION_INDEX_STRING, -1);
+        String jsonString = intent.getStringExtra(Constants.JSON_CONFIGURATION_STRING);
 
         // Initialization based on the type of configuration, i.e., if it is push or pull
-        language = intent.getStringExtra(EXTRA_KEY_LANGUAGE);
-        baseURL = intent.getStringExtra(EXTRA_KEY_BASE_URL);
+        language = intent.getStringExtra(Constants.EXTRA_KEY_LANGUAGE);
+        baseURL = intent.getStringExtra(Constants.EXTRA_KEY_BASE_URL);
         if (!isPush && selectedPullConfigurationIndex != -1 && jsonString != null) {
             // The feedback activity is started on behalf of a triggered pull configuration
             Log.v(TAG, "The feedback activity is started via a PULL configuration");
 
-            // Save the current configuration under FeedbackActivityConstants.CONFIGURATION_DIR}/FeedbackActivityConstants.JSON_CONFIGURATION_FILE_NAME
-            Utils.saveStringContentToInternalStorage(getApplicationContext(), CONFIGURATION_DIR, JSON_CONFIGURATION_FILE_NAME, jsonString, MODE_PRIVATE);
+            // Save the current configuration under FeedbackActivity.CONFIGURATION_DIR}/FeedbackActivity.JSON_CONFIGURATION_FILE_NAME
+            Utils.saveStringContentToInternalStorage(getApplicationContext(), Constants.CONFIGURATION_DIR, Constants.JSON_CONFIGURATION_FILE_NAME, jsonString, MODE_PRIVATE);
             GsonBuilder gsonBuilder = new GsonBuilder();
             gsonBuilder.setLenient();
             Gson gson = gsonBuilder.create();
@@ -430,19 +439,19 @@ public class FeedbackActivity extends AbstractBaseActivity implements Screenshot
     @Override
     public void onImageAnnotate(ScreenshotMechanismView screenshotMechanismView) {
         Intent intent = new Intent(this, AnnotateImageActivity.class);
-        if (screenshotMechanismView.getAllStickerAnnotations() != null && screenshotMechanismView.getAllStickerAnnotations().size() > 0) {
-            intent.putExtra(Utils.EXTRA_KEY_HAS_STICKER_ANNOTATIONS, true);
-            intent.putExtra(Utils.EXTRA_KEY_ALL_STICKER_ANNOTATIONS, screenshotMechanismView.getAllStickerAnnotations());
+        if (screenshotMechanismView.getAllStickerAnnotations() != null && !screenshotMechanismView.getAllStickerAnnotations().isEmpty()) {
+            intent.putExtra(Constants.EXTRA_KEY_HAS_STICKER_ANNOTATIONS, true);
+            intent.putExtra(Constants.EXTRA_KEY_ALL_STICKER_ANNOTATIONS, screenshotMechanismView.getAllStickerAnnotations());
         }
-        if (screenshotMechanismView.getAllTextAnnotations() != null && screenshotMechanismView.getAllTextAnnotations().size() > 0) {
-            intent.putExtra(Utils.EXTRA_KEY_HAS_TEXT_ANNOTATIONS, true);
-            intent.putExtra(Utils.EXTRA_KEY_ALL_TEXT_ANNOTATIONS, screenshotMechanismView.getAllTextAnnotations());
+        if (screenshotMechanismView.getAllTextAnnotations() != null && !screenshotMechanismView.getAllTextAnnotations().isEmpty()) {
+            intent.putExtra(Constants.EXTRA_KEY_HAS_TEXT_ANNOTATIONS, true);
+            intent.putExtra(Constants.EXTRA_KEY_ALL_TEXT_ANNOTATIONS, screenshotMechanismView.getAllTextAnnotations());
         }
 
         String path = screenshotMechanismView.getPicturePathWithoutStickers() == null ? screenshotMechanismView.getPicturePath() : screenshotMechanismView.getPicturePathWithoutStickers();
-        intent.putExtra(Utils.EXTRA_KEY_MECHANISM_VIEW_ID, screenshotMechanismView.getMechanismViewIndex());
-        intent.putExtra(Utils.EXTRA_KEY_IMAGE_PATCH, path);
-        intent.putExtra(Utils.TEXT_ANNOTATION_COUNTER_MAXIMUM, screenshotMechanismView.getMaxNumberTextAnnotation());
+        intent.putExtra(Constants.EXTRA_KEY_MECHANISM_VIEW_ID, screenshotMechanismView.getMechanismViewIndex());
+        intent.putExtra(Constants.EXTRA_KEY_IMAGE_PATCH, path);
+        intent.putExtra(Constants.TEXT_ANNOTATION_COUNTER_MAXIMUM, screenshotMechanismView.getMaxNumberTextAnnotation());
         startActivityForResult(intent, REQUEST_ANNOTATE);
     }
 
@@ -485,7 +494,7 @@ public class FeedbackActivity extends AbstractBaseActivity implements Screenshot
 
     @Override
     public void onRecordStart(long audioMechanismId) {
-        for (MechanismView mechanismView : allMechanismViews) {
+        for (MechanismView mechanismView : mechanismViews) {
             if (mechanismView instanceof AudioMechanismView) {
                 AudioMechanismView view = ((AudioMechanismView) mechanismView);
                 if (view.getAudioMechanismId() != audioMechanismId) {
@@ -497,7 +506,7 @@ public class FeedbackActivity extends AbstractBaseActivity implements Screenshot
 
     @Override
     public void onRecordStop() {
-        for (MechanismView mechanismView : allMechanismViews) {
+        for (MechanismView mechanismView : mechanismViews) {
             if (mechanismView instanceof AudioMechanismView) {
                 ((AudioMechanismView) mechanismView).setAllButtonsClickable(true);
             }
@@ -526,14 +535,14 @@ public class FeedbackActivity extends AbstractBaseActivity implements Screenshot
                     toast.show();
                 } else {
                     // The user denied the permission
-                    onRequestPermissionsResultDenied(requestCode, permissions, grantResults, Manifest.permission.RECORD_AUDIO,
+                    onRequestPermissionsResultDenied(requestCode, Manifest.permission.RECORD_AUDIO,
                             R.string.supersede_feedbacklibrary_record_audio_permission_text,
                             getResources().getString(R.string.supersede_feedbacklibrary_record_audio_permission_text_instructions));
                 }
         }
     }
 
-    private void onRequestPermissionsResultDenied(final int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults,
+    private void onRequestPermissionsResultDenied(final int requestCode,
                                                   @NonNull final String permission, int dialogMessage, @NonNull String dialogInstructions) {
         if (ActivityCompat.shouldShowRequestPermissionRationale(this, permission)) {
             // The user denied without checking 'Never ask again'. Show again the rationale
@@ -559,9 +568,14 @@ public class FeedbackActivity extends AbstractBaseActivity implements Screenshot
     }
 
     private void onSelectFromGalleryResult(Intent data) {
-        if (tempMechanismViewId != -1 && allMechanismViews.get(tempMechanismViewId) instanceof ScreenshotMechanismView) {
-            ScreenshotMechanismView screenshotMechanismView = (ScreenshotMechanismView) allMechanismViews.get(tempMechanismViewId);
+        if (tempMechanismViewId != -1 && mechanismViews.get(tempMechanismViewId) instanceof ScreenshotMechanismView) {
+            ScreenshotMechanismView screenshotMechanismView = (ScreenshotMechanismView) mechanismViews.get(tempMechanismViewId);
             Uri selectedImage = data.getData();
+
+            if (selectedImage == null) {
+                return;
+            }
+
             String[] filePathColumn = {MediaStore.Images.Media.DATA};
             Cursor cursor = getContentResolver().query(selectedImage, filePathColumn, null, null, null);
             if (cursor != null) {
@@ -603,88 +617,17 @@ public class FeedbackActivity extends AbstractBaseActivity implements Screenshot
 
         if (baseURL != null && language != null) {
             // The mechanism models are updated with the view values
-            for (MechanismView mechanismView : allMechanismViews) {
+            for (MechanismView mechanismView : mechanismViews) {
                 mechanismView.updateModel();
             }
 
             final ArrayList<String> messages = new ArrayList<>();
-            if (validateInput(allMechanisms, messages)) {
-                if (fbAPI == null) {
+            if (validateInput(mechanisms, messages)) {
+                if (feedbackAPI == null) {
                     Retrofit rtf = new Retrofit.Builder().baseUrl(baseURL).addConverterFactory(GsonConverterFactory.create()).build();
-                    fbAPI = rtf.create(feedbackAPI.class);
+                    feedbackAPI = rtf.create(IFeedbackAPI.class);
                 }
-
-                Call<ResponseBody> checkUpAndRunning = fbAPI.pingRepository();
-                if (checkUpAndRunning != null) {
-                    checkUpAndRunning.enqueue(new Callback<ResponseBody>() {
-                        @Override
-                        public void onFailure(Call<ResponseBody> call, Throwable t) {
-                            Log.e(TAG, "Failed to ping the server. onFailure method called", t);
-                            DialogUtils.showInformationDialog(FeedbackActivity.this, new String[]{getResources().getString(R.string.supersede_feedbacklibrary_error_text)}, true);
-                        }
-
-                        @Override
-                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                            if (response.code() == 200) {
-                                feedback = new Feedback(allMechanisms);
-                                feedback.setTitle(getResources().getString(R.string.supersede_feedbacklibrary_feedback_title_text, System.currentTimeMillis()));
-                                feedback.setApplicationId(orchestratorConfiguration.getId());
-                                feedback.setConfigurationId(activeConfiguration.getId());
-                                feedback.setLanguage(language);
-                                feedback.setUserIdentification(Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
-
-                                // The JSON string of the feedback
-                                GsonBuilder builder = new GsonBuilder();
-                                builder.excludeFieldsWithoutExposeAnnotation();
-                                builder.serializeNulls();
-                                Gson gson = builder.create();
-
-                                String jsonString = gson.toJson(feedback);
-                                MultipartBody.Part jsonPart = MultipartBody.Part.createFormData("json", "json", RequestBody.create(MediaType.parse("application/json"), jsonString.getBytes()));
-
-                                List<MultipartBody.Part> multipartFiles = new ArrayList<>();
-
-                                multipartFiles.addAll(getScreenshotMultipartbodyParts(feedback));
-                                multipartFiles.addAll(getAudioMultipartbodyParts(feedback));
-
-                                Call<JsonObject> result = fbAPI.createFeedbackVariant(language, feedback.getApplicationId(), jsonPart, multipartFiles);
-                                if (result != null) {
-                                    result.enqueue(new Callback<JsonObject>() {
-                                        @Override
-                                        public void onFailure(Call<JsonObject> call, Throwable t) {
-                                            Log.e(TAG, "Failed to send the feedback. onFailure method called", t);
-                                            DialogUtils.showInformationDialog(FeedbackActivity.this, new String[]{getResources().getString(R.string.supersede_feedbacklibrary_error_text)}, true);
-                                        }
-
-                                        @Override
-                                        public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-                                            if (response.code() == 201) {
-                                                Log.i(TAG, "Feedback successfully sent");
-                                                Toast toast = Toast.makeText(getApplicationContext(), getResources().getString(R.string.supersede_feedbacklibrary_success_text), Toast.LENGTH_SHORT);
-                                                toast.show();
-                                            } else {
-                                                Log.e(TAG, "Failed to send the feedback. Response code == " + response.code());
-                                                DialogUtils.showInformationDialog(FeedbackActivity.this, new String[]{getResources().getString(R.string.supersede_feedbacklibrary_error_text)}, true);
-                                            }
-                                        }
-                                    });
-                                } else {
-                                    Log.e(TAG, "Failed to send the feebdkack. Call<JsonObject> result is null");
-                                    DialogUtils.showInformationDialog(FeedbackActivity.this, new String[]{getResources().getString(R.string.supersede_feedbacklibrary_error_text)}, true);
-                                }
-
-                                checkAndSendViaEmail();
-
-                            } else {
-                                Log.e(TAG, "The server is not up and running. Response code == " + response.code());
-                                DialogUtils.showInformationDialog(FeedbackActivity.this, new String[]{getResources().getString(R.string.supersede_feedbacklibrary_error_text)}, true);
-                            }
-                        }
-                    });
-                } else {
-                    Log.e(TAG, "Failed to ping the server. Call<ResponseBody> checkUpAndRunning result is null");
-                    DialogUtils.showInformationDialog(FeedbackActivity.this, new String[]{getResources().getString(R.string.supersede_feedbacklibrary_error_text)}, true);
-                }
+                sendFeedback();
             } else {
                 Log.v(TAG, "Validation of the mechanism failed");
                 DialogUtils.showInformationDialog(this, messages.toArray(new String[messages.size()]), false);
@@ -697,6 +640,39 @@ public class FeedbackActivity extends AbstractBaseActivity implements Screenshot
             }
             DialogUtils.showInformationDialog(this, new String[]{getResources().getString(R.string.supersede_feedbacklibrary_error_text)}, true);
         }
+    }
+
+    private void sendFeedback() {
+        FeedbackService.getInstance().pingRepository();
+
+        feedback = new Feedback(mechanisms);
+        feedback.setTitle(getResources().getString(R.string.supersede_feedbacklibrary_feedback_title_text, System.currentTimeMillis()));
+        feedback.setApplicationId(orchestratorConfiguration.getId());
+        feedback.setConfigurationId(activeConfiguration.getId());
+        feedback.setLanguage(language);
+        feedback.setUserIdentification(Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
+
+        // The JSON string of the feedback
+        GsonBuilder builder = new GsonBuilder();
+        builder.excludeFieldsWithoutExposeAnnotation();
+        builder.serializeNulls();
+        Gson gson = builder.create();
+
+        String jsonString = gson.toJson(feedback);
+        MultipartBody.Part jsonPart = MultipartBody.Part.createFormData("json", "json", RequestBody.create(MediaType.parse("application/json"), jsonString.getBytes()));
+
+        List<MultipartBody.Part> multipartFiles = new ArrayList<>();
+        multipartFiles.addAll(getScreenshotMultipartbodyParts(feedback));
+        multipartFiles.addAll(getAudioMultipartbodyParts(feedback));
+
+        createFeedbackVariant(jsonPart, multipartFiles);
+        checkAndSendViaEmail();
+    }
+
+    private void createFeedbackVariant(MultipartBody.Part jsonPart, List<MultipartBody.Part> multipartFiles) {
+        FeedbackService.getInstance().createFeedbackVariant(language, feedback.getApplicationId(), jsonPart, multipartFiles);
+        Toast toast = Toast.makeText(getApplicationContext(), getResources().getString(R.string.supersede_feedbacklibrary_success_text), Toast.LENGTH_SHORT);
+        toast.show();
     }
 
     private List<MultipartBody.Part> getScreenshotMultipartbodyParts(Feedback feedback) {
@@ -736,15 +712,12 @@ public class FeedbackActivity extends AbstractBaseActivity implements Screenshot
     }
 
     private void checkAndSendViaEmail() {
-        if (getCopyCheckBox.isChecked())
-        {
+        if (getCopyCheckBox.isChecked()) {
             email = emailEditText.getText().toString();
-            if (Utils.isEmailValid(email))
-            {
+            if (Utils.isEmailValid(email)) {
                 sendCopyByEmail();
-            }
-
-            else DialogUtils.showInformationDialog(this, new String[]{getResources().getString(R.string.invalid_email)}, true);
+            } else
+                DialogUtils.showInformationDialog(this, new String[]{getResources().getString(R.string.invalid_email)}, true);
         }
     }
 
@@ -755,9 +728,8 @@ public class FeedbackActivity extends AbstractBaseActivity implements Screenshot
         Thread emailThread = new Thread(new Runnable() {
             @Override
             public void run() {
-                //TODO replace with your email
-                final String user = "supersede.zurich@gmail.com";
-                final String user_pw = "University2017";
+                final String username = "supersede.zurich@gmail.com";
+                final String password = System.getenv("F2F_SMTP_EMAIL_PASSWORD");
 
                 Properties props = new Properties();
                 props.put("mail.smtp.auth", "true");
@@ -783,12 +755,12 @@ public class FeedbackActivity extends AbstractBaseActivity implements Screenshot
 
                     String feedbackText = feedback.getTextFeedbacks().get(0).getText();
 
-                    CategoryMechanismView categoryMechanismView = (CategoryMechanismView) allMechanismViews.get(4);
+                    CategoryMechanismView categoryMechanismView = (CategoryMechanismView) mechanismViews.get(4);
                     String category = categoryMechanismView.getCustomSpinner().getSelectedItem().toString();
 
-                    if(category.equals("My feedback is about…")) category = "-";
+                    if (category.equals("My feedback is about…")) category = "-";
 
-                    RatingMechanismView ratingMechanismView = (RatingMechanismView) allMechanismViews.get(3);
+                    RatingMechanismView ratingMechanismView = (RatingMechanismView) mechanismViews.get(3);
                     String rating = String.valueOf(ratingMechanismView.getRating());
 
                     // Now set the actual message
@@ -810,16 +782,15 @@ public class FeedbackActivity extends AbstractBaseActivity implements Screenshot
 
                     Transport.send(message);
 
-                    if (TextUtils.isEmpty(savedEmail)){
+                    if (TextUtils.isEmpty(savedEmail)) {
                         SharedPreferences.Editor editor = sharedPreferences.edit();
-
                         editor.putString("email", email);
-
                         editor.apply();
                     }
 
                 } catch (MessagingException e) {
-                    //TODO log or handle
+                    Log.e(e.getMessage(), e.toString());
+                    DialogUtils.showInformationDialog(FeedbackActivity.this, new String[]{getResources().getString(R.string.supersede_feedbacklibrary_error_text)}, true);
                 }
             }
         });
@@ -829,8 +800,11 @@ public class FeedbackActivity extends AbstractBaseActivity implements Screenshot
 
     private void addAttachment(Multipart multipart, String filePath) throws MessagingException {
 
-        URI uri = null;
         try {
+            URI uri = new URI(filePath);
+
+            String[] segments = uri.getPath().split(Constants.PATH_DELIMITER);
+            String filename = segments[segments.length - 1];
             uri = new URI(filePath);
         } catch (URISyntaxException e) {
             Log.e(TAG, "Failed to create URI", e);
@@ -839,17 +813,24 @@ public class FeedbackActivity extends AbstractBaseActivity implements Screenshot
         String[] segments = uri.getPath().split("/");
         String filename = segments[segments.length-1];
 
-        DataSource source = new FileDataSource(filePath);
-        BodyPart messageBodyPart = new MimeBodyPart();
-        messageBodyPart.setDataHandler(new DataHandler(source));
-        messageBodyPart.setFileName(filename);
-        multipart.addBodyPart(messageBodyPart);
+            DataSource source = new FileDataSource(filePath);
+            BodyPart messageBodyPart = new MimeBodyPart();
+            messageBodyPart.setDataHandler(new DataHandler(source));
+            messageBodyPart.setFileName(filename);
+            multipart.addBodyPart(messageBodyPart);
+
+        } catch (URISyntaxException e) {
+            Log.e(e.getMessage(), e.toString());
+        }
     }
 
     private boolean isOnline() {
         ConnectivityManager cm =
                 (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        NetworkInfo netInfo = null;
+        if (cm != null) {
+            netInfo = cm.getActiveNetworkInfo();
+        }
         return netInfo != null && netInfo.isConnectedOrConnecting();
     }
 

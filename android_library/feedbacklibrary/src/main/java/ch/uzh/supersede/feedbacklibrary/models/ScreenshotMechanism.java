@@ -1,13 +1,14 @@
 package ch.uzh.supersede.feedbacklibrary.models;
 
 import android.util.Log;
-
-import ch.uzh.supersede.feedbacklibrary.configurations.MechanismConfigurationItem;
-import ch.uzh.supersede.feedbacklibrary.utils.Utils;
+import android.util.SparseArray;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import ch.uzh.supersede.feedbacklibrary.configurations.MechanismConfigurationItem;
+import ch.uzh.supersede.feedbacklibrary.utils.Constants;
 
 /**
  * Screenshot mechanism model
@@ -17,7 +18,7 @@ public class ScreenshotMechanism extends Mechanism {
     private String defaultPicture;
     private int maxNumberTextAnnotation = 0;
     private String imagePath;
-    private HashMap<Integer, String> allTextAnnotations = null;
+    private Map<Integer, String> allTextAnnotations = null;
 
     public ScreenshotMechanism(MechanismConfigurationItem item) {
         super(SCREENSHOT_TYPE, item);
@@ -29,11 +30,11 @@ public class ScreenshotMechanism extends Mechanism {
      *
      * @return all text annotation texts or an empty hash map if there are no text annotation texts
      */
-    public HashMap<Integer, String> getAllTextAnnotationTexts() {
+    public Map<Integer, String> getAllTextAnnotationTexts() {
         if (getAllTextAnnotations() != null) {
-            HashMap<Integer, String> returnValue = new HashMap<>();
+            Map<Integer, String> returnValue = new HashMap<>();
             for (Map.Entry<Integer, String> entry : getAllTextAnnotations().entrySet()) {
-                String split[] = entry.getValue().split(Utils.SEPARATOR);
+                String split[] = entry.getValue().split(Constants.SEPARATOR);
                 if (split.length > 0) {
                     returnValue.put(entry.getKey(), split[0]);
                 } else {
@@ -50,7 +51,7 @@ public class ScreenshotMechanism extends Mechanism {
      *
      * @return all text annotations
      */
-    public HashMap<Integer, String> getAllTextAnnotations() {
+    public Map<Integer, String> getAllTextAnnotations() {
         return allTextAnnotations;
     }
 
@@ -93,17 +94,18 @@ public class ScreenshotMechanism extends Mechanism {
     private void initScreenshotMechanism(MechanismConfigurationItem item) {
         for (Map<String, Object> param : item.getParameters()) {
             String key = (String) param.get("key");
+            Object value = param.get("value");
             // Title
             if (key.equals("title")) {
-                setTitle((String) param.get("value"));
+                setTitle((String) value);
             }
             // Default picture
-            if (key.equals("defaultPicture")) {
-                setDefaultPicture((String) param.get("value"));
+            else if (key.equals("defaultPicture")) {
+                setDefaultPicture((String) value);
             }
             // Maximum number of text annotations
-            if (key.equals("maxTextAnnotation")) {
-                setMaxNumberTextAnnotation(((Double) param.get("value")).intValue());
+            else if (key.equals("maxTextAnnotation")) {
+                setMaxNumberTextAnnotation(((Double) value).intValue());
             }
         }
     }
@@ -118,7 +120,7 @@ public class ScreenshotMechanism extends Mechanism {
      *
      * @param allTextAnnotations all text annotations
      */
-    public void setAllTextAnnotations(HashMap<Integer, String> allTextAnnotations) {
+    public void setAllTextAnnotations(Map<Integer, String> allTextAnnotations) {
         this.allTextAnnotations = allTextAnnotations;
     }
 
