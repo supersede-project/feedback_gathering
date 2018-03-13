@@ -96,7 +96,7 @@ public class StartActivity extends AbstractBaseActivity {
             if (result) {
                 /*
                  * The permission is already granted.
-                 * The library takes a screenshot of the current screen automatically and opens the FeedbackActivity from the feedback library.
+                 * The library takes a screenshot of the current screen automatically and opens the FeedbackActivityConstants from the feedback library.
                  */
                 Utils.startActivityWithScreenshotCapture("https://platform.supersede.eu:8443/", this, 29L, "en");
             }

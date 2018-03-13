@@ -2,7 +2,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="ch.uzh.supersede.feedbacklibrary.AnnotateImageActivity">
+    tools:context="ch.uzh.supersede.feedbacklibrary.activities.AnnotateImageActivity">
 
     <item
         android:id="@+id/supersede_feedbacklibrary_action_annotate_cancel"

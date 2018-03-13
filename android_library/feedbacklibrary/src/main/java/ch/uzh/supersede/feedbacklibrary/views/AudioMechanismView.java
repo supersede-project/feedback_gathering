@@ -20,11 +20,13 @@ import android.widget.Toast;
 import java.io.File;
 import java.io.IOException;
 
-import ch.uzh.supersede.feedbacklibrary.FeedbackActivity;
 import ch.uzh.supersede.feedbacklibrary.R;
 import ch.uzh.supersede.feedbacklibrary.models.AudioMechanism;
 import ch.uzh.supersede.feedbacklibrary.models.Mechanism;
 import ch.uzh.supersede.feedbacklibrary.utils.Utils;
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.FeedbackActivityConstants.*;
+
+
 
 
 /**
@@ -213,7 +215,7 @@ public class AudioMechanismView extends MechanismView implements SeekBar.OnSeekB
             public void onClick(View v) {
                 clearFocus();
 
-                boolean result = Utils.checkSinglePermission(activity, FeedbackActivity.PERMISSIONS_REQUEST_RECORD_AUDIO, Manifest.permission.RECORD_AUDIO, null, null, false);
+                boolean result = Utils.checkSinglePermission(activity, PERMISSIONS_REQUEST_RECORD_AUDIO, Manifest.permission.RECORD_AUDIO, null, null, false);
                 if (result) {
                     removeUpdateSeekBarTask();
                     removeUpdateSeekBarTaskRecorder();
