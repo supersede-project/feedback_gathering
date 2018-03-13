@@ -16,14 +16,14 @@
         <!-- android:theme will be overriden from app:theme -->
 
         <activity
-            android:name=".FeedbackActivity"
+            android:name=".activities.FeedbackActivity"
             android:label="@string/supersede_feedbacklibrary_feedback_activity_name"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.FeedbackLibrary"
             android:windowSoftInputMode="adjustPan" />
 
         <activity
-            android:name=".AnnotateImageActivity"
+            android:name=".activities.AnnotateImageActivity"
             android:label="@string/supersede_feedbacklibrary_annotate_image_activity_name"
             android:theme="@style/AppTheme.FeedbackLibrary"
             android:screenOrientation="portrait" />
@@ -31,7 +31,7 @@
         <activity android:name="com.theartofdev.edmodo.cropper.CropImageActivity" />
 
         <activity
-            android:name=".HelpActivity"
+            android:name=".activities.HelpActivity"
             android:theme="@style/AppTheme.FeedbackLibrary"
             android:label="Help"/>
 

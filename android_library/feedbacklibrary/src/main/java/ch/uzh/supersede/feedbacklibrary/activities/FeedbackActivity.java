@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright [2016] [Matthias Scherrer]
  * <p/>
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ch.uzh.supersede.feedbacklibrary;
+package ch.uzh.supersede.feedbacklibrary.activities;
 
 import android.Manifest;
 import android.app.Activity;
@@ -38,7 +38,6 @@ import android.provider.MediaStore;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -62,7 +61,6 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Properties;
 
 import javax.activation.DataHandler;
@@ -81,6 +79,7 @@ import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 
 import ch.uzh.supersede.feedbacklibrary.API.feedbackAPI;
+import ch.uzh.supersede.feedbacklibrary.R;
 import ch.uzh.supersede.feedbacklibrary.configurations.Configuration;
 import ch.uzh.supersede.feedbacklibrary.configurations.OrchestratorConfiguration;
 import ch.uzh.supersede.feedbacklibrary.configurations.OrchestratorConfigurationItem;
@@ -88,6 +87,7 @@ import ch.uzh.supersede.feedbacklibrary.feedbacks.AudioFeedback;
 import ch.uzh.supersede.feedbacklibrary.feedbacks.Feedback;
 import ch.uzh.supersede.feedbacklibrary.feedbacks.ScreenshotFeedback;
 import ch.uzh.supersede.feedbacklibrary.models.Mechanism;
+import ch.uzh.supersede.feedbacklibrary.utils.Constants;
 import ch.uzh.supersede.feedbacklibrary.utils.DialogUtils;
 import ch.uzh.supersede.feedbacklibrary.utils.Utils;
 import ch.uzh.supersede.feedbacklibrary.views.AudioMechanismView;
@@ -106,31 +106,13 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.FeedbackActivityConstants.*;
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.*;
+
 /**
  * The main activity where the feedback mechanisms are displayed.
  */
-public class FeedbackActivity extends AppCompatActivity implements ScreenshotMechanismView.OnImageChangedListener, AudioMechanismView.MultipleAudioMechanismsListener {
-    public final static String ANNOTATED_IMAGE_NAME_WITHOUT_STICKERS = "annotatedImageWithoutStickers.png";
-    public final static String ANNOTATED_IMAGE_NAME_WITH_STICKERS = "annotatedImageWithStickers.png";
-    public final static String CONFIGURATION_DIR = "configDir";
-    public final static String DEFAULT_IMAGE_PATH = "defaultImagePath";
-    public final static String IS_PUSH_STRING = "isPush";
-    public final static String JSON_CONFIGURATION_FILE_NAME = "currentConfiguration.json";
-    public final static String JSON_CONFIGURATION_STRING = "jsonConfigurationString";
-    public final static String SELECTED_PULL_CONFIGURATION_INDEX_STRING = "selectedPullConfigurationIndex";
-    // Microphone permission (android.permission-group.MICROPHONE)
-    public static final int PERMISSIONS_REQUEST_RECORD_AUDIO = 101;
-    // Initialization
-    public final static String EXTRA_KEY_APPLICATION_ID = "applicationId";
-    public final static String EXTRA_KEY_BASE_URL = "baseURL";
-    public final static String EXTRA_KEY_LANGUAGE = "language";
-    private final static int REQUEST_CAMERA = 10;
-    private final static int REQUEST_PHOTO = 11;
-    private final static int REQUEST_ANNOTATE = 12;
-    private static final String MULTIPART_FORM_DATA = "multipart/form-data";
-    // Storage permission (android.permission-group.STORAGE)
-    private static final int PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 100;
-    private static final String TAG = "FeedbackActivity";
+public class FeedbackActivity extends AbstractBaseActivity implements ScreenshotMechanismView.OnImageChangedListener, AudioMechanismView.MultipleAudioMechanismsListener {
     private feedbackAPI fbAPI;
     // Orchestrator configuration fetched from the orchestrator
     private OrchestratorConfigurationItem orchestratorConfigurationItem;
@@ -154,7 +136,6 @@ public class FeedbackActivity extends AppCompatActivity implements ScreenshotMec
     private ProgressDialog progressDialog;
     private String userScreenshotChosenTask = "";
     private String email;
-    private Map<String, RequestBody> files = new HashMap<>();
 
     private EditText emailEditText;
     private CheckBox getCopyCheckBox;
@@ -228,7 +209,7 @@ public class FeedbackActivity extends AppCompatActivity implements ScreenshotMec
                         if (response.code() == 200) {
                             Log.i(TAG, "Configuration successfully retrieved");
                             orchestratorConfigurationItem = response.body();
-                            // Save the current configuration under FeedbackActivity.CONFIGURATION_DIR}/FeedbackActivity.JSON_CONFIGURATION_FILE_NAME
+                            // Save the current configuration under FeedbackActivityConstants.CONFIGURATION_DIR}/FeedbackActivityConstants.JSON_CONFIGURATION_FILE_NAME
                             GsonBuilder gsonBuilder = new GsonBuilder();
                             gsonBuilder.setLenient();
                             Gson gson = gsonBuilder.create();
@@ -271,54 +252,54 @@ public class FeedbackActivity extends AppCompatActivity implements ScreenshotMec
     private void initView() {
         allMechanismViews = new ArrayList<>();
         LayoutInflater layoutInflater = LayoutInflater.from(this);
-        LinearLayout linearLayout = (LinearLayout) findViewById(R.id.supersede_feedbacklibrary_feedback_activity_layout);
+        LinearLayout linearLayout = getView(R.id.supersede_feedbacklibrary_feedback_activity_layout,LinearLayout.class);
 
         if (linearLayout != null) {
-
-            orderMechanisms();
-
-            for (int i = 0; i < allMechanisms.size(); ++i) {
-                if (allMechanisms.get(i) != null && allMechanisms.get(i).isActive()) {
-                    MechanismView mechanismView = null;
-                    View view = null;
-                    String type = allMechanisms.get(i).getType();
-                    switch (type) {
-                        case Mechanism.ATTACHMENT_TYPE:
-                            break;
-                        case Mechanism.AUDIO_TYPE:
-                            mechanismView = new AudioMechanismView(layoutInflater, allMechanisms.get(i), getResources(), this, getApplicationContext());
-                            view = mechanismView.getEnclosingLayout();
-                            break;
-                        case Mechanism.CATEGORY_TYPE:
-                            mechanismView = new CategoryMechanismView(layoutInflater, allMechanisms.get(i));
-                            view = mechanismView.getEnclosingLayout();
-                            break;
-                        case Mechanism.RATING_TYPE:
-                            mechanismView = new RatingMechanismView(layoutInflater, allMechanisms.get(i));
-                            view = mechanismView.getEnclosingLayout();
-                            break;
-                        case Mechanism.SCREENSHOT_TYPE:
-                            mechanismView = new ScreenshotMechanismView(layoutInflater, allMechanisms.get(i), this, allMechanismViews.size(), defaultImagePath);
-                            view = mechanismView.getEnclosingLayout();
-                            break;
-                        case Mechanism.TEXT_TYPE:
-                            mechanismView = new TextMechanismView(layoutInflater, allMechanisms.get(i));
-                            view = mechanismView.getEnclosingLayout();
-                            break;
-                        default:
-                            Log.wtf(TAG, "Unknown mechanism type '" + type + "'");
-                            break;
-                    }
-
-                    if (mechanismView != null && view != null) {
-                        allMechanismViews.add(mechanismView);
-                        linearLayout.addView(view);
-                    }
+            for (Mechanism mechanism : allMechanisms) {
+                if (mechanism != null && mechanism.isActive()) {
+                    resolveMechanism(layoutInflater, linearLayout, mechanism);
                 }
             }
-
             initCopyByEmailLayout(layoutInflater, linearLayout);
             layoutInflater.inflate(R.layout.send_feedback_layout, linearLayout);
+        }
+    }
+
+    private void resolveMechanism(LayoutInflater layoutInflater, LinearLayout linearLayout, Mechanism mechanism) {
+        MechanismView mechanismView = null;
+        View view = null;
+        String type = mechanism.getType();
+        switch (type) {
+            case Mechanism.ATTACHMENT_TYPE:
+                break;
+            case Mechanism.AUDIO_TYPE:
+                mechanismView = new AudioMechanismView(layoutInflater, mechanism, getResources(), this, getApplicationContext());
+                view = mechanismView.getEnclosingLayout();
+                break;
+            case Mechanism.CATEGORY_TYPE:
+                mechanismView = new CategoryMechanismView(layoutInflater, mechanism);
+                view = mechanismView.getEnclosingLayout();
+                break;
+            case Mechanism.RATING_TYPE:
+                mechanismView = new RatingMechanismView(layoutInflater, mechanism);
+                view = mechanismView.getEnclosingLayout();
+                break;
+            case Mechanism.SCREENSHOT_TYPE:
+                mechanismView = new ScreenshotMechanismView(layoutInflater, mechanism, this, allMechanismViews.size(), defaultImagePath);
+                view = mechanismView.getEnclosingLayout();
+                break;
+            case Mechanism.TEXT_TYPE:
+                mechanismView = new TextMechanismView(layoutInflater, mechanism);
+                view = mechanismView.getEnclosingLayout();
+                break;
+            default:
+                Log.wtf(TAG, "Unknown mechanism type '" + type + "'");
+                break;
+        }
+
+        if (mechanismView != null && view != null) {
+            allMechanismViews.add(mechanismView);
+            linearLayout.addView(view);
         }
     }
 
@@ -348,19 +329,6 @@ public class FeedbackActivity extends AppCompatActivity implements ScreenshotMec
         });
     }
 
-    private void orderMechanisms() {
-        ArrayList<Mechanism> list = new ArrayList<>();
-        /*
-        list.add(allMechanisms.get(2));
-        list.add(allMechanisms.get(0));
-        list.add(allMechanisms.get(1));
-        list.add(allMechanisms.get(3));
-        list.add(allMechanisms.get(4));
-        */
-
-        //allMechanisms = list;
-    }
-
     private boolean isPush() {
         return isPush;
     }
@@ -369,45 +337,48 @@ public class FeedbackActivity extends AppCompatActivity implements ScreenshotMec
     @SuppressWarnings("unchecked")
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == Activity.RESULT_OK) {
-            if (requestCode == REQUEST_PHOTO) {
-                onSelectFromGalleryResult(data);
-            } else if (requestCode == REQUEST_CAMERA) {
-            } else if (requestCode == REQUEST_ANNOTATE && data != null) {
-                // If mechanismViewId == -1, an error occurred
-                int mechanismViewId = data.getIntExtra(Utils.EXTRA_KEY_MECHANISM_VIEW_ID, -1);
-                if (mechanismViewId != -1) {
-                    ScreenshotMechanismView screenshotMechanismView = (ScreenshotMechanismView) allMechanismViews.get(mechanismViewId);
+        if (resultCode == Activity.RESULT_OK) resolveRequestCode(requestCode, data);
+    }
 
-                    // Sticker annotations
-                    if (data.getBooleanExtra(Utils.EXTRA_KEY_HAS_STICKER_ANNOTATIONS, false)) {
-                        screenshotMechanismView.setAllStickerAnnotations((HashMap<Integer, String>) data.getSerializableExtra(Utils.EXTRA_KEY_ALL_STICKER_ANNOTATIONS));
-                    }
-                    // Text annotations
-                    if (data.getBooleanExtra(Utils.EXTRA_KEY_HAS_TEXT_ANNOTATIONS, false)) {
-                        screenshotMechanismView.setAllTextAnnotations((HashMap<Integer, String>) data.getSerializableExtra(Utils.EXTRA_KEY_ALL_TEXT_ANNOTATIONS));
-                    }
+    private void resolveRequestCode(int requestCode, Intent data) {
+        if (requestCode == REQUEST_PHOTO) {
+            onSelectFromGalleryResult(data);
+        } else if (requestCode == REQUEST_CAMERA) {
+            //TODO: remove or handle
+        } else if (requestCode == REQUEST_ANNOTATE && data != null) {
+            // If mechanismViewId == -1, an error occurred
+            int mechanismViewId = data.getIntExtra(Utils.EXTRA_KEY_MECHANISM_VIEW_ID, -1);
+            if (mechanismViewId != -1) {
+                ScreenshotMechanismView screenshotMechanismView = (ScreenshotMechanismView) allMechanismViews.get(mechanismViewId);
 
-                    // Annotated image with stickers
-                    String tempPathWithStickers = data.getStringExtra(Utils.EXTRA_KEY_ANNOTATED_IMAGE_PATH_WITH_STICKERS) + "/" + mechanismViewId + ANNOTATED_IMAGE_NAME_WITH_STICKERS;
-                    screenshotMechanismView.setAnnotatedImagePath(tempPathWithStickers);
-                    screenshotMechanismView.setPicturePath(tempPathWithStickers);
-                    Bitmap annotatedBitmap = Utils.loadImageFromStorage(tempPathWithStickers);
-                    if (annotatedBitmap != null) {
-                        screenshotMechanismView.setPictureBitmap(annotatedBitmap);
-                        screenshotMechanismView.getScreenShotPreviewImageView().setImageBitmap(annotatedBitmap);
-                    }
-
-                    // Annotated image without stickers
-                    if (data.getStringExtra(Utils.EXTRA_KEY_ANNOTATED_IMAGE_PATH_WITHOUT_STICKERS) == null) {
-                        screenshotMechanismView.setPicturePathWithoutStickers(null);
-                    } else {
-                        String tempPathWithoutStickers = data.getStringExtra(Utils.EXTRA_KEY_ANNOTATED_IMAGE_PATH_WITHOUT_STICKERS) + "/" + mechanismViewId + ANNOTATED_IMAGE_NAME_WITHOUT_STICKERS;
-                        screenshotMechanismView.setPicturePathWithoutStickers(tempPathWithoutStickers);
-                    }
-                } else {
-                    Log.e(TAG, "Failed to annotate the image. No mechanismViewID provided");
+                // Sticker annotations
+                if (data.getBooleanExtra(Utils.EXTRA_KEY_HAS_STICKER_ANNOTATIONS, false)) {
+                    screenshotMechanismView.setAllStickerAnnotations((HashMap<Integer, String>) data.getSerializableExtra(Utils.EXTRA_KEY_ALL_STICKER_ANNOTATIONS));
                 }
+                // Text annotations
+                if (data.getBooleanExtra(Utils.EXTRA_KEY_HAS_TEXT_ANNOTATIONS, false)) {
+                    screenshotMechanismView.setAllTextAnnotations((HashMap<Integer, String>) data.getSerializableExtra(Utils.EXTRA_KEY_ALL_TEXT_ANNOTATIONS));
+                }
+
+                // Annotated image with stickers
+                String tempPathWithStickers = data.getStringExtra(Utils.EXTRA_KEY_ANNOTATED_IMAGE_PATH_WITH_STICKERS) + "/" + mechanismViewId + ANNOTATED_IMAGE_NAME_WITH_STICKERS;
+                screenshotMechanismView.setAnnotatedImagePath(tempPathWithStickers);
+                screenshotMechanismView.setPicturePath(tempPathWithStickers);
+                Bitmap annotatedBitmap = Utils.loadImageFromStorage(tempPathWithStickers);
+                if (annotatedBitmap != null) {
+                    screenshotMechanismView.setPictureBitmap(annotatedBitmap);
+                    screenshotMechanismView.getScreenShotPreviewImageView().setImageBitmap(annotatedBitmap);
+                }
+
+                // Annotated image without stickers
+                if (data.getStringExtra(Utils.EXTRA_KEY_ANNOTATED_IMAGE_PATH_WITHOUT_STICKERS) == null) {
+                    screenshotMechanismView.setPicturePathWithoutStickers(null);
+                } else {
+                    String tempPathWithoutStickers = data.getStringExtra(Utils.EXTRA_KEY_ANNOTATED_IMAGE_PATH_WITHOUT_STICKERS) + Constants.PATH_DELIMITER + mechanismViewId + ANNOTATED_IMAGE_NAME_WITHOUT_STICKERS;
+                    screenshotMechanismView.setPicturePathWithoutStickers(tempPathWithoutStickers);
+                }
+            } else {
+                Log.e(TAG, "Failed to annotate the image. No mechanismViewID provided");
             }
         }
     }
@@ -440,7 +411,7 @@ public class FeedbackActivity extends AppCompatActivity implements ScreenshotMec
             // The feedback activity is started on behalf of a triggered pull configuration
             Log.v(TAG, "The feedback activity is started via a PULL configuration");
 
-            // Save the current configuration under FeedbackActivity.CONFIGURATION_DIR}/FeedbackActivity.JSON_CONFIGURATION_FILE_NAME
+            // Save the current configuration under FeedbackActivityConstants.CONFIGURATION_DIR}/FeedbackActivityConstants.JSON_CONFIGURATION_FILE_NAME
             Utils.saveStringContentToInternalStorage(getApplicationContext(), CONFIGURATION_DIR, JSON_CONFIGURATION_FILE_NAME, jsonString, MODE_PRIVATE);
             GsonBuilder gsonBuilder = new GsonBuilder();
             gsonBuilder.setLenient();
@@ -452,11 +423,6 @@ public class FeedbackActivity extends AppCompatActivity implements ScreenshotMec
             // The feedback activity is started on behalf of the user
             Log.v(TAG, "The feedback activity is started via a PUSH configuration");
 
-            // TODO: remove before release
-            //initOfflineConfiguration();
-
-            // TODO: uncomment before release
-            // Get the application id and language
             init(intent.getLongExtra(EXTRA_KEY_APPLICATION_ID, -1L), baseURL, language);
         }
     }
@@ -495,6 +461,7 @@ public class FeedbackActivity extends AppCompatActivity implements ScreenshotMec
                     if (items[item].equals(res.getString(R.string.supersede_feedbacklibrary_photo_capture_text))) {
                         userScreenshotChosenTask = res.getString(R.string.supersede_feedbacklibrary_photo_capture_text);
                         if (result) {
+                            //TODO remove or handle
                         }
                     } else if (items[item].equals(res.getString(R.string.supersede_feedbacklibrary_library_chooser_text))) {
                         userScreenshotChosenTask = res.getString(R.string.supersede_feedbacklibrary_library_chooser_text);
@@ -539,22 +506,21 @@ public class FeedbackActivity extends AppCompatActivity implements ScreenshotMec
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        switch (requestCode) {
-            case PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE:
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Resources res = getResources();
-                    if (userScreenshotChosenTask.equals(res.getString(R.string.supersede_feedbacklibrary_photo_capture_text))) {
-                    } else if (userScreenshotChosenTask.equals(res.getString(R.string.supersede_feedbacklibrary_library_chooser_text))) {
-                        galleryIntent();
-                    }
-                } else {
-                    // The user denied the permission
-                    onRequestPermissionsResultDenied(requestCode, permissions, grantResults, Manifest.permission.READ_EXTERNAL_STORAGE,
-                            R.string.supersede_feedbacklibrary_external_storage_permission_text,
-                            getResources().getString(R.string.supersede_feedbacklibrary_external_storage_permission_text_instructions));
+        if (requestCode == PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Resources res = getResources();
+                if (userScreenshotChosenTask.equals(res.getString(R.string.supersede_feedbacklibrary_photo_capture_text))) {
+                    //TODO remove or handle
+                } else if (userScreenshotChosenTask.equals(res.getString(R.string.supersede_feedbacklibrary_library_chooser_text))) {
+                    galleryIntent();
                 }
-                break;
-            case PERMISSIONS_REQUEST_RECORD_AUDIO:
+            } else {
+                // The user denied the permission
+                onRequestPermissionsResultDenied(requestCode, permissions, grantResults, Manifest.permission.READ_EXTERNAL_STORAGE,
+                        R.string.supersede_feedbacklibrary_external_storage_permission_text,
+                        getResources().getString(R.string.supersede_feedbacklibrary_external_storage_permission_text_instructions));
+            }
+        }else if (requestCode == PERMISSIONS_REQUEST_RECORD_AUDIO){
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     Toast toast = Toast.makeText(getApplicationContext(), R.string.supersede_feedbacklibrary_record_audio_permission_granted_text, Toast.LENGTH_SHORT);
                     toast.show();
@@ -564,7 +530,6 @@ public class FeedbackActivity extends AppCompatActivity implements ScreenshotMec
                             R.string.supersede_feedbacklibrary_record_audio_permission_text,
                             getResources().getString(R.string.supersede_feedbacklibrary_record_audio_permission_text_instructions));
                 }
-                break;
         }
     }
 
@@ -791,8 +756,8 @@ public class FeedbackActivity extends AppCompatActivity implements ScreenshotMec
             @Override
             public void run() {
                 //TODO replace with your email
-                final String username = "supersede.zurich@gmail.com";
-                final String password = "University2017";
+                final String user = "supersede.zurich@gmail.com";
+                final String user_pw = "University2017";
 
                 Properties props = new Properties();
                 props.put("mail.smtp.auth", "true");
@@ -802,13 +767,14 @@ public class FeedbackActivity extends AppCompatActivity implements ScreenshotMec
 
                 Session session = Session.getInstance(props,
                         new javax.mail.Authenticator() {
+                            @Override
                             protected PasswordAuthentication getPasswordAuthentication() {
-                                return new PasswordAuthentication(username, password);
+                                return new PasswordAuthentication(user, user_pw);
                             }
                         });
                 try {
                     Message message = new MimeMessage(session);
-                    message.setFrom(new InternetAddress(username));
+                    message.setFrom(new InternetAddress(user));
                     message.setRecipients(Message.RecipientType.TO,
                             InternetAddress.parse(email));
                     message.setSubject("Copy of your feedback");
@@ -833,11 +799,11 @@ public class FeedbackActivity extends AppCompatActivity implements ScreenshotMec
                     // Set text message part
                     multipart.addBodyPart(messageBodyPart);
 
-                    for (ScreenshotFeedback feedback:screenshotFeedbackList) {
-                        addAttachment(multipart, feedback.getImagePath());
+                    for (ScreenshotFeedback screenshotFeedback : screenshotFeedbackList) {
+                        addAttachment(multipart, screenshotFeedback.getImagePath());
                     }
-                    for (AudioFeedback feedback:audioFeedbackList) {
-                        addAttachment(multipart, feedback.getAudioPath());
+                    for (AudioFeedback audioFeedback : audioFeedbackList) {
+                        addAttachment(multipart, audioFeedback.getAudioPath());
                     }
 
                     message.setContent(multipart);
@@ -853,7 +819,7 @@ public class FeedbackActivity extends AppCompatActivity implements ScreenshotMec
                     }
 
                 } catch (MessagingException e) {
-                    throw new RuntimeException(e);
+                    //TODO log or handle
                 }
             }
         });
@@ -867,7 +833,8 @@ public class FeedbackActivity extends AppCompatActivity implements ScreenshotMec
         try {
             uri = new URI(filePath);
         } catch (URISyntaxException e) {
-            e.printStackTrace();
+            Log.e(TAG, "Failed to create URI", e);
+            return;
         }
         String[] segments = uri.getPath().split("/");
         String filename = segments[segments.length-1];

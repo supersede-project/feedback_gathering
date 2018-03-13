@@ -9,7 +9,7 @@
     android:paddingLeft="@dimen/activity_feedback_margin"
     android:paddingRight="@dimen/activity_feedback_margin"
     android:paddingTop="@dimen/activity_feedback_margin"
-    tools:context="ch.uzh.supersede.feedbacklibrary.FeedbackActivity">
+    tools:context="ch.uzh.supersede.feedbacklibrary.activities.FeedbackActivity">
 
     <LinearLayout
         android:id="@+id/supersede_feedbacklibrary_feedback_activity_layout"

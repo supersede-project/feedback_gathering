@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright [2016] [Matthias Scherrer]
  * <p/>
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -57,8 +57,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import ch.uzh.supersede.feedbacklibrary.API.feedbackAPI;
-import ch.uzh.supersede.feedbacklibrary.FeedbackActivity;
 import ch.uzh.supersede.feedbacklibrary.R;
+import ch.uzh.supersede.feedbacklibrary.activities.FeedbackActivity;
 import ch.uzh.supersede.feedbacklibrary.configurations.ConfigurationItem;
 import ch.uzh.supersede.feedbacklibrary.configurations.OrchestratorConfigurationItem;
 import okhttp3.ResponseBody;
@@ -67,6 +67,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.FeedbackActivityConstants.*;
 
 /**
  * Class with various helper methods
@@ -237,11 +238,11 @@ public class Utils {
                                                       @NonNull final Activity activity, @NonNull final String permission, final int dialogTitle,
                                                       final int dialogMessage, final long applicationId, @NonNull final String baseURL, @NonNull final String language) {
         final Intent intent = new Intent(activity, FeedbackActivity.class);
-        intent.putExtra(FeedbackActivity.EXTRA_KEY_APPLICATION_ID, applicationId);
-        intent.putExtra(FeedbackActivity.EXTRA_KEY_BASE_URL, baseURL);
-        intent.putExtra(FeedbackActivity.EXTRA_KEY_LANGUAGE, language);
+        intent.putExtra(EXTRA_KEY_APPLICATION_ID, applicationId);
+        intent.putExtra(EXTRA_KEY_BASE_URL, baseURL);
+        intent.putExtra(EXTRA_KEY_LANGUAGE, language);
         if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            // Permission was already granted. Taking a screenshot of the current screen automatically and open the FeedbackActivity from the feedback library
+            // Permission was already granted. Taking a screenshot of the current screen automatically and open the FeedbackActivityConstants from the feedback library
             startActivity(activity, intent, baseURL, true);
         } else {
             if (ActivityCompat.shouldShowRequestPermissionRationale(activity, permission)) {
@@ -263,7 +264,7 @@ public class Utils {
                 alertBuilder.setCancelable(false);
                 alertBuilder.show();
             } else {
-                // Open the FeedbackActivity from the feedback library without automatically taking a screenshot
+                // Open the FeedbackActivityConstants from the feedback library without automatically taking a screenshot
                 startActivity(activity, intent, baseURL, false);
             }
         }
@@ -363,14 +364,23 @@ public class Utils {
     public static boolean saveStringContentToInternalStorage(Context applicationContext, String dirName, String fileName, String str, int mode) {
         File directory = applicationContext.getDir(dirName, mode);
         File myPath = new File(directory, fileName);
+        FileWriter out = null;
         try {
-            FileWriter out = new FileWriter(myPath);
+            out = new FileWriter(myPath);
             out.write(str);
             out.flush();
             out.close();
             return true;
         } catch (IOException e) {
             Log.e(TAG, "Failed to write the content to the file", e);
+        }finally {
+            if (out != null){
+                try {
+                    out.close();
+                } catch (IOException e) {
+                    Log.e(TAG, "Failed to close the FileWriter.", e);
+                }
+            }
         }
         return false;
     }
@@ -425,7 +435,7 @@ public class Utils {
                     if (response.code() == 200) {
                         if (isCapturingScreenshot) {
                             String defaultImagePath = captureScreenshot(activity);
-                            intent.putExtra(FeedbackActivity.DEFAULT_IMAGE_PATH, defaultImagePath);
+                            intent.putExtra(DEFAULT_IMAGE_PATH, defaultImagePath);
                         }
                         activity.startActivity(intent);
                     } else {
@@ -441,7 +451,7 @@ public class Utils {
     }
 
     /**
-     * This method takes a screenshot of the current screen automatically and opens the FeedbackActivity from the feedback library in case if a PUSH feedback is triggered.
+     * This method takes a screenshot of the current screen automatically and opens the FeedbackActivityConstants from the feedback library in case if a PUSH feedback is triggered.
      *
      * @param baseURL       the base URL
      * @param activity      the activity in which the method is called
@@ -466,10 +476,10 @@ public class Utils {
                     if (response.code() == 200) {
                         Intent intent = new Intent(activity, FeedbackActivity.class);
                         String defaultImagePath = Utils.captureScreenshot(activity);
-                        intent.putExtra(FeedbackActivity.DEFAULT_IMAGE_PATH, defaultImagePath);
-                        intent.putExtra(FeedbackActivity.EXTRA_KEY_APPLICATION_ID, applicationId);
-                        intent.putExtra(FeedbackActivity.EXTRA_KEY_BASE_URL, baseURL);
-                        intent.putExtra(FeedbackActivity.EXTRA_KEY_LANGUAGE, language);
+                        intent.putExtra(DEFAULT_IMAGE_PATH, defaultImagePath);
+                        intent.putExtra(EXTRA_KEY_APPLICATION_ID, applicationId);
+                        intent.putExtra(EXTRA_KEY_BASE_URL, baseURL);
+                        intent.putExtra(EXTRA_KEY_LANGUAGE, language);
                         activity.startActivity(intent);
                     } else {
                         Log.e(TAG, "The server is not up and running. Response code == " + response.code());
@@ -484,7 +494,7 @@ public class Utils {
     }
 
     /**
-     * This method opens the FeedbackActivity from the feedback library in case if a PULL feedback is triggered with a random PULL configuration.
+     * This method opens the FeedbackActivityConstants from the feedback library in case if a PULL feedback is triggered with a random PULL configuration.
      *
      * @param baseURL       the base URL
      * @param activity      the activity in which the method is called
@@ -560,11 +570,11 @@ public class Utils {
                                                     gsonBuilder.setLenient();
                                                     Gson gson = gsonBuilder.create();
                                                     String jsonString = gson.toJson(configuration);
-                                                    intent.putExtra(FeedbackActivity.IS_PUSH_STRING, false);
-                                                    intent.putExtra(FeedbackActivity.JSON_CONFIGURATION_STRING, jsonString);
-                                                    intent.putExtra(FeedbackActivity.SELECTED_PULL_CONFIGURATION_INDEX_STRING, shuffleIds.get(i));
-                                                    intent.putExtra(FeedbackActivity.EXTRA_KEY_BASE_URL, baseURL);
-                                                    intent.putExtra(FeedbackActivity.EXTRA_KEY_LANGUAGE, language);
+                                                    intent.putExtra(IS_PUSH_STRING, false);
+                                                    intent.putExtra(JSON_CONFIGURATION_STRING, jsonString);
+                                                    intent.putExtra(SELECTED_PULL_CONFIGURATION_INDEX_STRING, shuffleIds.get(i));
+                                                    intent.putExtra(EXTRA_KEY_BASE_URL, baseURL);
+                                                    intent.putExtra(EXTRA_KEY_LANGUAGE, language);
                                                     if (!showIntermediateDialog) {
                                                         // Start the feedback activity without asking the user
                                                         activity.startActivity(intent);
@@ -597,7 +607,7 @@ public class Utils {
     }
 
     /**
-     * This method opens the FeedbackActivity from the feedback library in case if a PULL feedback is triggered with a specific PULL configuration.
+     * This method opens the FeedbackActivityConstants from the feedback library in case if a PULL feedback is triggered with a specific PULL configuration.
      *
      * @param baseURL                the base URL
      * @param activity               the activity in which the method is called
@@ -668,11 +678,11 @@ public class Utils {
                                                 gsonBuilder.setLenient();
                                                 Gson gson = gsonBuilder.create();
                                                 String jsonString = gson.toJson(configuration);
-                                                intent.putExtra(FeedbackActivity.IS_PUSH_STRING, false);
-                                                intent.putExtra(FeedbackActivity.JSON_CONFIGURATION_STRING, jsonString);
-                                                intent.putExtra(FeedbackActivity.SELECTED_PULL_CONFIGURATION_INDEX_STRING, selectedPullConfigurationIndex[0]);
-                                                intent.putExtra(FeedbackActivity.EXTRA_KEY_BASE_URL, baseURL);
-                                                intent.putExtra(FeedbackActivity.EXTRA_KEY_LANGUAGE, language);
+                                                intent.putExtra(IS_PUSH_STRING, false);
+                                                intent.putExtra(JSON_CONFIGURATION_STRING, jsonString);
+                                                intent.putExtra(SELECTED_PULL_CONFIGURATION_INDEX_STRING, selectedPullConfigurationIndex[0]);
+                                                intent.putExtra(EXTRA_KEY_BASE_URL, baseURL);
+                                                intent.putExtra(EXTRA_KEY_LANGUAGE, language);
                                                 if (!showIntermediateDialog) {
                                                     // Start the feedback activity without asking the user
                                                     activity.startActivity(intent);

@@ -13,25 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ch.uzh.supersede.feedbacklibrary;
+package ch.uzh.supersede.feedbacklibrary.activities;
 
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -46,13 +42,12 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import ch.uzh.supersede.feedbacklibrary.R;
 import ch.uzh.supersede.feedbacklibrary.models.DialogType;
-import ch.uzh.supersede.feedbacklibrary.models.EditImageItem;
 import ch.uzh.supersede.feedbacklibrary.utils.ColorPickerDialog;
 import ch.uzh.supersede.feedbacklibrary.utils.Utils;
 import ch.uzh.supersede.feedbacklibrary.views.AnnotateImageView;
 import ch.uzh.supersede.feedbacklibrary.views.EditImageDialog;
-import ch.uzh.supersede.feedbacklibrary.views.EditImageViewAdapter;
 import ch.uzh.supersede.feedbacklibrary.views.StickerAnnotationImageView;
 import ch.uzh.supersede.feedbacklibrary.views.StickerAnnotationView;
 import ch.uzh.supersede.feedbacklibrary.views.TextAnnotationImageView;
@@ -68,8 +63,11 @@ import java.util.Map;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import static ch.uzh.supersede.feedbacklibrary.models.DialogType.Favorite;
-import static ch.uzh.supersede.feedbacklibrary.models.DialogType.QuickEdit;
+import static android.graphics.Color.BLACK;
+import static android.graphics.Color.RED;
+import static android.graphics.Color.WHITE;
+import static ch.uzh.supersede.feedbacklibrary.models.DialogType.*;
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.FeedbackActivityConstants.*;
 
 /**
  * Activity for annotating the screenshot
@@ -173,19 +171,20 @@ public class AnnotateImageActivity extends AppCompatActivity implements ColorPic
         // Add the file of the original image
         annotateImageView.addCroppedImage(new File(originalImagePath));
         // Set the background color of the canvas (used for the eraser)
-        annotateImageView.setBaseColor(Color.WHITE);
+
+        annotateImageView.setBaseColor(WHITE);
         // Set the mode
         annotateImageView.setMode(AnnotateImageView.Mode.DRAW);
         // Set the drawer
         annotateImageView.setDrawer(AnnotateImageView.Drawer.PEN);
         // Set the paint attributes
         annotateImageView.setPaintStyle(Paint.Style.STROKE);
-        annotateImageView.setPaintStrokeColor(Color.RED);
+        annotateImageView.setPaintStrokeColor(RED);
         annotateImageView.setLineCap(Paint.Cap.ROUND);
         annotateImageView.setLineJoin(Paint.Join.ROUND);
         float strokeWidth = getResources().getDisplayMetrics().density < 1.6F ? 6F : 12F;
         annotateImageView.setPaintStrokeWidth(strokeWidth);
-        annotateImageView.setPaintFillColor(Color.RED);
+        annotateImageView.setPaintFillColor(RED);
         annotateImageView.setOpacity(255);
         annotateImageView.setBlur(0F);
         // Set the text attributes
@@ -334,7 +333,7 @@ public class AnnotateImageActivity extends AppCompatActivity implements ColorPic
                 if (allStickerAnnotations.size() > 0 || allTextAnnotations.size() > 0) {
                     // Get the bitmap (image without stickers if there are any)
                     Bitmap annotatedBitmapWithoutStickers = annotateImageView.getBitmap();
-                    annotatedImagePathWithoutStickers = Utils.saveBitmapToInternalStorage(getApplicationContext(), "imageDir", mechanismViewId + FeedbackActivity.ANNOTATED_IMAGE_NAME_WITHOUT_STICKERS, annotatedBitmapWithoutStickers, Context.MODE_PRIVATE, Bitmap.CompressFormat.PNG, 100);
+                    annotatedImagePathWithoutStickers = Utils.saveBitmapToInternalStorage(getApplicationContext(), "imageDir", mechanismViewId + ANNOTATED_IMAGE_NAME_WITHOUT_STICKERS, annotatedBitmapWithoutStickers, Context.MODE_PRIVATE, Bitmap.CompressFormat.PNG, 100);
                 }
 
                 // Convert the ViewGroup, i.e., the supersede_feedbacklibrary_annotate_picture_layout into a bitmap (image with stickers)
@@ -346,7 +345,7 @@ public class AnnotateImageActivity extends AppCompatActivity implements ColorPic
                 Canvas canvas = new Canvas(annotatedBitmapWithStickers);
                 relativeLayout.draw(canvas);
                 Bitmap croppedBitmap = Bitmap.createBitmap(annotatedBitmapWithStickers, 0, 0, annotateImageView.getBitmapWidth(), annotateImageView.getBitmapHeight());
-                String annotatedImagePathWithStickers = Utils.saveBitmapToInternalStorage(getApplicationContext(), "imageDir", mechanismViewId + FeedbackActivity.ANNOTATED_IMAGE_NAME_WITH_STICKERS, croppedBitmap, Context.MODE_PRIVATE, Bitmap.CompressFormat.PNG, 100);
+                String annotatedImagePathWithStickers = Utils.saveBitmapToInternalStorage(getApplicationContext(), "imageDir", mechanismViewId + ANNOTATED_IMAGE_NAME_WITH_STICKERS, croppedBitmap, Context.MODE_PRIVATE, Bitmap.CompressFormat.PNG, 100);
 
                 Intent intent = new Intent();
                 intent.putExtra(Utils.EXTRA_KEY_MECHANISM_VIEW_ID, mechanismViewId);
@@ -646,8 +645,8 @@ public class AnnotateImageActivity extends AppCompatActivity implements ColorPic
         } else {
             oldPaintStrokeColor = annotateImageView.getPaintStrokeColor();
             oldPaintFillColor = annotateImageView.getPaintFillColor();
-            annotateImageView.setPaintStrokeColor(Color.BLACK);
-            annotateImageView.setPaintFillColor(Color.BLACK);
+            annotateImageView.setPaintStrokeColor(BLACK);
+            annotateImageView.setPaintFillColor(BLACK);
             showColorPickerDialog();
         }
         blackModeOn = !blackModeOn;

@@ -11,7 +11,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 
-import ch.uzh.supersede.feedbacklibrary.FeedbackActivity;
+import ch.uzh.supersede.feedbacklibrary.activities.FeedbackActivity;
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.FeedbackActivityConstants.*;
+
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -109,11 +111,11 @@ public class DialogUtils {
             builder.setMessage(message).setPositiveButton(ch.uzh.supersede.feedbacklibrary.R.string.supersede_feedbacklibrary_yes_string, new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int id) {
                     Intent intent = new Intent(associatedActivity, FeedbackActivity.class);
-                    intent.putExtra(FeedbackActivity.JSON_CONFIGURATION_STRING, jsonString);
-                    intent.putExtra(FeedbackActivity.IS_PUSH_STRING, false);
-                    intent.putExtra(FeedbackActivity.SELECTED_PULL_CONFIGURATION_INDEX_STRING, selectedPullConfigurationIndex);
-                    intent.putExtra(FeedbackActivity.EXTRA_KEY_BASE_URL, baseURL);
-                    intent.putExtra(FeedbackActivity.EXTRA_KEY_LANGUAGE, language);
+                    intent.putExtra(JSON_CONFIGURATION_STRING, jsonString);
+                    intent.putExtra(IS_PUSH_STRING, false);
+                    intent.putExtra(SELECTED_PULL_CONFIGURATION_INDEX_STRING, selectedPullConfigurationIndex);
+                    intent.putExtra(EXTRA_KEY_BASE_URL, baseURL);
+                    intent.putExtra(EXTRA_KEY_LANGUAGE, language);
                     associatedActivity.startActivity(intent);
                 }
             }).setNegativeButton(ch.uzh.supersede.feedbacklibrary.R.string.supersede_feedbacklibrary_no_string, new DialogInterface.OnClickListener() {
