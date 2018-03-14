@@ -1,0 +1,632 @@
+{
+  "id": 25,
+  "name": "Senercon Dev Application",
+  "state": 1,
+  "createdAt": "2017-11-13T11:41:53.000+0000",
+  "updatedAt": null,
+  "generalConfiguration": {
+    "id": 64,
+    "name": null,
+    "createdAt": "2017-11-13T11:41:53.000+0000",
+    "updatedAt": null,
+    "parameters": [
+      {
+        "id": 565,
+        "key": "feedbackMailAdress",
+        "value": "rgfwdebug@senercon.de",
+        "parameters": [],
+        "language": "en",
+        "createdAt": "2017-11-13T12:41:53.000+0100",
+        "updatedAt": null,
+        "order": 0
+      },
+      {
+        "id": 568,
+        "key": "feedbackMailKeyName",
+        "value": "rgfwdebug@senercon.de",
+        "parameters": [],
+        "language": "en",
+        "createdAt": "2017-11-13T12:41:53.000+0100",
+        "updatedAt": null,
+        "order": 0
+      },
+      {
+        "id": 567,
+        "key": "mainColor",
+        "value": "#00ff00",
+        "parameters": [],
+        "language": "en",
+        "createdAt": "2017-11-13T12:41:53.000+0100",
+        "updatedAt": null,
+        "order": 0
+      },
+      {
+        "id": 566,
+        "key": "dialogTitle",
+        "value": "Give us feedback to the energy saving platform",
+        "parameters": [],
+        "language": "en",
+        "createdAt": "2017-11-13T12:41:53.000+0100",
+        "updatedAt": null,
+        "order": 0
+      },
+      {
+        "id": 569,
+        "key": "reviewActive",
+        "value": "1.0",
+        "parameters": [],
+        "language": "en",
+        "createdAt": "2017-11-13T12:41:53.000+0100",
+        "updatedAt": null,
+        "order": 0
+      }
+    ]
+  },
+  "configurations": [
+    {
+      "id": 48,
+      "name": null,
+      "type": "PUSH",
+      "createdAt": "2017-11-13T11:41:53.000+0000",
+      "updatedAt": null,
+      "generalConfiguration": {
+        "id": 65,
+        "name": "Senercon Dev ",
+        "createdAt": "2017-11-13T11:41:53.000+0000",
+        "updatedAt": null,
+        "parameters": [
+          {
+            "id": 570,
+            "key": "feedbackMailKeyName",
+            "value": "rgfwdebug@senercon.de",
+            "parameters": [],
+            "language": "en",
+            "createdAt": "2017-11-13T12:41:53.000+0100",
+            "updatedAt": null,
+            "order": 0
+          }
+        ]
+      },
+      "pullDefault": false,
+      "pushDefault": true,
+      "mechanisms": [
+        {
+          "id": 99,
+          "type": "TEXT_TYPE",
+          "createdAt": "2017-11-13T11:41:53.000+0000",
+          "updatedAt": null,
+          "active": true,
+          "order": 1,
+          "parameters": [
+            {
+              "id": 584,
+              "key": "fieldWidth",
+              "value": "200.0",
+              "parameters": [],
+              "language": "en",
+              "createdAt": "2017-11-13T12:41:53.000+0100",
+              "updatedAt": null,
+              "order": 0
+            },
+            {
+              "id": 573,
+              "key": "maxLengthVisible",
+              "value": "1.0",
+              "parameters": [],
+              "language": "en",
+              "createdAt": "2017-11-13T12:41:53.000+0100",
+              "updatedAt": null,
+              "order": 0
+            },
+            {
+              "id": 583,
+              "key": "fieldBackgroundColor",
+              "value": "#ffffff",
+              "parameters": [],
+              "language": "en",
+              "createdAt": "2017-11-13T12:41:53.000+0100",
+              "updatedAt": null,
+              "order": 0
+            },
+            {
+              "id": 592,
+              "key": "fieldFontSize",
+              "value": "14.0",
+              "parameters": [],
+              "language": "en",
+              "createdAt": "2017-11-13T12:41:53.000+0100",
+              "updatedAt": null,
+              "order": 0
+            },
+            {
+              "id": 593,
+              "key": "borderColor",
+              "value": "#000000",
+              "parameters": [],
+              "language": "en",
+              "createdAt": "2017-11-13T12:41:53.000+0100",
+              "updatedAt": null,
+              "order": 0
+            },
+            {
+              "id": 578,
+              "key": "labelFontSize",
+              "value": "15.0",
+              "parameters": [],
+              "language": "en",
+              "createdAt": "2017-11-13T12:41:53.000+0100",
+              "updatedAt": null,
+              "order": 0
+            },
+            {
+              "id": 579,
+              "key": "clearInput",
+              "value": "0.0",
+              "parameters": [],
+              "language": "en",
+              "createdAt": "2017-11-13T12:41:53.000+0100",
+              "updatedAt": null,
+              "order": 0
+            },
+            {
+              "id": 585,
+              "key": "mandatoryReminder",
+              "value": "Please fill in the text field",
+              "parameters": [],
+              "language": "en",
+              "createdAt": "2017-11-13T12:41:53.000+0100",
+              "updatedAt": null,
+              "order": 0
+            },
+            {
+              "id": 582,
+              "key": "undoEnabled",
+              "value": "1.0",
+              "parameters": [],
+              "language": "en",
+              "createdAt": "2017-11-13T12:41:53.000+0100",
+              "updatedAt": null,
+              "order": 0
+            },
+            {
+              "id": 586,
+              "key": "fieldHeight",
+              "value": "90.0",
+              "parameters": [],
+              "language": "en",
+              "createdAt": "2017-11-13T12:41:53.000+0100",
+              "updatedAt": null,
+              "order": 0
+            },
+            {
+              "id": 571,
+              "key": "fieldFontType",
+              "value": "normal",
+              "parameters": [],
+              "language": "en",
+              "createdAt": "2017-11-13T12:41:53.000+0100",
+              "updatedAt": null,
+              "order": 0
+            },
+            {
+              "id": 581,
+              "key": "undoSteps",
+              "value": "1.0",
+              "parameters": [],
+              "language": "en",
+              "createdAt": "2017-11-13T12:41:53.000+0100",
+              "updatedAt": null,
+              "order": 0
+            },
+            {
+              "id": 587,
+              "key": "validateOnSkip",
+              "value": "1.0",
+              "parameters": [],
+              "language": "en",
+              "createdAt": "2017-11-13T12:41:53.000+0100",
+              "updatedAt": null,
+              "order": 0
+            },
+            {
+              "id": 588,
+              "key": "label",
+              "value": "Please write about your problem",
+              "parameters": [],
+              "language": "en",
+              "createdAt": "2017-11-13T12:41:53.000+0100",
+              "updatedAt": null,
+              "order": 0
+            },
+            {
+              "id": 574,
+              "key": "title",
+              "value": "Feedback",
+              "parameters": [],
+              "language": "en",
+              "createdAt": "2017-11-13T12:41:53.000+0100",
+              "updatedAt": null,
+              "order": 0
+            },
+            {
+              "id": 576,
+              "key": "mandatory",
+              "value": "1.0",
+              "parameters": [],
+              "language": "en",
+              "createdAt": "2017-11-13T12:41:53.000+0100",
+              "updatedAt": null,
+              "order": 0
+            },
+            {
+              "id": 591,
+              "key": "labelColor",
+              "value": "#353535",
+              "parameters": [],
+              "language": "en",
+              "createdAt": "2017-11-13T12:41:53.000+0100",
+              "updatedAt": null,
+              "order": 0
+            },
+            {
+              "id": 590,
+              "key": "textareaFontColor",
+              "value": "#7A7A7A",
+              "parameters": [],
+              "language": "en",
+              "createdAt": "2017-11-13T12:41:53.000+0100",
+              "updatedAt": null,
+              "order": 0
+            },
+            {
+              "id": 589,
+              "key": "fieldTextAlignment",
+              "value": "left",
+              "parameters": [],
+              "language": "en",
+              "createdAt": "2017-11-13T12:41:53.000+0100",
+              "updatedAt": null,
+              "order": 0
+            },
+            {
+              "id": 594,
+              "key": "labelPositioning",
+              "value": "left",
+              "parameters": [],
+              "language": "en",
+              "createdAt": "2017-11-13T12:41:53.000+0100",
+              "updatedAt": null,
+              "order": 0
+            },
+            {
+              "id": 575,
+              "key": "borderWidth",
+              "value": "1.0",
+              "parameters": [],
+              "language": "en",
+              "createdAt": "2017-11-13T12:41:53.000+0100",
+              "updatedAt": null,
+              "order": 0
+            },
+            {
+              "id": 580,
+              "key": "hint",
+              "value": "Please enter your feedback",
+              "parameters": [],
+              "language": "en",
+              "createdAt": "2017-11-13T12:41:53.000+0100",
+              "updatedAt": null,
+              "order": 0
+            },
+            {
+              "id": 577,
+              "key": "validationRegex",
+              "value": ".",
+              "parameters": [],
+              "language": "en",
+              "createdAt": "2017-11-13T12:41:53.000+0100",
+              "updatedAt": null,
+              "order": 0
+            },
+            {
+              "id": 572,
+              "key": "maxLength",
+              "value": "1000.0",
+              "parameters": [],
+              "language": "en",
+              "createdAt": "2017-11-13T12:41:53.000+0100",
+              "updatedAt": null,
+              "order": 0
+            }
+          ]
+        },
+        {
+          "id": 100,
+          "type": "AUDIO_TYPE",
+          "createdAt": "2017-11-13T11:41:53.000+0000",
+          "updatedAt": null,
+          "active": false,
+          "order": 2,
+          "parameters": [
+            {
+              "id": 595,
+              "key": "maxTime",
+              "value": "30.0",
+              "parameters": [],
+              "language": "en",
+              "createdAt": "2017-11-13T12:41:53.000+0100",
+              "updatedAt": null,
+              "order": 0
+            }
+          ]
+        },
+        {
+          "id": 101,
+          "type": "SCREENSHOT_TYPE",
+          "createdAt": "2017-11-13T11:41:53.000+0000",
+          "updatedAt": null,
+          "active": true,
+          "order": 3,
+          "parameters": [
+            {
+              "id": 597,
+              "key": "defaultPicture",
+              "value": "lastScreenshot",
+              "parameters": [],
+              "language": "en",
+              "createdAt": "2017-11-13T12:41:53.000+0100",
+              "updatedAt": null,
+              "order": 0
+            },
+            {
+              "id": 596,
+              "key": "title",
+              "value": "Title for screenshot feedback",
+              "parameters": [],
+              "language": "en",
+              "createdAt": "2017-11-13T12:41:53.000+0100",
+              "updatedAt": null,
+              "order": 0
+            }
+          ]
+        },
+        {
+          "id": 102,
+          "type": "RATING_TYPE",
+          "createdAt": "2017-11-13T11:41:53.000+0000",
+          "updatedAt": null,
+          "active": true,
+          "order": 4,
+          "parameters": [
+            {
+              "id": 599,
+              "key": "defaultRating",
+              "value": "0.0",
+              "parameters": [],
+              "language": "en",
+              "createdAt": "2017-11-13T12:41:53.000+0100",
+              "updatedAt": null,
+              "order": 0
+            },
+            {
+              "id": 598,
+              "key": "ratingIcon",
+              "value": "star",
+              "parameters": [],
+              "language": "en",
+              "createdAt": "2017-11-13T12:41:53.000+0100",
+              "updatedAt": null,
+              "order": 0
+            },
+            {
+              "id": 600,
+              "key": "maxRating",
+              "value": "5.0",
+              "parameters": [],
+              "language": "en",
+              "createdAt": "2017-11-13T12:41:53.000+0100",
+              "updatedAt": null,
+              "order": 0
+            },
+            {
+              "id": 601,
+              "key": "title",
+              "value": "Rate your user experience on this page",
+              "parameters": [],
+              "language": "en",
+              "createdAt": "2017-11-13T12:41:53.000+0100",
+              "updatedAt": null,
+              "order": 0
+            }
+          ]
+        },
+        {
+          "id": 103,
+          "type": "AUDIO_TYPE",
+          "createdAt": "2017-11-13T11:41:53.000+0000",
+          "updatedAt": null,
+          "active": false,
+          "order": 2,
+          "parameters": [
+            {
+              "id": 602,
+              "key": "maxTime",
+              "value": "30.0",
+              "parameters": [],
+              "language": "en",
+              "createdAt": "2017-11-13T12:41:53.000+0100",
+              "updatedAt": null,
+              "order": 0
+            }
+          ]
+        },
+        {
+          "id": 104,
+          "type": "CATEGORY_TYPE",
+          "createdAt": "2017-11-13T11:41:53.000+0000",
+          "updatedAt": null,
+          "active": true,
+          "order": 5,
+          "parameters": [
+            {
+              "id": 611,
+              "key": "mandatoryReminder",
+              "value": "Please select at least one category",
+              "parameters": [],
+              "language": "en",
+              "createdAt": "2017-11-13T12:41:53.000+0100",
+              "updatedAt": null,
+              "order": 0
+            },
+            {
+              "id": 603,
+              "key": "options",
+              "value": [
+                {
+                  "id": 606,
+                  "key": "BUG_CATEGORY",
+                  "value": "Bug",
+                  "parameters": [],
+                  "language": "en",
+                  "createdAt": "2017-11-13T12:41:53.000+0100",
+                  "updatedAt": null,
+                  "order": 0
+                },
+                {
+                  "id": 605,
+                  "key": "FEATURE_REQUEST_CATEGORY",
+                  "value": "Feature Request",
+                  "parameters": [],
+                  "language": "en",
+                  "createdAt": "2017-11-13T12:41:53.000+0100",
+                  "updatedAt": null,
+                  "order": 0
+                },
+                {
+                  "id": 604,
+                  "key": "GENERAL_CATEGORY",
+                  "value": "General Feedback",
+                  "parameters": [],
+                  "language": "en",
+                  "createdAt": "2017-11-13T12:41:53.000+0100",
+                  "updatedAt": null,
+                  "order": 0
+                }
+              ],
+              "parameters": [
+                {
+                  "id": 606,
+                  "key": "BUG_CATEGORY",
+                  "value": "Bug",
+                  "parameters": [],
+                  "language": "en",
+                  "createdAt": "2017-11-13T12:41:53.000+0100",
+                  "updatedAt": null,
+                  "order": 0
+                },
+                {
+                  "id": 605,
+                  "key": "FEATURE_REQUEST_CATEGORY",
+                  "value": "Feature Request",
+                  "parameters": [],
+                  "language": "en",
+                  "createdAt": "2017-11-13T12:41:53.000+0100",
+                  "updatedAt": null,
+                  "order": 0
+                },
+                {
+                  "id": 604,
+                  "key": "GENERAL_CATEGORY",
+                  "value": "General Feedback",
+                  "parameters": [],
+                  "language": "en",
+                  "createdAt": "2017-11-13T12:41:53.000+0100",
+                  "updatedAt": null,
+                  "order": 0
+                }
+              ],
+              "language": "en",
+              "createdAt": "2017-11-13T12:41:53.000+0100",
+              "updatedAt": null,
+              "order": 0
+            },
+            {
+              "id": 607,
+              "key": "multiple",
+              "value": "0.0",
+              "parameters": [],
+              "language": "en",
+              "createdAt": "2017-11-13T12:41:53.000+0100",
+              "updatedAt": null,
+              "order": 0
+            },
+            {
+              "id": 610,
+              "key": "title",
+              "value": "Please choose one of the following categories",
+              "parameters": [],
+              "language": "en",
+              "createdAt": "2017-11-13T12:41:53.000+0100",
+              "updatedAt": null,
+              "order": 0
+            },
+            {
+              "id": 608,
+              "key": "ownAllowed",
+              "value": "0.0",
+              "parameters": [],
+              "language": "en",
+              "createdAt": "2017-11-13T12:41:53.000+0100",
+              "updatedAt": null,
+              "order": 0
+            },
+            {
+              "id": 609,
+              "key": "mandatory",
+              "value": "1.0",
+              "parameters": [],
+              "language": "en",
+              "createdAt": "2017-11-13T12:41:53.000+0100",
+              "updatedAt": null,
+              "order": 0
+            }
+          ]
+        },
+        {
+          "id": 105,
+          "type": "ATTACHMENT_TYPE",
+          "createdAt": "2017-11-13T11:41:53.000+0000",
+          "updatedAt": null,
+          "active": true,
+          "order": 7,
+          "parameters": [
+            {
+              "id": 991,
+              "key": "maximumTotalFileSize",
+              "value": "1048576",
+              "parameters": [],
+              "language": "en",
+              "createdAt": "2018-01-29T11:25:38.000+0100",
+              "updatedAt": null,
+              "order": 0
+            },
+            {
+              "id": 612,
+              "key": "title",
+              "value": "You can also attach some files to your feedback",
+              "parameters": [],
+              "language": "en",
+              "createdAt": "2017-11-13T12:41:53.000+0100",
+              "updatedAt": null,
+              "order": 0
+            }
+          ]
+        }
+      ],
+      "userGroups": []
+    }
+  ],
+  "users": [],
+  "userGroups": [],
+  "apiUserPermissions": []
+}

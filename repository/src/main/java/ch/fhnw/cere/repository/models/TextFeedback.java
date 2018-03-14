@@ -45,7 +45,7 @@ public class TextFeedback implements MechanismFeedback {
     public String toString() {
         return String.format(
                 "TextFeedback[id=%d, feedbackId='%d', text='%s', mechanismId='%d']",
-                id, feedback.getId(), text, mechanismId);
+                id, feedback != null ? feedback.getId() : 0, text, mechanismId);
     }
 
     public long getId() {

@@ -28,6 +28,16 @@ public class GeneralConfiguration {
         this.parameters = parameters;
     }
 
+    @Override
+    public String toString() {
+        return "GeneralConfiguration{" +
+                "createdAt='" + createdAt + '\'' +
+                ", name='" + name + '\'' +
+                ", id=" + id +
+                ", parameters=" + parameters +
+                '}';
+    }
+
     public String getCreatedAt() {
         return createdAt;
     }

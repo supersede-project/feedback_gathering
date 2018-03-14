@@ -122,14 +122,6 @@ export class ScreenshotView implements MechanismView {
         } else {
             this.generateScreenshot();
         }
-
-        let myThis = this;
-        this.container.find('.scale-screenshot').on('click', (event) => {
-            event.preventDefault();
-            event.stopPropagation();
-            let factor = myThis.container.find('.scale-screenshot-factor').val();
-            myThis.scaleTheCanvas(factor);
-        });
     }
 
     generateScreenshotFromUrl() {
@@ -140,8 +132,6 @@ export class ScreenshotView implements MechanismView {
 
         setTimeout(function() {
             let screenshotImageUrl = myThis.screenshotMechanism.getParameterValue('screenshotUrl') + "?anti_cache=" + new Date().getTime();
-
-            console.log(screenshotImageUrl);
 
             let canvas: HTMLCanvasElement = <HTMLCanvasElement>(jQuery('<canvas width="478" height="251"></canvas>').get(0));
             myThis.canvas = canvas;
@@ -610,32 +600,6 @@ export class ScreenshotView implements MechanismView {
         canvas.setZoom(oldZoom);
         canvas.setZoom(factor);
         canvas.renderAll.bind(canvas);
-    }
-
-    scaleTheCanvas(factor) {
-        console.log('scaleTheCanvas: ' + factor);
-        let myThis = this;
-        let canvas = this.canvas;
-
-        // save the canvas content as imageURL
-        let data = canvas.toDataURL("image/png");
-        myThis.context = canvas.getContext("2d");
-        myThis.canvasOriginalWidth = canvas.width;
-        myThis.canvasOriginalHeight = canvas.height;
-
-        myThis.canvasWidth = myThis.canvasWidth * factor;
-        myThis.canvasHeight = myThis.canvasHeight * factor;
-
-        jQuery(canvas).prop('width', myThis.canvasWidth);
-        jQuery(canvas).prop('height', myThis.canvasHeight);
-
-        let img = new Image();
-        myThis.canvasState = img;
-        myThis.screenshotCanvas = canvas;
-        img.src = data;
-        img.onload = function () {
-            myThis.context.drawImage(img, 0, 0, img.width * factor, img.height * factor, 0, 0, canvas.width, canvas.height);
-        };
     }
 
     addTextAnnotation(left, top) {

@@ -31,6 +31,17 @@ public class Configuration {
         this.mechanisms = mechanisms;
     }
 
+    @Override
+    public String toString() {
+        return "Configuration{" +
+                "createdAt='" + createdAt + '\'' +
+                ", id=" + id +
+                ", generalConfiguration=" + generalConfiguration +
+                ", type='" + type + '\'' +
+                ", mechanisms=" + mechanisms +
+                '}';
+    }
+
     public String getCreatedAt() {
         return createdAt;
     }

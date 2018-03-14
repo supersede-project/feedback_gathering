@@ -3,7 +3,9 @@ package ch.fhnw.cere.repository.models.orchestrator;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import eu.supersede.integration.api.feedback.orchestrator.types.ConfigurationMechanism;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -39,6 +41,42 @@ public class Mechanism {
         this.parameters = parameters;
         this.canBeActivated = canBeActivated;
         this.order = order;
+    }
+
+    @Override
+    public String toString() {
+        return "Mechanism{" +
+                "configurationsId=" + configurationsId +
+                ", createdAt='" + createdAt + '\'' +
+                ", active=" + active +
+                ", id=" + id +
+                ", type='" + type + '\'' +
+                ", parameters=" + parameters +
+                ", canBeActivated=" + canBeActivated +
+                ", order=" + order +
+                '}';
+    }
+
+    public static List<Mechanism> filterByCategoryParameterId(List<Mechanism> mechanisms, long categoryParameterId) {
+        List<Mechanism> foundMechanisms = new ArrayList<>();
+
+        for(Mechanism mechanism : mechanisms) {
+            Parameter optionParameter = null;
+            for(Parameter parameter : mechanism.getParameters()) {
+                if(parameter.getKey().equals("options")) {
+                    optionParameter = parameter;
+                }
+            }
+            if(optionParameter != null) {
+                for(Parameter categoryParameter : optionParameter.getParameters()) {
+                    if(categoryParameter.getId().equals(categoryParameterId)) {
+                        foundMechanisms.add(mechanism);
+                    }
+                }
+            }
+        }
+
+        return foundMechanisms;
     }
 
     public Long getConfigurationsId() {
