@@ -24,6 +24,18 @@ export class ScreenshotViewDrawing {
 
         return [scaledUpCroppedImageWidth, scaledUpCroppedImageHeight];
     }
+
+    getWidthHeightForMaxResolution(maxWidth:number, maxHeight:number, originalWidth:number, originalHeight:number):number[] {
+        let factor = this.getScaleFactor(maxWidth, maxHeight, originalWidth, originalHeight);
+        if(factor > 1) {
+            return [originalWidth, originalHeight];
+        }
+        return [originalWidth * factor, originalHeight * factor];
+    }
+
+    getScaleFactor(maxWidth:number, maxHeight:number, originalWidth:number, originalHeight:number):number {
+        return Math.min(maxWidth / originalWidth, maxHeight / originalHeight);
+    }
 }
 
 

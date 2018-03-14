@@ -500,6 +500,9 @@
 .feedback-library p.rating-text {
   margin-top: 7px; }
 
+.feedback-library button.take-screenshot {
+  font-size: 0.9em; }
+
 .feedback-library .audio-type audio {
   display: none; }
 
