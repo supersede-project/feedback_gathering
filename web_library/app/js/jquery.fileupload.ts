@@ -7,7 +7,7 @@ export var fileUploadPluginModule = (function ($, window, document) {
     var dropArea;
     let fileInput;
     let fileTable;
-    this.maximumTotalFileSize = 0;
+    this.maximumTotalFileSize = 8*8*8*8*8*8*8*8;
     let currentFiles = [];
     var plugin;
 
@@ -84,7 +84,7 @@ export var fileUploadPluginModule = (function ($, window, document) {
 
     $.fn.fileUpload = function (distPathString: string, maximumTotalFileSize?: number) {
         if (maximumTotalFileSize === null || maximumTotalFileSize === undefined) {
-            maximumTotalFileSize = 0;
+            maximumTotalFileSize = 8*8*8*8*8*8*8*8;
         }
         plugin = this;
         plugin.currentFiles = currentFiles;
@@ -113,9 +113,11 @@ export var fileUploadPluginModule = (function ($, window, document) {
         $(document.body).on('click', 'a.remove-file', function (event) {
             event.stopPropagation();
             event.preventDefault();
-            let index = $(plugin).data('index');
+            let index = $(this).data('index');
             currentFiles.splice(index, 1);
             showFiles(currentFiles);
+            let currentTotal = getTotalFileSizeForFiles(currentFiles);
+            updateFileSizeDisplay(currentTotal);
         });
 
         fileInput.on('change', function (e) {
