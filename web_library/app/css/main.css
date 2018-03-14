@@ -73,7 +73,7 @@
   cursor: pointer;
   border: 1px solid black;
   background: white;
-  opacity: .8; }
+  opacity: 0.8; }
 
 .sp-alpha {
   display: none;
@@ -193,11 +193,12 @@
 @media (max-device-width: 480px) {
   .sp-color {
     right: 40%; }
+
   .sp-hue {
     left: 63%; }
+
   .sp-fill {
     padding-top: 60%; } }
-
 .sp-dragger {
   border-radius: 5px;
   height: 5px;
@@ -218,7 +219,7 @@
   right: -1px;
   border: 1px solid #000;
   background: white;
-  opacity: .8; }
+  opacity: 0.8; }
 
 .sp-container {
   border-radius: 0;
@@ -505,7 +506,6 @@
 
 .feedback-library .audio-type audio {
   display: none; }
-
 .feedback-library .audio-type .audio-buttons {
   margin: 10px 0; }
   .feedback-library .audio-type .audio-buttons a img {
@@ -527,17 +527,14 @@
     display: none;
     color: red;
     margin-top: 20px; }
-
 .feedback-library table.current-files {
   margin-top: 10px;
   font-size: 13px;
   color: #909090; }
   .feedback-library table.current-files td {
     padding-right: 15px; }
-
 .feedback-library .attachment-review tr {
   height: 20px; }
-
 .feedback-library .attachment-review a.remove-file {
   display: none; }
 
@@ -628,20 +625,16 @@
     /* IE10+ CSS styles go here */ }
     .feedback-library .hide-ie {
       display: none; } }
-
 @supports (-ms-accelerator: true) {
   .feedback-library {
     /* IE Edge 12+ CSS styles go here */ }
     .feedback-library .hide-ie {
       display: none; } }
-
 .feedback-library .mute-text {
   color: #a7a7a7; }
-
 .feedback-library .optional-info p {
   margin: 10px 0 1px 0;
   font-size: 12px; }
-
 .feedback-library h2.form-title {
   font-size: 26px;
   color: #1c416f;
@@ -651,7 +644,6 @@
   margin-top: 5px;
   font-weight: normal;
   margin-bottom: 22px; }
-
 .feedback-library .ui-dialog-titlebar {
   background: transparent;
   border-bottom: 1px solid black;
@@ -660,7 +652,6 @@
   border-right: none;
   border-radius: 0;
   text-transform: uppercase; }
-
 .feedback-library .feedback-mechanism.horizontal {
   margin-bottom: 25px; }
   .feedback-library .feedback-mechanism.horizontal .col {
@@ -673,15 +664,12 @@
   .feedback-library .feedback-mechanism.horizontal .col-right {
     float: right;
     width: 76%; }
-
 .feedback-library .feedback-mechanism.text-type {
   margin-bottom: 10px; }
-
 .feedback-library .feedback-mechanism.category-type {
   margin-bottom: 25px; }
   .feedback-library .feedback-mechanism.category-type p {
     margin-top: 6px; }
-
 .feedback-library textarea.text-type-text {
   width: 100%;
   min-width: 100%;
@@ -693,10 +681,8 @@
   margin-top: 6px;
   box-sizing: border-box;
   min-height: 0; }
-
 .feedback-library textarea.email-field {
   overflow-y: hidden; }
-
 .feedback-library .ui-dialog-titlebar {
   border-color: transparent;
   border-width: 1px;
@@ -706,27 +692,21 @@
     font-size: 13px;
     margin: 8px 0;
     text-transform: none; }
-
 .feedback-library p.explanation {
   margin-top: 7px;
   margin-bottom: 1px;
   font-size: 15px; }
-
 .feedback-library p.rating-text {
   margin-top: 1px;
   margin-bottom: 2px;
   font-size: 15px;
   line-height: 1.375em; }
-
 .feedback-library p.text-count {
   margin-bottom: 3px; }
-
 .feedback-library p.rating-input, .feedback-library p.text-count {
   margin-top: 4px; }
-
 .feedback-library section.dialog-navigation {
   margin: 13px 1px 3px 1px; }
-
 .feedback-library .button {
   background-color: #f9f9f9;
   background-size: 100% auto;
@@ -753,35 +733,27 @@
     .feedback-library .button.submit-feedback:hover {
       background-color: #5a7393;
       color: white; }
-
 .feedback-library .button:visited, .feedback-library .button:hover, .feedback-library button:active, .feedback-library button:focus {
   background-color: #F2F2F2;
   color: #282828;
   cursor: pointer; }
-
 .feedback-library .navigation-button, .feedback-library .discard-feedback, .feedback-library .submit-feedback {
   margin-top: 15px;
   font-size: 13px; }
-
 .feedback-library .navigation-button {
   float: right;
   display: block; }
-
 .feedback-library .navigation-button :active {
   position: relative;
   top: 1px; }
-
 .feedback-library .feedback-dialog-backward {
   float: left; }
-
 .feedback-library .clearfix {
   clear: both; }
-
 .feedback-library .server-response {
   display: none;
   margin-top: 20px;
   margin-bottom: 5px; }
-
 .feedback-library .server-response.success {
   display: block;
   background-color: #dff0d8;
@@ -789,7 +761,6 @@
   border: 1px solid #d0e9c6;
   border-radius: 0.25rem;
   padding: 15px; }
-
 .feedback-library .server-response.error {
   display: block;
   background-color: #f2dede;
@@ -797,10 +768,8 @@
   border: 1px solid #ebcccc;
   border-radius: 0.25rem;
   padding: 15px; }
-
 .feedback-library p.textarea-bottom {
   margin-top: 2px; }
-
 .feedback-library button.text-type-text-clear {
   background: none;
   margin: 2px;
@@ -808,7 +777,6 @@
   float: left; }
   .feedback-library button.text-type-text-clear:hover {
     color: #808080; }
-
 .feedback-library .text-type-max-length {
   font-size: 13px;
   font-family: Tahoma, Verdana, Segoe, sans-serif;
@@ -816,12 +784,10 @@
   width: auto;
   display: inline-block;
   float: right; }
-
 .feedback-library .feedback-form-error {
   color: red;
   margin: 2px 0;
   font-size: 13px; }
-
 .feedback-library .screenshot-preview {
   border: 1px solid #b9b9b9;
   height: auto;
@@ -832,10 +798,8 @@
     z-index: 5000;
     position: absolute;
     cursor: move; }
-
 .feedback-library .canvas-container {
   overflow: hidden; }
-
 .feedback-library .screenshot-review {
   position: relative; }
   .feedback-library .screenshot-review img.base {
@@ -844,12 +808,10 @@
     z-index: 3000; }
   .feedback-library .screenshot-review .sticker-container {
     z-index: 3000; }
-
 .feedback-library .hidden-preview {
   display: none;
   height: auto;
   position: relative; }
-
 .feedback-library .screenshot-operations {
   display: none; }
   .feedback-library .screenshot-operations .sticking img {
@@ -858,16 +820,12 @@
   .feedback-library .screenshot-operations p {
     font-size: 16px;
     margin-bottom: 2px; }
-
 .feedback-library button.screenshot {
   width: 95%; }
-
 .feedback-library button.discard-feedback {
   width: 215px; }
-
 .feedback-library button.take-screenshot {
   margin-bottom: 10px; }
-
 .feedback-library button.screenshot-operation {
   background: none;
   font-weight: normal;
@@ -889,7 +847,6 @@
     width: auto; }
     .feedback-library button.screenshot-operation.screenshot-draw-remove:hover {
       text-decoration: underline; }
-
 .feedback-library .sticker-container {
   position: absolute;
   z-index: 1000;
@@ -978,7 +935,6 @@
     z-index: 1000;
     height: auto;
     width: 30px; }
-
 .feedback-library .sticker-container:hover {
   border-color: black;
   border-width: 1px;
@@ -990,7 +946,6 @@
     display: block; }
   .feedback-library .sticker-container:hover a.color {
     display: block; }
-
 .feedback-library .sticker-container-review:hover {
   cursor: default;
   border: none; }
@@ -1000,21 +955,17 @@
     display: none; }
   .feedback-library .sticker-container-review:hover a.color {
     display: none; }
-
 .feedback-library .svg-sticker-source, .feedback-library .object-source.fillRect {
   width: 24px;
   height: 24px;
   margin: 3px; }
-
 .feedback-library .zoom-in, .feedback-library .zoom-out {
   width: 24px;
   height: 24px;
   margin: 1px;
   cursor: pointer; }
-
 .feedback-library .svg-sticker-source:hover, .feedback-library .object-source:hover {
   cursor: move; }
-
 .feedback-library .screenshot-text-review {
   display: none;
   margin-left: 30px;
@@ -1023,24 +974,19 @@
   width: 50%;
   text-align: left;
   z-index: 5000; }
-
 .feedback-library .selected-object-controls a {
   margin-top: 4px; }
-
 .feedback-library .screenshot-operations .text-size {
   display: inline-block;
   width: 50px;
   margin-left: 5px;
   position: relative;
   top: -5px; }
-
 .feedback-library .pull-right {
   float: right;
   display: inline-block; }
-
 .feedback-library .button-row {
   margin-top: 25px; }
-
 .feedback-library a.discard-feedback {
   float: left;
   display: inline-block;
@@ -1054,25 +1000,20 @@
   .feedback-library a.discard-feedback:hover {
     color: #282828;
     text-decoration: underline; }
-
 .feedback-library .at-least-one-mechanism {
   text-align: right; }
-
 .feedback-library .submission-message {
   margin-top: 25px;
   margin-bottom: 15px;
   color: #858786;
   font-size: 13px; }
-
 .feedback-library .screenshot-operations small {
   display: block;
   font-size: 12px;
   margin: 5px 0;
   font-style: italic; }
-
 .feedback-library .annotations-heading {
   margin-top: 5px; }
-
 .feedback-library .loader {
   margin: 0 auto;
   margin-top: 70px;
@@ -1084,13 +1025,11 @@
   width: 60px;
   height: 60px;
   animation: spin 2s linear infinite; }
-
 @keyframes spin {
   0% {
     transform: rotate(0deg); }
   100% {
     transform: rotate(360deg); } }
-
 .feedback-library.feedback-container {
   display: none;
   min-width: 1050px;
@@ -1150,3 +1089,5 @@
   .feedback-library .feedback-mechanism.user-question p {
     font-size: 14px !important;
     color: #000000 !important; }
+
+/*# sourceMappingURL=main.css.map */
