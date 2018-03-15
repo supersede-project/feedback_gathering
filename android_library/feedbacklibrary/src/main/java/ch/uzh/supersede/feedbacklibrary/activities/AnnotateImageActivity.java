@@ -43,16 +43,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import ch.uzh.supersede.feedbacklibrary.R;
-import ch.uzh.supersede.feedbacklibrary.models.DialogType;
-import ch.uzh.supersede.feedbacklibrary.utils.ColorPickerDialog;
-import ch.uzh.supersede.feedbacklibrary.utils.Utils;
-import ch.uzh.supersede.feedbacklibrary.views.AnnotateImageView;
-import ch.uzh.supersede.feedbacklibrary.views.EditImageDialog;
-import ch.uzh.supersede.feedbacklibrary.views.StickerAnnotationImageView;
-import ch.uzh.supersede.feedbacklibrary.views.StickerAnnotationView;
-import ch.uzh.supersede.feedbacklibrary.views.TextAnnotationImageView;
-import ch.uzh.supersede.feedbacklibrary.views.TextAnnotationView;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
@@ -64,14 +54,9 @@ import java.util.Map;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import static android.graphics.Color.BLACK;
-import static android.graphics.Color.RED;
-import static android.graphics.Color.WHITE;
-import static ch.uzh.supersede.feedbacklibrary.models.DialogType.*;
-import static ch.uzh.supersede.feedbacklibrary.utils.Constants.FeedbackActivityConstants.*;
+import ch.uzh.supersede.feedbacklibrary.R;
 import ch.uzh.supersede.feedbacklibrary.models.DialogType;
 import ch.uzh.supersede.feedbacklibrary.utils.ColorPickerDialog;
-import ch.uzh.supersede.feedbacklibrary.utils.Constants;
 import ch.uzh.supersede.feedbacklibrary.utils.Utils;
 import ch.uzh.supersede.feedbacklibrary.views.AnnotateImageView;
 import ch.uzh.supersede.feedbacklibrary.views.EditImageDialog;
@@ -80,8 +65,10 @@ import ch.uzh.supersede.feedbacklibrary.views.StickerAnnotationView;
 import ch.uzh.supersede.feedbacklibrary.views.TextAnnotationImageView;
 import ch.uzh.supersede.feedbacklibrary.views.TextAnnotationView;
 
-import static ch.uzh.supersede.feedbacklibrary.models.DialogType.Favorite;
-import static ch.uzh.supersede.feedbacklibrary.models.DialogType.QuickEdit;
+import static android.graphics.Color.*;
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.FeedbackActivityConstants.*;
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.ScreenshotConstants.*;
+
 
 /**
  * Activity for annotating the screenshot
@@ -205,10 +192,10 @@ public class AnnotateImageActivity extends AppCompatActivity implements ColorPic
     private void initAnnotations(Intent intent) {
         RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.supersede_feedbacklibrary_annotate_image_layout);
         if (relativeLayout != null) {
-            if (intent.getBooleanExtra(Constants.EXTRA_KEY_HAS_STICKER_ANNOTATIONS, false)) {
+            if (intent.getBooleanExtra(EXTRA_KEY_HAS_STICKER_ANNOTATIONS, false)) {
                 handleStickerAnnotations(intent);
             }
-            if (intent.getBooleanExtra(Constants.EXTRA_KEY_HAS_TEXT_ANNOTATIONS, false)) {
+            if (intent.getBooleanExtra(EXTRA_KEY_HAS_TEXT_ANNOTATIONS, false)) {
                 handleTextAnnotations(intent);
             }
             hideAllControlItems(relativeLayout);
@@ -216,10 +203,10 @@ public class AnnotateImageActivity extends AppCompatActivity implements ColorPic
     }
 
     private void handleStickerAnnotations(Intent intent) {
-        HashMap<Integer, String> allStickerAnnotations = (HashMap<Integer, String>) intent.getSerializableExtra(Constants.EXTRA_KEY_ALL_STICKER_ANNOTATIONS);
+        HashMap<Integer, String> allStickerAnnotations = (HashMap<Integer, String>) intent.getSerializableExtra(EXTRA_KEY_ALL_STICKER_ANNOTATIONS);
         for (Map.Entry<Integer, String> entry : allStickerAnnotations.entrySet()) {
             // Array will be of length 6 --> imageResourceId, x, y, width, height, rotation
-            String[] split = entry.getValue().split(Constants.SEPARATOR);
+            String[] split = entry.getValue().split(SEPARATOR);
             StickerAnnotationImageView stickerAnnotationImageView = addSticker(Integer.valueOf(split[0]));
             if (stickerAnnotationImageView != null) {
                 stickerAnnotationImageView.setX(Float.valueOf(split[1]));
@@ -232,11 +219,11 @@ public class AnnotateImageActivity extends AppCompatActivity implements ColorPic
     }
 
     private void handleTextAnnotations(Intent intent) {
-        HashMap<Integer, String> allTextAnnotations = (HashMap<Integer, String>) intent.getSerializableExtra(Constants.EXTRA_KEY_ALL_TEXT_ANNOTATIONS);
+        HashMap<Integer, String> allTextAnnotations = (HashMap<Integer, String>) intent.getSerializableExtra(EXTRA_KEY_ALL_TEXT_ANNOTATIONS);
         SortedSet<Integer> keys = new TreeSet<>(allTextAnnotations.keySet());
         for (Integer key : keys) {
             // Array will be of length 4 --> annotationText, imageResourceId, x, y
-            String[] split = (allTextAnnotations.get(key)).split(Constants.SEPARATOR);
+            String[] split = (allTextAnnotations.get(key)).split(SEPARATOR);
             TextAnnotationImageView textAnnotationImageView = addTextAnnotation(Integer.valueOf(split[1]));
             if (textAnnotationImageView != null) {
                 textAnnotationImageView.setAnnotationInputText(split[0]);
@@ -290,7 +277,7 @@ public class AnnotateImageActivity extends AppCompatActivity implements ColorPic
 
         Intent intent = getIntent();
         // If mechanismViewId == -1, an error occurred
-        mechanismViewId = intent.getIntExtra(Constants.EXTRA_KEY_MECHANISM_VIEW_ID, -1);
+        mechanismViewId = intent.getIntExtra(EXTRA_KEY_MECHANISM_VIEW_ID, -1);
         if (mechanismViewId != -1) {
             String imagePath = intent.getStringExtra("imagePath");
             textAnnotationCounter = 1;
@@ -351,12 +338,11 @@ public class AnnotateImageActivity extends AppCompatActivity implements ColorPic
                 if (allStickerAnnotations.size() > 0 || allTextAnnotations.size() > 0) {
                     // Get the bitmap (image without stickers if there are any)
                     Bitmap annotatedBitmapWithoutStickers = annotateImageView.getBitmap();
-                    annotatedImagePathWithoutStickers = Utils.saveBitmapToInternalStorage(getApplicationContext(), "imageDir", mechanismViewId + Constants.ANNOTATED_IMAGE_NAME_WITHOUT_STICKERS, annotatedBitmapWithoutStickers, Context.MODE_PRIVATE, Bitmap.CompressFormat.PNG, 100);
+                    annotatedImagePathWithoutStickers = Utils.saveBitmapToInternalStorage(getApplicationContext(), "imageDir", mechanismViewId + ANNOTATED_IMAGE_NAME_WITHOUT_STICKERS, annotatedBitmapWithoutStickers, Context.MODE_PRIVATE, Bitmap.CompressFormat.PNG, 100);
                 }
 
                 // Convert the ViewGroup, i.e., the supersede_feedbacklibrary_annotate_picture_layout into a bitmap (image with stickers)
-                relativeLayout.measure(View.MeasureSpec.makeMeasureSpec(annotateImageView.getBitmapWidth(), View.MeasureSpec.EXACTLY),
-                        View.MeasureSpec.makeMeasureSpec(annotateImageView.getBitmapHeight(), View.MeasureSpec.EXACTLY));
+                relativeLayout.measure(View.MeasureSpec.makeMeasureSpec(annotateImageView.getBitmapWidth(), View.MeasureSpec.EXACTLY), View.MeasureSpec.makeMeasureSpec(annotateImageView.getBitmapHeight(), View.MeasureSpec.EXACTLY));
 
                 relativeLayout.layout(0, 0, relativeLayout.getMeasuredWidth(), relativeLayout.getMeasuredHeight());
                 Bitmap annotatedBitmapWithStickers = Bitmap.createBitmap(relativeLayout.getLayoutParams().width, relativeLayout.getLayoutParams().height, Bitmap.Config.ARGB_8888);
@@ -366,13 +352,13 @@ public class AnnotateImageActivity extends AppCompatActivity implements ColorPic
                 String annotatedImagePathWithStickers = Utils.saveBitmapToInternalStorage(getApplicationContext(), "imageDir", mechanismViewId + ANNOTATED_IMAGE_NAME_WITH_STICKERS, croppedBitmap, Context.MODE_PRIVATE, Bitmap.CompressFormat.PNG, 100);
 
                 Intent intent = new Intent();
-                intent.putExtra(Constants.EXTRA_KEY_MECHANISM_VIEW_ID, mechanismViewId);
-                intent.putExtra(Constants.EXTRA_KEY_ANNOTATED_IMAGE_PATH_WITHOUT_STICKERS, annotatedImagePathWithoutStickers);
-                intent.putExtra(Constants.EXTRA_KEY_ANNOTATED_IMAGE_PATH_WITH_STICKERS, annotatedImagePathWithStickers);
-                intent.putExtra(Constants.EXTRA_KEY_HAS_STICKER_ANNOTATIONS, allStickerAnnotations.size() > 0);
-                intent.putExtra(Constants.EXTRA_KEY_ALL_STICKER_ANNOTATIONS, allStickerAnnotations);
-                intent.putExtra(Constants.EXTRA_KEY_HAS_TEXT_ANNOTATIONS, allTextAnnotations.size() > 0);
-                intent.putExtra(Constants.EXTRA_KEY_ALL_TEXT_ANNOTATIONS, allTextAnnotations);
+                intent.putExtra(EXTRA_KEY_MECHANISM_VIEW_ID, mechanismViewId);
+                intent.putExtra(EXTRA_KEY_ANNOTATED_IMAGE_PATH_WITHOUT_STICKERS, annotatedImagePathWithoutStickers);
+                intent.putExtra(EXTRA_KEY_ANNOTATED_IMAGE_PATH_WITH_STICKERS, annotatedImagePathWithStickers);
+                intent.putExtra(EXTRA_KEY_HAS_STICKER_ANNOTATIONS, allStickerAnnotations.size() > 0);
+                intent.putExtra(EXTRA_KEY_ALL_STICKER_ANNOTATIONS, allStickerAnnotations);
+                intent.putExtra(EXTRA_KEY_HAS_TEXT_ANNOTATIONS, allTextAnnotations.size() > 0);
+                intent.putExtra(EXTRA_KEY_ALL_TEXT_ANNOTATIONS, allTextAnnotations);
                 setResult(RESULT_OK, intent);
             }
             super.onBackPressed();
@@ -405,7 +391,7 @@ public class AnnotateImageActivity extends AppCompatActivity implements ColorPic
                     int width = child.getWidth();
                     int height = child.getHeight();
                     float rotation = child.getRotation();
-                    String value = annotationImageResource + Constants.SEPARATOR + getX + Constants.SEPARATOR + getY + Constants.SEPARATOR + width + Constants.SEPARATOR + height + Constants.SEPARATOR + rotation;
+                    String value = annotationImageResource + SEPARATOR + getX + SEPARATOR + getY + SEPARATOR + width + SEPARATOR + height + SEPARATOR + rotation;
                     allStickerAnnotations.put(i, value);
                 }
             }
@@ -431,7 +417,7 @@ public class AnnotateImageActivity extends AppCompatActivity implements ColorPic
                     int annotationImageResource = textAnnotationView.getImageResourceId();
                     float getX = child.getX();
                     float getY = child.getY();
-                    String value = annotationInputText + Constants.SEPARATOR + annotationImageResource + Constants.SEPARATOR + getX + Constants.SEPARATOR + getY;
+                    String value = annotationInputText + SEPARATOR + annotationImageResource + SEPARATOR + getX + SEPARATOR + getY;
                     allTextAnnotations.put(key, value);
                 }
             }
@@ -478,7 +464,7 @@ public class AnnotateImageActivity extends AppCompatActivity implements ColorPic
         }
     }
 
-    private List<View> calculateViewsToRemove(RelativeLayout relativeLayout){
+    private List<View> calculateViewsToRemove(RelativeLayout relativeLayout) {
         int newBitmapWidth = annotateImageView.getBitmapWidth();
         int newBitmapHeight = annotateImageView.getBitmapHeight();
         float fraction = 0.5f;
@@ -519,7 +505,7 @@ public class AnnotateImageActivity extends AppCompatActivity implements ColorPic
         favoriteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showDialog(Favorite);
+                showDialog(DialogType.Favorite);
             }
         });
 
@@ -527,7 +513,7 @@ public class AnnotateImageActivity extends AppCompatActivity implements ColorPic
         quickEditButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showDialog(QuickEdit);
+                showDialog(DialogType.QuickEdit);
             }
         });
 

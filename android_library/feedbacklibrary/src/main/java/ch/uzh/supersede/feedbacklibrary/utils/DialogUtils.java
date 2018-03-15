@@ -11,13 +11,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 
-import ch.uzh.supersede.feedbacklibrary.activities.FeedbackActivity;
-import static ch.uzh.supersede.feedbacklibrary.utils.Constants.FeedbackActivityConstants.*;
-
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import ch.uzh.supersede.feedbacklibrary.activities.FeedbackActivity;
+
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.FeedbackActivityConstants.*;
 
 /**
  * Class with dialogs

@@ -1,4 +1,4 @@
-package ch.uzh.supersede.feedbacklibrary.utils;
+package ch.uzh.supersede.feedbacklibrary.services;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -13,11 +13,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-import ch.uzh.supersede.feedbacklibrary.FeedbackActivity;
 import ch.uzh.supersede.feedbacklibrary.R;
+import ch.uzh.supersede.feedbacklibrary.activities.FeedbackActivity;
 import ch.uzh.supersede.feedbacklibrary.configurations.ConfigurationItem;
 import ch.uzh.supersede.feedbacklibrary.configurations.OrchestratorConfigurationItem;
+import ch.uzh.supersede.feedbacklibrary.utils.DialogUtils;
+import ch.uzh.supersede.feedbacklibrary.utils.Utils;
 import retrofit2.Response;
+
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.FeedbackActivityConstants.*;
 
 public class ActivityService {
     private static ActivityService instance;
@@ -90,8 +94,7 @@ public class ActivityService {
     /**
      * Opens the FeedbackActivity from the feedback library in case if a PULL feedback is triggered with a specific PULL configuration.
      */
-    public void triggerSpecificPullFeedback(@NonNull final String baseURL, @NonNull final Activity activity, final long applicationId, final @NonNull String language,
-                                            final long pullConfigurationId, final @NonNull String intermediateDialogText) {
+    public void triggerSpecificPullFeedback(@NonNull final String baseURL, @NonNull final Activity activity, final long applicationId, final @NonNull String language, final long pullConfigurationId, final @NonNull String intermediateDialogText) {
         FeedbackService svc = FeedbackService.getInstance();
         svc.pingOrchestrator();
         Response<OrchestratorConfigurationItem> response = svc.getConfiguration(language, applicationId);
@@ -144,20 +147,20 @@ public class ActivityService {
 
         Intent intent = new Intent(activity, FeedbackActivity.class);
         String defaultImagePath = Utils.captureScreenshot(activity);
-        intent.putExtra(Constants.DEFAULT_IMAGE_PATH, defaultImagePath);
-        intent.putExtra(Constants.EXTRA_KEY_APPLICATION_ID, applicationId);
-        intent.putExtra(Constants.EXTRA_KEY_BASE_URL, baseURL);
-        intent.putExtra(Constants.EXTRA_KEY_LANGUAGE, language);
+        intent.putExtra(DEFAULT_IMAGE_PATH, defaultImagePath);
+        intent.putExtra(EXTRA_KEY_APPLICATION_ID, applicationId);
+        intent.putExtra(EXTRA_KEY_BASE_URL, baseURL);
+        intent.putExtra(EXTRA_KEY_LANGUAGE, language);
         activity.startActivity(intent);
     }
 
     private Intent createPullFeedbackIntent(String baseURL, Activity activity, String jsonConfiguration, String language, long selectedPullConfigurationIndex) {
         Intent intent = new Intent(activity, activity.getClass());
-        intent.putExtra(Constants.IS_PUSH_STRING, false);
-        intent.putExtra(Constants.JSON_CONFIGURATION_STRING, jsonConfiguration);
-        intent.putExtra(Constants.SELECTED_PULL_CONFIGURATION_INDEX_STRING, selectedPullConfigurationIndex);
-        intent.putExtra(Constants.EXTRA_KEY_BASE_URL, baseURL);
-        intent.putExtra(Constants.EXTRA_KEY_LANGUAGE, language);
+        intent.putExtra(IS_PUSH_STRING, false);
+        intent.putExtra(JSON_CONFIGURATION_STRING, jsonConfiguration);
+        intent.putExtra(SELECTED_PULL_CONFIGURATION_INDEX_STRING, selectedPullConfigurationIndex);
+        intent.putExtra(EXTRA_KEY_BASE_URL, baseURL);
+        intent.putExtra(EXTRA_KEY_LANGUAGE, language);
         return intent;
     }
 }
