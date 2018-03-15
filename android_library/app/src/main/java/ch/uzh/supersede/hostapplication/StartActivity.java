@@ -10,7 +10,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
+import ch.uzh.supersede.feedbacklibrary.activities.FeedbackActivity;
 import ch.uzh.supersede.feedbacklibrary.services.ActivityService;
+import ch.uzh.supersede.feedbacklibrary.services.FeedbackService;
+import ch.uzh.supersede.feedbacklibrary.services.FeedbackService.ConfigurationRequestWrapper;
+import ch.uzh.supersede.feedbacklibrary.services.FeedbackService.ConfigurationRequestWrapper
+        .ConfigurationRequestWrapperBuilder;
 import ch.uzh.supersede.feedbacklibrary.utils.Utils;
 
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.SUPERSEEDE_BASE_URL;
@@ -32,57 +37,47 @@ public class StartActivity extends AbstractBaseActivity {
         super.onCreate(savedInstanceState);
 
         //TODO [jfo]: remove me
-        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
+                .permitAll()
+                .build();
         StrictMode.setThreadPolicy(policy);
 
         setContentView(R.layout.activity_start);
         Toolbar toolbar = getView(R.id.toolbar, Toolbar.class);
         setSupportActionBar(toolbar);
+    }
 
-        Button triggerRandomPullV1 = (Button) findViewById(R.id.trigger_random_pull_config_v1_button);
-        if (triggerRandomPullV1 != null) {
-            triggerRandomPullV1.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    /*
-                     * This method randomly triggers a potential PULL feedback of a specific application.
-                     * If any and which PULL feedback is triggered depends on the likelihood parameter of the each PULL configuration
-                     * (the likelihood is a general configuration parameter of a PULL configuration).
-                     * In this uzh, a PULL feedback from the application with id = 9 might be triggered.
-                     */
-                    ActivityService.getInstance().triggerRandomPullFeedback(SUPERSEEDE_BASE_URL, StartActivity.this, 14L, "en");
-                }
-            });
-        }
-        Button triggerSpecificPullV1Id14 = (Button) findViewById(R.id.trigger_specific_pull_config_v1_id21_button);
-        if (triggerSpecificPullV1Id14 != null) {
-            triggerSpecificPullV1Id14.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    /*
-                     * This method triggers a PULL feedback of a specific application.
-                     * Which PULL feedback is triggered depends on the given PULL configuration id.
-                     * The intermediate dialog text represents the dialog text which is shown to the user if a PULL feedback is triggered.
-                     * If an intermediate dialog is shown depends on the showIntermediateDialog parameter of the PULL configuration.
-                     * (the showIntermediateDialog is a general configuration parameter of a PULL configuration).
-                     * In this uzh, a PULL feedback with id = 21 from the application with id = 9 will be triggered.
-                     */
-                    ActivityService.getInstance().triggerSpecificPullFeedback(SUPERSEEDE_BASE_URL, StartActivity.this, 14L, "en", 21L, "Intermediate dialog text for pull configuration with id = 21");
-                }
-            });
-        }
-
-        Button triggerSpecificPullV1Id15 = (Button) findViewById(R.id.trigger_specific_pull_config_v1_id22_button);
-        if (triggerSpecificPullV1Id15 != null) {
-            triggerSpecificPullV1Id15.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    /*
-                     * In this uzh, a PULL feedback with id = 22 from the application with id = 9 will be triggered.
-                     */
-                    ActivityService.getInstance().triggerSpecificPullFeedback(SUPERSEEDE_BASE_URL, StartActivity.this, 14L, "en", 22L, "Intermediate dialog text for pull configuration with id = 22");
-                }
-            });
+    public void onButtonClicked(View view){
+        switch (view.getId()){
+            case R.id.trigger_random_pull_config_v1_button:{
+                //TODO: Missing Implementation
+                break;
+            }
+            case R.id.trigger_specific_pull_config_v1_id21_button:{
+                ConfigurationRequestWrapper wrapper = new ConfigurationRequestWrapperBuilder(StartActivity.this,FeedbackActivity.class)
+                        .withApplicationId(9)
+                        .withPullConfigurationId(21)
+                        .withUrl(SUPERSEEDE_BASE_URL)
+                        .withLanguage("en")
+                        .withIntermediateDialog("Intermediate dialog text for pull configuration with id = 22")
+                        .build();
+                FeedbackService.getInstance().pullConfigurationAndStartActivity(wrapper);
+                break;
+            }
+            case R.id.trigger_specific_pull_config_v1_id22_button:{
+                ConfigurationRequestWrapper wrapper = new ConfigurationRequestWrapperBuilder(StartActivity.this,FeedbackActivity.class)
+                        .withApplicationId(9)
+                        .withPullConfigurationId(22)
+                        .withUrl(SUPERSEEDE_BASE_URL)
+                        .withLanguage("en")
+                        .withIntermediateDialog("Intermediate dialog text for pull configuration with id = 22")
+                        .build();
+                FeedbackService.getInstance().pullConfigurationAndStartActivity(wrapper);
+                break;
+            }
+            default:{
+                break;
+            }
         }
     }
 
@@ -101,13 +96,17 @@ public class StartActivity extends AbstractBaseActivity {
         }
 
         if (id == R.id.action_single_mechanism_feedback) {
-            boolean result = Utils.checkSinglePermission(this, PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE, null, null, false);
+            boolean result = Utils.checkSinglePermission(this, PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE, Manifest
+                    .permission.READ_EXTERNAL_STORAGE, null, null, false);
             if (result) {
                 /*
                  * The permission is already granted.
-                 * The library takes a screenshot of the current screen automatically and opens the FeedbackActivityConstants from the feedback library.
+                 * The library takes a screenshot of the current screen automatically and opens the
+                 * FeedbackActivityConstants from the feedback library.
                  */
-                ActivityService.getInstance().startActivityWithScreenshotCapture(SUPERSEEDE_BASE_URL, this, 29L, "en");
+                FeedbackService
+                        .getInstance()
+                        .startActivityWithScreenshotCapture(SUPERSEEDE_BASE_URL, this, 29L, "en");
             }
         }
 
@@ -115,14 +114,19 @@ public class StartActivity extends AbstractBaseActivity {
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[]
+            grantResults) {
         if (requestCode == PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE) {
                 /*
-                 * In case the permission was not already granted, a rationale is shown to the user asking for the permission.
+                 * In case the permission was not already granted, a rationale is shown to the user asking for the
+                 * permission.
                  * The result of the request permission, i.e., if the user allowed or denied the permission,
                  * is handled in the onRequestPermissionsResultCase method.
                  */
-            Utils.onRequestPermissionsResultCase(requestCode, grantResults, this, Manifest.permission.READ_EXTERNAL_STORAGE, R.string.supersede_feedbacklibrary_permission_request_title, R.string.supersede_feedbacklibrary_external_storage_permission_text_automatic_screenshot_rationale, 29L, SUPERSEEDE_BASE_URL, "en");
+            Utils.onRequestPermissionsResultCase(requestCode, grantResults, this, Manifest.permission
+                    .READ_EXTERNAL_STORAGE, R.string.supersede_feedbacklibrary_permission_request_title, R.string
+                    .supersede_feedbacklibrary_external_storage_permission_text_automatic_screenshot_rationale, 29L,
+                    SUPERSEEDE_BASE_URL, "en");
         }
     }
 }

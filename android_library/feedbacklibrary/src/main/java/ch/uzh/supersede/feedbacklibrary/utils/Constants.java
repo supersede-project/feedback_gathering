@@ -7,7 +7,7 @@ public class Constants {
 
     public static final String PATH_DELIMITER = "/";
     public static final String SUPERSEEDE_BASE_URL = "https://platform.supersede.eu:8443/";
-
+    public static int OK_RESPONSE = 200;
     public static class FeedbackActivityConstants {
         private FeedbackActivityConstants() {
         }
