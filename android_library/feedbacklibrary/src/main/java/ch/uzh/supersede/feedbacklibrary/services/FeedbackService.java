@@ -14,10 +14,12 @@ import java.util.List;
 import java.util.Map;
 
 import ch.uzh.supersede.feedbacklibrary.API.IFeedbackAPI;
+import ch.uzh.supersede.feedbacklibrary.BuildConfig;
 import ch.uzh.supersede.feedbacklibrary.R;
 import ch.uzh.supersede.feedbacklibrary.activities.FeedbackActivity;
 import ch.uzh.supersede.feedbacklibrary.configurations.ConfigurationItem;
 import ch.uzh.supersede.feedbacklibrary.configurations.OrchestratorConfigurationItem;
+import ch.uzh.supersede.feedbacklibrary.stubs.OrchestratorStub;
 import ch.uzh.supersede.feedbacklibrary.utils.DialogUtils;
 import ch.uzh.supersede.feedbacklibrary.utils.Utils;
 import okhttp3.MultipartBody;
@@ -163,6 +165,7 @@ public class FeedbackService {
                         .setLenient()
                         .create()
                         .toJson(configuration);
+                //Notabene, hier wird die ganze Konfiguration verwendet, nicht Bruchstuecke..
 
                 Intent intent = createFeedbackIntentFromPull(configurationRequestWrapper.getUrl(),
                         configurationRequestWrapper.getStartingActivity(),
@@ -183,9 +186,22 @@ public class FeedbackService {
                     d.show(configurationRequestWrapper.getStartingActivity().getFragmentManager(), "feedbackPopupDialog");
                 }
             } else {
-                DialogUtils.showInformationDialog(configurationRequestWrapper.getStartingActivity(), new
-                        String[]{configurationRequestWrapper.getStartingActivity().getResources().getString(
-                                R.string.supersede_feedbacklibrary_feedback_application_unavailable_text)},true);
+                if (BuildConfig.DEBUG) {
+                    Intent intent = createFeedbackIntentFromPull(configurationRequestWrapper.getUrl(),
+                            configurationRequestWrapper.getStartingActivity(),
+                            configurationRequestWrapper.getActivityToStart(),
+                            OrchestratorStub.getJsonString(),
+                            configurationRequestWrapper.getLanguage(),
+                            2);
+
+                    configurationRequestWrapper
+                            .getStartingActivity()
+                            .startActivity(intent);
+                } else {
+                    DialogUtils.showInformationDialog(configurationRequestWrapper.getStartingActivity(), new String[]{configurationRequestWrapper
+                            .getStartingActivity()
+                            .getResources().getString(R.string.supersede_feedbacklibrary_feedback_application_unavailable_text)}, true);
+                }
             }
         }
 
