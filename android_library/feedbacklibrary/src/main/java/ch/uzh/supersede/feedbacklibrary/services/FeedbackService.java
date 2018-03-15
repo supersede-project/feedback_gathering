@@ -130,11 +130,6 @@ public class FeedbackService {
         }
 
         @Override
-        protected void onProgressUpdate(Integer... progress) {
-
-        }
-
-        @Override
         protected void onPostExecute(Response<OrchestratorConfigurationItem> response) {
             if (response == null || response.body() == null) {
                 return;
@@ -156,16 +151,12 @@ public class FeedbackService {
                 }
             }
 
-            if (selectedPullConfigurationIndex != -1) {
+            if (selectedPullConfigurationIndex != -1 && selectedConfigurationItem != null) {
                 // If no "showIntermediateDialog" is provided, show it
                 boolean showIntermediateDialog = true;
                 for (Map<String, Object> parameter : selectedConfigurationItem.getGeneralConfigurationItem().getParameters()) {
                     String key = (String) parameter.get("key");
-                    // Intermediate dialog
-                    if (key.equals("showIntermediateDialog")) {
-                        //TODO: [mbo] Refactor this casting-mess
-                        showIntermediateDialog = (Utils.intToBool(((Double) parameter.get("value")).intValue()));
-                    }
+                    showIntermediateDialog = isShowIntermediateDialog(showIntermediateDialog, parameter, key);
                 }
 
                 String jsonConfiguration = new GsonBuilder()
@@ -196,6 +187,14 @@ public class FeedbackService {
                         String[]{configurationRequestWrapper.getStartingActivity().getResources().getString(
                                 R.string.supersede_feedbacklibrary_feedback_application_unavailable_text)},true);
             }
+        }
+
+        private boolean isShowIntermediateDialog(boolean showIntermediateDialog, Map<String, Object> parameter, String key) {
+            if (key.equals("showIntermediateDialog")) {
+                //TODO: [mbo] Refactor this casting-mess
+                showIntermediateDialog = (Utils.intToBool(((Double) parameter.get("value")).intValue()));
+            }
+            return showIntermediateDialog;
         }
     }
 
@@ -301,16 +300,6 @@ public class FeedbackService {
                 }
                 return false;
             }
-        }
-
-        public ConfigurationRequestWrapper(String url, String language, Activity activity, long applicationId, long
-                pullConfigurationId) {
-            this.url = url;
-            this.language = language;
-            this.startingActivity = startingActivity;
-            this.activityToStart = activityToStart;
-            this.applicationId = applicationId;
-            this.pullConfigurationId = pullConfigurationId;
         }
 
         public String getUrl() {
