@@ -15,13 +15,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import ch.uzh.supersede.feedbacklibrary.FeedbackActivity;
+import ch.uzh.supersede.feedbacklibrary.activities.FeedbackActivity;
 
-import static ch.uzh.supersede.feedbacklibrary.utils.Constants.FeedbackActivityConstants.EXTRA_KEY_BASE_URL;
-import static ch.uzh.supersede.feedbacklibrary.utils.Constants.FeedbackActivityConstants.EXTRA_KEY_LANGUAGE;
-import static ch.uzh.supersede.feedbacklibrary.utils.Constants.FeedbackActivityConstants.IS_PUSH_STRING;
-import static ch.uzh.supersede.feedbacklibrary.utils.Constants.FeedbackActivityConstants.JSON_CONFIGURATION_STRING;
-import static ch.uzh.supersede.feedbacklibrary.utils.Constants.FeedbackActivityConstants.SELECTED_PULL_CONFIGURATION_INDEX_STRING;
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.FeedbackActivityConstants.*;
 
 /**
  * Class with dialogs

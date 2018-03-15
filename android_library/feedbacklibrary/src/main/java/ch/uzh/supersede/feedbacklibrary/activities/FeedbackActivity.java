@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ch.uzh.supersede.feedbacklibrary;
+package ch.uzh.supersede.feedbacklibrary.activities;
 
 import android.Manifest;
 import android.app.Activity;
@@ -78,9 +78,7 @@ import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 
 import ch.uzh.supersede.feedbacklibrary.API.IFeedbackAPI;
-import ch.uzh.supersede.feedbacklibrary.activities.AbstractBaseActivity;
-import ch.uzh.supersede.feedbacklibrary.activities.AnnotateImageActivity;
-import ch.uzh.supersede.feedbacklibrary.activities.HelpActivity;
+import ch.uzh.supersede.feedbacklibrary.R;
 import ch.uzh.supersede.feedbacklibrary.configurations.Configuration;
 import ch.uzh.supersede.feedbacklibrary.configurations.OrchestratorConfiguration;
 import ch.uzh.supersede.feedbacklibrary.configurations.OrchestratorConfigurationItem;
@@ -88,9 +86,8 @@ import ch.uzh.supersede.feedbacklibrary.feedbacks.AudioFeedback;
 import ch.uzh.supersede.feedbacklibrary.feedbacks.Feedback;
 import ch.uzh.supersede.feedbacklibrary.feedbacks.ScreenshotFeedback;
 import ch.uzh.supersede.feedbacklibrary.models.Mechanism;
-import ch.uzh.supersede.feedbacklibrary.utils.Constants;
+import ch.uzh.supersede.feedbacklibrary.services.FeedbackService;
 import ch.uzh.supersede.feedbacklibrary.utils.DialogUtils;
-import ch.uzh.supersede.feedbacklibrary.utils.FeedbackService;
 import ch.uzh.supersede.feedbacklibrary.utils.Utils;
 import ch.uzh.supersede.feedbacklibrary.views.AudioMechanismView;
 import ch.uzh.supersede.feedbacklibrary.views.CategoryMechanismView;
@@ -108,6 +105,8 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.FeedbackActivityConstants.*;
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.PATH_DELIMITER;
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.ScreenshotConstants.*;
 
 /**
  * The main activity where the feedback mechanisms are displayed.
@@ -311,7 +310,9 @@ public class FeedbackActivity extends AbstractBaseActivity implements Screenshot
         linearLayout.addView(view);
 
         emailEditText = (EditText) view.findViewById(R.id.sbe_email_et);
-        if (!TextUtils.isEmpty(savedEmail)) emailEditText.setText(savedEmail);
+        if (!TextUtils.isEmpty(savedEmail)) {
+            emailEditText.setText(savedEmail);
+        }
 
         getCopyCheckBox = (CheckBox) view.findViewById(R.id.sbe_get_copy_cb);
 
@@ -349,7 +350,7 @@ public class FeedbackActivity extends AbstractBaseActivity implements Screenshot
 
     @SuppressWarnings("unchecked")
     private void annotateMechanismView(Intent data) {
-        int mechanismViewId = data.getIntExtra(Constants.EXTRA_KEY_MECHANISM_VIEW_ID, -1);
+        int mechanismViewId = data.getIntExtra(EXTRA_KEY_MECHANISM_VIEW_ID, -1);
 
         if (mechanismViewId == -1) {
             Log.e(TAG, "Failed to annotate the image. No mechanismViewID provided");
@@ -359,16 +360,16 @@ public class FeedbackActivity extends AbstractBaseActivity implements Screenshot
         ScreenshotMechanismView screenshotMechanismView = (ScreenshotMechanismView) mechanismViews.get(mechanismViewId);
 
         // Sticker annotations
-        if (data.getBooleanExtra(Constants.EXTRA_KEY_HAS_STICKER_ANNOTATIONS, false)) {
-            screenshotMechanismView.setAllStickerAnnotations((HashMap<Integer, String>) data.getSerializableExtra(Constants.EXTRA_KEY_ALL_STICKER_ANNOTATIONS));
+        if (data.getBooleanExtra(EXTRA_KEY_HAS_STICKER_ANNOTATIONS, false)) {
+            screenshotMechanismView.setAllStickerAnnotations((HashMap<Integer, String>) data.getSerializableExtra(EXTRA_KEY_ALL_STICKER_ANNOTATIONS));
         }
         // Text annotations
-        if (data.getBooleanExtra(Constants.EXTRA_KEY_HAS_TEXT_ANNOTATIONS, false)) {
-            screenshotMechanismView.setAllTextAnnotations((HashMap<Integer, String>) data.getSerializableExtra(Constants.EXTRA_KEY_ALL_TEXT_ANNOTATIONS));
+        if (data.getBooleanExtra(EXTRA_KEY_HAS_TEXT_ANNOTATIONS, false)) {
+            screenshotMechanismView.setAllTextAnnotations((HashMap<Integer, String>) data.getSerializableExtra(EXTRA_KEY_ALL_TEXT_ANNOTATIONS));
         }
 
         // Annotated image with stickers
-        String tempPathWithStickers = data.getStringExtra(Constants.EXTRA_KEY_ANNOTATED_IMAGE_PATH_WITH_STICKERS) + Constants.PATH_DELIMITER + mechanismViewId + ANNOTATED_IMAGE_NAME_WITH_STICKERS;
+        String tempPathWithStickers = data.getStringExtra(EXTRA_KEY_ANNOTATED_IMAGE_PATH_WITH_STICKERS) + PATH_DELIMITER + mechanismViewId + ANNOTATED_IMAGE_NAME_WITH_STICKERS;
         screenshotMechanismView.setAnnotatedImagePath(tempPathWithStickers);
         screenshotMechanismView.setPicturePath(tempPathWithStickers);
         Bitmap annotatedBitmap = Utils.loadImageFromStorage(tempPathWithStickers);
@@ -378,10 +379,10 @@ public class FeedbackActivity extends AbstractBaseActivity implements Screenshot
         }
 
         // Annotated image without stickers
-        if (data.getStringExtra(Constants.EXTRA_KEY_ANNOTATED_IMAGE_PATH_WITHOUT_STICKERS) == null) {
+        if (data.getStringExtra(EXTRA_KEY_ANNOTATED_IMAGE_PATH_WITHOUT_STICKERS) == null) {
             screenshotMechanismView.setPicturePathWithoutStickers(null);
         } else {
-            String tempPathWithoutStickers = data.getStringExtra(Constants.EXTRA_KEY_ANNOTATED_IMAGE_PATH_WITHOUT_STICKERS) + Constants.PATH_DELIMITER + mechanismViewId + ANNOTATED_IMAGE_NAME_WITHOUT_STICKERS;
+            String tempPathWithoutStickers = data.getStringExtra(EXTRA_KEY_ANNOTATED_IMAGE_PATH_WITHOUT_STICKERS) + PATH_DELIMITER + mechanismViewId + ANNOTATED_IMAGE_NAME_WITHOUT_STICKERS;
             screenshotMechanismView.setPicturePathWithoutStickers(tempPathWithoutStickers);
         }
     }
@@ -439,18 +440,18 @@ public class FeedbackActivity extends AbstractBaseActivity implements Screenshot
     public void onImageAnnotate(ScreenshotMechanismView screenshotMechanismView) {
         Intent intent = new Intent(this, AnnotateImageActivity.class);
         if (screenshotMechanismView.getAllStickerAnnotations() != null && !screenshotMechanismView.getAllStickerAnnotations().isEmpty()) {
-            intent.putExtra(Constants.EXTRA_KEY_HAS_STICKER_ANNOTATIONS, true);
-            intent.putExtra(Constants.EXTRA_KEY_ALL_STICKER_ANNOTATIONS, screenshotMechanismView.getAllStickerAnnotations());
+            intent.putExtra(EXTRA_KEY_HAS_STICKER_ANNOTATIONS, true);
+            intent.putExtra(EXTRA_KEY_ALL_STICKER_ANNOTATIONS, screenshotMechanismView.getAllStickerAnnotations());
         }
         if (screenshotMechanismView.getAllTextAnnotations() != null && !screenshotMechanismView.getAllTextAnnotations().isEmpty()) {
-            intent.putExtra(Constants.EXTRA_KEY_HAS_TEXT_ANNOTATIONS, true);
-            intent.putExtra(Constants.EXTRA_KEY_ALL_TEXT_ANNOTATIONS, screenshotMechanismView.getAllTextAnnotations());
+            intent.putExtra(EXTRA_KEY_HAS_TEXT_ANNOTATIONS, true);
+            intent.putExtra(EXTRA_KEY_ALL_TEXT_ANNOTATIONS, screenshotMechanismView.getAllTextAnnotations());
         }
 
         String path = screenshotMechanismView.getPicturePathWithoutStickers() == null ? screenshotMechanismView.getPicturePath() : screenshotMechanismView.getPicturePathWithoutStickers();
-        intent.putExtra(Constants.EXTRA_KEY_MECHANISM_VIEW_ID, screenshotMechanismView.getMechanismViewIndex());
-        intent.putExtra(Constants.EXTRA_KEY_IMAGE_PATCH, path);
-        intent.putExtra(Constants.TEXT_ANNOTATION_COUNTER_MAXIMUM, screenshotMechanismView.getMaxNumberTextAnnotation());
+        intent.putExtra(EXTRA_KEY_MECHANISM_VIEW_ID, screenshotMechanismView.getMechanismViewIndex());
+        intent.putExtra(EXTRA_KEY_IMAGE_PATCH, path);
+        intent.putExtra(TEXT_ANNOTATION_COUNTER_MAXIMUM, screenshotMechanismView.getMaxNumberTextAnnotation());
         startActivityForResult(intent, REQUEST_ANNOTATE);
     }
 
@@ -524,9 +525,7 @@ public class FeedbackActivity extends AbstractBaseActivity implements Screenshot
                 }
             } else {
                 // The user denied the permission
-                onRequestPermissionsResultDenied(requestCode, Manifest.permission.READ_EXTERNAL_STORAGE,
-                        R.string.supersede_feedbacklibrary_external_storage_permission_text,
-                        getResources().getString(R.string.supersede_feedbacklibrary_external_storage_permission_text_instructions));
+                onRequestPermissionsResultDenied(requestCode, Manifest.permission.READ_EXTERNAL_STORAGE, R.string.supersede_feedbacklibrary_external_storage_permission_text, getResources().getString(R.string.supersede_feedbacklibrary_external_storage_permission_text_instructions));
             }
         } else if (requestCode == PERMISSIONS_REQUEST_RECORD_AUDIO) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -534,15 +533,12 @@ public class FeedbackActivity extends AbstractBaseActivity implements Screenshot
                 toast.show();
             } else {
                 // The user denied the permission
-                onRequestPermissionsResultDenied(requestCode, Manifest.permission.RECORD_AUDIO,
-                        R.string.supersede_feedbacklibrary_record_audio_permission_text,
-                        getResources().getString(R.string.supersede_feedbacklibrary_record_audio_permission_text_instructions));
+                onRequestPermissionsResultDenied(requestCode, Manifest.permission.RECORD_AUDIO, R.string.supersede_feedbacklibrary_record_audio_permission_text, getResources().getString(R.string.supersede_feedbacklibrary_record_audio_permission_text_instructions));
             }
         }
     }
 
-    private void onRequestPermissionsResultDenied(final int requestCode,
-                                                  @NonNull final String permission, int dialogMessage, @NonNull String dialogInstructions) {
+    private void onRequestPermissionsResultDenied(final int requestCode, @NonNull final String permission, int dialogMessage, @NonNull String dialogInstructions) {
         if (ActivityCompat.shouldShowRequestPermissionRationale(this, permission)) {
             // The user denied without checking 'Never ask again'. Show again the rationale
             AlertDialog.Builder alertBuilder = new AlertDialog.Builder(this);
@@ -715,8 +711,9 @@ public class FeedbackActivity extends AbstractBaseActivity implements Screenshot
             email = emailEditText.getText().toString();
             if (Utils.isEmailValid(email)) {
                 sendCopyByEmail();
-            } else
+            } else {
                 DialogUtils.showInformationDialog(this, new String[]{getResources().getString(R.string.invalid_email)}, true);
+            }
         }
     }
 
@@ -736,18 +733,16 @@ public class FeedbackActivity extends AbstractBaseActivity implements Screenshot
                 props.put("mail.smtp.host", "smtp.gmail.com");
                 props.put("mail.smtp.port", "587");
 
-                Session session = Session.getInstance(props,
-                        new javax.mail.Authenticator() {
-                            @Override
-                            protected PasswordAuthentication getPasswordAuthentication() {
-                                return new PasswordAuthentication(username, password);
-                            }
-                        });
+                Session session = Session.getInstance(props, new javax.mail.Authenticator() {
+                    @Override
+                    protected PasswordAuthentication getPasswordAuthentication() {
+                        return new PasswordAuthentication(username, password);
+                    }
+                });
                 try {
                     Message message = new MimeMessage(session);
                     message.setFrom(new InternetAddress(username));
-                    message.setRecipients(Message.RecipientType.TO,
-                            InternetAddress.parse(email));
+                    message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(email));
                     message.setSubject("Copy of your feedback");
 
                     BodyPart messageBodyPart = new MimeBodyPart();
@@ -757,7 +752,9 @@ public class FeedbackActivity extends AbstractBaseActivity implements Screenshot
                     CategoryMechanismView categoryMechanismView = (CategoryMechanismView) mechanismViews.get(4);
                     String category = categoryMechanismView.getCustomSpinner().getSelectedItem().toString();
 
-                    if (category.equals("My feedback is about…")) category = "-";
+                    if (category.equals("My feedback is about…")) {
+                        category = "-";
+                    }
 
                     RatingMechanismView ratingMechanismView = (RatingMechanismView) mechanismViews.get(3);
                     String rating = String.valueOf(ratingMechanismView.getRating());
@@ -817,8 +814,7 @@ public class FeedbackActivity extends AbstractBaseActivity implements Screenshot
     }
 
     private boolean isOnline() {
-        ConnectivityManager cm =
-                (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo netInfo = null;
         if (cm != null) {
             netInfo = cm.getActiveNetworkInfo();

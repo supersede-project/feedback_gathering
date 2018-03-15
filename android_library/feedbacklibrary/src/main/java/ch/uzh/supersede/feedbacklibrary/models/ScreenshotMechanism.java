@@ -1,14 +1,14 @@
 package ch.uzh.supersede.feedbacklibrary.models;
 
 import android.util.Log;
-import android.util.SparseArray;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import ch.uzh.supersede.feedbacklibrary.configurations.MechanismConfigurationItem;
-import ch.uzh.supersede.feedbacklibrary.utils.Constants;
+
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.ScreenshotConstants.*;
 
 /**
  * Screenshot mechanism model
@@ -34,7 +34,7 @@ public class ScreenshotMechanism extends Mechanism {
         if (getAllTextAnnotations() != null) {
             Map<Integer, String> returnValue = new HashMap<>();
             for (Map.Entry<Integer, String> entry : getAllTextAnnotations().entrySet()) {
-                String split[] = entry.getValue().split(Constants.SEPARATOR);
+                String split[] = entry.getValue().split(SEPARATOR);
                 if (split.length > 0) {
                     returnValue.put(entry.getKey(), split[0]);
                 } else {
