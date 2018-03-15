@@ -19,6 +19,14 @@ import ch.uzh.supersede.feedbacklibrary.configurations.ConfigurationItem;
 import ch.uzh.supersede.feedbacklibrary.configurations.OrchestratorConfigurationItem;
 import retrofit2.Response;
 
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.FeedbackActivityConstants.DEFAULT_IMAGE_PATH;
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.FeedbackActivityConstants.EXTRA_KEY_APPLICATION_ID;
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.FeedbackActivityConstants.EXTRA_KEY_BASE_URL;
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.FeedbackActivityConstants.EXTRA_KEY_LANGUAGE;
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.FeedbackActivityConstants.IS_PUSH_STRING;
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.FeedbackActivityConstants.JSON_CONFIGURATION_STRING;
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.FeedbackActivityConstants.SELECTED_PULL_CONFIGURATION_INDEX_STRING;
+
 public class ActivityService {
     private static ActivityService instance;
 
@@ -144,20 +152,20 @@ public class ActivityService {
 
         Intent intent = new Intent(activity, FeedbackActivity.class);
         String defaultImagePath = Utils.captureScreenshot(activity);
-        intent.putExtra(Constants.DEFAULT_IMAGE_PATH, defaultImagePath);
-        intent.putExtra(Constants.EXTRA_KEY_APPLICATION_ID, applicationId);
-        intent.putExtra(Constants.EXTRA_KEY_BASE_URL, baseURL);
-        intent.putExtra(Constants.EXTRA_KEY_LANGUAGE, language);
+        intent.putExtra(DEFAULT_IMAGE_PATH, defaultImagePath);
+        intent.putExtra(EXTRA_KEY_APPLICATION_ID, applicationId);
+        intent.putExtra(EXTRA_KEY_BASE_URL, baseURL);
+        intent.putExtra(EXTRA_KEY_LANGUAGE, language);
         activity.startActivity(intent);
     }
 
     private Intent createPullFeedbackIntent(String baseURL, Activity activity, String jsonConfiguration, String language, long selectedPullConfigurationIndex) {
         Intent intent = new Intent(activity, activity.getClass());
-        intent.putExtra(Constants.IS_PUSH_STRING, false);
-        intent.putExtra(Constants.JSON_CONFIGURATION_STRING, jsonConfiguration);
-        intent.putExtra(Constants.SELECTED_PULL_CONFIGURATION_INDEX_STRING, selectedPullConfigurationIndex);
-        intent.putExtra(Constants.EXTRA_KEY_BASE_URL, baseURL);
-        intent.putExtra(Constants.EXTRA_KEY_LANGUAGE, language);
+        intent.putExtra(IS_PUSH_STRING, false);
+        intent.putExtra(JSON_CONFIGURATION_STRING, jsonConfiguration);
+        intent.putExtra(SELECTED_PULL_CONFIGURATION_INDEX_STRING, selectedPullConfigurationIndex);
+        intent.putExtra(EXTRA_KEY_BASE_URL, baseURL);
+        intent.putExtra(EXTRA_KEY_LANGUAGE, language);
         return intent;
     }
 }

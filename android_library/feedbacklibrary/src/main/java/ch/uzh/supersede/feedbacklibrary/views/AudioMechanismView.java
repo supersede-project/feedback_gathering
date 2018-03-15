@@ -24,9 +24,9 @@ import ch.uzh.supersede.feedbacklibrary.R;
 import ch.uzh.supersede.feedbacklibrary.models.AudioMechanism;
 import ch.uzh.supersede.feedbacklibrary.models.Mechanism;
 import ch.uzh.supersede.feedbacklibrary.utils.Utils;
+
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.*;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.FeedbackActivityConstants.*;
-
-
 
 
 /**
@@ -164,7 +164,7 @@ public class AudioMechanismView extends MechanismView implements SeekBar.OnSeekB
                 currentRecordDuration = 1L;
                 recordIndicator.setVisibility(View.INVISIBLE);
 
-                if(mediaRecorder != null) {
+                if (mediaRecorder != null) {
                     mediaRecorder.stop();
                     mediaRecorder.reset();
                     mediaRecorder = null;
@@ -199,12 +199,10 @@ public class AudioMechanismView extends MechanismView implements SeekBar.OnSeekB
                 if (!isPaused && !isPlaying && !isRecording) {
                     startPlaying();
                     playButton.setImageResource(R.drawable.ic_pause_black_48dp);
-                }
-                else if (isPaused && !isPlaying && !isRecording && mediaPlayer != null && !mediaPlayer.isPlaying()) {
+                } else if (isPaused && !isPlaying && !isRecording && mediaPlayer != null && !mediaPlayer.isPlaying()) {
                     resumePlaying();
 
-                }
-                else if (!isPaused && isPlaying && mediaPlayer != null){
+                } else if (!isPaused && isPlaying && mediaPlayer != null) {
                     pausePlaying();
                     playButton.setImageResource(R.drawable.ic_play_arrow_black_48dp);
                 }
@@ -221,8 +219,8 @@ public class AudioMechanismView extends MechanismView implements SeekBar.OnSeekB
                     removeUpdateSeekBarTaskRecorder();
 
                     // Output file
-                    File audioDirectory = applicationContext.getDir(Constants.AUDIO_DIR, Context.MODE_PRIVATE);
-                    tempAudioFilePath = audioDirectory.getAbsolutePath() + "/" + audioMechanism.getId() + Constants.AUDIO_FILENAME + "." + Constants.AUDIO_EXTENSION;
+                    File audioDirectory = applicationContext.getDir(AUDIO_DIR, Context.MODE_PRIVATE);
+                    tempAudioFilePath = audioDirectory.getAbsolutePath() + "/" + audioMechanism.getId() + AUDIO_FILENAME + "." + AUDIO_EXTENSION;
 
                     // Setup recorder
                     mediaRecorder = new MediaRecorder();
@@ -312,8 +310,8 @@ public class AudioMechanismView extends MechanismView implements SeekBar.OnSeekB
     private void clearFocus() {
         if (activity.getCurrentFocus() != null) {
             activity.getCurrentFocus().clearFocus();
-            InputMethodManager imm = (InputMethodManager)activity.getSystemService(Context.INPUT_METHOD_SERVICE);
-            if(activity.getCurrentFocus() != null) {
+            InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
+            if (activity.getCurrentFocus() != null) {
                 imm.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
             }
         }

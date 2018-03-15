@@ -47,17 +47,9 @@ import java.util.Calendar;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import ch.uzh.supersede.feedbacklibrary.API.feedbackAPI;
+import ch.uzh.supersede.feedbacklibrary.FeedbackActivity;
 import ch.uzh.supersede.feedbacklibrary.R;
-import ch.uzh.supersede.feedbacklibrary.activities.FeedbackActivity;
-import ch.uzh.supersede.feedbacklibrary.configurations.ConfigurationItem;
-import ch.uzh.supersede.feedbacklibrary.configurations.OrchestratorConfigurationItem;
-import okhttp3.ResponseBody;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
+
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.FeedbackActivityConstants.*;
 
 /**
@@ -218,7 +210,7 @@ public class Utils {
         intent.putExtra(EXTRA_KEY_LANGUAGE, language);
         if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             // Permission was already granted. Taking a screenshot of the current screen automatically and open the FeedbackActivityConstants from the feedback library
-            startActivity(activity, intent, baseURL, true);
+            startActivity(activity, intent, true);
         } else {
             if (ActivityCompat.shouldShowRequestPermissionRationale(activity, permission)) {
                 // The user denied the permission without checking 'Never ask again'. Show the rationale
@@ -240,7 +232,7 @@ public class Utils {
                 alertBuilder.show();
             } else {
                 // Open the FeedbackActivityConstants from the feedback library without automatically taking a screenshot
-                startActivity(activity, intent, baseURL, false);
+                startActivity(activity, intent, false);
             }
         }
     }
@@ -347,8 +339,8 @@ public class Utils {
             return true;
         } catch (IOException e) {
             Log.e(TAG, "Failed to write the content to the file", e);
-        }finally {
-            if (out != null){
+        } finally {
+            if (out != null) {
                 try {
                     out.close();
                 } catch (IOException e) {
@@ -395,7 +387,7 @@ public class Utils {
         FeedbackService.getInstance().pingOrchestrator();
         if (isCapturingScreenshot) {
             String defaultImagePath = captureScreenshot(activity);
-            intent.putExtra(Constants.DEFAULT_IMAGE_PATH, defaultImagePath);
+            intent.putExtra(DEFAULT_IMAGE_PATH, defaultImagePath);
         }
         activity.startActivity(intent);
     }

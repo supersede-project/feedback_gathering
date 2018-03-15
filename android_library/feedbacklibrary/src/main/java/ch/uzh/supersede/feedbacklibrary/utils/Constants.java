@@ -2,7 +2,7 @@ package ch.uzh.supersede.feedbacklibrary.utils;
 
 public class Constants {
 
-    private Constants(){
+    private Constants() {
     }
 
     public static final String PATH_DELIMITER = "/";

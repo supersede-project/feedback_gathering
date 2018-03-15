@@ -77,9 +77,10 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 
-import ch.uzh.supersede.feedbacklibrary.API.feedbackAPI;
-import ch.uzh.supersede.feedbacklibrary.R;
 import ch.uzh.supersede.feedbacklibrary.API.IFeedbackAPI;
+import ch.uzh.supersede.feedbacklibrary.activities.AbstractBaseActivity;
+import ch.uzh.supersede.feedbacklibrary.activities.AnnotateImageActivity;
+import ch.uzh.supersede.feedbacklibrary.activities.HelpActivity;
 import ch.uzh.supersede.feedbacklibrary.configurations.Configuration;
 import ch.uzh.supersede.feedbacklibrary.configurations.OrchestratorConfiguration;
 import ch.uzh.supersede.feedbacklibrary.configurations.OrchestratorConfigurationItem;
@@ -100,7 +101,6 @@ import ch.uzh.supersede.feedbacklibrary.views.TextMechanismView;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -108,13 +108,12 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.FeedbackActivityConstants.*;
-import static ch.uzh.supersede.feedbacklibrary.utils.Constants.*;
 
 /**
  * The main activity where the feedback mechanisms are displayed.
  */
 public class FeedbackActivity extends AbstractBaseActivity implements ScreenshotMechanismView.OnImageChangedListener, AudioMechanismView.MultipleAudioMechanismsListener {
-    private feedbackAPI fbAPI;
+    private IFeedbackAPI feedbackAPI;
     // Orchestrator configuration fetched from the orchestrator
     private OrchestratorConfigurationItem orchestratorConfigurationItem;
     // Orchestrator configuration initialized from the previously fetched orchestrator configuration
@@ -224,7 +223,7 @@ public class FeedbackActivity extends AbstractBaseActivity implements Screenshot
                         gsonBuilder.setLenient();
                         Gson gson = gsonBuilder.create();
                         String jsonString = gson.toJson(orchestratorConfigurationItem);
-                        Utils.saveStringContentToInternalStorage(getApplicationContext(), Constants.CONFIGURATION_DIR, Constants.JSON_CONFIGURATION_FILE_NAME, jsonString, MODE_PRIVATE);
+                        Utils.saveStringContentToInternalStorage(getApplicationContext(), CONFIGURATION_DIR, JSON_CONFIGURATION_FILE_NAME, jsonString, MODE_PRIVATE);
                         initModel();
                         initView();
                         closeProgressDialog();
@@ -252,10 +251,10 @@ public class FeedbackActivity extends AbstractBaseActivity implements Screenshot
     private void initView() {
         mechanismViews = new ArrayList<>();
         LayoutInflater layoutInflater = LayoutInflater.from(this);
-        LinearLayout linearLayout = getView(R.id.supersede_feedbacklibrary_feedback_activity_layout,LinearLayout.class);
+        LinearLayout linearLayout = getView(R.id.supersede_feedbacklibrary_feedback_activity_layout, LinearLayout.class);
 
         if (linearLayout != null) {
-            for (Mechanism mechanism : allMechanisms) {
+            for (Mechanism mechanism : mechanisms) {
                 if (mechanism != null && mechanism.isActive()) {
                     resolveMechanism(layoutInflater, linearLayout, mechanism);
                 }
@@ -285,7 +284,7 @@ public class FeedbackActivity extends AbstractBaseActivity implements Screenshot
                 view = mechanismView.getEnclosingLayout();
                 break;
             case Mechanism.SCREENSHOT_TYPE:
-                mechanismView = new ScreenshotMechanismView(layoutInflater, mechanism, this, allMechanismViews.size(), defaultImagePath);
+                mechanismView = new ScreenshotMechanismView(layoutInflater, mechanism, this, mechanismViews.size(), defaultImagePath);
                 view = mechanismView.getEnclosingLayout();
                 break;
             case Mechanism.TEXT_TYPE:
@@ -298,7 +297,7 @@ public class FeedbackActivity extends AbstractBaseActivity implements Screenshot
         }
 
         if (mechanismView != null && view != null) {
-            allMechanismViews.add(mechanismView);
+            mechanismViews.add(mechanismView);
             linearLayout.addView(view);
         }
     }
@@ -369,7 +368,7 @@ public class FeedbackActivity extends AbstractBaseActivity implements Screenshot
         }
 
         // Annotated image with stickers
-        String tempPathWithStickers = data.getStringExtra(Constants.EXTRA_KEY_ANNOTATED_IMAGE_PATH_WITH_STICKERS) + Constants.PATH_DELIMITER + mechanismViewId + Constants.ANNOTATED_IMAGE_NAME_WITH_STICKERS;
+        String tempPathWithStickers = data.getStringExtra(Constants.EXTRA_KEY_ANNOTATED_IMAGE_PATH_WITH_STICKERS) + Constants.PATH_DELIMITER + mechanismViewId + ANNOTATED_IMAGE_NAME_WITH_STICKERS;
         screenshotMechanismView.setAnnotatedImagePath(tempPathWithStickers);
         screenshotMechanismView.setPicturePath(tempPathWithStickers);
         Bitmap annotatedBitmap = Utils.loadImageFromStorage(tempPathWithStickers);
@@ -382,7 +381,7 @@ public class FeedbackActivity extends AbstractBaseActivity implements Screenshot
         if (data.getStringExtra(Constants.EXTRA_KEY_ANNOTATED_IMAGE_PATH_WITHOUT_STICKERS) == null) {
             screenshotMechanismView.setPicturePathWithoutStickers(null);
         } else {
-            String tempPathWithoutStickers = data.getStringExtra(Constants.EXTRA_KEY_ANNOTATED_IMAGE_PATH_WITHOUT_STICKERS) + Constants.PATH_DELIMITER + mechanismViewId + Constants.ANNOTATED_IMAGE_NAME_WITHOUT_STICKERS;
+            String tempPathWithoutStickers = data.getStringExtra(Constants.EXTRA_KEY_ANNOTATED_IMAGE_PATH_WITHOUT_STICKERS) + Constants.PATH_DELIMITER + mechanismViewId + ANNOTATED_IMAGE_NAME_WITHOUT_STICKERS;
             screenshotMechanismView.setPicturePathWithoutStickers(tempPathWithoutStickers);
         }
     }
@@ -406,22 +405,22 @@ public class FeedbackActivity extends AbstractBaseActivity implements Screenshot
 
         Intent intent = getIntent();
         // Get the default image path for the screenshot if present
-        defaultImagePath = intent.getStringExtra(Constants.DEFAULT_IMAGE_PATH);
+        defaultImagePath = intent.getStringExtra(DEFAULT_IMAGE_PATH);
         // Get the configuration type
-        isPush = intent.getBooleanExtra(Constants.IS_PUSH_STRING, true);
+        isPush = intent.getBooleanExtra(IS_PUSH_STRING, true);
         // Get values related to a pull configuration
-        selectedPullConfigurationIndex = intent.getLongExtra(Constants.SELECTED_PULL_CONFIGURATION_INDEX_STRING, -1);
-        String jsonString = intent.getStringExtra(Constants.JSON_CONFIGURATION_STRING);
+        selectedPullConfigurationIndex = intent.getLongExtra(SELECTED_PULL_CONFIGURATION_INDEX_STRING, -1);
+        String jsonString = intent.getStringExtra(JSON_CONFIGURATION_STRING);
 
         // Initialization based on the type of configuration, i.e., if it is push or pull
-        language = intent.getStringExtra(Constants.EXTRA_KEY_LANGUAGE);
-        baseURL = intent.getStringExtra(Constants.EXTRA_KEY_BASE_URL);
+        language = intent.getStringExtra(EXTRA_KEY_LANGUAGE);
+        baseURL = intent.getStringExtra(EXTRA_KEY_BASE_URL);
         if (!isPush && selectedPullConfigurationIndex != -1 && jsonString != null) {
             // The feedback activity is started on behalf of a triggered pull configuration
             Log.v(TAG, "The feedback activity is started via a PULL configuration");
 
             // Save the current configuration under FeedbackActivity.CONFIGURATION_DIR}/FeedbackActivity.JSON_CONFIGURATION_FILE_NAME
-            Utils.saveStringContentToInternalStorage(getApplicationContext(), Constants.CONFIGURATION_DIR, Constants.JSON_CONFIGURATION_FILE_NAME, jsonString, MODE_PRIVATE);
+            Utils.saveStringContentToInternalStorage(getApplicationContext(), CONFIGURATION_DIR, JSON_CONFIGURATION_FILE_NAME, jsonString, MODE_PRIVATE);
             GsonBuilder gsonBuilder = new GsonBuilder();
             gsonBuilder.setLenient();
             Gson gson = gsonBuilder.create();
@@ -525,20 +524,20 @@ public class FeedbackActivity extends AbstractBaseActivity implements Screenshot
                 }
             } else {
                 // The user denied the permission
-                onRequestPermissionsResultDenied(requestCode, permissions, grantResults, Manifest.permission.READ_EXTERNAL_STORAGE,
+                onRequestPermissionsResultDenied(requestCode, Manifest.permission.READ_EXTERNAL_STORAGE,
                         R.string.supersede_feedbacklibrary_external_storage_permission_text,
                         getResources().getString(R.string.supersede_feedbacklibrary_external_storage_permission_text_instructions));
             }
-        }else if (requestCode == PERMISSIONS_REQUEST_RECORD_AUDIO){
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Toast toast = Toast.makeText(getApplicationContext(), R.string.supersede_feedbacklibrary_record_audio_permission_granted_text, Toast.LENGTH_SHORT);
-                    toast.show();
-                } else {
-                    // The user denied the permission
-                    onRequestPermissionsResultDenied(requestCode, Manifest.permission.RECORD_AUDIO,
-                            R.string.supersede_feedbacklibrary_record_audio_permission_text,
-                            getResources().getString(R.string.supersede_feedbacklibrary_record_audio_permission_text_instructions));
-                }
+        } else if (requestCode == PERMISSIONS_REQUEST_RECORD_AUDIO) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Toast toast = Toast.makeText(getApplicationContext(), R.string.supersede_feedbacklibrary_record_audio_permission_granted_text, Toast.LENGTH_SHORT);
+                toast.show();
+            } else {
+                // The user denied the permission
+                onRequestPermissionsResultDenied(requestCode, Manifest.permission.RECORD_AUDIO,
+                        R.string.supersede_feedbacklibrary_record_audio_permission_text,
+                        getResources().getString(R.string.supersede_feedbacklibrary_record_audio_permission_text_instructions));
+            }
         }
     }
 
@@ -741,12 +740,12 @@ public class FeedbackActivity extends AbstractBaseActivity implements Screenshot
                         new javax.mail.Authenticator() {
                             @Override
                             protected PasswordAuthentication getPasswordAuthentication() {
-                                return new PasswordAuthentication(user, user_pw);
+                                return new PasswordAuthentication(username, password);
                             }
                         });
                 try {
                     Message message = new MimeMessage(session);
-                    message.setFrom(new InternetAddress(user));
+                    message.setFrom(new InternetAddress(username));
                     message.setRecipients(Message.RecipientType.TO,
                             InternetAddress.parse(email));
                     message.setSubject("Copy of your feedback");
@@ -799,29 +798,22 @@ public class FeedbackActivity extends AbstractBaseActivity implements Screenshot
     }
 
     private void addAttachment(Multipart multipart, String filePath) throws MessagingException {
-
+        URI uri;
         try {
-            URI uri = new URI(filePath);
-
-            String[] segments = uri.getPath().split(Constants.PATH_DELIMITER);
-            String filename = segments[segments.length - 1];
             uri = new URI(filePath);
         } catch (URISyntaxException e) {
             Log.e(TAG, "Failed to create URI", e);
             return;
         }
         String[] segments = uri.getPath().split("/");
-        String filename = segments[segments.length-1];
+        String filename = segments[segments.length - 1];
 
-            DataSource source = new FileDataSource(filePath);
-            BodyPart messageBodyPart = new MimeBodyPart();
-            messageBodyPart.setDataHandler(new DataHandler(source));
-            messageBodyPart.setFileName(filename);
-            multipart.addBodyPart(messageBodyPart);
+        DataSource source = new FileDataSource(filePath);
+        BodyPart messageBodyPart = new MimeBodyPart();
+        messageBodyPart.setDataHandler(new DataHandler(source));
+        messageBodyPart.setFileName(filename);
+        multipart.addBodyPart(messageBodyPart);
 
-        } catch (URISyntaxException e) {
-            Log.e(e.getMessage(), e.toString());
-        }
     }
 
     private boolean isOnline() {

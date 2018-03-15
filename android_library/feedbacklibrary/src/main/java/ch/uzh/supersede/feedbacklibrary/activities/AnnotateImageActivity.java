@@ -43,16 +43,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import ch.uzh.supersede.feedbacklibrary.R;
-import ch.uzh.supersede.feedbacklibrary.models.DialogType;
-import ch.uzh.supersede.feedbacklibrary.utils.ColorPickerDialog;
-import ch.uzh.supersede.feedbacklibrary.utils.Utils;
-import ch.uzh.supersede.feedbacklibrary.views.AnnotateImageView;
-import ch.uzh.supersede.feedbacklibrary.views.EditImageDialog;
-import ch.uzh.supersede.feedbacklibrary.views.StickerAnnotationImageView;
-import ch.uzh.supersede.feedbacklibrary.views.StickerAnnotationView;
-import ch.uzh.supersede.feedbacklibrary.views.TextAnnotationImageView;
-import ch.uzh.supersede.feedbacklibrary.views.TextAnnotationView;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
@@ -64,11 +54,7 @@ import java.util.Map;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import static android.graphics.Color.BLACK;
-import static android.graphics.Color.RED;
-import static android.graphics.Color.WHITE;
-import static ch.uzh.supersede.feedbacklibrary.models.DialogType.*;
-import static ch.uzh.supersede.feedbacklibrary.utils.Constants.FeedbackActivityConstants.*;
+import ch.uzh.supersede.feedbacklibrary.R;
 import ch.uzh.supersede.feedbacklibrary.models.DialogType;
 import ch.uzh.supersede.feedbacklibrary.utils.ColorPickerDialog;
 import ch.uzh.supersede.feedbacklibrary.utils.Constants;
@@ -80,8 +66,8 @@ import ch.uzh.supersede.feedbacklibrary.views.StickerAnnotationView;
 import ch.uzh.supersede.feedbacklibrary.views.TextAnnotationImageView;
 import ch.uzh.supersede.feedbacklibrary.views.TextAnnotationView;
 
-import static ch.uzh.supersede.feedbacklibrary.models.DialogType.Favorite;
-import static ch.uzh.supersede.feedbacklibrary.models.DialogType.QuickEdit;
+import static android.graphics.Color.*;
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.FeedbackActivityConstants.*;
 
 /**
  * Activity for annotating the screenshot
@@ -351,7 +337,7 @@ public class AnnotateImageActivity extends AppCompatActivity implements ColorPic
                 if (allStickerAnnotations.size() > 0 || allTextAnnotations.size() > 0) {
                     // Get the bitmap (image without stickers if there are any)
                     Bitmap annotatedBitmapWithoutStickers = annotateImageView.getBitmap();
-                    annotatedImagePathWithoutStickers = Utils.saveBitmapToInternalStorage(getApplicationContext(), "imageDir", mechanismViewId + Constants.ANNOTATED_IMAGE_NAME_WITHOUT_STICKERS, annotatedBitmapWithoutStickers, Context.MODE_PRIVATE, Bitmap.CompressFormat.PNG, 100);
+                    annotatedImagePathWithoutStickers = Utils.saveBitmapToInternalStorage(getApplicationContext(), "imageDir", mechanismViewId + ANNOTATED_IMAGE_NAME_WITHOUT_STICKERS, annotatedBitmapWithoutStickers, Context.MODE_PRIVATE, Bitmap.CompressFormat.PNG, 100);
                 }
 
                 // Convert the ViewGroup, i.e., the supersede_feedbacklibrary_annotate_picture_layout into a bitmap (image with stickers)
@@ -478,7 +464,7 @@ public class AnnotateImageActivity extends AppCompatActivity implements ColorPic
         }
     }
 
-    private List<View> calculateViewsToRemove(RelativeLayout relativeLayout){
+    private List<View> calculateViewsToRemove(RelativeLayout relativeLayout) {
         int newBitmapWidth = annotateImageView.getBitmapWidth();
         int newBitmapHeight = annotateImageView.getBitmapHeight();
         float fraction = 0.5f;
@@ -519,7 +505,7 @@ public class AnnotateImageActivity extends AppCompatActivity implements ColorPic
         favoriteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showDialog(Favorite);
+                showDialog(DialogType.Favorite);
             }
         });
 
@@ -527,7 +513,7 @@ public class AnnotateImageActivity extends AppCompatActivity implements ColorPic
         quickEditButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showDialog(QuickEdit);
+                showDialog(DialogType.QuickEdit);
             }
         });
 

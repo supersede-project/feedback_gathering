@@ -2,14 +2,13 @@ package ch.uzh.supersede.hostapplication;
 
 import android.Manifest;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.os.StrictMode;
 
-import ch.uzh.supersede.feedbacklibrary.FeedbackActivity;
 import ch.uzh.supersede.feedbacklibrary.utils.ActivityService;
 import ch.uzh.supersede.feedbacklibrary.utils.Constants;
 import ch.uzh.supersede.feedbacklibrary.utils.Utils;
