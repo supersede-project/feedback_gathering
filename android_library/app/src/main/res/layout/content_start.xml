@@ -25,18 +25,21 @@
             android:id="@+id/trigger_random_pull_config_v1_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:onClick="onButtonClicked"
             android:text="@string/random_pull_feedback_button_text"/>
 
         <Button
             android:id="@+id/trigger_specific_pull_config_v1_id21_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:onClick="onButtonClicked"
             android:text="@string/specific_pull_feedback_button_text_id21"/>
 
         <Button
             android:id="@+id/trigger_specific_pull_config_v1_id22_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:onClick="onButtonClicked"
             android:text="@string/specific_pull_feedback_button_text_id22"/>
     </LinearLayout>
 </LinearLayout>
