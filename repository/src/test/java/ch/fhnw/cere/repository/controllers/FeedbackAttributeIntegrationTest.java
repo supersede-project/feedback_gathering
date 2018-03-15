@@ -129,6 +129,11 @@ public class FeedbackAttributeIntegrationTest extends BaseIntegrationTest{
         String adminJWTToken = requestSuperAdminJWTToken();
 
         mockMvc.perform(get(basePathEn + "applications/" + 1 + "/feedbacks" +
+                "/get_published/unread/"+endUser1.getId())
+                .header("Authorization", adminJWTToken))
+                .andExpect(status().isNotFound());
+
+        mockMvc.perform(get(basePathEn + "applications/" + 1 + "/feedbacks" +
                 "/get_blocked/false")
                 .header("Authorization", adminJWTToken))
                 .andExpect(status().isOk())
@@ -201,6 +206,17 @@ public class FeedbackAttributeIntegrationTest extends BaseIntegrationTest{
                 .andExpect(content().string("Feedback blocked status changed!"));
 
         this.mockMvc.perform(put(basePathEn + "applications/" + 1 + "/feedbacks/blocked" +
+                "/"+0)
+                .contentType(contentType)
+                .content(blockJson1))
+                .andExpect(content().string("Requested Feedback does not exist"));
+
+        this.mockMvc.perform(put(basePathEn + "applications/" + 1 + "/feedbacks/blocked" +
+                "/"+0)
+                .contentType(contentType))
+                .andExpect(content().string("JSON Body is NULL"));
+
+        this.mockMvc.perform(put(basePathEn + "applications/" + 1 + "/feedbacks/blocked" +
                 "/"+feedback3.getId())
                 .contentType(contentType)
                 .content(blockJson1))
@@ -239,6 +255,17 @@ public class FeedbackAttributeIntegrationTest extends BaseIntegrationTest{
                 .content(blockJson1))
                 .andExpect(content().string("Feedback visibility changed!"));
 
+        this.mockMvc.perform(put(basePathEn + "applications/" + 1 + "/feedbacks/visibility" +
+                "/"+0)
+                .contentType(contentType)
+                .content(blockJson1))
+                .andExpect(content().string("Requested Feedback does not exist"));
+
+        this.mockMvc.perform(put(basePathEn + "applications/" + 1 + "/feedbacks/visibility" +
+                "/"+0)
+                .contentType(contentType))
+                .andExpect(content().string("JSON Body is NULL"));
+
         mockMvc.perform(get(basePathEn + "applications/" + 1 + "/feedbacks" +
                 "/get_visible/true")
                 .header("Authorization", adminJWTToken))
@@ -259,6 +286,17 @@ public class FeedbackAttributeIntegrationTest extends BaseIntegrationTest{
                 .contentType(contentType)
                 .content(blockJson1))
                 .andExpect(content().string("Feedback published state changed!"));
+
+        this.mockMvc.perform(put(basePathEn + "applications/" + 1 + "/feedbacks/published" +
+                "/"+0)
+                .contentType(contentType)
+                .content(blockJson1))
+                .andExpect(content().string("Requested Feedback does not exist"));
+
+        this.mockMvc.perform(put(basePathEn + "applications/" + 1 + "/feedbacks/published" +
+                "/"+0)
+                .contentType(contentType))
+                .andExpect(content().string("JSON Body is NULL"));
 
         this.mockMvc.perform(put(basePathEn + "applications/" + 1 + "/feedbacks/published" +
                 "/"+feedback3.getId())

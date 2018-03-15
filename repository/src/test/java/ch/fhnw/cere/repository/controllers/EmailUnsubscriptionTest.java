@@ -13,6 +13,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
 import org.springframework.test.web.servlet.ResultMatcher;
 
 import static org.hamcrest.Matchers.hasSize;
@@ -20,6 +21,7 @@ import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -112,6 +114,8 @@ public class EmailUnsubscriptionTest extends BaseIntegrationTest{
                 .put("email",endUser1.getEmail())
                 .toString();
 
+        HttpEntity<String> testString = null;
+
         this.mockMvc.perform(post(basePathEn + "applications/" + 1 + "/feedbacks" +
                 "/unsubscribed")
                 .header("Authorization", adminJWTToken)
@@ -122,6 +126,16 @@ public class EmailUnsubscriptionTest extends BaseIntegrationTest{
                 "/unsubscribed")
                 .header("Authorization", adminJWTToken)
                 .content(unsubscribeExist))
+                .andExpect(status().isCreated());
+
+        this.mockMvc.perform(post(basePathEn + "applications/" + 1 + "/feedbacks" +
+                "/unsubscribed")
+                .header("Authorization", adminJWTToken))
+                .andExpect(status().isCreated());
+
+        this.mockMvc.perform(post(basePathEn + "applications/" + 1 + "/feedbacks" +
+                "/end_user")
+                .header("Authorization", adminJWTToken))
                 .andExpect(status().isCreated());
     }
 

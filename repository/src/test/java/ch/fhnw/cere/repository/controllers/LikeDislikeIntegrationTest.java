@@ -151,6 +151,12 @@ public class LikeDislikeIntegrationTest extends BaseIntegrationTest{
                 .header("Authorization", adminJWTToken))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is((int) userFBDislike1.getId())));
+
+        mockMvc.perform(get(basePathEn + "applications/" + 1 + "/feedbacks" +
+                "/dislikes/both/" +
+                +endUser1.getId()+"/"+feedback3.getId())
+                .header("Authorization", adminJWTToken))
+                .andExpect(status().isOk());
     }
 
     @Test

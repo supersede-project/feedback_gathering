@@ -48,12 +48,14 @@ public class FeedbackStatusTest extends BaseIntegrationTest {
     Feedback feedback1;
     Feedback feedback2;
     Feedback feedback3;
+    Feedback feedback4;
 
     EndUser endUser;
 
     FeedbackStatus feedbackStatus1;
     FeedbackStatus feedbackStatus2;
     FeedbackStatus feedbackStatus3;
+    FeedbackStatus feedbackStatus4;
 
     @Autowired
     private ApiUserPermissionRepository apiUserPermissionRepository;
@@ -71,6 +73,8 @@ public class FeedbackStatusTest extends BaseIntegrationTest {
         feedback2 = feedbackRepository.save(new Feedback("Feedback 2 App 1", endUser.getId(),
                 1, 11, "en"));
         feedback3 = feedbackRepository.save(new Feedback("Feedback 3 App 1", endUser.getId(),
+                1, 22, "en"));
+        feedback4 = feedbackRepository.save(new Feedback("Feedback 4 App 1", endUser.getId(),
                 1, 22, "en"));
 
         feedbackStatus1 = feedbackStatusRepository.save(new FeedbackStatus(feedback1,"status1"));
@@ -133,10 +137,26 @@ public class FeedbackStatusTest extends BaseIntegrationTest {
                 .put("status","pending")
                 .toString();
 
+        String feedbackCompany2 = new JSONObject()
+                .put("feedback_id",feedback4.getId())
+                .put("status","pending")
+                .toString();
+
         this.mockMvc.perform(post(basePathEn + "applications/" + 1 + "/feedbacks" +
                 "/status")
                 .header("Authorization", adminJWTToken)
                 .content(feedbackCompany))
+                .andExpect(status().isCreated());
+
+        this.mockMvc.perform(post(basePathEn + "applications/" + 1 + "/feedbacks" +
+                "/status")
+                .header("Authorization", adminJWTToken)
+                .content(feedbackCompany2))
+                .andExpect(status().isCreated());
+
+        this.mockMvc.perform(post(basePathEn + "applications/" + 1 + "/feedbacks" +
+                "/status")
+                .header("Authorization", adminJWTToken))
                 .andExpect(status().isCreated());
     }
 

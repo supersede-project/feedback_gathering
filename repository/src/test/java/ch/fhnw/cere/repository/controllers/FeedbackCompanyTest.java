@@ -18,9 +18,8 @@ import javax.servlet.ServletException;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -134,5 +133,31 @@ public class FeedbackCompanyTest extends BaseIntegrationTest{
                 .header("Authorization", adminJWTToken)
                 .content(feedbackCompany))
                 .andExpect(status().isCreated());
+    }
+
+    @Test
+    public void testChangePromoteCompany() throws Exception{
+        String adminJWTToken = requestAppAdminJWTToken();
+
+        String promote = new JSONObject()
+                .put("promote",true)
+                .toString();
+
+        this.mockMvc.perform(put(basePathEn + "applications/" + 1 + "/feedbacks" +
+                "/feedback_company/promote/"+feedbackCompany1.getId())
+                .header("Authorization", adminJWTToken)
+                .content(promote))
+                .andExpect(content().string("Company Feedback promote attribute changed!"));
+
+        this.mockMvc.perform(put(basePathEn + "applications/" + 1 + "/feedbacks" +
+                "/feedback_company/promote/"+0)
+                .header("Authorization", adminJWTToken)
+                .content(promote))
+                .andExpect(content().string("Requested Company Feedback does not exist"));
+
+        this.mockMvc.perform(put(basePathEn + "applications/" + 1 + "/feedbacks" +
+                "/feedback_company/promote/"+0)
+                .header("Authorization", adminJWTToken))
+                .andExpect(content().string("JSON Body is NULL"));
     }
 }

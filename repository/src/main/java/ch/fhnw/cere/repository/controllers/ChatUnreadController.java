@@ -37,7 +37,7 @@ public class ChatUnreadController {
         return chatUnreadService.findByFeedbackId(feedbackId);
     }
 
-    @PreAuthorize("@securityService.hasAdminPermission(#applicationId)")
+//    @PreAuthorize("@securityService.hasAdminPermission(#applicationId)")
     @RequestMapping(method = RequestMethod.GET, value = "/chat_unread" +
             "/user/{userId}")
     public List<ChatUnread> getChatUnreadForUser(@PathVariable long applicationId,
@@ -56,7 +56,7 @@ public class ChatUnreadController {
     }
 
     @PreAuthorize("@securityService.hasAdminPermission(#applicationId)")
-    @RequestMapping(method = RequestMethod.DELETE, value = "/chat_unread" +
+    @RequestMapping(method = RequestMethod.POST, value = "/chat_unread" +
             "/feedback/{feedbackId}/user/{userId}")
     public void deleteChatUnreadForFeedbackAndUser(
             @PathVariable long applicationId,

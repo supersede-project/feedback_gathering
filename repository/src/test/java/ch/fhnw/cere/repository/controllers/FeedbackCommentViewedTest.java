@@ -304,6 +304,11 @@ public class FeedbackCommentViewedTest extends BaseIntegrationTest{
 
         this.mockMvc.perform(post(basePathEn + "applications/" + 1 + "/feedbacks" +
                 "/feedback_views")
+                .header("Authorization", adminJWTToken))
+                .andExpect(status().isCreated());
+
+        this.mockMvc.perform(post(basePathEn + "applications/" + 1 + "/feedbacks" +
+                "/feedback_views")
                 .content(viewFeedback3)
                 .header("Authorization", adminJWTToken))
                 .andExpect(status().isCreated());

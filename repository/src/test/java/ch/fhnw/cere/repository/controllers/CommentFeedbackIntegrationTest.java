@@ -134,6 +134,22 @@ public class CommentFeedbackIntegrationTest extends BaseIntegrationTest{
                 .put("commentText",commentFeedback.getCommentText())
                 .put("bool_is_developer",commentFeedback.check_is_developer())
                 .put("activeStatus",commentFeedback.getActiveStatus())
+                .put("anonymous",false)
+                .toString();
+
+        String commentJson2 = new JSONObject()
+                .put("feedback_id",commentFeedback.getFeedback().getId())
+                .put("user_id",commentFeedback.getUser().getId())
+                .put("commentText",commentFeedback.getCommentText())
+                .put("activeStatus",commentFeedback.getActiveStatus())
+                .put("anonymous",false)
+                .toString();
+
+        String commentJson3 = new JSONObject()
+                .put("feedback_id",commentFeedback.getFeedback().getId())
+                .put("user_id",commentFeedback.getUser().getId())
+                .put("commentText",commentFeedback.getCommentText())
+                .put("anonymous",false)
                 .toString();
 
         String adminJWTToken = requestAppAdminJWTToken();
@@ -141,6 +157,14 @@ public class CommentFeedbackIntegrationTest extends BaseIntegrationTest{
         this.mockMvc.perform(post(basePathEn + "applications/" + 1 + "/feedbacks/comments")
                 .contentType(contentType)
                 .content(commentJson));
+
+        this.mockMvc.perform(post(basePathEn + "applications/" + 1 + "/feedbacks/comments")
+                .contentType(contentType)
+                .content(commentJson2));
+
+        this.mockMvc.perform(post(basePathEn + "applications/" + 1 + "/feedbacks/comments")
+                .contentType(contentType)
+                .content(commentJson3));
 
         String result = mockMvc.perform(get(basePathEn + "applications/" + 1 + "/feedbacks/"
                 +feedback1.getId())
@@ -150,7 +174,7 @@ public class CommentFeedbackIntegrationTest extends BaseIntegrationTest{
         mockMvc.perform(get(basePathEn + "applications/" + 1 + "/feedbacks/"
                 +feedback1.getId())
                 .header("Authorization", adminJWTToken))
-                .andExpect(jsonPath("$.commentCount", is((int) 5)));
+                .andExpect(jsonPath("$.commentCount", is((int) 7)));
     }
 
     @Test(expected = ServletException.class)
