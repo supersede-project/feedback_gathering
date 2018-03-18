@@ -4,11 +4,9 @@ import ch.fhnw.cere.repository.models.ChatUnread;
 import ch.fhnw.cere.repository.services.ChatUnreadService;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -29,20 +27,19 @@ public class ChatUnreadController {
         return chatUnreadService.findAll();
     }
 
+    //    @PreAuthorize("@securityService.hasAdminPermission(#applicationId)")
+    @RequestMapping(method = RequestMethod.GET, value = "/chat_unread" +
+            "/user/{userId}")
+    public List<ChatUnread> getChatUnreadForUser(@PathVariable long userId) {
+        return chatUnreadService.findByEnduserId(userId);
+    }
+
     @PreAuthorize("@securityService.hasAdminPermission(#applicationId)")
     @RequestMapping(method = RequestMethod.GET, value = "/chat_unread" +
             "/feedback/{feedbackId}")
     public List<ChatUnread> getChatUnreadForFeedback(@PathVariable long applicationId,
                                                     @PathVariable long feedbackId) {
         return chatUnreadService.findByFeedbackId(feedbackId);
-    }
-
-//    @PreAuthorize("@securityService.hasAdminPermission(#applicationId)")
-    @RequestMapping(method = RequestMethod.GET, value = "/chat_unread" +
-            "/user/{userId}")
-    public List<ChatUnread> getChatUnreadForUser(@PathVariable long applicationId,
-                                                     @PathVariable long userId) {
-        return chatUnreadService.findByEnduserId(userId);
     }
 
     @PreAuthorize("@securityService.hasAdminPermission(#applicationId)")
@@ -55,11 +52,10 @@ public class ChatUnreadController {
         return chatUnreadService.findByFeedbackIdAndEnduserId(feedbackId,userId);
     }
 
-    @PreAuthorize("@securityService.hasAdminPermission(#applicationId)")
+    @ResponseStatus(HttpStatus.OK)
     @RequestMapping(method = RequestMethod.POST, value = "/chat_unread" +
             "/feedback/{feedbackId}/user/{userId}")
     public void deleteChatUnreadForFeedbackAndUser(
-            @PathVariable long applicationId,
             @PathVariable long feedbackId,
             @PathVariable long userId) {
         chatUnreadService.delete(chatUnreadService.
