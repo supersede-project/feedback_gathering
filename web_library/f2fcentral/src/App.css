@@ -1,6 +1,6 @@
 .App {
   text-align: center;
-  background: #F2F2F2;
+  background: white;
 }
 
 .App-logo {
@@ -34,15 +34,6 @@
 
 .widget-container > .hide-sm {
   display: block;
-}
-
-.react-tabs {
-  color: #000;
-}
-
-.tabselected {
-  background: #1A7E92;
-  color: #FFF;
 }
 
 .MyFeedbacksTabAccordion {
@@ -100,6 +91,20 @@ button {
   margin: 0 auto;
 }
 
+.usermessage {
+  background: #82CAFF;
+  float: inherit;
+  line-height: 1.6;
+  margin-left: 38%;
+}
+
+.oppositionmessage{
+  background: #DAE2F3;
+  float: inherit;
+  line-height: 1.6;
+  margin-right: 38%;
+}
+
 .Select {
   width: 30%;
   margin: 0 auto;
@@ -110,7 +115,11 @@ button {
 }
 
 .iconContainer {
+  padding-top: 10px;
+  flex-grow: 1;
   display: flex;
+  flex-wrap: nowrap;
+  flex-direction: row;
 }
 
 .iconContainer svg {
@@ -128,6 +137,56 @@ button {
   flex-grow: 1;
 }
 
+.forumIconContainer {
+  padding-top: 10px;
+  flex-grow: 1;
+  display: flex;
+  flex-wrap: nowrap;
+  flex-direction: row;
+}
+
+.forumIconContainer svg {
+  margin-left: 10px;
+  flex-grow: 1;
+}
+
+.forumIconContainer svg:first-child {
+  margin-left: 0px;
+}
+
+.bundledIcon{
+  flex-grow: 1;
+  display: block;
+}
+
+.thumbsIconContainer {
+  position: relative;
+  margin-left: 8px;
+  flex-grow: 1;
+}
+
+.companyIconContainer {
+  padding-top: 10px;
+  flex-grow: 1;
+  display: flex;
+  flex-wrap: nowrap;
+  flex-direction: row;
+}
+
+.companyIconContainer svg {
+  margin-left: 10px;
+  flex-grow: 1;
+}
+
+.companyIconContainer svg:first-child{
+  margin-left: 0px;
+}
+
+.companytitle .disabled {
+  color: #EEE;
+  background-color: red;
+}
+
 .thumbsCount {
   position: relative;
   top: -10px;
@@ -137,20 +196,179 @@ button {
   padding: 0 2px;
 }
 
+.counts {
+  position: relative;
+  top: -10px;
+  left: 2px;
+  background: red;
+  color: white;
+  padding: 0 2px;
+}
+
+.settingsbox {
+  -webkit-box-sizing: content-box;
+  -moz-box-sizing: content-box;
+  box-sizing: content-box;
+  float: right;
+  width: 63%;
+  height: 14%;
+  position: relative;
+  right: 66%;
+  left: 0;
+  padding: 20px;
+  overflow: hidden;
+  background: #efefef;
+  -webkit-box-shadow: 1px 1px 1px 0 rgba(0,0,0,0.3) ;
+  box-shadow: 1px 1px 1px 0 rgba(0,0,0,0.3) ;
+}
+
 .accordion {
   border-top: 1px;
   border-bottom: 1px;
+  border: solid;
 }
 
 .accodion .active, .accordion:hover {
   background-color: #ccc;
 }
 
-.accorion-content {
+.accordion-content {
   display: none;
   background-color: white;
   overflow: hidden;
   padding: 0 18px;
+  border: 1px solid #333333;
+}
+
+.spacingstyle{
+  line-height: 200%;
+}
+
+.statuscomplete{
+  color: black;
+  border: 1px solid #333333;
+  padding: 3px 7px;
+ /* background-image: linear-gradient(180deg, #009933,  #00e64d);*/
+  background-color: #009933;
+  fontSize: 8px;
+  line-height: 200%;
+}
+
+.statusprogress{
+  color: black;
+  border: 1px solid #333333;
+  padding: 3px 7px;
+/*  background-image: linear-gradient(180deg, #ff884d, #ffbb99);*/
+  background-color: #ff884d;
+  fontSize: 8px;
+  line-height: 200%;
+}
+
+.statusdeclined{
+  color: black;
+  border: 1px solid #333333;
+  padding: 3px 7px;
+/*  background-image: linear-gradient(180deg, #b3003b, #ff1a66);*/
+  background-color: #ff1a66;
+  fontSize: 8px;
+  line-height: 200%;
+}
+
+.statusreceived{
+  color: black;
+  border: 1px solid #333333;
+  padding: 3px 7px;
+ /* background-image: linear-gradient(180deg, #1a8cff,  #99ccff);*/
+  background-color: #1a8cff;
+  fontSize: 8px;
+  line-height: 200%;
+}
+
+.statusunknown{
+  color: black;
+  border: 1px solid #333333;
+  padding: 3px 7px;
+  background-image: linear-gradient(180deg, #fff, #ddd 40%, #ccc);
+  fontSize: 8px;
+  line-height: 200%;
+}
+
+.promotingbanner{
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #CCCCCC;
+  color: white;
+  line-height: 200%;
+  bottom: 0px;
+}
+
+.companyfeedbackform{
+  line-height: 200%;
+  color: #006CEF;
+  text-align: justify;
+  font-family: "Helvetica Neue";
+}
+
+.companyfeedbacktext{
+  line-height: 200%;
+  color: #000000;
+  text-align: justify;
+  font-family: "Helvetica Neue";
+}
+
+.formbuttons{
+  background-color: #006CEF;
+  border: none;
+  color: white;
+  padding: 14px 30px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  margin: 3px 1px;
+  -webkit-transition-duration: 0.2s;
+  transition-duration: 0.2s;
+  cursor: pointer;
+}
+
+.formbuttons1{
+  background-color: white;
+  color: black;
+  border: 2px solid #006CEF;
+}
+
+.formbuttons1:hover {
+  background-color: #006CEF;
+  color: white;
+}
+
+.formbuttons1:active {
+  background-color: #006CEF;
+  transform: translateY(4px);
+}
+
+.successful {
+  background-color: #8cd9b1;
+  color: #FFFFFF;
+}
+
+.dropzone {
+  width: 600px;
+  height: 240px;
+  border-width: 2px;
+  border-color: #676767;
+  border-style: dashed;
+  border-radius: 9px;
+  background-color: #eeee;
+}
+
+.reactsanfonaitem {
+  border-bottom: 1px solid #cacaca;
+  padding-top: 3px;
+  padding-bottom: 3px;
+}
+
+.reactsanfonaitem:last-child{
+  border-bottom: none;
 }
 
 @keyframes App-logo-spin {

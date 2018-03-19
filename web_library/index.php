@@ -1,6 +1,7 @@
 <?php
 $user_id = intval($_GET['user_id']);
 $application_id = intval($_GET['application_id']);
+$admin_user = $_GET['admin_user'];
 
 if(!isset($user_id) || $user_id == 0) {
     $user_id = '99999999';
@@ -8,6 +9,10 @@ if(!isset($user_id) || $user_id == 0) {
 
 if(!isset($application_id) || $application_id == 0) {
   $application_id = 20;
+}
+
+if(!isset($admin_user) || $admin_user === '') {
+  $admin_user = false;
 }
 ?>
 
@@ -79,6 +84,8 @@ if(!isset($application_id) || $application_id == 0) {
     -->
     <!--<link rel="stylesheet" href="/dist/jqueryui/jquery-ui.min.css"/>-->
     <link rel="stylesheet" href="/dist/main.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
+
 </head>
 
 <body class="co2online secure cmd_content action_bereichePage">
@@ -389,8 +396,11 @@ if(!isset($application_id) || $application_id == 0) {
                 </header>
                 <!--###endheader###-->
                 <div id="f2fcentral-container">
-                    <button type="button" id="openF2fcentral">ClickMe</button>
-                    <div id="f2fcentral"></div>
+                     <!--<button type="button" id="openF2fcentral">ClickMe</button>-->
+                     <div class="fa fa-user" style="font-size:50px" id="openF2fcentral"}>
+                        <span id="unreadFeedbacks" class="nodisplay">!</span>
+                     </div>
+                     <div id="f2fcentral"></div>
                 </div>
                 <!--###startnav###-->
                 <div class="row">
@@ -1870,10 +1880,8 @@ if(!isset($application_id) || $application_id == 0) {
             //'distPath': 'dist/',
             //'distPath': 'https://platform.supersede.eu/web_library/senercon/dist/',
 
-            //'applicationId': 20,
+            'applicationId': 20,
             'apiEndpointOrchestrator': 'https://platform.supersede.eu:8443/',
-            // 'apiEndpointRepository': 'https://platform.supersede.eu:8443/',
-
             'applicationId': 20,
             //'apiEndpointOrchestrator': 'http://localhost:8081/',
             // 'apiEndpointRepository': 'http://localhost:9999/',
@@ -1897,6 +1905,9 @@ if(!isset($application_id) || $application_id == 0) {
 
     var userId = <?php echo $user_id; ?>;
     var applicationId = <?php echo $application_id; ?>;
+    var adminUser = <?php echo $admin_user; ?>;
+    var baseUrl = "http://mt.ronnieschaniel.com:8080/feedback_repository/feedback_repository/";
+    var lang = 'en';
 </script>
 
 <script type="text/javascript" src="/dist/f2fcentral.min.js"></script>
