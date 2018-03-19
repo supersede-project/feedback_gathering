@@ -1909,6 +1909,7 @@ if(!isset($admin_user) || $admin_user === '') {
     var applicationId = <?php echo $application_id; ?>;
     var adminUser = <?php echo $admin_user; ?>;
     var baseUrl = "http://mt.ronnieschaniel.com:8080/feedback_repository/feedback_repository/";
+    var lang = 'en';
 </script>
 
 <script type="text/javascript" src="/dist/f2fcentral.min.js"></script>

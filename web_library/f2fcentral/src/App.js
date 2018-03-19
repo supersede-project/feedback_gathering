@@ -71,8 +71,8 @@ class App extends Component {
         toRender =
             <Tabs style={{activeTabContentStyle: {backgroundColor: '#006CEF', borderColor: '#006CEF', color: '#006CEF'}}}>
               <TabList>
-                <Tab selectedClassName="tabselected">User Feedbacks</Tab>
-                <Tab selectedClassName="tabselected">Company Feedbacks</Tab>
+                <Tab selectedClassName="tabselected">User Feedback</Tab>
+                <Tab selectedClassName="tabselected">Company Feedback</Tab>
               </TabList>
 
               <TabPanel>
@@ -89,7 +89,7 @@ class App extends Component {
     else {
       toRender = <Tabs style={{activeTabContentStyle: {backgroundColor: '#006CEF', borderColor: '#006CEF', color: '#006CEF'}}}>
         <TabList>
-          <Tab selectedClassName="tabselected">My Feedbacks</Tab>
+          <Tab selectedClassName="tabselected">My Feedback</Tab>
           <Tab selectedClassName="tabselected">Feedback Forum</Tab>
         </TabList>
 

@@ -65,14 +65,14 @@ class FeedbackTitle extends Component {
 
     handleShowChat(e) {
         var that = this;
-        console.log(sessionStorage.getItem('token'));
+
         fetch(process.env.REACT_APP_BASE_URL + 'en/applications/' + sessionStorage.getItem('applicationId') + '/feedbacks/chat_unread/feedback/' + that.props.feedbackId + '/user/' + sessionStorage.getItem('userId'), {
             header: {
                 'Content-Type': 'application/json',
-                //'Authorization': sessionStorage.getItem('token')
+                'Authorization': sessionStorage.getItem('token')
             },
             method: 'POST'
-        }).then(result => result.json()).then(result => that.props.onShowChat({
+        }).then(result => that.props.onShowChat({
             showChat: true,
             index: this.props.feedbackId,
             unreadChat: [],
@@ -103,10 +103,10 @@ class FeedbackTitle extends Component {
         var statusStyle = {
             color: 'black',
             //border: '1px solid #333333',
-            padding: '3px 7px',
-            background: 'linear-gradient(180deg, #fff, #ddd 40%, #ccc)',
+            //padding: '3px 7px',
+            //background: 'linear-gradient(180deg, #fff, #ddd 40%, #ccc)',
             textAlign: 'center',
-            fontSize: '7px'
+            fontSize: '12px'
         }
         if (this.props.visibility === false) {
             return <TiGroupOutline size={35} onClick={this.setVisibility} padding={30}/>;
@@ -116,7 +116,7 @@ class FeedbackTitle extends Component {
         }
         if (this.props.visibility === true && this.props.published === false) {
             return <div><TiGroup color={'grey'} size={35} padding={30}/><br/>
-                <div style={statusStyle}>Request pending</div>
+                <div style={statusStyle}>Feedback under review</div>
             </div>
         }
     }
@@ -220,7 +220,6 @@ class FeedbackTitle extends Component {
                 that.setState({unreadChat: result})
                 console.log(`unread chat json: ${result}`);
                 console.log(result);
-
             });
     }
 

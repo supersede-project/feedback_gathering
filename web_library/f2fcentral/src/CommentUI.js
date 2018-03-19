@@ -122,7 +122,14 @@ class CommentUI extends Component {
   }
 
   deleteComment(commentId) {
-      //fetch
+      fetch(process.env.REACT_APP_BASE_URL + 'en/applications/' + sessionStorage.getItem('applicationId') + '/feedbacks/comments/' + commentId, {
+      method: 'DELETE',
+          headers: {
+          'Content-Type': 'application/json',
+          'Authorization': sessionStorage.getItem('token')
+      }
+  }).then(result => this.props.update());
+      e.stopPropagation();
   }
 
   render() {

@@ -50,8 +50,13 @@ class CompanyViewAccordion extends Component {
     this.openDropzone = this.openDropzone.bind(this);
     this.closeDropzone = this.closeDropzone.bind(this);
     this.handleShowComment = this.handleShowComment.bind(this);
+    this.handleBackButton = this.handleBackButton.bind(this);
 
   }
+
+  handleBackButton() {
+        this.setState({showComment: false, commentIndex: null});
+    }
 
   handleShowComment(e) {
     this.setState({showComment: e.showComment, commentIndex: e.index});

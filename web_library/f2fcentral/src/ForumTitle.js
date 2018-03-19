@@ -131,7 +131,8 @@ class ForumTitle extends Component {
 
                 <div className={style.spacingstyle}>
                     <div align="left" style={{fontSize: 10, color: 'black'}}>
-                        <MdVisibility size={17} color={"black"}/>Status: Feedback under review</div>
+                       {/* <MdVisibility size={17} color={"black"}/>*/}
+                        Feedback under review</div>
                 </div></h5>
                 <div className={style.forumIconContainer}>
                     <div className={style.bundledIcon}>
