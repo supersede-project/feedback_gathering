@@ -185,23 +185,10 @@ public class FeedbackService {
                             selectedPullConfigurationIndex, configurationRequestWrapper.getUrl(), configurationRequestWrapper.getLanguage());
                     d.show(configurationRequestWrapper.getStartingActivity().getFragmentManager(), "feedbackPopupDialog");
                 }
-            } else {
-                if (BuildConfig.DEBUG) {
-                    Intent intent = createFeedbackIntentFromPull(configurationRequestWrapper.getUrl(),
-                            configurationRequestWrapper.getStartingActivity(),
-                            configurationRequestWrapper.getActivityToStart(),
-                            OrchestratorStub.getJsonString(),
-                            configurationRequestWrapper.getLanguage(),
-                            2);
-
-                    configurationRequestWrapper
-                            .getStartingActivity()
-                            .startActivity(intent);
-                } else {
+            }else {
                     DialogUtils.showInformationDialog(configurationRequestWrapper.getStartingActivity(), new String[]{configurationRequestWrapper
                             .getStartingActivity()
                             .getResources().getString(R.string.supersede_feedbacklibrary_feedback_application_unavailable_text)}, true);
-                }
             }
         }
 

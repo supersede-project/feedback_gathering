@@ -63,6 +63,7 @@ import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 
 import ch.uzh.supersede.feedbacklibrary.API.IFeedbackAPI;
+import ch.uzh.supersede.feedbacklibrary.BuildConfig;
 import ch.uzh.supersede.feedbacklibrary.R;
 import ch.uzh.supersede.feedbacklibrary.configurations.Configuration;
 import ch.uzh.supersede.feedbacklibrary.configurations.OrchestratorConfiguration;
@@ -72,6 +73,8 @@ import ch.uzh.supersede.feedbacklibrary.feedbacks.Feedback;
 import ch.uzh.supersede.feedbacklibrary.feedbacks.ScreenshotFeedback;
 import ch.uzh.supersede.feedbacklibrary.models.Mechanism;
 import ch.uzh.supersede.feedbacklibrary.services.FeedbackService;
+import ch.uzh.supersede.feedbacklibrary.stubs.OrchestratorStub;
+import ch.uzh.supersede.feedbacklibrary.stubs.OrchestratorStub.MechanismBuilder;
 import ch.uzh.supersede.feedbacklibrary.utils.DialogUtils;
 import ch.uzh.supersede.feedbacklibrary.utils.Utils;
 import ch.uzh.supersede.feedbacklibrary.views.AudioMechanismView;
@@ -83,6 +86,7 @@ import ch.uzh.supersede.feedbacklibrary.views.TextMechanismView;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
+import okhttp3.internal.platform.Platform;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -238,13 +242,23 @@ public class FeedbackActivity extends AbstractBaseActivity implements Screenshot
         LinearLayout linearLayout = getView(R.id.supersede_feedbacklibrary_feedback_activity_layout, LinearLayout.class);
 
         if (linearLayout != null) {
-            for (Mechanism mechanism : mechanisms) {
-                if (mechanism != null && mechanism.isActive()) {
-                    resolveMechanism(layoutInflater, linearLayout, mechanism);
+            if ((BuildConfig.DEBUG)){
+                OrchestratorStub stub = new MechanismBuilder(this,getApplicationContext(),getResources(),linearLayout,defaultImagePath)
+                        .withAttachment()
+                        .withAudio()
+                        .withDialog()
+                        .build(mechanismViews);
+                stub.addAll(linearLayout,mechanismViews);
+            }else{
+                for (Mechanism mechanism : mechanisms) {
+                    if (mechanism != null && mechanism.isActive()) {
+                        resolveMechanism(layoutInflater, linearLayout, mechanism);
+                    }
                 }
             }
             initCopyByEmailLayout(layoutInflater, linearLayout);
             layoutInflater.inflate(R.layout.send_feedback_layout, linearLayout);
+
         }
     }
 
