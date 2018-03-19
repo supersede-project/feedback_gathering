@@ -13,8 +13,8 @@ import android.widget.FrameLayout;
  * Border view
  */
 public class BorderView extends View {
-    private Rect border;
-    private Paint borderPaint;
+    private Rect rect;
+    private Paint paint;
 
     public BorderView(Context context) {
         super(context);
@@ -32,22 +32,22 @@ public class BorderView extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-        // Draw sticker border
+        // Draw sticker rect
         FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) getLayoutParams();
-        if (border == null) {
-            border = new Rect();
+        if (rect == null) {
+            rect = new Rect();
         }
-        border.left = getLeft() - params.leftMargin;
-        border.top = getTop() - params.topMargin;
-        border.right = getRight() - params.rightMargin;
-        border.bottom = getBottom() - params.bottomMargin;
-        if (borderPaint == null) {
-            borderPaint = new Paint();
+        rect.left = getLeft() - params.leftMargin;
+        rect.top = getTop() - params.topMargin;
+        rect.right = getRight() - params.rightMargin;
+        rect.bottom = getBottom() - params.bottomMargin;
+        if (paint == null) {
+            paint = new Paint();
         }
-        borderPaint.setStrokeWidth(6);
-        borderPaint.setColor(Color.WHITE);
-        borderPaint.setStyle(Paint.Style.STROKE);
-        canvas.drawRect(border, borderPaint);
+        paint.setStrokeWidth(6);
+        paint.setColor(Color.WHITE);
+        paint.setStyle(Paint.Style.STROKE);
+        canvas.drawRect(rect, paint);
 
     }
 }

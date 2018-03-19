@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
+import android.support.v7.widget.AppCompatSpinner;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
@@ -23,7 +24,7 @@ import java.util.List;
 /**
  * Custom spinner class for spinner with single and multiple selection
  */
-public class CustomSpinner extends Spinner implements DialogInterface.OnClickListener, DialogInterface.OnMultiChoiceClickListener {
+public class CustomSpinner extends AppCompatSpinner implements DialogInterface.OnClickListener, DialogInterface.OnMultiChoiceClickListener {
     // General
     private int checkedIndex = -1;
     private boolean isMultiple;
@@ -31,7 +32,6 @@ public class CustomSpinner extends Spinner implements DialogInterface.OnClickLis
     private String itemsAtStart = null;
     private boolean[] mSelection = null;
     private boolean[] mSelectionAtStart = null;
-    private OnMultipleItemsSelectedListener listener;
     private ArrayAdapter<String> simpleAdapter;
     // Own category
     private boolean ownCategoryAllowed;
@@ -52,21 +52,6 @@ public class CustomSpinner extends Spinner implements DialogInterface.OnClickLis
         super(context, attr, defStyle);
         simpleAdapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item);
         super.setAdapter(simpleAdapter);
-    }
-
-    /**
-     * This method returns the indices of the selected items.
-     *
-     * @return the list of indices
-     */
-    public List<Integer> getSelectedIndices() {
-        List<Integer> selection = new LinkedList<>();
-        for (int i = 0; i < items.length; ++i) {
-            if (mSelection[i]) {
-                selection.add(i);
-            }
-        }
-        return selection;
     }
 
     @NonNull
@@ -170,8 +155,6 @@ public class CustomSpinner extends Spinner implements DialogInterface.OnClickLis
                             simpleAdapter.clear();
                             simpleAdapter.add(getSelectedItemsAsString());
                             System.arraycopy(mSelection, 0, mSelectionAtStart, 0, mSelection.length);
-                            listener.selectedIndices(getSelectedIndices());
-                            listener.selectedStrings(getSelectedStrings());
 
                             spinnerDialog.dismiss();
                         } else {
@@ -332,8 +315,6 @@ public class CustomSpinner extends Spinner implements DialogInterface.OnClickLis
                     simpleAdapter.clear();
                     simpleAdapter.add(getSelectedItemsAsString());
                     System.arraycopy(mSelection, 0, mSelectionAtStart, 0, mSelection.length);
-                    listener.selectedIndices(getSelectedIndices());
-                    listener.selectedStrings(getSelectedStrings());
                 }
             });
             builder.setNegativeButton(ch.uzh.supersede.feedbacklibrary.R.string.supersede_feedbacklibrary_cancel_string, new DialogInterface.OnClickListener() {
@@ -368,26 +349,6 @@ public class CustomSpinner extends Spinner implements DialogInterface.OnClickLis
      * @param items                 the items to select
      * @param firstDefaultSelection if the first item should be selected by default
      */
-    public void setItems(String[] items, boolean firstDefaultSelection) {
-        this.items = items;
-        mSelection = new boolean[this.items.length];
-        mSelectionAtStart = new boolean[this.items.length];
-        simpleAdapter.clear();
-        if (firstDefaultSelection && this.items.length > 0) {
-            simpleAdapter.add(this.items[0]);
-            checkedIndex = 0;
-        }
-        Arrays.fill(mSelection, false);
-        mSelection[0] = firstDefaultSelection;
-        mSelectionAtStart[0] = firstDefaultSelection;
-    }
-
-    /**
-     * This method sets the items for the selection.
-     *
-     * @param items                 the items to select
-     * @param firstDefaultSelection if the first item should be selected by default
-     */
     public void setItems(List<String> items, boolean firstDefaultSelection) {
         this.items = items.toArray(new String[items.size()]);
         mSelection = new boolean[this.items.length];
@@ -400,15 +361,6 @@ public class CustomSpinner extends Spinner implements DialogInterface.OnClickLis
         Arrays.fill(mSelection, false);
         mSelection[0] = firstDefaultSelection;
         mSelectionAtStart[0] = firstDefaultSelection;
-    }
-
-    /**
-     * This method sets the listener.
-     *
-     * @param listener the listener
-     */
-    public void setListener(OnMultipleItemsSelectedListener listener) {
-        this.listener = listener;
     }
 
     /**
@@ -429,50 +381,6 @@ public class CustomSpinner extends Spinner implements DialogInterface.OnClickLis
         this.ownCategoryAllowed = ownCategoryAllowed;
     }
 
-    /**
-     * This method sets the selection manually.
-     *
-     * @param selection the selection
-     */
-    public void setSelection(String[] selection) {
-        for (int i = 0; i < mSelection.length; i++) {
-            mSelection[i] = false;
-            mSelectionAtStart[i] = false;
-        }
-        for (String cell : selection) {
-            for (int j = 0; j < items.length; ++j) {
-                if (items[j].equals(cell)) {
-                    mSelection[j] = true;
-                    mSelectionAtStart[j] = true;
-                }
-            }
-        }
-        simpleAdapter.clear();
-        simpleAdapter.add(getSelectedItemsAsString());
-    }
-
-    /**
-     * This method sets the selection manually.
-     *
-     * @param selection the selection
-     */
-    public void setSelection(List<String> selection) {
-        for (int i = 0; i < mSelection.length; i++) {
-            mSelection[i] = false;
-            mSelectionAtStart[i] = false;
-        }
-        for (String sel : selection) {
-            for (int j = 0; j < items.length; ++j) {
-                if (items[j].equals(sel)) {
-                    mSelection[j] = true;
-                    mSelectionAtStart[j] = true;
-                }
-            }
-        }
-        simpleAdapter.clear();
-        simpleAdapter.add(getSelectedItemsAsString());
-    }
-
     @Override
     public void setSelection(int index) {
         for (int i = 0; i < mSelection.length; i++) {
@@ -485,29 +393,6 @@ public class CustomSpinner extends Spinner implements DialogInterface.OnClickLis
         } else {
             throw new IllegalArgumentException("Index " + index
                     + " is out of bounds.");
-        }
-        simpleAdapter.clear();
-        simpleAdapter.add(getSelectedItemsAsString());
-    }
-
-    /**
-     * This method sets the selected indices manually.
-     *
-     * @param selectedIndices the selectedIndices
-     */
-    public void setSelection(int[] selectedIndices) {
-        for (int i = 0; i < mSelection.length; i++) {
-            mSelection[i] = false;
-            mSelectionAtStart[i] = false;
-        }
-        for (int index : selectedIndices) {
-            if (index >= 0 && index < mSelection.length) {
-                mSelection[index] = true;
-                mSelectionAtStart[index] = true;
-            } else {
-                throw new IllegalArgumentException("Index " + index
-                        + " is out of bounds.");
-            }
         }
         simpleAdapter.clear();
         simpleAdapter.add(getSelectedItemsAsString());
@@ -535,11 +420,5 @@ public class CustomSpinner extends Spinner implements DialogInterface.OnClickLis
         }
         newMSelectionAtStart[newMSelectionAtStart.length - 1] = false;
         mSelectionAtStart = newMSelectionAtStart;
-    }
-
-    public interface OnMultipleItemsSelectedListener {
-        void selectedIndices(List<Integer> indices);
-
-        void selectedStrings(List<String> strings);
     }
 }

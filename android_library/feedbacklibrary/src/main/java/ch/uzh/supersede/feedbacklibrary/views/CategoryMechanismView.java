@@ -12,7 +12,7 @@ import java.util.List;
 /**
  * Choice mechanism view
  */
-public class CategoryMechanismView extends MechanismView implements CustomSpinner.OnMultipleItemsSelectedListener {
+public class CategoryMechanismView extends MechanismView {
     private CategoryMechanism categoryMechanism = null;
     private CustomSpinner customSpinner = null;
 
@@ -35,16 +35,7 @@ public class CategoryMechanismView extends MechanismView implements CustomSpinne
         }
         customSpinner.setOwnCategoryAllowed(categoryMechanism.isOwnAllowed());
         customSpinner.setItems(items, true);
-        customSpinner.setListener(this);
         customSpinner.setMultiple(categoryMechanism.isMultiple());
-    }
-
-    @Override
-    public void selectedIndices(List<Integer> indices) {
-    }
-
-    @Override
-    public void selectedStrings(List<String> strings) {
     }
 
     @Override
