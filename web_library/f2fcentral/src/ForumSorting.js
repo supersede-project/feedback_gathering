@@ -11,15 +11,18 @@ class ForumSorting extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            selectedOption: '',
-            selectedOptionValue: ''
+            selectedOption: ''
         };
-
+        this.handleChange = this.handleChange.bind(this);
     }
 
     handleChange(selectedOption) {
+        if(selectedOption === null) {
+            selectedOption = {value: ''};
+        }
         this.setState({selectedOption: selectedOption});
-        console.log(`Selected: ${selectedOption.label}`);
+        this.props.onUpdate(selectedOption.value);
+        console.log(`Selected: ${selectedOption.value}`);
     }
 
     render() {
@@ -28,27 +31,24 @@ class ForumSorting extends Component {
                 name="form-field-name"
                 value={this.state.selectedOption.value}
                 onChange={this.handleChange}
+                placeholder="Please select an option"
                 options={[
                     {value: 'date1', label: 'Decreasing date (Newest first)'},
                     {value: 'date2', label: 'Increasing date (Oldest first)'},
                     {value: 'myfeedback', label: 'My feedbacks'},
-                    {value: 'unseen', label: 'Unread feedbacks'},
+                    //{value: 'unread', label: 'Unread feedbacks'},
                     {value: 'unrated', label: 'Unrated feedbacks'},
                     {value: 'mostlike', label: 'Most liked feedbacks'},
                     {value: 'company', label: 'Company entries'},
-                    {value: 'status1', label: 'Status received'},
-                    {value: 'status2', label: 'In progress'},
-                    {value: 'status3', label: 'Declined'},
-                    {value: 'status4', label: 'Completed'},
+                    {value: 'received', label: 'Received'},
+                    {value: 'progress', label: 'In progress'},
+                    {value: 'declined', label: 'Declined'},
+                    {value: 'completed', label: 'Completed'},
 
                 ]}
             />
 
         );
-    }
-
-    update() {
-        this.props.onUpdate(this.state.selectedOption);
     }
 }
 
