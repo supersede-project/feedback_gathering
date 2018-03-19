@@ -528,8 +528,7 @@ public class AnnotateImageView extends AppCompatImageView {
      */
     public boolean redo() {
         if (historyPointer < pathLists.size()) {
-            if ((startHistoryPointer < startHistoryPointerLists.size() - 1) && startHistoryPointerLists.get
-                    (startHistoryPointer + 1) == historyPointer) {
+            if ((startHistoryPointer < startHistoryPointerLists.size() - 1) && startHistoryPointerLists.get(startHistoryPointer + 1) == historyPointer) {
                 startHistoryPointer++;
                 croppedImagePointer++;
                 updateCroppedImage();

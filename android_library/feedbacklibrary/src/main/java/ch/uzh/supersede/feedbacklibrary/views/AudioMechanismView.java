@@ -27,10 +27,8 @@ import ch.uzh.supersede.feedbacklibrary.models.Mechanism;
 import ch.uzh.supersede.feedbacklibrary.utils.Utils;
 
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.AudioMechanismConstants.*;
-import static ch.uzh.supersede.feedbacklibrary.utils.Constants.FeedbackActivityConstants
-        .PERMISSIONS_REQUEST_RECORD_AUDIO;
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.FeedbackActivityConstants.PERMISSIONS_REQUEST_RECORD_AUDIO;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.PATH_DELIMITER;
-import static java.lang.Math.toIntExact;
 
 /**
  * Audio mechanism view
@@ -68,16 +66,14 @@ public class AudioMechanismView extends MechanismView implements SeekBar.OnSeekB
 
     private MultipleAudioMechanismsListener multipleAudioMechanismsListener;
 
-    public AudioMechanismView(LayoutInflater layoutInflater, Mechanism mechanism, Resources resources, Activity
-            activity, Context applicationContext) {
+    public AudioMechanismView(LayoutInflater layoutInflater, Mechanism mechanism, Resources resources, Activity activity, Context applicationContext) {
         super(layoutInflater);
         this.audioMechanism = (AudioMechanism) mechanism;
         this.resources = resources;
         this.activity = activity;
         this.multipleAudioMechanismsListener = (MultipleAudioMechanismsListener) activity;
         this.applicationContext = applicationContext;
-        setEnclosingLayout(getLayoutInflater().inflate(ch.uzh.supersede.feedbacklibrary.R.layout
-                .audio_feedback_layout, null));
+        setEnclosingLayout(getLayoutInflater().inflate(ch.uzh.supersede.feedbacklibrary.R.layout.audio_feedback_layout, null));
         initView();
         handler = new Handler();
         updateSeekBarTask = new Runnable() {
@@ -86,8 +82,7 @@ public class AudioMechanismView extends MechanismView implements SeekBar.OnSeekB
                 long currentDuration = mediaPlayer.getCurrentPosition();
 
                 // Displaying time completed playing / total duration time
-                String toDisplay = milliSecondsToTimer(currentDuration) + PATH_DELIMITER + milliSecondsToTimer
-                        (mediaPlayerDuration);
+                String toDisplay = milliSecondsToTimer(currentDuration) + PATH_DELIMITER + milliSecondsToTimer(mediaPlayerDuration);
                 totalDurationLabel.setText(toDisplay);
 
                 // Updating progress bar
@@ -102,8 +97,7 @@ public class AudioMechanismView extends MechanismView implements SeekBar.OnSeekB
             public void run() {
                 long audioMechanismTotalDuration = ((long) audioMechanism.getMaxTime()) * 1000;
                 // Displaying time completed playing / total duration time
-                String toDisplay = milliSecondsToTimer(currentRecordDuration * 1000) + PATH_DELIMITER +
-                        milliSecondsToTimer(audioMechanismTotalDuration);
+                String toDisplay = milliSecondsToTimer(currentRecordDuration * 1000) + PATH_DELIMITER + milliSecondsToTimer(audioMechanismTotalDuration);
                 totalDurationLabel.setText(toDisplay);
 
                 // Updating progress bar
@@ -137,24 +131,19 @@ public class AudioMechanismView extends MechanismView implements SeekBar.OnSeekB
         return (int) (currentDuration / totalDuration / 1000 * 100);
     }
 
-    private String getDefaultTotalDurationLabel(){
+    private String getDefaultTotalDurationLabel() {
         return "-/" + milliSecondsToTimer(((long) audioMechanism.getMaxTime()) * 1000);
     }
 
     private void initView() {
-        ((TextView) getEnclosingLayout().findViewById(R.id.supersede_feedbacklibrary_audio_title)).setText(R.string
-                .short_audio_message);
-        recordAnimationColorStart = resources.getColor(R.color
-                .supersede_feedbacklibrary_audio_timer_record_indicator_start_animation_color);
-        recordAnimationColorEnd = resources.getColor(R.color
-                .supersede_feedbacklibrary_audio_timer_record_indicator_end_animation_color);
-        recordIndicator = (TextView) getEnclosingLayout().findViewById(R.id
-                .supersede_feedbacklibrary_audio_timer_record_indicator);
+        ((TextView) getEnclosingLayout().findViewById(R.id.supersede_feedbacklibrary_audio_title)).setText(R.string.short_audio_message);
+        recordAnimationColorStart = resources.getColor(R.color.supersede_feedbacklibrary_audio_timer_record_indicator_start_animation_color);
+        recordAnimationColorEnd = resources.getColor(R.color.supersede_feedbacklibrary_audio_timer_record_indicator_end_animation_color);
+        recordIndicator = (TextView) getEnclosingLayout().findViewById(R.id.supersede_feedbacklibrary_audio_timer_record_indicator);
         seekBar = (SeekBar) getEnclosingLayout().findViewById(R.id.supersede_feedbacklibrary_audio_seekbar);
 
         final String startTotalDurationLabel = getDefaultTotalDurationLabel();
-        totalDurationLabel = (TextView) getEnclosingLayout().findViewById(R.id
-                .supersede_feedbacklibrary_audio_timer_total_duration);
+        totalDurationLabel = (TextView) getEnclosingLayout().findViewById(R.id.supersede_feedbacklibrary_audio_timer_total_duration);
         totalDurationLabel.setText(startTotalDurationLabel);
 
         initClearButton();
@@ -164,8 +153,7 @@ public class AudioMechanismView extends MechanismView implements SeekBar.OnSeekB
     }
 
     private void initStopButton() {
-        stopButton = (ImageView) getEnclosingLayout().findViewById(R.id
-                .supersede_feedbacklibrary_audio_player_button_stop);
+        stopButton = (ImageView) getEnclosingLayout().findViewById(R.id.supersede_feedbacklibrary_audio_player_button_stop);
         setButtonEnabled(stopButton, false);
         stopButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -176,8 +164,7 @@ public class AudioMechanismView extends MechanismView implements SeekBar.OnSeekB
                     onRecordSuccess();
                     Toast toast = Toast.makeText(applicationContext, applicationContext
                             .getResources()
-                            .getString(R.string.supersede_feedbacklibrary_audio_stopped_recording_text), Toast
-                            .LENGTH_SHORT);
+                            .getString(R.string.supersede_feedbacklibrary_audio_stopped_recording_text), Toast.LENGTH_SHORT);
                     toast.show();
                 } else {
                     stopPlaying();
@@ -189,15 +176,13 @@ public class AudioMechanismView extends MechanismView implements SeekBar.OnSeekB
     }
 
     private void initRecordButton() {
-        recordButton = (ImageView) getEnclosingLayout().findViewById(R.id
-                .supersede_feedbacklibrary_audio_player_button_record);
+        recordButton = (ImageView) getEnclosingLayout().findViewById(R.id.supersede_feedbacklibrary_audio_player_button_record);
         recordButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 clearFocus();
 
-                boolean hasPermission = Utils.checkSinglePermission(activity, PERMISSIONS_REQUEST_RECORD_AUDIO,
-                        Manifest.permission.RECORD_AUDIO, null, null, false);
+                boolean hasPermission = Utils.checkSinglePermission(activity, PERMISSIONS_REQUEST_RECORD_AUDIO, Manifest.permission.RECORD_AUDIO, null, null, false);
 
                 if (!hasPermission) {
                     return;
@@ -208,8 +193,7 @@ public class AudioMechanismView extends MechanismView implements SeekBar.OnSeekB
 
                 // Output file
                 File audioFile = applicationContext.getDir(AUDIO_DIR, Context.MODE_PRIVATE);
-                tempAudioFilePath = audioFile.getAbsolutePath() + PATH_DELIMITER + audioMechanism.getId() +
-                        AUDIO_FILENAME + "." + AUDIO_EXTENSION;
+                tempAudioFilePath = audioFile.getAbsolutePath() + PATH_DELIMITER + audioMechanism.getId() + AUDIO_FILENAME + "." + AUDIO_EXTENSION;
 
                 initMediaRecorder();
                 initRecordIndicatorAnimator();
@@ -238,13 +222,11 @@ public class AudioMechanismView extends MechanismView implements SeekBar.OnSeekB
         mediaRecorder.setOnInfoListener(new MediaRecorder.OnInfoListener() {
             @Override
             public void onInfo(MediaRecorder mediaRecorder, int waringType, int extra) {
-                if ((waringType == MediaRecorder.MEDIA_RECORDER_INFO_MAX_DURATION_REACHED) && (!isPlaying &&
-                        isRecording)) {
+                if ((waringType == MediaRecorder.MEDIA_RECORDER_INFO_MAX_DURATION_REACHED) && (!isPlaying && isRecording)) {
                     onRecordSuccess();
                     Toast toast = Toast.makeText(applicationContext, applicationContext
                             .getResources()
-                            .getString(R.string.supersede_feedbacklibrary_audio_maximum_length_reached_text, (Float
-                                    .valueOf(audioMechanism.getMaxTime())).intValue()), Toast.LENGTH_SHORT);
+                            .getString(R.string.supersede_feedbacklibrary_audio_maximum_length_reached_text, (Float.valueOf(audioMechanism.getMaxTime())).intValue()), Toast.LENGTH_SHORT);
                     toast.show();
                 }
             }
@@ -270,8 +252,7 @@ public class AudioMechanismView extends MechanismView implements SeekBar.OnSeekB
         recordIndicator.setVisibility(View.VISIBLE);
         // Record animation
         if (recordIndicatorAnimator == null) {
-            recordIndicatorAnimator = ValueAnimator.ofObject(new ArgbEvaluator(), recordAnimationColorStart,
-                    recordAnimationColorEnd);
+            recordIndicatorAnimator = ValueAnimator.ofObject(new ArgbEvaluator(), recordAnimationColorStart, recordAnimationColorEnd);
             recordIndicatorAnimator.setDuration(1000);
             recordIndicatorAnimator.setRepeatMode(ValueAnimator.REVERSE);
             recordIndicatorAnimator.setRepeatCount(ValueAnimator.INFINITE);
@@ -290,8 +271,7 @@ public class AudioMechanismView extends MechanismView implements SeekBar.OnSeekB
     }
 
     private void initPlayButton() {
-        playButton = (ImageView) getEnclosingLayout().findViewById(R.id
-                .supersede_feedbacklibrary_audio_player_button_play);
+        playButton = (ImageView) getEnclosingLayout().findViewById(R.id.supersede_feedbacklibrary_audio_player_button_play);
         setButtonEnabled(playButton, false);
         playButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -313,8 +293,7 @@ public class AudioMechanismView extends MechanismView implements SeekBar.OnSeekB
     }
 
     private void initClearButton() {
-        clearButton = (ImageView) getEnclosingLayout().findViewById(R.id
-                .supersede_feedbacklibrary_audio_player_button_clear);
+        clearButton = (ImageView) getEnclosingLayout().findViewById(R.id.supersede_feedbacklibrary_audio_player_button_clear);
         setButtonEnabled(clearButton, false);
         clearButton.setOnClickListener(new View.OnClickListener() {
             @Override

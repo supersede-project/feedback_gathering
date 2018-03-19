@@ -131,9 +131,9 @@ public class AnnotateImageActivity extends AppCompatActivity implements ColorPic
             for (int i = 0; i < viewGroup.getChildCount(); ++i) {
                 View child = viewGroup.getChildAt(i);
                 if (child instanceof StickerAnnotationView) {
-                    ((StickerAnnotationView) child).setControlItemsHidden(true);
+                    ((StickerAnnotationView) child).setControlItemsInvisible(true);
                 } else if (child instanceof TextAnnotationView) {
-                    ((TextAnnotationView) child).setControlItemsHidden(true);
+                    ((TextAnnotationView) child).setControlItemsInvisible(true);
                 }
             }
         }

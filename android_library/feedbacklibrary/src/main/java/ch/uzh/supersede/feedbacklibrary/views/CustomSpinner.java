@@ -13,13 +13,16 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
-import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+
+import ch.uzh.supersede.feedbacklibrary.R;
+
 
 /**
  * Custom spinner class for spinner with single and multiple selection
@@ -27,9 +30,8 @@ import java.util.List;
 public class CustomSpinner extends AppCompatSpinner implements DialogInterface.OnClickListener, DialogInterface.OnMultiChoiceClickListener {
     // General
     private int checkedIndex = -1;
-    private boolean isMultiple;
+    private boolean isMultipleChoice;
     private String[] items = null;
-    private String itemsAtStart = null;
     private boolean[] mSelection = null;
     private boolean[] mSelectionAtStart = null;
     private ArrayAdapter<String> simpleAdapter;
@@ -52,6 +54,22 @@ public class CustomSpinner extends AppCompatSpinner implements DialogInterface.O
         super(context, attr, defStyle);
         simpleAdapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item);
         super.setAdapter(simpleAdapter);
+    }
+
+    public boolean isMultipleChoice() {
+        return isMultipleChoice;
+    }
+
+    public void setMultipleChoice(boolean isMultipleChoice) {
+        this.isMultipleChoice = isMultipleChoice;
+    }
+
+    public boolean isOwnCategoryAllowed() {
+        return ownCategoryAllowed;
+    }
+
+    public void setOwnCategoryAllowed(boolean ownCategoryAllowed) {
+        this.ownCategoryAllowed = ownCategoryAllowed;
     }
 
     @NonNull
@@ -86,230 +104,185 @@ public class CustomSpinner extends AppCompatSpinner implements DialogInterface.O
         return selection;
     }
 
-    /**
-     * This method returns if the spinner is of single or multiple choice type.
-     *
-     * @return true if it is multiple choice, false otherwise
-     */
-    public boolean isMultiple() {
-        return isMultiple;
-    }
+    private TextInputEditText createOwnCategoryDialog(LinearLayout linearLayout) {
+        final TextInputLayout layout = (TextInputLayout) linearLayout.findViewById(R.id.supersede_feedbacklibrary_own_category_dialog_input_layout);
+        final TextInputEditText editText = (TextInputEditText) linearLayout.findViewById(R.id.supersede_feedbacklibrary_own_category_dialog_text);
 
-    /**
-     * This method returns if creating an own category is allowed.
-     *
-     * @return true if it is allowed, false otherwise
-     */
-    public boolean isOwnCategoryAllowed() {
-        return ownCategoryAllowed;
-    }
+        layout.setHintEnabled(true);
+        layout.setHint(getResources().getString(R.string.supersede_feedbacklibrary_own_category_dialog_hint));
 
-    @Override
-    public void onClick(DialogInterface dialog, int which, boolean isChecked) {
-        final AlertDialog spinnerDialog = (AlertDialog) dialog;
-        final int spinnerWhich = which;
-        if (spinnerWhich < items.length) {
-            if (spinnerWhich == items.length - 1 && isOwnCategoryAllowed()) {
-                // Others was clicked
-                LayoutInflater layoutInflater = LayoutInflater.from(getContext());
-                // Inflating the custom layout
-                LinearLayout linearLayout = (LinearLayout) layoutInflater.inflate(ch.uzh.supersede.feedbacklibrary.R.layout.own_category_dialog_layout, null);
-
-                final TextInputLayout ownCategoryDialogInputLayout = (TextInputLayout) linearLayout.findViewById(ch.uzh.supersede.feedbacklibrary.R.id.supersede_feedbacklibrary_own_category_dialog_input_layout);
-                final TextInputEditText ownCategoryDialogInputEditText = (TextInputEditText) linearLayout.findViewById(ch.uzh.supersede.feedbacklibrary.R.id.supersede_feedbacklibrary_own_category_dialog_text);
-
-                // Set the hint and enable it
-                ownCategoryDialogInputLayout.setHintEnabled(true);
-                ownCategoryDialogInputLayout.setHint(getResources().getString(ch.uzh.supersede.feedbacklibrary.R.string.supersede_feedbacklibrary_own_category_dialog_hint));
-                ownCategoryDialogInputEditText.addTextChangedListener(new TextWatcher() {
-                    @Override
-                    public void afterTextChanged(Editable s) {
-                    }
-
-                    @Override
-                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                    }
-
-                    @Override
-                    public void onTextChanged(CharSequence s, int start, int before, int count) {
-                        if (s.length() > 0) {
-                            ownCategoryDialogInputLayout.setHint(getResources().getString(ch.uzh.supersede.feedbacklibrary.R.string.supersede_feedbacklibrary_own_category_dialog_label));
-                        } else if (s.length() == 0) {
-                            ownCategoryDialogInputLayout.setHint(getResources().getString(ch.uzh.supersede.feedbacklibrary.R.string.supersede_feedbacklibrary_own_category_dialog_hint));
-                        }
-                    }
-                });
-
-                final LinearLayout emptyLayout = (LinearLayout) linearLayout.findViewById(ch.uzh.supersede.feedbacklibrary.R.id.supersede_feedbacklibrary_own_category_dialog_empty_layout);
-                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                builder.setPositiveButton(getResources().getString(ch.uzh.supersede.feedbacklibrary.R.string.supersede_feedbacklibrary_ok_string), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        if (ownCategoryDialogInputEditText.getText().toString().length() > 0) {
-                            updateCategoryList(ownCategoryDialogInputEditText.getText().toString());
-                            ownCategoryDialogInputEditText.setText(null);
-                            if (emptyLayout != null) {
-                                emptyLayout.requestFocus();
-                            }
-
-                            simpleAdapter.clear();
-                            simpleAdapter.add(getSelectedItemsAsString());
-                            System.arraycopy(mSelection, 0, mSelectionAtStart, 0, mSelection.length);
-
-                            spinnerDialog.dismiss();
-                        } else {
-                            mSelection[spinnerWhich] = false;
-                            spinnerDialog.getListView().setItemChecked(spinnerWhich, false);
-                            ownCategoryDialogInputEditText.setText(null);
-                            if (emptyLayout != null) {
-                                emptyLayout.requestFocus();
-                            }
-                        }
-                    }
-                });
-                builder.setNegativeButton(getResources().getString(ch.uzh.supersede.feedbacklibrary.R.string.supersede_feedbacklibrary_cancel_string), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        mSelection[spinnerWhich] = false;
-                        spinnerDialog.getListView().setItemChecked(spinnerWhich, false);
-                        ownCategoryDialogInputEditText.setText(null);
-                        if (emptyLayout != null) {
-                            emptyLayout.requestFocus();
-                        }
-                    }
-                });
-                builder.setView(linearLayout);
-                builder.setCancelable(false);
-                builder.show();
+        editText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void afterTextChanged(Editable s) {
+                //nop
             }
-        }
-    }
 
-    @Override
-    public SpinnerAdapter getAdapter() {
-        return super.getAdapter();
-    }
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                //nop
+            }
 
-    @Override
-    public void onClick(DialogInterface dialog, int which) {
-        final AlertDialog spinnerDialog = (AlertDialog) dialog;
-        final int spinnerWhich = which;
-        if (spinnerWhich < items.length) {
-            if (spinnerWhich == items.length - 1 && isOwnCategoryAllowed()) {
-                // Other was clicked
-                LayoutInflater layoutInflater = LayoutInflater.from(getContext());
-                // Inflating the custom layout
-                LinearLayout linearLayout = (LinearLayout) layoutInflater.inflate(ch.uzh.supersede.feedbacklibrary.R.layout.own_category_dialog_layout, null);
-
-                final TextInputLayout ownCategoryDialogInputLayout = (TextInputLayout) linearLayout.findViewById(ch.uzh.supersede.feedbacklibrary.R.id.supersede_feedbacklibrary_own_category_dialog_input_layout);
-                final TextInputEditText ownCategoryDialogInputEditText = (TextInputEditText) linearLayout.findViewById(ch.uzh.supersede.feedbacklibrary.R.id.supersede_feedbacklibrary_own_category_dialog_text);
-
-                // Set the hint and enable it
-                ownCategoryDialogInputLayout.setHintEnabled(true);
-                ownCategoryDialogInputLayout.setHint(getResources().getString(ch.uzh.supersede.feedbacklibrary.R.string.supersede_feedbacklibrary_own_category_dialog_hint));
-                ownCategoryDialogInputEditText.addTextChangedListener(new TextWatcher() {
-                    @Override
-                    public void afterTextChanged(Editable s) {
-                    }
-
-                    @Override
-                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                    }
-
-                    @Override
-                    public void onTextChanged(CharSequence s, int start, int before, int count) {
-                        if (s.length() > 0) {
-                            ownCategoryDialogInputLayout.setHint(getResources().getString(ch.uzh.supersede.feedbacklibrary.R.string.supersede_feedbacklibrary_own_category_dialog_label));
-                        } else if (s.length() == 0) {
-                            ownCategoryDialogInputLayout.setHint(getResources().getString(ch.uzh.supersede.feedbacklibrary.R.string.supersede_feedbacklibrary_own_category_dialog_hint));
-                        }
-                    }
-                });
-
-                final LinearLayout emptyLayout = (LinearLayout) linearLayout.findViewById(ch.uzh.supersede.feedbacklibrary.R.id.supersede_feedbacklibrary_own_category_dialog_empty_layout);
-                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                builder.setPositiveButton(getResources().getString(ch.uzh.supersede.feedbacklibrary.R.string.supersede_feedbacklibrary_ok_string), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        if (ownCategoryDialogInputEditText.getText().toString().length() > 0) {
-                            updateCategoryList(ownCategoryDialogInputEditText.getText().toString());
-
-                            if (checkedIndex != -1 && checkedIndex != spinnerWhich) {
-                                mSelection[checkedIndex] = false;
-                            }
-                            checkedIndex = spinnerWhich;
-                            mSelection[spinnerWhich] = true;
-                            simpleAdapter.clear();
-                            simpleAdapter.add(items[spinnerWhich]);
-
-                            ownCategoryDialogInputEditText.setText(null);
-
-                            if (emptyLayout != null) {
-                                emptyLayout.requestFocus();
-                            }
-                            spinnerDialog.dismiss();
-                        } else {
-                            if(mSelection.length - 1 > spinnerWhich|| mSelection.length - 1 > checkedIndex) {
-                                return;
-                            }
-
-                            mSelection[spinnerWhich] = false;
-                            mSelection[checkedIndex] = true;
-                            spinnerDialog.getListView().setItemChecked(spinnerWhich, false);
-                            spinnerDialog.getListView().setItemChecked(checkedIndex, true);
-
-                            ownCategoryDialogInputEditText.setText(null);
-
-                            if (emptyLayout != null) {
-                                emptyLayout.requestFocus();
-                            }
-                        }
-                    }
-                });
-                builder.setNegativeButton(getResources().getString(ch.uzh.supersede.feedbacklibrary.R.string.supersede_feedbacklibrary_cancel_string), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        if(mSelection.length >= Math.max(spinnerWhich, checkedIndex) + 1) {
-                            mSelection[spinnerWhich] = false;
-                            mSelection[checkedIndex] = true;
-                            spinnerDialog.getListView().setItemChecked(spinnerWhich, false);
-                            spinnerDialog.getListView().setItemChecked(checkedIndex, true);
-
-                            ownCategoryDialogInputEditText.setText(null);
-
-                            if (emptyLayout != null) {
-                                emptyLayout.requestFocus();
-                            }
-                        }
-                    }
-                });
-                builder.setView(linearLayout);
-                builder.setCancelable(false);
-                builder.show();
-            } else {
-                if (checkedIndex != -1 && checkedIndex != spinnerWhich) {
-                    mSelection[checkedIndex] = false;
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (s.length() > 0) {
+                    layout.setHint(getResources().getString(R.string.supersede_feedbacklibrary_own_category_dialog_label));
+                } else if (s.length() == 0) {
+                    layout.setHint(getResources().getString(R.string.supersede_feedbacklibrary_own_category_dialog_hint));
                 }
-                checkedIndex = spinnerWhich;
-                mSelection[spinnerWhich] = true;
-                simpleAdapter.clear();
-                simpleAdapter.add(items[spinnerWhich]);
-                spinnerDialog.dismiss();
             }
-        } else {
+        });
+
+        return editText;
+    }
+
+    @Override
+    public void onClick(DialogInterface dialog, final int position, boolean isChecked) {
+        if ((position >= items.length) || !(position == items.length - 1 && isOwnCategoryAllowed())) {
+            return;
+        }
+
+        final AlertDialog spinnerDialog = (AlertDialog) dialog;
+        // Others was clicked
+        LayoutInflater layoutInflater = LayoutInflater.from(getContext());
+        // Inflating the custom layout
+        LinearLayout linearLayout = (LinearLayout) layoutInflater.inflate(R.layout.own_category_dialog_layout, null);
+        final TextInputEditText ownCategoryDialogInputEditText = createOwnCategoryDialog(linearLayout);
+        final LinearLayout emptyLayout = (LinearLayout) linearLayout.findViewById(R.id.supersede_feedbacklibrary_own_category_dialog_empty_layout);
+
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(getContext());
+        alertDialog.setPositiveButton(getResources().getString(R.string.supersede_feedbacklibrary_ok_string), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (ownCategoryDialogInputEditText.getText().toString().length() > 0) {
+                    updateCategoryList(ownCategoryDialogInputEditText.getText().toString());
+                    ownCategoryDialogInputEditText.setText(null);
+                    if (emptyLayout != null) {
+                        emptyLayout.requestFocus();
+                    }
+
+                    simpleAdapter.clear();
+                    simpleAdapter.add(getSelectedItemsAsString());
+                    System.arraycopy(mSelection, 0, mSelectionAtStart, 0, mSelection.length);
+
+                    spinnerDialog.dismiss();
+                } else {
+                    mSelection[position] = false;
+                    spinnerDialog.getListView().setItemChecked(position, false);
+                    ownCategoryDialogInputEditText.setText(null);
+                    if (emptyLayout != null) {
+                        emptyLayout.requestFocus();
+                    }
+                }
+            }
+        });
+        alertDialog.setNegativeButton(getResources().getString(R.string.supersede_feedbacklibrary_cancel_string), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                mSelection[position] = false;
+                spinnerDialog.getListView().setItemChecked(position, false);
+                ownCategoryDialogInputEditText.setText(null);
+                if (emptyLayout != null) {
+                    emptyLayout.requestFocus();
+                }
+            }
+        });
+        alertDialog.setView(linearLayout);
+        alertDialog.setCancelable(false);
+        alertDialog.show();
+    }
+
+    @Override
+    public void onClick(DialogInterface dialog, final int position) {
+        final AlertDialog spinnerDialog = (AlertDialog) dialog;
+        if (position >= items.length) {
             throw new IllegalArgumentException("Argument 'which' is out of bounds.");
         }
+
+        if (!(position == items.length - 1 && isOwnCategoryAllowed())) {
+            if (checkedIndex != -1 && checkedIndex != position) {
+                mSelection[checkedIndex] = false;
+            }
+            checkedIndex = position;
+            mSelection[position] = true;
+            simpleAdapter.clear();
+            simpleAdapter.add(items[position]);
+            spinnerDialog.dismiss();
+            return;
+        }
+
+        // Other was clicked
+        LayoutInflater layoutInflater = LayoutInflater.from(getContext());
+        // Inflating the custom layout
+        LinearLayout linearLayout = (LinearLayout) layoutInflater.inflate(R.layout.own_category_dialog_layout, null);
+        final TextInputEditText ownCategoryDialogInputEditText = createOwnCategoryDialog(linearLayout);
+        final LinearLayout emptyLayout = (LinearLayout) linearLayout.findViewById(R.id.supersede_feedbacklibrary_own_category_dialog_empty_layout);
+
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(getContext());
+        alertDialog.setPositiveButton(getResources().getString(R.string.supersede_feedbacklibrary_ok_string), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (ownCategoryDialogInputEditText.getText().toString().length() > 0) {
+                    updateCategoryList(ownCategoryDialogInputEditText.getText().toString());
+
+                    if (checkedIndex != -1 && checkedIndex != position) {
+                        mSelection[checkedIndex] = false;
+                    }
+                    checkedIndex = position;
+                    mSelection[position] = true;
+                    simpleAdapter.clear();
+                    simpleAdapter.add(items[position]);
+
+                    ownCategoryDialogInputEditText.setText(null);
+
+                    if (emptyLayout != null) {
+                        emptyLayout.requestFocus();
+                    }
+                    spinnerDialog.dismiss();
+                } else if (!(mSelection.length - 1 > position || mSelection.length - 1 > checkedIndex)) {
+                    mSelection[position] = false;
+                    mSelection[checkedIndex] = true;
+                    spinnerDialog.getListView().setItemChecked(position, false);
+                    spinnerDialog.getListView().setItemChecked(checkedIndex, true);
+
+                    ownCategoryDialogInputEditText.setText(null);
+
+                    if (emptyLayout != null) {
+                        emptyLayout.requestFocus();
+                    }
+                }
+            }
+        });
+        alertDialog.setNegativeButton(getResources().getString(R.string.supersede_feedbacklibrary_cancel_string), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (mSelection.length >= Math.max(position, checkedIndex) + 1) {
+                    mSelection[position] = false;
+                    mSelection[checkedIndex] = true;
+                    spinnerDialog.getListView().setItemChecked(position, false);
+                    spinnerDialog.getListView().setItemChecked(checkedIndex, true);
+
+                    ownCategoryDialogInputEditText.setText(null);
+
+                    if (emptyLayout != null) {
+                        emptyLayout.requestFocus();
+                    }
+                }
+            }
+        });
+        alertDialog.setView(linearLayout);
+        alertDialog.setCancelable(false);
+        alertDialog.show();
     }
 
     @Override
     public boolean performClick() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setCancelable(false);
-        if (isMultiple()) {
-            builder.setTitle(getResources().getString(ch.uzh.supersede.feedbacklibrary.R.string.supersede_feedbacklibrary_multiple_options_dialog_title));
+        if (isMultipleChoice()) {
+            builder.setTitle(getResources().getString(R.string.supersede_feedbacklibrary_multiple_options_dialog_title));
             builder.setMultiChoiceItems(items, mSelection, this);
-            itemsAtStart = getSelectedItemsAsString();
-            builder.setPositiveButton(ch.uzh.supersede.feedbacklibrary.R.string.supersede_feedbacklibrary_yes_string, new DialogInterface.OnClickListener() {
+            final String itemsAtStart = getSelectedItemsAsString();
+            builder.setPositiveButton(R.string.supersede_feedbacklibrary_yes_string, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     simpleAdapter.clear();
@@ -317,7 +290,7 @@ public class CustomSpinner extends AppCompatSpinner implements DialogInterface.O
                     System.arraycopy(mSelection, 0, mSelectionAtStart, 0, mSelection.length);
                 }
             });
-            builder.setNegativeButton(ch.uzh.supersede.feedbacklibrary.R.string.supersede_feedbacklibrary_cancel_string, new DialogInterface.OnClickListener() {
+            builder.setNegativeButton(R.string.supersede_feedbacklibrary_cancel_string, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     simpleAdapter.clear();
@@ -326,21 +299,22 @@ public class CustomSpinner extends AppCompatSpinner implements DialogInterface.O
                 }
             });
         } else {
-            builder.setTitle(getResources().getString(ch.uzh.supersede.feedbacklibrary.R.string.supersede_feedbacklibrary_single_option_dialog_title));
+            builder.setTitle(getResources().getString(R.string.supersede_feedbacklibrary_single_option_dialog_title));
             builder.setSingleChoiceItems(items, checkedIndex, this);
-            builder.setNegativeButton(ch.uzh.supersede.feedbacklibrary.R.string.supersede_feedbacklibrary_cancel_string, new DialogInterface.OnClickListener() {
+            builder.setNegativeButton(R.string.supersede_feedbacklibrary_cancel_string, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
+                    //nop
                 }
             });
         }
         builder.show();
-        return true;
+        return super.performClick();
     }
 
     @Override
     public void setAdapter(SpinnerAdapter adapter) {
-        throw new RuntimeException("setAdapter is not supported by CustomSpinner.");
+        throw new RuntimeException("setAdapter is not supported in CustomSpinner!");
     }
 
     /**
@@ -363,24 +337,6 @@ public class CustomSpinner extends AppCompatSpinner implements DialogInterface.O
         mSelectionAtStart[0] = firstDefaultSelection;
     }
 
-    /**
-     * This method sets if the spinner is of single or multiple choice type.
-     *
-     * @param multiple true if it is multiple choice, false otherwise
-     */
-    public void setMultiple(boolean multiple) {
-        isMultiple = multiple;
-    }
-
-    /**
-     * This method sets if own categories are allowed.
-     *
-     * @param ownCategoryAllowed true if it is allowed, false otherwise
-     */
-    public void setOwnCategoryAllowed(boolean ownCategoryAllowed) {
-        this.ownCategoryAllowed = ownCategoryAllowed;
-    }
-
     @Override
     public void setSelection(int index) {
         for (int i = 0; i < mSelection.length; i++) {
@@ -391,8 +347,7 @@ public class CustomSpinner extends AppCompatSpinner implements DialogInterface.O
             mSelection[index] = true;
             mSelectionAtStart[index] = true;
         } else {
-            throw new IllegalArgumentException("Index " + index
-                    + " is out of bounds.");
+            throw new IllegalArgumentException("Index " + index + " is out of bounds.");
         }
         simpleAdapter.clear();
         simpleAdapter.add(getSelectedItemsAsString());
@@ -401,23 +356,19 @@ public class CustomSpinner extends AppCompatSpinner implements DialogInterface.O
     private void updateCategoryList(String newCategory) {
         // Update items
         List<String> newItems = new ArrayList<>();
-        for (int i = 0; i < items.length; ++i) {
-            newItems.add(items[i]);
-        }
+        Collections.addAll(newItems, items);
         newItems.add(newItems.size() - 1, newCategory);
         items = newItems.toArray(new String[newItems.size()]);
+
         // Update mSelection
         boolean[] newMSelection = new boolean[items.length];
-        for (int i = 0; i < items.length - 1; ++i) {
-            newMSelection[i] = mSelection[i];
-        }
+        System.arraycopy(mSelection, 0, newMSelection, 0, items.length);
         newMSelection[newMSelection.length - 1] = false;
         mSelection = newMSelection;
+
         // Update mSelectionAtStart
         boolean[] newMSelectionAtStart = new boolean[items.length];
-        for (int i = 0; i < items.length - 1; ++i) {
-            newMSelectionAtStart[i] = mSelectionAtStart[i];
-        }
+        System.arraycopy(mSelectionAtStart, 0, newMSelectionAtStart, 0, items.length);
         newMSelectionAtStart[newMSelectionAtStart.length - 1] = false;
         mSelectionAtStart = newMSelectionAtStart;
     }
