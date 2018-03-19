@@ -32,7 +32,7 @@ public class EndUserController {
     }
 
     @PreAuthorize("@securityService.hasAdminPermission(#applicationId)")
-    @RequestMapping(method = RequestMethod.GET, value = "/end_user/{username}")
+    @RequestMapping(method = RequestMethod.GET, value = "/end_user/username/{username}")
     public EndUser getUserForUsername(@PathVariable long applicationId,
                                       @PathVariable String username) {
         return endUserService.findByUsername(username);

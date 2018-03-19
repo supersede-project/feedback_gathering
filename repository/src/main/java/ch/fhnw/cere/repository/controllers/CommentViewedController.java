@@ -47,7 +47,7 @@ public class CommentViewedController {
     @PreAuthorize("@securityService.hasAdminPermission(#applicationId)")
     @RequestMapping(method = RequestMethod.GET, value = "/comment_views" +
             "/comment/{commentId}")
-    public List<CommentViewed> getCommentViewsForFeedback(@PathVariable long applicationId,
+    public List<CommentViewed> getCommentViewsForComment(@PathVariable long applicationId,
                                                 @PathVariable long commentId) {
         return commentViewedService.findByCommentId(commentId);
     }

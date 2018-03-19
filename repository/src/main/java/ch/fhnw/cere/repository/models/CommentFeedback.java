@@ -2,6 +2,7 @@ package ch.fhnw.cere.repository.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -9,6 +10,10 @@ import javax.persistence.*;
 import java.util.Collection;
 import java.util.Date;
 
+/**
+ * This class represents single comments posted on feedback entries. Handling of
+ * sub-comments is done in a recursive manner by referencing the parent comment id
+ */
 @Entity
 public class CommentFeedback {
 
@@ -17,18 +22,26 @@ public class CommentFeedback {
     private long id;
 
 
-    @ManyToOne(cascade = {CascadeType.REMOVE, CascadeType.MERGE})
+    @JsonIgnoreProperties({"title","userIdentification","createdAt","updatedAt",
+    "applicationId","configurationId","language","commentCount","likeCount","dislikeCount",
+    "blocked","iconPath","unreadCommentCount","visibility","published","application",
+            "contextInformation","attachmentFeedbacks","audioFeedbacks","categoryFeedbacks",
+    "ratingFeedbacks","screenshotFeedbacks","textFeedbacks"})
+    @ManyToOne
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "feedback_id", nullable = false)
     private Feedback feedback;
 
 
-    @ManyToOne(cascade = {CascadeType.REMOVE, CascadeType.MERGE})
+    @JsonIgnoreProperties({"createdAt","updatedAt","applicationId","email",
+    "phoneNumber"})
+    @ManyToOne
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "user_id", nullable = false)
     private EndUser user;
 
-    @JsonIgnore
+    @JsonIgnoreProperties({"feedback","user","parentComment","children","commentText",
+            "createdAt","updatedAt","bool_is_developer","activeStatus"})
     @ManyToOne
     @JoinColumn(name="fk_parent_comment")
     private CommentFeedback parentComment;
@@ -41,6 +54,33 @@ public class CommentFeedback {
     private Date updatedAt;
     private Boolean bool_is_developer;
     private Boolean activeStatus;
+
+    private Boolean anonymous;
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public void setUpdatedAt(Date updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    public Boolean getBool_is_developer() {
+        return bool_is_developer;
+    }
+
+    public Boolean getAnonymous() {
+
+        return anonymous;
+    }
+
+    public void setAnonymous(Boolean anonymous) {
+        this.anonymous = anonymous;
+    }
 
     public void setFeedback(Feedback feedback) {
         this.feedback = feedback;

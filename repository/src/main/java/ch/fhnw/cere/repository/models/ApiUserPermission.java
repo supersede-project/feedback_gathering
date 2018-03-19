@@ -12,7 +12,7 @@ public class ApiUserPermission {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
-    @ManyToOne(cascade = {CascadeType.REMOVE, CascadeType.MERGE})
+    @ManyToOne
     @JsonIgnore
     @JoinColumn(name = "api_user_id")
     private ApiUser apiUser;

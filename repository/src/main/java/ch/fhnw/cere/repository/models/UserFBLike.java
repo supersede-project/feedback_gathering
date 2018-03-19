@@ -1,6 +1,7 @@
 package ch.fhnw.cere.repository.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -9,6 +10,7 @@ import java.util.Date;
 
 /**
  * Created by Aydinli on 08.11.2017.
+ * This class denotes which user liked which feedback
  */
 @Entity
 public class UserFBLike {
@@ -17,13 +19,18 @@ public class UserFBLike {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
-    @JsonIgnore
+    @JsonIgnoreProperties({"title","userIdentification","createdAt","updatedAt",
+            "applicationId","configurationId","language","commentCount","likeCount","dislikeCount",
+            "blocked","iconPath","unreadCommentCount","visibility","published","application",
+            "contextInformation","attachmentFeedbacks","audioFeedbacks","categoryFeedbacks",
+            "ratingFeedbacks","screenshotFeedbacks","textFeedbacks"})
     @ManyToOne(cascade = {CascadeType.MERGE})
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "feedback_id")
     private Feedback feedback;
 
-    @JsonIgnore
+    @JsonIgnoreProperties({"createdAt","updatedAt","applicationId","username","email",
+            "phoneNumber"})
     @ManyToOne(cascade = {CascadeType.MERGE})
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "user_id")

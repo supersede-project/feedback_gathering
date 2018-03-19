@@ -23,6 +23,6 @@ public interface FeedbackStatusService{
     public FeedbackStatus find(long id);
     public void delete(long id);
 
-    List<FeedbackStatus> findByFeedbackId(long feedbackId);
+    FeedbackStatus findByFeedbackId(long feedbackId);
     List<FeedbackStatus> findByStatus(String status);
 }

@@ -5,6 +5,8 @@ import ch.fhnw.cere.repository.models.orchestrator.Application;
 import ch.fhnw.cere.repository.models.orchestrator.Mechanism;
 import ch.fhnw.cere.repository.models.orchestrator.MechanismTemplateModel;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -29,7 +31,7 @@ public class Feedback {
     private int likeCount;
     private int dislikeCount;
     @Column(columnDefinition="tinyint(1) default 0")
-    private boolean isBlocked;
+    private boolean blocked;
     private String iconPath;
     private int unreadCommentCount;
 
@@ -39,13 +41,6 @@ public class Feedback {
     @Column(columnDefinition="tinyint(1) default 0")
     private boolean published;
 
-    public boolean isBlocked() {
-        return isBlocked;
-    }
-
-    public void setBlocked(boolean blocked) {
-        isBlocked = blocked;
-    }
 
     public boolean isVisibility() {
         return visibility;
@@ -88,11 +83,11 @@ public class Feedback {
     }
 
     public Boolean getBlocked() {
-        return isBlocked;
+        return blocked;
     }
 
-    public void setBlocked(Boolean blocked) {
-        isBlocked = blocked;
+    public void setBlocked(boolean blocked) {
+        this.blocked = blocked;
     }
 
     public String getIconPath() {
@@ -142,17 +137,17 @@ public class Feedback {
     @OneToMany(mappedBy = "feedback", cascade = {CascadeType.REMOVE, CascadeType.PERSIST})
     private List<ScreenshotFeedback> screenshotFeedbacks;
 
-
     @OneToMany(mappedBy = "feedback", cascade = {CascadeType.REMOVE, CascadeType.PERSIST})
+    @LazyCollection(LazyCollectionOption.FALSE)
     private List<TextFeedback> textFeedbacks;
 
     @JsonIgnore
     @OneToMany(mappedBy = "feedback", cascade = {CascadeType.REMOVE, CascadeType.PERSIST})
     private List<Status> statuses;
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "feedback", cascade = {CascadeType.REMOVE, CascadeType.PERSIST})
-    private List<FeedbackCompany> feedbackCompanies;
+//    @JsonIgnore
+//    @OneToMany(mappedBy = "feedback", cascade = {CascadeType.REMOVE, CascadeType.PERSIST})
+//    private List<FeedbackCompany> feedbackCompanies;
 
     @Override
     public String toString() {
@@ -200,7 +195,7 @@ public class Feedback {
         this.screenshotFeedbacks = screenshotFeedbacks;
         this.textFeedbacks = textFeedbacks;
         this.statuses = statuses;
-        this.feedbackCompanies = feedbackCompanies;
+//        this.feedbackCompanies = feedbackCompanies;
     }
 
     public Feedback(String title, long userIdentification, Date createdAt, Date updatedAt, long applicationId, long configurationId, String language, int commentCount, int likeCount, int dislikeCount, ContextInformation contextInformation, List<AttachmentFeedback> attachmentFeedbacks, List<AudioFeedback> audioFeedbacks, List<CategoryFeedback> categoryFeedbacks, List<RatingFeedback> ratingFeedbacks, List<ScreenshotFeedback> screenshotFeedbacks, List<TextFeedback> textFeedbacks, List<Status> statuses, List<FeedbackCompany> feedbackCompanies) {
@@ -222,7 +217,7 @@ public class Feedback {
         this.screenshotFeedbacks = screenshotFeedbacks;
         this.textFeedbacks = textFeedbacks;
         this.statuses = statuses;
-        this.feedbackCompanies = feedbackCompanies;
+//        this.feedbackCompanies = feedbackCompanies;
     }
 
     public static Feedback appendMechanismsToFeedback(Application application, Feedback feedback) {
@@ -386,11 +381,11 @@ public class Feedback {
         this.application = application;
     }
 
-    public List<FeedbackCompany> getFeedbackCompanies() {
-        return feedbackCompanies;
-    }
-
-    public void setFeedbackCompanies(List<FeedbackCompany> feedbackCompanies) {
-        this.feedbackCompanies = feedbackCompanies;
-    }
+//    public List<FeedbackCompany> getFeedbackCompanies() {
+//        return feedbackCompanies;
+//    }
+//
+//    public void setFeedbackCompanies(List<FeedbackCompany> feedbackCompanies) {
+//        this.feedbackCompanies = feedbackCompanies;
+//    }
 }

@@ -8,21 +8,45 @@
 
     <link href='http://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
 
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
     <!-- use the font -->
     <style>
         body {
             font-family: 'Roboto', sans-serif;
             font-size: 48px;
         }
+
+        a.button:link, a.button:visited {
+            background-color: #f4c321;
+            color: white;
+            padding: 14px 25px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+
+        a.button:hover, a.button:active {
+            background-color: red;
+        }
+
     </style>
 </head>
 <body style="margin: 0; padding: 0;">
 
 <table align="center" border="0" cellpadding="0" cellspacing="0" width="600" style="border-collapse: collapse;">
     <tr>
-        <td align="center" bgcolor="#78ab46" style="padding: 40px 0 30px 0;">
+        <td align="center" bgcolor="#99d22b" style="padding: 40px 0 30px 0;">
             <#--<img src="F:/SuperSede/monitor_feedback/repository/src/main/resources/icon_notification_red.png" alt="notification icon" style="display: block;" />-->
-            <img src="cid:logo.png" alt="notification icon" style="display: block;" />
+            <#--<img src="/icon_notification_red.png" width="100" height="100" alt="notification icon" style="display: block;" />-->
+                <div class="alert alert-info">
+                    <strong>F2F Central - Notifications!</strong>
+                </div>
         </td>
     </tr>
     <tr>
@@ -35,24 +59,66 @@
     </tr>
     <tr>
         <td bgcolor="#eacb60" style="padding: 40px 30px 40px 30px;">
-            <p>Your Feedbacks</p>
-            <#list user_feedbacks as user_feedback>
-                <p><b>User Feedback Title: </b>${user_feedback.title}</p>
-            </#list>
+            <h2><b>Your Feedbacks</b></h2>
+            <ul>
+                <#if user_feedbacks?size != 0>
+                    <#list user_feedbacks as user_feedback>
+                        <li>Feedback Title: ${user_feedback.title}
+                            <ul>
+                                <#if user_feedback.textFeedbacks??>
+                                    <#list user_feedback.textFeedbacks as textFeedback>
+                                        <li><i>Feedback Text: </i>${textFeedback.text}</li>
+                                    </#list>
+                                <#else>
+                                    <li>No text feedbacks</li>
+                                </#if>
+                            </ul>
+                        </li>
+                    </#list>
+                <#else>
+                    <li>
+                        You did not provide any feedbacks!
+                    </li>
+                </#if>
+            </ul>
         </td>
     </tr>
     <tr>
         <td bgcolor="#ea8f2e" style="padding: 40px 30px 40px 30px;">
-            <p>Feedbacks Forum</p>
-            <#list forum_feedbacks as forum_feedback>
-                <p><b>Forum Feedback Title: </b>${forum_feedback.title}</p>
-            </#list>
+            <h2><b>Community Feedbacks from the Forum</b></h2>
+            <ul>
+                <#if forum_feedbacks?size != 0>
+                    <#list forum_feedbacks as forum_feedback>
+                        <li>Feedback Title: ${forum_feedback.title}
+                            <ul>
+                                <#if forum_feedback.textFeedbacks??>
+                                    <#list forum_feedback.textFeedbacks as textFeedback>
+                                        <li><i>Feedback Text: </i>${textFeedback.text}</li>
+                                    </#list>
+                                <#else>
+                                    <li>No text feedbacks</li>
+                                </#if>
+                            </ul>
+                        </li>
+                    </#list>
+                <#else>
+                    <li>
+                        There are no feedbacks published in the Forum yet!
+                    </li>
+                </#if>
+            </ul>
         </td>
     </tr>
     <tr>
-        <td bgcolor="#777777" style="padding: 30px 30px 30px 30px;">
+        <td bgcolor="#b6b6b6" style="padding: 30px 30px 30px 30px;">
             <p>Best Regards,</p>
             <p>Feedback-To-Feebdack Central</p>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <p>You can explore more by clicking the button below: </p> <br/>
+            <a class="button" href="http://f2f.ronnieschaniel.com/">Visit F2F Central</a>
         </td>
     </tr>
 </table>

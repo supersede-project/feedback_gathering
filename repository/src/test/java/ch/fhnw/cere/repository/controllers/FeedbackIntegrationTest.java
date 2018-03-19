@@ -21,9 +21,7 @@ import java.util.Date;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.nullValue;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.fileUpload;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -170,6 +168,16 @@ public class FeedbackIntegrationTest extends BaseIntegrationTest {
                 .andExpect(jsonPath("$[0].title", is("Feedback 1 App 1")))
                 .andExpect(jsonPath("$[1].id", is((int) feedback2.getId())))
                 .andExpect(jsonPath("$[1].title", is("Feedback 2 App 1")));
+
+        this.mockMvc.perform(delete(basePathEn + "applications/" + 1 + "/feedbacks/" +
+                feedback1.getId())
+                .header("Authorization", adminJWTToken))
+                .andExpect(status().isOk());
+
+        mockMvc.perform(get(basePathEn + "applications/" + 1 + "/feedbacks")
+                .header("Authorization", adminJWTToken))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(1)));
     }
 
     @Test
@@ -219,7 +227,7 @@ public class FeedbackIntegrationTest extends BaseIntegrationTest {
     public void getFeedbacksByUserIdentificationWithoutPermission() throws Exception {
         String adminJWTToken = requestAdminJWTToken();
 
-        mockMvc.perform(get(basePathEn + "applications/" + 1 + "/feedbacks/user_identification/userId1")
+        mockMvc.perform(get(basePathEn + "applications/" + 1 + "/feedbacks/user_identification/"+11111)
                 .header("Authorization", adminJWTToken))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(1)))
@@ -231,7 +239,7 @@ public class FeedbackIntegrationTest extends BaseIntegrationTest {
     public void getFeedbacksByUserIdentification() throws Exception {
         String adminJWTToken = requestAppAdminJWTToken();
 
-        mockMvc.perform(get(basePathEn + "applications/" + 1 + "/feedbacks/user_identification/userId1")
+        mockMvc.perform(get(basePathEn + "applications/" + 1 + "/feedbacks/user_identification/"+11111)
                 .header("Authorization", adminJWTToken))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(2)))
@@ -268,7 +276,7 @@ public class FeedbackIntegrationTest extends BaseIntegrationTest {
                 .file(jsonFile))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.title", is("New Feedback")))
-                .andExpect(jsonPath("$.userIdentification", is("userId1")))
+                .andExpect(jsonPath("$.userIdentification", is(11111)))
                 .andExpect(jsonPath("$.applicationId", is(1)))
                 .andExpect(jsonPath("$.configurationId", is(11)))
                 .andExpect(jsonPath("$.language", is("en")))
@@ -314,7 +322,7 @@ public class FeedbackIntegrationTest extends BaseIntegrationTest {
                 .file(jsonFile))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.title", is("New Feedback")))
-                .andExpect(jsonPath("$.userIdentification", is("userId1")))
+                .andExpect(jsonPath("$.userIdentification", is(11111)))
                 .andExpect(jsonPath("$.applicationId", is(1)))
                 .andExpect(jsonPath("$.configurationId", is(11)))
                 .andExpect(jsonPath("$.language", is("en")))
@@ -360,7 +368,7 @@ public class FeedbackIntegrationTest extends BaseIntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is((int) createdFeedback.getId())))
                 .andExpect(jsonPath("$.title", is("New Feedback")))
-                .andExpect(jsonPath("$.userIdentification", is("userId1")))
+                .andExpect(jsonPath("$.userIdentification", is(11111)))
                 .andExpect(jsonPath("$.applicationId", is(1)))
                 .andExpect(jsonPath("$.configurationId", is(11)))
                 .andExpect(jsonPath("$.language", is("en")))
@@ -433,7 +441,7 @@ public class FeedbackIntegrationTest extends BaseIntegrationTest {
                 .file(screenshotFile))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.title", is("New Feedback")))
-                .andExpect(jsonPath("$.userIdentification", is("userId1")))
+                .andExpect(jsonPath("$.userIdentification", is(11111)))
                 .andExpect(jsonPath("$.applicationId", is(1)))
                 .andExpect(jsonPath("$.configurationId", is(11)))
                 .andExpect(jsonPath("$.language", is("en")))
@@ -472,7 +480,7 @@ public class FeedbackIntegrationTest extends BaseIntegrationTest {
                 .andExpect(jsonPath("$.id", is((int) createdFeedback.getId())))
 
                 .andExpect(jsonPath("$.title", is("New Feedback")))
-                .andExpect(jsonPath("$.userIdentification", is("userId1")))
+                .andExpect(jsonPath("$.userIdentification", is(11111)))
                 .andExpect(jsonPath("$.applicationId", is(1)))
                 .andExpect(jsonPath("$.configurationId", is(11)))
                 .andExpect(jsonPath("$.language", is("en")))

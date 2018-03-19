@@ -73,6 +73,15 @@ public class DislikeController {
             long feedbackId = object.getLong("feedback_id");
             long userId = object.getLong("user_id");
 
+            if(feedbackService.findByUserIdentification(userId) != null){
+                List<Feedback> userFeedbacks = feedbackService.findByUserIdentification(userId);
+                for(Feedback feedback:userFeedbacks){
+                    if(feedback.getId() == feedbackId){
+                        return null;
+                    }
+                }
+            }
+
             if(feedbackDislikeService.findByEnduserIdAndFeedbackId(userId,feedbackId) != null){
                 return feedbackDislikeService.findByEnduserIdAndFeedbackId(userId,feedbackId);
             }
@@ -92,16 +101,16 @@ public class DislikeController {
     }
 
     @PreAuthorize("@securityService.hasAdminPermission(#applicationId)")
-    @RequestMapping(method = RequestMethod.DELETE, value = "/dislike/{dislikeId}")
-    public void deleteDislike(@PathVariable long applicationId, @PathVariable long likeId) {
-        feedbackDislikeService.delete(likeId);
+    @RequestMapping(method = RequestMethod.DELETE, value = "/dislikes/{dislikeId}")
+    public void deleteDislike(@PathVariable long applicationId, @PathVariable long dislikeId) {
+        feedbackDislikeService.delete(dislikeId);
     }
 
     @PreAuthorize("@securityService.hasAdminPermission(#applicationId)")
-    @RequestMapping(method = RequestMethod.GET, value = "/dislike/{dislikeId}")
+    @RequestMapping(method = RequestMethod.GET, value = "/dislikes/{dislikeId}")
     public UserFBDislike getDislike(@PathVariable long applicationId,
-                           @PathVariable long likeId) {
-        UserFBDislike userFBDislike = feedbackDislikeService.find(likeId);
+                           @PathVariable long dislikeId) {
+        UserFBDislike userFBDislike = feedbackDislikeService.find(dislikeId);
         if(userFBDislike == null){
             throw new NotFoundException();
         }

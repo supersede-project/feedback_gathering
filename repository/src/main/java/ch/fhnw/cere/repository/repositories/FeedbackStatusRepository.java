@@ -14,6 +14,6 @@ import java.util.List;
 
 @Repository
 public interface FeedbackStatusRepository extends JpaRepository<FeedbackStatus, Long> {
-    List<FeedbackStatus> findByFeedbackId(@Param("feedbackId") long feedbackId);
+    FeedbackStatus findByFeedbackId(@Param("feedbackId") long feedbackId);
     List<FeedbackStatus> findByStatus(@Param("status") String status);
 }

@@ -39,7 +39,7 @@ public class FeedbackStatusServiceImpl implements FeedbackStatusService {
     }
 
     @Override
-    public List<FeedbackStatus> findByFeedbackId(long feedbackId) {
+    public FeedbackStatus findByFeedbackId(long feedbackId) {
         return feedbackStatusRepository.findByFeedbackId(feedbackId);
     }
 

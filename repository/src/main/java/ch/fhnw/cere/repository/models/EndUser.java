@@ -19,11 +19,14 @@ public class EndUser {
     private Date updatedAt;
     private long applicationId;
     private String username;
+    private String email;
     /**
      * Default NULL
      */
-    @Column(name = "phone_number", nullable = true)
+    @Column(name = "phone_number")
     private int phoneNumber;
+
+
 
     @OneToMany(mappedBy = "enduser", cascade = {CascadeType.REMOVE, CascadeType.PERSIST})
     private List<UserFBDislike> userFBDislikes;
@@ -42,10 +45,30 @@ public class EndUser {
         this.phoneNumber = phoneNumber;
     }
 
+    public EndUser(long applicationId, String username) {
+        this.applicationId = applicationId;
+        this.username = username;
+    }
+
     public EndUser(long applicationId, String username, int phoneNumber) {
         this.applicationId = applicationId;
         this.username = username;
         this.phoneNumber = phoneNumber;
+    }
+
+    public EndUser(long applicationId, String username, int phoneNumber, String email) {
+        this.applicationId = applicationId;
+        this.username = username;
+        this.phoneNumber = phoneNumber;
+        this.email = email;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public long getId() {

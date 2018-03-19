@@ -12,5 +12,5 @@ import java.util.List;
 
 @Repository
 public interface FeedbackCompanyRepository extends JpaRepository<FeedbackCompany, Long> {
-    List<FeedbackCompany> findByFeedbackId(@Param("feedbackId") long feedbackId);
+    List<FeedbackCompany> findByPromote(@Param("promote") boolean promote);
 }

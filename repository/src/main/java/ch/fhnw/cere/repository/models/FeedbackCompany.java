@@ -1,6 +1,7 @@
 package ch.fhnw.cere.repository.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -11,20 +12,27 @@ import java.util.Date;
 
 /**
  * Created by Aydinli on 08.11.2017.
+ * This class represents feedback entries which are issued by the company. They are
+ * comprised of a text and a status. User interaction in form of like/dislike or comment
+ * are restricted. The main objective of this class is to notify users in terms of
+ * upcoming events or features
  */
 @Entity
-@Where(clause = "promote=1")
 public class FeedbackCompany {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
-    @JsonIgnore
-    @ManyToOne(cascade = {CascadeType.PERSIST})
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn(name = "feedback_id")
-    private Feedback feedback;
+//    @JsonIgnoreProperties({"title","userIdentification","createdAt","updatedAt",
+//            "applicationId","configurationId","language","commentCount","likeCount","dislikeCount",
+//            "blocked","iconPath","unreadCommentCount","visibility","published","application",
+//            "contextInformation","attachmentFeedbacks","audioFeedbacks","categoryFeedbacks",
+//            "ratingFeedbacks","screenshotFeedbacks","textFeedbacks"})
+//    @ManyToOne(cascade = {CascadeType.PERSIST})
+//    @OnDelete(action = OnDeleteAction.CASCADE)
+//    @JoinColumn(name = "feedback_id")
+//    private Feedback feedback;
 
     private String text;
     private String status;
@@ -32,7 +40,6 @@ public class FeedbackCompany {
     private Date createdAt;
     private Date updatedAt;
 
-    @Column(name = "promote")
     private Boolean promote;
 
     @PrePersist
@@ -48,12 +55,18 @@ public class FeedbackCompany {
     public FeedbackCompany() {
     }
 
-    public FeedbackCompany(Feedback feedback, String text, String status, Date createdAt, Date updatedAt) {
-        this.feedback = feedback;
+//    public FeedbackCompany(Feedback feedback, String text, String status, Date createdAt, Date updatedAt) {
+//        this.feedback = feedback;
+//        this.text = text;
+//        this.status = status;
+//        this.createdAt = createdAt;
+//        this.updatedAt = updatedAt;
+//    }
+
+    public FeedbackCompany(String text, String status,Boolean promote) {
         this.text = text;
         this.status = status;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
+        this.promote = promote;
     }
 
     public Boolean getPromote() {
@@ -72,13 +85,13 @@ public class FeedbackCompany {
         this.id = id;
     }
 
-    public Feedback getFeedback() {
-        return feedback;
-    }
-
-    public void setFeedback(Feedback feedback) {
-        this.feedback = feedback;
-    }
+//    public Feedback getFeedback() {
+//        return feedback;
+//    }
+//
+//    public void setFeedback(Feedback feedback) {
+//        this.feedback = feedback;
+//    }
 
     public String getText() {
         return text;

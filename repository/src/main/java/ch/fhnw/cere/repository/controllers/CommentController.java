@@ -2,15 +2,14 @@ package ch.fhnw.cere.repository.controllers;
 
 import ch.fhnw.cere.repository.controllers.exceptions.NotFoundException;
 import ch.fhnw.cere.repository.models.CommentFeedback;
-import ch.fhnw.cere.repository.models.Feedback;
 import ch.fhnw.cere.repository.services.*;
-import com.sun.org.apache.xpath.internal.operations.Bool;
-import eu.supersede.integration.api.feedback.repository.types.FeedbackComment;
+import org.apache.velocity.exception.ResourceNotFoundException;
 import org.json.JSONObject;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -80,17 +79,54 @@ public class CommentController extends BaseController{
                 long parentId = object.getLong("fk_parent_comment");
                 commentFeedback.setParentComment(commentFeedbackService.find(parentId));
             }
+            if(object.has("anonymous") && object.get("anonymous") != null){
+                boolean anonymous = object.getBoolean("anonymous");
+                commentFeedback.setAnonymous(anonymous);
+            } else {
+                commentFeedback.setAnonymous(false);
+            }
             String commentText = object.getString("commentText");
-            Boolean bool_is_developer = object.getBoolean("bool_is_developer");
-            Boolean activeStatus = object.getBoolean("activeStatus");
+
+            if(object.has("bool_is_developer") && object.get("bool_is_developer") != null){
+                boolean bool_is_developer = object.getBoolean("bool_is_developer");
+                commentFeedback.setBool_is_developer(bool_is_developer);
+            } else {
+                commentFeedback.setBool_is_developer(false);
+            }
+
+            if(object.has("activeStatus") && object.get("activeStatus") != null){
+                boolean activeStatus = object.getBoolean("activeStatus");
+                commentFeedback.setActiveStatus(activeStatus);
+            } else {
+                commentFeedback.setActiveStatus(false);
+            }
 
             commentFeedback.setFeedback(feedbackService.find(feedbackId));
             commentFeedback.setUser(endUserService.find(userId));
             commentFeedback.setCommentText(commentText);
-            commentFeedback.setBool_is_developer(bool_is_developer);
-            commentFeedback.setActiveStatus(activeStatus);
             return commentFeedbackService.save(commentFeedback);
         }
         return null;
+    }
+
+    @PreAuthorize("@securityService.hasAdminPermission(#applicationId)")
+    @RequestMapping(method = RequestMethod.DELETE, value = "/comments/{id}")
+    public void deleteFeedback(@PathVariable long applicationId, @PathVariable long id,
+                               @RequestHeader(value = "Authentication") String admin) {
+        if(admin.equals("admin")){
+            commentFeedbackService.delete(id);
+        }
+    }
+
+//    @PreAuthorize("@securityService.hasAdminPermission(#applicationId)")
+//    @RequestMapping(method = RequestMethod.DELETE, value = "/comments/{id}")
+//    public void deleteComment(@PathVariable long applicationId, @PathVariable long id) {
+//        commentFeedbackService.delete(id);
+//    }
+
+    @PreAuthorize("@securityService.hasAdminPermission(#applicationId)")
+    @RequestMapping(method = RequestMethod.PUT, value = "/comments")
+    public CommentFeedback updateComment(@PathVariable long applicationId, @RequestBody CommentFeedback comment) {
+        return commentFeedbackService.save(comment);
     }
 }

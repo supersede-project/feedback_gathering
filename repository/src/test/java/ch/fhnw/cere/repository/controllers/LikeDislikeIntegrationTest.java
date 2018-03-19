@@ -11,6 +11,7 @@ import org.springframework.test.web.client.ExpectedCount;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.hasSize;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -46,6 +47,7 @@ public class LikeDislikeIntegrationTest extends BaseIntegrationTest{
 
     private EndUser endUser1;
     private EndUser endUser2;
+    private EndUser endUser3;
 
     private UserFBLike userFBLike1;
     private UserFBLike userFBLike2;
@@ -72,6 +74,7 @@ public class LikeDislikeIntegrationTest extends BaseIntegrationTest{
 
         endUser1 = endUserRepository.save(new EndUser(1,"kaydin1",123));
         endUser2 = endUserRepository.save(new EndUser(1,"kaydin2",123));
+        endUser3 = endUserRepository.save(new EndUser(1,"kaydin3",123));
 
         userFBLike1 = userFeedbackLikeRepository.save(new UserFBLike(endUser1,feedback1));
         userFBLike2 = userFeedbackLikeRepository.save(new UserFBLike(endUser1,feedback2));
@@ -98,6 +101,65 @@ public class LikeDislikeIntegrationTest extends BaseIntegrationTest{
     }
 
     @Test
+    public void getLikesAndDislikes() throws Exception{
+        String adminJWTToken = requestAppAdminJWTToken();
+
+        mockMvc.perform(get(basePathEn + "applications/" + 1 + "/feedbacks" +
+                "/likes")
+                .header("Authorization", adminJWTToken))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(4)));
+
+        mockMvc.perform(get(basePathEn + "applications/" + 1 + "/feedbacks" +
+                "/likes/feedback/"+feedback1.getId())
+                .header("Authorization", adminJWTToken))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(1)));
+
+        mockMvc.perform(get(basePathEn + "applications/" + 1 + "/feedbacks" +
+                "/likes/user/"+endUser1.getId())
+                .header("Authorization", adminJWTToken))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(2)));
+
+        mockMvc.perform(get(basePathEn + "applications/" + 1 + "/feedbacks" +
+                "/likes/"+userFBLike1.getId())
+                .header("Authorization", adminJWTToken))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id", is((int) userFBLike1.getId())));
+
+        mockMvc.perform(get(basePathEn + "applications/" + 1 + "/feedbacks" +
+                "/dislikes")
+                .header("Authorization", adminJWTToken))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(4)));
+
+        mockMvc.perform(get(basePathEn + "applications/" + 1 + "/feedbacks" +
+                "/dislikes/feedback/"+feedback1.getId())
+                .header("Authorization", adminJWTToken))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(1)));
+
+        mockMvc.perform(get(basePathEn + "applications/" + 1 + "/feedbacks" +
+                "/dislikes/user/"+endUser1.getId())
+                .header("Authorization", adminJWTToken))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(2)));
+
+        mockMvc.perform(get(basePathEn + "applications/" + 1 + "/feedbacks" +
+                "/dislikes/"+userFBDislike1.getId())
+                .header("Authorization", adminJWTToken))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id", is((int) userFBDislike1.getId())));
+
+        mockMvc.perform(get(basePathEn + "applications/" + 1 + "/feedbacks" +
+                "/dislikes/both/" +
+                +endUser1.getId()+"/"+feedback3.getId())
+                .header("Authorization", adminJWTToken))
+                .andExpect(status().isOk());
+    }
+
+    @Test
     public void testEndUser1DislikeFeedback1() throws Exception{
         String adminJWTToken = requestAppAdminJWTToken();
 
@@ -106,20 +168,39 @@ public class LikeDislikeIntegrationTest extends BaseIntegrationTest{
                 .put("feedback_id",feedback1.getId())
                 .toString();
 
-        this.mockMvc.perform(post(basePathEn + "applications/" + 1 + "/feedbacks/dislikes")
+        String postLike = new JSONObject()
+                .put("user_id",endUser3.getId())
+                .put("feedback_id",feedback1.getId())
+                .toString();
+
+        String postLike2 = new JSONObject()
+                .put("user_id",endUser1.getId())
+                .put("feedback_id",feedback3.getId())
+                .toString();
+
+        this.mockMvc.perform(post(basePathEn + "applications/" + 1 + "/feedbacks" +
+                "/dislikes")
+                .contentType(contentType)
+                .content(postLike2))
+                .andExpect(status().isCreated());
+
+        this.mockMvc.perform(post(basePathEn + "applications/" + 1 + "/feedbacks" +
+                "/dislikes")
                 .contentType(contentType)
                 .content(postDislike))
                 .andExpect(status().isCreated());
 
-        String jsonReturn = mockMvc.perform(get(basePathEn + "applications/" + 1 + "/feedbacks/likes/both/" +
-                +endUser1.getId()+"/"+feedback1.getId())
-                .header("Authorization", adminJWTToken))
-                .andReturn().getResponse().getContentAsString();
-
-        mockMvc.perform(get(basePathEn + "applications/" + 1 + "/feedbacks/likes/both/" +
+        mockMvc.perform(get(basePathEn + "applications/" + 1 + "/feedbacks" +
+                "/likes/both/" +
                 +endUser1.getId()+"/"+feedback1.getId())
                 .header("Authorization", adminJWTToken))
                 .andExpect(content().string(""));
+
+        this.mockMvc.perform(post(basePathEn + "applications/" + 1 + "/feedbacks" +
+                "/likes")
+                .contentType(contentType)
+                .content(postLike))
+                .andExpect(status().isCreated());
 
 //        String jsonReturn2 = mockMvc.perform(get(basePathEn + "applications/" + 1 +
 //                "/feedbacks/" + feedback1.getId())
@@ -147,5 +228,20 @@ public class LikeDislikeIntegrationTest extends BaseIntegrationTest{
                 .content(postLike))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id",is((int) userFBLike1.getId())));
+    }
+
+    @Test
+    public void testDeleteLikeAndDislike() throws Exception{
+        String adminJWTToken = requestAppAdminJWTToken();
+
+        this.mockMvc.perform(delete(basePathEn + "applications/" + 1 + "/feedbacks" +
+                "/likes/" + userFBLike1.getId())
+                .header("Authorization", adminJWTToken))
+                .andExpect(status().isOk());
+
+        this.mockMvc.perform(delete(basePathEn + "applications/" + 1 + "/feedbacks" +
+                "/dislikes/" + userFBDislike1.getId())
+                .header("Authorization", adminJWTToken))
+                .andExpect(status().isOk());
     }
 }

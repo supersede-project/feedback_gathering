@@ -11,9 +11,11 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import javafx.stage.Screen;
 import org.apache.commons.io.IOUtils;
+import org.json.JSONObject;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.util.MultiValueMap;
@@ -29,7 +31,9 @@ import java.io.ByteArrayInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 
 @RestController
@@ -42,7 +46,13 @@ public class FeedbackController extends BaseController {
     private FeedbackService feedbackService;
 
     @Autowired
+    private FeedbackViewedService feedbackViewedService;
+
+    @Autowired
     private FileStorageService fileStorageService;
+
+    @Autowired
+    private FeedbackStatusService feedbackStatusService;
 
     @Autowired
     private DataProviderIntegrator dataProviderIntegrator;
@@ -167,6 +177,11 @@ public class FeedbackController extends BaseController {
         feedback = fileStorageService.storeFiles(feedback, parts);
 
         Feedback createdFeedback = feedbackService.save(feedback);
+
+        String feedbackState = randomState().name().toLowerCase();
+        FeedbackStatus feedbackStatus = new FeedbackStatus(createdFeedback,feedbackState);
+        feedbackStatusService.save(feedbackStatus);
+
         dataProviderIntegrator.ingestJsonData(feedback);
         // feedbackEmailService.sendFeedbackNotification(createdFeedback);
         if(feedbackCentralIntegrationEnabled) {
@@ -225,5 +240,114 @@ public class FeedbackController extends BaseController {
     @RequestMapping(method = RequestMethod.PUT, value = "")
     public Feedback updateFeedback(@PathVariable long applicationId, @RequestBody Feedback feedback) {
         return feedbackService.save(feedback);
+    }
+
+
+    @PreAuthorize("@securityService.hasAdminPermission(#applicationId)")
+    @RequestMapping(method = RequestMethod.PUT, value = "/blocked/{feedbackId}")
+    public String feedbackBlock(@PathVariable long applicationId,
+                                @PathVariable long feedbackId,
+                                HttpEntity<String> blockJSON){
+        if(blockJSON.getBody() != null){
+            JSONObject obj = new JSONObject(blockJSON.getBody());
+            Boolean blocked = obj.getBoolean("blocked");
+            Feedback updateFeedback = feedbackService.find(feedbackId);
+            if(updateFeedback != null) {
+                updateFeedback.setBlocked(blocked);
+                feedbackService.save(updateFeedback);
+                return "Feedback blocked status changed!";
+            } else {
+                return "Requested Feedback does not exist";
+            }
+        }
+        return "JSON Body is NULL";
+    }
+
+    @PreAuthorize("@securityService.hasAdminPermission(#applicationId)")
+    @RequestMapping(method = RequestMethod.PUT, value = "/visibility/{feedbackId}")
+    public String feedbackVisibility(@PathVariable long applicationId,
+                                @PathVariable long feedbackId,
+                                HttpEntity<String> visibleJSON){
+        if(visibleJSON.getBody() != null){
+            JSONObject obj = new JSONObject(visibleJSON.getBody());
+            Boolean visible = obj.getBoolean("visible");
+            Feedback updateFeedback = feedbackService.find(feedbackId);
+            if(updateFeedback != null) {
+                updateFeedback.setVisibility(visible);
+                feedbackService.save(updateFeedback);
+                return "Feedback visibility changed!";
+            } else {
+                return "Requested Feedback does not exist";
+            }
+        }
+        return "JSON Body is NULL";
+    }
+
+    @PreAuthorize("@securityService.hasAdminPermission(#applicationId)")
+    @RequestMapping(method = RequestMethod.PUT, value = "/published/{feedbackId}")
+    public String feedbackPublished(@PathVariable long applicationId,
+                                     @PathVariable long feedbackId,
+                                     HttpEntity<String> publishedJSON){
+        if(publishedJSON.getBody() != null){
+            JSONObject obj = new JSONObject(publishedJSON.getBody());
+            Boolean published = obj.getBoolean("published");
+            Feedback updateFeedback = feedbackService.find(feedbackId);
+            if(updateFeedback != null) {
+                updateFeedback.setPublished(published);
+                feedbackService.save(updateFeedback);
+                return "Feedback published state changed!";
+            } else {
+                return "Requested Feedback does not exist";
+            }
+        }
+        return "JSON Body is NULL";
+    }
+
+    @PreAuthorize("@securityService.hasAdminPermission(#applicationId)")
+    @RequestMapping(method = RequestMethod.GET, value = "/get_blocked/{value}")
+    public List<Feedback> blockedFeedbacks(@PathVariable long applicationId,
+                                    @PathVariable boolean value){
+        return feedbackService.findByBlocked(value);
+    }
+
+    @PreAuthorize("@securityService.hasAdminPermission(#applicationId)")
+    @RequestMapping(method = RequestMethod.GET, value = "/get_visible/{value}")
+    public List<Feedback> visibleFeedbacks(@PathVariable long applicationId,
+                                            @PathVariable boolean value){
+        return feedbackService.findByVisibility(value);
+    }
+
+    @PreAuthorize("@securityService.hasAdminPermission(#applicationId)")
+    @RequestMapping(method = RequestMethod.GET, value = "/get_published/{value}")
+    public List<Feedback> publishedFeedbacks(@PathVariable long applicationId,
+                                           @PathVariable boolean value){
+        return feedbackService.findByPublished(value);
+    }
+
+    @PreAuthorize("@securityService.hasAdminPermission(#applicationId)")
+    @RequestMapping(method = RequestMethod.GET, value = "/get_published/unread" +
+            "/user/{userId}")
+    public List<Feedback> publishedUnreadFeedbacks(@PathVariable long applicationId,
+                                                   @PathVariable long userId){
+        List<FeedbackViewed> viewedFeedbacks = feedbackViewedService.findByEnduserId(userId);
+        List<Feedback> publishedFeedbacks = feedbackService.findByPublished(true);
+        List<Feedback> ownFeedbacks = feedbackService.findByUserIdentification(userId);
+        publishedFeedbacks.removeAll(ownFeedbacks);
+
+        for(FeedbackViewed feedbackViewed:viewedFeedbacks){
+            publishedFeedbacks.removeIf(feedback -> feedback.getId()==feedbackViewed.getFeedback().getId());
+        }
+        return publishedFeedbacks;
+    }
+
+    @PreAuthorize("@securityService.hasAdminPermission(#applicationId)")
+    @RequestMapping(method = RequestMethod.GET, value = "/pending_publication")
+    public List<Feedback> getPendingFeedbacks(@PathVariable long applicationId){
+        return feedbackService.findByPublishedAndVisibility(false,true);
+    }
+
+    private EnumStatus randomState(){
+        int pick = new Random().nextInt(EnumStatus.values().length);
+        return EnumStatus.values()[pick];
     }
 }

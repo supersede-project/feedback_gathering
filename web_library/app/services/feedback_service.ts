@@ -43,7 +43,7 @@ export class FeedbackService {
         });
     }
 
-    sendFeedbackSettings(url: string, formData:any, callback:(feedbackSettings:FeedbackSettings) => void, errorCallback?:(data:any) => void) {
+    sendFeedbackSettings(url: string, formData:any, callback:(data:any) => void, errorCallback?:(data:any) => void) {
         $.ajax({
             url: url,
             type: 'POST',
@@ -55,6 +55,48 @@ export class FeedbackService {
             //     xhr.setRequestHeader("Authorization", "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJzdXBlcl9hZG1pbiIsImNyZWF0ZWQiOjE1MTI4OTQ4NTI0MDMsImV4cCI6MTUxMzQ5OTY1Mn0.RRZ_OOM_39Lhl_jTpRBhlcQHix8KDVu0CF4EgPH84uTMCb4693Y88h29AnnV7B1mZMHfnvBHcf7tqCImfBJ6cQ");
             //     xhr.setRequestHeader("Cache-Control", "no-cache");
             // },
+            success: function (data) {
+                callback(data);
+            },
+            error: function (data) {
+                errorCallback(data);
+            }
+        });
+    }
+
+    getFeedbacks(url: string, token:string, callback:(feedbackSettings:FeedbackSettings) => void, errorCallback?:(data:any) => void) {
+        console.log("token of request: " + token);
+        $.ajax({
+            url: url,
+            type: 'GET',
+            contentType: 'application/json',
+            async: false,
+            beforeSend:function(xhr){
+                /* Authorization header */
+                xhr.setRequestHeader("Authorization", token);
+                xhr.setRequestHeader("Cache-Control", "no-cache");
+            },
+            success: function (data) {
+                callback(data);
+            },
+            error: function (data) {
+                errorCallback(data);
+            }
+        });
+    }
+
+    getFeedbackSettings(url: string, token:string, callback:(feedbackSettings:FeedbackSettings) => void, errorCallback?:(data:any) => void) {
+        console.log("token of request get feedback settings: " + token);
+        $.ajax({
+            url: url,
+            type: 'GET',
+            contentType: 'application/json',
+            async: false,
+            beforeSend:function(xhr){
+                /* Authorization header */
+                xhr.setRequestHeader("Authorization", token);
+                xhr.setRequestHeader("Cache-Control", "no-cache");
+            },
             success: function (data) {
                 callback(data);
             },

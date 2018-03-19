@@ -2,26 +2,35 @@ package ch.fhnw.cere.repository.models;
 
 import ch.fhnw.cere.repository.models.orchestrator.Application;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
+/**
+ * This class stores settings for a feedback in terms of status and inquiry options
+ */
 @Entity
 public class FeedbackSettings {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
-    @JsonIgnore
-    @OneToOne(cascade = {CascadeType.REMOVE, CascadeType.MERGE})
+    @JsonIgnoreProperties({"title","userIdentification","createdAt","updatedAt",
+            "applicationId","configurationId","language","commentCount","likeCount","dislikeCount",
+            "blocked","iconPath","unreadCommentCount","visibility","published","application",
+            "contextInformation","attachmentFeedbacks","audioFeedbacks","categoryFeedbacks",
+            "ratingFeedbacks","screenshotFeedbacks","textFeedbacks"})
+    @OneToOne
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "feedback_id", nullable = false)
     private Feedback feedback;
 
-    @JsonIgnore
-    @OneToOne(cascade = {CascadeType.REMOVE, CascadeType.MERGE})
+    @JsonIgnoreProperties({"createdAt","updatedAt","applicationId","username","email",
+            "phoneNumber"})
+    @OneToOne
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "user_id", nullable = false)
     private EndUser user;
@@ -80,13 +89,13 @@ public class FeedbackSettings {
 
     public FeedbackSettings(){}
 
-    public FeedbackSettings(EndUser user, Feedback feedback, boolean statusUpdates, String statusUpdatesContactChannel, boolean feedbackQuery, String feedbackQueryChannel, boolean globalFeedbackSetting, Application application){
-      this.application =   application;
+    public FeedbackSettings(EndUser user, Feedback feedback, boolean statusUpdates, String statusUpdatesContactChannel, boolean feedbackQuery, String feedbackQueryChannel, boolean globalFeedbackSetting){
+      this.user = user;
       this.feedback = feedback;
       this.feedbackQuery = feedbackQuery;
       this.feedbackQueryChannel = feedbackQueryChannel;
       this.statusUpdates = statusUpdates;
-      this.feedbackQueryChannel = statusUpdatesContactChannel;
+      this.statusUpdatesContactChannel = statusUpdatesContactChannel;
       this.globalFeedbackSetting = globalFeedbackSetting;
     }
 }
