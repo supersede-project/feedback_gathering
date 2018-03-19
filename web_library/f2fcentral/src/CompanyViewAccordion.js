@@ -31,6 +31,7 @@ class CompanyViewAccordion extends Component {
       loading: true,
       showChat: false,
       showComment: false,
+      commentIndex: null,
       chatIndex: null,
       chatTitle: '',
       filesToBeSent: [],
@@ -114,7 +115,7 @@ render() {
         if(item.textFeedbacks.length > 0 && item.categoryFeedbacks.length > 0)
         {
           return (
-            <AccordionItem titleTag="span" title={<CompanyViewFeedbackTitle published={item.published} update={that.fetchData} onShowChat={that.handleShowChat} feedbackId={item.id} type={item.categoryFeedbacks[0].parameterId} title={item.textFeedbacks[0].text} date={item.createdAt} visibility={item.visibility} likes={item.likeCount} dislikes={item.dislikeCount} commentnumber={item.commentCount} blocked={item.blocked} onShowComment={instance.handleShowComment}/>}>
+            <AccordionItem titleTag="span" title={<CompanyViewFeedbackTitle published={item.published} update={that.fetchData} onShowChat={that.handleShowChat} feedbackId={item.id} type={item.categoryFeedbacks[0].parameterId} title={item.textFeedbacks[0].text} date={item.createdAt} visibility={item.visibility} likes={item.likeCount} dislikes={item.dislikeCount} commentnumber={item.commentCount} blocked={item.blocked} onShowComment={that.handleShowComment}/>}>
             </AccordionItem>
           )
         }
@@ -144,11 +145,11 @@ render() {
     toRender = <DropzoneAvatar onDropzoneBackButtonSelected={this.closeDropzone}/>;
   }
 
-  else if(this.state.showComment){
-    toRender = <FeedbackForumCommentView post={this.state.data.find(function (a)
-    {
-       return a.id === instance.state.commentIndex;
-    })}/>
+  else if(that.state.showComment){
+    toRender = <FeedbackForumCommentView backButtonSelected={this.handleBackButton}
+                                         post={this.state.data.find(function (a) {
+                                             return a.id === that.state.commentIndex;
+                                         })}/>;
   }
   else {
     toRender = <p>No Elements to show</p>;

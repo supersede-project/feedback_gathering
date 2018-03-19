@@ -25,6 +25,7 @@ class CommentUI extends Component {
     this.renderChildren = this.renderChildren.bind(this);
     this.backButtonPressed = this.backButtonPressed.bind(this);
     this.backButton = this.backButton.bind(this);
+    this.getDeleteButton= this.getDeleteButton.bind(this);
   }
 
   componentDidMount() {
@@ -93,6 +94,7 @@ class CommentUI extends Component {
   }
 
   renderChildren(comment) {
+      var that = this;
     if(comment.children !== null && comment.children.length > 0)
       {
         return (<CommentList>
@@ -104,11 +106,23 @@ class CommentUI extends Component {
               <p>
                 {childComment.commentText}
               </p>
+                  {that.getDeleteButton(childComment.id)}
             </Comment>)
           })}
         </CommentList>)
       }
       return;
+  }
+
+  getDeleteButton(commentId) {
+      var that = this;
+      if(window.adminUser) {
+          return (<button className={style.formbutton1} type="button" onClick={(e) => that.deleteComment(commentId)}>Delete</button>);
+      }
+  }
+
+  deleteComment(commentId) {
+      //fetch
   }
 
   render() {
@@ -144,7 +158,9 @@ class CommentUI extends Component {
                   {comment.commentText}
                 </p>
                 <button className={style.formbuttons1} type="button" onClick={(e) => that.setReplyCommentId(e, comment.id)}>Reply</button>
-                {that.renderChildren(comment)}
+                  {that.getDeleteButton(comment.id)}
+
+                  {that.renderChildren(comment)}
                 </Comment>
               )}})}
             </CommentList>

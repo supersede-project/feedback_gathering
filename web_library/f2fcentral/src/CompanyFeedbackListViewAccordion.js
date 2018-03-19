@@ -2,7 +2,10 @@ import React, {Component} from 'react';
 import TiNews from 'react-icons/lib/ti/news';
 
 import style from './App.css';
-
+import { Accordion, AccordionItem } from 'react-sanfona';
+import 'react-tabs/style/react-tabs.css';
+import { PulseLoader } from 'react-spinners';
+import CompanyFeedback from "./CompanyFeedback";
 
 class CompanyFeedbackListViewAccordion extends Component {
 
@@ -17,10 +20,11 @@ class CompanyFeedbackListViewAccordion extends Component {
     }
 
     componentDidMount() {
-        this.fetchData(null);
+        this.fetchData();
     }
 
-    fetchData(e) {
+    fetchData() {
+        console.log("FetchData called");
         var that = this;
         fetch(process.env.REACT_APP_BASE_URL + 'en/applications/'+ sessionStorage.getItem('applicationId')+'/feedbacks/feedback_company', {
             headers: {
@@ -29,6 +33,7 @@ class CompanyFeedbackListViewAccordion extends Component {
             }
         }).then(result=>result.json())
             .then(result=> {
+
                 that.setState({data: result})
             });
     }
@@ -37,47 +42,20 @@ class CompanyFeedbackListViewAccordion extends Component {
         this.setState({expanded: !this.state.expanded});
     }
 
-    render()
-    {
-        let toRender = null;
-        var that = this;
+    render() {
+        let that = this;
 
-        toRender =
-            <div>
-                <Accordion>
+        return <Accordion>
             {that.state.data.map(function (item, index) {
-                if(!item.hasOwnProperty("textFeedbacks") && !this.state.expanded)
-                {
-                    return (
-                        <div style={{display: "flex", justifyContent: "space-around", background: 'linear-gradient(to bottom, #e6f9ff 0%, #ccf3ff 50%, #b3edff 52%, #99e7ff 100%)'}}>
-                            <h5 align="left" style={{
-                                flexGrow: 2,
-                                fontSize: 12,
-                                fontStyle: 'italic'
-                            }}
-                                onClick={this.toggleExpanded}><TiNews size={35} padding={75}/>&nbsp; {(!this.state.expanded && item.title.length > 30) ? item.title.substring(0, 30) + "...more" : item.title}
-                            </h5>
-                        </div>
-                    )
+                if(item.text.length >0){
+                 return(
+                     <AccordionItem titleTag="span" title={<CompanyFeedback title={item.text}/>}>
+                     </AccordionItem>
+                 )
                 }
-                else if(this.state.expanded){
-                    return (
-                        <div style={{display: "flex", justifyContent: "space-around", background: 'linear-gradient(to bottom, #e6f9ff 0%, #ccf3ff 50%, #b3edff 52%, #99e7ff 100%)'}}>
-                            <h5 align="left" style={{
-                                flexGrow: 2,
-                                fontSize: 12,
-                                fontStyle: 'italic'
-                            }}
-                                onClick={this.toggleExpanded}><TiNews size={35} padding={75}/>&nbsp; {(!this.state.expanded && item.title.length > 30) ? item.title.substring(0, 30) + "...less" : item.title}
-                            </h5>
-                        </div>
-                    )
-                }
-                return false;
-            })}
-                </Accordion>
-            </div>;
 
+            })}
+        </Accordion>
     }
 
 }

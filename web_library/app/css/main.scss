@@ -37,6 +37,23 @@
   }
 }
 
+#openF2fcentral {
+  span#unreadFeedbacks {
+    background-color: red;
+    color: white;
+    position: absolute;
+    top: 15px;
+    left: 30px;
+    padding: 0 2px;
+    size: 20px;
+    font-size: 20px;
+  }
+}
+
+.nodisplay {
+  display: none;
+}
+
 #feedbackEntryPoint {
   position: fixed;
   top: 300px;

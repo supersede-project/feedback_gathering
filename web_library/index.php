@@ -397,7 +397,9 @@ if(!isset($admin_user) || $admin_user === '') {
                 <!--###endheader###-->
                 <div id="f2fcentral-container">
                      <!--<button type="button" id="openF2fcentral">ClickMe</button>-->
-                     <div class="fa fa-user" style="font-size:50px" id="openF2fcentral"}></div>
+                     <div class="fa fa-user" style="font-size:50px" id="openF2fcentral"}>
+                        <span id="unreadFeedbacks" class="nodisplay">!</span>
+                     </div>
                      <div id="f2fcentral"></div>
                 </div>
                 <!--###startnav###-->
@@ -1906,6 +1908,7 @@ if(!isset($admin_user) || $admin_user === '') {
     var userId = <?php echo $user_id; ?>;
     var applicationId = <?php echo $application_id; ?>;
     var adminUser = <?php echo $admin_user; ?>;
+    var baseUrl = "http://mt.ronnieschaniel.com:8080/feedback_repository/feedback_repository/";
 </script>
 
 <script type="text/javascript" src="/dist/f2fcentral.min.js"></script>

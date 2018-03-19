@@ -65,13 +65,19 @@ class FeedbackTitle extends Component {
 
     handleShowChat(e) {
         var that = this;
+        console.log(sessionStorage.getItem('token'));
         fetch(process.env.REACT_APP_BASE_URL + 'en/applications/' + sessionStorage.getItem('applicationId') + '/feedbacks/chat_unread/feedback/' + that.props.feedbackId + '/user/' + sessionStorage.getItem('userId'), {
             header: {
                 'Content-Type': 'application/json',
-                'Authorization': sessionStorage.getItem('token')
+                //'Authorization': sessionStorage.getItem('token')
             },
             method: 'POST'
-        }).then(result => result.json()).then(result => that.props.onShowChat({showChat: true, index: this.props.feedbackId, unreadChat: [], title: that.props.title}));
+        }).then(result => result.json()).then(result => that.props.onShowChat({
+            showChat: true,
+            index: this.props.feedbackId,
+            unreadChat: [],
+            title: that.props.title
+        }));
     }
 
     toggleExpanded() {
@@ -94,23 +100,23 @@ class FeedbackTitle extends Component {
     }
 
     handleVisibility() {
-        var statusStyle={
-        color: 'black',
-        //border: '1px solid #333333',
-        padding: '3px 7px',
-        background: 'linear-gradient(180deg, #fff, #ddd 40%, #ccc)',
-        textAlign: 'center',
-        fontSize: '7px'
+        var statusStyle = {
+            color: 'black',
+            //border: '1px solid #333333',
+            padding: '3px 7px',
+            background: 'linear-gradient(180deg, #fff, #ddd 40%, #ccc)',
+            textAlign: 'center',
+            fontSize: '7px'
         }
         if (this.props.visibility === false) {
             return <TiGroupOutline size={35} onClick={this.setVisibility} padding={30}/>;
         }
-        if (this.props.visibility === true && this.props.published=== true) {
+        if (this.props.visibility === true && this.props.published === true) {
             return <TiGroup size={35} padding={30}/>
         }
-        if(this.props.visibility === true && this.props.published === false){
+        if (this.props.visibility === true && this.props.published === false) {
             return <div><TiGroup color={'grey'} size={35} padding={30}/><br/>
-           <div style={statusStyle}>Request pending</div>
+                <div style={statusStyle}>Request pending</div>
             </div>
         }
     }
@@ -206,7 +212,8 @@ class FeedbackTitle extends Component {
         fetch(process.env.REACT_APP_BASE_URL + 'en/applications/' + sessionStorage.getItem('applicationId') + '/feedbacks/chat_unread/user/' + sessionStorage.getItem('userId'), {
             method: 'GET',
             headers: {
-                'Content-Type': 'application/json'
+
+                'Content-Type': 'application/json',
             }
         }).then(result => result.json())
             .then(result => {
@@ -217,18 +224,21 @@ class FeedbackTitle extends Component {
             });
     }
 
-    handleUnreadChat(){
+    handleUnreadChat() {
         var that = this;
         var data = this.state.unreadChat;
         var content = "";
 
-        that.state.unreadChat.map(function (item, index) {
-             if(item.hasOwnProperty("feedback") && item.feedback.hasOwnProperty("id") && item.feedback.id === that.props.feedbackId) {
-                 console.log(`Juhu` + `feedbackID: ${item.feedback.id}`);
-                 content = <label className={style.counts} size={35}>!</label>
-                 return null;
-             }
-        });
+        if (data != null) {
+            this.state.unreadChat.map(function (item, index) {
+                if (item.hasOwnProperty("feedback") && item.feedback.hasOwnProperty("id") && item.feedback.id === that.props.feedbackId) {
+                    console.log(`Juhu` + `feedbackID: ${item.feedback.id}`);
+                    content = <label className={style.counts} size={35}>!</label>
+                    return null;
+                }
+            });
+        }
+
         return content;
     }
 
@@ -263,10 +273,21 @@ class FeedbackTitle extends Component {
 
         var dateText = "";
         var tmpDate = new Date(this.props.date.substring(0, this.props.date.indexOf('.')) + "Z");
-        var options = {year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric'}
+        var options = {
+            year: 'numeric',
+            month: 'numeric',
+            day: 'numeric',
+            hour: 'numeric',
+            minute: 'numeric',
+            second: 'numeric'
+        }
         dateText = new Intl.DateTimeFormat('de-DE', options).format(tmpDate);
 
-        return (<div style={{display: "flex", justifyContent: "space-around", background: 'linear-gradient(to top, #dfe9f3 0%, white 100%)'}}>
+        return (<div style={{
+            display: "flex",
+            justifyContent: "space-around",
+            background: 'linear-gradient(to top, #dfe9f3 0%, white 100%)'
+        }}>
             <h5 align="left" style={{
                 flexGrow: 2,
                 fontSize: 12,
@@ -274,7 +295,8 @@ class FeedbackTitle extends Component {
             }}
                 onClick={this.toggleExpanded}>{this.getIconForFeedbackType()}&nbsp; {(!this.state.expanded && this.props.title.length > 30) ? this.props.title.substring(0, 30) + "...more" : this.props.title}
                 <div className={style.spacingstyle}>
-                    <div align="left" style={{fontSize: 10, fontStyle: 'normal', fontWeight: 'normal'}}>sent on {dateText}</div>
+                    <div align="left" style={{fontSize: 10, fontStyle: 'normal', fontWeight: 'normal'}}>sent
+                        on {dateText}</div>
                     <div align="left" style={{fontSize: 10, color: '#169BDD', fontStyle: 'normal'}}>
                         Status: {this.handleFeedbackStatus()}</div>
                     <div align="left" style={{fontSize: 10, color: '#169BDD', fontStyle: 'normal'}}>Forum activity:
@@ -296,9 +318,9 @@ class FeedbackTitle extends Component {
                 {this.handleMailIcon()}
 
                 <div>
-                <FaWechat align="left" color={'#63C050'} style={{flexGrow: "1"}} onClick={this.handleShowChat}
-                          size={35}/>
-                <span>{this.handleUnreadChat()}</span>
+                    <FaWechat align="left" color={'#63C050'} style={{flexGrow: "1"}} onClick={this.handleShowChat}
+                              size={35}/>
+                    <span>{this.handleUnreadChat()}</span>
                 </div>
             </div>
         </div>);

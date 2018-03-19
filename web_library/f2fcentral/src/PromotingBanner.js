@@ -47,7 +47,7 @@ class PromotingBanner extends Component {
                          position: this.props.positioning,
                          background: 'linear-gradient(to bottom, lightgrey 0%, #CCCCCC 1%, #e0e0e0 26%, #d9d9d9 48%, #bfbfbf 75%, #b3b3b3 100%)'
                      }}>
-                    {that.state.data.map(function (item, index) {
+                    {this.state.data.map(function (item, index) {
                         if (item.promote === true) {
                             return (<div>
                                 <h5 align="left" style={{
