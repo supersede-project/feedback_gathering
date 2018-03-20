@@ -564,9 +564,22 @@ section.feedback-mechanism {
     position: absolute;
     left: 0px;
     top: 20px;
-    z-index: 1000;
+    z-index: 10000;
     background: #FFFFFF;
     overflow: scroll; }
+
+#openF2fcentral span#unreadFeedbacks {
+  background-color: red;
+  color: white;
+  position: absolute;
+  top: 15px;
+  left: 30px;
+  padding: 0 2px;
+  size: 20px;
+  font-size: 20px; }
+
+.nodisplay {
+  display: none; }
 
 #feedbackEntryPoint {
   position: fixed;

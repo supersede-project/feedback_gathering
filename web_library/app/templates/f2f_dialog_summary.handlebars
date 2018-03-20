@@ -18,28 +18,42 @@
                 </div>
             </div>
         </div>
-        <div class="row" style="padding: 30px">
-            Would you like to save this settings for further feedbacks?
-        </div>
+        <!--add hint as in review feedback dialog, and remove the following question section without the buttons-->
+        <!--<div class="row" style="padding: 30px">-->
+            <!--Would you like to save this settings for further feedbacks?-->
+        <!--</div>-->
         <div class="row" style="padding: 30px">
             <!--<div class="col-md-2">-->
                 <!--<button type="button" id="f2fDialogBackToInquiry" class="btn btn-success">Back</button>-->
             <!--</div>-->
-            <div class="col-md-8">
-                <label class="custom-control custom-radio">
-                    <input id="summaryFormSaveYes" name="saveSettings" type="radio" class="custom-control-input" value="Yes" required>
-                    <span class="custom-control-indicator"></span>
-                    <span class="custom-control-description">Yes</span>
-                </label>
-                <label class="custom-control custom-radio">
-                    <input id="summaryFormSaveNo" name="saveSettings" type="radio" class="custom-control-input" value="No" required>
-                    <span class="custom-control-indicator"></span>
-                    <span class="custom-control-description">No, I would like to adjust the settings for the next time</span>
-                </label>
+            <div role="alert" style="padding: 20px; background-color: darkcyan; /* Red */
+                color: white;
+                    margin-bottom: 15px;margin:15px;">
+                <i>Hint: </i> You are able to adjust the settings for the feedback in the F2F Central
             </div>
-            <div class="col-md-4">
-                <button type="button" id="f2fDialogSave" class="btn btn-success">Save</button>
-            </div>
+            <section class="dialog-navigation">
+                <button style="float: left; display: block;" id="f2fDialogBackToInquiry">
+                    Back</button>
+                <button type="button"
+                        style="float: right; display: block;" id="f2fDialogSave">Save Settings</button>
+                <div class="clearfix"></div>
+                <span class="server-response"></span>
+            </section>
+            <!--<div class="col-md-8">-->
+                <!--<label class="custom-control custom-radio">-->
+                    <!--<input id="summaryFormSaveYes" name="saveSettings" type="radio" class="custom-control-input" value="Yes" required>-->
+                    <!--<span class="custom-control-indicator"></span>-->
+                    <!--<span class="custom-control-description">Yes</span>-->
+                <!--</label>-->
+                <!--<label class="custom-control custom-radio">-->
+                    <!--<input id="summaryFormSaveNo" name="saveSettings" type="radio" class="custom-control-input" value="No" required>-->
+                    <!--<span class="custom-control-indicator"></span>-->
+                    <!--<span class="custom-control-description">No, I would like to adjust the settings for the next time</span>-->
+                <!--</label>-->
+            <!--</div>-->
+            <!--<div class="col-md-4">-->
+                <!--<button type="button" id="f2fDialogSave" class="btn btn-success">Save</button>-->
+            <!--</div>-->
         </div>
     </form>
 </section>

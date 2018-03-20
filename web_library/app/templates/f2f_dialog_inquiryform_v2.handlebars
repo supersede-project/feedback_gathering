@@ -5,7 +5,7 @@
         </div>
         <div class="row">
             <div class="col-md-6">
-                <p>May we contact you in case of inquiries related to your feedback?</p>
+                <p>May we contact you in case of questions related to your feedback?</p>
                 <div class="custom-controls-stacked">
                     <label class="custom-control custom-radio">
                         <input id="inquiryFormAllowUpdate" name="allowInquiry" value="Yes" type="radio" class="custom-control-input" required>
@@ -27,7 +27,7 @@
                         <span class="custom-control-indicator"></span>
                         <span class="custom-control-description">Email</span>
                     </label>
-                    <label class="custom-control custom-radio">
+                    <label class="custom-control custom-radio" style="margin:15px">
                         <input id="inquiryFormCentral" name="contactChannelInquiry" value="Feedback-To-Feedback Central" type="radio" class="custom-control-input" required>
                         <span class="custom-control-indicator"></span>
                         <span class="custom-control-description">Feedback-To-Feedback Central</span>
@@ -36,13 +36,21 @@
             </div>
         </div>
         <div class="row">
+            <section class="dialog-navigation">
+                <button style="float: left; display: block;" id="f2fDialogBackToUpdate">
+                    Back</button>
+                <button type="button"
+                        class="button navigation-button" id="f2fDialogFinish">Continue</button>
+                <div class="clearfix"></div>
+                <span class="server-response"></span>
+            </section>
             <!--<div class="col-md-1">-->
                 <!--<button type="button" id="f2fDialogBackToUpdate" class="btn btn-primary">Back</button>-->
             <!--</div>-->
-            <div class="col-md-10"></div>
-            <div class="col-md-2">
-                <button type="button" id="f2fDialogFinish" class="btn btn-primary">Continue</button>
-            </div>
+            <!--<div class="col-md-10"></div>-->
+            <!--<div class="col-md-1">-->
+                <!--<button type="button" id="f2fDialogFinish" class="btn btn-primary">Continue</button>-->
+            <!--</div>-->
         </div>
     </form>
 </section>
