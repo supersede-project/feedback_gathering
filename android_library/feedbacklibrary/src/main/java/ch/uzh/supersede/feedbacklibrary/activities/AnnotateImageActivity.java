@@ -100,7 +100,7 @@ public class AnnotateImageActivity extends AppCompatActivity implements ColorPic
             stickerViewTextAnnotationImageView.setOnTextAnnotationChangedListener(this);
             stickerViewTextAnnotationImageView.setAnnotationInputTextHint(getResources().getString(R.string.supersede_feedbacklibrary_text_annotation_dialog_hint));
             stickerViewTextAnnotationImageView.setAnnotationInputTextLabel(getResources().getString(R.string.supersede_feedbacklibrary_text_annotation_dialog_label));
-            TextView textView = stickerViewTextAnnotationImageView.getAnnotationNumberView();
+            TextView textView = stickerViewTextAnnotationImageView.getAnnotationNumber();
             if (textView != null) {
                 String newAnnotationNumber = Integer.toString(textAnnotationCounter);
                 textView.setText(newAnnotationNumber);
@@ -389,7 +389,7 @@ public class AnnotateImageActivity extends AppCompatActivity implements ColorPic
                 if (child instanceof TextAnnotationImageView) {
                     TextAnnotationImageView textAnnotationView = (TextAnnotationImageView) child;
 
-                    int key = Integer.valueOf(textAnnotationView.getAnnotationNumberView().getText().toString());
+                    int key = Integer.valueOf(textAnnotationView.getAnnotationNumber().getText().toString());
                     // If no text was entered, just set the empty string
                     String annotationInputText = "";
                     if (textAnnotationView.getAnnotationInputText() != null) {
@@ -411,7 +411,7 @@ public class AnnotateImageActivity extends AppCompatActivity implements ColorPic
             for (int i = 0; i < viewGroup.getChildCount(); ++i) {
                 View child = viewGroup.getChildAt(i);
                 if (child instanceof TextAnnotationImageView) {
-                    TextView textView = (((TextAnnotationImageView) child).getAnnotationNumberView());
+                    TextView textView = (((TextAnnotationImageView) child).getAnnotationNumber());
                     String newAnnotationNumber = Integer.toString(Integer.valueOf(textView.getText().toString()) - 1);
                     if (Integer.valueOf(newAnnotationNumber) != 0) {
                         textView.setText(newAnnotationNumber);
@@ -435,7 +435,7 @@ public class AnnotateImageActivity extends AppCompatActivity implements ColorPic
             View child = relativeLayout.getChildAt(i);
             if (child instanceof TextAnnotationImageView) {
                 String newAnnotationNumber = Integer.toString(textAnnotationCounter);
-                ((TextAnnotationImageView) child).getAnnotationNumberView().setText(newAnnotationNumber);
+                ((TextAnnotationImageView) child).getAnnotationNumber().setText(newAnnotationNumber);
                 textAnnotationCounter++;
             }
             if (textAnnotationCounter > textAnnotationCounterMaximum) {

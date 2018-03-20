@@ -8,10 +8,8 @@ import android.support.design.widget.TextInputLayout;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -20,10 +18,10 @@ import ch.uzh.supersede.feedbacklibrary.R;
 
 import static android.graphics.Color.WHITE;
 import static android.graphics.Typeface.BOLD;
-import static android.view.Gravity.CENTER;
+import static android.view.Gravity.*;
 
 public class TextAnnotationImageView extends AbstractAnnotationView {
-    private TextView annotationNumberView;
+    private TextView annotationNumber;
     private ImageView editAnnotation;
 
     // Text annotation
@@ -78,8 +76,8 @@ public class TextAnnotationImageView extends AbstractAnnotationView {
         this.onTextAnnotationChangedListener = onTextAnnotationChangedListener;
     }
 
-    public TextView getAnnotationNumberView() {
-        return annotationNumberView;
+    public TextView getAnnotationNumber() {
+        return annotationNumber;
     }
 
     @Override
@@ -87,30 +85,29 @@ public class TextAnnotationImageView extends AbstractAnnotationView {
         super.init(context);
         final Context textAnnotationContext = context;
 
-        annotationNumberView = new TextView(context);
+        annotationNumber = new TextView(context);
         editAnnotation = new ImageView(context);
 
         editAnnotation.setImageResource(R.drawable.ic_mode_edit_black_48dp);
-        annotationNumberView.setBackgroundResource(R.drawable.ic_lens_black_48dp);
+        annotationNumber.setBackgroundResource(R.drawable.ic_lens_black_48dp);
 
-        annotationNumberView.setTypeface(null, BOLD);
-        annotationNumberView.setTextColor(WHITE);
-        annotationNumberView.setGravity(CENTER);
+        annotationNumber.setTypeface(null, BOLD);
+        annotationNumber.setTextColor(WHITE);
+        annotationNumber.setGravity(CENTER);
 
-        annotationNumberView.setTag("annotationNumberView");
+        annotationNumber.setTag("annotationNumber");
         editAnnotation.setTag("editAnnotation");
 
+        int buttonSize = convertDpToPixel(BUTTON_SIZE_DP, getContext());
 
-        // Annotation number view
-        LayoutParams ivAnnotationNumberViewParams = new LayoutParams(convertDpToPixel(BUTTON_SIZE_DP, getContext()), convertDpToPixel(BUTTON_SIZE_DP, getContext()));
-        ivAnnotationNumberViewParams.gravity = Gravity.BOTTOM | Gravity.START;
+        LayoutParams annotationNumberParams = new LayoutParams(buttonSize, buttonSize);
+        LayoutParams editAnnotationsParams = new LayoutParams(buttonSize, buttonSize);
 
-        // Edit image view
-        LayoutParams ivEditParams = new LayoutParams(convertDpToPixel(BUTTON_SIZE_DP, getContext()), convertDpToPixel(BUTTON_SIZE_DP, getContext()));
-        ivEditParams.gravity = Gravity.BOTTOM | Gravity.END;
+        annotationNumberParams.gravity = BOTTOM | START;
+        editAnnotationsParams.gravity = BOTTOM | END;
 
-        addView(annotationNumberView, ivAnnotationNumberViewParams);
-        addView(editAnnotation, ivEditParams);
+        addView(annotationNumber, annotationNumberParams);
+        addView(editAnnotation, editAnnotationsParams);
 
         editAnnotation.setOnClickListener(new OnClickListener() {
             @Override
@@ -131,7 +128,7 @@ public class TextAnnotationImageView extends AbstractAnnotationView {
         super.setViewsVisible(isVisible);
         int visibility = isVisible ? VISIBLE : INVISIBLE;
         editAnnotation.setVisibility(visibility);
-        annotationNumberView.setVisibility(visibility);
+        annotationNumber.setVisibility(visibility);
     }
 
     private void showTextAnnotationDialog(Context context) {
@@ -143,17 +140,17 @@ public class TextAnnotationImageView extends AbstractAnnotationView {
         // Inflating the custom layout
         LinearLayout linearLayout = (LinearLayout) layoutInflater.inflate(R.layout.text_annotation_dialog_layout, null);
 
-        final TextInputLayout textAnnotationDialogInputLayout = (TextInputLayout) linearLayout.findViewById(R.id.supersede_feedbacklibrary_text_annotation_dialog_input_layout);
-        final TextInputEditText textAnnotationDialogInputEditText = (TextInputEditText) linearLayout.findViewById(R.id.supersede_feedbacklibrary_text_annotation_dialog_text);
+        final TextInputLayout textAnnotationLayout = (TextInputLayout) linearLayout.findViewById(R.id.supersede_feedbacklibrary_text_annotation_dialog_input_layout);
+        final TextInputEditText textAnnotationText = (TextInputEditText) linearLayout.findViewById(R.id.supersede_feedbacklibrary_text_annotation_dialog_text);
 
         // Set the input text if the sticker is restored
         if (annotationInputText != null) {
-            textAnnotationDialogInputEditText.setText(getAnnotationInputText());
+            textAnnotationText.setText(getAnnotationInputText());
         }
         // Set the hint and enable it
-        textAnnotationDialogInputLayout.setHintEnabled(true);
-        textAnnotationDialogInputLayout.setHint(getAnnotationInputTextHint());
-        textAnnotationDialogInputEditText.addTextChangedListener(new TextWatcher() {
+        textAnnotationLayout.setHintEnabled(true);
+        textAnnotationLayout.setHint(getAnnotationInputTextHint());
+        textAnnotationText.addTextChangedListener(new TextWatcher() {
             @Override
             public void afterTextChanged(Editable s) {
                 //nop
@@ -167,9 +164,9 @@ public class TextAnnotationImageView extends AbstractAnnotationView {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (s.length() > 0) {
-                    textAnnotationDialogInputLayout.setHint(getAnnotationInputTextLabel());
+                    textAnnotationLayout.setHint(getAnnotationInputTextLabel());
                 } else if (s.length() == 0) {
-                    textAnnotationDialogInputLayout.setHint(getAnnotationInputTextHint());
+                    textAnnotationLayout.setHint(getAnnotationInputTextHint());
                 }
             }
         });
@@ -180,7 +177,7 @@ public class TextAnnotationImageView extends AbstractAnnotationView {
         dialog.setPositiveButton(getResources().getString(R.string.supersede_feedbacklibrary_ok_string), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                setAnnotationInputText(textAnnotationDialogInputEditText.getText().toString());
+                setAnnotationInputText(textAnnotationText.getText().toString());
                 if (emptyLayout != null) {
                     emptyLayout.requestFocus();
                 }
