@@ -58,13 +58,13 @@ public class AudioMechanism extends Mechanism {
 
     private void initAudioMechanism(MechanismConfigurationItem item) {
         for (Map<String, Object> param : item.getParameters()) {
-            String key = (String) param.get("key");
+            String value = (String) param.get("key");
             // Title
-            if (key.equals("title")) {
+            if (value.equals("title")) {
                 setTitle((String) param.get("value"));
             }
             // Maximum time
-            if (key.equals("maxTime")) {
+            if (value.equals("maxTime")) {
                 setMaxTime(Float.parseFloat((String)param.get("value")));
             }
         }

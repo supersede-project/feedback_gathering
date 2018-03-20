@@ -8,7 +8,9 @@ import android.view.View;
 import android.widget.LinearLayout;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import ch.uzh.supersede.feedbacklibrary.configurations.MechanismConfigurationItem;
 import ch.uzh.supersede.feedbacklibrary.models.AudioMechanism;
@@ -135,6 +137,14 @@ public class OrchestratorStub {
                 case AUDIO_TYPE:
                     configurationItem.setType(AUDIO_TYPE);
                     AudioMechanism audioMechanism = new AudioMechanism(configurationItem);
+                    //DIESER CODE TUT WEH -->
+                    Map<String,Object> params = new HashMap<>();
+                    params.put("key","maxTime");
+                    params.put("value","Audio-Mechanism");
+                    List<Map<String,Object>> paramList = new ArrayList<>();
+                    paramList.add(params);
+                    configurationItem.setParameters(paramList);
+                    //<---
                     AudioMechanismView audioMechanismView = new AudioMechanismView(layoutInflater, audioMechanism, resources, activity, context);
                     viewList.add(audioMechanismView);
                     break;
@@ -172,8 +182,5 @@ public class OrchestratorStub {
                     break;
             }
         }
-
     }
-
-
 }
