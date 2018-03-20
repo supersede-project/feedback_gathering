@@ -13,8 +13,8 @@ export class AttachmentMechanism extends Mechanism {
         return {
             title: this.getParameterValue('title'),
             boxWidth: this.getParameterValue('boxWidth') || '100%',
-            maximumTotalFileSize: this.getParameterValue('maximumTotalFileSize') || 0,
-            maximumTotalFileSizeDisplay: this.formatBytes(this.getParameterValue('maximumTotalFileSize') || 0),
+            maximumTotalFileSize: this.getParameterValue('maximumTotalFileSize') || 8*8*8*8*8*8*8*8, // 16 MB
+            maximumTotalFileSizeDisplay: this.formatBytes(this.getParameterValue('maximumTotalFileSize') || 8*8*8*8*8*8*8*8), // 16 MB
             boxPaddingLeft: this.getParameterValue('boxPaddingLeft') || '0',
             boxPaddingRight: this.getParameterValue('boxPaddingRight') || '20px'
         }

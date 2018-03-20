@@ -49,7 +49,7 @@ public class ScreenshotFeedback implements FileFeedback, MechanismFeedback {
     public String toString() {
         return String.format(
                 "ScreenshotFeedback[id=%d, feedbackId='%d', mechanismId='%d', path='%s', fileExtension='%s']",
-                id, feedback.getId(), mechanismId, path, fileExtension);
+                id, feedback != null ? feedback.getId() : 0, mechanismId, path, fileExtension);
     }
 
     public ScreenshotFeedback() {

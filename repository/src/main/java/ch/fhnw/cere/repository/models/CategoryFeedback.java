@@ -43,9 +43,15 @@ public class CategoryFeedback implements MechanismFeedback {
 
     @Override
     public String toString() {
-        return String.format(
-                "CategoryFeedback[id=%d]",
-                id);
+        return "CategoryFeedback{" +
+                "id=" + id +
+                ", feedback=" + feedback +
+                ", mechanismId=" + mechanismId +
+                ", parameterId=" + parameterId +
+                ", text='" + text + '\'' +
+                ", mechanism=" + mechanism +
+                ", categoryValue='" + categoryValue + '\'' +
+                '}';
     }
 
     public CategoryFeedback() {

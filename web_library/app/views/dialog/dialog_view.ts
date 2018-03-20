@@ -37,7 +37,9 @@ export class DialogView {
             }
         }
 
-        this.setupCloseOnOutsideClick();
+        if(this.context.closeOnOutsideClick === null || this.context.closeOnOutsideClick === undefined || this.context.closeOnOutsideClick === true) {
+            this.setupCloseOnOutsideClick();
+        }
     }
 
     overrideMechanismConfiguration(context:any, localesOverride:any): any {

@@ -4,12 +4,15 @@ Hello,<br/>
 A new feedback was sent for application ${feedback.applicationId}.
 
 <p>User ID: ${feedback.userIdentification}</p>
+<p>Created at: ${feedback.createdAt?string("yyyy-MM-dd'T'HH:mm:ss.SSSZ")}</p>
 
 <p>
     <b>Text Feedback</b><br/>
 <#if feedback.textFeedbacks??>
     <#list feedback.textFeedbacks as textFeedback>
-        ${textFeedback.mechanism.label}:<br />
+        <#if textFeedback.mechanism??>
+            ${textFeedback.mechanism.label}:<br />
+        </#if>
         ${textFeedback.text}
     </#list>
 <#else>
@@ -34,10 +37,14 @@ A new feedback was sent for application ${feedback.applicationId}.
 <#if feedback.categoryFeedbacks??>
 
     <#list feedback.categoryFeedbacks as categoryFeedback>
-        ${categoryFeedback.mechanism.title}:
+        <#if categoryFeedback.mechanism??>
+            ${categoryFeedback.mechanism.title}:<br />
+        </#if>
 
         <#if categoryFeedback.parameterId??>
-            ${categoryFeedback.categoryValue}
+            <#if categoryFeedback.categoryValue??>
+                ${categoryFeedback.categoryValue}
+            </#if>
         <#else>
             ${categoryFeedback.text}
         </#if>

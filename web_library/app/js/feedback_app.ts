@@ -57,6 +57,7 @@ export class FeedbackApp {
             this.configureDialog(loadedApplication);
             this.configureFeedbackButton();
             this.configureElementSpecificPush(loadedApplication);
+            this.listenForHashChanges(loadedApplication);
             this.feedbackButton.show();
         }, errorData => {
             console.warn('SERVER ERROR ' + errorData.status + ' ' + errorData.statusText + ': ' + errorData.responseText);
@@ -73,6 +74,14 @@ export class FeedbackApp {
         this.dialogView = new FeedbackDialogView(dialogId, dialogTemplate, application.getPushConfiguration(), context);
     }
 
+    listenForHashChanges(application:Application) {
+        if ("onhashchange" in window) {
+            jQuery(window).on('hashchange', () => {
+                this.checkPullConfigurations(application);
+            });
+        }
+    }
+
     configureFeedbackButton() {
         var myThis = this;
         this.feedbackButton.css('background-color', this.options.backgroundColor);
@@ -83,43 +92,11 @@ export class FeedbackApp {
             event.stopPropagation();
             myThis.dialogView.toggleDialog();
         });
-
-        if ("onhashchange" in window) {
-            console.log("onhashchange supported");
-        } else {
-            console.log("onhashchange not supported");
-        }
-
-        jQuery(window).on('hashchange', function(event){
-            console.log('hashchange');
-            console.log(event);
-            let url = window.location.href;
-            console.log(url);
-            let urlParts = url.split('/');
-            let site = urlParts[urlParts.length - 1];
-            if(site === undefined || site === '') {
-                console.log('site 2');
-                site = urlParts[urlParts.length - 2];
-            }
-            console.log(site);
-
-            if(myThis.application.id === 14 && site === 'medalsView') {
-                console.log('feedback app trigger');
-                let pullConfigurationMedalsView = myThis.application.getPullConfigurations().filter(pullConfiguration => pullConfiguration.id === 52)[0];
-
-                console.log(pullConfigurationMedalsView.isSpecificActive());
-                console.log(pullConfigurationMedalsView.isDoNotDisturbTimeDurationOver());
-
-                if(pullConfigurationMedalsView.isDoNotDisturbTimeDurationOver() && pullConfigurationMedalsView.isSpecificActive()) {
-                    console.log('feedback app trigger 2');
-                    pullConfigurationMedalsView.showPullDialog(myThis.application, myThis.options);
-                }
-            }
-        });
     }
 
     checkPullConfigurations(application:Application) {
-        var alreadyTriggeredOne = false;
+        console.log('check pull');
+        let alreadyTriggeredOne = false;
         for (let pullConfiguration of shuffle(application.getPullConfigurations())) {
             alreadyTriggeredOne = pullConfiguration.checkTrigger(application, this.options, alreadyTriggeredOne);
         }

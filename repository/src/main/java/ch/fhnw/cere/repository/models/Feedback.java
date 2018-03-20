@@ -67,9 +67,25 @@ public class Feedback {
 
     @Override
     public String toString() {
-        return String.format(
-                "Feedback[id=%d, configurationId=%d]",
-                id, configurationId);
+        return "Feedback{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", userIdentification='" + userIdentification + '\'' +
+                ", createdAt=" + createdAt +
+                ", updatedAt=" + updatedAt +
+                ", applicationId=" + applicationId +
+                ", configurationId=" + configurationId +
+                ", language='" + language + '\'' +
+                ", application=" + application +
+                ", contextInformation=" + contextInformation +
+                ", attachmentFeedbacks=" + attachmentFeedbacks +
+                ", audioFeedbacks=" + audioFeedbacks +
+                ", categoryFeedbacks=" + categoryFeedbacks +
+                ", ratingFeedbacks=" + ratingFeedbacks +
+                ", screenshotFeedbacks=" + screenshotFeedbacks +
+                ", textFeedbacks=" + textFeedbacks +
+                ", statuses=" + statuses +
+                '}';
     }
 
     public Feedback() {
@@ -106,7 +122,7 @@ public class Feedback {
         feedback.setScreenshotFeedbacks((List<ScreenshotFeedback>)appendMechanismToMechanismFeedbacks(application, feedback.getScreenshotFeedbacks(), feedback.getConfigurationId()));
         feedback.setAudioFeedbacks((List<AudioFeedback>)appendMechanismToMechanismFeedbacks(application, feedback.getAudioFeedbacks(), feedback.getConfigurationId()));
         feedback.setRatingFeedbacks((List<RatingFeedback>)appendMechanismToMechanismFeedbacks(application, feedback.getRatingFeedbacks(), feedback.getConfigurationId()));
-        feedback.setCategoryFeedbacks((List<CategoryFeedback>)appendMechanismToMechanismFeedbacks(application, feedback.getCategoryFeedbacks(), feedback.getConfigurationId()));
+        feedback.setCategoryFeedbacks(appendMechanismToCategoryFeedbacks(application, feedback.getCategoryFeedbacks(), feedback.getConfigurationId()));
         feedback.setTextFeedbacks((List<TextFeedback>)appendMechanismToMechanismFeedbacks(application, feedback.getTextFeedbacks(), feedback.getConfigurationId()));
         return feedback;
     }
@@ -120,10 +136,37 @@ public class Feedback {
         for(MechanismFeedback mechanismFeedback : mechanismFeedbacks) {
             Mechanism mechanism = application.mechanismByConfigurationIdAndMechanismId(configurationId, mechanismFeedback.getMechanismId());
             if(mechanism != null) {
-                MechanismTemplateModel mechanismTemplateModel = new MechanismTemplateModel(mechanism);
-                mechanismFeedback.setMechanism(mechanismTemplateModel);
+                try {
+                    MechanismTemplateModel mechanismTemplateModel = new MechanismTemplateModel(mechanism);
+                    mechanismFeedback.setMechanism(mechanismTemplateModel);
+                } catch (Exception e) {
+                    System.out.println(e.getMessage());
+                }
             }
             mechanismFeedbacksWithMechanism.add(mechanismFeedback);
+        }
+        return mechanismFeedbacksWithMechanism;
+    }
+
+    private static List<CategoryFeedback> appendMechanismToCategoryFeedbacks(Application application, List<CategoryFeedback> mechanismFeedbacks, long configurationId) {
+        List<CategoryFeedback> mechanismFeedbacksWithMechanism = new ArrayList<>();
+        if(mechanismFeedbacks == null) {
+            return null;
+        }
+
+        for(CategoryFeedback categoryFeedback : mechanismFeedbacks) {
+            if(categoryFeedback.getParameterId() != null) {
+                Mechanism categoryMechanism = application.categoryMechanismByConfigurationIdAndCategoryMechanismParameterId(configurationId, categoryFeedback.getParameterId());
+                if(categoryMechanism != null) {
+                    try {
+                        MechanismTemplateModel mechanismTemplateModel = new MechanismTemplateModel(categoryMechanism);
+                        categoryFeedback.setMechanism(mechanismTemplateModel);
+                    } catch (Exception e) {
+                        System.out.println(e.getMessage());
+                    }
+                }
+                mechanismFeedbacksWithMechanism.add(categoryFeedback);
+            }
         }
         return mechanismFeedbacksWithMechanism;
     }
