@@ -5,6 +5,8 @@ import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnTouchListener;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
@@ -13,24 +15,21 @@ import ch.uzh.supersede.feedbacklibrary.R;
 import static android.view.Gravity.*;
 import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 
-public abstract class AbstractAnnotationView extends FrameLayout {
+/**
+ * Sticker view
+ */
+public abstract class AbstractAnnotationView extends FrameLayout implements OnTouchListener {
     public static final int BUTTON_SIZE_DP = 30;
     public static final int SELF_SIZE_DP = 100;
 
     // Sticker border
     private BorderView borderView;
-    private ImageView deleteImageView;
-    private ImageView checkImageView;
-
-    // Scaling
-    private float scaleOrgX = -1F;
-    private float scaleOrgY = -1F;
+    private ImageView deleteAnnotation;
+    private ImageView saveAnnotation;
 
     // Movement
-    private float moveOrgX = -1F;
-    private float moveOrgY = -1F;
-
-    private OnTouchListener onTouchListener;
+    private float moveOrgX;
+    private float moveOrgY;
 
     public AbstractAnnotationView(Context context) {
         super(context);
@@ -47,137 +46,100 @@ public abstract class AbstractAnnotationView extends FrameLayout {
         init(context);
     }
 
-    protected abstract View getMainView();
-
-    protected abstract void initOnTouchListener();
-
-    public BorderView getBorderView() {
-        return borderView;
-    }
-
-    public ImageView getDeleteImageView() {
-        return deleteImageView;
-    }
-
-    public ImageView getCheckImageView() {
-        return checkImageView;
-    }
-
-    public float getScaleOrgX() {
-        return scaleOrgX;
-    }
-
-    public float getScaleOrgY() {
-        return scaleOrgY;
-    }
-
-    public void setScaleOrgX(float scaleOrgX) {
-        this.scaleOrgX = scaleOrgX;
-    }
-
-    public void setScaleOrgY(float scaleOrgY) {
-        this.scaleOrgY = scaleOrgY;
-    }
-
-    public float getMoveOrgX() {
-        return moveOrgX;
-    }
-
-    public float getMoveOrgY() {
-        return moveOrgY;
-    }
-
-    public OnTouchListener getOnTouchListener() {
-        return onTouchListener;
-    }
-
-    public void setOnTouchListener(OnTouchListener onTouchListener) {
-        this.onTouchListener = onTouchListener;
-    }
-
-    public void setControlItemsInvisible(boolean isControlItemsInvisible) {
-        int visibility = isControlItemsInvisible ? View.INVISIBLE : View.VISIBLE;
-        getBorderView().setVisibility(visibility);
-        getDeleteImageView().setVisibility(visibility);
-        getCheckImageView().setVisibility(visibility);
-    }
-
-    protected double getLength(double x1, double y1, double x2, double y2) {
-        return Math.sqrt(Math.pow(y2 - y1, 2) + Math.pow(x2 - x1, 2));
-    }
-
     protected int convertDpToPixel(float dp, Context context) {
         DisplayMetrics metrics = context.getResources().getDisplayMetrics();
         return (int) (dp * (metrics.densityDpi / 160f));
     }
 
     protected void init(Context context) {
-        initOnTouchListener();
+        borderView = new BorderView(context);
+        deleteAnnotation = new ImageView(context);
+        saveAnnotation = new ImageView(context);
 
-        this.borderView = new BorderView(context);
-        this.deleteImageView = new ImageView(context);
-        this.checkImageView = new ImageView(context);
+        deleteAnnotation.setImageResource(R.drawable.ic_delete_black_48dp);
+        saveAnnotation.setImageResource(R.drawable.ic_check_circle_black_48dp);
 
-        getDeleteImageView().setImageResource(R.drawable.ic_delete_black_48dp);
-        getCheckImageView().setImageResource(R.drawable.ic_check_circle_black_48dp);
+        setTag("draggableViewGroup");
+        borderView.setTag("borderView");
+        deleteAnnotation.setTag("deleteAnnotation");
+        saveAnnotation.setTag("saveAnnotation");
 
-        getBorderView().setTag("borderView");
-        getDeleteImageView().setTag("deleteImageView");
-        getCheckImageView().setTag("checkImageView");
-
-        int fullMargin = convertDpToPixel(BUTTON_SIZE_DP, getContext());
-        int margin = fullMargin / 2;
+        int buttonSize = convertDpToPixel(BUTTON_SIZE_DP, getContext());
+        int margin = buttonSize / 2;
         int size = convertDpToPixel(SELF_SIZE_DP, getContext());
 
-        // Sticker view
-        LayoutParams params = new LayoutParams(size, size);
-        params.gravity = CENTER;
-        // Main view
-        LayoutParams mainViewParams = new LayoutParams(MATCH_PARENT, MATCH_PARENT);
-        mainViewParams.setMargins(margin, margin, margin, margin);
-        // Border view
+        LayoutParams stickerViewParams = new LayoutParams(size, size);
         LayoutParams borderViewParams = new LayoutParams(MATCH_PARENT, MATCH_PARENT);
+        LayoutParams deleteViewParams = new LayoutParams(buttonSize, buttonSize);
+        LayoutParams saveViewParams = new LayoutParams(buttonSize, buttonSize);
+
         borderViewParams.setMargins(margin, margin, margin, margin);
 
-        // Delete image view
-        LayoutParams deleteImageViewParams = new LayoutParams(fullMargin, fullMargin);
-        deleteImageViewParams.gravity = TOP | START;
-        // Check image view
-        LayoutParams checkImageViewParams = new LayoutParams(fullMargin, fullMargin);
-        checkImageViewParams.gravity = TOP | END;
+        stickerViewParams.gravity = CENTER;
+        deleteViewParams.gravity = TOP | START;
+        saveViewParams.gravity = TOP | END;
 
-        setLayoutParams(params);
-        addView(getMainView(), mainViewParams);
-        addView(getBorderView(), borderViewParams);
-        addView(getDeleteImageView(), deleteImageViewParams);
-        addView(getCheckImageView(), checkImageViewParams);
+        setLayoutParams(stickerViewParams);
+        addView(borderView, borderViewParams);
+        addView(deleteAnnotation, deleteViewParams);
+        addView(saveAnnotation, saveViewParams);
 
-        getCheckImageView().setOnClickListener(new View.OnClickListener() {
+        deleteAnnotation.setOnClickListener(new OnClickListener() {
             @Override
-            public void onClick(View v) {
-                setControlItemsInvisible(true);
+            public void onClick(View view) {
+                execDeleteAnnotationOnClick();
             }
         });
+        saveAnnotation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setViewsVisible(false);
+            }
+        });
+
+        setOnTouchListener(this);
     }
 
-    protected void initDraggableViewGroup(MotionEvent event) {
-        setControlItemsInvisible(false);
+    protected void execDeleteAnnotationOnClick() {
+        if (getParent() != null) {
+            ViewGroup myCanvas = ((ViewGroup) getParent());
+            myCanvas.removeView(AbstractAnnotationView.this);
+        }
+    }
+
+    @Override
+    public boolean onTouch(View view, MotionEvent event) {
+        if (view.getTag().equals("draggableViewGroup")) {
+            execDragStickerImageView(event);
+        }
+        return true;
+    }
+
+    private void execDragStickerImageView(MotionEvent event) {
+        setViewsVisible(true);
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
-                this.moveOrgX = event.getRawX();
-                this.moveOrgY = event.getRawY();
+                moveOrgX = event.getRawX();
+                moveOrgY = event.getRawY();
                 break;
             case MotionEvent.ACTION_MOVE:
-                float offsetX = event.getRawX() - getMoveOrgX();
-                float offsetY = event.getRawY() - getMoveOrgY();
+                float offsetX = event.getRawX() - moveOrgX;
+                float offsetY = event.getRawY() - moveOrgY;
                 setX(getX() + offsetX);
                 setY(getY() + offsetY);
-                this.moveOrgX = event.getRawX();
-                this.moveOrgY = event.getRawY();
+                moveOrgX = event.getRawX();
+                moveOrgY = event.getRawY();
                 break;
             case MotionEvent.ACTION_UP:
                 break;
             default:
         }
+    }
+
+    public void setViewsVisible(boolean isVisible) {
+        int visibility = isVisible ? VISIBLE : INVISIBLE;
+        borderView.setVisibility(visibility);
+        deleteAnnotation.setVisibility(visibility);
+        saveAnnotation.setVisibility(visibility);
     }
 }

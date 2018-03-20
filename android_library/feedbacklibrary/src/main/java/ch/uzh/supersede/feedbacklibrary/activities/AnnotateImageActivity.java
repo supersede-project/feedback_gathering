@@ -46,9 +46,8 @@ import ch.uzh.supersede.feedbacklibrary.utils.Utils;
 import ch.uzh.supersede.feedbacklibrary.views.AnnotateImageView;
 import ch.uzh.supersede.feedbacklibrary.views.EditImageDialog;
 import ch.uzh.supersede.feedbacklibrary.views.StickerAnnotationImageView;
-import ch.uzh.supersede.feedbacklibrary.views.StickerAnnotationView;
+import ch.uzh.supersede.feedbacklibrary.views.AbstractAnnotationView;
 import ch.uzh.supersede.feedbacklibrary.views.TextAnnotationImageView;
-import ch.uzh.supersede.feedbacklibrary.views.TextAnnotationView;
 
 import static android.graphics.Color.*;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.FeedbackActivityConstants.*;
@@ -58,7 +57,7 @@ import static ch.uzh.supersede.feedbacklibrary.utils.Constants.ScreenshotConstan
 /**
  * Activity for annotating the screenshot
  */
-public class AnnotateImageActivity extends AppCompatActivity implements ColorPickerDialog.OnColorChangeDialogListener, TextAnnotationView.OnTextAnnotationChangedListener, EditImageDialog.OnEditImageListener {
+public class AnnotateImageActivity extends AppCompatActivity implements ColorPickerDialog.OnColorChangeDialogListener, TextAnnotationImageView.OnTextAnnotationChangedListener, EditImageDialog.OnEditImageListener {
     private static final String TAG = "AnnotateImageActivity";
     private int mechanismViewId = -1;
     private boolean blackModeOn = false;
@@ -99,7 +98,6 @@ public class AnnotateImageActivity extends AppCompatActivity implements ColorPic
         if (textAnnotationCounter <= textAnnotationCounterMaximum) {
             TextAnnotationImageView stickerViewTextAnnotationImageView = new TextAnnotationImageView(this);
             stickerViewTextAnnotationImageView.setOnTextAnnotationChangedListener(this);
-            stickerViewTextAnnotationImageView.setImageResource(imageResourceId);
             stickerViewTextAnnotationImageView.setAnnotationInputTextHint(getResources().getString(R.string.supersede_feedbacklibrary_text_annotation_dialog_hint));
             stickerViewTextAnnotationImageView.setAnnotationInputTextLabel(getResources().getString(R.string.supersede_feedbacklibrary_text_annotation_dialog_label));
             TextView textView = stickerViewTextAnnotationImageView.getAnnotationNumberView();
@@ -130,10 +128,8 @@ public class AnnotateImageActivity extends AppCompatActivity implements ColorPic
         if (viewGroup != null) {
             for (int i = 0; i < viewGroup.getChildCount(); ++i) {
                 View child = viewGroup.getChildAt(i);
-                if (child instanceof StickerAnnotationView) {
-                    ((StickerAnnotationView) child).setControlItemsInvisible(true);
-                } else if (child instanceof TextAnnotationView) {
-                    ((TextAnnotationView) child).setControlItemsInvisible(true);
+                if (child instanceof AbstractAnnotationView) {
+                    ((AbstractAnnotationView) child).setViewsVisible(false);
                 }
             }
         }
@@ -399,10 +395,9 @@ public class AnnotateImageActivity extends AppCompatActivity implements ColorPic
                     if (textAnnotationView.getAnnotationInputText() != null) {
                         annotationInputText = (textAnnotationView.getAnnotationInputText()).trim();
                     }
-                    int annotationImageResource = textAnnotationView.getImageResourceId();
                     float getX = child.getX();
                     float getY = child.getY();
-                    String value = annotationInputText + SEPARATOR + annotationImageResource + SEPARATOR + getX + SEPARATOR + getY;
+                    String value = annotationInputText + SEPARATOR + getX + SEPARATOR + getY;
                     allTextAnnotations.put(key, value);
                 }
             }
@@ -415,8 +410,8 @@ public class AnnotateImageActivity extends AppCompatActivity implements ColorPic
         if (viewGroup != null) {
             for (int i = 0; i < viewGroup.getChildCount(); ++i) {
                 View child = viewGroup.getChildAt(i);
-                if (child instanceof TextAnnotationView) {
-                    TextView textView = (((TextAnnotationView) child).getAnnotationNumberView());
+                if (child instanceof TextAnnotationImageView) {
+                    TextView textView = (((TextAnnotationImageView) child).getAnnotationNumberView());
                     String newAnnotationNumber = Integer.toString(Integer.valueOf(textView.getText().toString()) - 1);
                     if (Integer.valueOf(newAnnotationNumber) != 0) {
                         textView.setText(newAnnotationNumber);
@@ -438,7 +433,7 @@ public class AnnotateImageActivity extends AppCompatActivity implements ColorPic
         textAnnotationCounter = 1;
         for (int i = 0; i < relativeLayout.getChildCount(); ++i) {
             View child = relativeLayout.getChildAt(i);
-            if (child instanceof TextAnnotationView) {
+            if (child instanceof TextAnnotationImageView) {
                 String newAnnotationNumber = Integer.toString(textAnnotationCounter);
                 ((TextAnnotationImageView) child).getAnnotationNumberView().setText(newAnnotationNumber);
                 textAnnotationCounter++;
@@ -457,7 +452,7 @@ public class AnnotateImageActivity extends AppCompatActivity implements ColorPic
         List<View> toRemove = new ArrayList<>();
         for (int i = 0; i < relativeLayout.getChildCount(); ++i) {
             View child = relativeLayout.getChildAt(i);
-            if (child instanceof StickerAnnotationView || child instanceof TextAnnotationView) {
+            if (child instanceof AbstractAnnotationView) {
                 // A fraction the sticker should be visible, if not the sticker will be removed
                 float deleteThresholdX = child.getWidth() * fraction;
                 float deleteThresholdY = child.getHeight() * fraction;
