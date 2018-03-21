@@ -39,6 +39,7 @@ import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.support.v7.widget.AppCompatImageView;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
@@ -203,14 +204,14 @@ public class AnnotateImageView extends AppCompatImageView {
         }
 
         if (mode == Mode.TEXT) {
-            textX = startX;
-            textY = startY;
+            this.textX = startX;
+            this.textY = startY;
 
             textPaint = createPaint();
         }
 
-        float textX = this.textX;
-        float textY = this.textY;
+        float canvasTextX = this.textX;
+        float canvasTextY = this.textY;
 
         Paint paintForMeasureText = new Paint();
 
@@ -218,11 +219,11 @@ public class AnnotateImageView extends AppCompatImageView {
         float textLength = paintForMeasureText.measureText(text);
         float lengthOfChar = textLength / (float) text.length();
         // Text-align : right
-        float restWidth = canvas.getWidth() - textX;
+        float restWidth = canvas.getWidth() - canvasTextX;
         // The number of characters at 1 line
         int numChars = (lengthOfChar <= 0) ? 1 : (int) Math.floor((double) (restWidth / lengthOfChar));
         int modNumChars = (numChars < 1) ? 1 : numChars;
-        float y = textY;
+        float y = canvasTextY;
 
         for (int i = 0, len = text.length(); i < len; i += modNumChars) {
             String substring;
@@ -235,7 +236,7 @@ public class AnnotateImageView extends AppCompatImageView {
 
             y += fontSize;
 
-            canvas.drawText(substring, textX, y, textPaint);
+            canvas.drawText(substring, canvasTextX, y, textPaint);
         }
     }
 
@@ -248,7 +249,8 @@ public class AnnotateImageView extends AppCompatImageView {
     }
 
     /**
-     * This method returns the part of the current canvas which represents the image, i.e., the 'bitmap part' of the whole view as a bitmap.
+     * This method returns the part of the current canvas which represents the image, i.e., the 'bitmap part' of the
+     * whole view as a bitmap.
      *
      * @return This is returned as bitmap.
      */
@@ -274,38 +276,18 @@ public class AnnotateImageView extends AppCompatImageView {
         return Bitmap.createBitmap(getDrawingCache(), 0, 0, width, height);
     }
 
-    /**
-     * This method returns the height of the bitmap.
-     *
-     * @return the bitmap height
-     */
     public int getBitmapHeight() {
         return bitmap.getHeight();
     }
 
-    /**
-     * This method returns the width of the bitmap.
-     *
-     * @return the bitmap width
-     */
     public int getBitmapWidth() {
         return bitmap.getWidth();
     }
 
-    /**
-     * This method returns the blur factor.
-     *
-     * @return the blur
-     */
     public float getBlur() {
         return blur;
     }
 
-    /**
-     * This method returns the list of files from all cropped images.
-     *
-     * @return the file list
-     */
     public List<File> getCroppedImageLists() {
         return croppedImageLists;
     }
@@ -314,38 +296,18 @@ public class AnnotateImageView extends AppCompatImageView {
         return pathLists.get(historyPointer - 1);
     }
 
-    /**
-     * This method returns the fill color of the paint.
-     *
-     * @return the fill color
-     */
     public int getPaintFillColor() {
         return paintFillColor;
     }
 
-    /**
-     * This method returns the stroke color of the paint.
-     *
-     * @return the stroke color
-     */
     public int getPaintStrokeColor() {
         return paintStrokeColor;
     }
 
-    /**
-     * This method returns the style of the paint.
-     *
-     * @return the paint style
-     */
     public Paint.Style getPaintStyle() {
         return paintStyle;
     }
 
-    /**
-     * This method returns the text.
-     *
-     * @return the text
-     */
     public String getText() {
         return text;
     }
@@ -435,16 +397,16 @@ public class AnnotateImageView extends AppCompatImageView {
                             float deltaX = endPoint.x - startPoint.x;
                             float deltaY = endPoint.y - startPoint.y;
                             float fracture = (float) 0.1;
-                            float point_x_1 = startPoint.x + ((1 - fracture) * deltaX + fracture * deltaY);
-                            float point_y_1 = startPoint.y + ((1 - fracture) * deltaY - fracture * deltaX);
-                            float point_x_2 = endPoint.x;
-                            float point_y_2 = endPoint.y;
-                            float point_x_3 = startPoint.x + ((1 - fracture) * deltaX - fracture * deltaY);
-                            float point_y_3 = startPoint.y + ((1 - fracture) * deltaY + fracture * deltaX);
+                            float pointX1 = startPoint.x + ((1 - fracture) * deltaX + fracture * deltaY);
+                            float pointY1 = startPoint.y + ((1 - fracture) * deltaY - fracture * deltaX);
+                            float pointX2 = endPoint.x;
+                            float pointY2 = endPoint.y;
+                            float pointX3 = startPoint.x + ((1 - fracture) * deltaX - fracture * deltaY);
+                            float pointY3 = startPoint.y + ((1 - fracture) * deltaY + fracture * deltaX);
 
-                            path.moveTo(point_x_1, point_y_1);
-                            path.lineTo(point_x_2, point_y_2);
-                            path.lineTo(point_x_3, point_y_3);
+                            path.moveTo(pointX1, pointY1);
+                            path.lineTo(pointX2, pointY2);
+                            path.lineTo(pointX3, pointY3);
                             break;
                         case RECTANGLE:
                             path.reset();
@@ -605,7 +567,7 @@ public class AnnotateImageView extends AppCompatImageView {
      * @param blur the blur
      */
     public void setBlur(float blur) {
-        if (!(blur < 0)) {
+        if (blur >= 0) {
             this.blur = blur;
         } else {
             this.blur = 0F;
@@ -636,7 +598,7 @@ public class AnnotateImageView extends AppCompatImageView {
      * @param size the font size
      */
     public void setFontSize(float size) {
-        if (!(size < 0F)) {
+        if (size >= 0F) {
             fontSize = size;
         } else {
             fontSize = 32F;
@@ -718,7 +680,7 @@ public class AnnotateImageView extends AppCompatImageView {
      * @param width the width
      */
     public void setPaintStrokeWidth(float width) {
-        if (!(width < 0)) {
+        if (width >= 0) {
             paintStrokeWidth = width;
         } else {
             paintStrokeWidth = 3F;
@@ -801,12 +763,14 @@ public class AnnotateImageView extends AppCompatImageView {
     }
 
     private void updateCroppedImage() {
-        String imagePath = croppedImageLists.get(croppedImagePointer - 1).getAbsolutePath();
-        Bitmap bitmap = BitmapFactory.decodeFile(imagePath);
+        String imagePath = croppedImageLists
+                .get(croppedImagePointer - 1)
+                .getAbsolutePath();
+        Bitmap unscaledBitmap = BitmapFactory.decodeFile(imagePath);
         if (croppedImagePointer > 1) {
-            this.bitmap = bitmap;
+            this.bitmap = unscaledBitmap;
         } else {
-            this.bitmap = Utils.scaleBitmap(bitmap, initW, initH);
+            this.bitmap = Utils.scaleBitmap(unscaledBitmap, initW, initH);
         }
     }
 
@@ -826,8 +790,13 @@ public class AnnotateImageView extends AppCompatImageView {
             croppedImagePointer++;
 
             for (int i = croppedImagePointer, size = croppedImageLists.size(); i < size; i++) {
-                croppedImageLists.get(croppedImagePointer).delete();
-                croppedImageLists.remove(croppedImagePointer);
+                if (croppedImageLists
+                        .get(croppedImagePointer)
+                        .delete()) {
+                    croppedImageLists.remove(croppedImagePointer);
+                } else {
+                    Log.w("AnnotateImageView", "Could not delete croppedImagePointer.");
+                }
             }
 
             for (int i = historyPointer, size = paintLists.size(); i < size; i++) {
@@ -869,20 +838,11 @@ public class AnnotateImageView extends AppCompatImageView {
 
     // Enumeration for Mode
     public enum Mode {
-        DRAW,
-        TEXT,
-        ERASER
+        DRAW, TEXT, ERASER
     }
 
     // Enumeration for Drawer
     public enum Drawer {
-        PEN,
-        LINE,
-        ARROW,
-        RECTANGLE,
-        CIRCLE,
-        ELLIPSE,
-        QUADRATIC_BEZIER,
-        QUBIC_BEZIER
+        PEN, LINE, ARROW, RECTANGLE, CIRCLE, ELLIPSE, QUADRATIC_BEZIER, QUBIC_BEZIER
     }
 }

@@ -16,11 +16,7 @@ import java.util.List;
 import ch.uzh.supersede.feedbacklibrary.R;
 import ch.uzh.supersede.feedbacklibrary.models.EditImageItem;
 
-/**
- * Created by Skidan Oleg on 25.06.2017.
- */
-
-public class EditImageViewAdapter extends RecyclerView.Adapter<EditImageViewAdapter.ViewHolder> {
+public class EditImageViewAdapter extends RecyclerView.Adapter<EditImageViewAdapter.EditImageViewHolder> {
 
     private List<EditImageItem> items;
     private Context context;
@@ -30,14 +26,14 @@ public class EditImageViewAdapter extends RecyclerView.Adapter<EditImageViewAdap
     }
 
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        context = parent.getContext();
-        View view = LayoutInflater.from(context).inflate(R.layout.edit_dialog_item_layout, parent, false);
-        return new ViewHolder(view);
+    public EditImageViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        this.context = parent.getContext();
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.edit_dialog_item_layout, parent, false);
+        return new EditImageViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolder holder, int position) {
+    public void onBindViewHolder(final EditImageViewHolder holder, int position) {
         final EditImageItem item = items.get(position);
         final String title = item.getTitle();
 
@@ -70,14 +66,14 @@ public class EditImageViewAdapter extends RecyclerView.Adapter<EditImageViewAdap
         return items.size();
     }
 
-    static class ViewHolder extends RecyclerView.ViewHolder{
+    static class EditImageViewHolder extends RecyclerView.ViewHolder{
         View view;
 
         ImageView elementImageView;
         TextView titleTextView;
         CheckBox starCheckBox;
 
-        ViewHolder(View itemView) {
+        EditImageViewHolder(View itemView) {
             super(itemView);
             view = itemView;
             elementImageView = (ImageView)itemView.findViewById(R.id.edil_element_iv);

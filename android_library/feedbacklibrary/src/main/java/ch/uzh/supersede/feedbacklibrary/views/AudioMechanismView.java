@@ -9,6 +9,7 @@ import android.content.res.Resources;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -27,12 +28,13 @@ import ch.uzh.supersede.feedbacklibrary.utils.Utils;
 
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.AudioMechanismConstants.*;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.FeedbackActivityConstants.PERMISSIONS_REQUEST_RECORD_AUDIO;
-
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.PATH_DELIMITER;
 
 /**
  * Audio mechanism view
  */
 public class AudioMechanismView extends MechanismView implements SeekBar.OnSeekBarChangeListener {
+    private static final String TAG = "AudioMechanismView";
     private int recordAnimationColorStart;
     private int recordAnimationColorEnd;
     private String audioFilePath;
@@ -76,15 +78,15 @@ public class AudioMechanismView extends MechanismView implements SeekBar.OnSeekB
         handler = new Handler();
         updateSeekBarTask = new Runnable() {
             public void run() {
-                long totalDuration = mediaPlayer.getDuration();
+                long mediaPlayerDuration = mediaPlayer.getDuration();
                 long currentDuration = mediaPlayer.getCurrentPosition();
 
                 // Displaying time completed playing / total duration time
-                String toDisplay = milliSecondsToTimer(currentDuration) + "/" + milliSecondsToTimer(totalDuration);
+                String toDisplay = milliSecondsToTimer(currentDuration) + PATH_DELIMITER + milliSecondsToTimer(mediaPlayerDuration);
                 totalDurationLabel.setText(toDisplay);
 
                 // Updating progress bar
-                int progress = getProgressPercentage(currentDuration, totalDuration);
+                int progress = getProgressPercentage(currentDuration, mediaPlayerDuration);
                 seekBar.setProgress(progress);
 
                 handler.postDelayed(this, 100);
@@ -93,13 +95,13 @@ public class AudioMechanismView extends MechanismView implements SeekBar.OnSeekB
         handlerRecorder = new Handler();
         updateSeekBarTaskRecorder = new Runnable() {
             public void run() {
-                long totalDuration = ((long) audioMechanism.getMaxTime()) * 1000;
+                long audioMechanismTotalDuration = ((long) audioMechanism.getMaxTime()) * 1000;
                 // Displaying time completed playing / total duration time
-                String toDisplay = milliSecondsToTimer(currentRecordDuration * 1000) + "/" + milliSecondsToTimer(totalDuration);
+                String toDisplay = milliSecondsToTimer(currentRecordDuration * 1000) + PATH_DELIMITER + milliSecondsToTimer(audioMechanismTotalDuration);
                 totalDurationLabel.setText(toDisplay);
 
                 // Updating progress bar
-                int progress = getProgressPercentage(currentRecordDuration * 1000, totalDuration);
+                int progress = getProgressPercentage(currentRecordDuration * 1000, audioMechanismTotalDuration);
                 seekBar.setProgress(progress);
 
                 ++currentRecordDuration;
@@ -126,28 +128,173 @@ public class AudioMechanismView extends MechanismView implements SeekBar.OnSeekB
     }
 
     private int getProgressPercentage(long currentDuration, long totalDuration) {
-        long currentSeconds = (int) (currentDuration / 1000);
-        long totalSeconds = (int) (totalDuration / 1000);
-        return Double.valueOf(((((double) currentSeconds) / totalSeconds) * 100)).intValue();
+        return (int) (currentDuration / totalDuration / 1000 * 100);
+    }
+
+    private String getDefaultTotalDurationLabel() {
+        return "-/" + milliSecondsToTimer(((long) audioMechanism.getMaxTime()) * 1000);
     }
 
     private void initView() {
-        ((TextView) getEnclosingLayout().findViewById(ch.uzh.supersede.feedbacklibrary.R.id.supersede_feedbacklibrary_audio_title)).setText(R.string.short_audio_message);
-        playButton = (ImageView) getEnclosingLayout().findViewById(ch.uzh.supersede.feedbacklibrary.R.id.supersede_feedbacklibrary_audio_player_button_play);
-        setButtonEnabled(playButton, false);
-        recordAnimationColorStart = resources.getColor(ch.uzh.supersede.feedbacklibrary.R.color.supersede_feedbacklibrary_audio_timer_record_indicator_start_animation_color);
-        recordAnimationColorEnd = resources.getColor(ch.uzh.supersede.feedbacklibrary.R.color.supersede_feedbacklibrary_audio_timer_record_indicator_end_animation_color);
-        recordButton = (ImageView) getEnclosingLayout().findViewById(ch.uzh.supersede.feedbacklibrary.R.id.supersede_feedbacklibrary_audio_player_button_record);
-        recordIndicator = (TextView) getEnclosingLayout().findViewById(ch.uzh.supersede.feedbacklibrary.R.id.supersede_feedbacklibrary_audio_timer_record_indicator);
-        seekBar = (SeekBar) getEnclosingLayout().findViewById(ch.uzh.supersede.feedbacklibrary.R.id.supersede_feedbacklibrary_audio_seekbar);
-        stopButton = (ImageView) getEnclosingLayout().findViewById(ch.uzh.supersede.feedbacklibrary.R.id.supersede_feedbacklibrary_audio_player_button_stop);
-        setButtonEnabled(stopButton, false);
-        clearButton = (ImageView) getEnclosingLayout().findViewById(R.id.supersede_feedbacklibrary_audio_player_button_clear);
-        setButtonEnabled(clearButton, false);
-        totalDurationLabel = (TextView) getEnclosingLayout().findViewById(ch.uzh.supersede.feedbacklibrary.R.id.supersede_feedbacklibrary_audio_timer_total_duration);
-        final String startTotalDurationLabel = "-/" + milliSecondsToTimer(((long) audioMechanism.getMaxTime()) * 1000);
+        ((TextView) getEnclosingLayout().findViewById(R.id.supersede_feedbacklibrary_audio_title)).setText(R.string.short_audio_message);
+        recordAnimationColorStart = resources.getColor(R.color.supersede_feedbacklibrary_audio_timer_record_indicator_start_animation_color);
+        recordAnimationColorEnd = resources.getColor(R.color.supersede_feedbacklibrary_audio_timer_record_indicator_end_animation_color);
+        recordIndicator = (TextView) getEnclosingLayout().findViewById(R.id.supersede_feedbacklibrary_audio_timer_record_indicator);
+        seekBar = (SeekBar) getEnclosingLayout().findViewById(R.id.supersede_feedbacklibrary_audio_seekbar);
+
+        final String startTotalDurationLabel = getDefaultTotalDurationLabel();
+        totalDurationLabel = (TextView) getEnclosingLayout().findViewById(R.id.supersede_feedbacklibrary_audio_timer_total_duration);
         totalDurationLabel.setText(startTotalDurationLabel);
 
+        initClearButton();
+        initPlayButton();
+        initRecordButton();
+        initStopButton();
+    }
+
+    private void initStopButton() {
+        stopButton = (ImageView) getEnclosingLayout().findViewById(R.id.supersede_feedbacklibrary_audio_player_button_stop);
+        setButtonEnabled(stopButton, false);
+        stopButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                clearFocus();
+
+                if (!isPlaying && isRecording) {
+                    onRecordSuccess();
+                    Toast toast = Toast.makeText(applicationContext, applicationContext
+                            .getResources()
+                            .getString(R.string.supersede_feedbacklibrary_audio_stopped_recording_text), Toast.LENGTH_SHORT);
+                    toast.show();
+                } else {
+                    stopPlaying();
+                }
+
+                playButton.setImageResource(R.drawable.ic_play_arrow_black_48dp);
+            }
+        });
+    }
+
+    private void initRecordButton() {
+        recordButton = (ImageView) getEnclosingLayout().findViewById(R.id.supersede_feedbacklibrary_audio_player_button_record);
+        recordButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                clearFocus();
+
+                boolean hasPermission = Utils.checkSinglePermission(activity, PERMISSIONS_REQUEST_RECORD_AUDIO, Manifest.permission.RECORD_AUDIO, null, null, false);
+
+                if (!hasPermission) {
+                    return;
+                }
+
+                removeUpdateSeekBarTask();
+                removeUpdateSeekBarTaskRecorder();
+
+                // Output file
+                File audioFile = applicationContext.getDir(AUDIO_DIR, Context.MODE_PRIVATE);
+                tempAudioFilePath = audioFile.getAbsolutePath() + PATH_DELIMITER + audioMechanism.getId() + AUDIO_FILENAME + "." + AUDIO_EXTENSION;
+
+                initMediaRecorder();
+                initRecordIndicatorAnimator();
+
+                isRecording = true;
+                setButtonEnabled(playButton, false);
+                setButtonEnabled(recordButton, false);
+                setButtonEnabled(stopButton, true);
+                setButtonEnabled(clearButton, true);
+
+                multipleAudioMechanismsListener.onRecordStart(audioMechanism.getId());
+
+                seekBar.setOnSeekBarChangeListener(null);
+                seekBar.setEnabled(false);
+                seekBar.setProgress(0);
+                seekBar.setMax(100);
+                currentRecordDuration = 1L;
+                addUpdateSeekBarTaskRecorder();
+            }
+        });
+    }
+
+    private void initMediaRecorder() {
+        // Setup recorder
+        mediaRecorder = new MediaRecorder();
+        mediaRecorder.setOnInfoListener(new MediaRecorder.OnInfoListener() {
+            @Override
+            public void onInfo(MediaRecorder mediaRecorder, int waringType, int extra) {
+                if ((waringType == MediaRecorder.MEDIA_RECORDER_INFO_MAX_DURATION_REACHED) && (!isPlaying && isRecording)) {
+                    onRecordSuccess();
+                    Toast toast = Toast.makeText(applicationContext, applicationContext
+                            .getResources()
+                            .getString(R.string.supersede_feedbacklibrary_audio_maximum_length_reached_text, (Float.valueOf(audioMechanism.getMaxTime())).intValue()), Toast.LENGTH_SHORT);
+                    toast.show();
+                }
+            }
+        });
+        mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+        mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
+        mediaRecorder.setOutputFile(tempAudioFilePath);
+        if (audioMechanism.getMaxTime() >= 1) {
+            mediaRecorder.setMaxDuration(((int) audioMechanism.getMaxTime()) * 1000);
+        } else {
+            mediaRecorder.setMaxDuration(1000);
+        }
+        mediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
+        try {
+            mediaRecorder.prepare();
+        } catch (IOException e) {
+            Log.e(TAG, "prepare() failed");
+        }
+        mediaRecorder.start();
+    }
+
+    private void initRecordIndicatorAnimator() {
+        recordIndicator.setVisibility(View.VISIBLE);
+        // Record animation
+        if (recordIndicatorAnimator == null) {
+            recordIndicatorAnimator = ValueAnimator.ofObject(new ArgbEvaluator(), recordAnimationColorStart, recordAnimationColorEnd);
+            recordIndicatorAnimator.setDuration(1000);
+            recordIndicatorAnimator.setRepeatMode(ValueAnimator.REVERSE);
+            recordIndicatorAnimator.setRepeatCount(ValueAnimator.INFINITE);
+            recordIndicatorAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                @Override
+                public void onAnimationUpdate(ValueAnimator animator) {
+                    recordIndicator.setTextColor((Integer) animator.getAnimatedValue());
+                }
+
+            });
+        }
+        if (recordIndicatorAnimator.isStarted() || recordIndicatorAnimator.isRunning()) {
+            recordIndicatorAnimator.cancel();
+        }
+        recordIndicatorAnimator.start();
+    }
+
+    private void initPlayButton() {
+        playButton = (ImageView) getEnclosingLayout().findViewById(R.id.supersede_feedbacklibrary_audio_player_button_play);
+        setButtonEnabled(playButton, false);
+        playButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                clearFocus();
+
+                if (!isPaused && !isPlaying && !isRecording) {
+                    startPlaying();
+                    playButton.setImageResource(R.drawable.ic_pause_black_48dp);
+                } else if (isPaused && !isPlaying && !isRecording && mediaPlayer != null && !mediaPlayer.isPlaying()) {
+                    resumePlaying();
+
+                } else if (!isPaused && isPlaying && mediaPlayer != null) {
+                    pausePlaying();
+                    playButton.setImageResource(R.drawable.ic_play_arrow_black_48dp);
+                }
+            }
+        });
+    }
+
+    private void initClearButton() {
+        clearButton = (ImageView) getEnclosingLayout().findViewById(R.id.supersede_feedbacklibrary_audio_player_button_clear);
+        setButtonEnabled(clearButton, false);
         clearButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -186,122 +333,7 @@ public class AudioMechanismView extends MechanismView implements SeekBar.OnSeekB
                 setButtonEnabled(recordButton, true);
 
                 seekBar.setProgress(0);
-                totalDurationLabel.setText(startTotalDurationLabel);
-                playButton.setImageResource(R.drawable.ic_play_arrow_black_48dp);
-            }
-        });
-
-        playButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                clearFocus();
-
-                if (!isPaused && !isPlaying && !isRecording) {
-                    startPlaying();
-                    playButton.setImageResource(R.drawable.ic_pause_black_48dp);
-                } else if (isPaused && !isPlaying && !isRecording && mediaPlayer != null && !mediaPlayer.isPlaying()) {
-                    resumePlaying();
-
-                } else if (!isPaused && isPlaying && mediaPlayer != null) {
-                    pausePlaying();
-                    playButton.setImageResource(R.drawable.ic_play_arrow_black_48dp);
-                }
-            }
-        });
-        recordButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                clearFocus();
-
-                boolean result = Utils.checkSinglePermission(activity, PERMISSIONS_REQUEST_RECORD_AUDIO, Manifest.permission.RECORD_AUDIO, null, null, false);
-                if (result) {
-                    removeUpdateSeekBarTask();
-                    removeUpdateSeekBarTaskRecorder();
-
-                    // Output file
-                    File audioDirectory = applicationContext.getDir(AUDIO_DIR, Context.MODE_PRIVATE);
-                    tempAudioFilePath = audioDirectory.getAbsolutePath() + "/" + audioMechanism.getId() + AUDIO_FILENAME + "." + AUDIO_EXTENSION;
-
-                    // Setup recorder
-                    mediaRecorder = new MediaRecorder();
-                    mediaRecorder.setOnInfoListener(new MediaRecorder.OnInfoListener() {
-                        @Override
-                        public void onInfo(MediaRecorder mr, int what, int extra) {
-                            if (what == MediaRecorder.MEDIA_RECORDER_INFO_MAX_DURATION_REACHED) {
-                                if (!isPlaying && isRecording) {
-                                    onRecordSuccess();
-                                    Toast toast = Toast.makeText(applicationContext, applicationContext.getResources().getString(ch.uzh.supersede.feedbacklibrary.R.string.supersede_feedbacklibrary_audio_maximum_length_reached_text, (Float.valueOf(audioMechanism.getMaxTime())).intValue()), Toast.LENGTH_SHORT);
-                                    toast.show();
-                                }
-                            }
-                        }
-                    });
-                    mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-                    mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
-                    mediaRecorder.setOutputFile(tempAudioFilePath);
-                    if (((int) audioMechanism.getMaxTime()) >= 1) {
-                        mediaRecorder.setMaxDuration(((int) audioMechanism.getMaxTime()) * 1000);
-                    } else {
-                        mediaRecorder.setMaxDuration(1000);
-                    }
-                    mediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
-                    try {
-                        mediaRecorder.prepare();
-                    } catch (IOException e) {
-                        System.out.println("prepare() failed");
-                    }
-                    mediaRecorder.start();
-
-                    recordIndicator.setVisibility(View.VISIBLE);
-                    // Record animation
-                    if (recordIndicatorAnimator == null) {
-                        recordIndicatorAnimator = ValueAnimator.ofObject(new ArgbEvaluator(), recordAnimationColorStart, recordAnimationColorEnd);
-                        recordIndicatorAnimator.setDuration(1000);
-                        recordIndicatorAnimator.setRepeatMode(ValueAnimator.REVERSE);
-                        recordIndicatorAnimator.setRepeatCount(ValueAnimator.INFINITE);
-                        recordIndicatorAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                            @Override
-                            public void onAnimationUpdate(ValueAnimator animator) {
-                                recordIndicator.setTextColor((Integer) animator.getAnimatedValue());
-                            }
-
-                        });
-                    }
-                    if (recordIndicatorAnimator.isStarted() || recordIndicatorAnimator.isRunning()) {
-                        recordIndicatorAnimator.cancel();
-                    }
-                    recordIndicatorAnimator.start();
-
-                    isRecording = true;
-                    setButtonEnabled(playButton, false);
-                    setButtonEnabled(recordButton, false);
-                    setButtonEnabled(stopButton, true);
-                    setButtonEnabled(clearButton, true);
-
-                    multipleAudioMechanismsListener.onRecordStart(audioMechanism.getId());
-
-                    seekBar.setOnSeekBarChangeListener(null);
-                    seekBar.setEnabled(false);
-                    seekBar.setProgress(0);
-                    seekBar.setMax(100);
-                    currentRecordDuration = 1L;
-                    addUpdateSeekBarTaskRecorder();
-                }
-            }
-        });
-        stopButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                clearFocus();
-
-                if (!isPlaying && isRecording) {
-                    onRecordSuccess();
-                    Toast toast = Toast.makeText(applicationContext, applicationContext.getResources().getString(ch.uzh.supersede.feedbacklibrary.R.string.supersede_feedbacklibrary_audio_stopped_recording_text), Toast.LENGTH_SHORT);
-                    toast.show();
-                } else {
-                    stopPlaying();
-                }
-
+                totalDurationLabel.setText(getDefaultTotalDurationLabel());
                 playButton.setImageResource(R.drawable.ic_play_arrow_black_48dp);
             }
         });
@@ -309,10 +341,14 @@ public class AudioMechanismView extends MechanismView implements SeekBar.OnSeekB
 
     private void clearFocus() {
         if (activity.getCurrentFocus() != null) {
-            activity.getCurrentFocus().clearFocus();
+            activity
+                    .getCurrentFocus()
+                    .clearFocus();
             InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
             if (activity.getCurrentFocus() != null) {
-                imm.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
+                imm.hideSoftInputFromWindow(activity
+                        .getCurrentFocus()
+                        .getWindowToken(), 0);
             }
         }
     }
@@ -342,6 +378,7 @@ public class AudioMechanismView extends MechanismView implements SeekBar.OnSeekB
 
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+        //empty
     }
 
     private void onRecordSuccess() {
@@ -394,7 +431,7 @@ public class AudioMechanismView extends MechanismView implements SeekBar.OnSeekB
             addUpdateSeekBarTask();
             seekBar.setOnSeekBarChangeListener(this);
         } catch (IOException e) {
-            System.out.println("prepare() failed");
+            Log.e(TAG, "prepare() failed");
         }
     }
 
@@ -406,8 +443,8 @@ public class AudioMechanismView extends MechanismView implements SeekBar.OnSeekB
     @Override
     public void onStopTrackingTouch(SeekBar seekBar) {
         removeUpdateSeekBarTask();
-        int totalDuration = mediaPlayer.getDuration();
-        int currentPosition = progressToTimer(seekBar.getProgress(), totalDuration);
+        int mediaPlayerDuration = mediaPlayer.getDuration();
+        int currentPosition = progressToTimer(seekBar.getProgress(), mediaPlayerDuration);
 
         // Forward or backward to certain seconds
         mediaPlayer.seekTo(currentPosition);

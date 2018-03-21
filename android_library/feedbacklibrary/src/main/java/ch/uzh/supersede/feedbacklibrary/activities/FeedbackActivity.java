@@ -440,11 +440,11 @@ public class FeedbackActivity extends AbstractBaseActivity implements Screenshot
         Intent intent = new Intent(this, AnnotateImageActivity.class);
         if (screenshotMechanismView.getAllStickerAnnotations() != null && !screenshotMechanismView.getAllStickerAnnotations().isEmpty()) {
             intent.putExtra(EXTRA_KEY_HAS_STICKER_ANNOTATIONS, true);
-            intent.putExtra(EXTRA_KEY_ALL_STICKER_ANNOTATIONS, screenshotMechanismView.getAllStickerAnnotations());
+            intent.putExtra(EXTRA_KEY_ALL_STICKER_ANNOTATIONS, new HashMap<>(screenshotMechanismView.getAllStickerAnnotations()));
         }
         if (screenshotMechanismView.getAllTextAnnotations() != null && !screenshotMechanismView.getAllTextAnnotations().isEmpty()) {
             intent.putExtra(EXTRA_KEY_HAS_TEXT_ANNOTATIONS, true);
-            intent.putExtra(EXTRA_KEY_ALL_TEXT_ANNOTATIONS, screenshotMechanismView.getAllTextAnnotations());
+            intent.putExtra(EXTRA_KEY_ALL_TEXT_ANNOTATIONS, new HashMap<>(screenshotMechanismView.getAllTextAnnotations()));
         }
 
         String path = screenshotMechanismView.getPicturePathWithoutStickers() == null ? screenshotMechanismView.getPicturePath() : screenshotMechanismView.getPicturePathWithoutStickers();

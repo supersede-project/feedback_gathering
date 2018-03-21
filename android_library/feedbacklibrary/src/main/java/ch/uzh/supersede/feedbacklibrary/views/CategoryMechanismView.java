@@ -1,20 +1,19 @@
 package ch.uzh.supersede.feedbacklibrary.views;
 
 import android.view.LayoutInflater;
-import android.widget.TextView;
-
-import ch.uzh.supersede.feedbacklibrary.models.CategoryMechanism;
-import ch.uzh.supersede.feedbacklibrary.models.Mechanism;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import ch.uzh.supersede.feedbacklibrary.models.CategoryMechanism;
+import ch.uzh.supersede.feedbacklibrary.models.Mechanism;
+
 /**
  * Choice mechanism view
  */
-public class CategoryMechanismView extends MechanismView implements CustomSpinner.OnMultipleItemsSelectedListener {
-    private CategoryMechanism categoryMechanism = null;
-    private CustomSpinner customSpinner = null;
+public class CategoryMechanismView extends MechanismView {
+    private CategoryMechanism categoryMechanism;
+    private CustomSpinner customSpinner;
 
     public CategoryMechanismView(LayoutInflater layoutInflater, Mechanism mechanism) {
         super(layoutInflater);
@@ -28,28 +27,23 @@ public class CategoryMechanismView extends MechanismView implements CustomSpinne
         List<String> items = new ArrayList<>(categoryMechanism.getOptions());
         if (categoryMechanism.isOwnAllowed()) {
             if (!categoryMechanism.isMultiple()) {
-                items.add(getEnclosingLayout().getResources().getString(ch.uzh.supersede.feedbacklibrary.R.string.supersede_feedbacklibrary_other_option_string));
+                items.add(getEnclosingLayout()
+                        .getResources()
+                        .getString(ch.uzh.supersede.feedbacklibrary.R.string.supersede_feedbacklibrary_other_option_string));
             } else {
-                items.add(getEnclosingLayout().getResources().getString(ch.uzh.supersede.feedbacklibrary.R.string.supersede_feedbacklibrary_other_options_string));
+                items.add(getEnclosingLayout()
+                        .getResources()
+                        .getString(ch.uzh.supersede.feedbacklibrary.R.string.supersede_feedbacklibrary_other_options_string));
             }
         }
         customSpinner.setOwnCategoryAllowed(categoryMechanism.isOwnAllowed());
         customSpinner.setItems(items, true);
-        customSpinner.setListener(this);
-        customSpinner.setMultiple(categoryMechanism.isMultiple());
-    }
-
-    @Override
-    public void selectedIndices(List<Integer> indices) {
-    }
-
-    @Override
-    public void selectedStrings(List<String> strings) {
+        customSpinner.setMultipleChoice(categoryMechanism.isMultiple());
     }
 
     @Override
     public void updateModel() {
-        categoryMechanism.setSelectedOptions(customSpinner.getSelectedStrings());
+        categoryMechanism.setSelectedOptions(getCustomSpinner().getSelectedStrings());
     }
 
     public CustomSpinner getCustomSpinner() {

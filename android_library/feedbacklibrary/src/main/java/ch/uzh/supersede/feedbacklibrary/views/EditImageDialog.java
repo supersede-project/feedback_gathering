@@ -23,10 +23,6 @@ import ch.uzh.supersede.feedbacklibrary.R;
 import ch.uzh.supersede.feedbacklibrary.models.DialogType;
 import ch.uzh.supersede.feedbacklibrary.models.EditImageItem;
 
-/**
- * Created by Skidan Oleg on 25.06.2017.
- */
-
 public class EditImageDialog extends DialogFragment {
 
     private List<EditImageItem> items;
@@ -35,7 +31,6 @@ public class EditImageDialog extends DialogFragment {
     private Map<String, EditImageItem> colorEditItems;
 
     private OnEditImageListener listener;
-    private AnnotateImageActivity activity;
 
     @Override
     public void onAttach(Context activity) {
@@ -50,7 +45,7 @@ public class EditImageDialog extends DialogFragment {
         }
     }
 
-    public EditImageDialog(){
+    public EditImageDialog() {
         super();
         items = new ArrayList<>();
         allImageEditItems = new HashMap<>();
@@ -66,11 +61,11 @@ public class EditImageDialog extends DialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.edit_dialog_layout, null);
-        RecyclerView recyclerView = (RecyclerView)view.findViewById(R.id.edl_edit_recycler_view);
+        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.edl_edit_recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setHasFixedSize(true);
 
-        switch (DialogType.valueOf(type)){
+        switch (DialogType.valueOf(type)) {
             case Favorite:
                 getFavorites();
                 builder.setTitle(R.string.favorite);
@@ -85,6 +80,7 @@ public class EditImageDialog extends DialogFragment {
                 getItems(colorEditItems);
                 builder.setTitle(R.string.color);
                 break;
+            default:
         }
 
         recyclerView.setAdapter(new EditImageViewAdapter(items));
@@ -98,21 +94,20 @@ public class EditImageDialog extends DialogFragment {
     private void getItems(Map<String, EditImageItem> data) {
         items.clear();
 
-        for(Map.Entry<String,?> entry : data.entrySet()){
-            items.add((EditImageItem)entry.getValue());
+        for (Map.Entry<String, ?> entry : data.entrySet()) {
+            items.add((EditImageItem) entry.getValue());
         }
     }
 
     private void getFavorites() {
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("ImageEdit", Context.MODE_PRIVATE);
-        Map<String,?> keys = sharedPreferences.getAll();
+        Map<String, ?> keys = sharedPreferences.getAll();
 
         items.clear();
 
-        for(Map.Entry<String,?> entry : keys.entrySet()){
-            if (entry.getValue().equals(true)){
-                if (allImageEditItems.get(entry.getKey())!=null)
-                    items.add(allImageEditItems.get(entry.getKey()));
+        for (Map.Entry<String, ?> entry : keys.entrySet()) {
+            if (entry.getValue().equals(true) && (allImageEditItems.get(entry.getKey()) != null)) {
+                items.add(allImageEditItems.get(entry.getKey()));
             }
         }
     }
@@ -130,8 +125,7 @@ public class EditImageDialog extends DialogFragment {
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("ImageEdit", Context.MODE_PRIVATE);
 
         EditImageItem color = new EditImageItem(getString(R.string.supersede_feedbacklibrary_colorpickerbutton_text), R.drawable.ic_palette_black_48dp);
-        color.setOnClickListener(new EditImageItem.OnClickListener()
-        {
+        color.setOnClickListener(new EditImageItem.OnClickListener() {
             @Override
             public void onClick() {
                 listener.onColorClicked();
@@ -141,11 +135,10 @@ public class EditImageDialog extends DialogFragment {
 
         final EditImageItem blur = new EditImageItem(getString(R.string.supersede_feedbacklibrary_blurbutton_text), R.drawable.ic_blur_on_black_48dp);
         final AnnotateImageView annotateImageView = setCorrectFavoritesIfNeed(sharedPreferences, blur);
-        blur.setOnClickListener(new EditImageItem.OnClickListener()
-        {
+        blur.setOnClickListener(new EditImageItem.OnClickListener() {
             @Override
             public void onClick() {
-                if (!(annotateImageView.getBlur() > 0F)) {
+                if (annotateImageView.getBlur() <= 0F) {
                     annotateImageView.setOpacity(180);
                     annotateImageView.setBlur(10F);
                 } else {
@@ -160,8 +153,7 @@ public class EditImageDialog extends DialogFragment {
 
         EditImageItem fill = new EditImageItem(getString(R.string.supersede_feedbacklibrary_strokebutton_text), R.drawable.ic_format_color_fill_black_48dp);
         setCorrectFillIfNeed(sharedPreferences, annotateImageView, fill);
-        fill.setOnClickListener(new EditImageItem.OnClickListener()
-        {
+        fill.setOnClickListener(new EditImageItem.OnClickListener() {
             @Override
             public void onClick() {
                 listener.onFillClicked();
@@ -170,7 +162,7 @@ public class EditImageDialog extends DialogFragment {
         colorEditItems.put(fill.getTitle(), fill);
 
         EditImageItem black = new EditImageItem(getString(R.string.supersede_feedbacklibrary_blackbutton_text), R.drawable.ic_brightness_1_black_48dp);
-        if (!activity.isBlackModeOn()) {
+        if (!getAnnotateImageActivity().isBlackModeOn()) {
             colorEditItems.put(color.getTitle(), color);
             black.setTitle(getString(R.string.supersede_feedbacklibrary_blackbutton_text));
 
@@ -195,8 +187,7 @@ public class EditImageDialog extends DialogFragment {
                 editor.apply();
             }
         }
-        black.setOnClickListener(new EditImageItem.OnClickListener()
-        {
+        black.setOnClickListener(new EditImageItem.OnClickListener() {
             @Override
             public void onClick() {
                 listener.onBlackClicked();
@@ -229,12 +220,19 @@ public class EditImageDialog extends DialogFragment {
         }
     }
 
+    private AnnotateImageActivity getAnnotateImageActivity(){
+        if (getActivity() instanceof AnnotateImageActivity) {
+            return (AnnotateImageActivity) getActivity();
+        } else {
+            throw new RuntimeException("Could not get AnnotateImageActivity from current instance.");
+        }
+    }
+
     @NonNull
     private AnnotateImageView setCorrectFavoritesIfNeed(SharedPreferences sharedPreferences, EditImageItem blur) {
-        activity = (AnnotateImageActivity)getActivity();
-        final AnnotateImageView annotateImageView = activity.getAnnotateImageView();
+        final AnnotateImageView annotateImageView = getAnnotateImageActivity().getAnnotateImageView();
 
-        if (!(annotateImageView.getBlur() > 0F)) {
+        if (annotateImageView.getBlur() <= 0F) {
             blur.setTitle(getString(R.string.supersede_feedbacklibrary_blurbutton_text));
             boolean isUnblurFavorite = sharedPreferences.getBoolean(getString(R.string.supersede_feedbacklibrary_unblurbutton_text), false);
 
@@ -260,8 +258,7 @@ public class EditImageDialog extends DialogFragment {
 
     private void getQuickEdit() {
         EditImageItem pencil = new EditImageItem("Pencil", R.drawable.ic_lead_pencil_black_48dp);
-        pencil.setOnClickListener(new EditImageItem.OnClickListener()
-        {
+        pencil.setOnClickListener(new EditImageItem.OnClickListener() {
             @Override
             public void onClick() {
                 listener.onPencilClicked();
@@ -270,8 +267,7 @@ public class EditImageDialog extends DialogFragment {
         quickEditItems.put("Pencil", pencil);
 
         EditImageItem arrows = new EditImageItem("Arrows", R.drawable.ic_call_made_black_48dp);
-        arrows.setOnClickListener(new EditImageItem.OnClickListener()
-        {
+        arrows.setOnClickListener(new EditImageItem.OnClickListener() {
             @Override
             public void onClick() {
                 listener.onArrowsClicked();
@@ -280,8 +276,7 @@ public class EditImageDialog extends DialogFragment {
         quickEditItems.put("Arrows", arrows);
 
         EditImageItem square = new EditImageItem("Square", R.drawable.ic_crop_din_black_48dp);
-        square.setOnClickListener(new EditImageItem.OnClickListener()
-        {
+        square.setOnClickListener(new EditImageItem.OnClickListener() {
             @Override
             public void onClick() {
                 listener.onSquareClicked();
@@ -290,8 +285,7 @@ public class EditImageDialog extends DialogFragment {
         quickEditItems.put("Square", square);
 
         EditImageItem line = new EditImageItem("Line", R.drawable.icon_line);
-        line.setOnClickListener(new EditImageItem.OnClickListener()
-        {
+        line.setOnClickListener(new EditImageItem.OnClickListener() {
             @Override
             public void onClick() {
                 listener.onLineClicked();
@@ -300,18 +294,16 @@ public class EditImageDialog extends DialogFragment {
         quickEditItems.put("Line", line);
 
         EditImageItem smileyFace = new EditImageItem("Smiley face", R.drawable.ic_insert_emoticon_black_48dp);
-        smileyFace.setOnClickListener(new EditImageItem.OnClickListener()
-        {
+        smileyFace.setOnClickListener(new EditImageItem.OnClickListener() {
             @Override
             public void onClick() {
                 listener.onSmileyFaceClicked();
             }
         });
-        quickEditItems.put("Smiley face",smileyFace);
+        quickEditItems.put("Smiley face", smileyFace);
 
         final EditImageItem text = new EditImageItem("Text", R.drawable.ic_comment_black_48dp);
-        text.setOnClickListener(new EditImageItem.OnClickListener()
-        {
+        text.setOnClickListener(new EditImageItem.OnClickListener() {
             @Override
             public void onClick() {
                 listener.onTextClicked();
@@ -320,16 +312,23 @@ public class EditImageDialog extends DialogFragment {
         quickEditItems.put("Text", text);
     }
 
-    public interface OnEditImageListener{
+    public interface OnEditImageListener {
         void onColorClicked();
+
         void onBlackClicked();
+
         void onFillClicked();
 
         void onPencilClicked();
+
         void onArrowsClicked();
+
         void onTextClicked();
+
         void onSmileyFaceClicked();
+
         void onLineClicked();
+
         void onSquareClicked();
     }
 

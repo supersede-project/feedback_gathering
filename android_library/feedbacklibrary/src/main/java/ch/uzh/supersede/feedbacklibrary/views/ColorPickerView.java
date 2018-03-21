@@ -19,11 +19,7 @@ public class ColorPickerView extends View {
     private static final int CENTER_X = 100;
     private static final int CENTER_Y = 100;
     private static final int CENTER_RADIUS = 32;
-    private static final float PI = 3.1415926f;
-    private final int[] mColors = new int[]{
-            0xFFFF0000, 0xFFFF00FF, 0xFF0000FF, 0xFF00FFFF, 0xFF00FF00,
-            0xFFFFFF00, 0xFFFF0000
-    };
+    private static final int[] COLORS = new int[]{0xFFFF0000, 0xFFFF00FF, 0xFF0000FF, 0xFF00FFFF, 0xFF00FF00, 0xFFFFFF00, 0xFFFF0000};
     private TextView textView;
     private Paint mPaint;
     private Paint mCenterPaint;
@@ -46,7 +42,7 @@ public class ColorPickerView extends View {
         super(c);
         this.textView = textView;
         changedColor = initialColor;
-        Shader s = new SweepGradient(0, 0, mColors, null);
+        Shader s = new SweepGradient(0, 0, COLORS, null);
 
         newRectF = new RectF();
 
@@ -64,16 +60,11 @@ public class ColorPickerView extends View {
         return s + Math.round(p * (d - s));
     }
 
-    /**
-     * This method returns the changed color.
-     *
-     * @return the changed color
-     */
     public int getChangedColor() {
         return changedColor;
     }
 
-    private int interpolateColor(int colors[], float unit) {
+    private int interpolateColor(int[] colors, float unit) {
         if (unit <= 0) {
             return colors[0];
         }
@@ -119,17 +110,18 @@ public class ColorPickerView extends View {
             case MotionEvent.ACTION_MOVE:
                 float angle = (float) Math.atan2(y, x);
                 // need to turn angle [-PI ... PI] into unit [0....1]
-                float unit = angle / (2 * PI);
+                float unit = (float) (angle / (2 * Math.PI));
                 if (unit < 0) {
                     unit += 1;
                 }
-                mCenterPaint.setColor(interpolateColor(mColors, unit));
+                mCenterPaint.setColor(interpolateColor(COLORS, unit));
                 textView.setTextColor(mCenterPaint.getColor());
                 invalidate();
                 break;
             case MotionEvent.ACTION_UP:
                 changedColor = mCenterPaint.getColor();
                 break;
+            default:
         }
         return true;
     }
