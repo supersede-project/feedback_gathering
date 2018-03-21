@@ -242,11 +242,13 @@ public class FeedbackActivity extends AbstractBaseActivity implements Screenshot
         LinearLayout linearLayout = getView(R.id.supersede_feedbacklibrary_feedback_activity_layout, LinearLayout.class);
 
         if (linearLayout != null) {
-            if (!BuildConfig.DEBUG){
-                OrchestratorStub stub = new MechanismBuilder(this,getApplicationContext(),getResources(),linearLayout,defaultImagePath)
-                        .withText()
-                        .withAudio()
-                        .withScreenshot()
+            if (BuildConfig.DEBUG){
+                OrchestratorStub stub = new MechanismBuilder(this,getApplicationContext(),getResources(),linearLayout,layoutInflater,defaultImagePath)
+//                        .withRating() //Uncomment for Enabling
+                        .withText() //Uncomment for Enabling
+                        .withScreenshot() //Uncomment for Enabling
+                        .withAudio() //Uncomment for Enabling
+//                        .withCategory() //Uncomment for Enabling
                         .build(mechanismViews);
                 stub.addAll(linearLayout,mechanismViews);
             }else{
@@ -601,7 +603,10 @@ public class FeedbackActivity extends AbstractBaseActivity implements Screenshot
      * This method performs a POST request in order to send the feedback to the repository.
      */
     public void sendButtonClicked(View view) {
-
+        if (BuildConfig.DEBUG){
+            OrchestratorStub.receiveFeedback(this,view);
+            return;
+        }
         if (!isOnline()) {
             DialogUtils.showInformationDialog(this, new String[]{getResources().getString(R.string.check_network_state)}, true);
             return;

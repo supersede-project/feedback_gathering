@@ -23,7 +23,7 @@ import java.util.List;
 /**
  * Custom spinner class for spinner with single and multiple selection
  */
-public class CustomSpinner extends Spinner implements DialogInterface.OnClickListener, DialogInterface.OnMultiChoiceClickListener {
+public class CustomSpinner extends android.support.v7.widget.AppCompatSpinner implements DialogInterface.OnClickListener, DialogInterface.OnMultiChoiceClickListener {
     // General
     private int checkedIndex = -1;
     private boolean isMultiple;

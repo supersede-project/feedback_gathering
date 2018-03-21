@@ -132,6 +132,9 @@ public class TextMechanism extends Mechanism {
             String key = (String) param.get("key");
             Object value = param.get("value");
 
+            if (key == null){
+                return;
+            }
             // Title
             if (key.equals("title")) {
                 setTitle((String) value);
@@ -257,7 +260,7 @@ public class TextMechanism extends Mechanism {
             return false;
         }
 
-        if (maxLength != null && inputText.length() > maxLength) {
+        if (maxLength != null && inputText!= null && inputText.length() > maxLength) {
             errorMessage.add("Text has " + inputText.length() + " characters. Maximum allowed characters are " + maxLength);
             return false;
         }

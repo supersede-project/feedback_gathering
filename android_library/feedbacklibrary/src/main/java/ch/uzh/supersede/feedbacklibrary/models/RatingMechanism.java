@@ -69,8 +69,11 @@ public class RatingMechanism extends Mechanism {
     private void initRatingMechanism(MechanismConfigurationItem item) {
         for (Map<String, Object> param : item.getParameters()) {
             String key = (String) param.get("key");
-            // Title
             Object value = param.get("value");
+            if (key == null){
+                return;
+            }
+            // Title
             if (key.equals("title")) {
                 setTitle((String) value);
             }

@@ -39,6 +39,9 @@ public class AttachmentMechanism extends Mechanism {
         for (Map<String, Object> param : item.getParameters()) {
             String key = (String) param.get("key");
             // Title
+            if (key == null){
+                return;
+            }
             if (key.equals("title")) {
                 setTitle((String) param.get("value"));
             }

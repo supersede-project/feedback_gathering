@@ -20,7 +20,7 @@ public class CategoryMechanism extends Mechanism {
     // Options the user can choose from
     private List<String> options = new ArrayList<>();
     private HashMap<String, Long> optionsIds = new HashMap<>();
-    private boolean ownAllowed;
+    private boolean ownAllowed = true;
     // Selected options by the user
     private List<String> selectedOptions = new ArrayList<>();
     private String title;
@@ -88,6 +88,9 @@ public class CategoryMechanism extends Mechanism {
     private void initChoiceMechanism(MechanismConfigurationItem item) {
         for (Map<String, Object> param : item.getParameters()) {
             String key = (String) param.get("key");
+            if (key == null){
+                return;
+            }
             // Title
             if (key.equals("title")) {
                 setTitle((String) param.get("value"));
@@ -133,7 +136,9 @@ public class CategoryMechanism extends Mechanism {
                         }
                     }
                     for (Map.Entry<String, Object> entry : par.entrySet()) {
-                        if (entry.getKey().equals("id")) {
+                        if (entry
+                                .getKey()
+                                .equals("id")) {
                             optionsIds.put(options.get(options.size() - 1), ((Double) entry.getValue()).longValue());
                         }
                     }

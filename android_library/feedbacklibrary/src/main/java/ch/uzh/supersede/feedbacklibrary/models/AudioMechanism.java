@@ -11,7 +11,7 @@ import ch.uzh.supersede.feedbacklibrary.configurations.MechanismConfigurationIte
 public class AudioMechanism extends Mechanism {
     private String audioPath;
     // Default value is 10 seconds
-    private float maxTime = 10.0F;
+    private float maxTime = 10;
     private String title;
     private int totalDuration;
 
@@ -58,13 +58,16 @@ public class AudioMechanism extends Mechanism {
 
     private void initAudioMechanism(MechanismConfigurationItem item) {
         for (Map<String, Object> param : item.getParameters()) {
-            String value = (String) param.get("key");
+            String key = (String) param.get("key");
             // Title
-            if (value.equals("title")) {
+            if (key == null){
+                return;
+            }
+            if (key.equals("title")) {
                 setTitle((String) param.get("value"));
             }
             // Maximum time
-            if (value.equals("maxTime")) {
+            if (key.equals("maxTime")) {
                 setMaxTime(Float.parseFloat((String)param.get("value")));
             }
         }
