@@ -1,5 +1,9 @@
 package ch.uzh.supersede.feedbacklibrary.utils;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 public class Constants {
 
     private Constants() {
@@ -59,5 +63,70 @@ public class Constants {
         public static final String EXTRA_KEY_MECHANISM_VIEW_ID = "mechanismViewID";
         public static final String SEPARATOR = "::;;::;;";
         public static final String TEXT_ANNOTATION_COUNTER_MAXIMUM = "textAnnotationCounterMaximum";
+    }
+
+    public static class OrchestratorConstants{
+        //General
+        public static final String ORCHESTRATOR_KEY = "key";
+        public static final String ORCHESTRATOR_VALUE = "value";
+        //Audio
+        public static final String AUDIO_TITLE_KEY = "title";
+        public static final String AUDIO_TITLE_VALUE = "Audio-Mechanism";
+        public static final String AUDIO_MAX_TIME_KEY = "maxTime";
+        public static final String AUDIO_MAX_TIME_VALUE = "15.0";
+        //Text
+        public static final String TEXT_TITLE_KEY = "title";
+        public static final String TEXT_HINT_KEY = "hint";
+        public static final String TEXT_LABEL_KEY = "label";
+        public static final String TEXT_FONT_COLOR_KEY = "textareaFontColor";
+        public static final String TEXT_FONT_SIZE_KEY = "fieldFontSize";
+        public static final String TEXT_FONT_TYPE_KEY = "fieldFontType";
+        public static final String TEXT_ALIGN_KEY = "fieldTextAlignment";
+        public static final String TEXT_MAX_LENGTH_KEY = "maxLength";
+        public static final String TEXT_MAX_LENGTH_VISIBLE_KEY = "maxLengthVisible";
+        public static final String TEXT_LENGTH_VISIBLE_KEY = "textLengthVisible";
+        public static final String TEXT_MANDATORY_KEY = "mandatory";
+        public static final String TEXT_REMINDER_KEY = "mandatoryReminder";
+        public static final String TEXT_TITLE_VALUE = "Text-Mechanism";
+        public static final String TEXT_HINT_VALUE = "Hint for this View";
+        public static final String TEXT_LABEL_VALUE = "Text";
+        public static final String TEXT_FONT_COLOR_VALUE = "#1511FF";
+        public static final String TEXT_FONT_SIZE_VALUE = "12";
+        public static final String TEXT_FONT_TYPE_VALUE = "italic";
+        public static final String TEXT_ALIGN_VALUE = "center";
+        public static final String TEXT_MAX_LENGTH_VALUE = "200";
+        public static final String TEXT_MAX_LENGTH_VISIBLE_VALUE = "150";
+        public static final String TEXT_LENGTH_VISIBLE_VALUE = "100";
+        public static final String TEXT_MANDATORY_VALUE = "1";
+        public static final String TEXT_REMINDER_VALUE = "Default mandatory reminder text";
+        //Screenshot
+        public static final String SCREENSHOT_TITLE_KEY = "title";
+        public static final String SCREENSHOT_DEFAULT_KEY = "defaultPicture";
+        public static final String SCREENSHOT_MAX_TEXT_KEY = "maxTextAnnotation";
+        public static final String SCREENSHOT_TITLE_VALUE = "Screenshot-Mechanism";
+        public static final String SCREENSHOT_DEFAULT_VALUE = "";
+        public static final String SCREENSHOT_MAX_TEXT_VALUE = "maxTextAnnotation";
+        //Category
+        public static final String CATEGORY_TITLE_KEY = "title";
+        public static final String CATEGORY_MANDATORY_KEY = "mandatory";
+        public static final String CATEGORY_MANDATORY_REMINDER_KEY = "mandatoryReminder";
+        public static final String CATEGORY_MULTIPLE_KEY = "multiple";
+        public static final String CATEGORY_OWN_KEY = "ownAllowed";
+        public static final String CATEGORY_OPTIONS_KEY = "options";
+        public static final String CATEGORY_TITLE_VALUE = "Screenshot-Mechanism";
+        public static final String CATEGORY_MANDATORY_VALUE = "1";
+        public static final String CATEGORY_MANDATORY_REMINDER_VALUE = "Default mandatory reminder text";
+        public static final String CATEGORY_MULTIPLE_VALUE = "1";
+        public static final String CATEGORY_OWN_VALUE = "1";
+        public static final List<Map<String, Object>> CATEGORY_OPTIONS_VALUE = new ArrayList<>();
+        //Rating
+        public static final String RATING_TITLE_KEY = "title";
+        public static final String RATING_ICON_KEY = "ratingIcon";
+        public static final String RATING_MAX_KEY = "maxRating";
+        public static final String RATING_DEFAULT_KEY = "defaultRating";
+        public static final String RATING_TITLE_VALUE = "Rating-Mechanism";
+        public static final String RATING_ICON_VALUE = "";
+        public static final String RATING_MAX_VALUE = "5.0";
+        public static final String RATING_DEFAULT_VALUE = "3.0";
     }
 }

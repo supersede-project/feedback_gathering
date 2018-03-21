@@ -95,6 +95,9 @@ public class ScreenshotMechanism extends Mechanism {
         for (Map<String, Object> param : item.getParameters()) {
             String key = (String) param.get("key");
             Object value = param.get("value");
+            if (key == null){
+                return;
+            }
             // Title
             if (key.equals("title")) {
                 setTitle((String) value);

@@ -11,6 +11,8 @@ public abstract class Mechanism {
     public static final String ATTACHMENT_TYPE = "ATTACHMENT_TYPE";
     public static final String AUDIO_TYPE = "AUDIO_TYPE";
     public static final String CATEGORY_TYPE = "CATEGORY_TYPE";
+    public static final String DIALOG_TYPE = "DIALOG_TYPE";
+    public static final String IMAGE_TYPE = "IMAGE_TYPE";
     public static final String RATING_TYPE = "RATING_TYPE";
     public static final String SCREENSHOT_TYPE = "SCREENSHOT_TYPE";
     public static final String TEXT_TYPE = "TEXT_TYPE";

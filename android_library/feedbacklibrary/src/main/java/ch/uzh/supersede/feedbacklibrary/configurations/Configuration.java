@@ -5,7 +5,9 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import ch.uzh.supersede.feedbacklibrary.BuildConfig;
 import ch.uzh.supersede.feedbacklibrary.models.Mechanism;
+import okhttp3.internal.platform.Platform;
 
 /**
  * Configuration either of type 'PUSH' or 'PULL'.
