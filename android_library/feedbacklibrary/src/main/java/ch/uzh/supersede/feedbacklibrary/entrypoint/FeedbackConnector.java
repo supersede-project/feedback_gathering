@@ -17,8 +17,7 @@ import ch.uzh.supersede.feedbacklibrary.services.FeedbackService.ConfigurationRe
 import ch.uzh.supersede.feedbacklibrary.services.FeedbackService.ConfigurationRequestWrapper.ConfigurationRequestWrapperBuilder;
 import ch.uzh.supersede.feedbacklibrary.utils.Utils;
 
-import static ch.uzh.supersede.feedbacklibrary.utils.Constants.PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE;
-import static ch.uzh.supersede.feedbacklibrary.utils.Constants.SUPERSEEDE_BASE_URL;
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.*;
 
 public class FeedbackConnector {
     HashMap<Integer,View> registeredViews;
@@ -43,11 +42,17 @@ public class FeedbackConnector {
 
     protected static void onTouchConnector(Activity activity, View view, MotionEvent event){
         if (event == null){ //On Listener attached
-            Toast.makeText(activity.getApplicationContext(),"Feedback Functionality attached!", Toast.LENGTH_SHORT).show();
+            onListenerConnected(activity,view);
         }else{ //On Listener triggered
-            Toast.makeText(activity.getApplicationContext(),"Feedback Functionality running!", Toast.LENGTH_SHORT).show();
+            onListenerTriggered(activity,view,event);
         }
-        //General
+    }
+
+    private static void onListenerConnected(Activity activity, View view) {
+        //NOP
+    }
+
+    private static void onListenerTriggered(Activity activity, View view, MotionEvent event) {
         boolean result = Utils.checkSinglePermission(activity, PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE, Manifest
                 .permission.READ_EXTERNAL_STORAGE, null, null, false);
         if (result) {
@@ -56,6 +61,7 @@ public class FeedbackConnector {
                     .startFeedbackActivityWithScreenshotCapture(SUPERSEEDE_BASE_URL, activity, 1337, "en");
         }
     }
+
 
     private static class FeedbackOnTouchListener implements OnTouchListener{
         private View mView;
