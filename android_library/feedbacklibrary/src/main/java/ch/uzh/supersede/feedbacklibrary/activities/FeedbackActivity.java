@@ -427,7 +427,10 @@ public class FeedbackActivity extends AbstractBaseActivity implements Screenshot
             orchestratorConfigurationItem = gson.fromJson(jsonString, OrchestratorConfigurationItem.class);
             initModel();
             initView();
-        } else {
+        } else if (BuildConfig.DEBUG){
+            initModel();
+            initView();
+        }else{
             // The feedback activity is started on behalf of the user
             Log.v(TAG, "The feedback activity is started via a PUSH configuration");
 

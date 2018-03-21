@@ -8,6 +8,7 @@
 
     <!-- Buttons -->
     <string name="random_pull_feedback_button_text">Trigger a potential random pull feedback from the application with id = 9</string>
+    <string name="feedback_connector_button_text">Feedback-Connector</string>
     <string name="specific_pull_feedback_button_text_id21">Trigger the specific pull feedback with id = 21 from the application with id = 9</string>
     <string name="specific_pull_feedback_button_text_id22">Trigger the specific pull feedback with id = 22 from the application with id = 9</string>
 
