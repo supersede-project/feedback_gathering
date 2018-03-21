@@ -27,6 +27,7 @@ import ch.uzh.supersede.feedbacklibrary.R;
 /**
  * Custom spinner class for spinner with single and multiple selection
  */
+
 public class CustomSpinner extends AppCompatSpinner implements DialogInterface.OnClickListener, DialogInterface.OnMultiChoiceClickListener {
     // General
     private int checkedIndex = -1;

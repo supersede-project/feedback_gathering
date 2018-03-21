@@ -55,7 +55,7 @@ public class StartActivity extends AbstractBaseActivity {
             }
             case R.id.trigger_specific_pull_config_v1_id21_button:{
                 ConfigurationRequestWrapper wrapper = new ConfigurationRequestWrapperBuilder(StartActivity.this,FeedbackActivity.class)
-                        .withApplicationId(9)
+                        .withApplicationId(14)
                         .withPullConfigurationId(21)
                         .withUrl(SUPERSEEDE_BASE_URL)
                         .withLanguage("en")
