@@ -243,6 +243,8 @@ export class FeedbackDialogView extends DialogView {
                 inquiryDialogView.setTitle(<string>i18n.t('general.success_dialog_title_f2f'));
                 inquiryDialogView.setModal(true);
 
+                var summaryDialogView = null;
+
                 $("input[name='allowUpdate']").change(function(){
                     if(jQuery('#UpdateForm_v2').find('input[name="allowUpdate"]:checked').val() == "No"){
                         $("#hideDivUpdate").hide();
@@ -268,14 +270,14 @@ export class FeedbackDialogView extends DialogView {
 
 
                 updateDialogView.addAnswerOption('#f2fDialogContinue', function() {
-                    summaryAllowUpdate = jQuery('#UpdateForm_v2').find('input[name="allowUpdate"]:checked').val();
-                    let channelUpdate = jQuery('#UpdateForm_v2').find('input[name="contactChannelUpdate"]:checked').val();
-                    if(typeof channelUpdate !== 'undefined'){
-                        summaryChannelUpdate = channelUpdate;
-                    }
+                    // summaryAllowUpdate = jQuery('#UpdateForm_v2').find('input[name="allowUpdate"]:checked').val();
+                    // let channelUpdate = jQuery('#UpdateForm_v2').find('input[name="contactChannelUpdate"]:checked').val();
+                    // if(typeof channelUpdate !== 'undefined'){
+                    //     summaryChannelUpdate = channelUpdate;
+                    // }
                     updateDialogView.close();
-                    console.log("allowContactReply:" + summaryAllowUpdate);
-                    console.log("contactChannel:" + channelUpdate);
+                    // console.log("allowContactReply:" + summaryAllowUpdate);
+                    // console.log("contactChannel:" + channelUpdate);
                     inquiryDialogView.open();
                 });
 
@@ -284,71 +286,129 @@ export class FeedbackDialogView extends DialogView {
                     updateDialogView.open();
                 });
                 inquiryDialogView.addAnswerOption('#f2fDialogFinish', function() {
+                    summarySetGlobal = false;
+                    summaryAllowUpdate = jQuery('#UpdateForm_v2').find('input[name="allowUpdate"]:checked').val();
+                    summaryChannelUpdate = jQuery('#UpdateForm_v2').find('input[name="contactChannelUpdate"]:checked').val();
                     summaryAllowInquiry = jQuery('#InquiryForm_v2').find('input[name="allowInquiry"]:checked').val();
-                    let channelInquiry = jQuery('#InquiryForm_v2').find('input[name="contactChannelInquiry"]:checked').val();
-                    if(typeof channelInquiry !== 'undefined'){
-                        summaryChannelInquiry = channelInquiry;
-                    }
+                    summaryChannelInquiry = jQuery('#InquiryForm_v2').find('input[name="contactChannelInquiry"]:checked').val();
+
                     inquiryDialogView.close();
-                    console.log("allowUpdate: " + jQuery('#UpdateForm_v2').find('input[name="allowUpdate"]:checked').val());
-                    console.log("allowInquiry: " + jQuery('#InquiryForm_v2').find('input[name="allowInquiry"]:checked').val());
-                    console.log("contactChannelUpdate: " + jQuery('#UpdateForm_v2').find('input[name="contactChannelUpdate"]:checked').val());
-                    console.log("contactChannelInquiry: " + jQuery('#InquiryForm_v2').find('input[name="contactChannelInquiry"]:checked').val());
-                    let summaryDialogView = new QuestionDialogView('SummaryForm', f2fSummaryTemplate,
-                        {'allowUpdate': jQuery('#UpdateForm_v2').find('input[name="allowUpdate"]:checked').val(),
-                            'allowInquiry': jQuery('#InquiryForm_v2').find('input[name="allowInquiry"]:checked').val(),
-                            'contactChannelUpdate': jQuery('#UpdateForm_v2').find('input[name="contactChannelUpdate"]:checked').val(),
-                            'contactChannelInquiry': jQuery('#InquiryForm_v2').find('input[name="contactChannelInquiry"]:checked').val()});
-                    summaryDialogView.setTitle(<string>i18n.t('general.success_dialog_title_f2f'));
-                    summaryDialogView.setModal(true);
 
-                    summaryDialogView.addAnswerOption('#f2fDialogBackToInquiry',function () {
-                        summaryDialogView.close();
-                        inquiryDialogView.open();
+                    let finalSettings: JSON = {};
+                    if(summaryAllowUpdate.toLowerCase() == "yes"){
+                        finalSettings.statusUpdates = true;
+                        finalSettings.statusUpdatesContactChannel = summaryChannelUpdate;
+                    } else {
+                        finalSettings.statusUpdates = false;
+                        finalSettings.statusUpdatesContactChannel = "";
+                    }
+
+                    if(summaryAllowInquiry.toLowerCase() == "yes"){
+                        finalSettings.feedbackQuery = true;
+                        finalSettings.feedbackQueryChannel = summaryChannelInquiry;
+                    } else {
+                        finalSettings.feedbackQuery = false;
+                        finalSettings.feedbackQueryChannel = "";
+                    }
+
+                    let feedbackJson = JSON.parse(JSON.stringify(data));
+                    console.log("FEEDBACK ID: " + feedbackJson.id);
+
+
+                    finalSettings.globalFeedbackSetting = summarySetGlobal;
+                    finalSettings.feedback_id = feedbackJson.id;
+                    // finalSettings.feedback = JSON.stringify(data);
+                    console.log("Feedback data: " + JSON.stringify(data));
+
+                    feedbackService.sendFeedbackSettings(urlSettings, finalSettings, function(data) {
+                        console.log("it worked");
+                        console.log(JSON.stringify(data))
+                    }, function(error) {
+                        console.log("sendFeedbackSettings: Error");
+                        console.log('Failure: ' + JSON.stringify(error));
                     });
-                    summaryDialogView.addAnswerOption('#f2fDialogSave', function() {
-                        // let setGlobal:string= jQuery('#SummaryForm').find('input[name="saveSettings"]:checked').val();
-                        // if (setGlobal.toLowerCase() == "yes"){
-                        //     summarySetGlobal = true;
-                        // }
-                        summarySetGlobal = false;
-                        summaryDialogView.close();
-
-                        let finalSettings: JSON = {};
-                        if(summaryAllowUpdate.toLowerCase() == "yes"){
-                            finalSettings.statusUpdates = true;
-                            finalSettings.statusUpdatesContactChannel = summaryChannelUpdate;
-                        } else {
-                            finalSettings.statusUpdates = false;
-                            finalSettings.statusUpdatesContactChannel = "";
-                        }
-
-                        if(summaryAllowInquiry.toLowerCase() == "yes"){
-                            finalSettings.feedbackQuery = true;
-                            finalSettings.feedbackQueryChannel = summaryChannelInquiry;
-                        } else {
-                            finalSettings.feedbackQuery = false;
-                            finalSettings.feedbackQueryChannel = "";
-                        }
-
-                        let feedbackJson = JSON.parse(JSON.stringify(data));
-                        console.log("FEEDBACK ID: " + feedbackJson.id);
 
 
-                        finalSettings.globalFeedbackSetting = summarySetGlobal;
-                        finalSettings.feedback_id = feedbackJson.id;
-                        // finalSettings.feedback = JSON.stringify(data);
-                        console.log("Feedback data: " + JSON.stringify(data));
 
-                        feedbackService.sendFeedbackSettings(urlSettings, finalSettings, function(data) {
-                            console.log("it worked");
-                            console.log(JSON.stringify(data))
-                        }, function(error) {
-                            console.log("sendFeedbackSettings: Error");
-                            console.log('Failure: ' + JSON.stringify(error));
-                        });
-                    });
-                    summaryDialogView.open();
+                    // summaryAllowInquiry = jQuery('#InquiryForm_v2').find('input[name="allowInquiry"]:checked').val();
+                    // let channelInquiry = jQuery('#InquiryForm_v2').find('input[name="contactChannelInquiry"]:checked').val();
+                    // if(typeof channelInquiry !== 'undefined'){
+                    //     summaryChannelInquiry = channelInquiry;
+                    // }
+                    // inquiryDialogView.close();
+                    // summaryAllowUpdate = jQuery('#UpdateForm_v2').find('input[name="allowUpdate"]:checked').val();
+                    // summaryChannelUpdate = jQuery('#UpdateForm_v2').find('input[name="contactChannelUpdate"]:checked').val();
+                    // summaryAllowInquiry = jQuery('#InquiryForm_v2').find('input[name="allowInquiry"]:checked').val();
+                    // summaryChannelInquiry = jQuery('#InquiryForm_v2').find('input[name="contactChannelInquiry"]:checked').val();
+                    //
+                    // console.log("allowUpdate: " + jQuery('#UpdateForm_v2').find('input[name="allowUpdate"]:checked').val());
+                    // console.log("allowInquiry: " + jQuery('#InquiryForm_v2').find('input[name="allowInquiry"]:checked').val());
+                    // console.log("contactChannelUpdate: " + jQuery('#UpdateForm_v2').find('input[name="contactChannelUpdate"]:checked').val());
+                    // console.log("contactChannelInquiry: " + jQuery('#InquiryForm_v2').find('input[name="contactChannelInquiry"]:checked').val());
+                    //
+                    // if(typeof summaryChannelUpdate!== 'undefined'){
+                    //     summaryChannelUpdate = "";
+                    // }
+                    //
+                    // if(typeof summaryChannelInquiry!== 'undefined'){
+                    //     summaryChannelInquiry = "";
+                    // }
+                    //
+                    // summaryDialogView = new QuestionDialogView('SummaryForm', f2fSummaryTemplate,
+                    //     {'allowUpdate': summaryAllowUpdate,
+                    //         'allowInquiry': summaryAllowInquiry,
+                    //         'contactChannelUpdate': summaryChannelUpdate,
+                    //         'contactChannelInquiry': summaryChannelInquiry});
+                    // summaryDialogView.setTitle(<string>i18n.t('general.success_dialog_title_f2f'));
+                    // summaryDialogView.setModal(true);
+                    //
+                    // summaryDialogView.addAnswerOption('#f2fDialogBackToInquiry',function () {
+                    //     summaryDialogView.close();
+                    //     inquiryDialogView.open();
+                    // });
+                    // summaryDialogView.addAnswerOption('#f2fDialogSave', function() {
+                    //     // let setGlobal:string= jQuery('#SummaryForm').find('input[name="saveSettings"]:checked').val();
+                    //     // if (setGlobal.toLowerCase() == "yes"){
+                    //     //     summarySetGlobal = true;
+                    //     // }
+                    //     summarySetGlobal = false;
+                    //     summaryDialogView.close();
+                    //
+                    //     let finalSettings: JSON = {};
+                    //     if(summaryAllowUpdate.toLowerCase() == "yes"){
+                    //         finalSettings.statusUpdates = true;
+                    //         finalSettings.statusUpdatesContactChannel = summaryChannelUpdate;
+                    //     } else {
+                    //         finalSettings.statusUpdates = false;
+                    //         finalSettings.statusUpdatesContactChannel = "";
+                    //     }
+                    //
+                    //     if(summaryAllowInquiry.toLowerCase() == "yes"){
+                    //         finalSettings.feedbackQuery = true;
+                    //         finalSettings.feedbackQueryChannel = summaryChannelInquiry;
+                    //     } else {
+                    //         finalSettings.feedbackQuery = false;
+                    //         finalSettings.feedbackQueryChannel = "";
+                    //     }
+                    //
+                    //     let feedbackJson = JSON.parse(JSON.stringify(data));
+                    //     console.log("FEEDBACK ID: " + feedbackJson.id);
+                    //
+                    //
+                    //     finalSettings.globalFeedbackSetting = summarySetGlobal;
+                    //     finalSettings.feedback_id = feedbackJson.id;
+                    //     // finalSettings.feedback = JSON.stringify(data);
+                    //     console.log("Feedback data: " + JSON.stringify(data));
+                    //
+                    //     feedbackService.sendFeedbackSettings(urlSettings, finalSettings, function(data) {
+                    //         console.log("it worked");
+                    //         console.log(JSON.stringify(data))
+                    //     }, function(error) {
+                    //         console.log("sendFeedbackSettings: Error");
+                    //         console.log('Failure: ' + JSON.stringify(error));
+                    //     });
+                    // });
+                    // summaryDialogView.open();
                 });
 
                 console.log("test console");
