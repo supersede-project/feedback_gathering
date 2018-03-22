@@ -28,7 +28,7 @@ import ch.uzh.supersede.feedbacklibrary.R;
  * Custom spinner class for spinner with single and multiple selection
  */
 
-public class CustomSpinner extends AppCompatSpinner implements DialogInterface.OnClickListener, DialogInterface.OnMultiChoiceClickListener {
+public class CategorySpinner extends AppCompatSpinner implements DialogInterface.OnClickListener, DialogInterface.OnMultiChoiceClickListener {
     // General
     private int checkedIndex = -1;
     private boolean isMultipleChoice;
@@ -39,19 +39,19 @@ public class CustomSpinner extends AppCompatSpinner implements DialogInterface.O
     // Own category
     private boolean ownCategoryAllowed;
 
-    public CustomSpinner(Context context) {
+    public CategorySpinner(Context context) {
         super(context);
         simpleAdapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item);
         super.setAdapter(simpleAdapter);
     }
 
-    public CustomSpinner(Context context, AttributeSet attrs) {
+    public CategorySpinner(Context context, AttributeSet attrs) {
         super(context, attrs);
         simpleAdapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item);
         super.setAdapter(simpleAdapter);
     }
 
-    public CustomSpinner(Context context, AttributeSet attr, int defStyle) {
+    public CategorySpinner(Context context, AttributeSet attr, int defStyle) {
         super(context, attr, defStyle);
         simpleAdapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item);
         super.setAdapter(simpleAdapter);
@@ -146,7 +146,7 @@ public class CustomSpinner extends AppCompatSpinner implements DialogInterface.O
         // Others was clicked
         LayoutInflater layoutInflater = LayoutInflater.from(getContext());
         // Inflating the custom layout
-        LinearLayout linearLayout = (LinearLayout) layoutInflater.inflate(R.layout.own_category_dialog_layout, null);
+        LinearLayout linearLayout = (LinearLayout) layoutInflater.inflate(R.layout.utility_category_spinner, null);
         final TextInputEditText ownCategoryDialogInputEditText = createOwnCategoryDialog(linearLayout);
         final LinearLayout emptyLayout = (LinearLayout) linearLayout.findViewById(R.id.supersede_feedbacklibrary_own_category_dialog_empty_layout);
 
@@ -214,7 +214,7 @@ public class CustomSpinner extends AppCompatSpinner implements DialogInterface.O
         // Other was clicked
         LayoutInflater layoutInflater = LayoutInflater.from(getContext());
         // Inflating the custom layout
-        LinearLayout linearLayout = (LinearLayout) layoutInflater.inflate(R.layout.own_category_dialog_layout, null);
+        LinearLayout linearLayout = (LinearLayout) layoutInflater.inflate(R.layout.utility_category_spinner, null);
         final TextInputEditText ownCategoryDialogInputEditText = createOwnCategoryDialog(linearLayout);
         final LinearLayout emptyLayout = (LinearLayout) linearLayout.findViewById(R.id.supersede_feedbacklibrary_own_category_dialog_empty_layout);
 

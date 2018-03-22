@@ -7,7 +7,7 @@
     <string name="action_feedback">Feedback</string>
 
     <!-- Buttons -->
-    <string name="button_host_feedback">Trigger a potential random pull feedback from the application with id = 9</string>
+    <string name="button_host_feedback">Feedback-Connector</string>
     <string name="button_host_trigger_1">Button</string>
     <string name="button_host_trigger_2">Button</string>
 </resources>

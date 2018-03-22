@@ -138,7 +138,7 @@ public class TextAnnotationImageView extends AbstractAnnotationView {
         }
         LayoutInflater layoutInflater = LayoutInflater.from(context);
         // Inflating the custom layout
-        LinearLayout linearLayout = (LinearLayout) layoutInflater.inflate(R.layout.text_annotation_dialog_layout, null);
+        LinearLayout linearLayout = (LinearLayout) layoutInflater.inflate(R.layout.mechanism_text, null);
 
         final TextInputLayout textAnnotationLayout = (TextInputLayout) linearLayout.findViewById(R.id.supersede_feedbacklibrary_text_annotation_dialog_input_layout);
         final TextInputEditText textAnnotationText = (TextInputEditText) linearLayout.findViewById(R.id.supersede_feedbacklibrary_text_annotation_dialog_text);

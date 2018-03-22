@@ -22,7 +22,7 @@ public class TextMechanismView extends MechanismView {
     public TextMechanismView(LayoutInflater layoutInflater, Mechanism mechanism) {
         super(layoutInflater);
         this.textMechanism = (TextMechanism) mechanism;
-        setEnclosingLayout(getLayoutInflater().inflate(R.layout.text_feedback_layout, null));
+        setEnclosingLayout(getLayoutInflater().inflate(R.layout.mechanism_text_enclosing, null));
         initView();
     }
 

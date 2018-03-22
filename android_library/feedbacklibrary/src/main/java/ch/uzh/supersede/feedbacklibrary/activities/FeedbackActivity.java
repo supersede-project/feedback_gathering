@@ -86,7 +86,6 @@ import ch.uzh.supersede.feedbacklibrary.views.TextMechanismView;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
-import okhttp3.internal.platform.Platform;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -258,7 +257,7 @@ public class FeedbackActivity extends AbstractBaseActivity implements Screenshot
                 }
             }
             initCopyByEmailLayout(layoutInflater, linearLayout);
-            layoutInflater.inflate(R.layout.send_feedback_layout, linearLayout);
+            layoutInflater.inflate(R.layout.utility_feedback_button, linearLayout);
 
         }
     }
@@ -306,7 +305,7 @@ public class FeedbackActivity extends AbstractBaseActivity implements Screenshot
         sharedPreferences = getSharedPreferences("FeedbackApp", Context.MODE_PRIVATE);
         savedEmail = sharedPreferences.getString("email", "");
 
-        View view = layoutInflater.inflate(R.layout.send_by_email_layout, null, false);
+        View view = layoutInflater.inflate(R.layout.mechanism_email, null, false);
         linearLayout.addView(view);
 
         emailEditText = (EditText) view.findViewById(R.id.sbe_email_et);
@@ -754,7 +753,7 @@ public class FeedbackActivity extends AbstractBaseActivity implements Screenshot
                     String feedbackText = feedback.getTextFeedbacks().get(0).getText();
 
                     CategoryMechanismView categoryMechanismView = (CategoryMechanismView) mechanismViews.get(4);
-                    String category = categoryMechanismView.getCustomSpinner().getSelectedItem().toString();
+                    String category = categoryMechanismView.getCategorySpinner().getSelectedItem().toString();
 
                     if (category.equals("My feedback is about…")) {
                         category = "-";
@@ -837,22 +836,5 @@ public class FeedbackActivity extends AbstractBaseActivity implements Screenshot
             }
         }
         return true;
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_help, menu);
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.mh_help) {
-            Intent intent = new Intent(this, HelpActivity.class);
-            startActivity(intent);
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 }

@@ -18,7 +18,7 @@
         card_view:cardUseCompatPadding="true"
         card_view:cardCornerRadius="1dp">
 
-        <ch.uzh.supersede.feedbacklibrary.views.CustomSpinner
+        <ch.uzh.supersede.feedbacklibrary.views.CategorySpinner
             android:id="@+id/supersede_feedbacklibrary_custom_spinner"
             android:layout_width="match_parent"
             android:layout_marginLeft="10dp"

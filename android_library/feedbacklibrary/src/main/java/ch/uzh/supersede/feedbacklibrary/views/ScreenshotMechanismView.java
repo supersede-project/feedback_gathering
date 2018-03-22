@@ -38,7 +38,7 @@ public class ScreenshotMechanismView extends MechanismView {
         this.screenshotMechanism = (ScreenshotMechanism) mechanism;
         this.onImageChangedListener = onImageChangedListener;
         this.mechanismViewIndex = mechanismViewIndex;
-        setEnclosingLayout(getLayoutInflater().inflate(R.layout.screenshot_feedback_layout, null));
+        setEnclosingLayout(getLayoutInflater().inflate(R.layout.mechanism_screenshot, null));
         initView(defaultImagePath);
     }
 

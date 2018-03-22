@@ -18,7 +18,7 @@ public class RatingMechanismView extends MechanismView {
     public RatingMechanismView(LayoutInflater layoutInflater, Mechanism mechanism) {
         super(layoutInflater);
         this.ratingMechanism = (RatingMechanism) mechanism;
-        setEnclosingLayout(getLayoutInflater().inflate(R.layout.rating_feedback_layout, null));
+        setEnclosingLayout(getLayoutInflater().inflate(R.layout.mechanism_rating, null));
         initView();
     }
 

@@ -5,6 +5,6 @@ import android.view.View;
 import android.widget.Toast;
 
 
-public interface IFeedbackConfiguration {
+public interface IFeedbackBehavior {
 
 }

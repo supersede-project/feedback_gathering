@@ -31,11 +31,6 @@
 
         <activity android:name="com.theartofdev.edmodo.cropper.CropImageActivity" />
 
-        <activity
-            android:name=".activities.HelpActivity"
-            android:theme="@style/AppTheme.FeedbackLibrary"
-            android:label="Help"/>
-
     </application>
 
 </manifest>

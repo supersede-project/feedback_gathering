@@ -47,7 +47,7 @@ public class ColorPickerDialog extends DialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = getActivity().getLayoutInflater();
         // Inflating the custom layout
-        View view = inflater.inflate(R.layout.color_picker_dialog, null);
+        View view = inflater.inflate(R.layout.utility_color_picker, null);
         LinearLayout linearLayout = (LinearLayout) view;
 
         TextView textView = new TextView(view.getContext());

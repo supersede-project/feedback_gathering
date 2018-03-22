@@ -15,7 +15,7 @@
         android:theme="@style/AppTheme"
         tools:replace="android:label,android:theme">
         <activity
-            android:name=".CleanStartActivity"
+            android:name=".HostActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
