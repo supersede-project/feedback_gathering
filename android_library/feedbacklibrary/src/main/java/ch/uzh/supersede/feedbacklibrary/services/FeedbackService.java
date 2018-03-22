@@ -220,12 +220,15 @@ public class FeedbackService {
     public void startFeedbackActivityWithScreenshotCapture(@NonNull final String baseURL, @NonNull final Activity activity, final long applicationId, @NonNull final String language) {
         Intent intent = new Intent(activity, FeedbackActivity.class);
         String defaultImagePath = Utils.captureScreenshot(activity);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
         intent.putExtra(DEFAULT_IMAGE_PATH, defaultImagePath);
         intent.putExtra(EXTRA_KEY_APPLICATION_ID, applicationId);
         intent.putExtra(EXTRA_KEY_BASE_URL, baseURL);
         intent.putExtra(EXTRA_KEY_LANGUAGE, language);
         activity.startActivity(intent);
+        activity.overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
     }
+
     public static class ConfigurationRequestWrapper {
         private String url;
         private String language;

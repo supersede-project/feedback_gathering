@@ -90,7 +90,7 @@ public class Constants {
         public static final String TEXT_MANDATORY_KEY = "mandatory";
         public static final String TEXT_REMINDER_KEY = "mandatoryReminder";
         public static final String TEXT_TITLE_VALUE = "Text-Mechanism";
-        public static final String TEXT_HINT_VALUE = "Hint for this View";
+        public static final String TEXT_HINT_VALUE = "Enter a Feedback-Text here...";
         public static final String TEXT_LABEL_VALUE = "Text";
         public static final String TEXT_FONT_COLOR_VALUE = "#1511FF";
         public static final String TEXT_FONT_SIZE_VALUE = "12";
@@ -105,7 +105,7 @@ public class Constants {
         public static final String SCREENSHOT_TITLE_KEY = "title";
         public static final String SCREENSHOT_DEFAULT_KEY = "defaultPicture";
         public static final String SCREENSHOT_MAX_TEXT_KEY = "maxTextAnnotation";
-        public static final String SCREENSHOT_TITLE_VALUE = "Screenshot-Mechanism";
+        public static final String SCREENSHOT_TITLE_VALUE = "Screenshot";
         public static final String SCREENSHOT_DEFAULT_VALUE = "";
         public static final String SCREENSHOT_MAX_TEXT_VALUE = "1000";
         //Category
@@ -126,7 +126,7 @@ public class Constants {
         public static final String RATING_ICON_KEY = "ratingIcon";
         public static final String RATING_MAX_KEY = "maxRating";
         public static final String RATING_DEFAULT_KEY = "defaultRating";
-        public static final String RATING_TITLE_VALUE = "Rating-Mechanism";
+        public static final String RATING_TITLE_VALUE = "Please select a Rating:";
         public static final String RATING_ICON_VALUE = "";
         public static final String RATING_MAX_VALUE = "5.0";
         public static final String RATING_DEFAULT_VALUE = "3.0";
