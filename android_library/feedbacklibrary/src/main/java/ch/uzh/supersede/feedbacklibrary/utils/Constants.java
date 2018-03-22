@@ -108,7 +108,7 @@ public class Constants {
         public static final String SCREENSHOT_MAX_TEXT_KEY = "maxTextAnnotation";
         public static final String SCREENSHOT_TITLE_VALUE = "Screenshot-Mechanism";
         public static final String SCREENSHOT_DEFAULT_VALUE = "";
-        public static final String SCREENSHOT_MAX_TEXT_VALUE = "maxTextAnnotation";
+        public static final String SCREENSHOT_MAX_TEXT_VALUE = "1000";
         //Category
         public static final String CATEGORY_TITLE_KEY = "title";
         public static final String CATEGORY_MANDATORY_KEY = "mandatory";

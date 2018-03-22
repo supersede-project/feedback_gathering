@@ -127,8 +127,11 @@ public class AudioMechanismView extends MechanismView implements SeekBar.OnSeekB
         return audioMechanism.getId();
     }
 
-    private int getProgressPercentage(long currentDuration, long totalDuration) {
-        return (int) (currentDuration / totalDuration / 1000 * 100);
+    private int getProgressPercentage(double currentDuration, double totalDuration) {
+        if (totalDuration > 0) {
+            return (int) (currentDuration / totalDuration * 100);
+        }
+        return 0;
     }
 
     private String getDefaultTotalDurationLabel() {

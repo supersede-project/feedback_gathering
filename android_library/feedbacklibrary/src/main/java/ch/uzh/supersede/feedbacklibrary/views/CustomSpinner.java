@@ -363,13 +363,13 @@ public class CustomSpinner extends AppCompatSpinner implements DialogInterface.O
 
         // Update mSelection
         boolean[] newMSelection = new boolean[items.length];
-        System.arraycopy(mSelection, 0, newMSelection, 0, items.length);
+        System.arraycopy(mSelection, 0, newMSelection, 0, mSelection.length);
         newMSelection[newMSelection.length - 1] = false;
         mSelection = newMSelection;
 
         // Update mSelectionAtStart
         boolean[] newMSelectionAtStart = new boolean[items.length];
-        System.arraycopy(mSelectionAtStart, 0, newMSelectionAtStart, 0, items.length);
+        System.arraycopy(mSelectionAtStart, 0, newMSelectionAtStart, 0, mSelectionAtStart.length);
         newMSelectionAtStart[newMSelectionAtStart.length - 1] = false;
         mSelectionAtStart = newMSelectionAtStart;
     }
