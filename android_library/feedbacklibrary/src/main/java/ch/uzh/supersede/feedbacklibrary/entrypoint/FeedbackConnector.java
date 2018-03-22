@@ -43,9 +43,8 @@ public class FeedbackConnector {
     protected static void onTouchConnector(Activity activity, View view, MotionEvent event){
         if (event == null){ //On Listener attached
             onListenerConnected(activity,view);
-        }else{ //On Listener triggered
-            onListenerTriggered(activity,view,event);
         }
+        onListenerTriggered(activity,view,event);
     }
 
     private static void onListenerConnected(Activity activity, View view) {

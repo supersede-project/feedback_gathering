@@ -24,6 +24,7 @@ import static ch.uzh.supersede.feedbacklibrary.utils.Constants.SUPERSEEDE_BASE_U
  * This class represents an activity of the host application,
  * i.e., StartActivity integrates the feedback library.
  */
+@Deprecated
 public class StartActivity extends AbstractBaseActivity {
     /*
      * This integer is used in the onRequestPermissionsResult method.

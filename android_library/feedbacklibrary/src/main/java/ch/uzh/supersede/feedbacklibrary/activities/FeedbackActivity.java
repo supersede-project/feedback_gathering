@@ -250,7 +250,6 @@ public class FeedbackActivity extends AbstractBaseActivity implements Screenshot
                         .withAudio() //Uncomment for Enabling
 //                        .withCategory() //Uncomment for Enabling
                         .build(mechanismViews);
-                stub.addAll(linearLayout,mechanismViews);
             }else{
                 for (Mechanism mechanism : mechanisms) {
                     if (mechanism != null && mechanism.isActive()) {
@@ -349,15 +348,15 @@ public class FeedbackActivity extends AbstractBaseActivity implements Screenshot
     }
 
     private void annotateMechanismView(Intent data) {
-        int mechanismViewId = data.getIntExtra(EXTRA_KEY_MECHANISM_VIEW_ID, -1);
-
-        if (mechanismViewId == -1) {
-            Log.e(TAG, "Failed to annotate the image. No mechanismViewID provided");
+        ScreenshotMechanismView screenshotMechanismView = null;
+        for (MechanismView mechanismView : mechanismViews){
+            if (mechanismView instanceof ScreenshotMechanismView){
+                screenshotMechanismView = (ScreenshotMechanismView) mechanismView;
+            }
+        }
+        if (screenshotMechanismView == null){
             return;
         }
-
-        ScreenshotMechanismView screenshotMechanismView = (ScreenshotMechanismView) mechanismViews.get(mechanismViewId);
-
         // Sticker annotations
         if (data.getBooleanExtra(EXTRA_KEY_HAS_STICKER_ANNOTATIONS, false)) {
             screenshotMechanismView.setAllStickerAnnotations((HashMap<Integer, String>) data.getSerializableExtra(EXTRA_KEY_ALL_STICKER_ANNOTATIONS));
@@ -368,7 +367,7 @@ public class FeedbackActivity extends AbstractBaseActivity implements Screenshot
         }
 
         // Annotated image with stickers
-        String tempPathWithStickers = data.getStringExtra(EXTRA_KEY_ANNOTATED_IMAGE_PATH_WITH_STICKERS) + PATH_DELIMITER + mechanismViewId + ANNOTATED_IMAGE_NAME_WITH_STICKERS;
+        String tempPathWithStickers = data.getStringExtra(EXTRA_KEY_ANNOTATED_IMAGE_PATH_WITH_STICKERS) + PATH_DELIMITER + screenshotMechanismView.getMechanismViewIndex() + ANNOTATED_IMAGE_NAME_WITH_STICKERS;
         screenshotMechanismView.setAnnotatedImagePath(tempPathWithStickers);
         screenshotMechanismView.setPicturePath(tempPathWithStickers);
         Bitmap annotatedBitmap = Utils.loadImageFromStorage(tempPathWithStickers);
@@ -381,7 +380,7 @@ public class FeedbackActivity extends AbstractBaseActivity implements Screenshot
         if (data.getStringExtra(EXTRA_KEY_ANNOTATED_IMAGE_PATH_WITHOUT_STICKERS) == null) {
             screenshotMechanismView.setPicturePathWithoutStickers(null);
         } else {
-            String tempPathWithoutStickers = data.getStringExtra(EXTRA_KEY_ANNOTATED_IMAGE_PATH_WITHOUT_STICKERS) + PATH_DELIMITER + mechanismViewId + ANNOTATED_IMAGE_NAME_WITHOUT_STICKERS;
+            String tempPathWithoutStickers = data.getStringExtra(EXTRA_KEY_ANNOTATED_IMAGE_PATH_WITHOUT_STICKERS) + PATH_DELIMITER + screenshotMechanismView.getMechanismViewIndex() + ANNOTATED_IMAGE_NAME_WITHOUT_STICKERS;
             screenshotMechanismView.setPicturePathWithoutStickers(tempPathWithoutStickers);
         }
     }
