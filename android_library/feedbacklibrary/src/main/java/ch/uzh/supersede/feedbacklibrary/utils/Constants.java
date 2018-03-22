@@ -34,7 +34,6 @@ public class Constants {
         public static final String EXTRA_KEY_APPLICATION_ID = "applicationId";
         public static final String EXTRA_KEY_BASE_URL = "baseURL";
         public static final String EXTRA_KEY_LANGUAGE = "language";
-        public static final String EXTRA_ORIGIN = "origin";
         public static final int REQUEST_PHOTO = 11;
         public static final int REQUEST_ANNOTATE = 12;
 
