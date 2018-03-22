@@ -6,12 +6,12 @@ import android.view.View;
 import ch.uzh.supersede.feedbacklibrary.activities.AbstractBaseActivity;
 import ch.uzh.supersede.feedbacklibrary.entrypoint.FeedbackConnector;
 
-public class CleanStartActivity extends AbstractBaseActivity {
+public class HostActivity extends AbstractBaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_start);
+        setContentView(R.layout.activity_host);
     }
 
     public void onFeedbackClicked(View view){

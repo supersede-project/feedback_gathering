@@ -73,7 +73,7 @@ public class AudioMechanismView extends MechanismView implements SeekBar.OnSeekB
         this.activity = activity;
         this.multipleAudioMechanismsListener = (MultipleAudioMechanismsListener) activity;
         this.applicationContext = applicationContext;
-        setEnclosingLayout(getLayoutInflater().inflate(ch.uzh.supersede.feedbacklibrary.R.layout.audio_feedback_layout, null));
+        setEnclosingLayout(getLayoutInflater().inflate(ch.uzh.supersede.feedbacklibrary.R.layout.mechanism_audio, null));
         initView();
         handler = new Handler();
         updateSeekBarTask = new Runnable() {

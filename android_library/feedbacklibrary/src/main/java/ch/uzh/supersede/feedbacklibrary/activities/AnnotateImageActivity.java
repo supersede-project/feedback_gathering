@@ -683,7 +683,7 @@ public class AnnotateImageActivity extends AppCompatActivity implements ColorPic
         private final List<String> values;
 
         public StickerArrayAdapter(Context context, List<Integer> icons, List<String> values) {
-            super(context, R.layout.sticker_row_layout, values);
+            super(context, R.layout.utility_sticker, values);
             this.context = context;
             this.icons = icons;
             this.values = values;
@@ -702,7 +702,7 @@ public class AnnotateImageActivity extends AppCompatActivity implements ColorPic
             LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
             if (convertView == null) {
-                convertView = layoutInflater.inflate(R.layout.sticker_row_layout, parent, false);
+                convertView = layoutInflater.inflate(R.layout.utility_sticker, parent, false);
             }
 
             ImageView imageView = (ImageView) convertView.findViewById(R.id.supersede_feedbacklibrary_sticker_row_layout_icon);

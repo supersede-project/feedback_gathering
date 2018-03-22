@@ -8,7 +8,7 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:showIn="@layout/activity_start">
+    tools:showIn="@layout/activity_host">
 
     <TextView
         android:layout_width="match_parent"
@@ -21,24 +21,24 @@
         android:orientation="vertical">
 
         <Button
-            android:id="@+id/trigger_random_pull_config_v1_button"
+            android:id="@+id/button_host_feedback"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:onClick="onFeedbackClicked"
-            android:text="@string/feedback_connector_button_text"/>
+            android:text="@string/button_host_feedback"/>
 
         <Button
-            android:id="@+id/trigger_specific_pull_config_v1_id21_button"
+            android:id="@+id/button_host_trigger_1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:onClick="onButtonClicked"
-            android:text="@string/specific_pull_feedback_button_text_id21"/>
+            android:text="@string/button_host_trigger_1"/>
 
         <Button
-            android:id="@+id/trigger_specific_pull_config_v1_id22_button"
+            android:id="@+id/button_host_trigger_2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:onClick="onButtonClicked"
-            android:text="@string/specific_pull_feedback_button_text_id22"/>
+            android:text="@string/button_host_trigger_2"/>
     </LinearLayout>
 </LinearLayout>
