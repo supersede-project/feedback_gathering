@@ -267,9 +267,9 @@ public class OrchestratorStub {
             return new OrchestratorParamBuilder();
         }
 
-        public Builder key(Object value) {
+        public Builder key(Object key) {
             HashMap<String, Object> map = new HashMap<>();
-            map.put(ORCHESTRATOR_KEY, value);
+            map.put(ORCHESTRATOR_KEY, key);
             return new Builder(list, map);
         }
 
@@ -279,15 +279,14 @@ public class OrchestratorStub {
 
         private static class Builder {
             private List<Map<String, Object>> list;
-            HashMap<String, Object> map;
+            Map<String, Object> map;
 
-            public Builder(List<Map<String, Object>> list, HashMap<String, Object> map) {
+            public Builder(List<Map<String, Object>> list, Map<String, Object> map) {
                 this.list = list;
                 this.map = map;
             }
 
             public OrchestratorParamBuilder value(Object value) {
-                HashMap<String, Object> map = new HashMap<>();
                 map.put(ORCHESTRATOR_VALUE, value);
                 list.add(map);
                 return new OrchestratorParamBuilder(list);

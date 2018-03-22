@@ -242,15 +242,15 @@ public class FeedbackActivity extends AbstractBaseActivity implements Screenshot
         LinearLayout linearLayout = getView(R.id.supersede_feedbacklibrary_feedback_activity_layout, LinearLayout.class);
 
         if (linearLayout != null) {
-            if (BuildConfig.DEBUG){
-                OrchestratorStub stub = new MechanismBuilder(this,getApplicationContext(),getResources(),linearLayout,layoutInflater,defaultImagePath)
-//                        .withRating() //Uncomment for Enabling
+            if (BuildConfig.DEBUG) {
+                new MechanismBuilder(this,getApplicationContext(),getResources(),linearLayout,layoutInflater,defaultImagePath)
+                        .withRating() //Uncomment for Enabling
                         .withText() //Uncomment for Enabling
                         .withScreenshot() //Uncomment for Enabling
                         .withAudio() //Uncomment for Enabling
-//                        .withCategory() //Uncomment for Enabling
+                        .withCategory() //Uncomment for Enabling
                         .build(mechanismViews);
-            }else{
+            } else {
                 for (Mechanism mechanism : mechanisms) {
                     if (mechanism != null && mechanism.isActive()) {
                         resolveMechanism(layoutInflater, linearLayout, mechanism);

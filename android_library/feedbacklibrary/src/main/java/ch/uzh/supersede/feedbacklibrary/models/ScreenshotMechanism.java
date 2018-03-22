@@ -108,7 +108,7 @@ public class ScreenshotMechanism extends Mechanism {
             }
             // Maximum number of text annotations
             else if (key.equals("maxTextAnnotation")) {
-                setMaxNumberTextAnnotation(((Double) value).intValue());
+                setMaxNumberTextAnnotation(Integer.valueOf((String) value));
             }
         }
     }
