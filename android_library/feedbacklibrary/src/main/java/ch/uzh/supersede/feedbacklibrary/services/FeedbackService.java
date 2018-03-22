@@ -217,7 +217,7 @@ public class FeedbackService {
     /**
      * Takes a screenshot of the current screen automatically and opens the FeedbackActivity from the feedback library in case if a PUSH feedback is triggered.
      */
-    public static void startActivityWithScreenshotCapture(@NonNull final String baseURL, @NonNull final Activity activity, final long applicationId, @NonNull final String language) {
+    public void startFeedbackActivityWithScreenshotCapture(@NonNull final String baseURL, @NonNull final Activity activity, final long applicationId, @NonNull final String language) {
         Intent intent = new Intent(activity, FeedbackActivity.class);
         String defaultImagePath = Utils.captureScreenshot(activity);
         intent.putExtra(DEFAULT_IMAGE_PATH, defaultImagePath);

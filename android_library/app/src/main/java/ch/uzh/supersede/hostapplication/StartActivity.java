@@ -8,10 +8,10 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 
+import ch.uzh.supersede.feedbacklibrary.activities.AbstractBaseActivity;
 import ch.uzh.supersede.feedbacklibrary.activities.FeedbackActivity;
-import ch.uzh.supersede.feedbacklibrary.services.ActivityService;
+import ch.uzh.supersede.feedbacklibrary.entrypoint.FeedbackConnector;
 import ch.uzh.supersede.feedbacklibrary.services.FeedbackService;
 import ch.uzh.supersede.feedbacklibrary.services.FeedbackService.ConfigurationRequestWrapper;
 import ch.uzh.supersede.feedbacklibrary.services.FeedbackService.ConfigurationRequestWrapper
@@ -24,6 +24,7 @@ import static ch.uzh.supersede.feedbacklibrary.utils.Constants.SUPERSEEDE_BASE_U
  * This class represents an activity of the host application,
  * i.e., StartActivity integrates the feedback library.
  */
+@Deprecated
 public class StartActivity extends AbstractBaseActivity {
     /*
      * This integer is used in the onRequestPermissionsResult method.
@@ -55,8 +56,8 @@ public class StartActivity extends AbstractBaseActivity {
             }
             case R.id.trigger_specific_pull_config_v1_id21_button:{
                 ConfigurationRequestWrapper wrapper = new ConfigurationRequestWrapperBuilder(StartActivity.this,FeedbackActivity.class)
-                        .withApplicationId(14)
-                        .withPullConfigurationId(21)
+                        .withApplicationId(-1)
+                        .withPullConfigurationId(-1)
                         .withUrl(SUPERSEEDE_BASE_URL)
                         .withLanguage("en")
                         .withIntermediateDialog("Intermediate dialog text for pull configuration with id = 22")
@@ -66,8 +67,8 @@ public class StartActivity extends AbstractBaseActivity {
             }
             case R.id.trigger_specific_pull_config_v1_id22_button:{
                 ConfigurationRequestWrapper wrapper = new ConfigurationRequestWrapperBuilder(StartActivity.this,FeedbackActivity.class)
-                        .withApplicationId(9)
-                        .withPullConfigurationId(22)
+                        .withApplicationId(-1)
+                        .withPullConfigurationId(-1)
                         .withUrl(SUPERSEEDE_BASE_URL)
                         .withLanguage("en")
                         .withIntermediateDialog("Intermediate dialog text for pull configuration with id = 22")
@@ -106,7 +107,7 @@ public class StartActivity extends AbstractBaseActivity {
                  */
                 FeedbackService
                         .getInstance()
-                        .startActivityWithScreenshotCapture(SUPERSEEDE_BASE_URL, this, 29L, "en");
+                        .startFeedbackActivityWithScreenshotCapture(SUPERSEEDE_BASE_URL, this, 29L, "en");
             }
         }
 
@@ -128,5 +129,9 @@ public class StartActivity extends AbstractBaseActivity {
                     .supersede_feedbacklibrary_external_storage_permission_text_automatic_screenshot_rationale, 29L,
                     SUPERSEEDE_BASE_URL, "en");
         }
+    }
+
+    public void onConnect(View view){
+        FeedbackConnector.getInstance().connect(view,this);
     }
 }
