@@ -39,9 +39,6 @@ import static ch.uzh.supersede.feedbacklibrary.models.Mechanism.SCREENSHOT_TYPE;
 import static ch.uzh.supersede.feedbacklibrary.models.Mechanism.TEXT_TYPE;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.OrchestratorConstants.*;
 
-/**
- * Created by Marco on 15.03.2018.
- */
 
 public class OrchestratorStub {
     private ArrayList<MechanismView> mechanismViews;
@@ -53,14 +50,11 @@ public class OrchestratorStub {
         return this.mechanismViews;
     }
 
-
-    public void addAll(LinearLayout linearLayout, List<MechanismView> mechanismViews) {
-    }
-
     public static void receiveFeedback(Activity activity, View view) {
         //TODO: Evaluation, Store etc
         Toast toast = Toast.makeText(activity.getApplicationContext(), activity.getResources().getString(R.string.supersede_feedbacklibrary_success_text), Toast.LENGTH_SHORT);
         toast.show();
+        activity.onBackPressed();
     }
 
     public static class MechanismBuilder <T extends Activity & OnImageChangedListener> {
@@ -141,7 +135,7 @@ public class OrchestratorStub {
             configurationItem.setCanBeActivated(true);
             configurationItem.setActive(true);
             configurationItem.setOrder(id);
-            configurationItem.setId(id++);
+            configurationItem.setId(id);
             switch (type) {
                 case ATTACHMENT_TYPE:
                     //TODO: Gab es nie, implementieren!
@@ -254,6 +248,7 @@ public class OrchestratorStub {
                 default:
                     break;
             }
+            id++;
         }
     }
 

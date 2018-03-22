@@ -21,8 +21,8 @@ import ch.uzh.supersede.feedbacklibrary.models.ScreenshotMechanism;
 public class ScreenshotMechanismView extends MechanismView {
     private ScreenshotMechanism screenshotMechanism = null;
     // Image annotation
-    private int mechanismViewIndex;
     private String annotatedImagePath = null;
+    private int mechanismViewIndex =-1; //TODO: REMOVE THIS BULLSHIT
     private ImageView screenShotPreviewImageView;
     private HashMap<Integer, String> allStickerAnnotations;
     private HashMap<Integer, String> allTextAnnotations;
