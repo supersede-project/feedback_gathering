@@ -54,6 +54,7 @@ public class SendJSONs {
 				else if (key.equals("line_number")) params.setLine_number(jsonParams.getString(key).replaceAll("\"", ""));
 				else if (key.equals("Location")) params.setLocation(jsonParams.getString(key).replaceAll("\"", ""));
 				else if (key.equals("message")) params.setMessage(jsonParams.getString(key).replaceAll("\"", ""));
+				else if (key.equals("sessionID")) params.setSessionID(jsonParams.getString(key).replaceAll("\"", ""));
 			}
 				
 			data.add(params);

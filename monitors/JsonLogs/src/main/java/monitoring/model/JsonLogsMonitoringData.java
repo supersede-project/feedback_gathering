@@ -15,6 +15,7 @@ public class JsonLogsMonitoringData implements MonitoringData {
 	private String line_number;
 	private String Location;
 	private String message;
+	private String sessionID;
 		
 	public JsonLogsMonitoringData() {
 		super();
@@ -92,6 +93,14 @@ public class JsonLogsMonitoringData implements MonitoringData {
 		this.message = message;
 	}
 
+	public String getSessionID() {
+		return sessionID;
+	}
+
+	public void setSessionID(String sessionID) {
+		this.sessionID = sessionID;
+	}
+
 	@Override
 	public JSONObject toJsonObject() {
 		JSONObject json = new JSONObject();
@@ -104,6 +113,7 @@ public class JsonLogsMonitoringData implements MonitoringData {
 		json.put("line_number", this.line_number);
 		json.put("Location", this.Location);
 		json.put("message", this.message);
+		json.put("sessionID", this.sessionID);
 		return json;
 	}
 
