@@ -1,0 +1,14 @@
+[
+  {
+    "feedback": " The experience with the player was okay. It seams to be a bit outdated, but works fine. Flash is a no-go. You should migrate to newer technologies. Some social media sharing would be great. It's great that one can give feedback!",
+    "similarity": 0.125
+  },
+  {
+    "feedback": " I guess this will be fixed, but the need to activate flash is not food  I really like the \"smart TV\" looks. Overall very easy to navigate and find stuff, quite up-to-date and appealing design",
+    "similarity": 0.16666666666666666
+  },
+  {
+    "feedback": "   Just a remark on the requirement of using Flash, this a a very restritive contraint for displaying the content in a iOS device, i.e, ipad or iphone. Having an app would be a good option to solve this issue.",
+    "similarity": 0.08333333333333333
+  }
+]

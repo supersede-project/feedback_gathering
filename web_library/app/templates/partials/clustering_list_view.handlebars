@@ -1,0 +1,36 @@
+<section class="clustering-list-view">
+    <p class="intro">
+    <strong class="title">One last question:</strong>
+    <span class="description">How similar is the following feedback to yours?</span>
+    </p>
+    <p class="similarity-label">Similarity</p>
+    <div class="clearfix"></div>
+    {{#each similarFeedbacks}}
+        <article class="similar-feedback">
+            <p class="text">
+                {{ number }}. {{ feedback }}
+            </p>
+            <label>
+                <input name="{{ number }}" type="radio" />
+                <br />
+                High
+            </label>
+            <label>
+                <input name="{{ number }}" type="radio" />
+                <br />
+                Medium
+            </label>
+            <label>
+                <input name="{{ number }}" type="radio" />
+                <br />
+                Low
+            </label>
+            <label>
+                <input name="{{ number }}" type="radio" />
+                <br />
+                None
+            </label>
+            <div class="clearfix"></div>
+        </article>
+    {{/each}}
+</section>
