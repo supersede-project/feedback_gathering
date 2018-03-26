@@ -83,8 +83,13 @@ public class LikeController {
                 }
             }
 
+//            if(feedbackLikeService.findByEnduserIdAndFeedbackId(userId,feedbackId) != null){
+//                return feedbackLikeService.findByEnduserIdAndFeedbackId(userId,feedbackId);
+//            }
             if(feedbackLikeService.findByEnduserIdAndFeedbackId(userId,feedbackId) != null){
-                return feedbackLikeService.findByEnduserIdAndFeedbackId(userId,feedbackId);
+                feedbackLikeService.delete(feedbackLikeService.
+                        findByEnduserIdAndFeedbackId(userId,feedbackId).getId());
+                return null;
             }
 
             if(feedbackDislikeService.findByEnduserIdAndFeedbackId(userId,feedbackId) != null){

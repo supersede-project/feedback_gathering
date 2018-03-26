@@ -178,7 +178,8 @@ public class FeedbackController extends BaseController {
 
         Feedback createdFeedback = feedbackService.save(feedback);
 
-        String feedbackState = randomState().name().toLowerCase();
+//        String feedbackState = randomState().name().toLowerCase();
+        String feedbackState = "received";
         FeedbackStatus feedbackStatus = new FeedbackStatus(createdFeedback,feedbackState);
         feedbackStatusService.save(feedbackStatus);
 
