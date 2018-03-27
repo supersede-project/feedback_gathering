@@ -102,9 +102,6 @@ class FeedbackTitle extends Component {
     handleVisibility() {
         var statusStyle = {
             color: 'black',
-            //border: '1px solid #333333',
-            //padding: '3px 7px',
-            //background: 'linear-gradient(180deg, #fff, #ddd 40%, #ccc)',
             textAlign: 'center',
             fontSize: '12px'
         }

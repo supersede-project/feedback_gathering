@@ -124,16 +124,27 @@ button {
 
 .iconContainer .tooltiptext{
   visibility: hidden;
-  /*width: 120px;*/
-  /*border-radius: 6px;*/
+  width: 140px;
+  height: 21px;
+  line-height: 21px;
+  border-radius: 4px;
   padding: 5px 0;
-  background-color: black;
-  color: #fff;
+  color: black;
   text-align: center;
   position: relative;
   z-index: 1;
-  font-size: 10px;
   display: inline;
+
+/*  position: absolute;
+  width: 140px;
+  color: #FFFFFF;
+  background: #000000;
+  height: 21px;
+  line-height: 21px;
+  text-align: center;
+  visibility: hidden;
+  border-radius: 4px;*/
+
 }
 
 .iconContainer:hover .tooltiptext {
