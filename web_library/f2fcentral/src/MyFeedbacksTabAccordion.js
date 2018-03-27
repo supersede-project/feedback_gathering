@@ -8,8 +8,6 @@ import 'react-tabs/style/react-tabs.css';
 
 import 'react-accessible-accordion/dist/react-accessible-accordion.css';
 import FeedbackTitle from './FeedbackTitle';
-import FeedbackBody from './FeedbackBody';
-import FeedbackData from './FeedbackData';
 import MdNotificationsActive from 'react-icons/lib/md/notifications-active';
 import ChatView from './ChatView';
 import PromotingBanner from "./PromotingBanner";

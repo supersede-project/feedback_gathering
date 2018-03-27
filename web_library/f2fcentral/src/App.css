@@ -122,6 +122,24 @@ button {
   flex-direction: row;
 }
 
+.iconContainer .tooltiptext{
+  visibility: hidden;
+  /*width: 120px;*/
+  /*border-radius: 6px;*/
+  padding: 5px 0;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  position: relative;
+  z-index: 1;
+  font-size: 10px;
+  display: inline;
+}
+
+.iconContainer:hover .tooltiptext {
+  visibility: visible;
+}
+
 .iconContainer svg {
   margin-left: 10px;
   flex-grow: 1;
@@ -198,10 +216,10 @@ button {
 
 .counts {
   position: relative;
-  top: -10px;
-  left: 2px;
-  background: red;
-  color: white;
+  top: -7px;
+  left: -3px;
+  background: white;
+  color: black;
   padding: 0 2px;
 }
 

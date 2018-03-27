@@ -157,10 +157,10 @@ class CompanyViewFeedbackTitle extends Component {
           var that = this;
 
       if(this.props.blocked === true){
-          return <GoCircleSlash size={30} color="black" onClick={this.closeThread}/>
+          return <GoCircleSlash size={30} color="red" onClick={this.closeThread}/>
       }
       else if(this.props.blocked === false) {
-          return <GoCircleSlash size={30} color="red" onClick={this.closeThread}/>
+          return <GoCircleSlash size={30} color="green" onClick={this.closeThread}/>
       }
   }
 
