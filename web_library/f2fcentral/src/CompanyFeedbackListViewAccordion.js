@@ -49,7 +49,7 @@ class CompanyFeedbackListViewAccordion extends Component {
             {that.state.data.map(function (item, index) {
                 if(item.text.length >0){
                  return(
-                     <AccordionItem titleTag="span" title={<CompanyFeedback title={item.text} promote={item.promote}/>}>
+                     <AccordionItem titleTag="span" title={<CompanyFeedback title={item.text} promote={item.promote} companyFeedbackId={item.id} update={that.fetchData}/>}>
                      </AccordionItem>
                  )
                 }
