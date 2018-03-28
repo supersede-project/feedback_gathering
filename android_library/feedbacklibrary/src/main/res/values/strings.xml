@@ -109,4 +109,15 @@
     <string name="email">Email</string>
     <string name="invalid_email">Invalid email</string>
     <string name="check_network_state">Check network state</string>
+
+
+
+    <!--Hub-->
+    <string name="feedback_list">Show\nFeedbacks</string>
+    <string name="feedback_settings">Feedback\nSettings</string>
+    <string name="feedback_send_feedback">Create\nFeedback</string>
+    <!--List-->
+    <!--Details-->
+    <!--Feedback-->
+    <!--Settings-->
 </resources>

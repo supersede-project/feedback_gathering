@@ -9,9 +9,7 @@ import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Build;
-import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -20,6 +18,7 @@ import android.util.Log;
 import android.view.View;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -28,74 +27,70 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.Calendar;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import ch.uzh.supersede.feedbacklibrary.R;
 import ch.uzh.supersede.feedbacklibrary.activities.FeedbackActivity;
+import ch.uzh.supersede.feedbacklibrary.database.FeedbackDatabase;
 import ch.uzh.supersede.feedbacklibrary.services.FeedbackService;
 
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.FeedbackActivityConstants.*;
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.ScreenshotConstants.*;
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.ScreenshotConstants.TAG;
 
 /**
  * Class with various helper methods
  */
 public class Utils {
-    private static final String SCREENSHOTS_DIR_NAME = "Screenshots";
-    private static final String TAG = "Utils";
 
     private Utils() {
     }
 
-    @NonNull
-    public static String captureScreenshot(final Activity activity) {
-        // Create the 'Screenshots' folder if it does not already exist
-        File screenshotDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), SCREENSHOTS_DIR_NAME);
-        screenshotDir.mkdirs();
 
-        // Image name 'Screenshot_YearMonthDay-HourMinuteSecondMillisecond.png'
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(System.currentTimeMillis());
-        String imageName = "Screenshot_" + calendar.get(Calendar.YEAR) + (calendar.get(Calendar.MONTH) + 1) + calendar.get(Calendar.DAY_OF_MONTH);
-        imageName += "-" + calendar.get(Calendar.HOUR_OF_DAY) + calendar.get(Calendar.MINUTE) + calendar.get(Calendar.SECOND) + calendar.get(Calendar.MILLISECOND) + ".png";
-        File screenshotFile = new File(screenshotDir, imageName);
+    public static void wipeImages(final Context context) {
+        FeedbackDatabase.getInstance(context).deleteData(IMAGE_DATA_DB_KEY);
+        FeedbackDatabase.getInstance(context).deleteData(IMAGE_ANNOTATED_DATA_DB_KEY);
+    }
 
-        // Create the screenshot file
-        try {
-            if (screenshotFile.exists() && !screenshotFile.delete()) {
-                Log.w(TAG, "Could not delete screenshotFile: " + screenshotFile.getName());
-            }
-            if (!screenshotFile.createNewFile()) {
-                Log.w(TAG, "Could not create new screenshotFile. ");
-            }
-        } catch (IOException e) {
-            Log.e(TAG, "Failed to create a new file", e);
-        }
-
-        // Capture the current screen
+    public static void storeScreenshotToDatabase(final Activity activity) {
         View rootView = activity.getWindow().getDecorView().getRootView();
         rootView.setDrawingCacheEnabled(true);
         Bitmap imageBitmap = Bitmap.createBitmap(rootView.getDrawingCache());
         rootView.setDrawingCacheEnabled(false);
+        storeImageToDatabase(activity,imageBitmap);
+    }
 
-        FileOutputStream fos;
-        try {
-            fos = new FileOutputStream(screenshotFile);
-            imageBitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
-            fos.flush();
-            fos.close();
-        } catch (Exception e) {
-            Log.e(TAG, "Failed to write the bitmap to the file", e);
+    public static void storeImageToDatabase(final Activity activity, Bitmap bitmap) {
+        storeBitmap(activity.getApplicationContext(),bitmap,IMAGE_DATA_DB_KEY);    }
+
+    public static void storeAnnotatedImageToDatabase(final Activity activity, Bitmap bitmap) {
+        storeBitmap(activity.getApplicationContext(),bitmap,IMAGE_ANNOTATED_DATA_DB_KEY);
+    }
+
+    private static void storeBitmap(Context context, Bitmap bitmap, String dataKey){
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+        if (bitmap != null) {
+            FeedbackDatabase.getInstance(context).writeByte(dataKey, stream.toByteArray());
         }
+    }
 
-        // Add the screenshot image to the Media Provider's database
-        Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-        Uri contentUri = Uri.fromFile(screenshotFile);
-        mediaScanIntent.setData(contentUri);
-        activity.sendBroadcast(mediaScanIntent);
 
-        return screenshotFile.getAbsolutePath();
+    public static Bitmap loadImageFromDatabase(final Context context) {
+        return loadImageFromDatabase(context,IMAGE_DATA_DB_KEY);
+    }
+
+    public static Bitmap loadAnnotatedImageFromDatabase(final Context context) {
+        return loadImageFromDatabase(context,IMAGE_ANNOTATED_DATA_DB_KEY);
+    }
+
+    private static Bitmap loadImageFromDatabase(final Context context, String dataKey) {
+        byte[] imageAsByte = FeedbackDatabase.getInstance(context).readBytes(dataKey);
+        if (imageAsByte==null){
+            return null;
+        }
+        return BitmapFactory.decodeByteArray(imageAsByte, 0, imageAsByte.length);
     }
 
     /**
@@ -110,9 +105,9 @@ public class Utils {
      * @param dialogMessage the dialog message for the rationale
      * @return true if permission is granted, false otherwise
      */
-    public static boolean checkSinglePermission(@NonNull final Context context, final int requestCode, @NonNull final String permission, final String dialogTitle, final String dialogMessage, final boolean showRequestPermissionRationale) {
-        if (Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M
-                && ContextCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
+    public static boolean checkSinglePermission(@NonNull final Context context, final int requestCode, @NonNull final String permission, final String dialogTitle, final String dialogMessage, final
+    boolean showRequestPermissionRationale) {
+        if (Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M && ContextCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
             if (showRequestPermissionRationale && ActivityCompat.shouldShowRequestPermissionRationale((Activity) context, permission)) {
                 AlertDialog.Builder alertBuilder = new AlertDialog.Builder(context);
                 alertBuilder.setCancelable(true);
@@ -187,8 +182,7 @@ public class Utils {
      * @param dialogTitle   the dialog title for the rationale
      * @param dialogMessage the dialog message for the rationale
      */
-    public static void onRequestPermissionsResultCase(final int requestCode, @NonNull int[] grantResults,
-                                                      @NonNull final Activity activity, @NonNull final String permission, final int dialogTitle,
+    public static void onRequestPermissionsResultCase(final int requestCode, @NonNull int[] grantResults, @NonNull final Activity activity, @NonNull final String permission, final int dialogTitle,
                                                       final int dialogMessage, final long applicationId, @NonNull final String baseURL, @NonNull final String language) {
         final Intent intent = new Intent(activity, FeedbackActivity.class);
         intent.putExtra(EXTRA_KEY_APPLICATION_ID, applicationId);
@@ -304,46 +298,7 @@ public class Utils {
     }
 
     /**
-     * This method saves the string content to the internal storage.
-     *
-     * @param applicationContext the application context
-     * @param dirName            the directory name, e.g., "configDir"
-     * @param fileName           the name of the file
-     * @param str                the file content as a string
-     * @param mode               the mode, e.g., Context.MODE_PRIVATE
-     * @return true on success, false otherwise
-     */
-    public static boolean saveStringContentToInternalStorage(Context applicationContext, String dirName, String fileName, String str, int mode) {
-        File directory = applicationContext.getDir(dirName, mode);
-        File myPath = new File(directory, fileName);
-        FileWriter out = null;
-        try {
-            out = new FileWriter(myPath);
-            out.write(str);
-            out.flush();
-            out.close();
-            return true;
-        } catch (IOException e) {
-            Log.e(TAG, "Failed to write the content to the file", e);
-        } finally {
-            if (out != null) {
-                try {
-                    out.close();
-                } catch (IOException e) {
-                    Log.e(TAG, "Failed to close the FileWriter.", e);
-                }
-            }
-        }
-        return false;
-    }
-
-    /**
      * This method scales the bitmap according to a maximum width and height keeping the aspect ratio.
-     *
-     * @param bitmap    the original bitmap
-     * @param newWidth  the maximum width to scale
-     * @param newHeight the minimum width to scale
-     * @return the scaled bitmap
      */
     public static Bitmap scaleBitmap(Bitmap bitmap, int newWidth, int newHeight) {
         int width = bitmap.getWidth();
@@ -368,12 +323,10 @@ public class Utils {
         return Bitmap.createScaledBitmap(bitmap, width, height, true);
     }
 
-    private static void startActivity(@NonNull final Activity activity, @NonNull final Intent intent,
-                                      final boolean isCapturingScreenshot) {
+    private static void startActivity(@NonNull final Activity activity, @NonNull final Intent intent, final boolean isCapturingScreenshot) {
         FeedbackService.getInstance().pingOrchestrator();
         if (isCapturingScreenshot) {
-            String defaultImagePath = captureScreenshot(activity);
-            intent.putExtra(DEFAULT_IMAGE_PATH, defaultImagePath);
+            storeScreenshotToDatabase(activity);
         }
         activity.startActivity(intent);
     }

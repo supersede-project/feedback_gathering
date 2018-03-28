@@ -1,7 +1,15 @@
 package ch.uzh.supersede.feedbacklibrary.views;
 
+import android.Manifest;
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -12,66 +20,87 @@ import java.util.HashMap;
 import java.util.Map;
 
 import ch.uzh.supersede.feedbacklibrary.R;
+import ch.uzh.supersede.feedbacklibrary.activities.AnnotateImageActivity;
 import ch.uzh.supersede.feedbacklibrary.models.Mechanism;
 import ch.uzh.supersede.feedbacklibrary.models.ScreenshotMechanism;
+import ch.uzh.supersede.feedbacklibrary.utils.Utils;
+
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.FeedbackActivityConstants.PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE;
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.FeedbackActivityConstants.REQUEST_ANNOTATE;
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.FeedbackActivityConstants.REQUEST_PHOTO;
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.ScreenshotConstants.EXTRA_KEY_ALL_STICKER_ANNOTATIONS;
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.ScreenshotConstants.EXTRA_KEY_ALL_TEXT_ANNOTATIONS;
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.ScreenshotConstants.EXTRA_KEY_HAS_STICKER_ANNOTATIONS;
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.ScreenshotConstants.EXTRA_KEY_HAS_TEXT_ANNOTATIONS;
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.ScreenshotConstants.EXTRA_KEY_MECHANISM_VIEW_ID;
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.ScreenshotConstants.TEXT_ANNOTATION_COUNTER_MAXIMUM;
 
 /**
  * Screenshot mechanism view
  */
 public class ScreenshotMechanismView extends MechanismView {
     private ScreenshotMechanism screenshotMechanism = null;
-    // Image annotation
-    private String annotatedImagePath = null;
     private int mechanismViewIndex =-1; //TODO: REMOVE THIS BULLSHIT
     private ImageView screenShotPreviewImageView;
     private HashMap<Integer, String> allStickerAnnotations;
     private HashMap<Integer, String> allTextAnnotations;
-    private Button annotateScreenshotButton;
-    private Button deleteScreenshotButton;
+    private Button editButton;
+    private Button selectButton;
+    private Button deleteButton;
     private Bitmap pictureBitmap;
-    private String picturePath;
-    private String picturePathWithoutStickers;
-    private OnImageChangedListener onImageChangedListener;
+    private Bitmap pictureBitmapAnnotated;
+    private Activity activity;
 
-    public ScreenshotMechanismView(LayoutInflater layoutInflater, Mechanism mechanism, OnImageChangedListener onImageChangedListener, int mechanismViewIndex, String defaultImagePath) {
+    public ScreenshotMechanismView(LayoutInflater layoutInflater, Activity activity, Mechanism mechanism, int mechanismViewIndex) {
         super(layoutInflater);
+        this.activity = activity;
         this.screenshotMechanism = (ScreenshotMechanism) mechanism;
-        this.onImageChangedListener = onImageChangedListener;
         this.mechanismViewIndex = mechanismViewIndex;
         setEnclosingLayout(getLayoutInflater().inflate(R.layout.mechanism_screenshot, null));
-        initView(defaultImagePath);
+        initView();
     }
 
-    public Map<Integer, String> getAllStickerAnnotations() {
+    private Map<Integer, String> getAllStickerAnnotations() {
         return allStickerAnnotations;
     }
 
-    public Map<Integer, String> getAllTextAnnotations() {
+    private Map<Integer, String> getAllTextAnnotations() {
         return allTextAnnotations;
     }
 
-    public Button getAnnotateScreenshotButton() {
-        return annotateScreenshotButton;
+    public void toggleSelectButton(boolean enabled) {
+        selectButton.setEnabled(enabled);
+        if (enabled) {
+            selectButton.setBackground(activity.getResources().getDrawable(R.drawable.blue_button_selector));
+        } else {
+            selectButton.setBackground(activity.getResources().getDrawable(R.drawable.gray_button_selector));
+        }
     }
 
-    public Button getDeleteScreenshotButton() {
-        return deleteScreenshotButton;
+    public void toggleEditButton(boolean enabled) {
+        editButton.setEnabled(enabled);
+        if (enabled){
+            editButton.setBackground(activity.getResources().getDrawable(R.drawable.pink_button_selector));
+        }else{
+            editButton.setBackground(activity.getResources().getDrawable(R.drawable.gray_button_selector));
+        }
     }
 
-    public int getMaxNumberTextAnnotation() {
+    public void toggleDeleteButton(boolean enabled) {
+        deleteButton.setEnabled(enabled);
+        if (enabled) {
+            deleteButton.setBackground(activity.getResources().getDrawable(R.drawable.blue_button_selector));
+        } else {
+            deleteButton.setBackground(activity.getResources().getDrawable(R.drawable.gray_button_selector));
+        }
+    }
+
+    private int getMaxNumberTextAnnotation() {
         return screenshotMechanism.getMaxNumberTextAnnotation();
     }
 
-    public int getMechanismViewIndex() {
+    private int getMechanismViewIndex() {
         return mechanismViewIndex;
-    }
-
-    public String getPicturePath() {
-        return picturePath;
-    }
-
-    public String getPicturePathWithoutStickers() {
-        return picturePathWithoutStickers;
     }
 
     public ImageView getScreenShotPreviewImageView() {
@@ -86,91 +115,135 @@ public class ScreenshotMechanismView extends MechanismView {
         this.allTextAnnotations = new HashMap<>(allTextAnnotations);
     }
 
-    public void setAnnotatedImagePath(String annotatedImagePath) {
-        this.annotatedImagePath = annotatedImagePath;
-    }
-
-    public void setPictureBitmap(Bitmap pictureBitmap) {
+    private void setPictureBitmap(Bitmap pictureBitmap) {
         this.pictureBitmap = pictureBitmap;
     }
 
-    public void setPicturePath(String picturePath) {
-        this.picturePath = picturePath;
+    private Bitmap getPictureBitmap() {
+        return pictureBitmap;
     }
 
-    public void setPicturePathWithoutStickers(String picturePathWithoutStickers) {
-        this.picturePathWithoutStickers = picturePathWithoutStickers;
+    public Bitmap getPictureBitmapAnnotated() {
+        return pictureBitmapAnnotated;
     }
 
-    private void initView(String defaultImagePath) {
-        View view = getEnclosingLayout();
-        boolean isEnabled = false;
-        screenShotPreviewImageView = (ImageView) view.findViewById(R.id.supersede_feedbacklibrary_screenshot_imageview);
-        screenShotPreviewImageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                onImageChangedListener.onImageClick(ScreenshotMechanismView.this);
-            }
-        });
+    private void setPictureBitmapAnnotated(Bitmap pictureBitmapAnnotated) {
+        this.pictureBitmapAnnotated = pictureBitmapAnnotated;
+    }
 
-        // Use the default image path for the screenshot if present
-        if (defaultImagePath != null) {
-            picturePath = defaultImagePath;
-            annotatedImagePath = picturePath;
-            pictureBitmap = BitmapFactory.decodeFile(picturePath);
-            screenShotPreviewImageView.setBackground(null);
-            screenShotPreviewImageView.setImageBitmap(pictureBitmap);
-            isEnabled = true;
-        }
+    private void initView() {
+        View enclosingLayout = getEnclosingLayout();
+        screenShotPreviewImageView = (ImageView) enclosingLayout.findViewById(R.id.supersede_feedbacklibrary_screenshot_imageview);
+
+        pictureBitmap = Utils.loadImageFromDatabase(getLayoutInflater().getContext());
         // Selecting image
-        Button selectScreenshotButton = (Button) view.findViewById(R.id.supersede_feedbacklibrary_select_screenshot_btn);
-        selectScreenshotButton.setOnClickListener(new View.OnClickListener() {
+        selectButton = (Button) enclosingLayout.findViewById(R.id.supersede_feedbacklibrary_select_screenshot_btn);
+        selectButton.setBackgroundColor(Color.GRAY);
+        selectButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onImageChangedListener.onImageSelect(ScreenshotMechanismView.this);
+                onImageSelect();
             }
         });
         // Annotate image
-        annotateScreenshotButton = (Button) view.findViewById(R.id.supersede_feedbacklibrary_annotate_screenshot_btn);
-        annotateScreenshotButton.setEnabled(isEnabled);
-        annotateScreenshotButton.setOnClickListener(new View.OnClickListener() {
+        editButton = (Button) enclosingLayout.findViewById(R.id.supersede_feedbacklibrary_annotate_screenshot_btn);
+        editButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onImageChangedListener.onImageAnnotate(ScreenshotMechanismView.this);
+                onImageAnnotate(ScreenshotMechanismView.this);
             }
         });
         // Delete image
-        deleteScreenshotButton = (Button) view.findViewById(R.id.supersede_feedbacklibrary_remove_screenshot_btn);
-        deleteScreenshotButton.setEnabled(isEnabled);
-        deleteScreenshotButton.setOnClickListener(new View.OnClickListener() {
+        deleteButton = (Button) enclosingLayout.findViewById(R.id.supersede_feedbacklibrary_remove_screenshot_btn);
+        deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                pictureBitmap = null;
-                picturePath = null;
-                picturePathWithoutStickers = null;
-                annotatedImagePath = null;
-                allStickerAnnotations = null;
-                allTextAnnotations = null;
-                annotateScreenshotButton.setEnabled(false);
-                deleteScreenshotButton.setEnabled(false);
-                screenShotPreviewImageView.setImageBitmap(null);
-                screenShotPreviewImageView.setBackgroundResource(R.drawable.ic_folder_open_black_24dp);
+                onImageDelete();
             }
         });
         ((TextView) getEnclosingLayout().findViewById(R.id.supersede_feedbacklibrary_screenshot_feedback_title)).setText(screenshotMechanism.getTitle());
+        refreshPreview(activity.getApplicationContext());
     }
 
     @Override
     public void updateModel() {
-        screenshotMechanism.setImagePath(annotatedImagePath);
         screenshotMechanism.setAllTextAnnotations(allTextAnnotations);
     }
 
-    public interface OnImageChangedListener {
-        void onImageAnnotate(ScreenshotMechanismView screenshotMechanismView);
+    private void onImageAnnotate(ScreenshotMechanismView screenshotMechanismView) {
+        Intent intent = new Intent(activity, AnnotateImageActivity.class);
+        if (screenshotMechanismView.getAllStickerAnnotations() != null && !screenshotMechanismView.getAllStickerAnnotations().isEmpty()) {
+            intent.putExtra(EXTRA_KEY_HAS_STICKER_ANNOTATIONS, true);
+            intent.putExtra(EXTRA_KEY_ALL_STICKER_ANNOTATIONS, new HashMap<>(screenshotMechanismView.getAllStickerAnnotations()));
+        }
+        if (screenshotMechanismView.getAllTextAnnotations() != null && !screenshotMechanismView.getAllTextAnnotations().isEmpty()) {
+            intent.putExtra(EXTRA_KEY_HAS_TEXT_ANNOTATIONS, true);
+            intent.putExtra(EXTRA_KEY_ALL_TEXT_ANNOTATIONS, new HashMap<>(screenshotMechanismView.getAllTextAnnotations()));
+        }
 
-        void onImageSelect(ScreenshotMechanismView screenshotMechanismView);
+        intent.putExtra(EXTRA_KEY_MECHANISM_VIEW_ID, screenshotMechanismView.getMechanismViewIndex());
+        intent.putExtra(TEXT_ANNOTATION_COUNTER_MAXIMUM, screenshotMechanismView.getMaxNumberTextAnnotation());
+        activity.startActivityForResult(intent,REQUEST_ANNOTATE);
+    }
 
-        void onImageClick(ScreenshotMechanismView screenshotMechanismView);
+    private void onImageSelect() {
+        final Resources res = activity.getResources();
+        final CharSequence[] items = {res.getString(R.string.supersede_feedbacklibrary_library_chooser_text), res.getString(R.string.supersede_feedbacklibrary_cancel_string)};
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+        builder.setTitle(res.getString(R.string.supersede_feedbacklibrary_image_selection_dialog_title));
+        builder.setItems(items, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int item) {
+                if (!items[item].equals(res.getString(R.string.supersede_feedbacklibrary_cancel_string))) {
+                    boolean result = Utils.checkSinglePermission(activity.getApplicationContext(), PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE, null, null, false);
+                    if (items[item].equals(res.getString(R.string.supersede_feedbacklibrary_library_chooser_text))) {
+                        if (result) {
+                            galleryIntent();
+                        }
+                    }
+                } else {
+                    dialog.dismiss();
+                }
+            }
+        });
+        builder.show();
+    }
+
+    private void onImageDelete() {
+        Utils.wipeImages(activity);
+        pictureBitmap = null;
+        allStickerAnnotations = null;
+        allTextAnnotations = null;
+        refreshPreview(activity.getApplicationContext());
+    }
+
+    private void galleryIntent() {
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        intent.setType("image/*");
+        activity.startActivityForResult(intent, REQUEST_PHOTO);
+    }
+
+    public void refreshPreview(Context context){
+        screenShotPreviewImageView.setBackground(null);
+        if (getPictureBitmap() == null){
+            setPictureBitmap(Utils.loadImageFromDatabase(context));
+        }
+        setPictureBitmapAnnotated(Utils.loadAnnotatedImageFromDatabase(context));
+        if (pictureBitmapAnnotated != null){
+            screenShotPreviewImageView.setImageBitmap(pictureBitmapAnnotated);
+        }else if (pictureBitmap != null){
+            screenShotPreviewImageView.setImageBitmap(pictureBitmap);
+        }else{
+            screenShotPreviewImageView.setImageBitmap(null);
+            screenShotPreviewImageView.setBackgroundResource(R.drawable.ic_folder_open_black_24dp);
+        }
+        toggleButtons();
+    }
+
+    private void toggleButtons() {
+        boolean imageSelected = pictureBitmap != null || pictureBitmapAnnotated != null;
+        toggleDeleteButton(imageSelected);
+        toggleEditButton(imageSelected);
+        toggleSelectButton(!imageSelected);
     }
 }

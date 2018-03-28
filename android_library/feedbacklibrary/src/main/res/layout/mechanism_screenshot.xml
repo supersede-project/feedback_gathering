@@ -75,7 +75,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="4dp"
-                    android:background="@drawable/button_selector"
+                    android:background="@drawable/blue_button_selector"
                     android:minWidth="88dp"
                     android:text="@string/supersede_feedbacklibrary_screenshotbutton_text"
                     android:textColor="@android:color/white"/>
@@ -85,7 +85,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="4dp"
-                    android:background="@drawable/button_selector"
+                    android:background="@drawable/blue_button_selector"
                     android:minWidth="88dp"
                     android:text="@string/supersede_feedbacklibrary_remove_string"
                     android:textColor="@android:color/white"/>

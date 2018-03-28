@@ -54,14 +54,14 @@ public class Constants {
     public static class ScreenshotConstants {
         private ScreenshotConstants() {
         }
+        public static final String TAG = "Utils";
+        public static final String IMAGE_DATA_DB_KEY = "imageData";
+        public static final String IMAGE_ANNOTATED_DATA_DB_KEY = "imageAnnotatedData";
 
         public static final String EXTRA_KEY_ALL_STICKER_ANNOTATIONS = "allStickerAnnotations";
         public static final String EXTRA_KEY_ALL_TEXT_ANNOTATIONS = "allTextAnnotations";
-        public static final String EXTRA_KEY_ANNOTATED_IMAGE_PATH_WITHOUT_STICKERS = "annotatedImagePathWithoutStickers";
-        public static final String EXTRA_KEY_ANNOTATED_IMAGE_PATH_WITH_STICKERS = "annotatedImagePathWithStickers";
         public static final String EXTRA_KEY_HAS_STICKER_ANNOTATIONS = "hasStickerAnnotations";
         public static final String EXTRA_KEY_HAS_TEXT_ANNOTATIONS = "hasTextAnnotations";
-        public static final String EXTRA_KEY_IMAGE_PATCH = "imagePath";
         public static final String EXTRA_KEY_MECHANISM_VIEW_ID = "mechanismViewID";
         public static final String SEPARATOR = "::;;::;;";
         public static final String TEXT_ANNOTATION_COUNTER_MAXIMUM = "textAnnotationCounterMaximum";
@@ -95,7 +95,7 @@ public class Constants {
         public static final String TEXT_FONT_COLOR_VALUE = "#1511FF";
         public static final String TEXT_FONT_SIZE_VALUE = "12";
         public static final String TEXT_FONT_TYPE_VALUE = "italic";
-        public static final String TEXT_ALIGN_VALUE = "center";
+        public static final String TEXT_ALIGN_VALUE = "left";
         public static final String TEXT_MAX_LENGTH_VALUE = "200";
         public static final String TEXT_MAX_LENGTH_VISIBLE_VALUE = "150";
         public static final String TEXT_LENGTH_VISIBLE_VALUE = "100";

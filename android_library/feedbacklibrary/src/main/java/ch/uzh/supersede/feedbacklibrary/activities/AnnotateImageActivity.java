@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Typeface;
@@ -13,7 +12,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -50,14 +48,13 @@ import ch.uzh.supersede.feedbacklibrary.views.AbstractAnnotationView;
 import ch.uzh.supersede.feedbacklibrary.views.TextAnnotationImageView;
 
 import static android.graphics.Color.*;
-import static ch.uzh.supersede.feedbacklibrary.utils.Constants.FeedbackActivityConstants.*;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.ScreenshotConstants.*;
 
 
 /**
  * Activity for annotating the screenshot
  */
-public class AnnotateImageActivity extends AppCompatActivity implements ColorPickerDialog.OnColorChangeDialogListener, TextAnnotationImageView.OnTextAnnotationChangedListener, EditImageDialog.OnEditImageListener {
+public class AnnotateImageActivity extends AbstractBaseActivity implements ColorPickerDialog.OnColorChangeDialogListener, TextAnnotationImageView.OnTextAnnotationChangedListener, EditImageDialog.OnEditImageListener {
     private static final String TAG = "AnnotateImageActivity";
     private int mechanismViewId = -1;
     private boolean blackModeOn = false;
@@ -135,14 +132,14 @@ public class AnnotateImageActivity extends AppCompatActivity implements ColorPic
         }
     }
 
-    private void initAnnotateImageView(Bitmap bitmap, String originalImagePath) {
+    private void initAnnotateImageView() {
         annotateImageView = new AnnotateImageView(this);
+        // Resolve bitmap to draw on
+        Bitmap bitmap = Utils.loadImageFromDatabase(this);
+        Bitmap bitmapAnnotated = Utils.loadAnnotatedImageFromDatabase(this);
         // Set the bitmap to draw on
-        annotateImageView.drawBitmap(bitmap);
-        // Add the file of the original image
-        annotateImageView.addCroppedImage(new File(originalImagePath));
+        annotateImageView.setBitmap(bitmapAnnotated!=null?bitmapAnnotated:bitmap);
         // Set the background color of the canvas (used for the eraser)
-
         annotateImageView.setBaseColor(WHITE);
         // Set the mode
         annotateImageView.setMode(AnnotateImageView.Mode.DRAW);
@@ -233,17 +230,18 @@ public class AnnotateImageActivity extends AppCompatActivity implements ColorPic
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
-            CropImage.ActivityResult result = CropImage.getActivityResult(data);
-            if (resultCode == RESULT_OK) {
-                Uri croppedImageUri = result.getUri();
-                File croppedImageFile = new File(croppedImageUri.getPath());
-                annotateImageView.updateCroppedImageHistory(croppedImageFile);
-            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
-                Toast toast = Toast.makeText(getApplicationContext(), R.string.supersede_feedbacklibrary_error_text, Toast.LENGTH_SHORT);
-                toast.show();
-            }
-        }
+        //TODO Implement that
+//        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+//            CropImage.ActivityResult result = CropImage.getActivityResult(data);
+//            if (resultCode == RESULT_OK) {
+//                Uri croppedImageUri = result.getUri();
+//                File croppedImageFile = new File(croppedImageUri.getPath());
+//                annotateImageView.updateCroppedImageHistory(croppedImageFile);
+//            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+//                Toast toast = Toast.makeText(getApplicationContext(), R.string.supersede_feedbacklibrary_error_text, Toast.LENGTH_SHORT);
+//                toast.show();
+//            }
+//        }
     }
 
     @Override
@@ -260,12 +258,10 @@ public class AnnotateImageActivity extends AppCompatActivity implements ColorPic
         // If mechanismViewId == -1, an error occurred
         mechanismViewId = intent.getIntExtra(EXTRA_KEY_MECHANISM_VIEW_ID, -1);
         if (mechanismViewId != -1) {
-            String imagePath = intent.getStringExtra("imagePath");
             textAnnotationCounter = 1;
             // If no maximum is specified, no text annotations are allowed
             textAnnotationCounterMaximum = intent.getIntExtra("textAnnotationCounterMaximum", 0);
-            Bitmap bitmap = BitmapFactory.decodeFile(imagePath);
-            initAnnotateImageView(bitmap, imagePath);
+            initAnnotateImageView();
             initAnnotations(intent);
             initStickerLists();
             setListeners();
@@ -289,16 +285,6 @@ public class AnnotateImageActivity extends AppCompatActivity implements ColorPic
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-
-        // In both cases whether the action is accepted or cancelled, the temporary stored files need to be deleted
-        List<File> tempFiles = annotateImageView.getCroppedImageLists();
-        for (int i = 1; i < tempFiles.size(); ++i) {
-            if (!tempFiles.get(i).delete()) {
-                Log.w(TAG, "File " + tempFiles.get(i).getName() + "could not be deleted.");
-            }
-        }
-        tempFiles.clear();
-
         if (id == R.id.supersede_feedbacklibrary_action_annotate_cancel) {
             super.onBackPressed();
             return true;
@@ -315,13 +301,6 @@ public class AnnotateImageActivity extends AppCompatActivity implements ColorPic
                 // Process all the text annotations
                 HashMap<Integer, String> allTextAnnotations = processTextAnnotations(relativeLayout);
 
-                String annotatedImagePathWithoutStickers = null;
-                if (allStickerAnnotations.size() > 0 || allTextAnnotations.size() > 0) {
-                    // Get the bitmap (image without stickers if there are any)
-                    Bitmap annotatedBitmapWithoutStickers = annotateImageView.getBitmap();
-                    annotatedImagePathWithoutStickers = Utils.saveBitmapToInternalStorage(getApplicationContext(), "imageDir", mechanismViewId + ANNOTATED_IMAGE_NAME_WITHOUT_STICKERS, annotatedBitmapWithoutStickers, Context.MODE_PRIVATE, Bitmap.CompressFormat.PNG, 100);
-                }
-
                 // Convert the ViewGroup, i.e., the supersede_feedbacklibrary_annotate_picture_layout into a bitmap (image with stickers)
                 relativeLayout.measure(View.MeasureSpec.makeMeasureSpec(annotateImageView.getBitmapWidth(), View.MeasureSpec.EXACTLY), View.MeasureSpec.makeMeasureSpec(annotateImageView.getBitmapHeight(), View.MeasureSpec.EXACTLY));
 
@@ -329,20 +308,19 @@ public class AnnotateImageActivity extends AppCompatActivity implements ColorPic
                 Bitmap annotatedBitmapWithStickers = Bitmap.createBitmap(relativeLayout.getLayoutParams().width, relativeLayout.getLayoutParams().height, Bitmap.Config.ARGB_8888);
                 Canvas canvas = new Canvas(annotatedBitmapWithStickers);
                 relativeLayout.draw(canvas);
-                Bitmap croppedBitmap = Bitmap.createBitmap(annotatedBitmapWithStickers, 0, 0, annotateImageView.getBitmapWidth(), annotateImageView.getBitmapHeight());
-                String annotatedImagePathWithStickers = Utils.saveBitmapToInternalStorage(getApplicationContext(), "imageDir", mechanismViewId + ANNOTATED_IMAGE_NAME_WITH_STICKERS, croppedBitmap, Context.MODE_PRIVATE, Bitmap.CompressFormat.PNG, 100);
+                Bitmap annotatedImage = Bitmap.createBitmap(annotatedBitmapWithStickers, 0, 0, annotateImageView.getBitmapWidth(), annotateImageView.getBitmapHeight());
+
+                Utils.storeAnnotatedImageToDatabase(this,annotatedImage);
 
                 Intent intent = new Intent();
                 intent.putExtra(EXTRA_KEY_MECHANISM_VIEW_ID, mechanismViewId);
-                intent.putExtra(EXTRA_KEY_ANNOTATED_IMAGE_PATH_WITHOUT_STICKERS, annotatedImagePathWithoutStickers);
-                intent.putExtra(EXTRA_KEY_ANNOTATED_IMAGE_PATH_WITH_STICKERS, annotatedImagePathWithStickers);
                 intent.putExtra(EXTRA_KEY_HAS_STICKER_ANNOTATIONS, allStickerAnnotations.size() > 0);
                 intent.putExtra(EXTRA_KEY_ALL_STICKER_ANNOTATIONS, allStickerAnnotations);
                 intent.putExtra(EXTRA_KEY_HAS_TEXT_ANNOTATIONS, allTextAnnotations.size() > 0);
                 intent.putExtra(EXTRA_KEY_ALL_TEXT_ANNOTATIONS, allTextAnnotations);
                 setResult(RESULT_OK, intent);
             }
-            super.onBackPressed();
+            onBackPressed();
             return true;
         }
 

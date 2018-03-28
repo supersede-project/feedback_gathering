@@ -26,9 +26,6 @@ import android.support.v4.app.ActivityCompat;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -68,6 +65,7 @@ import ch.uzh.supersede.feedbacklibrary.R;
 import ch.uzh.supersede.feedbacklibrary.configurations.Configuration;
 import ch.uzh.supersede.feedbacklibrary.configurations.OrchestratorConfiguration;
 import ch.uzh.supersede.feedbacklibrary.configurations.OrchestratorConfigurationItem;
+import ch.uzh.supersede.feedbacklibrary.database.FeedbackDatabase;
 import ch.uzh.supersede.feedbacklibrary.feedbacks.AudioFeedback;
 import ch.uzh.supersede.feedbacklibrary.feedbacks.Feedback;
 import ch.uzh.supersede.feedbacklibrary.feedbacks.ScreenshotFeedback;
@@ -93,13 +91,13 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.FeedbackActivityConstants.*;
-import static ch.uzh.supersede.feedbacklibrary.utils.Constants.PATH_DELIMITER;
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.FeedbackActivityConstants.TAG;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.ScreenshotConstants.*;
 
 /**
  * The main activity where the feedback mechanisms are displayed.
  */
-public class FeedbackActivity extends AbstractBaseActivity implements ScreenshotMechanismView.OnImageChangedListener, AudioMechanismView.MultipleAudioMechanismsListener {
+public class FeedbackActivity extends AbstractBaseActivity implements AudioMechanismView.MultipleAudioMechanismsListener {
     private IFeedbackAPI feedbackAPI;
     // Orchestrator configuration fetched from the orchestrator
     private OrchestratorConfigurationItem orchestratorConfigurationItem;
@@ -113,7 +111,6 @@ public class FeedbackActivity extends AbstractBaseActivity implements Screenshot
     private List<MechanismView> mechanismViews;
     // Image annotation
     private int tempMechanismViewId = -1;
-    private String defaultImagePath;
     // Pull configuration
     private boolean isPush;
     private long selectedPullConfigurationIndex;
@@ -138,6 +135,7 @@ public class FeedbackActivity extends AbstractBaseActivity implements Screenshot
         }
     }
 
+    //TODO REMOVE
     private void galleryIntent() {
         Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         intent.setType("image/*");
@@ -210,7 +208,7 @@ public class FeedbackActivity extends AbstractBaseActivity implements Screenshot
                         gsonBuilder.setLenient();
                         Gson gson = gsonBuilder.create();
                         String jsonString = gson.toJson(orchestratorConfigurationItem);
-                        Utils.saveStringContentToInternalStorage(getApplicationContext(), CONFIGURATION_DIR, JSON_CONFIGURATION_FILE_NAME, jsonString, MODE_PRIVATE);
+                        FeedbackDatabase.getInstance(getApplicationContext()).writeString(JSON_CONFIGURATION_FILE_NAME,jsonString);
                         initModel();
                         initView();
                         closeProgressDialog();
@@ -242,7 +240,7 @@ public class FeedbackActivity extends AbstractBaseActivity implements Screenshot
 
         if (linearLayout != null) {
             if (BuildConfig.DEBUG) {
-                new MechanismBuilder(this,getApplicationContext(),getResources(),linearLayout,layoutInflater,defaultImagePath)
+                new MechanismBuilder(this,getApplicationContext(),getResources(),linearLayout,layoutInflater)
                         .withRating() //Uncomment for Enabling
                         .withText() //Uncomment for Enabling
                         .withScreenshot() //Uncomment for Enabling
@@ -282,7 +280,7 @@ public class FeedbackActivity extends AbstractBaseActivity implements Screenshot
                 view = mechanismView.getEnclosingLayout();
                 break;
             case Mechanism.SCREENSHOT_TYPE:
-                mechanismView = new ScreenshotMechanismView(layoutInflater, mechanism, this, mechanismViews.size(), defaultImagePath);
+                mechanismView = new ScreenshotMechanismView(layoutInflater, this, mechanism, mechanismViews.size());
                 view = mechanismView.getEnclosingLayout();
                 break;
             case Mechanism.TEXT_TYPE:
@@ -319,8 +317,10 @@ public class FeedbackActivity extends AbstractBaseActivity implements Screenshot
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (b) {
+                    emailEditText.setEnabled(true);
                     emailEditText.setVisibility(View.VISIBLE);
                 } else {
+                    emailEditText.setEnabled(false);
                     emailEditText.setVisibility(View.GONE);
                 }
             }
@@ -364,24 +364,7 @@ public class FeedbackActivity extends AbstractBaseActivity implements Screenshot
         if (data.getBooleanExtra(EXTRA_KEY_HAS_TEXT_ANNOTATIONS, false)) {
             screenshotMechanismView.setAllTextAnnotations((HashMap<Integer, String>) data.getSerializableExtra(EXTRA_KEY_ALL_TEXT_ANNOTATIONS));
         }
-
-        // Annotated image with stickers
-        String tempPathWithStickers = data.getStringExtra(EXTRA_KEY_ANNOTATED_IMAGE_PATH_WITH_STICKERS) + PATH_DELIMITER + screenshotMechanismView.getMechanismViewIndex() + ANNOTATED_IMAGE_NAME_WITH_STICKERS;
-        screenshotMechanismView.setAnnotatedImagePath(tempPathWithStickers);
-        screenshotMechanismView.setPicturePath(tempPathWithStickers);
-        Bitmap annotatedBitmap = Utils.loadImageFromStorage(tempPathWithStickers);
-        if (annotatedBitmap != null) {
-            screenshotMechanismView.setPictureBitmap(annotatedBitmap);
-            screenshotMechanismView.getScreenShotPreviewImageView().setImageBitmap(annotatedBitmap);
-        }
-
-        // Annotated image without stickers
-        if (data.getStringExtra(EXTRA_KEY_ANNOTATED_IMAGE_PATH_WITHOUT_STICKERS) == null) {
-            screenshotMechanismView.setPicturePathWithoutStickers(null);
-        } else {
-            String tempPathWithoutStickers = data.getStringExtra(EXTRA_KEY_ANNOTATED_IMAGE_PATH_WITHOUT_STICKERS) + PATH_DELIMITER + screenshotMechanismView.getMechanismViewIndex() + ANNOTATED_IMAGE_NAME_WITHOUT_STICKERS;
-            screenshotMechanismView.setPicturePathWithoutStickers(tempPathWithoutStickers);
-        }
+        screenshotMechanismView.refreshPreview(this);
     }
 
     @Override
@@ -394,16 +377,7 @@ public class FeedbackActivity extends AbstractBaseActivity implements Screenshot
 
         setContentView(R.layout.activity_feedback);
 
-        UserManager userManager = (UserManager) getApplicationContext().getSystemService(Context.USER_SERVICE);
-        if (userManager.isUserAGoat()) {
-            Log.v(TAG, "The user IS a goat and subject to teleportations");
-        } else {
-            Log.v(TAG, "The user IS NOT a goat and subject to teleportations");
-        }
-
         Intent intent = getIntent();
-        // Get the default image path for the screenshot if present
-        defaultImagePath = intent.getStringExtra(DEFAULT_IMAGE_PATH);
         // Get the configuration type
         isPush = intent.getBooleanExtra(IS_PUSH_STRING, true);
         // Get values related to a pull configuration
@@ -418,7 +392,7 @@ public class FeedbackActivity extends AbstractBaseActivity implements Screenshot
             Log.v(TAG, "The feedback activity is started via a PULL configuration");
 
             // Save the current configuration under FeedbackActivity.CONFIGURATION_DIR}/FeedbackActivity.JSON_CONFIGURATION_FILE_NAME
-            Utils.saveStringContentToInternalStorage(getApplicationContext(), CONFIGURATION_DIR, JSON_CONFIGURATION_FILE_NAME, jsonString, MODE_PRIVATE);
+            FeedbackDatabase.getInstance(getApplicationContext()).writeString(JSON_CONFIGURATION_FILE_NAME,jsonString);
             GsonBuilder gsonBuilder = new GsonBuilder();
             gsonBuilder.setLenient();
             Gson gson = gsonBuilder.create();
@@ -434,62 +408,6 @@ public class FeedbackActivity extends AbstractBaseActivity implements Screenshot
 
             init(intent.getLongExtra(EXTRA_KEY_APPLICATION_ID, -1L), baseURL, language);
         }
-    }
-
-    @Override
-    public void onImageAnnotate(ScreenshotMechanismView screenshotMechanismView) {
-        Intent intent = new Intent(this, AnnotateImageActivity.class);
-        if (screenshotMechanismView.getAllStickerAnnotations() != null && !screenshotMechanismView.getAllStickerAnnotations().isEmpty()) {
-            intent.putExtra(EXTRA_KEY_HAS_STICKER_ANNOTATIONS, true);
-            intent.putExtra(EXTRA_KEY_ALL_STICKER_ANNOTATIONS, new HashMap<>(screenshotMechanismView.getAllStickerAnnotations()));
-        }
-        if (screenshotMechanismView.getAllTextAnnotations() != null && !screenshotMechanismView.getAllTextAnnotations().isEmpty()) {
-            intent.putExtra(EXTRA_KEY_HAS_TEXT_ANNOTATIONS, true);
-            intent.putExtra(EXTRA_KEY_ALL_TEXT_ANNOTATIONS, new HashMap<>(screenshotMechanismView.getAllTextAnnotations()));
-        }
-
-        String path = screenshotMechanismView.getPicturePathWithoutStickers() == null ? screenshotMechanismView.getPicturePath() : screenshotMechanismView.getPicturePathWithoutStickers();
-        intent.putExtra(EXTRA_KEY_MECHANISM_VIEW_ID, screenshotMechanismView.getMechanismViewIndex());
-        intent.putExtra(EXTRA_KEY_IMAGE_PATCH, path);
-        intent.putExtra(TEXT_ANNOTATION_COUNTER_MAXIMUM, screenshotMechanismView.getMaxNumberTextAnnotation());
-        startActivityForResult(intent, REQUEST_ANNOTATE);
-    }
-
-    @Override
-    public void onImageSelect(ScreenshotMechanismView screenshotMechanismView) {
-        tempMechanismViewId = screenshotMechanismView.getMechanismViewIndex();
-        final Resources res = getResources();
-        final CharSequence[] items = {res.getString(R.string.supersede_feedbacklibrary_library_chooser_text), res.getString(R.string.supersede_feedbacklibrary_cancel_string)};
-        AlertDialog.Builder builder = new AlertDialog.Builder(FeedbackActivity.this);
-        builder.setTitle(res.getString(R.string.supersede_feedbacklibrary_image_selection_dialog_title));
-        builder.setItems(items, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int item) {
-                if (!items[item].equals(res.getString(R.string.supersede_feedbacklibrary_cancel_string))) {
-                    boolean result = Utils.checkSinglePermission(FeedbackActivity.this, PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE, null, null, false);
-                    if (items[item].equals(res.getString(R.string.supersede_feedbacklibrary_photo_capture_text))) {
-                        userScreenshotChosenTask = res.getString(R.string.supersede_feedbacklibrary_photo_capture_text);
-                        if (result) {
-                            //TODO remove or handle
-                        }
-                    } else if (items[item].equals(res.getString(R.string.supersede_feedbacklibrary_library_chooser_text))) {
-                        userScreenshotChosenTask = res.getString(R.string.supersede_feedbacklibrary_library_chooser_text);
-                        if (result) {
-                            galleryIntent();
-                        }
-                    }
-                } else {
-                    dialog.dismiss();
-                }
-            }
-        });
-        builder.show();
-    }
-
-    @Override
-    public void onImageClick(ScreenshotMechanismView screenshotMechanismView) {
-        tempMechanismViewId = screenshotMechanismView.getMechanismViewIndex();
-        galleryIntent();
     }
 
     @Override
@@ -518,13 +436,10 @@ public class FeedbackActivity extends AbstractBaseActivity implements Screenshot
         if (requestCode == PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 Resources res = getResources();
-                if (userScreenshotChosenTask.equals(res.getString(R.string.supersede_feedbacklibrary_photo_capture_text))) {
-                    //TODO remove or handle
-                } else if (userScreenshotChosenTask.equals(res.getString(R.string.supersede_feedbacklibrary_library_chooser_text))) {
+                if (userScreenshotChosenTask.equals(res.getString(R.string.supersede_feedbacklibrary_library_chooser_text))) {
                     galleryIntent();
                 }
             } else {
-                // The user denied the permission
                 onRequestPermissionsResultDenied(requestCode, Manifest.permission.READ_EXTERNAL_STORAGE, R.string.supersede_feedbacklibrary_external_storage_permission_text, getResources().getString(R.string.supersede_feedbacklibrary_external_storage_permission_text_instructions));
             }
         } else if (requestCode == PERMISSIONS_REQUEST_RECORD_AUDIO) {
@@ -532,7 +447,6 @@ public class FeedbackActivity extends AbstractBaseActivity implements Screenshot
                 Toast toast = Toast.makeText(getApplicationContext(), R.string.supersede_feedbacklibrary_record_audio_permission_granted_text, Toast.LENGTH_SHORT);
                 toast.show();
             } else {
-                // The user denied the permission
                 onRequestPermissionsResultDenied(requestCode, Manifest.permission.RECORD_AUDIO, R.string.supersede_feedbacklibrary_record_audio_permission_text, getResources().getString(R.string.supersede_feedbacklibrary_record_audio_permission_text_instructions));
             }
         }
@@ -563,8 +477,14 @@ public class FeedbackActivity extends AbstractBaseActivity implements Screenshot
     }
 
     private void onSelectFromGalleryResult(Intent data) {
-        if (tempMechanismViewId != -1 && mechanismViews.get(tempMechanismViewId) instanceof ScreenshotMechanismView) {
-            ScreenshotMechanismView screenshotMechanismView = (ScreenshotMechanismView) mechanismViews.get(tempMechanismViewId);
+        ScreenshotMechanismView screenshotMechanismView = null;
+
+        for (MechanismView view : mechanismViews) {
+            if (view instanceof ScreenshotMechanismView) {
+                screenshotMechanismView = (ScreenshotMechanismView) view;
+            }
+        }
+        if (screenshotMechanismView != null) {
             Uri selectedImage = data.getData();
 
             if (selectedImage == null) {
@@ -578,16 +498,11 @@ public class FeedbackActivity extends AbstractBaseActivity implements Screenshot
                 int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
                 String tempPicturePath = cursor.getString(columnIndex);
                 cursor.close();
-                screenshotMechanismView.setPicturePath(tempPicturePath);
-                screenshotMechanismView.setAnnotatedImagePath(tempPicturePath);
                 Bitmap tempPictureBitmap = BitmapFactory.decodeFile(tempPicturePath);
-                screenshotMechanismView.setPictureBitmap(tempPictureBitmap);
-                screenshotMechanismView.getScreenShotPreviewImageView().setBackground(null);
-                screenshotMechanismView.getScreenShotPreviewImageView().setImageBitmap(tempPictureBitmap);
-                screenshotMechanismView.getAnnotateScreenshotButton().setEnabled(true);
-                screenshotMechanismView.getDeleteScreenshotButton().setEnabled(true);
+                Utils.wipeImages(this);
+                Utils.storeImageToDatabase(this,tempPictureBitmap);
+                screenshotMechanismView.refreshPreview(this);
             }
-            tempMechanismViewId = -1;
         }
     }
 
@@ -671,6 +586,7 @@ public class FeedbackActivity extends AbstractBaseActivity implements Screenshot
         FeedbackService.getInstance().createFeedbackVariant(language, feedback.getApplicationId(), jsonPart, multipartFiles);
         Toast toast = Toast.makeText(getApplicationContext(), getResources().getString(R.string.supersede_feedbacklibrary_success_text), Toast.LENGTH_SHORT);
         toast.show();
+        Utils.wipeImages(this);
     }
 
     private List<MultipartBody.Part> getScreenshotMultipartbodyParts(Feedback feedback) {
@@ -720,6 +636,7 @@ public class FeedbackActivity extends AbstractBaseActivity implements Screenshot
         }
     }
 
+    //TODO: Funktionalitaet geht noch nicht.
     private void sendCopyByEmail() {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
