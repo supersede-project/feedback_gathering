@@ -36,9 +36,6 @@ public class ApplicationTest {
         ObjectMapper mapper = new ObjectMapper();
         String applicationJson = readFile("src/test/resources/orchestrator_application_25.json",  StandardCharsets.UTF_8);
         application = mapper.readValue(applicationJson, Application.class);
-
-        String feedbacksJson = readFile("src/test/resources/feedback_app_25.json",  StandardCharsets.UTF_8);
-        feedbacks = mapper.readValue(feedbacksJson, new TypeReference<List<Feedback>>(){});
     }
 
     @Test
@@ -47,19 +44,6 @@ public class ApplicationTest {
 
         Mechanism categoryMechanism = application.categoryMechanismByConfigurationIdAndCategoryMechanismParameterId(48, 606);
         assertEquals(104, categoryMechanism.getId().intValue());
-    }
-
-    @Test
-    public void testApplicationMerge() throws Exception {
-        Feedback feedback = feedbacks.get(0);
-        Feedback.appendMechanismsToFeedback(application, feedback);
-
-        assertEquals(737, feedback.getId());
-        assertEquals("81829", feedback.getUserIdentification());
-        assertEquals("Please write about your problem", feedback.getTextFeedbacks().get(0).getMechanism().getParameters().stream().filter(parameter -> parameter.getKey().equals("label")).findAny().orElse(null).getValue());
-        assertEquals("Please choose one of the following categories", feedback.getCategoryFeedbacks().get(0).getMechanism().getParameters().stream().filter(parameter -> parameter.getKey().equals("title")).findAny().orElse(null).getValue());
-
-        System.err.println(feedback);
     }
 
     static String readFile(String path, Charset encoding) throws IOException {

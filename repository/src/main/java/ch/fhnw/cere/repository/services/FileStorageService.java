@@ -15,4 +15,5 @@ public interface FileStorageService {
     public File getFeedbackAudioFileByPath(String path, long applicationId);
     public File getFeedbackScreenshotFileByPath(String path, long applicationId);
     public List<File> getFeedbackFiles(Feedback feedback, List<? extends FileFeedback> fileFeedbacks, MultiValueMap<String, MultipartFile> parts) throws IOException;
+    public List<File> getAllStoredFilesOfFeedback(Feedback feedback);
 }

@@ -173,25 +173,13 @@ public class FeedbackController extends BaseController {
         }
 
         try {
-            List<File> attachmentFiles = fileStorageService.getFeedbackFiles(feedback, feedback.getAttachmentFeedbacks(), parts);
-            List<File> screenshotFiles = fileStorageService.getFeedbackFiles(feedback, feedback.getScreenshotFeedbacks(), parts);
-            List<File> audioFiles = fileStorageService.getFeedbackFiles(feedback, feedback.getAudioFeedbacks(), parts);
-            List<File> allFiles = new ArrayList<File>() {{
-                if(attachmentFiles != null) {
-                    addAll(attachmentFiles);
-                }
-                if(screenshotFiles != null) {
-                    addAll(screenshotFiles);
-                }
-                if(audioFiles != null) {
-                    addAll(audioFiles);
-                }
-            }};
+            List<File> allFiles = fileStorageService.getAllStoredFilesOfFeedback(feedback);
             for(File file : allFiles) {
                 mdmFileIntegrator.sendFile(file);
+                LOGGER.info("MdmFileIntegrator: File sent to WP2");
             }
         } catch (Exception e) {
-            LOGGER.error("Files could not be forwarded to WP2: " + e.getLocalizedMessage());
+            LOGGER.error("MdmFileIntegrator: Files could not be forwarded to WP2: " + e.getLocalizedMessage());
             e.printStackTrace();
         }
 

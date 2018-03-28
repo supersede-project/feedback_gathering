@@ -1,0 +1,62 @@
+[
+  {
+    "id": 615,
+    "title": "Feedback",
+    "userIdentification": "99999999",
+    "createdAt": "2018-01-30T14:17:42.000+0000",
+    "updatedAt": null,
+    "applicationId": 30,
+    "configurationId": 53,
+    "language": "en",
+    "application": null,
+    "contextInformation": {
+      "id": 535,
+      "resolution": "2137x3840",
+      "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.119 Safari/537.36",
+      "androidVersion": null,
+      "localTime": "2018-01-30T14:17:35.000+0000",
+      "timeZone": "+0100",
+      "devicePixelRatio": 1,
+      "country": null,
+      "region": null,
+      "url": "http://localhost/digitale_doerfer.html",
+      "metaData": "{\"diagram\":\"diagram X 02\",\"section\":\"section#diagramSection\"}"
+    },
+    "attachmentFeedbacks": [],
+    "audioFeedbacks": [],
+    "categoryFeedbacks": [
+      {
+        "id": 474,
+        "mechanismId": 0,
+        "parameterId": 943,
+        "text": "Text with German umlauts like ä ö ü ß that should look nice."
+      }
+    ],
+    "ratingFeedbacks": [
+      {
+        "id": 549,
+        "title": "Bewerten Sie das Feature, das Sie gerade benutzt haben.",
+        "rating": 5,
+        "mechanismId": 134
+      }
+    ],
+    "screenshotFeedbacks": [
+      {
+        "id": 141,
+        "mechanismId": 133,
+        "path": "30_99999999_1517321862014_weblib_screenshot_99999999.png",
+        "size": 260045,
+        "part": null,
+        "fileExtension": "png",
+        "textAnnotations": []
+      }
+    ],
+    "textFeedbacks": [
+      {
+        "id": 820,
+        "text": "test",
+        "mechanismId": 132
+      }
+    ]
+  }
+]
