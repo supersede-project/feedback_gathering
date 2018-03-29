@@ -68,6 +68,7 @@ import static ch.uzh.supersede.feedbacklibrary.utils.Constants.ScreenshotConstan
 public class AnnotateImageActivity extends AbstractBaseActivity implements ColorPickerDialog.OnColorChangeDialogListener, TextAnnotationImageView.OnTextAnnotationChangedListener, EditImageDialog.OnEditImageListener {
     private static final String TAG = "AnnotateImageActivity";
     private boolean blackModeOn = false;
+    private boolean avoidRevert = false;
     private int oldPaintStrokeColor;
     private int oldPaintFillColor;
     // Text annotation
@@ -300,7 +301,7 @@ public class AnnotateImageActivity extends AbstractBaseActivity implements Color
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.supersede_feedbacklibrary_action_annotate_cancel) {
-            super.onBackPressed();
+            onBackPressed();
             return true;
         }
         if (id == R.id.supersede_feedbacklibrary_action_annotate_accept) {
@@ -333,6 +334,7 @@ public class AnnotateImageActivity extends AbstractBaseActivity implements Color
                 intent.putExtra(EXTRA_KEY_ALL_TEXT_ANNOTATIONS, allTextAnnotations);
                 setResult(RESULT_OK, intent);
             }
+            avoidRevert = true;
             onBackPressed();
             return true;
         }
@@ -712,4 +714,12 @@ public class AnnotateImageActivity extends AbstractBaseActivity implements Color
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        if (!avoidRevert){
+            //Restore old Image
+            Utils.storeAnnotatedImageToDatabase(this,Utils.loadImageFromDatabase(this));
+        }
+        super.onBackPressed();
+    }
 }
