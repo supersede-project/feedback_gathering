@@ -131,7 +131,6 @@ public class ScreenshotMechanismView extends MechanismView {
         pictureBitmap = Utils.loadImageFromDatabase(getLayoutInflater().getContext());
         // Selecting image
         selectButton = (Button) enclosingLayout.findViewById(R.id.supersede_feedbacklibrary_select_screenshot_btn);
-        selectButton.setBackgroundColor(Color.GRAY);
         selectButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
