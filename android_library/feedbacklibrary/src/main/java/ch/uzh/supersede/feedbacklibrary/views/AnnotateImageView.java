@@ -463,10 +463,6 @@ public class AnnotateImageView extends AppCompatImageView {
 
             canvas.drawPath(path, paint);
         }
-
-        if (historyPointer%5==0){ // testing only
-            canvas.drawBitmap(bitmapInitial, 0F, 0F, emptyPaint);
-        }
         drawText(canvas);
     }
 
