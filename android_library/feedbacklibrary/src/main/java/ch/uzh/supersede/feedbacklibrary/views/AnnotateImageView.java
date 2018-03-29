@@ -1,8 +1,8 @@
 package ch.uzh.supersede.feedbacklibrary.views;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -12,15 +12,15 @@ import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.support.v7.widget.AppCompatImageView;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 
+import ch.uzh.supersede.feedbacklibrary.R;
 import ch.uzh.supersede.feedbacklibrary.utils.Utils;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,8 +42,8 @@ public class AnnotateImageView extends AppCompatImageView {
     private int baseColor = Color.WHITE;
     // Undo, Redo
     private int historyPointer = 0;
-    private List<Path> pathLists = new ArrayList<>();
-    private List<Paint> paintLists = new ArrayList<>();
+    private List<Path> pathList = new ArrayList<>();
+    private List<Paint> paintList = new ArrayList<>();
     // Flags
     private Mode mode = Mode.DRAW;
     private Drawer drawer = Drawer.PEN;
@@ -76,19 +76,23 @@ public class AnnotateImageView extends AppCompatImageView {
     private boolean noActionExecuted = true;
     private ImageButton undoButton = null;
     private ImageButton redoButton = null;
+    private Context context;
 
     public AnnotateImageView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
+        this.context = context;
         setup();
     }
 
     public AnnotateImageView(Context context, AttributeSet attrs) {
         super(context, attrs);
+        this.context = context;
         setup();
     }
 
     public AnnotateImageView(Context context) {
         super(context);
+        this.context = context;
         setup();
     }
 
@@ -196,6 +200,56 @@ public class AnnotateImageView extends AppCompatImageView {
         noActionExecuted = false;
     }
 
+    public void onCroppedRefresh(Context context){
+        setBitmap(Utils.loadAnnotatedImageFromDatabase(context));
+        resetHistory();
+    }
+
+    private void resetHistory() {
+        undoButton = (ImageButton) ((Activity)context).findViewById(R.id.supersede_feedbacklibrary_undo_btn);
+        redoButton = (ImageButton) ((Activity)context).findViewById(R.id.supersede_feedbacklibrary_redo_btn);
+
+        if (undoButton != null && redoButton != null) {
+            undoButton.setEnabled(false);
+            undoButton.setAlpha(0.4F);
+            undoButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (isUndoable()) {
+                        redoButton.setEnabled(undo());
+                        redoButton.setAlpha(1.0F);
+                    }
+                    if (!isUndoable()){
+                        undoButton.setEnabled(false);
+                        undoButton.setAlpha(0.4F);
+                        setNoActionExecuted(true);
+                    }
+                }
+            });
+            redoButton.setEnabled(false);
+            redoButton.setAlpha(0.4F);
+            redoButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (isRedoable()) {
+                        undoButton.setEnabled(redo());
+                        undoButton.setAlpha(1.0F);
+                    }
+                    if (!isRedoable()) {
+                        redoButton.setEnabled(false);
+                        redoButton.setAlpha(0.4F);
+                    }
+                }
+            });
+        }
+        paintList = new ArrayList<>();
+        pathList = new ArrayList<>();
+        pathList.add(new Path());
+        paintList.add(createPaint());
+        noActionExecuted = true;
+        historyPointer = 1;
+    }
+
     /**
      * This method returns the part of the current canvas which represents the image, i.e., the 'bitmap part' of the
      * whole view as a bitmap.
@@ -237,7 +291,7 @@ public class AnnotateImageView extends AppCompatImageView {
     }
 
     private Path getCurrentPath() {
-        return pathLists.get(historyPointer - 1);
+        return pathList.get(historyPointer - 1);
     }
 
     public int getPaintFillColor() {
@@ -257,7 +311,7 @@ public class AnnotateImageView extends AppCompatImageView {
     }
 
     public boolean isRedoable() {
-        return (historyPointer < pathLists.size());
+        return (historyPointer < pathList.size());
     }
 
     public boolean isUndoable() {
@@ -404,8 +458,8 @@ public class AnnotateImageView extends AppCompatImageView {
         }
 
         for (int i = 0; i < historyPointer; i++) {
-            Path path = pathLists.get(i);
-            Paint paint = paintLists.get(i);
+            Path path = pathList.get(i);
+            Paint paint = paintList.get(i);
 
             canvas.drawPath(path, paint);
         }
@@ -454,7 +508,7 @@ public class AnnotateImageView extends AppCompatImageView {
     }
 
     public boolean redo() {
-        if (historyPointer < pathLists.size()) {
+        if (historyPointer < pathList.size()) {
             historyPointer++;
             invalidate();
             return true;
@@ -555,11 +609,8 @@ public class AnnotateImageView extends AppCompatImageView {
     }
 
     private void setup() {
-        pathLists.add(new Path());
-        paintLists.add(createPaint());
-        historyPointer++;
-
-        textPaint.setARGB(0, 255, 255, 255);
+        resetHistory();
+        textPaint.setARGB(0, 0, 0, 0);
     }
 
     private void updateHistory(Path path) {
@@ -567,19 +618,19 @@ public class AnnotateImageView extends AppCompatImageView {
             enableUndoDisableRedo();
         }
 
-        if (historyPointer == pathLists.size()) {
-            pathLists.add(path);
-            paintLists.add(createPaint());
+        if (historyPointer == pathList.size()) {
+            pathList.add(path);
+            paintList.add(createPaint());
             historyPointer++;
         } else {
             // On the way of Undo or Redo
-            pathLists.set(historyPointer, path);
-            paintLists.set(historyPointer, createPaint());
+            pathList.set(historyPointer, path);
+            paintList.set(historyPointer, createPaint());
             historyPointer++;
 
-            for (int i = historyPointer, size = paintLists.size(); i < size; i++) {
-                pathLists.remove(historyPointer);
-                paintLists.remove(historyPointer);
+            for (int i = historyPointer, size = paintList.size(); i < size; i++) {
+                pathList.remove(historyPointer);
+                paintList.remove(historyPointer);
             }
         }
     }

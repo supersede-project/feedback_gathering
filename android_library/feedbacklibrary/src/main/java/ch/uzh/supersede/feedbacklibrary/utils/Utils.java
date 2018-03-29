@@ -76,7 +76,6 @@ public class Utils {
         }
     }
 
-
     public static Bitmap loadImageFromDatabase(final Context context) {
         return loadImageFromDatabase(context,IMAGE_DATA_DB_KEY);
     }

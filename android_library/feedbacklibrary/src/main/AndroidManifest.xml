@@ -43,8 +43,8 @@
             android:name=".activities.FeedbackSettingsActivity"
             android:theme="@style/AppTheme.FeedbackLibrary"
             android:screenOrientation="portrait" />
-
-        <activity android:name="com.theartofdev.edmodo.cropper.CropImageActivity" />
+        <activity android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
+            android:theme="@style/Base.Theme.AppCompat" />
 
     </application>
 
