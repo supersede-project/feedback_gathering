@@ -4,7 +4,6 @@ package ch.fhnw.cere.repository.controllers;
 import ch.fhnw.cere.repository.controllers.exceptions.NotFoundException;
 import ch.fhnw.cere.repository.integration.DataProviderIntegrator;
 import ch.fhnw.cere.repository.integration.FeedbackCentralIntegrator;
-import ch.fhnw.cere.repository.integration.MdmFileIntegrator;
 import ch.fhnw.cere.repository.models.*;
 import ch.fhnw.cere.repository.models.orchestrator.Application;
 import ch.fhnw.cere.repository.services.FeedbackEmailService;
@@ -44,9 +43,6 @@ public class FeedbackController extends BaseController {
 
     @Autowired
     private DataProviderIntegrator dataProviderIntegrator;
-
-    @Autowired
-    private MdmFileIntegrator mdmFileIntegrator;
 
     @Autowired
     private FeedbackCentralIntegrator feedbackCentralIntegrator;
@@ -169,17 +165,6 @@ public class FeedbackController extends BaseController {
         feedbackEmailService.sendFeedbackNotification(createdFeedback);
         if(feedbackCentralIntegrationEnabled) {
             feedbackCentralIntegrator.ingestJsonData(feedback);
-        }
-
-        try {
-            List<File> allFiles = fileStorageService.getAllStoredFilesOfFeedback(feedback);
-            for(File file : allFiles) {
-                mdmFileIntegrator.sendFile(file);
-                LOGGER.info("MdmFileIntegrator: File sent to WP2");
-            }
-        } catch (Exception e) {
-            LOGGER.error("MdmFileIntegrator: Files could not be forwarded to WP2: " + e.getLocalizedMessage());
-            e.printStackTrace();
         }
 
         return createdFeedback;
