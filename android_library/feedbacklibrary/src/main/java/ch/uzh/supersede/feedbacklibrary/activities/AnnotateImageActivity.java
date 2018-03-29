@@ -58,7 +58,6 @@ import static ch.uzh.supersede.feedbacklibrary.utils.Constants.ScreenshotConstan
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.ScreenshotConstants.EXTRA_KEY_ALL_TEXT_ANNOTATIONS;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.ScreenshotConstants.EXTRA_KEY_HAS_STICKER_ANNOTATIONS;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.ScreenshotConstants.EXTRA_KEY_HAS_TEXT_ANNOTATIONS;
-import static ch.uzh.supersede.feedbacklibrary.utils.Constants.ScreenshotConstants.EXTRA_KEY_MECHANISM_VIEW_ID;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.ScreenshotConstants.IMAGE_ANNOTATED_DATA_DB_KEY;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.ScreenshotConstants.SEPARATOR;
 
@@ -68,7 +67,6 @@ import static ch.uzh.supersede.feedbacklibrary.utils.Constants.ScreenshotConstan
  */
 public class AnnotateImageActivity extends AbstractBaseActivity implements ColorPickerDialog.OnColorChangeDialogListener, TextAnnotationImageView.OnTextAnnotationChangedListener, EditImageDialog.OnEditImageListener {
     private static final String TAG = "AnnotateImageActivity";
-    private int mechanismViewId = -1;
     private boolean blackModeOn = false;
     private int oldPaintStrokeColor;
     private int oldPaintFillColor;
@@ -277,19 +275,13 @@ public class AnnotateImageActivity extends AbstractBaseActivity implements Color
         setContentView(R.layout.activity_annotate);
 
         Intent intent = getIntent();
-        // If mechanismViewId == -1, an error occurred
-        mechanismViewId = intent.getIntExtra(EXTRA_KEY_MECHANISM_VIEW_ID, -1);
-        if (mechanismViewId != -1) {
-            textAnnotationCounter = 1;
-            // If no maximum is specified, no text annotations are allowed
-            textAnnotationCounterMaximum = intent.getIntExtra("textAnnotationCounterMaximum", 0);
-            initAnnotateImageView();
-            initAnnotations(intent);
-            initStickerLists();
-            setListeners();
-        } else {
-            Log.e(TAG, "Failed to create the activity. No mechanismViewID provided");
-        }
+        textAnnotationCounter = 1;
+        // If no maximum is specified, no text annotations are allowed
+        textAnnotationCounterMaximum = intent.getIntExtra("textAnnotationCounterMaximum", 0);
+        initAnnotateImageView();
+        initAnnotations(intent);
+        initStickerLists();
+        setListeners();
     }
 
     @Override
@@ -335,7 +327,6 @@ public class AnnotateImageActivity extends AbstractBaseActivity implements Color
                 Utils.storeAnnotatedImageToDatabase(this,annotatedImage);
 
                 Intent intent = new Intent();
-                intent.putExtra(EXTRA_KEY_MECHANISM_VIEW_ID, mechanismViewId);
                 intent.putExtra(EXTRA_KEY_HAS_STICKER_ANNOTATIONS, allStickerAnnotations.size() > 0);
                 intent.putExtra(EXTRA_KEY_ALL_STICKER_ANNOTATIONS, allStickerAnnotations);
                 intent.putExtra(EXTRA_KEY_HAS_TEXT_ANNOTATIONS, allTextAnnotations.size() > 0);

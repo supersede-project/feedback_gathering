@@ -32,7 +32,6 @@ import static ch.uzh.supersede.feedbacklibrary.utils.Constants.ScreenshotConstan
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.ScreenshotConstants.EXTRA_KEY_ALL_TEXT_ANNOTATIONS;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.ScreenshotConstants.EXTRA_KEY_HAS_STICKER_ANNOTATIONS;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.ScreenshotConstants.EXTRA_KEY_HAS_TEXT_ANNOTATIONS;
-import static ch.uzh.supersede.feedbacklibrary.utils.Constants.ScreenshotConstants.EXTRA_KEY_MECHANISM_VIEW_ID;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.ScreenshotConstants.TEXT_ANNOTATION_COUNTER_MAXIMUM;
 
 /**
@@ -40,7 +39,6 @@ import static ch.uzh.supersede.feedbacklibrary.utils.Constants.ScreenshotConstan
  */
 public class ScreenshotMechanismView extends MechanismView {
     private ScreenshotMechanism screenshotMechanism = null;
-    private int mechanismViewIndex =-1; //TODO: REMOVE THIS BULLSHIT
     private ImageView screenShotPreviewImageView;
     private HashMap<Integer, String> allStickerAnnotations;
     private HashMap<Integer, String> allTextAnnotations;
@@ -55,7 +53,6 @@ public class ScreenshotMechanismView extends MechanismView {
         super(layoutInflater);
         this.activity = activity;
         this.screenshotMechanism = (ScreenshotMechanism) mechanism;
-        this.mechanismViewIndex = mechanismViewIndex;
         setEnclosingLayout(getLayoutInflater().inflate(R.layout.mechanism_screenshot, null));
         initView();
     }
@@ -97,10 +94,6 @@ public class ScreenshotMechanismView extends MechanismView {
 
     private int getMaxNumberTextAnnotation() {
         return screenshotMechanism.getMaxNumberTextAnnotation();
-    }
-
-    private int getMechanismViewIndex() {
-        return mechanismViewIndex;
     }
 
     public ImageView getScreenShotPreviewImageView() {
@@ -180,8 +173,6 @@ public class ScreenshotMechanismView extends MechanismView {
             intent.putExtra(EXTRA_KEY_HAS_TEXT_ANNOTATIONS, true);
             intent.putExtra(EXTRA_KEY_ALL_TEXT_ANNOTATIONS, new HashMap<>(screenshotMechanismView.getAllTextAnnotations()));
         }
-
-        intent.putExtra(EXTRA_KEY_MECHANISM_VIEW_ID, screenshotMechanismView.getMechanismViewIndex());
         intent.putExtra(TEXT_ANNOTATION_COUNTER_MAXIMUM, screenshotMechanismView.getMaxNumberTextAnnotation());
         activity.startActivityForResult(intent,REQUEST_ANNOTATE);
     }

@@ -62,7 +62,6 @@ public class Constants {
         public static final String EXTRA_KEY_ALL_TEXT_ANNOTATIONS = "allTextAnnotations";
         public static final String EXTRA_KEY_HAS_STICKER_ANNOTATIONS = "hasStickerAnnotations";
         public static final String EXTRA_KEY_HAS_TEXT_ANNOTATIONS = "hasTextAnnotations";
-        public static final String EXTRA_KEY_MECHANISM_VIEW_ID = "mechanismViewID";
         public static final String SEPARATOR = "::;;::;;";
         public static final String TEXT_ANNOTATION_COUNTER_MAXIMUM = "textAnnotationCounterMaximum";
     }
