@@ -6,7 +6,6 @@ import ch.fhnw.cere.repository.models.*;
 import ch.fhnw.cere.repository.models.orchestrator.Application;
 import ch.fhnw.cere.repository.models.orchestrator.Mechanism;
 import ch.fhnw.cere.repository.models.orchestrator.MechanismTemplateModel;
-import com.sun.media.jfxmedia.logging.Logger;
 import org.json.JSONObject;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -103,7 +102,7 @@ public class FeedbackEmailServiceImpl implements FeedbackEmailService {
                 Application orchestratorApplication = this.orchestratorApplicationService.loadApplication(feedback.getLanguage(), feedback.getApplicationId());
                 Feedback.appendMechanismsToFeedback(orchestratorApplication, feedback);
             } catch(Exception e) {
-                Logger.logMsg(Logger.ERROR, "Orchestrator not available for repository email sender. Alternative email template chosen.");
+                LOGGER.error("Orchestrator not available for repository email sender. Alternative email template chosen.");
                 emailTemplate = freemarkerConfiguration.getTemplate("feedback_mail_without_configuration.ftl");
             }
 
