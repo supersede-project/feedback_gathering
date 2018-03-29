@@ -3,18 +3,13 @@ package ch.uzh.supersede.feedbacklibrary.entrypoint;
 
 import android.Manifest;
 import android.app.Activity;
-import android.content.Context;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
-import android.widget.Toast;
 
 import java.util.HashMap;
 
-import ch.uzh.supersede.feedbacklibrary.activities.FeedbackActivity;
 import ch.uzh.supersede.feedbacklibrary.services.FeedbackService;
-import ch.uzh.supersede.feedbacklibrary.services.FeedbackService.ConfigurationRequestWrapper;
-import ch.uzh.supersede.feedbacklibrary.services.FeedbackService.ConfigurationRequestWrapper.ConfigurationRequestWrapperBuilder;
 import ch.uzh.supersede.feedbacklibrary.utils.Utils;
 
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.*;
@@ -57,10 +52,9 @@ public class FeedbackConnector {
         if (result) {
             FeedbackService
                     .getInstance()
-                    .startFeedbackActivityWithScreenshotCapture(SUPERSEEDE_BASE_URL, activity, 1337, "en");
+                    .startFeedbackHubWithScreenshotCapture(SUPERSEEDE_BASE_URL, activity, 1337, "en");
         }
     }
-
 
     private static class FeedbackOnTouchListener implements OnTouchListener{
         private View mView;

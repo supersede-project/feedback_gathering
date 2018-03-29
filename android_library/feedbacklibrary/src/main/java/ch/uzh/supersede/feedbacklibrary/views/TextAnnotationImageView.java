@@ -8,6 +8,7 @@ import android.support.design.widget.TextInputLayout;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
@@ -150,6 +151,17 @@ public class TextAnnotationImageView extends AbstractAnnotationView {
         // Set the hint and enable it
         textAnnotationLayout.setHintEnabled(true);
         textAnnotationLayout.setHint(getAnnotationInputTextHint());
+        //TODO somekind of listener here:
+        textAnnotationText.setOnFocusChangeListener(new OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(hasFocus) {
+                    Log.d("focus","on");
+                } else {
+                    Log.d("focus","off");
+                }
+            }
+        });
         textAnnotationText.addTextChangedListener(new TextWatcher() {
             @Override
             public void afterTextChanged(Editable s) {

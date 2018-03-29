@@ -4,6 +4,8 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
     <color name="colorAccentDark">#ac2a56</color>
+    <color name="colorGray">#BBBBBB</color>
+    <color name="colorGrayDark">#777777</color>
     <color name="whiteColor">#FFFFFF</color>
     <color name="feedbackActivityBackground">#eeeeee</color>
 

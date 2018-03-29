@@ -21,12 +21,12 @@ import ch.uzh.supersede.feedbacklibrary.models.CategoryMechanism;
 import ch.uzh.supersede.feedbacklibrary.models.RatingMechanism;
 import ch.uzh.supersede.feedbacklibrary.models.ScreenshotMechanism;
 import ch.uzh.supersede.feedbacklibrary.models.TextMechanism;
+import ch.uzh.supersede.feedbacklibrary.utils.Utils;
 import ch.uzh.supersede.feedbacklibrary.views.AudioMechanismView;
 import ch.uzh.supersede.feedbacklibrary.views.CategoryMechanismView;
 import ch.uzh.supersede.feedbacklibrary.views.MechanismView;
 import ch.uzh.supersede.feedbacklibrary.views.RatingMechanismView;
 import ch.uzh.supersede.feedbacklibrary.views.ScreenshotMechanismView;
-import ch.uzh.supersede.feedbacklibrary.views.ScreenshotMechanismView.OnImageChangedListener;
 import ch.uzh.supersede.feedbacklibrary.views.TextMechanismView;
 
 import static ch.uzh.supersede.feedbacklibrary.models.Mechanism.ATTACHMENT_TYPE;
@@ -54,20 +54,20 @@ public class OrchestratorStub {
         //TODO: Evaluation, Store etc
         Toast toast = Toast.makeText(activity.getApplicationContext(), activity.getResources().getString(R.string.supersede_feedbacklibrary_success_text), Toast.LENGTH_SHORT);
         toast.show();
+        Utils.wipeImages(activity);
         activity.onBackPressed();
     }
 
-    public static class MechanismBuilder <T extends Activity & OnImageChangedListener> {
+    public static class MechanismBuilder <T extends Activity> {
         private ArrayList<MechanismView> viewList;
         private Context context;
         private LayoutInflater layoutInflater;
         private LinearLayout rootLayout;
         private Resources resources;
         private T activity;
-        private String imagePath;
         private int id;
 
-        public  MechanismBuilder(T activity, Context context, Resources resources, LinearLayout rootLayout, LayoutInflater layoutInflater, String imagePath) {
+        public  MechanismBuilder(T activity, Context context, Resources resources, LinearLayout rootLayout, LayoutInflater layoutInflater) {
             viewList = new ArrayList<>();
             id = 0;
             this.context = context;
@@ -75,7 +75,6 @@ public class OrchestratorStub {
             this.resources = resources;
             this.rootLayout = rootLayout;
             this.activity = activity;
-            this.imagePath = imagePath;
         }
 
         @Deprecated
@@ -209,7 +208,7 @@ public class OrchestratorStub {
                             .value(SCREENSHOT_MAX_TEXT_VALUE)
                             .get());
                     ScreenshotMechanism screenshotMechanism = new ScreenshotMechanism(configurationItem);
-                    ScreenshotMechanismView screenshotMechanismView = new ScreenshotMechanismView(layoutInflater, screenshotMechanism, activity, id, imagePath);
+                    ScreenshotMechanismView screenshotMechanismView = new ScreenshotMechanismView(layoutInflater, activity, screenshotMechanism, id);
                     viewList.add(screenshotMechanismView);
                     break;
                 case TEXT_TYPE:

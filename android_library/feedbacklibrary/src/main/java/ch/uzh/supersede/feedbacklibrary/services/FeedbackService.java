@@ -14,12 +14,10 @@ import java.util.List;
 import java.util.Map;
 
 import ch.uzh.supersede.feedbacklibrary.API.IFeedbackAPI;
-import ch.uzh.supersede.feedbacklibrary.BuildConfig;
 import ch.uzh.supersede.feedbacklibrary.R;
-import ch.uzh.supersede.feedbacklibrary.activities.FeedbackActivity;
+import ch.uzh.supersede.feedbacklibrary.activities.FeedbackHubActivity;
 import ch.uzh.supersede.feedbacklibrary.configurations.ConfigurationItem;
 import ch.uzh.supersede.feedbacklibrary.configurations.OrchestratorConfigurationItem;
-import ch.uzh.supersede.feedbacklibrary.stubs.OrchestratorStub;
 import ch.uzh.supersede.feedbacklibrary.utils.DialogUtils;
 import ch.uzh.supersede.feedbacklibrary.utils.Utils;
 import okhttp3.MultipartBody;
@@ -217,11 +215,11 @@ public class FeedbackService {
     /**
      * Takes a screenshot of the current screen automatically and opens the FeedbackActivity from the feedback library in case if a PUSH feedback is triggered.
      */
-    public void startFeedbackActivityWithScreenshotCapture(@NonNull final String baseURL, @NonNull final Activity activity, final long applicationId, @NonNull final String language) {
-        Intent intent = new Intent(activity, FeedbackActivity.class);
-        String defaultImagePath = Utils.captureScreenshot(activity);
+    public void startFeedbackHubWithScreenshotCapture(@NonNull final String baseURL, @NonNull final Activity activity, final long applicationId, @NonNull final String language) {
+        Intent intent = new Intent(activity, FeedbackHubActivity.class);
+        Utils.wipeImages(activity.getApplicationContext());
+        Utils.storeScreenshotToDatabase(activity);
         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-        intent.putExtra(DEFAULT_IMAGE_PATH, defaultImagePath);
         intent.putExtra(EXTRA_KEY_APPLICATION_ID, applicationId);
         intent.putExtra(EXTRA_KEY_BASE_URL, baseURL);
         intent.putExtra(EXTRA_KEY_LANGUAGE, language);

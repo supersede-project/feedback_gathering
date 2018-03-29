@@ -73,7 +73,7 @@ public class FeedbackDatabase extends AbstractFeedbackDatabase {
         return insert(DataTableEntry.TABLE_NAME, DataTableEntry.COLUMN_NAME_KEY, key, values);
     }
 
-    public Double getDouble(String key, Double valueIfNull) {
+    public Double readDouble(String key, Double valueIfNull) {
         SQLiteDatabase db = m_databaseHelper.getReadableDatabase();
         Cursor cursor = db.query(NumberTableEntry.TABLE_NAME, new String[]{NumberTableEntry.COLUMN_NAME_VALUE}, NumberTableEntry.COLUMN_NAME_KEY + " LIKE '" + key + "'", null, null, null, null, null);
         Double d = null;
@@ -83,7 +83,7 @@ public class FeedbackDatabase extends AbstractFeedbackDatabase {
         return ObjectUtility.nvl(d, valueIfNull);
     }
 
-    public Float getFloat(String key, Float valueIfNull) {
+    public Float readFloat(String key, Float valueIfNull) {
         SQLiteDatabase db = m_databaseHelper.getReadableDatabase();
         Cursor cursor = db.query(NumberTableEntry.TABLE_NAME, new String[]{NumberTableEntry.COLUMN_NAME_VALUE}, NumberTableEntry.COLUMN_NAME_KEY + " LIKE '" + key + "'", null, null, null, null, null);
         Float f = null;
@@ -93,7 +93,7 @@ public class FeedbackDatabase extends AbstractFeedbackDatabase {
         return ObjectUtility.nvl(f, valueIfNull);
     }
 
-    public Integer getInteger(String key, Integer valueIfNull) {
+    public Integer readInteger(String key, Integer valueIfNull) {
         SQLiteDatabase db = m_databaseHelper.getReadableDatabase();
         Cursor cursor = db.query(NumberTableEntry.TABLE_NAME, new String[]{NumberTableEntry.COLUMN_NAME_VALUE}, NumberTableEntry.COLUMN_NAME_KEY + " LIKE '" + key + "'", null, null, null, null, null);
         Integer i = null;
@@ -103,7 +103,7 @@ public class FeedbackDatabase extends AbstractFeedbackDatabase {
         return ObjectUtility.nvl(i, valueIfNull);
     }
 
-    public Long getLong(String key, Long valueIfNull) {
+    public Long readLong(String key, Long valueIfNull) {
         SQLiteDatabase db = m_databaseHelper.getReadableDatabase();
         Cursor cursor = db.query(NumberTableEntry.TABLE_NAME, new String[]{NumberTableEntry.COLUMN_NAME_VALUE}, NumberTableEntry.COLUMN_NAME_KEY + " LIKE '" + key + "'", null, null, null, null, null);
         Long l = null;
@@ -113,7 +113,7 @@ public class FeedbackDatabase extends AbstractFeedbackDatabase {
         return ObjectUtility.nvl(l, valueIfNull);
     }
 
-    public Short getShort(String key, Short valueIfNull) {
+    public Short readShort(String key, Short valueIfNull) {
         SQLiteDatabase db = m_databaseHelper.getReadableDatabase();
         Cursor cursor = db.query(NumberTableEntry.TABLE_NAME, new String[]{NumberTableEntry.COLUMN_NAME_VALUE}, NumberTableEntry.COLUMN_NAME_KEY + " LIKE '" + key + "'", null, null, null, null, null);
         Short s = null;
@@ -123,7 +123,7 @@ public class FeedbackDatabase extends AbstractFeedbackDatabase {
         return ObjectUtility.nvl(s, valueIfNull);
     }
 
-    public String getString(String key, String valueIfNull) {
+    public String readString(String key, String valueIfNull) {
         SQLiteDatabase db = m_databaseHelper.getReadableDatabase();
         Cursor cursor = db.query(TextTableEntry.TABLE_NAME, new String[]{TextTableEntry.COLUMN_NAME_VALUE}, TextTableEntry.COLUMN_NAME_KEY + " LIKE '" + key + "'", null, null, null, null, null);
         String s = null;
@@ -133,7 +133,7 @@ public class FeedbackDatabase extends AbstractFeedbackDatabase {
         return ObjectUtility.nvl(s, valueIfNull);
     }
 
-    public byte[] getBytes(String key) {
+    public byte[] readBytes(String key) {
         SQLiteDatabase db = m_databaseHelper.getReadableDatabase();
         Cursor cursor = db.query(DataTableEntry.TABLE_NAME, new String[]{DataTableEntry.COLUMN_NAME_VALUE}, DataTableEntry.COLUMN_NAME_KEY + " LIKE '" + key + "'", null, null, null, null, null);
         byte[] b = null;

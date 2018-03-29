@@ -15,21 +15,36 @@
         android:theme="@style/AppTheme.FeedbackLibrary">
         <!-- android:theme will be overriden from app:theme -->
 
-        <activity
-            android:name=".activities.FeedbackActivity"
-            android:launchMode="singleInstance"
-            android:label="@string/supersede_feedbacklibrary_feedback_activity_name"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.FeedbackLibrary"
-            android:windowSoftInputMode="adjustPan" />
 
         <activity
             android:name=".activities.AnnotateImageActivity"
             android:label="@string/supersede_feedbacklibrary_annotate_image_activity_name"
             android:theme="@style/AppTheme.FeedbackLibrary"
             android:screenOrientation="portrait" />
-
-        <activity android:name="com.theartofdev.edmodo.cropper.CropImageActivity" />
+        <activity
+            android:name=".activities.FeedbackHubActivity"
+            android:theme="@style/AppTheme.FeedbackLibrary"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activities.FeedbackActivity"
+            android:launchMode="singleInstance"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.FeedbackLibrary"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".activities.FeedbackListActivity"
+            android:theme="@style/AppTheme.FeedbackLibrary"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activities.FeedbackDetailsActivity"
+            android:theme="@style/AppTheme.FeedbackLibrary"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activities.FeedbackSettingsActivity"
+            android:theme="@style/AppTheme.FeedbackLibrary"
+            android:screenOrientation="portrait" />
+        <activity android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
+            android:theme="@style/Base.Theme.AppCompat" />
 
     </application>
 
