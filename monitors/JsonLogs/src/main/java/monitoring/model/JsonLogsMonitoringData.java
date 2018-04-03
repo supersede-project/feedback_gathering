@@ -113,7 +113,7 @@ public class JsonLogsMonitoringData implements MonitoringData {
 		json.put("line_number", this.line_number);
 		json.put("Location", this.Location);
 		json.put("message", this.message);
-		json.put("sessionID", this.sessionID);
+		//json.put("sessionID", this.sessionID);
 		return json;
 	}
 
