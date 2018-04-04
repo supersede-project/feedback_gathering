@@ -174,6 +174,11 @@ public class FeedbackController extends BaseController {
         try {
             List<File> allFiles = fileStorageService.getAllStoredFilesOfFeedback(feedback);
             for(File file : allFiles) {
+                if(file.exists()) {
+                    LOGGER.info("MdmFileIntegrator: File exists: " + file.getAbsolutePath());
+                } else {
+                    LOGGER.error("MdmFileIntegrator: File does NOT exist: " + file.getAbsolutePath());
+                }
                 mdmFileIntegrator.sendFile(file);
                 LOGGER.info("MdmFileIntegrator: File sent to WP2");
             }
