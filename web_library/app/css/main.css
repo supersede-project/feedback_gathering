@@ -890,6 +890,49 @@
     .feedback-library button.screenshot-operation.screenshot-draw-remove:hover {
       text-decoration: underline; }
 
+.feedback-library .clustering-list-view {
+  padding: 16px;
+  margin-top: 50px;
+  margin-left: -16px;
+  margin-bottom: 15px;
+  margin-right: -16px;
+  background: #efefff; }
+  .feedback-library .clustering-list-view strong {
+    font-size: 16px; }
+  .feedback-library .clustering-list-view .intro {
+    margin-bottom: 10px; }
+  .feedback-library .clustering-list-view p.similarity-label {
+    display: block;
+    float: right;
+    margin-bottom: 5px;
+    width: 226px;
+    margin-top: 2px;
+    text-align: center; }
+  .feedback-library .clustering-list-view article.similar-feedback {
+    border-top: 1px solid #cacaca;
+    padding-top: 10px; }
+    .feedback-library .clustering-list-view article.similar-feedback p.text {
+      width: 60%;
+      float: left;
+      margin-top: 0;
+      margin-bottom: 10px;
+      font-size: 14px; }
+    .feedback-library .clustering-list-view article.similar-feedback label {
+      float: right;
+      margin-right: 15px;
+      text-align: center;
+      margin-bottom: 10px; }
+      .feedback-library .clustering-list-view article.similar-feedback label input {
+        margin-bottom: 5px; }
+    .feedback-library .clustering-list-view article.similar-feedback button.confirm {
+      height: 17px;
+      float: right;
+      font-size: 14px;
+      opacity: 1.0;
+      margin-bottom: 8px; }
+    .feedback-library .clustering-list-view article.similar-feedback:hover button.confirm {
+      opacity: 1.0; }
+
 .feedback-library .sticker-container {
   position: absolute;
   z-index: 1000;

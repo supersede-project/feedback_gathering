@@ -45,7 +45,7 @@ public class CategoryFeedback implements MechanismFeedback {
     public String toString() {
         return "CategoryFeedback{" +
                 "id=" + id +
-                ", feedback=" + feedback +
+                ", feedback=" + (this.feedback == null ? "null" : this.feedback.getId()) +
                 ", mechanismId=" + mechanismId +
                 ", parameterId=" + parameterId +
                 ", text='" + text + '\'' +

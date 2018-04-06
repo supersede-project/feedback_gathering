@@ -78,7 +78,7 @@ dependencies {
     compile group: 'commons-fileupload', name: 'commons-fileupload', version: '1.3.2'
     compile group: 'org.springframework.kafka', name: 'spring-kafka', version: '1.2.2.RELEASE'
 
-    compile("eu.supersede.if:eu.supersede.if.api:0.3.0-SNAPSHOT"){changing = true}
+    compile("eu.supersede.if:eu.supersede.if.api:0.4.0-SNAPSHOT"){changing = true}
 
     runtime 'mysql:mysql-connector-java'
 

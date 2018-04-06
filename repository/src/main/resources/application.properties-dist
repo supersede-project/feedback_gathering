@@ -65,6 +65,9 @@ spring.jackson.serialization.write_dates_as_timestamps=false
 # ----------------------------------------
 # OTHERS
 # ----------------------------------------
+logging.level.org.springframework.web=INFO
+log4j.logger.org.hibernate=info
+
 jwt.secret=<insert_secret_here>
 spring.http.multipart.enabled=true
 spring.http.multipart.max-file-size=16MB

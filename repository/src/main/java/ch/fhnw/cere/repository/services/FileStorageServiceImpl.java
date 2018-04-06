@@ -1,13 +1,15 @@
 package ch.fhnw.cere.repository.services;
 
 import ch.fhnw.cere.repository.models.*;
-import com.sun.media.jfxmedia.logging.Logger;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.multipart.MultipartFile;
-
+import org.slf4j.LoggerFactory;
+import javax.mail.MessagingException;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -30,6 +32,7 @@ public class FileStorageServiceImpl implements FileStorageService {
     @Value("${supersede.upload_directory.screenshots_folder_name}")
     private String screenshotsFolderName;
 
+    private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(FileStorageServiceImpl.class);
 
     @Override
     public Feedback storeFiles(Feedback feedback, MultiValueMap<String, MultipartFile> parts) throws IOException {
@@ -108,6 +111,34 @@ public class FileStorageServiceImpl implements FileStorageService {
         return files;
     }
 
+    public List<File> getAllStoredFilesOfFeedback(Feedback feedback) {
+        List<File> allFilesOfFeedback = new ArrayList<>();
+        File resourcesDirectory = new File(uploadDirectory);
+
+        if(feedback.getAttachmentFeedbacks() != null) {
+            for(AttachmentFeedback attachmentFeedback : feedback.getAttachmentFeedbacks()) {
+                File attachment = new File(resourcesDirectory.getAbsolutePath() + File.separator + this.attachmentsFolderName + File.separator + attachmentFeedback.getPath());
+                allFilesOfFeedback.add(attachment);
+            }
+        }
+
+        if(feedback.getScreenshotFeedbacks() != null) {
+            for(ScreenshotFeedback screenshotFeedback : feedback.getScreenshotFeedbacks()) {
+                File screenshot = new File(resourcesDirectory.getAbsolutePath() + File.separator + this.screenshotsFolderName + File.separator + screenshotFeedback.getPath());
+                allFilesOfFeedback.add(screenshot);
+            }
+        }
+
+        if(feedback.getAudioFeedbacks() != null) {
+            for(AudioFeedback audioFeedback : feedback.getAudioFeedbacks()) {
+                File audioFile = new File(resourcesDirectory.getAbsolutePath() + File.separator + this.audiosFolderName + File.separator + audioFeedback.getPath());
+                allFilesOfFeedback.add(audioFile);;
+            }
+        }
+
+        return allFilesOfFeedback;
+    }
+
     private File convert(MultipartFile file) throws IOException {
         File convFile = new File(file.getOriginalFilename());
         convFile.createNewFile();
@@ -129,8 +160,8 @@ public class FileStorageServiceImpl implements FileStorageService {
             try {
                 directory.mkdir();
             } catch (Exception exception) {
-                Logger.logMsg(Logger.ERROR, "Feedback Repository could not create directory: " + directory.getAbsolutePath());
-                Logger.logMsg(Logger.ERROR, "Feedback Repository exception: " + exception);
+                LOGGER.error("Feedback Repository could not create directory: " + directory.getAbsolutePath());
+                LOGGER.error("Feedback Repository exception: " + exception);
             }
         }
     }

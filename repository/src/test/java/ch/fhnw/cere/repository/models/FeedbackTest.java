@@ -27,23 +27,21 @@ import static org.junit.Assert.assertEquals;
 @SpringBootTest(classes = RepositoryApplication.class)
 @WebAppConfiguration
 @ActiveProfiles("test")
-public class ApplicationTest {
+public class FeedbackTest {
     private Application application;
     private List<Feedback> feedbacks;
 
     @Before
     public void setup() throws IOException {
         ObjectMapper mapper = new ObjectMapper();
-        String applicationJson = readFile("src/test/resources/orchestrator_application_25.json",  StandardCharsets.UTF_8);
-        application = mapper.readValue(applicationJson, Application.class);
+
+        String feedbacksJson = readFile("src/test/resources/feedback_test_app.json",  StandardCharsets.UTF_8);
+        feedbacks = mapper.readValue(feedbacksJson, new TypeReference<List<Feedback>>(){});
     }
 
     @Test
-    public void testCategoryMechanismByConfigurationIdAndCategoryMechanismParameterId() throws Exception {
-        assertEquals(25, application.getId().intValue());
-
-        Mechanism categoryMechanism = application.categoryMechanismByConfigurationIdAndCategoryMechanismParameterId(48, 606);
-        assertEquals(104, categoryMechanism.getId().intValue());
+    public void testFeedbackSerializationWithGermanUmlauts() throws Exception {
+        System.err.println(feedbacks);
     }
 
     static String readFile(String path, Charset encoding) throws IOException {

@@ -3,12 +3,8 @@ package ch.fhnw.cere.repository.integration;
 
 import ch.fhnw.cere.repository.models.Feedback;
 import ch.fhnw.cere.repository.services.FeedbackCentralSender;
-import ch.fhnw.cere.repository.services.SettingService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import eu.supersede.integration.api.analysis.proxies.DataProviderProxy;
-import eu.supersede.integration.api.analysis.proxies.KafkaClient;
-import org.json.JSONObject;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;

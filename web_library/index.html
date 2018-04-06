@@ -61,11 +61,15 @@
     <![endif]-->
 
     <!--<link rel="stylesheet" href="https://platform.supersede.eu/web_library/siemens/dist/jqueryui/jquery-ui.min.css"/>-->
+    <!--
     <link rel="stylesheet" href="https://platform.supersede.eu/web_library/siemens/dist/main.min.css"/>
+    -->
     <!--
     -->
-    <!--<link rel="stylesheet" href="/dist/jqueryui/jquery-ui.min.css"/>-->
-    <!--<link rel="stylesheet" href="/dist/main.min.css"/>-->
+    <link rel="stylesheet" href="/dist/jqueryui/jquery-ui.min.css"/>
+    <!--
+    -->
+    <link rel="stylesheet" href="/dist/main.min.css"/>
 </head>
 
 <body class="co2online secure cmd_content action_bereichePage">
@@ -1679,6 +1683,7 @@
 </script>
 
 
+<!--
 <script src="https://platform.supersede.eu/web_library/siemens/dist/jquery-1.9.1.js"></script>
 <script src="https://platform.supersede.eu/web_library/siemens/dist/jqueryui/jquery-ui.min.js"></script>
 <script src="https://platform.supersede.eu/web_library/siemens/dist/audio/recorder.js"></script>
@@ -1687,8 +1692,8 @@
 <script src="https://platform.supersede.eu/web_library/siemens/dist/screenshot/customiseControls.js"></script>
 <script src="https://platform.supersede.eu/web_library/siemens/dist/screenshot/spectrum.js"></script>
 <script src="https://platform.supersede.eu/web_library/siemens/dist/jquery.feedback.min.js"></script>
+-->
 
-<!--
 <script src="dist/jquery-1.9.1.js"></script>
 <script src="dist/jqueryui/jquery-ui.min.js"></script>
 <script src="dist/audio/recorder.js"></script>
@@ -1697,7 +1702,6 @@
 <script src="dist/screenshot/customiseControls.js"></script>
 <script src="dist/screenshot/spectrum.js"></script>
 <script src="dist/jquery.feedback.min.js"></script>
--->
 
 <!--
 <script src="http://supersede.es.atos.net/web_library/senercon/dist/jquery-1.9.1.js"></script>
@@ -1718,10 +1722,9 @@
 
         jQuery('#feedbackEntryPoint').feedbackPlugin({
             //'distPath': 'http://supersede.es.atos.net/web_library/siemens/dist',
-            //'distPath': 'dist/',
 
-            'distPath': 'https://platform.supersede.eu/web_library/siemens/dist/',
-            'applicationId': 31,
+            'distPath': 'dist/',
+            'applicationId': 14,
             'apiEndpointOrchestrator': 'https://platform.supersede.eu:8443/',
             'apiEndpointRepository': 'https://platform.supersede.eu:8443/',
             'userId': '99999999',
