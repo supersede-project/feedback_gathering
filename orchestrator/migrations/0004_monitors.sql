@@ -7,7 +7,7 @@ DROP TABLE IF EXISTS `monitor_type`;
 -- ----------------------------
 CREATE TABLE `monitor_type` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) NOT NULL,
+  `name` varchar(255) NOT NULL UNIQUE,
   `created_at` timestamp(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
@@ -24,7 +24,7 @@ COMMIT;
 -- ----------------------------
 CREATE TABLE `monitor_tool` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) NOT NULL,
+  `name` varchar(255) NOT NULL UNIQUE,
   `created_at` timestamp(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
   `monitor_type_id` int(11) NOT NULL,
   `monitor_name` varchar(255) NOT NULL,
