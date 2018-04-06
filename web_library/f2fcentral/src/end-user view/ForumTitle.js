@@ -10,7 +10,7 @@ import TiTag from 'react-icons/lib/ti/tag';
 import MdVisibility from 'react-icons/lib/md/visibility';
 
 
-import style from './App.css';
+import style from '../css/App.css';
 
 class ForumTitle extends Component {
 

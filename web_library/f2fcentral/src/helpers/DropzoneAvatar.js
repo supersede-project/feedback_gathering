@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import Dropzone from 'react-dropzone';
-import style from './App.css';
+import style from '../css/App.css';
 
 class DropzoneAvatar extends Component {
 

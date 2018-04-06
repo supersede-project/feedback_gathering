@@ -1,10 +1,10 @@
 import React, {Component} from 'react';
 import CommentList from 'react-uikit-comment-list';
 import Comment from 'react-uikit-comment';
-import placeholder_avatar from './placeholder_avatar.svg'
+import placeholder_avatar from '../placeholder_avatar.svg'
 import ForumCommentTitle from './ForumCommentTitle';
 
-import style from './App.css';
+import style from '../css/App.css';
 
 
 class CommentUI extends Component {

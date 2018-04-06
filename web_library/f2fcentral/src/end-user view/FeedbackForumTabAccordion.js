@@ -8,15 +8,15 @@ import React, {Component} from 'react';
 import {PulseLoader} from 'react-spinners';
 import {Accordion, AccordionItem} from 'react-sanfona';
 
-import style from './App.css';
+import style from '../css/App.css';
 import 'react-tabs/style/react-tabs.css';
 
 import 'react-accessible-accordion/dist/react-accessible-accordion.css';
 import ForumTitle from "./ForumTitle";
 import ForumBody from "./ForumBody";
 import FeedbackForumCommentView from "./FeedbackForumCommentView";
-import ForumSorting from "./ForumSorting";
-import CompanyFeedback from "./CompanyFeedback";
+import ForumSorting from "../helpers/ForumSorting";
+import CompanyFeedback from "../helpers/CompanyFeedback";
 
 
 class FeedbackForumTabAccordion extends Component {

@@ -12,7 +12,7 @@ import TiGroup from 'react-icons/lib/ti/group';
 import FaThumbsOUp from 'react-icons/lib/fa/thumbs-o-up';
 import FaThumbsODown from 'react-icons/lib/fa/thumbs-o-down';
 
-import style from './App.css';
+import style from '../css/App.css';
 
 class FeedbackTitle extends Component {
 

@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import CommentList from 'react-uikit-comment-list';
 import Comment from 'react-uikit-comment';
-import placeholder_avatar from './placeholder_avatar.svg';
-import style from './App.css';
+import placeholder_avatar from '../placeholder_avatar.svg';
+import style from '../css/App.css';
 
 
 class ChatView extends Component {

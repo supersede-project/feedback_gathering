@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import TiNews from 'react-icons/lib/ti/news';
 
 
-import style from './App.css';
+import style from '../css/App.css';
 
 class PromotingBanner extends Component {
 

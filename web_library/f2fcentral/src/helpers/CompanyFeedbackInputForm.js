@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import style from './App.css';
+import style from '../css/App.css';
 
 class CompanyFeedbackInputForm extends Component {
 

@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
-import CommentUI from './CommentUI.js';
-import ForumCommentTitle from './ForumCommentTitle';
+import CommentUI from '../helpers/CommentUI.js';
+import ForumCommentTitle from '../helpers/ForumCommentTitle';
 
 class FeedbackForumCommentView extends Component {
 

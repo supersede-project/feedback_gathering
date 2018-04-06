@@ -3,14 +3,14 @@ import { PulseLoader } from 'react-spinners';
 
 import { Accordion, AccordionItem } from 'react-sanfona';
 
-import style from './App.css';
+import style from '../css/App.css';
 import 'react-tabs/style/react-tabs.css';
 
 import 'react-accessible-accordion/dist/react-accessible-accordion.css';
 import FeedbackTitle from './FeedbackTitle';
 import MdNotificationsActive from 'react-icons/lib/md/notifications-active';
-import ChatView from './ChatView';
-import PromotingBanner from "./PromotingBanner";
+import ChatView from '../helpers/ChatView';
+import PromotingBanner from "../helpers/PromotingBanner";
 
 
 class MyFeedbacksTabAccordion extends Component {

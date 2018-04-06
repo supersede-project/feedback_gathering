@@ -3,7 +3,7 @@ import TiNews from 'react-icons/lib/ti/news';
 import IoFlashOff from 'react-icons/lib/io/flash-off';
 import IoFlash from 'react-icons/lib/io/flash';
 
-import style from './App.css';
+import style from '../css/App.css';
 
 
 class CompanyFeedback extends Component {

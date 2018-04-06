@@ -13,7 +13,7 @@ import TiGroup from 'react-icons/lib/ti/group';
 import MdEmail from 'react-icons/lib/md/email';
 import MdPublish from 'react-icons/lib/md/publish';
 
-import style from './App.css';
+import style from '../css/App.css';
 
 class CompanyViewFeedbackTitle extends Component {
 
