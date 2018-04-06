@@ -7,15 +7,15 @@ import ChatView from '../helpers/ChatView';
 
 import '../css/App.css';
 import 'react-tabs/style/react-tabs.css';
-import style from './css/App.css';
+import style from '../css/App.css';
 
 import 'react-accessible-accordion/dist/react-accessible-accordion.css';
-import CompanyViewFeedbackTitle from "./CompanyViewFeedbackTitle";
+import CompanyViewFeedbackTitle from "../adminView/CompanyViewFeedbackTitle";
 import FaFileImageO from 'react-icons/lib/fa/file-image-o';
 import MdAnnouncement from 'react-icons/lib/md/announcement';
-import CompanyFeedbackInputForm from "./helpers/CompanyFeedbackInputForm";
-import DropzoneAvatar from "./DropzoneAvatar";
-import FeedbackForumCommentView from "./FeedbackForumCommentView";
+import CompanyFeedbackInputForm from "../helpers/CompanyFeedbackInputForm";
+import DropzoneAvatar from "../helpers/DropzoneAvatar";
+import FeedbackForumCommentView from "../end-user view/FeedbackForumCommentView";
 
 class CompanyViewAccordion extends Component {
 
