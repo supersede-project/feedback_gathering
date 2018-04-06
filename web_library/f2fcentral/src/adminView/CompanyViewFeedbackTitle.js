@@ -287,9 +287,10 @@ class CompanyViewFeedbackTitle extends Component {
                   {that.handleVisibility()}
                   <MdPublish className={style.counts} size={20} padding={10}
                              visibility={this.state.visiblePublishedIcon} onClick={this.publishFeedback}/>
+                  {that.handleMailIcon()}
                   <FaWechat align="left" size={35} color={'#63C050'} style={{flexGrow: "1"}}
                             onClick={this.handleShowChat}/>
-                  {that.handleMailIcon()}
+
               </div>
           </div>);
 

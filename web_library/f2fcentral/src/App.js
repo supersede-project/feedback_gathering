@@ -71,7 +71,7 @@ class App extends Component {
       else {
         toRender =
 /*{activeTabContentStyle: {backgroundColor: '#006CEF', borderColor: '#006CEF', color: '#006CEF'}}*/
-            <Tabs className={style.react-tabs__tab}>
+            <Tabs>
               <TabList>
                 <Tab selectedClassName="tabselected">User Feedback</Tab>
                 <Tab selectedClassName="tabselected">Company Feedback</Tab>
