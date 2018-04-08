@@ -329,7 +329,7 @@ class FeedbackForumTabAccordion extends Component {
                 <ForumSorting onUpdate={this.onUpdate.bind(this)}/>
                 <Accordion>
                     {sortedData.map(function (item, index) {
-                        console.log(sortedData);
+                        //console.log(sortedData);
                         if (!item.hasOwnProperty("textFeedbacks") || (item.textFeedbacks.length > 0 && item.categoryFeedbacks.length > 0)) {
                             var unread = false;
                             if (instance.state.unreadFeedbacks.filter((element) => element.id == item.id).length > 0) {

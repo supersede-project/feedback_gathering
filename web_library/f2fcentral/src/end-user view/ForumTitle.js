@@ -26,6 +26,7 @@ class ForumTitle extends Component {
             comment: parseInt(this.props.comment)
         }
         this.toggleExpanded = this.toggleExpanded.bind(this);
+        this.checkStatus = this.checkStatus.bind(this);
     }
 
     componentWillReceiveProps(nextProps) {
@@ -55,6 +56,16 @@ class ForumTitle extends Component {
         return <TiTag size={35} padding={75}/>;
     }
 
+    checkStatus(response){
+        if (response.status >= 200 && response.status < 300) {
+            return response
+        } else {
+            var error = new Error(response.statusText)
+            error.response = response
+            throw error
+        }
+    }
+
     addLike(e) {
         if (!this.props.visibility) {
             fetch(process.env.REACT_APP_BASE_URL + 'en/applications/' + sessionStorage.getItem('applicationId') + '/feedbacks/likes', {
@@ -67,8 +78,13 @@ class ForumTitle extends Component {
                     user_id: sessionStorage.getItem('userId'),
                     feedback_id: this.props.feedbackId
                 })
-            }).then(result => result.json())
+            }).then(this.checkStatus)
+                .then(result => result.json())
                 .then(result => {
+                    this.props.update();
+                })
+                .catch(error => {
+                    console.log('request failed')
                     this.props.update();
                 });
         }
@@ -87,8 +103,13 @@ class ForumTitle extends Component {
                     user_id: sessionStorage.getItem('userId'),
                     feedback_id: this.props.feedbackId
                 })
-            }).then(result => result.json())
+            }).then(this.checkStatus)
+                .then(result => result.json())
                 .then(result => {
+                    this.props.update();
+                })
+                .catch(error => {
+                    console.log('request failed')
                     this.props.update();
                 });
         }

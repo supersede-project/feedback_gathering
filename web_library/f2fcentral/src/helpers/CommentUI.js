@@ -139,19 +139,29 @@ class CommentUI extends Component {
     getDeleteButton(commentId) {
         var that = this;
         if (window.adminUser) {
-            return (<button className={style.formbutton1} type="button" onClick={(e) => that.deleteComment(commentId)}>
+            return (<button className={style.formbutton1} type="button" onClick={(e) => that.deleteComment(e)}>
                 Delete</button>);
         }
     }
 
-    deleteComment(commentId) {
-        fetch(process.env.REACT_APP_BASE_URL + 'en/applications/' + sessionStorage.getItem('applicationId') + '/feedbacks/comments/' + commentId, {
-            method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': sessionStorage.getItem('token')
-            }
-        }).then(result => this.props.update());
+    deleteComment(e) {
+        let commentId = "";
+
+        this.state.commentData.map((item, index) => {
+            commentId = item.id;
+        });
+
+            fetch(process.env.REACT_APP_BASE_URL + 'en/applications/' + sessionStorage.getItem('applicationId') + '/feedbacks/comments/' + commentId, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': sessionStorage.getItem('token')
+                }
+            }).then(result => {
+                    this.fetchData();
+                });
+
+        e.preventDefault();
         e.stopPropagation();
     }
 
