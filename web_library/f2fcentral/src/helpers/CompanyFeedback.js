@@ -76,7 +76,6 @@ class CompanyFeedback extends Component {
                 </h5>
                 <div className={style.iconContainer}>
                     {this.handleUnpromote()}
-                    <span className={style.tooltiptext}>Select to unpromote entry</span>
                 </div>
             </div>
         );

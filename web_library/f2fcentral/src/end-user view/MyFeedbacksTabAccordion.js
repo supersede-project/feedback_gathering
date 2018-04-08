@@ -66,6 +66,7 @@ class MyFeedbacksTabAccordion extends Component {
       let toRender = null;
       var that = this;
       if(!that.state.showChat && that.state.data.length > 0) {
+          that.state.data.reverse();
 
         toRender = <div><Accordion>
         {that.state.data.map(function (item, index) {

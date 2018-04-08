@@ -105,11 +105,24 @@ class CommentUI extends Component {
                     var userId = comment.user.id;
                     var userAvatars = that.state.userAvatars.filter(el => el.userId === userId);
                     var avatar = '';
+
+                    var dateText = "";
+                    var tmpDate = new Date(childComment.createdAt.substring(0, childComment.createdAt.indexOf('.')) + "Z");
+                    var options = {
+                        year: 'numeric',
+                        month: 'numeric',
+                        day: 'numeric',
+                        hour: 'numeric',
+                        minute: 'numeric',
+                        second: 'numeric'
+                    }
+                    dateText = new Intl.DateTimeFormat('de-DE', options).format(tmpDate);
+
                     if (userAvatars.length > 0) {
                         avatar = userAvatars[0].avatar;
                     }
                     return (<Comment title={childComment.user.username}
-                                     meta={new Date(childComment.createdAt.substring(0, childComment.createdAt.indexOf('.')) + "Z").toString()}
+                                     meta={dateText}
                                      avatar={{src: avatar}}>
 
                         <p>
@@ -209,6 +222,19 @@ class CommentUI extends Component {
                         var userAvatars = that.state.userAvatars.filter(el => el.userId === userId);
                         var avatar = '';
                         console.log(userAvatars.length);
+
+                        var dateText = "";
+                        var tmpDate = new Date(comment.createdAt.substring(0, comment.createdAt.indexOf('.')) + "Z");
+                        var options = {
+                            year: 'numeric',
+                            month: 'numeric',
+                            day: 'numeric',
+                            hour: 'numeric',
+                            minute: 'numeric',
+                            second: 'numeric'
+                        }
+                        dateText = new Intl.DateTimeFormat('de-DE', options).format(tmpDate);
+
                         if (userAvatars.length > 0) {
 
                             avatar = userAvatars[0].avatar;
@@ -216,7 +242,7 @@ class CommentUI extends Component {
                         if (comment.parentComment === null) {
                             return (
                                 <Comment title={comment.user.username}
-                                         meta={new Date(comment.createdAt.substring(0, comment.createdAt.indexOf('.')) + "Z").toString()}
+                                         meta={dateText}
                                          avatar={{src: avatar}}>
                                     <p>
                                         {comment.commentText}
