@@ -262,6 +262,18 @@ class CompanyViewFeedbackTitle extends Component {
       var showChat = null;
       var that=this;
 
+      var dateText = "";
+      var tmpDate = new Date(this.props.date.substring(0, this.props.date.indexOf('.')) + "Z");
+      var options = {
+          year: 'numeric',
+          month: 'numeric',
+          day: 'numeric',
+          hour: 'numeric',
+          minute: 'numeric',
+          second: 'numeric'
+      }
+      dateText = new Intl.DateTimeFormat('de-DE', options).format(tmpDate);
+
           return (<div style={{display: "flex", justifyContent: "space-around", background: this.state.backgroundcolor}}>
               <h5 align="left" style={{
                   flexGrow: 2,
@@ -269,7 +281,7 @@ class CompanyViewFeedbackTitle extends Component {
                   fontStyle: 'italic'
               }} onClick={that.toggleExpanded}>{that.handleBlockedThread()}{that.getIconForFeedbackType()}&nbsp; {(!this.state.expanded && this.props.title.length > 20) ? this.props.title.substring(0, 20) + "..." : this.props.title}
                   <div className={style.spacingstyle}>
-                      <div align="left" style={{fontSize: 10}}>sent on {this.props.date}</div>
+                      <div align="left" style={{fontSize: 10}}>sent on {dateText}</div>
                       <div align="left" style={{fontSize: 10, color: '#169BDD'}}>Status: {this.handleFeedbackStatus()}
                       </div>
                       <div align="left" style={{fontSize: 10, color: '#169BDD'}}>Forum activity:

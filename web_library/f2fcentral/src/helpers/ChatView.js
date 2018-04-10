@@ -134,10 +134,23 @@ class ChatView extends Component {
             var userId = item.user.id;
             var userAvatars = that.state.userAvatars.filter(el => el.userId === userId);
             var avatar = '';
+
+              var dateText = "";
+              var tmpDate = new Date(item.chatDate.substring(0, item.chatDate.indexOf('.')) + "Z");
+              var options = {
+                  year: 'numeric',
+                  month: 'numeric',
+                  day: 'numeric',
+                  hour: 'numeric',
+                  minute: 'numeric',
+                  second: 'numeric'
+              }
+              dateText = new Intl.DateTimeFormat('de-DE', options).format(tmpDate);
+
             if(userAvatars.length > 0) {
                 avatar = userAvatars[0].avatar;
             }
-            return (<Comment className={that.messageFromCurrentUser(userId)} meta={new Date(item.chatDate.substring(0, item.chatDate.indexOf('.')) + "Z").toString()} avatar={{src: avatar}}>
+            return (<Comment className={that.messageFromCurrentUser(userId)} meta={dateText} avatar={{src: avatar}}>
               <p>
                 {item.chatText}
               </p>
