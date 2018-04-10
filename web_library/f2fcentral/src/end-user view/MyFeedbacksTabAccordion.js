@@ -3,16 +3,14 @@ import { PulseLoader } from 'react-spinners';
 
 import { Accordion, AccordionItem } from 'react-sanfona';
 
-import style from './App.css';
+import style from '../css/App.css';
 import 'react-tabs/style/react-tabs.css';
 
 import 'react-accessible-accordion/dist/react-accessible-accordion.css';
 import FeedbackTitle from './FeedbackTitle';
-import FeedbackBody from './FeedbackBody';
-import FeedbackData from './FeedbackData';
 import MdNotificationsActive from 'react-icons/lib/md/notifications-active';
-import ChatView from './ChatView';
-import PromotingBanner from "./PromotingBanner";
+import ChatView from '../helpers/ChatView';
+import PromotingBanner from "../helpers/PromotingBanner";
 
 
 class MyFeedbacksTabAccordion extends Component {
@@ -68,6 +66,7 @@ class MyFeedbacksTabAccordion extends Component {
       let toRender = null;
       var that = this;
       if(!that.state.showChat && that.state.data.length > 0) {
+          that.state.data.reverse();
 
         toRender = <div><Accordion>
         {that.state.data.map(function (item, index) {

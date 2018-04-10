@@ -1,17 +1,18 @@
 import React, {Component} from 'react';
 import {Tab, Tabs, TabList, TabPanel} from 'react-tabs';
 
-import 'react-tabs/style/react-tabs.css';
-import style from 'react-tabs/style/react-tabs.css';
+//import 'react-tabs/style/react-tabs.css';
+//import style from 'react-tabs/style/react-tabs.css';
 
 import '../../node_modules/react-accessible-accordion/dist/react-accessible-accordion.css';
-import './App.css';
-import MyFeedbacksTabAccordion from "./MyFeedbacksTabAccordion";
-import FeedbackForumTabAccordion from "./FeedbackForumTabAccordion";
-import CompanyViewAccordion from "./CompanyViewAccordion";
-import LoginAdmin from "./LoginAdmin";
-import CompanyFeedbackListViewAccordion from "./CompanyFeedbackListViewAccordion";
+import './css/App.css';
+import MyFeedbacksTabAccordion from "./end-user view/MyFeedbacksTabAccordion";
+import FeedbackForumTabAccordion from "./end-user view/FeedbackForumTabAccordion";
+import CompanyViewAccordion from "./adminView/CompanyViewAccordion";
+import LoginAdmin from "./adminView/LoginAdmin";
+import CompanyFeedbackListViewAccordion from "./adminView/CompanyFeedbackListViewAccordion";
 
+import style from './css/App.css';
 
 class App extends Component {
 
@@ -69,7 +70,8 @@ class App extends Component {
       }
       else {
         toRender =
-            <Tabs style={{activeTabContentStyle: {backgroundColor: '#006CEF', borderColor: '#006CEF', color: '#006CEF'}}}>
+/*{activeTabContentStyle: {backgroundColor: '#006CEF', borderColor: '#006CEF', color: '#006CEF'}}*/
+            <Tabs>
               <TabList>
                 <Tab selectedClassName="tabselected">User Feedback</Tab>
                 <Tab selectedClassName="tabselected">Company Feedback</Tab>

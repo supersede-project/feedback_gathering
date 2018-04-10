@@ -12,7 +12,7 @@ import TiGroup from 'react-icons/lib/ti/group';
 import FaThumbsOUp from 'react-icons/lib/fa/thumbs-o-up';
 import FaThumbsODown from 'react-icons/lib/fa/thumbs-o-down';
 
-import style from './App.css';
+import style from '../css/App.css';
 
 class FeedbackTitle extends Component {
 
@@ -102,9 +102,6 @@ class FeedbackTitle extends Component {
     handleVisibility() {
         var statusStyle = {
             color: 'black',
-            //border: '1px solid #333333',
-            //padding: '3px 7px',
-            //background: 'linear-gradient(180deg, #fff, #ddd 40%, #ccc)',
             textAlign: 'center',
             fontSize: '12px'
         }

@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import TiNews from 'react-icons/lib/ti/news';
 
 
-import style from './App.css';
+import style from '../css/App.css';
 
 class PromotingBanner extends Component {
 
@@ -52,7 +52,8 @@ class PromotingBanner extends Component {
                             return (<div>
                                 <h5 align="left" style={{
                                     fontSize: 10,
-                                    fontStyle: 'italic'
+                                    fontStyle: 'italic',
+                                    color: 'black'
                                 }} onClick={that.toggleMessage}>
                                     <TiNews size={35}
                                             padding={75}/>&nbsp; {(item.text.length > 30) ? item.text.substring(0, 30) + "..." : item.text}

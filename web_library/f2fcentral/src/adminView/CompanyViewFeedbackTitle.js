@@ -13,7 +13,7 @@ import TiGroup from 'react-icons/lib/ti/group';
 import MdEmail from 'react-icons/lib/md/email';
 import MdPublish from 'react-icons/lib/md/publish';
 
-import style from './App.css';
+import style from '../css/App.css';
 
 class CompanyViewFeedbackTitle extends Component {
 
@@ -157,10 +157,10 @@ class CompanyViewFeedbackTitle extends Component {
           var that = this;
 
       if(this.props.blocked === true){
-          return <GoCircleSlash size={30} color="black" onClick={this.closeThread}/>
+          return <GoCircleSlash size={30} color="red" onClick={this.closeThread}/>
       }
       else if(this.props.blocked === false) {
-          return <GoCircleSlash size={30} color="red" onClick={this.closeThread}/>
+          return <GoCircleSlash size={30} color="green" onClick={this.closeThread}/>
       }
   }
 
@@ -262,6 +262,18 @@ class CompanyViewFeedbackTitle extends Component {
       var showChat = null;
       var that=this;
 
+      var dateText = "";
+      var tmpDate = new Date(this.props.date.substring(0, this.props.date.indexOf('.')) + "Z");
+      var options = {
+          year: 'numeric',
+          month: 'numeric',
+          day: 'numeric',
+          hour: 'numeric',
+          minute: 'numeric',
+          second: 'numeric'
+      }
+      dateText = new Intl.DateTimeFormat('de-DE', options).format(tmpDate);
+
           return (<div style={{display: "flex", justifyContent: "space-around", background: this.state.backgroundcolor}}>
               <h5 align="left" style={{
                   flexGrow: 2,
@@ -269,7 +281,7 @@ class CompanyViewFeedbackTitle extends Component {
                   fontStyle: 'italic'
               }} onClick={that.toggleExpanded}>{that.handleBlockedThread()}{that.getIconForFeedbackType()}&nbsp; {(!this.state.expanded && this.props.title.length > 20) ? this.props.title.substring(0, 20) + "..." : this.props.title}
                   <div className={style.spacingstyle}>
-                      <div align="left" style={{fontSize: 10}}>sent on {this.props.date}</div>
+                      <div align="left" style={{fontSize: 10}}>sent on {dateText}</div>
                       <div align="left" style={{fontSize: 10, color: '#169BDD'}}>Status: {this.handleFeedbackStatus()}
                       </div>
                       <div align="left" style={{fontSize: 10, color: '#169BDD'}}>Forum activity:
@@ -287,9 +299,10 @@ class CompanyViewFeedbackTitle extends Component {
                   {that.handleVisibility()}
                   <MdPublish className={style.counts} size={20} padding={10}
                              visibility={this.state.visiblePublishedIcon} onClick={this.publishFeedback}/>
+                  {that.handleMailIcon()}
                   <FaWechat align="left" size={35} color={'#63C050'} style={{flexGrow: "1"}}
                             onClick={this.handleShowChat}/>
-                  {that.handleMailIcon()}
+
               </div>
           </div>);
 

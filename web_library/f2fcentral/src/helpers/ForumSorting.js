@@ -1,10 +1,10 @@
 import React, {Component} from 'react';
 
-import './App.css';
+import '../css/App.css';
 import 'react-tabs/style/react-tabs.css';
 import Select from 'react-select';
 import 'react-select/dist/react-select.css';
-import './Dropdown.css';
+import '../css/Dropdown.css';
 
 class ForumSorting extends Component {
 

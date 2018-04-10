@@ -10,7 +10,7 @@ import TiTag from 'react-icons/lib/ti/tag';
 import MdVisibility from 'react-icons/lib/md/visibility';
 
 
-import style from './App.css';
+import style from '../css/App.css';
 
 class ForumTitle extends Component {
 
@@ -26,6 +26,7 @@ class ForumTitle extends Component {
             comment: parseInt(this.props.comment)
         }
         this.toggleExpanded = this.toggleExpanded.bind(this);
+        this.checkStatus = this.checkStatus.bind(this);
     }
 
     componentWillReceiveProps(nextProps) {
@@ -55,6 +56,16 @@ class ForumTitle extends Component {
         return <TiTag size={35} padding={75}/>;
     }
 
+    checkStatus(response){
+        if (response.status >= 200 && response.status < 300) {
+            return response
+        } else {
+            var error = new Error(response.statusText)
+            error.response = response
+            throw error
+        }
+    }
+
     addLike(e) {
         if (!this.props.visibility) {
             fetch(process.env.REACT_APP_BASE_URL + 'en/applications/' + sessionStorage.getItem('applicationId') + '/feedbacks/likes', {
@@ -67,8 +78,13 @@ class ForumTitle extends Component {
                     user_id: sessionStorage.getItem('userId'),
                     feedback_id: this.props.feedbackId
                 })
-            }).then(result => result.json())
+            }).then(this.checkStatus)
+                .then(result => result.json())
                 .then(result => {
+                    this.props.update();
+                })
+                .catch(error => {
+                    console.log('request failed')
                     this.props.update();
                 });
         }
@@ -87,8 +103,13 @@ class ForumTitle extends Component {
                     user_id: sessionStorage.getItem('userId'),
                     feedback_id: this.props.feedbackId
                 })
-            }).then(result => result.json())
+            }).then(this.checkStatus)
+                .then(result => result.json())
                 .then(result => {
+                    this.props.update();
+                })
+                .catch(error => {
+                    console.log('request failed')
                     this.props.update();
                 });
         }
@@ -120,40 +141,7 @@ class ForumTitle extends Component {
     render() {
         let toRender = null;
 
-        if (this.props.visibility === true) {
-            return (<div style={{display: "flex", justifyContent: "space-around", background: 'linear-gradient(to bottom, #f2f2f2 0%, #e6e6e6 50%, #d9d9d9 52%, #cccccc 100%)'}}>
-                <h5 align="left" style={{
-                    flexGrow: 2,
-                    fontSize: 12,
-                    fontStyle: 'italic'
-                }}
-                    onClick={this.toggleExpanded}>{this.getIconForFeedbackType()}&nbsp; {(!this.state.expanded && this.props.title.length > 30) ? this.props.title.substring(0, 30) + "..." : this.props.title}
-
-                <div className={style.spacingstyle}>
-                    <div align="left" style={{fontSize: 10, color: 'black'}}>
-                       {/* <MdVisibility size={17} color={"black"}/>*/}
-                        Feedback under review</div>
-                </div></h5>
-                <div className={style.forumIconContainer}>
-                    <div className={style.bundledIcon}>
-                        <FaWechat align="left" size={35} style={{flexGrow: "1"}} color={'#63C050'}
-                                  onClick={this.handleShowCommentChange}/>
-                        <span className={style.thumbsCount}>{this.state.comment}</span>
-                    </div>
-
-                    <div className={style.bundledIcon}>
-                        <FaThumbsOUp size={35} onClick={this.addLike}/>
-                        <span className={style.thumbsCount}>{this.state.thumbsUp}</span>
-                    </div>
-
-                    <div className={style.bundledIcon}>
-                        <FaThumbsODown size={35} onClick={this.addDislike}/>
-                        <span className={style.thumbsCount}>{this.state.thumbsDown}</span>
-                    </div>
-                </div>
-            </div>);
-        }
-        else if (!this.props.unread) {
+         if (!this.props.unread) {
             return (<div style={{display: "flex", justifyContent: "space-around", background: 'linear-gradient(to bottom, #ffffff 0%, #ffffff 50%, #ffffe6 52%, #ffffe6 100%)'}}>
                 <h5 align="left" style={{
                     flexGrow: 2,
