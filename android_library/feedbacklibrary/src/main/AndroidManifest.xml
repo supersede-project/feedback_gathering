@@ -15,7 +15,6 @@
         android:theme="@style/AppTheme.FeedbackLibrary">
         <!-- android:theme will be overriden from app:theme -->
 
-
         <activity
             android:name=".activities.AnnotateImageActivity"
             android:label="@string/supersede_feedbacklibrary_annotate_image_activity_name"

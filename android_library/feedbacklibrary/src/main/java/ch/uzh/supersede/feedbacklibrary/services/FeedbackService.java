@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
@@ -29,6 +30,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.FeedbackActivityConstants.*;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.OK_RESPONSE;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.SUPERSEEDE_BASE_URL;
+import static ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility.USER_LEVEL.ACTIVE;
 
 public class FeedbackService {
     private static final String TAG = "FeedbackService";
@@ -217,11 +219,14 @@ public class FeedbackService {
      */
     public void startFeedbackHubWithScreenshotCapture(@NonNull final String baseURL, @NonNull final Activity activity, final long applicationId, @NonNull final String language) {
         Intent intent = new Intent(activity, FeedbackHubActivity.class);
-        Utils.wipeImages(activity.getApplicationContext());
-        Utils.storeScreenshotToDatabase(activity);
+        if (ACTIVE.check(activity)){
+            Utils.wipeImages(activity.getApplicationContext());
+            Utils.storeScreenshotToDatabase(activity);
+        }else{
+            Utils.storeScreenshotToIntent(activity,intent);
+        }
         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
         intent.putExtra(EXTRA_KEY_APPLICATION_ID, applicationId);
-        intent.putExtra(EXTRA_KEY_BASE_URL, baseURL);
         intent.putExtra(EXTRA_KEY_LANGUAGE, language);
         activity.startActivity(intent);
         activity.overridePendingTransition(R.anim.fade_in, R.anim.fade_out);

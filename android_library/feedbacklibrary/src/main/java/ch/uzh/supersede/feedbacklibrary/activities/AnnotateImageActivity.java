@@ -55,9 +55,7 @@ import static android.graphics.Color.BLACK;
 import static android.graphics.Color.RED;
 import static android.graphics.Color.WHITE;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.ScreenshotConstants.EXTRA_KEY_ALL_STICKER_ANNOTATIONS;
-import static ch.uzh.supersede.feedbacklibrary.utils.Constants.ScreenshotConstants.EXTRA_KEY_ALL_TEXT_ANNOTATIONS;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.ScreenshotConstants.EXTRA_KEY_HAS_STICKER_ANNOTATIONS;
-import static ch.uzh.supersede.feedbacklibrary.utils.Constants.ScreenshotConstants.EXTRA_KEY_HAS_TEXT_ANNOTATIONS;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.ScreenshotConstants.IMAGE_ANNOTATED_DATA_DB_KEY;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.ScreenshotConstants.SEPARATOR;
 
@@ -65,7 +63,7 @@ import static ch.uzh.supersede.feedbacklibrary.utils.Constants.ScreenshotConstan
 /**
  * Activity for annotating the screenshot
  */
-public class AnnotateImageActivity extends AbstractBaseActivity implements ColorPickerDialog.OnColorChangeDialogListener, TextAnnotationImageView.OnTextAnnotationChangedListener, EditImageDialog.OnEditImageListener {
+public class AnnotateImageActivity extends AbstractBaseActivity implements ColorPickerDialog.OnColorChangeDialogListener, EditImageDialog.OnEditImageListener {
     private static final String TAG = "AnnotateImageActivity";
     private boolean blackModeOn = false;
     private boolean avoidRevert = false;
@@ -99,28 +97,6 @@ public class AnnotateImageActivity extends AbstractBaseActivity implements Color
 
     public AnnotateImageView getAnnotateImageView() {
         return annotateImageView;
-    }
-
-    @Nullable
-    private TextAnnotationImageView addTextAnnotation(int imageResourceId) {
-        if (textAnnotationCounter <= textAnnotationCounterMaximum) {
-            TextAnnotationImageView stickerViewTextAnnotationImageView = new TextAnnotationImageView(this);
-            stickerViewTextAnnotationImageView.setOnTextAnnotationChangedListener(this);
-            stickerViewTextAnnotationImageView.setAnnotationInputTextHint(getResources().getString(R.string.supersede_feedbacklibrary_text_annotation_dialog_hint));
-            stickerViewTextAnnotationImageView.setAnnotationInputTextLabel(getResources().getString(R.string.supersede_feedbacklibrary_text_annotation_dialog_label));
-            TextView textView = stickerViewTextAnnotationImageView.getAnnotationNumber();
-            if (textView != null) {
-                String newAnnotationNumber = Integer.toString(textAnnotationCounter);
-                textView.setText(newAnnotationNumber);
-                textAnnotationCounter++;
-            }
-            RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.supersede_feedbacklibrary_annotate_image_layout);
-            if (relativeLayout != null) {
-                relativeLayout.addView(stickerViewTextAnnotationImageView);
-            }
-            return stickerViewTextAnnotationImageView;
-        }
-        return null;
     }
 
     private ColorPickerDialog createColorPickerDialog(int mInitialColor) {
@@ -184,9 +160,6 @@ public class AnnotateImageActivity extends AbstractBaseActivity implements Color
             if (intent.getBooleanExtra(EXTRA_KEY_HAS_STICKER_ANNOTATIONS, false)) {
                 handleStickerAnnotations(intent);
             }
-            if (intent.getBooleanExtra(EXTRA_KEY_HAS_TEXT_ANNOTATIONS, false)) {
-                handleTextAnnotations(intent);
-            }
             hideAllControlItems(relativeLayout);
         }
     }
@@ -203,21 +176,6 @@ public class AnnotateImageActivity extends AbstractBaseActivity implements Color
                 stickerAnnotationImageView.getLayoutParams().width = Integer.valueOf(split[3]);
                 stickerAnnotationImageView.getLayoutParams().height = Integer.valueOf(split[4]);
                 stickerAnnotationImageView.setRotation(Float.valueOf(split[5]));
-            }
-        }
-    }
-
-    private void handleTextAnnotations(Intent intent) {
-        HashMap<Integer, String> allTextAnnotations = (HashMap<Integer, String>) intent.getSerializableExtra(EXTRA_KEY_ALL_TEXT_ANNOTATIONS);
-        SortedSet<Integer> keys = new TreeSet<>(allTextAnnotations.keySet());
-        for (Integer key : keys) {
-            // Array will be of length 4 --> annotationText, imageResourceId, x, y
-            String[] split = (allTextAnnotations.get(key)).split(SEPARATOR);
-            TextAnnotationImageView textAnnotationImageView = addTextAnnotation(Integer.valueOf(split[1]));
-            if (textAnnotationImageView != null) {
-                textAnnotationImageView.setAnnotationInputText(split[0]);
-                textAnnotationImageView.setX(Float.valueOf(split[2]));
-                textAnnotationImageView.setY(Float.valueOf(split[3]));
             }
         }
     }
@@ -313,8 +271,6 @@ public class AnnotateImageActivity extends AbstractBaseActivity implements Color
                 hideAllControlItems(relativeLayout);
                 // Process all the sticker annotations
                 HashMap<Integer, String> allStickerAnnotations = processStickerAnnotations(relativeLayout);
-                // Process all the text annotations
-                HashMap<Integer, String> allTextAnnotations = processTextAnnotations(relativeLayout);
 
                 // Convert the ViewGroup, i.e., the supersede_feedbacklibrary_annotate_picture_layout into a bitmap (image with stickers)
                 relativeLayout.measure(View.MeasureSpec.makeMeasureSpec(annotateImageView.getBitmapWidth(), View.MeasureSpec.EXACTLY), View.MeasureSpec.makeMeasureSpec(annotateImageView.getBitmapHeight(), View.MeasureSpec.EXACTLY));
@@ -330,8 +286,6 @@ public class AnnotateImageActivity extends AbstractBaseActivity implements Color
                 Intent intent = new Intent();
                 intent.putExtra(EXTRA_KEY_HAS_STICKER_ANNOTATIONS, allStickerAnnotations.size() > 0);
                 intent.putExtra(EXTRA_KEY_ALL_STICKER_ANNOTATIONS, allStickerAnnotations);
-                intent.putExtra(EXTRA_KEY_HAS_TEXT_ANNOTATIONS, allTextAnnotations.size() > 0);
-                intent.putExtra(EXTRA_KEY_ALL_TEXT_ANNOTATIONS, allTextAnnotations);
                 setResult(RESULT_OK, intent);
             }
             avoidRevert = true;
@@ -340,15 +294,6 @@ public class AnnotateImageActivity extends AbstractBaseActivity implements Color
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onTextAnnotationDelete() {
-        textAnnotationCounter--;
-        RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.supersede_feedbacklibrary_annotate_image_layout);
-        if (relativeLayout != null) {
-            refreshAnnotationNumber(relativeLayout);
-        }
     }
 
     private HashMap<Integer, String> processStickerAnnotations(ViewGroup viewGroup) {
@@ -372,31 +317,6 @@ public class AnnotateImageActivity extends AbstractBaseActivity implements Color
         }
 
         return allStickerAnnotations;
-    }
-
-    private HashMap<Integer, String> processTextAnnotations(ViewGroup viewGroup) {
-        HashMap<Integer, String> allTextAnnotations = new HashMap<>();
-        if (viewGroup != null) {
-            for (int i = 0; i < viewGroup.getChildCount(); ++i) {
-                View child = viewGroup.getChildAt(i);
-                if (child instanceof TextAnnotationImageView) {
-                    TextAnnotationImageView textAnnotationView = (TextAnnotationImageView) child;
-
-                    int key = Integer.valueOf(textAnnotationView.getAnnotationNumber().getText().toString());
-                    // If no text was entered, just set the empty string
-                    String annotationInputText = "";
-                    if (textAnnotationView.getAnnotationInputText() != null) {
-                        annotationInputText = (textAnnotationView.getAnnotationInputText()).trim();
-                    }
-                    float getX = child.getX();
-                    float getY = child.getY();
-                    String value = annotationInputText + SEPARATOR + getX + SEPARATOR + getY;
-                    allTextAnnotations.put(key, value);
-                }
-            }
-        }
-
-        return allTextAnnotations;
     }
 
     private void refreshAnnotationNumber(ViewGroup viewGroup) {
@@ -474,14 +394,6 @@ public class AnnotateImageActivity extends AbstractBaseActivity implements Color
     }
 
     private void setListeners() {
-        Button favoriteButton = (Button) findViewById(R.id.aa_favorite_button);
-        favoriteButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showDialog(DialogType.Favorite);
-            }
-        });
-
         Button quickEditButton = (Button) findViewById(R.id.aa_quick_edit_button);
         quickEditButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -651,12 +563,6 @@ public class AnnotateImageActivity extends AbstractBaseActivity implements Color
     @Override
     public void onArrowsClicked() {
         annotateImageView.setDrawer(AnnotateImageView.Drawer.ARROW);
-        dialog.dismiss();
-    }
-
-    @Override
-    public void onTextClicked() {
-        addTextAnnotation(R.drawable.ic_comment_black_48dp);
         dialog.dismiss();
     }
 

@@ -129,17 +129,56 @@ public class FeedbackActivity extends AbstractBaseActivity implements AudioMecha
     private String savedEmail;
     private SharedPreferences sharedPreferences;
 
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        //TODO [jfo]: remove me
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+
+        setContentView(R.layout.activity_feedback);
+
+        Intent intent = getIntent();
+        // Get the configuration type
+        isPush = intent.getBooleanExtra(IS_PUSH_STRING, true);
+        // Get values related to a pull configuration
+        selectedPullConfigurationIndex = intent.getLongExtra(SELECTED_PULL_CONFIGURATION_INDEX_STRING, -1);
+        String jsonString = intent.getStringExtra(JSON_CONFIGURATION_STRING);
+
+        // Initialization based on the type of configuration, i.e., if it is push or pull
+        language = intent.getStringExtra(EXTRA_KEY_LANGUAGE);
+        baseURL = intent.getStringExtra(EXTRA_KEY_BASE_URL);
+        if (!isPush && selectedPullConfigurationIndex != -1  && jsonString != null) {
+            // The feedback activity is started on behalf of a triggered pull configuration
+            Log.v(TAG, "The feedback activity is started via a PULL configuration");
+
+            // Save the current configuration under FeedbackActivity.CONFIGURATION_DIR}/FeedbackActivity.JSON_CONFIGURATION_FILE_NAME
+            FeedbackDatabase.getInstance(getApplicationContext()).writeString(JSON_CONFIGURATION_FILE_NAME,jsonString);
+            GsonBuilder gsonBuilder = new GsonBuilder();
+            gsonBuilder.setLenient();
+            Gson gson = gsonBuilder.create();
+            orchestratorConfigurationItem = gson.fromJson(jsonString, OrchestratorConfigurationItem.class);
+            initModel();
+            initView();
+        } else if (BuildConfig.DEBUG){
+            initModel();
+            initView();
+        }else{
+            // The feedback activity is started on behalf of the user
+            Log.v(TAG, "The feedback activity is started via a PUSH configuration");
+
+            init(intent.getLongExtra(EXTRA_KEY_APPLICATION_ID, -1L), baseURL, language);
+        }
+        onPostCreate();
+    }
+
+
     private void closeProgressDialog() {
         if (progressDialog != null && progressDialog.isShowing()) {
             progressDialog.dismiss();
         }
-    }
-
-    //TODO REMOVE
-    private void galleryIntent() {
-        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        intent.setType("image/*");
-        startActivityForResult(intent, REQUEST_PHOTO);
     }
 
     /**
@@ -245,7 +284,7 @@ public class FeedbackActivity extends AbstractBaseActivity implements AudioMecha
                         .withText() //Uncomment for Enabling
                         .withScreenshot() //Uncomment for Enabling
                         .withAudio() //Uncomment for Enabling
-                        .withCategory() //Uncomment for Enabling
+//                        .withCategory() //Uncomment for Enabling
                         .build(mechanismViews);
             } else {
                 for (Mechanism mechanism : mechanisms) {
@@ -360,54 +399,7 @@ public class FeedbackActivity extends AbstractBaseActivity implements AudioMecha
         if (data.getBooleanExtra(EXTRA_KEY_HAS_STICKER_ANNOTATIONS, false)) {
             screenshotMechanismView.setAllStickerAnnotations((HashMap<Integer, String>) data.getSerializableExtra(EXTRA_KEY_ALL_STICKER_ANNOTATIONS));
         }
-        // Text annotations
-        if (data.getBooleanExtra(EXTRA_KEY_HAS_TEXT_ANNOTATIONS, false)) {
-            screenshotMechanismView.setAllTextAnnotations((HashMap<Integer, String>) data.getSerializableExtra(EXTRA_KEY_ALL_TEXT_ANNOTATIONS));
-        }
         screenshotMechanismView.refreshPreview(this);
-    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        //TODO [jfo]: remove me
-        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-        StrictMode.setThreadPolicy(policy);
-
-        setContentView(R.layout.activity_feedback);
-
-        Intent intent = getIntent();
-        // Get the configuration type
-        isPush = intent.getBooleanExtra(IS_PUSH_STRING, true);
-        // Get values related to a pull configuration
-        selectedPullConfigurationIndex = intent.getLongExtra(SELECTED_PULL_CONFIGURATION_INDEX_STRING, -1);
-        String jsonString = intent.getStringExtra(JSON_CONFIGURATION_STRING);
-
-        // Initialization based on the type of configuration, i.e., if it is push or pull
-        language = intent.getStringExtra(EXTRA_KEY_LANGUAGE);
-        baseURL = intent.getStringExtra(EXTRA_KEY_BASE_URL);
-        if (!isPush && selectedPullConfigurationIndex != -1 && jsonString != null) {
-            // The feedback activity is started on behalf of a triggered pull configuration
-            Log.v(TAG, "The feedback activity is started via a PULL configuration");
-
-            // Save the current configuration under FeedbackActivity.CONFIGURATION_DIR}/FeedbackActivity.JSON_CONFIGURATION_FILE_NAME
-            FeedbackDatabase.getInstance(getApplicationContext()).writeString(JSON_CONFIGURATION_FILE_NAME,jsonString);
-            GsonBuilder gsonBuilder = new GsonBuilder();
-            gsonBuilder.setLenient();
-            Gson gson = gsonBuilder.create();
-            orchestratorConfigurationItem = gson.fromJson(jsonString, OrchestratorConfigurationItem.class);
-            initModel();
-            initView();
-        } else if (BuildConfig.DEBUG){
-            initModel();
-            initView();
-        }else{
-            // The feedback activity is started on behalf of the user
-            Log.v(TAG, "The feedback activity is started via a PUSH configuration");
-
-            init(intent.getLongExtra(EXTRA_KEY_APPLICATION_ID, -1L), baseURL, language);
-        }
     }
 
     @Override
@@ -428,51 +420,6 @@ public class FeedbackActivity extends AbstractBaseActivity implements AudioMecha
             if (mechanismView instanceof AudioMechanismView) {
                 ((AudioMechanismView) mechanismView).setAllButtonsClickable(true);
             }
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        if (requestCode == PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Resources res = getResources();
-                if (userScreenshotChosenTask.equals(res.getString(R.string.supersede_feedbacklibrary_library_chooser_text))) {
-                    galleryIntent();
-                }
-            } else {
-                onRequestPermissionsResultDenied(requestCode, Manifest.permission.READ_EXTERNAL_STORAGE, R.string.supersede_feedbacklibrary_external_storage_permission_text, getResources().getString(R.string.supersede_feedbacklibrary_external_storage_permission_text_instructions));
-            }
-        } else if (requestCode == PERMISSIONS_REQUEST_RECORD_AUDIO) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Toast toast = Toast.makeText(getApplicationContext(), R.string.supersede_feedbacklibrary_record_audio_permission_granted_text, Toast.LENGTH_SHORT);
-                toast.show();
-            } else {
-                onRequestPermissionsResultDenied(requestCode, Manifest.permission.RECORD_AUDIO, R.string.supersede_feedbacklibrary_record_audio_permission_text, getResources().getString(R.string.supersede_feedbacklibrary_record_audio_permission_text_instructions));
-            }
-        }
-    }
-
-    private void onRequestPermissionsResultDenied(final int requestCode, @NonNull final String permission, int dialogMessage, @NonNull String dialogInstructions) {
-        if (ActivityCompat.shouldShowRequestPermissionRationale(this, permission)) {
-            // The user denied without checking 'Never ask again'. Show again the rationale
-            AlertDialog.Builder alertBuilder = new AlertDialog.Builder(this);
-            alertBuilder.setTitle(R.string.supersede_feedbacklibrary_permission_request_title);
-            alertBuilder.setMessage(dialogMessage);
-            alertBuilder.setPositiveButton(R.string.supersede_feedbacklibrary_retry_string, new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                    ActivityCompat.requestPermissions(FeedbackActivity.this, new String[]{permission}, requestCode);
-                }
-            });
-            alertBuilder.setNegativeButton(R.string.supersede_feedbacklibrary_not_now_text, new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.dismiss();
-                }
-            });
-            alertBuilder.setCancelable(false);
-            alertBuilder.show();
-        } else {
-            // The user denied and checked the 'Never ask again' option. Show a short explanation dialog
-            DialogUtils.showInformationDialog(this, new String[]{dialogInstructions}, false);
         }
     }
 
