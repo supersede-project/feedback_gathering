@@ -27,7 +27,6 @@ import ch.uzh.supersede.feedbacklibrary.models.Mechanism;
 import ch.uzh.supersede.feedbacklibrary.utils.Utils;
 
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.AudioMechanismConstants.*;
-import static ch.uzh.supersede.feedbacklibrary.utils.Constants.FeedbackActivityConstants.PERMISSIONS_REQUEST_RECORD_AUDIO;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.PATH_DELIMITER;
 
 /**
@@ -185,11 +184,11 @@ public class AudioMechanismView extends MechanismView implements SeekBar.OnSeekB
             public void onClick(View v) {
                 clearFocus();
 
-                boolean hasPermission = Utils.checkSinglePermission(activity, PERMISSIONS_REQUEST_RECORD_AUDIO, Manifest.permission.RECORD_AUDIO, null, null, false);
-
-                if (!hasPermission) {
-                    return;
-                }
+//                boolean hasPermission = Utils.checkSinglePermission(activity, Manifest.permission.RECORD_AUDIO, null, null, false);
+//
+//                if (!hasPermission) {
+//                    return;
+//                }
 
                 removeUpdateSeekBarTask();
                 removeUpdateSeekBarTaskRecorder();

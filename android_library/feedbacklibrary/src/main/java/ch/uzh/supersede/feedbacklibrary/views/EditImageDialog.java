@@ -301,15 +301,6 @@ public class EditImageDialog extends DialogFragment {
             }
         });
         quickEditItems.put("Smiley face", smileyFace);
-
-        final EditImageItem text = new EditImageItem("Text", R.drawable.ic_comment_black_48dp);
-        text.setOnClickListener(new EditImageItem.OnClickListener() {
-            @Override
-            public void onClick() {
-                listener.onTextClicked();
-            }
-        });
-        quickEditItems.put("Text", text);
     }
 
     public interface OnEditImageListener {
@@ -322,8 +313,6 @@ public class EditImageDialog extends DialogFragment {
         void onPencilClicked();
 
         void onArrowsClicked();
-
-        void onTextClicked();
 
         void onSmileyFaceClicked();
 

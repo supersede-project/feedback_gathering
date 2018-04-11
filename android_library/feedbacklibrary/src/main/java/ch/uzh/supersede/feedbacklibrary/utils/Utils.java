@@ -1,5 +1,6 @@
 package ch.uzh.supersede.feedbacklibrary.utils;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -61,6 +62,16 @@ public class Utils {
         storeImageToDatabase(activity,imageBitmap);
     }
 
+    public static void storeScreenshotToIntent(final Activity activity, Intent intent) {
+        View rootView = activity.getWindow().getDecorView().getRootView();
+        rootView.setDrawingCacheEnabled(true);
+        Bitmap imageBitmap = Bitmap.createBitmap(rootView.getDrawingCache());
+        rootView.setDrawingCacheEnabled(false);
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        imageBitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+        intent.putExtra(EXTRA_KEY_CACHED_SCREENSHOT,stream.toByteArray());
+    }
+
     public static void storeImageToDatabase(final Activity activity, Bitmap bitmap) {
         storeBitmap(activity.getApplicationContext(),bitmap,IMAGE_DATA_DB_KEY);    }
 
@@ -71,8 +82,12 @@ public class Utils {
     private static void storeBitmap(Context context, Bitmap bitmap, String dataKey){
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
-        if (bitmap != null) {
-            FeedbackDatabase.getInstance(context).writeByte(dataKey, stream.toByteArray());
+        FeedbackDatabase.getInstance(context).writeByte(dataKey, stream.toByteArray());
+    }
+
+    public static void persistScreenshot(Context context, byte[] data){
+        if (data != null){
+            FeedbackDatabase.getInstance(context).writeByte(IMAGE_DATA_DB_KEY, data);
         }
     }
 
@@ -90,40 +105,6 @@ public class Utils {
             return null;
         }
         return BitmapFactory.decodeByteArray(imageAsByte, 0, imageAsByte.length);
-    }
-
-    /**
-     * This method checks a single permission at runtime. Required for Android versions Marshmallow (API version 23) and higher.
-     * The request code must be handled in the onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) method
-     * which has to be overridden in each activity that needs to request runtime permission.
-     *
-     * @param context       the context
-     * @param requestCode   the request code to be handled in the onRequestPermissionsResult method of the calling activity
-     * @param permission    the requested permission
-     * @param dialogTitle   the dialog title for the rationale
-     * @param dialogMessage the dialog message for the rationale
-     * @return true if permission is granted, false otherwise
-     */
-    public static boolean checkSinglePermission(@NonNull final Context context, final int requestCode, @NonNull final String permission, final String dialogTitle, final String dialogMessage, final
-    boolean showRequestPermissionRationale) {
-        if (Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M && ContextCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
-            if (showRequestPermissionRationale && ActivityCompat.shouldShowRequestPermissionRationale((Activity) context, permission)) {
-                AlertDialog.Builder alertBuilder = new AlertDialog.Builder(context);
-                alertBuilder.setCancelable(true);
-                alertBuilder.setTitle(dialogTitle);
-                alertBuilder.setMessage(dialogMessage);
-                alertBuilder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        ActivityCompat.requestPermissions((Activity) context, new String[]{permission}, requestCode);
-                    }
-                });
-                AlertDialog alert = alertBuilder.create();
-                alert.show();
-            } else {
-                ActivityCompat.requestPermissions((Activity) context, new String[]{permission}, requestCode);
-            }
-        }
-        return true;
     }
 
     /**
@@ -155,97 +136,6 @@ public class Utils {
     }
 
     /**
-     * This method loads an image as a bitmap from the specific path.
-     *
-     * @param path the absolute path of the image file
-     * @return the bitmap
-     */
-    @Nullable
-    public static Bitmap loadImageFromStorage(String path) {
-        try {
-            File f = new File(path);
-            return BitmapFactory.decodeStream(new FileInputStream(f));
-        } catch (FileNotFoundException e) {
-            Log.e(TAG, "File was not found", e);
-        }
-        return null;
-    }
-
-    /**
-     * This method is used in the host application in the onRequestPermissionsResult method in case if a PUSH feedback is triggered.
-     *
-     * @param requestCode   the request code to be handled in the onRequestPermissionsResult method of the calling activity
-     * @param grantResults  the granted results
-     * @param activity      the activity from where the method is called
-     * @param permission    the requested permission
-     * @param dialogTitle   the dialog title for the rationale
-     * @param dialogMessage the dialog message for the rationale
-     */
-    public static void onRequestPermissionsResultCase(final int requestCode, @NonNull int[] grantResults, @NonNull final Activity activity, @NonNull final String permission, final int dialogTitle,
-                                                      final int dialogMessage, final long applicationId, @NonNull final String baseURL, @NonNull final String language) {
-        final Intent intent = new Intent(activity, FeedbackActivity.class);
-        intent.putExtra(EXTRA_KEY_APPLICATION_ID, applicationId);
-        intent.putExtra(EXTRA_KEY_BASE_URL, baseURL);
-        intent.putExtra(EXTRA_KEY_LANGUAGE, language);
-        if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            // Permission was already granted. Taking a screenshot of the current screen automatically and open the FeedbackActivityConstants from the feedback library
-            startActivity(activity, intent, true);
-        } else {
-            if (ActivityCompat.shouldShowRequestPermissionRationale(activity, permission)) {
-                // The user denied the permission without checking 'Never ask again'. Show the rationale
-                AlertDialog.Builder alertBuilder = new AlertDialog.Builder(activity);
-                alertBuilder.setTitle(dialogTitle);
-                alertBuilder.setMessage(dialogMessage);
-                alertBuilder.setPositiveButton(R.string.supersede_feedbacklibrary_retry_string, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        ActivityCompat.requestPermissions(activity, new String[]{permission}, requestCode);
-                    }
-                });
-                alertBuilder.setNegativeButton(R.string.supersede_feedbacklibrary_not_now_text, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                        startActivity(activity, intent, false);
-                    }
-                });
-                alertBuilder.setCancelable(false);
-                alertBuilder.show();
-            } else {
-                // Open the FeedbackActivityConstants from the feedback library without automatically taking a screenshot
-                startActivity(activity, intent, false);
-            }
-        }
-    }
-
-    /**
-     * This method reads a specific file from the assets resource folder and returns it as a string.
-     *
-     * @param fileName     the file to read from
-     * @param assetManager the asset manager
-     * @return the file content as a string, or the empty string if an error occurred
-     */
-    public static String readFileAsString(String fileName, AssetManager assetManager) {
-        String ret = "";
-
-        try {
-            InputStream inputStream = assetManager.open(fileName);
-
-            if (inputStream != null) {
-                BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-                StringBuilder out = new StringBuilder();
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    out.append(line);
-                }
-                reader.close();
-                return out.toString();
-            }
-        } catch (IOException e) {
-            Log.e(TAG, e.getMessage(), e);
-        }
-        return ret;
-    }
-
-    /**
      * This method saves the bitmap in a specific file.
      *
      * @param file        the file to store the bitmap in
@@ -266,34 +156,6 @@ public class Utils {
             Log.e(TAG, "Failed to write the bitmap to the file.", e);
         }
         return false;
-    }
-
-    /**
-     * This method saves the bitmap to the internal storage.
-     *
-     * @param applicationContext the application context
-     * @param dirName            the directory name, e.g., "imageDir"
-     * @param imageName          the name of the image
-     * @param bitmapImage        the image as a bitmap
-     * @param mode               the mode, e.g., Context.MODE_PRIVATE
-     * @param format             the format
-     * @param quality            the quality
-     * @return the absolute path to the directory where the image is stored
-     */
-    @NonNull
-    public static String saveBitmapToInternalStorage(Context applicationContext, String dirName, String imageName, Bitmap bitmapImage, int mode, Bitmap.CompressFormat format, int quality) {
-        File directory = applicationContext.getDir(dirName, mode);
-        File myPath = new File(directory, imageName);
-        FileOutputStream fos;
-        try {
-            fos = new FileOutputStream(myPath);
-            bitmapImage.compress(format, quality, fos);
-            fos.flush();
-            fos.close();
-        } catch (Exception e) {
-            Log.e(TAG, "Failed to write the bitmap to the internal storage.", e);
-        }
-        return directory.getAbsolutePath();
     }
 
     /**
@@ -322,13 +184,6 @@ public class Utils {
         return Bitmap.createScaledBitmap(bitmap, width, height, true);
     }
 
-    private static void startActivity(@NonNull final Activity activity, @NonNull final Intent intent, final boolean isCapturingScreenshot) {
-        FeedbackService.getInstance().pingOrchestrator();
-        if (isCapturingScreenshot) {
-            storeScreenshotToDatabase(activity);
-        }
-        activity.startActivity(intent);
-    }
 
     public static boolean isEmailValid(String email) {
         String expression = "^[\\w\\.-]+@([\\w\\-]+\\.)+[A-Z]{2,4}$";

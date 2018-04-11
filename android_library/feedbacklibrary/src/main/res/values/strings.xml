@@ -31,7 +31,6 @@
     <string name="supersede_feedbacklibrary_finishannotation_title">Finish annotation</string>
     <string name="supersede_feedbacklibrary_cancelannotation_title">Cancel annotation</string>
     <string name="supersede_feedbacklibrary_chosencolor_string">Chosen color</string>
-    <string name="supersede_feedbacklibrary_photo_capture_text">Take a photo</string>
     <string name="supersede_feedbacklibrary_library_chooser_text">Choose from library</string>
     <string name="supersede_feedbacklibrary_image_selection_dialog_title">Select an image</string>
     <string name="supersede_feedbacklibrary_crop_string">Crop</string>
@@ -113,9 +112,22 @@
 
 
     <!--Hub-->
-    <string name="feedback_list">Show\nFeedbacks</string>
-    <string name="feedback_settings">Feedback\nSettings</string>
-    <string name="feedback_send_feedback">Create\nFeedback</string>
+    <string name="hub_feedback_list">Show\nFeedbacks</string>
+    <string name="hub_feedback_user_level">User-Level\n%1$d</string>
+    <string name="hub_feedback_settings">Feedback\nSettings</string>
+    <string name="hub_feedback_create">Create\nFeedback</string>
+    <string name="hub_status">&lt;b>&lt;font color="#colorString">Feedback-Hub&lt;/font>&lt;/b>&lt;br/>&lt;br/>&lt;b>User-Name:&lt;/b>&lt;font color="#colorString"> %1$s&lt;/font>&lt;br/>&lt;b>Karma-Level:&lt;/b>&lt;font color="#colorString"> %2$d&lt;/font>&lt;br/>&lt;b>Feedbacks:&lt;/b>&lt;font color="#colorString"> %3$d&lt;/font>&lt;br/>&lt;b>Comments:&lt;/b>&lt;font color="#colorString"> %4$d&lt;/font>&lt;br/>&lt;b>Likes:&lt;/b>&lt;font color="#colorString"> %5$d&lt;/font>&lt;br/>&lt;b>Dislikes:&lt;/b>&lt;font color="#colorString"> %6$d&lt;/font></string>
+    <string name="hub_access_1">Accessing Level 1</string>
+    <string name="hub_access_1_description">Level 1 grants you access to others Feedbacks and requires Internet-Permissions!</string>
+    <string name="hub_confirm">Confirm</string>
+    <string name="hub_access_2">Accessing Level 2</string>
+    <string name="hub_access_2_description">Level 2 grants you the ability to create Feedback yourself and requires Storage-Read/Write-Permissions and a User-Name with at least 4 Characters!</string>
+    <string name="hub_warning_username_too_short">User-Name too short!</string>
+    <string name="hub_access_3">Accessing Level 3</string>
+    <string name="hub_access_3_description">Level 3 grants you access to more advanced Feedback Mechanisms and needs Audio-Recording-Permissions!</string>
+    <string name="hub_username_restored">User-Name restored: "%1$s".</string>
+    <string name="hub_username_registered">User-Name "%1$s" registered.</string>
+    <string name="hub_warning_permission_not_granted">Permissions for next Level not granted!</string>
     <!--List-->
     <!--Details-->
     <!--Feedback-->

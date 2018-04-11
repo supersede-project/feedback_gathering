@@ -10,9 +10,11 @@ import android.view.View.OnTouchListener;
 import java.util.HashMap;
 
 import ch.uzh.supersede.feedbacklibrary.services.FeedbackService;
+import ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility;
 import ch.uzh.supersede.feedbacklibrary.utils.Utils;
 
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.*;
+import static ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility.USER_LEVEL.ACTIVE;
 
 public class FeedbackConnector {
     HashMap<Integer,View> registeredViews;
@@ -47,19 +49,13 @@ public class FeedbackConnector {
     }
 
     private static void onListenerTriggered(Activity activity, View view, MotionEvent event) {
-        boolean result = Utils.checkSinglePermission(activity, PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE, Manifest
-                .permission.READ_EXTERNAL_STORAGE, null, null, false);
-        if (result) {
-            FeedbackService
-                    .getInstance()
-                    .startFeedbackHubWithScreenshotCapture(SUPERSEEDE_BASE_URL, activity, 1337, "en");
-        }
+        FeedbackService.getInstance().startFeedbackHubWithScreenshotCapture(SUPERSEEDE_BASE_URL, activity, 1337, "en");
     }
 
     private static class FeedbackOnTouchListener implements OnTouchListener{
         private View mView;
         private Activity mActivity;
-        protected FeedbackOnTouchListener(Activity activity, View view){
+        private FeedbackOnTouchListener(Activity activity, View view){
             this.mActivity = activity;
             this.mView = view;
         }

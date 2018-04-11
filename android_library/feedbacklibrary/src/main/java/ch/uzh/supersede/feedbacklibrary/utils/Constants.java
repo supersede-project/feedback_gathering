@@ -9,31 +9,41 @@ public class Constants {
     private Constants() {
     }
 
+
+    public static final int PERMISSION_REQUEST_ALL = 800;
+    public static final String FEEDBACK_CONTRIBUTOR = "feedbackContributor";
+    public static final String SHARED_PREFERENCES = "feedbackSharedPreferences";
+    public static final String USER_NAME = "userName";
+
+
     public static final String PATH_DELIMITER = "/";
     public static final String SUPERSEEDE_BASE_URL = "https://platform.supersede.eu:8443/";
-    public static int OK_RESPONSE = 200;
-    public static final int PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 100;
+    public static final int OK_RESPONSE = 200;
+
+
+    public static class  FeedbackColorConstants {
+        private FeedbackColorConstants(){
+        }
+
+        public static final String COLOR_STRING = "colorString";
+        public static final String DARK_BLUE = "303F9F";
+    }
 
     public static class FeedbackActivityConstants {
+
         private FeedbackActivityConstants() {
         }
 
-        public static final String ANNOTATED_IMAGE_NAME_WITHOUT_STICKERS = "annotatedImageWithoutStickers.png";
-        public static final String ANNOTATED_IMAGE_NAME_WITH_STICKERS = "annotatedImageWithStickers.png";
-        public static final String CONFIGURATION_DIR = "configDir";
-        public static final String DEFAULT_IMAGE_PATH = "defaultImagePath";
         public static final String IS_PUSH_STRING = "isPush";
         public static final String JSON_CONFIGURATION_FILE_NAME = "currentConfiguration.json";
         public static final String JSON_CONFIGURATION_STRING = "jsonConfigurationString";
         public static final String SELECTED_PULL_CONFIGURATION_INDEX_STRING = "selectedPullConfigurationIndex";
 
-        // Microphone permission (android.permission-group.MICROPHONE)
-        public static final int PERMISSIONS_REQUEST_RECORD_AUDIO = 101;
-
         // Initialization
         public static final String EXTRA_KEY_APPLICATION_ID = "applicationId";
         public static final String EXTRA_KEY_BASE_URL = "baseURL";
         public static final String EXTRA_KEY_LANGUAGE = "language";
+        public static final String EXTRA_KEY_CACHED_SCREENSHOT = "cachedScreenshot";
         public static final int REQUEST_PHOTO = 11;
         public static final int REQUEST_ANNOTATE = 12;
 
@@ -59,9 +69,7 @@ public class Constants {
         public static final String IMAGE_ANNOTATED_DATA_DB_KEY = "imageAnnotatedData";
 
         public static final String EXTRA_KEY_ALL_STICKER_ANNOTATIONS = "allStickerAnnotations";
-        public static final String EXTRA_KEY_ALL_TEXT_ANNOTATIONS = "allTextAnnotations";
         public static final String EXTRA_KEY_HAS_STICKER_ANNOTATIONS = "hasStickerAnnotations";
-        public static final String EXTRA_KEY_HAS_TEXT_ANNOTATIONS = "hasTextAnnotations";
         public static final String SEPARATOR = "::;;::;;";
         public static final String TEXT_ANNOTATION_COUNTER_MAXIMUM = "textAnnotationCounterMaximum";
     }

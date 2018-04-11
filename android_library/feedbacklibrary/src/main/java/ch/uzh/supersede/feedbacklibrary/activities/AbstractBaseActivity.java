@@ -1,8 +1,9 @@
 package ch.uzh.supersede.feedbacklibrary.activities;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -13,12 +14,23 @@ import java.lang.reflect.Method;
 
 import ch.uzh.supersede.feedbacklibrary.R;
 import ch.uzh.supersede.feedbacklibrary.utils.ObjectUtility;
+import ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility;
+import ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility.USER_LEVEL;
+
+import static ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility.USER_LEVEL.LOCKED;
 
 @SuppressWarnings("squid:MaximumInheritanceDepth")
 public abstract class AbstractBaseActivity extends AppCompatActivity {
+    protected USER_LEVEL userLevel = LOCKED;
 
     protected <T> T getView(int id, Class<T> classType) {
         return classType.cast(findViewById(id));
+    }
+
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        userLevel = PermissionUtility.getUserLevel(getApplicationContext());
     }
 
     protected void onPostCreate(){

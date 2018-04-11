@@ -28,7 +28,7 @@ public class AnnotateImageView extends AppCompatImageView {
 
 
     public enum Mode {
-        DRAW, TEXT, ERASER
+        DRAW, ERASER
     }
 
     public enum Drawer {
@@ -105,14 +105,6 @@ public class AnnotateImageView extends AppCompatImageView {
         paint.setStrokeCap(lineCap);
         paint.setStrokeJoin(lineJoin);
 
-        // Text
-        if (mode == Mode.TEXT) {
-            paint.setTypeface(fontFamily);
-            paint.setTextSize(fontSize);
-            paint.setTextAlign(textAlign);
-            paint.setStrokeWidth(0F);
-        }
-
         // Eraser
         if (mode == Mode.ERASER) {
             paint.setColor(baseColor);
@@ -148,48 +140,6 @@ public class AnnotateImageView extends AppCompatImageView {
         this.bitmap = bitmap;
         this.bitmapInitial = bitmap;
         invalidate();
-    }
-
-    private void drawText(Canvas canvas) {
-        if (text.length() <= 0) {
-            return;
-        }
-
-        if (mode == Mode.TEXT) {
-            this.textX = startX;
-            this.textY = startY;
-
-            textPaint = createPaint();
-        }
-
-        float canvasTextX = this.textX;
-        float canvasTextY = this.textY;
-
-        Paint paintForMeasureText = new Paint();
-
-        // Line break automatically
-        float textLength = paintForMeasureText.measureText(text);
-        float lengthOfChar = textLength / (float) text.length();
-        // Text-align : right
-        float restWidth = canvas.getWidth() - canvasTextX;
-        // The number of characters at 1 line
-        int numChars = (lengthOfChar <= 0) ? 1 : (int) Math.floor((double) (restWidth / lengthOfChar));
-        int modNumChars = (numChars < 1) ? 1 : numChars;
-        float y = canvasTextY;
-
-        for (int i = 0, len = text.length(); i < len; i += modNumChars) {
-            String substring;
-
-            if ((i + modNumChars) < len) {
-                substring = text.substring(i, (i + modNumChars));
-            } else {
-                substring = text.substring(i, len);
-            }
-
-            y += fontSize;
-
-            canvas.drawText(substring, canvasTextX, y, textPaint);
-        }
     }
 
     private void enableUndoDisableRedo() {
@@ -341,11 +291,6 @@ public class AnnotateImageView extends AppCompatImageView {
                 }
 
                 break;
-            case TEXT:
-                startX = event.getX();
-                startY = event.getY();
-
-                break;
             default:
                 break;
         }
@@ -428,11 +373,6 @@ public class AnnotateImageView extends AppCompatImageView {
                 }
 
                 break;
-            case TEXT:
-                startX = x;
-                startY = y;
-
-                break;
             default:
                 break;
         }
@@ -463,7 +403,6 @@ public class AnnotateImageView extends AppCompatImageView {
 
             canvas.drawPath(path, paint);
         }
-        drawText(canvas);
     }
 
     @Override

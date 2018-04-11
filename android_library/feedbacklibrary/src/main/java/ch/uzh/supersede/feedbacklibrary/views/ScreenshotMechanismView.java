@@ -29,9 +29,7 @@ import static ch.uzh.supersede.feedbacklibrary.utils.Constants.FeedbackActivityC
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.FeedbackActivityConstants.REQUEST_ANNOTATE;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.FeedbackActivityConstants.REQUEST_PHOTO;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.ScreenshotConstants.EXTRA_KEY_ALL_STICKER_ANNOTATIONS;
-import static ch.uzh.supersede.feedbacklibrary.utils.Constants.ScreenshotConstants.EXTRA_KEY_ALL_TEXT_ANNOTATIONS;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.ScreenshotConstants.EXTRA_KEY_HAS_STICKER_ANNOTATIONS;
-import static ch.uzh.supersede.feedbacklibrary.utils.Constants.ScreenshotConstants.EXTRA_KEY_HAS_TEXT_ANNOTATIONS;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.ScreenshotConstants.TEXT_ANNOTATION_COUNTER_MAXIMUM;
 
 /**
@@ -168,10 +166,6 @@ public class ScreenshotMechanismView extends MechanismView {
             intent.putExtra(EXTRA_KEY_HAS_STICKER_ANNOTATIONS, true);
             intent.putExtra(EXTRA_KEY_ALL_STICKER_ANNOTATIONS, new HashMap<>(screenshotMechanismView.getAllStickerAnnotations()));
         }
-        if (screenshotMechanismView.getAllTextAnnotations() != null && !screenshotMechanismView.getAllTextAnnotations().isEmpty()) {
-            intent.putExtra(EXTRA_KEY_HAS_TEXT_ANNOTATIONS, true);
-            intent.putExtra(EXTRA_KEY_ALL_TEXT_ANNOTATIONS, new HashMap<>(screenshotMechanismView.getAllTextAnnotations()));
-        }
         intent.putExtra(TEXT_ANNOTATION_COUNTER_MAXIMUM, screenshotMechanismView.getMaxNumberTextAnnotation());
         activity.startActivityForResult(intent,REQUEST_ANNOTATE);
     }
@@ -185,12 +179,12 @@ public class ScreenshotMechanismView extends MechanismView {
             @Override
             public void onClick(DialogInterface dialog, int item) {
                 if (!items[item].equals(res.getString(R.string.supersede_feedbacklibrary_cancel_string))) {
-                    boolean result = Utils.checkSinglePermission(activity.getApplicationContext(), PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE, null, null, false);
-                    if (items[item].equals(res.getString(R.string.supersede_feedbacklibrary_library_chooser_text))) {
-                        if (result) {
-                            galleryIntent();
-                        }
-                    }
+//                    boolean result = Utils.checkSinglePermission(activity.getApplicationContext(), Manifest.permission.READ_EXTERNAL_STORAGE, null, null, false);
+//                    if (items[item].equals(res.getString(R.string.supersede_feedbacklibrary_library_chooser_text))) {
+////                        if (result) {
+////                            galleryIntent();
+//                        }
+//                    }
                 } else {
                     dialog.dismiss();
                 }
