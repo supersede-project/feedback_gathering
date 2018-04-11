@@ -143,6 +143,8 @@ public class FeedbackHubActivity extends AbstractBaseActivity {
                     tapCounter = 0;
                     FeedbackDatabase.getInstance(this).writeString(USER_NAME,null);
                     Toast.makeText(this, "DEVELOPER: Username resetted!", Toast.LENGTH_SHORT).show();
+                    userName = null;
+                    statusText.setText(Html.fromHtml(getString(R.string.hub_status,userName,0,0,0,0,0).replace(COLOR_STRING,DARK_BLUE)));
                 }
             }
         }

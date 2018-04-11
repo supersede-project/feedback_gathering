@@ -59,8 +59,7 @@
                 android:layout_height="fill_parent"
                 android:layout_weight="3"
                 android:textAlignment="center"
-                android:gravity="center"
-                android:onClick="onButtonClicked"/>
+                android:gravity="center"/>
 
             <Space
                 android:layout_width="0dp"
@@ -83,10 +82,11 @@
                 android:text="@string/hub_feedback_create"
                 android:onClick="onButtonClicked"/>
 
-            <Space
+            <TextView
                 android:layout_width="0dp"
                 android:layout_height="fill_parent"
-                android:layout_weight="3"/>
+                android:layout_weight="3"
+                android:onClick="onButtonClicked"/>
 
             <Button
                 android:id="@+id/hub_button_settings"
