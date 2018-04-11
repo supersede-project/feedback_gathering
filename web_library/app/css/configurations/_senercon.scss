@@ -27,6 +27,18 @@ $buttonBorderColor: transparent;
 $buttonHeight: 32px;
 $buttonTextTransform: none;
 
+// discard
+$discardButtonBackgroundColor: #63bc4e;
+$discardButtonColor: white;
+$discardButtonHoverBackgroundColor: #63bc4e;
+$discardButtonHoverColor: white;
+$discardButtonFontWeight: normal;
+
+$discardLinkColor: black;
+$discardLinkTextDecoration: none;
+$discardLinkHoverColor: #63bc4e;
+$discardLinkHoverTextDecoration: none;
+
 // submit
 $submitButtonBackgroundColor: #63bc4e;
 $submitButtonColor: white;
@@ -64,5 +76,9 @@ section.feedback-mechanism {
 }
 
 .feedback-library a.discard-feedback {
-  color: #63bc4e;
+  color: #091107 !important;
+}
+
+.feedback-library a.discard-feedback:hover {
+  color: #63bc4e !important;
 }

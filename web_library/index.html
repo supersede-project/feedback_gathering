@@ -1683,6 +1683,86 @@
 </script>
 
 
+
+<style>
+    .pop-up-demo {
+        position: fixed;
+        bottom: 0;
+        right: 200px;
+        border: 1px solid #909090;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+        padding: 15px;
+        width: 350px;
+    }
+
+    .pop-up-demo.active {
+        bottom: 300px;
+        border-bottom: none;
+        color: white;
+        background: #536790;
+    }
+
+    .pop-up-body {
+        width: 350px;
+        position: fixed;
+        bottom: 0;
+        right: 200px;
+        height: 300px;
+        border: 1px solid #909090;
+        padding: 15px;
+    }
+
+    .pop-up-body .send {
+        color: white;
+        background: #536790;
+        border: none;
+        padding: 4px 15px;
+        float: right;
+    }
+
+    .pop-up-body {
+        font-size: 14px;
+    }
+
+    .pop-up-body textarea {
+        margin-top: 3px;
+        width: 100%;
+        border: 1px solid #cacaca;
+    }
+</style>
+<article class="pop-up-demo active">
+    It took me longer than expected!
+</article>
+<section class="pop-up-body">
+    <span>What was the reason for that? Can you help us?</span>
+
+    <br/><br/>
+    <p>
+    <input type="checkbox" id="1" data-parameter-id="514" name="category_mechanism_92" value="BUG_CATEGORY">
+    <label for="1"> Performance Problem</label>
+    </p>
+    <p>
+    <input type="checkbox" id="2" data-parameter-id="514" name="category_mechanism_92" value="BUG_CATEGORY">
+    <label for="2"> Feature was missing</label>
+    </p>
+    <p>
+    <input type="checkbox" id="3" data-parameter-id="514" name="category_mechanism_92" value="BUG_CATEGORY">
+    <label for="3"> I did not understand it</label>
+    </p>
+
+    <br/>
+
+    <label>Tell us more:</label><br />
+    <textarea></textarea>
+
+    <br/>
+    <br />
+
+    <input type="submit" class="send">
+</section>
+
+
 <!--
 <script src="https://platform.supersede.eu/web_library/siemens/dist/jquery-1.9.1.js"></script>
 <script src="https://platform.supersede.eu/web_library/siemens/dist/jqueryui/jquery-ui.min.js"></script>
@@ -1724,11 +1804,11 @@
             //'distPath': 'http://supersede.es.atos.net/web_library/siemens/dist',
 
             'distPath': 'dist/',
-            'applicationId': 14,
+            'applicationId': 20,
             'apiEndpointOrchestrator': 'https://platform.supersede.eu:8443/',
             'apiEndpointRepository': 'https://platform.supersede.eu:8443/',
             'userId': '99999999',
-            'lang': 'de',
+            'lang': 'en',
             'fallbackLang': 'en',
             'modal': 1
 
