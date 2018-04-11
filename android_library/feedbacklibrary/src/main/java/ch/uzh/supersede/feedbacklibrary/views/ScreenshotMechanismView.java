@@ -179,12 +179,9 @@ public class ScreenshotMechanismView extends MechanismView {
             @Override
             public void onClick(DialogInterface dialog, int item) {
                 if (!items[item].equals(res.getString(R.string.supersede_feedbacklibrary_cancel_string))) {
-//                    boolean result = Utils.checkSinglePermission(activity.getApplicationContext(), Manifest.permission.READ_EXTERNAL_STORAGE, null, null, false);
-//                    if (items[item].equals(res.getString(R.string.supersede_feedbacklibrary_library_chooser_text))) {
-////                        if (result) {
-////                            galleryIntent();
-//                        }
-//                    }
+                    if (items[item].equals(res.getString(R.string.supersede_feedbacklibrary_library_chooser_text))) {
+                        galleryIntent();
+                    }
                 } else {
                     dialog.dismiss();
                 }
