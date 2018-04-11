@@ -184,12 +184,6 @@ public class AudioMechanismView extends MechanismView implements SeekBar.OnSeekB
             public void onClick(View v) {
                 clearFocus();
 
-//                boolean hasPermission = Utils.checkSinglePermission(activity, Manifest.permission.RECORD_AUDIO, null, null, false);
-//
-//                if (!hasPermission) {
-//                    return;
-//                }
-
                 removeUpdateSeekBarTask();
                 removeUpdateSeekBarTaskRecorder();
 

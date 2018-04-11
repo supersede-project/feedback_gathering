@@ -38,6 +38,7 @@ import static ch.uzh.supersede.feedbacklibrary.models.Mechanism.RATING_TYPE;
 import static ch.uzh.supersede.feedbacklibrary.models.Mechanism.SCREENSHOT_TYPE;
 import static ch.uzh.supersede.feedbacklibrary.models.Mechanism.TEXT_TYPE;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.OrchestratorConstants.*;
+import static ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility.USER_LEVEL.ADVANCED;
 
 
 public class OrchestratorStub {
@@ -84,7 +85,9 @@ public class OrchestratorStub {
         }
 
         public MechanismBuilder withAudio() {
-            resolve(AUDIO_TYPE);
+            if (ADVANCED.check(context)) {
+                resolve(AUDIO_TYPE);
+            }
             return this;
         }
 
