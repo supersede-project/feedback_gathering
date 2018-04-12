@@ -18,9 +18,9 @@ public class CallbackWrapper<T> implements Callback<T> {
     @Override
     public void onResponse(Call<T> call, Response<T> response) {
         if (response.code() == HttpURLConnection.HTTP_OK) {
-            callback.onEventCompleted(eventType);
+            callback.onEventCompleted(eventType, response);
         } else {
-            callback.onEventFailed(eventType);
+            callback.onEventFailed(eventType, response);
         }
     }
 
