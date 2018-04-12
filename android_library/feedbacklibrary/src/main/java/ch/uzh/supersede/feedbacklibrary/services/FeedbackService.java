@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
@@ -27,8 +26,8 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+import static ch.uzh.supersede.feedbacklibrary.services.IFeedbackServiceEventListener.EventType;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.FeedbackActivityConstants.*;
-import static ch.uzh.supersede.feedbacklibrary.utils.Constants.OK_RESPONSE;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.SUPERSEEDE_BASE_URL;
 import static ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility.USER_LEVEL.ACTIVE;
 
@@ -52,71 +51,37 @@ public class FeedbackService {
         return instance;
     }
 
-    public boolean pingOrchestrator() {
-        try {
-            Response<ResponseBody> response = feedbackAPI
-                    .pingOrchestrator()
-                    .execute();
-            if (response.code() == OK_RESPONSE) {
-                return true;
-            }
-        } catch (IOException e) {
-            Log.e(TAG, e.getMessage());
-        }
-        return false;
+    public void pingOrchestrator(IFeedbackServiceEventListener callback) {
+        feedbackAPI.pingOrchestrator().enqueue(new CallbackWrapper<ResponseBody>(callback, EventType.PING_ORCHESTRATOR) {
+        });
     }
 
-    public boolean pingRepository() {
-        try {
-            Response<ResponseBody> response = feedbackAPI
-                    .pingRepository()
-                    .execute();
-            if (response.code() == OK_RESPONSE) {
-                return true;
-            }
-        } catch (IOException e) {
-            Log.e(TAG, e.getMessage());
-        }
-        return false;
+    public void pingRepository(IFeedbackServiceEventListener callback) {
+        feedbackAPI.pingRepository().enqueue(new CallbackWrapper<ResponseBody>(callback, EventType.PING_REPOSITORY) {
+        });
     }
 
-    public boolean createFeedbackVariant(String language, long applicationId, MultipartBody.Part feedback,
-                                         List<MultipartBody.Part> files) {
-        try {
-            Response<JsonObject> response = feedbackAPI
-                    .createFeedbackVariant(language, applicationId, feedback, files)
-                    .execute();
-            if (response.code() == OK_RESPONSE) {
-                return true;
-            }
-        } catch (IOException e) {
-            Log.e(TAG, e.getMessage());
-        }
-        return false;
+    public void createFeedbackVariant(IFeedbackServiceEventListener callback, String language, long applicationId, MultipartBody.Part feedback, List<MultipartBody.Part> files) {
+        feedbackAPI.createFeedbackVariant(language, applicationId, feedback, files).enqueue(new CallbackWrapper<JsonObject>(callback, EventType.CREATE_FEEDBACK_VARIANT) {
+        });
     }
 
     /**
      * Opens the FeedbackActivity from the feedback library in case if a PULL feedback is triggered with a specific PULL configuration.
      */
     public void pullConfigurationAndStartActivity(ConfigurationRequestWrapper configurationRequestWrapper) {
-        if (configurationRequestWrapper != null && pingOrchestrator()) {
+        if (configurationRequestWrapper != null) {
             new AsyncOrchestratorConfigurationFetcher(configurationRequestWrapper).execute();
         }
     }
 
-
     //<Params, Progress, Result>
-    private class AsyncOrchestratorConfigurationFetcher extends AsyncTask<Void, Integer, Response<OrchestratorConfigurationItem>> {
+    private static class AsyncOrchestratorConfigurationFetcher extends AsyncTask<Void, Integer, Response<OrchestratorConfigurationItem>> {
         private ConfigurationRequestWrapper configurationRequestWrapper;
-
-        private AsyncOrchestratorConfigurationFetcher() {
-
-        }
 
         public AsyncOrchestratorConfigurationFetcher(ConfigurationRequestWrapper configurationRequestWrapper) {
             this.configurationRequestWrapper = configurationRequestWrapper;
         }
-
 
         @Override
         protected Response<OrchestratorConfigurationItem> doInBackground(Void... voids) {
@@ -141,7 +106,8 @@ public class FeedbackService {
             List<ConfigurationItem> configurationItems = configuration.getConfigurationItems();
             long selectedPullConfigurationIndex = -1;
             ConfigurationItem selectedConfigurationItem = null;
-            Log.d("APPLICATION-ID: "+configurationRequestWrapper.getApplicationId()," APPLICATION-ID "+configurationRequestWrapper.getApplicationId()+" HAT "+configurationItems.size()+ " CONFIGURATIONS!");
+            Log.d("APPLICATION-ID: " + configurationRequestWrapper.getApplicationId(), " APPLICATION-ID " + configurationRequestWrapper.getApplicationId() + " HAT " + configurationItems.size() + " " +
+                    "CONFIGURATIONS!");
             for (ConfigurationItem configurationItem : configurationItems) {
                 if (configurationItem
                         .getType()
@@ -185,10 +151,10 @@ public class FeedbackService {
                             selectedPullConfigurationIndex, configurationRequestWrapper.getUrl(), configurationRequestWrapper.getLanguage());
                     d.show(configurationRequestWrapper.getStartingActivity().getFragmentManager(), "feedbackPopupDialog");
                 }
-            }else {
-                    DialogUtils.showInformationDialog(configurationRequestWrapper.getStartingActivity(), new String[]{configurationRequestWrapper
-                            .getStartingActivity()
-                            .getResources().getString(R.string.supersede_feedbacklibrary_feedback_application_unavailable_text)}, true);
+            } else {
+                DialogUtils.showInformationDialog(configurationRequestWrapper.getStartingActivity(), new String[]{configurationRequestWrapper
+                        .getStartingActivity()
+                        .getResources().getString(R.string.supersede_feedbacklibrary_feedback_application_unavailable_text)}, true);
             }
         }
 
@@ -219,11 +185,11 @@ public class FeedbackService {
      */
     public void startFeedbackHubWithScreenshotCapture(@NonNull final String baseURL, @NonNull final Activity activity, final long applicationId, @NonNull final String language) {
         Intent intent = new Intent(activity, FeedbackHubActivity.class);
-        if (ACTIVE.check(activity)){
+        if (ACTIVE.check(activity)) {
             Utils.wipeImages(activity.getApplicationContext());
             Utils.storeScreenshotToDatabase(activity);
-        }else{
-            Utils.storeScreenshotToIntent(activity,intent);
+        } else {
+            Utils.storeScreenshotToIntent(activity, intent);
         }
         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
         intent.putExtra(EXTRA_KEY_APPLICATION_ID, applicationId);
@@ -304,7 +270,7 @@ public class FeedbackService {
 
             private boolean checkNullAndLog(Object o, String label) {
                 if (o == null) {
-                    Log.e(TAG, "Could not create ConfigurationRequestWrapper because "+label+ " is null.");
+                    Log.e(TAG, "Could not create ConfigurationRequestWrapper because " + label + " is null.");
                     return true;
                 }
                 return false;

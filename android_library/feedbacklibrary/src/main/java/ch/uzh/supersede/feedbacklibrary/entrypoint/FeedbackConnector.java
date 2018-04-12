@@ -1,7 +1,6 @@
 package ch.uzh.supersede.feedbacklibrary.entrypoint;
 
 
-import android.Manifest;
 import android.app.Activity;
 import android.view.MotionEvent;
 import android.view.View;
@@ -10,14 +9,11 @@ import android.view.View.OnTouchListener;
 import java.util.HashMap;
 
 import ch.uzh.supersede.feedbacklibrary.services.FeedbackService;
-import ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility;
-import ch.uzh.supersede.feedbacklibrary.utils.Utils;
 
-import static ch.uzh.supersede.feedbacklibrary.utils.Constants.*;
-import static ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility.USER_LEVEL.ACTIVE;
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.SUPERSEEDE_BASE_URL;
 
 public class FeedbackConnector {
-    HashMap<Integer,View> registeredViews;
+    private HashMap<Integer,View> registeredViews;
 
     private static final FeedbackConnector instance = new FeedbackConnector();
 
