@@ -69,12 +69,15 @@ public class FeedbackListActivity extends AbstractBaseActivity {
                 }
             }
         }
-        Collections.sort(myFeedbackList);
-        Collections.sort(topFeedbackList);
-        Collections.sort(hotFeedbackList);
-        Collections.sort(newFeedbackList);
+        sort(myFeedbackList,topFeedbackList,hotFeedbackList,newFeedbackList);
         load(myFeedbackList,true);
         onPostCreate();
+    }
+
+    private void sort(ArrayList<FeedbackListItem>... lists){
+        for (ArrayList<FeedbackListItem> list : lists){
+            Collections.sort(list);
+        }
     }
 
     private EditText addTextChangedListener(final EditText editText) {
@@ -131,6 +134,7 @@ public class FeedbackListActivity extends AbstractBaseActivity {
         } else if (v.getId() == newButton.getId()) {
             loadNewFeedbacks();
         }
+        //handle focus and keyboard
         focusSink.requestFocus();
         InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(focusSink.getWindowToken(), 0);
