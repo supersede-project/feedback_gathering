@@ -13,7 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import ch.uzh.supersede.feedbacklibrary.R;
-import ch.uzh.supersede.feedbacklibrary.views.ColorPickerView;
+import ch.uzh.supersede.feedbacklibrary.components.views.ColorPickerView;
 
 /**
  * Color picker dialog class

@@ -1,4 +1,4 @@
-package ch.uzh.supersede.feedbacklibrary.views;
+package ch.uzh.supersede.feedbacklibrary.components.views;
 
 import android.app.Activity;
 import android.content.Context;
@@ -210,7 +210,7 @@ public class AnnotateImageView extends AppCompatImageView {
         setDrawingCacheEnabled(false);
         setDrawingCacheEnabled(true);
 
-        // Adjust width and height
+        // Adjust screenWidth and screenHeight
         Bitmap drawingCache = getDrawingCache();
         int width;
         int height;

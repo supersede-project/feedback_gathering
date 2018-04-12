@@ -1,26 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
-    <color name="colorAccentDark">#ac2a56</color>
-    <color name="colorGray">#BBBBBB</color>
-    <color name="colorGrayDark">#777777</color>
-    <color name="whiteColor">#FFFFFF</color>
-    <color name="feedbackActivityBackground">#eeeeee</color>
+    <color name="indigo">#3F51B5</color>
+    <color name="indigoDark">#303F9F</color>
+    <color name="accent">#FF4081</color>
+    <color name="pink">#AC2A56</color>
 
-    <!-- AnnotateImageView -->
-    <color name="supersede_feedbacklibrary_annotate_image_layout_background_color">#4D4D4D</color>
+    <color name="white">#FFFFFF</color>
+    <color name="silver">#EEEEEE</color>
+    <color name="gray">#BBBBBB</color>
+    <color name="grayDark">#777777</color>
+    <color name="anthrazit">#767676</color>
+    <color name="anthrazitDark">#4D4D4D</color>
+    <color name="black">#000000</color>
 
-    <!-- Audio mechanism -->
-    <color name="supersede_feedbacklibrary_audio_timer_record_indicator_start_animation_color">
-        #000000
-    </color>
-    <color name="supersede_feedbacklibrary_audio_timer_record_indicator_end_animation_color">
-        #FF4081
-    </color>
-    <color name="progress_start">#009933</color>
-    <color name="progress_end">#996633</color>
+    <color name="green">#009933</color>
+    <color name="lime">#996633</color>
 
-    <color name="ratingFeedbackTextColor">#767676</color>
 </resources>

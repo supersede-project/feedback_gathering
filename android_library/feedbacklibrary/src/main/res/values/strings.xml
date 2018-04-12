@@ -128,6 +128,11 @@
     <string name="hub_username_restored">User-Name restored: "%1$s".</string>
     <string name="hub_username_registered">User-Name "%1$s" registered.</string>
     <string name="hub_warning_permission_not_granted">Permissions for next Level not granted!</string>
+    <string name="list_button_mine">Mine</string>
+    <string name="list_button_top">Top</string>
+    <string name="list_button_hot">Hot</string>
+    <string name="list_button_new">New</string>
+    <string name="list_edit_search">Search</string>
     <!--List-->
     <!--Details-->
     <!--Feedback-->

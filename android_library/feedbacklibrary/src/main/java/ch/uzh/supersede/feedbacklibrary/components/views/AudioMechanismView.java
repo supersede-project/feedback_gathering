@@ -1,6 +1,5 @@
-package ch.uzh.supersede.feedbacklibrary.views;
+package ch.uzh.supersede.feedbacklibrary.components.views;
 
-import android.Manifest;
 import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
 import android.app.Activity;
@@ -24,7 +23,6 @@ import java.io.IOException;
 import ch.uzh.supersede.feedbacklibrary.R;
 import ch.uzh.supersede.feedbacklibrary.models.AudioMechanism;
 import ch.uzh.supersede.feedbacklibrary.models.Mechanism;
-import ch.uzh.supersede.feedbacklibrary.utils.Utils;
 
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.AudioMechanismConstants.*;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.PATH_DELIMITER;
@@ -139,8 +137,8 @@ public class AudioMechanismView extends MechanismView implements SeekBar.OnSeekB
 
     private void initView() {
         ((TextView) getEnclosingLayout().findViewById(R.id.supersede_feedbacklibrary_audio_title)).setText(R.string.short_audio_message);
-        recordAnimationColorStart = resources.getColor(R.color.supersede_feedbacklibrary_audio_timer_record_indicator_start_animation_color);
-        recordAnimationColorEnd = resources.getColor(R.color.supersede_feedbacklibrary_audio_timer_record_indicator_end_animation_color);
+        recordAnimationColorStart = resources.getColor(R.color.black);
+        recordAnimationColorEnd = resources.getColor(R.color.accent);
         recordIndicator = (TextView) getEnclosingLayout().findViewById(R.id.supersede_feedbacklibrary_audio_timer_record_indicator);
         seekBar = (SeekBar) getEnclosingLayout().findViewById(R.id.supersede_feedbacklibrary_audio_seekbar);
 

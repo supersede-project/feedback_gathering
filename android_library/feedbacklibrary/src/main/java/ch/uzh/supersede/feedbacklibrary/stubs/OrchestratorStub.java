@@ -14,7 +14,6 @@ import java.util.List;
 import java.util.Map;
 
 import ch.uzh.supersede.feedbacklibrary.R;
-import ch.uzh.supersede.feedbacklibrary.activities.FeedbackActivity;
 import ch.uzh.supersede.feedbacklibrary.configurations.MechanismConfigurationItem;
 import ch.uzh.supersede.feedbacklibrary.models.AudioMechanism;
 import ch.uzh.supersede.feedbacklibrary.models.CategoryMechanism;
@@ -22,12 +21,12 @@ import ch.uzh.supersede.feedbacklibrary.models.RatingMechanism;
 import ch.uzh.supersede.feedbacklibrary.models.ScreenshotMechanism;
 import ch.uzh.supersede.feedbacklibrary.models.TextMechanism;
 import ch.uzh.supersede.feedbacklibrary.utils.Utils;
-import ch.uzh.supersede.feedbacklibrary.views.AudioMechanismView;
-import ch.uzh.supersede.feedbacklibrary.views.CategoryMechanismView;
-import ch.uzh.supersede.feedbacklibrary.views.MechanismView;
-import ch.uzh.supersede.feedbacklibrary.views.RatingMechanismView;
-import ch.uzh.supersede.feedbacklibrary.views.ScreenshotMechanismView;
-import ch.uzh.supersede.feedbacklibrary.views.TextMechanismView;
+import ch.uzh.supersede.feedbacklibrary.components.views.AudioMechanismView;
+import ch.uzh.supersede.feedbacklibrary.components.views.CategoryMechanismView;
+import ch.uzh.supersede.feedbacklibrary.components.views.MechanismView;
+import ch.uzh.supersede.feedbacklibrary.components.views.RatingMechanismView;
+import ch.uzh.supersede.feedbacklibrary.components.views.ScreenshotMechanismView;
+import ch.uzh.supersede.feedbacklibrary.components.views.TextMechanismView;
 
 import static ch.uzh.supersede.feedbacklibrary.models.Mechanism.ATTACHMENT_TYPE;
 import static ch.uzh.supersede.feedbacklibrary.models.Mechanism.AUDIO_TYPE;

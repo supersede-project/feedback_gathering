@@ -1,6 +1,5 @@
-package ch.uzh.supersede.feedbacklibrary.views;
+package ch.uzh.supersede.feedbacklibrary.components.views;
 
-import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -8,7 +7,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,7 +23,6 @@ import ch.uzh.supersede.feedbacklibrary.models.Mechanism;
 import ch.uzh.supersede.feedbacklibrary.models.ScreenshotMechanism;
 import ch.uzh.supersede.feedbacklibrary.utils.Utils;
 
-import static ch.uzh.supersede.feedbacklibrary.utils.Constants.FeedbackActivityConstants.PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.FeedbackActivityConstants.REQUEST_ANNOTATE;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.FeedbackActivityConstants.REQUEST_PHOTO;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.ScreenshotConstants.EXTRA_KEY_ALL_STICKER_ANNOTATIONS;
@@ -66,27 +63,27 @@ public class ScreenshotMechanismView extends MechanismView {
     public void toggleSelectButton(boolean enabled) {
         selectButton.setEnabled(enabled);
         if (enabled) {
-            selectButton.setBackground(activity.getResources().getDrawable(R.drawable.blue_button_selector));
+            selectButton.setBackground(activity.getResources().getDrawable(R.drawable.blue_button));
         } else {
-            selectButton.setBackground(activity.getResources().getDrawable(R.drawable.gray_button_selector));
+            selectButton.setBackground(activity.getResources().getDrawable(R.drawable.gray_button));
         }
     }
 
     public void toggleEditButton(boolean enabled) {
         editButton.setEnabled(enabled);
         if (enabled){
-            editButton.setBackground(activity.getResources().getDrawable(R.drawable.pink_button_selector));
+            editButton.setBackground(activity.getResources().getDrawable(R.drawable.pink_button));
         }else{
-            editButton.setBackground(activity.getResources().getDrawable(R.drawable.gray_button_selector));
+            editButton.setBackground(activity.getResources().getDrawable(R.drawable.gray_button));
         }
     }
 
     public void toggleDeleteButton(boolean enabled) {
         deleteButton.setEnabled(enabled);
         if (enabled) {
-            deleteButton.setBackground(activity.getResources().getDrawable(R.drawable.blue_button_selector));
+            deleteButton.setBackground(activity.getResources().getDrawable(R.drawable.blue_button));
         } else {
-            deleteButton.setBackground(activity.getResources().getDrawable(R.drawable.gray_button_selector));
+            deleteButton.setBackground(activity.getResources().getDrawable(R.drawable.gray_button));
         }
     }
 

@@ -29,7 +29,7 @@
         android:layout_marginBottom="10dp"
         android:padding="8dp"
         android:minWidth="88dp"
-        android:background="@drawable/pink_button_selector"
+        android:background="@drawable/pink_button"
         android:textColor="@android:color/white"
         android:onClick="sendButtonClicked"
         android:text="@string/supersede_feedbacklibrary_sendbutton_text"/>

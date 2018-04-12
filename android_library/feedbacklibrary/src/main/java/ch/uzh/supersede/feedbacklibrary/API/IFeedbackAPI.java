@@ -23,7 +23,7 @@ public interface IFeedbackAPI {
     /**
      * This methods sends the feedback to the repository.
      *
-     * @param language the language
+     * @param language the l`anguage
      * @param feedback the feedback
      * @param files    the multipart files
      * @return the JSON object

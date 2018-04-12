@@ -33,6 +33,7 @@
         <activity
             android:name=".activities.FeedbackListActivity"
             android:theme="@style/AppTheme.FeedbackLibrary"
+            android:windowSoftInputMode="adjustPan"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activities.FeedbackDetailsActivity"

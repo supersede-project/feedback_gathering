@@ -1,4 +1,4 @@
-package ch.uzh.supersede.feedbacklibrary.views;
+package ch.uzh.supersede.feedbacklibrary.components.views;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -16,6 +16,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import ch.uzh.supersede.feedbacklibrary.R;
+import ch.uzh.supersede.feedbacklibrary.components.views.AbstractAnnotationView;
 
 import static android.graphics.Color.WHITE;
 import static android.graphics.Typeface.BOLD;

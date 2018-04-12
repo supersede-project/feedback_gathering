@@ -2,9 +2,9 @@
 
     <!-- Base feedback library theme. -->
     <style name="AppTheme.FeedbackLibrary" parent="Theme.AppCompat.Light.DarkActionBar">
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorPrimary">@color/indigo</item>
+        <item name="colorPrimaryDark">@color/indigoDark</item>
+        <item name="colorAccent">@color/accent</item>
         <item name="android:windowActionBar">false</item>
         <item name="android:windowTitleSize">0dp</item>
     </style>

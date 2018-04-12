@@ -1,4 +1,4 @@
-package ch.uzh.supersede.feedbacklibrary.views;
+package ch.uzh.supersede.feedbacklibrary.components.views;
 
 import android.view.LayoutInflater;
 
