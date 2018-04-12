@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="cyan">#80DEEA</color>
+    <color name="cyanDark">#26c6da</color>
     <color name="indigo">#3F51B5</color>
     <color name="indigoDark">#303F9F</color>
     <color name="accent">#FF4081</color>

@@ -22,7 +22,7 @@ public class FeedbackListItem extends LinearLayout implements Comparable {
     private int points;
     private String title;
     public enum FEEDBACK_STATUS{
-        OPEN("Open",Color.rgb(0,0,222)),
+        OPEN("Open",Color.rgb(0,150,255)),
         IN_PROGRESS("In Progress",Color.rgb(222,222,0)),
         REJECTED("Rejected",Color.rgb(222,0,0)),
         CLOSED("Closed",Color.rgb(0,222,100));
@@ -60,14 +60,15 @@ public class FeedbackListItem extends LinearLayout implements Comparable {
         setOrientation(VERTICAL);
         LinearLayoutCompat.LayoutParams longParams = new LinearLayoutCompat.LayoutParams(screenWidth, partHeight / 2);
         LinearLayoutCompat.LayoutParams shortParams = new LinearLayoutCompat.LayoutParams(innerLayoutWidth / 2, partHeight / 2);
-        Drawable drawable = ContextCompat.getDrawable(context, R.drawable.pink_square);
+        Drawable drawable = ContextCompat.getDrawable(context, R.drawable.dark_blue_square);
         int white = ContextCompat.getColor(context,R.color.white);
         LinearLayout upperWrapperLayout = createWrapperLayout(longParams, context, HORIZONTAL);
         LinearLayout lowerWrapperLayout = createWrapperLayout(longParams, context, HORIZONTAL);
-        titleView = createTextView(shortParams, context, title, Gravity.START, drawable, 5,white );
-        dateView = createTextView(shortParams, context, date, Gravity.END, drawable, 5, white);
-        statusView = createTextView(shortParams, context, status.getLabel(), Gravity.START, drawable, 5, status.getColor());
-        pointView = createTextView(shortParams, context, "+" + points, Gravity.END, drawable, 5, white);
+        int padding = 10;
+        titleView = createTextView(shortParams, context, title, Gravity.START, drawable, padding,white );
+        dateView = createTextView(shortParams, context, date, Gravity.END, drawable, padding, white);
+        statusView = createTextView(shortParams, context, status.getLabel(), Gravity.START, drawable, padding, status.getColor());
+        pointView = createTextView(shortParams, context, "+" + points, Gravity.END, drawable, padding, white);
         upperWrapperLayout.addView(titleView);
         upperWrapperLayout.addView(dateView);
         lowerWrapperLayout.addView(statusView);

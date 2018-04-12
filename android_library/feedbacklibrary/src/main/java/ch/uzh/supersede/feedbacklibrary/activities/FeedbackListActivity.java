@@ -148,7 +148,7 @@ public class FeedbackListActivity extends AbstractBaseActivity {
     }
 
     private void doSearch(String s) {
-        if (!equals(getString(R.string.list_edit_search).equals(s))) {
+        if (!getString(R.string.list_edit_search).equals(s)) {
             if (StringUtility.hasText(s)) {
                 ArrayList<FeedbackListItem> remainingItems = new ArrayList<>();
                 for (FeedbackListItem item : activeFeedbackList){

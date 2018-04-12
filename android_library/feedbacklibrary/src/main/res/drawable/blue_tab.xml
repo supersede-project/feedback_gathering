@@ -29,7 +29,7 @@
         </shape>
     </item>
 
-    <item>
+    <item android:state_selected="false">
         <shape android:shape="rectangle">
             <corners
                 android:topLeftRadius="7dp"
