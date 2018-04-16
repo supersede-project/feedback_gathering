@@ -1,6 +1,8 @@
 package ch.uzh.supersede.feedbacklibrary.utils;
 
 import android.app.Activity;
+import android.content.*;
+import android.graphics.*;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -9,6 +11,8 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.View;
 
+import java.io.*;
+import java.util.regex.*;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -18,9 +22,8 @@ import java.util.regex.Pattern;
 
 import ch.uzh.supersede.feedbacklibrary.database.FeedbackDatabase;
 
-import static ch.uzh.supersede.feedbacklibrary.utils.Constants.FeedbackActivityConstants.*;
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.FeedbackActivityConstants.EXTRA_KEY_CACHED_SCREENSHOT;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.ScreenshotConstants.*;
-import static ch.uzh.supersede.feedbacklibrary.utils.Constants.ScreenshotConstants.TAG;
 
 /**
  * Class with various helper methods
@@ -141,7 +144,7 @@ public class Utils {
     }
 
     /**
-     * This method scales the bitmap according to a maximum width and height keeping the aspect ratio.
+     * This method scales the bitmap according to a maximum screenWidth and screenHeight keeping the aspect ratio.
      */
     public static Bitmap scaleBitmap(Bitmap bitmap, int newWidth, int newHeight) {
         int width = bitmap.getWidth();

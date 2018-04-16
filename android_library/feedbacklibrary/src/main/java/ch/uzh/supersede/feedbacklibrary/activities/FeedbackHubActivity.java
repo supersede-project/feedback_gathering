@@ -9,29 +9,17 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.text.Html;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.*;
 
 import ch.uzh.supersede.feedbacklibrary.R;
 import ch.uzh.supersede.feedbacklibrary.database.FeedbackDatabase;
-import ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility;
+import ch.uzh.supersede.feedbacklibrary.utils.*;
 import ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility.USER_LEVEL;
-import ch.uzh.supersede.feedbacklibrary.utils.PopUp;
-import ch.uzh.supersede.feedbacklibrary.utils.Utils;
 
-import static ch.uzh.supersede.feedbacklibrary.utils.Constants.FEEDBACK_CONTRIBUTOR;
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.*;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.FeedbackActivityConstants.EXTRA_KEY_CACHED_SCREENSHOT;
-import static ch.uzh.supersede.feedbacklibrary.utils.Constants.FeedbackColorConstants.COLOR_STRING;
-import static ch.uzh.supersede.feedbacklibrary.utils.Constants.FeedbackColorConstants.DARK_BLUE;
-import static ch.uzh.supersede.feedbacklibrary.utils.Constants.PERMISSION_REQUEST_ALL;
-import static ch.uzh.supersede.feedbacklibrary.utils.Constants.SHARED_PREFERENCES;
-import static ch.uzh.supersede.feedbacklibrary.utils.Constants.USER_NAME;
-import static ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility.USER_LEVEL.ACTIVE;
-import static ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility.USER_LEVEL.ADVANCED;
-import static ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility.USER_LEVEL.LOCKED;
-import static ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility.USER_LEVEL.PASSIVE;
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.FeedbackColorConstants.*;
+import static ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility.USER_LEVEL.*;
 
 @SuppressWarnings({"squid:MaximumInheritanceDepth","squid:S1170"})
 public class FeedbackHubActivity extends AbstractBaseActivity {
@@ -41,7 +29,6 @@ public class FeedbackHubActivity extends AbstractBaseActivity {
     private Button settingsButton;
     private TextView statusText;
     private String userName;
-    private final String[] preAllocatedStringStorage = new String[]{null};
     private int tapCounter = 0;
     private byte[] cachedScreenshot = null;
 

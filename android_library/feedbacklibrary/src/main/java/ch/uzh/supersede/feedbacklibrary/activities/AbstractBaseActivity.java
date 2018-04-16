@@ -5,7 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
+import android.util.*;
 import android.view.View;
 import android.widget.Toast;
 
@@ -22,6 +22,9 @@ import static ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility.USER_LEVE
 @SuppressWarnings("squid:MaximumInheritanceDepth")
 public abstract class AbstractBaseActivity extends AppCompatActivity {
     protected USER_LEVEL userLevel = LOCKED;
+    protected final String[] preAllocatedStringStorage = new String[]{null};
+    protected int screenWidth;
+    protected int screenHeight;
 
     protected <T> T getView(int id, Class<T> classType) {
         return classType.cast(findViewById(id));
@@ -31,6 +34,10 @@ public abstract class AbstractBaseActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         userLevel = PermissionUtility.getUserLevel(getApplicationContext());
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        screenHeight = displayMetrics.heightPixels;
+        screenWidth = displayMetrics.widthPixels;
     }
 
     protected void onPostCreate(){

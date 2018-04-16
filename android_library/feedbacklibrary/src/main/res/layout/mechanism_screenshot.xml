@@ -39,7 +39,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.45">
-                <!-- Layout height is fixed at the moment (later: relative to the screen size?) -->
+                <!-- Layout screenHeight is fixed at the moment (later: relative to the screen size?) -->
 
                 <ImageView
                     android:id="@+id/supersede_feedbacklibrary_screenshot_imageview"
@@ -75,7 +75,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="4dp"
-                    android:background="@drawable/blue_button_selector"
+                    android:background="@drawable/blue_button"
                     android:minWidth="88dp"
                     android:text="@string/supersede_feedbacklibrary_screenshotbutton_text"
                     android:textColor="@android:color/white"/>
@@ -85,7 +85,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="4dp"
-                    android:background="@drawable/blue_button_selector"
+                    android:background="@drawable/blue_button"
                     android:minWidth="88dp"
                     android:text="@string/supersede_feedbacklibrary_remove_string"
                     android:textColor="@android:color/white"/>

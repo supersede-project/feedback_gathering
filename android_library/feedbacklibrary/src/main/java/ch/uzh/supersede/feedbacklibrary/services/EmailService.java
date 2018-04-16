@@ -35,9 +35,9 @@ import ch.uzh.supersede.feedbacklibrary.feedbacks.Feedback;
 import ch.uzh.supersede.feedbacklibrary.feedbacks.ScreenshotFeedback;
 import ch.uzh.supersede.feedbacklibrary.utils.DialogUtils;
 import ch.uzh.supersede.feedbacklibrary.utils.Utils;
-import ch.uzh.supersede.feedbacklibrary.views.CategoryMechanismView;
-import ch.uzh.supersede.feedbacklibrary.views.MechanismView;
-import ch.uzh.supersede.feedbacklibrary.views.RatingMechanismView;
+import ch.uzh.supersede.feedbacklibrary.components.views.CategoryMechanismView;
+import ch.uzh.supersede.feedbacklibrary.components.views.MechanismView;
+import ch.uzh.supersede.feedbacklibrary.components.views.RatingMechanismView;
 
 public class EmailService {
     private static final String TAG = "EmailService";

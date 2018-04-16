@@ -35,6 +35,12 @@ import java.util.List;
 
 import ch.uzh.supersede.feedbacklibrary.BuildConfig;
 import ch.uzh.supersede.feedbacklibrary.R;
+import ch.uzh.supersede.feedbacklibrary.components.views.AudioMechanismView;
+import ch.uzh.supersede.feedbacklibrary.components.views.CategoryMechanismView;
+import ch.uzh.supersede.feedbacklibrary.components.views.MechanismView;
+import ch.uzh.supersede.feedbacklibrary.components.views.RatingMechanismView;
+import ch.uzh.supersede.feedbacklibrary.components.views.ScreenshotMechanismView;
+import ch.uzh.supersede.feedbacklibrary.components.views.TextMechanismView;
 import ch.uzh.supersede.feedbacklibrary.configurations.Configuration;
 import ch.uzh.supersede.feedbacklibrary.configurations.OrchestratorConfiguration;
 import ch.uzh.supersede.feedbacklibrary.configurations.OrchestratorConfigurationItem;
@@ -51,12 +57,6 @@ import ch.uzh.supersede.feedbacklibrary.stubs.OrchestratorStub;
 import ch.uzh.supersede.feedbacklibrary.stubs.OrchestratorStub.MechanismBuilder;
 import ch.uzh.supersede.feedbacklibrary.utils.DialogUtils;
 import ch.uzh.supersede.feedbacklibrary.utils.Utils;
-import ch.uzh.supersede.feedbacklibrary.views.AudioMechanismView;
-import ch.uzh.supersede.feedbacklibrary.views.CategoryMechanismView;
-import ch.uzh.supersede.feedbacklibrary.views.MechanismView;
-import ch.uzh.supersede.feedbacklibrary.views.RatingMechanismView;
-import ch.uzh.supersede.feedbacklibrary.views.ScreenshotMechanismView;
-import ch.uzh.supersede.feedbacklibrary.views.TextMechanismView;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -340,7 +340,7 @@ public class FeedbackActivity extends AbstractBaseActivity implements AudioMecha
         multipartFiles.addAll(screenshotBodyParts);
         multipartFiles.addAll(audioBodyParts);
 
-                execCreateFeedbackVariant(jsonPart, multipartFiles);
+        execCreateFeedbackVariant(jsonPart, multipartFiles);
         EmailService.getInstance().checkAndSendViaEmail(this, sendViaEmailCheckbox, emailEditText, feedback, mechanismViews);
     }
 

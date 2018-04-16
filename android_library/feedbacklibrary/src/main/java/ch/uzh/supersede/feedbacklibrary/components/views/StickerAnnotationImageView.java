@@ -1,4 +1,4 @@
-package ch.uzh.supersede.feedbacklibrary.views;
+package ch.uzh.supersede.feedbacklibrary.components.views;
 
 import android.content.Context;
 import android.util.AttributeSet;
@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.ImageView;
 
 import ch.uzh.supersede.feedbacklibrary.R;
+import ch.uzh.supersede.feedbacklibrary.components.views.AbstractAnnotationView;
 
 import static android.view.Gravity.*;
 import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;

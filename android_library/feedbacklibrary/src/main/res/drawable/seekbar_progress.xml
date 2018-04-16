@@ -8,8 +8,8 @@
                 android:angle="270"
                 android:centerColor="#989898"
                 android:centerY="0.5"
-                android:endColor="@color/whiteColor"
-                android:startColor="@color/whiteColor"
+                android:endColor="@color/white"
+                android:startColor="@color/white"
                 />
         </shape>
     </item>
@@ -21,8 +21,8 @@
                     android:radius="5dip"/>
                 <gradient
                     android:angle="270"
-                    android:endColor="@color/colorAccent"
-                    android:startColor="@color/colorAccent"
+                    android:endColor="@color/accent"
+                    android:startColor="@color/accent"
                     />
             </shape>
         </clip>
