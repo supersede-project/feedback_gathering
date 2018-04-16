@@ -21,17 +21,17 @@ import java.io.File;
 import java.io.IOException;
 
 import ch.uzh.supersede.feedbacklibrary.R;
+import ch.uzh.supersede.feedbacklibrary.models.AbstractMechanism;
 import ch.uzh.supersede.feedbacklibrary.models.AudioMechanism;
-import ch.uzh.supersede.feedbacklibrary.models.Mechanism;
 
-import static ch.uzh.supersede.feedbacklibrary.utils.Constants.AudioMechanismConstants.*;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.PATH_DELIMITER;
 
-/**
- * Audio mechanism view
- */
-public class AudioMechanismView extends MechanismView implements SeekBar.OnSeekBarChangeListener {
+public class AudioMechanismView extends AbstractMechanismView implements SeekBar.OnSeekBarChangeListener {
     private static final String TAG = "AudioMechanismView";
+    private static final String AUDIO_DIR = "audioDir";
+    private static final String AUDIO_EXTENSION = "m4a";
+    private static final String AUDIO_FILENAME = "audioFile";
+
     private int recordAnimationColorStart;
     private int recordAnimationColorEnd;
     private String audioFilePath;
@@ -63,7 +63,7 @@ public class AudioMechanismView extends MechanismView implements SeekBar.OnSeekB
 
     private MultipleAudioMechanismsListener multipleAudioMechanismsListener;
 
-    public AudioMechanismView(LayoutInflater layoutInflater, Mechanism mechanism, Resources resources, Activity activity, Context applicationContext) {
+    public AudioMechanismView(LayoutInflater layoutInflater, AbstractMechanism mechanism, Resources resources, Activity activity, Context applicationContext) {
         super(layoutInflater);
         this.audioMechanism = (AudioMechanism) mechanism;
         this.resources = resources;
@@ -136,7 +136,7 @@ public class AudioMechanismView extends MechanismView implements SeekBar.OnSeekB
     }
 
     private void initView() {
-        ((TextView) getEnclosingLayout().findViewById(R.id.supersede_feedbacklibrary_audio_title)).setText(R.string.short_audio_message);
+        ((TextView) getEnclosingLayout().findViewById(R.id.supersede_feedbacklibrary_audio_title)).setText(R.string.audio_hint);
         recordAnimationColorStart = resources.getColor(R.color.black);
         recordAnimationColorEnd = resources.getColor(R.color.accent);
         recordIndicator = (TextView) getEnclosingLayout().findViewById(R.id.supersede_feedbacklibrary_audio_timer_record_indicator);
@@ -164,7 +164,7 @@ public class AudioMechanismView extends MechanismView implements SeekBar.OnSeekB
                     onRecordSuccess();
                     Toast toast = Toast.makeText(applicationContext, applicationContext
                             .getResources()
-                            .getString(R.string.supersede_feedbacklibrary_audio_stopped_recording_text), Toast.LENGTH_SHORT);
+                            .getString(R.string.audio_stopped_recording_text), Toast.LENGTH_SHORT);
                     toast.show();
                 } else {
                     stopPlaying();
@@ -220,7 +220,7 @@ public class AudioMechanismView extends MechanismView implements SeekBar.OnSeekB
                     onRecordSuccess();
                     Toast toast = Toast.makeText(applicationContext, applicationContext
                             .getResources()
-                            .getString(R.string.supersede_feedbacklibrary_audio_maximum_length_reached_text, (Float.valueOf(audioMechanism.getMaxTime())).intValue()), Toast.LENGTH_SHORT);
+                            .getString(R.string.audio_maximum_length_reached_text, (Float.valueOf(audioMechanism.getMaxTime())).intValue()), Toast.LENGTH_SHORT);
                     toast.show();
                 }
             }

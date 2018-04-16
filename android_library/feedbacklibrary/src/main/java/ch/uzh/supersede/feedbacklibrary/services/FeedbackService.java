@@ -9,7 +9,7 @@ import com.google.gson.JsonObject;
 import java.util.List;
 import java.util.Map;
 
-import ch.uzh.supersede.feedbacklibrary.API.IFeedbackAPI;
+import ch.uzh.supersede.feedbacklibrary.api.IFeedbackAPI;
 import ch.uzh.supersede.feedbacklibrary.R;
 import ch.uzh.supersede.feedbacklibrary.configurations.ConfigurationItem;
 import ch.uzh.supersede.feedbacklibrary.configurations.OrchestratorConfigurationItem;
@@ -23,7 +23,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 import static ch.uzh.supersede.feedbacklibrary.services.IFeedbackServiceEventListener.EventType;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.FeedbackActivityConstants.*;
-import static ch.uzh.supersede.feedbacklibrary.utils.Constants.SUPERSEEDE_BASE_URL;
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.SUPERSEDE_BASE_URL;
 
 public class FeedbackService {
     private static final String TAG = "FeedbackService";
@@ -36,7 +36,7 @@ public class FeedbackService {
     public static FeedbackService getInstance() {
         if (instance == null) {
             Retrofit retrofit = new Retrofit.Builder()
-                    .baseUrl(SUPERSEEDE_BASE_URL)
+                    .baseUrl(SUPERSEDE_BASE_URL)
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
             feedbackAPI = retrofit.create(IFeedbackAPI.class);
@@ -120,7 +120,7 @@ public class FeedbackService {
         } else {
             DialogUtils.showInformationDialog(configurationRequestWrapper.getStartingActivity(), new String[]{configurationRequestWrapper
                     .getStartingActivity()
-                    .getResources().getString(R.string.supersede_feedbacklibrary_feedback_application_unavailable_text)}, true);
+                    .getResources().getString(R.string.info_application_unavailable)}, true);
         }
     }
 
@@ -138,9 +138,9 @@ public class FeedbackService {
         Intent intent = new Intent(configWrapper.getStartingActivity(), configWrapper.getActivityToStart());
         intent.putExtra(IS_PUSH_STRING, false);
         intent.putExtra(JSON_CONFIGURATION_STRING, jsonConfiguration);
-        intent.putExtra(SELECTED_PULL_CONFIGURATION_INDEX_STRING, selectedPullConfigurationIndex);
-        intent.putExtra(EXTRA_KEY_BASE_URL, configWrapper.getUrl());
-        intent.putExtra(EXTRA_KEY_LANGUAGE, configWrapper.getLanguage());
+        intent.putExtra(SELECTED_PULL_CONFIGURATION_INDEX, selectedPullConfigurationIndex);
+        intent.putExtra(BASE_URL, configWrapper.getUrl());
+        intent.putExtra(LANGUAGE, configWrapper.getLanguage());
         return intent;
     }
 

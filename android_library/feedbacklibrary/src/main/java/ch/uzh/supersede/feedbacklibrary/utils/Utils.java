@@ -1,8 +1,6 @@
 package ch.uzh.supersede.feedbacklibrary.utils;
 
 import android.app.Activity;
-import android.content.*;
-import android.graphics.*;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -11,8 +9,6 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.View;
 
-import java.io.*;
-import java.util.regex.*;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -23,12 +19,14 @@ import java.util.regex.Pattern;
 import ch.uzh.supersede.feedbacklibrary.database.FeedbackDatabase;
 
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.FeedbackActivityConstants.EXTRA_KEY_CACHED_SCREENSHOT;
-import static ch.uzh.supersede.feedbacklibrary.utils.Constants.ScreenshotConstants.*;
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.AnnotateImageConstants.IMAGE_ANNOTATED_DATA_DB_KEY;
 
 /**
  * Class with various helper methods
  */
 public class Utils {
+    private static final String TAG = "Utils";
+    private static final String IMAGE_DATA_DB_KEY = "imageData";
 
     private Utils() {
     }
@@ -44,7 +42,7 @@ public class Utils {
         rootView.setDrawingCacheEnabled(true);
         Bitmap imageBitmap = Bitmap.createBitmap(rootView.getDrawingCache());
         rootView.setDrawingCacheEnabled(false);
-        storeImageToDatabase(activity,imageBitmap);
+        storeImageToDatabase(activity, imageBitmap);
     }
 
     public static void storeScreenshotToIntent(final Activity activity, Intent intent) {
@@ -54,39 +52,40 @@ public class Utils {
         rootView.setDrawingCacheEnabled(false);
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         imageBitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
-        intent.putExtra(EXTRA_KEY_CACHED_SCREENSHOT,stream.toByteArray());
+        intent.putExtra(EXTRA_KEY_CACHED_SCREENSHOT, stream.toByteArray());
     }
 
     public static void storeImageToDatabase(final Activity activity, Bitmap bitmap) {
-        storeBitmap(activity.getApplicationContext(),bitmap,IMAGE_DATA_DB_KEY);    }
-
-    public static void storeAnnotatedImageToDatabase(final Activity activity, Bitmap bitmap) {
-        storeBitmap(activity.getApplicationContext(),bitmap,IMAGE_ANNOTATED_DATA_DB_KEY);
+        storeBitmap(activity.getApplicationContext(), bitmap, IMAGE_DATA_DB_KEY);
     }
 
-    private static void storeBitmap(Context context, Bitmap bitmap, String dataKey){
+    public static void storeAnnotatedImageToDatabase(final Activity activity, Bitmap bitmap) {
+        storeBitmap(activity.getApplicationContext(), bitmap, IMAGE_ANNOTATED_DATA_DB_KEY);
+    }
+
+    private static void storeBitmap(Context context, Bitmap bitmap, String dataKey) {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
         FeedbackDatabase.getInstance(context).writeByte(dataKey, stream.toByteArray());
     }
 
-    public static void persistScreenshot(Context context, byte[] data){
-        if (data != null){
+    public static void persistScreenshot(Context context, byte[] data) {
+        if (data != null) {
             FeedbackDatabase.getInstance(context).writeByte(IMAGE_DATA_DB_KEY, data);
         }
     }
 
     public static Bitmap loadImageFromDatabase(final Context context) {
-        return loadImageFromDatabase(context,IMAGE_DATA_DB_KEY);
+        return loadImageFromDatabase(context, IMAGE_DATA_DB_KEY);
     }
 
     public static Bitmap loadAnnotatedImageFromDatabase(final Context context) {
-        return loadImageFromDatabase(context,IMAGE_ANNOTATED_DATA_DB_KEY);
+        return loadImageFromDatabase(context, IMAGE_ANNOTATED_DATA_DB_KEY);
     }
 
     private static Bitmap loadImageFromDatabase(final Context context, String dataKey) {
         byte[] imageAsByte = FeedbackDatabase.getInstance(context).readBytes(dataKey);
-        if (imageAsByte==null){
+        if (imageAsByte == null) {
             return null;
         }
         return BitmapFactory.decodeByteArray(imageAsByte, 0, imageAsByte.length);

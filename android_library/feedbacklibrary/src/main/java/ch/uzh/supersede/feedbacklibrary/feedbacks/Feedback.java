@@ -11,17 +11,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import ch.uzh.supersede.feedbacklibrary.models.AbstractMechanism;
 import ch.uzh.supersede.feedbacklibrary.models.AttachmentMechanism;
 import ch.uzh.supersede.feedbacklibrary.models.AudioMechanism;
 import ch.uzh.supersede.feedbacklibrary.models.CategoryMechanism;
-import ch.uzh.supersede.feedbacklibrary.models.Mechanism;
 import ch.uzh.supersede.feedbacklibrary.models.RatingMechanism;
 import ch.uzh.supersede.feedbacklibrary.models.ScreenshotMechanism;
 import ch.uzh.supersede.feedbacklibrary.models.TextMechanism;
 
-/**
- * Feedback
- */
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.MechanismConstants.*;
+
 public class Feedback implements Serializable {
     // Application
     @Expose
@@ -50,34 +49,34 @@ public class Feedback implements Serializable {
     @Expose
     private List<TextFeedback> textFeedbacks = new ArrayList<>();
 
-    public Feedback(List<Mechanism> allMechanisms) {
-        for (Mechanism mechanism : allMechanisms) {
+    public Feedback(List<AbstractMechanism> allMechanisms) {
+        for (AbstractMechanism mechanism : allMechanisms) {
             if (mechanism != null && mechanism.isActive()) {
                 String type = mechanism.getType();
                 switch (type) {
-                    case Mechanism.ATTACHMENT_TYPE:
+                    case ATTACHMENT_TYPE:
                         AttachmentMechanism attachmentMechanism = (AttachmentMechanism) mechanism;
                         break;
-                    case Mechanism.AUDIO_TYPE:
+                    case AUDIO_TYPE:
                         AudioMechanism audioMechanism = (AudioMechanism) mechanism;
                         if (audioMechanism.getAudioPath() != null) {
                             audioFeedbacks.add(new AudioFeedback(audioMechanism, audioFeedbacks.size()));
                         }
                         break;
-                    case Mechanism.CATEGORY_TYPE:
+                    case CATEGORY_TYPE:
                         CategoryFeedback categoryFeedback = new CategoryFeedback((CategoryMechanism) mechanism);
                         categoryFeedbacks.addAll(categoryFeedback.getCategories());
                         break;
-                    case Mechanism.RATING_TYPE:
+                    case RATING_TYPE:
                         ratingFeedbacks.add(new RatingFeedback((RatingMechanism) mechanism));
                         break;
-                    case Mechanism.SCREENSHOT_TYPE:
+                    case SCREENSHOT_TYPE:
                         ScreenshotMechanism screenshotMechanism = (ScreenshotMechanism) mechanism;
                         if (screenshotMechanism.getImagePath() != null) {
                             screenshotFeedbacks.add(new ScreenshotFeedback(screenshotMechanism, screenshotFeedbacks.size()));
                         }
                         break;
-                    case Mechanism.TEXT_TYPE:
+                    case TEXT_TYPE:
                         textFeedbacks.add(new TextFeedback((TextMechanism) mechanism));
                         break;
                     default:
@@ -89,117 +88,6 @@ public class Feedback implements Serializable {
         }
     }
 
-    /**
-     * This method returns the application id.
-     *
-     * @return the application id
-     */
-    public long getApplicationId() {
-        return applicationId;
-    }
-
-    /**
-     * This method returns the attachment feedbacks.
-     *
-     * @return the attachment feedbacks
-     */
-    public List<AttachmentFeedback> getAttachmentFeedbacks() {
-        return attachmentFeedbacks;
-    }
-
-    /**
-     * This method returns the audio feedbacks.
-     *
-     * @return the audio feedbacks
-     */
-    public List<AudioFeedback> getAudioFeedbacks() {
-        return audioFeedbacks;
-    }
-
-    /**
-     * This method returns the category feedbacks.
-     *
-     * @return the category feedbacks
-     */
-    public List<HashMap<String, Object>> getCategoryFeedbacks() {
-        return categoryFeedbacks;
-    }
-
-    /**
-     * This method returns the configuration id of the active configuration from which the feedback is sent.
-     *
-     * @return the configuration id
-     */
-    public long getConfigurationId() {
-        return configurationId;
-    }
-
-    /**
-     * This method returns the context information.
-     *
-     * @return the context information
-     */
-    public Map<String, Object> getContextInformation() {
-        return contextInformation;
-    }
-
-    /**
-     * This method returns the language.
-     *
-     * @return the language
-     */
-    public String getLanguage() {
-        return language;
-    }
-
-    /**
-     * This method returns the rating feedbacks.
-     *
-     * @return the rating feedbacks.
-     */
-    public List<RatingFeedback> getRatingFeedbacks() {
-        return ratingFeedbacks;
-    }
-
-    /**
-     * This method returns the screenshot feedbacks.
-     *
-     * @return the screenshot feedbacks
-     */
-    public List<ScreenshotFeedback> getScreenshotFeedbacks() {
-        return screenshotFeedbacks;
-    }
-
-    /**
-     * This method returns the text feedbacks.
-     *
-     * @return the text feedbacks
-     */
-    public List<TextFeedback> getTextFeedbacks() {
-        return textFeedbacks;
-    }
-
-    /**
-     * This method returns the title of the feedback.
-     *
-     * @return the title
-     */
-    public String getTitle() {
-        return title;
-    }
-
-    /**
-     * This method returns the user identification.
-     *
-     * @return the user identification
-     */
-    public String getUserIdentification() {
-        return userIdentification;
-    }
-
-    /**
-     * This method initializes the context information
-     */
     public void initContextInformation() {
         // TODO: not yet sent to the repository, i.e., needs to be implemented
         contextInformation = new HashMap<>();
@@ -215,106 +103,99 @@ public class Feedback implements Serializable {
         contextInformation.put("host", Build.HOST);
     }
 
-    /**
-     * This method sets the application id.
-     *
-     * @param applicationId the application id
-     */
+    public long getApplicationId() {
+        return applicationId;
+    }
+
     public void setApplicationId(long applicationId) {
         this.applicationId = applicationId;
     }
 
-    /**
-     * This method sets the attachment feedbacks.
-     *
-     * @param attachmentFeedbacks the attachment feedbacks
-     */
-    public void setAttachmentFeedbacks(List<AttachmentFeedback> attachmentFeedbacks) {
-        this.attachmentFeedbacks = attachmentFeedbacks;
+    public long getConfigurationId() {
+        return configurationId;
     }
 
-    /**
-     * This method sets the audio feedbacks.
-     *
-     * @param audioFeedbacks the audio feedbacks
-     */
-    public void setAudioFeedbacks(List<AudioFeedback> audioFeedbacks) {
-        this.audioFeedbacks = audioFeedbacks;
-    }
-
-    /**
-     * This method sets the category feedbacks.
-     *
-     * @param categoryFeedbacks the category feedbacks
-     */
-    public void setCategoryFeedbacks(List<HashMap<String, Object>> categoryFeedbacks) {
-        this.categoryFeedbacks = categoryFeedbacks;
-    }
-
-    /**
-     * This method sets the configuration id of the active configuration from which the feedback is sent.
-     *
-     * @param configurationId the configuration id
-     */
     public void setConfigurationId(long configurationId) {
         this.configurationId = configurationId;
+    }
+
+    public Map<String, Object> getContextInformation() {
+        return contextInformation;
     }
 
     public void setContextInformation(Map<String, Object> contextInformation) {
         this.contextInformation = contextInformation;
     }
 
-    /**
-     * This method sets the language.
-     *
-     * @param language the language
-     */
+    public String getLanguage() {
+        return language;
+    }
+
     public void setLanguage(String language) {
         this.language = language;
     }
 
-    /**
-     * This method sets the rating feedbacks.
-     *
-     * @param ratingFeedbacks the rating feedbacks
-     */
-    public void setRatingFeedbacks(List<RatingFeedback> ratingFeedbacks) {
-        this.ratingFeedbacks = ratingFeedbacks;
+    public String getTitle() {
+        return title;
     }
 
-    /**
-     * This method sets the screenshot feedbacks.
-     *
-     * @param screenshotFeedbacks the screenshot feedbacks
-     */
-    public void setScreenshotFeedbacks(List<ScreenshotFeedback> screenshotFeedbacks) {
-        this.screenshotFeedbacks = screenshotFeedbacks;
-    }
-
-    /**
-     * This method sets the text feedbacks.
-     *
-     * @param textFeedbacks the text feedbacks
-     */
-    public void setTextFeedbacks(List<TextFeedback> textFeedbacks) {
-        this.textFeedbacks = textFeedbacks;
-    }
-
-    /**
-     * This method sets the title of the feedback.
-     *
-     * @param title the title
-     */
     public void setTitle(String title) {
         this.title = title;
     }
 
-    /**
-     * This method sets the user identification.
-     *
-     * @param userIdentification the user identification
-     */
+    public String getUserIdentification() {
+        return userIdentification;
+    }
+
     public void setUserIdentification(String userIdentification) {
         this.userIdentification = userIdentification;
+    }
+
+    public List<AttachmentFeedback> getAttachmentFeedbacks() {
+        return attachmentFeedbacks;
+    }
+
+    public void setAttachmentFeedbacks(List<AttachmentFeedback> attachmentFeedbacks) {
+        this.attachmentFeedbacks = attachmentFeedbacks;
+    }
+
+    public List<AudioFeedback> getAudioFeedbacks() {
+        return audioFeedbacks;
+    }
+
+    public void setAudioFeedbacks(List<AudioFeedback> audioFeedbacks) {
+        this.audioFeedbacks = audioFeedbacks;
+    }
+
+    public List<HashMap<String, Object>> getCategoryFeedbacks() {
+        return categoryFeedbacks;
+    }
+
+    public void setCategoryFeedbacks(List<HashMap<String, Object>> categoryFeedbacks) {
+        this.categoryFeedbacks = categoryFeedbacks;
+    }
+
+    public List<RatingFeedback> getRatingFeedbacks() {
+        return ratingFeedbacks;
+    }
+
+    public void setRatingFeedbacks(List<RatingFeedback> ratingFeedbacks) {
+        this.ratingFeedbacks = ratingFeedbacks;
+    }
+
+    public List<ScreenshotFeedback> getScreenshotFeedbacks() {
+        return screenshotFeedbacks;
+    }
+
+    public void setScreenshotFeedbacks(List<ScreenshotFeedback> screenshotFeedbacks) {
+        this.screenshotFeedbacks = screenshotFeedbacks;
+    }
+
+    public List<TextFeedback> getTextFeedbacks() {
+        return textFeedbacks;
+    }
+
+    public void setTextFeedbacks(List<TextFeedback> textFeedbacks) {
+        this.textFeedbacks = textFeedbacks;
     }
 }

@@ -110,7 +110,7 @@ public class CategorySpinner extends AppCompatSpinner implements DialogInterface
         final TextInputEditText editText = (TextInputEditText) linearLayout.findViewById(R.id.supersede_feedbacklibrary_own_category_dialog_text);
 
         layout.setHintEnabled(true);
-        layout.setHint(getResources().getString(R.string.supersede_feedbacklibrary_own_category_dialog_hint));
+        layout.setHint(getResources().getString(R.string.category_own_category_hint));
 
         editText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -126,9 +126,9 @@ public class CategorySpinner extends AppCompatSpinner implements DialogInterface
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (s.length() > 0) {
-                    layout.setHint(getResources().getString(R.string.supersede_feedbacklibrary_own_category_dialog_label));
+                    layout.setHint(getResources().getString(R.string.category_own_category));
                 } else if (s.length() == 0) {
-                    layout.setHint(getResources().getString(R.string.supersede_feedbacklibrary_own_category_dialog_hint));
+                    layout.setHint(getResources().getString(R.string.category_own_category_hint));
                 }
             }
         });
@@ -151,7 +151,7 @@ public class CategorySpinner extends AppCompatSpinner implements DialogInterface
         final LinearLayout emptyLayout = (LinearLayout) linearLayout.findViewById(R.id.supersede_feedbacklibrary_own_category_dialog_empty_layout);
 
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(getContext());
-        alertDialog.setPositiveButton(getResources().getString(R.string.supersede_feedbacklibrary_ok_string), new DialogInterface.OnClickListener() {
+        alertDialog.setPositiveButton(getResources().getString(R.string.dialog_ok), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 if (ownCategoryDialogInputEditText.getText().toString().length() > 0) {
@@ -176,7 +176,7 @@ public class CategorySpinner extends AppCompatSpinner implements DialogInterface
                 }
             }
         });
-        alertDialog.setNegativeButton(getResources().getString(R.string.supersede_feedbacklibrary_cancel_string), new DialogInterface.OnClickListener() {
+        alertDialog.setNegativeButton(getResources().getString(R.string.dialog_cancel), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 mSelection[position] = false;
@@ -219,7 +219,7 @@ public class CategorySpinner extends AppCompatSpinner implements DialogInterface
         final LinearLayout emptyLayout = (LinearLayout) linearLayout.findViewById(R.id.supersede_feedbacklibrary_own_category_dialog_empty_layout);
 
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(getContext());
-        alertDialog.setPositiveButton(getResources().getString(R.string.supersede_feedbacklibrary_ok_string), new DialogInterface.OnClickListener() {
+        alertDialog.setPositiveButton(getResources().getString(R.string.dialog_ok), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 if (ownCategoryDialogInputEditText.getText().toString().length() > 0) {
@@ -253,7 +253,7 @@ public class CategorySpinner extends AppCompatSpinner implements DialogInterface
                 }
             }
         });
-        alertDialog.setNegativeButton(getResources().getString(R.string.supersede_feedbacklibrary_cancel_string), new DialogInterface.OnClickListener() {
+        alertDialog.setNegativeButton(getResources().getString(R.string.dialog_cancel), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 if (mSelection.length >= Math.max(position, checkedIndex) + 1) {
@@ -280,10 +280,10 @@ public class CategorySpinner extends AppCompatSpinner implements DialogInterface
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setCancelable(false);
         if (isMultipleChoice()) {
-            builder.setTitle(getResources().getString(R.string.supersede_feedbacklibrary_multiple_options_dialog_title));
+            builder.setTitle(getResources().getString(R.string.category_multiple_options));
             builder.setMultiChoiceItems(items, mSelection, this);
             final String itemsAtStart = getSelectedItemsAsString();
-            builder.setPositiveButton(R.string.supersede_feedbacklibrary_yes_string, new DialogInterface.OnClickListener() {
+            builder.setPositiveButton(R.string.dialog_yes, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     simpleAdapter.clear();
@@ -291,7 +291,7 @@ public class CategorySpinner extends AppCompatSpinner implements DialogInterface
                     System.arraycopy(mSelection, 0, mSelectionAtStart, 0, mSelection.length);
                 }
             });
-            builder.setNegativeButton(R.string.supersede_feedbacklibrary_cancel_string, new DialogInterface.OnClickListener() {
+            builder.setNegativeButton(R.string.dialog_cancel, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     simpleAdapter.clear();
@@ -300,9 +300,9 @@ public class CategorySpinner extends AppCompatSpinner implements DialogInterface
                 }
             });
         } else {
-            builder.setTitle(getResources().getString(R.string.supersede_feedbacklibrary_single_option_dialog_title));
+            builder.setTitle(getResources().getString(R.string.category_single_option));
             builder.setSingleChoiceItems(items, checkedIndex, this);
-            builder.setNegativeButton(R.string.supersede_feedbacklibrary_cancel_string, new DialogInterface.OnClickListener() {
+            builder.setNegativeButton(R.string.dialog_cancel, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     //nop

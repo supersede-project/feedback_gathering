@@ -3,8 +3,10 @@ package ch.uzh.supersede.feedbacklibrary.services;
 import android.app.Activity;
 import android.util.Log;
 
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.FeedbackActivityConstants.APPLICATION_ID;
+
 public class ConfigurationRequestWrapper {
-    private static final String TAG = "ConfigurationRequestWrapper";
+    private static final String TAG = "ConfigurationRequestWra";
     private String url;
     private String language;
     private String intermediateDialogText;
@@ -86,7 +88,7 @@ public class ConfigurationRequestWrapper {
         public ConfigurationRequestWrapper build() {
             if (checkNullAndLog(url, "url") || checkNullAndLog(language, "language") || checkNullAndLog
                     (intermediateDialogText, "intermediateDialogText") || checkNullAndLog(activityToStart, "activityToStart")
-                    || checkNullAndLog(startingActivity, "startingActivity") || checkNullAndLog(applicationId, "applicationId")
+                    || checkNullAndLog(startingActivity, "startingActivity") || checkNullAndLog(applicationId, APPLICATION_ID)
                     || checkNullAndLog(pullConfigurationId, "pullConfigurationId")) {
                 throw new RuntimeException("Could not create ConfigurationRequestWrapper!");
             }

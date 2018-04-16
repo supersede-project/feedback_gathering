@@ -66,19 +66,19 @@ public class EditImageDialog extends DialogFragment {
         recyclerView.setHasFixedSize(true);
 
         switch (DialogType.valueOf(type)) {
-            case Favorite:
+            case FAVORITE:
                 getFavorites();
-                builder.setTitle(R.string.favorite);
+                builder.setTitle(R.string.image_annotation_favorite);
                 break;
 
-            case QuickEdit:
+            case QUICK_EDIT:
                 getItems(quickEditItems);
-                builder.setTitle(R.string.quick_edit);
+                builder.setTitle(R.string.image_annotation_quick_edit);
                 break;
 
-            case Color:
+            case CHANGE_COLOR:
                 getItems(colorEditItems);
-                builder.setTitle(R.string.color);
+                builder.setTitle(R.string.image_annotation_color);
                 break;
             default:
         }
@@ -124,7 +124,7 @@ public class EditImageDialog extends DialogFragment {
     private void getColor() {
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("ImageEdit", Context.MODE_PRIVATE);
 
-        EditImageItem color = new EditImageItem(getString(R.string.supersede_feedbacklibrary_colorpickerbutton_text), R.drawable.ic_palette_black_48dp);
+        EditImageItem color = new EditImageItem(getString(R.string.image_annotation_color_picker), R.drawable.ic_palette_black_48dp);
         color.setOnClickListener(new EditImageItem.OnClickListener() {
             @Override
             public void onClick() {
@@ -133,7 +133,7 @@ public class EditImageDialog extends DialogFragment {
         });
         colorEditItems.put(color.getTitle(), color);
 
-        final EditImageItem blur = new EditImageItem(getString(R.string.supersede_feedbacklibrary_blurbutton_text), R.drawable.ic_blur_on_black_48dp);
+        final EditImageItem blur = new EditImageItem(getString(R.string.image_annotation_blur), R.drawable.ic_blur_on_black_48dp);
         final AnnotateImageView annotateImageView = setCorrectFavoritesIfNeed(sharedPreferences, blur);
         blur.setOnClickListener(new EditImageItem.OnClickListener() {
             @Override
@@ -151,7 +151,7 @@ public class EditImageDialog extends DialogFragment {
         });
         colorEditItems.put(blur.getTitle(), blur);
 
-        EditImageItem fill = new EditImageItem(getString(R.string.supersede_feedbacklibrary_strokebutton_text), R.drawable.ic_format_color_fill_black_48dp);
+        EditImageItem fill = new EditImageItem(getString(R.string.image_annotation_stroke), R.drawable.ic_format_color_fill_black_48dp);
         setCorrectFillIfNeed(sharedPreferences, annotateImageView, fill);
         fill.setOnClickListener(new EditImageItem.OnClickListener() {
             @Override
@@ -161,29 +161,29 @@ public class EditImageDialog extends DialogFragment {
         });
         colorEditItems.put(fill.getTitle(), fill);
 
-        EditImageItem black = new EditImageItem(getString(R.string.supersede_feedbacklibrary_blackbutton_text), R.drawable.ic_brightness_1_black_48dp);
+        EditImageItem black = new EditImageItem(getString(R.string.image_annotation_black), R.drawable.ic_brightness_1_black_48dp);
         if (!getAnnotateImageActivity().isBlackModeOn()) {
             colorEditItems.put(color.getTitle(), color);
-            black.setTitle(getString(R.string.supersede_feedbacklibrary_blackbutton_text));
+            black.setTitle(getString(R.string.image_annotation_black));
 
-            boolean isColorFavorite = sharedPreferences.getBoolean(getString(R.string.supersede_feedbacklibrary_colorbutton_text), false);
+            boolean isColorFavorite = sharedPreferences.getBoolean(getString(R.string.image_annotation_color), false);
 
             if (isColorFavorite) {
                 SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putBoolean(getString(R.string.supersede_feedbacklibrary_colorbutton_text), false);
-                editor.putBoolean(getString(R.string.supersede_feedbacklibrary_blackbutton_text), true);
+                editor.putBoolean(getString(R.string.image_annotation_color), false);
+                editor.putBoolean(getString(R.string.image_annotation_black), true);
                 editor.apply();
             }
         } else {
             colorEditItems.remove(color.getTitle());
-            black.setTitle(getString(R.string.supersede_feedbacklibrary_colorbutton_text));
+            black.setTitle(getString(R.string.image_annotation_color));
 
-            boolean isBlackFavorite = sharedPreferences.getBoolean(getString(R.string.supersede_feedbacklibrary_blackbutton_text), false);
+            boolean isBlackFavorite = sharedPreferences.getBoolean(getString(R.string.image_annotation_black), false);
 
             if (isBlackFavorite) {
                 SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putBoolean(getString(R.string.supersede_feedbacklibrary_blackbutton_text), false);
-                editor.putBoolean(getString(R.string.supersede_feedbacklibrary_colorbutton_text), true);
+                editor.putBoolean(getString(R.string.image_annotation_black), false);
+                editor.putBoolean(getString(R.string.image_annotation_color), true);
                 editor.apply();
             }
         }
@@ -198,23 +198,23 @@ public class EditImageDialog extends DialogFragment {
 
     private void setCorrectFillIfNeed(SharedPreferences sharedPreferences, AnnotateImageView annotateImageView, EditImageItem fill) {
         if (annotateImageView.getPaintStyle() == Paint.Style.FILL) {
-            fill.setTitle(getString(R.string.supersede_feedbacklibrary_strokebutton_text));
-            boolean isFillFavorite = sharedPreferences.getBoolean(getString(R.string.supersede_feedbacklibrary_fillbutton_text), false);
+            fill.setTitle(getString(R.string.image_annotation_stroke));
+            boolean isFillFavorite = sharedPreferences.getBoolean(getString(R.string.image_annotation_fill), false);
 
             if (isFillFavorite) {
                 SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putBoolean(getString(R.string.supersede_feedbacklibrary_fillbutton_text), false);
-                editor.putBoolean(getString(R.string.supersede_feedbacklibrary_strokebutton_text), true);
+                editor.putBoolean(getString(R.string.image_annotation_fill), false);
+                editor.putBoolean(getString(R.string.image_annotation_stroke), true);
                 editor.apply();
             }
         } else {
-            fill.setTitle(getString(R.string.supersede_feedbacklibrary_fillbutton_text));
-            boolean isStrokeFavorite = sharedPreferences.getBoolean(getString(R.string.supersede_feedbacklibrary_strokebutton_text), false);
+            fill.setTitle(getString(R.string.image_annotation_fill));
+            boolean isStrokeFavorite = sharedPreferences.getBoolean(getString(R.string.image_annotation_stroke), false);
 
             if (isStrokeFavorite) {
                 SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putBoolean(getString(R.string.supersede_feedbacklibrary_strokebutton_text), false);
-                editor.putBoolean(getString(R.string.supersede_feedbacklibrary_fillbutton_text), true);
+                editor.putBoolean(getString(R.string.image_annotation_stroke), false);
+                editor.putBoolean(getString(R.string.image_annotation_fill), true);
                 editor.apply();
             }
         }
@@ -233,23 +233,23 @@ public class EditImageDialog extends DialogFragment {
         final AnnotateImageView annotateImageView = getAnnotateImageActivity().getAnnotateImageView();
 
         if (annotateImageView.getBlur() <= 0F) {
-            blur.setTitle(getString(R.string.supersede_feedbacklibrary_blurbutton_text));
-            boolean isUnblurFavorite = sharedPreferences.getBoolean(getString(R.string.supersede_feedbacklibrary_unblurbutton_text), false);
+            blur.setTitle(getString(R.string.image_annotation_blur));
+            boolean isUnblurFavorite = sharedPreferences.getBoolean(getString(R.string.image_annotation_normal_mode), false);
 
             if (isUnblurFavorite) {
                 SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putBoolean(getString(R.string.supersede_feedbacklibrary_unblurbutton_text), false);
-                editor.putBoolean(getString(R.string.supersede_feedbacklibrary_blurbutton_text), true);
+                editor.putBoolean(getString(R.string.image_annotation_normal_mode), false);
+                editor.putBoolean(getString(R.string.image_annotation_blur), true);
                 editor.apply();
             }
         } else {
-            blur.setTitle(getString(R.string.supersede_feedbacklibrary_unblurbutton_text));
-            boolean isBlurFavorite = sharedPreferences.getBoolean(getString(R.string.supersede_feedbacklibrary_blurbutton_text), false);
+            blur.setTitle(getString(R.string.image_annotation_normal_mode));
+            boolean isBlurFavorite = sharedPreferences.getBoolean(getString(R.string.image_annotation_blur), false);
 
             if (isBlurFavorite) {
                 SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putBoolean(getString(R.string.supersede_feedbacklibrary_blurbutton_text), false);
-                editor.putBoolean(getString(R.string.supersede_feedbacklibrary_unblurbutton_text), true);
+                editor.putBoolean(getString(R.string.image_annotation_blur), false);
+                editor.putBoolean(getString(R.string.image_annotation_normal_mode), true);
                 editor.apply();
             }
         }

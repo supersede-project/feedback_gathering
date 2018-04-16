@@ -11,7 +11,6 @@ import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.StrictMode;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -52,10 +51,10 @@ import ch.uzh.supersede.feedbacklibrary.components.views.TextAnnotationImageView
 import static android.graphics.Color.BLACK;
 import static android.graphics.Color.RED;
 import static android.graphics.Color.WHITE;
-import static ch.uzh.supersede.feedbacklibrary.utils.Constants.ScreenshotConstants.EXTRA_KEY_ALL_STICKER_ANNOTATIONS;
-import static ch.uzh.supersede.feedbacklibrary.utils.Constants.ScreenshotConstants.EXTRA_KEY_HAS_STICKER_ANNOTATIONS;
-import static ch.uzh.supersede.feedbacklibrary.utils.Constants.ScreenshotConstants.IMAGE_ANNOTATED_DATA_DB_KEY;
-import static ch.uzh.supersede.feedbacklibrary.utils.Constants.ScreenshotConstants.SEPARATOR;
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.AnnotateImageConstants.EXTRA_KEY_ALL_STICKER_ANNOTATIONS;
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.AnnotateImageConstants.EXTRA_KEY_HAS_STICKER_ANNOTATIONS;
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.AnnotateImageConstants.IMAGE_ANNOTATED_DATA_DB_KEY;
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.AnnotateImageConstants.SEPARATOR;
 
 
 /**
@@ -142,7 +141,6 @@ public class AnnotateImageActivity extends AbstractBaseActivity implements Color
         annotateImageView.setBlur(0F);
         // Set the text attributes
         annotateImageView.setText("Default text");
-        annotateImageView.setFontFamily(Typeface.DEFAULT);
         annotateImageView.setFontSize(32F);
         annotateImageView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.supersede_feedbacklibrary_annotate_image_layout);
@@ -187,12 +185,12 @@ public class AnnotateImageActivity extends AbstractBaseActivity implements Color
         stickerIcons.add(R.drawable.ic_sentiment_dissatisfied_black_48dp);
         stickerIcons.add(R.drawable.ic_sentiment_neutral_black_48dp);
         stickerIcons.add(R.drawable.ic_sentiment_satisfied_black_48dp);
-        stickerLabels.add(getResources().getString(R.string.supersede_feedbacklibrary_sticker_dialog_smiley_title));
-        stickerLabels.add(getResources().getString(R.string.supersede_feedbacklibrary_sticker_dialog_thumb_up_title));
-        stickerLabels.add(getResources().getString(R.string.supersede_feedbacklibrary_sticker_dialog_thumb_down_title));
-        stickerLabels.add(getResources().getString(R.string.supersede_feedbacklibrary_sticker_dialog_dissatisfied_title));
-        stickerLabels.add(getResources().getString(R.string.supersede_feedbacklibrary_sticker_dialog_neutral_title));
-        stickerLabels.add(getResources().getString(R.string.supersede_feedbacklibrary_sticker_dialog_satisfied_title));
+        stickerLabels.add(getResources().getString(R.string.sticker_smiley));
+        stickerLabels.add(getResources().getString(R.string.sticker_thumb_up));
+        stickerLabels.add(getResources().getString(R.string.sticker_thumb_down));
+        stickerLabels.add(getResources().getString(R.string.sticker_dissatisfied));
+        stickerLabels.add(getResources().getString(R.string.sticker_neutral));
+        stickerLabels.add(getResources().getString(R.string.sticker_satisfied));
     }
 
     @Override
@@ -215,7 +213,7 @@ public class AnnotateImageActivity extends AbstractBaseActivity implements Color
                 FeedbackDatabase.getInstance(this).writeByte(IMAGE_ANNOTATED_DATA_DB_KEY, bytes);
                 annotateImageView.onCroppedRefresh(this);
             } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
-                Toast toast = Toast.makeText(getApplicationContext(), R.string.supersede_feedbacklibrary_error_text, Toast.LENGTH_SHORT);
+                Toast toast = Toast.makeText(getApplicationContext(), R.string.info_error, Toast.LENGTH_SHORT);
                 toast.show();
             }
         }
@@ -391,7 +389,7 @@ public class AnnotateImageActivity extends AbstractBaseActivity implements Color
         quickEditButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showDialog(DialogType.QuickEdit);
+                showDialog(DialogType.QUICK_EDIT);
             }
         });
 
@@ -399,7 +397,7 @@ public class AnnotateImageActivity extends AbstractBaseActivity implements Color
         colorButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showDialog(DialogType.Color);
+                showDialog(DialogType.CHANGE_COLOR);
             }
         });
 
@@ -471,9 +469,9 @@ public class AnnotateImageActivity extends AbstractBaseActivity implements Color
         dialog.setArguments(args);
 
         switch (type) {
-            case Favorite:
-            case QuickEdit:
-            case Color:
+            case FAVORITE:
+            case QUICK_EDIT:
+            case CHANGE_COLOR:
                 dialog.show(getSupportFragmentManager(), "EditImageDialog");
                 break;
             default:
@@ -489,8 +487,8 @@ public class AnnotateImageActivity extends AbstractBaseActivity implements Color
         if (stickerDialog == null) {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setIcon(R.drawable.ic_sentiment_satisfied_black_48dp);
-            builder.setTitle(getResources().getString(R.string.supersede_feedbacklibrary_sticker_dialog_title));
-            builder.setNegativeButton(getResources().getString(R.string.supersede_feedbacklibrary_cancel_string), new DialogInterface.OnClickListener() {
+            builder.setTitle(getResources().getString(R.string.sticker));
+            builder.setNegativeButton(getResources().getString(R.string.dialog_cancel), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.dismiss();

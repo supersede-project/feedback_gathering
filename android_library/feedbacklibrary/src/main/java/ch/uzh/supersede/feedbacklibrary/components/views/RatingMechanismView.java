@@ -5,17 +5,14 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 
 import ch.uzh.supersede.feedbacklibrary.R;
-import ch.uzh.supersede.feedbacklibrary.models.Mechanism;
+import ch.uzh.supersede.feedbacklibrary.models.AbstractMechanism;
 import ch.uzh.supersede.feedbacklibrary.models.RatingMechanism;
 
-/**
- * Rating mechanism view
- */
-public class RatingMechanismView extends MechanismView {
+public class RatingMechanismView extends AbstractMechanismView {
     private RatingMechanism ratingMechanism = null;
     private RatingBar ratingBar;
 
-    public RatingMechanismView(LayoutInflater layoutInflater, Mechanism mechanism) {
+    public RatingMechanismView(LayoutInflater layoutInflater, AbstractMechanism mechanism) {
         super(layoutInflater);
         this.ratingMechanism = (RatingMechanism) mechanism;
         setEnclosingLayout(getLayoutInflater().inflate(R.layout.mechanism_rating, null));

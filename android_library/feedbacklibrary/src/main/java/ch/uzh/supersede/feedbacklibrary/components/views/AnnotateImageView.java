@@ -9,7 +9,6 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PointF;
 import android.graphics.RectF;
-import android.graphics.Typeface;
 import android.support.v7.widget.AppCompatImageView;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
@@ -18,21 +17,20 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 
-import ch.uzh.supersede.feedbacklibrary.R;
-import ch.uzh.supersede.feedbacklibrary.utils.Utils;
-
 import java.util.ArrayList;
 import java.util.List;
 
-public class AnnotateImageView extends AppCompatImageView {
+import ch.uzh.supersede.feedbacklibrary.R;
+import ch.uzh.supersede.feedbacklibrary.utils.Utils;
 
+public class AnnotateImageView extends AppCompatImageView {
 
     public enum Mode {
         DRAW, ERASER
     }
 
     public enum Drawer {
-        PEN, LINE, ARROW, RECTANGLE, CIRCLE, ELLIPSE, QUADRATIC_BEZIER, QUBIC_BEZIER
+        PEN, LINE, ARROW, RECTANGLE, CIRCLE, ELLIPSE, QUADRATIC_BEZIER, CUBIC_BEZIER
     }
 
     private final Paint emptyPaint = new Paint();
@@ -59,12 +57,7 @@ public class AnnotateImageView extends AppCompatImageView {
     private Paint.Join lineJoin = Paint.Join.ROUND;
     // Text
     private String text = "";
-    private Typeface fontFamily = Typeface.DEFAULT;
-    private float fontSize = 32F;
-    private Paint.Align textAlign = Paint.Align.RIGHT;
     private Paint textPaint = new Paint();
-    private float textX = 0F;
-    private float textY = 0F;
     // Drawer
     private float startX = 0F;
     private float startY = 0F;
@@ -272,7 +265,7 @@ public class AnnotateImageView extends AppCompatImageView {
         switch (mode) {
             case DRAW:
             case ERASER:
-                if ((drawer != Drawer.QUADRATIC_BEZIER) && (drawer != Drawer.QUBIC_BEZIER)) {
+                if ((drawer != Drawer.QUADRATIC_BEZIER) && (drawer != Drawer.CUBIC_BEZIER)) {
                     // Otherwise
                     updateHistory(createPath(event));
                     isDown = true;
@@ -303,7 +296,7 @@ public class AnnotateImageView extends AppCompatImageView {
         switch (mode) {
             case DRAW:
             case ERASER:
-                if ((drawer != Drawer.QUADRATIC_BEZIER) && (drawer != Drawer.QUBIC_BEZIER)) {
+                if ((drawer != Drawer.QUADRATIC_BEZIER) && (drawer != Drawer.CUBIC_BEZIER)) {
                     if (!isDown) {
                         return;
                     }
@@ -473,18 +466,6 @@ public class AnnotateImageView extends AppCompatImageView {
 
     public void setDrawer(Drawer drawer) {
         this.drawer = drawer;
-    }
-
-    public void setFontFamily(Typeface face) {
-        fontFamily = face;
-    }
-
-    public void setFontSize(float size) {
-        if (size >= 0F) {
-            fontSize = size;
-        } else {
-            fontSize = 32F;
-        }
     }
 
     public void setLineCap(Paint.Cap cap) {

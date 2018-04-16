@@ -36,7 +36,7 @@ import ch.uzh.supersede.feedbacklibrary.feedbacks.ScreenshotFeedback;
 import ch.uzh.supersede.feedbacklibrary.utils.DialogUtils;
 import ch.uzh.supersede.feedbacklibrary.utils.Utils;
 import ch.uzh.supersede.feedbacklibrary.components.views.CategoryMechanismView;
-import ch.uzh.supersede.feedbacklibrary.components.views.MechanismView;
+import ch.uzh.supersede.feedbacklibrary.components.views.AbstractMechanismView;
 import ch.uzh.supersede.feedbacklibrary.components.views.RatingMechanismView;
 
 public class EmailService {
@@ -53,7 +53,7 @@ public class EmailService {
         return instance;
     }
 
-    public void checkAndSendViaEmail(final Activity activity, CheckBox sendViaEmailCheckbox, EditText emailEditText, final Feedback feedback, final List<MechanismView> mechanismViews) {
+    public void checkAndSendViaEmail(final Activity activity, CheckBox sendViaEmailCheckbox, EditText emailEditText, final Feedback feedback, final List<AbstractMechanismView> mechanismViews) {
         if (!sendViaEmailCheckbox.isChecked()) {
             return;
         }
@@ -71,12 +71,12 @@ public class EmailService {
             });
             emailThread.start();
         } else {
-            DialogUtils.showInformationDialog(activity, new String[]{activity.getResources().getString(R.string.invalid_email)}, true);
+            DialogUtils.showInformationDialog(activity, new String[]{activity.getResources().getString(R.string.email_invalid)}, true);
         }
     }
 
     //TODO: Funktionalitaet geht noch nicht.
-    private static void execSendMail(final Activity activity, final String email, final Feedback feedback, final List<MechanismView> mechanismViews) {
+    private static void execSendMail(final Activity activity, final String email, final Feedback feedback, final List<AbstractMechanismView> mechanismViews) {
         final String username = "supersede.zurich@gmail.com";
         final String password = System.getenv("F2F_SMTP_EMAIL_PASSWORD");
 
@@ -139,7 +139,7 @@ public class EmailService {
 
         } catch (MessagingException e) {
             Log.e(e.getMessage(), e.toString());
-            DialogUtils.showInformationDialog(activity, new String[]{activity.getResources().getString(R.string.supersede_feedbacklibrary_error_text)}, true);
+            DialogUtils.showInformationDialog(activity, new String[]{activity.getResources().getString(R.string.info_error)}, true);
         }
     }
 

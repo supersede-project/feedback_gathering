@@ -16,7 +16,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import ch.uzh.supersede.feedbacklibrary.R;
-import ch.uzh.supersede.feedbacklibrary.components.views.AbstractAnnotationView;
 
 import static android.graphics.Color.WHITE;
 import static android.graphics.Typeface.BOLD;
@@ -187,7 +186,7 @@ public class TextAnnotationImageView extends AbstractAnnotationView {
         final LinearLayout emptyLayout = (LinearLayout) linearLayout.findViewById(R.id.supersede_feedbacklibrary_text_annotation_dialog_empty_layout);
 
         AlertDialog.Builder dialog = new AlertDialog.Builder(context);
-        dialog.setPositiveButton(getResources().getString(R.string.supersede_feedbacklibrary_ok_string), new DialogInterface.OnClickListener() {
+        dialog.setPositiveButton(getResources().getString(R.string.dialog_ok), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 setAnnotationInputText(textAnnotationText.getText().toString());
@@ -198,7 +197,7 @@ public class TextAnnotationImageView extends AbstractAnnotationView {
                 dialog.dismiss();
             }
         });
-        dialog.setNegativeButton(getResources().getString(R.string.supersede_feedbacklibrary_cancel_string), new DialogInterface.OnClickListener() {
+        dialog.setNegativeButton(getResources().getString(R.string.dialog_cancel), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 if (emptyLayout != null) {

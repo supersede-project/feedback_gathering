@@ -15,9 +15,6 @@ import ch.uzh.supersede.feedbacklibrary.R;
 import static android.view.Gravity.*;
 import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 
-/**
- * Sticker view
- */
 public abstract class AbstractAnnotationView extends FrameLayout implements OnTouchListener {
     public static final int BUTTON_SIZE_DP = 30;
     public static final int SELF_SIZE_DP = 100;

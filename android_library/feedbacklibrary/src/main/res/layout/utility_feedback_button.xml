@@ -15,7 +15,7 @@
         android:layout_toStartOf="@+id/supersede_feedbacklibrary_send_feedback_button"
         android:paddingTop="5dp"
         android:visibility="gone"
-        android:text="@string/supersede_feedbacklibrary_sendconfirmation_text"
+        android:text="@string/feedback_send_confirmation"
         android:textSize="16sp"/>
 
     <Button
@@ -32,6 +32,6 @@
         android:background="@drawable/pink_button"
         android:textColor="@android:color/white"
         android:onClick="sendButtonClicked"
-        android:text="@string/supersede_feedbacklibrary_sendbutton_text"/>
+        android:text="@string/feedback_send"/>
 
 </RelativeLayout>

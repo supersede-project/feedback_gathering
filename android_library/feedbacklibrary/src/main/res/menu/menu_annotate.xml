@@ -7,12 +7,12 @@
     <item
         android:id="@+id/supersede_feedbacklibrary_action_annotate_cancel"
         android:icon="@drawable/ic_clear_white_24dp"
-        android:title="@string/supersede_feedbacklibrary_cancelannotation_title"
+        android:title="@string/image_annotation_cancel"
         app:showAsAction="always"/>
 
     <item
         android:id="@+id/supersede_feedbacklibrary_action_annotate_accept"
         android:icon="@drawable/ic_check_white_24dp"
-        android:title="@string/supersede_feedbacklibrary_finishannotation_title"
+        android:title="@string/image_annotation_finish"
         app:showAsAction="always"/>
 </menu>

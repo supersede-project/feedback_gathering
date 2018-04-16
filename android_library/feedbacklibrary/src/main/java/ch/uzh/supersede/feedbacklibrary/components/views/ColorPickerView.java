@@ -12,9 +12,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
 
-/**
- * Color picker view.
- */
 public class ColorPickerView extends View {
     private static final int CENTER_X = 100;
     private static final int CENTER_Y = 100;

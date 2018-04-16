@@ -7,16 +7,12 @@ import android.support.v4.content.ContextCompat;
 
 import java.util.ArrayList;
 
-import static ch.uzh.supersede.feedbacklibrary.utils.Constants.FEEDBACK_CONTRIBUTOR;
-import static ch.uzh.supersede.feedbacklibrary.utils.Constants.SHARED_PREFERENCES;
-import static ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility.USER_LEVEL.ACTIVE;
-import static ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility.USER_LEVEL.ADVANCED;
-import static ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility.USER_LEVEL.LOCKED;
-import static ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility.USER_LEVEL.PASSIVE;
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.*;
+import static ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility.USER_LEVEL.*;
 
-public class PermissionUtility{
+public class PermissionUtility {
 
-    public enum USER_LEVEL{
+    public enum USER_LEVEL {
         LOCKED(0),
         PASSIVE(1,
                 Manifest.permission.INTERNET,
@@ -34,18 +30,20 @@ public class PermissionUtility{
                 Manifest.permission.RECORD_AUDIO);
         private int level;
         private String[] permissions;
-        USER_LEVEL(int level, String... permissions){
+
+        USER_LEVEL(int level, String... permissions) {
             this.level = level;
             this.permissions = permissions;
         }
-        public boolean check(Context context){
+
+        public boolean check(Context context) {
             boolean contributor = context.getSharedPreferences(SHARED_PREFERENCES, Context.MODE_PRIVATE).getBoolean(FEEDBACK_CONTRIBUTOR, false);
-            return contributor&&getMissing(context).length==0;
+            return contributor && getMissing(context).length == 0;
         }
 
-        public String[] getMissing(Context context){
+        public String[] getMissing(Context context) {
             ArrayList<String> permissionsNotGranted = new ArrayList<>();
-            for (String permission : permissions){
+            for (String permission : permissions) {
                 if (ContextCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
                     permissionsNotGranted.add(permission);
                 }
@@ -58,13 +56,16 @@ public class PermissionUtility{
         }
     }
 
-    public static USER_LEVEL getUserLevel(Context context){
-        if (ADVANCED.check(context))
+    public static USER_LEVEL getUserLevel(Context context) {
+        if (ADVANCED.check(context)) {
             return ADVANCED;
-        if (ACTIVE.check(context))
+        }
+        if (ACTIVE.check(context)) {
             return ACTIVE;
-        if (PASSIVE.check(context))
+        }
+        if (PASSIVE.check(context)) {
             return PASSIVE;
+        }
         return LOCKED;
     }
 }

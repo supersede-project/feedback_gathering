@@ -12,12 +12,10 @@ import java.util.HashMap;
 
 import ch.uzh.supersede.feedbacklibrary.R;
 import ch.uzh.supersede.feedbacklibrary.activities.FeedbackHubActivity;
-import ch.uzh.supersede.feedbacklibrary.services.FeedbackService;
 import ch.uzh.supersede.feedbacklibrary.utils.Utils;
 
-import static ch.uzh.supersede.feedbacklibrary.utils.Constants.FeedbackActivityConstants.EXTRA_KEY_APPLICATION_ID;
-import static ch.uzh.supersede.feedbacklibrary.utils.Constants.FeedbackActivityConstants.EXTRA_KEY_LANGUAGE;
-import static ch.uzh.supersede.feedbacklibrary.utils.Constants.SUPERSEEDE_BASE_URL;
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.FeedbackActivityConstants.*;
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.SUPERSEDE_BASE_URL;
 import static ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility.USER_LEVEL.ACTIVE;
 
 public class FeedbackConnector {
@@ -53,7 +51,7 @@ public class FeedbackConnector {
     }
 
     private static void onListenerTriggered(Activity activity, View view, MotionEvent event) {
-        startFeedbackHubWithScreenshotCapture(SUPERSEEDE_BASE_URL, activity, 1337, "en");
+        startFeedbackHubWithScreenshotCapture(SUPERSEDE_BASE_URL, activity, 1337, "en");
     }
 
     private static class FeedbackOnTouchListener implements OnTouchListener{
@@ -82,8 +80,8 @@ public class FeedbackConnector {
             Utils.storeScreenshotToIntent(activity, intent);
         }
         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-        intent.putExtra(EXTRA_KEY_APPLICATION_ID, applicationId);
-        intent.putExtra(EXTRA_KEY_LANGUAGE, language);
+        intent.putExtra(APPLICATION_ID, applicationId);
+        intent.putExtra(LANGUAGE, language);
         activity.startActivity(intent);
         activity.overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
     }
