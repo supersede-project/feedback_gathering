@@ -9,16 +9,13 @@ public class Constants {
     private Constants() {
     }
 
-
     public static final int PERMISSION_REQUEST_ALL = 800;
     public static final String FEEDBACK_CONTRIBUTOR = "feedbackContributor";
     public static final String SHARED_PREFERENCES = "feedbackSharedPreferences";
     public static final String USER_NAME = "userName";
 
-
     public static final String PATH_DELIMITER = "/";
     public static final String SUPERSEEDE_BASE_URL = "https://platform.supersede.eu:8443/";
-    public static final int OK_RESPONSE = 200;
 
 
     public static class  FeedbackColorConstants {
