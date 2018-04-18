@@ -1,65 +1,33 @@
 package ch.uzh.supersede.feedbacklibrary.activities;
 
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.ProgressDialog;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
+import android.app.*;
+import android.content.*;
 import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
-import android.net.Uri;
+import android.graphics.*;
+import android.net.*;
 import android.os.Bundle;
-import android.provider.MediaStore;
-import android.provider.Settings;
+import android.provider.*;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.Toast;
+import android.view.*;
+import android.widget.*;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import com.google.gson.*;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
-import ch.uzh.supersede.feedbacklibrary.BuildConfig;
-import ch.uzh.supersede.feedbacklibrary.R;
-import ch.uzh.supersede.feedbacklibrary.configurations.Configuration;
-import ch.uzh.supersede.feedbacklibrary.configurations.OrchestratorConfiguration;
-import ch.uzh.supersede.feedbacklibrary.configurations.OrchestratorConfigurationItem;
+import ch.uzh.supersede.feedbacklibrary.*;
+import ch.uzh.supersede.feedbacklibrary.components.views.*;
+import ch.uzh.supersede.feedbacklibrary.configurations.*;
 import ch.uzh.supersede.feedbacklibrary.database.FeedbackDatabase;
-import ch.uzh.supersede.feedbacklibrary.feedbacks.AudioFeedback;
-import ch.uzh.supersede.feedbacklibrary.feedbacks.Feedback;
-import ch.uzh.supersede.feedbacklibrary.feedbacks.ScreenshotFeedback;
+import ch.uzh.supersede.feedbacklibrary.feedback.*;
 import ch.uzh.supersede.feedbacklibrary.models.Mechanism;
-import ch.uzh.supersede.feedbacklibrary.services.ConfigurationRequestWrapper;
-import ch.uzh.supersede.feedbacklibrary.services.EmailService;
-import ch.uzh.supersede.feedbacklibrary.services.FeedbackService;
-import ch.uzh.supersede.feedbacklibrary.services.IFeedbackServiceEventListener;
+import ch.uzh.supersede.feedbacklibrary.services.*;
 import ch.uzh.supersede.feedbacklibrary.stubs.OrchestratorStub;
 import ch.uzh.supersede.feedbacklibrary.stubs.OrchestratorStub.MechanismBuilder;
-import ch.uzh.supersede.feedbacklibrary.utils.DialogUtils;
-import ch.uzh.supersede.feedbacklibrary.utils.Utils;
-import ch.uzh.supersede.feedbacklibrary.views.AudioMechanismView;
-import ch.uzh.supersede.feedbacklibrary.views.CategoryMechanismView;
-import ch.uzh.supersede.feedbacklibrary.views.MechanismView;
-import ch.uzh.supersede.feedbacklibrary.views.RatingMechanismView;
-import ch.uzh.supersede.feedbacklibrary.views.ScreenshotMechanismView;
-import ch.uzh.supersede.feedbacklibrary.views.TextMechanismView;
-import okhttp3.MediaType;
-import okhttp3.MultipartBody;
-import okhttp3.RequestBody;
+import ch.uzh.supersede.feedbacklibrary.utils.*;
+import okhttp3.*;
 import retrofit2.Response;
 
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.FeedbackActivityConstants.*;
@@ -509,7 +477,7 @@ public class FeedbackActivity extends AbstractBaseActivity implements AudioMecha
 
     public List<MultipartBody.Part> getScreenshotMultipartbodyParts() {
         List<MultipartBody.Part> multipartFiles = new ArrayList<>();
-        List<ScreenshotFeedback> screenshotFeedbackList = feedback.getScreenshotFeedbacks();
+        List<ScreenshotFeedback> screenshotFeedbackList = feedback.getScreenshotFeedback();
         if (screenshotFeedbackList != null) {
             for (int pos = 0; pos < screenshotFeedbackList.size(); ++pos) {
                 File screenshotFile = new File(screenshotFeedbackList.get(pos).getImagePath());
@@ -525,7 +493,7 @@ public class FeedbackActivity extends AbstractBaseActivity implements AudioMecha
 
     public List<MultipartBody.Part> getAudioMultipartbodyParts() {
         List<MultipartBody.Part> multipartFiles = new ArrayList<>();
-        List<AudioFeedback> audioFeedbackList = feedback.getAudioFeedbacks();
+        List<AudioFeedback> audioFeedbackList = feedback.getAudioFeedback();
         if (audioFeedbackList != null) {
             for (int pos = 0; pos < audioFeedbackList.size(); ++pos) {
                 File audioFile = new File(audioFeedbackList.get(pos).getAudioPath());
