@@ -1,16 +1,17 @@
 package ch.uzh.supersede.feedbacklibrary.components.buttons;
 
 import android.app.Activity;
-import android.content.Context;
+import android.content.*;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutCompat;
 import android.util.DisplayMetrics;
-import android.view.Gravity;
+import android.view.*;
 import android.widget.*;
 
 import ch.uzh.supersede.feedbacklibrary.R;
+import ch.uzh.supersede.feedbacklibrary.activities.*;
 import ch.uzh.supersede.feedbacklibrary.database.FeedbackDatabase;
 import ch.uzh.supersede.feedbacklibrary.interfaces.ISortableFeedback;
 import ch.uzh.supersede.feedbacklibrary.utils.*;
@@ -18,6 +19,7 @@ import ch.uzh.supersede.feedbacklibrary.wrapper.FeedbackBean;
 
 import static ch.uzh.supersede.feedbacklibrary.interfaces.ISortableFeedback.FEEDBACK_SORTING.*;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.*;
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.FeedbackActivityConstants.*;
 import static ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility.USER_LEVEL.ACTIVE;
 import static ch.uzh.supersede.feedbacklibrary.wrapper.FeedbackBean.FEEDBACK_STATUS.DUPLICATE;
 
@@ -66,6 +68,21 @@ public class FeedbackListItem extends LinearLayout implements Comparable, ISorta
         lowerWrapperLayout.addView(pointView);
         addView(upperWrapperLayout);
         addView(lowerWrapperLayout);
+        setOnLongClickListener(new OnLongClickListener(){
+            @Override
+            public boolean onLongClick(View v) {
+                startFeedbackDetailsActivity();
+                return false;
+            }
+        });
+    }
+
+    private void startFeedbackDetailsActivity() {
+        Intent intent = new Intent(getContext(), FeedbackDetailsActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+        intent.putExtra(EXTRA_KEY_FEEDBACK_BEAN, feedbackBean);
+        getContext().startActivity(intent);
+        ((Activity)getContext()).overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
     }
 
     public FeedbackBean getFeedbackBean() {

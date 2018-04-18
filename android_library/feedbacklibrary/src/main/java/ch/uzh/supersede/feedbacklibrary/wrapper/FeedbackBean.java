@@ -2,9 +2,11 @@ package ch.uzh.supersede.feedbacklibrary.wrapper;
 
 import android.graphics.Color;
 
+import java.io.Serializable;
+
 import ch.uzh.supersede.feedbacklibrary.utils.CompareUtility;
 
-public class FeedbackBean {
+public class FeedbackBean implements Serializable{
 
     @SuppressWarnings("squid:UnusedPrivateMethod")
     public enum FEEDBACK_STATUS {
