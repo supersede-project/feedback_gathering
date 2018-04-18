@@ -135,12 +135,13 @@ public class FeedbackListActivity extends AbstractBaseActivity {
         activeFeedbackList.clear();
         if (!getString(R.string.list_edit_search).equals(s) && StringUtility.hasText(s)) {
             for (FeedbackListItem item : allFeedbackList) {
-                if (item.getFeedbackBean().getTitle().contains(s)) {
+                if (item.getFeedbackBean().getTitle().toLowerCase().contains(s.toLowerCase())) {
                     activeFeedbackList.add(item);
                 }
             }
             searchTerm = s;
         } else {
+            searchTerm = null;
             activeFeedbackList = new ArrayList<>(allFeedbackList);
         }
         sort();

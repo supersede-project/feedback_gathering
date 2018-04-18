@@ -135,7 +135,7 @@
     <string name="list_button_new">New</string>
     <string name="list_edit_search">Search</string>
     <string name="list_date">Date: %1$s</string>
-    <string name="list_responses">(%1$d Responses)</string>
+    <string name="list_resplies">(%1$d Replies)</string>
     <!--Details-->
     <!--Feedback-->
     <!--Settings-->

@@ -12,6 +12,7 @@ import ch.uzh.supersede.feedbacklibrary.wrapper.FeedbackBean.FEEDBACK_STATUS;
 
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.TECHNICAL_USER_NAME;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.USER_NAME;
+import static ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility.USER_LEVEL.ACTIVE;
 import static ch.uzh.supersede.feedbacklibrary.wrapper.FeedbackBean.FEEDBACK_STATUS.*;
 
 public class RepositoryStub {
@@ -28,7 +29,7 @@ public class RepositoryStub {
 
     private static FeedbackBean generateFeedback(Context context, int minUpVotes,int maxUpVotes, float ownFeedbackPercent) {
         int upperBound = NumberUtility.divide(1,ownFeedbackPercent);
-        boolean ownFeedback = NumberUtility.randomInt(0,upperBound>0?upperBound-1:upperBound)==0;
+        boolean ownFeedback = ACTIVE.check(context)&&NumberUtility.randomInt(0,upperBound>0?upperBound-1:upperBound)==0;
         FEEDBACK_STATUS feedbackStatus = generateFeedbackStatus();
         String title = generateTitle();
         String userName = generateUserName(context, ownFeedback);
@@ -74,7 +75,7 @@ public class RepositoryStub {
     @NonNull
     private static String generateTechnicalUserName(Context context,boolean own) {
         if (own){
-            return FeedbackDatabase.getInstance(context).readString(USER_NAME, null);
+            return FeedbackDatabase.getInstance(context).readString(TECHNICAL_USER_NAME, null);
         }
         return UUID.randomUUID().toString();
     }
@@ -82,13 +83,13 @@ public class RepositoryStub {
     @NonNull
     private static String generateUserName(Context context,boolean own) {
         if (own){
-            return FeedbackDatabase.getInstance(context).readString(TECHNICAL_USER_NAME, null);
+            return FeedbackDatabase.getInstance(context).readString(USER_NAME, null);
         }
         return RepositoryStub.getUniqueName(GeneratorStub.BagOfNames.pickRandom());
     }
     @NonNull
     private static String generateTitle() {
-        return "Feedback regarding ".concat(GeneratorStub.BagOfLabels.pickRandom());
+        return GeneratorStub.BagOfLabels.pickRandom().concat("-Feedback");
     }
     //Should be generated on the Server
     //Return value is something like Jake --> Jake#12345678 (random 8 digits)
