@@ -37,19 +37,17 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.SortedSet;
-import java.util.TreeSet;
 
 import ch.uzh.supersede.feedbacklibrary.R;
 import ch.uzh.supersede.feedbacklibrary.database.FeedbackDatabase;
 import ch.uzh.supersede.feedbacklibrary.models.DialogType;
 import ch.uzh.supersede.feedbacklibrary.utils.ColorPickerDialog;
 import ch.uzh.supersede.feedbacklibrary.utils.Utils;
-import ch.uzh.supersede.feedbacklibrary.views.AbstractAnnotationView;
-import ch.uzh.supersede.feedbacklibrary.views.AnnotateImageView;
-import ch.uzh.supersede.feedbacklibrary.views.EditImageDialog;
-import ch.uzh.supersede.feedbacklibrary.views.StickerAnnotationImageView;
-import ch.uzh.supersede.feedbacklibrary.views.TextAnnotationImageView;
+import ch.uzh.supersede.feedbacklibrary.components.views.AbstractAnnotationView;
+import ch.uzh.supersede.feedbacklibrary.components.views.AnnotateImageView;
+import ch.uzh.supersede.feedbacklibrary.components.views.EditImageDialog;
+import ch.uzh.supersede.feedbacklibrary.components.views.StickerAnnotationImageView;
+import ch.uzh.supersede.feedbacklibrary.components.views.TextAnnotationImageView;
 
 import static android.graphics.Color.BLACK;
 import static android.graphics.Color.RED;
@@ -167,7 +165,7 @@ public class AnnotateImageActivity extends AbstractBaseActivity implements Color
     private void handleStickerAnnotations(Intent intent) {
         HashMap<Integer, String> allStickerAnnotations = (HashMap<Integer, String>) intent.getSerializableExtra(EXTRA_KEY_ALL_STICKER_ANNOTATIONS);
         for (Map.Entry<Integer, String> entry : allStickerAnnotations.entrySet()) {
-            // Array will be of length 6 --> imageResourceId, x, y, width, height, rotation
+            // Array will be of length 6 --> imageResourceId, x, y, screenWidth, screenHeight, rotation
             String[] split = entry.getValue().split(SEPARATOR);
             StickerAnnotationImageView stickerAnnotationImageView = addSticker(Integer.valueOf(split[0]));
             if (stickerAnnotationImageView != null) {

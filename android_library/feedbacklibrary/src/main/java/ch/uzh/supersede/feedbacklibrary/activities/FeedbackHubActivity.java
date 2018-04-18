@@ -9,29 +9,20 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.text.Html;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.*;
+
+import java.util.UUID;
 
 import ch.uzh.supersede.feedbacklibrary.R;
 import ch.uzh.supersede.feedbacklibrary.database.FeedbackDatabase;
-import ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility;
+import ch.uzh.supersede.feedbacklibrary.stubs.RepositoryStub;
+import ch.uzh.supersede.feedbacklibrary.utils.*;
 import ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility.USER_LEVEL;
-import ch.uzh.supersede.feedbacklibrary.utils.PopUp;
-import ch.uzh.supersede.feedbacklibrary.utils.Utils;
 
-import static ch.uzh.supersede.feedbacklibrary.utils.Constants.FEEDBACK_CONTRIBUTOR;
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.*;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.FeedbackActivityConstants.EXTRA_KEY_CACHED_SCREENSHOT;
-import static ch.uzh.supersede.feedbacklibrary.utils.Constants.FeedbackColorConstants.COLOR_STRING;
-import static ch.uzh.supersede.feedbacklibrary.utils.Constants.FeedbackColorConstants.DARK_BLUE;
-import static ch.uzh.supersede.feedbacklibrary.utils.Constants.PERMISSION_REQUEST_ALL;
-import static ch.uzh.supersede.feedbacklibrary.utils.Constants.SHARED_PREFERENCES;
-import static ch.uzh.supersede.feedbacklibrary.utils.Constants.USER_NAME;
-import static ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility.USER_LEVEL.ACTIVE;
-import static ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility.USER_LEVEL.ADVANCED;
-import static ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility.USER_LEVEL.LOCKED;
-import static ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility.USER_LEVEL.PASSIVE;
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.FeedbackColorConstants.*;
+import static ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility.USER_LEVEL.*;
 
 @SuppressWarnings({"squid:MaximumInheritanceDepth","squid:S1170"})
 public class FeedbackHubActivity extends AbstractBaseActivity {
@@ -41,7 +32,6 @@ public class FeedbackHubActivity extends AbstractBaseActivity {
     private Button settingsButton;
     private TextView statusText;
     private String userName;
-    private final String[] preAllocatedStringStorage = new String[]{null};
     private int tapCounter = 0;
     private byte[] cachedScreenshot = null;
 
@@ -139,7 +129,7 @@ public class FeedbackHubActivity extends AbstractBaseActivity {
             } else {
                 //DEVELOPER MENU, TO BE REMOVED OR HIDDEN
                 tapCounter++;
-                if (tapCounter >= 5){
+                if (tapCounter >= 5 && ACTIVE.check(this)){
                     tapCounter = 0;
                     FeedbackDatabase.getInstance(this).writeString(USER_NAME,null);
                     Toast.makeText(this, "DEVELOPER: Username resetted!", Toast.LENGTH_SHORT).show();
@@ -219,13 +209,19 @@ public class FeedbackHubActivity extends AbstractBaseActivity {
         updateUserLevel();
         if (ACTIVE.check(this) && preAllocatedStringStorage[0] != null){
             String name = FeedbackDatabase.getInstance(this).readString(USER_NAME,null);
+            String technicalName = FeedbackDatabase.getInstance(this).readString(TECHNICAL_USER_NAME,null);
             if (name == null){
                 Toast.makeText(this,getString(R.string.hub_username_registered,preAllocatedStringStorage[0]),Toast.LENGTH_SHORT).show();
+                preAllocatedStringStorage[0] = RepositoryStub.getUniqueName(preAllocatedStringStorage[0]);
                 FeedbackDatabase.getInstance(this).writeString(USER_NAME,preAllocatedStringStorage[0]);
                 userName = preAllocatedStringStorage[0];
             }else{
                 userName = name;
                 Toast.makeText(this,getString(R.string.hub_username_restored,name),Toast.LENGTH_SHORT).show();
+            }
+            if (technicalName == null){
+                String id = UUID.randomUUID().toString();
+                FeedbackDatabase.getInstance(this).writeString(TECHNICAL_USER_NAME,id);
             }
             preAllocatedStringStorage[0] = null;
         }

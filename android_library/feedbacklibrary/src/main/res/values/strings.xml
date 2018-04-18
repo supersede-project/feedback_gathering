@@ -112,13 +112,13 @@
 
 
     <!--Hub-->
-    <string name="hub_feedback_list">Show\nFeedbacks</string>
+    <string name="hub_feedback_list">Show\nFeedback</string>
     <string name="hub_feedback_user_level">User-Level\n%1$d</string>
     <string name="hub_feedback_settings">Feedback\nSettings</string>
     <string name="hub_feedback_create">Create\nFeedback</string>
-    <string name="hub_status">&lt;b>&lt;font color="#colorString">Feedback-Hub&lt;/font>&lt;/b>&lt;br/>&lt;br/>&lt;b>User-Name:&lt;/b>&lt;font color="#colorString"> %1$s&lt;/font>&lt;br/>&lt;b>Karma-Level:&lt;/b>&lt;font color="#colorString"> %2$d&lt;/font>&lt;br/>&lt;b>Feedbacks:&lt;/b>&lt;font color="#colorString"> %3$d&lt;/font>&lt;br/>&lt;b>Comments:&lt;/b>&lt;font color="#colorString"> %4$d&lt;/font>&lt;br/>&lt;b>Likes:&lt;/b>&lt;font color="#colorString"> %5$d&lt;/font>&lt;br/>&lt;b>Dislikes:&lt;/b>&lt;font color="#colorString"> %6$d&lt;/font></string>
+    <string name="hub_status">&lt;b>&lt;font color="#colorString">Feedback-Hub&lt;/font>&lt;/b>&lt;br/>&lt;br/>&lt;b>User-Name:&lt;/b>&lt;font color="#colorString"> %1$s&lt;/font>&lt;br/>&lt;b>Karma-Level:&lt;/b>&lt;font color="#colorString"> %2$d&lt;/font>&lt;br/>&lt;b>Feedback:&lt;/b>&lt;font color="#colorString"> %3$d&lt;/font>&lt;br/>&lt;b>Comments:&lt;/b>&lt;font color="#colorString"> %4$d&lt;/font>&lt;br/>&lt;b>Likes:&lt;/b>&lt;font color="#colorString"> %5$d&lt;/font>&lt;br/>&lt;b>Dislikes:&lt;/b>&lt;font color="#colorString"> %6$d&lt;/font></string>
     <string name="hub_access_1">Accessing Level 1</string>
-    <string name="hub_access_1_description">Level 1 grants you access to others Feedbacks and requires Internet-Permissions!</string>
+    <string name="hub_access_1_description">Level 1 grants you access to others Feedback and requires Permissions for Internet-Access!</string>
     <string name="hub_confirm">Confirm</string>
     <string name="hub_access_2">Accessing Level 2</string>
     <string name="hub_access_2_description">Level 2 grants you the ability to create Feedback yourself and requires Storage-Read/Write-Permissions and a User-Name with at least 4 Characters!</string>
@@ -129,6 +129,13 @@
     <string name="hub_username_registered">User-Name "%1$s" registered.</string>
     <string name="hub_warning_permission_not_granted">Permissions for next Level not granted!</string>
     <!--List-->
+    <string name="list_button_mine">Mine</string>
+    <string name="list_button_top">Top</string>
+    <string name="list_button_hot">Hot</string>
+    <string name="list_button_new">New</string>
+    <string name="list_edit_search">Search</string>
+    <string name="list_date">Date: %1$s</string>
+    <string name="list_responses">(%1$d Responses)</string>
     <!--Details-->
     <!--Feedback-->
     <!--Settings-->

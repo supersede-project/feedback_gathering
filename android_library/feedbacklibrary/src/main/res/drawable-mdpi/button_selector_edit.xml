@@ -3,14 +3,14 @@
     <item android:state_pressed="true">
         <shape android:shape="rectangle">
             <corners android:radius="5dp"/>
-            <solid android:color="@color/colorAccent"/>
+            <solid android:color="@color/accent"/>
             <size android:height="22dp" android:width="80dp"/>
         </shape>
     </item>
     <item android:state_selected="true">
         <shape android:shape="rectangle">
             <corners android:radius="5dp"/>
-            <solid android:color="@color/colorAccent"/>
+            <solid android:color="@color/accent"/>
             <size android:height="22dp" android:width="80dp"/>
         </shape>
     </item>
@@ -18,7 +18,7 @@
     <item android:state_pressed="false">
         <shape android:shape="rectangle">
             <corners android:radius="5dp"/>
-            <solid android:color="@color/colorAccent"/>
+            <solid android:color="@color/accent"/>
             <size android:height="22dp" android:width="80dp"/>
         </shape>
     </item>
@@ -26,7 +26,7 @@
     <item>
         <shape android:shape="rectangle">
             <corners android:radius="5dp"/>
-            <solid android:color="@color/colorAccent"/>
+            <solid android:color="@color/accent"/>
             <size android:height="22dp" android:width="80dp"/>
         </shape>
     </item>

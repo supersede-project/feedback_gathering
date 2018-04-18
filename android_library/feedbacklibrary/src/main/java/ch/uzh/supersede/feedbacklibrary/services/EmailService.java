@@ -1,43 +1,24 @@
 package ch.uzh.supersede.feedbacklibrary.services;
 
 import android.app.Activity;
-import android.content.Context;
-import android.content.SharedPreferences;
+import android.content.*;
 import android.os.StrictMode;
 import android.text.TextUtils;
 import android.util.Log;
-import android.widget.CheckBox;
-import android.widget.EditText;
+import android.widget.*;
 
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.List;
-import java.util.Properties;
+import java.net.*;
+import java.util.*;
 
-import javax.activation.DataHandler;
-import javax.activation.DataSource;
-import javax.activation.FileDataSource;
-import javax.mail.BodyPart;
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.Multipart;
+import javax.activation.*;
+import javax.mail.*;
 import javax.mail.PasswordAuthentication;
-import javax.mail.Session;
-import javax.mail.Transport;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeBodyPart;
-import javax.mail.internet.MimeMessage;
-import javax.mail.internet.MimeMultipart;
+import javax.mail.internet.*;
 
 import ch.uzh.supersede.feedbacklibrary.R;
-import ch.uzh.supersede.feedbacklibrary.feedbacks.AudioFeedback;
-import ch.uzh.supersede.feedbacklibrary.feedbacks.Feedback;
-import ch.uzh.supersede.feedbacklibrary.feedbacks.ScreenshotFeedback;
-import ch.uzh.supersede.feedbacklibrary.utils.DialogUtils;
-import ch.uzh.supersede.feedbacklibrary.utils.Utils;
-import ch.uzh.supersede.feedbacklibrary.views.CategoryMechanismView;
-import ch.uzh.supersede.feedbacklibrary.views.MechanismView;
-import ch.uzh.supersede.feedbacklibrary.views.RatingMechanismView;
+import ch.uzh.supersede.feedbacklibrary.components.views.*;
+import ch.uzh.supersede.feedbacklibrary.feedback.*;
+import ch.uzh.supersede.feedbacklibrary.utils.*;
 
 public class EmailService {
     private static final String TAG = "EmailService";
@@ -99,7 +80,7 @@ public class EmailService {
             message.setSubject("Copy of your feedback");
 
             BodyPart messageBodyPart = new MimeBodyPart();
-            String feedbackText = feedback.getTextFeedbacks().get(0).getText();
+            String feedbackText = feedback.getTextFeedback().get(0).getText();
 
             CategoryMechanismView categoryMechanismView = (CategoryMechanismView) mechanismViews.get(4);
             String category = categoryMechanismView.getCategorySpinner().getSelectedItem().toString();
@@ -119,10 +100,10 @@ public class EmailService {
             // Set text message part
             multipart.addBodyPart(messageBodyPart);
 
-            for (ScreenshotFeedback screenshotFeedback : feedback.getScreenshotFeedbacks()) {
+            for (ScreenshotFeedback screenshotFeedback : feedback.getScreenshotFeedback()) {
                 addAttachment(multipart, screenshotFeedback.getImagePath());
             }
-            for (AudioFeedback audioFeedback : feedback.getAudioFeedbacks()) {
+            for (AudioFeedback audioFeedback : feedback.getAudioFeedback()) {
                 addAttachment(multipart, audioFeedback.getAudioPath());
             }
 
