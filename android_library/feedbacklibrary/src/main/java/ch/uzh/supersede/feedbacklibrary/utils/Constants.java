@@ -14,8 +14,10 @@ public class Constants {
     public static final String FEEDBACK_CONTRIBUTOR = "feedbackContributor";
     public static final String SHARED_PREFERENCES = "feedbackSharedPreferences";
     public static final String USER_NAME = "userName";
+    public static final String TECHNICAL_USER_NAME = "technicalUserName";
 
 
+    public static final String SPACE = " ";
     public static final String PATH_DELIMITER = "/";
     public static final String SUPERSEEDE_BASE_URL = "https://platform.supersede.eu:8443/";
     public static final int OK_RESPONSE = 200;

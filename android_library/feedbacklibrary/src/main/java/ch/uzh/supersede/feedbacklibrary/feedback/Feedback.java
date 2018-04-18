@@ -1,4 +1,4 @@
-package ch.uzh.supersede.feedbacklibrary.feedbacks;
+package ch.uzh.supersede.feedbacklibrary.feedback;
 
 import android.os.Build;
 import android.util.Log;
@@ -38,17 +38,17 @@ public class Feedback implements Serializable {
     private String userIdentification;
     // Mechanisms
     @Expose
-    private List<AttachmentFeedback> attachmentFeedbacks = new ArrayList<>();
+    private List<AttachmentFeedback> attachmentFeedbackList = new ArrayList<>();
     @Expose
-    private List<AudioFeedback> audioFeedbacks = new ArrayList<>();
+    private List<AudioFeedback> audioFeedbackList = new ArrayList<>();
     @Expose
-    private List<HashMap<String, Object>> categoryFeedbacks = new ArrayList<>();
+    private List<HashMap<String, Object>> categoryFeedbackList = new ArrayList<>();
     @Expose
-    private List<RatingFeedback> ratingFeedbacks = new ArrayList<>();
+    private List<RatingFeedback> ratingFeedbackList = new ArrayList<>();
     @Expose
-    private List<ScreenshotFeedback> screenshotFeedbacks = new ArrayList<>();
+    private List<ScreenshotFeedback> screenshotFeedbackList = new ArrayList<>();
     @Expose
-    private List<TextFeedback> textFeedbacks = new ArrayList<>();
+    private List<TextFeedback> textFeedbackList = new ArrayList<>();
 
     public Feedback(List<Mechanism> allMechanisms) {
         for (Mechanism mechanism : allMechanisms) {
@@ -61,24 +61,24 @@ public class Feedback implements Serializable {
                     case Mechanism.AUDIO_TYPE:
                         AudioMechanism audioMechanism = (AudioMechanism) mechanism;
                         if (audioMechanism.getAudioPath() != null) {
-                            audioFeedbacks.add(new AudioFeedback(audioMechanism, audioFeedbacks.size()));
+                            audioFeedbackList.add(new AudioFeedback(audioMechanism, audioFeedbackList.size()));
                         }
                         break;
                     case Mechanism.CATEGORY_TYPE:
                         CategoryFeedback categoryFeedback = new CategoryFeedback((CategoryMechanism) mechanism);
-                        categoryFeedbacks.addAll(categoryFeedback.getCategories());
+                        categoryFeedbackList.addAll(categoryFeedback.getCategories());
                         break;
                     case Mechanism.RATING_TYPE:
-                        ratingFeedbacks.add(new RatingFeedback((RatingMechanism) mechanism));
+                        ratingFeedbackList.add(new RatingFeedback((RatingMechanism) mechanism));
                         break;
                     case Mechanism.SCREENSHOT_TYPE:
                         ScreenshotMechanism screenshotMechanism = (ScreenshotMechanism) mechanism;
                         if (screenshotMechanism.getImagePath() != null) {
-                            screenshotFeedbacks.add(new ScreenshotFeedback(screenshotMechanism, screenshotFeedbacks.size()));
+                            screenshotFeedbackList.add(new ScreenshotFeedback(screenshotMechanism, screenshotFeedbackList.size()));
                         }
                         break;
                     case Mechanism.TEXT_TYPE:
-                        textFeedbacks.add(new TextFeedback((TextMechanism) mechanism));
+                        textFeedbackList.add(new TextFeedback((TextMechanism) mechanism));
                         break;
                     default:
                         Log.wtf("Feedback", "Unknown mechanism type '" + type + "'");
@@ -103,8 +103,8 @@ public class Feedback implements Serializable {
      *
      * @return the attachment feedbacks
      */
-    public List<AttachmentFeedback> getAttachmentFeedbacks() {
-        return attachmentFeedbacks;
+    public List<AttachmentFeedback> getAttachmentFeedback() {
+        return attachmentFeedbackList;
     }
 
     /**
@@ -112,8 +112,8 @@ public class Feedback implements Serializable {
      *
      * @return the audio feedbacks
      */
-    public List<AudioFeedback> getAudioFeedbacks() {
-        return audioFeedbacks;
+    public List<AudioFeedback> getAudioFeedback() {
+        return audioFeedbackList;
     }
 
     /**
@@ -121,8 +121,8 @@ public class Feedback implements Serializable {
      *
      * @return the category feedbacks
      */
-    public List<HashMap<String, Object>> getCategoryFeedbacks() {
-        return categoryFeedbacks;
+    public List<HashMap<String, Object>> getCategoryFeedbackList() {
+        return categoryFeedbackList;
     }
 
     /**
@@ -157,8 +157,8 @@ public class Feedback implements Serializable {
      *
      * @return the rating feedbacks.
      */
-    public List<RatingFeedback> getRatingFeedbacks() {
-        return ratingFeedbacks;
+    public List<RatingFeedback> getRatingFeedback() {
+        return ratingFeedbackList;
     }
 
     /**
@@ -166,8 +166,8 @@ public class Feedback implements Serializable {
      *
      * @return the screenshot feedbacks
      */
-    public List<ScreenshotFeedback> getScreenshotFeedbacks() {
-        return screenshotFeedbacks;
+    public List<ScreenshotFeedback> getScreenshotFeedback() {
+        return screenshotFeedbackList;
     }
 
     /**
@@ -175,8 +175,8 @@ public class Feedback implements Serializable {
      *
      * @return the text feedbacks
      */
-    public List<TextFeedback> getTextFeedbacks() {
-        return textFeedbacks;
+    public List<TextFeedback> getTextFeedback() {
+        return textFeedbackList;
     }
 
     /**
@@ -227,28 +227,28 @@ public class Feedback implements Serializable {
     /**
      * This method sets the attachment feedbacks.
      *
-     * @param attachmentFeedbacks the attachment feedbacks
+     * @param attachmentFeedback the attachment feedbacks
      */
-    public void setAttachmentFeedbacks(List<AttachmentFeedback> attachmentFeedbacks) {
-        this.attachmentFeedbacks = attachmentFeedbacks;
+    public void setAttachmentFeedback(List<AttachmentFeedback> attachmentFeedback) {
+        this.attachmentFeedbackList = attachmentFeedback;
     }
 
     /**
      * This method sets the audio feedbacks.
      *
-     * @param audioFeedbacks the audio feedbacks
+     * @param audioFeedback the audio feedbacks
      */
-    public void setAudioFeedbacks(List<AudioFeedback> audioFeedbacks) {
-        this.audioFeedbacks = audioFeedbacks;
+    public void setAudioFeedback(List<AudioFeedback> audioFeedback) {
+        this.audioFeedbackList = audioFeedback;
     }
 
     /**
      * This method sets the category feedbacks.
      *
-     * @param categoryFeedbacks the category feedbacks
+     * @param categoryFeedbackList the category feedbacks
      */
-    public void setCategoryFeedbacks(List<HashMap<String, Object>> categoryFeedbacks) {
-        this.categoryFeedbacks = categoryFeedbacks;
+    public void setCategoryFeedbackList(List<HashMap<String, Object>> categoryFeedbackList) {
+        this.categoryFeedbackList = categoryFeedbackList;
     }
 
     /**
@@ -276,28 +276,28 @@ public class Feedback implements Serializable {
     /**
      * This method sets the rating feedbacks.
      *
-     * @param ratingFeedbacks the rating feedbacks
+     * @param ratingFeedback the rating feedbacks
      */
-    public void setRatingFeedbacks(List<RatingFeedback> ratingFeedbacks) {
-        this.ratingFeedbacks = ratingFeedbacks;
+    public void setRatingFeedback(List<RatingFeedback> ratingFeedback) {
+        this.ratingFeedbackList = ratingFeedback;
     }
 
     /**
      * This method sets the screenshot feedbacks.
      *
-     * @param screenshotFeedbacks the screenshot feedbacks
+     * @param screenshotFeedback the screenshot feedbacks
      */
-    public void setScreenshotFeedbacks(List<ScreenshotFeedback> screenshotFeedbacks) {
-        this.screenshotFeedbacks = screenshotFeedbacks;
+    public void setScreenshotFeedback(List<ScreenshotFeedback> screenshotFeedback) {
+        this.screenshotFeedbackList = screenshotFeedback;
     }
 
     /**
      * This method sets the text feedbacks.
      *
-     * @param textFeedbacks the text feedbacks
+     * @param textFeedback the text feedbacks
      */
-    public void setTextFeedbacks(List<TextFeedback> textFeedbacks) {
-        this.textFeedbacks = textFeedbacks;
+    public void setTextFeedback(List<TextFeedback> textFeedback) {
+        this.textFeedbackList = textFeedback;
     }
 
     /**

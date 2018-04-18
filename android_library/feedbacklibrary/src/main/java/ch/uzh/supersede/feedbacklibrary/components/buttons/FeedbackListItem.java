@@ -2,7 +2,6 @@ package ch.uzh.supersede.feedbacklibrary.components.buttons;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
@@ -12,46 +11,35 @@ import android.view.Gravity;
 import android.widget.*;
 
 import ch.uzh.supersede.feedbacklibrary.R;
+import ch.uzh.supersede.feedbacklibrary.database.FeedbackDatabase;
+import ch.uzh.supersede.feedbacklibrary.interfaces.ISortableFeedback;
 import ch.uzh.supersede.feedbacklibrary.utils.*;
+import ch.uzh.supersede.feedbacklibrary.wrapper.FeedbackBean;
 
-public class FeedbackListItem extends LinearLayout implements Comparable {
+import static ch.uzh.supersede.feedbacklibrary.interfaces.ISortableFeedback.FEEDBACK_SORTING.*;
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.SPACE;
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.TECHNICAL_USER_NAME;
+import static ch.uzh.supersede.feedbacklibrary.wrapper.FeedbackBean.FEEDBACK_STATUS.DUPLICATE;
+
+public class FeedbackListItem extends LinearLayout implements Comparable, ISortableFeedback {
     private TextView titleView;
     private TextView dateView;
     private TextView statusView;
     private TextView pointView;
-    private int points;
-    private String title;
-    public enum FEEDBACK_STATUS{
-        OPEN("Open",Color.rgb(0,150,255)),
-        IN_PROGRESS("In Progress",Color.rgb(222,222,0)),
-        REJECTED("Rejected",Color.rgb(222,0,0)),
-        CLOSED("Closed",Color.rgb(0,222,100));
-        private int color;
-        private String label;
-        FEEDBACK_STATUS(String label, int color){
-            this.label = label;
-            this.color = color;
-        }
+    private FeedbackBean feedbackBean;
+    private FEEDBACK_SORTING sorting = NONE;
+    private String ownUser;
 
-        public int getColor() {
-            return color;
-        }
-
-        public String getLabel() {
-            return label;
-        }
-    }
-
-    public FeedbackListItem(Context context, int visibleTiles, String title, String date, FEEDBACK_STATUS status, int points) {
+    public FeedbackListItem(Context context, int visibleTiles, FeedbackBean feedbackBean) {
         super(context);
+        this.feedbackBean = feedbackBean;
         DisplayMetrics displayMetrics = new DisplayMetrics();
         ((Activity) getContext()).getWindowManager()
                                  .getDefaultDisplay()
                                  .getMetrics(displayMetrics);
         int screenHeight = displayMetrics.heightPixels;
         int screenWidth = displayMetrics.widthPixels;
-        this.points = points;
-        this.title = title;
+        int padding = 10;
         int partHeight = NumberUtility.divide(screenHeight, visibleTiles + 3);
         int innerLayoutWidth = NumberUtility.multiply(screenWidth, 0.905f); //weighted 20/22
         LinearLayoutCompat.LayoutParams masterParams = new LinearLayoutCompat.LayoutParams(screenWidth, partHeight);
@@ -64,17 +52,22 @@ public class FeedbackListItem extends LinearLayout implements Comparable {
         int white = ContextCompat.getColor(context,R.color.white);
         LinearLayout upperWrapperLayout = createWrapperLayout(longParams, context, HORIZONTAL);
         LinearLayout lowerWrapperLayout = createWrapperLayout(longParams, context, HORIZONTAL);
-        int padding = 10;
-        titleView = createTextView(shortParams, context, title, Gravity.START, drawable, padding,white );
-        dateView = createTextView(shortParams, context, date, Gravity.END, drawable, padding, white);
-        statusView = createTextView(shortParams, context, status.getLabel(), Gravity.START, drawable, padding, status.getColor());
-        pointView = createTextView(shortParams, context, "+" + points, Gravity.END, drawable, padding, white);
+        ownUser = FeedbackDatabase.getInstance(getContext()).readString(TECHNICAL_USER_NAME, null);
+        titleView = createTextView(shortParams, context, feedbackBean.getTitle(), Gravity.START, drawable, padding,white );
+        dateView = createTextView(shortParams, context, context.getString(R.string.list_date,DateUtility.getDateFromLong(feedbackBean.getTimeStamp())), Gravity.END, drawable, padding, white);
+        statusView = createTextView(shortParams, context, feedbackBean.getFeedbackStatus().getLabel().concat(SPACE+context.getString(R.string.list_responses,feedbackBean.getResponses())), Gravity.START, drawable, padding, feedbackBean.getFeedbackStatus().getColor());
+        pointView = createTextView(shortParams, context, feedbackBean.getUpVotesAsText(), Gravity.END, drawable, padding, white);
+        updatePercentageColor();
         upperWrapperLayout.addView(titleView);
         upperWrapperLayout.addView(dateView);
         lowerWrapperLayout.addView(statusView);
         lowerWrapperLayout.addView(pointView);
         addView(upperWrapperLayout);
         addView(lowerWrapperLayout);
+    }
+
+    public FeedbackBean getFeedbackBean() {
+        return feedbackBean;
     }
 
     private LinearLayout createWrapperLayout(LinearLayoutCompat.LayoutParams layoutParams, Context context, int orientation) {
@@ -95,25 +88,57 @@ public class FeedbackListItem extends LinearLayout implements Comparable {
         return textView;
     }
 
-    public int getPoints() {
-        return points;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
     @Override
+    @SuppressWarnings({"squid:S3358","squid:S1210","squid:S3776"})
     public int compareTo(@NonNull Object o) {
         if (o instanceof FeedbackListItem) {
-            int comparedPoints = ((FeedbackListItem) o).getPoints();
-            return comparedPoints > getPoints() ? 1 : comparedPoints == getPoints() ? 0 : -1;
+            this.setVisibility(VISIBLE);
+            switch (sorting){
+                case NONE:
+                    break;
+                case MINE:
+                    if (!StringUtility.equals(feedbackBean.getTechnicalUserName(),ownUser)){
+                        this.setVisibility(GONE);
+                    }
+                    break;
+                case HOT:
+                    int comparedResponses = ((FeedbackListItem) o).getFeedbackBean().getResponses();
+                    return comparedResponses > feedbackBean.getResponses() ? 1 : comparedResponses == feedbackBean.getResponses() ? 0 : -1;
+                case TOP:
+                    int comparedUpVotes = ((FeedbackListItem) o).getFeedbackBean().getUpVotes();
+                    return comparedUpVotes > feedbackBean.getUpVotes() ? 1 : comparedUpVotes == feedbackBean.getUpVotes() ? 0 : -1;
+                case NEW:
+                    long comparedTimestamp = ((FeedbackListItem) o).getFeedbackBean().getTimeStamp();
+                    return comparedTimestamp > feedbackBean.getTimeStamp() ? 1 : comparedTimestamp == feedbackBean.getTimeStamp() ? 0 : -1;
+                default:
+                    break;
+            }
+
         }
         return 0;
     }
 
-    public void updatePercentageColor(int maxPoints){
-        float percent = 1f/maxPoints*points;
+    public void updatePercentageColor() {
+        float percent;
+        if (feedbackBean.getUpVotes() < 0) {
+            percent = 1f / (2 * feedbackBean.getMinUpVotes()) * (feedbackBean.getMinUpVotes() - feedbackBean.getUpVotes());
+        } else if (feedbackBean.getUpVotes() == 0) {
+            pointView.setTextColor(DUPLICATE.getColor());
+            return;
+        } else {
+            percent = 1f / (2 * feedbackBean.getMaxUpVotes()) * (feedbackBean.getMaxUpVotes() + feedbackBean.getUpVotes());
+        }
         pointView.setTextColor(ColorUtility.percentToColor(percent));
+    }
+
+    @Override
+    public void sort(FEEDBACK_SORTING sorting) {
+        this.sorting = sorting;
+    }
+
+    public void setSearchVisibility(int visible) {
+        if (sorting != MINE || StringUtility.equals(feedbackBean.getTechnicalUserName(),ownUser)){
+            setVisibility(visible);
+        }
     }
 }

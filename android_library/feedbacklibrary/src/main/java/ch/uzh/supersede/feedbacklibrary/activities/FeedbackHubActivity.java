@@ -11,8 +11,11 @@ import android.text.Html;
 import android.view.View;
 import android.widget.*;
 
+import java.util.UUID;
+
 import ch.uzh.supersede.feedbacklibrary.R;
 import ch.uzh.supersede.feedbacklibrary.database.FeedbackDatabase;
+import ch.uzh.supersede.feedbacklibrary.stubs.RepositoryStub;
 import ch.uzh.supersede.feedbacklibrary.utils.*;
 import ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility.USER_LEVEL;
 
@@ -126,7 +129,7 @@ public class FeedbackHubActivity extends AbstractBaseActivity {
             } else {
                 //DEVELOPER MENU, TO BE REMOVED OR HIDDEN
                 tapCounter++;
-                if (tapCounter >= 5){
+                if (tapCounter >= 5 && ACTIVE.check(this)){
                     tapCounter = 0;
                     FeedbackDatabase.getInstance(this).writeString(USER_NAME,null);
                     Toast.makeText(this, "DEVELOPER: Username resetted!", Toast.LENGTH_SHORT).show();
@@ -206,13 +209,19 @@ public class FeedbackHubActivity extends AbstractBaseActivity {
         updateUserLevel();
         if (ACTIVE.check(this) && preAllocatedStringStorage[0] != null){
             String name = FeedbackDatabase.getInstance(this).readString(USER_NAME,null);
+            String technicalName = FeedbackDatabase.getInstance(this).readString(TECHNICAL_USER_NAME,null);
             if (name == null){
                 Toast.makeText(this,getString(R.string.hub_username_registered,preAllocatedStringStorage[0]),Toast.LENGTH_SHORT).show();
+                preAllocatedStringStorage[0] = RepositoryStub.getUniqueName(preAllocatedStringStorage[0]);
                 FeedbackDatabase.getInstance(this).writeString(USER_NAME,preAllocatedStringStorage[0]);
                 userName = preAllocatedStringStorage[0];
             }else{
                 userName = name;
                 Toast.makeText(this,getString(R.string.hub_username_restored,name),Toast.LENGTH_SHORT).show();
+            }
+            if (technicalName == null){
+                String id = UUID.randomUUID().toString();
+                FeedbackDatabase.getInstance(this).writeString(TECHNICAL_USER_NAME,id);
             }
             preAllocatedStringStorage[0] = null;
         }

@@ -1,4 +1,4 @@
-package ch.uzh.supersede.feedbacklibrary.feedbacks;
+package ch.uzh.supersede.feedbacklibrary.feedback;
 
 import ch.uzh.supersede.feedbacklibrary.models.RatingMechanism;
 import com.google.gson.annotations.Expose;

@@ -60,9 +60,9 @@ import ch.uzh.supersede.feedbacklibrary.configurations.Configuration;
 import ch.uzh.supersede.feedbacklibrary.configurations.OrchestratorConfiguration;
 import ch.uzh.supersede.feedbacklibrary.configurations.OrchestratorConfigurationItem;
 import ch.uzh.supersede.feedbacklibrary.database.FeedbackDatabase;
-import ch.uzh.supersede.feedbacklibrary.feedbacks.AudioFeedback;
-import ch.uzh.supersede.feedbacklibrary.feedbacks.Feedback;
-import ch.uzh.supersede.feedbacklibrary.feedbacks.ScreenshotFeedback;
+import ch.uzh.supersede.feedbacklibrary.feedback.AudioFeedback;
+import ch.uzh.supersede.feedbacklibrary.feedback.Feedback;
+import ch.uzh.supersede.feedbacklibrary.feedback.ScreenshotFeedback;
 import ch.uzh.supersede.feedbacklibrary.models.Mechanism;
 import ch.uzh.supersede.feedbacklibrary.services.FeedbackService;
 import ch.uzh.supersede.feedbacklibrary.stubs.OrchestratorStub;
@@ -533,7 +533,7 @@ public class FeedbackActivity extends AbstractBaseActivity implements AudioMecha
     private List<MultipartBody.Part> getScreenshotMultipartbodyParts(Feedback feedback) {
         List<MultipartBody.Part> multipartFiles = new ArrayList<>();
 
-        screenshotFeedbackList = feedback.getScreenshotFeedbacks();
+        screenshotFeedbackList = feedback.getScreenshotFeedback();
         if (screenshotFeedbackList != null) {
             for (int pos = 0; pos < screenshotFeedbackList.size(); ++pos) {
                 File screenshotFile = new File(screenshotFeedbackList.get(pos).getImagePath());
@@ -551,7 +551,7 @@ public class FeedbackActivity extends AbstractBaseActivity implements AudioMecha
     private List<MultipartBody.Part> getAudioMultipartbodyParts(Feedback feedback) {
         List<MultipartBody.Part> multipartFiles = new ArrayList<>();
 
-        audioFeedbackList = feedback.getAudioFeedbacks();
+        audioFeedbackList = feedback.getAudioFeedback();
         if (audioFeedbackList != null) {
             for (int pos = 0; pos < audioFeedbackList.size(); ++pos) {
                 File audioFile = new File(audioFeedbackList.get(pos).getAudioPath());
@@ -608,7 +608,7 @@ public class FeedbackActivity extends AbstractBaseActivity implements AudioMecha
 
                     BodyPart messageBodyPart = new MimeBodyPart();
 
-                    String feedbackText = feedback.getTextFeedbacks().get(0).getText();
+                    String feedbackText = feedback.getTextFeedback().get(0).getText();
 
                     CategoryMechanismView categoryMechanismView = (CategoryMechanismView) mechanismViews.get(4);
                     String category = categoryMechanismView.getCategorySpinner().getSelectedItem().toString();

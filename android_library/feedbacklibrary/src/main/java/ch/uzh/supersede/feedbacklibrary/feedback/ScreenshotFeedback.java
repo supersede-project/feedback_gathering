@@ -1,6 +1,4 @@
-package ch.uzh.supersede.feedbacklibrary.feedbacks;
-
-import android.util.SparseArray;
+package ch.uzh.supersede.feedbacklibrary.feedback;
 
 import ch.uzh.supersede.feedbacklibrary.models.ScreenshotMechanism;
 
