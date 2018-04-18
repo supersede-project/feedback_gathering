@@ -111,24 +111,16 @@ public class FeedbackListItem extends LinearLayout implements Comparable, ISorta
     @SuppressWarnings({"squid:S3358","squid:S1210","squid:S3776"})
     public int compareTo(@NonNull Object o) {
         if (o instanceof FeedbackListItem) {
-            switch (sorting){
-                case NONE:
-                    break;
-                case MINE:
-                    break;
-                case HOT:
-                    int comparedResponses = ((FeedbackListItem) o).getFeedbackBean().getResponses();
-                    return comparedResponses > feedbackBean.getResponses() ? 1 : comparedResponses == feedbackBean.getResponses() ? 0 : -1;
-                case TOP:
-                    int comparedUpVotes = ((FeedbackListItem) o).getFeedbackBean().getUpVotes();
-                    return comparedUpVotes > feedbackBean.getUpVotes() ? 1 : comparedUpVotes == feedbackBean.getUpVotes() ? 0 : -1;
-                case NEW:
-                    long comparedTimestamp = ((FeedbackListItem) o).getFeedbackBean().getTimeStamp();
-                    return comparedTimestamp > feedbackBean.getTimeStamp() ? 1 : comparedTimestamp == feedbackBean.getTimeStamp() ? 0 : -1;
-                default:
-                    break;
+            if (sorting == MINE || sorting == NEW){
+                long comparedTimestamp = ((FeedbackListItem) o).getFeedbackBean().getTimeStamp();
+                return comparedTimestamp > feedbackBean.getTimeStamp() ? 1 : comparedTimestamp == feedbackBean.getTimeStamp() ? 0 : -1;
+            }else if (sorting == HOT){
+                int comparedResponses = ((FeedbackListItem) o).getFeedbackBean().getResponses();
+                return comparedResponses > feedbackBean.getResponses() ? 1 : comparedResponses == feedbackBean.getResponses() ? 0 : -1;
+            }else if (sorting == TOP){
+                int comparedUpVotes = ((FeedbackListItem) o).getFeedbackBean().getUpVotes();
+                return comparedUpVotes > feedbackBean.getUpVotes() ? 1 : comparedUpVotes == feedbackBean.getUpVotes() ? 0 : -1;
             }
-
         }
         return 0;
     }
