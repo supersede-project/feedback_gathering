@@ -46,7 +46,7 @@ public class FeedbackListActivity extends AbstractBaseActivity {
         newButton = setOnClickListener(getView(R.id.list_button_new, Button.class));
         searchText = addTextChangedListener(getView(R.id.list_edit_search, EditText.class));
         focusSink = getView(R.id.list_edit_focus_sink, LinearLayout.class);
-        for (FeedbackBean bean : RepositoryStub.generateFeedback(this, 50, -30, 50, 0.2f)) {
+        for (FeedbackBean bean : RepositoryStub.generateFeedback(this, 50, -30, 50, 0.1f)) {
             allFeedbackList.add(new FeedbackListItem(this, 8, bean));
         }
         activeFeedbackList = new ArrayList<>(allFeedbackList);
@@ -135,12 +135,13 @@ public class FeedbackListActivity extends AbstractBaseActivity {
         activeFeedbackList.clear();
         if (!getString(R.string.list_edit_search).equals(s) && StringUtility.hasText(s)) {
             for (FeedbackListItem item : allFeedbackList) {
-                if (item.getFeedbackBean().getTitle().contains(s)) {
+                if (item.getFeedbackBean().getTitle().toLowerCase().contains(s.toLowerCase())) {
                     activeFeedbackList.add(item);
                 }
             }
             searchTerm = s;
         } else {
+            searchTerm = null;
             activeFeedbackList = new ArrayList<>(allFeedbackList);
         }
         sort();

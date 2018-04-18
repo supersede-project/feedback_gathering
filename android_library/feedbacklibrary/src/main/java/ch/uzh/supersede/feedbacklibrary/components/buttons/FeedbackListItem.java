@@ -17,8 +17,8 @@ import ch.uzh.supersede.feedbacklibrary.utils.*;
 import ch.uzh.supersede.feedbacklibrary.wrapper.FeedbackBean;
 
 import static ch.uzh.supersede.feedbacklibrary.interfaces.ISortableFeedback.FEEDBACK_SORTING.*;
-import static ch.uzh.supersede.feedbacklibrary.utils.Constants.SPACE;
-import static ch.uzh.supersede.feedbacklibrary.utils.Constants.TECHNICAL_USER_NAME;
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.*;
+import static ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility.USER_LEVEL.ACTIVE;
 import static ch.uzh.supersede.feedbacklibrary.wrapper.FeedbackBean.FEEDBACK_STATUS.DUPLICATE;
 
 public class FeedbackListItem extends LinearLayout implements Comparable, ISortableFeedback {
@@ -28,7 +28,7 @@ public class FeedbackListItem extends LinearLayout implements Comparable, ISorta
     private TextView pointView;
     private FeedbackBean feedbackBean;
     private FEEDBACK_SORTING sorting = NONE;
-    private String ownUser;
+    private String ownUser = USER_NAME_ANONYMOUS;
 
     public FeedbackListItem(Context context, int visibleTiles, FeedbackBean feedbackBean) {
         super(context);
@@ -52,10 +52,12 @@ public class FeedbackListItem extends LinearLayout implements Comparable, ISorta
         int white = ContextCompat.getColor(context,R.color.white);
         LinearLayout upperWrapperLayout = createWrapperLayout(longParams, context, HORIZONTAL);
         LinearLayout lowerWrapperLayout = createWrapperLayout(longParams, context, HORIZONTAL);
-        ownUser = FeedbackDatabase.getInstance(getContext()).readString(TECHNICAL_USER_NAME, null);
+        if (ACTIVE.check(context)){
+            ownUser = FeedbackDatabase.getInstance(getContext()).readString(TECHNICAL_USER_NAME, null);
+        }
         titleView = createTextView(shortParams, context, feedbackBean.getTitle(), Gravity.START, drawable, padding,white );
         dateView = createTextView(shortParams, context, context.getString(R.string.list_date,DateUtility.getDateFromLong(feedbackBean.getTimeStamp())), Gravity.END, drawable, padding, white);
-        statusView = createTextView(shortParams, context, feedbackBean.getFeedbackStatus().getLabel().concat(SPACE+context.getString(R.string.list_responses,feedbackBean.getResponses())), Gravity.START, drawable, padding, feedbackBean.getFeedbackStatus().getColor());
+        statusView = createTextView(shortParams, context, feedbackBean.getFeedbackStatus().getLabel().concat(SPACE+context.getString(R.string.list_resplies,feedbackBean.getResponses())), Gravity.START, drawable, padding, feedbackBean.getFeedbackStatus().getColor());
         pointView = createTextView(shortParams, context, feedbackBean.getUpVotesAsText(), Gravity.END, drawable, padding, white);
         updatePercentageColor();
         upperWrapperLayout.addView(titleView);
@@ -92,14 +94,10 @@ public class FeedbackListItem extends LinearLayout implements Comparable, ISorta
     @SuppressWarnings({"squid:S3358","squid:S1210","squid:S3776"})
     public int compareTo(@NonNull Object o) {
         if (o instanceof FeedbackListItem) {
-            this.setVisibility(VISIBLE);
             switch (sorting){
                 case NONE:
                     break;
                 case MINE:
-                    if (!StringUtility.equals(feedbackBean.getTechnicalUserName(),ownUser)){
-                        this.setVisibility(GONE);
-                    }
                     break;
                 case HOT:
                     int comparedResponses = ((FeedbackListItem) o).getFeedbackBean().getResponses();
@@ -133,12 +131,11 @@ public class FeedbackListItem extends LinearLayout implements Comparable, ISorta
 
     @Override
     public void sort(FEEDBACK_SORTING sorting) {
-        this.sorting = sorting;
-    }
-
-    public void setSearchVisibility(int visible) {
         if (sorting != MINE || StringUtility.equals(feedbackBean.getTechnicalUserName(),ownUser)){
-            setVisibility(visible);
+            this.setVisibility(VISIBLE);
+        }else{
+            this.setVisibility(GONE);
         }
+        this.sorting = sorting;
     }
 }

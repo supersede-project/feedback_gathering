@@ -43,8 +43,8 @@ public class PermissionUtility {
 
         public boolean check(Context context) {
             boolean contributor = context.getSharedPreferences(SHARED_PREFERENCES, Context.MODE_PRIVATE).getBoolean(FEEDBACK_CONTRIBUTOR, false);
-            boolean userNameChosen = checkForUsername(context);
-            return contributor && userNameChosen && getMissing(context).length == 0;
+            boolean noMissingPermissions = getMissing(context).length == 0;
+            return contributor && noMissingPermissions && checkForUsername(context);
         }
 
         private boolean checkForUsername(Context context) {
