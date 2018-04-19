@@ -6,9 +6,9 @@ import android.widget.Toast;
 
 import ch.uzh.supersede.feedbacklibrary.R;
 import ch.uzh.supersede.feedbacklibrary.utils.DateUtility;
-import ch.uzh.supersede.feedbacklibrary.wrapper.FeedbackBean;
+import ch.uzh.supersede.feedbacklibrary.beans.FeedbackBean;
 
-import static ch.uzh.supersede.feedbacklibrary.utils.Constants.FeedbackActivityConstants.EXTRA_KEY_FEEDBACK_BEAN;
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.EXTRA_KEY_FEEDBACK_BEAN;
 
 @SuppressWarnings("squid:MaximumInheritanceDepth")
 public class FeedbackDetailsActivity extends AbstractBaseActivity {
@@ -21,11 +21,11 @@ public class FeedbackDetailsActivity extends AbstractBaseActivity {
         feedbackBean = (FeedbackBean) getIntent().getSerializableExtra(EXTRA_KEY_FEEDBACK_BEAN);
         if (feedbackBean != null) {
             Toast.makeText(getApplicationContext(), getString(R.string.details_feedback_toast,
-                            feedbackBean.getTitle(), feedbackBean.getUserName(),
-                            DateUtility.getDateFromLong(feedbackBean.getTimeStamp()),
-                            feedbackBean.getUpVotes(),
-                            feedbackBean.getResponses()), Toast.LENGTH_LONG)
-                    .show();
+                    feedbackBean.getTitle(), feedbackBean.getUserName(),
+                    DateUtility.getDateFromLong(feedbackBean.getTimeStamp()),
+                    feedbackBean.getUpVotes(),
+                    feedbackBean.getResponses()), Toast.LENGTH_LONG)
+                 .show();
         }
         onPostCreate();
     }

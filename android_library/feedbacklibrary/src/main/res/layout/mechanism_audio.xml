@@ -48,7 +48,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="start"
-                    android:text="@string/supersede_feedbacklibrary_audio_default_current_duration"
+                    android:text="@string/audio_default_current_duration"
                     android:textSize="16sp"/>
                 <!-- Recording indicator -->
                 <TextView
@@ -56,7 +56,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
-                    android:text="@string/supersede_feedbacklibrary_audio_record_indicator"
+                    android:text="@string/audio_record_indicator"
                     android:textSize="16sp"
                     android:textStyle="bold"
                     android:visibility="invisible"/>
@@ -67,7 +67,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="end"
-                    android:text="@string/supersede_feedbacklibrary_audio_default_total_duration"
+                    android:text="@string/audio_default_total_duration"
                     android:textSize="16sp"/>
             </LinearLayout>
 

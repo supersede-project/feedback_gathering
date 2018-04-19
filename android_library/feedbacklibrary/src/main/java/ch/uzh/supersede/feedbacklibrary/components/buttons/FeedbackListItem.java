@@ -1,27 +1,32 @@
 package ch.uzh.supersede.feedbacklibrary.components.buttons;
 
 import android.app.Activity;
-import android.content.*;
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutCompat;
 import android.util.DisplayMetrics;
-import android.view.*;
-import android.widget.*;
+import android.view.Gravity;
+import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import ch.uzh.supersede.feedbacklibrary.R;
-import ch.uzh.supersede.feedbacklibrary.activities.*;
+import ch.uzh.supersede.feedbacklibrary.activities.FeedbackDetailsActivity;
 import ch.uzh.supersede.feedbacklibrary.database.FeedbackDatabase;
 import ch.uzh.supersede.feedbacklibrary.interfaces.ISortableFeedback;
-import ch.uzh.supersede.feedbacklibrary.utils.*;
-import ch.uzh.supersede.feedbacklibrary.wrapper.FeedbackBean;
+import ch.uzh.supersede.feedbacklibrary.utils.ColorUtility;
+import ch.uzh.supersede.feedbacklibrary.utils.DateUtility;
+import ch.uzh.supersede.feedbacklibrary.utils.NumberUtility;
+import ch.uzh.supersede.feedbacklibrary.utils.StringUtility;
+import ch.uzh.supersede.feedbacklibrary.beans.FeedbackBean;
 
 import static ch.uzh.supersede.feedbacklibrary.interfaces.ISortableFeedback.FEEDBACK_SORTING.*;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.*;
-import static ch.uzh.supersede.feedbacklibrary.utils.Constants.FeedbackActivityConstants.*;
 import static ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility.USER_LEVEL.ACTIVE;
-import static ch.uzh.supersede.feedbacklibrary.wrapper.FeedbackBean.FEEDBACK_STATUS.DUPLICATE;
+import static ch.uzh.supersede.feedbacklibrary.beans.FeedbackBean.FEEDBACK_STATUS.DUPLICATE;
 
 public class FeedbackListItem extends LinearLayout implements Comparable, ISortableFeedback {
     private TextView titleView;
@@ -51,15 +56,18 @@ public class FeedbackListItem extends LinearLayout implements Comparable, ISorta
         LinearLayoutCompat.LayoutParams longParams = new LinearLayoutCompat.LayoutParams(screenWidth, partHeight / 2);
         LinearLayoutCompat.LayoutParams shortParams = new LinearLayoutCompat.LayoutParams(innerLayoutWidth / 2, partHeight / 2);
         Drawable drawable = ContextCompat.getDrawable(context, R.drawable.dark_blue_square);
-        int white = ContextCompat.getColor(context,R.color.white);
+        int white = ContextCompat.getColor(context, R.color.white);
         LinearLayout upperWrapperLayout = createWrapperLayout(longParams, context, HORIZONTAL);
         LinearLayout lowerWrapperLayout = createWrapperLayout(longParams, context, HORIZONTAL);
-        if (ACTIVE.check(context)){
+        if (ACTIVE.check(context)) {
             ownUser = FeedbackDatabase.getInstance(getContext()).readString(TECHNICAL_USER_NAME, null);
         }
-        titleView = createTextView(shortParams, context, feedbackBean.getTitle(), Gravity.START, drawable, padding,white );
-        dateView = createTextView(shortParams, context, context.getString(R.string.list_date,DateUtility.getDateFromLong(feedbackBean.getTimeStamp())), Gravity.END, drawable, padding, white);
-        statusView = createTextView(shortParams, context, feedbackBean.getFeedbackStatus().getLabel().concat(SPACE+context.getString(R.string.list_resplies,feedbackBean.getResponses())), Gravity.START, drawable, padding, feedbackBean.getFeedbackStatus().getColor());
+        titleView = createTextView(shortParams, context, feedbackBean.getTitle(), Gravity.START, drawable, padding, white);
+        dateView = createTextView(shortParams, context, context.getString(R.string.list_date, DateUtility.getDateFromLong(feedbackBean.getTimeStamp())), Gravity.END, drawable, padding, white);
+        statusView = createTextView(shortParams, context, feedbackBean
+                .getFeedbackStatus()
+                .getLabel()
+                .concat(SPACE + context.getString(R.string.list_resplies, feedbackBean.getResponses())), Gravity.START, drawable, padding, feedbackBean.getFeedbackStatus().getColor());
         pointView = createTextView(shortParams, context, feedbackBean.getUpVotesAsText(), Gravity.END, drawable, padding, white);
         updatePercentageColor();
         upperWrapperLayout.addView(titleView);
@@ -68,7 +76,7 @@ public class FeedbackListItem extends LinearLayout implements Comparable, ISorta
         lowerWrapperLayout.addView(pointView);
         addView(upperWrapperLayout);
         addView(lowerWrapperLayout);
-        setOnLongClickListener(new OnLongClickListener(){
+        setOnLongClickListener(new OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
                 startFeedbackDetailsActivity();
@@ -82,7 +90,7 @@ public class FeedbackListItem extends LinearLayout implements Comparable, ISorta
         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
         intent.putExtra(EXTRA_KEY_FEEDBACK_BEAN, feedbackBean);
         getContext().startActivity(intent);
-        ((Activity)getContext()).overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+        ((Activity) getContext()).overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
     }
 
     public FeedbackBean getFeedbackBean() {
@@ -108,16 +116,16 @@ public class FeedbackListItem extends LinearLayout implements Comparable, ISorta
     }
 
     @Override
-    @SuppressWarnings({"squid:S3358","squid:S1210","squid:S3776"})
+    @SuppressWarnings({"squid:S3358", "squid:S1210", "squid:S3776"})
     public int compareTo(@NonNull Object o) {
         if (o instanceof FeedbackListItem) {
-            if (sorting == MINE || sorting == NEW){
+            if (sorting == MINE || sorting == NEW) {
                 long comparedTimestamp = ((FeedbackListItem) o).getFeedbackBean().getTimeStamp();
                 return comparedTimestamp > feedbackBean.getTimeStamp() ? 1 : comparedTimestamp == feedbackBean.getTimeStamp() ? 0 : -1;
-            }else if (sorting == HOT){
+            } else if (sorting == HOT) {
                 int comparedResponses = ((FeedbackListItem) o).getFeedbackBean().getResponses();
                 return comparedResponses > feedbackBean.getResponses() ? 1 : comparedResponses == feedbackBean.getResponses() ? 0 : -1;
-            }else if (sorting == TOP){
+            } else if (sorting == TOP) {
                 int comparedUpVotes = ((FeedbackListItem) o).getFeedbackBean().getUpVotes();
                 return comparedUpVotes > feedbackBean.getUpVotes() ? 1 : comparedUpVotes == feedbackBean.getUpVotes() ? 0 : -1;
             }
@@ -140,9 +148,9 @@ public class FeedbackListItem extends LinearLayout implements Comparable, ISorta
 
     @Override
     public void sort(FEEDBACK_SORTING sorting) {
-        if (sorting != MINE || StringUtility.equals(feedbackBean.getTechnicalUserName(),ownUser)){
+        if (sorting != MINE || StringUtility.equals(feedbackBean.getTechnicalUserName(), ownUser)) {
             this.setVisibility(VISIBLE);
-        }else{
+        } else {
             this.setVisibility(GONE);
         }
         this.sorting = sorting;

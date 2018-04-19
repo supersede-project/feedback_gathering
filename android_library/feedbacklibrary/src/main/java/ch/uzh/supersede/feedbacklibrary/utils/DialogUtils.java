@@ -17,11 +17,8 @@ import java.util.List;
 
 import ch.uzh.supersede.feedbacklibrary.activities.FeedbackActivity;
 
-import static ch.uzh.supersede.feedbacklibrary.utils.Constants.FeedbackActivityConstants.*;
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.*;
 
-/**
- * Class with dialogs
- */
 public class DialogUtils {
     /**
      * This method creates a progress dialog.
@@ -73,7 +70,7 @@ public class DialogUtils {
                     message.append(s).append(" \n");
                 }
             }
-            builder.setMessage(message.toString()).setNegativeButton(getResources().getString(ch.uzh.supersede.feedbacklibrary.R.string.supersede_feedbacklibrary_close_string), new DialogInterface.OnClickListener() {
+            builder.setMessage(message.toString()).setNegativeButton(getResources().getString(ch.uzh.supersede.feedbacklibrary.R.string.dialog_close), new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int id) {
                     dialog.dismiss();
                 }
@@ -91,9 +88,9 @@ public class DialogUtils {
             Bundle args = new Bundle();
             args.putString("message", message);
             args.putString("jsonString", jsonString);
-            args.putLong("selectedPullConfigurationIndex", selectedPullConfigurationIndex);
-            args.putString("baseURL", baseURL);
-            args.putString("language", language);
+            args.putLong(SELECTED_PULL_CONFIGURATION_INDEX, selectedPullConfigurationIndex);
+            args.putString(EXTRA_KEY_BASE_URL, baseURL);
+            args.putString(EXTRA_KEY_LANGUAGE, language);
             f.setArguments(args);
             return f;
         }
@@ -104,21 +101,21 @@ public class DialogUtils {
             AlertDialog.Builder builder = new AlertDialog.Builder(associatedActivity);
             String message = getArguments().getString("message");
             final String jsonString = getArguments().getString("jsonString");
-            final long selectedPullConfigurationIndex = getArguments().getLong("selectedPullConfigurationIndex");
-            final String baseURL = getArguments().getString("baseURL");
-            final String language = getArguments().getString("language");
+            final long selectedPullConfigurationIndex = getArguments().getLong(SELECTED_PULL_CONFIGURATION_INDEX);
+            final String baseURL = getArguments().getString(EXTRA_KEY_BASE_URL);
+            final String language = getArguments().getString(EXTRA_KEY_LANGUAGE);
 
-            builder.setMessage(message).setPositiveButton(ch.uzh.supersede.feedbacklibrary.R.string.supersede_feedbacklibrary_yes_string, new DialogInterface.OnClickListener() {
+            builder.setMessage(message).setPositiveButton(ch.uzh.supersede.feedbacklibrary.R.string.dialog_yes, new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int id) {
                     Intent intent = new Intent(associatedActivity, FeedbackActivity.class);
                     intent.putExtra(JSON_CONFIGURATION_STRING, jsonString);
                     intent.putExtra(IS_PUSH_STRING, false);
-                    intent.putExtra(SELECTED_PULL_CONFIGURATION_INDEX_STRING, selectedPullConfigurationIndex);
+                    intent.putExtra(SELECTED_PULL_CONFIGURATION_INDEX, selectedPullConfigurationIndex);
                     intent.putExtra(EXTRA_KEY_BASE_URL, baseURL);
                     intent.putExtra(EXTRA_KEY_LANGUAGE, language);
                     associatedActivity.startActivity(intent);
                 }
-            }).setNegativeButton(ch.uzh.supersede.feedbacklibrary.R.string.supersede_feedbacklibrary_no_string, new DialogInterface.OnClickListener() {
+            }).setNegativeButton(ch.uzh.supersede.feedbacklibrary.R.string.dialog_no, new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int id) {
                     dialog.dismiss();
                 }

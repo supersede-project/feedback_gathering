@@ -17,12 +17,12 @@ import ch.uzh.supersede.feedbacklibrary.configurations.Configuration;
 import ch.uzh.supersede.feedbacklibrary.configurations.OrchestratorConfiguration;
 import ch.uzh.supersede.feedbacklibrary.configurations.OrchestratorConfigurationItem;
 import ch.uzh.supersede.feedbacklibrary.models.CategoryMechanism;
-import ch.uzh.supersede.feedbacklibrary.models.Mechanism;
+import ch.uzh.supersede.feedbacklibrary.models.AbstractMechanism;
 import ch.uzh.supersede.feedbacklibrary.models.TextMechanism;
 import ch.uzh.supersede.feedbacklibrary.utils.Utils;
 
-import static ch.uzh.supersede.feedbacklibrary.models.Mechanism.CATEGORY_TYPE;
-import static ch.uzh.supersede.feedbacklibrary.models.Mechanism.TEXT_TYPE;
+import static ch.uzh.supersede.feedbacklibrary.models.AbstractMechanism.CATEGORY_TYPE;
+import static ch.uzh.supersede.feedbacklibrary.models.AbstractMechanism.TEXT_TYPE;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -44,8 +44,8 @@ public class ConfigurationTest {
         assertEquals(orderedActiveConfiguration.getId(), shuffledActiveConfiguration.getId());
 
         // Check if both active configurations contain 6 mechanisms and that their order corresponds
-        List<Mechanism> orderedMechanismList = orderedActiveConfiguration.getMechanisms();
-        List<Mechanism> shuffledMechanismList = shuffledActiveConfiguration.getMechanisms();
+        List<AbstractMechanism> orderedMechanismList = orderedActiveConfiguration.getMechanisms();
+        List<AbstractMechanism> shuffledMechanismList = shuffledActiveConfiguration.getMechanisms();
         assertEquals(6, orderedMechanismList.size());
         assertEquals(6, shuffledMechanismList.size());
         for (int i = 0; i < 6; ++i) {
@@ -68,7 +68,7 @@ public class ConfigurationTest {
     @Test
     public void mechanismValidationTest() throws IOException {
         OrchestratorConfiguration orchestratorConfiguration = createConfiguration("configurationInput/application_6.json", -1);
-        List<Mechanism> mechanismList = orchestratorConfiguration.getActiveConfiguration().getMechanisms();
+        List<AbstractMechanism> mechanismList = orchestratorConfiguration.getActiveConfiguration().getMechanisms();
         List<String> stubList = new ArrayList<>();
 
         // Check if the first to mechanisms are of type TEXT_TYPE

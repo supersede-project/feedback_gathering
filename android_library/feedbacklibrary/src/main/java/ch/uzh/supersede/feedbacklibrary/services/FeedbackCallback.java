@@ -6,11 +6,11 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class CallbackWrapper<T> implements Callback<T> {
+public class FeedbackCallback<T> implements Callback<T> {
     private IFeedbackServiceEventListener callback;
     private IFeedbackServiceEventListener.EventType eventType;
 
-    public CallbackWrapper(IFeedbackServiceEventListener callback, IFeedbackServiceEventListener.EventType eventType) {
+    public FeedbackCallback(IFeedbackServiceEventListener callback, IFeedbackServiceEventListener.EventType eventType) {
         this.callback = callback;
         this.eventType = eventType;
     }

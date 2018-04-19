@@ -19,20 +19,14 @@ import java.util.Map;
 
 import ch.uzh.supersede.feedbacklibrary.R;
 import ch.uzh.supersede.feedbacklibrary.activities.AnnotateImageActivity;
-import ch.uzh.supersede.feedbacklibrary.models.Mechanism;
+import ch.uzh.supersede.feedbacklibrary.models.AbstractMechanism;
 import ch.uzh.supersede.feedbacklibrary.models.ScreenshotMechanism;
 import ch.uzh.supersede.feedbacklibrary.utils.Utils;
 
-import static ch.uzh.supersede.feedbacklibrary.utils.Constants.FeedbackActivityConstants.REQUEST_ANNOTATE;
-import static ch.uzh.supersede.feedbacklibrary.utils.Constants.FeedbackActivityConstants.REQUEST_PHOTO;
-import static ch.uzh.supersede.feedbacklibrary.utils.Constants.ScreenshotConstants.EXTRA_KEY_ALL_STICKER_ANNOTATIONS;
-import static ch.uzh.supersede.feedbacklibrary.utils.Constants.ScreenshotConstants.EXTRA_KEY_HAS_STICKER_ANNOTATIONS;
-import static ch.uzh.supersede.feedbacklibrary.utils.Constants.ScreenshotConstants.TEXT_ANNOTATION_COUNTER_MAXIMUM;
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.*;
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.ViewsConstants.TEXT_ANNOTATION_COUNTER_MAXIMUM;
 
-/**
- * Screenshot mechanism view
- */
-public class ScreenshotMechanismView extends MechanismView {
+public class ScreenshotMechanismView extends AbstractMechanismView {
     private ScreenshotMechanism screenshotMechanism = null;
     private ImageView screenShotPreviewImageView;
     private HashMap<Integer, String> allStickerAnnotations;
@@ -44,7 +38,7 @@ public class ScreenshotMechanismView extends MechanismView {
     private Bitmap pictureBitmapAnnotated;
     private Activity activity;
 
-    public ScreenshotMechanismView(LayoutInflater layoutInflater, Activity activity, Mechanism mechanism, int mechanismViewIndex) {
+    public ScreenshotMechanismView(LayoutInflater layoutInflater, Activity activity, AbstractMechanism mechanism, int mechanismViewIndex) {
         super(layoutInflater);
         this.activity = activity;
         this.screenshotMechanism = (ScreenshotMechanism) mechanism;
@@ -71,9 +65,9 @@ public class ScreenshotMechanismView extends MechanismView {
 
     public void toggleEditButton(boolean enabled) {
         editButton.setEnabled(enabled);
-        if (enabled){
+        if (enabled) {
             editButton.setBackground(activity.getResources().getDrawable(R.drawable.pink_button));
-        }else{
+        } else {
             editButton.setBackground(activity.getResources().getDrawable(R.drawable.gray_button));
         }
     }
@@ -164,19 +158,19 @@ public class ScreenshotMechanismView extends MechanismView {
             intent.putExtra(EXTRA_KEY_ALL_STICKER_ANNOTATIONS, new HashMap<>(screenshotMechanismView.getAllStickerAnnotations()));
         }
         intent.putExtra(TEXT_ANNOTATION_COUNTER_MAXIMUM, screenshotMechanismView.getMaxNumberTextAnnotation());
-        activity.startActivityForResult(intent,REQUEST_ANNOTATE);
+        activity.startActivityForResult(intent, REQUEST_ANNOTATE);
     }
 
     private void onImageSelect() {
         final Resources res = activity.getResources();
-        final CharSequence[] items = {res.getString(R.string.supersede_feedbacklibrary_library_chooser_text), res.getString(R.string.supersede_feedbacklibrary_cancel_string)};
+        final CharSequence[] items = {res.getString(R.string.screenshot_choose), res.getString(R.string.dialog_cancel)};
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-        builder.setTitle(res.getString(R.string.supersede_feedbacklibrary_image_selection_dialog_title));
+        builder.setTitle(res.getString(R.string.screenshot_select));
         builder.setItems(items, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int item) {
-                if (!items[item].equals(res.getString(R.string.supersede_feedbacklibrary_cancel_string))) {
-                    if (items[item].equals(res.getString(R.string.supersede_feedbacklibrary_library_chooser_text))) {
+                if (!items[item].equals(res.getString(R.string.dialog_cancel))) {
+                    if (items[item].equals(res.getString(R.string.screenshot_choose))) {
                         galleryIntent();
                     }
                 } else {
@@ -201,17 +195,17 @@ public class ScreenshotMechanismView extends MechanismView {
         activity.startActivityForResult(intent, REQUEST_PHOTO);
     }
 
-    public void refreshPreview(Context context){
+    public void refreshPreview(Context context) {
         screenShotPreviewImageView.setBackground(null);
-        if (getPictureBitmap() == null){
+        if (getPictureBitmap() == null) {
             setPictureBitmap(Utils.loadImageFromDatabase(context));
         }
         setPictureBitmapAnnotated(Utils.loadAnnotatedImageFromDatabase(context));
-        if (pictureBitmapAnnotated != null){
+        if (pictureBitmapAnnotated != null) {
             screenShotPreviewImageView.setImageBitmap(pictureBitmapAnnotated);
-        }else if (pictureBitmap != null){
+        } else if (pictureBitmap != null) {
             screenShotPreviewImageView.setImageBitmap(pictureBitmap);
-        }else{
+        } else {
             screenShotPreviewImageView.setImageBitmap(null);
             screenShotPreviewImageView.setBackgroundResource(R.drawable.ic_folder_open_black_24dp);
         }

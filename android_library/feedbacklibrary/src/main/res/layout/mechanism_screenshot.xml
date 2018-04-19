@@ -67,7 +67,7 @@
                     android:layout_margin="4dp"
                     android:background="@drawable/button_selector_edit"
                     android:minWidth="88dp"
-                    android:text="@string/supersede_feedbacklibrary_annotatebutton_text"
+                    android:text="@string/screenshot_edit"
                     android:textColor="@android:color/white"/>
 
                 <Button
@@ -77,7 +77,7 @@
                     android:layout_margin="4dp"
                     android:background="@drawable/blue_button"
                     android:minWidth="88dp"
-                    android:text="@string/supersede_feedbacklibrary_screenshotbutton_text"
+                    android:text="@string/screenshot_add"
                     android:textColor="@android:color/white"/>
 
                 <Button
@@ -87,7 +87,7 @@
                     android:layout_margin="4dp"
                     android:background="@drawable/blue_button"
                     android:minWidth="88dp"
-                    android:text="@string/supersede_feedbacklibrary_remove_string"
+                    android:text="@string/screenshot_remove"
                     android:textColor="@android:color/white"/>
             </LinearLayout>
         </LinearLayout>

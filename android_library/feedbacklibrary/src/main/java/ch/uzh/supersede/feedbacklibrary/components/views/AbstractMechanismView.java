@@ -3,14 +3,11 @@ package ch.uzh.supersede.feedbacklibrary.components.views;
 import android.view.LayoutInflater;
 import android.view.View;
 
-/**
- * Mechanism view
- */
-public abstract class MechanismView {
+public abstract class AbstractMechanismView {
     private View enclosingLayout = null;
     private LayoutInflater layoutInflater = null;
 
-    public MechanismView(LayoutInflater layoutInflater) {
+    public AbstractMechanismView(LayoutInflater layoutInflater) {
         this.layoutInflater = layoutInflater;
     }
 

@@ -1,4 +1,4 @@
-package ch.uzh.supersede.feedbacklibrary.API;
+package ch.uzh.supersede.feedbacklibrary.api;
 
 import com.google.gson.JsonObject;
 
@@ -29,16 +29,16 @@ public interface IFeedbackAPI {
      * @return the JSON object
      */
     @Multipart
-    @POST("feedback_repository/{language}/applications/{application_id}/feedbacks")
-    Call<JsonObject> createFeedbackVariant(@Path("language") String language, @Path("application_id") long application_id, @Part MultipartBody.Part feedback, @Part List<MultipartBody.Part> files);
+    @POST("feedback_repository/{language}/applications/{applicationId}/feedbacks")
+    Call<JsonObject> createFeedbackVariant(@Path("language") String language, @Path("applicationId") long applicationId, @Part MultipartBody.Part feedback, @Part List<MultipartBody.Part> files);
 
     /**
      * This method retrieves the feedback configuration from the orchestrator.
      *
      * @return the configuration from the orchestrator
      */
-    @GET("orchestrator/feedback/{language}/applications/{application_id}")
-    Call<OrchestratorConfigurationItem> getConfiguration(@Path("language") String language, @Path("application_id") long application_id);
+    @GET("orchestrator/feedback/{language}/applications/{applicationId}")
+    Call<OrchestratorConfigurationItem> getConfiguration(@Path("language") String language, @Path("applicationId") long applicationId);
 
     /**
      * This method checks it the orchestrator is up and running.

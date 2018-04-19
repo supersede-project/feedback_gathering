@@ -1,9 +1,5 @@
 package ch.uzh.supersede.feedbacklibrary.models;
 
-/**
- * Created by Skidan Oleg on 25.06.2017.
- */
-
 public class EditImageItem {
     private String title;
     private int elementResource;
@@ -15,6 +11,18 @@ public class EditImageItem {
     public EditImageItem(String title, int elementResource) {
         this.title = title;
         this.elementResource = elementResource;
+    }
+
+    public interface OnClickListener {
+        void onClick();
+    }
+
+    public void click() {
+        listener.onClick();
+    }
+
+    public void setOnClickListener(OnClickListener onClickListener) {
+        listener = onClickListener;
     }
 
     public String getTitle() {
@@ -33,15 +41,11 @@ public class EditImageItem {
         this.elementResource = elementResource;
     }
 
-    public void setOnClickListener(OnClickListener onClickListener) {
-        listener = onClickListener;
+    public OnClickListener getListener() {
+        return listener;
     }
 
-    public void click() {
-        listener.onClick();
-    }
-
-    public interface OnClickListener {
-        void onClick();
+    public void setListener(OnClickListener listener) {
+        this.listener = listener;
     }
 }

@@ -10,14 +10,14 @@
 
     <application
         android:allowBackup="false"
-        android:label="@string/supersede_feedbacklibrary_feedback_library_name"
+        android:label="@string/feedback_library"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.FeedbackLibrary">
         <!-- android:theme will be overriden from app:theme -->
 
         <activity
             android:name=".activities.AnnotateImageActivity"
-            android:label="@string/supersede_feedbacklibrary_annotate_image_activity_name"
+            android:label="@string/annotate_image_activity"
             android:theme="@style/AppTheme.FeedbackLibrary"
             android:screenOrientation="portrait" />
         <activity

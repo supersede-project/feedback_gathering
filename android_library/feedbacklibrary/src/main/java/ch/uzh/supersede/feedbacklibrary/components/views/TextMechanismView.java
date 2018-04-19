@@ -10,16 +10,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 
 import ch.uzh.supersede.feedbacklibrary.R;
-import ch.uzh.supersede.feedbacklibrary.models.Mechanism;
+import ch.uzh.supersede.feedbacklibrary.models.AbstractMechanism;
 import ch.uzh.supersede.feedbacklibrary.models.TextMechanism;
 
-/**
- * Text mechanism view
- */
-public class TextMechanismView extends MechanismView {
+public class TextMechanismView extends AbstractMechanismView {
     private TextMechanism textMechanism = null;
 
-    public TextMechanismView(LayoutInflater layoutInflater, Mechanism mechanism) {
+    public TextMechanismView(LayoutInflater layoutInflater, AbstractMechanism mechanism) {
         super(layoutInflater);
         this.textMechanism = (TextMechanism) mechanism;
         setEnclosingLayout(getLayoutInflater().inflate(R.layout.mechanism_text_enclosing, null));
@@ -91,7 +88,7 @@ public class TextMechanismView extends MechanismView {
 
                 if (textMechanism.getMaxLength() != null && textMechanism.isMaxLengthVisible() && textInputLayout.isErrorEnabled()) {
                     if (s.length() > textMechanism.getMaxLength()) {
-                        textInputLayout.setError(getEnclosingLayout().getResources().getString(R.string.supersede_feedbacklibrary_maximum_character_hint, textMechanism.getMaxLength()));
+                        textInputLayout.setError(getEnclosingLayout().getResources().getString(R.string.feedback_text_warning, textMechanism.getMaxLength()));
                     } else {
                         textInputLayout.setError(null);
                     }

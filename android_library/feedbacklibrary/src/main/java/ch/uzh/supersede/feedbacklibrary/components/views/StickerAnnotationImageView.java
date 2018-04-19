@@ -7,13 +7,12 @@ import android.view.View;
 import android.widget.ImageView;
 
 import ch.uzh.supersede.feedbacklibrary.R;
-import ch.uzh.supersede.feedbacklibrary.components.views.AbstractAnnotationView;
 
 import static android.view.Gravity.*;
 import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.ViewsConstants.*;
 
 public class StickerAnnotationImageView extends AbstractAnnotationView {
-    // Scaling
     private float scaleOrgX;
     private float scaleOrgY;
     private double centerX;

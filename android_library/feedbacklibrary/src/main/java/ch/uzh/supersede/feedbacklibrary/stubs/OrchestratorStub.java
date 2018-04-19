@@ -14,53 +14,46 @@ import java.util.List;
 import java.util.Map;
 
 import ch.uzh.supersede.feedbacklibrary.R;
+import ch.uzh.supersede.feedbacklibrary.components.views.AbstractMechanismView;
+import ch.uzh.supersede.feedbacklibrary.components.views.AudioMechanismView;
+import ch.uzh.supersede.feedbacklibrary.components.views.CategoryMechanismView;
+import ch.uzh.supersede.feedbacklibrary.components.views.RatingMechanismView;
+import ch.uzh.supersede.feedbacklibrary.components.views.ScreenshotMechanismView;
+import ch.uzh.supersede.feedbacklibrary.components.views.TextMechanismView;
 import ch.uzh.supersede.feedbacklibrary.configurations.MechanismConfigurationItem;
 import ch.uzh.supersede.feedbacklibrary.models.AudioMechanism;
 import ch.uzh.supersede.feedbacklibrary.models.CategoryMechanism;
 import ch.uzh.supersede.feedbacklibrary.models.RatingMechanism;
 import ch.uzh.supersede.feedbacklibrary.models.ScreenshotMechanism;
 import ch.uzh.supersede.feedbacklibrary.models.TextMechanism;
-import ch.uzh.supersede.feedbacklibrary.utils.*;
-import ch.uzh.supersede.feedbacklibrary.components.views.AudioMechanismView;
-import ch.uzh.supersede.feedbacklibrary.components.views.CategoryMechanismView;
-import ch.uzh.supersede.feedbacklibrary.components.views.MechanismView;
-import ch.uzh.supersede.feedbacklibrary.components.views.RatingMechanismView;
-import ch.uzh.supersede.feedbacklibrary.components.views.ScreenshotMechanismView;
-import ch.uzh.supersede.feedbacklibrary.components.views.TextMechanismView;
+import ch.uzh.supersede.feedbacklibrary.utils.Utils;
 
-import static ch.uzh.supersede.feedbacklibrary.models.Mechanism.ATTACHMENT_TYPE;
-import static ch.uzh.supersede.feedbacklibrary.models.Mechanism.AUDIO_TYPE;
-import static ch.uzh.supersede.feedbacklibrary.models.Mechanism.CATEGORY_TYPE;
-import static ch.uzh.supersede.feedbacklibrary.models.Mechanism.DIALOG_TYPE;
-import static ch.uzh.supersede.feedbacklibrary.models.Mechanism.IMAGE_TYPE;
-import static ch.uzh.supersede.feedbacklibrary.models.Mechanism.RATING_TYPE;
-import static ch.uzh.supersede.feedbacklibrary.models.Mechanism.SCREENSHOT_TYPE;
-import static ch.uzh.supersede.feedbacklibrary.models.Mechanism.TEXT_TYPE;
-import static ch.uzh.supersede.feedbacklibrary.utils.Constants.OrchestratorConstants.*;
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.*;
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.StubsConstants.*;
 import static ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility.USER_LEVEL.ADVANCED;
 
 
 public class OrchestratorStub {
-    private ArrayList<MechanismView> mechanismViews;
+    private ArrayList<AbstractMechanismView> mechanismViews;
 
     private OrchestratorStub() {
         mechanismViews = new ArrayList<>();
     }
 
-    public List<MechanismView> getMechanismViews() {
+    public List<AbstractMechanismView> getMechanismViews() {
         return this.mechanismViews;
     }
 
     public static void receiveFeedback(Activity activity, View view) {
         //TODO: Evaluation, Store etc
-        Toast toast = Toast.makeText(activity.getApplicationContext(), activity.getResources().getString(R.string.supersede_feedbacklibrary_success_text), Toast.LENGTH_SHORT);
+        Toast toast = Toast.makeText(activity.getApplicationContext(), activity.getResources().getString(R.string.feedback_success), Toast.LENGTH_SHORT);
         toast.show();
         Utils.wipeImages(activity);
         activity.onBackPressed();
     }
 
     public static class MechanismBuilder<T extends Activity> {
-        private ArrayList<MechanismView> viewList;
+        private ArrayList<AbstractMechanismView> viewList;
         private Context context;
         private LayoutInflater layoutInflater;
         private LinearLayout rootLayout;
@@ -123,9 +116,9 @@ public class OrchestratorStub {
             return this;
         }
 
-        public OrchestratorStub build(List<MechanismView> mechanismViews) {
+        public OrchestratorStub build(List<AbstractMechanismView> mechanismViews) {
             OrchestratorStub stub = new OrchestratorStub();
-            for (MechanismView view : viewList) {
+            for (AbstractMechanismView view : viewList) {
                 mechanismViews.add(view);
                 rootLayout.addView(view.getEnclosingLayout());
             }
@@ -134,7 +127,7 @@ public class OrchestratorStub {
 
         private void resolve(String type) {
             MechanismConfigurationItem configurationItem = new MechanismConfigurationItem();
-            configurationItem.setCanBeActivated(true);
+            configurationItem.setActivatePossible(true);
             configurationItem.setActive(true);
             configurationItem.setOrder(id);
             configurationItem.setId(id);
@@ -295,5 +288,4 @@ public class OrchestratorStub {
             }
         }
     }
-
-  }
+}
