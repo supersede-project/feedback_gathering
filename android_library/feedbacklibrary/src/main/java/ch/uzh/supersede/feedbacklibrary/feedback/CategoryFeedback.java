@@ -1,7 +1,5 @@
 package ch.uzh.supersede.feedbacklibrary.feedback;
 
-import ch.uzh.supersede.feedbacklibrary.models.CategoryMechanism;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -9,9 +7,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-/**
- * Category feedback.
- */
+import ch.uzh.supersede.feedbacklibrary.models.CategoryMechanism;
+
 public class CategoryFeedback implements Serializable {
     private List<HashMap<String, Object>> categories;
 
@@ -19,18 +16,13 @@ public class CategoryFeedback implements Serializable {
         initCategoryFeedback(categoryMechanism);
     }
 
-    /**
-     * This method returns the categories.
-     *
-     * @return the categories
-     */
     public List<HashMap<String, Object>> getCategories() {
         return categories;
     }
 
     private void initCategoryFeedback(CategoryMechanism categoryMechanism) {
         List<String> options = categoryMechanism.getOptions();
-        HashMap<String, Long> optionsIds = categoryMechanism.getOptionsIds();
+        HashMap<String, Long> optionsIds = new HashMap<>(categoryMechanism.getOptionsIds());
         Set<String> selectedOptionsSet = categoryMechanism.getSelectedOptionsSet();
 
         // Process all the not user created options

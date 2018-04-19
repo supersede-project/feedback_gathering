@@ -8,11 +8,9 @@ import java.util.Map;
 import ch.uzh.supersede.feedbacklibrary.configurations.MechanismConfigurationItem;
 import ch.uzh.supersede.feedbacklibrary.utils.Utils;
 
-/**
- * Text mechanism model
- */
-public class TextMechanism extends Mechanism {
-    private String title;
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.TEXT_TYPE;
+
+public class TextMechanism extends AbstractMechanism {
     private String hint = "";
     private String label = "";
     // Font color of the input text
@@ -37,102 +35,12 @@ public class TextMechanism extends Mechanism {
         initTextMechanism(item);
     }
 
-    /**
-     * This method returns the hint.
-     *
-     * @return the hint, or the empty string by default
-     */
-    public String getHint() {
-        return hint;
-    }
-
-    /**
-     * This method returns the input text.
-     *
-     * @return the input text, or null by default
-     */
-    public String getInputText() {
-        return inputText;
-    }
-
-    /**
-     * This method returns the alignment of the input text.
-     *
-     * @return the alignment, or null by default
-     */
-    public String getInputTextAlignment() {
-        return inputTextAlignment;
-    }
-
-    /**
-     * This method returns the font color of the input text.
-     *
-     * @return the font color, or null by default
-     */
-    public String getInputTextFontColor() {
-        return inputTextFontColor;
-    }
-
-    /**
-     * This method returns the font size of the input text.
-     *
-     * @return the font size, or null by default
-     */
-    public Float getInputTextFontSize() {
-        return inputTextFontSize;
-    }
-
-    /**
-     * This method returns the font type of the input text.
-     *
-     * @return the font type, or null by default
-     */
-    public Integer getInputTextFontType() {
-        return inputTextFontType;
-    }
-
-    /**
-     * This method returns the label.
-     *
-     * @return the label, or the empty string by default
-     */
-    public String getLabel() {
-        return label;
-    }
-
-    /**
-     * This method returns the mandatory reminder.
-     *
-     * @return the mandatory reminder
-     */
-    public String getMandatoryReminder() {
-        return mandatoryReminder;
-    }
-
-    /**
-     * This method returns the maximum length of the input text.
-     *
-     * @return the maximum length, or null by default
-     */
-    public Integer getMaxLength() {
-        return maxLength;
-    }
-
-    /**
-     * This method returns the title.
-     *
-     * @return the title
-     */
-    public String getTitle() {
-        return title;
-    }
-
     private void initTextMechanism(MechanismConfigurationItem item) {
         for (Map<String, Object> param : item.getParameters()) {
             String key = (String) param.get("key");
             Object value = param.get("value");
 
-            if (key == null){
+            if (key == null) {
                 return;
             }
             // Title
@@ -226,33 +134,6 @@ public class TextMechanism extends Mechanism {
         }
     }
 
-    /**
-     * This method returns if entering a text is mandatory.
-     *
-     * @return true if it is mandatory, false otherwise
-     */
-    public boolean isMandatory() {
-        return mandatory;
-    }
-
-    /**
-     * This method returns if the maximum length of the input text is visible for the user.
-     *
-     * @return true if it is visible, false otherwise
-     */
-    public boolean isMaxLengthVisible() {
-        return maxLengthVisible;
-    }
-
-    /**
-     * This method returns if the length of the current input text is visible for the user.
-     *
-     * @return true if it is visible, false otherwise
-     */
-    public boolean isTextLengthVisible() {
-        return textLengthVisible;
-    }
-
     @Override
     public boolean isValid(List<String> errorMessage) {
         if (isMandatory() && inputText.length() <= 0) {
@@ -260,7 +141,7 @@ public class TextMechanism extends Mechanism {
             return false;
         }
 
-        if (maxLength != null && inputText!= null && inputText.length() > maxLength) {
+        if (maxLength != null && inputText != null && inputText.length() > maxLength) {
             errorMessage.add("Text has " + inputText.length() + " characters. Maximum allowed characters are " + maxLength);
             return false;
         }
@@ -268,120 +149,99 @@ public class TextMechanism extends Mechanism {
         return true;
     }
 
-    /**
-     * This method sets the hint.
-     *
-     * @param hint the hint
-     */
+    public String getHint() {
+        return hint;
+    }
+
     public void setHint(String hint) {
         this.hint = hint;
     }
 
-    /**
-     * This method sets the input text.
-     *
-     * @param inputText the input text
-     */
-    public void setInputText(String inputText) {
-        this.inputText = inputText;
+    public String getLabel() {
+        return label;
     }
 
-    /**
-     * This method sets the alignment of the input text.
-     *
-     * @param inputTextAlignment the input text alignment
-     */
-    public void setInputTextAlignment(String inputTextAlignment) {
-        this.inputTextAlignment = inputTextAlignment;
-    }
-
-    /**
-     * This method sets the text color of the input text.
-     *
-     * @param inputTextFontColor the input text color
-     */
-    public void setInputTextFontColor(String inputTextFontColor) {
-        this.inputTextFontColor = inputTextFontColor;
-    }
-
-    /**
-     * This method sets the size of the input text.
-     *
-     * @param inputTextFontSize the input text size
-     */
-    public void setInputTextFontSize(float inputTextFontSize) {
-        this.inputTextFontSize = inputTextFontSize;
-    }
-
-    /**
-     * This method sets the font type of the input text.
-     *
-     * @param inputTextFontType the input text font type
-     */
-    public void setInputTextFontType(int inputTextFontType) {
-        this.inputTextFontType = inputTextFontType;
-    }
-
-    /**
-     * This method sets the label.
-     *
-     * @param label the label
-     */
     public void setLabel(String label) {
         this.label = label;
     }
 
-    /**
-     * This method sets if entering a text is mandatory.
-     *
-     * @param mandatory true if it is mandatory, false otherwise
-     */
-    public void setMandatory(boolean mandatory) {
-        this.mandatory = mandatory;
+    public String getInputTextFontColor() {
+        return inputTextFontColor;
     }
 
-    /**
-     * This method sets the mandatory reminder.
-     *
-     * @param mandatoryReminder the mandatory reminder
-     */
-    public void setMandatoryReminder(String mandatoryReminder) {
-        this.mandatoryReminder = mandatoryReminder;
+    public void setInputTextFontColor(String inputTextFontColor) {
+        this.inputTextFontColor = inputTextFontColor;
     }
 
-    /**
-     * This method sets the maximum length of the input text.
-     *
-     * @param maxLength the maximum length
-     */
-    public void setMaxLength(int maxLength) {
+    public Float getInputTextFontSize() {
+        return inputTextFontSize;
+    }
+
+    public void setInputTextFontSize(Float inputTextFontSize) {
+        this.inputTextFontSize = inputTextFontSize;
+    }
+
+    public Integer getInputTextFontType() {
+        return inputTextFontType;
+    }
+
+    public void setInputTextFontType(Integer inputTextFontType) {
+        this.inputTextFontType = inputTextFontType;
+    }
+
+    public String getInputTextAlignment() {
+        return inputTextAlignment;
+    }
+
+    public void setInputTextAlignment(String inputTextAlignment) {
+        this.inputTextAlignment = inputTextAlignment;
+    }
+
+    public Integer getMaxLength() {
+        return maxLength;
+    }
+
+    public void setMaxLength(Integer maxLength) {
         this.maxLength = maxLength;
     }
 
-    /**
-     * This method sets if the maximum length of the input text is visible for the user.
-     *
-     * @param maxLengthVisible true if it is visible, false otherwise
-     */
+    public boolean isMaxLengthVisible() {
+        return maxLengthVisible;
+    }
+
     public void setMaxLengthVisible(boolean maxLengthVisible) {
         this.maxLengthVisible = maxLengthVisible;
     }
 
-    /**
-     * This method sets if the length of the current input text is visible for the user.
-     *
-     * @param textLengthVisible true if it is visible, false otherwise
-     */
+    public boolean isMandatory() {
+        return mandatory;
+    }
+
+    public void setMandatory(boolean mandatory) {
+        this.mandatory = mandatory;
+    }
+
+    public String getMandatoryReminder() {
+        return mandatoryReminder;
+    }
+
+    public void setMandatoryReminder(String mandatoryReminder) {
+        this.mandatoryReminder = mandatoryReminder;
+    }
+
+    public boolean isTextLengthVisible() {
+        return textLengthVisible;
+    }
+
     public void setTextLengthVisible(boolean textLengthVisible) {
         this.textLengthVisible = textLengthVisible;
     }
 
-    /**
-     * This method sets the title.
-     *
-     * @param title the title
-     */
-    public void setTitle(String title) {
-        this.title = title;
+    public String getInputText() {
+        return inputText;
+    }
+
+    public void setInputText(String inputText) {
+        this.inputText = inputText;
     }
 }

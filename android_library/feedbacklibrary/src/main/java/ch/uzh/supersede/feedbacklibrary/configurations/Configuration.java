@@ -5,9 +5,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import ch.uzh.supersede.feedbacklibrary.BuildConfig;
-import ch.uzh.supersede.feedbacklibrary.models.Mechanism;
-import okhttp3.internal.platform.Platform;
+import ch.uzh.supersede.feedbacklibrary.models.AbstractMechanism;
 
 /**
  * Configuration either of type 'PUSH' or 'PULL'.
@@ -17,61 +15,16 @@ public class Configuration {
     private GeneralConfiguration generalConfiguration;
     private long id;
     private boolean isPush;
-    private List<Mechanism> mechanisms;
+    private List<AbstractMechanism> mechanisms;
     private String type;
 
     public Configuration(ConfigurationItem configurationItem) {
-        createdAt = configurationItem.getCreatedAt();
+        createdAt = configurationItem.getDateOfCreation();
         generalConfiguration = new GeneralConfiguration(configurationItem.getGeneralConfigurationItem());
         id = configurationItem.getId();
         isPush = configurationItem.getType().equals("PUSH");
         type = configurationItem.getType();
         initMechanisms(configurationItem);
-    }
-
-    /**
-     * This method returns the date of creation as a string.
-     *
-     * @return the creation date as a string
-     */
-    public String getCreatedAt() {
-        return createdAt;
-    }
-
-    /**
-     * This method returns the general configuration.
-     *
-     * @return the general configuration
-     */
-    public GeneralConfiguration getGeneralConfiguration() {
-        return generalConfiguration;
-    }
-
-    /**
-     * This method returns the id of the configuration.
-     *
-     * @return the configuration id
-     */
-    public long getId() {
-        return id;
-    }
-
-    /**
-     * This method returns all mechanisms of the configuration.
-     *
-     * @return all mechanisms
-     */
-    public List<Mechanism> getMechanisms() {
-        return mechanisms;
-    }
-
-    /**
-     * This method returns the type of the configuration.
-     *
-     * @return the type, either 'PUSH' or 'PULL'
-     */
-    public String getType() {
-        return type;
     }
 
     private void initMechanisms(ConfigurationItem configurationItem) {
@@ -80,25 +33,62 @@ public class Configuration {
             mechanisms.add(mechanismConfigurationItem.createMechanism());
         }
 
-        if(mechanisms != null) {
-            Collections.sort(mechanisms, new Comparator<Mechanism>() {
-                @Override
-                public int compare(Mechanism a, Mechanism b) {
-                    if(a == null || b == null) {
-                        return -1;
-                    }
-                    return ((Integer) a.getOrder()).compareTo(b.getOrder());
+        Collections.sort(mechanisms, new Comparator<AbstractMechanism>() {
+            @Override
+            public int compare(AbstractMechanism a, AbstractMechanism b) {
+                if (a == null || b == null) {
+                    return -1;
                 }
-            });
-        }
+                return ((Integer) a.getOrder()).compareTo(b.getOrder());
+            }
+        });
     }
 
-    /**
-     * This method returns if the configuration is of type 'PUSH'.
-     *
-     * @return true if the configuration is of type 'PUSH', false otherwise
-     */
+    public String getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(String createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public GeneralConfiguration getGeneralConfiguration() {
+        return generalConfiguration;
+    }
+
+    public void setGeneralConfiguration(GeneralConfiguration generalConfiguration) {
+        this.generalConfiguration = generalConfiguration;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
     public boolean isPush() {
         return isPush;
+    }
+
+    public void setPush(boolean isPush) {
+        this.isPush = isPush;
+    }
+
+    public List<AbstractMechanism> getMechanisms() {
+        return mechanisms;
+    }
+
+    public void setMechanisms(List<AbstractMechanism> mechanisms) {
+        this.mechanisms = mechanisms;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }

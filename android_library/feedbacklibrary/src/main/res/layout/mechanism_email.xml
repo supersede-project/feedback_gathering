@@ -22,7 +22,7 @@
         android:id="@+id/sbe_get_copy_cb"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/get_feedback_copy_by_email"
+        android:text="@string/email_copy"
         android:textSize="16sp"/>
 
     <EditText

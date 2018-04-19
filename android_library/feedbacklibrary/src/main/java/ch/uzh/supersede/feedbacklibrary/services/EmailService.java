@@ -1,27 +1,47 @@
 package ch.uzh.supersede.feedbacklibrary.services;
 
 import android.app.Activity;
-import android.content.*;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.StrictMode;
 import android.text.TextUtils;
 import android.util.Log;
-import android.widget.*;
+import android.widget.CheckBox;
+import android.widget.EditText;
 
-import java.net.*;
-import java.util.*;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.List;
+import java.util.Properties;
 
-import javax.activation.*;
-import javax.mail.*;
+import javax.activation.DataHandler;
+import javax.activation.DataSource;
+import javax.activation.FileDataSource;
+import javax.mail.BodyPart;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.Multipart;
 import javax.mail.PasswordAuthentication;
-import javax.mail.internet.*;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeBodyPart;
+import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMultipart;
 
 import ch.uzh.supersede.feedbacklibrary.R;
-import ch.uzh.supersede.feedbacklibrary.components.views.*;
-import ch.uzh.supersede.feedbacklibrary.feedback.*;
-import ch.uzh.supersede.feedbacklibrary.utils.*;
+import ch.uzh.supersede.feedbacklibrary.components.views.AbstractMechanismView;
+import ch.uzh.supersede.feedbacklibrary.components.views.CategoryMechanismView;
+import ch.uzh.supersede.feedbacklibrary.components.views.RatingMechanismView;
+import ch.uzh.supersede.feedbacklibrary.feedback.AudioFeedback;
+import ch.uzh.supersede.feedbacklibrary.feedback.Feedback;
+import ch.uzh.supersede.feedbacklibrary.feedback.ScreenshotFeedback;
+import ch.uzh.supersede.feedbacklibrary.utils.DialogUtils;
+import ch.uzh.supersede.feedbacklibrary.utils.Utils;
+
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.ServicesConstants.EMAIL_SERVICE_TAG;
 
 public class EmailService {
-    private static final String TAG = "EmailService";
     private static EmailService instance;
 
     private EmailService() {
@@ -34,7 +54,7 @@ public class EmailService {
         return instance;
     }
 
-    public void checkAndSendViaEmail(final Activity activity, CheckBox sendViaEmailCheckbox, EditText emailEditText, final Feedback feedback, final List<MechanismView> mechanismViews) {
+    public void checkAndSendViaEmail(final Activity activity, CheckBox sendViaEmailCheckbox, EditText emailEditText, final Feedback feedback, final List<AbstractMechanismView> mechanismViews) {
         if (!sendViaEmailCheckbox.isChecked()) {
             return;
         }
@@ -52,12 +72,12 @@ public class EmailService {
             });
             emailThread.start();
         } else {
-            DialogUtils.showInformationDialog(activity, new String[]{activity.getResources().getString(R.string.invalid_email)}, true);
+            DialogUtils.showInformationDialog(activity, new String[]{activity.getResources().getString(R.string.email_invalid)}, true);
         }
     }
 
     //TODO: Funktionalitaet geht noch nicht.
-    private static void execSendMail(final Activity activity, final String email, final Feedback feedback, final List<MechanismView> mechanismViews) {
+    private static void execSendMail(final Activity activity, final String email, final Feedback feedback, final List<AbstractMechanismView> mechanismViews) {
         final String username = "supersede.zurich@gmail.com";
         final String password = System.getenv("F2F_SMTP_EMAIL_PASSWORD");
 
@@ -80,7 +100,7 @@ public class EmailService {
             message.setSubject("Copy of your feedback");
 
             BodyPart messageBodyPart = new MimeBodyPart();
-            String feedbackText = feedback.getTextFeedback().get(0).getText();
+            String feedbackText = feedback.getTextFeedbackList().get(0).getText();
 
             CategoryMechanismView categoryMechanismView = (CategoryMechanismView) mechanismViews.get(4);
             String category = categoryMechanismView.getCategorySpinner().getSelectedItem().toString();
@@ -100,10 +120,10 @@ public class EmailService {
             // Set text message part
             multipart.addBodyPart(messageBodyPart);
 
-            for (ScreenshotFeedback screenshotFeedback : feedback.getScreenshotFeedback()) {
+            for (ScreenshotFeedback screenshotFeedback : feedback.getScreenshotFeedbackList()) {
                 addAttachment(multipart, screenshotFeedback.getImagePath());
             }
-            for (AudioFeedback audioFeedback : feedback.getAudioFeedback()) {
+            for (AudioFeedback audioFeedback : feedback.getAudioFeedbackList()) {
                 addAttachment(multipart, audioFeedback.getAudioPath());
             }
 
@@ -120,7 +140,7 @@ public class EmailService {
 
         } catch (MessagingException e) {
             Log.e(e.getMessage(), e.toString());
-            DialogUtils.showInformationDialog(activity, new String[]{activity.getResources().getString(R.string.supersede_feedbacklibrary_error_text)}, true);
+            DialogUtils.showInformationDialog(activity, new String[]{activity.getResources().getString(R.string.info_error)}, true);
         }
     }
 
@@ -129,7 +149,7 @@ public class EmailService {
         try {
             uri = new URI(filePath);
         } catch (URISyntaxException e) {
-            Log.e(TAG, "Failed to create URI", e);
+            Log.e(EMAIL_SERVICE_TAG, "Failed to create URI", e);
             return;
         }
         String[] segments = uri.getPath().split("/");

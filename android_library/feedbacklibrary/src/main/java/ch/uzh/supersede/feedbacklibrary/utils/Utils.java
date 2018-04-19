@@ -18,15 +18,10 @@ import java.util.regex.Pattern;
 
 import ch.uzh.supersede.feedbacklibrary.database.FeedbackDatabase;
 
-import static ch.uzh.supersede.feedbacklibrary.utils.Constants.FeedbackActivityConstants.*;
-import static ch.uzh.supersede.feedbacklibrary.utils.Constants.ScreenshotConstants.*;
-import static ch.uzh.supersede.feedbacklibrary.utils.Constants.ScreenshotConstants.TAG;
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.*;
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.UtilsConstants.*;
 
-/**
- * Class with various helper methods
- */
 public class Utils {
-
     private Utils() {
     }
 
@@ -41,7 +36,7 @@ public class Utils {
         rootView.setDrawingCacheEnabled(true);
         Bitmap imageBitmap = Bitmap.createBitmap(rootView.getDrawingCache());
         rootView.setDrawingCacheEnabled(false);
-        storeImageToDatabase(activity,imageBitmap);
+        storeImageToDatabase(activity, imageBitmap);
     }
 
     public static void storeScreenshotToIntent(final Activity activity, Intent intent) {
@@ -51,39 +46,40 @@ public class Utils {
         rootView.setDrawingCacheEnabled(false);
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         imageBitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
-        intent.putExtra(EXTRA_KEY_CACHED_SCREENSHOT,stream.toByteArray());
+        intent.putExtra(EXTRA_KEY_CACHED_SCREENSHOT, stream.toByteArray());
     }
 
     public static void storeImageToDatabase(final Activity activity, Bitmap bitmap) {
-        storeBitmap(activity.getApplicationContext(),bitmap,IMAGE_DATA_DB_KEY);    }
-
-    public static void storeAnnotatedImageToDatabase(final Activity activity, Bitmap bitmap) {
-        storeBitmap(activity.getApplicationContext(),bitmap,IMAGE_ANNOTATED_DATA_DB_KEY);
+        storeBitmap(activity.getApplicationContext(), bitmap, IMAGE_DATA_DB_KEY);
     }
 
-    private static void storeBitmap(Context context, Bitmap bitmap, String dataKey){
+    public static void storeAnnotatedImageToDatabase(final Activity activity, Bitmap bitmap) {
+        storeBitmap(activity.getApplicationContext(), bitmap, IMAGE_ANNOTATED_DATA_DB_KEY);
+    }
+
+    private static void storeBitmap(Context context, Bitmap bitmap, String dataKey) {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
         FeedbackDatabase.getInstance(context).writeByte(dataKey, stream.toByteArray());
     }
 
-    public static void persistScreenshot(Context context, byte[] data){
-        if (data != null){
+    public static void persistScreenshot(Context context, byte[] data) {
+        if (data != null) {
             FeedbackDatabase.getInstance(context).writeByte(IMAGE_DATA_DB_KEY, data);
         }
     }
 
     public static Bitmap loadImageFromDatabase(final Context context) {
-        return loadImageFromDatabase(context,IMAGE_DATA_DB_KEY);
+        return loadImageFromDatabase(context, IMAGE_DATA_DB_KEY);
     }
 
     public static Bitmap loadAnnotatedImageFromDatabase(final Context context) {
-        return loadImageFromDatabase(context,IMAGE_ANNOTATED_DATA_DB_KEY);
+        return loadImageFromDatabase(context, IMAGE_ANNOTATED_DATA_DB_KEY);
     }
 
     private static Bitmap loadImageFromDatabase(final Context context, String dataKey) {
         byte[] imageAsByte = FeedbackDatabase.getInstance(context).readBytes(dataKey);
-        if (imageAsByte==null){
+        if (imageAsByte == null) {
             return null;
         }
         return BitmapFactory.decodeByteArray(imageAsByte, 0, imageAsByte.length);
@@ -102,7 +98,7 @@ public class Utils {
         try {
             return File.createTempFile(prefix, suffix, context.getCacheDir());
         } catch (IOException e) {
-            Log.e(TAG, "Failed to create a temporary file", e);
+            Log.e(UTILS_TAG, "Failed to create a temporary file", e);
         }
         return null;
     }
@@ -135,13 +131,13 @@ public class Utils {
             fos.close();
             return true;
         } catch (Exception e) {
-            Log.e(TAG, "Failed to write the bitmap to the file.", e);
+            Log.e(UTILS_TAG, "Failed to write the bitmap to the file.", e);
         }
         return false;
     }
 
     /**
-     * This method scales the bitmap according to a maximum width and height keeping the aspect ratio.
+     * This method scales the bitmap according to a maximum screenWidth and screenHeight keeping the aspect ratio.
      */
     public static Bitmap scaleBitmap(Bitmap bitmap, int newWidth, int newHeight) {
         int width = bitmap.getWidth();
