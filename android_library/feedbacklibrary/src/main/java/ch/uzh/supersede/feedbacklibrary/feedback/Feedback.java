@@ -1,4 +1,4 @@
-package ch.uzh.supersede.feedbacklibrary.feedbacks;
+package ch.uzh.supersede.feedbacklibrary.feedback;
 
 import android.os.Build;
 import android.util.Log;
@@ -37,17 +37,17 @@ public class Feedback implements Serializable {
     private String userIdentification;
     // Mechanisms
     @Expose
-    private List<AttachmentFeedback> attachmentFeedbacks = new ArrayList<>();
+    private List<AttachmentFeedback> attachmentFeedbackList = new ArrayList<>();
     @Expose
-    private List<AudioFeedback> audioFeedbacks = new ArrayList<>();
+    private List<AudioFeedback> audioFeedbackList = new ArrayList<>();
     @Expose
-    private List<HashMap<String, Object>> categoryFeedbacks = new ArrayList<>();
+    private List<HashMap<String, Object>> categoryFeedbackList = new ArrayList<>();
     @Expose
-    private List<RatingFeedback> ratingFeedbacks = new ArrayList<>();
+    private List<RatingFeedback> ratingFeedbackList = new ArrayList<>();
     @Expose
-    private List<ScreenshotFeedback> screenshotFeedbacks = new ArrayList<>();
+    private List<ScreenshotFeedback> screenshotFeedbackList = new ArrayList<>();
     @Expose
-    private List<TextFeedback> textFeedbacks = new ArrayList<>();
+    private List<TextFeedback> textFeedbackList = new ArrayList<>();
 
     public Feedback(List<AbstractMechanism> allMechanisms) {
         for (AbstractMechanism mechanism : allMechanisms) {
@@ -60,24 +60,24 @@ public class Feedback implements Serializable {
                     case AUDIO_TYPE:
                         AudioMechanism audioMechanism = (AudioMechanism) mechanism;
                         if (audioMechanism.getAudioPath() != null) {
-                            audioFeedbacks.add(new AudioFeedback(audioMechanism, audioFeedbacks.size()));
+                            audioFeedbackList.add(new AudioFeedback(audioMechanism, audioFeedbackList.size()));
                         }
                         break;
                     case CATEGORY_TYPE:
                         CategoryFeedback categoryFeedback = new CategoryFeedback((CategoryMechanism) mechanism);
-                        categoryFeedbacks.addAll(categoryFeedback.getCategories());
+                        categoryFeedbackList.addAll(categoryFeedback.getCategories());
                         break;
                     case RATING_TYPE:
-                        ratingFeedbacks.add(new RatingFeedback((RatingMechanism) mechanism));
+                        ratingFeedbackList.add(new RatingFeedback((RatingMechanism) mechanism));
                         break;
                     case SCREENSHOT_TYPE:
                         ScreenshotMechanism screenshotMechanism = (ScreenshotMechanism) mechanism;
                         if (screenshotMechanism.getImagePath() != null) {
-                            screenshotFeedbacks.add(new ScreenshotFeedback(screenshotMechanism, screenshotFeedbacks.size()));
+                            screenshotFeedbackList.add(new ScreenshotFeedback(screenshotMechanism, screenshotFeedbackList.size()));
                         }
                         break;
                     case TEXT_TYPE:
-                        textFeedbacks.add(new TextFeedback((TextMechanism) mechanism));
+                        textFeedbackList.add(new TextFeedback((TextMechanism) mechanism));
                         break;
                     default:
                         Log.wtf("Feedback", "Unknown mechanism type '" + type + "'");

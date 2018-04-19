@@ -136,6 +136,7 @@
                 android:layout_weight="1" />
 
             <ScrollView
+                android:id="@+id/list_view_scroll"
                 android:layout_width="0dp"
                 android:layout_height="fill_parent"
                 android:layout_weight="20">

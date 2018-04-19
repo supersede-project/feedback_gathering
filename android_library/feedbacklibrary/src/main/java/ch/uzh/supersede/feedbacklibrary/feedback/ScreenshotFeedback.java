@@ -1,4 +1,6 @@
-package ch.uzh.supersede.feedbacklibrary.feedbacks;
+package ch.uzh.supersede.feedbacklibrary.feedback;
+
+import ch.uzh.supersede.feedbacklibrary.models.ScreenshotMechanism;
 
 import com.google.gson.annotations.Expose;
 

@@ -7,8 +7,13 @@ import android.support.v4.content.ContextCompat;
 
 import java.util.ArrayList;
 
+import ch.uzh.supersede.feedbacklibrary.database.FeedbackDatabase;
+
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.*;
-import static ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility.USER_LEVEL.*;
+import static ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility.USER_LEVEL.ACTIVE;
+import static ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility.USER_LEVEL.ADVANCED;
+import static ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility.USER_LEVEL.LOCKED;
+import static ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility.USER_LEVEL.PASSIVE;
 
 public class PermissionUtility {
 
@@ -38,7 +43,16 @@ public class PermissionUtility {
 
         public boolean check(Context context) {
             boolean contributor = context.getSharedPreferences(SHARED_PREFERENCES, Context.MODE_PRIVATE).getBoolean(FEEDBACK_CONTRIBUTOR, false);
-            return contributor && getMissing(context).length == 0;
+            boolean noMissingPermissions = getMissing(context).length == 0;
+            return contributor && noMissingPermissions && checkForUsername(context);
+        }
+
+        private boolean checkForUsername(Context context) {
+            if (this == ACTIVE || this == ADVANCED) {
+                String username = FeedbackDatabase.getInstance(context).readString(USER_NAME, null);
+                return StringUtility.hasText(username);
+            }
+            return true;
         }
 
         public String[] getMissing(Context context) {

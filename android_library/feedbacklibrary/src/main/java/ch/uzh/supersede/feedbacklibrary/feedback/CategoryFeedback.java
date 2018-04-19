@@ -1,4 +1,4 @@
-package ch.uzh.supersede.feedbacklibrary.feedbacks;
+package ch.uzh.supersede.feedbacklibrary.feedback;
 
 import java.io.Serializable;
 import java.util.ArrayList;

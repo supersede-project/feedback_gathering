@@ -3,10 +3,11 @@ package ch.uzh.supersede.feedbacklibrary.services;
 import android.app.Activity;
 import android.util.Log;
 
-import static ch.uzh.supersede.feedbacklibrary.utils.Constants.FeedbackActivityConstants.APPLICATION_ID;
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.EXTRA_KEY_APPLICATION_ID;
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.ServicesConstants.CONFIGURATION_REAUEST_WRAPPER_TAG;
 
-public class ConfigurationRequestWrapper {
-    private static final String TAG = "ConfigurationRequestWra";
+
+public class ConfigurationRequestBean {
     private String url;
     private String language;
     private String intermediateDialogText;
@@ -15,7 +16,7 @@ public class ConfigurationRequestWrapper {
     private long applicationId;
     private long pullConfigurationId;
 
-    private ConfigurationRequestWrapper() {
+    private ConfigurationRequestBean() {
     }
 
     public String getUrl() {
@@ -85,14 +86,14 @@ public class ConfigurationRequestWrapper {
             return this;
         }
 
-        public ConfigurationRequestWrapper build() {
+        public ConfigurationRequestBean build() {
             if (checkNullAndLog(url, "url") || checkNullAndLog(language, "language") || checkNullAndLog
                     (intermediateDialogText, "intermediateDialogText") || checkNullAndLog(activityToStart, "activityToStart")
-                    || checkNullAndLog(startingActivity, "startingActivity") || checkNullAndLog(applicationId, APPLICATION_ID)
+                    || checkNullAndLog(startingActivity, "startingActivity") || checkNullAndLog(applicationId, EXTRA_KEY_APPLICATION_ID)
                     || checkNullAndLog(pullConfigurationId, "pullConfigurationId")) {
-                throw new RuntimeException("Could not create ConfigurationRequestWrapper!");
+                throw new RuntimeException("Could not create ConfigurationRequestBean!");
             }
-            ConfigurationRequestWrapper wrapper = new ConfigurationRequestWrapper();
+            ConfigurationRequestBean wrapper = new ConfigurationRequestBean();
             wrapper.url = this.url;
             wrapper.language = this.language;
             wrapper.intermediateDialogText = this.intermediateDialogText;
@@ -105,7 +106,7 @@ public class ConfigurationRequestWrapper {
 
         private boolean checkNullAndLog(Object o, String label) {
             if (o == null) {
-                Log.e(TAG, "Could not create ConfigurationRequestWrapper because " + label + " is null.");
+                Log.e(CONFIGURATION_REAUEST_WRAPPER_TAG, "Could not create ConfigurationRequestBean because " + label + " is null.");
                 return true;
             }
             return false;

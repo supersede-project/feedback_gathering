@@ -38,6 +38,9 @@ import ch.uzh.supersede.feedbacklibrary.utils.Utils;
 import ch.uzh.supersede.feedbacklibrary.components.views.CategoryMechanismView;
 import ch.uzh.supersede.feedbacklibrary.components.views.AbstractMechanismView;
 import ch.uzh.supersede.feedbacklibrary.components.views.RatingMechanismView;
+import ch.uzh.supersede.feedbacklibrary.components.views.*;
+import ch.uzh.supersede.feedbacklibrary.feedback.*;
+import ch.uzh.supersede.feedbacklibrary.utils.*;
 
 public class EmailService {
     private static final String TAG = "EmailService";
@@ -99,7 +102,7 @@ public class EmailService {
             message.setSubject("Copy of your feedback");
 
             BodyPart messageBodyPart = new MimeBodyPart();
-            String feedbackText = feedback.getTextFeedbacks().get(0).getText();
+            String feedbackText = feedback.getTextFeedback().get(0).getText();
 
             CategoryMechanismView categoryMechanismView = (CategoryMechanismView) mechanismViews.get(4);
             String category = categoryMechanismView.getCategorySpinner().getSelectedItem().toString();
@@ -119,10 +122,10 @@ public class EmailService {
             // Set text message part
             multipart.addBodyPart(messageBodyPart);
 
-            for (ScreenshotFeedback screenshotFeedback : feedback.getScreenshotFeedbacks()) {
+            for (ScreenshotFeedback screenshotFeedback : feedback.getScreenshotFeedback()) {
                 addAttachment(multipart, screenshotFeedback.getImagePath());
             }
-            for (AudioFeedback audioFeedback : feedback.getAudioFeedbacks()) {
+            for (AudioFeedback audioFeedback : feedback.getAudioFeedback()) {
                 addAttachment(multipart, audioFeedback.getAudioPath());
             }
 

@@ -5,7 +5,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.text.*;
-import android.view.*;
+import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.*;
@@ -14,9 +14,12 @@ import java.util.*;
 
 import ch.uzh.supersede.feedbacklibrary.R;
 import ch.uzh.supersede.feedbacklibrary.components.buttons.FeedbackListItem;
+import ch.uzh.supersede.feedbacklibrary.interfaces.ISortableFeedback.FEEDBACK_SORTING;
+import ch.uzh.supersede.feedbacklibrary.stubs.RepositoryStub;
 import ch.uzh.supersede.feedbacklibrary.utils.*;
+import ch.uzh.supersede.feedbacklibrary.wrapper.FeedbackBean;
 
-import static ch.uzh.supersede.feedbacklibrary.components.buttons.FeedbackListItem.FEEDBACK_STATUS.*;
+import static ch.uzh.supersede.feedbacklibrary.interfaces.ISortableFeedback.FEEDBACK_SORTING.MINE;
 
 @SuppressWarnings("squid:MaximumInheritanceDepth")
 public class FeedbackListActivity extends AbstractBaseActivity {
@@ -28,13 +31,9 @@ public class FeedbackListActivity extends AbstractBaseActivity {
     private LinearLayout focusSink;
     private EditText searchText;
     private String searchTerm;
-    private int maxPoints = 0;
-    private static final Button[] activeButtonAllocation = new Button[]{null};
-    private ArrayList<FeedbackListItem> myFeedbackList = new ArrayList<>();
-    private ArrayList<FeedbackListItem> topFeedbackList = new ArrayList<>();
-    private ArrayList<FeedbackListItem> hotFeedbackList = new ArrayList<>();
-    private ArrayList<FeedbackListItem> newFeedbackList = new ArrayList<>();
     private ArrayList<FeedbackListItem> activeFeedbackList = new ArrayList<>();
+    private ArrayList<FeedbackListItem> allFeedbackList = new ArrayList<>();
+    private FEEDBACK_SORTING sorting = MINE;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,37 +46,20 @@ public class FeedbackListActivity extends AbstractBaseActivity {
         newButton = setOnClickListener(getView(R.id.list_button_new, Button.class));
         searchText = addTextChangedListener(getView(R.id.list_edit_search, EditText.class));
         focusSink = getView(R.id.list_edit_focus_sink, LinearLayout.class);
-        for (int l = 0; l < 4; l++) {
-            String title = l == 0 ? "My Feedback #" : l == 1 ? "Top Feedback #" : l == 2 ? "Hot Feedback #" : "New Feedback #";
-            for (int s = 0; s < 4; s++) {
-                FeedbackListItem.FEEDBACK_STATUS status = s == 0 ? OPEN : s == 1 ? IN_PROGRESS : s == 2 ? REJECTED : CLOSED;
-                for (int i = 0; i < 10; i++) {
-                    int id = (10*s)+i;
-                    FeedbackListItem listItem = new FeedbackListItem(this, 8, title + id, "Date: ".concat(DateUtility.getDate(false)), status, (int) (50 * Math.random()));
-                    if (listItem.getPoints() > maxPoints) {
-                        maxPoints = listItem.getPoints();
-                    }
-                    if (l == 0) {
-                        myFeedbackList.add(listItem);
-                    } else if (l == 1) {
-                        topFeedbackList.add(listItem);
-                    }else if (l == 2) {
-                        hotFeedbackList.add(listItem);
-                    }else if (l == 3) {
-                        newFeedbackList.add(listItem);
-                    }
-                }
-            }
+        for (FeedbackBean bean : RepositoryStub.generateFeedback(this, 50, -30, 50, 0.1f)) {
+            allFeedbackList.add(new FeedbackListItem(this, 8, bean));
         }
-        sort(myFeedbackList,topFeedbackList,hotFeedbackList,newFeedbackList);
-        load(myFeedbackList,true);
+        activeFeedbackList = new ArrayList<>(allFeedbackList);
+        sort();
         onPostCreate();
     }
 
-    private void sort(ArrayList<FeedbackListItem>... lists){
-        for (ArrayList<FeedbackListItem> list : lists){
-            Collections.sort(list);
+    private void sort() {
+        for (FeedbackListItem item : activeFeedbackList) {
+            item.sort(sorting);
         }
+        Collections.sort(activeFeedbackList);
+        load();
     }
 
     private EditText addTextChangedListener(final EditText editText) {
@@ -126,18 +108,20 @@ public class FeedbackListActivity extends AbstractBaseActivity {
         v.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.blue_tab));
         ((Button) v).setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.white));
         if (v.getId() == myButton.getId()) {
-            loadMyFeedbacks();
+            loadMyFeedback();
         } else if (v.getId() == topButton.getId()) {
-            loadTopFeedbacks();
+            loadTopFeedback();
         } else if (v.getId() == hotButton.getId()) {
-            loadHotFeedbacks();
+            loadHotFeedback();
         } else if (v.getId() == newButton.getId()) {
-            loadNewFeedbacks();
+            loadNewFeedback();
         }
         //handle focus and keyboard
         focusSink.requestFocus();
-        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(focusSink.getWindowToken(), 0);
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (imm != null) {
+            imm.hideSoftInputFromWindow(focusSink.getWindowToken(), 0);
+        }
     }
 
     private void setInactive(Button... buttons) {
@@ -148,50 +132,46 @@ public class FeedbackListActivity extends AbstractBaseActivity {
     }
 
     private void doSearch(String s) {
-        if (!getString(R.string.list_edit_search).equals(s)) {
-            if (StringUtility.hasText(s)) {
-                ArrayList<FeedbackListItem> remainingItems = new ArrayList<>();
-                for (FeedbackListItem item : activeFeedbackList){
-                    if (item.getTitle().contains(s)){
-                        remainingItems.add(item);
-                    }
+        activeFeedbackList.clear();
+        if (!getString(R.string.list_edit_search).equals(s) && StringUtility.hasText(s)) {
+            for (FeedbackListItem item : allFeedbackList) {
+                if (item.getFeedbackBean().getTitle().toLowerCase().contains(s.toLowerCase())) {
+                    activeFeedbackList.add(item);
                 }
-                load(remainingItems, false);
-            }else{
-                load(activeFeedbackList, false);
             }
             searchTerm = s;
+        } else {
+            searchTerm = null;
+            activeFeedbackList = new ArrayList<>(allFeedbackList);
         }
+        sort();
     }
 
-    private void loadNewFeedbacks() {
-        load(newFeedbackList,true);
+    private void loadNewFeedback() {
+        sorting = FEEDBACK_SORTING.NEW;
         doSearch(searchTerm);
     }
 
-    private void loadHotFeedbacks() {
-        load(hotFeedbackList,true);
+    private void loadHotFeedback() {
+        sorting = FEEDBACK_SORTING.HOT;
         doSearch(searchTerm);
     }
 
-    private void loadTopFeedbacks() {
-        load(topFeedbackList,true);
+    private void loadTopFeedback() {
+        sorting = FEEDBACK_SORTING.TOP;
         doSearch(searchTerm);
     }
 
-    private void loadMyFeedbacks() {
-        load(myFeedbackList,true);
+    private void loadMyFeedback() {
+        sorting = MINE;
         doSearch(searchTerm);
     }
 
-    private void load(ArrayList<FeedbackListItem> arrayList, boolean save){
+    private void load() {
         scrollListLayout.removeAllViews();
-        for (FeedbackListItem item : arrayList) {
-            item.updatePercentageColor(maxPoints);
+        getView(R.id.list_view_scroll, ScrollView.class).scrollTo(0, 0);
+        for (FeedbackListItem item : activeFeedbackList) {
             scrollListLayout.addView(item);
-        }
-        if (save){
-            activeFeedbackList = arrayList;
         }
     }
 }

@@ -511,7 +511,7 @@ public class FeedbackActivity extends AbstractBaseActivity implements AudioMecha
 
     public List<MultipartBody.Part> getScreenshotMultipartbodyParts() {
         List<MultipartBody.Part> multipartFiles = new ArrayList<>();
-        List<ScreenshotFeedback> screenshotFeedbackList = feedback.getScreenshotFeedbacks();
+        List<ScreenshotFeedback> screenshotFeedbackList = feedback.getScreenshotFeedback();
         if (screenshotFeedbackList != null) {
             for (int pos = 0; pos < screenshotFeedbackList.size(); ++pos) {
                 File screenshotFile = new File(screenshotFeedbackList.get(pos).getImagePath());
@@ -527,7 +527,7 @@ public class FeedbackActivity extends AbstractBaseActivity implements AudioMecha
 
     public List<MultipartBody.Part> getAudioMultipartbodyParts() {
         List<MultipartBody.Part> multipartFiles = new ArrayList<>();
-        List<AudioFeedback> audioFeedbackList = feedback.getAudioFeedbacks();
+        List<AudioFeedback> audioFeedbackList = feedback.getAudioFeedback();
         if (audioFeedbackList != null) {
             for (int pos = 0; pos < audioFeedbackList.size(); ++pos) {
                 File audioFile = new File(audioFeedbackList.get(pos).getAudioPath());
