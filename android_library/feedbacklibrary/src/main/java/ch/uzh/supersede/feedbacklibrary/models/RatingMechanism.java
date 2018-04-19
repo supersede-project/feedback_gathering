@@ -4,7 +4,7 @@ import java.util.List;
 
 import ch.uzh.supersede.feedbacklibrary.configurations.MechanismConfigurationItem;
 
-import static ch.uzh.supersede.feedbacklibrary.utils.Constants.MechanismConstants.RATING_TYPE;
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.RATING_TYPE;
 
 public class RatingMechanism extends AbstractMechanism {
     private String ratingIcon;
@@ -22,8 +22,7 @@ public class RatingMechanism extends AbstractMechanism {
         super.handleMechanismParameter(key, value);
         if (key.equals("ratingIcon")) {
             setRatingIcon((String) value);
-        }
-        else if (key.equals("maxRating") || key.equals("defaultRating")) {
+        } else if (key.equals("maxRating") || key.equals("defaultRating")) {
             setDefaultRating(Float.parseFloat((String) value));
         }
     }

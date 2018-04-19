@@ -30,20 +30,18 @@ import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 
 import ch.uzh.supersede.feedbacklibrary.R;
-import ch.uzh.supersede.feedbacklibrary.feedbacks.AudioFeedback;
-import ch.uzh.supersede.feedbacklibrary.feedbacks.Feedback;
-import ch.uzh.supersede.feedbacklibrary.feedbacks.ScreenshotFeedback;
+import ch.uzh.supersede.feedbacklibrary.components.views.AbstractMechanismView;
+import ch.uzh.supersede.feedbacklibrary.components.views.CategoryMechanismView;
+import ch.uzh.supersede.feedbacklibrary.components.views.RatingMechanismView;
+import ch.uzh.supersede.feedbacklibrary.feedback.AudioFeedback;
+import ch.uzh.supersede.feedbacklibrary.feedback.Feedback;
+import ch.uzh.supersede.feedbacklibrary.feedback.ScreenshotFeedback;
 import ch.uzh.supersede.feedbacklibrary.utils.DialogUtils;
 import ch.uzh.supersede.feedbacklibrary.utils.Utils;
-import ch.uzh.supersede.feedbacklibrary.components.views.CategoryMechanismView;
-import ch.uzh.supersede.feedbacklibrary.components.views.AbstractMechanismView;
-import ch.uzh.supersede.feedbacklibrary.components.views.RatingMechanismView;
-import ch.uzh.supersede.feedbacklibrary.components.views.*;
-import ch.uzh.supersede.feedbacklibrary.feedback.*;
-import ch.uzh.supersede.feedbacklibrary.utils.*;
+
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.ServicesConstants.EMAIL_SERVICE_TAG;
 
 public class EmailService {
-    private static final String TAG = "EmailService";
     private static EmailService instance;
 
     private EmailService() {
@@ -102,7 +100,7 @@ public class EmailService {
             message.setSubject("Copy of your feedback");
 
             BodyPart messageBodyPart = new MimeBodyPart();
-            String feedbackText = feedback.getTextFeedback().get(0).getText();
+            String feedbackText = feedback.getTextFeedbackList().get(0).getText();
 
             CategoryMechanismView categoryMechanismView = (CategoryMechanismView) mechanismViews.get(4);
             String category = categoryMechanismView.getCategorySpinner().getSelectedItem().toString();
@@ -122,10 +120,10 @@ public class EmailService {
             // Set text message part
             multipart.addBodyPart(messageBodyPart);
 
-            for (ScreenshotFeedback screenshotFeedback : feedback.getScreenshotFeedback()) {
+            for (ScreenshotFeedback screenshotFeedback : feedback.getScreenshotFeedbackList()) {
                 addAttachment(multipart, screenshotFeedback.getImagePath());
             }
-            for (AudioFeedback audioFeedback : feedback.getAudioFeedback()) {
+            for (AudioFeedback audioFeedback : feedback.getAudioFeedbackList()) {
                 addAttachment(multipart, audioFeedback.getAudioPath());
             }
 
@@ -151,7 +149,7 @@ public class EmailService {
         try {
             uri = new URI(filePath);
         } catch (URISyntaxException e) {
-            Log.e(TAG, "Failed to create URI", e);
+            Log.e(EMAIL_SERVICE_TAG, "Failed to create URI", e);
             return;
         }
         String[] segments = uri.getPath().split("/");

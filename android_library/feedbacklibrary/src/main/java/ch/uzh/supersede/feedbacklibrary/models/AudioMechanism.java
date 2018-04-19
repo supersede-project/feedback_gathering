@@ -4,7 +4,7 @@ import java.util.List;
 
 import ch.uzh.supersede.feedbacklibrary.configurations.MechanismConfigurationItem;
 
-import static ch.uzh.supersede.feedbacklibrary.utils.Constants.MechanismConstants.AUDIO_TYPE;
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.AUDIO_TYPE;
 
 public class AudioMechanism extends AbstractMechanism {
     private String audioPath;

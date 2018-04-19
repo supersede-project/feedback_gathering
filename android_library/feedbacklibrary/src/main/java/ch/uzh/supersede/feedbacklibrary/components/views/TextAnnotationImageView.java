@@ -21,6 +21,7 @@ import ch.uzh.supersede.feedbacklibrary.components.views.AbstractAnnotationView;
 import static android.graphics.Color.WHITE;
 import static android.graphics.Typeface.BOLD;
 import static android.view.Gravity.*;
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.ViewsConstants.BUTTON_SIZE_DP;
 
 public class TextAnnotationImageView extends AbstractAnnotationView {
     private TextView annotationNumber;

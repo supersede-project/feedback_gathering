@@ -24,14 +24,10 @@ import ch.uzh.supersede.feedbacklibrary.R;
 import ch.uzh.supersede.feedbacklibrary.models.AbstractMechanism;
 import ch.uzh.supersede.feedbacklibrary.models.AudioMechanism;
 
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.ModelsConstants.*;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.PATH_DELIMITER;
 
 public class AudioMechanismView extends AbstractMechanismView implements SeekBar.OnSeekBarChangeListener {
-    private static final String TAG = "AudioMechanismView";
-    private static final String AUDIO_DIR = "audioDir";
-    private static final String AUDIO_EXTENSION = "m4a";
-    private static final String AUDIO_FILENAME = "audioFile";
-
     private int recordAnimationColorStart;
     private int recordAnimationColorEnd;
     private String audioFilePath;
@@ -237,7 +233,7 @@ public class AudioMechanismView extends AbstractMechanismView implements SeekBar
         try {
             mediaRecorder.prepare();
         } catch (IOException e) {
-            Log.e(TAG, "prepare() failed");
+            Log.e(AUDIO_MECHANISM_VIEW_TAG, "prepare() failed");
         }
         mediaRecorder.start();
     }
@@ -425,7 +421,7 @@ public class AudioMechanismView extends AbstractMechanismView implements SeekBar
             addUpdateSeekBarTask();
             seekBar.setOnSeekBarChangeListener(this);
         } catch (IOException e) {
-            Log.e(TAG, "prepare() failed");
+            Log.e(AUDIO_MECHANISM_VIEW_TAG, "prepare() failed");
         }
     }
 

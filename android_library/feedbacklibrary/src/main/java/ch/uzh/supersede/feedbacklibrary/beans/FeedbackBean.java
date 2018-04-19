@@ -1,4 +1,4 @@
-package ch.uzh.supersede.feedbacklibrary.wrapper;
+package ch.uzh.supersede.feedbacklibrary.beans;
 
 import android.graphics.Color;
 

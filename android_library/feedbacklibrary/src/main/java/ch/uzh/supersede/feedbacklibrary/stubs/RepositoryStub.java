@@ -7,13 +7,13 @@ import java.util.*;
 
 import ch.uzh.supersede.feedbacklibrary.database.FeedbackDatabase;
 import ch.uzh.supersede.feedbacklibrary.utils.*;
-import ch.uzh.supersede.feedbacklibrary.wrapper.FeedbackBean;
-import ch.uzh.supersede.feedbacklibrary.wrapper.FeedbackBean.FEEDBACK_STATUS;
+import ch.uzh.supersede.feedbacklibrary.beans.FeedbackBean;
+import ch.uzh.supersede.feedbacklibrary.beans.FeedbackBean.FEEDBACK_STATUS;
 
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.TECHNICAL_USER_NAME;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.USER_NAME;
 import static ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility.USER_LEVEL.ACTIVE;
-import static ch.uzh.supersede.feedbacklibrary.wrapper.FeedbackBean.FEEDBACK_STATUS.*;
+import static ch.uzh.supersede.feedbacklibrary.beans.FeedbackBean.FEEDBACK_STATUS.*;
 
 public class RepositoryStub {
     private RepositoryStub(){

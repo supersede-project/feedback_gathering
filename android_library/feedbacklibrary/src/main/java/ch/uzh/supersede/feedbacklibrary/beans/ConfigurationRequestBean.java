@@ -1,4 +1,4 @@
-package ch.uzh.supersede.feedbacklibrary.services;
+package ch.uzh.supersede.feedbacklibrary.beans;
 
 import android.app.Activity;
 import android.util.Log;
@@ -47,7 +47,7 @@ public class ConfigurationRequestBean {
         return pullConfigurationId;
     }
 
-    public static class ConfigurationRequestWrapperBuilder {
+    public static class ConfigurationRequestBeanBuilder {
         private String url;
         private String language;
         private String intermediateDialogText;
@@ -56,32 +56,32 @@ public class ConfigurationRequestBean {
         private long applicationId;
         private long pullConfigurationId;
 
-        public ConfigurationRequestWrapperBuilder(Activity startingActivity, Class<?> activityToStart) {
+        public ConfigurationRequestBeanBuilder(Activity startingActivity, Class<?> activityToStart) {
             this.startingActivity = startingActivity;
             this.activityToStart = activityToStart;
         }
 
-        public ConfigurationRequestWrapperBuilder withApplicationId(long applicationId) {
+        public ConfigurationRequestBeanBuilder withApplicationId(long applicationId) {
             this.applicationId = applicationId;
             return this;
         }
 
-        public ConfigurationRequestWrapperBuilder withPullConfigurationId(long pullConfigurationId) {
+        public ConfigurationRequestBeanBuilder withPullConfigurationId(long pullConfigurationId) {
             this.pullConfigurationId = pullConfigurationId;
             return this;
         }
 
-        public ConfigurationRequestWrapperBuilder withLanguage(String language) {
+        public ConfigurationRequestBeanBuilder withLanguage(String language) {
             this.language = language;
             return this;
         }
 
-        public ConfigurationRequestWrapperBuilder withUrl(String url) {
+        public ConfigurationRequestBeanBuilder withUrl(String url) {
             this.url = url;
             return this;
         }
 
-        public ConfigurationRequestWrapperBuilder withIntermediateDialog(String intermediateDialogText) {
+        public ConfigurationRequestBeanBuilder withIntermediateDialog(String intermediateDialogText) {
             this.intermediateDialogText = intermediateDialogText;
             return this;
         }

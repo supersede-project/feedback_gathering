@@ -18,16 +18,10 @@ import java.util.regex.Pattern;
 
 import ch.uzh.supersede.feedbacklibrary.database.FeedbackDatabase;
 
-import static ch.uzh.supersede.feedbacklibrary.utils.Constants.FeedbackActivityConstants.EXTRA_KEY_CACHED_SCREENSHOT;
-import static ch.uzh.supersede.feedbacklibrary.utils.Constants.AnnotateImageConstants.IMAGE_ANNOTATED_DATA_DB_KEY;
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.*;
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.UtilsConstants.*;
 
-/**
- * Class with various helper methods
- */
 public class Utils {
-    private static final String TAG = "Utils";
-    private static final String IMAGE_DATA_DB_KEY = "imageData";
-
     private Utils() {
     }
 
@@ -104,7 +98,7 @@ public class Utils {
         try {
             return File.createTempFile(prefix, suffix, context.getCacheDir());
         } catch (IOException e) {
-            Log.e(TAG, "Failed to create a temporary file", e);
+            Log.e(UTILS_TAG, "Failed to create a temporary file", e);
         }
         return null;
     }
@@ -137,7 +131,7 @@ public class Utils {
             fos.close();
             return true;
         } catch (Exception e) {
-            Log.e(TAG, "Failed to write the bitmap to the file.", e);
+            Log.e(UTILS_TAG, "Failed to write the bitmap to the file.", e);
         }
         return false;
     }

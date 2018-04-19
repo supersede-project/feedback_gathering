@@ -12,7 +12,7 @@ import ch.uzh.supersede.feedbacklibrary.models.RatingMechanism;
 import ch.uzh.supersede.feedbacklibrary.models.ScreenshotMechanism;
 import ch.uzh.supersede.feedbacklibrary.models.TextMechanism;
 
-import static ch.uzh.supersede.feedbacklibrary.utils.Constants.MechanismConstants.*;
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.*;
 
 public class MechanismConfigurationItem implements Serializable {
     private boolean isActive;

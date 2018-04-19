@@ -12,11 +12,9 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
 
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.ViewsConstants.*;
+
 public class ColorPickerView extends View {
-    private static final int CENTER_X = 100;
-    private static final int CENTER_Y = 100;
-    private static final int CENTER_RADIUS = 32;
-    private static final int[] COLORS = new int[]{0xFFFF0000, 0xFFFF00FF, 0xFF0000FF, 0xFF00FFFF, 0xFF00FF00, 0xFFFFFF00, 0xFFFF0000};
     private TextView textView;
     private Paint mPaint;
     private Paint mCenterPaint;

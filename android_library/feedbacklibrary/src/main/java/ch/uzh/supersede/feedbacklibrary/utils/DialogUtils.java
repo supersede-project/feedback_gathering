@@ -17,11 +17,8 @@ import java.util.List;
 
 import ch.uzh.supersede.feedbacklibrary.activities.FeedbackActivity;
 
-import static ch.uzh.supersede.feedbacklibrary.utils.Constants.FeedbackActivityConstants.*;
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.*;
 
-/**
- * Class with dialogs
- */
 public class DialogUtils {
     /**
      * This method creates a progress dialog.
@@ -92,8 +89,8 @@ public class DialogUtils {
             args.putString("message", message);
             args.putString("jsonString", jsonString);
             args.putLong(SELECTED_PULL_CONFIGURATION_INDEX, selectedPullConfigurationIndex);
-            args.putString(BASE_URL, baseURL);
-            args.putString(LANGUAGE, language);
+            args.putString(EXTRA_KEY_BASE_URL, baseURL);
+            args.putString(EXTRA_KEY_LANGUAGE, language);
             f.setArguments(args);
             return f;
         }
@@ -105,8 +102,8 @@ public class DialogUtils {
             String message = getArguments().getString("message");
             final String jsonString = getArguments().getString("jsonString");
             final long selectedPullConfigurationIndex = getArguments().getLong(SELECTED_PULL_CONFIGURATION_INDEX);
-            final String baseURL = getArguments().getString(BASE_URL);
-            final String language = getArguments().getString(LANGUAGE);
+            final String baseURL = getArguments().getString(EXTRA_KEY_BASE_URL);
+            final String language = getArguments().getString(EXTRA_KEY_LANGUAGE);
 
             builder.setMessage(message).setPositiveButton(ch.uzh.supersede.feedbacklibrary.R.string.dialog_yes, new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int id) {
@@ -114,8 +111,8 @@ public class DialogUtils {
                     intent.putExtra(JSON_CONFIGURATION_STRING, jsonString);
                     intent.putExtra(IS_PUSH_STRING, false);
                     intent.putExtra(SELECTED_PULL_CONFIGURATION_INDEX, selectedPullConfigurationIndex);
-                    intent.putExtra(BASE_URL, baseURL);
-                    intent.putExtra(LANGUAGE, language);
+                    intent.putExtra(EXTRA_KEY_BASE_URL, baseURL);
+                    intent.putExtra(EXTRA_KEY_LANGUAGE, language);
                     associatedActivity.startActivity(intent);
                 }
             }).setNegativeButton(ch.uzh.supersede.feedbacklibrary.R.string.dialog_no, new DialogInterface.OnClickListener() {

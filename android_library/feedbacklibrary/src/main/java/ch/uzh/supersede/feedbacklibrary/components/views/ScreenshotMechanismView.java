@@ -23,9 +23,8 @@ import ch.uzh.supersede.feedbacklibrary.models.AbstractMechanism;
 import ch.uzh.supersede.feedbacklibrary.models.ScreenshotMechanism;
 import ch.uzh.supersede.feedbacklibrary.utils.Utils;
 
-import static ch.uzh.supersede.feedbacklibrary.utils.Constants.AnnotateImageConstants.*;
-import static ch.uzh.supersede.feedbacklibrary.utils.Constants.FeedbackActivityConstants.REQUEST_ANNOTATE;
-import static ch.uzh.supersede.feedbacklibrary.utils.Constants.FeedbackActivityConstants.REQUEST_PHOTO;
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.*;
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.ViewsConstants.TEXT_ANNOTATION_COUNTER_MAXIMUM;
 
 public class ScreenshotMechanismView extends AbstractMechanismView {
     private ScreenshotMechanism screenshotMechanism = null;

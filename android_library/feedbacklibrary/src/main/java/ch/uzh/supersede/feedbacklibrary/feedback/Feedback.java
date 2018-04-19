@@ -19,7 +19,7 @@ import ch.uzh.supersede.feedbacklibrary.models.RatingMechanism;
 import ch.uzh.supersede.feedbacklibrary.models.ScreenshotMechanism;
 import ch.uzh.supersede.feedbacklibrary.models.TextMechanism;
 
-import static ch.uzh.supersede.feedbacklibrary.utils.Constants.MechanismConstants.*;
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.*;
 
 public class Feedback implements Serializable {
     // Application
@@ -35,6 +35,7 @@ public class Feedback implements Serializable {
     private String title;
     @Expose
     private String userIdentification;
+
     // Mechanisms
     @Expose
     private List<AttachmentFeedback> attachmentFeedbackList = new ArrayList<>();
@@ -151,51 +152,51 @@ public class Feedback implements Serializable {
         this.userIdentification = userIdentification;
     }
 
-    public List<AttachmentFeedback> getAttachmentFeedbacks() {
-        return attachmentFeedbacks;
+    public List<AttachmentFeedback> getAttachmentFeedbackList() {
+        return attachmentFeedbackList;
     }
 
-    public void setAttachmentFeedbacks(List<AttachmentFeedback> attachmentFeedbacks) {
-        this.attachmentFeedbacks = attachmentFeedbacks;
+    public void setAttachmentFeedbackList(List<AttachmentFeedback> attachmentFeedbackList) {
+        this.attachmentFeedbackList = attachmentFeedbackList;
     }
 
-    public List<AudioFeedback> getAudioFeedbacks() {
-        return audioFeedbacks;
+    public List<AudioFeedback> getAudioFeedbackList() {
+        return audioFeedbackList;
     }
 
-    public void setAudioFeedbacks(List<AudioFeedback> audioFeedbacks) {
-        this.audioFeedbacks = audioFeedbacks;
+    public void setAudioFeedbackList(List<AudioFeedback> audioFeedbackList) {
+        this.audioFeedbackList = audioFeedbackList;
     }
 
-    public List<HashMap<String, Object>> getCategoryFeedbacks() {
-        return categoryFeedbacks;
+    public List<HashMap<String, Object>> getCategoryFeedbackList() {
+        return categoryFeedbackList;
     }
 
-    public void setCategoryFeedbacks(List<HashMap<String, Object>> categoryFeedbacks) {
-        this.categoryFeedbacks = categoryFeedbacks;
+    public void setCategoryFeedbackList(List<HashMap<String, Object>> categoryFeedbackList) {
+        this.categoryFeedbackList = categoryFeedbackList;
     }
 
-    public List<RatingFeedback> getRatingFeedbacks() {
-        return ratingFeedbacks;
+    public List<RatingFeedback> getRatingFeedbackList() {
+        return ratingFeedbackList;
     }
 
-    public void setRatingFeedbacks(List<RatingFeedback> ratingFeedbacks) {
-        this.ratingFeedbacks = ratingFeedbacks;
+    public void setRatingFeedbackList(List<RatingFeedback> ratingFeedbackList) {
+        this.ratingFeedbackList = ratingFeedbackList;
     }
 
-    public List<ScreenshotFeedback> getScreenshotFeedbacks() {
-        return screenshotFeedbacks;
+    public List<ScreenshotFeedback> getScreenshotFeedbackList() {
+        return screenshotFeedbackList;
     }
 
-    public void setScreenshotFeedbacks(List<ScreenshotFeedback> screenshotFeedbacks) {
-        this.screenshotFeedbacks = screenshotFeedbacks;
+    public void setScreenshotFeedbackList(List<ScreenshotFeedback> screenshotFeedbackList) {
+        this.screenshotFeedbackList = screenshotFeedbackList;
     }
 
-    public List<TextFeedback> getTextFeedbacks() {
-        return textFeedbacks;
+    public List<TextFeedback> getTextFeedbackList() {
+        return textFeedbackList;
     }
 
-    public void setTextFeedbacks(List<TextFeedback> textFeedbacks) {
-        this.textFeedbacks = textFeedbacks;
+    public void setTextFeedbackList(List<TextFeedback> textFeedbackList) {
+        this.textFeedbackList = textFeedbackList;
     }
 }

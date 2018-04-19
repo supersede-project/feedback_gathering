@@ -4,7 +4,7 @@ import java.util.List;
 
 import ch.uzh.supersede.feedbacklibrary.configurations.MechanismConfigurationItem;
 
-import static ch.uzh.supersede.feedbacklibrary.utils.Constants.MechanismConstants.ATTACHMENT_TYPE;
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.ATTACHMENT_TYPE;
 
 public class AttachmentMechanism extends AbstractMechanism {
     private List<String> attachmentPaths;

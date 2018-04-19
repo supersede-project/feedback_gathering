@@ -8,8 +8,7 @@ import java.util.Map;
 
 import ch.uzh.supersede.feedbacklibrary.configurations.MechanismConfigurationItem;
 
-import static ch.uzh.supersede.feedbacklibrary.utils.Constants.AnnotateImageConstants.SEPARATOR;
-import static ch.uzh.supersede.feedbacklibrary.utils.Constants.MechanismConstants.SCREENSHOT_TYPE;
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.*;
 
 public class ScreenshotMechanism extends AbstractMechanism {
     private String defaultPicture;

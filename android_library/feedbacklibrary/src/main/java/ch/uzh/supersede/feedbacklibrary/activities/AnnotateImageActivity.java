@@ -8,7 +8,6 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -38,30 +37,21 @@ import java.util.List;
 import java.util.Map;
 
 import ch.uzh.supersede.feedbacklibrary.R;
-import ch.uzh.supersede.feedbacklibrary.database.FeedbackDatabase;
-import ch.uzh.supersede.feedbacklibrary.models.DialogType;
-import ch.uzh.supersede.feedbacklibrary.utils.ColorPickerDialog;
-import ch.uzh.supersede.feedbacklibrary.utils.Utils;
 import ch.uzh.supersede.feedbacklibrary.components.views.AbstractAnnotationView;
 import ch.uzh.supersede.feedbacklibrary.components.views.AnnotateImageView;
 import ch.uzh.supersede.feedbacklibrary.components.views.EditImageDialog;
 import ch.uzh.supersede.feedbacklibrary.components.views.StickerAnnotationImageView;
 import ch.uzh.supersede.feedbacklibrary.components.views.TextAnnotationImageView;
+import ch.uzh.supersede.feedbacklibrary.database.FeedbackDatabase;
+import ch.uzh.supersede.feedbacklibrary.models.DialogType;
+import ch.uzh.supersede.feedbacklibrary.utils.ColorPickerDialog;
+import ch.uzh.supersede.feedbacklibrary.utils.Utils;
 
-import static android.graphics.Color.BLACK;
-import static android.graphics.Color.RED;
-import static android.graphics.Color.WHITE;
-import static ch.uzh.supersede.feedbacklibrary.utils.Constants.AnnotateImageConstants.EXTRA_KEY_ALL_STICKER_ANNOTATIONS;
-import static ch.uzh.supersede.feedbacklibrary.utils.Constants.AnnotateImageConstants.EXTRA_KEY_HAS_STICKER_ANNOTATIONS;
-import static ch.uzh.supersede.feedbacklibrary.utils.Constants.AnnotateImageConstants.IMAGE_ANNOTATED_DATA_DB_KEY;
-import static ch.uzh.supersede.feedbacklibrary.utils.Constants.AnnotateImageConstants.SEPARATOR;
+import static android.graphics.Color.*;
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.*;
 
 
-/**
- * Activity for annotating the screenshot
- */
 public class AnnotateImageActivity extends AbstractBaseActivity implements ColorPickerDialog.OnColorChangeDialogListener, EditImageDialog.OnEditImageListener {
-    private static final String TAG = "AnnotateImageActivity";
     private boolean blackModeOn = false;
     private boolean avoidRevert = false;
     private int oldPaintStrokeColor;
@@ -122,7 +112,7 @@ public class AnnotateImageActivity extends AbstractBaseActivity implements Color
         Bitmap bitmap = Utils.loadImageFromDatabase(this);
         Bitmap bitmapAnnotated = Utils.loadAnnotatedImageFromDatabase(this);
         // Set the bitmap to draw on
-        annotateImageView.setBitmap(bitmapAnnotated!=null?bitmapAnnotated:bitmap);
+        annotateImageView.setBitmap(bitmapAnnotated != null ? bitmapAnnotated : bitmap);
         // Set the background color of the canvas (used for the eraser)
         annotateImageView.setBaseColor(WHITE);
         // Set the mode
@@ -207,7 +197,7 @@ public class AnnotateImageActivity extends AbstractBaseActivity implements Color
                     buf.read(bytes, 0, bytes.length);
                     buf.close();
                 } catch (IOException e) {
-                    Log.e("cropFailure",e.getMessage());
+                    Log.e("cropFailure", e.getMessage());
                 }
                 FeedbackDatabase.getInstance(this).writeByte(IMAGE_ANNOTATED_DATA_DB_KEY, bytes);
                 annotateImageView.onCroppedRefresh(this);
@@ -263,7 +253,8 @@ public class AnnotateImageActivity extends AbstractBaseActivity implements Color
                 HashMap<Integer, String> allStickerAnnotations = processStickerAnnotations(relativeLayout);
 
                 // Convert the ViewGroup, i.e., the supersede_feedbacklibrary_annotate_picture_layout into a bitmap (image with stickers)
-                relativeLayout.measure(View.MeasureSpec.makeMeasureSpec(annotateImageView.getBitmapWidth(), View.MeasureSpec.EXACTLY), View.MeasureSpec.makeMeasureSpec(annotateImageView.getBitmapHeight(), View.MeasureSpec.EXACTLY));
+                relativeLayout.measure(View.MeasureSpec.makeMeasureSpec(annotateImageView.getBitmapWidth(), View.MeasureSpec.EXACTLY), View.MeasureSpec.makeMeasureSpec(annotateImageView
+                        .getBitmapHeight(), View.MeasureSpec.EXACTLY));
 
                 relativeLayout.layout(0, 0, relativeLayout.getMeasuredWidth(), relativeLayout.getMeasuredHeight());
                 Bitmap annotatedBitmapWithStickers = Bitmap.createBitmap(relativeLayout.getLayoutParams().width, relativeLayout.getLayoutParams().height, Bitmap.Config.ARGB_8888);
@@ -271,7 +262,7 @@ public class AnnotateImageActivity extends AbstractBaseActivity implements Color
                 relativeLayout.draw(canvas);
                 Bitmap annotatedImage = Bitmap.createBitmap(annotatedBitmapWithStickers, 0, 0, annotateImageView.getBitmapWidth(), annotateImageView.getBitmapHeight());
 
-                Utils.storeAnnotatedImageToDatabase(this,annotatedImage);
+                Utils.storeAnnotatedImageToDatabase(this, annotatedImage);
 
                 Intent intent = new Intent();
                 intent.putExtra(EXTRA_KEY_HAS_STICKER_ANNOTATIONS, allStickerAnnotations.size() > 0);
@@ -407,46 +398,48 @@ public class AnnotateImageActivity extends AbstractBaseActivity implements Color
                 Bitmap tempBitmap = annotateImageView.getBitmap();
                 Bitmap croppedBitmap = Bitmap.createBitmap(tempBitmap, 0, 0, tempBitmap.getWidth(), tempBitmap.getHeight());
                 File tempFile = Utils.createTempChacheFile(getApplicationContext(), "crop", ".png");
-                double avgIntensity = calculateAverageColorIntensity(tempBitmap,0.2);
+                double avgIntensity = calculateAverageColorIntensity(tempBitmap, 0.2);
                 if (Utils.saveBitmapToFile(tempFile, croppedBitmap, Bitmap.CompressFormat.PNG, 100)) {
                     Uri cropInput = Uri.fromFile(tempFile);
                     CropImage.activity(cropInput)
                              .setGuidelines(CropImageView.Guidelines.ON)
-                             .setGuidelinesColor(avgIntensity>125?Color.BLACK:Color.WHITE)
-                             .setBorderCornerColor(avgIntensity>125?Color.BLACK:Color.WHITE)
-                             .setBorderLineColor(avgIntensity>125?Color.BLACK:Color.WHITE)
+                             .setGuidelinesColor(avgIntensity > 125 ? Color.BLACK : Color.WHITE)
+                             .setBorderCornerColor(avgIntensity > 125 ? Color.BLACK : Color.WHITE)
+                             .setBorderLineColor(avgIntensity > 125 ? Color.BLACK : Color.WHITE)
                              .start(AnnotateImageActivity.this);
                 }
             }
         });
     }
 
-     /** Returns an average color-intensity, stepDensity defines the coverage of pixels
+    /**
+     * Returns an average color-intensity, stepDensity defines the coverage of pixels
+     *
      * @param bitmap
      * @param stepDensity
      * @return
      */
-    private double calculateAverageColorIntensity(Bitmap bitmap, double stepDensity){
-        double density = (stepDensity<=0||stepDensity>0.5)?0.5:stepDensity;
-        int stepSize = (int)(1.0/density);
-        return calculateAverageColorIntensity(bitmap,stepSize);
+    private double calculateAverageColorIntensity(Bitmap bitmap, double stepDensity) {
+        double density = (stepDensity <= 0 || stepDensity > 0.5) ? 0.5 : stepDensity;
+        int stepSize = (int) (1.0 / density);
+        return calculateAverageColorIntensity(bitmap, stepSize);
     }
-    /** Returns an average color-intensity, stepSize defines the probing distance
+
+    /**
+     * Returns an average color-intensity, stepSize defines the probing distance
      *
      * @param bitmap
      * @param stepSize
      * @return intensity
      */
-    private double calculateAverageColorIntensity(Bitmap bitmap, int stepSize){
+    private double calculateAverageColorIntensity(Bitmap bitmap, int stepSize) {
         long redBucket = 0;
         long greenBucket = 0;
         long blueBucket = 0;
         long pixelCount = 0;
-        int step = (stepSize<=0||stepSize>=(bitmap.getHeight()>bitmap.getWidth()?bitmap.getWidth():bitmap.getHeight()))?1:stepSize;
-        for (int y = 0; y < bitmap.getHeight(); y=y+step)
-        {
-            for (int x = 0; x < bitmap.getWidth(); x=x+step)
-            {
+        int step = (stepSize <= 0 || stepSize >= (bitmap.getHeight() > bitmap.getWidth() ? bitmap.getWidth() : bitmap.getHeight())) ? 1 : stepSize;
+        for (int y = 0; y < bitmap.getHeight(); y = y + step) {
+            for (int x = 0; x < bitmap.getWidth(); x = x + step) {
                 int c = bitmap.getPixel(x, y);
 
                 pixelCount++;
@@ -458,7 +451,7 @@ public class AnnotateImageActivity extends AbstractBaseActivity implements Color
         double avgRed = redBucket / pixelCount;
         double avgGreen = greenBucket / pixelCount;
         double avgBlue = blueBucket / pixelCount;
-        return (avgRed+avgRed+avgGreen)/3;
+        return (avgRed + avgRed + avgGreen) / 3;
     }
 
     private void showDialog(DialogType type) {
@@ -612,9 +605,9 @@ public class AnnotateImageActivity extends AbstractBaseActivity implements Color
 
     @Override
     public void onBackPressed() {
-        if (!avoidRevert){
+        if (!avoidRevert) {
             //Restore old Image
-            Utils.storeAnnotatedImageToDatabase(this,Utils.loadImageFromDatabase(this));
+            Utils.storeAnnotatedImageToDatabase(this, Utils.loadImageFromDatabase(this));
         }
         super.onBackPressed();
     }

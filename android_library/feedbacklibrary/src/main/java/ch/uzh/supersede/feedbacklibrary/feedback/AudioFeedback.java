@@ -5,6 +5,7 @@ import com.google.gson.annotations.Expose;
 import java.io.File;
 import java.io.Serializable;
 
+import ch.uzh.supersede.feedbacklibrary.feedbacks.AbstractPartFeedback;
 import ch.uzh.supersede.feedbacklibrary.models.AudioMechanism;
 
 public class AudioFeedback extends AbstractPartFeedback implements Serializable {

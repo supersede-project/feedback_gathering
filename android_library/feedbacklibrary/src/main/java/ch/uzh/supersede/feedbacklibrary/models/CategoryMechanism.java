@@ -10,7 +10,7 @@ import java.util.Set;
 import ch.uzh.supersede.feedbacklibrary.configurations.MechanismConfigurationItem;
 import ch.uzh.supersede.feedbacklibrary.utils.Utils;
 
-import static ch.uzh.supersede.feedbacklibrary.utils.Constants.MechanismConstants.CATEGORY_TYPE;
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.CATEGORY_TYPE;
 
 public class CategoryMechanism extends AbstractMechanism {
     private boolean mandatory = false;

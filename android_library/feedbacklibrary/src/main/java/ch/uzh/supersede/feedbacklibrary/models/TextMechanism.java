@@ -8,7 +8,7 @@ import java.util.Map;
 import ch.uzh.supersede.feedbacklibrary.configurations.MechanismConfigurationItem;
 import ch.uzh.supersede.feedbacklibrary.utils.Utils;
 
-import static ch.uzh.supersede.feedbacklibrary.utils.Constants.MechanismConstants.TEXT_TYPE;
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.TEXT_TYPE;
 
 public class TextMechanism extends AbstractMechanism {
     private String hint = "";

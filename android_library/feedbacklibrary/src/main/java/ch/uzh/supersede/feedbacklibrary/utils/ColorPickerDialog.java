@@ -15,18 +15,10 @@ import android.widget.TextView;
 import ch.uzh.supersede.feedbacklibrary.R;
 import ch.uzh.supersede.feedbacklibrary.components.views.ColorPickerView;
 
-/**
- * Color picker dialog class
- */
 public class ColorPickerDialog extends DialogFragment {
     OnColorChangeDialogListener mListener;
     private int changedColor;
 
-    /**
-     * This method returns the changed color.
-     *
-     * @return the changed color
-     */
     public int getChangedColor() {
         return changedColor;
     }
