@@ -55,41 +55,39 @@ public class FeedbackHubActivity extends AbstractBaseActivity {
         if (ACTIVE.check(this)) {
             userName = FeedbackDatabase.getInstance(this).readString(USER_NAME, null);
         }
-        updateUserLevel();
+        updateUserLevel(false);
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        updateUserLevel();
+        updateUserLevel(false);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        updateUserLevel();
+        updateUserLevel(false);
     }
 
-    private void updateUserLevel() {
-        userLevel = PermissionUtility.getUserLevel(getApplicationContext());
+    private void updateUserLevel(boolean ignoreDatabaseCheck) {
+        userLevel = PermissionUtility.getUserLevel(getApplicationContext(), ignoreDatabaseCheck);
         levelButton.setText(getResources().getString(R.string.hub_feedback_user_level, userLevel.getLevel()));
         levelButton.setEnabled(true);
         settingsButton.setEnabled(false);
         feedbackButton.setEnabled(false);
         listButton.setEnabled(false);
         statusText.setEnabled(false);
-        if (userLevel.getLevel()>LOCKED.getLevel()){
+        if (PASSIVE.check(getApplicationContext(),ignoreDatabaseCheck)){
             listButton.setEnabled(true);
         }
-        if (userLevel.getLevel()>PASSIVE.getLevel()){
+        if (ACTIVE.check(getApplicationContext(),ignoreDatabaseCheck)){
             feedbackButton.setEnabled(true);
             Utils.persistScreenshot(this,cachedScreenshot);
             statusText.setText(Html.fromHtml(getString(R.string.hub_status,userName,0,0,0,0,0).replace(COLOR_STRING,DARK_BLUE)));
         }
-        if (userLevel.getLevel()>ACTIVE.getLevel()){
+        if (ADVANCED.check(getApplicationContext(),ignoreDatabaseCheck)){
             settingsButton.setEnabled(true);
-        }
-        if (userLevel.getLevel()>=ADVANCED.getLevel()){
             levelButton.setEnabled(false);
         }
     }
@@ -152,7 +150,7 @@ public class FeedbackHubActivity extends AbstractBaseActivity {
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.cancel();
                     getSharedPreferences(SHARED_PREFERENCES,MODE_PRIVATE).edit().putBoolean(FEEDBACK_CONTRIBUTOR,true).apply();
-                    updateUserLevel();
+                    updateUserLevel(true);
                 }
             };
         }else if (userLevel == ACTIVE) {
@@ -210,8 +208,8 @@ public class FeedbackHubActivity extends AbstractBaseActivity {
     }
 
     private void handleAllPermissionsGranted() {
-        updateUserLevel();
-        if (ACTIVE.check(this) && preAllocatedStringStorage[0] != null){
+        updateUserLevel(true);
+        if (ACTIVE.check(this,true) && preAllocatedStringStorage[0] != null){
             String name = FeedbackDatabase.getInstance(this).readString(USER_NAME,null);
             String technicalName = FeedbackDatabase.getInstance(this).readString(TECHNICAL_USER_NAME,null);
             if (name == null){

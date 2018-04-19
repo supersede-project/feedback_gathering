@@ -82,7 +82,7 @@
     <string name="hub_feedback_user_level">User-Level\n%1$d</string>
     <string name="hub_feedback_settings">Feedback\nSettings</string>
     <string name="hub_feedback_create">Create\nFeedback</string>
-    <string name="hub_status">&lt;b>&lt;font color="#colorString">Feedback-Hub&lt;/font>&lt;/b>&lt;br/>&lt;br/>&lt;b>User-Name:&lt;/b>&lt;font color="#colorString"> %1$s&lt;/font>&lt;br/>&lt;b>Karma-Level:&lt;/b>&lt;font color="#colorString"> %2$d&lt;/font>&lt;br/>&lt;b>Feedback:&lt;/b>&lt;font color="#colorString"> %3$d&lt;/font>&lt;br/>&lt;b>Comments:&lt;/b>&lt;font color="#colorString"> %4$d&lt;/font>&lt;br/>&lt;b>Likes:&lt;/b>&lt;font color="#colorString"> %5$d&lt;/font>&lt;br/>&lt;b>Dislikes:&lt;/b>&lt;font color="#colorString"> %6$d&lt;/font></string>
+    <string name="hub_status">&lt;b>&lt;font color="#colorString">Feedback-Hub&lt;/font>&lt;/b>&lt;br/>&lt;br/>&lt;b>User-Name&lt;br/>&lt;/b>&lt;font color="#colorString"> %1$s&lt;/font>&lt;br/>&lt;b>Karma-Level&lt;br/>&lt;/b>&lt;font color="#colorString"> %2$d&lt;/font>&lt;br/>&lt;b>Feedback&lt;br/>&lt;/b>&lt;font color="#colorString"> %3$d&lt;/font>&lt;br/>&lt;b>Replies&lt;br/>&lt;/b>&lt;font color="#colorString"> %4$d&lt;/font>&lt;br/>&lt;b>Up-Votes&lt;br/>&lt;/b>&lt;font color="#colorString"> %5$d&lt;/font>&lt;br/>&lt;b>Down-Votes&lt;br/>&lt;/b>&lt;font color="#colorString"> %6$d&lt;/font></string>
     <string name="hub_access_1">Accessing Level 1</string>
     <string name="hub_access_1_description">Level 1 grants you access to others Feedback and requires Permissions for Internet-Access!</string>
     <string name="hub_confirm">Confirm</string>
