@@ -27,14 +27,14 @@ public abstract class AbstractMechanism {
             if (param.get("key") == null) {
                 return;
             } else {
-                handleMechanismParameter((String) param.get("key"), (String) param.get("value"));
+                handleMechanismParameter((String) param.get("key"), param.get("value"));
             }
         }
     }
 
-    public void handleMechanismParameter(String key, String value) {
+    public void handleMechanismParameter(String key, Object value) {
         if (key.equals("title")) {
-            setTitle(value);
+            setTitle((String) value);
         }
     }
 

@@ -2,8 +2,10 @@ package ch.uzh.supersede.feedbacklibrary.models;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import ch.uzh.supersede.feedbacklibrary.configurations.MechanismConfigurationItem;
 import ch.uzh.supersede.feedbacklibrary.utils.Utils;
@@ -26,30 +28,27 @@ public class CategoryMechanism extends AbstractMechanism {
     }
 
     @Override
-    public void handleMechanismParameter(String key, String value) {
+    public void handleMechanismParameter(String key, Object value) {
         super.handleMechanismParameter(key, value);
         if (key.equals("mandatory")) {
             if (isBool(value)) {
-                setMandatory(Boolean.valueOf(value));
+                setMandatory(Boolean.parseBoolean((String) value));
             } else {
-                Double doubleValue = Double.parseDouble(value);
-                setMandatory(Utils.intToBool(doubleValue.intValue()));
+                setMandatory(Utils.intToBool(Integer.parseInt((String) value)));
             }
         } else if (key.equals("mandatoryReminder")) {
-            setMandatoryReminder(value);
+            setMandatoryReminder((String) value);
         } else if (key.equals("multiple")) {
             if (isBool(value)) {
-                setMultiple(Boolean.valueOf(value));
+                setMultiple(Boolean.parseBoolean((String) value));
             } else {
-                Double doubleValue = Double.parseDouble(value);
-                setMultiple(Utils.intToBool(doubleValue.intValue()));
+                setMultiple(Utils.intToBool(Integer.parseInt((String) value)));
             }
         } else if (key.equals("ownAllowed")) {
             if (isBool(value)) {
-                setOwnAllowed(Boolean.valueOf(value));
+                setOwnAllowed(Boolean.parseBoolean((String) value));
             } else {
-                Double doubleValue = Double.parseDouble(value);
-                setOwnAllowed(Utils.intToBool(doubleValue.intValue()));
+                setOwnAllowed(Utils.intToBool(Integer.parseInt((String) value)));
             }
         } else if (key.equals("options")) {
             List<Map<String, Object>> opt = (List<Map<String, Object>>) value;
@@ -129,11 +128,15 @@ public class CategoryMechanism extends AbstractMechanism {
         return selectedOptions;
     }
 
+    public Set<String> getSelectedOptionsSet() {
+        return new HashSet<>(selectedOptions);
+    }
+
     public void setSelectedOptions(List<String> selectedOptions) {
         this.selectedOptions = selectedOptions;
     }
 
-    private boolean isBool(String value) {
-        return value != null && (value.equals("true") || value.equals("false"));
+    private boolean isBool(Object value) {
+        return value != null && value instanceof Boolean;
     }
 }

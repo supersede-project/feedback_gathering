@@ -18,14 +18,13 @@ public class RatingMechanism extends AbstractMechanism {
     }
 
     @Override
-    public void handleMechanismParameter(String key, String value) {
+    public void handleMechanismParameter(String key, Object value) {
         super.handleMechanismParameter(key, value);
         if (key.equals("ratingIcon")) {
-            setRatingIcon(value);
+            setRatingIcon((String) value);
         }
         else if (key.equals("maxRating") || key.equals("defaultRating")) {
-            Double doubleValue = Double.parseDouble(value);
-            setDefaultRating(doubleValue.floatValue());
+            setDefaultRating(Float.parseFloat((String) value));
         }
     }
 

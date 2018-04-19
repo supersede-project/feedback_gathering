@@ -22,7 +22,7 @@ public class CategoryFeedback implements Serializable {
 
     private void initCategoryFeedback(CategoryMechanism categoryMechanism) {
         List<String> options = categoryMechanism.getOptions();
-        HashMap<String, Long> optionsIds = categoryMechanism.getOptionsIds();
+        HashMap<String, Long> optionsIds = new HashMap<>(categoryMechanism.getOptionsIds());
         Set<String> selectedOptionsSet = categoryMechanism.getSelectedOptionsSet();
 
         // Process all the not user created options

@@ -141,7 +141,6 @@ public class AnnotateImageActivity extends AbstractBaseActivity implements Color
         annotateImageView.setBlur(0F);
         // Set the text attributes
         annotateImageView.setText("Default text");
-        annotateImageView.setFontSize(32F);
         annotateImageView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.supersede_feedbacklibrary_annotate_image_layout);
         if (relativeLayout != null) {

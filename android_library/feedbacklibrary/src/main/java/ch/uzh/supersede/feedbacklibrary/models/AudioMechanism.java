@@ -1,7 +1,6 @@
 package ch.uzh.supersede.feedbacklibrary.models;
 
 import java.util.List;
-import java.util.Map;
 
 import ch.uzh.supersede.feedbacklibrary.configurations.MechanismConfigurationItem;
 
@@ -18,10 +17,10 @@ public class AudioMechanism extends AbstractMechanism {
     }
 
     @Override
-    public void handleMechanismParameter(String key, String value) {
+    public void handleMechanismParameter(String key, Object value) {
         super.handleMechanismParameter(key, value);
         if (key.equals("maxTime")) {
-            setMaxTime(Float.parseFloat(value));
+            setMaxTime(Float.parseFloat((String) value));
         }
     }
 

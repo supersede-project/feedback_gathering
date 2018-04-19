@@ -1,7 +1,6 @@
 package ch.uzh.supersede.feedbacklibrary.models;
 
 import java.util.List;
-import java.util.Map;
 
 import ch.uzh.supersede.feedbacklibrary.configurations.MechanismConfigurationItem;
 

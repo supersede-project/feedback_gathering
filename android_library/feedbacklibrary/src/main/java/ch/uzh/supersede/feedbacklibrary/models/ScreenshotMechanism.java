@@ -22,12 +22,12 @@ public class ScreenshotMechanism extends AbstractMechanism {
     }
 
     @Override
-    public void handleMechanismParameter(String key, String value) {
+    public void handleMechanismParameter(String key, Object value) {
         super.handleMechanismParameter(key, value);
         if (key.equals("defaultPicture")) {
-            setDefaultPicture(value);
+            setDefaultPicture((String) value);
         } else if (key.equals("maxTextAnnotation")) {
-            setMaxNumberTextAnnotation(Integer.valueOf(value));
+            setMaxNumberTextAnnotation(Integer.parseInt((String) value));
         }
     }
 
