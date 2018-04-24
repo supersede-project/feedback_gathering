@@ -106,12 +106,13 @@ export class PullConfiguration extends Configuration {
         console.log('doNotDisturbTimeIsOver = ' + doNotDisturbTimeIsOver);
         console.log('askOnStartUp = ' + askOnStartUp);
         console.log('likeliHoodOkay = ' + likeliHoodOkay);
+        console.log('pullSpecificActive= ' + this.isSpecificActive());
         console.log('all = ' + pullActive && (pageDoesMatch || hashDoesMatch) && doNotDisturbTimeIsOver && (askOnStartUp || likeliHoodOkay));
         console.log('------');
 
 
         if (this.shouldOnlyBeDisplayedOnce()) {
-            return pullActive && !this.pullDialogAlreadyDisplayed() && (pageDoesMatch || hashDoesMatch) && likeliHoodOkay;
+            return pullActive && !this.pullDialogAlreadyDisplayed() && (pageDoesMatch || hashDoesMatch) && (likeliHoodOkay || this.isSpecificActive());
         }
 
         return pullActive && (pageDoesMatch || hashDoesMatch) && doNotDisturbTimeIsOver && (askOnStartUp || likeliHoodOkay);

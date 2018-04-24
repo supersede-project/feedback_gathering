@@ -27,6 +27,18 @@ $buttonBorderColor: #b9b9b9;
 $buttonHeight: 32px;
 $buttonTextTransform: none;
 
+// discard
+$discardButtonBackgroundColor: rgba(28, 65, 111, 1);
+$discardButtonColor: white;
+$discardButtonHoverBackgroundColor: #5a7393;
+$discardButtonHoverColor: white;
+$discardButtonFontWeight: normal;
+
+$discardLinkColor: black;
+$discardLinkTextDecoration: none;
+$discardLinkHoverColor: #5a7393;
+$discardLinkHoverTextDecoration: none;
+
 // submit button
 $submitButtonBackgroundColor: rgba(28, 65, 111, 1);
 $submitButtonColor: white;

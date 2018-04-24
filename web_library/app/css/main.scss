@@ -418,10 +418,6 @@
     width: 95%;
   }
 
-  button.discard-feedback {
-    width: 215px;
-  }
-
   button.take-screenshot {
     margin-bottom: 10px;
   }
@@ -715,22 +711,35 @@
     margin-top: 25px;
   }
 
+  button.discard-feedback {
+    width: 215px;
+    color: $discardButtonColor;
+    background: $discardButtonBackgroundColor;
+    font-weight: $discardButtonFontWeight;
+
+    &:hover {
+      color: $discardButtonHoverColor;
+      background: $discardButtonBackgroundColor;
+    }
+  }
+
   a.discard-feedback {
     float: left;
     display: inline-block;
-    color: $dialogTitlebarColor;
-    text-decoration: none;
+    color: $discardLinkColor;
+    text-decoration: $discardLinkTextDecoration;
     margin-top: 23px;
     margin-right: 30px;
     font-size: 14px;
+    font-weight: normal;
 
     &.no-float-left {
       float: none;
     }
 
     &:hover {
-      color: $dialogTitlebarColor;
-      text-decoration: underline;
+      color: $discardLinkHoverColor;
+      text-decoration: $discardLinkHoverTextDecoration;
     }
   }
 
