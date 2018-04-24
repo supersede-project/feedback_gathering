@@ -21,6 +21,11 @@ public class DateUtility {
         return System.currentTimeMillis() - yearsInMs;
     }
 
+    public static Long getPastDateAfter(long afterDate) {
+        long yearsInMs = (long)((System.currentTimeMillis()-afterDate) * Math.random());
+        return System.currentTimeMillis() - yearsInMs;
+    }
+
     public static String getDateFromLong(long ms) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(ms);

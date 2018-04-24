@@ -25,8 +25,8 @@ import ch.uzh.supersede.feedbacklibrary.beans.FeedbackBean;
 
 import static ch.uzh.supersede.feedbacklibrary.interfaces.ISortableFeedback.FEEDBACK_SORTING.*;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.*;
+import static ch.uzh.supersede.feedbacklibrary.utils.Enums.FEEDBACK_STATUS.DUPLICATE;
 import static ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility.USER_LEVEL.ACTIVE;
-import static ch.uzh.supersede.feedbacklibrary.beans.FeedbackBean.FEEDBACK_STATUS.DUPLICATE;
 
 public class FeedbackListItem extends LinearLayout implements Comparable, ISortableFeedback {
     private TextView titleView;
@@ -53,7 +53,7 @@ public class FeedbackListItem extends LinearLayout implements Comparable, ISorta
         masterParams.setMargins(5, 5, 5, 5);
         setLayoutParams(masterParams);
         setOrientation(VERTICAL);
-        LinearLayoutCompat.LayoutParams longParams = new LinearLayoutCompat.LayoutParams(screenWidth, partHeight / 2);
+        LinearLayoutCompat.LayoutParams longParams = new LinearLayoutCompat.LayoutParams(innerLayoutWidth, partHeight / 2);
         LinearLayoutCompat.LayoutParams shortParams = new LinearLayoutCompat.LayoutParams(innerLayoutWidth / 2, partHeight / 2);
         Drawable drawable = ContextCompat.getDrawable(context, R.drawable.dark_blue_square);
         int white = ContextCompat.getColor(context, R.color.white);
