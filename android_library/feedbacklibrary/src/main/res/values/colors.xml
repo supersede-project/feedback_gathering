@@ -17,5 +17,64 @@
 
     <color name="green">#009933</color>
     <color name="lime">#996633</color>
+    <color name="gold">#ffe100</color>
 
+    <color name="transparent">#00FFFFFF</color>
+    <color name="gray_0">#111111</color>
+    <color name="gray_1">#333333</color>
+    <color name="gray_2">#666666</color>
+    <color name="gray_3">#999999</color>
+    <color name="gray_4">#AAAAAA</color>
+    <color name="gray_5">#DDDDDD</color>
+    <color name="red_1">#330000</color>
+    <color name="red_2">#660000</color>
+    <color name="red_3">#990000</color>
+    <color name="red_4">#AA0000</color>
+    <color name="red_5">#DD0000</color>
+    <color name="red">#FF0000</color>
+    <color name="green_0">#001100</color>
+    <color name="green_1">#003300</color>
+    <color name="green_2">#006600</color>
+    <color name="green_3">#009900</color>
+    <color name="green_4">#00AA00</color>
+    <color name="green_5">#00DD00</color>
+    <color name="green_pure">#00FF00</color>
+    <color name="blue_1">#000033</color>
+    <color name="blue_2">#000066</color>
+    <color name="blue_3">#000099</color>
+    <color name="blue_4">#0000AA</color>
+    <color name="blue_5">#0000DD</color>
+    <color name="blue">#0000FF</color>
+    <color name="yellow">#FFFF00</color>
+    <color name="magenta">#FF00FF</color>
+    <color name="cyan_pure">#00FFFF</color>
+
+    <color name="text">#FFFFFF</color>
+    <color name="foreground">#244864</color>
+    <color name="background">#122432</color>
+    <color name="grey">#202020</color>
+    <color name="darkgrey">#161616</color>
+    <color name="button">#326496</color>
+    <color name="fire">#FF0000</color>
+    <color name="orange">#FF6A00</color>
+    <color name="orangeyellow">#FFDD00</color>
+
+    <color name="transparentBlack_1">#99000000</color>
+    <color name="transparentBlack_2">#77000000</color>
+    <color name="transparentBlack_3">#55000000</color>
+    <color name="transparentBlack_4">#33000000</color>
+    <color name="transparentBlack_5">#11000000</color>
+    <color name="transparentBlack_z">#00000000</color>
+
+    <color name="gold_trans">#55FED73B</color>
+    <color name="gold_1">#FED73B</color>
+    <color name="gold_2">#FDEE73</color>
+    <color name="gold_3">#E58504</color>
+    <color name="gold_4">#DF7400</color>
+
+    <color name="list_green_d">#005C00</color>
+    <color name="list_green_b">#007000</color>
+
+    <color name="list_red_d">#5C0000</color>
+    <color name="list_red_b">#700000</color>
 </resources>

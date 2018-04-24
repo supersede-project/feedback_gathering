@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.ContentFrameLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.ContentFrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -9,72 +8,178 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:orientation="vertical"
-        android:weightSum="9">
+        android:weightSum="60">
 
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="0dp"
+            android:layout_weight="20"
             android:orientation="horizontal"
-            android:layout_weight="3"
             android:weightSum="9">
-            <Space
-                android:layout_width="0dp"
-                android:layout_height="fill_parent"
-                android:layout_weight="3"/>
 
-            <Space
+            <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="fill_parent"
-                android:layout_weight="3"/>
+                android:layout_weight="3"
+                android:orientation="vertical"
+                android:weightSum="9">
 
-            <Space
+                <Button
+                    android:layout_width="fill_parent"
+                    android:layout_height="0dp"
+                    android:layout_margin="5dp"
+                    android:layout_weight="3"
+                    android:text="Images" />
+
+                <Button
+                    android:layout_width="fill_parent"
+                    android:layout_height="0dp"
+                    android:layout_margin="5dp"
+                    android:layout_weight="3"
+                    android:enabled="false"
+                    android:text="Audio" />
+
+                <Button
+                    android:layout_width="fill_parent"
+                    android:layout_height="0dp"
+                    android:layout_margin="5dp"
+                    android:layout_weight="3"
+                    android:text="Labels" />
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="fill_parent"
-                android:layout_weight="3" />
+                android:layout_weight="6"
+                android:orientation="vertical"
+                android:weightSum="6">
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="2"
+                    android:orientation="horizontal"
+                    android:weightSum="9">
+
+                    <Space
+                        android:layout_width="0dp"
+                        android:layout_height="fill_parent"
+                        android:layout_weight="2" />
+
+                    <Button
+                        android:layout_width="0dp"
+                        android:layout_height="fill_parent"
+                        android:layout_margin="5dp"
+                        android:layout_weight="2"
+                        android:gravity="center"
+                        android:text="@string/minus" />
+
+                    <TextView
+                        android:id="@+id/details_text_votes"
+                        android:layout_width="0dp"
+                        android:layout_height="fill_parent"
+                        android:layout_weight="3"
+                        android:gravity="center"/>
+
+                    <Button
+                        android:layout_width="0dp"
+                        android:layout_height="fill_parent"
+                        android:layout_margin="5dp"
+                        android:layout_weight="2"
+                        android:gravity="center"
+                        android:text="@string/plus" />
+                </LinearLayout>
+
+                <Space
+                    android:layout_width="fill_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
+
+                <TextView
+                    android:id="@+id/details_text_user"
+                    android:layout_width="fill_parent"
+                    android:layout_height="0dp"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:background="@color/cyanDark"
+                    android:padding="5dp"/>
+
+                <TextView
+                    android:id="@+id/details_text_title"
+                    android:layout_width="fill_parent"
+                    android:layout_height="0dp"
+                    android:layout_margin="5dp"
+                    android:layout_weight="2"
+                    android:background="@color/cyanDark"
+                    android:padding="5dp"/>
+            </LinearLayout>
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="0dp"
+            android:layout_weight="10"
             android:orientation="horizontal"
-            android:layout_weight="3"
             android:weightSum="9">
-            <Space
-                android:layout_width="0dp"
-                android:layout_height="fill_parent"
-                android:layout_weight="3"/>
 
-            <Space
+            <TextView
+                android:id="@+id/details_text_description"
                 android:layout_width="0dp"
                 android:layout_height="fill_parent"
-                android:layout_weight="3"/>
-
-            <Space
-                android:layout_width="0dp"
-                android:layout_height="fill_parent"
-                android:layout_weight="3" />
+                android:layout_margin="5dp"
+                android:layout_weight="9"
+                android:background="@color/cyanDark"
+                android:padding="5dp"/>
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="0dp"
+            android:layout_weight="25"
             android:orientation="horizontal"
-            android:layout_weight="3"
-            android:weightSum="9">
-            <Space
-                android:layout_width="0dp"
-                android:layout_height="fill_parent"
-                android:layout_weight="3"/>
+            android:weightSum="30">
 
             <Space
                 android:layout_width="0dp"
                 android:layout_height="fill_parent"
-                android:layout_weight="3"/>
+                android:layout_weight="2" />
 
-            <Space
+            <ScrollView
                 android:layout_width="0dp"
                 android:layout_height="fill_parent"
-                android:layout_weight="3" />
+                android:layout_weight="28">
+
+                <LinearLayout
+                    android:id="@+id/details_layout_scroll"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                </LinearLayout>
+            </ScrollView>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="0dp"
+            android:layout_weight="5"
+            android:orientation="horizontal"
+            android:weightSum="8">
+
+            <Button
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_margin="5dp"
+                android:layout_weight="4"
+                android:text="Subscribe" />
+
+            <Button
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_margin="5dp"
+                android:layout_weight="4"
+                android:text="Add Response" />
         </LinearLayout>
     </LinearLayout>
 

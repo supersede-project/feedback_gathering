@@ -110,4 +110,6 @@
     <string name="settings_button_mine">Mine</string>
     <string name="settings_button_others">Others</string>
     <string name="settings_button_settings">Settings</string>
+    <string name="minus">-</string>
+    <string name="plus">+</string>
 </resources>

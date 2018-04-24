@@ -1,38 +1,38 @@
 package ch.uzh.supersede.feedbacklibrary.beans;
 
-import android.graphics.Color;
-
 import java.io.Serializable;
+import java.util.*;
 
-import ch.uzh.supersede.feedbacklibrary.utils.*;
+import ch.uzh.supersede.feedbacklibrary.utils.CompareUtility;
 import ch.uzh.supersede.feedbacklibrary.utils.Enums.FEEDBACK_STATUS;
 
-public class FeedbackBean implements Serializable{
-
+public class FeedbackDetailsBean implements Serializable{
 
     private String title;
+    private String description;
     private String userName;
     private String technicalUserName;
+    private String[] labels;
     private long timeStamp;
     private int upVotes;
-    private int maxUpVotes;
-    private int minUpVotes;
-    private int responses;
     private FEEDBACK_STATUS feedbackStatus;
+    private List<FeedbackResponseBean> feedbackResponses = new ArrayList<>();
+    private FeedbackBean feedbackBean;
 
-    private FeedbackBean() {
+    private FeedbackDetailsBean() {
     }
 
     public static class Builder {
         private String title;
+        private String description;
         private String userName;
         private String technicalUserName;
+        private String[] labels;
         private long timeStamp;
         private int upVotes;
-        private int maxUpVotes;
-        private int minUpVotes;
-        private int responses;
         private FEEDBACK_STATUS feedbackStatus;
+        private List<FeedbackResponseBean> feedbackResponses = new ArrayList<>();
+        private FeedbackBean feedbackBean;
 
         public Builder() {
             //NOP
@@ -40,6 +40,11 @@ public class FeedbackBean implements Serializable{
 
         public Builder withTitle(String title) {
             this.title = title;
+            return this;
+        }
+
+        public Builder withDescription(String description) {
+            this.description = description;
             return this;
         }
 
@@ -53,6 +58,11 @@ public class FeedbackBean implements Serializable{
             return this;
         }
 
+        public Builder withLabels(String... labels) {
+            this.labels = labels;
+            return this;
+        }
+
         public Builder withTimestamp(long timeStamp) {
             this.timeStamp = timeStamp;
             return this;
@@ -63,37 +73,33 @@ public class FeedbackBean implements Serializable{
             return this;
         }
 
-        public Builder withMaxUpVotes(int maxUpVotes) {
-            this.maxUpVotes = maxUpVotes;
-            return this;
-        }
-        public Builder withMinUpVotes(int minUpVotes) {
-            this.minUpVotes = minUpVotes;
-            return this;
-        }
-
-        public Builder withResponses(int responses) {
-            this.responses = responses;
-            return this;
-        }
-
         public Builder withStatus(FEEDBACK_STATUS feedbackStatus) {
             this.feedbackStatus = feedbackStatus;
             return this;
         }
 
-        public FeedbackBean build() {
-            if (CompareUtility.notNull(title,userName,technicalUserName,timeStamp,maxUpVotes, minUpVotes,feedbackStatus)) {
-                FeedbackBean bean = new FeedbackBean();
+        public Builder withResponses(List<FeedbackResponseBean> feedbackResponses) {
+            this.feedbackResponses = feedbackResponses;
+            return this;
+        }
+
+        public Builder withFeedbackBean(FeedbackBean feedbackBean) {
+            this.feedbackBean = feedbackBean;
+            return this;
+        }
+
+        public FeedbackDetailsBean build() {
+            if (CompareUtility.notNull(title,userName,technicalUserName,timeStamp,description,feedbackStatus,feedbackBean)) {
+                FeedbackDetailsBean bean = new FeedbackDetailsBean();
                 bean.title = this.title;
+                bean.description = this.description;
                 bean.userName = this.userName;
                 bean.technicalUserName = this.technicalUserName;
                 bean.timeStamp = this.timeStamp;
                 bean.upVotes = this.upVotes;
-                bean.maxUpVotes = this.maxUpVotes;
-                bean.minUpVotes = this.minUpVotes;
-                bean.responses = this.responses;
                 bean.feedbackStatus = this.feedbackStatus;
+                bean.feedbackResponses = this.feedbackResponses;
+                bean.feedbackBean = this.feedbackBean;
                 return bean;
             }
             return null;
@@ -102,6 +108,10 @@ public class FeedbackBean implements Serializable{
 
     public String getTitle() {
         return title;
+    }
+
+    public String getDescription() {
+        return description;
     }
 
     public String getUserName() {
@@ -121,22 +131,22 @@ public class FeedbackBean implements Serializable{
     }
 
     public String getUpVotesAsText() {
-        return upVotes<=0?String.valueOf(upVotes):"+"+upVotes;
+        return upVotes <= 0 ? String.valueOf(upVotes) : "+" + upVotes;
     }
 
-    public int getResponses() {
-        return responses;
+    public List<FeedbackResponseBean> getResponses() {
+        return feedbackResponses;
     }
 
     public FEEDBACK_STATUS getFeedbackStatus() {
         return feedbackStatus;
     }
 
-    public int getMaxUpVotes() {
-        return maxUpVotes;
+    public FeedbackBean getFeedbackBean() {
+        return feedbackBean;
     }
 
-    public int getMinUpVotes() {
-        return minUpVotes;
+    public String[] getLabels() {
+        return labels;
     }
 }
