@@ -4,6 +4,9 @@ package ch.fhnw.cere.repository.models.orchestrator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.List;
+import java.util.Objects;
+
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Parameter {
@@ -17,6 +20,10 @@ public class Parameter {
     protected Object value;
     @JsonProperty("key")
     protected String key;
+    @JsonProperty("order")
+    protected int order;
+    @JsonProperty("parameters")
+    protected List<Parameter> parameters = null;
 
     public Parameter() {
     }
@@ -27,6 +34,38 @@ public class Parameter {
         this.id = id;
         this.value = value;
         this.key = key;
+    }
+
+    public Parameter(String createdAt, String language, Long id, Object value, String key, int order) {
+        this.createdAt = createdAt;
+        this.language = language;
+        this.id = id;
+        this.value = value;
+        this.key = key;
+        this.order = order;
+    }
+
+    public Parameter(String createdAt, String language, Long id, Object value, String key, int order, List<Parameter> parameters) {
+        this.createdAt = createdAt;
+        this.language = language;
+        this.id = id;
+        this.value = value;
+        this.key = key;
+        this.order = order;
+        this.parameters = parameters;
+    }
+
+    @Override
+    public String toString() {
+        return "Parameter{" +
+                "createdAt='" + createdAt + '\'' +
+                ", language='" + language + '\'' +
+                ", id=" + id +
+                ", value=" + value +
+                ", key='" + key + '\'' +
+                ", order=" + order +
+                ", parameters=" + parameters +
+                '}';
     }
 
     public String getCreatedAt() {
@@ -67,5 +106,21 @@ public class Parameter {
 
     public void setKey(String key) {
         this.key = key;
+    }
+
+    public int getOrder() {
+        return order;
+    }
+
+    public void setOrder(int order) {
+        this.order = order;
+    }
+
+    public List<Parameter> getParameters() {
+        return parameters;
+    }
+
+    public void setParameters(List<Parameter> parameters) {
+        this.parameters = parameters;
     }
 }

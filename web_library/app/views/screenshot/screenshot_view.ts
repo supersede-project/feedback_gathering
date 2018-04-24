@@ -4,14 +4,15 @@ import '../../js/lib/screenshot/html2canvas_5_0_4.min.js';
 import '../../js/lib/screenshot/html2canvas_5_0_4.svg.min.js';
 import '../../js/lib/screenshot/rgbcolor.js';
 import '../../js/lib/screenshot/StackBlur.js';
-import '../../js/lib/screenshot/canvg.js';
-import {Mechanism} from '../../models/mechanisms/mechanism';
 import {CanvasState} from './canvas_state';
 import {ScreenshotFeedback} from '../../models/feedbacks/screenshot_feedback';
 import {MechanismView} from '../mechanism_view';
 import IPoint = fabric.IPoint;
 import {clickBlocked} from '../dialog/dialog_view';
 import { ScreenshotMechanism } from "../../models/mechanisms/screenshot_mechanism";
+import { ColorPickerModule } from './color_picker_options';
+import { CanvasObjectModule } from './canvas_object';
+import { CanvasArrowModule } from './canvas_arrow';
 
 const freehandDrawingMode:string = 'freehandDrawingMode';
 const rectDrawingMode:string = 'rectDrawingMode';
@@ -37,11 +38,7 @@ export class ScreenshotView implements MechanismView {
     elementToCapture:JQuery;
     elementsToHide:[string];
     screenshotCanvas:any;
-    scaledScreenshotCanvas:any;
     context:any;
-    startX:number;
-    startY:number;
-    drawingMode:string;
     canvasState:HTMLImageElement;
     canvasStates:CanvasState[];
     canvasWidth:number;
@@ -92,18 +89,14 @@ export class ScreenshotView implements MechanismView {
 
     replaceOptionsWithTemporarySpans() {
         jQuery('select').each(function() {
-            var selectText = jQuery(this).find('option:selected').text();
+            let select = jQuery(this);
+            let selectText = select.find('option:selected').text();
 
-            jQuery(this).data('original-color', jQuery(this).css('color'));
-            jQuery(this).css('color', 'transparent');
-            var textOverlay = jQuery('<span class="html2canvas-option">' + selectText + '</span>');
-            textOverlay.css('position', 'absolute')
-                .css('top', jQuery(this).offset().top - 30 + 'px')
-                .css('left', jQuery(this).offset().left + 10 + 'px')
-                .css('width', 'auto')
-                .css('height', '25px')
-                .css('display', 'block')
-                .css('z-index', 9000);
+            select.data('original-color', select.css('color'));
+            select.css('color', 'transparent');
+            let textOverlay = jQuery('<span class="html2canvas-option">' + selectText + '</span>');
+
+            textOverlay.css(CanvasObjectModule.getTemporarySpansCSS(select));
             jQuery('body').append(textOverlay);
         });
     }
@@ -111,7 +104,7 @@ export class ScreenshotView implements MechanismView {
     removeTemporarySpans() {
         jQuery('.html2canvas-option').remove();
         jQuery('select').each(function() {
-            var originalColor = jQuery(this).data('original-color');
+            let originalColor = jQuery(this).data('original-color');
             jQuery(this).css('color', originalColor);
         });
     }
@@ -122,14 +115,6 @@ export class ScreenshotView implements MechanismView {
         } else {
             this.generateScreenshot();
         }
-
-        let myThis = this;
-        this.container.find('.scale-screenshot').on('click', (event) => {
-            event.preventDefault();
-            event.stopPropagation();
-            let factor = myThis.container.find('.scale-screenshot-factor').val();
-            myThis.scaleTheCanvas(factor);
-        });
     }
 
     generateScreenshotFromUrl() {
@@ -140,8 +125,6 @@ export class ScreenshotView implements MechanismView {
 
         setTimeout(function() {
             let screenshotImageUrl = myThis.screenshotMechanism.getParameterValue('screenshotUrl') + "?anti_cache=" + new Date().getTime();
-
-            console.log(screenshotImageUrl);
 
             let canvas: HTMLCanvasElement = <HTMLCanvasElement>(jQuery('<canvas width="478" height="251"></canvas>').get(0));
             myThis.canvas = canvas;
@@ -182,13 +165,13 @@ export class ScreenshotView implements MechanismView {
     }
 
     generateScreenshot() {
-        var scrollPosition = this.container.offset().top;
+        let scrollPosition = this.container.offset().top;
         this.hideElements();
         this.addAndShowLoading();
-        var myThis = this;
+        let myThis = this;
 
         setTimeout(function() {
-            myThis.svgToCanvas();
+            CanvasObjectModule.svgToCanvas(myThis);
             myThis.replaceOptionsWithTemporarySpans();
 
             html2canvas(myThis.elementToCapture, {
@@ -209,10 +192,10 @@ export class ScreenshotView implements MechanismView {
                         myThis.screenshotPreviewElement.show();
                         jQuery('.screenshot-preview canvas').attr('id', canvasId);
 
-                        var windowRatio = myThis.elementToCapture.width() / myThis.elementToCapture.height();
+                        let windowRatio = myThis.elementToCapture.width() / myThis.elementToCapture.height();
 
                         // save the canvas content as imageURL
-                        var data = canvas.toDataURL("image/png");
+                        let data = canvas.toDataURL("image/png");
                         myThis.context = canvas.getContext("2d");
                         myThis.canvasOriginalWidth = canvas.width;
                         myThis.canvasOriginalHeight = canvas.height;
@@ -223,7 +206,7 @@ export class ScreenshotView implements MechanismView {
                         jQuery(canvas).prop('width', myThis.canvasWidth);
                         jQuery(canvas).prop('height', myThis.canvasHeight);
 
-                        var img = new Image();
+                        let img = new Image();
                         myThis.canvasState = img;
                         myThis.screenshotCanvas = canvas;
                         img.src = data;
@@ -338,63 +321,9 @@ export class ScreenshotView implements MechanismView {
             });
 
             myThis.selectedObjectControls.find('a.color').css('color', currentObjectColor);
-            myThis.selectedObjectControls.find('a.color').off().spectrum({
-                color: currentObjectColor,
-                containerClassName: myThis.colorPickerCSSClass,
-                showPaletteOnly: true,
-                togglePaletteOnly: true,
-                togglePaletteMoreText: 'more',
-                togglePaletteLessText: 'less',
-                palette: [
-                    ["#000", "#444", "#666", "#999", "#ccc", "#eee", "#f3f3f3", "#fff"],
-                    ["#f00", "#f90", "#ff0", "#0f0", "#0ff", "#00f", "#90f", "#f0f"],
-                    ["#f4cccc", "#fce5cd", "#fff2cc", "#d9ead3", "#d0e0e3", "#cfe2f3", "#d9d2e9", "#ead1dc"],
-                    ["#ea9999", "#f9cb9c", "#ffe599", "#b6d7a8", "#a2c4c9", "#9fc5e8", "#b4a7d6", "#d5a6bd"],
-                    ["#e06666", "#f6b26b", "#ffd966", "#93c47d", "#76a5af", "#6fa8dc", "#8e7cc3", "#c27ba0"],
-                    ["#c00", "#e69138", "#f1c232", "#6aa84f", "#45818e", "#3d85c6", "#674ea7", "#a64d79"],
-                    ["#900", "#b45f06", "#bf9000", "#38761d", "#134f5c", "#0b5394", "#351c75", "#741b47"],
-                    ["#600", "#783f04", "#7f6000", "#274e13", "#0c343d", "#073763", "#20124d", "#4c1130"]
-                ],
-                change: function (color) {
-                    var color = color.toHexString();
-                    jQuery(this).css('color', color);
 
-                    if (selectedObject.get('customType') === 'arrow') {
-                        selectedObject.setFill(color);
-                        selectedObject.setStroke(color);
-                        if(selectedObject.line !== undefined) {
-                            selectedObject.line.setFill(color);
-                            selectedObject.line.setStroke(color);
-                        }
-                        if(selectedObject.arrow !== undefined) {
-                            selectedObject.arrow.setFill(color);
-                            selectedObject.arrow.setStroke(color);
-                        }
-                        if(selectedObject.circle !== undefined) {
-                            selectedObject.circle.setFill(color);
-                            selectedObject.circle.setStroke(color);
-                        }
-                    } else if (selectedObject.get('type') === 'path-group') {
-                        for (var path of selectedObject.paths) {
-                            if (path.getFill() != "") {
-                                path.setFill(color);
-                            }
-                        }
-                    } else if (selectedObject.get('type') === 'path' || selectedObject.get('type') === 'fabricObject') {
-                        selectedObject.setStroke(color);
-                    } else if (selectedObject.get('type') === 'fillRect') {
-                        selectedObject.setStroke(color);
-                        selectedObject.setFill(color);
-                    } else {
-                        selectedObject.setFill(color);
-                    }
-
-                    myThis.fabricCanvas.renderAll();
-                },
-                beforeShow: function (color) {
-                    jQuery(this).spectrum("option", 'color', currentObjectColor);
-                }
-            });
+            let colorPickerOptions = ColorPickerModule.colorPickerOptions(myThis, currentObjectColor, selectedObject);
+            myThis.selectedObjectControls.find('a.color').off().spectrum(colorPickerOptions);
         });
 
         myThis.fabricCanvas.on('selection:cleared', function () {
@@ -475,20 +404,10 @@ export class ScreenshotView implements MechanismView {
         var mousey = 0;
         var crop = false;
 
-        myThis.croppingRect = new fabric.Rect({
-            fill: 'transparent',
-            originX: 'left',
-            originY: 'top',
-            stroke: '#333',
-            strokeDashArray: [4, 4],
-            type: cropperTypeObjectIdentifier,
-            opacity: 1,
-            width: 1,
-            height: 1
-        });
+        let croppingRectOptions = CanvasObjectModule.getCroppingRectOptions(cropperTypeObjectIdentifier);
+        myThis.croppingRect = new fabric.Rect(croppingRectOptions);
 
         this.croppingIsActive = true;
-
         myThis.croppingRect.visible = false;
         this.fabricCanvas.add(myThis.croppingRect);
 
@@ -542,7 +461,7 @@ export class ScreenshotView implements MechanismView {
             myThis.croppingIsActive = false;
             jQuery(this).hide();
             jQuery('.screenshot-crop-cancel').hide();
-            myThis.setCanvasObjectsMovement(false);
+            CanvasObjectModule.setCanvasObjectsMovement(false, myThis.fabricCanvas, cropperTypeObjectIdentifier);
         });
     }
 
@@ -562,7 +481,7 @@ export class ScreenshotView implements MechanismView {
         if(this.croppingRect) {
             this.croppingRect.remove();
         }
-        this.setCanvasObjectsMovement(false);
+        CanvasObjectModule.setCanvasObjectsMovement(false, this.fabricCanvas, cropperTypeObjectIdentifier);
     }
 
     cropTheCanvas(croppingRect) {
@@ -612,32 +531,6 @@ export class ScreenshotView implements MechanismView {
         canvas.renderAll.bind(canvas);
     }
 
-    scaleTheCanvas(factor) {
-        console.log('scaleTheCanvas: ' + factor);
-        let myThis = this;
-        let canvas = this.canvas;
-
-        // save the canvas content as imageURL
-        let data = canvas.toDataURL("image/png");
-        myThis.context = canvas.getContext("2d");
-        myThis.canvasOriginalWidth = canvas.width;
-        myThis.canvasOriginalHeight = canvas.height;
-
-        myThis.canvasWidth = myThis.canvasWidth * factor;
-        myThis.canvasHeight = myThis.canvasHeight * factor;
-
-        jQuery(canvas).prop('width', myThis.canvasWidth);
-        jQuery(canvas).prop('height', myThis.canvasHeight);
-
-        let img = new Image();
-        myThis.canvasState = img;
-        myThis.screenshotCanvas = canvas;
-        img.src = data;
-        img.onload = function () {
-            myThis.context.drawImage(img, 0, 0, img.width * factor, img.height * factor, 0, 0, canvas.width, canvas.height);
-        };
-    }
-
     addTextAnnotation(left, top) {
         var text = new fabric.IText('Your text', {
             left: left,
@@ -661,30 +554,8 @@ export class ScreenshotView implements MechanismView {
         myThis.fabricCanvas.freeDrawingBrush.width = 6;
 
         freehandControls.find('a.freehand-color').css('color', currentFreehandDrawingColor);
-        freehandControls.find('a.freehand-color').off().spectrum({
-            color: defaultColor,
-            containerClassName: myThis.colorPickerCSSClass,
-            showPaletteOnly: true,
-            togglePaletteOnly: true,
-            togglePaletteMoreText: 'more',
-            togglePaletteLessText: 'less',
-            palette: [
-                ["#000", "#444", "#666", "#999", "#ccc", "#eee", "#f3f3f3", "#fff"],
-                ["#f00", "#f90", "#ff0", "#0f0", "#0ff", "#00f", "#90f", "#f0f"],
-                ["#f4cccc", "#fce5cd", "#fff2cc", "#d9ead3", "#d0e0e3", "#cfe2f3", "#d9d2e9", "#ead1dc"],
-                ["#ea9999", "#f9cb9c", "#ffe599", "#b6d7a8", "#a2c4c9", "#9fc5e8", "#b4a7d6", "#d5a6bd"],
-                ["#e06666", "#f6b26b", "#ffd966", "#93c47d", "#76a5af", "#6fa8dc", "#8e7cc3", "#c27ba0"],
-                ["#c00", "#e69138", "#f1c232", "#6aa84f", "#45818e", "#3d85c6", "#674ea7", "#a64d79"],
-                ["#900", "#b45f06", "#bf9000", "#38761d", "#134f5c", "#0b5394", "#351c75", "#741b47"],
-                ["#600", "#783f04", "#7f6000", "#274e13", "#0c343d", "#073763", "#20124d", "#4c1130"]
-            ],
-            change: function (color) {
-                var color = color.toHexString();
-                jQuery(this).css('color', color);
-                myThis.fabricCanvas.freeDrawingBrush.color = color;
-                myThis.fabricCanvas.renderAll();
-            }
-        });
+        let colorPickerOptions = ColorPickerModule.colorPickerOptionsFreehand(myThis, defaultColor);
+        freehandControls.find('a.freehand-color').off().spectrum(colorPickerOptions);
 
         jQuery('.screenshot-operations .freehand').on('click', function () {
             if (myThis.fabricCanvas.isDrawingMode) {
@@ -764,53 +635,20 @@ export class ScreenshotView implements MechanismView {
                    });
                } else if (sticker.hasClass('object-source')) {
                    if (sticker.hasClass('arrow')) {
-                       myThis.addArrowToCanvas(offsetX, offsetY);
+                       CanvasArrowModule.addArrowToCanvas(offsetX, offsetY, myThis.fabricCanvas, defaultColor, myThis.hasBordersAndControls);
                    } else if (sticker.hasClass('rect')) {
-                       var rect = new fabric.Rect({
-                           left: offsetX,
-                           top: offsetY,
-                           width: 50,
-                           height: 50,
-                           hasBorders: myThis.hasBordersAndControls,
-                           hasControls: myThis.hasBordersAndControls,
-                           type: 'fabricObject',
-                           stroke: defaultColor,
-                           strokeWidth: myThis.defaultStrokeWidth,
-                           lockUniScaling: false,
-                           fill: 'transparent'
-                       });
+                       let rectOptions = CanvasObjectModule.getRectOptions(offsetX, offsetY, myThis, defaultColor, 'transparent', 'fabricObject');
+                       let rect = new fabric.Rect(rectOptions);
                        myThis.fabricCanvas.add(rect).renderAll();
                        myThis.fabricCanvas.setActiveObject(rect);
                    } else if (sticker.hasClass('fillRect')) {
-                       var rect = new fabric.Rect({
-                           left: offsetX,
-                           top: offsetY,
-                           width: 50,
-                           height: 50,
-                           hasBorders: myThis.hasBordersAndControls,
-                           hasControls: myThis.hasBordersAndControls,
-                           type: 'fillRect',
-                           stroke: defaultColor,
-                           strokeWidth: myThis.defaultStrokeWidth,
-                           lockUniScaling: false,
-                           fill: defaultColor
-                       });
+                       let rectOptions = CanvasObjectModule.getRectOptions(offsetX, offsetY, myThis, defaultColor, defaultColor, 'fillRect');
+                       let rect = new fabric.Rect(rectOptions);
                        myThis.fabricCanvas.add(rect).renderAll();
                        myThis.fabricCanvas.setActiveObject(rect);
                    } else if (sticker.hasClass('circle')) {
-                       var circle = new fabric.Circle({
-                           left: offsetX,
-                           top: offsetY,
-                           radius: 50,
-                           hasBorders: myThis.hasBordersAndControls,
-                           hasControls: myThis.hasBordersAndControls,
-                           startAngle: 0,
-                           type: 'fabricObject',
-                           endAngle: 2 * Math.PI,
-                           stroke: defaultColor,
-                           strokeWidth: myThis.defaultStrokeWidth,
-                           fill: 'transparent'
-                       });
+                       let circleOptions = CanvasObjectModule.getCircleOptions(offsetX, offsetY, myThis, defaultColor);
+                       let circle = new fabric.Circle(circleOptions);
                        myThis.fabricCanvas.add(circle).renderAll();
                        myThis.fabricCanvas.setActiveObject(circle);
                    }
@@ -865,71 +703,26 @@ export class ScreenshotView implements MechanismView {
                     });
                 } else if (sticker.hasClass('object-source')) {
                     if (sticker.hasClass('arrow')) {
-                        myThis.addArrowToCanvas(offsetX, offsetY);
+                        CanvasArrowModule.addArrowToCanvas(offsetX, offsetY, myThis.fabricCanvas, defaultColor, myThis.hasBordersAndControls);
                     } else if (sticker.hasClass('rect')) {
-                        var rect = new fabric.Rect({
-                            left: offsetX,
-                            top: offsetY,
-                            width: 50,
-                            height: 50,
-                            hasBorders: myThis.hasBordersAndControls,
-                            hasControls: myThis.hasBordersAndControls,
-                            type: 'fabricObject',
-                            stroke: defaultColor,
-                            strokeWidth: myThis.defaultStrokeWidth,
-                            lockUniScaling: false,
-                            fill: 'transparent'
-                        });
+                        let rectOptions = CanvasObjectModule.getRectOptions(offsetX, offsetY, myThis, defaultColor, 'transparent', 'fabricObject');
+                        let rect = new fabric.Rect(rectOptions);
                         myThis.fabricCanvas.add(rect).renderAll();
                         myThis.fabricCanvas.setActiveObject(rect);
                     } else if (sticker.hasClass('fillRect')) {
-                        var rect = new fabric.Rect({
-                            left: offsetX,
-                            top: offsetY,
-                            width: 50,
-                            height: 50,
-                            hasBorders: myThis.hasBordersAndControls,
-                            hasControls: myThis.hasBordersAndControls,
-                            type: 'fillRect',
-                            stroke: defaultColor,
-                            strokeWidth: myThis.defaultStrokeWidth,
-                            lockUniScaling: false,
-                            fill: defaultColor
-                        });
+                        let rectOptions = CanvasObjectModule.getRectOptions(offsetX, offsetY, myThis, defaultColor, defaultColor, 'fillRect');
+                        let rect = new fabric.Rect(rectOptions);
                         myThis.fabricCanvas.add(rect).renderAll();
                         myThis.fabricCanvas.setActiveObject(rect);
                     } else if (sticker.hasClass('circle')) {
-                        var circle = new fabric.Circle({
-                            left: offsetX,
-                            top: offsetY,
-                            radius: 50,
-                            hasBorders: myThis.hasBordersAndControls,
-                            hasControls: myThis.hasBordersAndControls,
-                            startAngle: 0,
-                            type: 'fabricObject',
-                            endAngle: 2 * Math.PI,
-                            stroke: defaultColor,
-                            strokeWidth: myThis.defaultStrokeWidth,
-                            fill: 'transparent'
-                        });
+                        let circleOptions = CanvasObjectModule.getCircleOptions(offsetX, offsetY, myThis, defaultColor);
+                        var circle = new fabric.Circle(circleOptions);
                         myThis.fabricCanvas.add(circle).renderAll();
                         myThis.fabricCanvas.setActiveObject(circle);
                     }
                 }
             }
         });
-    }
-
-    getScaleFactor(maxWidth:number, maxHeight:number, originalWidth:number, originalHeight:number):number {
-        return Math.min(maxWidth / originalWidth, maxHeight / originalHeight);
-    }
-
-    getWidthHeightForMaxResolution(maxWidth:number, maxHeight:number, originalWidth:number, originalHeight:number):number[] {
-        let factor = this.getScaleFactor(maxWidth, maxHeight, originalWidth, originalHeight);
-        if(factor > 1) {
-            return [originalWidth, originalHeight];
-        }
-        return [originalWidth * factor, originalHeight * factor];
     }
 
     /**
@@ -942,36 +735,6 @@ export class ScreenshotView implements MechanismView {
             return DataHelper.dataURItoBlob(dataUrl);
         }
         return null;
-    }
-
-    /**
-     * Creates a in-memory scaled down version of the canvas depending on the max resolution set in the configuration.
-     */
-    createScaledDownCanvas() {
-        let myThis = this;
-        if (this.screenshotCanvas) {
-            let dataUrl = this.screenshotCanvas.toDataURL("image/png");
-            let maxResolution = this.screenshotMechanism.getMaxResolutionWidthAndHeight();
-            let resolutionIsAnywaySmaller = (Math.max(maxResolution[0], maxResolution[1]) > Math.max(myThis.canvasWidth, myThis.canvasHeight) &&
-                Math.min(maxResolution[0], maxResolution[1]) > Math.min(myThis.canvasWidth, myThis.canvasHeight));
-
-            this.scaledScreenshotCanvas = document.createElement('canvas');
-            let scaleCanvasContext = this.scaledScreenshotCanvas.getContext('2d');
-            let getWidthHeightForMaxResolution = this.getWidthHeightForMaxResolution(maxResolution[0], maxResolution[1], myThis.canvasWidth, myThis.canvasHeight);
-            let factor = this.getScaleFactor(maxResolution[0], maxResolution[1], myThis.canvasWidth, myThis.canvasHeight);
-
-            let imgToScaleDown = new Image();
-            imgToScaleDown.src = dataUrl;
-            imgToScaleDown.onload = function () {
-                if(maxResolution === null || resolutionIsAnywaySmaller) {
-                    myThis.scaledScreenshotCanvas = myThis.screenshotCanvas;
-                } else {
-                    // TODO get this working
-                    scaleCanvasContext.scale(factor, factor);
-                    scaleCanvasContext.drawImage(imgToScaleDown, 0, 0, imgToScaleDown.width, imgToScaleDown.height, 0, 0, myThis.canvasWidth, myThis.canvasHeight);
-                }
-            };
-        }
     }
 
     addCaptureEventToButton() {
@@ -1064,7 +827,7 @@ export class ScreenshotView implements MechanismView {
             event.stopPropagation();
             myThis.fabricCanvas.deactivateAll().renderAll();
             myThis.selectedObjectControls.hide();
-            myThis.setCanvasObjectsMovement(true);
+            CanvasObjectModule.setCanvasObjectsMovement(true, myThis.fabricCanvas, cropperTypeObjectIdentifier);
             myThis.disableFreehandDrawing();
             myThis.disableCurrentObjectInToolbar();
             myThis.initCrop();
@@ -1091,16 +854,11 @@ export class ScreenshotView implements MechanismView {
     }
 
     customizeControls() {
-        var myThis = this;
-        var colorLinkElement = jQuery('<a class="corner-color" href="#"><i class="material-icons">format_color_fill</i></a>');
+        let myThis = this;
+        let colorLinkElement = jQuery('<a class="corner-color" href="#"><i class="material-icons">format_color_fill</i></a>');
+        colorLinkElement.css(CanvasObjectModule.getColorLinkElementCSS(defaultColor));
 
-        colorLinkElement.css('position', 'absolute');
-        colorLinkElement.css('color', defaultColor);
-        colorLinkElement.css('width', '16px');
-        colorLinkElement.css('height', '16px');
-        colorLinkElement.css('opacity', '0');
-
-        var selectedObjectControls = jQuery('#screenshotMechanism' + myThis.screenshotMechanism.id + ' .selected-object-controls');
+        let selectedObjectControls = jQuery('#screenshotMechanism' + myThis.screenshotMechanism.id + ' .selected-object-controls');
 
         fabric.Object.prototype.hide = function () {
             this.set({
@@ -1138,65 +896,8 @@ export class ScreenshotView implements MechanismView {
 
                     colorLinkElement.css('top', e.offsetY - 12 + 'px');
                     colorLinkElement.css('left', e.offsetX - 8 + 'px');
-                    colorLinkElement.off().spectrum({
-                        color: currentObjectColor,
-                        containerClassName: myThis.colorPickerCSSClass,
-                        showPaletteOnly: true,
-                        togglePaletteOnly: true,
-                        togglePaletteMoreText: 'more',
-                        togglePaletteLessText: 'less',
-                        palette: [
-                            ["#000", "#444", "#666", "#999", "#ccc", "#eee", "#f3f3f3", "#fff"],
-                            ["#f00", "#f90", "#ff0", "#0f0", "#0ff", "#00f", "#90f", "#f0f"],
-                            ["#f4cccc", "#fce5cd", "#fff2cc", "#d9ead3", "#d0e0e3", "#cfe2f3", "#d9d2e9", "#ead1dc"],
-                            ["#ea9999", "#f9cb9c", "#ffe599", "#b6d7a8", "#a2c4c9", "#9fc5e8", "#b4a7d6", "#d5a6bd"],
-                            ["#e06666", "#f6b26b", "#ffd966", "#93c47d", "#76a5af", "#6fa8dc", "#8e7cc3", "#c27ba0"],
-                            ["#c00", "#e69138", "#f1c232", "#6aa84f", "#45818e", "#3d85c6", "#674ea7", "#a64d79"],
-                            ["#900", "#b45f06", "#bf9000", "#38761d", "#134f5c", "#0b5394", "#351c75", "#741b47"],
-                            ["#600", "#783f04", "#7f6000", "#274e13", "#0c343d", "#073763", "#20124d", "#4c1130"]
-                        ],
-                        change: function (color) {
-                            var color = color.toHexString();
-                            jQuery(this).css('color', color);
-
-                            if (selectedObject.get('customType') === 'arrow') {
-                                selectedObject.setFill(color);
-                                selectedObject.setStroke(color);
-                                if(selectedObject.line !== undefined) {
-                                    selectedObject.line.setFill(color);
-                                    selectedObject.line.setStroke(color);
-                                }
-                                if(selectedObject.arrow !== undefined) {
-                                    selectedObject.arrow.setFill(color);
-                                    selectedObject.arrow.setStroke(color);
-                                }
-                                if(selectedObject.circle !== undefined) {
-                                    selectedObject.circle.setFill(color);
-                                    selectedObject.circle.setStroke(color);
-                                }
-                            } else if (selectedObject.get('type') === 'path-group') {
-                                for (var path of selectedObject.paths) {
-                                    if (path.getFill() != "") {
-                                        path.setFill(color);
-                                    }
-                                }
-                            } else if (selectedObject.get('type') === 'path' || selectedObject.get('type') === 'fabricObject') {
-                                selectedObject.setStroke(color);
-                            } else if (selectedObject.get('type') === 'fillRect') {
-                                selectedObject.setStroke(color);
-                                selectedObject.setFill(color);
-                            } else {
-                                selectedObject.setFill(color);
-                            }
-
-                            selectedObjectControls.find('a.color').css('color', color);
-                            myThis.fabricCanvas.renderAll();
-                            jQuery(this).remove();
-                        },
-                        beforeShow: function (color) {
-                            jQuery(this).spectrum("option", 'color', myThis.getObjectColor(target));
-                        }
-                    });
+                    let colorPickerOptions = ColorPickerModule.colorPickerOptionsForControl(myThis, currentObjectColor, selectedObject, selectedObjectControls, target);
+                    colorLinkElement.off().spectrum(colorPickerOptions);
                     myThis.screenshotPreviewElement.append(colorLinkElement);
                     colorLinkElement.click();
                 },
@@ -1238,269 +939,15 @@ export class ScreenshotView implements MechanismView {
             }
         });
 
-        fabric.Object.prototype.customiseCornerIcons({
-            settings: {
-                borderColor: 'black',
-                cornerSize: 24,
-                cornerShape: 'rect',
-                cornerPadding: 1
-            },
-            ml: {
-                icon: myThis.distPath + 'img/ic_delete_black_24px_background.svg'
-            },
-            mt: {
-                icon: myThis.distPath + 'img/ic_format_color_fill_black_24px_background.svg'
-            }
-        });
+        fabric.Object.prototype.customiseCornerIcons(CanvasObjectModule.getCustomiseCornerIconsOptions(myThis));
     }
 
     setDefaultStrokeWidth(strokeWidth:number) {
         this.defaultStrokeWidth = strokeWidth;
     }
 
-    addArrowToCanvas(offsetX:number, offsetY:number) {
-        var line,
-            arrow,
-            circle,
-            myThis = this;
-
-        line = new fabric.Line([offsetX, offsetY, offsetX + 50, offsetY + 50], {
-            stroke: defaultColor,
-            selectable: true,
-            strokeWidth: 3,
-            padding: 1,
-            hasBorders: myThis.hasBordersAndControls,
-            hasControls: myThis.hasBordersAndControls,
-            originX: 'center',
-            originY: 'center',
-            lockScalingX: true,
-            lockScalingY: true,
-            lockRotation: true,
-        });
-
-        var centerX = (line.x1 + line.x2) / 2,
-            centerY = (line.y1 + line.y2) / 2;
-        var deltaX = line.left - centerX,
-            deltaY = line.top - centerY;
-
-        arrow = new fabric.Triangle({
-            left: line.get('x1') + deltaX,
-            top: line.get('y1') + deltaY,
-            originX: 'center',
-            originY: 'center',
-            hasBorders: false,
-            hasControls: false,
-            lockScalingX: true,
-            lockScalingY: true,
-            lockRotation: true,
-            padding: 0,
-            pointType: 'arrow_start',
-            angle: -45,
-            width: 20,
-            height: 20,
-            fill: defaultColor
-        });
-        arrow.line = line;
-
-        circle = new fabric.Circle({
-            left: line.get('x2') + deltaX,
-            top: line.get('y2') + deltaY,
-            radius: 2,
-            stroke: defaultColor,
-            strokeWidth: 3,
-            originX: 'center',
-            originY: 'center',
-            hasBorders: false,
-            hasControls: false,
-            lockScalingX: true,
-            lockScalingY: true,
-            lockRotation: true,
-            padding: 0,
-            pointType: 'arrow_end',
-            fill: defaultColor
-        });
-        circle.line = line;
-
-        line.customType = arrow.customType = circle.customType = 'arrow';
-        line.circle = arrow.circle = circle;
-        line.arrow = circle.arrow = arrow;
-
-        myThis.fabricCanvas.add(line, arrow, circle);
-
-        function moveEnd(obj) {
-            var p = obj,
-                x1, y1, x2, y2;
-
-            if (obj.pointType === 'arrow_end') {
-                obj.line.set('x2', obj.get('left'));
-                obj.line.set('y2', obj.get('top'));
-            } else {
-                obj.line.set('x1', obj.get('left'));
-                obj.line.set('y1', obj.get('top'));
-            }
-
-            obj.line._setWidthHeight();
-
-            x1 = obj.line.get('x1');
-            y1 = obj.line.get('y1');
-            x2 = obj.line.get('x2');
-            y2 = obj.line.get('y2');
-
-            var angle = myThis.calcArrowAngle(x1, y1, x2, y2);
-
-            if (obj.pointType === 'arrow_end') {
-                obj.arrow.set('angle', angle - 90);
-            } else {
-                obj.set('angle', angle - 90);
-            }
-
-            obj.line.setCoords();
-            myThis.fabricCanvas.renderAll();
-        }
-
-        function moveLine() {
-            var oldCenterX = (line.x1 + line.x2) / 2,
-                oldCenterY = (line.y1 + line.y2) / 2,
-                deltaX = line.left - oldCenterX,
-                deltaY = line.top - oldCenterY;
-
-            line.arrow.set({
-                'left': line.x1 + deltaX,
-                'top': line.y1 + deltaY
-            }).setCoords();
-
-            line.circle.set({
-                'left': line.x2 + deltaX,
-                'top': line.y2 + deltaY
-            }).setCoords();
-
-            line.set({
-                'x1': line.x1 + deltaX,
-                'y1': line.y1 + deltaY,
-                'x2': line.x2 + deltaX,
-                'y2': line.y2 + deltaY
-            });
-
-            line.set({
-                'left': (line.x1 + line.x2) / 2,
-                'top': (line.y1 + line.y2) / 2
-            });
-        }
-
-        arrow.on('moving', function () {
-           moveEnd(arrow);
-        });
-
-        circle.on('moving', function () {
-            moveEnd(circle);
-        });
-
-        line.on('moving', function () {
-            moveLine();
-        });
-    }
-
-    calcArrowAngle(x1, y1, x2, y2) {
-        var angle = 0,
-            x, y;
-
-        x = (x2 - x1);
-        y = (y2 - y1);
-
-        if (x === 0) {
-            angle = (y === 0) ? 0 : (y > 0) ? Math.PI / 2 : Math.PI * 3 / 2;
-        } else if (y === 0) {
-            angle = (x > 0) ? 0 : Math.PI;
-        } else {
-            angle = (x < 0) ? Math.atan(y / x) + Math.PI : (y < 0) ? Math.atan(y / x) + (2 * Math.PI) : Math.atan(y / x);
-        }
-
-        return (angle * 180 / Math.PI);
-    }
-
-    setCanvasObjectsMovement(lock:boolean) {
-        var objects = this.fabricCanvas.getObjects();
-
-        for (var i = 0; i < objects.length; i++) {
-            if(this.fabricCanvas.getObjects()[i].get('type') !== cropperTypeObjectIdentifier) {
-                this.fabricCanvas.getObjects()[i].lockMovementX = lock;
-                this.fabricCanvas.getObjects()[i].lockMovementX = lock;
-            }
-        }
-    }
-
-    getObjectColor(object:any) {
-        if (object.get('type') === 'path-group') {
-            for (var path of object.paths) {
-                if (path.getFill() != "") {
-                    var currentObjectColor = path.getFill();
-                    break;
-                }
-            }
-        } else if (object.get('type') === 'path' || object.get('type') === 'fabricObject') {
-            var currentObjectColor = object.getStroke();
-        } else if (object.get('type') === 'fillRect') {
-            var currentObjectColor = object.getFill();
-        } else {
-            var currentObjectColor = object.getFill();
-        }
-
-        return currentObjectColor;
-    }
-
-    /**
-     * Converts SVG objects (e.g. from highcharts lib) to a temporary canvas. This enables us to capture also SVG stuff
-     * on the screenshot.
-     */
-    svgToCanvas() {
-        var myThis = this;
-        var svgElements = this.elementToCapture.find('svg:not(.jq-star-svg)');
-
-        //replace all svgs with a temp canvas
-        svgElements.each(function() {
-            var canvas, xml;
-
-            // canvg doesn't cope very well with em font sizes so find the calculated size in pixels and replace it in the element.
-            jQuery.each(jQuery(this).find('[style*=em]'), function(index, el) {
-                jQuery(this).css('font-size', myThis.getStyle(el, 'font-size'));
-            });
-
-            canvas = document.createElement("canvas");
-            canvas.className = "screenShotTempCanvas";
-            //convert SVG into a XML string
-            xml = (new XMLSerializer()).serializeToString(this);
-
-            // Removing the name space as IE throws an error
-            xml = xml.replace(/xmlns=\"http:\/\/www\.w3\.org\/2000\/svg\"/, '');
-
-            //draw the SVG onto a canvas
-            canvg(canvas, xml);
-            jQuery(canvas).insertAfter(this);
-            //hide the SVG element
-            jQuery(this).attr('class', 'temp-hide');
-            jQuery(this).hide();
-        });
-    }
-
     showAllCanvasElements() {
         jQuery('.temp-hide').show();
-    }
-
-    getStyle(el, styleProp) {
-        let camelize = function (str) {
-            return str.replace(/\-(\w)/g, function(str, letter){
-                return letter.toUpperCase();
-            });
-        };
-
-        if (el.currentStyle) {
-            return el.currentStyle[camelize(styleProp)];
-        } else if (document.defaultView && document.defaultView.getComputedStyle) {
-            return document.defaultView.getComputedStyle(el,null)
-                .getPropertyValue(styleProp);
-        } else {
-            return el.style[camelize(styleProp)];
-        }
     }
 }
 
