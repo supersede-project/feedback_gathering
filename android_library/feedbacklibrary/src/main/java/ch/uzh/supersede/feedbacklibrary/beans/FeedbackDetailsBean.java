@@ -8,6 +8,7 @@ import ch.uzh.supersede.feedbacklibrary.utils.Enums.FEEDBACK_STATUS;
 
 public class FeedbackDetailsBean implements Serializable{
 
+    private UUID feedbackUid;
     private String title;
     private String description;
     private String userName;
@@ -23,6 +24,7 @@ public class FeedbackDetailsBean implements Serializable{
     }
 
     public static class Builder {
+        private UUID feedbackUid;
         private String title;
         private String description;
         private String userName;
@@ -88,15 +90,22 @@ public class FeedbackDetailsBean implements Serializable{
             return this;
         }
 
+        public Builder withFeedbackUid(UUID feedbackUid) {
+            this.feedbackUid = feedbackUid;
+            return this;
+        }
+
         public FeedbackDetailsBean build() {
-            if (CompareUtility.notNull(title,userName,technicalUserName,timeStamp,description,feedbackStatus,feedbackBean)) {
+            if (CompareUtility.notNull(feedbackUid,title,userName,technicalUserName,timeStamp,description,feedbackStatus,feedbackBean)) {
                 FeedbackDetailsBean bean = new FeedbackDetailsBean();
+                bean.feedbackUid = feedbackUid;
                 bean.title = this.title;
                 bean.description = this.description;
                 bean.userName = this.userName;
                 bean.technicalUserName = this.technicalUserName;
                 bean.timeStamp = this.timeStamp;
                 bean.upVotes = this.upVotes;
+                bean.labels = labels;
                 bean.feedbackStatus = this.feedbackStatus;
                 bean.feedbackResponses = this.feedbackResponses;
                 bean.feedbackBean = this.feedbackBean;
@@ -148,5 +157,9 @@ public class FeedbackDetailsBean implements Serializable{
 
     public String[] getLabels() {
         return labels;
+    }
+
+    public UUID getFeedbackUid() {
+        return feedbackUid;
     }
 }

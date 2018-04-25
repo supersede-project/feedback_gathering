@@ -16,6 +16,8 @@ import java.util.List;
 import ch.uzh.supersede.feedbacklibrary.R;
 import ch.uzh.supersede.feedbacklibrary.models.EditImageItem;
 
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.SHARED_PREFERENCES_ID;
+
 public class EditImageViewAdapter extends RecyclerView.Adapter<EditImageViewAdapter.EditImageViewHolder> {
 
     private List<EditImageItem> items;
@@ -37,7 +39,7 @@ public class EditImageViewAdapter extends RecyclerView.Adapter<EditImageViewAdap
         final EditImageItem item = items.get(position);
         final String title = item.getTitle();
 
-        final SharedPreferences sharedPreferences = context.getSharedPreferences("ImageEdit", Context.MODE_PRIVATE);
+        final SharedPreferences sharedPreferences = context.getSharedPreferences(SHARED_PREFERENCES_ID, Context.MODE_PRIVATE);
         boolean isFavorite = sharedPreferences.getBoolean(title, false);
 
         holder.elementImageView.setImageResource(item.getElementResource());

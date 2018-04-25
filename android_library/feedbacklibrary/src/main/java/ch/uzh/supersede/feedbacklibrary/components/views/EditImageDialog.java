@@ -23,6 +23,9 @@ import ch.uzh.supersede.feedbacklibrary.R;
 import ch.uzh.supersede.feedbacklibrary.models.DialogType;
 import ch.uzh.supersede.feedbacklibrary.models.EditImageItem;
 
+import static android.content.Context.MODE_PRIVATE;
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.SHARED_PREFERENCES_ID;
+
 public class EditImageDialog extends DialogFragment {
 
     private List<EditImageItem> items;
@@ -100,7 +103,7 @@ public class EditImageDialog extends DialogFragment {
     }
 
     private void getFavorites() {
-        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("ImageEdit", Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(SHARED_PREFERENCES_ID, MODE_PRIVATE);
         Map<String, ?> keys = sharedPreferences.getAll();
 
         items.clear();
@@ -122,7 +125,7 @@ public class EditImageDialog extends DialogFragment {
     }
 
     private void getColor() {
-        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("ImageEdit", Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(SHARED_PREFERENCES_ID, MODE_PRIVATE);
 
         EditImageItem color = new EditImageItem(getString(R.string.image_annotation_color_picker), R.drawable.ic_palette_black_48dp);
         color.setOnClickListener(new EditImageItem.OnClickListener() {

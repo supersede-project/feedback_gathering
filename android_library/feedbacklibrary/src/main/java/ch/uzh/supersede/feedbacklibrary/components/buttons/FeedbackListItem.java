@@ -10,8 +10,7 @@ import android.support.v7.widget.LinearLayoutCompat;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.View;
-import android.widget.LinearLayout;
-import android.widget.TextView;
+import android.widget.*;
 
 import ch.uzh.supersede.feedbacklibrary.R;
 import ch.uzh.supersede.feedbacklibrary.activities.FeedbackDetailsActivity;
@@ -68,8 +67,9 @@ public class FeedbackListItem extends LinearLayout implements Comparable, ISorta
                 .getFeedbackStatus()
                 .getLabel()
                 .concat(SPACE + context.getString(R.string.list_resplies, feedbackBean.getResponses())), Gravity.START, drawable, padding, feedbackBean.getFeedbackStatus().getColor());
-        pointView = createTextView(shortParams, context, feedbackBean.getUpVotesAsText(), Gravity.END, drawable, padding, white);
+        pointView = createTextView(shortParams, context, feedbackBean.getVotesAsText(), Gravity.END, drawable, padding, white);
         updatePercentageColor();
+        setBackgroundColor(ContextCompat.getColor(context, R.color.indigo));
         upperWrapperLayout.addView(titleView);
         upperWrapperLayout.addView(dateView);
         lowerWrapperLayout.addView(statusView);

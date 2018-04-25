@@ -1,11 +1,13 @@
 package ch.uzh.supersede.feedbacklibrary.beans;
 
 import java.io.Serializable;
+import java.util.UUID;
 
 import ch.uzh.supersede.feedbacklibrary.utils.*;
 
 public class FeedbackResponseBean implements Serializable{
 
+    private UUID feedbackUid;
     private String userName;
     private String technicalUserName;
     private String content;
@@ -17,6 +19,7 @@ public class FeedbackResponseBean implements Serializable{
     }
 
     public static class Builder {
+        private UUID feedbackUid;
         private String userName;
         private String technicalUserName;
         private String content;
@@ -56,9 +59,15 @@ public class FeedbackResponseBean implements Serializable{
             return this;
         }
 
+        public Builder withFeedbackUid(UUID feedbackUid) {
+            this.feedbackUid = feedbackUid;
+            return this;
+        }
+
         public FeedbackResponseBean build() {
-            if (CompareUtility.notNull(content,userName,technicalUserName,timeStamp)) {
+            if (CompareUtility.notNull(feedbackUid,content,userName,technicalUserName,timeStamp)) {
                 FeedbackResponseBean bean = new FeedbackResponseBean();
+                bean.feedbackUid = feedbackUid;
                 bean.content = this.content;
                 bean.userName = this.userName;
                 bean.technicalUserName = this.technicalUserName;
@@ -90,7 +99,12 @@ public class FeedbackResponseBean implements Serializable{
     public boolean isFeedbackOwner() {
         return isFeedbackOwner;
     }
+
     public boolean isDeveloper() {
         return isDeveloper;
+    }
+
+    public UUID getFeedbackUid() {
+        return feedbackUid;
     }
 }
