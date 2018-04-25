@@ -39,6 +39,7 @@ import ch.uzh.supersede.feedbacklibrary.feedback.ScreenshotFeedback;
 import ch.uzh.supersede.feedbacklibrary.utils.DialogUtils;
 import ch.uzh.supersede.feedbacklibrary.utils.Utils;
 
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.SHARED_PREFERENCES_ID;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.ServicesConstants.EMAIL_SERVICE_TAG;
 
 public class EmailService {
@@ -130,7 +131,7 @@ public class EmailService {
             message.setContent(multipart);
             Transport.send(message);
 
-            SharedPreferences sharedPreferences = activity.getSharedPreferences("FeedbackApp", Context.MODE_PRIVATE);
+            SharedPreferences sharedPreferences = activity.getSharedPreferences(SHARED_PREFERENCES_ID, Context.MODE_PRIVATE);
             String savedEmail = sharedPreferences.getString("email", "");
             if (TextUtils.isEmpty(savedEmail)) {
                 SharedPreferences.Editor editor = sharedPreferences.edit();

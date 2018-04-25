@@ -1,8 +1,7 @@
 package ch.uzh.supersede.feedbacklibrary.beans;
 
-import android.graphics.Color;
-
 import java.io.Serializable;
+import java.util.UUID;
 
 import ch.uzh.supersede.feedbacklibrary.utils.*;
 import ch.uzh.supersede.feedbacklibrary.utils.Enums.FEEDBACK_STATUS;
@@ -10,6 +9,7 @@ import ch.uzh.supersede.feedbacklibrary.utils.Enums.FEEDBACK_STATUS;
 public class FeedbackBean implements Serializable{
 
 
+    private UUID feedbackUid;
     private String title;
     private String userName;
     private String technicalUserName;
@@ -24,6 +24,7 @@ public class FeedbackBean implements Serializable{
     }
 
     public static class Builder {
+        private UUID feedbackUid;
         private String title;
         private String userName;
         private String technicalUserName;
@@ -82,9 +83,15 @@ public class FeedbackBean implements Serializable{
             return this;
         }
 
+        public Builder withFeedbackUid(UUID feedbackUid) {
+            this.feedbackUid = feedbackUid;
+            return this;
+        }
+
         public FeedbackBean build() {
-            if (CompareUtility.notNull(title,userName,technicalUserName,timeStamp,maxUpVotes, minUpVotes,feedbackStatus)) {
+            if (CompareUtility.notNull(feedbackUid,title,userName,technicalUserName,timeStamp,maxUpVotes, minUpVotes,feedbackStatus)) {
                 FeedbackBean bean = new FeedbackBean();
+                bean.feedbackUid = feedbackUid;
                 bean.title = this.title;
                 bean.userName = this.userName;
                 bean.technicalUserName = this.technicalUserName;
@@ -120,7 +127,7 @@ public class FeedbackBean implements Serializable{
         return upVotes;
     }
 
-    public String getUpVotesAsText() {
+    public String getVotesAsText() {
         return upVotes<=0?String.valueOf(upVotes):"+"+upVotes;
     }
 
@@ -138,5 +145,18 @@ public class FeedbackBean implements Serializable{
 
     public int getMinUpVotes() {
         return minUpVotes;
+    }
+
+    public UUID getFeedbackUid() {
+        return feedbackUid;
+    }
+
+    public String downVote(){
+        upVotes--;
+        return getVotesAsText();
+    }
+    public String upVote(){
+        upVotes++;
+        return getVotesAsText();
     }
 }

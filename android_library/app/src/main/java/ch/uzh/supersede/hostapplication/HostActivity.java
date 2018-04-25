@@ -8,9 +8,9 @@ import android.view.View;
 import android.widget.LinearLayout;
 
 import ch.uzh.supersede.feedbacklibrary.activities.AbstractBaseActivity;
-import ch.uzh.supersede.feedbacklibrary.entrypoint.FeedbackConnector;
+import ch.uzh.supersede.feedbacklibrary.entrypoint.*;
 
-public class HostActivity extends AbstractBaseActivity {
+public class HostActivity extends AbstractBaseActivity implements IFeedbackBehavior{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
