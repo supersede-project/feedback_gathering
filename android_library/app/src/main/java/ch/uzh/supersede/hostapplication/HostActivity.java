@@ -10,7 +10,7 @@ import android.widget.LinearLayout;
 import ch.uzh.supersede.feedbacklibrary.activities.AbstractBaseActivity;
 import ch.uzh.supersede.feedbacklibrary.entrypoint.*;
 
-public class HostActivity extends AbstractBaseActivity implements IFeedbackBehavior{
+public class HostActivity extends AbstractBaseActivity implements IFeedbackBehavior, IFeedbackDeveloper, IFeedbackStyle, IFeedbackSettings{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
