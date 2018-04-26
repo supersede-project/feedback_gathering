@@ -25,26 +25,29 @@
                 android:weightSum="9">
 
                 <Button
+                    android:id="@+id/details_button_images"
                     android:layout_width="fill_parent"
                     android:layout_height="0dp"
-                    android:layout_margin="5dp"
                     android:layout_weight="3"
-                    android:text="Images" />
+                    android:onClick="onButtonClicked"
+                    android:text="@string/details_images" />
 
                 <Button
+                    android:id="@+id/details_button_audio"
                     android:layout_width="fill_parent"
                     android:layout_height="0dp"
-                    android:layout_margin="5dp"
                     android:layout_weight="3"
                     android:enabled="false"
-                    android:text="Audio" />
+                    android:onClick="onButtonClicked"
+                    android:text="@string/details_audio" />
 
                 <Button
+                    android:id="@+id/details_button_labels"
                     android:layout_width="fill_parent"
                     android:layout_height="0dp"
-                    android:layout_margin="5dp"
                     android:layout_weight="3"
-                    android:text="Labels" />
+                    android:onClick="onButtonClicked"
+                    android:text="@string/details_labels" />
             </LinearLayout>
 
             <LinearLayout
@@ -67,27 +70,31 @@
                         android:layout_weight="2" />
 
                     <Button
+                        android:id="@+id/details_button_down"
                         android:layout_width="0dp"
                         android:layout_height="fill_parent"
                         android:layout_margin="5dp"
                         android:layout_weight="2"
                         android:gravity="center"
-                        android:text="@string/minus" />
+                        android:onClick="onButtonClicked"
+                        android:text="@string/details_minus" />
 
                     <TextView
                         android:id="@+id/details_text_votes"
                         android:layout_width="0dp"
                         android:layout_height="fill_parent"
                         android:layout_weight="3"
-                        android:gravity="center"/>
+                        android:gravity="center" />
 
                     <Button
+                        android:id="@+id/details_button_up"
                         android:layout_width="0dp"
                         android:layout_height="fill_parent"
                         android:layout_margin="5dp"
                         android:layout_weight="2"
                         android:gravity="center"
-                        android:text="@string/plus" />
+                        android:onClick="onButtonClicked"
+                        android:text="@string/details_plus" />
                 </LinearLayout>
 
                 <Space
@@ -102,16 +109,26 @@
                     android:layout_margin="5dp"
                     android:layout_weight="1"
                     android:background="@color/cyanDark"
-                    android:padding="5dp"/>
+                    android:padding="5dp" />
+
+                <TextView
+                    android:id="@+id/details_text_status"
+                    android:layout_width="fill_parent"
+                    android:layout_height="0dp"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:background="@color/cyanDark"
+                    android:padding="5dp" />
 
                 <TextView
                     android:id="@+id/details_text_title"
                     android:layout_width="fill_parent"
                     android:layout_height="0dp"
                     android:layout_margin="5dp"
-                    android:layout_weight="2"
+                    android:layout_weight="1"
                     android:background="@color/cyanDark"
-                    android:padding="5dp"/>
+                    android:padding="5dp" />
+
             </LinearLayout>
         </LinearLayout>
 
@@ -129,7 +146,7 @@
                 android:layout_margin="5dp"
                 android:layout_weight="9"
                 android:background="@color/cyanDark"
-                android:padding="5dp"/>
+                android:padding="5dp" />
         </LinearLayout>
 
         <LinearLayout
@@ -168,18 +185,22 @@
             android:weightSum="8">
 
             <Button
+                android:id="@+id/details_button_subscribe"
                 android:layout_width="0dp"
                 android:layout_height="fill_parent"
                 android:layout_margin="5dp"
                 android:layout_weight="4"
-                android:text="Subscribe" />
+                android:onClick="onButtonClicked"
+                android:text="@string/details_subscribe" />
 
             <Button
+                android:id="@+id/details_button_response"
                 android:layout_width="0dp"
                 android:layout_height="fill_parent"
                 android:layout_margin="5dp"
                 android:layout_weight="4"
-                android:text="Add Response" />
+                android:onClick="onButtonClicked"
+                android:text="@string/details_response" />
         </LinearLayout>
     </LinearLayout>
 

@@ -11,6 +11,7 @@ import ch.uzh.supersede.feedbacklibrary.stubs.GeneratorStub.BagOfLabels;
 import ch.uzh.supersede.feedbacklibrary.utils.*;
 import ch.uzh.supersede.feedbacklibrary.utils.Enums.FEEDBACK_STATUS;
 
+import static ch.uzh.supersede.feedbacklibrary.database.FeedbackDatabase.SAVE_MODE.*;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.TECHNICAL_USER_NAME;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.USER_NAME;
 import static ch.uzh.supersede.feedbacklibrary.utils.Enums.FEEDBACK_STATUS.*;
@@ -27,7 +28,7 @@ public class RepositoryStub {
         }
         return feedbackBeans;
     }
-    public static List<FeedbackResponseBean> getFeedbackResponses(Context context, int count, long feedbackCreationDate, float developerPercent, float ownerPercent, FeedbackBean feedbackBean) {
+    private static List<FeedbackResponseBean> getFeedbackResponses(Context context, int count, long feedbackCreationDate, float developerPercent, float ownerPercent, FeedbackBean feedbackBean) {
         ArrayList<FeedbackResponseBean> feedbackResponseBeans = new ArrayList<>();
         for (int f = 0; f < count; f++) {
             feedbackResponseBeans.add(getFeedbackResponse(context,feedbackCreationDate,developerPercent,ownerPercent,feedbackBean));
@@ -42,10 +43,12 @@ public class RepositoryStub {
         String userName = feedbackBean.getUserName();
         String technicalUserName = feedbackBean.getTechnicalUserName();
         String[] labels = BagOfLabels.pickRandom(5);
+        int upVotes = feedbackBean.getUpVotes();
         long timeStamp = generateTimestamp();
-        FEEDBACK_STATUS status = generateFeedbackStatus();
+        FEEDBACK_STATUS status = feedbackBean.getFeedbackStatus();
         List<FeedbackResponseBean> feedbackResponses = getFeedbackResponses(context, NumberUtility.randomInt(0, 10), timeStamp, 0.1f, 0.1f, feedbackBean);
         return new FeedbackDetailsBean.Builder()
+                .withFeedbackUid(feedbackBean.getFeedbackUid())
                 .withFeedbackBean(feedbackBean)
                 .withTitle(title)
                 .withDescription(description)
@@ -54,6 +57,7 @@ public class RepositoryStub {
                 .withLabels(labels)
                 .withTimestamp(timeStamp)
                 .withStatus(status)
+                .withUpVotes(upVotes)
                 .withResponses(feedbackResponses)
                 .build();
     }
@@ -68,6 +72,7 @@ public class RepositoryStub {
         String technicalUserName = generateTechnicalUserName(context, false);
         long timeStamp = DateUtility.getPastDateAfter(feedbackCreationDate);
         return new FeedbackResponseBean.Builder()
+                .withFeedbackUid(feedbackBean.getFeedbackUid())
                 .withContent(content)
                 .withUserName(userName)
                 .withTechnicalUserName(technicalUserName)
@@ -78,6 +83,7 @@ public class RepositoryStub {
     }
 
     private static FeedbackBean getFeedback(Context context, int minUpVotes,int maxUpVotes, float ownFeedbackPercent) {
+        UUID feedbackUid = UUID.randomUUID();
         int upperBound = NumberUtility.divide(1,ownFeedbackPercent);
         boolean ownFeedback = ACTIVE.check(context)&&NumberUtility.randomInt(0,upperBound>0?upperBound-1:upperBound)==0;
         FEEDBACK_STATUS feedbackStatus = generateFeedbackStatus();
@@ -88,6 +94,7 @@ public class RepositoryStub {
         int upVotes = generateUpVotes(minUpVotes,maxUpVotes,feedbackStatus);
         int responses = generateResponses();
         return new FeedbackBean.Builder()
+                .withFeedbackUid(feedbackUid)
                 .withTitle(title)
                 .withUserName(userName)
                 .withTechnicalUserName(technicalUserName)
@@ -157,5 +164,25 @@ public class RepositoryStub {
     //Return value is something like Jake --> Jake#12345678 (random 8 digits)
     public static String getUniqueName(String name) {
         return name.concat("#").concat(String.valueOf(NumberUtility.multiply(99999999, Math.random())));
+    }
+
+    public static void sendUpVote(Context context, FeedbackBean bean) {
+        //TheoreticalCallToRepo
+        FeedbackDatabase.getInstance(context).writeFeedback(bean, UP_VOTED);
+    }
+
+    public static void sendDownVote(Context context, FeedbackBean bean) {
+        //TheoreticalCallToRepo
+        FeedbackDatabase.getInstance(context).writeFeedback(bean, DOWN_VOTED);
+    }
+
+    public static void sendFeedbackResponse(Context context, FeedbackBean bean, String response) {
+        //TheoreticalCallToRepo
+        FeedbackDatabase.getInstance(context).writeFeedback(bean, RESPONDED);
+    }
+
+    public static void sendSubscriptionChange(Context context, FeedbackBean bean, boolean subscribed) {
+        //TheoreticalCallToRepo
+        FeedbackDatabase.getInstance(context).writeFeedback(bean, subscribed ? SUBSCRIBED : UN_SUBSCRIBED);
     }
 }

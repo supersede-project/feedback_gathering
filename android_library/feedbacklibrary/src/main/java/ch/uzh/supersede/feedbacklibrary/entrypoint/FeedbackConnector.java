@@ -2,10 +2,10 @@ package ch.uzh.supersede.feedbacklibrary.entrypoint;
 
 
 import android.app.Activity;
-import android.content.Intent;
+import android.content.*;
+import android.content.pm.ApplicationInfo;
 import android.support.annotation.NonNull;
-import android.view.MotionEvent;
-import android.view.View;
+import android.view.*;
 import android.view.View.OnTouchListener;
 
 import java.util.HashMap;
@@ -14,7 +14,7 @@ import ch.uzh.supersede.feedbacklibrary.R;
 import ch.uzh.supersede.feedbacklibrary.activities.FeedbackHubActivity;
 import ch.uzh.supersede.feedbacklibrary.utils.Utils;
 
-import static android.provider.MediaStore.Video.VideoColumns.LANGUAGE;
+import static android.content.Context.MODE_PRIVATE;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.*;
 import static ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility.USER_LEVEL.ACTIVE;
 
@@ -38,6 +38,7 @@ public class FeedbackConnector {
             onTouchConnector(activity, view, null);
         }
     }
+
 
     protected static void onTouchConnector(Activity activity, View view, MotionEvent event) {
         if (event == null) { //On Listener attached
@@ -75,6 +76,7 @@ public class FeedbackConnector {
      */
     public static void startFeedbackHubWithScreenshotCapture(@NonNull final String baseURL, @NonNull final Activity activity, final long applicationId, @NonNull final String language) {
         Intent intent = new Intent(activity, FeedbackHubActivity.class);
+        getActivityConfiguration(activity, intent);
         if (ACTIVE.check(activity)) {
             Utils.wipeImages(activity.getApplicationContext());
             Utils.storeScreenshotToDatabase(activity);
@@ -83,8 +85,33 @@ public class FeedbackConnector {
         }
         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
         intent.putExtra(EXTRA_KEY_APPLICATION_ID, applicationId);
-        intent.putExtra(LANGUAGE, language);
+        intent.putExtra(EXTRA_KEY_LANGUAGE, language);
         activity.startActivity(intent);
         activity.overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+    }
+
+        //TODO> Implement marco
+    private static void getActivityConfiguration(Activity activity, Intent intent) {
+        String hostApplicationName = getApplicationName(activity);
+        activity.getSharedPreferences(SHARED_PREFERENCES_ID, MODE_PRIVATE).edit().putString(EXTRA_KEY_HOST_APPLICATION_NAME, hostApplicationName).apply();
+        intent.putExtra(EXTRA_KEY_HOST_APPLICATION_NAME, hostApplicationName);
+        if (activity instanceof IFeedbackBehavior){
+
+        }
+        if (activity instanceof  IFeedbackStyle){
+
+        }
+        if (activity instanceof  IFeedbackSettings){
+
+        }
+        if (activity instanceof  IFeedbackDeveloper){
+
+        }
+    }
+
+    public static String getApplicationName(Context context) {
+        ApplicationInfo applicationInfo = context.getApplicationInfo();
+        int stringId = applicationInfo.labelRes;
+        return stringId == 0 ? applicationInfo.nonLocalizedLabel.toString() : context.getString(stringId);
     }
 }

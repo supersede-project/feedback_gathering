@@ -11,4 +11,16 @@ public class CollectionUtility {
         }
         return null;
     }
+
+    public static boolean oneOf(Object o, Object... objects){
+        if (o == null || objects==null || objects.length == 0){
+            return false;
+        }
+        for (Object o_ : objects){
+            if (o.equals(o_)){
+                return true;
+            }
+        }
+        return false;
+    }
 }
