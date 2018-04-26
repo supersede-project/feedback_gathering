@@ -6,10 +6,13 @@ public class NumberUtility {
     }
 
     public static int divide(int a, int b) {
-        return (int) ((float) a / (float) b);
+        return divide(a, (float) b);
     }
 
     public static int divide(int a, float b) {
+        if (b == 0) {
+            throw new ArithmeticException("Division by zero.");
+        }
         return (int) ((float) a / b);
     }
 
@@ -21,10 +24,9 @@ public class NumberUtility {
         return (int) (a * b);
     }
 
-
     public static int randomPosition(Object[] array) {
         if (array == null) {
-            return 0;
+            throw new ArrayIndexOutOfBoundsException("Array is null");
         }
         return randomInt(0, array.length - 1);
     }

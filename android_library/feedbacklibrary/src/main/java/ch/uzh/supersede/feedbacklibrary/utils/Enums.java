@@ -66,4 +66,10 @@ public class Enums {
     public enum FETCH_MODE{
         OWN, VOTED, UP_VOTED, DOWN_VOTED, SUBSCRIBED, RESPONDED, ALL
     }
+
+    public enum SETTINGS_VIEW {
+        MINE,
+        OTHERS,
+        SUBSCRIPTIONS
+    }
 }
