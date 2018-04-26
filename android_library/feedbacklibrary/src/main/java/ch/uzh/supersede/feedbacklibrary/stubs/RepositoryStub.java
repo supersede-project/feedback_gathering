@@ -171,4 +171,5 @@ public class RepositoryStub {
         //TheoreticalCallToRepo
         FeedbackDatabase.getInstance(context).writeFeedback(bean, subscribed ? SUBSCRIBED : UN_SUBSCRIBED);
     }
+
 }

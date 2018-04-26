@@ -15,6 +15,7 @@ public class LocalFeedbackBean {
     private int voted;
     private int subscribed;
     private int votes;
+    private int responses;
     private String feedbackStatusLabel;
     private int responded;
     private UUID feedbackUid;
@@ -24,15 +25,16 @@ public class LocalFeedbackBean {
         this.feedbackUid = UUID.fromString(cursor.getString(0));
         this.title = cursor.getString(1);
         this.votes = cursor.getInt(2);
-        this.feedbackStatusLabel = cursor.getString(3);
-        this.owner = cursor.getInt(4);
-        this.creationDate = cursor.getLong(5);
-        this.voted = cursor.getInt(6);
-        this.votedDate = cursor.getLong(7);
-        this.subscribed = cursor.getInt(8);
-        this.subscribedDate = cursor.getLong(9);
-        this.responded = cursor.getInt(10);
-        this.respondedDate = cursor.getLong(11);
+        this.responses = cursor.getInt(3);
+        this.feedbackStatusLabel = cursor.getString(4);
+        this.owner = cursor.getInt(5);
+        this.creationDate = cursor.getLong(6);
+        this.voted = cursor.getInt(7);
+        this.votedDate = cursor.getLong(8);
+        this.subscribed = cursor.getInt(9);
+        this.subscribedDate = cursor.getLong(10);
+        this.responded = cursor.getInt(11);
+        this.respondedDate = cursor.getLong(12);
     }
 
     public long getCreationDate() {
@@ -61,6 +63,10 @@ public class LocalFeedbackBean {
 
     public int getVotes() {
         return votes;
+    }
+
+    public int getResponses() {
+        return responses;
     }
 
     public UUID getFeedbackUid() {

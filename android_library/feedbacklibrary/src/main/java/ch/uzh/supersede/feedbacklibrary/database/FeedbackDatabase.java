@@ -109,6 +109,7 @@ public class FeedbackDatabase extends AbstractFeedbackDatabase {
                 FeedbackTableEntry.COLUMN_NAME_FEEDBACK_UID,
                 FeedbackTableEntry.COLUMN_NAME_TITLE,
                 FeedbackTableEntry.COLUMN_NAME_VOTES,
+                FeedbackTableEntry.COLUMN_NAME_RESPONSES,
                 FeedbackTableEntry.COLUMN_NAME_STATUS,
                 FeedbackTableEntry.COLUMN_NAME_OWNER,
                 FeedbackTableEntry.COLUMN_NAME_CREATION_TIMESTAMP,
@@ -201,6 +202,7 @@ public class FeedbackDatabase extends AbstractFeedbackDatabase {
         values.put(FeedbackTableEntry.COLUMN_NAME_FEEDBACK_UID, feedbackBean.getFeedbackUid().toString());
         values.put(FeedbackTableEntry.COLUMN_NAME_TITLE, feedbackBean.getTitle());
         values.put(FeedbackTableEntry.COLUMN_NAME_VOTES, feedbackBean.getUpVotes());
+        values.put(FeedbackTableEntry.COLUMN_NAME_RESPONSES, feedbackBean.getResponses());
         values.put(FeedbackTableEntry.COLUMN_NAME_STATUS, feedbackBean.getFeedbackStatus().getLabel());
         values.put(FeedbackTableEntry.COLUMN_NAME_OWNER, owner);
         values.put(FeedbackTableEntry.COLUMN_NAME_CREATION_TIMESTAMP, feedbackBean.getTimeStamp());

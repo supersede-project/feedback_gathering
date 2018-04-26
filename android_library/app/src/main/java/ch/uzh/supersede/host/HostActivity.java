@@ -1,4 +1,4 @@
-package ch.uzh.supersede.hostapplication;
+package ch.uzh.supersede.host;
 
 import android.graphics.Color;
 import android.os.Bundle;
