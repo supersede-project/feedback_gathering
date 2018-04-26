@@ -49,19 +49,19 @@ public class MonitorConfigurationController extends BaseController {
     @PreAuthorize("@securityService.hasAdminPermission()")
     @ResponseStatus(HttpStatus.CREATED)
     @RequestMapping(method = RequestMethod.POST, value = "")
-    public MonitorConfiguration createMonitorConfiguration(@RequestBody MonitorConfiguration monitorConfiguration) {
+    public MonitorConfiguration createMonitorConfiguration(@RequestBody MonitorConfiguration monitorConfiguration) throws Exception {
         monitorConfiguration.setMonitorTool(getMonitoringTool());
-        try {
+        //try {
 	        MonitorManagerProxy<?, ?> proxy = new MonitorManagerProxy<>();
 			MonitorSpecificConfiguration configurationObj = generateMonitorConf(monitorConfiguration, getMonitoringTool());
 			MonitorSpecificConfiguration createConfiguration = proxy.createMonitorConfiguration(configurationObj);
 			monitorConfiguration.setMonitorManagerId(createConfiguration.getId());
 			MonitorConfiguration newMonitorConfiguration = monitorConfigurationRepository.save(monitorConfiguration);
 			return newMonitorConfiguration;
-        } catch(Exception e) {
+        /*} catch(Exception e) {
         	e.printStackTrace();
         	return null;
-        }        		
+        }      */  		
     }
 
     @PreAuthorize("@securityService.hasAdminPermission()")
