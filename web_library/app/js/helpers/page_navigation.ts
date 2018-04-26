@@ -71,10 +71,11 @@ export class PageNavigation {
                     screenshotMechanism.screenshotView !== undefined && screenshotMechanism.screenshotView.screenshotCanvas !== undefined && screenshotMechanism.screenshotView.screenshotCanvas !== null
                     && screenshotMechanism.getParameterValue('page') != "review") {
 
-                    // canvas that is later on used to create the binary that get's sent
-                    //screenshotMechanism.screenshotView.createScaledDownCanvas();
-
-                    var img = jQuery('<img src="' + screenshotMechanism.screenshotView.screenshotCanvas.toDataURL() + '" />');
+                    var img = jQuery('<img src="' + screenshotMechanism.screenshotView.screenshotCanvas.toDataURL({
+                        format: "image/jpeg",
+                        quality: 1.0,
+                        multiplier: 2.0
+                    }) + '" />');
                     img.css('width', '40%');
                     img.addClass('base');
                     var screenshotReviewElement = nextPage.find('.screenshot-review');
@@ -164,7 +165,7 @@ export class PageNavigation {
         }
 
         // TODO define parameters in the Orchestrator to control the feature, including tenant and number of similar feedback shown
-        let feedbackClusteringEnabled = true;
+        let feedbackClusteringEnabled = false;
 
         if(validFeedback && feedbackClusteringEnabled) {
             this.showClusteredFeedback();

@@ -195,7 +195,11 @@ export class ScreenshotView implements MechanismView {
                         let windowRatio = myThis.elementToCapture.width() / myThis.elementToCapture.height();
 
                         // save the canvas content as imageURL
-                        let data = canvas.toDataURL("image/png");
+                        let data = canvas.toDataURL({
+                            format: "image/jpeg",
+                            quality: 1.0,
+                            multiplier: 2.0
+                        });
                         myThis.context = canvas.getContext("2d");
                         myThis.canvasOriginalWidth = canvas.width;
                         myThis.canvasOriginalHeight = canvas.height;
@@ -203,8 +207,11 @@ export class ScreenshotView implements MechanismView {
                         myThis.canvasWidth = myThis.screenshotPreviewElement.width() - 2;
                         myThis.canvasHeight = (myThis.screenshotPreviewElement.width() / windowRatio) - 2;
 
-                        jQuery(canvas).prop('width', myThis.canvasWidth);
-                        jQuery(canvas).prop('height', myThis.canvasHeight);
+                        jQuery(canvas).attr('width', myThis.canvasWidth);
+                        jQuery(canvas).attr('height', myThis.canvasHeight);
+                        jQuery(canvas).css('width', myThis.canvasWidth);
+                        jQuery(canvas).css('height', myThis.canvasHeight);
+
 
                         let img = new Image();
                         myThis.canvasState = img;
@@ -731,7 +738,15 @@ export class ScreenshotView implements MechanismView {
      */
     getScreenshotAsBinary() {
         if(this.screenshotCanvas) {
-            let dataUrl = this.screenshotCanvas.toDataURL("image/png");
+            this.context.webkitImageSmoothingEnabled = false;
+            this.context.mozImageSmoothingEnabled = false;
+            this.context.imageSmoothingEnabled = false;
+
+            let dataUrl = this.screenshotCanvas.toDataURL({
+                format: "image/jpeg",
+                quality: 1.0,
+                multiplier: 2.0
+            });
             return DataHelper.dataURItoBlob(dataUrl);
         }
         return null;
