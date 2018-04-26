@@ -12,6 +12,16 @@ export class TextView implements MechanismView {
     }
 
     initEvents() {
+        Math.trunc = Math.trunc || function(x) {
+            if (isNaN(x)) {
+                return NaN;
+            }
+            if (x > 0) {
+                return Math.floor(x);
+            }
+            return Math.ceil(x);
+        };
+
         var container = jQuery('#' + this.dialogId);
         var sectionSelector = "textMechanism" + this.textMechanism.id;
         var textarea = container.find('section#' + sectionSelector + ' textarea.text-type-text');
