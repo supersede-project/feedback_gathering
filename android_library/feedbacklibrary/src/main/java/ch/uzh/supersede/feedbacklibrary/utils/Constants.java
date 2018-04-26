@@ -13,6 +13,7 @@ public class Constants {
     public static final String FEEDBACK_CONTRIBUTOR = "feedbackContributor";
     public static final String SHARED_PREFERENCES = "feedbackSharedPreferences";
     public static final String USER_NAME = "userName";
+    public static final String IS_DEVELOPER = "isDeveloper";
     public static final String USER_NAME_ANONYMOUS = "anonymous";
 
     public static final String SPACE = " ";
@@ -41,6 +42,13 @@ public class Constants {
     public static final String EXTRA_KEY_CACHED_SCREENSHOT = "cachedScreenshot";
 
     public static final String SHARED_PREFERENCES_ID = "ch.uzh.supersede.feedbacklibrary.feedback";
+    public static final String SHARED_PREFERENCES_IS_DEVELOPER = "isDeveloper";
+    public static final String SHARED_PREFERENCES_HOST_APPLICATION_NAME = "hostApplicationName";
+    public static final String SHARED_PREFERENCES_HOST_APPLICATION_ID = "hostApplicationId";
+    public static final String SHARED_PREFERENCES_SETTINGS_USER_NAME_MIN_LENGTH = "settingsUserNameMin";
+    public static final String SHARED_PREFERENCES_SETTINGS_USER_NAME_MAX_LENGTH = "settingsUserNameMax";
+    public static final String SHARED_PREFERENCES_SETTINGS_RESPONSE_MIN_LENGTH = "settingsResponseMin";
+    public static final String SHARED_PREFERENCES_SETTINGS_RESPONSE_MAX_LENGTH = "settingsResponseMax";
 
     public static final int REQUEST_PHOTO = 11;
     public static final int REQUEST_ANNOTATE = 12;
@@ -49,6 +57,18 @@ public class Constants {
     public static final String EXTRA_KEY_ALL_STICKER_ANNOTATIONS = "allStickerAnnotations";
     public static final String EXTRA_KEY_HAS_STICKER_ANNOTATIONS = "hasStickerAnnotations";
 
+    public static class SettingsConstants {
+        private SettingsConstants() {
+        }
+
+        //SettingsConstants
+
+        public static final int SETTINGS_USER_NAME_MIN_LENGTH = 4;
+        public static final int SETTINGS_USER_NAME_MAX_LENGTH = 16;
+        public static final int SETTINGS_RESPONSE_MIN_LENGTH = 20;
+        public static final int SETTINGS_RESPONSE_MAX_LENGTH = 200;
+    }
+    
     public static class UtilsConstants {
         private UtilsConstants() {
         }

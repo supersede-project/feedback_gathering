@@ -91,8 +91,10 @@
     <string name="hub_warning_username_too_short">User-Name too short!</string>
     <string name="hub_access_3">Accessing Level 3</string>
     <string name="hub_access_3_description">Level 3 grants you access to more advanced Feedback Mechanisms and needs Audio-Recording-Permissions!</string>
-    <string name="hub_username_restored">User-Name restored: "%1$s".</string>
-    <string name="hub_username_registered">User-Name "%1$s" registered.</string>
+    <string name="hub_username_restored">User restored: "%1$s".</string>
+    <string name="hub_developer_restored">Developer restored: "%1$s".</string>
+    <string name="hub_username_registered">User "%1$s" registered.</string>
+    <string name="hub_developer_registered">Developer "%1$s" registered.</string>
     <string name="hub_warning_permission_not_granted">Permissions for next Level not granted!</string>
 
     <!--List-->
@@ -107,6 +109,8 @@
     <!--Details-->
     <string name="details_minus">-</string>
     <string name="details_plus">+</string>
+    <string name="details_send_response">Send Response</string>
+    <string name="details_cancel">Cancel</string>
     <string name="details_response">Add Response</string>
     <string name="details_subscribe">Subscribe</string>
     <string name="details_unsubscribe">Unsubscribe</string>
@@ -116,6 +120,7 @@
     <string name="details_user">User: %1$s</string>
     <string name="details_status">Status: %1$s</string>
     <string name="details_title">Title: %1$s</string>
+    <string name="details_response_too_short">Response too short.</string>
     <!--Feedback-->
     <!--Settings-->
     <string name="settings_button_mine">Mine</string>

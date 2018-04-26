@@ -94,7 +94,8 @@ public class FeedbackConnector {
     private static void getActivityConfiguration(Activity activity, Intent intent) {
         String hostApplicationName = getApplicationName(activity);
         String hostApplicationId = getApplicationId(activity);
-        activity.getSharedPreferences(SHARED_PREFERENCES_ID, MODE_PRIVATE).edit().putString(EXTRA_KEY_HOST_APPLICATION_NAME, hostApplicationName).apply();
+        activity.getSharedPreferences(SHARED_PREFERENCES_ID, MODE_PRIVATE).edit().putString(SHARED_PREFERENCES_HOST_APPLICATION_NAME, hostApplicationName).apply();
+        activity.getSharedPreferences(SHARED_PREFERENCES_ID, MODE_PRIVATE).edit().putString(SHARED_PREFERENCES_HOST_APPLICATION_ID, hostApplicationId).apply();
         intent.putExtra(EXTRA_KEY_HOST_APPLICATION_NAME, hostApplicationName);
         if (activity instanceof IFeedbackBehavior){
 
@@ -103,10 +104,13 @@ public class FeedbackConnector {
 
         }
         if (activity instanceof  IFeedbackSettings){
-
+            activity.getSharedPreferences(SHARED_PREFERENCES_ID, MODE_PRIVATE).edit().putInt(SHARED_PREFERENCES_SETTINGS_USER_NAME_MIN_LENGTH, ((IFeedbackSettings)activity).getConfiguredMinUserNameLength()).apply();
+            activity.getSharedPreferences(SHARED_PREFERENCES_ID, MODE_PRIVATE).edit().putInt(SHARED_PREFERENCES_SETTINGS_USER_NAME_MAX_LENGTH, ((IFeedbackSettings)activity).getConfiguredMaxUserNameLength()).apply();
+            activity.getSharedPreferences(SHARED_PREFERENCES_ID, MODE_PRIVATE).edit().putInt(SHARED_PREFERENCES_SETTINGS_RESPONSE_MIN_LENGTH, ((IFeedbackSettings)activity).getConfiguredMinResponseLength()).apply();
+            activity.getSharedPreferences(SHARED_PREFERENCES_ID, MODE_PRIVATE).edit().putInt(SHARED_PREFERENCES_SETTINGS_RESPONSE_MAX_LENGTH, ((IFeedbackSettings)activity).getConfiguredMaxResponseLength()).apply();
         }
         if (activity instanceof  IFeedbackDeveloper){
-
+            activity.getSharedPreferences(SHARED_PREFERENCES_ID, MODE_PRIVATE).edit().putBoolean(SHARED_PREFERENCES_IS_DEVELOPER, ((IFeedbackDeveloper)activity).isDeveloper()).apply();
         }
     }
 

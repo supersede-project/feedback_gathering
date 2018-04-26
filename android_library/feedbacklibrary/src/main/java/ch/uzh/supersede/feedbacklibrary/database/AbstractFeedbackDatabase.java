@@ -9,8 +9,7 @@ import android.provider.BaseColumns;
 import java.io.File;
 
 import static android.content.Context.MODE_PRIVATE;
-import static ch.uzh.supersede.feedbacklibrary.utils.Constants.EXTRA_KEY_HOST_APPLICATION_NAME;
-import static ch.uzh.supersede.feedbacklibrary.utils.Constants.SHARED_PREFERENCES_ID;
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.*;
 
 abstract class AbstractFeedbackDatabase {
     //Private
@@ -199,7 +198,7 @@ abstract class AbstractFeedbackDatabase {
         private static final String FILE_DIR = "Feedback";
 
         FeedbackDbHelper(Context context) {
-            super(context, Environment.getExternalStorageDirectory() + File.separator + FILE_DIR + File.separator + context.getSharedPreferences(SHARED_PREFERENCES_ID, MODE_PRIVATE).getString(EXTRA_KEY_HOST_APPLICATION_NAME,"")+DATABASE_NAME+DATABASE_ENDING, null, DATABASE_VERSION);
+            super(context, Environment.getExternalStorageDirectory() + File.separator + FILE_DIR + File.separator + context.getSharedPreferences(SHARED_PREFERENCES_ID, MODE_PRIVATE).getString(SHARED_PREFERENCES_HOST_APPLICATION_NAME,"")+DATABASE_NAME+DATABASE_ENDING, null, DATABASE_VERSION);
         }
 
         public void onCreate(SQLiteDatabase db) {
