@@ -16,11 +16,11 @@ public class HostActivity extends AbstractBaseActivity implements IFeedbackBehav
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_host);
-        LinearLayout lLayout = getView(R.id.root_layout,LinearLayout.class);
+        LinearLayout linearLayout = getView(R.id.root_layout,LinearLayout.class);
         CoordinatorLayout cLayout = getView(R.id.coordinator_layout,CoordinatorLayout.class);
         double colorDouble = ((double)Color.BLACK)*Math.random();
         int color = (int)colorDouble;
-        lLayout.setBackgroundColor(color);
+        linearLayout.setBackgroundColor(color);
         cLayout.setBackgroundColor(color);
     }
 
@@ -31,6 +31,26 @@ public class HostActivity extends AbstractBaseActivity implements IFeedbackBehav
 
     @Override
     public boolean isDeveloper() {
-        return true;
+        return false;
+    }
+
+    @Override
+    public int getConfiguredMinUserNameLength() {
+        return 3;
+    }
+
+    @Override
+    public int getConfiguredMaxUserNameLength() {
+        return 10;
+    }
+
+    @Override
+    public int getConfiguredMinResponseLength() {
+        return 10;
+    }
+
+    @Override
+    public int getConfiguredMaxResponseLength() {
+        return 30;
     }
 }

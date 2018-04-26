@@ -27,6 +27,8 @@ import ch.uzh.supersede.feedbacklibrary.utils.Utils;
 
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.ActivitiesConstants.*;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.*;
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.SettingsConstants.SETTINGS_USER_NAME_MAX_LENGTH;
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.SettingsConstants.SETTINGS_USER_NAME_MIN_LENGTH;
 import static ch.uzh.supersede.feedbacklibrary.utils.Enums.FETCH_MODE.*;
 import static ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility.USER_LEVEL.*;
 
@@ -41,6 +43,8 @@ public class FeedbackHubActivity extends AbstractBaseActivity {
     private int tapCounter = 0;
     private byte[] cachedScreenshot = null;
     private String hostApplicationName = null;
+    private int minUserNameLength;
+    private int maxUserNameLength;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,16 +63,18 @@ public class FeedbackHubActivity extends AbstractBaseActivity {
         if (ACTIVE.check(this)) {
             userName = FeedbackDatabase.getInstance(this).readString(USER_NAME, null);
         }
+        minUserNameLength = getSharedPreferences(SHARED_PREFERENCES_ID, MODE_PRIVATE).getInt(SHARED_PREFERENCES_SETTINGS_USER_NAME_MIN_LENGTH, SETTINGS_USER_NAME_MIN_LENGTH);
+        maxUserNameLength = getSharedPreferences(SHARED_PREFERENCES_ID, MODE_PRIVATE).getInt(SHARED_PREFERENCES_SETTINGS_USER_NAME_MAX_LENGTH, SETTINGS_USER_NAME_MAX_LENGTH);
         updateUserLevel(false);
     }
 
     private void restoreHostApplicationNameToPreferences() {
         String extraHostApplicationName = getIntent().getStringExtra(EXTRA_KEY_HOST_APPLICATION_NAME);
-        String preferencesHostApplicationName = getSharedPreferences(SHARED_PREFERENCES_ID, MODE_PRIVATE).getString(EXTRA_KEY_HOST_APPLICATION_NAME,null);
+        String preferencesHostApplicationName = getSharedPreferences(SHARED_PREFERENCES_ID, MODE_PRIVATE).getString(SHARED_PREFERENCES_HOST_APPLICATION_NAME,null);
         if (preferencesHostApplicationName == null && extraHostApplicationName != null){
-            getSharedPreferences(SHARED_PREFERENCES_ID, MODE_PRIVATE).edit().putString(EXTRA_KEY_HOST_APPLICATION_NAME, extraHostApplicationName).apply();
+            getSharedPreferences(SHARED_PREFERENCES_ID, MODE_PRIVATE).edit().putString(SHARED_PREFERENCES_HOST_APPLICATION_NAME, extraHostApplicationName).apply();
         }else if (preferencesHostApplicationName == null && hostApplicationName != null){
-            getSharedPreferences(SHARED_PREFERENCES_ID, MODE_PRIVATE).edit().putString(EXTRA_KEY_HOST_APPLICATION_NAME, hostApplicationName).apply();
+            getSharedPreferences(SHARED_PREFERENCES_ID, MODE_PRIVATE).edit().putString(SHARED_PREFERENCES_HOST_APPLICATION_NAME, hostApplicationName).apply();
         }
     }
 
@@ -161,6 +167,7 @@ public class FeedbackHubActivity extends AbstractBaseActivity {
                 if (tapCounter >= 5 && ACTIVE.check(this)){
                     tapCounter = 0;
                     FeedbackDatabase.getInstance(this).writeString(USER_NAME,null);
+                    FeedbackDatabase.getInstance(this).writeBoolean(IS_DEVELOPER,false);
                     List<LocalFeedbackBean> ownFeedbackBeans = FeedbackDatabase.getInstance(this).getFeedbackBeans(OWN);
                     List<LocalFeedbackBean> subscribedFeedbackBeans = FeedbackDatabase.getInstance(this).getFeedbackBeans(SUBSCRIBED);
                     List<LocalFeedbackBean> votedFeedbackBeans = FeedbackDatabase.getInstance(this).getFeedbackBeans(VOTED);
@@ -198,7 +205,11 @@ public class FeedbackHubActivity extends AbstractBaseActivity {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     String inputString = inputEditText[0].getText().toString();
-                    if (inputString.length() < 4){ //TODO: Length as settings
+                    if (inputString.length() < minUserNameLength){
+                        Toast.makeText(getApplicationContext(), R.string.hub_warning_username_too_short,Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    if (inputString.length() > maxUserNameLength){
                         Toast.makeText(getApplicationContext(), R.string.hub_warning_username_too_short,Toast.LENGTH_SHORT).show();
                         return;
                     }
@@ -255,14 +266,16 @@ public class FeedbackHubActivity extends AbstractBaseActivity {
         updateUserLevel(true);
         if (ACTIVE.check(this,true) && preAllocatedStringStorage[0] != null){
             String name = FeedbackDatabase.getInstance(this).readString(USER_NAME,null);
+            boolean isDeveloper = getSharedPreferences(SHARED_PREFERENCES_ID, MODE_PRIVATE).getBoolean(SHARED_PREFERENCES_IS_DEVELOPER, false);
             if (name == null){
-                Toast.makeText(this,getString(R.string.hub_username_registered,preAllocatedStringStorage[0]),Toast.LENGTH_SHORT).show();
+                Toast.makeText(this,getString(isDeveloper?R.string.hub_developer_registered:R.string.hub_username_registered,preAllocatedStringStorage[0]),Toast.LENGTH_SHORT).show();
                 preAllocatedStringStorage[0] = RepositoryStub.registerAndGetUniqueName(preAllocatedStringStorage[0],false);
                 FeedbackDatabase.getInstance(this).writeString(USER_NAME,preAllocatedStringStorage[0]);
+                FeedbackDatabase.getInstance(this).writeBoolean(IS_DEVELOPER, isDeveloper);
                 userName = preAllocatedStringStorage[0];
             }else{
                 userName = name;
-                Toast.makeText(this,getString(R.string.hub_username_restored,name),Toast.LENGTH_SHORT).show();
+                Toast.makeText(this,getString(isDeveloper?R.string.hub_developer_registered:R.string.hub_username_restored,name),Toast.LENGTH_SHORT).show();
             }
             preAllocatedStringStorage[0] = null;
         }
