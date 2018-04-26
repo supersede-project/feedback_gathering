@@ -3,7 +3,7 @@ package ch.uzh.supersede.feedbacklibrary.entrypoint;
 
 import android.app.Activity;
 import android.content.*;
-import android.content.pm.ApplicationInfo;
+import android.content.pm.*;
 import android.support.annotation.NonNull;
 import android.view.*;
 import android.view.View.OnTouchListener;
@@ -90,9 +90,10 @@ public class FeedbackConnector {
         activity.overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
     }
 
-        //TODO> Implement marco
+    //TODO> Implement marco
     private static void getActivityConfiguration(Activity activity, Intent intent) {
         String hostApplicationName = getApplicationName(activity);
+        String hostApplicationId = getApplicationId(activity);
         activity.getSharedPreferences(SHARED_PREFERENCES_ID, MODE_PRIVATE).edit().putString(EXTRA_KEY_HOST_APPLICATION_NAME, hostApplicationName).apply();
         intent.putExtra(EXTRA_KEY_HOST_APPLICATION_NAME, hostApplicationName);
         if (activity instanceof IFeedbackBehavior){
@@ -109,9 +110,13 @@ public class FeedbackConnector {
         }
     }
 
-    public static String getApplicationName(Context context) {
+    private static String getApplicationName(Context context) {
         ApplicationInfo applicationInfo = context.getApplicationInfo();
         int stringId = applicationInfo.labelRes;
         return stringId == 0 ? applicationInfo.nonLocalizedLabel.toString() : context.getString(stringId);
+    }
+
+    private static String getApplicationId(Context context) {
+        return context.getPackageName().concat("."+getApplicationName(context)).toLowerCase();
     }
 }

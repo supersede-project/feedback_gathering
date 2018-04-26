@@ -75,6 +75,7 @@ abstract class AbstractFeedbackDatabase {
         public static final String COLUMN_NAME_FEEDBACK_UID = " FEEDBACK_UID ";
         public static final String COLUMN_NAME_TITLE = " TITLE ";
         public static final String COLUMN_NAME_VOTES = " VOTES ";
+        public static final String COLUMN_NAME_RESPONSES = " RESPONSES ";
         public static final String COLUMN_NAME_STATUS = " STATUS ";
         public static final String COLUMN_NAME_OWNER = " OWNER ";
         public static final String COLUMN_NAME_CREATION_TIMESTAMP = " CREATION_TIMESTAMP ";
@@ -109,6 +110,7 @@ abstract class AbstractFeedbackDatabase {
                         FeedbackTableEntry.COLUMN_NAME_FEEDBACK_UID + TEXT_TYPE + COMMA_SEP +
                         FeedbackTableEntry.COLUMN_NAME_TITLE + TEXT_TYPE + COMMA_SEP +
                         FeedbackTableEntry.COLUMN_NAME_VOTES + NUMBER_TYPE + COMMA_SEP +
+                        FeedbackTableEntry.COLUMN_NAME_RESPONSES + NUMBER_TYPE + COMMA_SEP +
                         FeedbackTableEntry.COLUMN_NAME_STATUS + TEXT_TYPE + COMMA_SEP +
                         FeedbackTableEntry.COLUMN_NAME_OWNER + NUMBER_TYPE + COMMA_SEP +
                         FeedbackTableEntry.COLUMN_NAME_CREATION_TIMESTAMP + NUMBER_TYPE + COMMA_SEP +
@@ -153,6 +155,7 @@ abstract class AbstractFeedbackDatabase {
                         FeedbackTableEntry.COLUMN_NAME_FEEDBACK_UID + COMMA_SEP +
                         FeedbackTableEntry.COLUMN_NAME_TITLE + COMMA_SEP +
                         FeedbackTableEntry.COLUMN_NAME_VOTES + COMMA_SEP +
+                        FeedbackTableEntry.COLUMN_NAME_RESPONSES + COMMA_SEP +
                         FeedbackTableEntry.COLUMN_NAME_STATUS + COMMA_SEP +
                         FeedbackTableEntry.COLUMN_NAME_OWNER + COMMA_SEP +
                         FeedbackTableEntry.COLUMN_NAME_CREATION_TIMESTAMP + COMMA_SEP +
@@ -167,6 +170,7 @@ abstract class AbstractFeedbackDatabase {
                         FeedbackTableEntry.COLUMN_NAME_FEEDBACK_UID + COMMA_SEP +
                         FeedbackTableEntry.COLUMN_NAME_TITLE + COMMA_SEP +
                         FeedbackTableEntry.COLUMN_NAME_VOTES + COMMA_SEP +
+                        FeedbackTableEntry.COLUMN_NAME_RESPONSES + COMMA_SEP +
                         FeedbackTableEntry.COLUMN_NAME_STATUS + COMMA_SEP +
                         FeedbackTableEntry.COLUMN_NAME_OWNER + COMMA_SEP +
                         FeedbackTableEntry.COLUMN_NAME_CREATION_TIMESTAMP + COMMA_SEP +
