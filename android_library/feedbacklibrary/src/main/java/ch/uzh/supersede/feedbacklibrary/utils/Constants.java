@@ -14,7 +14,6 @@ public class Constants {
     public static final String SHARED_PREFERENCES = "feedbackSharedPreferences";
     public static final String USER_NAME = "userName";
     public static final String USER_NAME_ANONYMOUS = "anonymous";
-    public static final String TECHNICAL_USER_NAME = "technicalUserName";
 
     public static final String SPACE = " ";
     public static final String PATH_DELIMITER = "/";

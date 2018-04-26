@@ -9,7 +9,6 @@ public class FeedbackResponseBean implements Serializable{
 
     private UUID feedbackUid;
     private String userName;
-    private String technicalUserName;
     private String content;
     private long timeStamp;
     private boolean isFeedbackOwner;
@@ -21,7 +20,6 @@ public class FeedbackResponseBean implements Serializable{
     public static class Builder {
         private UUID feedbackUid;
         private String userName;
-        private String technicalUserName;
         private String content;
         private long timeStamp;
         private boolean isFeedbackOwner;
@@ -38,11 +36,6 @@ public class FeedbackResponseBean implements Serializable{
 
         public Builder withUserName(String userName) {
             this.userName = userName;
-            return this;
-        }
-
-        public Builder withTechnicalUserName(String technicalUserName) {
-            this.technicalUserName = technicalUserName;
             return this;
         }
 
@@ -65,12 +58,11 @@ public class FeedbackResponseBean implements Serializable{
         }
 
         public FeedbackResponseBean build() {
-            if (CompareUtility.notNull(feedbackUid,content,userName,technicalUserName,timeStamp)) {
+            if (CompareUtility.notNull(feedbackUid,content,userName,timeStamp)) {
                 FeedbackResponseBean bean = new FeedbackResponseBean();
                 bean.feedbackUid = feedbackUid;
                 bean.content = this.content;
                 bean.userName = this.userName;
-                bean.technicalUserName = this.technicalUserName;
                 bean.timeStamp = this.timeStamp;
                 bean.isFeedbackOwner = this.isFeedbackOwner;
                 bean.isDeveloper = this.isDeveloper;
@@ -86,10 +78,6 @@ public class FeedbackResponseBean implements Serializable{
 
     public String getUserName() {
         return userName;
-    }
-
-    public String getTechnicalUserName() {
-        return technicalUserName;
     }
 
     public long getTimeStamp() {

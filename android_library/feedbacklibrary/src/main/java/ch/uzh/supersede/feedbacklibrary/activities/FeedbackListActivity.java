@@ -14,12 +14,12 @@ import java.util.*;
 
 import ch.uzh.supersede.feedbacklibrary.R;
 import ch.uzh.supersede.feedbacklibrary.components.buttons.FeedbackListItem;
-import ch.uzh.supersede.feedbacklibrary.interfaces.ISortableFeedback.FEEDBACK_SORTING;
 import ch.uzh.supersede.feedbacklibrary.stubs.RepositoryStub;
 import ch.uzh.supersede.feedbacklibrary.utils.*;
 import ch.uzh.supersede.feedbacklibrary.beans.FeedbackBean;
 
-import static ch.uzh.supersede.feedbacklibrary.interfaces.ISortableFeedback.FEEDBACK_SORTING.MINE;
+import static ch.uzh.supersede.feedbacklibrary.utils.Enums.FEEDBACK_SORTING.*;
+
 
 @SuppressWarnings("squid:MaximumInheritanceDepth")
 public class FeedbackListActivity extends AbstractBaseActivity {
@@ -33,7 +33,7 @@ public class FeedbackListActivity extends AbstractBaseActivity {
     private String searchTerm;
     private ArrayList<FeedbackListItem> activeFeedbackList = new ArrayList<>();
     private ArrayList<FeedbackListItem> allFeedbackList = new ArrayList<>();
-    private FEEDBACK_SORTING sorting = MINE;
+    private Enums.FEEDBACK_SORTING sorting = MINE;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -148,17 +148,17 @@ public class FeedbackListActivity extends AbstractBaseActivity {
     }
 
     private void loadNewFeedback() {
-        sorting = FEEDBACK_SORTING.NEW;
+        sorting = NEW;
         doSearch(searchTerm);
     }
 
     private void loadHotFeedback() {
-        sorting = FEEDBACK_SORTING.HOT;
+        sorting = HOT;
         doSearch(searchTerm);
     }
 
     private void loadTopFeedback() {
-        sorting = FEEDBACK_SORTING.TOP;
+        sorting = TOP;
         doSearch(searchTerm);
     }
 

@@ -16,14 +16,11 @@ import ch.uzh.supersede.feedbacklibrary.R;
 import ch.uzh.supersede.feedbacklibrary.activities.FeedbackDetailsActivity;
 import ch.uzh.supersede.feedbacklibrary.database.FeedbackDatabase;
 import ch.uzh.supersede.feedbacklibrary.interfaces.ISortableFeedback;
-import ch.uzh.supersede.feedbacklibrary.utils.ColorUtility;
-import ch.uzh.supersede.feedbacklibrary.utils.DateUtility;
-import ch.uzh.supersede.feedbacklibrary.utils.NumberUtility;
-import ch.uzh.supersede.feedbacklibrary.utils.StringUtility;
+import ch.uzh.supersede.feedbacklibrary.utils.*;
 import ch.uzh.supersede.feedbacklibrary.beans.FeedbackBean;
 
-import static ch.uzh.supersede.feedbacklibrary.interfaces.ISortableFeedback.FEEDBACK_SORTING.*;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.*;
+import static ch.uzh.supersede.feedbacklibrary.utils.Enums.FEEDBACK_SORTING.*;
 import static ch.uzh.supersede.feedbacklibrary.utils.Enums.FEEDBACK_STATUS.DUPLICATE;
 import static ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility.USER_LEVEL.ACTIVE;
 
@@ -33,7 +30,7 @@ public class FeedbackListItem extends LinearLayout implements Comparable, ISorta
     private TextView statusView;
     private TextView pointView;
     private FeedbackBean feedbackBean;
-    private FEEDBACK_SORTING sorting = NONE;
+    private Enums.FEEDBACK_SORTING sorting = NONE;
     private String ownUser = USER_NAME_ANONYMOUS;
 
     public FeedbackListItem(Context context, int visibleTiles, FeedbackBean feedbackBean) {
@@ -59,7 +56,7 @@ public class FeedbackListItem extends LinearLayout implements Comparable, ISorta
         LinearLayout upperWrapperLayout = createWrapperLayout(longParams, context, HORIZONTAL);
         LinearLayout lowerWrapperLayout = createWrapperLayout(longParams, context, HORIZONTAL);
         if (ACTIVE.check(context)) {
-            ownUser = FeedbackDatabase.getInstance(getContext()).readString(TECHNICAL_USER_NAME, null);
+            ownUser = FeedbackDatabase.getInstance(getContext()).readString(USER_NAME, null);
         }
         titleView = createTextView(shortParams, context, feedbackBean.getTitle(), Gravity.START, drawable, padding, white);
         dateView = createTextView(shortParams, context, context.getString(R.string.list_date, DateUtility.getDateFromLong(feedbackBean.getTimeStamp())), Gravity.END, drawable, padding, white);
@@ -147,8 +144,8 @@ public class FeedbackListItem extends LinearLayout implements Comparable, ISorta
     }
 
     @Override
-    public void sort(FEEDBACK_SORTING sorting) {
-        if (sorting != MINE || StringUtility.equals(feedbackBean.getTechnicalUserName(), ownUser)) {
+    public void sort(Enums.FEEDBACK_SORTING sorting) {
+        if (sorting != MINE || StringUtility.equals(feedbackBean.getUserName(), ownUser)) {
             this.setVisibility(VISIBLE);
         } else {
             this.setVisibility(GONE);

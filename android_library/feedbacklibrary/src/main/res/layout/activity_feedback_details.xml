@@ -162,12 +162,13 @@
                 android:layout_weight="2" />
 
             <ScrollView
+                android:id="@+id/details_layout_scroll_container"
                 android:layout_width="0dp"
                 android:layout_height="fill_parent"
                 android:layout_weight="28">
 
                 <LinearLayout
-                    android:id="@+id/details_layout_scroll"
+                    android:id="@+id/details_layout_scroll_layout"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">

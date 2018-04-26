@@ -12,7 +12,6 @@ public class FeedbackDetailsBean implements Serializable{
     private String title;
     private String description;
     private String userName;
-    private String technicalUserName;
     private String[] labels;
     private long timeStamp;
     private int upVotes;
@@ -28,7 +27,6 @@ public class FeedbackDetailsBean implements Serializable{
         private String title;
         private String description;
         private String userName;
-        private String technicalUserName;
         private String[] labels;
         private long timeStamp;
         private int upVotes;
@@ -52,11 +50,6 @@ public class FeedbackDetailsBean implements Serializable{
 
         public Builder withUserName(String userName) {
             this.userName = userName;
-            return this;
-        }
-
-        public Builder withTechnicalUserName(String technicalUserName) {
-            this.technicalUserName = technicalUserName;
             return this;
         }
 
@@ -96,13 +89,12 @@ public class FeedbackDetailsBean implements Serializable{
         }
 
         public FeedbackDetailsBean build() {
-            if (CompareUtility.notNull(feedbackUid,title,userName,technicalUserName,timeStamp,description,feedbackStatus,feedbackBean)) {
+            if (CompareUtility.notNull(feedbackUid,title,userName,timeStamp,description,feedbackStatus,feedbackBean)) {
                 FeedbackDetailsBean bean = new FeedbackDetailsBean();
                 bean.feedbackUid = feedbackUid;
                 bean.title = this.title;
                 bean.description = this.description;
                 bean.userName = this.userName;
-                bean.technicalUserName = this.technicalUserName;
                 bean.timeStamp = this.timeStamp;
                 bean.upVotes = this.upVotes;
                 bean.labels = labels;
@@ -125,10 +117,6 @@ public class FeedbackDetailsBean implements Serializable{
 
     public String getUserName() {
         return userName;
-    }
-
-    public String getTechnicalUserName() {
-        return technicalUserName;
     }
 
     public long getTimeStamp() {
