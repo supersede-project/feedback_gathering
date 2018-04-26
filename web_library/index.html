@@ -60,11 +60,15 @@
     <script src="/js/html5shiv.js"></script>
     <![endif]-->
 
+    <!--<link rel="stylesheet" href="https://platform.supersede.eu/web_library/siemens/dist/jqueryui/jquery-ui.min.css"/>-->
     <!--
-    <link rel="stylesheet" href="https://platform.supersede.eu/web_library/senercon/dist/jqueryui/jquery-ui.min.css"/>
-    <link rel="stylesheet" href="https://platform.supersede.eu/web_library/senercon/dist/main.min.css"/>
+    <link rel="stylesheet" href="https://platform.supersede.eu/web_library/siemens/dist/main.min.css"/>
     -->
-    <!--<link rel="stylesheet" href="/dist/jqueryui/jquery-ui.min.css"/>-->
+    <!--
+    -->
+    <link rel="stylesheet" href="/dist/jqueryui/jquery-ui.min.css"/>
+    <!--
+    -->
     <link rel="stylesheet" href="/dist/main.min.css"/>
 </head>
 
@@ -1679,15 +1683,95 @@
 </script>
 
 
+
+<style>
+    .pop-up-demo {
+        position: fixed;
+        bottom: 0;
+        right: 200px;
+        border: 1px solid #909090;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+        padding: 15px;
+        width: 350px;
+    }
+
+    .pop-up-demo.active {
+        bottom: 300px;
+        border-bottom: none;
+        color: white;
+        background: #536790;
+    }
+
+    .pop-up-body {
+        width: 350px;
+        position: fixed;
+        bottom: 0;
+        right: 200px;
+        height: 300px;
+        border: 1px solid #909090;
+        padding: 15px;
+    }
+
+    .pop-up-body .send {
+        color: white;
+        background: #536790;
+        border: none;
+        padding: 4px 15px;
+        float: right;
+    }
+
+    .pop-up-body {
+        font-size: 14px;
+    }
+
+    .pop-up-body textarea {
+        margin-top: 3px;
+        width: 100%;
+        border: 1px solid #cacaca;
+    }
+</style>
+<article class="pop-up-demo active">
+    It took me longer than expected!
+</article>
+<section class="pop-up-body">
+    <span>What was the reason for that? Can you help us?</span>
+
+    <br/><br/>
+    <p>
+    <input type="checkbox" id="1" data-parameter-id="514" name="category_mechanism_92" value="BUG_CATEGORY">
+    <label for="1"> Performance Problem</label>
+    </p>
+    <p>
+    <input type="checkbox" id="2" data-parameter-id="514" name="category_mechanism_92" value="BUG_CATEGORY">
+    <label for="2"> Feature was missing</label>
+    </p>
+    <p>
+    <input type="checkbox" id="3" data-parameter-id="514" name="category_mechanism_92" value="BUG_CATEGORY">
+    <label for="3"> I did not understand it</label>
+    </p>
+
+    <br/>
+
+    <label>Tell us more:</label><br />
+    <textarea></textarea>
+
+    <br/>
+    <br />
+
+    <input type="submit" class="send">
+</section>
+
+
 <!--
-<script src="https://platform.supersede.eu/web_library/atos/dist/jquery-1.9.1.js"></script>
-<script src="https://platform.supersede.eu/web_library/atos/dist/jqueryui/jquery-ui.min.js"></script>
-<script src="https://platform.supersede.eu/web_library/atos/dist/audio/recorder.js"></script>
-<script src="https://platform.supersede.eu/web_library/atos/dist/audio/Fr.voice.js"></script>
-<script src="https://platform.supersede.eu/web_library/atos/dist/screenshot/fabric.min.js"></script>
-<script src="https://platform.supersede.eu/web_library/atos/dist/screenshot/customiseControls.js"></script>
-<script src="https://platform.supersede.eu/web_library/atos/dist/screenshot/spectrum.js"></script>
-<script src="https://platform.supersede.eu/web_library/atos/dist/jquery.feedback.min.js"></script>
+<script src="https://platform.supersede.eu/web_library/siemens/dist/jquery-1.9.1.js"></script>
+<script src="https://platform.supersede.eu/web_library/siemens/dist/jqueryui/jquery-ui.min.js"></script>
+<script src="https://platform.supersede.eu/web_library/siemens/dist/audio/recorder.js"></script>
+<script src="https://platform.supersede.eu/web_library/siemens/dist/audio/Fr.voice.js"></script>
+<script src="https://platform.supersede.eu/web_library/siemens/dist/screenshot/fabric.min.js"></script>
+<script src="https://platform.supersede.eu/web_library/siemens/dist/screenshot/customiseControls.js"></script>
+<script src="https://platform.supersede.eu/web_library/siemens/dist/screenshot/spectrum.js"></script>
+<script src="https://platform.supersede.eu/web_library/siemens/dist/jquery.feedback.min.js"></script>
 -->
 
 <script src="dist/jquery-1.9.1.js"></script>
@@ -1717,13 +1801,16 @@
 
 
         jQuery('#feedbackEntryPoint').feedbackPlugin({
-            //'distPath': 'http://supersede.es.atos.net/web_library/senercon/dist',
-            //'distPath': 'dist/',
-            //'distPath': 'https://platform.supersede.eu/web_library/senercon/dist/',
+            //'distPath': 'http://supersede.es.atos.net/web_library/siemens/dist',
 
-            'applicationId': 30,
+            'distPath': 'dist/',
+            'applicationId': 20,
             'apiEndpointOrchestrator': 'https://platform.supersede.eu:8443/',
             'apiEndpointRepository': 'https://platform.supersede.eu:8443/',
+            'userId': '99999999',
+            'lang': 'en',
+            'fallbackLang': 'en',
+            'modal': 1
 
             //'apiEndpointOrchestrator': 'http://localhost:8081/',
             //'apiEndpointRepository': 'http://localhost:8082/',
@@ -1731,10 +1818,7 @@
             //'apiEndpointOrchestrator': 'http://mt.ronnieschaniel.com:8080/feedback_orchestrator-2.0.0/',
             //'apiEndpointRepository': 'http://mt.ronnieschaniel.com:8080/feedback_repository-2.0.0/',
 
-            'userId': '99999999',
-            'lang': 'de',
-            'fallbackLang': 'en',
-            'modal': 1,
+            /*
             'dialogCSSClass': 'my-custom-dialog-class',
             'colorPickerCSSClass': 'my-color-picker',
             'defaultStrokeWidth': 4,
@@ -1742,6 +1826,7 @@
                 'diagram': 'diagram X 02',
                 'section': 'section#diagramSection'
             }
+            */
         });
     });
 

@@ -1,10 +1,13 @@
 package ch.fhnw.cere.repository.models.orchestrator;
 
+import java.lang.management.MemoryType;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import eu.supersede.integration.api.feedback.orchestrator.types.MechanismType;
 
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -34,6 +37,18 @@ public class Application {
         this.generalConfiguration = generalConfiguration;
     }
 
+    @Override
+    public String toString() {
+        return "Application{" +
+                "createdAt='" + createdAt + '\'' +
+                ", configurations=" + configurations +
+                ", name='" + name + '\'' +
+                ", id=" + id +
+                ", state=" + state +
+                ", generalConfiguration=" + generalConfiguration +
+                '}';
+    }
+
     public Mechanism mechanismByConfigurationIdAndMechanismId(long configurationId, long mechanismId) {
         Optional<Configuration> configurationOptional = this.configurations.stream().filter(conf -> conf.getId() == configurationId).findFirst();
         if(configurationOptional.isPresent()) {
@@ -42,6 +57,30 @@ public class Application {
                     mechanism -> mechanism.getId() == mechanismId
             ).findFirst();
             return mechanismOptional.orElse(null);
+        } else {
+            return null;
+        }
+    }
+
+    public Mechanism categoryMechanismByConfigurationIdAndCategoryMechanismParameterId(long configurationId, long parameterId) {
+        Optional<Configuration> configurationOptional = this.configurations.stream().filter(conf -> conf.getId() == configurationId).findFirst();
+        if(configurationOptional.isPresent()) {
+            Configuration configuration = configurationOptional.get();
+            List<Mechanism> categoryMechanismsOptional = configuration.getMechanisms().stream().filter(
+                    mechanism -> mechanism.getType().equals(MechanismType.CATEGORY_TYPE.toString())
+            ).collect(Collectors.toList());
+
+            if(categoryMechanismsOptional != null) {
+                List<Mechanism> mechanismsWithParameter = Mechanism.filterByCategoryParameterId(categoryMechanismsOptional, parameterId);
+
+                if(mechanismsWithParameter != null && mechanismsWithParameter.size() > 0) {
+                    return mechanismsWithParameter.get(0);
+                } else {
+                    return null;
+                }
+            } else {
+                return null;
+            }
         } else {
             return null;
         }

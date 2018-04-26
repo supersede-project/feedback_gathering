@@ -2,6 +2,8 @@ import {ConfigurationInterface} from '../../models/configurations/configuration_
 import i18n = require('i18next');
 import './../jquery.validate';
 import {mechanismTypes} from '../config';
+import { ClusteringService } from '../../services/clustering_service';
+import { readJSON } from '../../services/mocks/mocks_loader';
 
 
 export class PageNavigation {
@@ -21,6 +23,8 @@ export class PageNavigation {
      *  indicates whether the navigation forward should happen (true) or not (false)
      */
     pageForwardCallback(currentPage, nextPage) {
+        let validFeedback = true;
+
         var textMechanisms = this.configuration.getMechanismConfig(mechanismTypes.textType);
         var ratingMechanisms = this.configuration.getMechanismConfig(mechanismTypes.ratingType);
         var screenshotMechanisms = this.configuration.getMechanismConfig(mechanismTypes.screenshotType);
@@ -36,11 +40,11 @@ export class PageNavigation {
         });
 
         if (currentPage.find('.invalid').length > 0) {
-            return false;
+            validFeedback = false;
         }
 
         if(!this.validWithNoMechanismMandatory(currentPage)) {
-            return false;
+            validFeedback = false;
         }
 
         if (nextPage) {
@@ -158,7 +162,54 @@ export class PageNavigation {
                 }
             }
         }
-        return true;
+
+        // TODO define parameters in the Orchestrator to control the feature, including tenant and number of similar feedback shown
+        let feedbackClusteringEnabled = true;
+
+        if(validFeedback && feedbackClusteringEnabled) {
+            this.showClusteredFeedback();
+        }
+
+
+        return validFeedback;
+    }
+
+    showClusteredFeedback():void {
+        let instantClusteringContainer = this.container.find('.instant-clustering-container');
+        let textMechanisms = this.configuration.getMechanismConfig(mechanismTypes.textType);
+        let feedbackText = '';
+
+        for (let textMechanism of textMechanisms) {
+            if (textMechanism != null && textMechanism.active && textMechanism.getParameterValue('page') != "review") {
+                let sectionSelector = "textMechanism" + textMechanism.id;
+                let textarea = this.container.find('section#' + sectionSelector + ' textarea.text-type-text');
+                feedbackText += textarea.val() + ' ';
+            }
+        }
+
+        let clusteringEndpointUrl = 'http://supersede.es.atos.net:3001/cluster/feedback';
+        let clusteringService:ClusteringService = new ClusteringService();
+        clusteringService.retrieveRelatedFeedback(clusteringEndpointUrl, feedbackText, 'senercon', 5,
+            (data) => {
+                instantClusteringContainer.empty().html(data);
+            },
+            (data) => {
+                console.warn('instant clustering request failed');
+                console.warn(data);
+            }
+        );
+
+        let similarFeedbacks = require('json!../../services/mocks/dev/feedback_clustering.json');
+        similarFeedbacks = similarFeedbacks.map((similarFeedback, index) => {
+           return {
+               'feedback': similarFeedback.feedback,
+               'number': index + 1
+           }
+        });
+        let similarFeedbacksTemplate = require('../../templates/partials/clustering_list_view.handlebars');
+        let responseDataHtml = similarFeedbacksTemplate({similarFeedbacks: similarFeedbacks});
+
+        instantClusteringContainer.empty().html(responseDataHtml);
     }
 
     /**

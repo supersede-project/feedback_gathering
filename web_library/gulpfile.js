@@ -157,12 +157,12 @@ gulp.task('copy-images', function() {
 });
 
 gulp.task('copy-screenshot-assets', function() {
-    gulp.src(['app/js/lib/screenshot/fabric.min.js', 'app/js/lib/screenshot/customiseControls.js', 'app/js/lib/screenshot/spectrum.js', 'app/js/lib/screenshot/html2canvas_5_0_4.min.js', 'app/js/lib/screenshot/html2canvas_5_0_4.svg.min.js'])
+    gulp.src(['app/js/lib/screenshot/fabric.min.js', 'app/js/lib/screenshot/customiseControls.js', 'app/js/lib/screenshot/spectrum.js', 'app/js/lib/screenshot/html2canvas_5_0_4.min.js', 'app/js/lib/screenshot/html2canvas_5_0_4.svg.min.js', 'app/js/lib/screenshot/canvg.js'])
         .pipe(gulp.dest('dist/screenshot'));
 });
 
 gulp.task('copy-and-uglify-screenshot-assets', function() {
-    gulp.src(['app/js/lib/screenshot/fabric.min.js', 'app/js/lib/screenshot/customiseControls.js', 'app/js/lib/screenshot/spectrum.js', 'app/js/lib/screenshot/html2canvas_5_0_4.min.js', 'app/js/lib/screenshot/html2canvas_5_0_4.svg.min.js'])
+    gulp.src(['app/js/lib/screenshot/fabric.min.js', 'app/js/lib/screenshot/customiseControls.js', 'app/js/lib/screenshot/spectrum.js', 'app/js/lib/screenshot/html2canvas_5_0_4.min.js', 'app/js/lib/screenshot/html2canvas_5_0_4.svg.min.js', 'app/js/lib/screenshot/canvg.js'])
         .pipe(uglify({mangle:false}))
         .pipe(gulp.dest('dist/screenshot'));
 });
