@@ -47,7 +47,7 @@ public class ConfigurationRequestBean {
         return pullConfigurationId;
     }
 
-    public static class ConfigurationRequestBeanBuilder {
+    public static class Builder {
         private String url;
         private String language;
         private String intermediateDialogText;
@@ -56,32 +56,32 @@ public class ConfigurationRequestBean {
         private long applicationId;
         private long pullConfigurationId;
 
-        public ConfigurationRequestBeanBuilder(Activity startingActivity, Class<?> activityToStart) {
+        public Builder(Activity startingActivity, Class<?> activityToStart) {
             this.startingActivity = startingActivity;
             this.activityToStart = activityToStart;
         }
 
-        public ConfigurationRequestBeanBuilder withApplicationId(long applicationId) {
+        public Builder withApplicationId(long applicationId) {
             this.applicationId = applicationId;
             return this;
         }
 
-        public ConfigurationRequestBeanBuilder withPullConfigurationId(long pullConfigurationId) {
+        public Builder withPullConfigurationId(long pullConfigurationId) {
             this.pullConfigurationId = pullConfigurationId;
             return this;
         }
 
-        public ConfigurationRequestBeanBuilder withLanguage(String language) {
+        public Builder withLanguage(String language) {
             this.language = language;
             return this;
         }
 
-        public ConfigurationRequestBeanBuilder withUrl(String url) {
+        public Builder withUrl(String url) {
             this.url = url;
             return this;
         }
 
-        public ConfigurationRequestBeanBuilder withIntermediateDialog(String intermediateDialogText) {
+        public Builder withIntermediateDialog(String intermediateDialogText) {
             this.intermediateDialogText = intermediateDialogText;
             return this;
         }

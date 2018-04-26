@@ -5,6 +5,7 @@ import android.content.*;
 import android.database.Cursor;
 import android.graphics.*;
 import android.net.*;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.*;
 import android.text.TextUtils;
@@ -19,6 +20,7 @@ import java.util.*;
 
 import ch.uzh.supersede.feedbacklibrary.*;
 import ch.uzh.supersede.feedbacklibrary.beans.ConfigurationRequestBean;
+import ch.uzh.supersede.feedbacklibrary.beans.FeedbackBean;
 import ch.uzh.supersede.feedbacklibrary.components.views.*;
 import ch.uzh.supersede.feedbacklibrary.configurations.*;
 import ch.uzh.supersede.feedbacklibrary.database.FeedbackDatabase;
@@ -27,11 +29,11 @@ import ch.uzh.supersede.feedbacklibrary.models.AbstractMechanism;
 import ch.uzh.supersede.feedbacklibrary.services.*;
 import ch.uzh.supersede.feedbacklibrary.stubs.OrchestratorStub;
 import ch.uzh.supersede.feedbacklibrary.stubs.OrchestratorStub.MechanismBuilder;
+import ch.uzh.supersede.feedbacklibrary.stubs.RepositoryStub;
 import ch.uzh.supersede.feedbacklibrary.utils.*;
 import okhttp3.*;
 import retrofit2.Response;
 
-import static android.content.Context.MODE_PRIVATE;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.*;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.ActivitiesConstants.*;
 
@@ -39,6 +41,7 @@ import static ch.uzh.supersede.feedbacklibrary.utils.Constants.ActivitiesConstan
 public class FeedbackActivity extends AbstractBaseActivity implements AudioMechanismView.MultipleAudioMechanismsListener, IFeedbackServiceEventListener {
     private OrchestratorConfigurationItem orchestratorConfigurationItem;
     private OrchestratorConfiguration orchestratorConfiguration;
+    private OrchestratorStub orchestratorStub;
     private Configuration activeConfiguration;
     private List<AbstractMechanism> mechanisms;
     private List<AbstractMechanismView> mechanismViews;
@@ -71,8 +74,8 @@ public class FeedbackActivity extends AbstractBaseActivity implements AudioMecha
         String jsonString = intent.getStringExtra(JSON_CONFIGURATION_STRING);
 
         // Initialization based on the type of configuration, i.e., if it is push or pull
-        language = intent.getStringExtra(EXTRA_KEY_LANGUAGE);
-        baseURL = intent.getStringExtra(SUPERSEDE_BASE_URL);
+        language = "en"; //FIXME pay attention
+        baseURL = SUPERSEDE_BASE_URL;
 
         if (!isPush && selectedPullConfigurationIndex != -1 && jsonString != null) {
             // The feedback activity is started on behalf of a triggered pull configuration
@@ -143,16 +146,20 @@ public class FeedbackActivity extends AbstractBaseActivity implements AudioMecha
         }
     }
 
+
     @Override
-    public void onEventCompleted(EventType eventType, Response response) {
+    @SuppressWarnings("unchecked")
+    public void onEventCompleted(EventType eventType, Object response) {
         switch (eventType) {
             case PING_REPOSITORY:
-                prepareSendFeedback(getScreenshotMultipartbodyParts(), getAudioMultipartbodyParts());
+                prepareSendFeedback();
+                Utils.wipeImages(this);
+                this.onBackPressed();
                 break;
             case CREATE_FEEDBACK_VARIANT:
                 break;
             case GET_CONFIGURATION:
-                execLoadConfiguration(response);
+                execLoadConfiguration((Response<OrchestratorConfigurationItem>) response);
                 break;
             default:
                 break;
@@ -160,7 +167,7 @@ public class FeedbackActivity extends AbstractBaseActivity implements AudioMecha
     }
 
     @Override
-    public void onEventFailed(EventType eventType, Response response) {
+    public void onEventFailed(EventType eventType, Object response) {
         switch (eventType) {
             case GET_CONFIGURATION:
                 closeProgressDialog();
@@ -196,7 +203,7 @@ public class FeedbackActivity extends AbstractBaseActivity implements AudioMecha
 
     private void initConfiguration(long applicationId) {
         ConfigurationRequestBean configurationRequestBean =
-                new ConfigurationRequestBean.ConfigurationRequestBeanBuilder(this, this.getClass())
+                new ConfigurationRequestBean.Builder(this, this.getClass())
                         .withApplicationId(applicationId)
                         .withLanguage(language)
                         .build();
@@ -223,13 +230,14 @@ public class FeedbackActivity extends AbstractBaseActivity implements AudioMecha
             return;
         }
         if (BuildConfig.DEBUG) {
-            new MechanismBuilder(this, getApplicationContext(), getResources(), linearLayout, layoutInflater)
+            orchestratorStub = new MechanismBuilder(this, getApplicationContext(), getResources(), linearLayout, layoutInflater)
                     .withRating() //Uncomment for Enabling
                     .withText() //Uncomment for Enabling
                     .withScreenshot() //Uncomment for Enabling
                     .withAudio() //Uncomment for Enabling
                     //                        .withCategory() //Uncomment for Enabling
                     .build(mechanismViews);
+            mechanisms = orchestratorStub.getMechanisms();
         } else {
             for (AbstractMechanism mechanism : mechanisms) {
                 if (mechanism != null && mechanism.isActive()) {
@@ -237,7 +245,7 @@ public class FeedbackActivity extends AbstractBaseActivity implements AudioMecha
                 }
             }
         }
-        initCopyByEmailLayout(this, layoutInflater, linearLayout);
+        //initCopyByEmailLayout(this, layoutInflater, linearLayout);
         layoutInflater.inflate(R.layout.utility_feedback_button, linearLayout);
     }
 
@@ -281,36 +289,31 @@ public class FeedbackActivity extends AbstractBaseActivity implements AudioMecha
         closeProgressDialog();
     }
 
-    private void execCreateFeedbackVariant(MultipartBody.Part jsonPart, List<MultipartBody.Part> multipartFiles) {
-        FeedbackService.getInstance().createFeedbackVariant(this, language, feedback.getApplicationId(), jsonPart, multipartFiles);
+    private void execCreateFeedbackVariant(FeedbackBean feedbackBean, List<MultipartBody.Part> multipartFiles) {
+        FeedbackService.getInstance().createFeedbackVariant(this, this, language, feedback.getApplicationId(), feedbackBean, multipartFiles);
         Toast toast = Toast.makeText(getApplicationContext(), getResources().getString(R.string.feedback_success), Toast.LENGTH_SHORT);
         toast.show();
         Utils.wipeImages(this);
     }
 
-    public void prepareSendFeedback(List<MultipartBody.Part> screenshotBodyParts, List<MultipartBody.Part> audioBodyParts) {
+    public void prepareSendFeedback() {
         feedback = new Feedback(mechanisms);
         feedback.setTitle(getResources().getString(R.string.feedback_title, System.currentTimeMillis()));
-        feedback.setApplicationId(orchestratorConfiguration.getId());
-        feedback.setConfigurationId(activeConfiguration.getId());
+        if (BuildConfig.DEBUG) {
+            feedback.setApplicationId(orchestratorStub.getId());
+            feedback.setConfigurationId(orchestratorStub.getId());
+        } else {
+            feedback.setApplicationId(orchestratorConfiguration.getId());
+            feedback.setConfigurationId(activeConfiguration.getId());
+        }
         feedback.setLanguage(language);
         feedback.setUserIdentification(Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
 
-        // The JSON string of the feedback
-        GsonBuilder builder = new GsonBuilder();
-        builder.excludeFieldsWithoutExposeAnnotation();
-        builder.serializeNulls();
-        Gson gson = builder.create();
-
-        String jsonString = gson.toJson(feedback);
-        MultipartBody.Part jsonPart = MultipartBody.Part.createFormData("json", "json", RequestBody.create(MediaType.parse("application/json"), jsonString.getBytes()));
-
         List<MultipartBody.Part> multipartFiles = new ArrayList<>();
-        multipartFiles.addAll(screenshotBodyParts);
-        multipartFiles.addAll(audioBodyParts);
+        multipartFiles.addAll(getScreenshotMultipartbodyParts());
+        multipartFiles.addAll(getAudioMultipartbodyParts());
 
-        execCreateFeedbackVariant(jsonPart, multipartFiles);
-        EmailService.getInstance().checkAndSendViaEmail(this, sendViaEmailCheckbox, emailEditText, feedback, mechanismViews);
+        execCreateFeedbackVariant(RepositoryStub.feedbackToFeedbackBean(this, feedback), multipartFiles);
     }
 
     private void closeProgressDialog() {
@@ -420,10 +423,6 @@ public class FeedbackActivity extends AbstractBaseActivity implements AudioMecha
      * This method performs a POST request in order to send the feedback to the repository.
      */
     public void sendButtonClicked(View view) {
-        if (BuildConfig.DEBUG) {
-            OrchestratorStub.receiveFeedback(this, view);
-            return;
-        }
         if (!isOnline()) {
             DialogUtils.showInformationDialog(this, new String[]{getResources().getString(R.string.feedback_check_network_state)}, true);
             return;
@@ -467,6 +466,9 @@ public class FeedbackActivity extends AbstractBaseActivity implements AudioMecha
     }
 
     private boolean validateInput(List<AbstractMechanism> allMechanisms, List<String> errorMessages) {
+        if (allMechanisms == null) {
+            return true;
+        }
         // Append an error message and return. The user is confronted with one error message at a time.
         for (AbstractMechanism mechanism : allMechanisms) {
             if (mechanism != null && mechanism.isActive() && !mechanism.isValid(errorMessages)) {

@@ -70,4 +70,10 @@ public class Enums {
     public enum RESPONSE_MODE{
         EDITING, READING
     }
+
+    public enum SETTINGS_VIEW {
+        MINE,
+        OTHERS,
+        SUBSCRIPTIONS
+    }
 }

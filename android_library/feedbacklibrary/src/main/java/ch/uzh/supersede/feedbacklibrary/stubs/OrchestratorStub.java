@@ -21,6 +21,7 @@ import ch.uzh.supersede.feedbacklibrary.components.views.RatingMechanismView;
 import ch.uzh.supersede.feedbacklibrary.components.views.ScreenshotMechanismView;
 import ch.uzh.supersede.feedbacklibrary.components.views.TextMechanismView;
 import ch.uzh.supersede.feedbacklibrary.configurations.MechanismConfigurationItem;
+import ch.uzh.supersede.feedbacklibrary.models.AbstractMechanism;
 import ch.uzh.supersede.feedbacklibrary.models.AudioMechanism;
 import ch.uzh.supersede.feedbacklibrary.models.CategoryMechanism;
 import ch.uzh.supersede.feedbacklibrary.models.RatingMechanism;
@@ -35,13 +36,22 @@ import static ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility.USER_LEVE
 
 public class OrchestratorStub {
     private ArrayList<AbstractMechanismView> mechanismViews;
+    private ArrayList<AbstractMechanism> mechanisms;
+    private int id;
 
     private OrchestratorStub() {
-        mechanismViews = new ArrayList<>();
     }
 
     public List<AbstractMechanismView> getMechanismViews() {
         return this.mechanismViews;
+    }
+
+    public List<AbstractMechanism> getMechanisms() {
+        return mechanisms;
+    }
+
+    public int getId() {
+        return id;
     }
 
     public static void receiveFeedback(Activity activity, View view) {
@@ -53,7 +63,8 @@ public class OrchestratorStub {
     }
 
     public static class MechanismBuilder<T extends Activity> {
-        private ArrayList<AbstractMechanismView> viewList;
+        private List<AbstractMechanismView> mechanismViews;
+        private List<AbstractMechanism> mechanisms;
         private Context context;
         private LayoutInflater layoutInflater;
         private LinearLayout rootLayout;
@@ -62,8 +73,9 @@ public class OrchestratorStub {
         private int id;
 
         public MechanismBuilder(T activity, Context context, Resources resources, LinearLayout rootLayout, LayoutInflater layoutInflater) {
-            viewList = new ArrayList<>();
-            id = 0;
+            this.mechanismViews = new ArrayList<>();
+            this.mechanisms = new ArrayList<>();
+            this.id = 0;
             this.context = context;
             this.layoutInflater = layoutInflater;
             this.resources = resources;
@@ -118,10 +130,13 @@ public class OrchestratorStub {
 
         public OrchestratorStub build(List<AbstractMechanismView> mechanismViews) {
             OrchestratorStub stub = new OrchestratorStub();
-            for (AbstractMechanismView view : viewList) {
+            for (AbstractMechanismView view : this.mechanismViews) {
                 mechanismViews.add(view);
                 rootLayout.addView(view.getEnclosingLayout());
             }
+            stub.mechanisms = new ArrayList<>(this.mechanisms);
+            stub.mechanismViews = new ArrayList<>(this.mechanismViews);
+            stub.id = this.id;
             return stub;
         }
 
@@ -146,7 +161,8 @@ public class OrchestratorStub {
                             .get());
                     AudioMechanism audioMechanism = new AudioMechanism(configurationItem);
                     AudioMechanismView audioMechanismView = new AudioMechanismView(layoutInflater, audioMechanism, resources, activity, context);
-                    viewList.add(audioMechanismView);
+                    mechanisms.add(audioMechanism);
+                    mechanismViews.add(audioMechanismView);
                     break;
                 case CATEGORY_TYPE:
                     configurationItem.setType(CATEGORY_TYPE);
@@ -167,7 +183,8 @@ public class OrchestratorStub {
                             .get());
                     CategoryMechanism categoryMechanism = new CategoryMechanism(configurationItem);
                     CategoryMechanismView categoryMechanismView = new CategoryMechanismView(layoutInflater, categoryMechanism);
-                    viewList.add(categoryMechanismView);
+                    mechanisms.add(categoryMechanism);
+                    mechanismViews.add(categoryMechanismView);
                     break;
                 case DIALOG_TYPE:
                     //TODO: Gab es nie, implementieren!
@@ -190,7 +207,8 @@ public class OrchestratorStub {
                             .get());
                     RatingMechanism ratingMechanism = new RatingMechanism(configurationItem);
                     RatingMechanismView ratingMechanismView = new RatingMechanismView(layoutInflater, ratingMechanism);
-                    viewList.add(ratingMechanismView);
+                    mechanisms.add(ratingMechanism);
+                    mechanismViews.add(ratingMechanismView);
                     break;
                 case SCREENSHOT_TYPE:
                     configurationItem.setType(SCREENSHOT_TYPE);
@@ -205,7 +223,8 @@ public class OrchestratorStub {
                             .get());
                     ScreenshotMechanism screenshotMechanism = new ScreenshotMechanism(configurationItem);
                     ScreenshotMechanismView screenshotMechanismView = new ScreenshotMechanismView(layoutInflater, activity, screenshotMechanism, id);
-                    viewList.add(screenshotMechanismView);
+                    mechanisms.add(screenshotMechanism);
+                    mechanismViews.add(screenshotMechanismView);
                     break;
                 case TEXT_TYPE:
                     configurationItem.setType(TEXT_TYPE);
@@ -238,7 +257,8 @@ public class OrchestratorStub {
                             .get());
                     TextMechanism textMechanism = new TextMechanism(configurationItem);
                     TextMechanismView textMechanismView = new TextMechanismView(layoutInflater, textMechanism);
-                    viewList.add(textMechanismView);
+                    mechanisms.add(textMechanism);
+                    mechanismViews.add(textMechanismView);
                     break;
                 default:
                     break;

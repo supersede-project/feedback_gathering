@@ -2,6 +2,8 @@ package ch.uzh.supersede.feedbacklibrary.beans;
 
 import android.database.Cursor;
 
+import java.io.Serializable;
+import java.util.Random;
 import java.util.UUID;
 
 import ch.uzh.supersede.feedbacklibrary.utils.Enums;

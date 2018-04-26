@@ -3,11 +3,10 @@ package ch.uzh.supersede.feedbacklibrary.beans;
 import java.io.Serializable;
 import java.util.UUID;
 
-import ch.uzh.supersede.feedbacklibrary.utils.*;
+import ch.uzh.supersede.feedbacklibrary.utils.CompareUtility;
 import ch.uzh.supersede.feedbacklibrary.utils.Enums.FEEDBACK_STATUS;
 
 public class FeedbackBean implements Serializable{
-
 
     private UUID feedbackUid;
     private String title;
