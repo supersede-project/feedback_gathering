@@ -12,61 +12,70 @@ import static android.content.Context.MODE_PRIVATE;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.EXTRA_KEY_HOST_APPLICATION_NAME;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.SHARED_PREFERENCES_ID;
 
-public abstract class AbstractFeedbackDatabase {
-    //Datatypes
-    protected static final String TEXT_TYPE = " TEXT ";
-    protected static final String NUMBER_TYPE = " INTEGER ";
-    protected static final String FLOATING_NUMBER_TYPE = " REAL ";
-    protected static final String DATA_TYPE = " BLOB ";
-    protected static final String KEY_TYPE = " PRIMARY KEY ";
-    protected static final String COMMA_SEP = ",";
-    public static final String ALTER_TABLE = "ALTER TABLE ";
-    public static final String RENAME_TO_TEMP = " RENAME TO 'TEMP_";
-    public static final String DROP_TABLE_IF_EXISTS = "DROP TABLE IF EXISTS ";
-    public static final String INSERT_INTO = "INSERT INTO ";
-    public static final String SUB_SELECT = " SELECT ";
-    public static final String BRACES_OPEN = " ( ";
-    public static final String BRACES_CLOSE = " ) ";
-    public static final String FROM_TEMP = " FROM TEMP_";
-    public static final String CREATE_TABLE_IF_NOT_EXISTS = "CREATE TABLE IF NOT EXISTS ";
-    public static final String DROP_TABLE_IF_EXISTS_TEMP = "DROP TABLE IF EXISTS TEMP_";
-    public static final String LIKE = " LIKE ";
-    public static final String EQ = " = ";
-    public static final String NEQ = " != ";
-    public static final String ONE = " 1 ";
-    public static final String MINONE = " -1 ";
-    public static final String ZERO = " 0 ";
-    public static final String QUOTES = "'";
-    public static final String LIKE_WILDCARD = " LIKE ? ";
+abstract class AbstractFeedbackDatabase {
+    //Private
+    private static final String TEXT_TYPE = " TEXT ";
+    private static final String NUMBER_TYPE = " INTEGER ";
+    private static final String FLOATING_NUMBER_TYPE = " REAL ";
+    private static final String DATA_TYPE = " BLOB ";
+    private static final String KEY_TYPE = " PRIMARY KEY ";
+    private static final String COMMA_SEP = ",";
+    private static final String ALTER_TABLE = "ALTER TABLE ";
+    private static final String RENAME_TO_TEMP = " RENAME TO 'TEMP_";
+    private static final String DROP_TABLE_IF_EXISTS = "DROP TABLE IF EXISTS ";
+    private static final String INSERT_INTO = "INSERT INTO ";
+    private static final String SUB_SELECT = " SELECT ";
+    private static final String BRACES_OPEN = " ( ";
+    private static final String BRACES_CLOSE = " ) ";
+    private static final String FROM_TEMP = " FROM TEMP_";
+    private static final String CREATE_TABLE_IF_NOT_EXISTS = "CREATE TABLE IF NOT EXISTS ";
+    private static final String DROP_TABLE_IF_EXISTS_TEMP = "DROP TABLE IF EXISTS TEMP_";
+    //Package Private
+    static final String LIKE = " LIKE ";
+    static final String EQ = " = ";
+    static final String NEQ = " != ";
+    static final String ONE = " 1 ";
+    static final String MIN_ONE = " -1 ";
+    static final String ZERO = " 0 ";
+    static final String QUOTES = "'";
+    static final String LIKE_WILDCARD = " LIKE ? ";
 
     //Table for Numbers
     protected static class NumberTableEntry implements BaseColumns {
+        private NumberTableEntry(){
+        }
         public static final String TABLE_NAME = " NUMBER_TABLE ";
         public static final String COLUMN_NAME_KEY = " KEY ";
         public static final String COLUMN_NAME_VALUE = " VALUE ";
-        public static final String COLUMN_NAME_TIMESTAMP = " TIMESTAMP ";
+        private static final String COLUMN_NAME_TIMESTAMP = " TIMESTAMP ";
     }
     //Table for Texts
     protected static class TextTableEntry implements BaseColumns {
+        private TextTableEntry(){
+        }
         public static final String TABLE_NAME = " TEXT_TABLE ";
         public static final String COLUMN_NAME_KEY = " KEY ";
         public static final String COLUMN_NAME_VALUE = " VALUE ";
-        public static final String COLUMN_NAME_TIMESTAMP = " TIMESTAMP ";
+        private static final String COLUMN_NAME_TIMESTAMP = " TIMESTAMP ";
     }
     //Table for Data
     protected static class DataTableEntry implements BaseColumns {
+        private DataTableEntry(){
+        }
         public static final String TABLE_NAME = " DATA_TABLE ";
         public static final String COLUMN_NAME_KEY = " KEY ";
         public static final String COLUMN_NAME_VALUE = " VALUE ";
-        public static final String COLUMN_NAME_TIMESTAMP = " TIMESTAMP ";
+        private static final String COLUMN_NAME_TIMESTAMP = " TIMESTAMP ";
     }
 
-    //Table for Feedback id, title, votes, own, ownCreationTimestamp, subscribed, timestampSubscribed, voted, timeStampVoted
     protected static class FeedbackTableEntry implements BaseColumns {
+        private FeedbackTableEntry(){
+        }
         public static final String TABLE_NAME = " FEEDBACK_TABLE ";
         public static final String COLUMN_NAME_FEEDBACK_UID = " FEEDBACK_UID ";
         public static final String COLUMN_NAME_TITLE = " TITLE ";
         public static final String COLUMN_NAME_VOTES = " VOTES ";
+        public static final String COLUMN_NAME_STATUS = " STATUS ";
         public static final String COLUMN_NAME_OWNER = " OWNER ";
         public static final String COLUMN_NAME_CREATION_TIMESTAMP = " CREATION_TIMESTAMP ";
         public static final String COLUMN_NAME_SUBSCRIBED = " SUBSCRIBED ";
@@ -100,6 +109,7 @@ public abstract class AbstractFeedbackDatabase {
                         FeedbackTableEntry.COLUMN_NAME_FEEDBACK_UID + TEXT_TYPE + COMMA_SEP +
                         FeedbackTableEntry.COLUMN_NAME_TITLE + TEXT_TYPE + COMMA_SEP +
                         FeedbackTableEntry.COLUMN_NAME_VOTES + NUMBER_TYPE + COMMA_SEP +
+                        FeedbackTableEntry.COLUMN_NAME_STATUS + TEXT_TYPE + COMMA_SEP +
                         FeedbackTableEntry.COLUMN_NAME_OWNER + NUMBER_TYPE + COMMA_SEP +
                         FeedbackTableEntry.COLUMN_NAME_CREATION_TIMESTAMP + NUMBER_TYPE + COMMA_SEP +
                         FeedbackTableEntry.COLUMN_NAME_SUBSCRIBED + NUMBER_TYPE + COMMA_SEP +
@@ -143,6 +153,7 @@ public abstract class AbstractFeedbackDatabase {
                         FeedbackTableEntry.COLUMN_NAME_FEEDBACK_UID + COMMA_SEP +
                         FeedbackTableEntry.COLUMN_NAME_TITLE + COMMA_SEP +
                         FeedbackTableEntry.COLUMN_NAME_VOTES + COMMA_SEP +
+                        FeedbackTableEntry.COLUMN_NAME_STATUS + COMMA_SEP +
                         FeedbackTableEntry.COLUMN_NAME_OWNER + COMMA_SEP +
                         FeedbackTableEntry.COLUMN_NAME_CREATION_TIMESTAMP + COMMA_SEP +
                         FeedbackTableEntry.COLUMN_NAME_SUBSCRIBED + COMMA_SEP +
@@ -156,6 +167,7 @@ public abstract class AbstractFeedbackDatabase {
                         FeedbackTableEntry.COLUMN_NAME_FEEDBACK_UID + COMMA_SEP +
                         FeedbackTableEntry.COLUMN_NAME_TITLE + COMMA_SEP +
                         FeedbackTableEntry.COLUMN_NAME_VOTES + COMMA_SEP +
+                        FeedbackTableEntry.COLUMN_NAME_STATUS + COMMA_SEP +
                         FeedbackTableEntry.COLUMN_NAME_OWNER + COMMA_SEP +
                         FeedbackTableEntry.COLUMN_NAME_CREATION_TIMESTAMP + COMMA_SEP +
                         FeedbackTableEntry.COLUMN_NAME_SUBSCRIBED + COMMA_SEP +

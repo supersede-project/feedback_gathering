@@ -15,10 +15,7 @@ import ch.uzh.supersede.feedbacklibrary.database.FeedbackDatabase;
 import ch.uzh.supersede.feedbacklibrary.stubs.RepositoryStub;
 import ch.uzh.supersede.feedbacklibrary.utils.*;
 
-import static ch.uzh.supersede.feedbacklibrary.database.FeedbackDatabase.FETCH_MODE.*;
-import static ch.uzh.supersede.feedbacklibrary.database.FeedbackDatabase.FETCH_MODE.RESPONDED;
-import static ch.uzh.supersede.feedbacklibrary.database.FeedbackDatabase.FETCH_MODE.SUBSCRIBED;
-import static ch.uzh.supersede.feedbacklibrary.database.FeedbackDatabase.SAVE_MODE.*;
+import static ch.uzh.supersede.feedbacklibrary.components.buttons.FeedbackResponseListItem.RESPONSE_MODE.FIXED;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.EXTRA_KEY_FEEDBACK_BEAN;
 
 @SuppressWarnings("squid:MaximumInheritanceDepth")
@@ -26,6 +23,7 @@ public class FeedbackDetailsActivity extends AbstractBaseActivity {
     private FeedbackDetailsBean feedbackDetailsBean;
     private LocalFeedbackState feedbackState;
     private LinearLayout responseLayout;
+    private ScrollView scrollContainer;
     private TextView votesText;
     private TextView userText;
     private TextView statusText;
@@ -44,7 +42,8 @@ public class FeedbackDetailsActivity extends AbstractBaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_feedback_details);
-        responseLayout = getView(R.id.details_layout_scroll, LinearLayout.class);
+        responseLayout = getView(R.id.details_layout_scroll_layout, LinearLayout.class);
+        scrollContainer = getView(R.id.details_layout_scroll_container, ScrollView.class);
         votesText = getView(R.id.details_text_votes, TextView.class);
         userText = getView(R.id.details_text_user, TextView.class);
         statusText = getView(R.id.details_text_status, TextView.class);
@@ -63,7 +62,7 @@ public class FeedbackDetailsActivity extends AbstractBaseActivity {
             if (feedbackDetailsBean != null) {
                 updateFeedbackState();
                 for (FeedbackResponseBean bean : feedbackDetailsBean.getResponses()) {
-                    FeedbackResponseListItem feedbackResponseListItem = new FeedbackResponseListItem(this, bean);
+                    FeedbackResponseListItem feedbackResponseListItem = new FeedbackResponseListItem(this, bean, FIXED);
                     responseList.add(feedbackResponseListItem);
                 }
                 Collections.sort(responseList);
@@ -120,6 +119,7 @@ public class FeedbackDetailsActivity extends AbstractBaseActivity {
         }else if (view.getId() == subscribeButton.getId()){
             RepositoryStub.sendSubscriptionChange(this, feedbackDetailsBean.getFeedbackBean(), !feedbackState.isSubscribed());
         }else if (view.getId() == responseButton.getId()){
+            scrollContainer.fullScroll(View.FOCUS_DOWN);
             RepositoryStub.sendFeedbackResponse(this, feedbackDetailsBean.getFeedbackBean(),null);
             Toast.makeText(this,"Response added! (TODO: implement)",Toast.LENGTH_SHORT).show();
         }

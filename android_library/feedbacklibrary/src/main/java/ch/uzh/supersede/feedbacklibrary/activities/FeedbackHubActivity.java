@@ -25,9 +25,9 @@ import ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility.USER_LEVEL;
 import ch.uzh.supersede.feedbacklibrary.utils.PopUp;
 import ch.uzh.supersede.feedbacklibrary.utils.Utils;
 
-import static ch.uzh.supersede.feedbacklibrary.database.FeedbackDatabase.FETCH_MODE.*;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.ActivitiesConstants.*;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.*;
+import static ch.uzh.supersede.feedbacklibrary.utils.Enums.FETCH_MODE.*;
 import static ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility.USER_LEVEL.*;
 
 @SuppressWarnings({"squid:MaximumInheritanceDepth","squid:S1170"})
@@ -255,19 +255,14 @@ public class FeedbackHubActivity extends AbstractBaseActivity {
         updateUserLevel(true);
         if (ACTIVE.check(this,true) && preAllocatedStringStorage[0] != null){
             String name = FeedbackDatabase.getInstance(this).readString(USER_NAME,null);
-            String technicalName = FeedbackDatabase.getInstance(this).readString(TECHNICAL_USER_NAME,null);
             if (name == null){
                 Toast.makeText(this,getString(R.string.hub_username_registered,preAllocatedStringStorage[0]),Toast.LENGTH_SHORT).show();
-                preAllocatedStringStorage[0] = RepositoryStub.getUniqueName(preAllocatedStringStorage[0]);
+                preAllocatedStringStorage[0] = RepositoryStub.registerAndGetUniqueName(preAllocatedStringStorage[0],false);
                 FeedbackDatabase.getInstance(this).writeString(USER_NAME,preAllocatedStringStorage[0]);
                 userName = preAllocatedStringStorage[0];
             }else{
                 userName = name;
                 Toast.makeText(this,getString(R.string.hub_username_restored,name),Toast.LENGTH_SHORT).show();
-            }
-            if (technicalName == null){
-                String id = UUID.randomUUID().toString();
-                FeedbackDatabase.getInstance(this).writeString(TECHNICAL_USER_NAME,id);
             }
             preAllocatedStringStorage[0] = null;
         }

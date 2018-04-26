@@ -28,8 +28,9 @@ public class HostActivity extends AbstractBaseActivity implements IFeedbackBehav
         FeedbackConnector.getInstance().connect(view,this);
     }
 
+
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    public boolean isDeveloper() {
+        return true;
     }
 }
