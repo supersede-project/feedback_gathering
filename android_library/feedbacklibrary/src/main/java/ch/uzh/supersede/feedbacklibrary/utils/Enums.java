@@ -67,6 +67,10 @@ public class Enums {
         OWN, VOTED, UP_VOTED, DOWN_VOTED, SUBSCRIBED, RESPONDED, ALL
     }
 
+    public enum RESPONSE_MODE{
+        EDITING, READING
+    }
+
     public enum SETTINGS_VIEW {
         MINE,
         OTHERS,

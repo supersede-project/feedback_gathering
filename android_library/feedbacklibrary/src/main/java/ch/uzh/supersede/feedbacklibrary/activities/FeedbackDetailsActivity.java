@@ -1,6 +1,7 @@
 package ch.uzh.supersede.feedbacklibrary.activities;
 
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.view.*;
@@ -14,16 +15,20 @@ import ch.uzh.supersede.feedbacklibrary.components.buttons.FeedbackResponseListI
 import ch.uzh.supersede.feedbacklibrary.database.FeedbackDatabase;
 import ch.uzh.supersede.feedbacklibrary.stubs.RepositoryStub;
 import ch.uzh.supersede.feedbacklibrary.utils.*;
+import ch.uzh.supersede.feedbacklibrary.utils.Enums.RESPONSE_MODE;
 
+import static ch.uzh.supersede.feedbacklibrary.components.buttons.FeedbackResponseListItem.RESPONSE_MODE.EDITABLE;
 import static ch.uzh.supersede.feedbacklibrary.components.buttons.FeedbackResponseListItem.RESPONSE_MODE.FIXED;
-import static ch.uzh.supersede.feedbacklibrary.utils.Constants.EXTRA_KEY_FEEDBACK_BEAN;
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.*;
+import static ch.uzh.supersede.feedbacklibrary.utils.Enums.RESPONSE_MODE.READING;
 
 @SuppressWarnings("squid:MaximumInheritanceDepth")
 public class FeedbackDetailsActivity extends AbstractBaseActivity {
+    public static RESPONSE_MODE mode = READING;
     private FeedbackDetailsBean feedbackDetailsBean;
     private LocalFeedbackState feedbackState;
-    private LinearLayout responseLayout;
-    private ScrollView scrollContainer;
+    private static LinearLayout responseLayout;
+    private static ScrollView scrollContainer;
     private TextView votesText;
     private TextView userText;
     private TextView statusText;
@@ -41,6 +46,7 @@ public class FeedbackDetailsActivity extends AbstractBaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mode = READING;
         setContentView(R.layout.activity_feedback_details);
         responseLayout = getView(R.id.details_layout_scroll_layout, LinearLayout.class);
         scrollContainer = getView(R.id.details_layout_scroll_container, ScrollView.class);
@@ -62,7 +68,7 @@ public class FeedbackDetailsActivity extends AbstractBaseActivity {
             if (feedbackDetailsBean != null) {
                 updateFeedbackState();
                 for (FeedbackResponseBean bean : feedbackDetailsBean.getResponses()) {
-                    FeedbackResponseListItem feedbackResponseListItem = new FeedbackResponseListItem(this, bean, FIXED);
+                    FeedbackResponseListItem feedbackResponseListItem = new FeedbackResponseListItem(this,feedbackBean, bean, FIXED);
                     responseList.add(feedbackResponseListItem);
                 }
                 Collections.sort(responseList);
@@ -118,12 +124,30 @@ public class FeedbackDetailsActivity extends AbstractBaseActivity {
             votesText.setText(feedbackDetailsBean.getFeedbackBean().downVote());
         }else if (view.getId() == subscribeButton.getId()){
             RepositoryStub.sendSubscriptionChange(this, feedbackDetailsBean.getFeedbackBean(), !feedbackState.isSubscribed());
-        }else if (view.getId() == responseButton.getId()){
+        }else if (view.getId() == responseButton.getId() && mode == READING){
+            FeedbackResponseListItem item = new FeedbackResponseListItem(this,feedbackDetailsBean.getFeedbackBean(),null,EDITABLE);
+            //Get to the Bottom
             scrollContainer.fullScroll(View.FOCUS_DOWN);
-            RepositoryStub.sendFeedbackResponse(this, feedbackDetailsBean.getFeedbackBean(),null);
-            Toast.makeText(this,"Response added! (TODO: implement)",Toast.LENGTH_SHORT).show();
+            responseLayout.addView(item);
+            //Show new Entry
+            scrollContainer.fullScroll(View.FOCUS_DOWN);
+            item.requestInputFocus();
         }
         updateFeedbackState();
+    }
+
+    public static void persistFeedbackResponseLocally(Context context, FeedbackBean bean, String feedbackResponse) {{
+        String userName = FeedbackDatabase.getInstance(context).readString(USER_NAME, USER_NAME_ANONYMOUS);
+        boolean isDeveloper = FeedbackDatabase.getInstance(context).readBoolean(IS_DEVELOPER, false);
+        boolean isOwner = bean.getUserName() != null && bean.getUserName().equals(userName);
+        FeedbackResponseBean responseBean = RepositoryStub.persist(bean, feedbackResponse, userName, isDeveloper, isOwner);
+        FeedbackResponseListItem item = new FeedbackResponseListItem(context,bean,responseBean,FIXED);
+        //Get to the Bottom
+        scrollContainer.fullScroll(View.FOCUS_DOWN);
+        responseLayout.addView(item);
+        //Show new Entry
+        scrollContainer.fullScroll(View.FOCUS_DOWN);
+    }
     }
 }
 

@@ -49,6 +49,13 @@ public class FeedbackDatabase extends AbstractFeedbackDatabase {
         return insert(NumberTableEntry.TABLE_NAME, NumberTableEntry.COLUMN_NAME_KEY, key, values);
     }
 
+    public long writeBoolean(String key, boolean value) {
+        ContentValues values = new ContentValues();
+        values.put(NumberTableEntry.COLUMN_NAME_KEY, key);
+        values.put(NumberTableEntry.COLUMN_NAME_VALUE, value?1:0);
+        return insert(NumberTableEntry.TABLE_NAME, NumberTableEntry.COLUMN_NAME_KEY, key, values);
+    }
+
     public long writeInteger(String key, Integer value) {
         ContentValues values = new ContentValues();
         values.put(NumberTableEntry.COLUMN_NAME_KEY, key);
@@ -272,6 +279,20 @@ public class FeedbackDatabase extends AbstractFeedbackDatabase {
         }
         cursor.close();
         return ObjectUtility.nvl(f, valueIfNull);
+    }
+
+    public Boolean readBoolean(String key, Boolean valueIfNull) {
+        SQLiteDatabase db = databaseHelper.getReadableDatabase();
+        Cursor cursor = db.query(NumberTableEntry.TABLE_NAME, new String[]{NumberTableEntry.COLUMN_NAME_VALUE}, NumberTableEntry.COLUMN_NAME_KEY + LIKE + QUOTES + key + QUOTES, null, null, null, null, null);
+        Integer i = null;
+        if (cursor.moveToFirst()) {
+            i = cursor.getInt(0);
+        }
+        cursor.close();
+        if (i == null){
+            return valueIfNull;
+        }
+        return i==1?true:false;
     }
 
     public Integer readInteger(String key, Integer valueIfNull) {

@@ -53,8 +53,8 @@ public class RepositoryStub {
         String[] labels = GeneratorStub.BagOfLabels.pickRandom(5);
         int upVotes = feedbackBean.getUpVotes();
         long timeStamp = generateTimestamp();
-        Enums.FEEDBACK_STATUS status = feedbackBean.getFeedbackStatus();
-        List<FeedbackResponseBean> feedbackResponses = getFeedbackResponses(context, NumberUtility.randomInt(0, 10), timeStamp, 0.1f, 0.1f, feedbackBean);
+        FEEDBACK_STATUS status = feedbackBean.getFeedbackStatus();
+        List<FeedbackResponseBean> feedbackResponses = getFeedbackResponses(context, feedbackBean.getResponses(), timeStamp, 0.1f, 0.1f, feedbackBean);
         return new FeedbackDetailsBean.Builder()
                 .withFeedbackUid(feedbackBean.getFeedbackUid())
                 .withFeedbackBean(feedbackBean)
@@ -87,7 +87,18 @@ public class RepositoryStub {
                 .build();
     }
 
-    private static FeedbackBean getFeedback(Context context, int minUpVotes, int maxUpVotes, float ownFeedbackPercent) {
+    public static FeedbackResponseBean persist(FeedbackBean feedbackBean, String content, String userName, boolean isDeveloper, boolean isFeedbackOwner){
+        return new FeedbackResponseBean.Builder()
+                .withFeedbackUid(feedbackBean.getFeedbackUid())
+                .withContent(content)
+                .withUserName(userName)
+                .withTimestamp(System.currentTimeMillis())
+                .isDeveloper(isDeveloper)
+                .isFeedbackOwner(isFeedbackOwner)
+                .build();
+    }
+
+    private static FeedbackBean getFeedback(Context context, int minUpVotes,int maxUpVotes, float ownFeedbackPercent) {
         UUID feedbackUid = UUID.randomUUID();
         int upperBound = NumberUtility.divide(1, ownFeedbackPercent);
         boolean ownFeedback = ACTIVE.check(context) && NumberUtility.randomInt(0, upperBound > 0 ? upperBound - 1 : upperBound) == 0;
