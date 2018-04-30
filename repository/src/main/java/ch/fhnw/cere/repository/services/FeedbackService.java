@@ -13,6 +13,7 @@ public interface FeedbackService {
     public void delete(long id);
     List<Feedback> findByApplicationId(long applicationId);
     List<Feedback> findByUserIdentification(String userIdentification);
+    List<Feedback> findByAndroidApplicationId(String findByAndroidApplicationId);
 }
 
 
