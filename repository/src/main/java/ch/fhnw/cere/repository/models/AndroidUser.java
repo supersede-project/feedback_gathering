@@ -10,9 +10,10 @@ public class AndroidUser {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
+    @Column(unique = true)
     private String name;
     private boolean isDeveloper;
-
+    private boolean isBlocked;
 
     public AndroidUser() {
     }
@@ -44,6 +45,14 @@ public class AndroidUser {
 
     public void setDeveloper(boolean developer) {
         isDeveloper = developer;
+    }
+
+    public boolean isBlocked() {
+        return isBlocked;
+    }
+
+    public void setBlocked(boolean blocked) {
+        isBlocked = blocked;
     }
 
 }

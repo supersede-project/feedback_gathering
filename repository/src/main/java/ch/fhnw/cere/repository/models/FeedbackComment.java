@@ -1,21 +1,20 @@
 package ch.fhnw.cere.repository.models;
 
-
 import javax.persistence.*;
 
-
 @Entity
-public class FeedbackVote {
-
+public class FeedbackComment {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
+    private String comment;
 
-    public FeedbackVote() {
+
+
+
+    public FeedbackComment() {
+
     }
 
-    public FeedbackVote(String name,  boolean isDeveloper) {
-
-    }
 }
