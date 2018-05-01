@@ -36,10 +36,6 @@ public class FeedbackServiceImpl implements FeedbackService {
         return feedbackRepository.findByApplicationId(applicationId);
     }
 
-    public List<Feedback> findByAndroidApplicationId(String androidApplicationId) {
-        return feedbackRepository.findByAndroidApplicationId(androidApplicationId);
-    }
-
     public List<Feedback> findByUserIdentification(String userIdentification) {
         return feedbackRepository.findByUserIdentification(userIdentification);
     }
