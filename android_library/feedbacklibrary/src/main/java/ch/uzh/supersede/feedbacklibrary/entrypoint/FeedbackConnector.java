@@ -12,6 +12,7 @@ import java.util.HashMap;
 
 import ch.uzh.supersede.feedbacklibrary.R;
 import ch.uzh.supersede.feedbacklibrary.activities.FeedbackHubActivity;
+import ch.uzh.supersede.feedbacklibrary.beans.*;
 import ch.uzh.supersede.feedbacklibrary.utils.Utils;
 
 import static android.content.Context.MODE_PRIVATE;
@@ -39,8 +40,7 @@ public class FeedbackConnector {
         }
     }
 
-
-    protected static void onTouchConnector(Activity activity, View view, MotionEvent event) {
+    private static void onTouchConnector(Activity activity, View view, MotionEvent event) {
         if (event == null) { //On Listener attached
             onListenerConnected(activity, view);
         }
@@ -52,7 +52,7 @@ public class FeedbackConnector {
     }
 
     private static void onListenerTriggered(Activity activity, View view, MotionEvent event) {
-        startFeedbackHubWithScreenshotCapture(EXTRA_KEY_BASE_URL, activity, 1337, "en");
+        startFeedbackHubWithScreenshotCapture(EXTRA_KEY_BASE_URL, activity, "en");
     }
 
     private static class FeedbackOnTouchListener implements OnTouchListener {
@@ -74,7 +74,7 @@ public class FeedbackConnector {
     /**
      * Takes a screenshot of the current screen automatically and opens the FeedbackActivity from the feedback library in case if a PUSH feedback is triggered.
      */
-    public static void startFeedbackHubWithScreenshotCapture(@NonNull final String baseURL, @NonNull final Activity activity, final long applicationId, @NonNull final String language) {
+    private static void startFeedbackHubWithScreenshotCapture(@NonNull final String baseURL, @NonNull final Activity activity, @NonNull final String language) {
         Intent intent = new Intent(activity, FeedbackHubActivity.class);
         getActivityConfiguration(activity, intent);
         if (ACTIVE.check(activity)) {
@@ -84,43 +84,16 @@ public class FeedbackConnector {
             Utils.storeScreenshotToIntent(activity, intent);
         }
         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-        intent.putExtra(EXTRA_KEY_APPLICATION_ID, applicationId);
         intent.putExtra(EXTRA_KEY_LANGUAGE, language);
         activity.startActivity(intent);
         activity.overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
     }
 
-    //TODO> Implement marco
     private static void getActivityConfiguration(Activity activity, Intent intent) {
-        String hostApplicationName = getApplicationName(activity);
-        String hostApplicationId = getApplicationId(activity);
-        activity.getSharedPreferences(SHARED_PREFERENCES_ID, MODE_PRIVATE).edit().putString(SHARED_PREFERENCES_HOST_APPLICATION_NAME, hostApplicationName).apply();
-        activity.getSharedPreferences(SHARED_PREFERENCES_ID, MODE_PRIVATE).edit().putString(SHARED_PREFERENCES_HOST_APPLICATION_ID, hostApplicationId).apply();
-        intent.putExtra(EXTRA_KEY_HOST_APPLICATION_NAME, hostApplicationName);
-        if (activity instanceof IFeedbackBehavior){
-
-        }
-        if (activity instanceof  IFeedbackStyle){
-
-        }
-        if (activity instanceof  IFeedbackSettings){
-            activity.getSharedPreferences(SHARED_PREFERENCES_ID, MODE_PRIVATE).edit().putInt(SHARED_PREFERENCES_SETTINGS_USER_NAME_MIN_LENGTH, ((IFeedbackSettings)activity).getConfiguredMinUserNameLength()).apply();
-            activity.getSharedPreferences(SHARED_PREFERENCES_ID, MODE_PRIVATE).edit().putInt(SHARED_PREFERENCES_SETTINGS_USER_NAME_MAX_LENGTH, ((IFeedbackSettings)activity).getConfiguredMaxUserNameLength()).apply();
-            activity.getSharedPreferences(SHARED_PREFERENCES_ID, MODE_PRIVATE).edit().putInt(SHARED_PREFERENCES_SETTINGS_RESPONSE_MIN_LENGTH, ((IFeedbackSettings)activity).getConfiguredMinResponseLength()).apply();
-            activity.getSharedPreferences(SHARED_PREFERENCES_ID, MODE_PRIVATE).edit().putInt(SHARED_PREFERENCES_SETTINGS_RESPONSE_MAX_LENGTH, ((IFeedbackSettings)activity).getConfiguredMaxResponseLength()).apply();
-        }
-        if (activity instanceof  IFeedbackDeveloper){
-            activity.getSharedPreferences(SHARED_PREFERENCES_ID, MODE_PRIVATE).edit().putBoolean(SHARED_PREFERENCES_IS_DEVELOPER, ((IFeedbackDeveloper)activity).isDeveloper()).apply();
-        }
-    }
-
-    private static String getApplicationName(Context context) {
-        ApplicationInfo applicationInfo = context.getApplicationInfo();
-        int stringId = applicationInfo.labelRes;
-        return stringId == 0 ? applicationInfo.nonLocalizedLabel.toString() : context.getString(stringId);
-    }
-
-    private static String getApplicationId(Context context) {
-        return context.getPackageName().concat("."+getApplicationName(context)).toLowerCase();
+        LocalConfigurationBean configurationBean = new LocalConfigurationBean(activity);
+        //Host Name for Database
+        activity.getSharedPreferences(SHARED_PREFERENCES_ID, MODE_PRIVATE).edit().putString(SHARED_PREFERENCES_HOST_APPLICATION_NAME, configurationBean.getHostApplicationName()).apply();
+        intent.putExtra(EXTRA_KEY_HOST_APPLICATION_NAME, configurationBean.getHostApplicationName());
+        intent.putExtra(EXTRA_KEY_APPLICATION_CONFIGURATION,configurationBean);
     }
 }

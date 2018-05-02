@@ -9,14 +9,17 @@ import android.util.*;
 import android.view.View;
 import android.widget.Toast;
 
+import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import ch.uzh.supersede.feedbacklibrary.R;
+import ch.uzh.supersede.feedbacklibrary.beans.LocalConfigurationBean;
 import ch.uzh.supersede.feedbacklibrary.utils.ObjectUtility;
 import ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility;
 import ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility.USER_LEVEL;
 
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.EXTRA_KEY_APPLICATION_CONFIGURATION;
 import static ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility.USER_LEVEL.LOCKED;
 
 @SuppressWarnings("squid:MaximumInheritanceDepth")
@@ -25,6 +28,7 @@ public abstract class AbstractBaseActivity extends AppCompatActivity {
     protected final String[] preAllocatedStringStorage = new String[]{null};
     protected int screenWidth;
     protected int screenHeight;
+    protected LocalConfigurationBean configuration;
 
     protected <T> T getView(int id, Class<T> classType) {
         return classType.cast(findViewById(id));
@@ -38,6 +42,7 @@ public abstract class AbstractBaseActivity extends AppCompatActivity {
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         screenHeight = displayMetrics.heightPixels;
         screenWidth = displayMetrics.widthPixels;
+        configuration = (LocalConfigurationBean)getIntent().getSerializableExtra(EXTRA_KEY_APPLICATION_CONFIGURATION);
     }
 
     protected void onPostCreate(){
@@ -51,6 +56,7 @@ public abstract class AbstractBaseActivity extends AppCompatActivity {
     protected <T extends Activity> void  startActivity(T startActivity, Class<?> activityToStart ){
         Intent intent = new Intent(startActivity.getApplicationContext(), activityToStart);
         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+        handOverConfigurationToIntent(intent);
         startActivity.startActivity(intent);
         startActivity.overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
     }
@@ -74,5 +80,14 @@ public abstract class AbstractBaseActivity extends AppCompatActivity {
             Log.e("invokeNullSafe",e.getMessage());
         }
         return ObjectUtility.nvl(returnObject,valueIfNull);
+    }
+
+    protected void handOverConfigurationToIntent(Intent intent){
+        Serializable configuration = getIntent().getSerializableExtra(EXTRA_KEY_APPLICATION_CONFIGURATION);
+        intent.putExtra(EXTRA_KEY_APPLICATION_CONFIGURATION,configuration);
+    }
+
+    public LocalConfigurationBean getConfiguration() {
+        return configuration;
     }
 }

@@ -3,7 +3,6 @@ package ch.uzh.supersede.feedbacklibrary.beans;
 import android.app.Activity;
 import android.util.Log;
 
-import static ch.uzh.supersede.feedbacklibrary.utils.Constants.EXTRA_KEY_APPLICATION_ID;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.ServicesConstants.CONFIGURATION_REAUEST_WRAPPER_TAG;
 
 
@@ -89,7 +88,7 @@ public class ConfigurationRequestBean {
         public ConfigurationRequestBean build() {
             if (checkNullAndLog(url, "url") || checkNullAndLog(language, "language") || checkNullAndLog
                     (intermediateDialogText, "intermediateDialogText") || checkNullAndLog(activityToStart, "activityToStart")
-                    || checkNullAndLog(startingActivity, "startingActivity") || checkNullAndLog(applicationId, EXTRA_KEY_APPLICATION_ID)
+                    || checkNullAndLog(startingActivity, "startingActivity") || checkNullAndLog(applicationId, "applicationId")
                     || checkNullAndLog(pullConfigurationId, "pullConfigurationId")) {
                 throw new RuntimeException("Could not create ConfigurationRequestBean!");
             }

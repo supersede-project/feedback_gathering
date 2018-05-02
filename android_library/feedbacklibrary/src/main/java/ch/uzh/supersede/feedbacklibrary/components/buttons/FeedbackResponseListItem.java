@@ -12,16 +12,14 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.*;
 
 import ch.uzh.supersede.feedbacklibrary.R;
-import ch.uzh.supersede.feedbacklibrary.activities.FeedbackDetailsActivity;
+import ch.uzh.supersede.feedbacklibrary.activities.*;
 import ch.uzh.supersede.feedbacklibrary.beans.*;
 import ch.uzh.supersede.feedbacklibrary.database.FeedbackDatabase;
 import ch.uzh.supersede.feedbacklibrary.stubs.RepositoryStub;
 import ch.uzh.supersede.feedbacklibrary.utils.*;
 
-import static android.content.Context.MODE_PRIVATE;
 import static ch.uzh.supersede.feedbacklibrary.components.buttons.FeedbackResponseListItem.RESPONSE_MODE.*;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.*;
-import static ch.uzh.supersede.feedbacklibrary.utils.Constants.SettingsConstants.*;
 import static ch.uzh.supersede.feedbacklibrary.utils.Enums.RESPONSE_MODE.EDITING;
 import static ch.uzh.supersede.feedbacklibrary.utils.Enums.RESPONSE_MODE.READING;
 
@@ -32,20 +30,18 @@ public class FeedbackResponseListItem extends LinearLayout implements Comparable
     private FeedbackResponseBean feedbackResponseBean;
     private FeedbackBean feedbackBean;
     private RESPONSE_MODE mode;
-    private int minResponseLength;
-    private int maxResponseLength;
+    private LocalConfigurationBean configuration;
 
     public enum RESPONSE_MODE {
         FIXED, EDITABLE
     }
 
-    public FeedbackResponseListItem(Context context, FeedbackBean feedbackBean, FeedbackResponseBean feedbackResponseBean, RESPONSE_MODE mode) {
+    public FeedbackResponseListItem(Context context, FeedbackBean feedbackBean, FeedbackResponseBean feedbackResponseBean, LocalConfigurationBean configuration, RESPONSE_MODE mode) {
         super(context);
+        this.configuration = configuration;
         this.feedbackBean = feedbackBean;
         this.feedbackResponseBean = feedbackResponseBean;
         this.mode = mode;
-        minResponseLength = getContext().getSharedPreferences(SHARED_PREFERENCES_ID, MODE_PRIVATE).getInt(SHARED_PREFERENCES_SETTINGS_RESPONSE_MIN_LENGTH, SETTINGS_RESPONSE_MIN_LENGTH);
-        maxResponseLength = getContext().getSharedPreferences(SHARED_PREFERENCES_ID, MODE_PRIVATE).getInt(SHARED_PREFERENCES_SETTINGS_RESPONSE_MAX_LENGTH, SETTINGS_RESPONSE_MAX_LENGTH);
         generateListItem(feedbackResponseBean);
     }
 
@@ -173,7 +169,7 @@ public class FeedbackResponseListItem extends LinearLayout implements Comparable
         editText.setMaxLines(Integer.MAX_VALUE);
         editText.setLayoutParams(layoutParams);
         editText.setGravity(gravity);
-        editText.setFilters(new InputFilter[]{new InputFilter.LengthFilter(maxResponseLength)});
+        editText.setFilters(new InputFilter[]{new InputFilter.LengthFilter(configuration.getMaxResponseLength())});
         editText.setTextColor(textColor);
         editText.setBackgroundColor(backgroundColor);
         editText.setPadding(padding, padding, padding, padding);
@@ -194,13 +190,13 @@ public class FeedbackResponseListItem extends LinearLayout implements Comparable
     }
 
     private void prepareFeedbackResponse() {
-        if (((EditText)bottomView).getText().length() < minResponseLength){
+        if (((EditText)bottomView).getText().length() < configuration.getMinResponseLength()){
             Toast.makeText(getContext(),getContext().getString(R.string.details_response_too_short),Toast.LENGTH_SHORT).show();
         }else{
             String response = ((EditText) bottomView).getText().toString();
             RepositoryStub.sendFeedbackResponse(getContext(),feedbackBean, response);
             removeFeedbackResponse();
-            FeedbackDetailsActivity.persistFeedbackResponseLocally(getContext(),feedbackBean,response);
+            FeedbackDetailsActivity.persistFeedbackResponseLocally(getContext(),feedbackBean,configuration, response);
         }
     }
 

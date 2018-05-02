@@ -34,21 +34,22 @@ public class Constants {
     public static final String JSON_CONFIGURATION_STRING = "jsonConfigurationString";
     public static final String SELECTED_PULL_CONFIGURATION_INDEX = "selectedPullConfigurationIndex";
 
-    public static final String EXTRA_KEY_APPLICATION_ID = "applicationId";
     public static final String EXTRA_KEY_BASE_URL = "baseURL";
     public static final String EXTRA_KEY_LANGUAGE = "language";
     public static final String EXTRA_KEY_HOST_APPLICATION_NAME = "hostApplicationName";
+    public static final String EXTRA_KEY_APPLICATION_CONFIGURATION = "applicationConfiguration";
     public static final String EXTRA_KEY_FEEDBACK_BEAN = "feedbackBean";
     public static final String EXTRA_KEY_CACHED_SCREENSHOT = "cachedScreenshot";
 
     public static final String SHARED_PREFERENCES_ID = "ch.uzh.supersede.feedbacklibrary.feedback";
-    public static final String SHARED_PREFERENCES_IS_DEVELOPER = "isDeveloper";
     public static final String SHARED_PREFERENCES_HOST_APPLICATION_NAME = "hostApplicationName";
-    public static final String SHARED_PREFERENCES_HOST_APPLICATION_ID = "hostApplicationId";
-    public static final String SHARED_PREFERENCES_SETTINGS_USER_NAME_MIN_LENGTH = "settingsUserNameMin";
-    public static final String SHARED_PREFERENCES_SETTINGS_USER_NAME_MAX_LENGTH = "settingsUserNameMax";
-    public static final String SHARED_PREFERENCES_SETTINGS_RESPONSE_MIN_LENGTH = "settingsResponseMin";
-    public static final String SHARED_PREFERENCES_SETTINGS_RESPONSE_MAX_LENGTH = "settingsResponseMax";
+
+    //    public static final String SHARED_PREFERENCES_IS_DEVELOPER = "isDeveloper";
+//    public static final String SHARED_PREFERENCES_HOST_APPLICATION_ID = "hostApplicationId";
+//    public static final String SHARED_PREFERENCES_SETTINGS_USER_NAME_MIN_LENGTH = "settingsUserNameMin";
+//    public static final String SHARED_PREFERENCES_SETTINGS_USER_NAME_MAX_LENGTH = "settingsUserNameMax";
+//    public static final String SHARED_PREFERENCES_SETTINGS_RESPONSE_MIN_LENGTH = "settingsResponseMin";
+//    public static final String SHARED_PREFERENCES_SETTINGS_RESPONSE_MAX_LENGTH = "settingsResponseMax";
 
     public static final int REQUEST_PHOTO = 11;
     public static final int REQUEST_ANNOTATE = 12;
