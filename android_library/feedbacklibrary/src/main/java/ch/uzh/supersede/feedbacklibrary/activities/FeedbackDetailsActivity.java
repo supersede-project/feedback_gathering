@@ -68,7 +68,7 @@ public class FeedbackDetailsActivity extends AbstractBaseActivity {
             if (feedbackDetailsBean != null) {
                 updateFeedbackState();
                 for (FeedbackResponseBean bean : feedbackDetailsBean.getResponses()) {
-                    FeedbackResponseListItem feedbackResponseListItem = new FeedbackResponseListItem(this,feedbackBean, bean, FIXED);
+                    FeedbackResponseListItem feedbackResponseListItem = new FeedbackResponseListItem(this,feedbackBean, bean, configuration, FIXED);
                     responseList.add(feedbackResponseListItem);
                 }
                 Collections.sort(responseList);
@@ -125,7 +125,7 @@ public class FeedbackDetailsActivity extends AbstractBaseActivity {
         }else if (view.getId() == subscribeButton.getId()){
             RepositoryStub.sendSubscriptionChange(this, feedbackDetailsBean.getFeedbackBean(), !feedbackState.isSubscribed());
         }else if (view.getId() == responseButton.getId() && mode == READING){
-            FeedbackResponseListItem item = new FeedbackResponseListItem(this,feedbackDetailsBean.getFeedbackBean(),null,EDITABLE);
+            FeedbackResponseListItem item = new FeedbackResponseListItem(this,feedbackDetailsBean.getFeedbackBean(),null,configuration,EDITABLE);
             //Get to the Bottom
             scrollContainer.fullScroll(View.FOCUS_DOWN);
             responseLayout.addView(item);
@@ -136,18 +136,19 @@ public class FeedbackDetailsActivity extends AbstractBaseActivity {
         updateFeedbackState();
     }
 
-    public static void persistFeedbackResponseLocally(Context context, FeedbackBean bean, String feedbackResponse) {{
-        String userName = FeedbackDatabase.getInstance(context).readString(USER_NAME, USER_NAME_ANONYMOUS);
-        boolean isDeveloper = FeedbackDatabase.getInstance(context).readBoolean(IS_DEVELOPER, false);
-        boolean isOwner = bean.getUserName() != null && bean.getUserName().equals(userName);
-        FeedbackResponseBean responseBean = RepositoryStub.persist(bean, feedbackResponse, userName, isDeveloper, isOwner);
-        FeedbackResponseListItem item = new FeedbackResponseListItem(context,bean,responseBean,FIXED);
-        //Get to the Bottom
-        scrollContainer.fullScroll(View.FOCUS_DOWN);
-        responseLayout.addView(item);
-        //Show new Entry
-        scrollContainer.fullScroll(View.FOCUS_DOWN);
-    }
+    public static void persistFeedbackResponseLocally(Context context, FeedbackBean bean, LocalConfigurationBean configuration, String feedbackResponse) {
+        {
+            String userName = FeedbackDatabase.getInstance(context).readString(USER_NAME, USER_NAME_ANONYMOUS);
+            boolean isDeveloper = FeedbackDatabase.getInstance(context).readBoolean(IS_DEVELOPER, false);
+            boolean isOwner = bean.getUserName() != null && bean.getUserName().equals(userName);
+            FeedbackResponseBean responseBean = RepositoryStub.persist(bean, feedbackResponse, userName, isDeveloper, isOwner);
+            FeedbackResponseListItem item = new FeedbackResponseListItem(context, bean, responseBean, configuration, FIXED);
+            //Get to the Bottom
+            scrollContainer.fullScroll(View.FOCUS_DOWN);
+            responseLayout.addView(item);
+            //Show new Entry
+            scrollContainer.fullScroll(View.FOCUS_DOWN);
+        }
     }
 }
 

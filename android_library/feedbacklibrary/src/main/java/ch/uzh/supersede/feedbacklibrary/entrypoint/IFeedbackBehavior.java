@@ -7,4 +7,6 @@ import android.widget.Toast;
 
 public interface IFeedbackBehavior {
 
+    int getConfiguredPullIntervalMinutes();
+
 }
