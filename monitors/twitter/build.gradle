@@ -51,7 +51,7 @@ dependencies {
 
     // The production code uses the SLF4J logging API at compile time
     compile 'org.slf4j:slf4j-api:1.7.21'
-    compile("eu.supersede.if:eu.supersede.if.api:0.3.0-SNAPSHOT"){changing = true} 
+    compile("eu.supersede.if:eu.supersede.if.api:0.4.0-SNAPSHOT"){changing = true} 
     
     compile 'log4j:log4j:1.2.17'
 
