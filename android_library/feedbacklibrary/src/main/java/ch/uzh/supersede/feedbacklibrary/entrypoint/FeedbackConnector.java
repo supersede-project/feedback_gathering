@@ -4,6 +4,7 @@ package ch.uzh.supersede.feedbacklibrary.entrypoint;
 import android.app.Activity;
 import android.content.*;
 import android.content.pm.*;
+import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
 import android.view.*;
 import android.view.View.OnTouchListener;
@@ -13,7 +14,7 @@ import java.util.HashMap;
 import ch.uzh.supersede.feedbacklibrary.R;
 import ch.uzh.supersede.feedbacklibrary.activities.FeedbackHubActivity;
 import ch.uzh.supersede.feedbacklibrary.beans.*;
-import ch.uzh.supersede.feedbacklibrary.utils.Utils;
+import ch.uzh.supersede.feedbacklibrary.utils.*;
 
 import static android.content.Context.MODE_PRIVATE;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.*;
@@ -76,21 +77,23 @@ public class FeedbackConnector {
      */
     private static void startFeedbackHubWithScreenshotCapture(@NonNull final String baseURL, @NonNull final Activity activity, @NonNull final String language) {
         Intent intent = new Intent(activity, FeedbackHubActivity.class);
-        getActivityConfiguration(activity, intent);
+        Bitmap screenshot;
         if (ACTIVE.check(activity)) {
             Utils.wipeImages(activity.getApplicationContext());
-            Utils.storeScreenshotToDatabase(activity);
+            screenshot = Utils.storeScreenshotToDatabase(activity);
         } else {
-            Utils.storeScreenshotToIntent(activity, intent);
+            screenshot = Utils.storeScreenshotToIntent(activity, intent);
         }
+        getActivityConfiguration(activity, intent, screenshot);
         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
         intent.putExtra(EXTRA_KEY_LANGUAGE, language);
         activity.startActivity(intent);
         activity.overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
     }
 
-    private static void getActivityConfiguration(Activity activity, Intent intent) {
-        LocalConfigurationBean configurationBean = new LocalConfigurationBean(activity);
+    private static void getActivityConfiguration(Activity activity, Intent intent, Bitmap screenshot) {
+        Integer[] topColors = ImageUtility.calculateTopNColors(screenshot,2,20);
+        LocalConfigurationBean configurationBean = new LocalConfigurationBean(activity,topColors);
         //Host Name for Database
         activity.getSharedPreferences(SHARED_PREFERENCES_ID, MODE_PRIVATE).edit().putString(SHARED_PREFERENCES_HOST_APPLICATION_NAME, configurationBean.getHostApplicationName()).apply();
         intent.putExtra(EXTRA_KEY_HOST_APPLICATION_NAME, configurationBean.getHostApplicationName());

@@ -4,10 +4,12 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.*;
 import android.view.View;
-import android.widget.Toast;
+import android.widget.*;
 
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
@@ -15,8 +17,7 @@ import java.lang.reflect.Method;
 
 import ch.uzh.supersede.feedbacklibrary.R;
 import ch.uzh.supersede.feedbacklibrary.beans.LocalConfigurationBean;
-import ch.uzh.supersede.feedbacklibrary.utils.ObjectUtility;
-import ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility;
+import ch.uzh.supersede.feedbacklibrary.utils.*;
 import ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility.USER_LEVEL;
 
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.EXTRA_KEY_APPLICATION_CONFIGURATION;
@@ -89,5 +90,19 @@ public abstract class AbstractBaseActivity extends AppCompatActivity {
 
     public LocalConfigurationBean getConfiguration() {
         return configuration;
+    }
+
+    protected void colorViews(int colorIndex, View... views){
+        Integer color = configuration.getTopColors()[colorIndex];
+        if (configuration.getTopColors().length >= colorIndex && color != null) {
+            for (View v : views) {
+                if (v instanceof TextView && ImageUtility.isDark(color)){
+                    ((TextView)v).setTextColor(ContextCompat.getColor(this,R.color.white));
+                }else if (v instanceof TextView){
+                    ((TextView)v).setTextColor(ContextCompat.getColor(this,R.color.black));
+                }
+                v.setBackgroundColor(color);
+            }
+        }
     }
 }

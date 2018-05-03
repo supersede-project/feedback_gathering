@@ -9,10 +9,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.text.Html;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.*;
 
 import java.util.*;
 
@@ -20,11 +17,10 @@ import ch.uzh.supersede.feedbacklibrary.R;
 import ch.uzh.supersede.feedbacklibrary.beans.*;
 import ch.uzh.supersede.feedbacklibrary.database.FeedbackDatabase;
 import ch.uzh.supersede.feedbacklibrary.stubs.RepositoryStub;
-import ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility;
+import ch.uzh.supersede.feedbacklibrary.utils.*;
 import ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility.USER_LEVEL;
-import ch.uzh.supersede.feedbacklibrary.utils.PopUp;
-import ch.uzh.supersede.feedbacklibrary.utils.Utils;
 
+import static ch.uzh.supersede.feedbacklibrary.entrypoint.IFeedbackStyle.FEEDBACK_STYLE.ADAPTIVE;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.ActivitiesConstants.*;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.*;
 import static ch.uzh.supersede.feedbacklibrary.utils.Enums.FETCH_MODE.*;
@@ -36,6 +32,7 @@ public class FeedbackHubActivity extends AbstractBaseActivity {
     private Button levelButton;
     private Button feedbackButton;
     private Button settingsButton;
+    private LinearLayout backgroundLayout;
     private TextView statusText;
     private String userName;
     private int tapCounter = 0;
@@ -47,11 +44,16 @@ public class FeedbackHubActivity extends AbstractBaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_feedback_hub);
-        //User Level Setup
+        //Layout
         listButton = getView(R.id.hub_button_list, Button.class);
         levelButton = getView(R.id.hub_button_user_level, Button.class);
         feedbackButton = getView(R.id.hub_button_feedback, Button.class);
         settingsButton = getView(R.id.hub_button_settings, Button.class);
+        backgroundLayout = getView(R.id.hub_layout_background, LinearLayout.class);
+        if (configuration.getStyle()==ADAPTIVE){
+            colorViews(0,backgroundLayout);
+            colorViews(1,listButton,levelButton,feedbackButton,settingsButton);
+        }
         statusText = getView(R.id.hub_text_status, TextView.class);
         //Cache
         cachedScreenshot = getIntent().getByteArrayExtra(EXTRA_KEY_CACHED_SCREENSHOT);
@@ -106,12 +108,25 @@ public class FeedbackHubActivity extends AbstractBaseActivity {
             int downVotedFeedbackBeans = FeedbackDatabase.getInstance(this).getFeedbackBeans(DOWN_VOTED).size();
             int respondedFeedbackBeans = FeedbackDatabase.getInstance(this).getFeedbackBeans(RESPONDED).size();
             int allFeedbackBeans = FeedbackDatabase.getInstance(this).getFeedbackBeans(ALL).size();
-            statusText.setText(Html.fromHtml(getString(R.string.hub_status,userName,
-                    allFeedbackBeans,
-                    ownFeedbackBeans,
-                    respondedFeedbackBeans,
-                    upVotedFeedbackBeans,
-                    downVotedFeedbackBeans).replace(COLOR_STRING,DARK_BLUE)));
+            if (configuration.getStyle()==ADAPTIVE && configuration.hasAtLeastNTopColors(2) ) {
+                statusText.setText(Html.fromHtml(getString(R.string.hub_status, userName,
+                        allFeedbackBeans,
+                        ownFeedbackBeans,
+                        respondedFeedbackBeans,
+                        upVotedFeedbackBeans,
+                        downVotedFeedbackBeans)
+                        .replace(PRIMARY_COLOR_STRING, ImageUtility.isDark(configuration.getTopColors()[0])?WHITE:BLACK)
+                        .replace(SECONDARY_COLOR_STRING, ImageUtility.toHexString(configuration.getTopColors()[1]))));
+            }else{
+                statusText.setText(Html.fromHtml(getString(R.string.hub_status,userName,
+                        allFeedbackBeans,
+                        ownFeedbackBeans,
+                        respondedFeedbackBeans,
+                        upVotedFeedbackBeans,
+                        downVotedFeedbackBeans)
+                        .replace(PRIMARY_COLOR_STRING,BLACK)
+                        .replace(SECONDARY_COLOR_STRING,DARK_BLUE)));
+            }
             feedbackButton.setEnabled(true);
             settingsButton.setEnabled(true);
         }
@@ -177,7 +192,7 @@ public class FeedbackHubActivity extends AbstractBaseActivity {
                                     respondedFeedbackBeans.size()+" responded Feedback-Entries.",
                             Toast.LENGTH_SHORT).show();
                     userName = null;
-                    statusText.setText(Html.fromHtml(getString(R.string.hub_status,userName,0,0,0,0,0).replace(COLOR_STRING,DARK_BLUE)));
+                    statusText.setText(Html.fromHtml(getString(R.string.hub_status,userName,0,0,0,0,0).replace(PRIMARY_COLOR_STRING,DARK_BLUE)));
                     updateUserLevel(false);
                 }
             }

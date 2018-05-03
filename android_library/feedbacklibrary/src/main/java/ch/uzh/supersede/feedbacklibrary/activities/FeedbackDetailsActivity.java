@@ -24,6 +24,7 @@ import static ch.uzh.supersede.feedbacklibrary.components.buttons.FeedbackRespon
 import static ch.uzh.supersede.feedbacklibrary.components.buttons.FeedbackResponseListItem.RESPONSE_MODE.FIXED;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.*;
 import static ch.uzh.supersede.feedbacklibrary.utils.Enums.RESPONSE_MODE.READING;
+import static ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility.USER_LEVEL.ACTIVE;
 
 @SuppressWarnings("squid:MaximumInheritanceDepth")
 public class FeedbackDetailsActivity extends AbstractBaseActivity {
@@ -44,6 +45,7 @@ public class FeedbackDetailsActivity extends AbstractBaseActivity {
     private Button labelButton;
     private Button subscribeButton;
     private Button responseButton;
+    private Button makePublicButton;
     private ArrayList<FeedbackResponseListItem> responseList = new ArrayList<>();
 
     @Override
@@ -65,6 +67,7 @@ public class FeedbackDetailsActivity extends AbstractBaseActivity {
         labelButton = getView(R.id.details_button_labels, Button.class);
         subscribeButton = getView(R.id.details_button_subscribe, Button.class);
         responseButton = getView(R.id.details_button_response, Button.class);
+        makePublicButton = getView(R.id.details_button_make_public, Button.class);
         FeedbackBean feedbackBean = (FeedbackBean) getIntent().getSerializableExtra(EXTRA_KEY_FEEDBACK_BEAN);
         if (feedbackBean != null) {
             feedbackDetailsBean = RepositoryStub.getFeedbackDetails(this, feedbackBean);
@@ -83,6 +86,13 @@ public class FeedbackDetailsActivity extends AbstractBaseActivity {
                 statusText.setText(getString(R.string.details_status,feedbackDetailsBean.getFeedbackStatus().getLabel()));
                 titleText.setText(getString(R.string.details_title,feedbackDetailsBean.getTitle()));
                 descriptionText.setText(feedbackDetailsBean.getDescription());
+            }
+            if (feedbackBean.isOwnFeedback(getApplicationContext())){
+                upButton.setEnabled(false);
+                downButton.setEnabled(false);
+                if (!feedbackBean.isPublic()){
+                    makePublicButton.setVisibility(View.VISIBLE);
+                }
             }
         }
         onPostCreate();
@@ -151,6 +161,20 @@ public class FeedbackDetailsActivity extends AbstractBaseActivity {
             //Show new Entry
             scrollContainer.fullScroll(View.FOCUS_DOWN);
             item.requestInputFocus();
+        }else if (view.getId() == makePublicButton.getId()){
+            DialogInterface.OnClickListener okClickListener = new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    makePublicButton.setVisibility(View.INVISIBLE);
+                    RepositoryStub.makeFeedbackPublic(feedbackDetailsBean);
+                    Toast.makeText(FeedbackDetailsActivity.this,R.string.details_published,Toast.LENGTH_SHORT).show();
+                    dialog.cancel();
+                }
+            };
+            new PopUp(this)
+                    .withTitle(getString(R.string.details_make_public_title))
+                    .withCustomOk("Confirm",okClickListener)
+                    .withMessage(getString(R.string.details_make_public_content)).buildAndShow();
         }
         updateFeedbackState();
     }

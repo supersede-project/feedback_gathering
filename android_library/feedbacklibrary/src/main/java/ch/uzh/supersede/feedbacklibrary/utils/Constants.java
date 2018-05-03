@@ -102,8 +102,11 @@ public class Constants {
         }
 
         //FeedbackHubActivity
-        public static final String COLOR_STRING = "colorString";
+        public static final String PRIMARY_COLOR_STRING = "primaryColorString";
+        public static final String SECONDARY_COLOR_STRING = "secondaryColorString";
         public static final String DARK_BLUE = "303F9F";
+        public static final String BLACK = "000000";
+        public static final String WHITE = "FFFFFF";
 
         //FeedbackAcitivity
         public static final String FEEDBACK_ACTIVITY_TAG = "FeedbackActivity";

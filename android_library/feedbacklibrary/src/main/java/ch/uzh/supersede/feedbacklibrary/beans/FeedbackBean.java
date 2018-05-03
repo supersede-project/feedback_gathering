@@ -1,10 +1,16 @@
 package ch.uzh.supersede.feedbacklibrary.beans;
 
+import android.content.Context;
+
 import java.io.Serializable;
 import java.util.UUID;
 
+import ch.uzh.supersede.feedbacklibrary.database.FeedbackDatabase;
 import ch.uzh.supersede.feedbacklibrary.utils.CompareUtility;
 import ch.uzh.supersede.feedbacklibrary.utils.Enums.FEEDBACK_STATUS;
+
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.USER_NAME;
+import static ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility.USER_LEVEL.ACTIVE;
 
 public class FeedbackBean implements Serializable{
 
@@ -17,6 +23,7 @@ public class FeedbackBean implements Serializable{
     private int minUpVotes;
     private int responses;
     private FEEDBACK_STATUS feedbackStatus;
+    private boolean isPublic;
 
     private FeedbackBean() {
     }
@@ -31,6 +38,7 @@ public class FeedbackBean implements Serializable{
         private int minUpVotes;
         private int responses;
         private FEEDBACK_STATUS feedbackStatus;
+        private boolean isPublic;
 
         public Builder() {
             //NOP
@@ -80,6 +88,12 @@ public class FeedbackBean implements Serializable{
             return this;
         }
 
+        public Builder isPublic() {
+            this.isPublic = true;
+            return this;
+        }
+
+
         public FeedbackBean build() {
             if (CompareUtility.notNull(feedbackUid,title,userName,timeStamp,maxUpVotes, minUpVotes,feedbackStatus)) {
                 FeedbackBean bean = new FeedbackBean();
@@ -92,6 +106,7 @@ public class FeedbackBean implements Serializable{
                 bean.minUpVotes = this.minUpVotes;
                 bean.responses = this.responses;
                 bean.feedbackStatus = this.feedbackStatus;
+                bean.isPublic = this.isPublic;
                 return bean;
             }
             return null;
@@ -145,5 +160,16 @@ public class FeedbackBean implements Serializable{
     public String upVote(){
         upVotes++;
         return getVotesAsText();
+    }
+
+    public boolean isPublic() {
+        return isPublic;
+    }
+
+    public boolean isOwnFeedback(Context context){
+        if (ACTIVE.check(context,false) && getUserName().equals(FeedbackDatabase.getInstance(context).readString(USER_NAME,""))){
+            return true;
+        }
+        return false;
     }
 }

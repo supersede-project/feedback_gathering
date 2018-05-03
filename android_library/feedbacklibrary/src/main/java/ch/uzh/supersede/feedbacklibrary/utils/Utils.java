@@ -30,15 +30,16 @@ public class Utils {
         FeedbackDatabase.getInstance(context).deleteData(IMAGE_ANNOTATED_DATA_DB_KEY);
     }
 
-    public static void storeScreenshotToDatabase(final Activity activity) {
+    public static Bitmap storeScreenshotToDatabase(final Activity activity) {
         View rootView = activity.getWindow().getDecorView().getRootView();
         rootView.setDrawingCacheEnabled(true);
         Bitmap imageBitmap = Bitmap.createBitmap(rootView.getDrawingCache());
         rootView.setDrawingCacheEnabled(false);
         storeImageToDatabase(activity, imageBitmap);
+        return imageBitmap;
     }
 
-    public static void storeScreenshotToIntent(final Activity activity, Intent intent) {
+    public static Bitmap storeScreenshotToIntent(final Activity activity, Intent intent) {
         View rootView = activity.getWindow().getDecorView().getRootView();
         rootView.setDrawingCacheEnabled(true);
         Bitmap imageBitmap = Bitmap.createBitmap(rootView.getDrawingCache());
@@ -46,6 +47,7 @@ public class Utils {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         imageBitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
         intent.putExtra(EXTRA_KEY_CACHED_SCREENSHOT, stream.toByteArray());
+        return imageBitmap;
     }
 
     public static void storeImageToDatabase(final Activity activity, Bitmap bitmap) {

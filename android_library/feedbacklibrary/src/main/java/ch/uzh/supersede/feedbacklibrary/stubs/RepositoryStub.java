@@ -253,4 +253,7 @@ public class RepositoryStub {
         return new byte[0];
     }
 
+    public static void makeFeedbackPublic(FeedbackDetailsBean feedbackDetailsBean) {
+        //TheoreticalCallToRepo
+    }
 }

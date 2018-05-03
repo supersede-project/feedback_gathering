@@ -34,11 +34,13 @@ public class LocalConfigurationBean implements Serializable {
     private String hostApplicationName;
     private String hostApplicationId;
     private Long hostApplicationLongId;
+    private Integer[] topColors;
 
     private LocalConfigurationBean() {
     }
 
-    public LocalConfigurationBean(Activity activity) {
+    public LocalConfigurationBean(Activity activity, Integer[] topColors) {
+        this.topColors = topColors;
         if (activity instanceof IFeedbackBehavior) {
             readConfiguration((IFeedbackBehavior) activity);
         }
@@ -96,6 +98,17 @@ public class LocalConfigurationBean implements Serializable {
         return context.getPackageName().concat("." + getApplicationName(context)).toLowerCase();
     }
 
+    public boolean hasAtLeastNTopColors(int n){
+        if (topColors.length < n){
+            return false;
+        }
+        for (Integer i : topColors){
+            if (i == null) {
+                return false;
+            }
+        }
+        return true;
+    }
 
     public int getPullIntervalMinutes() {
         return pullIntervalMinutes;
@@ -155,5 +168,9 @@ public class LocalConfigurationBean implements Serializable {
 
     public Long getHostApplicationLongId() {
         return hostApplicationLongId;
+    }
+
+    public Integer[] getTopColors() {
+        return topColors;
     }
 }
