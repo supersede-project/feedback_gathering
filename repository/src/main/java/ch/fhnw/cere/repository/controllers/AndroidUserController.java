@@ -30,8 +30,17 @@ public class AndroidUserController extends BaseController {
 
     @PreAuthorize("@securityService.hasAdminPermission(#applicationId)")
     @RequestMapping(method = RequestMethod.GET, value = "/{id}")
-    public AndroidUser getAndroidUser(@PathVariable long applicationId, @PathVariable long id) {
+    public AndroidUser getAndroidUser(@RequestParam(value = "name", required = false) String name, @PathVariable long applicationId, @PathVariable long id) {
         AndroidUser androidUser = androidUserService.find(id);
+        if (androidUser == null) {
+            throw new NotFoundException();
+        }
+        return androidUser;
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "", params = "name")
+    public AndroidUser getAndroidUserByName(@RequestParam("name") String name) {
+        AndroidUser androidUser = androidUserService.findByName(name);
         if (androidUser == null) {
             throw new NotFoundException();
         }
@@ -40,18 +49,18 @@ public class AndroidUserController extends BaseController {
 
     @ResponseStatus(HttpStatus.CREATED)
     @RequestMapping(method = RequestMethod.POST, value = "")
-    public AndroidUser createAndroidUser(@PathVariable long applicationId ,@RequestBody AndroidUser androidUser) {
+    public AndroidUser createAndroidUser(@PathVariable long applicationId, @RequestBody AndroidUser androidUser) {
         androidUser.setApplicationId(applicationId);
         return androidUserService.save(androidUser);
     }
 
     @RequestMapping(method = RequestMethod.PUT, value = "/{id}")
     public AndroidUser blockedAndroidUser(@PathVariable("id") long id, HttpEntity<String> blockedState) {
-        if(blockedState.getBody() != null){
+        if (blockedState.getBody() != null) {
             JSONObject obj = new JSONObject(blockedState.getBody());
             boolean blockedValue = obj.getBoolean("blocked");
             AndroidUser modifiedAndroidUser = androidUserService.find(id);
-            if(modifiedAndroidUser != null) {
+            if (modifiedAndroidUser != null) {
                 modifiedAndroidUser.setBlocked(blockedValue);
                 androidUserService.save(modifiedAndroidUser);
                 return modifiedAndroidUser;
@@ -61,6 +70,7 @@ public class AndroidUserController extends BaseController {
         }
         throw new BadRequestException();
     }
+
     @RequestMapping(method = RequestMethod.DELETE, value = "/{id}")
     public void deleteAndroidUser(@PathVariable long id) {
         androidUserService.delete(id);

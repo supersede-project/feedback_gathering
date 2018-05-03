@@ -33,7 +33,7 @@ public class AndroidUserServiceImpl implements AndroidUserService {
     }
 
     public AndroidUser findByName(String name) {
-        return null;
+        return androidUserRepository.findByName(name);
     }
 
     public List<AndroidUser> findByApplicationId(long id) {

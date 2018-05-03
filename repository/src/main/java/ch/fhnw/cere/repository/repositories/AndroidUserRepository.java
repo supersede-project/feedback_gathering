@@ -10,4 +10,5 @@ import java.util.List;
 @Repository
 public interface AndroidUserRepository extends JpaRepository<AndroidUser, Long> {
     List<AndroidUser> findByApplicationId(long id);
+    AndroidUser findByName(String name);
 }
