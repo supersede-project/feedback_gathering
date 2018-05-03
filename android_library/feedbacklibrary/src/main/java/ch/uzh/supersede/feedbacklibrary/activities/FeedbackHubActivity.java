@@ -17,7 +17,7 @@ import android.widget.Toast;
 import java.util.*;
 
 import ch.uzh.supersede.feedbacklibrary.R;
-import ch.uzh.supersede.feedbacklibrary.beans.LocalFeedbackBean;
+import ch.uzh.supersede.feedbacklibrary.beans.*;
 import ch.uzh.supersede.feedbacklibrary.database.FeedbackDatabase;
 import ch.uzh.supersede.feedbacklibrary.stubs.RepositoryStub;
 import ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility;
@@ -27,8 +27,6 @@ import ch.uzh.supersede.feedbacklibrary.utils.Utils;
 
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.ActivitiesConstants.*;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.*;
-import static ch.uzh.supersede.feedbacklibrary.utils.Constants.SettingsConstants.SETTINGS_USER_NAME_MAX_LENGTH;
-import static ch.uzh.supersede.feedbacklibrary.utils.Constants.SettingsConstants.SETTINGS_USER_NAME_MIN_LENGTH;
 import static ch.uzh.supersede.feedbacklibrary.utils.Enums.FETCH_MODE.*;
 import static ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility.USER_LEVEL.*;
 
@@ -43,8 +41,7 @@ public class FeedbackHubActivity extends AbstractBaseActivity {
     private int tapCounter = 0;
     private byte[] cachedScreenshot = null;
     private String hostApplicationName = null;
-    private int minUserNameLength;
-    private int maxUserNameLength;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,8 +60,6 @@ public class FeedbackHubActivity extends AbstractBaseActivity {
         if (ACTIVE.check(this)) {
             userName = FeedbackDatabase.getInstance(this).readString(USER_NAME, null);
         }
-        minUserNameLength = getSharedPreferences(SHARED_PREFERENCES_ID, MODE_PRIVATE).getInt(SHARED_PREFERENCES_SETTINGS_USER_NAME_MIN_LENGTH, SETTINGS_USER_NAME_MIN_LENGTH);
-        maxUserNameLength = getSharedPreferences(SHARED_PREFERENCES_ID, MODE_PRIVATE).getInt(SHARED_PREFERENCES_SETTINGS_USER_NAME_MAX_LENGTH, SETTINGS_USER_NAME_MAX_LENGTH);
         updateUserLevel(false);
     }
 
@@ -205,11 +200,11 @@ public class FeedbackHubActivity extends AbstractBaseActivity {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     String inputString = inputEditText[0].getText().toString();
-                    if (inputString.length() < minUserNameLength){
+                    if (inputString.length() < configuration.getMinUserNameLength()){
                         Toast.makeText(getApplicationContext(), R.string.hub_warning_username_too_short,Toast.LENGTH_SHORT).show();
                         return;
                     }
-                    if (inputString.length() > maxUserNameLength){
+                    if (inputString.length() > configuration.getMaxUserNameLength()){
                         Toast.makeText(getApplicationContext(), R.string.hub_warning_username_too_short,Toast.LENGTH_SHORT).show();
                         return;
                     }
@@ -266,16 +261,15 @@ public class FeedbackHubActivity extends AbstractBaseActivity {
         updateUserLevel(true);
         if (ACTIVE.check(this,true) && preAllocatedStringStorage[0] != null){
             String name = FeedbackDatabase.getInstance(this).readString(USER_NAME,null);
-            boolean isDeveloper = getSharedPreferences(SHARED_PREFERENCES_ID, MODE_PRIVATE).getBoolean(SHARED_PREFERENCES_IS_DEVELOPER, false);
             if (name == null){
-                Toast.makeText(this,getString(isDeveloper?R.string.hub_developer_registered:R.string.hub_username_registered,preAllocatedStringStorage[0]),Toast.LENGTH_SHORT).show();
+                Toast.makeText(this,getString(configuration.isDeveloper()?R.string.hub_developer_registered:R.string.hub_username_registered,preAllocatedStringStorage[0]),Toast.LENGTH_SHORT).show();
                 preAllocatedStringStorage[0] = RepositoryStub.registerAndGetUniqueName(preAllocatedStringStorage[0],false);
                 FeedbackDatabase.getInstance(this).writeString(USER_NAME,preAllocatedStringStorage[0]);
-                FeedbackDatabase.getInstance(this).writeBoolean(IS_DEVELOPER, isDeveloper);
+                FeedbackDatabase.getInstance(this).writeBoolean(IS_DEVELOPER, configuration.isDeveloper());
                 userName = preAllocatedStringStorage[0];
             }else{
                 userName = name;
-                Toast.makeText(this,getString(isDeveloper?R.string.hub_developer_registered:R.string.hub_username_restored,name),Toast.LENGTH_SHORT).show();
+                Toast.makeText(this,getString(configuration.isDeveloper()?R.string.hub_developer_registered:R.string.hub_username_restored,name),Toast.LENGTH_SHORT).show();
             }
             preAllocatedStringStorage[0] = null;
         }

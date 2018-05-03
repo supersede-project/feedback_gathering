@@ -2,7 +2,6 @@ package ch.uzh.supersede.host;
 
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.design.widget.CoordinatorLayout;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -10,7 +9,7 @@ import android.widget.LinearLayout;
 import ch.uzh.supersede.feedbacklibrary.activities.AbstractBaseActivity;
 import ch.uzh.supersede.feedbacklibrary.entrypoint.*;
 
-public class HostActivity extends AbstractBaseActivity implements IFeedbackBehavior, IFeedbackDeveloper, IFeedbackStyle, IFeedbackSettings{
+public class HostActivity extends AbstractBaseActivity implements IFeedbackBehavior, IFeedbackStyle, IFeedbackSettings, IFeedbackLayoutConfiguration, IFeedbackDeveloper {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,12 +27,53 @@ public class HostActivity extends AbstractBaseActivity implements IFeedbackBehav
         FeedbackConnector.getInstance().connect(view,this);
     }
 
-
+    //Feedback Layout
     @Override
-    public boolean isDeveloper() {
+    public boolean isAudioFeedbackEnabled() {
         return false;
     }
 
+    @Override
+    public boolean isScreenshotFeedbackEnabled() {
+        return true;
+    }
+
+    @Override
+    public boolean isAttachmentFeedbackEnabled() {
+        return true;
+    }
+
+    @Override
+    public boolean isLabelFeedbackEnabled() {
+        return true;
+    }
+
+    @Override
+    public boolean isTextFeedbackEnabled() {
+        return true;
+    }
+
+    @Override
+    public int getConfiguredAudioFeedbackOrder() {
+        return 0;
+    }
+
+    @Override
+    public int getConfiguredScreenshotFeedbackOrder() {
+        return 3;
+    }
+
+    @Override
+    public int getConfiguredLabelFeedbackOrder() {
+        return 1;
+    }
+
+    @Override
+    public int getConfiguredTextFeedbackOrder() {
+        return 2;
+    }
+
+    //Feedback Settings
     @Override
     public int getConfiguredMinUserNameLength() {
         return 3;
@@ -52,5 +92,23 @@ public class HostActivity extends AbstractBaseActivity implements IFeedbackBehav
     @Override
     public int getConfiguredMaxResponseLength() {
         return 30;
+    }
+
+    //Feedback Developer
+    @Override
+    public boolean isDeveloper() {
+        return true;
+    }
+
+    //Feedback Behaviour
+    @Override
+    public int getConfiguredPullIntervalMinutes() {
+        return 0;
+    }
+
+    //Feedback Layout
+    @Override
+    public FEEDBACK_STYLE getConfiguredFeedbackStyle() {
+        return null;
     }
 }

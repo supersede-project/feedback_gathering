@@ -13,11 +13,11 @@ import android.view.View;
 import android.widget.*;
 
 import ch.uzh.supersede.feedbacklibrary.R;
-import ch.uzh.supersede.feedbacklibrary.activities.FeedbackDetailsActivity;
+import ch.uzh.supersede.feedbacklibrary.activities.*;
+import ch.uzh.supersede.feedbacklibrary.beans.*;
 import ch.uzh.supersede.feedbacklibrary.database.FeedbackDatabase;
 import ch.uzh.supersede.feedbacklibrary.interfaces.ISortableFeedback;
 import ch.uzh.supersede.feedbacklibrary.utils.*;
-import ch.uzh.supersede.feedbacklibrary.beans.FeedbackBean;
 
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.*;
 import static ch.uzh.supersede.feedbacklibrary.utils.Enums.FEEDBACK_SORTING.*;
@@ -32,9 +32,11 @@ public class FeedbackListItem extends LinearLayout implements Comparable, ISorta
     private FeedbackBean feedbackBean;
     private Enums.FEEDBACK_SORTING sorting = NONE;
     private String ownUser = USER_NAME_ANONYMOUS;
+    private LocalConfigurationBean configuration;
 
-    public FeedbackListItem(Context context, int visibleTiles, FeedbackBean feedbackBean) {
+    public FeedbackListItem(Context context, int visibleTiles, FeedbackBean feedbackBean, LocalConfigurationBean configuration) {
         super(context);
+        this.configuration = configuration;
         this.feedbackBean = feedbackBean;
         DisplayMetrics displayMetrics = new DisplayMetrics();
         ((Activity) getContext()).getWindowManager()
@@ -86,6 +88,7 @@ public class FeedbackListItem extends LinearLayout implements Comparable, ISorta
         Intent intent = new Intent(getContext(), FeedbackDetailsActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
         intent.putExtra(EXTRA_KEY_FEEDBACK_BEAN, feedbackBean);
+        intent.putExtra(EXTRA_KEY_APPLICATION_CONFIGURATION, configuration);
         getContext().startActivity(intent);
         ((Activity) getContext()).overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
     }

@@ -96,7 +96,7 @@ public class FeedbackActivity extends AbstractBaseActivity implements AudioMecha
             // The feedback activity is started on behalf of the user
             Log.v(FEEDBACK_ACTIVITY_TAG, "The feedback activity is started via a PUSH configuration");
 
-            init(intent.getLongExtra(EXTRA_KEY_APPLICATION_ID, -1L));
+            init(configuration.getHostApplicationLongId());
         }
         onPostCreate();
     }
