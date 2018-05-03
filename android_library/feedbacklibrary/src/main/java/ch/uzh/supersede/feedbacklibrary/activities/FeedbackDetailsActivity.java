@@ -1,7 +1,10 @@
 package ch.uzh.supersede.feedbacklibrary.activities;
 
 
-import android.content.Context;
+import android.app.Dialog;
+import android.content.*;
+import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.view.*;
@@ -116,6 +119,22 @@ public class FeedbackDetailsActivity extends AbstractBaseActivity {
                     .withTitle(getString(R.string.details_labels))
                     .withoutCancel()
                     .withMessage(StringUtility.concatWithDelimiter(", ", feedbackDetailsBean.getLabels())).buildAndShow();
+        }else if (view.getId() == imageButton.getId()) {
+            final Dialog builder = new Dialog(FeedbackDetailsActivity.this);
+            builder.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            builder.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+            ImageView imageView = new ImageView(FeedbackDetailsActivity.this);
+            imageView.setImageBitmap(RepositoryStub.loadFeedbackImage(FeedbackDetailsActivity.this,feedbackDetailsBean));
+            imageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    builder.dismiss();
+                }
+            });
+            builder.addContentView(imageView, new RelativeLayout.LayoutParams(
+                    ViewGroup.LayoutParams.WRAP_CONTENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT));
+            builder.show();
         }else if (view.getId() == upButton.getId()) {
             RepositoryStub.sendUpVote(this, feedbackDetailsBean.getFeedbackBean());
             votesText.setText(feedbackDetailsBean.getFeedbackBean().upVote());
@@ -137,7 +156,6 @@ public class FeedbackDetailsActivity extends AbstractBaseActivity {
     }
 
     public static void persistFeedbackResponseLocally(Context context, FeedbackBean bean, LocalConfigurationBean configuration, String feedbackResponse) {
-        {
             String userName = FeedbackDatabase.getInstance(context).readString(USER_NAME, USER_NAME_ANONYMOUS);
             boolean isDeveloper = FeedbackDatabase.getInstance(context).readBoolean(IS_DEVELOPER, false);
             boolean isOwner = bean.getUserName() != null && bean.getUserName().equals(userName);
@@ -148,7 +166,6 @@ public class FeedbackDetailsActivity extends AbstractBaseActivity {
             responseLayout.addView(item);
             //Show new Entry
             scrollContainer.fullScroll(View.FOCUS_DOWN);
-        }
     }
 }
 

@@ -25,7 +25,6 @@ public class Utils {
     private Utils() {
     }
 
-
     public static void wipeImages(final Context context) {
         FeedbackDatabase.getInstance(context).deleteData(IMAGE_DATA_DB_KEY);
         FeedbackDatabase.getInstance(context).deleteData(IMAGE_ANNOTATED_DATA_DB_KEY);

@@ -260,7 +260,7 @@ public class AnnotateImageActivity extends AbstractBaseActivity implements Color
                 Bitmap annotatedBitmapWithStickers = Bitmap.createBitmap(relativeLayout.getLayoutParams().width, relativeLayout.getLayoutParams().height, Bitmap.Config.ARGB_8888);
                 Canvas canvas = new Canvas(annotatedBitmapWithStickers);
                 relativeLayout.draw(canvas);
-                Bitmap annotatedImage = Bitmap.createBitmap(annotatedBitmapWithStickers, 0, 0, annotateImageView.getBitmapWidth(), annotateImageView.getBitmapHeight());
+                Bitmap annotatedImage = Bitmap.createBitmap(annotatedBitmapWithStickers, 0, 0, annotatedBitmapWithStickers.getWidth(), annotatedBitmapWithStickers.getHeight());
 
                 Utils.storeAnnotatedImageToDatabase(this, annotatedImage);
 

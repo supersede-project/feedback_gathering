@@ -1,6 +1,7 @@
 package ch.uzh.supersede.feedbacklibrary.stubs;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
 
 import java.util.ArrayList;
@@ -13,11 +14,8 @@ import ch.uzh.supersede.feedbacklibrary.beans.FeedbackResponseBean;
 import ch.uzh.supersede.feedbacklibrary.beans.LocalFeedbackBean;
 import ch.uzh.supersede.feedbacklibrary.database.FeedbackDatabase;
 import ch.uzh.supersede.feedbacklibrary.feedback.Feedback;
-import ch.uzh.supersede.feedbacklibrary.utils.CompareUtility;
-import ch.uzh.supersede.feedbacklibrary.utils.DateUtility;
-import ch.uzh.supersede.feedbacklibrary.utils.Enums;
+import ch.uzh.supersede.feedbacklibrary.utils.*;
 import ch.uzh.supersede.feedbacklibrary.utils.Enums.FEEDBACK_STATUS;
-import ch.uzh.supersede.feedbacklibrary.utils.NumberUtility;
 
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.USER_NAME;
 import static ch.uzh.supersede.feedbacklibrary.utils.Enums.FEEDBACK_STATUS.*;
@@ -222,7 +220,10 @@ public class RepositoryStub {
         int maxUpVotes = 50; //FIXME [jfo]
 
         UUID feedbackUid = UUID.randomUUID();
-        String title = feedback.getTextFeedbackList().get(0).getText();
+        String title = "";
+        if (!feedback.getTextFeedbackList().isEmpty()){
+            title = feedback.getTextFeedbackList().get(0).getText();
+        }
         String userName = generateUserName(context, true);
         long timeStamp = generateTimestamp();
         int upVotes = 0;
@@ -241,4 +242,15 @@ public class RepositoryStub {
                 .withStatus(feedbackStatus)
                 .build();
     }
+
+    public static Bitmap loadFeedbackImage(Context context, FeedbackDetailsBean feedbackDetailsBean) {
+        //TheoreticalCallToRepo
+        return Utils.loadImageFromDatabase(context);
+    }
+
+    public static byte[] loadFeedbackAudio(Context context, FeedbackDetailsBean feedbackDetailsBean) {
+        //TheoreticalCallToRepo
+        return new byte[0];
+    }
+
 }

@@ -114,7 +114,7 @@
     <string name="details_response">Add Response</string>
     <string name="details_subscribe">Subscribe</string>
     <string name="details_unsubscribe">Unsubscribe</string>
-    <string name="details_images">Images</string>
+    <string name="details_images">Image</string>
     <string name="details_audio">Audio</string>
     <string name="details_labels">Labels</string>
     <string name="details_user">User: %1$s</string>
