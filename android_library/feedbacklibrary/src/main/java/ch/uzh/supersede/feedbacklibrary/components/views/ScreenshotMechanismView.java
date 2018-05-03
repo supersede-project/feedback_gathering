@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -40,6 +41,7 @@ public class ScreenshotMechanismView extends AbstractMechanismView {
 
     public ScreenshotMechanismView(LayoutInflater layoutInflater, Activity activity, AbstractMechanism mechanism, int mechanismViewIndex) {
         super(layoutInflater);
+        this.viewOrder = mechanism.getOrder();
         this.activity = activity;
         this.screenshotMechanism = (ScreenshotMechanism) mechanism;
         setEnclosingLayout(getLayoutInflater().inflate(R.layout.mechanism_screenshot, null));
@@ -217,5 +219,14 @@ public class ScreenshotMechanismView extends AbstractMechanismView {
         toggleDeleteButton(imageSelected);
         toggleEditButton(imageSelected);
         toggleSelectButton(!imageSelected);
+    }
+
+    @Override
+    public int compareTo(@NonNull Object o) {
+        if (o instanceof AbstractMechanismView){
+            int comparedViewOrder = ((AbstractMechanismView) o).getViewOrder();
+            return comparedViewOrder > getViewOrder() ? -1 : comparedViewOrder == getViewOrder() ? 0 : 1;
+        }
+        return 0;
     }
 }

@@ -16,6 +16,7 @@ import ch.uzh.supersede.feedbacklibrary.feedback.Feedback;
 import ch.uzh.supersede.feedbacklibrary.utils.CompareUtility;
 import ch.uzh.supersede.feedbacklibrary.utils.DateUtility;
 import ch.uzh.supersede.feedbacklibrary.utils.Enums;
+import ch.uzh.supersede.feedbacklibrary.utils.Enums.FEEDBACK_STATUS;
 import ch.uzh.supersede.feedbacklibrary.utils.NumberUtility;
 
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.USER_NAME;
@@ -24,7 +25,6 @@ import static ch.uzh.supersede.feedbacklibrary.utils.Enums.SAVE_MODE.*;
 import static ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility.USER_LEVEL.ACTIVE;
 
 public class RepositoryStub {
-    private static String ownUser;
 
     private RepositoryStub() {
     }
@@ -102,7 +102,7 @@ public class RepositoryStub {
         UUID feedbackUid = UUID.randomUUID();
         int upperBound = NumberUtility.divide(1, ownFeedbackPercent);
         boolean ownFeedback = ACTIVE.check(context) && NumberUtility.randomInt(0, upperBound > 0 ? upperBound - 1 : upperBound) == 0;
-        Enums.FEEDBACK_STATUS feedbackStatus = generateFeedbackStatus();
+        FEEDBACK_STATUS feedbackStatus = generateFeedbackStatus();
         String title = generateTitle();
         String userName = generateUserName(context, ownFeedback);
         long timeStamp = generateTimestamp();
@@ -127,7 +127,7 @@ public class RepositoryStub {
 
         UUID feedbackUid = localFeedbackBean.getFeedbackUid();
         String title = localFeedbackBean.getTitle();
-        Enums.FEEDBACK_STATUS feedbackStatus = localFeedbackBean.getFeedbackStatus();
+        FEEDBACK_STATUS feedbackStatus = localFeedbackBean.getFeedbackStatus();
         int upVotes = localFeedbackBean.getVotes() + generateUpVotes(minUpVotes, maxUpVotes, feedbackStatus);
         long timeStamp = localFeedbackBean.getCreationDate();
         int responses = localFeedbackBean.getResponses();
@@ -146,8 +146,8 @@ public class RepositoryStub {
                 .build();
     }
 
-    private static Enums.FEEDBACK_STATUS generateFeedbackStatus() {
-        Enums.FEEDBACK_STATUS[] status = new Enums.FEEDBACK_STATUS[]{OPEN, IN_PROGRESS, REJECTED, DUPLICATE, CLOSED};
+    private static FEEDBACK_STATUS generateFeedbackStatus() {
+        FEEDBACK_STATUS[] status = new FEEDBACK_STATUS[]{OPEN, IN_PROGRESS, REJECTED, DUPLICATE, CLOSED};
         return status[NumberUtility.randomPosition(status)];
     }
 
@@ -155,7 +155,7 @@ public class RepositoryStub {
         return NumberUtility.randomInt(0, 50);
     }
 
-    private static int generateUpVotes(int minUpVotes, int maxUpVotes, Enums.FEEDBACK_STATUS feedbackStatus) {
+    private static int generateUpVotes(int minUpVotes, int maxUpVotes, FEEDBACK_STATUS feedbackStatus) {
         if (CompareUtility.oneOf(feedbackStatus, REJECTED)) {
             return NumberUtility.randomInt(minUpVotes, -1);
         } else if (CompareUtility.oneOf(feedbackStatus, DUPLICATE)) {
@@ -227,7 +227,7 @@ public class RepositoryStub {
         long timeStamp = generateTimestamp();
         int upVotes = 0;
         int responses = 0;
-        Enums.FEEDBACK_STATUS feedbackStatus = OPEN;
+        FEEDBACK_STATUS feedbackStatus = OPEN;
 
         return new FeedbackBean.Builder()
                 .withFeedbackUid(feedbackUid)

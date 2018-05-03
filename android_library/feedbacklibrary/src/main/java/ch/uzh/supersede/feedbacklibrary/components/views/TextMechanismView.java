@@ -1,6 +1,7 @@
 package ch.uzh.supersede.feedbacklibrary.components.views;
 
 import android.graphics.Color;
+import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.text.Editable;
@@ -18,6 +19,7 @@ public class TextMechanismView extends AbstractMechanismView {
 
     public TextMechanismView(LayoutInflater layoutInflater, AbstractMechanism mechanism) {
         super(layoutInflater);
+        this.viewOrder = mechanism.getOrder();
         this.textMechanism = (TextMechanism) mechanism;
         setEnclosingLayout(getLayoutInflater().inflate(R.layout.mechanism_text_enclosing, null));
         initView();
@@ -100,5 +102,14 @@ public class TextMechanismView extends AbstractMechanismView {
     @Override
     public void updateModel() {
         textMechanism.setInputText(((TextInputEditText) getEnclosingLayout().findViewById(R.id.supersede_feedbacklibrary_text_feedback_text)).getText().toString());
+    }
+
+    @Override
+    public int compareTo(@NonNull Object o) {
+        if (o instanceof AbstractMechanismView){
+            int comparedViewOrder = ((AbstractMechanismView) o).getViewOrder();
+            return comparedViewOrder > getViewOrder() ? -1 : comparedViewOrder == getViewOrder() ? 0 : 1;
+        }
+        return 0;
     }
 }

@@ -29,31 +29,6 @@ public class HostActivity extends AbstractBaseActivity implements IFeedbackBehav
 
     //Feedback Layout
     @Override
-    public boolean isAudioFeedbackEnabled() {
-        return false;
-    }
-
-    @Override
-    public boolean isScreenshotFeedbackEnabled() {
-        return true;
-    }
-
-    @Override
-    public boolean isAttachmentFeedbackEnabled() {
-        return true;
-    }
-
-    @Override
-    public boolean isLabelFeedbackEnabled() {
-        return true;
-    }
-
-    @Override
-    public boolean isTextFeedbackEnabled() {
-        return true;
-    }
-
-    @Override
     public int getConfiguredAudioFeedbackOrder() {
         return 0;
     }
@@ -64,12 +39,17 @@ public class HostActivity extends AbstractBaseActivity implements IFeedbackBehav
     }
 
     @Override
-    public int getConfiguredLabelFeedbackOrder() {
-        return 1;
+    public int getConfiguredCategoryFeedbackOrder() {
+        return 0;
     }
 
     @Override
     public int getConfiguredTextFeedbackOrder() {
+        return 8;
+    }
+
+    @Override
+    public int getConfiguredRatingFeedbackOrder() {
         return 2;
     }
 

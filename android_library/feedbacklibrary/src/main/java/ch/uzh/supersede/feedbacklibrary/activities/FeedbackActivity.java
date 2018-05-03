@@ -230,7 +230,7 @@ public class FeedbackActivity extends AbstractBaseActivity implements AudioMecha
             return;
         }
         if (BuildConfig.DEBUG) {
-            orchestratorStub = new MechanismBuilder(this, getApplicationContext(), getResources(), linearLayout, layoutInflater)
+            orchestratorStub = new MechanismBuilder(this, getApplicationContext(), getResources(), getConfiguration(), linearLayout, layoutInflater)
                     .withRating() //Uncomment for Enabling
                     .withText() //Uncomment for Enabling
                     .withScreenshot() //Uncomment for Enabling
@@ -420,7 +420,7 @@ public class FeedbackActivity extends AbstractBaseActivity implements AudioMecha
     }
 
     /*
-     * This method performs a POST request in order to send the feedback to the repository.
+     * This method performs a POST request in viewOrder to send the feedback to the repository.
      */
     public void sendButtonClicked(View view) {
         if (!isOnline()) {
