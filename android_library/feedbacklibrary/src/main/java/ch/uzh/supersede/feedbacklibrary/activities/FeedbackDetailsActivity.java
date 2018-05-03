@@ -1,7 +1,9 @@
 package ch.uzh.supersede.feedbacklibrary.activities;
 
 
-import android.content.Context;
+import android.app.Dialog;
+import android.content.*;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.view.*;
@@ -41,6 +43,7 @@ public class FeedbackDetailsActivity extends AbstractBaseActivity {
     private Button labelButton;
     private Button subscribeButton;
     private Button responseButton;
+    private Button makePublicButton;
     private ArrayList<FeedbackResponseListItem> responseList = new ArrayList<>();
 
     @Override
@@ -62,25 +65,40 @@ public class FeedbackDetailsActivity extends AbstractBaseActivity {
         labelButton = getView(R.id.details_button_labels, Button.class);
         subscribeButton = getView(R.id.details_button_subscribe, Button.class);
         responseButton = getView(R.id.details_button_response, Button.class);
+        makePublicButton = getView(R.id.details_button_make_public, Button.class);
         FeedbackBean feedbackBean = (FeedbackBean) getIntent().getSerializableExtra(EXTRA_KEY_FEEDBACK_BEAN);
-        if (feedbackBean != null) {
+        FeedbackDetailsBean cachedFeedbackDetailsBean = (FeedbackDetailsBean) getIntent().getSerializableExtra(EXTRA_KEY_FEEDBACK_DETAIL_BEAN);
+        if (cachedFeedbackDetailsBean != null) {
+            feedbackDetailsBean = cachedFeedbackDetailsBean;
+            feedbackBean = feedbackDetailsBean.getFeedbackBean();
+        } else if (feedbackBean != null) {
             feedbackDetailsBean = RepositoryStub.getFeedbackDetails(this, feedbackBean);
-            if (feedbackDetailsBean != null) {
-                updateFeedbackState();
-                for (FeedbackResponseBean bean : feedbackDetailsBean.getResponses()) {
-                    FeedbackResponseListItem feedbackResponseListItem = new FeedbackResponseListItem(this,feedbackBean, bean, configuration, FIXED);
-                    responseList.add(feedbackResponseListItem);
-                }
-                Collections.sort(responseList);
-                for (FeedbackResponseListItem item : responseList) {
-                    responseLayout.addView(item);
-                }
-                votesText.setText(feedbackDetailsBean.getUpVotesAsText());
-                userText.setText(getString(R.string.details_user,feedbackDetailsBean.getUserName()));
-                statusText.setText(getString(R.string.details_status,feedbackDetailsBean.getFeedbackStatus().getLabel()));
-                titleText.setText(getString(R.string.details_title,feedbackDetailsBean.getTitle()));
-                descriptionText.setText(feedbackDetailsBean.getDescription());
+        }
+        if (feedbackDetailsBean != null) {
+            updateFeedbackState();
+            for (FeedbackResponseBean bean : feedbackDetailsBean.getResponses()) {
+                FeedbackResponseListItem feedbackResponseListItem = new FeedbackResponseListItem(this, feedbackBean, bean, configuration, FIXED);
+                responseList.add(feedbackResponseListItem);
             }
+            Collections.sort(responseList);
+            for (FeedbackResponseListItem item : responseList) {
+                responseLayout.addView(item);
+            }
+            votesText.setText(feedbackDetailsBean.getUpVotesAsText());
+            userText.setText(getString(R.string.details_user, feedbackDetailsBean.getUserName()));
+            statusText.setText(getString(R.string.details_status, feedbackDetailsBean.getFeedbackStatus().getLabel()));
+            titleText.setText(getString(R.string.details_title, feedbackDetailsBean.getTitle()));
+            descriptionText.setText(feedbackDetailsBean.getDescription());
+
+            if (feedbackDetailsBean.getFeedbackBean() != null && feedbackDetailsBean.getFeedbackBean().isOwnFeedback(getApplicationContext())) {
+                upButton.setEnabled(false);
+                downButton.setEnabled(false);
+                if (!feedbackDetailsBean.getFeedbackBean().isPublic()) {
+                    makePublicButton.setVisibility(View.VISIBLE);
+                }
+            }
+        }else{
+            this.onBackPressed();
         }
         onPostCreate();
     }
@@ -102,7 +120,7 @@ public class FeedbackDetailsActivity extends AbstractBaseActivity {
             votesText.setTextColor(ContextCompat.getColor(this, R.color.red_5));
             downButton.setEnabled(false);
         }
-        if (feedbackState.isEqualVoted()){
+        if (feedbackState.isEqualVoted() && feedbackDetailsBean.getFeedbackBean().isPublic()){
             votesText.setTextColor(ContextCompat.getColor(this, R.color.black));
             upButton.setEnabled(true);
             downButton.setEnabled(true);
@@ -116,6 +134,22 @@ public class FeedbackDetailsActivity extends AbstractBaseActivity {
                     .withTitle(getString(R.string.details_labels))
                     .withoutCancel()
                     .withMessage(StringUtility.concatWithDelimiter(", ", feedbackDetailsBean.getLabels())).buildAndShow();
+        }else if (view.getId() == imageButton.getId()) {
+            final Dialog builder = new Dialog(FeedbackDetailsActivity.this);
+            builder.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            builder.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+            ImageView imageView = new ImageView(FeedbackDetailsActivity.this);
+            imageView.setImageBitmap(feedbackDetailsBean.getBitmap());
+            imageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    builder.dismiss();
+                }
+            });
+            builder.addContentView(imageView, new RelativeLayout.LayoutParams(
+                    ViewGroup.LayoutParams.WRAP_CONTENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT));
+            builder.show();
         }else if (view.getId() == upButton.getId()) {
             RepositoryStub.sendUpVote(this, feedbackDetailsBean.getFeedbackBean());
             votesText.setText(feedbackDetailsBean.getFeedbackBean().upVote());
@@ -132,12 +166,25 @@ public class FeedbackDetailsActivity extends AbstractBaseActivity {
             //Show new Entry
             scrollContainer.fullScroll(View.FOCUS_DOWN);
             item.requestInputFocus();
+        }else if (view.getId() == makePublicButton.getId()){
+            DialogInterface.OnClickListener okClickListener = new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    makePublicButton.setVisibility(View.INVISIBLE);
+                    RepositoryStub.makeFeedbackPublic(feedbackDetailsBean);
+                    Toast.makeText(FeedbackDetailsActivity.this,R.string.details_published,Toast.LENGTH_SHORT).show();
+                    dialog.cancel();
+                }
+            };
+            new PopUp(this)
+                    .withTitle(getString(R.string.details_make_public_title))
+                    .withCustomOk("Confirm",okClickListener)
+                    .withMessage(getString(R.string.details_make_public_content)).buildAndShow();
         }
         updateFeedbackState();
     }
 
     public static void persistFeedbackResponseLocally(Context context, FeedbackBean bean, LocalConfigurationBean configuration, String feedbackResponse) {
-        {
             String userName = FeedbackDatabase.getInstance(context).readString(USER_NAME, USER_NAME_ANONYMOUS);
             boolean isDeveloper = FeedbackDatabase.getInstance(context).readBoolean(IS_DEVELOPER, false);
             boolean isOwner = bean.getUserName() != null && bean.getUserName().equals(userName);
@@ -148,7 +195,6 @@ public class FeedbackDetailsActivity extends AbstractBaseActivity {
             responseLayout.addView(item);
             //Show new Entry
             scrollContainer.fullScroll(View.FOCUS_DOWN);
-        }
     }
 }
 

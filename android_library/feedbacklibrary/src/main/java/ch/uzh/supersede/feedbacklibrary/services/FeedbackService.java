@@ -15,6 +15,7 @@ import java.util.Map;
 
 import ch.uzh.supersede.feedbacklibrary.BuildConfig;
 import ch.uzh.supersede.feedbacklibrary.R;
+import ch.uzh.supersede.feedbacklibrary.activities.AbstractBaseActivity;
 import ch.uzh.supersede.feedbacklibrary.api.IFeedbackAPI;
 import ch.uzh.supersede.feedbacklibrary.beans.ConfigurationRequestBean;
 import ch.uzh.supersede.feedbacklibrary.beans.FeedbackBean;
@@ -268,7 +269,7 @@ public abstract class FeedbackService {
             ArrayList<FeedbackListItem> feedbackList = new ArrayList<>();
 
             for (LocalFeedbackBean localFeedbackBean : FeedbackDatabase.getInstance(activity).getFeedbackBeans(OWN)) {
-                feedbackList.add(new FeedbackListItem(activity, 8, RepositoryStub.getFeedback(activity, localFeedbackBean)));
+                feedbackList.add(new FeedbackListItem(activity, 8, RepositoryStub.getFeedback(activity, localFeedbackBean), ((AbstractBaseActivity)activity).getConfiguration()));
             }
 
             callback.onEventCompleted(GET_OTHERS_FEEDBACK_VOTES, feedbackList);

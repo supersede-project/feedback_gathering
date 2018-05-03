@@ -44,8 +44,7 @@ import ch.uzh.supersede.feedbacklibrary.components.views.StickerAnnotationImageV
 import ch.uzh.supersede.feedbacklibrary.components.views.TextAnnotationImageView;
 import ch.uzh.supersede.feedbacklibrary.database.FeedbackDatabase;
 import ch.uzh.supersede.feedbacklibrary.models.DialogType;
-import ch.uzh.supersede.feedbacklibrary.utils.ColorPickerDialog;
-import ch.uzh.supersede.feedbacklibrary.utils.Utils;
+import ch.uzh.supersede.feedbacklibrary.utils.*;
 
 import static android.graphics.Color.*;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.*;
@@ -260,7 +259,7 @@ public class AnnotateImageActivity extends AbstractBaseActivity implements Color
                 Bitmap annotatedBitmapWithStickers = Bitmap.createBitmap(relativeLayout.getLayoutParams().width, relativeLayout.getLayoutParams().height, Bitmap.Config.ARGB_8888);
                 Canvas canvas = new Canvas(annotatedBitmapWithStickers);
                 relativeLayout.draw(canvas);
-                Bitmap annotatedImage = Bitmap.createBitmap(annotatedBitmapWithStickers, 0, 0, annotateImageView.getBitmapWidth(), annotateImageView.getBitmapHeight());
+                Bitmap annotatedImage = Bitmap.createBitmap(annotatedBitmapWithStickers, 0, 0, annotatedBitmapWithStickers.getWidth(), annotatedBitmapWithStickers.getHeight());
 
                 Utils.storeAnnotatedImageToDatabase(this, annotatedImage);
 
@@ -398,7 +397,7 @@ public class AnnotateImageActivity extends AbstractBaseActivity implements Color
                 Bitmap tempBitmap = annotateImageView.getBitmap();
                 Bitmap croppedBitmap = Bitmap.createBitmap(tempBitmap, 0, 0, tempBitmap.getWidth(), tempBitmap.getHeight());
                 File tempFile = Utils.createTempChacheFile(getApplicationContext(), "crop", ".png");
-                double avgIntensity = calculateAverageColorIntensity(tempBitmap, 0.2);
+                double avgIntensity = ImageUtility.calculateAverageColorIntensity(tempBitmap, 0.2);
                 if (Utils.saveBitmapToFile(tempFile, croppedBitmap, Bitmap.CompressFormat.PNG, 100)) {
                     Uri cropInput = Uri.fromFile(tempFile);
                     CropImage.activity(cropInput)
@@ -410,48 +409,6 @@ public class AnnotateImageActivity extends AbstractBaseActivity implements Color
                 }
             }
         });
-    }
-
-    /**
-     * Returns an average color-intensity, stepDensity defines the coverage of pixels
-     *
-     * @param bitmap
-     * @param stepDensity
-     * @return
-     */
-    private double calculateAverageColorIntensity(Bitmap bitmap, double stepDensity) {
-        double density = (stepDensity <= 0 || stepDensity > 0.5) ? 0.5 : stepDensity;
-        int stepSize = (int) (1.0 / density);
-        return calculateAverageColorIntensity(bitmap, stepSize);
-    }
-
-    /**
-     * Returns an average color-intensity, stepSize defines the probing distance
-     *
-     * @param bitmap
-     * @param stepSize
-     * @return intensity
-     */
-    private double calculateAverageColorIntensity(Bitmap bitmap, int stepSize) {
-        long redBucket = 0;
-        long greenBucket = 0;
-        long blueBucket = 0;
-        long pixelCount = 0;
-        int step = (stepSize <= 0 || stepSize >= (bitmap.getHeight() > bitmap.getWidth() ? bitmap.getWidth() : bitmap.getHeight())) ? 1 : stepSize;
-        for (int y = 0; y < bitmap.getHeight(); y = y + step) {
-            for (int x = 0; x < bitmap.getWidth(); x = x + step) {
-                int c = bitmap.getPixel(x, y);
-
-                pixelCount++;
-                redBucket += Color.red(c);
-                greenBucket += Color.green(c);
-                blueBucket += Color.blue(c);
-            }
-        }
-        double avgRed = redBucket / pixelCount;
-        double avgGreen = greenBucket / pixelCount;
-        double avgBlue = blueBucket / pixelCount;
-        return (avgRed + avgRed + avgGreen) / 3;
     }
 
     private void showDialog(DialogType type) {

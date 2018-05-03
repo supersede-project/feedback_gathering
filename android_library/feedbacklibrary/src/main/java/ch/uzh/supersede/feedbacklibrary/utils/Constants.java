@@ -39,6 +39,7 @@ public class Constants {
     public static final String EXTRA_KEY_HOST_APPLICATION_NAME = "hostApplicationName";
     public static final String EXTRA_KEY_APPLICATION_CONFIGURATION = "applicationConfiguration";
     public static final String EXTRA_KEY_FEEDBACK_BEAN = "feedbackBean";
+    public static final String EXTRA_KEY_FEEDBACK_DETAIL_BEAN = "feedbackDetailBean";
     public static final String EXTRA_KEY_CACHED_SCREENSHOT = "cachedScreenshot";
 
     public static final String SHARED_PREFERENCES_ID = "ch.uzh.supersede.feedbacklibrary.feedback";
@@ -102,8 +103,11 @@ public class Constants {
         }
 
         //FeedbackHubActivity
-        public static final String COLOR_STRING = "colorString";
+        public static final String PRIMARY_COLOR_STRING = "primaryColorString";
+        public static final String SECONDARY_COLOR_STRING = "secondaryColorString";
         public static final String DARK_BLUE = "303F9F";
+        public static final String BLACK = "000000";
+        public static final String WHITE = "FFFFFF";
 
         //FeedbackAcitivity
         public static final String FEEDBACK_ACTIVITY_TAG = "FeedbackActivity";

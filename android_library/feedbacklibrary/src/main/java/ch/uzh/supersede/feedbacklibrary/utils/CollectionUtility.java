@@ -1,5 +1,8 @@
 package ch.uzh.supersede.feedbacklibrary.utils;
 
+import java.lang.reflect.Array;
+import java.util.List;
+
 public class CollectionUtility {
 
     private CollectionUtility() {
@@ -22,5 +25,16 @@ public class CollectionUtility {
             }
         }
         return false;
+    }
+
+    public static  <T> T[] subArray(Class<T> clazz, List<T> source, int begin, int end){
+        if (source.size() <= end || end <= begin){
+            return (T[]) Array.newInstance(clazz, 0);
+        }
+        T[] array = (T[]) Array.newInstance(clazz, end-begin);
+        for (int i = begin; i < end; i++){
+            array[i] = source.get(i);
+        }
+        return array;
     }
 }

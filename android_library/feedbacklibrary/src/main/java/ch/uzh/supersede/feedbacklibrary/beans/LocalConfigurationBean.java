@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.pm.ApplicationInfo;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 
 import ch.uzh.supersede.feedbacklibrary.entrypoint.*;
 import ch.uzh.supersede.feedbacklibrary.entrypoint.IFeedbackStyle.FEEDBACK_STYLE;
@@ -19,15 +18,11 @@ public class LocalConfigurationBean implements Serializable {
     // IFeedbackDeveloper
     private boolean isDeveloper;
     // IFeedbackLayoutConfiguration
-    private boolean isLabelEnabled;
-    private boolean isTextEnabled;
-    private boolean isAudioEnabled;
-    private boolean isScreenshotEnabled;
-    private boolean isAttachmentEnabled;
-    private int labelOrder;
+    private int categoryOrder;
     private int textOrder;
     private int audioOrder;
     private int screenshotOrder;
+    private int ratingOrder;
     // IFeedbackSettings
     private int minUserNameLength;
     private int maxUserNameLength;
@@ -39,11 +34,13 @@ public class LocalConfigurationBean implements Serializable {
     private String hostApplicationName;
     private String hostApplicationId;
     private Long hostApplicationLongId;
+    private Integer[] topColors;
 
     private LocalConfigurationBean() {
     }
 
-    public LocalConfigurationBean(Activity activity) {
+    public LocalConfigurationBean(Activity activity, Integer[] topColors) {
+        this.topColors = topColors;
         if (activity instanceof IFeedbackBehavior) {
             readConfiguration((IFeedbackBehavior) activity);
         }
@@ -73,15 +70,11 @@ public class LocalConfigurationBean implements Serializable {
     }
 
     private void readConfiguration(IFeedbackLayoutConfiguration configuration) {
-        this.isLabelEnabled = configuration.isLabelFeedbackEnabled();
-        this.isTextEnabled = configuration.isLabelFeedbackEnabled();
-        this.isAudioEnabled = configuration.isLabelFeedbackEnabled();
-        this.isScreenshotEnabled = configuration.isLabelFeedbackEnabled();
-        this.isAttachmentEnabled = configuration.isLabelFeedbackEnabled();
-        this.labelOrder = configuration.getConfiguredLabelFeedbackOrder();
+        this.categoryOrder = configuration.getConfiguredCategoryFeedbackOrder();
         this.textOrder = configuration.getConfiguredTextFeedbackOrder();
         this.audioOrder = configuration.getConfiguredAudioFeedbackOrder();
         this.screenshotOrder = configuration.getConfiguredScreenshotFeedbackOrder();
+        this.ratingOrder = configuration.getConfiguredRatingFeedbackOrder();
     }
 
     private void readConfiguration(IFeedbackSettings configuration) {
@@ -105,6 +98,17 @@ public class LocalConfigurationBean implements Serializable {
         return context.getPackageName().concat("." + getApplicationName(context)).toLowerCase();
     }
 
+    public boolean hasAtLeastNTopColors(int n){
+        if (topColors.length < n){
+            return false;
+        }
+        for (Integer i : topColors){
+            if (i == null) {
+                return false;
+            }
+        }
+        return true;
+    }
 
     public int getPullIntervalMinutes() {
         return pullIntervalMinutes;
@@ -114,28 +118,8 @@ public class LocalConfigurationBean implements Serializable {
         return isDeveloper;
     }
 
-    public boolean isLabelEnabled() {
-        return isLabelEnabled;
-    }
-
-    public boolean isTextEnabled() {
-        return isTextEnabled;
-    }
-
-    public boolean isAudioEnabled() {
-        return isAudioEnabled;
-    }
-
-    public boolean isScreenshotEnabled() {
-        return isScreenshotEnabled;
-    }
-
-    public boolean isAttachmentEnabled() {
-        return isAttachmentEnabled;
-    }
-
-    public int getLabelOrder() {
-        return labelOrder;
+    public int getCategoryOrder() {
+        return categoryOrder;
     }
 
     public int getTextOrder() {
@@ -144,6 +128,10 @@ public class LocalConfigurationBean implements Serializable {
 
     public int getAudioOrder() {
         return audioOrder;
+    }
+
+    public int getRatingOrder() {
+        return ratingOrder;
     }
 
     public int getScreenshotOrder() {
@@ -180,5 +168,9 @@ public class LocalConfigurationBean implements Serializable {
 
     public Long getHostApplicationLongId() {
         return hostApplicationLongId;
+    }
+
+    public Integer[] getTopColors() {
+        return topColors;
     }
 }

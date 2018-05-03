@@ -2,22 +2,28 @@ package ch.uzh.supersede.feedbacklibrary.entrypoint;
 
 
 public interface IFeedbackLayoutConfiguration {
-
-    boolean isAudioFeedbackEnabled();
-
-    boolean isScreenshotFeedbackEnabled();
-
-    boolean isAttachmentFeedbackEnabled();
-
-    boolean isLabelFeedbackEnabled();
-
-    boolean isTextFeedbackEnabled();
-
+    /** Setting this to -1 will disable Audio Feedback.
+     * @return Sorting-Order of this Feedback
+     */
     int getConfiguredAudioFeedbackOrder();
 
+    /** Setting this to -1 will disable Screenshot Feedback.
+     * @return Sorting-Order of this Feedback
+     */
     int getConfiguredScreenshotFeedbackOrder();
 
-    int getConfiguredLabelFeedbackOrder();
+    /** Setting this to -1 will disable Category Feedback.
+     * @return Sorting-Order of this Feedback
+     */
+    int getConfiguredCategoryFeedbackOrder();
 
+    /** Setting this to -1 will disable Text Feedback.
+     * @return Sorting-Order of this Feedback
+     */
     int getConfiguredTextFeedbackOrder();
+
+    /** Setting this to -1 will disable Rating Feedback.
+     * @return Sorting-Order of this Feedback
+     */
+    int getConfiguredRatingFeedbackOrder();
 }

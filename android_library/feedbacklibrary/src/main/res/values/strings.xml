@@ -82,7 +82,19 @@
     <string name="hub_feedback_user_level">User-Level\n%1$d</string>
     <string name="hub_feedback_settings">Feedback\nSettings</string>
     <string name="hub_feedback_create">Create\nFeedback</string>
-    <string name="hub_status">&lt;b>&lt;font color="#colorString">Feedback-Hub&lt;/font>&lt;/b>&lt;br/>&lt;br/>&lt;b>User-Name&lt;br/>&lt;/b>&lt;font color="#colorString"> %1$s&lt;/font>&lt;br/>&lt;b>Karma-Score&lt;br/>&lt;/b>&lt;font color="#colorString"> %2$d&lt;/font>&lt;br/>&lt;b>Feedback&lt;br/>&lt;/b>&lt;font color="#colorString"> %3$d&lt;/font>&lt;br/>&lt;b>Responses&lt;br/>&lt;/b>&lt;font color="#colorString"> %4$d&lt;/font>&lt;br/>&lt;b>Up-Votes&lt;br/>&lt;/b>&lt;font color="#colorString"> %5$d&lt;/font>&lt;br/>&lt;b>Down-Votes&lt;br/>&lt;/b>&lt;font color="#colorString"> %6$d&lt;/font></string>
+    <string name="hub_status">&lt;b>&lt;font color="#secondaryColorString">Feedback-Hub&lt;/font>&lt;/b>&lt;br/>&lt;br/>&lt;b>
+        &lt;font color="#primaryColorString">User-Name&lt;/font>
+        &lt;br/>&lt;/b>&lt;font color="#secondaryColorString"> %1$s&lt;/font>&lt;br/>&lt;b>
+        &lt;font color="#primaryColorString">Karma-Score&lt;/font>
+        &lt;br/>&lt;/b>&lt;font color="#secondaryColorString"> %2$d&lt;/font>&lt;br/>&lt;b>
+        &lt;font color="#primaryColorString">Feedback&lt;/font>
+        &lt;br/>&lt;/b>&lt;font color="#secondaryColorString"> %3$d&lt;/font>&lt;br/>&lt;b>
+        &lt;font color="#primaryColorString">Responses&lt;/font>
+        &lt;br/>&lt;/b>&lt;font color="#secondaryColorString"> %4$d&lt;/font>&lt;br/>&lt;b>
+        &lt;font color="#primaryColorString">Up-Votes&lt;/font>
+        &lt;br/>&lt;/b>&lt;font color="#secondaryColorString"> %5$d&lt;/font>&lt;br/>&lt;b>
+        &lt;font color="#primaryColorString">Down-Votes&lt;/font>
+        &lt;br/>&lt;/b>&lt;font color="#secondaryColorString"> %6$d&lt;/font></string>
     <string name="hub_access_1">Accessing Level 1</string>
     <string name="hub_access_1_description">Level 1 grants you access to others Feedback and requires Permissions for Internet-Access!</string>
     <string name="hub_confirm">Confirm</string>
@@ -114,16 +126,20 @@
     <string name="details_response">Add Response</string>
     <string name="details_subscribe">Subscribe</string>
     <string name="details_unsubscribe">Unsubscribe</string>
-    <string name="details_images">Images</string>
+    <string name="details_images">Image</string>
     <string name="details_audio">Audio</string>
     <string name="details_labels">Labels</string>
     <string name="details_user">User: %1$s</string>
     <string name="details_status">Status: %1$s</string>
     <string name="details_title">Title: %1$s</string>
     <string name="details_response_too_short">Response too short.</string>
+    <string name="details_make_public">Make Feedback Public</string>
+    <string name="details_make_public_title">Confirm Feedback Publishing</string>
+    <string name="details_make_public_content">Do you want to publish this Feedback?\nA published Feedback can be seen, rated and responded upon by other Users and the Developers.\nThis decision cannot be reverted.</string>
     <!--Feedback-->
     <!--Settings-->
     <string name="settings_button_mine">Mine</string>
     <string name="settings_button_others">Others</string>
     <string name="settings_button_subscriptions">Subscriptions</string>
+    <string name="details_published">Published!</string>
 </resources>

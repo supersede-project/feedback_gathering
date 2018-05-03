@@ -1,5 +1,6 @@
 package ch.uzh.supersede.feedbacklibrary.components.views;
 
+import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 
 import java.util.ArrayList;
@@ -14,6 +15,7 @@ public class CategoryMechanismView extends AbstractMechanismView {
 
     public CategoryMechanismView(LayoutInflater layoutInflater, AbstractMechanism mechanism) {
         super(layoutInflater);
+        this.viewOrder = mechanism.getOrder();
         this.categoryMechanism = (CategoryMechanism) mechanism;
         setEnclosingLayout(getLayoutInflater().inflate(ch.uzh.supersede.feedbacklibrary.R.layout.mechanism_category, null));
         initView();
@@ -45,5 +47,14 @@ public class CategoryMechanismView extends AbstractMechanismView {
 
     public CategorySpinner getCategorySpinner() {
         return categorySpinner;
+    }
+
+    @Override
+    public int compareTo(@NonNull Object o) {
+        if (o instanceof AbstractMechanismView){
+            int comparedViewOrder = ((AbstractMechanismView) o).getViewOrder();
+            return comparedViewOrder > getViewOrder() ? -1 : comparedViewOrder == getViewOrder() ? 0 : 1;
+        }
+        return 0;
     }
 }
