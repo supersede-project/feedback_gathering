@@ -12,6 +12,7 @@ public class AndroidUser {
     private long id;
     @Column(unique = true)
     private String name;
+    private long applicationId;
     private boolean isDeveloper;
     private boolean isBlocked;
 
@@ -37,6 +38,14 @@ public class AndroidUser {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public long getApplicationId() {
+        return applicationId;
+    }
+
+    public void setApplicationId(long applicationId) {
+        this.applicationId = applicationId;
     }
 
     public boolean isDeveloper() {

@@ -36,4 +36,8 @@ public class AndroidUserServiceImpl implements AndroidUserService {
         return null;
     }
 
+    public List<AndroidUser> findByApplicationId(long id) {
+        return androidUserRepository.findByApplicationId(id);
+    }
+
 }

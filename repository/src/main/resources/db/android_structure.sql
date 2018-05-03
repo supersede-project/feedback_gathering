@@ -161,6 +161,7 @@ CREATE TABLE `android_application` (
 DROP TABLE IF EXISTS `android_user`;
 CREATE TABLE `android_user` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `application_id` bigint(20) NOT NULL,
   `name` varchar(255) NOT NULL,
   `is_developer` bit(1) NOT NULL,
   `is_blocked` bit(1) NOT NULL,
