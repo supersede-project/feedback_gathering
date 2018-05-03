@@ -3,7 +3,10 @@ package ch.uzh.supersede.feedbacklibrary.utils;
 import android.graphics.*;
 import android.support.annotation.NonNull;
 
+import java.io.*;
 import java.util.*;
+
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.EXTRA_KEY_CACHED_SCREENSHOT;
 
 public class ImageUtility {
 
@@ -120,5 +123,18 @@ public class ImageUtility {
             return (avgRed + avgGreen + avgBlue) / 3;
         }
         return 0;
+    }
+
+    public static byte[] imageToBytes(Bitmap bitmap){
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+        return stream.toByteArray();
+    }
+
+    public static Bitmap bytesToImage(byte[] bytes){
+        if (bytes == null || bytes.length == 0){
+            return null;
+        }
+        return BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
     }
 }

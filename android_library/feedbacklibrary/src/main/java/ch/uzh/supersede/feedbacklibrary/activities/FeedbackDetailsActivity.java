@@ -4,7 +4,6 @@ package ch.uzh.supersede.feedbacklibrary.activities;
 import android.app.Dialog;
 import android.content.*;
 import android.graphics.drawable.ColorDrawable;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.view.*;
@@ -24,7 +23,6 @@ import static ch.uzh.supersede.feedbacklibrary.components.buttons.FeedbackRespon
 import static ch.uzh.supersede.feedbacklibrary.components.buttons.FeedbackResponseListItem.RESPONSE_MODE.FIXED;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.*;
 import static ch.uzh.supersede.feedbacklibrary.utils.Enums.RESPONSE_MODE.READING;
-import static ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility.USER_LEVEL.ACTIVE;
 
 @SuppressWarnings("squid:MaximumInheritanceDepth")
 public class FeedbackDetailsActivity extends AbstractBaseActivity {
@@ -69,31 +67,38 @@ public class FeedbackDetailsActivity extends AbstractBaseActivity {
         responseButton = getView(R.id.details_button_response, Button.class);
         makePublicButton = getView(R.id.details_button_make_public, Button.class);
         FeedbackBean feedbackBean = (FeedbackBean) getIntent().getSerializableExtra(EXTRA_KEY_FEEDBACK_BEAN);
-        if (feedbackBean != null) {
+        FeedbackDetailsBean cachedFeedbackDetailsBean = (FeedbackDetailsBean) getIntent().getSerializableExtra(EXTRA_KEY_FEEDBACK_DETAIL_BEAN);
+        if (cachedFeedbackDetailsBean != null) {
+            feedbackDetailsBean = cachedFeedbackDetailsBean;
+            feedbackBean = feedbackDetailsBean.getFeedbackBean();
+        } else if (feedbackBean != null) {
             feedbackDetailsBean = RepositoryStub.getFeedbackDetails(this, feedbackBean);
-            if (feedbackDetailsBean != null) {
-                updateFeedbackState();
-                for (FeedbackResponseBean bean : feedbackDetailsBean.getResponses()) {
-                    FeedbackResponseListItem feedbackResponseListItem = new FeedbackResponseListItem(this,feedbackBean, bean, configuration, FIXED);
-                    responseList.add(feedbackResponseListItem);
-                }
-                Collections.sort(responseList);
-                for (FeedbackResponseListItem item : responseList) {
-                    responseLayout.addView(item);
-                }
-                votesText.setText(feedbackDetailsBean.getUpVotesAsText());
-                userText.setText(getString(R.string.details_user,feedbackDetailsBean.getUserName()));
-                statusText.setText(getString(R.string.details_status,feedbackDetailsBean.getFeedbackStatus().getLabel()));
-                titleText.setText(getString(R.string.details_title,feedbackDetailsBean.getTitle()));
-                descriptionText.setText(feedbackDetailsBean.getDescription());
+        }
+        if (feedbackDetailsBean != null) {
+            updateFeedbackState();
+            for (FeedbackResponseBean bean : feedbackDetailsBean.getResponses()) {
+                FeedbackResponseListItem feedbackResponseListItem = new FeedbackResponseListItem(this, feedbackBean, bean, configuration, FIXED);
+                responseList.add(feedbackResponseListItem);
             }
-            if (feedbackBean.isOwnFeedback(getApplicationContext())){
+            Collections.sort(responseList);
+            for (FeedbackResponseListItem item : responseList) {
+                responseLayout.addView(item);
+            }
+            votesText.setText(feedbackDetailsBean.getUpVotesAsText());
+            userText.setText(getString(R.string.details_user, feedbackDetailsBean.getUserName()));
+            statusText.setText(getString(R.string.details_status, feedbackDetailsBean.getFeedbackStatus().getLabel()));
+            titleText.setText(getString(R.string.details_title, feedbackDetailsBean.getTitle()));
+            descriptionText.setText(feedbackDetailsBean.getDescription());
+
+            if (feedbackDetailsBean.getFeedbackBean() != null && feedbackDetailsBean.getFeedbackBean().isOwnFeedback(getApplicationContext())) {
                 upButton.setEnabled(false);
                 downButton.setEnabled(false);
-                if (!feedbackBean.isPublic()){
+                if (!feedbackDetailsBean.getFeedbackBean().isPublic()) {
                     makePublicButton.setVisibility(View.VISIBLE);
                 }
             }
+        }else{
+            this.onBackPressed();
         }
         onPostCreate();
     }
@@ -115,7 +120,7 @@ public class FeedbackDetailsActivity extends AbstractBaseActivity {
             votesText.setTextColor(ContextCompat.getColor(this, R.color.red_5));
             downButton.setEnabled(false);
         }
-        if (feedbackState.isEqualVoted()){
+        if (feedbackState.isEqualVoted() && feedbackDetailsBean.getFeedbackBean().isPublic()){
             votesText.setTextColor(ContextCompat.getColor(this, R.color.black));
             upButton.setEnabled(true);
             downButton.setEnabled(true);
@@ -134,7 +139,7 @@ public class FeedbackDetailsActivity extends AbstractBaseActivity {
             builder.requestWindowFeature(Window.FEATURE_NO_TITLE);
             builder.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
             ImageView imageView = new ImageView(FeedbackDetailsActivity.this);
-            imageView.setImageBitmap(RepositoryStub.loadFeedbackImage(FeedbackDetailsActivity.this,feedbackDetailsBean));
+            imageView.setImageBitmap(feedbackDetailsBean.getBitmap());
             imageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

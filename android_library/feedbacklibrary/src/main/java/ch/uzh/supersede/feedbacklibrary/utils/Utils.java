@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.Image;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.View;
@@ -44,9 +45,7 @@ public class Utils {
         rootView.setDrawingCacheEnabled(true);
         Bitmap imageBitmap = Bitmap.createBitmap(rootView.getDrawingCache());
         rootView.setDrawingCacheEnabled(false);
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        imageBitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
-        intent.putExtra(EXTRA_KEY_CACHED_SCREENSHOT, stream.toByteArray());
+        intent.putExtra(EXTRA_KEY_CACHED_SCREENSHOT, ImageUtility.imageToBytes(imageBitmap));
         return imageBitmap;
     }
 
@@ -83,7 +82,7 @@ public class Utils {
         if (imageAsByte == null) {
             return null;
         }
-        return BitmapFactory.decodeByteArray(imageAsByte, 0, imageAsByte.length);
+        return ImageUtility.bytesToImage(imageAsByte);
     }
 
     /**

@@ -215,31 +215,54 @@ public class RepositoryStub {
         FeedbackDatabase.getInstance(context).writeFeedback(bean, subscribed ? SUBSCRIBED : UN_SUBSCRIBED);
     }
 
-    public static FeedbackBean feedbackToFeedbackBean(Context context, Feedback feedback) {
+    public static FeedbackDetailsBean feedbackToFeedbackBean(Context context, Feedback feedback) {
         int minUpVotes = -30; //FIXME [jfo]
         int maxUpVotes = 50; //FIXME [jfo]
 
+
+        //MBO TODO: TITLE AND LABELS BEFORE CREATION
         UUID feedbackUid = UUID.randomUUID();
-        String title = "";
-        if (!feedback.getTextFeedbackList().isEmpty()){
+        String title = null;
+        String description = null;
+        String[] content = new String[0];
+        if (!feedback.getTextFeedbackList().isEmpty()) {
             title = feedback.getTextFeedbackList().get(0).getText();
+        }else{
+            content = generateDescriptionAndTitle();
         }
+
         String userName = generateUserName(context, true);
         long timeStamp = generateTimestamp();
         int upVotes = 0;
         int responses = 0;
-        FEEDBACK_STATUS feedbackStatus = OPEN;
 
-        return new FeedbackBean.Builder()
+        FeedbackBean feedbackBean = new FeedbackBean.Builder()
                 .withFeedbackUid(feedbackUid)
-                .withTitle(title)
+                .withTitle(title==null?content[1]:title)
                 .withUserName(userName)
                 .withTimestamp(timeStamp)
                 .withUpVotes(upVotes)
                 .withMinUpVotes(minUpVotes)
                 .withMaxUpVotes(maxUpVotes)
                 .withResponses(responses)
-                .withStatus(feedbackStatus)
+                .withStatus(OPEN)
+                .build();
+
+        String[] labels = GeneratorStub.BagOfLabels.pickRandom(5);
+        FEEDBACK_STATUS status = feedbackBean.getFeedbackStatus();
+        List<FeedbackResponseBean> feedbackResponses = getFeedbackResponses(context, feedbackBean.getResponses(), timeStamp, 0.1f, 0.1f, feedbackBean);
+        return new FeedbackDetailsBean.Builder()
+                .withFeedbackUid(feedbackBean.getFeedbackUid())
+                .withFeedbackBean(feedbackBean)
+                .withTitle(feedbackBean.getTitle())
+                .withDescription(description==null?content[0]:description)
+                .withUserName(userName)
+                .withLabels(labels)
+                .withTimestamp(timeStamp)
+                .withStatus(status)
+                .withUpVotes(upVotes)
+                .withResponses(feedbackResponses)
+                .withBitmap(Utils.loadImageFromDatabase(context))
                 .build();
     }
 
