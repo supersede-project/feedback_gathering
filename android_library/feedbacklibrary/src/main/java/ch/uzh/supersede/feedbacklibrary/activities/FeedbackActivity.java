@@ -53,9 +53,6 @@ public class FeedbackActivity extends AbstractBaseActivity implements AudioMecha
     private ProgressDialog progressDialog;
     private Feedback feedback;
 
-    private CheckBox sendViaEmailCheckbox;
-    private EditText emailEditText;
-
     public long getSelectedPullConfigurationIndex() {
         return selectedPullConfigurationIndex;
     }
@@ -250,34 +247,7 @@ public class FeedbackActivity extends AbstractBaseActivity implements AudioMecha
                 }
             }
         }
-        //initCopyByEmailLayout(this, layoutInflater, linearLayout);
         layoutInflater.inflate(R.layout.utility_feedback_button, linearLayout);
-    }
-
-    public void initCopyByEmailLayout(Activity activity, LayoutInflater layoutInflater, LinearLayout linearLayout) {
-        String savedEmail = activity.getSharedPreferences(SHARED_PREFERENCES_ID, MODE_PRIVATE).getString("email", "");
-
-        View view = layoutInflater.inflate(R.layout.mechanism_email, null, false);
-        linearLayout.addView(view);
-
-        emailEditText = (EditText) view.findViewById(R.id.sbe_email_et);
-        if (!TextUtils.isEmpty(savedEmail)) {
-            emailEditText.setText(savedEmail);
-        }
-
-        sendViaEmailCheckbox = (CheckBox) view.findViewById(R.id.sbe_get_copy_cb);
-        sendViaEmailCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if (b) {
-                    emailEditText.setEnabled(true);
-                    emailEditText.setVisibility(View.VISIBLE);
-                } else {
-                    emailEditText.setEnabled(false);
-                    emailEditText.setVisibility(View.GONE);
-                }
-            }
-        });
     }
 
     public void execLoadConfiguration(Response<OrchestratorConfigurationItem> response) {
