@@ -101,7 +101,7 @@ public class TextMechanismView extends AbstractMechanismView {
 
     @Override
     public void updateModel() {
-        textMechanism.setInputText(((TextInputEditText) getEnclosingLayout().findViewById(R.id.supersede_feedbacklibrary_text_feedback_text)).getText().toString());
+        textMechanism.setText(((TextInputEditText) getEnclosingLayout().findViewById(R.id.supersede_feedbacklibrary_text_feedback_text)).getText().toString());
     }
 
     @Override

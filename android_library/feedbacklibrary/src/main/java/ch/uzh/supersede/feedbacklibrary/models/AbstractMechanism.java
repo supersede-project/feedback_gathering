@@ -1,21 +1,28 @@
 package ch.uzh.supersede.feedbacklibrary.models;
 
+import com.google.gson.annotations.Expose;
+
+import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
 import ch.uzh.supersede.feedbacklibrary.configurations.MechanismConfigurationItem;
 
-public abstract class AbstractMechanism {
+public abstract class AbstractMechanism implements Serializable {
     private boolean isActivatePossible;
-    private long id;
+    @Expose
+    private long mechanismId;
     private boolean isActive;
     private int order;
     private String type;
     private String title;
 
+    public AbstractMechanism() {
+    }
+
     public AbstractMechanism(String type, MechanismConfigurationItem item) {
         this.isActivatePossible = item.isActivatePossible();
-        this.id = item.getId();
+        this.mechanismId = item.getId();
         this.isActive = item.isActive();
         this.order = item.getOrder();
         this.type = type;
@@ -48,12 +55,12 @@ public abstract class AbstractMechanism {
         this.isActivatePossible = isActivatePossible;
     }
 
-    public long getId() {
-        return id;
+    public long getMechanismId() {
+        return mechanismId;
     }
 
-    public void setId(long id) {
-        this.id = id;
+    public void setMechanismId(long mechanismId) {
+        this.mechanismId = mechanismId;
     }
 
     public boolean isActive() {

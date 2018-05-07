@@ -22,9 +22,11 @@ public class CategoryMechanism extends AbstractMechanism {
     private boolean isOwnAllowed = true;
     // Selected options by the user
     private List<String> selectedOptions = new ArrayList<>();
+    private List<HashMap<String, Object>> categories;
 
     public CategoryMechanism(MechanismConfigurationItem item) {
         super(CATEGORY_TYPE, item);
+        initCategoryFeedback();
     }
 
     @Override
@@ -67,6 +69,42 @@ public class CategoryMechanism extends AbstractMechanism {
         }
     }
 
+    private void initCategoryFeedback() {
+        List<String> options = getOptions();
+        HashMap<String, Long> optionsIds = new HashMap<>(getOptionsIds());
+        Set<String> selectedOptionsSet = getSelectedOptionsSet();
+
+        // Process all the not user created options
+        for (String option : options) {
+            if (optionsIds.containsKey(option)) {
+                if (categories == null) {
+                    categories = new ArrayList<>();
+                }
+                HashMap<String, Object> values = new HashMap<>();
+                if (selectedOptionsSet.contains(option)) {
+                    values.put("text", option);
+                } else {
+                    values.put("text", null);
+                }
+                values.put("parameterId", optionsIds.get(option));
+                categories.add(values);
+            }
+        }
+
+        // Process all the user created options
+        Set<String> copySelectedOptionSet = new HashSet<>(selectedOptionsSet);
+        copySelectedOptionSet.removeAll(new HashSet<>(options));
+        for (String option : copySelectedOptionSet) {
+            if (categories == null) {
+                categories = new ArrayList<>();
+            }
+            HashMap<String, Object> values = new HashMap<>();
+            values.put("text", option);
+            values.put("parameterId", null);
+            categories.add(values);
+        }
+    }
+
     @Override
     public boolean isValid(List<String> errorMessage) {
         if (isMandatory() && getSelectedOptions().isEmpty()) {
@@ -74,6 +112,10 @@ public class CategoryMechanism extends AbstractMechanism {
             return false;
         }
         return true;
+    }
+
+    public List<HashMap<String, Object>> getCategories() {
+        return categories;
     }
 
     public boolean isMandatory() {

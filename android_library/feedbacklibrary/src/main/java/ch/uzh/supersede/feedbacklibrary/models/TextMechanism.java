@@ -2,6 +2,8 @@ package ch.uzh.supersede.feedbacklibrary.models;
 
 import android.graphics.Typeface;
 
+import com.google.gson.annotations.Expose;
+
 import java.util.List;
 import java.util.Map;
 
@@ -28,7 +30,8 @@ public class TextMechanism extends AbstractMechanism {
     private String mandatoryReminder = "Default mandatory reminder text!";
     private boolean textLengthVisible = true;
     // The text entered by the user
-    private String inputText = null;
+    @Expose
+    private String text = null;
 
     public TextMechanism(MechanismConfigurationItem item) {
         super(TEXT_TYPE, item);
@@ -136,13 +139,13 @@ public class TextMechanism extends AbstractMechanism {
 
     @Override
     public boolean isValid(List<String> errorMessage) {
-        if (isMandatory() && inputText.length() <= 0) {
+        if (isMandatory() && text.length() <= 0) {
             errorMessage.add(mandatoryReminder);
             return false;
         }
 
-        if (maxLength != null && inputText != null && inputText.length() > maxLength) {
-            errorMessage.add("Text has " + inputText.length() + " characters. Maximum allowed characters are " + maxLength);
+        if (maxLength != null && text != null && text.length() > maxLength) {
+            errorMessage.add("Text has " + text.length() + " characters. Maximum allowed characters are " + maxLength);
             return false;
         }
 
@@ -237,11 +240,11 @@ public class TextMechanism extends AbstractMechanism {
         this.textLengthVisible = textLengthVisible;
     }
 
-    public String getInputText() {
-        return inputText;
+    public String getText() {
+        return text;
     }
 
-    public void setInputText(String inputText) {
-        this.inputText = inputText;
+    public void setText(String text) {
+        this.text = text;
     }
 }

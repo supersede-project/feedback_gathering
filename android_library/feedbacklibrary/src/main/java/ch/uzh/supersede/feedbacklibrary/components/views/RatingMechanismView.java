@@ -30,17 +30,17 @@ public class RatingMechanismView extends AbstractMechanismView {
 
     @Override
     public void updateModel() {
-        ratingMechanism.setInputRating(((RatingBar) getEnclosingLayout().findViewById(R.id.supersede_feedbacklibrary_rating_feedback_rating)).getRating());
+        ratingMechanism.setRating((long) ((RatingBar) getEnclosingLayout().findViewById(R.id.supersede_feedbacklibrary_rating_feedback_rating)).getRating());
     }
 
-    public float getRating(){
+    public float getRating() {
         return ratingBar.getRating();
     }
 
 
     @Override
     public int compareTo(@NonNull Object o) {
-        if (o instanceof AbstractMechanismView){
+        if (o instanceof AbstractMechanismView) {
             int comparedViewOrder = ((AbstractMechanismView) o).getViewOrder();
             return comparedViewOrder > getViewOrder() ? -1 : comparedViewOrder == getViewOrder() ? 0 : 1;
         }

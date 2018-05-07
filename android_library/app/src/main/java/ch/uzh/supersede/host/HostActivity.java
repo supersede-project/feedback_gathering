@@ -39,22 +39,22 @@ public class HostActivity extends AbstractBaseActivity implements IFeedbackBehav
     //Feedback Layout
     @Override
     public int getConfiguredAudioFeedbackOrder() {
-        return -1;
+        return 1;
     }
 
     @Override
     public int getConfiguredScreenshotFeedbackOrder() {
-        return 2;
+        return 3;
     }
 
     @Override
     public int getConfiguredCategoryFeedbackOrder() {
-        return -1;
+        return 10;
     }
 
     @Override
     public int getConfiguredTextFeedbackOrder() {
-        return -1;
+        return 2;
     }
 
     @Override

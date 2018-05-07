@@ -28,7 +28,7 @@ import static ch.uzh.supersede.feedbacklibrary.utils.Constants.*;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.ViewsConstants.TEXT_ANNOTATION_COUNTER_MAXIMUM;
 
 public class ScreenshotMechanismView extends AbstractMechanismView {
-    private ScreenshotMechanism screenshotMechanism = null;
+    private ScreenshotMechanism screenshotMechanism;
     private ImageView screenShotPreviewImageView;
     private HashMap<Integer, String> allStickerAnnotations;
     private HashMap<Integer, String> allTextAnnotations;
