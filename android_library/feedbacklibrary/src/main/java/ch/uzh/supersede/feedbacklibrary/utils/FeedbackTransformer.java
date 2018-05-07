@@ -21,6 +21,7 @@ public class FeedbackTransformer {
                 .withApplicationId(applicationId)
                 .withTitle(feedbackDetailsBean.getTitle())
                 .withUserIdentification(feedbackDetailsBean.getUserName())
+                .withContextInformation()
                 .withAttachmentMechanism((AttachmentMechanism) getMechanism(mechanisms, AttachmentMechanism.class))
                 .withAudioMechanism((AudioMechanism) getMechanism(mechanisms, AudioMechanism.class))
                 .withCategoryMechanism((CategoryMechanism) getMechanism(mechanisms, CategoryMechanism.class))
@@ -30,7 +31,7 @@ public class FeedbackTransformer {
                 .build();
     }
 
-    public static AbstractMechanism getMechanism(List<AbstractMechanism> mechanisms, Class<? extends AbstractMechanism> mechanismType) {
+    private static AbstractMechanism getMechanism(List<AbstractMechanism> mechanisms, Class<? extends AbstractMechanism> mechanismType) {
         for (AbstractMechanism mechanism : mechanisms) {
             if (mechanism.getClass().equals(mechanismType)) {
                 return mechanism;

@@ -16,7 +16,7 @@ public class AudioMechanism extends AbstractPartMechanism {
     private int duration;
 
     public AudioMechanism(MechanismConfigurationItem item) {
-        super(AUDIO_TYPE, item, 0); //TODO [jfo] set part id
+        super(AUDIO_TYPE, item);
     }
 
     @Override
@@ -48,6 +48,7 @@ public class AudioMechanism extends AbstractPartMechanism {
 
     public void setAudioPath(String audioPath) {
         this.audioPath = audioPath;
+        initPartFeedback(0, audioPath); //FIXME [jfo] not gudd
     }
 
     public float getMaxTime() {

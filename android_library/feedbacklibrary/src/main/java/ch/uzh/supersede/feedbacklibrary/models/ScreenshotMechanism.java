@@ -23,7 +23,7 @@ public class ScreenshotMechanism extends AbstractPartMechanism {
     private List<HashMap<String, Object>> textAnnotations;
 
     public ScreenshotMechanism(MechanismConfigurationItem item) {
-        super(SCREENSHOT_TYPE, item, 0); //TODO [jfo] set part id
+        super(SCREENSHOT_TYPE, item);
         initScreenshotFeedback();
     }
 

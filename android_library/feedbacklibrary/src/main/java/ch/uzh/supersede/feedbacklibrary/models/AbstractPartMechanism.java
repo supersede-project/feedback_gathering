@@ -22,18 +22,17 @@ public abstract class AbstractPartMechanism extends AbstractMechanism implements
     @Expose
     private String part;
 
-    public AbstractPartMechanism(String type, MechanismConfigurationItem item, int partId) {
+    public AbstractPartMechanism(String type, MechanismConfigurationItem item) {
         super(type, item);
-        initPartFeedback(partId);
     }
 
     public abstract String getPartString();
 
-    private void initPartFeedback(int partId) {
-        if (getFilePath() == null){
+    protected void initPartFeedback(int partId, String filePath) {
+        if (filePath == null){
             return;
         }
-        File file = new File(getFilePath());
+        File file = new File(filePath);
         String[] split = (file.getName()).split("\\.");
         if (split.length == 1) {
             // The file has no file extension

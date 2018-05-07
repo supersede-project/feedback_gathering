@@ -6,7 +6,7 @@ import android.view.View;
 public abstract class AbstractMechanismView implements Comparable{
     protected int viewOrder = 0;
     private View enclosingLayout = null;
-    private LayoutInflater layoutInflater = null;
+    private LayoutInflater layoutInflater;
 
     public AbstractMechanismView(LayoutInflater layoutInflater) {
         this.layoutInflater = layoutInflater;

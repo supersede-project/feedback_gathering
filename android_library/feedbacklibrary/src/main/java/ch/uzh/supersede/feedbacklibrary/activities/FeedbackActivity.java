@@ -1,12 +1,8 @@
 package ch.uzh.supersede.feedbacklibrary.activities;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -31,16 +27,11 @@ import java.util.UUID;
 
 import ch.uzh.supersede.feedbacklibrary.BuildConfig;
 import ch.uzh.supersede.feedbacklibrary.R;
-import ch.uzh.supersede.feedbacklibrary.beans.ConfigurationRequestBean;
 import ch.uzh.supersede.feedbacklibrary.beans.FeedbackBean;
 import ch.uzh.supersede.feedbacklibrary.beans.FeedbackDetailsBean;
-import ch.uzh.supersede.feedbacklibrary.beans.LocalConfigurationBean;
 import ch.uzh.supersede.feedbacklibrary.components.views.AbstractMechanismView;
 import ch.uzh.supersede.feedbacklibrary.components.views.AudioMechanismView;
-import ch.uzh.supersede.feedbacklibrary.components.views.CategoryMechanismView;
-import ch.uzh.supersede.feedbacklibrary.components.views.RatingMechanismView;
 import ch.uzh.supersede.feedbacklibrary.components.views.ScreenshotMechanismView;
-import ch.uzh.supersede.feedbacklibrary.components.views.TextMechanismView;
 import ch.uzh.supersede.feedbacklibrary.database.FeedbackDatabase;
 import ch.uzh.supersede.feedbacklibrary.models.AbstractMechanism;
 import ch.uzh.supersede.feedbacklibrary.services.FeedbackService;
@@ -55,8 +46,8 @@ import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 
-import static ch.uzh.supersede.feedbacklibrary.utils.Constants.*;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.ActivitiesConstants.FEEDBACK_ACTIVITY_TAG;
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.*;
 import static ch.uzh.supersede.feedbacklibrary.utils.Enums.FEEDBACK_STATUS.OPEN;
 
 @SuppressWarnings({"squid:MaximumInheritanceDepth", "squid:S1170"})
