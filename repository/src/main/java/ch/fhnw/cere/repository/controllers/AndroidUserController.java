@@ -30,7 +30,7 @@ public class AndroidUserController extends BaseController {
 
     @PreAuthorize("@securityService.hasAdminPermission(#applicationId)")
     @RequestMapping(method = RequestMethod.GET, value = "/{id}")
-    public AndroidUser getAndroidUser(@RequestParam(value = "name", required = false) String name, @PathVariable long applicationId, @PathVariable long id) {
+    public AndroidUser getAndroidUser(@PathVariable long applicationId, @PathVariable long id) {
         AndroidUser androidUser = androidUserService.find(id);
         if (androidUser == null) {
             throw new NotFoundException();
@@ -54,12 +54,12 @@ public class AndroidUserController extends BaseController {
         return androidUserService.save(androidUser);
     }
 
-    @RequestMapping(method = RequestMethod.PUT, value = "/{id}")
-    public AndroidUser blockedAndroidUser(@PathVariable("id") long id, HttpEntity<String> blockedState) {
+    @RequestMapping(method = RequestMethod.PUT, value = "", params = "name")
+    public AndroidUser blockedAndroidUser(@RequestParam("name") String name, HttpEntity<String> blockedState) {
         if (blockedState.getBody() != null) {
             JSONObject obj = new JSONObject(blockedState.getBody());
             boolean blockedValue = obj.getBoolean("blocked");
-            AndroidUser modifiedAndroidUser = androidUserService.find(id);
+            AndroidUser modifiedAndroidUser = androidUserService.findByName(name);
             if (modifiedAndroidUser != null) {
                 modifiedAndroidUser.setBlocked(blockedValue);
                 androidUserService.save(modifiedAndroidUser);

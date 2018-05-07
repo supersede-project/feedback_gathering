@@ -26,6 +26,7 @@ public class Feedback {
     private long applicationId;
     private long configurationId;
     private String language;
+    private Boolean isPublic;
 
     @Transient
     private Application application;
@@ -305,5 +306,13 @@ public class Feedback {
 
     public void setApplication(Application application) {
         this.application = application;
+    }
+
+    public Boolean isPublic() {
+        return isPublic;
+    }
+
+    public void setPublic(Boolean aPublic) {
+        isPublic = aPublic;
     }
 }
