@@ -34,11 +34,6 @@
     <string name="screenshot_edit">Edit</string>
     <string name="screenshot_remove">Remove</string>
 
-    <!-- Email Mechanism -->
-    <string name="email">Email</string>
-    <string name="email_copy">Get a copy by email</string>
-    <string name="email_invalid">Invalid email</string>
-
     <!-- Image annotation-->
     <string name="image_annotation_color_picker">Color Picker</string>
     <string name="image_annotation_blur">Blur</string>
