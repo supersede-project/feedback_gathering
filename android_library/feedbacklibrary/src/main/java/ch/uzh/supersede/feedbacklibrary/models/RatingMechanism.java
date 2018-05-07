@@ -1,5 +1,7 @@
 package ch.uzh.supersede.feedbacklibrary.models;
 
+import com.google.gson.annotations.Expose;
+
 import java.util.List;
 
 import ch.uzh.supersede.feedbacklibrary.configurations.MechanismConfigurationItem;
@@ -11,7 +13,8 @@ public class RatingMechanism extends AbstractMechanism {
     private int maxRating;
     private float defaultRating;
 
-    private float inputRating;
+    @Expose
+    private long rating;
 
     public RatingMechanism(MechanismConfigurationItem item) {
         super(RATING_TYPE, item);
@@ -56,11 +59,11 @@ public class RatingMechanism extends AbstractMechanism {
         this.defaultRating = defaultRating;
     }
 
-    public float getInputRating() {
-        return inputRating;
+    public float getRating() {
+        return rating;
     }
 
-    public void setInputRating(float inputRating) {
-        this.inputRating = inputRating;
+    public void setRating(long rating) {
+        this.rating = rating;
     }
 }

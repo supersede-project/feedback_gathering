@@ -16,16 +16,13 @@ import java.util.Map;
 import ch.uzh.supersede.feedbacklibrary.configurations.Configuration;
 import ch.uzh.supersede.feedbacklibrary.configurations.OrchestratorConfiguration;
 import ch.uzh.supersede.feedbacklibrary.configurations.OrchestratorConfigurationItem;
-import ch.uzh.supersede.feedbacklibrary.models.CategoryMechanism;
 import ch.uzh.supersede.feedbacklibrary.models.AbstractMechanism;
+import ch.uzh.supersede.feedbacklibrary.models.CategoryMechanism;
 import ch.uzh.supersede.feedbacklibrary.models.TextMechanism;
 import ch.uzh.supersede.feedbacklibrary.utils.Utils;
 
-import static ch.uzh.supersede.feedbacklibrary.models.AbstractMechanism.CATEGORY_TYPE;
-import static ch.uzh.supersede.feedbacklibrary.models.AbstractMechanism.TEXT_TYPE;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.*;
+import static org.junit.Assert.*;
 
 /**
  * Class for testing the configuration
@@ -49,7 +46,7 @@ public class ConfigurationTest {
         assertEquals(6, orderedMechanismList.size());
         assertEquals(6, shuffledMechanismList.size());
         for (int i = 0; i < 6; ++i) {
-            assertEquals(orderedMechanismList.get(i).getId(), shuffledMechanismList.get(i).getId());
+            assertEquals(orderedMechanismList.get(i).getMechanismId(), shuffledMechanismList.get(i).getMechanismId());
         }
     }
 
@@ -75,8 +72,8 @@ public class ConfigurationTest {
         assertEquals(mechanismList.get(0).getType(), TEXT_TYPE);
         assertEquals(mechanismList.get(1).getType(), TEXT_TYPE);
 
-        ((TextMechanism) mechanismList.get(0)).setInputText("");
-        ((TextMechanism) mechanismList.get(1)).setInputText("");
+        ((TextMechanism) mechanismList.get(0)).setText("");
+        ((TextMechanism) mechanismList.get(1)).setText("");
         assertFalse((mechanismList.get(0)).isValid(stubList));
         assertTrue((mechanismList.get(1)).isValid(stubList));
 

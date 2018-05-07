@@ -19,6 +19,7 @@ import ch.uzh.supersede.feedbacklibrary.activities.AbstractBaseActivity;
 import ch.uzh.supersede.feedbacklibrary.api.IFeedbackAPI;
 import ch.uzh.supersede.feedbacklibrary.beans.ConfigurationRequestBean;
 import ch.uzh.supersede.feedbacklibrary.beans.FeedbackBean;
+import ch.uzh.supersede.feedbacklibrary.beans.FeedbackDetailsBean;
 import ch.uzh.supersede.feedbacklibrary.beans.LocalFeedbackBean;
 import ch.uzh.supersede.feedbacklibrary.components.buttons.AbstractSettingsListItem;
 import ch.uzh.supersede.feedbacklibrary.components.buttons.FeedbackListItem;
@@ -79,7 +80,7 @@ public abstract class FeedbackService {
 
     public abstract void pingRepository(IFeedbackServiceEventListener callback);
 
-    public abstract void createFeedbackVariant(IFeedbackServiceEventListener callback, Activity activity, String language, long applicationId, FeedbackBean feedbackBean, List<MultipartBody.Part> files);
+    public abstract void createFeedbackVariant(IFeedbackServiceEventListener callback, Activity activity, String language, long applicationId, FeedbackDetailsBean feedbackDetailsBean, List<MultipartBody.Part> files);
 
     public abstract void getConfiguration(IFeedbackServiceEventListener callback, ConfigurationRequestBean configurationRequestBean);
 
@@ -109,14 +110,14 @@ public abstract class FeedbackService {
         }
 
         @Override
-        public void createFeedbackVariant(IFeedbackServiceEventListener callback, Activity activity, String language, long applicationId, FeedbackBean feedbackBean, List<MultipartBody.Part> files) {
+        public void createFeedbackVariant(IFeedbackServiceEventListener callback, Activity activity, String language, long applicationId, FeedbackDetailsBean feedbackDetailsBean, List<MultipartBody.Part> files) {
             // The JSON string of the feedback
             GsonBuilder builder = new GsonBuilder();
             builder.excludeFieldsWithoutExposeAnnotation();
             builder.serializeNulls();
             Gson gson = builder.create();
 
-            String jsonString = gson.toJson(feedbackBean);
+            String jsonString = gson.toJson(feedbackDetailsBean);
             MultipartBody.Part jsonPart = MultipartBody.Part.createFormData("json", "json", RequestBody.create(MediaType.parse("application/json"), jsonString.getBytes()));
 
             feedbackAPI.createFeedbackVariant(language, applicationId, jsonPart, files).enqueue(
@@ -240,8 +241,8 @@ public abstract class FeedbackService {
         }
 
         @Override
-        public void createFeedbackVariant(IFeedbackServiceEventListener callback, Activity activity, String language, long applicationId, FeedbackBean feedback, List<MultipartBody.Part> files) {
-            FeedbackDatabase.getInstance(activity).writeFeedback(feedback, Enums.SAVE_MODE.CREATED);
+        public void createFeedbackVariant(IFeedbackServiceEventListener callback, Activity activity, String language, long applicationId, FeedbackDetailsBean feedbackDetailsBean, List<MultipartBody.Part> files) {
+            FeedbackDatabase.getInstance(activity).writeFeedback(feedbackDetailsBean.getFeedbackBean(), Enums.SAVE_MODE.CREATED);
             callback.onEventCompleted(CREATE_FEEDBACK_VARIANT, null);
         }
 

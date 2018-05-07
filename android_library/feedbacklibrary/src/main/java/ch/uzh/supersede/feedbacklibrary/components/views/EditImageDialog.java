@@ -20,8 +20,8 @@ import java.util.Map;
 
 import ch.uzh.supersede.feedbacklibrary.activities.AnnotateImageActivity;
 import ch.uzh.supersede.feedbacklibrary.R;
-import ch.uzh.supersede.feedbacklibrary.models.DialogType;
 import ch.uzh.supersede.feedbacklibrary.models.EditImageItem;
+import ch.uzh.supersede.feedbacklibrary.utils.Enums.DIALOG_TYPE;
 
 import static android.content.Context.MODE_PRIVATE;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.SHARED_PREFERENCES_ID;
@@ -68,7 +68,7 @@ public class EditImageDialog extends DialogFragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setHasFixedSize(true);
 
-        switch (DialogType.valueOf(type)) {
+        switch (DIALOG_TYPE.valueOf(type)) {
             case FAVORITE:
                 getFavorites();
                 builder.setTitle(R.string.image_annotation_favorite);

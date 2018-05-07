@@ -1,19 +1,22 @@
 package ch.uzh.supersede.feedbacklibrary.models;
 
+import com.google.gson.annotations.Expose;
+
 import java.util.List;
 
 import ch.uzh.supersede.feedbacklibrary.configurations.MechanismConfigurationItem;
 
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.AUDIO_TYPE;
 
-public class AudioMechanism extends AbstractMechanism {
+public class AudioMechanism extends AbstractPartMechanism {
     private String audioPath;
     // Default value is 10 seconds
     private float maxTime = 10;
-    private int totalDuration;
+    @Expose
+    private int duration;
 
     public AudioMechanism(MechanismConfigurationItem item) {
-        super(AUDIO_TYPE, item);
+        super(AUDIO_TYPE, item, 0); //TODO [jfo] set part id
     }
 
     @Override
@@ -27,6 +30,16 @@ public class AudioMechanism extends AbstractMechanism {
     @Override
     public boolean isValid(List<String> errorMessage) {
         return true;
+    }
+
+    @Override
+    public String getPartString() {
+        return "audio";
+    }
+
+    @Override
+    public String getFilePath() {
+        return audioPath;
     }
 
     public String getAudioPath() {
@@ -45,11 +58,11 @@ public class AudioMechanism extends AbstractMechanism {
         this.maxTime = maxTime;
     }
 
-    public int getTotalDuration() {
-        return totalDuration;
+    public int getDuration() {
+        return duration;
     }
 
-    public void setTotalDuration(int totalDuration) {
-        this.totalDuration = totalDuration;
+    public void setDuration(int duration) {
+        this.duration = duration;
     }
 }

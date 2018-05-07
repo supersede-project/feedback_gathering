@@ -86,9 +86,12 @@ public class ConfigurationRequestBean {
         }
 
         public ConfigurationRequestBean build() {
-            if (checkNullAndLog(url, "url") || checkNullAndLog(language, "language") || checkNullAndLog
-                    (intermediateDialogText, "intermediateDialogText") || checkNullAndLog(activityToStart, "activityToStart")
-                    || checkNullAndLog(startingActivity, "startingActivity") || checkNullAndLog(applicationId, "applicationId")
+            if (checkNullAndLog(url, "url")
+                    || checkNullAndLog(language, "language")
+                    || checkNullAndLog(intermediateDialogText, "intermediateDialogText")
+                    || checkNullAndLog(activityToStart, "activityToStart")
+                    || checkNullAndLog(startingActivity, "startingActivity")
+                    || checkNullAndLog(applicationId, "applicationId")
                     || checkNullAndLog(pullConfigurationId, "pullConfigurationId")) {
                 throw new RuntimeException("Could not create ConfigurationRequestBean!");
             }

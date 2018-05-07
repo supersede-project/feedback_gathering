@@ -76,4 +76,11 @@ public class Enums {
         OTHERS,
         SUBSCRIPTIONS
     }
+
+    public enum DIALOG_TYPE {
+        FAVORITE,
+        QUICK_EDIT,
+        CHANGE_COLOR,
+        CROP
+    }
 }

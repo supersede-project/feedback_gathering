@@ -1,14 +1,17 @@
 package ch.uzh.supersede.feedbacklibrary.beans;
 
-import android.graphics.*;
+import android.graphics.Bitmap;
 
-import java.io.*;
-import java.util.*;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
-import ch.uzh.supersede.feedbacklibrary.utils.*;
+import ch.uzh.supersede.feedbacklibrary.utils.CompareUtility;
 import ch.uzh.supersede.feedbacklibrary.utils.Enums.FEEDBACK_STATUS;
+import ch.uzh.supersede.feedbacklibrary.utils.ImageUtility;
 
-public class FeedbackDetailsBean implements Serializable{
+public class FeedbackDetailsBean implements Serializable {
 
     private UUID feedbackUid;
     private String title;
@@ -98,7 +101,7 @@ public class FeedbackDetailsBean implements Serializable{
         }
 
         public FeedbackDetailsBean build() {
-            if (CompareUtility.notNull(feedbackUid,title,userName,timeStamp,description,feedbackStatus,feedbackBean)) {
+            if (CompareUtility.notNull(feedbackUid, title, userName, timeStamp, description, feedbackStatus, feedbackBean)) {
                 FeedbackDetailsBean bean = new FeedbackDetailsBean();
                 bean.feedbackUid = feedbackUid;
                 bean.title = this.title;

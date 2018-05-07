@@ -12,36 +12,37 @@ public class ImageUtility {
 
     private ImageUtility() {
     }
+
     public static Integer[] calculateTopNColors(Bitmap bitmap, int nColors, int steps) {
         int pixelStep = 0;
-        HashMap<Integer,ColorMapEntry> colorMap = new HashMap<>();
-        int xStep = (int)(bitmap.getWidth()/(double)steps);
-        int yStep = (int)(bitmap.getHeight()/(double)steps);
+        HashMap<Integer, ColorMapEntry> colorMap = new HashMap<>();
+        int xStep = (int) (bitmap.getWidth() / (double) steps);
+        int yStep = (int) (bitmap.getHeight() / (double) steps);
         for (int y = 0; y < bitmap.getHeight(); y = y + yStep) {
             for (int x = 0; x < bitmap.getWidth(); x = x + xStep) {
                 int c = bitmap.getPixel(x, y);
-                if (colorMap.containsKey(c)){
+                if (colorMap.containsKey(c)) {
                     colorMap.get(c).increment();
-                }else{
-                    colorMap.put(c,new ColorMapEntry(c));
+                } else {
+                    colorMap.put(c, new ColorMapEntry(c));
                 }
                 pixelStep++;
             }
         }
         ArrayList<ColorMapEntry> sortedColorMap = new ArrayList<>();
         ArrayList<Integer> finalColorList = new ArrayList<>();
-        for (Map.Entry<Integer,ColorMapEntry> e : colorMap.entrySet()){
+        for (Map.Entry<Integer, ColorMapEntry> e : colorMap.entrySet()) {
             sortedColorMap.add(e.getValue());
         }
         Collections.sort(sortedColorMap);
-        for (ColorMapEntry i : sortedColorMap){
+        for (ColorMapEntry i : sortedColorMap) {
             finalColorList.add(i.getColor());
         }
-        return CollectionUtility.subArray(Integer.class, finalColorList,0,nColors);
+        return CollectionUtility.subArray(Integer.class, finalColorList, 0, nColors);
     }
 
-    public static boolean isDark(int color){
-        return ((Color.red(color) + Color.green(color) + Color.blue(color)) / 3d)<122;
+    public static boolean isDark(int color) {
+        return ((Color.red(color) + Color.green(color) + Color.blue(color)) / 3d) < 122;
     }
 
     public final static String toHexString(int colour) throws NullPointerException {
@@ -52,14 +53,16 @@ public class ImageUtility {
         return hexColour;
     }
 
-    public static class ColorMapEntry implements Comparable{
+    public static class ColorMapEntry implements Comparable {
         private int color;
         private int count;
-        public ColorMapEntry(int color){
+
+        public ColorMapEntry(int color) {
             this.color = color;
             this.count = 1;
         }
-        public void increment(){
+
+        public void increment() {
             this.count++;
         }
 
@@ -73,13 +76,14 @@ public class ImageUtility {
 
         @Override
         public int compareTo(@NonNull Object o) {
-            if (o instanceof ColorMapEntry){
+            if (o instanceof ColorMapEntry) {
                 int comparedCount = ((ColorMapEntry) o).getCount();
                 return comparedCount > getCount() ? 1 : comparedCount == getCount() ? 0 : -1;
             }
             return 0;
         }
     }
+
     /**
      * Returns an average color-intensity, stepDensity defines the coverage of pixels
      *
@@ -116,7 +120,7 @@ public class ImageUtility {
                 blueBucket += Color.blue(c);
             }
         }
-        if (pixelCount > 0){
+        if (pixelCount > 0) {
             double avgRed = redBucket / pixelCount;
             double avgGreen = greenBucket / pixelCount;
             double avgBlue = blueBucket / pixelCount;
@@ -125,14 +129,18 @@ public class ImageUtility {
         return 0;
     }
 
-    public static byte[] imageToBytes(Bitmap bitmap){
+    public static byte[] imageToBytes(Bitmap bitmap) {
+        if (bitmap == null) {
+            return new byte[0];
+        }
+
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
         return stream.toByteArray();
     }
 
-    public static Bitmap bytesToImage(byte[] bytes){
-        if (bytes == null || bytes.length == 0){
+    public static Bitmap bytesToImage(byte[] bytes) {
+        if (bytes == null || bytes.length == 0) {
             return null;
         }
         return BitmapFactory.decodeByteArray(bytes, 0, bytes.length);

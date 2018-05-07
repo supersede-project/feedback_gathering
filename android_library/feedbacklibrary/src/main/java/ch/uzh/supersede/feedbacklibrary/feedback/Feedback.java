@@ -18,11 +18,11 @@ import ch.uzh.supersede.feedbacklibrary.models.CategoryMechanism;
 import ch.uzh.supersede.feedbacklibrary.models.RatingMechanism;
 import ch.uzh.supersede.feedbacklibrary.models.ScreenshotMechanism;
 import ch.uzh.supersede.feedbacklibrary.models.TextMechanism;
+import ch.uzh.supersede.feedbacklibrary.utils.CompareUtility;
 
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.*;
 
 public class Feedback implements Serializable {
-    // Application
     @Expose
     private long applicationId;
     @Expose
@@ -35,20 +35,126 @@ public class Feedback implements Serializable {
     private String title;
     @Expose
     private String userIdentification;
+    @Expose
+    private List<AttachmentMechanism> attachmentFeedbackList = new ArrayList<>();
+    @Expose
+    private List<AudioMechanism> audioFeedbackList = new ArrayList<>();
+    @Expose
+    private List<CategoryMechanism> categoryFeedbackList = new ArrayList<>();
+    @Expose
+    private List<RatingMechanism> ratingFeedbackList = new ArrayList<>();
+    @Expose
+    private List<ScreenshotMechanism> screenshotFeedbackList = new ArrayList<>();
+    @Expose
+    private List<TextMechanism> textFeedbackList = new ArrayList<>();
 
-    // Mechanisms
-    @Expose
-    private List<AttachmentFeedback> attachmentFeedbackList = new ArrayList<>();
-    @Expose
-    private List<AudioFeedback> audioFeedbackList = new ArrayList<>();
-    @Expose
-    private List<HashMap<String, Object>> categoryFeedbackList = new ArrayList<>();
-    @Expose
-    private List<RatingFeedback> ratingFeedbackList = new ArrayList<>();
-    @Expose
-    private List<ScreenshotFeedback> screenshotFeedbackList = new ArrayList<>();
-    @Expose
-    private List<TextFeedback> textFeedbackList = new ArrayList<>();
+    private Feedback() {
+    }
+
+    public static class Builder {
+        private long applicationId;
+        private long configurationId;
+        private Map<String, Object> contextInformation;
+        private String language;
+        private String title;
+        private String userIdentification;
+        private List<AttachmentMechanism> attachmentFeedbackList;
+        private List<AudioMechanism> audioFeedbackList;
+        private List<CategoryMechanism> categoryFeedbackList;
+        private List<RatingMechanism> ratingFeedbackList;
+        private List<ScreenshotMechanism> screenshotFeedbackList;
+        private List<TextMechanism> textFeedbackList;
+
+        public Builder() {
+            //NOP
+        }
+
+        public Builder withTitle(String title) {
+            this.title = title;
+            return this;
+        }
+
+        public Builder withApplicationId(long applicationId) {
+            this.applicationId = applicationId;
+            return this;
+        }
+
+        public Builder withConfigurationId(long configurationId) {
+            this.configurationId = configurationId;
+            return this;
+        }
+
+        public Builder withContextInformation(Map<String, Object> contextInformation) {
+            this.contextInformation = new HashMap<>(contextInformation);
+            return this;
+        }
+
+        public Builder withLanguage(String language) {
+            this.language = language;
+            return this;
+        }
+
+        public Builder withUserIdentification(String userIdentification) {
+            this.userIdentification = userIdentification;
+            return this;
+        }
+
+        public Builder withAttachmentMechanism(AttachmentMechanism attachmentMechanism) {
+            this.attachmentFeedbackList = new ArrayList<>();
+            attachmentFeedbackList.add(attachmentMechanism);
+            return this;
+        }
+
+        public Builder withAudioMechanism(AudioMechanism audioMechanism) {
+            this.audioFeedbackList = new ArrayList<>();
+            audioFeedbackList.add(audioMechanism);
+            return this;
+        }
+
+        public Builder withCategoryMechanism(CategoryMechanism categoryMechanism) {
+            this.categoryFeedbackList = new ArrayList<>();
+            categoryFeedbackList.add(categoryMechanism);
+            return this;
+        }
+
+        public Builder withRatingMechanism(RatingMechanism ratingMechanism) {
+            this.ratingFeedbackList = new ArrayList<>();
+            ratingFeedbackList.add(ratingMechanism);
+            return this;
+        }
+
+        public Builder withScreenshotMechanism(ScreenshotMechanism screenshotMechanism) {
+            this.screenshotFeedbackList = new ArrayList<>();
+            screenshotFeedbackList.add(screenshotMechanism);
+            return this;
+        }
+
+        public Builder withTextMechanism(TextMechanism textMechanism) {
+            this.textFeedbackList = new ArrayList<>();
+            textFeedbackList.add(textMechanism);
+            return this;
+        }
+
+        public Feedback build() {
+            if (CompareUtility.notNull(title, userIdentification, applicationId)) {
+                Feedback bean = new Feedback();
+                bean.applicationId = applicationId;
+                bean.configurationId = this.configurationId;
+                bean.contextInformation = this.contextInformation;
+                bean.language = this.language;
+                bean.title = this.title;
+                bean.userIdentification = this.userIdentification;
+                bean.attachmentFeedbackList = new ArrayList<>(this.attachmentFeedbackList);
+                bean.audioFeedbackList = new ArrayList<>(this.audioFeedbackList);
+                bean.categoryFeedbackList = new ArrayList<>(this.categoryFeedbackList);
+                bean.ratingFeedbackList = new ArrayList<>(this.ratingFeedbackList);
+                bean.screenshotFeedbackList = new ArrayList<>(this.screenshotFeedbackList);
+                bean.textFeedbackList = new ArrayList<>(this.textFeedbackList);
+                return bean;
+            }
+            return null;
+        }
+    }
 
     public Feedback(List<AbstractMechanism> allMechanisms) {
         for (AbstractMechanism mechanism : allMechanisms) {
@@ -61,24 +167,23 @@ public class Feedback implements Serializable {
                     case AUDIO_TYPE:
                         AudioMechanism audioMechanism = (AudioMechanism) mechanism;
                         if (audioMechanism.getAudioPath() != null) {
-                            audioFeedbackList.add(new AudioFeedback(audioMechanism, audioFeedbackList.size()));
+                            audioFeedbackList.add(audioMechanism);
                         }
                         break;
                     case CATEGORY_TYPE:
-                        CategoryFeedback categoryFeedback = new CategoryFeedback((CategoryMechanism) mechanism);
-                        categoryFeedbackList.addAll(categoryFeedback.getCategories());
+                        categoryFeedbackList.add((CategoryMechanism) mechanism);
                         break;
                     case RATING_TYPE:
-                        ratingFeedbackList.add(new RatingFeedback((RatingMechanism) mechanism));
+                        ratingFeedbackList.add((RatingMechanism) mechanism);
                         break;
                     case SCREENSHOT_TYPE:
                         ScreenshotMechanism screenshotMechanism = (ScreenshotMechanism) mechanism;
                         if (screenshotMechanism.getImagePath() != null) {
-                            screenshotFeedbackList.add(new ScreenshotFeedback(screenshotMechanism, screenshotFeedbackList.size()));
+                            screenshotFeedbackList.add(screenshotMechanism);
                         }
                         break;
                     case TEXT_TYPE:
-                        textFeedbackList.add(new TextFeedback((TextMechanism) mechanism));
+                        textFeedbackList.add((TextMechanism) mechanism);
                         break;
                     default:
                         Log.wtf("Feedback", "Unknown mechanism type '" + type + "'");
@@ -152,51 +257,51 @@ public class Feedback implements Serializable {
         this.userIdentification = userIdentification;
     }
 
-    public List<AttachmentFeedback> getAttachmentFeedbackList() {
+    public List<AttachmentMechanism> getAttachmentFeedbackList() {
         return attachmentFeedbackList;
     }
 
-    public void setAttachmentFeedbackList(List<AttachmentFeedback> attachmentFeedbackList) {
+    public void setAttachmentFeedbackList(List<AttachmentMechanism> attachmentFeedbackList) {
         this.attachmentFeedbackList = attachmentFeedbackList;
     }
 
-    public List<AudioFeedback> getAudioFeedbackList() {
+    public List<AudioMechanism> getAudioFeedbackList() {
         return audioFeedbackList;
     }
 
-    public void setAudioFeedbackList(List<AudioFeedback> audioFeedbackList) {
+    public void setAudioFeedbackList(List<AudioMechanism> audioFeedbackList) {
         this.audioFeedbackList = audioFeedbackList;
     }
 
-    public List<HashMap<String, Object>> getCategoryFeedbackList() {
+    public List<CategoryMechanism> getCategoryFeedbackList() {
         return categoryFeedbackList;
     }
 
-    public void setCategoryFeedbackList(List<HashMap<String, Object>> categoryFeedbackList) {
+    public void setCategoryFeedbackList(List<CategoryMechanism> categoryFeedbackList) {
         this.categoryFeedbackList = categoryFeedbackList;
     }
 
-    public List<RatingFeedback> getRatingFeedbackList() {
+    public List<RatingMechanism> getRatingFeedbackList() {
         return ratingFeedbackList;
     }
 
-    public void setRatingFeedbackList(List<RatingFeedback> ratingFeedbackList) {
+    public void setRatingFeedbackList(List<RatingMechanism> ratingFeedbackList) {
         this.ratingFeedbackList = ratingFeedbackList;
     }
 
-    public List<ScreenshotFeedback> getScreenshotFeedbackList() {
+    public List<ScreenshotMechanism> getScreenshotFeedbackList() {
         return screenshotFeedbackList;
     }
 
-    public void setScreenshotFeedbackList(List<ScreenshotFeedback> screenshotFeedbackList) {
+    public void setScreenshotFeedbackList(List<ScreenshotMechanism> screenshotFeedbackList) {
         this.screenshotFeedbackList = screenshotFeedbackList;
     }
 
-    public List<TextFeedback> getTextFeedbackList() {
+    public List<TextMechanism> getTextFeedbackList() {
         return textFeedbackList;
     }
 
-    public void setTextFeedbackList(List<TextFeedback> textFeedbackList) {
+    public void setTextFeedbackList(List<TextMechanism> textFeedbackList) {
         this.textFeedbackList = textFeedbackList;
     }
 }

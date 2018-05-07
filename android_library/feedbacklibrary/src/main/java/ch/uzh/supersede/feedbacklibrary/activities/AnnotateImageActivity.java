@@ -43,11 +43,14 @@ import ch.uzh.supersede.feedbacklibrary.components.views.EditImageDialog;
 import ch.uzh.supersede.feedbacklibrary.components.views.StickerAnnotationImageView;
 import ch.uzh.supersede.feedbacklibrary.components.views.TextAnnotationImageView;
 import ch.uzh.supersede.feedbacklibrary.database.FeedbackDatabase;
-import ch.uzh.supersede.feedbacklibrary.models.DialogType;
-import ch.uzh.supersede.feedbacklibrary.utils.*;
+import ch.uzh.supersede.feedbacklibrary.utils.ColorPickerDialog;
+import ch.uzh.supersede.feedbacklibrary.utils.Enums.DIALOG_TYPE;
+import ch.uzh.supersede.feedbacklibrary.utils.ImageUtility;
+import ch.uzh.supersede.feedbacklibrary.utils.Utils;
 
 import static android.graphics.Color.*;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.*;
+import static ch.uzh.supersede.feedbacklibrary.utils.Enums.DIALOG_TYPE.CHANGE_COLOR;
 
 
 public class AnnotateImageActivity extends AbstractBaseActivity implements ColorPickerDialog.OnColorChangeDialogListener, EditImageDialog.OnEditImageListener {
@@ -378,7 +381,7 @@ public class AnnotateImageActivity extends AbstractBaseActivity implements Color
         quickEditButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showDialog(DialogType.QUICK_EDIT);
+                showDialog(DIALOG_TYPE.QUICK_EDIT);
             }
         });
 
@@ -386,7 +389,7 @@ public class AnnotateImageActivity extends AbstractBaseActivity implements Color
         colorButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showDialog(DialogType.CHANGE_COLOR);
+                showDialog(CHANGE_COLOR);
             }
         });
 
@@ -411,7 +414,7 @@ public class AnnotateImageActivity extends AbstractBaseActivity implements Color
         });
     }
 
-    private void showDialog(DialogType type) {
+    private void showDialog(DIALOG_TYPE type) {
         dialog = new EditImageDialog();
         Bundle args = new Bundle();
         args.putString("type", type.name());
