@@ -43,7 +43,7 @@ public class ConfigurationTest {
         assertEquals("PUSH", shuffledActiveConfiguration.getType());
         assertEquals(orderedActiveConfiguration.getId(), shuffledActiveConfiguration.getId());
 
-        // Check if both active configurations contain 6 mechanisms and that their order corresponds
+        // Check if both active configurations contain 6 mechanisms and that their viewOrder corresponds
         List<AbstractMechanism> orderedMechanismList = orderedActiveConfiguration.getMechanisms();
         List<AbstractMechanism> shuffledMechanismList = shuffledActiveConfiguration.getMechanisms();
         assertEquals(6, orderedMechanismList.size());

@@ -8,6 +8,7 @@ import android.content.res.Resources;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -61,6 +62,7 @@ public class AudioMechanismView extends AbstractMechanismView implements SeekBar
 
     public AudioMechanismView(LayoutInflater layoutInflater, AbstractMechanism mechanism, Resources resources, Activity activity, Context applicationContext) {
         super(layoutInflater);
+        this.viewOrder = mechanism.getOrder();
         this.audioMechanism = (AudioMechanism) mechanism;
         this.resources = resources;
         this.activity = activity;
@@ -535,9 +537,19 @@ public class AudioMechanismView extends AbstractMechanismView implements SeekBar
         audioMechanism.setTotalDuration(totalDuration);
     }
 
+
     public interface MultipleAudioMechanismsListener {
         void onRecordStart(long audioMechanismId);
 
         void onRecordStop();
+    }
+
+    @Override
+    public int compareTo(@NonNull Object o) {
+        if (o instanceof AbstractMechanismView){
+            int comparedViewOrder = ((AbstractMechanismView) o).getViewOrder();
+            return comparedViewOrder > getViewOrder() ? -1 : comparedViewOrder == getViewOrder() ? 0 : 1;
+        }
+        return 0;
     }
 }

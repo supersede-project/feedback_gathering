@@ -3,7 +3,8 @@ package ch.uzh.supersede.feedbacklibrary.components.views;
 import android.view.LayoutInflater;
 import android.view.View;
 
-public abstract class AbstractMechanismView {
+public abstract class AbstractMechanismView implements Comparable{
+    protected int viewOrder = 0;
     private View enclosingLayout = null;
     private LayoutInflater layoutInflater = null;
 
@@ -24,4 +25,8 @@ public abstract class AbstractMechanismView {
     }
 
     public abstract void updateModel();
+
+    public int getViewOrder() {
+        return viewOrder;
+    }
 }

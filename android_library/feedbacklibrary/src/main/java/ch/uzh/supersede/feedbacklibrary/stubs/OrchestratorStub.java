@@ -8,12 +8,10 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import ch.uzh.supersede.feedbacklibrary.R;
+import ch.uzh.supersede.feedbacklibrary.beans.LocalConfigurationBean;
 import ch.uzh.supersede.feedbacklibrary.components.views.AbstractMechanismView;
 import ch.uzh.supersede.feedbacklibrary.components.views.AudioMechanismView;
 import ch.uzh.supersede.feedbacklibrary.components.views.CategoryMechanismView;
@@ -63,6 +61,7 @@ public class OrchestratorStub {
     }
 
     public static class MechanismBuilder<T extends Activity> {
+        private LocalConfigurationBean configuration;
         private List<AbstractMechanismView> mechanismViews;
         private List<AbstractMechanism> mechanisms;
         private Context context;
@@ -72,9 +71,10 @@ public class OrchestratorStub {
         private T activity;
         private int id;
 
-        public MechanismBuilder(T activity, Context context, Resources resources, LinearLayout rootLayout, LayoutInflater layoutInflater) {
+        public MechanismBuilder(T activity, Context context, Resources resources, LocalConfigurationBean configuration, LinearLayout rootLayout, LayoutInflater layoutInflater) {
             this.mechanismViews = new ArrayList<>();
             this.mechanisms = new ArrayList<>();
+            this.configuration = configuration;
             this.id = 0;
             this.context = context;
             this.layoutInflater = layoutInflater;
@@ -85,51 +85,60 @@ public class OrchestratorStub {
 
         @Deprecated
         public MechanismBuilder withAttachment() {
-            resolve(ATTACHMENT_TYPE);
+            resolve(ATTACHMENT_TYPE, 0);
             return this;
         }
 
         public MechanismBuilder withAudio() {
-            if (ADVANCED.check(context)) {
-                resolve(AUDIO_TYPE);
+            if (ADVANCED.check(context) && configuration.getAudioOrder() != -1) {
+                resolve(AUDIO_TYPE, configuration.getAudioOrder());
             }
             return this;
         }
 
         public MechanismBuilder withCategory() {
-            resolve(CATEGORY_TYPE);
+            if (configuration.getCategoryOrder() != -1) {
+                resolve(CATEGORY_TYPE, configuration.getCategoryOrder());
+            }
             return this;
         }
 
         @Deprecated
         public MechanismBuilder withDialog() {
-            resolve(DIALOG_TYPE);
+            resolve(DIALOG_TYPE, 0);
             return this;
         }
 
         @Deprecated
         public MechanismBuilder withImage() {
-            resolve(IMAGE_TYPE);
+            resolve(IMAGE_TYPE, 0);
             return this;
         }
 
         public MechanismBuilder withRating() {
-            resolve(RATING_TYPE);
+            if (configuration.getRatingOrder() != -1) {
+                resolve(RATING_TYPE, configuration.getRatingOrder());
+            }
             return this;
         }
 
         public MechanismBuilder withScreenshot() {
-            resolve(SCREENSHOT_TYPE);
+            if (configuration.getScreenshotOrder() != -1) {
+                resolve(SCREENSHOT_TYPE, configuration.getScreenshotOrder());
+            }
             return this;
         }
 
         public MechanismBuilder withText() {
-            resolve(TEXT_TYPE);
+            if (configuration.getTextOrder() != -1) {
+                resolve(TEXT_TYPE, configuration.getTextOrder());
+            }
             return this;
         }
 
         public OrchestratorStub build(List<AbstractMechanismView> mechanismViews) {
             OrchestratorStub stub = new OrchestratorStub();
+            Collections.sort(this.mechanismViews);
             for (AbstractMechanismView view : this.mechanismViews) {
                 mechanismViews.add(view);
                 rootLayout.addView(view.getEnclosingLayout());
@@ -140,15 +149,15 @@ public class OrchestratorStub {
             return stub;
         }
 
-        private void resolve(String type) {
+        private void resolve(String type, int order) {
             MechanismConfigurationItem configurationItem = new MechanismConfigurationItem();
             configurationItem.setActivatePossible(true);
             configurationItem.setActive(true);
-            configurationItem.setOrder(id);
-            configurationItem.setId(id);
+            configurationItem.setOrder(order);
+            configurationItem.setId(order);
             switch (type) {
                 case ATTACHMENT_TYPE:
-                    //TODO: Gab es nie, implementieren!
+                    //TODO: Gab es nie, implementieren oder als Attachment button des Screenshots umschreiben
                     break;
                 case AUDIO_TYPE:
                     configurationItem.setType(AUDIO_TYPE);

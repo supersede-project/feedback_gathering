@@ -19,8 +19,7 @@ import java.io.File;
 import java.util.*;
 
 import ch.uzh.supersede.feedbacklibrary.*;
-import ch.uzh.supersede.feedbacklibrary.beans.ConfigurationRequestBean;
-import ch.uzh.supersede.feedbacklibrary.beans.FeedbackBean;
+import ch.uzh.supersede.feedbacklibrary.beans.*;
 import ch.uzh.supersede.feedbacklibrary.components.views.*;
 import ch.uzh.supersede.feedbacklibrary.configurations.*;
 import ch.uzh.supersede.feedbacklibrary.database.FeedbackDatabase;
@@ -152,9 +151,15 @@ public class FeedbackActivity extends AbstractBaseActivity implements AudioMecha
     public void onEventCompleted(EventType eventType, Object response) {
         switch (eventType) {
             case PING_REPOSITORY:
-                prepareSendFeedback();
-                Utils.wipeImages(this);
-                this.onBackPressed();
+                FeedbackDetailsBean feedbackBean = prepareSendFeedback();
+
+                Intent intent = new Intent(this, FeedbackDetailsActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                intent.putExtra(EXTRA_KEY_FEEDBACK_DETAIL_BEAN, feedbackBean);
+                intent.putExtra(EXTRA_KEY_APPLICATION_CONFIGURATION, configuration);
+                this.onBackPressed(); //This serves the purpose of erasing the Feedback Activity from the Back-Button
+                startActivity(intent);
+                overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
                 break;
             case CREATE_FEEDBACK_VARIANT:
                 break;
@@ -230,7 +235,7 @@ public class FeedbackActivity extends AbstractBaseActivity implements AudioMecha
             return;
         }
         if (BuildConfig.DEBUG) {
-            orchestratorStub = new MechanismBuilder(this, getApplicationContext(), getResources(), linearLayout, layoutInflater)
+            orchestratorStub = new MechanismBuilder(this, getApplicationContext(), getResources(), getConfiguration(), linearLayout, layoutInflater)
                     .withRating() //Uncomment for Enabling
                     .withText() //Uncomment for Enabling
                     .withScreenshot() //Uncomment for Enabling
@@ -296,7 +301,7 @@ public class FeedbackActivity extends AbstractBaseActivity implements AudioMecha
         Utils.wipeImages(this);
     }
 
-    public void prepareSendFeedback() {
+    public FeedbackDetailsBean prepareSendFeedback() {
         feedback = new Feedback(mechanisms);
         feedback.setTitle(getResources().getString(R.string.feedback_title, System.currentTimeMillis()));
         if (BuildConfig.DEBUG) {
@@ -313,7 +318,9 @@ public class FeedbackActivity extends AbstractBaseActivity implements AudioMecha
         multipartFiles.addAll(getScreenshotMultipartbodyParts());
         multipartFiles.addAll(getAudioMultipartbodyParts());
 
-        execCreateFeedbackVariant(RepositoryStub.feedbackToFeedbackBean(this, feedback), multipartFiles);
+        FeedbackDetailsBean feedbackDetailsBean = RepositoryStub.feedbackToFeedbackBean(this, feedback);
+        execCreateFeedbackVariant(feedbackDetailsBean.getFeedbackBean(), multipartFiles);
+        return feedbackDetailsBean;
     }
 
     private void closeProgressDialog() {
@@ -420,7 +427,7 @@ public class FeedbackActivity extends AbstractBaseActivity implements AudioMecha
     }
 
     /*
-     * This method performs a POST request in order to send the feedback to the repository.
+     * This method performs a POST request in viewOrder to send the feedback to the repository.
      */
     public void sendButtonClicked(View view) {
         if (!isOnline()) {

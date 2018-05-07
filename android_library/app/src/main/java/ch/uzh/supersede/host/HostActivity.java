@@ -4,7 +4,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.view.View;
-import android.widget.LinearLayout;
+import android.widget.*;
 
 import ch.uzh.supersede.feedbacklibrary.activities.AbstractBaseActivity;
 import ch.uzh.supersede.feedbacklibrary.entrypoint.*;
@@ -16,11 +16,20 @@ public class HostActivity extends AbstractBaseActivity implements IFeedbackBehav
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_host);
         LinearLayout linearLayout = getView(R.id.root_layout,LinearLayout.class);
+        Button feedbackButton = getView(R.id.button_host_feedback,Button.class);
+        Button dummyButton1 = getView(R.id.button_host_trigger_1,Button.class);
+        Button dummyButton2 = getView(R.id.button_host_trigger_2,Button.class);
         CoordinatorLayout cLayout = getView(R.id.coordinator_layout,CoordinatorLayout.class);
-        double colorDouble = ((double)Color.BLACK)*Math.random();
-        int color = (int)colorDouble;
-        linearLayout.setBackgroundColor(color);
-        cLayout.setBackgroundColor(color);
+        double primaryColorDouble = ((double)Color.BLACK)*Math.random();
+        int primaryColor = (int)primaryColorDouble;
+        linearLayout.setBackgroundColor(primaryColor);
+        cLayout.setBackgroundColor(primaryColor);
+
+        double secondaryColorDouble = ((double)Color.BLACK)*Math.random();
+        int secondaryColor = (int)secondaryColorDouble;
+        feedbackButton.setBackgroundColor(secondaryColor);
+        dummyButton1.setBackgroundColor(secondaryColor);
+        dummyButton2.setBackgroundColor(secondaryColor);
     }
 
     public void onFeedbackClicked(View view){
@@ -29,48 +38,28 @@ public class HostActivity extends AbstractBaseActivity implements IFeedbackBehav
 
     //Feedback Layout
     @Override
-    public boolean isAudioFeedbackEnabled() {
-        return false;
-    }
-
-    @Override
-    public boolean isScreenshotFeedbackEnabled() {
-        return true;
-    }
-
-    @Override
-    public boolean isAttachmentFeedbackEnabled() {
-        return true;
-    }
-
-    @Override
-    public boolean isLabelFeedbackEnabled() {
-        return true;
-    }
-
-    @Override
-    public boolean isTextFeedbackEnabled() {
-        return true;
-    }
-
-    @Override
     public int getConfiguredAudioFeedbackOrder() {
-        return 0;
+        return -1;
     }
 
     @Override
     public int getConfiguredScreenshotFeedbackOrder() {
-        return 3;
+        return 2;
     }
 
     @Override
-    public int getConfiguredLabelFeedbackOrder() {
-        return 1;
+    public int getConfiguredCategoryFeedbackOrder() {
+        return -1;
     }
 
     @Override
     public int getConfiguredTextFeedbackOrder() {
-        return 2;
+        return -1;
+    }
+
+    @Override
+    public int getConfiguredRatingFeedbackOrder() {
+        return 1;
     }
 
     //Feedback Settings
@@ -109,6 +98,6 @@ public class HostActivity extends AbstractBaseActivity implements IFeedbackBehav
     //Feedback Layout
     @Override
     public FEEDBACK_STYLE getConfiguredFeedbackStyle() {
-        return null;
+        return FEEDBACK_STYLE.ADAPTIVE;
     }
 }

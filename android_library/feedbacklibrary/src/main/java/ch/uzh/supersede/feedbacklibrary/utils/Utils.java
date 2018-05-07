@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.Image;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.View;
@@ -25,28 +26,27 @@ public class Utils {
     private Utils() {
     }
 
-
     public static void wipeImages(final Context context) {
         FeedbackDatabase.getInstance(context).deleteData(IMAGE_DATA_DB_KEY);
         FeedbackDatabase.getInstance(context).deleteData(IMAGE_ANNOTATED_DATA_DB_KEY);
     }
 
-    public static void storeScreenshotToDatabase(final Activity activity) {
+    public static Bitmap storeScreenshotToDatabase(final Activity activity) {
         View rootView = activity.getWindow().getDecorView().getRootView();
         rootView.setDrawingCacheEnabled(true);
         Bitmap imageBitmap = Bitmap.createBitmap(rootView.getDrawingCache());
         rootView.setDrawingCacheEnabled(false);
         storeImageToDatabase(activity, imageBitmap);
+        return imageBitmap;
     }
 
-    public static void storeScreenshotToIntent(final Activity activity, Intent intent) {
+    public static Bitmap storeScreenshotToIntent(final Activity activity, Intent intent) {
         View rootView = activity.getWindow().getDecorView().getRootView();
         rootView.setDrawingCacheEnabled(true);
         Bitmap imageBitmap = Bitmap.createBitmap(rootView.getDrawingCache());
         rootView.setDrawingCacheEnabled(false);
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        imageBitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
-        intent.putExtra(EXTRA_KEY_CACHED_SCREENSHOT, stream.toByteArray());
+        intent.putExtra(EXTRA_KEY_CACHED_SCREENSHOT, ImageUtility.imageToBytes(imageBitmap));
+        return imageBitmap;
     }
 
     public static void storeImageToDatabase(final Activity activity, Bitmap bitmap) {
@@ -82,7 +82,7 @@ public class Utils {
         if (imageAsByte == null) {
             return null;
         }
-        return BitmapFactory.decodeByteArray(imageAsByte, 0, imageAsByte.length);
+        return ImageUtility.bytesToImage(imageAsByte);
     }
 
     /**

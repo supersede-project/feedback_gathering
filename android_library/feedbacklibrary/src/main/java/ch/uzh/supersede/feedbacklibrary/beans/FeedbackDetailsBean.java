@@ -1,9 +1,11 @@
 package ch.uzh.supersede.feedbacklibrary.beans;
 
-import java.io.Serializable;
+import android.graphics.*;
+
+import java.io.*;
 import java.util.*;
 
-import ch.uzh.supersede.feedbacklibrary.utils.CompareUtility;
+import ch.uzh.supersede.feedbacklibrary.utils.*;
 import ch.uzh.supersede.feedbacklibrary.utils.Enums.FEEDBACK_STATUS;
 
 public class FeedbackDetailsBean implements Serializable{
@@ -18,6 +20,7 @@ public class FeedbackDetailsBean implements Serializable{
     private FEEDBACK_STATUS feedbackStatus;
     private List<FeedbackResponseBean> feedbackResponses = new ArrayList<>();
     private FeedbackBean feedbackBean;
+    private byte[] bitmapBytes;
 
     private FeedbackDetailsBean() {
     }
@@ -32,6 +35,7 @@ public class FeedbackDetailsBean implements Serializable{
         private int upVotes;
         private FEEDBACK_STATUS feedbackStatus;
         private List<FeedbackResponseBean> feedbackResponses = new ArrayList<>();
+        private byte[] bitmap;
         private FeedbackBean feedbackBean;
 
         public Builder() {
@@ -88,6 +92,11 @@ public class FeedbackDetailsBean implements Serializable{
             return this;
         }
 
+        public Builder withBitmap(Bitmap bitmap) {
+            this.bitmap = ImageUtility.imageToBytes(bitmap);
+            return this;
+        }
+
         public FeedbackDetailsBean build() {
             if (CompareUtility.notNull(feedbackUid,title,userName,timeStamp,description,feedbackStatus,feedbackBean)) {
                 FeedbackDetailsBean bean = new FeedbackDetailsBean();
@@ -101,6 +110,7 @@ public class FeedbackDetailsBean implements Serializable{
                 bean.feedbackStatus = this.feedbackStatus;
                 bean.feedbackResponses = this.feedbackResponses;
                 bean.feedbackBean = this.feedbackBean;
+                bean.bitmapBytes = this.bitmap;
                 return bean;
             }
             return null;
@@ -150,4 +160,10 @@ public class FeedbackDetailsBean implements Serializable{
     public UUID getFeedbackUid() {
         return feedbackUid;
     }
+
+    public Bitmap getBitmap() {
+        return ImageUtility.bytesToImage(bitmapBytes);
+    }
+
+
 }
