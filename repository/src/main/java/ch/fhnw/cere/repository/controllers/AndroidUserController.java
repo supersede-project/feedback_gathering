@@ -7,13 +7,11 @@ import ch.fhnw.cere.repository.models.AndroidUser;
 import ch.fhnw.cere.repository.services.AndroidUserService;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import javax.ws.rs.QueryParam;
 import java.util.List;
 
 @RestController
@@ -50,6 +48,8 @@ public class AndroidUserController extends BaseController {
     @ResponseStatus(HttpStatus.CREATED)
     @RequestMapping(method = RequestMethod.POST, value = "")
     public AndroidUser createAndroidUser(@PathVariable long applicationId, @RequestBody AndroidUser androidUser) {
+        int currentNumber = androidUserService.findByApplicationId(applicationId).size();
+        androidUser.setName(androidUser.getName() + '#' + currentNumber);
         androidUser.setApplicationId(applicationId);
         return androidUserService.save(androidUser);
     }
