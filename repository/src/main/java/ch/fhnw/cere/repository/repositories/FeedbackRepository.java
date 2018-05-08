@@ -13,4 +13,5 @@ import java.util.List;
 public interface FeedbackRepository extends JpaRepository<Feedback, Long> {
     List<Feedback> findByApplicationId(@Param("applicationId") long applicationId);
     List<Feedback> findByUserIdentification(@Param("userIdentification") String userIdentification);
+    List<Feedback> findByIsPublic(@Param("isPublic") boolean isPublic);
 }

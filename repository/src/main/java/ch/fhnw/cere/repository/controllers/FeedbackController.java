@@ -1,6 +1,7 @@
 package ch.fhnw.cere.repository.controllers;
 
 
+import ch.fhnw.cere.repository.controllers.exceptions.BadRequestException;
 import ch.fhnw.cere.repository.controllers.exceptions.NotFoundException;
 import ch.fhnw.cere.repository.integration.DataProviderIntegrator;
 import ch.fhnw.cere.repository.integration.FeedbackCentralIntegrator;
@@ -13,9 +14,11 @@ import ch.fhnw.cere.repository.services.FileStorageService;
 import ch.fhnw.cere.repository.services.OrchestratorApplicationService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.io.IOUtils;
+import org.json.JSONObject;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.util.MultiValueMap;
@@ -62,7 +65,15 @@ public class FeedbackController extends BaseController {
 
     @PreAuthorize("@securityService.hasAdminPermission(#applicationId)")
     @RequestMapping(method = RequestMethod.GET, value = "")
-    public List<Feedback> getApplicationFeedbacks(@PathVariable long applicationId) {
+    public List<Feedback> getApplicationFeedbacks(@RequestParam(value = "view", required = false) String view, @PathVariable long applicationId) {
+        if(view != null) {
+            if (view.equals("public")) {
+                return feedbackService.findByIsPublic(true);
+            } else if (view.equals("private")) {
+                return feedbackService.findByIsPublic(false);
+            }
+            throw new NotFoundException();
+        }
         return feedbackService.findByApplicationId(applicationId());
     }
 
@@ -74,7 +85,7 @@ public class FeedbackController extends BaseController {
         Application orchestratorApplication = null;
         try {
             orchestratorApplication = this.orchestratorApplicationService.loadApplication(feedbacks.get(0).getLanguage(), feedbacks.get(0).getApplicationId());
-            for(Feedback feedback : feedbacks) {
+            for (Feedback feedback : feedbacks) {
                 Feedback.appendMechanismsToFeedback(orchestratorApplication, feedback);
                 feedback.setApplication(orchestratorApplication);
             }
@@ -117,46 +128,46 @@ public class FeedbackController extends BaseController {
         ObjectMapper mapper = new ObjectMapper();
         Feedback feedback = mapper.readValue(jsonString, Feedback.class);
         feedback.setApplicationId(applicationId());
-        if(feedback.getLanguage() == null) {
+        if (feedback.getLanguage() == null) {
             feedback.setLanguage("en");
         }
 
         // TODO rewrite
-        if(feedback.getContextInformation() != null) {
+        if (feedback.getContextInformation() != null) {
             feedback.getContextInformation().setFeedback(feedback);
         }
-        if(feedback.getTextFeedbacks() != null) {
-            for(TextFeedback textFeedback : feedback.getTextFeedbacks()) {
+        if (feedback.getTextFeedbacks() != null) {
+            for (TextFeedback textFeedback : feedback.getTextFeedbacks()) {
                 textFeedback.setFeedback(feedback);
             }
         }
-        if(feedback.getRatingFeedbacks() != null) {
-            for(RatingFeedback ratingFeedback : feedback.getRatingFeedbacks()) {
+        if (feedback.getRatingFeedbacks() != null) {
+            for (RatingFeedback ratingFeedback : feedback.getRatingFeedbacks()) {
                 ratingFeedback.setFeedback(feedback);
             }
         }
-        if(feedback.getCategoryFeedbacks() != null) {
-            for(CategoryFeedback categoryFeedback : feedback.getCategoryFeedbacks()) {
+        if (feedback.getCategoryFeedbacks() != null) {
+            for (CategoryFeedback categoryFeedback : feedback.getCategoryFeedbacks()) {
                 categoryFeedback.setFeedback(feedback);
             }
         }
-        if(feedback.getScreenshotFeedbacks() != null) {
-            for(ScreenshotFeedback screenshotFeedback : feedback.getScreenshotFeedbacks()) {
+        if (feedback.getScreenshotFeedbacks() != null) {
+            for (ScreenshotFeedback screenshotFeedback : feedback.getScreenshotFeedbacks()) {
                 screenshotFeedback.setFeedback(feedback);
             }
         }
-        if(feedback.getAttachmentFeedbacks() != null) {
-            for(AttachmentFeedback attachmentFeedback : feedback.getAttachmentFeedbacks()) {
+        if (feedback.getAttachmentFeedbacks() != null) {
+            for (AttachmentFeedback attachmentFeedback : feedback.getAttachmentFeedbacks()) {
                 attachmentFeedback.setFeedback(feedback);
             }
         }
-        if(feedback.getAudioFeedbacks() != null) {
-            for(AudioFeedback audioFeedback : feedback.getAudioFeedbacks()) {
+        if (feedback.getAudioFeedbacks() != null) {
+            for (AudioFeedback audioFeedback : feedback.getAudioFeedbacks()) {
                 audioFeedback.setFeedback(feedback);
             }
         }
-        if(feedback.getStatuses() != null) {
-            for(Status status : feedback.getStatuses()) {
+        if (feedback.getStatuses() != null) {
+            for (Status status : feedback.getStatuses()) {
                 status.setFeedback(feedback);
             }
         }
@@ -167,14 +178,14 @@ public class FeedbackController extends BaseController {
         Feedback createdFeedback = feedbackService.save(feedback);
         dataProviderIntegrator.ingestJsonData(feedback);
         feedbackEmailService.sendFeedbackNotification(createdFeedback);
-        if(feedbackCentralIntegrationEnabled) {
+        if (feedbackCentralIntegrationEnabled) {
             feedbackCentralIntegrator.ingestJsonData(feedback);
         }
 
         try {
             List<File> allFiles = fileStorageService.getAllStoredFilesOfFeedback(feedback);
-            for(File file : allFiles) {
-                if(file.exists()) {
+            for (File file : allFiles) {
+                if (file.exists()) {
                     LOGGER.info("MdmFileIntegrator: File exists: " + file.getAbsolutePath());
                 } else {
                     LOGGER.error("MdmFileIntegrator: File does NOT exist: " + file.getAbsolutePath());
@@ -250,7 +261,7 @@ public class FeedbackController extends BaseController {
         Application orchestratorApplication = orchestratorRepositoryDataMergeRequest.getApplication();
 
         try {
-            for(Feedback feedback : feedbacks) {
+            for (Feedback feedback : feedbacks) {
                 Feedback.appendMechanismsToFeedback(orchestratorApplication, feedback);
                 feedback.setApplication(orchestratorApplication);
             }
@@ -260,5 +271,22 @@ public class FeedbackController extends BaseController {
         }
 
         return feedbacks;
+    }
+
+    @RequestMapping(method = RequestMethod.PUT, value = "/{id}")
+    public Feedback publicityFeedback(@PathVariable("id") long id, HttpEntity<String> publicState) {
+        if (publicState.getBody() != null) {
+            JSONObject obj = new JSONObject(publicState.getBody());
+            boolean publicValue = obj.getBoolean("public");
+            Feedback modifiedFeedback = feedbackService.find(id);
+            if (modifiedFeedback != null) {
+                modifiedFeedback.setPublic(publicValue);
+                feedbackService.save(modifiedFeedback);
+                return modifiedFeedback;
+            } else {
+                throw new NotFoundException();
+            }
+        }
+        throw new BadRequestException();
     }
 }
