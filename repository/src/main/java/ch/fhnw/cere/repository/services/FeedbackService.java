@@ -12,6 +12,7 @@ public interface FeedbackService {
     public Feedback find(long id);
     public void delete(long id);
     List<Feedback> findByApplicationId(long applicationId);
+    List<Feedback> findByIsPublic(boolean isPublic);
     List<Feedback> findByUserIdentification(String userIdentification);
 }
 
