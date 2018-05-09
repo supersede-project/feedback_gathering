@@ -267,13 +267,9 @@ public abstract class FeedbackService {
 
         @Override
         public void getOthersFeedbackVotes(IFeedbackServiceEventListener callback, Activity activity) {
-            ArrayList<FeedbackListItem> feedbackList = new ArrayList<>();
+            List<LocalFeedbackBean> feedbackBeans = FeedbackDatabase.getInstance(activity).getFeedbackBeans(OWN);
 
-            for (LocalFeedbackBean localFeedbackBean : FeedbackDatabase.getInstance(activity).getFeedbackBeans(OWN)) {
-                feedbackList.add(new FeedbackListItem(activity, 8, RepositoryStub.getFeedback(activity, localFeedbackBean), ((AbstractBaseActivity)activity).getConfiguration()));
-            }
-
-            callback.onEventCompleted(GET_OTHERS_FEEDBACK_VOTES, feedbackList);
+            callback.onEventCompleted(GET_OTHERS_FEEDBACK_VOTES, feedbackBeans);
         }
 
         @Override

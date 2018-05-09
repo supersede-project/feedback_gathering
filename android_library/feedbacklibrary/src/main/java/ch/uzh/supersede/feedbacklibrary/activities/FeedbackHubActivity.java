@@ -50,10 +50,8 @@ public class FeedbackHubActivity extends AbstractBaseActivity {
         feedbackButton = getView(R.id.hub_button_feedback, Button.class);
         settingsButton = getView(R.id.hub_button_settings, Button.class);
         backgroundLayout = getView(R.id.hub_layout_background, LinearLayout.class);
-        if (configuration.getStyle()==ADAPTIVE){
-            colorViews(0,backgroundLayout);
-            colorViews(1,listButton,levelButton,feedbackButton,settingsButton);
-        }
+        colorViews(0,backgroundLayout);
+        colorViews(1,listButton,levelButton,feedbackButton,settingsButton);
         statusText = getView(R.id.hub_text_status, TextView.class);
         //Cache
         cachedScreenshot = getIntent().getByteArrayExtra(EXTRA_KEY_CACHED_SCREENSHOT);
@@ -108,15 +106,18 @@ public class FeedbackHubActivity extends AbstractBaseActivity {
             int downVotedFeedbackBeans = FeedbackDatabase.getInstance(this).getFeedbackBeans(DOWN_VOTED).size();
             int respondedFeedbackBeans = FeedbackDatabase.getInstance(this).getFeedbackBeans(RESPONDED).size();
             int allFeedbackBeans = FeedbackDatabase.getInstance(this).getFeedbackBeans(ALL).size();
-            if (configuration.getStyle()==ADAPTIVE && configuration.hasAtLeastNTopColors(2) ) {
+            if (configuration.hasAtLeastNTopColors(2) ) {
                 statusText.setText(Html.fromHtml(getString(R.string.hub_status, userName,
                         allFeedbackBeans,
                         ownFeedbackBeans,
                         respondedFeedbackBeans,
                         upVotedFeedbackBeans,
                         downVotedFeedbackBeans)
-                        .replace(PRIMARY_COLOR_STRING, ImageUtility.isDark(configuration.getTopColors()[0])?WHITE:BLACK)
-                        .replace(SECONDARY_COLOR_STRING, ImageUtility.toHexString(configuration.getTopColors()[1]))));
+                        .replace(PRIMARY_COLOR_STRING, ColorUtility.isDark(configuration.getTopColors()[0])?WHITE:BLACK)
+                        .replace(SECONDARY_COLOR_STRING, ColorUtility.toHexString(ColorUtility.adjustColorToBackground(
+                                configuration.getTopColors()[0],
+                                configuration.getTopColors()[1],
+                                0.3)))));
             }else{
                 statusText.setText(Html.fromHtml(getString(R.string.hub_status,userName,
                         allFeedbackBeans,

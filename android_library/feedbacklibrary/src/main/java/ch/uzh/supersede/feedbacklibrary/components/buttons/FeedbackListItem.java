@@ -3,15 +3,15 @@ package ch.uzh.supersede.feedbacklibrary.components.buttons;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutCompat;
-import android.transition.TransitionManager;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.*;
+
+import java.util.*;
 
 import ch.uzh.supersede.feedbacklibrary.R;
 import ch.uzh.supersede.feedbacklibrary.activities.*;
@@ -35,7 +35,7 @@ public class FeedbackListItem extends LinearLayout implements Comparable, ISorta
     private String ownUser = USER_NAME_ANONYMOUS;
     private LocalConfigurationBean configuration;
 
-    public FeedbackListItem(Context context, int visibleTiles, FeedbackBean feedbackBean, LocalConfigurationBean configuration) {
+    public FeedbackListItem(Context context, int visibleTiles, FeedbackBean feedbackBean, LocalConfigurationBean configuration, int backgroundColor) {
         super(context);
         this.configuration = configuration;
         this.feedbackBean = feedbackBean;
@@ -54,22 +54,27 @@ public class FeedbackListItem extends LinearLayout implements Comparable, ISorta
         setOrientation(VERTICAL);
         LinearLayoutCompat.LayoutParams longParams = new LinearLayoutCompat.LayoutParams(innerLayoutWidth, partHeight / 2);
         LinearLayoutCompat.LayoutParams shortParams = new LinearLayoutCompat.LayoutParams(innerLayoutWidth / 2, partHeight / 2);
-        Drawable drawable = ContextCompat.getDrawable(context, R.drawable.dark_blue_square);
-        int white = ContextCompat.getColor(context, R.color.white);
+        int textColor = 0;
+        if (ColorUtility.isDark(backgroundColor)){
+            textColor = ContextCompat.getColor(context, R.color.white);
+        }else{
+            textColor = ContextCompat.getColor(context, R.color.black);
+        }
         LinearLayout upperWrapperLayout = createWrapperLayout(longParams, context, HORIZONTAL);
         LinearLayout lowerWrapperLayout = createWrapperLayout(longParams, context, HORIZONTAL);
         if (ACTIVE.check(context)) {
             ownUser = FeedbackDatabase.getInstance(getContext()).readString(USER_NAME, null);
         }
-        titleView = createTextView(shortParams, context, feedbackBean.getTitle(), Gravity.START, drawable, padding, white);
-        dateView = createTextView(shortParams, context, context.getString(R.string.list_date, DateUtility.getDateFromLong(feedbackBean.getTimeStamp())), Gravity.END, drawable, padding, white);
+        titleView = createTextView(shortParams, context, feedbackBean.getTitle(), Gravity.START, padding, textColor);
+        dateView = createTextView(shortParams, context, context.getString(R.string.list_date, DateUtility.getDateFromLong(feedbackBean.getTimeStamp())), Gravity.END, padding, textColor);
+        int statusColor = ColorUtility.adjustColorToBackground(backgroundColor,feedbackBean.getFeedbackStatus().getColor(),0.4);
         statusView = createTextView(shortParams, context, feedbackBean
                 .getFeedbackStatus()
                 .getLabel()
-                .concat(SPACE + context.getString(R.string.list_resplies, feedbackBean.getResponses())), Gravity.START, drawable, padding, feedbackBean.getFeedbackStatus().getColor());
-        pointView = createTextView(shortParams, context, feedbackBean.getVotesAsText(), Gravity.END, drawable, padding, white);
+                .concat(SPACE + context.getString(R.string.list_responses, feedbackBean.getResponses())), Gravity.START, padding, statusColor);
+        pointView = createTextView(shortParams, context, feedbackBean.getVotesAsText(), Gravity.END, padding, textColor);
         updatePercentageColor();
-        setBackgroundColor(ContextCompat.getColor(context, R.color.indigo));
+        setBackgroundColor(backgroundColor);
         upperWrapperLayout.addView(titleView);
         upperWrapperLayout.addView(dateView);
         lowerWrapperLayout.addView(statusView);
@@ -105,12 +110,11 @@ public class FeedbackListItem extends LinearLayout implements Comparable, ISorta
         return linearLayout;
     }
 
-    private TextView createTextView(LinearLayoutCompat.LayoutParams layoutParams, Context context, String text, int gravity, Drawable background, int padding, int textColor) {
+    private TextView createTextView(LinearLayoutCompat.LayoutParams layoutParams, Context context, String text, int gravity,int padding, int textColor) {
         TextView textView = new TextView(context);
         textView.setLayoutParams(layoutParams);
         textView.setText(text);
         textView.setGravity(gravity);
-        textView.setBackground(background);
         textView.setPadding(padding, padding, padding, padding);
         textView.setTextColor(textColor);
         return textView;
@@ -148,9 +152,14 @@ public class FeedbackListItem extends LinearLayout implements Comparable, ISorta
     }
 
     @Override
-    public void sort(Enums.FEEDBACK_SORTING sorting) {
+    public void setSorting(Enums.FEEDBACK_SORTING sorting, List<Enums.FEEDBACK_STATUS> allowedStatuses) {
         if (sorting != MINE || StringUtility.equals(feedbackBean.getUserName(), ownUser)) {
-            this.setVisibility(VISIBLE);
+            this.setVisibility(GONE);
+            for (Enums.FEEDBACK_STATUS status : allowedStatuses){
+                if (status == feedbackBean.getFeedbackStatus()){
+                    this.setVisibility(VISIBLE);
+                }
+            }
         } else {
             this.setVisibility(GONE);
         }

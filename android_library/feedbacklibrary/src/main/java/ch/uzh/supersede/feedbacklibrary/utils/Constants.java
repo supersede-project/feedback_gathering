@@ -45,13 +45,6 @@ public class Constants {
     public static final String SHARED_PREFERENCES_ID = "ch.uzh.supersede.feedbacklibrary.feedback";
     public static final String SHARED_PREFERENCES_HOST_APPLICATION_NAME = "hostApplicationName";
 
-    //    public static final String SHARED_PREFERENCES_IS_DEVELOPER = "isDeveloper";
-//    public static final String SHARED_PREFERENCES_HOST_APPLICATION_ID = "hostApplicationId";
-//    public static final String SHARED_PREFERENCES_SETTINGS_USER_NAME_MIN_LENGTH = "settingsUserNameMin";
-//    public static final String SHARED_PREFERENCES_SETTINGS_USER_NAME_MAX_LENGTH = "settingsUserNameMax";
-//    public static final String SHARED_PREFERENCES_SETTINGS_RESPONSE_MIN_LENGTH = "settingsResponseMin";
-//    public static final String SHARED_PREFERENCES_SETTINGS_RESPONSE_MAX_LENGTH = "settingsResponseMax";
-
     public static final int REQUEST_PHOTO = 11;
     public static final int REQUEST_ANNOTATE = 12;
 
@@ -62,13 +55,6 @@ public class Constants {
     public static class SettingsConstants {
         private SettingsConstants() {
         }
-
-        //SettingsConstants
-
-        public static final int SETTINGS_USER_NAME_MIN_LENGTH = 4;
-        public static final int SETTINGS_USER_NAME_MAX_LENGTH = 16;
-        public static final int SETTINGS_RESPONSE_MIN_LENGTH = 20;
-        public static final int SETTINGS_RESPONSE_MAX_LENGTH = 200;
     }
     
     public static class UtilsConstants {
@@ -101,13 +87,16 @@ public class Constants {
     public static class ActivitiesConstants {
         private ActivitiesConstants() {
         }
-
         //FeedbackHubActivity
         public static final String PRIMARY_COLOR_STRING = "primaryColorString";
         public static final String SECONDARY_COLOR_STRING = "secondaryColorString";
         public static final String DARK_BLUE = "303F9F";
         public static final String BLACK = "000000";
         public static final String WHITE = "FFFFFF";
+        public static final int ANTHRAZIT_DARK = -11711155;
+        public static final int GRAY_DARK = -8947849;
+        public static final int GRAY = -4473925;
+        public static final int SILVER = -1118482;
 
         //FeedbackAcitivity
         public static final String FEEDBACK_ACTIVITY_TAG = "FeedbackActivity";
