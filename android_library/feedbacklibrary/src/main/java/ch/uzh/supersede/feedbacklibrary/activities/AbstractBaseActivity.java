@@ -2,9 +2,10 @@ package ch.uzh.supersede.feedbacklibrary.activities;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.*;
+import android.graphics.drawable.*;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.*;
@@ -92,16 +93,46 @@ public abstract class AbstractBaseActivity extends AppCompatActivity {
         return configuration;
     }
 
+    protected int getTopColor(int colorIndex){
+        if (configuration.getTopColors().length >= colorIndex) {
+           return ObjectUtility.nvl(configuration.getTopColors()[colorIndex],0);
+        }
+        return 0;
+    }
+
     protected void colorViews(int colorIndex, View... views){
-        Integer color = configuration.getTopColors()[colorIndex];
-        if (configuration.getTopColors().length >= colorIndex && color != null) {
-            for (View v : views) {
-                if (v instanceof TextView && ImageUtility.isDark(color)){
-                    ((TextView)v).setTextColor(ContextCompat.getColor(this,R.color.white));
-                }else if (v instanceof TextView){
-                    ((TextView)v).setTextColor(ContextCompat.getColor(this,R.color.black));
+        if (configuration.getTopColors().length >= colorIndex) {
+            Integer color = configuration.getTopColors()[colorIndex];
+            for (View v : color != null?views:new View[0]) {
+                if (v instanceof TextView && ColorUtility.isDark(color)) {
+                    ((TextView) v).setTextColor(ContextCompat.getColor(this, R.color.white));
+                } else if (v instanceof TextView) {
+                    ((TextView) v).setTextColor(ContextCompat.getColor(this, R.color.black));
                 }
                 v.setBackgroundColor(color);
+            }
+        }
+    }
+
+    protected void colorShape(int colorIndex, View... views) {
+        if (configuration.getTopColors().length >= colorIndex) {
+            Integer color = configuration.getTopColors()[colorIndex];
+            for (View view : color != null ? views : new View[0]) {
+                Drawable background = view.getBackground();
+                if (background instanceof ShapeDrawable) {
+                    ((ShapeDrawable) background).getPaint().setColor(color);
+                } else if (background instanceof GradientDrawable) {
+                    ((GradientDrawable) background).setColor(color);
+                } else if (background instanceof ColorDrawable) {
+                    ((ColorDrawable) background).setColor(color);
+                } else if (background instanceof StateListDrawable) {
+                    background.setColorFilter(color, PorterDuff.Mode.MULTIPLY);
+                }
+                if (view instanceof TextView && ColorUtility.isDark(color)) {
+                    ((TextView) view).setTextColor(ContextCompat.getColor(this, R.color.white));
+                } else if (view instanceof TextView) {
+                    ((TextView) view).setTextColor(ContextCompat.getColor(this, R.color.black));
+                }
             }
         }
     }

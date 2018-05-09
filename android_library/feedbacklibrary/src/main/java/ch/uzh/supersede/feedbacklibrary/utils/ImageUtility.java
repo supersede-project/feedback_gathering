@@ -14,7 +14,6 @@ public class ImageUtility {
     }
 
     public static Integer[] calculateTopNColors(Bitmap bitmap, int nColors, int steps) {
-        int pixelStep = 0;
         HashMap<Integer, ColorMapEntry> colorMap = new HashMap<>();
         int xStep = (int) (bitmap.getWidth() / (double) steps);
         int yStep = (int) (bitmap.getHeight() / (double) steps);
@@ -26,7 +25,6 @@ public class ImageUtility {
                 } else {
                     colorMap.put(c, new ColorMapEntry(c));
                 }
-                pixelStep++;
             }
         }
         ArrayList<ColorMapEntry> sortedColorMap = new ArrayList<>();
@@ -39,18 +37,6 @@ public class ImageUtility {
             finalColorList.add(i.getColor());
         }
         return CollectionUtility.subArray(Integer.class, finalColorList, 0, nColors);
-    }
-
-    public static boolean isDark(int color) {
-        return ((Color.red(color) + Color.green(color) + Color.blue(color)) / 3d) < 122;
-    }
-
-    public final static String toHexString(int colour) throws NullPointerException {
-        String hexColour = Integer.toHexString(colour & 0xffffff);
-        if (hexColour.length() < 6) {
-            hexColour = "000000".substring(0, 6 - hexColour.length()) + hexColour;
-        }
-        return hexColour;
     }
 
     public static class ColorMapEntry implements Comparable {
