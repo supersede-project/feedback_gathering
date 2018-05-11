@@ -17,6 +17,8 @@ import java.util.Date;
 import static com.jayway.restassured.RestAssured.expect;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.hasSize;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -77,5 +79,71 @@ public class MechanismsParametersIntegrationTest extends BaseIntegrationTest {
                 .andExpect(jsonPath("$[1].language", is("en")))
                 .andExpect(jsonPath("$[1].key", is("font-size")))
                 .andExpect(jsonPath("$[1].value", is("10px")));
+    }
+
+    @Test
+    public void createParameterForMechanism() throws Exception {
+        Parameter parameter = new Parameter("newKey", "newValue", new Date(), new Date(), "en", null, null, null, null);
+        String parameterJson = toJson(parameter);
+        String adminJWTToken = requestAdminJWTToken();
+
+        mockMvc.perform(post(basePathEn + this.mechanism1.getId() + "/parameters")
+                .contentType(contentType)
+                .header("Authorization", adminJWTToken)
+                .content(parameterJson))
+                .andExpect(status().isCreated());
+
+        mockMvc.perform(get(basePathEn + this.mechanism1.getId() + "/parameters"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(3)))
+                .andExpect(jsonPath("$[0].language", is("en")))
+                .andExpect(jsonPath("$[0].key", is("title")))
+                .andExpect(jsonPath("$[0].value", is("Title EN")))
+                .andExpect(jsonPath("$[1].language", is("en")))
+                .andExpect(jsonPath("$[1].key", is("font-size")))
+                .andExpect(jsonPath("$[1].value", is("10px")))
+                .andExpect(jsonPath("$[2].language", is("en")))
+                .andExpect(jsonPath("$[2].key", is("newKey")))
+                .andExpect(jsonPath("$[2].value", is("newValue")));
+    }
+
+    @Test
+    public void updateParameterForMechanism() throws Exception {
+        this.parameter1.setValue("Title EN updated");
+        String parameterJson = toJson(this.parameter1);
+        String adminJWTToken = requestAdminJWTToken();
+
+        mockMvc.perform(put(basePathEn + this.mechanism1.getId() + "/parameters/" + this.parameter1.getId())
+                .contentType(contentType)
+                .header("Authorization", adminJWTToken)
+                .content(parameterJson))
+                .andExpect(status().isOk());
+
+        mockMvc.perform(get(basePathEn + this.mechanism1.getId() + "/parameters"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(2)))
+                .andExpect(jsonPath("$[0].language", is("en")))
+                .andExpect(jsonPath("$[0].key", is("title")))
+                .andExpect(jsonPath("$[0].value", is("Title EN updated")))
+                .andExpect(jsonPath("$[1].language", is("en")))
+                .andExpect(jsonPath("$[1].key", is("font-size")))
+                .andExpect(jsonPath("$[1].value", is("10px")));
+    }
+
+    @Test
+    public void deleteParameterForMechanism() throws Exception {
+        String adminJWTToken = requestAdminJWTToken();
+
+        mockMvc.perform(delete(basePathEn + this.mechanism1.getId() + "/parameters/" + this.parameter3.getId())
+                .contentType(contentType)
+                .header("Authorization", adminJWTToken))
+                .andExpect(status().isOk());
+
+        mockMvc.perform(get(basePathDe + this.mechanism1.getId() + "/parameters"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(1)))
+                .andExpect(jsonPath("$[0].language", is("de")))
+                .andExpect(jsonPath("$[0].key", is("title")))
+                .andExpect(jsonPath("$[0].value", is("Titel DE")));
     }
 }
