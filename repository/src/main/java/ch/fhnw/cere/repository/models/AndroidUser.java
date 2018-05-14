@@ -15,6 +15,12 @@ public class AndroidUser {
     private long applicationId;
     private boolean isDeveloper;
     private boolean isBlocked;
+    @Transient
+    private int karma;
+    @Transient
+    private VoteCount voteCount;
+    @Transient
+    private int feedbackCount;
 
     public AndroidUser() {
     }
@@ -64,4 +70,27 @@ public class AndroidUser {
         isBlocked = blocked;
     }
 
+    public int getKarma() {
+        return karma;
+    }
+
+    public void setKarma(int karma) {
+        this.karma = karma;
+    }
+
+    public int getFeedbackCount() {
+        return feedbackCount;
+    }
+
+    public void setFeedbackCount(int feedbackCount) {
+        this.feedbackCount = feedbackCount;
+    }
+
+    public VoteCount getVoteCount() {
+        return voteCount;
+    }
+
+    public void setVoteCount(VoteCount voteCount) {
+        this.voteCount = voteCount;
+    }
 }

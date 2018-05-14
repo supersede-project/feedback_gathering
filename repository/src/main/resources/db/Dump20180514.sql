@@ -29,7 +29,7 @@ CREATE TABLE `android_user` (
   `is_developer` bit(1) NOT NULL,
   `is_blocked` bit(1) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -38,7 +38,7 @@ CREATE TABLE `android_user` (
 
 LOCK TABLES `android_user` WRITE;
 /*!40000 ALTER TABLE `android_user` DISABLE KEYS */;
-INSERT INTO `android_user` VALUES (1,-888,'AUser1','','\0'),(3,0,'AUser2','\0',''),(4,0,'AUser3','\0',''),(5,-888,'AUser2#1','\0','\0'),(6,-888,'AUser2#2','\0','\0');
+INSERT INTO `android_user` VALUES (1,-888,'AUser1','','\0'),(3,0,'AUser2','\0',''),(4,0,'AUser3','\0',''),(5,-888,'AUser2#1','\0','\0'),(6,-888,'AUser2#2','\0','\0'),(7,-888,'AUser2#3','','\0'),(8,-888,'AUser2#4','','\0'),(9,-888,'AUser2#5','','\0');
 /*!40000 ALTER TABLE `android_user` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -263,13 +263,10 @@ CREATE TABLE `feedback` (
   `title` varchar(255) DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   `user_identification` varchar(255) DEFAULT NULL,
-  `android_user_id` bigint(20) DEFAULT NULL,
   `is_public` bit(1) DEFAULT b'0',
   `feedback_status` bigint(20) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `android_user_id_idx` (`android_user_id`),
   KEY `feedback_status_idx` (`feedback_status`),
-  CONSTRAINT `android_user_id` FOREIGN KEY (`android_user_id`) REFERENCES `android_user` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `feedback_status` FOREIGN KEY (`feedback_status`) REFERENCES `feedback_status` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB AUTO_INCREMENT=40 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -280,7 +277,7 @@ CREATE TABLE `feedback` (
 
 LOCK TABLES `feedback` WRITE;
 /*!40000 ALTER TABLE `feedback` DISABLE KEYS */;
-INSERT INTO `feedback` VALUES (1,1,2,'2017-05-31 19:57:54','en','Test feedback','2017-05-31 19:58:05','u123456',NULL,'',NULL),(2,1,1,'2017-06-19 12:39:06',NULL,'Feedback',NULL,'99999999',NULL,'',NULL),(3,1,1,'2017-06-19 13:40:45',NULL,'Feedback',NULL,'99999999',NULL,'\0',NULL),(4,1,1,'2017-06-19 13:41:47',NULL,'Feedback','2018-05-07 22:00:12','99999999',NULL,'',NULL),(5,1,1,'2017-06-19 13:43:45',NULL,'Feedback',NULL,'99999999',NULL,NULL,NULL),(6,1,1,'2017-06-19 13:47:02','en','Feedback',NULL,'99999999',NULL,NULL,NULL),(7,1,1,'2017-06-19 13:51:53','en','Feedback',NULL,'99999999',NULL,'\0',NULL),(8,1,1,'2017-06-19 13:52:26','en','Feedback',NULL,'99999999',NULL,NULL,NULL),(9,1,1,'2017-06-19 13:56:49','en','Feedback',NULL,'99999999',NULL,NULL,NULL),(10,1,1,'2017-06-19 13:57:18','en','Feedback',NULL,'99999999',NULL,NULL,NULL),(11,1,1,'2017-06-19 21:43:05','en','Feedback',NULL,'99999999',NULL,NULL,NULL),(12,1,1,'2017-06-19 21:44:02','en','Feedback',NULL,'99999999',NULL,NULL,NULL),(13,1,1,'2017-06-19 22:12:45','en','Feedback',NULL,'99999999',NULL,NULL,NULL),(14,1,1,'2017-07-06 12:53:00','en','Feedback',NULL,'99999999',NULL,NULL,NULL),(15,7,7,'2017-07-06 12:57:35','en','Feedback',NULL,'99999999',NULL,NULL,NULL),(16,7,7,'2017-07-19 13:29:54','en','Feedback',NULL,'99999999',NULL,NULL,NULL),(17,7,7,'2017-07-19 13:31:46','en','Feedback',NULL,'99999999',NULL,NULL,NULL),(18,7,7,'2017-07-19 13:32:51','en','Feedback',NULL,'99999999',NULL,NULL,NULL),(19,7,7,'2017-08-21 14:08:45','en','Feedback',NULL,'99999999',NULL,NULL,NULL),(20,7,7,'2017-08-21 14:14:17','en','Feedback',NULL,'99999999',NULL,NULL,NULL),(21,7,7,'2017-08-21 14:15:53','en','Feedback',NULL,'99999999',NULL,NULL,NULL),(22,7,7,'2017-08-21 14:19:34','en','Feedback',NULL,'99999999',NULL,NULL,NULL),(23,7,7,'2017-08-21 14:23:44','en','Feedback',NULL,'99999999',NULL,NULL,NULL),(24,7,7,'2017-08-21 16:34:02','en','Feedback',NULL,'99999999',NULL,NULL,NULL),(25,7,7,'2017-08-21 16:40:41','en','Feedback',NULL,'99999999',NULL,NULL,NULL),(26,7,7,'2017-08-22 10:10:26','en','Feedback',NULL,'99999999',NULL,NULL,NULL),(27,7,7,'2017-08-22 10:16:07','en','Feedback',NULL,'99999999',NULL,NULL,NULL),(28,7,7,'2017-08-22 10:17:34','en','Feedback',NULL,'99999999',NULL,NULL,NULL),(29,7,7,'2017-08-22 10:32:31','en','Feedback',NULL,'99999999',NULL,NULL,NULL),(30,7,7,'2017-08-22 10:41:44','en','Feedback',NULL,'99999999',NULL,NULL,NULL),(31,7,7,'2017-08-22 10:44:05','en','Feedback',NULL,'99999999',NULL,NULL,NULL),(32,7,7,'2017-08-22 10:48:50','en','Feedback',NULL,'99999999',NULL,NULL,NULL),(33,7,7,'2017-08-22 11:13:05','en','Feedback',NULL,'99999999',NULL,NULL,NULL),(34,7,7,'2017-08-22 11:14:41','en','Feedback',NULL,'99999999',NULL,NULL,NULL),(35,7,7,'2017-08-22 11:19:46','en','Feedback',NULL,'99999999',NULL,NULL,NULL),(36,7,7,'2017-08-22 11:25:33','en','Feedback',NULL,'99999999',NULL,NULL,NULL),(37,7,7,'2017-08-22 11:31:31','en','Feedback',NULL,'99999999',NULL,NULL,NULL),(38,7,7,'2017-08-22 11:33:11','en','Feedback',NULL,'99999999',NULL,NULL,NULL),(39,7,7,'2017-08-23 10:32:37','en','Feedback',NULL,'99999999',NULL,NULL,NULL);
+INSERT INTO `feedback` VALUES (1,1,2,'2017-05-31 19:57:54','en','Test feedback','2017-05-31 19:58:05','AUser2#1','',NULL),(2,1,1,'2017-06-19 12:39:06',NULL,'Feedback',NULL,'AUser2#1','',NULL),(3,1,1,'2017-06-19 13:40:45',NULL,'Feedback',NULL,'AUser2#3','\0',NULL),(4,1,1,'2017-06-19 13:41:47',NULL,'Feedback','2018-05-07 22:00:12','AUser2#3','',NULL),(5,1,1,'2017-06-19 13:43:45',NULL,'Feedback',NULL,'AUser2#3','',NULL),(6,1,1,'2017-06-19 13:47:02','en','Feedback',NULL,'99999999',NULL,NULL),(7,1,1,'2017-06-19 13:51:53','en','Feedback',NULL,'AUser2#3','\0',NULL),(8,1,1,'2017-06-19 13:52:26','en','Feedback',NULL,'99999999',NULL,NULL),(9,1,1,'2017-06-19 13:56:49','en','Feedback',NULL,'99999999',NULL,NULL),(10,1,1,'2017-06-19 13:57:18','en','Feedback',NULL,'99999999',NULL,NULL),(11,1,1,'2017-06-19 21:43:05','en','Feedback',NULL,'99999999',NULL,NULL),(12,1,1,'2017-06-19 21:44:02','en','Feedback',NULL,'99999999',NULL,NULL),(13,1,1,'2017-06-19 22:12:45','en','Feedback',NULL,'99999999',NULL,NULL),(14,1,1,'2017-07-06 12:53:00','en','Feedback',NULL,'99999999',NULL,NULL),(15,7,7,'2017-07-06 12:57:35','en','Feedback',NULL,'99999999',NULL,NULL),(16,7,7,'2017-07-19 13:29:54','en','Feedback',NULL,'99999999',NULL,NULL),(17,7,7,'2017-07-19 13:31:46','en','Feedback',NULL,'99999999',NULL,NULL),(18,7,7,'2017-07-19 13:32:51','en','Feedback',NULL,'99999999',NULL,NULL),(19,7,7,'2017-08-21 14:08:45','en','Feedback',NULL,'99999999',NULL,NULL),(20,7,7,'2017-08-21 14:14:17','en','Feedback',NULL,'99999999',NULL,NULL),(21,7,7,'2017-08-21 14:15:53','en','Feedback',NULL,'99999999',NULL,NULL),(22,7,7,'2017-08-21 14:19:34','en','Feedback',NULL,'99999999',NULL,NULL),(23,7,7,'2017-08-21 14:23:44','en','Feedback',NULL,'99999999',NULL,NULL),(24,7,7,'2017-08-21 16:34:02','en','Feedback',NULL,'99999999',NULL,NULL),(25,7,7,'2017-08-21 16:40:41','en','Feedback',NULL,'99999999',NULL,NULL),(26,7,7,'2017-08-22 10:10:26','en','Feedback',NULL,'99999999',NULL,NULL),(27,7,7,'2017-08-22 10:16:07','en','Feedback',NULL,'99999999',NULL,NULL),(28,7,7,'2017-08-22 10:17:34','en','Feedback',NULL,'99999999',NULL,NULL),(29,7,7,'2017-08-22 10:32:31','en','Feedback',NULL,'99999999',NULL,NULL),(30,7,7,'2017-08-22 10:41:44','en','Feedback',NULL,'99999999',NULL,NULL),(31,7,7,'2017-08-22 10:44:05','en','Feedback',NULL,'99999999',NULL,NULL),(32,7,7,'2017-08-22 10:48:50','en','Feedback',NULL,'99999999',NULL,NULL),(33,7,7,'2017-08-22 11:13:05','en','Feedback',NULL,'99999999',NULL,NULL),(34,7,7,'2017-08-22 11:14:41','en','Feedback',NULL,'99999999',NULL,NULL),(35,7,7,'2017-08-22 11:19:46','en','Feedback',NULL,'99999999',NULL,NULL),(36,7,7,'2017-08-22 11:25:33','en','Feedback',NULL,'99999999',NULL,NULL),(37,7,7,'2017-08-22 11:31:31','en','Feedback',NULL,'99999999',NULL,NULL),(38,7,7,'2017-08-22 11:33:11','en','Feedback',NULL,'99999999',NULL,NULL),(39,7,7,'2017-08-23 10:32:37','en','Feedback',NULL,'99999999',NULL,NULL);
 /*!40000 ALTER TABLE `feedback` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -340,13 +337,13 @@ INSERT INTO `feedback_status` VALUES (1,'OPEN'),(2,'IN_PROGRESS'),(3,'CLOSED'),(
 UNLOCK TABLES;
 
 --
--- Table structure for table `feedback_votes`
+-- Table structure for table `feedback_vote`
 --
 
-DROP TABLE IF EXISTS `feedback_votes`;
+DROP TABLE IF EXISTS `feedback_vote`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `feedback_votes` (
+CREATE TABLE `feedback_vote` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `voter_user_id` bigint(20) NOT NULL,
   `voted_user_id` bigint(20) NOT NULL,
@@ -356,19 +353,20 @@ CREATE TABLE `feedback_votes` (
   KEY `feedback_id` (`feedback_id`),
   KEY `voter_user_id` (`voter_user_id`),
   KEY `voted_user_id` (`voted_user_id`),
-  CONSTRAINT `feedback_votes_ibfk_1` FOREIGN KEY (`feedback_id`) REFERENCES `feedback` (`id`),
-  CONSTRAINT `feedback_votes_ibfk_2` FOREIGN KEY (`voter_user_id`) REFERENCES `android_user` (`id`),
-  CONSTRAINT `feedback_votes_ibfk_3` FOREIGN KEY (`voted_user_id`) REFERENCES `android_user` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  CONSTRAINT `feedback_vote_ibfk_1` FOREIGN KEY (`feedback_id`) REFERENCES `feedback` (`id`),
+  CONSTRAINT `feedback_vote_ibfk_2` FOREIGN KEY (`voter_user_id`) REFERENCES `android_user` (`id`),
+  CONSTRAINT `feedback_vote_ibfk_3` FOREIGN KEY (`voted_user_id`) REFERENCES `android_user` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `feedback_votes`
+-- Dumping data for table `feedback_vote`
 --
 
-LOCK TABLES `feedback_votes` WRITE;
-/*!40000 ALTER TABLE `feedback_votes` DISABLE KEYS */;
-/*!40000 ALTER TABLE `feedback_votes` ENABLE KEYS */;
+LOCK TABLES `feedback_vote` WRITE;
+/*!40000 ALTER TABLE `feedback_vote` DISABLE KEYS */;
+INSERT INTO `feedback_vote` VALUES (1,7,5,1,1),(2,7,5,2,-1),(3,5,7,4,1),(4,5,7,5,-1),(5,1,5,1,1),(6,8,5,1,1),(7,9,5,1,1),(8,9,7,4,-1);
+/*!40000 ALTER TABLE `feedback_vote` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -631,4 +629,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-05-08 15:53:39
+-- Dump completed on 2018-05-14 19:15:45
