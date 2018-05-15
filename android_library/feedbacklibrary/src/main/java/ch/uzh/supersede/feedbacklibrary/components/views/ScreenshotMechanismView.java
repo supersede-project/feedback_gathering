@@ -13,7 +13,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -25,7 +24,6 @@ import ch.uzh.supersede.feedbacklibrary.models.ScreenshotMechanism;
 import ch.uzh.supersede.feedbacklibrary.utils.Utils;
 
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.*;
-import static ch.uzh.supersede.feedbacklibrary.utils.Constants.ViewsConstants.TEXT_ANNOTATION_COUNTER_MAXIMUM;
 
 public class ScreenshotMechanismView extends AbstractMechanismView {
     private ScreenshotMechanism screenshotMechanism;
@@ -81,10 +79,6 @@ public class ScreenshotMechanismView extends AbstractMechanismView {
         } else {
             deleteButton.setBackground(activity.getResources().getDrawable(R.drawable.gray_button));
         }
-    }
-
-    private int getMaxNumberTextAnnotation() {
-        return screenshotMechanism.getMaxNumberTextAnnotation();
     }
 
     public ImageView getScreenShotPreviewImageView() {
@@ -144,13 +138,12 @@ public class ScreenshotMechanismView extends AbstractMechanismView {
                 onImageDelete();
             }
         });
-        ((TextView) getEnclosingLayout().findViewById(R.id.supersede_feedbacklibrary_screenshot_feedback_title)).setText(screenshotMechanism.getTitle());
         refreshPreview(activity.getApplicationContext());
     }
 
     @Override
     public void updateModel() {
-        screenshotMechanism.setAllTextAnnotations(allTextAnnotations);
+        //TODO [jfo] what to do here?
     }
 
     private void onImageAnnotate(ScreenshotMechanismView screenshotMechanismView) {
@@ -159,7 +152,6 @@ public class ScreenshotMechanismView extends AbstractMechanismView {
             intent.putExtra(EXTRA_KEY_HAS_STICKER_ANNOTATIONS, true);
             intent.putExtra(EXTRA_KEY_ALL_STICKER_ANNOTATIONS, new HashMap<>(screenshotMechanismView.getAllStickerAnnotations()));
         }
-        intent.putExtra(TEXT_ANNOTATION_COUNTER_MAXIMUM, screenshotMechanismView.getMaxNumberTextAnnotation());
         activity.startActivityForResult(intent, REQUEST_ANNOTATE);
     }
 

@@ -7,8 +7,7 @@ import com.google.gson.annotations.Expose;
 import java.io.File;
 import java.io.Serializable;
 
-import ch.uzh.supersede.feedbacklibrary.configurations.MechanismConfigurationItem;
-import ch.uzh.supersede.feedbacklibrary.models.AbstractMechanism;
+import ch.uzh.supersede.feedbacklibrary.utils.Utils;
 
 /**
  * Base class of feedback which need to be sent as multipart such as attachment, audio or screenshot.
@@ -22,28 +21,20 @@ public abstract class AbstractPartMechanism extends AbstractMechanism implements
     @Expose
     private String part;
 
-    public AbstractPartMechanism(String type, MechanismConfigurationItem item) {
-        super(type, item);
+    public AbstractPartMechanism(long mechanismId, int order) {
+        super(mechanismId, order);
     }
 
     public abstract String getPartString();
 
-    protected void initPartFeedback(int partId, String filePath) {
-        if (filePath == null){
+    protected void initPartFeedback(String filePath) {
+        if (filePath == null) {
             return;
         }
         File file = new File(filePath);
-        String[] split = (file.getName()).split("\\.");
-        if (split.length == 1) {
-            // The file has no file extension
-            setName(split[0]);
-            setFileExtension(null);
-        } else if (split.length > 1) {
-            //FIXME: WTF!
-            setName(split[split.length - 2]);
-            setFileExtension(split[split.length - 1]);
-        }
-        setPart(getPartString() + partId);
+        String[] split = Utils.splitFileNameExtension(file.getName());
+        setFileExtension(split[1]);
+        setPart(getPartString());
     }
 
     @Nullable
