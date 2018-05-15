@@ -10,7 +10,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import ch.uzh.supersede.feedbacklibrary.models.AttachmentMechanism;
 import ch.uzh.supersede.feedbacklibrary.models.AudioMechanism;
 import ch.uzh.supersede.feedbacklibrary.models.CategoryMechanism;
 import ch.uzh.supersede.feedbacklibrary.models.RatingMechanism;
@@ -32,8 +31,6 @@ public class Feedback implements Serializable {
     @Expose
     private String userIdentification;
     @Expose
-    private List<AttachmentMechanism> attachmentFeedbackList;
-    @Expose
     private List<AudioMechanism> audioFeedbackList;
     @Expose
     private List<CategoryMechanism> categoryFeedbackList;
@@ -54,7 +51,6 @@ public class Feedback implements Serializable {
         private String language;
         private String title;
         private String userIdentification;
-        private List<AttachmentMechanism> attachmentFeedbackList;
         private List<AudioMechanism> audioFeedbackList;
         private List<CategoryMechanism> categoryFeedbackList;
         private List<RatingMechanism> ratingFeedbackList;
@@ -92,14 +88,6 @@ public class Feedback implements Serializable {
 
         public Builder withUserIdentification(String userIdentification) {
             this.userIdentification = userIdentification;
-            return this;
-        }
-
-        public Builder withAttachmentMechanism(AttachmentMechanism attachmentMechanism) {
-            this.attachmentFeedbackList = new ArrayList<>();
-            if (attachmentMechanism != null && attachmentMechanism.getAttachmentPaths() != null) {
-                attachmentFeedbackList.add(attachmentMechanism);
-            }
             return this;
         }
 
@@ -146,7 +134,6 @@ public class Feedback implements Serializable {
                 bean.language = this.language;
                 bean.title = this.title;
                 bean.userIdentification = this.userIdentification;
-                bean.attachmentFeedbackList = new ArrayList<>(this.attachmentFeedbackList);
                 bean.audioFeedbackList = new ArrayList<>(this.audioFeedbackList);
                 bean.categoryFeedbackList = new ArrayList<>(this.categoryFeedbackList);
                 bean.ratingFeedbackList = new ArrayList<>(this.ratingFeedbackList);
@@ -197,10 +184,6 @@ public class Feedback implements Serializable {
 
     public String getUserIdentification() {
         return userIdentification;
-    }
-
-    public List<AttachmentMechanism> getAttachmentFeedbackList() {
-        return attachmentFeedbackList;
     }
 
     public List<AudioMechanism> getAudioFeedbackList() {

@@ -29,9 +29,7 @@ public class Configuration {
 
     private void initMechanisms(ConfigurationItem configurationItem) {
         mechanisms = new ArrayList<>();
-        for (MechanismConfigurationItem mechanismConfigurationItem : configurationItem.getMechanismConfigurationItems()) {
-            mechanisms.add(mechanismConfigurationItem.createMechanism());
-        }
+        mechanisms.addAll(configurationItem.getAbstractMechanisms());
 
         Collections.sort(mechanisms, new Comparator<AbstractMechanism>() {
             @Override

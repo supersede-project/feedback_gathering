@@ -5,7 +5,6 @@ import java.util.List;
 import ch.uzh.supersede.feedbacklibrary.beans.FeedbackDetailsBean;
 import ch.uzh.supersede.feedbacklibrary.feedback.Feedback;
 import ch.uzh.supersede.feedbacklibrary.models.AbstractMechanism;
-import ch.uzh.supersede.feedbacklibrary.models.AttachmentMechanism;
 import ch.uzh.supersede.feedbacklibrary.models.AudioMechanism;
 import ch.uzh.supersede.feedbacklibrary.models.CategoryMechanism;
 import ch.uzh.supersede.feedbacklibrary.models.RatingMechanism;
@@ -22,7 +21,6 @@ public class FeedbackTransformer {
                 .withTitle(feedbackDetailsBean.getTitle())
                 .withUserIdentification(feedbackDetailsBean.getUserName())
                 .withContextInformation()
-                .withAttachmentMechanism((AttachmentMechanism) getMechanism(mechanisms, AttachmentMechanism.class))
                 .withAudioMechanism((AudioMechanism) getMechanism(mechanisms, AudioMechanism.class))
                 .withCategoryMechanism((CategoryMechanism) getMechanism(mechanisms, CategoryMechanism.class))
                 .withRatingMechanism((RatingMechanism) getMechanism(mechanisms, RatingMechanism.class))

@@ -1,108 +1,31 @@
 package ch.uzh.supersede.feedbacklibrary.models;
 
+import com.google.gson.annotations.Expose;
+
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
-
-import ch.uzh.supersede.feedbacklibrary.configurations.MechanismConfigurationItem;
-import ch.uzh.supersede.feedbacklibrary.utils.Utils;
-
-import static ch.uzh.supersede.feedbacklibrary.utils.Constants.CATEGORY_TYPE;
 
 public class CategoryMechanism extends AbstractMechanism {
     private boolean mandatory = false;
     private String mandatoryReminder;
     private boolean multiple = false;
-    // Options the user can choose from
     private List<String> options = new ArrayList<>();
-    private HashMap<String, Long> optionsIds = new HashMap<>();
     private boolean isOwnAllowed = true;
-    // Selected options by the user
     private List<String> selectedOptions = new ArrayList<>();
-    private List<HashMap<String, Object>> categories;
 
-    public CategoryMechanism(MechanismConfigurationItem item) {
-        super(CATEGORY_TYPE, item);
+    @Expose
+    private List<String> categories = new ArrayList<>();
+
+    public CategoryMechanism(long mechanismId, int order) {
+        super(mechanismId, order);
+        //TODO [jfo] set mandatoryReminder, multiple, ownAllowed, options
         initCategoryFeedback();
     }
 
-    @Override
-    public void handleMechanismParameter(String key, Object value) {
-        super.handleMechanismParameter(key, value);
-        if (key.equals("mandatory")) {
-            if (isBool(value)) {
-                setMandatory(Boolean.parseBoolean((String) value));
-            } else {
-                setMandatory(Utils.intToBool(Integer.parseInt((String) value)));
-            }
-        } else if (key.equals("mandatoryReminder")) {
-            setMandatoryReminder((String) value);
-        } else if (key.equals("multiple")) {
-            if (isBool(value)) {
-                setMultiple(Boolean.parseBoolean((String) value));
-            } else {
-                setMultiple(Utils.intToBool(Integer.parseInt((String) value)));
-            }
-        } else if (key.equals("ownAllowed")) {
-            if (isBool(value)) {
-                setOwnAllowed(Boolean.parseBoolean((String) value));
-            } else {
-                setOwnAllowed(Utils.intToBool(Integer.parseInt((String) value)));
-            }
-        } else if (key.equals("options")) {
-            List<Map<String, Object>> opt = (List<Map<String, Object>>) value;
-            for (Map<String, Object> par : opt) {
-                for (Map.Entry<String, Object> entry : par.entrySet()) {
-                    if (entry.getKey().equals("value")) {
-                        options.add((String) entry.getValue());
-                    }
-                }
-                for (Map.Entry<String, Object> entry : par.entrySet()) {
-                    if (entry.getKey().equals("id")) {
-                        optionsIds.put(options.get(options.size() - 1), ((Double) entry.getValue()).longValue());
-                    }
-                }
-            }
-        }
-    }
-
     private void initCategoryFeedback() {
-        List<String> options = getOptions();
-        HashMap<String, Long> optionsIds = new HashMap<>(getOptionsIds());
-        Set<String> selectedOptionsSet = getSelectedOptionsSet();
-
-        // Process all the not user created options
-        for (String option : options) {
-            if (optionsIds.containsKey(option)) {
-                if (categories == null) {
-                    categories = new ArrayList<>();
-                }
-                HashMap<String, Object> values = new HashMap<>();
-                if (selectedOptionsSet.contains(option)) {
-                    values.put("text", option);
-                } else {
-                    values.put("text", null);
-                }
-                values.put("parameterId", optionsIds.get(option));
-                categories.add(values);
-            }
-        }
-
-        // Process all the user created options
-        Set<String> copySelectedOptionSet = new HashSet<>(selectedOptionsSet);
-        copySelectedOptionSet.removeAll(new HashSet<>(options));
-        for (String option : copySelectedOptionSet) {
-            if (categories == null) {
-                categories = new ArrayList<>();
-            }
-            HashMap<String, Object> values = new HashMap<>();
-            values.put("text", option);
-            values.put("parameterId", null);
-            categories.add(values);
-        }
+        categories.addAll(getSelectedOptionsSet());
     }
 
     @Override
@@ -114,7 +37,7 @@ public class CategoryMechanism extends AbstractMechanism {
         return true;
     }
 
-    public List<HashMap<String, Object>> getCategories() {
+    public List<String> getCategories() {
         return categories;
     }
 
@@ -150,14 +73,6 @@ public class CategoryMechanism extends AbstractMechanism {
         this.options = options;
     }
 
-    public Map<String, Long> getOptionsIds() {
-        return optionsIds;
-    }
-
-    public void setOptionsIds(Map<String, Long> optionsIds) {
-        this.optionsIds = new HashMap<>(optionsIds);
-    }
-
     public boolean isOwnAllowed() {
         return isOwnAllowed;
     }
@@ -178,7 +93,4 @@ public class CategoryMechanism extends AbstractMechanism {
         this.selectedOptions = selectedOptions;
     }
 
-    private boolean isBool(Object value) {
-        return value != null && value instanceof Boolean;
-    }
 }
