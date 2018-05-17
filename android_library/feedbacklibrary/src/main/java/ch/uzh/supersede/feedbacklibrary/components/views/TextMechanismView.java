@@ -1,26 +1,23 @@
 package ch.uzh.supersede.feedbacklibrary.components.views;
 
-import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
-import android.view.View;
 
 import ch.uzh.supersede.feedbacklibrary.R;
-import ch.uzh.supersede.feedbacklibrary.models.AbstractMechanism;
-import ch.uzh.supersede.feedbacklibrary.models.TextMechanism;
+import ch.uzh.supersede.feedbacklibrary.models.AbstractFeedbackPart;
+import ch.uzh.supersede.feedbacklibrary.models.TextFeedback;
 
-public class TextMechanismView extends AbstractMechanismView {
-    private TextMechanism textMechanism = null;
+public class TextMechanismView extends AbstractFeedbackPartView {
+    private TextFeedback textFeedback ;
 
-    public TextMechanismView(LayoutInflater layoutInflater, AbstractMechanism mechanism) {
+    public TextMechanismView(LayoutInflater layoutInflater, AbstractFeedbackPart mechanism) {
         super(layoutInflater);
         this.viewOrder = mechanism.getOrder();
-        this.textMechanism = (TextMechanism) mechanism;
+        this.textFeedback = (TextFeedback) mechanism;
         setEnclosingLayout(getLayoutInflater().inflate(R.layout.mechanism_text_enclosing, null));
         initView();
     }
@@ -31,43 +28,7 @@ public class TextMechanismView extends AbstractMechanismView {
 
         // Set the hint and enable it
         textInputLayout.setHintEnabled(true);
-        textInputLayout.setHint(textMechanism.getHint());
-
-        // Only set the values if they are initialized (else use the values defined in the layout)
-        if (textMechanism.getInputTextFontColor() != null) {
-            textInputEditText.setTextColor(Color.parseColor(textMechanism.getInputTextFontColor()));
-        }
-        if (textMechanism.getInputTextFontSize() != null) {
-            textInputEditText.setTextSize(TypedValue.COMPLEX_UNIT_SP, textMechanism.getInputTextFontSize());
-        }
-        if (textMechanism.getInputTextFontType() != null) {
-            textInputEditText.setTypeface(null, textMechanism.getInputTextFontType());
-        }
-        if (textMechanism.getInputTextAlignment() != null) {
-            String alignment = textMechanism.getInputTextAlignment();
-            switch (alignment) {
-                case "center":
-                    textInputEditText.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-                    break;
-                case "right":
-                    textInputEditText.setTextAlignment(View.TEXT_ALIGNMENT_TEXT_END);
-                    break;
-                case "left":
-                    textInputEditText.setTextAlignment(View.TEXT_ALIGNMENT_TEXT_START);
-                    break;
-                default:
-                    break;
-            }
-        }
-        if (textMechanism.isTextLengthVisible()) {
-            textInputLayout.setCounterEnabled(true);
-        }
-        if (textMechanism.getMaxLength() != null && textMechanism.isMaxLengthVisible()) {
-            textInputLayout.setCounterMaxLength(textMechanism.getMaxLength());
-            textInputLayout.setErrorEnabled(true);
-            // If there is a maximum length and this maximum length is visible, then the counter must be visible anyways independent of isTextLengthVisible
-            textInputLayout.setCounterEnabled(true);
-        }
+        textInputLayout.setHint(textFeedback.getHint());
 
         textInputEditText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -83,14 +44,14 @@ public class TextMechanismView extends AbstractMechanismView {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (s.length() > 0) {
-                    textInputLayout.setHint(textMechanism.getLabel());
+                    textInputLayout.setHint(textFeedback.getLabel());
                 } else if (s.length() == 0) {
-                    textInputLayout.setHint(textMechanism.getHint());
+                    textInputLayout.setHint(textFeedback.getHint());
                 }
 
-                if (textMechanism.getMaxLength() != null && textMechanism.isMaxLengthVisible() && textInputLayout.isErrorEnabled()) {
-                    if (s.length() > textMechanism.getMaxLength()) {
-                        textInputLayout.setError(getEnclosingLayout().getResources().getString(R.string.feedback_text_warning, textMechanism.getMaxLength()));
+                if (textFeedback.getMaxLength() != null && textInputLayout.isErrorEnabled()) {
+                    if (s.length() > textFeedback.getMaxLength()) {
+                        textInputLayout.setError(getEnclosingLayout().getResources().getString(R.string.feedback_text_warning, textFeedback.getMaxLength()));
                     } else {
                         textInputLayout.setError(null);
                     }
@@ -101,13 +62,13 @@ public class TextMechanismView extends AbstractMechanismView {
 
     @Override
     public void updateModel() {
-        textMechanism.setText(((TextInputEditText) getEnclosingLayout().findViewById(R.id.supersede_feedbacklibrary_text_feedback_text)).getText().toString());
+        textFeedback.setText(((TextInputEditText) getEnclosingLayout().findViewById(R.id.supersede_feedbacklibrary_text_feedback_text)).getText().toString());
     }
 
     @Override
     public int compareTo(@NonNull Object o) {
-        if (o instanceof AbstractMechanismView){
-            int comparedViewOrder = ((AbstractMechanismView) o).getViewOrder();
+        if (o instanceof AbstractFeedbackPartView) {
+            int comparedViewOrder = ((AbstractFeedbackPartView) o).getViewOrder();
             return comparedViewOrder > getViewOrder() ? -1 : comparedViewOrder == getViewOrder() ? 0 : 1;
         }
         return 0;

@@ -4,16 +4,17 @@ import com.google.gson.annotations.Expose;
 
 import java.util.List;
 
-public class AudioMechanism extends AbstractPartMechanism {
+import ch.uzh.supersede.feedbacklibrary.beans.LocalConfigurationBean;
+
+public class AudioFeedback extends AbstractMultipartFeedback {
     private String audioPath;
-    // Default value is 10 seconds
-    private float maxTime = 10;
+    private double maxTime;
     @Expose
     private int duration;
 
-    public AudioMechanism(long mechanismId, int order) {
-        super(mechanismId, order);
-        //TODO [jfo] set max time localConfiguration
+    public AudioFeedback(long mechanismId, LocalConfigurationBean configuration) {
+        super(mechanismId, configuration.getAudioOrder());
+        this.maxTime = configuration.getAudioMaxTime();
     }
 
     @Override
@@ -40,7 +41,7 @@ public class AudioMechanism extends AbstractPartMechanism {
         initPartFeedback(audioPath); //FIXME [jfo] not gudd
     }
 
-    public float getMaxTime() {
+    public double getMaxTime() {
         return maxTime;
     }
 

@@ -4,33 +4,33 @@ import java.util.List;
 
 import ch.uzh.supersede.feedbacklibrary.beans.FeedbackDetailsBean;
 import ch.uzh.supersede.feedbacklibrary.feedback.Feedback;
-import ch.uzh.supersede.feedbacklibrary.models.AbstractMechanism;
-import ch.uzh.supersede.feedbacklibrary.models.AudioMechanism;
-import ch.uzh.supersede.feedbacklibrary.models.CategoryMechanism;
-import ch.uzh.supersede.feedbacklibrary.models.RatingMechanism;
-import ch.uzh.supersede.feedbacklibrary.models.ScreenshotMechanism;
-import ch.uzh.supersede.feedbacklibrary.models.TextMechanism;
+import ch.uzh.supersede.feedbacklibrary.models.AbstractFeedbackPart;
+import ch.uzh.supersede.feedbacklibrary.models.AudioFeedback;
+import ch.uzh.supersede.feedbacklibrary.models.LabelFeedback;
+import ch.uzh.supersede.feedbacklibrary.models.RatingFeedback;
+import ch.uzh.supersede.feedbacklibrary.models.ScreenshotFeedback;
+import ch.uzh.supersede.feedbacklibrary.models.TextFeedback;
 
 public class FeedbackTransformer {
     private FeedbackTransformer() {
     }
 
-    public static Feedback FeedbackDetailsBeanToFeedback(FeedbackDetailsBean feedbackDetailsBean, long applicationId, List<AbstractMechanism> mechanisms) {
+    public static Feedback FeedbackDetailsBeanToFeedback(FeedbackDetailsBean feedbackDetailsBean, long applicationId, List<AbstractFeedbackPart> mechanisms) {
         return new Feedback.Builder()
                 .withApplicationId(applicationId)
                 .withTitle(feedbackDetailsBean.getTitle())
                 .withUserIdentification(feedbackDetailsBean.getUserName())
                 .withContextInformation()
-                .withAudioMechanism((AudioMechanism) getMechanism(mechanisms, AudioMechanism.class))
-                .withCategoryMechanism((CategoryMechanism) getMechanism(mechanisms, CategoryMechanism.class))
-                .withRatingMechanism((RatingMechanism) getMechanism(mechanisms, RatingMechanism.class))
-                .withScreenshotMechanism((ScreenshotMechanism) getMechanism(mechanisms, ScreenshotMechanism.class))
-                .withTextMechanism((TextMechanism) getMechanism(mechanisms, TextMechanism.class))
+                .withAudioMechanism((AudioFeedback) getMechanism(mechanisms, AudioFeedback.class))
+                .withCategoryMechanism((LabelFeedback) getMechanism(mechanisms, LabelFeedback.class))
+                .withRatingMechanism((RatingFeedback) getMechanism(mechanisms, RatingFeedback.class))
+                .withScreenshotMechanism((ScreenshotFeedback) getMechanism(mechanisms, ScreenshotFeedback.class))
+                .withTextMechanism((TextFeedback) getMechanism(mechanisms, TextFeedback.class))
                 .build();
     }
 
-    private static AbstractMechanism getMechanism(List<AbstractMechanism> mechanisms, Class<? extends AbstractMechanism> mechanismType) {
-        for (AbstractMechanism mechanism : mechanisms) {
+    private static AbstractFeedbackPart getMechanism(List<AbstractFeedbackPart> mechanisms, Class<? extends AbstractFeedbackPart> mechanismType) {
+        for (AbstractFeedbackPart mechanism : mechanisms) {
             if (mechanism.getClass().equals(mechanismType)) {
                 return mechanism;
             }

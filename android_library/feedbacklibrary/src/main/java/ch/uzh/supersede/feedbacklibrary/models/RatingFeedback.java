@@ -4,17 +4,21 @@ import com.google.gson.annotations.Expose;
 
 import java.util.List;
 
-public class RatingMechanism extends AbstractMechanism {
+import ch.uzh.supersede.feedbacklibrary.beans.LocalConfigurationBean;
+
+public class RatingFeedback extends AbstractFeedbackPart {
     private String ratingIcon;
     private int maxRating;
-    private float defaultRating;
+    private int defaultRating;
 
     @Expose
     private long rating;
 
-    public RatingMechanism(long mechanismId, int order) {
-        super(mechanismId, order);
-        //TODO [jfo] ratingIcon, maxRating, defaultRating
+    public RatingFeedback(long mechanismId, LocalConfigurationBean configuration) {
+        super(mechanismId, configuration.getRatingOrder());
+        this.ratingIcon = configuration.getRatingIcon();
+        this.maxRating = configuration.getRatingMaxValue();
+        this.defaultRating = configuration.getRatingDefaultValue();
     }
 
     @Override
@@ -26,27 +30,15 @@ public class RatingMechanism extends AbstractMechanism {
         return ratingIcon;
     }
 
-    public void setRatingIcon(String ratingIcon) {
-        this.ratingIcon = ratingIcon;
-    }
-
     public int getMaxRating() {
         return maxRating;
-    }
-
-    public void setMaxRating(int maxRating) {
-        this.maxRating = maxRating;
     }
 
     public float getDefaultRating() {
         return defaultRating;
     }
 
-    public void setDefaultRating(float defaultRating) {
-        this.defaultRating = defaultRating;
-    }
-
-    public float getRating() {
+    public long getRating() {
         return rating;
     }
 

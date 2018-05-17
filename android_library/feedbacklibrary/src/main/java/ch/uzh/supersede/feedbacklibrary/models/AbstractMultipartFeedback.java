@@ -12,7 +12,7 @@ import ch.uzh.supersede.feedbacklibrary.utils.Utils;
 /**
  * Base class of feedback which need to be sent as multipart such as attachment, audio or screenshot.
  */
-public abstract class AbstractPartMechanism extends AbstractMechanism implements Serializable {
+public abstract class AbstractMultipartFeedback extends AbstractFeedbackPart implements Serializable {
     @Nullable
     @Expose
     private String fileExtension;
@@ -21,7 +21,7 @@ public abstract class AbstractPartMechanism extends AbstractMechanism implements
     @Expose
     private String part;
 
-    public AbstractPartMechanism(long mechanismId, int order) {
+    public AbstractMultipartFeedback(long mechanismId, int order) {
         super(mechanismId, order);
     }
 
