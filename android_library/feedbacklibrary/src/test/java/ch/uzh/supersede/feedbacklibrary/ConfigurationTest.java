@@ -16,9 +16,9 @@ import java.util.Map;
 import ch.uzh.supersede.feedbacklibrary.configurations.Configuration;
 import ch.uzh.supersede.feedbacklibrary.configurations.OrchestratorConfiguration;
 import ch.uzh.supersede.feedbacklibrary.configurations.OrchestratorConfigurationItem;
-import ch.uzh.supersede.feedbacklibrary.models.AbstractMechanism;
-import ch.uzh.supersede.feedbacklibrary.models.CategoryMechanism;
-import ch.uzh.supersede.feedbacklibrary.models.TextMechanism;
+import ch.uzh.supersede.feedbacklibrary.models.AbstractFeedbackPart;
+import ch.uzh.supersede.feedbacklibrary.models.LabelFeedback;
+import ch.uzh.supersede.feedbacklibrary.models.TextFeedback;
 import ch.uzh.supersede.feedbacklibrary.utils.Utils;
 
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.*;
@@ -41,8 +41,8 @@ public class ConfigurationTest {
         assertEquals(orderedActiveConfiguration.getId(), shuffledActiveConfiguration.getId());
 
         // Check if both active configurations contain 6 mechanisms and that their viewOrder corresponds
-        List<AbstractMechanism> orderedMechanismList = orderedActiveConfiguration.getMechanisms();
-        List<AbstractMechanism> shuffledMechanismList = shuffledActiveConfiguration.getMechanisms();
+        List<AbstractFeedbackPart> orderedMechanismList = orderedActiveConfiguration.getMechanisms();
+        List<AbstractFeedbackPart> shuffledMechanismList = shuffledActiveConfiguration.getMechanisms();
         assertEquals(6, orderedMechanismList.size());
         assertEquals(6, shuffledMechanismList.size());
         for (int i = 0; i < 6; ++i) {
@@ -65,26 +65,18 @@ public class ConfigurationTest {
     @Test
     public void mechanismValidationTest() throws IOException {
         OrchestratorConfiguration orchestratorConfiguration = createConfiguration("configurationInput/application_6.json", -1);
-        List<AbstractMechanism> mechanismList = orchestratorConfiguration.getActiveConfiguration().getMechanisms();
+        List<AbstractFeedbackPart> mechanismList = orchestratorConfiguration.getActiveConfiguration().getMechanisms();
         List<String> stubList = new ArrayList<>();
 
-        // Check if the first to mechanisms are of type TEXT_TYPE
-        assertEquals(mechanismList.get(0).getType(), TEXT_TYPE);
-        assertEquals(mechanismList.get(1).getType(), TEXT_TYPE);
-
-        ((TextMechanism) mechanismList.get(0)).setText("");
-        ((TextMechanism) mechanismList.get(1)).setText("");
+        ((TextFeedback) mechanismList.get(0)).setText("");
+        ((TextFeedback) mechanismList.get(1)).setText("");
         assertFalse((mechanismList.get(0)).isValid(stubList));
         assertTrue((mechanismList.get(1)).isValid(stubList));
-
-        // Check if the mechanisms at index 8 and 9 are of type CATEGORY_TYPE
-        assertEquals(mechanismList.get(8).getType(), CATEGORY_TYPE);
-        assertEquals(mechanismList.get(9).getType(), CATEGORY_TYPE);
 
         assertFalse((mechanismList.get(8)).isValid(stubList));
         List<String> selectedOptions = new ArrayList<>();
         selectedOptions.add("selected");
-        ((CategoryMechanism) mechanismList.get(8)).setSelectedOptions(selectedOptions);
+        ((LabelFeedback) mechanismList.get(8)).setSelectedLabels(selectedOptions);
         assertTrue((mechanismList.get(8)).isValid(stubList));
         assertTrue((mechanismList.get(9)).isValid(stubList));
     }

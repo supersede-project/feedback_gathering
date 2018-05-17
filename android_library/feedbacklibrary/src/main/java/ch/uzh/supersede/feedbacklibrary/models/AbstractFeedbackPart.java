@@ -5,15 +5,15 @@ import com.google.gson.annotations.Expose;
 import java.io.Serializable;
 import java.util.List;
 
-public abstract class AbstractMechanism implements Serializable {
+public abstract class AbstractFeedbackPart implements Serializable {
     @Expose
     private long mechanismId;
     private int order;
 
-    public AbstractMechanism() {
+    public AbstractFeedbackPart() {
     }
 
-    public AbstractMechanism(long mechanismId, int order) {
+    public AbstractFeedbackPart(long mechanismId, int order) {
         this.mechanismId = mechanismId;
         this.order = order;
     }
