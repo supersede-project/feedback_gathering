@@ -12,4 +12,5 @@ public interface FeedbackVoteRepository extends JpaRepository<FeedbackVote, Long
     public List<FeedbackVote> findByFeedbackId(long id);
     public List<FeedbackVote> findByVoterUserId(long id);
     public List<FeedbackVote> findByVotedUserId(long id);
+    public FeedbackVote findByFeedbackIdAndVoterUserId(long feedbackId, long voterUserId);
 }

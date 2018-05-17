@@ -1,6 +1,7 @@
 package ch.fhnw.cere.repository.services;
 
 import ch.fhnw.cere.repository.models.FeedbackVote;
+import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
@@ -15,7 +16,9 @@ public interface FeedbackVoteService {
 
     public List<FeedbackVote> findByVoterUserId(long id);
 
-    public List<FeedbackVote> findByVotedUserId(long id);
+    public List<FeedbackVote> findByVotedUserName(String username);
+
+    public FeedbackVote findByFeedbackIdAndVoterUserId(long feedbackId, long voterUserId);
 
     public void delete(long id);
 }

@@ -68,14 +68,15 @@ public class AndroidUserServiceImpl implements AndroidUserService {
 
 
     private void calculateStats(AndroidUser androidUser) {
-        androidUser.setKarma(calculateKarma(androidUser.getId()));
+        androidUser.setKarma(calculateKarma(androidUser.getName()));
         androidUser.setFeedbackCount(countFeedback(androidUser.getName()));
         androidUser.setVoteCount(countVotes(androidUser.getId()));
     }
 
-    private int calculateKarma(long userId) {
+    // TODO: fix this!
+    private int calculateKarma(String userName) {
         int karma = 0;
-        List<FeedbackVote> votes = feedbackVoteService.findByVotedUserId(userId);
+        List<FeedbackVote> votes = feedbackVoteService.findByVotedUserName(userName);
 
         for(FeedbackVote vote : votes) {
             karma += vote.getVote();
@@ -102,10 +103,8 @@ public class AndroidUserServiceImpl implements AndroidUserService {
         return voteCount;
     }
 
-    private int countFeedback(String userIdentification) {
-        int feedbackCount = 0;
-        List<Feedback> feedback = feedbackService.findByUserIdentification(userIdentification);
-        return feedback.size();
+    private long countFeedback(String userIdentification) {
+        return feedbackService.countByUserIdentifictation(userIdentification);
     }
 
 }

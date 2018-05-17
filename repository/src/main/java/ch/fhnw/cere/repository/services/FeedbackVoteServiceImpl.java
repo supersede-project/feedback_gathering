@@ -40,11 +40,17 @@ public class FeedbackVoteServiceImpl implements FeedbackVoteService {
 
     @Override
     public List<FeedbackVote> findByVotedUserId(long id) {
+
         return feedbackVoteRepository.findByVotedUserId(id);
     }
 
     @Override
     public void delete(long id) {
         feedbackVoteRepository.delete(id);
+    }
+
+    @Override
+    public FeedbackVote findByFeedbackIdAndVoterUserId(long feedbackId, long voterUserId) {
+       return feedbackVoteRepository.findByFeedbackIdAndVoterUserId(feedbackId, voterUserId);
     }
 }

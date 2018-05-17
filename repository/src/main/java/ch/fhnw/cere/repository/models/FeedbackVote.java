@@ -23,21 +23,20 @@ public class FeedbackVote {
     @JoinColumn(name = "feedback_id")
     private Feedback feedback;
 
+    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+    @JsonIdentityReference(alwaysAsId = true)
     @ManyToOne(cascade = {CascadeType.PERSIST})
     @JoinColumn(name = "voter_user_id")
     private AndroidUser voterUser;
 
-    @ManyToOne(cascade = {CascadeType.PERSIST})
-    @JoinColumn(name = "voted_user_id")
-    private AndroidUser votedUser;
 
     public FeedbackVote() {
     }
 
-    public FeedbackVote(int vote, AndroidUser voterUser, AndroidUser votedUser) {
-        this.vote = vote;
+    public FeedbackVote(Feedback feedback, AndroidUser voterUser, int vote) {
+        this.feedback = feedback;
         this.voterUser = voterUser;
-        this.votedUser = votedUser;
+        this.vote = vote;
     }
 
     public long getId() {
@@ -72,13 +71,6 @@ public class FeedbackVote {
         this.voterUser = voterUser;
     }
 
-    public AndroidUser getVotedUser() {
-        return votedUser;
-    }
-
-    public void setVotedUser(AndroidUser votedUser) {
-        this.votedUser = votedUser;
-    }
 
 
 }
