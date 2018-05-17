@@ -4,8 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.media.Image;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.View;
@@ -14,8 +12,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import ch.uzh.supersede.feedbacklibrary.database.FeedbackDatabase;
 
@@ -24,6 +20,23 @@ import static ch.uzh.supersede.feedbacklibrary.utils.Constants.UtilsConstants.*;
 
 public class Utils {
     private Utils() {
+    }
+
+    public static String[] splitFileNameExtension(String fileName) {
+        String[] filePath = new String[2];
+        if (fileName == null) {
+            return filePath;
+        }
+
+        filePath[0] = fileName;
+        filePath[1] = "";
+
+        int i = fileName.lastIndexOf(".");
+        if (i > 0) {
+            filePath[0] = fileName.substring(0, i);
+            filePath[1] = fileName.substring(i + 1);
+        }
+        return filePath;
     }
 
     public static void wipeImages(final Context context) {

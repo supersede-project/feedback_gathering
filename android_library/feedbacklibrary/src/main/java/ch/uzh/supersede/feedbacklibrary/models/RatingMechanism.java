@@ -4,10 +4,6 @@ import com.google.gson.annotations.Expose;
 
 import java.util.List;
 
-import ch.uzh.supersede.feedbacklibrary.configurations.MechanismConfigurationItem;
-
-import static ch.uzh.supersede.feedbacklibrary.utils.Constants.RATING_TYPE;
-
 public class RatingMechanism extends AbstractMechanism {
     private String ratingIcon;
     private int maxRating;
@@ -16,18 +12,9 @@ public class RatingMechanism extends AbstractMechanism {
     @Expose
     private long rating;
 
-    public RatingMechanism(MechanismConfigurationItem item) {
-        super(RATING_TYPE, item);
-    }
-
-    @Override
-    public void handleMechanismParameter(String key, Object value) {
-        super.handleMechanismParameter(key, value);
-        if (key.equals("ratingIcon")) {
-            setRatingIcon((String) value);
-        } else if (key.equals("maxRating") || key.equals("defaultRating")) {
-            setDefaultRating(Float.parseFloat((String) value));
-        }
+    public RatingMechanism(long mechanismId, int order) {
+        super(mechanismId, order);
+        //TODO [jfo] ratingIcon, maxRating, defaultRating
     }
 
     @Override

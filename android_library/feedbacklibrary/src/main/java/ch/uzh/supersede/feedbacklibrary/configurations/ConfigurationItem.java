@@ -5,6 +5,8 @@ import com.google.gson.annotations.SerializedName;
 import java.io.Serializable;
 import java.util.List;
 
+import ch.uzh.supersede.feedbacklibrary.models.AbstractMechanism;
+
 public class ConfigurationItem implements Serializable {
     private String dateOfCreation;
     @SerializedName("generalConfiguration")
@@ -12,7 +14,7 @@ public class ConfigurationItem implements Serializable {
     private long id;
     private String type;
     @SerializedName("mechanisms")
-    private List<MechanismConfigurationItem> mechanismConfigurationItems;
+    private List<AbstractMechanism> abstractMechanisms;
 
     public String getDateOfCreation() {
         return dateOfCreation;
@@ -46,11 +48,11 @@ public class ConfigurationItem implements Serializable {
         this.type = type;
     }
 
-    public List<MechanismConfigurationItem> getMechanismConfigurationItems() {
-        return mechanismConfigurationItems;
+    public List<AbstractMechanism> getAbstractMechanisms() {
+        return abstractMechanisms;
     }
 
-    public void setMechanismConfigurationItems(List<MechanismConfigurationItem> mechanismConfigurationItems) {
-        this.mechanismConfigurationItems = mechanismConfigurationItems;
+    public void setAbstractMechanisms(List<AbstractMechanism> abstractMechanisms) {
+        this.abstractMechanisms = abstractMechanisms;
     }
 }

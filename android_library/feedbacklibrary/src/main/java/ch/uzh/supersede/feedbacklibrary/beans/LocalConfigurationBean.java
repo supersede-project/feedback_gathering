@@ -3,14 +3,16 @@ package ch.uzh.supersede.feedbacklibrary.beans;
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
+import android.graphics.Color;
 
 import java.io.Serializable;
 
 import ch.uzh.supersede.feedbacklibrary.entrypoint.*;
 import ch.uzh.supersede.feedbacklibrary.entrypoint.IFeedbackStyle.FEEDBACK_STYLE;
-import ch.uzh.supersede.feedbacklibrary.utils.NumberUtility;
+import ch.uzh.supersede.feedbacklibrary.utils.*;
 
-import static ch.uzh.supersede.feedbacklibrary.entrypoint.IFeedbackStyle.FEEDBACK_STYLE.NONE;
+import static ch.uzh.supersede.feedbacklibrary.entrypoint.IFeedbackStyle.FEEDBACK_STYLE.*;
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.ActivitiesConstants.*;
 
 public class LocalConfigurationBean implements Serializable {
     // IFeedbackBehavior
@@ -29,7 +31,7 @@ public class LocalConfigurationBean implements Serializable {
     private int minResponseLength;
     private int maxResponseLength;
     // IFeedbackStyle
-    private FEEDBACK_STYLE style = NONE;
+    private FEEDBACK_STYLE style;
     // Application
     private String hostApplicationName;
     private String hostApplicationId;
@@ -86,6 +88,15 @@ public class LocalConfigurationBean implements Serializable {
 
     private void readConfiguration(IFeedbackStyle configuration) {
         this.style = configuration.getConfiguredFeedbackStyle();
+        if (style == DARK){
+            topColors = new Integer[]{
+                    ANTHRAZIT_DARK,GRAY_DARK
+            };
+        }else if (style == BRIGHT){
+            topColors = new Integer[]{
+                    GRAY,SILVER
+            };
+        }
     }
 
     private static String getApplicationName(Context context) {

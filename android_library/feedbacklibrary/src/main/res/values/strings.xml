@@ -109,9 +109,10 @@
     <string name="list_button_top">Top</string>
     <string name="list_button_hot">Hot</string>
     <string name="list_button_new">New</string>
+    <string name="list_filter">Filter</string>
     <string name="list_edit_search">Search</string>
     <string name="list_date">Date: %1$s</string>
-    <string name="list_resplies">(%1$d Responses)</string>
+    <string name="list_responses">(%1$d Responses)</string>
     <string name="details_feedback_toast">%1$s loaded.\nCreator: %2$s.\nCreation-Date: %3$s.\nUp-Votes: %4$d.\nResponses: %5$d.</string>
     <!--Details-->
     <string name="details_minus">-</string>

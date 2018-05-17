@@ -18,7 +18,6 @@ import ch.uzh.supersede.feedbacklibrary.components.views.CategoryMechanismView;
 import ch.uzh.supersede.feedbacklibrary.components.views.RatingMechanismView;
 import ch.uzh.supersede.feedbacklibrary.components.views.ScreenshotMechanismView;
 import ch.uzh.supersede.feedbacklibrary.components.views.TextMechanismView;
-import ch.uzh.supersede.feedbacklibrary.configurations.MechanismConfigurationItem;
 import ch.uzh.supersede.feedbacklibrary.models.AbstractMechanism;
 import ch.uzh.supersede.feedbacklibrary.models.AudioMechanism;
 import ch.uzh.supersede.feedbacklibrary.models.CategoryMechanism;
@@ -150,121 +149,33 @@ public class OrchestratorStub {
         }
 
         private void resolve(String type, int order) {
-            MechanismConfigurationItem configurationItem = new MechanismConfigurationItem();
-            configurationItem.setActivatePossible(true);
-            configurationItem.setActive(true);
-            configurationItem.setOrder(order);
-            configurationItem.setId(order);
             switch (type) {
-                case ATTACHMENT_TYPE:
-                    //TODO: Gab es nie, implementieren oder als Attachment button des Screenshots umschreiben
-                    break;
                 case AUDIO_TYPE:
-                    configurationItem.setType(AUDIO_TYPE);
-                    configurationItem.setParameters(OrchestratorParamBuilder
-                            .instance()
-                            .key(AUDIO_TITLE_KEY)
-                            .value(AUDIO_TITLE_VALUE)
-                            .key(AUDIO_MAX_TIME_KEY)
-                            .value(AUDIO_MAX_TIME_VALUE)
-                            .get());
-                    AudioMechanism audioMechanism = new AudioMechanism(configurationItem);
+                    AudioMechanism audioMechanism = new AudioMechanism(order, order);
                     AudioMechanismView audioMechanismView = new AudioMechanismView(layoutInflater, audioMechanism, resources, activity, context);
                     mechanisms.add(audioMechanism);
                     mechanismViews.add(audioMechanismView);
                     break;
                 case CATEGORY_TYPE:
-                    configurationItem.setType(CATEGORY_TYPE);
-                    configurationItem.setParameters(OrchestratorParamBuilder
-                            .instance()
-                            .key(CATEGORY_TITLE_KEY)
-                            .value(CATEGORY_TITLE_VALUE)
-                            .key(CATEGORY_MANDATORY_KEY)
-                            .value(CATEGORY_MANDATORY_VALUE)
-                            .key(CATEGORY_MULTIPLE_KEY)
-                            .value(CATEGORY_MULTIPLE_VALUE)
-                            .key(CATEGORY_MANDATORY_REMINDER_KEY)
-                            .value(CATEGORY_MANDATORY_REMINDER_VALUE)
-                            .key(CATEGORY_OPTIONS_KEY)
-                            .value(CATEGORY_OPTIONS_VALUE)
-                            .key(CATEGORY_OWN_KEY)
-                            .value(CATEGORY_OWN_VALUE)
-                            .get());
-                    CategoryMechanism categoryMechanism = new CategoryMechanism(configurationItem);
+                    CategoryMechanism categoryMechanism = new CategoryMechanism(order, order);
                     CategoryMechanismView categoryMechanismView = new CategoryMechanismView(layoutInflater, categoryMechanism);
                     mechanisms.add(categoryMechanism);
                     mechanismViews.add(categoryMechanismView);
                     break;
-                case DIALOG_TYPE:
-                    //TODO: Gab es nie, implementieren!
-                    break;
-                case IMAGE_TYPE:
-                    //TODO: Gab es nie, implementieren!
-                    break;
                 case RATING_TYPE:
-                    configurationItem.setType(RATING_TYPE);
-                    configurationItem.setParameters(OrchestratorParamBuilder
-                            .instance()
-                            .key(RATING_TITLE_KEY)
-                            .value(RATING_TITLE_VALUE)
-                            .key(RATING_ICON_KEY)
-                            .value(RATING_ICON_VALUE)
-                            .key(RATING_MAX_KEY)
-                            .value(RATING_MAX_VALUE)
-                            .key(RATING_DEFAULT_KEY)
-                            .value(RATING_DEFAULT_VALUE)
-                            .get());
-                    RatingMechanism ratingMechanism = new RatingMechanism(configurationItem);
+                    RatingMechanism ratingMechanism = new RatingMechanism(order, order);
                     RatingMechanismView ratingMechanismView = new RatingMechanismView(layoutInflater, ratingMechanism);
                     mechanisms.add(ratingMechanism);
                     mechanismViews.add(ratingMechanismView);
                     break;
                 case SCREENSHOT_TYPE:
-                    configurationItem.setType(SCREENSHOT_TYPE);
-                    configurationItem.setParameters(OrchestratorParamBuilder
-                            .instance()
-                            .key(SCREENSHOT_TITLE_KEY)
-                            .value(SCREENSHOT_TITLE_VALUE)
-                            .key(SCREENSHOT_DEFAULT_KEY)
-                            .value(SCREENSHOT_DEFAULT_VALUE)
-                            .key(SCREENSHOT_MAX_TEXT_KEY)
-                            .value(SCREENSHOT_MAX_TEXT_VALUE)
-                            .get());
-                    ScreenshotMechanism screenshotMechanism = new ScreenshotMechanism(configurationItem);
+                    ScreenshotMechanism screenshotMechanism = new ScreenshotMechanism(order, order);
                     ScreenshotMechanismView screenshotMechanismView = new ScreenshotMechanismView(layoutInflater, activity, screenshotMechanism, id);
                     mechanisms.add(screenshotMechanism);
                     mechanismViews.add(screenshotMechanismView);
                     break;
                 case TEXT_TYPE:
-                    configurationItem.setType(TEXT_TYPE);
-                    configurationItem.setParameters(OrchestratorParamBuilder
-                            .instance()
-                            .key(TEXT_TITLE_KEY)
-                            .value(TEXT_TITLE_VALUE)
-                            .key(TEXT_HINT_KEY)
-                            .value(TEXT_HINT_VALUE)
-                            .key(TEXT_LABEL_KEY)
-                            .value(TEXT_LABEL_VALUE)
-                            .key(TEXT_FONT_COLOR_KEY)
-                            .value(TEXT_FONT_COLOR_VALUE)
-                            .key(TEXT_FONT_SIZE_KEY)
-                            .value(TEXT_FONT_SIZE_VALUE)
-                            .key(TEXT_FONT_TYPE_KEY)
-                            .value(TEXT_FONT_TYPE_VALUE)
-                            .key(TEXT_ALIGN_KEY)
-                            .value(TEXT_ALIGN_VALUE)
-                            .key(TEXT_MAX_LENGTH_KEY)
-                            .value(TEXT_MAX_LENGTH_VALUE)
-                            .key(TEXT_MAX_LENGTH_VISIBLE_KEY)
-                            .value(TEXT_MAX_LENGTH_VISIBLE_VALUE)
-                            .key(TEXT_LENGTH_VISIBLE_KEY)
-                            .value(TEXT_LENGTH_VISIBLE_VALUE)
-                            .key(TEXT_MANDATORY_KEY)
-                            .value(TEXT_MANDATORY_VALUE)
-                            .key(TEXT_REMINDER_KEY)
-                            .value(TEXT_REMINDER_VALUE)
-                            .get());
-                    TextMechanism textMechanism = new TextMechanism(configurationItem);
+                    TextMechanism textMechanism = new TextMechanism(order, order);
                     TextMechanismView textMechanismView = new TextMechanismView(layoutInflater, textMechanism);
                     mechanisms.add(textMechanism);
                     mechanismViews.add(textMechanismView);

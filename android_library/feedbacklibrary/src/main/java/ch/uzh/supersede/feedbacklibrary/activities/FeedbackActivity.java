@@ -331,7 +331,7 @@ public class FeedbackActivity extends AbstractBaseActivity implements AudioMecha
         }
         // Append an error message and return. The user is confronted with one error message at a time.
         for (AbstractMechanism mechanism : allMechanisms) {
-            if (mechanism != null && mechanism.isActive() && !mechanism.isValid(errorMessages)) {
+            if (mechanism != null && !mechanism.isValid(errorMessages)) {
                 return false;
             }
         }

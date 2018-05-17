@@ -5,7 +5,7 @@
             <corners
                 android:topLeftRadius="7dp"
                 android:topRightRadius="7dp"/>
-            <solid android:color="@color/indigoDark"/>
+            <solid android:color="@color/white"/>
             <size android:height="22dp" android:width="80dp"/>
         </shape>
     </item>
@@ -14,7 +14,7 @@
             <corners
                 android:topLeftRadius="7dp"
                 android:topRightRadius="7dp"/>
-            <solid android:color="@color/indigoDark"/>
+            <solid android:color="@color/white"/>
             <size android:height="22dp" android:width="80dp"/>
         </shape>
     </item>
@@ -23,7 +23,7 @@
             <corners
                 android:topLeftRadius="7dp"
                 android:topRightRadius="7dp"/>
-            <solid android:color="@color/indigo"/>
+            <solid android:color="@color/white"/>
             <size android:height="22dp" android:width="80dp"/>
         </shape>
     </item>
@@ -32,7 +32,7 @@
             <corners
                 android:topLeftRadius="7dp"
                 android:topRightRadius="7dp"/>
-            <solid android:color="@color/indigo"/>
+            <solid android:color="@color/white"/>
             <size android:height="22dp" android:width="80dp"/>
         </shape>
     </item>

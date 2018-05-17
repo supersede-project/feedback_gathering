@@ -4,10 +4,6 @@ import com.google.gson.annotations.Expose;
 
 import java.util.List;
 
-import ch.uzh.supersede.feedbacklibrary.configurations.MechanismConfigurationItem;
-
-import static ch.uzh.supersede.feedbacklibrary.utils.Constants.AUDIO_TYPE;
-
 public class AudioMechanism extends AbstractPartMechanism {
     private String audioPath;
     // Default value is 10 seconds
@@ -15,16 +11,9 @@ public class AudioMechanism extends AbstractPartMechanism {
     @Expose
     private int duration;
 
-    public AudioMechanism(MechanismConfigurationItem item) {
-        super(AUDIO_TYPE, item);
-    }
-
-    @Override
-    public void handleMechanismParameter(String key, Object value) {
-        super.handleMechanismParameter(key, value);
-        if (key.equals("maxTime")) {
-            setMaxTime(Float.parseFloat((String) value));
-        }
+    public AudioMechanism(long mechanismId, int order) {
+        super(mechanismId, order);
+        //TODO [jfo] set max time localConfiguration
     }
 
     @Override
@@ -48,15 +37,11 @@ public class AudioMechanism extends AbstractPartMechanism {
 
     public void setAudioPath(String audioPath) {
         this.audioPath = audioPath;
-        initPartFeedback(0, audioPath); //FIXME [jfo] not gudd
+        initPartFeedback(audioPath); //FIXME [jfo] not gudd
     }
 
     public float getMaxTime() {
         return maxTime;
-    }
-
-    public void setMaxTime(float maxTime) {
-        this.maxTime = maxTime;
     }
 
     public int getDuration() {
