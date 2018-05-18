@@ -166,6 +166,11 @@ button {
   flex-grow: 1;
 }
 
+.iconContainer >div{
+  display: inline-block;
+  margin-left: 10px;
+}
+
 .forumIconContainer {
   padding-top: 10px;
   flex-grow: 1;
@@ -181,6 +186,11 @@ button {
 
 .forumIconContainer svg:first-child {
   margin-left: 0px;
+}
+
+.forumIconContainer >div{
+  display: inline-block;
+  margin-left: 10px;
 }
 
 .bundledIcon{
@@ -220,7 +230,7 @@ button {
   position: relative;
   top: -10px;
   left: 2px;
-  background: red;
+  background: black;
   color: white;
   padding: 0 2px;
 }
