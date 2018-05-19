@@ -165,7 +165,7 @@ export class PageNavigation {
         }
 
         // TODO define parameters in the Orchestrator to control the feature, including tenant and number of similar feedback shown
-        let feedbackClusteringEnabled = false;
+        let feedbackClusteringEnabled = true;
 
         if(validFeedback && feedbackClusteringEnabled) {
             this.showClusteredFeedback();
@@ -190,8 +190,9 @@ export class PageNavigation {
 
         let clusteringEndpointUrl = 'http://supersede.es.atos.net:3001/cluster/feedback';
         let clusteringService:ClusteringService = new ClusteringService();
-        clusteringService.retrieveRelatedFeedback(clusteringEndpointUrl, feedbackText, 'senercon', 5,
+        clusteringService.retrieveRelatedFeedback(clusteringEndpointUrl, feedbackText, 'atos', 5,
             (data) => {
+                console.log(data);
                 instantClusteringContainer.empty().html(data);
             },
             (data) => {
@@ -199,7 +200,7 @@ export class PageNavigation {
                 console.warn(data);
             }
         );
-
+/*
         let similarFeedbacks = require('json!../../services/mocks/dev/feedback_clustering.json');
         similarFeedbacks = similarFeedbacks.map((similarFeedback, index) => {
            return {
@@ -209,8 +210,8 @@ export class PageNavigation {
         });
         let similarFeedbacksTemplate = require('../../templates/partials/clustering_list_view.handlebars');
         let responseDataHtml = similarFeedbacksTemplate({similarFeedbacks: similarFeedbacks});
-
         instantClusteringContainer.empty().html(responseDataHtml);
+*/
     }
 
     /**

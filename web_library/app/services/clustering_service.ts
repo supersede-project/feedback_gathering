@@ -22,10 +22,10 @@ export class ClusteringService {
         $.ajax({
             url: url,
             type: 'POST',
-            data: body,
+            data: JSON.stringify(body),
             dataType: 'json',
             processData: false,
-            contentType: false,
+            contentType: 'application/json',
             success: function (data) {
                 callback(data);
             },
