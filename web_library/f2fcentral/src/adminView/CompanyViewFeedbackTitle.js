@@ -281,10 +281,10 @@ class CompanyViewFeedbackTitle extends Component {
                   fontStyle: 'italic'
               }} onClick={that.toggleExpanded}>{that.handleBlockedThread()}{that.getIconForFeedbackType()}&nbsp; {(!this.state.expanded && this.props.title.length > 20) ? this.props.title.substring(0, 20) + "..." : this.props.title}
                   <div className={style.spacingstyle}>
-                      <div align="left" style={{fontSize: 10}}>sent on {dateText}</div>
-                      <div align="left" style={{fontSize: 10, color: '#169BDD'}}>Status: {this.handleFeedbackStatus()}
+                      <div align="left" style={{fontSize: 10, color: '#000000', fontStyle: 'normal', fontWeight: 'normal'}}>sent on {dateText}</div>
+                      <div align="left" style={{fontSize: 10, color: '#000000', fontStyle: 'normal', fontWeight: 'normal'}}>Status: {this.handleFeedbackStatus()}
                       </div>
-                      <div align="left" style={{fontSize: 10, color: '#000000'}}>Forum activity:
+                      <div align="left" style={{fontSize: 10, color: '#000000', fontStyle: 'normal', fontWeight: 'normal'}}>Forum activity:
                           <FaThumbsOUp size={20} color={'black'} padding={10}/>
                           <span className={style.counts}>{this.props.likes}</span>
                           <FaThumbsODown size={20} color={'black'} padding={10}/>

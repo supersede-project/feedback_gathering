@@ -294,9 +294,9 @@ class FeedbackTitle extends Component {
                 <div className={style.spacingstyle}>
                     <div align="left" style={{fontSize: 10, fontStyle: 'normal', fontWeight: 'normal'}}>sent
                         on {dateText}</div>
-                    <div align="left" style={{fontSize: 10, color: '#169BDD', fontStyle: 'normal'}}>
+                    <div align="left" style={{fontSize: 10, color: '#000000', fontStyle: 'normal', fontWeight: 'normal'}}>
                         Status: {this.handleFeedbackStatus()}</div>
-                    <div align="left" style={{fontSize: 10, color: '#000000', fontStyle: 'normal'}}>Forum activity:
+                    <div align="left" style={{fontSize: 10, color: '#000000', fontStyle: 'normal', fontWeight: 'normal'}}>Forum activity:
                         <FaThumbsOUp size={20} color={'black'} padding={10}/>
                         <span className={style.counts}>{this.props.likes}</span>
                         <FaThumbsODown size={20} color={'black'} padding={10}/>

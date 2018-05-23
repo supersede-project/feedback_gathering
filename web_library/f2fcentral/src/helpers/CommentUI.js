@@ -139,7 +139,7 @@ class CommentUI extends Component {
     getDeleteButton(commentId) {
         var that = this;
         if (window.adminUser) {
-            return (<button className={style.formbutton1} type="button" onClick={(e) => that.deleteComment(e)}>
+            return (<button className={style.formbuttons1} type="button" onClick={(e) => that.deleteComment(e)}>
                 Delete</button>);
         }
     }
@@ -217,10 +217,12 @@ class CommentUI extends Component {
             createCommentContent = <div className="createCommentContainer">
             <textarea value={this.state.formValue} rows="10" cols="80" onChange={this.handleTextAreaChange}
                       placeholder="Insert your comment..."></textarea>
+                <div>
                 <button className={style.formbuttons1} type="button" onClick={(e) => this.addComment(e)}>Submit comment
                 </button>
                 &nbsp;
                 <button className={style.formbuttons1} type="button" onClick={this.backButtonPressed}>Back</button>
+                </div>
             </div>
         }
 
@@ -259,7 +261,7 @@ class CommentUI extends Component {
                                     </p>
                                     <button className={style.formbuttons1} type="button"
                                             onClick={(e) => that.setReplyCommentId(e, comment.id)}>Reply
-                                    </button>
+                                    </button>&nbsp;
                                     {that.getDeleteButton(comment.id)}
 
                                     {that.renderChildren(comment)}
