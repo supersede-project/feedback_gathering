@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 
 import TiInfoOutline from 'react-icons/lib/ti/info-outline';
-import FaWechat from 'react-icons/lib/fa/wechat';
 import FaLightbulbO from 'react-icons/lib/fa/lightbulb-o';
 import TiInfoLargeOutline from 'react-icons/lib/ti/info-large-outline';
 import {Widget, addResponseMessage, addUserMessage, toggleWidget} from 'react-chat-widget';
@@ -11,6 +10,8 @@ import MdEmail from 'react-icons/lib/md/email';
 import TiGroup from 'react-icons/lib/ti/group';
 import FaThumbsOUp from 'react-icons/lib/fa/thumbs-o-up';
 import FaThumbsODown from 'react-icons/lib/fa/thumbs-o-down';
+import TiMessage from 'react-icons/lib/ti/message';
+import TiMessages from 'react-icons/lib/ti/messages';
 
 import style from '../css/App.css';
 
@@ -138,7 +139,7 @@ class FeedbackTitle extends Component {
             return <MdEmail size={35} color='black' onClick={this.changeMailSetting}/>;
         }
         if (this.state.feedbackSetting.feedbackQueryChannel === "Email") {
-            return <MdEmail size={35} color='green' onClick={this.changeMailSetting}/>;
+            return <MdEmail size={35} color='#006CEF' onClick={this.changeMailSetting}/>;
         }
         else {
             return <MdEmail size={35} color='black' onClick={this.changeMailSetting}/>;
@@ -282,7 +283,7 @@ class FeedbackTitle extends Component {
         return (<div style={{
             display: "flex",
             justifyContent: "space-around",
-            background: 'linear-gradient(to top, #dfe9f3 0%, white 100%)'
+            background: '#FFFFFF'
         }}>
             <h5 align="left" style={{
                 flexGrow: 2,
@@ -295,12 +296,12 @@ class FeedbackTitle extends Component {
                         on {dateText}</div>
                     <div align="left" style={{fontSize: 10, color: '#169BDD', fontStyle: 'normal'}}>
                         Status: {this.handleFeedbackStatus()}</div>
-                    <div align="left" style={{fontSize: 10, color: '#169BDD', fontStyle: 'normal'}}>Forum activity:
+                    <div align="left" style={{fontSize: 10, color: '#000000', fontStyle: 'normal'}}>Forum activity:
                         <FaThumbsOUp size={20} color={'black'} padding={10}/>
                         <span className={style.counts}>{this.props.likes}</span>
                         <FaThumbsODown size={20} color={'black'} padding={10}/>
                         <span className={style.counts}>{this.props.dislikes}</span>
-                        <FaWechat size={20} color={'#63C050'} padding={10}/>
+                        <TiMessages size={20} color={'#006CEF'} padding={10}/>
                         <span className={style.counts}>{this.props.commentnumber}</span>
                     </div>
                 </div>
@@ -314,7 +315,7 @@ class FeedbackTitle extends Component {
                 {this.handleMailIcon()}
 
                 <div>
-                    <FaWechat align="left" color={'#63C050'} style={{flexGrow: "1"}} onClick={this.handleShowChat}
+                    <TiMessage align="left" color={'#006CEF'} style={{flexGrow: "1"}} onClick={this.handleShowChat}
                               size={35}/>
                     <span>{this.handleUnreadChat()}</span>
                 </div>

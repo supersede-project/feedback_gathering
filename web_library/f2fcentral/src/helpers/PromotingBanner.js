@@ -45,7 +45,7 @@ class PromotingBanner extends Component {
                 <div className={style.promotingbanner}
                      style={{
                          position: this.props.positioning,
-                         background: 'linear-gradient(to bottom, lightgrey 0%, #CCCCCC 1%, #e0e0e0 26%, #d9d9d9 48%, #bfbfbf 75%, #b3b3b3 100%)'
+                         background: ' #e6e6e6'
                      }}>
                     {this.state.data.map(function (item, index) {
                         if (item.promote === true) {
@@ -69,7 +69,7 @@ class PromotingBanner extends Component {
                 <div className={style.promotingbanner}
                      style={{
                          position: this.props.positioning,
-                         background: 'linear-gradient(to bottom, lightgrey 0%, lightgrey 1%, #e0e0e0 26%, #efefef 48%, #d9d9d9 75%, #bcbcbc 100%)'
+                         background: ' #e6e6e6'
                      }}>
                     <p onClick={that.toggleMessage} style={{color: 'red', fontStyle: 'oblique', fontSize: 10}}>Check out the forum for more details</p>
                 </div>

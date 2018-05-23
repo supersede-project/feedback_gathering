@@ -284,7 +284,7 @@ class CompanyViewFeedbackTitle extends Component {
                       <div align="left" style={{fontSize: 10}}>sent on {dateText}</div>
                       <div align="left" style={{fontSize: 10, color: '#169BDD'}}>Status: {this.handleFeedbackStatus()}
                       </div>
-                      <div align="left" style={{fontSize: 10, color: '#169BDD'}}>Forum activity:
+                      <div align="left" style={{fontSize: 10, color: '#000000'}}>Forum activity:
                           <FaThumbsOUp size={20} color={'black'} padding={10}/>
                           <span className={style.counts}>{this.props.likes}</span>
                           <FaThumbsODown size={20} color={'black'} padding={10}/>

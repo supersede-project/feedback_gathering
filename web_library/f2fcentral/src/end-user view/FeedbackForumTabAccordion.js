@@ -360,9 +360,7 @@ class FeedbackForumTabAccordion extends Component {
                             return (
                                 <AccordionItem className={style.reactsanfonaitem} titleTag="span"
                                                title={accordionItemTitle}>
-                                    {/*<div>
-                                    <ForumBody status="WIP" date={item.createdAt} onShowCommentChange={instance.handleShowCommentChange} index={index}/>
-                                </div>*/}
+
                                 </AccordionItem>
                             )
                         }

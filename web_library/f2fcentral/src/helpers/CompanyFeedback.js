@@ -65,7 +65,7 @@ class CompanyFeedback extends Component {
     render()
     {
         return (
-            <div style={{display: "flex", justifyContent: "space-around", background: 'linear-gradient(to bottom, #e6f9ff 0%, #ccf3ff 50%, #b3edff 52%, #99e7ff 100%)'}}>
+            <div style={{display: "flex", justifyContent: "space-around", background: '#FFFCDB'}}>
                 <h5 align="left" style={{
                     flexGrow: 2,
                     fontSize: 12,

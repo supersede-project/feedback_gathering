@@ -3,7 +3,7 @@ import React, {Component} from 'react';
 import TiInfoOutline from 'react-icons/lib/ti/info-outline';
 import FaThumbsOUp from 'react-icons/lib/fa/thumbs-o-up';
 import FaThumbsODown from 'react-icons/lib/fa/thumbs-o-down';
-import FaWechat from 'react-icons/lib/fa/wechat';
+import TiMessages from 'react-icons/lib/ti/messages';
 import FaLightbulbO from 'react-icons/lib/fa/lightbulb-o';
 import TiInfoLargeOutline from 'react-icons/lib/ti/info-large-outline';
 import TiTag from 'react-icons/lib/ti/tag';
@@ -142,7 +142,7 @@ class ForumTitle extends Component {
         let toRender = null;
 
          if (!this.props.unread) {
-            return (<div style={{display: "flex", justifyContent: "space-around", background: 'linear-gradient(to bottom, #ffffff 0%, #ffffff 50%, #ffffe6 52%, #ffffe6 100%)'}}>
+            return (<div style={{display: "flex", justifyContent: "space-around", background: 'FFFFF'}}>
                 <h5 align="left" style={{
                     flexGrow: 2,
                     fontSize: 12,
@@ -152,7 +152,7 @@ class ForumTitle extends Component {
                 </h5>
                 <div className={style.forumIconContainer}>
                     <div className={style.bundledIcon}>
-                        <FaWechat align="left" size={35} style={{flexGrow: "1"}} color={'#63C050'}
+                        <TiMessages align="left" size={35} style={{flexGrow: "1"}} color={'#006CEF'}
                                   onClick={this.handleShowCommentChange}/>
                         <span className={style.thumbsCount}>{this.state.comment}</span>
                     </div>
@@ -184,7 +184,7 @@ class ForumTitle extends Component {
                     </div></h5>
                 <div className={style.forumIconContainer}>
                     <div className={style.bundledIcon}>
-                        <FaWechat align="left" size={35} style={{flexGrow: "1"}} color={'#63C050'}
+                        <TiMessages align="left" size={35} style={{flexGrow: "1"}} color={'#006CEF'}
                                   onClick={this.handleShowCommentChange}/>
                         <span className={style.thumbsCount}>{this.state.comment}</span>
                     </div>
@@ -203,7 +203,7 @@ class ForumTitle extends Component {
         }
         else {
 
-            return (<div style={{display: "flex", justifyContent: "space-around", background: 'linear-gradient(to bottom, #ffffff 0%, #f2f8ff 20%, #e6f2ff 52%, #cce5ff 100%)'}}>
+            return (<div style={{display: "flex", justifyContent: "space-around", background: '#EFF6FC'}}>
                 <h5 align="left" style={{
                     flexGrow: 2,
                     fontSize: 12,
@@ -213,7 +213,7 @@ class ForumTitle extends Component {
                 </h5>
                 <div className={style.forumIconContainer}>
                     <div className={style.bundledIcon}>
-                        <FaWechat align="left" size={35} style={{flexGrow: "1"}} color={'#63C050'}
+                        <TiMessages align="left" size={35} style={{flexGrow: "1"}} color={'#006CEF'}
                                   onClick={this.handleShowCommentChange}/>
                         <span className={style.thumbsCount}>{this.state.comment}</span>
                     </div>
