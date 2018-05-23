@@ -69,7 +69,7 @@ class PromotingBanner extends Component {
                 <div className={style.promotingbanner}
                      style={{
                          position: this.props.positioning,
-                         background: ' #e6e6e6'
+                         background: '#e6e6e6'
                      }}>
                     <p onClick={that.toggleMessage} style={{color: 'red', fontStyle: 'oblique', fontSize: 10}}>Check out the forum for more details</p>
                 </div>

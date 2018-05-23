@@ -113,7 +113,7 @@ class CompanyViewFeedbackTitle extends Component {
                   blocked: true
               })
           }).then(result => this.props.update());
-          that.setState({backgroundcolor: 'linear-gradient(-180deg, rgba(255,255,255,0.50) 0%, rgba(0,0,0,0.50) 100%)'});
+          that.setState({backgroundcolor: '#ffffff'});
           e.stopPropagation();
       }
       else if(this.props.blocked === true){
@@ -127,7 +127,7 @@ class CompanyViewFeedbackTitle extends Component {
                   blocked: false
               })
           }).then(result => this.props.update());
-          that.setState({backgroundcolor: 'linear-gradient(to top, #e6e9f0 0%, #eef1f5 100%)'});
+          that.setState({backgroundcolor: '#e6e6e6'});
           e.stopPropagation();
       }
   }
@@ -147,10 +147,10 @@ class CompanyViewFeedbackTitle extends Component {
 
       handleBackgroundColor(){
         if(this.props.blocked === false){
-            this.setState({backgroundcolor: 'linear-gradient(to top, #e6e9f0 0%, #eef1f5 100%)'});
+            this.setState({backgroundcolor: '#FFFFFF'});
         }
         else if(this.props.blocked === true){
-            this.setState({backgroundcolor: 'linear-gradient(-180deg, rgba(255,255,255,0.50) 0%, rgba(0,0,0,0.50) 100%)'});
+            this.setState({backgroundcolor: '#E6E6E6'});
         }
       }
 
@@ -275,7 +275,7 @@ class CompanyViewFeedbackTitle extends Component {
       }
       dateText = new Intl.DateTimeFormat('de-DE', options).format(tmpDate);
 
-          return (<div style={{display: "flex", justifyContent: "space-around", background: '#FFFFFF'
+          return (<div style={{display: "flex", justifyContent: "space-around", background: this.state.backgroundcolor
           }}>
               <h5 align="left" style={{
                   flexGrow: 2,

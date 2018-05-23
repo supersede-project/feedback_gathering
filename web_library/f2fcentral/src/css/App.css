@@ -288,7 +288,7 @@ button {
   border: 1px solid #333333;
   padding: 3px 7px;
  /* background-image: linear-gradient(180deg, #009933,  #00e64d);*/
-  background-color: #009933;
+  background-color: #46B29D;
   fontSize: 8px;
   line-height: 200%;
 }
@@ -298,7 +298,7 @@ button {
   border: 1px solid #333333;
   padding: 3px 7px;
 /*  background-image: linear-gradient(180deg, #ff884d, #ffbb99);*/
-  background-color: #ff884d;
+  background-color: #E37B40;
   fontSize: 8px;
   line-height: 200%;
 }
@@ -308,7 +308,7 @@ button {
   border: 1px solid #333333;
   padding: 3px 7px;
 /*  background-image: linear-gradient(180deg, #b3003b, #ff1a66);*/
-  background-color: #ff1a66;
+  background-color: #DE5B49;
   fontSize: 8px;
   line-height: 200%;
 }
@@ -318,7 +318,7 @@ button {
   border: 1px solid #333333;
   padding: 3px 7px;
  /* background-image: linear-gradient(180deg, #1a8cff,  #99ccff);*/
-  background-color: #1a8cff;
+  background-color: #F0CA4D;
   fontSize: 8px;
   line-height: 200%;
 }
@@ -327,7 +327,7 @@ button {
   color: black;
   border: 1px solid #333333;
   padding: 3px 7px;
-  background-image: linear-gradient(180deg, #fff, #ddd 40%, #ccc);
+  background-color: #324D5C;
   fontSize: 8px;
   line-height: 200%;
 }

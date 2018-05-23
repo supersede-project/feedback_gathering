@@ -110,7 +110,7 @@ render() {
   var that = this;
   if(!that.state.showChat && that.state.data.length > 0 && !that.state.showModal && !that.state.showDropzone && !that.state.showComment) {
       that.state.data.reverse();
-      
+
     toRender = <Accordion>
       {that.state.data.map(function (item, index) {
         if(item.textFeedbacks.length > 0 && item.categoryFeedbacks.length > 0)
