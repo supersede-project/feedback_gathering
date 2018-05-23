@@ -308,12 +308,8 @@ class FeedbackTitle extends Component {
             </h5>
             {showChat}
             <div className={style.iconContainer}>
-
                 {this.handleVisibility()}
-
-
                 {this.handleMailIcon()}
-
                 <div>
                     <TiMessage align="left" color={'#006CEF'} style={{flexGrow: "1"}} onClick={this.handleShowChat}
                               size={35}/>

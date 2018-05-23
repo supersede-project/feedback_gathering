@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 
 import TiInfoOutline from 'react-icons/lib/ti/info-outline';
-import FaWechat from 'react-icons/lib/fa/wechat';
 import FaLightbulbO from 'react-icons/lib/fa/lightbulb-o';
 import TiInfoLargeOutline from 'react-icons/lib/ti/info-large-outline';
 import FaThumbsOUp from 'react-icons/lib/fa/thumbs-o-up';
@@ -12,6 +11,8 @@ import TiTag from 'react-icons/lib/ti/tag';
 import TiGroup from 'react-icons/lib/ti/group';
 import MdEmail from 'react-icons/lib/md/email';
 import MdPublish from 'react-icons/lib/md/publish';
+import TiMessage from 'react-icons/lib/ti/message';
+import TiMessages from 'react-icons/lib/ti/messages';
 
 import style from '../css/App.css';
 
@@ -274,12 +275,14 @@ class CompanyViewFeedbackTitle extends Component {
       }
       dateText = new Intl.DateTimeFormat('de-DE', options).format(tmpDate);
 
-          return (<div style={{display: "flex", justifyContent: "space-around", background: this.state.backgroundcolor}}>
+          return (<div style={{display: "flex", justifyContent: "space-around", background: '#FFFFFF'
+          }}>
               <h5 align="left" style={{
                   flexGrow: 2,
                   fontSize: 12,
                   fontStyle: 'italic'
-              }} onClick={that.toggleExpanded}>{that.handleBlockedThread()}{that.getIconForFeedbackType()}&nbsp; {(!this.state.expanded && this.props.title.length > 20) ? this.props.title.substring(0, 20) + "..." : this.props.title}
+              }}
+                  onClick={that.toggleExpanded}>{that.handleBlockedThread()}{that.getIconForFeedbackType()}&nbsp; {(!this.state.expanded && this.props.title.length > 20) ? this.props.title.substring(0, 20) + "..." : this.props.title}
                   <div className={style.spacingstyle}>
                       <div align="left" style={{fontSize: 10, color: '#000000', fontStyle: 'normal', fontWeight: 'normal'}}>sent on {dateText}</div>
                       <div align="left" style={{fontSize: 10, color: '#000000', fontStyle: 'normal', fontWeight: 'normal'}}>Status: {this.handleFeedbackStatus()}
@@ -289,20 +292,19 @@ class CompanyViewFeedbackTitle extends Component {
                           <span className={style.counts}>{this.props.likes}</span>
                           <FaThumbsODown size={20} color={'black'} padding={10}/>
                           <span className={style.counts}>{this.props.dislikes}</span>
-                          <FaWechat size={20} color={'#63C050'} padding={10} onClick={this.handleShowComment}/>
+                          <TiMessages size={20} color={'#006CEF'} padding={10} onClick={this.handleShowComment}/>
                           <span className={style.counts}>{this.props.commentnumber}</span>
                       </div>
                   </div>
               </h5>
 
-              <div className="companyIconContainer">
+              <div className={style.iconContainer}>
                   {that.handleVisibility()}
                   <MdPublish className={style.counts} size={20} padding={10}
                              visibility={this.state.visiblePublishedIcon} onClick={this.publishFeedback}/>
                   {that.handleMailIcon()}
-                  <FaWechat align="left" size={35} color={'#63C050'} style={{flexGrow: "1"}}
+                  <TiMessage align="left" size={35} color={'#006CEF'} style={{flexGrow: "1"}}
                             onClick={this.handleShowChat}/>
-
               </div>
           </div>);
 
