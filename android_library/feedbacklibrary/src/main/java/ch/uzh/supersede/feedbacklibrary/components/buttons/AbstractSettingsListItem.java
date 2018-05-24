@@ -3,6 +3,7 @@ package ch.uzh.supersede.feedbacklibrary.components.buttons;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutCompat;
@@ -14,8 +15,10 @@ import android.widget.TextView;
 
 import ch.uzh.supersede.feedbacklibrary.R;
 import ch.uzh.supersede.feedbacklibrary.activities.FeedbackDetailsActivity;
+import ch.uzh.supersede.feedbacklibrary.beans.LocalConfigurationBean;
 import ch.uzh.supersede.feedbacklibrary.beans.LocalFeedbackBean;
 import ch.uzh.supersede.feedbacklibrary.stubs.RepositoryStub;
+import ch.uzh.supersede.feedbacklibrary.utils.ColorUtility;
 import ch.uzh.supersede.feedbacklibrary.utils.DateUtility;
 import ch.uzh.supersede.feedbacklibrary.utils.NumberUtility;
 
@@ -24,12 +27,11 @@ import static ch.uzh.supersede.feedbacklibrary.utils.Constants.EXTRA_KEY_FEEDBAC
 public abstract class AbstractSettingsListItem extends LinearLayout {
     public static final int PADDING = 10;
     private LocalFeedbackBean feedbackBean;
-    private Drawable coloredBackground;
     private LinearLayout upperWrapperLayout;
     private LinearLayout lowerWrapperLayout;
     private TextView dateView;
     private TextView titleView;
-    private int textColor;
+    private Integer[] colors;
 
     public LocalFeedbackBean getFeedbackBean() {
         return feedbackBean;
@@ -49,25 +51,18 @@ public abstract class AbstractSettingsListItem extends LinearLayout {
         return lowerWrapperLayout;
     }
 
-    public Drawable getColoredBackground() {
-        return coloredBackground;
-    }
-
     public TextView getDateView() {
         return dateView;
-    }
-
-    public int getTextColor() {
-        return textColor;
     }
 
     public TextView getTitleView() {
         return titleView;
     }
 
-    public AbstractSettingsListItem(Context context, int visibleTiles, LocalFeedbackBean feedbackBean) {
+    public AbstractSettingsListItem(Context context, int visibleTiles, LocalFeedbackBean feedbackBean, LocalConfigurationBean configuration, int backgroundColor) {
         super(context);
         this.feedbackBean = feedbackBean;
+        this.colors = configuration.getTopColors();
 
         DisplayMetrics displayMetrics = new DisplayMetrics();
         ((Activity) getContext()).getWindowManager()
@@ -83,17 +78,23 @@ public abstract class AbstractSettingsListItem extends LinearLayout {
         setOrientation(VERTICAL);
         LinearLayoutCompat.LayoutParams longParams = new LinearLayoutCompat.LayoutParams(screenWidth, partHeight / 2);
         shortParams = new LinearLayoutCompat.LayoutParams(innerLayoutWidth / 2, partHeight / 2);
-        coloredBackground = ContextCompat.getDrawable(context, R.drawable.dark_blue_square);
-        textColor = ContextCompat.getColor(context, R.color.white);
+
+        int textColor;
+        if (ColorUtility.isDark(backgroundColor)) {
+            textColor = ContextCompat.getColor(context, R.color.white);
+        } else {
+            textColor = ContextCompat.getColor(context, R.color.black);
+        }
+
         upperWrapperLayout = createWrapperLayout(longParams, context, HORIZONTAL);
         lowerWrapperLayout = createWrapperLayout(longParams, context, HORIZONTAL);
-
-        titleView = createTextView(getShortParams(), context, feedbackBean.getTitle(), Gravity.START, getColoredBackground(), PADDING, getTextColor());
-        dateView = createTextView(shortParams, context, context.getString(R.string.list_date, DateUtility.getDateFromLong(feedbackBean.getCreationDate())), Gravity.END, coloredBackground, PADDING,
-                textColor);
+        titleView = createTextView(shortParams, context, feedbackBean.getTitle(), Gravity.START, PADDING, textColor);
+        dateView = createTextView(shortParams, context, context.getString(R.string.list_date, DateUtility.getDateFromLong(feedbackBean.getCreationDate())), Gravity.END, PADDING, textColor);
+        int statusColor = ColorUtility.adjustColorToBackground(backgroundColor, feedbackBean.getFeedbackStatus().getColor(), 0.4);
         TextView statusView = createTextView(shortParams, context, feedbackBean.getFeedbackStatus().getLabel(),
-                Gravity.START, coloredBackground, PADDING, feedbackBean.getFeedbackStatus().getColor());
+                Gravity.START, PADDING, statusColor);
 
+        setBackgroundColor(backgroundColor);
         lowerWrapperLayout.addView(statusView);
 
         setOnLongClickListener(new OnLongClickListener() {
@@ -120,14 +121,21 @@ public abstract class AbstractSettingsListItem extends LinearLayout {
         return linearLayout;
     }
 
-    protected TextView createTextView(LinearLayoutCompat.LayoutParams layoutParams, Context context, String text, int gravity, Drawable background, int padding, int textColor) {
+    private TextView createTextView(LinearLayoutCompat.LayoutParams layoutParams, Context context, String text, int gravity, int padding, int textColor) {
         TextView textView = new TextView(context);
         textView.setLayoutParams(layoutParams);
         textView.setText(text);
         textView.setGravity(gravity);
-        textView.setBackground(background);
         textView.setPadding(padding, padding, padding, padding);
         textView.setTextColor(textColor);
         return textView;
+    }
+
+
+    protected int getForegroundColor() {
+        if (colors != null && colors.length > 1) {
+            return colors[1];
+        }
+        return Color.BLACK;
     }
 }

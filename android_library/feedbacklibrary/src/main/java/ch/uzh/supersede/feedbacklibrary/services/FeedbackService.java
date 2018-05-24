@@ -15,16 +15,14 @@ import java.util.Map;
 
 import ch.uzh.supersede.feedbacklibrary.BuildConfig;
 import ch.uzh.supersede.feedbacklibrary.R;
-import ch.uzh.supersede.feedbacklibrary.activities.AbstractBaseActivity;
 import ch.uzh.supersede.feedbacklibrary.api.IFeedbackAPI;
 import ch.uzh.supersede.feedbacklibrary.beans.ConfigurationRequestBean;
 import ch.uzh.supersede.feedbacklibrary.beans.FeedbackBean;
 import ch.uzh.supersede.feedbacklibrary.beans.FeedbackDetailsBean;
 import ch.uzh.supersede.feedbacklibrary.beans.LocalFeedbackBean;
 import ch.uzh.supersede.feedbacklibrary.components.buttons.AbstractSettingsListItem;
-import ch.uzh.supersede.feedbacklibrary.components.buttons.FeedbackListItem;
-import ch.uzh.supersede.feedbacklibrary.components.buttons.SubscriptionsListItem;
-import ch.uzh.supersede.feedbacklibrary.components.buttons.VotesListItem;
+import ch.uzh.supersede.feedbacklibrary.components.buttons.SubscriptionListItem;
+import ch.uzh.supersede.feedbacklibrary.components.buttons.VoteListItem;
 import ch.uzh.supersede.feedbacklibrary.configurations.ConfigurationItem;
 import ch.uzh.supersede.feedbacklibrary.configurations.OrchestratorConfigurationItem;
 import ch.uzh.supersede.feedbacklibrary.database.FeedbackDatabase;
@@ -258,27 +256,17 @@ public abstract class FeedbackService {
 
         @Override
         public void getMineFeedbackVotes(IFeedbackServiceEventListener callback, Activity activity) {
-            ArrayList<AbstractSettingsListItem> feedbackList = new ArrayList<>();
-            for (LocalFeedbackBean feedback : FeedbackDatabase.getInstance(activity).getFeedbackBeans(VOTED)) {
-                feedbackList.add(new VotesListItem(activity, 8, feedback));
-            }
-            callback.onEventCompleted(GET_MINE_FEEDBACK_VOTES, feedbackList);
+            callback.onEventCompleted(GET_MINE_FEEDBACK_VOTES, FeedbackDatabase.getInstance(activity).getFeedbackBeans(VOTED));
         }
 
         @Override
         public void getOthersFeedbackVotes(IFeedbackServiceEventListener callback, Activity activity) {
-            List<LocalFeedbackBean> feedbackBeans = FeedbackDatabase.getInstance(activity).getFeedbackBeans(OWN);
-
-            callback.onEventCompleted(GET_OTHERS_FEEDBACK_VOTES, feedbackBeans);
+            callback.onEventCompleted(GET_OTHERS_FEEDBACK_VOTES, FeedbackDatabase.getInstance(activity).getFeedbackBeans(OWN));
         }
 
         @Override
         public void getFeedbackSettings(IFeedbackServiceEventListener callback, Activity activity) {
-            ArrayList<AbstractSettingsListItem> feedbackList = new ArrayList<>();
-            for (LocalFeedbackBean feedback : FeedbackDatabase.getInstance(activity).getFeedbackBeans(SUBSCRIBED)) {
-                feedbackList.add(new SubscriptionsListItem(activity, 8, feedback));
-            }
-            callback.onEventCompleted(GET_FEEDBACK_SETTINGS, feedbackList);
+            callback.onEventCompleted(GET_FEEDBACK_SETTINGS, FeedbackDatabase.getInstance(activity).getFeedbackBeans(SUBSCRIBED));
         }
 
         @Override

@@ -44,18 +44,18 @@ public abstract class AbstractBaseActivity extends AppCompatActivity {
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         screenHeight = displayMetrics.heightPixels;
         screenWidth = displayMetrics.widthPixels;
-        configuration = (LocalConfigurationBean)getIntent().getSerializableExtra(EXTRA_KEY_APPLICATION_CONFIGURATION);
+        configuration = (LocalConfigurationBean) getIntent().getSerializableExtra(EXTRA_KEY_APPLICATION_CONFIGURATION);
     }
 
-    protected void onPostCreate(){
-        invokeNullSafe(getSupportActionBar(),"hide",null);
+    protected void onPostCreate() {
+        invokeNullSafe(getSupportActionBar(), "hide", null);
     }
 
-    public void onButtonClicked(View view){
-        Toast.makeText(getApplicationContext(),"Button Clicked.",Toast.LENGTH_SHORT).show();
+    public void onButtonClicked(View view) {
+        Toast.makeText(getApplicationContext(), "Button Clicked.", Toast.LENGTH_SHORT).show();
     }
 
-    protected <T extends Activity> void  startActivity(T startActivity, Class<?> activityToStart ){
+    protected <T extends Activity> void startActivity(T startActivity, Class<?> activityToStart) {
         Intent intent = new Intent(startActivity.getApplicationContext(), activityToStart);
         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
         handOverConfigurationToIntent(intent);
@@ -63,47 +63,47 @@ public abstract class AbstractBaseActivity extends AppCompatActivity {
         startActivity.overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
     }
 
-    protected Object invokeNullSafe(Object o, String methodName, Object valueIfNull, Object... params){
-        if (o==null){
+    protected Object invokeNullSafe(Object o, String methodName, Object valueIfNull, Object... params) {
+        if (o == null) {
             return valueIfNull;
         }
-        Class[] paramClasses = new Class[params!=null?params.length:0];
-        for (int p = 0; p < (params!=null?params.length:0); p++){
-            paramClasses[p]=params[p].getClass();
+        Class[] paramClasses = new Class[params != null ? params.length : 0];
+        for (int p = 0; p < (params != null ? params.length : 0); p++) {
+            paramClasses[p] = params[p].getClass();
         }
         Object returnObject = null;
         try {
-            Method method = (params==null?o.getClass().getMethod(methodName):o.getClass().getMethod(methodName,paramClasses));
-            if (method==null){
+            Method method = (params == null ? o.getClass().getMethod(methodName) : o.getClass().getMethod(methodName, paramClasses));
+            if (method == null) {
                 return valueIfNull;
             }
             returnObject = method.invoke(o, params);
-        } catch (SecurityException | NoSuchMethodException | IllegalAccessException |InvocationTargetException e) {
-            Log.e("invokeNullSafe",e.getMessage());
+        } catch (SecurityException | NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+            Log.e("invokeNullSafe", e.getMessage());
         }
-        return ObjectUtility.nvl(returnObject,valueIfNull);
+        return ObjectUtility.nvl(returnObject, valueIfNull);
     }
 
-    protected void handOverConfigurationToIntent(Intent intent){
+    protected void handOverConfigurationToIntent(Intent intent) {
         Serializable configuration = getIntent().getSerializableExtra(EXTRA_KEY_APPLICATION_CONFIGURATION);
-        intent.putExtra(EXTRA_KEY_APPLICATION_CONFIGURATION,configuration);
+        intent.putExtra(EXTRA_KEY_APPLICATION_CONFIGURATION, configuration);
     }
 
     public LocalConfigurationBean getConfiguration() {
         return configuration;
     }
 
-    protected int getTopColor(int colorIndex){
+    protected int getTopColor(int colorIndex) {
         if (configuration.getTopColors().length >= colorIndex) {
-           return ObjectUtility.nvl(configuration.getTopColors()[colorIndex],0);
+            return ObjectUtility.nvl(configuration.getTopColors()[colorIndex], 0);
         }
         return 0;
     }
 
-    protected void colorViews(int colorIndex, View... views){
+    protected void colorViews(int colorIndex, View... views) {
         if (configuration.getTopColors().length >= colorIndex) {
             Integer color = configuration.getTopColors()[colorIndex];
-            for (View v : color != null?views:new View[0]) {
+            for (View v : color != null ? views : new View[0]) {
                 if (v instanceof TextView && ColorUtility.isDark(color)) {
                     ((TextView) v).setTextColor(ContextCompat.getColor(this, R.color.white));
                 } else if (v instanceof TextView) {

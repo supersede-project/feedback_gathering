@@ -1,8 +1,10 @@
 package ch.uzh.supersede.feedbacklibrary.activities;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
@@ -12,11 +14,16 @@ import java.util.List;
 
 import ch.uzh.supersede.feedbacklibrary.BuildConfig;
 import ch.uzh.supersede.feedbacklibrary.R;
+import ch.uzh.supersede.feedbacklibrary.beans.LocalFeedbackBean;
 import ch.uzh.supersede.feedbacklibrary.components.buttons.AbstractSettingsListItem;
+import ch.uzh.supersede.feedbacklibrary.components.buttons.SubscriptionListItem;
+import ch.uzh.supersede.feedbacklibrary.components.buttons.VoteListItem;
+import ch.uzh.supersede.feedbacklibrary.database.FeedbackDatabase;
 import ch.uzh.supersede.feedbacklibrary.services.FeedbackService;
 import ch.uzh.supersede.feedbacklibrary.services.IFeedbackServiceEventListener;
 
-import static ch.uzh.supersede.feedbacklibrary.utils.Enums.*;
+import static ch.uzh.supersede.feedbacklibrary.utils.Enums.FETCH_MODE.VOTED;
+import static ch.uzh.supersede.feedbacklibrary.utils.Enums.SETTINGS_VIEW;
 import static ch.uzh.supersede.feedbacklibrary.utils.Enums.SETTINGS_VIEW.*;
 
 
@@ -30,6 +37,8 @@ public class FeedbackSettingsActivity extends AbstractBaseActivity implements IF
     private Button othersButton;
     private Button settingsButton;
 
+    private LinearLayout focusSink;
+
     private ArrayList<AbstractSettingsListItem> myFeedbackList = new ArrayList<>();
     private ArrayList<AbstractSettingsListItem> othersFeedbackList = new ArrayList<>();
     private ArrayList<AbstractSettingsListItem> settingsFeedbackList = new ArrayList<>();
@@ -40,10 +49,21 @@ public class FeedbackSettingsActivity extends AbstractBaseActivity implements IF
         setContentView(R.layout.activity_feedback_settings);
 
         scrollListLayout = getView(R.id.settings_layout_scroll, LinearLayout.class);
+        focusSink = getView(R.id.list_edit_focus_sink, LinearLayout.class);
 
         myButton = setOnClickListener(getView(R.id.settings_button_mine, Button.class));
         othersButton = setOnClickListener(getView(R.id.settings_button_others, Button.class));
         settingsButton = setOnClickListener(getView(R.id.settings_button_settings, Button.class));
+
+
+        colorShape(0, myButton, othersButton, settingsButton);
+        colorShape(1, myButton);
+        colorViews(1,
+                getView(R.id.settings_layout_color_1, LinearLayout.class),
+                getView(R.id.settings_layout_color_2, LinearLayout.class),
+                getView(R.id.settings_layout_color_3, LinearLayout.class),
+                getView(R.id.settings_layout_color_4, LinearLayout.class));
+
         onPostCreate();
     }
 
@@ -58,15 +78,26 @@ public class FeedbackSettingsActivity extends AbstractBaseActivity implements IF
     @SuppressWarnings("unchecked")
     public void onEventCompleted(EventType eventType, Object response) {
         if (BuildConfig.DEBUG) {
+
+            ArrayList<AbstractSettingsListItem> feedbackList = new ArrayList<>();
             switch (eventType) {
                 case GET_MINE_FEEDBACK_VOTES:
-                    myFeedbackList = (ArrayList<AbstractSettingsListItem>) response;
+                    myFeedbackList.clear();
+                    for (LocalFeedbackBean bean : (ArrayList<LocalFeedbackBean>) response) {
+                        myFeedbackList.add(new VoteListItem(this, 8, bean, configuration, getTopColor(0)));
+                    }
                     break;
                 case GET_OTHERS_FEEDBACK_VOTES:
-                    othersFeedbackList = (ArrayList<AbstractSettingsListItem>) response;
+                    othersFeedbackList.clear();
+                    for (LocalFeedbackBean bean : (ArrayList<LocalFeedbackBean>) response) {
+                        othersFeedbackList.add(new VoteListItem(this, 8, bean, configuration, getTopColor(0)));
+                    }
                     break;
                 case GET_FEEDBACK_SETTINGS:
-                    settingsFeedbackList = (ArrayList<AbstractSettingsListItem>) response;
+                    settingsFeedbackList.clear();
+                    for (LocalFeedbackBean bean : (ArrayList<LocalFeedbackBean>) response) {
+                        settingsFeedbackList.add(new SubscriptionListItem(this, 8, bean, configuration, getTopColor(0)));
+                    }
                     break;
                 default:
             }
@@ -102,8 +133,7 @@ public class FeedbackSettingsActivity extends AbstractBaseActivity implements IF
 
     private void toggleButtons(View v) {
         setInactive(myButton, othersButton, settingsButton);
-        v.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.blue_tab));
-        ((Button) v).setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.white));
+        colorShape(1, v);
 
         if (v.getId() == myButton.getId()) {
             load(myFeedbackList);
@@ -114,6 +144,13 @@ public class FeedbackSettingsActivity extends AbstractBaseActivity implements IF
         } else if (v.getId() == settingsButton.getId()) {
             load(settingsFeedbackList);
             currentViewState = SUBSCRIPTIONS;
+        }
+
+        //handle focus and keyboard
+        focusSink.requestFocus();
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (imm != null) {
+            imm.hideSoftInputFromWindow(focusSink.getWindowToken(), 0);
         }
     }
 
@@ -130,10 +167,7 @@ public class FeedbackSettingsActivity extends AbstractBaseActivity implements IF
     }
 
     private void setInactive(Button... buttons) {
-        for (Button b : buttons) {
-            b.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.gray_tab));
-            b.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.indigo));
-        }
+        colorShape(0, buttons);
     }
 
     private void load(List<? extends LinearLayout> currentList) {
