@@ -155,6 +155,7 @@ public class FeedbackActivity extends AbstractBaseActivity implements AudioMecha
         LayoutInflater layoutInflater = LayoutInflater.from(this);
         LinearLayout linearLayout = getView(R.id.supersede_feedbacklibrary_feedback_activity_layout, LinearLayout.class);
 
+        layoutInflater.inflate(R.layout.utility_feedback_button, linearLayout);
         mechanisms = new OrchestratorStub.FeedbackBuilder(this, getApplicationContext(), getResources(), getConfiguration(), linearLayout, layoutInflater)
                 .withRating()
                 .withText()
@@ -163,7 +164,6 @@ public class FeedbackActivity extends AbstractBaseActivity implements AudioMecha
                 .withCategory()
                 .build(mechanismViews).getFeedbackParts();
 
-        layoutInflater.inflate(R.layout.utility_feedback_button, linearLayout);
     }
 
     private void execCreateFeedbackVariant(FeedbackDetailsBean feedbackDetailsBean, List<MultipartBody.Part> multipartFiles) {

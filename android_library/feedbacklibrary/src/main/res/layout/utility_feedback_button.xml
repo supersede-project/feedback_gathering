@@ -20,12 +20,13 @@
 
     <Button
         android:id="@+id/supersede_feedbacklibrary_send_feedback_button"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignParentTop="true"
         android:layout_marginTop="0dp"
-        android:layout_marginRight="3dp"
+        android:layout_marginRight="18dp"
+        android:layout_marginLeft="18dp"
         android:layout_marginBottom="10dp"
         android:padding="8dp"
         android:minWidth="88dp"

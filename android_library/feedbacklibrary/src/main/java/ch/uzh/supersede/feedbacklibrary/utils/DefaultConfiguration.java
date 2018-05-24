@@ -47,12 +47,12 @@ public class DefaultConfiguration implements
     }
 
     @Override
-    public int getConfiguredScreenshotFeedbackOrder() {
+    public int getConfiguredTextFeedbackOrder() {
         return 2;
     }
 
     @Override
-    public int getConfiguredTextFeedbackOrder() {
+    public int getConfiguredScreenshotFeedbackOrder() {
         return 3;
     }
 
