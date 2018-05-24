@@ -6,3 +6,13 @@ This CSS, and the Bootstrap CSS library (in 'External Resources'), are not requi
 select.form-control {
     width: 70%;
 }
+
+select.placeholder {
+    font-size: x-small;
+}
+
+.Select-placeholder,
+.Select div,
+.Select--single > .Select-control .Select-value{
+    font-size: 8px;
+}

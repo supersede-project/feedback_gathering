@@ -288,7 +288,7 @@ class FeedbackTitle extends Component {
             <h5 align="left" style={{
                 flexGrow: 2,
                 fontSize: 12,
-                fontStyle: 'italic'
+                fontStyle: 'normal'
             }}
                 onClick={this.toggleExpanded}>{this.getIconForFeedbackType()}&nbsp; {(!this.state.expanded && this.props.title.length > 30) ? this.props.title.substring(0, 30) + "..." : this.props.title}
                 <div className={style.spacingstyle}>

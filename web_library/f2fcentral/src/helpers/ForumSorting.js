@@ -27,6 +27,7 @@ class ForumSorting extends Component {
 
     render() {
         return (
+
             <Select
                 name="form-field-name"
                 value={this.state.selectedOption.value}

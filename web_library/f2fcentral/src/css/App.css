@@ -238,7 +238,7 @@ button {
 .counts {
   position: relative;
   top: -7px;
-  left: 1px;
+  left: -1px;
   background: white;
   color: black;
   padding: 0 4px;
@@ -406,6 +406,24 @@ button {
   padding-bottom: 3px;
 }
 
+.Select-placeholder,
+.Select--single > .Select-control .Select-value {
+  bottom: 0;
+  color: #aaa;
+  left: 0;
+  line-height: 34px;
+  padding-left: 10px;
+  padding-right: 10px;
+  position: absolute;
+  right: 0;
+  top: 0;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 10px;
+}
+
 .reactsanfonaitem:last-child{
   border-bottom: none;
 }
@@ -417,14 +435,15 @@ button {
 }
 
 .react-tabs__tab {
-  display: inline-block;
-  border: 1px solid transparent;
+  display: inline-table;
+  border: 1px solid #006CEF;
   border-bottom: none;
-  bottom: -1px;
+  bottom: 0px;
   position: relative;
   list-style: none;
-  padding: 6px 12px;
+  padding: 12px 12px;
   cursor: pointer;
+
 }
 
 .react-tabs__tab--selected {
@@ -442,7 +461,7 @@ button {
 .react-tabs__tab:focus {
   box-shadow: 0 0 5px hsl(208, 99%, 50%);
   border-color: hsl(208, 99%, 50%);
-  outline: none;
+  outline: 2px solid #006CEF;
 }
 
 .react-tabs__tab:focus:after {

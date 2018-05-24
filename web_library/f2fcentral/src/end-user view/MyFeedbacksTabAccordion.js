@@ -105,7 +105,7 @@ class MyFeedbacksTabAccordion extends Component {
               <div>
               <p>No Elements to show</p>
                 <div>
-                  <PromotingBanner positioning="absolute"/>
+                  <PromotingBanner className={style.reactsanfonaitem} positioning="absolute"/>
                 </div>
               </div>    ;
       }

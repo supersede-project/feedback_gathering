@@ -137,7 +137,7 @@ class CompanyViewFeedbackTitle extends Component {
               return <MdEmail size={35} color='black'/>;
         }
           if(this.state.feedbackSetting.feedbackQueryChannel === "Email"){
-              return <MdEmail size={35} color='green'/>;
+              return <MdEmail size={35} color='#006CEF'/>;
           }
           else {
               return <MdEmail size={35} color='black'/>;
@@ -280,7 +280,7 @@ class CompanyViewFeedbackTitle extends Component {
               <h5 align="left" style={{
                   flexGrow: 2,
                   fontSize: 12,
-                  fontStyle: 'italic'
+                  fontStyle: 'normal'
               }}
                   onClick={that.toggleExpanded}>{that.handleBlockedThread()}{that.getIconForFeedbackType()}&nbsp; {(!this.state.expanded && this.props.title.length > 20) ? this.props.title.substring(0, 20) + "..." : this.props.title}
                   <div className={style.spacingstyle}>
