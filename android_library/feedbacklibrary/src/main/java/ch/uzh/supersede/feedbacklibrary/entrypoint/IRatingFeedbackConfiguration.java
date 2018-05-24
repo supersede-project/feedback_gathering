@@ -4,7 +4,11 @@ import ch.uzh.supersede.feedbacklibrary.utils.ValueCheck;
 
 @ValueCheck("(getConfiguredRatingFeedbackMaxValue() > 0)" +
         "&& (getConfiguredRatingFeedbackDefaultValue() <= getConfiguredRatingFeedbackMaxValue())")
-public interface IRatingFeedbackConfiguration extends IRatingFeedbackSimpleConfiguration{
+public interface IRatingFeedbackConfiguration{
+    /** Setting this to -1 will disable Rating Feedback.
+     * @return Sorting-Order of this Feedback
+     */
+    int getConfiguredRatingFeedbackOrder();
     /**
      * Set the title for the rating feedback.
      *

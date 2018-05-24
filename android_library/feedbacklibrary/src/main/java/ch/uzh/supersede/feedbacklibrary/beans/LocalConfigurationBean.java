@@ -36,7 +36,6 @@ public class LocalConfigurationBean implements Serializable {
     private String textLabel;
     private int textMaxLength;
     private int textMinLength;
-    private int titleOrder;
     // IFeedbackSettings
     private int minUserNameLength;
     private int maxUserNameLength;
@@ -49,6 +48,7 @@ public class LocalConfigurationBean implements Serializable {
     private String hostApplicationId;
     private Long hostApplicationLongId;
     private Integer[] topColors;
+    private boolean coloringVertical;
 
     private LocalConfigurationBean() {
     }
@@ -84,78 +84,60 @@ public class LocalConfigurationBean implements Serializable {
     }
 
     private void readConfiguration(IFeedbackConfiguration configuration) {
-        if (configuration instanceof IAudioFeedbackSimpleConfiguration) {
-            if (configuration instanceof IAudioFeedbackConfiguration) {
+        if (configuration instanceof ISimpleFeedbackConfiguration){
+            ISimpleFeedbackConfiguration simpleFeedbackConfiguration = (ISimpleFeedbackConfiguration) configuration;
+            this.audioOrder = simpleFeedbackConfiguration.getConfiguredAudioFeedbackOrder();
+            this.audioMaxTime = DefaultConfiguration.getInstance().getConfiguredAudioFeedbackMaxTime();
+            this.labelOrder = simpleFeedbackConfiguration.getConfiguredLabelFeedbackOrder();
+            this.labelMaxCount = DefaultConfiguration.getInstance().getConfiguredLabelFeedbackMaxCount();
+            this.labelMinCount = DefaultConfiguration.getInstance().getConfiguredLabelFeedbackMinCount();
+            this.ratingOrder = simpleFeedbackConfiguration.getConfiguredRatingFeedbackOrder();
+            this.ratingTitle = DefaultConfiguration.getInstance().getConfiguredRatingFeedbackTitle();
+            this.ratingIcon = DefaultConfiguration.getInstance().getConfiguredRatingFeedbackIcon();
+            this.ratingMaxValue = DefaultConfiguration.getInstance().getConfiguredRatingFeedbackMaxValue();
+            this.ratingDefaultValue = DefaultConfiguration.getInstance().getConfiguredRatingFeedbackDefaultValue();
+            this.screenshotOrder = simpleFeedbackConfiguration.getConfiguredScreenshotFeedbackOrder();
+            this.screenshotIsEditable = DefaultConfiguration.getInstance().getConfiguredScreenshotFeedbackIsEditable();
+            this.textOrder = simpleFeedbackConfiguration.getConfiguredTextFeedbackOrder();
+            this.textHint = DefaultConfiguration.getInstance().getConfiguredTextFeedbackHint();
+            this.textLabel = DefaultConfiguration.getInstance().getConfiguredTextFeedbackLabel();
+            this.textMaxLength = DefaultConfiguration.getInstance().getConfiguredTextFeedbackMaxLength();
+            this.textMinLength = DefaultConfiguration.getInstance().getConfiguredTextFeedbackMinLength();
+        }
+        if (configuration instanceof IAudioFeedbackConfiguration) {
                 IAudioFeedbackConfiguration audioConfiguration = (IAudioFeedbackConfiguration) configuration;
                 this.audioOrder = audioConfiguration.getConfiguredAudioFeedbackOrder();
                 this.audioMaxTime = audioConfiguration.getConfiguredAudioFeedbackMaxTime();
-            } else {
-                IAudioFeedbackSimpleConfiguration audioConfiguration = (IAudioFeedbackSimpleConfiguration) configuration;
-                this.audioOrder = audioConfiguration.getConfiguredAudioFeedbackOrder();
-                this.audioMaxTime = DefaultConfiguration.getInstance().getConfiguredAudioFeedbackMaxTime();
-            }
-        } else if (configuration instanceof ILabelFeedbackSimpleConfiguration) {
-            if (configuration instanceof ILabelFeedbackConfiguration) {
+        }
+        if (configuration instanceof ILabelFeedbackConfiguration) {
                 ILabelFeedbackConfiguration labelConfiguration = (ILabelFeedbackConfiguration) configuration;
                 this.labelOrder = labelConfiguration.getConfiguredLabelFeedbackOrder();
                 this.labelMaxCount = labelConfiguration.getConfiguredLabelFeedbackMaxCount();
                 this.labelMinCount = labelConfiguration.getConfiguredLabelFeedbackMinCount();
-            } else {
-                ILabelFeedbackSimpleConfiguration labelConfiguration = (ILabelFeedbackSimpleConfiguration) configuration;
-                this.labelOrder = labelConfiguration.getConfiguredLabelFeedbackOrder();
-                this.labelMaxCount = DefaultConfiguration.getInstance().getConfiguredLabelFeedbackMaxCount();
-                this.labelMinCount = DefaultConfiguration.getInstance().getConfiguredLabelFeedbackMinCount();
-            }
-        } else if (configuration instanceof IRatingFeedbackSimpleConfiguration) {
-            if (configuration instanceof IRatingFeedbackConfiguration) {
+        }
+        if (configuration instanceof IRatingFeedbackConfiguration) {
                 IRatingFeedbackConfiguration ratingConfiguration = (IRatingFeedbackConfiguration) configuration;
                 this.ratingOrder = ratingConfiguration.getConfiguredRatingFeedbackOrder();
                 this.ratingTitle = ratingConfiguration.getConfiguredRatingFeedbackTitle();
                 this.ratingIcon = ratingConfiguration.getConfiguredRatingFeedbackIcon();
                 this.ratingMaxValue = ratingConfiguration.getConfiguredRatingFeedbackMaxValue();
                 this.ratingDefaultValue = ratingConfiguration.getConfiguredRatingFeedbackDefaultValue();
-            } else {
-                IRatingFeedbackSimpleConfiguration ratingConfiguration = (IRatingFeedbackSimpleConfiguration) configuration;
-                this.ratingOrder = ratingConfiguration.getConfiguredRatingFeedbackOrder();
-                this.ratingTitle = DefaultConfiguration.getInstance().getConfiguredRatingFeedbackTitle();
-                this.ratingIcon = DefaultConfiguration.getInstance().getConfiguredRatingFeedbackIcon();
-                this.ratingMaxValue = DefaultConfiguration.getInstance().getConfiguredRatingFeedbackMaxValue();
-                this.ratingDefaultValue = DefaultConfiguration.getInstance().getConfiguredRatingFeedbackDefaultValue();
-            }
-        } else if (configuration instanceof IScreenshotFeedbackSimpleConfiguration) {
-            if (configuration instanceof IScreenshotFeedbackConfiguration) {
+        }
+        if (configuration instanceof IScreenshotFeedbackConfiguration) {
                 IScreenshotFeedbackConfiguration screenshotConfiguration = (IScreenshotFeedbackConfiguration) configuration;
                 this.screenshotOrder = screenshotConfiguration.getConfiguredScreenshotFeedbackOrder();
                 this.screenshotIsEditable = screenshotConfiguration.getConfiguredScreenshotFeedbackIsEditable();
-            } else {
-                IScreenshotFeedbackSimpleConfiguration screenshotConfiguration = (IScreenshotFeedbackSimpleConfiguration) configuration;
-                this.screenshotOrder = screenshotConfiguration.getConfiguredScreenshotFeedbackOrder();
-                this.screenshotIsEditable = DefaultConfiguration.getInstance().getConfiguredScreenshotFeedbackIsEditable();
-            }
-        } else if (configuration instanceof ITextFeedbackSimpleConfiguration) {
-            if (configuration instanceof ITextFeedbackConfiguration) {
+        }
+        if (configuration instanceof ITextFeedbackConfiguration) {
                 ITextFeedbackConfiguration textConfiguration = (ITextFeedbackConfiguration) configuration;
                 this.textOrder = textConfiguration.getConfiguredTextFeedbackOrder();
                 this.textHint = textConfiguration.getConfiguredTextFeedbackHint();
                 this.textLabel = textConfiguration.getConfiguredTextFeedbackLabel();
                 this.textMaxLength = textConfiguration.getConfiguredTextFeedbackMaxLength();
                 this.textMinLength = textConfiguration.getConfiguredTextFeedbackMinLength();
-            } else {
-                ITextFeedbackSimpleConfiguration textConfiguration = (ITextFeedbackSimpleConfiguration) configuration;
-                this.textOrder = textConfiguration.getConfiguredTextFeedbackOrder();
-                this.textHint = DefaultConfiguration.getInstance().getConfiguredTextFeedbackHint();
-                this.textLabel = DefaultConfiguration.getInstance().getConfiguredTextFeedbackLabel();
-                this.textMaxLength = DefaultConfiguration.getInstance().getConfiguredTextFeedbackMaxLength();
-                this.textMinLength = DefaultConfiguration.getInstance().getConfiguredTextFeedbackMinLength();
-            }
-        } else if (configuration instanceof ITitleFeedbackSimpleConfiguration) {
-            if (configuration instanceof ITitleFeedbackConfiguration) {
-                ITitleFeedbackConfiguration titleConfiguration = (ITitleFeedbackConfiguration) configuration;
-                this.titleOrder = titleConfiguration.getConfiguredTitleFeedbackOrder();
-            } else {
-                ITitleFeedbackSimpleConfiguration titleConfiguration = (ITitleFeedbackSimpleConfiguration) configuration;
-                this.titleOrder = titleConfiguration.getConfiguredTitleFeedbackOrder();
-            }
+        }
+        if (configuration instanceof ITitleFeedbackConfiguration) {
+                //TODO
         }
     }
 
@@ -169,13 +151,44 @@ public class LocalConfigurationBean implements Serializable {
 
     private void readConfiguration(IFeedbackStyle configuration) {
         this.style = configuration.getConfiguredFeedbackStyle();
+        coloringVertical =true;
         if (style == DARK) {
             topColors = new Integer[]{
                     ANTHRAZIT_DARK, GRAY_DARK
             };
-        } else if (style == BRIGHT) {
+        } else if (style == LIGHT) {
             topColors = new Integer[]{
                     GRAY, SILVER
+            };
+        } else if (style == SWITZERLAND) {
+            topColors = new Integer[]{
+                    WHITE, SWISS_RED
+            };
+        } else if (style == GERMANY) {
+            topColors = new Integer[]{
+                    BLACK, GERMANY_RED, GERMANY_GOLD
+            };
+        } else if (style == AUSTRIA) {
+            topColors = new Integer[]{
+                    AUSTRIA_RED, WHITE, AUSTRIA_RED
+            };
+        } else if (style == FRANCE) {
+            coloringVertical = false;
+            topColors = new Integer[]{
+                    FRANCE_BLUE, WHITE, FRANCE_RED
+            };
+        } else if (style == ITALY) {
+            coloringVertical = false;
+            topColors = new Integer[]{
+                    ITALY_GREEN, WHITE, ITALY_RED
+            };
+        } else if (style == YUGOSLAVIA) {
+            topColors = new Integer[]{
+                    YUGOSLAVIA_BLUE, WHITE, YUGOSLAVIA_RED
+            };
+        } else if (style == WINDOWS95) {
+            topColors = new Integer[]{
+                    WIN95_GRAY,WIN95_BLUE
             };
         }
     }
@@ -278,10 +291,6 @@ public class LocalConfigurationBean implements Serializable {
         return textMinLength;
     }
 
-    public int getTitleOrder() {
-        return titleOrder;
-    }
-
     public int getMinUserNameLength() {
         return minUserNameLength;
     }
@@ -316,5 +325,9 @@ public class LocalConfigurationBean implements Serializable {
 
     public Integer[] getTopColors() {
         return topColors;
+    }
+
+    public boolean isColoringVertical() {
+        return coloringVertical;
     }
 }

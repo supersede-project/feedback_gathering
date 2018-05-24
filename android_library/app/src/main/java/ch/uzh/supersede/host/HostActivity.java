@@ -15,12 +15,7 @@ public class HostActivity extends AbstractBaseActivity implements
         IFeedbackStyle,
         IFeedbackSettings,
         IFeedbackDeveloper,
-        IAudioFeedbackSimpleConfiguration,
-        ILabelFeedbackSimpleConfiguration,
-        IRatingFeedbackSimpleConfiguration,
-        IScreenshotFeedbackSimpleConfiguration,
-        ITextFeedbackSimpleConfiguration,
-        ITitleFeedbackSimpleConfiguration {
+        ISimpleFeedbackConfiguration{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,11 +68,6 @@ public class HostActivity extends AbstractBaseActivity implements
         return DefaultConfiguration.getInstance().getConfiguredRatingFeedbackOrder();
     }
 
-    @Override
-    public int getConfiguredTitleFeedbackOrder() {
-        return DefaultConfiguration.getInstance().getConfiguredTitleFeedbackOrder();
-    }
-
     //Feedback Settings
     @Override
     public int getConfiguredMinUserNameLength() {
@@ -114,6 +104,6 @@ public class HostActivity extends AbstractBaseActivity implements
 
     @Override
     public FEEDBACK_STYLE getConfiguredFeedbackStyle() {
-        return FEEDBACK_STYLE.ADAPTIVE;
+        return FEEDBACK_STYLE.LIGHT;
     }
 }

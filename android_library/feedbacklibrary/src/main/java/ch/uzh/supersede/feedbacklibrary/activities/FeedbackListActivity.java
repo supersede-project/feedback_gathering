@@ -131,7 +131,6 @@ public class FeedbackListActivity extends AbstractBaseActivity {
     private void toggleButtons(View v) {
         setInactive(myButton, topButton, hotButton, newButton);
         colorShape(1,v);
-        ((Button) v).setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.white));
         if (v.getId() == myButton.getId()) {
             loadMyFeedback();
         } else if (v.getId() == topButton.getId()) {

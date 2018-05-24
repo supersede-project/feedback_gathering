@@ -34,6 +34,32 @@ public class DefaultConfiguration implements
         return defaultConfiguration;
     }
 
+    //ORDERS
+
+    @Override
+    public int getConfiguredLabelFeedbackOrder() {
+        return -1;
+    }
+
+    @Override
+    public int getConfiguredRatingFeedbackOrder() {
+        return 1;
+    }
+
+    @Override
+    public int getConfiguredScreenshotFeedbackOrder() {
+        return 2;
+    }
+
+    @Override
+    public int getConfiguredTextFeedbackOrder() {
+        return 3;
+    }
+
+    @Override
+    public int getConfiguredAudioFeedbackOrder() {
+        return 4;
+    }
 
     @Override
     public boolean isDeveloper() {
@@ -66,18 +92,8 @@ public class DefaultConfiguration implements
     }
 
     @Override
-    public int getConfiguredAudioFeedbackOrder() {
-        return 5;
-    }
-
-    @Override
     public double getConfiguredAudioFeedbackMaxTime() {
         return 15.0;
-    }
-
-    @Override
-    public int getConfiguredLabelFeedbackOrder() {
-        return 2;
     }
 
     @Override
@@ -88,11 +104,6 @@ public class DefaultConfiguration implements
     @Override
     public int getConfiguredLabelFeedbackMinCount() {
         return 2;
-    }
-
-    @Override
-    public int getConfiguredRatingFeedbackOrder() {
-        return 1;
     }
 
     @Override
@@ -116,18 +127,8 @@ public class DefaultConfiguration implements
     }
 
     @Override
-    public int getConfiguredScreenshotFeedbackOrder() {
-        return 3;
-    }
-
-    @Override
     public boolean getConfiguredScreenshotFeedbackIsEditable() {
         return true;
-    }
-
-    @Override
-    public int getConfiguredTextFeedbackOrder() {
-        return 4;
     }
 
     @Override
@@ -142,17 +143,12 @@ public class DefaultConfiguration implements
 
     @Override
     public int getConfiguredTextFeedbackMaxLength() {
-        return 3;
-    }
-
-    @Override
-    public int getConfiguredTextFeedbackMinLength() {
         return 999;
     }
 
     @Override
-    public int getConfiguredTitleFeedbackOrder() {
-        return 0;
+    public int getConfiguredTextFeedbackMinLength() {
+        return 3;
     }
 
     @Override

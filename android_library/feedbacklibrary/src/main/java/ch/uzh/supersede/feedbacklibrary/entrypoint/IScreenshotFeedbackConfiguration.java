@@ -1,6 +1,10 @@
 package ch.uzh.supersede.feedbacklibrary.entrypoint;
 
-public interface IScreenshotFeedbackConfiguration extends IScreenshotFeedbackSimpleConfiguration {
+public interface IScreenshotFeedbackConfiguration {
+    /** Setting this to -1 will disable Screenshot Feedback.
+     * @return Sorting-Order of this Feedback
+     */
+    int getConfiguredScreenshotFeedbackOrder();
     /**
      * Whether the screenshot shall be editable.
      *

@@ -37,11 +37,7 @@ import ch.uzh.supersede.feedbacklibrary.models.AbstractFeedbackPart;
 import ch.uzh.supersede.feedbacklibrary.services.FeedbackService;
 import ch.uzh.supersede.feedbacklibrary.services.IFeedbackServiceEventListener;
 import ch.uzh.supersede.feedbacklibrary.stubs.OrchestratorStub;
-import ch.uzh.supersede.feedbacklibrary.utils.DialogUtils;
-import ch.uzh.supersede.feedbacklibrary.utils.Enums;
-import ch.uzh.supersede.feedbacklibrary.utils.FeedbackTransformer;
-import ch.uzh.supersede.feedbacklibrary.utils.ImageUtility;
-import ch.uzh.supersede.feedbacklibrary.utils.Utils;
+import ch.uzh.supersede.feedbacklibrary.utils.*;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -122,13 +118,18 @@ public class FeedbackActivity extends AbstractBaseActivity implements AudioMecha
         switch (eventType) {
             case PING_REPOSITORY:
                 FeedbackDetailsBean feedbackBean = prepareSendFeedback();
-                Intent intent = new Intent(this, FeedbackDetailsActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                intent.putExtra(EXTRA_KEY_FEEDBACK_DETAIL_BEAN, feedbackBean);
-                intent.putExtra(EXTRA_KEY_APPLICATION_CONFIGURATION, configuration);
-                this.onBackPressed(); //This serves the purpose of erasing the Feedback Activity from the Back-Button
-                startActivity(intent);
-                overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+                if (VersionUtility.getDateVersion() > 1) {
+                    Intent intent = new Intent(this, FeedbackDetailsActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                    intent.putExtra(EXTRA_KEY_FEEDBACK_DETAIL_BEAN, feedbackBean);
+                    intent.putExtra(EXTRA_KEY_APPLICATION_CONFIGURATION, configuration);
+                    this.onBackPressed(); //This serves the purpose of erasing the Feedback Activity from the Back-Button
+                    startActivity(intent);
+                    overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+                }else{
+                    Toast.makeText(getApplicationContext(),getResources().getString(R.string.feedback_success),Toast.LENGTH_SHORT).show();
+                    onBackPressed();
+                }
                 break;
             case CREATE_FEEDBACK_VARIANT:
                 break;

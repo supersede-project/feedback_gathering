@@ -5,6 +5,7 @@ import com.google.gson.annotations.Expose;
 import java.util.List;
 
 import ch.uzh.supersede.feedbacklibrary.beans.LocalConfigurationBean;
+import ch.uzh.supersede.feedbacklibrary.utils.StringUtility;
 
 public class TextFeedback extends AbstractFeedbackPart {
     private String hint;
@@ -23,8 +24,19 @@ public class TextFeedback extends AbstractFeedbackPart {
     }
 
     @Override
-    public boolean isValid(List<String> errorMessage) {
-        return (getMinLength() < text.length() || text.length() > maxLength);
+    public boolean isValid(List<String> errorMessages) {
+        if (StringUtility.hasText(text)) {
+            if (text.length() < getMinLength()) {
+                errorMessages.add("Feedback-Text too short!");
+            } else if (text.length() > maxLength) {
+                errorMessages.add("Feedback-Text too long!");
+            } else {
+                return true;
+            }
+            return false;
+        }
+        errorMessages.add("Feedback-Text is empty!");
+        return false;
     }
 
     public String getHint() {

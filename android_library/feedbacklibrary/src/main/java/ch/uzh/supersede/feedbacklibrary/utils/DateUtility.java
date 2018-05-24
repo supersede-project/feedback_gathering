@@ -27,12 +27,35 @@ public class DateUtility {
     }
 
     public static String getDateFromLong(long ms) {
+        String year = formatDateNumber(getYear(ms));
+        String month = formatDateNumber(getMonth(ms));
+        String day = formatDateNumber(getDay(ms));
+        return day.concat(".").concat(month).concat(".").concat(year);
+    }
+    public static int getYear(){
+        return getYear(System.currentTimeMillis());
+    }
+    public static int getMonth(){
+        return getMonth(System.currentTimeMillis());
+    }
+    public static int getDay(){
+        return getDay(System.currentTimeMillis());
+    }
+
+    private static int getYear(long ms){
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(ms);
-        String year = formatDateNumber(calendar.get(Calendar.YEAR));
-        String month = formatDateNumber(calendar.get(Calendar.MONTH) + 1);
-        String day = formatDateNumber(calendar.get(Calendar.DAY_OF_MONTH));
-        return day.concat(".").concat(month).concat(".").concat(year);
+        return calendar.get(Calendar.YEAR);
+    }
+    private static int getMonth(long ms){
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(ms);
+        return calendar.get(Calendar.MONTH)+1;
+    }
+    private static int getDay(long ms){
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(ms);
+        return calendar.get(Calendar.DAY_OF_MONTH);
     }
 
     private static String formatDateNumber(int number) {
