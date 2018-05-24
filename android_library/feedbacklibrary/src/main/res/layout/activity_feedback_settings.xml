@@ -26,7 +26,7 @@
                 android:layout_marginRight="5dp"
                 android:layout_marginTop="5dp"
                 android:layout_weight="4"
-                android:background="@drawable/blue_tab"
+                android:background="@drawable/white_tab"
                 android:text="@string/settings_button_mine"
                 android:textColor="@color/white" />
 
@@ -38,7 +38,7 @@
                 android:layout_marginRight="5dp"
                 android:layout_marginTop="5dp"
                 android:layout_weight="4"
-                android:background="@drawable/gray_tab"
+                android:background="@drawable/white_tab"
                 android:text="@string/settings_button_others"
                 android:textColor="@color/indigo" />
 
@@ -50,34 +50,42 @@
                 android:layout_marginRight="5dp"
                 android:layout_marginTop="5dp"
                 android:layout_weight="4"
-                android:background="@drawable/gray_tab"
+                android:background="@drawable/white_tab"
                 android:text="@string/settings_button_subscriptions"
                 android:textColor="@color/indigo" />
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/settings_layout_color_1"
             android:layout_width="fill_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:background="@drawable/blue_square"
             android:orientation="horizontal"
             android:weightSum="1" />
 
         <LinearLayout
+            android:id="@+id/settings_layout_color_2"
             android:layout_width="fill_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:background="@drawable/blue_square"
             android:orientation="horizontal"
             android:weightSum="1" />
 
         <LinearLayout
+            android:id="@+id/settings_layout_color_3"
             android:layout_width="fill_parent"
             android:layout_height="0dp"
             android:layout_weight="40"
-            android:background="@drawable/blue_square"
             android:orientation="horizontal"
             android:weightSum="22">
+
+            <LinearLayout
+                android:id="@+id/list_edit_focus_sink"
+                android:layout_width="0px"
+                android:layout_height="0px"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:orientation="horizontal" />
 
             <Space
                 android:layout_width="0dp"
@@ -105,10 +113,10 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/settings_layout_color_4"
             android:layout_width="fill_parent"
             android:layout_height="0dp"
             android:layout_weight="2"
-            android:background="@drawable/blue_square"
             android:orientation="horizontal"
             android:weightSum="1" />
     </LinearLayout>
