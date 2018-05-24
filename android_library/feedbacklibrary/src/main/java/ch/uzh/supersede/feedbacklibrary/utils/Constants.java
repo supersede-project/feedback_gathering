@@ -72,12 +72,28 @@ public class Constants {
         public static final String PRIMARY_COLOR_STRING = "primaryColorString";
         public static final String SECONDARY_COLOR_STRING = "secondaryColorString";
         public static final String DARK_BLUE = "303F9F";
-        public static final String BLACK = "000000";
-        public static final String WHITE = "FFFFFF";
+        public static final String BLACK_HEX = "000000";
+        public static final String WHITE_HEX = "FFFFFF";
         public static final int ANTHRAZIT_DARK = -11711155;
         public static final int GRAY_DARK = -8947849;
         public static final int GRAY = -4473925;
         public static final int SILVER = -1118482;
+        public static final int BLACK = -16777216;
+        public static final int WHITE = -1;
+        public static final int SWISS_RED = -65536;
+        public static final int YUGOSLAVIA_RED = -2359296;
+        public static final int YUGOSLAVIA_BLUE = -16697197;
+        public static final int ITALY_GREEN = -16739770;
+        public static final int ITALY_RED= -3265737;
+        public static final int GERMANY_RED= -2293760;
+        public static final int GERMANY_GOLD= -12800;
+        public static final int AUSTRIA_RED= -1234631;
+        public static final int FRANCE_BLUE= -16768107;
+        public static final int FRANCE_RED= -1234631;
+        public static final int WIN95_GRAY= -4144960;
+        public static final int WIN95_BLUE= -16777088;
+        public static final int DISABLED_BACKGROUND= -3355444;
+        public static final int DISABLED_FOREGROUND= -8750470;
 
         //FeedbackAcitivity
         public static final String FEEDBACK_ACTIVITY_TAG = "FeedbackActivity";

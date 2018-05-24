@@ -138,4 +138,6 @@
     <string name="settings_button_others">Others</string>
     <string name="settings_button_subscriptions">Subscriptions</string>
     <string name="details_published">Published!</string>
+    <!--Abstract-->
+    <string name="abstract_button_clicked">Button \n\"%1$s\"\n clicked!</string>
 </resources>
