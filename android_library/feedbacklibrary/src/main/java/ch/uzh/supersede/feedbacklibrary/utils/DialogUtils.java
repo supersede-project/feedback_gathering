@@ -20,19 +20,8 @@ import ch.uzh.supersede.feedbacklibrary.activities.FeedbackActivity;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.*;
 
 public class DialogUtils {
-    /**
-     * This method creates a progress dialog.
-     *
-     * @param context              the context
-     * @param title                the title of the dialog
-     * @param cancelOnTouchOutside cancelOnTouchOutside
-     * @return the progress dialog
-     */
-    public static ProgressDialog createProgressDialog(Context context, String title, boolean cancelOnTouchOutside) {
-        ProgressDialog progressDialog = new ProgressDialog(context);
-        progressDialog.setTitle(title);
-        progressDialog.setCanceledOnTouchOutside(cancelOnTouchOutside);
-        return progressDialog;
+
+    private DialogUtils(){
     }
 
     /**
@@ -71,51 +60,6 @@ public class DialogUtils {
                 }
             }
             builder.setMessage(message.toString()).setNegativeButton(getResources().getString(ch.uzh.supersede.feedbacklibrary.R.string.dialog_close), new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int id) {
-                    dialog.dismiss();
-                }
-            });
-            return builder.create();
-        }
-    }
-
-    /**
-     * Dialog asking the user if (s)he wants to give feedback.
-     */
-    public static class PullFeedbackIntermediateDialog extends DialogFragment {
-        public static PullFeedbackIntermediateDialog newInstance(String message, String jsonString, long selectedPullConfigurationIndex, String baseURL, String language) {
-            PullFeedbackIntermediateDialog f = new PullFeedbackIntermediateDialog();
-            Bundle args = new Bundle();
-            args.putString("message", message);
-            args.putString("jsonString", jsonString);
-            args.putLong(SELECTED_PULL_CONFIGURATION_INDEX, selectedPullConfigurationIndex);
-            args.putString(EXTRA_KEY_BASE_URL, baseURL);
-            args.putString(EXTRA_KEY_LANGUAGE, language);
-            f.setArguments(args);
-            return f;
-        }
-
-        @Override
-        public Dialog onCreateDialog(Bundle savedInstanceState) {
-            final Activity associatedActivity = getActivity();
-            AlertDialog.Builder builder = new AlertDialog.Builder(associatedActivity);
-            String message = getArguments().getString("message");
-            final String jsonString = getArguments().getString("jsonString");
-            final long selectedPullConfigurationIndex = getArguments().getLong(SELECTED_PULL_CONFIGURATION_INDEX);
-            final String baseURL = getArguments().getString(EXTRA_KEY_BASE_URL);
-            final String language = getArguments().getString(EXTRA_KEY_LANGUAGE);
-
-            builder.setMessage(message).setPositiveButton(ch.uzh.supersede.feedbacklibrary.R.string.dialog_yes, new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int id) {
-                    Intent intent = new Intent(associatedActivity, FeedbackActivity.class);
-                    intent.putExtra(JSON_CONFIGURATION_STRING, jsonString);
-                    intent.putExtra(IS_PUSH_STRING, false);
-                    intent.putExtra(SELECTED_PULL_CONFIGURATION_INDEX, selectedPullConfigurationIndex);
-                    intent.putExtra(EXTRA_KEY_BASE_URL, baseURL);
-                    intent.putExtra(EXTRA_KEY_LANGUAGE, language);
-                    associatedActivity.startActivity(intent);
-                }
-            }).setNegativeButton(ch.uzh.supersede.feedbacklibrary.R.string.dialog_no, new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int id) {
                     dialog.dismiss();
                 }

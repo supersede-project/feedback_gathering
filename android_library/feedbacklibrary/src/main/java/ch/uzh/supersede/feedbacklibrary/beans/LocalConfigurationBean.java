@@ -154,7 +154,7 @@ public class LocalConfigurationBean implements Serializable {
         coloringVertical =true;
         if (style == DARK) {
             topColors = new Integer[]{
-                    ANTHRAZIT_DARK, GRAY_DARK
+                    ANTHRACITE_DARK, GRAY_DARK
             };
         } else if (style == LIGHT) {
             topColors = new Integer[]{

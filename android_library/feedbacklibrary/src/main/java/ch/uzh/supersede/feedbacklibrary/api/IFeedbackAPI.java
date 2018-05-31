@@ -15,8 +15,7 @@ import retrofit2.http.Part;
 import retrofit2.http.Path;
 
 /**
- * API calls to the feedback orchestrator and feedback repository
- * Orchestrator: baseURL/orchestrator/feedback (http://docs.supersedeorchestratorapi.apiary.io/#reference)
+ * API calls to the feedback repository
  * Repository: baseURL/feedback_repository (http://docs.supersederepositoryapi.apiary.io/#reference)
  */
 public interface IFeedbackAPI {
@@ -31,28 +30,4 @@ public interface IFeedbackAPI {
     @Multipart
     @POST("feedback_repository/{language}/applications/{applicationId}/feedbacks")
     Call<JsonObject> createFeedbackVariant(@Path("language") String language, @Path("applicationId") long applicationId, @Part MultipartBody.Part feedback, @Part List<MultipartBody.Part> files);
-
-    /**
-     * This method retrieves the feedback configuration from the orchestrator.
-     *
-     * @return the configuration from the orchestrator
-     */
-    @GET("orchestrator/feedback/{language}/applications/{applicationId}")
-    Call<OrchestratorConfigurationItem> getConfiguration(@Path("language") String language, @Path("applicationId") long applicationId);
-
-    /**
-     * This method checks it the orchestrator is up and running.
-     *
-     * @return 'pong'
-     */
-    @GET("orchestrator/feedback/ping")
-    Call<ResponseBody> pingOrchestrator();
-
-    /**
-     * This method checks it the repository is up and running.
-     *
-     * @return 'pong'
-     */
-    @GET("feedback_repository/ping")
-    Call<ResponseBody> pingRepository();
 }

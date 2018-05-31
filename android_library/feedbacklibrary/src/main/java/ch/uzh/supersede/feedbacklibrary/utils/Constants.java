@@ -14,13 +14,9 @@ public class Constants {
 
     public static final String SPACE = " ";
     public static final String PATH_DELIMITER = "/";
-    public static final String SUPERSEDE_BASE_URL = "https://platform.supersede.eu:8443/";
+    public static final String SUPERSEDE_BASE_URL = "http://supersede.es.atos.net:8081/"; //"https://platform.supersede.eu:8443/";
 
     public static final String SEPARATOR = "::;;::;;";
-    public static final String IS_PUSH_STRING = "isPush";
-
-    public static final String JSON_CONFIGURATION_STRING = "jsonConfigurationString";
-    public static final String SELECTED_PULL_CONFIGURATION_INDEX = "selectedPullConfigurationIndex";
 
     public static final String EXTRA_KEY_BASE_URL = "baseURL";
     public static final String EXTRA_KEY_LANGUAGE = "language";
@@ -74,7 +70,7 @@ public class Constants {
         public static final String DARK_BLUE = "303F9F";
         public static final String BLACK_HEX = "000000";
         public static final String WHITE_HEX = "FFFFFF";
-        public static final int ANTHRAZIT_DARK = -11711155;
+        public static final int ANTHRACITE_DARK = -11711155;
         public static final int GRAY_DARK = -8947849;
         public static final int GRAY = -4473925;
         public static final int SILVER = -1118482;
@@ -104,7 +100,7 @@ public class Constants {
         }
 
         public static final String FEEDBACK_SERVICE_TAG = "FeedbackService";
-        public static final String CONFIGURATION_REAUEST_WRAPPER_TAG = "ConfigurationRequestWra";
+        public static final String CONFIGURATION_REQUEST_WRAPPER_TAG = "ConfigurationRequestWra";
     }
 
     public static class ModelsConstants {
