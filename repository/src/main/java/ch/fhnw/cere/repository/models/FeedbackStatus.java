@@ -14,7 +14,8 @@ public class FeedbackStatus {
     public FeedbackStatus() {
 
     }
-    public FeedbackStatus(String statusType) {
+    public FeedbackStatus(long id, String statusType) {
+        this.id = id;
         this.statusType = statusType;
     }
 
