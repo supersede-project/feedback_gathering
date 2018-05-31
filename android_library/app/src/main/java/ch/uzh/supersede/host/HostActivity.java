@@ -92,7 +92,7 @@ public class HostActivity extends AbstractBaseActivity implements
 
     @Override
     public boolean isDeveloper() {
-        return true;
+        return false;
     }
     //Feedback Behaviour
 

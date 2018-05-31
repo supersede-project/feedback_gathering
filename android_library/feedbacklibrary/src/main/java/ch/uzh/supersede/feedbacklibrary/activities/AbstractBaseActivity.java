@@ -149,14 +149,40 @@ public abstract class AbstractBaseActivity extends AppCompatActivity {
         if (VersionUtility.getDateVersion() < lockBelowVersion){
             for (int id : viewIds){
                 View view = findViewById(id);
-                if (view != null){
-                    view.setEnabled(false);
-                    view.setClickable(false);
-                    view.setBackgroundColor(DISABLED_BACKGROUND);
-                    if (view instanceof TextView) {
-                        ((TextView) view).setTextColor(DISABLED_FOREGROUND);
-                    }
+                disableViews(view);
+            }
+        }
+    }
+
+    protected void disableViews(View... views) {
+        for (View view : (views != null && views.length>0)?views:new View[0]) {
+            if (view != null) {
+                view.setEnabled(false);
+                view.setClickable(false);
+                view.setBackgroundColor(DISABLED_BACKGROUND);
+                if (view instanceof TextView) {
+                    ((TextView) view).setTextColor(DISABLED_FOREGROUND);
                 }
+            }
+        }
+    }
+
+    protected void enableView(View view, int colorIndex, Boolean... conditionals) {
+        if (conditionals != null && conditionals.length > 0){
+            for (Boolean b : conditionals){
+                if (!b){
+                    return;
+                }
+            }
+        }
+        if (view != null && getColorCount() >= colorIndex){
+            view.setEnabled(true);
+            view.setClickable(true);
+            view.setBackgroundColor(getTopColor(colorIndex));
+            if (view instanceof TextView && ColorUtility.isDark(getTopColor(colorIndex))) {
+                ((TextView) view).setTextColor(ContextCompat.getColor(this, R.color.white));
+            } else if (view instanceof TextView) {
+                ((TextView) view).setTextColor(ContextCompat.getColor(this, R.color.black));
             }
         }
     }

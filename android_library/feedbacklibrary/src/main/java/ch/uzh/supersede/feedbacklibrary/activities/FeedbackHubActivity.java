@@ -4,7 +4,6 @@ package ch.uzh.supersede.feedbacklibrary.activities;
 import android.content.*;
 import android.content.DialogInterface.OnClickListener;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -111,13 +110,20 @@ public class FeedbackHubActivity extends AbstractBaseActivity {
     private void updateUserLevel(boolean ignoreDatabaseCheck) {
         userLevel = PermissionUtility.getUserLevel(getApplicationContext(), ignoreDatabaseCheck);
         levelButton.setText(getResources().getString(R.string.hub_feedback_user_level, userLevel.getLevel()));
-        levelButton.setEnabled(true);
-        settingsButton.setEnabled(false);
-        feedbackButton.setEnabled(false);
-        listButton.setEnabled(false);
+
+        if (getColorCount() == 2){
+            enableView(levelButton,1);
+            disableViews(settingsButton,feedbackButton,listButton);
+        }else if (getColorCount()==3){
+            if (getConfiguration().isColoringVertical()) {
+                enableView(levelButton,0);
+            }else{
+                enableView(levelButton,2);
+            }
+        }
         statusText.setVisibility(View.GONE);
         if (PASSIVE.check(getApplicationContext(),ignoreDatabaseCheck)){
-            listButton.setEnabled(true);
+            enableView(listButton,1,VersionUtility.getDateVersion()>1);
         }
         if (ACTIVE.check(getApplicationContext(),ignoreDatabaseCheck)){
             statusText.setVisibility(View.VISIBLE);
@@ -149,11 +155,21 @@ public class FeedbackHubActivity extends AbstractBaseActivity {
                         .replace(PRIMARY_COLOR_STRING, BLACK_HEX)
                         .replace(SECONDARY_COLOR_STRING,DARK_BLUE)));
             }
-            feedbackButton.setEnabled(true);
-            settingsButton.setEnabled(true);
+            if (getColorCount() == 2){
+                enableView(feedbackButton,1);
+                enableView(settingsButton,1,VersionUtility.getDateVersion()>1);
+            }else if (getColorCount()==3){
+                if (getConfiguration().isColoringVertical()) {
+                    enableView(feedbackButton,2);
+                    enableView(settingsButton,2,VersionUtility.getDateVersion()>1);
+                }else{
+                    enableView(feedbackButton,0);
+                    enableView(settingsButton,2,VersionUtility.getDateVersion()>1);
+                }
+            }
         }
         if (ADVANCED.check(getApplicationContext(),ignoreDatabaseCheck)){
-            levelButton.setEnabled(false);
+            disableViews(levelButton);
         }
     }
 

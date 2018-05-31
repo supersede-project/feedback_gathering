@@ -91,7 +91,7 @@
         &lt;font color="#primaryColorString">Down-Votes&lt;/font>
         &lt;br/>&lt;/b>&lt;font color="#secondaryColorString"> %6$d&lt;/font></string>
     <string name="hub_access_1">Accessing Level 1</string>
-    <string name="hub_access_1_description">Level 1 grants you access to others Feedback and requires Permissions for Internet-Access!</string>
+    <string name="hub_access_1_description">Level 1 grants you access to others Feedback and requires Permissions for Internet-Access!\n\n!Feature unlocked after Release 2!</string>
     <string name="hub_confirm">Confirm</string>
     <string name="hub_access_2">Accessing Level 2</string>
     <string name="hub_access_2_description">Level 2 grants you the ability to create Feedback yourself and requires Storage-Read/Write-Permissions and a User-Name with at least 4 Characters!</string>
