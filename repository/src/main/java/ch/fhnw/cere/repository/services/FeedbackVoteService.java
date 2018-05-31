@@ -1,7 +1,6 @@
 package ch.fhnw.cere.repository.services;
 
 import ch.fhnw.cere.repository.models.FeedbackVote;
-import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
