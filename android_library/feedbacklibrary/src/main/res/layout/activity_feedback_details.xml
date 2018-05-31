@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.ContentFrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical"
+        android:weightSum="60">
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="0dp"
+            android:layout_weight="20"
+            android:orientation="horizontal"
+            android:weightSum="9">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_weight="3"
+                android:orientation="vertical"
+                android:weightSum="9">
+
+                <Button
+                    android:id="@+id/details_button_images"
+                    android:layout_width="fill_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="3"
+                    android:onClick="onButtonClicked"
+                    android:text="@string/details_images" />
+
+                <Button
+                    android:id="@+id/details_button_audio"
+                    android:layout_width="fill_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="3"
+                    android:enabled="false"
+                    android:onClick="onButtonClicked"
+                    android:text="@string/details_audio" />
+
+                <Button
+                    android:id="@+id/details_button_labels"
+                    android:layout_width="fill_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="3"
+                    android:onClick="onButtonClicked"
+                    android:text="@string/details_labels" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_weight="6"
+                android:orientation="vertical"
+                android:weightSum="6">
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="2"
+                    android:orientation="horizontal"
+                    android:weightSum="9">
+
+                    <Space
+                        android:layout_width="0dp"
+                        android:layout_height="fill_parent"
+                        android:layout_weight="2" />
+
+                    <Button
+                        android:id="@+id/details_button_down"
+                        android:layout_width="0dp"
+                        android:layout_height="fill_parent"
+                        android:layout_margin="5dp"
+                        android:layout_weight="2"
+                        android:gravity="center"
+                        android:onClick="onButtonClicked"
+                        android:text="@string/details_minus" />
+
+                    <TextView
+                        android:id="@+id/details_text_votes"
+                        android:layout_width="0dp"
+                        android:layout_height="fill_parent"
+                        android:layout_weight="3"
+                        android:gravity="center" />
+
+                    <Button
+                        android:id="@+id/details_button_up"
+                        android:layout_width="0dp"
+                        android:layout_height="fill_parent"
+                        android:layout_margin="5dp"
+                        android:layout_weight="2"
+                        android:gravity="center"
+                        android:onClick="onButtonClicked"
+                        android:text="@string/details_plus" />
+                </LinearLayout>
+
+                <Button
+                    android:id="@+id/details_button_make_public"
+                    android:layout_width="fill_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:visibility="invisible"
+                    android:onClick="onButtonClicked"
+                    android:text="@string/details_make_public"/>
+
+                <TextView
+                    android:id="@+id/details_text_user"
+                    android:layout_width="fill_parent"
+                    android:layout_height="0dp"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:background="@color/cyanDark"
+                    android:padding="5dp" />
+
+                <TextView
+                    android:id="@+id/details_text_status"
+                    android:layout_width="fill_parent"
+                    android:layout_height="0dp"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:background="@color/cyanDark"
+                    android:padding="5dp" />
+
+                <TextView
+                    android:id="@+id/details_text_title"
+                    android:layout_width="fill_parent"
+                    android:layout_height="0dp"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:background="@color/cyanDark"
+                    android:padding="5dp" />
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="0dp"
+            android:layout_weight="10"
+            android:orientation="horizontal"
+            android:weightSum="9">
+
+            <TextView
+                android:id="@+id/details_text_description"
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_margin="5dp"
+                android:layout_weight="9"
+                android:background="@color/cyanDark"
+                android:padding="5dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="0dp"
+            android:layout_weight="25"
+            android:orientation="horizontal"
+            android:weightSum="30">
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_weight="2" />
+
+            <ScrollView
+                android:id="@+id/details_layout_scroll_container"
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_weight="28">
+
+                <LinearLayout
+                    android:id="@+id/details_layout_scroll_layout"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                </LinearLayout>
+            </ScrollView>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="0dp"
+            android:layout_weight="5"
+            android:orientation="horizontal"
+            android:weightSum="8">
+
+            <Button
+                android:id="@+id/details_button_subscribe"
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_margin="5dp"
+                android:layout_weight="4"
+                android:onClick="onButtonClicked"
+                android:text="@string/details_subscribe" />
+
+            <Button
+                android:id="@+id/details_button_response"
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_margin="5dp"
+                android:layout_weight="4"
+                android:onClick="onButtonClicked"
+                android:text="@string/details_response" />
+        </LinearLayout>
+    </LinearLayout>
+
+</android.support.v7.widget.ContentFrameLayout>

@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.ContentFrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <LinearLayout
+        android:id="@+id/hub_layout_background"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical"
+        android:weightSum="9">
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="0dp"
+            android:orientation="horizontal"
+            android:layout_weight="3"
+            android:weightSum="9">
+
+            <Button
+                android:id="@+id/hub_button_list"
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_weight="3"
+                android:text="@string/hub_feedback_list"
+                android:onClick="onButtonClicked" />
+
+            <TextView
+                android:id="@+id/hub_space_color_top"
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_weight="3"/>
+
+            <Button
+                android:id="@+id/hub_button_user_level"
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_weight="3"
+                android:text="@string/hub_feedback_list"
+                android:onClick="onButtonClicked" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="0dp"
+            android:orientation="horizontal"
+            android:layout_weight="3"
+            android:weightSum="9">
+
+            <TextView
+                android:id="@+id/hub_space_color_left"
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_weight="3"/>
+
+            <TextView
+                android:id="@+id/hub_text_status"
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_weight="3"
+                android:textAlignment="center"
+                android:gravity="center"/>
+
+            <TextView
+                android:id="@+id/hub_space_color_right"
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_weight="3"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="0dp"
+            android:orientation="horizontal"
+            android:layout_weight="3"
+            android:weightSum="9">
+
+            <Button
+                android:id="@+id/hub_button_feedback"
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_weight="3"
+                android:text="@string/hub_feedback_create"
+                android:onClick="onButtonClicked"/>
+
+            <TextView
+                android:id="@+id/hub_space_color_bottom"
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_weight="3"
+                android:onClick="onButtonClicked"/>
+
+            <Button
+                android:id="@+id/hub_button_settings"
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_weight="3"
+                android:text="@string/hub_feedback_settings"
+                android:onClick="onButtonClicked"/>
+        </LinearLayout>
+    </LinearLayout>
+
+</android.support.v7.widget.ContentFrameLayout>

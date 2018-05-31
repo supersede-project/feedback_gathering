@@ -13,20 +13,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import ch.uzh.supersede.feedbacklibrary.R;
-import ch.uzh.supersede.feedbacklibrary.views.ColorPickerView;
+import ch.uzh.supersede.feedbacklibrary.components.views.ColorPickerView;
 
-/**
- * Color picker dialog class
- */
 public class ColorPickerDialog extends DialogFragment {
     OnColorChangeDialogListener mListener;
     private int changedColor;
 
-    /**
-     * This method returns the changed color.
-     *
-     * @return the changed color
-     */
     public int getChangedColor() {
         return changedColor;
     }
@@ -47,11 +39,11 @@ public class ColorPickerDialog extends DialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = getActivity().getLayoutInflater();
         // Inflating the custom layout
-        View view = inflater.inflate(R.layout.color_picker_dialog, null);
+        View view = inflater.inflate(R.layout.utility_color_picker, null);
         LinearLayout linearLayout = (LinearLayout) view;
 
         TextView textView = new TextView(view.getContext());
-        textView.setText(R.string.supersede_feedbacklibrary_chosencolor_string);
+        textView.setText(R.string.image_annotation_chosen_color);
         textView.setTextSize(20F);
         textView.setTypeface(null, Typeface.BOLD);
         textView.setTextColor(changedColor);
@@ -66,15 +58,16 @@ public class ColorPickerDialog extends DialogFragment {
 
         // Setting the view to the custom layout
         builder.setView(linearLayout)
-                .setPositiveButton(getResources().getString(R.string.supersede_feedbacklibrary_ok_string), new DialogInterface.OnClickListener() {
+                .setPositiveButton(getResources().getString(R.string.dialog_ok), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         // The user wants to change the color
                         changedColor = cpv.getChangedColor();
                         mListener.onDialogPositiveClick(ColorPickerDialog.this);
                     }
                 })
-                .setNegativeButton(getResources().getString(R.string.supersede_feedbacklibrary_discard_string), new DialogInterface.OnClickListener() {
+                .setNegativeButton(getResources().getString(R.string.dialog_discard), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
+                        //do nothing
                     }
                 });
         return builder.create();

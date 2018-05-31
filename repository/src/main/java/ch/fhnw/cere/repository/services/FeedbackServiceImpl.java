@@ -39,4 +39,13 @@ public class FeedbackServiceImpl implements FeedbackService {
     public List<Feedback> findByUserIdentification(String userIdentification) {
         return feedbackRepository.findByUserIdentification(userIdentification);
     }
+
+    @Override
+    public long countByUserIdentifictation(String userIdentification) {
+        return feedbackRepository.countByUserIdentification(userIdentification);
+    }
+
+    public List<Feedback> findByIsPublic(boolean isPublic){
+        return feedbackRepository.findByIsPublic(isPublic);
+    }
 }

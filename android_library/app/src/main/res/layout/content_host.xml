@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:showIn="@layout/activity_host">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/host_application_screen_text"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/button_host_feedback"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="onFeedbackClicked"
+            android:text="@string/button_host_feedback"/>
+
+        <Button
+            android:id="@+id/button_host_trigger_1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="onButtonClicked"
+            android:text="@string/button_host_trigger_1"/>
+
+        <Button
+            android:id="@+id/button_host_trigger_2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="onButtonClicked"
+            android:text="@string/button_host_trigger_2"/>
+    </LinearLayout>
+</LinearLayout>

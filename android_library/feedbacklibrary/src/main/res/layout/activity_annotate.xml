@@ -5,8 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/supersede_feedbacklibrary_annotate_image_layout_background_color"
-    tools:context="ch.uzh.supersede.feedbacklibrary.AnnotateImageActivity">
+    android:background="@color/white"
+    tools:context="ch.uzh.supersede.feedbacklibrary.activities.AnnotateImageActivity">
 
     <RelativeLayout
         android:layout_width="wrap_content"
@@ -17,7 +17,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/supersede_feedbacklibrary_annotate_image_layout_background_color"
+            android:background="@color/white"
             android:orientation="horizontal">
             <RelativeLayout
                 android:id="@+id/supersede_feedbacklibrary_annotate_image_layout"
@@ -39,7 +39,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/ic_undo_black_48dp"
-                    android:background="@color/supersede_feedbacklibrary_annotate_image_layout_background_color"
+                    android:background="@color/white"
                     android:layout_marginBottom="8dp"/>
 
                 <ImageButton
@@ -47,7 +47,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/ic_redo_black_48dp"
-                    android:background="@color/supersede_feedbacklibrary_annotate_image_layout_background_color"/>
+                    android:background="@color/white"/>
 
             </LinearLayout>
 
@@ -63,44 +63,33 @@
         android:weightSum="4">
 
         <Button
-            android:id="@+id/aa_favorite_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/favorite"
-            android:layout_weight="0"
-            android:textAllCaps="false"
-            android:background="@drawable/button_selector"
-            android:textColor="@android:color/white"
-            android:layout_margin="4dp"
-            android:drawableStart="@drawable/ic_star_white_24dp"/>
-        <Button
             android:id="@+id/aa_quick_edit_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/quick_edit"
+            android:text="@string/image_annotation_quick_edit"
             android:layout_weight="1"
             android:textAllCaps="false"
-            android:background="@drawable/button_selector"
+            android:background="@drawable/blue_button"
             android:textColor="@android:color/white"
             android:layout_margin="4dp"/>
         <Button
             android:id="@+id/aa_color_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/color"
+            android:text="@string/image_annotation_color"
             android:layout_weight="1"
             android:textAllCaps="false"
-            android:background="@drawable/button_selector"
+            android:background="@drawable/blue_button"
             android:textColor="@android:color/white"
             android:layout_margin="4dp"/>
         <Button
             android:id="@+id/aa_crop_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/crop"
+            android:text="@string/image_annotation_crop"
             android:layout_weight="1"
             android:textAllCaps="false"
-            android:background="@drawable/button_selector"
+            android:background="@drawable/blue_button"
             android:textColor="@android:color/white"
             android:layout_margin="4dp"/>
     </LinearLayout>

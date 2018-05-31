@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.ContentFrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical"
+        android:weightSum="50">
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="0dp"
+            android:layout_weight="5"
+            android:orientation="horizontal"
+            android:weightSum="12">
+
+            <Button
+                android:id="@+id/settings_button_mine"
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="5dp"
+                android:layout_weight="4"
+                android:background="@drawable/white_tab"
+                android:text="@string/settings_button_mine"
+                android:textColor="@color/white" />
+
+            <Button
+                android:id="@+id/settings_button_others"
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="5dp"
+                android:layout_weight="4"
+                android:background="@drawable/white_tab"
+                android:text="@string/settings_button_others"
+                android:textColor="@color/indigo" />
+
+            <Button
+                android:id="@+id/settings_button_settings"
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="5dp"
+                android:layout_weight="4"
+                android:background="@drawable/white_tab"
+                android:text="@string/settings_button_subscriptions"
+                android:textColor="@color/indigo" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/settings_layout_color_1"
+            android:layout_width="fill_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:weightSum="1" />
+
+        <LinearLayout
+            android:id="@+id/settings_layout_color_2"
+            android:layout_width="fill_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:weightSum="1" />
+
+        <LinearLayout
+            android:id="@+id/settings_layout_color_3"
+            android:layout_width="fill_parent"
+            android:layout_height="0dp"
+            android:layout_weight="40"
+            android:orientation="horizontal"
+            android:weightSum="22">
+
+            <LinearLayout
+                android:id="@+id/list_edit_focus_sink"
+                android:layout_width="0px"
+                android:layout_height="0px"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:orientation="horizontal" />
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_weight="1" />
+
+            <ScrollView
+                android:id="@+id/settings_view_scroll"
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_weight="20">
+
+                <LinearLayout
+                    android:id="@+id/settings_layout_scroll"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical" />
+            </ScrollView>
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_weight="1" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/settings_layout_color_4"
+            android:layout_width="fill_parent"
+            android:layout_height="0dp"
+            android:layout_weight="2"
+            android:orientation="horizontal"
+            android:weightSum="1" />
+    </LinearLayout>
+
+
+</android.support.v7.widget.ContentFrameLayout>

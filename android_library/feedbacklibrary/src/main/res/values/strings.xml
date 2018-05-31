@@ -1,112 +1,143 @@
 <resources>
     <!-- Activity names -->
-    <string name="supersede_feedbacklibrary_feedback_library_name">Feedback Library</string>
-    <string name="supersede_feedbacklibrary_feedback_activity_name">Feedback</string>
-    <string name="supersede_feedbacklibrary_annotate_image_activity_name">Annotate Image</string>
+    <string name="feedback_library">Feedback Library</string>
+    <string name="annotate_image_activity">Annotate Image</string>
+
+    <!-- Feedback Activity -->
+    <string name="feedback_check_network_state">Check network state</string>
+    <string name="feedback_send_confirmation">By sending the feedback, you agree with the terms and conditions.</string>
+    <string name="feedback_send">Send feedback</string>
+    <string name="feedback_success">Your feedback was successfully sent. Thank you!</string>
+    <string name="feedback_title">Feedback title at the current time of %1$d milliseconds</string>
+    <string name="feedback_text_warning">"Text cannot be longer than %1$d characters"</string>
 
     <!-- Audio mechanism -->
-    <string name="supersede_feedbacklibrary_audio_default_current_duration">0:00</string>
-    <string name="supersede_feedbacklibrary_audio_default_total_duration">0:00/-</string>
-    <string name="supersede_feedbacklibrary_audio_record_indicator">RECORDING!</string>
-    <string name="supersede_feedbacklibrary_audio_maximum_length_text">Maximum %1$d seconds can be recorded</string>
-    <string name="supersede_feedbacklibrary_audio_maximum_length_reached_text">"Recording stopped because the limit of %1$d seconds is reached"</string>
-    <string name="supersede_feedbacklibrary_audio_stopped_recording_text">Stopped recording</string>
+    <string name="audio_hint">Express your feedback with a short audio message</string>
+    <string name="audio_default_current_duration">0:00</string>
+    <string name="audio_default_total_duration">0:00/-</string>
+    <string name="audio_record_indicator">RECORDING!</string>
+    <string name="audio_maximum_length_reached_text">"Recording stopped because the limit of %1$d seconds is reached"</string>
+    <string name="audio_stopped_recording_text">Stopped recording</string>
 
     <!-- Category mechanism -->
-    <string name="supersede_feedbacklibrary_single_option_dialog_title">Please select an option</string>
-    <string name="supersede_feedbacklibrary_multiple_options_dialog_title">Please select one or multiple options</string>
-    <string name="supersede_feedbacklibrary_other_option_string">Other</string>
-    <string name="supersede_feedbacklibrary_other_options_string">Others</string>
-    <string name="supersede_feedbacklibrary_own_category_dialog_label">Category</string>
-    <string name="supersede_feedbacklibrary_own_category_dialog_hint">Please enter your own category</string>
+    <string name="category_single_option">Please select an option</string>
+    <string name="category_multiple_options">Please select one or multiple options</string>
+    <string name="category_other_option">Other</string>
+    <string name="category_other_options">Others</string>
+    <string name="category_own_category">Category</string>
+    <string name="category_own_category_hint">Please enter your own category</string>
+
+    <!-- Screenshot Mechanism -->
+    <string name="screenshot_choose">Choose from library</string>
+    <string name="screenshot_select">Select an image</string>
+    <string name="screenshot_add">Add</string>
+    <string name="screenshot_edit">Edit</string>
+    <string name="screenshot_remove">Remove</string>
 
     <!-- Image annotation-->
-    <string name="supersede_feedbacklibrary_colorpickerbutton_text">Color Picker</string>
-    <string name="supersede_feedbacklibrary_blurbutton_text">Blur</string>
-    <string name="supersede_feedbacklibrary_unblurbutton_text">Unblur</string>
-    <string name="supersede_feedbacklibrary_fillbutton_text">Fill</string>
-    <string name="supersede_feedbacklibrary_strokebutton_text">Stroke</string>
-    <string name="supersede_feedbacklibrary_blackbutton_text">Black</string>
-    <string name="supersede_feedbacklibrary_colorbutton_text">Color</string>
-    <string name="supersede_feedbacklibrary_finishannotation_title">Finish annotation</string>
-    <string name="supersede_feedbacklibrary_cancelannotation_title">Cancel annotation</string>
-    <string name="supersede_feedbacklibrary_chosencolor_string">Chosen color</string>
-    <string name="supersede_feedbacklibrary_photo_capture_text">Take a photo</string>
-    <string name="supersede_feedbacklibrary_library_chooser_text">Choose from library</string>
-    <string name="supersede_feedbacklibrary_image_selection_dialog_title">Select an image</string>
-    <string name="supersede_feedbacklibrary_crop_string">Crop</string>
-    <string name="supersede_feedbacklibrary_sticker_dialog_title">Express your sentiment</string>
-    <string name="supersede_feedbacklibrary_sticker_dialog_smiley_title">Smiley</string>
-    <string name="supersede_feedbacklibrary_sticker_dialog_thumb_up_title">Thumb up</string>
-    <string name="supersede_feedbacklibrary_sticker_dialog_thumb_down_title">Thumb down</string>
-    <string name="supersede_feedbacklibrary_sticker_dialog_dissatisfied_title">Dissatisfied</string>
-    <string name="supersede_feedbacklibrary_sticker_dialog_neutral_title">Neutral</string>
-    <string name="supersede_feedbacklibrary_sticker_dialog_satisfied_title">Satisfied</string>
-    <string name="supersede_feedbacklibrary_text_annotation_dialog_label">Text annotation</string>
-    <string name="supersede_feedbacklibrary_text_annotation_dialog_hint">Please enter your text annotation</string>
-    <string name="supersede_feedbacklibrary_text_processing_dialog">Please wait. Processing image</string>
-    <string name="short_audio_message">Express your feedback with a short audio message</string>
-    <string name="favorite">Favorite</string>
-    <string name="quick_edit">Quick edit</string>
-    <string name="color">Color</string>
-    <string name="crop">Crop</string>
+    <string name="image_annotation_color_picker">Color Picker</string>
+    <string name="image_annotation_blur">Blur</string>
+    <string name="image_annotation_normal_mode">Normal</string>
+    <string name="image_annotation_fill">Fill</string>
+    <string name="image_annotation_stroke">Stroke</string>
+    <string name="image_annotation_black">Black</string>
+    <string name="image_annotation_color">Color</string>
+    <string name="image_annotation_finish">Finish annotation</string>
+    <string name="image_annotation_cancel">Cancel annotation</string>
+    <string name="image_annotation_chosen_color">Chosen color</string>
+    <string name="image_annotation_crop">Crop</string>
+    <string name="image_annotation_favorite">Favorite</string>
+    <string name="image_annotation_quick_edit">Quick edit</string>
 
-    <!-- Miscellaneous -->
-    <string name="supersede_feedbacklibrary_sendconfirmation_text">By sending the feedback, you agree with the terms and conditions.</string>
-    <string name="supersede_feedbacklibrary_sendbutton_text">Send feedback</string>
-    <string name="supersede_feedbacklibrary_remove_string">Remove</string>
-    <string name="supersede_feedbacklibrary_off_string">Off</string>
-    <string name="supersede_feedbacklibrary_on_string">On</string>
-    <string name="supersede_feedbacklibrary_yes_string">Yes</string>
-    <string name="supersede_feedbacklibrary_no_string">No</string>
-    <string name="supersede_feedbacklibrary_ok_string">OK</string>
-    <string name="supersede_feedbacklibrary_cancel_string">Cancel</string>
-    <string name="supersede_feedbacklibrary_discard_string">Discard</string>
-    <string name="supersede_feedbacklibrary_close_string">Close</string>
-    <string name="supersede_feedbacklibrary_loading_string">Loading. Please wait.</string>
-    <string name="supersede_feedbacklibrary_error_text">Oops. Something went wrong! Please try again later.</string>
-    <string name="supersede_feedbacklibrary_success_text">Your feedback was successfully sent. Thank you!</string>
-    <string name="supersede_feedbacklibrary_feedback_application_unavailable_text">We apologize that the feedback tool is not available at the moment. Please try again later.</string>
-    <string name="supersede_feedbacklibrary_feedback_title_text">Feedback title at the current time of %1$d milliseconds</string>
+    <string name="sticker">Express your sentiment</string>
+    <string name="sticker_smiley">Smiley</string>
+    <string name="sticker_thumb_up">Thumb up</string>
+    <string name="sticker_thumb_down">Thumb down</string>
+    <string name="sticker_dissatisfied">Dissatisfied</string>
+    <string name="sticker_neutral">Neutral</string>
+    <string name="sticker_satisfied">Satisfied</string>
 
-    <!-- Permissions -->
-    <string name="supersede_feedbacklibrary_permission_request_title">Permission request</string>
-    <string name="supersede_feedbacklibrary_record_audio_permission_granted_text">You can now capture your audio message by pressing the record button</string>
-    <string name="supersede_feedbacklibrary_record_audio_permission_text">Audio permission is necessary in order to record audio</string>
-    <string name="supersede_feedbacklibrary_record_audio_permission_text_instructions">Audio permission is necessary in order to record audio. You can grant access in the application\'s settings to use this feature.</string>
-    <string name="supersede_feedbacklibrary_external_storage_permission_text">External storage permission is necessary in order to choose a picture</string>
-    <string name="supersede_feedbacklibrary_external_storage_permission_text_instructions">External storage permission is necessary in order to choose a picture. You can grant access in the application\'s settings to use this feature.</string>
-    <string name="supersede_feedbacklibrary_external_storage_permission_text_automatic_screenshot_rationale">The application takes a screenshot of the current screen and external storage permission is necessary to do so</string>
-    <string name="supersede_feedbacklibrary_retry_string">Re-try</string>
-    <string name="supersede_feedbacklibrary_not_now_text">Not now</string>
+    <!-- Dialog -->
+    <string name="dialog_yes">Yes</string>
+    <string name="dialog_no">No</string>
+    <string name="dialog_ok">OK</string>
+    <string name="dialog_cancel">Cancel</string>
+    <string name="dialog_discard">Discard</string>
+    <string name="dialog_close">Close</string>
 
-    <!-- Pull feedback -->
-    <string name="supersede_feedbacklibrary_pull_feedback_question_string">Would you like to give feedback?</string>
-
-    <!-- Screenshot mechanism -->
-    <string name="supersede_feedbacklibrary_screenshotbutton_text">Add</string>
-    <string name="supersede_feedbacklibrary_annotatebutton_text">Edit</string>
-    <string name="supersede_feedbacklibrary_previewbutton_text">Preview</string>
-    <string name="supersede_feedbacklibrary_erasebutton_text">Erase</string>
-
-    <!-- Text mechanism -->
-    <string name="supersede_feedbacklibrary_maximum_character_hint">"Text cannot be longer than %1$d characters"</string>
+    <string name="info_loading">Loading. Please wait.</string>
+    <string name="info_error">Oops. Something went wrong! Please try again later.</string>
+    <string name="info_application_unavailable">We apologize that the feedback tool is not available at the moment. Please try again later.</string>
 
     <!-- Overriding string resources in com.theartofdev.edmodo:android-image-cropper -->
-    <string name="crop_image_menu_crop">@string/supersede_feedbacklibrary_crop_string</string>
-    <string name="help">help</string>
+    <string name="crop_image_menu_crop">@string/image_annotation_crop</string>
 
-    <!--Help activity text-->
-    <string name="help_text">\tHere you can send your feedback to developer. \n\n\tThere are 3 options available: image, text, audio.
-        \n\n\t\u2022 image - you can add a screenshot (with the problem appeared) there is a function "edit" which you can use if have a wish to add more information to the screenshot.
-        \n\n\t\u2022 text - you can write your feedback, max 250
-        \n\n\t\u2022 audio - you can make a voice recording, max 30 seconds
-        \n\n\t You also can rate by stars your experience with app.
-    </string>
+    <!--Hub-->
+    <string name="hub_feedback_list">Show\nFeedback</string>
+    <string name="hub_feedback_user_level">User-Level\n%1$d</string>
+    <string name="hub_feedback_settings">Feedback\nSettings</string>
+    <string name="hub_feedback_create">Create\nFeedback</string>
+    <string name="hub_status">&lt;b>&lt;font color="#secondaryColorString">Feedback-Hub&lt;/font>&lt;/b>&lt;br/>&lt;br/>&lt;b>
+        &lt;font color="#primaryColorString">User-Name&lt;/font>
+        &lt;br/>&lt;/b>&lt;font color="#secondaryColorString"> %1$s&lt;/font>&lt;br/>&lt;b>
+        &lt;font color="#primaryColorString">Karma-Score&lt;/font>
+        &lt;br/>&lt;/b>&lt;font color="#secondaryColorString"> %2$d&lt;/font>&lt;br/>&lt;b>
+        &lt;font color="#primaryColorString">Feedback&lt;/font>
+        &lt;br/>&lt;/b>&lt;font color="#secondaryColorString"> %3$d&lt;/font>&lt;br/>&lt;b>
+        &lt;font color="#primaryColorString">Responses&lt;/font>
+        &lt;br/>&lt;/b>&lt;font color="#secondaryColorString"> %4$d&lt;/font>&lt;br/>&lt;b>
+        &lt;font color="#primaryColorString">Up-Votes&lt;/font>
+        &lt;br/>&lt;/b>&lt;font color="#secondaryColorString"> %5$d&lt;/font>&lt;br/>&lt;b>
+        &lt;font color="#primaryColorString">Down-Votes&lt;/font>
+        &lt;br/>&lt;/b>&lt;font color="#secondaryColorString"> %6$d&lt;/font></string>
+    <string name="hub_access_1">Accessing Level 1</string>
+    <string name="hub_access_1_description">Level 1 grants you access to others Feedback and requires Permissions for Internet-Access!\n\n!Feature unlocked after Release 2!</string>
+    <string name="hub_confirm">Confirm</string>
+    <string name="hub_access_2">Accessing Level 2</string>
+    <string name="hub_access_2_description">Level 2 grants you the ability to create Feedback yourself and requires Storage-Read/Write-Permissions and a User-Name with at least 4 Characters!</string>
+    <string name="hub_warning_username_too_short">User-Name too short!</string>
+    <string name="hub_access_3">Accessing Level 3</string>
+    <string name="hub_access_3_description">Level 3 grants you access to more advanced Feedback Mechanisms and needs Audio-Recording-Permissions!</string>
+    <string name="hub_username_restored">User restored: "%1$s".</string>
+    <string name="hub_developer_restored">Developer restored: "%1$s".</string>
+    <string name="hub_username_registered">User "%1$s" registered.</string>
+    <string name="hub_developer_registered">Developer "%1$s" registered.</string>
+    <string name="hub_warning_permission_not_granted">Permissions for next Level not granted!</string>
 
-    <!--Copy by email-->
-    <string name="get_feedback_copy_by_email">Get a copy by email</string>
-    <string name="email">Email</string>
-    <string name="invalid_email">Invalid email</string>
-    <string name="check_network_state">Check network state</string>
+    <!--List-->
+    <string name="list_button_mine">Mine</string>
+    <string name="list_button_top">Top</string>
+    <string name="list_button_hot">Hot</string>
+    <string name="list_button_new">New</string>
+    <string name="list_filter">Filter</string>
+    <string name="list_edit_search">Search</string>
+    <string name="list_date">Date: %1$s</string>
+    <string name="list_responses">(%1$d Responses)</string>
+    <string name="details_feedback_toast">%1$s loaded.\nCreator: %2$s.\nCreation-Date: %3$s.\nUp-Votes: %4$d.\nResponses: %5$d.</string>
+    <!--Details-->
+    <string name="details_minus">-</string>
+    <string name="details_plus">+</string>
+    <string name="details_send_response">Send Response</string>
+    <string name="details_cancel">Cancel</string>
+    <string name="details_response">Add Response</string>
+    <string name="details_subscribe">Subscribe</string>
+    <string name="details_unsubscribe">Unsubscribe</string>
+    <string name="details_images">Image</string>
+    <string name="details_audio">Audio</string>
+    <string name="details_labels">Labels</string>
+    <string name="details_user">User: %1$s</string>
+    <string name="details_status">Status: %1$s</string>
+    <string name="details_title">Title: %1$s</string>
+    <string name="details_response_too_short">Response too short.</string>
+    <string name="details_make_public">Make Feedback Public</string>
+    <string name="details_make_public_title">Confirm Feedback Publishing</string>
+    <string name="details_make_public_content">Do you want to publish this Feedback?\nA published Feedback can be seen, rated and responded upon by other Users and the Developers.\nThis decision cannot be reverted.</string>
+    <!--Feedback-->
+    <!--Settings-->
+    <string name="settings_button_mine">Mine</string>
+    <string name="settings_button_others">Others</string>
+    <string name="settings_button_subscriptions">Subscriptions</string>
+    <string name="details_published">Published!</string>
+    <!--Abstract-->
+    <string name="abstract_button_clicked">Button \n\"%1$s\"\n clicked!</string>
 </resources>

@@ -5,7 +5,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import ch.uzh.supersede.feedbacklibrary.models.Mechanism;
+import ch.uzh.supersede.feedbacklibrary.models.AbstractFeedbackPart;
 
 /**
  * Configuration either of type 'PUSH' or 'PULL'.
@@ -15,11 +15,11 @@ public class Configuration {
     private GeneralConfiguration generalConfiguration;
     private long id;
     private boolean isPush;
-    private List<Mechanism> mechanisms;
+    private List<AbstractFeedbackPart> mechanisms;
     private String type;
 
     public Configuration(ConfigurationItem configurationItem) {
-        createdAt = configurationItem.getCreatedAt();
+        createdAt = configurationItem.getDateOfCreation();
         generalConfiguration = new GeneralConfiguration(configurationItem.getGeneralConfigurationItem());
         id = configurationItem.getId();
         isPush = configurationItem.getType().equals("PUSH");
@@ -27,76 +27,66 @@ public class Configuration {
         initMechanisms(configurationItem);
     }
 
-    /**
-     * This method returns the date of creation as a string.
-     *
-     * @return the creation date as a string
-     */
+    private void initMechanisms(ConfigurationItem configurationItem) {
+        mechanisms = new ArrayList<>();
+        mechanisms.addAll(configurationItem.getAbstractFeedbackParts());
+
+        Collections.sort(mechanisms, new Comparator<AbstractFeedbackPart>() {
+            @Override
+            public int compare(AbstractFeedbackPart a, AbstractFeedbackPart b) {
+                if (a == null || b == null) {
+                    return -1;
+                }
+                return ((Integer) a.getOrder()).compareTo(b.getOrder());
+            }
+        });
+    }
+
     public String getCreatedAt() {
         return createdAt;
     }
 
-    /**
-     * This method returns the general configuration.
-     *
-     * @return the general configuration
-     */
+    public void setCreatedAt(String createdAt) {
+        this.createdAt = createdAt;
+    }
+
     public GeneralConfiguration getGeneralConfiguration() {
         return generalConfiguration;
     }
 
-    /**
-     * This method returns the id of the configuration.
-     *
-     * @return the configuration id
-     */
+    public void setGeneralConfiguration(GeneralConfiguration generalConfiguration) {
+        this.generalConfiguration = generalConfiguration;
+    }
+
     public long getId() {
         return id;
     }
 
-    /**
-     * This method returns all mechanisms of the configuration.
-     *
-     * @return all mechanisms
-     */
-    public List<Mechanism> getMechanisms() {
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public boolean isPush() {
+        return isPush;
+    }
+
+    public void setPush(boolean isPush) {
+        this.isPush = isPush;
+    }
+
+    public List<AbstractFeedbackPart> getMechanisms() {
         return mechanisms;
     }
 
-    /**
-     * This method returns the type of the configuration.
-     *
-     * @return the type, either 'PUSH' or 'PULL'
-     */
+    public void setMechanisms(List<AbstractFeedbackPart> mechanisms) {
+        this.mechanisms = mechanisms;
+    }
+
     public String getType() {
         return type;
     }
 
-    private void initMechanisms(ConfigurationItem configurationItem) {
-        mechanisms = new ArrayList<>();
-        for (MechanismConfigurationItem mechanismConfigurationItem : configurationItem.getMechanismConfigurationItems()) {
-            mechanisms.add(mechanismConfigurationItem.createMechanism());
-        }
-
-        if(mechanisms != null) {
-            Collections.sort(mechanisms, new Comparator<Mechanism>() {
-                @Override
-                public int compare(Mechanism a, Mechanism b) {
-                    if(a == null || b == null) {
-                        return -1;
-                    }
-                    return ((Integer) a.getOrder()).compareTo(b.getOrder());
-                }
-            });
-        }
-    }
-
-    /**
-     * This method returns if the configuration is of type 'PUSH'.
-     *
-     * @return true if the configuration is of type 'PUSH', false otherwise
-     */
-    public boolean isPush() {
-        return isPush;
+    public void setType(String type) {
+        this.type = type;
     }
 }

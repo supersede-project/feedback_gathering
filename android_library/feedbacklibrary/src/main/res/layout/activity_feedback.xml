@@ -4,12 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/feedbackActivityBackground"
+    android:background="@color/silver"
     android:paddingBottom="@dimen/activity_feedback_margin"
     android:paddingLeft="@dimen/activity_feedback_margin"
     android:paddingRight="@dimen/activity_feedback_margin"
     android:paddingTop="@dimen/activity_feedback_margin"
-    tools:context="ch.uzh.supersede.feedbacklibrary.FeedbackActivity">
+    tools:context="ch.uzh.supersede.feedbacklibrary.activities.FeedbackActivity">
 
     <LinearLayout
         android:id="@+id/supersede_feedbacklibrary_feedback_activity_layout"

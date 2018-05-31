@@ -4,7 +4,9 @@ package ch.fhnw.cere.repository.models;
 import ch.fhnw.cere.repository.models.orchestrator.Application;
 import ch.fhnw.cere.repository.models.orchestrator.Mechanism;
 import ch.fhnw.cere.repository.models.orchestrator.MechanismTemplateModel;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
@@ -26,6 +28,12 @@ public class Feedback {
     private long applicationId;
     private long configurationId;
     private String language;
+    private Boolean isPublic;
+
+    @ManyToOne()
+    @JoinColumn(name = "feedback_status")
+    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "statusType")
+    private FeedbackStatus feedbackStatus = new FeedbackStatus(1,"OPEN");
 
     @Transient
     private Application application;
@@ -305,5 +313,21 @@ public class Feedback {
 
     public void setApplication(Application application) {
         this.application = application;
+    }
+
+    public Boolean isPublic() {
+        return isPublic;
+    }
+
+    public void setPublic(Boolean aPublic) {
+        isPublic = aPublic;
+    }
+
+    public FeedbackStatus getFeedbackStatus() {
+        return feedbackStatus;
+    }
+
+    public void setFeedbackStatus(FeedbackStatus feedbackStatus) {
+        this.feedbackStatus = feedbackStatus;
     }
 }
