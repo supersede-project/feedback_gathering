@@ -12,39 +12,37 @@ import java.util.*;
 
 import ch.uzh.supersede.feedbacklibrary.R;
 import ch.uzh.supersede.feedbacklibrary.beans.LocalConfigurationBean;
-import ch.uzh.supersede.feedbacklibrary.components.views.AbstractMechanismView;
+import ch.uzh.supersede.feedbacklibrary.components.views.AbstractFeedbackPartView;
 import ch.uzh.supersede.feedbacklibrary.components.views.AudioMechanismView;
-import ch.uzh.supersede.feedbacklibrary.components.views.CategoryMechanismView;
+import ch.uzh.supersede.feedbacklibrary.components.views.LabelMechanismView;
 import ch.uzh.supersede.feedbacklibrary.components.views.RatingMechanismView;
 import ch.uzh.supersede.feedbacklibrary.components.views.ScreenshotMechanismView;
 import ch.uzh.supersede.feedbacklibrary.components.views.TextMechanismView;
-import ch.uzh.supersede.feedbacklibrary.models.AbstractMechanism;
-import ch.uzh.supersede.feedbacklibrary.models.AudioMechanism;
-import ch.uzh.supersede.feedbacklibrary.models.CategoryMechanism;
-import ch.uzh.supersede.feedbacklibrary.models.RatingMechanism;
-import ch.uzh.supersede.feedbacklibrary.models.ScreenshotMechanism;
-import ch.uzh.supersede.feedbacklibrary.models.TextMechanism;
+import ch.uzh.supersede.feedbacklibrary.models.AbstractFeedbackPart;
+import ch.uzh.supersede.feedbacklibrary.models.AudioFeedback;
+import ch.uzh.supersede.feedbacklibrary.models.LabelFeedback;
+import ch.uzh.supersede.feedbacklibrary.models.RatingFeedback;
+import ch.uzh.supersede.feedbacklibrary.models.ScreenshotFeedback;
+import ch.uzh.supersede.feedbacklibrary.models.TextFeedback;
 import ch.uzh.supersede.feedbacklibrary.utils.Utils;
 
-import static ch.uzh.supersede.feedbacklibrary.utils.Constants.*;
-import static ch.uzh.supersede.feedbacklibrary.utils.Constants.StubsConstants.*;
 import static ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility.USER_LEVEL.ADVANCED;
 
 
 public class OrchestratorStub {
-    private ArrayList<AbstractMechanismView> mechanismViews;
-    private ArrayList<AbstractMechanism> mechanisms;
+    private ArrayList<AbstractFeedbackPartView> feedbackPartViews;
+    private ArrayList<AbstractFeedbackPart> feedbackParts;
     private int id;
 
     private OrchestratorStub() {
     }
 
-    public List<AbstractMechanismView> getMechanismViews() {
-        return this.mechanismViews;
+    public List<AbstractFeedbackPartView> getFeedbackPartViews() {
+        return this.feedbackPartViews;
     }
 
-    public List<AbstractMechanism> getMechanisms() {
-        return mechanisms;
+    public List<AbstractFeedbackPart> getFeedbackParts() {
+        return feedbackParts;
     }
 
     public int getId() {
@@ -59,10 +57,10 @@ public class OrchestratorStub {
         activity.onBackPressed();
     }
 
-    public static class MechanismBuilder<T extends Activity> {
+    public static class FeedbackBuilder<T extends Activity> {
         private LocalConfigurationBean configuration;
-        private List<AbstractMechanismView> mechanismViews;
-        private List<AbstractMechanism> mechanisms;
+        private List<AbstractFeedbackPartView> mechanismViews;
+        private List<AbstractFeedbackPart> mechanisms;
         private Context context;
         private LayoutInflater layoutInflater;
         private LinearLayout rootLayout;
@@ -70,7 +68,7 @@ public class OrchestratorStub {
         private T activity;
         private int id;
 
-        public MechanismBuilder(T activity, Context context, Resources resources, LocalConfigurationBean configuration, LinearLayout rootLayout, LayoutInflater layoutInflater) {
+        public FeedbackBuilder(T activity, Context context, Resources resources, LocalConfigurationBean configuration, LinearLayout rootLayout, LayoutInflater layoutInflater) {
             this.mechanismViews = new ArrayList<>();
             this.mechanisms = new ArrayList<>();
             this.configuration = configuration;
@@ -82,150 +80,76 @@ public class OrchestratorStub {
             this.activity = activity;
         }
 
-        @Deprecated
-        public MechanismBuilder withAttachment() {
-            resolve(ATTACHMENT_TYPE, 0);
-            return this;
-        }
-
-        public MechanismBuilder withAudio() {
+        public FeedbackBuilder withAudio() {
             if (ADVANCED.check(context) && configuration.getAudioOrder() != -1) {
-                resolve(AUDIO_TYPE, configuration.getAudioOrder());
+                AudioFeedback audioFeedback = new AudioFeedback(id, configuration);
+                AudioMechanismView audioMechanismView = new AudioMechanismView(layoutInflater, audioFeedback, resources, activity, context);
+                mechanisms.add(audioFeedback);
+                mechanismViews.add(audioMechanismView);
+                id++;
             }
             return this;
         }
 
-        public MechanismBuilder withCategory() {
-            if (configuration.getCategoryOrder() != -1) {
-                resolve(CATEGORY_TYPE, configuration.getCategoryOrder());
+        public FeedbackBuilder withCategory() {
+            if (configuration.getLabelOrder() != -1) {
+                LabelFeedback labelFeedback = new LabelFeedback(id, configuration);
+                LabelMechanismView labelMechanismView = new LabelMechanismView(layoutInflater, labelFeedback);
+                mechanisms.add(labelFeedback);
+                mechanismViews.add(labelMechanismView);
+                id++;
             }
             return this;
         }
 
-        @Deprecated
-        public MechanismBuilder withDialog() {
-            resolve(DIALOG_TYPE, 0);
-            return this;
-        }
-
-        @Deprecated
-        public MechanismBuilder withImage() {
-            resolve(IMAGE_TYPE, 0);
-            return this;
-        }
-
-        public MechanismBuilder withRating() {
+        public FeedbackBuilder withRating() {
             if (configuration.getRatingOrder() != -1) {
-                resolve(RATING_TYPE, configuration.getRatingOrder());
+                RatingFeedback ratingFeedback = new RatingFeedback(id, configuration);
+                RatingMechanismView ratingMechanismView = new RatingMechanismView(layoutInflater, ratingFeedback);
+                mechanisms.add(ratingFeedback);
+                mechanismViews.add(ratingMechanismView);
+                id++;
             }
             return this;
         }
 
-        public MechanismBuilder withScreenshot() {
+        public FeedbackBuilder withScreenshot() {
             if (configuration.getScreenshotOrder() != -1) {
-                resolve(SCREENSHOT_TYPE, configuration.getScreenshotOrder());
+                ScreenshotFeedback screenshotFeedback = new ScreenshotFeedback(id, configuration);
+                ScreenshotMechanismView screenshotMechanismView = new ScreenshotMechanismView(layoutInflater, activity, screenshotFeedback, id);
+                mechanisms.add(screenshotFeedback);
+                mechanismViews.add(screenshotMechanismView);
+                id++;
             }
             return this;
         }
 
-        public MechanismBuilder withText() {
+        public FeedbackBuilder withText() {
             if (configuration.getTextOrder() != -1) {
-                resolve(TEXT_TYPE, configuration.getTextOrder());
+                TextFeedback textFeedback = new TextFeedback(id, configuration);
+                TextMechanismView textMechanismView = new TextMechanismView(layoutInflater, textFeedback);
+                mechanisms.add(textFeedback);
+                mechanismViews.add(textMechanismView);
+                id++;
             }
             return this;
         }
 
-        public OrchestratorStub build(List<AbstractMechanismView> mechanismViews) {
+        public FeedbackBuilder withTitle(){
+            throw new UnsupportedOperationException("Not yet implemented!");
+        }
+
+        public OrchestratorStub build(List<AbstractFeedbackPartView> mechanismViews) {
             OrchestratorStub stub = new OrchestratorStub();
             Collections.sort(this.mechanismViews);
-            for (AbstractMechanismView view : this.mechanismViews) {
+            for (AbstractFeedbackPartView view : this.mechanismViews) {
                 mechanismViews.add(view);
                 rootLayout.addView(view.getEnclosingLayout());
             }
-            stub.mechanisms = new ArrayList<>(this.mechanisms);
-            stub.mechanismViews = new ArrayList<>(this.mechanismViews);
+            stub.feedbackParts = new ArrayList<>(this.mechanisms);
+            stub.feedbackPartViews = new ArrayList<>(this.mechanismViews);
             stub.id = this.id;
             return stub;
-        }
-
-        private void resolve(String type, int order) {
-            switch (type) {
-                case AUDIO_TYPE:
-                    AudioMechanism audioMechanism = new AudioMechanism(order, order);
-                    AudioMechanismView audioMechanismView = new AudioMechanismView(layoutInflater, audioMechanism, resources, activity, context);
-                    mechanisms.add(audioMechanism);
-                    mechanismViews.add(audioMechanismView);
-                    break;
-                case CATEGORY_TYPE:
-                    CategoryMechanism categoryMechanism = new CategoryMechanism(order, order);
-                    CategoryMechanismView categoryMechanismView = new CategoryMechanismView(layoutInflater, categoryMechanism);
-                    mechanisms.add(categoryMechanism);
-                    mechanismViews.add(categoryMechanismView);
-                    break;
-                case RATING_TYPE:
-                    RatingMechanism ratingMechanism = new RatingMechanism(order, order);
-                    RatingMechanismView ratingMechanismView = new RatingMechanismView(layoutInflater, ratingMechanism);
-                    mechanisms.add(ratingMechanism);
-                    mechanismViews.add(ratingMechanismView);
-                    break;
-                case SCREENSHOT_TYPE:
-                    ScreenshotMechanism screenshotMechanism = new ScreenshotMechanism(order, order);
-                    ScreenshotMechanismView screenshotMechanismView = new ScreenshotMechanismView(layoutInflater, activity, screenshotMechanism, id);
-                    mechanisms.add(screenshotMechanism);
-                    mechanismViews.add(screenshotMechanismView);
-                    break;
-                case TEXT_TYPE:
-                    TextMechanism textMechanism = new TextMechanism(order, order);
-                    TextMechanismView textMechanismView = new TextMechanismView(layoutInflater, textMechanism);
-                    mechanisms.add(textMechanism);
-                    mechanismViews.add(textMechanismView);
-                    break;
-                default:
-                    break;
-            }
-            id++;
-        }
-    }
-
-    private static class OrchestratorParamBuilder {
-        private List<Map<String, Object>> list;
-
-        private OrchestratorParamBuilder() {
-            this.list = new ArrayList<>();
-        }
-
-        public OrchestratorParamBuilder(List<Map<String, Object>> list) {
-            this.list = list;
-        }
-
-        public static OrchestratorParamBuilder instance() {
-            return new OrchestratorParamBuilder();
-        }
-
-        public Builder key(Object key) {
-            HashMap<String, Object> map = new HashMap<>();
-            map.put(ORCHESTRATOR_KEY, key);
-            return new Builder(list, map);
-        }
-
-        public List<Map<String, Object>> get() {
-            return list;
-        }
-
-        private static class Builder {
-            private List<Map<String, Object>> list;
-            Map<String, Object> map;
-
-            public Builder(List<Map<String, Object>> list, Map<String, Object> map) {
-                this.list = list;
-                this.map = map;
-            }
-
-            public OrchestratorParamBuilder value(Object value) {
-                map.put(ORCHESTRATOR_VALUE, value);
-                list.add(map);
-                return new OrchestratorParamBuilder(list);
-            }
         }
     }
 }

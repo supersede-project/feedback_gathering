@@ -19,14 +19,14 @@ import java.util.Map;
 
 import ch.uzh.supersede.feedbacklibrary.R;
 import ch.uzh.supersede.feedbacklibrary.activities.AnnotateImageActivity;
-import ch.uzh.supersede.feedbacklibrary.models.AbstractMechanism;
-import ch.uzh.supersede.feedbacklibrary.models.ScreenshotMechanism;
+import ch.uzh.supersede.feedbacklibrary.models.AbstractFeedbackPart;
+import ch.uzh.supersede.feedbacklibrary.models.ScreenshotFeedback;
 import ch.uzh.supersede.feedbacklibrary.utils.Utils;
 
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.*;
 
-public class ScreenshotMechanismView extends AbstractMechanismView {
-    private ScreenshotMechanism screenshotMechanism;
+public class ScreenshotMechanismView extends AbstractFeedbackPartView {
+    private ScreenshotFeedback screenshotFeedback;
     private ImageView screenShotPreviewImageView;
     private HashMap<Integer, String> allStickerAnnotations;
     private HashMap<Integer, String> allTextAnnotations;
@@ -37,11 +37,11 @@ public class ScreenshotMechanismView extends AbstractMechanismView {
     private Bitmap pictureBitmapAnnotated;
     private Activity activity;
 
-    public ScreenshotMechanismView(LayoutInflater layoutInflater, Activity activity, AbstractMechanism mechanism, int mechanismViewIndex) {
+    public ScreenshotMechanismView(LayoutInflater layoutInflater, Activity activity, AbstractFeedbackPart mechanism, int mechanismViewIndex) {
         super(layoutInflater);
         this.viewOrder = mechanism.getOrder();
         this.activity = activity;
-        this.screenshotMechanism = (ScreenshotMechanism) mechanism;
+        this.screenshotFeedback = (ScreenshotFeedback) mechanism;
         setEnclosingLayout(getLayoutInflater().inflate(R.layout.mechanism_screenshot, null));
         initView();
     }
@@ -215,8 +215,8 @@ public class ScreenshotMechanismView extends AbstractMechanismView {
 
     @Override
     public int compareTo(@NonNull Object o) {
-        if (o instanceof AbstractMechanismView){
-            int comparedViewOrder = ((AbstractMechanismView) o).getViewOrder();
+        if (o instanceof AbstractFeedbackPartView){
+            int comparedViewOrder = ((AbstractFeedbackPartView) o).getViewOrder();
             return comparedViewOrder > getViewOrder() ? -1 : comparedViewOrder == getViewOrder() ? 0 : 1;
         }
         return 0;

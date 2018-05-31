@@ -29,19 +29,15 @@ import ch.uzh.supersede.feedbacklibrary.BuildConfig;
 import ch.uzh.supersede.feedbacklibrary.R;
 import ch.uzh.supersede.feedbacklibrary.beans.FeedbackBean;
 import ch.uzh.supersede.feedbacklibrary.beans.FeedbackDetailsBean;
-import ch.uzh.supersede.feedbacklibrary.components.views.AbstractMechanismView;
+import ch.uzh.supersede.feedbacklibrary.components.views.AbstractFeedbackPartView;
 import ch.uzh.supersede.feedbacklibrary.components.views.AudioMechanismView;
 import ch.uzh.supersede.feedbacklibrary.components.views.ScreenshotMechanismView;
 import ch.uzh.supersede.feedbacklibrary.database.FeedbackDatabase;
-import ch.uzh.supersede.feedbacklibrary.models.AbstractMechanism;
+import ch.uzh.supersede.feedbacklibrary.models.AbstractFeedbackPart;
 import ch.uzh.supersede.feedbacklibrary.services.FeedbackService;
 import ch.uzh.supersede.feedbacklibrary.services.IFeedbackServiceEventListener;
 import ch.uzh.supersede.feedbacklibrary.stubs.OrchestratorStub;
-import ch.uzh.supersede.feedbacklibrary.utils.DialogUtils;
-import ch.uzh.supersede.feedbacklibrary.utils.Enums;
-import ch.uzh.supersede.feedbacklibrary.utils.FeedbackTransformer;
-import ch.uzh.supersede.feedbacklibrary.utils.ImageUtility;
-import ch.uzh.supersede.feedbacklibrary.utils.Utils;
+import ch.uzh.supersede.feedbacklibrary.utils.*;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -52,8 +48,8 @@ import static ch.uzh.supersede.feedbacklibrary.utils.Enums.FEEDBACK_STATUS.OPEN;
 
 @SuppressWarnings({"squid:MaximumInheritanceDepth", "squid:S1170"})
 public class FeedbackActivity extends AbstractBaseActivity implements AudioMechanismView.MultipleAudioMechanismsListener, IFeedbackServiceEventListener {
-    private List<AbstractMechanism> mechanisms;
-    private List<AbstractMechanismView> mechanismViews;
+    private List<AbstractFeedbackPart> mechanisms;
+    private List<AbstractFeedbackPartView> mechanismViews;
 
     private String language;
     private String baseURL;
@@ -97,7 +93,7 @@ public class FeedbackActivity extends AbstractBaseActivity implements AudioMecha
 
     @Override
     public void onRecordStart(long audioMechanismId) {
-        for (AbstractMechanismView mechanismView : mechanismViews) {
+        for (AbstractFeedbackPartView mechanismView : mechanismViews) {
             if (mechanismView instanceof AudioMechanismView) {
                 AudioMechanismView view = ((AudioMechanismView) mechanismView);
                 if (view.getAudioMechanismId() != audioMechanismId) {
@@ -109,7 +105,7 @@ public class FeedbackActivity extends AbstractBaseActivity implements AudioMecha
 
     @Override
     public void onRecordStop() {
-        for (AbstractMechanismView mechanismView : mechanismViews) {
+        for (AbstractFeedbackPartView mechanismView : mechanismViews) {
             if (mechanismView instanceof AudioMechanismView) {
                 ((AudioMechanismView) mechanismView).setAllButtonsClickable(true);
             }
@@ -122,13 +118,18 @@ public class FeedbackActivity extends AbstractBaseActivity implements AudioMecha
         switch (eventType) {
             case PING_REPOSITORY:
                 FeedbackDetailsBean feedbackBean = prepareSendFeedback();
-                Intent intent = new Intent(this, FeedbackDetailsActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                intent.putExtra(EXTRA_KEY_FEEDBACK_DETAIL_BEAN, feedbackBean);
-                intent.putExtra(EXTRA_KEY_APPLICATION_CONFIGURATION, configuration);
-                this.onBackPressed(); //This serves the purpose of erasing the Feedback Activity from the Back-Button
-                startActivity(intent);
-                overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+                if (VersionUtility.getDateVersion() > 1) {
+                    Intent intent = new Intent(this, FeedbackDetailsActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                    intent.putExtra(EXTRA_KEY_FEEDBACK_DETAIL_BEAN, feedbackBean);
+                    intent.putExtra(EXTRA_KEY_APPLICATION_CONFIGURATION, configuration);
+                    this.onBackPressed(); //This serves the purpose of erasing the Feedback Activity from the Back-Button
+                    startActivity(intent);
+                    overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+                }else{
+                    Toast.makeText(getApplicationContext(),getResources().getString(R.string.feedback_success),Toast.LENGTH_SHORT).show();
+                    onBackPressed();
+                }
                 break;
             case CREATE_FEEDBACK_VARIANT:
                 break;
@@ -154,15 +155,15 @@ public class FeedbackActivity extends AbstractBaseActivity implements AudioMecha
         LayoutInflater layoutInflater = LayoutInflater.from(this);
         LinearLayout linearLayout = getView(R.id.supersede_feedbacklibrary_feedback_activity_layout, LinearLayout.class);
 
-        mechanisms = new OrchestratorStub.MechanismBuilder(this, getApplicationContext(), getResources(), getConfiguration(), linearLayout, layoutInflater)
+        layoutInflater.inflate(R.layout.utility_feedback_button, linearLayout);
+        mechanisms = new OrchestratorStub.FeedbackBuilder(this, getApplicationContext(), getResources(), getConfiguration(), linearLayout, layoutInflater)
                 .withRating()
                 .withText()
                 .withScreenshot()
                 .withAudio()
                 .withCategory()
-                .build(mechanismViews).getMechanisms();
+                .build(mechanismViews).getFeedbackParts();
 
-        layoutInflater.inflate(R.layout.utility_feedback_button, linearLayout);
     }
 
     private void execCreateFeedbackVariant(FeedbackDetailsBean feedbackDetailsBean, List<MultipartBody.Part> multipartFiles) {
@@ -234,7 +235,7 @@ public class FeedbackActivity extends AbstractBaseActivity implements AudioMecha
 
     private void annotateMechanismView(Intent data) {
         ScreenshotMechanismView screenshotMechanismView = null;
-        for (AbstractMechanismView mechanismView : mechanismViews) {
+        for (AbstractFeedbackPartView mechanismView : mechanismViews) {
             if (mechanismView instanceof ScreenshotMechanismView) {
                 screenshotMechanismView = (ScreenshotMechanismView) mechanismView;
             }
@@ -252,7 +253,7 @@ public class FeedbackActivity extends AbstractBaseActivity implements AudioMecha
     private void onSelectFromGalleryResult(Intent data) {
         ScreenshotMechanismView screenshotMechanismView = null;
 
-        for (AbstractMechanismView view : mechanismViews) {
+        for (AbstractFeedbackPartView view : mechanismViews) {
             if (view instanceof ScreenshotMechanismView) {
                 screenshotMechanismView = (ScreenshotMechanismView) view;
             }
@@ -299,7 +300,7 @@ public class FeedbackActivity extends AbstractBaseActivity implements AudioMecha
         }
 
         // The mechanism models are updated with the view values
-        for (AbstractMechanismView mechanismView : mechanismViews) {
+        for (AbstractFeedbackPartView mechanismView : mechanismViews) {
             mechanismView.updateModel();
         }
 
@@ -325,12 +326,12 @@ public class FeedbackActivity extends AbstractBaseActivity implements AudioMecha
         return netInfo != null && netInfo.isConnectedOrConnecting();
     }
 
-    private boolean validateInput(List<AbstractMechanism> allMechanisms, List<String> errorMessages) {
+    private boolean validateInput(List<AbstractFeedbackPart> allMechanisms, List<String> errorMessages) {
         if (allMechanisms == null) {
             return true;
         }
         // Append an error message and return. The user is confronted with one error message at a time.
-        for (AbstractMechanism mechanism : allMechanisms) {
+        for (AbstractFeedbackPart mechanism : allMechanisms) {
             if (mechanism != null && !mechanism.isValid(errorMessages)) {
                 return false;
             }

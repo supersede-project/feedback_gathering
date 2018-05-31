@@ -5,7 +5,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import ch.uzh.supersede.feedbacklibrary.models.AbstractMechanism;
+import ch.uzh.supersede.feedbacklibrary.models.AbstractFeedbackPart;
 
 /**
  * Configuration either of type 'PUSH' or 'PULL'.
@@ -15,7 +15,7 @@ public class Configuration {
     private GeneralConfiguration generalConfiguration;
     private long id;
     private boolean isPush;
-    private List<AbstractMechanism> mechanisms;
+    private List<AbstractFeedbackPart> mechanisms;
     private String type;
 
     public Configuration(ConfigurationItem configurationItem) {
@@ -29,11 +29,11 @@ public class Configuration {
 
     private void initMechanisms(ConfigurationItem configurationItem) {
         mechanisms = new ArrayList<>();
-        mechanisms.addAll(configurationItem.getAbstractMechanisms());
+        mechanisms.addAll(configurationItem.getAbstractFeedbackParts());
 
-        Collections.sort(mechanisms, new Comparator<AbstractMechanism>() {
+        Collections.sort(mechanisms, new Comparator<AbstractFeedbackPart>() {
             @Override
-            public int compare(AbstractMechanism a, AbstractMechanism b) {
+            public int compare(AbstractFeedbackPart a, AbstractFeedbackPart b) {
                 if (a == null || b == null) {
                     return -1;
                 }
@@ -74,11 +74,11 @@ public class Configuration {
         this.isPush = isPush;
     }
 
-    public List<AbstractMechanism> getMechanisms() {
+    public List<AbstractFeedbackPart> getMechanisms() {
         return mechanisms;
     }
 
-    public void setMechanisms(List<AbstractMechanism> mechanisms) {
+    public void setMechanisms(List<AbstractFeedbackPart> mechanisms) {
         this.mechanisms = mechanisms;
     }
 

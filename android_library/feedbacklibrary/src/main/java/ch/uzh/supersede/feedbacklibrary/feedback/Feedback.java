@@ -10,11 +10,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import ch.uzh.supersede.feedbacklibrary.models.AudioMechanism;
-import ch.uzh.supersede.feedbacklibrary.models.CategoryMechanism;
-import ch.uzh.supersede.feedbacklibrary.models.RatingMechanism;
-import ch.uzh.supersede.feedbacklibrary.models.ScreenshotMechanism;
-import ch.uzh.supersede.feedbacklibrary.models.TextMechanism;
+import ch.uzh.supersede.feedbacklibrary.models.AudioFeedback;
+import ch.uzh.supersede.feedbacklibrary.models.LabelFeedback;
+import ch.uzh.supersede.feedbacklibrary.models.RatingFeedback;
+import ch.uzh.supersede.feedbacklibrary.models.ScreenshotFeedback;
+import ch.uzh.supersede.feedbacklibrary.models.TextFeedback;
 import ch.uzh.supersede.feedbacklibrary.utils.CompareUtility;
 
 public class Feedback implements Serializable {
@@ -31,15 +31,15 @@ public class Feedback implements Serializable {
     @Expose
     private String userIdentification;
     @Expose
-    private List<AudioMechanism> audioFeedbackList;
+    private List<AudioFeedback> audioFeedbackList;
     @Expose
-    private List<CategoryMechanism> categoryFeedbackList;
+    private List<LabelFeedback> categoryFeedbackList;
     @Expose
-    private List<RatingMechanism> ratingFeedbackList;
+    private List<RatingFeedback> ratingFeedbackList;
     @Expose
-    private List<ScreenshotMechanism> screenshotFeedbackList;
+    private List<ScreenshotFeedback> screenshotFeedbackList;
     @Expose
-    private List<TextMechanism> textFeedbackList;
+    private List<TextFeedback> textFeedbackList;
 
     private Feedback() {
     }
@@ -51,11 +51,11 @@ public class Feedback implements Serializable {
         private String language;
         private String title;
         private String userIdentification;
-        private List<AudioMechanism> audioFeedbackList;
-        private List<CategoryMechanism> categoryFeedbackList;
-        private List<RatingMechanism> ratingFeedbackList;
-        private List<ScreenshotMechanism> screenshotFeedbackList;
-        private List<TextMechanism> textFeedbackList;
+        private List<AudioFeedback> audioFeedbackList;
+        private List<LabelFeedback> categoryFeedbackList;
+        private List<RatingFeedback> ratingFeedbackList;
+        private List<ScreenshotFeedback> screenshotFeedbackList;
+        private List<TextFeedback> textFeedbackList;
 
         public Builder() {
             //NOP
@@ -91,37 +91,37 @@ public class Feedback implements Serializable {
             return this;
         }
 
-        public Builder withAudioMechanism(AudioMechanism audioMechanism) {
+        public Builder withAudioMechanism(AudioFeedback audioFeedback) {
             this.audioFeedbackList = new ArrayList<>();
-            if (audioMechanism.getAudioPath() != null) {
-                audioFeedbackList.add(audioMechanism);
+            if (audioFeedback.getAudioPath() != null) {
+                audioFeedbackList.add(audioFeedback);
             }
             return this;
         }
 
-        public Builder withCategoryMechanism(CategoryMechanism categoryMechanism) {
+        public Builder withCategoryMechanism(LabelFeedback labelFeedback) {
             this.categoryFeedbackList = new ArrayList<>();
-            categoryFeedbackList.add(categoryMechanism);
+            categoryFeedbackList.add(labelFeedback);
             return this;
         }
 
-        public Builder withRatingMechanism(RatingMechanism ratingMechanism) {
+        public Builder withRatingMechanism(RatingFeedback ratingFeedback) {
             this.ratingFeedbackList = new ArrayList<>();
-            ratingFeedbackList.add(ratingMechanism);
+            ratingFeedbackList.add(ratingFeedback);
             return this;
         }
 
-        public Builder withScreenshotMechanism(ScreenshotMechanism screenshotMechanism) {
+        public Builder withScreenshotMechanism(ScreenshotFeedback screenshotFeedback) {
             this.screenshotFeedbackList = new ArrayList<>();
-            if (screenshotMechanism.getImagePath() != null) {
-                screenshotFeedbackList.add(screenshotMechanism);
+            if (screenshotFeedback.getImagePath() != null) {
+                screenshotFeedbackList.add(screenshotFeedback);
             }
             return this;
         }
 
-        public Builder withTextMechanism(TextMechanism textMechanism) {
+        public Builder withTextMechanism(TextFeedback textFeedback) {
             this.textFeedbackList = new ArrayList<>();
-            textFeedbackList.add(textMechanism);
+            textFeedbackList.add(textFeedback);
             return this;
         }
 
@@ -186,23 +186,23 @@ public class Feedback implements Serializable {
         return userIdentification;
     }
 
-    public List<AudioMechanism> getAudioFeedbackList() {
+    public List<AudioFeedback> getAudioFeedbackList() {
         return audioFeedbackList;
     }
 
-    public List<CategoryMechanism> getCategoryFeedbackList() {
+    public List<LabelFeedback> getCategoryFeedbackList() {
         return categoryFeedbackList;
     }
 
-    public List<RatingMechanism> getRatingFeedbackList() {
+    public List<RatingFeedback> getRatingFeedbackList() {
         return ratingFeedbackList;
     }
 
-    public List<ScreenshotMechanism> getScreenshotFeedbackList() {
+    public List<ScreenshotFeedback> getScreenshotFeedbackList() {
         return screenshotFeedbackList;
     }
 
-    public List<TextMechanism> getTextFeedbackList() {
+    public List<TextFeedback> getTextFeedbackList() {
         return textFeedbackList;
     }
 

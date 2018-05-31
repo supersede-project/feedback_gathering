@@ -1,6 +1,8 @@
 package ch.uzh.supersede.feedbacklibrary.utils;
 
 import android.graphics.Color;
+import android.graphics.drawable.*;
+import android.view.View;
 
 public class ColorUtility {
 
@@ -66,5 +68,13 @@ public class ColorUtility {
     public static int fromHexString(String color) {
         color = color.replace("#","");
         return Integer.valueOf(color, 16);
+    }
+
+    public static int getBackgroundColorOfView(View v){
+        int color = Color.TRANSPARENT;
+        Drawable background = v.getBackground();
+        if (background instanceof ColorDrawable)
+            color = ((ColorDrawable) background).getColor();
+        return color;
     }
 }

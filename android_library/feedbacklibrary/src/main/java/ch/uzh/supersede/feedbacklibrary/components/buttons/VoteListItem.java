@@ -12,18 +12,19 @@ import android.widget.TextView;
 import ch.uzh.supersede.feedbacklibrary.R;
 import ch.uzh.supersede.feedbacklibrary.beans.FeedbackBean;
 import ch.uzh.supersede.feedbacklibrary.beans.FeedbackVoteBean;
+import ch.uzh.supersede.feedbacklibrary.beans.LocalConfigurationBean;
 import ch.uzh.supersede.feedbacklibrary.beans.LocalFeedbackBean;
 import ch.uzh.supersede.feedbacklibrary.stubs.RepositoryStub;
 
-public class VotesListItem extends AbstractSettingsListItem {
+public class VoteListItem extends AbstractSettingsListItem {
 
-    public VotesListItem(Context context, int visibleTiles, LocalFeedbackBean localFeedbackBean) {
-        super(context, visibleTiles, localFeedbackBean);
+    public VoteListItem(Context context, int visibleTiles, LocalFeedbackBean localFeedbackBean, LocalConfigurationBean configuration, int backgroundColor) {
+        super(context, visibleTiles, localFeedbackBean, configuration, backgroundColor);
 
         LinearLayout upperWrapperLayout = getUpperWrapperLayout();
         LinearLayout lowerWrapperLayout = getLowerWrapperLayout();
 
-        ImageView voteView = createVoteView(getShortParams(), context, localFeedbackBean, getColoredBackground(), PADDING);
+        ImageView voteView = createVoteView(getShortParams(), context, localFeedbackBean, PADDING);
 
         upperWrapperLayout.addView(getTitleView());
         upperWrapperLayout.addView(getDateView());
@@ -33,19 +34,18 @@ public class VotesListItem extends AbstractSettingsListItem {
         addView(lowerWrapperLayout);
     }
 
-    private ImageView createVoteView(LinearLayoutCompat.LayoutParams layoutParams, Context context, LocalFeedbackBean localFeedbackBean, Drawable background, int padding) {
+    private ImageView createVoteView(LinearLayoutCompat.LayoutParams layoutParams, Context context, LocalFeedbackBean localFeedbackBean, int padding) {
         ImageView imageView = new ImageView(context);
         imageView.setLayoutParams(layoutParams);
 
         if (localFeedbackBean.getVoted() > 0) {
             imageView.setImageResource(R.drawable.ic_thumb_up_black_48dp);
-            imageView.getDrawable().mutate().setColorFilter(getResources().getColor(R.color.cyan), PorterDuff.Mode.SRC_IN);
+            imageView.getDrawable().mutate().setColorFilter(getForegroundColor(), PorterDuff.Mode.SRC_IN);
         } else {
             imageView.setImageResource(R.drawable.ic_thumb_down_black_48dp);
-            imageView.getDrawable().mutate().setColorFilter(getResources().getColor(R.color.accent), PorterDuff.Mode.SRC_IN);
+            imageView.getDrawable().mutate().setColorFilter(getForegroundColor(), PorterDuff.Mode.SRC_IN);
         }
 
-        imageView.setBackground(background);
         imageView.setPadding(padding, padding, padding, padding);
 
         return imageView;

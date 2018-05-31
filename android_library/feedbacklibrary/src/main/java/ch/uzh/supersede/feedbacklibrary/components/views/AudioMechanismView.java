@@ -22,17 +22,17 @@ import java.io.File;
 import java.io.IOException;
 
 import ch.uzh.supersede.feedbacklibrary.R;
-import ch.uzh.supersede.feedbacklibrary.models.AbstractMechanism;
-import ch.uzh.supersede.feedbacklibrary.models.AudioMechanism;
+import ch.uzh.supersede.feedbacklibrary.models.AbstractFeedbackPart;
+import ch.uzh.supersede.feedbacklibrary.models.AudioFeedback;
 
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.ModelsConstants.*;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.PATH_DELIMITER;
 
-public class AudioMechanismView extends AbstractMechanismView implements SeekBar.OnSeekBarChangeListener {
+public class AudioMechanismView extends AbstractFeedbackPartView implements SeekBar.OnSeekBarChangeListener {
     private int recordAnimationColorStart;
     private int recordAnimationColorEnd;
     private String audioFilePath;
-    private AudioMechanism audioMechanism;
+    private AudioFeedback audioFeedback;
     private Activity activity;
     private Context applicationContext;
     private boolean isPaused = false;
@@ -60,10 +60,10 @@ public class AudioMechanismView extends AbstractMechanismView implements SeekBar
 
     private MultipleAudioMechanismsListener multipleAudioMechanismsListener;
 
-    public AudioMechanismView(LayoutInflater layoutInflater, AbstractMechanism mechanism, Resources resources, Activity activity, Context applicationContext) {
+    public AudioMechanismView(LayoutInflater layoutInflater, AbstractFeedbackPart mechanism, Resources resources, Activity activity, Context applicationContext) {
         super(layoutInflater);
         this.viewOrder = mechanism.getOrder();
-        this.audioMechanism = (AudioMechanism) mechanism;
+        this.audioFeedback = (AudioFeedback) mechanism;
         this.resources = resources;
         this.activity = activity;
         this.multipleAudioMechanismsListener = (MultipleAudioMechanismsListener) activity;
@@ -90,7 +90,7 @@ public class AudioMechanismView extends AbstractMechanismView implements SeekBar
         handlerRecorder = new Handler();
         updateSeekBarTaskRecorder = new Runnable() {
             public void run() {
-                long audioMechanismTotalDuration = ((long) audioMechanism.getMaxTime()) * 1000;
+                long audioMechanismTotalDuration = ((long) audioFeedback.getMaxTime()) * 1000;
                 // Displaying time completed playing / total duration time
                 String toDisplay = milliSecondsToTimer(currentRecordDuration * 1000) + PATH_DELIMITER + milliSecondsToTimer(audioMechanismTotalDuration);
                 totalDurationLabel.setText(toDisplay);
@@ -119,7 +119,7 @@ public class AudioMechanismView extends AbstractMechanismView implements SeekBar
      * @return the audio mechanism id
      */
     public long getAudioMechanismId() {
-        return audioMechanism.getMechanismId();
+        return audioFeedback.getMechanismId();
     }
 
     private int getProgressPercentage(double currentDuration, double totalDuration) {
@@ -130,7 +130,7 @@ public class AudioMechanismView extends AbstractMechanismView implements SeekBar
     }
 
     private String getDefaultTotalDurationLabel() {
-        return "-/" + milliSecondsToTimer(((long) audioMechanism.getMaxTime()) * 1000);
+        return "-/" + milliSecondsToTimer(((long) audioFeedback.getMaxTime()) * 1000);
     }
 
     private void initView() {
@@ -185,7 +185,7 @@ public class AudioMechanismView extends AbstractMechanismView implements SeekBar
 
                 // Output file
                 File audioFile = applicationContext.getDir(AUDIO_DIR, Context.MODE_PRIVATE);
-                tempAudioFilePath = audioFile.getAbsolutePath() + PATH_DELIMITER + audioMechanism.getMechanismId() + AUDIO_FILENAME + "." + AUDIO_EXTENSION;
+                tempAudioFilePath = audioFile.getAbsolutePath() + PATH_DELIMITER + audioFeedback.getMechanismId() + AUDIO_FILENAME + "." + AUDIO_EXTENSION;
 
                 initMediaRecorder();
                 initRecordIndicatorAnimator();
@@ -196,7 +196,7 @@ public class AudioMechanismView extends AbstractMechanismView implements SeekBar
                 setButtonEnabled(stopButton, true);
                 setButtonEnabled(clearButton, true);
 
-                multipleAudioMechanismsListener.onRecordStart(audioMechanism.getMechanismId());
+                multipleAudioMechanismsListener.onRecordStart(audioFeedback.getMechanismId());
 
                 seekBar.setOnSeekBarChangeListener(null);
                 seekBar.setEnabled(false);
@@ -218,7 +218,7 @@ public class AudioMechanismView extends AbstractMechanismView implements SeekBar
                     onRecordSuccess();
                     Toast toast = Toast.makeText(applicationContext, applicationContext
                             .getResources()
-                            .getString(R.string.audio_maximum_length_reached_text, (Float.valueOf(audioMechanism.getMaxTime())).intValue()), Toast.LENGTH_SHORT);
+                            .getString(R.string.audio_maximum_length_reached_text, audioFeedback.getMaxTime()), Toast.LENGTH_SHORT);
                     toast.show();
                 }
             }
@@ -226,8 +226,8 @@ public class AudioMechanismView extends AbstractMechanismView implements SeekBar
         mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
         mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
         mediaRecorder.setOutputFile(tempAudioFilePath);
-        if (audioMechanism.getMaxTime() >= 1) {
-            mediaRecorder.setMaxDuration(((int) audioMechanism.getMaxTime()) * 1000);
+        if (audioFeedback.getMaxTime() >= 1) {
+            mediaRecorder.setMaxDuration(((int) audioFeedback.getMaxTime()) * 1000);
         } else {
             mediaRecorder.setMaxDuration(1000);
         }
@@ -533,8 +533,8 @@ public class AudioMechanismView extends AbstractMechanismView implements SeekBar
 
     @Override
     public void updateModel() {
-        audioMechanism.setAudioPath(audioFilePath);
-        audioMechanism.setDuration(totalDuration);
+        audioFeedback.setAudioPath(audioFilePath);
+        audioFeedback.setDuration(totalDuration);
     }
 
 
@@ -546,8 +546,8 @@ public class AudioMechanismView extends AbstractMechanismView implements SeekBar
 
     @Override
     public int compareTo(@NonNull Object o) {
-        if (o instanceof AbstractMechanismView){
-            int comparedViewOrder = ((AbstractMechanismView) o).getViewOrder();
+        if (o instanceof AbstractFeedbackPartView){
+            int comparedViewOrder = ((AbstractFeedbackPartView) o).getViewOrder();
             return comparedViewOrder > getViewOrder() ? -1 : comparedViewOrder == getViewOrder() ? 0 : 1;
         }
         return 0;

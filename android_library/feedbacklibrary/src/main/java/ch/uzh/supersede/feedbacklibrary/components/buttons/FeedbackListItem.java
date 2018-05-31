@@ -68,9 +68,7 @@ public class FeedbackListItem extends LinearLayout implements Comparable, ISorta
         titleView = createTextView(shortParams, context, feedbackBean.getTitle(), Gravity.START, padding, textColor);
         dateView = createTextView(shortParams, context, context.getString(R.string.list_date, DateUtility.getDateFromLong(feedbackBean.getTimeStamp())), Gravity.END, padding, textColor);
         int statusColor = ColorUtility.adjustColorToBackground(backgroundColor,feedbackBean.getFeedbackStatus().getColor(),0.4);
-        statusView = createTextView(shortParams, context, feedbackBean
-                .getFeedbackStatus()
-                .getLabel()
+        statusView = createTextView(shortParams, context, feedbackBean.getFeedbackStatus().getLabel()
                 .concat(SPACE + context.getString(R.string.list_responses, feedbackBean.getResponses())), Gravity.START, padding, statusColor);
         pointView = createTextView(shortParams, context, feedbackBean.getVotesAsText(), Gravity.END, padding, textColor);
         updatePercentageColor();
