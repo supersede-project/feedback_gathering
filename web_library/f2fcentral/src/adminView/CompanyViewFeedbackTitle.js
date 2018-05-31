@@ -282,7 +282,7 @@ class CompanyViewFeedbackTitle extends Component {
                   fontSize: 12,
                   fontStyle: 'normal'
               }}
-                  onClick={that.toggleExpanded}>{that.handleBlockedThread()}{that.getIconForFeedbackType()}&nbsp; {(!this.state.expanded && this.props.title.length > 20) ? this.props.title.substring(0, 20) + "..." : this.props.title}
+                  onClick={that.toggleExpanded}>{that.handleBlockedThread()}{that.getIconForFeedbackType()}&nbsp; {(!this.state.expanded && this.props.title.length > 30) ? this.props.title.substring(0, 30) + "..." : this.props.title}
                   <div className={style.spacingstyle}>
                       <div align="left" style={{fontSize: 10, color: '#000000', fontStyle: 'normal', fontWeight: 'normal'}}>sent on {dateText}</div>
                       <div align="left" style={{fontSize: 10, color: '#000000', fontStyle: 'normal', fontWeight: 'normal'}}>Status: {this.handleFeedbackStatus()}

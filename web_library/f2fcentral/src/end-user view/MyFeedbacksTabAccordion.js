@@ -73,7 +73,7 @@ class MyFeedbacksTabAccordion extends Component {
             if(item.textFeedbacks.length > 0 && item.categoryFeedbacks.length > 0)
             {
               return (
-                  <AccordionItem className={style.reactsanfonaitem} titleTag="span" title={<FeedbackTitle feedbackId={item.id} update={that.fetchData} updateSetting={that.fetchData} onShowChat={that.handleShowChat} type={item.categoryFeedbacks[0].parameterId} title={item.textFeedbacks[0].text} visibility={item.visibility} published={item.published} date={item.createdAt} likes={item.likeCount} dislikes={item.dislikeCount} commentnumber={item.commentCount}/>}>
+                  <AccordionItem className={style.reactsanfonaitem} titleTag="span" title={<FeedbackTitle feedbackId={item.id} update={that.fetchData} updateSetting={that.fetchData} onShowChat={that.handleShowChat} type={item.textFeedbacks[0].mechanismId} title={item.textFeedbacks[0].text} visibility={item.visibility} published={item.published} date={item.createdAt} likes={item.likeCount} dislikes={item.dislikeCount} commentnumber={item.commentCount}/>}>
                   </AccordionItem>
               )
             }

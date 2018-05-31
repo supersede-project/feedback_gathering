@@ -148,7 +148,7 @@ class ForumTitle extends Component {
                     fontSize: 12,
                     fontStyle: 'italic'
                 }}
-                    onClick={this.toggleExpanded}>{this.getIconForFeedbackType()}&nbsp; {(!this.state.expanded && this.props.title.length > 20) ? this.props.title.substring(0, 20) + "..." : this.props.title}
+                    onClick={this.toggleExpanded}>{this.getIconForFeedbackType()}&nbsp; {(!this.state.expanded && this.props.title.length > 30) ? this.props.title.substring(0, 30) + "..." : this.props.title}
                 </h5>
                 <div className={style.forumIconContainer}>
                     <div className={style.bundledIcon}>
@@ -209,7 +209,7 @@ class ForumTitle extends Component {
                     fontSize: 12,
                     fontStyle: 'italic'
                 }}
-                    onClick={this.toggleExpanded}>{this.getIconForFeedbackType()}&nbsp; {(!this.state.expanded && this.props.title.length > 20) ? this.props.title.substring(0, 20) + "..." : this.props.title}
+                    onClick={this.toggleExpanded}>{this.getIconForFeedbackType()}&nbsp; {(!this.state.expanded && this.props.title.length > 30) ? this.props.title.substring(0, 30) + "..." : this.props.title}
                 </h5>
                 <div className={style.forumIconContainer}>
                     <div className={style.bundledIcon}>

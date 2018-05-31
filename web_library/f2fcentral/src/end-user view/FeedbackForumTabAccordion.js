@@ -353,7 +353,7 @@ class FeedbackForumTabAccordion extends Component {
                                     <ForumTitle feedbackId={item.id} unread={unread} visibility={visibility}
                                                 title={item.textFeedbacks[0].text} thumbsUp={item.likeCount}
                                                 thumbsDown={item.dislikeCount} comment={item.commentCount}
-                                                type={item.categoryFeedbacks[0].parameterId}
+                                                type={item.textFeedbacks[0].mechanismId}
                                                 onShowCommentChange={instance.handleShowCommentChange}
                                                 update={instance.fetchData.bind(instance)} index={index}/>;
                             }
