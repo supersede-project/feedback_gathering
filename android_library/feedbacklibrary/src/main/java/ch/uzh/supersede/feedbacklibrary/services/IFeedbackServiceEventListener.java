@@ -2,8 +2,6 @@ package ch.uzh.supersede.feedbacklibrary.services;
 
 public interface IFeedbackServiceEventListener {
     enum EventType {
-        PING_ORCHESTRATOR,
-        PING_REPOSITORY,
         CREATE_FEEDBACK_VARIANT,
         GET_CONFIGURATION,
         GET_MINE_FEEDBACK_VOTES,

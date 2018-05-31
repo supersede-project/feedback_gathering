@@ -302,21 +302,6 @@ public class AnnotateImageActivity extends AbstractBaseActivity implements Color
         return allStickerAnnotations;
     }
 
-    private void refreshAnnotationNumber(ViewGroup viewGroup) {
-        if (viewGroup != null) {
-            for (int i = 0; i < viewGroup.getChildCount(); ++i) {
-                View child = viewGroup.getChildAt(i);
-                if (child instanceof TextAnnotationImageView) {
-                    TextView textView = (((TextAnnotationImageView) child).getAnnotationNumber());
-                    String newAnnotationNumber = Integer.toString(Integer.valueOf(textView.getText().toString()) - 1);
-                    if (Integer.valueOf(newAnnotationNumber) != 0) {
-                        textView.setText(newAnnotationNumber);
-                    }
-                }
-            }
-        }
-    }
-
     private void removeOutOfBoundsAnnotations() {
         RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.supersede_feedbacklibrary_annotate_image_layout);
 

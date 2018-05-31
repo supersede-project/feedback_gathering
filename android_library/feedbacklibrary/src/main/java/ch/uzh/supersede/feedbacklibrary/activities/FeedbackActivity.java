@@ -54,6 +54,7 @@ public class FeedbackActivity extends AbstractBaseActivity implements AudioMecha
     private String language;
     private String baseURL;
     private FeedbackDetailsBean feedbackDetailsBean;
+    private FeedbackBean feedbackBean;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,8 +117,7 @@ public class FeedbackActivity extends AbstractBaseActivity implements AudioMecha
     @SuppressWarnings("unchecked")
     public void onEventCompleted(EventType eventType, Object response) {
         switch (eventType) {
-            case PING_REPOSITORY:
-                FeedbackDetailsBean feedbackBean = prepareSendFeedback();
+            case CREATE_FEEDBACK_VARIANT:
                 if (VersionUtility.getDateVersion() > 1) {
                     Intent intent = new Intent(this, FeedbackDetailsActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
@@ -126,12 +126,10 @@ public class FeedbackActivity extends AbstractBaseActivity implements AudioMecha
                     this.onBackPressed(); //This serves the purpose of erasing the Feedback Activity from the Back-Button
                     startActivity(intent);
                     overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
-                }else{
-                    Toast.makeText(getApplicationContext(),getResources().getString(R.string.feedback_success),Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getApplicationContext(), getResources().getString(R.string.feedback_success), Toast.LENGTH_SHORT).show();
                     onBackPressed();
                 }
-                break;
-            case CREATE_FEEDBACK_VARIANT:
                 break;
             default:
                 break;
@@ -173,7 +171,7 @@ public class FeedbackActivity extends AbstractBaseActivity implements AudioMecha
         Utils.wipeImages(this);
     }
 
-    private FeedbackDetailsBean prepareSendFeedback() {
+    private FeedbackDetailsBean execPrepareAndSendFeedback() {
         String userName = FeedbackDatabase.getInstance(this).readString(USER_NAME, null);
         long timestamp = System.currentTimeMillis();
         UUID feedbackUid = UUID.randomUUID();
@@ -189,7 +187,7 @@ public class FeedbackActivity extends AbstractBaseActivity implements AudioMecha
         String labels = ""; //TODO [jfo] set
         Bitmap bitmap = null; //TODO [jfo] set
 
-        FeedbackBean feedbackBean = new FeedbackBean.Builder()
+        feedbackBean = new FeedbackBean.Builder()
                 .withUserName(userName)
                 .withTimestamp(timestamp)
                 .withFeedbackUid(feedbackUid)
@@ -311,10 +309,6 @@ public class FeedbackActivity extends AbstractBaseActivity implements AudioMecha
             Log.v(FEEDBACK_ACTIVITY_TAG, "Validation of the mechanism failed");
             DialogUtils.showInformationDialog(this, messages.toArray(new String[messages.size()]), false);
         }
-    }
-
-    private void execPrepareAndSendFeedback() {
-        FeedbackService.getInstance().pingRepository(this);
     }
 
     private boolean isOnline() {

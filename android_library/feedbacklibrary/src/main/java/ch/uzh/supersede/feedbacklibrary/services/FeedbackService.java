@@ -74,15 +74,7 @@ public abstract class FeedbackService {
         return instance;
     }
 
-    public abstract void pingOrchestrator(IFeedbackServiceEventListener callback);
-
-    public abstract void pingRepository(IFeedbackServiceEventListener callback);
-
     public abstract void createFeedbackVariant(IFeedbackServiceEventListener callback, Activity activity, String language, long applicationId, FeedbackDetailsBean feedbackDetailsBean, List<MultipartBody.Part> files);
-
-    public abstract void getConfiguration(IFeedbackServiceEventListener callback, ConfigurationRequestBean configurationRequestBean);
-
-    public abstract void execImportConfigurationAndStartActivity(ConfigurationRequestBean configurationRequestBean, Response<OrchestratorConfigurationItem> response);
 
     public abstract void getMineFeedbackVotes(IFeedbackServiceEventListener callback, Activity activity);
 
@@ -93,23 +85,9 @@ public abstract class FeedbackService {
     public abstract void createSubscription(IFeedbackServiceEventListener callback, Context context, FeedbackBean feedbackBean, boolean isChecked);
 
     private static class FeedbackApiService extends FeedbackService {
-        @Override
-        public void pingOrchestrator(IFeedbackServiceEventListener callback) {
-            feedbackAPI.pingOrchestrator().enqueue(
-                    new FeedbackCallback<ResponseBody>(callback, EventType.PING_ORCHESTRATOR) {
-                    });
-        }
-
-        @Override
-        public void pingRepository(IFeedbackServiceEventListener callback) {
-            feedbackAPI.pingRepository().enqueue(
-                    new FeedbackCallback<ResponseBody>(callback, EventType.PING_REPOSITORY) {
-                    });
-        }
 
         @Override
         public void createFeedbackVariant(IFeedbackServiceEventListener callback, Activity activity, String language, long applicationId, FeedbackDetailsBean feedbackDetailsBean, List<MultipartBody.Part> files) {
-            // The JSON string of the feedback
             GsonBuilder builder = new GsonBuilder();
             builder.excludeFieldsWithoutExposeAnnotation();
             builder.serializeNulls();
@@ -121,69 +99,6 @@ public abstract class FeedbackService {
             feedbackAPI.createFeedbackVariant(language, applicationId, jsonPart, files).enqueue(
                     new FeedbackCallback<JsonObject>(callback, EventType.CREATE_FEEDBACK_VARIANT) {
                     });
-        }
-
-        @Override
-        public void getConfiguration(IFeedbackServiceEventListener callback, ConfigurationRequestBean configurationRequestBean) {
-            feedbackAPI.getConfiguration(configurationRequestBean.getLanguage(), configurationRequestBean.getApplicationId()).enqueue(
-                    new FeedbackCallback<OrchestratorConfigurationItem>(callback, EventType.GET_CONFIGURATION) {
-                    });
-        }
-
-        @Override
-        public void execImportConfigurationAndStartActivity(ConfigurationRequestBean configurationRequestBean, Response<OrchestratorConfigurationItem> response) {
-            if (response == null || response.body() == null) {
-                return;
-            }
-
-            OrchestratorConfigurationItem configuration = response.body();
-            List<ConfigurationItem> configurationItems = configuration.getConfigurationItems();
-            long selectedPullConfigurationIndex = -1;
-            ConfigurationItem selectedConfigurationItem = null;
-            Log.d(FEEDBACK_SERVICE_TAG, " Application with ID [" + configurationRequestBean.getApplicationId() + "] has " + configurationItems.size() + "  configurations!");
-            for (ConfigurationItem configurationItem : configurationItems) {
-                if (configurationItem
-                        .getType()
-                        .equals("PULL") && configurationItem.getId() == configurationRequestBean
-                        .getPullConfigurationId()) {
-                    selectedPullConfigurationIndex = configurationItem.getId();
-                    selectedConfigurationItem = configurationItem;
-                    break;
-                }
-            }
-
-            if (selectedPullConfigurationIndex != -1 && selectedConfigurationItem != null) {
-                // If no "showIntermediateDialog" is provided, show it
-                boolean showIntermediateDialog = true;
-                for (Map<String, Object> parameter : selectedConfigurationItem.getGeneralConfigurationItem().getParameters()) {
-                    String key = (String) parameter.get("key");
-                    showIntermediateDialog = isShowIntermediateDialog(showIntermediateDialog, parameter, key);
-                }
-
-                String jsonConfiguration = new GsonBuilder()
-                        .setLenient()
-                        .create()
-                        .toJson(configuration);
-                //Notabene, hier wird die ganze Konfiguration verwendet, nicht Bruchstuecke..
-
-                Intent intent = createFeedbackIntentFromPull(configurationRequestBean, jsonConfiguration, selectedPullConfigurationIndex);
-
-                if (!showIntermediateDialog) {
-                    // Start the feedback activity without asking the user
-                    configurationRequestBean
-                            .getStartingActivity()
-                            .startActivity(intent);
-                } else {
-                    // Ask the user if he would like to give feedback or not
-                    DialogUtils.PullFeedbackIntermediateDialog d = DialogUtils.PullFeedbackIntermediateDialog.newInstance(configurationRequestBean.getIntermediateDialogText(), jsonConfiguration,
-                            selectedPullConfigurationIndex, configurationRequestBean.getUrl(), configurationRequestBean.getLanguage());
-                    d.show(configurationRequestBean.getStartingActivity().getFragmentManager(), "feedbackPopupDialog");
-                }
-            } else {
-                DialogUtils.showInformationDialog(configurationRequestBean.getStartingActivity(), new String[]{configurationRequestBean
-                        .getStartingActivity()
-                        .getResources().getString(R.string.info_application_unavailable)}, true);
-            }
         }
 
         @Override
@@ -205,53 +120,14 @@ public abstract class FeedbackService {
         public void createSubscription(IFeedbackServiceEventListener callback, Context context, FeedbackBean feedbackBean, boolean isChecked) {
             //TODO [jfo] implement
         }
-
-        private boolean isShowIntermediateDialog(boolean showIntermediateDialog, Map<String, Object> parameter, String key) {
-            if (key.equals("showIntermediateDialog")) {
-                showIntermediateDialog = Utils.intToBool(Integer.valueOf(parameter.get("value").toString()));
-            }
-            return showIntermediateDialog;
-        }
-
-        /**
-         * Starts an activity with the orchestrator-configuration
-         */
-        private static Intent createFeedbackIntentFromPull(ConfigurationRequestBean configWrapper, String jsonConfiguration, long selectedPullConfigurationIndex) {
-            Intent intent = new Intent(configWrapper.getStartingActivity(), configWrapper.getActivityToStart());
-            intent.putExtra(IS_PUSH_STRING, false);
-            intent.putExtra(JSON_CONFIGURATION_STRING, jsonConfiguration);
-            intent.putExtra(SELECTED_PULL_CONFIGURATION_INDEX, selectedPullConfigurationIndex);
-            intent.putExtra(EXTRA_KEY_BASE_URL, configWrapper.getUrl());
-            intent.putExtra(EXTRA_KEY_LANGUAGE, configWrapper.getLanguage());
-            return intent;
-        }
     }
 
     private static class FeedbackMockService extends FeedbackService {
-        @Override
-        public void pingOrchestrator(IFeedbackServiceEventListener callback) {
-            callback.onEventCompleted(PING_ORCHESTRATOR, null);
-        }
-
-        @Override
-        public void pingRepository(IFeedbackServiceEventListener callback) {
-            callback.onEventCompleted(PING_REPOSITORY, null);
-        }
 
         @Override
         public void createFeedbackVariant(IFeedbackServiceEventListener callback, Activity activity, String language, long applicationId, FeedbackDetailsBean feedbackDetailsBean, List<MultipartBody.Part> files) {
             FeedbackDatabase.getInstance(activity).writeFeedback(feedbackDetailsBean.getFeedbackBean(), Enums.SAVE_MODE.CREATED);
             callback.onEventCompleted(CREATE_FEEDBACK_VARIANT, null);
-        }
-
-        @Override
-        public void getConfiguration(IFeedbackServiceEventListener callback, ConfigurationRequestBean configurationRequestBean) {
-            callback.onEventCompleted(GET_CONFIGURATION, null);
-        }
-
-        @Override
-        public void execImportConfigurationAndStartActivity(ConfigurationRequestBean configurationRequestBean, Response<OrchestratorConfigurationItem> response) {
-            //TODO [jfo] probably not needed
         }
 
         @Override

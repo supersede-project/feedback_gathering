@@ -3,7 +3,7 @@ package ch.uzh.supersede.feedbacklibrary.beans;
 import android.app.Activity;
 import android.util.Log;
 
-import static ch.uzh.supersede.feedbacklibrary.utils.Constants.ServicesConstants.CONFIGURATION_REAUEST_WRAPPER_TAG;
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.ServicesConstants.CONFIGURATION_REQUEST_WRAPPER_TAG;
 
 
 public class ConfigurationRequestBean {
@@ -108,7 +108,7 @@ public class ConfigurationRequestBean {
 
         private boolean checkNullAndLog(Object o, String label) {
             if (o == null) {
-                Log.e(CONFIGURATION_REAUEST_WRAPPER_TAG, "Could not create ConfigurationRequestBean because " + label + " is null.");
+                Log.e(CONFIGURATION_REQUEST_WRAPPER_TAG, "Could not create ConfigurationRequestBean because " + label + " is null.");
                 return true;
             }
             return false;
