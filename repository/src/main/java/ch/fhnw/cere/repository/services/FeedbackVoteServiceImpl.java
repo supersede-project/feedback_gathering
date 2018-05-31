@@ -39,9 +39,8 @@ public class FeedbackVoteServiceImpl implements FeedbackVoteService {
     }
 
     @Override
-    public List<FeedbackVote> findByVotedUserId(long id) {
-
-        return feedbackVoteRepository.findByVotedUserId(id);
+    public List<FeedbackVote> findByVotedUserName(String username) {
+        return null;
     }
 
     @Override

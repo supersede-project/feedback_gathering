@@ -73,15 +73,17 @@ public class AndroidUserServiceImpl implements AndroidUserService {
         androidUser.setVoteCount(countVotes(androidUser.getId()));
     }
 
-    // TODO: fix this!
     private int calculateKarma(String userName) {
         int karma = 0;
-        List<FeedbackVote> votes = feedbackVoteService.findByVotedUserName(userName);
+        List<Feedback> userFeedback = feedbackService.findByUserIdentification(userName);
 
-        for(FeedbackVote vote : votes) {
-            karma += vote.getVote();
+        for (Feedback feedback : userFeedback) {
+            long feedbackId = feedback.getId();
+            List<FeedbackVote> votes = feedbackVoteService.findByFeedbackId(feedbackId);
+            for(FeedbackVote vote : votes) {
+                karma += vote.getVote();
+            }
         }
-
         return karma;
     }
 
