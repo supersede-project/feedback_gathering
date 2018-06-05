@@ -37,8 +37,8 @@ public class AndroidUserController extends BaseController {
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "", params = "name")
-    public AndroidUser getAndroidUserByName(@RequestParam("name") String name) {
-        AndroidUser androidUser = androidUserService.findByName(name);
+    public AndroidUser getAndroidUserByNameAndApplicationId(@PathVariable long applicationId, @RequestParam("name") String name) {
+        AndroidUser androidUser = androidUserService.findByNameAndApplicationId(name, applicationId);
         if (androidUser == null) {
             throw new NotFoundException();
         }

@@ -10,5 +10,6 @@ public interface AndroidUserService {
     public AndroidUser find(long id);
     public void delete(long id);
     public AndroidUser findByName(String name);
+    public AndroidUser findByNameAndApplicationId(String name, long applicationId);
     List<AndroidUser> findByApplicationId(long id);
 }

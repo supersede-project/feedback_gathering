@@ -56,6 +56,12 @@ public class AndroidUserServiceImpl implements AndroidUserService {
         return androidUser;
     }
 
+    public AndroidUser findByNameAndApplicationId(String name, long applicationId) {
+        AndroidUser androidUser = androidUserRepository.findByNameAndApplicationId(name, applicationId);
+        calculateStats(androidUser);
+        return androidUser;
+    }
+
     public List<AndroidUser> findByApplicationId(long id) {
 
         List<AndroidUser> androidUsers = androidUserRepository.findByApplicationId(id);
