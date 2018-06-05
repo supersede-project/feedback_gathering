@@ -18,27 +18,16 @@ import ch.uzh.supersede.feedbacklibrary.models.TextFeedback;
 import ch.uzh.supersede.feedbacklibrary.utils.CompareUtility;
 
 public class Feedback implements Serializable {
-    @Expose
     private long applicationId;
-    @Expose
     private long configurationId;
-    @Expose
     private Map<String, Object> contextInformation;
-    @Expose
     private String language;
-    @Expose
     private String title;
-    @Expose
     private String userIdentification;
-    @Expose
     private List<AudioFeedback> audioFeedbackList;
-    @Expose
     private List<LabelFeedback> categoryFeedbackList;
-    @Expose
     private List<RatingFeedback> ratingFeedbackList;
-    @Expose
     private List<ScreenshotFeedback> screenshotFeedbackList;
-    @Expose
     private List<TextFeedback> textFeedbackList;
 
     private Feedback() {

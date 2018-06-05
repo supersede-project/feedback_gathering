@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.pm.ApplicationInfo;
 
 import java.io.Serializable;
+import java.util.Locale;
 
 import ch.uzh.supersede.feedbacklibrary.entrypoint.*;
 import ch.uzh.supersede.feedbacklibrary.entrypoint.IFeedbackStyle.FEEDBACK_STYLE;
@@ -47,6 +48,7 @@ public class LocalConfigurationBean implements Serializable {
     private String hostApplicationName;
     private String hostApplicationId;
     private Long hostApplicationLongId;
+    private String hostApplicationLanguage;
     private Integer[] topColors;
     private boolean coloringVertical;
 
@@ -73,6 +75,7 @@ public class LocalConfigurationBean implements Serializable {
         hostApplicationName = getApplicationName(activity);
         hostApplicationId = getApplicationId(activity);
         hostApplicationLongId = NumberUtility.createApplicationIdFromString(hostApplicationId);
+        hostApplicationLanguage = Locale.getDefault().getLanguage();
     }
 
     private void readConfiguration(IFeedbackBehavior configuration) {
@@ -321,6 +324,10 @@ public class LocalConfigurationBean implements Serializable {
 
     public Long getHostApplicationLongId() {
         return hostApplicationLongId;
+    }
+
+    public String getHostApplicationLanguage() {
+        return hostApplicationLanguage;
     }
 
     public Integer[] getTopColors() {

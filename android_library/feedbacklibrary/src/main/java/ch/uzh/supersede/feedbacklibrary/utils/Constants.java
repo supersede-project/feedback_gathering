@@ -15,6 +15,8 @@ public class Constants {
     public static final String SPACE = " ";
     public static final String PATH_DELIMITER = "/";
     public static final String SUPERSEDE_BASE_URL = "http://supersede.es.atos.net:8081/"; //"https://platform.supersede.eu:8443/";
+    public static final String LIFETIME_TOKEN = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJzdXBlcl9hZG1pbiIsImNyZWF0ZWQiOjE1Mjc3NzQxODAyMzQsImV4cCI6MjEzMjU3NDE4MH0.A00XDDAt3PUsYNkBDiJD5jZ3CbimW4" +
+            "-4YgEiyKu3DFTXhxQ5QuWy2fgZrAiqxtSiQbAOfMn-E8wLTvx0RQorjQ"; //FIXME [jfo] remove as soon as possible
 
     public static final String SEPARATOR = "::;;::;;";
 
@@ -80,16 +82,16 @@ public class Constants {
         public static final int YUGOSLAVIA_RED = -2359296;
         public static final int YUGOSLAVIA_BLUE = -16697197;
         public static final int ITALY_GREEN = -16739770;
-        public static final int ITALY_RED= -3265737;
-        public static final int GERMANY_RED= -2293760;
-        public static final int GERMANY_GOLD= -12800;
-        public static final int AUSTRIA_RED= -1234631;
-        public static final int FRANCE_BLUE= -16768107;
-        public static final int FRANCE_RED= -1234631;
-        public static final int WIN95_GRAY= -4144960;
-        public static final int WIN95_BLUE= -16777088;
-        public static final int DISABLED_BACKGROUND= -3355444;
-        public static final int DISABLED_FOREGROUND= -8750470;
+        public static final int ITALY_RED = -3265737;
+        public static final int GERMANY_RED = -2293760;
+        public static final int GERMANY_GOLD = -12800;
+        public static final int AUSTRIA_RED = -1234631;
+        public static final int FRANCE_BLUE = -16768107;
+        public static final int FRANCE_RED = -1234631;
+        public static final int WIN95_GRAY = -4144960;
+        public static final int WIN95_BLUE = -16777088;
+        public static final int DISABLED_BACKGROUND = -3355444;
+        public static final int DISABLED_FOREGROUND = -8750470;
 
         //FeedbackAcitivity
         public static final String FEEDBACK_ACTIVITY_TAG = "FeedbackActivity";

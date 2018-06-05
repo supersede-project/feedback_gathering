@@ -2,7 +2,10 @@ package ch.uzh.supersede.feedbacklibrary.services;
 
 public interface IFeedbackServiceEventListener {
     enum EventType {
-        CREATE_FEEDBACK_VARIANT,
+        AUTHENTICATE,
+        CREATE_USER,
+        GET_USER,
+        CREATE_FEEDBACK,
         GET_CONFIGURATION,
         GET_MINE_FEEDBACK_VOTES,
         GET_OTHERS_FEEDBACK_VOTES,

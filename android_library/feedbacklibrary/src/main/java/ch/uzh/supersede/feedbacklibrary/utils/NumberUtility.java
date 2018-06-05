@@ -80,7 +80,7 @@ public class NumberUtility {
         String package2 = stringToLongString(pts[pointer[type][1]],3);
         String package3 = stringToLongString(pts[pointer[type][2]],3);
         String package4 = stringToLongString(pts[pointer[type][3]],3);
-        return -Long.valueOf(head+length+application+package1+package2+package3+package4);
+        return 8; //FIXME [jfo] -Long.valueOf(head+length+application+package1+package2+package3+package4);
     }
 
     private static String stringToLongString(String s, int maxDigits){

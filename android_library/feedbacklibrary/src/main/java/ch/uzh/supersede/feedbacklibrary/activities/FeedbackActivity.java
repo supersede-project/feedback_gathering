@@ -51,8 +51,6 @@ public class FeedbackActivity extends AbstractBaseActivity implements AudioMecha
     private List<AbstractFeedbackPart> mechanisms;
     private List<AbstractFeedbackPartView> mechanismViews;
 
-    private String language;
-    private String baseURL;
     private FeedbackDetailsBean feedbackDetailsBean;
     private FeedbackBean feedbackBean;
 
@@ -60,10 +58,6 @@ public class FeedbackActivity extends AbstractBaseActivity implements AudioMecha
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_feedback);
-
-        language = "en"; //FIXME pay attention
-        baseURL = SUPERSEDE_BASE_URL;
-
         initView();
         onPostCreate();
     }
@@ -117,7 +111,7 @@ public class FeedbackActivity extends AbstractBaseActivity implements AudioMecha
     @SuppressWarnings("unchecked")
     public void onEventCompleted(EventType eventType, Object response) {
         switch (eventType) {
-            case CREATE_FEEDBACK_VARIANT:
+            case CREATE_FEEDBACK:
                 if (VersionUtility.getDateVersion() > 1) {
                     Intent intent = new Intent(this, FeedbackDetailsActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
@@ -165,7 +159,7 @@ public class FeedbackActivity extends AbstractBaseActivity implements AudioMecha
     }
 
     private void execCreateFeedbackVariant(FeedbackDetailsBean feedbackDetailsBean, List<MultipartBody.Part> multipartFiles) {
-        FeedbackService.getInstance().createFeedbackVariant(this, this, language, configuration.getHostApplicationLongId(), feedbackDetailsBean, multipartFiles);
+        FeedbackService.getInstance().createFeedback(this, this, feedbackDetailsBean, multipartFiles);
         Toast toast = Toast.makeText(getApplicationContext(), getResources().getString(R.string.feedback_success), Toast.LENGTH_SHORT);
         toast.show();
         Utils.wipeImages(this);
@@ -221,7 +215,6 @@ public class FeedbackActivity extends AbstractBaseActivity implements AudioMecha
             Gson gson = builder.create();
             String jsonString = gson.toJson(FeedbackTransformer.FeedbackDetailsBeanToFeedback(feedbackDetailsBean, configuration.getHostApplicationLongId(), mechanisms));
 
-            Log.i("TEST:", "language: " + language);
             Log.i("TEST:", "applicationId: " + configuration.getHostApplicationLongId());
             Log.i("TEST:", "jsonString: " + jsonString);
             Log.i("TEST:", "files: " + multipartFiles.toString());
@@ -284,16 +277,6 @@ public class FeedbackActivity extends AbstractBaseActivity implements AudioMecha
     public void sendButtonClicked(View view) {
         if (!isOnline()) {
             DialogUtils.showInformationDialog(this, new String[]{getResources().getString(R.string.feedback_check_network_state)}, true);
-            return;
-        }
-
-        if (baseURL == null || language == null) {
-            if (baseURL == null) {
-                Log.e(FEEDBACK_ACTIVITY_TAG, "Failed to send the feedback. baseURL is null");
-            } else {
-                Log.e(FEEDBACK_ACTIVITY_TAG, "Failed to send the feedback. language is null");
-            }
-            DialogUtils.showInformationDialog(this, new String[]{getResources().getString(R.string.info_error)}, true);
             return;
         }
 
