@@ -7,7 +7,7 @@ public class AndroidUser {
     private String name;
     private long applicationId;
     private int karma;
-    private int voteCount;
+    private Integer voteCount; //FIXME [jfo] because repo..
     private int feedbackCount;
     @SerializedName("developer")
     private boolean isDeveloper;
