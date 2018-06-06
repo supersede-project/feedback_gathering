@@ -19,11 +19,19 @@ cd ../HttpMonitoring
 echo -e "\nCleaning and building HTTP Monitor...\n"
 ./gradlew clean build --refresh-dependencies
 
+cd ../JsonLogs
+echo -e "\nCleaning and building Json Logs Monitor...\n"
+./gradlew clean build --refresh-dependencies
+
 cd ../MonitoringUserEvents/PrjMonitoringUserEvents
 echo -e "\nCleaning and building MonitoringUserEvents Monitor...\n"
-mvn clean package --refresh-dependencies
+mvn clean package 
 
-cd ../../DiskMonitor
+cd ../../ConfigurationFileHTMLMonitor/
+echo -e "\nCleaning and building ConfigurationFileHTML Monitor...\n"
+mvn clean package
+
+cd ../DiskMonitor
 echo -e "\nCleaning and building DiskMonitor Monitor...\n"
 cp /home/tomcat/ssh src/main/resources/ssh
 ./gradlew clean build --refresh-dependencies
