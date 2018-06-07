@@ -2,18 +2,14 @@ package ch.uzh.supersede.feedbacklibrary.activities;
 
 
 import android.content.DialogInterface;
-import android.content.DialogInterface.OnClickListener;
-import android.content.pm.PackageManager;
+import android.annotation.SuppressLint;
+import android.content.*;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.text.Html;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.view.*;
+import android.widget.*;
 
 import java.util.List;
 
@@ -96,6 +92,30 @@ public class FeedbackHubActivity extends AbstractBaseActivity implements IFeedba
         FeedbackService.getInstance().authenticate(this, new AuthenticateRequest("test", "123")); //TODO [jfo] parse credentials
     }
 
+    @SuppressLint("ClickableViewAccessibility")
+    @Override
+    protected void createInfoBubbles() {
+        boolean tutorialFinished = getSharedPreferences(SHARED_PREFERENCES_ID, MODE_PRIVATE).getBoolean(SHARED_PREFERENCES_TUTORIAL_HUB,false);
+        if (!tutorialFinished) {
+            RelativeLayout root = getView(R.id.hub_root, RelativeLayout.class);
+            RelativeLayout mLayout = infoUtility.addInfoBox(root, getString(R.string.hub_feedback_status_label), getString(R.string.hub_feedback_status_info), this, statusText);
+            RelativeLayout llLayout = infoUtility.addInfoBox(root, getString(R.string.hub_feedback_create_label), getString(R.string.hub_feedback_create_info), this, feedbackButton, mLayout);
+            RelativeLayout lrLayout = infoUtility.addInfoBox(root, getString(R.string.hub_feedback_settings_label), getString(R.string.hub_feedback_settings_info), this, settingsButton,llLayout);
+            RelativeLayout ulLayout = infoUtility.addInfoBox(root, getString(R.string.hub_feedback_list_label), getString(R.string.hub_feedback_list_info), this, listButton, lrLayout);
+            RelativeLayout urLayout = infoUtility.addInfoBox(root, getString(R.string.hub_feedback_user_lvl_label), getString(R.string.hub_feedback_user_lvl_info), this, levelButton, ulLayout);
+            RelativeLayout umLayout = infoUtility.addInfoBox(root, getString(R.string.hub_feedback_info_label), getString(R.string.hub_feedback_info_info), this, spaceTop, urLayout);
+            mLayout.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    Toast.makeText(v.getContext(), R.string.hub_tutorial_finished, Toast.LENGTH_SHORT).show();
+                    getSharedPreferences(SHARED_PREFERENCES_ID, MODE_PRIVATE).edit().putBoolean(SHARED_PREFERENCES_TUTORIAL_HUB, true).apply();
+                    return false;
+                }
+            });
+            colorShape(1, lrLayout, llLayout, mLayout, urLayout, ulLayout,umLayout);
+        }
+    }
+
     private void restoreHostApplicationNameToPreferences() {
         String extraHostApplicationName = getIntent().getStringExtra(EXTRA_KEY_HOST_APPLICATION_NAME);
         String preferencesHostApplicationName = getSharedPreferences(SHARED_PREFERENCES_ID, MODE_PRIVATE).getString(SHARED_PREFERENCES_HOST_APPLICATION_NAME, null);
@@ -176,13 +196,12 @@ public class FeedbackHubActivity extends AbstractBaseActivity implements IFeedba
                 enableView(levelButton, 2);
             }
         }
-        statusText.setVisibility(View.GONE);
-        if (PASSIVE.check(getApplicationContext(), ignoreDatabaseCheck)) {
-            enableView(listButton, 1, VersionUtility.getDateVersion() > 1);
+        statusText.setText(null);
+        if (PASSIVE.check(getApplicationContext(),ignoreDatabaseCheck)){
+            enableView(listButton,1,VersionUtility.getDateVersion()>1);
         }
-        if (ACTIVE.check(getApplicationContext(), ignoreDatabaseCheck)) {
-            statusText.setVisibility(View.VISIBLE);
-            Utils.persistScreenshot(this, cachedScreenshot);
+        if (ACTIVE.check(getApplicationContext(),ignoreDatabaseCheck)){
+            Utils.persistScreenshot(this,cachedScreenshot);
             int ownFeedbackBeans = FeedbackDatabase.getInstance(this).getFeedbackBeans(OWN).size();
             int upVotedFeedbackBeans = FeedbackDatabase.getInstance(this).getFeedbackBeans(UP_VOTED).size();
             int downVotedFeedbackBeans = FeedbackDatabase.getInstance(this).getFeedbackBeans(DOWN_VOTED).size();
