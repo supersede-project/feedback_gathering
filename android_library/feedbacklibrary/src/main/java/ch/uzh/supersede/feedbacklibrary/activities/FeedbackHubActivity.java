@@ -147,12 +147,11 @@ public class FeedbackHubActivity extends AbstractBaseActivity {
                 enableView(levelButton,2);
             }
         }
-        statusText.setVisibility(View.GONE);
+        statusText.setText(null);
         if (PASSIVE.check(getApplicationContext(),ignoreDatabaseCheck)){
             enableView(listButton,1,VersionUtility.getDateVersion()>1);
         }
         if (ACTIVE.check(getApplicationContext(),ignoreDatabaseCheck)){
-            statusText.setVisibility(View.VISIBLE);
             Utils.persistScreenshot(this,cachedScreenshot);
             int ownFeedbackBeans = FeedbackDatabase.getInstance(this).getFeedbackBeans(OWN).size();
             int upVotedFeedbackBeans = FeedbackDatabase.getInstance(this).getFeedbackBeans(UP_VOTED).size();
