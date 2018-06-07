@@ -5,18 +5,17 @@ import android.view.LayoutInflater;
 import android.widget.RatingBar;
 
 import ch.uzh.supersede.feedbacklibrary.R;
-import ch.uzh.supersede.feedbacklibrary.models.AbstractFeedbackPart;
 import ch.uzh.supersede.feedbacklibrary.models.RatingFeedback;
 
-public class RatingMechanismView extends AbstractFeedbackPartView {
+public class RatingFeedbackView extends AbstractFeedbackPartView {
     private RatingFeedback ratingFeedback;
     private RatingBar ratingBar;
 
-    public RatingMechanismView(LayoutInflater layoutInflater, AbstractFeedbackPart mechanism) {
+    public RatingFeedbackView(LayoutInflater layoutInflater, RatingFeedback ratingFeedback) {
         super(layoutInflater);
-        this.viewOrder = mechanism.getOrder();
-        this.ratingFeedback = (RatingFeedback) mechanism;
-        setEnclosingLayout(getLayoutInflater().inflate(R.layout.mechanism_rating, null));
+        this.viewOrder = ratingFeedback.getOrder();
+        this.ratingFeedback = ratingFeedback;
+        setEnclosingLayout(getLayoutInflater().inflate(R.layout.rating_feedback, null));
         initView();
     }
 

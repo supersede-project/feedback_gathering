@@ -12,24 +12,9 @@ public class AudioFeedback extends AbstractMultipartFeedback {
     @Expose
     private int duration;
 
-    public AudioFeedback(long mechanismId, LocalConfigurationBean configuration) {
-        super(mechanismId, configuration.getAudioOrder());
+    public AudioFeedback(LocalConfigurationBean configuration) {
+        super(configuration.getAudioOrder());
         this.maxTime = configuration.getAudioMaxTime();
-    }
-
-    @Override
-    public boolean isValid(List<String> errorMessage) {
-        return true;
-    }
-
-    @Override
-    public String getPartString() {
-        return "audio";
-    }
-
-    @Override
-    public String getFilePath() {
-        return audioPath;
     }
 
     public String getAudioPath() {

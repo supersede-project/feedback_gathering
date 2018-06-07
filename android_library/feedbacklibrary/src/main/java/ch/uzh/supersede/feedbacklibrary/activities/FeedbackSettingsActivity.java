@@ -78,8 +78,6 @@ public class FeedbackSettingsActivity extends AbstractBaseActivity implements IF
     @SuppressWarnings("unchecked")
     public void onEventCompleted(EventType eventType, Object response) {
         if (BuildConfig.DEBUG) {
-
-            ArrayList<AbstractSettingsListItem> feedbackList = new ArrayList<>();
             switch (eventType) {
                 case GET_MINE_FEEDBACK_VOTES:
                     myFeedbackList.clear();

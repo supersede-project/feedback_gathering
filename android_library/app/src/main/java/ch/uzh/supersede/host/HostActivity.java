@@ -10,12 +10,13 @@ import ch.uzh.supersede.feedbacklibrary.activities.AbstractBaseActivity;
 import ch.uzh.supersede.feedbacklibrary.entrypoint.*;
 import ch.uzh.supersede.feedbacklibrary.utils.DefaultConfiguration;
 
+@SuppressWarnings({"squid:MaximumInheritanceDepth", "squid:S1170"})
 public class HostActivity extends AbstractBaseActivity implements
         IFeedbackBehavior,
         IFeedbackStyle,
         IFeedbackSettings,
         IFeedbackDeveloper,
-        ISimpleFeedbackConfiguration{
+        ISimpleFeedbackConfiguration {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,20 +89,20 @@ public class HostActivity extends AbstractBaseActivity implements
     public int getConfiguredMaxResponseLength() {
         return 30;
     }
-    //Feedback Developer
 
+    //Feedback Developer
     @Override
     public boolean isDeveloper() {
         return false;
     }
-    //Feedback Behaviour
 
+    //Feedback Behavior
     @Override
     public int getConfiguredPullIntervalMinutes() {
         return 0;
     }
-    //Feedback Layout
 
+    //Feedback Layout
     @Override
     public FEEDBACK_STYLE getConfiguredFeedbackStyle() {
         return FEEDBACK_STYLE.LIGHT;

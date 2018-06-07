@@ -13,9 +13,13 @@ import ch.uzh.supersede.feedbacklibrary.beans.FeedbackDetailsBean;
 import ch.uzh.supersede.feedbacklibrary.beans.FeedbackResponseBean;
 import ch.uzh.supersede.feedbacklibrary.beans.LocalFeedbackBean;
 import ch.uzh.supersede.feedbacklibrary.database.FeedbackDatabase;
-import ch.uzh.supersede.feedbacklibrary.feedback.Feedback;
-import ch.uzh.supersede.feedbacklibrary.utils.*;
+import ch.uzh.supersede.feedbacklibrary.models.Feedback;
+import ch.uzh.supersede.feedbacklibrary.models.AuthenticateResponse;
+import ch.uzh.supersede.feedbacklibrary.utils.CompareUtility;
+import ch.uzh.supersede.feedbacklibrary.utils.DateUtility;
 import ch.uzh.supersede.feedbacklibrary.utils.Enums.FEEDBACK_STATUS;
+import ch.uzh.supersede.feedbacklibrary.utils.NumberUtility;
+import ch.uzh.supersede.feedbacklibrary.utils.Utils;
 
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.USER_NAME;
 import static ch.uzh.supersede.feedbacklibrary.utils.Enums.FEEDBACK_STATUS.*;
@@ -85,7 +89,7 @@ public class RepositoryStub {
                 .build();
     }
 
-    public static FeedbackResponseBean persist(FeedbackBean feedbackBean, String content, String userName, boolean isDeveloper, boolean isFeedbackOwner){
+    public static FeedbackResponseBean persist(FeedbackBean feedbackBean, String content, String userName, boolean isDeveloper, boolean isFeedbackOwner) {
         return new FeedbackResponseBean.Builder()
                 .withFeedbackUid(feedbackBean.getFeedbackUid())
                 .withContent(content)
@@ -96,7 +100,7 @@ public class RepositoryStub {
                 .build();
     }
 
-    private static FeedbackBean getFeedback(Context context, int minUpVotes,int maxUpVotes, float ownFeedbackPercent) {
+    private static FeedbackBean getFeedback(Context context, int minUpVotes, int maxUpVotes, float ownFeedbackPercent) {
         UUID feedbackUid = UUID.randomUUID();
         int upperBound = NumberUtility.divide(1, ownFeedbackPercent);
         boolean ownFeedback = ACTIVE.check(context) && NumberUtility.randomInt(0, upperBound > 0 ? upperBound - 1 : upperBound) == 0;
@@ -227,7 +231,7 @@ public class RepositoryStub {
         String[] content = new String[0];
         if (!feedback.getTextFeedbackList().isEmpty()) {
             title = feedback.getTextFeedbackList().get(0).getText();
-        }else{
+        } else {
             content = generateDescriptionAndTitle();
         }
 
@@ -238,7 +242,7 @@ public class RepositoryStub {
 
         FeedbackBean feedbackBean = new FeedbackBean.Builder()
                 .withFeedbackUid(feedbackUid)
-                .withTitle(title==null?content[1]:title)
+                .withTitle(title == null ? content[1] : title)
                 .withUserName(userName)
                 .withTimestamp(timeStamp)
                 .withUpVotes(upVotes)
@@ -255,7 +259,7 @@ public class RepositoryStub {
                 .withFeedbackUid(feedbackBean.getFeedbackUid())
                 .withFeedbackBean(feedbackBean)
                 .withTitle(feedbackBean.getTitle())
-                .withDescription(description==null?content[0]:description)
+                .withDescription(description == null ? content[0] : description)
                 .withUserName(userName)
                 .withLabels(labels)
                 .withTimestamp(timeStamp)
@@ -278,5 +282,13 @@ public class RepositoryStub {
 
     public static void makeFeedbackPublic(FeedbackDetailsBean feedbackDetailsBean) {
         //TheoreticalCallToRepo
+    }
+
+    public static AuthenticateResponse generateAuthenticateResponse() {
+        return new AuthenticateResponse(generateToken());
+    }
+
+    private static String generateToken() {
+        return UUID.randomUUID().toString();
     }
 }

@@ -2,47 +2,39 @@ package ch.uzh.supersede.feedbacklibrary.services;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
-import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
-import ch.uzh.supersede.feedbacklibrary.BuildConfig;
-import ch.uzh.supersede.feedbacklibrary.R;
 import ch.uzh.supersede.feedbacklibrary.api.IFeedbackAPI;
-import ch.uzh.supersede.feedbacklibrary.beans.ConfigurationRequestBean;
 import ch.uzh.supersede.feedbacklibrary.beans.FeedbackBean;
 import ch.uzh.supersede.feedbacklibrary.beans.FeedbackDetailsBean;
-import ch.uzh.supersede.feedbacklibrary.beans.LocalFeedbackBean;
-import ch.uzh.supersede.feedbacklibrary.components.buttons.AbstractSettingsListItem;
-import ch.uzh.supersede.feedbacklibrary.components.buttons.SubscriptionListItem;
-import ch.uzh.supersede.feedbacklibrary.components.buttons.VoteListItem;
-import ch.uzh.supersede.feedbacklibrary.configurations.ConfigurationItem;
-import ch.uzh.supersede.feedbacklibrary.configurations.OrchestratorConfigurationItem;
 import ch.uzh.supersede.feedbacklibrary.database.FeedbackDatabase;
+import ch.uzh.supersede.feedbacklibrary.models.AbstractFeedbackPart;
+import ch.uzh.supersede.feedbacklibrary.models.AndroidUser;
+import ch.uzh.supersede.feedbacklibrary.models.AuthenticateRequest;
+import ch.uzh.supersede.feedbacklibrary.models.AuthenticateResponse;
+import ch.uzh.supersede.feedbacklibrary.models.Feedback;
 import ch.uzh.supersede.feedbacklibrary.stubs.RepositoryStub;
-import ch.uzh.supersede.feedbacklibrary.utils.DialogUtils;
 import ch.uzh.supersede.feedbacklibrary.utils.Enums;
-import ch.uzh.supersede.feedbacklibrary.utils.Utils;
+import ch.uzh.supersede.feedbacklibrary.utils.FeedbackTransformer;
+import ch.uzh.supersede.feedbacklibrary.utils.ImageUtility;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
+import okhttp3.OkHttpClient;
 import okhttp3.RequestBody;
-import okhttp3.ResponseBody;
-import retrofit2.Response;
+import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 import static ch.uzh.supersede.feedbacklibrary.services.IFeedbackServiceEventListener.EventType;
 import static ch.uzh.supersede.feedbacklibrary.services.IFeedbackServiceEventListener.EventType.*;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.*;
-import static ch.uzh.supersede.feedbacklibrary.utils.Constants.ServicesConstants.FEEDBACK_SERVICE_TAG;
 import static ch.uzh.supersede.feedbacklibrary.utils.Enums.FETCH_MODE.*;
+import static ch.uzh.supersede.feedbacklibrary.utils.Enums.RUNNING_MODE_TYPE.MOCKUP;
 
 /**
  * Singleton class that returns the original {@link FeedbackApiService} with its functions, defined in {@link IFeedbackAPI} iff {@code BuildConfig.DEBUG} is enabled, otherwise
@@ -52,20 +44,28 @@ import static ch.uzh.supersede.feedbacklibrary.utils.Enums.FETCH_MODE.*;
 public abstract class FeedbackService {
     private static FeedbackService instance;
     private static IFeedbackAPI feedbackAPI;
+    private String token;
+    private long applicationId;
+    private String language;
 
     private FeedbackService() {
     }
 
     public static FeedbackService getInstance() {
-        if (BuildConfig.DEBUG) {
+        if (RUNNING_MODE == MOCKUP) {
             if (instance == null) {
                 instance = new FeedbackMockService();
             }
             return instance;
         }
         if (instance == null) {
+            HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
+            interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+            OkHttpClient client = new OkHttpClient.Builder().addInterceptor(interceptor).build();
+
             Retrofit retrofit = new Retrofit.Builder()
-                    .baseUrl(EXTRA_KEY_BASE_URL)
+                    .baseUrl(SUPERSEDE_BASE_URL)
+                    .client(client)
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
             feedbackAPI = retrofit.create(IFeedbackAPI.class);
@@ -74,7 +74,37 @@ public abstract class FeedbackService {
         return instance;
     }
 
-    public abstract void createFeedbackVariant(IFeedbackServiceEventListener callback, Activity activity, String language, long applicationId, FeedbackDetailsBean feedbackDetailsBean, List<MultipartBody.Part> files);
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+    public long getApplicationId() {
+        return applicationId;
+    }
+
+    public void setApplicationId(long applicationId) {
+        this.applicationId = applicationId;
+    }
+
+    public String getLanguage() {
+        return language;
+    }
+
+    public void setLanguage(String language) {
+        this.language = language;
+    }
+
+    public abstract void authenticate(IFeedbackServiceEventListener callback, AuthenticateRequest authenticateRequest);
+
+    public abstract void createFeedback(IFeedbackServiceEventListener callback, Activity activity, FeedbackDetailsBean feedbackDetailsBean, List<AbstractFeedbackPart> feedbackParts);
+
+    public abstract void createUser(IFeedbackServiceEventListener callback, AndroidUser androidUser);
+
+    public abstract void getUser(IFeedbackServiceEventListener callback, AndroidUser androidUser);
 
     public abstract void getMineFeedbackVotes(IFeedbackServiceEventListener callback, Activity activity);
 
@@ -87,17 +117,39 @@ public abstract class FeedbackService {
     private static class FeedbackApiService extends FeedbackService {
 
         @Override
-        public void createFeedbackVariant(IFeedbackServiceEventListener callback, Activity activity, String language, long applicationId, FeedbackDetailsBean feedbackDetailsBean, List<MultipartBody.Part> files) {
-            GsonBuilder builder = new GsonBuilder();
-            builder.excludeFieldsWithoutExposeAnnotation();
-            builder.serializeNulls();
-            Gson gson = builder.create();
+        public void authenticate(IFeedbackServiceEventListener callback, AuthenticateRequest authenticateRequest) {
+            feedbackAPI.authenticate(authenticateRequest).enqueue(
+                    new RepositoryCallback<AuthenticateResponse>(callback, EventType.AUTHENTICATE) {
+                    });
+        }
 
-            String jsonString = gson.toJson(feedbackDetailsBean);
-            MultipartBody.Part jsonPart = MultipartBody.Part.createFormData("json", "json", RequestBody.create(MediaType.parse("application/json"), jsonString.getBytes()));
+        @Override
+        public void createUser(IFeedbackServiceEventListener callback, AndroidUser androidUser) {
+            feedbackAPI.createUser(getToken(), getLanguage(), getApplicationId(), androidUser).enqueue(
+                    new RepositoryCallback<AndroidUser>(callback, EventType.CREATE_USER) {
+                    });
+        }
 
-            feedbackAPI.createFeedbackVariant(language, applicationId, jsonPart, files).enqueue(
-                    new FeedbackCallback<JsonObject>(callback, EventType.CREATE_FEEDBACK_VARIANT) {
+        @Override
+        public void getUser(IFeedbackServiceEventListener callback, AndroidUser androidUser) {
+            feedbackAPI.getUser(getToken(), getLanguage(), getApplicationId(), androidUser.getName()).enqueue(
+                    new RepositoryCallback<AndroidUser>(callback, EventType.GET_USER) {
+                    });
+        }
+
+        @Override
+        public void createFeedback(IFeedbackServiceEventListener callback, Activity activity, FeedbackDetailsBean feedbackDetailsBean, List<AbstractFeedbackPart> feedbackParts) {
+            List<MultipartBody.Part> multipartFiles = new ArrayList<>();
+            multipartFiles.add(MultipartBody.Part.createFormData("screenshot", "screenshot", RequestBody.create(MediaType.parse("image/png"), ImageUtility.imageToBytes(feedbackDetailsBean.getBitmap()))));
+            multipartFiles.add(MultipartBody.Part.createFormData("audio", "audio", RequestBody.create(MediaType.parse("audio/mp3"), new byte[0]))); //FIXME [jfo] load audio
+
+            Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
+            Feedback feedback = FeedbackTransformer.FeedbackDetailsBeanToFeedback(feedbackDetailsBean, activity, feedbackParts);
+            String jsonString = gson.toJson(feedback);
+            MultipartBody.Part jsonFeedback = MultipartBody.Part.createFormData("json", "json", RequestBody.create(MediaType.parse("application/json"), jsonString.getBytes()));
+
+            feedbackAPI.createFeedback(getToken(), getLanguage(), getApplicationId(), jsonFeedback, multipartFiles).enqueue(
+                    new RepositoryCallback<Feedback>(callback, EventType.CREATE_FEEDBACK) {
                     });
         }
 
@@ -118,16 +170,31 @@ public abstract class FeedbackService {
 
         @Override
         public void createSubscription(IFeedbackServiceEventListener callback, Context context, FeedbackBean feedbackBean, boolean isChecked) {
-            //TODO [jfo] implement
+            RepositoryStub.sendSubscriptionChange(context, feedbackBean, isChecked);
+            callback.onEventCompleted(CREATE_SUBSCRIPTION, FeedbackDatabase.getInstance(context).getFeedbackState(feedbackBean));
         }
     }
 
     private static class FeedbackMockService extends FeedbackService {
+        @Override
+        public void authenticate(IFeedbackServiceEventListener callback, AuthenticateRequest authenticateRequest) {
+            callback.onEventCompleted(AUTHENTICATE, RepositoryStub.generateAuthenticateResponse());
+        }
 
         @Override
-        public void createFeedbackVariant(IFeedbackServiceEventListener callback, Activity activity, String language, long applicationId, FeedbackDetailsBean feedbackDetailsBean, List<MultipartBody.Part> files) {
+        public void createUser(IFeedbackServiceEventListener callback, AndroidUser androidUser) {
+            callback.onEventCompleted(CREATE_USER, androidUser);
+        }
+
+        @Override
+        public void getUser(IFeedbackServiceEventListener callback, AndroidUser androidUser) {
+            callback.onEventCompleted(GET_USER, androidUser);
+        }
+
+        @Override
+        public void createFeedback(IFeedbackServiceEventListener callback, Activity activity, FeedbackDetailsBean feedbackDetailsBean, List<AbstractFeedbackPart> feedbackParts) {
             FeedbackDatabase.getInstance(activity).writeFeedback(feedbackDetailsBean.getFeedbackBean(), Enums.SAVE_MODE.CREATED);
-            callback.onEventCompleted(CREATE_FEEDBACK_VARIANT, null);
+            callback.onEventCompleted(CREATE_FEEDBACK, null);
         }
 
         @Override

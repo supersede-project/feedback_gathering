@@ -19,17 +19,14 @@ import java.util.Map;
 
 import ch.uzh.supersede.feedbacklibrary.R;
 import ch.uzh.supersede.feedbacklibrary.activities.AnnotateImageActivity;
-import ch.uzh.supersede.feedbacklibrary.models.AbstractFeedbackPart;
 import ch.uzh.supersede.feedbacklibrary.models.ScreenshotFeedback;
 import ch.uzh.supersede.feedbacklibrary.utils.Utils;
 
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.*;
 
-public class ScreenshotMechanismView extends AbstractFeedbackPartView {
-    private ScreenshotFeedback screenshotFeedback;
+public class ScreenshotFeedbackView extends AbstractFeedbackPartView {
     private ImageView screenShotPreviewImageView;
     private HashMap<Integer, String> allStickerAnnotations;
-    private HashMap<Integer, String> allTextAnnotations;
     private Button editButton;
     private Button selectButton;
     private Button deleteButton;
@@ -37,21 +34,16 @@ public class ScreenshotMechanismView extends AbstractFeedbackPartView {
     private Bitmap pictureBitmapAnnotated;
     private Activity activity;
 
-    public ScreenshotMechanismView(LayoutInflater layoutInflater, Activity activity, AbstractFeedbackPart mechanism, int mechanismViewIndex) {
+    public ScreenshotFeedbackView(LayoutInflater layoutInflater, Activity activity, ScreenshotFeedback screenshotFeedback) {
         super(layoutInflater);
-        this.viewOrder = mechanism.getOrder();
+        this.viewOrder = screenshotFeedback.getOrder();
         this.activity = activity;
-        this.screenshotFeedback = (ScreenshotFeedback) mechanism;
-        setEnclosingLayout(getLayoutInflater().inflate(R.layout.mechanism_screenshot, null));
+        setEnclosingLayout(getLayoutInflater().inflate(R.layout.screenshot_feedback, null));
         initView();
     }
 
     private Map<Integer, String> getAllStickerAnnotations() {
         return allStickerAnnotations;
-    }
-
-    private Map<Integer, String> getAllTextAnnotations() {
-        return allTextAnnotations;
     }
 
     public void toggleSelectButton(boolean enabled) {
@@ -89,10 +81,6 @@ public class ScreenshotMechanismView extends AbstractFeedbackPartView {
         this.allStickerAnnotations = new HashMap<>(allStickerAnnotations);
     }
 
-    public void setAllTextAnnotations(Map<Integer, String> allTextAnnotations) {
-        this.allTextAnnotations = new HashMap<>(allTextAnnotations);
-    }
-
     private void setPictureBitmap(Bitmap pictureBitmap) {
         this.pictureBitmap = pictureBitmap;
     }
@@ -127,7 +115,7 @@ public class ScreenshotMechanismView extends AbstractFeedbackPartView {
         editButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onImageAnnotate(ScreenshotMechanismView.this);
+                onImageAnnotate(ScreenshotFeedbackView.this);
             }
         });
         // Delete image
@@ -146,11 +134,11 @@ public class ScreenshotMechanismView extends AbstractFeedbackPartView {
         //TODO [jfo] what to do here?
     }
 
-    private void onImageAnnotate(ScreenshotMechanismView screenshotMechanismView) {
+    private void onImageAnnotate(ScreenshotFeedbackView screenshotFeedbackView) {
         Intent intent = new Intent(activity, AnnotateImageActivity.class);
-        if (screenshotMechanismView.getAllStickerAnnotations() != null && !screenshotMechanismView.getAllStickerAnnotations().isEmpty()) {
+        if (screenshotFeedbackView.getAllStickerAnnotations() != null && !screenshotFeedbackView.getAllStickerAnnotations().isEmpty()) {
             intent.putExtra(EXTRA_KEY_HAS_STICKER_ANNOTATIONS, true);
-            intent.putExtra(EXTRA_KEY_ALL_STICKER_ANNOTATIONS, new HashMap<>(screenshotMechanismView.getAllStickerAnnotations()));
+            intent.putExtra(EXTRA_KEY_ALL_STICKER_ANNOTATIONS, new HashMap<>(screenshotFeedbackView.getAllStickerAnnotations()));
         }
         activity.startActivityForResult(intent, REQUEST_ANNOTATE);
     }
@@ -179,7 +167,6 @@ public class ScreenshotMechanismView extends AbstractFeedbackPartView {
         Utils.wipeImages(activity);
         pictureBitmap = null;
         allStickerAnnotations = null;
-        allTextAnnotations = null;
         refreshPreview(activity.getApplicationContext());
     }
 

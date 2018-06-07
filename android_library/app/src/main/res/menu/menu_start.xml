@@ -9,7 +9,7 @@
         android:title="@string/action_settings"
         app:showAsAction="never"/>
     <item
-        android:id="@+id/action_single_mechanism_feedback"
+        android:id="@+id/action_single_feedback_part"
         android:orderInCategory="102"
         android:title="@string/action_feedback"
         app:showAsAction="never"/>

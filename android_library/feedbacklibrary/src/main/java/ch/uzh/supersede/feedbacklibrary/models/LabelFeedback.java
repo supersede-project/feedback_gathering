@@ -14,8 +14,8 @@ public class LabelFeedback extends AbstractFeedbackPart {
     @Expose
     private List<String> labels = new ArrayList<>();
 
-    public LabelFeedback(long mechanismId, LocalConfigurationBean configuration) {
-        super(mechanismId, configuration.getLabelOrder());
+    public LabelFeedback(LocalConfigurationBean configuration) {
+        super(configuration.getLabelOrder());
         this.maxCount = configuration.getLabelMaxCount();
         this.minCount = configuration.getLabelMinCount();
         labels.addAll(selectedLabels);
