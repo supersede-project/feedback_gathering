@@ -1,5 +1,6 @@
 package ch.uzh.supersede.feedbacklibrary.activities;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.*;
@@ -33,6 +34,7 @@ public abstract class AbstractBaseActivity extends AppCompatActivity {
     protected int screenWidth;
     protected int screenHeight;
     protected LocalConfigurationBean configuration;
+    protected InfoUtility infoUtility;
 
     protected <T> T getView(int id, Class<T> classType) {
         return classType.cast(findViewById(id));
@@ -47,6 +49,7 @@ public abstract class AbstractBaseActivity extends AppCompatActivity {
         screenHeight = displayMetrics.heightPixels;
         screenWidth = displayMetrics.widthPixels;
         configuration = (LocalConfigurationBean) getIntent().getSerializableExtra(EXTRA_KEY_APPLICATION_CONFIGURATION);
+        infoUtility = new InfoUtility(screenWidth,screenHeight);
     }
 
     protected void onPostCreate() {
@@ -86,13 +89,12 @@ public abstract class AbstractBaseActivity extends AppCompatActivity {
     protected void colorViews(int colorIndex, View... views) {
         if (configuration.getTopColors().length >= colorIndex) {
             Integer color = configuration.getTopColors()[colorIndex];
-            for (View v : color != null ? views : new View[0]) {
-                if (v instanceof TextView && ColorUtility.isDark(color)) {
-                    ((TextView) v).setTextColor(ContextCompat.getColor(this, R.color.white));
-                } else if (v instanceof TextView) {
-                    ((TextView) v).setTextColor(ContextCompat.getColor(this, R.color.black));
+            for (View view : color != null ? views : new View[0]) {
+                if (view == null) {
+                    continue;
                 }
-                v.setBackgroundColor(color);
+                colorizeText(color, view);
+                view.setBackgroundColor(color);
             }
         }
     }
@@ -101,6 +103,9 @@ public abstract class AbstractBaseActivity extends AppCompatActivity {
         if (configuration.getTopColors().length >= colorIndex) {
             Integer color = configuration.getTopColors()[colorIndex];
             for (View view : color != null ? views : new View[0]) {
+                if (view == null) {
+                    continue;
+                }
                 Drawable background = view.getBackground();
                 if (background instanceof ShapeDrawable) {
                     ((ShapeDrawable) background).getPaint().setColor(color);
@@ -111,12 +116,21 @@ public abstract class AbstractBaseActivity extends AppCompatActivity {
                 } else if (background instanceof StateListDrawable) {
                     background.setColorFilter(color, PorterDuff.Mode.MULTIPLY);
                 }
-                if (view instanceof TextView && ColorUtility.isDark(color)) {
-                    ((TextView) view).setTextColor(ContextCompat.getColor(this, R.color.white));
-                } else if (view instanceof TextView) {
-                    ((TextView) view).setTextColor(ContextCompat.getColor(this, R.color.black));
+                colorizeText(color, view);
+                if (view instanceof RelativeLayout){
+                    for (int v = 0; v <  ((RelativeLayout)view).getChildCount(); v++){
+                        colorizeText(color,((RelativeLayout)view).getChildAt(v));
+                    }
                 }
             }
+        }
+    }
+
+    private void colorizeText(Integer color, View view) {
+        if (view instanceof TextView && ColorUtility.isDark(color)) {
+            ((TextView) view).setTextColor(ContextCompat.getColor(this, R.color.white));
+        } else if (view instanceof TextView) {
+            ((TextView) view).setTextColor(ContextCompat.getColor(this, R.color.black));
         }
     }
 
@@ -179,11 +193,17 @@ public abstract class AbstractBaseActivity extends AppCompatActivity {
             view.setEnabled(true);
             view.setClickable(true);
             view.setBackgroundColor(getTopColor(colorIndex));
-            if (view instanceof TextView && ColorUtility.isDark(getTopColor(colorIndex))) {
-                ((TextView) view).setTextColor(ContextCompat.getColor(this, R.color.white));
-            } else if (view instanceof TextView) {
-                ((TextView) view).setTextColor(ContextCompat.getColor(this, R.color.black));
-            }
+            colorizeText(getTopColor(colorIndex), view);
         }
+    }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        createInfoBubbles();
+    }
+
+    protected void createInfoBubbles(){
+        //NOP
     }
 }

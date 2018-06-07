@@ -75,8 +75,21 @@
     <!--Hub-->
     <string name="hub_feedback_list">Show\nFeedback</string>
     <string name="hub_feedback_user_level">User-Level\n%1$d</string>
+    <string name="hub_feedback_user_lvl">User-Level</string>
     <string name="hub_feedback_settings">Feedback\nSettings</string>
     <string name="hub_feedback_create">Create\nFeedback</string>
+    <string name="hub_feedback_status_label">Hub-Status</string>
+    <string name="hub_feedback_list_label">Show Feedback</string>
+    <string name="hub_feedback_user_lvl_label">User-Level</string>
+    <string name="hub_feedback_settings_label">Feedback Settings</string>
+    <string name="hub_feedback_create_label">Create Feedback</string>
+    <string name="hub_feedback_info_label">Tutorial Info-Bubble</string>
+    <string name="hub_feedback_status_info">This Field will summarize your Statistics.\nUser-Level 2 required.</string>
+    <string name="hub_feedback_list_info">This Button lets you access the Feedback for this App.\nUser-Level 1 required.</string>
+    <string name="hub_feedback_user_lvl_info">This Button lets you register an Account and thereby increase your User-Level which you need to access certain Functionalities.</string>
+    <string name="hub_feedback_settings_info">Use this Button to undertake the App some Adaptions regarding Notifications and other cool Stuff!\nUser-Level 2 required.</string>
+    <string name="hub_feedback_create_info">Create your own Feedback by using this Button.\nUser-Level 2 required.</string>
+    <string name="hub_feedback_info_info">This Bubble will guide you through this Application\'s Feedback Functionality.\nTap on it to continue!</string>
     <string name="hub_status">&lt;b>&lt;font color="#secondaryColorString">Feedback-Hub&lt;/font>&lt;/b>&lt;br/>&lt;br/>&lt;b>
         &lt;font color="#primaryColorString">User-Name&lt;/font>
         &lt;br/>&lt;/b>&lt;font color="#secondaryColorString"> %1$s&lt;/font>&lt;br/>&lt;b>
@@ -103,7 +116,7 @@
     <string name="hub_username_registered">User "%1$s" registered.</string>
     <string name="hub_developer_registered">Developer "%1$s" registered.</string>
     <string name="hub_warning_permission_not_granted">Permissions for next Level not granted!</string>
-
+    <string name="hub_tutorial_finished">Tutorial finished!</string>
     <!--List-->
     <string name="list_button_mine">Mine</string>
     <string name="list_button_top">Top</string>
