@@ -8,17 +8,16 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 
 import ch.uzh.supersede.feedbacklibrary.R;
-import ch.uzh.supersede.feedbacklibrary.models.AbstractFeedbackPart;
 import ch.uzh.supersede.feedbacklibrary.models.TextFeedback;
 
-public class TextMechanismView extends AbstractFeedbackPartView {
+public class TextFeedbackView extends AbstractFeedbackPartView {
     private TextFeedback textFeedback ;
 
-    public TextMechanismView(LayoutInflater layoutInflater, AbstractFeedbackPart mechanism) {
+    public TextFeedbackView(LayoutInflater layoutInflater, TextFeedback feedbackPart) {
         super(layoutInflater);
-        this.viewOrder = mechanism.getOrder();
-        this.textFeedback = (TextFeedback) mechanism;
-        setEnclosingLayout(getLayoutInflater().inflate(R.layout.mechanism_text_enclosing, null));
+        this.viewOrder = feedbackPart.getOrder();
+        this.textFeedback = feedbackPart;
+        setEnclosingLayout(getLayoutInflater().inflate(R.layout.text_feedback_enclosing, null));
         initView();
     }
 

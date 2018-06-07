@@ -7,11 +7,11 @@
     <string name="feedback_check_network_state">Check network state</string>
     <string name="feedback_send_confirmation">By sending the feedback, you agree with the terms and conditions.</string>
     <string name="feedback_send">Send feedback</string>
-    <string name="feedback_success">Your feedback was successfully sent. Thank you!</string>
+    <string name="feedback_success">Your feedback was sent successfully. Thank you!</string>
     <string name="feedback_title">Feedback title at the current time of %1$d milliseconds</string>
     <string name="feedback_text_warning">"Text cannot be longer than %1$d characters"</string>
 
-    <!-- Audio mechanism -->
+    <!-- Audio feedback -->
     <string name="audio_hint">Express your feedback with a short audio message</string>
     <string name="audio_default_current_duration">0:00</string>
     <string name="audio_default_total_duration">0:00/-</string>
@@ -19,7 +19,7 @@
     <string name="audio_maximum_length_reached_text">"Recording stopped because the limit of %1$d seconds is reached"</string>
     <string name="audio_stopped_recording_text">Stopped recording</string>
 
-    <!-- Category mechanism -->
+    <!-- Category feedback -->
     <string name="category_single_option">Please select an option</string>
     <string name="category_multiple_options">Please select one or multiple options</string>
     <string name="category_other_option">Other</string>
@@ -27,7 +27,7 @@
     <string name="category_own_category">Category</string>
     <string name="category_own_category_hint">Please enter your own category</string>
 
-    <!-- Screenshot Mechanism -->
+    <!-- Screenshot feedback -->
     <string name="screenshot_choose">Choose from library</string>
     <string name="screenshot_select">Select an image</string>
     <string name="screenshot_add">Add</string>

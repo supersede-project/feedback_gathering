@@ -110,7 +110,7 @@ public class Constants {
         }
 
         // AudioFeedback
-        public static final String AUDIO_MECHANISM_VIEW_TAG = "AudioMechanismView";
+        public static final String AUDIO_MECHANISM_VIEW_TAG = "AudioFeedbackView";
         public static final String AUDIO_DIR = "audioDir";
         public static final String AUDIO_EXTENSION = "m4a";
         public static final String AUDIO_FILENAME = "audioFile";

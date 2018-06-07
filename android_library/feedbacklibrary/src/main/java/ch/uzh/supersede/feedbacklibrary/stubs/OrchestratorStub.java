@@ -13,11 +13,11 @@ import java.util.*;
 import ch.uzh.supersede.feedbacklibrary.R;
 import ch.uzh.supersede.feedbacklibrary.beans.LocalConfigurationBean;
 import ch.uzh.supersede.feedbacklibrary.components.views.AbstractFeedbackPartView;
-import ch.uzh.supersede.feedbacklibrary.components.views.AudioMechanismView;
-import ch.uzh.supersede.feedbacklibrary.components.views.LabelMechanismView;
-import ch.uzh.supersede.feedbacklibrary.components.views.RatingMechanismView;
-import ch.uzh.supersede.feedbacklibrary.components.views.ScreenshotMechanismView;
-import ch.uzh.supersede.feedbacklibrary.components.views.TextMechanismView;
+import ch.uzh.supersede.feedbacklibrary.components.views.AudioFeedbackView;
+import ch.uzh.supersede.feedbacklibrary.components.views.LabelFeedbackView;
+import ch.uzh.supersede.feedbacklibrary.components.views.RatingFeedbackView;
+import ch.uzh.supersede.feedbacklibrary.components.views.ScreenshotFeedbackView;
+import ch.uzh.supersede.feedbacklibrary.components.views.TextFeedbackView;
 import ch.uzh.supersede.feedbacklibrary.models.AbstractFeedbackPart;
 import ch.uzh.supersede.feedbacklibrary.models.AudioFeedback;
 import ch.uzh.supersede.feedbacklibrary.models.LabelFeedback;
@@ -59,8 +59,8 @@ public class OrchestratorStub {
 
     public static class FeedbackBuilder<T extends Activity> {
         private LocalConfigurationBean configuration;
-        private List<AbstractFeedbackPartView> mechanismViews;
-        private List<AbstractFeedbackPart> mechanisms;
+        private List<AbstractFeedbackPartView> feedbackPartViews;
+        private List<AbstractFeedbackPart> feedbackParts;
         private Context context;
         private LayoutInflater layoutInflater;
         private LinearLayout rootLayout;
@@ -69,8 +69,8 @@ public class OrchestratorStub {
         private int id;
 
         public FeedbackBuilder(T activity, Context context, Resources resources, LocalConfigurationBean configuration, LinearLayout rootLayout, LayoutInflater layoutInflater) {
-            this.mechanismViews = new ArrayList<>();
-            this.mechanisms = new ArrayList<>();
+            this.feedbackPartViews = new ArrayList<>();
+            this.feedbackParts = new ArrayList<>();
             this.configuration = configuration;
             this.id = 0;
             this.context = context;
@@ -83,9 +83,9 @@ public class OrchestratorStub {
         public FeedbackBuilder withAudio() {
             if (ADVANCED.check(context) && configuration.getAudioOrder() != -1) {
                 AudioFeedback audioFeedback = new AudioFeedback(id, configuration);
-                AudioMechanismView audioMechanismView = new AudioMechanismView(layoutInflater, audioFeedback, resources, activity, context);
-                mechanisms.add(audioFeedback);
-                mechanismViews.add(audioMechanismView);
+                AudioFeedbackView audioMechanismView = new AudioFeedbackView(layoutInflater, audioFeedback, resources, activity, context);
+                feedbackParts.add(audioFeedback);
+                feedbackPartViews.add(audioMechanismView);
                 id++;
             }
             return this;
@@ -94,9 +94,9 @@ public class OrchestratorStub {
         public FeedbackBuilder withCategory() {
             if (configuration.getLabelOrder() != -1) {
                 LabelFeedback labelFeedback = new LabelFeedback(id, configuration);
-                LabelMechanismView labelMechanismView = new LabelMechanismView(layoutInflater, labelFeedback);
-                mechanisms.add(labelFeedback);
-                mechanismViews.add(labelMechanismView);
+                LabelFeedbackView labelFeedbackView = new LabelFeedbackView(layoutInflater, labelFeedback);
+                feedbackParts.add(labelFeedback);
+                feedbackPartViews.add(labelFeedbackView);
                 id++;
             }
             return this;
@@ -105,9 +105,9 @@ public class OrchestratorStub {
         public FeedbackBuilder withRating() {
             if (configuration.getRatingOrder() != -1) {
                 RatingFeedback ratingFeedback = new RatingFeedback(id, configuration);
-                RatingMechanismView ratingMechanismView = new RatingMechanismView(layoutInflater, ratingFeedback);
-                mechanisms.add(ratingFeedback);
-                mechanismViews.add(ratingMechanismView);
+                RatingFeedbackView ratingFeedbackView = new RatingFeedbackView(layoutInflater, ratingFeedback);
+                feedbackParts.add(ratingFeedback);
+                feedbackPartViews.add(ratingFeedbackView);
                 id++;
             }
             return this;
@@ -116,9 +116,9 @@ public class OrchestratorStub {
         public FeedbackBuilder withScreenshot() {
             if (configuration.getScreenshotOrder() != -1) {
                 ScreenshotFeedback screenshotFeedback = new ScreenshotFeedback(id, configuration);
-                ScreenshotMechanismView screenshotMechanismView = new ScreenshotMechanismView(layoutInflater, activity, screenshotFeedback, id);
-                mechanisms.add(screenshotFeedback);
-                mechanismViews.add(screenshotMechanismView);
+                ScreenshotFeedbackView screenshotFeedbackView = new ScreenshotFeedbackView(layoutInflater, activity, screenshotFeedback);
+                feedbackParts.add(screenshotFeedback);
+                feedbackPartViews.add(screenshotFeedbackView);
                 id++;
             }
             return this;
@@ -127,9 +127,9 @@ public class OrchestratorStub {
         public FeedbackBuilder withText() {
             if (configuration.getTextOrder() != -1) {
                 TextFeedback textFeedback = new TextFeedback(id, configuration);
-                TextMechanismView textMechanismView = new TextMechanismView(layoutInflater, textFeedback);
-                mechanisms.add(textFeedback);
-                mechanismViews.add(textMechanismView);
+                TextFeedbackView textFeedbackView = new TextFeedbackView(layoutInflater, textFeedback);
+                feedbackParts.add(textFeedback);
+                feedbackPartViews.add(textFeedbackView);
                 id++;
             }
             return this;
@@ -139,15 +139,15 @@ public class OrchestratorStub {
             throw new UnsupportedOperationException("Not yet implemented!");
         }
 
-        public OrchestratorStub build(List<AbstractFeedbackPartView> mechanismViews) {
+        public OrchestratorStub build(List<AbstractFeedbackPartView> feedbackPartViews) {
             OrchestratorStub stub = new OrchestratorStub();
-            Collections.sort(this.mechanismViews);
-            for (AbstractFeedbackPartView view : this.mechanismViews) {
-                mechanismViews.add(view);
+            Collections.sort(this.feedbackPartViews);
+            for (AbstractFeedbackPartView view : this.feedbackPartViews) {
+                feedbackPartViews.add(view);
                 rootLayout.addView(view.getEnclosingLayout());
             }
-            stub.feedbackParts = new ArrayList<>(this.mechanisms);
-            stub.feedbackPartViews = new ArrayList<>(this.mechanismViews);
+            stub.feedbackParts = new ArrayList<>(this.feedbackParts);
+            stub.feedbackPartViews = new ArrayList<>(this.feedbackPartViews);
             stub.id = this.id;
             return stub;
         }

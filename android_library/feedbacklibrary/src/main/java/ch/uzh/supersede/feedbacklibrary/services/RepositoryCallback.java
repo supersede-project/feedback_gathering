@@ -1,7 +1,5 @@
 package ch.uzh.supersede.feedbacklibrary.services;
 
-import java.net.HttpURLConnection;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -17,8 +15,8 @@ public class RepositoryCallback<T> implements Callback<T> {
 
     @Override
     public void onResponse(Call<T> call, Response<T> response) {
-        if (response.code() == HttpURLConnection.HTTP_OK) {
-            callback.onEventCompleted(eventType, response);
+        if (response.isSuccessful()) {
+            callback.onEventCompleted(eventType, response.body());
         } else {
             callback.onEventFailed(eventType, response);
         }

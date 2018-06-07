@@ -1,33 +1,51 @@
-package ch.uzh.supersede.feedbacklibrary.feedback;
+package ch.uzh.supersede.feedbacklibrary.models;
 
+import android.content.Context;
+import android.graphics.Point;
 import android.os.Build;
+import android.text.format.Time;
+import android.view.WindowManager;
 
 import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
-import ch.uzh.supersede.feedbacklibrary.models.AudioFeedback;
-import ch.uzh.supersede.feedbacklibrary.models.LabelFeedback;
-import ch.uzh.supersede.feedbacklibrary.models.RatingFeedback;
-import ch.uzh.supersede.feedbacklibrary.models.ScreenshotFeedback;
-import ch.uzh.supersede.feedbacklibrary.models.TextFeedback;
 import ch.uzh.supersede.feedbacklibrary.utils.CompareUtility;
 
 public class Feedback implements Serializable {
+    @Expose
     private long applicationId;
+    @Expose
     private long configurationId;
+    @Expose
     private Map<String, Object> contextInformation;
+    @Expose
     private String language;
+    @Expose
     private String title;
+    @Expose
     private String userIdentification;
+    @Expose
+    @SerializedName("audioFeedbacks")
     private List<AudioFeedback> audioFeedbackList;
-    private List<LabelFeedback> categoryFeedbackList;
+    @Expose
+    @SerializedName("categoryFeedbacks")
+    private List<LabelFeedback> labelFeedbackList;
+    @Expose
+    @SerializedName("ratingFeedbacks")
     private List<RatingFeedback> ratingFeedbackList;
+    @Expose
+    @SerializedName("screenshotFeedbacks")
     private List<ScreenshotFeedback> screenshotFeedbackList;
+    @Expose
+    @SerializedName("textFeedbacks")
     private List<TextFeedback> textFeedbackList;
 
     private Feedback() {
@@ -65,8 +83,8 @@ public class Feedback implements Serializable {
             return this;
         }
 
-        public Builder withContextInformation() {
-            this.contextInformation = createContextInformation();
+        public Builder withContextInformation(Context context) {
+            this.contextInformation = createContextInformation(context);
             return this;
         }
 
@@ -80,37 +98,43 @@ public class Feedback implements Serializable {
             return this;
         }
 
-        public Builder withAudioMechanism(AudioFeedback audioFeedback) {
+        public Builder withAudioFeedback(AudioFeedback audioFeedback) {
             this.audioFeedbackList = new ArrayList<>();
-            if (audioFeedback.getAudioPath() != null) {
+            if (audioFeedback != null && audioFeedback.getAudioPath() != null) {
                 audioFeedbackList.add(audioFeedback);
             }
             return this;
         }
 
-        public Builder withCategoryMechanism(LabelFeedback labelFeedback) {
+        public Builder withLabelFeedback(LabelFeedback labelFeedback) {
             this.categoryFeedbackList = new ArrayList<>();
-            categoryFeedbackList.add(labelFeedback);
+            if (labelFeedback != null) {
+                categoryFeedbackList.add(labelFeedback);
+            }
             return this;
         }
 
-        public Builder withRatingMechanism(RatingFeedback ratingFeedback) {
+        public Builder withRatingFeedback(RatingFeedback ratingFeedback) {
             this.ratingFeedbackList = new ArrayList<>();
-            ratingFeedbackList.add(ratingFeedback);
+            if (ratingFeedback != null) {
+                ratingFeedbackList.add(ratingFeedback);
+            }
             return this;
         }
 
-        public Builder withScreenshotMechanism(ScreenshotFeedback screenshotFeedback) {
+        public Builder withScreenshotFeedback(ScreenshotFeedback screenshotFeedback) {
             this.screenshotFeedbackList = new ArrayList<>();
-            if (screenshotFeedback.getImagePath() != null) {
+            if (screenshotFeedback != null && screenshotFeedback.getImagePath() != null) {
                 screenshotFeedbackList.add(screenshotFeedback);
             }
             return this;
         }
 
-        public Builder withTextMechanism(TextFeedback textFeedback) {
+        public Builder withTextFeedback(TextFeedback textFeedback) {
             this.textFeedbackList = new ArrayList<>();
-            textFeedbackList.add(textFeedback);
+            if (textFeedback != null) {
+                textFeedbackList.add(textFeedback);
+            }
             return this;
         }
 
@@ -124,7 +148,7 @@ public class Feedback implements Serializable {
                 bean.title = this.title;
                 bean.userIdentification = this.userIdentification;
                 bean.audioFeedbackList = new ArrayList<>(this.audioFeedbackList);
-                bean.categoryFeedbackList = new ArrayList<>(this.categoryFeedbackList);
+                bean.labelFeedbackList = new ArrayList<>(this.categoryFeedbackList);
                 bean.ratingFeedbackList = new ArrayList<>(this.ratingFeedbackList);
                 bean.screenshotFeedbackList = new ArrayList<>(this.screenshotFeedbackList);
                 bean.textFeedbackList = new ArrayList<>(this.textFeedbackList);
@@ -133,18 +157,22 @@ public class Feedback implements Serializable {
             return null;
         }
 
-        private static Map<String, Object> createContextInformation() {
+        private static Map<String, Object> createContextInformation(Context context) {
             Map<String, Object> deviceInfo = new HashMap<>();
-            deviceInfo.put("release", Build.VERSION.RELEASE);
-            deviceInfo.put("device", Build.DEVICE);
-            deviceInfo.put("model", Build.MODEL);
-            deviceInfo.put("product", Build.PRODUCT);
-            deviceInfo.put("brand", Build.BRAND);
-            deviceInfo.put("display", Build.DISPLAY);
-            deviceInfo.put("androidId", Build.ID);
-            deviceInfo.put("manufacturer", Build.MANUFACTURER);
-            deviceInfo.put("serial", Build.SERIAL);
-            deviceInfo.put("host", Build.HOST);
+            deviceInfo.put("androidVersion", Build.VERSION.RELEASE);
+            deviceInfo.put("country", Locale.getDefault().getCountry());
+            deviceInfo.put("metaData", Build.MODEL);
+
+            deviceInfo.put("localTime", Calendar.getInstance().getTime());
+            deviceInfo.put("timeZone", Time.getCurrentTimezone());
+
+            WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+            if (windowManager != null) {
+                Point screen = new Point();
+                windowManager.getDefaultDisplay().getRealSize(screen);
+                deviceInfo.put("resolution", screen.x + "x" + screen.y);
+            }
+
             return deviceInfo;
         }
     }
@@ -179,8 +207,8 @@ public class Feedback implements Serializable {
         return audioFeedbackList;
     }
 
-    public List<LabelFeedback> getCategoryFeedbackList() {
-        return categoryFeedbackList;
+    public List<LabelFeedback> getLabelFeedbackList() {
+        return labelFeedbackList;
     }
 
     public List<RatingFeedback> getRatingFeedbackList() {

@@ -2,7 +2,7 @@ package ch.uzh.supersede.feedbacklibrary.api;
 
 import java.util.List;
 
-import ch.uzh.supersede.feedbacklibrary.feedback.Feedback;
+import ch.uzh.supersede.feedbacklibrary.models.Feedback;
 import ch.uzh.supersede.feedbacklibrary.models.AndroidUser;
 import ch.uzh.supersede.feedbacklibrary.models.AuthenticateRequest;
 import ch.uzh.supersede.feedbacklibrary.models.AuthenticateResponse;

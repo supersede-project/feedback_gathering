@@ -21,8 +21,8 @@ public abstract class AbstractMultipartFeedback extends AbstractFeedbackPart imp
     @Expose
     private String part;
 
-    public AbstractMultipartFeedback(long mechanismId, int order) {
-        super(mechanismId, order);
+    public AbstractMultipartFeedback(long multipartFeedbackId, int order) {
+        super(multipartFeedbackId, order);
     }
 
     public abstract String getPartString();

@@ -7,17 +7,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ch.uzh.supersede.feedbacklibrary.models.LabelFeedback;
-import ch.uzh.supersede.feedbacklibrary.models.AbstractFeedbackPart;
 
-public class LabelMechanismView extends AbstractFeedbackPartView {
+public class LabelFeedbackView extends AbstractFeedbackPartView {
     private LabelFeedback labelFeedback;
     private CategorySpinner categorySpinner;
 
-    public LabelMechanismView(LayoutInflater layoutInflater, AbstractFeedbackPart mechanism) {
+    public LabelFeedbackView(LayoutInflater layoutInflater, LabelFeedback labelFeedback) {
         super(layoutInflater);
-        this.viewOrder = mechanism.getOrder();
-        this.labelFeedback = (LabelFeedback) mechanism;
-        setEnclosingLayout(getLayoutInflater().inflate(ch.uzh.supersede.feedbacklibrary.R.layout.mechanism_category, null));
+        this.viewOrder = labelFeedback.getOrder();
+        this.labelFeedback = labelFeedback;
+        setEnclosingLayout(getLayoutInflater().inflate(ch.uzh.supersede.feedbacklibrary.R.layout.category_feedback, null));
         initView();
     }
 

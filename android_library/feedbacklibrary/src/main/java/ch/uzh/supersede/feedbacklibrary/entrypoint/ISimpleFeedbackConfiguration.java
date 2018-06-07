@@ -1,7 +1,7 @@
 package ch.uzh.supersede.feedbacklibrary.entrypoint;
 
 /**
- * Simple interface to activate/deactivate the specific mechanisms<br>
+ * Simple interface to activate/deactivate the specific feedbackPart<br>
  * A specific interface will override the corresponding part in this interface
  */
 public interface ISimpleFeedbackConfiguration extends IFeedbackConfiguration {

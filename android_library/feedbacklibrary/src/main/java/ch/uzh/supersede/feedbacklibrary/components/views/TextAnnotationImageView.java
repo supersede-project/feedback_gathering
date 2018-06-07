@@ -16,7 +16,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import ch.uzh.supersede.feedbacklibrary.R;
-import ch.uzh.supersede.feedbacklibrary.components.views.AbstractAnnotationView;
 
 import static android.graphics.Color.WHITE;
 import static android.graphics.Typeface.BOLD;
@@ -141,7 +140,7 @@ public class TextAnnotationImageView extends AbstractAnnotationView {
         }
         LayoutInflater layoutInflater = LayoutInflater.from(context);
         // Inflating the custom layout
-        LinearLayout linearLayout = (LinearLayout) layoutInflater.inflate(R.layout.mechanism_text, null);
+        LinearLayout linearLayout = (LinearLayout) layoutInflater.inflate(R.layout.text_feedback, null);
 
         final TextInputLayout textAnnotationLayout = (TextInputLayout) linearLayout.findViewById(R.id.supersede_feedbacklibrary_text_annotation_dialog_input_layout);
         final TextInputEditText textAnnotationText = (TextInputEditText) linearLayout.findViewById(R.id.supersede_feedbacklibrary_text_annotation_dialog_text);

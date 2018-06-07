@@ -14,8 +14,8 @@ public class RatingFeedback extends AbstractFeedbackPart {
     @Expose
     private long rating;
 
-    public RatingFeedback(long mechanismId, LocalConfigurationBean configuration) {
-        super(mechanismId, configuration.getRatingOrder());
+    public RatingFeedback(long ratingFeedbackId, LocalConfigurationBean configuration) {
+        super(ratingFeedbackId, configuration.getRatingOrder());
         this.ratingIcon = configuration.getRatingIcon();
         this.maxRating = configuration.getRatingMaxValue();
         this.defaultRating = configuration.getRatingDefaultValue();

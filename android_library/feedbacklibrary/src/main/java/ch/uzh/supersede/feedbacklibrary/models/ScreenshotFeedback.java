@@ -8,8 +8,8 @@ public class ScreenshotFeedback extends AbstractMultipartFeedback {
     private String imagePath;
     private boolean isEditable;
 
-    public ScreenshotFeedback(long mechanismId, LocalConfigurationBean configuration) {
-        super(mechanismId, configuration.getScreenshotOrder());
+    public ScreenshotFeedback(long screenshotFeedbackId, LocalConfigurationBean configuration) {
+        super(screenshotFeedbackId, configuration.getScreenshotOrder());
         this.isEditable = configuration.isScreenshotIsEditable();
     }
 

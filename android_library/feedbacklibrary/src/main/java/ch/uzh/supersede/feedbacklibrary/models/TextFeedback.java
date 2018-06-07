@@ -15,8 +15,8 @@ public class TextFeedback extends AbstractFeedbackPart {
     @Expose
     private String text;
 
-    public TextFeedback(long mechanismId, LocalConfigurationBean configuration) {
-        super(mechanismId, configuration.getTextOrder());
+    public TextFeedback(long textFeedbackId, LocalConfigurationBean configuration) {
+        super(textFeedbackId, configuration.getTextOrder());
         this.hint = configuration.getTextHint();
         this.label = configuration.getTextLabel();
         this.maxLength = configuration.getTextMaxLength();

@@ -12,8 +12,8 @@ public class AudioFeedback extends AbstractMultipartFeedback {
     @Expose
     private int duration;
 
-    public AudioFeedback(long mechanismId, LocalConfigurationBean configuration) {
-        super(mechanismId, configuration.getAudioOrder());
+    public AudioFeedback(long audioFeedbackId, LocalConfigurationBean configuration) {
+        super(audioFeedbackId, configuration.getAudioOrder());
         this.maxTime = configuration.getAudioMaxTime();
     }
 

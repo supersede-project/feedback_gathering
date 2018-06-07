@@ -13,7 +13,7 @@ import ch.uzh.supersede.feedbacklibrary.beans.FeedbackDetailsBean;
 import ch.uzh.supersede.feedbacklibrary.beans.FeedbackResponseBean;
 import ch.uzh.supersede.feedbacklibrary.beans.LocalFeedbackBean;
 import ch.uzh.supersede.feedbacklibrary.database.FeedbackDatabase;
-import ch.uzh.supersede.feedbacklibrary.feedback.Feedback;
+import ch.uzh.supersede.feedbacklibrary.models.Feedback;
 import ch.uzh.supersede.feedbacklibrary.models.AuthenticateResponse;
 import ch.uzh.supersede.feedbacklibrary.utils.CompareUtility;
 import ch.uzh.supersede.feedbacklibrary.utils.DateUtility;

@@ -124,14 +124,19 @@ public class FeedbackHubActivity extends AbstractBaseActivity implements IFeedba
     public void onEventCompleted(EventType eventType, Object response) {
         switch (eventType) {
             case AUTHENTICATE:
-                FeedbackService.getInstance().setToken(((AuthenticateResponse) response).getToken());
+                if (response instanceof AuthenticateResponse) {
+                    FeedbackService.getInstance().setToken(((AuthenticateResponse) response).getToken());
+                }
                 FeedbackService.getInstance().setApplicationId(configuration.getHostApplicationLongId()); //TODO [jfo] maybe this id is returned with authentication
                 FeedbackService.getInstance().setLanguage(configuration.getHostApplicationLanguage());
                 break;
             case CREATE_USER:
-                FeedbackDatabase.getInstance(this).writeString(USER_NAME, ((AndroidUser) response).getName());
-                FeedbackDatabase.getInstance(this).writeBoolean(IS_DEVELOPER, ((AndroidUser) response).isDeveloper());
-                userName = preAllocatedStringStorage[0];
+                if (response instanceof AndroidUser) {
+                    AndroidUser androidUser = (AndroidUser) response;
+                    FeedbackDatabase.getInstance(this).writeString(USER_NAME, androidUser.getName());
+                    FeedbackDatabase.getInstance(this).writeBoolean(IS_DEVELOPER, androidUser.isDeveloper());
+                    userName = androidUser.getName();
+                }
                 preAllocatedStringStorage[0] = null;
                 break;
             default:
@@ -154,7 +159,7 @@ public class FeedbackHubActivity extends AbstractBaseActivity implements IFeedba
 
     @Override
     public void onConnectionFailed(EventType eventType) {
-
+        //TODO
     }
 
     private void updateUserLevel(boolean ignoreDatabaseCheck) {
