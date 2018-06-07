@@ -89,7 +89,7 @@ public class FeedbackHubActivity extends AbstractBaseActivity {
     @Override
     protected void createInfoBubbles() {
         boolean tutorialFinished = getSharedPreferences(SHARED_PREFERENCES_ID, MODE_PRIVATE).getBoolean(SHARED_PREFERENCES_TUTORIAL_HUB,false);
-        if (tutorialFinished) {
+        if (!tutorialFinished) {
             RelativeLayout root = getView(R.id.hub_root, RelativeLayout.class);
             RelativeLayout mLayout = infoUtility.addInfoBox(root, getString(R.string.hub_feedback_status_label), getString(R.string.hub_feedback_status_info), this, statusText);
             RelativeLayout llLayout = infoUtility.addInfoBox(root, getString(R.string.hub_feedback_create_label), getString(R.string.hub_feedback_create_info), this, feedbackButton, mLayout);
