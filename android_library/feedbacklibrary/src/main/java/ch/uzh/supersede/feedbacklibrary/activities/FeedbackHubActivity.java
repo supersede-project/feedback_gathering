@@ -1,9 +1,10 @@
 package ch.uzh.supersede.feedbacklibrary.activities;
 
 
-import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 import android.annotation.SuppressLint;
 import android.content.*;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
