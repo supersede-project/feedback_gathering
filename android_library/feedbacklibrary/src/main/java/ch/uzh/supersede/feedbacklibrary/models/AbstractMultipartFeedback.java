@@ -20,12 +20,13 @@ public abstract class AbstractMultipartFeedback extends AbstractFeedbackPart imp
     private String name;
     @Expose
     private String part;
+    @Expose
+    private String path;
+    private long size;
 
-    public AbstractMultipartFeedback(long multipartFeedbackId, int order) {
-        super(multipartFeedbackId, order);
+    public AbstractMultipartFeedback(int order) {
+        super(order);
     }
-
-    public abstract String getPartString();
 
     protected void initPartFeedback(String filePath) {
         if (filePath == null) {
@@ -34,15 +35,13 @@ public abstract class AbstractMultipartFeedback extends AbstractFeedbackPart imp
         File file = new File(filePath);
         String[] split = Utils.splitFileNameExtension(file.getName());
         setFileExtension(split[1]);
-        setPart(getPartString());
+        setPart(getPart());
     }
 
     @Nullable
     public String getFileExtension() {
         return fileExtension;
     }
-
-    public abstract String getFilePath();
 
     public void setFileExtension(@Nullable String fileExtension) {
         this.fileExtension = fileExtension;
@@ -62,5 +61,17 @@ public abstract class AbstractMultipartFeedback extends AbstractFeedbackPart imp
 
     public void setPart(String part) {
         this.part = part;
+    }
+
+    public long getSize() {
+        return size;
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
     }
 }

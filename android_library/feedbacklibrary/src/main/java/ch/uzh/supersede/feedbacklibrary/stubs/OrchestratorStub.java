@@ -8,7 +8,9 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import ch.uzh.supersede.feedbacklibrary.R;
 import ch.uzh.supersede.feedbacklibrary.beans.LocalConfigurationBean;
@@ -82,7 +84,7 @@ public class OrchestratorStub {
 
         public FeedbackBuilder withAudio() {
             if (ADVANCED.check(context) && configuration.getAudioOrder() != -1) {
-                AudioFeedback audioFeedback = new AudioFeedback(id, configuration);
+                AudioFeedback audioFeedback = new AudioFeedback(configuration);
                 AudioFeedbackView audioMechanismView = new AudioFeedbackView(layoutInflater, audioFeedback, resources, activity, context);
                 feedbackParts.add(audioFeedback);
                 feedbackPartViews.add(audioMechanismView);
@@ -93,7 +95,7 @@ public class OrchestratorStub {
 
         public FeedbackBuilder withCategory() {
             if (configuration.getLabelOrder() != -1) {
-                LabelFeedback labelFeedback = new LabelFeedback(id, configuration);
+                LabelFeedback labelFeedback = new LabelFeedback(configuration);
                 LabelFeedbackView labelFeedbackView = new LabelFeedbackView(layoutInflater, labelFeedback);
                 feedbackParts.add(labelFeedback);
                 feedbackPartViews.add(labelFeedbackView);
@@ -104,7 +106,7 @@ public class OrchestratorStub {
 
         public FeedbackBuilder withRating() {
             if (configuration.getRatingOrder() != -1) {
-                RatingFeedback ratingFeedback = new RatingFeedback(id, configuration);
+                RatingFeedback ratingFeedback = new RatingFeedback(configuration);
                 RatingFeedbackView ratingFeedbackView = new RatingFeedbackView(layoutInflater, ratingFeedback);
                 feedbackParts.add(ratingFeedback);
                 feedbackPartViews.add(ratingFeedbackView);
@@ -115,7 +117,7 @@ public class OrchestratorStub {
 
         public FeedbackBuilder withScreenshot() {
             if (configuration.getScreenshotOrder() != -1) {
-                ScreenshotFeedback screenshotFeedback = new ScreenshotFeedback(id, configuration);
+                ScreenshotFeedback screenshotFeedback = new ScreenshotFeedback(configuration);
                 ScreenshotFeedbackView screenshotFeedbackView = new ScreenshotFeedbackView(layoutInflater, activity, screenshotFeedback);
                 feedbackParts.add(screenshotFeedback);
                 feedbackPartViews.add(screenshotFeedbackView);
@@ -126,7 +128,7 @@ public class OrchestratorStub {
 
         public FeedbackBuilder withText() {
             if (configuration.getTextOrder() != -1) {
-                TextFeedback textFeedback = new TextFeedback(id, configuration);
+                TextFeedback textFeedback = new TextFeedback(configuration);
                 TextFeedbackView textFeedbackView = new TextFeedbackView(layoutInflater, textFeedback);
                 feedbackParts.add(textFeedback);
                 feedbackPartViews.add(textFeedbackView);
@@ -135,7 +137,7 @@ public class OrchestratorStub {
             return this;
         }
 
-        public FeedbackBuilder withTitle(){
+        public FeedbackBuilder withTitle() {
             throw new UnsupportedOperationException("Not yet implemented!");
         }
 

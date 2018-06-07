@@ -10,20 +10,16 @@ public class RatingFeedback extends AbstractFeedbackPart {
     private String ratingIcon;
     private int maxRating;
     private int defaultRating;
+    private String title;
 
     @Expose
     private long rating;
 
-    public RatingFeedback(long ratingFeedbackId, LocalConfigurationBean configuration) {
-        super(ratingFeedbackId, configuration.getRatingOrder());
+    public RatingFeedback(LocalConfigurationBean configuration) {
+        super(configuration.getRatingOrder());
         this.ratingIcon = configuration.getRatingIcon();
         this.maxRating = configuration.getRatingMaxValue();
         this.defaultRating = configuration.getRatingDefaultValue();
-    }
-
-    @Override
-    public boolean isValid(List<String> errorMessage) {
-        return true;
     }
 
     public String getRatingIcon() {
@@ -44,5 +40,9 @@ public class RatingFeedback extends AbstractFeedbackPart {
 
     public void setRating(long rating) {
         this.rating = rating;
+    }
+
+    public String getTitle() {
+        return title;
     }
 }

@@ -59,15 +59,15 @@ public class Enums {
     }
 
 
-    public enum SAVE_MODE{
-        CREATED, UP_VOTED, DOWN_VOTED,SUBSCRIBED, UN_SUBSCRIBED, RESPONDED
+    public enum SAVE_MODE {
+        CREATED, UP_VOTED, DOWN_VOTED, SUBSCRIBED, UN_SUBSCRIBED, RESPONDED
     }
 
-    public enum FETCH_MODE{
+    public enum FETCH_MODE {
         OWN, VOTED, UP_VOTED, DOWN_VOTED, SUBSCRIBED, RESPONDED, ALL
     }
 
-    public enum RESPONSE_MODE{
+    public enum RESPONSE_MODE {
         EDITING, READING
     }
 
@@ -82,5 +82,11 @@ public class Enums {
         QUICK_EDIT,
         CHANGE_COLOR,
         CROP
+    }
+
+    public enum RUNNING_MODE_TYPE {
+        MOCKUP,
+        TEST,
+        PRODUCTIVE
     }
 }

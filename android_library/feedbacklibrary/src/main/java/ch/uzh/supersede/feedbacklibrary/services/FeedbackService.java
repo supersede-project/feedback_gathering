@@ -14,10 +14,10 @@ import ch.uzh.supersede.feedbacklibrary.beans.FeedbackBean;
 import ch.uzh.supersede.feedbacklibrary.beans.FeedbackDetailsBean;
 import ch.uzh.supersede.feedbacklibrary.database.FeedbackDatabase;
 import ch.uzh.supersede.feedbacklibrary.models.AbstractFeedbackPart;
-import ch.uzh.supersede.feedbacklibrary.models.Feedback;
 import ch.uzh.supersede.feedbacklibrary.models.AndroidUser;
 import ch.uzh.supersede.feedbacklibrary.models.AuthenticateRequest;
 import ch.uzh.supersede.feedbacklibrary.models.AuthenticateResponse;
+import ch.uzh.supersede.feedbacklibrary.models.Feedback;
 import ch.uzh.supersede.feedbacklibrary.stubs.RepositoryStub;
 import ch.uzh.supersede.feedbacklibrary.utils.Enums;
 import ch.uzh.supersede.feedbacklibrary.utils.FeedbackTransformer;
@@ -32,8 +32,9 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 import static ch.uzh.supersede.feedbacklibrary.services.IFeedbackServiceEventListener.EventType;
 import static ch.uzh.supersede.feedbacklibrary.services.IFeedbackServiceEventListener.EventType.*;
-import static ch.uzh.supersede.feedbacklibrary.utils.Constants.SUPERSEDE_BASE_URL;
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.*;
 import static ch.uzh.supersede.feedbacklibrary.utils.Enums.FETCH_MODE.*;
+import static ch.uzh.supersede.feedbacklibrary.utils.Enums.RUNNING_MODE_TYPE.MOCKUP;
 
 /**
  * Singleton class that returns the original {@link FeedbackApiService} with its functions, defined in {@link IFeedbackAPI} iff {@code BuildConfig.DEBUG} is enabled, otherwise
@@ -51,12 +52,12 @@ public abstract class FeedbackService {
     }
 
     public static FeedbackService getInstance() {
-        //        if (BuildConfig.DEBUG) {
-        //            if (instance == null) {
-        //                instance = new FeedbackMockService();
-        //            }
-        //            return instance;
-        //        }
+        if (RUNNING_MODE == MOCKUP) {
+            if (instance == null) {
+                instance = new FeedbackMockService();
+            }
+            return instance;
+        }
         if (instance == null) {
             HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
             interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
@@ -143,7 +144,7 @@ public abstract class FeedbackService {
             multipartFiles.add(MultipartBody.Part.createFormData("audio", "audio", RequestBody.create(MediaType.parse("audio/mp3"), new byte[0]))); //FIXME [jfo] load audio
 
             Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
-            Feedback feedback = FeedbackTransformer.FeedbackDetailsBeanToFeedback(feedbackDetailsBean, activity, getApplicationId(), feedbackParts);
+            Feedback feedback = FeedbackTransformer.FeedbackDetailsBeanToFeedback(feedbackDetailsBean, activity, feedbackParts);
             String jsonString = gson.toJson(feedback);
             MultipartBody.Part jsonFeedback = MultipartBody.Part.createFormData("json", "json", RequestBody.create(MediaType.parse("application/json"), jsonString.getBytes()));
 
@@ -191,7 +192,7 @@ public abstract class FeedbackService {
         }
 
         @Override
-        public void createFeedback(IFeedbackServiceEventListener callback, Activity activity, FeedbackDetailsBean feedbackDetailsBean,  List<AbstractFeedbackPart> feedbackParts) {
+        public void createFeedback(IFeedbackServiceEventListener callback, Activity activity, FeedbackDetailsBean feedbackDetailsBean, List<AbstractFeedbackPart> feedbackParts) {
             FeedbackDatabase.getInstance(activity).writeFeedback(feedbackDetailsBean.getFeedbackBean(), Enums.SAVE_MODE.CREATED);
             callback.onEventCompleted(CREATE_FEEDBACK, null);
         }

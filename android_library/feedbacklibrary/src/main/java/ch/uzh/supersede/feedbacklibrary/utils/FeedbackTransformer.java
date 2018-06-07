@@ -17,9 +17,8 @@ public class FeedbackTransformer {
     private FeedbackTransformer() {
     }
 
-    public static Feedback FeedbackDetailsBeanToFeedback(FeedbackDetailsBean feedbackDetailsBean, Context context, long applicationId, List<AbstractFeedbackPart> feedbackPart) {
+    public static Feedback FeedbackDetailsBeanToFeedback(FeedbackDetailsBean feedbackDetailsBean, Context context, List<AbstractFeedbackPart> feedbackPart) {
         return new Feedback.Builder()
-                .withApplicationId(applicationId)
                 .withTitle(feedbackDetailsBean.getTitle())
                 .withUserIdentification(feedbackDetailsBean.getUserName())
                 .withContextInformation(context)

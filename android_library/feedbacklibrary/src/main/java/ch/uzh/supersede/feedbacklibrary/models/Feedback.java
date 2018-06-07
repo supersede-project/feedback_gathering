@@ -1,33 +1,22 @@
 package ch.uzh.supersede.feedbacklibrary.models;
 
 import android.content.Context;
-import android.graphics.Point;
-import android.os.Build;
-import android.text.format.Time;
-import android.view.WindowManager;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.HashMap;
+import java.util.Date;
 import java.util.List;
-import java.util.Locale;
-import java.util.Map;
 
 import ch.uzh.supersede.feedbacklibrary.utils.CompareUtility;
 
 public class Feedback implements Serializable {
+
     @Expose
-    private long applicationId;
-    @Expose
-    private long configurationId;
-    @Expose
-    private Map<String, Object> contextInformation;
-    @Expose
-    private String language;
+    @SerializedName("contextInformation")
+    private ContextInformationFeedback contextInformationFeedback;
     @Expose
     private String title;
     @Expose
@@ -47,15 +36,22 @@ public class Feedback implements Serializable {
     @Expose
     @SerializedName("textFeedbacks")
     private List<TextFeedback> textFeedbackList;
+    @SerializedName("attachmentFeedbacks")
+    private List<AbstractFeedbackPart> attachmentFeedbackList;
+    private long id;
+    private long applicationId;
+    private long configurationId;
+    private String language;
+    private Date createdAt;
+    private Date updatedAt;
+    //private Enums.FEEDBACK_STATUS feedbackStatus; TODO [jfo]
+
 
     private Feedback() {
     }
 
     public static class Builder {
-        private long applicationId;
-        private long configurationId;
-        private Map<String, Object> contextInformation;
-        private String language;
+        private ContextInformationFeedback contextInformationFeedback;
         private String title;
         private String userIdentification;
         private List<AudioFeedback> audioFeedbackList;
@@ -73,23 +69,15 @@ public class Feedback implements Serializable {
             return this;
         }
 
-        public Builder withApplicationId(long applicationId) {
-            this.applicationId = applicationId;
-            return this;
-        }
-
-        public Builder withConfigurationId(long configurationId) {
-            this.configurationId = configurationId;
-            return this;
-        }
-
         public Builder withContextInformation(Context context) {
-            this.contextInformation = createContextInformation(context);
-            return this;
-        }
-
-        public Builder withLanguage(String language) {
-            this.language = language;
+            this.contextInformationFeedback = new ContextInformationFeedback.Builder(context)
+                    .withAndroidVersion()
+                    .withCountry()
+                    .withLocalTime()
+                    .withMetaData()
+                    .withResolution()
+                    .withTimeZone()
+                    .build();
             return this;
         }
 
@@ -124,7 +112,7 @@ public class Feedback implements Serializable {
 
         public Builder withScreenshotFeedback(ScreenshotFeedback screenshotFeedback) {
             this.screenshotFeedbackList = new ArrayList<>();
-            if (screenshotFeedback != null && screenshotFeedback.getImagePath() != null) {
+            if (screenshotFeedback != null && screenshotFeedback.getPath() != null) {
                 screenshotFeedbackList.add(screenshotFeedback);
             }
             return this;
@@ -139,12 +127,9 @@ public class Feedback implements Serializable {
         }
 
         public Feedback build() {
-            if (CompareUtility.notNull(title, userIdentification, applicationId)) {
+            if (CompareUtility.notNull(title, userIdentification)) {
                 Feedback bean = new Feedback();
-                bean.applicationId = applicationId;
-                bean.configurationId = this.configurationId;
-                bean.contextInformation = this.contextInformation;
-                bean.language = this.language;
+                bean.contextInformationFeedback = this.contextInformationFeedback;
                 bean.title = this.title;
                 bean.userIdentification = this.userIdentification;
                 bean.audioFeedbackList = new ArrayList<>(this.audioFeedbackList);
@@ -155,25 +140,6 @@ public class Feedback implements Serializable {
                 return bean;
             }
             return null;
-        }
-
-        private static Map<String, Object> createContextInformation(Context context) {
-            Map<String, Object> deviceInfo = new HashMap<>();
-            deviceInfo.put("androidVersion", Build.VERSION.RELEASE);
-            deviceInfo.put("country", Locale.getDefault().getCountry());
-            deviceInfo.put("metaData", Build.MODEL);
-
-            deviceInfo.put("localTime", Calendar.getInstance().getTime());
-            deviceInfo.put("timeZone", Time.getCurrentTimezone());
-
-            WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
-            if (windowManager != null) {
-                Point screen = new Point();
-                windowManager.getDefaultDisplay().getRealSize(screen);
-                deviceInfo.put("resolution", screen.x + "x" + screen.y);
-            }
-
-            return deviceInfo;
         }
     }
 
@@ -187,8 +153,8 @@ public class Feedback implements Serializable {
     }
 
 
-    public Map<String, Object> getContextInformation() {
-        return contextInformation;
+    public ContextInformationFeedback getContextInformationFeedback() {
+        return contextInformationFeedback;
     }
 
     public String getLanguage() {
@@ -223,4 +189,19 @@ public class Feedback implements Serializable {
         return textFeedbackList;
     }
 
+    public long getId() {
+        return id;
+    }
+
+    public Date getCreatedAt() {
+        return createdAt;
+    }
+
+    public Date getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public List<AbstractFeedbackPart> getAttachmentFeedbackList() {
+        return attachmentFeedbackList;
+    }
 }

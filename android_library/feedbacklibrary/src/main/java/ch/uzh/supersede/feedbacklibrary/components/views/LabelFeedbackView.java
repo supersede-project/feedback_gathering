@@ -16,7 +16,7 @@ public class LabelFeedbackView extends AbstractFeedbackPartView {
         super(layoutInflater);
         this.viewOrder = labelFeedback.getOrder();
         this.labelFeedback = labelFeedback;
-        setEnclosingLayout(getLayoutInflater().inflate(ch.uzh.supersede.feedbacklibrary.R.layout.category_feedback, null));
+        setEnclosingLayout(getLayoutInflater().inflate(ch.uzh.supersede.feedbacklibrary.R.layout.label_feedback, null));
         initView();
     }
 

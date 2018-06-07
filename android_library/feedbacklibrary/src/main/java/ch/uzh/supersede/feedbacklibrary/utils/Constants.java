@@ -1,6 +1,10 @@
 package ch.uzh.supersede.feedbacklibrary.utils;
 
+
+import static ch.uzh.supersede.feedbacklibrary.utils.Enums.RUNNING_MODE_TYPE.*;
+
 public class Constants {
+    public static final Enums.RUNNING_MODE_TYPE RUNNING_MODE = TEST;
 
     private Constants() {
     }
@@ -11,10 +15,9 @@ public class Constants {
     public static final String USER_NAME = "userName";
     public static final String IS_DEVELOPER = "isDeveloper";
     public static final String USER_NAME_ANONYMOUS = "anonymous";
-
     public static final String SPACE = " ";
     public static final String PATH_DELIMITER = "/";
-    public static final String SUPERSEDE_BASE_URL = "http://supersede.es.atos.net:8081/"; //"https://platform.supersede.eu:8443/";
+    public static final String SUPERSEDE_BASE_URL = RUNNING_MODE == PRODUCTIVE ? "https://platform.supersede.eu:8443/" : "http://supersede.es.atos.net:8081/";
     public static final String LIFETIME_TOKEN = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJzdXBlcl9hZG1pbiIsImNyZWF0ZWQiOjE1Mjc3NzQxODAyMzQsImV4cCI6MjEzMjU3NDE4MH0.A00XDDAt3PUsYNkBDiJD5jZ3CbimW4" +
             "-4YgEiyKu3DFTXhxQ5QuWy2fgZrAiqxtSiQbAOfMn-E8wLTvx0RQorjQ"; //FIXME [jfo] remove as soon as possible
 
@@ -37,6 +40,8 @@ public class Constants {
     public static final String IMAGE_ANNOTATED_DATA_DB_KEY = "imageAnnotatedData";
     public static final String EXTRA_KEY_ALL_STICKER_ANNOTATIONS = "allStickerAnnotations";
     public static final String EXTRA_KEY_HAS_STICKER_ANNOTATIONS = "hasStickerAnnotations";
+
+    public static final String NOT_YET_IMPLEMENTED_EXCEPTION = "Not yet implemented";
 
     public static class UtilsConstants {
         private UtilsConstants() {
@@ -95,14 +100,6 @@ public class Constants {
 
         //FeedbackAcitivity
         public static final String FEEDBACK_ACTIVITY_TAG = "FeedbackActivity";
-    }
-
-    public static class ServicesConstants {
-        private ServicesConstants() {
-        }
-
-        public static final String FEEDBACK_SERVICE_TAG = "FeedbackService";
-        public static final String CONFIGURATION_REQUEST_WRAPPER_TAG = "ConfigurationRequestWra";
     }
 
     public static class ModelsConstants {
