@@ -88,8 +88,8 @@ public class FeedbackBean implements Serializable{
             return this;
         }
 
-        public Builder isPublic() {
-            this.isPublic = true;
+        public Builder isPublic(boolean isPublic) {
+            this.isPublic = isPublic;
             return this;
         }
 
