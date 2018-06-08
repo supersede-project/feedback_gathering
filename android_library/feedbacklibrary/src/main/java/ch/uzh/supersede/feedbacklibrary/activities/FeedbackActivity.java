@@ -107,7 +107,7 @@ public class FeedbackActivity extends AbstractBaseActivity implements AudioFeedb
                 if (VersionUtility.getDateVersion() > 1) {
                     Intent intent = new Intent(this, FeedbackDetailsActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                    intent.putExtra(EXTRA_KEY_FEEDBACK_DETAIL_BEAN, feedbackDetailsBean.getFeedbackBean());
+                    intent.putExtra(EXTRA_KEY_FEEDBACK_DETAIL_BEAN, feedbackDetailsBean);
                     intent.putExtra(EXTRA_KEY_APPLICATION_CONFIGURATION, configuration);
                     this.onBackPressed(); //This serves the purpose of erasing the Feedback Activity from the Back-Button
                     startActivity(intent);
