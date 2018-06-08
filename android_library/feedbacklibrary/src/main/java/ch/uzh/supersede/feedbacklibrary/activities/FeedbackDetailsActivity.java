@@ -23,6 +23,7 @@ import static ch.uzh.supersede.feedbacklibrary.components.buttons.FeedbackRespon
 import static ch.uzh.supersede.feedbacklibrary.components.buttons.FeedbackResponseListItem.RESPONSE_MODE.FIXED;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.*;
 import static ch.uzh.supersede.feedbacklibrary.utils.Enums.RESPONSE_MODE.READING;
+import static ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility.USER_LEVEL.ACTIVE;
 
 @SuppressWarnings("squid:MaximumInheritanceDepth")
 public class FeedbackDetailsActivity extends AbstractBaseActivity {
@@ -100,30 +101,39 @@ public class FeedbackDetailsActivity extends AbstractBaseActivity {
         }else{
             this.onBackPressed();
         }
+        //Disable all Database-related content, read only
+        if (!ACTIVE.check(this,true)) {
+            upButton.setEnabled(false);
+            downButton.setEnabled(false);
+            subscribeButton.setEnabled(false);
+            responseButton.setEnabled(false);
+        }
         onPostCreate();
     }
 
     private void updateFeedbackState() {
-        feedbackState = FeedbackDatabase.getInstance(this).getFeedbackState(feedbackDetailsBean.getFeedbackBean());
-        if (feedbackState.isSubscribed()){
-            subscribeButton.setText(getString(R.string.details_unsubscribe));
-            subscribeButton.setTextColor(ContextCompat.getColor(this, R.color.red_3));
-        }else{
-            subscribeButton.setText(getString(R.string.details_subscribe));
-            subscribeButton.setTextColor(ContextCompat.getColor(this, R.color.black));
-        }
-        if (feedbackState.isUpVoted()){
-            votesText.setTextColor(ContextCompat.getColor(this, R.color.green_4));
-            upButton.setEnabled(false);
-        }
-        if (feedbackState.isDownVoted()){
-            votesText.setTextColor(ContextCompat.getColor(this, R.color.red_5));
-            downButton.setEnabled(false);
-        }
-        if (feedbackState.isEqualVoted() && feedbackDetailsBean.getFeedbackBean().isPublic()){
-            votesText.setTextColor(ContextCompat.getColor(this, R.color.black));
-            upButton.setEnabled(true);
-            downButton.setEnabled(true);
+        if (ACTIVE.check(this,true)) {
+            feedbackState = FeedbackDatabase.getInstance(this).getFeedbackState(feedbackDetailsBean.getFeedbackBean());
+            if (feedbackState.isSubscribed()) {
+                subscribeButton.setText(getString(R.string.details_unsubscribe));
+                subscribeButton.setTextColor(ContextCompat.getColor(this, R.color.red_3));
+            } else {
+                subscribeButton.setText(getString(R.string.details_subscribe));
+                subscribeButton.setTextColor(ContextCompat.getColor(this, R.color.black));
+            }
+            if (feedbackState.isUpVoted()) {
+                votesText.setTextColor(ContextCompat.getColor(this, R.color.green_4));
+                upButton.setEnabled(false);
+            }
+            if (feedbackState.isDownVoted()) { //TODO> Downvoting doesnt enable upvoting.
+                votesText.setTextColor(ContextCompat.getColor(this, R.color.red_5));
+                downButton.setEnabled(false);
+            }
+            if (feedbackState.isEqualVoted() && feedbackDetailsBean.getFeedbackBean().isPublic()) {
+                votesText.setTextColor(ContextCompat.getColor(this, R.color.black));
+                upButton.setEnabled(true);
+                downButton.setEnabled(true);
+            }
         }
     }
 

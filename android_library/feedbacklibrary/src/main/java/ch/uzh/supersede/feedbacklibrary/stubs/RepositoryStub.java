@@ -58,7 +58,7 @@ public class RepositoryStub {
         FEEDBACK_STATUS status = feedbackBean.getFeedbackStatus();
         List<FeedbackResponseBean> feedbackResponses = getFeedbackResponses(context, feedbackBean.getResponses(), timeStamp, 0.1f, 0.1f, feedbackBean);
         return new FeedbackDetailsBean.Builder()
-                .withFeedbackUid(feedbackBean.getFeedbackId())
+                .withFeedbackId(feedbackBean.getFeedbackId())
                 .withFeedbackBean(feedbackBean)
                 .withTitle(title)
                 .withDescription(description)
@@ -120,6 +120,7 @@ public class RepositoryStub {
                 .withMaxUpVotes(maxUpVotes)
                 .withResponses(responses)
                 .withStatus(feedbackStatus)
+                .isPublic(!ownFeedback)
                 .build();
     }
 
@@ -256,7 +257,7 @@ public class RepositoryStub {
         FEEDBACK_STATUS status = feedbackBean.getFeedbackStatus();
         List<FeedbackResponseBean> feedbackResponses = getFeedbackResponses(context, feedbackBean.getResponses(), timeStamp, 0.1f, 0.1f, feedbackBean);
         return new FeedbackDetailsBean.Builder()
-                .withFeedbackUid(feedbackBean.getFeedbackId())
+                .withFeedbackId(feedbackBean.getFeedbackId())
                 .withFeedbackBean(feedbackBean)
                 .withTitle(feedbackBean.getTitle())
                 .withDescription(description == null ? content[0] : description)

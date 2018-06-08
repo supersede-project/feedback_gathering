@@ -90,7 +90,7 @@ public class FeedbackDetailsBean implements Serializable {
             return this;
         }
 
-        public Builder withFeedbackUid(long feedbackId) {
+        public Builder withFeedbackId(long feedbackId) {
             this.feedbackId = feedbackId;
             return this;
         }

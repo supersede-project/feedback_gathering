@@ -1,9 +1,7 @@
 package ch.uzh.supersede.feedbacklibrary.utils;
 
-import java.util.Date;
-
 public class VersionUtility {
-    private static final int BASE_VERSION = 5;
+    private static final int BASE_VERSION = 1;
 
     private VersionUtility() {
     }

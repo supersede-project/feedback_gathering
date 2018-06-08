@@ -53,7 +53,7 @@ public class FeedbackUtility {
         Enums.FEEDBACK_STATUS status = OPEN;  // TODO not yet implemented
         int upVotes = 0; // TODO not yet implemented
         int responses = 0; // TODO not yet implemented
-        UUID feedbackId = UUID.randomUUID(); // TODO not yet implemented
+        long feedbackId = NumberUtility.randomLong(); // TODO not yet implemented
 
         String description = null;
         String[] labels = new String[0];
@@ -71,7 +71,7 @@ public class FeedbackUtility {
         bitmap = bitmap != null ? bitmap : Utils.loadImageFromDatabase(context);
 
         FeedbackBean feedbackBean = new FeedbackBean.Builder()
-                .withFeedbackUid(feedbackId)
+                .withFeedbackId(feedbackId)
                 .withTitle(title)
                 .withUserName(userName)
                 .withTimestamp(timeStamp)
@@ -82,7 +82,7 @@ public class FeedbackUtility {
                 .withStatus(status)
                 .build();
         return new FeedbackDetailsBean.Builder()
-                .withFeedbackUid(feedbackBean.getFeedbackUid())
+                .withFeedbackId(feedbackBean.getFeedbackId())
                 .withFeedbackBean(feedbackBean)
                 .withTitle(feedbackBean.getTitle())
                 .withDescription(description)
