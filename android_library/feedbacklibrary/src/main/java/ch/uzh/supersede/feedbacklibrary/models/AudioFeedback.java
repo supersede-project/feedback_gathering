@@ -15,6 +15,8 @@ public class AudioFeedback extends AbstractMultipartFeedback {
     public AudioFeedback(LocalConfigurationBean configuration) {
         super(configuration.getAudioOrder());
         this.maxTime = configuration.getAudioMaxTime();
+        setPart("audio");
+        setFileExtension("mp3");
     }
 
     public String getAudioPath() {
@@ -23,7 +25,6 @@ public class AudioFeedback extends AbstractMultipartFeedback {
 
     public void setAudioPath(String audioPath) {
         this.audioPath = audioPath;
-        initPartFeedback(audioPath); //FIXME [jfo] not gudd
     }
 
     public double getMaxTime() {

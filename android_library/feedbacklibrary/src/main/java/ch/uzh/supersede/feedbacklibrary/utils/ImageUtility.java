@@ -1,12 +1,15 @@
 package ch.uzh.supersede.feedbacklibrary.utils;
 
-import android.graphics.*;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 
-import java.io.*;
-import java.util.*;
-
-import static ch.uzh.supersede.feedbacklibrary.utils.Constants.EXTRA_KEY_CACHED_SCREENSHOT;
+import java.io.ByteArrayOutputStream;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ImageUtility {
 
@@ -130,5 +133,12 @@ public class ImageUtility {
             return null;
         }
         return BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+    }
+
+    public static int sizeOf(Bitmap data) {
+        if (data != null) {
+            return data.getRowBytes() * data.getHeight();
+        }
+        return 0;
     }
 }
