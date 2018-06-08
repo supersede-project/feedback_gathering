@@ -13,7 +13,7 @@ import ch.uzh.supersede.feedbacklibrary.utils.ImageUtility;
 
 public class FeedbackDetailsBean implements Serializable {
 
-    private UUID feedbackUid;
+    private long feedbackId;
     private String title;
     private String description;
     private String userName;
@@ -29,7 +29,7 @@ public class FeedbackDetailsBean implements Serializable {
     }
 
     public static class Builder {
-        private UUID feedbackUid;
+        private long feedbackId;
         private String title;
         private String description;
         private String userName;
@@ -90,8 +90,8 @@ public class FeedbackDetailsBean implements Serializable {
             return this;
         }
 
-        public Builder withFeedbackUid(UUID feedbackUid) {
-            this.feedbackUid = feedbackUid;
+        public Builder withFeedbackUid(long feedbackId) {
+            this.feedbackId = feedbackId;
             return this;
         }
 
@@ -101,9 +101,9 @@ public class FeedbackDetailsBean implements Serializable {
         }
 
         public FeedbackDetailsBean build() {
-            if (CompareUtility.notNull(feedbackUid, title, userName, timeStamp, description, feedbackStatus, feedbackBean)) {
+            if (CompareUtility.notNull(feedbackId, title, userName, timeStamp, description, feedbackStatus, feedbackBean)) {
                 FeedbackDetailsBean bean = new FeedbackDetailsBean();
-                bean.feedbackUid = feedbackUid;
+                bean.feedbackId = feedbackId;
                 bean.title = this.title;
                 bean.description = this.description;
                 bean.userName = this.userName;
@@ -160,8 +160,8 @@ public class FeedbackDetailsBean implements Serializable {
         return labels;
     }
 
-    public UUID getFeedbackUid() {
-        return feedbackUid;
+    public long getFeedbackId() {
+        return feedbackId;
     }
 
     public Bitmap getBitmap() {

@@ -58,7 +58,7 @@ public class RepositoryStub {
         FEEDBACK_STATUS status = feedbackBean.getFeedbackStatus();
         List<FeedbackResponseBean> feedbackResponses = getFeedbackResponses(context, feedbackBean.getResponses(), timeStamp, 0.1f, 0.1f, feedbackBean);
         return new FeedbackDetailsBean.Builder()
-                .withFeedbackUid(feedbackBean.getFeedbackUid())
+                .withFeedbackUid(feedbackBean.getFeedbackId())
                 .withFeedbackBean(feedbackBean)
                 .withTitle(title)
                 .withDescription(description)
@@ -80,7 +80,7 @@ public class RepositoryStub {
         String userName = feedbackOwner ? feedbackBean.getUserName() : generateUserName(context, false);
         long timeStamp = DateUtility.getPastDateAfter(feedbackCreationDate);
         return new FeedbackResponseBean.Builder()
-                .withFeedbackUid(feedbackBean.getFeedbackUid())
+                .withFeedbackId(feedbackBean.getFeedbackId())
                 .withContent(content)
                 .withUserName(userName)
                 .withTimestamp(timeStamp)
@@ -91,7 +91,7 @@ public class RepositoryStub {
 
     public static FeedbackResponseBean persist(FeedbackBean feedbackBean, String content, String userName, boolean isDeveloper, boolean isFeedbackOwner) {
         return new FeedbackResponseBean.Builder()
-                .withFeedbackUid(feedbackBean.getFeedbackUid())
+                .withFeedbackId(feedbackBean.getFeedbackId())
                 .withContent(content)
                 .withUserName(userName)
                 .withTimestamp(System.currentTimeMillis())
@@ -101,7 +101,7 @@ public class RepositoryStub {
     }
 
     private static FeedbackBean getFeedback(Context context, int minUpVotes, int maxUpVotes, float ownFeedbackPercent) {
-        UUID feedbackUid = UUID.randomUUID();
+        long feedbackId = NumberUtility.randomLong();
         int upperBound = NumberUtility.divide(1, ownFeedbackPercent);
         boolean ownFeedback = ACTIVE.check(context) && NumberUtility.randomInt(0, upperBound > 0 ? upperBound - 1 : upperBound) == 0;
         FEEDBACK_STATUS feedbackStatus = generateFeedbackStatus();
@@ -111,7 +111,7 @@ public class RepositoryStub {
         int upVotes = generateUpVotes(minUpVotes, maxUpVotes, feedbackStatus);
         int responses = generateResponses();
         return new FeedbackBean.Builder()
-                .withFeedbackUid(feedbackUid)
+                .withFeedbackId(feedbackId)
                 .withTitle(title)
                 .withUserName(userName)
                 .withTimestamp(timeStamp)
@@ -127,7 +127,7 @@ public class RepositoryStub {
         int minUpVotes = -30; //FIXME [jfo]
         int maxUpVotes = 50; //FIXME [jfo]
 
-        UUID feedbackUid = localFeedbackBean.getFeedbackUid();
+        long feedbackId = localFeedbackBean.getFeedbackId();
         String title = localFeedbackBean.getTitle();
         FEEDBACK_STATUS feedbackStatus = localFeedbackBean.getFeedbackStatus();
         int upVotes = localFeedbackBean.getVotes() + generateUpVotes(minUpVotes, maxUpVotes, feedbackStatus);
@@ -136,7 +136,7 @@ public class RepositoryStub {
         String userName = FeedbackDatabase.getInstance(context).readString(USER_NAME, null);
 
         return new FeedbackBean.Builder()
-                .withFeedbackUid(feedbackUid)
+                .withFeedbackId(feedbackId)
                 .withTitle(title)
                 .withUserName(userName)
                 .withTimestamp(timeStamp)
@@ -225,7 +225,7 @@ public class RepositoryStub {
 
 
         //MBO TODO: TITLE AND LABELS BEFORE CREATION
-        UUID feedbackUid = UUID.randomUUID();
+        long feedbackId = NumberUtility.randomLong();
         String title = null;
         String description = null;
         String[] content = new String[0];
@@ -241,7 +241,7 @@ public class RepositoryStub {
         int responses = 0;
 
         FeedbackBean feedbackBean = new FeedbackBean.Builder()
-                .withFeedbackUid(feedbackUid)
+                .withFeedbackId(feedbackId)
                 .withTitle(title == null ? content[1] : title)
                 .withUserName(userName)
                 .withTimestamp(timeStamp)
@@ -256,7 +256,7 @@ public class RepositoryStub {
         FEEDBACK_STATUS status = feedbackBean.getFeedbackStatus();
         List<FeedbackResponseBean> feedbackResponses = getFeedbackResponses(context, feedbackBean.getResponses(), timeStamp, 0.1f, 0.1f, feedbackBean);
         return new FeedbackDetailsBean.Builder()
-                .withFeedbackUid(feedbackBean.getFeedbackUid())
+                .withFeedbackUid(feedbackBean.getFeedbackId())
                 .withFeedbackBean(feedbackBean)
                 .withTitle(feedbackBean.getTitle())
                 .withDescription(description == null ? content[0] : description)

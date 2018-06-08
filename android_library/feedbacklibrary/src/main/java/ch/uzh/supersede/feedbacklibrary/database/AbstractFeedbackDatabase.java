@@ -71,7 +71,7 @@ abstract class AbstractFeedbackDatabase {
         private FeedbackTableEntry(){
         }
         public static final String TABLE_NAME = " FEEDBACK_TABLE ";
-        public static final String COLUMN_NAME_FEEDBACK_UID = " FEEDBACK_UID ";
+        public static final String COLUMN_NAME_FEEDBACK_ID = " FEEDBACK_ID ";
         public static final String COLUMN_NAME_TITLE = " TITLE ";
         public static final String COLUMN_NAME_VOTES = " VOTES ";
         public static final String COLUMN_NAME_RESPONSES = " RESPONSES ";
@@ -106,7 +106,7 @@ abstract class AbstractFeedbackDatabase {
                         DataTableEntry.COLUMN_NAME_TIMESTAMP + NUMBER_TYPE  + BRACES_CLOSE,
                 CREATE_TABLE_IF_NOT_EXISTS + FeedbackTableEntry.TABLE_NAME + BRACES_OPEN +
                         FeedbackTableEntry._ID + NUMBER_TYPE + KEY_TYPE + COMMA_SEP +
-                        FeedbackTableEntry.COLUMN_NAME_FEEDBACK_UID + TEXT_TYPE + COMMA_SEP +
+                        FeedbackTableEntry.COLUMN_NAME_FEEDBACK_ID + NUMBER_TYPE + COMMA_SEP +
                         FeedbackTableEntry.COLUMN_NAME_TITLE + TEXT_TYPE + COMMA_SEP +
                         FeedbackTableEntry.COLUMN_NAME_VOTES + NUMBER_TYPE + COMMA_SEP +
                         FeedbackTableEntry.COLUMN_NAME_RESPONSES + NUMBER_TYPE + COMMA_SEP +
@@ -151,7 +151,7 @@ abstract class AbstractFeedbackDatabase {
                         NumberTableEntry.COLUMN_NAME_VALUE + COMMA_SEP + DataTableEntry.COLUMN_NAME_TIMESTAMP + FROM_TEMP + DataTableEntry.TABLE_NAME,
                 INSERT_INTO + FeedbackTableEntry.TABLE_NAME + BRACES_OPEN +
                         FeedbackTableEntry._ID + COMMA_SEP +
-                        FeedbackTableEntry.COLUMN_NAME_FEEDBACK_UID + COMMA_SEP +
+                        FeedbackTableEntry.COLUMN_NAME_FEEDBACK_ID + COMMA_SEP +
                         FeedbackTableEntry.COLUMN_NAME_TITLE + COMMA_SEP +
                         FeedbackTableEntry.COLUMN_NAME_VOTES + COMMA_SEP +
                         FeedbackTableEntry.COLUMN_NAME_RESPONSES + COMMA_SEP +
@@ -166,7 +166,7 @@ abstract class AbstractFeedbackDatabase {
                         FeedbackTableEntry.COLUMN_NAME_RESPONDED_TIMESTAMP +
                         BRACES_CLOSE + SUB_SELECT +
                         FeedbackTableEntry._ID + COMMA_SEP +
-                        FeedbackTableEntry.COLUMN_NAME_FEEDBACK_UID + COMMA_SEP +
+                        FeedbackTableEntry.COLUMN_NAME_FEEDBACK_ID + COMMA_SEP +
                         FeedbackTableEntry.COLUMN_NAME_TITLE + COMMA_SEP +
                         FeedbackTableEntry.COLUMN_NAME_VOTES + COMMA_SEP +
                         FeedbackTableEntry.COLUMN_NAME_RESPONSES + COMMA_SEP +

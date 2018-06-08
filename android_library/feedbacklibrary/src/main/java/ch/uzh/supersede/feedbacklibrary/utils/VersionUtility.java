@@ -1,7 +1,9 @@
 package ch.uzh.supersede.feedbacklibrary.utils;
 
+import java.util.Date;
+
 public class VersionUtility {
-    private static final int BASE_VERSION = 1;
+    private static final int BASE_VERSION = 5;
 
     private VersionUtility() {
     }
@@ -12,13 +14,13 @@ public class VersionUtility {
         //        3	27-29	30.06 - 20.07	45
         //        4	30-32	21.07 - 10.08	22
         //        5	33-35	11.08 - 31.08	12
-        if (DateUtility.getMonth() >= 8 && DateUtility.getDay() >= 31){
+        if ((DateUtility.getMonth() == 8 && DateUtility.getDay() >= 31) || DateUtility.getMonth() >= 9){
             return 5;
-        }else if (DateUtility.getMonth() >= 8 && DateUtility.getDay() >= 10){
+        }else if ((DateUtility.getMonth() == 8 && DateUtility.getDay() >= 10) || DateUtility.getMonth() >= 9){
             return 4;
-        }else if (DateUtility.getMonth() >= 7 && DateUtility.getDay() >= 20){
+        }else if ((DateUtility.getMonth() == 7 && DateUtility.getDay() >= 20) || DateUtility.getMonth() >= 8){
             return 3;
-        }else if (DateUtility.getMonth() >= 6 && DateUtility.getDay() >= 29){
+        }else if ((DateUtility.getMonth() == 6 && DateUtility.getDay() >= 29) || DateUtility.getMonth() >= 7){
             return 2;
         }
         return BASE_VERSION;

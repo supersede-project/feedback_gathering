@@ -117,7 +117,7 @@ public class FeedbackDatabase extends AbstractFeedbackDatabase {
         }
         SQLiteDatabase db = databaseHelper.getReadableDatabase();
         Cursor cursor = db.query(FeedbackTableEntry.TABLE_NAME, new String[]{
-                FeedbackTableEntry.COLUMN_NAME_FEEDBACK_UID,
+                FeedbackTableEntry.COLUMN_NAME_FEEDBACK_ID,
                 FeedbackTableEntry.COLUMN_NAME_TITLE,
                 FeedbackTableEntry.COLUMN_NAME_VOTES,
                 FeedbackTableEntry.COLUMN_NAME_RESPONSES,
@@ -146,9 +146,7 @@ public class FeedbackDatabase extends AbstractFeedbackDatabase {
                 FeedbackTableEntry.COLUMN_NAME_OWNER,
                 FeedbackTableEntry.COLUMN_NAME_VOTED,
                 FeedbackTableEntry.COLUMN_NAME_SUBSCRIBED,
-                FeedbackTableEntry.COLUMN_NAME_RESPONDED}, FeedbackTableEntry.COLUMN_NAME_FEEDBACK_UID + LIKE + QUOTES + feedbackBean
-                .getFeedbackUid()
-                .toString() + QUOTES, null, null, null, null, null);
+                FeedbackTableEntry.COLUMN_NAME_RESPONDED}, FeedbackTableEntry.COLUMN_NAME_FEEDBACK_ID + LIKE + String.valueOf(feedbackBean.getFeedbackId()), null, null, null, null, null);
         if (cursor.moveToFirst()) {
             LocalFeedbackState localFeedbackState = new LocalFeedbackState(cursor);
             cursor.close();
@@ -176,9 +174,7 @@ public class FeedbackDatabase extends AbstractFeedbackDatabase {
                 FeedbackTableEntry.COLUMN_NAME_VOTED,
                 FeedbackTableEntry.COLUMN_NAME_VOTED_TIMESTAMP,
                 FeedbackTableEntry.COLUMN_NAME_RESPONDED,
-                FeedbackTableEntry.COLUMN_NAME_RESPONDED_TIMESTAMP}, FeedbackTableEntry.COLUMN_NAME_FEEDBACK_UID + LIKE + QUOTES + feedbackBean
-                .getFeedbackUid()
-                .toString() + QUOTES, null, null, null, null, null);
+                FeedbackTableEntry.COLUMN_NAME_RESPONDED_TIMESTAMP}, FeedbackTableEntry.COLUMN_NAME_FEEDBACK_ID + LIKE + String.valueOf(feedbackBean.getFeedbackId()) , null, null, null, null, null);
         long newRowId = 0;
         if (cursor.moveToFirst()) {
             subscribed = cursor.getInt(0);
@@ -187,7 +183,7 @@ public class FeedbackDatabase extends AbstractFeedbackDatabase {
             votedTime = cursor.getLong(3);
             responded = cursor.getInt(4);
             respondedTime = cursor.getLong(5);
-            deleteWithoutClose(db, FeedbackTableEntry.TABLE_NAME, FeedbackTableEntry.COLUMN_NAME_FEEDBACK_UID, feedbackBean.getFeedbackUid().toString());
+            deleteWithoutClose(db, FeedbackTableEntry.TABLE_NAME, FeedbackTableEntry.COLUMN_NAME_FEEDBACK_ID, String.valueOf(feedbackBean.getFeedbackId()));
         }
         switch (mode) {
             case CREATED:
@@ -214,7 +210,7 @@ public class FeedbackDatabase extends AbstractFeedbackDatabase {
                 respondedTime = System.currentTimeMillis();
                 break;
         }
-        values.put(FeedbackTableEntry.COLUMN_NAME_FEEDBACK_UID, feedbackBean.getFeedbackUid().toString());
+        values.put(FeedbackTableEntry.COLUMN_NAME_FEEDBACK_ID, String.valueOf(feedbackBean.getFeedbackId()));
         values.put(FeedbackTableEntry.COLUMN_NAME_TITLE, feedbackBean.getTitle());
         values.put(FeedbackTableEntry.COLUMN_NAME_VOTES, feedbackBean.getUpVotes());
         values.put(FeedbackTableEntry.COLUMN_NAME_RESPONSES, feedbackBean.getResponses());
@@ -230,7 +226,7 @@ public class FeedbackDatabase extends AbstractFeedbackDatabase {
 
         //Removal
         if (subscribed == 0 && owner == 0 && voted == 0 && responded == 0) {
-            deleteWithoutClose(db, FeedbackTableEntry.TABLE_NAME, FeedbackTableEntry.COLUMN_NAME_FEEDBACK_UID, feedbackBean.getFeedbackUid().toString());
+            deleteWithoutClose(db, FeedbackTableEntry.TABLE_NAME, FeedbackTableEntry.COLUMN_NAME_FEEDBACK_ID, String.valueOf(feedbackBean.getFeedbackId()));
         } else {
             newRowId = db.insert(FeedbackTableEntry.TABLE_NAME, "null", values);
         }
@@ -250,11 +246,11 @@ public class FeedbackDatabase extends AbstractFeedbackDatabase {
     }
 
     public void deleteFeedbackWithoutClose(SQLiteDatabase db, LocalFeedbackBean feedbackBean) {
-        deleteWithoutClose(db, FeedbackTableEntry.TABLE_NAME, FeedbackTableEntry.COLUMN_NAME_FEEDBACK_UID, feedbackBean.getFeedbackUid().toString());
+        deleteWithoutClose(db, FeedbackTableEntry.TABLE_NAME, FeedbackTableEntry.COLUMN_NAME_FEEDBACK_ID, String.valueOf(feedbackBean.getFeedbackId()));
     }
 
     public void deleteFeedback(LocalFeedbackBean feedbackBean) {
-        delete(FeedbackTableEntry.TABLE_NAME, FeedbackTableEntry.COLUMN_NAME_FEEDBACK_UID, feedbackBean.getFeedbackUid().toString());
+        delete(FeedbackTableEntry.TABLE_NAME, FeedbackTableEntry.COLUMN_NAME_FEEDBACK_ID, String.valueOf(feedbackBean.getFeedbackId()));
     }
 
     public Double readDouble(String key, Double valueIfNull) {
