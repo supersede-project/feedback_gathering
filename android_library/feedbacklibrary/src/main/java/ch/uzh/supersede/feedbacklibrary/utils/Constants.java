@@ -15,6 +15,7 @@ public class Constants {
     public static final String USER_NAME = "userName";
     public static final String IS_DEVELOPER = "isDeveloper";
     public static final String USER_NAME_ANONYMOUS = "anonymous";
+    public static final String USER_NAME_CREATING = "being created ..";
     public static final String SPACE = " ";
     public static final String PATH_DELIMITER = "/";
     public static final String SUPERSEDE_BASE_URL = RUNNING_MODE == PRODUCTIVE ? "https://platform.supersede.eu:8443/" : "http://supersede.es.atos.net:8081/";

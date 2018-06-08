@@ -159,6 +159,8 @@ public class FeedbackHubActivity extends AbstractBaseActivity implements IFeedba
                     userName = androidUser.getName();
                 }
                 preAllocatedStringStorage[0] = null;
+                updateUserLevel(true);
+                levelButton.setEnabled(true);
                 break;
             default:
                 break;
@@ -393,6 +395,8 @@ public class FeedbackHubActivity extends AbstractBaseActivity implements IFeedba
                 Toast.makeText(this, getString(configuration.isDeveloper() ? R.string.hub_developer_registered : R.string.hub_username_registered, preAllocatedStringStorage[0]), Toast.LENGTH_SHORT)
                      .show();
                 FeedbackService.getInstance().createUser(this, new AndroidUser(preAllocatedStringStorage[0], configuration.isDeveloper()));
+                userName = USER_NAME_CREATING;
+                levelButton.setEnabled(false);
             } else {
                 userName = name;
                 Toast.makeText(this, getString(configuration.isDeveloper() ? R.string.hub_developer_registered : R.string.hub_username_restored, name), Toast.LENGTH_SHORT).show();
