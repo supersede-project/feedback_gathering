@@ -20,6 +20,7 @@ import java.util.Map;
 import ch.uzh.supersede.feedbacklibrary.R;
 import ch.uzh.supersede.feedbacklibrary.activities.AnnotateImageActivity;
 import ch.uzh.supersede.feedbacklibrary.models.ScreenshotFeedback;
+import ch.uzh.supersede.feedbacklibrary.utils.ImageUtility;
 import ch.uzh.supersede.feedbacklibrary.utils.Utils;
 
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.*;
@@ -33,11 +34,13 @@ public class ScreenshotFeedbackView extends AbstractFeedbackPartView {
     private Bitmap pictureBitmap;
     private Bitmap pictureBitmapAnnotated;
     private Activity activity;
+    private ScreenshotFeedback screenshotFeedback;
 
     public ScreenshotFeedbackView(LayoutInflater layoutInflater, Activity activity, ScreenshotFeedback screenshotFeedback) {
         super(layoutInflater);
         this.viewOrder = screenshotFeedback.getOrder();
         this.activity = activity;
+        this.screenshotFeedback = screenshotFeedback;
         setEnclosingLayout(getLayoutInflater().inflate(R.layout.screenshot_feedback, null));
         initView();
     }
@@ -131,7 +134,7 @@ public class ScreenshotFeedbackView extends AbstractFeedbackPartView {
 
     @Override
     public void updateModel() {
-        //TODO [jfo] what to do here?
+        pictureBitmapAnnotated = pictureBitmap;
     }
 
     private void onImageAnnotate(ScreenshotFeedbackView screenshotFeedbackView) {
@@ -190,6 +193,7 @@ public class ScreenshotFeedbackView extends AbstractFeedbackPartView {
             screenShotPreviewImageView.setImageBitmap(null);
             screenShotPreviewImageView.setBackgroundResource(R.drawable.ic_folder_open_black_24dp);
         }
+        screenshotFeedback.setSize(pictureBitmapAnnotated != null ? ImageUtility.sizeOf(pictureBitmapAnnotated) : ImageUtility.sizeOf(pictureBitmap));
         toggleButtons();
     }
 
@@ -202,7 +206,7 @@ public class ScreenshotFeedbackView extends AbstractFeedbackPartView {
 
     @Override
     public int compareTo(@NonNull Object o) {
-        if (o instanceof AbstractFeedbackPartView){
+        if (o instanceof AbstractFeedbackPartView) {
             int comparedViewOrder = ((AbstractFeedbackPartView) o).getViewOrder();
             return comparedViewOrder > getViewOrder() ? -1 : comparedViewOrder == getViewOrder() ? 0 : 1;
         }

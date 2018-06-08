@@ -112,7 +112,7 @@ public class Feedback implements Serializable {
 
         public Builder withScreenshotFeedback(ScreenshotFeedback screenshotFeedback) {
             this.screenshotFeedbackList = new ArrayList<>();
-            if (screenshotFeedback != null && screenshotFeedback.getPath() != null) {
+            if (screenshotFeedback != null && screenshotFeedback.getSize() > 0) {
                 screenshotFeedbackList.add(screenshotFeedback);
             }
             return this;
@@ -127,7 +127,7 @@ public class Feedback implements Serializable {
         }
 
         public Feedback build() {
-            if (CompareUtility.notNull(title, userIdentification)) {
+            if (CompareUtility.notNull(userIdentification)) {
                 Feedback bean = new Feedback();
                 bean.contextInformationFeedback = this.contextInformationFeedback;
                 bean.title = this.title;
