@@ -20,8 +20,7 @@ import ch.uzh.supersede.feedbacklibrary.models.AuthenticateResponse;
 import ch.uzh.supersede.feedbacklibrary.models.Feedback;
 import ch.uzh.supersede.feedbacklibrary.stubs.RepositoryStub;
 import ch.uzh.supersede.feedbacklibrary.utils.Enums;
-import ch.uzh.supersede.feedbacklibrary.utils.FeedbackTransformer;
-import ch.uzh.supersede.feedbacklibrary.utils.ImageUtility;
+import ch.uzh.supersede.feedbacklibrary.utils.FeedbackUtility;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
@@ -100,7 +99,7 @@ public abstract class FeedbackService {
 
     public abstract void authenticate(IFeedbackServiceEventListener callback, AuthenticateRequest authenticateRequest);
 
-    public abstract void createFeedback(IFeedbackServiceEventListener callback, Activity activity, FeedbackDetailsBean feedbackDetailsBean, List<AbstractFeedbackPart> feedbackParts);
+    public abstract void createFeedback(IFeedbackServiceEventListener callback, Activity activity, Feedback feedback, byte[] screenshot);
 
     public abstract void createUser(IFeedbackServiceEventListener callback, AndroidUser androidUser);
 
@@ -138,13 +137,12 @@ public abstract class FeedbackService {
         }
 
         @Override
-        public void createFeedback(IFeedbackServiceEventListener callback, Activity activity, FeedbackDetailsBean feedbackDetailsBean, List<AbstractFeedbackPart> feedbackParts) {
+        public void createFeedback(IFeedbackServiceEventListener callback, Activity activity, Feedback feedback, byte[] screenshot) {
             List<MultipartBody.Part> multipartFiles = new ArrayList<>();
-            multipartFiles.add(MultipartBody.Part.createFormData("screenshot", "screenshot", RequestBody.create(MediaType.parse("image/png"), ImageUtility.imageToBytes(feedbackDetailsBean.getBitmap()))));
+            multipartFiles.add(MultipartBody.Part.createFormData("screenshot", "screenshot", RequestBody.create(MediaType.parse("image/png"), screenshot)));
             multipartFiles.add(MultipartBody.Part.createFormData("audio", "audio", RequestBody.create(MediaType.parse("audio/mp3"), new byte[0]))); //FIXME [jfo] load audio
 
             Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
-            Feedback feedback = FeedbackTransformer.FeedbackDetailsBeanToFeedback(feedbackDetailsBean, activity, feedbackParts);
             String jsonString = gson.toJson(feedback);
             MultipartBody.Part jsonFeedback = MultipartBody.Part.createFormData("json", "json", RequestBody.create(MediaType.parse("application/json"), jsonString.getBytes()));
 
@@ -192,9 +190,9 @@ public abstract class FeedbackService {
         }
 
         @Override
-        public void createFeedback(IFeedbackServiceEventListener callback, Activity activity, FeedbackDetailsBean feedbackDetailsBean, List<AbstractFeedbackPart> feedbackParts) {
-            FeedbackDatabase.getInstance(activity).writeFeedback(feedbackDetailsBean.getFeedbackBean(), Enums.SAVE_MODE.CREATED);
-            callback.onEventCompleted(CREATE_FEEDBACK, null);
+        public void createFeedback(IFeedbackServiceEventListener callback, Activity activity, Feedback feedback, byte[] screenshot) {
+            FeedbackDatabase.getInstance(activity).writeFeedback(FeedbackUtility.feedbackToFeedbackDetailsBean(activity, feedback).getFeedbackBean(), Enums.SAVE_MODE.CREATED);
+            callback.onEventCompleted(CREATE_FEEDBACK, feedback);
         }
 
         @Override

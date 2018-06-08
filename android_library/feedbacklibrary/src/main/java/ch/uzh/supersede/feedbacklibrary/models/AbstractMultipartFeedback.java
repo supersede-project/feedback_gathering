@@ -28,16 +28,6 @@ public abstract class AbstractMultipartFeedback extends AbstractFeedbackPart imp
         super(order);
     }
 
-    protected void initPartFeedback(String filePath) {
-        if (filePath == null) {
-            return;
-        }
-        File file = new File(filePath);
-        String[] split = Utils.splitFileNameExtension(file.getName());
-        setFileExtension(split[1]);
-        setPart(getPart());
-    }
-
     @Nullable
     public String getFileExtension() {
         return fileExtension;
@@ -65,6 +55,10 @@ public abstract class AbstractMultipartFeedback extends AbstractFeedbackPart imp
 
     public long getSize() {
         return size;
+    }
+
+    public void setSize(long size) {
+        this.size = size;
     }
 
     public String getPath() {

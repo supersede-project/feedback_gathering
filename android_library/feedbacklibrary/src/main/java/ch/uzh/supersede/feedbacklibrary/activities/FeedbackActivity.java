@@ -20,32 +20,31 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.UUID;
 
 import ch.uzh.supersede.feedbacklibrary.R;
-import ch.uzh.supersede.feedbacklibrary.beans.FeedbackBean;
 import ch.uzh.supersede.feedbacklibrary.beans.FeedbackDetailsBean;
 import ch.uzh.supersede.feedbacklibrary.components.views.AbstractFeedbackPartView;
 import ch.uzh.supersede.feedbacklibrary.components.views.AudioFeedbackView;
 import ch.uzh.supersede.feedbacklibrary.components.views.ScreenshotFeedbackView;
-import ch.uzh.supersede.feedbacklibrary.database.FeedbackDatabase;
 import ch.uzh.supersede.feedbacklibrary.models.AbstractFeedbackPart;
+import ch.uzh.supersede.feedbacklibrary.models.Feedback;
 import ch.uzh.supersede.feedbacklibrary.services.FeedbackService;
 import ch.uzh.supersede.feedbacklibrary.services.IFeedbackServiceEventListener;
 import ch.uzh.supersede.feedbacklibrary.stubs.OrchestratorStub;
-import ch.uzh.supersede.feedbacklibrary.utils.*;
+import ch.uzh.supersede.feedbacklibrary.utils.DialogUtils;
+import ch.uzh.supersede.feedbacklibrary.utils.FeedbackUtility;
+import ch.uzh.supersede.feedbacklibrary.utils.ImageUtility;
+import ch.uzh.supersede.feedbacklibrary.utils.Utils;
+import ch.uzh.supersede.feedbacklibrary.utils.VersionUtility;
 
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.ActivitiesConstants.FEEDBACK_ACTIVITY_TAG;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.*;
-import static ch.uzh.supersede.feedbacklibrary.utils.Enums.FEEDBACK_STATUS.OPEN;
 
 @SuppressWarnings({"squid:MaximumInheritanceDepth", "squid:S1170"})
 public class FeedbackActivity extends AbstractBaseActivity implements AudioFeedbackView.MultipleAudioMechanismsListener, IFeedbackServiceEventListener {
     private List<AbstractFeedbackPart> feedbackParts;
     private List<AbstractFeedbackPartView> feedbackPartViews;
-
     private FeedbackDetailsBean feedbackDetailsBean;
-    private FeedbackBean feedbackBean;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,7 +107,7 @@ public class FeedbackActivity extends AbstractBaseActivity implements AudioFeedb
                 if (VersionUtility.getDateVersion() > 1) {
                     Intent intent = new Intent(this, FeedbackDetailsActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                    intent.putExtra(EXTRA_KEY_FEEDBACK_DETAIL_BEAN, feedbackBean);
+                    intent.putExtra(EXTRA_KEY_FEEDBACK_DETAIL_BEAN, feedbackDetailsBean);
                     intent.putExtra(EXTRA_KEY_APPLICATION_CONFIGURATION, configuration);
                     this.onBackPressed(); //This serves the purpose of erasing the Feedback Activity from the Back-Button
                     startActivity(intent);
@@ -151,54 +150,15 @@ public class FeedbackActivity extends AbstractBaseActivity implements AudioFeedb
 
     }
 
-    private void execCreateFeedbackVariant(FeedbackDetailsBean feedbackDetailsBean) {
-        FeedbackService.getInstance().createFeedback(this, this, feedbackDetailsBean, feedbackParts);
-        Toast toast = Toast.makeText(getApplicationContext(), getResources().getString(R.string.feedback_success), Toast.LENGTH_SHORT);
-        toast.show();
+    private void execPrepareAndSendFeedback() {
+        Bitmap screenshot = Utils.loadAnnotatedImageFromDatabase(this);
+        screenshot = screenshot != null ? screenshot : Utils.loadImageFromDatabase(this);
+
+        Feedback feedback = FeedbackUtility.createFeedback(this, feedbackParts);
+
+        feedbackDetailsBean = FeedbackUtility.feedbackToFeedbackDetailsBean(this, feedback);
+        FeedbackService.getInstance().createFeedback(this, this, feedback, ImageUtility.imageToBytes(screenshot));
         Utils.wipeImages(this);
-    }
-
-    private FeedbackDetailsBean execPrepareAndSendFeedback() {
-        String userName = FeedbackDatabase.getInstance(this).readString(USER_NAME, null);
-        long timestamp = System.currentTimeMillis();
-        long feedbackId = NumberUtility.randomLong();
-        Enums.FEEDBACK_STATUS status = OPEN;
-        int upVotes = 0;
-        int responses = 0;
-
-        int minUpVotes = 0; //TODO [jfo] set
-        int maxUpVotes = 0; //TODO [jfo] set
-
-        String title = ""; //TODO [jfo] set
-        String description = ""; //TODO [jfo] set
-        String labels = ""; //TODO [jfo] set
-        Bitmap bitmap = Utils.loadImageFromDatabase(this);
-
-        feedbackBean = new FeedbackBean.Builder()
-                .withUserName(userName)
-                .withTimestamp(timestamp)
-                .withFeedbackId(feedbackId)
-                .withTitle(title)
-                .withStatus(status)
-                .withUpVotes(upVotes)
-                .withResponses(responses)
-                .withMinUpVotes(minUpVotes)
-                .withMaxUpVotes(maxUpVotes)
-                .build();
-        feedbackDetailsBean = new FeedbackDetailsBean.Builder()
-                .withUserName(userName)
-                .withTimestamp(timestamp)
-                .withFeedbackUid(feedbackId)
-                .withFeedbackBean(feedbackBean)
-                .withTitle(title)
-                .withDescription(description)
-                .withLabels(labels)
-                .withStatus(status)
-                .withBitmap(bitmap)
-                .build();
-
-        execCreateFeedbackVariant(feedbackDetailsBean);
-        return feedbackDetailsBean;
     }
 
     private void annotateMechanismView(Intent data) {

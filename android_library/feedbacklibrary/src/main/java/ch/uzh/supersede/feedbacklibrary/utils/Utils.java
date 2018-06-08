@@ -31,7 +31,7 @@ public class Utils {
         filePath[0] = fileName;
         filePath[1] = "";
 
-        int i = fileName.lastIndexOf(".");
+        int i = fileName.lastIndexOf('.');
         if (i > 0) {
             filePath[0] = fileName.substring(0, i);
             filePath[1] = fileName.substring(i + 1);
