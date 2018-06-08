@@ -161,7 +161,7 @@ public class FeedbackActivity extends AbstractBaseActivity implements AudioFeedb
     private FeedbackDetailsBean execPrepareAndSendFeedback() {
         String userName = FeedbackDatabase.getInstance(this).readString(USER_NAME, null);
         long timestamp = System.currentTimeMillis();
-        UUID feedbackUid = UUID.randomUUID();
+        long feedbackId = NumberUtility.randomLong();
         Enums.FEEDBACK_STATUS status = OPEN;
         int upVotes = 0;
         int responses = 0;
@@ -177,7 +177,7 @@ public class FeedbackActivity extends AbstractBaseActivity implements AudioFeedb
         feedbackBean = new FeedbackBean.Builder()
                 .withUserName(userName)
                 .withTimestamp(timestamp)
-                .withFeedbackUid(feedbackUid)
+                .withFeedbackId(feedbackId)
                 .withTitle(title)
                 .withStatus(status)
                 .withUpVotes(upVotes)
@@ -188,7 +188,7 @@ public class FeedbackActivity extends AbstractBaseActivity implements AudioFeedb
         feedbackDetailsBean = new FeedbackDetailsBean.Builder()
                 .withUserName(userName)
                 .withTimestamp(timestamp)
-                .withFeedbackUid(feedbackUid)
+                .withFeedbackUid(feedbackId)
                 .withFeedbackBean(feedbackBean)
                 .withTitle(title)
                 .withDescription(description)

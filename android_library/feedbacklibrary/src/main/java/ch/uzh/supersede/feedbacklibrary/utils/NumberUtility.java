@@ -24,6 +24,10 @@ public class NumberUtility {
         return (int) (a * b);
     }
 
+    private static long multiply(long a, double b) {
+        return (long) (a * b);
+    }
+
     public static int randomPosition(Object[] array) {
         if (array == null) {
             throw new ArrayIndexOutOfBoundsException("Array is null");
@@ -43,6 +47,9 @@ public class NumberUtility {
         return min + random;
     }
 
+    public static long randomLong(){
+        return multiply(Long.MAX_VALUE, Math.random());
+    }
 
     /**
      * Creates an ID from the Application id (package+application-name)
