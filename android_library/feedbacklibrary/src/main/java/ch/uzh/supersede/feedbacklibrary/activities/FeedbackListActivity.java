@@ -1,31 +1,44 @@
 package ch.uzh.supersede.feedbacklibrary.activities;
 
 
-import android.app.*;
-import android.content.*;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.CompoundButtonCompat;
-import android.text.*;
-import android.view.*;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.*;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import ch.uzh.supersede.feedbacklibrary.R;
+import ch.uzh.supersede.feedbacklibrary.beans.FeedbackDetailsBean;
 import ch.uzh.supersede.feedbacklibrary.components.buttons.FeedbackListItem;
-import ch.uzh.supersede.feedbacklibrary.stubs.RepositoryStub;
-import ch.uzh.supersede.feedbacklibrary.utils.*;
-import ch.uzh.supersede.feedbacklibrary.beans.FeedbackBean;
+import ch.uzh.supersede.feedbacklibrary.models.Feedback;
+import ch.uzh.supersede.feedbacklibrary.services.IFeedbackServiceEventListener;
+import ch.uzh.supersede.feedbacklibrary.utils.ColorUtility;
+import ch.uzh.supersede.feedbacklibrary.utils.Enums;
+import ch.uzh.supersede.feedbacklibrary.utils.FeedbackUtility;
+import ch.uzh.supersede.feedbacklibrary.utils.StringUtility;
 
 import static ch.uzh.supersede.feedbacklibrary.utils.Enums.FEEDBACK_SORTING.*;
 
 
 @SuppressWarnings("squid:MaximumInheritanceDepth")
-public class FeedbackListActivity extends AbstractBaseActivity {
+public class FeedbackListActivity extends AbstractBaseActivity implements IFeedbackServiceEventListener {
     private LinearLayout scrollListLayout;
     private Button myButton;
     private Button topButton;
@@ -60,15 +73,15 @@ public class FeedbackListActivity extends AbstractBaseActivity {
         Collections.addAll(allowedStatuses, Enums.FEEDBACK_STATUS.values());
         searchText = addTextChangedListener(getView(R.id.list_edit_search, EditText.class));
         focusSink = getView(R.id.list_edit_focus_sink, LinearLayout.class);
-        for (FeedbackBean bean : RepositoryStub.getFeedback(this, 50, -30, 50, 0.1f)) {
-            FeedbackListItem listItem = new FeedbackListItem(this, 8, bean, configuration,getTopColor(0));
-            allFeedbackList.add(listItem);
-        }
+//        for (FeedbackBean bean : RepositoryStub.getFeedback(this, 50, -30, 50, 0.1f)) {
+//            FeedbackListItem listItem = new FeedbackListItem(this, 8, bean, configuration, getTopColor(0));
+//            allFeedbackList.add(listItem);
+//        }
         activeFeedbackList = new ArrayList<>(allFeedbackList);
         sort();
-        colorShape(0,topButton,hotButton,newButton);
-        colorShape(1,myButton);
-        colorViews(0,filterButton);
+        colorShape(0, topButton, hotButton, newButton);
+        colorShape(1, myButton);
+        colorViews(0, filterButton);
         colorViews(1,
                 getView(R.id.list_layout_color_1, LinearLayout.class),
                 getView(R.id.list_layout_color_2, LinearLayout.class),
@@ -79,9 +92,37 @@ public class FeedbackListActivity extends AbstractBaseActivity {
 
     }
 
+    @Override
+    public void onEventCompleted(EventType eventType, Object response) {
+        switch (eventType) {
+            case GET_FEEDBACK_LIST:
+                if (response instanceof List) {
+                    List<FeedbackDetailsBean> feedbackDetailsBeans = new ArrayList<>();
+                    for (Feedback feedback : (List<Feedback>) response) {
+                        FeedbackDetailsBean feedbackDetailsBean = FeedbackUtility.feedbackToFeedbackDetailsBean(this, feedback);
+                        feedbackDetailsBeans.add(feedbackDetailsBean);
+                        allFeedbackList.add(new FeedbackListItem(this, 8, feedbackDetailsBean.getFeedbackBean(), configuration, getTopColor(0)));
+                    }
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
+    @Override
+    public void onEventFailed(EventType eventType, Object response) {
+
+    }
+
+    @Override
+    public void onConnectionFailed(EventType eventType) {
+
+    }
+
     private void sort() {
         for (FeedbackListItem item : activeFeedbackList) {
-            item.setSorting(sorting,allowedStatuses);
+            item.setSorting(sorting, allowedStatuses);
         }
         Collections.sort(activeFeedbackList);
         load();
@@ -130,7 +171,7 @@ public class FeedbackListActivity extends AbstractBaseActivity {
 
     private void toggleButtons(View v) {
         setInactive(myButton, topButton, hotButton, newButton);
-        colorShape(1,v);
+        colorShape(1, v);
         if (v.getId() == myButton.getId()) {
             loadMyFeedback();
         } else if (v.getId() == topButton.getId()) {
@@ -167,13 +208,15 @@ public class FeedbackListActivity extends AbstractBaseActivity {
         }
         sort();
     }
+
     private final CheckBox[] filterCheckBoxArray = new CheckBox[Enums.FEEDBACK_STATUS.values().length];
+
     private void openFilteringOptions() {
         LinearLayout borderLayout = new LinearLayout(this);
         LinearLayout wrapperLayout = new LinearLayout(this);
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         int margin = 15;
-        params.setMargins(margin,margin,margin,margin);
+        params.setMargins(margin, margin, margin, margin);
         wrapperLayout.setOrientation(LinearLayout.VERTICAL);
         wrapperLayout.setLayoutParams(params);
 
@@ -183,16 +226,16 @@ public class FeedbackListActivity extends AbstractBaseActivity {
             CheckBox checkBox = new CheckBox(this);
             checkBox.setText(status.getLabel());
             CompoundButtonCompat.setButtonTintList(checkBox, ColorStateList.valueOf(getTopColor(1)));
-            checkBox.setTextColor(ColorUtility.adjustColorToBackground(getTopColor(0),status.getColor(),0.4));
-            for (Enums.FEEDBACK_STATUS statusAllowed : allowedStatuses){
-                if (statusAllowed == status){
+            checkBox.setTextColor(ColorUtility.adjustColorToBackground(getTopColor(0), status.getColor(), 0.4));
+            for (Enums.FEEDBACK_STATUS statusAllowed : allowedStatuses) {
+                if (statusAllowed == status) {
                     checkBox.setChecked(true);
                 }
             }
-            filterCheckBoxArray[s]= checkBox;
+            filterCheckBoxArray[s] = checkBox;
             wrapperLayout.addView(checkBox);
         }
-        builder.setPositiveButton("Close",new DialogInterface.OnClickListener() {
+        builder.setPositiveButton("Close", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.cancel();
@@ -216,7 +259,7 @@ public class FeedbackListActivity extends AbstractBaseActivity {
             }
         });
         AlertDialog alertDialog = builder.show();
-        alertDialog.getButton(Dialog.BUTTON_POSITIVE).setTextColor(ColorUtility.adjustColorToBackground(getResources().getColor(R.color.white),getTopColor(1),0.3));
+        alertDialog.getButton(Dialog.BUTTON_POSITIVE).setTextColor(ColorUtility.adjustColorToBackground(getResources().getColor(R.color.white), getTopColor(1), 0.3));
     }
 
     private void loadNewFeedback() {

@@ -101,6 +101,8 @@ public abstract class FeedbackService {
 
     public abstract void createFeedback(IFeedbackServiceEventListener callback, Activity activity, Feedback feedback, byte[] screenshot);
 
+    public abstract void getFeedbackList(IFeedbackServiceEventListener callback);
+
     public abstract void createUser(IFeedbackServiceEventListener callback, AndroidUser androidUser);
 
     public abstract void getUser(IFeedbackServiceEventListener callback, AndroidUser androidUser);
@@ -152,6 +154,13 @@ public abstract class FeedbackService {
         }
 
         @Override
+        public void getFeedbackList(IFeedbackServiceEventListener callback) {
+            feedbackAPI.getFeedbackList(getToken(), getLanguage(), getApplicationId()).enqueue(
+                    new RepositoryCallback<List<Feedback>>(callback, EventType.GET_FEEDBACK_LIST) {
+                    });
+        }
+
+        @Override
         public void getMineFeedbackVotes(IFeedbackServiceEventListener callback, Activity activity) {
             //TODO [jfo] implement
         }
@@ -193,6 +202,11 @@ public abstract class FeedbackService {
         public void createFeedback(IFeedbackServiceEventListener callback, Activity activity, Feedback feedback, byte[] screenshot) {
             FeedbackDatabase.getInstance(activity).writeFeedback(FeedbackUtility.feedbackToFeedbackDetailsBean(activity, feedback).getFeedbackBean(), Enums.SAVE_MODE.CREATED);
             callback.onEventCompleted(CREATE_FEEDBACK, feedback);
+        }
+
+        @Override
+        public void getFeedbackList(IFeedbackServiceEventListener callback) {
+            //TODO [jfo] implement
         }
 
         @Override

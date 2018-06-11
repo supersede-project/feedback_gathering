@@ -12,15 +12,15 @@ public class VersionUtility {
         //        3	27-29	30.06 - 20.07	45
         //        4	30-32	21.07 - 10.08	22
         //        5	33-35	11.08 - 31.08	12
-        if ((DateUtility.getMonth() == 8 && DateUtility.getDay() >= 31) || DateUtility.getMonth() >= 9){
+        if ((DateUtility.getMonth() == 8 && DateUtility.getDay() >= 31) || DateUtility.getMonth() >= 9) {
             return 5;
-        }else if ((DateUtility.getMonth() == 8 && DateUtility.getDay() >= 10) || DateUtility.getMonth() >= 9){
+        } else if ((DateUtility.getMonth() == 8 && DateUtility.getDay() >= 10) || DateUtility.getMonth() >= 9) {
             return 4;
-        }else if ((DateUtility.getMonth() == 7 && DateUtility.getDay() >= 20) || DateUtility.getMonth() >= 8){
+        } else if ((DateUtility.getMonth() == 7 && DateUtility.getDay() >= 20) || DateUtility.getMonth() >= 8) {
             return 3;
-        }else if ((DateUtility.getMonth() == 6 && DateUtility.getDay() >= 29) || DateUtility.getMonth() >= 7){
+        } else if ((DateUtility.getMonth() == 6 && DateUtility.getDay() >= 29) || DateUtility.getMonth() >= 7) {
             return 2;
         }
-        return BASE_VERSION;
+        return BASE_VERSION + 1;
     }
 }

@@ -6,6 +6,7 @@ public interface IFeedbackServiceEventListener {
         CREATE_USER,
         GET_USER,
         CREATE_FEEDBACK,
+        GET_FEEDBACK_LIST,
         GET_CONFIGURATION,
         GET_MINE_FEEDBACK_VOTES,
         GET_OTHERS_FEEDBACK_VOTES,
