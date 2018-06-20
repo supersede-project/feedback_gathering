@@ -8,6 +8,7 @@ import android.content.DialogInterface;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.support.v4.widget.CompoundButtonCompat;
+import android.support.v7.widget.ContentFrameLayout;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
@@ -19,6 +20,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -28,10 +30,12 @@ import ch.uzh.supersede.feedbacklibrary.R;
 import ch.uzh.supersede.feedbacklibrary.beans.FeedbackDetailsBean;
 import ch.uzh.supersede.feedbacklibrary.components.buttons.FeedbackListItem;
 import ch.uzh.supersede.feedbacklibrary.models.Feedback;
+import ch.uzh.supersede.feedbacklibrary.services.FeedbackService;
 import ch.uzh.supersede.feedbacklibrary.services.IFeedbackServiceEventListener;
 import ch.uzh.supersede.feedbacklibrary.utils.ColorUtility;
 import ch.uzh.supersede.feedbacklibrary.utils.Enums;
 import ch.uzh.supersede.feedbacklibrary.utils.FeedbackUtility;
+import ch.uzh.supersede.feedbacklibrary.utils.LoadingViewUtility;
 import ch.uzh.supersede.feedbacklibrary.utils.StringUtility;
 
 import static ch.uzh.supersede.feedbacklibrary.utils.Enums.FEEDBACK_SORTING.*;
@@ -52,12 +56,16 @@ public class FeedbackListActivity extends AbstractBaseActivity implements IFeedb
     private ArrayList<FeedbackListItem> allFeedbackList = new ArrayList<>();
     private Enums.FEEDBACK_SORTING sorting = MINE;
     private ArrayList<Enums.FEEDBACK_STATUS> allowedStatuses = new ArrayList<>();
-
+    TextView loadingTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_feedback_list);
+        loadingTextView = LoadingViewUtility.createLoadingView(this, screenWidth, screenHeight, getTopColor(0));
+        ContentFrameLayout rootLayout = getView(R.id.feedback_list_root, ContentFrameLayout.class);
+        rootLayout.addView(loadingTextView);
+
         scrollListLayout = getView(R.id.list_layout_scroll, LinearLayout.class);
         myButton = setOnClickListener(getView(R.id.list_button_mine, Button.class));
         topButton = setOnClickListener(getView(R.id.list_button_top, Button.class));
@@ -73,12 +81,7 @@ public class FeedbackListActivity extends AbstractBaseActivity implements IFeedb
         Collections.addAll(allowedStatuses, Enums.FEEDBACK_STATUS.values());
         searchText = addTextChangedListener(getView(R.id.list_edit_search, EditText.class));
         focusSink = getView(R.id.list_edit_focus_sink, LinearLayout.class);
-//        for (FeedbackBean bean : RepositoryStub.getFeedback(this, 50, -30, 50, 0.1f)) {
-//            FeedbackListItem listItem = new FeedbackListItem(this, 8, bean, configuration, getTopColor(0));
-//            allFeedbackList.add(listItem);
-//        }
-        activeFeedbackList = new ArrayList<>(allFeedbackList);
-        sort();
+
         colorShape(0, topButton, hotButton, newButton);
         colorShape(1, myButton);
         colorViews(0, filterButton);
@@ -89,7 +92,13 @@ public class FeedbackListActivity extends AbstractBaseActivity implements IFeedb
                 getView(R.id.list_layout_color_4, LinearLayout.class),
                 getView(R.id.list_layout_color_5, LinearLayout.class));
         onPostCreate();
+    }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        loadingTextView.setVisibility(View.VISIBLE);
+        FeedbackService.getInstance(this).getFeedbackList(this, this, configuration, getTopColor(0));
     }
 
     @Override
@@ -103,21 +112,31 @@ public class FeedbackListActivity extends AbstractBaseActivity implements IFeedb
                         feedbackDetailsBeans.add(feedbackDetailsBean);
                         allFeedbackList.add(new FeedbackListItem(this, 8, feedbackDetailsBean.getFeedbackBean(), configuration, getTopColor(0)));
                     }
+                    activeFeedbackList = new ArrayList<>(allFeedbackList);
+                    sort();
+                }
+                break;
+            case GET_FEEDBACK_LIST_MOCK:
+                if (response instanceof ArrayList) {
+                    allFeedbackList = (ArrayList<FeedbackListItem>) response;
+                    activeFeedbackList = new ArrayList<>(allFeedbackList);
+                    sort();
                 }
                 break;
             default:
                 break;
         }
+        loadingTextView.setVisibility(View.INVISIBLE);
     }
 
     @Override
     public void onEventFailed(EventType eventType, Object response) {
-
+        loadingTextView.setVisibility(View.INVISIBLE);
     }
 
     @Override
     public void onConnectionFailed(EventType eventType) {
-
+        loadingTextView.setVisibility(View.INVISIBLE);
     }
 
     private void sort() {

@@ -1,8 +1,12 @@
 package ch.uzh.supersede.feedbacklibrary.utils;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.*;
+import android.support.v4.content.ContextCompat;
 import android.view.View;
+
+import ch.uzh.supersede.feedbacklibrary.R;
 
 public class ColorUtility {
 
@@ -17,6 +21,13 @@ public class ColorUtility {
         return ((Color.red(color) + Color.green(color) + Color.blue(color)) / 3d) < 122;
     }
 
+    public static int getTextColor(Context context, int backgroundColor){
+        if (ColorUtility.isDark(backgroundColor)) {
+            return ContextCompat.getColor(context, R.color.white);
+        } else {
+           return ContextCompat.getColor(context, R.color.black);
+        }
+    }
 
     /**
      * Calculates the differences between Color a and b
