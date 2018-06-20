@@ -85,7 +85,6 @@ public class Enums {
     }
 
     public enum RUNNING_MODE_TYPE {
-        MOCKUP,
         TEST,
         PRODUCTIVE
     }

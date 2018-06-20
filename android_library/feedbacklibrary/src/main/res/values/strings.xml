@@ -72,6 +72,9 @@
     <!-- Overriding string resources in com.theartofdev.edmodo:android-image-cropper -->
     <string name="crop_image_menu_crop">@string/image_annotation_crop</string>
 
+    <!-- Loading text-->
+    <string name="loading_text">loading&#8230;</string>
+
     <!--Hub-->
     <string name="hub_feedback_list">Show\nFeedback</string>
     <string name="hub_feedback_user_level">User-Level\n%1$d</string>
@@ -147,6 +150,10 @@
     <string name="details_make_public_content">Do you want to publish this Feedback?\nA published Feedback can be seen, rated and responded upon by other Users and the Developers.\nThis decision cannot be reverted.</string>
     <!--Feedback-->
     <!--Settings-->
+
+    <string name="settings_general_title"><b>General Settings</b></string>
+    <string name="settings_feedback_title"><b>Feedback Settings</b></string>
+    <string name="settings_use_stubs">Use stubs</string>
     <string name="settings_button_mine">Mine</string>
     <string name="settings_button_others">Others</string>
     <string name="settings_button_subscriptions">Subscriptions</string>

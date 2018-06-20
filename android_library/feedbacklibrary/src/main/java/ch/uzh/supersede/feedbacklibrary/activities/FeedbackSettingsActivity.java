@@ -2,17 +2,17 @@ package ch.uzh.supersede.feedbacklibrary.activities;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
+import android.widget.ToggleButton;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import ch.uzh.supersede.feedbacklibrary.BuildConfig;
 import ch.uzh.supersede.feedbacklibrary.R;
 import ch.uzh.supersede.feedbacklibrary.beans.LocalFeedbackBean;
 import ch.uzh.supersede.feedbacklibrary.components.buttons.AbstractSettingsListItem;
@@ -22,7 +22,7 @@ import ch.uzh.supersede.feedbacklibrary.database.FeedbackDatabase;
 import ch.uzh.supersede.feedbacklibrary.services.FeedbackService;
 import ch.uzh.supersede.feedbacklibrary.services.IFeedbackServiceEventListener;
 
-import static ch.uzh.supersede.feedbacklibrary.utils.Enums.FETCH_MODE.VOTED;
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.USE_STUBS;
 import static ch.uzh.supersede.feedbacklibrary.utils.Enums.SETTINGS_VIEW;
 import static ch.uzh.supersede.feedbacklibrary.utils.Enums.SETTINGS_VIEW.*;
 
@@ -55,6 +55,15 @@ public class FeedbackSettingsActivity extends AbstractBaseActivity implements IF
         othersButton = setOnClickListener(getView(R.id.settings_button_others, Button.class));
         settingsButton = setOnClickListener(getView(R.id.settings_button_settings, Button.class));
 
+        ToggleButton useStubsToggle = getView(R.id.settings_toggle_use_stubs, ToggleButton.class);
+        useStubsToggle.setChecked(FeedbackDatabase.getInstance(this).readBoolean(USE_STUBS, false));
+        useStubsToggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean isEnabled) {
+                FeedbackDatabase.getInstance(compoundButton.getContext()).writeBoolean(USE_STUBS, isEnabled);
+                execFillFeedbackList();
+            }
+        });
 
         colorShape(0, myButton, othersButton, settingsButton);
         colorShape(1, myButton);
@@ -77,30 +86,27 @@ public class FeedbackSettingsActivity extends AbstractBaseActivity implements IF
     @Override
     @SuppressWarnings("unchecked")
     public void onEventCompleted(EventType eventType, Object response) {
-        if (BuildConfig.DEBUG) {
-            switch (eventType) {
-                case GET_MINE_FEEDBACK_VOTES:
-                    myFeedbackList.clear();
-                    for (LocalFeedbackBean bean : (ArrayList<LocalFeedbackBean>) response) {
-                        myFeedbackList.add(new VoteListItem(this, 8, bean, configuration, getTopColor(0)));
-                    }
-                    break;
-                case GET_OTHERS_FEEDBACK_VOTES:
-                    othersFeedbackList.clear();
-                    for (LocalFeedbackBean bean : (ArrayList<LocalFeedbackBean>) response) {
-                        othersFeedbackList.add(new VoteListItem(this, 8, bean, configuration, getTopColor(0)));
-                    }
-                    break;
-                case GET_FEEDBACK_SETTINGS:
-                    settingsFeedbackList.clear();
-                    for (LocalFeedbackBean bean : (ArrayList<LocalFeedbackBean>) response) {
-                        settingsFeedbackList.add(new SubscriptionListItem(this, 8, bean, configuration, getTopColor(0)));
-                    }
-                    break;
-                default:
-            }
+        switch (eventType) {
+            case GET_MINE_FEEDBACK_VOTES_MOCK:
+                myFeedbackList.clear();
+                for (LocalFeedbackBean bean : (ArrayList<LocalFeedbackBean>) response) {
+                    myFeedbackList.add(new VoteListItem(this, 8, bean, configuration, getTopColor(0)));
+                }
+                break;
+            case GET_OTHERS_FEEDBACK_VOTES_MOCK:
+                othersFeedbackList.clear();
+                for (LocalFeedbackBean bean : (ArrayList<LocalFeedbackBean>) response) {
+                    othersFeedbackList.add(new VoteListItem(this, 8, bean, configuration, getTopColor(0)));
+                }
+                break;
+            case GET_FEEDBACK_SUBSCRIPTIONS_MOCK:
+                settingsFeedbackList.clear();
+                for (LocalFeedbackBean bean : (ArrayList<LocalFeedbackBean>) response) {
+                    settingsFeedbackList.add(new SubscriptionListItem(this, 8, bean, configuration, getTopColor(0)));
+                }
+                break;
+            default:
         }
-        //TODO [jfo] real implementation
     }
 
     @Override
@@ -114,9 +120,9 @@ public class FeedbackSettingsActivity extends AbstractBaseActivity implements IF
     }
 
     private void execFillFeedbackList() {
-        FeedbackService.getInstance().getOthersFeedbackVotes(this, this);
-        FeedbackService.getInstance().getMineFeedbackVotes(this, this);
-        FeedbackService.getInstance().getFeedbackSettings(this, this);
+        FeedbackService.getInstance(this).getOthersFeedbackVotes(this, this);
+        FeedbackService.getInstance(this).getMineFeedbackVotes(this, this);
+        FeedbackService.getInstance(this).getFeedbackSubscriptions(this, this);
     }
 
     private Button setOnClickListener(Button button) {

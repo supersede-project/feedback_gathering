@@ -90,18 +90,18 @@ public class FeedbackHubActivity extends AbstractBaseActivity implements IFeedba
         }
         updateUserLevel(false);
         invokeVersionControl(2, R.id.hub_button_list, R.id.hub_button_settings);
-        FeedbackService.getInstance().authenticate(this, new AuthenticateRequest("test", "123")); //TODO [jfo] parse credentials
+        FeedbackService.getInstance(this).authenticate(this, new AuthenticateRequest("test", "123")); //TODO [jfo] parse credentials
     }
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void createInfoBubbles() {
-        boolean tutorialFinished = getSharedPreferences(SHARED_PREFERENCES_ID, MODE_PRIVATE).getBoolean(SHARED_PREFERENCES_TUTORIAL_HUB,false);
+        boolean tutorialFinished = getSharedPreferences(SHARED_PREFERENCES_ID, MODE_PRIVATE).getBoolean(SHARED_PREFERENCES_TUTORIAL_HUB, false);
         if (!tutorialFinished) {
             RelativeLayout root = getView(R.id.hub_root, RelativeLayout.class);
             RelativeLayout mLayout = infoUtility.addInfoBox(root, getString(R.string.hub_feedback_status_label), getString(R.string.hub_feedback_status_info), this, statusText);
             RelativeLayout llLayout = infoUtility.addInfoBox(root, getString(R.string.hub_feedback_create_label), getString(R.string.hub_feedback_create_info), this, feedbackButton, mLayout);
-            RelativeLayout lrLayout = infoUtility.addInfoBox(root, getString(R.string.hub_feedback_settings_label), getString(R.string.hub_feedback_settings_info), this, settingsButton,llLayout);
+            RelativeLayout lrLayout = infoUtility.addInfoBox(root, getString(R.string.hub_feedback_settings_label), getString(R.string.hub_feedback_settings_info), this, settingsButton, llLayout);
             RelativeLayout ulLayout = infoUtility.addInfoBox(root, getString(R.string.hub_feedback_list_label), getString(R.string.hub_feedback_list_info), this, listButton, lrLayout);
             RelativeLayout urLayout = infoUtility.addInfoBox(root, getString(R.string.hub_feedback_user_lvl_label), getString(R.string.hub_feedback_user_lvl_info), this, levelButton, ulLayout);
             RelativeLayout umLayout = infoUtility.addInfoBox(root, getString(R.string.hub_feedback_info_label), getString(R.string.hub_feedback_info_info), this, spaceTop, urLayout);
@@ -113,7 +113,7 @@ public class FeedbackHubActivity extends AbstractBaseActivity implements IFeedba
                     return false;
                 }
             });
-            colorShape(1, lrLayout, llLayout, mLayout, urLayout, ulLayout,umLayout);
+            colorShape(1, lrLayout, llLayout, mLayout, urLayout, ulLayout, umLayout);
         }
     }
 
@@ -146,10 +146,10 @@ public class FeedbackHubActivity extends AbstractBaseActivity implements IFeedba
         switch (eventType) {
             case AUTHENTICATE:
                 if (response instanceof AuthenticateResponse) {
-                    FeedbackService.getInstance().setToken(((AuthenticateResponse) response).getToken());
+                    FeedbackService.getInstance(this).setToken(((AuthenticateResponse) response).getToken());
                 }
-                FeedbackService.getInstance().setApplicationId(configuration.getHostApplicationLongId()); //TODO [jfo] maybe this id is returned with authentication
-                FeedbackService.getInstance().setLanguage(configuration.getHostApplicationLanguage());
+                FeedbackService.getInstance(this).setApplicationId(configuration.getHostApplicationLongId()); //TODO [jfo] maybe this id is returned with authentication
+                FeedbackService.getInstance(this).setLanguage(configuration.getHostApplicationLanguage());
                 break;
             case CREATE_USER:
                 if (response instanceof AndroidUser) {
@@ -172,9 +172,9 @@ public class FeedbackHubActivity extends AbstractBaseActivity implements IFeedba
         switch (eventType) {
             case AUTHENTICATE:
                 //FIXME [jfo] remove block as soon as possible
-                FeedbackService.getInstance().setToken(LIFETIME_TOKEN);
-                FeedbackService.getInstance().setApplicationId(configuration.getHostApplicationLongId()); //TODO [jfo] maybe this id is returned with authentication
-                FeedbackService.getInstance().setLanguage(configuration.getHostApplicationLanguage());
+                FeedbackService.getInstance(this).setToken(LIFETIME_TOKEN);
+                FeedbackService.getInstance(this).setApplicationId(configuration.getHostApplicationLongId()); //TODO [jfo] maybe this id is returned with authentication
+                FeedbackService.getInstance(this).setLanguage(configuration.getHostApplicationLanguage());
                 break;
             default:
         }
@@ -200,11 +200,11 @@ public class FeedbackHubActivity extends AbstractBaseActivity implements IFeedba
             }
         }
         statusText.setText(null);
-        if (PASSIVE.check(getApplicationContext(),ignoreDatabaseCheck)){
-            enableView(listButton,1,VersionUtility.getDateVersion()>1);
+        if (PASSIVE.check(getApplicationContext(), ignoreDatabaseCheck)) {
+            enableView(listButton, 1, VersionUtility.getDateVersion() > 1);
         }
-        if (ACTIVE.check(getApplicationContext(),ignoreDatabaseCheck)){
-            Utils.persistScreenshot(this,cachedScreenshot);
+        if (ACTIVE.check(getApplicationContext(), ignoreDatabaseCheck)) {
+            Utils.persistScreenshot(this, cachedScreenshot);
             int ownFeedbackBeans = FeedbackDatabase.getInstance(this).getFeedbackBeans(OWN).size();
             int upVotedFeedbackBeans = FeedbackDatabase.getInstance(this).getFeedbackBeans(UP_VOTED).size();
             int downVotedFeedbackBeans = FeedbackDatabase.getInstance(this).getFeedbackBeans(DOWN_VOTED).size();
@@ -394,7 +394,7 @@ public class FeedbackHubActivity extends AbstractBaseActivity implements IFeedba
             if (name == null) {
                 Toast.makeText(this, getString(configuration.isDeveloper() ? R.string.hub_developer_registered : R.string.hub_username_registered, preAllocatedStringStorage[0]), Toast.LENGTH_SHORT)
                      .show();
-                FeedbackService.getInstance().createUser(this, new AndroidUser(preAllocatedStringStorage[0], configuration.isDeveloper()));
+                FeedbackService.getInstance(this).createUser(this, new AndroidUser(preAllocatedStringStorage[0], configuration.isDeveloper()));
                 userName = USER_NAME_CREATING;
                 levelButton.setEnabled(false);
             } else {

@@ -1,10 +1,7 @@
 package ch.uzh.supersede.feedbacklibrary.components.buttons;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.graphics.PorterDuff;
-import android.graphics.drawable.Drawable;
-import android.provider.CalendarContract;
 import android.support.v7.widget.LinearLayoutCompat;
 import android.view.Gravity;
 import android.widget.CompoundButton;
@@ -54,7 +51,7 @@ public class SubscriptionListItem extends AbstractSettingsListItem implements IF
 
         toggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                FeedbackService.getInstance().createSubscription(getListener(), context, RepositoryStub.getFeedback(context, feedbackBean), isChecked);
+                FeedbackService.getInstance(context).createSubscription(getListener(), context, RepositoryStub.getFeedback(context, feedbackBean), isChecked);
             }
         });
 
