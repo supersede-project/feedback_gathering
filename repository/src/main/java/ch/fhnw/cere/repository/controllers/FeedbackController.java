@@ -8,10 +8,7 @@ import ch.fhnw.cere.repository.integration.FeedbackCentralIntegrator;
 import ch.fhnw.cere.repository.integration.MdmFileIntegrator;
 import ch.fhnw.cere.repository.models.*;
 import ch.fhnw.cere.repository.models.orchestrator.Application;
-import ch.fhnw.cere.repository.services.FeedbackEmailService;
-import ch.fhnw.cere.repository.services.FeedbackService;
-import ch.fhnw.cere.repository.services.FileStorageService;
-import ch.fhnw.cere.repository.services.OrchestratorApplicationService;
+import ch.fhnw.cere.repository.services.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.io.IOUtils;
 import org.json.JSONObject;
@@ -60,13 +57,16 @@ public class FeedbackController extends BaseController {
     @Autowired
     private OrchestratorApplicationService orchestratorApplicationService;
 
+    @Autowired
+    private FeedbackStatusService feedbackStatusService;
+
     @Value("${integration.feedback_central}")
     private boolean feedbackCentralIntegrationEnabled;
 
     @PreAuthorize("@securityService.hasAdminPermission(#applicationId)")
     @RequestMapping(method = RequestMethod.GET, value = "")
     public List<Feedback> getApplicationFeedbacks(@RequestParam(value = "view", required = false) String view, @PathVariable long applicationId) {
-        if(view != null) {
+        if (view != null) {
             if (view.equals("public")) {
                 return feedbackService.findByIsPublic(true);
             } else if (view.equals("private")) {
@@ -274,14 +274,23 @@ public class FeedbackController extends BaseController {
     }
 
     @RequestMapping(method = RequestMethod.PUT, value = "/{id}")
-    public Feedback publicityFeedback(@PathVariable("id") long id, HttpEntity<String> publicState) {
-        if (publicState.getBody() != null) {
-            JSONObject obj = new JSONObject(publicState.getBody());
-            boolean publicValue = obj.getBoolean("public");
+    public Feedback publicityFeedback(@PathVariable("id") long id, HttpEntity<String> requestBody) {
+        if (requestBody.getBody() != null) {
+            JSONObject obj = new JSONObject(requestBody.getBody());
             Feedback modifiedFeedback = feedbackService.find(id);
             if (modifiedFeedback != null) {
-                modifiedFeedback.setPublic(publicValue);
-                feedbackService.save(modifiedFeedback);
+                if (obj.has("public")) {
+                    boolean publicValue = obj.getBoolean("public");
+                    modifiedFeedback.setPublic(publicValue);
+                }
+                if (obj.has("status")) {
+                    String statusValue = obj.getString("status");
+                    FeedbackStatus feedbackStatus = feedbackStatusService.findByStatus(statusValue);
+                    if (feedbackStatus != null) {
+                        modifiedFeedback.setFeedbackStatus(feedbackStatus);
+                    }
+                    feedbackService.save(modifiedFeedback);
+                }
                 return modifiedFeedback;
             } else {
                 throw new NotFoundException();

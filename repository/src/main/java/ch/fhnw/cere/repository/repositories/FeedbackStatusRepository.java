@@ -9,5 +9,5 @@ import java.util.List;
 
 @Repository
 public interface FeedbackStatusRepository extends JpaRepository<FeedbackStatus, Long> {
-    List<FeedbackStatus> findByStatusType(@Param("statusType") String statusType);
+    FeedbackStatus findByStatus(@Param("status") String status);
 }

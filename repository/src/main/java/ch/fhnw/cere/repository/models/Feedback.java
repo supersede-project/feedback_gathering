@@ -4,9 +4,7 @@ package ch.fhnw.cere.repository.models;
 import ch.fhnw.cere.repository.models.orchestrator.Application;
 import ch.fhnw.cere.repository.models.orchestrator.Mechanism;
 import ch.fhnw.cere.repository.models.orchestrator.MechanismTemplateModel;
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.*;
 import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
@@ -32,7 +30,7 @@ public class Feedback {
 
     @ManyToOne()
     @JoinColumn(name = "feedback_status")
-    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "statusType")
+    @JsonUnwrapped()
     private FeedbackStatus feedbackStatus = new FeedbackStatus(1,"OPEN");
 
     @Transient

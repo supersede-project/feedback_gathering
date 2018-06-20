@@ -11,7 +11,7 @@ public interface FeedbackStatusService {
 
     public FeedbackStatus find(long id);
 
-    public List<FeedbackStatus> findByStatusType(String statusType);
+    public FeedbackStatus findByStatus(String status);
 
     public void delete(long id);
 }

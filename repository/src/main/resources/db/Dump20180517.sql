@@ -321,7 +321,7 @@ DROP TABLE IF EXISTS `feedback_status`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `feedback_status` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `status_type` varchar(255) NOT NULL,
+  `status` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;

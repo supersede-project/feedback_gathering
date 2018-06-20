@@ -3,9 +3,13 @@ package ch.fhnw.cere.repository.services;
 import ch.fhnw.cere.repository.models.FeedbackStatus;
 import ch.fhnw.cere.repository.repositories.FeedbackStatusRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+@Service
+@Transactional
 public class FeedbackStatusServiceImpl implements FeedbackStatusService {
 
     @Autowired
@@ -27,8 +31,8 @@ public class FeedbackStatusServiceImpl implements FeedbackStatusService {
     }
 
     @Override
-    public List<FeedbackStatus> findByStatusType(String statusType) {
-        return feedbackStatusRepository.findByStatusType(statusType);
+    public FeedbackStatus findByStatus(String status) {
+        return feedbackStatusRepository.findByStatus(status);
     }
 
     @Override

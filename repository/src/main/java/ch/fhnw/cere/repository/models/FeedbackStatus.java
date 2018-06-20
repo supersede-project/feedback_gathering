@@ -9,14 +9,14 @@ public class FeedbackStatus {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
-    private String statusType;
+    private String status;
 
     public FeedbackStatus() {
 
     }
-    public FeedbackStatus(long id, String statusType) {
+    public FeedbackStatus(long id, String status) {
         this.id = id;
-        this.statusType = statusType;
+        this.status = status;
     }
 
     public long getId() {
@@ -27,11 +27,11 @@ public class FeedbackStatus {
         this.id = id;
     }
 
-    public String getStatusType() {
-        return statusType;
+    public String getStatus() {
+        return status;
     }
 
-    public void setStatusType(String statusType) {
-        this.statusType = statusType;
+    public void setStatus(String status) {
+        this.status = status;
     }
 }
