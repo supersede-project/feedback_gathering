@@ -82,8 +82,11 @@ public class FeedbackListItem extends LinearLayout implements Comparable, ISorta
         setOnLongClickListener(new OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                startFeedbackDetailsActivity();
+                if (VersionUtility.getDateVersion() > 2) {
+                    startFeedbackDetailsActivity();
+                }
                 return false;
+
             }
         });
     }

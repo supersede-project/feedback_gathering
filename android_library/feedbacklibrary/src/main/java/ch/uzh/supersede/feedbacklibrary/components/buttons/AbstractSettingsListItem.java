@@ -10,17 +10,14 @@ import android.support.v7.widget.LinearLayoutCompat;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.View;
-import android.widget.LinearLayout;
-import android.widget.TextView;
+import android.widget.*;
 
 import ch.uzh.supersede.feedbacklibrary.R;
 import ch.uzh.supersede.feedbacklibrary.activities.FeedbackDetailsActivity;
 import ch.uzh.supersede.feedbacklibrary.beans.LocalConfigurationBean;
 import ch.uzh.supersede.feedbacklibrary.beans.LocalFeedbackBean;
 import ch.uzh.supersede.feedbacklibrary.stubs.RepositoryStub;
-import ch.uzh.supersede.feedbacklibrary.utils.ColorUtility;
-import ch.uzh.supersede.feedbacklibrary.utils.DateUtility;
-import ch.uzh.supersede.feedbacklibrary.utils.NumberUtility;
+import ch.uzh.supersede.feedbacklibrary.utils.*;
 
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.EXTRA_KEY_FEEDBACK_BEAN;
 
@@ -107,11 +104,13 @@ public abstract class AbstractSettingsListItem extends LinearLayout {
     }
 
     private void startFeedbackDetailsActivity() {
-        Intent intent = new Intent(getContext(), FeedbackDetailsActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-        intent.putExtra(EXTRA_KEY_FEEDBACK_BEAN, RepositoryStub.getFeedback(getContext(), feedbackBean));
-        getContext().startActivity(intent);
-        ((Activity) getContext()).overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+        if (VersionUtility.getDateVersion() > 2) {
+            Intent intent = new Intent(getContext(), FeedbackDetailsActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+            intent.putExtra(EXTRA_KEY_FEEDBACK_BEAN, RepositoryStub.getFeedback(getContext(), feedbackBean));
+            getContext().startActivity(intent);
+            ((Activity) getContext()).overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+        }
     }
 
     private LinearLayout createWrapperLayout(LinearLayoutCompat.LayoutParams layoutParams, Context context, int orientation) {

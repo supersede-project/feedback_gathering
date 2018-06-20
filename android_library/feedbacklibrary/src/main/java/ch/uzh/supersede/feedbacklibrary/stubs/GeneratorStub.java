@@ -111,9 +111,9 @@ public class GeneratorStub {
         }
     }
 
-    public static class BagOfLabels {
+    public static class BagOfTags {
 
-        private BagOfLabels() {
+        private BagOfTags() {
         }
 
         private static String[] labels = new String[]{
