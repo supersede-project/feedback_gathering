@@ -104,7 +104,7 @@ public class FeedbackActivity extends AbstractBaseActivity implements AudioFeedb
     public void onEventCompleted(EventType eventType, Object response) {
         switch (eventType) {
             case CREATE_FEEDBACK:
-                if (VersionUtility.getDateVersion() > 1) {
+                if (VersionUtility.getDateVersion() > 2) {
                     Intent intent = new Intent(this, FeedbackDetailsActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                     intent.putExtra(EXTRA_KEY_FEEDBACK_DETAIL_BEAN, feedbackDetailsBean);

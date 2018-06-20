@@ -153,4 +153,6 @@
     <string name="details_published">Published!</string>
     <!--Abstract-->
     <string name="abstract_button_clicked">Button \n\"%1$s\"\n clicked!</string>
+    <string name="_open"><![CDATA[<]]></string>
+    <string name="_close"><![CDATA[>]]></string>
 </resources>

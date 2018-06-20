@@ -36,6 +36,7 @@ dependencies {
     compile 'com.theartofdev.edmodo:android-image-cropper:2.3.1'
     compile 'com.android.support.constraint:constraint-layout:1.1.0'
     compile 'com.squareup.okhttp3:logging-interceptor:3.9.1'
+    compile 'com.nex3z:flow-layout:1.2.2'
 
     testCompile 'junit:junit:4.12'
 

@@ -4,9 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 import ch.uzh.supersede.feedbacklibrary.beans.FeedbackBean;
 import ch.uzh.supersede.feedbacklibrary.beans.FeedbackDetailsBean;
@@ -52,7 +50,7 @@ public class RepositoryStub {
         String description = content[0];
         String title = content[1];
         String userName = feedbackBean.getUserName();
-        String[] labels = GeneratorStub.BagOfLabels.pickRandom(5);
+        String[] labels = GeneratorStub.BagOfTags.pickRandom(5);
         int upVotes = feedbackBean.getUpVotes();
         long timeStamp = generateTimestamp();
         FEEDBACK_STATUS status = feedbackBean.getFeedbackStatus();
@@ -181,7 +179,7 @@ public class RepositoryStub {
 
     @NonNull
     private static String generateTitle() {
-        return GeneratorStub.BagOfLabels.pickRandom().concat("-Feedback");
+        return GeneratorStub.BagOfTags.pickRandom().concat("-Feedback");
     }
 
     @NonNull
@@ -253,7 +251,7 @@ public class RepositoryStub {
                 .withStatus(OPEN)
                 .build();
 
-        String[] labels = GeneratorStub.BagOfLabels.pickRandom(5);
+        String[] labels = GeneratorStub.BagOfTags.pickRandom(5);
         FEEDBACK_STATUS status = feedbackBean.getFeedbackStatus();
         List<FeedbackResponseBean> feedbackResponses = getFeedbackResponses(context, feedbackBean.getResponses(), timeStamp, 0.1f, 0.1f, feedbackBean);
         return new FeedbackDetailsBean.Builder()
@@ -283,6 +281,19 @@ public class RepositoryStub {
 
     public static void makeFeedbackPublic(FeedbackDetailsBean feedbackDetailsBean) {
         //TheoreticalCallToRepo
+    }
+    public static Map<String,String> getFeedbackTags() {
+        //TheoreticalCallToRepo
+        ArrayList<String> loadedTags = new ArrayList<>(
+                Arrays.asList(
+                        "GUI", "Images", "Scaling", "Performance", "Permissions", "Data-Usage", "Improvement", "Development", "Translations",
+                        "Battery", "Privacy", "Crashes", "Bugs", "Functionality", "Ideas", "Updates", "Region-Lock", "Content", "Features",
+                        "Design", "Handling", "Usability", "Audio", "Sensors", "Brightness", "GPS", "Accuracy", "Quality"));
+        TreeMap<String,String> sortedTags = new TreeMap<>();
+        for (String tag : loadedTags){
+            sortedTags.put(tag.toLowerCase(),tag);
+        }
+        return sortedTags;
     }
 
     public static AuthenticateResponse generateAuthenticateResponse() {
