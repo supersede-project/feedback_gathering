@@ -257,7 +257,7 @@ public class FeedbackHubActivity extends AbstractBaseActivity implements IFeedba
             if (i == R.id.hub_button_list) {
                 startActivity(this, FeedbackListActivity.class);
             } else if (i == R.id.hub_button_feedback) {
-                startActivity(this, FeedbackActivity.class);
+                startActivity(this, FeedbackIdentityActivity.class);
             } else if (i == R.id.hub_button_settings) {
                 startActivity(this, FeedbackSettingsActivity.class);
             } else if (i == R.id.hub_button_user_level) {

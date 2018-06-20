@@ -105,6 +105,6 @@ public class HostActivity extends AbstractBaseActivity implements
     //Feedback Layout
     @Override
     public FEEDBACK_STYLE getConfiguredFeedbackStyle() {
-        return FEEDBACK_STYLE.LIGHT;
+        return FEEDBACK_STYLE.DARK;
     }
 }

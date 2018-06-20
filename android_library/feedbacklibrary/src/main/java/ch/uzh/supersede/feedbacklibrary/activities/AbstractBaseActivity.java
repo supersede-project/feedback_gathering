@@ -9,8 +9,9 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Layout;
 import android.util.*;
-import android.view.View;
+import android.view.*;
 import android.widget.*;
 
 import java.io.Serializable;
@@ -98,6 +99,17 @@ public abstract class AbstractBaseActivity extends AppCompatActivity {
             }
         }
     }
+    protected void colorLayouts(int colorIndex, ViewGroup... layouts) {
+        if (configuration.getTopColors().length >= colorIndex) {
+            Integer color = configuration.getTopColors()[colorIndex];
+            for (ViewGroup layout : color != null ? layouts : new ViewGroup[0]) {
+                if (layout == null) {
+                    continue;
+                }
+                layout.setBackgroundColor(color);
+            }
+        }
+    }
 
     protected void colorShape(int colorIndex, View... views) {
         if (configuration.getTopColors().length >= colorIndex) {
@@ -122,6 +134,15 @@ public abstract class AbstractBaseActivity extends AppCompatActivity {
                         colorizeText(color,((RelativeLayout)view).getChildAt(v));
                     }
                 }
+            }
+        }
+    }
+
+    public void colorTextOnly(int backgroundColorIndex, View... views){
+        if (configuration.getTopColors().length >= backgroundColorIndex) {
+            Integer color = configuration.getTopColors()[backgroundColorIndex];
+            for (View view : color != null ? views : new View[0]) {
+                colorizeText(color, view);
             }
         }
     }
