@@ -162,6 +162,7 @@
     <string name="abstract_button_clicked">Button \n\"%1$s\"\n clicked!</string>
     <string name="_open"><![CDATA[<]]></string>
     <string name="_close"><![CDATA[>]]></string>
+    <!--Identity-->
     <string name="identity_input_title">Input Feedback-Title here...</string>
     <string name="identity_input_tags">Input Feedback-Tags here...</string>
     <string name="identity_too_short">Tag too short! Minimum:</string>
@@ -176,8 +177,8 @@
     <string name="identity_warn_title_too_long">Title too long! Maximum Length:</string>
     <string name="identity_warn_too_few_tags">Not enough Tags! Minimum:</string>
     <string name="identity_next">Next</string>
-    <string name="identity_recommendations">Recommendatons:</string>
+    <string name="identity_recommendations">Recommendations:</string>
     <string name="identity_tag_handling">The Space- and Enter-Key will add your Tag. Tap on a Tag to modify it.</string>
     <string name="identity_back">Back</string>
-    <string name="identity_introduction">Let\'s begin with a juicy Title and some sweet Tags for your Feedback, shall we? ;)</string>
+    <string name="identity_introduction">Begin your Feedback-Creation with choosing a  Title and adding some Tags!</string>
 </resources>

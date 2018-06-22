@@ -58,10 +58,8 @@ public class RepositoryStub {
         return new FeedbackDetailsBean.Builder()
                 .withFeedbackId(feedbackBean.getFeedbackId())
                 .withFeedbackBean(feedbackBean)
-                .withTitle(title)
                 .withDescription(description)
                 .withUserName(userName)
-                .withTags(labels)
                 .withTimestamp(timeStamp)
                 .withStatus(status)
                 .withUpVotes(upVotes)
@@ -223,7 +221,6 @@ public class RepositoryStub {
         int maxUpVotes = 50; //FIXME [jfo]
 
 
-        //MBO TODO: TITLE AND LABELS BEFORE CREATION
         long feedbackId = NumberUtility.randomLong();
         String title = null;
         String description = null;
@@ -242,6 +239,7 @@ public class RepositoryStub {
         FeedbackBean feedbackBean = new FeedbackBean.Builder()
                 .withFeedbackId(feedbackId)
                 .withTitle(title == null ? content[1] : title)
+                .withTags(GeneratorStub.BagOfTags.pickRandom(3))
                 .withUserName(userName)
                 .withTimestamp(timeStamp)
                 .withUpVotes(upVotes)
@@ -257,10 +255,8 @@ public class RepositoryStub {
         return new FeedbackDetailsBean.Builder()
                 .withFeedbackId(feedbackBean.getFeedbackId())
                 .withFeedbackBean(feedbackBean)
-                .withTitle(feedbackBean.getTitle())
                 .withDescription(description == null ? content[0] : description)
                 .withUserName(userName)
-                .withTags(labels)
                 .withTimestamp(timeStamp)
                 .withStatus(status)
                 .withUpVotes(upVotes)

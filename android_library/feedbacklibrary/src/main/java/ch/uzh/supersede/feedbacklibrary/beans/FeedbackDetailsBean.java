@@ -13,10 +13,8 @@ import ch.uzh.supersede.feedbacklibrary.utils.ImageUtility;
 public class FeedbackDetailsBean implements Serializable {
 
     private long feedbackId;
-    private String title;
     private String description;
     private String userName;
-    private String[] tags;
     private long timeStamp;
     private int upVotes;
     private FEEDBACK_STATUS feedbackStatus;
@@ -29,10 +27,8 @@ public class FeedbackDetailsBean implements Serializable {
 
     public static class Builder {
         private long feedbackId;
-        private String title;
         private String description;
         private String userName;
-        private String[] tags;
         private long timeStamp;
         private int upVotes;
         private FEEDBACK_STATUS feedbackStatus;
@@ -44,11 +40,6 @@ public class FeedbackDetailsBean implements Serializable {
             //NOP
         }
 
-        public Builder withTitle(String title) {
-            this.title = title;
-            return this;
-        }
-
         public Builder withDescription(String description) {
             this.description = description;
             return this;
@@ -56,11 +47,6 @@ public class FeedbackDetailsBean implements Serializable {
 
         public Builder withUserName(String userName) {
             this.userName = userName;
-            return this;
-        }
-
-        public Builder withTags(String... tags) {
-            this.tags = tags;
             return this;
         }
 
@@ -100,15 +86,13 @@ public class FeedbackDetailsBean implements Serializable {
         }
 
         public FeedbackDetailsBean build() {
-            if (CompareUtility.notNull(feedbackId, title, userName, timeStamp, description, feedbackStatus, feedbackBean)) {
+            if (CompareUtility.notNull(feedbackId, userName, timeStamp, description, feedbackStatus, feedbackBean)) {
                 FeedbackDetailsBean bean = new FeedbackDetailsBean();
                 bean.feedbackId = feedbackId;
-                bean.title = this.title;
                 bean.description = this.description;
                 bean.userName = this.userName;
                 bean.timeStamp = this.timeStamp;
                 bean.upVotes = this.upVotes;
-                bean.tags = tags;
                 bean.feedbackStatus = this.feedbackStatus;
                 bean.feedbackResponses = this.feedbackResponses;
                 bean.feedbackBean = this.feedbackBean;
@@ -120,7 +104,7 @@ public class FeedbackDetailsBean implements Serializable {
     }
 
     public String getTitle() {
-        return title;
+        return feedbackBean.getTitle();
     }
 
     public String getDescription() {
@@ -156,7 +140,7 @@ public class FeedbackDetailsBean implements Serializable {
     }
 
     public String[] getTags() {
-        return tags;
+        return feedbackBean.getTags();
     }
 
     public long getFeedbackId() {

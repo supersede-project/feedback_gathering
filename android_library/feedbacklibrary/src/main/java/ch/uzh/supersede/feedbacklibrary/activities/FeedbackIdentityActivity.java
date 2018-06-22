@@ -181,7 +181,7 @@ public class FeedbackIdentityActivity extends AbstractBaseActivity {
     }
 
     private void addTag(String s) {
-        createdTags.add(s);
+        createdTags.add(s.toLowerCase());
         Button b = new Button(this);
         b.setText(s);
         b.setOnClickListener(new View.OnClickListener() {

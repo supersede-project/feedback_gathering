@@ -149,7 +149,6 @@
                     android:singleLine="true"
                     android:gravity="center"
                     android:textAlignment="center"
-                    android:inputType="textEmailAddress"
                     android:text="@string/identity_input_tags"
                     />
                 <Space
