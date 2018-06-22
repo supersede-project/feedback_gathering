@@ -5,7 +5,6 @@ import android.graphics.Bitmap;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 import ch.uzh.supersede.feedbacklibrary.utils.CompareUtility;
 import ch.uzh.supersede.feedbacklibrary.utils.Enums.FEEDBACK_STATUS;
@@ -17,7 +16,7 @@ public class FeedbackDetailsBean implements Serializable {
     private String title;
     private String description;
     private String userName;
-    private String[] labels;
+    private String[] tags;
     private long timeStamp;
     private int upVotes;
     private FEEDBACK_STATUS feedbackStatus;
@@ -33,7 +32,7 @@ public class FeedbackDetailsBean implements Serializable {
         private String title;
         private String description;
         private String userName;
-        private String[] labels;
+        private String[] tags;
         private long timeStamp;
         private int upVotes;
         private FEEDBACK_STATUS feedbackStatus;
@@ -60,8 +59,8 @@ public class FeedbackDetailsBean implements Serializable {
             return this;
         }
 
-        public Builder withLabels(String... labels) {
-            this.labels = labels;
+        public Builder withTags(String... tags) {
+            this.tags = tags;
             return this;
         }
 
@@ -109,7 +108,7 @@ public class FeedbackDetailsBean implements Serializable {
                 bean.userName = this.userName;
                 bean.timeStamp = this.timeStamp;
                 bean.upVotes = this.upVotes;
-                bean.labels = labels;
+                bean.tags = tags;
                 bean.feedbackStatus = this.feedbackStatus;
                 bean.feedbackResponses = this.feedbackResponses;
                 bean.feedbackBean = this.feedbackBean;
@@ -156,8 +155,8 @@ public class FeedbackDetailsBean implements Serializable {
         return feedbackBean;
     }
 
-    public String[] getLabels() {
-        return labels;
+    public String[] getTags() {
+        return tags;
     }
 
     public long getFeedbackId() {

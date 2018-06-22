@@ -45,11 +45,15 @@ public class FeedbackActivity extends AbstractBaseActivity implements AudioFeedb
     private List<AbstractFeedbackPart> feedbackParts;
     private List<AbstractFeedbackPartView> feedbackPartViews;
     private FeedbackDetailsBean feedbackDetailsBean;
+    private String feedbackTitle;
+    private String[] feedbackTags;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_feedback);
+        feedbackTitle = getIntent().getStringExtra(EXTRA_KEY_FEEDBACK_TITLE);
+        feedbackTags = getIntent().getStringArrayExtra(EXTRA_KEY_FEEDBACK_TAGS);
         initView();
         onPostCreate();
     }
@@ -156,7 +160,7 @@ public class FeedbackActivity extends AbstractBaseActivity implements AudioFeedb
 
         Feedback feedback = FeedbackUtility.createFeedback(this, feedbackParts);
 
-        feedbackDetailsBean = FeedbackUtility.feedbackToFeedbackDetailsBean(this, feedback);
+        feedbackDetailsBean = FeedbackUtility.feedbackToFeedbackDetailsBean(this, feedback, feedbackTitle, feedbackTags);
         FeedbackService.getInstance().createFeedback(this, this, feedback, ImageUtility.imageToBytes(screenshot));
         Utils.wipeImages(this);
     }

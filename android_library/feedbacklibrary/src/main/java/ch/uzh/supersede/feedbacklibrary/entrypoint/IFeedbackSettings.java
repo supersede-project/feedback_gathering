@@ -10,5 +10,4 @@ public interface IFeedbackSettings {
     int getConfiguredMinResponseLength();
 
     int getConfiguredMaxResponseLength();
-
 }

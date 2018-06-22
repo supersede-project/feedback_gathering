@@ -31,6 +31,8 @@ public class Constants {
     public static final String EXTRA_KEY_FEEDBACK_BEAN = "feedbackBean";
     public static final String EXTRA_KEY_FEEDBACK_DETAIL_BEAN = "feedbackDetailBean";
     public static final String EXTRA_KEY_CACHED_SCREENSHOT = "cachedScreenshot";
+    public static final String EXTRA_KEY_FEEDBACK_TITLE = "feedbackTitle";
+    public static final String EXTRA_KEY_FEEDBACK_TAGS = "feedbackTags";
 
     public static final String SHARED_PREFERENCES_ID = "ch.uzh.supersede.feedbacklibrary.feedback";
     public static final String SHARED_PREFERENCES_HOST_APPLICATION_NAME = "hostApplicationName";
