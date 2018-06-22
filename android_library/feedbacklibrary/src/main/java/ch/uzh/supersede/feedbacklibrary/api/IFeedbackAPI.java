@@ -29,11 +29,9 @@ public interface IFeedbackAPI {
     @POST("feedback_repository/{language}/applications/{applicationId}/feedbacks")
     Call<Feedback> createFeedback(@Header("Authorization") String token, @Path("language") String language, @Path("applicationId") long applicationId, @Part MultipartBody.Part feedback, @Part List<MultipartBody.Part> files);
 
-    @Multipart
     @GET("feedback_repository/{language}/applications/{applicationId}/feedbacks/{feedbackId}")
     Call<Feedback> getFeedback(@Header("Authorization") String token, @Path("language") String language, @Path("applicationId") long applicationId, long feedbackId);
 
-    @Multipart
     @GET("feedback_repository/{language}/applications/{applicationId}/feedbacks")
     Call<List<Feedback>> getFeedbackList(@Header("Authorization") String token, @Path("language") String language, @Path("applicationId") long applicationId);
 

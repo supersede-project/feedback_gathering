@@ -161,7 +161,7 @@ public class FeedbackActivity extends AbstractBaseActivity implements AudioFeedb
         Feedback feedback = FeedbackUtility.createFeedback(this, feedbackParts);
 
         feedbackDetailsBean = FeedbackUtility.feedbackToFeedbackDetailsBean(this, feedback, feedbackTitle, feedbackTags);
-        FeedbackService.getInstance().createFeedback(this, this, feedback, ImageUtility.imageToBytes(screenshot));
+        FeedbackService.getInstance(this).createFeedback(this, this, feedback, ImageUtility.imageToBytes(screenshot));
         Utils.wipeImages(this);
     }
 

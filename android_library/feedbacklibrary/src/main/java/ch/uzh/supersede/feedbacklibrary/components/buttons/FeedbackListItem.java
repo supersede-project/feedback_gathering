@@ -54,12 +54,7 @@ public class FeedbackListItem extends LinearLayout implements Comparable, ISorta
         setOrientation(VERTICAL);
         LinearLayoutCompat.LayoutParams longParams = new LinearLayoutCompat.LayoutParams(innerLayoutWidth, partHeight / 2);
         LinearLayoutCompat.LayoutParams shortParams = new LinearLayoutCompat.LayoutParams(innerLayoutWidth / 2, partHeight / 2);
-        int textColor = 0;
-        if (ColorUtility.isDark(backgroundColor)){
-            textColor = ContextCompat.getColor(context, R.color.white);
-        }else{
-            textColor = ContextCompat.getColor(context, R.color.black);
-        }
+        int textColor = ColorUtility.getTextColor(context, backgroundColor);
         LinearLayout upperWrapperLayout = createWrapperLayout(longParams, context, HORIZONTAL);
         LinearLayout lowerWrapperLayout = createWrapperLayout(longParams, context, HORIZONTAL);
         if (ACTIVE.check(context)) {
