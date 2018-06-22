@@ -9,7 +9,7 @@ import ch.uzh.supersede.feedbacklibrary.entrypoint.ILabelFeedbackConfiguration;
 import ch.uzh.supersede.feedbacklibrary.entrypoint.IRatingFeedbackConfiguration;
 import ch.uzh.supersede.feedbacklibrary.entrypoint.IScreenshotFeedbackConfiguration;
 import ch.uzh.supersede.feedbacklibrary.entrypoint.ITextFeedbackConfiguration;
-import ch.uzh.supersede.feedbacklibrary.entrypoint.ITitleFeedbackConfiguration;
+import ch.uzh.supersede.feedbacklibrary.entrypoint.ITitleAndTagFeedbackConfiguration;
 
 public class DefaultConfiguration implements
         IFeedbackBehavior,
@@ -21,7 +21,7 @@ public class DefaultConfiguration implements
         IRatingFeedbackConfiguration,
         IScreenshotFeedbackConfiguration,
         ITextFeedbackConfiguration,
-        ITitleFeedbackConfiguration {
+        ITitleAndTagFeedbackConfiguration {
     private static DefaultConfiguration defaultConfiguration;
 
     private DefaultConfiguration() {
@@ -68,22 +68,57 @@ public class DefaultConfiguration implements
 
     @Override
     public int getConfiguredMinUserNameLength() {
-        return 0;
+        return 5;
     }
 
     @Override
     public int getConfiguredMaxUserNameLength() {
-        return 0;
+        return 35;
     }
 
     @Override
     public int getConfiguredMinResponseLength() {
-        return 0;
+        return 10;
     }
 
     @Override
     public int getConfiguredMaxResponseLength() {
-        return 0;
+        return 255;
+    }
+
+    @Override
+    public int getConfiguredMinTitleLength() {
+        return 5;
+    }
+
+    @Override
+    public int getConfiguredMaxTitleLength() {
+        return 100;
+    }
+
+    @Override
+    public int getConfiguredMinTagLength() {
+        return 3;
+    }
+
+    @Override
+    public int getConfiguredMaxTagLength() {
+        return 20;
+    }
+
+    @Override
+    public int getConfiguredMinTagNumber() {
+        return 1;
+    }
+
+    @Override
+    public int getConfiguredMaxTagNumber() {
+        return 5;
+    }
+
+    @Override
+    public int getConfiguredMaxTagRecommendationNumber() {
+        return 5;
     }
 
     @Override

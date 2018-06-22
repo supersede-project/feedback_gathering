@@ -66,7 +66,15 @@ abstract class AbstractFeedbackDatabase {
         public static final String COLUMN_NAME_VALUE = " VALUE ";
         private static final String COLUMN_NAME_TIMESTAMP = " TIMESTAMP ";
     }
-
+    //Table for Tags
+    protected static class TagTableEntry implements BaseColumns {
+        private TagTableEntry(){
+        }
+        public static final String TABLE_NAME = " TAG_TABLE ";
+        public static final String COLUMN_NAME_FEEDBACK_ID = " FEEDBACK_ID ";
+        public static final String COLUMN_NAME_TAG = " TAG ";
+    }
+    //Table for Feedback
     protected static class FeedbackTableEntry implements BaseColumns {
         private FeedbackTableEntry(){
         }
@@ -104,6 +112,10 @@ abstract class AbstractFeedbackDatabase {
                         DataTableEntry.COLUMN_NAME_KEY + TEXT_TYPE + COMMA_SEP +
                         DataTableEntry.COLUMN_NAME_VALUE + DATA_TYPE + COMMA_SEP +
                         DataTableEntry.COLUMN_NAME_TIMESTAMP + NUMBER_TYPE  + BRACES_CLOSE,
+                CREATE_TABLE_IF_NOT_EXISTS + TagTableEntry.TABLE_NAME + BRACES_OPEN +
+                        TagTableEntry._ID + NUMBER_TYPE + KEY_TYPE + COMMA_SEP +
+                        TagTableEntry.COLUMN_NAME_FEEDBACK_ID + NUMBER_TYPE + COMMA_SEP +
+                        TagTableEntry.COLUMN_NAME_TAG + TEXT_TYPE  + BRACES_CLOSE,
                 CREATE_TABLE_IF_NOT_EXISTS + FeedbackTableEntry.TABLE_NAME + BRACES_OPEN +
                         FeedbackTableEntry._ID + NUMBER_TYPE + KEY_TYPE + COMMA_SEP +
                         FeedbackTableEntry.COLUMN_NAME_FEEDBACK_ID + NUMBER_TYPE + COMMA_SEP +
@@ -126,6 +138,7 @@ abstract class AbstractFeedbackDatabase {
                 ALTER_TABLE + NumberTableEntry.TABLE_NAME + RENAME_TO_TEMP + NumberTableEntry.TABLE_NAME + "'",
                 ALTER_TABLE + TextTableEntry.TABLE_NAME + RENAME_TO_TEMP + TextTableEntry.TABLE_NAME + "'",
                 ALTER_TABLE + DataTableEntry.TABLE_NAME + RENAME_TO_TEMP + DataTableEntry.TABLE_NAME + "'",
+                ALTER_TABLE + TagTableEntry.TABLE_NAME + RENAME_TO_TEMP + TagTableEntry.TABLE_NAME + "'",
                 ALTER_TABLE + FeedbackTableEntry.TABLE_NAME + RENAME_TO_TEMP + FeedbackTableEntry.TABLE_NAME + "'",
         };
     }
@@ -135,6 +148,7 @@ abstract class AbstractFeedbackDatabase {
                 DROP_TABLE_IF_EXISTS + NumberTableEntry.TABLE_NAME,
                 DROP_TABLE_IF_EXISTS + TextTableEntry.TABLE_NAME,
                 DROP_TABLE_IF_EXISTS + DataTableEntry.TABLE_NAME,
+                DROP_TABLE_IF_EXISTS + TagTableEntry.TABLE_NAME,
                 DROP_TABLE_IF_EXISTS + FeedbackTableEntry.TABLE_NAME,
         };
     }
@@ -149,6 +163,9 @@ abstract class AbstractFeedbackDatabase {
                 INSERT_INTO + DataTableEntry.TABLE_NAME + BRACES_OPEN + DataTableEntry._ID + COMMA_SEP + DataTableEntry.COLUMN_NAME_KEY + COMMA_SEP +
                         NumberTableEntry.COLUMN_NAME_VALUE + COMMA_SEP + DataTableEntry.COLUMN_NAME_TIMESTAMP + BRACES_CLOSE + SUB_SELECT + DataTableEntry._ID + COMMA_SEP + DataTableEntry.COLUMN_NAME_KEY + COMMA_SEP +
                         NumberTableEntry.COLUMN_NAME_VALUE + COMMA_SEP + DataTableEntry.COLUMN_NAME_TIMESTAMP + FROM_TEMP + DataTableEntry.TABLE_NAME,
+                INSERT_INTO + TagTableEntry.TABLE_NAME + BRACES_OPEN + TagTableEntry._ID + COMMA_SEP + TagTableEntry.COLUMN_NAME_FEEDBACK_ID + COMMA_SEP +
+                        TagTableEntry.COLUMN_NAME_TAG + BRACES_CLOSE + SUB_SELECT + TagTableEntry._ID + COMMA_SEP + TagTableEntry.COLUMN_NAME_FEEDBACK_ID + COMMA_SEP +
+                        TagTableEntry.COLUMN_NAME_TAG + FROM_TEMP + TagTableEntry.TABLE_NAME,
                 INSERT_INTO + FeedbackTableEntry.TABLE_NAME + BRACES_OPEN +
                         FeedbackTableEntry._ID + COMMA_SEP +
                         FeedbackTableEntry.COLUMN_NAME_FEEDBACK_ID + COMMA_SEP +
@@ -185,7 +202,8 @@ abstract class AbstractFeedbackDatabase {
         return new String[]{
                 DROP_TABLE_IF_EXISTS_TEMP + NumberTableEntry.TABLE_NAME,
                 DROP_TABLE_IF_EXISTS_TEMP + TextTableEntry.TABLE_NAME,
-                DROP_TABLE_IF_EXISTS_TEMP + NumberTableEntry.TABLE_NAME,
+                DROP_TABLE_IF_EXISTS_TEMP + DataTableEntry.TABLE_NAME,
+                DROP_TABLE_IF_EXISTS_TEMP + TagTableEntry.TABLE_NAME,
                 DROP_TABLE_IF_EXISTS_TEMP + FeedbackTableEntry.TABLE_NAME,
         };
     }
@@ -199,6 +217,7 @@ abstract class AbstractFeedbackDatabase {
 
         FeedbackDbHelper(Context context) {
             super(context, Environment.getExternalStorageDirectory() + File.separator + FILE_DIR + File.separator + context.getSharedPreferences(SHARED_PREFERENCES_ID, MODE_PRIVATE).getString(SHARED_PREFERENCES_HOST_APPLICATION_NAME,"")+DATABASE_NAME+DATABASE_ENDING, null, DATABASE_VERSION);
+            onCreate(getWritableDatabase());
         }
 
         public void onCreate(SQLiteDatabase db) {

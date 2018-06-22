@@ -42,6 +42,13 @@ public class LocalConfigurationBean implements Serializable {
     private int maxUserNameLength;
     private int minResponseLength;
     private int maxResponseLength;
+    private int minTitleLength;
+    private int maxTitleLength;
+    private int minTagLength;
+    private int maxTagLength;
+    private int minTagNumber;
+    private int maxTagNumber;
+    private int maxTagRecommendationNumber;
     // IFeedbackStyle
     private FEEDBACK_STYLE style;
     // Application
@@ -51,9 +58,6 @@ public class LocalConfigurationBean implements Serializable {
     private String hostApplicationLanguage;
     private Integer[] topColors;
     private boolean coloringVertical;
-
-    private LocalConfigurationBean() {
-    }
 
     public LocalConfigurationBean(Activity activity, Integer[] topColors) {
         this.topColors = topColors;
@@ -106,6 +110,13 @@ public class LocalConfigurationBean implements Serializable {
             this.textLabel = DefaultConfiguration.getInstance().getConfiguredTextFeedbackLabel();
             this.textMaxLength = DefaultConfiguration.getInstance().getConfiguredTextFeedbackMaxLength();
             this.textMinLength = DefaultConfiguration.getInstance().getConfiguredTextFeedbackMinLength();
+            this.minTitleLength = DefaultConfiguration.getInstance().getConfiguredMinTitleLength();
+            this.maxTitleLength = DefaultConfiguration.getInstance().getConfiguredMaxTitleLength();
+            this.minTagLength = DefaultConfiguration.getInstance().getConfiguredMinTagLength();
+            this.maxTagLength = DefaultConfiguration.getInstance().getConfiguredMaxTagLength();
+            this.minTagNumber = DefaultConfiguration.getInstance().getConfiguredMinTagNumber();
+            this.maxTagNumber = DefaultConfiguration.getInstance().getConfiguredMaxTagNumber();
+            this.maxTagRecommendationNumber = DefaultConfiguration.getInstance().getConfiguredMaxTagRecommendationNumber();
         }
         if (configuration instanceof IAudioFeedbackConfiguration) {
                 IAudioFeedbackConfiguration audioConfiguration = (IAudioFeedbackConfiguration) configuration;
@@ -139,8 +150,15 @@ public class LocalConfigurationBean implements Serializable {
                 this.textMaxLength = textConfiguration.getConfiguredTextFeedbackMaxLength();
                 this.textMinLength = textConfiguration.getConfiguredTextFeedbackMinLength();
         }
-        if (configuration instanceof ITitleFeedbackConfiguration) {
-                //TODO
+        if (configuration instanceof ITitleAndTagFeedbackConfiguration) {
+            ITitleAndTagFeedbackConfiguration titleAndTagConfiguration = (ITitleAndTagFeedbackConfiguration) configuration;
+            this.minTitleLength = titleAndTagConfiguration.getConfiguredMinTitleLength();
+            this.maxTitleLength = titleAndTagConfiguration.getConfiguredMaxTitleLength();
+            this.minTagLength = titleAndTagConfiguration.getConfiguredMinTagLength();
+            this.maxTagLength = titleAndTagConfiguration.getConfiguredMaxTagLength();
+            this.minTagNumber = titleAndTagConfiguration.getConfiguredMinTagNumber();
+            this.maxTagNumber = titleAndTagConfiguration.getConfiguredMaxTagNumber();
+            this.maxTagRecommendationNumber = titleAndTagConfiguration.getConfiguredMaxTagRecommendationNumber();
         }
     }
 
@@ -310,6 +328,34 @@ public class LocalConfigurationBean implements Serializable {
         return maxResponseLength;
     }
 
+    public int getMinTagLength() {
+        return minTagLength;
+    }
+
+    public int getMaxTagLength() {
+        return maxTagLength;
+    }
+
+    public int getMinTagNumber() {
+        return minTagNumber;
+    }
+
+    public int getMaxTagNumber() {
+        return maxTagNumber;
+    }
+
+    public int getMaxTagRecommendationNumber() {
+        return maxTagRecommendationNumber;
+    }
+
+    public int getMinTitleLength() {
+        return minTitleLength;
+    }
+
+    public int getMaxTitleLength() {
+        return maxTitleLength;
+    }
+
     public FEEDBACK_STYLE getStyle() {
         return style;
     }
@@ -337,4 +383,5 @@ public class LocalConfigurationBean implements Serializable {
     public boolean isColoringVertical() {
         return coloringVertical;
     }
+
 }

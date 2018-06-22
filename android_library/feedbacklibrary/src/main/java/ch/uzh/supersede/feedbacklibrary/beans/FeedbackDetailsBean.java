@@ -5,7 +5,6 @@ import android.graphics.Bitmap;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 import ch.uzh.supersede.feedbacklibrary.utils.CompareUtility;
 import ch.uzh.supersede.feedbacklibrary.utils.Enums.FEEDBACK_STATUS;
@@ -14,10 +13,8 @@ import ch.uzh.supersede.feedbacklibrary.utils.ImageUtility;
 public class FeedbackDetailsBean implements Serializable {
 
     private long feedbackId;
-    private String title;
     private String description;
     private String userName;
-    private String[] labels;
     private long timeStamp;
     private int upVotes;
     private FEEDBACK_STATUS feedbackStatus;
@@ -30,10 +27,8 @@ public class FeedbackDetailsBean implements Serializable {
 
     public static class Builder {
         private long feedbackId;
-        private String title;
         private String description;
         private String userName;
-        private String[] labels;
         private long timeStamp;
         private int upVotes;
         private FEEDBACK_STATUS feedbackStatus;
@@ -45,11 +40,6 @@ public class FeedbackDetailsBean implements Serializable {
             //NOP
         }
 
-        public Builder withTitle(String title) {
-            this.title = title;
-            return this;
-        }
-
         public Builder withDescription(String description) {
             this.description = description;
             return this;
@@ -57,11 +47,6 @@ public class FeedbackDetailsBean implements Serializable {
 
         public Builder withUserName(String userName) {
             this.userName = userName;
-            return this;
-        }
-
-        public Builder withLabels(String... labels) {
-            this.labels = labels;
             return this;
         }
 
@@ -101,15 +86,13 @@ public class FeedbackDetailsBean implements Serializable {
         }
 
         public FeedbackDetailsBean build() {
-            if (CompareUtility.notNull(feedbackId, title, userName, timeStamp, description, feedbackStatus, feedbackBean)) {
+            if (CompareUtility.notNull(feedbackId, userName, timeStamp, description, feedbackStatus, feedbackBean)) {
                 FeedbackDetailsBean bean = new FeedbackDetailsBean();
                 bean.feedbackId = feedbackId;
-                bean.title = this.title;
                 bean.description = this.description;
                 bean.userName = this.userName;
                 bean.timeStamp = this.timeStamp;
                 bean.upVotes = this.upVotes;
-                bean.labels = labels;
                 bean.feedbackStatus = this.feedbackStatus;
                 bean.feedbackResponses = this.feedbackResponses;
                 bean.feedbackBean = this.feedbackBean;
@@ -121,7 +104,7 @@ public class FeedbackDetailsBean implements Serializable {
     }
 
     public String getTitle() {
-        return title;
+        return feedbackBean.getTitle();
     }
 
     public String getDescription() {
@@ -156,8 +139,8 @@ public class FeedbackDetailsBean implements Serializable {
         return feedbackBean;
     }
 
-    public String[] getLabels() {
-        return labels;
+    public String[] getTags() {
+        return feedbackBean.getTags();
     }
 
     public long getFeedbackId() {

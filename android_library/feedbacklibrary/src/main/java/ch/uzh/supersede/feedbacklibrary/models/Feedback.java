@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import ch.uzh.supersede.feedbacklibrary.beans.LocalConfigurationBean;
 import ch.uzh.supersede.feedbacklibrary.utils.CompareUtility;
 
 public class Feedback implements Serializable {
@@ -44,10 +45,15 @@ public class Feedback implements Serializable {
     private String language;
     private Date createdAt;
     private Date updatedAt;
+    private String[] tags;
     //private Enums.FEEDBACK_STATUS feedbackStatus; TODO [jfo]
 
 
     private Feedback() {
+    }
+
+    public String[] getTags() {
+        return tags;
     }
 
     public static class Builder {
@@ -59,6 +65,7 @@ public class Feedback implements Serializable {
         private List<RatingFeedback> ratingFeedbackList;
         private List<ScreenshotFeedback> screenshotFeedbackList;
         private List<TextFeedback> textFeedbackList;
+        private String[] tags;
 
         public Builder() {
             //NOP
@@ -91,6 +98,11 @@ public class Feedback implements Serializable {
             if (audioFeedback != null && audioFeedback.getAudioPath() != null) {
                 audioFeedbackList.add(audioFeedback);
             }
+            return this;
+        }
+
+        public Builder withTags(String[] feedbackTags) {
+            this.tags = feedbackTags;
             return this;
         }
 
@@ -137,10 +149,13 @@ public class Feedback implements Serializable {
                 bean.ratingFeedbackList = new ArrayList<>(this.ratingFeedbackList);
                 bean.screenshotFeedbackList = new ArrayList<>(this.screenshotFeedbackList);
                 bean.textFeedbackList = new ArrayList<>(this.textFeedbackList);
+                bean.tags = tags;
+                bean.createdAt = new Date();
                 return bean;
             }
             return null;
         }
+
     }
 
     public long getApplicationId() {

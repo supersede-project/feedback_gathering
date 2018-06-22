@@ -143,7 +143,7 @@ public class FeedbackDetailsActivity extends AbstractBaseActivity {
             new PopUp(this)
                     .withTitle(getString(R.string.details_labels))
                     .withoutCancel()
-                    .withMessage(StringUtility.concatWithDelimiter(", ", feedbackDetailsBean.getLabels())).buildAndShow();
+                    .withMessage(StringUtility.concatWithDelimiter(", ", feedbackDetailsBean.getTags())).buildAndShow();
         }else if (view.getId() == imageButton.getId()) {
             final Dialog builder = new Dialog(FeedbackDetailsActivity.this);
             builder.requestWindowFeature(Window.FEATURE_NO_TITLE);

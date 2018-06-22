@@ -16,6 +16,7 @@ public class FeedbackBean implements Serializable{
 
     private long feedbackId;
     private String title;
+    private String[] tags;
     private String userName;
     private long timeStamp;
     private int upVotes;
@@ -31,6 +32,7 @@ public class FeedbackBean implements Serializable{
     public static class Builder {
         private long feedbackId;
         private String title;
+        private String[] tags;
         private String userName;
         private long timeStamp;
         private int upVotes;
@@ -46,6 +48,11 @@ public class FeedbackBean implements Serializable{
 
         public Builder withTitle(String title) {
             this.title = title;
+            return this;
+        }
+
+        public Builder withTags(String[] tags) {
+            this.tags = tags;
             return this;
         }
 
@@ -95,10 +102,11 @@ public class FeedbackBean implements Serializable{
 
 
         public FeedbackBean build() {
-            if (CompareUtility.notNull(feedbackId,title,userName,timeStamp,maxUpVotes, minUpVotes,feedbackStatus)) {
+            if (CompareUtility.notNull(feedbackId,title,tags,userName,timeStamp,maxUpVotes, minUpVotes,feedbackStatus)) {
                 FeedbackBean bean = new FeedbackBean();
                 bean.feedbackId = feedbackId;
                 bean.title = this.title;
+                bean.tags = this.tags;
                 bean.userName = this.userName;
                 bean.timeStamp = this.timeStamp;
                 bean.upVotes = this.upVotes;
@@ -115,6 +123,10 @@ public class FeedbackBean implements Serializable{
 
     public String getTitle() {
         return title;
+    }
+
+    public String[] getTags() {
+        return tags;
     }
 
     public String getUserName() {

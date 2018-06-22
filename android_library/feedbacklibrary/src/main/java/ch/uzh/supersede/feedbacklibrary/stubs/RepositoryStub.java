@@ -58,10 +58,8 @@ public class RepositoryStub {
         return new FeedbackDetailsBean.Builder()
                 .withFeedbackId(feedbackBean.getFeedbackId())
                 .withFeedbackBean(feedbackBean)
-                .withTitle(title)
                 .withDescription(description)
                 .withUserName(userName)
-                .withLabels(labels)
                 .withTimestamp(timeStamp)
                 .withStatus(status)
                 .withUpVotes(upVotes)
@@ -223,7 +221,6 @@ public class RepositoryStub {
         int maxUpVotes = 50; //FIXME [jfo]
 
 
-        //MBO TODO: TITLE AND LABELS BEFORE CREATION
         long feedbackId = NumberUtility.randomLong();
         String title = null;
         String description = null;
@@ -242,6 +239,7 @@ public class RepositoryStub {
         FeedbackBean feedbackBean = new FeedbackBean.Builder()
                 .withFeedbackId(feedbackId)
                 .withTitle(title == null ? content[1] : title)
+                .withTags(GeneratorStub.BagOfTags.pickRandom(3))
                 .withUserName(userName)
                 .withTimestamp(timeStamp)
                 .withUpVotes(upVotes)
@@ -257,10 +255,8 @@ public class RepositoryStub {
         return new FeedbackDetailsBean.Builder()
                 .withFeedbackId(feedbackBean.getFeedbackId())
                 .withFeedbackBean(feedbackBean)
-                .withTitle(feedbackBean.getTitle())
                 .withDescription(description == null ? content[0] : description)
                 .withUserName(userName)
-                .withLabels(labels)
                 .withTimestamp(timeStamp)
                 .withStatus(status)
                 .withUpVotes(upVotes)
@@ -282,7 +278,7 @@ public class RepositoryStub {
     public static void makeFeedbackPublic(FeedbackDetailsBean feedbackDetailsBean) {
         //TheoreticalCallToRepo
     }
-    public static Map<String,String> getFeedbackTags() {
+    public static Map<String,String> getFeedbackTags(Context context) {
         //TheoreticalCallToRepo
         ArrayList<String> loadedTags = new ArrayList<>(
                 Arrays.asList(
@@ -291,6 +287,9 @@ public class RepositoryStub {
                         "Design", "Handling", "Usability", "Audio", "Sensors", "Brightness", "GPS", "Accuracy", "Quality"));
         TreeMap<String,String> sortedTags = new TreeMap<>();
         for (String tag : loadedTags){
+            sortedTags.put(tag.toLowerCase(),tag);
+        }
+        for (String tag : FeedbackDatabase.getInstance(context).readTags(null)){
             sortedTags.put(tag.toLowerCase(),tag);
         }
         return sortedTags;

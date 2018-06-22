@@ -26,6 +26,7 @@ import ch.uzh.supersede.feedbacklibrary.beans.FeedbackDetailsBean;
 import ch.uzh.supersede.feedbacklibrary.components.views.AbstractFeedbackPartView;
 import ch.uzh.supersede.feedbacklibrary.components.views.AudioFeedbackView;
 import ch.uzh.supersede.feedbacklibrary.components.views.ScreenshotFeedbackView;
+import ch.uzh.supersede.feedbacklibrary.database.FeedbackDatabase;
 import ch.uzh.supersede.feedbacklibrary.models.AbstractFeedbackPart;
 import ch.uzh.supersede.feedbacklibrary.models.Feedback;
 import ch.uzh.supersede.feedbacklibrary.services.FeedbackService;
@@ -45,11 +46,15 @@ public class FeedbackActivity extends AbstractBaseActivity implements AudioFeedb
     private List<AbstractFeedbackPart> feedbackParts;
     private List<AbstractFeedbackPartView> feedbackPartViews;
     private FeedbackDetailsBean feedbackDetailsBean;
+    private String feedbackTitle;
+    private String[] feedbackTags;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_feedback);
+        feedbackTitle = getIntent().getStringExtra(EXTRA_KEY_FEEDBACK_TITLE);
+        feedbackTags = getIntent().getStringArrayExtra(EXTRA_KEY_FEEDBACK_TAGS);
         initView();
         onPostCreate();
     }
@@ -100,38 +105,17 @@ public class FeedbackActivity extends AbstractBaseActivity implements AudioFeedb
     }
 
     @Override
-    @SuppressWarnings("unchecked")
-    public void onEventCompleted(EventType eventType, Object response) {
-        switch (eventType) {
-            case CREATE_FEEDBACK:
-                if (VersionUtility.getDateVersion() > 2) {
-                    Intent intent = new Intent(this, FeedbackDetailsActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                    intent.putExtra(EXTRA_KEY_FEEDBACK_DETAIL_BEAN, feedbackDetailsBean);
-                    intent.putExtra(EXTRA_KEY_APPLICATION_CONFIGURATION, configuration);
-                    this.onBackPressed(); //This serves the purpose of erasing the Feedback Activity from the Back-Button
-                    startActivity(intent);
-                    overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
-                } else {
-                    Toast.makeText(getApplicationContext(), getResources().getString(R.string.feedback_success), Toast.LENGTH_SHORT).show();
-                    onBackPressed();
-                }
-                break;
-            default:
-                break;
-        }
-    }
-
-    @Override
     public void onEventFailed(EventType eventType, Object response) {
-        Log.e(FEEDBACK_ACTIVITY_TAG, "Failed to consume Event.");
-        DialogUtils.showInformationDialog(this, new String[]{getResources().getString(R.string.info_error)}, true);
+        String msg = "Failed to consume the Event.";
+        Log.e(FEEDBACK_ACTIVITY_TAG, msg);
+        DialogUtils.showInformationDialog(this, new String[]{getResources().getString(R.string.info_error),msg}, true);
     }
 
     @Override
     public void onConnectionFailed(EventType eventType) {
-        Log.e(FEEDBACK_ACTIVITY_TAG, "Failed to connect to Server.");
-        DialogUtils.showInformationDialog(this, new String[]{getResources().getString(R.string.info_error)}, true);
+        String msg = "Failed to connect to the Server.";
+        Log.e(FEEDBACK_ACTIVITY_TAG, msg);
+        DialogUtils.showInformationDialog(this, new String[]{getResources().getString(R.string.info_error),msg}, true);
     }
 
     private void initView() {
@@ -154,11 +138,36 @@ public class FeedbackActivity extends AbstractBaseActivity implements AudioFeedb
         Bitmap screenshot = Utils.loadAnnotatedImageFromDatabase(this);
         screenshot = screenshot != null ? screenshot : Utils.loadImageFromDatabase(this);
 
-        Feedback feedback = FeedbackUtility.createFeedback(this, feedbackParts);
+        Feedback feedback = FeedbackUtility.createFeedback(this, feedbackParts, feedbackTitle, feedbackTags);
 
         feedbackDetailsBean = FeedbackUtility.feedbackToFeedbackDetailsBean(this, feedback);
         FeedbackService.getInstance(this).createFeedback(this, this, feedback, ImageUtility.imageToBytes(screenshot));
         Utils.wipeImages(this);
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public void onEventCompleted(EventType eventType, Object response) {
+        switch (eventType) {
+            case CREATE_FEEDBACK:
+                if (VersionUtility.getDateVersion() > 2 ) {
+                    Intent intent = new Intent(this, FeedbackDetailsActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                    intent.putExtra(EXTRA_KEY_FEEDBACK_DETAIL_BEAN, feedbackDetailsBean);
+                    intent.putExtra(EXTRA_KEY_APPLICATION_CONFIGURATION, configuration);
+                    this.onBackPressed(); //This serves the purpose of erasing the Feedback Activity from the Back-Button
+                    startActivity(intent);
+                    overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+                } else {
+                    Toast.makeText(getApplicationContext(), getResources().getString(R.string.feedback_success), Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(getApplicationContext(), FeedbackHubActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(this,FeedbackHubActivity.class, true,intent);
+                }
+                break;
+            default:
+                break;
+        }
     }
 
     private void annotateMechanismView(Intent data) {
