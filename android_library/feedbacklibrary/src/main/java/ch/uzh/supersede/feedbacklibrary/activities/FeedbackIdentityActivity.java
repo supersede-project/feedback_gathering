@@ -1,11 +1,9 @@
 package ch.uzh.supersede.feedbacklibrary.activities;
 
 import android.content.*;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.*;
-import android.text.style.StyleSpan;
 import android.view.*;
 import android.widget.*;
 
@@ -17,10 +15,8 @@ import ch.uzh.supersede.feedbacklibrary.R;
 import ch.uzh.supersede.feedbacklibrary.stubs.RepositoryStub;
 import ch.uzh.supersede.feedbacklibrary.utils.PopUp;
 
-import static android.graphics.Typeface.*;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.EXTRA_KEY_FEEDBACK_TAGS;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.EXTRA_KEY_FEEDBACK_TITLE;
-import static ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility.USER_LEVEL.PASSIVE;
 
 public class FeedbackIdentityActivity extends AbstractBaseActivity {
     private Map<String,String> loadedTags = new TreeMap<>();
@@ -36,7 +32,7 @@ public class FeedbackIdentityActivity extends AbstractBaseActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_feedback_identity);
-        loadedTags = RepositoryStub.getFeedbackTags();
+        loadedTags = RepositoryStub.getFeedbackTags(this);
         buttonNext = getView(R.id.identity_button_next, Button.class);
         buttonBack = getView(R.id.identity_button_back, Button.class);
         tagContainer = getView(R.id.identity_container_tags, FlowLayout.class);
@@ -60,7 +56,7 @@ public class FeedbackIdentityActivity extends AbstractBaseActivity {
         editTitle.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus && "Input Feedback-Title here...".equals(editTitle.getText().toString())){
+                if (hasFocus && getString(R.string.identity_input_title).equals(editTitle.getText().toString())){
                     editTitle.setText(null);
                 }
             }
@@ -78,23 +74,23 @@ public class FeedbackIdentityActivity extends AbstractBaseActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (s.length() > 0 && !"Input Feedback-Tags here...".equals(s.toString())){
+                if (s.length() > 0 && !getString(R.string.identity_input_tags).equals(s.toString())){
                     if (s.toString().toCharArray()[s.length()-1]==' '){
                         if (s.toString().length()<configuration.getMinTagLength()){
-                            Toast.makeText(getApplicationContext(),"Tag too short! Min: "+configuration.getMinTagLength(),Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(),getString(R.string.identity_too_short)+configuration.getMinTagLength(),Toast.LENGTH_SHORT).show();
                             editTag.setText(s.toString().substring(0,s.length()-1));
                             editTag.setSelection(s.length()-1);
                         }else if (s.toString().length()>configuration.getMaxTagLength()){
-                            Toast.makeText(getApplicationContext(),"Tag too long! Max: "+configuration.getMaxTagLength(),Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(),getString(R.string.identity_too_long)+configuration.getMaxTagLength(),Toast.LENGTH_SHORT).show();
                             editTag.setText(s.toString().substring(0,s.length()-1));
                             editTag.setSelection(s.length()-1);
                         }else if (createdTags.size()==configuration.getMaxTagNumber()){
-                            Toast.makeText(getApplicationContext(),"Maximum number of Tags! Delete some to continue!",Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), R.string.identity_max_tags,Toast.LENGTH_SHORT).show();
                             editTag.setText(s.toString().substring(0,s.length()-1));
                             editTag.setSelection(s.length()-1);
                         }else{
                             if (createdTags.contains(s.toString().substring(0,s.length()-1))){
-                                Toast.makeText(getApplicationContext(),"Tag already in your Tag-List!",Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getApplicationContext(), R.string.identity_tag_duplicate,Toast.LENGTH_SHORT).show();
                                 editTag.setText(s.toString().substring(0,s.length()-1));
                                 editTag.setSelection(s.length()-1);
                             }else{
@@ -112,7 +108,7 @@ public class FeedbackIdentityActivity extends AbstractBaseActivity {
         editTag.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus && "Input Feedback-Tags here...".equals(editTag.getText().toString())){
+                if (hasFocus && getString(R.string.identity_input_tags).equals(editTag.getText().toString())){
                     editTag.setText(null);
                 }
             }
@@ -122,9 +118,16 @@ public class FeedbackIdentityActivity extends AbstractBaseActivity {
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_DOWN){
                     if (createdTags.size()< configuration.getMaxTagNumber()){
-                        addTag(editTag.getText().toString());
+                        String s = editTag.getText().toString();
+                        if (s.length()<configuration.getMinTagLength()){
+                            Toast.makeText(getApplicationContext(),getString(R.string.identity_too_short)+configuration.getMinTagLength(),Toast.LENGTH_SHORT).show();
+                        }else if (s.length()>configuration.getMaxTagLength()){
+                            Toast.makeText(getApplicationContext(),getString(R.string.identity_too_long)+configuration.getMaxTagLength(),Toast.LENGTH_SHORT).show();
+                        }else{
+                            addTag(s);
+                        }
                     }else{
-                        Toast.makeText(getApplicationContext(),"Maximum number of Tags reached! Max: "+configuration.getMaxTagNumber(),Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(),getString(R.string.identity_max_tags)+configuration.getMaxTagNumber(),Toast.LENGTH_SHORT).show();
                     }
                 }
                 return false;
@@ -169,7 +172,7 @@ public class FeedbackIdentityActivity extends AbstractBaseActivity {
                     if (createdTags.size()<configuration.getMaxTagNumber()){
                         addTag(((Button)v).getText().toString());
                     }else{
-                        Toast.makeText(getApplicationContext(),"Maximum number of Tags! Max: "+configuration.getMaxTagLength(),Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(),getString(R.string.identity_max_tags)+configuration.getMaxTagLength(),Toast.LENGTH_SHORT).show();
                     }
                 }
             });
@@ -199,8 +202,8 @@ public class FeedbackIdentityActivity extends AbstractBaseActivity {
     public void onButtonClicked(View view) {
         if (view.getId() == buttonBack.getId()){
             new PopUp(this)
-                    .withTitle("Cancel Creation")
-                    .withMessage("Do you want to cancel the Feedback-Creation?")
+                    .withTitle(getString(R.string.identity_cancel))
+                    .withMessage(getString(R.string.identity_cancel_body))
                     .withCustomOk(getString(R.string.hub_confirm), new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
@@ -212,12 +215,12 @@ public class FeedbackIdentityActivity extends AbstractBaseActivity {
             String message = validateInput();
             if (message == null){
                 Intent intent = new Intent(getApplicationContext(), FeedbackActivity.class);
-                intent.putExtra(EXTRA_KEY_FEEDBACK_TITLE,editTitle.toString());
+                intent.putExtra(EXTRA_KEY_FEEDBACK_TITLE,editTitle.getText().toString());
                 intent.putExtra(EXTRA_KEY_FEEDBACK_TAGS,createdTags.toArray(new String[createdTags.size()]));
-                startActivity(this, FeedbackActivity.class);
+                startActivity(this, FeedbackActivity.class,false, intent);
             }else{
                 new PopUp(this)
-                        .withTitle("Input Incomplete")
+                        .withTitle(getString(R.string.identity_incomplete))
                         .withMessage(message)
                         .withCustomOk(getString(R.string.hub_confirm), new DialogInterface.OnClickListener() {
                             @Override
@@ -231,14 +234,14 @@ public class FeedbackIdentityActivity extends AbstractBaseActivity {
 
     private String validateInput() {
         String errorMessage = null;
-        if ("Input Feedback-Title here...".equals(editTitle.getText().toString())){
-            errorMessage = "Specify a Title!";
+        if (getString(R.string.identity_input_title).equals(editTitle.getText().toString())){
+            errorMessage = getString(R.string.identity_warn_specify_title);
         } else if (editTitle.getText().length() < configuration.getMinTitleLength()){
-            errorMessage = "Title too short! Minimum Length: "+configuration.getMinTitleLength();
+            errorMessage = getString(R.string.identity_warn_title_too_short)+configuration.getMinTitleLength();
         }else if (editTitle.getText().length() > configuration.getMaxTitleLength()){
-            errorMessage = "Title too long! Maximum Length: "+configuration.getMaxTitleLength();
+            errorMessage = getString(R.string.identity_warn_title_too_long)+configuration.getMaxTitleLength();
         }else if (createdTags.size() < configuration.getMinTagNumber()){
-            errorMessage = "Not enough Tags! Min: "+configuration.getMinTagNumber();
+            errorMessage = getString(R.string.identity_warn_too_few_tags)+configuration.getMinTagNumber();
         }
             return errorMessage;
     }

@@ -255,11 +255,11 @@ public class FeedbackHubActivity extends AbstractBaseActivity implements IFeedba
         if (view != null) {
             int i = view.getId();
             if (i == R.id.hub_button_list) {
-                startActivity(this, FeedbackListActivity.class);
+                startActivity(this, FeedbackListActivity.class,false);
             } else if (i == R.id.hub_button_feedback) {
-                startActivity(this, FeedbackIdentityActivity.class);
+                startActivity(this, FeedbackIdentityActivity.class,false);
             } else if (i == R.id.hub_button_settings) {
-                startActivity(this, FeedbackSettingsActivity.class);
+                startActivity(this, FeedbackSettingsActivity.class,false);
             } else if (i == R.id.hub_button_user_level) {
                 switch (userLevel.getLevel()) {
                     case 0:

@@ -63,7 +63,7 @@ public abstract class AbstractBaseActivity extends AppCompatActivity {
         }
     }
 
-    protected <T extends Activity> void startActivity(T startActivity, Class<?> activityToStart, Intent... handoverIntent) {
+    protected <T extends Activity> void startActivity(T startActivity, Class<?> activityToStart, boolean destruction, Intent... handoverIntent) {
         Intent intent = null;
         if (handoverIntent == null || handoverIntent.length == 0){
             intent = new Intent(startActivity.getApplicationContext(), activityToStart);
@@ -74,6 +74,9 @@ public abstract class AbstractBaseActivity extends AppCompatActivity {
         handOverConfigurationToIntent(intent);
         startActivity.startActivity(intent);
         startActivity.overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+        if (destruction){
+            startActivity.finish();
+        }
     }
 
     protected void handOverConfigurationToIntent(Intent intent) {

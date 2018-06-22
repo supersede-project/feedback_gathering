@@ -23,9 +23,9 @@ public class FeedbackUtility {
     private FeedbackUtility() {
     }
 
-    public static Feedback createFeedback(Context context, List<AbstractFeedbackPart> feedbackPart) {
+    public static Feedback createFeedback(Context context, List<AbstractFeedbackPart> feedbackPart, String feedbackTitle, String[] feedbackTags) {
         return new Feedback.Builder()
-                //.withTitle() TODO not yet implemented
+                .withTitle(feedbackTitle)
                 .withUserIdentification(FeedbackDatabase.getInstance(context).readString(USER_NAME, null))
                 .withContextInformation(context)
                 .withAudioFeedback((AudioFeedback) getFeedbackPart(feedbackPart, AudioFeedback.class))
@@ -33,6 +33,7 @@ public class FeedbackUtility {
                 .withRatingFeedback((RatingFeedback) getFeedbackPart(feedbackPart, RatingFeedback.class))
                 .withScreenshotFeedback((ScreenshotFeedback) getFeedbackPart(feedbackPart, ScreenshotFeedback.class))
                 .withTextFeedback((TextFeedback) getFeedbackPart(feedbackPart, TextFeedback.class))
+                .withTags(feedbackTags)
                 .build();
     }
 
@@ -45,7 +46,7 @@ public class FeedbackUtility {
         return null;
     }
 
-    public static FeedbackDetailsBean feedbackToFeedbackDetailsBean(Context context, Feedback feedback, String title, String[] tags) {
+    public static FeedbackDetailsBean feedbackToFeedbackDetailsBean(Context context, Feedback feedback) {
         int minUpVotes = 0; // TODO not yet implemented
         int maxUpVotes = 10; // TODO not yet implemented
         Enums.FEEDBACK_STATUS status = OPEN;  // TODO not yet implemented
@@ -58,15 +59,15 @@ public class FeedbackUtility {
         if (!feedback.getTextFeedbackList().isEmpty()) {
             description = feedback.getTextFeedbackList().get(0).getText();
         }
-
         String userName = feedback.getUserIdentification();
-        long timeStamp = feedback.getCreatedAt() != null ? feedback.getCreatedAt().getTime() : 0;
+        long timeStamp = feedback.getCreatedAt() != null ? feedback.getCreatedAt().getTime() : System.currentTimeMillis();
         Bitmap bitmap = Utils.loadAnnotatedImageFromDatabase(context);
         bitmap = bitmap != null ? bitmap : Utils.loadImageFromDatabase(context);
 
         FeedbackBean feedbackBean = new FeedbackBean.Builder()
                 .withFeedbackId(feedbackId)
-                .withTitle(title)
+                .withTitle(feedback.getTitle())
+                .withTags(feedback.getTags())
                 .withUserName(userName)
                 .withTimestamp(timeStamp)
                 .withUpVotes(upVotes)
@@ -81,7 +82,7 @@ public class FeedbackUtility {
                 .withTitle(feedbackBean.getTitle())
                 .withDescription(description)
                 .withUserName(userName)
-                .withTags(tags)
+                .withTags(feedback.getTags())
                 .withTimestamp(timeStamp)
                 .withStatus(status)
                 .withUpVotes(upVotes)

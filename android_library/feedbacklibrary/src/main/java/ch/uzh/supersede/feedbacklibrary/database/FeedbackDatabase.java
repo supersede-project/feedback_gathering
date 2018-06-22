@@ -229,11 +229,33 @@ public class FeedbackDatabase extends AbstractFeedbackDatabase {
             deleteWithoutClose(db, FeedbackTableEntry.TABLE_NAME, FeedbackTableEntry.COLUMN_NAME_FEEDBACK_ID, String.valueOf(feedbackBean.getFeedbackId()));
         } else {
             newRowId = db.insert(FeedbackTableEntry.TABLE_NAME, "null", values);
+            writeTags(db,feedbackBean.getFeedbackId(),feedbackBean.getTags());
         }
 
         cursor.close();
         db.close();
         return newRowId;
+    }
+
+    private void writeTags(SQLiteDatabase db, Long feedbackId, String[] tags){
+        for (String tag : tags){
+            ContentValues values = new ContentValues();
+            values.put(TagTableEntry.COLUMN_NAME_FEEDBACK_ID, String.valueOf(feedbackId));
+            values.put(TagTableEntry.COLUMN_NAME_TAG, tag);
+            db.insert(TagTableEntry.TABLE_NAME, "null", values);
+        }
+    }
+
+    public String[] readTags(Long feedbackId){
+        SQLiteDatabase db = databaseHelper.getReadableDatabase();
+        Cursor cursor = db.query(true,TagTableEntry.TABLE_NAME, new String[]{TagTableEntry.COLUMN_NAME_TAG}, TagTableEntry.COLUMN_NAME_FEEDBACK_ID + (feedbackId==null?NEQ+ZERO:EQ + feedbackId), null, null, null, null,
+                null);
+        ArrayList<String> tags = new ArrayList<>();
+        while (cursor.moveToNext()) {
+            tags.add(cursor.getString(0));
+        }
+        cursor.close();
+        return tags.toArray(new String[tags.size()]);
     }
 
     public void wipeAllStoredFeedback() {

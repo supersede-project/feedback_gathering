@@ -66,7 +66,7 @@
     <string name="dialog_close">Close</string>
 
     <string name="info_loading">Loading. Please wait.</string>
-    <string name="info_error">Oops. Something went wrong! Please try again later.</string>
+    <string name="info_error">Something went wrong! Please try again later.</string>
     <string name="info_application_unavailable">We apologize that the feedback tool is not available at the moment. Please try again later.</string>
 
     <!-- Overriding string resources in com.theartofdev.edmodo:android-image-cropper -->
@@ -154,12 +154,30 @@
     <string name="settings_general_title"><b>General Settings</b></string>
     <string name="settings_feedback_title"><b>Feedback Settings</b></string>
     <string name="settings_use_stubs">Use stubs</string>
-    <string name="settings_button_mine">Mine</string>
-    <string name="settings_button_others">Others</string>
+    <string name="settings_button_mine">Votes Sent</string>
+    <string name="settings_button_others">Votes Received</string>
     <string name="settings_button_subscriptions">Subscriptions</string>
     <string name="details_published">Published!</string>
     <!--Abstract-->
     <string name="abstract_button_clicked">Button \n\"%1$s\"\n clicked!</string>
     <string name="_open"><![CDATA[<]]></string>
     <string name="_close"><![CDATA[>]]></string>
+    <string name="identity_input_title">Input Feedback-Title here...</string>
+    <string name="identity_input_tags">Input Feedback-Tags here...</string>
+    <string name="identity_too_short">Tag too short! Minimum:</string>
+    <string name="identity_too_long">Tag too long! Maximum:</string>
+    <string name="identity_max_tags">Maximum number of Tags! Delete some to continue!</string>
+    <string name="identity_tag_duplicate">Tag already in your Tag-List!</string>
+    <string name="identity_cancel">Cancel Creation</string>
+    <string name="identity_cancel_body">Do you want to cancel the Feedback-Creation?</string>
+    <string name="identity_incomplete">Input Incomplete</string>
+    <string name="identity_warn_specify_title">Specify a Title!</string>
+    <string name="identity_warn_title_too_short">Title too short! Minimum Length:</string>
+    <string name="identity_warn_title_too_long">Title too long! Maximum Length:</string>
+    <string name="identity_warn_too_few_tags">Not enough Tags! Minimum:</string>
+    <string name="identity_next">Next</string>
+    <string name="identity_recommendations">Recommendatons:</string>
+    <string name="identity_tag_handling">The Space- and Enter-Key will add your Tag. Tap on a Tag to modify it.</string>
+    <string name="identity_back">Back</string>
+    <string name="identity_introduction">Let\'s begin with a juicy Title and some sweet Tags for your Feedback, shall we? ;)</string>
 </resources>

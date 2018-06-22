@@ -282,7 +282,7 @@ public class RepositoryStub {
     public static void makeFeedbackPublic(FeedbackDetailsBean feedbackDetailsBean) {
         //TheoreticalCallToRepo
     }
-    public static Map<String,String> getFeedbackTags() {
+    public static Map<String,String> getFeedbackTags(Context context) {
         //TheoreticalCallToRepo
         ArrayList<String> loadedTags = new ArrayList<>(
                 Arrays.asList(
@@ -291,6 +291,9 @@ public class RepositoryStub {
                         "Design", "Handling", "Usability", "Audio", "Sensors", "Brightness", "GPS", "Accuracy", "Quality"));
         TreeMap<String,String> sortedTags = new TreeMap<>();
         for (String tag : loadedTags){
+            sortedTags.put(tag.toLowerCase(),tag);
+        }
+        for (String tag : FeedbackDatabase.getInstance(context).readTags(null)){
             sortedTags.put(tag.toLowerCase(),tag);
         }
         return sortedTags;
