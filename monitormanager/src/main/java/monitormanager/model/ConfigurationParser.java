@@ -30,6 +30,8 @@ import com.google.gson.JsonObject;
 
 import eu.supersede.integration.api.monitoring.manager.types.AppStoreMonitorConfiguration;
 import eu.supersede.integration.api.monitoring.manager.types.GooglePlayMonitorConfiguration;
+import eu.supersede.integration.api.monitoring.manager.types.HttpMonitorConfiguration;
+import eu.supersede.integration.api.monitoring.manager.types.Method;
 import eu.supersede.integration.api.monitoring.manager.types.MonitorSpecificConfiguration;
 import eu.supersede.integration.api.monitoring.manager.types.TwitterMonitorConfiguration;
 
@@ -68,6 +70,17 @@ public class ConfigurationParser {
 		AppStoreMonitorConfiguration configuration = new AppStoreMonitorConfiguration();
 		setMonitorConfigurationParams(configuration, in);
 		if (in.has("appId")) configuration.setAppId(in.get("appId").getAsString());
+		
+		return configuration;
+	}
+	
+	public HttpMonitorConfiguration getHttpConfiguration(JsonObject json) throws Exception {
+		System.out.println("\t" + json);
+		JsonObject in = json.getAsJsonObject("QoS");
+		HttpMonitorConfiguration configuration = new HttpMonitorConfiguration();
+		setMonitorConfigurationParams(configuration, in);
+		if (in.has("url")) configuration.setUrl(in.get("url").getAsString());
+		if (in.has("method")) configuration.setMethod(Method.valueOf(in.get("method").getAsString()));
 		
 		return configuration;
 	}
