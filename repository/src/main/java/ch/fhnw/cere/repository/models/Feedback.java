@@ -171,6 +171,13 @@ public class Feedback {
         return mechanismFeedbacksWithMechanism;
     }
 
+    public void addRatingFeedback(RatingFeedback ratingFeedback) {
+        if(ratingFeedbacks == null) {
+            ratingFeedbacks = new ArrayList<>();
+        }
+        ratingFeedbacks.add(ratingFeedback);
+    }
+
     public long getId() {
         return id;
     }

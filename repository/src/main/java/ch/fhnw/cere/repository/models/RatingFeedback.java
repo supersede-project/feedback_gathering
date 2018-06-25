@@ -47,6 +47,12 @@ public class RatingFeedback implements MechanismFeedback {
         this.mechanismId = mechanismId;
     }
 
+    public RatingFeedback(String title, int rating, long mechanismId) {
+        this.title = title;
+        this.rating = rating;
+        this.mechanismId = mechanismId;
+    }
+
     public long getId() {
         return id;
     }
