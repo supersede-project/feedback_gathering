@@ -28,6 +28,11 @@ public class SecurityServiceImpl implements SecurityService {
         return isSuperAdmin();
     }
 
+    @Override
+    public Boolean hasNoPermissionRequirements() {
+        return true;
+    }
+
     private boolean isSuperAdmin() {
         return (getApiUser().getAuthorities().stream().map(Object::toString).collect(Collectors.toList()).contains(new SimpleGrantedAuthority(ApiUserRole.SUPER_ADMIN.getAuthority()).toString()));
     }

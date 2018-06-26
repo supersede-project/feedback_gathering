@@ -46,9 +46,6 @@ public class FeedbackController extends BaseController {
     private DataProviderIntegrator dataProviderIntegrator;
 
     @Autowired
-    private MdmFileIntegrator mdmFileIntegrator;
-
-    @Autowired
     private FeedbackCentralIntegrator feedbackCentralIntegrator;
 
     @Autowired
@@ -179,7 +176,7 @@ public class FeedbackController extends BaseController {
                 } else {
                     LOGGER.error("MdmFileIntegrator: File does NOT exist: " + file.getAbsolutePath());
                 }
-                mdmFileIntegrator.sendFile(file);
+                //mdmFileIntegrator.sendFile(file);
                 LOGGER.info("MdmFileIntegrator: File sent to WP2");
             }
         } catch (Exception e) {

@@ -5,4 +5,5 @@ public interface SecurityService {
 
     public Boolean hasAdminPermission(long applicationId);
     public Boolean hasSuperAdminPermission();
+    public Boolean hasNoPermissionRequirements();
 }

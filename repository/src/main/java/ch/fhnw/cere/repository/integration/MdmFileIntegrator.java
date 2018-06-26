@@ -14,7 +14,6 @@ import java.nio.file.Paths;
 /**
  * Forwards files to WP2.
  */
-@Component
 public class MdmFileIntegrator {
 
     @Value("${mdm.file_endpoint}")
