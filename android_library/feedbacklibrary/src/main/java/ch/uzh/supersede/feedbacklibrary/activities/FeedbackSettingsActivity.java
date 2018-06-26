@@ -2,16 +2,12 @@ package ch.uzh.supersede.feedbacklibrary.activities;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.v7.widget.ContentFrameLayout;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
-import android.widget.CompoundButton;
-import android.widget.LinearLayout;
-import android.widget.ScrollView;
-import android.widget.ToggleButton;
+import android.widget.*;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 import ch.uzh.supersede.feedbacklibrary.R;
 import ch.uzh.supersede.feedbacklibrary.beans.LocalFeedbackBean;
@@ -21,6 +17,7 @@ import ch.uzh.supersede.feedbacklibrary.components.buttons.VoteListItem;
 import ch.uzh.supersede.feedbacklibrary.database.FeedbackDatabase;
 import ch.uzh.supersede.feedbacklibrary.services.FeedbackService;
 import ch.uzh.supersede.feedbacklibrary.services.IFeedbackServiceEventListener;
+import ch.uzh.supersede.feedbacklibrary.utils.CompareUtility;
 
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.USE_STUBS;
 import static ch.uzh.supersede.feedbacklibrary.utils.Enums.SETTINGS_VIEW;
@@ -65,6 +62,17 @@ public class FeedbackSettingsActivity extends AbstractBaseActivity implements IF
             }
         });
 
+        colorLayouts(0,getView(R.id.settings_root,ContentFrameLayout.class));
+        colorTextOnly(0,
+                getView(R.id.settings_text_use_stubs,TextView.class),
+                getView(R.id.settings_text_feature_2,TextView.class),
+                getView(R.id.settings_text_feature_3,TextView.class),
+                getView(R.id.settings_text_title_general,TextView.class),
+                getView(R.id.settings_text_title_feedback,TextView.class));
+        colorViews(1,
+                getView(R.id.settings_toggle_use_stubs,ToggleButton.class),
+                getView(R.id.settings_toggle_feature_2,ToggleButton.class),
+                getView(R.id.settings_toggle_feature_3,ToggleButton.class));
         colorShape(0, myButton, othersButton, settingsButton);
         colorShape(1, myButton);
         colorViews(1,
@@ -92,18 +100,21 @@ public class FeedbackSettingsActivity extends AbstractBaseActivity implements IF
                 for (LocalFeedbackBean bean : (ArrayList<LocalFeedbackBean>) response) {
                     myFeedbackList.add(new VoteListItem(this, 8, bean, configuration, getTopColor(0)));
                 }
+                Collections.sort(myFeedbackList);
                 break;
             case GET_OTHERS_FEEDBACK_VOTES_MOCK:
                 othersFeedbackList.clear();
                 for (LocalFeedbackBean bean : (ArrayList<LocalFeedbackBean>) response) {
                     othersFeedbackList.add(new VoteListItem(this, 8, bean, configuration, getTopColor(0)));
                 }
+                Collections.sort(othersFeedbackList);
                 break;
             case GET_FEEDBACK_SUBSCRIPTIONS_MOCK:
                 settingsFeedbackList.clear();
                 for (LocalFeedbackBean bean : (ArrayList<LocalFeedbackBean>) response) {
                     settingsFeedbackList.add(new SubscriptionListItem(this, 8, bean, configuration, getTopColor(0)));
                 }
+                Collections.sort(settingsFeedbackList);
                 break;
             default:
         }

@@ -6,7 +6,8 @@ import java.io.Serializable;
 import java.util.UUID;
 
 import ch.uzh.supersede.feedbacklibrary.database.FeedbackDatabase;
-import ch.uzh.supersede.feedbacklibrary.utils.CompareUtility;
+import ch.uzh.supersede.feedbacklibrary.stubs.GeneratorStub;
+import ch.uzh.supersede.feedbacklibrary.utils.*;
 import ch.uzh.supersede.feedbacklibrary.utils.Enums.FEEDBACK_STATUS;
 
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.USER_NAME;
@@ -118,6 +119,23 @@ public class FeedbackBean implements Serializable{
                 return bean;
             }
             return null;
+        }
+
+        //Showcase
+        public FeedbackBean fromLocalFeedbackBean(Context context,LocalFeedbackBean localFeedbackBean) {
+            FeedbackBean bean = new FeedbackBean();
+            bean.feedbackId = localFeedbackBean.getFeedbackId();
+            bean.title = localFeedbackBean.getTitle();
+            bean.tags = FeedbackDatabase.getInstance(context).readTags(localFeedbackBean.getFeedbackId());
+            bean.userName = localFeedbackBean.getOwner()==1?FeedbackDatabase.getInstance(context).readString(Constants.USER_NAME,null): GeneratorStub.BagOfNames.pickRandom();
+            bean.timeStamp = localFeedbackBean.getCreationDate();
+            bean.upVotes = localFeedbackBean.getVotes();
+            bean.maxUpVotes = 50; //FIXME mbo
+            bean.minUpVotes = -30; //FIXME mbo
+            bean.responses = localFeedbackBean.getResponses();
+            bean.feedbackStatus = localFeedbackBean.getFeedbackStatus();
+            bean.isPublic = false;
+            return bean;
         }
     }
 

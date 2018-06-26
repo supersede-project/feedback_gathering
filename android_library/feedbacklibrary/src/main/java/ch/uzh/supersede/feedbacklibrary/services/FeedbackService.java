@@ -33,6 +33,7 @@ import static ch.uzh.supersede.feedbacklibrary.services.IFeedbackServiceEventLis
 import static ch.uzh.supersede.feedbacklibrary.services.IFeedbackServiceEventListener.EventType.*;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.*;
 import static ch.uzh.supersede.feedbacklibrary.utils.Enums.FETCH_MODE.*;
+import static ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility.USER_LEVEL.ACTIVE;
 
 /**
  * Singleton class that returns the original {@link FeedbackApiService} with its functions, defined in {@link IFeedbackAPI} iff {@code BuildConfig.DEBUG} is enabled, otherwise
@@ -52,7 +53,10 @@ public abstract class FeedbackService {
     }
 
     public static FeedbackService getInstance(Context context) {
-        boolean useStubs = FeedbackDatabase.getInstance(context).readBoolean(USE_STUBS, false);
+        boolean useStubs = false;
+        if (ACTIVE.check(context)){
+            useStubs = FeedbackDatabase.getInstance(context).readBoolean(USE_STUBS, false);
+        }
 
         if (useStubs) {
             if (mockInstance == null) {
@@ -220,8 +224,10 @@ public abstract class FeedbackService {
         public void getFeedbackList(IFeedbackServiceEventListener callback, Activity activity, LocalConfigurationBean configuration, int backgroundColor) {
             ArrayList<FeedbackListItem> allFeedbackList = new ArrayList<>();
             for (FeedbackBean bean : RepositoryStub.getFeedback(activity, 50, -30, 50, 0.1f)) {
-                FeedbackListItem listItem = new FeedbackListItem(activity, 8, bean, configuration, backgroundColor);
-                allFeedbackList.add(listItem);
+                if (bean != null) {
+                    FeedbackListItem listItem = new FeedbackListItem(activity, 8, bean, configuration, backgroundColor);
+                    allFeedbackList.add(listItem);
+                }
             }
             callback.onEventCompleted(GET_FEEDBACK_LIST_MOCK, allFeedbackList);
         }

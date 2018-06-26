@@ -47,6 +47,7 @@ public class FeedbackHubActivity extends AbstractBaseActivity implements IFeedba
     private TextView spaceBottom;
     private TextView statusText;
     private String userName;
+    private boolean tutorialInitialized = false;
     private int tapCounter = 0;
     private byte[] cachedScreenshot = null;
     private String hostApplicationName = null;
@@ -97,7 +98,7 @@ public class FeedbackHubActivity extends AbstractBaseActivity implements IFeedba
     @Override
     protected void createInfoBubbles() {
         boolean tutorialFinished = getSharedPreferences(SHARED_PREFERENCES_ID, MODE_PRIVATE).getBoolean(SHARED_PREFERENCES_TUTORIAL_HUB, false);
-        if (!tutorialFinished) {
+        if (!tutorialFinished && !tutorialInitialized) {
             RelativeLayout root = getView(R.id.hub_root, RelativeLayout.class);
             RelativeLayout mLayout = infoUtility.addInfoBox(root, getString(R.string.hub_feedback_status_label), getString(R.string.hub_feedback_status_info), this, statusText);
             RelativeLayout llLayout = infoUtility.addInfoBox(root, getString(R.string.hub_feedback_create_label), getString(R.string.hub_feedback_create_info), this, feedbackButton, mLayout);
@@ -114,6 +115,7 @@ public class FeedbackHubActivity extends AbstractBaseActivity implements IFeedba
                 }
             });
             colorShape(1, lrLayout, llLayout, mLayout, urLayout, ulLayout, umLayout);
+            tutorialInitialized = true;
         }
     }
 
@@ -252,6 +254,11 @@ public class FeedbackHubActivity extends AbstractBaseActivity implements IFeedba
 
     @Override
     public void onButtonClicked(View view) {
+        boolean tutorialFinished = getSharedPreferences(SHARED_PREFERENCES_ID, MODE_PRIVATE).getBoolean(SHARED_PREFERENCES_TUTORIAL_HUB, false);
+        if (!tutorialFinished){
+            Toast.makeText(getApplicationContext(), R.string.hub_tutorial_alert,Toast.LENGTH_SHORT).show();
+            return;
+        }
         if (view != null) {
             int i = view.getId();
             if (i == R.id.hub_button_list) {

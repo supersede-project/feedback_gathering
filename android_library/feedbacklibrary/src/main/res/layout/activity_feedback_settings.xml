@@ -1,15 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.ContentFrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:id="@+id/settings_root">
 
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:orientation="vertical"
-        android:weightSum="50">
+        android:weightSum="85">
 
         <TextView
+            android:id="@+id/settings_text_title_general"
             android:layout_width="fill_parent"
             android:layout_height="0dp"
             android:layout_margin="5dp"
@@ -22,7 +24,7 @@
             android:layout_height="0dp"
             android:layout_marginEnd="50dp"
             android:layout_marginStart="50dp"
-            android:layout_weight="10"
+            android:layout_weight="25"
             android:orientation="vertical"
             android:weightSum="9">
 
@@ -34,6 +36,7 @@
                 android:weightSum="10">
 
                 <TextView
+                    android:id="@+id/settings_text_use_stubs"
                     android:layout_width="0dp"
                     android:layout_height="fill_parent"
                     android:layout_margin="5dp"
@@ -56,14 +59,16 @@
                 android:orientation="horizontal">
 
                 <TextView
+                    android:id="@+id/settings_text_feature_2"
                     android:layout_width="0dp"
                     android:layout_height="fill_parent"
                     android:layout_margin="5dp"
                     android:layout_weight="5"
                     android:gravity="center_vertical|end"
-                    android:text="dummy setting 2" />
+                    android:text="#upcomming feature 2#"/>
 
                 <ToggleButton
+                    android:id="@+id/settings_toggle_feature_2"
                     android:layout_width="0dp"
                     android:layout_height="fill_parent"
                     android:layout_margin="1dp"
@@ -78,14 +83,16 @@
                 android:orientation="horizontal">
 
                 <TextView
+                    android:id="@+id/settings_text_feature_3"
                     android:layout_width="0dp"
                     android:layout_height="fill_parent"
                     android:layout_margin="5dp"
                     android:layout_weight="5"
                     android:gravity="center_vertical|end"
-                    android:text="dummy setting 3" />
+                    android:text="#upcomming feature 3#"/>
 
                 <ToggleButton
+                    android:id="@+id/settings_toggle_feature_3"
                     android:layout_width="0dp"
                     android:layout_height="fill_parent"
                     android:layout_margin="1dp"
@@ -100,6 +107,7 @@
             android:layout_weight="10" />
 
         <TextView
+            android:id="@+id/settings_text_title_feedback"
             android:layout_width="fill_parent"
             android:layout_height="0dp"
             android:layout_margin="5dp"
@@ -112,6 +120,7 @@
             android:layout_height="0dp"
             android:layout_weight="5"
             android:orientation="horizontal"
+            android:background="@color/white"
             android:weightSum="12">
 
             <Button

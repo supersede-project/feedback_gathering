@@ -2,6 +2,7 @@ package ch.uzh.supersede.feedbacklibrary.components.buttons;
 
 import android.content.Context;
 import android.graphics.PorterDuff;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutCompat;
 import android.view.Gravity;
 import android.widget.CompoundButton;
@@ -78,5 +79,10 @@ public class SubscriptionListItem extends AbstractSettingsListItem implements IF
     @Override
     public void onConnectionFailed(EventType eventType) {
         //TODO [jfo] implement
+    }
+
+    @Override
+    public int compareTo(@NonNull Object o) {
+        return 0;
     }
 }
