@@ -13,11 +13,8 @@ import ch.uzh.supersede.feedbacklibrary.beans.LocalFeedbackBean;
 import ch.uzh.supersede.feedbacklibrary.database.FeedbackDatabase;
 import ch.uzh.supersede.feedbacklibrary.models.Feedback;
 import ch.uzh.supersede.feedbacklibrary.models.AuthenticateResponse;
-import ch.uzh.supersede.feedbacklibrary.utils.CompareUtility;
-import ch.uzh.supersede.feedbacklibrary.utils.DateUtility;
+import ch.uzh.supersede.feedbacklibrary.utils.*;
 import ch.uzh.supersede.feedbacklibrary.utils.Enums.FEEDBACK_STATUS;
-import ch.uzh.supersede.feedbacklibrary.utils.NumberUtility;
-import ch.uzh.supersede.feedbacklibrary.utils.Utils;
 
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.USER_NAME;
 import static ch.uzh.supersede.feedbacklibrary.utils.Enums.FEEDBACK_STATUS.*;
@@ -31,6 +28,15 @@ public class RepositoryStub {
 
     public static List<FeedbackBean> getFeedback(Context context, int count, int minUpVotes, int maxUpVotes, float ownFeedbackPercent) {
         List<FeedbackBean> feedbackBeans = new ArrayList<>();
+        if (ACTIVE.check(context) && FeedbackDatabase.getInstance(context).readBoolean(Constants.USE_STUBS,false)){
+            List<LocalFeedbackBean> ownFeedbackBeans = FeedbackDatabase.getInstance(context).getFeedbackBeans(Enums.FETCH_MODE.OWN);
+            if (!ownFeedbackBeans.isEmpty()){
+                ownFeedbackPercent = 0;
+            }
+            for (LocalFeedbackBean bean : ownFeedbackBeans){
+                feedbackBeans.add(new FeedbackBean.Builder().fromLocalFeedbackBean(context,bean));
+            }
+        }
         for (int f = 0; f < count; f++) {
             feedbackBeans.add(getFeedback(context, minUpVotes, maxUpVotes, ownFeedbackPercent));
         }
@@ -98,10 +104,14 @@ public class RepositoryStub {
 
     private static FeedbackBean getFeedback(Context context, int minUpVotes, int maxUpVotes, float ownFeedbackPercent) {
         long feedbackId = NumberUtility.randomLong();
-        int upperBound = NumberUtility.divide(1, ownFeedbackPercent);
-        boolean ownFeedback = ACTIVE.check(context) && NumberUtility.randomInt(0, upperBound > 0 ? upperBound - 1 : upperBound) == 0;
+        boolean ownFeedback = false;
+        if (ownFeedbackPercent != 0){
+            int upperBound = NumberUtility.divide(1, ownFeedbackPercent);
+            ownFeedback = ACTIVE.check(context) && NumberUtility.randomInt(0, upperBound > 0 ? upperBound - 1 : upperBound) == 0;
+        }
         FEEDBACK_STATUS feedbackStatus = generateFeedbackStatus();
         String title = generateTitle();
+        String[] tags = GeneratorStub.BagOfTags.pickRandom(5);
         String userName = generateUserName(context, ownFeedback);
         long timeStamp = generateTimestamp();
         int upVotes = generateUpVotes(minUpVotes, maxUpVotes, feedbackStatus);
@@ -109,6 +119,7 @@ public class RepositoryStub {
         return new FeedbackBean.Builder()
                 .withFeedbackId(feedbackId)
                 .withTitle(title)
+                .withTags(tags)
                 .withUserName(userName)
                 .withTimestamp(timeStamp)
                 .withUpVotes(upVotes)

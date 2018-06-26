@@ -10,6 +10,7 @@ import java.io.File;
 
 import static android.content.Context.MODE_PRIVATE;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.*;
+import static ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility.USER_LEVEL.ACTIVE;
 
 abstract class AbstractFeedbackDatabase {
     //Private

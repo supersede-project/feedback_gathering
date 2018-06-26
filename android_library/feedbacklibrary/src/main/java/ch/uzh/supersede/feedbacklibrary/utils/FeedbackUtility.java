@@ -64,6 +64,7 @@ public class FeedbackUtility {
         Bitmap bitmap = Utils.loadAnnotatedImageFromDatabase(context);
         bitmap = bitmap != null ? bitmap : Utils.loadImageFromDatabase(context);
 
+        //TODO: Dani, we need title & tags
         FeedbackBean feedbackBean = new FeedbackBean.Builder()
                 .withFeedbackId(feedbackId)
                 .withTitle(feedback.getTitle())
@@ -76,6 +77,9 @@ public class FeedbackUtility {
                 .withResponses(responses)
                 .withStatus(status)
                 .build();
+        if (feedbackBean == null){
+            return null; //Avoid NP caused by old Feedback on the Repository
+        }
         return new FeedbackDetailsBean.Builder()
                 .withFeedbackId(feedbackBean.getFeedbackId())
                 .withFeedbackBean(feedbackBean)

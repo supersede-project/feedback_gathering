@@ -21,7 +21,7 @@ import ch.uzh.supersede.feedbacklibrary.utils.*;
 
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.EXTRA_KEY_FEEDBACK_BEAN;
 
-public abstract class AbstractSettingsListItem extends LinearLayout {
+public abstract class AbstractSettingsListItem extends LinearLayout  implements Comparable {
     public static final int PADDING = 10;
     private LocalFeedbackBean feedbackBean;
     private LinearLayout upperWrapperLayout;

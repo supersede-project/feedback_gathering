@@ -3,6 +3,7 @@ package ch.uzh.supersede.feedbacklibrary.components.buttons;
 import android.content.Context;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutCompat;
 import android.view.Gravity;
 import android.widget.ImageView;
@@ -41,7 +42,7 @@ public class VoteListItem extends AbstractSettingsListItem {
         if (localFeedbackBean.getVoted() > 0) {
             imageView.setImageResource(R.drawable.ic_thumb_up_black_48dp);
             imageView.getDrawable().mutate().setColorFilter(getForegroundColor(), PorterDuff.Mode.SRC_IN);
-        } else {
+        } else if (localFeedbackBean.getVoted() < 0){
             imageView.setImageResource(R.drawable.ic_thumb_down_black_48dp);
             imageView.getDrawable().mutate().setColorFilter(getForegroundColor(), PorterDuff.Mode.SRC_IN);
         }
@@ -49,5 +50,14 @@ public class VoteListItem extends AbstractSettingsListItem {
         imageView.setPadding(padding, padding, padding, padding);
 
         return imageView;
+    }
+
+    @Override
+    public int compareTo(@NonNull Object o) {
+        if (o instanceof VoteListItem){
+            long comparedTimestamp = ((VoteListItem) o).getFeedbackBean().getCreationDate();
+            return comparedTimestamp > getFeedbackBean().getCreationDate() ? 1 : comparedTimestamp == getFeedbackBean().getCreationDate() ? 0 : -1;
+        }
+        return 0;
     }
 }
