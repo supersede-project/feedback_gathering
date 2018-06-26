@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(value = "${supersede.base_path.feedback}/{language}/applications/{applicationId}/reports")
-public class ReportingController {
+public class ReportingController extends BaseController {
 
     @Autowired
     private ReportService reportService;
