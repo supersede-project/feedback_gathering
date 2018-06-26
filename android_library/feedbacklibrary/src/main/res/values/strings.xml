@@ -131,6 +131,8 @@
     <string name="list_date">Date: %1$s</string>
     <string name="list_responses">(%1$d Responses)</string>
     <string name="details_feedback_toast">%1$s loaded.\nCreator: %2$s.\nCreation-Date: %3$s.\nUp-Votes: %4$d.\nResponses: %5$d.</string>
+    <string name="list_alert_event">Could not process the Event from to the Server.</string>
+    <string name="list_alert_server">Could not establish a Connection to the Server.</string>
     <!--Details-->
     <string name="details_minus">-</string>
     <string name="details_plus">+</string>

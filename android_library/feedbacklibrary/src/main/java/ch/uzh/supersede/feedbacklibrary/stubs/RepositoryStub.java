@@ -31,7 +31,7 @@ public class RepositoryStub {
         if (ACTIVE.check(context) && FeedbackDatabase.getInstance(context).readBoolean(Constants.USE_STUBS,false)){
             List<LocalFeedbackBean> ownFeedbackBeans = FeedbackDatabase.getInstance(context).getFeedbackBeans(Enums.FETCH_MODE.OWN);
             if (!ownFeedbackBeans.isEmpty()){
-                ownFeedbackPercent = 0;
+                ownFeedbackPercent = 0; //if own feedback exists, dont create artificial ones
             }
             for (LocalFeedbackBean bean : ownFeedbackBeans){
                 feedbackBeans.add(new FeedbackBean.Builder().fromLocalFeedbackBean(context,bean));

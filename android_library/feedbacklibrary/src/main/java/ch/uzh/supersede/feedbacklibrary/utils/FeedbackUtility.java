@@ -15,6 +15,7 @@ import ch.uzh.supersede.feedbacklibrary.models.LabelFeedback;
 import ch.uzh.supersede.feedbacklibrary.models.RatingFeedback;
 import ch.uzh.supersede.feedbacklibrary.models.ScreenshotFeedback;
 import ch.uzh.supersede.feedbacklibrary.models.TextFeedback;
+import ch.uzh.supersede.feedbacklibrary.stubs.GeneratorStub;
 
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.USER_NAME;
 import static ch.uzh.supersede.feedbacklibrary.utils.Enums.FEEDBACK_STATUS.OPEN;
@@ -64,11 +65,16 @@ public class FeedbackUtility {
         Bitmap bitmap = Utils.loadAnnotatedImageFromDatabase(context);
         bitmap = bitmap != null ? bitmap : Utils.loadImageFromDatabase(context);
 
-        //TODO: Dani, we need title & tags
+        String title = feedback.getTitle();
+        String[] tags = feedback.getTags();
+        //TODO: Dani, we need title & tags, workaround for release 2
+        if (title == null || title.length() == 0){
+            title = "#Dummy-Title# " + GeneratorStub.BagOfFeedbackTitles.pickRandom();
+        }
         FeedbackBean feedbackBean = new FeedbackBean.Builder()
                 .withFeedbackId(feedbackId)
-                .withTitle(feedback.getTitle())
-                .withTags(feedback.getTags())
+                .withTitle(title)
+                .withTags(tags)
                 .withUserName(userName)
                 .withTimestamp(timeStamp)
                 .withUpVotes(upVotes)
