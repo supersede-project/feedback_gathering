@@ -15,12 +15,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.ScrollView;
-import android.widget.TextView;
+import android.widget.*;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -134,11 +129,13 @@ public class FeedbackListActivity extends AbstractBaseActivity implements IFeedb
     @Override
     public void onEventFailed(EventType eventType, Object response) {
         loadingTextView.setVisibility(View.INVISIBLE);
+        Toast.makeText(getApplicationContext(), R.string.list_alert_event,Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onConnectionFailed(EventType eventType) {
         loadingTextView.setVisibility(View.INVISIBLE);
+        Toast.makeText(getApplicationContext(), R.string.list_alert_server,Toast.LENGTH_SHORT).show();
     }
 
     private void sort() {
