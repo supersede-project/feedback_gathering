@@ -181,7 +181,7 @@
     <string name="identity_warn_too_few_tags">Not enough Tags! Minimum:</string>
     <string name="identity_next">Next</string>
     <string name="identity_recommendations">Recommendations:</string>
-    <string name="identity_tag_handling">The Space- and Enter-Key will add your Tag. Tap on a Tag to modify it.</string>
+    <string name="identity_tag_handling">The Space- and Enter-Key will add your Tag. Recommended Tags can be added by tapping on them. Tap on an already added Tag to modify it.</string>
     <string name="identity_back">Back</string>
     <string name="identity_introduction">Begin your Feedback-Creation with choosing a  Title and adding some Tags!</string>
 </resources>

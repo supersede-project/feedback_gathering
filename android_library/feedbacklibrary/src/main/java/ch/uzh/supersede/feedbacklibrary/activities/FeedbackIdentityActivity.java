@@ -187,10 +187,7 @@ public class FeedbackIdentityActivity extends AbstractBaseActivity {
         b.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                editTag.setText(((Button)v).getText().toString());
-                editTag.setSelection(((Button)v).getText().length());
-                createdTags.remove(((Button)v).getText().toString());
-                tagContainer.removeView(v);
+                removeTag(v);
             }
         });
         tagContainer.addView(b);
@@ -198,19 +195,17 @@ public class FeedbackIdentityActivity extends AbstractBaseActivity {
         recommendationContainer.removeAllViews();
     }
 
+    private void removeTag(View v) {
+        editTag.setText(((Button)v).getText().toString().toLowerCase());
+        editTag.setSelection(((Button)v).getText().length());
+        createdTags.remove(((Button)v).getText().toString());
+        tagContainer.removeView(v);
+    }
+
     @Override
     public void onButtonClicked(View view) {
         if (view.getId() == buttonBack.getId()){
-            new PopUp(this)
-                    .withTitle(getString(R.string.identity_cancel))
-                    .withMessage(getString(R.string.identity_cancel_body))
-                    .withCustomOk(getString(R.string.hub_confirm), new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                            onBackPressed();
-                        }
-                    }).buildAndShow();
+            onBackPressed();
         }else if (view.getId() == buttonNext.getId()){
             String message = validateInput();
             if (message == null){
@@ -244,5 +239,25 @@ public class FeedbackIdentityActivity extends AbstractBaseActivity {
             errorMessage = getString(R.string.identity_warn_too_few_tags)+configuration.getMinTagNumber();
         }
             return errorMessage;
+    }
+
+    boolean cancellation = false;
+    @Override
+    public void onBackPressed() {
+        if (!cancellation) {
+            new PopUp(this)
+                    .withTitle(getString(R.string.identity_cancel))
+                    .withMessage(getString(R.string.identity_cancel_body))
+                    .withCustomOk(getString(R.string.hub_confirm), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                            cancellation = true;
+                            onBackPressed();
+                        }
+                    }).buildAndShow();
+        }else{
+            super.onBackPressed();
+        }
     }
 }
