@@ -19,6 +19,7 @@ import ch.uzh.supersede.feedbacklibrary.stubs.GeneratorStub;
 
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.USER_NAME;
 import static ch.uzh.supersede.feedbacklibrary.utils.Enums.FEEDBACK_STATUS.OPEN;
+import static ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility.USER_LEVEL.ACTIVE;
 
 public class FeedbackUtility {
     private FeedbackUtility() {
@@ -62,8 +63,11 @@ public class FeedbackUtility {
         }
         String userName = feedback.getUserIdentification();
         long timeStamp = feedback.getCreatedAt() != null ? feedback.getCreatedAt().getTime() : System.currentTimeMillis();
-        Bitmap bitmap = Utils.loadAnnotatedImageFromDatabase(context);
-        bitmap = bitmap != null ? bitmap : Utils.loadImageFromDatabase(context);
+        Bitmap bitmap = null;
+        if (ACTIVE.check(context)){
+            bitmap = Utils.loadAnnotatedImageFromDatabase(context);
+            bitmap = bitmap != null ? bitmap : Utils.loadImageFromDatabase(context);
+        }
 
         String title = feedback.getTitle();
         String[] tags = feedback.getTags();
