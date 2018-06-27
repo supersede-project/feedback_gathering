@@ -80,7 +80,7 @@ public class FeedbackSettingsActivity extends AbstractBaseActivity implements IF
                 getView(R.id.settings_layout_color_2, LinearLayout.class),
                 getView(R.id.settings_layout_color_3, LinearLayout.class),
                 getView(R.id.settings_layout_color_4, LinearLayout.class));
-
+        invokeVersionControl(5,R.id.settings_toggle_feature_2,R.id.settings_toggle_feature_3);
         onPostCreate();
     }
 
