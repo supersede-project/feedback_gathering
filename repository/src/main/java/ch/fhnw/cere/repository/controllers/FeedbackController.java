@@ -65,16 +65,20 @@ public class FeedbackController extends BaseController {
 
     @PreAuthorize("@securityService.hasAdminPermission(#applicationId)")
     @RequestMapping(method = RequestMethod.GET, value = "")
-    public List<Feedback> getApplicationFeedbacks(@RequestParam(value = "view", required = false) String view, @PathVariable long applicationId) {
-        if (view != null) {
+    public List<Feedback> getApplicationFeedbacks(@RequestParam(value = "view", required = false) String view,
+                                                  @RequestParam(value = "ids", required = false) List<Long> idList,
+                                                  @PathVariable long applicationId) {
+        if (view != null && idList == null) {
             if (view.equals("public")) {
                 return feedbackService.findByIsPublic(true);
             } else if (view.equals("private")) {
                 return feedbackService.findByIsPublic(false);
             }
             throw new NotFoundException();
+        } else if (idList != null && !idList.isEmpty()) {
+            return feedbackService.findAllByFeedbackIdIn(applicationId, idList);
         }
-        return feedbackService.findByApplicationId(applicationId());
+        return feedbackService.findByApplicationId(applicationId);
     }
 
     @PreAuthorize("@securityService.hasAdminPermission(#applicationId)")
@@ -274,7 +278,7 @@ public class FeedbackController extends BaseController {
     }
 
     @RequestMapping(method = RequestMethod.PUT, value = "/{id}")
-    public Feedback publicityFeedback(@PathVariable("id") long id, HttpEntity<String> requestBody) {
+    public Feedback modifyFeedback(@PathVariable("id") long id, HttpEntity<String> requestBody) {
         if (requestBody.getBody() != null) {
             JSONObject obj = new JSONObject(requestBody.getBody());
             Feedback modifiedFeedback = feedbackService.find(id);
@@ -289,9 +293,8 @@ public class FeedbackController extends BaseController {
                     if (feedbackStatus != null) {
                         modifiedFeedback.setFeedbackStatus(feedbackStatus);
                     }
-                    feedbackService.save(modifiedFeedback);
                 }
-                return modifiedFeedback;
+                return feedbackService.save(modifiedFeedback);
             } else {
                 throw new NotFoundException();
             }
