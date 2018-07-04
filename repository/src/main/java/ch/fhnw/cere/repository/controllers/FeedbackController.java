@@ -70,9 +70,9 @@ public class FeedbackController extends BaseController {
                                                   @PathVariable long applicationId) {
         if (view != null && idList == null) {
             if (view.equals("public")) {
-                return feedbackService.findByIsPublic(true);
+                return feedbackService.findByApplicationIdAndIsPublic(applicationId,true);
             } else if (view.equals("private")) {
-                return feedbackService.findByIsPublic(false);
+                return feedbackService.findByApplicationIdAndIsPublic(applicationId,false);
             }
             throw new NotFoundException();
         } else if (idList != null && !idList.isEmpty()) {
@@ -287,8 +287,8 @@ public class FeedbackController extends BaseController {
                     boolean publicValue = obj.getBoolean("public");
                     modifiedFeedback.setPublic(publicValue);
                 }
-                if (obj.has("status")) {
-                    String statusValue = obj.getString("status");
+                if (obj.has("feedbackStatus")) {
+                    String statusValue = obj.getString("feedbackStatus");
                     FeedbackStatus feedbackStatus = feedbackStatusService.findByStatus(statusValue);
                     if (feedbackStatus != null) {
                         modifiedFeedback.setFeedbackStatus(feedbackStatus);

@@ -12,7 +12,7 @@ public interface FeedbackService {
     Feedback find(long id);
     void delete(long id);
     List<Feedback> findByApplicationId(long applicationId);
-    List<Feedback> findByIsPublic(boolean isPublic);
+    List<Feedback> findByApplicationIdAndIsPublic(long applicationId, boolean isPublic);
     List<Feedback> findByUserIdentification(String userIdentification);
     List<Feedback> findAllByFeedbackIdIn(long applicationId, List<Long> idList);
     long countByUserIdentifictation(String userIdentification);

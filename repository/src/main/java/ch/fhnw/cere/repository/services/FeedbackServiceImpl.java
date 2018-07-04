@@ -51,7 +51,7 @@ public class FeedbackServiceImpl implements FeedbackService {
     }
 
 
-    public List<Feedback> findByIsPublic(boolean isPublic){
-        return feedbackRepository.findByIsPublic(isPublic);
+    public List<Feedback> findByApplicationIdAndIsPublic(long applicationId, boolean isPublic){
+        return feedbackRepository.findByApplicationIdAndIsPublic(applicationId, isPublic);
     }
 }

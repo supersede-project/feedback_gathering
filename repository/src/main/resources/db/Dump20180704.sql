@@ -268,7 +268,7 @@ CREATE TABLE `feedback` (
   PRIMARY KEY (`id`),
   KEY `feedback_status_idx` (`feedback_status`),
   CONSTRAINT `feedback_status` FOREIGN KEY (`feedback_status`) REFERENCES `feedback_status` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=40 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=50 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -277,7 +277,7 @@ CREATE TABLE `feedback` (
 
 LOCK TABLES `feedback` WRITE;
 /*!40000 ALTER TABLE `feedback` DISABLE KEYS */;
-INSERT INTO `feedback` VALUES (1,1,2,'2017-05-31 19:57:54','en','Test feedback','2017-05-31 19:58:05','AUser2#1','',NULL),(2,1,1,'2017-06-19 12:39:06',NULL,'Feedback',NULL,'AUser2#1','',NULL),(3,1,1,'2017-06-19 13:40:45',NULL,'Feedback',NULL,'AUser2#3','\0',NULL),(4,1,1,'2017-06-19 13:41:47',NULL,'Feedback','2018-05-07 22:00:12','AUser2#3','',NULL),(5,1,1,'2017-06-19 13:43:45',NULL,'Feedback',NULL,'AUser2#3','',NULL),(6,1,1,'2017-06-19 13:47:02','en','Feedback',NULL,'99999999',NULL,NULL),(7,1,1,'2017-06-19 13:51:53','en','Feedback',NULL,'AUser2#3','\0',NULL),(8,1,1,'2017-06-19 13:52:26','en','Feedback',NULL,'99999999',NULL,NULL),(9,1,1,'2017-06-19 13:56:49','en','Feedback',NULL,'99999999',NULL,NULL),(10,1,1,'2017-06-19 13:57:18','en','Feedback',NULL,'99999999',NULL,NULL),(11,1,1,'2017-06-19 21:43:05','en','Feedback',NULL,'99999999',NULL,NULL),(12,1,1,'2017-06-19 21:44:02','en','Feedback',NULL,'99999999',NULL,NULL),(13,1,1,'2017-06-19 22:12:45','en','Feedback',NULL,'99999999',NULL,NULL),(14,1,1,'2017-07-06 12:53:00','en','Feedback',NULL,'99999999',NULL,NULL),(15,7,7,'2017-07-06 12:57:35','en','Feedback',NULL,'99999999',NULL,NULL),(16,7,7,'2017-07-19 13:29:54','en','Feedback',NULL,'99999999',NULL,NULL),(17,7,7,'2017-07-19 13:31:46','en','Feedback',NULL,'99999999',NULL,NULL),(18,7,7,'2017-07-19 13:32:51','en','Feedback',NULL,'99999999',NULL,NULL),(19,7,7,'2017-08-21 14:08:45','en','Feedback',NULL,'99999999',NULL,NULL),(20,7,7,'2017-08-21 14:14:17','en','Feedback',NULL,'99999999',NULL,NULL),(21,7,7,'2017-08-21 14:15:53','en','Feedback',NULL,'99999999',NULL,NULL),(22,7,7,'2017-08-21 14:19:34','en','Feedback',NULL,'99999999',NULL,NULL),(23,7,7,'2017-08-21 14:23:44','en','Feedback',NULL,'99999999',NULL,NULL),(24,7,7,'2017-08-21 16:34:02','en','Feedback',NULL,'99999999',NULL,NULL),(25,7,7,'2017-08-21 16:40:41','en','Feedback',NULL,'99999999',NULL,NULL),(26,7,7,'2017-08-22 10:10:26','en','Feedback',NULL,'99999999',NULL,NULL),(27,7,7,'2017-08-22 10:16:07','en','Feedback',NULL,'99999999',NULL,NULL),(28,7,7,'2017-08-22 10:17:34','en','Feedback',NULL,'99999999',NULL,NULL),(29,7,7,'2017-08-22 10:32:31','en','Feedback',NULL,'99999999',NULL,NULL),(30,7,7,'2017-08-22 10:41:44','en','Feedback',NULL,'99999999',NULL,NULL),(31,7,7,'2017-08-22 10:44:05','en','Feedback',NULL,'99999999',NULL,NULL),(32,7,7,'2017-08-22 10:48:50','en','Feedback',NULL,'99999999',NULL,NULL),(33,7,7,'2017-08-22 11:13:05','en','Feedback',NULL,'99999999',NULL,NULL),(34,7,7,'2017-08-22 11:14:41','en','Feedback',NULL,'99999999',NULL,NULL),(35,7,7,'2017-08-22 11:19:46','en','Feedback',NULL,'99999999',NULL,NULL),(36,7,7,'2017-08-22 11:25:33','en','Feedback',NULL,'99999999',NULL,NULL),(37,7,7,'2017-08-22 11:31:31','en','Feedback',NULL,'99999999',NULL,NULL),(38,7,7,'2017-08-22 11:33:11','en','Feedback',NULL,'99999999',NULL,NULL),(39,7,7,'2017-08-23 10:32:37','en','Feedback',NULL,'99999999',NULL,NULL);
+INSERT INTO `feedback` VALUES (1,1,2,'2017-05-31 19:57:54','en','Test feedback','2017-05-31 19:58:05','AUser2#1','',1),(2,1,1,'2017-06-19 12:39:06',NULL,'Feedback',NULL,'AUser2#1','',1),(3,1,1,'2017-06-19 13:40:45',NULL,'Feedback',NULL,'AUser2#3','\0',1),(4,1,1,'2017-06-19 13:41:47',NULL,'Feedback','2018-05-07 22:00:12','AUser2#3','',1),(5,1,1,'2017-06-19 13:43:45',NULL,'Feedback',NULL,'AUser2#3','',1),(6,1,1,'2017-06-19 13:47:02','en','Feedback',NULL,'99999999',NULL,1),(7,1,1,'2017-06-19 13:51:53','en','Feedback',NULL,'AUser2#3','\0',1),(8,1,1,'2017-06-19 13:52:26','en','Feedback',NULL,'99999999',NULL,1),(9,1,1,'2017-06-19 13:56:49','en','Feedback',NULL,'99999999',NULL,1),(10,1,1,'2017-06-19 13:57:18','en','Feedback',NULL,'99999999',NULL,1),(11,1,1,'2017-06-19 21:43:05','en','Feedback',NULL,'99999999',NULL,1),(12,1,1,'2017-06-19 21:44:02','en','Feedback',NULL,'99999999',NULL,1),(13,1,1,'2017-06-19 22:12:45','en','Feedback',NULL,'99999999',NULL,1),(14,1,1,'2017-07-06 12:53:00','en','Feedback',NULL,'99999999',NULL,1),(15,7,7,'2017-07-06 12:57:35','en','Feedback',NULL,'99999999',NULL,1),(16,7,7,'2017-07-19 13:29:54','en','Feedback',NULL,'99999999',NULL,1),(17,7,7,'2017-07-19 13:31:46','en','Feedback',NULL,'99999999',NULL,1),(18,7,7,'2017-07-19 13:32:51','en','Feedback',NULL,'99999999',NULL,1),(19,7,7,'2017-08-21 14:08:45','en','Feedback',NULL,'99999999',NULL,1),(20,7,7,'2017-08-21 14:14:17','en','Feedback',NULL,'99999999',NULL,1),(21,7,7,'2017-08-21 14:15:53','en','Feedback',NULL,'99999999',NULL,1),(22,7,7,'2017-08-21 14:19:34','en','Feedback',NULL,'99999999',NULL,1),(23,7,7,'2017-08-21 14:23:44','en','Feedback',NULL,'99999999',NULL,1),(24,7,7,'2017-08-21 16:34:02','en','Feedback',NULL,'99999999',NULL,1),(25,7,7,'2017-08-21 16:40:41','en','Feedback',NULL,'99999999',NULL,1),(26,7,7,'2017-08-22 10:10:26','en','Feedback',NULL,'99999999',NULL,1),(27,7,7,'2017-08-22 10:16:07','en','Feedback',NULL,'99999999',NULL,1),(28,7,7,'2017-08-22 10:17:34','en','Feedback',NULL,'99999999',NULL,1),(29,7,7,'2017-08-22 10:32:31','en','Feedback',NULL,'99999999',NULL,1),(30,7,7,'2017-08-22 10:41:44','en','Feedback',NULL,'99999999',NULL,1),(31,7,7,'2017-08-22 10:44:05','en','Feedback',NULL,'99999999',NULL,1),(32,7,7,'2017-08-22 10:48:50','en','Feedback',NULL,'99999999',NULL,1),(33,7,7,'2017-08-22 11:13:05','en','Feedback',NULL,'99999999',NULL,1),(34,7,7,'2017-08-22 11:14:41','en','Feedback',NULL,'99999999',NULL,1),(35,7,7,'2017-08-22 11:19:46','en','Feedback','2018-07-04 16:27:40','99999999','\0',3),(36,7,7,'2017-08-22 11:25:33','en','Feedback',NULL,'99999999','\0',1),(37,7,7,'2017-08-22 11:31:31','en','Feedback',NULL,'99999999','',1),(38,7,7,'2017-08-22 11:33:11','en','Feedback',NULL,'99999999','\0',1),(39,7,7,'2017-08-23 10:32:37','en','Feedback',NULL,'99999999','',1),(46,7,1,'2018-07-04 15:56:55','EN','test_feedback',NULL,'huhu','\0',1),(49,7,1,'2018-07-04 16:26:19','EN','test_feedback',NULL,'huhu','\0',1);
 /*!40000 ALTER TABLE `feedback` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -313,6 +313,33 @@ LOCK TABLES `feedback_comment` WRITE;
 UNLOCK TABLES;
 
 --
+-- Table structure for table `feedback_label`
+--
+
+DROP TABLE IF EXISTS `feedback_label`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `feedback_label` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `feedback_id` bigint(20) NOT NULL,
+  `label` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `feedback_vote` (`feedback_id`),
+  CONSTRAINT `feedback_vote` FOREIGN KEY (`feedback_id`) REFERENCES `feedback` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `feedback_label`
+--
+
+LOCK TABLES `feedback_label` WRITE;
+/*!40000 ALTER TABLE `feedback_label` DISABLE KEYS */;
+INSERT INTO `feedback_label` VALUES (1,37,'Color'),(2,37,'GUI'),(3,38,'Bug'),(4,39,'Bug'),(5,36,'Improvement'),(6,36,'Performance'),(7,35,'GUI'),(8,35,'Usability'),(9,35,'Improvement'),(10,34,'Improvement'),(11,34,'Usability');
+/*!40000 ALTER TABLE `feedback_label` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `feedback_status`
 --
 
@@ -321,7 +348,7 @@ DROP TABLE IF EXISTS `feedback_status`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `feedback_status` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `status_type` varchar(255) NOT NULL,
+  `status` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -346,17 +373,14 @@ DROP TABLE IF EXISTS `feedback_vote`;
 CREATE TABLE `feedback_vote` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `voter_user_id` bigint(20) NOT NULL,
-  `voted_user_id` bigint(20) NOT NULL,
   `feedback_id` bigint(20) NOT NULL,
   `vote` tinyint(1) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `feedback_id` (`feedback_id`),
   KEY `voter_user_id` (`voter_user_id`),
-  KEY `voted_user_id` (`voted_user_id`),
   CONSTRAINT `feedback_vote_ibfk_1` FOREIGN KEY (`feedback_id`) REFERENCES `feedback` (`id`),
-  CONSTRAINT `feedback_vote_ibfk_2` FOREIGN KEY (`voter_user_id`) REFERENCES `android_user` (`id`),
-  CONSTRAINT `feedback_vote_ibfk_3` FOREIGN KEY (`voted_user_id`) REFERENCES `android_user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
+  CONSTRAINT `feedback_vote_ibfk_2` FOREIGN KEY (`voter_user_id`) REFERENCES `android_user` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -365,7 +389,7 @@ CREATE TABLE `feedback_vote` (
 
 LOCK TABLES `feedback_vote` WRITE;
 /*!40000 ALTER TABLE `feedback_vote` DISABLE KEYS */;
-INSERT INTO `feedback_vote` VALUES (1,7,5,1,1),(2,7,5,2,-1),(3,5,7,4,1),(4,5,7,5,-1),(5,1,5,1,1),(6,8,5,1,1),(7,9,5,1,1),(8,9,7,4,-1);
+INSERT INTO `feedback_vote` VALUES (1,7,1,-1),(2,7,2,-1),(3,5,4,1),(4,5,5,-1),(5,1,1,1),(6,8,1,1),(7,9,1,1),(8,9,4,-1);
 /*!40000 ALTER TABLE `feedback_vote` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -416,7 +440,7 @@ CREATE TABLE `rating_feedback` (
   PRIMARY KEY (`id`),
   KEY `FKa5merp6x61nokyyvx17snw5bb` (`feedback_id`),
   CONSTRAINT `FKa5merp6x61nokyyvx17snw5bb` FOREIGN KEY (`feedback_id`) REFERENCES `feedback` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=74 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=94 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -425,7 +449,7 @@ CREATE TABLE `rating_feedback` (
 
 LOCK TABLES `rating_feedback` WRITE;
 /*!40000 ALTER TABLE `rating_feedback` DISABLE KEYS */;
-INSERT INTO `rating_feedback` VALUES (1,3,5,'Please rate',1),(2,24,5,'Rate Grid Data UI',15),(3,24,5,'Rate Grid Data UI',16),(4,24,0,'Rate Grid Data UI',17),(5,24,5,'Rate Grid Data UI',18),(6,24,5,'Rate Grid Data UI',19),(7,24,0,'Rate Grid Data UI',20),(8,24,0,'Rate Grid Data UI',21),(9,24,0,'Rate Grid Data UI',22),(10,24,0,'Rate Grid Data UI',23),(11,24,5,'Rate Grid Data UI',24),(12,24,5,'Rate Grid Data UI',25),(13,24,5,'Rate Grid Data UI',26),(14,24,0,'Rate Grid Data UI',27),(15,24,0,'Rate Grid Data UI',28),(16,24,5,'Rate Grid Data UI',29),(17,24,0,'Rate Grid Data UI',30),(18,24,0,'Rate Grid Data UI',31),(19,24,0,'Rate Grid Data UI',32),(20,24,0,'Rate Grid Data UI',33),(21,24,5,'Rate Grid Data UI',34),(22,24,5,'Rate Grid Data UI',35),(23,24,5,'Rate Grid Data UI',36),(24,24,5,'Rate Grid Data UI',37),(25,24,5,'Rate Grid Data UI',38),(26,24,1,'Rate Grid Data UI',39);
+INSERT INTO `rating_feedback` VALUES (1,3,5,'Please rate',1),(2,24,5,'Rate Grid Data UI',15),(3,24,5,'Rate Grid Data UI',16),(4,24,0,'Rate Grid Data UI',17),(5,24,5,'Rate Grid Data UI',18),(6,24,5,'Rate Grid Data UI',19),(7,24,0,'Rate Grid Data UI',20),(8,24,0,'Rate Grid Data UI',21),(9,24,0,'Rate Grid Data UI',22),(10,24,0,'Rate Grid Data UI',23),(11,24,5,'Rate Grid Data UI',24),(12,24,5,'Rate Grid Data UI',25),(13,24,5,'Rate Grid Data UI',26),(14,24,0,'Rate Grid Data UI',27),(15,24,0,'Rate Grid Data UI',28),(16,24,5,'Rate Grid Data UI',29),(17,24,0,'Rate Grid Data UI',30),(18,24,0,'Rate Grid Data UI',31),(19,24,0,'Rate Grid Data UI',32),(20,24,0,'Rate Grid Data UI',33),(21,24,5,'Rate Grid Data UI',34),(22,24,5,'Rate Grid Data UI',35),(23,24,5,'Rate Grid Data UI',36),(24,24,5,'Rate Grid Data UI',37),(25,24,5,'Rate Grid Data UI',38),(26,24,1,'Rate Grid Data UI',39),(86,5,4,'Test rating',46),(87,6,5,'Test rating 2',46),(92,5,4,'Test rating',49),(93,6,5,'Test rating 2',49);
 /*!40000 ALTER TABLE `rating_feedback` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -607,7 +631,7 @@ CREATE TABLE `text_feedback` (
   PRIMARY KEY (`id`),
   KEY `FKtidcgd0wra4sxqlawcp4li155` (`feedback_id`),
   CONSTRAINT `FKtidcgd0wra4sxqlawcp4li155` FOREIGN KEY (`feedback_id`) REFERENCES `feedback` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=349 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=359 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -616,7 +640,7 @@ CREATE TABLE `text_feedback` (
 
 LOCK TABLES `text_feedback` WRITE;
 /*!40000 ALTER TABLE `text_feedback` DISABLE KEYS */;
-INSERT INTO `text_feedback` VALUES (1,1,'My text feedback',1),(2,1,'test',NULL),(3,1,'test',NULL),(4,1,'',NULL),(5,1,'',NULL),(6,1,'',NULL),(7,1,'',NULL),(8,1,'test with screenshot',NULL),(9,1,'',NULL),(10,1,'test',NULL),(11,1,'test',NULL),(12,1,'',NULL),(13,1,'test',NULL),(14,1,'Feedback to the new backend',14),(15,23,'Feedback Siemens test data grid',15),(16,23,'Test files',16),(17,23,'',17),(18,23,'test file 3\n1 screenshot\n3 attachments ',18),(19,23,'Feedback should be sent to repository. After that it is sent to the kafka topic raw-feedback. Then analysed. And finally it is stored in the kafka topic analysed-feedback. After that it is ready to be traced.',19),(20,23,'',20),(21,23,'',21),(22,23,'',22),(23,23,'',23),(24,23,'This feedback is sent to the repository, then to kafka raw-feedback. After that it is analysed and sent to analysed-feedback. Then it would be ready to be traced onto requirements stored in a JIRA.',24),(25,23,'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.',25),(26,23,'Test feedback that should get stored in dl feedback storage. ',26),(27,23,'',27),(28,23,'',28),(29,23,'Sample feedback. Stored in the dl',29),(30,23,'',30),(31,23,'',31),(32,23,'',32),(33,23,'',33),(34,23,'Hello. I just want to say that the application is great. However, there is one little error with the heating diagram (see screenshot). And it would be great if you could add the functionality to login via twitter. ',34),(35,23,'Hello. I just want to say that the application is great. However, there is one little error with the heating diagram (see screenshot). And it would be great if you could add the functionality to login via twitter.',35),(36,23,'Hello. I just want to say that the application is great. However, there is one little error with the heating diagram (see screenshot). And it would be great if you could add the functionality to login via twitter.',36),(37,23,'Hello. I just want to say that the application is great. However, there is one little error with the heating diagram (see screenshot). And it would be great if you could add the functionality to login via twitter.',37),(38,23,'Hello. I just want to say that the application is great. However, there is one little error with the heating diagram (see screenshot). And it would be great if you could add the functionality to login via twitter.',38),(39,23,'The zoom function has a problem I think. Sometimes the screenshot disappears and I get a white box.',39);
+INSERT INTO `text_feedback` VALUES (1,1,'My text feedback',1),(2,1,'test',NULL),(3,1,'test',NULL),(4,1,'',NULL),(5,1,'',NULL),(6,1,'',NULL),(7,1,'',NULL),(8,1,'test with screenshot',NULL),(9,1,'',NULL),(10,1,'test',NULL),(11,1,'test',NULL),(12,1,'',NULL),(13,1,'test',NULL),(14,1,'Feedback to the new backend',14),(15,23,'Feedback Siemens test data grid',15),(16,23,'Test files',16),(17,23,'',17),(18,23,'test file 3\n1 screenshot\n3 attachments ',18),(19,23,'Feedback should be sent to repository. After that it is sent to the kafka topic raw-feedback. Then analysed. And finally it is stored in the kafka topic analysed-feedback. After that it is ready to be traced.',19),(20,23,'',20),(21,23,'',21),(22,23,'',22),(23,23,'',23),(24,23,'This feedback is sent to the repository, then to kafka raw-feedback. After that it is analysed and sent to analysed-feedback. Then it would be ready to be traced onto requirements stored in a JIRA.',24),(25,23,'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.',25),(26,23,'Test feedback that should get stored in dl feedback storage. ',26),(27,23,'',27),(28,23,'',28),(29,23,'Sample feedback. Stored in the dl',29),(30,23,'',30),(31,23,'',31),(32,23,'',32),(33,23,'',33),(34,23,'Hello. I just want to say that the application is great. However, there is one little error with the heating diagram (see screenshot). And it would be great if you could add the functionality to login via twitter. ',34),(35,23,'Hello. I just want to say that the application is great. However, there is one little error with the heating diagram (see screenshot). And it would be great if you could add the functionality to login via twitter.',35),(36,23,'Hello. I just want to say that the application is great. However, there is one little error with the heating diagram (see screenshot). And it would be great if you could add the functionality to login via twitter.',36),(37,23,'Hello. I just want to say that the application is great. However, there is one little error with the heating diagram (see screenshot). And it would be great if you could add the functionality to login via twitter.',37),(38,23,'Hello. I just want to say that the application is great. However, there is one little error with the heating diagram (see screenshot). And it would be great if you could add the functionality to login via twitter.',38),(39,23,'The zoom function has a problem I think. Sometimes the screenshot disappears and I get a white box.',39),(355,1,'This is the feedback text',46),(358,1,'This is the feedback text',49);
 /*!40000 ALTER TABLE `text_feedback` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -629,4 +653,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-05-14 19:15:45
+-- Dump completed on 2018-07-04 17:01:59

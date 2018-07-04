@@ -5,7 +5,6 @@ import ch.fhnw.cere.repository.models.orchestrator.Application;
 import ch.fhnw.cere.repository.models.orchestrator.Mechanism;
 import ch.fhnw.cere.repository.models.orchestrator.MechanismTemplateModel;
 import com.fasterxml.jackson.annotation.*;
-import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -26,11 +25,10 @@ public class Feedback {
     private long applicationId;
     private long configurationId;
     private String language;
-    private Boolean isPublic;
+    private Boolean isPublic = false;
 
     @ManyToOne()
     @JoinColumn(name = "feedback_status")
-    @JsonUnwrapped()
     private FeedbackStatus feedbackStatus = new FeedbackStatus(1,"OPEN");
 
     @Transient
@@ -66,6 +64,9 @@ public class Feedback {
 
     @OneToMany(mappedBy = "feedback", cascade = {CascadeType.REMOVE, CascadeType.PERSIST})
     private List<TextFeedback> textFeedbacks;
+
+    @OneToMany(mappedBy = "feedback", cascade = {CascadeType.REMOVE, CascadeType.PERSIST})
+    private List<FeedbackLabel> labels;
 
     @JsonIgnore
     @OneToMany(mappedBy = "feedback", cascade = {CascadeType.REMOVE, CascadeType.PERSIST})
@@ -327,5 +328,13 @@ public class Feedback {
 
     public void setFeedbackStatus(FeedbackStatus feedbackStatus) {
         this.feedbackStatus = feedbackStatus;
+    }
+
+    public List<FeedbackLabel> getLabels() {
+        return labels;
+    }
+
+    public void setLabels(List<FeedbackLabel> labels) {
+        this.labels = labels;
     }
 }
