@@ -27,6 +27,7 @@ public class Feedback {
     private String language;
     private Boolean isPublic = false;
 
+    //TODO: fix output
     @ManyToOne()
     @JoinColumn(name = "feedback_status")
     private FeedbackStatus feedbackStatus = new FeedbackStatus(1,"OPEN");
@@ -65,6 +66,7 @@ public class Feedback {
     @OneToMany(mappedBy = "feedback", cascade = {CascadeType.REMOVE, CascadeType.PERSIST})
     private List<TextFeedback> textFeedbacks;
 
+    //TODO: fix the output
     @OneToMany(mappedBy = "feedback", cascade = {CascadeType.REMOVE, CascadeType.PERSIST})
     private List<FeedbackLabel> labels;
 
