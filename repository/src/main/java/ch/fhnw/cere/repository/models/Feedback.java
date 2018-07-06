@@ -68,7 +68,7 @@ public class Feedback {
 
     //TODO: fix the output
     @OneToMany(mappedBy = "feedback", cascade = {CascadeType.REMOVE, CascadeType.PERSIST})
-    private List<FeedbackLabel> labels;
+    private List<FeedbackTag> tags;
 
     @JsonIgnore
     @OneToMany(mappedBy = "feedback", cascade = {CascadeType.REMOVE, CascadeType.PERSIST})
@@ -332,11 +332,11 @@ public class Feedback {
         this.feedbackStatus = feedbackStatus;
     }
 
-    public List<FeedbackLabel> getLabels() {
-        return labels;
+    public List<FeedbackTag> getTags() {
+        return tags;
     }
 
-    public void setLabels(List<FeedbackLabel> labels) {
-        this.labels = labels;
+    public void setTags(List<FeedbackTag> tags) {
+        this.tags = tags;
     }
 }

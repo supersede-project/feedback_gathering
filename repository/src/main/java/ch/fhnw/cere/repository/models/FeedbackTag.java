@@ -7,7 +7,7 @@ import org.hibernate.annotations.OnDeleteAction;
 import javax.persistence.*;
 
 @Entity
-public class FeedbackLabel {
+public class FeedbackTag {
 
     @JsonIgnore
     @Id
@@ -20,15 +20,15 @@ public class FeedbackLabel {
     @JoinColumn(name = "feedback_id")
     private Feedback feedback;
 
-    private String label;
+    private String tag;
 
-    public FeedbackLabel() {
+    public FeedbackTag() {
 
     }
 
-    public FeedbackLabel(Feedback feedback, String label) {
+    public FeedbackTag(Feedback feedback, String tag) {
         this.feedback = feedback;
-        this.label = label;
+        this.tag = tag;
     }
 
     public long getId() {
@@ -47,11 +47,11 @@ public class FeedbackLabel {
         this.feedback = feedback;
     }
 
-    public String getLabel() {
-        return label;
+    public String getTag() {
+        return tag;
     }
 
-    public void setLabel(String label) {
-        this.label = label;
+    public void setTag(String tag) {
+        this.tag = tag;
     }
 }

@@ -282,33 +282,6 @@ INSERT INTO `feedback` VALUES (1,1,2,'2017-05-31 19:57:54','en','Test feedback',
 UNLOCK TABLES;
 
 --
--- Table structure for table `feedback_label`
---
-
-DROP TABLE IF EXISTS `feedback_label`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `feedback_label` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `feedback_id` bigint(20) NOT NULL,
-  `tag` varchar(255) NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `feedback_vote` (`feedback_id`),
-  CONSTRAINT `feedback_vote` FOREIGN KEY (`feedback_id`) REFERENCES `feedback` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `feedback_label`
---
-
-LOCK TABLES `feedback_label` WRITE;
-/*!40000 ALTER TABLE `feedback_label` DISABLE KEYS */;
-INSERT INTO `feedback_label` VALUES (1,37,'Color'),(2,37,'GUI'),(3,38,'Bug'),(4,39,'Bug'),(5,36,'Improvement'),(6,36,'Performance'),(7,35,'GUI'),(8,35,'Usability'),(9,35,'Improvement'),(10,34,'Improvement'),(11,34,'Usability');
-/*!40000 ALTER TABLE `feedback_label` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `feedback_response`
 --
 
@@ -360,6 +333,32 @@ LOCK TABLES `feedback_status` WRITE;
 /*!40000 ALTER TABLE `feedback_status` DISABLE KEYS */;
 INSERT INTO `feedback_status` VALUES (1,'OPEN'),(2,'IN_PROGRESS'),(3,'CLOSED'),(4,'REJECTED'),(5,'DUPLICATE'),(6,'DELETED');
 /*!40000 ALTER TABLE `feedback_status` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `feedback_tag`
+--
+
+DROP TABLE IF EXISTS `feedback_tag`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `feedback_tag` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `feedback_id` bigint(20) NOT NULL,
+  `tag` text NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `feedback_vote` (`feedback_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `feedback_tag`
+--
+
+LOCK TABLES `feedback_tag` WRITE;
+/*!40000 ALTER TABLE `feedback_tag` DISABLE KEYS */;
+INSERT INTO `feedback_tag` VALUES (1,37,'Color'),(2,37,'GUI'),(3,38,'Bug'),(4,39,'Bug'),(5,36,'Improvement'),(6,36,'Performance'),(7,35,'GUI'),(8,35,'Usability'),(9,35,'Improvement'),(10,34,'Improvement'),(11,34,'Usability'),(13,2,'Tag');
+/*!40000 ALTER TABLE `feedback_tag` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -652,4 +651,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-07-04 18:31:10
+-- Dump completed on 2018-07-06 13:36:26
