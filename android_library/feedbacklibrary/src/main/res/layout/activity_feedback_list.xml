@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.ContentFrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/feedback_list_root"
+    android:id="@+id/list_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -103,6 +103,7 @@
                 android:layout_weight="12"
                 android:background="@color/white"
                 android:maxLines="1"
+                android:singleLine="true"
                 android:nextFocusLeft="@id/list_edit_search"
                 android:nextFocusUp="@id/list_edit_search"
                 android:padding="1dp"

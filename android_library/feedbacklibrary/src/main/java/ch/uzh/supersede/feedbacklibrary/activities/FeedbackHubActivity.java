@@ -22,13 +22,10 @@ import ch.uzh.supersede.feedbacklibrary.models.AuthenticateRequest;
 import ch.uzh.supersede.feedbacklibrary.models.AuthenticateResponse;
 import ch.uzh.supersede.feedbacklibrary.services.FeedbackService;
 import ch.uzh.supersede.feedbacklibrary.services.IFeedbackServiceEventListener;
-import ch.uzh.supersede.feedbacklibrary.utils.ColorUtility;
-import ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility;
+import ch.uzh.supersede.feedbacklibrary.utils.*;
 import ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility.USER_LEVEL;
-import ch.uzh.supersede.feedbacklibrary.utils.PopUp;
-import ch.uzh.supersede.feedbacklibrary.utils.Utils;
-import ch.uzh.supersede.feedbacklibrary.utils.VersionUtility;
 
+import static ch.uzh.supersede.feedbacklibrary.entrypoint.IFeedbackStyle.FEEDBACK_STYLE.*;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.ActivitiesConstants.*;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.*;
 import static ch.uzh.supersede.feedbacklibrary.utils.Enums.FETCH_MODE.*;
@@ -67,7 +64,7 @@ public class FeedbackHubActivity extends AbstractBaseActivity implements IFeedba
         spaceBottom = getView(R.id.hub_space_color_bottom, TextView.class);
         spaceLeft = getView(R.id.hub_space_color_left, TextView.class);
         spaceRight = getView(R.id.hub_space_color_right, TextView.class);
-        if (getColorCount() == 2) {
+        if (getColorCount() == 2 || CollectionUtility.oneOf(getConfiguration().getStyle(),DARK,LIGHT,SWITZERLAND,WINDOWS95)) {
             colorViews(0, backgroundLayout);
             colorViews(1, listButton, levelButton, feedbackButton, settingsButton);
         } else if (getColorCount() == 3) {
@@ -191,20 +188,11 @@ public class FeedbackHubActivity extends AbstractBaseActivity implements IFeedba
         userLevel = PermissionUtility.getUserLevel(getApplicationContext(), ignoreDatabaseCheck);
         levelButton.setText(getResources().getString(R.string.hub_feedback_user_level, userLevel.getLevel()));
 
-        if (getColorCount() == 2) {
-            enableView(levelButton, 1);
-            disableViews(settingsButton, feedbackButton, listButton);
-        } else if (getColorCount() == 3) {
-            if (getConfiguration().isColoringVertical()) {
-                enableView(levelButton, 0);
-            } else {
-                enableView(levelButton, 2);
-            }
-        }
+        enableView(levelButton, viewToColorMap.get(levelButton));
         statusText.setText(null);
         if (PASSIVE.check(getApplicationContext(), ignoreDatabaseCheck)) {
-            enableView(listButton, 1, VersionUtility.getDateVersion() > 1);
         }
+        enableView(listButton, viewToColorMap.get(listButton), VersionUtility.getDateVersion() > 1);
         if (ACTIVE.check(getApplicationContext(), ignoreDatabaseCheck)) {
             Utils.persistScreenshot(this, cachedScreenshot);
             int ownFeedbackBeans = FeedbackDatabase.getInstance(this).getFeedbackBeans(OWN).size();
@@ -234,18 +222,9 @@ public class FeedbackHubActivity extends AbstractBaseActivity implements IFeedba
                         .replace(PRIMARY_COLOR_STRING, BLACK_HEX)
                         .replace(SECONDARY_COLOR_STRING, DARK_BLUE)));
             }
-            if (getColorCount() == 2) {
-                enableView(feedbackButton, 1);
-                enableView(settingsButton, 1, VersionUtility.getDateVersion() > 1);
-            } else if (getColorCount() == 3) {
-                if (getConfiguration().isColoringVertical()) {
-                    enableView(feedbackButton, 2);
-                    enableView(settingsButton, 2, VersionUtility.getDateVersion() > 1);
-                } else {
-                    enableView(feedbackButton, 0);
-                    enableView(settingsButton, 2, VersionUtility.getDateVersion() > 1);
-                }
-            }
+
+            enableView(settingsButton, viewToColorMap.get(settingsButton));
+            enableView(settingsButton, viewToColorMap.get(settingsButton));
         }
         if (ADVANCED.check(getApplicationContext(), ignoreDatabaseCheck)) {
             disableViews(levelButton);
@@ -277,6 +256,7 @@ public class FeedbackHubActivity extends AbstractBaseActivity implements IFeedba
                         break;
                     case 1:
                         final EditText nameInputText = new EditText(this);
+                        nameInputText.setSingleLine();
                         nameInputText.setMaxLines(1);
                         new PopUp(this)
                                 .withTitle(getString(R.string.hub_access_2))

@@ -2,6 +2,7 @@ package ch.uzh.supersede.feedbacklibrary.components.buttons;
 
 import android.app.*;
 import android.content.*;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutCompat;
@@ -134,7 +135,7 @@ public class FeedbackResponseListItem extends LinearLayout implements Comparable
         } else if (feedbackResponseBean != null && feedbackResponseBean.isFeedbackOwner() || mode == EDITABLE) {
             return ContextCompat.getColor(getContext(), R.color.accent);
         }else{
-            return ContextCompat.getColor(getContext(), R.color.cyan);
+            return ColorUtility.isDark(configuration.getTopColors()[2])? Color.WHITE:Color.BLACK;
         }
     }
     private int resolveBackgroundColor(FeedbackResponseBean feedbackResponseBean) {
@@ -143,7 +144,7 @@ public class FeedbackResponseListItem extends LinearLayout implements Comparable
         } else if (feedbackResponseBean != null && feedbackResponseBean.isFeedbackOwner() || mode == EDITABLE) {
             return ContextCompat.getColor(getContext(), R.color.pink);
         }else{
-            return ContextCompat.getColor(getContext(), R.color.indigo);
+            return configuration.getTopColors()[2];
         }
     }
 

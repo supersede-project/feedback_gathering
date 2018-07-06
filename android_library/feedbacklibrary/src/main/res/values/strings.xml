@@ -143,7 +143,7 @@
     <string name="details_unsubscribe">Unsubscribe</string>
     <string name="details_images">Image</string>
     <string name="details_audio">Audio</string>
-    <string name="details_labels">Labels</string>
+    <string name="details_tags">Tags</string>
     <string name="details_user">User: %1$s</string>
     <string name="details_status">Status: %1$s</string>
     <string name="details_title">Title: %1$s</string>
@@ -151,6 +151,13 @@
     <string name="details_make_public">Make Feedback Public</string>
     <string name="details_make_public_title">Confirm Feedback Publishing</string>
     <string name="details_make_public_content">Do you want to publish this Feedback?\nA published Feedback can be seen, rated and responded upon by other Users and the Developers.\nThis decision cannot be reverted.</string>
+    <string name="details_published">Published!</string>
+    <!--DetailsDeveloper-->
+    <string name="details_developer_award_karma">Award Karma</string>
+    <string name="details_developer_award_karma_title">Confirm Karma Awarding</string>
+    <string name="details_developer_award_karma_content">How much Karma do you want to award the User %1$s?</string>
+    <string name="details_developer_karma_awarded">%1$s Karma to %2$s awarded!</string>
+    <string name="details_developer_karma_error">Enter a valid amount of Karma!</string>
     <!--Feedback-->
     <!--Settings-->
 
@@ -160,7 +167,6 @@
     <string name="settings_button_mine">Votes Sent</string>
     <string name="settings_button_others">Votes Received</string>
     <string name="settings_button_subscriptions">Subscriptions</string>
-    <string name="details_published">Published!</string>
     <!--Abstract-->
     <string name="abstract_button_clicked">Button \n\"%1$s\"\n clicked!</string>
     <string name="_open"><![CDATA[<]]></string>
@@ -168,17 +174,18 @@
     <!--Identity-->
     <string name="identity_input_title">Input Feedback-Title here...</string>
     <string name="identity_input_tags">Input Feedback-Tags here...</string>
-    <string name="identity_too_short">Tag too short! Minimum:</string>
-    <string name="identity_too_long">Tag too long! Maximum:</string>
+    <string name="identity_too_short">Tag too short! Minimum: </string>
+    <string name="identity_too_long">Tag too long! Maximum: </string>
     <string name="identity_max_tags">Maximum number of Tags! Delete some to continue!</string>
+    <string name="identity_tag_already_contained">Maximum number of Tags! Delete some to continue!</string>
     <string name="identity_tag_duplicate">Tag already in your Tag-List!</string>
     <string name="identity_cancel">Cancel Creation</string>
     <string name="identity_cancel_body">Do you want to cancel the Feedback-Creation?</string>
     <string name="identity_incomplete">Input Incomplete</string>
     <string name="identity_warn_specify_title">Specify a Title!</string>
     <string name="identity_warn_title_too_short">Title too short! Minimum Length:</string>
-    <string name="identity_warn_title_too_long">Title too long! Maximum Length:</string>
-    <string name="identity_warn_too_few_tags">Not enough Tags! Minimum:</string>
+    <string name="identity_warn_title_too_long">Title too long! Maximum Length: </string>
+    <string name="identity_warn_too_few_tags">Not enough Tags! Minimum: </string>
     <string name="identity_next">Next</string>
     <string name="identity_recommendations">Recommendations:</string>
     <string name="identity_tag_handling">The Space- and Enter-Key will add your Tag. Recommended Tags can be added by tapping on them. Tap on an already added Tag to modify it.</string>

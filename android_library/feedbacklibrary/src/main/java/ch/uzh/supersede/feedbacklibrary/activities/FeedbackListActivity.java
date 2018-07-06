@@ -58,7 +58,7 @@ public class FeedbackListActivity extends AbstractBaseActivity implements IFeedb
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_feedback_list);
         loadingTextView = LoadingViewUtility.createLoadingView(this, screenWidth, screenHeight, getTopColor(0));
-        ContentFrameLayout rootLayout = getView(R.id.feedback_list_root, ContentFrameLayout.class);
+        ContentFrameLayout rootLayout = getView(R.id.list_root, ContentFrameLayout.class);
         rootLayout.addView(loadingTextView);
 
         scrollListLayout = getView(R.id.list_layout_scroll, LinearLayout.class);
@@ -86,14 +86,18 @@ public class FeedbackListActivity extends AbstractBaseActivity implements IFeedb
                 getView(R.id.list_layout_color_3, LinearLayout.class),
                 getView(R.id.list_layout_color_4, LinearLayout.class),
                 getView(R.id.list_layout_color_5, LinearLayout.class));
+        colorViews(2,getView(R.id.list_root,ContentFrameLayout.class));
         onPostCreate();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        allFeedbackList.clear();
         loadingTextView.setVisibility(View.VISIBLE);
         FeedbackService.getInstance(this).getFeedbackList(this, this, configuration, getTopColor(0));
+        doSearch(searchText.getText().toString());
+        sort();
     }
 
     @Override
@@ -110,6 +114,7 @@ public class FeedbackListActivity extends AbstractBaseActivity implements IFeedb
                         }
                     }
                     activeFeedbackList = new ArrayList<>(allFeedbackList);
+                    doSearch(searchText.getText().toString());
                     sort();
                 }
                 break;
@@ -117,6 +122,7 @@ public class FeedbackListActivity extends AbstractBaseActivity implements IFeedb
                 if (response instanceof ArrayList) {
                     allFeedbackList = (ArrayList<FeedbackListItem>) response;
                     activeFeedbackList = new ArrayList<>(allFeedbackList);
+                    doSearch(searchText.getText().toString());
                     sort();
                 }
                 break;

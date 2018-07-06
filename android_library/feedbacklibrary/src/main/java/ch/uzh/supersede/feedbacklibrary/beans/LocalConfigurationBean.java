@@ -175,15 +175,15 @@ public class LocalConfigurationBean implements Serializable {
         coloringVertical =true;
         if (style == DARK) {
             topColors = new Integer[]{
-                    ANTHRACITE_DARK, GRAY_DARK
+                    ANTHRACITE_DARK, GRAY_DARK, GRAY
             };
         } else if (style == LIGHT) {
             topColors = new Integer[]{
-                    GRAY, SILVER
+                    GRAY, SILVER, WHITE
             };
         } else if (style == SWITZERLAND) {
             topColors = new Integer[]{
-                    WHITE, SWISS_RED
+                    WHITE, SWISS_RED, WHITE
             };
         } else if (style == GERMANY) {
             topColors = new Integer[]{
@@ -209,7 +209,7 @@ public class LocalConfigurationBean implements Serializable {
             };
         } else if (style == WINDOWS95) {
             topColors = new Integer[]{
-                    WIN95_GRAY,WIN95_BLUE
+                    WIN95_GRAY,WIN95_BLUE,WHITE
             };
         }
     }

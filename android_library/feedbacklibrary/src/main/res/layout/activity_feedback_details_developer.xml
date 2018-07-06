@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.ContentFrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/details_root"
+    android:id="@+id/details_developer_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -26,7 +26,7 @@
                 android:weightSum="9">
 
                 <Button
-                    android:id="@+id/details_button_images"
+                    android:id="@+id/details_developer_button_images"
                     android:layout_width="fill_parent"
                     android:layout_height="0dp"
                     android:layout_margin="5dp"
@@ -35,7 +35,7 @@
                     android:text="@string/details_images" />
 
                 <Button
-                    android:id="@+id/details_button_audio"
+                    android:id="@+id/details_developer_button_audio"
                     android:layout_width="fill_parent"
                     android:layout_height="0dp"
                     android:layout_margin="5dp"
@@ -45,7 +45,7 @@
                     android:text="@string/details_audio" />
 
                 <Button
-                    android:id="@+id/details_button_tags"
+                    android:id="@+id/details_developer_button_tags"
                     android:layout_width="fill_parent"
                     android:layout_margin="5dp"
                     android:layout_height="0dp"
@@ -68,37 +68,18 @@
                     android:orientation="horizontal"
                     android:weightSum="9">
 
-                    <Space
-                        android:layout_width="0dp"
-                        android:layout_height="fill_parent"
-                        android:layout_weight="2" />
-
-                    <Button
-                        android:id="@+id/details_button_down"
-                        android:layout_width="0dp"
-                        android:layout_height="fill_parent"
-                        android:layout_margin="5dp"
-                        android:layout_weight="2"
-                        android:gravity="center"
-                        android:onClick="onButtonClicked"
-                        android:text="@string/details_minus" />
-
                     <TextView
-                        android:id="@+id/details_text_votes"
+                        android:id="@+id/details_developer_text_votes"
                         android:layout_width="0dp"
                         android:layout_height="fill_parent"
                         android:layout_weight="3"
                         android:gravity="center" />
 
-                    <Button
-                        android:id="@+id/details_button_up"
+
+                    <Space
                         android:layout_width="0dp"
                         android:layout_height="fill_parent"
-                        android:layout_margin="5dp"
-                        android:layout_weight="2"
-                        android:gravity="center"
-                        android:onClick="onButtonClicked"
-                        android:text="@string/details_plus" />
+                        android:layout_weight="6" />
                 </LinearLayout>
 
                 <Space
@@ -107,33 +88,32 @@
                     android:layout_weight="1"/>
 
                 <Button
-                    android:id="@+id/details_button_make_public"
+                    android:id="@+id/details_developer_button_award_karma"
                     android:layout_width="fill_parent"
                     android:layout_height="0dp"
                     android:padding="0dp"
                     android:layout_weight="2"
-                    android:visibility="invisible"
                     android:onClick="onButtonClicked"
-                    android:text="@string/details_make_public"/>
+                    android:text="@string/details_developer_award_karma"/>
 
                 <TextView
-                    android:id="@+id/details_text_user"
+                    android:id="@+id/details_developer_text_user"
                     android:layout_width="fill_parent"
                     android:layout_height="0dp"
                     android:layout_margin="5dp"
                     android:layout_weight="2"
                     android:padding="5dp" />
 
-                <TextView
-                    android:id="@+id/details_text_status"
+                <Spinner
+                    android:id="@+id/details_developer_spinner_status"
                     android:layout_width="fill_parent"
                     android:layout_height="0dp"
                     android:layout_margin="5dp"
                     android:layout_weight="2"
-                    android:padding="5dp" />
+                    android:padding="5dp"/>
 
                 <TextView
-                    android:id="@+id/details_text_title"
+                    android:id="@+id/details_developer_text_title"
                     android:layout_width="fill_parent"
                     android:layout_height="0dp"
                     android:layout_margin="5dp"
@@ -151,7 +131,7 @@
             android:weightSum="9">
 
             <TextView
-                android:id="@+id/details_text_description"
+                android:id="@+id/details_developer_text_description"
                 android:layout_width="0dp"
                 android:layout_height="fill_parent"
                 android:layout_margin="5dp"
@@ -173,14 +153,14 @@
                 android:layout_weight="1" />
 
             <ScrollView
-                android:id="@+id/details_layout_scroll_container"
+                android:id="@+id/details_developer_layout_scroll_container"
                 android:layout_width="0dp"
                 android:layout_margin="5dp"
                 android:layout_height="fill_parent"
                 android:layout_weight="28">
 
                 <LinearLayout
-                    android:id="@+id/details_layout_scroll_layout"
+                    android:id="@+id/details_developer_layout_scroll_layout"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
@@ -202,7 +182,7 @@
             android:weightSum="8">
 
             <Button
-                android:id="@+id/details_button_subscribe"
+                android:id="@+id/details_developer_button_subscribe"
                 android:layout_width="0dp"
                 android:layout_height="fill_parent"
                 android:layout_margin="5dp"
@@ -211,7 +191,7 @@
                 android:text="@string/details_subscribe" />
 
             <Button
-                android:id="@+id/details_button_response"
+                android:id="@+id/details_developer_button_response"
                 android:layout_width="0dp"
                 android:layout_height="fill_parent"
                 android:layout_margin="5dp"

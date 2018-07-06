@@ -87,7 +87,12 @@ public class FeedbackListItem extends LinearLayout implements Comparable, ISorta
     }
 
     private void startFeedbackDetailsActivity() {
-        Intent intent = new Intent(getContext(), FeedbackDetailsActivity.class);
+        Intent intent = null;
+        if (ACTIVE.check(getContext())&& FeedbackDatabase.getInstance(getContext()).readBoolean(IS_DEVELOPER,false)){
+            intent = new Intent(getContext(), FeedbackDetailsDeveloperActivity.class);
+        }else {
+            intent = new Intent(getContext(), FeedbackDetailsActivity.class);
+        }
         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
         intent.putExtra(EXTRA_KEY_FEEDBACK_BEAN, feedbackBean);
         intent.putExtra(EXTRA_KEY_APPLICATION_CONFIGURATION, configuration);

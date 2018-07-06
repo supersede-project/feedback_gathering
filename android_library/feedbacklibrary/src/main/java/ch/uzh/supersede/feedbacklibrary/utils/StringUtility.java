@@ -24,7 +24,7 @@ public class StringUtility {
 
     public static String concatWithDelimiter(String delimiter, String... tokens) {
         String finalString = "";
-        if (tokens.length == 0){
+        if (tokens == null || tokens.length == 0){
             return finalString;
         }
         for (String t : tokens) {

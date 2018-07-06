@@ -77,7 +77,7 @@ public class HostActivity extends AbstractBaseActivity implements
 
     @Override
     public int getConfiguredMaxUserNameLength() {
-        return 10;
+        return 100;
     }
 
     @Override
@@ -93,7 +93,7 @@ public class HostActivity extends AbstractBaseActivity implements
     //Feedback Developer
     @Override
     public boolean isDeveloper() {
-        return false;
+        return true;
     }
 
     //Feedback Behavior
@@ -105,6 +105,6 @@ public class HostActivity extends AbstractBaseActivity implements
     //Feedback Layout
     @Override
     public FEEDBACK_STYLE getConfiguredFeedbackStyle() {
-        return FEEDBACK_STYLE.LIGHT;
+        return FEEDBACK_STYLE.DARK;
     }
 }

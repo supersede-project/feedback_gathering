@@ -17,6 +17,7 @@ import android.widget.*;
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.HashMap;
 
 import ch.uzh.supersede.feedbacklibrary.R;
 import ch.uzh.supersede.feedbacklibrary.beans.LocalConfigurationBean;
@@ -36,6 +37,7 @@ public abstract class AbstractBaseActivity extends AppCompatActivity {
     protected int screenHeight;
     protected LocalConfigurationBean configuration;
     protected InfoUtility infoUtility;
+    protected HashMap<View,Integer> viewToColorMap = new HashMap<>();
 
     protected <T> T getView(int id, Class<T> classType) {
         return classType.cast(findViewById(id));
@@ -101,6 +103,9 @@ public abstract class AbstractBaseActivity extends AppCompatActivity {
             for (View view : color != null ? views : new View[0]) {
                 if (view == null) {
                     continue;
+                }
+                if (!viewToColorMap.containsKey(view)){
+                    viewToColorMap.put(view,colorIndex);
                 }
                 colorizeText(color, view);
                 view.setBackgroundColor(color);
@@ -210,7 +215,8 @@ public abstract class AbstractBaseActivity extends AppCompatActivity {
         }
     }
 
-    protected void enableView(View view, int colorIndex, Boolean... conditionals) {
+    protected void enableView(View view, Integer colorIndex, Boolean... conditionals) {
+        colorIndex = (colorIndex==null?0:colorIndex);
         if (conditionals != null && conditionals.length > 0){
             for (Boolean b : conditionals){
                 if (!b){

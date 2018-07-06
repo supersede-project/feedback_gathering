@@ -89,7 +89,7 @@ public class FeedbackIdentityActivity extends AbstractBaseActivity {
                             editTag.setText(s.toString().substring(0,s.length()-1));
                             editTag.setSelection(s.length()-1);
                         }else{
-                            if (createdTags.contains(s.toString().substring(0,s.length()-1))){
+                            if (createdTags.contains(s.toString().substring(0,s.length()-1).toLowerCase())){
                                 Toast.makeText(getApplicationContext(), R.string.identity_tag_duplicate,Toast.LENGTH_SHORT).show();
                                 editTag.setText(s.toString().substring(0,s.length()-1));
                                 editTag.setSelection(s.length()-1);
@@ -124,7 +124,11 @@ public class FeedbackIdentityActivity extends AbstractBaseActivity {
                         }else if (s.length()>configuration.getMaxTagLength()){
                             Toast.makeText(getApplicationContext(),getString(R.string.identity_too_long)+configuration.getMaxTagLength(),Toast.LENGTH_SHORT).show();
                         }else{
-                            addTag(s);
+                            if (createdTags.contains(s.toString().toLowerCase())){
+                                Toast.makeText(getApplicationContext(), R.string.identity_tag_duplicate,Toast.LENGTH_SHORT).show();
+                            }else{
+                                addTag(s);
+                            }
                         }
                     }else{
                         Toast.makeText(getApplicationContext(),getString(R.string.identity_max_tags)+configuration.getMaxTagNumber(),Toast.LENGTH_SHORT).show();
@@ -170,7 +174,11 @@ public class FeedbackIdentityActivity extends AbstractBaseActivity {
                 @Override
                 public void onClick(View v) {
                     if (createdTags.size()<configuration.getMaxTagNumber()){
-                        addTag(((Button)v).getText().toString());
+                        if (createdTags.contains(((Button)v).getText().toString().toLowerCase())){
+                            Toast.makeText(getApplicationContext(), R.string.identity_tag_duplicate,Toast.LENGTH_SHORT).show();
+                        }else{
+                            addTag(((Button)v).getText().toString());
+                        }
                     }else{
                         Toast.makeText(getApplicationContext(),getString(R.string.identity_max_tags)+configuration.getMaxTagLength(),Toast.LENGTH_SHORT).show();
                     }
