@@ -23,11 +23,8 @@ public class Constants {
     public static final String SUPERSEDE_BASE_URL = RUNNING_MODE == PRODUCTIVE ? "https://platform.supersede.eu:8443/" : "http://supersede.es.atos.net:8081/";
     public static final String LIFETIME_TOKEN = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJzdXBlcl9hZG1pbiIsImNyZWF0ZWQiOjE1Mjc3NzQxODAyMzQsImV4cCI6MjEzMjU3NDE4MH0.A00XDDAt3PUsYNkBDiJD5jZ3CbimW4" +
             "-4YgEiyKu3DFTXhxQ5QuWy2fgZrAiqxtSiQbAOfMn-E8wLTvx0RQorjQ"; //FIXME [jfo] remove as soon as possible
-
     public static final String SEPARATOR = "::;;::;;";
 
-    public static final String EXTRA_KEY_BASE_URL = "baseURL";
-    public static final String EXTRA_KEY_LANGUAGE = "language";
     public static final String EXTRA_KEY_HOST_APPLICATION_NAME = "hostApplicationName";
     public static final String EXTRA_KEY_APPLICATION_CONFIGURATION = "applicationConfiguration";
     public static final String EXTRA_KEY_FEEDBACK_BEAN = "feedbackBean";
@@ -37,6 +34,11 @@ public class Constants {
     public static final String EXTRA_KEY_FEEDBACK_TAGS = "feedbackTags";
     public static final String EXTRA_FROM_CREATION = "fromCreation";
     public static final String EXTRA_KEY_FEEDBACK_DELETION = "feedbackDeletion";
+    public static final String EXTRA_KEY_ALL_STICKER_ANNOTATIONS = "allStickerAnnotations";
+    public static final String EXTRA_KEY_HAS_STICKER_ANNOTATIONS = "hasStickerAnnotations";
+    public static final String EXTRA_KEY_THEME_COLOR_0 = "themeColorPrimary";
+    public static final String EXTRA_KEY_THEME_COLOR_1 = "themeColorSecondary";
+    public static final String EXTRA_KEY_THEME_COLOR_2 = "themeColorTeritary";
 
     public static final String SHARED_PREFERENCES_ID = "ch.uzh.supersede.feedbacklibrary.feedback";
     public static final String SHARED_PREFERENCES_HOST_APPLICATION_NAME = "hostApplicationName";
@@ -48,9 +50,6 @@ public class Constants {
     public static final int REQUEST_ANNOTATE = 12;
 
     public static final String IMAGE_ANNOTATED_DATA_DB_KEY = "imageAnnotatedData";
-    public static final String EXTRA_KEY_ALL_STICKER_ANNOTATIONS = "allStickerAnnotations";
-    public static final String EXTRA_KEY_HAS_STICKER_ANNOTATIONS = "hasStickerAnnotations";
-
     public static final String NOT_YET_IMPLEMENTED_EXCEPTION = "Not yet implemented";
 
     public static class UtilsConstants {

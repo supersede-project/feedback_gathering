@@ -1,15 +1,18 @@
 package ch.uzh.supersede.feedbacklibrary.activities;
 
 
-import android.content.DialogInterface.OnClickListener;
 import android.annotation.SuppressLint;
-import android.content.*;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
-import android.text.*;
-import android.view.*;
+import android.text.Html;
+import android.text.InputFilter;
+import android.view.MotionEvent;
+import android.view.View;
 import android.widget.*;
 
 import java.util.List;
@@ -17,9 +20,7 @@ import java.util.List;
 import ch.uzh.supersede.feedbacklibrary.R;
 import ch.uzh.supersede.feedbacklibrary.beans.LocalFeedbackBean;
 import ch.uzh.supersede.feedbacklibrary.database.FeedbackDatabase;
-import ch.uzh.supersede.feedbacklibrary.models.AndroidUser;
-import ch.uzh.supersede.feedbacklibrary.models.AuthenticateRequest;
-import ch.uzh.supersede.feedbacklibrary.models.AuthenticateResponse;
+import ch.uzh.supersede.feedbacklibrary.models.*;
 import ch.uzh.supersede.feedbacklibrary.services.FeedbackService;
 import ch.uzh.supersede.feedbacklibrary.services.IFeedbackServiceEventListener;
 import ch.uzh.supersede.feedbacklibrary.utils.*;
@@ -89,6 +90,17 @@ public class FeedbackHubActivity extends AbstractBaseActivity implements IFeedba
         updateUserLevel(false);
         invokeVersionControl(2, R.id.hub_button_list, R.id.hub_button_settings);
         FeedbackService.getInstance(this).authenticate(this, new AuthenticateRequest("super_admin", "password")); //TODO [jfo] parse credentials
+        startNotificationService();
+    }
+
+    public void startNotificationService() {
+        Intent intent = new Intent(getBaseContext(), NotificationBaseService.class);
+        intent.putExtra(EXTRA_KEY_APPLICATION_CONFIGURATION, configuration);
+        startService(intent);
+    }
+
+    public void stopNotificationService() {
+        stopService(new Intent(getBaseContext(), NotificationBaseService.class));
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -216,13 +228,13 @@ public class FeedbackHubActivity extends AbstractBaseActivity implements IFeedba
                         if (getSharedPreferences(SHARED_PREFERENCES, MODE_PRIVATE).getBoolean(SHARED_PREFERENCES_ONLINE, false)) {
                             //der callback ob der server antwortet. generell speichern dieses status in einem state?
                             final EditText nameInputText = new EditText(this);
-                            nameInputText.setFilters(new InputFilter[]{ new InputFilter.LengthFilter(configuration.getMaxUserNameLength()
+                            nameInputText.setFilters(new InputFilter[]{new InputFilter.LengthFilter(configuration.getMaxUserNameLength()
                             )});
                             nameInputText.setSingleLine();
                             nameInputText.setMaxLines(1);
                             new PopUp(this)
                                     .withTitle(getString(R.string.hub_access_2))
-                                    .withMessage(getString(R.string.hub_access_2_description,configuration.getMinUserNameLength(),configuration.getMaxUserNameLength()))
+                                    .withMessage(getString(R.string.hub_access_2_description, configuration.getMinUserNameLength(), configuration.getMaxUserNameLength()))
                                     .withInput(nameInputText)
                                     .withCustomOk(getString(R.string.hub_confirm), getClickListener(ACTIVE, nameInputText)).buildAndShow();
                         } else {
