@@ -3,13 +3,12 @@ package ch.uzh.supersede.feedbacklibrary.activities;
 
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;
-import android.content.DialogInterface.OnClickListener;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.text.Html;
-import android.text.InputFilter;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.*;
@@ -89,6 +88,18 @@ public class FeedbackHubActivity extends AbstractBaseActivity implements IFeedba
         ServiceUtility.startService(NotificationService.class, this, new ServiceUtility.Extra(EXTRA_KEY_APPLICATION_CONFIGURATION, configuration));
         updateUserLevel(false);
         invokeVersionControl(2, R.id.hub_button_list, R.id.hub_button_settings);
+        FeedbackService.getInstance(this).authenticate(this, new AuthenticateRequest("test", "123")); //TODO [jfo] parse credentials
+        startNotificationService();
+    }
+
+    public void startNotificationService() {
+        Intent intent = new Intent(getBaseContext(), NotificationBaseService.class);
+        intent.putExtra(EXTRA_KEY_APPLICATION_CONFIGURATION, configuration);
+        startService(intent);
+    }
+
+    public void stopNotificationService() {
+        stopService(new Intent(getBaseContext(), NotificationBaseService.class));
     }
 
     @SuppressLint("ClickableViewAccessibility")
