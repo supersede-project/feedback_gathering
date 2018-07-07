@@ -89,7 +89,7 @@ public class FeedbackHubActivity extends AbstractBaseActivity implements IFeedba
         invokeVersionControl(2, R.id.hub_button_list, R.id.hub_button_settings);
 
         //FIXME [jfo] check permissions, i.e. authenticate only iff > level 1
-        FeedbackService.getInstance(this).authenticate(this, new AuthenticateRequest("super_admin", "password")); //TODO [jfo] parse credentials
+        FeedbackService.getInstance(this).authenticate(this, new AuthenticateRequest("test", "123")); //TODO [jfo] parse credentials
 
         //FIXME [jfo] check permissions, i.e. start service only iff > level 2
         ServiceUtility.startService(NotificationService.class, this, new ServiceUtility.Extra(EXTRA_KEY_APPLICATION_CONFIGURATION, configuration));

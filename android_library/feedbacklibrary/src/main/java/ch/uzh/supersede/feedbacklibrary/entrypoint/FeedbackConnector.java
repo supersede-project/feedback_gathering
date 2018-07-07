@@ -93,9 +93,6 @@ public class FeedbackConnector {
 
     private static void getActivityConfiguration(Activity activity, Intent intent, Bitmap screenshot) {
         Integer[] topColors = ImageUtility.calculateTopNColors(screenshot, 3, 20);
-        //        FeedbackDatabase.getInstance(activity).writeInteger(EXTRA_KEY_THEME_COLOR_0, topColors[0]);
-        //        FeedbackDatabase.getInstance(activity).writeInteger(EXTRA_KEY_THEME_COLOR_1, topColors[1]);
-        //        FeedbackDatabase.getInstance(activity).writeInteger(EXTRA_KEY_THEME_COLOR_2, topColors[2]);
 
         LocalConfigurationBean configurationBean = new LocalConfigurationBean(activity, topColors);
         //Host Name for Database
