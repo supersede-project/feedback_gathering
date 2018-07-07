@@ -57,7 +57,12 @@
         <activity android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
             android:theme="@style/Base.Theme.AppCompat" />
 
-        <service android:name=".services.NotificationBaseService" />
+        <service android:name=".services.NotificationService" />
+        <receiver android:name=".services.NotificationServiceBroadcastReceiver" >
+            <intent-filter>
+                <action android:name="NotificationServiceBroadcastReceiver"/>
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

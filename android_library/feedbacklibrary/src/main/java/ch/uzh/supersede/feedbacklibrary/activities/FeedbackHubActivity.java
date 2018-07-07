@@ -4,7 +4,6 @@ package ch.uzh.supersede.feedbacklibrary.activities;
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -50,7 +49,6 @@ public class FeedbackHubActivity extends AbstractBaseActivity implements IFeedba
     private byte[] cachedScreenshot = null;
     private String hostApplicationName = null;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -89,18 +87,12 @@ public class FeedbackHubActivity extends AbstractBaseActivity implements IFeedba
         }
         updateUserLevel(false);
         invokeVersionControl(2, R.id.hub_button_list, R.id.hub_button_settings);
+
+        //FIXME [jfo] check permissions, i.e. authenticate only iff > level 1
         FeedbackService.getInstance(this).authenticate(this, new AuthenticateRequest("super_admin", "password")); //TODO [jfo] parse credentials
-        startNotificationService();
-    }
 
-    public void startNotificationService() {
-        Intent intent = new Intent(getBaseContext(), NotificationBaseService.class);
-        intent.putExtra(EXTRA_KEY_APPLICATION_CONFIGURATION, configuration);
-        startService(intent);
-    }
-
-    public void stopNotificationService() {
-        stopService(new Intent(getBaseContext(), NotificationBaseService.class));
+        //FIXME [jfo] check permissions, i.e. start service only iff > level 2
+        ServiceUtility.startService(NotificationService.class, this, new ServiceUtility.Extra(EXTRA_KEY_APPLICATION_CONFIGURATION, configuration));
     }
 
     @SuppressLint("ClickableViewAccessibility")
