@@ -219,4 +219,7 @@
     <!--Tutorial-->
     <string name="tutorial_finished">Tutorial finished!</string>
     <string name="tutorial_alert">Finish the Tutorial first!</string>
+
+    <!-- Services -->
+    <string name="notification_service_shutdown">feedbacklibrary.intent.action.SHUTDOWN_SERVICE</string>
 </resources>

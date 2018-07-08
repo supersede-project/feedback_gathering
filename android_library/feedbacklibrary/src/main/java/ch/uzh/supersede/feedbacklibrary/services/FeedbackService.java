@@ -2,7 +2,6 @@ package ch.uzh.supersede.feedbacklibrary.services;
 
 import android.app.Activity;
 import android.content.Context;
-import android.net.*;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -14,20 +13,15 @@ import ch.uzh.supersede.feedbacklibrary.api.IFeedbackAPI;
 import ch.uzh.supersede.feedbacklibrary.beans.*;
 import ch.uzh.supersede.feedbacklibrary.components.buttons.FeedbackListItem;
 import ch.uzh.supersede.feedbacklibrary.database.FeedbackDatabase;
-import ch.uzh.supersede.feedbacklibrary.models.AndroidUser;
-import ch.uzh.supersede.feedbacklibrary.models.AuthenticateRequest;
-import ch.uzh.supersede.feedbacklibrary.models.AuthenticateResponse;
-import ch.uzh.supersede.feedbacklibrary.models.Feedback;
+import ch.uzh.supersede.feedbacklibrary.models.*;
 import ch.uzh.supersede.feedbacklibrary.stubs.RepositoryStub;
 import ch.uzh.supersede.feedbacklibrary.utils.Enums;
 import ch.uzh.supersede.feedbacklibrary.utils.FeedbackUtility;
 import okhttp3.*;
 import okhttp3.logging.HttpLoggingInterceptor;
-import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-import static android.content.Context.MODE_PRIVATE;
 import static ch.uzh.supersede.feedbacklibrary.services.IFeedbackServiceEventListener.EventType;
 import static ch.uzh.supersede.feedbacklibrary.services.IFeedbackServiceEventListener.EventType.*;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.*;
@@ -53,10 +47,10 @@ public abstract class FeedbackService {
 
     public static FeedbackService getInstance(Context context, boolean... useStubInput) {
         boolean useStubs = false;
-        if (useStubInput.length >0){
+        if (useStubInput.length > 0) {
             useStubs = useStubInput[0];
         }
-        if (ACTIVE.check(context)){
+        if (ACTIVE.check(context)) {
             useStubs = FeedbackDatabase.getInstance(context).readBoolean(USE_STUBS, false);
         }
 
@@ -217,8 +211,8 @@ public abstract class FeedbackService {
         }
 
         @Override
-        public void updateFeedbackStatus(IFeedbackServiceEventListener callback,FeedbackDetailsBean feedbackDetailsBean, Object item) {
-            if (item instanceof String){
+        public void updateFeedbackStatus(IFeedbackServiceEventListener callback, FeedbackDetailsBean feedbackDetailsBean, Object item) {
+            if (item instanceof String) {
                 //TODO: mbo implement real
             }
         }
@@ -301,7 +295,7 @@ public abstract class FeedbackService {
 
         @Override
         public void updateFeedbackStatus(IFeedbackServiceEventListener callback, FeedbackDetailsBean feedbackDetailsBean, Object item) {
-            RepositoryStub.updateFeedbackStatus(feedbackDetailsBean,item);
+            RepositoryStub.updateFeedbackStatus(feedbackDetailsBean, item);
             //TODO: mbo implement
         }
 

@@ -1,8 +1,6 @@
 package ch.uzh.supersede.feedbacklibrary.services;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
+import android.content.*;
 import android.util.Log;
 
 import ch.uzh.supersede.feedbacklibrary.beans.LocalConfigurationBean;
@@ -11,13 +9,14 @@ import ch.uzh.supersede.feedbacklibrary.utils.ServiceUtility;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.EXTRA_KEY_APPLICATION_CONFIGURATION;
 
 /**
- * Listens to broadcast events from the NotificationService and tries to restart i.e. re-instanciate it.
+ * Listens to broadcast events from the NotificationService and tries to restart i.e. re-instantiate it.
  */
-public class NotificationServiceBroadcastReceiver extends BroadcastReceiver {
+public class NotificationServiceShutdownReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        Log.d(this.getClass().getSimpleName(), "Restarting " + NotificationService.class.getSimpleName());
+        Log.i(this.getClass().getSimpleName(), "Restarting " + NotificationService.class.getSimpleName());
+        //TODO [jfo] check database if service shall be enabled
         LocalConfigurationBean configuration = (LocalConfigurationBean) intent.getSerializableExtra(EXTRA_KEY_APPLICATION_CONFIGURATION);
         ServiceUtility.startService(NotificationService.class, context, new ServiceUtility.Extra(EXTRA_KEY_APPLICATION_CONFIGURATION, configuration));
     }

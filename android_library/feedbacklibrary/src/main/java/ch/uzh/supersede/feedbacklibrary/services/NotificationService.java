@@ -1,34 +1,35 @@
 package ch.uzh.supersede.feedbacklibrary.services;
 
-import android.app.Notification;
-import android.app.PendingIntent;
-import android.app.Service;
+import android.app.*;
 import android.content.Intent;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 import android.util.Log;
-import android.widget.Toast;
 
 import ch.uzh.supersede.feedbacklibrary.R;
 import ch.uzh.supersede.feedbacklibrary.activities.FeedbackHubActivity;
 import ch.uzh.supersede.feedbacklibrary.beans.LocalConfigurationBean;
 import ch.uzh.supersede.feedbacklibrary.database.FeedbackDatabase;
+import ch.uzh.supersede.feedbacklibrary.models.AndroidUser;
+import ch.uzh.supersede.feedbacklibrary.utils.ServiceUtility;
 
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.*;
 
 public class NotificationService extends Service implements IFeedbackServiceEventListener {
-    private static final long POLL_SLEEP_TIME = 10000; // milliseconds //TODO [jfo] set to reasonable interval
+    private static final long POLL_SLEEP_TIME = 3000; // milliseconds //TODO [jfo] set to reasonable interval
+    private static final int MAX_FAIL_COUNT = 10;
     private LocalConfigurationBean configuration;
-    private int notificationId = 0;
+    private static int notificationId = 0;
+    private static int failCount = 0;
     private AsyncPoll asyncPoll;
     private Thread pollThread;
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         configuration = (LocalConfigurationBean) intent.getSerializableExtra(EXTRA_KEY_APPLICATION_CONFIGURATION);
-        Toast.makeText(this, "Service Started", Toast.LENGTH_LONG).show();
+        Log.i(getClass().getSimpleName(), "service started.");
         execAsyncPolling();
         return START_STICKY;
     }
@@ -40,12 +41,12 @@ public class NotificationService extends Service implements IFeedbackServiceEven
     }
 
     /**
-     * Create a never dyeing service by re-instanciating itself through a brocastReciever when the actual host app gets destroyed.
+     * Create a never dyeing service by re-instantiating itself through a brocastReciever when the actual host app gets destroyed.
      */
     @Override
     public void onTaskRemoved(Intent rootIntent) {
         super.onTaskRemoved(rootIntent);
-        Intent broadcastIntent = new Intent("NotificationServiceBroadcastReceiver");
+        Intent broadcastIntent = new Intent(getResources().getString(R.string.notification_service_shutdown));
         broadcastIntent.putExtra(EXTRA_KEY_APPLICATION_CONFIGURATION, configuration);
         sendBroadcast(broadcastIntent);
     }
@@ -53,11 +54,12 @@ public class NotificationService extends Service implements IFeedbackServiceEven
     @Override
     public void onDestroy() {
         super.onDestroy();
+        resetFailCount();
         if (asyncPoll != null) {
             asyncPoll.shutdown();
             pollThread = null;
         }
-        Toast.makeText(this, "Service Destroyed", Toast.LENGTH_LONG).show();
+        Log.i(getClass().getSimpleName(), "service stopped.");
     }
 
     protected Notification createNotification(String title, String message) {
@@ -89,25 +91,65 @@ public class NotificationService extends Service implements IFeedbackServiceEven
         pollThread.start();
     }
 
-    void execPoll() {
-        String userName = FeedbackDatabase.getInstance(this).readString(USER_NAME, null);
-        boolean isDeveloper = FeedbackDatabase.getInstance(this).readBoolean(IS_DEVELOPER, false);
+    enum NotificationEvent {
+        FEEDBACK_STATUS_NOTIFICATION,
+        ACHIEVEMENT_NOTIFICATION,
+        FEEDBACK_RESPONSE_NOTIFICATION,
+        FEEDBACK_VOTE_NOTIFICATION,
+        FEEDBACK_VISIBILITY_NOTIFICATION
+    }
 
-        FeedbackService.getInstance(this).getMineFeedbackVotes(this, null);
-        FeedbackService.getInstance(this).getOthersFeedbackVotes(this, null);
-        FeedbackService.getInstance(this).getFeedbackSubscriptions(this, null);
-//        FeedbackService.getInstance(this).getUser(this, new AndroidUser(userName, isDeveloper)); //FIXME [jfo] not working yet
+    void execPoll() {
+        if (failCount > MAX_FAIL_COUNT) {
+            resetFailCount();
+            ServiceUtility.stopService(NotificationService.class, getApplicationContext());
+            return;
+        }
+        switch (NotificationEvent.values()[notificationId % NotificationEvent.values().length]) {
+            case FEEDBACK_STATUS_NOTIFICATION:
+                // TODO [jfo] getSubscribedFeedback and check for status changes
+                FeedbackService.getInstance(this).getFeedbackList(this, null, configuration, 0);
+                break;
+            case ACHIEVEMENT_NOTIFICATION:
+                // TODO [jfo] getUser and check for karma changes
+                String userName = FeedbackDatabase.getInstance(this).readString(USER_NAME, null);
+                boolean isDeveloper = FeedbackDatabase.getInstance(this).readBoolean(IS_DEVELOPER, false);
+                FeedbackService.getInstance(this).getUser(this, new AndroidUser(userName, isDeveloper));
+                break;
+            case FEEDBACK_RESPONSE_NOTIFICATION:
+                // TODO [jfo] getSubscribedFeedback and check for status changes
+                break;
+            case FEEDBACK_VOTE_NOTIFICATION:
+                // TODO [jfo] getSubscribedFeedback and check for vote changes
+                break;
+            case FEEDBACK_VISIBILITY_NOTIFICATION:
+                // TODO [jfo] getMine & SubscribedFeedback and check for visinility changes
+                break;
+            default:
+                break;
+        }
+    }
+
+    @Override
+    public void onEventCompleted(IFeedbackServiceEventListener.EventType eventType, Object response) {
+        switch (eventType) {
+            case GET_MINE_FEEDBACK_VOTES:
+                handleMineFeedbackVotesUpdate();
+                break;
+            case GET_FEEDBACK_SUBSCRIPTIONS:
+                handleFeedbackSubscriptionUpdate();
+                break;
+            case GET_USER:
+                handleUserUpdate();
+                break;
+            default:
+                break;
+        }
     }
 
     private void handleMineFeedbackVotesUpdate() {
         //TODO [jfo] implement update notification
         Notification notification = createNotification("New Votes have arrived for your Feedback", "dummy votes message..");
-        execSendNotification(notification);
-    }
-
-    private void handleOthersFeedbackVotesUpdate() {
-        //TODO [jfo] implement update notification
-        Notification notification = createNotification("New Votes have arrived for others Feedback", "dummy feedback message..");
         execSendNotification(notification);
     }
 
@@ -124,33 +166,23 @@ public class NotificationService extends Service implements IFeedbackServiceEven
     }
 
     @Override
-    public void onEventCompleted(IFeedbackServiceEventListener.EventType eventType, Object response) {
-        switch (eventType) {
-            case GET_MINE_FEEDBACK_VOTES:
-                handleMineFeedbackVotesUpdate();
-                break;
-            case GET_OTHERS_FEEDBACK_VOTES:
-                handleOthersFeedbackVotesUpdate();
-                break;
-            case GET_FEEDBACK_SUBSCRIPTIONS:
-                handleFeedbackSubscriptionUpdate();
-                break;
-            case GET_USER:
-                handleUserUpdate();
-                break;
-            default:
-                break;
-        }
-    }
-
-    @Override
     public void onEventFailed(IFeedbackServiceEventListener.EventType eventType, Object response) {
-        // TODO [jfo] reasonable error handling
+        updateFailCount();
+        Log.e(getClass().getSimpleName(), "Event " + eventType + " failed: " + response.toString());
     }
 
     @Override
     public void onConnectionFailed(IFeedbackServiceEventListener.EventType eventType) {
-        // TODO [jfo] reasonable error handling
+        updateFailCount();
+        Log.e(getClass().getSimpleName(), "Event " + eventType + " failed: server is not available.");
+    }
+
+    private synchronized void updateFailCount() {
+        failCount++;
+    }
+
+    private synchronized void resetFailCount() {
+        failCount = 0;
     }
 
     /**
@@ -180,6 +212,7 @@ public class NotificationService extends Service implements IFeedbackServiceEven
         }
 
         synchronized void shutdown() {
+            resetFailCount();
             asyncPoll = null;
             isShutdown = true;
             synchronized (this) {

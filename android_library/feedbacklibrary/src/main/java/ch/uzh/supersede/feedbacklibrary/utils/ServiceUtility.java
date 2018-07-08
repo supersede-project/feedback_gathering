@@ -1,6 +1,5 @@
 package ch.uzh.supersede.feedbacklibrary.utils;
 
-import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
@@ -34,9 +33,9 @@ public class ServiceUtility {
         }
     }
 
-    public static void stopService(Class<?> serviceClass, Activity activity) {
-        if (isServiceRunning(serviceClass, activity)) {
-            activity.stopService(new Intent(activity.getBaseContext(), serviceClass));
+    public static void stopService(Class<?> serviceClass, Context context) {
+        if (isServiceRunning(serviceClass, context)) {
+            context.stopService(new Intent(context, serviceClass));
         }
     }
 
