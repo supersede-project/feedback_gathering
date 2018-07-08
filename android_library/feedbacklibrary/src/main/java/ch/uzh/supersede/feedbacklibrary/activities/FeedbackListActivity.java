@@ -112,20 +112,14 @@ public class FeedbackListActivity extends AbstractBaseActivity implements IFeedb
     public void onEventCompleted(EventType eventType, Object response) {
         switch (eventType) {
             case GET_FEEDBACK_LIST:
-                if (response instanceof List) {
-                    List<FeedbackDetailsBean> feedbackDetailsBeans = new ArrayList<>();
-                    for (Feedback feedback : (List<Feedback>) response) {
-                        FeedbackDetailsBean feedbackDetailsBean = FeedbackUtility.feedbackToFeedbackDetailsBean(this, feedback);
-                        if (feedbackDetailsBean != null){ //Avoid NP caused by old Repository Feedback
-                            feedbackDetailsBeans.add(feedbackDetailsBean);
-                            allFeedbackList.add(new FeedbackListItem(this, 8, feedbackDetailsBean.getFeedbackBean(), configuration, getTopColor(0)));
-                        }
-                    }
-                    activeFeedbackList = new ArrayList<>(allFeedbackList);
-                    doSearch(searchText.getText().toString());
-                    loadingTextView.setVisibility(View.INVISIBLE);
-                    sort();
+                List<FeedbackDetailsBean> feedbackDetailsBeans = FeedbackUtility.transformFeedbackResponse(response, this);
+                for (FeedbackDetailsBean feedbackDetailsBean : feedbackDetailsBeans) {
+                    allFeedbackList.add(new FeedbackListItem(this, 8, feedbackDetailsBean.getFeedbackBean(), configuration, getTopColor(0)));
                 }
+                activeFeedbackList = new ArrayList<>(allFeedbackList);
+                doSearch(searchText.getText().toString());
+                loadingTextView.setVisibility(View.INVISIBLE);
+                sort();
                 break;
             case GET_FEEDBACK_LIST_MOCK:
                 if (response instanceof ArrayList) {

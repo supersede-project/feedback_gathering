@@ -154,7 +154,7 @@ public class FeedbackResponseListItem extends LinearLayout implements Comparable
     }
 
     private int resolveTextColor(FeedbackResponseBean feedbackResponseBean) {
-        if (feedbackResponseBean != null && feedbackResponseBean.isDeveloper() || mode == EDITABLE && FeedbackDatabase.getInstance(getContext()).readBoolean(IS_DEVELOPER,false)) {
+        if (feedbackResponseBean != null && feedbackResponseBean.isDeveloper() || mode == EDITABLE && FeedbackDatabase.getInstance(getContext()).readBoolean(USER_IS_DEVELOPER,false)) {
             return ContextCompat.getColor(getContext(), R.color.gold_2);
         } else if (feedbackResponseBean != null && feedbackResponseBean.isFeedbackOwner() || mode == EDITABLE) {
             return ContextCompat.getColor(getContext(), R.color.accent);
@@ -163,7 +163,7 @@ public class FeedbackResponseListItem extends LinearLayout implements Comparable
         }
     }
     private int resolveBackgroundColor(FeedbackResponseBean feedbackResponseBean) {
-        if (feedbackResponseBean != null && feedbackResponseBean.isDeveloper() || mode == EDITABLE && FeedbackDatabase.getInstance(getContext()).readBoolean(IS_DEVELOPER,false)) {
+        if (feedbackResponseBean != null && feedbackResponseBean.isDeveloper() || mode == EDITABLE && FeedbackDatabase.getInstance(getContext()).readBoolean(USER_IS_DEVELOPER,false)) {
             return ContextCompat.getColor(getContext(), R.color.gold_3);
         } else if (feedbackResponseBean != null && feedbackResponseBean.isFeedbackOwner() || mode == EDITABLE) {
             return ContextCompat.getColor(getContext(), R.color.pink);

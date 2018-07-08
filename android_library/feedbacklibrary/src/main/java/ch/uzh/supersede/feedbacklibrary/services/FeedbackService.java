@@ -191,8 +191,12 @@ public abstract class FeedbackService {
 
         @Override
         public void getFeedbackSubscriptions(IFeedbackServiceEventListener callback, Activity activity) {
-            //TODO [jfo] add list of SUBSCRIBED feedbackIds as query
-            feedbackAPI.getFeedbackList(getToken(), getLanguage(), getApplicationId(), null, null).enqueue(
+            List<LocalFeedbackBean> feedbackBeans = FeedbackDatabase.getInstance(activity).getFeedbackBeans(SUBSCRIBED);
+            Long[] feedbackIds = new Long[feedbackBeans.size()];
+            for (int i = 0; i < feedbackBeans.size(); i++){
+                feedbackIds[i] = feedbackBeans.get(i).getFeedbackId();
+            }
+            feedbackAPI.getFeedbackList(getToken(), getLanguage(), getApplicationId(), feedbackIds).enqueue(
                     new RepositoryCallback<List<Feedback>>(callback, EventType.GET_FEEDBACK_SUBSCRIPTIONS) {
                     });
         }

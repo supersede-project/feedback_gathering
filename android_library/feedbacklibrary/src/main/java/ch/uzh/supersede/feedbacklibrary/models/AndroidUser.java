@@ -7,7 +7,7 @@ public class AndroidUser {
     private String name;
     private long applicationId;
     private int karma;
-    private Integer voteCount; //FIXME [jfo] because repo..
+    private VoteCount voteCount;
     private int feedbackCount;
     @SerializedName("developer")
     private boolean isDeveloper;
@@ -35,7 +35,7 @@ public class AndroidUser {
         return karma;
     }
 
-    public int getVoteCount() {
+    public VoteCount getVoteCount() {
         return voteCount;
     }
 
@@ -49,5 +49,18 @@ public class AndroidUser {
 
     public boolean isBlocked() {
         return isBlocked;
+    }
+
+    public class VoteCount {
+        int upVoteCount;
+        int downVoteCount;
+
+        public int getUpVoteCount() {
+            return upVoteCount;
+        }
+
+        public int getDownVoteCount() {
+            return downVoteCount;
+        }
     }
 }

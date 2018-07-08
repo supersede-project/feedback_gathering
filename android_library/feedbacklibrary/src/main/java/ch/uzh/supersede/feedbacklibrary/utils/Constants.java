@@ -12,9 +12,13 @@ public class Constants {
     public static final int PERMISSION_REQUEST_ALL = 800;
     public static final String FEEDBACK_CONTRIBUTOR = "feedbackContributor";
     public static final String SHARED_PREFERENCES = "feedbackSharedPreferences";
+
     public static final String USER_NAME = "userName";
-    public static final String IS_DEVELOPER = "isDeveloper";
+    public static final String USER_IS_DEVELOPER = "isDeveloper";
+    public static final String USER_KARMA = "userKarma";
+    public static final String USER_IS_BLOCKED = "userIsBlocked";
     public static final String REPORTED_FEEDBACK = "reportedFeedback";
+
     public static final String USE_STUBS = "useStubs";
     public static final String USER_NAME_ANONYMOUS = "anonymous";
     public static final String USER_NAME_CREATING = "being created ..";

@@ -255,7 +255,7 @@ public class FeedbackDetailsActivity extends AbstractBaseActivity {
 
     public static void persistFeedbackResponseLocally(Context context, FeedbackBean bean, LocalConfigurationBean configuration, String feedbackResponse) {
             String userName = FeedbackDatabase.getInstance(context).readString(USER_NAME, USER_NAME_ANONYMOUS);
-            boolean isDeveloper = FeedbackDatabase.getInstance(context).readBoolean(IS_DEVELOPER, false);
+            boolean isDeveloper = FeedbackDatabase.getInstance(context).readBoolean(USER_IS_DEVELOPER, false);
             boolean isOwner = bean.getUserName() != null && bean.getUserName().equals(userName);
             FeedbackResponseBean responseBean = RepositoryStub.persist(bean, feedbackResponse, userName, isDeveloper, isOwner);
             FeedbackResponseListItem item = new FeedbackResponseListItem(context, bean, responseBean, configuration, FIXED);

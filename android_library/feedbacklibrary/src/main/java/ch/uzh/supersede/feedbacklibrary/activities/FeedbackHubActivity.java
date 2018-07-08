@@ -252,7 +252,7 @@ public class FeedbackHubActivity extends AbstractBaseActivity implements IFeedba
                 if (tapCounter >= 5 && ACTIVE.check(this)) {
                     tapCounter = 0;
                     FeedbackDatabase.getInstance(this).writeString(USER_NAME, null);
-                    FeedbackDatabase.getInstance(this).writeBoolean(IS_DEVELOPER, false);
+                    FeedbackDatabase.getInstance(this).writeBoolean(USER_IS_DEVELOPER, false);
                     List<LocalFeedbackBean> ownFeedbackBeans = FeedbackDatabase.getInstance(this).getFeedbackBeans(OWN);
                     List<LocalFeedbackBean> subscribedFeedbackBeans = FeedbackDatabase.getInstance(this).getFeedbackBeans(SUBSCRIBED);
                     List<LocalFeedbackBean> votedFeedbackBeans = FeedbackDatabase.getInstance(this).getFeedbackBeans(VOTED);
@@ -383,7 +383,9 @@ public class FeedbackHubActivity extends AbstractBaseActivity implements IFeedba
                 if (response instanceof AndroidUser) {
                     AndroidUser androidUser = (AndroidUser) response;
                     FeedbackDatabase.getInstance(this).writeString(USER_NAME, androidUser.getName());
-                    FeedbackDatabase.getInstance(this).writeBoolean(IS_DEVELOPER, androidUser.isDeveloper());
+                    FeedbackDatabase.getInstance(this).writeInteger(USER_KARMA, androidUser.getKarma());
+                    FeedbackDatabase.getInstance(this).writeBoolean(USER_IS_DEVELOPER, androidUser.isDeveloper());
+                    FeedbackDatabase.getInstance(this).writeBoolean(USER_IS_BLOCKED, androidUser.isBlocked());
                     userName = androidUser.getName();
                 }
                 preAllocatedStringStorage[0] = null;
