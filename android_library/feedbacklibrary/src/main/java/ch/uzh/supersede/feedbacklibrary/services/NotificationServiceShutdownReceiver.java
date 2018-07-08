@@ -16,6 +16,8 @@ public class NotificationServiceShutdownReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         Log.i(this.getClass().getSimpleName(), "Restarting " + NotificationService.class.getSimpleName());
-        ServiceUtility.startService(NotificationService.class, context);
+        //TODO [jfo] check database if service shall be enabled
+        LocalConfigurationBean configuration = (LocalConfigurationBean) intent.getSerializableExtra(EXTRA_KEY_APPLICATION_CONFIGURATION);
+        ServiceUtility.startService(NotificationService.class, context, new ServiceUtility.Extra(EXTRA_KEY_APPLICATION_CONFIGURATION, configuration));
     }
 }
