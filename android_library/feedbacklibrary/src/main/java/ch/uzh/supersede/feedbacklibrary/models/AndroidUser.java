@@ -14,6 +14,10 @@ public class AndroidUser {
     @SerializedName("blocked")
     private boolean isBlocked;
 
+    public AndroidUser(String name){
+        this.name = name;
+    }
+
     public AndroidUser(String name, boolean isDeveloper) {
         this.name = name;
         this.isDeveloper = isDeveloper;
