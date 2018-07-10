@@ -113,25 +113,29 @@ public class NotificationService extends Service implements IFeedbackServiceEven
     }
 
     private void handleFeedbackSubscriptionUpdate(List<FeedbackDetailsBean> newFeedbackDetailsBeans) {
-        Notification notification = NotificationUtility.getInstance(this).createFeedbackUpdateNotification(newFeedbackDetailsBeans, this, configuration);
-        execSendNotification(notification);
+        List<Notification> notifications = NotificationUtility.getInstance(this).createFeedbackUpdateNotification(newFeedbackDetailsBeans, this, configuration, true);
+        for (Notification notification : notifications) {
+            execSendNotification(notification);
+        }
     }
 
     private void handleUserUpdate(AndroidUser androidUser) {
-        Notification notification = NotificationUtility.getInstance(this).createUserUpdateNotification(androidUser, this, configuration);
-        execSendNotification(notification);
+        List<Notification> notifications = NotificationUtility.getInstance(this).createUserUpdateNotification(androidUser, this, configuration, true);
+        for (Notification notification : notifications) {
+            execSendNotification(notification);
+        }
     }
 
     @Override
     public void onEventFailed(IFeedbackServiceEventListener.EventType eventType, Object response) {
         updateFailCount();
-        Log.e(getClass().getSimpleName(), "Event " + eventType + " failed: " + response.toString());
+        Log.e(getClass().getSimpleName(), getResources().getString(R.string.api_service_event_failed, eventType, response.toString()));
     }
 
     @Override
     public void onConnectionFailed(IFeedbackServiceEventListener.EventType eventType) {
         updateFailCount();
-        Log.e(getClass().getSimpleName(), "Event " + eventType + " failed: server is not available.");
+        Log.e(getClass().getSimpleName(), getResources().getString(R.string.api_service_connection_failed, eventType));
     }
 
     private synchronized void updateFailCount() {
@@ -154,7 +158,7 @@ public class NotificationService extends Service implements IFeedbackServiceEven
             Thread thisThread = Thread.currentThread();
             while (pollThread == thisThread) {
                 try {
-                    thisThread.sleep(POLL_SLEEP_TIME);
+                    pollThread.sleep(POLL_SLEEP_TIME); //NOSONAR
                     synchronized (this) {
                         while (isShutdown && pollThread == thisThread) {
                             wait();

@@ -3,6 +3,7 @@ package ch.uzh.supersede.feedbacklibrary.activities;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.widget.ContentFrameLayout;
+import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.*;
@@ -11,15 +12,12 @@ import java.util.*;
 
 import ch.uzh.supersede.feedbacklibrary.R;
 import ch.uzh.supersede.feedbacklibrary.beans.LocalFeedbackBean;
-import ch.uzh.supersede.feedbacklibrary.components.buttons.AbstractSettingsListItem;
-import ch.uzh.supersede.feedbacklibrary.components.buttons.SubscriptionListItem;
-import ch.uzh.supersede.feedbacklibrary.components.buttons.VoteListItem;
+import ch.uzh.supersede.feedbacklibrary.components.buttons.*;
 import ch.uzh.supersede.feedbacklibrary.database.FeedbackDatabase;
-import ch.uzh.supersede.feedbacklibrary.services.FeedbackService;
-import ch.uzh.supersede.feedbacklibrary.services.IFeedbackServiceEventListener;
-import ch.uzh.supersede.feedbacklibrary.utils.CompareUtility;
+import ch.uzh.supersede.feedbacklibrary.services.*;
+import ch.uzh.supersede.feedbacklibrary.utils.ServiceUtility;
 
-import static ch.uzh.supersede.feedbacklibrary.utils.Constants.USE_STUBS;
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.*;
 import static ch.uzh.supersede.feedbacklibrary.utils.Enums.SETTINGS_VIEW;
 import static ch.uzh.supersede.feedbacklibrary.utils.Enums.SETTINGS_VIEW.*;
 
@@ -62,17 +60,27 @@ public class FeedbackSettingsActivity extends AbstractBaseActivity implements IF
             }
         });
 
-        colorLayouts(0,getView(R.id.settings_root,ContentFrameLayout.class));
+        ToggleButton enableNotificationsToggle = getView(R.id.settings_toggle_enable_notifications, ToggleButton.class);
+        enableNotificationsToggle.setChecked(FeedbackDatabase.getInstance(this).readBoolean(ENABLE_NOTIFICATIONS, false));
+        enableNotificationsToggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean isEnabled) {
+                FeedbackDatabase.getInstance(compoundButton.getContext()).writeBoolean(ENABLE_NOTIFICATIONS, isEnabled);
+                execStartNotificationService(isEnabled);
+            }
+        });
+
+        colorLayouts(0, getView(R.id.settings_root, ContentFrameLayout.class));
         colorTextOnly(0,
-                getView(R.id.settings_text_use_stubs,TextView.class),
-                getView(R.id.settings_text_feature_2,TextView.class),
-                getView(R.id.settings_text_feature_3,TextView.class),
-                getView(R.id.settings_text_title_general,TextView.class),
-                getView(R.id.settings_text_title_feedback,TextView.class));
+                getView(R.id.settings_text_use_stubs, TextView.class),
+                getView(R.id.settings_text_enable_notifications, TextView.class),
+                getView(R.id.settings_text_feature_3, TextView.class),
+                getView(R.id.settings_text_title_general, TextView.class),
+                getView(R.id.settings_text_title_feedback, TextView.class));
         colorViews(1,
-                getView(R.id.settings_toggle_use_stubs,ToggleButton.class),
-                getView(R.id.settings_toggle_feature_2,ToggleButton.class),
-                getView(R.id.settings_toggle_feature_3,ToggleButton.class));
+                getView(R.id.settings_toggle_use_stubs, ToggleButton.class),
+                getView(R.id.settings_toggle_enable_notifications, ToggleButton.class),
+                getView(R.id.settings_toggle_feature_3, ToggleButton.class));
         colorShape(0, myButton, othersButton, settingsButton);
         colorShape(1, myButton);
         colorViews(1,
@@ -80,7 +88,7 @@ public class FeedbackSettingsActivity extends AbstractBaseActivity implements IF
                 getView(R.id.settings_layout_color_2, LinearLayout.class),
                 getView(R.id.settings_layout_color_3, LinearLayout.class),
                 getView(R.id.settings_layout_color_4, LinearLayout.class));
-        invokeVersionControl(5,R.id.settings_toggle_feature_2,R.id.settings_toggle_feature_3);
+        invokeVersionControl(5, R.id.settings_toggle_feature_3);
         onPostCreate();
     }
 
@@ -122,18 +130,26 @@ public class FeedbackSettingsActivity extends AbstractBaseActivity implements IF
 
     @Override
     public void onEventFailed(EventType eventType, Object response) {
-        //TODO [jfo] implementation
+        Log.e(getClass().getSimpleName(), getResources().getString(R.string.api_service_event_failed, eventType, response.toString()));
     }
 
     @Override
     public void onConnectionFailed(EventType eventType) {
-        //TODO [jfo] implementation
+        Log.e(getClass().getSimpleName(), getResources().getString(R.string.api_service_connection_failed, eventType));
     }
 
     private void execFillFeedbackList() {
         FeedbackService.getInstance(this).getOthersFeedbackVotes(this, this);
         FeedbackService.getInstance(this).getMineFeedbackVotes(this, this);
         FeedbackService.getInstance(this).getFeedbackSubscriptions(this, this);
+    }
+
+    private void execStartNotificationService(boolean isEnabled) {
+        if (isEnabled) {
+            ServiceUtility.startService(NotificationService.class, this, new ServiceUtility.Extra(EXTRA_KEY_APPLICATION_CONFIGURATION, configuration));
+        } else {
+            ServiceUtility.stopService(NotificationService.class, this);
+        }
     }
 
     private Button setOnClickListener(Button button) {

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.PorterDuff;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutCompat;
+import android.util.Log;
 import android.view.Gravity;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
@@ -11,6 +12,7 @@ import android.widget.Switch;
 import android.widget.Toast;
 
 import ch.uzh.supersede.feedbacklibrary.BuildConfig;
+import ch.uzh.supersede.feedbacklibrary.R;
 import ch.uzh.supersede.feedbacklibrary.beans.LocalConfigurationBean;
 import ch.uzh.supersede.feedbacklibrary.beans.LocalFeedbackBean;
 import ch.uzh.supersede.feedbacklibrary.beans.LocalFeedbackState;
@@ -73,12 +75,12 @@ public class SubscriptionListItem extends AbstractSettingsListItem implements IF
 
     @Override
     public void onEventFailed(EventType eventType, Object response) {
-        //TODO [jfo] implement
+        Log.e(getClass().getSimpleName(), getResources().getString(R.string.api_service_event_failed, eventType, response.toString()));
     }
 
     @Override
     public void onConnectionFailed(EventType eventType) {
-        //TODO [jfo] implement
+        Log.e(getClass().getSimpleName(), getResources().getString(R.string.api_service_connection_failed, eventType));
     }
 
     @Override

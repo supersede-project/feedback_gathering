@@ -7,6 +7,7 @@
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
         android:allowBackup="false"
@@ -62,18 +63,15 @@
 
         <receiver
             android:name=".services.NotificationServiceShutdownReceiver"
-            android:enabled="true"
             android:exported="false">
             <intent-filter>
                 <action android:name="@string/notification_service_shutdown" />
             </intent-filter>
         </receiver>
-        <receiver
-            android:name=".services.BootCompletedReceiver"
-            android:enabled="true"
-            android:exported="false">
+        <receiver android:name=".services.BootCompletedReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
             </intent-filter>
         </receiver>
     </application>

@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import ch.uzh.supersede.feedbacklibrary.R;
@@ -44,7 +45,7 @@ public class NotificationUtility {
     }
 
     private Notification createNotification(String title, String message, Context context, LocalConfigurationBean configuration) {
-        if (message.isEmpty()){
+        if (message.isEmpty()) {
             return null;
         }
 
@@ -64,43 +65,66 @@ public class NotificationUtility {
                 .build();
     }
 
-    public Notification createUserUpdateNotification(AndroidUser androidUser, Context context, LocalConfigurationBean configuration) {
+    public List<Notification> createUserUpdateNotification(AndroidUser androidUser, Context context, LocalConfigurationBean configuration, boolean isSummary) {
+        if (isSummary) {
+            List<Notification> notifications = new ArrayList<>();
+            notifications.add(createUserUpdateNotificationSummary(androidUser, context, configuration));
+            return notifications;
+        }
+        return createUserUpdateNotifications(androidUser, context, configuration);
+    }
+
+    private List<Notification> createUserUpdateNotifications(AndroidUser androidUser, Context context, LocalConfigurationBean configuration) {
+        throw new UnsupportedOperationException("not yet implemented.");
+    }
+
+    private Notification createUserUpdateNotificationSummary(AndroidUser androidUser, Context context, LocalConfigurationBean configuration) {
         StringBuilder message = new StringBuilder();
         if (androidUser.isBlocked() != userIsBlocked) {
-            String partMessage = androidUser.isBlocked() ? "Your account got blocked!" : "Your account got unblocked!";
-            message.append(partMessage);
+            int resource = androidUser.isBlocked() ? R.string.notification_user_blocked : R.string.notification_user_unblocked;
+            message.append(context.getResources().getString(resource));
             message.append('\n');
             userIsBlocked = androidUser.isBlocked();
             FeedbackDatabase.getInstance(context).writeBoolean(USER_IS_BLOCKED, userIsBlocked);
         }
         if (androidUser.getKarma() != userKarma) {
             int increase = userKarma - androidUser.getKarma();
-            String partMessage = increase > 0 ? "Your karma has increased by " : "Your karma has decreased by ";
-            message.append(partMessage);
-            message.append(increase);
+            int resource = increase > 0 ? R.string.notification_user_karma_increased : R.string.notification_user_karma_decreased;
+            message.append(context.getResources().getString(resource, increase));
             message.append('\n');
             userKarma = androidUser.getKarma();
             FeedbackDatabase.getInstance(context).writeInteger(USER_KARMA, userKarma);
         }
         if (androidUser.isDeveloper() != userIsDeveloper) {
-            String partMessage = androidUser.isDeveloper() ? "Your are now a developer!" : "Your no longer a developer!";
-            message.append(partMessage);
+            int resource = androidUser.isDeveloper() ? R.string.notification_user_developer : R.string.notification_user_not_developer;
+            message.append(context.getResources().getString(resource));
             message.append('\n');
             userIsDeveloper = androidUser.isDeveloper();
             FeedbackDatabase.getInstance(context).writeBoolean(USER_IS_DEVELOPER, userIsDeveloper);
         }
         if (!androidUser.getName().equals(userName)) {
             userName = androidUser.getName();
-            message.append("Your username has changed to ");
-            message.append(userName);
+            message.append(context.getResources().getString(R.string.notification_user_name_changed, userName));
             message.append('\n');
             FeedbackDatabase.getInstance(context).writeString(USER_NAME, userName);
         }
-
-        return createNotification("Your user has received new updates", message.toString(), context, configuration);
+        return createNotification(context.getResources().getString(R.string.notification_user_title), message.toString(), context, configuration);
     }
 
-    public Notification createFeedbackUpdateNotification(List<FeedbackDetailsBean> newFeedbackDetailsBeans, Context context, LocalConfigurationBean configuration) {
+    public List<Notification> createFeedbackUpdateNotification(List<FeedbackDetailsBean> newFeedbackDetailsBeans, Context context, LocalConfigurationBean configuration, boolean isSummary) {
+        if (isSummary) {
+            List<Notification> notifications = new ArrayList<>();
+            notifications.add(createFeedbackUpdateNotificationSummary(newFeedbackDetailsBeans, context, configuration));
+            return notifications;
+        }
+        return createFeedbackUpdateNotifications(newFeedbackDetailsBeans, context, configuration);
+    }
+
+    private List<Notification> createFeedbackUpdateNotifications(List<FeedbackDetailsBean> newFeedbackDetailsBeans, Context context, LocalConfigurationBean configuration) {
+        throw new UnsupportedOperationException("not yet implemented.");
+    }
+
+    private Notification createFeedbackUpdateNotificationSummary(List<FeedbackDetailsBean> newFeedbackDetailsBeans, Context context, LocalConfigurationBean configuration) {
         List<LocalFeedbackBean> oldFeedbackBeans = FeedbackDatabase.getInstance(context).getFeedbackBeans(SUBSCRIBED);
         int newResponses = 0;
         int newOwnResponses = 0;
@@ -119,48 +143,40 @@ public class NotificationUtility {
                     newResponses += responseChange;
                     newVotes += voteChange;
                     statusUpdates += statusChange;
-                    if (newFeedback.getUserName().equals(userName)){
+                    if (newFeedback.getUserName().equals(userName)) {
                         newOwnResponses += responseChange;
                         newOwnVotes += voteChange;
                         ownStatusUpdates += statusUpdates;
                     }
                     //TODO [jfo] check for public/private feedback
+                    FeedbackDatabase.getInstance(context).writeFeedback(newFeedback.getFeedbackBean(), Enums.SAVE_MODE.SUBSCRIBED);
                 }
             }
         }
 
         StringBuilder message = new StringBuilder();
-        if (newResponses > 0) {
-            message.append("There are ");
-            message.append(newResponses);
-            message.append(" new responses on your subscribed feedback, thereof ");
-            message.append(newOwnResponses);
-            message.append(" off your own.");
-            message.append('\n');
-        }
-        if (newVotes != 0) {
-            message.append("There are ");
-            message.append(newVotes);
-            message.append(" new votes on your subscribed feedback, thereof ");
-            message.append(newOwnVotes);
-            message.append(" off your own.");
-            message.append('\n');
-        }
-        if (statusUpdates > 0) {
-            message.append("The status of ");
-            message.append(statusUpdates);
-            message.append(" off your subscribed feedback have changed, thereof ");
-            message.append(ownStatusUpdates);
-            message.append(" off your own.");
-            message.append('\n');
-        }
-        if (visibilityUpdates > 0) {
-            message.append("The visibility of ");
-            message.append(visibilityUpdates);
-            message.append(" off your feedback have changed.");
-            message.append('\n');
-        }
+        append(message, context, R.string.notification_feedback_responses, newResponses, R.string.notification_feedback_own, newOwnResponses);
+        append(message, context, R.string.notification_feedback_votes, newVotes, R.string.notification_feedback_own, newOwnVotes);
+        append(message, context, R.string.notification_feedback_status, statusUpdates, R.string.notification_feedback_own, ownStatusUpdates);
+        append(message, context, R.string.notification_feedback_visibility, visibilityUpdates);
 
-        return createNotification("Your subscribed feedback have received updates", message.toString(), context, configuration);
+        return createNotification(context.getResources().getString(R.string.notification_feedback_title), message.toString(), context, configuration);
+    }
+
+    private void append(StringBuilder message, Context context, Integer resource, Integer value) {
+        append(message, context, resource, value, null, null);
+    }
+
+    private void append(StringBuilder message, Context context, Integer resource, Integer value, Integer resourceOwn, Integer valueOwn) {
+        if (resource == null) {
+            return;
+        }
+        if (value != 0) {
+            message.append(context.getResources().getString(resource, value));
+            if (valueOwn != null && resourceOwn != null && valueOwn != 0) {
+                message.append(context.getResources().getString(resourceOwn, valueOwn));
+            }
+            message.append('\n');
+        }
     }
 }

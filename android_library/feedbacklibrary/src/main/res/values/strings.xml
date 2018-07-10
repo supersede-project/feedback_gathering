@@ -151,7 +151,7 @@
     <string name="details_make_public">Make Feedback Public</string>
     <string name="details_make_public_title">Confirm Feedback Publishing</string>
     <string name="details_make_public_content">Do you want to publish this Feedback?\nA published Feedback can be seen, rated and responded upon by other Users and the Developers.\nThis decision cannot be reverted.</string>
-    <string name="details_published">Published!</string>
+
     <string name="details_report_title">Report Feedback</string>
     <string name="details_report_content">Enter a short Summary with a length between %1$d and %2$d Character to describe your Report:</string>
     <string name="details_report_sent">Report sent, Thank you!</string>
@@ -172,23 +172,26 @@
     <string name="details_developer_votes_title">Votes: </string>
     <string name="details_developer_delete">Delete</string>
     <!--Feedback-->
-    <!--Settings-->
 
+    <!--Settings-->
     <string name="settings_general_title"><b>General Settings</b></string>
     <string name="settings_feedback_title"><b>Feedback Settings</b></string>
     <string name="settings_use_stubs">Use stubs</string>
+    <string name="settings_enable_notifications">Enable notifications</string>
     <string name="settings_button_mine">Votes Sent</string>
     <string name="settings_button_others">Votes Received</string>
     <string name="settings_button_subscriptions">Subscriptions</string>
+    <string name="details_published">Published!</string>
+
     <!--Abstract-->
     <string name="abstract_button_clicked">Button \n\"%1$s\"\n clicked!</string>
     <string name="_open"><![CDATA[<]]></string>
     <string name="_close"><![CDATA[>]]></string>
     <!--Identity-->
-    <string name="identity_input_title">Input Feedback-Title here...</string>
-    <string name="identity_input_tags">Input Feedback-Tags here...</string>
-    <string name="identity_too_short">Tag too short! Minimum: </string>
-    <string name="identity_too_long">Tag too long! Maximum: </string>
+    <string name="identity_input_title">Input Feedback-Title here&#8230;</string>
+    <string name="identity_input_tags">Input Feedback-Tags here&#8230;</string>
+    <string name="identity_too_short">Tag too short! Minimum:</string>
+    <string name="identity_too_long">Tag too long! Maximum:</string>
     <string name="identity_max_tags">Maximum number of Tags! Delete some to continue!</string>
     <string name="identity_tag_already_contained">Maximum number of Tags! Delete some to continue!</string>
     <string name="identity_tag_duplicate">Tag already in your Tag-List!</string>
@@ -222,4 +225,24 @@
 
     <!-- Services -->
     <string name="notification_service_shutdown">feedbacklibrary.intent.action.SHUTDOWN_SERVICE</string>
+    <string name="api_service_event_failed">Event %1$s failed: %2$s.</string>
+    <string name="api_service_connection_failed">Event %1$s failed: server is not available.</string>
+
+
+    <!-- Notifications -->
+    <string name="notification_user_title">Your user has received new updates.</string>
+    <string name="notification_user_blocked">Your account got blocked!</string>
+    <string name="notification_user_unblocked">Your account got unblocked!</string>
+    <string name="notification_user_karma_increased">Your karma has increased by %1$d.</string>
+    <string name="notification_user_karma_decreased">Your karma has decreased by %1$d.</string>
+    <string name="notification_user_developer">Your are now a developer!</string>
+    <string name="notification_user_not_developer">Your no longer a developer!</string>
+    <string name="notification_user_name_changed">Your username has changed to %1$s.</string>
+    <string name="notification_feedback_title">Your subscribed feedback have received updates.</string>
+    <string name="notification_feedback_responses">There are %1$d new responses on your subscribed feedback.</string>
+    <string name="notification_feedback_votes">There are %1$d new votes on your subscribed feedback.</string>
+    <string name="notification_feedback_status">The status of %1$d off your subscribed feedback have changed.</string>
+    <string name="notification_feedback_visibility">The visibility of %1$d off your own feedback have changed.</string>
+    <string name="notification_feedback_own">Thereof %1$d off your own.</string>
+
 </resources>

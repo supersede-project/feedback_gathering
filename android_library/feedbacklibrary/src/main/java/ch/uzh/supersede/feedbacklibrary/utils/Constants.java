@@ -20,6 +20,7 @@ public class Constants {
     public static final String REPORTED_FEEDBACK = "reportedFeedback";
 
     public static final String USE_STUBS = "useStubs";
+    public static final String ENABLE_NOTIFICATIONS = "enableNotifications";
     public static final String USER_NAME_ANONYMOUS = "anonymous";
     public static final String USER_NAME_CREATING = "being created ..";
     public static final String SPACE = " ";
