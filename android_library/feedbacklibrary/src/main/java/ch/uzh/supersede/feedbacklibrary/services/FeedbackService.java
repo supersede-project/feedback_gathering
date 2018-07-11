@@ -174,7 +174,7 @@ public abstract class FeedbackService {
 
         @Override
         public void getFeedbackList(IFeedbackServiceEventListener callback, Activity activity, LocalConfigurationBean configuration, int backgroundColor) {
-            feedbackAPI.getFeedbackList(getToken(), getLanguage(), getApplicationId()).enqueue(
+            feedbackAPI.getFeedbackList(getToken(), getLanguage(), getApplicationId(), null, null).enqueue(
                     new RepositoryCallback<List<Feedback>>(callback, EventType.GET_FEEDBACK_LIST) {
                     });
         }
@@ -182,7 +182,7 @@ public abstract class FeedbackService {
         @Override
         public void getMineFeedbackVotes(IFeedbackServiceEventListener callback, Activity activity) {
             //TODO [jfo] add list of VOTED feedbackIds as query
-            feedbackAPI.getFeedbackList(getToken(), getLanguage(), getApplicationId()).enqueue(
+            feedbackAPI.getFeedbackList(getToken(), getLanguage(), getApplicationId(), null, null).enqueue(
                     new RepositoryCallback<List<Feedback>>(callback, EventType.GET_OTHERS_FEEDBACK_VOTES) {
                     });
         }
@@ -190,7 +190,7 @@ public abstract class FeedbackService {
         @Override
         public void getOthersFeedbackVotes(IFeedbackServiceEventListener callback, Activity activity) {
             //TODO [jfo] add list of OWN feedbackIds as query
-            feedbackAPI.getFeedbackList(getToken(), getLanguage(), getApplicationId()).enqueue(
+            feedbackAPI.getFeedbackList(getToken(), getLanguage(), getApplicationId(), null, null).enqueue(
                     new RepositoryCallback<List<Feedback>>(callback, EventType.GET_MINE_FEEDBACK_VOTES) {
                     });
         }
@@ -198,7 +198,7 @@ public abstract class FeedbackService {
         @Override
         public void getFeedbackSubscriptions(IFeedbackServiceEventListener callback, Activity activity) {
             //TODO [jfo] add list of SUBSCRIBED feedbackIds as query
-            feedbackAPI.getFeedbackList(getToken(), getLanguage(), getApplicationId()).enqueue(
+            feedbackAPI.getFeedbackList(getToken(), getLanguage(), getApplicationId(), null, null).enqueue(
                     new RepositoryCallback<List<Feedback>>(callback, EventType.GET_FEEDBACK_SUBSCRIPTIONS) {
                     });
         }
