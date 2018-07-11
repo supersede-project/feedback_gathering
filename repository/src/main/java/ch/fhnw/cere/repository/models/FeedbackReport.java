@@ -1,33 +1,37 @@
 package ch.fhnw.cere.repository.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 
 @Entity
-public class FeedbackTag {
+public class FeedbackReport {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
-    @JsonIgnore
+    @ManyToOne(cascade = {CascadeType.PERSIST})
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JoinColumn(name = "reporter_id")
+    private AndroidUser reporter;
+
     @ManyToOne(cascade = {CascadeType.PERSIST})
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "feedback_id")
     private Feedback feedback;
 
-    private String tag;
+    private String reason;
 
-    public FeedbackTag() {
+    public FeedbackReport() {
 
     }
 
-    public FeedbackTag(Feedback feedback, String tag) {
+    public FeedbackReport(Feedback feedback, AndroidUser reporter, String reason) {
         this.feedback = feedback;
-        this.tag = tag;
+        this.reporter = reporter;
+        this.reason = reason;
     }
 
     public long getId() {
@@ -38,6 +42,14 @@ public class FeedbackTag {
         this.id = id;
     }
 
+    public AndroidUser getReporter() {
+        return reporter;
+    }
+
+    public void setReporter(AndroidUser reporter) {
+        this.reporter = reporter;
+    }
+
     public Feedback getFeedback() {
         return feedback;
     }
@@ -46,11 +58,11 @@ public class FeedbackTag {
         this.feedback = feedback;
     }
 
-    public String getTag() {
-        return tag;
+    public String getReason() {
+        return reason;
     }
 
-    public void setTag(String tag) {
-        this.tag = tag;
+    public void setReason(String reason) {
+        this.reason = reason;
     }
 }

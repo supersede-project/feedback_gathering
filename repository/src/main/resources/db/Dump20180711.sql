@@ -29,7 +29,7 @@ CREATE TABLE `android_user` (
   `is_developer` bit(1) NOT NULL,
   `is_blocked` bit(1) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -38,7 +38,7 @@ CREATE TABLE `android_user` (
 
 LOCK TABLES `android_user` WRITE;
 /*!40000 ALTER TABLE `android_user` DISABLE KEYS */;
-INSERT INTO `android_user` VALUES (1,-888,'AUser1','','\0'),(3,0,'AUser2','\0',''),(4,0,'AUser3','\0',''),(5,-888,'AUser2#1','\0','\0'),(6,-888,'AUser2#2','\0','\0'),(7,-888,'AUser2#3','','\0'),(8,-888,'AUser2#4','','\0'),(9,-888,'AUser2#5','','\0');
+INSERT INTO `android_user` VALUES (1,1,'AUser1','','\0'),(3,1,'AUser2','\0',''),(4,1,'AUser3','\0',''),(5,1,'AUser2#1','\0','\0'),(6,1,'AUser2#2','\0','\0'),(7,1,'AUser2#3','','\0'),(8,1,'AUser2#4','','\0'),(9,1,'AUser2#5','','\0');
 /*!40000 ALTER TABLE `android_user` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -282,30 +282,33 @@ INSERT INTO `feedback` VALUES (1,1,2,'2017-05-31 19:57:54','en','Test feedback',
 UNLOCK TABLES;
 
 --
--- Table structure for table `feedback_label`
+-- Table structure for table `feedback_report`
 --
 
-DROP TABLE IF EXISTS `feedback_label`;
+DROP TABLE IF EXISTS `feedback_report`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `feedback_label` (
+CREATE TABLE `feedback_report` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `reporter_id` bigint(20) NOT NULL,
   `feedback_id` bigint(20) NOT NULL,
-  `tag` varchar(255) NOT NULL,
+  `reason` text,
   PRIMARY KEY (`id`),
-  KEY `feedback_vote` (`feedback_id`),
-  CONSTRAINT `feedback_vote` FOREIGN KEY (`feedback_id`) REFERENCES `feedback` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8;
+  KEY `reporter_id` (`reporter_id`),
+  KEY `feedback_id` (`feedback_id`),
+  CONSTRAINT `feedback_iddf` FOREIGN KEY (`feedback_id`) REFERENCES `feedback` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `reporter_id` FOREIGN KEY (`reporter_id`) REFERENCES `android_user` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `feedback_label`
+-- Dumping data for table `feedback_report`
 --
 
-LOCK TABLES `feedback_label` WRITE;
-/*!40000 ALTER TABLE `feedback_label` DISABLE KEYS */;
-INSERT INTO `feedback_label` VALUES (1,37,'Color'),(2,37,'GUI'),(3,38,'Bug'),(4,39,'Bug'),(5,36,'Improvement'),(6,36,'Performance'),(7,35,'GUI'),(8,35,'Usability'),(9,35,'Improvement'),(10,34,'Improvement'),(11,34,'Usability');
-/*!40000 ALTER TABLE `feedback_label` ENABLE KEYS */;
+LOCK TABLES `feedback_report` WRITE;
+/*!40000 ALTER TABLE `feedback_report` DISABLE KEYS */;
+INSERT INTO `feedback_report` VALUES (1,8,1,'This is bullshit!');
+/*!40000 ALTER TABLE `feedback_report` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -324,7 +327,9 @@ CREATE TABLE `feedback_response` (
   `content` text NOT NULL,
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
-  KEY `feedback_id` (`feedback_id`)
+  KEY `feedback_id` (`feedback_id`),
+  CONSTRAINT `feedback_id` FOREIGN KEY (`feedback_id`) REFERENCES `feedback` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `user_id` FOREIGN KEY (`user_id`) REFERENCES `android_user` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -363,6 +368,32 @@ INSERT INTO `feedback_status` VALUES (1,'OPEN'),(2,'IN_PROGRESS'),(3,'CLOSED'),(
 UNLOCK TABLES;
 
 --
+-- Table structure for table `feedback_tag`
+--
+
+DROP TABLE IF EXISTS `feedback_tag`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `feedback_tag` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `feedback_id` bigint(20) NOT NULL,
+  `tag` text NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `feedback_vote` (`feedback_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `feedback_tag`
+--
+
+LOCK TABLES `feedback_tag` WRITE;
+/*!40000 ALTER TABLE `feedback_tag` DISABLE KEYS */;
+INSERT INTO `feedback_tag` VALUES (1,37,'Color'),(2,37,'GUI'),(3,38,'Bug'),(4,39,'Bug'),(5,36,'Improvement'),(6,36,'Performance'),(7,35,'GUI'),(8,35,'Usability'),(9,35,'Improvement'),(10,34,'Improvement'),(11,34,'Usability'),(13,2,'Tag');
+/*!40000 ALTER TABLE `feedback_tag` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `feedback_vote`
 --
 
@@ -373,7 +404,7 @@ CREATE TABLE `feedback_vote` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `voter_user_id` bigint(20) NOT NULL,
   `feedback_id` bigint(20) NOT NULL,
-  `vote` tinyint(1) DEFAULT NULL,
+  `vote` bigint(20) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `feedback_id` (`feedback_id`),
   KEY `voter_user_id` (`voter_user_id`),
@@ -388,7 +419,7 @@ CREATE TABLE `feedback_vote` (
 
 LOCK TABLES `feedback_vote` WRITE;
 /*!40000 ALTER TABLE `feedback_vote` DISABLE KEYS */;
-INSERT INTO `feedback_vote` VALUES (1,7,1,-1),(2,7,2,-1),(3,5,4,1),(4,5,5,-1),(5,1,1,1),(6,8,1,1),(7,9,1,1),(8,9,4,-1);
+INSERT INTO `feedback_vote` VALUES (1,7,1,-1),(2,7,2,-1),(3,5,4,10),(4,5,5,-1),(5,1,1,1),(6,8,1,1),(7,9,1,1),(8,9,4,-1),(9,9,4,5);
 /*!40000 ALTER TABLE `feedback_vote` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -652,4 +683,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-07-04 18:31:10
+-- Dump completed on 2018-07-11 16:40:14

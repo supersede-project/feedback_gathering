@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping(value = "${supersede.base_path.feedback}/{language}/applications/{applicationId}/feedbacks/tags")
+@RequestMapping(value = "${supersede.base_path.feedback}/{language}/applications/{applicationId}/tags")
 public class FeedbackTagController extends BaseController {
 
     @Autowired
