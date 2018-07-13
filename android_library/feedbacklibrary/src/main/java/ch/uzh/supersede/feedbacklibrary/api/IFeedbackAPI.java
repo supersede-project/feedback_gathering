@@ -38,6 +38,10 @@ public interface IFeedbackAPI {
     Call<List<Feedback>> getFeedbackList(@Header("Authorization") String token, @Path("language") String language, @Path("applicationId") long applicationId, @Query("view") String view, @Query
             ("ids") String ids);
 
+    // Does not exist in current repo version on server
+    @PUT("feedback_repository/{language}/applications/{applicationId}/feedbacks/{feedbackId}")
+    Call<Feedback> editFeedback(@Header("Authorization") String token, @Path("language") String language, @Path("applicationId") long applicationId, @Body Feedback body);
+
     @POST("feedback_repository/{language}/applications/{applicationId}/android_users")
     Call<AndroidUser> createUser(@Header("Authorization") String token, @Path("language") String language, @Path("applicationId") long applicationId, @Body AndroidUser body);
 
@@ -53,7 +57,7 @@ public interface IFeedbackAPI {
 
     // Does not exist in current repo version on server
     @POST("feedback_repository/{language}/applications/{applicationId}/reports")
-    Call<FeedbackReport> createFeedbackReport(@Header("Authorization") String token, @Path("language") String language, @Path("applicationId") long applicationId, @Body AndroidUser body);
+    Call<FeedbackReport> createFeedbackReport(@Header("Authorization") String token, @Path("language") String language, @Path("applicationId") long applicationId, @Body FeedbackReport body);
 
     // Does not exist in current repo version on server
     @GET("feedback_repository/{language}/applications/{applicationId}/feedbacks/{feedbackId}/responses")
@@ -75,7 +79,7 @@ public interface IFeedbackAPI {
     Call<List<String>> getTagList(@Header("Authorization") String token, @Path("language") String language, @Path("applicationId") long applicationId);
 
     // Does not exist in current repo version on server
-    @POST("feedback_repository/{language}/applications/{applicationId}/feedbacks/{feedbackId}/votes")
+    @PUT("feedback_repository/{language}/applications/{applicationId}/feedbacks/{feedbackId}/votes")
     Call<FeedbackVote> createVote(@Header("Authorization") String token, @Path("language") String language, @Path("applicationId") long applicationId, @Path("feedbackId") long feedbackId, @Body
             FeedbackVote body);
 
