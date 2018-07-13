@@ -62,7 +62,7 @@
         <service android:name=".services.NotificationService" />
 
         <receiver
-            android:name=".services.NotificationServiceShutdownReceiver"
+            android:name="ch.uzh.supersede.feedbacklibrary.services.NotificationServiceShutdownReceiver"
             android:enabled="true"
             android:exported="false">
             <intent-filter>
@@ -70,7 +70,7 @@
             </intent-filter>
         </receiver>
         <receiver
-            android:name=".services.BootCompletedReceiver"
+            android:name="ch.uzh.supersede.feedbacklibrary.services.BootCompletedReceiver"
             android:enabled="true"
             android:exported="true">
             <intent-filter>

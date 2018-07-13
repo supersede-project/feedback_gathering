@@ -5,6 +5,7 @@ public interface IFeedbackServiceEventListener {
         AUTHENTICATE,
         CREATE_USER,
         GET_USER,
+        GET_USER_MOCK,
         CREATE_FEEDBACK,
         GET_FEEDBACK_LIST,
         GET_FEEDBACK_LIST_MOCK,

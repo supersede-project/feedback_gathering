@@ -18,7 +18,7 @@ import ch.uzh.supersede.feedbacklibrary.models.AndroidUser;
 import ch.uzh.supersede.feedbacklibrary.models.AuthenticateResponse;
 import ch.uzh.supersede.feedbacklibrary.utils.*;
 
-import static ch.uzh.supersede.feedbacklibrary.utils.Constants.LIFETIME_TOKEN;
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.*;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.UserConstants.USER_NAME;
 import static ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility.USER_LEVEL.ADVANCED;
 
@@ -41,7 +41,9 @@ public class NotificationService extends Service implements IFeedbackServiceEven
             return;
         }
 
-        configuration = FeedbackDatabase.getInstance(this).readConfiguration();
+        if (configuration == null) {
+            configuration = FeedbackDatabase.getInstance(this).readConfiguration();
+        }
         userName = FeedbackDatabase.getInstance(this).readString(USER_NAME, null);
 
         if (CompareUtility.notNull(configuration, userName)) {
@@ -54,6 +56,9 @@ public class NotificationService extends Service implements IFeedbackServiceEven
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        if (intent != null) {
+            configuration = (LocalConfigurationBean) intent.getSerializableExtra(EXTRA_KEY_APPLICATION_CONFIGURATION);
+        }
         Log.i(getClass().getSimpleName(), "service started.");
         return START_STICKY;
     }
@@ -113,7 +118,7 @@ public class NotificationService extends Service implements IFeedbackServiceEven
             stopSelf();
             return;
         }
-        FeedbackService.getInstance(this).getFeedbackList(this, null, configuration, 0);
+        FeedbackService.getInstance(this).getFeedbackList(this, this);
         FeedbackService.getInstance(this).getUser(this, new AndroidUser(userName));
     }
 
@@ -135,6 +140,12 @@ public class NotificationService extends Service implements IFeedbackServiceEven
                 if (response instanceof AndroidUser) {
                     handleUserUpdate((AndroidUser) response);
                 }
+                break;
+            case GET_FEEDBACK_SUBSCRIPTIONS_MOCK:
+                execSendNotification(NotificationUtility.getInstance(this).createDummyFeedbackUpdateNotification(this, configuration));
+                break;
+            case GET_USER_MOCK:
+                execSendNotification(NotificationUtility.getInstance(this).createDummyUserUpdateNotification(this, configuration));
                 break;
             default:
                 break;

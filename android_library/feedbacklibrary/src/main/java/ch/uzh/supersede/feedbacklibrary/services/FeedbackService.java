@@ -103,7 +103,7 @@ public abstract class FeedbackService {
 
     public abstract void createFeedback(IFeedbackServiceEventListener callback, Activity activity, Feedback feedback, byte[] screenshot);
 
-    public abstract void getFeedbackList(IFeedbackServiceEventListener callback, Activity activity, LocalConfigurationBean configuration, int backgroundColor);
+    public abstract void getFeedbackList(IFeedbackServiceEventListener callback, Context context);
 
     public abstract void createUser(IFeedbackServiceEventListener callback, AndroidUser androidUser);
 
@@ -166,7 +166,7 @@ public abstract class FeedbackService {
         }
 
         @Override
-        public void getFeedbackList(IFeedbackServiceEventListener callback, Activity activity, LocalConfigurationBean configuration, int backgroundColor) {
+        public void getFeedbackList(IFeedbackServiceEventListener callback, Context context) {
             feedbackAPI.getFeedbackList(getToken(), getLanguage(), getApplicationId(), null, null).enqueue(
                     new RepositoryCallback<List<Feedback>>(callback, EventType.GET_FEEDBACK_LIST) {
                     });
@@ -249,7 +249,7 @@ public abstract class FeedbackService {
 
         @Override
         public void getUser(IFeedbackServiceEventListener callback, AndroidUser androidUser) {
-            callback.onEventCompleted(GET_USER, androidUser);
+            callback.onEventCompleted(GET_USER_MOCK, androidUser);
         }
 
         @Override
@@ -259,15 +259,8 @@ public abstract class FeedbackService {
         }
 
         @Override
-        public void getFeedbackList(IFeedbackServiceEventListener callback, Activity activity, LocalConfigurationBean configuration, int backgroundColor) {
-            ArrayList<FeedbackListItem> allFeedbackList = new ArrayList<>();
-            for (FeedbackBean bean : RepositoryStub.getFeedback(activity, 50, -30, 50, 0.1f)) {
-                if (bean != null) {
-                    FeedbackListItem listItem = new FeedbackListItem(activity, 8, bean, configuration, backgroundColor);
-                    allFeedbackList.add(listItem);
-                }
-            }
-            callback.onEventCompleted(GET_FEEDBACK_LIST_MOCK, allFeedbackList);
+        public void getFeedbackList(IFeedbackServiceEventListener callback, Context context) {
+            callback.onEventCompleted(GET_FEEDBACK_LIST_MOCK, RepositoryStub.getFeedback(context, 50, -30, 50, 0.1f));
         }
 
         @Override

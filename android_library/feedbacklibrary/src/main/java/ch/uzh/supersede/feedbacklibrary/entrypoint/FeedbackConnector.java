@@ -105,7 +105,9 @@ public class FeedbackConnector {
         intent.putExtra(EXTRA_KEY_APPLICATION_CONFIGURATION, configurationBean);
     }
 
-    private static void execStoreStateToDatabase(Context context, LocalConfigurationBean configuration){
-        FeedbackDatabase.getInstance(context).writeConfiguration(configuration);
+    private static void execStoreStateToDatabase(Context context, LocalConfigurationBean configuration) {
+        if (ACTIVE.check(context)) {
+            FeedbackDatabase.getInstance(context).writeConfiguration(configuration);
+        }
     }
 }

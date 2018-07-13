@@ -6,14 +6,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 import ch.uzh.supersede.feedbacklibrary.R;
 import ch.uzh.supersede.feedbacklibrary.activities.FeedbackHubActivity;
 import ch.uzh.supersede.feedbacklibrary.beans.*;
 import ch.uzh.supersede.feedbacklibrary.database.FeedbackDatabase;
 import ch.uzh.supersede.feedbacklibrary.models.AndroidUser;
+import ch.uzh.supersede.feedbacklibrary.stubs.GeneratorStub;
 
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.*;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.UserConstants.*;
@@ -66,6 +66,48 @@ public class NotificationUtility {
                 .build();
     }
 
+    public Notification createDummyUserUpdateNotification(Context context, LocalConfigurationBean configuration) {
+        StringBuilder message = new StringBuilder();
+        AndroidUser androidUser = new AndroidUser(GeneratorStub.BagOfNames.pickRandom(), new Random().nextBoolean(), new Random().nextInt(1000), new Random().nextBoolean());
+
+        int resource = androidUser.isBlocked() ? R.string.notification_user_blocked : R.string.notification_user_unblocked;
+        message.append(context.getResources().getString(resource));
+        message.append('\n');
+
+        int increase = androidUser.getKarma() - userKarma;
+        resource = increase > 0 ? R.string.notification_user_karma_increased : R.string.notification_user_karma_decreased;
+        message.append(context.getResources().getString(resource, increase));
+        message.append('\n');
+
+        resource = androidUser.isDeveloper() ? R.string.notification_user_developer : R.string.notification_user_not_developer;
+        message.append(context.getResources().getString(resource));
+        message.append('\n');
+
+        message.append(context.getResources().getString(R.string.notification_user_name_changed, androidUser.getName()));
+        message.append('\n');
+
+        return createNotification("DUMMY" + context.getResources().getString(R.string.notification_user_title), message.toString(), context, configuration);
+    }
+
+    public Notification createDummyFeedbackUpdateNotification(Context context, LocalConfigurationBean configuration) {
+        StringBuilder message = new StringBuilder();
+
+        int newResponses = new Random().nextInt(100);
+        int newOwnResponses = new Random().nextInt(100);
+        int newVotes = new Random().nextInt(100);
+        int newOwnVotes = new Random().nextInt(100);
+        int statusUpdates = new Random().nextInt(100);
+        int ownStatusUpdates = new Random().nextInt(100);
+        int visibilityUpdates = new Random().nextInt(100);
+
+        append(message, context, R.string.notification_feedback_responses, newResponses, R.string.notification_feedback_own, newOwnResponses);
+        append(message, context, R.string.notification_feedback_votes, newVotes, R.string.notification_feedback_own, newOwnVotes);
+        append(message, context, R.string.notification_feedback_status, statusUpdates, R.string.notification_feedback_own, ownStatusUpdates);
+        append(message, context, R.string.notification_feedback_visibility, visibilityUpdates);
+
+        return createNotification(context.getResources().getString(R.string.notification_feedback_title), message.toString(), context, configuration);
+    }
+
     public List<Notification> createUserUpdateNotification(AndroidUser androidUser, Context context, LocalConfigurationBean configuration, boolean isSummary) {
         if (isSummary) {
             List<Notification> notifications = new ArrayList<>();
@@ -89,7 +131,7 @@ public class NotificationUtility {
             FeedbackDatabase.getInstance(context).writeBoolean(USER_IS_BLOCKED, userIsBlocked);
         }
         if (androidUser.getKarma() != userKarma) {
-            int increase = userKarma - androidUser.getKarma();
+            int increase = androidUser.getKarma() - userKarma;
             int resource = increase > 0 ? R.string.notification_user_karma_increased : R.string.notification_user_karma_decreased;
             message.append(context.getResources().getString(resource, increase));
             message.append('\n');

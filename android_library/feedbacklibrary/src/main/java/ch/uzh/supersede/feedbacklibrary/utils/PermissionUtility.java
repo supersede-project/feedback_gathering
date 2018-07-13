@@ -45,6 +45,9 @@ public class PermissionUtility {
         }
 
         public boolean check(Context context, boolean ignoreDatabaseCheck) {
+            if (context == null) {
+                return false;
+            }
             boolean contributor = context.getSharedPreferences(SHARED_PREFERENCES, Context.MODE_PRIVATE).getBoolean(FEEDBACK_CONTRIBUTOR, false);
             boolean noMissingPermissions = getMissing(context).length == 0;
             return ignoreDatabaseCheck ? contributor && noMissingPermissions : contributor && noMissingPermissions && checkForUsername(context);

@@ -23,6 +23,13 @@ public class AndroidUser {
         this.isDeveloper = isDeveloper;
     }
 
+    public AndroidUser(String name, boolean isDeveloper, int karma, boolean isBlocked) {
+        this.name = name;
+        this.isDeveloper = isDeveloper;
+        this.karma = karma;
+        this.isBlocked = isBlocked;
+    }
+
     public long getId() {
         return id;
     }
