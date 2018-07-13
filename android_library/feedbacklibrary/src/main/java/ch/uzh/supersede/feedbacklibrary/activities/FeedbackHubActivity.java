@@ -84,15 +84,11 @@ public class FeedbackHubActivity extends AbstractBaseActivity implements IFeedba
         onPostCreate();
         if (ACTIVE.check(this)) {
             userName = FeedbackDatabase.getInstance(this).readString(USER_NAME, null);
+            FeedbackService.getInstance(this).authenticate(this, new AuthenticateRequest(configuration.getRepositoryLogin(), configuration.getRepositoryPass()));
         }
+        ServiceUtility.startService(NotificationService.class, this, new ServiceUtility.Extra(EXTRA_KEY_APPLICATION_CONFIGURATION, configuration));
         updateUserLevel(false);
         invokeVersionControl(2, R.id.hub_button_list, R.id.hub_button_settings);
-
-        //FIXME [jfo] check permissions, i.e. authenticate only iff > level 1
-        FeedbackService.getInstance(this).authenticate(this, new AuthenticateRequest("test", "123")); //TODO [jfo] parse credentials
-
-        //FIXME [jfo] check permissions, i.e. start service only iff > level 2
-        ServiceUtility.startService(NotificationService.class, this, new ServiceUtility.Extra(EXTRA_KEY_APPLICATION_CONFIGURATION, configuration));
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -402,7 +398,7 @@ public class FeedbackHubActivity extends AbstractBaseActivity implements IFeedba
         super.onEventCompleted(eventType, response);
         switch (eventType) {
             case AUTHENTICATE:
-                //FIXME [jfo] remove block as soon as possible
+                //FIXME [jfo] remove block with F2FA-80
                 FeedbackService.getInstance(this).setToken(LIFETIME_TOKEN);
                 FeedbackService.getInstance(this).setApplicationId(configuration.getHostApplicationLongId()); //TODO [jfo] maybe this id is returned with authentication
                 FeedbackService.getInstance(this).setLanguage(configuration.getHostApplicationLanguage());

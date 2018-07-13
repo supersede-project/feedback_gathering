@@ -1,16 +1,20 @@
 package ch.uzh.supersede.feedbacklibrary.activities;
 
 import android.app.Activity;
-import android.content.*;
-import android.graphics.*;
+import android.content.Context;
+import android.content.Intent;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.*;
-import android.net.*;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.util.*;
-import android.view.*;
+import android.util.DisplayMetrics;
+import android.util.Log;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.*;
 
 import java.io.Serializable;
@@ -20,14 +24,13 @@ import java.util.HashMap;
 
 import ch.uzh.supersede.feedbacklibrary.R;
 import ch.uzh.supersede.feedbacklibrary.beans.LocalConfigurationBean;
-import ch.uzh.supersede.feedbacklibrary.services.*;
+import ch.uzh.supersede.feedbacklibrary.services.FeedbackService;
+import ch.uzh.supersede.feedbacklibrary.services.IFeedbackServiceEventListener;
 import ch.uzh.supersede.feedbacklibrary.utils.*;
 import ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility.USER_LEVEL;
-import okhttp3.ResponseBody;
 
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.ActivitiesConstants.*;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.*;
-import static ch.uzh.supersede.feedbacklibrary.utils.Constants.ActivitiesConstants.DISABLED_BACKGROUND;
-import static ch.uzh.supersede.feedbacklibrary.utils.Constants.ActivitiesConstants.DISABLED_FOREGROUND;
 import static ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility.USER_LEVEL.LOCKED;
 
 @SuppressWarnings("squid:MaximumInheritanceDepth")
@@ -38,7 +41,7 @@ public abstract class AbstractBaseActivity extends AppCompatActivity implements 
     protected int screenHeight;
     protected LocalConfigurationBean configuration;
     protected InfoUtility infoUtility;
-    protected HashMap<View,Integer> viewToColorMap = new HashMap<>();
+    protected HashMap<View, Integer> viewToColorMap = new HashMap<>();
 
     protected <T> T getView(int id, Class<T> classType) {
         return classType.cast(findViewById(id));
@@ -53,7 +56,7 @@ public abstract class AbstractBaseActivity extends AppCompatActivity implements 
         screenHeight = displayMetrics.heightPixels;
         screenWidth = displayMetrics.widthPixels;
         configuration = (LocalConfigurationBean) getIntent().getSerializableExtra(EXTRA_KEY_APPLICATION_CONFIGURATION);
-        infoUtility = new InfoUtility(screenWidth,screenHeight);
+        infoUtility = new InfoUtility(screenWidth, screenHeight);
     }
 
     protected void onPostCreate() {
@@ -63,16 +66,16 @@ public abstract class AbstractBaseActivity extends AppCompatActivity implements 
 
     private void checkConnectivity() {
         NetworkInfo activeNetworkInfo = null;
-        try{
+        try {
             ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
             activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
-        }catch (Exception e){
-            Log.e("Network",e.getMessage());
+        } catch (Exception e) {
+            Log.e("Network", e.getMessage());
         }
-        if (activeNetworkInfo != null && activeNetworkInfo.isConnected()){
+        if (activeNetworkInfo != null && activeNetworkInfo.isConnected()) {
             //Online, ping Repository and wait for Callback
             FeedbackService.getInstance(getApplicationContext()).pingRepository(this);
-        }else{
+        } else {
             //Offline, don't ping Repository
             getSharedPreferences(SHARED_PREFERENCES, MODE_PRIVATE).edit().putBoolean(SHARED_PREFERENCES_ONLINE, false).apply();
         }
@@ -92,19 +95,19 @@ public abstract class AbstractBaseActivity extends AppCompatActivity implements 
 
     protected <T extends Activity> void startActivity(T startActivity, Class<?> activityToStart, boolean destruction, Intent... handoverIntent) {
         Intent intent = null;
-        if (handoverIntent == null || handoverIntent.length == 0){
+        if (handoverIntent == null || handoverIntent.length == 0) {
             intent = new Intent(startActivity.getApplicationContext(), activityToStart);
-        }else{
+        } else {
             intent = handoverIntent[0];
         }
         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-        if (destruction){
+        if (destruction) {
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         }
         handOverConfigurationToIntent(intent);
         startActivity.startActivity(intent);
         startActivity.overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
-        if (destruction){
+        if (destruction) {
             startActivity.finish();
         }
     }
@@ -132,14 +135,15 @@ public abstract class AbstractBaseActivity extends AppCompatActivity implements 
                 if (view == null) {
                     continue;
                 }
-                if (!viewToColorMap.containsKey(view)){
-                    viewToColorMap.put(view,colorIndex);
+                if (!viewToColorMap.containsKey(view)) {
+                    viewToColorMap.put(view, colorIndex);
                 }
                 colorizeText(color, view);
                 view.setBackgroundColor(color);
             }
         }
     }
+
     protected void colorLayouts(int colorIndex, ViewGroup... layouts) {
         if (configuration.getTopColors().length >= colorIndex) {
             Integer color = configuration.getTopColors()[colorIndex];
@@ -170,16 +174,16 @@ public abstract class AbstractBaseActivity extends AppCompatActivity implements 
                     background.setColorFilter(color, PorterDuff.Mode.MULTIPLY);
                 }
                 colorizeText(color, view);
-                if (view instanceof RelativeLayout){
-                    for (int v = 0; v <  ((RelativeLayout)view).getChildCount(); v++){
-                        colorizeText(color,((RelativeLayout)view).getChildAt(v));
+                if (view instanceof RelativeLayout) {
+                    for (int v = 0; v < ((RelativeLayout) view).getChildCount(); v++) {
+                        colorizeText(color, ((RelativeLayout) view).getChildAt(v));
                     }
                 }
             }
         }
     }
 
-    public void colorTextOnly(int backgroundColorIndex, View... views){
+    public void colorTextOnly(int backgroundColorIndex, View... views) {
         if (configuration.getTopColors().length >= backgroundColorIndex) {
             Integer color = configuration.getTopColors()[backgroundColorIndex];
             for (View view : color != null ? views : new View[0]) {
@@ -221,9 +225,9 @@ public abstract class AbstractBaseActivity extends AppCompatActivity implements 
         return ObjectUtility.nvl(returnObject, valueIfNull);
     }
 
-    protected void invokeVersionControl(int lockBelowVersion, int... viewIds){
-        if (VersionUtility.getDateVersion() < lockBelowVersion){
-            for (int id : viewIds){
+    protected void invokeVersionControl(int lockBelowVersion, int... viewIds) {
+        if (VersionUtility.getDateVersion() < lockBelowVersion) {
+            for (int id : viewIds) {
                 View view = findViewById(id);
                 disableViews(view);
             }
@@ -231,7 +235,7 @@ public abstract class AbstractBaseActivity extends AppCompatActivity implements 
     }
 
     protected void disableViews(View... views) {
-        for (View view : (views != null && views.length>0)?views:new View[0]) {
+        for (View view : (views != null && views.length > 0) ? views : new View[0]) {
             if (view != null) {
                 view.setEnabled(false);
                 view.setClickable(false);
@@ -244,15 +248,15 @@ public abstract class AbstractBaseActivity extends AppCompatActivity implements 
     }
 
     protected void enableView(View view, Integer colorIndex, Boolean... conditionals) {
-        colorIndex = (colorIndex==null?0:colorIndex);
-        if (conditionals != null && conditionals.length > 0){
-            for (Boolean b : conditionals){
-                if (!b){
+        colorIndex = (colorIndex == null ? 0 : colorIndex);
+        if (conditionals != null && conditionals.length > 0) {
+            for (Boolean b : conditionals) {
+                if (!b) {
                     return;
                 }
             }
         }
-        if (view != null && getColorCount() >= colorIndex){
+        if (view != null && getColorCount() >= colorIndex) {
             view.setEnabled(true);
             view.setClickable(true);
             view.setBackgroundColor(getTopColor(colorIndex));
@@ -266,19 +270,18 @@ public abstract class AbstractBaseActivity extends AppCompatActivity implements 
         createInfoBubbles();
     }
 
-    protected void createInfoBubbles(){
+    protected void createInfoBubbles() {
         //NOP
     }
-
 
 
     @Override
     public void onEventCompleted(EventType eventType, Object response) {
         switch (eventType) {
             case PING_REPOSITORY:
-                if (RestUtility.responseEquals(response,"pong")){
+                if (RestUtility.responseEquals(response, "pong")) {
                     getSharedPreferences(SHARED_PREFERENCES, MODE_PRIVATE).edit().putBoolean(SHARED_PREFERENCES_ONLINE, true).apply();
-                }else{
+                } else {
                     getSharedPreferences(SHARED_PREFERENCES, MODE_PRIVATE).edit().putBoolean(SHARED_PREFERENCES_ONLINE, false).apply();
                 }
                 break;

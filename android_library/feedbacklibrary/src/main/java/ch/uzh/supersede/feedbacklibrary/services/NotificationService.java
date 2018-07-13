@@ -15,14 +15,14 @@ import ch.uzh.supersede.feedbacklibrary.beans.FeedbackDetailsBean;
 import ch.uzh.supersede.feedbacklibrary.beans.LocalConfigurationBean;
 import ch.uzh.supersede.feedbacklibrary.database.FeedbackDatabase;
 import ch.uzh.supersede.feedbacklibrary.models.AndroidUser;
+import ch.uzh.supersede.feedbacklibrary.models.AuthenticateResponse;
 import ch.uzh.supersede.feedbacklibrary.utils.*;
 
-import static ch.uzh.supersede.feedbacklibrary.utils.Constants.EXTRA_KEY_APPLICATION_CONFIGURATION;
-import static ch.uzh.supersede.feedbacklibrary.utils.Constants.USER_NAME;
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.*;
+import static ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility.USER_LEVEL.ADVANCED;
 
 public class NotificationService extends Service implements IFeedbackServiceEventListener {
-    private static final long POLL_SLEEP_TIME = 3000; // milliseconds //TODO [jfo] set to reasonable interval
-    private static final int MAX_FAIL_COUNT = 10;
+    private static final int MAX_FAIL_COUNT = 1000;
 
     private LocalConfigurationBean configuration;
     private String userName;
@@ -34,12 +34,26 @@ public class NotificationService extends Service implements IFeedbackServiceEven
     private Thread pollThread;
 
     @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
-        configuration = (LocalConfigurationBean) intent.getSerializableExtra(EXTRA_KEY_APPLICATION_CONFIGURATION);
+    public void onCreate() {
+        if (!ADVANCED.check(this)) {
+            stopSelf();
+            return;
+        }
+
+        configuration = FeedbackDatabase.getInstance(this).readConfiguration();
         userName = FeedbackDatabase.getInstance(this).readString(USER_NAME, null);
 
+        if (CompareUtility.notNull(configuration, userName)) {
+            execStartAsyncPolling();
+        } else {
+            Log.e(getClass().getSimpleName(), "service stopped due to a configuration error.");
+            stopSelf();
+        }
+    }
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
         Log.i(getClass().getSimpleName(), "service started.");
-        execStartAsyncPolling();
         return START_STICKY;
     }
 
@@ -50,25 +64,32 @@ public class NotificationService extends Service implements IFeedbackServiceEven
     }
 
     /**
-     * Create a never dyeing service by re-instantiating itself through a brocastReciever when the actual host app gets destroyed.
+     * Create a never dying service by re-instantiating itself through a brocastReciever when the actual host app gets destroyed.
      */
     @Override
     public void onTaskRemoved(Intent rootIntent) {
         super.onTaskRemoved(rootIntent);
+        execStopAsyncPolling();
         Intent broadcastIntent = new Intent(getResources().getString(R.string.notification_service_shutdown));
-        broadcastIntent.putExtra(EXTRA_KEY_APPLICATION_CONFIGURATION, configuration);
+        Log.d(getClass().getSimpleName(), "Starting new broadcast with configuration=" + (configuration != null));
         sendBroadcast(broadcastIntent);
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        resetFailCount();
+        execStopAsyncPolling();
+    }
+
+    private void execStopAsyncPolling() {
         if (asyncPoll != null) {
+            resetFailCount();
             asyncPoll.shutdown();
             pollThread = null;
+            Log.i(getClass().getSimpleName(), "polling stopped.");
+        } else {
+            Log.d(getClass().getSimpleName(), "polling already stopped.");
         }
-        Log.i(getClass().getSimpleName(), "service stopped.");
     }
 
     protected void execSendNotification(Notification notification) {
@@ -88,7 +109,7 @@ public class NotificationService extends Service implements IFeedbackServiceEven
     void execPoll() {
         if (failCount > MAX_FAIL_COUNT) {
             resetFailCount();
-            ServiceUtility.stopService(NotificationService.class, this);
+            stopSelf();
             return;
         }
         FeedbackService.getInstance(this).getFeedbackList(this, null, configuration, 0);
@@ -98,6 +119,13 @@ public class NotificationService extends Service implements IFeedbackServiceEven
     @Override
     public void onEventCompleted(IFeedbackServiceEventListener.EventType eventType, Object response) {
         switch (eventType) {
+            case AUTHENTICATE:
+                if (response instanceof AuthenticateResponse) {
+                    FeedbackService.getInstance(this).setToken(((AuthenticateResponse) response).getToken());
+                }
+                FeedbackService.getInstance(this).setApplicationId(configuration.getHostApplicationLongId());
+                FeedbackService.getInstance(this).setLanguage(configuration.getHostApplicationLanguage());
+                break;
             case GET_FEEDBACK_SUBSCRIPTIONS:
                 List<FeedbackDetailsBean> feedbackDetailsBeans = FeedbackUtility.transformFeedbackResponse(response, this);
                 handleFeedbackSubscriptionUpdate(feedbackDetailsBeans);
@@ -128,14 +156,23 @@ public class NotificationService extends Service implements IFeedbackServiceEven
 
     @Override
     public void onEventFailed(IFeedbackServiceEventListener.EventType eventType, Object response) {
+        switch (eventType) {
+            case AUTHENTICATE:
+                //FIXME [jfo] remove block with F2FA-80
+                FeedbackService.getInstance(this).setToken(LIFETIME_TOKEN);
+                FeedbackService.getInstance(this).setApplicationId(configuration.getHostApplicationLongId());
+                FeedbackService.getInstance(this).setLanguage(configuration.getHostApplicationLanguage());
+                break;
+            default:
+        }
         updateFailCount();
-        Log.e(getClass().getSimpleName(), getResources().getString(R.string.api_service_event_failed, eventType, response.toString()));
+        Log.w(getClass().getSimpleName(), getResources().getString(R.string.api_service_event_failed, eventType, response.toString()));
     }
 
     @Override
     public void onConnectionFailed(IFeedbackServiceEventListener.EventType eventType) {
         updateFailCount();
-        Log.e(getClass().getSimpleName(), getResources().getString(R.string.api_service_connection_failed, eventType));
+        Log.w(getClass().getSimpleName(), getResources().getString(R.string.api_service_connection_failed, eventType));
     }
 
     private synchronized void updateFailCount() {
@@ -158,7 +195,7 @@ public class NotificationService extends Service implements IFeedbackServiceEven
             Thread thisThread = Thread.currentThread();
             while (pollThread == thisThread) {
                 try {
-                    pollThread.sleep(POLL_SLEEP_TIME); //NOSONAR
+                    thisThread.sleep(configuration.getPullIntervalMinutes() * 1000L);
                     synchronized (this) {
                         while (isShutdown && pollThread == thisThread) {
                             wait();

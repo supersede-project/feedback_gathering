@@ -2,8 +2,6 @@ package ch.uzh.supersede.feedbacklibrary.models;
 
 import com.google.gson.annotations.Expose;
 
-import java.util.List;
-
 import ch.uzh.supersede.feedbacklibrary.beans.LocalConfigurationBean;
 
 public class RatingFeedback extends AbstractFeedbackPart {
@@ -18,8 +16,8 @@ public class RatingFeedback extends AbstractFeedbackPart {
     public RatingFeedback(LocalConfigurationBean configuration) {
         super(configuration.getRatingOrder());
         this.ratingIcon = configuration.getRatingIcon();
-        this.maxRating = configuration.getRatingMaxValue();
-        this.defaultRating = configuration.getRatingDefaultValue();
+        this.maxRating = configuration.getMaxRatingValue();
+        this.defaultRating = configuration.getDefaultRatingValue();
     }
 
     public String getRatingIcon() {

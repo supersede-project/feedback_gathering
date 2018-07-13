@@ -15,28 +15,35 @@ import static ch.uzh.supersede.feedbacklibrary.entrypoint.IFeedbackStyleConfigur
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.ActivitiesConstants.*;
 
 public class LocalConfigurationBean implements Serializable {
+    // Application
+    private String hostApplicationName;
+    private String hostApplicationId;
+    private Long hostApplicationLongId;
+    private String hostApplicationLanguage;
     // IFeedbackBehaviorConfiguration
     private int pullIntervalMinutes;
     // IFeedbackDeveloperConfiguration
     private boolean isDeveloper;
+    private String repositoryLogin;
+    private String repositoryPass;
     // IFeedbackLayoutConfiguration
     private int audioOrder;
-    private double audioMaxTime;
+    private double maxAudioTime;
     private int labelOrder;
-    private int labelMaxCount;
-    private int labelMinCount;
+    private int maxLabelCount;
+    private int minLabelCount;
     private int ratingOrder;
     private String ratingTitle;
     private String ratingIcon;
-    private int ratingMaxValue;
-    private int ratingDefaultValue;
+    private int maxRatingValue;
+    private int defaultRatingValue;
     private int screenshotOrder;
-    private boolean screenshotIsEditable;
+    private boolean isScreenshotEditable;
     private int textOrder;
     private String textHint;
     private String textLabel;
-    private int textMaxLength;
-    private int textMinLength;
+    private int maxTextLength;
+    private int minTextLength;
     // IFeedbackSettingsConfiguration
     private int minUserNameLength;
     private int maxUserNameLength;
@@ -54,13 +61,12 @@ public class LocalConfigurationBean implements Serializable {
     private int maxTagRecommendationNumber;
     // IFeedbackStyleConfiguration
     private FEEDBACK_STYLE style;
-    // Application
-    private String hostApplicationName;
-    private String hostApplicationId;
-    private Long hostApplicationLongId;
-    private String hostApplicationLanguage;
     private Integer[] topColors;
-    private boolean coloringVertical;
+    private boolean isColoringVertical;
+
+    private LocalConfigurationBean() {
+        //nop
+    }
 
     public LocalConfigurationBean(Activity activity, Integer[] topColors) {
         this.topColors = topColors;
@@ -90,29 +96,31 @@ public class LocalConfigurationBean implements Serializable {
     }
 
     private void readConfiguration(IFeedbackDeveloperConfiguration configuration) {
+        this.repositoryLogin = configuration.getConfiguredRepositoryLogin();
+        this.repositoryPass = configuration.getConfiguredRepositoryPassword();
         this.isDeveloper = configuration.isDeveloper();
     }
 
     private void readConfiguration(IFeedbackConfiguration configuration) {
-        if (configuration instanceof ISimpleFeedbackConfiguration){
+        if (configuration instanceof ISimpleFeedbackConfiguration) {
             ISimpleFeedbackConfiguration simpleFeedbackConfiguration = (ISimpleFeedbackConfiguration) configuration;
             this.audioOrder = simpleFeedbackConfiguration.getConfiguredAudioFeedbackOrder();
-            this.audioMaxTime = DefaultConfiguration.getInstance().getConfiguredAudioFeedbackMaxTime();
+            this.maxAudioTime = DefaultConfiguration.getInstance().getConfiguredAudioFeedbackMaxTime();
             this.labelOrder = simpleFeedbackConfiguration.getConfiguredLabelFeedbackOrder();
-            this.labelMaxCount = DefaultConfiguration.getInstance().getConfiguredLabelFeedbackMaxCount();
-            this.labelMinCount = DefaultConfiguration.getInstance().getConfiguredLabelFeedbackMinCount();
+            this.maxLabelCount = DefaultConfiguration.getInstance().getConfiguredLabelFeedbackMaxCount();
+            this.minLabelCount = DefaultConfiguration.getInstance().getConfiguredLabelFeedbackMinCount();
             this.ratingOrder = simpleFeedbackConfiguration.getConfiguredRatingFeedbackOrder();
             this.ratingTitle = DefaultConfiguration.getInstance().getConfiguredRatingFeedbackTitle();
             this.ratingIcon = DefaultConfiguration.getInstance().getConfiguredRatingFeedbackIcon();
-            this.ratingMaxValue = DefaultConfiguration.getInstance().getConfiguredRatingFeedbackMaxValue();
-            this.ratingDefaultValue = DefaultConfiguration.getInstance().getConfiguredRatingFeedbackDefaultValue();
+            this.maxRatingValue = DefaultConfiguration.getInstance().getConfiguredRatingFeedbackMaxValue();
+            this.defaultRatingValue = DefaultConfiguration.getInstance().getConfiguredRatingFeedbackDefaultValue();
             this.screenshotOrder = simpleFeedbackConfiguration.getConfiguredScreenshotFeedbackOrder();
-            this.screenshotIsEditable = DefaultConfiguration.getInstance().getConfiguredScreenshotFeedbackIsEditable();
+            this.isScreenshotEditable = DefaultConfiguration.getInstance().getConfiguredScreenshotFeedbackIsEditable();
             this.textOrder = simpleFeedbackConfiguration.getConfiguredTextFeedbackOrder();
             this.textHint = DefaultConfiguration.getInstance().getConfiguredTextFeedbackHint();
             this.textLabel = DefaultConfiguration.getInstance().getConfiguredTextFeedbackLabel();
-            this.textMaxLength = DefaultConfiguration.getInstance().getConfiguredTextFeedbackMaxLength();
-            this.textMinLength = DefaultConfiguration.getInstance().getConfiguredTextFeedbackMinLength();
+            this.maxTextLength = DefaultConfiguration.getInstance().getConfiguredTextFeedbackMaxLength();
+            this.minTextLength = DefaultConfiguration.getInstance().getConfiguredTextFeedbackMinLength();
             this.minTitleLength = DefaultConfiguration.getInstance().getConfiguredMinTitleLength();
             this.maxTitleLength = DefaultConfiguration.getInstance().getConfiguredMaxTitleLength();
             this.minTagLength = DefaultConfiguration.getInstance().getConfiguredMinTagLength();
@@ -122,36 +130,36 @@ public class LocalConfigurationBean implements Serializable {
             this.maxTagRecommendationNumber = DefaultConfiguration.getInstance().getConfiguredMaxTagRecommendationNumber();
         }
         if (configuration instanceof IAudioFeedbackConfiguration) {
-                IAudioFeedbackConfiguration audioConfiguration = (IAudioFeedbackConfiguration) configuration;
-                this.audioOrder = audioConfiguration.getConfiguredAudioFeedbackOrder();
-                this.audioMaxTime = audioConfiguration.getConfiguredAudioFeedbackMaxTime();
+            IAudioFeedbackConfiguration audioConfiguration = (IAudioFeedbackConfiguration) configuration;
+            this.audioOrder = audioConfiguration.getConfiguredAudioFeedbackOrder();
+            this.maxAudioTime = audioConfiguration.getConfiguredAudioFeedbackMaxTime();
         }
         if (configuration instanceof ILabelFeedbackConfiguration) {
-                ILabelFeedbackConfiguration labelConfiguration = (ILabelFeedbackConfiguration) configuration;
-                this.labelOrder = labelConfiguration.getConfiguredLabelFeedbackOrder();
-                this.labelMaxCount = labelConfiguration.getConfiguredLabelFeedbackMaxCount();
-                this.labelMinCount = labelConfiguration.getConfiguredLabelFeedbackMinCount();
+            ILabelFeedbackConfiguration labelConfiguration = (ILabelFeedbackConfiguration) configuration;
+            this.labelOrder = labelConfiguration.getConfiguredLabelFeedbackOrder();
+            this.maxLabelCount = labelConfiguration.getConfiguredLabelFeedbackMaxCount();
+            this.minLabelCount = labelConfiguration.getConfiguredLabelFeedbackMinCount();
         }
         if (configuration instanceof IRatingFeedbackConfiguration) {
-                IRatingFeedbackConfiguration ratingConfiguration = (IRatingFeedbackConfiguration) configuration;
-                this.ratingOrder = ratingConfiguration.getConfiguredRatingFeedbackOrder();
-                this.ratingTitle = ratingConfiguration.getConfiguredRatingFeedbackTitle();
-                this.ratingIcon = ratingConfiguration.getConfiguredRatingFeedbackIcon();
-                this.ratingMaxValue = ratingConfiguration.getConfiguredRatingFeedbackMaxValue();
-                this.ratingDefaultValue = ratingConfiguration.getConfiguredRatingFeedbackDefaultValue();
+            IRatingFeedbackConfiguration ratingConfiguration = (IRatingFeedbackConfiguration) configuration;
+            this.ratingOrder = ratingConfiguration.getConfiguredRatingFeedbackOrder();
+            this.ratingTitle = ratingConfiguration.getConfiguredRatingFeedbackTitle();
+            this.ratingIcon = ratingConfiguration.getConfiguredRatingFeedbackIcon();
+            this.maxRatingValue = ratingConfiguration.getConfiguredRatingFeedbackMaxValue();
+            this.defaultRatingValue = ratingConfiguration.getConfiguredRatingFeedbackDefaultValue();
         }
         if (configuration instanceof IScreenshotFeedbackConfiguration) {
-                IScreenshotFeedbackConfiguration screenshotConfiguration = (IScreenshotFeedbackConfiguration) configuration;
-                this.screenshotOrder = screenshotConfiguration.getConfiguredScreenshotFeedbackOrder();
-                this.screenshotIsEditable = screenshotConfiguration.getConfiguredScreenshotFeedbackIsEditable();
+            IScreenshotFeedbackConfiguration screenshotConfiguration = (IScreenshotFeedbackConfiguration) configuration;
+            this.screenshotOrder = screenshotConfiguration.getConfiguredScreenshotFeedbackOrder();
+            this.isScreenshotEditable = screenshotConfiguration.getConfiguredScreenshotFeedbackIsEditable();
         }
         if (configuration instanceof ITextFeedbackConfiguration) {
-                ITextFeedbackConfiguration textConfiguration = (ITextFeedbackConfiguration) configuration;
-                this.textOrder = textConfiguration.getConfiguredTextFeedbackOrder();
-                this.textHint = textConfiguration.getConfiguredTextFeedbackHint();
-                this.textLabel = textConfiguration.getConfiguredTextFeedbackLabel();
-                this.textMaxLength = textConfiguration.getConfiguredTextFeedbackMaxLength();
-                this.textMinLength = textConfiguration.getConfiguredTextFeedbackMinLength();
+            ITextFeedbackConfiguration textConfiguration = (ITextFeedbackConfiguration) configuration;
+            this.textOrder = textConfiguration.getConfiguredTextFeedbackOrder();
+            this.textHint = textConfiguration.getConfiguredTextFeedbackHint();
+            this.textLabel = textConfiguration.getConfiguredTextFeedbackLabel();
+            this.maxTextLength = textConfiguration.getConfiguredTextFeedbackMaxLength();
+            this.minTextLength = textConfiguration.getConfiguredTextFeedbackMinLength();
         }
         if (configuration instanceof ITitleAndTagFeedbackConfiguration) {
             ITitleAndTagFeedbackConfiguration titleAndTagConfiguration = (ITitleAndTagFeedbackConfiguration) configuration;
@@ -178,7 +186,7 @@ public class LocalConfigurationBean implements Serializable {
 
     private void readConfiguration(IFeedbackStyleConfiguration configuration) {
         this.style = configuration.getConfiguredFeedbackStyle();
-        coloringVertical =true;
+        isColoringVertical = true;
         if (style == DARK) {
             topColors = new Integer[]{
                     ANTHRACITE_DARK, GRAY_DARK, GRAY
@@ -200,12 +208,12 @@ public class LocalConfigurationBean implements Serializable {
                     AUSTRIA_RED, WHITE, AUSTRIA_RED
             };
         } else if (style == FRANCE) {
-            coloringVertical = false;
+            isColoringVertical = false;
             topColors = new Integer[]{
                     FRANCE_BLUE, WHITE, FRANCE_RED
             };
         } else if (style == ITALY) {
-            coloringVertical = false;
+            isColoringVertical = false;
             topColors = new Integer[]{
                     ITALY_GREEN, WHITE, ITALY_RED
             };
@@ -242,6 +250,294 @@ public class LocalConfigurationBean implements Serializable {
         return true;
     }
 
+    public static class Builder {
+        private String hostApplicationId;
+        private Long hostApplicationLongId;
+        private String hostApplicationName;
+        private String hostApplicationLanguage;
+        private Integer pullIntervalMinutes;
+        private Boolean isDeveloper;
+        private Integer audioOrder;
+        private Double maxAudioTime;
+        private Integer screenshotOrder;
+        private Boolean isScreenshotEditable;
+        private Integer ratingOrder;
+        private String ratingTitle;
+        private String ratingIcon;
+        private Integer ratingDefaultValue;
+        private Integer maxRatingValue;
+        private Integer labelOrder;
+        private Integer maxLabelCount;
+        private Integer minLabelCount;
+        private Integer textOrder;
+        private String textLabel;
+        private String textHint;
+        private Integer maxTextLength;
+        private Integer minTextLength;
+        private Integer maxTagLength;
+        private Integer minTagLength;
+        private Integer maxTagNumber;
+        private Integer minTagNumber;
+        private Integer maxTagRecommendationNumber;
+        private Integer maxTitleLength;
+        private Integer minTitleLength;
+        private Integer maxResponseLength;
+        private Integer minResponseLength;
+        private Integer maxUserNameLength;
+        private Integer minUserNameLength;
+        private FEEDBACK_STYLE style;
+        private Boolean isColoringVertical;
+        private Integer[] topColors;
+        private String repositoryLogin;
+        private String repositoryPassword;
+
+        public Builder() {
+            //nop
+        }
+
+        public Builder withHostApplicationId(String hostApplicationId) {
+            this.hostApplicationId = hostApplicationId;
+            return this;
+        }
+
+        public Builder withHostApplicationLongId(Long hostApplicationLongId) {
+            this.hostApplicationLongId = hostApplicationLongId;
+            return this;
+        }
+
+        public Builder withHostApplicationName(String hostApplicationName) {
+            this.hostApplicationName = hostApplicationName;
+            return this;
+        }
+
+        public Builder withHostApplicationLanguage(String hostApplicationLanguage) {
+            this.hostApplicationLanguage = hostApplicationLanguage;
+            return this;
+        }
+
+        public Builder withPullIntervalMinutes(Integer pullIntervalMinutes) {
+            this.pullIntervalMinutes = pullIntervalMinutes;
+            return this;
+        }
+
+        public Builder withIsDeveloper(Boolean isDeveloper) {
+            this.isDeveloper = isDeveloper;
+            return this;
+        }
+
+        public Builder withAudioOrder(Integer audioOrder) {
+            this.audioOrder = audioOrder;
+            return this;
+        }
+
+        public Builder withMaxAudioTime(Double maxAudioTime) {
+            this.maxAudioTime = maxAudioTime;
+            return this;
+        }
+
+        public Builder withScreenshotOrder(Integer screenshotOrder) {
+            this.screenshotOrder = screenshotOrder;
+            return this;
+        }
+
+        public Builder withIsScreenshotEditable(Boolean isScreenshotIsEditable) {
+            this.isScreenshotEditable = isScreenshotIsEditable;
+            return this;
+        }
+
+        public Builder withRatingOrder(Integer ratingOrder) {
+            this.ratingOrder = ratingOrder;
+            return this;
+        }
+
+        public Builder withRatingTitle(String ratingTitle) {
+            this.ratingTitle = ratingTitle;
+            return this;
+        }
+
+        public Builder withRatingIcon(String ratingIcon) {
+            this.ratingIcon = ratingIcon;
+            return this;
+        }
+
+        public Builder withRatingDefaultValue(Integer ratingDefaultValue) {
+            this.ratingDefaultValue = ratingDefaultValue;
+            return this;
+        }
+
+        public Builder withMaxRatingValue(Integer maxRatingValue) {
+            this.maxRatingValue = maxRatingValue;
+            return this;
+        }
+
+        public Builder withLabelOrder(Integer labelOrder) {
+            this.labelOrder = labelOrder;
+            return this;
+        }
+
+        public Builder withMaxLabelCount(Integer maxLabelCount) {
+            this.maxLabelCount = maxLabelCount;
+            return this;
+        }
+
+        public Builder withMinLabelCount(Integer minLabelCount) {
+            this.minLabelCount = minLabelCount;
+            return this;
+        }
+
+        public Builder withTextOrder(Integer textOrder) {
+            this.textOrder = textOrder;
+            return this;
+        }
+
+        public Builder withTextLabel(String textLabel) {
+            this.textLabel = textLabel;
+            return this;
+        }
+
+        public Builder withTextHint(String textHint) {
+            this.textHint = textHint;
+            return this;
+        }
+
+        public Builder withMaxTextLength(Integer maxTextLength) {
+            this.maxTextLength = maxTextLength;
+            return this;
+        }
+
+        public Builder withMinTextLength(Integer minTextLength) {
+            this.minTextLength = minTextLength;
+            return this;
+        }
+
+        public Builder withMaxTagLength(Integer maxTagLength) {
+            this.maxTagLength = maxTagLength;
+            return this;
+        }
+
+        public Builder withMinTagLength(Integer minTagLength) {
+            this.minTagLength = minTagLength;
+            return this;
+        }
+
+        public Builder withMaxTagNumber(Integer maxTagNumber) {
+            this.maxTagNumber = maxTagNumber;
+            return this;
+        }
+
+        public Builder withMinTagNumber(Integer minTagNumber) {
+            this.minTagNumber = minTagNumber;
+            return this;
+        }
+
+        public Builder withMaxTagRecommendationNumber(Integer maxTagRecommendationNumber) {
+            this.maxTagRecommendationNumber = maxTagRecommendationNumber;
+            return this;
+        }
+
+        public Builder withMaxTitleLength(Integer maxTitleLength) {
+            this.maxTitleLength = maxTitleLength;
+            return this;
+        }
+
+        public Builder withMinTitleLength(Integer minTitleLength) {
+            this.minTitleLength = minTitleLength;
+            return this;
+        }
+
+        public Builder withMaxResponseLength(Integer maxResponseLength) {
+            this.maxResponseLength = maxResponseLength;
+            return this;
+        }
+
+        public Builder withMinResponseLength(Integer minResponseLength) {
+            this.minResponseLength = minResponseLength;
+            return this;
+        }
+
+        public Builder withMaxUserNameLength(Integer maxUserNameLength) {
+            this.maxUserNameLength = maxUserNameLength;
+            return this;
+        }
+
+        public Builder withMinUserNameLength(Integer minUserNameLength) {
+            this.minUserNameLength = minUserNameLength;
+            return this;
+        }
+
+        public Builder withStyle(FEEDBACK_STYLE style) {
+            this.style = style;
+            return this;
+        }
+
+        public Builder withIsColoringVertical(Boolean isColoringVertical) {
+            this.isColoringVertical = isColoringVertical;
+            return this;
+        }
+
+        public Builder withTopColors(Integer[] topColors) {
+            this.topColors = topColors;
+            return this;
+        }
+
+        public Builder withRepositoryLogin(String repositoryLogin) {
+            this.repositoryLogin = repositoryLogin;
+            return this;
+        }
+
+        public Builder withRepositoryPassword(String repositoryPassword) {
+            this.repositoryPassword = repositoryPassword;
+            return this;
+        }
+
+        public LocalConfigurationBean build() {
+            if (CompareUtility.notNull(hostApplicationId, hostApplicationName, hostApplicationLanguage, topColors, repositoryLogin, repositoryPassword)) {
+                LocalConfigurationBean config = new LocalConfigurationBean();
+                config.hostApplicationId = this.hostApplicationId;
+                config.hostApplicationLongId = this.hostApplicationLongId;
+                config.hostApplicationName = this.hostApplicationName;
+                config.hostApplicationLanguage = this.hostApplicationLanguage;
+                config.pullIntervalMinutes = this.pullIntervalMinutes;
+                config.isDeveloper = this.isDeveloper;
+                config.audioOrder = this.audioOrder;
+                config.maxAudioTime = this.maxAudioTime;
+                config.screenshotOrder = this.screenshotOrder;
+                config.isScreenshotEditable = this.isScreenshotEditable;
+                config.ratingOrder = this.ratingOrder;
+                config.ratingTitle = this.ratingTitle;
+                config.ratingIcon = this.ratingIcon;
+                config.defaultRatingValue = this.ratingDefaultValue;
+                config.maxRatingValue = this.maxRatingValue;
+                config.labelOrder = this.labelOrder;
+                config.maxLabelCount = this.maxLabelCount;
+                config.minLabelCount = this.minLabelCount;
+                config.textOrder = this.textOrder;
+                config.textLabel = this.textLabel;
+                config.textHint = this.textHint;
+                config.maxTextLength = this.maxTextLength;
+                config.minTextLength = this.minTextLength;
+                config.maxTagLength = this.maxTagLength;
+                config.minTagLength = this.minTagLength;
+                config.maxTagNumber = this.maxTagNumber;
+                config.minTagNumber = this.minTagNumber;
+                config.maxTagRecommendationNumber = this.maxTagRecommendationNumber;
+                config.maxTitleLength = this.maxTitleLength;
+                config.minTitleLength = this.minTitleLength;
+                config.maxResponseLength = this.maxResponseLength;
+                config.minResponseLength = this.minResponseLength;
+                config.maxUserNameLength = this.maxUserNameLength;
+                config.minUserNameLength = this.minUserNameLength;
+                config.style = this.style;
+                config.isColoringVertical = this.isColoringVertical;
+                config.topColors = this.topColors;
+                config.repositoryLogin = this.repositoryLogin;
+                config.repositoryPass = this.repositoryPassword;
+                return config;
+            }
+            return null;
+        }
+    }
+
     public int getPullIntervalMinutes() {
         return pullIntervalMinutes;
     }
@@ -254,20 +550,20 @@ public class LocalConfigurationBean implements Serializable {
         return audioOrder;
     }
 
-    public double getAudioMaxTime() {
-        return audioMaxTime;
+    public double getMaxAudioTime() {
+        return maxAudioTime;
     }
 
     public int getLabelOrder() {
         return labelOrder;
     }
 
-    public int getLabelMaxCount() {
-        return labelMaxCount;
+    public int getMaxLabelCount() {
+        return maxLabelCount;
     }
 
-    public int getLabelMinCount() {
-        return labelMinCount;
+    public int getMinLabelCount() {
+        return minLabelCount;
     }
 
     public int getRatingOrder() {
@@ -282,20 +578,20 @@ public class LocalConfigurationBean implements Serializable {
         return ratingIcon;
     }
 
-    public int getRatingMaxValue() {
-        return ratingMaxValue;
+    public int getMaxRatingValue() {
+        return maxRatingValue;
     }
 
-    public int getRatingDefaultValue() {
-        return ratingDefaultValue;
+    public int getDefaultRatingValue() {
+        return defaultRatingValue;
     }
 
     public int getScreenshotOrder() {
         return screenshotOrder;
     }
 
-    public boolean isScreenshotIsEditable() {
-        return screenshotIsEditable;
+    public boolean isScreenshotEditable() {
+        return isScreenshotEditable;
     }
 
     public int getTextOrder() {
@@ -310,12 +606,12 @@ public class LocalConfigurationBean implements Serializable {
         return textLabel;
     }
 
-    public int getTextMaxLength() {
-        return textMaxLength;
+    public int getMaxTextLength() {
+        return maxTextLength;
     }
 
-    public int getTextMinLength() {
-        return textMinLength;
+    public int getMinTextLength() {
+        return minTextLength;
     }
 
     public int getMinUserNameLength() {
@@ -387,7 +683,15 @@ public class LocalConfigurationBean implements Serializable {
     }
 
     public boolean isColoringVertical() {
-        return coloringVertical;
+        return isColoringVertical;
+    }
+
+    public String getRepositoryLogin(){
+        return repositoryLogin;
+    }
+
+    public String getRepositoryPass(){
+        return repositoryPass;
     }
 
     public int getMinReportLength() {

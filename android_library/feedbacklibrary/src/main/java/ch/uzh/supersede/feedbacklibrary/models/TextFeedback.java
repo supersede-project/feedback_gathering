@@ -19,8 +19,8 @@ public class TextFeedback extends AbstractFeedbackPart {
         super(configuration.getTextOrder());
         this.hint = configuration.getTextHint();
         this.label = configuration.getTextLabel();
-        this.maxLength = configuration.getTextMaxLength();
-        this.minLength = configuration.getTextMinLength();
+        this.maxLength = configuration.getMaxTextLength();
+        this.minLength = configuration.getMinTextLength();
     }
 
     @Override

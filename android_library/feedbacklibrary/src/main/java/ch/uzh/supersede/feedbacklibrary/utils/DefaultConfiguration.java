@@ -59,6 +59,16 @@ public class DefaultConfiguration implements
     }
 
     @Override
+    public String getConfiguredRepositoryLogin() {
+        return "admin";
+    }
+
+    @Override
+    public String getConfiguredRepositoryPassword() {
+        return "password";
+    }
+
+    @Override
     public int getConfiguredMinUserNameLength() {
         return 5;
     }
@@ -195,6 +205,7 @@ public class DefaultConfiguration implements
 
     @Override
     public int getConfiguredPullIntervalMinutes() {
-        return 0;
+        return 5;
     }
+
 }

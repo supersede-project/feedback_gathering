@@ -16,8 +16,8 @@ public class LabelFeedback extends AbstractFeedbackPart {
 
     public LabelFeedback(LocalConfigurationBean configuration) {
         super(configuration.getLabelOrder());
-        this.maxCount = configuration.getLabelMaxCount();
-        this.minCount = configuration.getLabelMinCount();
+        this.maxCount = configuration.getMaxLabelCount();
+        this.minCount = configuration.getMinLabelCount();
         labels.addAll(selectedLabels);
     }
 

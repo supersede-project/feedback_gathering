@@ -6,8 +6,7 @@ import android.content.Context;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 import ch.uzh.supersede.feedbacklibrary.api.IFeedbackAPI;
 import ch.uzh.supersede.feedbacklibrary.beans.*;
@@ -193,10 +192,10 @@ public abstract class FeedbackService {
         public void getFeedbackSubscriptions(IFeedbackServiceEventListener callback, Activity activity) {
             List<LocalFeedbackBean> feedbackBeans = FeedbackDatabase.getInstance(activity).getFeedbackBeans(SUBSCRIBED);
             Long[] feedbackIds = new Long[feedbackBeans.size()];
-            for (int i = 0; i < feedbackBeans.size(); i++){
+            for (int i = 0; i < feedbackBeans.size(); i++) {
                 feedbackIds[i] = feedbackBeans.get(i).getFeedbackId();
             }
-            feedbackAPI.getFeedbackList(getToken(), getLanguage(), getApplicationId(), feedbackIds).enqueue(
+            feedbackAPI.getFeedbackList(getToken(), getLanguage(), getApplicationId(), Arrays.toString(feedbackIds)).enqueue(
                     new RepositoryCallback<List<Feedback>>(callback, EventType.GET_FEEDBACK_SUBSCRIPTIONS) {
                     });
         }

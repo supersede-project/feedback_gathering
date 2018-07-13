@@ -8,12 +8,12 @@ import android.database.sqlite.SQLiteDatabase;
 import java.util.ArrayList;
 import java.util.List;
 
-import ch.uzh.supersede.feedbacklibrary.beans.FeedbackBean;
-import ch.uzh.supersede.feedbacklibrary.beans.LocalFeedbackBean;
-import ch.uzh.supersede.feedbacklibrary.beans.LocalFeedbackState;
+import ch.uzh.supersede.feedbacklibrary.beans.*;
+import ch.uzh.supersede.feedbacklibrary.entrypoint.IFeedbackStyle;
 import ch.uzh.supersede.feedbacklibrary.utils.Enums;
 import ch.uzh.supersede.feedbacklibrary.utils.ObjectUtility;
 
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.ConfigurationConstants.*;
 import static ch.uzh.supersede.feedbacklibrary.utils.Enums.FETCH_MODE.ALL;
 
 
@@ -52,7 +52,7 @@ public class FeedbackDatabase extends AbstractFeedbackDatabase {
     public long writeBoolean(String key, boolean value) {
         ContentValues values = new ContentValues();
         values.put(NumberTableEntry.COLUMN_NAME_KEY, key);
-        values.put(NumberTableEntry.COLUMN_NAME_VALUE, value?1:0);
+        values.put(NumberTableEntry.COLUMN_NAME_VALUE, value ? 1 : 0);
         return insert(NumberTableEntry.TABLE_NAME, NumberTableEntry.COLUMN_NAME_KEY, key, values);
     }
 
@@ -174,7 +174,7 @@ public class FeedbackDatabase extends AbstractFeedbackDatabase {
                 FeedbackTableEntry.COLUMN_NAME_VOTED,
                 FeedbackTableEntry.COLUMN_NAME_VOTED_TIMESTAMP,
                 FeedbackTableEntry.COLUMN_NAME_RESPONDED,
-                FeedbackTableEntry.COLUMN_NAME_RESPONDED_TIMESTAMP}, FeedbackTableEntry.COLUMN_NAME_FEEDBACK_ID + LIKE + String.valueOf(feedbackBean.getFeedbackId()) , null, null, null, null, null);
+                FeedbackTableEntry.COLUMN_NAME_RESPONDED_TIMESTAMP}, FeedbackTableEntry.COLUMN_NAME_FEEDBACK_ID + LIKE + String.valueOf(feedbackBean.getFeedbackId()), null, null, null, null, null);
         long newRowId = 0;
         if (cursor.moveToFirst()) {
             subscribed = cursor.getInt(0);
@@ -229,7 +229,7 @@ public class FeedbackDatabase extends AbstractFeedbackDatabase {
             deleteWithoutClose(db, FeedbackTableEntry.TABLE_NAME, FeedbackTableEntry.COLUMN_NAME_FEEDBACK_ID, String.valueOf(feedbackBean.getFeedbackId()));
         } else {
             newRowId = db.insert(FeedbackTableEntry.TABLE_NAME, "null", values);
-            writeTags(db,feedbackBean.getFeedbackId(),feedbackBean.getTags());
+            writeTags(db, feedbackBean.getFeedbackId(), feedbackBean.getTags());
         }
 
         cursor.close();
@@ -237,8 +237,8 @@ public class FeedbackDatabase extends AbstractFeedbackDatabase {
         return newRowId;
     }
 
-    private void writeTags(SQLiteDatabase db, Long feedbackId, String[] tags){
-        for (String tag : (tags==null?new String[0]:tags)){
+    private void writeTags(SQLiteDatabase db, Long feedbackId, String[] tags) {
+        for (String tag : (tags == null ? new String[0] : tags)) {
             ContentValues values = new ContentValues();
             values.put(TagTableEntry.COLUMN_NAME_FEEDBACK_ID, String.valueOf(feedbackId));
             values.put(TagTableEntry.COLUMN_NAME_TAG, tag);
@@ -246,9 +246,10 @@ public class FeedbackDatabase extends AbstractFeedbackDatabase {
         }
     }
 
-    public String[] readTags(Long feedbackId){
+    public String[] readTags(Long feedbackId) {
         SQLiteDatabase db = databaseHelper.getReadableDatabase();
-        Cursor cursor = db.query(true,TagTableEntry.TABLE_NAME, new String[]{TagTableEntry.COLUMN_NAME_TAG}, TagTableEntry.COLUMN_NAME_FEEDBACK_ID + (feedbackId==null?NEQ+ZERO:EQ + feedbackId), null, null, null, null,
+        Cursor cursor = db.query(true, TagTableEntry.TABLE_NAME, new String[]{TagTableEntry.COLUMN_NAME_TAG}, TagTableEntry.COLUMN_NAME_FEEDBACK_ID + (feedbackId == null ? NEQ + ZERO : EQ +
+                        feedbackId), null, null, null, null,
                 null);
         ArrayList<String> tags = new ArrayList<>();
         while (cursor.moveToNext()) {
@@ -273,6 +274,112 @@ public class FeedbackDatabase extends AbstractFeedbackDatabase {
 
     public void deleteFeedback(LocalFeedbackBean feedbackBean) {
         delete(FeedbackTableEntry.TABLE_NAME, FeedbackTableEntry.COLUMN_NAME_FEEDBACK_ID, String.valueOf(feedbackBean.getFeedbackId()));
+    }
+
+    public void writeConfiguration(LocalConfigurationBean config) {
+        // Host Application
+        writeString(CONFIG_HOST_APPLICATION_ID, config.getHostApplicationId());
+        writeLong(CONFIG_HOST_APPLICATION_LONG_ID, config.getHostApplicationLongId());
+        writeString(CONFIG_HOST_APPLICATION_NAME, config.getHostApplicationName());
+        writeString(CONFIG_HOST_APPLICATION_LANGUAGE, config.getHostApplicationLanguage());
+        // Miscellaneous
+        writeInteger(CONFIG_PULL_INTERVAL_MINUTES, config.getPullIntervalMinutes());
+        writeBoolean(CONFIG_IS_DEVELOPER, config.isDeveloper());
+        writeString(CONFIG_REPOSITORY_LOGIN, config.getRepositoryLogin());
+        writeString(CONFIG_REPOSITORY_PASS, config.getRepositoryPass());
+        // Audio / Screenshot
+        writeInteger(CONFIG_AUDIO_ORDER, config.getAudioOrder());
+        writeDouble(CONFIG_MAX_AUDIO_TIME, config.getMaxAudioTime());
+        writeInteger(CONFIG_SCREENSHOT_ORDER, config.getScreenshotOrder());
+        writeBoolean(CONFIG_IS_SCREENSHOT_EDITABLE, config.isScreenshotEditable());
+        // Rating
+        writeInteger(CONFIG_RATING_ORDER, config.getRatingOrder());
+        writeString(CONFIG_RATING_TITLE, config.getRatingTitle());
+        writeString(CONFIG_RATING_ICON, config.getRatingIcon());
+        writeInteger(CONFIG_RATING_DEFAULT_VALUE, config.getDefaultRatingValue());
+        writeInteger(CONFIG_MAX_RATING_VALUE, config.getMaxRatingValue());
+        // Label
+        writeInteger(CONFIG_LABEL_ORDER, config.getLabelOrder());
+        writeInteger(CONFIG_MAX_LABEL_COUNT, config.getMaxLabelCount());
+        writeInteger(CONFIG_MIN_LABEL_COUNT, config.getMinLabelCount());
+        // Text
+        writeInteger(CONFIG_TEXT_ORDER, config.getTextOrder());
+        writeString(CONFIG_TEXT_LABEL, config.getTextLabel());
+        writeString(CONFIG_TEXT_HINT, config.getTextHint());
+        writeInteger(CONFIG_MAX_TEXT_LENGTH, config.getMaxTextLength());
+        writeInteger(CONFIG_MIN_TEXT_LENGTH, config.getMinTextLength());
+        // Tag
+        writeInteger(CONFIG_MAX_TAG_LENGTH, config.getMaxTagLength());
+        writeInteger(CONFIG_MIN_TAG_LENGTH, config.getMinTagLength());
+        writeInteger(CONFIG_MAX_TAG_NUMBER, config.getMaxTagNumber());
+        writeInteger(CONFIG_MIN_TAG_NUMBER, config.getMinTagNumber());
+        writeInteger(CONFIG_MAX_TAG_RECOMMENDATION_NUMBER, config.getMaxTagRecommendationNumber());
+        // Title
+        writeInteger(CONFIG_MAX_TITLE_LENGTH, config.getMaxTitleLength());
+        writeInteger(CONFIG_MIN_TITLE_LENGTH, config.getMinTitleLength());
+        // Response
+        writeInteger(CONFIG_MAX_RESPONSE_LENGTH, config.getMaxResponseLength());
+        writeInteger(CONFIG_MIN_RESPONSE_LENGTH, config.getMinResponseLength());
+        // User
+        writeInteger(CONFIG_MAX_USER_NAME_LENGTH, config.getMaxUserNameLength());
+        writeInteger(CONFIG_MIN_USER_NAME_LENGTH, config.getMinUserNameLength());
+        // Style
+        writeString(CONFIG_STYLE, config.getStyle().toString());
+        writeBoolean(CONFIG_IS_COLORING_VERTICAL, config.isColoringVertical());
+        Integer[] colors = config.getTopColors();
+        for (int i = 0; i < colors.length; i++) {
+            writeInteger(CONFIG_COLOR + i, colors[i]);
+        }
+        writeInteger(CONFIG_COLORS_LENGTH, colors.length);
+    }
+
+    public LocalConfigurationBean readConfiguration() {
+        int colorsLength = readInteger(CONFIG_COLORS_LENGTH, 0);
+        Integer[] topColors = new Integer[colorsLength];
+        for (int i = 0; i < colorsLength; i++) {
+            topColors[i] = readInteger(CONFIG_COLOR + i, 0);
+        }
+
+        return new LocalConfigurationBean.Builder()
+                .withHostApplicationLongId(readLong(CONFIG_HOST_APPLICATION_LONG_ID, null))
+                .withHostApplicationName(readString(CONFIG_HOST_APPLICATION_NAME, null))
+                .withHostApplicationLanguage(readString(CONFIG_HOST_APPLICATION_LANGUAGE, null))
+                .withPullIntervalMinutes(readInteger(CONFIG_PULL_INTERVAL_MINUTES, null))
+                .withIsDeveloper(readBoolean(CONFIG_IS_DEVELOPER, null))
+                .withRepositoryLogin(readString(CONFIG_REPOSITORY_LOGIN, null))
+                .withRepositoryPassword(readString(CONFIG_REPOSITORY_PASS, null))
+                .withAudioOrder(readInteger(CONFIG_AUDIO_ORDER, null))
+                .withMaxAudioTime(readDouble(CONFIG_MAX_AUDIO_TIME, null))
+                .withScreenshotOrder(readInteger(CONFIG_SCREENSHOT_ORDER, null))
+                .withIsScreenshotEditable(readBoolean(CONFIG_IS_SCREENSHOT_EDITABLE, null))
+                .withRatingOrder(readInteger(CONFIG_RATING_ORDER, null))
+                .withRatingTitle(readString(CONFIG_RATING_TITLE, null))
+                .withRatingIcon(readString(CONFIG_RATING_ICON, null))
+                .withRatingDefaultValue(readInteger(CONFIG_RATING_DEFAULT_VALUE, null))
+                .withMaxRatingValue(readInteger(CONFIG_MAX_RATING_VALUE, null))
+                .withLabelOrder(readInteger(CONFIG_LABEL_ORDER, null))
+                .withMaxLabelCount(readInteger(CONFIG_MAX_LABEL_COUNT, null))
+                .withMinLabelCount(readInteger(CONFIG_MIN_LABEL_COUNT, null))
+                .withTextOrder(readInteger(CONFIG_TEXT_ORDER, null))
+                .withTextLabel(readString(CONFIG_TEXT_LABEL, null))
+                .withTextHint(readString(CONFIG_TEXT_HINT, null))
+                .withMaxTextLength(readInteger(CONFIG_MAX_TEXT_LENGTH, null))
+                .withMinTextLength(readInteger(CONFIG_MIN_TEXT_LENGTH, null))
+                .withMaxTagLength(readInteger(CONFIG_MAX_TAG_LENGTH, null))
+                .withMinTagLength(readInteger(CONFIG_MIN_TAG_LENGTH, null))
+                .withMaxTagNumber(readInteger(CONFIG_MAX_TAG_NUMBER, null))
+                .withMinTagNumber(readInteger(CONFIG_MIN_TAG_NUMBER, null))
+                .withMaxTagRecommendationNumber(readInteger(CONFIG_MAX_TAG_RECOMMENDATION_NUMBER, null))
+                .withMaxTitleLength(readInteger(CONFIG_MAX_TITLE_LENGTH, null))
+                .withMinTitleLength(readInteger(CONFIG_MIN_TITLE_LENGTH, null))
+                .withMaxResponseLength(readInteger(CONFIG_MAX_RESPONSE_LENGTH, null))
+                .withMinResponseLength(readInteger(CONFIG_MIN_RESPONSE_LENGTH, null))
+                .withMaxUserNameLength(readInteger(CONFIG_MAX_USER_NAME_LENGTH, null))
+                .withMinUserNameLength(readInteger(CONFIG_MIN_USER_NAME_LENGTH, null))
+                .withStyle(IFeedbackStyle.FEEDBACK_STYLE.valueOf(readString(CONFIG_STYLE, "DARK")))
+                .withIsColoringVertical(readBoolean(CONFIG_IS_COLORING_VERTICAL, null))
+                .withTopColors(topColors)
+                .build();
     }
 
     public Double readDouble(String key, Double valueIfNull) {
@@ -301,16 +408,17 @@ public class FeedbackDatabase extends AbstractFeedbackDatabase {
 
     public Boolean readBoolean(String key, Boolean valueIfNull) {
         SQLiteDatabase db = databaseHelper.getReadableDatabase();
-        Cursor cursor = db.query(NumberTableEntry.TABLE_NAME, new String[]{NumberTableEntry.COLUMN_NAME_VALUE}, NumberTableEntry.COLUMN_NAME_KEY + LIKE + QUOTES + key + QUOTES, null, null, null, null, null);
+        Cursor cursor = db.query(NumberTableEntry.TABLE_NAME, new String[]{NumberTableEntry.COLUMN_NAME_VALUE}, NumberTableEntry.COLUMN_NAME_KEY + LIKE + QUOTES + key + QUOTES, null, null, null,
+                null, null);
         Integer i = null;
         if (cursor.moveToFirst()) {
             i = cursor.getInt(0);
         }
         cursor.close();
-        if (i == null){
+        if (i == null) {
             return valueIfNull;
         }
-        return i==1?true:false;
+        return i == 1 ? true : false;
     }
 
     public Integer readInteger(String key, Integer valueIfNull) {

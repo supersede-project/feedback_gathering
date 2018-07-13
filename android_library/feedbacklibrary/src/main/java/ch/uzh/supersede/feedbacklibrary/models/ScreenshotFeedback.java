@@ -10,7 +10,7 @@ public class ScreenshotFeedback extends AbstractMultipartFeedback {
 
     public ScreenshotFeedback(LocalConfigurationBean configuration) {
         super(configuration.getScreenshotOrder());
-        this.isEditable = configuration.isScreenshotIsEditable();
+        this.isEditable = configuration.isScreenshotEditable();
         setPart("screenshot");
         setFileExtension(".png");
     }

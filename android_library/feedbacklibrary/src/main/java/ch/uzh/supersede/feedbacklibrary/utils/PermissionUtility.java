@@ -32,7 +32,8 @@ public class PermissionUtility {
                 Manifest.permission.ACCESS_NETWORK_STATE,
                 Manifest.permission.READ_EXTERNAL_STORAGE,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                Manifest.permission.RECORD_AUDIO);
+                Manifest.permission.RECORD_AUDIO,
+                Manifest.permission.RECEIVE_BOOT_COMPLETED);
         private int level;
         private String[] permissions;
 
