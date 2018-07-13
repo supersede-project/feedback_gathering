@@ -298,10 +298,6 @@ public class FeedbackDatabase extends AbstractFeedbackDatabase {
         writeString(CONFIG_RATING_ICON, config.getRatingIcon());
         writeInteger(CONFIG_RATING_DEFAULT_VALUE, config.getDefaultRatingValue());
         writeInteger(CONFIG_MAX_RATING_VALUE, config.getMaxRatingValue());
-        // Label
-        writeInteger(CONFIG_LABEL_ORDER, config.getLabelOrder());
-        writeInteger(CONFIG_MAX_LABEL_COUNT, config.getMaxLabelCount());
-        writeInteger(CONFIG_MIN_LABEL_COUNT, config.getMinLabelCount());
         // Text
         writeInteger(CONFIG_TEXT_ORDER, config.getTextOrder());
         writeString(CONFIG_TEXT_LABEL, config.getTextLabel());
@@ -341,41 +337,49 @@ public class FeedbackDatabase extends AbstractFeedbackDatabase {
         }
 
         return new LocalConfigurationBean.Builder()
+                // Host Application
+                .withHostApplicationId(readString(CONFIG_HOST_APPLICATION_ID, null))
                 .withHostApplicationLongId(readLong(CONFIG_HOST_APPLICATION_LONG_ID, null))
                 .withHostApplicationName(readString(CONFIG_HOST_APPLICATION_NAME, null))
                 .withHostApplicationLanguage(readString(CONFIG_HOST_APPLICATION_LANGUAGE, null))
+                // Miscellaneous
                 .withPullIntervalMinutes(readInteger(CONFIG_PULL_INTERVAL_MINUTES, null))
                 .withIsDeveloper(readBoolean(CONFIG_IS_DEVELOPER, null))
                 .withRepositoryLogin(readString(CONFIG_REPOSITORY_LOGIN, null))
                 .withRepositoryPassword(readString(CONFIG_REPOSITORY_PASS, null))
+                // Audio / Screenshot
                 .withAudioOrder(readInteger(CONFIG_AUDIO_ORDER, null))
                 .withMaxAudioTime(readDouble(CONFIG_MAX_AUDIO_TIME, null))
                 .withScreenshotOrder(readInteger(CONFIG_SCREENSHOT_ORDER, null))
                 .withIsScreenshotEditable(readBoolean(CONFIG_IS_SCREENSHOT_EDITABLE, null))
+                // Rating
                 .withRatingOrder(readInteger(CONFIG_RATING_ORDER, null))
                 .withRatingTitle(readString(CONFIG_RATING_TITLE, null))
                 .withRatingIcon(readString(CONFIG_RATING_ICON, null))
                 .withRatingDefaultValue(readInteger(CONFIG_RATING_DEFAULT_VALUE, null))
                 .withMaxRatingValue(readInteger(CONFIG_MAX_RATING_VALUE, null))
-                .withLabelOrder(readInteger(CONFIG_LABEL_ORDER, null))
-                .withMaxLabelCount(readInteger(CONFIG_MAX_LABEL_COUNT, null))
-                .withMinLabelCount(readInteger(CONFIG_MIN_LABEL_COUNT, null))
+                // Text
                 .withTextOrder(readInteger(CONFIG_TEXT_ORDER, null))
                 .withTextLabel(readString(CONFIG_TEXT_LABEL, null))
                 .withTextHint(readString(CONFIG_TEXT_HINT, null))
                 .withMaxTextLength(readInteger(CONFIG_MAX_TEXT_LENGTH, null))
                 .withMinTextLength(readInteger(CONFIG_MIN_TEXT_LENGTH, null))
+                // Tag
                 .withMaxTagLength(readInteger(CONFIG_MAX_TAG_LENGTH, null))
                 .withMinTagLength(readInteger(CONFIG_MIN_TAG_LENGTH, null))
                 .withMaxTagNumber(readInteger(CONFIG_MAX_TAG_NUMBER, null))
                 .withMinTagNumber(readInteger(CONFIG_MIN_TAG_NUMBER, null))
                 .withMaxTagRecommendationNumber(readInteger(CONFIG_MAX_TAG_RECOMMENDATION_NUMBER, null))
+                // Title
                 .withMaxTitleLength(readInteger(CONFIG_MAX_TITLE_LENGTH, null))
                 .withMinTitleLength(readInteger(CONFIG_MIN_TITLE_LENGTH, null))
+                // Response
                 .withMaxResponseLength(readInteger(CONFIG_MAX_RESPONSE_LENGTH, null))
                 .withMinResponseLength(readInteger(CONFIG_MIN_RESPONSE_LENGTH, null))
+                // User
                 .withMaxUserNameLength(readInteger(CONFIG_MAX_USER_NAME_LENGTH, null))
                 .withMinUserNameLength(readInteger(CONFIG_MIN_USER_NAME_LENGTH, null))
+                // Style
                 .withStyle(IFeedbackStyle.FEEDBACK_STYLE.valueOf(readString(CONFIG_STYLE, "DARK")))
                 .withIsColoringVertical(readBoolean(CONFIG_IS_COLORING_VERTICAL, null))
                 .withTopColors(topColors)

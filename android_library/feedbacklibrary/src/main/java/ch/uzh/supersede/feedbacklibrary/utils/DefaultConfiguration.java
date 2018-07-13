@@ -1,7 +1,6 @@
 package ch.uzh.supersede.feedbacklibrary.utils;
 
 import ch.uzh.supersede.feedbacklibrary.entrypoint.*;
-import ch.uzh.supersede.feedbacklibrary.entrypoint.IFeedbackStyleConfiguration;
 
 public class DefaultConfiguration implements
         IFeedbackBehaviorConfiguration,
@@ -9,7 +8,6 @@ public class DefaultConfiguration implements
         IFeedbackSettingsConfiguration,
         IFeedbackDeveloperConfiguration,
         IAudioFeedbackConfiguration,
-        ILabelFeedbackConfiguration,
         IRatingFeedbackConfiguration,
         IScreenshotFeedbackConfiguration,
         ITextFeedbackConfiguration,
@@ -27,12 +25,6 @@ public class DefaultConfiguration implements
     }
 
     //ORDERS
-
-    @Override
-    public int getConfiguredLabelFeedbackOrder() {
-        return -1;
-    }
-
     @Override
     public int getConfiguredRatingFeedbackOrder() {
         return 1;
@@ -146,16 +138,6 @@ public class DefaultConfiguration implements
     @Override
     public double getConfiguredAudioFeedbackMaxTime() {
         return 15.0;
-    }
-
-    @Override
-    public int getConfiguredLabelFeedbackMaxCount() {
-        return 5;
-    }
-
-    @Override
-    public int getConfiguredLabelFeedbackMinCount() {
-        return 2;
     }
 
     @Override

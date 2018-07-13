@@ -13,12 +13,6 @@ public class Constants {
     public static final String FEEDBACK_CONTRIBUTOR = "feedbackContributor";
     public static final String SHARED_PREFERENCES = "feedbackSharedPreferences";
 
-    public static final String USER_NAME = "userName";
-    public static final String USER_IS_DEVELOPER = "isDeveloper";
-    public static final String USER_KARMA = "userKarma";
-    public static final String USER_IS_BLOCKED = "userIsBlocked";
-    public static final String REPORTED_FEEDBACK = "reportedFeedback";
-
     public static final String USE_STUBS = "useStubs";
     public static final String ENABLE_NOTIFICATIONS = "enableNotifications";
     public static final String USER_NAME_ANONYMOUS = "anonymous";
@@ -54,6 +48,19 @@ public class Constants {
     public static final String IMAGE_ANNOTATED_DATA_DB_KEY = "imageAnnotatedData";
     public static final String NOT_YET_IMPLEMENTED_EXCEPTION = "Not yet implemented";
 
+
+    public static class UserConstants {
+        private UserConstants() {
+        }
+
+        public static final String USER_NAME = "userName";
+        public static final String USER_IS_DEVELOPER = "isDeveloper";
+        public static final String USER_KARMA = "userKarma";
+        public static final String USER_IS_BLOCKED = "userIsBlocked";
+        public static final String USER_REPORTED_FEEDBACK = "reportedFeedback";
+    }
+
+
     public static class ConfigurationConstants {
         private ConfigurationConstants() {
         }
@@ -75,9 +82,6 @@ public class Constants {
         public static final String CONFIG_RATING_ICON = "configRatingIcon";
         public static final String CONFIG_RATING_DEFAULT_VALUE = "configRatingDefaultValue";
         public static final String CONFIG_MAX_RATING_VALUE = "configMaxRatingValue";
-        public static final String CONFIG_LABEL_ORDER = "configLabelOrder";
-        public static final String CONFIG_MAX_LABEL_COUNT = "configMaxLabelCount";
-        public static final String CONFIG_MIN_LABEL_COUNT = "configMinLabelCount";
         public static final String CONFIG_TEXT_ORDER = "configTextOrder";
         public static final String CONFIG_TEXT_LABEL = "configTextLabel";
         public static final String CONFIG_TEXT_HINT = "configTextHint";

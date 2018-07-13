@@ -4,7 +4,8 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.view.View;
-import android.widget.*;
+import android.widget.Button;
+import android.widget.LinearLayout;
 
 import ch.uzh.supersede.feedbacklibrary.activities.AbstractBaseActivity;
 import ch.uzh.supersede.feedbacklibrary.entrypoint.*;
@@ -52,11 +53,6 @@ public class HostActivity extends AbstractBaseActivity implements
     @Override
     public int getConfiguredScreenshotFeedbackOrder() {
         return DefaultConfiguration.getInstance().getConfiguredScreenshotFeedbackOrder();
-    }
-
-    @Override
-    public int getConfiguredLabelFeedbackOrder() {
-        return DefaultConfiguration.getInstance().getConfiguredLabelFeedbackOrder();
     }
 
     @Override

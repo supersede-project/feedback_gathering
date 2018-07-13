@@ -128,7 +128,6 @@ public class FeedbackActivity extends AbstractBaseActivity implements AudioFeedb
                 .withText()
                 .withScreenshot()
                 .withAudio()
-                .withCategory()
                 .build(feedbackPartViews).getFeedbackParts();
 
     }

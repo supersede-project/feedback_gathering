@@ -8,18 +8,11 @@ import java.util.List;
 
 import ch.uzh.supersede.feedbacklibrary.beans.FeedbackBean;
 import ch.uzh.supersede.feedbacklibrary.beans.FeedbackDetailsBean;
-import ch.uzh.supersede.feedbacklibrary.components.buttons.FeedbackListItem;
 import ch.uzh.supersede.feedbacklibrary.database.FeedbackDatabase;
-import ch.uzh.supersede.feedbacklibrary.models.AbstractFeedbackPart;
-import ch.uzh.supersede.feedbacklibrary.models.AudioFeedback;
-import ch.uzh.supersede.feedbacklibrary.models.Feedback;
-import ch.uzh.supersede.feedbacklibrary.models.LabelFeedback;
-import ch.uzh.supersede.feedbacklibrary.models.RatingFeedback;
-import ch.uzh.supersede.feedbacklibrary.models.ScreenshotFeedback;
-import ch.uzh.supersede.feedbacklibrary.models.TextFeedback;
+import ch.uzh.supersede.feedbacklibrary.models.*;
 import ch.uzh.supersede.feedbacklibrary.stubs.GeneratorStub;
 
-import static ch.uzh.supersede.feedbacklibrary.utils.Constants.USER_NAME;
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.UserConstants.USER_NAME;
 import static ch.uzh.supersede.feedbacklibrary.utils.Enums.FEEDBACK_STATUS.OPEN;
 import static ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility.USER_LEVEL.ACTIVE;
 

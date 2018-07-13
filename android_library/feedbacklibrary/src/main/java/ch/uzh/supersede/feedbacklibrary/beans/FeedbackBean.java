@@ -3,17 +3,16 @@ package ch.uzh.supersede.feedbacklibrary.beans;
 import android.content.Context;
 
 import java.io.Serializable;
-import java.util.UUID;
 
 import ch.uzh.supersede.feedbacklibrary.database.FeedbackDatabase;
 import ch.uzh.supersede.feedbacklibrary.stubs.GeneratorStub;
-import ch.uzh.supersede.feedbacklibrary.utils.*;
+import ch.uzh.supersede.feedbacklibrary.utils.CompareUtility;
 import ch.uzh.supersede.feedbacklibrary.utils.Enums.FEEDBACK_STATUS;
 
-import static ch.uzh.supersede.feedbacklibrary.utils.Constants.USER_NAME;
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.UserConstants.USER_NAME;
 import static ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility.USER_LEVEL.ACTIVE;
 
-public class FeedbackBean implements Serializable{
+public class FeedbackBean implements Serializable {
 
     private long feedbackId;
     private String title;
@@ -76,6 +75,7 @@ public class FeedbackBean implements Serializable{
             this.maxUpVotes = maxUpVotes;
             return this;
         }
+
         public Builder withMinUpVotes(int minUpVotes) {
             this.minUpVotes = minUpVotes;
             return this;
@@ -103,7 +103,7 @@ public class FeedbackBean implements Serializable{
 
 
         public FeedbackBean build() {
-            if (CompareUtility.notNull(feedbackId,title,userName,timeStamp,maxUpVotes, minUpVotes,feedbackStatus)) {
+            if (CompareUtility.notNull(feedbackId, title, userName, timeStamp, maxUpVotes, minUpVotes, feedbackStatus)) {
                 FeedbackBean bean = new FeedbackBean();
                 bean.feedbackId = feedbackId;
                 bean.title = this.title;
@@ -122,12 +122,12 @@ public class FeedbackBean implements Serializable{
         }
 
         //Showcase
-        public FeedbackBean fromLocalFeedbackBean(Context context,LocalFeedbackBean localFeedbackBean) {
+        public FeedbackBean fromLocalFeedbackBean(Context context, LocalFeedbackBean localFeedbackBean) {
             FeedbackBean bean = new FeedbackBean();
             bean.feedbackId = localFeedbackBean.getFeedbackId();
             bean.title = localFeedbackBean.getTitle();
             bean.tags = FeedbackDatabase.getInstance(context).readTags(localFeedbackBean.getFeedbackId());
-            bean.userName = localFeedbackBean.getOwner()==1?FeedbackDatabase.getInstance(context).readString(Constants.USER_NAME,null): GeneratorStub.BagOfNames.pickRandom();
+            bean.userName = localFeedbackBean.getOwner() == 1 ? FeedbackDatabase.getInstance(context).readString(USER_NAME, null) : GeneratorStub.BagOfNames.pickRandom();
             bean.timeStamp = localFeedbackBean.getCreationDate();
             bean.upVotes = localFeedbackBean.getVotes();
             bean.maxUpVotes = 50; //FIXME mbo
@@ -160,7 +160,7 @@ public class FeedbackBean implements Serializable{
     }
 
     public String getVotesAsText() {
-        return upVotes<=0?String.valueOf(upVotes):"+"+upVotes;
+        return upVotes <= 0 ? String.valueOf(upVotes) : "+" + upVotes;
     }
 
     public int getResponses() {
@@ -183,11 +183,12 @@ public class FeedbackBean implements Serializable{
         return feedbackId;
     }
 
-    public String downVote(){
+    public String downVote() {
         upVotes--;
         return getVotesAsText();
     }
-    public String upVote(){
+
+    public String upVote() {
         upVotes++;
         return getVotesAsText();
     }
@@ -196,8 +197,8 @@ public class FeedbackBean implements Serializable{
         return isPublic;
     }
 
-    public boolean isOwnFeedback(Context context){
-        if (ACTIVE.check(context,false) && getUserName().equals(FeedbackDatabase.getInstance(context).readString(USER_NAME,""))){
+    public boolean isOwnFeedback(Context context) {
+        if (ACTIVE.check(context, false) && getUserName().equals(FeedbackDatabase.getInstance(context).readString(USER_NAME, ""))) {
             return true;
         }
         return false;

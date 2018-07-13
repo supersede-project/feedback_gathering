@@ -10,10 +10,8 @@ import java.util.ArrayList;
 import ch.uzh.supersede.feedbacklibrary.database.FeedbackDatabase;
 
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.*;
-import static ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility.USER_LEVEL.ACTIVE;
-import static ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility.USER_LEVEL.ADVANCED;
-import static ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility.USER_LEVEL.LOCKED;
-import static ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility.USER_LEVEL.PASSIVE;
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.UserConstants.USER_NAME;
+import static ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility.USER_LEVEL.*;
 
 public class PermissionUtility {
 
@@ -43,13 +41,13 @@ public class PermissionUtility {
         }
 
         public boolean check(Context context) {
-            return check(context,false);
+            return check(context, false);
         }
 
         public boolean check(Context context, boolean ignoreDatabaseCheck) {
             boolean contributor = context.getSharedPreferences(SHARED_PREFERENCES, Context.MODE_PRIVATE).getBoolean(FEEDBACK_CONTRIBUTOR, false);
             boolean noMissingPermissions = getMissing(context).length == 0;
-            return ignoreDatabaseCheck?contributor && noMissingPermissions:contributor && noMissingPermissions && checkForUsername(context);
+            return ignoreDatabaseCheck ? contributor && noMissingPermissions : contributor && noMissingPermissions && checkForUsername(context);
         }
 
         private boolean checkForUsername(Context context) {
@@ -76,16 +74,17 @@ public class PermissionUtility {
     }
 
     public static USER_LEVEL getUserLevel(Context context) {
-        return getUserLevel(context,false);
+        return getUserLevel(context, false);
     }
+
     public static USER_LEVEL getUserLevel(Context context, boolean ignoreDatabaseCheck) {
-        if (ADVANCED.check(context,ignoreDatabaseCheck)) {
+        if (ADVANCED.check(context, ignoreDatabaseCheck)) {
             return ADVANCED;
         }
-        if (ACTIVE.check(context,ignoreDatabaseCheck)) {
+        if (ACTIVE.check(context, ignoreDatabaseCheck)) {
             return ACTIVE;
         }
-        if (PASSIVE.check(context,ignoreDatabaseCheck)) {
+        if (PASSIVE.check(context, ignoreDatabaseCheck)) {
             return PASSIVE;
         }
         return LOCKED;

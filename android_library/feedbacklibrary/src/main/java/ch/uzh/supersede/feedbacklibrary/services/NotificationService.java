@@ -18,7 +18,8 @@ import ch.uzh.supersede.feedbacklibrary.models.AndroidUser;
 import ch.uzh.supersede.feedbacklibrary.models.AuthenticateResponse;
 import ch.uzh.supersede.feedbacklibrary.utils.*;
 
-import static ch.uzh.supersede.feedbacklibrary.utils.Constants.*;
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.LIFETIME_TOKEN;
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.UserConstants.USER_NAME;
 import static ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility.USER_LEVEL.ADVANCED;
 
 public class NotificationService extends Service implements IFeedbackServiceEventListener {

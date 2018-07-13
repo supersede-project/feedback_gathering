@@ -29,9 +29,6 @@ public class LocalConfigurationBean implements Serializable {
     // IFeedbackLayoutConfiguration
     private int audioOrder;
     private double maxAudioTime;
-    private int labelOrder;
-    private int maxLabelCount;
-    private int minLabelCount;
     private int ratingOrder;
     private String ratingTitle;
     private String ratingIcon;
@@ -106,9 +103,6 @@ public class LocalConfigurationBean implements Serializable {
             ISimpleFeedbackConfiguration simpleFeedbackConfiguration = (ISimpleFeedbackConfiguration) configuration;
             this.audioOrder = simpleFeedbackConfiguration.getConfiguredAudioFeedbackOrder();
             this.maxAudioTime = DefaultConfiguration.getInstance().getConfiguredAudioFeedbackMaxTime();
-            this.labelOrder = simpleFeedbackConfiguration.getConfiguredLabelFeedbackOrder();
-            this.maxLabelCount = DefaultConfiguration.getInstance().getConfiguredLabelFeedbackMaxCount();
-            this.minLabelCount = DefaultConfiguration.getInstance().getConfiguredLabelFeedbackMinCount();
             this.ratingOrder = simpleFeedbackConfiguration.getConfiguredRatingFeedbackOrder();
             this.ratingTitle = DefaultConfiguration.getInstance().getConfiguredRatingFeedbackTitle();
             this.ratingIcon = DefaultConfiguration.getInstance().getConfiguredRatingFeedbackIcon();
@@ -133,12 +127,6 @@ public class LocalConfigurationBean implements Serializable {
             IAudioFeedbackConfiguration audioConfiguration = (IAudioFeedbackConfiguration) configuration;
             this.audioOrder = audioConfiguration.getConfiguredAudioFeedbackOrder();
             this.maxAudioTime = audioConfiguration.getConfiguredAudioFeedbackMaxTime();
-        }
-        if (configuration instanceof ILabelFeedbackConfiguration) {
-            ILabelFeedbackConfiguration labelConfiguration = (ILabelFeedbackConfiguration) configuration;
-            this.labelOrder = labelConfiguration.getConfiguredLabelFeedbackOrder();
-            this.maxLabelCount = labelConfiguration.getConfiguredLabelFeedbackMaxCount();
-            this.minLabelCount = labelConfiguration.getConfiguredLabelFeedbackMinCount();
         }
         if (configuration instanceof IRatingFeedbackConfiguration) {
             IRatingFeedbackConfiguration ratingConfiguration = (IRatingFeedbackConfiguration) configuration;
@@ -266,9 +254,6 @@ public class LocalConfigurationBean implements Serializable {
         private String ratingIcon;
         private Integer ratingDefaultValue;
         private Integer maxRatingValue;
-        private Integer labelOrder;
-        private Integer maxLabelCount;
-        private Integer minLabelCount;
         private Integer textOrder;
         private String textLabel;
         private String textHint;
@@ -367,21 +352,6 @@ public class LocalConfigurationBean implements Serializable {
 
         public Builder withMaxRatingValue(Integer maxRatingValue) {
             this.maxRatingValue = maxRatingValue;
-            return this;
-        }
-
-        public Builder withLabelOrder(Integer labelOrder) {
-            this.labelOrder = labelOrder;
-            return this;
-        }
-
-        public Builder withMaxLabelCount(Integer maxLabelCount) {
-            this.maxLabelCount = maxLabelCount;
-            return this;
-        }
-
-        public Builder withMinLabelCount(Integer minLabelCount) {
-            this.minLabelCount = minLabelCount;
             return this;
         }
 
@@ -508,9 +478,6 @@ public class LocalConfigurationBean implements Serializable {
                 config.ratingIcon = this.ratingIcon;
                 config.defaultRatingValue = this.ratingDefaultValue;
                 config.maxRatingValue = this.maxRatingValue;
-                config.labelOrder = this.labelOrder;
-                config.maxLabelCount = this.maxLabelCount;
-                config.minLabelCount = this.minLabelCount;
                 config.textOrder = this.textOrder;
                 config.textLabel = this.textLabel;
                 config.textHint = this.textHint;
@@ -552,18 +519,6 @@ public class LocalConfigurationBean implements Serializable {
 
     public double getMaxAudioTime() {
         return maxAudioTime;
-    }
-
-    public int getLabelOrder() {
-        return labelOrder;
-    }
-
-    public int getMaxLabelCount() {
-        return maxLabelCount;
-    }
-
-    public int getMinLabelCount() {
-        return minLabelCount;
     }
 
     public int getRatingOrder() {

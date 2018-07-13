@@ -16,13 +16,11 @@ import ch.uzh.supersede.feedbacklibrary.R;
 import ch.uzh.supersede.feedbacklibrary.beans.LocalConfigurationBean;
 import ch.uzh.supersede.feedbacklibrary.components.views.AbstractFeedbackPartView;
 import ch.uzh.supersede.feedbacklibrary.components.views.AudioFeedbackView;
-import ch.uzh.supersede.feedbacklibrary.components.views.LabelFeedbackView;
 import ch.uzh.supersede.feedbacklibrary.components.views.RatingFeedbackView;
 import ch.uzh.supersede.feedbacklibrary.components.views.ScreenshotFeedbackView;
 import ch.uzh.supersede.feedbacklibrary.components.views.TextFeedbackView;
 import ch.uzh.supersede.feedbacklibrary.models.AbstractFeedbackPart;
 import ch.uzh.supersede.feedbacklibrary.models.AudioFeedback;
-import ch.uzh.supersede.feedbacklibrary.models.LabelFeedback;
 import ch.uzh.supersede.feedbacklibrary.models.RatingFeedback;
 import ch.uzh.supersede.feedbacklibrary.models.ScreenshotFeedback;
 import ch.uzh.supersede.feedbacklibrary.models.TextFeedback;
@@ -88,17 +86,6 @@ public class OrchestratorStub {
                 AudioFeedbackView audioMechanismView = new AudioFeedbackView(layoutInflater, audioFeedback, resources, activity, context);
                 feedbackParts.add(audioFeedback);
                 feedbackPartViews.add(audioMechanismView);
-                id++;
-            }
-            return this;
-        }
-
-        public FeedbackBuilder withCategory() {
-            if (configuration.getLabelOrder() != -1) {
-                LabelFeedback labelFeedback = new LabelFeedback(configuration);
-                LabelFeedbackView labelFeedbackView = new LabelFeedbackView(layoutInflater, labelFeedback);
-                feedbackParts.add(labelFeedback);
-                feedbackPartViews.add(labelFeedbackView);
                 id++;
             }
             return this;

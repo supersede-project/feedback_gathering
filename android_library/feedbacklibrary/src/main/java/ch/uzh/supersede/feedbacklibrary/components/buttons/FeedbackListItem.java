@@ -4,23 +4,25 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutCompat;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.View;
-import android.widget.*;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
-import java.util.*;
+import java.util.List;
 
 import ch.uzh.supersede.feedbacklibrary.R;
-import ch.uzh.supersede.feedbacklibrary.activities.*;
-import ch.uzh.supersede.feedbacklibrary.beans.*;
+import ch.uzh.supersede.feedbacklibrary.activities.FeedbackDetailsActivity;
+import ch.uzh.supersede.feedbacklibrary.beans.FeedbackBean;
+import ch.uzh.supersede.feedbacklibrary.beans.LocalConfigurationBean;
 import ch.uzh.supersede.feedbacklibrary.database.FeedbackDatabase;
 import ch.uzh.supersede.feedbacklibrary.interfaces.ISortableFeedback;
 import ch.uzh.supersede.feedbacklibrary.utils.*;
 
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.*;
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.UserConstants.USER_NAME;
 import static ch.uzh.supersede.feedbacklibrary.utils.Enums.FEEDBACK_SORTING.*;
 import static ch.uzh.supersede.feedbacklibrary.utils.Enums.FEEDBACK_STATUS.DUPLICATE;
 import static ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility.USER_LEVEL.ACTIVE;
@@ -62,9 +64,9 @@ public class FeedbackListItem extends LinearLayout implements Comparable, ISorta
         }
         titleView = createTextView(shortParams, context, feedbackBean.getTitle(), Gravity.START, padding, textColor);
         dateView = createTextView(shortParams, context, context.getString(R.string.list_date, DateUtility.getDateFromLong(feedbackBean.getTimeStamp())), Gravity.END, padding, textColor);
-        int statusColor = ColorUtility.adjustColorToBackground(backgroundColor,feedbackBean.getFeedbackStatus().getColor(),0.4);
+        int statusColor = ColorUtility.adjustColorToBackground(backgroundColor, feedbackBean.getFeedbackStatus().getColor(), 0.4);
         statusView = createTextView(shortParams, context, feedbackBean.getFeedbackStatus().getLabel()
-                .concat(SPACE + context.getString(R.string.list_responses, feedbackBean.getResponses())), Gravity.START, padding, statusColor);
+                                                                      .concat(SPACE + context.getString(R.string.list_responses, feedbackBean.getResponses())), Gravity.START, padding, statusColor);
         pointView = createTextView(shortParams, context, feedbackBean.getVotesAsText(), Gravity.END, padding, textColor);
         updatePercentageColor();
         setBackgroundColor(backgroundColor);
@@ -116,7 +118,7 @@ public class FeedbackListItem extends LinearLayout implements Comparable, ISorta
         return linearLayout;
     }
 
-    private TextView createTextView(LinearLayoutCompat.LayoutParams layoutParams, Context context, String text, int gravity,int padding, int textColor) {
+    private TextView createTextView(LinearLayoutCompat.LayoutParams layoutParams, Context context, String text, int gravity, int padding, int textColor) {
         TextView textView = new TextView(context);
         textView.setLayoutParams(layoutParams);
         textView.setText(text);
@@ -161,8 +163,8 @@ public class FeedbackListItem extends LinearLayout implements Comparable, ISorta
     public void setSorting(Enums.FEEDBACK_SORTING sorting, List<Enums.FEEDBACK_STATUS> allowedStatuses) {
         if (sorting != MINE || StringUtility.equals(feedbackBean.getUserName(), ownUser)) {
             this.setVisibility(GONE);
-            for (Enums.FEEDBACK_STATUS status : allowedStatuses){
-                if (status == feedbackBean.getFeedbackStatus()){
+            for (Enums.FEEDBACK_STATUS status : allowedStatuses) {
+                if (status == feedbackBean.getFeedbackStatus()) {
                     this.setVisibility(VISIBLE);
                 }
             }
