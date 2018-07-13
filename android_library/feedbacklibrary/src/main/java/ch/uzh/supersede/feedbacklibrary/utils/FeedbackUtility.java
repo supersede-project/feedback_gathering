@@ -8,7 +8,6 @@ import java.util.List;
 
 import ch.uzh.supersede.feedbacklibrary.beans.FeedbackBean;
 import ch.uzh.supersede.feedbacklibrary.beans.FeedbackDetailsBean;
-import ch.uzh.supersede.feedbacklibrary.components.buttons.FeedbackListItem;
 import ch.uzh.supersede.feedbacklibrary.database.FeedbackDatabase;
 import ch.uzh.supersede.feedbacklibrary.models.*;
 import ch.uzh.supersede.feedbacklibrary.stubs.GeneratorStub;
