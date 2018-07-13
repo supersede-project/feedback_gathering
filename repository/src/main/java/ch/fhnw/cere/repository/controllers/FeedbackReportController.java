@@ -37,6 +37,7 @@ public class FeedbackReportController extends BaseController {
         return feedbackReportService.find(id);
     }
 
+    //TODO: CHECK if this is the right way to to this...
     @PreAuthorize("@securityService.hasAdminPermission(#applicationId)")
     @RequestMapping(method = RequestMethod.POST, value = "")
     public FeedbackReport createFeedbackReport(@PathVariable long applicationId, HttpEntity<String> feedbackReportRequest) {

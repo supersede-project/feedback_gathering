@@ -27,6 +27,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
+import java.util.Comparator;
 import java.util.List;
 
 
@@ -70,15 +71,15 @@ public class FeedbackController extends BaseController {
                                                   @PathVariable long applicationId) {
         if (view != null && idList == null) {
             if (view.equals("public")) {
-                return feedbackService.findByApplicationIdAndIsPublic(applicationId,true);
+                return setMinMaxVotes(feedbackService.findByApplicationIdAndIsPublic(applicationId, true), applicationId);
             } else if (view.equals("private")) {
-                return feedbackService.findByApplicationIdAndIsPublic(applicationId,false);
+                return setMinMaxVotes(feedbackService.findByApplicationIdAndIsPublic(applicationId, false), applicationId);
             }
             throw new NotFoundException();
         } else if (idList != null && !idList.isEmpty()) {
-            return feedbackService.findAllByFeedbackIdIn(applicationId, idList);
+            return setMinMaxVotes(feedbackService.findAllByFeedbackIdIn(applicationId, idList), applicationId);
         }
-        return feedbackService.findByApplicationId(applicationId);
+        return setMinMaxVotes(feedbackService.findByApplicationId(applicationId), applicationId);
     }
 
     @PreAuthorize("@securityService.hasAdminPermission(#applicationId)")
@@ -107,14 +108,13 @@ public class FeedbackController extends BaseController {
         if (feedback == null) {
             throw new NotFoundException();
         }
-        return feedback;
+        return setMinMaxVotes(feedback, applicationId);
     }
 
     @PreAuthorize("@securityService.hasAdminPermission(#applicationId)")
     @RequestMapping(method = RequestMethod.GET, value = "/user_identification/{userIdentification}")
     public List<Feedback> getFeedbacksByUserIdentification(@PathVariable long applicationId, @PathVariable String userIdentification) {
-     return feedbackService.findByUserIdentification(userIdentification);
-
+        return feedbackService.findByUserIdentification(userIdentification);
     }
 
     @ResponseStatus(HttpStatus.CREATED)
@@ -301,4 +301,49 @@ public class FeedbackController extends BaseController {
         }
         throw new BadRequestException();
     }
+
+    private List<Feedback> setMinMaxVotes(List<Feedback> feedbackList, long applicationId) {
+        List<Feedback> applicationFeedbackList = feedbackService.findByApplicationId(applicationId);
+
+        int minVotes = 0;
+        int maxVotes = 0;
+        Feedback minFeedback = applicationFeedbackList.stream().min(Comparator.comparingInt(Feedback::getVotes)).orElse(null);
+        Feedback maxFeedback = applicationFeedbackList.stream().max(Comparator.comparingInt(Feedback::getVotes)).orElse(null);
+
+        if (minFeedback != null) {
+            minVotes = minFeedback.getVotes();
+        }
+
+        if (maxFeedback != null) {
+            maxVotes = maxFeedback.getVotes();
+        }
+
+        int finalMinVotes = minVotes;
+        int finalMaxVotes = maxVotes;
+        feedbackList.forEach(feedback -> feedback.setMinMaxVotes(finalMinVotes, finalMaxVotes));
+
+        return feedbackList;
+    }
+
+    private Feedback setMinMaxVotes(Feedback feedback, long applicationId) {
+        List<Feedback> applicationFeedbackList = feedbackService.findByApplicationId(applicationId);
+
+        int minVotes = 0;
+        int maxVotes = 0;
+        Feedback minFeedback = applicationFeedbackList.stream().min(Comparator.comparingInt(Feedback::getVotes)).orElse(null);
+        Feedback maxFeedback = applicationFeedbackList.stream().max(Comparator.comparingInt(Feedback::getVotes)).orElse(null);
+
+        if (minFeedback != null) {
+            minVotes = minFeedback.getVotes();
+        }
+
+        if (maxFeedback != null) {
+            maxVotes = maxFeedback.getVotes();
+        }
+
+        feedback.setMinMaxVotes(minVotes, maxVotes);
+
+        return feedback;
+    }
+
 }

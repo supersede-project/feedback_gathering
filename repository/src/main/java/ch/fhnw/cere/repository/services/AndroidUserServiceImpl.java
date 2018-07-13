@@ -99,9 +99,9 @@ public class AndroidUserServiceImpl implements AndroidUserService {
         int downVoteCount = 0;
         List<FeedbackVote> votes = feedbackVoteService.findByVoterUserId(userId);
         for (FeedbackVote vote: votes) {
-            if (vote.getVote() == 1) {
+            if (vote.getVote() > 0) {
                 upVoteCount++;
-            } else if (vote.getVote() == -1) {
+            } else if (vote.getVote() < 0) {
                 downVoteCount++;
             }
         }
@@ -112,7 +112,7 @@ public class AndroidUserServiceImpl implements AndroidUserService {
     }
 
     private long countFeedback(String userIdentification) {
-        return feedbackService.countByUserIdentifictation(userIdentification);
+        return feedbackService.countByUserIdentification(userIdentification);
     }
 
 }

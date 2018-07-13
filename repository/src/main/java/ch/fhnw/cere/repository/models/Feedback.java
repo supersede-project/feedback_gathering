@@ -74,6 +74,15 @@ public class Feedback {
     @OneToMany(mappedBy = "feedback", cascade = {CascadeType.REMOVE, CascadeType.PERSIST})
     private List<Status> statuses;
 
+    @Transient
+    private int maxVotes;
+
+    @Transient
+    private int minVotes;
+
+    @Transient
+    private int votes;
+
     @Override
     public String toString() {
         return "Feedback{" +
@@ -338,5 +347,34 @@ public class Feedback {
 
     public void setTags(List<FeedbackTag> tags) {
         this.tags = tags;
+    }
+
+    public int getVotes() {
+        return votes;
+    }
+
+    public void setVotes(int votes) {
+        this.votes = votes;
+    }
+
+    public int getMaxVotes() {
+        return maxVotes;
+    }
+
+    public void setMaxVotes(int maxVotes) {
+        this.maxVotes = maxVotes;
+    }
+
+    public int getMinVotes() {
+        return minVotes;
+    }
+
+    public void setMinVotes(int minVotes) {
+        this.minVotes = minVotes;
+    }
+
+    public void setMinMaxVotes(int minVotes, int maxVotes){
+        setMinVotes(minVotes);
+        setMaxVotes(maxVotes);
     }
 }

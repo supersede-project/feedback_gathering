@@ -48,7 +48,7 @@ public class FeedbackVoteController extends BaseController {
         if (createdVote.getBody() != null) {
             JSONObject obj = new JSONObject(createdVote.getBody());
             int vote = obj.getInt("vote");
-            String voterUserName = obj.getString("voterUserName");
+            String voterUserName = obj.getString("voterUsername");
             AndroidUser voterAndroidUser = androidUserService.findByName(voterUserName);
             Feedback votedFeedback = feedbackService.find(feedbackId);
             FeedbackVote feedbackVote = feedbackVoteService.findByFeedbackIdAndVoterUserId(votedFeedback.getId(),voterAndroidUser.getId());

@@ -1,6 +1,7 @@
 package ch.fhnw.cere.repository.services;
 
 import ch.fhnw.cere.repository.models.Feedback;
+import ch.fhnw.cere.repository.models.FeedbackVote;
 import ch.fhnw.cere.repository.repositories.FeedbackRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,42 +17,93 @@ public class FeedbackServiceImpl implements FeedbackService {
     @Autowired
     private FeedbackRepository feedbackRepository;
 
-    public List<Feedback> findAll(){
-        return feedbackRepository.findAll();
+    @Autowired
+    private FeedbackVoteService feedbackVoteService;
+
+    public List<Feedback> findAll() {
+        List<Feedback> feedbackList = feedbackRepository.findAll();
+
+        for (Feedback feedback : feedbackList) {
+            calculateVotes(feedback);
+        }
+
+        return feedbackList;
+
     }
 
-    public Feedback save(Feedback feedback){
+    public Feedback save(Feedback feedback) {
         return feedbackRepository.save(feedback);
     }
 
-    public Feedback find(long id){
-        return feedbackRepository.findOne(id);
+    public Feedback find(long id) {
+        Feedback feedback = feedbackRepository.findOne(id);
+        calculateVotes(feedback);
+        return feedback;
     }
 
-    public void delete(long id){
+    public void delete(long id) {
         feedbackRepository.delete(id);
     }
 
     public List<Feedback> findByApplicationId(long applicationId) {
-        return feedbackRepository.findByApplicationId(applicationId);
+        List<Feedback> feedbackList = feedbackRepository.findByApplicationId(applicationId);
+
+        for (Feedback feedback : feedbackList) {
+            calculateVotes(feedback);
+        }
+
+        return feedbackList;
+
     }
 
     public List<Feedback> findByUserIdentification(String userIdentification) {
-        return feedbackRepository.findByUserIdentification(userIdentification);
+        List<Feedback> feedbackList = feedbackRepository.findByUserIdentification(userIdentification);
+
+        for (Feedback feedback : feedbackList) {
+            calculateVotes(feedback);
+        }
+
+        return feedbackList;
     }
 
     @Override
-    public List<Feedback> findAllByFeedbackIdIn(long applicationId,List<Long> idList) {
-        return feedbackRepository.findAllByFeedbackIdIn(applicationId, idList);
+    public List<Feedback> findAllByFeedbackIdIn(long applicationId, List<Long> idList) {
+        List<Feedback> feedbackList = feedbackRepository.findAllByFeedbackIdIn(applicationId, idList);
+
+        for (Feedback feedback : feedbackList) {
+            calculateVotes(feedback);
+        }
+
+        return feedbackList;
     }
 
     @Override
-    public long countByUserIdentifictation(String userIdentification) {
+    public long countByUserIdentification(String userIdentification) {
         return feedbackRepository.countByUserIdentification(userIdentification);
     }
 
 
-    public List<Feedback> findByApplicationIdAndIsPublic(long applicationId, boolean isPublic){
-        return feedbackRepository.findByApplicationIdAndIsPublic(applicationId, isPublic);
+    public List<Feedback> findByApplicationIdAndIsPublic(long applicationId, boolean isPublic) {
+        List<Feedback> feedbackList = feedbackRepository.findByApplicationIdAndIsPublic(applicationId, isPublic);
+
+        for (Feedback feedback : feedbackList) {
+            calculateVotes(feedback);
+        }
+
+        return feedbackList;
+    }
+
+    private void calculateVotes(Feedback feedback) {
+        feedback.setVotes(countVotes(feedback.getId()));
+    }
+
+
+    private int countVotes(long feedbackId) {
+        int voteCount = 0;
+        List<FeedbackVote> votes = feedbackVoteService.findByFeedbackId(feedbackId);
+        for (FeedbackVote vote : votes) {
+            voteCount += vote.getVote();
+        }
+        return voteCount;
     }
 }
