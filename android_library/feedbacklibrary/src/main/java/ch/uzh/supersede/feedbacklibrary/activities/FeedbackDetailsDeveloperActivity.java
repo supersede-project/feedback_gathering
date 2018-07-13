@@ -5,7 +5,7 @@ import android.app.Dialog;
 import android.content.*;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.support.v7.widget.ContentFrameLayout;
+import android.support.v7.widget.*;
 import android.text.InputType;
 import android.text.method.DigitsKeyListener;
 import android.view.*;
@@ -17,6 +17,7 @@ import ch.uzh.supersede.feedbacklibrary.R;
 import ch.uzh.supersede.feedbacklibrary.beans.*;
 import ch.uzh.supersede.feedbacklibrary.components.buttons.FeedbackResponseListItem;
 import ch.uzh.supersede.feedbacklibrary.database.FeedbackDatabase;
+import ch.uzh.supersede.feedbacklibrary.services.FeedbackService;
 import ch.uzh.supersede.feedbacklibrary.stubs.RepositoryStub;
 import ch.uzh.supersede.feedbacklibrary.utils.Enums.RESPONSE_MODE;
 import ch.uzh.supersede.feedbacklibrary.utils.*;
@@ -30,7 +31,7 @@ import static ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility.USER_LEVE
 @SuppressWarnings("squid:MaximumInheritanceDepth")
 public class FeedbackDetailsDeveloperActivity extends AbstractBaseActivity {
     public static RESPONSE_MODE mode = READING;
-    private FeedbackDetailsBean feedbackDetailsBean;
+    private final FeedbackDetailsBean[] activeFeedbackDetailsBean = new FeedbackDetailsBean[1];
     private LocalFeedbackState feedbackState;
     private static LinearLayout responseLayout;
     private static ScrollView scrollContainer;
@@ -39,6 +40,7 @@ public class FeedbackDetailsDeveloperActivity extends AbstractBaseActivity {
     private Spinner status;
     private TextView titleText;
     private TextView descriptionText;
+    private Button deleteButton;
     private Button imageButton;
     private Button audioButton;
     private Button tagButton;
@@ -59,6 +61,7 @@ public class FeedbackDetailsDeveloperActivity extends AbstractBaseActivity {
         status = getView(R.id.details_developer_spinner_status, Spinner.class);
         titleText = getView(R.id.details_developer_text_title, TextView.class);
         descriptionText = getView(R.id.details_developer_text_description, TextView.class);
+        deleteButton = getView(R.id.details_developer_button_delete, Button.class);
         imageButton = getView(R.id.details_developer_button_images, Button.class);
         audioButton = getView(R.id.details_developer_button_audio, Button.class);
         tagButton = getView(R.id.details_developer_button_tags, Button.class);
@@ -68,13 +71,13 @@ public class FeedbackDetailsDeveloperActivity extends AbstractBaseActivity {
         FeedbackBean feedbackBean = (FeedbackBean) getIntent().getSerializableExtra(EXTRA_KEY_FEEDBACK_BEAN);
         FeedbackDetailsBean cachedFeedbackDetailsBean = (FeedbackDetailsBean) getIntent().getSerializableExtra(EXTRA_KEY_FEEDBACK_DETAIL_BEAN);
         if (cachedFeedbackDetailsBean != null) {
-            feedbackDetailsBean = cachedFeedbackDetailsBean;
-            feedbackBean = feedbackDetailsBean.getFeedbackBean();
+            setFeedbackDetailsBean(cachedFeedbackDetailsBean);
+            feedbackBean = cachedFeedbackDetailsBean.getFeedbackBean();
         } else if (feedbackBean != null) {
-            feedbackDetailsBean = RepositoryStub.getFeedbackDetails(this, feedbackBean);
+            setFeedbackDetailsBean(RepositoryStub.getFeedbackDetails(this, feedbackBean));
         }
-        if (feedbackDetailsBean != null) {
-            for (FeedbackResponseBean bean : feedbackDetailsBean.getResponses()) {
+        if (getFeedbackDetailsBean() != null) {
+            for (FeedbackResponseBean bean : getFeedbackDetailsBean().getResponses()) {
                 FeedbackResponseListItem feedbackResponseListItem = new FeedbackResponseListItem(this, feedbackBean, bean, configuration, FIXED);
                 responseList.add(feedbackResponseListItem);
             }
@@ -82,8 +85,8 @@ public class FeedbackDetailsDeveloperActivity extends AbstractBaseActivity {
             for (FeedbackResponseListItem item : responseList) {
                 responseLayout.addView(item);
             }
-            votesText.setText(feedbackDetailsBean.getUpVotesAsText());
-            userText.setText(getString(R.string.details_user, feedbackDetailsBean.getUserName()));
+            votesText.setText(getFeedbackDetailsBean().getUpVotesAsText());
+            userText.setText(getString(R.string.details_user, getFeedbackDetailsBean().getUserName()));
             ArrayAdapter adapter= new ArrayAdapter(getApplicationContext(), R.layout.feedback_status_spinner_layout,
                     new String[]{Enums.FEEDBACK_STATUS.OPEN.getLabel(),
                             Enums.FEEDBACK_STATUS.IN_PROGRESS.getLabel(),
@@ -91,9 +94,24 @@ public class FeedbackDetailsDeveloperActivity extends AbstractBaseActivity {
                             Enums.FEEDBACK_STATUS.DUPLICATE.getLabel(),
                             Enums.FEEDBACK_STATUS.CLOSED.getLabel()});
             status.setAdapter(adapter);
-            status.setSelection(adapter.getPosition(feedbackDetailsBean.getFeedbackStatus().getLabel()));
-            titleText.setText(getString(R.string.details_title, feedbackDetailsBean.getTitle()));
-            descriptionText.setText(feedbackDetailsBean.getDescription());
+            status.setSelection(adapter.getPosition(getFeedbackDetailsBean().getFeedbackStatus().getLabel()));
+            status.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                    if (isStatusNew(((AppCompatSpinner) parentView).getAdapter().getItem(position))){
+                        FeedbackService.getInstance(getApplicationContext()).updateFeedbackStatus(getFeedbackDetailsBean(),((AppCompatSpinner) parentView).getAdapter().getItem(position));
+                        Toast.makeText(FeedbackDetailsDeveloperActivity.this,getString(R.string.details_developer_status_updated),Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parentView) {
+                    //NOP
+                }
+
+            });
+            titleText.setText(getString(R.string.details_title, getFeedbackDetailsBean().getTitle()));
+            descriptionText.setText(getFeedbackDetailsBean().getDescription());
         }else{
             this.onBackPressed();
         }
@@ -108,19 +126,35 @@ public class FeedbackDetailsDeveloperActivity extends AbstractBaseActivity {
         onPostCreate();
     }
 
+    private boolean isStatusNew(Object item) {
+        if (item instanceof String && getFeedbackDetailsBean()!= null){
+           String feedbackStatus = (String) item;
+           return !feedbackStatus.equals(getFeedbackDetailsBean().getFeedbackStatus().getLabel());
+        }
+        return false;
+    }
+
+    public FeedbackDetailsBean getFeedbackDetailsBean() {
+        return activeFeedbackDetailsBean[0];
+    }
+
+    public void setFeedbackDetailsBean(FeedbackDetailsBean feedbackDetailsBean) {
+        this.activeFeedbackDetailsBean[0] = feedbackDetailsBean;
+    }
+
     @Override
     public void onButtonClicked(View view) {
         if (view.getId() == tagButton.getId()) {
             new PopUp(this)
                     .withTitle(getString(R.string.details_tags))
                     .withoutCancel()
-                    .withMessage(StringUtility.concatWithDelimiter(", ", feedbackDetailsBean.getTags())).buildAndShow();
+                    .withMessage(StringUtility.concatWithDelimiter(", ", getFeedbackDetailsBean().getTags())).buildAndShow();
         }else if (view.getId() == imageButton.getId()) {
             final Dialog builder = new Dialog(FeedbackDetailsDeveloperActivity.this);
             builder.requestWindowFeature(Window.FEATURE_NO_TITLE);
             builder.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
             ImageView imageView = new ImageView(FeedbackDetailsDeveloperActivity.this);
-            imageView.setImageBitmap(feedbackDetailsBean.getBitmap());
+            imageView.setImageBitmap(getFeedbackDetailsBean().getBitmap());
             imageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -132,9 +166,9 @@ public class FeedbackDetailsDeveloperActivity extends AbstractBaseActivity {
                     ViewGroup.LayoutParams.WRAP_CONTENT));
             builder.show();
         }else if (view.getId() == subscribeButton.getId()){
-            RepositoryStub.sendSubscriptionChange(this, feedbackDetailsBean.getFeedbackBean(), !feedbackState.isSubscribed());
+            RepositoryStub.sendSubscriptionChange(this, getFeedbackDetailsBean().getFeedbackBean(), !feedbackState.isSubscribed());
         }else if (view.getId() == responseButton.getId() && mode == READING){
-            FeedbackResponseListItem item = new FeedbackResponseListItem(this,feedbackDetailsBean.getFeedbackBean(),null,configuration,EDITABLE);
+            FeedbackResponseListItem item = new FeedbackResponseListItem(this,getFeedbackDetailsBean().getFeedbackBean(),null,configuration,EDITABLE);
             //Get to the Bottom
             scrollContainer.fullScroll(View.FOCUS_DOWN);
             responseLayout.addView(item);
@@ -152,8 +186,8 @@ public class FeedbackDetailsDeveloperActivity extends AbstractBaseActivity {
                 public void onClick(DialogInterface dialog, int which) {
                     if (karmaInputText.getText().length()>0){
                         Integer karma = Integer.parseInt(karmaInputText.getText().toString());
-                        RepositoryStub.sendKarma(feedbackDetailsBean,karma);
-                        Toast.makeText(FeedbackDetailsDeveloperActivity.this,getString(R.string.details_developer_karma_awarded,String.valueOf(karma),feedbackDetailsBean.getUserName()),Toast.LENGTH_SHORT).show();
+                        RepositoryStub.sendKarma(getFeedbackDetailsBean(),karma);
+                        Toast.makeText(FeedbackDetailsDeveloperActivity.this,getString(R.string.details_developer_karma_awarded,String.valueOf(karma),getFeedbackDetailsBean().getUserName()),Toast.LENGTH_SHORT).show();
                         dialog.cancel();
                     }else{
                         Toast.makeText(FeedbackDetailsDeveloperActivity.this,getString(R.string.details_developer_karma_error),Toast.LENGTH_SHORT).show();
@@ -164,7 +198,26 @@ public class FeedbackDetailsDeveloperActivity extends AbstractBaseActivity {
                     .withTitle(getString(R.string.details_developer_award_karma_title))
                     .withInput(karmaInputText)
                     .withCustomOk("Confirm",okClickListener)
-                    .withMessage(getString(R.string.details_developer_award_karma_content,feedbackDetailsBean.getUserName())).buildAndShow();
+                    .withMessage(getString(R.string.details_developer_award_karma_content,getFeedbackDetailsBean().getUserName())).buildAndShow();
+        }else if (view.getId() == deleteButton.getId()){
+            DialogInterface.OnClickListener okClickListener = new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    if(which==Dialog.BUTTON_POSITIVE){
+                        FeedbackService.getInstance(getApplicationContext()).deleteFeedback(getFeedbackDetailsBean());
+                        Toast.makeText(FeedbackDetailsDeveloperActivity.this,getString(R.string.details_developer_deleted),Toast.LENGTH_SHORT).show();
+                        dialog.cancel();
+                        Intent intent = new Intent(getApplicationContext(), FeedbackListActivity.class);
+                        intent.putExtra(EXTRA_KEY_FEEDBACK_DELETION,true);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(FeedbackDetailsDeveloperActivity.this,FeedbackListActivity.class,true, intent);
+                    }
+                }
+            };
+            new PopUp(this)
+                    .withTitle(getString(R.string.details_developer_delete_confirm_title))
+                    .withCustomOk("Confirm",okClickListener)
+                    .withMessage(getString(R.string.details_developer_delete_confirm)).buildAndShow();
         }
     }
 

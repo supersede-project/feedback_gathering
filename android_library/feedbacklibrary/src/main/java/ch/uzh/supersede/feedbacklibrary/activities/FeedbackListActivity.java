@@ -24,6 +24,7 @@ import java.util.List;
 import ch.uzh.supersede.feedbacklibrary.R;
 import ch.uzh.supersede.feedbacklibrary.beans.FeedbackDetailsBean;
 import ch.uzh.supersede.feedbacklibrary.components.buttons.FeedbackListItem;
+import ch.uzh.supersede.feedbacklibrary.database.FeedbackDatabase;
 import ch.uzh.supersede.feedbacklibrary.models.Feedback;
 import ch.uzh.supersede.feedbacklibrary.services.FeedbackService;
 import ch.uzh.supersede.feedbacklibrary.services.IFeedbackServiceEventListener;
@@ -33,7 +34,10 @@ import ch.uzh.supersede.feedbacklibrary.utils.FeedbackUtility;
 import ch.uzh.supersede.feedbacklibrary.utils.LoadingViewUtility;
 import ch.uzh.supersede.feedbacklibrary.utils.StringUtility;
 
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.EXTRA_KEY_FEEDBACK_DELETION;
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.IS_DEVELOPER;
 import static ch.uzh.supersede.feedbacklibrary.utils.Enums.FEEDBACK_SORTING.*;
+import static ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility.USER_LEVEL.ACTIVE;
 
 
 @SuppressWarnings("squid:MaximumInheritanceDepth")
@@ -51,7 +55,8 @@ public class FeedbackListActivity extends AbstractBaseActivity implements IFeedb
     private ArrayList<FeedbackListItem> allFeedbackList = new ArrayList<>();
     private Enums.FEEDBACK_SORTING sorting = MINE;
     private ArrayList<Enums.FEEDBACK_STATUS> allowedStatuses = new ArrayList<>();
-    TextView loadingTextView;
+    private TextView loadingTextView;
+    private boolean returnedFromDeletion = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +65,8 @@ public class FeedbackListActivity extends AbstractBaseActivity implements IFeedb
         loadingTextView = LoadingViewUtility.createLoadingView(this, screenWidth, screenHeight, getTopColor(0));
         ContentFrameLayout rootLayout = getView(R.id.list_root, ContentFrameLayout.class);
         rootLayout.addView(loadingTextView);
+        returnedFromDeletion = getIntent().getBooleanExtra(EXTRA_KEY_FEEDBACK_DELETION,false);
+
 
         scrollListLayout = getView(R.id.list_layout_scroll, LinearLayout.class);
         myButton = setOnClickListener(getView(R.id.list_button_mine, Button.class));
@@ -219,6 +226,11 @@ public class FeedbackListActivity extends AbstractBaseActivity implements IFeedb
 
     private void doSearch(String s) {
         activeFeedbackList.clear();
+        if (sorting==MINE && ACTIVE.check(getApplicationContext()) && FeedbackDatabase.getInstance(getApplicationContext()).readBoolean(IS_DEVELOPER,false)){
+            addDeveloperContext();
+            sort();
+            return;
+        }
         if (!getString(R.string.list_edit_search).equals(s) && StringUtility.hasText(s)) {
             for (FeedbackListItem item : allFeedbackList) {
                 if (item.getFeedbackBean().getTitle().toLowerCase().contains(s.toLowerCase())) {
@@ -231,6 +243,10 @@ public class FeedbackListActivity extends AbstractBaseActivity implements IFeedb
             activeFeedbackList = new ArrayList<>(allFeedbackList);
         }
         sort();
+    }
+
+    private void addDeveloperContext() {
+        //TODO: connect new views with specific players (negatively contributing, often contributing, often replying etc.)
     }
 
     private final CheckBox[] filterCheckBoxArray = new CheckBox[Enums.FEEDBACK_STATUS.values().length];

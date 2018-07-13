@@ -25,7 +25,7 @@ import ch.uzh.supersede.feedbacklibrary.services.IFeedbackServiceEventListener;
 import ch.uzh.supersede.feedbacklibrary.utils.*;
 import ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility.USER_LEVEL;
 
-import static ch.uzh.supersede.feedbacklibrary.entrypoint.IFeedbackStyle.FEEDBACK_STYLE.*;
+import static ch.uzh.supersede.feedbacklibrary.entrypoint.IFeedbackStyleConfiguration.FEEDBACK_STYLE.*;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.ActivitiesConstants.*;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.*;
 import static ch.uzh.supersede.feedbacklibrary.utils.Enums.FETCH_MODE.*;
@@ -255,14 +255,22 @@ public class FeedbackHubActivity extends AbstractBaseActivity implements IFeedba
                                 .withCustomOk(getString(R.string.hub_confirm), getClickListener(PASSIVE)).buildAndShow();
                         break;
                     case 1:
-                        final EditText nameInputText = new EditText(this);
-                        nameInputText.setSingleLine();
-                        nameInputText.setMaxLines(1);
-                        new PopUp(this)
-                                .withTitle(getString(R.string.hub_access_2))
-                                .withMessage(getString(R.string.hub_access_2_description))
-                                .withInput(nameInputText)
-                                .withCustomOk(getString(R.string.hub_confirm), getClickListener(ACTIVE, nameInputText)).buildAndShow();
+                        if (FeedbackService.getInstance(getApplicationContext()).pingServer()) {
+                            final EditText nameInputText = new EditText(this);
+                            nameInputText.setSingleLine();
+                            nameInputText.setMaxLines(1);
+                            new PopUp(this)
+                                    .withTitle(getString(R.string.hub_access_2))
+                                    .withMessage(getString(R.string.hub_access_2_description))
+                                    .withInput(nameInputText)
+                                    .withCustomOk(getString(R.string.hub_confirm), getClickListener(ACTIVE, nameInputText)).buildAndShow();
+                        }else{
+                            new PopUp(this)
+                                    .withTitle(getString(R.string.hub_access_2))
+                                    .withMessage(getString(R.string.hub_access_2_fail))
+                                    .withoutCancel()
+                                    .withCustomOk(getString(R.string.hub_confirm)).buildAndShow();
+                        }
                         break;
                     case 2:
                         new PopUp(this)

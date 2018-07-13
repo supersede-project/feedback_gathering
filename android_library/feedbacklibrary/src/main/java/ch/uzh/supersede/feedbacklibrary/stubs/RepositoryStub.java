@@ -326,4 +326,14 @@ public class RepositoryStub {
     private static String generateToken() {
         return UUID.randomUUID().toString();
     }
+
+    public static void updateFeedbackStatus(FeedbackDetailsBean feedbackDetailsBean, Object item) {
+        if (item instanceof String){
+            //TheoreticalCallToRepo
+        }
+    }
+
+    public static void deleteFeedback(FeedbackDetailsBean feedbackDetailsBean) {
+        //TheoreticalCallToRepo
+    }
 }

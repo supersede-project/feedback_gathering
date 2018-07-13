@@ -256,14 +256,15 @@ public class FeedbackIdentityActivity extends AbstractBaseActivity {
             new PopUp(this)
                     .withTitle(getString(R.string.identity_cancel))
                     .withMessage(getString(R.string.identity_cancel_body))
-                    .withCustomOk(getString(R.string.hub_confirm), new DialogInterface.OnClickListener() {
+                    .withCustomOk(getString(R.string.dialog_yes), new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             dialog.dismiss();
                             cancellation = true;
                             onBackPressed();
                         }
-                    }).buildAndShow();
+                    }).withCustomCancel(getString(R.string.dialog_no))
+                    .buildAndShow();
         }else{
             super.onBackPressed();
         }

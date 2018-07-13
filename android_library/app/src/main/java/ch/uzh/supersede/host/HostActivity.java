@@ -12,10 +12,10 @@ import ch.uzh.supersede.feedbacklibrary.utils.DefaultConfiguration;
 
 @SuppressWarnings({"squid:MaximumInheritanceDepth", "squid:S1170"})
 public class HostActivity extends AbstractBaseActivity implements
-        IFeedbackBehavior,
-        IFeedbackStyle,
-        IFeedbackSettings,
-        IFeedbackDeveloper,
+        IFeedbackBehaviorConfiguration,
+        IFeedbackStyleConfiguration,
+        IFeedbackSettingsConfiguration,
+        IFeedbackDeveloperConfiguration,
         ISimpleFeedbackConfiguration {
 
     @Override
@@ -88,6 +88,21 @@ public class HostActivity extends AbstractBaseActivity implements
     @Override
     public int getConfiguredMaxResponseLength() {
         return 30;
+    }
+
+    @Override
+    public int getConfiguredMinReportLength() {
+        return 5;
+    }
+
+    @Override
+    public int getConfiguredMaxReportLength() {
+        return 100;
+    }
+
+    @Override
+    public boolean getConfiguredReportEnabled() {
+        return false;
     }
 
     //Feedback Developer

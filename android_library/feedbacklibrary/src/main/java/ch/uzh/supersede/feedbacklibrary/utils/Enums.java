@@ -68,7 +68,7 @@ public class Enums {
     }
 
     public enum RESPONSE_MODE {
-        EDITING, READING
+        EDITING, READING, DELETING
     }
 
     public enum SETTINGS_VIEW {

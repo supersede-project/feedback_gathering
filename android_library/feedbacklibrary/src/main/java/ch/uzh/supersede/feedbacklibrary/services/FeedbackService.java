@@ -10,8 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ch.uzh.supersede.feedbacklibrary.api.IFeedbackAPI;
-import ch.uzh.supersede.feedbacklibrary.beans.FeedbackBean;
-import ch.uzh.supersede.feedbacklibrary.beans.LocalConfigurationBean;
+import ch.uzh.supersede.feedbacklibrary.beans.*;
 import ch.uzh.supersede.feedbacklibrary.components.buttons.FeedbackListItem;
 import ch.uzh.supersede.feedbacklibrary.database.FeedbackDatabase;
 import ch.uzh.supersede.feedbacklibrary.models.AndroidUser;
@@ -56,6 +55,9 @@ public abstract class FeedbackService {
         boolean useStubs = false;
         if (ACTIVE.check(context)){
             useStubs = FeedbackDatabase.getInstance(context).readBoolean(USE_STUBS, false);
+        }else{
+            //TODO: Ping repo and if no answer is given, use stubs
+
         }
 
         if (useStubs) {
@@ -121,6 +123,12 @@ public abstract class FeedbackService {
     public abstract void getFeedbackSubscriptions(IFeedbackServiceEventListener callback, Activity activity);
 
     public abstract void createSubscription(IFeedbackServiceEventListener callback, Context context, FeedbackBean feedbackBean, boolean isChecked);
+
+    public abstract boolean pingServer();
+
+    public abstract void updateFeedbackStatus(FeedbackDetailsBean feedbackDetailsBean, Object item);
+
+    public abstract void deleteFeedback(FeedbackDetailsBean feedbackDetailsBean);
 
     private static class FeedbackApiService extends FeedbackService {
 
@@ -196,6 +204,24 @@ public abstract class FeedbackService {
             RepositoryStub.sendSubscriptionChange(context, feedbackBean, isChecked);
             callback.onEventCompleted(CREATE_SUBSCRIPTION, FeedbackDatabase.getInstance(context).getFeedbackState(feedbackBean));
         }
+
+        @Override
+        public boolean pingServer() {
+            //TODO: mbo implement
+            return false;
+        }
+
+        @Override
+        public void updateFeedbackStatus(FeedbackDetailsBean feedbackDetailsBean, Object item) {
+            RepositoryStub.updateFeedbackStatus(feedbackDetailsBean,item);
+            //TODO: mbo implement
+        }
+
+        @Override
+        public void deleteFeedback(FeedbackDetailsBean feedbackDetailsBean) {
+            RepositoryStub.deleteFeedback(feedbackDetailsBean);
+            //TODO: mbo implement
+        }
     }
 
     private static class FeedbackMockService extends FeedbackService {
@@ -251,6 +277,22 @@ public abstract class FeedbackService {
         public void createSubscription(IFeedbackServiceEventListener callback, Context context, FeedbackBean feedbackBean, boolean isChecked) {
             RepositoryStub.sendSubscriptionChange(context, feedbackBean, isChecked);
             callback.onEventCompleted(CREATE_SUBSCRIPTION, FeedbackDatabase.getInstance(context).getFeedbackState(feedbackBean));
+        }
+
+        @Override
+        public boolean pingServer() {
+            //TODO: mbo implement
+            return false;
+        }
+
+        @Override
+        public void updateFeedbackStatus(FeedbackDetailsBean feedbackDetailsBean, Object item) {
+            //TODO: mbo implement
+        }
+
+        @Override
+        public void deleteFeedback(FeedbackDetailsBean feedbackDetailsBean) {
+            //TODO: mbo implement
         }
     }
 }

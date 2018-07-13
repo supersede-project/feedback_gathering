@@ -54,15 +54,19 @@ public class PopUp {
         return this;
     }
 
-    public PopUp withCustomCancel(String cancelLabel, OnClickListener clickListener) {
+    public PopUp withCustomCancel(String cancelLabel, OnClickListener... clickListener) {
         this.cancelLabel = cancelLabel;
-        this.cancelClickListener = clickListener;
+        if (clickListener != null && clickListener.length>0){
+            this.cancelClickListener = clickListener[0];
+        }
         return this;
     }
 
-    public PopUp withCustomOk(String okLabel, OnClickListener clickListener) {
+    public PopUp withCustomOk(String okLabel, OnClickListener... clickListener) {
         this.okLabel = okLabel;
-        this.okClickListener = clickListener;
+        if (clickListener != null && clickListener.length>0){
+            this.cancelClickListener = clickListener[0];
+        }
         return this;
     }
 

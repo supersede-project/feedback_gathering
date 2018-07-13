@@ -41,6 +41,7 @@ public class FeedbackDetailsActivity extends AbstractBaseActivity {
     private Button upButton;
     private Button downButton;
     private Button imageButton;
+    private Button reportButton;
     private Button audioButton;
     private Button tagButton;
     private Button subscribeButton;
@@ -65,12 +66,22 @@ public class FeedbackDetailsActivity extends AbstractBaseActivity {
         downButton = getView(R.id.details_button_down, Button.class);
         imageButton = getView(R.id.details_button_images, Button.class);
         audioButton = getView(R.id.details_button_audio, Button.class);
+        reportButton = getView(R.id.details_button_report, Button.class);
         tagButton = getView(R.id.details_button_tags, Button.class);
         subscribeButton = getView(R.id.details_button_subscribe, Button.class);
         responseButton = getView(R.id.details_button_response, Button.class);
         makePublicButton = getView(R.id.details_button_make_public, Button.class);
         FeedbackBean feedbackBean = (FeedbackBean) getIntent().getSerializableExtra(EXTRA_KEY_FEEDBACK_BEAN);
         FeedbackDetailsBean cachedFeedbackDetailsBean = (FeedbackDetailsBean) getIntent().getSerializableExtra(EXTRA_KEY_FEEDBACK_DETAIL_BEAN);
+        if (!configuration.isReportEnabled()){
+            reportButton.setVisibility(View.GONE);
+            LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams)subscribeButton.getLayoutParams();
+            layoutParams.weight = 3;
+            subscribeButton.setLayoutParams(layoutParams);
+            layoutParams = (LinearLayout.LayoutParams)responseButton.getLayoutParams();
+            layoutParams.weight = 3;
+            responseButton.setLayoutParams(layoutParams);
+        }
         if (cachedFeedbackDetailsBean != null) {
             feedbackDetailsBean = cachedFeedbackDetailsBean;
             feedbackBean = feedbackDetailsBean.getFeedbackBean();
@@ -195,6 +206,20 @@ public class FeedbackDetailsActivity extends AbstractBaseActivity {
                     .withTitle(getString(R.string.details_make_public_title))
                     .withCustomOk("Confirm",okClickListener)
                     .withMessage(getString(R.string.details_make_public_content)).buildAndShow();
+        }else if (view.getId() == reportButton.getId()){
+            final EditText reportReason = new EditText(this);
+            DialogInterface.OnClickListener okClickListener = new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    reportReason.getText();
+                    dialog.cancel();
+                }
+            };
+            new PopUp(this)
+                    .withTitle(getString(R.string.details_make_public_title))
+                    .withCustomOk("Confirm",okClickListener)
+                    .withMessage(getString(R.string.details_make_public_content)).buildAndShow();
+
         }
         updateFeedbackState();
     }
