@@ -39,6 +39,7 @@ public class Constants {
     public static final String SHARED_PREFERENCES_ID = "ch.uzh.supersede.feedbacklibrary.feedback";
     public static final String SHARED_PREFERENCES_HOST_APPLICATION_NAME = "hostApplicationName";
     public static final String SHARED_PREFERENCES_TUTORIAL_HUB = "hubTutorial";
+    public static final String SHARED_PREFERENCES_ONLINE = "isOnline";
 
     public static final int REQUEST_PHOTO = 11;
     public static final int REQUEST_ANNOTATE = 12;

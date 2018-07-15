@@ -1,15 +1,14 @@
 package ch.uzh.supersede.feedbacklibrary.activities;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.Intent;
+import android.content.*;
 import android.graphics.*;
 import android.graphics.drawable.*;
+import android.net.*;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.text.Layout;
 import android.util.*;
 import android.view.*;
 import android.widget.*;
@@ -21,16 +20,17 @@ import java.util.HashMap;
 
 import ch.uzh.supersede.feedbacklibrary.R;
 import ch.uzh.supersede.feedbacklibrary.beans.LocalConfigurationBean;
+import ch.uzh.supersede.feedbacklibrary.services.*;
 import ch.uzh.supersede.feedbacklibrary.utils.*;
 import ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility.USER_LEVEL;
 
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.*;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.ActivitiesConstants.DISABLED_BACKGROUND;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.ActivitiesConstants.DISABLED_FOREGROUND;
-import static ch.uzh.supersede.feedbacklibrary.utils.Constants.EXTRA_KEY_APPLICATION_CONFIGURATION;
 import static ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility.USER_LEVEL.LOCKED;
 
 @SuppressWarnings("squid:MaximumInheritanceDepth")
-public abstract class AbstractBaseActivity extends AppCompatActivity {
+public abstract class AbstractBaseActivity extends AppCompatActivity implements IFeedbackServiceEventListener {
     protected USER_LEVEL userLevel = LOCKED;
     protected final String[] preAllocatedStringStorage = new String[]{null};
     protected int screenWidth;
@@ -57,6 +57,30 @@ public abstract class AbstractBaseActivity extends AppCompatActivity {
 
     protected void onPostCreate() {
         invokeNullSafe(getSupportActionBar(), "hide", null);
+        checkConnectivity();
+    }
+
+    private void checkConnectivity() {
+        NetworkInfo activeNetworkInfo = null;
+        try{
+            ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+            activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        }catch (Exception e){
+            Log.e("Network",e.getMessage());
+        }
+        if (activeNetworkInfo != null && activeNetworkInfo.isConnected()){
+            //Online, ping Repository and wait for Callback
+            FeedbackService.getInstance(getApplicationContext()).pingRepository(this);
+        }else{
+            //Offline, don't ping Repository
+            getSharedPreferences(SHARED_PREFERENCES, MODE_PRIVATE).edit().putBoolean(SHARED_PREFERENCES_ONLINE, false).apply();
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        checkConnectivity();
     }
 
     public void onButtonClicked(View view) {
@@ -240,5 +264,38 @@ public abstract class AbstractBaseActivity extends AppCompatActivity {
 
     protected void createInfoBubbles(){
         //NOP
+    }
+
+
+
+    @Override
+    public void onEventCompleted(EventType eventType, Object response) {
+        switch (eventType) {
+            case PING_REPOSITORY:
+                getSharedPreferences(SHARED_PREFERENCES, MODE_PRIVATE).edit().putBoolean(SHARED_PREFERENCES_ONLINE, true).apply();
+                break;
+            default:
+                break;
+        }
+    }
+
+    @Override
+    public void onEventFailed(EventType eventType, Object response) {
+        switch (eventType) {
+            case PING_REPOSITORY:
+                getSharedPreferences(SHARED_PREFERENCES, MODE_PRIVATE).edit().putBoolean(SHARED_PREFERENCES_ONLINE, false).apply();
+                break;
+            default:
+        }
+    }
+
+    @Override
+    public void onConnectionFailed(EventType eventType) {
+        switch (eventType) {
+            case PING_REPOSITORY:
+                getSharedPreferences(SHARED_PREFERENCES, MODE_PRIVATE).edit().putBoolean(SHARED_PREFERENCES_ONLINE, false).apply();
+                break;
+            default:
+        }
     }
 }

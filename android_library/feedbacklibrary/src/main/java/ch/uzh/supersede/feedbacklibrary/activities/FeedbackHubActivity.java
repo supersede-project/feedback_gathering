@@ -140,50 +140,6 @@ public class FeedbackHubActivity extends AbstractBaseActivity implements IFeedba
         restoreHostApplicationNameToPreferences();
     }
 
-    @Override
-    public void onEventCompleted(EventType eventType, Object response) {
-        switch (eventType) {
-            case AUTHENTICATE:
-                if (response instanceof AuthenticateResponse) {
-                    FeedbackService.getInstance(this).setToken(((AuthenticateResponse) response).getToken());
-                }
-                FeedbackService.getInstance(this).setApplicationId(configuration.getHostApplicationLongId()); //TODO [jfo] maybe this id is returned with authentication
-                FeedbackService.getInstance(this).setLanguage(configuration.getHostApplicationLanguage());
-                break;
-            case CREATE_USER:
-                if (response instanceof AndroidUser) {
-                    AndroidUser androidUser = (AndroidUser) response;
-                    FeedbackDatabase.getInstance(this).writeString(USER_NAME, androidUser.getName());
-                    FeedbackDatabase.getInstance(this).writeBoolean(IS_DEVELOPER, androidUser.isDeveloper());
-                    userName = androidUser.getName();
-                }
-                preAllocatedStringStorage[0] = null;
-                updateUserLevel(true);
-                levelButton.setEnabled(true);
-                break;
-            default:
-                break;
-        }
-    }
-
-    @Override
-    public void onEventFailed(EventType eventType, Object response) {
-        switch (eventType) {
-            case AUTHENTICATE:
-                //FIXME [jfo] remove block as soon as possible
-                FeedbackService.getInstance(this).setToken(LIFETIME_TOKEN);
-                FeedbackService.getInstance(this).setApplicationId(configuration.getHostApplicationLongId()); //TODO [jfo] maybe this id is returned with authentication
-                FeedbackService.getInstance(this).setLanguage(configuration.getHostApplicationLanguage());
-                break;
-            default:
-        }
-    }
-
-    @Override
-    public void onConnectionFailed(EventType eventType) {
-        //TODO
-    }
-
     private void updateUserLevel(boolean ignoreDatabaseCheck) {
         userLevel = PermissionUtility.getUserLevel(getApplicationContext(), ignoreDatabaseCheck);
         levelButton.setText(getResources().getString(R.string.hub_feedback_user_level, userLevel.getLevel()));
@@ -255,7 +211,8 @@ public class FeedbackHubActivity extends AbstractBaseActivity implements IFeedba
                                 .withCustomOk(getString(R.string.hub_confirm), getClickListener(PASSIVE)).buildAndShow();
                         break;
                     case 1:
-                        if (FeedbackService.getInstance(getApplicationContext()).pingServer()) {
+                        if (getSharedPreferences(SHARED_PREFERENCES, MODE_PRIVATE).getBoolean(SHARED_PREFERENCES_ONLINE, false)) {
+                            //der callback ob der server antwortet. generell speichern dieses status in einem state?
                             final EditText nameInputText = new EditText(this);
                             nameInputText.setSingleLine();
                             nameInputText.setMaxLines(1);
@@ -401,5 +358,51 @@ public class FeedbackHubActivity extends AbstractBaseActivity implements IFeedba
         if (reload) {
             updateUserLevel(true);
         }
+    }
+
+    @Override
+    public void onEventCompleted(EventType eventType, Object response) {
+        super.onEventCompleted(eventType,response);
+        switch (eventType) {
+            case AUTHENTICATE:
+                if (response instanceof AuthenticateResponse) {
+                    FeedbackService.getInstance(this).setToken(((AuthenticateResponse) response).getToken());
+                }
+                FeedbackService.getInstance(this).setApplicationId(configuration.getHostApplicationLongId()); //TODO [jfo] maybe this id is returned with authentication
+                FeedbackService.getInstance(this).setLanguage(configuration.getHostApplicationLanguage());
+                break;
+            case CREATE_USER:
+                if (response instanceof AndroidUser) {
+                    AndroidUser androidUser = (AndroidUser) response;
+                    FeedbackDatabase.getInstance(this).writeString(USER_NAME, androidUser.getName());
+                    FeedbackDatabase.getInstance(this).writeBoolean(IS_DEVELOPER, androidUser.isDeveloper());
+                    userName = androidUser.getName();
+                }
+                preAllocatedStringStorage[0] = null;
+                updateUserLevel(true);
+                levelButton.setEnabled(true);
+                break;
+            default:
+                break;
+        }
+    }
+
+    @Override
+    public void onEventFailed(EventType eventType, Object response) {
+        super.onEventCompleted(eventType,response);
+        switch (eventType) {
+            case AUTHENTICATE:
+                //FIXME [jfo] remove block as soon as possible
+                FeedbackService.getInstance(this).setToken(LIFETIME_TOKEN);
+                FeedbackService.getInstance(this).setApplicationId(configuration.getHostApplicationLongId()); //TODO [jfo] maybe this id is returned with authentication
+                FeedbackService.getInstance(this).setLanguage(configuration.getHostApplicationLanguage());
+                break;
+            default:
+        }
+    }
+
+    @Override
+    public void onConnectionFailed(EventType eventType) {
+        super.onConnectionFailed(eventType);
     }
 }

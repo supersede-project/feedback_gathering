@@ -15,7 +15,8 @@ public interface IFeedbackServiceEventListener {
         GET_OTHERS_FEEDBACK_VOTES_MOCK,
         GET_FEEDBACK_SUBSCRIPTIONS,
         GET_FEEDBACK_SUBSCRIPTIONS_MOCK,
-        CREATE_SUBSCRIPTION
+        CREATE_SUBSCRIPTION,
+        PING_REPOSITORY
     }
 
     void onEventCompleted(EventType eventType, Object response);

@@ -17,7 +17,7 @@ import ch.uzh.supersede.feedbacklibrary.R;
 import ch.uzh.supersede.feedbacklibrary.beans.*;
 import ch.uzh.supersede.feedbacklibrary.components.buttons.FeedbackResponseListItem;
 import ch.uzh.supersede.feedbacklibrary.database.FeedbackDatabase;
-import ch.uzh.supersede.feedbacklibrary.services.FeedbackService;
+import ch.uzh.supersede.feedbacklibrary.services.*;
 import ch.uzh.supersede.feedbacklibrary.stubs.RepositoryStub;
 import ch.uzh.supersede.feedbacklibrary.utils.Enums.RESPONSE_MODE;
 import ch.uzh.supersede.feedbacklibrary.utils.*;
@@ -29,7 +29,7 @@ import static ch.uzh.supersede.feedbacklibrary.utils.Enums.RESPONSE_MODE.READING
 import static ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility.USER_LEVEL.ACTIVE;
 
 @SuppressWarnings("squid:MaximumInheritanceDepth")
-public class FeedbackDetailsDeveloperActivity extends AbstractBaseActivity {
+public class FeedbackDetailsDeveloperActivity extends AbstractBaseActivity implements IFeedbackServiceEventListener {
     public static RESPONSE_MODE mode = READING;
     private final FeedbackDetailsBean[] activeFeedbackDetailsBean = new FeedbackDetailsBean[1];
     private LocalFeedbackState feedbackState;
@@ -99,7 +99,7 @@ public class FeedbackDetailsDeveloperActivity extends AbstractBaseActivity {
                 @Override
                 public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
                     if (isStatusNew(((AppCompatSpinner) parentView).getAdapter().getItem(position))){
-                        FeedbackService.getInstance(getApplicationContext()).updateFeedbackStatus(getFeedbackDetailsBean(),((AppCompatSpinner) parentView).getAdapter().getItem(position));
+                        FeedbackService.getInstance(getApplicationContext()).updateFeedbackStatus(FeedbackDetailsDeveloperActivity.this, getFeedbackDetailsBean(),((AppCompatSpinner) parentView).getAdapter().getItem(position));
                         Toast.makeText(FeedbackDetailsDeveloperActivity.this,getString(R.string.details_developer_status_updated),Toast.LENGTH_SHORT).show();
                     }
                 }
@@ -204,7 +204,7 @@ public class FeedbackDetailsDeveloperActivity extends AbstractBaseActivity {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     if(which==Dialog.BUTTON_POSITIVE){
-                        FeedbackService.getInstance(getApplicationContext()).deleteFeedback(getFeedbackDetailsBean());
+                        FeedbackService.getInstance(getApplicationContext()).deleteFeedback(FeedbackDetailsDeveloperActivity.this, getFeedbackDetailsBean());
                         Toast.makeText(FeedbackDetailsDeveloperActivity.this,getString(R.string.details_developer_deleted),Toast.LENGTH_SHORT).show();
                         dialog.cancel();
                         Intent intent = new Intent(getApplicationContext(), FeedbackListActivity.class);
@@ -232,6 +232,21 @@ public class FeedbackDetailsDeveloperActivity extends AbstractBaseActivity {
             responseLayout.addView(item);
             //Show new Entry
             scrollContainer.fullScroll(View.FOCUS_DOWN);
+    }
+
+    @Override
+    public void onEventCompleted(EventType eventType, Object response) {
+        //TODO: Implement
+    }
+
+    @Override
+    public void onEventFailed(EventType eventType, Object response) {
+        //TDOO: Implement
+    }
+
+    @Override
+    public void onConnectionFailed(EventType eventType) {
+        //TODO: Implement
     }
 }
 

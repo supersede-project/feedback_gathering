@@ -6,7 +6,7 @@ import ch.uzh.supersede.feedbacklibrary.models.Feedback;
 import ch.uzh.supersede.feedbacklibrary.models.AndroidUser;
 import ch.uzh.supersede.feedbacklibrary.models.AuthenticateRequest;
 import ch.uzh.supersede.feedbacklibrary.models.AuthenticateResponse;
-import okhttp3.MultipartBody;
+import okhttp3.*;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
@@ -40,4 +40,7 @@ public interface IFeedbackAPI {
 
     @GET("feedback_repository/{language}/applications/{applicationId}/android_users?user={user}")
     Call<AndroidUser> getUser(@Header("Authorization") String token, @Path("language") String language, @Path("applicationId") long applicationId, @Path("user") String user);
+
+    @GET("feedback_repository/ping")
+    Call<ResponseBody> pingRepository();
 }

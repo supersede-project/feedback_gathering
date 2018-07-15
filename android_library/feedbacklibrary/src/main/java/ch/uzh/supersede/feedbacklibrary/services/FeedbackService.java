@@ -2,6 +2,7 @@ package ch.uzh.supersede.feedbacklibrary.services;
 
 import android.app.Activity;
 import android.content.Context;
+import android.net.*;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -20,11 +21,9 @@ import ch.uzh.supersede.feedbacklibrary.models.Feedback;
 import ch.uzh.supersede.feedbacklibrary.stubs.RepositoryStub;
 import ch.uzh.supersede.feedbacklibrary.utils.Enums;
 import ch.uzh.supersede.feedbacklibrary.utils.FeedbackUtility;
-import okhttp3.MediaType;
-import okhttp3.MultipartBody;
-import okhttp3.OkHttpClient;
-import okhttp3.RequestBody;
+import okhttp3.*;
 import okhttp3.logging.HttpLoggingInterceptor;
+import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -124,11 +123,11 @@ public abstract class FeedbackService {
 
     public abstract void createSubscription(IFeedbackServiceEventListener callback, Context context, FeedbackBean feedbackBean, boolean isChecked);
 
-    public abstract boolean pingServer();
+    public abstract void pingRepository(IFeedbackServiceEventListener callback);
 
-    public abstract void updateFeedbackStatus(FeedbackDetailsBean feedbackDetailsBean, Object item);
+    public abstract void updateFeedbackStatus(IFeedbackServiceEventListener callback, FeedbackDetailsBean feedbackDetailsBean, Object item);
 
-    public abstract void deleteFeedback(FeedbackDetailsBean feedbackDetailsBean);
+    public abstract void deleteFeedback(IFeedbackServiceEventListener callback, FeedbackDetailsBean feedbackDetailsBean);
 
     private static class FeedbackApiService extends FeedbackService {
 
@@ -206,19 +205,19 @@ public abstract class FeedbackService {
         }
 
         @Override
-        public boolean pingServer() {
-            //TODO: mbo implement
-            return false;
+        public void pingRepository(IFeedbackServiceEventListener callback) {
+            feedbackAPI.pingRepository();
+            callback.onEventCompleted(PING_REPOSITORY,null);
         }
 
         @Override
-        public void updateFeedbackStatus(FeedbackDetailsBean feedbackDetailsBean, Object item) {
+        public void updateFeedbackStatus(IFeedbackServiceEventListener callback,FeedbackDetailsBean feedbackDetailsBean, Object item) {
             RepositoryStub.updateFeedbackStatus(feedbackDetailsBean,item);
             //TODO: mbo implement
         }
 
         @Override
-        public void deleteFeedback(FeedbackDetailsBean feedbackDetailsBean) {
+        public void deleteFeedback(IFeedbackServiceEventListener callback, FeedbackDetailsBean feedbackDetailsBean) {
             RepositoryStub.deleteFeedback(feedbackDetailsBean);
             //TODO: mbo implement
         }
@@ -280,18 +279,17 @@ public abstract class FeedbackService {
         }
 
         @Override
-        public boolean pingServer() {
-            //TODO: mbo implement
-            return false;
-        }
-
-        @Override
-        public void updateFeedbackStatus(FeedbackDetailsBean feedbackDetailsBean, Object item) {
+        public void pingRepository(IFeedbackServiceEventListener callback) {
             //TODO: mbo implement
         }
 
         @Override
-        public void deleteFeedback(FeedbackDetailsBean feedbackDetailsBean) {
+        public void updateFeedbackStatus(IFeedbackServiceEventListener callback, FeedbackDetailsBean feedbackDetailsBean, Object item) {
+            //TODO: mbo implement
+        }
+
+        @Override
+        public void deleteFeedback(IFeedbackServiceEventListener callback, FeedbackDetailsBean feedbackDetailsBean) {
             //TODO: mbo implement
         }
     }
