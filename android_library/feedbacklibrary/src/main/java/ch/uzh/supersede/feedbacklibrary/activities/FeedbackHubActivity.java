@@ -64,7 +64,7 @@ public class FeedbackHubActivity extends AbstractBaseActivity implements IFeedba
         spaceBottom = getView(R.id.hub_space_color_bottom, TextView.class);
         spaceLeft = getView(R.id.hub_space_color_left, TextView.class);
         spaceRight = getView(R.id.hub_space_color_right, TextView.class);
-        if (getColorCount() == 2 || CollectionUtility.oneOf(getConfiguration().getStyle(),DARK,LIGHT,SWITZERLAND,WINDOWS95)) {
+        if (getColorCount() == 2 || CollectionUtility.oneOf(getConfiguration().getStyle(), DARK, LIGHT, SWITZERLAND, WINDOWS95)) {
             colorViews(0, backgroundLayout);
             colorViews(1, listButton, levelButton, feedbackButton, settingsButton);
         } else if (getColorCount() == 3) {
@@ -144,6 +144,8 @@ public class FeedbackHubActivity extends AbstractBaseActivity implements IFeedba
         userLevel = PermissionUtility.getUserLevel(getApplicationContext(), ignoreDatabaseCheck);
         levelButton.setText(getResources().getString(R.string.hub_feedback_user_level, userLevel.getLevel()));
 
+        disableViews(settingsButton, feedbackButton, listButton);
+
         enableView(levelButton, viewToColorMap.get(levelButton));
         statusText.setText(null);
         if (PASSIVE.check(getApplicationContext(), ignoreDatabaseCheck)) {
@@ -190,18 +192,18 @@ public class FeedbackHubActivity extends AbstractBaseActivity implements IFeedba
     @Override
     public void onButtonClicked(View view) {
         boolean tutorialFinished = getSharedPreferences(SHARED_PREFERENCES_ID, MODE_PRIVATE).getBoolean(SHARED_PREFERENCES_TUTORIAL_HUB, false);
-        if (!tutorialFinished){
-            Toast.makeText(getApplicationContext(), R.string.hub_tutorial_alert,Toast.LENGTH_SHORT).show();
+        if (!tutorialFinished) {
+            Toast.makeText(getApplicationContext(), R.string.hub_tutorial_alert, Toast.LENGTH_SHORT).show();
             return;
         }
         if (view != null) {
             int i = view.getId();
             if (i == R.id.hub_button_list) {
-                startActivity(this, FeedbackListActivity.class,false);
+                startActivity(this, FeedbackListActivity.class, false);
             } else if (i == R.id.hub_button_feedback) {
-                startActivity(this, FeedbackIdentityActivity.class,false);
+                startActivity(this, FeedbackIdentityActivity.class, false);
             } else if (i == R.id.hub_button_settings) {
-                startActivity(this, FeedbackSettingsActivity.class,false);
+                startActivity(this, FeedbackSettingsActivity.class, false);
             } else if (i == R.id.hub_button_user_level) {
                 switch (userLevel.getLevel()) {
                     case 0:
@@ -221,7 +223,7 @@ public class FeedbackHubActivity extends AbstractBaseActivity implements IFeedba
                                     .withMessage(getString(R.string.hub_access_2_description))
                                     .withInput(nameInputText)
                                     .withCustomOk(getString(R.string.hub_confirm), getClickListener(ACTIVE, nameInputText)).buildAndShow();
-                        }else{
+                        } else {
                             new PopUp(this)
                                     .withTitle(getString(R.string.hub_access_2))
                                     .withMessage(getString(R.string.hub_access_2_fail))
@@ -362,7 +364,7 @@ public class FeedbackHubActivity extends AbstractBaseActivity implements IFeedba
 
     @Override
     public void onEventCompleted(EventType eventType, Object response) {
-        super.onEventCompleted(eventType,response);
+        super.onEventCompleted(eventType, response);
         switch (eventType) {
             case AUTHENTICATE:
                 if (response instanceof AuthenticateResponse) {
@@ -389,7 +391,7 @@ public class FeedbackHubActivity extends AbstractBaseActivity implements IFeedba
 
     @Override
     public void onEventFailed(EventType eventType, Object response) {
-        super.onEventCompleted(eventType,response);
+        super.onEventCompleted(eventType, response);
         switch (eventType) {
             case AUTHENTICATE:
                 //FIXME [jfo] remove block as soon as possible
