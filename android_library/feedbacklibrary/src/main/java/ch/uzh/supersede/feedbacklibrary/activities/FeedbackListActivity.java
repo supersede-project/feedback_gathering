@@ -30,8 +30,8 @@ import ch.uzh.supersede.feedbacklibrary.services.FeedbackService;
 import ch.uzh.supersede.feedbacklibrary.services.IFeedbackServiceEventListener;
 import ch.uzh.supersede.feedbacklibrary.utils.*;
 
-import static ch.uzh.supersede.feedbacklibrary.utils.Constants.EXTRA_KEY_FEEDBACK_DELETION;
-import static ch.uzh.supersede.feedbacklibrary.utils.Constants.IS_DEVELOPER;
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.*;
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.SHARED_PREFERENCES_ONLINE;
 import static ch.uzh.supersede.feedbacklibrary.utils.Enums.FEEDBACK_SORTING.*;
 import static ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility.USER_LEVEL.ACTIVE;
 
@@ -98,7 +98,12 @@ public class FeedbackListActivity extends AbstractBaseActivity implements IFeedb
         super.onResume();
         allFeedbackList.clear();
         loadingTextView.setVisibility(View.VISIBLE);
-        FeedbackService.getInstance(this).getFeedbackList(this, this, configuration, getTopColor(0));
+        if (!ACTIVE.check(getApplicationContext()) && !getSharedPreferences(SHARED_PREFERENCES, MODE_PRIVATE).getBoolean(SHARED_PREFERENCES_ONLINE, false)){
+            //userlvl 1 and offline
+            FeedbackService.getInstance(this, true).getFeedbackList(this, this, configuration, getTopColor(0));
+        }else{
+            FeedbackService.getInstance(this).getFeedbackList(this, this, configuration, getTopColor(0));
+        }
         doSearch(searchText.getText().toString());
         sort();
     }

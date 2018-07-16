@@ -51,13 +51,13 @@ public abstract class FeedbackService {
     private FeedbackService() {
     }
 
-    public static FeedbackService getInstance(Context context) {
+    public static FeedbackService getInstance(Context context, boolean... useStubInput) {
         boolean useStubs = false;
+        if (useStubInput.length >0){
+            useStubs = useStubInput[0];
+        }
         if (ACTIVE.check(context)){
             useStubs = FeedbackDatabase.getInstance(context).readBoolean(USE_STUBS, false);
-        }else{
-            //Below userlevel 2, its not possible to set the connectivity to stubs, so if you're not connected, use stubs.
-            useStubs = !context.getSharedPreferences(SHARED_PREFERENCES, MODE_PRIVATE).getBoolean(SHARED_PREFERENCES_ONLINE, false);
         }
 
         if (useStubs) {

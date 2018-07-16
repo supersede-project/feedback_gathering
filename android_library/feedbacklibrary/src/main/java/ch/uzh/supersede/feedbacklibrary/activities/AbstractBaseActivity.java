@@ -277,7 +277,7 @@ public abstract class AbstractBaseActivity extends AppCompatActivity implements 
         switch (eventType) {
             case PING_REPOSITORY:
                 if (RestUtility.responseEquals(response,"pong")){
-                                        getSharedPreferences(SHARED_PREFERENCES, MODE_PRIVATE).edit().putBoolean(SHARED_PREFERENCES_ONLINE, true).apply();
+                    getSharedPreferences(SHARED_PREFERENCES, MODE_PRIVATE).edit().putBoolean(SHARED_PREFERENCES_ONLINE, true).apply();
                 }else{
                     getSharedPreferences(SHARED_PREFERENCES, MODE_PRIVATE).edit().putBoolean(SHARED_PREFERENCES_ONLINE, false).apply();
                 }
