@@ -27,6 +27,7 @@ import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+import static android.content.Context.MODE_PRIVATE;
 import static ch.uzh.supersede.feedbacklibrary.services.IFeedbackServiceEventListener.EventType;
 import static ch.uzh.supersede.feedbacklibrary.services.IFeedbackServiceEventListener.EventType.*;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.*;
@@ -55,8 +56,8 @@ public abstract class FeedbackService {
         if (ACTIVE.check(context)){
             useStubs = FeedbackDatabase.getInstance(context).readBoolean(USE_STUBS, false);
         }else{
-            //TODO: Ping repo and if no answer is given, use stubs
-
+            //Below userlevel 2, its not possible to set the connectivity to stubs, so if you're not connected, use stubs.
+            useStubs = !context.getSharedPreferences(SHARED_PREFERENCES, MODE_PRIVATE).getBoolean(SHARED_PREFERENCES_ONLINE, false);
         }
 
         if (useStubs) {
