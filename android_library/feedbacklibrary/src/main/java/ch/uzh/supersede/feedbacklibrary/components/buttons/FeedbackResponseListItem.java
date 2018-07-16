@@ -41,7 +41,7 @@ public class FeedbackResponseListItem extends LinearLayout implements Comparable
 
     public FeedbackResponseListItem(Context context, FeedbackBean feedbackBean, FeedbackResponseBean feedbackResponseBean, LocalConfigurationBean configuration, RESPONSE_MODE mode) {
         super(context);
-        this.isDeveloper = FeedbackDatabase.getInstance(context).readBoolean(IS_DEVELOPER,false);
+        this.isDeveloper = FeedbackDatabase.getInstance(context).readBoolean(IS_DEVELOPER,false)&& VersionUtility.getDateVersion()>=4;
         this.configuration = configuration;
         this.feedbackBean = feedbackBean;
         this.feedbackResponseBean = feedbackResponseBean;
@@ -223,7 +223,7 @@ public class FeedbackResponseListItem extends LinearLayout implements Comparable
                 String response = ((EditText) bottomView).getText().toString();
                 RepositoryStub.sendFeedbackResponse(getContext(),feedbackBean, response);
                 removeFeedbackResponse();
-                if (FeedbackDatabase.getInstance(getContext()).readBoolean(IS_DEVELOPER,false)) {
+                if (isDeveloper) {
                     FeedbackDetailsDeveloperActivity.persistFeedbackResponseLocally(getContext(), feedbackBean, configuration, response);
                 }else{
                     FeedbackDetailsActivity.persistFeedbackResponseLocally(getContext(), feedbackBean, configuration, response);

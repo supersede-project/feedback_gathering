@@ -1,5 +1,6 @@
 package ch.uzh.supersede.feedbacklibrary.activities;
 
+import android.annotation.SuppressLint;
 import android.content.*;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -15,8 +16,7 @@ import ch.uzh.supersede.feedbacklibrary.R;
 import ch.uzh.supersede.feedbacklibrary.stubs.RepositoryStub;
 import ch.uzh.supersede.feedbacklibrary.utils.PopUp;
 
-import static ch.uzh.supersede.feedbacklibrary.utils.Constants.EXTRA_KEY_FEEDBACK_TAGS;
-import static ch.uzh.supersede.feedbacklibrary.utils.Constants.EXTRA_KEY_FEEDBACK_TITLE;
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.*;
 
 public class FeedbackIdentityActivity extends AbstractBaseActivity {
     private Map<String,String> loadedTags = new TreeMap<>();
@@ -27,6 +27,8 @@ public class FeedbackIdentityActivity extends AbstractBaseActivity {
     private EditText editTag;
     private FlowLayout tagContainer;
     private FlowLayout recommendationContainer;
+    private boolean tutorialInitialized = false;
+    private boolean tutorialFinished = false;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -47,6 +49,7 @@ public class FeedbackIdentityActivity extends AbstractBaseActivity {
         colorViews(1, buttonBack, buttonNext);
         getView(R.id.identity_focus_sink, LinearLayout.class).requestFocus();
         createEditableFields();
+        tutorialFinished = getSharedPreferences(SHARED_PREFERENCES_ID, MODE_PRIVATE).getBoolean(SHARED_PREFERENCES_TUTORIAL_IDENTITY, false);
         onPostCreate();
     }
 
@@ -206,12 +209,16 @@ public class FeedbackIdentityActivity extends AbstractBaseActivity {
     private void removeTag(View v) {
         editTag.setText(((Button)v).getText().toString().toLowerCase());
         editTag.setSelection(((Button)v).getText().length());
-        createdTags.remove(((Button)v).getText().toString());
+        createdTags.remove(((Button)v).getText().toString().toLowerCase());
         tagContainer.removeView(v);
     }
 
     @Override
     public void onButtonClicked(View view) {
+        if (!tutorialFinished){
+            Toast.makeText(getApplicationContext(), R.string.tutorial_alert, Toast.LENGTH_SHORT).show();
+            return;
+        }
         if (view.getId() == buttonBack.getId()){
             onBackPressed();
         }else if (view.getId() == buttonNext.getId()){
@@ -252,6 +259,10 @@ public class FeedbackIdentityActivity extends AbstractBaseActivity {
     boolean cancellation = false;
     @Override
     public void onBackPressed() {
+        if (!tutorialFinished){
+            Toast.makeText(getApplicationContext(), R.string.tutorial_alert, Toast.LENGTH_SHORT).show();
+            return;
+        }
         if (!cancellation) {
             new PopUp(this)
                     .withTitle(getString(R.string.identity_cancel))
@@ -267,6 +278,36 @@ public class FeedbackIdentityActivity extends AbstractBaseActivity {
                     .buildAndShow();
         }else{
             super.onBackPressed();
+        }
+    }
+
+
+    @SuppressLint("ClickableViewAccessibility")
+    @Override
+    protected void createInfoBubbles() {
+        editTitle.setEnabled(false);
+        editTag.setEnabled(false);
+        if (!tutorialFinished && !tutorialInitialized) {
+            RelativeLayout root = getView(R.id.identity_root, RelativeLayout.class);
+            RelativeLayout mLayout = infoUtility.addInfoBox(root, getString(R.string.identity_tutorial_title_cancel), getString(R.string.identity_tutorial_content_cancel), this, buttonBack);
+            RelativeLayout llLayout = infoUtility.addInfoBox(root, getString(R.string.identity_tutorial_title_continue),getString(R.string.identity_tutorial_content_continue), this, buttonNext, mLayout);
+            RelativeLayout lrLayout = infoUtility.addInfoBox(root, getString(R.string.identity_tutorial_title_selected_tags), getString(R.string.identity_tutorial_content_selected_tags), this, tagContainer, llLayout);
+            RelativeLayout ulLayout = infoUtility.addInfoBox(root, getString(R.string.identity_tutorial_title_recommendations), getString(R.string.identity_tutorial_content_recommendations), this, recommendationContainer, lrLayout);
+            RelativeLayout urLayout = infoUtility.addInfoBox(root, getString(R.string.identity_tutorial_title_tag_input), getString(R.string.identity_tutorial_content_tag_input, configuration.getMaxTagNumber(), configuration.getMinTagNumber(), configuration.getMinTagLength(), configuration.getMaxTagLength()), this, editTag, ulLayout);
+            RelativeLayout umLayout = infoUtility.addInfoBox(root, getString(R.string.identity_tutorial_title_title_input), getString(R.string.identity_tutorial_content_title_input,configuration.getMinTitleLength(), configuration.getMaxTitleLength()), this, editTitle, urLayout);
+            mLayout.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    Toast.makeText(v.getContext(), R.string.tutorial_finished, Toast.LENGTH_SHORT).show();
+                    getSharedPreferences(SHARED_PREFERENCES_ID, MODE_PRIVATE).edit().putBoolean(SHARED_PREFERENCES_TUTORIAL_IDENTITY, true).apply();
+                    editTitle.setEnabled(true);
+                    editTag.setEnabled(true);
+                    tutorialFinished = true;
+                    return false;
+                }
+            });
+            colorShape(1, lrLayout, llLayout, mLayout, urLayout, ulLayout, umLayout);
+            tutorialInitialized = true;
         }
     }
 }

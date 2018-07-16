@@ -28,11 +28,7 @@ import ch.uzh.supersede.feedbacklibrary.database.FeedbackDatabase;
 import ch.uzh.supersede.feedbacklibrary.models.Feedback;
 import ch.uzh.supersede.feedbacklibrary.services.FeedbackService;
 import ch.uzh.supersede.feedbacklibrary.services.IFeedbackServiceEventListener;
-import ch.uzh.supersede.feedbacklibrary.utils.ColorUtility;
-import ch.uzh.supersede.feedbacklibrary.utils.Enums;
-import ch.uzh.supersede.feedbacklibrary.utils.FeedbackUtility;
-import ch.uzh.supersede.feedbacklibrary.utils.LoadingViewUtility;
-import ch.uzh.supersede.feedbacklibrary.utils.StringUtility;
+import ch.uzh.supersede.feedbacklibrary.utils.*;
 
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.EXTRA_KEY_FEEDBACK_DELETION;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.IS_DEVELOPER;
@@ -65,8 +61,8 @@ public class FeedbackListActivity extends AbstractBaseActivity implements IFeedb
         loadingTextView = LoadingViewUtility.createLoadingView(this, screenWidth, screenHeight, getTopColor(0));
         ContentFrameLayout rootLayout = getView(R.id.list_root, ContentFrameLayout.class);
         rootLayout.addView(loadingTextView);
-        returnedFromDeletion = getIntent().getBooleanExtra(EXTRA_KEY_FEEDBACK_DELETION,false);
 
+        returnedFromDeletion = getIntent().getBooleanExtra(EXTRA_KEY_FEEDBACK_DELETION,false);
 
         scrollListLayout = getView(R.id.list_layout_scroll, LinearLayout.class);
         myButton = setOnClickListener(getView(R.id.list_button_mine, Button.class));
@@ -122,6 +118,7 @@ public class FeedbackListActivity extends AbstractBaseActivity implements IFeedb
                     }
                     activeFeedbackList = new ArrayList<>(allFeedbackList);
                     doSearch(searchText.getText().toString());
+                    loadingTextView.setVisibility(View.INVISIBLE);
                     sort();
                 }
                 break;
@@ -130,25 +127,47 @@ public class FeedbackListActivity extends AbstractBaseActivity implements IFeedb
                     allFeedbackList = (ArrayList<FeedbackListItem>) response;
                     activeFeedbackList = new ArrayList<>(allFeedbackList);
                     doSearch(searchText.getText().toString());
+                    loadingTextView.setVisibility(View.INVISIBLE);
                     sort();
                 }
                 break;
             default:
                 break;
         }
-        loadingTextView.setVisibility(View.INVISIBLE);
     }
 
     @Override
     public void onEventFailed(EventType eventType, Object response) {
-        loadingTextView.setVisibility(View.INVISIBLE);
-        Toast.makeText(getApplicationContext(), R.string.list_alert_event,Toast.LENGTH_SHORT).show();
+        super.onEventFailed(eventType,response);
+        switch (eventType) {
+            case GET_FEEDBACK_LIST:
+                loadingTextView.setVisibility(View.INVISIBLE);
+                Toast.makeText(getApplicationContext(), R.string.list_alert_event,Toast.LENGTH_SHORT).show();
+                break;
+            case GET_FEEDBACK_LIST_MOCK:
+                loadingTextView.setVisibility(View.INVISIBLE);
+                Toast.makeText(getApplicationContext(), R.string.list_alert_event,Toast.LENGTH_SHORT).show();
+                break;
+            default:
+                break;
+        }
     }
 
     @Override
     public void onConnectionFailed(EventType eventType) {
-        loadingTextView.setVisibility(View.INVISIBLE);
-        Toast.makeText(getApplicationContext(), R.string.list_alert_server,Toast.LENGTH_SHORT).show();
+        super.onConnectionFailed(eventType);
+        switch (eventType) {
+            case GET_FEEDBACK_LIST:
+                loadingTextView.setVisibility(View.INVISIBLE);
+                Toast.makeText(getApplicationContext(), R.string.list_alert_server,Toast.LENGTH_SHORT).show();
+                break;
+            case GET_FEEDBACK_LIST_MOCK:
+                loadingTextView.setVisibility(View.INVISIBLE);
+                Toast.makeText(getApplicationContext(), R.string.list_alert_server,Toast.LENGTH_SHORT).show();
+                break;
+            default:
+                break;
+        }
     }
 
     private void sort() {
@@ -226,7 +245,7 @@ public class FeedbackListActivity extends AbstractBaseActivity implements IFeedb
 
     private void doSearch(String s) {
         activeFeedbackList.clear();
-        if (sorting==MINE && ACTIVE.check(getApplicationContext()) && FeedbackDatabase.getInstance(getApplicationContext()).readBoolean(IS_DEVELOPER,false)){
+        if (sorting==MINE && ACTIVE.check(getApplicationContext()) && FeedbackDatabase.getInstance(getApplicationContext()).readBoolean(IS_DEVELOPER,false) && VersionUtility.getDateVersion()>=4){
             addDeveloperContext();
             sort();
             return;

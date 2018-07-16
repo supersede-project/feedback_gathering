@@ -328,12 +328,10 @@ public class RepositoryStub {
     }
 
     public static void updateFeedbackStatus(FeedbackDetailsBean feedbackDetailsBean, Object item) {
-        if (item instanceof String){
-            //TheoreticalCallToRepo
-        }
+        //TODO: MBO lokal implementieren
     }
 
     public static void deleteFeedback(FeedbackDetailsBean feedbackDetailsBean) {
-        //TheoreticalCallToRepo
+        //TODO: MBO lokal implementieren
     }
 }

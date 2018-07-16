@@ -26,7 +26,6 @@ import ch.uzh.supersede.feedbacklibrary.beans.FeedbackDetailsBean;
 import ch.uzh.supersede.feedbacklibrary.components.views.AbstractFeedbackPartView;
 import ch.uzh.supersede.feedbacklibrary.components.views.AudioFeedbackView;
 import ch.uzh.supersede.feedbacklibrary.components.views.ScreenshotFeedbackView;
-import ch.uzh.supersede.feedbacklibrary.database.FeedbackDatabase;
 import ch.uzh.supersede.feedbacklibrary.models.AbstractFeedbackPart;
 import ch.uzh.supersede.feedbacklibrary.models.Feedback;
 import ch.uzh.supersede.feedbacklibrary.services.FeedbackService;
@@ -155,8 +154,8 @@ public class FeedbackActivity extends AbstractBaseActivity implements AudioFeedb
                     intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                     intent.putExtra(EXTRA_KEY_FEEDBACK_DETAIL_BEAN, feedbackDetailsBean);
                     intent.putExtra(EXTRA_KEY_APPLICATION_CONFIGURATION, configuration);
-                    this.onBackPressed(); //This serves the purpose of erasing the Feedback Activity from the Back-Button
-                    startActivity(intent);
+                    intent.putExtra(EXTRA_FROM_CREATION, true);
+                    startActivity(this,FeedbackDetailsActivity.class, true,intent);
                     overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
                 } else {
                     Toast.makeText(getApplicationContext(), getResources().getString(R.string.feedback_success), Toast.LENGTH_SHORT).show();

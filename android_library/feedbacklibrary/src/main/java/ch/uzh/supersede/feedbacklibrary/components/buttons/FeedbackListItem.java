@@ -95,7 +95,8 @@ public class FeedbackListItem extends LinearLayout implements Comparable, ISorta
                 intent = new Intent(getContext(), FeedbackDetailsActivity.class);
             }
         }else {
-            intent = new Intent(getContext(), FeedbackDetailsActivity.class);
+            Toast.makeText(getContext(),R.string.list_alert_user_level,Toast.LENGTH_SHORT).show();
+            return;
         }
         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
         intent.putExtra(EXTRA_KEY_FEEDBACK_BEAN, feedbackBean);

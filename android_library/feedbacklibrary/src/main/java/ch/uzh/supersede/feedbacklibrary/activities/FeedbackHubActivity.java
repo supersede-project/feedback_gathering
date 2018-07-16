@@ -8,7 +8,7 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
-import android.text.Html;
+import android.text.*;
 import android.view.*;
 import android.widget.*;
 
@@ -88,7 +88,7 @@ public class FeedbackHubActivity extends AbstractBaseActivity implements IFeedba
         }
         updateUserLevel(false);
         invokeVersionControl(2, R.id.hub_button_list, R.id.hub_button_settings);
-        FeedbackService.getInstance(this).authenticate(this, new AuthenticateRequest("test", "123")); //TODO [jfo] parse credentials
+        FeedbackService.getInstance(this).authenticate(this, new AuthenticateRequest("super_admin", "password")); //TODO [jfo] parse credentials
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -106,7 +106,7 @@ public class FeedbackHubActivity extends AbstractBaseActivity implements IFeedba
             mLayout.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
-                    Toast.makeText(v.getContext(), R.string.hub_tutorial_finished, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(v.getContext(), R.string.tutorial_finished, Toast.LENGTH_SHORT).show();
                     getSharedPreferences(SHARED_PREFERENCES_ID, MODE_PRIVATE).edit().putBoolean(SHARED_PREFERENCES_TUTORIAL_HUB, true).apply();
                     return false;
                 }
@@ -149,8 +149,8 @@ public class FeedbackHubActivity extends AbstractBaseActivity implements IFeedba
         enableView(levelButton, viewToColorMap.get(levelButton));
         statusText.setText(null);
         if (PASSIVE.check(getApplicationContext(), ignoreDatabaseCheck)) {
+            enableView(listButton, viewToColorMap.get(listButton), VersionUtility.getDateVersion() > 1);
         }
-        enableView(listButton, viewToColorMap.get(listButton), VersionUtility.getDateVersion() > 1);
         if (ACTIVE.check(getApplicationContext(), ignoreDatabaseCheck)) {
             Utils.persistScreenshot(this, cachedScreenshot);
             int ownFeedbackBeans = FeedbackDatabase.getInstance(this).getFeedbackBeans(OWN).size();
@@ -181,7 +181,7 @@ public class FeedbackHubActivity extends AbstractBaseActivity implements IFeedba
                         .replace(SECONDARY_COLOR_STRING, DARK_BLUE)));
             }
 
-            enableView(settingsButton, viewToColorMap.get(settingsButton));
+            enableView(feedbackButton, viewToColorMap.get(feedbackButton));
             enableView(settingsButton, viewToColorMap.get(settingsButton));
         }
         if (ADVANCED.check(getApplicationContext(), ignoreDatabaseCheck)) {
@@ -193,7 +193,7 @@ public class FeedbackHubActivity extends AbstractBaseActivity implements IFeedba
     public void onButtonClicked(View view) {
         boolean tutorialFinished = getSharedPreferences(SHARED_PREFERENCES_ID, MODE_PRIVATE).getBoolean(SHARED_PREFERENCES_TUTORIAL_HUB, false);
         if (!tutorialFinished) {
-            Toast.makeText(getApplicationContext(), R.string.hub_tutorial_alert, Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), R.string.tutorial_alert, Toast.LENGTH_SHORT).show();
             return;
         }
         if (view != null) {
@@ -216,11 +216,13 @@ public class FeedbackHubActivity extends AbstractBaseActivity implements IFeedba
                         if (getSharedPreferences(SHARED_PREFERENCES, MODE_PRIVATE).getBoolean(SHARED_PREFERENCES_ONLINE, false)) {
                             //der callback ob der server antwortet. generell speichern dieses status in einem state?
                             final EditText nameInputText = new EditText(this);
+                            nameInputText.setFilters(new InputFilter[]{ new InputFilter.LengthFilter(configuration.getMaxUserNameLength()
+                            )});
                             nameInputText.setSingleLine();
                             nameInputText.setMaxLines(1);
                             new PopUp(this)
                                     .withTitle(getString(R.string.hub_access_2))
-                                    .withMessage(getString(R.string.hub_access_2_description))
+                                    .withMessage(getString(R.string.hub_access_2_description,configuration.getMinUserNameLength(),configuration.getMaxUserNameLength()))
                                     .withInput(nameInputText)
                                     .withCustomOk(getString(R.string.hub_confirm), getClickListener(ACTIVE, nameInputText)).buildAndShow();
                         } else {

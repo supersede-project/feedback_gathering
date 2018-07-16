@@ -129,6 +129,10 @@ public abstract class FeedbackService {
 
     public abstract void deleteFeedback(IFeedbackServiceEventListener callback, FeedbackDetailsBean feedbackDetailsBean);
 
+    public abstract void reportFeedback(FeedbackDetailsBean feedbackDetailsBean, String report);
+
+    public abstract void makeFeedbackPublic(FeedbackDetailsBean feedbackDetailsBean);
+
     private static class FeedbackApiService extends FeedbackService {
 
         @Override
@@ -206,19 +210,30 @@ public abstract class FeedbackService {
 
         @Override
         public void pingRepository(IFeedbackServiceEventListener callback) {
-            feedbackAPI.pingRepository();
-            callback.onEventCompleted(PING_REPOSITORY,null);
+            feedbackAPI.pingRepository().enqueue(
+                    new RepositoryCallback<ResponseBody>(callback, EventType.PING_REPOSITORY) {
+                    });
         }
 
         @Override
         public void updateFeedbackStatus(IFeedbackServiceEventListener callback,FeedbackDetailsBean feedbackDetailsBean, Object item) {
-            RepositoryStub.updateFeedbackStatus(feedbackDetailsBean,item);
-            //TODO: mbo implement
+            if (item instanceof String){
+                //TODO: mbo implement real
+            }
         }
 
         @Override
         public void deleteFeedback(IFeedbackServiceEventListener callback, FeedbackDetailsBean feedbackDetailsBean) {
-            RepositoryStub.deleteFeedback(feedbackDetailsBean);
+            //TODO: mbo implement
+        }
+
+        @Override
+        public void reportFeedback(FeedbackDetailsBean feedbackDetailsBean, String report) {
+            //TODO: mbo implement
+        }
+
+        @Override
+        public void makeFeedbackPublic(FeedbackDetailsBean feedbackDetailsBean) {
             //TODO: mbo implement
         }
     }
@@ -285,11 +300,23 @@ public abstract class FeedbackService {
 
         @Override
         public void updateFeedbackStatus(IFeedbackServiceEventListener callback, FeedbackDetailsBean feedbackDetailsBean, Object item) {
+            RepositoryStub.updateFeedbackStatus(feedbackDetailsBean,item);
             //TODO: mbo implement
         }
 
         @Override
         public void deleteFeedback(IFeedbackServiceEventListener callback, FeedbackDetailsBean feedbackDetailsBean) {
+            RepositoryStub.deleteFeedback(feedbackDetailsBean);
+            //TODO: mbo implement
+        }
+
+        @Override
+        public void reportFeedback(FeedbackDetailsBean feedbackDetailsBean, String report) {
+            //TODO: mbo implement
+        }
+
+        @Override
+        public void makeFeedbackPublic(FeedbackDetailsBean feedbackDetailsBean) {
             //TODO: mbo implement
         }
     }

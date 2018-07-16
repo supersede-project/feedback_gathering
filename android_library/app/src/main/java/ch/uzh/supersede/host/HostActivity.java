@@ -102,13 +102,13 @@ public class HostActivity extends AbstractBaseActivity implements
 
     @Override
     public boolean getConfiguredReportEnabled() {
-        return false;
+        return true;
     }
 
     //Feedback Developer
     @Override
     public boolean isDeveloper() {
-        return true;
+        return false;
     }
 
     //Feedback Behavior

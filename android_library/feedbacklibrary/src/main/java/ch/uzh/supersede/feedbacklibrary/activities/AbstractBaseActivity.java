@@ -23,6 +23,7 @@ import ch.uzh.supersede.feedbacklibrary.beans.LocalConfigurationBean;
 import ch.uzh.supersede.feedbacklibrary.services.*;
 import ch.uzh.supersede.feedbacklibrary.utils.*;
 import ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility.USER_LEVEL;
+import okhttp3.ResponseBody;
 
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.*;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.ActivitiesConstants.DISABLED_BACKGROUND;
@@ -97,6 +98,9 @@ public abstract class AbstractBaseActivity extends AppCompatActivity implements 
             intent = handoverIntent[0];
         }
         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+        if (destruction){
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        }
         handOverConfigurationToIntent(intent);
         startActivity.startActivity(intent);
         startActivity.overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
@@ -272,7 +276,11 @@ public abstract class AbstractBaseActivity extends AppCompatActivity implements 
     public void onEventCompleted(EventType eventType, Object response) {
         switch (eventType) {
             case PING_REPOSITORY:
-                getSharedPreferences(SHARED_PREFERENCES, MODE_PRIVATE).edit().putBoolean(SHARED_PREFERENCES_ONLINE, true).apply();
+                if (RestUtility.responseEquals(response,"pong")){
+                                        getSharedPreferences(SHARED_PREFERENCES, MODE_PRIVATE).edit().putBoolean(SHARED_PREFERENCES_ONLINE, true).apply();
+                }else{
+                    getSharedPreferences(SHARED_PREFERENCES, MODE_PRIVATE).edit().putBoolean(SHARED_PREFERENCES_ONLINE, false).apply();
+                }
                 break;
             default:
                 break;

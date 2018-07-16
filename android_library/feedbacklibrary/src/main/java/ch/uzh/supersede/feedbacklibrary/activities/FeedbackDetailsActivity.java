@@ -7,6 +7,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.ContentFrameLayout;
+import android.text.*;
 import android.view.*;
 import android.widget.*;
 
@@ -16,6 +17,7 @@ import ch.uzh.supersede.feedbacklibrary.R;
 import ch.uzh.supersede.feedbacklibrary.beans.*;
 import ch.uzh.supersede.feedbacklibrary.components.buttons.FeedbackResponseListItem;
 import ch.uzh.supersede.feedbacklibrary.database.FeedbackDatabase;
+import ch.uzh.supersede.feedbacklibrary.services.FeedbackService;
 import ch.uzh.supersede.feedbacklibrary.stubs.RepositoryStub;
 import ch.uzh.supersede.feedbacklibrary.utils.*;
 import ch.uzh.supersede.feedbacklibrary.utils.Enums.RESPONSE_MODE;
@@ -47,6 +49,7 @@ public class FeedbackDetailsActivity extends AbstractBaseActivity {
     private Button subscribeButton;
     private Button responseButton;
     private Button makePublicButton;
+    private boolean creationMode = false;
     private ArrayList<FeedbackResponseListItem> responseList = new ArrayList<>();
 
 
@@ -73,6 +76,7 @@ public class FeedbackDetailsActivity extends AbstractBaseActivity {
         makePublicButton = getView(R.id.details_button_make_public, Button.class);
         FeedbackBean feedbackBean = (FeedbackBean) getIntent().getSerializableExtra(EXTRA_KEY_FEEDBACK_BEAN);
         FeedbackDetailsBean cachedFeedbackDetailsBean = (FeedbackDetailsBean) getIntent().getSerializableExtra(EXTRA_KEY_FEEDBACK_DETAIL_BEAN);
+        creationMode = getIntent().getBooleanExtra(EXTRA_FROM_CREATION,false);
         if (!configuration.isReportEnabled()){
             reportButton.setVisibility(View.GONE);
             LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams)subscribeButton.getLayoutParams();
@@ -124,16 +128,19 @@ public class FeedbackDetailsActivity extends AbstractBaseActivity {
         colorViews(0,upButton,downButton,imageButton,audioButton, tagButton,subscribeButton,responseButton);
         colorViews(1,getView(R.id.details_root,ContentFrameLayout.class));
         colorViews(2,userText,titleText,statusText,descriptionText);
+        updateReportStatus(null);
+        updateOwnFeedbackCase();
+        invokeVersionControl(5,audioButton.getId());
         onPostCreate();
     }
 
     private void updateFeedbackState() {
         if (ACTIVE.check(this,true)) {
             feedbackState = FeedbackDatabase.getInstance(this).getFeedbackState(feedbackDetailsBean.getFeedbackBean());
-            if (feedbackState.isSubscribed()) {
+            if (feedbackState.isSubscribed() && subscribeButton.isEnabled()) {
                 subscribeButton.setText(getString(R.string.details_unsubscribe));
                 subscribeButton.setTextColor(ContextCompat.getColor(this, R.color.red_3));
-            } else {
+            } else if (subscribeButton.isEnabled()){
                 subscribeButton.setText(getString(R.string.details_subscribe));
                 colorViews(0,subscribeButton);
             }
@@ -197,7 +204,7 @@ public class FeedbackDetailsActivity extends AbstractBaseActivity {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     makePublicButton.setVisibility(View.INVISIBLE);
-                    RepositoryStub.makeFeedbackPublic(feedbackDetailsBean);
+                    FeedbackService.getInstance(getApplicationContext()).makeFeedbackPublic(feedbackDetailsBean);
                     Toast.makeText(FeedbackDetailsActivity.this,R.string.details_published,Toast.LENGTH_SHORT).show();
                     dialog.cancel();
                 }
@@ -208,20 +215,42 @@ public class FeedbackDetailsActivity extends AbstractBaseActivity {
                     .withMessage(getString(R.string.details_make_public_content)).buildAndShow();
         }else if (view.getId() == reportButton.getId()){
             final EditText reportReason = new EditText(this);
+            reportReason.setFilters(new InputFilter[]{ new InputFilter.LengthFilter(configuration.getMaxReportLength())});
             DialogInterface.OnClickListener okClickListener = new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    reportReason.getText();
-                    dialog.cancel();
+                    String report = reportReason.getText().toString();
+                    if (!StringUtility.hasText(report)) {
+                        Toast.makeText(FeedbackDetailsActivity.this, R.string.details_report_error_empty, Toast.LENGTH_SHORT).show();
+                    } else if (report.length() < configuration.getMinReportLength()) {
+                        Toast.makeText(FeedbackDetailsActivity.this, R.string.details_report_error_short, Toast.LENGTH_SHORT).show();
+                    } else if (report.length() > configuration.getMaxReportLength()) {
+                        Toast.makeText(FeedbackDetailsActivity.this, R.string.details_report_error_long, Toast.LENGTH_SHORT).show();
+                    } else {
+                        FeedbackService.getInstance(getApplicationContext()).reportFeedback(feedbackDetailsBean, report);
+                        Toast.makeText(FeedbackDetailsActivity.this,R.string.details_report_sent,Toast.LENGTH_SHORT).show();
+                        updateReportStatus(report);
+                        dialog.dismiss();
+                    }
                 }
             };
             new PopUp(this)
-                    .withTitle(getString(R.string.details_make_public_title))
+                    .withTitle(getString(R.string.details_report_title))
+                    .withInput(reportReason)
                     .withCustomOk("Confirm",okClickListener)
-                    .withMessage(getString(R.string.details_make_public_content)).buildAndShow();
+                    .withMessage(getString(R.string.details_report_content,configuration.getMinReportLength(),configuration.getMaxReportLength())).buildAndShow();
 
         }
         updateFeedbackState();
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (creationMode){
+            startActivity(this,FeedbackHubActivity.class,true);
+        }else{
+            super.onBackPressed();
+        }
     }
 
     public static void persistFeedbackResponseLocally(Context context, FeedbackBean bean, LocalConfigurationBean configuration, String feedbackResponse) {
@@ -235,6 +264,28 @@ public class FeedbackDetailsActivity extends AbstractBaseActivity {
             responseLayout.addView(item);
             //Show new Entry
             scrollContainer.fullScroll(View.FOCUS_DOWN);
+    }
+
+    public void updateReportStatus(String report){
+        if (ACTIVE.check(getApplicationContext())){
+            if (report != null){
+                FeedbackDatabase.getInstance(getApplicationContext()).writeString(REPORTED_FEEDBACK+feedbackDetailsBean.getFeedbackBean().getFeedbackId(),report);
+            }
+            if (FeedbackDatabase.getInstance(getApplicationContext()).readString(REPORTED_FEEDBACK+feedbackDetailsBean.getFeedbackBean().getFeedbackId(),null) != null ){
+                disableViews(reportButton);
+            }
+        }
+    }
+
+    /**
+     * disable certain buttons on own feedback
+     */
+    public void updateOwnFeedbackCase(){
+        if (ACTIVE.check(getApplicationContext())){
+            if (feedbackDetailsBean.getUserName().equals(FeedbackDatabase.getInstance(getApplicationContext()).readString(USER_NAME,null))){
+                disableViews(reportButton,subscribeButton);
+            }
+        }
     }
 }
 
