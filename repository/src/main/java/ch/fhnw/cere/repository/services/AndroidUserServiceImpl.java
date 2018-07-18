@@ -42,7 +42,9 @@ public class AndroidUserServiceImpl implements AndroidUserService {
 
     public AndroidUser find(long id){
         AndroidUser androidUser = androidUserRepository.findOne(id);
-        calculateStats(androidUser);
+        if(androidUser != null) {
+            calculateStats(androidUser);
+        }
         return androidUser;
     }
 
@@ -52,13 +54,17 @@ public class AndroidUserServiceImpl implements AndroidUserService {
 
     public AndroidUser findByName(String name) {
         AndroidUser androidUser = androidUserRepository.findByName(name);
-        calculateStats(androidUser);
+        if(androidUser != null) {
+            calculateStats(androidUser);
+        }
         return androidUser;
     }
 
     public AndroidUser findByNameAndApplicationId(String name, long applicationId) {
         AndroidUser androidUser = androidUserRepository.findByNameAndApplicationId(name, applicationId);
-        calculateStats(androidUser);
+        if(androidUser != null) {
+            calculateStats(androidUser);
+        }
         return androidUser;
     }
 

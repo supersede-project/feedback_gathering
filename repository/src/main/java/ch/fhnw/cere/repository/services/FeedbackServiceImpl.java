@@ -37,7 +37,9 @@ public class FeedbackServiceImpl implements FeedbackService {
 
     public Feedback find(long id) {
         Feedback feedback = feedbackRepository.findOne(id);
-        calculateVotes(feedback);
+        if(feedback != null) {
+            calculateVotes(feedback);
+        }
         return feedback;
     }
 
