@@ -176,6 +176,12 @@ public class FeedbackController extends BaseController {
             }
         }
 
+        if (feedback.getTags() != null) {
+            for (FeedbackTag feedbackTag : feedback.getTags()) {
+                feedbackTag.setFeedback(feedback);
+            }
+        }
+
         parts.remove("json");
         feedback = fileStorageService.storeFiles(feedback, parts);
 

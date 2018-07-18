@@ -4,7 +4,12 @@ package ch.fhnw.cere.repository.models;
 import ch.fhnw.cere.repository.models.orchestrator.Application;
 import ch.fhnw.cere.repository.models.orchestrator.Mechanism;
 import ch.fhnw.cere.repository.models.orchestrator.MechanismTemplateModel;
+import ch.fhnw.cere.repository.serialization.CustomFeedbackStatusSerializer;
+import ch.fhnw.cere.repository.serialization.CustomTagDeserializer;
+import ch.fhnw.cere.repository.serialization.CustomTagSerializer;
 import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -27,9 +32,9 @@ public class Feedback {
     private String language;
     private Boolean isPublic = false;
 
-    //TODO: fix output
     @ManyToOne()
     @JoinColumn(name = "feedback_status")
+    @JsonSerialize(using = CustomFeedbackStatusSerializer.class)
     private FeedbackStatus feedbackStatus = new FeedbackStatus(1,"OPEN");
 
     @Transient
@@ -66,8 +71,9 @@ public class Feedback {
     @OneToMany(mappedBy = "feedback", cascade = {CascadeType.REMOVE, CascadeType.PERSIST})
     private List<TextFeedback> textFeedbacks;
 
-    //TODO: fix the output
     @OneToMany(mappedBy = "feedback", cascade = {CascadeType.REMOVE, CascadeType.PERSIST})
+    @JsonSerialize(using = CustomTagSerializer.class)
+    @JsonDeserialize(using = CustomTagDeserializer.class)
     private List<FeedbackTag> tags;
 
     @JsonIgnore
