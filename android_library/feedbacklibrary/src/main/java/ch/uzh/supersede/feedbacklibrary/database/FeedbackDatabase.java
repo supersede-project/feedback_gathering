@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ch.uzh.supersede.feedbacklibrary.beans.*;
-import ch.uzh.supersede.feedbacklibrary.entrypoint.IFeedbackStyle;
+import ch.uzh.supersede.feedbacklibrary.entrypoint.IFeedbackStyleConfiguration;
 import ch.uzh.supersede.feedbacklibrary.utils.Enums;
 import ch.uzh.supersede.feedbacklibrary.utils.ObjectUtility;
 
@@ -380,7 +380,7 @@ public class FeedbackDatabase extends AbstractFeedbackDatabase {
                 .withMaxUserNameLength(readInteger(CONFIG_MAX_USER_NAME_LENGTH, null))
                 .withMinUserNameLength(readInteger(CONFIG_MIN_USER_NAME_LENGTH, null))
                 // Style
-                .withStyle(IFeedbackStyle.FEEDBACK_STYLE.valueOf(readString(CONFIG_STYLE, "DARK")))
+                .withStyle(IFeedbackStyleConfiguration.FEEDBACK_STYLE.valueOf(readString(CONFIG_STYLE, "DARK")))
                 .withIsColoringVertical(readBoolean(CONFIG_IS_COLORING_VERTICAL, null))
                 .withTopColors(topColors)
                 .build();

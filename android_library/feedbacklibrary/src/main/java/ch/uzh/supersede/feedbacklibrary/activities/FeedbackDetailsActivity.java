@@ -272,9 +272,9 @@ public class FeedbackDetailsActivity extends AbstractBaseActivity {
     public void updateReportStatus(String report) {
         if (ACTIVE.check(getApplicationContext())) {
             if (report != null) {
-                FeedbackDatabase.getInstance(getApplicationContext()).writeString(REPORTED_FEEDBACK + feedbackDetailsBean.getFeedbackBean().getFeedbackId(), report);
+                FeedbackDatabase.getInstance(getApplicationContext()).writeString(USER_REPORTED_FEEDBACK + feedbackDetailsBean.getFeedbackBean().getFeedbackId(), report);
             }
-            if (FeedbackDatabase.getInstance(getApplicationContext()).readString(REPORTED_FEEDBACK + feedbackDetailsBean.getFeedbackBean().getFeedbackId(), null) != null) {
+            if (FeedbackDatabase.getInstance(getApplicationContext()).readString(USER_REPORTED_FEEDBACK + feedbackDetailsBean.getFeedbackBean().getFeedbackId(), null) != null) {
                 disableViews(reportButton);
             }
         }

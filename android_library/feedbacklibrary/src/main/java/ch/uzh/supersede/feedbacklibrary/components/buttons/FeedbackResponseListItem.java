@@ -15,6 +15,7 @@ import android.widget.*;
 
 import ch.uzh.supersede.feedbacklibrary.R;
 import ch.uzh.supersede.feedbacklibrary.activities.FeedbackDetailsActivity;
+import ch.uzh.supersede.feedbacklibrary.activities.FeedbackDetailsDeveloperActivity;
 import ch.uzh.supersede.feedbacklibrary.beans.*;
 import ch.uzh.supersede.feedbacklibrary.database.FeedbackDatabase;
 import ch.uzh.supersede.feedbacklibrary.stubs.RepositoryStub;
@@ -41,7 +42,7 @@ public class FeedbackResponseListItem extends LinearLayout implements Comparable
 
     public FeedbackResponseListItem(Context context, FeedbackBean feedbackBean, FeedbackResponseBean feedbackResponseBean, LocalConfigurationBean configuration, RESPONSE_MODE mode) {
         super(context);
-        this.isDeveloper = FeedbackDatabase.getInstance(context).readBoolean(IS_DEVELOPER, false) && VersionUtility.getDateVersion() >= 4;
+        this.isDeveloper = FeedbackDatabase.getInstance(context).readBoolean(USER_IS_DEVELOPER, false) && VersionUtility.getDateVersion() >= 4;
         this.configuration = configuration;
         this.feedbackBean = feedbackBean;
         this.feedbackResponseBean = feedbackResponseBean;

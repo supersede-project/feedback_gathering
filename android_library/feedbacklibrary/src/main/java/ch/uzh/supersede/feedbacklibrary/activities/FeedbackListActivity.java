@@ -30,6 +30,7 @@ import ch.uzh.supersede.feedbacklibrary.stubs.RepositoryStub;
 import ch.uzh.supersede.feedbacklibrary.utils.*;
 
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.*;
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.UserConstants.USER_IS_DEVELOPER;
 import static ch.uzh.supersede.feedbacklibrary.utils.Enums.FEEDBACK_SORTING.*;
 import static ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility.USER_LEVEL.ACTIVE;
 
@@ -98,9 +99,9 @@ public class FeedbackListActivity extends AbstractBaseActivity implements IFeedb
         loadingTextView.setVisibility(View.VISIBLE);
         if (!ACTIVE.check(getApplicationContext()) && !getSharedPreferences(SHARED_PREFERENCES, MODE_PRIVATE).getBoolean(SHARED_PREFERENCES_ONLINE, false)) {
             //userlvl 1 and offline
-            FeedbackService.getInstance(this, true).getFeedbackList(this, this, configuration, getTopColor(0));
+            FeedbackService.getInstance(this, true).getFeedbackList(this, this);
         } else {
-            FeedbackService.getInstance(this).getFeedbackList(this, this, configuration, getTopColor(0));
+            FeedbackService.getInstance(this).getFeedbackList(this, this);
         }
         doSearch(searchText.getText().toString());
         sort();
@@ -250,7 +251,7 @@ public class FeedbackListActivity extends AbstractBaseActivity implements IFeedb
         activeFeedbackList.clear();
         if (sorting == MINE && ACTIVE.check(getApplicationContext()) && FeedbackDatabase
                 .getInstance(getApplicationContext())
-                .readBoolean(IS_DEVELOPER, false) && VersionUtility.getDateVersion() >= 4) {
+                .readBoolean(USER_IS_DEVELOPER, false) && VersionUtility.getDateVersion() >= 4) {
             addDeveloperContext();
             sort();
             return;

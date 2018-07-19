@@ -8,13 +8,13 @@ import android.support.v7.widget.LinearLayoutCompat;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.View;
-import android.widget.LinearLayout;
-import android.widget.TextView;
+import android.widget.*;
 
 import java.util.List;
 
 import ch.uzh.supersede.feedbacklibrary.R;
 import ch.uzh.supersede.feedbacklibrary.activities.FeedbackDetailsActivity;
+import ch.uzh.supersede.feedbacklibrary.activities.FeedbackDetailsDeveloperActivity;
 import ch.uzh.supersede.feedbacklibrary.beans.FeedbackBean;
 import ch.uzh.supersede.feedbacklibrary.beans.LocalConfigurationBean;
 import ch.uzh.supersede.feedbacklibrary.database.FeedbackDatabase;
@@ -22,7 +22,7 @@ import ch.uzh.supersede.feedbacklibrary.interfaces.ISortableFeedback;
 import ch.uzh.supersede.feedbacklibrary.utils.*;
 
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.*;
-import static ch.uzh.supersede.feedbacklibrary.utils.Constants.UserConstants.USER_NAME;
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.UserConstants.*;
 import static ch.uzh.supersede.feedbacklibrary.utils.Enums.FEEDBACK_SORTING.*;
 import static ch.uzh.supersede.feedbacklibrary.utils.Enums.FEEDBACK_STATUS.DUPLICATE;
 import static ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility.USER_LEVEL.ACTIVE;
@@ -90,14 +90,14 @@ public class FeedbackListItem extends LinearLayout implements Comparable, ISorta
 
     private void startFeedbackDetailsActivity() {
         Intent intent = null;
-        if (ACTIVE.check(getContext())&& FeedbackDatabase.getInstance(getContext()).readBoolean(IS_DEVELOPER,false)){
-            if (VersionUtility.getDateVersion()>=4){
+        if (ACTIVE.check(getContext()) && FeedbackDatabase.getInstance(getContext()).readBoolean(USER_IS_DEVELOPER, false)) {
+            if (VersionUtility.getDateVersion() >= 4) {
                 intent = new Intent(getContext(), FeedbackDetailsDeveloperActivity.class);
-            }else{
+            } else {
                 intent = new Intent(getContext(), FeedbackDetailsActivity.class);
             }
-        }else {
-            Toast.makeText(getContext(),R.string.list_alert_user_level,Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(getContext(), R.string.list_alert_user_level, Toast.LENGTH_SHORT).show();
             return;
         }
         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
