@@ -1,21 +1,13 @@
 package ch.uzh.supersede.feedbacklibrary.utils;
 
-import ch.uzh.supersede.feedbacklibrary.entrypoint.IAudioFeedbackConfiguration;
-import ch.uzh.supersede.feedbacklibrary.entrypoint.IFeedbackBehavior;
-import ch.uzh.supersede.feedbacklibrary.entrypoint.IFeedbackDeveloper;
-import ch.uzh.supersede.feedbacklibrary.entrypoint.IFeedbackSettings;
-import ch.uzh.supersede.feedbacklibrary.entrypoint.IFeedbackStyle;
-import ch.uzh.supersede.feedbacklibrary.entrypoint.ILabelFeedbackConfiguration;
-import ch.uzh.supersede.feedbacklibrary.entrypoint.IRatingFeedbackConfiguration;
-import ch.uzh.supersede.feedbacklibrary.entrypoint.IScreenshotFeedbackConfiguration;
-import ch.uzh.supersede.feedbacklibrary.entrypoint.ITextFeedbackConfiguration;
-import ch.uzh.supersede.feedbacklibrary.entrypoint.ITitleAndTagFeedbackConfiguration;
+import ch.uzh.supersede.feedbacklibrary.entrypoint.*;
+import ch.uzh.supersede.feedbacklibrary.entrypoint.IFeedbackStyleConfiguration;
 
 public class DefaultConfiguration implements
-        IFeedbackBehavior,
-        IFeedbackStyle,
-        IFeedbackSettings,
-        IFeedbackDeveloper,
+        IFeedbackBehaviorConfiguration,
+        IFeedbackStyleConfiguration,
+        IFeedbackSettingsConfiguration,
+        IFeedbackDeveloperConfiguration,
         IAudioFeedbackConfiguration,
         ILabelFeedbackConfiguration,
         IRatingFeedbackConfiguration,
@@ -84,6 +76,21 @@ public class DefaultConfiguration implements
     @Override
     public int getConfiguredMaxResponseLength() {
         return 255;
+    }
+
+    @Override
+    public int getConfiguredMinReportLength() {
+        return 10;
+    }
+
+    @Override
+    public int getConfiguredMaxReportLength() {
+        return 255;
+    }
+
+    @Override
+    public boolean getConfiguredReportEnabled() {
+        return true;
     }
 
     @Override

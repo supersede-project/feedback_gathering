@@ -14,6 +14,7 @@ public class Constants {
     public static final String SHARED_PREFERENCES = "feedbackSharedPreferences";
     public static final String USER_NAME = "userName";
     public static final String IS_DEVELOPER = "isDeveloper";
+    public static final String REPORTED_FEEDBACK = "reportedFeedback";
     public static final String USE_STUBS = "useStubs";
     public static final String USER_NAME_ANONYMOUS = "anonymous";
     public static final String USER_NAME_CREATING = "being created ..";
@@ -34,10 +35,14 @@ public class Constants {
     public static final String EXTRA_KEY_CACHED_SCREENSHOT = "cachedScreenshot";
     public static final String EXTRA_KEY_FEEDBACK_TITLE = "feedbackTitle";
     public static final String EXTRA_KEY_FEEDBACK_TAGS = "feedbackTags";
+    public static final String EXTRA_FROM_CREATION = "fromCreation";
+    public static final String EXTRA_KEY_FEEDBACK_DELETION = "feedbackDeletion";
 
     public static final String SHARED_PREFERENCES_ID = "ch.uzh.supersede.feedbacklibrary.feedback";
     public static final String SHARED_PREFERENCES_HOST_APPLICATION_NAME = "hostApplicationName";
     public static final String SHARED_PREFERENCES_TUTORIAL_HUB = "hubTutorial";
+    public static final String SHARED_PREFERENCES_TUTORIAL_IDENTITY = "identityTutorial";
+    public static final String SHARED_PREFERENCES_ONLINE = "isOnline";
 
     public static final int REQUEST_PHOTO = 11;
     public static final int REQUEST_ANNOTATE = 12;

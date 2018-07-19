@@ -8,16 +8,16 @@ import java.io.Serializable;
 import java.util.Locale;
 
 import ch.uzh.supersede.feedbacklibrary.entrypoint.*;
-import ch.uzh.supersede.feedbacklibrary.entrypoint.IFeedbackStyle.FEEDBACK_STYLE;
+import ch.uzh.supersede.feedbacklibrary.entrypoint.IFeedbackStyleConfiguration.FEEDBACK_STYLE;
 import ch.uzh.supersede.feedbacklibrary.utils.*;
 
-import static ch.uzh.supersede.feedbacklibrary.entrypoint.IFeedbackStyle.FEEDBACK_STYLE.*;
+import static ch.uzh.supersede.feedbacklibrary.entrypoint.IFeedbackStyleConfiguration.FEEDBACK_STYLE.*;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.ActivitiesConstants.*;
 
 public class LocalConfigurationBean implements Serializable {
-    // IFeedbackBehavior
+    // IFeedbackBehaviorConfiguration
     private int pullIntervalMinutes;
-    // IFeedbackDeveloper
+    // IFeedbackDeveloperConfiguration
     private boolean isDeveloper;
     // IFeedbackLayoutConfiguration
     private int audioOrder;
@@ -37,7 +37,7 @@ public class LocalConfigurationBean implements Serializable {
     private String textLabel;
     private int textMaxLength;
     private int textMinLength;
-    // IFeedbackSettings
+    // IFeedbackSettingsConfiguration
     private int minUserNameLength;
     private int maxUserNameLength;
     private int minResponseLength;
@@ -48,8 +48,11 @@ public class LocalConfigurationBean implements Serializable {
     private int maxTagLength;
     private int minTagNumber;
     private int maxTagNumber;
+    private int maxReportLength;
+    private int minReportLength;
+    private boolean reportEnabled;
     private int maxTagRecommendationNumber;
-    // IFeedbackStyle
+    // IFeedbackStyleConfiguration
     private FEEDBACK_STYLE style;
     // Application
     private String hostApplicationName;
@@ -61,20 +64,20 @@ public class LocalConfigurationBean implements Serializable {
 
     public LocalConfigurationBean(Activity activity, Integer[] topColors) {
         this.topColors = topColors;
-        if (activity instanceof IFeedbackBehavior) {
-            readConfiguration((IFeedbackBehavior) activity);
+        if (activity instanceof IFeedbackBehaviorConfiguration) {
+            readConfiguration((IFeedbackBehaviorConfiguration) activity);
         }
-        if (activity instanceof IFeedbackDeveloper) {
-            readConfiguration((IFeedbackDeveloper) activity);
+        if (activity instanceof IFeedbackDeveloperConfiguration) {
+            readConfiguration((IFeedbackDeveloperConfiguration) activity);
         }
         if (activity instanceof IFeedbackConfiguration) {
             readConfiguration((IFeedbackConfiguration) activity);
         }
-        if (activity instanceof IFeedbackSettings) {
-            readConfiguration((IFeedbackSettings) activity);
+        if (activity instanceof IFeedbackSettingsConfiguration) {
+            readConfiguration((IFeedbackSettingsConfiguration) activity);
         }
-        if (activity instanceof IFeedbackStyle) {
-            readConfiguration((IFeedbackStyle) activity);
+        if (activity instanceof IFeedbackStyleConfiguration) {
+            readConfiguration((IFeedbackStyleConfiguration) activity);
         }
         hostApplicationName = getApplicationName(activity);
         hostApplicationId = getApplicationId(activity);
@@ -82,11 +85,11 @@ public class LocalConfigurationBean implements Serializable {
         hostApplicationLanguage = Locale.getDefault().getLanguage();
     }
 
-    private void readConfiguration(IFeedbackBehavior configuration) {
+    private void readConfiguration(IFeedbackBehaviorConfiguration configuration) {
         this.pullIntervalMinutes = configuration.getConfiguredPullIntervalMinutes();
     }
 
-    private void readConfiguration(IFeedbackDeveloper configuration) {
+    private void readConfiguration(IFeedbackDeveloperConfiguration configuration) {
         this.isDeveloper = configuration.isDeveloper();
     }
 
@@ -163,27 +166,30 @@ public class LocalConfigurationBean implements Serializable {
     }
 
 
-    private void readConfiguration(IFeedbackSettings configuration) {
+    private void readConfiguration(IFeedbackSettingsConfiguration configuration) {
         this.minUserNameLength = configuration.getConfiguredMinUserNameLength();
         this.maxUserNameLength = configuration.getConfiguredMaxUserNameLength();
         this.minResponseLength = configuration.getConfiguredMinResponseLength();
         this.maxResponseLength = configuration.getConfiguredMaxResponseLength();
+        this.minReportLength = configuration.getConfiguredMinReportLength();
+        this.maxReportLength = configuration.getConfiguredMaxReportLength();
+        this.reportEnabled = configuration.getConfiguredReportEnabled();
     }
 
-    private void readConfiguration(IFeedbackStyle configuration) {
+    private void readConfiguration(IFeedbackStyleConfiguration configuration) {
         this.style = configuration.getConfiguredFeedbackStyle();
         coloringVertical =true;
         if (style == DARK) {
             topColors = new Integer[]{
-                    ANTHRACITE_DARK, GRAY_DARK
+                    ANTHRACITE_DARK, GRAY_DARK, GRAY
             };
         } else if (style == LIGHT) {
             topColors = new Integer[]{
-                    GRAY, SILVER
+                    GRAY, SILVER, WHITE
             };
         } else if (style == SWITZERLAND) {
             topColors = new Integer[]{
-                    WHITE, SWISS_RED
+                    WHITE, SWISS_RED, WHITE
             };
         } else if (style == GERMANY) {
             topColors = new Integer[]{
@@ -209,7 +215,7 @@ public class LocalConfigurationBean implements Serializable {
             };
         } else if (style == WINDOWS95) {
             topColors = new Integer[]{
-                    WIN95_GRAY,WIN95_BLUE
+                    WIN95_GRAY,WIN95_BLUE,WHITE
             };
         }
     }
@@ -384,4 +390,15 @@ public class LocalConfigurationBean implements Serializable {
         return coloringVertical;
     }
 
+    public int getMinReportLength() {
+        return minReportLength;
+    }
+
+    public boolean isReportEnabled() {
+        return reportEnabled;
+    }
+
+    public int getMaxReportLength() {
+        return maxReportLength;
+    }
 }

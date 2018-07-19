@@ -1,16 +1,16 @@
 package ch.uzh.supersede.feedbacklibrary.models;
 
 public class AuthenticateRequest {
-    private String user;
+    private String name;
     private String password;
 
-    public AuthenticateRequest(String user, String password) {
-        this.user = user;
+    public AuthenticateRequest(String name, String password) {
+        this.name = name;
         this.password = password;
     }
 
-    public String getUser() {
-        return user;
+    public String getName() {
+        return name;
     }
 
     public String getPassword() {

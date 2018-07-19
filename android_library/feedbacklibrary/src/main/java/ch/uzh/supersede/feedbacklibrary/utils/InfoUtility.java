@@ -81,7 +81,7 @@ public class InfoUtility {
                 infoBox.setY(y+anchorHeight/2);
             }else{ //lower-left
                 infoBox.setBackground(ResourcesCompat.getDrawable(view.getResources(), R.drawable.info_box_left_lower_neutral, null));
-                infoBox.setY(y);
+                infoBox.setY(y-view.getMeasuredHeight());
             }
         } else {//right info-box
             infoBox.setX(x+anchorWidth/2-titleWidth);
@@ -90,7 +90,7 @@ public class InfoUtility {
                 infoBox.setY(y+anchorHeight/2);
             }else{ //lower-right
                 infoBox.setBackground(ResourcesCompat.getDrawable(view.getResources(), R.drawable.info_box_right_lower_neutral, null));
-                infoBox.setY(y);
+                infoBox.setY(y-view.getMeasuredHeight());
             }
         }
 

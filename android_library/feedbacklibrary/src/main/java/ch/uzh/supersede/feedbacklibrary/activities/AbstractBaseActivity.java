@@ -1,15 +1,14 @@
 package ch.uzh.supersede.feedbacklibrary.activities;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.Intent;
+import android.content.*;
 import android.graphics.*;
 import android.graphics.drawable.*;
+import android.net.*;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.text.Layout;
 import android.util.*;
 import android.view.*;
 import android.widget.*;
@@ -17,25 +16,29 @@ import android.widget.*;
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.HashMap;
 
 import ch.uzh.supersede.feedbacklibrary.R;
 import ch.uzh.supersede.feedbacklibrary.beans.LocalConfigurationBean;
+import ch.uzh.supersede.feedbacklibrary.services.*;
 import ch.uzh.supersede.feedbacklibrary.utils.*;
 import ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility.USER_LEVEL;
+import okhttp3.ResponseBody;
 
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.*;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.ActivitiesConstants.DISABLED_BACKGROUND;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.ActivitiesConstants.DISABLED_FOREGROUND;
-import static ch.uzh.supersede.feedbacklibrary.utils.Constants.EXTRA_KEY_APPLICATION_CONFIGURATION;
 import static ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility.USER_LEVEL.LOCKED;
 
 @SuppressWarnings("squid:MaximumInheritanceDepth")
-public abstract class AbstractBaseActivity extends AppCompatActivity {
+public abstract class AbstractBaseActivity extends AppCompatActivity implements IFeedbackServiceEventListener {
     protected USER_LEVEL userLevel = LOCKED;
     protected final String[] preAllocatedStringStorage = new String[]{null};
     protected int screenWidth;
     protected int screenHeight;
     protected LocalConfigurationBean configuration;
     protected InfoUtility infoUtility;
+    protected HashMap<View,Integer> viewToColorMap = new HashMap<>();
 
     protected <T> T getView(int id, Class<T> classType) {
         return classType.cast(findViewById(id));
@@ -55,6 +58,30 @@ public abstract class AbstractBaseActivity extends AppCompatActivity {
 
     protected void onPostCreate() {
         invokeNullSafe(getSupportActionBar(), "hide", null);
+        checkConnectivity();
+    }
+
+    private void checkConnectivity() {
+        NetworkInfo activeNetworkInfo = null;
+        try{
+            ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+            activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        }catch (Exception e){
+            Log.e("Network",e.getMessage());
+        }
+        if (activeNetworkInfo != null && activeNetworkInfo.isConnected()){
+            //Online, ping Repository and wait for Callback
+            FeedbackService.getInstance(getApplicationContext()).pingRepository(this);
+        }else{
+            //Offline, don't ping Repository
+            getSharedPreferences(SHARED_PREFERENCES, MODE_PRIVATE).edit().putBoolean(SHARED_PREFERENCES_ONLINE, false).apply();
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        checkConnectivity();
     }
 
     public void onButtonClicked(View view) {
@@ -71,6 +98,9 @@ public abstract class AbstractBaseActivity extends AppCompatActivity {
             intent = handoverIntent[0];
         }
         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+        if (destruction){
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        }
         handOverConfigurationToIntent(intent);
         startActivity.startActivity(intent);
         startActivity.overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
@@ -101,6 +131,9 @@ public abstract class AbstractBaseActivity extends AppCompatActivity {
             for (View view : color != null ? views : new View[0]) {
                 if (view == null) {
                     continue;
+                }
+                if (!viewToColorMap.containsKey(view)){
+                    viewToColorMap.put(view,colorIndex);
                 }
                 colorizeText(color, view);
                 view.setBackgroundColor(color);
@@ -210,7 +243,8 @@ public abstract class AbstractBaseActivity extends AppCompatActivity {
         }
     }
 
-    protected void enableView(View view, int colorIndex, Boolean... conditionals) {
+    protected void enableView(View view, Integer colorIndex, Boolean... conditionals) {
+        colorIndex = (colorIndex==null?0:colorIndex);
         if (conditionals != null && conditionals.length > 0){
             for (Boolean b : conditionals){
                 if (!b){
@@ -234,5 +268,42 @@ public abstract class AbstractBaseActivity extends AppCompatActivity {
 
     protected void createInfoBubbles(){
         //NOP
+    }
+
+
+
+    @Override
+    public void onEventCompleted(EventType eventType, Object response) {
+        switch (eventType) {
+            case PING_REPOSITORY:
+                if (RestUtility.responseEquals(response,"pong")){
+                    getSharedPreferences(SHARED_PREFERENCES, MODE_PRIVATE).edit().putBoolean(SHARED_PREFERENCES_ONLINE, true).apply();
+                }else{
+                    getSharedPreferences(SHARED_PREFERENCES, MODE_PRIVATE).edit().putBoolean(SHARED_PREFERENCES_ONLINE, false).apply();
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
+    @Override
+    public void onEventFailed(EventType eventType, Object response) {
+        switch (eventType) {
+            case PING_REPOSITORY:
+                getSharedPreferences(SHARED_PREFERENCES, MODE_PRIVATE).edit().putBoolean(SHARED_PREFERENCES_ONLINE, false).apply();
+                break;
+            default:
+        }
+    }
+
+    @Override
+    public void onConnectionFailed(EventType eventType) {
+        switch (eventType) {
+            case PING_REPOSITORY:
+                getSharedPreferences(SHARED_PREFERENCES, MODE_PRIVATE).edit().putBoolean(SHARED_PREFERENCES_ONLINE, false).apply();
+                break;
+            default:
+        }
     }
 }

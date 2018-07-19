@@ -1,7 +1,7 @@
 package ch.uzh.supersede.feedbacklibrary.entrypoint;
 
 
-public interface IFeedbackDeveloper {
+public interface IFeedbackDeveloperConfiguration {
 
     boolean isDeveloper();
 

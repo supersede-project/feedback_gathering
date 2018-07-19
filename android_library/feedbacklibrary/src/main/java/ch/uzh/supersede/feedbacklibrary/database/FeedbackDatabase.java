@@ -238,7 +238,7 @@ public class FeedbackDatabase extends AbstractFeedbackDatabase {
     }
 
     private void writeTags(SQLiteDatabase db, Long feedbackId, String[] tags){
-        for (String tag : tags){
+        for (String tag : (tags==null?new String[0]:tags)){
             ContentValues values = new ContentValues();
             values.put(TagTableEntry.COLUMN_NAME_FEEDBACK_ID, String.valueOf(feedbackId));
             values.put(TagTableEntry.COLUMN_NAME_TAG, tag);

@@ -8,7 +8,7 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
-import android.text.Html;
+import android.text.*;
 import android.view.*;
 import android.widget.*;
 
@@ -22,13 +22,10 @@ import ch.uzh.supersede.feedbacklibrary.models.AuthenticateRequest;
 import ch.uzh.supersede.feedbacklibrary.models.AuthenticateResponse;
 import ch.uzh.supersede.feedbacklibrary.services.FeedbackService;
 import ch.uzh.supersede.feedbacklibrary.services.IFeedbackServiceEventListener;
-import ch.uzh.supersede.feedbacklibrary.utils.ColorUtility;
-import ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility;
+import ch.uzh.supersede.feedbacklibrary.utils.*;
 import ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility.USER_LEVEL;
-import ch.uzh.supersede.feedbacklibrary.utils.PopUp;
-import ch.uzh.supersede.feedbacklibrary.utils.Utils;
-import ch.uzh.supersede.feedbacklibrary.utils.VersionUtility;
 
+import static ch.uzh.supersede.feedbacklibrary.entrypoint.IFeedbackStyleConfiguration.FEEDBACK_STYLE.*;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.ActivitiesConstants.*;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.*;
 import static ch.uzh.supersede.feedbacklibrary.utils.Enums.FETCH_MODE.*;
@@ -67,7 +64,7 @@ public class FeedbackHubActivity extends AbstractBaseActivity implements IFeedba
         spaceBottom = getView(R.id.hub_space_color_bottom, TextView.class);
         spaceLeft = getView(R.id.hub_space_color_left, TextView.class);
         spaceRight = getView(R.id.hub_space_color_right, TextView.class);
-        if (getColorCount() == 2) {
+        if (getColorCount() == 2 || CollectionUtility.oneOf(getConfiguration().getStyle(), DARK, LIGHT, SWITZERLAND, WINDOWS95)) {
             colorViews(0, backgroundLayout);
             colorViews(1, listButton, levelButton, feedbackButton, settingsButton);
         } else if (getColorCount() == 3) {
@@ -91,7 +88,7 @@ public class FeedbackHubActivity extends AbstractBaseActivity implements IFeedba
         }
         updateUserLevel(false);
         invokeVersionControl(2, R.id.hub_button_list, R.id.hub_button_settings);
-        FeedbackService.getInstance(this).authenticate(this, new AuthenticateRequest("test", "123")); //TODO [jfo] parse credentials
+        FeedbackService.getInstance(this).authenticate(this, new AuthenticateRequest("super_admin", "password")); //TODO [jfo] parse credentials
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -109,7 +106,7 @@ public class FeedbackHubActivity extends AbstractBaseActivity implements IFeedba
             mLayout.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
-                    Toast.makeText(v.getContext(), R.string.hub_tutorial_finished, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(v.getContext(), R.string.tutorial_finished, Toast.LENGTH_SHORT).show();
                     getSharedPreferences(SHARED_PREFERENCES_ID, MODE_PRIVATE).edit().putBoolean(SHARED_PREFERENCES_TUTORIAL_HUB, true).apply();
                     return false;
                 }
@@ -143,67 +140,16 @@ public class FeedbackHubActivity extends AbstractBaseActivity implements IFeedba
         restoreHostApplicationNameToPreferences();
     }
 
-    @Override
-    public void onEventCompleted(EventType eventType, Object response) {
-        switch (eventType) {
-            case AUTHENTICATE:
-                if (response instanceof AuthenticateResponse) {
-                    FeedbackService.getInstance(this).setToken(((AuthenticateResponse) response).getToken());
-                }
-                FeedbackService.getInstance(this).setApplicationId(configuration.getHostApplicationLongId()); //TODO [jfo] maybe this id is returned with authentication
-                FeedbackService.getInstance(this).setLanguage(configuration.getHostApplicationLanguage());
-                break;
-            case CREATE_USER:
-                if (response instanceof AndroidUser) {
-                    AndroidUser androidUser = (AndroidUser) response;
-                    FeedbackDatabase.getInstance(this).writeString(USER_NAME, androidUser.getName());
-                    FeedbackDatabase.getInstance(this).writeBoolean(IS_DEVELOPER, androidUser.isDeveloper());
-                    userName = androidUser.getName();
-                }
-                preAllocatedStringStorage[0] = null;
-                updateUserLevel(true);
-                levelButton.setEnabled(true);
-                break;
-            default:
-                break;
-        }
-    }
-
-    @Override
-    public void onEventFailed(EventType eventType, Object response) {
-        switch (eventType) {
-            case AUTHENTICATE:
-                //FIXME [jfo] remove block as soon as possible
-                FeedbackService.getInstance(this).setToken(LIFETIME_TOKEN);
-                FeedbackService.getInstance(this).setApplicationId(configuration.getHostApplicationLongId()); //TODO [jfo] maybe this id is returned with authentication
-                FeedbackService.getInstance(this).setLanguage(configuration.getHostApplicationLanguage());
-                break;
-            default:
-        }
-    }
-
-    @Override
-    public void onConnectionFailed(EventType eventType) {
-        //TODO
-    }
-
     private void updateUserLevel(boolean ignoreDatabaseCheck) {
         userLevel = PermissionUtility.getUserLevel(getApplicationContext(), ignoreDatabaseCheck);
         levelButton.setText(getResources().getString(R.string.hub_feedback_user_level, userLevel.getLevel()));
 
-        if (getColorCount() == 2) {
-            enableView(levelButton, 1);
-            disableViews(settingsButton, feedbackButton, listButton);
-        } else if (getColorCount() == 3) {
-            if (getConfiguration().isColoringVertical()) {
-                enableView(levelButton, 0);
-            } else {
-                enableView(levelButton, 2);
-            }
-        }
+        disableViews(settingsButton, feedbackButton, listButton);
+
+        enableView(levelButton, viewToColorMap.get(levelButton));
         statusText.setText(null);
         if (PASSIVE.check(getApplicationContext(), ignoreDatabaseCheck)) {
-            enableView(listButton, 1, VersionUtility.getDateVersion() > 1);
+            enableView(listButton, viewToColorMap.get(listButton), VersionUtility.getDateVersion() > 1);
         }
         if (ACTIVE.check(getApplicationContext(), ignoreDatabaseCheck)) {
             Utils.persistScreenshot(this, cachedScreenshot);
@@ -234,18 +180,9 @@ public class FeedbackHubActivity extends AbstractBaseActivity implements IFeedba
                         .replace(PRIMARY_COLOR_STRING, BLACK_HEX)
                         .replace(SECONDARY_COLOR_STRING, DARK_BLUE)));
             }
-            if (getColorCount() == 2) {
-                enableView(feedbackButton, 1);
-                enableView(settingsButton, 1, VersionUtility.getDateVersion() > 1);
-            } else if (getColorCount() == 3) {
-                if (getConfiguration().isColoringVertical()) {
-                    enableView(feedbackButton, 2);
-                    enableView(settingsButton, 2, VersionUtility.getDateVersion() > 1);
-                } else {
-                    enableView(feedbackButton, 0);
-                    enableView(settingsButton, 2, VersionUtility.getDateVersion() > 1);
-                }
-            }
+
+            enableView(feedbackButton, viewToColorMap.get(feedbackButton));
+            enableView(settingsButton, viewToColorMap.get(settingsButton));
         }
         if (ADVANCED.check(getApplicationContext(), ignoreDatabaseCheck)) {
             disableViews(levelButton);
@@ -255,18 +192,18 @@ public class FeedbackHubActivity extends AbstractBaseActivity implements IFeedba
     @Override
     public void onButtonClicked(View view) {
         boolean tutorialFinished = getSharedPreferences(SHARED_PREFERENCES_ID, MODE_PRIVATE).getBoolean(SHARED_PREFERENCES_TUTORIAL_HUB, false);
-        if (!tutorialFinished){
-            Toast.makeText(getApplicationContext(), R.string.hub_tutorial_alert,Toast.LENGTH_SHORT).show();
+        if (!tutorialFinished) {
+            Toast.makeText(getApplicationContext(), R.string.tutorial_alert, Toast.LENGTH_SHORT).show();
             return;
         }
         if (view != null) {
             int i = view.getId();
             if (i == R.id.hub_button_list) {
-                startActivity(this, FeedbackListActivity.class,false);
+                startActivity(this, FeedbackListActivity.class, false);
             } else if (i == R.id.hub_button_feedback) {
-                startActivity(this, FeedbackIdentityActivity.class,false);
+                startActivity(this, FeedbackIdentityActivity.class, false);
             } else if (i == R.id.hub_button_settings) {
-                startActivity(this, FeedbackSettingsActivity.class,false);
+                startActivity(this, FeedbackSettingsActivity.class, false);
             } else if (i == R.id.hub_button_user_level) {
                 switch (userLevel.getLevel()) {
                     case 0:
@@ -276,13 +213,25 @@ public class FeedbackHubActivity extends AbstractBaseActivity implements IFeedba
                                 .withCustomOk(getString(R.string.hub_confirm), getClickListener(PASSIVE)).buildAndShow();
                         break;
                     case 1:
-                        final EditText nameInputText = new EditText(this);
-                        nameInputText.setMaxLines(1);
-                        new PopUp(this)
-                                .withTitle(getString(R.string.hub_access_2))
-                                .withMessage(getString(R.string.hub_access_2_description))
-                                .withInput(nameInputText)
-                                .withCustomOk(getString(R.string.hub_confirm), getClickListener(ACTIVE, nameInputText)).buildAndShow();
+                        if (getSharedPreferences(SHARED_PREFERENCES, MODE_PRIVATE).getBoolean(SHARED_PREFERENCES_ONLINE, false)) {
+                            //der callback ob der server antwortet. generell speichern dieses status in einem state?
+                            final EditText nameInputText = new EditText(this);
+                            nameInputText.setFilters(new InputFilter[]{ new InputFilter.LengthFilter(configuration.getMaxUserNameLength()
+                            )});
+                            nameInputText.setSingleLine();
+                            nameInputText.setMaxLines(1);
+                            new PopUp(this)
+                                    .withTitle(getString(R.string.hub_access_2))
+                                    .withMessage(getString(R.string.hub_access_2_description,configuration.getMinUserNameLength(),configuration.getMaxUserNameLength()))
+                                    .withInput(nameInputText)
+                                    .withCustomOk(getString(R.string.hub_confirm), getClickListener(ACTIVE, nameInputText)).buildAndShow();
+                        } else {
+                            new PopUp(this)
+                                    .withTitle(getString(R.string.hub_access_2))
+                                    .withMessage(getString(R.string.hub_access_2_fail))
+                                    .withoutCancel()
+                                    .withCustomOk(getString(R.string.hub_confirm)).buildAndShow();
+                        }
                         break;
                     case 2:
                         new PopUp(this)
@@ -413,5 +362,51 @@ public class FeedbackHubActivity extends AbstractBaseActivity implements IFeedba
         if (reload) {
             updateUserLevel(true);
         }
+    }
+
+    @Override
+    public void onEventCompleted(EventType eventType, Object response) {
+        super.onEventCompleted(eventType, response);
+        switch (eventType) {
+            case AUTHENTICATE:
+                if (response instanceof AuthenticateResponse) {
+                    FeedbackService.getInstance(this).setToken(((AuthenticateResponse) response).getToken());
+                }
+                FeedbackService.getInstance(this).setApplicationId(configuration.getHostApplicationLongId()); //TODO [jfo] maybe this id is returned with authentication
+                FeedbackService.getInstance(this).setLanguage(configuration.getHostApplicationLanguage());
+                break;
+            case CREATE_USER:
+                if (response instanceof AndroidUser) {
+                    AndroidUser androidUser = (AndroidUser) response;
+                    FeedbackDatabase.getInstance(this).writeString(USER_NAME, androidUser.getName());
+                    FeedbackDatabase.getInstance(this).writeBoolean(IS_DEVELOPER, androidUser.isDeveloper());
+                    userName = androidUser.getName();
+                }
+                preAllocatedStringStorage[0] = null;
+                updateUserLevel(true);
+                levelButton.setEnabled(true);
+                break;
+            default:
+                break;
+        }
+    }
+
+    @Override
+    public void onEventFailed(EventType eventType, Object response) {
+        super.onEventCompleted(eventType, response);
+        switch (eventType) {
+            case AUTHENTICATE:
+                //FIXME [jfo] remove block as soon as possible
+                FeedbackService.getInstance(this).setToken(LIFETIME_TOKEN);
+                FeedbackService.getInstance(this).setApplicationId(configuration.getHostApplicationLongId()); //TODO [jfo] maybe this id is returned with authentication
+                FeedbackService.getInstance(this).setLanguage(configuration.getHostApplicationLanguage());
+                break;
+            default:
+        }
+    }
+
+    @Override
+    public void onConnectionFailed(EventType eventType) {
+        super.onConnectionFailed(eventType);
     }
 }

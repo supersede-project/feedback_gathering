@@ -27,7 +27,10 @@ public class RepositoryStub {
     }
 
     public static List<FeedbackBean> getFeedback(Context context, int count, int minUpVotes, int maxUpVotes, float ownFeedbackPercent) {
-        List<FeedbackBean> feedbackBeans = new ArrayList<>();
+        List<FeedbackBean> feedbackBeans = PersistentDataSingleton.getInstance().getPersistedFeedback();
+        if (!feedbackBeans.isEmpty()){
+            return feedbackBeans; //Already loaded once, in place for offline usage
+        }
         if (ACTIVE.check(context) && FeedbackDatabase.getInstance(context).readBoolean(Constants.USE_STUBS,false)){
             List<LocalFeedbackBean> ownFeedbackBeans = FeedbackDatabase.getInstance(context).getFeedbackBeans(Enums.FETCH_MODE.OWN);
             if (!ownFeedbackBeans.isEmpty()){
@@ -40,14 +43,19 @@ public class RepositoryStub {
         for (int f = 0; f < count; f++) {
             feedbackBeans.add(getFeedback(context, minUpVotes, maxUpVotes, ownFeedbackPercent));
         }
+        PersistentDataSingleton.getInstance().persistFeedbackBeans(feedbackBeans);
         return feedbackBeans;
     }
 
     private static List<FeedbackResponseBean> getFeedbackResponses(Context context, int count, long feedbackCreationDate, float developerPercent, float ownerPercent, FeedbackBean feedbackBean) {
-        ArrayList<FeedbackResponseBean> feedbackResponseBeans = new ArrayList<>();
+        List<FeedbackResponseBean> feedbackResponseBeans = PersistentDataSingleton.getInstance().getPersistedFeedbackResponses(feedbackBean.getFeedbackId());
+        if (!feedbackResponseBeans.isEmpty()){
+            return feedbackResponseBeans;
+        }
         for (int f = 0; f < count; f++) {
             feedbackResponseBeans.add(getFeedbackResponse(context, feedbackCreationDate, developerPercent, ownerPercent, feedbackBean));
         }
+        PersistentDataSingleton.getInstance().persistFeedbackResponses(feedbackBean.getFeedbackId(),feedbackResponseBeans);
         return feedbackResponseBeans;
     }
 
@@ -289,6 +297,11 @@ public class RepositoryStub {
     public static void makeFeedbackPublic(FeedbackDetailsBean feedbackDetailsBean) {
         //TheoreticalCallToRepo
     }
+
+    public static void sendKarma(FeedbackDetailsBean feedbackDetailsBean, int karma) {
+        //TheoreticalCallToRepo
+    }
+
     public static Map<String,String> getFeedbackTags(Context context) {
         //TheoreticalCallToRepo
         ArrayList<String> loadedTags = new ArrayList<>(
@@ -312,5 +325,13 @@ public class RepositoryStub {
 
     private static String generateToken() {
         return UUID.randomUUID().toString();
+    }
+
+    public static void updateFeedbackStatus(FeedbackDetailsBean feedbackDetailsBean, Object item) {
+        //TODO: MBO lokal implementieren
+    }
+
+    public static void deleteFeedback(FeedbackDetailsBean feedbackDetailsBean) {
+        //TODO: MBO lokal implementieren
     }
 }

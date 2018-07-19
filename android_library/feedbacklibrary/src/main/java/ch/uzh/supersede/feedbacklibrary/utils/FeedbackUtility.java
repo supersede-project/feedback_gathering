@@ -54,7 +54,6 @@ public class FeedbackUtility {
         Enums.FEEDBACK_STATUS status = OPEN;  // TODO not yet implemented
         int upVotes = 0; // TODO not yet implemented
         int responses = 0; // TODO not yet implemented
-        long feedbackId = NumberUtility.randomLong(); // TODO not yet implemented
 
         String description = null;
 
@@ -76,7 +75,7 @@ public class FeedbackUtility {
             title = "#Dummy-Title# " + GeneratorStub.BagOfFeedbackTitles.pickRandom();
         }
         FeedbackBean feedbackBean = new FeedbackBean.Builder()
-                .withFeedbackId(feedbackId)
+                .withFeedbackId(feedback.getId())
                 .withTitle(title)
                 .withTags(tags)
                 .withUserName(userName)

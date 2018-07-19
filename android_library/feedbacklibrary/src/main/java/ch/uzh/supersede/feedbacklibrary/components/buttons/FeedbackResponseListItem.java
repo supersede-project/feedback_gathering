@@ -2,6 +2,7 @@ package ch.uzh.supersede.feedbacklibrary.components.buttons;
 
 import android.app.*;
 import android.content.*;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutCompat;
@@ -22,8 +23,10 @@ import static ch.uzh.supersede.feedbacklibrary.components.buttons.FeedbackRespon
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.*;
 import static ch.uzh.supersede.feedbacklibrary.utils.Enums.RESPONSE_MODE.EDITING;
 import static ch.uzh.supersede.feedbacklibrary.utils.Enums.RESPONSE_MODE.READING;
+import static ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility.USER_LEVEL.ACTIVE;
 
 public class FeedbackResponseListItem extends LinearLayout implements Comparable {
+    private boolean isDeveloper;
     private View upperLeftView;
     private View upperRightView;
     private View bottomView;
@@ -38,6 +41,7 @@ public class FeedbackResponseListItem extends LinearLayout implements Comparable
 
     public FeedbackResponseListItem(Context context, FeedbackBean feedbackBean, FeedbackResponseBean feedbackResponseBean, LocalConfigurationBean configuration, RESPONSE_MODE mode) {
         super(context);
+        this.isDeveloper = FeedbackDatabase.getInstance(context).readBoolean(IS_DEVELOPER,false)&& VersionUtility.getDateVersion()>=4;
         this.configuration = configuration;
         this.feedbackBean = feedbackBean;
         this.feedbackResponseBean = feedbackResponseBean;
@@ -60,6 +64,7 @@ public class FeedbackResponseListItem extends LinearLayout implements Comparable
         setOrientation(VERTICAL);
         LinearLayoutCompat.LayoutParams longParams = new LinearLayoutCompat.LayoutParams(screenWidth, LayoutParams.WRAP_CONTENT);
         LinearLayoutCompat.LayoutParams shortParams = new LinearLayoutCompat.LayoutParams(innerLayoutWidth / 2, headerHeight);
+        LinearLayoutCompat.LayoutParams shortWrapperParams = new LinearLayoutCompat.LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT);
         setBackgroundColor(resolveBackgroundColor(feedbackResponseBean));
         LinearLayout upperWrapperLayout = createWrapperLayout(longParams, getContext(), HORIZONTAL);
         LinearLayout lowerWrapperLayout = createWrapperLayout(longParams, getContext(), HORIZONTAL);
@@ -108,17 +113,33 @@ public class FeedbackResponseListItem extends LinearLayout implements Comparable
                     resolveBackgroundColor(feedbackResponseBean));
         } else if (mode == FIXED) {
             upperLeftView = createTextView(shortParams,
-                    feedbackResponseBean.getUserName(),
+                    feedbackResponseBean.getUserName()+(isDeveloper?"\n"+getContext().getString(R.string.list_date, DateUtility.getDateFromLong(mode==FIXED?feedbackResponseBean.getTimeStamp():System.currentTimeMillis())):""),
                     Gravity.START,
                     padding,
                     resolveTextColor(feedbackResponseBean),
                     resolveBackgroundColor(feedbackResponseBean));
-            upperRightView = createTextView(shortParams,
-                    getContext().getString(R.string.list_date, DateUtility.getDateFromLong(mode==FIXED?feedbackResponseBean.getTimeStamp():System.currentTimeMillis())),
-                    Gravity.END,
-                    padding,
-                    resolveTextColor(feedbackResponseBean),
-                    resolveBackgroundColor(feedbackResponseBean));
+            if (isDeveloper){
+                OnClickListener deleteListener = new OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        deleteFeedbackResponse();
+                    }
+                };
+                upperRightView = createButtonView(shortParams,
+                        getContext().getString(R.string.details_developer_delete),
+                        deleteListener,
+                        new int[]{0,0,0,0},
+                        padding,
+                        resolveTextColor(feedbackResponseBean),
+                        resolveBackgroundColor(feedbackResponseBean));
+            }else{
+                upperRightView = createTextView(shortParams,
+                        getContext().getString(R.string.list_date, DateUtility.getDateFromLong(mode==FIXED?feedbackResponseBean.getTimeStamp():System.currentTimeMillis())),
+                        Gravity.END,
+                        padding,
+                        resolveTextColor(feedbackResponseBean),
+                        resolveBackgroundColor(feedbackResponseBean));
+            }
             bottomView = createTextView(longParams,
                     feedbackResponseBean.getContent(),
                     Gravity.START,
@@ -128,13 +149,17 @@ public class FeedbackResponseListItem extends LinearLayout implements Comparable
         }
     }
 
+    private void deleteFeedbackResponse() {
+        //TODO: POPUP CALL FOR DELETE, REMOVE AND RELOAD
+    }
+
     private int resolveTextColor(FeedbackResponseBean feedbackResponseBean) {
         if (feedbackResponseBean != null && feedbackResponseBean.isDeveloper() || mode == EDITABLE && FeedbackDatabase.getInstance(getContext()).readBoolean(IS_DEVELOPER,false)) {
             return ContextCompat.getColor(getContext(), R.color.gold_2);
         } else if (feedbackResponseBean != null && feedbackResponseBean.isFeedbackOwner() || mode == EDITABLE) {
             return ContextCompat.getColor(getContext(), R.color.accent);
         }else{
-            return ContextCompat.getColor(getContext(), R.color.cyan);
+            return ColorUtility.isDark(configuration.getTopColors()[2])? Color.WHITE:Color.BLACK;
         }
     }
     private int resolveBackgroundColor(FeedbackResponseBean feedbackResponseBean) {
@@ -143,7 +168,7 @@ public class FeedbackResponseListItem extends LinearLayout implements Comparable
         } else if (feedbackResponseBean != null && feedbackResponseBean.isFeedbackOwner() || mode == EDITABLE) {
             return ContextCompat.getColor(getContext(), R.color.pink);
         }else{
-            return ContextCompat.getColor(getContext(), R.color.indigo);
+            return configuration.getTopColors()[2];
         }
     }
 
@@ -181,6 +206,7 @@ public class FeedbackResponseListItem extends LinearLayout implements Comparable
         layoutParams.setMargins(margins[0],margins[1],margins[2],margins[3]);
         button.setLayoutParams(layoutParams);
         button.setGravity(Gravity.CENTER);
+        button.setPadding(0,0,0,0);
         button.setTextColor(backgroundColor);
         button.setBackgroundColor(textColor);
         button.setText(label);
@@ -190,13 +216,19 @@ public class FeedbackResponseListItem extends LinearLayout implements Comparable
     }
 
     private void prepareFeedbackResponse() {
-        if (((EditText)bottomView).getText().length() < configuration.getMinResponseLength()){
-            Toast.makeText(getContext(),getContext().getString(R.string.details_response_too_short),Toast.LENGTH_SHORT).show();
-        }else{
-            String response = ((EditText) bottomView).getText().toString();
-            RepositoryStub.sendFeedbackResponse(getContext(),feedbackBean, response);
-            removeFeedbackResponse();
-            FeedbackDetailsActivity.persistFeedbackResponseLocally(getContext(),feedbackBean,configuration, response);
+        if (ACTIVE.check(getContext())){
+            if (((EditText)bottomView).getText().length() < configuration.getMinResponseLength()){
+                Toast.makeText(getContext(),getContext().getString(R.string.details_response_too_short),Toast.LENGTH_SHORT).show();
+            }else{
+                String response = ((EditText) bottomView).getText().toString();
+                RepositoryStub.sendFeedbackResponse(getContext(),feedbackBean, response);
+                removeFeedbackResponse();
+                if (isDeveloper) {
+                    FeedbackDetailsDeveloperActivity.persistFeedbackResponseLocally(getContext(), feedbackBean, configuration, response);
+                }else{
+                    FeedbackDetailsActivity.persistFeedbackResponseLocally(getContext(), feedbackBean, configuration, response);
+                }
+            }
         }
     }
 

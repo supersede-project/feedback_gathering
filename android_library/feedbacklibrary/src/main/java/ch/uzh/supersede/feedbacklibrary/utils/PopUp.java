@@ -54,15 +54,33 @@ public class PopUp {
         return this;
     }
 
-    public PopUp withCustomCancel(String cancelLabel, OnClickListener clickListener) {
+    public PopUp withCustomCancel(String cancelLabel, OnClickListener... clickListener) {
         this.cancelLabel = cancelLabel;
-        this.cancelClickListener = clickListener;
+        if (clickListener != null && clickListener.length>0){
+            this.cancelClickListener = clickListener[0];
+        }else{
+            this.cancelClickListener = new OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            };
+        }
         return this;
     }
 
-    public PopUp withCustomOk(String okLabel, OnClickListener clickListener) {
+    public PopUp withCustomOk(String okLabel, OnClickListener... clickListener) {
         this.okLabel = okLabel;
-        this.okClickListener = clickListener;
+        if (clickListener != null && clickListener.length>0){
+            this.okClickListener = clickListener[0];
+        }else{
+            this.okClickListener = new OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            };
+        }
         return this;
     }
 
@@ -91,19 +109,19 @@ public class PopUp {
                 builder.setPositiveButton("OK", new OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
+                        dialog.dismiss();
                     }
                 });
             }
         }
         if (showCancel){
             if (cancelClickListener != null) {
-                builder.setPositiveButton(okLabel, cancelClickListener);
+                builder.setNegativeButton(cancelLabel, cancelClickListener);
             } else {
                 builder.setNegativeButton("Cancel", new OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
+                        dialog.dismiss();
                     }
                 });
             }
