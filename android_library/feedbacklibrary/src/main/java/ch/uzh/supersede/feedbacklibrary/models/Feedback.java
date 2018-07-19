@@ -46,6 +46,9 @@ public class Feedback implements Serializable {
     private Date createdAt;
     private Date updatedAt;
     private String[] tags;
+    private int votes;
+    private int minVotes;
+    private int maxVotes;
     //private Enums.FEEDBACK_STATUS feedbackStatus; TODO [jfo]
 
 
@@ -218,5 +221,17 @@ public class Feedback implements Serializable {
 
     public List<AbstractFeedbackPart> getAttachmentFeedbackList() {
         return attachmentFeedbackList;
+    }
+
+    public int getVotes() {
+        return votes;
+    }
+
+    public int getMinVotes() {
+        return minVotes;
+    }
+
+    public int getMaxVotes() {
+        return maxVotes;
     }
 }
