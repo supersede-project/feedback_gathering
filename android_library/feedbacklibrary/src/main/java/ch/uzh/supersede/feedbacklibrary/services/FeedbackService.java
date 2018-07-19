@@ -195,7 +195,7 @@ public abstract class FeedbackService {
             for (int i = 0; i < feedbackBeans.size(); i++) {
                 feedbackIds[i] = feedbackBeans.get(i).getFeedbackId();
             }
-            feedbackAPI.getFeedbackList(getToken(), getLanguage(), getApplicationId(), Arrays.toString(feedbackIds)).enqueue(
+            feedbackAPI.getFeedbackList(getToken(), getLanguage(), getApplicationId(), null, Arrays.toString(feedbackIds)).enqueue(
                     new RepositoryCallback<List<Feedback>>(callback, EventType.GET_FEEDBACK_SUBSCRIPTIONS) {
                     });
         }

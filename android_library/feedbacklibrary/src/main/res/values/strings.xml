@@ -8,7 +8,6 @@
     <string name="feedback_send_confirmation">By sending the feedback, you agree with the terms and conditions.</string>
     <string name="feedback_send">Send feedback</string>
     <string name="feedback_success">Your feedback was sent successfully. Thank you!</string>
-    <string name="feedback_title">Feedback title at the current time of %1$d milliseconds</string>
     <string name="feedback_text_warning">"Text cannot be longer than %1$d characters"</string>
 
     <!-- Audio feedback -->
@@ -18,14 +17,6 @@
     <string name="audio_record_indicator">RECORDING!</string>
     <string name="audio_maximum_length_reached_text">"Recording stopped because the limit of %1$d seconds is reached"</string>
     <string name="audio_stopped_recording_text">Stopped recording</string>
-
-    <!-- Category feedback -->
-    <string name="category_single_option">Please select an option</string>
-    <string name="category_multiple_options">Please select one or multiple options</string>
-    <string name="category_other_option">Other</string>
-    <string name="category_other_options">Others</string>
-    <string name="category_own_category">Category</string>
-    <string name="category_own_category_hint">Please enter your own category</string>
 
     <!-- Screenshot feedback -->
     <string name="screenshot_choose">Choose from library</string>
@@ -65,9 +56,7 @@
     <string name="dialog_discard">Discard</string>
     <string name="dialog_close">Close</string>
 
-    <string name="info_loading">Loading. Please wait.</string>
     <string name="info_error">Something went wrong! Please try again later.</string>
-    <string name="info_application_unavailable">We apologize that the feedback tool is not available at the moment. Please try again later.</string>
 
     <!-- Overriding string resources in com.theartofdev.edmodo:android-image-cropper -->
     <string name="crop_image_menu_crop">@string/image_annotation_crop</string>
@@ -78,7 +67,6 @@
     <!--Hub-->
     <string name="hub_feedback_list">Show\nFeedback</string>
     <string name="hub_feedback_user_level">User-Level\n%1$d</string>
-    <string name="hub_feedback_user_lvl">User-Level</string>
     <string name="hub_feedback_settings">Feedback\nSettings</string>
     <string name="hub_feedback_create">Create\nFeedback</string>
     <string name="hub_feedback_status_label">Hub-Status</string>
@@ -116,7 +104,6 @@
     <string name="hub_access_3">Accessing Level 3</string>
     <string name="hub_access_3_description">Level 3 grants you access to more advanced Feedback Mechanisms and needs Audio-Recording-Permissions!</string>
     <string name="hub_username_restored">User restored: "%1$s".</string>
-    <string name="hub_developer_restored">Developer restored: "%1$s".</string>
     <string name="hub_username_registered">User "%1$s" registered.</string>
     <string name="hub_developer_registered">Developer "%1$s" registered.</string>
     <string name="hub_warning_permission_not_granted">Permissions for next Level not granted!</string>
@@ -158,7 +145,6 @@
     <string name="details_report_error_empty">Description empty!</string>
     <string name="details_report_error_short">Description too short!</string>
     <string name="details_report_error_long">Description too long!</string>
-    <string name="details_feedback_toast">%1$s loaded.\nCreator: %2$s.\nCreation-Date: %3$s.\nUp-Votes: %4$d.\nResponses: %5$d.</string>
     <!--DetailsDeveloper-->
     <string name="details_developer_award_karma">Award Karma</string>
     <string name="details_developer_award_karma_title">Confirm Karma Awarding</string>
@@ -185,8 +171,6 @@
 
     <!--Abstract-->
     <string name="abstract_button_clicked">Button \n\"%1$s\"\n clicked!</string>
-    <string name="_open"><![CDATA[<]]></string>
-    <string name="_close"><![CDATA[>]]></string>
     <!--Identity-->
     <string name="identity_input_title">Input Feedback-Title here&#8230;</string>
     <string name="identity_input_tags">Input Feedback-Tags here&#8230;</string>
