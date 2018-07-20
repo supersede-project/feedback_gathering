@@ -1,58 +1,34 @@
 package ch.uzh.supersede.feedbacklibrary.activities;
 
 import android.app.AlertDialog;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
+import android.content.*;
+import android.graphics.*;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.view.*;
+import android.widget.*;
 
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.io.*;
+import java.util.*;
 
 import ch.uzh.supersede.feedbacklibrary.R;
-import ch.uzh.supersede.feedbacklibrary.components.views.AbstractAnnotationView;
-import ch.uzh.supersede.feedbacklibrary.components.views.AnnotateImageView;
-import ch.uzh.supersede.feedbacklibrary.components.views.EditImageDialog;
-import ch.uzh.supersede.feedbacklibrary.components.views.StickerAnnotationImageView;
-import ch.uzh.supersede.feedbacklibrary.components.views.TextAnnotationImageView;
+import ch.uzh.supersede.feedbacklibrary.components.views.*;
 import ch.uzh.supersede.feedbacklibrary.database.FeedbackDatabase;
 import ch.uzh.supersede.feedbacklibrary.utils.ColorPickerDialog;
 import ch.uzh.supersede.feedbacklibrary.utils.Enums.DIALOG_TYPE;
 import ch.uzh.supersede.feedbacklibrary.utils.ImageUtility;
-import ch.uzh.supersede.feedbacklibrary.utils.Utils;
 
 import static android.graphics.Color.*;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.*;
 import static ch.uzh.supersede.feedbacklibrary.utils.Enums.DIALOG_TYPE.CHANGE_COLOR;
+import static ch.uzh.supersede.feedbacklibrary.utils.ImageUtility.*;
 
-
+@SuppressWarnings("squid:MaximumInheritanceDepth")
 public class AnnotateImageActivity extends AbstractBaseActivity implements ColorPickerDialog.OnColorChangeDialogListener, EditImageDialog.OnEditImageListener {
     private boolean blackModeOn = false;
     private boolean avoidRevert = false;
@@ -111,8 +87,8 @@ public class AnnotateImageActivity extends AbstractBaseActivity implements Color
     private void initAnnotateImageView() {
         annotateImageView = new AnnotateImageView(this);
         // Resolve bitmap to draw on
-        Bitmap bitmap = Utils.loadImageFromDatabase(this);
-        Bitmap bitmapAnnotated = Utils.loadAnnotatedImageFromDatabase(this);
+        Bitmap bitmap = ImageUtility.loadImageFromDatabase(this);
+        Bitmap bitmapAnnotated = ImageUtility.loadAnnotatedImageFromDatabase(this);
         // Set the bitmap to draw on
         annotateImageView.setBitmap(bitmapAnnotated != null ? bitmapAnnotated : bitmap);
         // Set the background color of the canvas (used for the eraser)
@@ -151,6 +127,7 @@ public class AnnotateImageActivity extends AbstractBaseActivity implements Color
         }
     }
 
+    @SuppressWarnings("unchecked")
     private void handleStickerAnnotations(Intent intent) {
         HashMap<Integer, String> allStickerAnnotations = (HashMap<Integer, String>) intent.getSerializableExtra(EXTRA_KEY_ALL_STICKER_ANNOTATIONS);
         for (Map.Entry<Integer, String> entry : allStickerAnnotations.entrySet()) {
@@ -264,7 +241,7 @@ public class AnnotateImageActivity extends AbstractBaseActivity implements Color
                 relativeLayout.draw(canvas);
                 Bitmap annotatedImage = Bitmap.createBitmap(annotatedBitmapWithStickers, 0, 0, annotatedBitmapWithStickers.getWidth(), annotatedBitmapWithStickers.getHeight());
 
-                Utils.storeAnnotatedImageToDatabase(this, annotatedImage);
+                ImageUtility.storeAnnotatedImageToDatabase(this, annotatedImage);
 
                 Intent intent = new Intent();
                 intent.putExtra(EXTRA_KEY_HAS_STICKER_ANNOTATIONS, allStickerAnnotations.size() > 0);
@@ -384,9 +361,9 @@ public class AnnotateImageActivity extends AbstractBaseActivity implements Color
             public void onClick(View view) {
                 Bitmap tempBitmap = annotateImageView.getBitmap();
                 Bitmap croppedBitmap = Bitmap.createBitmap(tempBitmap, 0, 0, tempBitmap.getWidth(), tempBitmap.getHeight());
-                File tempFile = Utils.createTempChacheFile(getApplicationContext(), "crop", ".png");
+                File tempFile = ImageUtility.createTempCacheFile(getApplicationContext(), "crop", ".png");
                 double avgIntensity = ImageUtility.calculateAverageColorIntensity(tempBitmap, 0.2);
-                if (Utils.saveBitmapToFile(tempFile, croppedBitmap, Bitmap.CompressFormat.PNG, 100)) {
+                if (ImageUtility.saveBitmapToFile(tempFile, croppedBitmap, Bitmap.CompressFormat.PNG, 100)) {
                     Uri cropInput = Uri.fromFile(tempFile);
                     CropImage.activity(cropInput)
                              .setGuidelines(CropImageView.Guidelines.ON)
@@ -552,7 +529,7 @@ public class AnnotateImageActivity extends AbstractBaseActivity implements Color
     public void onBackPressed() {
         if (!avoidRevert) {
             //Restore old Image
-            Utils.storeAnnotatedImageToDatabase(this, Utils.loadImageFromDatabase(this));
+            ImageUtility.storeAnnotatedImageToDatabase(this, loadImageFromDatabase(this));
         }
         super.onBackPressed();
     }

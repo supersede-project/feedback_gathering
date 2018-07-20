@@ -59,21 +59,20 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/settings_text_feature_2"
+                    android:id="@+id/settings_text_enable_notifications"
                     android:layout_width="0dp"
                     android:layout_height="fill_parent"
                     android:layout_margin="5dp"
                     android:layout_weight="5"
                     android:gravity="center_vertical|end"
-                    android:text="#upcoming feature 2#"/>
+                    android:text="@string/settings_enable_notifications"/>
 
                 <ToggleButton
-                    android:id="@+id/settings_toggle_feature_2"
+                    android:id="@+id/settings_toggle_enable_notifications"
                     android:layout_width="0dp"
                     android:layout_height="fill_parent"
                     android:layout_margin="1dp"
-                    android:layout_weight="5"
-                    android:enabled="false" />
+                    android:layout_weight="5" />
             </LinearLayout>
 
             <LinearLayout

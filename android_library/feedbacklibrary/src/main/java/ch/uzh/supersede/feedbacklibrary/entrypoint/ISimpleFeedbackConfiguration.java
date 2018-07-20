@@ -15,11 +15,6 @@ public interface ISimpleFeedbackConfiguration {
          */
         int getConfiguredScreenshotFeedbackOrder();
 
-        /** Setting this to -1 will disable Label Feedback.
-         * @return Sorting-Order of this Feedback
-         */
-        int getConfiguredLabelFeedbackOrder();
-
         /** Setting this to -1 will disable Text Feedback.
          * @return Sorting-Order of this Feedback
          */

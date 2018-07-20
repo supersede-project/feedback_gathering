@@ -5,26 +5,29 @@ import android.app.Dialog;
 import android.content.*;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.support.v7.widget.*;
+import android.support.v7.widget.AppCompatSpinner;
+import android.support.v7.widget.ContentFrameLayout;
 import android.text.InputType;
 import android.text.method.DigitsKeyListener;
 import android.view.*;
 import android.widget.*;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
 
 import ch.uzh.supersede.feedbacklibrary.R;
 import ch.uzh.supersede.feedbacklibrary.beans.*;
 import ch.uzh.supersede.feedbacklibrary.components.buttons.FeedbackResponseListItem;
 import ch.uzh.supersede.feedbacklibrary.database.FeedbackDatabase;
-import ch.uzh.supersede.feedbacklibrary.services.*;
+import ch.uzh.supersede.feedbacklibrary.services.FeedbackService;
+import ch.uzh.supersede.feedbacklibrary.services.IFeedbackServiceEventListener;
 import ch.uzh.supersede.feedbacklibrary.stubs.RepositoryStub;
-import ch.uzh.supersede.feedbacklibrary.utils.Enums.RESPONSE_MODE;
 import ch.uzh.supersede.feedbacklibrary.utils.*;
+import ch.uzh.supersede.feedbacklibrary.utils.Enums.RESPONSE_MODE;
 
 import static ch.uzh.supersede.feedbacklibrary.components.buttons.FeedbackResponseListItem.RESPONSE_MODE.*;
 import static ch.uzh.supersede.feedbacklibrary.utils.Constants.*;
-import static ch.uzh.supersede.feedbacklibrary.utils.Enums.FEEDBACK_STATUS.CLOSED;
+import static ch.uzh.supersede.feedbacklibrary.utils.Constants.UserConstants.*;
 import static ch.uzh.supersede.feedbacklibrary.utils.Enums.RESPONSE_MODE.READING;
 import static ch.uzh.supersede.feedbacklibrary.utils.PermissionUtility.USER_LEVEL.ACTIVE;
 
@@ -87,7 +90,7 @@ public class FeedbackDetailsDeveloperActivity extends AbstractBaseActivity imple
             }
             votesText.setText(getFeedbackDetailsBean().getUpVotesAsText());
             userText.setText(getString(R.string.details_user, getFeedbackDetailsBean().getUserName()));
-            ArrayAdapter adapter= new ArrayAdapter(getApplicationContext(), R.layout.feedback_status_spinner_layout,
+            ArrayAdapter adapter = new ArrayAdapter(getApplicationContext(), R.layout.feedback_status_spinner_layout,
                     new String[]{Enums.FEEDBACK_STATUS.OPEN.getLabel(),
                             Enums.FEEDBACK_STATUS.IN_PROGRESS.getLabel(),
                             Enums.FEEDBACK_STATUS.REJECTED.getLabel(),
@@ -98,9 +101,11 @@ public class FeedbackDetailsDeveloperActivity extends AbstractBaseActivity imple
             status.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-                    if (isStatusNew(((AppCompatSpinner) parentView).getAdapter().getItem(position))){
-                        FeedbackService.getInstance(getApplicationContext()).updateFeedbackStatus(FeedbackDetailsDeveloperActivity.this, getFeedbackDetailsBean(),((AppCompatSpinner) parentView).getAdapter().getItem(position));
-                        Toast.makeText(FeedbackDetailsDeveloperActivity.this,getString(R.string.details_developer_status_updated),Toast.LENGTH_SHORT).show();
+                    if (isStatusNew(((AppCompatSpinner) parentView).getAdapter().getItem(position))) {
+                        FeedbackService
+                                .getInstance(getApplicationContext())
+                                .updateFeedbackStatus(FeedbackDetailsDeveloperActivity.this, getFeedbackDetailsBean(), ((AppCompatSpinner) parentView).getAdapter().getItem(position));
+                        Toast.makeText(FeedbackDetailsDeveloperActivity.this, getString(R.string.details_developer_status_updated), Toast.LENGTH_SHORT).show();
                     }
                 }
 
@@ -112,24 +117,24 @@ public class FeedbackDetailsDeveloperActivity extends AbstractBaseActivity imple
             });
             titleText.setText(getString(R.string.details_title, getFeedbackDetailsBean().getTitle()));
             descriptionText.setText(getFeedbackDetailsBean().getDescription());
-        }else{
+        } else {
             this.onBackPressed();
         }
         //Disable all Database-related content, read only
-        if (!ACTIVE.check(this,true)) {
+        if (!ACTIVE.check(this, true)) {
             subscribeButton.setEnabled(false);
             responseButton.setEnabled(false);
         }
-        colorViews(0,imageButton,audioButton, tagButton,subscribeButton,responseButton);
-        colorViews(1,getView(R.id.details_developer_root,ContentFrameLayout.class));
-        colorViews(2,userText,titleText, status,descriptionText);
+        colorViews(0, imageButton, audioButton, tagButton, subscribeButton, responseButton);
+        colorViews(1, getView(R.id.details_developer_root, ContentFrameLayout.class));
+        colorViews(2, userText, titleText, status, descriptionText);
         onPostCreate();
     }
 
     private boolean isStatusNew(Object item) {
-        if (item instanceof String && getFeedbackDetailsBean()!= null){
-           String feedbackStatus = (String) item;
-           return !feedbackStatus.equals(getFeedbackDetailsBean().getFeedbackStatus().getLabel());
+        if (item instanceof String && getFeedbackDetailsBean() != null) {
+            String feedbackStatus = (String) item;
+            return !feedbackStatus.equals(getFeedbackDetailsBean().getFeedbackStatus().getLabel());
         }
         return false;
     }
@@ -149,7 +154,7 @@ public class FeedbackDetailsDeveloperActivity extends AbstractBaseActivity imple
                     .withTitle(getString(R.string.details_tags))
                     .withoutCancel()
                     .withMessage(StringUtility.concatWithDelimiter(", ", getFeedbackDetailsBean().getTags())).buildAndShow();
-        }else if (view.getId() == imageButton.getId()) {
+        } else if (view.getId() == imageButton.getId()) {
             final Dialog builder = new Dialog(FeedbackDetailsDeveloperActivity.this);
             builder.requestWindowFeature(Window.FEATURE_NO_TITLE);
             builder.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
@@ -165,17 +170,17 @@ public class FeedbackDetailsDeveloperActivity extends AbstractBaseActivity imple
                     ViewGroup.LayoutParams.WRAP_CONTENT,
                     ViewGroup.LayoutParams.WRAP_CONTENT));
             builder.show();
-        }else if (view.getId() == subscribeButton.getId()){
+        } else if (view.getId() == subscribeButton.getId()) {
             RepositoryStub.sendSubscriptionChange(this, getFeedbackDetailsBean().getFeedbackBean(), !feedbackState.isSubscribed());
-        }else if (view.getId() == responseButton.getId() && mode == READING){
-            FeedbackResponseListItem item = new FeedbackResponseListItem(this,getFeedbackDetailsBean().getFeedbackBean(),null,configuration,EDITABLE);
+        } else if (view.getId() == responseButton.getId() && mode == READING) {
+            FeedbackResponseListItem item = new FeedbackResponseListItem(this, getFeedbackDetailsBean().getFeedbackBean(), null, configuration, EDITABLE);
             //Get to the Bottom
             scrollContainer.fullScroll(View.FOCUS_DOWN);
             responseLayout.addView(item);
             //Show new Entry
             scrollContainer.fullScroll(View.FOCUS_DOWN);
             item.requestInputFocus();
-        }else if (view.getId() == awardKarmaButton.getId()){
+        } else if (view.getId() == awardKarmaButton.getId()) {
             final EditText karmaInputText = new EditText(this);
             karmaInputText.setSingleLine();
             karmaInputText.setMaxLines(1);
@@ -184,54 +189,57 @@ public class FeedbackDetailsDeveloperActivity extends AbstractBaseActivity imple
             DialogInterface.OnClickListener okClickListener = new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    if (karmaInputText.getText().length()>0){
+                    if (karmaInputText.getText().length() > 0) {
                         Integer karma = Integer.parseInt(karmaInputText.getText().toString());
-                        RepositoryStub.sendKarma(getFeedbackDetailsBean(),karma);
-                        Toast.makeText(FeedbackDetailsDeveloperActivity.this,getString(R.string.details_developer_karma_awarded,String.valueOf(karma),getFeedbackDetailsBean().getUserName()),Toast.LENGTH_SHORT).show();
+                        RepositoryStub.sendKarma(getFeedbackDetailsBean(), karma);
+                        Toast
+                                .makeText(FeedbackDetailsDeveloperActivity.this, getString(R.string.details_developer_karma_awarded, String.valueOf(karma), getFeedbackDetailsBean().getUserName()),
+                                        Toast.LENGTH_SHORT)
+                                .show();
                         dialog.cancel();
-                    }else{
-                        Toast.makeText(FeedbackDetailsDeveloperActivity.this,getString(R.string.details_developer_karma_error),Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(FeedbackDetailsDeveloperActivity.this, getString(R.string.details_developer_karma_error), Toast.LENGTH_SHORT).show();
                     }
                 }
             };
             new PopUp(this)
                     .withTitle(getString(R.string.details_developer_award_karma_title))
                     .withInput(karmaInputText)
-                    .withCustomOk("Confirm",okClickListener)
-                    .withMessage(getString(R.string.details_developer_award_karma_content,getFeedbackDetailsBean().getUserName())).buildAndShow();
-        }else if (view.getId() == deleteButton.getId()){
+                    .withCustomOk("Confirm", okClickListener)
+                    .withMessage(getString(R.string.details_developer_award_karma_content, getFeedbackDetailsBean().getUserName())).buildAndShow();
+        } else if (view.getId() == deleteButton.getId()) {
             DialogInterface.OnClickListener okClickListener = new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    if(which==Dialog.BUTTON_POSITIVE){
+                    if (which == Dialog.BUTTON_POSITIVE) {
                         FeedbackService.getInstance(getApplicationContext()).deleteFeedback(FeedbackDetailsDeveloperActivity.this, getFeedbackDetailsBean());
-                        Toast.makeText(FeedbackDetailsDeveloperActivity.this,getString(R.string.details_developer_deleted),Toast.LENGTH_SHORT).show();
+                        Toast.makeText(FeedbackDetailsDeveloperActivity.this, getString(R.string.details_developer_deleted), Toast.LENGTH_SHORT).show();
                         dialog.cancel();
                         Intent intent = new Intent(getApplicationContext(), FeedbackListActivity.class);
-                        intent.putExtra(EXTRA_KEY_FEEDBACK_DELETION,true);
+                        intent.putExtra(EXTRA_KEY_FEEDBACK_DELETION, true);
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        startActivity(FeedbackDetailsDeveloperActivity.this,FeedbackListActivity.class,true, intent);
+                        startActivity(FeedbackDetailsDeveloperActivity.this, FeedbackListActivity.class, true, intent);
                     }
                 }
             };
             new PopUp(this)
                     .withTitle(getString(R.string.details_developer_delete_confirm_title))
-                    .withCustomOk("Confirm",okClickListener)
+                    .withCustomOk("Confirm", okClickListener)
                     .withMessage(getString(R.string.details_developer_delete_confirm)).buildAndShow();
         }
     }
 
     public static void persistFeedbackResponseLocally(Context context, FeedbackBean bean, LocalConfigurationBean configuration, String feedbackResponse) {
-            String userName = FeedbackDatabase.getInstance(context).readString(USER_NAME, USER_NAME_ANONYMOUS);
-            boolean isDeveloper = FeedbackDatabase.getInstance(context).readBoolean(IS_DEVELOPER, false);
-            boolean isOwner = bean.getUserName() != null && bean.getUserName().equals(userName);
-            FeedbackResponseBean responseBean = RepositoryStub.persist(bean, feedbackResponse, userName, isDeveloper, isOwner);
-            FeedbackResponseListItem item = new FeedbackResponseListItem(context, bean, responseBean, configuration, FIXED);
-            //Get to the Bottom
-            scrollContainer.fullScroll(View.FOCUS_DOWN);
-            responseLayout.addView(item);
-            //Show new Entry
-            scrollContainer.fullScroll(View.FOCUS_DOWN);
+        String userName = FeedbackDatabase.getInstance(context).readString(USER_NAME, USER_NAME_ANONYMOUS);
+        boolean isDeveloper = FeedbackDatabase.getInstance(context).readBoolean(USER_IS_DEVELOPER, false);
+        boolean isOwner = bean.getUserName() != null && bean.getUserName().equals(userName);
+        FeedbackResponseBean responseBean = RepositoryStub.persist(bean, feedbackResponse, userName, isDeveloper, isOwner);
+        FeedbackResponseListItem item = new FeedbackResponseListItem(context, bean, responseBean, configuration, FIXED);
+        //Get to the Bottom
+        scrollContainer.fullScroll(View.FOCUS_DOWN);
+        responseLayout.addView(item);
+        //Show new Entry
+        scrollContainer.fullScroll(View.FOCUS_DOWN);
     }
 
     @Override

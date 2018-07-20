@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ch.uzh.supersede.feedbacklibrary.R;
-import ch.uzh.supersede.feedbacklibrary.utils.Utils;
+import ch.uzh.supersede.feedbacklibrary.utils.ImageUtility;
 
 public class AnnotateImageView extends AppCompatImageView {
 
@@ -144,7 +144,7 @@ public class AnnotateImageView extends AppCompatImageView {
     }
 
     public void onCroppedRefresh(Context context){
-        setBitmap(Utils.loadAnnotatedImageFromDatabase(context));
+        setBitmap(ImageUtility.loadAnnotatedImageFromDatabase(context));
         resetHistory();
     }
 
@@ -402,8 +402,8 @@ public class AnnotateImageView extends AppCompatImageView {
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         // Only adjust the relativeLayout when the AnnotateImageView has not been laid out yet
         if (oldw == 0 && oldh == 0) {
-            bitmap = Utils.scaleBitmap(bitmap, w, h);
-            bitmapInitial = Utils.scaleBitmap(bitmapInitial, w, h);
+            bitmap = ImageUtility.scaleBitmap(bitmap, w, h);
+            bitmapInitial = ImageUtility.scaleBitmap(bitmapInitial, w, h);
             RelativeLayout relativeLayout = (RelativeLayout) getParent();
             ViewGroup.LayoutParams relativeLayoutLayoutParams = relativeLayout.getLayoutParams();
             if (relativeLayoutLayoutParams != null) {

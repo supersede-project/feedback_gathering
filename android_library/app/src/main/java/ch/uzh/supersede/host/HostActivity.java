@@ -5,7 +5,8 @@ import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.*;
+import android.widget.Button;
+import android.widget.LinearLayout;
 
 import ch.uzh.supersede.feedbacklibrary.activities.AbstractBaseActivity;
 import ch.uzh.supersede.feedbacklibrary.entrypoint.*;
@@ -54,11 +55,6 @@ public class HostActivity extends AppCompatActivity implements
     @Override
     public int getConfiguredScreenshotFeedbackOrder() {
         return DefaultConfiguration.getInstance().getConfiguredScreenshotFeedbackOrder();
-    }
-
-    @Override
-    public int getConfiguredLabelFeedbackOrder() {
-        return DefaultConfiguration.getInstance().getConfiguredLabelFeedbackOrder();
     }
 
     @Override
@@ -113,10 +109,20 @@ public class HostActivity extends AppCompatActivity implements
         return false;
     }
 
+    @Override
+    public String getConfiguredRepositoryLogin() {
+        return "super_admin";
+    }
+
+    @Override
+    public String getConfiguredRepositoryPassword() {
+        return "password";
+    }
+
     //Feedback Behavior
     @Override
     public int getConfiguredPullIntervalMinutes() {
-        return 0;
+        return 1;
     }
 
     //Feedback Layout

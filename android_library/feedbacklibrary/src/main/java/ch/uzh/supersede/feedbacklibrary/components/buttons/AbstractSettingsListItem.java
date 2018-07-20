@@ -30,6 +30,10 @@ public abstract class AbstractSettingsListItem extends LinearLayout  implements 
     private TextView titleView;
     private Integer[] colors;
 
+    public AbstractSettingsListItem(Context context){
+        super(context);
+    }
+
     public LocalFeedbackBean getFeedbackBean() {
         return feedbackBean;
     }

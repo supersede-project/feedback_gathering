@@ -12,22 +12,22 @@ public class Constants {
     public static final int PERMISSION_REQUEST_ALL = 800;
     public static final String FEEDBACK_CONTRIBUTOR = "feedbackContributor";
     public static final String SHARED_PREFERENCES = "feedbackSharedPreferences";
-    public static final String USER_NAME = "userName";
-    public static final String IS_DEVELOPER = "isDeveloper";
-    public static final String REPORTED_FEEDBACK = "reportedFeedback";
+
     public static final String USE_STUBS = "useStubs";
+    public static final String ENABLE_NOTIFICATIONS = "enableNotifications";
     public static final String USER_NAME_ANONYMOUS = "anonymous";
     public static final String USER_NAME_CREATING = "being created ..";
+    public static final String CONFIGURATION = "localConfigurationBean";
+
     public static final String SPACE = " ";
     public static final String PATH_DELIMITER = "/";
+    public static final String HTML_LINEBREAK = "<br/>";
+
     public static final String SUPERSEDE_BASE_URL = RUNNING_MODE == PRODUCTIVE ? "https://platform.supersede.eu:8443/" : "http://supersede.es.atos.net:8081/";
     public static final String LIFETIME_TOKEN = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJzdXBlcl9hZG1pbiIsImNyZWF0ZWQiOjE1Mjc3NzQxODAyMzQsImV4cCI6MjEzMjU3NDE4MH0.A00XDDAt3PUsYNkBDiJD5jZ3CbimW4" +
             "-4YgEiyKu3DFTXhxQ5QuWy2fgZrAiqxtSiQbAOfMn-E8wLTvx0RQorjQ"; //FIXME [jfo] remove as soon as possible
-
     public static final String SEPARATOR = "::;;::;;";
 
-    public static final String EXTRA_KEY_BASE_URL = "baseURL";
-    public static final String EXTRA_KEY_LANGUAGE = "language";
     public static final String EXTRA_KEY_HOST_APPLICATION_NAME = "hostApplicationName";
     public static final String EXTRA_KEY_APPLICATION_CONFIGURATION = "applicationConfiguration";
     public static final String EXTRA_KEY_FEEDBACK_BEAN = "feedbackBean";
@@ -37,6 +37,8 @@ public class Constants {
     public static final String EXTRA_KEY_FEEDBACK_TAGS = "feedbackTags";
     public static final String EXTRA_FROM_CREATION = "fromCreation";
     public static final String EXTRA_KEY_FEEDBACK_DELETION = "feedbackDeletion";
+    public static final String EXTRA_KEY_ALL_STICKER_ANNOTATIONS = "allStickerAnnotations";
+    public static final String EXTRA_KEY_HAS_STICKER_ANNOTATIONS = "hasStickerAnnotations";
 
     public static final String SHARED_PREFERENCES_ID = "ch.uzh.supersede.feedbacklibrary.feedback";
     public static final String SHARED_PREFERENCES_HOST_APPLICATION_NAME = "hostApplicationName";
@@ -50,10 +52,19 @@ public class Constants {
     public static final int REQUEST_ANNOTATE = 12;
 
     public static final String IMAGE_ANNOTATED_DATA_DB_KEY = "imageAnnotatedData";
-    public static final String EXTRA_KEY_ALL_STICKER_ANNOTATIONS = "allStickerAnnotations";
-    public static final String EXTRA_KEY_HAS_STICKER_ANNOTATIONS = "hasStickerAnnotations";
-
     public static final String NOT_YET_IMPLEMENTED_EXCEPTION = "Not yet implemented";
+
+
+    public static class UserConstants {
+        private UserConstants() {
+        }
+
+        public static final String USER_NAME = "userName";
+        public static final String USER_IS_DEVELOPER = "isDeveloper";
+        public static final String USER_KARMA = "userKarma";
+        public static final String USER_IS_BLOCKED = "userIsBlocked";
+        public static final String USER_REPORTED_FEEDBACK = "reportedFeedback";
+    }
 
     public static class UtilsConstants {
         private UtilsConstants() {
